@@ -1,0 +1,394 @@
+{
+    "path": [
+        "Home",
+        "Books"
+    ],
+	"self" : {
+        "_id": "fe21bcab-b1b9-4837-bd72-0a49454cf3fb",
+        "index": 0,
+        "type": "folder",
+        "name": "Books",
+        "extension": false,
+        "size": 3339428,
+        "cdate": "2015-04-08T12:49:18",
+        "mdate": "2017-05-06T10:22:44",
+        "starred": false,
+        "sharedOut": false
+    },
+    "files": [
+        {
+            "_id": "c60d5343-54bf-4db4-96f6-1403acbfc4bc",
+            "index": 0,
+            "type": "insert_drive_file",
+            "name": "minim aliquip eu cupidatat nulla",
+            "extension": "txt",
+            "size": 1723070,
+            "cdate": "2017-05-01T04:30:06",
+            "mdate": "2016-06-03T09:38:41",
+            "starred": false,
+            "meta": {
+                "author": "Webster Kaufman",
+                "pages": 136,
+                "published": 1982,
+                "publisher": "Obones"
+            }
+        },
+        {
+            "_id": "bc6fa7b1-700a-4d3e-994e-cbdbe62a932e",
+            "index": 1,
+            "type": "insert_drive_file",
+            "name": "ut do enim exercitation nisi",
+            "extension": "pdf",
+            "size": 3585570,
+            "cdate": "2015-01-13T05:55:39",
+            "mdate": "2016-01-21T05:03:03",
+            "starred": true,
+            "meta": {
+                "author": "Valencia Barber",
+                "pages": 95,
+                "published": 2012,
+                "publisher": "Genmom"
+            }
+        },
+        {
+            "_id": "aa9763ac-7f9f-4ff5-a8d9-5186b8989aad",
+            "index": 2,
+            "type": "insert_drive_file",
+            "name": "ad anim et sint pariatur",
+            "extension": "pdf",
+            "size": 2460388,
+            "cdate": "2016-09-09T12:43:41",
+            "mdate": "2014-12-21T05:37:56",
+            "starred": true,
+            "meta": {
+                "author": "Schultz Sparks",
+                "pages": 165,
+                "published": 1973,
+                "publisher": "Hometown"
+            }
+        },
+        {
+            "_id": "b4126a4b-569a-4d2f-87e4-7ca3b9f861b7",
+            "index": 3,
+            "type": "insert_drive_file",
+            "name": "dolore dolore pariatur eiusmod culpa",
+            "extension": "epub",
+            "size": 2474825,
+            "cdate": "2014-04-04T01:28:39",
+            "mdate": "2017-11-14T02:20:48",
+            "starred": true,
+            "meta": {
+                "author": "Macias Buckley",
+                "pages": 122,
+                "published": 2013,
+                "publisher": "Sybixtex"
+            }
+        },
+        {
+            "_id": "34b9efc6-9d51-4c35-b76d-95267f52d869",
+            "index": 4,
+            "type": "insert_drive_file",
+            "name": "mollit anim ea cillum duis",
+            "extension": "pdf",
+            "size": 1232684,
+            "cdate": "2015-08-18T08:49:03",
+            "mdate": "2014-10-20T12:46:08",
+            "starred": false,
+            "meta": {
+                "author": "Ruby Dunn",
+                "pages": 92,
+                "published": 2005,
+                "publisher": "Jetsilk"
+            }
+        },
+        {
+            "_id": "351a08eb-d79a-4ce8-a503-7d4b92aebacb",
+            "index": 5,
+            "type": "insert_drive_file",
+            "name": "pariatur elit nisi voluptate enim",
+            "extension": "epub",
+            "size": 1510658,
+            "cdate": "2017-07-05T01:15:13",
+            "mdate": "2017-10-16T03:33:33",
+            "starred": true,
+            "meta": {
+                "author": "Monica Rhodes",
+                "pages": 183,
+                "published": 1996,
+                "publisher": "Calcu"
+            }
+        },
+        {
+            "_id": "338946a0-3a1a-4aba-a688-0de82245ed46",
+            "index": 6,
+            "type": "insert_drive_file",
+            "name": "exercitation sit dolore culpa anim",
+            "extension": "txt",
+            "size": 3918593,
+            "cdate": "2016-12-25T09:44:39",
+            "mdate": "2016-07-17T07:56:25",
+            "starred": false,
+            "meta": {
+                "author": "Lenora Perez",
+                "pages": 120,
+                "published": 1982,
+                "publisher": "Aquasure"
+            }
+        },
+        {
+            "_id": "6bfebc8e-3f57-40a6-a86d-3ab4a8de68fe",
+            "index": 7,
+            "type": "insert_drive_file",
+            "name": "aliquip veniam ea veniam est",
+            "extension": "epub",
+            "size": 3229688,
+            "cdate": "2017-01-23T08:23:46",
+            "mdate": "2015-02-08T03:08:14",
+            "starred": true,
+            "meta": {
+                "author": "Kayla May",
+                "pages": 101,
+                "published": 1992,
+                "publisher": "Omatom"
+            }
+        },
+        {
+            "_id": "836bd8fd-39c5-4eba-9d97-f41436664838",
+            "index": 8,
+            "type": "insert_drive_file",
+            "name": "do esse dolore consequat laboris",
+            "extension": "txt",
+            "size": 1448967,
+            "cdate": "2017-05-20T06:04:19",
+            "mdate": "2014-01-12T01:00:38",
+            "starred": true,
+            "meta": {
+                "author": "Joseph Henderson",
+                "pages": 155,
+                "published": 1994,
+                "publisher": "Decratex"
+            }
+        },
+        {
+            "_id": "33ae8e55-7ac6-4db0-90fb-b02492db401c",
+            "index": 9,
+            "type": "insert_drive_file",
+            "name": "est aute proident velit magna",
+            "extension": "epub",
+            "size": 4062286,
+            "cdate": "2016-04-08T01:06:22",
+            "mdate": "2015-05-25T08:55:57",
+            "starred": true,
+            "meta": {
+                "author": "Deborah Burns",
+                "pages": 103,
+                "published": 1987,
+                "publisher": "Centice"
+            }
+        },
+        {
+            "_id": "56ded866-1b68-4d8c-b4b1-be3b670adda4",
+            "index": 10,
+            "type": "insert_drive_file",
+            "name": "deserunt culpa magna ullamco eu",
+            "extension": "txt",
+            "size": 3827029,
+            "cdate": "2016-04-10T11:11:14",
+            "mdate": "2016-05-25T10:12:58",
+            "starred": true,
+            "meta": {
+                "author": "Butler Downs",
+                "pages": 162,
+                "published": 1979,
+                "publisher": "Nurplex"
+            }
+        },
+        {
+            "_id": "982919b8-8ec4-450b-837a-068d91a02654",
+            "index": 11,
+            "type": "insert_drive_file",
+            "name": "laboris sunt ipsum incididunt cupidatat",
+            "extension": "pdf",
+            "size": 3838348,
+            "cdate": "2014-10-13T04:14:54",
+            "mdate": "2016-12-26T12:37:58",
+            "starred": false,
+            "meta": {
+                "author": "Christine Beard",
+                "pages": 95,
+                "published": 2015,
+                "publisher": "Rameon"
+            }
+        },
+        {
+            "_id": "7171e08b-4b71-4d78-9865-932e7b077298",
+            "index": 12,
+            "type": "insert_drive_file",
+            "name": "sit sint cupidatat ut ad",
+            "extension": "txt",
+            "size": 2488602,
+            "cdate": "2014-06-30T06:49:23",
+            "mdate": "2017-11-07T09:04:35",
+            "starred": false,
+            "meta": {
+                "author": "Celia Howell",
+                "pages": 135,
+                "published": 1992,
+                "publisher": "Tersanki"
+            }
+        },
+        {
+            "_id": "36f7d720-891b-43db-acc6-e0ec11579682",
+            "index": 13,
+            "type": "insert_drive_file",
+            "name": "veniam esse pariatur proident voluptate",
+            "extension": "txt",
+            "size": 1319214,
+            "cdate": "2015-04-10T04:24:06",
+            "mdate": "2017-03-06T08:32:21",
+            "starred": true,
+            "meta": {
+                "author": "Cohen Waller",
+                "pages": 99,
+                "published": 1990,
+                "publisher": "Nipaz"
+            }
+        },
+        {
+            "_id": "a45fc61b-cd57-4f89-be87-63cc087ae782",
+            "index": 14,
+            "type": "insert_drive_file",
+            "name": "minim excepteur ut do sint",
+            "extension": "epub",
+            "size": 1298507,
+            "cdate": "2014-10-11T11:21:49",
+            "mdate": "2015-02-09T07:44:16",
+            "starred": true,
+            "meta": {
+                "author": "Ryan Martinez",
+                "pages": 117,
+                "published": 1991,
+                "publisher": "Daycore"
+            }
+        },
+        {
+            "_id": "09758ff8-9927-43a9-bbfe-37108673c580",
+            "index": 15,
+            "type": "insert_drive_file",
+            "name": "fugiat proident ullamco cupidatat proident",
+            "extension": "txt",
+            "size": 3437979,
+            "cdate": "2014-11-10T12:54:24",
+            "mdate": "2015-05-23T03:21:34",
+            "starred": false,
+            "meta": {
+                "author": "Walton Martin",
+                "pages": 186,
+                "published": 1977,
+                "publisher": "Quailcom"
+            }
+        },
+        {
+            "_id": "02c3ccad-8b31-43f8-8365-4fb3f9508260",
+            "index": 16,
+            "type": "insert_drive_file",
+            "name": "nisi id aliquip Lorem minim",
+            "extension": "txt",
+            "size": 2200558,
+            "cdate": "2015-08-23T02:15:04",
+            "mdate": "2017-11-05T11:10:25",
+            "starred": true,
+            "meta": {
+                "author": "Cannon Wright",
+                "pages": 103,
+                "published": 1997,
+                "publisher": "Aquacine"
+            }
+        },
+        {
+            "_id": "6e21dee4-1f0e-414b-a300-aa3f4528fc61",
+            "index": 17,
+            "type": "insert_drive_file",
+            "name": "proident nostrud laboris ut aute",
+            "extension": "txt",
+            "size": 2275564,
+            "cdate": "2015-10-25T04:11:06",
+            "mdate": "2015-05-26T09:57:58",
+            "starred": false,
+            "meta": {
+                "author": "Deanna Bowman",
+                "pages": 96,
+                "published": 2009,
+                "publisher": "Exposa"
+            }
+        },
+        {
+            "_id": "f35916f4-ef1f-4ce0-9376-93e0869248a9",
+            "index": 18,
+            "type": "insert_drive_file",
+            "name": "quis mollit quis nulla sunt",
+            "extension": "txt",
+            "size": 2281344,
+            "cdate": "2017-11-13T03:04:42",
+            "mdate": "2016-01-01T10:09:45",
+            "starred": true,
+            "meta": {
+                "author": "Katharine Wagner",
+                "pages": 195,
+                "published": 1998,
+                "publisher": "Miracula"
+            }
+        },
+        {
+            "_id": "0d20ec29-a348-4377-ac8d-8b76fced4348",
+            "index": 19,
+            "type": "insert_drive_file",
+            "name": "qui officia adipisicing voluptate fugiat",
+            "extension": "epub",
+            "size": 1699463,
+            "cdate": "2017-08-21T11:29:04",
+            "mdate": "2015-12-14T12:28:29",
+            "starred": false,
+            "meta": {
+                "author": "Perez Doyle",
+                "pages": 139,
+                "published": 2004,
+                "publisher": "Viagrand"
+            }
+        },
+        {
+            "_id": "0eb8646b-a2ab-4f25-9438-741424e21ba9",
+            "index": 20,
+            "type": "insert_drive_file",
+            "name": "anim ea esse minim proident",
+            "extension": "txt",
+            "size": 1178938,
+            "cdate": "2016-04-12T07:05:23",
+            "mdate": "2015-10-17T11:54:11",
+            "starred": false,
+            "meta": {
+                "author": "Esmeralda Watkins",
+                "pages": 131,
+                "published": 1991,
+                "publisher": "Eclipsent"
+            }
+        },
+        {
+            "_id": "9a9feb83-b7df-4d5a-881c-071c4ee7ae99",
+            "index": 21,
+            "type": "insert_drive_file",
+            "name": "sit cillum cupidatat voluptate ad",
+            "extension": "txt",
+            "size": 3199536,
+            "cdate": "2016-12-31T05:20:04",
+            "mdate": "2017-08-05T07:13:57",
+            "starred": true,
+            "meta": {
+                "author": "Morin Petersen",
+                "pages": 104,
+                "published": 1979,
+                "publisher": "Kaggle"
+            }
+        }
+    ]
+}
