@@ -40,6 +40,6 @@
     "vue-router": "^2.3.1",
     "vue-style-loader": "^1.0.0",
     "vue-template-compiler": "^2.2.4",
-    "webpack": "^2.6.1"
+    "webpack": "^4.1.0"
   }
 }
