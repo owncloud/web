@@ -32,7 +32,7 @@
     "npm-watch": "^0.1.8",
     "pug": "^2.0.0-rc.2",
     "sass-loader": "^6.0.3",
-    "style-loader": "^0.16.1",
+    "style-loader": "^0.20.2",
     "uikit": "^3.0.0-beta.24",
     "vue": "^2.2.6",
     "vue-html-loader": "^1.2.4",
