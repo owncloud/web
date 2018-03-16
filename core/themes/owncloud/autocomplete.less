@@ -1,0 +1,11 @@
+.autocomplete {
+    &-suggestions:extend(.uk-position-absolute, .uk-background-muted, .uk-box-shadow-medium) {}
+    &-suggestion {
+        padding: @padding-small-padding / 2 @padding-small-padding;
+
+        &.selected {
+            background-color: @global-primary-background;
+            color: @global-inverse-color;
+        }
+    }
+}

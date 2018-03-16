@@ -12,7 +12,7 @@
     #file-sharing-default-modal(uk-modal)
         .uk-modal-dialog
             .uk-modal-header
-                h3.uk-h3 Share {{ filename }} with {{ recipient }}
+                h3.uk-h3 Share {{ filename }} with {{ share.recipient }}
 
             .uk-modal-body
                 fieldset.uk-fieldset
@@ -47,7 +47,7 @@
 
             .uk-modal-footer
                     button.uk-button.uk-button-small.uk-button-default.uk-modal-close Cancel
-                    button.uk-button.uk-button-small.uk-button-primary.uk-align-right.uk-modal-close.uk-margin-remove-bottom Save
+                    button(@click="share.send = true").uk-button.uk-button-small.uk-button-primary.uk-align-right.uk-modal-close.uk-margin-remove-bottom Save
 </template>
 <script>
     import Mixins  from '../mixins';
@@ -61,20 +61,13 @@
             }
         },
         mounted() {
-            UIkit.util.on('#file-sharing-modal', 'shown', function () {
+            UIkit.util.on('#file-sharing-modal', 'hide', function () {
                 // $('#mailto').tagsInput();
             });
         },
         methods: {
             createShare() {
-                let hash = Math.random().toString(32).substring(2, 15);
-
-                this.share.sharedOut.push({
-                    'type'   : 'default',
-                    'name'   : hash,
-                    'perms'  : 'Write only',
-                });
-                this.recipient = '';
+                this.$parent.$options.methods.createPublicShare()
             }
         }
     }
