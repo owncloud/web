@@ -1,16 +1,12 @@
 {
   "name": "files",
-  "title": "Files",
+  "title": "Filebrowser",
   "icon": "folder",
   "version": "0.1.0",
-  "description": "Concept on redesigning the ownCloud Frontend",
-  "assets": {
-    "js": [
-      "js/files.bundle.js"
-    ]
-  },
+  "description": "This is the funky frontend app",
+  "main": "js/files.bundle.js",
   "scripts": {
-    "dev": "webpack  --progress --colors --watch",
+    "watch": "webpack  --progress --colors --watch",
     "build": "webpack -p"
   },
   "author": "Felix Heidecke",
