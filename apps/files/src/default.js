@@ -29,6 +29,6 @@ const router = new VueRouter({
 
 const Main = new Vue({
     router,
-    el : '#files',
+    el : '#oc-app-container',
     render: h => h(App)
 });

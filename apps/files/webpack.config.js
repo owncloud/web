@@ -5,9 +5,6 @@ module.exports = {
 	},
 	module: {
 		loaders: [{
-			test: require.resolve('uikit'),
-			loader: 'expose-loader?UIkit'
-		}, {
 			test: /\.js?$/,
 			exclude: /node_modules/,
 			loader: 'babel-loader',
