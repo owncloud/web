@@ -71,7 +71,7 @@
         mixins : [Mixins],
         components: {
             'public-link-modal' : PublicLinkModal,
-            'standard-modal'     : DefaultModal
+            'standard-modal'    : DefaultModal
         },
         props  : ['share'],
         data () {
@@ -125,7 +125,7 @@
         }
     }
 </script>
-<style lang="sass">
+<style lang="less">
 ._csv {
     span + span:before {
         content: ", "
