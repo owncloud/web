@@ -87,11 +87,14 @@
 </template>
 
 <script>
-import _           from 'lodash';
-import jquery      from 'jquery';
-
 import Mixins      from '../mixins';
 import FileDetails from './File-Details.vue';
+
+import jquery      from 'jquery';
+
+const remove   = require('lodash/remove');
+const includes = require('lodash/includes');
+const filter   = require('lodash/filter');
 
 export default {
 	mixins: [Mixins],
