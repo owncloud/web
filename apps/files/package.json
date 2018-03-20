@@ -28,7 +28,7 @@
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "moment": "^2.21.0",
-    "node-sass": "^4.5.2",
+    "node-sass": "^4.7.2",
     "npm-watch": "^0.1.8",
     "pug": "^2.0.2",
     "sass-loader": "^6.0.3",
