@@ -31,7 +31,7 @@
     "node-sass": "^4.5.2",
     "npm-watch": "^0.1.8",
     "pug": "^2.0.2",
-    "sass-loader": "^6.0.3",
+    "sass-loader": "^6.0.7",
     "style-loader": "^0.20.3",
     "uikit": "^3.0.0-beta.24",
     "vue": "^2.5.16",
