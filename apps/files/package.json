@@ -30,7 +30,7 @@
     "moment": "^2.21.0",
     "node-sass": "^4.5.2",
     "npm-watch": "^0.1.8",
-    "pug": "^2.0.0-rc.2",
+    "pug": "^2.0.1",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.16.1",
     "uikit": "^3.0.0-beta.24",
