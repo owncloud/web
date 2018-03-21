@@ -1,6 +1,8 @@
 import $   from "jquery";
-import _   from "lodash";
 import Vue from "vue";
+
+const isEmpty  = require('lodash/isEmpty');
+const assignIn = require('lodash/assignIn');
 
 const ocHead = new Vue({
     el : '#oc-head',
@@ -23,17 +25,17 @@ const ocHead = new Vue({
             menu    : [],
             plugins : {},
             assets  : {
-                js  : [],
-                css : []
+                js  : null,
+                css : null
             }
         }
     },
     mounted () {
         // load core package data
         this.getCoreConfig().then(()=> {
-
-            this.getAppConfig();
-
+            this.getAppConfig().then(() => {
+                this._loadAppAssets();
+            });
         });
     },
 
@@ -46,39 +48,49 @@ const ocHead = new Vue({
             return `${this.core.title} &ndash; ${this.app.title}`;
         },
 
-        appFromPath () {
+        appName () {
+            // determine app by path
             let pathname = document.location.pathname.substr(1);
-            return (_.isEmpty(pathname)) ? false : pathname;
+
+            if (pathname.length > 0)
+                return pathname
+
+            if (this.core.startApp)
+                return this.core.startApp
+
+            return null;
         }
     },
 
     methods: {
+        getApp () {
+            // determine app by path
+            let pathname = document.location.pathname.substr(1);
+
+            if (!isEmpty(pathname.length))
+                return pathname
+
+            if (this.core.startApp)
+                return this.core.startApp
+
+            return null;
+        },
 
         // reading data from the core API
         getCoreConfig () {
             return new Promise((resolve, reject) => {
                 this._readPackage('https://next.json-generator.com/api/json/get/V1nS9lcYV').then((data) => {
-                    this.core = {
-                        theme      : data.theme,
-                        installed  : data.installed,
-                        version    : data.version,
-                        instanceid : data.instanceid,
-                        apps       : data.apps
-                    }
+                    this.core = assignIn(this.core, data);
                     resolve();
-                }).catch(function() {
-                    reject();
+                }).catch(function(err) {
+                    reject('can not getCoreConfig ' + err);
                 });
             });
         },
 
         getAppConfig () {
             return new Promise((resolve, reject) => {
-                let path = this.appFromPath;
-                if (!path)
-                    path = this.core.startApp;
-
-                this._readPackage(`/apps/${path}/package.json`).then((app) => {
+                this._readPackage(`/apps/${this.getApp()}/package.json`).then((app) => {
                     this.app = {
                         name        : app.name,
                         title       : app.title,
@@ -89,8 +101,8 @@ const ocHead = new Vue({
                         description : app.description,
                         menu        : app.menu,
                         assets      : {
-                            js  : [app.main],
-                            css : []
+                            js  : app.main,
+                            css : app.css
                         }
                     }
                     resolve();
@@ -98,9 +110,6 @@ const ocHead = new Vue({
                     reject(`failed to load /apps/${path}/package.json`);
                 });
             });
-        },
-
-        appToLoad () {
         },
 
         _readPackage( pathToAPI ) {
@@ -111,6 +120,16 @@ const ocHead = new Vue({
                     reject(`can't read: ${pathToAPI}`);
                 });
             });
+        },
+
+        _loadAppAssets() {
+
+            let $main = $('<script>', {
+                "src"   : `/apps/${this.app.name}/${this.app.assets.js}`,
+                "defer" : true
+            });
+
+            $('body').append($main)
         }
     }
 });

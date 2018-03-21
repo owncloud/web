@@ -12,6 +12,10 @@ import SharingIn from './components/Sharing-In.vue'
 // Routing
 const routes = [
     {
+        path: '/',
+        redirect: '/list/home',
+    },
+    {
         path: '/list/:item',
         component: FilesApp,
         name: 'files'
