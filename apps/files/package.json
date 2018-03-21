@@ -37,7 +37,7 @@
     "vue": "^2.5.16",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^11.3.4",
-    "vue-router": "^2.3.1",
+    "vue-router": "^3.0.1",
     "vue-style-loader": "^1.0.0",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^2.6.1"
