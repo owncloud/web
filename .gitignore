@@ -1,3 +1,5 @@
 /node_modules/
 core/js/*
 .idea
+*.bundle.js
+*.bundle.js.map
