@@ -12,6 +12,10 @@ import SharingIn from './components/Sharing-In.vue'
 // Routing
 const routes = [
     {
+        path: '/',
+        redirect: '/list/home',
+    },
+    {
         path: '/list/:item',
         component: FilesApp,
         name: 'files'
@@ -29,6 +33,6 @@ const router = new VueRouter({
 
 const Main = new Vue({
     router,
-    el : '#files',
+    el : '#oc-app-container',
     render: h => h(App)
 });

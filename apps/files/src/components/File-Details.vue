@@ -110,7 +110,7 @@
     }
 </script>
 
-<style lang="scss">
+<style lang="less">
     .material-icons {
         user-select: none;
 

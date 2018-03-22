@@ -46,7 +46,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 	.category {
 		text-transform: capitalize;
 	}

@@ -1,27 +1,29 @@
 module.exports = {
 	entry: './src/default.js',
 	output : {
-		filename : './js/files.bundle.js'
+		path: `${__dirname}/js`,
+		filename : 'files.bundle.js'
+	},
+	resolve: {
+		alias: {
+			vue: 'vue/dist/vue.js'
+		}
 	},
 	module: {
-		loaders: [{
-			test: require.resolve('uikit'),
-			loader: 'expose-loader?UIkit'
-		}, {
+		rules: [{
 			test: /\.js?$/,
 			exclude: /node_modules/,
-			loader: 'babel-loader',
-		}, {
-			test: /\.scss?$/,
-			loader: 'style-loader!css-loader!sass-loader'
+			use: 'babel-loader',
 		}, {
 			test: /\.vue$/,
 			loader: 'vue-loader',
 			options: {
-				loaders: {
-					scss: 'vue-style-loader!css-loader!sass-loader', // <style lang="scss">
-					less: 'vue-style-loader!css-loader!less-loader' // <style lang="less">
-				}
+				use: [
+					'vue-style-loader',
+					'css-loader',
+					'css-loader',
+					'less-loader'
+				]
 			}
 		}]
 	}

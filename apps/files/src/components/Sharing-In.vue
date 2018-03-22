@@ -179,7 +179,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 
 	.file-table-body-wrapper {
 		display: block;
