@@ -11,10 +11,10 @@ all_apps=$(addprefix app-,$(apps))
 all: build
 
 .PHONY: build
-build: uikit $(all_apps)
+build: uikit core $(all_apps)
 
 .PHONY: clean
-clean: clean-uikit $(addprefix clean-app-,$(apps))
+clean: clean-uikit clean-core $(addprefix clean-app-,$(apps))
 
 #
 # UIkit
@@ -32,6 +32,17 @@ $(uikit_dist): $(uikit_deps) $(uikit_theme_src) core/uikit/package.json core/uik
 .PHONY: clean-uikit
 clean-uikit:
 	rm -Rf $(uikit_dist) $(uikit_deps) core/uikit/custom
+
+#
+# core
+#
+.PHONY: core
+core:
+	npm run build
+
+.PHONY: clean-core
+clean-core:
+	rm -rf core/js/core.bundle.js.*
 
 #
 # Apps
