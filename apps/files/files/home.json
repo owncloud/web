@@ -13,15 +13,16 @@
             "mdate": "2017-05-06T10:22:44",
             "starred": false,
             "sharedOut": [{
-                    "name": "bill.murray@fillmurray.com",
+                    "hash": "25779f88",
+                    "mailTo" : "Klaus",
+                    "mailBody" : "",
                     "perms": {
                         "canShare" : true,
                         "canCreate" : true,
                         "canChange" : true,
                         "canDelete" : true
                     },
-                    "state": 1,
-                    "type" : "public",
+                    "type" : "link",
                     "password" : "25779f8829ab7a7650e85a4cc871e6ac"
                 },
                 {

@@ -1,4 +1,5 @@
 module.exports = {
+    devtool: 'source-map',
 	entry: './src/default.js',
 	output : {
 		path: `${__dirname}/js`,

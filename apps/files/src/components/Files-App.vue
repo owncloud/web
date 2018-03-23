@@ -66,8 +66,9 @@
 
 								// --- Shared ----------
 								td(class="uk-visible@l").uk-text-nowrap.uk-table-shrink.uk-text-right
-									div(v-if="file.sharedOut").uk-text-meta.uk-inline
-										span._sharee(v-for="(sharer, sid) in file.sharedOut", uk-tooltip, :title="sharer.mail") {{ sharer.name }}
+									div(v-if="file.shared.to.user.length > 0").uk-text-meta.uk-inline
+										span {{ file.shared.to.user[0].name }}
+										span(v-if="file.shared.to.user.length > 1") &nbsp;&amp;&nbsp;{{ file.shared.to.user.length - 1 }} more
 
 								// --- Owner ----------
 								td(class="uk-visible@l").uk-text-nowrap.uk-table-shrink.uk-text-right
@@ -134,7 +135,8 @@ export default {
 		loadFolder() {
 			this.loading = true;
 
-			jquery.getJSON(`apps/files/files/${this.item}.json`, (data) => {
+			// jquery.getJSON(`apps/files/files/${this.item}.json`, (data) => {
+			jquery.getJSON('https://next.json-generator.com/api/json/get/V1yd3nPPV', (data) => {
 
 				let delay = Math.random() * (1000 - 200) + 200;
 
@@ -242,17 +244,6 @@ export default {
 
 	._is-starred {
 		color: #faa05a;
-	}
-
-	._sharee {
-
-		& + ._sharee::before {
-			content: ", ";
-		}
-
-		&:last-of-type:nth-of-type(n+2)::before {
-			content: " & ";
-		}
 	}
 
 	.material-icons.uk-position-center-left {
