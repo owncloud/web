@@ -91,7 +91,7 @@ const ocHead = new Vue({
 
         getAppConfig () {
             return new Promise((resolve, reject) => {
-                this._readPackage(`/apps/${this.getApp()}/package.json`).then((app) => {
+                this._readPackage(`apps/${this.getApp()}/package.json`).then((app) => {
                     this.app = {
                         name        : app.name,
                         title       : app.title,
@@ -126,7 +126,7 @@ const ocHead = new Vue({
         _loadAppAssets() {
 
             let $main = $('<script>', {
-                "src"   : `/apps/${this.app.name}/${this.app.assets.js}`,
+                "src"   : `apps/${this.app.name}/${this.app.assets.js}`,
                 "defer" : true
             });
 
