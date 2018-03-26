@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<info>
+	<id>phoenix</id>
+	<name>Phoenix</name>
+	<summary>Phoenix</summary>
+	<description>Phoenix</description>
+	<licence>AGPL</licence>
+	<author>Thomas Müller, Felix Heidecke</author>
+	<version>0.0.1</version>
+	<category>tools</category>
+	<dependencies>
+		<owncloud min-version="10.0" max-version="11.0" />
+	</dependencies>
+	<navigation>
+		<static/>
+		<order>100</order>
+		<name>Phoenix</name>
+	</navigation>
+</info>
