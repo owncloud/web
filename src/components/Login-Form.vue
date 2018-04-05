@@ -1,5 +1,5 @@
 <template>
-	<form>
+	<div>
 		<div class="uk-margin">
 			<label>User name</label>
 			<input class="uk-input" type="text" v-model="userName" autofocus @keyup.enter="submit" />
@@ -11,7 +11,7 @@
 		<div class="uk-margin">
 			<input class="uk-button uk-button-default" type="button" value="Login" @click="submit"/>
 		</div>
-	</form>
+	</div>
 </template>
 
 <script>
