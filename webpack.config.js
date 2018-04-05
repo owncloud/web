@@ -16,6 +16,18 @@ module.exports = {
 			exclude: [/node_modules/, /apps/],
 			include: [/src/],
 			use: 'babel-loader'
+		}, {
+			test: /\.vue$/,
+			loader: 'vue-loader',
+			options: {
+				use: [
+					'vue-style-loader',
+					'vue-html-loader',
+					'css-loader',
+					'css-loader',
+					'less-loader'
+				]
+			}
 		}]
 	}
 }

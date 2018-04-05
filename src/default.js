@@ -1,3 +1,6 @@
+
+import LoginDialog from './components/Login-Dialog.vue';
+
 const $        = require("jquery");
 const Vue      = require('vue');
 
@@ -130,7 +133,18 @@ const ocHead = new Vue({
                 "defer" : true
             });
 
-            $('body').append($main)
+            $('body').append($main);
         }
     }
+});
+
+const ocDialogs = new Vue({
+	el: '#oc-dialogs',
+	components: {
+		LoginDialog
+	},
+
+	mounted () {
+		UIkit.modal('#oc-dialog-login').show();
+	}
 });
