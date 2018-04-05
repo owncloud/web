@@ -15,6 +15,11 @@ import LoginForm from './Login-Form.vue';
 export default {
 	components: {
 		LoginForm
+	},
+	methods: {
+		loginSuccess: function() {
+			UIkit.modal('#oc-dialog-login').hide();
+		}
 	}
 };
 </script>
