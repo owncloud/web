@@ -83,8 +83,15 @@ const ocHead = new Vue({
         // reading data from the core API
         getCoreConfig () {
             return new Promise((resolve, reject) => {
-                this._readPackage('https://next.json-generator.com/api/json/get/V1nS9lcYV').then((data) => {
+                this._readPackage('config.json').then((data) => {
                     this.core = assignIn(this.core, data);
+
+                    OC.config = data;
+                    if (!OC.config.backendUrl) {
+                        OC.config.backendUrl = location.protocol + '//' + location.host + location.pathname;
+                    }
+                    OC.client = new OwncloudClient(OC.config.backendUrl);
+
                     resolve();
                 }).catch(function(err) {
                     reject('can not getCoreConfig ' + err);
@@ -148,3 +155,13 @@ const ocDialogs = new Vue({
 		UIkit.modal('#oc-dialog-login').show();
 	}
 });
+
+const OwncloudClient = require('js-owncloud-client');
+
+// TODO: define in separate file
+
+// global namespace
+window.OC = {
+	client: null
+};
+
