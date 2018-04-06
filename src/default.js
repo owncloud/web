@@ -37,8 +37,10 @@ const ocHead = new Vue({
     mounted () {
         // load core package data
         this.getCoreConfig().then(()=> {
+            // TODO: load all apps from config.json
+            this._loadAppAssets('notifications', 'js/notifications.bundle.js');
             this.getAppConfig().then(() => {
-                this._loadAppAssets();
+                this._loadAppAssets(this.app.name, this.app.assets.js);
             });
         });
     },
@@ -133,10 +135,10 @@ const ocHead = new Vue({
             });
         },
 
-        _loadAppAssets() {
+        _loadAppAssets(name, bundle) {
 
             let $main = $('<script>', {
-                "src"   : `apps/${this.app.name}/${this.app.assets.js}`,
+                "src"   : `apps/${name}/${bundle}`,
                 "defer" : true
             });
 
