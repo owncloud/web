@@ -56,7 +56,7 @@
     "filesize": "^3.6.1",
     "jquery": "^3.3.1",
     "lodash": "^4.17.5",
-    "moment": "^2.21.0",
+    "moment": "^2.22.0",
     "uikit": "^3.0.0-beta.40",
     "underscore": "^1.8.3",
     "vue": "^2.5.16",
