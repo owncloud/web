@@ -1,3 +1,6 @@
+
+import LoginDialog from './components/Login-Dialog.vue';
+
 const $        = require("jquery");
 const Vue      = require('vue');
 
@@ -80,8 +83,15 @@ const ocHead = new Vue({
         // reading data from the core API
         getCoreConfig () {
             return new Promise((resolve, reject) => {
-                this._readPackage('https://next.json-generator.com/api/json/get/V1nS9lcYV').then((data) => {
+                this._readPackage('config.json').then((data) => {
                     this.core = assignIn(this.core, data);
+
+                    OC.config = data;
+                    if (!OC.config.backendUrl) {
+                        OC.config.backendUrl = location.protocol + '//' + location.host + location.pathname;
+                    }
+                    OC.client = new OwncloudClient(OC.config.backendUrl);
+
                     resolve();
                 }).catch(function(err) {
                     reject('can not getCoreConfig ' + err);
@@ -130,7 +140,29 @@ const ocHead = new Vue({
                 "defer" : true
             });
 
-            $('body').append($main)
+            $('body').append($main);
         }
     }
 });
+
+const ocDialogs = new Vue({
+	el: '#oc-dialogs',
+	components: {
+		LoginDialog
+	},
+
+	mounted () {
+        //uncomment to test login
+		//UIkit.modal('#oc-dialog-login').show();
+	}
+});
+
+const OwncloudClient = require('js-owncloud-client');
+
+// TODO: define in separate file
+
+// global namespace
+window.OC = {
+	client: null
+};
+

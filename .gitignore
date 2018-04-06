@@ -3,3 +3,4 @@ core/js/*
 .idea
 *.bundle.js
 *.bundle.js.map
+config.json
