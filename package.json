@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "jquery": "^3.3.1",
-    "js-owncloud-client": "^0.1.3",
+    "js-owncloud-client": "github:owncloud/js-owncloud-client#master",
     "lodash": "^4.17.5",
     "vue": "^2.5.16"
   }
