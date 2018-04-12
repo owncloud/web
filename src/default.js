@@ -155,7 +155,7 @@ const ocDialogs = new Vue({
 
 	mounted () {
         //uncomment to test login
-		//UIkit.modal('#oc-dialog-login').show();
+		UIkit.modal('#oc-dialog-login').show();
 	}
 });
 
