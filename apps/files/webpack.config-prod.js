@@ -1,13 +1,12 @@
 module.exports = {
-    devtool: 'source-map',
 	entry: './src/default.js',
 	output : {
 		path: `${__dirname}/js`,
-		filename : 'files.bundle.js'
+		filename : "files.bundle.js"
 	},
 	resolve: {
 		alias: {
-			vue: 'vue/dist/vue.js'
+			vue: 'vue/dist/vue.min.js'
 		}
 	},
 	module: {
@@ -21,7 +20,6 @@ module.exports = {
 			options: {
 				use: [
 					'vue-style-loader',
-					'css-loader',
 					'css-loader',
 					'less-loader'
 				]

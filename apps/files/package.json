@@ -1,31 +1,11 @@
 {
   "name": "files",
-  "title": "Filebrowser",
-  "icon": "folder",
   "version": "0.1.0",
   "description": "This is the funky frontend app",
   "main": "js/files.bundle.js",
-  "menu": [
-    {
-      "title": "All files",
-      "href": "list/all"
-    },
-    {
-      "title": "Favorites",
-      "href": "favorites"
-    },
-    {
-      "title": "Share by you",
-      "href": "share/outbound"
-    },
-    {
-      "title": "Share with you",
-      "href": "share/inbound"
-    }
-  ],
   "scripts": {
-    "watch": "webpack --progress --colors --watch --mode 'development'",
-    "build": "webpack -p"
+    "watch": "webpack --progress --colors --watch --mode 'development' --config webpack.config-dev.js",
+    "build": "webpack -p --config webpack.config-prod.js"
   },
   "author": "Felix Heidecke",
   "license": "AGPL-3.0",
@@ -43,6 +23,7 @@
     "node-sass": "^4.7.2",
     "npm-watch": "^0.3.0",
     "pug": "^2.0.3",
+    "requirejs": "^2.3.5",
     "style-loader": "^0.20.3",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^14.2.2",
@@ -59,7 +40,6 @@
     "moment": "^2.22.1",
     "uikit": "^3.0.0-beta.42",
     "underscore": "^1.8.3",
-    "vue": "^2.5.16",
-    "select2": "^4.0.5"
+    "vue": "^2.5.16"
   }
 }

@@ -1,5 +1,6 @@
 /node_modules/
 core/js/*
+!core/js/oc.js
 .idea
 *.bundle.js
 *.bundle.js.map

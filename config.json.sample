@@ -1,18 +1,9 @@
 {
-	"backendUrl": "http://localhost/owncloud",
-	"apps": {
-		"enabled": [
-			"files",
-			"notifications"
-		],
-		"installed": [
-			"files",
-			"market"
-		]
-	},
-	"startApp": "files",
+	"backendUrl": "http://localhost/owncloud/",
 	"theme": "owncloud",
-	"installed": true,
-	"version": "10.1.0.0",
-	"instanceid": "9b5eabcd-b40c-4395-822e-68f8ac615016"
+	"version": "10.1.0",
+	"instanceid": "9b5eabcd-b40c-4395-822e-68f8ac615016",
+	"apps" : [
+		{ "id" : "files" }
+	]
 }
