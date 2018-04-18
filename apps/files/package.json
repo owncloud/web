@@ -58,7 +58,7 @@
     "lodash": "^4.17.5",
     "moment": "^2.22.1",
     "uikit": "^3.0.0-beta.40",
-    "underscore": "^1.8.3",
+    "underscore": "^1.9.0",
     "vue": "^2.5.16",
     "select2": "^4.0.5"
   }
