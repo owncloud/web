@@ -103,9 +103,6 @@
     import PublicLinkModal from './File-Sharing-Public-Link-Modal.vue';
     import DefaultModal    from './File-Sharing-Default-Modal.vue';
 
-    import jquery          from 'jquery';
-    import select2         from 'select2';
-
     export default {
         mixins : [Mixins],
         components: {
@@ -144,14 +141,6 @@
             UIkit.util.on('#file-sharing-modal', 'hide', () => {
                 if (this.linkShare.send) {
                     this.createLinkShare();
-                }
-            });
-
-            $('#foo').select2({
-                ajax: {
-                    url: 'https://next.json-generator.com/api/json/get/EJ8qOjDw4',
-                    dataType: 'json'
-                    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
                 }
             });
         },

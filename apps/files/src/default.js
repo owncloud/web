@@ -5,7 +5,6 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
-import App       from './App.vue'
 import FilesApp  from './components/Files-App.vue'
 import SharingIn from './components/Sharing-In.vue'
 
@@ -31,8 +30,12 @@ const router = new VueRouter({
     routes
 });
 
-const Main = new Vue({
+const app = new Vue({
     router,
-    el : '#oc-app-container',
-    render: h => h(App)
+	template: '<router-view></router-view>',
+	mounted () {
+		this.$emit('mounted')
+	}
 });
+
+export default define(app);

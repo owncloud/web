@@ -1,0 +1,21 @@
+{
+  "name": "demo_full",
+  "version": "0.1.0",
+  "description": "This is the funky frontend app",
+  "main": "js/demo.js",
+  "scripts": {
+    "watch": "webpack --progress --colors --watch --mode 'development'",
+    "build": "webpack -p"
+  },
+  "author": "Felix Heidecke",
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/felixheidecke/oc_redesign#readme",
+  "devDependencies": {
+    "webpack": "^4.2.0",
+    "webpack-cli": "^2.0.13"
+  },
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "vue": "^2.5.16"
+  }
+}

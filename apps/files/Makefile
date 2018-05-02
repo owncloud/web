@@ -13,10 +13,9 @@ build: $(bundles)
 node_modules: package.json package-lock.json
 	npm install
 
-$(bundles): webpack.config.js node_modules
+$(bundles): webpack.config-prod.js webpack.config-dev.js node_modules
 	npm run build
 
 .PHONY: clean
 clean:
 	rm -Rf node_modules $(bundles)
-

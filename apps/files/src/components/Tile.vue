@@ -46,16 +46,14 @@
 	}
 </script>
 
-<style lang="less" scoped>
+<style scoped>
 	.category {
 		text-transform: capitalize;
 	}
 
 	.app-preview {
-		background: {
-			size: cover;
-			position: left center;
-		}
+		background-size: cover;
+		background-position: left center;
 	}
 
 	.uk-label {
