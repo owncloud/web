@@ -1,0 +1,78 @@
+Writing Less/CSS
+----------------
+
+Foreword:
+~~~~~~~~~
+
+We highly suggest approaching writing CSS in a modular manner as it is described in https://smacss.com[SMACSS] to make reading and especially writing and improving your code easy for all of us. Please stick to the following rules layed out here:
+
+---
+
+#bad .good
+^^^^^^^^^^
+
+Only style classes to keep specificity to a minimum.
+
+---
+
+Avoid nesting, create Objects instead
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+_This is an excepert from http://thesassway.com/advanced/modular-css-naming-conventions[thesassway.com]_
+
+---
+
+Objects traditionally are nouns. They take the form of:
+
+[source,Less]
+----
+.noun {}            // examples: ".button", .menu, .textbox, .header
+----
+
+Parent-Child relationships are also nouns:
+[source,Less]
+----
+.noun {}            // parent: .post
+.noun-noun {}       // child:  .post-title
+----
+
+Subclasses are often preceeded by a adjective describing the type of object:
+
+[source,Less]
+----
+.adjective-noun {}  // example: .dropdown-button
+----
+
+And Modifiers are almost always adjectives (or are used descriptively):
+
+[source,Less]
+----
+._is_state {}        // state: is-selected, is-hidden
+._adjective {}       // examples: .left, .right, .block, .inline
+----
+
+
+The Namespace
+~~~~~~~~~~~~~
+
+Phoenix provides `data-app-id="my_app"` attibute in the DOM node to render your app to, so make sure to use this reference as a wrapper in you'r Less code like so:
+
+[source,Less]
+----
+[data-app-id="my_app"] {
+
+	@min-height: 30px;
+	@max-height: @min-height * 2;
+
+	.foo {
+		min-height: @min-height;
+	}
+
+	.bar {
+		min-height: @min-height;
+		max-height: @max-height;
+	}
+}
+----
+
+CAUTION: We do not recommend putting CSS in your (probably already big) app bundle.
