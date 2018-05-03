@@ -1,6 +1,7 @@
-import Vue from 'vue';
-import _   from 'lodash';
-import $   from 'jquery';
+import Vue   from 'vue';
+import _     from 'lodash';
+import $     from 'jquery';
+import UIkit from 'uikit';
 
 OC = new Vue({
 	el  : "#oc",

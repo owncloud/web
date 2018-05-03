@@ -1,7 +1,8 @@
 /node_modules/
 core/js/*
-!core/js/oc.js
+core/css/*
 .idea
 *.bundle.js
 *.bundle.js.map
+
 config.json
