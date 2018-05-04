@@ -1,43 +1,24 @@
 
 SERVER_HOST=0.0.0.0:8300
 
-uikit_dist=core/uikit/dist
-uikit_deps=core/uikit/node_modules
-uikit_theme_src=$(wildcard core/themes/*.less) $(wildcard core/themes/**/*.less)
-
 apps=files
 all_apps=$(addprefix app-,$(apps))
 
 all: build
 
 .PHONY: build
-build: uikit core $(all_apps)
+build: core $(all_apps)
 
 .PHONY: clean
-clean: clean-uikit clean-core $(addprefix clean-app-,$(apps))
-
-#
-# UIkit
-#
-uikit: $(uikit_dist)
-
-$(uikit_deps):
-	cd core/uikit && npm install
-
-$(uikit_dist): $(uikit_deps) $(uikit_theme_src) core/uikit/package.json core/uikit/package-lock.json
-	rm -Rf core/uikit/custom
-	ln -s ../themes core/uikit/custom
-	cd core/uikit && npm run compile
-
-.PHONY: clean-uikit
-clean-uikit:
-	rm -Rf $(uikit_dist) $(uikit_deps) core/uikit/custom
+clean: clean-core $(addprefix clean-app-,$(apps))
 
 #
 # core
 #
 .PHONY: core
 core:
+	npm install
+	node_modules/less/bin/lessc src/themes/owncloud.less core/css/uikit.owncloud.css --relative-urls
 	npm run build
 
 .PHONY: clean-core
@@ -61,8 +42,4 @@ clean-app-%:
 .PHONY: run
 run: build
 	php -S "$(SERVER_HOST)"
-
-.PHONY: watch
-watch: build
-	cd core/uikit && npm run watch
 
