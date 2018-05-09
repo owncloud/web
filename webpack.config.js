@@ -26,7 +26,6 @@ module.exports = {
 				options: {
 					use: [
 						'vue-style-loader',
-						'vue-html-loader',
 						'css-loader',
 						'less-loader'
 					]

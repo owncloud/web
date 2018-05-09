@@ -1,5 +1,7 @@
 {
-	"backendUrl": "http://localhost/owncloud/",
+	"servers" : [
+		"https://demo.owncloud.com"
+	],
 	"theme": "owncloud",
 	"version": "10.1.0",
 	"instanceid": "9b5eabcd-b40c-4395-822e-68f8ac615016",

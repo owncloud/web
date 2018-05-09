@@ -17,7 +17,7 @@ define({
 	 	setup: (self) => {
 	 		var my = self.info;
 	 		var p = new Promise((resolve, defer) => {
-	 			OC.registerNav(my.id, {
+	 			OC.registerNavItem(my.id, {
 	 				name: my.name,
 	 				iconMaterial: 'folder',
 	 				route: '/'
