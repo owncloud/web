@@ -53,25 +53,25 @@ export default {
 
 		_show () {
 			this._resetForm();
-			this.$parent.$UIkit.modal('#oc-login-dialog').show();
+			this.$parent.$uikit.modal('#oc-login-dialog').show();
 		},
 
 		_hide () {
 			this._resetForm();
-			this.$parent.$UIkit.modal('#oc-login-dialog').hide();
+			this.$parent.$uikit.modal('#oc-login-dialog').hide();
 		},
 
 		login () {
 			this.loading = true;
 			let OC = this.$parent;
-			OC.$Client.setInstance(this.instance);
-			OC.$Client.login(this.username, this.password).then(status => {
-				OC.$Client.users.getUser(this.username).then(user => {
+			OC.$client.setInstance(this.instance);
+			OC.$client.login(this.username, this.password).then(status => {
+				OC.$client.users.getUser(this.username).then(user => {
 					this.loading = false;
 					this._hide();
 					OC.setUser(user);
 					OC.$bus.emit('phoenix:user-logged-in');
-					OC.$UIkit.notification({
+					OC.$uikit.notification({
 						message: `Welcome  ${user.displayname}<br>We love you :-*`,
 						status: 'primary'
 					});
@@ -79,7 +79,7 @@ export default {
 			}).catch(error => {
 				this.loading = false;
 				console.log(error);
-				OC.$UIkit.notification({
+				OC.$uikit.notification({
 					message: error,
 					status: 'danger',
 				});

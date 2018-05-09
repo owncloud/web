@@ -5,6 +5,7 @@ import _        from 'lodash';
 import $        from 'jquery';
 import filesize from 'filesize';
 
+
 // --- Components ---
 
 import TopBar      from './components/Top-Bar.vue';
@@ -22,15 +23,13 @@ Vue.use(VueBus);
 import Helper from './mixins/helper.js';
 
 
-// --- Add UIkit to the scope ---
+// --- Adding global libraries ---
 
-import UIkit from 'uikit';
-Vue.prototype.$UIkit = UIkit
-
-// Add JS-owncloud-client instance to the scope
-
+import UIkit  from 'uikit';
 import Client from 'js-owncloud-client';
-Vue.prototype.$Client = new Client();
+
+Vue.prototype.$uikit  = UIkit
+Vue.prototype.$client = new Client();
 
 OC = new Vue({
 	el       : "#oc-scaffold",
@@ -72,7 +71,7 @@ OC = new Vue({
 		});
 
 		this.$bus.on('phoenix:user-logged-in', () => {
-			this.$Client.getCapabilities().then(caps => {
+			this.$client.getCapabilities().then(caps => {
 				this.server = caps
 			});
 		});
@@ -94,7 +93,7 @@ OC = new Vue({
 				this.$bus.emit('phoenix:config-loaded');
 			}).fail((err) => {
 				if (err.status === 404) {
-					this.$UIkit.notification({
+					this.$uikit.notification({
 						message: '<strong>config.json missing!</strong><br>Make sure to have this file in your root folder.',
 						status: 'danger',
 						timeout: 0
