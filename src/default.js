@@ -8,9 +8,9 @@ import filesize from 'filesize';
 
 // --- Components ---
 
-import TopBar      from './components/Top-Bar.vue';
-import Menu        from './components/Menu.vue';
-import LoginDialog from './components/Login-Dialog.vue';
+import TopBar   from './components/Top-Bar.vue';
+import Menu     from './components/Menu.vue';
+import Login    from './components/Login.vue';
 
 
 // --- Plugins ---
@@ -36,9 +36,9 @@ OC = new Vue({
 	name     : "phoenix",
 	mixins   : [Helper],
 	components: {
-		'top-bar'      : TopBar,
-		'side-menu'    : Menu,
-		'login-dialog' : LoginDialog
+		'top-bar'   : TopBar,
+		'side-menu' : Menu,
+		'login'    : Login
 	},
 	data     : {
 		appPath : '/apps',
