@@ -122,7 +122,7 @@ export default {
 			this.$route.push()
 		},
 		toggleFavorite (item) {
-			this.files[item].stared = (this.files[item].stared) ? false : true;
+			this.files[item].stared = (!this.files[item].stared);
 		},
 		routerLink (item) {
 			this.$router.push({
@@ -135,27 +135,98 @@ export default {
 		loadFolder() {
 			this.loading = true;
 
-			// jquery.getJSON(`apps/files/files/${this.item}.json`, (data) => {
-			jquery.getJSON('https://next.json-generator.com/api/json/get/V1yd3nPPV', (data) => {
+			let oc = window.oc;
 
-				let delay = Math.random() * (1000 - 200) + 200;
+            // List all files
+            oc.files.list('/').then(files => {
+                // Remove the root element
+                files = files.splice(1);
 
-				setTimeout( () => {
-					this.path    = data.path;
-					this.files   = data.files;
-					this.self    = data.self;
-					this.loading = false;
-					this.resetSelect();
-				}, delay)
+                let delay = Math.random() * (1000 - 200) + 200;
 
-			}).fail(function (e) {
-				console.log(e);
-				UIkit.notification({
-					message: e.statusText,
-					status: 'danger',
-					pos: 'top-center'
-				});
-			})
+                setTimeout( () => {
+                    this.path    = '/';
+
+                    this.files   = files.map(file => ({
+                        type: (file.type === 'dir') ? 'folder' : file.type,
+
+                        //TODO: Retrieve real shared status of each file
+                        shared: {
+                            to: {
+                                user: [
+                                    {
+                                        perms: {
+                                            "remove": false,
+                                            "change": false,
+                                            "create": true,
+                                            "share": false
+                                        },
+                                        avatar: "http://stevensegallery.com/40/40",
+                                        name: "Jeannie Boyer",
+                                        state: 0,
+                                        type: "default"
+                                    }
+                                ],
+                                link: [
+                                    {
+                                        "password": false,
+                                        "perms": {
+                                            "remove": false,
+                                            "change": false,
+                                            "create": true,
+                                            "share": true
+                                        },
+                                        "type": "link",
+                                        "mailTo": "",
+                                        "hash": "b8ab6e5c",
+                                        "IGNORE": {
+                                            "1": "Lessie.Holland@Anixang.net",
+                                            "2": "b8ab6e5c-7c4d-4e9a-9712-b28322fd1d54"
+                                        }
+                                    }
+                                ]
+                            },
+                            from: false
+                        },
+
+                        starred: false,
+
+                        mdate: file['fileInfo']['{DAV:}getlastmodified'],
+
+                        cdate: '',    //TODO: Retrieve data of creation of a file
+
+                        size: function(){
+                            if(file.type === 'dir'){
+                                return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
+                            }else{
+                                return file['fileInfo']['{DAV:}getcontentlength'] / 100
+                            }
+                        }(),
+
+                        extension:  (file.type === 'dir') ? false : '',
+
+                        name: function () {
+                            let pathList = file.name.split("/").filter(e => e !== "")
+                            return pathList[pathList.length - 1];
+                        }(),
+
+                        id: file['fileInfo']['{DAV:}getetag']
+                    }));
+
+                    this.self    = files.self;
+
+                    this.loading = false;
+
+                    this.resetSelect();
+                }, delay)
+            }).catch(error => {
+                console.log(error);
+                UIkit.notification({
+                    message: error.statusText,
+                    status: 'danger',
+                    pos: 'top-center'
+                });
+            });
 		},
 		singleSelect (item) {
 			this.selected = [item];
