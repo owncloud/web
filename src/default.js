@@ -3,7 +3,6 @@
 import Vue      from 'vue';
 import _        from 'lodash';
 import $        from 'jquery';
-import Client   from 'js-owncloud-client';
 import filesize from 'filesize';
 
 // --- Components ---
@@ -22,10 +21,16 @@ Vue.use(VueBus);
 
 import Helper from './mixins/helper.js';
 
+
 // --- Add UIkit to the scope ---
 
 import UIkit from 'uikit';
 Vue.prototype.$UIkit = UIkit
+
+// Add JS-owncloud-client instance to the scope
+
+import Client from 'js-owncloud-client';
+Vue.prototype.$Client = new Client();
 
 OC = new Vue({
 	el       : "#oc-scaffold",
@@ -51,8 +56,7 @@ OC = new Vue({
 			email       : null,
 			enabled     : false,
 			home        : null
-		},
-		client  : null
+		}
 	},
 
 	mounted () {
@@ -60,7 +64,6 @@ OC = new Vue({
 		this._loadConfig();
 
 		this.$bus.on('phoenix:config-loaded', () => {
-			this.client = new Client();
 			this._setupApps()
 		});
 
@@ -69,7 +72,7 @@ OC = new Vue({
 		});
 
 		this.$bus.on('phoenix:user-logged-in', () => {
-			this.client.getCapabilities().then(caps => {
+			this.$Client.getCapabilities().then(caps => {
 				this.server = caps
 			});
 		});

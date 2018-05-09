@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="core/css/uikit.owncloud.css" />
 </head>
 <body>
-    <section id="oc-scaffold">
+	<section id="oc-scaffold">
 		<header>
 			<top-bar :user="user"></top-bar>
 		</header>
@@ -16,7 +16,7 @@
 			<side-menu :nav='nav'></side-menu>
 		</aside>
 		<login-dialog :user="user" :servers="config.servers"></login-dialog>
-    </section>
+	</section>
 	<section id="oc-content" class="uk-offcanvas-content"></section>
 	<script data-main="/core/js/core.bundle.js" src="/node_modules/requirejs/require.js"></script>
 </body>

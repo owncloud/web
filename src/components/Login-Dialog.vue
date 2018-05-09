@@ -64,9 +64,9 @@ export default {
 		login () {
 			this.loading = true;
 			let OC = this.$parent;
-			OC.client.setInstance(this.instance);
-			OC.client.login(this.username, this.password).then(status => {
-				OC.client.users.getUser(this.username).then(user => {
+			OC.$Client.setInstance(this.instance);
+			OC.$Client.login(this.username, this.password).then(status => {
+				OC.$Client.users.getUser(this.username).then(user => {
 					this.loading = false;
 					this._hide();
 					OC.setUser(user);
