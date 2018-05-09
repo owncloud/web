@@ -47,9 +47,20 @@ sharing and such. It is instanciated during loadtime and can be used in all its 
 ----
 let folder = '/path/to/folder';
 
-OC.client.files.mkdir(folder);
-OC.client.share.shareFileWithLink(folder, { options });
+OC.$client.files.mkdir(folder);
+OC.$client.share.shareFileWithLink(folder, { options });
 ----
 
 You don't need to worry about logging in, as this can be done for you by link:oc-phoenix-events.txt[requesting
 the user to be prompted to login],
+
+UIKit
+~~~~~
+
+The UIKit library allows to use elements such as modals, overlays, notifications and the like.
+
+[source,javascript]
+----
+OC.$uikit.notification('My message');
+OC.$uikit.notification('My message in red', 'danger');
+----
