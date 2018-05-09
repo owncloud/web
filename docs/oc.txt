@@ -1,0 +1,55 @@
+The OC Vue instance
+-------------------
+
+The OC Object serves as the scaffold for loading apps, suppliying the means to
+authenticate as well as an eventbus, a backend client and UI elements.
+
+Eventbus
+~~~~~~~~
+
+The eventbus allows for Phoenix as well as other apps to emit events and listen
+to these events.
+
+You can emit events for others to listen to
+
+[source,javascript]
+----
+OC.$bus.emit('eventname', prop1, prop2, … )
+----
+
+Listen `.on()` or `.once()` to events and stop listening later `.off()`
+
+[source,javascript]
+----
+OC.$bus.on('eventname', payload => {
+    let p1 = payload[0],
+        p2 = payload[1]
+})
+----
+
+.Read more about
+[NOTE]
+===============================
+- Naming convention for events
+- The full list of phoenix events
+- https://vuejs.org/v2/api/#Instance-Methods-Events[Vue.js Instance Events]
+===============================
+
+---
+
+ownCloud Client
+~~~~~~~~~~~~~~~
+
+The client allows you to talk to the ownCloud Server Backend to do file operations,
+sharing and such. It is instanciated during loadtime and can be used in all its glory.
+
+[source,javascript]
+----
+let folder = '/path/to/folder';
+
+OC.client.files.mkdir(folder);
+OC.client.share.shareFileWithLink(folder, { options });
+----
+
+You don't need to worry about logging in, as this can be done for you by link:oc-phoenix-events.txt[requesting
+the user to be prompted to login],
