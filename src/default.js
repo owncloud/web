@@ -88,7 +88,7 @@ OC = new Vue({
 		 */
 
 		_loadConfig () {
-			$.getJSON('/config.json', (config) => {
+			$.getJSON('config.json', (config) => {
 				this.config = config;
 				this.apps   = config.apps;
 				this.$bus.emit('phoenix:config-loaded');
@@ -231,7 +231,7 @@ OC = new Vue({
 		},
 
 		appJS( app, file ) {
-			return ['/apps', app, 'js', file + '.js'].join('/');
+			return ['apps', app, 'js', file + '.js'].join('/');
 		},
 
 		// -------------------------------------------- registration methods ---
