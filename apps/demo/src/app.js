@@ -8,14 +8,6 @@ let tpl =	'<div class="uk-card uk-card-default uk-card-body uk-width-1-2@m uk-po
 			'	<div id="demo-extend-below"></div>' +
 			'</div>';
 
-
-// Emits events
-// *	update: cookies, payload: amountOfCookies
-
-// Listens to
-// *	update: cookies, payload: amountOfCookies
-
-
 let app = new Vue({
 	name: 'demo',
 	data: {
@@ -23,21 +15,15 @@ let app = new Vue({
 	},
 	template: tpl,
 	mounted () {
-		this.$emit('mounted');
+		OC.$bus.emit('demo:mounted');
 
-		OC.$emit(this.i('extend:above'), '#demo-extend-above', this.amountOfCookies);
-		OC.$emit(this.i('extend:below'), '#demo-extend-below', this.amountOfCookies);
+		OC.$bus.emit('demo:extends-above', '#demo-extend-above', this.amountOfCookies);
+		OC.$bus.emit('demo:extends-below', '#demo-extend-below', this.amountOfCookies);
 	},
 	methods: {
 		addCookie() {
 			++this.amountOfCookies;
-			OC.$emit(this.i('update:cookies'), this.amountOfCookies);
-		},
-
-		// --- helper ----
-
-		i (e) {
-			return 'demo:' + e;
+			OC.$bus.emit('demo:update-cookies', this.amountOfCookies);
 		}
 	}
 });
