@@ -22,14 +22,15 @@ Vue.use(VueBus);
 
 import Helper from './mixins/helper.js';
 
-
 // --- Adding global libraries ---
 
 import UIkit  from 'uikit';
 import Client from 'js-owncloud-client';
+import Extend from './libs/extend.js';
 
-Vue.prototype.$uikit  = UIkit
+Vue.prototype.$uikit  = UIkit;
 Vue.prototype.$client = new Client();
+Vue.prototype.$extend = Extend;
 
 OC = new Vue({
 	el       : "#oc-scaffold",
@@ -48,8 +49,9 @@ OC = new Vue({
 		server : {},
 
 		// models
-		nav     : [],
-		apps    : [],
+		nav        : [],
+		apps       : [],
+		eventQueue : [],
 		user    : {
 			displayname : null,
 			email       : null,
@@ -62,22 +64,16 @@ OC = new Vue({
 		// Start with loading the config
 		this._loadConfig();
 
-		this.$bus.on('phoenix:config-loaded', () => {
+		this.$once('afterLoadConfig', () => {
 			this._setupApps()
 		});
 
-		this.$bus.on('phoenix:apps-setup', () => {
+		this.$once('afterSetupApps', () => {
 			this._bootApp(_.head(this.apps))
 		});
 
-        if(this.user.email === null){
-            this.$bus.emit('phoenix:request-login');
-        }
-
-		this.$bus.on('phoenix:user-logged-in', () => {
-			this.$client.getCapabilities().then(caps => {
-				this.server = caps
-			});
+		this.$once('afterBootApp', () => {
+			this._runEventQueue();
 		});
 
 	},
@@ -94,7 +90,7 @@ OC = new Vue({
 			$.getJSON('config.json', (config) => {
 				this.config = config;
 				this.apps   = config.apps;
-				this.$bus.emit('phoenix:config-loaded');
+				this.$emit('afterLoadConfig');
 			}).fail((err) => {
 				if (err.status === 404) {
 					this.$uikit.notification({
@@ -103,7 +99,6 @@ OC = new Vue({
 						timeout: 0
 					});
 				}
-
 			});
 		},
 
@@ -120,17 +115,21 @@ OC = new Vue({
 
 				// TODO: Find better var name for 'foo'
 				requirejs([this.appJS(app.id, 'boot')], ( foo ) => {
+
 					let defaults = {
 						enabled : true,
 						running : false,
 					};
+
+					if (foo.info.plugin)
+						this.eventQueue.push(foo.info.id + ':booted');
 
 					this.apps[i] = _.assignIn(defaults, foo.info);
 
 					// inject self
 					foo.setup(foo).then(() => {
 						if (this.apps.length === ++i) {
-							this.$bus.emit('phoenix:apps-setup')
+							this.$emit('afterSetupApps');
 						}
 					})
 
@@ -151,10 +150,17 @@ OC = new Vue({
 		_bootApp (app) {
 			requirejs([this.appJS(app.id, 'boot')], ( App ) => {
 				App.boot(this._spawnAppContainer(), App).then( () => {
-					this._appSet(app.id, { 'running' : true });
-					this.$bus.emit(app.id + ':booted');
+					this._appSet(app.id, { 'running' : true } );
+					this.eventQueue.push(app.id + ':booted');
+					this.$emit('afterBootApp');
 				})
 			})
+		},
+
+		_runEventQueue () {
+			_.forEach(this.eventQueue, (event, i) => {
+				this.$bus.emit(event);
+			});
 		},
 
 		_spawnAppContainer () {
