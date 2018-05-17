@@ -1,32 +1,79 @@
-import Vue   from 'vue';
-import _     from 'lodash';
-import $     from 'jquery';
-import UIkit from 'uikit';
+// --- Libraries ---
+
+import Vue      from 'vue';
+import _        from 'lodash';
+import $        from 'jquery';
+import filesize from 'filesize';
+
+
+// --- Components ---
+
+import TopBar   from './components/Top-Bar.vue';
+import Menu     from './components/Menu.vue';
+import Login    from './components/Login.vue';
+
+
+// --- Plugins ---
+
+import VueBus from 'vue-bus';
+Vue.use(VueBus);
+
+// --- Mixins ---
+
+import Helper from './mixins/helper.js';
+
+
+// --- Adding global libraries ---
+
+import UIkit  from 'uikit';
+import Client from 'js-owncloud-client';
+
+Vue.prototype.$uikit  = UIkit
+Vue.prototype.$client = new Client();
 
 OC = new Vue({
-	el  : "#oc",
-	name : "phoenix",
-	data: {
+	el       : "#oc-scaffold",
+	name     : "phoenix",
+	mixins   : [Helper],
+	components: {
+		'top-bar'   : TopBar,
+		'side-menu' : Menu,
+		'login'    : Login
+	},
+	data     : {
 		appPath : '/apps',
 
 		// config settings
 		config  : {},
+		server : {},
 
 		// models
 		nav     : [],
-		apps    : []
+		apps    : [],
+		user    : {
+			displayname : null,
+			email       : null,
+			enabled     : false,
+			home        : null
+		}
 	},
 
 	mounted () {
 		// Start with loading the config
 		this._loadConfig();
 
-		this.$on('phoenix:configLoaded', () => {
+		this.$bus.on('phoenix:config-loaded', () => {
 			this._setupApps()
 		});
 
-		this.$on('phoenix:appsSetup', () => {
+		this.$bus.on('phoenix:apps-setup', () => {
 			this._bootApp(_.head(this.apps))
+		});
+
+		this.$bus.on('phoenix:user-logged-in', () => {
+			this.$client.getCapabilities().then(caps => {
+				this.server = caps
+			});
 		});
 
 	},
@@ -40,16 +87,16 @@ OC = new Vue({
 		 */
 
 		_loadConfig () {
-			$.getJSON('/config.json', (config) => {
+			$.getJSON('config.json', (config) => {
 				this.config = config;
 				this.apps   = config.apps;
-				this.$emit('phoenix:configLoaded');
+				this.$bus.emit('phoenix:config-loaded');
 			}).fail((err) => {
 				if (err.status === 404) {
-					UIkit.notification({
-					    message: '<strong>config.json missing!</strong><br>Make sure to have this file in your root folder.',
-					    status: 'danger',
-					    timeout: 0
+					this.$uikit.notification({
+						message: '<strong>config.json missing!</strong><br>Make sure to have this file in your root folder.',
+						status: 'danger',
+						timeout: 0
 					});
 				}
 
@@ -79,7 +126,7 @@ OC = new Vue({
 					// inject self
 					foo.setup(foo).then(() => {
 						if (this.apps.length === ++i) {
-							this.$emit('phoenix:appsSetup')
+							this.$bus.emit('phoenix:apps-setup')
 						}
 					})
 
@@ -88,6 +135,7 @@ OC = new Vue({
 				});
 			});
 		},
+
 
 		/**
 		 * Boot an application
@@ -100,7 +148,7 @@ OC = new Vue({
 			requirejs([this.appJS(app.id, 'boot')], ( App ) => {
 				App.boot(this._spawnAppContainer(), App).then( () => {
 					this._appSet(app.id, { 'running' : true });
-					this.$emit(app.id + ':booted');
+					this.$bus.emit(app.id + ':booted');
 				})
 			})
 		},
@@ -133,68 +181,64 @@ OC = new Vue({
 			this.apps[index] = _.assignIn(app, payload);
 		},
 
-		// ---------------------------------------------------------- helper ---
+		// ----------------------------------------------------------- USERS ---
 
-		pathBootJs( app ) {
+		// setters
 
-			let id = (typeof app === 'object') ? app.id : app;
-
-			return `${this.appPath}/${id}/js/boot.js`;
+		setUser (user) {
+			this.user = user;
 		},
+
+		// getters
+
+		getUser () {
+			return this.user
+		},
+
+		getUserDisplayname () {
+			return this.user.displayname;
+		},
+
+		getUserEmail () {
+			return this.user.email;
+		},
+
+		getUserQuota (formatted = false) {
+			if (!this.user.quota)
+				return null
+
+			if (!formatted)
+				return this.user.quota;
+
+			let form = {
+				free  : filesize(this.user.quota.free),
+				total : filesize(this.user.quota.total),
+				used  : filesize(this.user.quota.used)
+			};
+
+			return _.assignIn(this.user.quota, form);
+		},
+
+		userEnabled () {
+			return this.user.enabled;
+		},
+
+		// ---------------------------------------------------------- helper ---
 
 		getAppById( id ) {
 			return _.find(this.apps, ["id", id] );
 		},
 
 		appJS( app, file ) {
-			return ['/apps', app, 'js', file + '.js'].join('/');
+			return ['apps', app, 'js', file + '.js'].join('/');
 		},
-
-
-		/**
-		 * Create random string
-		 * will start with "c4…"
-		 *
-		 * @param prefix any string, number
-		 * @return 16 char string
-		 */
-
-		createRandom (prefix = '') {
-			// will always start with "c4…"
-			return prefix + btoa(Math.random()).toLowerCase().substring(1, 17);
-		},
-
-
-		// ------------------------------------------------ logging, warning ---
-
-		log ( message ) {
-			console.log( message );
-		},
-
-		warn ( message ) {
-			console.warn( message );
-		},
-
 
 		// -------------------------------------------- registration methods ---
 
-		registerNav ( app, payload ) {
+		registerNavItem ( app, payload ) {
 			this.nav.push(_.assign( { app }, payload ));
 		},
 
-		registerExp( app, payload) {
-
-			if (typeof payload != 'object' && _.isEmpty( payload.name ))
-				return false
-
-			this.exp.push( _.assignIn( { app }, payload ))
-		},
-
-		// --------------------------------------------------------- GETTERS ---
-
-		getNavItems () {
-			return this.nav;
-		}
 	},
 })
 
