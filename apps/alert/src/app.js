@@ -13,16 +13,15 @@ let app = new Vue({
 	},
 	template: tpl,
 	mounted () {
-		OC.$bus.emit('alert:mounted');
 		OC.$bus.on("demo:update-cookies", count => {
 			this.counter = count;
 		})
 	}
 });
 
-OC.$bus.once("demo:extends-below", (node, cookies) => {
-	app.$mount(node);
-	app.counter = cookies;
-})
+OC.$extend.request('demo', 'above-the-line').then( payload => {
+	app.$mount(payload[0]);
+	app.counter = payload[1];
+});
 
 export default define(app);

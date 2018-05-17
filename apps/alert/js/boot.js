@@ -8,7 +8,8 @@ define({
 		 id      : "alert",
 		 name    : "Let's ring some bells",
 		 author  : "Max Mustermann",
-		 version : "0.2.11"
+		 version : "0.2.11",
+		 plugin  : true
 	 },
 
 

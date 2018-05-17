@@ -19,7 +19,7 @@
 			</div>
 		</div>
 		<div class="uk-navbar-right">
-			<ul class="uk-navbar-nav">
+			<ul class="uk-navbar-nav" data-exp="navbar-right">
 				<li class="uk-visible@s">
 					<a href=""><i class="material-icons uk-text-inverse">search</i></a>
 					<input type="text" name="search" value="" class="uk-input uk-width-medium" placeholder="Search…" uk-dropdown="animation: uk-animation-slide-right-small; pos: left-center; offset: 0; delay-hide:100; mode: click;">
@@ -37,6 +37,7 @@
 
 <script>
 import _ from 'lodash';
+import $ from 'jquery';
 
 export default {
 	props   : ['user'],
