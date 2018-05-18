@@ -70,6 +70,10 @@ OC = new Vue({
 			this._bootApp(_.head(this.apps))
 		});
 
+        if(this.user.email === null){
+            this.$bus.emit('phoenix:request-login');
+        }
+
 		this.$bus.on('phoenix:user-logged-in', () => {
 			this.$client.getCapabilities().then(caps => {
 				this.server = caps
