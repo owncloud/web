@@ -72,10 +72,6 @@ OC = new Vue({
 			this._bootApp(_.head(this.apps))
 		});
 
-		this.$once('afterBootApp', () => {
-			this._runEventQueue();
-		});
-
 	},
 
 	methods: {
