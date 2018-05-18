@@ -54,7 +54,7 @@
 
                                 // --- Name ----------
                                 td(v-if="!file.extension", @click="singleSelect(file)").uk-text-truncate.uk-visible-toggle
-                                    a(@click.stop="routerLink(file)").uk-link-text.uk-position-relative
+                                    a(@click.stop="routerLink(file.path)").uk-link-text.uk-position-relative
                                         i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
                                         span {{ file.name }}
 
@@ -113,7 +113,9 @@
             }
         },
         mounted() {
-            this.loadFolder();
+            OC.$bus.on('phoenix:user-logged-in', () => {
+                this.loadFolder();
+            })
         },
         methods: {
             goto(e) {
@@ -122,29 +124,29 @@
             toggleFavorite(item) {
                 this.files[item].stared = (!this.files[item].stared);
             },
-            routerLink(item) {
-                this.path.push(item.name);
-
+            routerLink(itemPath) {
                 this.$router.push({
                     name: 'files',
                     params: {
-                        item: item.path
+                        item: itemPath
                     }
                 })
             },
             loadFolder() {
                 this.loading = true;
 
-                const oc = window.oc;
-
                 let absPath = this.$route.params.item;
                 if(this.$route.params.item === 'home'){
                     absPath = '/';
                     this.path = []
+                }else{
+                    let pathSplit  = absPath.split('/');
+                    pathSplit = pathSplit.slice(1, pathSplit.length - 1);
+                    this.path = pathSplit
                 }
 
                 // List all files
-                oc.files.list(absPath).then(files => {
+                OC.$client.files.list(absPath).then(files => {
                     // Remove the root element
                     files = files.splice(1);
 
@@ -260,7 +262,7 @@
         },
         computed: {
             item() {
-                return this.$route.params.item;   //this.$route.params.item.toLowerCase();
+                return this.$route.params.item;
             },
             typeOfFolder() {
                 return _.filter(this.files, ['extension', false])
