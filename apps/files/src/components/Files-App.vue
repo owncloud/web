@@ -135,18 +135,18 @@
             loadFolder() {
                 this.loading = true;
 
-                let absolutePath = this.$route.params.item;
+                let absPath = this.$route.params.item;
                 if(this.$route.params.item === 'home'){
                     absolutePath = '/';
                     this.path = []
                 }else{
-                    let pathSplit  = absolutePath.split('/');
+                    let pathSplit  = absPath.split('/');
                     pathSplit = pathSplit.slice(1, pathSplit.length - 1);
                     this.path = pathSplit
                 }
 
                 // List all files
-                OC.$client.files.list(absolutePath).then(files => {
+                OC.$client.files.list(absPath).then(files => {
                     // Remove the root element
                     files = files.splice(1);
 
@@ -271,7 +271,6 @@
 </script>
 
 <style lang="less">
-
     #files-app {
         ._scroll_container {
             display: block;
