@@ -58,6 +58,12 @@
 
     export default {
         mixins : [Mixins],
-        props  : ['share','filename']
+        props  : ['share','filename'],
+        data() {
+            return {
+                expires: null,
+                password: null
+            }
+        }
     }
 </script>
