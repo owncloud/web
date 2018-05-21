@@ -138,7 +138,7 @@
             this.resetDefaultShare();
             this.resetLinkShare();
 
-            UIkit.util.on('#file-sharing-modal', 'hide', () => {
+            OC.$uikit.util.on('#file-sharing-modal', 'hide', () => {
                 if (this.linkShare.send) {
                     this.createLinkShare();
                 }
@@ -170,7 +170,7 @@
                     'password'    : this.linkShare.password,
                 });
 
-                UIkit.notification({
+                OC.$uikit.notification({
                     message : (this.linkShare.mail.to) ? "Link has been send to " + this.linkShare.mail.to : "Link has been created",
                     status  : 'success',
                     pos     : 'top-center'
@@ -179,10 +179,10 @@
                 this.resetLinkShare();
             },
             openPublicLinkModal () {
-                UIkit.modal('#file-sharing-modal').show();
+                OC.$uikit.modal('#file-sharing-modal').show();
             },
             openDefaultModal () {
-                UIkit.modal('#file-sharing-default-modal').show();
+                OC.$uikit.modal('#file-sharing-default-modal').show();
             },
             formatPerms(perms) {
                 let string = "";

@@ -61,7 +61,7 @@
             }
         },
         mounted() {
-            UIkit.util.on('#file-sharing-modal', 'hide', function () {
+            OC.$uikit.util.on('#file-sharing-modal', 'hide', function () {
                 // $('#mailto').tagsInput();
             });
         },
