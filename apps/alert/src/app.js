@@ -15,7 +15,17 @@ let app = new Vue({
 	mounted () {
 		OC.$bus.on("demo:update-cookies", count => {
 			this.counter = count;
-		})
+		});
+
+		OC.$extend.provide('alert', 'funky', this.youSuck);
+	},
+	methods : {
+		youSuck() {
+			let p = new Promise((r, d) => {
+				r('You suck!');
+			});
+			return p;
+		}
 	}
 });
 

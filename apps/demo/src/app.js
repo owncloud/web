@@ -15,6 +15,10 @@ let app = new Vue({
 	template: tpl,
 	mounted () {
 		OC.$extend.provide('demo', 'above-the-line', this.extendAboveTheLine)
+
+		OC.$extend.request('alert', 'funky').then(boing => {
+			alert(boing);
+		});
 	},
 	methods: {
 		addCookie() {

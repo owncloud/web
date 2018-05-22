@@ -1,10 +1,9 @@
 const extend = {
-	request (appId, exp) {
 
+	request (appId, exp) {
 		let p = new Promise((resolve, defer) => {
 			let returnEvent = btoa(Math.random()).toLowerCase().substring(1, 17);
-
-			OC.$bus.on( [appId, 'booted'].join(':'), () => {
+			OC.$bus.on( [appId, 'start'].join(':'), () => {
 				OC.$bus.emit( [appId, 'request-extension', exp].join(':'), returnEvent);
 				OC.$bus.once(returnEvent, payload => {
 					resolve(payload)
