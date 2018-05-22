@@ -105,30 +105,27 @@ OC = new Vue({
 
 		/**
 		 * Setup all available apps
-		 *
-		 * @return Promise
 		 */
 
 		_setupApps () {
 
-			_.forEach(this.apps, (app, i) => {
+			_.forEach(this.apps, (app, index) => {
 
 				// TODO: Find better var name for 'foo'
-				requirejs([this.appJS(app.id, 'boot')], ( foo ) => {
+				requirejs([this.appJS(app.id, 'boot')], ( a ) => {
 
-					let defaults = {
-						enabled : true,
-						running : false,
-					};
+					a.setup().then((appInfo) => {
+						if (app.id != appInfo.id) {
+							console.error(`PHOENIX: App ID missmatch! ${app.id} != ${appInfo.id}`);
+							return false
+						}
 
-					if (foo.info.plugin)
-						this.eventQueue.push(foo.info.id + ':booted');
+						this._registerApp(index, appInfo);
 
-					this.apps[i] = _.assignIn(defaults, foo.info);
+						if (appInfo.start)
+							this.$bus.emit(app.id +':start');
 
-					// inject self
-					foo.setup(foo).then(() => {
-						if (this.apps.length === ++i) {
+						if (this.apps.length === ++index) {
 							this.$emit('afterSetupApps');
 						}
 					})
@@ -139,6 +136,38 @@ OC = new Vue({
 			});
 		},
 
+		/**
+		 * Setup all available apps
+		 *
+		 * @param appInfo (object) return value on setup/boot
+		 */
+
+		_registerApp ( index, appInfo ) {
+
+			let defaults = {
+				enabled : true,
+				start : false,
+				styles  : []
+			};
+
+			let model = _.assignIn(defaults, appInfo);
+			this.apps[index] = model;
+		},
+
+		_addStyles ( appId, array ) {
+			let $head = $('head');
+			_.forEach(array, style => {
+				$('<link>', {
+					rel        : 'stylesheet',
+					href       : `apps/${appId}/${style}`,
+					'data-rel' : appId
+				}).appendTo($head);
+			});
+		},
+
+		_removeStyles ( appId ) {
+			$(`link[data-app-id="${appId}"]`).remove();
+		},
 
 		/**
 		 * Boot an application
@@ -148,11 +177,14 @@ OC = new Vue({
 		 */
 
 		_bootApp (app) {
+
+			if (app.styles.length > 0)
+				this._addStyles(app.id, app.styles);
+
 			requirejs([this.appJS(app.id, 'boot')], ( App ) => {
-				App.boot(this._spawnAppContainer(), App).then( () => {
-					this._appSet(app.id, { 'running' : true } );
-					this.eventQueue.push(app.id + ':booted');
-					this.$emit('afterBootApp');
+				App.boot(this._spawnAppContainer(), App).then( (val) => {
+					this._appSet(app.id, val );
+					this.$bus.emit(app.id +':start');
 				})
 			})
 		},
@@ -184,11 +216,13 @@ OC = new Vue({
 		 */
 
 		_appSet (id, payload) {
-
-			let app   = this.getAppById(id),
+			let apps  = _.clone(this.apps),
+				app   = this.getAppById(id),
 				index = _.findIndex(app);
 
-			this.apps[index] = _.assignIn(app, payload);
+			apps[index] = _.assignIn(app, payload);
+
+			this.apps = apps;
 		},
 
 		// ----------------------------------------------------------- USERS ---
@@ -250,6 +284,14 @@ OC = new Vue({
 		},
 
 	},
+	computed : {
+		appsRunning () {
+			return _.filter(this.apps, 'start');
+		},
+		appsPending () {
+			return _.filter(this.apps, ['start', false]);
+		}
+	}
 })
 
 export default OC;
