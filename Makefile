@@ -19,6 +19,16 @@ node_modules: package.json package-lock.json
 core/css/uikit.%.css: src/themes/%.less node_modules
 	node_modules/less/bin/lessc src/themes/$*.less core/css/uikit.$*.css --relative-urls
 
+core/css/material-icons.css: src/themes/icons.scss node_modules
+	node node_modules/.bin/sass src/themes/icons.scss core/css/material-icons.css --no-source-map
+
+core/fonts: node_modules
+	mkdir core/fonts
+
+core/fonts/MaterialIcons-Regular.%: core/fonts node_modules
+	cp node_modules/material-icons/iconfont/MaterialIcons-Regular.* core/fonts/
+
+
 core/js/core.bundle.js: node_modules
 	npm run build
 
@@ -26,11 +36,11 @@ core/js/core.bundle.js: node_modules
 # core
 #
 .PHONY: core
-core: core/js/core.bundle.js core/css/uikit.owncloud.css
+core: core/js/core.bundle.js core/css/uikit.owncloud.css core/css/material-icons.css core/fonts/MaterialIcons-Regular.%
 
 .PHONY: clean-core
 clean-core:
-	rm -rf core/js/core.bundle.js.* core/css/uikit.*.css
+	rm -rf core/js/core.bundle.js.* core/css/uikit.*.css core/fonts core/css/material-icons.css
 	rm -Rf node_modules
 
 #
@@ -52,4 +62,3 @@ clean-app-%:
 .PHONY: run
 run: build
 	php -S "$(SERVER_HOST)"
-

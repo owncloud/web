@@ -31,6 +31,7 @@
     "start-server-and-test": "^1.7.1",
     "vue-loader": "14.2.3",
     "vue-template-compiler": "^2.5.16",
+    "sass": "^1.3.2",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.0.8",
     "webpack-merge": "^4.1.3"
@@ -39,6 +40,7 @@
     "axios": "^0.18.0",
     "js-owncloud-client": "^0.1.3",
     "lodash": "^4.17.10",
+    "material-icons": "^0.2.3",
     "requirejs": "^2.3.6",
     "uikit": "^3.0.0-rc.9",
     "vue": "^2.5.16",

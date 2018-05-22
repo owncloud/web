@@ -1,5 +1,6 @@
 core/js/*
 core/css/*
+core/fonts/*
 
 apps/*
 !apps/servstat
