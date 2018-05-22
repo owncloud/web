@@ -13,11 +13,12 @@ let app = new Vue({
 		amountOfCookies: 43,
 	},
 	template: tpl,
-	mounted () {
+	created () {
 		OC.$extend.provide('demo', 'above-the-line', this.extendAboveTheLine)
-
-		OC.$extend.request('alert', 'funky').then(boing => {
-			alert(boing);
+	},
+	mounted () {
+		OC.$extend.request('alert', 'funky').then(message => {
+			console.log(message);
 		});
 	},
 	methods: {
