@@ -12,17 +12,18 @@ let app = new Vue({
 		counter: 0
 	},
 	template: tpl,
+	created () {
+		OC.$extend.provide('alert', 'funky', this.extendFunky);
+	},
 	mounted () {
 		OC.$bus.on("demo:update-cookies", count => {
 			this.counter = count;
 		});
-
-		OC.$extend.provide('alert', 'funky', this.youSuck);
 	},
 	methods : {
-		youSuck() {
+		extendFunky() {
 			let p = new Promise((r, d) => {
-				r('You suck!');
+				r('You just extended funky!');
 			});
 			return p;
 		}

@@ -33,11 +33,8 @@ define({
 	boot: (container) => {
 		var p  = new Promise((resolve, defer) => {
 			requirejs([OC.appJS('demo', 'demo.bundle')], (app) => {
-
-				setTimeout(() => {
-					app.$mount(container);
-					app.$once('mounted', resolve( { start: true } ) );
-				}, 5000);
+				app.$mount(container);
+				app.$once('mounted', resolve( { start: true } ) );
 			});
 		});
 		return p;
