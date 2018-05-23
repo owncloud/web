@@ -51,7 +51,6 @@ OC = new Vue({
 		// models
 		nav        : [],
 		apps       : [],
-		eventQueue : [],
 		user    : {
 			displayname : null,
 			email       : null,
@@ -183,12 +182,6 @@ OC = new Vue({
 					this.$bus.emit(app.id +':start');
 				})
 			})
-		},
-
-		_runEventQueue () {
-			_.forEach(this.eventQueue, (event, i) => {
-				this.$bus.emit(event);
-			});
 		},
 
 		_spawnAppContainer () {
