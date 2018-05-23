@@ -150,87 +150,82 @@
                     // Remove the root element
                     files = files.splice(1);
 
-                    let delay = Math.random() * (1000 - 200) + 200;
+                    this.files = files.map(file => {
+                        return ({
+                            type: (file.type === 'dir') ? 'folder' : file.type,
 
-                    setTimeout(() => {
-
-                        this.files = files.map(file => {
-                            return ({
-                                type: (file.type === 'dir') ? 'folder' : file.type,
-
-                                //TODO: Retrieve real shared status of each file
-                                shared: {
-                                    to: {
-                                        user: [
-                                            // {
-                                            //     perms: {
-                                            //         "remove": false,
-                                            //         "change": false,
-                                            //         "create": true,
-                                            //         "share": false
-                                            //     },
-                                            //     avatar: "http://stevensegallery.com/40/40",
-                                            //     name: "Jeannie Boyer",
-                                            //     state: 0,
-                                            //     type: "default"
-                                            // }
-                                        ],
-                                        link: [
-                                            // {
-                                            //     password: false,
-                                            //     perms: {
-                                            //         remove: false,
-                                            //         change: false,
-                                            //         create: true,
-                                            //         share: true
-                                            //     },
-                                            //     type: "link",
-                                            //     mailTo: "",
-                                            //     hash: "b8ab6e5c",
-                                            //     IGNORE: {
-                                            //         "1": "Lessie.Holland@Anixang.net",
-                                            //         "2": "b8ab6e5c-7c4d-4e9a-9712-b28322fd1d54"
-                                            //     }
-                                            // }
-                                        ]
-                                    },
-                                    from: false
+                            //TODO: Retrieve real shared status of each file
+                            shared: {
+                                to: {
+                                    user: [
+                                        // {
+                                        //     perms: {
+                                        //         "remove": false,
+                                        //         "change": false,
+                                        //         "create": true,
+                                        //         "share": false
+                                        //     },
+                                        //     avatar: "http://stevensegallery.com/40/40",
+                                        //     name: "Jeannie Boyer",
+                                        //     state: 0,
+                                        //     type: "default"
+                                        // }
+                                    ],
+                                    link: [
+                                        // {
+                                        //     password: false,
+                                        //     perms: {
+                                        //         remove: false,
+                                        //         change: false,
+                                        //         create: true,
+                                        //         share: true
+                                        //     },
+                                        //     type: "link",
+                                        //     mailTo: "",
+                                        //     hash: "b8ab6e5c",
+                                        //     IGNORE: {
+                                        //         "1": "Lessie.Holland@Anixang.net",
+                                        //         "2": "b8ab6e5c-7c4d-4e9a-9712-b28322fd1d54"
+                                        //     }
+                                        // }
+                                    ]
                                 },
+                                from: false
+                            },
 
-                                starred: false,
+                            starred: false,
 
-                                mdate: file['fileInfo']['{DAV:}getlastmodified'],
+                            mdate: file['fileInfo']['{DAV:}getlastmodified'],
 
-                                cdate: '',    //TODO: Retrieve data of creation of a file
+                            cdate: '',    //TODO: Retrieve data of creation of a file
 
-                                size: function () {
-                                    if (file.type === 'dir') {
-                                        return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
-                                    } else {
-                                        return file['fileInfo']['{DAV:}getcontentlength'] / 100
-                                    }
-                                }(),
+                            size: function () {
+                                if (file.type === 'dir') {
+                                    return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
+                                } else {
+                                    return file['fileInfo']['{DAV:}getcontentlength'] / 100
+                                }
+                            }(),
 
-                                extension: (file.type === 'dir') ? false : '',
+                            extension: (file.type === 'dir') ? false : '',
 
-                                name: function () {
-                                    let pathList = file.name.split("/").filter(e => e !== "")
-                                    return pathList[pathList.length - 1];
-                                }(),
+                            name: function () {
+                                let pathList = file.name.split("/").filter(e => e !== "")
+                                return pathList[pathList.length - 1];
+                            }(),
 
-                                path: file.name,
+                            path: file.name,
 
-                                id: file['fileInfo']['{DAV:}getetag']
-                            });
+                            id: file['fileInfo']['{DAV:}getetag']
                         });
+                    });
 
-                        this.self = files.self;
+                    this.self = files.self;
 
-                        this.loading = false;
+                    this.loading = false;
 
-                        this.resetSelect();
-                    }, delay)
-                }).catch(error => {``
+                    this.resetSelect();
+                }).catch(error => {
                     console.log(error);
                     UIkit.notification({
                         message: error.statusText,
