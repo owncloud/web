@@ -1,11 +1,4 @@
 define({
-	 info : {
-		 id      : 'files',
-		 name    : "Files",
-		 author  : "Felix Heidecke, Vincent Petry, Thomas Müller",
-		 version : "0.1.0",
-	 },
-
 
 	 	/**
 		 * allow to setup the application
@@ -14,15 +7,15 @@ define({
 		 * @param self will feed back 'this' object
 		 */
 
-	 	setup: (self) => {
+	 	setup: () => {
 	 		var my = self.info;
 	 		var p = new Promise((resolve, defer) => {
-	 			OC.registerNavItem(my.id, {
-	 				name: my.name,
+	 			OC.registerNavItem('files', {
+	 				name: 'Files',
 	 				iconMaterial: 'folder',
 	 				route: '/'
 	 			});
-	 			resolve();
+				resolve( { id : 'files' } );
 	 		});
 	 		return p;
 	 	},
@@ -34,17 +27,11 @@ define({
 		 * @return promise
 		 */
 
-		boot: (container, self) => {
-			var my = self.info;
+		boot: (container) => {
 			var p = new Promise((resolve, defer) => {
-
-				requirejs([OC.appJS(my.id, my.id + '.bundle')], (app) => {
-
-					// mount the app
+				requirejs([OC.appJS('files', 'files.bundle')], (app) => {
 					app.$mount(container);
-
-					// listen to 'mounted' event
-					app.$once('mounted', resolve());
+					app.$once('mounted', resolve( { start: true } ) );
 				});
 			});
 			return p;
