@@ -1,6 +1,13 @@
-/node_modules/
+node_modules/
 core/js/*
 core/css/*
+
+
+apps/*
+!apps/alert
+!apps/demo
+!apps/files
+
 .idea
 *.bundle.js
 *.bundle.js.map
