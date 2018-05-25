@@ -1,6 +1,6 @@
 const extend = {
 
-	request (appId, exp) {
+	request (appId, exp, payload = []) {
 		let p = new Promise((resolve, defer) => {
 
 			let returnEvent  = btoa(Math.random()).toLowerCase().substring(1, 17),
@@ -9,13 +9,13 @@ const extend = {
 
 			// Is the app running?
 			if (reqApp && reqApp.start) {
-				this._processRequest(extPointName, returnEvent, resolve, defer);
+				this._processRequest(extPointName, returnEvent, payload, resolve, defer);
 			}
 
 			// Wait for app:start event
 			else {
 				OC.$bus.on( [appId, 'start'].join(':'), () => {
-					this._processRequest(extPointName, returnEvent, resolve, defer);
+					this._processRequest(extPointName, returnEvent, payload, resolve, defer);
 				});
 			}
 		});
@@ -23,15 +23,15 @@ const extend = {
 	},
 
 	provide (myId, exp, method) {
-		OC.$bus.on( [myId, 'request-extension', exp].join(':'), returnEvent => {
-			method().then( (data) => {
+		OC.$bus.on( [myId, 'request-extension', exp].join(':'), (returnEvent, payload) => {
+			method(payload).then( (data) => {
 				OC.$bus.emit(returnEvent, data);
 			})
 		})
 	},
 
-	_processRequest (extPointName, returnEvent, resolve, defer) {
-		OC.$bus.emit(extPointName, returnEvent);
+	_processRequest (extPointName, returnEvent, payload, resolve, defer) {
+		OC.$bus.emit(extPointName, returnEvent, payload);
 		OC.$bus.once(returnEvent, payload => {
 			resolve(payload)
 		});
