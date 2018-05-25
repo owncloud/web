@@ -30,7 +30,7 @@
     "vue-router": "^3.0.1",
     "vue-style-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^4.7.0",
+    "webpack": "^4.9.1",
     "webpack-cli": "^2.1.2"
   },
   "dependencies": {
