@@ -6,7 +6,7 @@
         i.material-icons(class=a.class)= a.icon
 
     mixin iconButton(a)
-        button.uk-button(class='uk-button-' + a.buttonType, class=a.class, type="button").uk-flex.uk-flex-middle
+        button.uk-button(class='uk-button-' + a.buttonType, class=a.class, type="button", @click=a.click).uk-flex.uk-flex-middle
             if a.text
                 +icon({icon: a.icon, class: 'uk-margin-small-right'})
                 span= a.text
@@ -16,7 +16,7 @@
     // --- Vue component -----------------------------------------------
 
     .uk-button-group.uk-margin-medium-top
-        +iconButton({class: 'uk-button-small', icon: 'file_download', buttonType: 'primary', text: 'Download' })
+        +iconButton({class: 'uk-button-small', icon: 'file_download', buttonType: 'primary', text: 'Download', click: 'downloadFile("cat")' })
         +iconButton({class: 'uk-button-small', icon: 'more_horiz', buttonType: 'default'})
         div(uk-dropdown="mode: click")
             .uk-margin
@@ -43,6 +43,29 @@
         data () {
             return {
                 fileAction: null
+            }
+        },
+        methods: {
+            downloadFile(path) {
+                console.log(path)
+                OC.$client.files.getFileContents('/hack.pdf').then(res => {
+
+                    var blob = new Blob([res._18], { type: 'application/pdf' });
+                    console.log(res)
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'hack.pdf';
+
+                    document.body.appendChild(link);
+                    link.click();
+
+                    document.body.removeChild(link);
+
+
+
+                }).catch(err =>{
+                    console.log(err)
+                })
             }
         }
     }

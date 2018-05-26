@@ -216,7 +216,7 @@
 
                             path: file.name,
 
-                            id: file['fileInfo']['{DAV:}getetag']
+                            id: file['fileInfo']['{DAV:}gettag']
                         });
                     });
 
