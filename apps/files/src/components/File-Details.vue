@@ -18,7 +18,7 @@
                         span.uk-text-meta Size:&nbsp;
                         span.uk-text-small {{ file[0].size | fileSize }}
 
-            FileDetailsButtonrow
+            FileDetailsButtonrow(:files="file")
 
             ul(uk-switcher="connect: #hou2ifelkje").uk-child-width-expand.uk-tab
                 li.uk-active
@@ -64,7 +64,7 @@
                         span.uk-text-meta Size:&nbsp;
                         span.uk-text-small {{ accumulatedFilesSize | fileSize }}
 
-            FileDetailsButtonrow
+            FileDetailsButtonrow(:files="file")
 
             hr.uk-hr
             ul.uk-list.uk-list-bullet

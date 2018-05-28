@@ -16,7 +16,7 @@
     // --- Vue component -----------------------------------------------
 
     .uk-button-group.uk-margin-medium-top
-        +iconButton({class: 'uk-button-small', icon: 'file_download', buttonType: 'primary', text: 'Download', click: 'downloadFile("cat")' })
+        +iconButton({class: 'uk-button-small', icon: 'file_download', buttonType: 'primary', text: 'Download', click: 'download()' })
         +iconButton({class: 'uk-button-small', icon: 'more_horiz', buttonType: 'default'})
         div(uk-dropdown="mode: click")
             .uk-margin
@@ -40,32 +40,28 @@
 </template>
 <script>
     export default {
+        props : ['files'],
         data () {
             return {
                 fileAction: null
             }
         },
         methods: {
-            downloadFile(path) {
-                console.log(path)
-                OC.$client.files.getFileContents('/hack.pdf').then(res => {
+            download() {
+                for(let i = 0; i < this.files.length; i++){
+                    OC.$client.files.getFileContents(this.files[i].path).then(res => {
+                        var blob = new Blob([res]);
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = this.files[i].name;
 
-                    var blob = new Blob([res._18], { type: 'application/pdf' });
-                    console.log(res)
-                    var link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = 'hack.pdf';
-
-                    document.body.appendChild(link);
-                    link.click();
-
-                    document.body.removeChild(link);
-
-
-
-                }).catch(err =>{
-                    console.log(err)
-                })
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }).catch(err =>{
+                        console.log(err)
+                    })
+                }
             }
         }
     }
