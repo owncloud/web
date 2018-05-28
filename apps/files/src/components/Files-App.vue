@@ -88,54 +88,52 @@
 </template>
 
 <script>
-	import Mixins from '../mixins';
-	import FileDetails from './File-Details.vue';
+    import Mixins       from '../mixins';
+    import FileDetails  from './File-Details.vue';
 
-	const remove = require('lodash/remove');
-	const includes = require('lodash/includes');
-	const filter = require('lodash/filter');
+    const remove    = require('lodash/remove');
+    const includes  = require('lodash/includes');
+    const filter    = require('lodash/filter');
 
-	export default {
-		mixins: [Mixins],
-		components: {
-			FileDetails
-		},
-		data() {
-			return {
-				loading: false,
-				filterBy: {
-					files: true,
-					folder: true,
-					hidden: false
-				},
-				path: [],
-				files: [],
-				selected: [],
-				self: {}
-			}
-		},
-		mounted() {
-			OC.$bus.on('phoenix:user-logged-in', () => {
-				this.loadFolder();
-			})
-		},
-		methods: {
-			goto(e) {
-				this.$route.push()
-			},
-			toggleFavorite(item) {
-				this.files[item].stared = (!this.files[item].stared);
-			},
-			routerLink(itemPath) {
-				this.$router.push({
-					name: 'files',
-					params: {
-						item: itemPath
-					}
-				})
-			},
-			loadFolder() {
-				this.loading = true;
+    export default {
+        mixins      : [Mixins],
+        components  : {FileDetails},
+        data() {
+            return {
+                loading : false,
+                filterBy: {
+                    files   : true,
+                    folder  : true,
+                    hidden  : false
+                },
+                path    : [],
+                files   : [],
+                selected: [],
+                self    : {}
+            }
+        },
+        mounted() {
+            OC.$bus.on('phoenix:user-logged-in', () => {
+                this.loadFolder();
+            })
+        },
+        methods: {
+            goto(e) {
+                this.$route.push()
+            },
+            toggleFavorite(item) {
+                this.files[item].stared = (!this.files[item].stared);
+            },
+            routerLink(itemPath) {
+                this.$router.push({
+                    name: 'files',
+                    params: {
+                        item: itemPath
+                    }
+                })
+            },
+            loadFolder() {
+                this.loading = true;
 
 				let absolutePath = this.$route.params.item;
 				if(this.$route.params.item === 'home'){
@@ -152,9 +150,9 @@
 					// Remove the root element
 					files = files.splice(1);
 
-					this.files = files.map(file => {
-						return ({
-							type: (file.type === 'dir') ? 'folder' : file.type,
+                    this.files = files.map(file => {
+                        return ({
+                            type    : (file.type === 'dir') ? 'folder' : file.type,
 
 							//TODO: Retrieve real shared status of each file
 							shared: {
@@ -195,32 +193,32 @@
 								from: false
 							},
 
-							starred: false,
+                            starred : false,
 
-							mdate: file['fileInfo']['{DAV:}getlastmodified'],
+                            mdate   : file['fileInfo']['{DAV:}getlastmodified'],
 
-							cdate: '',    //TODO: Retrieve data of creation of a file
+                            cdate   : '',    //TODO: Retrieve data of creation of a file
 
-							size: function () {
-								if (file.type === 'dir') {
-									return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
-								} else {
-									return file['fileInfo']['{DAV:}getcontentlength'] / 100
-								}
-							}(),
+                            size    : function () {
+                                if (file.type === 'dir') {
+                                    return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
+                                } else {
+                                    return file['fileInfo']['{DAV:}getcontentlength'] / 100
+                                }
+                            }(),
 
 							extension: (file.type === 'dir') ? false : '',
 
-							name: function () {
-								let pathList = file.name.split("/").filter(e => e !== "")
-								return pathList[pathList.length - 1];
-							}(),
+                            name    : function () {
+                                let pathList = file.name.split("/").filter(e => e !== "")
+                                return pathList[pathList.length - 1];
+                            }(),
 
-							path: file.name,
+                            path    : file.name,
 
-							id: file['fileInfo']['{DAV:}getetag']
-						});
-					});
+                            id      : file['fileInfo']['{DAV:}getetag']
+                        });
+                    });
 
 					this.self = files.self;
 
