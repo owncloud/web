@@ -88,28 +88,28 @@
 </template>
 
 <script>
-    import Mixins from '../mixins';
-    import FileDetails from './File-Details.vue';
+    import Mixins       from '../mixins';
+    import FileDetails  from './File-Details.vue';
 
-    const remove = require('lodash/remove');
-    const includes = require('lodash/includes');
-    const filter = require('lodash/filter');
+    const remove    = require('lodash/remove');
+    const includes  = require('lodash/includes');
+    const filter    = require('lodash/filter');
 
     export default {
-        mixins: [Mixins],
-        components: {FileDetails},
+        mixins      : [Mixins],
+        components  : {FileDetails},
         data() {
             return {
-                loading: false,
+                loading : false,
                 filterBy: {
-                    files: true,
-                    folder: true,
-                    hidden: false
+                    files   : true,
+                    folder  : true,
+                    hidden  : false
                 },
-                path: [],
-                files: [],
+                path    : [],
+                files   : [],
                 selected: [],
-                self: {}
+                self    : {}
             }
         },
         mounted() {
@@ -155,7 +155,7 @@
                             type: (file.type === 'dir') ? 'folder' : file.type,
 
                             //TODO: Retrieve real shared status of each file
-                            shared: {
+                            shared  : {
                                 to: {
                                     user: [
                                         // {
@@ -193,13 +193,13 @@
                                 from: false
                             },
 
-                            starred: false,
+                            starred : false,
 
-                            mdate: file['fileInfo']['{DAV:}getlastmodified'],
+                            mdate   : file['fileInfo']['{DAV:}getlastmodified'],
 
-                            cdate: '',    //TODO: Retrieve data of creation of a file
+                            cdate   : '',    //TODO: Retrieve data of creation of a file
 
-                            size: function () {
+                            size    : function () {
                                 if (file.type === 'dir') {
                                     return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
                                 } else {
@@ -209,14 +209,14 @@
 
                             extension: (file.type === 'dir') ? false : '',
 
-                            name: function () {
+                            name    : function () {
                                 let pathList = file.name.split("/").filter(e => e !== "")
                                 return pathList[pathList.length - 1];
                             }(),
 
-                            path: file.name,
+                            path    : file.name,
 
-                            id: file['fileInfo']['{DAV:}gettag']
+                            id      : file['fileInfo']['{DAV:}gettag']
                         });
                     });
 
