@@ -5,7 +5,7 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:vue/recommended"
+        "plugin:vue/essential"
         ],
     "parserOptions": {
         "sourceType": "module"
