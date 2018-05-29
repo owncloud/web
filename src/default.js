@@ -18,9 +18,11 @@ import Login    from './components/Login.vue';
 import VueBus from 'vue-bus';
 Vue.use(VueBus);
 
+
 // --- Mixins ---
 
 import Helper from './mixins/helper.js';
+
 
 // --- Adding global libraries ---
 
@@ -33,14 +35,14 @@ Vue.prototype.$client = new Client();
 Vue.prototype.$extend = Extend;
 
 OC = new Vue({
-	el       : "#oc-scaffold",
-	name     : "phoenix",
-	mixins   : [Helper],
+	el       : '#oc-scaffold',
+	name     : 'Phoenix',
 	components: {
 		'top-bar'   : TopBar,
 		'side-menu' : Menu,
 		'login'    : Login
 	},
+	mixins   : [Helper],
 	data     : {
 		appPath : '/apps',
 
@@ -58,17 +60,25 @@ OC = new Vue({
 			home        : null
 		}
 	},
+	computed : {
+		appsRunning () {
+			return _.filter(this.apps, 'start');
+		},
+		appsPending () {
+			return _.filter(this.apps, ['start', false]);
+		}
+	},
 
 	mounted () {
 		// Start with loading the config
 		this._loadConfig();
 
 		this.$once('afterLoadConfig', () => {
-			this._setupApps()
+			this._setupApps();
 		});
 
 		this.$once('afterSetupApps', () => {
-			this._bootApp(_.head(this.apps))
+			this._bootApp(_.head(this.apps));
 		});
 
 	},
@@ -110,9 +120,9 @@ OC = new Vue({
 				requirejs([this.appJS(app.id, 'boot')], ( a ) => {
 
 					a.setup().then((appInfo) => {
-						if (app.id != appInfo.id) {
+						if (app.id !== appInfo.id) {
 							console.error(`PHOENIX: App ID missmatch! ${app.id} != ${appInfo.id}`);
-							return false
+							return false;
 						}
 
 						this._registerApp(index, appInfo);
@@ -123,7 +133,7 @@ OC = new Vue({
 						if (this.apps.length === ++index) {
 							this.$emit('afterSetupApps');
 						}
-					})
+					});
 
 				}, (err) => {
 					this.warn(err);
@@ -180,8 +190,8 @@ OC = new Vue({
 				App.boot(this._spawnAppContainer(), App).then( (val) => {
 					this._appSet(app.id, val );
 					this.$bus.emit(app.id +':start');
-				})
-			})
+				});
+			});
 		},
 
 		_spawnAppContainer () {
@@ -225,7 +235,7 @@ OC = new Vue({
 		// getters
 
 		getUser () {
-			return this.user
+			return this.user;
 		},
 
 		getUserDisplayname () {
@@ -238,7 +248,7 @@ OC = new Vue({
 
 		getUserQuota (formatted = false) {
 			if (!this.user.quota)
-				return null
+				return null;
 
 			if (!formatted)
 				return this.user.quota;
@@ -259,7 +269,7 @@ OC = new Vue({
 		// ---------------------------------------------------------- helper ---
 
 		getAppById( id ) {
-			return _.find(this.apps, ["id", id] );
+			return _.find(this.apps, ['id', id] );
 		},
 
 		appJS( app, file ) {
@@ -273,14 +283,6 @@ OC = new Vue({
 		},
 
 	},
-	computed : {
-		appsRunning () {
-			return _.filter(this.apps, 'start');
-		},
-		appsPending () {
-			return _.filter(this.apps, ['start', false]);
-		}
-	}
-})
+});
 
 export default OC;

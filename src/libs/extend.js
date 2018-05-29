@@ -26,16 +26,16 @@ const extend = {
 		OC.$bus.on( [myId, 'request-extension', exp].join(':'), (returnEvent, payload) => {
 			method(payload).then( (data) => {
 				OC.$bus.emit(returnEvent, data);
-			})
-		})
+			});
+		});
 	},
 
 	_processRequest (extPointName, returnEvent, payload, resolve, defer) {
 		OC.$bus.emit(extPointName, returnEvent, payload);
 		OC.$bus.once(returnEvent, payload => {
-			resolve(payload)
+			resolve(payload);
 		});
 	}
-}
+};
 
 export default extend;
