@@ -64,7 +64,6 @@
 	import Mixins  from '../mixins';
 
 	// vue components
-	import FilesSharing         from './File-Sharing.vue';
 	import FileDetailsButtonrow from './File-Details-Buttonrow.vue';
 
 	import $ from 'jquery';
