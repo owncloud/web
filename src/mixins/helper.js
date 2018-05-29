@@ -13,6 +13,6 @@ var helper = {
 			return prefix + btoa(Math.random()).toLowerCase().substring(1, 17);
 		}
 	}
-}
+};
 
 export default helper;

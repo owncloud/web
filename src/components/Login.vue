@@ -65,7 +65,7 @@ export default {
 			this.loading = true;
 			let OC = this.$parent;
 			OC.$client.setInstance(this.instance);
-			OC.$client.login(this.username, this.password).then(status => {
+			OC.$client.login(this.username, this.password).then( () => {
 				OC.$client.users.getUser(this.username).then(user => {
 					this.loading = false;
 					this._hide();
@@ -78,7 +78,6 @@ export default {
 				});
 			}).catch(error => {
 				this.loading = false;
-				console.log(error);
 				OC.$uikit.notification({
 					message: error,
 					status: 'danger',
