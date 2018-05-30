@@ -1,7 +1,5 @@
-node_modules/
 core/js/*
 core/css/*
-
 
 apps/*
 !apps/alert
@@ -13,3 +11,5 @@ apps/*
 *.bundle.js.map
 
 config.json
+
+node_modules
