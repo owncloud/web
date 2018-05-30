@@ -6,7 +6,6 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 import FilesApp  from './components/Files-App.vue'
-import SharingIn from './components/Sharing-In.vue'
 
 // Routing
 const routes = [
@@ -18,11 +17,6 @@ const routes = [
         path: '/list/:item',
         component: FilesApp,
         name: 'files'
-    },
-    {
-        path: '/sharing/in',
-        component: SharingIn,
-        name: 'sharing'
     }
 ];
 

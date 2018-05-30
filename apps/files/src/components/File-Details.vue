@@ -72,7 +72,6 @@
 		mixins     : [Mixins],
 		props      : ['file'],
 		components : {
-			FilesSharing,
 			FileDetailsButtonrow
 		},
 		data () {
