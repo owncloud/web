@@ -48,8 +48,6 @@
         },
         methods: {
             download() {
-                console.log("cat")
-                console.log(this.files)
                 for(let i = 0; i < this.files.length; i++){
                     OC.$client.files.getFileContents(this.files[i].path).then(res => {
                         var blob = new Blob([res]);
