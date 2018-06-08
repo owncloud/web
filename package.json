@@ -8,7 +8,8 @@
   "scripts": {
     "watch": "webpack --progress --colors --watch --mode 'development'",
     "build": "webpack -p --mode 'production'",
-    "lint": "eslint src/**/*.vue src/**/*.js --color --global OC --global requirejs"
+    "lint": "eslint src/**/*.vue src/**/*.js --color --global OC --global requirejs",
+    "acceptance-tests": "nightwatch"
   },
   "author": "Felix Heidecke",
   "license": "AGPL-1.0",
@@ -19,7 +20,11 @@
     "babel-loader": "^7.1.4",
     "babel-preset-es2015": "^6.24.1",
     "css-loader": "^0.28.11",
+    "cucumber": "^4.0.0",
+    "cucumber-pretty": "^1.4.0",
     "less": "^3.0.4",
+    "nightwatch": "^0.9.20",
+    "nightwatch-cucumber": "^9.1.2",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^14.2.2",
     "vue-style-loader": "^4.1.0",
