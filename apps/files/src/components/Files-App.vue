@@ -14,7 +14,7 @@
 						li.uk-flex.uk-flex-center
 							router-link(:to="{ name: 'files', params: { item: 'home' }}", tag="i").material-icons.burger.cursor-pointer home
 						li(v-for="(pathItem, pId) in path")
-							router-link(:to="{ name: 'files', params: { item: pathItem.toLowerCase() }}").cursor-pointer {{ pathItem }}
+							router-link(:to="{ name: 'files', params: { item: pathItem }}").cursor-pointer {{ pathItem.split('/').slice(-1)[0] }}
 				li
 					span {{ files.length }} Results
 				li
@@ -135,14 +135,15 @@
             loadFolder() {
                 this.loading = true;
 
+                this.path = [];
 				let absolutePath = this.$route.params.item;
 				if(this.$route.params.item === 'home'){
 					absolutePath = '/';
-					this.path = []
 				}else{
-					let pathSplit  = absolutePath.split('/');
-					pathSplit = pathSplit.slice(1, pathSplit.length - 1);
-					this.path = pathSplit
+					let pathSplit  = absolutePath.split('/').filter((val) => val);
+					for (let i = 0; i < pathSplit.length; i++) {
+					    this.path.push('/' + pathSplit.slice(0, i + 1).join('/'));
+                    }
 				}
 
 				// List all files
