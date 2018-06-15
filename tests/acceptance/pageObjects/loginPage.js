@@ -12,6 +12,10 @@ module.exports = {
 			selector: '//label[.="Select ownCloud"]/../select',
 			locateStrategy: 'xpath'
 		},
+		selectOwncloudFirstOption: {
+			selector: '//label[.="Select ownCloud"]/../select/option[1]',
+			locateStrategy: 'xpath'
+		},
 		usernameInput: { 
 			selector: '//label[.="User name"]/../input',
 			locateStrategy: 'xpath'
