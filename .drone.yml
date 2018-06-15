@@ -1,0 +1,82 @@
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+branches: [master, release*]
+
+pipeline:
+  install-server:
+    image: owncloudci/core
+    version: ${OC_VERSION}
+    pull: true
+    db_type: ${DB_TYPE}
+    db_name: ${DB_NAME}
+    db_host: ${DB_TYPE}
+    db_username: autotest
+    db_password: owncloud
+    core_path: /var/www/owncloud/
+
+  configure-server:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/
+      - php occ a:e testing
+      - php occ config:system:set trusted_domains 1 --value=owncloud
+      - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+      - php occ log:manage --level 0
+      - php occ config:list
+
+  owncloud-log:
+    image: owncloud/ubuntu:16.04
+    detach: true
+    pull: true
+    commands:
+      - tail -f /var/www/owncloud/data/owncloud.log
+
+  wait-for-phoenix:
+    image: owncloud/ubuntu:16.04
+    commands:
+      - bash /var/www/owncloud/phoenix/tests/drone/wait-for-phoenix.sh
+
+  fix-permissions:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/
+      - chown www-data * -R
+
+  webui-acceptance-tests:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/phoenix
+      - npm run acceptance-tests-drone
+
+services:
+  phoenix:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/phoenix
+      - cp tests/drone/config.json config.json
+      - make
+      - make run SERVER_HOST=0.0.0.0:8300
+
+  owncloud:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    environment:
+      - APACHE_WEBROOT=/var/www/owncloud/
+    command: [ "/usr/local/bin/apachectl", "-e", "debug", "-D", "FOREGROUND" ]
+
+  selenium:
+    image: selenium/standalone-chrome-debug:latest
+    pull: true
+
+matrix:
+  include:
+    - PHP_VERSION: 7.1
+      OC_VERSION: daily-master-qa
+      DB_TYPE: sqlite
+      DB_NAME: owncloud

@@ -1,6 +1,7 @@
 module.exports = {
-	url: 'http://localhost:8300/',
-	//TODO need to pass this URL in from outside as baseUrl paramter
+	url: function() {
+		return this.api.launchUrl;
+	},
 	elements: {
 		body: 'body',
 		openLoginDialogButton: {

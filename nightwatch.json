@@ -10,7 +10,6 @@
     "start_process" : false,
     "server_path" : "",
     "log_path" : "",
-    "port" : 4445,
     "cli_args" : {
       "webdriver.chrome.driver" : "",
       "webdriver.gecko.driver" : "",
@@ -23,6 +22,19 @@
       "launch_url" : "http://localhost:8300",
       "selenium_port"  : 4445,
       "selenium_host"  : "localhost",
+      "silent": true,
+      "screenshots" : {
+        "enabled" : false,
+        "path" : ""
+      },
+      "desiredCapabilities": {
+        "browserName": "chrome"
+      }
+    },
+    "drone" : {
+      "launch_url" : "http://phoenix:8300",
+      "selenium_port"  : 4444,
+      "selenium_host"  : "selenium",
       "silent": true,
       "screenshots" : {
         "enabled" : false,

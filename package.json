@@ -9,7 +9,8 @@
     "watch": "webpack --progress --colors --watch --mode 'development'",
     "build": "webpack -p --mode 'production'",
     "lint": "eslint src/**/*.vue src/**/*.js --color --global OC --global requirejs",
-    "acceptance-tests": "nightwatch"
+    "acceptance-tests": "nightwatch",
+    "acceptance-tests-drone": "nightwatch -e drone"
   },
   "author": "Felix Heidecke",
   "license": "AGPL-1.0",
