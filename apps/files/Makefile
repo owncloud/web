@@ -13,7 +13,7 @@ build: $(bundles)
 node_modules: package.json package-lock.json
 	npm install
 
-$(bundles): webpack.config-prod.js webpack.config-dev.js node_modules
+$(bundles): webpack.common.js webpack.dev.js node_modules
 	npm run build
 
 .PHONY: clean

@@ -1,35 +1,18 @@
 module.exports = {
-	devtool: 'source-map',
 	entry: './src/default.js',
-	resolve: {
-		alias: {
-			vue: 'vue/dist/vue.js'
-		}
-	},
 	output: {
 		path: `${__dirname}/core/js`,
 		filename: 'core.bundle.js',
-		library: "OC",
-		libraryTarget: "var",
-		libraryExport: "default"
 	},
 	module: {
 		rules: [
 			{
 				test: /\.js?$/,
 				exclude: [/node_modules/, /apps/],
-				include: [/src/],
-				use: 'babel-loader'
+				include: [/src/]
 			}, {
 				test: /\.vue$/,
 				loader: 'vue-loader',
-				options: {
-					use: [
-						'vue-style-loader',
-						'css-loader',
-						'less-loader'
-					]
-				}
 			}
 		]
 	},

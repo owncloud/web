@@ -2,13 +2,15 @@ core/js/*
 core/css/*
 
 apps/*
-!apps/alert
+!apps/servstat
 !apps/demo
 !apps/files
 
 .idea
 *.bundle.js
 *.bundle.js.map
+*.chunk.js
+*.chunk.js.map
 
 config.json
 

@@ -12,9 +12,9 @@
 				li.uk-width-expand
 					ol.uk-breadcrumb.uk-margin-remove-bottom
 						li.uk-flex.uk-flex-center
-							router-link(:to="{ name: 'files', params: { item: 'home' }}", tag="i").material-icons.burger.cursor-pointer home
+							router-link(:to="{ name: 'file-list', params: { item: 'home' }}", tag="i").material-icons.burger.cursor-pointer home
 						li(v-for="(pathItem, pId) in path")
-							router-link(:to="{ name: 'files', params: { item: pathItem }}").cursor-pointer {{ pathItem.split('/').slice(-1)[0] }}
+							router-link(:to="{ name: 'file-list', params: { item: pathItem }}").cursor-pointer {{ pathItem.split('/').slice(-1)[0] }}
 				li
 					span {{ files.length }} Results
 				li
@@ -43,32 +43,25 @@
 								th
 									input(type="checkbox").uk-checkbox.uk-margin-small-left
 								th Name
-								th(class="uk-visible@l").uk-text-right Shared with
 								th(class="uk-visible@l").uk-text-right Owner
 								th Size
 								th(class="uk-visible@s") Date
 						tbody
 							tr(v-for="(file, id) in files", :data-file-id="file._id", :class="{ '_is-selected' : isChecked(file) }").uk-animation-fade
 								td.uk-table-shrink
-									input(type="checkbox", :checked="isChecked(file)", @click="multiSelect(file)").uk-checkbox.uk-margin-small-left
+									input(type="checkbox", :checked="isChecked(file)", @click="toggleFileSelect(file)").uk-checkbox.uk-margin-small-left
 
 								// --- Name ----------
-								td(v-if="!file.extension", @click="singleSelect(file)").uk-text-truncate.uk-visible-toggle
+								td(v-if="!file.extension", @click="toggleFileSelect(file)").uk-text-truncate.uk-visible-toggle
 									a(@click.stop="routerLink(file.path)").uk-link-text.uk-position-relative
 										i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
 										span {{ file.name }}
 
-								td(v-else).uk-text-truncate(@click="singleSelect(file)")
+								td(v-else).uk-text-truncate(@click="toggleFileSelect(file)")
 									a(@click.stop="endOfDummy").uk-link.uk-position-relative
 										i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
 										span {{ file.name }}
 									span.uk-text-meta .{{ file.extension }}
-
-								// --- Shared ----------
-								td(class="uk-visible@l").uk-text-nowrap.uk-table-shrink.uk-text-right
-									div(v-if="file.shared.to.user.length > 0").uk-text-meta.uk-inline
-										span {{ file.shared.to.user[0].name }}
-										span(v-if="file.shared.to.user.length > 1") &nbsp;&amp;&nbsp;{{ file.shared.to.user.length - 1 }} more
 
 								// --- Owner ----------
 								td(class="uk-visible@l").uk-text-nowrap.uk-table-shrink.uk-text-right
@@ -84,188 +77,174 @@
 									time.uk-text-meta {{ file.mdate | formDateFromNow }}
 
 				aside.uk-width-medium.uk-background-default.uk-padding-small(v-show="selected.length > 0", class="uk-width-large@l uk-padding@l").uk-animation-slide-right-small
-					FileDetails(:file="selected" @reset="resetSelect")
+					FileDetails(@reset="resetFileSelection")
 </template>
 
 <script>
-    import Mixins       from '../mixins';
-    import FileDetails  from './File-Details.vue';
+	import Mixins       from '../mixins';
+	import FileDetails  from './File-Details.vue';
 
-    const remove    = require('lodash/remove');
-    const includes  = require('lodash/includes');
-    const filter    = require('lodash/filter');
+	const _includes = require('lodash/includes');
+	const _filter   = require('lodash/filter');
 
-    export default {
-        mixins      : [Mixins],
-        components  : {FileDetails},
-        data() {
-            return {
-                loading : false,
-                filterBy: {
-                    files   : true,
-                    folder  : true,
-                    hidden  : false
-                },
-                path    : [],
-                files   : [],
-                selected: [],
-                self    : {}
-            }
-        },
-        mounted() {
-            OC.$bus.on('phoenix:user-logged-in', () => {
-                this.loadFolder();
-            })
-        },
-        methods: {
-            goto(e) {
-                this.$route.push()
-            },
-            toggleFavorite(item) {
-                this.files[item].stared = (!this.files[item].stared);
-            },
-            routerLink(itemPath) {
-                this.$router.push({
-                    name: 'files',
-                    params: {
-                        item: itemPath
-                    }
-                })
-            },
-            loadFolder() {
-                this.loading = true;
+	const store     = require('../store');
 
-                this.path = [];
+	export default {
+		mixins      : [Mixins],
+		components  : {FileDetails},
+		data() {
+			return {
+				loading : false,
+				filterBy: {
+					files   : true,
+					folder  : true,
+					hidden  : false
+				},
+				path    : [],
+				files   : [],
+				self    : {}
+			}
+		},
+		beforeMount () {
+			// Extend the store (only once)
+			if (!this.$store.state.files) {
+				this.$store.registerModule('files', store.default);
+			}
+		},
+		mounted () {
+			if (this.userLoggedIn) {
+				this.loadFolder();
+			}
+			else {
+				this.$events.emit('phoenix:request-login');
+			}
+		},
+		methods: {
+			goto(e) {
+				this.$route.push()
+			},
+
+			toggleFavorite(item) {
+				this.files[item].stared = (!this.files[item].stared);
+			},
+
+			routerLink(itemPath) {
+				this.$router.push({
+					name: 'file-list',
+					params: {
+						item: itemPath
+					}
+				})
+			},
+
+			loadFolder() {
+				if (!this.iAmActive)
+					return false;
+
+				this.loading = true;
+
+				this.path = [];
 				let absolutePath = this.$route.params.item;
-				if(this.$route.params.item === 'home'){
+				if (this.$route.params.item === 'home') {
 					absolutePath = '/';
-				}else{
+				} else {
 					let pathSplit  = absolutePath.split('/').filter((val) => val);
 					for (let i = 0; i < pathSplit.length; i++) {
-					    this.path.push('/' + pathSplit.slice(0, i + 1).join('/'));
-                    }
+						this.path.push('/' + pathSplit.slice(0, i + 1).join('/'));
+					}
 				}
 
 				// List all files
-				OC.$client.files.list(absolutePath).then(files => {
+				this.$client.files.list(absolutePath).then(files => {
 					// Remove the root element
 					files = files.splice(1);
 
-                    this.files = files.map(file => {
-                        return ({
-                            type    : (file.type === 'dir') ? 'folder' : file.type,
+					this.files = files.map(file => {
+						return ({
+							type : (file.type === 'dir') ? 'folder' : file.type,
+							starred : false,
+							mdate   : file['fileInfo']['{DAV:}getlastmodified'],
+							cdate   : '',    //TODO: Retrieve data of creation of a file
 
-							//TODO: Retrieve real shared status of each file
-							shared: {
-								to: {
-									user: [
-										// {
-										//     perms: {
-										//         "remove": false,
-										//         "change": false,
-										//         "create": true,
-										//         "share": false
-										//     },
-										//     avatar: "http://stevensegallery.com/40/40",
-										//     name: "Jeannie Boyer",
-										//     state: 0,
-										//     type: "default"
-										// }
-									],
-									link: [
-										// {
-										//     password: false,
-										//     perms: {
-										//         remove: false,
-										//         change: false,
-										//         create: true,
-										//         share: true
-										//     },
-										//     type: "link",
-										//     mailTo: "",
-										//     hash: "b8ab6e5c",
-										//     IGNORE: {
-										//         "1": "Lessie.Holland@Anixang.net",
-										//         "2": "b8ab6e5c-7c4d-4e9a-9712-b28322fd1d54"
-										//     }
-										// }
-									]
-								},
-								from: false
-							},
-
-                            starred : false,
-
-                            mdate   : file['fileInfo']['{DAV:}getlastmodified'],
-
-                            cdate   : '',    //TODO: Retrieve data of creation of a file
-
-                            size    : function () {
-                                if (file.type === 'dir') {
-                                    return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
-                                } else {
-                                    return file['fileInfo']['{DAV:}getcontentlength'] / 100
-                                }
-                            }(),
-
+							size    : function () {
+								if (file.type === 'dir') {
+									return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
+								} else {
+									return file['fileInfo']['{DAV:}getcontentlength'] / 100
+								}
+							}(),
 							extension: (file.type === 'dir') ? false : '',
-
-                            name    : function () {
-                                let pathList = file.name.split("/").filter(e => e !== "")
-                                return pathList[pathList.length - 1];
-                            }(),
-
-                            path    : file.name,
-
-                            id      : file['fileInfo']['{DAV:}getetag']
-                        });
-                    });
+							name    : function () {
+								let pathList = file.name.split("/").filter(e => e !== "")
+								return pathList[pathList.length - 1];
+							}(),
+							path    : file.name,
+							id      : file['fileInfo']['{DAV:}getetag']
+						});
+					});
 
 					this.self = files.self;
 
 					this.loading = false;
 
-					this.resetSelect();
+					this.resetFileSelection();
 				}).catch(error => {
-					console.log(error);
-					UIkit.notification({
+					this.$uikit.notification({
 						message: error.statusText,
 						status: 'danger',
 						pos: 'top-center'
 					});
 				});
 			},
-			singleSelect(item) {
-				this.selected = [item];
+
+			resetFileSelection() {
+				this.$store.dispatch('files/RESET_SELECTION')
 			},
-			resetSelect() {
-				this.selected = [];
-			},
-			multiSelect(item) {
+
+			toggleFileSelect(item) {
 				if (this.isChecked(item))
-					_.remove(this.selected, item);
+					this.$store.dispatch('files/REMOVE_FILE_SELECTION', item)
 				else
-					this.selected.push(item);
+					this.$store.dispatch('files/ADD_FILE_SELECTION', item)
 			},
+
 			isChecked(item) {
-				return _.includes(this.selected, item);
+				return _includes(this.selected, item);
 			}
 		},
 		watch: {
-			item() {
+			item () {
 				this.loadFolder()
+			},
+			userLoggedIn (cur, prev) {
+				if (cur !== prev)
+					this.loadFolder()
 			}
 		},
 		computed: {
+			selected () {
+				return this.$store.getters['files/SELECTED'];
+			},
+
 			item() {
 				return this.$route.params.item;
 			},
+
 			typeOfFolder() {
-				return _.filter(this.files, ['extension', false])
+				return _filter(this.files, ['extension', false])
 			},
+
 			typeOfFile(showHidden) {
 				showHidden = (typeof showHidden !== 'undefined') ? showHidden : false;
-				return _.filter(this.files, 'extension')
+				return _filter(this.files, 'extension')
+			},
+
+			userLoggedIn () {
+				return this.$store.getters.USER_LOGGED_IN;
+			},
+
+			iAmActive () {
+				return this.$route.name == 'file-list';
 			}
 		}
 	}

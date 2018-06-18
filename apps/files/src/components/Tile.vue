@@ -22,30 +22,28 @@
 					router-link(:to="{ name: 'details', params: { id: application.id }}")
 						canvas(width="1600", height="900", :style="application.screenshots[0].url | cssBackgroundImage").app-preview
 </template>
-
 <script>
-	import Rating from './Rating.vue';
+import Rating from './Rating.vue';
 
-	export default {
-		components: {
-			Rating
-		},
-		props: [
-			'application'
-		],
-		filters: {
-			cssBackgroundImage (image) {
-				return 'background-image:url("' + image + '");';
-			}
-		},
-		methods: {
-			t(string) {
-				return this.$gettext(string);
-			}
+export default {
+	components: {
+		Rating
+	},
+	props: [
+		'application'
+	],
+	filters: {
+		cssBackgroundImage(image) {
+			return `background-image:url("${iamge}");`;
+		}
+	},
+	methods: {
+		t(string) {
+			return this.$gettext(string);
 		}
 	}
+}
 </script>
-
 <style scoped>
 	.category {
 		text-transform: capitalize;

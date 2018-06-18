@@ -1,288 +1,75 @@
-// --- Libraries ---
+// --- Libraries and Plugins ---
 
-import Vue      from 'vue';
-import _        from 'lodash';
-import $        from 'jquery';
-import filesize from 'filesize';
+import Vue       from 'vue';
 
+const _forEach = require('lodash/forEach');
+const _map     = require('lodash/map');
+const _flatten = require('lodash/flatten');
 
 // --- Components ---
 
-import TopBar   from './components/Top-Bar.vue';
-import Menu     from './components/Menu.vue';
-import Login    from './components/Login.vue';
-
-
-// --- Plugins ---
-
-import VueBus from 'vue-bus';
-Vue.use(VueBus);
-
-
-// --- Mixins ---
-
-import Helper from './mixins/helper.js';
-
+import Phoenix   from './Phoenix.vue';
 
 // --- Adding global libraries ---
 
 import UIkit  from 'uikit';
 import Client from 'js-owncloud-client';
-import Extend from './libs/extend.js';
+import Axios  from 'axios';
+
+import store  from './store.js';
 
 Vue.prototype.$uikit  = UIkit;
+Vue.prototype.$axios  = Axios;
 Vue.prototype.$client = new Client();
-Vue.prototype.$extend = Extend;
 
-OC = new Vue({
-	el       : '#oc-scaffold',
-	name     : 'Phoenix',
-	components: {
-		'top-bar'   : TopBar,
-		'side-menu' : Menu,
-		'login'    : Login
-	},
-	mixins   : [Helper],
-	data     : {
-		appPath : '/apps',
+// --- Plugins ----
 
-		// config settings
-		config  : {},
-		server : {},
+import VueEvents   from 'vue-events';
+import VueRouter   from 'vue-router';
 
-		// models
-		nav        : [],
-		apps       : [],
-		user    : {
-			displayname : null,
-			email       : null,
-			enabled     : false,
-			home        : null
-		}
-	},
-	computed : {
-		appsRunning () {
-			return _.filter(this.apps, 'start');
-		},
-		appsPending () {
-			return _.filter(this.apps, ['start', false]);
-		}
-	},
+Vue.use(VueEvents);
+Vue.use(VueRouter);
 
-	mounted () {
-		// Start with loading the config
-		this._loadConfig();
+// --- Router ----
 
-		this.$once('afterLoadConfig', () => {
-			this._setupApps();
+Axios.get('config.json').then(config => {
+
+	let apps = _map(config.data.apps, (app) => {
+		return `./apps/${app}/js/${app}.bundle.js`
+	})
+
+	requirejs(apps, function() {
+
+		let plugins  = [];
+		let navItems = [];
+		let routes   = [{
+			path : '/',
+			redirect : to => arguments[0].navItems[0].route
+		}];
+
+		_forEach(arguments, (app) => {
+			if (app.routes) routes.push(app.routes);
+			if (app.plugins) plugins.push(app.plugins);
+			if (app.navItems) navItems.push(app.navItems);
+		})
+
+		const router = new VueRouter({
+			routes: _flatten(routes)
 		});
 
-		this.$once('afterSetupApps', () => {
-			this._bootApp(_.head(this.apps));
+		const OC  = new Vue({
+			el : '#owncloud',
+			data : {
+				config   : config.data,
+				plugins  : _flatten(plugins),
+				navItems : _flatten(navItems)
+			},
+			store,
+			router,
+			render: h => h(Phoenix)
 		});
+	});
 
-	},
-
-	methods: {
-
-		/**
-		 * Write apps.json to this.apps
-		 *
-		 * @return Promise
-		 */
-
-		_loadConfig () {
-			$.getJSON('config.json', (config) => {
-				this.config = config;
-				this.apps   = config.apps;
-				this.$emit('afterLoadConfig');
-			}).fail((err) => {
-				if (err.status === 404) {
-					this.$uikit.notification({
-						message: '<strong>config.json missing!</strong><br>Make sure to have this file in your root folder.',
-						status: 'danger',
-						timeout: 0
-					});
-				}
-			});
-		},
-
-
-		/**
-		 * Setup all available apps
-		 */
-
-		_setupApps () {
-
-			_.forEach(this.apps, (app, index) => {
-
-				// TODO: Find better var name for 'foo'
-				requirejs([this.appJS(app.id, 'boot')], ( a ) => {
-
-					a.setup().then((appInfo) => {
-						if (app.id !== appInfo.id) {
-							console.error(`PHOENIX: App ID missmatch! ${app.id} != ${appInfo.id}`);
-							return false;
-						}
-
-						this._registerApp(index, appInfo);
-
-						if (appInfo.start)
-							this.$bus.emit(app.id +':start');
-
-						if (this.apps.length === ++index) {
-							this.$emit('afterSetupApps');
-						}
-					});
-
-				}, (err) => {
-					this.warn(err);
-				});
-			});
-		},
-
-		/**
-		 * Setup all available apps
-		 *
-		 * @param appInfo (object) return value on setup/boot
-		 */
-
-		_registerApp ( index, appInfo ) {
-
-			let defaults = {
-				enabled : true,
-				start : false,
-				styles  : []
-			};
-
-			let model = _.assignIn(defaults, appInfo);
-			this.apps[index] = model;
-		},
-
-		_addStyles ( appId, array ) {
-			let $head = $('head');
-			_.forEach(array, style => {
-				$('<link>', {
-					rel        : 'stylesheet',
-					href       : `apps/${appId}/${style}`,
-					'data-rel' : appId
-				}).appendTo($head);
-			});
-		},
-
-		_removeStyles ( appId ) {
-			$(`link[data-app-id="${appId}"]`).remove();
-		},
-
-		/**
-		 * Boot an application
-		 *
-		 * @param obj app with appId as key
-		 * @return Promise
-		 */
-
-		_bootApp (app) {
-
-			if (app.styles.length > 0)
-				this._addStyles(app.id, app.styles);
-
-			requirejs([this.appJS(app.id, 'boot')], ( App ) => {
-				App.boot(this._spawnAppContainer(), App).then( (val) => {
-					this._appSet(app.id, val );
-					this.$bus.emit(app.id +':start');
-				});
-			});
-		},
-
-		_spawnAppContainer () {
-
-			let attr = {
-				id    : this.createRandom(),
-				class : 'oc-app-container',
-				text  : 'Loading ...'
-			};
-
-			// Reset app container
-			$('#oc-content').html( $('<div>', attr ) );
-			return `#${attr.id}`;
-		},
-
-		/**
-		 * Change the model object of an app
-		 *
-		 * @param id appId
-		 * @param payload object
-		 */
-
-		_appSet (id, payload) {
-			let apps  = _.clone(this.apps),
-				app   = this.getAppById(id),
-				index = _.findIndex(app);
-
-			apps[index] = _.assignIn(app, payload);
-
-			this.apps = apps;
-		},
-
-		// ----------------------------------------------------------- USERS ---
-
-		// setters
-
-		setUser (user) {
-			this.user = user;
-		},
-
-		// getters
-
-		getUser () {
-			return this.user;
-		},
-
-		getUserDisplayname () {
-			return this.user.displayname;
-		},
-
-		getUserEmail () {
-			return this.user.email;
-		},
-
-		getUserQuota (formatted = false) {
-			if (!this.user.quota)
-				return null;
-
-			if (!formatted)
-				return this.user.quota;
-
-			let form = {
-				free  : filesize(this.user.quota.free),
-				total : filesize(this.user.quota.total),
-				used  : filesize(this.user.quota.used)
-			};
-
-			return _.assignIn(this.user.quota, form);
-		},
-
-		userEnabled () {
-			return this.user.enabled;
-		},
-
-		// ---------------------------------------------------------- helper ---
-
-		getAppById( id ) {
-			return _.find(this.apps, ['id', id] );
-		},
-
-		appJS( app, file ) {
-			return ['apps', app, 'js', file + '.js'].join('/');
-		},
-
-		// -------------------------------------------- registration methods ---
-
-		registerNavItem ( app, payload ) {
-			this.nav.push(_.assign( { app }, payload ));
-		},
-
-	},
+}).catch(err => {
+	alert(err);
 });
-
-export default OC;
