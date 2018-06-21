@@ -48,7 +48,8 @@
 								th Size
 								th(class="uk-visible@s") Date
 						tbody
-							tr(v-for="(file, id) in files", :data-file-id="file._id", :class="{ '_is-selected' : isChecked(file) }").uk-animation-fade
+							drag
+							tr(v-for="(file, id) in files", :data-file-id="file._id", :class="{ '_is-selected' : isChecked(file) }" draggable="true").uk-animation-fade
 								td.uk-table-shrink
 									input(type="checkbox", :checked="isChecked(file)", @click="multiSelect(file)").uk-checkbox.uk-margin-small-left
 
