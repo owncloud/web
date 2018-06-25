@@ -9,6 +9,10 @@
 
 		.uk-position-relative
 			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
+				li
+					div.js-upload(uk-form-custom)
+						input(type='file' multiple)
+						button.uk-button.uk-button-default(type='button') Upload
 				li.uk-width-expand
 					ol.uk-breadcrumb.uk-margin-remove-bottom
 						li.uk-flex.uk-flex-center
@@ -83,6 +87,8 @@
 								td(class="uk-visible@s").uk-text-nowrap.uk-table-shrink
 									time.uk-text-meta {{ file.mdate | formDateFromNow }}
 
+		progress#js-progressbar.uk-progress.uk-position-bottom(value='0', max='100' hidden)
+
 				aside.uk-width-medium.uk-background-default.uk-padding-small(v-show="selected.length > 0", class="uk-width-large@l uk-padding@l").uk-animation-slide-right-small
 					FileDetails(:file="selected" @reset="resetSelect")
 </template>
@@ -116,6 +122,53 @@
             OC.$bus.on('phoenix:user-logged-in', () => {
                 this.loadFolder();
             })
+
+            var bar = document.getElementById('js-progressbar');
+
+            OC.$uikit.upload('.js-upload', {
+
+                url: '',
+                multiple: true,
+
+                beforeAll: function () {
+                    // TODO
+                },
+                beforeSend: function (environment) {
+                    // TODO
+                },
+                load: function () {
+                    // TODO
+                },
+                error: function () {
+                    // TODO : Error in uploading files
+                },
+                complete: function () {
+                    // TODO : Upload successfully completed
+                },
+
+                loadStart: function (e) {
+                    bar.removeAttribute('hidden');
+                    bar.max = e.total;
+                    bar.value = e.loaded;
+                },
+
+                progress: function (e) {
+                    bar.max = e.total;
+                    bar.value = e.loaded;
+                },
+
+                loadEnd: function (e) {
+                    bar.max = e.total;
+                    bar.value = e.loaded;
+                },
+
+                completeAll: function () {
+                    setTimeout(function () {
+                        bar.setAttribute('hidden', 'hidden');
+                    }, 1000);
+                }
+
+            });
         },
         methods: {
             goto(e) {
