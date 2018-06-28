@@ -254,17 +254,17 @@
 			isChecked(item) {
 				return _.includes(this.selected, item);
 			},
-			onDrop(dropLocation, dropData, dragData, event) {
-                if(dropLocation === 'file-list' && dropData.type === 'folder'){
+            onDrop(dropLocation, dropData, dragData, event) {
+                if (dropLocation === 'file-list' && dropData.type === 'folder') {
                     OC.$client.files.move(dragData.path, dropData.path + dragData.name).then(res => {
                         this.loadFolder();
-					});
-                }else if (dropLocation === 'breadcrumb'){
+                    });
+                } else if (dropLocation === 'breadcrumb') {
                     OC.$client.files.move(dragData.path, dropData + '/' + dragData.name).then(res => {
                         this.loadFolder();
                     });
                 }
-			}
+            }
 		},
 		watch: {
 			item() {
