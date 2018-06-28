@@ -5,6 +5,11 @@ import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
+import { Drag, Drop } from 'vue-drag-drop';
+
+Vue.component('drag', Drag);
+Vue.component('drop', Drop);
+
 import FilesApp  from './components/Files-App.vue'
 
 // Routing

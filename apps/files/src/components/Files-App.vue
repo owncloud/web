@@ -12,9 +12,11 @@
 				li.uk-width-expand
 					ol.uk-breadcrumb.uk-margin-remove-bottom
 						li.uk-flex.uk-flex-center
-							router-link(:to="{ name: 'files', params: { item: 'home' }}", tag="i").material-icons.burger.cursor-pointer home
+							drop(@drop="onDrop('breadcrumb', '', ...arguments)")
+								router-link(:to="{ name: 'files', params: { item: 'home' }}", tag="i").material-icons.burger.cursor-pointer home
 						li(v-for="(pathItem, pId) in path")
-							router-link(:to="{ name: 'files', params: { item: pathItem }}").cursor-pointer {{ pathItem.split('/').slice(-1)[0] }}
+							drop(@drop="onDrop('breadcrumb', pathItem, ...arguments)")
+								router-link(:to="{ name: 'files', params: { item: pathItem }}").cursor-pointer {{ pathItem.split('/').slice(-1)[0] }}
 				li
 					span {{ files.length }} Results
 				li
@@ -54,9 +56,11 @@
 
 								// --- Name ----------
 								td(v-if="!file.extension", @click="singleSelect(file)").uk-text-truncate.uk-visible-toggle
-									a(@click.stop="routerLink(file.path)").uk-link-text.uk-position-relative
-										i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
-										span {{ file.name }}
+									drag(:transfer-data="file")
+										drop(@drop="onDrop('file-list', file, ...arguments)")
+											a(@click.stop="routerLink(file.path)").uk-link-text.uk-position-relative
+												i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
+												span {{ file.name }}
 
 								td(v-else).uk-text-truncate(@click="singleSelect(file)")
 									a(@click.stop="endOfDummy").uk-link.uk-position-relative
@@ -249,7 +253,18 @@
 			},
 			isChecked(item) {
 				return _.includes(this.selected, item);
-			}
+			},
+            onDrop(dropLocation, dropData, dragData, event) {
+                if (dropLocation === 'file-list' && dropData.type === 'folder') {
+                    OC.$client.files.move(dragData.path, dropData.path + dragData.name).then(res => {
+                        this.loadFolder();
+                    });
+                } else if (dropLocation === 'breadcrumb') {
+                    OC.$client.files.move(dragData.path, dropData + '/' + dragData.name).then(res => {
+                        this.loadFolder();
+                    });
+                }
+            }
 		},
 		watch: {
 			item() {
