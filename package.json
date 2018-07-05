@@ -19,7 +19,7 @@
     "cucumber": "^4.0.0",
     "cucumber-pretty": "^1.4.0",
     "less": "^3.0.4",
-    "nightwatch": "^0.9.20",
+    "nightwatch": "^1.0.6",
     "nightwatch-cucumber": "^9.1.2",
     "vue-loader": "14.2.3",
     "vue-template-compiler": "^2.5.16",
