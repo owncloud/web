@@ -20,7 +20,7 @@
     "expose-loader": "^0.7.5",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
-    "node-sass": "^4.7.2",
+    "node-sass": "^4.9.1",
     "npm-watch": "^0.3.0",
     "pug": "^2.0.3",
     "requirejs": "^2.3.5",
