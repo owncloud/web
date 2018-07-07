@@ -21,7 +21,7 @@
     "babel-loader": "^7.1.4",
     "babel-preset-es2015": "^6.24.1",
     "css-loader": "^0.28.11",
-    "cucumber": "^4.0.0",
+    "cucumber": "^4.2.1",
     "cucumber-pretty": "^1.4.0",
     "less": "^3.0.4",
     "nightwatch": "^0.9.20",
