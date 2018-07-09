@@ -182,7 +182,7 @@
 				} else {
 					let pathSplit  = absolutePath.split('/').filter((val) => val);
 					for (let i = 0; i < pathSplit.length; i++) {
-						this.path.push('/' + pathSplit.slice(0, i + 1).join('/'));
+						this.path.push('/' + pathSplit.slice(0, i + 1).join('/') + '/');
 					}
 				}
 
@@ -233,6 +233,9 @@
 					});
 				} else {
 					let cachedFiles = JSON.parse(localStorage.getItem(absolutePath));
+					if(cachedFiles == null){
+						cachedFiles = [];
+                    }
 
 					this.files = cachedFiles;
 
