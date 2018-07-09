@@ -187,6 +187,8 @@
 				}
 
 				if (navigator.onLine) {
+					this.offlineNotified = false;
+
 					// List all files
 					OC.$client.files.list(absolutePath).then(files => {
 						// Remove the root element
@@ -232,6 +234,16 @@
 						});
 					});
 				} else {
+					// If the user has not been notified
+					if(!this.offlineNotified){
+						OC.$uikit.notification({
+							message: `You are currently offline. Latest changes may not be available`,
+							status: 'primary'
+						});
+
+						this.offlineNotified = true;
+                    }
+
 					let cachedFiles = JSON.parse(localStorage.getItem(absolutePath));
 					if(cachedFiles == null){
 						cachedFiles = [];
