@@ -17,11 +17,10 @@ When('the user logs in with username {string} and password {string} using the we
 		const loginPage = client.page.loginPage();
 		return loginPage
 		.waitForElementVisible('@loginDialogDiv', 1000)
-		.click('@selectOwncloud')
-		.click('@selectOwncloudFirstOption')
 		.setValue('@usernameInput', username)
 		.setValue('@passwordInput', password)
-		.click('@loginSubmitButton');
+		.click('@loginSubmitButton')
+		.waitForElementNotVisible('@loginDialogDiv',10000);
 	});
 
 Then('the files table should be displayed',

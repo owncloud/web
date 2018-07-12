@@ -1,1 +1,10 @@
-{"servers" : ["http://owncloud/"],"apps" : [{ "id" : "files" }]}
+{
+	"server" : "http://owncloud",
+	"theme": "owncloud",
+	"version": "0.1.0",
+	"apps" : [
+		"demo",
+		"servstat",
+		"files"
+	]
+}
