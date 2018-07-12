@@ -1,35 +1,27 @@
-// ------------------------------------------------------------- Vue plugins ---
+const pkg = require('../package.json');
 
-import Vue       from 'vue'
-import VueRouter from 'vue-router';
+// --- Navigation Item(s) ------------------------------------------------------
 
-Vue.use(VueRouter);
-
-import FilesApp  from './components/Files-App.vue'
-
-// Routing
-const routes = [
-    {
-        path: '/',
-        redirect: '/list/home',
-    },
-    {
-        path: '/list/:item',
-        component: FilesApp,
-        name: 'files'
-    }
-];
-
-const router = new VueRouter({
-    routes
-});
-
-const app = new Vue({
-    router,
-	template: '<router-view></router-view>',
-	mounted () {
-		this.$emit('mounted')
+const navItems = [{
+	name: 'Files',
+	iconMaterial: 'folder',
+	route: {
+		name: 'file-list',
+		params: {
+			item: 'home'
+		}
 	}
-});
+}]
 
-export default define(app);
+import FilesApp from './components/Files-App.vue';
+
+const routes = [{
+	path: `/${pkg.name}/list/:item`,
+	component: FilesApp,
+	name: 'file-list'
+}]
+
+export default define({
+	routes,
+	navItems
+});

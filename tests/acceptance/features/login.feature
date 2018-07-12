@@ -10,5 +10,6 @@ Feature: login users
 	Scenario: admin login
 		Given the user has browsed to the login page
 		When the user logs in with username "admin" and password "admin" using the webUI
+		And the user browses to the files page
 		Then the files table should be displayed
 		And the files table should not be empty

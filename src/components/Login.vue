@@ -6,12 +6,6 @@
 					Login
 				</h2>
 				<div class="uk-margin">
-					<label>Select ownCloud</label>
-					<select class="uk-select" v-model="instance">
-						<option v-for="server in servers">{{ server }}</option>
-					</select>
-				</div>
-				<div class="uk-margin">
 					<label>User name</label>
 					<input class="uk-input" type="text" v-model="username" autofocus @keyup.enter="login" />
 				</div>
@@ -33,15 +27,13 @@
 export default {
 	data () {
 		return {
-			loading : false,
-			instance: null,
-			username: '',
-			password: ''
+			loading  : false,
+			username : '',
+			password : ''
 		};
 	},
-	props : ['user', 'servers'],
 	mounted () {
-		this.$parent.$bus.on('phoenix:request-login', () => {
+		this.$events.on('phoenix:request-login', () => {
 			this._show();
 		});
 	},
@@ -64,13 +56,12 @@ export default {
 		login () {
 			this.loading = true;
 			let OC = this.$parent;
-			OC.$client.setInstance(this.instance);
 			OC.$client.login(this.username, this.password).then( () => {
 				OC.$client.users.getUser(this.username).then(user => {
 					this.loading = false;
 					this._hide();
-					OC.setUser(user);
-					OC.$bus.emit('phoenix:user-logged-in');
+					this.$store.dispatch('SET_USER', user);
+					OC.$events.emit('phoenix:user-logged-in');
 					OC.$uikit.notification({
 						message: `Welcome  ${user.displayname}<br>We love you :-*`,
 						status: 'primary'

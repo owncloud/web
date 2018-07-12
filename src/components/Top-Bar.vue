@@ -19,13 +19,10 @@
 			</div>
 		</div>
 		<div class="uk-navbar-right">
-			<ul class="uk-navbar-nav" data-exp="navbar-right">
-				<li class="uk-visible@s">
-					<a href=""><i class="material-icons uk-text-inverse">search</i></a>
-					<input type="text" name="search" value="" class="uk-input uk-width-medium" placeholder="Search…" uk-dropdown="animation: uk-animation-slide-right-small; pos: left-center; offset: 0; delay-hide:100; mode: click;">
-				</li>
+			<ul class="uk-navbar-nav">
+				<component v-for="(plugin, pid) in extendNavbarRight" :is="plugin.component" :key="pid" v-if="extendNavbarRight.length > 0"></component>
 				<li v-if="isAnonymous">
-					<a href="#" @click="requestLogin"><i class="material-icons uk-margin-small-right uk-text-inverse">lock</i><span class="uk-text-inverse uk-visible@s">Login</span></a>
+					<a href="#" @click.prevent="requestLogin"><span class="uk-text-inverse uk-visible@s">Login</span></a>
 				</li>
 				<li v-else>
 					<a href="#" :uk-tooltip="user.email"><i class="material-icons uk-margin-small-right uk-text-inverse">account_circle</i><span class="uk-text-inverse uk-visible@s">{{ user.displayname }}</span></a>
@@ -36,19 +33,30 @@
 </template>
 
 <script>
-import _ from 'lodash';
+
+const _isEmpty = require('lodash/isEmpty');
+
+import pluginHelper from '../mixins/pluginHelper.js';
 
 export default {
-	props   : ['user'],
 	methods : {
 		requestLogin () {
-			this.$parent.$bus.emit('phoenix:request-login');
+			this.$events.emit('phoenix:request-login');
 		}
 	},
+	mixins : [
+		pluginHelper
+	],
 	computed : {
 		isAnonymous () {
-			return _.isEmpty(this.user.displayname);
+			return _isEmpty(this.user.displayname);
+		},
+		extendNavbarRight () {
+			return this.getPlugins('phoenixNavbarRight');
+		},
+		user () {
+			return this.$store.state.user;
 		}
 	}
-}
+};
 </script>

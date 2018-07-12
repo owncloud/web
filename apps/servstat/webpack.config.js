@@ -1,11 +1,11 @@
 module.exports = {
-	devtool: 'source-map',
+    devtool: 'source-map',
 	entry: './src/app.js',
-	output: {
+	output : {
 		path: `${__dirname}/js`,
-		chunkFilename: '[name].demo.chunk.js',
-		filename: "demo.bundle.js",
-		publicPath: 'apps/demo/js/'
+		chunkFilename: '[name].servstat.chunk.js',
+		filename : "servstat.bundle.js",
+		publicPath: 'apps/servstat/js/'
 	},
 	module: {
 		rules: [{

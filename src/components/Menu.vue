@@ -2,11 +2,11 @@
 	<div id="oc-nav" uk-offcanvas="mode: reveal">
 		<div class="uk-offcanvas-bar uk-background-muted">
 			<ul class="uk-nav-default uk-nav-parent-icon" uk-nav="">
-				<li v-for="n, nid in nav">
-					<a :href="n.href" :data-app-id="n.id">
+				<li v-for="(n, nid) in nav" :key="nid">
+					<router-link :to="n.route">
 						<i v-if="n.iconMaterial" class="material-icons uk-margin-small-right" v-text="n.iconMaterial"></i>
 						<span v-text="n.name"></span>
-					</a>
+					</router-link>
 				</li>
 				<li class="uk-nav-divider"></li>
 				<li class="uk-parent uk-margin-medium-top"><a href="#" uk-height-match=""><i class="material-icons uk-margin-small-right">account_circle</i>Personal</a>
@@ -46,6 +46,10 @@
 
 <script>
 export default {
-	props: ['nav']
-}
+	computed : {
+		nav () {
+			return this.$root.navItems;
+		}
+	}
+};
 </script>

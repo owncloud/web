@@ -1,8 +1,8 @@
 {
-  "name": "alert",
-  "version": "0.1.0",
-  "description": "I am alertfull",
-  "main": "js/alert.js",
+  "name": "servstat",
+  "version": "0.2.3",
+  "description": "Information about the backend server status",
+  "main": "js/app.js",
   "scripts": {
     "watch": "webpack --progress --colors --watch --mode 'development'",
     "build": "webpack -p"
@@ -11,11 +11,10 @@
   "license": "AGPL-3.0",
   "homepage": "https://github.com/felixheidecke/oc_redesign#readme",
   "devDependencies": {
-    "webpack": "^4.2.0",
-    "webpack-cli": "^2.0.13"
+    "webpack": "^4.15.0",
+    "webpack-cli": "^3.0.8"
   },
   "dependencies": {
-    "jquery": "^3.3.1",
-    "vue": "^2.5.16"
+    "vue-loader": "^14.2.3"
   }
 }

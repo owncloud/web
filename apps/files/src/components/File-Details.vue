@@ -5,44 +5,47 @@
 
 	#file-details.uk-position-relative
 		button(type="button", uk-close, @click="close").uk-position-top-right
-		section(v-show="file.length === 1")
-			.uk-grid-small.uk-flex-middle(uk-grid, v-if="file.length === 1")
+		section(v-if="file")
+			.uk-grid-small.uk-flex-middle(uk-grid)
 				.uk-width-auto
-					i.material-icons.-x2 {{ file[0].type }}
+					i.material-icons.-x2 {{ file.type }}
 
 				.uk-width-expand
-					h3.uk-card-title.uk-margin-remove-bottom.uk-text-truncate {{ file[0].name }}
+					h3.uk-card-title.uk-margin-remove-bottom.uk-text-truncate {{ file.name }}
 						span(uk-icon="icon: link", uk-tooltip, title="Copy local link", style="cursor:pointer").uk-margin-small-left
 
 					p.uk-margin-remove-top
 						span.uk-text-meta Size:&nbsp;
-						span.uk-text-small {{ file[0].size | fileSize }}
+						span.uk-text-small {{ file.size | fileSize }}
 
-			FileDetailsButtonrow(:files="file")
+			Buttonrow(:files="file")
 
-			ul(uk-switcher="connect: #hou2ifelkje", data-exp="file-details-panel-tabs").uk-child-width-expand.uk-tab
+			ul(:uk-switcher="'connect:#'+switcherId", data-exp="file-details-panel-tabs").uk-child-width-expand.uk-tab
 				li.uk-active
 					a(href="") Info
+				li(v-for="(plugin, pid) in extendButtonRow", :key="pid")
+					a(href="") {{ plugin.title }}
 
-			ul#hou2ifelkje.uk-switcher(data-exp="file-details-panel-contents")
+			ul.uk-switcher(data-exp="file-details-panel-contents", :id="switcherId")
 				li
-					.uk-overflow-hidden(v-if="file.length === 1")
+					.uk-overflow-hidden
 						table.uk-table.uk-table-small.uk-text-meta
 							tbody
 								tr
 									td Modified:
-									td.uk-table-expand {{ file[0].mdate | formDateTime }}
+									td.uk-table-expand {{ file.mdate | formDateTime }}
 								tr.uk-padding-bottom-small
 									td Created:
-									td.uk-table-expand {{ file[0].cdate | formDateTime }}
-								tr(v-for="(meta, key) in file[0].meta")
+									td.uk-table-expand {{ file.cdate | formDateTime }}
+								tr(v-for="(meta, key) in file.meta")
 									td {{ key | ucFirst }}:
 									td.uk-table-expand {{ meta }}
+				component(v-for="(plugin, pid) in extendButtonRow", :is="plugin.component", :key="pid", v-if="extendButtonRow.length > 0")
 
-		section(v-show="file.length > 1")
+		section(v-if="files")
 			.uk-grid-small.uk-flex-middle(uk-grid)
 				.uk-width-auto
-					i.material-icons.-x2 filter_{{ file.length }}
+					i.material-icons.-x2 filter_{{ files.length }}
 
 				.uk-width-expand
 					h3.uk-card-title.uk-margin-remove-bottom.uk-text-truncate Multiple files
@@ -52,70 +55,65 @@
 						span.uk-text-meta Size:&nbsp;
 						span.uk-text-small {{ accumulatedFilesSize | fileSize }}
 
-			FileDetailsButtonrow(:files="file")
+			Buttonrow(:files="file")
 
 			hr.uk-hr
 			ul.uk-list.uk-list-bullet
-				li(v-for="item in file") {{ item.name }}
-					span(v-if="item.extension").uk-text-meta .{{ item.extension }}
+				li(v-for="item in files") {{ item.name }}
 </template>
 
 <script>
-	import Mixins  from '../mixins';
+const _each = require('lodash/each');
+const _size = require('lodash/size');
+const _filter = require('lodash/filter');
+const _unique = require('lodash/uniqueId');
 
-	// vue components
-	import FileDetailsButtonrow from './File-Details-Buttonrow.vue';
+import Mixins from '../mixins';
+import Buttonrow from './File-Details-Buttonrow.vue';
 
-	import $ from 'jquery';
-
-	export default {
-		mixins     : [Mixins],
-		props      : ['file'],
-		components : {
-			FileDetailsButtonrow
+export default {
+	mixins: [Mixins],
+	components: {
+		Buttonrow
+	},
+	methods: {
+		close() {
+			this.$emit('reset');
+		}
+	},
+	computed: {
+		switcherId() {
+			return _unique('uk-switcher-');
 		},
-		data () {
-			return {
-				recipient : ""
-			}
-		},
-		created () {
-			OC.$extend.provide('files', 'file-details-panel', this.extendFileDetailsPanel);
-		},
-		watch : {
-			file () {
-				OC.$bus.emit('files:file-details-update', this.file)
-			}
-		},
-		methods : {
-			close () {
-				this.$emit('reset');
-			},
-			extendFileDetailsPanel (payload) {
+		accumulatedFilesSize() {
+			let size = 0;
 
-				let p = new Promise((resolve, defer) => {
-					let id = OC.createRandom();
-					$('[data-exp="file-details-panel-tabs"]').append( '<li><a href="">' + payload[0] + '</a></li>' );
-					$('[data-exp="file-details-panel-contents"]').append( $('<li>' , { id : id }));
-					resolve(['#'+id, this.file]);
-				});
-				return p;
-			}
+			_each(this.files, (e) => {
+				size = size + e.size
+			});
+
+			return size;
 		},
-		computed   : {
-			accumulatedFilesSize () {
-				let size = 0;
+		extendButtonRow() {
+			return _filter(this.$root.plugins, ['extend', "filesDetailsButtonRow"]);
+		},
+		file() {
+			let filesSelected = this.$store.getters['files/SELECTED'];
+			if (_size(filesSelected) !== 1)
+				return false
 
-				_.each(this.file, (e) => {
-					size = size + e.size
-				});
+			return filesSelected[0];
+		},
+		files() {
+			let filesSelected = this.$store.getters['files/SELECTED'];
+			if (_size(filesSelected) === 1)
+				return false
 
-				return size;
-			}
+			return filesSelected;
 		}
 	}
+}
 </script>
-
 <style lang="less">
 	.material-icons {
 		user-select: none;

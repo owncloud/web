@@ -8,16 +8,7 @@
 	<link rel="stylesheet" href="core/css/uikit.owncloud.css" />
 </head>
 <body>
-	<section id="oc-scaffold">
-		<header>
-			<top-bar :user="user"></top-bar>
-		</header>
-		<aside>
-			<side-menu :nav='nav'></side-menu>
-		</aside>
-		<login :user="user" :servers="config.servers"></login>
-	</section>
-	<section id="oc-content" class="uk-offcanvas-content"></section>
+	<section id="owncloud"></section>
 	<script data-main="core/js/core.bundle.js" src="node_modules/requirejs/require.js"></script>
 </body>
 </html>

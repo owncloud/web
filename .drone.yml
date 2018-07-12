@@ -59,8 +59,15 @@ services:
     pull: true
     commands:
       - cd /var/www/owncloud/phoenix
-      - cp tests/drone/config.json config.json
       - make
+      - cd /var/www/owncloud/phoenix/apps/demo
+      - npm install
+      - npm run build
+      - cd /var/www/owncloud/phoenix/apps/servstat
+      - npm install
+      - npm run build
+      - cd /var/www/owncloud/phoenix
+      - cp tests/drone/config.json config.json
       - make run SERVER_HOST=0.0.0.0:8300
 
   owncloud:

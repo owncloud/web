@@ -1,4 +1,7 @@
 module.exports = {
+		url: function() {
+			return this.api.launchUrl + "/#/files/list/home";
+	},
 	elements: {
 		filesTable: {
 			selector: '//div[@id="files-app"]//table',
