@@ -3,9 +3,18 @@
 	mixin icon(a)
 		i.material-icons(class=a.class)= a.icon
 
-	#files-app
+	#files-app.uk-height-1-1(@contextmenu="contextHandler($event)")
 		transition(name="fade")
 			span(v-show="loading").oc-loader-spinner
+
+		div(:style="{ top: contextMenuTop, left: contextMenuLeft }")
+			button
+			div(uk-dropdown ref="contextMenu")
+				ul.uk-nav.uk-dropdown-nav
+					li Download
+					li Item 1
+					li Item 2
+					li Item 3
 
 		.uk-position-relative
 			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
@@ -102,7 +111,10 @@
 				},
 				path    : [],
 				files   : [],
-				self    : {}
+				self    : {},
+
+				contextMenuTop	: 100,
+				contextMenuLeft	: 100
 			}
 		},
 		beforeMount () {
@@ -135,6 +147,17 @@
 						item: itemPath
 					}
 				})
+			},
+
+			contextHandler(event) {
+				if(event.target.tagName === 'TD'){
+					this.contextMenuTop = event.pageY;
+					this.contextMenuLeft = event.pageX;
+
+					let dropdown = this.$uikit.dropdown(this.$refs.contextMenu);
+					dropdown.show();
+				}
+				event.preventDefault();
 			},
 
 			loadFolder() {
@@ -203,9 +226,9 @@
 
 			toggleFileSelect(item) {
 				if (this.isChecked(item))
-					this.$store.dispatch('files/REMOVE_FILE_SELECTION', item)
+					this.$store.dispatch('files/REMOVE_FILE_SELECTION', item);
 				else
-					this.$store.dispatch('files/ADD_FILE_SELECTION', item)
+					this.$store.dispatch('files/ADD_FILE_SELECTION', item);
 			},
 
 			isChecked(item) {
@@ -214,7 +237,7 @@
 		},
 		watch: {
 			item () {
-				this.loadFolder()
+				this.loadFolder();
 			},
 			userLoggedIn (cur, prev) {
 				if (cur !== prev)
@@ -244,7 +267,7 @@
 			},
 
 			iAmActive () {
-				return this.$route.name == 'file-list';
+				return this.$route.name === 'file-list';
 			}
 		}
 	}
