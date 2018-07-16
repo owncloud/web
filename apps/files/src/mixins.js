@@ -12,10 +12,10 @@ export default {
 			return moment(date).fromNow();
 		},
 		formDate(date) {
-			return moment(date).format('MMMM Do YYYY')
+			return moment(date).format('MMMM Do YYYY');
 		},
 		formDateTime(date) {
-			return moment(date).format('LLL')
+			return moment(date).format('LLL');
 		},
 		ucFirst(string) {
 			return string.charAt(0).toUpperCase() + string.slice(1);
@@ -24,7 +24,7 @@ export default {
 	methods: {
 		label(string) {
 
-			let cssClass = ["uk-label"];
+			let cssClass = ['uk-label'];
 
 			switch (parseInt(string)) {
 				case 1:
@@ -37,7 +37,7 @@ export default {
 					cssClass.push('uk-label-success');
 			}
 
-			return '<span class="' + cssClass.join(" ") + '">' + string + '</span>';
+			return '<span class="' + cssClass.join(' ') + '">' + string + '</span>';
 		},
 		endOfDummy() {
 			UIkit.notification({
@@ -47,4 +47,4 @@ export default {
 			});
 		}
 	}
-}
+};
