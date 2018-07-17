@@ -5,6 +5,7 @@ apps/*
 !apps/servstat
 !apps/demo
 !apps/files
+!apps/user_ldap
 
 .idea
 *.bundle.js

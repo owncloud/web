@@ -1,0 +1,27 @@
+{
+    "server" : {
+        "host"       : "",
+        "port"       : 0,
+        "certCheck"  : true,
+        "userDN"     : "",
+        "baseDN"     : "",
+        "password"   : "",
+        "backupHost" : "",
+        "cacheTTL"   : 600,
+        "backupPort" : ""
+    },
+    "users" : {
+        "filter" : "(|(objectclass=inetOrgPerson))",
+        "filterObjectclass" : "",
+        "displayNameField" : "displayName",
+        "displayNameField2" : "",
+        "filterGroups": ""
+    },
+    "groups" : {},
+    "login" : {
+        "filter" : "(&(|(objectclass=inetOrgPerson))(uid=%uid))",
+        "username" : true,
+        "email": false,
+        "attributes": ""
+    }
+}
