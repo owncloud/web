@@ -18,7 +18,7 @@
   "devDependencies": {
     "cucumber": "^4.0.0",
     "cucumber-pretty": "^1.4.0",
-    "less": "^3.0.4",
+    "less": "^3.8.0",
     "nightwatch": "^0.9.20",
     "nightwatch-cucumber": "^9.1.2",
     "vue-loader": "14.2.3",
