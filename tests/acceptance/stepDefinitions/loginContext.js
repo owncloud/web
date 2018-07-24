@@ -1,4 +1,4 @@
-const { client } = require('nightwatch-cucumber');
+const { client } = require('nightwatch-api');
 const { Given, Then, When } = require('cucumber');
 
 Given(/^the user has browsed to the login page$/,
