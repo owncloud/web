@@ -7,17 +7,17 @@
 		transition(name="fade")
 			span(v-show="loading").oc-loader-spinner
 
-		div(:style="{ top: contextMenuTop, left: contextMenuLeft }")
-			button
-			div(uk-dropdown ref="contextMenu")
-				ul.uk-nav.uk-dropdown-nav
-					li Download
-					li Item 1
-					li Item 2
-					li Item 3
+		div(uk-dropdown ref="contextMenu" :style="{ top: contextMenuTop, left: contextMenuLeft }")
+			ul.uk-nav.uk-dropdown-nav
+				li Download
+				li Some item A
+				li Some item B
+				li Some item C
 
 		.uk-position-relative
 			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
+				li.uk-flex.uk-flex-center
+					.material-icons.burger.cursor-pointer(@click="xxx()") add
 				li.uk-width-expand
 					ol.uk-breadcrumb.uk-margin-remove-bottom
 						li.uk-flex.uk-flex-center
