@@ -16,3 +16,9 @@ Run `make`
 ## Run
 
 Run a PHP test server `make run SERVER_HOST=0.0.0.0:8300`
+
+## Run acceptance tests
+
+- build, configure and run phoenix
+- install the Chrome browser
+- run `npm run acceptance-tests`

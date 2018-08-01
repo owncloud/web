@@ -1,13 +1,38 @@
-require('nightwatch-cucumber')({
-  /* other configuration options */
-			cucumberArgs : [
-					'--require', 'tests/acceptance/stepDefinitions', '--format',
-					'node_modules/cucumber-pretty', '--format',
-					'json:reports/cucumber.json', 'tests/acceptance/features'
-					]
-})
+const chromedriver = require('chromedriver');
 
-module.exports = (function(settings) {
-  return settings;
-})(require('./nightwatch.json'));
-
+module.exports = {
+	page_objects_path : './tests/acceptance/pageObjects',
+	test_settings: {
+		local: {
+			launch_url : 'http://localhost:8300',
+			webdriver: {
+				start_process: true,
+				server_path: chromedriver.path,
+				cli_args: ['--port=4445']
+			},
+			desiredCapabilities: {
+				browserName: 'chrome',
+				javascriptEnabled: true,
+				acceptSslCerts: true,
+				chromeOptions: {
+					args: ['disable-gpu']
+				}
+			}
+		},
+		drone: {
+			launch_url : 'http://phoenix:8300',
+			selenium_host: 'selenium',
+			webdriver: {
+				start_process: false
+			},
+			desiredCapabilities: {
+				browserName: 'chrome',
+				javascriptEnabled: true,
+				acceptSslCerts: true,
+				chromeOptions: {
+					args: ['disable-gpu']
+				}
+			}
+		},
+	}
+};

@@ -1,4 +1,4 @@
-const { client } = require('nightwatch-cucumber');
+const { client } = require('nightwatch-api');
 const { Given, Then, When } = require('cucumber');
 
 When('the user browses to the files page',
