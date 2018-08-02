@@ -7,7 +7,7 @@
 			<side-menu></side-menu>
 		</aside>
 		<login></login>
-		<main id="oc-content" class="uk-offcanvas-content">
+		<main id="oc-content" class="uk-offcanvas-content uk-background-muted">
 			<router-view></router-view>
 		</main>
 	</div>

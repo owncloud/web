@@ -1,6 +1,5 @@
 <template>
 	<section data-app-id="user_ldap" class="uk-padding">
-		<h1>LDAP integration</h1>
 		<wizard></wizard>
 	</section>
 </template>

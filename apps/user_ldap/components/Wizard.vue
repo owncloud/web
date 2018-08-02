@@ -1,38 +1,32 @@
 <template>
-	<div v-if="!loading" uk-grid>
-		<main class="uk-width-expand">
-			<wizardServer :server="config.server" class="uk-margin"></wizardServer>
-			<wizardUsers :users="config.users"></wizardUsers>
-			<wizardLogin :login="config.login"></wizardLogin>
-			<wizardGroups :groups="config.groups"></wizardGroups>
-		</main>
-		<aside class="uk-width-large uk-position-relative">
-			<div class="uk-card uk-card-default uk-card-small uk-height-1-1">
-				<div class="uk-card-body">
-
-					<div uk-alert>
-						<a class="uk-alert-close" uk-close></a>
-						<h3>
-							Getting started
-						</h3>
-						<p>
-							Please setup basic Server settings to get the party started!
-						</p>
-					</div>
-
-					<div uk-alert class="uk-alert-danger" v-if="errors.length > 0">
-						<ul class="uk-list">
-							<li v-for="err in errors">{{err.response}}</li>
-						</ul>
-					</div>
-
-					<button v-for="(backup, bid) in history" type="button" class="uk-button uk-button-text uk-flex uk-flex-middle" @click="restore(bid)">
-						<i class="material-icons uk-margin-small-right" style="font-size:18px">restore</i>
-						<span>Restore from {{ backup.time | formDate }}</span>
-					</button>
+	<div v-if="!loading">
+		<wizardServer :server="config.server" :is-active="tab.server" class="uk-margin"></wizardServer>
+		<wizardUsers :users="config.users" :is-active="tab.users"></wizardUsers>
+		<!-- <wizardLogin :login="config.login"></wizardLogin> -->
+		<!-- <wizardGroups :groups="config.groups"></wizardGroups> -->
+		<!-- <aside class="uk-width-large uk-position-relative">
+			<div uk-sticky="offset: 100">
+				<div uk-alert>
+					<a class="uk-alert-close" uk-close></a>
+					<h3>
+						Getting started
+					</h3>
+					<p>
+						Please setup basic Server settings to get the party started!
+					</p>
 				</div>
 			</div>
-		</aside>
+			<div uk-alert class="uk-alert-danger" v-if="errors.length > 0">
+				<ul class="uk-list">
+					<li v-for="err in errors">{{err.response}}</li>
+				</ul>
+			</div>
+
+			<button v-for="(backup, bid) in history" type="button" class="uk-button uk-button-text uk-flex uk-flex-middle" @click="restore(bid)">
+				<i class="material-icons uk-margin-small-right" style="font-size:18px">restore</i>
+				<span>Restore from {{ backup.time | formDate }}</span>
+			</button>
+		</aside> -->
 		<footer class="uk-width-1-1">
 			<div class="uk-button-group">
 				<div class="uk-inline">
@@ -63,7 +57,6 @@
 </template>
 <script>
 
-import $ 			from 'jquery';
 import moment		from 'moment';
 
 import WizardServer from "./Wizard-Server.vue";
@@ -77,12 +70,16 @@ export default {
 			loading : true,
 			config  : {},
 			errors  : [],
-			history : []
+			history : [],
+			tab : {
+				server : true,
+				users  : true
+			}
 		}
 	},
 	mounted () {
-		$.getJSON('/apps/user_ldap/ldap_config_demo.json', (config) => {
-			this.config  = config;
+		this.$axios.get('/apps/user_ldap/ldap_config_demo.json').then(config => {
+			this.config  = config.data;
 			this.loading = false;
 		});
 	},
@@ -98,7 +95,9 @@ export default {
 		}
 	},
 	methods : {
-
+		toggleTab (tab) {
+			this.tab[tab] = !this.tab[tab];
+		},
 		validate() {
 			this.errors = [];
 
@@ -113,7 +112,6 @@ export default {
 					where    : 'server.port',
 					response : 'Port 0 is not open or whatever'
 				});
-
 		},
 
 		test () {

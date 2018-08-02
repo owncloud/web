@@ -1,0 +1,19 @@
+.uk-form-label-sticky {
+	display         : flex;
+	height          : @form-height;
+	background-color: @global-muted-background;
+	align-items     : center;
+	padding         : 0 @form-small-padding-horizontal;
+
+	border          : @global-border-width solid @global-border;
+	border-right    : 0 none;
+	box-sizing      : border-box;
+
+	font-size       : @global-small-font-size;
+	color           : @global-muted-color;
+
+	& + .uk-input,
+	& + .uk-select {
+		padding-left: @form-small-padding-horizontal;
+	}
+}

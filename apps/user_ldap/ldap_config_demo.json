@@ -1,14 +1,14 @@
 {
     "server" : {
-        "host"       : "",
-        "port"       : 0,
-        "certCheck"  : true,
-        "userDN"     : "",
-        "baseDN"     : "",
-        "password"   : "",
-        "backupHost" : "",
-        "cacheTTL"   : 600,
-        "backupPort" : ""
+        "host"              : "",
+        "port"              : "",
+        "certCheckDisabled" : false,
+        "userDN"            : "",
+        "baseDN"            : "",
+        "password"          : "",
+        "backupHost"        : "",
+        "cacheTTL"          : 600,
+        "backupPort"        : ""
     },
     "users" : {
         "filter" : "(|(objectclass=inetOrgPerson))",
