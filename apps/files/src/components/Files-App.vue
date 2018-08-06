@@ -92,259 +92,204 @@
 </template>
 
 <script>
-    import Mixins       from '../mixins';
-    import FileDetails  from './File-Details.vue';
-
-    const remove    = require('lodash/remove');
-    const includes  = require('lodash/includes');
-    const filter    = require('lodash/filter');
-
-    export default {
-        mixins      : [Mixins],
-        components  : {FileDetails},
-        data() {
-            return {
-                loading : false,
-                filterBy: {
-                    files   : true,
-                    folder  : true,
-                    hidden  : false
-                },
-                path    : [],
-                files   : [],
-                selected: [],
-                self    : {}
-            }
-        },
-        mounted() {
-            OC.$bus.on('phoenix:user-logged-in', () => {
-                this.loadFolder();
-            })
-        },
-        methods: {
-            goto(e) {
-                this.$route.push()
-            },
-            toggleFavorite(item) {
-                this.files[item].stared = (!this.files[item].stared);
-            },
-            routerLink(itemPath) {
-                this.$router.push({
-                    name: 'files',
-                    params: {
-                        item: itemPath
-                    }
-                })
-            },
-            loadFolder() {
-                this.loading = true;
-
-                this.path = [];
-				let absolutePath = this.$route.params.item;
-				if(this.$route.params.item === 'home'){
-					absolutePath = '/';
-				}else{
-					let pathSplit  = absolutePath.split('/').filter((val) => val);
-					for (let i = 0; i < pathSplit.length; i++) {
-					    this.path.push('/' + pathSplit.slice(0, i + 1).join('/'));
-                    }
+import Mixins from '../mixins';
+import FileDetails from './File-Details.vue';
+const remove = require('lodash/remove');
+const includes = require('lodash/includes');
+const filter = require('lodash/filter');
+export default {
+	mixins: [Mixins],
+	components: {
+		FileDetails
+	},
+	data() {
+		return {
+			loading: false,
+			filterBy: {
+				files: true,
+				folder: true,
+				hidden: false
+			},
+			path: [],
+			files: [],
+			selected: [],
+			self: {}
+		}
+	},
+	mounted() {
+		OC.$bus.on('phoenix:user-logged-in', () => {
+			this.loadFolder();
+		})
+	},
+	methods: {
+		goto(e) {
+			this.$route.push()
+		},
+		toggleFavorite(item) {
+			this.files[item].stared = (!this.files[item].stared);
+		},
+		routerLink(itemPath) {
+			this.$router.push({
+				name: 'files',
+				params: {
+					item: itemPath
 				}
-
-				// List all files
-				OC.$client.files.list(absolutePath).then(files => {
-					// Remove the root element
-					files = files.splice(1);
-
-                    this.files = files.map(file => {
-                        return ({
-                            type    : (file.type === 'dir') ? 'folder' : file.type,
-
-							//TODO: Retrieve real shared status of each file
-							shared: {
-								to: {
-									user: [
-										// {
-										//     perms: {
-										//         "remove": false,
-										//         "change": false,
-										//         "create": true,
-										//         "share": false
-										//     },
-										//     avatar: "http://stevensegallery.com/40/40",
-										//     name: "Jeannie Boyer",
-										//     state: 0,
-										//     type: "default"
-										// }
-									],
-									link: [
-										// {
-										//     password: false,
-										//     perms: {
-										//         remove: false,
-										//         change: false,
-										//         create: true,
-										//         share: true
-										//     },
-										//     type: "link",
-										//     mailTo: "",
-										//     hash: "b8ab6e5c",
-										//     IGNORE: {
-										//         "1": "Lessie.Holland@Anixang.net",
-										//         "2": "b8ab6e5c-7c4d-4e9a-9712-b28322fd1d54"
-										//     }
-										// }
-									]
-								},
-								from: false
+			})
+		},
+		loadFolder() {
+			this.loading = true;
+			this.path = [];
+			let absolutePath = this.$route.params.item;
+			if (this.$route.params.item === 'home') {
+				absolutePath = '/';
+			} else {
+				let pathSplit = absolutePath.split('/').filter((val) => val);
+				for (let i = 0; i < pathSplit.length; i++) {
+					this.path.push('/' + pathSplit.slice(0, i + 1).join('/'));
+				}
+			}
+			// List all files
+			OC.$client.files.list(absolutePath).then(files => {
+				// Remove the root element
+				files = files.splice(1);
+				this.files = files.map(file => {
+					return ({
+						type: (file.type === 'dir') ? 'folder' : file.type,
+						//TODO: Retrieve real shared status of each file
+						shared: {
+							to: {
+								user: [],
+								link: []
 							},
-
-                            starred : false,
-
-                            mdate   : file['fileInfo']['{DAV:}getlastmodified'],
-
-                            cdate   : '',    //TODO: Retrieve data of creation of a file
-
-                            size    : function () {
-                                if (file.type === 'dir') {
-                                    return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
-                                } else {
-                                    return file['fileInfo']['{DAV:}getcontentlength'] / 100
-                                }
-                            }(),
-
-							extension: (file.type === 'dir') ? false : '',
-
-                            name    : function () {
-                                let pathList = file.name.split("/").filter(e => e !== "")
-                                return pathList[pathList.length - 1];
-                            }(),
-
-                            path    : file.name,
-
-                            id      : file['fileInfo']['{DAV:}getetag']
-                        });
-                    });
-
-					this.self = files.self;
-
-					this.loading = false;
-
-					this.resetSelect();
-				}).catch(error => {
-					console.log(error);
-					UIkit.notification({
-						message: error.statusText,
-						status: 'danger',
-						pos: 'top-center'
+							from: false
+						},
+						starred: false,
+						mdate: file['fileInfo']['{DAV:}getlastmodified'],
+						cdate: '', //TODO: Retrieve data of creation of a file
+						size: function() {
+							if (file.type === 'dir') {
+								return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
+							} else {
+								return file['fileInfo']['{DAV:}getcontentlength'] / 100
+							}
+						}(),
+						extension: (file.type === 'dir') ? false : '',
+						name: function() {
+							let pathList = file.name.split("/").filter(e => e !== "")
+							return pathList[pathList.length - 1];
+						}(),
+						path: file.name,
+						id: file['fileInfo']['{DAV:}getetag']
 					});
 				});
-			},
-			singleSelect(item) {
-				this.selected = [item];
-			},
-			resetSelect() {
-				this.selected = [];
-			},
-			multiSelect(item) {
-				if (this.isChecked(item))
-					_.remove(this.selected, item);
-				else
-					this.selected.push(item);
-			},
-			isChecked(item) {
-				return _.includes(this.selected, item);
-			},
-            onDrop(dropLocation, dropData, dragData, event) {
-                if (dropLocation === 'file-list' && dropData.type === 'folder') {
-                    OC.$client.files.move(dragData.path, dropData.path + dragData.name).then(res => {
-                        this.loadFolder();
-                    });
-                } else if (dropLocation === 'breadcrumb') {
-                    OC.$client.files.move(dragData.path, dropData + '/' + dragData.name).then(res => {
-                        this.loadFolder();
-                    });
-                }
-            }
+				this.self = files.self;
+				this.loading = false;
+				this.resetSelect();
+			}).catch(error => {
+				UIkit.notification({
+					message: error.statusText,
+					status: 'danger',
+					pos: 'top-center'
+				});
+			});
 		},
-		watch: {
-			item() {
-				this.loadFolder()
-			}
+		singleSelect(item) {
+			this.selected = [item];
 		},
-		computed: {
-			item() {
-				return this.$route.params.item;
-			},
-			typeOfFolder() {
-				return _.filter(this.files, ['extension', false])
-			},
-			typeOfFile(showHidden) {
-				showHidden = (typeof showHidden !== 'undefined') ? showHidden : false;
-				return _.filter(this.files, 'extension')
+		resetSelect() {
+			this.selected = [];
+		},
+		multiSelect(item) {
+			if (this.isChecked(item)) _.remove(this.selected, item);
+			else this.selected.push(item);
+		},
+		isChecked(item) {
+			return _.includes(this.selected, item);
+		},
+		onDrop(dropLocation, dropData, dragData, event) {
+			if (dropLocation === 'file-list' && dropData.type === 'folder') {
+				OC.$client.files.move(dragData.path, dropData.path + dragData.name).then(res => {
+					this.loadFolder();
+				});
+			} else if (dropLocation === 'breadcrumb') {
+				OC.$client.files.move(dragData.path, dropData + '/' + dragData.name).then(res => {
+					this.loadFolder();
+				});
 			}
 		}
+	},
+	watch: {
+		item() {
+			this.loadFolder()
+		}
+	},
+	computed: {
+		item() {
+			return this.$route.params.item;
+		},
+		typeOfFolder() {
+			return _.filter(this.files, ['extension', false])
+		},
+		typeOfFile(showHidden) {
+			showHidden = (typeof showHidden !== 'undefined') ? showHidden : false;
+			return _.filter(this.files, 'extension')
+		}
 	}
+}
 </script>
-
 <style lang="less">
-
-	#files-app {
-		._scroll_container {
-			display: block;
-			overflow-x: hidden;
-			overflow-y: auto;
-
-			&::-webkit-scrollbar {
-				background-color: #f8f8f8;
-				width: 5px;
-			}
-
-			&::-webkit-scrollbar-track {
-				-webkit-box-shadow: none;
-			}
-
-			&::-webkit-scrollbar-thumb {
-				background-color: #e5e5e5;
-			}
+#files-app {
+	._scroll_container {
+		display: block;
+		overflow-x: hidden;
+		overflow-y: auto;
+		&::-webkit-scrollbar {
+			background-color: #f8f8f8;
+			width: 5px;
+		}
+		&::-webkit-scrollbar-track {
+			-webkit-box-shadow: none;
+		}
+		&::-webkit-scrollbar-thumb {
+			background-color: #e5e5e5;
 		}
 	}
+}
 
-	.burger {
-		font-size: 24px; // keep original font size for material icons
+.burger {
+	font-size: 24px; // keep original font size for material icons
+}
+
+.material-icon {
+	&.-x075 {
+		font-size: 75%;
 	}
+}
 
-	.material-icon {
-		&.-x075 {
-			font-size: 75%;
-		}
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.oc-highlight {
+	color: #E56F35;
+}
+
+.uk-iconnav li {
+	height: 24px;
+}
+
+._is-selected {
+	background-color: #f8f8f8;
+}
+
+._is-starred {
+	color: #faa05a;
+}
+
+.material-icons.uk-position-center-left {
+	transform: translateY(-55%);
+	+ span {
+		padding-left: 30px;
 	}
-
-	.cursor-pointer {
-		cursor: pointer;
-	}
-
-	.oc-highlight {
-		color: #E56F35;
-	}
-
-	.uk-iconnav li {
-		height: 24px;
-	}
-
-	._is-selected {
-		background-color: #f8f8f8;
-	}
-
-	._is-starred {
-		color: #faa05a;
-	}
-
-	.material-icons.uk-position-center-left {
-
-		transform: translateY(-55%);
-
-		+ span {
-			padding-left: 30px;
-		}
-	}
+}
 </style>
