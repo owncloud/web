@@ -140,12 +140,14 @@
 			},
 
 			routerLink(itemPath) {
-				this.$router.push({
-					name: 'file-list',
-					params: {
-						item: itemPath
-					}
-				})
+				if(itemPath.endsWith('/')) {
+					this.$router.push({
+						name: 'file-list',
+						params: {
+							item: itemPath
+						}
+					})
+				}
 			},
 
 			contextHandler(event) {
