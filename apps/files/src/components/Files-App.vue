@@ -16,7 +16,7 @@
 		.uk-position-relative
 			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
 				li.uk-flex.uk-flex-center
-					.material-icons.burger.cursor-pointer add
+					.material-icons.burger.cursor-pointer create_new_folder
 					div(uk-dropdown="mode: click", ref="newFolderDropdown", v-on:beforeshow="newFolderName = ''")
 						form
 							input.uk-input.uk-form-small(type='text', v-model="newFolderName", placeholder='Folder name')

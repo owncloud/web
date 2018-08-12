@@ -31,7 +31,13 @@
 			.uk-margin-top
 				button.uk-button.uk-button-primary.uk-button-small.uk-width-1-1 Go
 
-		+iconButton({class: 'uk-button-small', icon: 'create', buttonType: 'default'})
+		template(v-if="this.$store.state.files.selected.length === 1")
+			+iconButton({class: 'uk-button-small', icon: 'create', buttonType: 'default'})
+		div(uk-dropdown="mode: click")
+			.uk-margin
+				input.uk-input(v-model="newName", placeholder="Name")
+			.uk-margin-top
+				button.uk-button.uk-button-primary.uk-button-small.uk-width-1-1(@click="renameItem(newName)") Update
 
 		+iconButton({class: 'uk-button-small', icon: 'delete', buttonType: 'default'})
 		div(uk-dropdown="mode: click")
@@ -45,7 +51,9 @@ export default {
 	props: ['files'],
 	data() {
 		return {
-			fileAction: null
+			fileAction: null,
+
+			newName: ''
 		}
 	},
 	methods: {
@@ -75,6 +83,30 @@ export default {
 				}).catch(err => {
 					console.log(err)
 				})
+			}
+		},
+		renameItem(newName) {
+			if(newName !== ''){
+				let file = this.$store.state.files.selected[0];
+				let pathSplit = file.path.split('/');
+				let currentDirectory = pathSplit.slice(0, pathSplit[pathSplit.length - 1] === '' ? pathSplit.length - 2 : pathSplit.length - 1).join('/') + '/';
+
+				let dest = currentDirectory + newName;
+				if(file.type === 'file') {
+					dest += '.' + file.path.split('/').splice(-1)[0].split('.').splice(-1)[0];
+				}
+
+				this.$client.files.move(file.path, dest).then(res => {
+					this.$store.dispatch('files/RESET_SELECTION');
+				}).catch(err => {
+					console.log(err)
+				})
+			}else {
+				this.$uikit.notification({
+					message: 'New name cannot be empty',
+					status: 'danger',
+					pos: 'top-center'
+				});
 			}
 		}
 	}
