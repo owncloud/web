@@ -16,7 +16,12 @@
 		.uk-position-relative
 			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
 				li.uk-flex.uk-flex-center
-					.material-icons.burger.cursor-pointer(@click="xxx()") add
+					.material-icons.burger.cursor-pointer add
+					div(uk-dropdown="mode: click", ref="newFolderDropdown", v-on:beforeshow="newFolderName = ''")
+						form
+							input.uk-input.uk-form-small(type='text', v-model="newFolderName", placeholder='Folder name')
+							button.uk-button.uk-button-primary.uk-button-small.uk-margin-small-top(@click="createNewFolder(newFolderName)") OK
+
 				li.uk-width-expand
 					ol.uk-breadcrumb.uk-margin-remove-bottom
 						li.uk-flex.uk-flex-center
@@ -112,8 +117,7 @@
 				files   : [],
 				self    : {},
 
-				contextMenuTop	: 100,
-				contextMenuLeft	: 100
+				newFolderName	: ''
 			}
 		},
 		beforeMount () {
@@ -219,6 +223,33 @@
 						pos: 'top-center'
 					});
 				});
+			},
+
+			createNewFolder(newFolderName) {
+				if(newFolderName !== ''){
+					this.$uikit.dropdown(this.$refs.newFolderDropdown).hide();
+					this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + newFolderName)
+						.then(res => {
+							this.loadFolder();
+						}).catch(err => {
+							if(err === 'The resource you tried to create already exists') {
+								this.$uikit.notification({
+									message: err,
+									status: 'danger',
+									pos: 'top-center'
+								});
+							}else{
+								//TODO
+								console.log(err);
+							}
+					});
+				}else{
+					this.$uikit.notification({
+						message: 'Please enter a folder name',
+						status: 'danger',
+						pos: 'top-center'
+					});
+				}
 			},
 
 			resetFileSelection() {
