@@ -7,12 +7,11 @@
 		transition(name="fade")
 			span(v-show="loading").oc-loader-spinner
 
-		div(uk-dropdown ref="contextMenu" :style="{ top: contextMenuTop, left: contextMenuLeft }")
-			ul.uk-nav.uk-dropdown-nav
-				li Download
-				li Some item A
-				li Some item B
-				li Some item C
+		<!--div(uk-dropdown ref="contextMenu")-->
+			<!--ul.uk-nav.uk-dropdown-nav-->
+				<!--li Download-->
+				<!--li Item A-->
+				<!--li Item B-->
 
 		.uk-position-relative
 			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
@@ -150,14 +149,14 @@
 			},
 
 			contextHandler(event) {
-				if(event.target.tagName === 'TD'){
-					this.contextMenuTop = event.pageY;
-					this.contextMenuLeft = event.pageX;
-
-					let dropdown = this.$uikit.dropdown(this.$refs.contextMenu);
-					dropdown.show();
-				}
-				event.preventDefault();
+				// if(event.target.tagName === 'TD'){
+				// 	this.contextMenuTop = event.pageY;
+				// 	this.contextMenuLeft = event.pageX;
+				//
+				// 	let dropdown = this.$uikit.dropdown(this.$refs.contextMenu);
+				// 	dropdown.show();
+				// }
+				// event.preventDefault();
 			},
 
 			loadFolder() {
