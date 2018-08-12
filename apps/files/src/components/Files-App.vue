@@ -182,7 +182,7 @@
 				} else {
 					let pathSplit  = absolutePath.split('/').filter((val) => val);
 					for (let i = 0; i < pathSplit.length; i++) {
-						this.path.push('/' + pathSplit.slice(0, i + 1).join('/') + '/');
+						this.path.push('/' + pathSplit.slice(0, i + 1).join('/'));
 					}
 				}
 
@@ -190,7 +190,7 @@
 					this.offlineNotified = false;
 
 					// List all files
-					OC.$client.files.list(absolutePath).then(files => {
+					this.$client.files.list(absolutePath).then(files => {
 						// Remove the root element
 						files = files.splice(1);
 
@@ -236,7 +236,7 @@
 				} else {
 					// If the user has not been notified
 					if(!this.offlineNotified){
-						OC.$uikit.notification({
+						this.$uikit.notification({
 							message: `You are currently offline. Latest changes may not be available`,
 							status: 'primary'
 						});
@@ -255,7 +255,7 @@
 
 					this.loading = false;
 
-					this.resetSelect();
+					this.resetFileSelection();
 				}
 			},
 
