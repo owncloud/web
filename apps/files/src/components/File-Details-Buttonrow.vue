@@ -27,16 +27,18 @@
 				select.uk-select
 					option into Games
 					option into Books
-					option into Musik
+					option into Music
 			.uk-margin-top
 				button.uk-button.uk-button-primary.uk-button-small.uk-width-1-1 Go
+
+		+iconButton({class: 'uk-button-small', icon: 'create', buttonType: 'default'})
 
 		+iconButton({class: 'uk-button-small', icon: 'delete', buttonType: 'default'})
 		div(uk-dropdown="mode: click")
 			.uk-margin
 				span Are you sure you want to delete Filename?
 			.uk-margin-top
-				button.uk-button.uk-button-danger.uk-button-small.uk-width-1-1 Delete
+				button.uk-button.uk-button-danger.uk-button-small.uk-width-1-1(@click="deleteItems()") Delete
 </template>
 <script>
 export default {
@@ -48,15 +50,28 @@ export default {
 	},
 	methods: {
 		download() {
-			for (let i = 0; i < this.files.length; i++) {
-				OC.$client.files.getFileContents(this.files[i].path).then(res => {
+			let files = this.$store.state.files.selected;
+
+			for (let i = 0; i < files.length; i++) {
+				this.$client.files.getFileContents(files[i].path).then(res => {
 					var blob = new Blob([res]);
 					var link = document.createElement('a');
 					link.href = window.URL.createObjectURL(blob);
-					link.download = this.files[i].name;
+					link.download = files[i].name;
 					document.body.appendChild(link);
 					link.click();
 					document.body.removeChild(link);
+				}).catch(err => {
+					console.log(err)
+				})
+			}
+		},
+		deleteItems() {
+			let files = this.$store.state.files.selected;
+
+			for (let i = 0; i < files.length; i++) {
+				this.$client.files.delete(files[i].path).then(res => {
+					this.$store.dispatch('files/RESET_SELECTION');
 				}).catch(err => {
 					console.log(err)
 				})
