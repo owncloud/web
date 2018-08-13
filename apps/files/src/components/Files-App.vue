@@ -3,18 +3,33 @@
 	mixin icon(a)
 		i.material-icons(class=a.class)= a.icon
 
-	#files-app
+	#files-app.uk-height-1-1(@contextmenu="contextHandler($event)")
 		transition(name="fade")
 			span(v-show="loading").oc-loader-spinner
 
+		<!--div(uk-dropdown ref="contextMenu")-->
+			<!--ul.uk-nav.uk-dropdown-nav-->
+				<!--li Download-->
+				<!--li Item A-->
+				<!--li Item B-->
+
 		.uk-position-relative
 			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
+				li.uk-flex.uk-flex-center
+					.material-icons.burger.cursor-pointer create_new_folder
+					div(uk-dropdown="mode: click", ref="newFolderDropdown", v-on:beforeshow="newFolderName = ''")
+						form
+							input.uk-input.uk-form-small(type='text', v-model="newFolderName", placeholder='Folder name')
+							button.uk-button.uk-button-primary.uk-button-small.uk-margin-small-top(@click="createNewFolder(newFolderName)") OK
+
 				li.uk-width-expand
 					ol.uk-breadcrumb.uk-margin-remove-bottom
 						li.uk-flex.uk-flex-center
-							router-link(:to="{ name: 'file-list', params: { item: 'home' }}", tag="i").material-icons.burger.cursor-pointer home
+							drop(@drop="onDrop('breadcrumb', '', ...arguments)")
+								router-link(:to="{ name: 'file-list', params: { item: 'home' }}", tag="i").material-icons.burger.cursor-pointer home
 						li(v-for="(pathItem, pId) in path")
-							router-link(:to="{ name: 'file-list', params: { item: pathItem }}").cursor-pointer {{ pathItem.split('/').slice(-1)[0] }}
+							drop(@drop="onDrop('breadcrumb', pathItem, ...arguments)")
+								router-link(:to="{ name: 'file-list', params: { item: pathItem }}").cursor-pointer {{ pathItem.split('/').slice(-1)[0] }}
 				li
 					span {{ files.length }} Results
 				li
@@ -52,10 +67,12 @@
 									input(type="checkbox", :checked="isChecked(file)", @click="toggleFileSelect(file)").uk-checkbox.uk-margin-small-left
 
 								// --- Name ----------
-								td(v-if="!file.extension", @click="toggleFileSelect(file)").uk-text-truncate.uk-visible-toggle
-									a(@click.stop="routerLink(file.path)").uk-link-text.uk-position-relative
-										i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
-										span {{ file.name }}
+								td(v-if="!file.extension", @click="singleSelect(file)").uk-text-truncate.uk-visible-toggle
+									drag(:transfer-data="file")
+										drop(@drop="onDrop('file-list', file, ...arguments)")
+											a(@click.stop="routerLink(file.path)").uk-link-text.uk-position-relative
+												i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
+												span {{ file.name }}
 
 								td(v-else).uk-text-truncate(@click="toggleFileSelect(file)")
 									a(@click.stop="endOfDummy").uk-link.uk-position-relative
@@ -102,7 +119,9 @@
 				},
 				path    : [],
 				files   : [],
-				self    : {}
+				self    : {},
+
+				newFolderName	: ''
 			}
 		},
 		beforeMount () {
@@ -129,12 +148,25 @@
 			},
 
 			routerLink(itemPath) {
-				this.$router.push({
-					name: 'file-list',
-					params: {
-						item: itemPath
-					}
-				})
+				if(itemPath.endsWith('/')) {
+					this.$router.push({
+						name: 'file-list',
+						params: {
+							item: itemPath
+						}
+					})
+				}
+			},
+
+			contextHandler(event) {
+				// if(event.target.tagName === 'TD'){
+				// 	this.contextMenuTop = event.pageY;
+				// 	this.contextMenuLeft = event.pageX;
+				//
+				// 	let dropdown = this.$uikit.dropdown(this.$refs.contextMenu);
+				// 	dropdown.show();
+				// }
+				// event.preventDefault();
 			},
 
 			loadFolder() {
@@ -197,24 +229,63 @@
 				});
 			},
 
+			createNewFolder(newFolderName) {
+				if(newFolderName !== ''){
+					this.$uikit.dropdown(this.$refs.newFolderDropdown).hide();
+					this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + newFolderName)
+						.then(res => {
+							this.loadFolder();
+						}).catch(err => {
+							if(err === 'The resource you tried to create already exists') {
+								this.$uikit.notification({
+									message: err,
+									status: 'danger',
+									pos: 'top-center'
+								});
+							}else{
+								//TODO
+								console.log(err);
+							}
+					});
+				}else{
+					this.$uikit.notification({
+						message: 'Please enter a folder name',
+						status: 'danger',
+						pos: 'top-center'
+					});
+				}
+			},
+
 			resetFileSelection() {
 				this.$store.dispatch('files/RESET_SELECTION')
 			},
 
 			toggleFileSelect(item) {
 				if (this.isChecked(item))
-					this.$store.dispatch('files/REMOVE_FILE_SELECTION', item)
+					this.$store.dispatch('files/REMOVE_FILE_SELECTION', item);
 				else
-					this.$store.dispatch('files/ADD_FILE_SELECTION', item)
+					this.$store.dispatch('files/ADD_FILE_SELECTION', item);
 			},
 
 			isChecked(item) {
 				return _includes(this.selected, item);
-			}
+			},
+
+            onDrop(dropLocation, dropData, dragData, event) {
+                if (dropLocation === 'file-list' && dropData.type === 'folder') {
+                    this.$client.files.move(dragData.path, dropData.path + dragData.name).then(res => {
+                        this.loadFolder();
+                    });
+                } else if (dropLocation === 'breadcrumb') {
+                    this.$client.files.move(dragData.path, dropData + '/' + dragData.name).then(res => {
+                        this.loadFolder();
+                    });
+                }
+            }
 		},
 		watch: {
 			item () {
-				this.loadFolder()
+				this.loadFolder();
 			},
 			userLoggedIn (cur, prev) {
 				if (cur !== prev)
@@ -244,7 +315,7 @@
 			},
 
 			iAmActive () {
-				return this.$route.name == 'file-list';
+				return this.$route.name === 'file-list';
 			}
 		}
 	}

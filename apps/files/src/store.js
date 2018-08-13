@@ -7,7 +7,7 @@ export default {
 	},
 	mutations: {
 		ADD_FILE_SELECTION(state, file) {
-			state.selected.push(file)
+			state.selected.push(file);
 		},
 		REMOVE_FILE_SELECTION(state, file) {
 			if (state.selected.length > 1) {
@@ -23,22 +23,22 @@ export default {
 	},
 	actions: {
 		ADD_FILE_SELECTION(context, file) {
-			context.commit('ADD_FILE_SELECTION', file)
+			context.commit('ADD_FILE_SELECTION', file);
 		},
 		REMOVE_FILE_SELECTION(context, file) {
-			context.commit('REMOVE_FILE_SELECTION', file)
+			context.commit('REMOVE_FILE_SELECTION', file);
 		},
 		RESET_SELECTION(context) {
-			context.commit('RESET_SELECTION')
+			context.commit('RESET_SELECTION');
 		}
 	},
 	getters: {
 		SELECTED: state => {
-			if (state.selected.length == 0) {
-				return false
+			if (state.selected.length === 0) {
+				return false;
 			} else {
 				return state.selected;
 			}
 		}
 	}
-}
+};
