@@ -242,12 +242,12 @@
 						});
 
 						this.offlineNotified = true;
-                    }
+					}
 
 					let cachedFiles = JSON.parse(localStorage.getItem(absolutePath));
 					if(cachedFiles == null){
 						cachedFiles = [];
-                    }
+					}
 
 					this.files = cachedFiles;
 
