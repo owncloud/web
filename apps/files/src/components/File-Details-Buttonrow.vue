@@ -80,6 +80,11 @@ export default {
 			for (let i = 0; i < files.length; i++) {
 				this.$client.files.delete(files[i].path).then(res => {
 					this.$store.dispatch('files/RESET_SELECTION');
+
+					let parentFiles = this.$parent.$parent.$data.files;
+					parentFiles.splice(
+						parentFiles.indexOf(files[i]), 1
+					);
 				}).catch(err => {
 					console.log(err)
 				})
@@ -98,6 +103,10 @@ export default {
 
 				this.$client.files.move(file.path, dest).then(res => {
 					this.$store.dispatch('files/RESET_SELECTION');
+					this.$parent.$parent.$options.methods.loadFolder();
+
+					let parentFiles = this.$parent.$parent.$data.files;
+					parentFiles[parentFiles.indexOf(file)].name = newName;
 				}).catch(err => {
 					console.log(err)
 				})
