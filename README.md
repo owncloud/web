@@ -7,7 +7,7 @@ Pushing a new design and frontend concept to ownCloud
 
 
 
-[See this online Demo](http://wp12578177.server-he.de)
+[See this online Demo](http://dev.felix.click/OWC.007.16/0.1.0/)
 
 ## How to build
 
