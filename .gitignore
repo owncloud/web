@@ -4,7 +4,6 @@ core/css/*
 apps/*
 !apps/servstat
 !apps/demo
-!apps/files
 
 .idea
 *.bundle.js
