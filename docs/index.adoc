@@ -1,0 +1,30 @@
+The Phoenix Project
+-------------------
+
+What is Phoenix?
+~~~~~~~~~~~~~~~~
+
+Phoenix is the Environment for your ownCloud Application frontend. It's completely written in HTML, CSS and Javascript.
+
+Phoenix's OC Object is a https://vuejs.org/[Vue.js] instance using https://babeljs.io/[babel], https://vue-loader.vuejs.org/[vue-loader], https://github.com/pagekit/vue-resource[vue-resource] (and more) bundled with https://webpack.github.io/[Webpack]. UI and theming is based on the http://lesscss.org/[Less] version of https://getuikit.com/[Uikit3] (Currently in beta)
+
+http://requirejs.org/[Require.js] is used in application registration and booting.
+
+
+Understanding Phoenix
+~~~~~~~~~~~~~~~~~~~~~
+
+* The OC Object
+* OC Eventbus: `OC.booted()`, `on()` and `once()`
+* Helper: `OC.path()`, `OC.pathJS()`, […]
+* Authentication: `OC.login()`, `OC.getUser()`, […]
+
+App Development
+~~~~~~~~~~~~~~~
+
+* Folder structure
+* Bundling
+* link:booting[Booting]
+* Code Convetions
+** link:writing-less[Less]
+** avaScript
