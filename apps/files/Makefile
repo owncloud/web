@@ -1,7 +1,3 @@
-
-uikit_dist=core/uikit/dist
-uikit_deps=core/uikit/node_modules
-
 apps=apps/files
 bundles=js/files.bundle.js
 
@@ -11,7 +7,7 @@ all: build
 build: $(bundles)
 
 node_modules: package.json package-lock.json
-	npm install
+	npm install && touch node_modules
 
 $(bundles): webpack.common.js webpack.dev.js node_modules
 	npm run build
