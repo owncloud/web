@@ -186,47 +186,77 @@
 					}
 				}
 
-				// List all files
-				this.$client.files.list(absolutePath).then(files => {
-					// Remove the root element
-					files = files.splice(1);
+				if (navigator.onLine) {
+					this.offlineNotified = false;
 
-					this.files = files.map(file => {
-						return ({
-							type : (file.type === 'dir') ? 'folder' : file.type,
-							starred : false,
-							mdate   : file['fileInfo']['{DAV:}getlastmodified'],
-							cdate   : '',    //TODO: Retrieve data of creation of a file
+					// List all files
+					this.$client.files.list(absolutePath).then(files => {
+						// Remove the root element
+						files = files.splice(1);
 
-							size    : function () {
-								if (file.type === 'dir') {
-									return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
-								} else {
-									return file['fileInfo']['{DAV:}getcontentlength'] / 100
-								}
-							}(),
-							extension: (file.type === 'dir') ? false : '',
-							name    : function () {
-								let pathList = file.name.split("/").filter(e => e !== "")
-								return pathList[pathList.length - 1];
-							}(),
-							path    : file.name,
-							id      : file['fileInfo']['{DAV:}getetag']
+						this.files = files.map(file => {
+							return ({
+								type    : (file.type === 'dir') ? 'folder' : file.type,
+								starred : false,
+								mdate   : file['fileInfo']['{DAV:}getlastmodified'],
+								cdate   : '',    //TODO: Retrieve data of creation of a file
+
+								size    : function () {
+									if (file.type === 'dir') {
+										return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
+									} else {
+										return file['fileInfo']['{DAV:}getcontentlength'] / 100
+									}
+								}(),
+								extension: (file.type === 'dir') ? false : '',
+								name    : function () {
+									let pathList = file.name.split("/").filter(e => e !== "")
+									return pathList[pathList.length - 1];
+								}(),
+								path    : file.name,
+								id      : file['fileInfo']['{DAV:}getetag']
+							});
+						});
+
+						// Save files in the cache
+						localStorage.setItem(absolutePath, JSON.stringify(this.files));
+
+						this.self = files.self;
+
+						this.loading = false;
+
+						this.resetFileSelection();
+					}).catch(error => {
+						this.$uikit.notification({
+							message: error.statusText,
+							status: 'danger',
+							pos: 'top-center'
 						});
 					});
+				} else {
+					// If the user has not been notified
+					if(!this.offlineNotified){
+						this.$uikit.notification({
+							message: `You are currently offline. Latest changes may not be available`,
+							status: 'primary'
+						});
 
-					this.self = files.self;
+						this.offlineNotified = true;
+					}
+
+					let cachedFiles = JSON.parse(localStorage.getItem(absolutePath));
+					if(cachedFiles == null){
+						cachedFiles = [];
+					}
+
+					this.files = cachedFiles;
+
+					this.self = cachedFiles.self;
 
 					this.loading = false;
 
 					this.resetFileSelection();
-				}).catch(error => {
-					this.$uikit.notification({
-						message: error.statusText,
-						status: 'danger',
-						pos: 'top-center'
-					});
-				});
+				}
 			},
 
 			createNewFolder(newFolderName) {
