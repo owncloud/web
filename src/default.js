@@ -2,7 +2,6 @@
 
 import Vue       from 'vue';
 
-const _forEach = require('lodash/forEach');
 const _map     = require('lodash/map');
 const _flatten = require('lodash/flatten');
 
@@ -47,11 +46,11 @@ Axios.get('config.json').then(config => {
 			redirect : to => arguments[0].navItems[0].route
 		}];
 
-		_forEach(arguments, (app) => {
+		for (let app of arguments) {
 			if (app.routes) routes.push(app.routes);
 			if (app.plugins) plugins.push(app.plugins);
 			if (app.navItems) navItems.push(app.navItems);
-		})
+		}
 
 		const router = new VueRouter({
 			routes: _flatten(routes)
