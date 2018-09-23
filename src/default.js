@@ -30,6 +30,13 @@ import VueRouter   from 'vue-router';
 Vue.use(VueEvents);
 Vue.use(VueRouter);
 
+// --- Drag Drop ----
+
+import { Drag, Drop } from 'vue-drag-drop';
+
+Vue.component('drag', Drag);
+Vue.component('drop', Drop);
+
 // --- Router ----
 
 Axios.get('config.json').then(config => {
@@ -73,11 +80,3 @@ Axios.get('config.json').then(config => {
 }).catch(err => {
 	alert(err);
 });
-
-
-// --- Drag Drop ----
-
-import { Drag, Drop } from 'vue-drag-drop';
-
-Vue.component('drag', Drag);
-Vue.component('drop', Drop);
