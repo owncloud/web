@@ -28,7 +28,7 @@
     "less": "^3.8.0",
     "nightwatch": "^1.0.10",
     "nightwatch-api": "^0.4.0",
-    "start-server-and-test": "^1.5.0",
+    "start-server-and-test": "^1.7.0",
     "vue-loader": "14.2.3",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.15.0",
