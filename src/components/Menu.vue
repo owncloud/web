@@ -3,7 +3,7 @@
     <div class="uk-offcanvas-bar uk-background-muted">
       <ul class="uk-nav-default uk-nav-parent-icon" uk-nav="">
         <li v-for="(n, nid) in nav" :key="nid">
-          <router-link :to="n.route">
+          <router-link :to="n.route" :target="n.target">
             <i v-if="n.iconMaterial" class="material-icons uk-margin-small-right" v-text="n.iconMaterial"></i>
             <span v-text="n.name"></span>
           </router-link>
