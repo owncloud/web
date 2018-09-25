@@ -304,7 +304,7 @@
 				return _includes(this.selected, item);
 			},
 
-            async onDrop(dropLocation, dropData, dragData, event) {
+			async onDrop(dropLocation, dropData, dragData, event) {
 				try {
 					if (dropLocation === 'file-list' && dropData.type === 'folder') {
 						await this.$client.files.move(dragData.path, dropData.path + dragData.name)
