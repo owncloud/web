@@ -29,7 +29,7 @@
 								router-link(:to="{ name: 'file-list', params: { item: 'home' }}", tag="i").material-icons.burger.cursor-pointer home
 						li(v-for="(pathItem, pId) in path")
 							drop(@drop="onDrop('breadcrumb', pathItem, ...arguments)")
-								router-link(:to="{ name: 'file-list', params: { item: pathItem }}").cursor-pointer {{ pathItem.split('/').slice(-1)[0] }}
+								router-link(:to="{ name: 'file-list', params: { item: pathItem }}").cursor-pointer.uk-link-text {{ pathItem.split('/').slice(-1)[0] }}
 				li
 					span {{ files.length }} Results
 				li
