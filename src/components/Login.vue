@@ -53,27 +53,29 @@ export default {
 			this.$parent.$uikit.modal('#oc-login-dialog').hide();
 		},
 
-		login () {
-			this.loading = true;
-			let OC = this.$parent;
-			OC.$client.login(this.username, this.password).then( () => {
-				OC.$client.users.getUser(this.username).then(user => {
-					this.loading = false;
-					this._hide();
-					this.$store.dispatch('SET_USER', user);
-					OC.$events.emit('phoenix:user-logged-in');
-					OC.$uikit.notification({
-						message: `Welcome  ${user.displayname}<br>We love you :-*`,
-						status: 'primary'
-					});
+		async login () {
+			try {
+				this.loading = true;
+				let OC = this.$parent;
+				await OC.$client.login(this.username, this.password)
+				let user = await OC.$client.users.getUser(this.username)
+
+				this.loading = false;
+				this._hide();
+				this.$store.dispatch('SET_USER', user);
+				OC.$events.emit('phoenix:user-logged-in');
+				OC.$uikit.notification({
+					message: `Welcome  ${user.displayname}<br>We love you :-*`,
+					status: 'primary'
 				});
-			}).catch(error => {
+			}
+			catch (error) {
 				this.loading = false;
 				OC.$uikit.notification({
 					message: error,
 					status: 'danger',
 				});
-			});
+			}
 		},
 	}
 };

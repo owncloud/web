@@ -38,44 +38,50 @@ Vue.component('drop', Drop);
 
 // --- Router ----
 
-Axios.get('config.json').then(config => {
+async function load_apps_and_start () {
 
-	let apps = _map(config.data.apps, (app) => {
-		return `./apps/${app}/js/${app}.bundle.js`
-	})
+	try {
+		let config = await Axios.get('config.json')
 
-	requirejs(apps, function() {
+		let apps = _map(config.data.apps, (app) => {
+			return `./apps/${app}/js/${app}.bundle.js`
+		})
 
-		let plugins  = [];
-		let navItems = [];
-		let routes   = [{
-			path : '/',
-			redirect : to => arguments[0].navItems[0].route
-		}];
+		requirejs(apps, function() {
 
-		for (let app of arguments) {
-			if (app.routes) routes.push(app.routes);
-			if (app.plugins) plugins.push(app.plugins);
-			if (app.navItems) navItems.push(app.navItems);
-		}
+			let plugins  = [];
+			let navItems = [];
+			let routes   = [{
+				path : '/',
+				redirect : to => arguments[0].navItems[0].route
+			}];
 
-		const router = new VueRouter({
-			routes: _flatten(routes)
+			for (let app of arguments) {
+				if (app.routes) routes.push(app.routes);
+				if (app.plugins) plugins.push(app.plugins);
+				if (app.navItems) navItems.push(app.navItems);
+			}
+
+			const router = new VueRouter({
+				routes: _flatten(routes)
+			});
+
+			const OC  = new Vue({
+				el : '#owncloud',
+				data : {
+					config   : config.data,
+					plugins  : _flatten(plugins),
+					navItems : _flatten(navItems)
+				},
+				store,
+				router,
+				render: h => h(Phoenix)
+			});
 		});
+	}
+	catch (err) {
+		alert(err);
+	}
+}
 
-		const OC  = new Vue({
-			el : '#owncloud',
-			data : {
-				config   : config.data,
-				plugins  : _flatten(plugins),
-				navItems : _flatten(navItems)
-			},
-			store,
-			router,
-			render: h => h(Phoenix)
-		});
-	});
-
-}).catch(err => {
-	alert(err);
-});
+load_apps_and_start();

@@ -57,11 +57,12 @@ export default {
 		}
 	},
 	methods: {
-		download() {
+		async download() {
 			let files = this.$store.state.files.selected;
 
 			for (let i = 0; i < files.length; i++) {
-				this.$client.files.getFileContents(files[i].path).then(res => {
+				try {
+					let res = await this.$client.files.getFileContents(files[i].path)
 					var blob = new Blob([res]);
 					var link = document.createElement('a');
 					link.href = window.URL.createObjectURL(blob);
@@ -69,28 +70,31 @@ export default {
 					document.body.appendChild(link);
 					link.click();
 					document.body.removeChild(link);
-				}).catch(err => {
+				}
+				catch (err)  {
 					console.log(err)
-				})
+				}
 			}
 		},
-		deleteItems() {
+		async deleteItems() {
 			let files = this.$store.state.files.selected;
 
 			for (let i = 0; i < files.length; i++) {
-				this.$client.files.delete(files[i].path).then(res => {
+				try {
+					let res = await this.$client.files.delete(files[i].path)
 					this.$store.dispatch('files/RESET_SELECTION');
 
 					let parentFiles = this.$parent.$parent.$data.files;
 					parentFiles.splice(
 						parentFiles.indexOf(files[i]), 1
 					);
-				}).catch(err => {
+				}
+				catch (err) {
 					console.log(err)
-				})
+				}
 			}
 		},
-		renameItem(newName) {
+		async renameItem(newName) {
 			if(newName !== ''){
 				let file = this.$store.state.files.selected[0];
 				let pathSplit = file.path.split('/');
@@ -101,15 +105,17 @@ export default {
 					dest += '.' + file.path.split('/').splice(-1)[0].split('.').splice(-1)[0];
 				}
 
-				this.$client.files.move(file.path, dest).then(res => {
+				try {
+					let res = await this.$client.files.move(file.path, dest)
 					this.$store.dispatch('files/RESET_SELECTION');
 					this.$parent.$parent.$options.methods.loadFolder();
 
 					let parentFiles = this.$parent.$parent.$data.files;
 					parentFiles[parentFiles.indexOf(file)].name = newName;
-				}).catch(err => {
+				}
+				catch(err) {
 					console.log(err)
-				})
+				}
 			}else {
 				this.$uikit.notification({
 					message: 'New name cannot be empty',
