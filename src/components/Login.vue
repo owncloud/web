@@ -63,7 +63,7 @@ export default {
 					this.$store.dispatch('SET_USER', user);
 					OC.$events.emit('phoenix:user-logged-in');
 					OC.$uikit.notification({
-						message: `Welcome  ${user.displayname}<br>We love you :-*`,
+						message: `Welcome  ${user.displayname}`,
 						status: 'primary'
 					});
 				});
