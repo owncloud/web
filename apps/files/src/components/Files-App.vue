@@ -67,7 +67,7 @@
 									input(type="checkbox", :checked="isChecked(file)", @click="toggleFileSelect(file)").uk-checkbox.uk-margin-small-left
 
 								// --- Name ----------
-								td(v-if="!file.extension", @click="singleSelect(file)").uk-text-truncate.uk-visible-toggle
+								td(v-if="!file.extension", @click="toggleFileSelect(file)").uk-text-truncate.uk-visible-toggle
 									drag(:transfer-data="file")
 										drop(@drop="onDrop('file-list', file, ...arguments)")
 											a(@click.stop="routerLink(file.path)").uk-link-text.uk-position-relative
