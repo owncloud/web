@@ -42,7 +42,7 @@ Axios.get('config.json').then(config => {
 
 	let apps = _map(config.data.apps, (app) => {
 		return `./apps/${app}/js/${app}.bundle.js`;
-	})
+	});
 
 	requirejs(apps, function() {
 
