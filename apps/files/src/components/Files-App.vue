@@ -191,7 +191,7 @@
 
 					// List all files
 					try {
-						let files = await this.$client.files.list(absolutePath)
+						let files = await this.$client.files.list(absolutePath);
 						// Remove the root element
 						files = files.splice(1);
 
@@ -265,7 +265,7 @@
 				if(newFolderName !== ''){
 					this.$uikit.dropdown(this.$refs.newFolderDropdown).hide();
 					try {
-						let res = await this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + newFolderName)
+						let res = await this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + newFolderName);
 						this.loadFolder();
 					}
 					catch (err) {
@@ -307,10 +307,10 @@
 			async onDrop(dropLocation, dropData, dragData, event) {
 				try {
 					if (dropLocation === 'file-list' && dropData.type === 'folder') {
-						await this.$client.files.move(dragData.path, dropData.path + dragData.name)
+						await this.$client.files.move(dragData.path, dropData.path + dragData.name);
 						this.loadFolder();
 					} else if (dropLocation === 'breadcrumb') {
-						await this.$client.files.move(dragData.path, dropData + '/' + dragData.name)
+						await this.$client.files.move(dragData.path, dropData + '/' + dragData.name);
 						this.loadFolder();
 					}
 				}

@@ -57,8 +57,8 @@ export default {
 			try {
 				this.loading = true;
 				let OC = this.$parent;
-				await OC.$client.login(this.username, this.password)
-				let user = await OC.$client.users.getUser(this.username)
+				await OC.$client.login(this.username, this.password);
+				let user = await OC.$client.users.getUser(this.username);
 
 				this.loading = false;
 				this._hide();
