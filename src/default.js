@@ -41,11 +41,11 @@ Vue.component('drop', Drop);
 async function load_apps_and_start () {
 
 	try {
-		let config = await Axios.get('config.json')
+		let config = await Axios.get('config.json');
 
 		let apps = _map(config.data.apps, (app) => {
-			return `./apps/${app}/js/${app}.bundle.js`
-		})
+			return `./apps/${app}/js/${app}.bundle.js`;
+		});
 
 		requirejs(apps, function() {
 
