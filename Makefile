@@ -17,13 +17,13 @@ node_modules: package.json package-lock.json
 	npm install && touch node_modules
 
 core/css/uikit.%.css: src/themes/%.less node_modules
-	node_modules/less/bin/lessc src/themes/$*.less core/css/uikit.$*.css --relative-urls
+	node_modules/less/bin/lessc src/themes/$*.less core/css/uikit.$*.css --rewrite-urls=all
 
 core/css/material-icons.css: src/themes/icons.scss node_modules
-	node node_modules/.bin/sass src/themes/icons.scss core/css/material-icons.css --no-source-map
+	node_modules/.bin/sass src/themes/icons.scss $0 --no-source-map
 
 core/fonts: node_modules
-	mkdir core/fonts
+	mkdir -p core/fonts
 
 core/fonts/MaterialIcons-Regular.%: core/fonts node_modules
 	cp node_modules/material-icons/iconfont/MaterialIcons-Regular.* core/fonts/
