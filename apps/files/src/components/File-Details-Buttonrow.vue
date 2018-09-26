@@ -70,7 +70,7 @@ export default {
 					link.click();
 					document.body.removeChild(link);
 				}).catch(err => {
-					console.log(err)
+					console.log(err);
 				})
 			}
 		},
@@ -86,7 +86,7 @@ export default {
 						parentFiles.indexOf(files[i]), 1
 					);
 				}).catch(err => {
-					console.log(err)
+					console.log(err);
 				})
 			}
 		},
@@ -108,7 +108,7 @@ export default {
 					let parentFiles = this.$parent.$parent.$data.files;
 					parentFiles[parentFiles.indexOf(file)].name = newName;
 				}).catch(err => {
-					console.log(err)
+					console.log(err);
 				})
 			}else {
 				this.$uikit.notification({
@@ -119,5 +119,5 @@ export default {
 			}
 		}
 	}
-}
+};
 </script>

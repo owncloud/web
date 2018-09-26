@@ -9,14 +9,14 @@ const navItems = [{
 	route: {
 		name: 'demo-show-config'
 	}
-}]
+}];
 
 
 // --- Components --------------------------------------------------------------
 
 const ShowConfig = () => ({
 	component: import ('./DemoShowConfig.vue')
-})
+});
 
 import ButtonRowItem from './ButtonRowItem.vue';
 
@@ -26,7 +26,7 @@ const routes = [{
 	path: `/${pkg.name}`,
 	component: ShowConfig,
 	name: 'demo-show-config'
-}]
+}];
 
 const plugins = [{
 	extend: "filesDetailsButtonRow",

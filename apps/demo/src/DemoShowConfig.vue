@@ -20,5 +20,5 @@ export default {
 			return this.$root.config;
 		}
 	}
-}
+};
 </script>
