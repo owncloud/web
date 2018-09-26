@@ -24,7 +24,8 @@ export default {
 		'login'     : Login
 	},
 	beforeMount () {
-		this.$client.setInstance(this.$root.config.server);
+		let instance = this.$root.config.server || window.location.origin;
+		this.$client.setInstance(instance);
 	}
 }
 </script>

@@ -1,0 +1,8 @@
+{
+  "server" : "",
+  "theme": "owncloud",
+  "version": "0.1.0",
+  "apps" : [
+    "files"
+  ]
+}

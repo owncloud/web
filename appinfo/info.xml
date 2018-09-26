@@ -5,14 +5,14 @@
 	<summary>Phoenix</summary>
 	<description>Phoenix</description>
 	<licence>AGPL</licence>
-	<author>Thomas Müller, Felix Heidecke</author>
-	<version>0.0.1</version>
+	<author>Felix Heidecke, Oshan Mudannayake</author>
+	<version>0.1.0</version>
 	<category>tools</category>
 	<dependencies>
 		<owncloud min-version="10.0" max-version="11.0" />
 	</dependencies>
 	<navigation>
-		<static/>
+		<static>index.html</static>
 		<order>100</order>
 		<name>Phoenix</name>
 	</navigation>
