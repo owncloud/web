@@ -13,5 +13,5 @@ export default {
 			return this.$store.getters['files/SELECTED'];
 		}
 	}
-}
+};
 </script>

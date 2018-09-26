@@ -89,7 +89,7 @@ export default {
 			let size = 0;
 
 			_each(this.files, (e) => {
-				size = size + e.size
+				size = size + e.size;
 			});
 
 			return size;
@@ -100,14 +100,14 @@ export default {
 		file() {
 			let filesSelected = this.$store.getters['files/SELECTED'];
 			if (_size(filesSelected) !== 1)
-				return false
+				return false;
 
 			return filesSelected[0];
 		},
 		files() {
 			let filesSelected = this.$store.getters['files/SELECTED'];
 			if (_size(filesSelected) === 1)
-				return false
+				return false;
 
 			return filesSelected;
 		}

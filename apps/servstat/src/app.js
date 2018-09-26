@@ -9,7 +9,7 @@ const navItems = [{
 	route        : {
 		name : 'servstat'
 	}
-}]
+}];
 
 
 // --- Components --------------------------------------------------------------
@@ -24,7 +24,7 @@ const string = {
 			return this.$root.config.server;
 		}
 	}
-}
+};
 
 const ip = {
 	name : "ServstatIp",
@@ -42,7 +42,7 @@ const routes = [{
 	path : `/${pkg.name}`,
 	component : ip,
 	name : 'servstat'
-}]
+}];
 
 const plugins = [{
 	extend: "phoenixNavbarRight",
@@ -56,4 +56,4 @@ export default define({
 	routes,
 	plugins,
 	navItems
-})
+});
