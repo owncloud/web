@@ -23,7 +23,7 @@
     "babel-preset-env": "^1.7.0",
     "chromedriver": "^2.40.0",
     "css-loader": "^0.28.11",
-    "cucumber": "^4.2.1",
+    "cucumber": "^5.0.1",
     "cucumber-pretty": "^1.4.0",
     "less": "^3.8.1",
     "nightwatch": "^1.0.10",
@@ -31,7 +31,7 @@
     "start-server-and-test": "^1.7.1",
     "vue-loader": "14.2.3",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^4.15.0",
+    "webpack": "^4.20.2",
     "webpack-cli": "^3.0.8",
     "webpack-merge": "^4.1.3"
   },

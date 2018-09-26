@@ -2,18 +2,22 @@
 <info>
 	<id>phoenix</id>
 	<name>Phoenix</name>
-	<summary>Phoenix</summary>
-	<description>Phoenix</description>
+	<summary>Next generation user interface for ownCloud</summary>
+	<description>Next generation user interface for ownCloud based on vue.js and UiKit.
+This is an early release with known limitations and missing features.
+
+Please report and findings in https://talk.owncloud.com/channel/phoenix	</description>
 	<licence>AGPL</licence>
-	<author>Thomas Müller, Felix Heidecke</author>
-	<version>0.0.1</version>
+	<author>Felix Heidecke, Oshan Mudannayake, Thomas Müller</author>
+	<version>0.1.1</version>
 	<category>tools</category>
 	<dependencies>
-		<owncloud min-version="10.0" max-version="11.0" />
+		<owncloud min-version="10.0" max-version="10.1" />
 	</dependencies>
 	<navigation>
-		<static/>
+		<static>index.html</static>
 		<order>100</order>
 		<name>Phoenix</name>
 	</navigation>
+	<screenshot>https://user-images.githubusercontent.com/1005065/37416039-20817b4c-27ad-11e8-9f14-cbe12936fd64.png</screenshot>
 </info>

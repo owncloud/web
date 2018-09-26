@@ -53,6 +53,13 @@ pipeline:
       - cd /var/www/owncloud/phoenix
       - npm run acceptance-tests-drone
 
+  build:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/phoenix
+      - make -f Makefile.release dist
+
 services:
   phoenix:
     image: owncloudci/php:${PHP_VERSION}

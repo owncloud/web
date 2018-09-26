@@ -22,3 +22,17 @@ Run a PHP test server `make run SERVER_HOST=0.0.0.0:8300`
 - build, configure and run phoenix
 - install the Chrome browser
 - run `npm run acceptance-tests`
+
+## How to build Phoeinx as ownCloud app
+
+Run `make clean && make`
+Run `make -f Makefile.release` dist
+
+
+## How to deploy the app to ownCloud
+
+Grab build/dist/phoenix.tar.gz
+Move to the apps folder on your ownCloud installation
+tar -xzf phoenix.tar.gz
+Run `./occ apps:enable phoenix`
+Refresh your webui and see Phoenix in the app menu
