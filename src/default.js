@@ -38,7 +38,7 @@ Vue.component('drop', Drop);
 
 // --- Router ----
 
-async function load_apps_and_start () {
+(async function () {
 
 	try {
 		let config = await Axios.get('config.json');
@@ -82,6 +82,4 @@ async function load_apps_and_start () {
 	catch (err) {
 		alert(err);
 	}
-}
-
-load_apps_and_start();
+})();
