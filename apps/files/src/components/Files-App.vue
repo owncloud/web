@@ -169,7 +169,7 @@
 				// event.preventDefault();
 			},
 
-			loadFolder() {
+			async loadFolder() {
 				if (!this.iAmActive)
 					return false;
 
@@ -190,7 +190,8 @@
 					this.offlineNotified = false;
 
 					// List all files
-					this.$client.files.list(absolutePath).then(files => {
+					try {
+						let files = await this.$client.files.list(absolutePath);
 						// Remove the root element
 						files = files.splice(1);
 
@@ -226,13 +227,14 @@
 						this.loading = false;
 
 						this.resetFileSelection();
-					}).catch(error => {
+					}
+					catch (error) {
 						this.$uikit.notification({
 							message: error.statusText,
 							status: 'danger',
 							pos: 'top-center'
 						});
-					});
+					}
 				} else {
 					// If the user has not been notified
 					if(!this.offlineNotified){
@@ -259,24 +261,25 @@
 				}
 			},
 
-			createNewFolder(newFolderName) {
+			async createNewFolder(newFolderName) {
 				if(newFolderName !== ''){
 					this.$uikit.dropdown(this.$refs.newFolderDropdown).hide();
-					this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + newFolderName)
-						.then(res => {
-							this.loadFolder();
-						}).catch(err => {
-							if(err === 'The resource you tried to create already exists') {
-								this.$uikit.notification({
-									message: err,
-									status: 'danger',
-									pos: 'top-center'
-								});
-							}else{
-								//TODO
-								console.log(err);
-							}
-					});
+					try {
+						let res = await this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + newFolderName);
+						this.loadFolder();
+					}
+					catch (err) {
+						if(err === 'The resource you tried to create already exists') {
+							this.$uikit.notification({
+								message: err,
+								status: 'danger',
+								pos: 'top-center'
+							});
+						}else{
+							//TODO
+							console.log(err);
+						}
+					}
 				}else{
 					this.$uikit.notification({
 						message: 'Please enter a folder name',
@@ -301,16 +304,20 @@
 				return _includes(this.selected, item);
 			},
 
-            onDrop(dropLocation, dropData, dragData, event) {
-                if (dropLocation === 'file-list' && dropData.type === 'folder') {
-                    this.$client.files.move(dragData.path, dropData.path + dragData.name).then(res => {
-                        this.loadFolder();
-                    });
-                } else if (dropLocation === 'breadcrumb') {
-                    this.$client.files.move(dragData.path, dropData + '/' + dragData.name).then(res => {
-                        this.loadFolder();
-                    });
-                }
+			async onDrop(dropLocation, dropData, dragData, event) {
+				try {
+					if (dropLocation === 'file-list' && dropData.type === 'folder') {
+						await this.$client.files.move(dragData.path, dropData.path + dragData.name);
+						this.loadFolder();
+					} else if (dropLocation === 'breadcrumb') {
+						await this.$client.files.move(dragData.path, dropData + '/' + dragData.name);
+						this.loadFolder();
+					}
+				}
+				catch (err) {
+					//TODO
+					console.log(err);
+				}
             }
 		},
 		watch: {
