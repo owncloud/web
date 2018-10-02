@@ -38,7 +38,7 @@
             <li><a @click="notImplemented()"><span v-translate>EMail-templates</span></a></li>
           </ul>
         </li>
-        <li class="uk-margin-medium-top"><a @click="notImplemented()"><i class="material-icons uk-margin-small-right">exit_to_app</i><span v-translate>Exit ownCloud</span></a></li>
+        <li class="uk-margin-medium-top"><a @click="logout()"><i class="material-icons uk-margin-small-right">exit_to_app</i><span v-translate>Exit ownCloud</span></a></li>
       </ul>
     </div>
   </div>
@@ -57,6 +57,12 @@ export default {
       OC.$uikit.notification({
         message: 'Not implemented yet.',
         status: 'primary'
+      })
+    },
+
+    logout () {
+      this.$store.dispatch('logout', {}).then(() => {
+        this.$router.push('/login')
       })
     }
   }
