@@ -308,10 +308,12 @@
                 if(item.type === 'folder'){
                 	return this.filterBy.folder;
                 } else {
-					return this.filterBy.files;
+                    if (item.name.startsWith('.')) {
+                        return this.filterBy.hidden;
+                    } else{
+                        return this.filterBy.files;
+                    }
 				}
-
-				// TODO: Check for hidden files
             },
 
 			async onDrop(dropLocation, dropData, dragData, event) {
