@@ -21,11 +21,11 @@
 		<div class="uk-navbar-right">
 			<ul class="uk-navbar-nav">
 				<component v-for="(plugin, pid) in extendNavbarRight" :is="plugin.component" :key="pid" v-if="extendNavbarRight.length > 0"></component>
-				<li v-if="isAnonymous">
+				<li v-if="!isAuthenticated">
 					<a href="#" @click.prevent="requestLogin"><span class="uk-text-inverse uk-visible@s" v-translate>Login</span></a>
 				</li>
-				<li v-else>
-					<a href="#" :uk-tooltip="user.email"><i class="material-icons uk-margin-small-right uk-text-inverse">account_circle</i><span class="uk-text-inverse uk-visible@s">{{ user.displayname }}</span></a>
+				<li v-if="isAuthenticated">
+					<a href="#" :uk-tooltip="user.email"><i class="material-icons uk-margin-small-right uk-text-inverse">account_circle</i><span class="uk-text-inverse">{{ user.displayname }}</span></a>
 				</li>
 			</ul>
 		</div>
@@ -33,8 +33,6 @@
 </template>
 
 <script>
-
-const _isEmpty = require('lodash/isEmpty');
 
 import pluginHelper from '../mixins/pluginHelper.js';
 
@@ -48,14 +46,14 @@ export default {
 		pluginHelper
 	],
 	computed : {
-		isAnonymous () {
-			return _isEmpty(this.user.displayname);
-		},
+        isAuthenticated () {
+            return this.$store.state.auth.isAuthenticated
+        },
 		extendNavbarRight () {
 			return this.getPlugins('phoenixNavbarRight');
 		},
-		user () {
-			return this.$store.state.user;
+        user () {
+            return this.$store.state.auth.user;
 		}
 	}
 };

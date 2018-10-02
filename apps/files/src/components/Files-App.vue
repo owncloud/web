@@ -131,12 +131,7 @@
 			}
 		},
 		mounted () {
-			if (this.userLoggedIn) {
-				this.loadFolder();
-			}
-			else {
-				this.$events.emit('phoenix:request-login');
-			}
+			this.loadFolder();
 		},
 		methods: {
 			goto(e) {
@@ -335,10 +330,6 @@
 		watch: {
 			item () {
 				this.loadFolder();
-			},
-			userLoggedIn (cur, prev) {
-				if (cur !== prev)
-					this.loadFolder()
 			}
 		},
 		computed: {
@@ -357,10 +348,6 @@
 			typeOfFile(showHidden) {
 				showHidden = (typeof showHidden !== 'undefined') ? showHidden : false;
 				return _filter(this.files, 'extension')
-			},
-
-			userLoggedIn () {
-				return this.$store.getters.USER_LOGGED_IN;
 			},
 
 			iAmActive () {
