@@ -28,8 +28,9 @@ LOCALE_FILES ?= $(foreach app,$(APPS),$(patsubst %,$(app)/l10n/locale/%/LC_MESSA
 .PHONY: clean extract translations
 
 clean:
-	rm -f $(TEMPLATE_FILE) $(OUTPUT_DIR)/translations.json; \
-	$(foreach app,$(APPS),rm -rf $(app)/l10n/template.pot);
+	rm -f $(TEMPLATE_FILE) $(OUTPUT_DIR)/translations.json;
+	rm -f $(foreach app,$(APPS),$(app)/l10n/template.pot);
+	rm -f $(foreach app,$(APPS),$(app)/l10n/translations.json);
 
 extract: $(TEMPLATE_FILE)
 
@@ -62,5 +63,13 @@ $(TEMPLATE_FILE):
 
 # Generate translations.json file from all available apps .pot templates.
 $(OUTPUT_DIR)/translations.json: clean
-	mkdir -p $(OUTPUT_DIR)
-	gettext-compile --output $@ $(LOCALE_FILES)
+	@for app in $(INPUT_FILES); \
+	do \
+		if [ $$app = '../src' ]; then \
+			export OUT_DIR=.; \
+		else \
+			export OUT_DIR=$$app/l10n; \
+		fi; \
+		mkdir -p $$OUT_DIR; \
+		gettext-compile --output $$OUT_DIR/translations.json $(patsubst %,$$OUT_DIR/locale/%/LC_MESSAGES/app.po,$(LOCALES)); \
+	done; \
