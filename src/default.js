@@ -39,7 +39,7 @@ Vue.use(GetTextPlugin, {
   en_GB: 'British English',
   de_DE: 'German',
   },
-  defaultLanguage: 'de_DE',
+  defaultLanguage: 'en_GB',
   translations: translations,
 })
 
