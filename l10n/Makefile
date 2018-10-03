@@ -42,15 +42,20 @@ $(TEMPLATE_FILE):
 # Generate .po files for each available language.
 	@for app in $(INPUT_FILES); \
 	do \
-		mkdir -p $$app/l10n; \
+		if [ $$app = '../src' ]; then \
+			export OUT_DIR=. ; \
+		else \
+			export OUT_DIR=$$app/l10n; \
+			mkdir -p $$OUT_DIR; \
+		fi; \
 		export GETTEXT_APP_SOURCES=`find $$app -name '*.vue'`;\
-		gettext-extract --attribute v-translate --output $$app/l10n/template.pot $$GETTEXT_APP_SOURCES; \
+		gettext-extract --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
 		for lang in $(LOCALES); \
 		do \
-			export PO_FILE=$$app/l10n/locale/$$lang/LC_MESSAGES/app.po; \
-			echo "msgmerge --update $$PO_FILE $$app/l10n/template.pot"; \
+			export PO_FILE=$$OUT_DIR/locale/$$lang/LC_MESSAGES/app.po; \
+			echo "msgmerge --update $$PO_FILE $$OUT_DIR/template.pot"; \
 			mkdir -p $$(dirname $$PO_FILE); \
-			[ -f $$PO_FILE ] && msgmerge --lang=$$lang --update $$PO_FILE $$app/l10n/template.pot || msginit --no-translator --locale=$$lang --input=$$app/l10n/template.pot --output-file=$$PO_FILE; \
+			[ -f $$PO_FILE ] && msgmerge --lang=$$lang --update $$PO_FILE  $$OUT_DIR/template.pot || msginit --no-translator --locale=$$lang --input=$$OUT_DIR/template.pot --output-file=$$PO_FILE; \
 			msgattrib --no-wrap --no-obsolete -o $$PO_FILE $$PO_FILE; \
 		done \
 	done;
