@@ -19,7 +19,7 @@ OUTPUT_DIR = .
 TEMPLATE_FILE = ./template.pot
 
 # Available locales for the app.
-LOCALES = en_GB de_DE
+LOCALES = en_US en_GB de_DE
 
 # Name of the generated .po files for each available locale.
 LOCALE_FILES ?= $(foreach app,$(APPS),$(patsubst %,$(app)/l10n/locale/%/LC_MESSAGES/app.po,$(LOCALES))) $(patsubst %,./locale/%/LC_MESSAGES/app.po,$(LOCALES))
@@ -28,8 +28,9 @@ LOCALE_FILES ?= $(foreach app,$(APPS),$(patsubst %,$(app)/l10n/locale/%/LC_MESSA
 .PHONY: clean extract translations
 
 clean:
-	rm -f $(TEMPLATE_FILE) $(OUTPUT_DIR)/translations.json; \
-	$(foreach app,$(APPS),rm -rf $(app)/l10n/template.pot);
+	rm -f $(TEMPLATE_FILE) $(OUTPUT_DIR)/translations.json;
+	rm -f $(foreach app,$(APPS),$(app)/l10n/template.pot);
+	rm -f $(foreach app,$(APPS),$(app)/l10n/translations.json);
 
 extract: $(TEMPLATE_FILE)
 
@@ -42,20 +43,33 @@ $(TEMPLATE_FILE):
 # Generate .po files for each available language.
 	@for app in $(INPUT_FILES); \
 	do \
-		mkdir -p $$app/l10n; \
+		if [ $$app = '../src' ]; then \
+			export OUT_DIR=.; \
+		else \
+			export OUT_DIR=$$app/l10n; \
+		fi; \
+		mkdir -p $$OUT_DIR; \
 		export GETTEXT_APP_SOURCES=`find $$app -name '*.vue'`;\
-		gettext-extract --attribute v-translate --output $$app/l10n/template.pot $$GETTEXT_APP_SOURCES; \
+		node ../node_modules/easygettext/src/extract-cli.js --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
 		for lang in $(LOCALES); \
 		do \
-			export PO_FILE=$$app/l10n/locale/$$lang/LC_MESSAGES/app.po; \
-			echo "msgmerge --update $$PO_FILE $$app/l10n/template.pot"; \
+			export PO_FILE=$$OUT_DIR/locale/$$lang/LC_MESSAGES/app.po; \
+			echo "msgmerge --update $$PO_FILE $$OUT_DIR/template.pot"; \
 			mkdir -p $$(dirname $$PO_FILE); \
-			[ -f $$PO_FILE ] && msgmerge --lang=$$lang --update $$PO_FILE $$app/l10n/template.pot || msginit --no-translator --locale=$$lang --input=$$app/l10n/template.pot --output-file=$$PO_FILE; \
+			[ -f $$PO_FILE ] && msgmerge --lang=$$lang --update $$PO_FILE  $$OUT_DIR/template.pot || msginit --no-translator --locale=$$lang --input=$$OUT_DIR/template.pot --output-file=$$PO_FILE; \
 			msgattrib --no-wrap --no-obsolete -o $$PO_FILE $$PO_FILE; \
 		done \
 	done;
 
 # Generate translations.json file from all available apps .pot templates.
 $(OUTPUT_DIR)/translations.json: clean
-	mkdir -p $(OUTPUT_DIR)
-	gettext-compile --output $@ $(LOCALE_FILES)
+	@for app in $(INPUT_FILES); \
+	do \
+		if [ $$app = '../src' ]; then \
+			export OUT_DIR=.; \
+		else \
+			export OUT_DIR=$$app/l10n; \
+		fi; \
+		mkdir -p $$OUT_DIR; \
+		gettext-compile --output $$OUT_DIR/translations.json $(patsubst %,$$OUT_DIR/locale/%/LC_MESSAGES/app.po,$(LOCALES)); \
+	done; \

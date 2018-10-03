@@ -30,7 +30,6 @@
     "nightwatch": "^1.0.11",
     "nightwatch-api": "^0.4.0",
     "start-server-and-test": "^1.7.3",
-    "vue-gettext": "^2.1.0",
     "vue-loader": "14.2.3",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.20.2",
@@ -46,6 +45,7 @@
     "vue": "^2.5.16",
     "vue-drag-drop": "^1.1.4",
     "vue-events": "^3.1.0",
+    "vue-gettext": "^2.1.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   }
