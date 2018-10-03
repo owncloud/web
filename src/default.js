@@ -40,13 +40,6 @@ Vue.use(GetTextPlugin, {
   de_DE: 'German',
   },
   defaultLanguage: 'de_DE',
-  languageVmMixin: {
-    computed: {
-      currentKebabCase: function () {
-        return this.current.toLowerCase().replace('_', '-')
-      },
-    },
-  },
   translations: translations,
 })
 
