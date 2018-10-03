@@ -31,11 +31,22 @@ Vue.use(VueRouter);
 
 // --- Gettext ----
 
-import GetText from 'vue-gettext';
+import GetTextPlugin from 'vue-gettext';
 import translations from '../l10n/translations.json'
 
-Vue.use(GetText, {
-  defaultLanguage: 'en_GB',
+Vue.use(GetTextPlugin, {
+  availableLanguages: {
+  en_GB: 'British English',
+  de_DE: 'German',
+  },
+  defaultLanguage: 'de_DE',
+  languageVmMixin: {
+    computed: {
+      currentKebabCase: function () {
+        return this.current.toLowerCase().replace('_', '-')
+      },
+    },
+  },
   translations: translations,
 })
 

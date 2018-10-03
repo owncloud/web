@@ -43,11 +43,11 @@ $(TEMPLATE_FILE):
 	@for app in $(INPUT_FILES); \
 	do \
 		if [ $$app = '../src' ]; then \
-			export OUT_DIR=. ; \
+			export OUT_DIR=.; \
 		else \
 			export OUT_DIR=$$app/l10n; \
-			mkdir -p $$OUT_DIR; \
 		fi; \
+		mkdir -p $$OUT_DIR; \
 		export GETTEXT_APP_SOURCES=`find $$app -name '*.vue'`;\
 		gettext-extract --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
 		for lang in $(LOCALES); \
