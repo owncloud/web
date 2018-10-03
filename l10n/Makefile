@@ -50,7 +50,7 @@ $(TEMPLATE_FILE):
 		fi; \
 		mkdir -p $$OUT_DIR; \
 		export GETTEXT_APP_SOURCES=`find $$app -name '*.vue'`;\
-		gettext-extract --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
+		node ../node_modules/easygettext/src/extract-cli.js --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
 		for lang in $(LOCALES); \
 		do \
 			export PO_FILE=$$OUT_DIR/locale/$$lang/LC_MESSAGES/app.po; \
