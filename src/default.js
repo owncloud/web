@@ -29,6 +29,20 @@ import VueRouter   from 'vue-router';
 Vue.use(VueEvents);
 Vue.use(VueRouter);
 
+// --- Gettext ----
+
+import GetTextPlugin from 'vue-gettext';
+import translations from '../l10n/translations.json'
+
+Vue.use(GetTextPlugin, {
+    availableLanguages: {
+        en: 'English',
+        de: 'German',
+    },
+    defaultLanguage: navigator.language.substring(0,2),
+    translations: translations,
+})
+
 // --- Drag Drop ----
 
 import { Drag, Drop } from 'vue-drag-drop';
@@ -40,46 +54,46 @@ Vue.component('drop', Drop);
 
 (async function () {
 
-	try {
-		let config = await Axios.get('config.json');
+    try {
+        let config = await Axios.get('config.json');
 
-		let apps = _map(config.data.apps, (app) => {
-			return `./apps/${app}/js/${app}.bundle.js`;
-		});
+        let apps = _map(config.data.apps, (app) => {
+            return `./apps/${app}/js/${app}.bundle.js`;
+        });
 
-		requirejs(apps, function() {
+        requirejs(apps, function() {
 
-			let plugins  = [];
-			let navItems = [];
-			let routes   = [{
-				path : '/',
-				redirect : to => arguments[0].navItems[0].route
-			}];
+            let plugins  = [];
+            let navItems = [];
+            let routes   = [{
+                path : '/',
+                redirect : to => arguments[0].navItems[0].route
+            }];
 
-			for (let app of arguments) {
-				if (app.routes) routes.push(app.routes);
-				if (app.plugins) plugins.push(app.plugins);
-				if (app.navItems) navItems.push(app.navItems);
-			}
+            for (let app of arguments) {
+                if (app.routes) routes.push(app.routes);
+                if (app.plugins) plugins.push(app.plugins);
+                if (app.navItems) navItems.push(app.navItems);
+            }
 
-			const router = new VueRouter({
-				routes: _flatten(routes)
-			});
+            const router = new VueRouter({
+                routes: _flatten(routes)
+            });
 
-			const OC  = new Vue({
-				el : '#owncloud',
-				data : {
-					config   : config.data,
-					plugins  : _flatten(plugins),
-					navItems : _flatten(navItems)
-				},
-				store,
-				router,
-				render: h => h(Phoenix)
-			});
-		});
-	}
-	catch (err) {
-		alert(err);
-	}
+            const OC  = new Vue({
+                el : '#owncloud',
+                data : {
+                    config   : config.data,
+                    plugins  : _flatten(plugins),
+                    navItems : _flatten(navItems)
+                },
+                store,
+                router,
+                render: h => h(Phoenix)
+            });
+        });
+    }
+    catch (err) {
+        alert(err);
+    }
 })();
