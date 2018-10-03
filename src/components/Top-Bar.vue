@@ -5,7 +5,7 @@
 				<li>
 					<a href="#" uk-toggle="target: #oc-nav">
 						<i class="material-icons uk-margin-small-right uk-text-inverse">menu</i>
-						<span class="uk-text-inverse">Files</span>
+						<span class="uk-text-inverse" v-translate>Files</span>
 					</a>
 				</li>
 			</ul>
@@ -15,14 +15,14 @@
 				<div class="uk-width-1-2 uk-text-right">
 					<img src="core/gfx/cloud-logo-invert.svg" alt="ownCloud" height="45" width="80">
 				</div>
-				<span class="uk-width-1-2 uk-text-left uk-text-inverse">ownCloud</span>
+				<span v-translate class="uk-width-1-2 uk-text-left uk-text-inverse">ownCloud</span>
 			</div>
 		</div>
 		<div class="uk-navbar-right">
 			<ul class="uk-navbar-nav">
 				<component v-for="(plugin, pid) in extendNavbarRight" :is="plugin.component" :key="pid" v-if="extendNavbarRight.length > 0"></component>
 				<li v-if="isAnonymous">
-					<a href="#" @click.prevent="requestLogin"><span class="uk-text-inverse uk-visible@s">Login</span></a>
+					<a href="#" @click.prevent="requestLogin"><span class="uk-text-inverse uk-visible@s" v-translate>Login</span></a>
 				</li>
 				<li v-else>
 					<a href="#" :uk-tooltip="user.email"><i class="material-icons uk-margin-small-right uk-text-inverse">account_circle</i><span class="uk-text-inverse uk-visible@s">{{ user.displayname }}</span></a>
