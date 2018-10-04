@@ -29,6 +29,20 @@ import VueRouter   from 'vue-router';
 Vue.use(VueEvents);
 Vue.use(VueRouter);
 
+// --- Gettext ----
+
+import GetTextPlugin from 'vue-gettext';
+import translations from '../l10n/translations.json'
+
+Vue.use(GetTextPlugin, {
+  availableLanguages: {
+  en: 'English',
+  de: 'German',
+  },
+  defaultLanguage: navigator.language.substring(0,2),
+  translations: translations,
+})
+
 // --- Drag Drop ----
 
 import { Drag, Drop } from 'vue-drag-drop';

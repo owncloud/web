@@ -9,36 +9,36 @@
 					</router-link>
 				</li>
 				<li class="uk-nav-divider"></li>
-				<li class="uk-parent uk-margin-medium-top"><a href="#" uk-height-match=""><i class="material-icons uk-margin-small-right">account_circle</i>Personal</a>
+				<li class="uk-parent uk-margin-medium-top"><a href="#" uk-height-match=""><i class="material-icons uk-margin-small-right">account_circle</i><span v-translate>Personal</span></a>
 					<ul class="uk-nav-sub">
-						<li><a @click="notImplemented()">About Me</a></li>
-						<li><a @click="notImplemented()">Sessions</a></li>
-						<li><a @click="notImplemented()">App passwords</a></li>
-						<li><a @click="notImplemented()">Sync clients</a></li>
-						<li><a @click="notImplemented()">Activity</a></li>
-						<li><a @click="notImplemented()">Federated Cloud</a></li>
+						<li><a @click="notImplemented()"><span v-translate>About Me</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>Sessions</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>App passwords</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>Sync clients</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>Activity</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>Federated Cloud</span></a></li>
 					</ul>
 				</li>
 				<li class="uk-nav-divider"></li>
-				<li class="uk-parent"><a href="#"><i class="material-icons uk-margin-small-right">help</i>Help</a>
+				<li class="uk-parent"><a href="#"><i class="material-icons uk-margin-small-right">help</i><span v-translate>Help</span></a>
 					<ul class="uk-nav-sub">
-						<li><a @click="notImplemented()">User documentation</a></li>
-						<li><a @click="notImplemented()">Online documentation</a></li>
-						<li><a @click="notImplemented()">Forum</a></li>
-						<li><a @click="notImplemented()">Issue tracker</a></li>
-						<li><a @click="notImplemented()">Commercial support</a></li>
+						<li><a @click="notImplemented()"><span v-translate>User documentation</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>Online documentation</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>Forum</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>Issue tracker</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>Commercial support</span></a></li>
 					</ul>
 				</li>
-				<li class="uk-parent uk-margin-medium-top"><a href="#"><i class="material-icons uk-margin-small-right">settings</i>Administration</a>
+				<li class="uk-parent uk-margin-medium-top"><a href="#"><i class="material-icons uk-margin-small-right">settings</i><span v-translate>Administration</span></a>
 					<ul class="uk-nav-sub">
-						<li><a @click="notImplemented()">Sharing</a></li>
-						<li><a @click="notImplemented()">External storage</a></li>
-						<li><a @click="notImplemented()">Federation</a></li>
-						<li><a @click="notImplemented()">File handling</a></li>
-						<li><a @click="notImplemented()">EMail-templates</a></li>
+						<li><a @click="notImplemented()"><span v-translate>Sharing</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>External storage</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>Federation</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>File handling</span></a></li>
+						<li><a @click="notImplemented()"><span v-translate>EMail-templates</span></a></li>
 					</ul>
 				</li>
-				<li class="uk-margin-medium-top"><a @click="notImplemented()"><i class="material-icons uk-margin-small-right">exit_to_app</i>Exit ownCloud</a></li>
+				<li class="uk-margin-medium-top"><a @click="notImplemented()"><i class="material-icons uk-margin-small-right">exit_to_app</i><span v-translate>Exit ownCloud</span></a></li>
 			</ul>
 		</div>
 	</div>

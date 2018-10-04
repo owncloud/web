@@ -25,6 +25,7 @@
     "css-loader": "^0.28.11",
     "cucumber": "^5.0.1",
     "cucumber-pretty": "^1.4.0",
+    "easygettext": "^2.6.4",
     "less": "^3.8.1",
     "nightwatch": "^1.0.11",
     "nightwatch-api": "^0.4.0",
@@ -44,6 +45,7 @@
     "vue": "^2.5.16",
     "vue-drag-drop": "^1.1.4",
     "vue-events": "^3.1.0",
+    "vue-gettext": "^2.1.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   }
