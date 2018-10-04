@@ -1,6 +1,9 @@
 core/js/*
 core/css/*
 
+**/l10n/locale
+**/l10n/template.pot
+
 apps/*
 !apps/servstat
 !apps/demo

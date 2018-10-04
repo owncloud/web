@@ -19,11 +19,8 @@ OUTPUT_DIR = .
 TEMPLATE_FILE = ./template.pot
 
 # Available locales for the app.
-<<<<<<< HEAD
-LOCALES = en_US en_GB de_DE
-=======
-LOCALES = en_GB de_DE
->>>>>>> f432af080e16109d0ee99dccb1a02f8c1a6e17a5
+
+LOCALES = en de fr
 
 # Name of the generated .po files for each available locale.
 LOCALE_FILES ?= $(foreach app,$(APPS),$(patsubst %,$(app)/l10n/locale/%/LC_MESSAGES/app.po,$(LOCALES))) $(patsubst %,./locale/%/LC_MESSAGES/app.po,$(LOCALES))
