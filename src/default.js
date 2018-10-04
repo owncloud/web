@@ -36,11 +36,18 @@ import translations from '../l10n/translations.json'
 
 Vue.use(GetTextPlugin, {
   availableLanguages: {
+<<<<<<< HEAD
   en_US: 'American English',
   en_GB: 'British English',
   de_DE: 'German',
   },
   defaultLanguage: 'en_US',
+=======
+  en_GB: 'British English',
+  de_DE: 'German',
+  },
+  defaultLanguage: 'en_GB',
+>>>>>>> f432af080e16109d0ee99dccb1a02f8c1a6e17a5
   translations: translations,
 })
 
