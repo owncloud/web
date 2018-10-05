@@ -62,7 +62,7 @@
 								th Size
 								th(class="uk-visible@s") Date
 						tbody
-							tr(v-for="(file, id) in files", :data-file-id="file._id", :class="{ '_is-selected' : isChecked(file) }").uk-animation-fade
+							tr(v-for="(file, id) in files", v-if="ifFiltered(file)", :data-file-id="file._id", :class="{ '_is-selected' : isChecked(file) }").uk-animation-fade
 								td.uk-table-shrink
 									input(type="checkbox", :checked="isChecked(file)", @click="toggleFileSelect(file)").uk-checkbox.uk-margin-small-left
 
@@ -303,6 +303,18 @@
 			isChecked(item) {
 				return _includes(this.selected, item);
 			},
+
+            ifFiltered(item) {
+                if(item.type === 'folder'){
+                	return this.filterBy.folder;
+                } else {
+                    if (item.name.startsWith('.')) {
+                        return this.filterBy.hidden;
+                    } else{
+                        return this.filterBy.files;
+                    }
+				}
+            },
 
 			async onDrop(dropLocation, dropData, dragData, event) {
 				try {
