@@ -4,7 +4,7 @@ NODE_BINDIR = ../node_modules/.bin
 export PATH := $(NODE_BINDIR):$(PATH)
 
 # Where to find apps (it can be multiple paths).
-APPS = $(wildcard ../apps/*)
+APPS =  ../apps/files
 
 # Where to find core folder
 CORE = ../src
@@ -20,7 +20,7 @@ TEMPLATE_FILE = ./template.pot
 
 # Available locales for the app.
 
-LOCALES = en de fr
+LOCALES = de fr es it
 
 # Name of the generated .po files for each available locale.
 LOCALE_FILES ?= $(foreach app,$(APPS),$(patsubst %,$(app)/l10n/locale/%/LC_MESSAGES/app.po,$(LOCALES))) $(patsubst %,./locale/%/LC_MESSAGES/app.po,$(LOCALES))
@@ -29,9 +29,10 @@ LOCALE_FILES ?= $(foreach app,$(APPS),$(patsubst %,$(app)/l10n/locale/%/LC_MESSA
 .PHONY: clean extract translations
 
 clean:
-	rm -f $(TEMPLATE_FILE) $(OUTPUT_DIR)/translations.json;
 	rm -f $(foreach app,$(APPS),$(app)/l10n/template.pot);
-	rm -f $(foreach app,$(APPS),$(app)/l10n/translations.json);
+	rm -f $(TEMPLATE_FILE);
+	rm -rf $(foreach app,$(APPS),$(app)/l10n/locale);
+	rm -rf locale;
 
 extract: $(TEMPLATE_FILE)
 
@@ -52,18 +53,10 @@ $(TEMPLATE_FILE):
 		mkdir -p $$OUT_DIR; \
 		export GETTEXT_APP_SOURCES=`find $$app -name '*.vue'`;\
 		node ../node_modules/easygettext/src/extract-cli.js --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
-		for lang in $(LOCALES); \
-		do \
-			export PO_FILE=$$OUT_DIR/locale/$$lang/LC_MESSAGES/app.po; \
-			echo "msgmerge --update $$PO_FILE $$OUT_DIR/template.pot"; \
-			mkdir -p $$(dirname $$PO_FILE); \
-			[ -f $$PO_FILE ] && msgmerge --lang=$$lang --update $$PO_FILE  $$OUT_DIR/template.pot || msginit --no-translator --locale=$$lang --input=$$OUT_DIR/template.pot --output-file=$$PO_FILE; \
-			msgattrib --no-wrap --no-obsolete -o $$PO_FILE $$PO_FILE; \
-		done \
 	done;
 
 # Generate translations.json file from all available apps .pot templates.
-$(OUTPUT_DIR)/translations.json: clean
+$(OUTPUT_DIR)/translations.json:
 	@for app in $(INPUT_FILES); \
 	do \
 		if [ $$app = '../src' ]; then \
