@@ -23,7 +23,7 @@
     "babel-preset-env": "^1.7.0",
     "chromedriver": "^2.42.0",
     "css-loader": "^0.28.11",
-    "cucumber": "^5.0.1",
+    "cucumber": "^5.0.2",
     "cucumber-pretty": "^1.4.0",
     "easygettext": "^2.6.4",
     "less": "^3.8.1",
