@@ -26,7 +26,7 @@
     "css-loader": "^0.28.11",
     "cucumber": "^5.0.2",
     "cucumber-pretty": "^1.4.0",
-    "easygettext": "^2.6.4",
+    "easygettext": "^2.7.0",
     "less": "^3.8.1",
     "nightwatch": "^1.0.11",
     "nightwatch-api": "^0.4.0",
