@@ -20,7 +20,7 @@ core/css/uikit.%.css: src/themes/%.less node_modules
 	node_modules/less/bin/lessc src/themes/$*.less core/css/uikit.$*.css --relative-urls
 
 core/js/core.bundle.js: node_modules
-	npm run build
+	npm run build:dev
 
 #
 # core
@@ -52,4 +52,27 @@ clean-app-%:
 .PHONY: run
 run: build
 	php -S "$(SERVER_HOST)"
+
+
+.PHONY: l10n-push
+l10n-push:
+	cd l10n && tx -d push -s --skip --no-interactive
+	cd apps/files/l10n && tx -d push -s --skip --no-interactive
+
+.PHONY: l10n-pull
+l10n-pull:
+	cd l10n && tx -d pull -a --skip
+	cd apps/files/l10n && tx -d pull -a --skip
+
+.PHONY: l10n-clean
+l10n-clean:
+	cd l10n && make clean
+
+.PHONY: l10n-read
+l10n-read: node_modules
+	cd l10n && make extract
+
+.PHONY: l10n-write
+l10n-write: node_modules
+	cd l10n && make translations
 
