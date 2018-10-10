@@ -20,7 +20,7 @@ core/css/uikit.%.css: src/themes/%.less node_modules
 	node_modules/less/bin/lessc src/themes/$*.less core/css/uikit.$*.css --relative-urls
 
 core/js/core.bundle.js: node_modules
-	npm run build
+	npm run build:dev
 
 #
 # core

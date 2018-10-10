@@ -44,7 +44,7 @@ dist: javascript distdir sign package
 .PHONY: javascript
 javascript:
 	$(NPM) install
-	$(NPM) run build
+	$(NPM) run build:prod
 	$(NPM) install --prefix apps/files
 	$(NPM) run build --prefix apps/files
 
