@@ -11,7 +11,7 @@ module.exports = merge(common, {
   },
   devServer: {
     contentBase: __dirname,
-    publicPath: '/',
+    publicPath: '/core/js',
     compress: false,
     port: 8300
   }

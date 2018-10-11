@@ -39,7 +39,7 @@ import pluginHelper from '../mixins/pluginHelper.js';
 export default {
 	methods : {
 		requestLogin () {
-			this.$events.emit('phoenix:request-login');
+            router.push({ name: 'login' });
 		}
 	},
 	mixins : [
