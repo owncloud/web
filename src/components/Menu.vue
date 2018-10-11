@@ -59,12 +59,16 @@ export default {
         status: 'primary'
       })
     },
-
     logout () {
+      let OC = this.$parent
+      OC.$uikit.offcanvas(this.$el).hide()
+
       this.$store.dispatch('logout', {}).then(() => {
         this.$router.push('/login')
       })
     }
+
   }
+
 }
 </script>

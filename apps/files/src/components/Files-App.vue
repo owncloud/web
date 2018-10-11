@@ -13,7 +13,7 @@
 				<!--li Item A-->
 				<!--li Item B-->
 
-		.uk-position-relative
+		.uk-position-relative.move-down
 			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
 				li.uk-flex.uk-flex-center
 					.material-icons.burger.cursor-pointer create_new_folder
@@ -380,6 +380,9 @@
 		}
 	}
 
+    .move-down {
+        top: 60px
+    }
 	.burger {
 		font-size: 24px; // keep original font size for material icons
 	}

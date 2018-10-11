@@ -1,11 +1,20 @@
 <template>
-    <div class=".uk-padding">
+    <div class="uk-background-primary background">
+
         <div>
-            <div>
+            <img src="core/gfx/cloud-logo-invert.svg" width="50%">
+        </div>
+        <div>
+            <div class="uk-position-center uk-background-muted uk-border-rounded uk-padding">
                 <h2 v-translate>
-                    Login
+                    Welcome to ownCloud
                 </h2>
-                <button class="uk-button uk-button-primary" @click="authenticate" v-translate>Authenticate with OAuth</button>
+                <div v-translate class="uk-text-small">
+                    Please click the button below to authenticate with ownCloud and get access to your data.
+                </div>
+                <div class="uk-padding">
+                    <button class="uk-button uk-button-primary" @click="authenticate" v-translate>Authenticate</button>
+                </div>
             </div>
         </div>
     </div>
@@ -32,3 +41,9 @@ export default {
   }
 }
 </script>
+
+<style scoped="true">
+    .background {
+        height: 100%;
+    }
+</style>

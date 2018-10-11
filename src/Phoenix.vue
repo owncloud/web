@@ -1,9 +1,9 @@
 <template>
 	<div id="Phoenix">
-		<header>
+		<header  v-if="showHeader">
 			<top-bar></top-bar>
 		</header>
-		<aside>
+		<aside  v-if="showHeader">
 			<side-menu></side-menu>
 		</aside>
 		<main id="oc-content" class="uk-offcanvas-content">
@@ -26,6 +26,12 @@ export default {
         if (this.$store.state.auth.isAuthenticated) {
             this.$store.dispatch('initAuth');
         }
-    }
+    },
+	computed: {
+        showHeader() {
+			// TODO: more general approach: use meta.showTopBar
+			return this.$route.name !== 'login';
+		}
+	}
 }
 </script>
