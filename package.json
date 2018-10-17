@@ -10,6 +10,7 @@
     "build:dev": "webpack -d --config webpack.dev.js",
     "build:prod": "webpack -p --config webpack.prod.js",
     "lint": "eslint src/**/*.vue src/**/*.js --color --global requirejs --global require",
+    "accessibility-tests": "node node_modules/axe-cli/axe-cli",
     "acceptance-tests": "cucumber-js --require-module babel-core/register --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features",
     "acceptance-tests-drone": "cucumber-js --require-module babel-core/register --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features"
   },
@@ -17,6 +18,7 @@
   "license": "AGPL-3.0",
   "homepage": "https://github.com/owncloud/phoenix",
   "devDependencies": {
+    "axe-cli": "^3.0.0",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
