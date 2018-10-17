@@ -2,7 +2,6 @@ workspace:
   base: /var/www/owncloud
   path: phoenix
 
-branches: [master, release*]
 
 pipeline:
   install-server:
@@ -52,6 +51,13 @@ pipeline:
     commands:
       - cd /var/www/owncloud/phoenix
       - npm run acceptance-tests-drone
+
+  webui-accessibility-tests:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/phoenix
+      - npm run accessibility-tests-drone phoenix:8300
 
   build:
     image: owncloudci/php:${PHP_VERSION}
