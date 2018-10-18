@@ -20,7 +20,7 @@
 		</div>
 		<div class="uk-navbar-right">
 			<ul class="uk-navbar-nav">
-				<component v-for="(plugin, pid) in extendNavbarRight" :is="plugin.component" :key="pid" v-if="extendNavbarRight.length > 0"></component>
+				<div v-for="(plugin, pid) in extendNavbarRight" :key="pid"><component :is="plugin.component" v-if="extendNavbarRight.length > 0"></component></div>
 				<li v-if="isAnonymous">
 					<a href="#" @click.prevent="requestLogin"><span class="uk-text-inverse uk-visible@s" v-translate>Login</span></a>
 				</li>

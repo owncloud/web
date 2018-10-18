@@ -52,14 +52,14 @@ export default {
 		}
 	},
 	methods: {
-	    notImplemented() {
-            let OC = this.$parent;
-            OC.$uikit.notification({
-                message: `Not implemented yet.`,
-                status: 'primary'
-            });
+		notImplemented() {
+			let OC = this.$parent;
+			OC.$uikit.notification({
+				message: 'Not implemented yet.',
+				status: 'primary'
+			});
 
-        }
+		}
 	}
 };
 </script>
