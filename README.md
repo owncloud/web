@@ -11,11 +11,17 @@ Pushing a new design and frontend concept to ownCloud
 
 ## How to build
 
-Run `make`
+Run `npm install`
 
 ## Run
 
-Run a PHP test server `make run SERVER_HOST=0.0.0.0:8300`
+Run a test server `npm run watch`
+For running with a domain other than localhost `export SERVER_HOST="example.com:8300"` or `npm run watch example:8300`
+
+## Run linter
+
+Run lint-test `npm run lint`
+Run lint autofix `npm run lint-fix`
 
 ## Run acceptance tests
 
