@@ -16,7 +16,7 @@ Run `npm install`
 ## Run
 
 Run a test server `npm run watch`
-For running with a domain other than localhost `export SERVER_HOST="example.com:8300"` or `npm run watch example:8300`
+For running with a domain other than localhost `export SERVER_HOST="example.com:8300"` and run `npm run watch` after, or `npm run watch example:8300`
 
 ## Run linter
 
