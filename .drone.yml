@@ -46,6 +46,13 @@ pipeline:
       - cd /var/www/owncloud/
       - chown www-data * -R
 
+  lint-test:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/phoenix
+      - npm run lint
+
   webui-acceptance-tests:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
