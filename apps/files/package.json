@@ -11,7 +11,7 @@
   "license": "AGPL-3.0",
   "homepage": "https://github.com/owncloud/phoenix",
   "devDependencies": {
-    "css-loader": "^0.28.11",
+    "css-loader": "^1.0.0",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "pug": "^2.0.3",
