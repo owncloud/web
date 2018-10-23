@@ -1,9 +1,9 @@
-const VueLoaderPlugin = require('VueLoaderPlugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
 	plugins: [
-		VueLoaderPlugin,
-	],
+    new VueLoaderPlugin()
+  ],
 	entry: './src/default.js',
 	output: {
 		path: `${__dirname}/core/js`,
