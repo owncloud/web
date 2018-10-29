@@ -42,7 +42,7 @@
     "nightwatch": "^1.0.11",
     "nightwatch-api": "^0.4.0",
     "parse-json": "^4.0.0",
-    "start-server-and-test": "^1.7.4",
+    "start-server-and-test": "^1.7.7",
     "vue-loader": "15.4.2",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.20.2",
