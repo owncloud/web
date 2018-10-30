@@ -1,8 +1,10 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
 	plugins: [
+		new VueLoaderPlugin(),
 		new MiniCssExtractPlugin({
 				// Options similar to the same options in webpackOptions.output
 				// both options are optional
