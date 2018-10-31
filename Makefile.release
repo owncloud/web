@@ -46,7 +46,7 @@ javascript:
 	$(YARN) install
 	$(YARN) run build:prod
 	$(YARN) install --prefix apps/files
-	$(YARN) run build --prefix apps/files
+	$(YARN) run build:prod --prefix apps/files
 
 .PHONY: distdir
 distdir:
