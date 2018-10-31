@@ -14,13 +14,13 @@ build: core $(all_apps)
 clean: clean-core $(addprefix clean-app-,$(apps))
 
 node_modules: package.json package-lock.json
-	npm install && touch node_modules
+	yarn install && touch node_modules
 
 core/css/uikit.%.css: src/themes/%.less node_modules
 	node_modules/less/bin/lessc src/themes/$*.less core/css/uikit.$*.css --relative-urls
 
 core/js/core.bundle.js: node_modules
-	npm run build:dev
+	yarn run build:dev
 
 #
 # core
@@ -75,4 +75,3 @@ l10n-read: node_modules
 .PHONY: l10n-write
 l10n-write: node_modules
 	cd l10n && make translations
-

@@ -11,23 +11,23 @@ Pushing a new design and frontend concept to ownCloud
 
 ## How to build
 
-Run `npm install`
+Run `yarn install`
 
 ## Run
 
-Run a test server `npm run watch`
-For running with a domain other than localhost `export SERVER_HOST="example.com:8300"` and run `npm run watch` after, or `npm run watch example:8300`
+Run a test server `yarn run watch`
+For running with a domain other than localhost `export SERVER_HOST="example.com:8300"` and run `yarn run watch` after, or `yarn run watch example:8300`
 
 ## Run linter
 
-Run lint-test `npm run lint`
-Run lint autofix `npm run lint-fix`
+Run lint-test `yarn run lint`
+Run lint autofix `yarn run lint-fix`
 
 ## Run acceptance tests
 
 - build, configure and run phoenix
 - install the Chrome browser
-- run `npm run acceptance-tests`
+- run `yarn run acceptance-tests`
 
 ## How to build Phoeinx as ownCloud app
 
