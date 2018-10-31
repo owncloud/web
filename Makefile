@@ -13,7 +13,7 @@ build: core $(all_apps)
 .PHONY: clean
 clean: clean-core $(addprefix clean-app-,$(apps))
 
-node_modules: package.json package-lock.json
+node_modules: package.json yarn.lock
 	npm install && touch node_modules
 
 core/css/uikit.%.css: src/themes/%.less node_modules
@@ -75,4 +75,3 @@ l10n-read: node_modules
 .PHONY: l10n-write
 l10n-write: node_modules
 	cd l10n && make translations
-
