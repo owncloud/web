@@ -13,7 +13,7 @@ build: core $(all_apps)
 .PHONY: clean
 clean: clean-core $(addprefix clean-app-,$(apps))
 
-node_modules: package.json package-lock.json
+node_modules: package.json yarn.lock
 	yarn install && touch node_modules
 
 core/css/uikit.%.css: src/themes/%.less node_modules
