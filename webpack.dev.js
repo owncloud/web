@@ -15,7 +15,7 @@ module.exports = merge(common, {
     publicPath: '/core/',
     filename: "js/core.bundle.js",
     watchContentBase: true,
-    https: true,
+    https: false,
     compress: true,
     port: 8300
   }
