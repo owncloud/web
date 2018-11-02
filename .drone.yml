@@ -69,12 +69,20 @@ pipeline:
 
 services:
   phoenix:
-    image: node:10
+    image: owncloudci/php:${PHP_VERSION}
     pull: true
     commands:
       - cd /var/www/owncloud/phoenix
-      - yarn install
-      - yarn run watch
+      - make
+      - cd /var/www/owncloud/phoenix/apps/demo
+      - npm install
+      - npm run build
+      - cd /var/www/owncloud/phoenix/apps/servstat
+      - npm install
+      - npm run build
+      - cd /var/www/owncloud/phoenix
+      - cp tests/drone/config.json config.json
+- make run SERVER_HOST=0.0.0.0:8300
 
   owncloud:
     image: owncloudci/php:${PHP_VERSION}
