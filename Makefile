@@ -14,7 +14,7 @@ build: core $(all_apps)
 clean: clean-core $(addprefix clean-app-,$(apps))
 
 node_modules: package.json yarn.lock
-	npm install && touch node_modules
+	yarn install && touch node_modules
 
 core/css/uikit.%.css: src/themes/%.less node_modules
 	node_modules/less/bin/lessc src/themes/$*.less core/css/uikit.$*.css --relative-urls

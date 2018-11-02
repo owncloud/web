@@ -7,7 +7,7 @@ all: build
 build: $(bundles)
 
 node_modules: package.json yarn.lock
-	npm install && touch node_modules
+	yarn install && touch node_modules
 
 $(bundles): webpack.common.js webpack.dev.js node_modules
 	yarn run build
