@@ -73,16 +73,8 @@ services:
     pull: true
     commands:
       - cd /var/www/owncloud/phoenix
-      - make
-      - cd /var/www/owncloud/phoenix/apps/demo
       - yarn install
-      - yarn run build
-      - cd /var/www/owncloud/phoenix/apps/servstat
-      - yarn install
-      - yarn run build
-      - cd /var/www/owncloud/phoenix
-      - cp tests/drone/config.json config.json
-      - make run SERVER_HOST=0.0.0.0:8300
+      - yarn run watch
 
   owncloud:
     image: owncloudci/php:${PHP_VERSION}
