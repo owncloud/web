@@ -51,14 +51,14 @@ pipeline:
     pull: true
     commands:
       - cd /var/www/owncloud/phoenix
-      - yarn run lint
+      - npm run lint
 
   webui-acceptance-tests:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     commands:
       - cd /var/www/owncloud/phoenix
-      - yarn run acceptance-tests-drone
+      - npm run acceptance-tests-drone
 
   build:
     image: owncloudci/php:${PHP_VERSION}
@@ -82,7 +82,7 @@ services:
       - npm run build
       - cd /var/www/owncloud/phoenix
       - cp tests/drone/config.json config.json
-- make run SERVER_HOST=0.0.0.0:8300
+      - make run SERVER_HOST=0.0.0.0:8300
 
   owncloud:
     image: owncloudci/php:${PHP_VERSION}
