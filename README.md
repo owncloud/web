@@ -21,7 +21,7 @@ Run a PHP test server `make run SERVER_HOST=0.0.0.0:8300`
 
 - build, configure and run phoenix
 - install the Chrome browser
-- run `npm run acceptance-tests`
+- run `yarn run acceptance-tests`
 
 ## How to build Phoeinx as ownCloud app
 
