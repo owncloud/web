@@ -4,6 +4,9 @@ import moment from 'moment';
 export default {
 	filters: {
 		fileSize(int) {
+			if (isNaN(int)) {
+				return '???';
+			}
 			return filesize(int * 100, {
 				round: 2
 			});
