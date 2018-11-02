@@ -13,8 +13,8 @@ build: core $(all_apps)
 .PHONY: clean
 clean: clean-core $(addprefix clean-app-,$(apps))
 
-node_modules: package.json package-lock.json
-	yarn install && touch node_modules
+node_modules: package.json yarn.lock
+	npm install && touch node_modules
 
 core/css/uikit.%.css: src/themes/%.less node_modules
 	node_modules/less/bin/lessc src/themes/$*.less core/css/uikit.$*.css --relative-urls

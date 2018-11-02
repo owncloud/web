@@ -6,8 +6,8 @@ all: build
 .PHONY: build
 build: $(bundles)
 
-node_modules: package.json package-lock.json
-	yarn install && touch node_modules
+node_modules: package.json yarn.lock
+	npm install && touch node_modules
 
 $(bundles): webpack.common.js webpack.dev.js node_modules
 	yarn run build
