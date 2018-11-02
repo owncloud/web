@@ -69,7 +69,7 @@ pipeline:
 
 services:
   phoenix:
-    image: owncloudci/php:${PHP_VERSION}
+    image: node:10
     pull: true
     commands:
       - cd /var/www/owncloud/phoenix
