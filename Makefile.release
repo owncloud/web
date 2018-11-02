@@ -1,8 +1,8 @@
 SHELL := /bin/bash
 
-NPM := $(shell command -v npm 2> /dev/null)
-ifndef NPM
-    $(error npm is not available on your system, please install npm)
+YARN := $(shell command -v yarn 2> /dev/null)
+ifndef YARN
+    $(error yarn is not available on your system, please install npm)
 endif
 
 
@@ -43,10 +43,10 @@ dist: javascript distdir sign package
 
 .PHONY: javascript
 javascript:
-	$(NPM) install
-	$(NPM) run build:prod
-	$(NPM) install --prefix apps/files
-	$(NPM) run build --prefix apps/files
+	$(YARN) install
+	$(YARN) run build:prod
+	$(YARN) install --prefix apps/files
+	$(YARN) run build:prod --prefix apps/files
 
 .PHONY: distdir
 distdir:
