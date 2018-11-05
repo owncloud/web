@@ -61,13 +61,6 @@ pipeline:
       - cd /var/www/owncloud/phoenix
       - npm run lint
 
-  webui-acceptance-tests:
-    image: owncloudci/php:${PHP_VERSION}
-    pull: true
-    commands:
-      - cd /var/www/owncloud/phoenix
-      - npm run acceptance-tests-drone
-
   build:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
