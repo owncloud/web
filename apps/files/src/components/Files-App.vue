@@ -225,7 +225,7 @@
 					}
 					catch (error) {
 						this.$uikit.notification({
-							message: error.statusText,
+							message: error.statusText || error,
 							status: 'danger',
 							pos: 'top-center'
 						});
