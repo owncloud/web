@@ -73,6 +73,9 @@ Vue.component('drop', Drop);
                 redirect : to => arguments[0].navItems[0].route
             }];
 
+            // inject custom config into vuex base state
+            store.state.config.auth = config.data.auth
+
             for (let app of arguments) {
                 if (app.routes) routes.push(app.routes);
                 if (app.plugins) plugins.push(app.plugins);
