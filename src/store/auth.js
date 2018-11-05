@@ -6,8 +6,10 @@ let vueAuthInstance
 
 export default {
   state: {
-    displayname: '',
-    email: 'x',
+    user: {
+      displayname: '',
+      email: 'x'
+    },
     isAuthenticated: false
   },
   getters: {

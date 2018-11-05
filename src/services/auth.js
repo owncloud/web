@@ -7,9 +7,9 @@ export function initVueAuthenticate (config) {
       providers: {
         oauth2: {
           name: 'ownCloud',
-          clientId: config.clientId || '',
-          url: config.apiUrl || '',
-          authorizationEndpoint: config.authUrl || '',
+          clientId: config.clientId,
+          url: config.apiUrl,
+          authorizationEndpoint: config.authUrl,
           responseType: 'token',
           responseParams: {
             code: 'code',

@@ -29,8 +29,12 @@ export default {
     },
 	computed: {
         showHeader() {
-			// TODO: more general approach: use meta.showTopBar
-			return this.$route.name !== 'login';
+					if ( this.$route.meta.hideHeadbar === true) {
+						return false
+					}
+					else{
+						return true
+					}
 		}
 	}
 }

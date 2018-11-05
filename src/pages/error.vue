@@ -7,10 +7,10 @@
         <div>
             <div class="uk-position-center uk-background-muted uk-border-rounded uk-padding">
                 <h2 v-translate>
-                    Welcome to ownCloud
+                    Could not Authenticate
                 </h2>
                 <div v-translate class="uk-text-small">
-                    Please click the button below to authenticate with ownCloud and get access to your data.
+                    Please click the button below again to authenticate with ownCloud and get access to your data.
                 </div>
                 <div class="uk-padding">
                     <button class="uk-button uk-button-primary" @click="authenticate" v-translate>Authenticate</button>
@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'loginPage',
+  name: 'errorPage',
 
   data () {
     return {
@@ -34,13 +34,9 @@ export default {
 
   methods: {
     authenticate () {
-      this.$store.dispatch('authenticate', { provider: 'oauth2' })
-        .then(() => {
-          this.$router.push('/')
-        })
-        .catch(() => {
-          this.$router.push('/error')
-        })
+      this.$store.dispatch('authenticate', { provider: 'oauth2' }).then(() => {
+        this.$router.push('/')
+      })
     }
   }
 }
