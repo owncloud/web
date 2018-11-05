@@ -47,7 +47,7 @@ export default {
   ],
   computed: {
     isAuthenticated () {
-      return this.$store.state.auth.isAuthenticated
+      return this.$store.getters.isAuthenticated
     },
     extendNavbarRight () {
       return this.getPlugins('phoenixNavbarRight')

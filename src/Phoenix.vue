@@ -23,9 +23,7 @@ export default {
 	beforeMount () {
 		let instance = this.$root.config.server || window.location.origin;
 		this.$client.setInstance(instance);
-        if (this.$store.state.auth.isAuthenticated) {
-            this.$store.dispatch('initAuth');
-        }
+        this.$store.dispatch('initAuth');
     },
 	computed: {
         showHeader() {

@@ -29,7 +29,7 @@ router.beforeEach(function (to, from, next) {
     authRequired = false
   }
   if (authRequired) {
-    if (store.state.auth.isAuthenticated) {
+    if (store.getters.isAuthenticated) {
       next()
     } else {
       router.push({ name: 'login' })
