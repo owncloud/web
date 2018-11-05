@@ -1,19 +1,25 @@
-import vueAuthInstance from '../services/auth.js'
+import {
+  initVueAuthenticate
+} from '../services/auth.js'
+
+let vueAuthInstance
 
 export default {
   state: {
-    user: {
-      displayname: '',
-      email: 'x'
-    },
-    isAuthenticated: vueAuthInstance.isAuthenticated()
+    displayname: '',
+    email: 'x',
+    isAuthenticated: false
   },
-
+  getters: {
+    isAuthenticated: state => {
+      return state.isAuthenticated
+    }
+  },
   mutations: {
-    isAuthenticated (state, payload) {
+    IS_AUTHENTICATED (state, payload) {
       state.isAuthenticated = payload.isAuthenticated
     },
-    setUser (state, payload) {
+    SET_USER (state, payload) {
       state.user = payload
     }
   },
@@ -22,7 +28,7 @@ export default {
     login (context, payload) {
       payload = payload || {}
       return vueAuthInstance.login(payload.user, payload.requestOptions).then(function () {
-        context.commit('isAuthenticated', {
+        context.commit('IS_AUTHENTICATED', {
           isAuthenticated: vueAuthInstance.isAuthenticated()
         })
       })
@@ -31,10 +37,10 @@ export default {
     logout (context, payload) {
       payload = payload || {}
       return vueAuthInstance.logout(payload.requestOptions).then(function () {
-        context.commit('isAuthenticated', {
+        context.commit('IS_AUTHENTICATED', {
           isAuthenticated: vueAuthInstance.isAuthenticated()
         })
-        context.commit('setUser', {
+        context.commit('SET_USER', {
           displayname: '',
           email: ''
         })
@@ -43,7 +49,7 @@ export default {
 
     initAuth (context, payload) {
       this._vm.$client.loginWithBearer(vueAuthInstance.getToken()).then(res => {
-        context.commit('setUser', {
+        context.commit('SET_USER', {
           displayname: res['display-name'],
           email: Object.keys(res.email).length === 0 ? '' : res.email
         })
@@ -51,9 +57,11 @@ export default {
     },
 
     authenticate (context, payload) {
+      // TODO shouldn't we use vue-authenticate global & inject it into vue ?
+      vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
       payload = payload || {}
       return vueAuthInstance.authenticate(payload.provider, payload.userData, payload.requestOptions).then(() => {
-        context.commit('isAuthenticated', {
+        context.commit('IS_AUTHENTICATED', {
           isAuthenticated: vueAuthInstance.isAuthenticated()
         })
         if (vueAuthInstance.isAuthenticated) {
