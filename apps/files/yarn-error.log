@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-2.2.3.tgz: ENOENT: no such file or directory, open '/usr/local/share/.cache/yarn/v2/npm-postcss-selector-parser-2.2.3-f9437788606c3c9acee16ffe8d8b16297f27bb90/.yarn-tarball.tgz'
+  Error: ENOENT: no such file or directory, lstat '/usr/local/share/.cache/yarn/v2/npm-require-from-string-1.2.1-529c9ccef27380adfec9a2f965b649bbee636418'
 
 npm manifest: 
   {
