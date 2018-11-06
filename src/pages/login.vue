@@ -13,7 +13,7 @@
                     Please click the button below to authenticate with ownCloud and get access to your data.
                 </div>
                 <div class="uk-padding">
-                    <button class="uk-button uk-button-primary" @click="authenticate" v-translate>Authenticate</button>
+                    <button id="authenticate" class="uk-button uk-button-primary" @click="authenticate" v-translate>Authenticate</button>
                 </div>
             </div>
         </div>
