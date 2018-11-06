@@ -13,7 +13,7 @@
 				<!--li Item A-->
 				<!--li Item B-->
 
-		.uk-position-relative
+		.uk-position-relative.move-down
 			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
 				li.uk-flex.uk-flex-center
 					.material-icons.burger.cursor-pointer create_new_folder
@@ -131,12 +131,7 @@
 			}
 		},
 		mounted () {
-			if (this.userLoggedIn) {
-				this.loadFolder();
-			}
-			else {
-				this.$events.emit('phoenix:request-login');
-			}
+			this.loadFolder();
 		},
 		methods: {
 			goto(e) {
@@ -230,7 +225,7 @@
 					}
 					catch (error) {
 						this.$uikit.notification({
-							message: error.statusText,
+							message: error.statusText || error,
 							status: 'danger',
 							pos: 'top-center'
 						});
@@ -335,10 +330,6 @@
 		watch: {
 			item () {
 				this.loadFolder();
-			},
-			userLoggedIn (cur, prev) {
-				if (cur !== prev)
-					this.loadFolder()
 			}
 		},
 		computed: {
@@ -357,10 +348,6 @@
 			typeOfFile(showHidden) {
 				showHidden = (typeof showHidden !== 'undefined') ? showHidden : false;
 				return _filter(this.files, 'extension')
-			},
-
-			userLoggedIn () {
-				return this.$store.getters.USER_LOGGED_IN;
 			},
 
 			iAmActive () {
@@ -393,6 +380,9 @@
 		}
 	}
 
+    .move-down {
+        top: 60px
+    }
 	.burger {
 		font-size: 24px; // keep original font size for material icons
 	}

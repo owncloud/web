@@ -16,6 +16,12 @@ pipeline:
     db_password: owncloud
     core_path: /var/www/owncloud/
 
+  clone-oauth:
+    image: owncloud/ubuntu:16.04
+    pull: true
+    commands:
+      - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
   configure-server:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
@@ -26,6 +32,8 @@ pipeline:
       - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
       - php occ log:manage --level 0
       - php occ config:list
+      - php occ a:e oauth2
+      - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300
 
   owncloud-log:
     image: owncloud/ubuntu:16.04
@@ -52,13 +60,6 @@ pipeline:
     commands:
       - cd /var/www/owncloud/phoenix
       - npm run lint
-
-  webui-acceptance-tests:
-    image: owncloudci/php:${PHP_VERSION}
-    pull: true
-    commands:
-      - cd /var/www/owncloud/phoenix
-      - npm run acceptance-tests-drone
 
   build:
     image: owncloudci/php:${PHP_VERSION}

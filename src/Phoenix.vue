@@ -1,12 +1,11 @@
 <template>
 	<div id="Phoenix">
-		<header>
+		<header  v-if="showHeader">
 			<top-bar></top-bar>
 		</header>
-		<aside>
+		<aside  v-if="showHeader">
 			<side-menu></side-menu>
 		</aside>
-		<login></login>
 		<main id="oc-content" class="uk-offcanvas-content">
 			<router-view></router-view>
 		</main>
@@ -15,17 +14,26 @@
 <script>
 import TopBar from './components/Top-Bar.vue';
 import Menu   from './components/Menu.vue';
-import Login  from './components/Login.vue';
 
 export default {
 	components: {
 		'top-bar'   : TopBar,
-		'side-menu' : Menu,
-		'login'     : Login
+		'side-menu' : Menu
 	},
 	beforeMount () {
 		let instance = this.$root.config.server || window.location.origin;
 		this.$client.setInstance(instance);
+        this.$store.dispatch('initAuth');
+    },
+	computed: {
+        showHeader() {
+					if ( this.$route.meta.hideHeadbar === true) {
+						return false
+					}
+					else{
+						return true
+					}
+		}
 	}
 }
 </script>
