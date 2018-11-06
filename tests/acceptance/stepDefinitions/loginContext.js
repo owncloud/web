@@ -6,8 +6,6 @@ Given(/^the user has browsed to the login page$/,
 		const loginPage = client.page.loginPage();
 		return loginPage
 		.navigate()
-		.waitForElementVisible('@openLoginDialogButton', 1000)
-		.click('@openLoginDialogButton')
 		.waitForElementVisible('@loginDialogDiv', 1000);
 		//TODO we need a global const for waiting timeout
 	});
