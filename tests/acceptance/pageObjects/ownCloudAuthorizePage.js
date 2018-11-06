@@ -4,8 +4,8 @@ module.exports = {
 	},
 	elements: {
 		body: 'body',
-        authenticateButton: {
-            selector: '#authenticate',
-		}
+		authorizeButton: {
+			selector: 'button[type=submit]',
+		},
 	}
 }
