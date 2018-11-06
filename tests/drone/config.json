@@ -8,8 +8,6 @@
 		"authUrl": "http://owncloud/index.php/apps/oauth2/authorize"
 	},
 	"apps" : [
-		"demo",
-		"servstat",
 		"files"
 	]
 }
