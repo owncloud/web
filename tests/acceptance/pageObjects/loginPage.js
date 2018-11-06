@@ -1,6 +1,6 @@
 module.exports = {
 	url: function() {
-		return this.api.launchUrl;
+		return this.api.launchUrl + '/#/login';
 	},
 	elements: {
 		body: 'body',
