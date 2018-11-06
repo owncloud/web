@@ -35,19 +35,6 @@ pipeline:
       - php occ a:e oauth2
       - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300
 
-  build-phoenix:
-    image: owncloudci/php:${PHP_VERSION}
-    pull: true
-    commands:
-      - cd /var/www/owncloud/phoenix
-      - make
-      - cd /var/www/owncloud/phoenix/apps/demo
-      - yarn install
-      - yarn run build
-      - cd /var/www/owncloud/phoenix/apps/servstat
-      - yarn install
-      - yarn run build
-
   owncloud-log:
     image: owncloud/ubuntu:16.04
     detach: true
