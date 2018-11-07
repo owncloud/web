@@ -43,9 +43,10 @@ pipeline:
       - tail -f /var/www/owncloud/data/owncloud.log
 
   wait-for-phoenix:
-    image: owncloud/ubuntu:16.04
+    image: owncloudci/php:${PHP_VERSION=7.1}
+    pull: true
     commands:
-      - bash /var/www/owncloud/phoenix/tests/drone/wait-for-phoenix.sh
+      - wait-for-it -t 300 phoenix:8300
 
   fix-permissions:
     image: owncloudci/php:${PHP_VERSION=7.1}
