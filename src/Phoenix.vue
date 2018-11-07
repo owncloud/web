@@ -23,16 +23,16 @@ export default {
 	beforeMount () {
 		let instance = this.$root.config.server || window.location.origin;
 		this.$client.setInstance(instance);
-        this.$store.dispatch('initAuth');
+    this.$store.dispatch('initAuth');
     },
 	computed: {
-        showHeader() {
-					if ( this.$route.meta.hideHeadbar === true) {
-						return false
-					}
-					else{
-						return true
-					}
+  	showHeader() {
+			if ( this.$route.meta.hideHeadbar === true) {
+			 	return false
+			}
+			else{
+				return true
+			}
 		}
 	}
 }

@@ -31,12 +31,11 @@ export default {
       password: ''
     }
   },
-
   methods: {
     authenticate () {
       this.$store.dispatch('authenticate', { provider: 'oauth2' })
         .then(() => {
-          this.$router.push('/')
+          this.$router.push({ path: '/' })
         })
         .catch(() => {
           this.$router.push('/error')

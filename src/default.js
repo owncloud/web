@@ -73,8 +73,6 @@ Vue.component('drop', Drop);
                 redirect : to => arguments[0].navItems[0].route
             }];
 
-            // inject custom config into vuex base state
-            store.state.config.auth = config.data.auth
 
             for (let app of arguments) {
                 if (app.routes) routes.push(app.routes);
@@ -95,6 +93,8 @@ Vue.component('drop', Drop);
                 router,
                 render: h => h(Phoenix)
             });
+            // inject custom config into vuex base state
+            store.dispatch('loadConfig', config.data)
         });
     }
     catch (err) {
