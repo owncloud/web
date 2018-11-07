@@ -83,7 +83,7 @@ services:
       - npm run build
       - cd /var/www/owncloud/phoenix
       - cp tests/drone/config.json config.json
-      - cp tests/ tests/
+      - cp -r tests/ tests/
       - make run SERVER_HOST=0.0.0.0:8300
 
   owncloud:
