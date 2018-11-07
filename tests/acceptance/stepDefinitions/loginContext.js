@@ -5,20 +5,44 @@ Given(/^the user has browsed to the login page$/,
 	() => {
 		const loginPage = client.page.loginPage();
 		return loginPage
-		.navigate()
-		.waitForElementVisible('@loginDialogDiv', 1000);
-		//TODO we need a global const for waiting timeout
+		.navigate();
+	});
+
+When('the user clicks the authenticate button',
+	() => {
+        const loginPage = client.page.loginPage();
+				console.warn(loginPage);
+        return loginPage
+			.waitForElementVisible('@authenticateButton')
+            .click('@authenticateButton');
 	});
 
 When('the user logs in with username {string} and password {string} using the webUI',
 	(username, password) => {
-		const loginPage = client.page.loginPage();
+        const loginPage = client
+            .windowHandles(function(result) {
+                var temp = result.value[1];
+                this.switchWindow(temp);
+            })
+			.page.ownCloudLoginPage();
 		return loginPage
-		.waitForElementVisible('@loginDialogDiv', 1000)
+		.waitForElementVisible('@usernameInput', 1000)
 		.setValue('@usernameInput', username)
 		.setValue('@passwordInput', password)
-		.click('@loginSubmitButton')
-		.waitForElementNotVisible('@loginDialogDiv',10000);
+		.click('@loginSubmitButton');
+	});
+
+When('the user authorizes access to phoenix',
+	() => {
+        const loginPage = client
+            .windowHandles(function(result) {
+                var temp = result.value[1];
+                this.switchWindow(temp);
+            })
+            .page.ownCloudAuthorizePage();
+        return loginPage
+            .waitForElementVisible('@authorizeButton', 1000)
+            .click('@authorizeButton');
 	});
 
 Then('the files table should be displayed',

@@ -2,9 +2,12 @@
 	"server" : "http://owncloud",
 	"theme": "owncloud",
 	"version": "0.1.0",
+	"auth" : {
+		"clientId": "Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU",
+		"url": "http://owncloud/index.php/apps/oauth2/api/v1/token",
+		"authUrl": "http://owncloud/index.php/apps/oauth2/authorize"
+	},
 	"apps" : [
-		"demo",
-		"servstat",
 		"files"
 	]
 }

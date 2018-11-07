@@ -12,6 +12,7 @@ module.exports = merge(common, {
   },
   devServer: {
     contentBase: path.resolve(__dirname),
+    historyApiFallback: true,
     publicPath: '/core/',
     filename: "js/core.bundle.js",
     watchContentBase: true,
