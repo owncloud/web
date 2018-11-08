@@ -7,11 +7,11 @@ branches: [master, release*]
 pipeline:
   install-server:
     image: owncloudci/core
-    version: ${OC_VERSION}
+    version: ${OC_VERSION=daily-master-qa}
     pull: true
-    db_type: ${DB_TYPE}
-    db_name: ${DB_NAME}
-    db_host: ${DB_TYPE}
+    db_type: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=sqlite}
+    db_host: ${DB_TYPE=sqlite}
     db_username: autotest
     db_password: owncloud
     core_path: /var/www/owncloud/
@@ -23,7 +23,7 @@ pipeline:
       - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
 
   configure-server:
-    image: owncloudci/php:${PHP_VERSION}
+    image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
     commands:
       - cd /var/www/owncloud/
@@ -43,26 +43,34 @@ pipeline:
       - tail -f /var/www/owncloud/data/owncloud.log
 
   wait-for-phoenix:
-    image: owncloud/ubuntu:16.04
+    image: owncloudci/php:${PHP_VERSION=7.1}
+    pull: true
     commands:
-      - bash /var/www/owncloud/phoenix/tests/drone/wait-for-phoenix.sh
+      - wait-for-it -t 300 phoenix:8300
 
   fix-permissions:
-    image: owncloudci/php:${PHP_VERSION}
+    image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
     commands:
       - cd /var/www/owncloud/
       - chown www-data * -R
 
   lint-test:
-    image: owncloudci/php:${PHP_VERSION}
+    image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
     commands:
       - cd /var/www/owncloud/phoenix
       - npm run lint
 
-  build:
-    image: owncloudci/php:${PHP_VERSION}
+  webui-acceptance-tests:
+    image: owncloudci/php:${PHP_VERSION=7.1}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/phoenix
+      - npm run acceptance-tests-drone
+
+  build-release:
+    image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
     commands:
       - cd /var/www/owncloud/phoenix
@@ -70,23 +78,21 @@ pipeline:
 
 services:
   phoenix:
-    image: owncloudci/php:${PHP_VERSION}
+    image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
     commands:
       - cd /var/www/owncloud/phoenix
-      - make
-      - cd /var/www/owncloud/phoenix/apps/demo
-      - npm install
-      - npm run build
-      - cd /var/www/owncloud/phoenix/apps/servstat
-      - npm install
-      - npm run build
+      - yarn install
+      - yarn run build:dev
+      - cd /var/www/owncloud/phoenix/apps/files
+      - yarn install
+      - yarn run build
       - cd /var/www/owncloud/phoenix
       - cp tests/drone/config.json config.json
-      - make run SERVER_HOST=0.0.0.0:8300
+      - make run SERVER_HOST=phoenix:8300
 
   owncloud:
-    image: owncloudci/php:${PHP_VERSION}
+    image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
     environment:
       - APACHE_WEBROOT=/var/www/owncloud/
@@ -95,10 +101,3 @@ services:
   selenium:
     image: selenium/standalone-chrome-debug:latest
     pull: true
-
-matrix:
-  include:
-    - PHP_VERSION: 7.1
-      OC_VERSION: daily-master-qa
-      DB_TYPE: sqlite
-      DB_NAME: owncloud

@@ -13,7 +13,7 @@
                     Please click the button below to authenticate with ownCloud and get access to your data.
                 </div>
                 <div class="uk-padding">
-                    <button class="uk-button uk-button-primary" @click="authenticate" v-translate>Authenticate</button>
+                    <button id="authenticate" class="uk-button uk-button-primary" @click="authenticate" v-translate>Authenticate</button>
                 </div>
             </div>
         </div>
@@ -31,12 +31,11 @@ export default {
       password: ''
     }
   },
-
   methods: {
     authenticate () {
       this.$store.dispatch('authenticate', { provider: 'oauth2' })
         .then(() => {
-          this.$router.push('/')
+          this.$router.push({ path: '/' })
         })
         .catch(() => {
           this.$router.push('/error')

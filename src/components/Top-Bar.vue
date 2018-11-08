@@ -53,7 +53,7 @@ export default {
       return this.getPlugins('phoenixNavbarRight')
     },
     user () {
-      return this.$store.state.auth.user
+      return this.$store.state.user
     }
   }
 }
