@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/postcss-load-plugins/-/postcss-load-plugins-2.3.0.tgz: ENOENT: no such file or directory, open '/usr/local/share/.cache/yarn/v2/npm-postcss-load-plugins-2.3.0-745768116599aca2f009fad426b00175049d8d92/.yarn-tarball.tgz'
+  Error: ENOENT: no such file or directory, scandir '/usr/local/share/.cache/yarn/v2/npm-flatten-1.0.2-dae46a9d78fbe25292258cc1e780a41d95c03782'
 
 npm manifest: 
   {
