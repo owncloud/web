@@ -1,5 +1,5 @@
 <template>
-	<div id="Phoenix">
+	<v-app id="Phoenix">
 		<header  v-if="showHeader">
 			<top-bar></top-bar>
 		</header>
@@ -9,7 +9,7 @@
 		<main id="oc-content" class="uk-offcanvas-content">
 			<router-view></router-view>
 		</main>
-	</div>
+	</v-app>
 </template>
 <script>
 import TopBar from './components/Top-Bar.vue';

@@ -12,6 +12,7 @@ import Phoenix   from './Phoenix.vue';
 // --- Adding global libraries ---
 
 import UIkit  from 'uikit';
+import Vuetify from 'vuetify';
 import Client from 'js-owncloud-client';
 import Axios  from 'axios';
 
@@ -30,7 +31,8 @@ import VueAxios from 'vue-axios';
 
 Vue.use(VueEvents);
 Vue.use(VueRouter);
-Vue.use(VueAxios, Axios)
+Vue.use(Vuetify);
+Vue.use(VueAxios, Axios);
 
 // --- Gettext ----
 
@@ -95,6 +97,10 @@ Vue.component('drop', Drop);
             });
             // inject custom config into vuex base state
             store.dispatch('loadConfig', config.data)
+            let theme = Axios.get(`src/themes/${config.data.theme}.json`).then(res => {
+              store.dispatch('loadTheme', res.data)
+            })
+
         });
     }
     catch (err) {
