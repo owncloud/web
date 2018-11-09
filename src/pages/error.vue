@@ -1,28 +1,25 @@
 <template>
-    <div class="background uk-background-primary">
-
-        <div>
-            <img src="core/gfx/cloud-logo-invert.svg" width="50%">
-        </div>
-        <div>
-            <div class="uk-position-center uk-background-muted uk-border-rounded uk-padding">
-                <h2 v-translate>
-                    Could not Authenticate
-                </h2>
-                <div v-translate class="uk-text-small">
-                    Please click the button below again to authenticate with ownCloud and get access to your data.
-                </div>
-                <div class="uk-padding">
-                    <button class="uk-button uk-button-primary" @click="authenticate" v-translate>Authenticate</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <v-layout class="background primary">
+        <v-img
+          :src='`${this.$store.state.config.theme.logo.big}`'
+          width="50%"
+          aspect-ratio="1.96">
+          <v-flex class="theme--light grey lighten-2 pa-3 ma-3" xs4>
+            <h2 class="pa-2" v-translate>
+                Ooppss... Something went wrong.
+            </h2>
+            <v-flex class="pa-2" v-translate>
+                Please click the button below to authenticate with ownCloud and get access to your data.
+            </v-flex>
+            <v-btn class="pa-2" color="info" @click="authenticate" v-translate>Authenticate</v-btn>
+          </v-flex>
+        </v-img>
+    </v-layout>
 </template>
 
 <script>
 export default {
-  name: 'errorPage',
+  name: 'loginPage',
 
   data () {
     return {
@@ -31,19 +28,22 @@ export default {
       password: ''
     }
   },
-
   methods: {
     authenticate () {
-      this.$store.dispatch('authenticate', { provider: 'oauth2' }).then(() => {
-        this.$router.push('/')
-      })
+      this.$store.dispatch('authenticate', { provider: 'oauth2' })
+        .then(() => {
+          this.$router.push({ path: '/' })
+        })
+        .catch(() => {
+          this.$router.push('/error')
+        })
     }
   }
 }
 </script>
 
 <style scoped="true">
-    .background {
-        height: 100%;
-    }
+  .background{
+    height: "100%";
+  }
 </style>
