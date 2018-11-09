@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: ENOENT: no such file or directory, scandir '/usr/local/share/.cache/yarn/v2/npm-flatten-1.0.2-dae46a9d78fbe25292258cc1e780a41d95c03782'
+  Error: https://registry.yarnpkg.com/is-directory/-/is-directory-0.3.1.tgz: ENOENT: no such file or directory, open '/usr/local/share/.cache/yarn/v2/npm-is-directory-0.3.1-61339b6f2475fc772fd9c9d83f5c8575dc154ae1/.yarn-tarball.tgz'
 
 npm manifest: 
   {
