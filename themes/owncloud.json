@@ -1,0 +1,20 @@
+{
+  "general": {
+    "name": "ownCloud",
+    "slogan": "ownCloud – A safe home for all your data"
+  },
+  "colors": {
+    "primary": "#1D2D44",
+    "secondary": "#8C9EFF",
+    "accent": "#F5F7F9",
+    "info": "#6A9EFF",
+    "success": "#32D296",
+    "warning": "#FAA05A",
+    "error": "#F0506E"
+  },
+  "logo": {
+    "mini": "core/gfx/cloud-logo-invert.svg",
+    "small": "core/gfx/cloud-logo-invert.svg",
+    "big": "core/gfx/cloud-logo-invert.svg"
+  }
+}

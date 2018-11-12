@@ -12,6 +12,7 @@ import Phoenix   from './Phoenix.vue';
 // --- Adding global libraries ---
 
 import UIkit  from 'uikit';
+import Vuetify from 'vuetify';
 import Client from 'js-owncloud-client';
 import Axios  from 'axios';
 
@@ -30,7 +31,8 @@ import VueAxios from 'vue-axios';
 
 Vue.use(VueEvents);
 Vue.use(VueRouter);
-Vue.use(VueAxios, Axios)
+Vue.use(VueAxios, Axios);
+Vue.use(Vuetify);
 
 // --- Gettext ----
 
@@ -93,8 +95,14 @@ Vue.component('drop', Drop);
                 router,
                 render: h => h(Phoenix)
             });
-            // inject custom config into vuex base state
+            // inject custom config into vuex
             store.dispatch('loadConfig', config.data)
+            // inject custom theme config into vuex
+            let theme = Axios.get(`themes/${config.data.theme}.json`).then(res => {
+              store.dispatch('loadTheme', res.data)
+              // TODO FOUC happens here; this color init is too late.
+              OC.$vuetify.theme = res.data.colors
+            })
         });
     }
     catch (err) {

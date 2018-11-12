@@ -9,6 +9,9 @@ apps/*
 !apps/demo
 !apps/files
 
+themes/*
+!themes/owncloud.json
+
 .idea
 *.bundle.js
 *.bundle.js.map
@@ -18,6 +21,7 @@ apps/*
 config.json
 package-lock.json
 
+fonts
 node_modules
 build
 
