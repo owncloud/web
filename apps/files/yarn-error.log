@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: ENOENT: no such file or directory, lstat '/usr/local/share/.cache/yarn/v2/npm-require-from-string-1.2.1-529c9ccef27380adfec9a2f965b649bbee636418'
+  Error: ENOENT: no such file or directory, open '/usr/local/share/.cache/yarn/v2/npm-@webassemblyjs/ieee754-1.7.10-62c1728b7ef0f66ef8221e2966a0afd75db430df/.yarn-metadata.json'
 
 npm manifest: 
   {
