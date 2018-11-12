@@ -9,7 +9,7 @@ module.exports = {
 				// Options similar to the same options in webpackOptions.output
 				// both options are optional
 				filename: "css/[name].css",
-				chunkFilename: "css/[id].css"
+				chunkFilename: "css/[name].[id].css"
 		})
 	],
 	entry: {
@@ -22,6 +22,7 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, 'core'),
 		filename: 'js/[name].bundle.js',
+		chunkFilename: 'js/[name].[id].bundle.js'
 	},
 	module: {
 		rules: [
@@ -30,6 +31,17 @@ module.exports = {
 				exclude: [/node_modules/, /apps/],
 				include: [/src/]
 			}, {
+				test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+				include: [/node_modules\/material-design-icons-iconfont\/dist/],
+				use: [{
+						loader: 'file-loader',
+						options: {
+								name: '[name].[ext]',
+								publicPath: '../fonts',
+								outputPath: 'fonts'
+						}
+				}]
+			},{
 				test: /\.vue$/,
 				loader: 'vue-loader',
 				exclude: [/node_modules/]
@@ -41,17 +53,6 @@ module.exports = {
 					"css-loader",
 					"sass-loader"
 				]
-			},
-			{
-					test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-					include: [/node_modules\/material-design-icons-iconfont\/dist/],
-					use: [{
-							loader: 'file-loader',
-							options: {
-									name: '[name].[ext]',
-									outputPath: './fonts'
-							}
-					}]
 			},
 			{
         test: /\.(le|c)ss$/,
