@@ -13,7 +13,7 @@
         <v-flex class="pa-2" v-translate>
           Please click the button below to authenticate with {{ configuration.theme.general.name }} and get access to your data.
         </v-flex>
-        <v-btn class="pa-2" color="primary" @click="authenticate"><span v-translate>Authenticate</span></v-btn>
+        <v-btn class="pa-2" color="primary" id="authenticate" @click="authenticate"><span v-translate>Authenticate</span></v-btn>
       </v-flex>
     </v-img>
   </v-layout>
