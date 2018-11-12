@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "js-owncloud-client": "github:owncloud/js-owncloud-client#master",
+    "js-owncloud-client": "github:owncloud/js-owncloud-client#feature/davclient.js",
     "lodash": "^4.17.11",
     "requirejs": "^2.3.6",
     "uikit": "^3.0.0-rc.9",

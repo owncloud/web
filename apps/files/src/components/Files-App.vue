@@ -70,7 +70,7 @@
 								td(v-if="!file.extension", @click="toggleFileSelect(file)").uk-text-truncate.uk-visible-toggle
 									drag(:transfer-data="file")
 										drop(@drop="onDrop('file-list', file, ...arguments)")
-											a(@click.stop="routerLink(file.path)").uk-link-text.uk-position-relative
+											a(@click.stop="routerLink(file)").uk-link-text.uk-position-relative
 												i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
 												span {{ file.name }}
 
@@ -142,12 +142,12 @@
 				this.files[item].stared = (!this.files[item].stared);
 			},
 
-			routerLink(itemPath) {
-				if(itemPath.endsWith('/')) {
+			routerLink(file) {
+				if(file.type === 'folder') {
 					this.$router.push({
 						name: 'file-list',
 						params: {
-							item: itemPath
+							item: file.path
 						}
 					})
 				}
