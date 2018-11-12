@@ -1,5 +1,6 @@
 core/js/*
 core/css/*
+core/fonts/*
 
 **/l10n/locale
 **/l10n/template.pot
@@ -8,9 +9,6 @@ apps/*
 !apps/servstat
 !apps/demo
 !apps/files
-
-themes/*
-!themes/owncloud.json
 
 .idea
 *.bundle.js
@@ -21,7 +19,6 @@ themes/*
 config.json
 package-lock.json
 
-fonts
 node_modules
 build
 
