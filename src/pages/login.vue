@@ -56,6 +56,7 @@ export default {
     height: "100%";
   }
   .center-dialog {
+    /* FIXME General center class */
     margin-left: auto!important;
     margin-right: auto!important;
     margin-top: 32vh!important;
