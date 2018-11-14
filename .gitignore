@@ -1,5 +1,6 @@
 core/js/*
 core/css/*
+core/fonts/*
 
 **/l10n/locale
 **/l10n/template.pot

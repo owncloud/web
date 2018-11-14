@@ -8,17 +8,21 @@ module.exports = {
 		new MiniCssExtractPlugin({
 				// Options similar to the same options in webpackOptions.output
 				// both options are optional
-				filename: "css/uikit.[name].css",
-				chunkFilename: "css/uikit.[id].css"
+				filename: "css/[name].css",
+				chunkFilename: "css/[name].[id].css"
 		})
 	],
 	entry: {
-		core: './src/default.js',
-		owncloud: './src/themes/owncloud.less'
+		core: [
+			'./src/default.js',
+			'./src/themes/owncloud.less',
+			'./node_modules/material-design-icons-iconfont/dist/material-design-icons.css',
+			'./node_modules/vuetify/dist/vuetify.css']
 	},
 	output: {
 		path: path.resolve(__dirname, 'core'),
 		filename: 'js/[name].bundle.js',
+		chunkFilename: 'js/[name].[id].bundle.js'
 	},
 	module: {
 		rules: [
@@ -27,11 +31,31 @@ module.exports = {
 				exclude: [/node_modules/, /apps/],
 				include: [/src/]
 			}, {
+				test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+				include: [/node_modules\/material-design-icons-iconfont\/dist/],
+				use: [{
+						loader: 'file-loader',
+						options: {
+								name: '[name].[ext]',
+								publicPath: '../fonts',
+								outputPath: 'fonts'
+						}
+				}]
+			},{
 				test: /\.vue$/,
 				loader: 'vue-loader',
+				exclude: [/node_modules/]
+			}, {
+				test: /\.(sa|sc|c)ss$/,
+				exclude: [/src/],
+				use: [
+					MiniCssExtractPlugin.loader,
+					"css-loader",
+					"sass-loader"
+				]
 			},
 			{
-        test: /\.(le|sa|sc|c)ss$/,
+        test: /\.(le|c)ss$/,
 				include: [/src/],
 				use: [
 					// fallback to style-loader in development
