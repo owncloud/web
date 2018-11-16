@@ -1,5 +1,5 @@
 <template>
-	<v-container fluid class="pa-0">
+	<v-container id="files-app" fluid class="pa-0">
 		<v-toolbar class="elevation-1">
  			<v-btn v-if="!createFolder" @click="createFolder = !createFolder" flat><v-icon large>create_new_folder</v-icon></v-btn>
 			<v-btn v-if="createFolder" @click="createFolder = !createFolder" flat><v-icon large>add</v-icon></v-btn>
