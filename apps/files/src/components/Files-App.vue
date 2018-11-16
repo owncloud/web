@@ -6,6 +6,7 @@
 			<v-flex v-if="createFolder" xs2>
 				<v-text-field
 					placeholder="New folder Name"
+					v-model="newFolderName"
 					hide-details
 					single-line
 				></v-text-field>
@@ -163,6 +164,7 @@
 		},
 
 		navigateTo (route , param) {
+			if(param === '')
        this.$router.push({
          'name': route,
 				 'params': {

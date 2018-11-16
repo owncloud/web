@@ -30,14 +30,14 @@ export default {
       items: [
         { title: 'Home', icon: 'dashboard' },
         { title: 'About', icon: 'question_answer' }
-      ],
+      ]
     }
   },
   mixins: [
     pluginHelper
   ],
   methods: {
-    ...mapActions(['toggleSidebar']),
+    ...mapActions(['toggleSidebar'])
   },
   computed: {
     ...mapGetters(['configuration']),

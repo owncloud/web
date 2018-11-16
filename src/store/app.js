@@ -6,7 +6,7 @@ const state = {
 
 const actions = {
   toggleSidebar (context, visible) {
-    context.commit('TOGGLE_SIDEBAR' , visible)
+    context.commit('TOGGLE_SIDEBAR', visible)
   }
 }
 

@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -82,7 +82,7 @@ export default {
             { title: 'Sync clients' },
             { title: 'Activity' },
             { title: 'Federated Cloud' }
-          ],
+          ]
         },
         help: {
           title: 'Help',
@@ -119,10 +119,10 @@ export default {
         return this.isSidebarVisible
       },
       set (newVal) {
-        if(newVal){
+        if (newVal) {
           return
         }
-        this.toggleSidebar(newVal);
+        this.toggleSidebar(newVal)
       }
     }
   },
@@ -141,9 +141,9 @@ export default {
       })
     },
     navigateTo (route) {
-       this.$router.push({
-         'name': route.name
-       })
+      this.$router.push({
+        'name': route.name
+      })
     }
 
   }
