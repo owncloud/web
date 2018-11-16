@@ -16,6 +16,7 @@ import Vuetify from 'vuetify';
 import Client from 'js-owncloud-client';
 import Axios  from 'axios';
 
+import { sync } from 'vuex-router-sync'
 import store  from './store';
 import router  from './router';
 
@@ -61,7 +62,6 @@ Vue.component('drop', Drop);
 
     try {
         let config = await Axios.get('config.json');
-
         let apps = _map(config.data.apps, (app) => {
             return `./apps/${app}/js/${app}.bundle.js`;
         });
@@ -80,10 +80,11 @@ Vue.component('drop', Drop);
                 if (app.routes) routes.push(app.routes);
                 if (app.plugins) plugins.push(app.plugins);
                 if (app.navItems) navItems.push(app.navItems);
+                if (app.store) store.registerModule(app.appName, app.store.default)
             }
-
             router.addRoutes(_flatten(routes));
-
+            sync(store, router);
+            
             const OC  = new Vue({
                 el : '#owncloud',
                 data : {

@@ -1,60 +1,54 @@
 <template>
-  <div id="oc-head" class="uk-position-top uk-position-fixed uk-position-z-index" uk-navbar="mode: click">
-    <div class="uk-navbar-left">
-      <ul class="uk-navbar-nav">
-        <li>
-          <a href="#" uk-toggle="target: #oc-nav">
-            <i class="material-icons uk-margin-small-right uk-text-inverse">menu</i>
-            <span class="uk-text-inverse" v-translate>Files</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="uk-position-center">
-      <div id="oc-logo-main" class="uk-flex uk-flex-middle">
-        <div class="uk-width-1-2 uk-text-right">
-          <img src="core/gfx/cloud-logo-invert.svg" alt="ownCloud" height="45" width="80">
-        </div>
-        <span v-translate class="uk-width-1-2 uk-text-left uk-text-inverse">ownCloud</span>
-      </div>
-    </div>
-    <div class="uk-navbar-right">
-      <ul class="uk-navbar-nav">
-        <div v-for="(plugin, pid) in extendNavbarRight" :key="pid"><component :is="plugin.component" v-if="extendNavbarRight.length > 0"></component></div>
-        <li v-if="!isAuthenticated">
-          <a href="#" @click.prevent="requestLogin"><span class="uk-text-inverse uk-visible@s" v-translate>Login</span></a>
-        </li>
-        <li v-if="isAuthenticated">
-          <a href="#" :uk-tooltip="user.email"><i class="material-icons uk-margin-small-right uk-text-inverse">account_circle</i><span class="uk-text-inverse">{{ user.displayname }}</span></a>
-        </li>
-      </ul>
-    </div>
-  </div>
+  <v-toolbar class="theme--dark primary">
+  <v-toolbar-side-icon @click.prevent="toggleSidebar(true)" class="theme--dark"></v-toolbar-side-icon>
+  <span class="subheading" v-translate>Files</span>
+  <v-spacer></v-spacer>
+    <v-flex xs1>
+      <v-img
+        v-if="configuration.theme.logo.big"
+        :src="configuration.theme.logo.big"
+        :aspect-ratio="1.8"
+        width="60%"
+        />
+    </v-flex>
+    <span class="font-weight-medium title">{{ configuration.theme.general.name }}</span>
+  <v-spacer></v-spacer>
+  <v-toolbar-items class="hidden-sm-and-down">
+  <v-btn class="theme--dark" flat><v-icon class="theme--dark" medium>account_circle</v-icon>&nbsp;<span>{{ user.displayname }}</span></v-btn>
+  </v-toolbar-items>
+</v-toolbar>
 </template>
 
 <script>
-
+import { mapGetters, mapState, mapActions } from 'vuex'
 import pluginHelper from '../mixins/pluginHelper.js'
 
 export default {
-  methods: {
-    requestLogin () {
-      this.$router.push({ name: 'login' })
+  data () {
+    return {
+      drawer: false,
+      items: [
+        { title: 'Home', icon: 'dashboard' },
+        { title: 'About', icon: 'question_answer' }
+      ],
     }
   },
   mixins: [
     pluginHelper
   ],
+  methods: {
+    ...mapActions(['toggleSidebar']),
+  },
   computed: {
-    isAuthenticated () {
-      return this.$store.getters.isAuthenticated
-    },
+    ...mapGetters(['configuration']),
+    ...mapState(['user']),
     extendNavbarRight () {
       return this.getPlugins('phoenixNavbarRight')
-    },
-    user () {
-      return this.$store.state.user
     }
   }
 }
 </script>
+
+<style scoped="true">
+
+</style>

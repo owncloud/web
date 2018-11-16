@@ -50,13 +50,3 @@ export default {
   }
 }
 </script>
-
-<style scoped="true">
-  .v-btn, h2, .flex{
-    padding: 8px 8px;
-  }
-  .center-dialog {
-    /* FIXME: use justify-center and align-center */
-    margin-top: 32vh!important;
-  }
-</style>

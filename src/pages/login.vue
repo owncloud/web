@@ -51,7 +51,7 @@ export default {
 }
 </script>
 
-<style scoped="true">
+<style>
   .v-btn, h2, .flex{
     padding: 8px 8px;
   }
