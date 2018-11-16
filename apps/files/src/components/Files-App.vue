@@ -2,7 +2,7 @@
 	<v-container id="files-app" fluid class="pa-0">
 		<v-toolbar class="elevation-1">
  			<v-btn v-if="!createFolder" @click="createFolder = !createFolder" flat><v-icon large>create_new_folder</v-icon></v-btn>
-			<v-btn v-if="createFolder" @click="createFolder = !createFolder" flat><v-icon large>add</v-icon></v-btn>
+			<v-btn v-if="createFolder" @click="addNewFolder(newFolderName)" flat><v-icon large>add</v-icon></v-btn>
 			<v-flex v-if="createFolder" xs2>
 				<v-text-field
 					placeholder="New folder Name"
@@ -37,6 +37,7 @@
 		</v-toolbar>
 
 		<v-data-table
+			id="filesTable"
 			v-model="selected"
 			:headers="headers"
 			:items="files"
@@ -58,7 +59,7 @@
 					<th
 						v-for="header in props.headers"
 						:key="header.text"
-						:class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+						:class="[header.text === 'Name' ? 'text-xs-left' : 'text-xs-center' , 'column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
 						@click="changeSort(header.value)"
 					>
 						<v-icon small>arrow_upward</v-icon>
@@ -69,7 +70,7 @@
 			<template slot="items" slot-scope="props">
 				<tr :active="props.selected" >
 						<td><v-checkbox  @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details></v-checkbox></td>
-						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.name }}</td>
+						<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item.path)" class="text-xs-left">{{ props.item.name }}</td>
 						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.size | fileSize }}</td>
 						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.mdate | formDateFromNow }}</td>
 						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.owner }}</td>
@@ -164,7 +165,6 @@
 		},
 
 		navigateTo (route , param) {
-			if(param === '')
        this.$router.push({
          'name': route,
 				 'params': {
@@ -172,6 +172,22 @@
 				 }
        })
     },
+
+		openFile (file) {
+			console.log(file)
+		},
+
+		addNewFolder (folderName){
+			if(folderName !== ''){
+				this.createFolder = !this.createFolder
+				this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + folderName)
+				.then(res => {
+					this.loadFolder();
+					this.newFolderName = '';
+				})
+				.catch(console.error)
+			}
+		},
 
 // TODO AUSTAUSCHEN!!
 
