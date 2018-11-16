@@ -15,7 +15,6 @@ module.exports = {
 	entry: {
 		core: [
 			'./src/default.js',
-			//'./src/themes/owncloud.less',
 			'./node_modules/material-design-icons-iconfont/dist/material-design-icons.css',
 			'./node_modules/vuetify/dist/vuetify.css']
 	},
