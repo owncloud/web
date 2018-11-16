@@ -1,209 +1,207 @@
-<template lang="pug">
-	// material icon mixin
-	mixin icon(a)
-		i.material-icons(class=a.class)= a.icon
+<template>
+	<v-container fluid class="pa-0">
+		<v-toolbar class="elevation-1">
+ 			<v-btn v-if="!createFolder" @click="createFolder = !createFolder" flat><v-icon large>create_new_folder</v-icon></v-btn>
+			<v-btn v-if="createFolder" @click="createFolder = !createFolder" flat><v-icon large>add</v-icon></v-btn>
+			<v-flex v-if="createFolder" xs2>
+				<v-text-field
+					placeholder="New folder Name"
+					hide-details
+					single-line
+				></v-text-field>
+			</v-flex>
+			<v-flex align-self-center>
+				<v-breadcrumbs class="pa-0" :items="getRoutes">
+					<template slot="item" slot-scope="props">
+							<drop >
+								<v-icon @click="navigateTo('file-list', props.item.route)" v-if="props.item.text === 'home'" large>home</v-icon>
+								<span @click="navigateTo('file-list', props.item.route)" v-else class="heading font-weight-bold">{{ props.item.text }}</span>
+							</drop>
+					</template>
+				</v-breadcrumbs>
+			</v-flex>
+			<v-spacer></v-spacer>
+			<v-flex align-self-center class="text-xs-right" xs1>
+					<span class="heading">{{ files.length }} Results</span>
+			</v-flex>
+			<v-menu transition="scale-transition">
+				<v-btn slot="activator" flat><v-icon large>filter_list</v-icon></v-btn>
+				<v-list>
+					<v-list-tile v-for="(filter, fid) in filters" :key="fid" @click="">
+						<v-list-tile-title v-text="filter.name"></v-list-tile-title>
+						<v-checkbox v-model="filter.value"></v-checkbox>
+					</v-list-tile>
+				</v-list>
+			</v-menu>
+		</v-toolbar>
 
-	#files-app.uk-height-1-1(@contextmenu="contextHandler($event)")
-		transition(name="fade")
-			span(v-show="loading").oc-loader-spinner
-
-		<!--div(uk-dropdown ref="contextMenu")-->
-			<!--ul.uk-nav.uk-dropdown-nav-->
-				<!--li Download-->
-				<!--li Item A-->
-				<!--li Item B-->
-
-		.uk-position-relative.move-down
-			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
-				li.uk-flex.uk-flex-center
-					.material-icons.burger.cursor-pointer create_new_folder
-					div(uk-dropdown="mode: click", ref="newFolderDropdown", v-on:beforeshow="newFolderName = ''")
-						form
-							input.uk-input.uk-form-small(type='text', v-model="newFolderName", placeholder='Folder name')
-							button.uk-button.uk-button-primary.uk-button-small.uk-margin-small-top(@click="createNewFolder(newFolderName)") OK
-
-				li.uk-width-expand
-					ol.uk-breadcrumb.uk-margin-remove-bottom
-						li.uk-flex.uk-flex-center
-							drop(@drop="onDrop('breadcrumb', '', ...arguments)")
-								router-link(:to="{ name: 'file-list', params: { item: 'home' }}", tag="i").material-icons.burger.cursor-pointer home
-						li(v-for="(pathItem, pId) in path")
-							drop(@drop="onDrop('breadcrumb', pathItem, ...arguments)")
-								router-link(:to="{ name: 'file-list', params: { item: pathItem }}").cursor-pointer.uk-link-text {{ pathItem.split('/').slice(-1)[0] }}
-				li
-					span {{ files.length }} Results
-				li
-					button.uk-button.uk-button-material.uk-button-small
-						i.material-icons.uk-margin-small-right filter_list
-						span Filter
-					div(uk-dropdown="mode: click")
-						ul.uk-list.uk-margin-remove
-							li
-								label
-									input.uk-checkbox(type='checkbox', name='Accepted', v-model="filterBy.files")
-									span(:class="{ 'uk-text-primary' : filterBy.accepted }").uk-text-meta.uk-margin-small-left Files
-							li
-								label
-									input.uk-checkbox(type='checkbox', name='Pending', v-model="filterBy.folder")
-									span(:class="{ 'uk-text-primary' : filterBy.pending }").uk-text-meta.uk-margin-small-left Folder
-							li
-								label
-									input.uk-checkbox(type='checkbox', name='Pending', v-model="filterBy.hidden")
-									span(:class="{ 'uk-text-primary' : filterBy.hidden }").uk-text-meta.uk-margin-small-left Hidden files
-			div(uk-grid).uk-grid-collapse
-				main.uk-width-expand._scroll_container
-					table.file-table-header.uk-table.uk-table-middle.uk-table-divider.uk-margin-remove
-						thead
-							tr
-								th
-									input(type="checkbox").uk-checkbox.uk-margin-small-left
-								th Name
-								th(class="uk-visible@l").uk-text-right Owner
-								th Size
-								th(class="uk-visible@s") Date
-						tbody
-							tr(v-for="(file, id) in files", v-if="ifFiltered(file)", :data-file-id="file._id", :class="{ '_is-selected' : isChecked(file) }").uk-animation-fade
-								td.uk-table-shrink
-									input(type="checkbox", :checked="isChecked(file)", @click="toggleFileSelect(file)").uk-checkbox.uk-margin-small-left
-
-								// --- Name ----------
-								td(v-if="!file.extension", @click="toggleFileSelect(file)").uk-text-truncate.uk-visible-toggle
-									drag(:transfer-data="file")
-										drop(@drop="onDrop('file-list', file, ...arguments)")
-											a(@click.stop="routerLink(file.path)").uk-link-text.uk-position-relative
-												i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
-												span {{ file.name }}
-
-								td(v-else).uk-text-truncate(@click="toggleFileSelect(file)")
-									a(@click.stop="endOfDummy").uk-link.uk-position-relative
-										i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
-										span {{ file.name }}
-									span.uk-text-meta .{{ file.extension }}
-
-								// --- Owner ----------
-								td(class="uk-visible@l").uk-text-nowrap.uk-table-shrink.uk-text-right
-									div(v-if="file.sharedIn").uk-text-meta.uk-inline
-										span(uk-tooltip, :title="file.sharedIn.mail") {{ file.sharedIn.name }}
-
-								// --- Size ------------------
-								td.uk-text-nowrap.uk-table-shrink
-									span.uk-text-meta {{ file.size | fileSize }}
-
-								// --- Filedate ------------------
-								td(class="uk-visible@s").uk-text-nowrap.uk-table-shrink
-									time.uk-text-meta {{ file.mdate | formDateFromNow }}
-
-				aside.uk-width-medium.uk-background-default.uk-padding-small(v-show="selected.length > 0", class="uk-width-large@l uk-padding@l").uk-animation-slide-right-small
-					FileDetails(@reset="resetFileSelection")
+		<v-data-table
+			v-model="selected"
+			:headers="headers"
+			:items="files"
+			:pagination.sync="pagination"
+			select-all
+			item-key="name"
+			class="elevation-1">
+			<template slot="headers" slot-scope="props">
+				<tr>
+					<th>
+						<v-checkbox
+							:input-value="props.all"
+							:indeterminate="props.indeterminate"
+							primary
+							hide-details
+							@click.native="toggleAll"
+						></v-checkbox>
+					</th>
+					<th
+						v-for="header in props.headers"
+						:key="header.text"
+						:class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+						@click="changeSort(header.value)"
+					>
+						<v-icon small>arrow_upward</v-icon>
+						{{ header.text }}
+					</th>
+				</tr>
+			</template>
+			<template slot="items" slot-scope="props">
+				<tr :active="props.selected" >
+						<td><v-checkbox  @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details></v-checkbox></td>
+						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.name }}</td>
+						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.size | fileSize }}</td>
+						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.mdate | formDateFromNow }}</td>
+						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.owner }}</td>
+				</tr>
+			</template>
+		</v-data-table>
+</v-container>
 </template>
 
 <script>
 	import Mixins       from '../mixins';
-	import FileDetails  from './File-Details.vue';
-
 	const _includes = require('lodash/includes');
-	const _filter   = require('lodash/filter');
-
-	const store     = require('../store');
+	import { mapActions, mapGetters, mapState } from 'vuex'
 
 	export default {
-		mixins      : [Mixins],
-		components  : {FileDetails},
+		mixins:[
+			Mixins
+		],
+		components: {
+			// FileDetails
+		},
 		data() {
 			return {
-				loading : false,
-				filterBy: {
-					files   : true,
-					folder  : true,
-					hidden  : false
-				},
-				path    : [],
-				files   : [],
-				self    : {},
+			createFolder: false,
+      pagination: {
+        sortBy: 'name'
+      },
+			selected: [],
+			headers: [
+				{ text: 'Name', value: 'name' },
+				{ text: 'Size', value: 'size' },
+				{ text: 'Date', value: 'date' },
+				{ text: 'Owner', value: 'owner' }
+			],
+			loading : false,
+			filters: [
+				{
+					name: 'Files',
+				  value: true
+				},{
+					name: 'Folders',
+					value: true
+				}, {
+					name: 'Hidden',
+					value: false
+				}
+			],
+			path    : [],
+			breadcrumbs: 	[],
+			files   : [],
+			self    : {},
+			newFolderName	: ''
+		}
+	},
+	mounted () {
+		this.loadFolder();
+	},
+	methods: {
+		...mapActions('files',['resetFileSelection', 'addFileSelection', 'removeFileSelection']),
 
-				newFolderName	: ''
+		toggleFileSelect(item) {
+			if(_includes(this.selected, item)){
+				this.removeFileSelection(item)
+			}
+			else{
+				this.addFileSelection(item)
 			}
 		},
-		beforeMount () {
-			// Extend the store (only once)
-			if (!this.$store.state.files) {
-				this.$store.registerModule('files', store.default);
+
+		toggleAll () {
+			if (this.selected.length) {
+				for(let item in this.selected){
+					this.removeFileSelection(item)
+				}
+				this.selected = []
+			}
+			else {
+				this.selected = this.files.slice()
+				for (let item in this.selected) {
+					this.addFileSelection(item)
+				}
 			}
 		},
-		mounted () {
-			this.loadFolder();
+
+		changeSort (column) {
+			if (this.pagination.sortBy === column) {
+				this.pagination.descending = !this.pagination.descending
+			} else {
+				this.pagination.sortBy = column
+				this.pagination.descending = false
+			}
 		},
-		methods: {
-			goto(e) {
-				this.$route.push()
-			},
 
-			toggleFavorite(item) {
-				this.files[item].stared = (!this.files[item].stared);
-			},
+		navigateTo (route , param) {
+       this.$router.push({
+         'name': route,
+				 'params': {
+					 'item': param
+				 }
+       })
+    },
 
-			routerLink(itemPath) {
-				if(itemPath.endsWith('/')) {
-					this.$router.push({
-						name: 'file-list',
-						params: {
-							item: itemPath
-						}
-					})
-				}
-			},
+// TODO AUSTAUSCHEN!!
 
-			contextHandler(event) {
-				// if(event.target.tagName === 'TD'){
-				// 	this.contextMenuTop = event.pageY;
-				// 	this.contextMenuLeft = event.pageX;
-				//
-				// 	let dropdown = this.$uikit.dropdown(this.$refs.contextMenu);
-				// 	dropdown.show();
-				// }
-				// event.preventDefault();
-			},
-
-			async loadFolder() {
-				if (!this.iAmActive)
-					return false;
-
-				this.loading = true;
-
-				this.path = [];
-				let absolutePath = this.$route.params.item;
-				if (this.$route.params.item === 'home') {
-					absolutePath = '/';
-				} else {
-					let pathSplit  = absolutePath.split('/').filter((val) => val);
-					for (let i = 0; i < pathSplit.length; i++) {
-						this.path.push('/' + pathSplit.slice(0, i + 1).join('/'));
-					}
-				}
-
-				if (navigator.onLine) {
-					this.offlineNotified = false;
-
+		async loadFolder() {
+			if (!this.iAmActive)
+				return false;
+			this.loading = true;
+			this.path = [];
+			let absolutePath = this.route.params.item;
+			if (this.$route.params.item === 'home') {
+				absolutePath = '/';
+			}
+			if (navigator.onLine) {
+				this.offlineNotified = false;
 					// List all files
-					try {
-						let files = await this.$client.files.list(absolutePath);
-						// Remove the root element
-						files = files.splice(1);
-
+				try {
+					let files = await this.$client.files.list(absolutePath);
+					// Remove the root element
+					files = files.splice(1);
 						this.files = files.map(file => {
-							return ({
-								type    : (file.type === 'dir') ? 'folder' : file.type,
-								starred : false,
-								mdate   : file['fileInfo']['{DAV:}getlastmodified'],
-								cdate   : '',    //TODO: Retrieve data of creation of a file
-
-								size    : function () {
-									if (file.type === 'dir') {
-										return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
-									} else {
-										return file['fileInfo']['{DAV:}getcontentlength'] / 100
-									}
-								}(),
+						return ({
+							type    : (file.type === 'dir') ? 'folder' : file.type,
+							starred : false,
+							mdate   : file['fileInfo']['{DAV:}getlastmodified'],
+							cdate   : '',    //TODO: Retrieve data of creation of a file
+							size    : function () {
+							if (file.type === 'dir') {
+								return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
+							} else {
+								return file['fileInfo']['{DAV:}getcontentlength'] / 100
+							}
+						}(),
 								extension: (file.type === 'dir') ? false : '',
 								name    : function () {
 									let pathList = file.name.split("/").filter(e => e !== "")
@@ -252,7 +250,7 @@
 
 					this.loading = false;
 
-					this.resetFileSelection();
+					// this.resetFileSelection();
 				}
 			},
 
@@ -284,20 +282,8 @@
 				}
 			},
 
-			resetFileSelection() {
-				this.$store.dispatch('files/RESET_SELECTION')
-			},
 
-			toggleFileSelect(item) {
-				if (this.isChecked(item))
-					this.$store.dispatch('files/REMOVE_FILE_SELECTION', item);
-				else
-					this.$store.dispatch('files/ADD_FILE_SELECTION', item);
-			},
 
-			isChecked(item) {
-				return _includes(this.selected, item);
-			},
 
             ifFiltered(item) {
                 if(item.type === 'folder'){
@@ -333,21 +319,30 @@
 			}
 		},
 		computed: {
-			selected () {
-				return this.$store.getters['files/SELECTED'];
+			...mapState(['route']),
+
+			getRoutes() {
+				this.breadcrumbs = [];
+				let breadcrumb = {};
+				let absolutePath = this.route.params.item;
+				let pathSplit  = absolutePath.split('/').filter((val) => val);
+				if(!_includes(pathSplit, 'home')){
+						breadcrumb.text = 'home'
+						breadcrumb.route = breadcrumb.text
+						this.breadcrumbs.push(breadcrumb);
+						breadcrumb = {}
+				}
+					for (let i = 0; i < pathSplit.length; i++) {
+						breadcrumb.text = pathSplit.slice(0, i + 1)[i]
+						breadcrumb.route = '/' + pathSplit.slice(0, i + 1).join('/')
+						this.breadcrumbs.push(breadcrumb);
+						breadcrumb = {}
+					}
+				return this.breadcrumbs
 			},
 
 			item() {
 				return this.$route.params.item;
-			},
-
-			typeOfFolder() {
-				return _filter(this.files, ['extension', false])
-			},
-
-			typeOfFile(showHidden) {
-				showHidden = (typeof showHidden !== 'undefined') ? showHidden : false;
-				return _filter(this.files, 'extension')
 			},
 
 			iAmActive () {
@@ -356,69 +351,3 @@
 		}
 	}
 </script>
-
-<style lang="less">
-
-	#files-app {
-		._scroll_container {
-			display: block;
-			overflow-x: hidden;
-			overflow-y: auto;
-
-			&::-webkit-scrollbar {
-				background-color: #f8f8f8;
-				width: 5px;
-			}
-
-			&::-webkit-scrollbar-track {
-				-webkit-box-shadow: none;
-			}
-
-			&::-webkit-scrollbar-thumb {
-				background-color: #e5e5e5;
-			}
-		}
-	}
-
-    .move-down {
-        top: 60px
-    }
-	.burger {
-		font-size: 24px; // keep original font size for material icons
-	}
-
-	.material-icon {
-		&.-x075 {
-			font-size: 75%;
-		}
-	}
-
-	.cursor-pointer {
-		cursor: pointer;
-	}
-
-	.oc-highlight {
-		color: #E56F35;
-	}
-
-	.uk-iconnav li {
-		height: 24px;
-	}
-
-	._is-selected {
-		background-color: #f8f8f8;
-	}
-
-	._is-starred {
-		color: #faa05a;
-	}
-
-	.material-icons.uk-position-center-left {
-
-		transform: translateY(-55%);
-
-		+ span {
-			padding-left: 30px;
-		}
-	}
-</style>

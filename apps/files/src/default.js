@@ -1,4 +1,5 @@
 const pkg = require('../package.json');
+const store = require('./store.js')
 
 // --- Navigation Item(s) ------------------------------------------------------
 
@@ -13,6 +14,8 @@ const navItems = [{
 	}
 }];
 
+const appName = "files"
+
 import FilesApp from './components/Files-App.vue';
 
 const routes = [{
@@ -23,6 +26,8 @@ const routes = [{
 }];
 
 export default define({
+	appName,
+	store,
 	routes,
 	navItems
 });
