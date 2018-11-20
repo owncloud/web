@@ -1,5 +1,6 @@
 <template>
 	<v-app light id="Phoenix">
+		<notification-bar />
 		<v-container fluid class="pa-0">
 			<v-layout tag="header"  v-if="showHeader">
 				<top-bar></top-bar>
@@ -16,9 +17,11 @@
 <script>
 import TopBar from './components/Top-Bar.vue';
 import Menu   from './components/Menu.vue';
+import NotificationBar from './components/NotificationBar.vue'
 
 export default {
 	components: {
+		NotificationBar,
 		TopBar,
 		'side-menu' : Menu
 	},
