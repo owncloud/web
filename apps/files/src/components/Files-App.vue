@@ -1,17 +1,28 @@
 <template>
 	<v-container id="files-app" fluid class="pa-0">
 		<v-toolbar class="elevation-1">
- 			<v-btn v-if="!createFolder" @click="createFolder = !createFolder" flat>
-				<v-icon large>create_new_folder</v-icon>
-			</v-btn>
-			<v-btn v-if="createFolder" @click="addNewFolder(newFolderName)" flat>
-				<v-icon large>add</v-icon>
-			</v-btn>
-			<v-flex v-if="createFolder" xs2>
+	 			<v-btn v-if="!createFile" @click="createFolder ? addNewFolder(newFolderName) : createFolder = !createFolder" flat>
+					<v-icon v-if="!createFolder" large>create_new_folder</v-icon>
+					<v-icon v-if="createFolder" large>add</v-icon>
+				</v-btn>
+				<v-btn v-if="!createFolder" @click="createFile ? addNewFile(newFileName, item) : createFile = !createFile" flat>
+					<v-icon v-if="!createFile" large>file_copy</v-icon>
+					<v-icon v-if="createFile" large>add</v-icon>
+				</v-btn>
+			<v-flex v-if="createFolder || createFile" xs2>
 				<v-text-field
+					v-if="createFolder"
 					@keydown.enter="addNewFolder(newFolderName)"
-					:placeholder="$gettext('New folder Name')"
+					:placeholder="$gettext('Enter foldername here')"
 					v-model="newFolderName"
+					hide-details
+					single-line
+				></v-text-field>
+				<v-text-field
+					v-if="createFile"
+					@keydown.enter="addNewFile(newFileName)"
+					:placeholder="$gettext('Enter filename here')"
+					v-model="newFileName"
 					hide-details
 					single-line
 				></v-text-field>
@@ -30,7 +41,6 @@
 					</template>
 				</v-breadcrumbs>
 			</v-flex>
-			<v-spacer></v-spacer>
 			<v-flex align-self-center class="text-xs-right" xs1>
 				<span>
 					<translate :translate-n="filteredFiles.length" translate-plural="%{ filteredFiles.length } Results">
@@ -122,6 +132,7 @@
 		data() {
 			return {
 			createFolder: false,
+			createFile: false,
       pagination: {
         sortBy: 'name'
       },
@@ -152,11 +163,11 @@
 			breadcrumbs: 	[],
 			files   : [],
 			self    : {},
-			newFolderName	: ''
+			newFolderName	: '',
+			newFileName	: ''
 		}
 	},
 	mounted () {
-		//this.loadFolder();
 		this.getFolder();
 	},
 	methods: {
@@ -209,11 +220,26 @@
     },
 
 		openFile (file) {
-			//TODO Fileactions on file open
+			// TODO Fileactions on file open
 			console.log(file)
 		},
 
+		addNewFile (fileName, path) {
+			this.createFile = !this.createFile
+			if(fileName !== ''){
+				if(path === 'home'){
+					path = '/'
+				}
+				console.log('addNewFile', fileName, 'pathToAddto', path)
+				// this.$client.files.putFile().then(res => {
+				// 		console.log(res)
+				// }).catch(console.info)
+			}
+
+		},
+
 		addNewFolder (folderName){
+			this.createFolder = !this.createFolder
 			if(folderName !== ''){
 				this.createFolder = !this.createFolder
 				this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + folderName)
@@ -222,8 +248,6 @@
 					this.newFolderName = '';
 				})
 				.catch(console.error)
-			} else{
-				this.createFolder = !this.createFolder
 			}
 		},
 
@@ -259,7 +283,7 @@
 						type    : (file.type === 'dir') ? 'folder' : file.type,
 						starred : false,
 						mdate   : file['fileInfo']['{DAV:}getlastmodified'],
-						cdate   : '',    //TODO: Retrieve data of creation of a file
+						cdate   : '',    // TODO: Retrieve data of creation of a file
 						size    : function () {
 						if (file.type === 'dir') {
 							return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
