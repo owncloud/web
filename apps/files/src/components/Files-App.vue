@@ -1,12 +1,16 @@
 <template>
 	<v-container id="files-app" fluid class="pa-0">
 		<v-toolbar class="elevation-1">
- 			<v-btn v-if="!createFolder" @click="createFolder = !createFolder" flat><v-icon large>create_new_folder</v-icon></v-btn>
-			<v-btn v-if="createFolder" @click="addNewFolder(newFolderName)" flat><v-icon large>add</v-icon></v-btn>
+ 			<v-btn v-if="!createFolder" @click="createFolder = !createFolder" flat>
+				<v-icon large>create_new_folder</v-icon>
+			</v-btn>
+			<v-btn v-if="createFolder" @click="addNewFolder(newFolderName)" flat>
+				<v-icon large>add</v-icon>
+			</v-btn>
 			<v-flex v-if="createFolder" xs2>
 				<v-text-field
 					@keydown.enter="addNewFolder(newFolderName)"
-					placeholder="New folder Name"
+					:placeholder="$gettext('New folder Name')"
 					v-model="newFolderName"
 					hide-details
 					single-line
@@ -16,15 +20,23 @@
 				<v-breadcrumbs class="pa-0" :items="getRoutes">
 					<template slot="item" slot-scope="props">
 							<drop >
-								<v-icon @click="navigateTo('file-list', props.item.route)" v-if="props.item.text === 'home'" large>home</v-icon>
-								<span @click="navigateTo('file-list', props.item.route)" v-else class="heading font-weight-bold">{{ props.item.text }}</span>
+								<v-icon @click="navigateTo('file-list', props.item.route)" v-if="props.item.text === 'home'" large>
+									home
+								</v-icon>
+								<span @click="navigateTo('file-list', props.item.route)" v-else class="heading font-weight-bold">
+									{{ props.item.text }}
+								</span>
 							</drop>
 					</template>
 				</v-breadcrumbs>
 			</v-flex>
 			<v-spacer></v-spacer>
 			<v-flex align-self-center class="text-xs-right" xs1>
-				<span><translate :translate-n="filteredFiles.length" translate-plural="%{ filteredFiles.length } Results">%{ filteredFiles.length } Result</translate></span>
+				<span>
+					<translate :translate-n="filteredFiles.length" translate-plural="%{ filteredFiles.length } Results">
+						%{ filteredFiles.length } Result
+					</translate>
+				</span>
 			</v-flex>
 			<v-menu transition="scale-transition">
 				<v-btn slot="activator" flat><v-icon large>filter_list</v-icon></v-btn>
@@ -69,12 +81,26 @@
 			</template>
 			<template slot="items" slot-scope="props">
 				<tr :active="props.selected">
-						<td><v-checkbox  @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details></v-checkbox></td>
-						<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item.path)" class="text-xs-left">{{ props.item.name }}</td>
-						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.size | fileSize }}</td>
-						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.mdate | formDateFromNow }}</td>
-						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.owner }}</td>
+						<td>
+							<v-checkbox  @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details>
+							</v-checkbox>
+						</td>
+						<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item.path)" class="text-xs-left">
+							{{ props.item.name }}
+						</td>
+						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
+							{{ props.item.size | fileSize }}
+						</td>
+						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
+							{{ props.item.mdate | formDateFromNow }}
+						</td>
+						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
+							{{ props.item.owner }}
+						</td>
 				</tr>
+			</template>
+			<template slot="pageText" slot-scope="props">
+				<span>Item</span> {{ props.pageStart }} - {{ props.pageStop }} <span>of</span> {{ props.itemsLength }}
 			</template>
 		</v-data-table>
 </v-container>
@@ -130,10 +156,11 @@
 		}
 	},
 	mounted () {
-		this.loadFolder();
+		//this.loadFolder();
+		this.getFolder();
 	},
 	methods: {
-		...mapActions('files',['resetFileSelection', 'addFileSelection', 'removeFileSelection']),
+		...mapActions('files',['resetFileSelection', 'addFileSelection', 'removeFileSelection','loadFiles']),
 
 		trace() {
 			console.info('trace', arguments)
@@ -191,7 +218,7 @@
 				this.createFolder = !this.createFolder
 				this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + folderName)
 				.then(() => {
-					this.loadFolder();
+					this.getFolder();
 					this.newFolderName = '';
 				})
 				.catch(console.error)
@@ -211,146 +238,96 @@
 				}
 		},
 
-// TODO AUSTAUSCHEN!!
-
-		async loadFolder() {
-			if (!this.iAmActive)
-				return false;
-			this.loading = true;
-			this.path = [];
-			let absolutePath = this.route.params.item;
-			if (this.$route.params.item === 'home') {
-				absolutePath = '/';
+		getFileSize(file) {
+			if (file.type === 'dir') {
+				return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
+			} else {
+				return file['fileInfo']['{DAV:}getcontentlength'] / 100
 			}
-			if (navigator.onLine) {
-				this.offlineNotified = false;
-					// List all files
-				try {
-					let files = await this.$client.files.list(absolutePath);
-					// Remove the root element
-					files = files.splice(1);
-						this.files = files.map(file => {
-						return ({
-							type    : (file.type === 'dir') ? 'folder' : file.type,
-							starred : false,
-							mdate   : file['fileInfo']['{DAV:}getlastmodified'],
-							cdate   : '',    //TODO: Retrieve data of creation of a file
-							size    : function () {
-							if (file.type === 'dir') {
-								return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
-							} else {
-								return file['fileInfo']['{DAV:}getcontentlength'] / 100
-							}
+		},
+
+		getFolder () {
+			if (!this.iAmActive){
+				return false
+			}
+			this.path = []
+			let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
+			this.$client.files.list(absolutePath).then(res => {
+
+				this.files = res.splice(1).map(file => {
+					return ({
+						type    : (file.type === 'dir') ? 'folder' : file.type,
+						starred : false,
+						mdate   : file['fileInfo']['{DAV:}getlastmodified'],
+						cdate   : '',    //TODO: Retrieve data of creation of a file
+						size    : function () {
+						if (file.type === 'dir') {
+							return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
+						} else {
+							return file['fileInfo']['{DAV:}getcontentlength'] / 100
+						}
+					}(),
+						extension: (file.type === 'dir') ? false : '',
+						name    : function () {
+							let pathList = file.name.split("/").filter(e => e !== "")
+							return pathList[pathList.length - 1];
 						}(),
-								extension: (file.type === 'dir') ? false : '',
-								name    : function () {
-									let pathList = file.name.split("/").filter(e => e !== "")
-									return pathList[pathList.length - 1];
-								}(),
-								path    : file.name,
-								id      : file['fileInfo']['{DAV:}getetag']
-							});
-						});
+						path    : file.name,
+						id      : file['fileInfo']['{DAV:}getetag']
+					})
+				});
 
-						// Save files in the cache
-						localStorage.setItem(absolutePath, JSON.stringify(this.files));
+				this.loadFiles(this.files);
 
-						this.self = files.self;
+				this.self = files.self;
 
-						this.loading = false;
+				this.resetFileSelection();
+			})
+		}
+	},
 
-						this.resetFileSelection();
-					}
-					catch (error) {
-						this.$uikit.notification({
-							message: error.statusText || error,
-							status: 'danger',
-							pos: 'top-center'
-						});
-					}
-				} else {
-					// If the user has not been notified
-					if(!this.offlineNotified){
-						this.$uikit.notification({
-							message: `You are currently offline. Latest changes may not be available`,
-							status: 'primary'
-						});
+	watch: {
+		item () {
+			this.getFolder();
+		}
+	},
 
-						this.offlineNotified = true;
-					}
-
-					let cachedFiles = JSON.parse(localStorage.getItem(absolutePath));
-					if(cachedFiles == null){
-						cachedFiles = [];
-					}
-
-					this.files = cachedFiles;
-
-					this.self = cachedFiles.self;
-
-					this.loading = false;
-
-					// this.resetFileSelection();
-				}
-			},
-
-			async onDrop(dropLocation, dropData, dragData, event) {
-				try {
-					if (dropLocation === 'file-list' && dropData.type === 'folder') {
-						await this.$client.files.move(dragData.path, dropData.path + dragData.name);
-						this.loadFolder();
-					} else if (dropLocation === 'breadcrumb') {
-						await this.$client.files.move(dragData.path, dropData + '/' + dragData.name);
-						this.loadFolder();
-					}
-				}
-				catch (err) {
-					//TODO
-					console.log(err);
-				}
-            }
-		},
-		watch: {
-			item () {
-				this.loadFolder();
-			}
-		},
-		computed: {
-			...mapState(['route']),
+	computed: {
+		...mapState(['route']),
 
 			filteredFiles() {
-				return filter(this.files, (file) => {
-					return this.ifFiltered(file)
-				})
-			},
+			return filter(this.files, (file) => {
+				return this.ifFiltered(file)
+			})
+		},
 
-			getRoutes() {
-				this.breadcrumbs = [];
-				let breadcrumb = {};
-				let absolutePath = this.route.params.item;
-				let pathSplit  = absolutePath.split('/').filter((val) => val);
-				if(!_includes(pathSplit, 'home')){
-						breadcrumb.text = 'home'
-						breadcrumb.route = breadcrumb.text
-						this.breadcrumbs.push(breadcrumb);
-						breadcrumb = {}
-				}
-					for (let i = 0; i < pathSplit.length; i++) {
-						breadcrumb.text = pathSplit.slice(0, i + 1)[i]
-						breadcrumb.route = '/' + pathSplit.slice(0, i + 1).join('/')
-						this.breadcrumbs.push(breadcrumb);
-						breadcrumb = {}
-					}
-				return this.breadcrumbs
-			},
-
-			item() {
-				return this.$route.params.item;
-			},
-
-			iAmActive () {
-				return this.$route.name === 'file-list';
+		getRoutes() {
+			this.breadcrumbs = [];
+			let breadcrumb = {};
+			let absolutePath = this.route.params.item;
+			let pathSplit  = absolutePath.split('/').filter((val) => val);
+			if(!_includes(pathSplit, 'home')){
+					breadcrumb.text = 'home'
+					breadcrumb.route = breadcrumb.text
+					this.breadcrumbs.push(breadcrumb);
+					breadcrumb = {}
 			}
+				for (let i = 0; i < pathSplit.length; i++) {
+					breadcrumb.text = pathSplit.slice(0, i + 1)[i]
+					breadcrumb.route = '/' + pathSplit.slice(0, i + 1).join('/')
+					this.breadcrumbs.push(breadcrumb);
+					breadcrumb = {}
+				}
+			return this.breadcrumbs
+		},
+
+		item() {
+			return this.$route.params.item;
+		},
+
+		iAmActive () {
+			return this.$route.name === 'file-list';
 		}
 	}
+}
 </script>

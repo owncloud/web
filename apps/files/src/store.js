@@ -3,10 +3,14 @@ const _without = require('lodash/without');
 const namespaced = true
 
 const state = {
+	files: [],
 	selected: []
 }
 
 const mutations = {
+	LOAD_FILES(state, files) {
+		state.files = files
+	},
 	ADD_FILE_SELECTION(state, file) {
 		state.selected.push(file);
 	},
@@ -23,6 +27,9 @@ const mutations = {
 }
 
 const actions = {
+	loadFiles(context, files) {
+		context.commit('LOAD_FILES', files);
+	},
 	addFileSelection(context, file) {
 		context.commit('ADD_FILE_SELECTION', file);
 	},
