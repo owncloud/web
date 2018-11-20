@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'loginPage',
 
@@ -38,13 +38,19 @@ export default {
     ...mapGetters(['configuration'])
   },
   methods: {
+    ...mapActions(['showNotification']),
+
     authenticate () {
       this.$store.dispatch('authenticate', { provider: 'oauth2' })
         .then(() => {
           this.$router.push({ path: '/' })
         })
-        .catch(() => {
-          this.$router.push('/error')
+        .catch((error) => {
+          this.showNotification({
+            title: this.$gettext('Could not login'),
+            desc: error.message,
+            type: "error"
+          })
         })
     }
   }
