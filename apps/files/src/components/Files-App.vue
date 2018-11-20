@@ -5,6 +5,7 @@
 			<v-btn v-if="createFolder" @click="addNewFolder(newFolderName)" flat><v-icon large>add</v-icon></v-btn>
 			<v-flex v-if="createFolder" xs2>
 				<v-text-field
+					@keydown.enter="addNewFolder(newFolderName)"
 					placeholder="New folder Name"
 					v-model="newFolderName"
 					hide-details
@@ -23,7 +24,7 @@
 			</v-flex>
 			<v-spacer></v-spacer>
 			<v-flex align-self-center class="text-xs-right" xs1>
-				<span><translate :translate-n="files.length" translate-plural="%{ files.length } Results">%{ files.length } Result</translate></span>
+				<span><translate :translate-n="filteredFiles.length" translate-plural="%{ filteredFiles.length } Results">%{ filteredFiles.length } Result</translate></span>
 			</v-flex>
 			<v-menu transition="scale-transition">
 				<v-btn slot="activator" flat><v-icon large>filter_list</v-icon></v-btn>
@@ -40,13 +41,12 @@
 			id="filesTable"
 			v-model="selected"
 			:headers="headers"
-			:items="files"
+			:items="filteredFiles"
 			:pagination.sync="pagination"
 			select-all
 			item-key="name"
 			class="elevation-1">
 			<template slot="headers" slot-scope="props">
-				<tr>
 					<th>
 						<v-checkbox
 							:input-value="props.all"
@@ -68,7 +68,7 @@
 				</tr>
 			</template>
 			<template slot="items" slot-scope="props">
-				<tr :active="props.selected" >
+				<tr :active="props.selected">
 						<td><v-checkbox  @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details></v-checkbox></td>
 						<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item.path)" class="text-xs-left">{{ props.item.name }}</td>
 						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">{{ props.item.size | fileSize }}</td>
@@ -83,6 +83,7 @@
 <script>
 	import Mixins       from '../mixins';
 	const _includes = require('lodash/includes');
+	import { filter } from 'lodash'
 	import { mapActions, mapGetters, mapState } from 'vuex'
 
 	export default {
@@ -109,12 +110,15 @@
 			filters: [
 				{
 					name: 'Files',
+					tag: 'file',
 				  value: true
 				},{
 					name: 'Folders',
+					tag: 'folder',
 					value: true
 				}, {
 					name: 'Hidden',
+					tag: 'hidden',
 					value: false
 				}
 			],
@@ -130,6 +134,10 @@
 	},
 	methods: {
 		...mapActions('files',['resetFileSelection', 'addFileSelection', 'removeFileSelection']),
+
+		trace() {
+			console.info('trace', arguments)
+		},
 
 		toggleFileSelect(item) {
 			if(_includes(this.selected, item)){
@@ -174,6 +182,7 @@
     },
 
 		openFile (file) {
+			//TODO Fileactions on file open
 			console.log(file)
 		},
 
@@ -181,7 +190,7 @@
 			if(folderName !== ''){
 				this.createFolder = !this.createFolder
 				this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + folderName)
-				.then(res => {
+				.then(() => {
 					this.loadFolder();
 					this.newFolderName = '';
 				})
@@ -189,6 +198,17 @@
 			} else{
 				this.createFolder = !this.createFolder
 			}
+		},
+
+		ifFiltered(item) {
+				for(let filter of this.filters) {
+					if(item.type === filter.tag){
+						return filter.value
+					}
+					else if(item.name.startsWith('.')) {
+						return this.filters[2].value
+					}
+				}
 		},
 
 // TODO AUSTAUSCHEN!!
@@ -274,49 +294,6 @@
 				}
 			},
 
-			async createNewFolder(newFolderName) {
-				if(newFolderName !== ''){
-					this.$uikit.dropdown(this.$refs.newFolderDropdown).hide();
-					try {
-						let res = await this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + newFolderName);
-						this.loadFolder();
-					}
-					catch (err) {
-						if(err === 'The resource you tried to create already exists') {
-							this.$uikit.notification({
-								message: err,
-								status: 'danger',
-								pos: 'top-center'
-							});
-						}else{
-							//TODO
-							console.log(err);
-						}
-					}
-				}else{
-					this.$uikit.notification({
-						message: 'Please enter a folder name',
-						status: 'danger',
-						pos: 'top-center'
-					});
-				}
-			},
-
-
-
-
-            ifFiltered(item) {
-                if(item.type === 'folder'){
-                	return this.filterBy.folder;
-                } else {
-                    if (item.name.startsWith('.')) {
-                        return this.filterBy.hidden;
-                    } else{
-                        return this.filterBy.files;
-                    }
-				}
-            },
-
 			async onDrop(dropLocation, dropData, dragData, event) {
 				try {
 					if (dropLocation === 'file-list' && dropData.type === 'folder') {
@@ -340,6 +317,12 @@
 		},
 		computed: {
 			...mapState(['route']),
+
+			filteredFiles() {
+				return filter(this.files, (file) => {
+					return this.ifFiltered(file)
+				})
+			},
 
 			getRoutes() {
 				this.breadcrumbs = [];

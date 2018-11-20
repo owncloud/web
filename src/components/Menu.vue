@@ -58,7 +58,7 @@
                 <v-icon>exit_to_app</v-icon>
               </v-list-tile-action>
               <v-list-tile-content>
-                <v-list-tile-title>Exit {{ configuration.theme.general.name }}</v-list-tile-title>
+                <v-list-tile-title><span v-translate>Exit</span> {{ configuration.theme.general.name }}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
 
