@@ -8,8 +8,7 @@
         v-if="configuration.theme.logo.big"
         :src="configuration.theme.logo.big"
         :aspect-ratio="1.8"
-        width="60%"
-        />
+        width="60%"/>
     </v-flex>
     <span class="font-weight-medium title">{{ configuration.theme.general.name }}</span>
   <v-spacer></v-spacer>

@@ -23,7 +23,7 @@
 			</v-flex>
 			<v-spacer></v-spacer>
 			<v-flex align-self-center class="text-xs-right" xs1>
-					<span class="heading">{{ files.length }} Results</span>
+				<span><translate :translate-n="files.length" translate-plural="%{ files.length } Results">%{ files.length } Result</translate></span>
 			</v-flex>
 			<v-menu transition="scale-transition">
 				<v-btn slot="activator" flat><v-icon large>filter_list</v-icon></v-btn>
@@ -186,6 +186,8 @@
 					this.newFolderName = '';
 				})
 				.catch(console.error)
+			} else{
+				this.createFolder = !this.createFolder
 			}
 		},
 
