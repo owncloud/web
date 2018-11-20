@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: ENOENT: no such file or directory, open '/usr/local/share/.cache/yarn/v2/npm-@webassemblyjs/ieee754-1.7.10-62c1728b7ef0f66ef8221e2966a0afd75db430df/.yarn-metadata.json'
+  Error: https://registry.yarnpkg.com/cosmiconfig/-/cosmiconfig-2.2.2.tgz: ENOENT: no such file or directory, open '/usr/local/share/.cache/yarn/v2/npm-cosmiconfig-2.2.2-6173cebd56fac042c1f4390edf7af6c07c7cb892/.yarn-tarball.tgz'
 
 npm manifest: 
   {
