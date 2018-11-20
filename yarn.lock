@@ -6932,10 +6932,10 @@ stacktrace-js@^2.0.0:
     stack-generator "^2.0.1"
     stacktrace-gps "^3.0.1"
 
-start-server-and-test@^1.7.9:
-  version "1.7.9"
-  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-1.7.9.tgz#bc475bca30e1f0f6b7c5f3e6c4b6685483f81a31"
-  integrity sha512-ERONVdbR9dMVrEVPWFTpRIO4GbUT+/t5pxoKezYKoMecnU2NYujn2JgtXJ0rt2nuuZ8VlU9Fv5m3y+wVe1xJMQ==
+start-server-and-test@^1.7.10:
+  version "1.7.10"
+  resolved "https://registry.yarnpkg.com/start-server-and-test/-/start-server-and-test-1.7.10.tgz#804315f0752e2b1da1e955bb7bbb710b0482e30e"
+  integrity sha512-87kAP+AMMD4/dmMlCea16n/fcABpe6cYcT5X3+sID0S7X64JTjeGO76TWorPg1o+/6365U1yJ16MsYTo0R6bJQ==
   dependencies:
     bluebird "3.5.3"
     check-more-types "2.24.0"
