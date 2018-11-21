@@ -244,7 +244,7 @@
 			this.createFolder = !this.createFolder
 			if(folderName !== ''){
 				this.createFolder = !this.createFolder
-				this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + folderName)
+				this.$client.files.createFolder(((this.item === 'home') ? '' : this.item) + '/' + folderName)
 				.then(() => {
 					this.getFolder();
 					this.newFolderName = '';
