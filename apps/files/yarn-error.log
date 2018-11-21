@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/cosmiconfig/-/cosmiconfig-2.2.2.tgz: ENOENT: no such file or directory, open '/usr/local/share/.cache/yarn/v2/npm-cosmiconfig-2.2.2-6173cebd56fac042c1f4390edf7af6c07c7cb892/.yarn-tarball.tgz'
+  Error: https://registry.yarnpkg.com/postcss-selector-parser/-/postcss-selector-parser-2.2.3.tgz: ENOENT: no such file or directory, open '/usr/local/share/.cache/yarn/v2/npm-postcss-selector-parser-2.2.3-f9437788606c3c9acee16ffe8d8b16297f27bb90/.yarn-tarball.tgz'
 
 npm manifest: 
   {
