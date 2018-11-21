@@ -460,11 +460,6 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
-argv@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/argv/-/argv-0.0.2.tgz#ecbd16f8949b157183711b1bda334f37840185ab"
-  integrity sha1-7L0W+JSbFXGDcRsb2jNPN4QBhas=
-
 arr-diff@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/arr-diff/-/arr-diff-4.0.0.tgz#d6461074febfec71e7e15235761a329a5dc7c520"
@@ -1761,17 +1756,6 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codecov@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.1.0.tgz#340bd968d361f256976b5af782dd8ba9f82bc849"
-  integrity sha512-aWQc/rtHbcWEQLka6WmBAOpV58J2TwyXqlpAQGhQaSiEUoigTTUk6lLd2vB3kXkhnDyzyH74RXfmV4dq2txmdA==
-  dependencies:
-    argv "^0.0.2"
-    ignore-walk "^3.0.1"
-    js-yaml "^3.12.0"
-    request "^2.87.0"
-    urlgrey "^0.4.4"
-
 collection-visit@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/collection-visit/-/collection-visit-1.0.0.tgz#4bc0373c164bc3291b4d368c829cf1a80a59dca0"
@@ -2222,7 +2206,6 @@ date-now@^0.1.4:
 
 "davclient.js@https://github.com/owncloud/davclient.js.git":
   version "0.1.3"
-  uid "6fc854ee835dea382a8fbc319ce6cf772bf1d699"
   resolved "https://github.com/owncloud/davclient.js.git#6fc854ee835dea382a8fbc319ce6cf772bf1d699"
 
 de-indent@^1.0.2:
@@ -3430,6 +3413,11 @@ gherkin@^5.0.0:
   resolved "https://registry.yarnpkg.com/gherkin/-/gherkin-5.1.0.tgz#684bbb03add24eaf7bdf544f58033eb28fb3c6d5"
   integrity sha1-aEu7A63STq9731RPWAM+so+zxtU=
 
+git-hooks@^1.1.10:
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/git-hooks/-/git-hooks-1.1.10.tgz#c3113a8506593ac703bffc3bc77badbe8c9e1536"
+  integrity sha512-23nto1qLsqJdY0daAUYqeKPyTvzefR2wZv1krgFRnPg0FxrmITCeWAIv/QfR+fAD7eZC7Rp5OSicJB4hDKyp1A==
+
 glob-parent@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-3.1.0.tgz#9e6af6299d8d3bd2bd40430832bd113df906c5ae"
@@ -4245,12 +4233,11 @@ js-base64@^2.1.8:
   integrity sha512-xcinL3AuDJk7VSzsHgb9DvvIXayBbadtMZ4HFPx8rUszbW1MuNMlwYVC4zzCZ6e1sqZpnNS5ZFYOhXqA39T7LQ==
 
 "js-owncloud-client@github:owncloud/js-owncloud-client#master":
-  version "0.1.3"
-  uid "6ad23af4fadcd142c93e3a84349efd8deccfb888"
-  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/6ad23af4fadcd142c93e3a84349efd8deccfb888"
+  version "0.2.0-alpha1"
+  uid "0a69e5b7d55014924d8832fc92ca2477077e801d"
+  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/0a69e5b7d55014924d8832fc92ca2477077e801d"
   dependencies:
     browser-request "^0.3.3"
-    codecov "^3.1.0"
     davclient.js "https://github.com/owncloud/davclient.js.git"
     promise "^8.0.0"
     request "^2.81.0"
@@ -7480,11 +7467,6 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
-
-urlgrey@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/urlgrey/-/urlgrey-0.4.4.tgz#892fe95960805e85519f1cd4389f2cb4cbb7652f"
-  integrity sha1-iS/pWWCAXoVRnxzUOJ8stMu3ZS8=
 
 use@^3.1.0:
   version "3.1.1"
