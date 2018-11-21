@@ -27,7 +27,7 @@
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
-    "chromedriver": "^2.43.0",
+    "chromedriver": "^2.43.3",
     "css-loader": "^1.0.1",
     "cucumber": "^5.0.2",
     "cucumber-pretty": "^1.4.0",
