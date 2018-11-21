@@ -59,65 +59,67 @@
 			</v-menu>
 		</v-toolbar>
 
-		<v-data-table
-			id="filesTable"
-			v-model="selected"
-			:headers="headers"
-			:items="filteredFiles"
-			:pagination.sync="pagination"
-			select-all
-			item-key="name"
-			class="elevation-1">
-			<template slot="headers" slot-scope="props">
-					<th>
-						<v-checkbox
-							:input-value="props.all"
-							:indeterminate="props.indeterminate"
-							primary
-							hide-details
-							@click.native="toggleAll"
-						></v-checkbox>
-					</th>
-					<th
-						v-for="header in props.headers"
-						:key="header.text"
-						:class="[header.text === 'Name' ? 'text-xs-left' : 'text-xs-center' , 'column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-						@click="changeSort(header.value)"
-					>
-						<v-icon small>arrow_upward</v-icon>
-						{{ header.text }}
-					</th>
-				</tr>
-			</template>
-			<template slot="items" slot-scope="props">
-				<tr :active="props.selected">
-						<td>
-							<v-checkbox  @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details>
-							</v-checkbox>
-						</td>
-						<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item.path)" class="text-xs-left">
-							{{ props.item.name }}
-						</td>
-						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
-							{{ props.item.size | fileSize }}
-						</td>
-						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
-							{{ props.item.mdate | formDateFromNow }}
-						</td>
-						<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
-							{{ props.item.owner }}
-						</td>
-				</tr>
-			</template>
-			<template slot="pageText" slot-scope="props">
-				<span>Item</span> {{ props.pageStart }} - {{ props.pageStop }} <span>of</span> {{ props.itemsLength }}
-			</template>
-		</v-data-table>
+			<v-data-table
+				id="filesTable"
+				v-model="selected"
+				:headers="headers"
+				:items="filteredFiles"
+				:pagination.sync="pagination"
+				select-all
+				item-key="name"
+				class="elevation-1">
+				<template slot="headers" slot-scope="props">
+						<th>
+							<v-checkbox
+								:input-value="props.all"
+								:indeterminate="props.indeterminate"
+								primary
+								hide-details
+								@click.native="toggleAll"
+							></v-checkbox>
+						</th>
+						<th
+							v-for="header in props.headers"
+							:key="header.text"
+							:class="[header.text === 'Name' ? 'text-xs-left' : 'text-xs-center' , 'column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+							@click="changeSort(header.value)"
+						>
+							<v-icon small>arrow_upward</v-icon>
+							{{ header.text }}
+						</th>
+					</tr>
+				</template>
+				<template slot="items" slot-scope="props">
+					<tr :active="props.selected">
+							<td>
+								<v-checkbox  @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details>
+								</v-checkbox>
+							</td>
+							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item.path)" class="text-xs-left">
+								{{ props.item.name }}
+							</td>
+							<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
+								{{ props.item.size | fileSize }}
+							</td>
+							<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
+								{{ props.item.mdate | formDateFromNow }}
+							</td>
+							<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
+								{{ props.item.owner }}
+							</td>
+					</tr>
+				</template>
+				<template slot="pageText" slot-scope="props">
+					<span>Item</span> {{ props.pageStart }} - {{ props.pageStop }} <span>of</span> {{ props.itemsLength }}
+				</template>
+			</v-data-table>
 </v-container>
 </template>
 
 <script>
 	import Mixins       from '../mixins';
+	import FileDetails from './File-Details.vue'
+
 	const _includes = require('lodash/includes');
 	import { filter } from 'lodash'
 	import { mapActions, mapGetters, mapState } from 'vuex'
@@ -127,10 +129,11 @@
 			Mixins
 		],
 		components: {
-			// FileDetails
+			FileDetails,
 		},
 		data() {
 			return {
+			sheet: false,
 			createFolder: false,
 			createFile: false,
       pagination: {
@@ -220,8 +223,7 @@
     },
 
 		openFile (file) {
-			// TODO Fileactions on file open
-			console.log(file)
+			this.sheet = true
 		},
 
 		addNewFile (fileName, path) {

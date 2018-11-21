@@ -26,7 +26,7 @@ export default {
     ...mapActions(['showNotification', 'deleteNotification'])
   },
   computed: {
-    ...mapGetters(['activeNotifications']),
+    ...mapGetters(['activeNotifications'])
   }
 }
 </script>

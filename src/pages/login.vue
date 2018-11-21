@@ -49,7 +49,7 @@ export default {
           this.showNotification({
             title: this.$gettext('Could not login'),
             desc: error.message,
-            type: "error"
+            type: 'error'
           })
         })
     }
