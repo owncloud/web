@@ -11,10 +11,10 @@ module.exports = merge(common, {
     }
   },
   devServer: {
-    contentBase: path.resolve(__dirname),
+    contentBase: path.resolve(__dirname, 'dist'),
     historyApiFallback: true,
-    publicPath: '/core/',
-    filename: "js/core.bundle.js",
+    publicPath: '/',
+    filename: "core/core.bundle.js",
     watchContentBase: true,
     https: false,
     compress: true,

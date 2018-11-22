@@ -2,7 +2,6 @@ module.exports = {
 	devtool: 'source-map',
 	entry: './src/app.js',
 	output: {
-		path: `${__dirname}/js`,
 		chunkFilename: '[name].demo.chunk.js',
 		filename: "demo.bundle.js",
 		publicPath: 'apps/demo/js/'

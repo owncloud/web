@@ -10,7 +10,7 @@ endif
 app_name=phoenix
 build_dir=$(CURDIR)/build
 dist_dir=$(build_dir)/dist
-src_files=README.md CHANGELOG.md LICENSE index.html core/fonts themes/* core/css/core.css core/js/core.bundle.js node_modules/requirejs/require.js sw.js apps/files/js/files.bundle.js core/gfx/cloud-logo-invert.svg
+src_files=README.md CHANGELOG.md LICENSE dist/index.html dist/fonts themes/* dist/css/core.css dist/core/core.bundle.js node_modules/requirejs/require.js sw.js apps/files/js/files.bundle.js static/gfx/cloud-logo-invert.svg
 src_dirs=appinfo img
 all_src=$(src_dirs) $(src_files)
 
@@ -45,8 +45,6 @@ dist: javascript distdir sign package
 javascript:
 	$(YARN) install
 	$(YARN) run build:prod
-	$(YARN) install --prefix apps/files
-	$(YARN) run build:prod --prefix apps/files
 
 .PHONY: distdir
 distdir:

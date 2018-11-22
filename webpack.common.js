@@ -1,27 +1,65 @@
-const path = require('path');
+const path = require('path')
+const fs = require('fs')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
+const appFolder = path.resolve(__dirname, 'apps')
+let apps = []
+
+fs.readdirSync(appFolder)
+		.forEach(function (mod) {
+							var modPath = {
+								from: path.join(appFolder, mod, 'dist'),
+								to: path.resolve('dist', 'apps', mod)
+							}
+							apps.push(modPath)
+						})
+const src_files = [{
+										from: path.resolve(__dirname, 'favicon.ico'),
+										to: path.resolve(__dirname, 'dist')
+									},{
+						        from: path.resolve(__dirname, 'config.json'),
+						        to: path.resolve(__dirname, 'dist')
+						      }, {
+						        from: path.resolve(__dirname, 'static/**'),
+						        to: path.resolve(__dirname, 'dist')
+						      },{
+						        from: path.resolve(__dirname, 'sw.js'),
+						        to: path.resolve(__dirname, 'dist')
+						      },{
+						        from: path.resolve(__dirname, 'themes/*'),
+						        to: path.resolve(__dirname, 'dist')
+						      },{
+						        from: path.resolve(__dirname, 'node_modules', 'requirejs', 'require.js'),
+						        to: path.resolve(__dirname, 'dist', 'node_modules', 'requirejs')
+						      }]
+for(file of src_files){
+	apps.push(file)
+}
 module.exports = {
 	plugins: [
-		new VueLoaderPlugin(),
 		new MiniCssExtractPlugin({
-				// Options similar to the same options in webpackOptions.output
-				// both options are optional
-				filename: "css/[name].css",
-				chunkFilename: "css/[name].[id].css"
-		})
+						filename: './css/[name].css',
+						chunkFilename: './css/[name].[id].css'}),
+		new HtmlWebpackPlugin({
+			template: 'index.html'
+		}),
+		new VueLoaderPlugin(),
+		new CopyWebpackPlugin(apps)
 	],
+	output: {
+		filename: './core/[name].bundle.js',
+		chunkFilename: './core/[name].[id].bundle.js',
+	},
 	entry: {
 		core: [
-			'./src/default.js',
 			'./node_modules/material-design-icons-iconfont/dist/material-design-icons.css',
-			'./node_modules/vuetify/dist/vuetify.css']
-	},
-	output: {
-		path: path.resolve(__dirname, 'core'),
-		filename: 'js/[name].bundle.js',
-		chunkFilename: 'js/[name].[id].bundle.js'
+			'./node_modules/vuetify/dist/vuetify.css',
+			'./src/default.js'
+		]
 	},
 	module: {
 		rules: [

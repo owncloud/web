@@ -9,7 +9,7 @@ const _flatten = require('lodash/flatten');
 
 import Phoenix   from './Phoenix.vue';
 
-// --- Adding global libraries ---
+// --- Adding global libraries ---2
 
 import UIkit  from 'uikit';
 import Vuetify from 'vuetify';
@@ -63,7 +63,7 @@ Vue.component('drop', Drop);
     try {
         let config = await Axios.get('config.json');
         let apps = _map(config.data.apps, (app) => {
-            return `./apps/${app}/js/${app}.bundle.js`;
+            return `./apps/${app}/${app}.bundle.js`;
         });
 
         requirejs(apps, function() {
@@ -84,7 +84,7 @@ Vue.component('drop', Drop);
             }
             router.addRoutes(_flatten(routes));
             sync(store, router);
-            
+
             const OC  = new Vue({
                 el : '#owncloud',
                 data : {
