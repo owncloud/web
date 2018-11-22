@@ -3,6 +3,7 @@
         v-model="sidebarIsVisible"
         absolute
         temporary
+        clipped
         class='mt-5'
         style='top: 16px'>
         <v-list class="pt-0" dense>

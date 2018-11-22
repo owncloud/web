@@ -58,7 +58,8 @@
 				</v-list>
 			</v-menu>
 		</v-toolbar>
-
+		<v-layout row>
+			<v-flex xs12>
 			<v-data-table
 				id="filesTable"
 				v-model="selected"
@@ -78,6 +79,12 @@
 								@click.native="toggleAll"
 							></v-checkbox>
 						</th>
+						<th>
+							<v-checkbox
+							primary	hide-details
+							color="yellow"
+							on-icon="star" off-icon="star_border"></v-checkbox>
+						</th>
 						<th
 							v-for="header in props.headers"
 							:key="header.text"
@@ -92,19 +99,27 @@
 				<template slot="items" slot-scope="props">
 					<tr :active="props.selected">
 							<td>
-								<v-checkbox  @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details>
+								<v-checkbox @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details>
 								</v-checkbox>
 							</td>
-							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item.path)" class="text-xs-left">
+							<td>
+								<v-checkbox
+								@change=""
+								v-model="props.item.starred"
+								primary	hide-details
+								color="yellow"
+								on-icon="star" off-icon="star_border" large></v-checkbox>
+							</td>
+							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-left">
 								{{ props.item.name }}
 							</td>
-							<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
+							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-center">
 								{{ props.item.size | fileSize }}
 							</td>
-							<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
+							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-center">
 								{{ props.item.mdate | formDateFromNow }}
 							</td>
-							<td @click="navigateTo('file-list', props.item.path)" class="text-xs-center">
+							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-center">
 								{{ props.item.owner }}
 							</td>
 					</tr>
@@ -113,12 +128,19 @@
 					<span>Item</span> {{ props.pageStart }} - {{ props.pageStop }} <span>of</span> {{ props.itemsLength }}
 				</template>
 			</v-data-table>
+		</v-flex>
+		<v-flex>
+			<file-details v-if="selectedFiles !== false" :items="selectedFiles"/>
+		</v-flex>
+		</v-layout>
+			<fileactions-tab :sheet="sheet" :file="fileAction" @close="sheet = !sheet"/>
 </v-container>
 </template>
 
 <script>
 	import Mixins       from '../mixins';
 	import FileDetails from './File-Details.vue'
+	import FileactionsTab from './FileactionsTab.vue'
 
 	const _includes = require('lodash/includes');
 	import { filter } from 'lodash'
@@ -130,12 +152,15 @@
 		],
 		components: {
 			FileDetails,
+			FileactionsTab
 		},
 		data() {
 			return {
 			sheet: false,
 			createFolder: false,
 			createFile: false,
+			fileAction: {},
+			fileName: '',
       pagination: {
         sortBy: 'name'
       },
@@ -181,7 +206,7 @@
 		},
 
 		toggleFileSelect(item) {
-			if(_includes(this.selected, item)){
+			if(_includes(this.selectedFiles, item)){
 				this.removeFileSelection(item)
 			}
 			else{
@@ -191,15 +216,17 @@
 
 		toggleAll () {
 			if (this.selected.length) {
-				for(let item in this.selected){
+				for(let item of this.selectedFiles){
 					this.removeFileSelection(item)
 				}
 				this.selected = []
 			}
 			else {
-				this.selected = this.files.slice()
-				for (let item in this.selected) {
-					this.addFileSelection(item)
+				this.selected = this.filteredFiles.slice()
+				for (let item of this.selected) {
+					if(!_includes(this.selectedFiles, item)){
+						this.addFileSelection(item)
+					}
 				}
 			}
 		},
@@ -224,6 +251,10 @@
 
 		openFile (file) {
 			this.sheet = true
+			let files = file.name.split('/')
+			let myFile = files.slice(-1)
+
+			this.fileAction = file
 		},
 
 		addNewFile (fileName, path) {
@@ -320,6 +351,7 @@
 
 	computed: {
 		...mapState(['route']),
+		...mapGetters('files', ['selectedFiles']),
 
 			filteredFiles() {
 			return filter(this.files, (file) => {

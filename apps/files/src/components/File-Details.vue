@@ -1,60 +1,65 @@
 <template>
 	<v-navigation-drawer
       v-model="drawer"
+			right
+			floating
+			permanent
+			height="100%"
     >
-      <v-toolbar flat class="transparent">
-        <v-list class="pa-0">
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img src="https://randomuser.me/api/portraits/men/85.jpg">
-            </v-list-tile-avatar>
-
-            <v-list-tile-content>
-              <v-list-tile-title>John Leider</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
-
-      <v-list class="pt-0" dense>
-        <v-divider></v-divider>
-
-        <v-list-tile
-          v-for="item in items"
-          :key="item.title"
-          @click=""
-        >
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-
-          <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
+			<v-tabs
+	      v-model="active"
+	      color="primary"
+	      dark
+	      slider-color="yellow"
+	    >
+	      <v-tab
+	        v-for="item in items"
+	        :key="item.name"
+	        ripple
+	      >
+	        {{ item.name }}
+	      </v-tab>
+	      <v-tab-item
+	        v-for="item in items"
+	        :key="item.name"
+	      >
+					<v-flex>
+						<p class="headline font-weight-medium text-xs-center">{{ item.name }}</p>
+					</v-flex>
+					<v-layout row>
+						<p class="text-xs-left">FileSize: </p>
+						<v-spacer />
+						<p class="text-xs-right">{{ item.size | fileSize }}</p>
+					</v-layout>
+					<v-layout row>
+						<p class="text-xs-left">Created: </p>
+						<v-spacer />
+						<p class="text-xs-right">{{ item.cdate | formDateFromNow }}</p>
+					</v-layout>
+					<v-layout row>
+						<p class="text-xs-left">Last Edited: </p>
+						<v-spacer />
+						<p class="text-xs-right">{{ item.mdate | formDateFromNow }}</p>
+					</v-layout>
+	      </v-tab-item>
+	    </v-tabs>
     </v-navigation-drawer>
 </template>
 
 <script>
-const _each = require('lodash/each');
-const _size = require('lodash/size');
-const _filter = require('lodash/filter');
-const _unique = require('lodash/uniqueId');
-
 import Mixins from '../mixins';
-//import Buttonrow from './File-Details-Buttonrow.vue';
+import { each } from 'lodash';
 
 export default {
 	mixins: [Mixins],
+	props: ['items'],
 	data (){
 		return {
-			drawer: true,
-			items: []
+			drawer: false,
+			active: this.getLength,
 		}
 	},
 	components: {
-		//Buttonrow
 	},
 	methods: {
 		close() {
@@ -62,34 +67,26 @@ export default {
 		}
 	},
 	computed: {
-		switcherId() {
-			return _unique('uk-switcher-');
+		getLength () {
+			return this.items.length
 		},
+
+		toggle () {
+			if(!this.items){
+				return this.drawer = false
+			}else{
+				return this.drawer = true
+			}
+		},
+
 		accumulatedFilesSize() {
 			let size = 0;
 
-			_each(this.files, (e) => {
+			each(this.items, (e) => {
 				size = size + e.size;
 			});
 
 			return size;
-		},
-		extendButtonRow() {
-			return _filter(this.$root.plugins, ['extend', "filesDetailsButtonRow"]);
-		},
-		file() {
-			let filesSelected = this.$store.getters['files/SELECTED'];
-			if (_size(filesSelected) !== 1)
-				return false;
-
-			return filesSelected[0];
-		},
-		files() {
-			let filesSelected = this.$store.getters['files/SELECTED'];
-			if (_size(filesSelected) === 1)
-				return false;
-
-			return filesSelected;
 		}
 	}
 }
