@@ -19,8 +19,7 @@ const router = new Router({
     name: 'error',
     component: ErrorPage,
     meta: { auth: false, title: 'Oooops something went wrong', hideHeadbar: true }
-  }
-  ]
+  }]
 })
 
 router.beforeEach(function (to, from, next) {

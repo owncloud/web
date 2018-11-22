@@ -10,9 +10,6 @@ module.exports = {
 		fileRows: {
 			selector: '//div[@id="files-app"]//tbody/tr',
 			locateStrategy: 'xpath'
-		},
-		loadingIndicator: {
-			selector: '.oc-loader-spinner'
-		},
+		}
 	}
 }

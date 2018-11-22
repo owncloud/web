@@ -48,7 +48,6 @@ Then('the files table should be displayed',
 	() => {
 		const filesPage = client.page.filesPage();
 		return filesPage
-		.waitForElementNotVisible('@loadingIndicator', 1000)
 		.assert.visible('@filesTable');
 	});
 
@@ -56,7 +55,6 @@ Then('the files table should not be empty',
 	() => {
 		const filesPage = client.page.filesPage();
 		return filesPage
-		.waitForElementNotVisible('@loadingIndicator', 1000)
 		//even the loading indicator is gone the table might not be rendered yet
 		.waitForElementVisible('@fileRows', 10000);
 	});

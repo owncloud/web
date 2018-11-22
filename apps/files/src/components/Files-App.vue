@@ -1,424 +1,397 @@
-<template lang="pug">
-	// material icon mixin
-	mixin icon(a)
-		i.material-icons(class=a.class)= a.icon
-
-	#files-app.uk-height-1-1(@contextmenu="contextHandler($event)")
-		transition(name="fade")
-			span(v-show="loading").oc-loader-spinner
-
-		<!--div(uk-dropdown ref="contextMenu")-->
-			<!--ul.uk-nav.uk-dropdown-nav-->
-				<!--li Download-->
-				<!--li Item A-->
-				<!--li Item B-->
-
-		.uk-position-relative.move-down
-			ul(uk-grid).uk-padding-small.uk-flex.uk-flex-middle.uk-background-muted
-				li.uk-flex.uk-flex-center
-					.material-icons.burger.cursor-pointer create_new_folder
-					div(uk-dropdown="mode: click", ref="newFolderDropdown", v-on:beforeshow="newFolderName = ''")
-						form
-							input.uk-input.uk-form-small(type='text', v-model="newFolderName", placeholder='Folder name')
-							button.uk-button.uk-button-primary.uk-button-small.uk-margin-small-top(@click="createNewFolder(newFolderName)") OK
-
-				li.uk-width-expand
-					ol.uk-breadcrumb.uk-margin-remove-bottom
-						li.uk-flex.uk-flex-center
-							drop(@drop="onDrop('breadcrumb', '', ...arguments)")
-								router-link(:to="{ name: 'file-list', params: { item: 'home' }}", tag="i").material-icons.burger.cursor-pointer home
-						li(v-for="(pathItem, pId) in path")
-							drop(@drop="onDrop('breadcrumb', pathItem, ...arguments)")
-								router-link(:to="{ name: 'file-list', params: { item: pathItem }}").cursor-pointer.uk-link-text {{ pathItem.split('/').slice(-1)[0] }}
-				li
-					span {{ files.length }} Results
-				li
-					button.uk-button.uk-button-material.uk-button-small
-						i.material-icons.uk-margin-small-right filter_list
-						span Filter
-					div(uk-dropdown="mode: click")
-						ul.uk-list.uk-margin-remove
-							li
-								label
-									input.uk-checkbox(type='checkbox', name='Accepted', v-model="filterBy.files")
-									span(:class="{ 'uk-text-primary' : filterBy.accepted }").uk-text-meta.uk-margin-small-left Files
-							li
-								label
-									input.uk-checkbox(type='checkbox', name='Pending', v-model="filterBy.folder")
-									span(:class="{ 'uk-text-primary' : filterBy.pending }").uk-text-meta.uk-margin-small-left Folder
-							li
-								label
-									input.uk-checkbox(type='checkbox', name='Pending', v-model="filterBy.hidden")
-									span(:class="{ 'uk-text-primary' : filterBy.hidden }").uk-text-meta.uk-margin-small-left Hidden files
-			div(uk-grid).uk-grid-collapse
-				main.uk-width-expand._scroll_container
-					table.file-table-header.uk-table.uk-table-middle.uk-table-divider.uk-margin-remove
-						thead
-							tr
-								th
-									input(type="checkbox").uk-checkbox.uk-margin-small-left
-								th Name
-								th(class="uk-visible@l").uk-text-right Owner
-								th Size
-								th(class="uk-visible@s") Date
-						tbody
-							tr(v-for="(file, id) in files", v-if="ifFiltered(file)", :data-file-id="file._id", :class="{ '_is-selected' : isChecked(file) }").uk-animation-fade
-								td.uk-table-shrink
-									input(type="checkbox", :checked="isChecked(file)", @click="toggleFileSelect(file)").uk-checkbox.uk-margin-small-left
-
-								// --- Name ----------
-								td(v-if="!file.extension", @click="toggleFileSelect(file)").uk-text-truncate.uk-visible-toggle
-									drag(:transfer-data="file")
-										drop(@drop="onDrop('file-list', file, ...arguments)")
-											a(@click.stop="routerLink(file.path)").uk-link-text.uk-position-relative
-												i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
-												span {{ file.name }}
-
-								td(v-else).uk-text-truncate(@click="toggleFileSelect(file)")
-									a(@click.stop="endOfDummy").uk-link.uk-position-relative
-										i.material-icons.uk-text-primary.uk-position-center-left {{ file.type }}
-										span {{ file.name }}
-									span.uk-text-meta .{{ file.extension }}
-
-								// --- Owner ----------
-								td(class="uk-visible@l").uk-text-nowrap.uk-table-shrink.uk-text-right
-									div(v-if="file.sharedIn").uk-text-meta.uk-inline
-										span(uk-tooltip, :title="file.sharedIn.mail") {{ file.sharedIn.name }}
-
-								// --- Size ------------------
-								td.uk-text-nowrap.uk-table-shrink
-									span.uk-text-meta {{ file.size | fileSize }}
-
-								// --- Filedate ------------------
-								td(class="uk-visible@s").uk-text-nowrap.uk-table-shrink
-									time.uk-text-meta {{ file.mdate | formDateFromNow }}
-
-				aside.uk-width-medium.uk-background-default.uk-padding-small(v-show="selected.length > 0", class="uk-width-large@l uk-padding@l").uk-animation-slide-right-small
-					FileDetails(@reset="resetFileSelection")
+<template>
+	<v-container id="files-app" fluid class="pa-0">
+		<v-toolbar class="elevation-1">
+	 			<v-btn v-if="!createFile" @click="createFolder ? addNewFolder(newFolderName) : createFolder = !createFolder" flat>
+					<v-icon v-if="!createFolder" large>create_new_folder</v-icon>
+					<v-icon v-if="createFolder" large>add</v-icon>
+				</v-btn>
+				<v-btn v-if="!createFolder" @click="createFile ? addNewFile(newFileName, item) : createFile = !createFile" flat>
+					<v-icon v-if="!createFile" large>file_copy</v-icon>
+					<v-icon v-if="createFile" large>add</v-icon>
+				</v-btn>
+			<v-flex v-if="createFolder || createFile" xs2>
+				<v-text-field
+					v-if="createFolder"
+					@keydown.enter="addNewFolder(newFolderName)"
+					:placeholder="$gettext('Enter foldername here')"
+					v-model="newFolderName"
+					hide-details
+					single-line
+				></v-text-field>
+				<v-text-field
+					v-if="createFile"
+					@keydown.enter="addNewFile(newFileName)"
+					:placeholder="$gettext('Enter filename here')"
+					v-model="newFileName"
+					hide-details
+					single-line
+				></v-text-field>
+			</v-flex>
+			<v-flex align-self-center>
+				<v-breadcrumbs class="pa-0" :items="getRoutes">
+					<template slot="item" slot-scope="props">
+							<drop >
+								<v-icon @click="navigateTo('file-list', props.item.route)" v-if="props.item.text === 'home'" large>
+									home
+								</v-icon>
+								<span @click="navigateTo('file-list', props.item.route)" v-else class="heading font-weight-bold">
+									{{ props.item.text }}
+								</span>
+							</drop>
+					</template>
+				</v-breadcrumbs>
+			</v-flex>
+			<v-flex align-self-center class="text-xs-right" xs1>
+				<span>
+					<translate :translate-n="filteredFiles.length" translate-plural="%{ filteredFiles.length } Results">
+						%{ filteredFiles.length } Result
+					</translate>
+				</span>
+			</v-flex>
+			<v-menu transition="scale-transition">
+				<v-btn slot="activator" flat><v-icon large>filter_list</v-icon></v-btn>
+				<v-list>
+					<v-list-tile v-for="(filter, fid) in filters" :key="fid" @click="">
+						<v-list-tile-title v-text="filter.name"></v-list-tile-title>
+						<v-checkbox v-model="filter.value"></v-checkbox>
+					</v-list-tile>
+				</v-list>
+			</v-menu>
+		</v-toolbar>
+		<v-layout row>
+			<v-flex xs12>
+			<v-data-table
+				id="filesTable"
+				v-model="selected"
+				:headers="headers"
+				:items="filteredFiles"
+				:pagination.sync="pagination"
+				select-all
+				item-key="name"
+				class="elevation-1">
+				<template slot="headers" slot-scope="props">
+						<th>
+							<v-checkbox
+								:input-value="props.all"
+								:indeterminate="props.indeterminate"
+								primary
+								hide-details
+								@click.native="toggleAll"
+							></v-checkbox>
+						</th>
+						<th>
+							<v-checkbox
+							primary	hide-details
+							color="yellow"
+							on-icon="star" off-icon="star_border"></v-checkbox>
+						</th>
+						<th
+							v-for="header in props.headers"
+							:key="header.text"
+							:class="[header.text === 'Name' ? 'text-xs-left' : 'text-xs-center' , 'column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+							@click="changeSort(header.value)"
+						>
+							<v-icon small>arrow_upward</v-icon>
+							{{ header.text }}
+						</th>
+					</tr>
+				</template>
+				<template slot="items" slot-scope="props">
+					<tr :active="props.selected">
+							<td>
+								<v-checkbox @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details>
+								</v-checkbox>
+							</td>
+							<td>
+								<v-checkbox
+								@change=""
+								v-model="props.item.starred"
+								primary	hide-details
+								color="yellow"
+								on-icon="star" off-icon="star_border" large></v-checkbox>
+							</td>
+							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-left">
+								{{ props.item.name }}
+							</td>
+							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-center">
+								{{ props.item.size | fileSize }}
+							</td>
+							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-center">
+								{{ props.item.mdate | formDateFromNow }}
+							</td>
+							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-center">
+								{{ props.item.owner }}
+							</td>
+					</tr>
+				</template>
+				<template slot="pageText" slot-scope="props">
+					<span>Item</span> {{ props.pageStart }} - {{ props.pageStop }} <span>of</span> {{ props.itemsLength }}
+				</template>
+			</v-data-table>
+		</v-flex>
+		<v-flex>
+			<file-details v-if="selectedFiles !== false" :items="selectedFiles"/>
+		</v-flex>
+		</v-layout>
+			<fileactions-tab :sheet="sheet" :file="fileAction" @close="sheet = !sheet"/>
+</v-container>
 </template>
 
 <script>
 	import Mixins       from '../mixins';
-	import FileDetails  from './File-Details.vue';
+	import FileDetails from './File-Details.vue'
+	import FileactionsTab from './FileactionsTab.vue'
 
 	const _includes = require('lodash/includes');
-	const _filter   = require('lodash/filter');
-
-	const store     = require('../store');
+	import { filter } from 'lodash'
+	import { mapActions, mapGetters, mapState } from 'vuex'
 
 	export default {
-		mixins      : [Mixins],
-		components  : {FileDetails},
+		mixins:[
+			Mixins
+		],
+		components: {
+			FileDetails,
+			FileactionsTab
+		},
 		data() {
 			return {
-				loading : false,
-				filterBy: {
-					files   : true,
-					folder  : true,
-					hidden  : false
-				},
-				path    : [],
-				files   : [],
-				self    : {},
+			sheet: false,
+			createFolder: false,
+			createFile: false,
+			fileAction: {},
+			fileName: '',
+      pagination: {
+        sortBy: 'name'
+      },
+			selected: [],
+			headers: [
+				{ text: 'Name', value: 'name' },
+				{ text: 'Size', value: 'size' },
+				{ text: 'Date', value: 'date' },
+				{ text: 'Owner', value: 'owner' }
+			],
+			loading : false,
+			filters: [
+				{
+					name: 'Files',
+					tag: 'file',
+				  value: true
+				},{
+					name: 'Folders',
+					tag: 'folder',
+					value: true
+				}, {
+					name: 'Hidden',
+					tag: 'hidden',
+					value: false
+				}
+			],
+			path    : [],
+			breadcrumbs: 	[],
+			files   : [],
+			self    : {},
+			newFolderName	: '',
+			newFileName	: ''
+		}
+	},
+	mounted () {
+		this.getFolder();
+	},
+	methods: {
+		...mapActions('files',['resetFileSelection', 'addFileSelection', 'removeFileSelection','loadFiles']),
 
-				newFolderName	: ''
+		trace() {
+			console.info('trace', arguments)
+		},
+
+		toggleFileSelect(item) {
+			if(_includes(this.selectedFiles, item)){
+				this.removeFileSelection(item)
+			}
+			else{
+				this.addFileSelection(item)
 			}
 		},
-		beforeMount () {
-			// Extend the store (only once)
-			if (!this.$store.state.files) {
-				this.$store.registerModule('files', store.default);
+
+		toggleAll () {
+			if (this.selected.length) {
+				for(let item of this.selectedFiles){
+					this.removeFileSelection(item)
+				}
+				this.selected = []
+			}
+			else {
+				this.selected = this.filteredFiles.slice()
+				for (let item of this.selected) {
+					if(!_includes(this.selectedFiles, item)){
+						this.addFileSelection(item)
+					}
+				}
 			}
 		},
-		mounted () {
-			this.loadFolder();
+
+		changeSort (column) {
+			if (this.pagination.sortBy === column) {
+				this.pagination.descending = !this.pagination.descending
+			} else {
+				this.pagination.sortBy = column
+				this.pagination.descending = false
+			}
 		},
-		methods: {
-			goto(e) {
-				this.$route.push()
-			},
 
-			toggleFavorite(item) {
-				this.files[item].stared = (!this.files[item].stared);
-			},
+		navigateTo (route , param) {
+       this.$router.push({
+         'name': route,
+				 'params': {
+					 'item': param
+				 }
+       })
+    },
 
-			routerLink(itemPath) {
-				if(itemPath.endsWith('/')) {
-					this.$router.push({
-						name: 'file-list',
-						params: {
-							item: itemPath
+		openFile (file) {
+			this.sheet = true
+			let files = file.name.split('/')
+			let myFile = files.slice(-1)
+
+			this.fileAction = file
+		},
+
+		addNewFile (fileName, path) {
+			this.createFile = !this.createFile
+			if(fileName !== ''){
+				if(path === 'home'){
+					path = '/'
+				}
+				console.log('addNewFile', fileName, 'pathToAddto', path)
+				// this.$client.files.putFile().then(res => {
+				// 		console.log(res)
+				// }).catch(console.info)
+			}
+
+		},
+
+		addNewFolder (folderName){
+			this.createFolder = !this.createFolder
+			if(folderName !== ''){
+				this.createFolder = !this.createFolder
+				this.$client.files.createFolder(((this.item === 'home') ? '' : this.item) + '/' + folderName)
+				.then(() => {
+					this.getFolder();
+					this.newFolderName = '';
+				})
+				.catch(console.error)
+			}
+		},
+
+		ifFiltered(item) {
+				for(let filter of this.filters) {
+					if(item.type === filter.tag){
+						return filter.value
+					}
+					else if(item.name.startsWith('.')) {
+						return this.filters[2].value
+					}
+				}
+		},
+
+		getFileSize(file) {
+			if (file.type === 'dir') {
+				return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
+			} else {
+				return file['fileInfo']['{DAV:}getcontentlength'] / 100
+			}
+		},
+
+		getFolder () {
+			if (!this.iAmActive){
+				return false
+			}
+			this.path = []
+			let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
+			this.$client.files.list(absolutePath, 1, [
+			    '{http://owncloud.org/ns}favorite',
+				'{DAV:}getcontentlength',
+				'{http://owncloud.org/ns}size',
+				'{DAV:}getlastmodified',
+                '{DAV:}resourcetype'
+			]).then(res => {
+
+				this.files = res.splice(1).map(file => {
+					return ({
+						type    : (file.type === 'dir') ? 'folder' : file.type,
+						starred : file['fileInfo']['{http://owncloud.org/ns}favorite'] !== '0',
+						mdate   : file['fileInfo']['{DAV:}getlastmodified'],
+						cdate   : '',    // TODO: Retrieve data of creation of a file
+						size    : function () {
+						if (file.type === 'dir') {
+							return file['fileInfo']['{http://owncloud.org/ns}size'] / 100
+						} else {
+							return file['fileInfo']['{DAV:}getcontentlength'] / 100
 						}
+					}(),
+						extension: (file.type === 'dir') ? false : '',
+						name    : function () {
+							let pathList = file.name.split("/").filter(e => e !== "")
+							return pathList[pathList.length - 1];
+						}(),
+						path    : file.name,
+						id      : file['fileInfo']['{DAV:}getetag']
 					})
-				}
-			},
+				});
 
-			contextHandler(event) {
-				// if(event.target.tagName === 'TD'){
-				// 	this.contextMenuTop = event.pageY;
-				// 	this.contextMenuLeft = event.pageX;
-				//
-				// 	let dropdown = this.$uikit.dropdown(this.$refs.contextMenu);
-				// 	dropdown.show();
-				// }
-				// event.preventDefault();
-			},
+				this.loadFiles(this.files);
 
-			async loadFolder() {
-				if (!this.iAmActive)
-					return false;
+				this.self = files.self;
 
-				this.loading = true;
+				this.resetFileSelection();
+			})
+		}
+	},
 
-				this.path = [];
-				let absolutePath = this.$route.params.item;
-				if (this.$route.params.item === 'home') {
-					absolutePath = '/';
-				} else {
-					let pathSplit  = absolutePath.split('/').filter((val) => val);
-					for (let i = 0; i < pathSplit.length; i++) {
-						this.path.push('/' + pathSplit.slice(0, i + 1).join('/'));
-					}
-				}
+	watch: {
+		item () {
+			this.getFolder();
+		}
+	},
 
-				if (navigator.onLine) {
-					this.offlineNotified = false;
+	computed: {
+		...mapState(['route']),
+		...mapGetters('files', ['selectedFiles']),
 
-					// List all files
-					try {
-						let files = await this.$client.files.list(absolutePath);
-						// Remove the root element
-						files = files.splice(1);
-
-						this.files = files.map(file => {
-							return ({
-								type    : (file.type === 'dir') ? 'folder' : file.type,
-								starred : false,
-								mdate   : file['fileInfo']['{DAV:}getlastmodified'],
-								cdate   : '',    //TODO: Retrieve data of creation of a file
-
-								size    : function () {
-									if (file.type === 'dir') {
-										return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
-									} else {
-										return file['fileInfo']['{DAV:}getcontentlength'] / 100
-									}
-								}(),
-								extension: (file.type === 'dir') ? false : '',
-								name    : function () {
-									let pathList = file.name.split("/").filter(e => e !== "")
-									return pathList[pathList.length - 1];
-								}(),
-								path    : file.name,
-								id      : file['fileInfo']['{DAV:}getetag']
-							});
-						});
-
-						// Save files in the cache
-						localStorage.setItem(absolutePath, JSON.stringify(this.files));
-
-						this.self = files.self;
-
-						this.loading = false;
-
-						this.resetFileSelection();
-					}
-					catch (error) {
-						this.$uikit.notification({
-							message: error.statusText || error,
-							status: 'danger',
-							pos: 'top-center'
-						});
-					}
-				} else {
-					// If the user has not been notified
-					if(!this.offlineNotified){
-						this.$uikit.notification({
-							message: `You are currently offline. Latest changes may not be available`,
-							status: 'primary'
-						});
-
-						this.offlineNotified = true;
-					}
-
-					let cachedFiles = JSON.parse(localStorage.getItem(absolutePath));
-					if(cachedFiles == null){
-						cachedFiles = [];
-					}
-
-					this.files = cachedFiles;
-
-					this.self = cachedFiles.self;
-
-					this.loading = false;
-
-					this.resetFileSelection();
-				}
-			},
-
-			async createNewFolder(newFolderName) {
-				if(newFolderName !== ''){
-					this.$uikit.dropdown(this.$refs.newFolderDropdown).hide();
-					try {
-						let res = await this.$client.files.createFolder(((this.item === 'home') ? '/' : this.item) + newFolderName);
-						this.loadFolder();
-					}
-					catch (err) {
-						if(err === 'The resource you tried to create already exists') {
-							this.$uikit.notification({
-								message: err,
-								status: 'danger',
-								pos: 'top-center'
-							});
-						}else{
-							//TODO
-							console.log(err);
-						}
-					}
-				}else{
-					this.$uikit.notification({
-						message: 'Please enter a folder name',
-						status: 'danger',
-						pos: 'top-center'
-					});
-				}
-			},
-
-			resetFileSelection() {
-				this.$store.dispatch('files/RESET_SELECTION')
-			},
-
-			toggleFileSelect(item) {
-				if (this.isChecked(item))
-					this.$store.dispatch('files/REMOVE_FILE_SELECTION', item);
-				else
-					this.$store.dispatch('files/ADD_FILE_SELECTION', item);
-			},
-
-			isChecked(item) {
-				return _includes(this.selected, item);
-			},
-
-            ifFiltered(item) {
-                if(item.type === 'folder'){
-                	return this.filterBy.folder;
-                } else {
-                    if (item.name.startsWith('.')) {
-                        return this.filterBy.hidden;
-                    } else{
-                        return this.filterBy.files;
-                    }
-				}
-            },
-
-			async onDrop(dropLocation, dropData, dragData, event) {
-				try {
-					if (dropLocation === 'file-list' && dropData.type === 'folder') {
-						await this.$client.files.move(dragData.path, dropData.path + dragData.name);
-						this.loadFolder();
-					} else if (dropLocation === 'breadcrumb') {
-						await this.$client.files.move(dragData.path, dropData + '/' + dragData.name);
-						this.loadFolder();
-					}
-				}
-				catch (err) {
-					//TODO
-					console.log(err);
-				}
-            }
+			filteredFiles() {
+			return filter(this.files, (file) => {
+				return this.ifFiltered(file)
+			})
 		},
-		watch: {
-			item () {
-				this.loadFolder();
+
+		getRoutes() {
+			this.breadcrumbs = [];
+			let breadcrumb = {};
+			let absolutePath = this.route.params.item;
+			let pathSplit  = absolutePath.split('/').filter((val) => val);
+			if(!_includes(pathSplit, 'home')){
+					breadcrumb.text = 'home'
+					breadcrumb.route = breadcrumb.text
+					this.breadcrumbs.push(breadcrumb);
+					breadcrumb = {}
 			}
+				for (let i = 0; i < pathSplit.length; i++) {
+					breadcrumb.text = pathSplit.slice(0, i + 1)[i]
+					breadcrumb.route = '/' + pathSplit.slice(0, i + 1).join('/')
+					this.breadcrumbs.push(breadcrumb);
+					breadcrumb = {}
+				}
+			return this.breadcrumbs
 		},
-		computed: {
-			selected () {
-				return this.$store.getters['files/SELECTED'];
-			},
 
-			item() {
-				return this.$route.params.item;
-			},
+		item() {
+			return this.$route.params.item;
+		},
 
-			typeOfFolder() {
-				return _filter(this.files, ['extension', false])
-			},
-
-			typeOfFile(showHidden) {
-				showHidden = (typeof showHidden !== 'undefined') ? showHidden : false;
-				return _filter(this.files, 'extension')
-			},
-
-			iAmActive () {
-				return this.$route.name === 'file-list';
-			}
+		iAmActive () {
+			return this.$route.name === 'file-list';
 		}
 	}
+}
 </script>
-
-<style lang="less">
-
-	#files-app {
-		._scroll_container {
-			display: block;
-			overflow-x: hidden;
-			overflow-y: auto;
-
-			&::-webkit-scrollbar {
-				background-color: #f8f8f8;
-				width: 5px;
-			}
-
-			&::-webkit-scrollbar-track {
-				-webkit-box-shadow: none;
-			}
-
-			&::-webkit-scrollbar-thumb {
-				background-color: #e5e5e5;
-			}
-		}
-	}
-
-    .move-down {
-        top: 60px
-    }
-	.burger {
-		font-size: 24px; // keep original font size for material icons
-	}
-
-	.material-icon {
-		&.-x075 {
-			font-size: 75%;
-		}
-	}
-
-	.cursor-pointer {
-		cursor: pointer;
-	}
-
-	.oc-highlight {
-		color: #E56F35;
-	}
-
-	.uk-iconnav li {
-		height: 24px;
-	}
-
-	._is-selected {
-		background-color: #f8f8f8;
-	}
-
-	._is-starred {
-		color: #faa05a;
-	}
-
-	.material-icons.uk-position-center-left {
-
-		transform: translateY(-55%);
-
-		+ span {
-			padding-left: 30px;
-		}
-	}
-</style>

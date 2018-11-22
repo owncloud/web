@@ -15,7 +15,6 @@ module.exports = {
 	entry: {
 		core: [
 			'./src/default.js',
-			'./src/themes/owncloud.less',
 			'./node_modules/material-design-icons-iconfont/dist/material-design-icons.css',
 			'./node_modules/vuetify/dist/vuetify.css']
 	},
@@ -47,23 +46,14 @@ module.exports = {
 				exclude: [/node_modules/]
 			}, {
 				test: /\.(sa|sc|c)ss$/,
-				exclude: [/src/],
+				include: [/node_modules/,/src/],
 				use: [
+					"style-loader",
 					MiniCssExtractPlugin.loader,
 					"css-loader",
 					"sass-loader"
 				]
-			},
-			{
-        test: /\.(le|c)ss$/,
-				include: [/src/],
-				use: [
-					// fallback to style-loader in development
-					MiniCssExtractPlugin.loader,
-					"css-loader",
-					"less-loader"
-				]
-    	}
+			}
 		]
 	},
 	// some weird bug when loading js-owncloud-client, no idea... see https://github.com/webpack-contrib/css-loader/issues/447

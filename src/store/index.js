@@ -6,6 +6,7 @@ import VuexPersistence from 'vuex-persist'
 
 /* STORE MODULES
 */
+import app from './app'
 import config from './config'
 import user from './user'
 
@@ -25,6 +26,7 @@ export const Store = new Vuex.Store({
   // },
   plugins: [vuexPersist.plugin],
   modules: {
+    app,
     user,
     config
   },

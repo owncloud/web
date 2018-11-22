@@ -1,63 +1,138 @@
 <template>
-  <div id="oc-nav" uk-offcanvas="mode: reveal">
-    <div class="uk-offcanvas-bar uk-background-muted">
-      <ul class="uk-nav-default uk-nav-parent-icon" uk-nav="">
-        <li v-for="(n, nid) in nav" :key="nid">
-          <router-link :to="n.route" :target="n.target">
-            <i v-if="n.iconMaterial" class="material-icons uk-margin-small-right" v-text="n.iconMaterial"></i>
-            <span v-text="n.name"></span>
-          </router-link>
-        </li>
-        <li class="uk-nav-divider"></li>
-        <li class="uk-parent uk-margin-medium-top"><a href="#" uk-height-match=""><i class="material-icons uk-margin-small-right">account_circle</i><span v-translate>Personal</span></a>
-          <ul class="uk-nav-sub">
-            <li><a @click="notImplemented()"><span v-translate>About Me</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>Sessions</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>App passwords</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>Sync clients</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>Activity</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>Federated Cloud</span></a></li>
-          </ul>
-        </li>
-        <li class="uk-nav-divider"></li>
-        <li class="uk-parent"><a href="#"><i class="material-icons uk-margin-small-right">help</i><span v-translate>Help</span></a>
-          <ul class="uk-nav-sub">
-            <li><a @click="notImplemented()"><span v-translate>User documentation</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>Online documentation</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>Forum</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>Issue tracker</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>Commercial support</span></a></li>
-          </ul>
-        </li>
-        <li class="uk-parent uk-margin-medium-top"><a href="#"><i class="material-icons uk-margin-small-right">settings</i><span v-translate>Administration</span></a>
-          <ul class="uk-nav-sub">
-            <li><a @click="notImplemented()"><span v-translate>Sharing</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>External storage</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>Federation</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>File handling</span></a></li>
-            <li><a @click="notImplemented()"><span v-translate>EMail-templates</span></a></li>
-          </ul>
-        </li>
-        <li class="uk-margin-medium-top"><a @click="logout()"><i class="material-icons uk-margin-small-right">exit_to_app</i><span v-translate>Exit ownCloud</span></a></li>
-      </ul>
-    </div>
-  </div>
+  <v-navigation-drawer
+        v-model="sidebarIsVisible"
+        absolute
+        temporary
+        clipped
+        class='mt-5'
+        style='top: 16px'>
+        <v-list class="pt-0" dense>
+          <v-list-tile
+            v-for="(n, nid) in nav"
+            :key="nid"
+            @click="navigateTo(n.route)">
+              <v-list-tile-action>
+                <v-icon>{{ n.iconMaterial }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title v-translate>{{ n.name }}</v-list-tile-title>
+              </v-list-tile-content>
+          </v-list-tile>
+
+          <v-divider></v-divider>
+
+          <v-list-group
+                      v-for="item in menuData"
+                      v-model="item.active"
+                      :key="item.title"
+                      no-action
+                    >
+
+                      <v-list-tile slot="activator">
+                        <v-list-tile-action>
+                          <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                          <v-list-tile-title v-translate>{{ item.title }}</v-list-tile-title>
+                        </v-list-tile-content>
+                      </v-list-tile>
+                      <v-list-tile
+                        v-for="subItem in item.subItems"
+                        :key="subItem.title"
+                        @click="notImplemented()"
+                      >
+                        <v-list-tile-content>
+                          <v-list-tile-title v-translate>{{ subItem.title }}</v-list-tile-title>
+                        </v-list-tile-content>
+
+                        <v-list-tile-action>
+                          <v-icon>{{ subItem.action }}</v-icon>
+                        </v-list-tile-action>
+                      </v-list-tile>
+                    </v-list-group>
+
+            <v-divider ></v-divider>
+
+            <v-list-tile
+              @click="logout()">
+              <v-list-tile-action>
+                <v-icon>exit_to_app</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title><span v-translate>Exit</span> {{ configuration.theme.general.name }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+        </v-list>
+      </v-navigation-drawer>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
+  data () {
+    return {
+      menuData: {
+        personal: {
+          title: 'Personal',
+          icon: 'account_circle',
+          subItems: [
+            { title: 'About me' },
+            { title: 'Sessions' },
+            { title: 'App passwords' },
+            { title: 'Sync clients' },
+            { title: 'Activity' },
+            { title: 'Federated Cloud' }
+          ]
+        },
+        help: {
+          title: 'Help',
+          icon: 'help',
+          subItems: [
+            { title: 'User documentation' },
+            { title: 'Online documentation' },
+            { title: 'Forum' },
+            { title: 'Issue Tracker' },
+            { title: 'Commercial Support' }
+          ]
+        },
+        admin: {
+          title: 'Administration',
+          icon: 'settings',
+          subItems: [
+            { title: 'Sharing' },
+            { title: 'External storage' },
+            { title: 'Federation' },
+            { title: 'File handling' },
+            { title: 'Email-templates' }
+          ]
+        }
+      }
+    }
+  },
   computed: {
     nav () {
       return this.$root.navItems
+    },
+    ...mapGetters(['isSidebarVisible']),
+    ...mapGetters(['configuration']),
+    sidebarIsVisible: {
+      get () {
+        return this.isSidebarVisible
+      },
+      set (newVal) {
+        if (newVal) {
+          return
+        }
+        this.toggleSidebar(newVal)
+      }
     }
   },
   methods: {
+    ...mapActions(['toggleSidebar']),
     notImplemented () {
-      let OC = this.$parent
-      OC.$uikit.notification({
-        message: 'Not implemented yet.',
-        status: 'primary'
-      })
+      // TODO: tempelgogo's snackbarQueue
+      console.log('snackbar should be here')
     },
     logout () {
       let OC = this.$parent
@@ -65,6 +140,11 @@ export default {
 
       this.$store.dispatch('logout', {}).then(() => {
         this.$router.push('/login')
+      })
+    },
+    navigateTo (route) {
+      this.$router.push({
+        'name': route.name
       })
     }
 

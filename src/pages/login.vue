@@ -7,7 +7,7 @@
         :src="configuration.theme.logo.big"
         :aspect-ratio="1"
         height="100vh">
-        <v-flex class="grey lighten-2 pa-4 ma-auto elevation-5 center-dialog" md4 xs8>
+        <v-flex class="center-dialog grey lighten-2 pa-4 ml-auto mr-auto elevation-5" md4 xs8>
           <h2>
             <span v-translate>Welcome to</span> {{ configuration.theme.general.name }}
           </h2>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'loginPage',
 
@@ -38,20 +38,26 @@ export default {
     ...mapGetters(['configuration'])
   },
   methods: {
+    ...mapActions(['showNotification']),
+
     authenticate () {
       this.$store.dispatch('authenticate', { provider: 'oauth2' })
         .then(() => {
           this.$router.push({ path: '/' })
         })
-        .catch(() => {
-          this.$router.push('/error')
+        .catch((error) => {
+          this.showNotification({
+            title: this.$gettext('Could not login'),
+            desc: error.message,
+            type: 'error'
+          })
         })
     }
   }
 }
 </script>
 
-<style scoped="true">
+<style>
   .v-btn, h2, .flex{
     padding: 8px 8px;
   }

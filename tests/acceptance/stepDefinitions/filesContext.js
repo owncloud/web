@@ -10,5 +10,4 @@ When('the user browses to the files page',
             .page.filesPage();
 		return filesPage
 		.navigate()
-		.waitForElementNotVisible('@loadingIndicator', 1000);
 	});

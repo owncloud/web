@@ -42,6 +42,10 @@ export default {
 
 			return '<span class="' + cssClass.join(' ') + '">' + string + '</span>';
 		},
+		typeOfFile(showHidden) {
+			showHidden = (typeof showHidden !== 'undefined') ? showHidden : false;
+			return _filter(this.files, 'extension')
+		},
 		endOfDummy() {
 			UIkit.notification({
 				message: 'Not supported in the clickdummy',
