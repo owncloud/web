@@ -309,12 +309,15 @@
 			}
 			this.path = []
 			let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
-			this.$client.files.list(absolutePath).then(res => {
+			this.$client.files.list(absolutePath, 1, [
+			    '{http://owncloud.org/ns}favorite'
+			]).then(res => {
 
 				this.files = res.splice(1).map(file => {
+				    console.log(typeof file['fileInfo']['{http://owncloud.org/ns}favorite']);
 					return ({
 						type    : (file.type === 'dir') ? 'folder' : file.type,
-						starred : false,
+						starred : file['fileInfo']['{http://owncloud.org/ns}favorite'] !== '0',
 						mdate   : file['fileInfo']['{DAV:}getlastmodified'],
 						cdate   : '',    // TODO: Retrieve data of creation of a file
 						size    : function () {
