@@ -1,3 +1,7 @@
 #!/usr/bin/env sh
-
-yarn run lint
+if [ -z "$CI" ]
+then
+    yarn run lint
+else
+    echo "No linting in drone ..."
+fi
