@@ -70,6 +70,7 @@
 				item-key="name"
 				class="elevation-1">
 				<template slot="headers" slot-scope="props">
+					<tr>
 						<th>
 							<v-checkbox
 								:input-value="props.all"
@@ -104,8 +105,8 @@
 							</td>
 							<td>
 								<v-checkbox
-								@change=""
-								v-model="props.item.starred"
+								@change="toggleFileFavorite(props.item)"
+								:input-value="props.item.starred"
 								primary	hide-details
 								color="yellow"
 								on-icon="star" off-icon="star_border" large></v-checkbox>
@@ -199,7 +200,7 @@
 		this.getFolder();
 	},
 	methods: {
-		...mapActions('files',['resetFileSelection', 'addFileSelection', 'removeFileSelection','loadFiles']),
+		...mapActions('files',['resetFileSelection', 'addFileSelection', 'removeFileSelection','loadFiles','markFavorite']),
 
 		trace() {
 			console.info('trace', arguments)
@@ -213,7 +214,9 @@
 				this.addFileSelection(item)
 			}
 		},
-
+        toggleFileFavorite(item) {
+		    this.markFavorite(item)
+		},
 		toggleAll () {
 			if (this.selected.length) {
 				for(let item of this.selectedFiles){
@@ -293,14 +296,6 @@
 						return this.filters[2].value
 					}
 				}
-		},
-
-		getFileSize(file) {
-			if (file.type === 'dir') {
-				return file['fileInfo']['{DAV:}quota-used-bytes'] / 100
-			} else {
-				return file['fileInfo']['{DAV:}getcontentlength'] / 100
-			}
 		},
 
 		getFolder () {
