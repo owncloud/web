@@ -13,8 +13,8 @@ fs.readdirSync(appFolder)
 		.forEach(function (mod) {
 							if(fs.existsSync(path.resolve(appFolder, mod))){
 								var modPath = {
-									from: path.resolve(appFolder, mod, 'dist/*' ),
-									to: path.resolve(__dirname, 'dist', 'apps', mod)
+									from: path.resolve(appFolder, mod, 'dist' ),
+									to: './apps/' + mod
 								}
 								apps.push(modPath)
 							}
