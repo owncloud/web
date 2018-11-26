@@ -1,4 +1,5 @@
 const _without = require('lodash/without');
+import { findIndex } from 'lodash'
 
 const namespaced = true
 
@@ -25,7 +26,10 @@ const mutations = {
 		state.selected = [];
 	},
   FAVORITE_FILE( state, item ) {
-		//state.files
+		let fileIndex = findIndex(state.files, (f) => {
+			return f.name === item.name
+		})
+		state.files[fileIndex].starred = !item.starred
 	}
 }
 
