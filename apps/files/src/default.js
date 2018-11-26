@@ -16,7 +16,7 @@ const navItems = [{
 
 const appName = "files"
 
-import FilesApp from './components/Files-App.vue';
+import FilesApp from './components/FilesApp.vue';
 
 const routes = [{
 	path: `/${pkg.name}/list/:item`,
