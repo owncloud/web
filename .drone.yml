@@ -76,6 +76,26 @@ pipeline:
       - cd /var/www/owncloud/phoenix
       - make -f Makefile.release dist
 
+  deploy-staging:
+    image: drillster/drone-rsync:latest
+    pull: true
+    secrets: [ rsync_key ]
+    user: deploy
+    hosts: pixie.owncloud.systems
+    port: 22
+    recursive: true
+    delete: true
+    source: build/dist/phoenix/
+    target: /home/deploy/phoenix
+    script:
+      - sudo docker exec phoenix occ maintenance:mode --on
+      - sudo rsync -az --chown=www-data:www-data -r --del /home/deploy/phoenix/ /var/lib/phoenix/apps/phoenix
+      - sudo docker exec phoenix occ maintenance:mode --off
+      - sudo docker exec phoenix owncloud migrate
+    when:
+      event: [ push ]
+      branch: [ master ]
+
 services:
   phoenix:
     image: owncloudci/php:${PHP_VERSION=7.1}
@@ -83,6 +103,11 @@ services:
     commands:
       - cd /var/www/owncloud/phoenix
       - yarn install
+      - yarn run build:dev
+      - cd /var/www/owncloud/phoenix/apps/files
+      - yarn install
+      - yarn run build
+      - cd /var/www/owncloud/phoenix
       - cp tests/drone/config.json config.json
       - make run SERVER_HOST=phoenix:8300
 
