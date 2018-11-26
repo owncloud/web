@@ -24,8 +24,7 @@ const mutations = {
 	RESET_SELECTION(state) {
 		state.selected = [];
 	},
-    FAVORITE_FILE(state, item, newValue) {
-		console.log(item)
+  FAVORITE_FILE( state, item ) {
 		//state.files
 	}
 }
@@ -43,11 +42,13 @@ const actions = {
 	resetFileSelection(context) {
 		context.commit('RESET_SELECTION');
 	},
-	markFavorite(context, file) {
+	markFavorite(context, payload) {
+				let file = payload.file
+				let client = payload.client
         let newValue = !file.starred;
-        this.$client.files.favorite(file.path, newValue)
+        	client.files.favorite(file.path, newValue)
             .then(() => {
-            	context.commit('FAVORITE_FILE', item, newValue);
+            	context.commit('FAVORITE_FILE', file);
             })
             .catch(error => {
                 console.log(error)

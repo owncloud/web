@@ -217,7 +217,10 @@
 			}
 		},
         toggleFileFavorite(item) {
-		    this.markFavorite(item)
+		    this.markFavorite({
+					client: this.$client,
+					file: item
+				})
 		},
 		toggleAll () {
 			if (this.selected.length) {
