@@ -60,79 +60,10 @@
 		</v-toolbar>
 		<v-layout row>
 			<v-flex xs12>
-			<v-data-table
-				id="filesTable"
-				v-model="selected"
-				:headers="headers"
-				:items="filteredFiles"
-				:pagination.sync="pagination"
-				select-all
-				item-key="name"
-				class="elevation-1">
-				<template slot="headers" slot-scope="props">
-					<tr>
-						<th>
-							<v-checkbox
-								:input-value="props.all"
-								:indeterminate="props.indeterminate"
-								primary
-								hide-details
-								@click.native="toggleAll"
-							></v-checkbox>
-						</th>
-						<th>
-							<v-checkbox
-							primary	hide-details
-							color="yellow"
-							on-icon="star" off-icon="star_border"></v-checkbox>
-						</th>
-						<th
-							v-for="header in props.headers"
-							:key="header.text"
-							:class="[header.text === 'Name' ? 'text-xs-left' : 'text-xs-center' , 'column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-							@click="changeSort(header.value)"
-						>
-							<v-icon small>arrow_upward</v-icon>
-							{{ header.text }}
-						</th>
-					</tr>
-				</template>
-				<template slot="items" slot-scope="props">
-					<tr :active="props.selected">
-							<td>
-								<v-checkbox @change="toggleFileSelect(props.item)" :input-value="props.selected" primary	hide-details>
-								</v-checkbox>
-							</td>
-							<td>
-								<v-checkbox
-								@change="toggleFileFavorite(props.item)"
-								:input-value="props.item.starred"
-								primary	hide-details
-								color="yellow"
-								on-icon="star" off-icon="star_border" large></v-checkbox>
-							</td>
-							<td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-left">
-								<v-icon>{{ (props.item.extension === false) ? 'folder' : 'cloud_download' }}</v-icon>
-								{{ props.item.name }}
-							</td>
-							<td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
-								{{ props.item.size | fileSize }}
-							</td>
-							<td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
-								{{ props.item.mdate | formDateFromNow }}
-							</td>
-							<td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
-								{{ props.item.owner }}
-							</td>
-					</tr>
-				</template>
-				<template slot="pageText" slot-scope="props">
-					<span>Item</span> {{ props.pageStart }} - {{ props.pageStop }} <span>of</span> {{ props.itemsLength }}
-				</template>
-			</v-data-table>
+				<dir-table @toggle="toggleFileSelect" :fileData="filteredFiles" />
 		</v-flex>
 		<v-flex>
-			<file-details v-if="selectedFiles !== false" :items="selectedFiles"/>
+			<file-details v-if="selectedFiles !== false" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
 		</v-flex>
 		</v-layout>
 			<fileactions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
@@ -141,9 +72,9 @@
 
 <script>
 	import Mixins       from '../mixins';
-	import FileDetails from './File-Details.vue'
+	import FileDetails from './FileDetails.vue'
 	import FileactionsTab from './FileactionsTab.vue'
-
+	import DirTable from './DirTable.vue'
 	const _includes = require('lodash/includes');
 	import { filter } from 'lodash'
 	import { mapActions, mapGetters, mapState } from 'vuex'
@@ -154,7 +85,8 @@
 		],
 		components: {
 			FileDetails,
-			FileactionsTab
+			FileactionsTab,
+			DirTable
 		},
 		data() {
 			return {
@@ -163,17 +95,7 @@
 			createFile: false,
 			fileAction: {},
 			fileName: '',
-      pagination: {
-				rowsPerPage: 20,
-        sortBy: 'name'
-      },
 			selected: [],
-			headers: [
-				{ text: 'Name', value: 'name' },
-				{ text: 'Size', value: 'size' },
-				{ text: 'Date', value: 'date' },
-				{ text: 'Owner', value: 'owner' }
-			],
 			loading : false,
 			filters: [
 				{
@@ -216,46 +138,7 @@
 				this.addFileSelection(item)
 			}
 		},
-        toggleFileFavorite(item) {
-		    this.markFavorite({
-					client: this.$client,
-					file: item
-				})
-		},
-		toggleAll () {
-			if (this.selected.length) {
-				for(let item of this.selectedFiles){
-					this.removeFileSelection(item)
-				}
-				this.selected = []
-			}
-			else {
-				this.selected = this.filteredFiles.slice()
-				for (let item of this.selected) {
-					if(!_includes(this.selectedFiles, item)){
-						this.addFileSelection(item)
-					}
-				}
-			}
-		},
 
-		changeSort (column) {
-			if (this.pagination.sortBy === column) {
-				this.pagination.descending = !this.pagination.descending
-			} else {
-				this.pagination.sortBy = column
-				this.pagination.descending = false
-			}
-		},
-
-		navigateTo (route , param) {
-       this.$router.push({
-         'name': route,
-				 'params': {
-					 'item': param
-				 }
-       })
-    },
 		openFileActionBar (file) {
 			this.showActionBar = true
 			console.log('Files-App#openFileActionBar', file.path)
@@ -277,7 +160,6 @@
 				// 		console.log(res)
 				// }).catch(console.info)
 			}
-
 		},
 
 		addNewFolder (folderName){

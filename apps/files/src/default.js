@@ -22,7 +22,7 @@ const navItems = [{
 }]
 
 
-import FilesApp from './components/Files-App.vue';
+import FilesApp from './components/FilesApp.vue';
 
 const routes = [{
     path: `/${appInfo.id}`,
