@@ -1656,10 +1656,10 @@ chrome-trace-event@^1.0.0:
   dependencies:
     tslib "^1.9.0"
 
-chromedriver@^2.36.0, chromedriver@^2.43.4:
-  version "2.43.4"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.43.4.tgz#6ce6401d192432ebe858ae517634df61a8a67397"
-  integrity sha512-veZYRS3JTQmjUaSSKIPN1+A/Q2b9tv5ERXj6VOz6azlVeIohHGbFT6zaOvD2EIbVtzVfogK1MxgmWcTRnE6p9g==
+chromedriver@^2.36.0, chromedriver@^2.44.0:
+  version "2.44.0"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.44.0.tgz#aed1d136d0ae2d43be80c69ade756ca55ebf8fc3"
+  integrity sha512-/lDFxpSc3mJG/+RF657qDVa3XbfwG8+X2x0Y3kVkvZe6u6aZg+zTMHeGoQziUQGPaDQ9sj8sFYv4duv/AS6y7A==
   dependencies:
     del "^3.0.0"
     extract-zip "^1.6.7"
@@ -4415,7 +4415,8 @@ js-base64@^2.1.8:
 
 "js-owncloud-client@github:owncloud/js-owncloud-client#master":
   version "0.2.0-alpha1"
-  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/0a69e5b7d55014924d8832fc92ca2477077e801d"
+  uid "71c7f9533a40d05774762640bd729018dfa8cf59"
+  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/71c7f9533a40d05774762640bd729018dfa8cf59"
   dependencies:
     browser-request "^0.3.3"
     davclient.js "https://github.com/owncloud/davclient.js.git"
@@ -5034,10 +5035,10 @@ min-document@^2.19.0:
   dependencies:
     dom-walk "^0.1.0"
 
-mini-css-extract-plugin@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-0.4.4.tgz#c10410a004951bd3cedac1da69053940fccb625d"
-  integrity sha512-o+Jm+ocb0asEngdM6FsZWtZsRzA8koFUudIDwYUfl94M3PejPHG7Vopw5hN9V8WsMkSFpm3tZP3Fesz89EyrfQ==
+mini-css-extract-plugin@^0.4.5:
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-0.4.5.tgz#c99e9e78d54f3fa775633aee5933aeaa4e80719a"
+  integrity sha512-dqBanNfktnp2hwL2YguV9Jh91PFX7gu7nRLs4TGsbAfAG6WOtlynFRYzwDwmmeSb5uIwHo9nx1ta0f7vAZVp2w==
   dependencies:
     loader-utils "^1.1.0"
     schema-utils "^1.0.0"
@@ -7921,10 +7922,10 @@ vue-loader@15.4.2:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-router@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
-  integrity sha512-vLLoY452L+JBpALMP5UHum9+7nzR9PeIBCghU9ZtJ1eWm6ieUI8Zb/DI3MYxH32bxkjzYV1LRjNv4qr8d+uX/w==
+vue-router@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.2.tgz#dedc67afe6c4e2bc25682c8b1c2a8c0d7c7e56be"
+  integrity sha512-opKtsxjp9eOcFWdp6xLQPLmRGgfM932Tl56U9chYTnoWqKxQ8M20N7AkdEbM5beUh6wICoFGYugAX9vQjyJLFg==
 
 vue-style-loader@^4.1.0:
   version "4.1.2"
