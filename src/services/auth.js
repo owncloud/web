@@ -10,6 +10,7 @@ export function initVueAuthenticate (config) {
           clientId: config.clientId,
           url: config.apiUrl,
           authorizationEndpoint: config.authUrl,
+          redirectUri: window.location.href,
           responseType: 'token',
           responseParams: {
             code: 'code',
