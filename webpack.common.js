@@ -12,7 +12,7 @@ let apps = []
 fs.readdirSync(appFolder)
 		.forEach(function (mod) {
 							var modPath = {
-								from: path.join(appFolder, mod, 'dist'),
+								from: path.resolve('apps', mod, 'dist'),
 								to: path.resolve('dist', 'apps', mod)
 							}
 							apps.push(modPath)
@@ -21,9 +21,6 @@ const src_files = [{
 										from: path.resolve(__dirname, 'favicon.ico'),
 										to: path.resolve(__dirname, 'dist')
 									},{
-						        from: path.resolve(__dirname, 'config.json'),
-						        to: path.resolve(__dirname, 'dist')
-						      }, {
 						        from: path.resolve(__dirname, 'static/**'),
 						        to: path.resolve(__dirname, 'dist')
 						      },{
