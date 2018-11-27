@@ -59,7 +59,12 @@ module.exports = {
 			'./node_modules/material-design-icons-iconfont/dist/material-design-icons.css',
 			'./node_modules/vuetify/dist/vuetify.css',
 			'./src/default.js'
-		]
+			'./static/fonts/ocft/css/ocft.css']
+	},
+	output: {
+		path: path.resolve(__dirname, 'core'),
+		filename: 'js/[name].bundle.js',
+		chunkFilename: 'js/[name].[id].bundle.js'
 	},
 	module: {
 		rules: [
@@ -69,7 +74,7 @@ module.exports = {
 				include: [/src/]
 			}, {
 				test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-				include: [/node_modules\/material-design-icons-iconfont\/dist/],
+				include: [/node_modules\/material-design-icons-iconfont\/dist/, /static\/fonts\/ocft\/font/],
 				use: [{
 						loader: 'file-loader',
 						options: {
@@ -84,7 +89,7 @@ module.exports = {
 				exclude: [/node_modules/]
 			}, {
 				test: /\.(sa|sc|c)ss$/,
-				include: [/node_modules/,/src/],
+				include: [/node_modules/,/src/, /static/],
 				use: [
 					"style-loader",
 					MiniCssExtractPlugin.loader,
