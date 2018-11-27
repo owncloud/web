@@ -5,7 +5,7 @@
 			right
 			floating
 			permanent
-			height="100%"
+			height="85vh"
     >
 		<v-layout column>
 			<v-layout primary row>
