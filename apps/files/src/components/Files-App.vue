@@ -31,10 +31,10 @@
 				<v-breadcrumbs class="pa-0" :items="getRoutes">
 					<template slot="item" slot-scope="props">
 							<drop >
-								<v-icon @click="navigateTo('file-list', props.item.route)" v-if="props.item.text === 'home'" large>
+								<v-icon @click="navigateTo('files-list', props.item.route)" v-if="props.item.text === 'home'" large>
 									home
 								</v-icon>
-								<span @click="navigateTo('file-list', props.item.route)" v-else class="heading font-weight-bold">
+								<span @click="navigateTo('files-list', props.item.route)" v-else class="heading font-weight-bold">
 									{{ props.item.text }}
 								</span>
 							</drop>
@@ -110,16 +110,17 @@
 								color="yellow"
 								on-icon="star" off-icon="star_border" large></v-checkbox>
 							</td>
-							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-left">
+							<td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-left">
+								<v-icon>{{ (props.item.extension === false) ? 'folder' : 'cloud_download' }}</v-icon>
 								{{ props.item.name }}
 							</td>
-							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-center">
+							<td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
 								{{ props.item.size | fileSize }}
 							</td>
-							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-center">
+							<td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
 								{{ props.item.mdate | formDateFromNow }}
 							</td>
-							<td @click="props.item.extension === false ? navigateTo('file-list', props.item.path) : openFile(props.item)" class="text-xs-center">
+							<td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
 								{{ props.item.owner }}
 							</td>
 					</tr>
@@ -133,7 +134,7 @@
 			<file-details v-if="selectedFiles !== false" :items="selectedFiles"/>
 		</v-flex>
 		</v-layout>
-			<fileactions-tab :sheet="sheet" :file="fileAction" @close="sheet = !sheet"/>
+			<fileactions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
 </v-container>
 </template>
 
@@ -156,12 +157,13 @@
 		},
 		data() {
 			return {
-			sheet: false,
+			showActionBar: false,
 			createFolder: false,
 			createFile: false,
 			fileAction: {},
 			fileName: '',
       pagination: {
+				rowsPerPage: 20,
         sortBy: 'name'
       },
 			selected: [],
@@ -199,8 +201,8 @@
 		this.getFolder();
 	},
 	methods: {
-		...mapActions('files',['resetFileSelection', 'addFileSelection', 'removeFileSelection','loadFiles']),
-
+		...mapActions('Files',['resetFileSelection', 'addFileSelection', 'removeFileSelection','loadFiles']),
+		...mapActions(['openFile']),
 		trace() {
 			console.info('trace', arguments)
 		},
@@ -248,12 +250,13 @@
 				 }
        })
     },
-
-		openFile (file) {
-			this.sheet = true
-			let files = file.name.split('/')
-			let myFile = files.slice(-1)
-
+		openFileActionBar (file) {
+			this.showActionBar = true
+			console.log('Files-App#openFileActionBar', file.path)
+			this.openFile({
+				client: this.$client,
+				filePath: file.path
+			})
 			this.fileAction = file
 		},
 
@@ -357,7 +360,7 @@
 
 	computed: {
 		...mapState(['route']),
-		...mapGetters('files', ['selectedFiles']),
+		...mapGetters('Files', ['selectedFiles']),
 
 			filteredFiles() {
 			return filter(this.files, (file) => {
@@ -390,7 +393,7 @@
 		},
 
 		iAmActive () {
-			return this.$route.name === 'file-list';
+			return this.$route.name === 'files-list';
 		}
 	}
 }

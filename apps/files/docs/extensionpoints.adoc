@@ -7,7 +7,7 @@
 
 /**
  * request slot in file side-panel
- * @param {string} appname application name
+ * @param {object} appInfo application information
  * @param {string} extensionpoint extensionpoint name
  * @param {array} payload expects array[0] to be string for tab label
  * @returns {array}

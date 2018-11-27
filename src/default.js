@@ -77,14 +77,18 @@ Vue.component('drop', Drop);
 
 
             for (let app of arguments) {
+                if (!app.appInfo) {
+                  console.error('Try to load app with missing appInfo...')
+                }
                 if (app.routes) routes.push(app.routes);
                 if (app.plugins) plugins.push(app.plugins);
                 if (app.navItems) navItems.push(app.navItems);
-                if (app.store) store.registerModule(app.appName, app.store.default)
+                if (app.store) store.registerModule(app.appInfo.name, app.store.default)
+                store.dispatch('registerApp', app.appInfo)
             }
             router.addRoutes(_flatten(routes));
             sync(store, router);
-            
+
             const OC  = new Vue({
                 el : '#owncloud',
                 data : {
