@@ -122,7 +122,6 @@ export default {
       }
     },
     toggleFileFavorite (item) {
-      console.log(item)
       this.markFavorite({
         client: this.$client,
         file: item
