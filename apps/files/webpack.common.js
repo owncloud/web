@@ -4,11 +4,14 @@ module.exports = {
 	plugins: [
 		new VueLoaderPlugin()
 	],
-	entry: './src/default.js',
+	entry: {
+		files: [
+			'./src/default.js',
+		]
+	},
 	output : {
-		chunkFilename: '[name].files.chunk.js',
-		filename : "files.bundle.js",
-		publicPath: 'apps/files/js/'
+		chunkFilename: '[name].[id].chunk.js',
+		filename: "[name].bundle.js",
 	},
 	module: {
 		rules: [{

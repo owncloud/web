@@ -58,13 +58,8 @@ module.exports = {
 		core: [
 			'./node_modules/material-design-icons-iconfont/dist/material-design-icons.css',
 			'./node_modules/vuetify/dist/vuetify.css',
-			'./src/default.js'
+			'./src/default.js',
 			'./static/fonts/ocft/css/ocft.css']
-	},
-	output: {
-		path: path.resolve(__dirname, 'core'),
-		filename: 'js/[name].bundle.js',
-		chunkFilename: 'js/[name].[id].bundle.js'
 	},
 	module: {
 		rules: [
