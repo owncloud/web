@@ -53,7 +53,7 @@
     "style-loader": "^0.23.1",
     "vue-loader": "15.4.2",
     "vue-template-compiler": "^2.5.16",
-    "webpack": "^4.26.0",
+    "webpack": "^4.26.1",
     "webpack-cli": "^3.1.1",
     "webpack-copy-plugin": "^0.0.4",
     "webpack-dev-server": "^3.1.9",
