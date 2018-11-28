@@ -60,7 +60,7 @@
 		</v-toolbar>
 		<v-layout row>
 			<v-flex xs12>
-				<dir-table @toggle="toggleFileSelect" :fileData="filteredFiles" />
+				<dir-table @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" />
 		</v-flex>
 		<v-flex>
 			<file-details v-if="selectedFiles !== false" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
@@ -140,12 +140,11 @@
 		},
 
 		openFileActionBar (file) {
-			this.showActionBar = true
-			console.log('Files-App#openFileActionBar', file.path)
 			this.openFile({
 				client: this.$client,
 				filePath: file.path
 			})
+			this.showActionBar = true
 			this.fileAction = file
 		},
 

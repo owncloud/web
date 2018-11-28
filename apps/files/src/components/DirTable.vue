@@ -49,16 +49,16 @@
             color="yellow"
             on-icon="star" off-icon="star_border" large></v-checkbox>
           </td>
-          <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFile(props.item)" class="text-xs-left">
+          <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-left">
             {{ props.item.name }}
           </td>
-          <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFile(props.item)" class="text-xs-center">
+          <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
             {{ props.item.size | fileSize }}
           </td>
-          <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFile(props.item)" class="text-xs-center">
+          <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
             {{ props.item.mdate | formDateFromNow }}
           </td>
-          <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFile(props.item)" class="text-xs-center">
+          <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
             {{ props.item.owner }}
           </td>
       </tr>
@@ -98,6 +98,7 @@ export default {
   }),
   methods: {
     ...mapActions('files',['markFavorite']),
+    ...mapActions(['openFile']),
 
     toggleAll () {
       if (this.selected.length) {
@@ -145,13 +146,9 @@ export default {
     },
 
 
-    openFile (file) {
-      this.sheet = true
-      let files = file.name.split('/')
-      let myFile = files.slice(-1)
-
-      this.fileAction = file
-    }
+    openFileActionBar (file) {
+      this.$emit('FileAction', file)
+		 },
   },
   computed: {
     ...mapGetters('files',['slectedFiles']),
