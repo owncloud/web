@@ -54,7 +54,7 @@ const actions = {
 		let newValue = !file.starred
 		client.files.favorite(file.path, newValue)
 		  .then(() => {
-				context.commit('FAVORITE_FILE', file);
+			context.commit('FAVORITE_FILE', file);
 		  })
 		  .catch(error => {
 			console.log(error)
@@ -66,6 +66,7 @@ const actions = {
         for (let file of files) {
             client.files.delete(file.path).then(() => {
                 context.commit('REMOVE_FILE', file);
+                context.commit('REMOVE_FILE_SELECTION', file);
             }).catch(error => {
                 console.log('error: ' + file.path + ' not deleted: ' + error)
             })
@@ -74,17 +75,20 @@ const actions = {
 }
 
 const getters = {
-	selectedFiles: state => {
-		if (state.selected.length === 0) {
-			return false;
-		} else {
-			return state.selected;
-		}
-	}
+    selectedFiles: state => {
+        if (state.selected.length === 0) {
+            return false;
+        } else {
+            return state.selected;
+        }
+    },
+    files: state => {
+        return state.files;
+    }
 }
 
 export default {
-	namespaced,
+  namespaced,
   state,
   actions,
   mutations,
