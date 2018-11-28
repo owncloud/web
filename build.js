@@ -17,8 +17,9 @@ if (!fs.existsSync(join(modPath, 'package.json'))) return
 var yarnCmd = os.platform().startsWith('win') ? 'yarn.cmd' : 'yarn'
 
 // install folder
-cp.exec(yarnCmd + ' install && ' + yarnCmd + ' build' , { env: process.env, cwd: modPath } , function(error, stdout, stderr){
+cp.execSync(yarnCmd + ' install && ' + yarnCmd + ' build' , { env: process.env, cwd: modPath } , function(error, stdout, stderr){
 	console.log(stdout);
+  console.log(stderr)
 })
 
 })
