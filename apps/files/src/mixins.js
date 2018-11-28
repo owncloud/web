@@ -25,6 +25,14 @@ export default {
 		}
 	},
 	methods: {
+		navigateTo (route , param) {
+			 this.$router.push({
+				 'name': route,
+				 'params': {
+					 'item': param
+				 }
+			 })
+		},
 		label(string) {
 
 			let cssClass = ['uk-label'];

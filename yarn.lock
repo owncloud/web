@@ -4256,8 +4256,7 @@ js-base64@^2.1.8:
 
 "js-owncloud-client@github:owncloud/js-owncloud-client#master":
   version "0.2.0-alpha1"
-  uid "72193518b69395588fd8b25aaeb8f3ed5abe2109"
-  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/72193518b69395588fd8b25aaeb8f3ed5abe2109"
+  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/71c7f9533a40d05774762640bd729018dfa8cf59"
   dependencies:
     browser-request "^0.3.3"
     davclient.js "https://github.com/owncloud/davclient.js.git"
@@ -7431,9 +7430,9 @@ uglify-to-browserify@~1.0.0:
   integrity sha1-bgkk1r2mta/jSeOabWMoUKD4grc=
 
 uikit@^3.0.0-rc.9:
-  version "3.0.0-rc.20"
-  resolved "https://registry.yarnpkg.com/uikit/-/uikit-3.0.0-rc.20.tgz#28623e939ec301ccef0a5d4d5f14ead3aa1ea8c0"
-  integrity sha512-LJvZkAHa0xM8JbrRDBUR3EiAYquqjIe638XSNisVvpnBamrJkj67TFOrSLUJbHFj3akMX4F28EJp5vV5MDEdPA==
+  version "3.0.0-rc.24"
+  resolved "https://registry.yarnpkg.com/uikit/-/uikit-3.0.0-rc.24.tgz#df4e749958a31a0a336feb23db6f3e887050bee6"
+  integrity sha512-iNo4bcSIAUm2nEPQrY5NVHaZhV8BkMo2SnVqPPq5gO8Ki11l5S4ndFZLfv3bTfl9fifXDdtejTBuZwPyEuLpZg==
 
 union-value@^1.0.0:
   version "1.0.0"
