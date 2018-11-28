@@ -9,6 +9,7 @@ apps/*
 !apps/servstat
 !apps/demo
 !apps/files
+!apps/markdown-editor
 
 .idea
 *.bundle.js

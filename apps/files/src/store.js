@@ -24,7 +24,7 @@ const mutations = {
 	RESET_SELECTION(state) {
 		state.selected = [];
 	},
-	FAVORITE_FILE( state, item ) {
+  FAVORITE_FILE( state, item ) {
 		let fileIndex = findIndex(state.files, (f) => {
 			return f.name === item.name
 		})

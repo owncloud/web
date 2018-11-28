@@ -55,6 +55,7 @@
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.26.0",
     "webpack-cli": "^3.1.1",
+    "webpack-copy-plugin": "^0.0.4",
     "webpack-dev-server": "^3.1.9",
     "webpack-merge": "^4.1.3"
   },

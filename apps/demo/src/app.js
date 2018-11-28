@@ -34,7 +34,15 @@ const plugins = [{
 	title: 'Demo'
 }];
 
+const appInfo = {
+	name: 'Demo',
+	id: 'demo',
+	isFileEditor: false,
+	extensions: []
+}
+
 export default define({
+	appInfo,
 	routes,
 	navItems,
 	plugins

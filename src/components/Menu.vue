@@ -143,9 +143,7 @@ export default {
       })
     },
     navigateTo (route) {
-      this.$router.push({
-        'name': route.name
-      })
+      this.$router.push(route)
     }
 
   }
