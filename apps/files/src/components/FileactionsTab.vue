@@ -20,23 +20,23 @@
   </v-bottom-sheet>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'fileactionsTab',
   props: ['sheet', 'file'],
-    methods: {
-      openFileAction (appId) {
-        this.$emit('open', appId)
-        // TODO path to state
-        this.$router.push({
-          name: appId
-        })
-      },
-      closeTab () {
-        this.$emit('close')
-      }
+  methods: {
+    openFileAction (appId) {
+      this.$emit('open', appId)
+      // TODO path to state
+      this.$router.push({
+        name: appId
+      })
     },
-    computed: mapGetters(['extensions'])
+    closeTab () {
+      this.$emit('close')
+    }
+  },
+  computed: mapGetters(['extensions'])
 }
 </script>
