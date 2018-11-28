@@ -17,10 +17,12 @@
 			  </v-flex>
 			</v-layout>
 			<v-layout primary row>
+				<v-spacer />
 			  <v-btn flat><v-icon color="white" medium>delete</v-icon></v-btn>
-			  <v-btn flat><v-icon color="white" medium>share</v-icon></v-btn>
+				<v-spacer />
 				<v-btn v-if="items.length <= 1" flat><v-icon color="white" medium>cloud_download</v-icon></v-btn>
 			  <v-btn disabled v-else flat><v-icon color="white" medium>archive</v-icon></v-btn>
+				<v-spacer />
 			</v-layout>
 			<v-tabs
 			  v-model="active"

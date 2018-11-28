@@ -43,8 +43,8 @@
           </td>
           <td v-if="disableColumn('stars')">
             <v-checkbox
-            @change=""
-            v-model="props.item.starred"
+            @change="toggleFileFavorite(props.item)"
+            :input-value="props.item.starred"
             primary	hide-details
             color="yellow"
             on-icon="star" off-icon="star_border" large></v-checkbox>
@@ -69,7 +69,7 @@
   </v-data-table>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
 
 export default {
@@ -97,6 +97,8 @@ export default {
     }
   }),
   methods: {
+    ...mapActions('files',['markFavorite']),
+
     toggleAll () {
       if (this.selected.length) {
         for(let item of this.selectedFiles){
@@ -113,6 +115,15 @@ export default {
         }
       }
     },
+
+    toggleFileFavorite(item) {
+      console.log(item)
+        this.markFavorite({
+          client: this.$client,
+          file: item
+        })
+    },
+
     disableColumn (column) {
       if(column === 'stars') {
         this.columnsDisabled.favorite = this.starsEnabled === false ? false : true

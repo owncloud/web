@@ -1,4 +1,4 @@
-const _without = require('lodash/without');
+import { findIndex, without } from 'lodash'
 
 const namespaced = true
 
@@ -16,13 +16,19 @@ const mutations = {
 	},
 	REMOVE_FILE_SELECTION(state, file) {
 		if (state.selected.length > 1) {
-			state.selected = _without(state.selected, file);
+			state.selected = without(state.selected, file);
 			return;
 		}
 		state.selected = [];
 	},
 	RESET_SELECTION(state) {
 		state.selected = [];
+	},
+	FAVORITE_FILE( state, item ) {
+		let fileIndex = findIndex(state.files, (f) => {
+			return f.name === item.name
+		})
+		state.files[fileIndex].starred = !item.starred
 	}
 }
 
@@ -38,6 +44,18 @@ const actions = {
 	},
 	resetFileSelection(context) {
 		context.commit('RESET_SELECTION');
+	},
+	markFavorite(context, payload) {
+		let file = payload.file
+		let client = payload.client
+    let newValue = !file.starred;
+    client.files.favorite(file.path, newValue)
+      .then(() => {
+    		context.commit('FAVORITE_FILE', file);
+      })
+      .catch(error => {
+      	console.log(error)
+			})
 	}
 }
 
