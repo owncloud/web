@@ -63,7 +63,7 @@
           <dir-table @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" />
         </v-flex>
         <v-flex>
-          <file-details v-if="selectedFiles !== false" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
+          <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
         </v-flex>
       </v-layout>
       <fileactions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>

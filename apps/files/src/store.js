@@ -77,7 +77,7 @@ const actions = {
 const getters = {
     selectedFiles: state => {
         if (state.selected.length === 0) {
-            return false;
+            return [];
         } else {
             return state.selected;
         }

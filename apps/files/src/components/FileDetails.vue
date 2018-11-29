@@ -133,15 +133,15 @@ export default {
       return this.items.length
     },
     getTabName () {
-      let n = (this.items.length > 1) ? 'Multiple Files' : this.items[0].name
-      // this.tabName = n
-      return n
+      if (this.items.length === 0) {
+          return ''
+      }
+      return (this.items.length > 1) ? 'Multiple Files' : this.items[0].name
     },
     accumulatedFilesSize () {
-      let size = reduce(this.items, (sum, n) => {
+      return reduce(this.items, (sum, n) => {
         return sum + n.size
       }, 0)
-      return size
     }
   }
 }
