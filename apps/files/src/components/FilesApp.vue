@@ -63,7 +63,7 @@
           <dir-table @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" />
         </v-flex>
         <v-flex>
-          <file-details v-if="selectedFiles !== false" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
+          <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
         </v-flex>
       </v-layout>
       <fileactions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
@@ -114,7 +114,6 @@ export default {
       ],
       path: [],
       breadcrumbs: [],
-      files: [],
       self: {},
       newFolderName: '',
       newFileName: ''
@@ -193,7 +192,7 @@ export default {
         '{DAV:}getlastmodified',
         '{DAV:}resourcetype'
       ]).then(res => {
-        this.files = res.splice(1).map(file => {
+        let files = res.splice(1).map(file => {
           return ({
             type: (file.type === 'dir') ? 'folder' : file.type,
             starred: file['fileInfo']['{http://owncloud.org/ns}favorite'] !== '0',
@@ -216,9 +215,9 @@ export default {
           })
         })
 
-        this.loadFiles(this.files)
+        this.loadFiles(files)
 
-        this.self = this.files.self
+        this.self = files.self
 
         this.resetFileSelection()
       })
@@ -252,7 +251,7 @@ export default {
 
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles']),
+    ...mapGetters('Files', ['selectedFiles', 'files']),
 
     activeRoute() {
       let route = this.getRoutes()
@@ -271,7 +270,7 @@ export default {
 
     iAmActive () {
       return this.$route.name === 'files-list'
-    }
+    },
   }
 }
 </script>

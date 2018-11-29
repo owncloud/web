@@ -1,7 +1,7 @@
 <template>
   <v-data-table
   id="filesTable"
-  v-model="selected"
+  v-model="selectedFiles"
   :headers="headers"
   :items="fileData"
   :pagination.sync="pagination"
@@ -87,7 +87,6 @@ export default {
   name: 'DirTable',
   props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled', 'ownerEnabled'],
   data: () => ({
-    selected: [],
     columnsDisabled: {
       favorite: false,
       fileSelect: false,
@@ -109,12 +108,11 @@ export default {
     ...mapActions(['openFile']),
 
     toggleAll () {
-      if (this.selected.length) {
+      if (this.selectedFiles.length) {
         this.resetFileSelection()
-        this.selected = []
       } else {
-        this.selected = this.fileData.slice()
-        for (let item of this.selected) {
+        let selectedFiles = this.fileData.slice()
+        for (let item of selectedFiles) {
           if (!includes(this.selectedFiles, item)) {
             this.addFileSelection(item)
           }
@@ -122,7 +120,6 @@ export default {
       }
     },
     toggleFileFavorite (item) {
-      console.log(item)
       this.markFavorite({
         client: this.$client,
         file: item
@@ -151,7 +148,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('files', ['slectedFiles'])
+    ...mapGetters('Files', ['selectedFiles'])
 
   }
 }

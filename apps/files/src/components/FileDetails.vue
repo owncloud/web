@@ -18,9 +18,9 @@
     </v-layout>
     <v-layout primary row>
       <v-spacer />
-      <v-btn flat><v-icon color="white" medium>delete</v-icon></v-btn>
+      <v-btn @click.native="deleteSelectedFiles" flat><v-icon color="white" medium>delete</v-icon></v-btn>
       <v-spacer />
-      <v-btn v-if="items.length <= 1" flat><v-icon color="white" medium>cloud_download</v-icon></v-btn>
+      <v-btn @click.native="downloadFiles" v-if="items.length <= 1" flat><v-icon color="white" medium>cloud_download</v-icon></v-btn>
       <v-btn disabled v-else flat><v-icon color="white" medium>archive</v-icon></v-btn>
       <v-spacer />
     </v-layout>
@@ -89,6 +89,7 @@
 <script>
 import Mixins from '../mixins'
 import { reduce } from 'lodash'
+import { mapActions } from 'vuex'
 
 export default {
   mixins: [Mixins],
@@ -111,8 +112,20 @@ export default {
   components: {
   },
   methods: {
+    ...mapActions('Files', ['deleteFiles']),
     close () {
       this.$emit('reset')
+    },
+    downloadFiles() {
+      const url = this.$client.files.getFileUrl(this.items[0].path)
+      console.log(url)
+      // TODO: call client.download
+    },
+    deleteSelectedFiles() {
+      this.deleteFiles({
+        client: this.$client,
+        files: this.items
+      })
     }
   },
   computed: {
@@ -120,15 +133,15 @@ export default {
       return this.items.length
     },
     getTabName () {
-      let n = (this.items.length > 1) ? 'Multiple Files' : this.items[0].name
-      // this.tabName = n
-      return n
+      if (this.items.length === 0) {
+          return ''
+      }
+      return (this.items.length > 1) ? 'Multiple Files' : this.items[0].name
     },
     accumulatedFilesSize () {
-      let size = reduce(this.items, (sum, n) => {
+      return reduce(this.items, (sum, n) => {
         return sum + n.size
       }, 0)
-      return size
     }
   }
 }
