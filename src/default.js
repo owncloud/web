@@ -47,6 +47,7 @@ Vue.use(GetTextPlugin, {
     },
     defaultLanguage: navigator.language.substring(0,2),
     translations: translations,
+    silent: true,
 })
 
 // --- Drag Drop ----
