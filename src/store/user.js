@@ -78,6 +78,12 @@ const getters = {
     }
     return vueAuthInstance.isAuthenticated()
   },
+  getToken: (state, getters, rootState) => {
+    if (!vueAuthInstance) {
+      vueAuthInstance = initVueAuthenticate(rootState.config.auth)
+    }
+    return vueAuthInstance.getToken()
+  },
   user: state => {
     return state
   }
