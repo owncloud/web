@@ -3,7 +3,7 @@ SERVER_HOST=0.0.0.0:8300
 
 apps=files
 all_apps=$(addprefix app-,$(apps))
-core_bundle=core/js/core.bundle.js
+core_bundle=dist/core/core.bundle.js
 
 all: build
 
@@ -16,22 +16,19 @@ clean: clean-core $(addprefix clean-app-,$(apps))
 node_modules: package.json yarn.lock
 	yarn install && touch node_modules
 
-core/css/uikit.%.css: src/themes/%.less node_modules
-	node_modules/less/bin/lessc src/themes/$*.less core/css/uikit.$*.css --relative-urls
-
-core/js/core.bundle.js: node_modules
+dist/core/core.bundle.js: node_modules
 	yarn run build:dev
 
 #
 # core
 #
 .PHONY: core
-core: core/js/core.bundle.js core/css/uikit.owncloud.css
+core: dist/core/core.bundle.js
 
 .PHONY: clean-core
 clean-core:
-	rm -rf core/js/core.bundle.js.* core/css/uikit.*.css
-	rm -Rf node_modules
+	rm -rf dist
+	rm -rf node_modules
 
 #
 # Apps
@@ -50,8 +47,8 @@ clean-app-%:
 # Test server
 #
 .PHONY: run
-run: build
-	php -S "$(SERVER_HOST)"
+run:
+	php -t dist/ -S "$(SERVER_HOST)"
 
 
 .PHONY: l10n-push

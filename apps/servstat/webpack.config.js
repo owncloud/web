@@ -1,19 +1,25 @@
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+
 module.exports = {
-    devtool: 'source-map',
-	entry: './src/app.js',
+  plugins: [
+    new VueLoaderPlugin()
+  ],
+  devtool: 'source-map',
+	entry: {
+    servstat: ['./src/app.js']
+  },
 	output : {
-		path: `${__dirname}/js`,
 		chunkFilename: '[name].servstat.chunk.js',
 		filename : "servstat.bundle.js",
-		publicPath: 'apps/servstat/js/'
 	},
-	module: {
+  module: {
 		rules: [{
 			test: /\.js?$/,
 			exclude: /node_modules/
-		}, {
-			test: /\.vue$/,
-			loader: 'vue-loader'
-		}]
+		},{
+      test: /\.vue$/,
+      loader: 'vue-loader',
+      exclude: [/node_modules/]
+    }]
 	}
 }

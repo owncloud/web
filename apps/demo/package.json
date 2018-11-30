@@ -11,10 +11,12 @@
   "license": "AGPL-3.0",
   "homepage": "https://github.com/felixheidecke/oc_redesign#readme",
   "devDependencies": {
-    "webpack": "^4.15.0",
-    "webpack-cli": "^3.0.8"
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2"
   },
   "dependencies": {
-    "vue-loader": "^14.2.3"
+    "lodash": "^4.17.11"
   }
 }

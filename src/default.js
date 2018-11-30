@@ -11,7 +11,6 @@ import Phoenix   from './Phoenix.vue';
 
 // --- Adding global libraries ---
 
-import UIkit  from 'uikit';
 import Vuetify from 'vuetify';
 import Client from 'js-owncloud-client';
 import Axios  from 'axios';
@@ -20,7 +19,6 @@ import { sync } from 'vuex-router-sync'
 import store  from './store';
 import router  from './router';
 
-Vue.prototype.$uikit  = UIkit;
 Vue.prototype.$axios  = Axios;
 Vue.prototype.$client = new Client();
 
@@ -64,7 +62,7 @@ Vue.component('drop', Drop);
     try {
         let config = await Axios.get('config.json');
         let apps = _map(config.data.apps, (app) => {
-            return `./apps/${app}/js/${app}.bundle.js`;
+            return `./apps/${app}/${app}.bundle.js`;
         });
 
         requirejs(apps, function() {
@@ -104,7 +102,7 @@ Vue.component('drop', Drop);
             // inject custom config into vuex
             store.dispatch('loadConfig', config.data)
             // inject custom theme config into vuex
-            let theme = Axios.get(`themes/${config.data.theme}.json`).then(res => {
+            let theme = Axios.get(`themes/${config.data.theme}/${config.data.theme}.json`).then(res => {
               store.dispatch('loadTheme', res.data)
               // TODO FOUC happens here; this color init is too late.
               OC.$vuetify.theme = res.data.colors
