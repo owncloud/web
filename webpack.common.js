@@ -8,7 +8,13 @@ const HtmlWebpackPlugin = require ('html-webpack-plugin')
 const appFolder = path.resolve(__dirname, 'apps')
 let apps = []
 
-fs.readdirSync(appFolder)
+if(fs.existsSync('config.json')) {
+  var config = require('./config.json')
+}else{
+  var config = require('./tests/drone/config.json')
+}
+
+config.apps
 		.forEach(function (mod) {
 							if(fs.existsSync(path.resolve(appFolder, mod))){
 								var modPath = {
