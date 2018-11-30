@@ -12,7 +12,7 @@ When('the user clicks the authenticate button',
 	() => {
         const loginPage = client.page.loginPage();
         return loginPage
-			.waitForElementVisible('@authenticateButton')
+			.waitForElementVisible('@authenticateButton', 10000)
             .click('@authenticateButton');
 	});
 
@@ -25,7 +25,7 @@ When('the user logs in with username {string} and password {string} using the we
             })
 			.page.ownCloudLoginPage();
 		return loginPage
-		.waitForElementVisible('@usernameInput', 1000)
+		.waitForElementVisible('@usernameInput', 10000)
 		.setValue('@usernameInput', username)
 		.setValue('@passwordInput', password)
 		.click('@loginSubmitButton');
@@ -40,7 +40,7 @@ When('the user authorizes access to phoenix',
             })
             .page.ownCloudAuthorizePage();
         return loginPage
-            .waitForElementVisible('@authorizeButton', 1000)
+            .waitForElementVisible('@authorizeButton', 10000)
             .click('@authorizeButton');
 	});
 
