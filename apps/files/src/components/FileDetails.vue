@@ -89,7 +89,7 @@
 <script>
 import Mixins from '../mixins'
 import { reduce } from 'lodash'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   mixins: [Mixins],
@@ -118,9 +118,22 @@ export default {
     },
     downloadFiles() {
       const url = this.$client.files.getFileUrl(this.items[0].path)
-      console.log(url)
-      // TODO: call client.download
-    },
+        let anchor = document.createElement("a");
+
+        let headers = new Headers();
+        headers.append('Authorization', 'Bearer ' + this.getToken);
+
+        fetch(url, { headers })
+          .then(response => response.blob())
+          .then(blobby => {
+            let objectUrl = window.URL.createObjectURL(blobby);
+
+            anchor.href = objectUrl;
+            anchor.download = this.items[0].name;
+            anchor.click();
+
+            window.URL.revokeObjectURL(objectUrl);
+          });    },
     deleteSelectedFiles() {
       this.deleteFiles({
         client: this.$client,
@@ -129,6 +142,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getToken']),
     getLength () {
       return this.items.length
     },
