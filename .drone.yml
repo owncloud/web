@@ -102,12 +102,9 @@ services:
     pull: true
     commands:
       - cd /var/www/owncloud/phoenix
+      - yarn dist
       - yarn install
-      - yarn run build:dev
-      - cd /var/www/owncloud/phoenix/apps/files
-      - yarn install
-      - yarn run build
-      - cd /var/www/owncloud/phoenix
+      - yarn run build:prod
       - cp tests/drone/config.json config.json
       - make run SERVER_HOST=phoenix:8300
 
