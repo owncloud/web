@@ -48,8 +48,7 @@ clean-app-%:
 #
 .PHONY: run
 run:
-	cd dist/
-	php -S "$(SERVER_HOST)"
+	php -t dist/ -S "$(SERVER_HOST)"
 
 
 .PHONY: l10n-push
