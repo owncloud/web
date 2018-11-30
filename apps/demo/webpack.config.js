@@ -1,4 +1,9 @@
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+
 module.exports = {
+  plugins: [
+    new VueLoaderPlugin()
+  ],
 	devtool: 'source-map',
 	entry: {
     demo: ['./src/app.js']
