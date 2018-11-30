@@ -8,6 +8,7 @@ endif
 
 
 app_name=phoenix
+cur_dir=$(CURDIR)
 dist_dir=$(CURDIR)/dist
 
 occ=$(CURDIR)/../../occ
@@ -39,11 +40,9 @@ dist: distdir javascript distconf sign package
 
 .PHONY: javascript
 javascript:
-  $(YARN) dist
+	$(YARN) dist
 	$(YARN) install
 	$(YARN) run build:prod
-	$(YARN) install --prefix apps/files
-	$(YARN) run build:prod --prefix apps/files
 
 .PHONY: distdir
 distdir:
@@ -63,4 +62,5 @@ endif
 
 .PHONY: package
 package:
-	tar -czf $(dist_dir)/$(app_name).tar.gz -C $(dist_dir) $(app_name)
+	mkdir $(CURDIR)/release
+	tar -czf $(CURDIR)/release/$(app_name).tar.gz dist/*

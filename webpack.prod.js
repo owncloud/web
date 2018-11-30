@@ -6,19 +6,19 @@ module.exports = merge(common, {
   plugins: [
     WebpackCopyPlugin([{
                         from: 'README.md',
-                        to: './dist/'
+                        to: 'README.md'
                       },{
                         from: 'sw.js',
-                        to: './dist/'
+                        to: 'sw.js'
                       },{
                         from: 'LICENSE',
-                        to: './dist/'
+                        to: 'LICENSE'
                       },{
                         from: 'CHANGELOG.md',
-                        to: './dist/'
+                        to: 'CHANGELOG.md'
                       },{
                         from: 'manifest.json',
-                        to: './dist/'
+                        to: 'manifest.json'
                       }])
   ],
 	mode: 'production',
