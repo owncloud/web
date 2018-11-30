@@ -8,11 +8,7 @@ endif
 
 
 app_name=phoenix
-build_dir=$(CURDIR)/build
-dist_dir=$(build_dir)/dist
-src_files=README.md CHANGELOG.md LICENSE manifest.json index.html core/fonts themes/* core/css/core.css core/js/core.bundle.js node_modules/requirejs/require.js sw.js apps/files/js/files.bundle.js apps/markdown-editor/js/*.js core/gfx/cloud-logo-invert.svg
-src_dirs=appinfo img
-all_src=$(src_dirs) $(src_files)
+dist_dir=$(CURDIR)/dist
 
 occ=$(CURDIR)/../../occ
 private_key=$(HOME)/.owncloud/certificates/$(app_name).key
@@ -38,11 +34,12 @@ help:
 
 .PHONY: dist
 dist:                       ## Build distribution
-dist: javascript distdir sign package
+dist: distdir javascript distconf sign package
 
 
 .PHONY: javascript
 javascript:
+  $(YARN) dist
 	$(YARN) install
 	$(YARN) run build:prod
 	$(YARN) install --prefix apps/files
@@ -51,14 +48,15 @@ javascript:
 .PHONY: distdir
 distdir:
 	rm -rf $(dist_dir)
-	mkdir -p $(dist_dir)/$(app_name)
-	cp --parent -R $(all_src) $(dist_dir)/$(app_name)
-	cp config.json.dist $(dist_dir)/$(app_name)/config.json
+
+.PHONY: distconf
+distconf:
+	cp config.json.dist $(dist_dir)/config.json
 
 .PHONY: sign
 sign:
 ifdef CAN_SIGN
-	$(sign) --path="$(dist_dir)/$(app_name)"
+	$(sign) --path="$(dist_dir)"
 else
 	@echo $(sign_skip_msg)
 endif
