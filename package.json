@@ -63,7 +63,7 @@
     "axios": "^0.18.0",
     "js-owncloud-client": "github:owncloud/js-owncloud-client#master",
     "lodash": "^4.17.11",
-    "material-design-icons-iconfont": "^4.0.2",
+    "material-design-icons-iconfont": "^4.0.3",
     "requirejs": "^2.3.6",
     "uikit": "^3.0.0-rc.9",
     "vue": "^2.5.16",
