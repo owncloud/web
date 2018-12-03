@@ -3,8 +3,6 @@ import FileInfoSideBar from './components/FileInfoSidebar.vue'
 
 const store = require('./store.js')
 
-// --- Navigation Item(s) ------------------------------------------------------
-
 const appInfo = {
   name: 'Files',
   id: 'files',

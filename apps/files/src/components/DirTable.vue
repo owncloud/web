@@ -87,12 +87,12 @@ export default {
     columnsDisabled: {
       favorite: false,
       fileSelect: false,
-      data: false,
+      data: false
     },
     headers: [
       { text: 'Name', value: 'name' },
       { text: 'Size', value: 'size' },
-      { text: 'Date', value: 'date' },
+      { text: 'Date', value: 'date' }
     ],
     pagination: {
       sortBy: 'name'
