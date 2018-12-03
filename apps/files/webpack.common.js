@@ -2,7 +2,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
 	plugins: [
-		new VueLoaderPlugin()
+		new VueLoaderPlugin(),
 	],
 	entry: './src/default.js',
 	output : {
@@ -16,8 +16,14 @@ module.exports = {
 			test: /\.js?$/,
 			exclude: /node_modules/,
 		}, {
-			test: /\.vue$/,
-			loader: 'vue-loader'
-		}]
+            test: /\.vue$/,
+            loader: 'vue-loader'
+        }, {
+                test: /\.css$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader'
+                ]
+        }]
 	}
 }

@@ -1,4 +1,5 @@
-const pkg = require('../package.json');
+import FilesApp from './components/FilesApp.vue'
+
 const store = require('./store.js')
 
 // --- Navigation Item(s) ------------------------------------------------------
@@ -21,23 +22,19 @@ const navItems = [{
   }
 }]
 
-
-import FilesApp from './components/FilesApp.vue';
-
 const routes = [{
-    path: `/${appInfo.id}`,
-    redirect: `/${appInfo.id}/list/home`
-  },
-  {
-    path: `/${appInfo.id}/list/:item`,
-    component: FilesApp,
-    name: 'files-list',
-    meta: {
-      'hideHeadbar': false
-    }
+  path: `/${appInfo.id}`,
+  redirect: `/${appInfo.id}/list/home`
+},
+{
+  path: `/${appInfo.id}/list/:item`,
+  component: FilesApp,
+  name: 'files-list',
+  meta: {
+    'hideHeadbar': false
   }
+}
 ]
-
 
 export default define({
   appInfo,

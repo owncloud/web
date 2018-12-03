@@ -116,25 +116,26 @@ export default {
     close () {
       this.$emit('reset')
     },
-    downloadFiles() {
+    downloadFiles () {
       const url = this.$client.files.getFileUrl(this.items[0].path)
-        let anchor = document.createElement("a");
+      let anchor = document.createElement('a')
 
-        let headers = new Headers();
-        headers.append('Authorization', 'Bearer ' + this.getToken);
+      let headers = new Headers()
+      headers.append('Authorization', 'Bearer ' + this.getToken)
 
-        fetch(url, { headers })
-          .then(response => response.blob())
-          .then(blobby => {
-            let objectUrl = window.URL.createObjectURL(blobby);
+      fetch(url, { headers })
+        .then(response => response.blob())
+        .then(blobby => {
+          let objectUrl = window.URL.createObjectURL(blobby)
 
-            anchor.href = objectUrl;
-            anchor.download = this.items[0].name;
-            anchor.click();
+          anchor.href = objectUrl
+          anchor.download = this.items[0].name
+          anchor.click()
 
-            window.URL.revokeObjectURL(objectUrl);
-          });    },
-    deleteSelectedFiles() {
+          window.URL.revokeObjectURL(objectUrl)
+        })
+    },
+    deleteSelectedFiles () {
       this.deleteFiles({
         client: this.$client,
         files: this.items
@@ -148,7 +149,7 @@ export default {
     },
     getTabName () {
       if (this.items.length === 0) {
-          return ''
+        return ''
       }
       return (this.items.length > 1) ? 'Multiple Files' : this.items[0].name
     },
