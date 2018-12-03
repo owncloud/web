@@ -38,7 +38,7 @@
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^5.0.0-beta.5",
+    "eslint-plugin-vue": "^5.0.0",
     "file-loader": "^2.0.0",
     "git-hooks": "^1.1.10",
     "less": "^3.9.0",
