@@ -54,7 +54,7 @@
           color="yellow"
           on-icon="star" off-icon="star_border" large></v-checkbox>
         </td>
-        <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-left">
+        <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-left ellipsis" style="max-width: 310px">
           {{ props.item.name }}
         </td>
         <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">

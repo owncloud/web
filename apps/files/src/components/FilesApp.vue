@@ -28,6 +28,9 @@
           ></v-text-field>
         </v-flex>
         <v-flex align-self-center>
+          <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError"></file-upload>
+        </v-flex>
+        <v-flex align-self-center>
           <v-breadcrumbs class="pa-0" :items="activeRoute">
             <template slot="item" slot-scope="props">
               <drop >
@@ -75,9 +78,19 @@ import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
 import FileactionsTab from './FileactionsTab.vue'
 import DirTable from './DirTable.vue'
+import FileUpload from './FileUpload.vue'
 import { filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
+
 const _includes = require('lodash/includes')
+
+const davProperties = [
+    '{http://owncloud.org/ns}favorite',
+    '{DAV:}getcontentlength',
+    '{http://owncloud.org/ns}size',
+    '{DAV:}getlastmodified',
+    '{DAV:}resourcetype'
+]
 
 export default {
   mixins: [
@@ -86,7 +99,8 @@ export default {
   components: {
     FileDetails,
     FileactionsTab,
-    DirTable
+    DirTable,
+    FileUpload
   },
   data () {
     return {
@@ -123,10 +137,22 @@ export default {
     this.getFolder()
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite']),
+    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles']),
     ...mapActions(['openFile']),
     trace () {
       console.info('trace', arguments)
+    },
+
+    onFileSuccess (event, file) {
+        this.$client.files.fileInfo(file.name, davProperties).then(fileInfo => {
+            this.addFiles({
+                files:[fileInfo]
+            })
+        })
+    },
+
+    onFileError (error) {
+      console.log('file error ' + error)
     },
 
     toggleFileSelect (item) {
@@ -185,35 +211,8 @@ export default {
       }
       this.path = []
       let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
-      this.$client.files.list(absolutePath, 1, [
-        '{http://owncloud.org/ns}favorite',
-        '{DAV:}getcontentlength',
-        '{http://owncloud.org/ns}size',
-        '{DAV:}getlastmodified',
-        '{DAV:}resourcetype'
-      ]).then(res => {
-        let files = res.splice(1).map(file => {
-          return ({
-            type: (file.type === 'dir') ? 'folder' : file.type,
-            starred: file['fileInfo']['{http://owncloud.org/ns}favorite'] !== '0',
-            mdate: file['fileInfo']['{DAV:}getlastmodified'],
-            cdate: '', // TODO: Retrieve data of creation of a file
-            size: (function () {
-              if (file.type === 'dir') {
-                return file['fileInfo']['{http://owncloud.org/ns}size'] / 100
-              } else {
-                return file['fileInfo']['{DAV:}getcontentlength'] / 100
-              }
-            }()),
-            extension: (file.type === 'dir') ? false : '',
-            name: (function () {
-              let pathList = file.name.split('/').filter(e => e !== '')
-              return pathList[pathList.length - 1]
-            }()),
-            path: file.name,
-            id: file['fileInfo']['{DAV:}getetag']
-          })
-        })
+      this.$client.files.list(absolutePath, 1, davProperties).then(res => {
+        let files = res.splice(1)
 
         this.loadFiles(files)
 
@@ -252,10 +251,10 @@ export default {
   computed: {
     ...mapState(['route']),
     ...mapGetters('Files', ['selectedFiles', 'files']),
+    ...mapGetters(['getToken']),
 
-    activeRoute() {
-      let route = this.getRoutes()
-      return route
+    activeRoute () {
+      return this.getRoutes()
     },
 
     filteredFiles () {
@@ -271,6 +270,16 @@ export default {
     iAmActive () {
       return this.$route.name === 'files-list'
     },
+
+    url () {
+      let path = this.item === 'home' ? '/' : this.item + '/'
+      return this.$client.files.getFileUrl(path)
+    },
+    headers () {
+      return {
+        'Authorization': 'Bearer ' + this.getToken
+      }
+    }
   }
 }
 </script>
