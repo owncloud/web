@@ -1,4 +1,5 @@
 import FilesApp from './components/FilesApp.vue'
+import FileInfoSideBar from './components/FileInfoSidebar.vue'
 
 const store = require('./store.js')
 
@@ -9,7 +10,14 @@ const appInfo = {
   id: 'files',
   icon: 'folder',
   isFileEditor: false,
-  extensions: []
+  extensions: [],
+  fileSideBars: [
+    {
+      app: 'files',
+      name: 'Files',
+      component: FileInfoSideBar
+    }
+  ]
 }
 const navItems = [{
   name: appInfo.name,
