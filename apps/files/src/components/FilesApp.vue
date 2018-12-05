@@ -62,10 +62,10 @@
         </v-menu>
       </v-toolbar>
       <v-layout row fill-height>
-        <v-flex xs12 pa-0 fill-height>
+        <v-flex :class="{'xs12': selectedFiles.length === 0, 'xs6': selectedFiles.length > 0 }" pa-0 fill-height>
           <dir-table @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" />
         </v-flex>
-        <v-flex v-if="selectedFiles.length > 0" pa-0>
+        <v-flex v-if="selectedFiles.length > 0" xs6 pa-0>
           <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
         </v-flex>
       </v-layout>
