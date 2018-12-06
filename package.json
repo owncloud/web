@@ -30,7 +30,7 @@
     "chromedriver": "^2.44.1",
     "css-loader": "^1.0.1",
     "cucumber": "^5.0.3",
-    "cucumber-pretty": "^1.4.0",
+    "cucumber-pretty": "^1.5.0",
     "easygettext": "^2.7.0",
     "eslint": "^5.9.0",
     "eslint-config-standard": "^12.0.0",
