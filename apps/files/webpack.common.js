@@ -2,7 +2,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
 	plugins: [
-		new VueLoaderPlugin()
+		new VueLoaderPlugin(),
 	],
 	entry: {
     files: ['./src/default.js']

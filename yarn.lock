@@ -1656,10 +1656,10 @@ chrome-trace-event@^1.0.0:
   dependencies:
     tslib "^1.9.0"
 
-chromedriver@^2.36.0, chromedriver@^2.44.0:
-  version "2.44.0"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.44.0.tgz#aed1d136d0ae2d43be80c69ade756ca55ebf8fc3"
-  integrity sha512-/lDFxpSc3mJG/+RF657qDVa3XbfwG8+X2x0Y3kVkvZe6u6aZg+zTMHeGoQziUQGPaDQ9sj8sFYv4duv/AS6y7A==
+chromedriver@^2.36.0, chromedriver@^2.44.1:
+  version "2.44.1"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.44.1.tgz#bb4dd614cb92b9a816e499ebaa692500011f4a3e"
+  integrity sha512-IPM8XQzQYVNJ9Rfec5cy0aGbrZno5xUlDNLLuph9bjkTJVoi14zqjvtmRd8Dc1P5vTw0MwNQ5JD89zibXp/W5A==
   dependencies:
     del "^3.0.0"
     extract-zip "^1.6.7"
@@ -1718,13 +1718,6 @@ cli-table3@^0.5.1:
     string-width "^2.1.1"
   optionalDependencies:
     colors "^1.1.2"
-
-cli-table@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/cli-table/-/cli-table-0.3.1.tgz#f53b05266a8b1a0b934b3d0821e6e2dc5914ae23"
-  integrity sha1-9TsFJmqLGguTSz0IIebi3FkUriM=
-  dependencies:
-    colors "1.0.3"
 
 cli-width@^2.0.0:
   version "2.2.0"
@@ -1798,12 +1791,7 @@ color-name@1.1.3:
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
   integrity sha1-p9BVi9icQveV3UIyj3QIMcpTvCU=
 
-colors@1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/colors/-/colors-1.0.3.tgz#0433f44d809680fdeb60ed260f1b0c262e82a40b"
-  integrity sha1-BDP0TYCWgP3rYO0mDxsMJi6CpAs=
-
-colors@^1.1.2, colors@^1.2.5:
+colors@^1.1.2, colors@^1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.3.2.tgz#2df8ff573dfbf255af562f8ce7181d6b971a359b"
   integrity sha512-rhP0JSBGYvpcNQj4s5AdShMeE5ahMop96cTeDl/v9qQQm2fYClE2QXZRi8wLzc+GmXSxdIqqbOIAhyObEXDbfQ==
@@ -2106,13 +2094,6 @@ cssesc@^0.1.0:
   resolved "https://registry.yarnpkg.com/cssesc/-/cssesc-0.1.0.tgz#c814903e45623371a0477b40109aaafbeeaddbb4"
   integrity sha1-yBSQPkViM3GgR3tAEJqq++6t27Q=
 
-cucumber-expressions@^5.0.13:
-  version "5.0.18"
-  resolved "https://registry.yarnpkg.com/cucumber-expressions/-/cucumber-expressions-5.0.18.tgz#6c70779efd3aebc5e9e7853938b1110322429596"
-  integrity sha1-bHB3nv0668Xp54U5OLERAyJClZY=
-  dependencies:
-    becke-ch--regex--s0-0-v1--base--pl--lib "^1.2.0"
-
 cucumber-expressions@^6.0.0:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/cucumber-expressions/-/cucumber-expressions-6.0.1.tgz#47c9c573781c2ff721d7ad5b2cd1c97f4399ab8e"
@@ -2120,14 +2101,13 @@ cucumber-expressions@^6.0.0:
   dependencies:
     becke-ch--regex--s0-0-v1--base--pl--lib "^1.2.0"
 
-cucumber-pretty@^1.4.0:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/cucumber-pretty/-/cucumber-pretty-1.4.4.tgz#ee041b043a4c7ad7059f8b33a2037ddee3dc99ca"
-  integrity sha512-pSRYaewQg6DqQbcCn4AfxzzgQSVQ0d5nyLxUUBqnPkinp73aMYqBvOmY6tlb6f3YkPnDzB9tf3vC6wdnGjGBzQ==
+cucumber-pretty@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/cucumber-pretty/-/cucumber-pretty-1.5.0.tgz#2a239ebd06866ee6d3cb6173d24c93012b066e00"
+  integrity sha512-hXkxauUiqxyFCs/Jq19xV/S/WJVaUaoAomINJnO7/QH1tR2RQ+RzWfZppkD6/NlclmHlgg4rEOb2DgG1j7QyGQ==
   dependencies:
-    cli-table "^0.3.1"
-    colors "^1.2.5"
-    cucumber "^4.2.1"
+    cli-table3 "^0.5.1"
+    colors "^1.3.2"
     figures "^2.0.0"
 
 cucumber-tag-expressions@^1.1.1:
@@ -2135,44 +2115,10 @@ cucumber-tag-expressions@^1.1.1:
   resolved "https://registry.yarnpkg.com/cucumber-tag-expressions/-/cucumber-tag-expressions-1.1.1.tgz#7f5c7b70009bc2b666591bfe64854578bedee85a"
   integrity sha1-f1x7cACbwrZmWRv+ZIVFeL7e6Fo=
 
-cucumber@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/cucumber/-/cucumber-4.2.1.tgz#64cfff6150bbe6b5e94b173470057353d6206719"
-  integrity sha512-3gQ0Vv4kSHsvXEFC6b1c+TfLRDzWD1/kU7e5vm8Kh8j35b95k6favan9/4ixcBNqd7UsU1T6FYcawC87+DlNKw==
-  dependencies:
-    assertion-error-formatter "^2.0.1"
-    babel-runtime "^6.11.6"
-    bluebird "^3.4.1"
-    cli-table "^0.3.1"
-    colors "^1.1.2"
-    commander "^2.9.0"
-    cucumber-expressions "^5.0.13"
-    cucumber-tag-expressions "^1.1.1"
-    duration "^0.2.0"
-    escape-string-regexp "^1.0.5"
-    figures "2.0.0"
-    gherkin "^5.0.0"
-    glob "^7.0.0"
-    indent-string "^3.1.0"
-    is-generator "^1.0.2"
-    is-stream "^1.1.0"
-    knuth-shuffle-seeded "^1.0.6"
-    lodash "^4.17.4"
-    mz "^2.4.0"
-    progress "^2.0.0"
-    resolve "^1.3.3"
-    serialize-error "^2.1.0"
-    stack-chain "^2.0.0"
-    stacktrace-js "^2.0.0"
-    string-argv "0.0.2"
-    title-case "^2.1.1"
-    util-arity "^1.0.2"
-    verror "^1.9.0"
-
-cucumber@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/cucumber/-/cucumber-5.0.2.tgz#ffdeea0b47eaf21a63dedb49cd880425f2d7eb52"
-  integrity sha512-0A5VkH4UKk5tkbo/jtUGDrAb7pUGuMqAvJAgpjm3n303sXfG8ntu0ESGjss4YKBAMl//qnBzGpB4cdSt5raH2A==
+cucumber@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/cucumber/-/cucumber-5.0.3.tgz#0935a816a0bcc02ea01ef67be30e7367c9c79984"
+  integrity sha512-FsOKcEquPTVzK2sDqshI3Bw8ETztNIrMQ5+Ph8Z8QNaStl7cvIS3M9/T+9zeXvadPJX0jUWkbWcJ91x4gBw9Fg==
   dependencies:
     assertion-error-formatter "^2.0.1"
     babel-runtime "^6.11.6"
@@ -2187,7 +2133,7 @@ cucumber@^5.0.2:
     escape-string-regexp "^1.0.5"
     figures "2.0.0"
     gherkin "^5.0.0"
-    glob "^7.0.0"
+    glob "^7.1.3"
     indent-string "^3.1.0"
     is-generator "^1.0.2"
     is-stream "^1.1.0"
@@ -2270,7 +2216,7 @@ debug@3.2.6, debug@^3.1.0, debug@^3.2.5:
   dependencies:
     ms "^2.1.1"
 
-debug@4.1.0, debug@^4.0.1:
+debug@4.1.0, debug@^4.0.1, debug@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.0.tgz#373687bffa678b38b1cd91f861b63850035ddc87"
   integrity sha512-heNPJUJIqC+xB6ayLAMHaIrmN9HKa7aQO8MGqKpvCA+uJYVcvR6l5kgdrhRuwPFHU7P5/A1w0BjByPHwpfTDKg==
@@ -2593,7 +2539,7 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
-duration@^0.2.0, duration@^0.2.1:
+duration@^0.2.1:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/duration/-/duration-0.2.2.tgz#ddf149bc3bc6901150fe9017111d016b3357f529"
   integrity sha512-06kgtea+bGreF5eKYgI/36A6pLXggY7oR4p1pq4SmdFBn1ReOL5D8RhG64VrqfTTKNucqqtBAwEj8aB88mcqrg==
@@ -2855,12 +2801,12 @@ eslint-plugin-standard@^4.0.0:
   resolved "https://registry.yarnpkg.com/eslint-plugin-standard/-/eslint-plugin-standard-4.0.0.tgz#f845b45109c99cd90e77796940a344546c8f6b5c"
   integrity sha512-OwxJkR6TQiYMmt1EsNRMe5qG3GsbjlcOhbGUBY4LtavF9DsLaTcoR+j2Tdjqi23oUwKNUqX7qcn5fPStafMdlA==
 
-eslint-plugin-vue@^5.0.0-beta.5:
-  version "5.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-5.0.0-beta.5.tgz#d478abfcea7eaa98cbe28eedec4aea0e596fbdb2"
-  integrity sha512-ETVqyctk0cta99tTi3NjDDGyJiQZTHlf6J7fl6Ig58/926U2tjzU3T0A/c6/jkiTw1m9yErxLyF+IPnwX7j6bg==
+eslint-plugin-vue@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-vue/-/eslint-plugin-vue-5.0.0.tgz#4a2cc1c0e71ea45e1bd9c1a60f925bfe68bb5710"
+  integrity sha512-mSv2Ebz3RaPP+XJO/mu7F+SdR9lrMyGISSExnarLFqqf3pF5wTmwWNrhHW1o9zKzKI811UVTIIkWJJvgO6SsUQ==
   dependencies:
-    vue-eslint-parser "^3.2.1"
+    vue-eslint-parser "^4.0.2"
 
 eslint-scope@^4.0.0:
   version "4.0.0"
@@ -2924,7 +2870,7 @@ eslint@^5.9.0:
     table "^5.0.2"
     text-table "^0.2.0"
 
-espree@^4.0.0:
+espree@^4.0.0, espree@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/espree/-/espree-4.1.0.tgz#728d5451e0fd156c04384a7ad89ed51ff54eb25f"
   integrity sha512-I5BycZW6FCVIub93TeVY1s7vjhP9CY6cXCznIRfiig7nRviKZYdRnj/sHEWC6A7WE9RDWOFq9+7OsWSYz8qv2w==
@@ -3538,7 +3484,7 @@ glob@7.1.2:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.2, glob@~7.1.1:
+glob@^7.0.0, glob@^7.0.3, glob@^7.0.5, glob@^7.1.2, glob@^7.1.3, glob@~7.1.1:
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.3.tgz#3960832d3f1574108342dafd3a67b332c0969df1"
   integrity sha512-vcfuiIxogLV4DlGBHIUOwI0IbrJ8HWPc4MU7HzviGeNho/UJDfi6B5p3sHeWIQ0KGIU0Jpxi5ZHxemQfLkkAwQ==
@@ -4399,7 +4345,7 @@ js-base64@^2.1.8:
 
 "js-owncloud-client@github:owncloud/js-owncloud-client#master":
   version "0.2.0-alpha1"
-  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/5c3e3922f0127f1f8eb8e591e87c6282fc3ab402"
+  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/466f1afdae44da890c4ef7e1b0011b886c5a66ca"
   dependencies:
     browser-request "^0.3.3"
     davclient.js "https://github.com/owncloud/davclient.js.git"
@@ -4866,10 +4812,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-material-design-icons-iconfont@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/material-design-icons-iconfont/-/material-design-icons-iconfont-4.0.2.tgz#1671f6b7e9f4a58911997c4e0b964a520c059ec2"
-  integrity sha512-BYAtSuiD8EHlLD1TEzNc++KpRmfI5Wn6peBK+fsQfDBzxSbJg3SZ+ALXM+DAJ9ogSLjdmf4DG+6WGFkZABiIqA==
+material-design-icons-iconfont@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/material-design-icons-iconfont/-/material-design-icons-iconfont-4.0.3.tgz#b2fbcc9828f96e6418b8e475060f866296b714ef"
+  integrity sha512-AB0MlNhhEm4W3M/kejsjZkLUq/HenHJ8fq5TXa7cpnXg8IXWLzO5MCBWTokk8eQ447EbbQnCqUP+xQnVCZ2SZg==
 
 md5.js@^1.3.4:
   version "1.3.5"
@@ -7243,11 +7189,6 @@ stream-shift@^1.0.0:
   resolved "https://registry.yarnpkg.com/stream-shift/-/stream-shift-1.0.0.tgz#d5c752825e5367e786f78e18e445ea223a155952"
   integrity sha1-1cdSgl5TZ+eG944Y5EXqIjoVWVI=
 
-string-argv@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/string-argv/-/string-argv-0.0.2.tgz#dac30408690c21f3c3630a3ff3a05877bdcbd736"
-  integrity sha1-2sMECGkMIfPDYwo/86BYd73L1zY=
-
 string-argv@0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/string-argv/-/string-argv-0.1.1.tgz#66bd5ae3823708eaa1916fa5412703150d4ddfaf"
@@ -7844,17 +7785,17 @@ vue-drag-drop@^1.1.4:
   dependencies:
     core-js "^2.5.3"
 
-vue-eslint-parser@^3.2.1:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-3.2.2.tgz#47c971ee4c39b0ee7d7f5e154cb621beb22f7a34"
-  integrity sha512-dprI6ggKCTwV22r+i8dtUGquiOCn063xyDmb7BV/BjG5Oc/m5EoMNrWevpvTcrlGuFZmYVPs5fgsu8UIxmMKzg==
+vue-eslint-parser@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-4.0.2.tgz#7d10ec5b67d9b2ef240cac0f0e8b2f03773d810e"
+  integrity sha512-A+teFdsAVtVawd4rtLsv8q6uuj2MYt3Uw+GCodqEkjozB3g20G91hbukz60yWa9IUx/yFz+JzKBu/3Djkod36g==
   dependencies:
-    debug "^3.1.0"
+    debug "^4.1.0"
     eslint-scope "^4.0.0"
     eslint-visitor-keys "^1.0.0"
-    espree "^4.0.0"
+    espree "^4.1.0"
     esquery "^1.0.1"
-    lodash "^4.17.10"
+    lodash "^4.17.11"
 
 vue-events@^3.1.0:
   version "3.1.0"
@@ -7913,10 +7854,10 @@ vue@^2.5.16, vue@^2.5.2:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.17.tgz#0f8789ad718be68ca1872629832ed533589c6ada"
   integrity sha512-mFbcWoDIJi0w0Za4emyLiW72Jae0yjANHbCVquMKijcavBGypqlF7zHRgMa5k4sesdv7hv2rB4JPdZfR+TPfhQ==
 
-vuetify@^1.3.11:
-  version "1.3.11"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.3.11.tgz#8be51f752a821704bb7fe0b7ac1f9324b902e52a"
-  integrity sha512-K9RS3DaREv9KCX6CqaO5owMltN8V++z9ReyPWnZdq8aokNCu9oDh7cZ3yqkkaoymy9kH89mtjhEu8ybLm6QCsg==
+vuetify@^1.3.12:
+  version "1.3.12"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.3.12.tgz#a605a978e88385ace60301fc50502fe53ae940fb"
+  integrity sha512-CJccj0EQcda6Hj5p4P0SKsaN5rkNj5HkZOGkXJOl6v+NJRM2tibrbNtFIGlEBMl+b2j8AnnLVkN3Q5T2nfed8w==
 
 vuex-persist@^2.0.0:
   version "2.0.0"
@@ -8046,10 +7987,10 @@ webpack-sources@^1.1.0, webpack-sources@^1.3.0:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^4.26.1:
-  version "4.26.1"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.26.1.tgz#ff3a9283d363c07b3494dfa702d08f4f2ef6cb39"
-  integrity sha512-i2oOvEvuvLLSuSCkdVrknaxAhtUZ9g+nLSoHCWV0gDzqGX2DXaCrMmMUpbRsTSSLrUqAI56PoEiyMUZIZ1msug==
+webpack@^4.27.1:
+  version "4.27.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.27.1.tgz#5f2e2db446d2266376fa15d7d2277a1a9c2e12bb"
+  integrity sha512-WArHiLvHrlfyRM8i7f+2SFbr/XbQ0bXqTkPF8JpHOzub5482Y3wx7rEO8stuLGOKOgZJcqcisLhD7LrM/+fVMw==
   dependencies:
     "@webassemblyjs/ast" "1.7.11"
     "@webassemblyjs/helper-module-context" "1.7.11"
