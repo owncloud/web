@@ -12,5 +12,9 @@
         "sourceType": "module"
     },
     "rules": {
+    },
+    "globals": {
+      "require": false,
+      "requirejs": false
     }
 }

@@ -4,8 +4,8 @@
   "description": "This is the funky frontend app",
   "main": "js/files.bundle.js",
   "scripts": {
-    "lint": "eslint src/**/*.vue src/**/*.js --color --global requirejs --global require",
-    "lint-fix": "eslint src/**/*.vue src/**/*.js --color --global requirejs --global require --fix",
+    "lint": "eslint src/**/*.vue src/**/*.js src/*.js --color",
+    "lint-fix": "eslint src/**/*.vue src/**/*.js  src/*.js --color",
     "watch": "webpack --progress --colors --watch --mode development --config webpack.dev.js",
     "build": "webpack -p --config webpack.common.js"
   },

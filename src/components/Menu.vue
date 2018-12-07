@@ -135,9 +135,7 @@ export default {
       console.log('snackbar should be here')
     },
     logout () {
-      let OC = this.$parent
-      OC.$uikit.offcanvas(this.$el).hide()
-
+      this.sidebarIsVisible = false
       this.$store.dispatch('logout', {}).then(() => {
         this.$router.push('/login')
       })

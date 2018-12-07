@@ -16,9 +16,6 @@ clean: clean-core $(addprefix clean-app-,$(apps))
 node_modules: package.json yarn.lock
 	yarn install && touch node_modules
 
-core/css/uikit.%.css: src/themes/%.less node_modules
-	node_modules/less/bin/lessc src/themes/$*.less core/css/uikit.$*.css --relative-urls
-
 core/js/core.bundle.js: node_modules
 	yarn run build:dev
 
@@ -26,11 +23,11 @@ core/js/core.bundle.js: node_modules
 # core
 #
 .PHONY: core
-core: core/js/core.bundle.js core/css/uikit.owncloud.css
+core: core/js/core.bundle.js
 
 .PHONY: clean-core
 clean-core:
-	rm -rf core/js/core.bundle.js.* core/css/uikit.*.css
+	rm -rf core/js/core.bundle.js.*
 	rm -Rf node_modules
 
 #
