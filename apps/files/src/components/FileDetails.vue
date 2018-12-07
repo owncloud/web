@@ -71,23 +71,7 @@ export default {
       this.$emit('reset')
     },
     downloadFiles () {
-      const url = this.$client.files.getFileUrl(this.items[0].path)
-      let anchor = document.createElement('a')
-
-      let headers = new Headers()
-      headers.append('Authorization', 'Bearer ' + this.getToken)
-
-      fetch(url, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-          let objectUrl = window.URL.createObjectURL(blobby)
-
-          anchor.href = objectUrl
-          anchor.download = this.items[0].name
-          anchor.click()
-
-          window.URL.revokeObjectURL(objectUrl)
-        })
+      this.downloadFile(this.items[0])
     },
     deleteSelectedFiles () {
       this.deleteFiles({

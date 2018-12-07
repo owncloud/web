@@ -1,5 +1,6 @@
 import filesize from 'filesize'
 import moment from 'moment'
+import fileTypeIconMappings from './fileTypeIconMappings.json'
 
 export default {
   filters: {
@@ -32,6 +33,32 @@ export default {
           'item': param
         }
       })
+    },
+    downloadFile (file) {
+      const url = this.$client.files.getFileUrl(file.path)
+      let anchor = document.createElement('a')
+
+      let headers = new Headers()
+      headers.append('Authorization', 'Bearer ' + this.getToken)
+
+      fetch(url, {headers})
+        .then(response => response.blob())
+        .then(blobby => {
+          let objectUrl = window.URL.createObjectURL(blobby)
+
+          anchor.href = objectUrl
+          anchor.download = file.name
+          anchor.click()
+
+          window.URL.revokeObjectURL(objectUrl)
+        })
+    },
+    fileTypeIcon (fileType) {
+      if (fileType) {
+        const icon = fileTypeIconMappings[fileType]
+        if (icon) return `ocft icon-${icon}`
+      }
+      return 'ocft icon-x-office-document'
     },
     label (string) {
       let cssClass = ['uk-label']
