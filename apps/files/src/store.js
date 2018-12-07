@@ -7,7 +7,7 @@ const state = {
   selected: []
 }
 
-function _buildFile(file) {
+function _buildFile (file) {
   return ({
     type: (file.type === 'dir') ? 'folder' : file.type,
     starred: file['fileInfo']['{http://owncloud.org/ns}favorite'] !== '0',
@@ -23,8 +23,8 @@ function _buildFile(file) {
     extension: (file.type === 'dir') ? false : '',
     name: (function () {
       let pathList = file.name.split('/').filter(e => e !== '')
-        return pathList[pathList.length - 1]
-      }()),
+      return pathList[pathList.length - 1]
+    }()),
     path: file.name,
     id: file['fileInfo']['{DAV:}getetag']
   })

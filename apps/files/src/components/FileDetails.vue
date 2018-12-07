@@ -5,7 +5,7 @@
   right
   floating
   permanent
-  height="85vh"
+  width="50%"
   >
   <v-layout column>
     <v-layout primary row>
@@ -31,56 +31,18 @@
     slider-color="yellow"
     >
     <v-tab
-    v-for="tab of registeredTabs"
+    v-for="tab of fileSideBars"
     :key="tab.name"
     ripple
     >
     {{ tab.name }}
   </v-tab>
-  <v-tab-item
-  v-for="tab of registeredTabs"
-  :key="tab.name"
-  >
-  <v-layout v-if="items.length <= 1" column>
-    <v-layout row>
-      <v-list-tile
-      v-for="tile in items"
-      :key="tile.id"
+      <v-tab-item
+              v-for="tab of fileSideBars"
+              :key="tab.name"
       >
-      <v-list-tile-avatar>
-        <v-icon large>folder</v-icon>
-      </v-list-tile-avatar>
-
-      <v-list-tile-title>{{ tile.name }}</v-list-tile-title>
-      <v-list-tile-sub-title>{{ tile.size | fileSize }}</v-list-tile-sub-title>
-    </v-list-tile>
-  </v-layout>
-</v-layout>
-<v-layout v-else column>
-  <v-layout row>
-    <v-flex>
-      <span class="content text-xs-center">{{ items.length }} Items selected.</span>
-    </v-flex>
-    <v-spacer />
-    <v-flex>
-      <span class="content text-xs-right">Total Size: {{ accumulatedFilesSize | fileSize }}</span>
-    </v-flex>
-  </v-layout>
-  <v-layout column>
-    <v-list-tile
-    v-for="tile in items"
-    :key="tile.id"
-    >
-    <v-list-tile-avatar>
-      <v-icon large>folder</v-icon>
-    </v-list-tile-avatar>
-
-    <v-list-tile-title>{{ tile.name }}</v-list-tile-title>
-    <v-list-tile-sub-title>{{ tile.size | fileSize }}</v-list-tile-sub-title>
-  </v-list-tile>
-</v-layout>
-</v-layout>
-</v-tab-item>
+        <component :is="tab.component"></component>
+      </v-tab-item>
 </v-tabs>
 </v-layout>
 </v-navigation-drawer>
@@ -88,7 +50,6 @@
 
 <script>
 import Mixins from '../mixins'
-import { reduce } from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -99,14 +60,7 @@ export default {
     return {
       drawer: false,
       tabName: '',
-      active: this.getLength,
-      registeredTabs: [
-        {
-          app: 'files',
-          name: 'Files',
-          componentPath: 'OcSidebar.vue'
-        }
-      ]
+      active: this.getLength
     }
   },
   components: {
@@ -143,7 +97,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getToken']),
+    ...mapGetters(['getToken', 'fileSideBars']),
+
     getLength () {
       return this.items.length
     },
@@ -152,11 +107,6 @@ export default {
         return ''
       }
       return (this.items.length > 1) ? 'Multiple Files' : this.items[0].name
-    },
-    accumulatedFilesSize () {
-      return reduce(this.items, (sum, n) => {
-        return sum + n.size
-      }, 0)
     }
   }
 }
