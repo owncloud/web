@@ -62,7 +62,7 @@
     "vue-gettext": "^2.1.1",
     "vue-loader": "15.4.2",
     "vue-router": "^3.0.2",
-    "vue-template-compiler": "^2.5.16",
+    "vue-template-compiler": "^2.5.20",
     "vuetify": "^1.3.12",
     "vuex": "^3.0.1",
     "vuex-persist": "^2.0.0",
