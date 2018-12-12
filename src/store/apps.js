@@ -11,6 +11,7 @@ const state = {
     edit: false
   },
   extensions: {},
+  fileSideBars: {},
   meta: {}
 }
 
@@ -56,6 +57,11 @@ const mutations = {
         }
       })
     }
+    if (appInfo.fileSideBars) {
+      forEach(appInfo.fileSideBars, (sideBar) => {
+        state.fileSideBars[sideBar.app] = sideBar
+      })
+    }
     if (!appInfo.id) return
     // name: use id as fallback display name
     // icon: use empty box as fallback icon
@@ -92,6 +98,9 @@ const getters = {
       return e
     })
     return ext
+  },
+  fileSideBars: state => {
+    return state.fileSideBars
   }
 }
 

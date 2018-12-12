@@ -1,5 +1,5 @@
   <template>
-    <v-container id="files-app" fluid class="pa-0">
+    <v-container id="files-app" fluid pa-0>
       <v-toolbar class="elevation-1">
         <v-btn v-if="!createFile" @click="createFolder ? addNewFolder(newFolderName) : createFolder = !createFolder" flat>
           <v-icon v-if="!createFolder" large>create_new_folder</v-icon>
@@ -61,12 +61,12 @@
           </v-list>
         </v-menu>
       </v-toolbar>
-      <v-layout row>
-        <v-flex xs12>
+      <v-layout row fill-height>
+        <v-flex :class="{'xs12': selectedFiles.length === 0, 'xs6': selectedFiles.length > 0 }" pa-0 fill-height>
           <dir-table @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" />
         </v-flex>
-        <v-flex>
-          <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
+        <v-flex v-if="selectedFiles.length > 0" xs6 pa-0>
+          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
         </v-flex>
       </v-layout>
       <fileactions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
@@ -85,11 +85,11 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 const _includes = require('lodash/includes')
 
 const davProperties = [
-    '{http://owncloud.org/ns}favorite',
-    '{DAV:}getcontentlength',
-    '{http://owncloud.org/ns}size',
-    '{DAV:}getlastmodified',
-    '{DAV:}resourcetype'
+  '{http://owncloud.org/ns}favorite',
+  '{DAV:}getcontentlength',
+  '{http://owncloud.org/ns}size',
+  '{DAV:}getlastmodified',
+  '{DAV:}resourcetype'
 ]
 
 export default {
@@ -144,11 +144,11 @@ export default {
     },
 
     onFileSuccess (event, file) {
-        this.$client.files.fileInfo(file.name, davProperties).then(fileInfo => {
-            this.addFiles({
-                files:[fileInfo]
-            })
+      this.$client.files.fileInfo(file.name, davProperties).then(fileInfo => {
+        this.addFiles({
+          files: [fileInfo]
         })
+      })
     },
 
     onFileError (error) {

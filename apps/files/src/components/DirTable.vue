@@ -63,9 +63,6 @@
         <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
           {{ props.item.mdate | formDateFromNow }}
         </td>
-        <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
-          {{ props.item.owner }}
-        </td>
       </tr>
     </template>
     <template slot="pageText" slot-scope="props">
@@ -85,19 +82,17 @@ export default {
     Mixins
   ],
   name: 'DirTable',
-  props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled', 'ownerEnabled'],
+  props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled'],
   data: () => ({
     columnsDisabled: {
       favorite: false,
       fileSelect: false,
-      data: false,
-      owner: false
+      data: false
     },
     headers: [
       { text: 'Name', value: 'name' },
       { text: 'Size', value: 'size' },
-      { text: 'Date', value: 'date' },
-      { text: 'Owner', value: 'owner' }
+      { text: 'Date', value: 'date' }
     ],
     pagination: {
       sortBy: 'name'
