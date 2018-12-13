@@ -7654,10 +7654,10 @@ vue@^2.5.2, vue@^2.5.21:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.21.tgz#3d33dcd03bb813912ce894a8303ab553699c4a85"
   integrity sha512-Aejvyyfhn0zjVeLvXd70h4hrE4zZDx1wfZqia6ekkobLmUZ+vNFQer53B4fu0EjWBSiqApxPejzkO1Znt3joxQ==
 
-vuetify@^1.3.12:
-  version "1.3.12"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.3.12.tgz#a605a978e88385ace60301fc50502fe53ae940fb"
-  integrity sha512-CJccj0EQcda6Hj5p4P0SKsaN5rkNj5HkZOGkXJOl6v+NJRM2tibrbNtFIGlEBMl+b2j8AnnLVkN3Q5T2nfed8w==
+vuetify@^1.3.14:
+  version "1.3.14"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.3.14.tgz#d0dbcbd2c10b5bf5954ba05a823f0a0cacb58661"
+  integrity sha512-/xzfxFLv4FFdXi2c+tfQhXiw7MwtcYk3E7gXBMYbZb5kM7emFf3Up4JKvu93o9Qe/wQysMLQk2q1LFCLfJ/Slg==
 
 vuex-persist@^2.0.0:
   version "2.0.0"
