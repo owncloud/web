@@ -158,7 +158,8 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles']),
-    ...mapActions(['openFile']),
+    ...mapActions(['openFile', 'showNotification']),
+
     trace () {
       console.info('trace', arguments)
     },
@@ -247,7 +248,15 @@ export default {
       this.path = []
       let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
       this.$client.files.list(absolutePath, 1, davProperties).then(res => {
-        let files = res.splice(1)
+        let files = []
+        if (res === null) {
+          this.showNotification({
+            title: this.$gettext('Loading folder failed ....'),
+            type: 'error'
+          })
+        } else {
+          files = res.splice(1)
+        }
 
         this.loadFiles(files)
 
@@ -255,7 +264,11 @@ export default {
 
         this.resetFileSelection()
       }).catch(error => {
-        alert(error)
+        this.showNotification({
+          title: this.$gettext('Loading folder failed ....'),
+          desc: error.message,
+          type: 'error'
+        })
       }).finally(() => {
         this.loading = false
       })
