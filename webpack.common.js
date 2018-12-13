@@ -39,7 +39,8 @@ module.exports = {
 	plugins: [
     new WebpackCopyPlugin(apps),
     new HtmlWebpackPlugin({
-      template: 'index.html'
+      template: 'index.html',
+      favicon: `./themes/${config.theme}/assets/gfx/favicon_32x32.jpg`
     }),
 		new VueLoaderPlugin(),
 		new MiniCssExtractPlugin({
