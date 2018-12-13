@@ -55,6 +55,7 @@
           on-icon="star" off-icon="star_border" large></v-checkbox>
         </td>
         <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-left ellipsis" style="max-width: 310px">
+          <v-icon>{{ fileTypeIcon(props.item.extension) }}</v-icon>
           {{ props.item.name }}
         </td>
         <td @click="props.item.extension === false ? navigateTo('files-list', props.item.path) : openFileActionBar(props.item)" class="text-xs-center">
@@ -74,6 +75,7 @@
 
 import { includes } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
+import fileTypeIconMappings from '../fileTypeIconMappings.json'
 
 import Mixins from '../mixins'
 
@@ -140,6 +142,13 @@ export default {
     },
     openFileActionBar (file) {
       this.$emit('FileAction', file)
+    },
+    fileTypeIcon (fileType) {
+      if (fileType) {
+        const icon = fileTypeIconMappings[fileType]
+        if (icon) return `ocft icon-${icon}`
+      }
+      return 'ocft icon-x-office-document'
     }
   },
   computed: {
