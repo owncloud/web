@@ -8,9 +8,6 @@ module.exports = merge(common, {
                         from: 'README.md',
                         to: 'README.md'
                       },{
-                        from: 'sw.js',
-                        to: 'sw.js'
-                      },{
                         from: 'LICENSE',
                         to: 'LICENSE'
                       },{

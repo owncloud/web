@@ -5,13 +5,19 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const WebpackCopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require ('html-webpack-plugin')
 
+
 const appFolder = path.resolve(__dirname, 'apps')
 let apps = []
+let favicon = './themes/owncloud/assets/gfx/favicon.jpg'
 
 if(fs.existsSync('config.json')) {
   var config = require('./config.json')
 }else{
   var config = require('./tests/drone/config.json')
+}
+
+if(fs.existsSync(`./themes/${config.theme}/assets/gfx/favicon.jpg`)) {
+  favicon  = `./themes/${config.theme}/assets/gfx/favicon.jpg`
 }
 
 config.apps
@@ -40,7 +46,7 @@ module.exports = {
     new WebpackCopyPlugin(apps),
     new HtmlWebpackPlugin({
       template: 'index.html',
-      favicon: `./themes/${config.theme}/assets/gfx/favicon_32x32.jpg`
+      favicon: favicon
     }),
 		new VueLoaderPlugin(),
 		new MiniCssExtractPlugin({
