@@ -53,9 +53,12 @@ export default {
           window.URL.revokeObjectURL(objectUrl)
         })
     },
-    fileTypeIcon (fileType) {
-      if (fileType) {
-        const icon = fileTypeIconMappings[fileType]
+    fileTypeIcon (file) {
+      if (file) {
+        if (file.type === 'folder') {
+          return 'ocft icon-folder'
+        }
+        const icon = fileTypeIconMappings[file.extension]
         if (icon) return `ocft icon-${icon}`
       }
       return 'ocft icon-x-office-document'

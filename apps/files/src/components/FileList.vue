@@ -42,7 +42,7 @@
             on-icon="star" off-icon="star_border" large></v-checkbox>
         </v-list-tile-action>
         <v-list-tile-avatar>
-          <v-icon>{{ fileTypeIcon(item.extension) }}</v-icon>
+          <v-icon>{{ fileTypeIcon(item) }}</v-icon>
         </v-list-tile-avatar>        <v-list-tile-content
           @click="item.extension === false ? navigateTo('files-list', item.path) : openFileActionBar(item)"
           style="cursor: pointer"
