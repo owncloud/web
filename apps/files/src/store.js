@@ -20,7 +20,7 @@ function _buildFile (file) {
         return file['fileInfo']['{DAV:}getcontentlength'] / 100
       }
     }()),
-    extension: (file.type === 'dir') ? false : '',
+    extension: (file.type === 'dir') ? false : file.name.match(/\.[0-9a-z]+$/i)[0].substr(1),
     name: (function () {
       let pathList = file.name.split('/').filter(e => e !== '')
       return pathList[pathList.length - 1]
