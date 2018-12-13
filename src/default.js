@@ -81,7 +81,7 @@ Vue.component('drop', Drop);
         if (app.navItems) navItems.push(app.navItems)
         if (app.store) store.registerModule(app.appInfo.name, app.store.default)
         store.dispatch('registerApp', app.appInfo)
-      }html-webpack-plugin
+      }
       router.addRoutes(_flatten(routes))
       sync(store, router)
 
