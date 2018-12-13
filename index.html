@@ -25,19 +25,6 @@
 <body>
 	<main id="owncloud"></main>
 	<script src="node_modules/requirejs/require.js"></script>
-	<script>
-		if ('serviceWorker' in navigator) {
-			window.addEventListener('load', () => {
-				navigator.serviceWorker.register('sw.js')
-					.then(registration => {
-						// Service Worker registered
-					})
-					.catch(err => {
-						// Service Worker registration failed
-					});
-			});
-		}
-	</script>
 	<noscript>
 		<div id="enable-js-banner">
 			<span id="banner-content"><h3>Please enable JavaScript</h3></span>
