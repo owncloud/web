@@ -13,8 +13,8 @@
     "error": "#F0506E"
   },
   "logo": {
-    "mini": "core/gfx/cloud-logo-invert.svg",
-    "small": "core/gfx/cloud-logo-invert.svg",
-    "big": "core/gfx/cloud-logo-invert.svg"
+    "mini": "themes/owncloud/cloud-logo-invert.svg",
+    "small": "themes/owncloud/cloud-logo-invert.svg",
+    "big": "themes/owncloud/cloud-logo-invert.svg"
   }
 }
