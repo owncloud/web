@@ -14,7 +14,7 @@
           <v-flex v-translate>
             Please click the button below to authenticate with {{ configuration.theme.general.name }} and get access to your data.
           </v-flex>
-          <v-btn color="primary" id="authenticate" @click="authenticate"><span v-translate>Authenticate</span></v-btn>
+          <v-btn color="primary" id="authenticate" @click="login()"><span v-translate>Authenticate</span></v-btn>
         </v-flex>
       </v-img>
     </v-flex>
@@ -25,34 +25,17 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'loginPage',
-
+  name: 'LoginPage',
   data () {
     return {
-      loading: false,
-      username: '',
-      password: ''
+      loading: false
     }
   },
   computed: {
     ...mapGetters(['configuration'])
   },
   methods: {
-    ...mapActions(['showNotification']),
-
-    authenticate () {
-      this.$store.dispatch('authenticate', { provider: 'oauth2' })
-        .then(() => {
-          this.$router.push({ path: '/' })
-        })
-        .catch((error) => {
-          this.showNotification({
-            title: this.$gettext('Could not login'),
-            desc: error.message,
-            type: 'error'
-          })
-        })
-    }
+    ...mapActions(['login'])
   }
 }
 </script>
