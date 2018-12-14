@@ -4,6 +4,7 @@ import { VueAuthenticate } from 'vue-authenticate'
 export function initVueAuthenticate (config) {
   if (config) {
     return new VueAuthenticate(Axios, {
+      tokenPrefix: 'oc_oAuth',
       providers: {
         oauth2: {
           name: 'ownCloud',
