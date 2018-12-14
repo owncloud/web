@@ -1,13 +1,15 @@
 <template>
   <div>
     <v-layout class="background primary">
-      <v-flex class="pa-0" xs12>
+      <v-flex class="pa-0" xs12 style="height: 100vh">
         <v-img
-        v-if="configuration.theme.logo.big"
-        :src="configuration.theme.logo.big"
-        :aspect-ratio="1"
-        height="100vh">
-        <v-flex class="center-dialog grey lighten-2 pa-4 ml-auto mr-auto elevation-5" md4 xs8>
+          v-if="configuration.theme.logo.big"
+          :src="configuration.theme.logo.big"
+          max-height="40%"
+          height="40%"
+          contain
+          ></v-img>
+          <v-flex class="center-dialog grey lighten-2 pa-4 ml-auto mr-auto elevation-5" md4 xs8>
           <h2>
             <span v-translate>Welcome to</span> {{ configuration.theme.general.name }}
           </h2>
@@ -16,9 +18,8 @@
           </v-flex>
           <v-btn color="primary" id="authenticate" @click="login()"><span v-translate>Authenticate</span></v-btn>
         </v-flex>
-      </v-img>
-    </v-flex>
-  </v-layout>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
@@ -41,11 +42,4 @@ export default {
 </script>
 
 <style>
-  .v-btn, h2, .flex{
-    padding: 8px 8px;
-  }
-  .center-dialog {
-    /* FIXME: use justify-center and align-center */
-    margin-top: 32vh!important;
-  }
 </style>
