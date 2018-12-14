@@ -12,7 +12,8 @@ const state = {
   },
   extensions: {},
   fileSideBars: {},
-  meta: {}
+  meta: {},
+  topBars: {}
 }
 
 const actions = {
@@ -62,6 +63,12 @@ const mutations = {
         state.fileSideBars[sideBar.app] = sideBar
       })
     }
+    if (appInfo.topBar) {
+      forEach(appInfo.topBar, (topBar) => {
+        state.topBars[topBar.app] = topBar
+      })
+    }
+    if (!appInfo.id) return
     if (!appInfo.id) return
     // name: use id as fallback display name
     // icon: use empty box as fallback icon
@@ -84,6 +91,9 @@ const getters = {
   activeFile: state => {
     return state.file
   },
+  activeApp: (state, getters, rootState) => {
+    if (rootState.route && rootState.route.path) return state.meta[rootState.route.path.split('/')[1]]
+  },
   extensions: state => {
     if (!state.file.path) return []
     // TODO regex optimization, if everything works.
@@ -101,6 +111,9 @@ const getters = {
   },
   fileSideBars: state => {
     return state.fileSideBars
+  },
+  navTopBars: state => {
+    return state.topBars
   }
 }
 

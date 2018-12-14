@@ -1,21 +1,22 @@
 <template>
-  <v-toolbar class="theme--dark primary">
-  <v-toolbar-side-icon @click.prevent="toggleSidebar(true)" class="theme--dark"></v-toolbar-side-icon>
-  <span class="subheading" v-translate>Files</span>
-  <v-spacer></v-spacer>
-    <v-flex xs1>
-      <v-img
-        v-if="configuration.theme.logo.big"
-        :src="configuration.theme.logo.big"
-        :aspect-ratio="1.8"
-        width="60%"/>
-    </v-flex>
-    <span class="font-weight-medium title">{{ configuration.theme.general.name }}</span>
-  <v-spacer></v-spacer>
-  <v-toolbar-items class="hidden-sm-and-down">
-  <v-btn class="theme--dark" flat><v-icon class="theme--dark" medium>account_circle</v-icon>&nbsp;<span>{{ user.displayname }}</span></v-btn>
-  </v-toolbar-items>
-</v-toolbar>
+  <v-toolbar fixed class="theme--dark primary pa-0">
+          <v-toolbar-side-icon @click.prevent="toggleSidebar(true)" class="theme--dark"></v-toolbar-side-icon>
+          <span class="subheading" v-translate>Files</span>
+          <v-spacer></v-spacer>
+          <v-flex xs1>
+            <v-img
+            v-if="configuration.theme.logo.big"
+            :src="configuration.theme.logo.big"
+            :aspect-ratio="1.8"
+            width="60%"/>
+          </v-flex>
+          <span class="font-weight-medium title">{{ configuration.theme.general.name }}</span>
+          <v-spacer></v-spacer>
+          <v-toolbar-items class="hidden-sm-and-down">
+            <v-btn class="theme--dark" flat><v-icon class="theme--dark" medium>account_circle</v-icon>&nbsp;<span>{{ user.displayname }}</span></v-btn>
+          </v-toolbar-items>
+          <component v-if="nestedBar" slot="extension" :is="nestedBar"></component>
+  </v-toolbar>
 </template>
 
 <script>
@@ -39,10 +40,17 @@ export default {
     ...mapActions(['toggleSidebar'])
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'navTopBars', 'activeApp']),
     ...mapState(['user']),
     extendNavbarRight () {
       return this.getPlugins('phoenixNavbarRight')
+    },
+    nestedBar () {
+      if (this.navTopBars[this.activeApp.id]) {
+        return this.navTopBars[this.activeApp.id].component
+      }
+      return false
+      // return this.getPlugins('')
     }
   }
 }
