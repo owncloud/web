@@ -1,0 +1,20 @@
+{
+  "general": {
+    "name": "Custom Cloud",
+    "slogan": "Your custom cloud, personalized for you!"
+  },
+  "colors": {
+    "primary": "#745bca",
+    "secondary": "#d4778a",
+    "accent": "#F5F7F9",
+    "info": "#6A9EFF",
+    "success": "#32D296",
+    "warning": "#FAA05A",
+    "error": "#F0506E"
+  },
+  "logo": {
+    "mini": "themes/example/logo-icon.svg",
+    "small": "themes/example/logo-icon.svg",
+    "big": "themes/example/logo-icon.svg"
+  }
+}
