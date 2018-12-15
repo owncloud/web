@@ -47,7 +47,7 @@
     "material-design-icons-iconfont": "^4.0.3",
     "mini-css-extract-plugin": "^0.5.0",
     "nightwatch": "^1.0.11",
-    "nightwatch-api": "^0.4.0",
+    "nightwatch-api": "^1.0.0",
     "node-sass": "^4.11.0",
     "parse-json": "^4.0.0",
     "requirejs": "^2.3.6",
