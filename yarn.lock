@@ -30,10 +30,10 @@
   dependencies:
     "@types/babel-types" "*"
 
-"@types/debug@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-0.0.30.tgz#dc1e40f7af3b9c815013a7860e6252f6352a84df"
-  integrity sha512-orGL5LXERPYsLov6CWs3Fh6203+dXzJkR7OnddIr2514Hsecwc8xRpzCapshBbKFImCsvS/mk6+FWiN5LyZJAQ==
+"@types/debug@^0.0.31":
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-0.0.31.tgz#bac8d8aab6a823e91deb7f79083b2a35fa638f33"
+  integrity sha512-LS1MCPaQKqspg7FvexuhmDbWUhE2yIJ+4AgVIyObfc06/UKZ8REgxGNjZc82wPLWmbeOm7S+gSsLgo75TanG4A==
 
 "@types/node@*":
   version "10.12.2"
@@ -1629,10 +1629,10 @@ chrome-trace-event@^1.0.0:
   dependencies:
     tslib "^1.9.0"
 
-chromedriver@^2.36.0, chromedriver@^2.44.1:
-  version "2.44.1"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.44.1.tgz#bb4dd614cb92b9a816e499ebaa692500011f4a3e"
-  integrity sha512-IPM8XQzQYVNJ9Rfec5cy0aGbrZno5xUlDNLLuph9bjkTJVoi14zqjvtmRd8Dc1P5vTw0MwNQ5JD89zibXp/W5A==
+chromedriver@^2.36.0, chromedriver@^2.45.0:
+  version "2.45.0"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.45.0.tgz#8c1b158adbbd3e0ca3f7af19d459082245554378"
+  integrity sha512-Qwmcr+2mU3INeR6mVsQ8gO00vZpL8ZeTJLclX44C0dcs88jrSDgckPqbG+qkVX+m2L/aOPnF0lYgPdOiOiLt5w==
   dependencies:
     del "^3.0.0"
     extract-zip "^1.6.7"
@@ -4218,7 +4218,6 @@ js-base64@^2.1.8:
 
 "js-owncloud-client@github:owncloud/js-owncloud-client#master":
   version "0.2.0-alpha1"
-  uid "79b7b2416136b9ee530fc462450a306763a369fb"
   resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/79b7b2416136b9ee530fc462450a306763a369fb"
   dependencies:
     browser-request "^0.3.3"
@@ -5084,19 +5083,18 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
-nightwatch-api@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/nightwatch-api/-/nightwatch-api-0.4.0.tgz#feb62d41f81d1fa9f37e6d217bdcd8c9e300dd19"
-  integrity sha512-oKVo0EkpnqJeQJLt4MdevKOBUE+KDHN+fZmSpvi4SqLUNrZm3DYZqvCHpU17YaMUMJWK9Qndz0Wbg/4WEx7UQw==
+nightwatch-api@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/nightwatch-api/-/nightwatch-api-2.0.0.tgz#591f4bab5958853e1b6b7039e5d2c86d8a418c93"
+  integrity sha512-S0Kn+du2IDltzb5NtoG6OPQUv4gfRI4mb7Ybz6vzGv4/L2iV7eyg9AwGgXWm0KzSHEcfeGAxejIrQGdp+vWe9w==
   dependencies:
-    "@types/debug" "^0.0.30"
-    debug "^3.1.0"
-    nightwatch "^1.0.6"
+    "@types/debug" "^0.0.31"
+    debug "^4.1.0"
 
-nightwatch@^1.0.11, nightwatch@^1.0.6:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-1.0.11.tgz#6829c1aa87f6e939ce77c64b35e1aef5d0ed5e62"
-  integrity sha512-vEAit4rVgufCAyaqQ6Cxs29A9cBNEKeXxWcPFXrG/AOp+19Vz2K6shoNTwpbdNpDDbp7Pjy1YnvjlG9aQrCsmQ==
+nightwatch@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-1.0.15.tgz#5695c17136239a1f74f2a53235911bff9733e4d3"
+  integrity sha512-PksSlRPg+jsAb3/YdY0z4mVyTWSrf+tY9Ua1nbcqJH177mTDEcZhbJ6ITgwC3gsAPPDBK2lIM6McDgRQU37XeA==
   dependencies:
     assertion-error "^1.1.0"
     chai-nightwatch "0.2.1"
