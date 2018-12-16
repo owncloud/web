@@ -19,6 +19,7 @@
                           ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false"></oc-dialog-prompt>
         <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
                           ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false"></oc-dialog-prompt>
+        <file-upload-progress :file-name="fileUploadName" v-model="fileUploadProgress"></file-upload-progress>
         <v-menu
           offset-y
         >
@@ -42,7 +43,7 @@
             <v-divider></v-divider>
 
             <v-list>
-              <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError"></file-upload>
+              <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
               <v-divider></v-divider>
               <v-list-tile @click="createFolder = true">
                 <v-list-tile-action>
@@ -97,6 +98,7 @@ import FileActionsTab from './FileactionsTab.vue'
 import FileList from './FileList.vue'
 import FileUpload from './FileUpload.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
+import FileUploadProgress from './FileUploadProgress.vue'
 import { filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
@@ -119,6 +121,7 @@ export default {
     FileActionsTab,
     FileList,
     FileUpload,
+    FileUploadProgress,
     OcDialogPrompt
   },
   data () {
@@ -126,6 +129,8 @@ export default {
       showActionBar: false,
       createFolder: false,
       createFile: false,
+      fileUploadName: '',
+      fileUploadProgress: 0,
       upload: false,
       fileAction: {},
       fileName: '',
@@ -166,6 +171,8 @@ export default {
 
     onFileSuccess (event, file) {
       this.$client.files.fileInfo(file.name, davProperties).then(fileInfo => {
+        this.fileUploadProgress = 0
+        this.fileUploadName = ''
         this.addFiles({
           files: [fileInfo]
         })
@@ -173,7 +180,16 @@ export default {
     },
 
     onFileError (error) {
-      console.log('file error ' + error)
+      this.showNotification({
+        title: this.$gettext('File upload failed ....'),
+        desc: error,
+        type: 'error'
+      })
+    },
+
+    onFileProgress (progress) {
+      this.fileUploadProgress = progress.progress
+      this.fileUploadName = progress.fileName
     },
 
     toggleFileSelect (item) {

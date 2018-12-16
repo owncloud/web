@@ -30,18 +30,13 @@ export default {
   },
   data () {
     return {
-      progress: 0
+      progress: 0,
+      fileName: ''
     }
   },
   computed: {
     uploading () {
       return this.progress > 0
-    },
-    progressStyle () {
-      return {
-        width: `${this.progress}%`,
-        display: this.uploading ? 'block' : 'none'
-      }
     }
   },
   methods: {
@@ -57,6 +52,7 @@ export default {
 
     upload (file) {
       this.progress = 0.1
+      this.fileName = file.name
       let fileUpload = new FileUpload(this.url, this.headers, this.onProgress, this.requestType)
       fileUpload
         .upload(file, this.additionalData)
@@ -81,7 +77,10 @@ export default {
 
     onProgress (e) {
       this.progress = parseInt(e.loaded * 100 / e.total)
-      this.$emit('progress', this.progress)
+      this.$emit('progress', {
+        fileName: this.fileName,
+        progress: this.progress
+      })
     }
   }
 }
