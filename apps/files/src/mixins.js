@@ -5,6 +5,9 @@ import fileTypeIconMappings from './fileTypeIconMappings.json'
 export default {
   filters: {
     fileSize (int) {
+      if (int < 0) {
+        return 'Pending ...'
+      }
       if (isNaN(int)) {
         return '???'
       }
@@ -41,7 +44,7 @@ export default {
       let headers = new Headers()
       headers.append('Authorization', 'Bearer ' + this.getToken)
 
-      fetch(url, {headers})
+      fetch(url, { headers })
         .then(response => response.blob())
         .then(blobby => {
           let objectUrl = window.URL.createObjectURL(blobby)
