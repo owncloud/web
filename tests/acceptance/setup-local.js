@@ -4,8 +4,8 @@ import { createSession, closeSession, startWebDriver, stopWebDriver} from 'night
 setDefaultTimeout(60000);
 
 BeforeAll(async () => {
-	await startWebDriver('local');
-	await createSession('local');
+	await startWebDriver({ env: 'local'});
+	await createSession({ env: 'local'});
 });
 
 AfterAll(async () => {
