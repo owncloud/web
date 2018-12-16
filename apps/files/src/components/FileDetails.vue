@@ -13,7 +13,7 @@
         <v-icon color="white" class="pl-4" medium>folder</v-icon>
       </v-flex>
       <v-flex white--text align-self-center>
-        <span class="subheading" v-translate> {{ getTabName }} </span>
+        <span class="subheading"> {{ getTabName }} </span>
       </v-flex>
     </v-layout>
     <v-layout primary row>
@@ -90,7 +90,7 @@ export default {
       if (this.items.length === 0) {
         return ''
       }
-      return (this.items.length > 1) ? 'Multiple Files' : this.items[0].name
+      return (this.items.length > 1) ? this.$gettext('Multiple Files') : this.items[0].name
     }
   }
 }

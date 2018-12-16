@@ -1,5 +1,5 @@
   <template>
-    <v-container id="files-app" fluid pa-0>
+    <v-container id="files-app" fluid pa-0 style="height: 100vh">
       <v-toolbar class="elevation-1">
         <v-flex align-self-center>
           <v-breadcrumbs class="pa-0" :items="activeRoute">
@@ -86,8 +86,8 @@
         <v-flex v-if="selectedFiles.length > 0" xs6 pa-0>
           <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
         </v-flex>
+        <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
       </v-layout>
-      <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
     </v-container>
   </template>
 
