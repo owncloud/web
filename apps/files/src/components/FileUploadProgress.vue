@@ -3,17 +3,16 @@
     v-model="show"
     hide-overlay
     persistent
-    width="300"
   >
     <v-card
       color="primary"
       dark
     >
       <v-card-text>
-        <span v-if="uploading" class="text-truncate">
+        <span v-if="uploading" class="text-truncate" style="display: block">
           Uploading {{ FileName }}
         </span>
-        <span v-if="!uploading" class="text-truncate">
+        <span v-if="!uploading" class="text-truncate" style="display: block">
           Finalizing upload of {{ FileName }}
         </span>
         <v-progress-linear
