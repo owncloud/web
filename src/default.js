@@ -40,7 +40,11 @@ Vue.prototype.$client = new Client()
 Vue.use(VueEvents)
 Vue.use(VueRouter)
 Vue.use(VueAxios, Axios)
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  options: {
+    customProperties: true
+  }
+})
 
 Vue.use(GetTextPlugin, {
   availableLanguages: {
