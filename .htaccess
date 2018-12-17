@@ -1,0 +1,12 @@
+
+# BEGIN Caching
+<ifModule mod_headers.c>
+    <filesMatch "\\.(ico|jpg|jpeg|png|gif|ttf|otf|woff|woff2|eot|svg)$">
+    Header set Cache-Control "max-age=1, private, must-revalidate"
+    </filesMatch>
+    <filesMatch "\\.(css|js|json|html)$">
+    Header set Cache-Control "max-age=1, private, must-revalidate"
+    </filesMatch>
+</ifModule>
+# END Caching
+
