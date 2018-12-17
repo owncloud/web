@@ -18,6 +18,11 @@ const actions = {
       context.commit('SET_USER', state)
       // force redirect to login page after logout
       router.push({ name: 'login' })
+    }).catch(() => {
+      // reset user to default state
+      context.commit('SET_USER', state)
+      // force redirect to login page after logout
+      router.push({ name: 'login' })
     })
   },
   initAuth (context) {
