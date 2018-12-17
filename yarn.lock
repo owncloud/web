@@ -5092,10 +5092,10 @@ nightwatch-api@^2.0.0:
     "@types/debug" "^0.0.31"
     debug "^4.1.0"
 
-nightwatch@^1.0.15:
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-1.0.15.tgz#5695c17136239a1f74f2a53235911bff9733e4d3"
-  integrity sha512-PksSlRPg+jsAb3/YdY0z4mVyTWSrf+tY9Ua1nbcqJH177mTDEcZhbJ6ITgwC3gsAPPDBK2lIM6McDgRQU37XeA==
+nightwatch@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-1.0.16.tgz#74f1328ebd4782bd5925d851786d7fa81ba992f9"
+  integrity sha512-nqn+349qw88dbS/PCGbrDt1+PEtNV05brZOHilUnfZZ3Txpbmuhb9Z88tiNsNKv5pKxvWorUZz+B76eXH0EuEQ==
   dependencies:
     assertion-error "^1.1.0"
     chai-nightwatch "0.2.1"
