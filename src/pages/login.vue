@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-layout class="background primary">
-      <v-flex class="pa-0" xs12 style="height: 100vh">
+    <v-layout background primary :style="backgroundStyle">
+      <v-flex pa-0 xs12 style="height: 100vh">
         <v-img
           v-if="configuration.theme.logo.big"
           :src="configuration.theme.logo.big"
@@ -33,13 +33,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration'])
+    ...mapGetters(['configuration']),
+    backgroundStyle () {
+      return `background-image: linear-gradient(${this.configuration.theme.colors.primary}, ${this.configuration.theme.colors.secondary});`
+    }
   },
   methods: {
     ...mapActions(['login'])
   }
 }
 </script>
-
-<style>
-</style>
