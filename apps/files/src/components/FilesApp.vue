@@ -16,9 +16,9 @@
           </v-breadcrumbs>
         </v-flex>
         <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName"
-                          ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false"></oc-dialog-prompt>
+                          ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
         <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
-                          ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false"></oc-dialog-prompt>
+                          ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
         <file-upload-progress :file-name="fileUploadName" v-model="fileUploadProgress"></file-upload-progress>
         <v-menu
           offset-y
