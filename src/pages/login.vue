@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container pa-0 fill-height style="max-width: 100%">
-      <v-layout background primary :style="backgroundStyle" >
+      <v-layout background primary class="loginGradient" >
         <v-flex pa-0 xs12 style="height: 95vh">
           <v-img
             v-if="configuration.theme.logo.big"
@@ -53,13 +53,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-    backgroundStyle () {
-      return `background-image: linear-gradient(${this.configuration.theme.colors.primary}, ${this.configuration.theme.colors.secondary});`
-    }
+    ...mapGetters(['configuration'])
   },
   methods: {
     ...mapActions(['login'])
   }
 }
 </script>
+
+<style>
+.loginGradient {
+  background-image: linear-gradient(var(--v-primary-base), var(--v-secondary-base));
+}
+</style>
