@@ -8,6 +8,13 @@ const state = {
 }
 
 function _buildFile (file) {
+  let ext = false
+  if (file.type !== 'dir') {
+    const ex = file.name.match(/\.[0-9a-z]+$/i)
+    if (ex !== null) {
+      ext = ex[0].substr(1)
+    }
+  }
   return ({
     type: (file.type === 'dir') ? 'folder' : file.type,
     starred: file['fileInfo']['{http://owncloud.org/ns}favorite'] !== '0',
@@ -20,7 +27,7 @@ function _buildFile (file) {
         return file['fileInfo']['{DAV:}getcontentlength'] / 100
       }
     }()),
-    extension: (file.type === 'dir') ? false : file.name.match(/\.[0-9a-z]+$/i)[0].substr(1),
+    extension: ext,
     name: (function () {
       let pathList = file.name.split('/').filter(e => e !== '')
       return pathList[pathList.length - 1]

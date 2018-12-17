@@ -1,13 +1,11 @@
 <template>
-  <div class="file-upload">
-    <div class="input-wrapper">
-      <input id="file-upload-input" type="file" name="file" @change="onChangeInputFile" :multiple="false" :disabled="uploading" ref="input" />
-      <label v-if="!uploading" for="file-upload-input">
-      <v-icon large>cloud_upload</v-icon>
-      </label>
-      <v-progress-circular v-if="uploading" :value="progress">{{ progress }}</v-progress-circular>
-    </div>
-  </div>
+  <v-list-tile @click="triggerUpload">
+    <v-list-tile-action>
+      <v-icon>cloud_upload</v-icon>
+    </v-list-tile-action>
+    <v-list-tile-title v-translate>Upload</v-list-tile-title>
+    <input id="fileUploadInput" type="file" name="file" @change="onChangeInputFile" :multiple="false" :disabled="uploading" ref="input" />
+  </v-list-tile>
 </template>
 
 <script>
@@ -32,21 +30,19 @@ export default {
   },
   data () {
     return {
-      progress: 0
+      progress: 0,
+      fileName: ''
     }
   },
   computed: {
     uploading () {
       return this.progress > 0
-    },
-    progressStyle () {
-      return {
-        width: `${this.progress}%`,
-        display: this.uploading ? 'block' : 'none'
-      }
     }
   },
   methods: {
+    triggerUpload () {
+      this.$refs.input.click()
+    },
     onChangeInputFile (e) {
       let files = e.target.files || e.dataTransfer.files
       if (!files.length) return
@@ -56,6 +52,7 @@ export default {
 
     upload (file) {
       this.progress = 0.1
+      this.fileName = file.name
       let fileUpload = new FileUpload(this.url, this.headers, this.onProgress, this.requestType)
       fileUpload
         .upload(file, this.additionalData)
@@ -80,14 +77,17 @@ export default {
 
     onProgress (e) {
       this.progress = parseInt(e.loaded * 100 / e.total)
-      this.$emit('progress', this.progress)
+      this.$emit('progress', {
+        fileName: this.fileName,
+        progress: this.progress
+      })
     }
   }
 }
 </script>
 
 <style scoped="true">
-  #file-upload-input {
+  #fileUploadInput {
     position: absolute;
     left: -99999px;
   }

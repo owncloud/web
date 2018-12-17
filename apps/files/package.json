@@ -5,7 +5,7 @@
   "main": "js/files.bundle.js",
   "scripts": {
     "lint": "eslint src/**/*.vue src/**/*.js src/*.js --color",
-    "lint-fix": "eslint src/**/*.vue src/**/*.js  src/*.js --color",
+    "lint-fix": "eslint src/**/*.vue src/**/*.js  src/*.js --color --fix",
     "watch": "webpack --progress --colors --watch --mode development --config webpack.dev.js",
     "build": "webpack -p --config webpack.common.js"
   },

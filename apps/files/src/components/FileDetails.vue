@@ -13,7 +13,7 @@
         <v-icon color="white" class="pl-4" medium>folder</v-icon>
       </v-flex>
       <v-flex white--text align-self-center>
-        <span class="subheading" v-translate> {{ getTabName }} </span>
+        <span class="subheading"> {{ getTabName }} </span>
       </v-flex>
     </v-layout>
     <v-layout primary row>
@@ -71,23 +71,7 @@ export default {
       this.$emit('reset')
     },
     downloadFiles () {
-      const url = this.$client.files.getFileUrl(this.items[0].path)
-      let anchor = document.createElement('a')
-
-      let headers = new Headers()
-      headers.append('Authorization', 'Bearer ' + this.getToken)
-
-      fetch(url, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-          let objectUrl = window.URL.createObjectURL(blobby)
-
-          anchor.href = objectUrl
-          anchor.download = this.items[0].name
-          anchor.click()
-
-          window.URL.revokeObjectURL(objectUrl)
-        })
+      this.downloadFile(this.items[0])
     },
     deleteSelectedFiles () {
       this.deleteFiles({
@@ -106,7 +90,7 @@ export default {
       if (this.items.length === 0) {
         return ''
       }
-      return (this.items.length > 1) ? 'Multiple Files' : this.items[0].name
+      return (this.items.length > 1) ? this.$gettext('Multiple Files') : this.items[0].name
     }
   }
 }
