@@ -8,7 +8,7 @@
                 <v-icon @click="navigateTo('files-list', props.item.route)" v-if="props.item.text === 'home'" large>
                   home
                 </v-icon>
-                <span @click="navigateTo('files-list', props.item.route)" v-else class="heading font-weight-bold">
+                <span @click="navigateTo('files-list', props.item.route)" v-else class="heading font-weight-bold" style="cursor: pointer">
                   {{ props.item.text }}
                 </span>
               </drop>
@@ -292,7 +292,7 @@ export default {
     getRoutes () {
       this.breadcrumbs = []
       let breadcrumb = {}
-      let absolutePath = this.route.params.item
+      let absolutePath = this.$route.params.item
       let pathSplit = absolutePath.split('/').filter((val) => val)
       if (!_includes(pathSplit, 'home')) {
         breadcrumb.text = 'home'
