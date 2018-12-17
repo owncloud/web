@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar class="theme--dark primary">
+  <v-toolbar app class="theme--dark primary">
   <v-toolbar-side-icon @click.prevent="toggleSidebar(true)" class="theme--dark"></v-toolbar-side-icon>
   <span class="subheading" v-translate>Files</span>
   <v-spacer></v-spacer>

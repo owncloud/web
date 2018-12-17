@@ -1,17 +1,11 @@
 <template>
   <v-app light id="Phoenix">
     <notification-bar />
-    <v-container fluid class="pa-0">
-      <v-layout tag="header"  v-if="showHeader">
-        <top-bar></top-bar>
-      </v-layout>
-      <v-layout tag="aside" v-if="showHeader">
-        <side-menu></side-menu>
-      </v-layout>
-      <main>
-        <router-view></router-view>
-      </main>
-    </v-container>
+    <top-bar v-if="showHeader"></top-bar>
+    <side-menu v-if="showHeader"></side-menu>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
   </v-app>
 </template>
 <script>
