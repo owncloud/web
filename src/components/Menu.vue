@@ -136,9 +136,7 @@ export default {
     },
     logout () {
       this.sidebarIsVisible = false
-      this.$store.dispatch('logout', {}).then(() => {
-        this.$router.push('/login')
-      })
+      this.$store.dispatch('logout')
     },
     navigateTo (route) {
       this.$router.push(route)
