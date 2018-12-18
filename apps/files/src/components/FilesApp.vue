@@ -1,5 +1,6 @@
   <template>
-    <v-container id="files-app" fluid pa-0 style="height: 100vh">
+    <v-content>
+      <v-container id="files-app" fluid pa-0 style="height: 100vh">
       <v-toolbar class="elevation-1">
         <v-flex align-self-center>
           <v-breadcrumbs class="pa-0" :items="activeRoute">
@@ -89,6 +90,7 @@
         <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
       </v-layout>
     </v-container>
+    </v-content>
   </template>
 
 <script>
