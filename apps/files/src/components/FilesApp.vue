@@ -8,7 +8,7 @@
                 <v-icon @click="navigateTo('files-list', props.item.route)" v-if="props.item.text === 'home'" large>
                   home
                 </v-icon>
-                <span @click="navigateTo('files-list', props.item.route)" v-else class="heading font-weight-bold">
+                <span @click="navigateTo('files-list', props.item.route)" v-else class="heading font-weight-bold" style="cursor: pointer">
                   {{ props.item.text }}
                 </span>
               </drop>
@@ -16,9 +16,9 @@
           </v-breadcrumbs>
         </v-flex>
         <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName"
-                          ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false"></oc-dialog-prompt>
+                          ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
         <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
-                          ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false"></oc-dialog-prompt>
+                          ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
         <file-upload-progress :file-name="fileUploadName" v-model="fileUploadProgress"></file-upload-progress>
         <v-menu
           offset-y
@@ -292,7 +292,7 @@ export default {
     getRoutes () {
       this.breadcrumbs = []
       let breadcrumb = {}
-      let absolutePath = this.route.params.item
+      let absolutePath = this.$route.params.item
       let pathSplit = absolutePath.split('/').filter((val) => val)
       if (!_includes(pathSplit, 'home')) {
         breadcrumb.text = 'home'

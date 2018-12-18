@@ -7,6 +7,7 @@
         <v-text-field
           autofocus
           v-model="inputValue"
+          ref="input"
           @keydown.enter.native="onConfirm"
         ></v-text-field>
       </v-card-text>
@@ -27,7 +28,6 @@ export default {
     value: {},
     ocTitle: String,
     ocInputName: String,
-    ocInputId: String,
     ocInputMaxlength: [String, Number],
     ocInputPlaceholder: [String, Number],
     ocContent: String,
@@ -46,6 +46,13 @@ export default {
   watch: {
     value () {
       this.inputValue = this.value
+    },
+    ocActive (isActive) {
+      this.$nextTick().then(() => {
+        if (isActive) {
+          this.$refs.input.focus()
+        }
+      })
     }
   },
   methods: {
