@@ -25,25 +25,25 @@
       <v-spacer />
     </v-layout>
     <v-tabs
-    v-model="active"
-    color="primary lighten-5"
-    dark
-    slider-color="yellow"
+      v-model="active"
+      color="primary lighten-5"
+      dark
+      slider-color="yellow"
     >
-    <v-tab
-    v-for="tab of fileSideBars"
-    :key="tab.name"
-    ripple
-    >
-    {{ tab.name }}
-  </v-tab>
+      <v-tab
+        v-for="tab of fileSideBars"
+        :key="tab.name"
+        ripple
+      >
+        {{ tab.name }}
+      </v-tab>
       <v-tab-item
-              v-for="tab of fileSideBars"
-              :key="tab.name"
+        v-for="tab of fileSideBars"
+        :key="tab.name"
       >
         <component :is="tab.component"></component>
       </v-tab-item>
-</v-tabs>
+    </v-tabs>
 </v-layout>
 </v-navigation-drawer>
 </template>
@@ -60,7 +60,7 @@ export default {
     return {
       drawer: false,
       tabName: '',
-      active: this.getLength
+      active: 0
     }
   },
   components: {
@@ -69,6 +69,9 @@ export default {
     ...mapActions('Files', ['deleteFiles']),
     close () {
       this.$emit('reset')
+    },
+    showSidebar (sideBarName) {
+      this.active = Object.keys(this.fileSideBars).indexOf(sideBarName)
     },
     downloadFiles () {
       this.downloadFile(this.items[0])
@@ -83,9 +86,6 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'fileSideBars']),
 
-    getLength () {
-      return this.items.length
-    },
     getTabName () {
       if (this.items.length === 0) {
         return ''
