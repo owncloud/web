@@ -52,16 +52,12 @@
           <v-list-tile-sub-title>{{ item.mdate | formDateFromNow }}</v-list-tile-sub-title>
         </v-list-tile-content>
 
-        <v-list-tile-action>
+        <v-list-tile-action
+          v-for="(action, index) in actions"
+          :key="index">
           <v-btn icon
-            @click="downloadFile(item)">
-            <v-icon>file_download</v-icon>
-          </v-btn>
-        </v-list-tile-action>
-        <v-list-tile-action>
-          <v-btn icon
-          @click="deleteFile(item)">
-            <v-icon>delete</v-icon>
+            @click="action.handler(item, action.handlerData)">
+            <v-icon>{{ action.icon }}</v-icon>
           </v-btn>
         </v-list-tile-action>
 
@@ -116,13 +112,30 @@ export default {
         client: this.$client,
         files: [file]
       })
+    },
+    openSideBar (file, sideBarName) {
+      this.$emit('sideBarOpen', file, sideBarName)
     }
   },
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
-    ...mapGetters(['getToken']),
+    ...mapGetters(['getToken', 'fileSideBars']),
     all () {
       return this.selectedFiles.length === this.fileData.length
+    },
+    actions () {
+      let actions = [
+        { icon: 'file_download', handler: this.downloadFile },
+        { icon: 'delete', handler: this.deleteFile }
+      ]
+      for (let sideBarName in this.fileSideBars) {
+        let sideBar = this.fileSideBars[sideBarName]
+        if (sideBar.quickAccess) {
+          actions.push({ icon: sideBar.quickAccess.icon, handler: this.openSideBar, handlerData: sideBarName })
+        }
+      }
+
+      return actions
     }
   }
 }

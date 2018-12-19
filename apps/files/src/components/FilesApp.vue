@@ -81,10 +81,10 @@
       <v-layout row fill-height>
         <v-flex :class="{'xs12': selectedFiles.length === 0, 'xs6': selectedFiles.length > 0 }" pa-0 fill-height>
           <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear>
-          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" />
+          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" @sideBarOpen="openSideBar"/>
         </v-flex>
         <v-flex v-if="selectedFiles.length > 0" xs6 pa-0>
-          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
+          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
         </v-flex>
         <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
       </v-layout>
@@ -207,6 +207,14 @@ export default {
       })
       this.showActionBar = true
       this.fileAction = file
+    },
+
+    openSideBar (file, sideBarName) {
+      this.resetFileSelection()
+      this.addFileSelection(file)
+      this.$nextTick().then(() => {
+        this.$refs.fileDetails.showSidebar(sideBarName)
+      })
     },
 
     addNewFile (fileName) {
