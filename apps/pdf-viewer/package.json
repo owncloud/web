@@ -1,0 +1,21 @@
+{
+  "name": "pdf-viewer",
+  "version": "1.0.0",
+  "description": "View pdfs in phoenix",
+  "main": "index.js",
+  "scripts": {
+    "watch": "webpack --progress --colors --watch --mode 'development'",
+    "build": "webpack -p"
+  },
+  "author": "Thomas Müller",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2"
+  },
+  "dependencies": {
+    "css-loader": "^2.0.1",
+    "scss-loader": "^0.0.1",
+    "vue-pdf": "^4.0.4"
+  }
+}
