@@ -170,16 +170,25 @@ export default {
     },
 
     onFileSuccess (event, file) {
-      this.$client.files.fileInfo(file.name, davProperties).then(fileInfo => {
-        this.fileUploadProgress = 0
-        this.fileUploadName = ''
-        this.addFiles({
-          files: [fileInfo]
+      this.$nextTick().then(() => {
+        const filePath = ((this.item === 'home') ? '' : this.item) + '/' + file.name
+        this.$client.files.fileInfo(filePath, davProperties).then(fileInfo => {
+          this.fileUploadProgress = 0
+          this.fileUploadName = ''
+          this.addFiles({
+            files: [fileInfo]
+          })
+        }).catch(() => {
+          this.fileUploadProgress = 0
+          this.fileUploadName = ''
+          this.getFolder()
         })
       })
     },
 
     onFileError (error) {
+      this.fileUploadProgress = 0
+      this.fileUploadName = ''
       this.showNotification({
         title: this.$gettext('File upload failed ....'),
         desc: error,
