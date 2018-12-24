@@ -13,11 +13,15 @@ module.exports = merge(common, {
   devServer: {
     contentBase: path.resolve(__dirname),
     historyApiFallback: true,
+    // workaround for webpack-dev-server issue, which works around sockjs issue
+    // for bug status, see https://github.com/webpack/webpack-dev-server/issues/1604
+    // we should enable hostCheck in near future...
+    disableHostCheck: true,
     publicPath: '/core/',
-    filename: "js/core.bundle.js",
+    filename: 'js/core.bundle.js',
     watchContentBase: true,
     https: false,
     compress: true,
     port: 8300
   }
-});
+})
