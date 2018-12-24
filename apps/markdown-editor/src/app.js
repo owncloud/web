@@ -10,7 +10,7 @@ const MarkdownEditor = () => ({
 // --- Routing -----------------------------------------------------------------
 
 const routes = [{
-	path: `/markdown-editor`,
+	path: '',
 	component: MarkdownEditor,
 	name: 'markdown-editor'
 }];

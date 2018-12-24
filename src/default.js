@@ -80,7 +80,11 @@ Vue.component('drop', Drop);
         if (!app.appInfo) {
           console.error('Try to load app with missing appInfo...')
         }
-        if (app.routes) routes.push(app.routes)
+        if (app.routes) {
+          // rewrite relative app routes by prefix'ing their corresponding appId
+          app.routes.forEach(r => (r.path = `/${encodeURI(app.appInfo.id)}${r.path}`))
+          routes.push(app.routes)
+        }
         if (app.plugins) plugins.push(app.plugins)
         if (app.navItems) navItems.push(app.navItems)
         if (app.store) store.registerModule(app.appInfo.name, app.store.default)

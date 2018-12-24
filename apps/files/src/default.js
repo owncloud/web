@@ -29,11 +29,11 @@ const navItems = [{
 }]
 
 const routes = [{
-  path: `/${appInfo.id}`,
+  path: '',
   redirect: `/${appInfo.id}/list/home`
 },
 {
-  path: `/${appInfo.id}/list/:item`,
+  path: '/list/:item',
   component: FilesApp,
   name: 'files-list',
   meta: {
