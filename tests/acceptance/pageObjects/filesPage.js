@@ -4,12 +4,10 @@ module.exports = {
 	},
 	elements: {
 		filesTable: {
-			selector: '//div[@id="files-app"]//table',
-			locateStrategy: 'xpath'
+			selector: '#files-list'
 		},
 		fileRows: {
-			selector: '//div[@id="files-app"]//tbody/tr',
-			locateStrategy: 'xpath'
+			selector: '.file-row'
 		}
 	}
 }

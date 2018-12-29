@@ -14,6 +14,7 @@ import user from './user'
 Vue.use(Vuex)
 
 const vuexPersist = new VuexPersistence({
+  key: 'phoenixState',
   storage: window.localStorage,
   filter: (mutation) => (['SET_USER', 'SET_TOKEN'].indexOf(mutation.type) > -1),
   modules: ['user']

@@ -40,7 +40,7 @@ When('the user authorizes access to phoenix',
             })
             .page.ownCloudAuthorizePage();
         return loginPage
-            .waitForElementVisible('@authorizeButton', 10000)
+            .waitForElementPresent('@authorizeButton', 1000)
             .click('@authorizeButton');
 	});
 

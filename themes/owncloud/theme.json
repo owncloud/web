@@ -6,15 +6,15 @@
   "colors": {
     "primary": "#1D2D44",
     "secondary": "#8C9EFF",
-    "accent": "#F5F7F9",
+    "accent": "#abacae",
     "info": "#6A9EFF",
     "success": "#32D296",
     "warning": "#FAA05A",
     "error": "#F0506E"
   },
   "logo": {
-    "mini": "themes/owncloud/assets/gfx/cloud-logo-invert.svg",
-    "small": "themes/owncloud/assets/gfx/cloud-logo-invert.svg",
-    "big": "themes/owncloud/assets/gfx/cloud-logo-invert.svg"
+    "mini": "themes/owncloud/cloud-logo-invert.svg",
+    "small": "themes/owncloud/cloud-logo-invert.svg",
+    "big": "themes/owncloud/cloud-logo-invert.svg"
   }
 }

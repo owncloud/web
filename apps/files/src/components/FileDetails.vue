@@ -13,7 +13,7 @@
         <v-icon color="white" class="pl-4" medium>folder</v-icon>
       </v-flex>
       <v-flex white--text align-self-center>
-        <span class="subheading" v-translate> {{ getTabName }} </span>
+        <span class="subheading"> {{ getTabName }} </span>
       </v-flex>
     </v-layout>
     <v-layout primary row>
@@ -25,25 +25,25 @@
       <v-spacer />
     </v-layout>
     <v-tabs
-    v-model="active"
-    color="primary lighten-5"
-    dark
-    slider-color="yellow"
+      v-model="active"
+      color="primary lighten-5"
+      dark
+      slider-color="yellow"
     >
-    <v-tab
-    v-for="tab of fileSideBars"
-    :key="tab.name"
-    ripple
-    >
-    {{ tab.name }}
-  </v-tab>
+      <v-tab
+        v-for="tab of fileSideBars"
+        :key="tab.name"
+        ripple
+      >
+        {{ tab.name }}
+      </v-tab>
       <v-tab-item
-              v-for="tab of fileSideBars"
-              :key="tab.name"
+        v-for="tab of fileSideBars"
+        :key="tab.name"
       >
         <component :is="tab.component"></component>
       </v-tab-item>
-</v-tabs>
+    </v-tabs>
 </v-layout>
 </v-navigation-drawer>
 </template>
@@ -60,7 +60,7 @@ export default {
     return {
       drawer: false,
       tabName: '',
-      active: this.getLength
+      active: 0
     }
   },
   components: {
@@ -70,24 +70,11 @@ export default {
     close () {
       this.$emit('reset')
     },
+    showSidebar (sideBarName) {
+      this.active = Object.keys(this.fileSideBars).indexOf(sideBarName)
+    },
     downloadFiles () {
-      const url = this.$client.files.getFileUrl(this.items[0].path)
-      let anchor = document.createElement('a')
-
-      let headers = new Headers()
-      headers.append('Authorization', 'Bearer ' + this.getToken)
-
-      fetch(url, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-          let objectUrl = window.URL.createObjectURL(blobby)
-
-          anchor.href = objectUrl
-          anchor.download = this.items[0].name
-          anchor.click()
-
-          window.URL.revokeObjectURL(objectUrl)
-        })
+      this.downloadFile(this.items[0])
     },
     deleteSelectedFiles () {
       this.deleteFiles({
@@ -99,14 +86,11 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'fileSideBars']),
 
-    getLength () {
-      return this.items.length
-    },
     getTabName () {
       if (this.items.length === 0) {
         return ''
       }
-      return (this.items.length > 1) ? 'Multiple Files' : this.items[0].name
+      return (this.items.length > 1) ? this.$gettext('Multiple Files') : this.items[0].name
     }
   }
 }

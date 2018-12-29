@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-layout class="background primary">
+    <v-layout background primary :style="backgroundStyle">
       <v-flex class="pa-0" xs12>
         <v-img
         v-if="configuration.theme.logo.big"
@@ -25,17 +25,18 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  name: 'loginPage',
+  name: 'errorPage',
 
   data () {
     return {
-      loading: false,
-      username: '',
-      password: ''
+      loading: false
     }
   },
   computed: {
-    ...mapGetters(['configuration'])
+    ...mapGetters(['configuration']),
+    backgroundStyle () {
+      return `background-image: linear-gradient(${this.configuration.theme.colors.primary}, ${this.configuration.theme.colors.secondary});`
+    }
   },
   methods: {
     authenticate () {

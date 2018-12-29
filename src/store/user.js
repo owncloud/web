@@ -1,58 +1,46 @@
 'use strict'
 import initVueAuthenticate from '../services/auth'
+import router from '../router/'
 
 let vueAuthInstance
 
 const state = {
+  token: '',
   displayname: null,
   email: null,
   isAuthenticated: false
 }
 
 const actions = {
-  login (context, payload) {
-    if (vueAuthInstance !== undefined) {
-      vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
-    }
-    payload = payload || {}
-    return vueAuthInstance.login(payload.user, payload.requestOptions)
+  logout (context, payload = {}) {
+    vueAuthInstance.logout(payload.requestOptions)
+    // reset user to default state
+    context.commit('SET_USER', state)
+    // force redirect to login page after logout
+    router.push({ name: 'login' })
   },
-
-  logout (context, payload) {
-    if (vueAuthInstance !== undefined) {
-      vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
-    }
-    payload = payload || {}
-    return vueAuthInstance.logout(payload.requestOptions).then(function () {
+  initAuth (context) {
+    // if called from login, use available vue-authenticate instance; else re-init
+    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
+    const token = vueAuthInstance.getToken()
+    this._vm.$client.loginWithBearer(token).then(res => {
+      const token = vueAuthInstance.getToken()
       context.commit('SET_USER', {
-        displayname: '',
-        email: '',
-        isAuthenticated: false
+        displayname: res['display-name'],
+        email: !Object.keys(res.email).length ? '' : res.email,
+        token,
+        isAuthenticated: true
       })
+      router.push({ path: '/' })
+    }).catch((e) => {
+      console.error('logout forced! Seems that your token is invalid. Error:', e)
+      context.dispatch('logout')
     })
   },
-
-  initAuth (context, payload) {
-    if (vueAuthInstance !== undefined) {
-      vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
-    }
-    if (context.getters.isAuthenticated) {
-      this._vm.$client.loginWithBearer(vueAuthInstance.getToken()).then(res => {
-        context.commit('SET_USER', {
-          displayname: res['display-name'],
-          email: Object.keys(res.email).length === 0 ? '' : res.email,
-          isAuthenticated: true
-        })
-      })
-    }
-  },
-
-  authenticate (context, payload) {
-    if (vueAuthInstance !== undefined) {
-      vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
-    }
-    payload = payload || {}
-    return vueAuthInstance.authenticate(payload.provider, payload.userData, payload.requestOptions).then(() => {
+  login (context, payload = { provider: 'oauth2' }) {
+    // reset vue-authenticate
+    vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
+    vueAuthInstance.authenticate(payload.provider, {}, {}).then(() => {
       if (vueAuthInstance.isAuthenticated) {
         context.dispatch('initAuth')
       }
@@ -65,26 +53,18 @@ const mutations = {
     state.displayname = user.displayname
     state.email = user.email
     state.isAuthenticated = user.isAuthenticated
-  },
-  isAuthenticated (state, payload) {
-    state.isAuthenticated = payload.isAuthenticated
+    state.token = user.token
   }
 }
 
 const getters = {
-  isAuthenticated: (state, getters, rootState) => {
-    if (!vueAuthInstance) {
-      vueAuthInstance = initVueAuthenticate(rootState.config.auth)
-    }
-    return vueAuthInstance.isAuthenticated()
+  isAuthenticated: (state) => {
+    return state.isAuthenticated
   },
-  getToken: (state, getters, rootState) => {
-    if (!vueAuthInstance) {
-      vueAuthInstance = initVueAuthenticate(rootState.config.auth)
-    }
-    return vueAuthInstance.getToken()
+  getToken: (state) => {
+    return state.token
   },
-  user: state => {
+  user: (state) => {
     return state
   }
 }

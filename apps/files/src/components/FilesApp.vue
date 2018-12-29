@@ -1,35 +1,6 @@
   <template>
-    <v-container id="files-app" fluid pa-0>
+    <v-container id="files-app" fluid pa-0 style="height: 100vh">
       <v-toolbar class="elevation-1">
-        <v-btn v-if="!createFile" @click="createFolder ? addNewFolder(newFolderName) : createFolder = !createFolder" flat>
-          <v-icon v-if="!createFolder" large>create_new_folder</v-icon>
-          <v-icon v-if="createFolder" large>add</v-icon>
-        </v-btn>
-        <v-btn v-if="!createFolder" @click="createFile ? addNewFile(newFileName, item) : createFile = !createFile" flat>
-          <v-icon v-if="!createFile" large>file_copy</v-icon>
-          <v-icon v-if="createFile" large>add</v-icon>
-        </v-btn>
-        <v-flex v-if="createFolder || createFile" xs2>
-          <v-text-field
-          v-if="createFolder"
-          @keydown.enter="addNewFolder(newFolderName)"
-          :placeholder="$gettext('Enter foldername here')"
-          v-model="newFolderName"
-          hide-details
-          single-line
-          ></v-text-field>
-          <v-text-field
-          v-if="createFile"
-          @keydown.enter="addNewFile(newFileName)"
-          :placeholder="$gettext('Enter filename here')"
-          v-model="newFileName"
-          hide-details
-          single-line
-          ></v-text-field>
-        </v-flex>
-        <v-flex align-self-center>
-          <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError"></file-upload>
-        </v-flex>
         <v-flex align-self-center>
           <v-breadcrumbs class="pa-0" :items="activeRoute">
             <template slot="item" slot-scope="props">
@@ -37,13 +8,59 @@
                 <v-icon @click="navigateTo('files-list', props.item.route)" v-if="props.item.text === 'home'" large>
                   home
                 </v-icon>
-                <span @click="navigateTo('files-list', props.item.route)" v-else class="heading font-weight-bold">
+                <span @click="navigateTo('files-list', props.item.route)" v-else class="heading font-weight-bold" style="cursor: pointer">
                   {{ props.item.text }}
                 </span>
               </drop>
             </template>
           </v-breadcrumbs>
         </v-flex>
+        <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName"
+                          ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
+        <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
+                          ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
+        <file-upload-progress :file-name="fileUploadName" v-model="fileUploadProgress"></file-upload-progress>
+        <v-menu
+          offset-y
+        >
+          <v-btn
+            slot="activator"
+            color="primary"
+            dark
+            v-translate
+          >
+            + New
+          </v-btn>
+
+          <v-card>
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline mb-0" v-translate>Create and upload files and folder</h3>
+                <div>You can upload files and folders<br>And create folders and various files ...</div>
+              </div>
+            </v-card-title>
+
+            <v-divider></v-divider>
+
+            <v-list>
+              <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
+              <v-divider></v-divider>
+              <v-list-tile @click="createFolder = true">
+                <v-list-tile-action>
+                  <v-icon>create_new_folder</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-title v-translate>New folder</v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile @click="createFile = true">
+                <v-list-tile-action>
+                  <v-icon>file_copy</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-title v-translate>New file</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+
+          </v-card>
+        </v-menu>
         <v-flex align-self-center class="text-xs-right" xs1>
           <span>
             <translate :translate-n="filteredFiles.length" translate-plural="%{ filteredFiles.length } Results">
@@ -63,22 +80,25 @@
       </v-toolbar>
       <v-layout row fill-height>
         <v-flex :class="{'xs12': selectedFiles.length === 0, 'xs6': selectedFiles.length > 0 }" pa-0 fill-height>
-          <dir-table @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" />
+          <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear>
+          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" @sideBarOpen="openSideBar"/>
         </v-flex>
         <v-flex v-if="selectedFiles.length > 0" xs6 pa-0>
-          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false"/>
+          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
         </v-flex>
+        <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
       </v-layout>
-      <fileactions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
     </v-container>
   </template>
 
 <script>
 import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
-import FileactionsTab from './FileactionsTab.vue'
-import DirTable from './DirTable.vue'
+import FileActionsTab from './FileactionsTab.vue'
+import FileList from './FileList.vue'
 import FileUpload from './FileUpload.vue'
+import OcDialogPrompt from './ocDialogPrompt.vue'
+import FileUploadProgress from './FileUploadProgress.vue'
 import { filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
@@ -98,15 +118,20 @@ export default {
   ],
   components: {
     FileDetails,
-    FileactionsTab,
-    DirTable,
-    FileUpload
+    FileActionsTab,
+    FileList,
+    FileUpload,
+    FileUploadProgress,
+    OcDialogPrompt
   },
   data () {
     return {
       showActionBar: false,
       createFolder: false,
       createFile: false,
+      fileUploadName: '',
+      fileUploadProgress: 0,
+      upload: false,
       fileAction: {},
       fileName: '',
       selected: [],
@@ -138,21 +163,42 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles']),
-    ...mapActions(['openFile']),
+    ...mapActions(['openFile', 'showNotification']),
+
     trace () {
       console.info('trace', arguments)
     },
 
     onFileSuccess (event, file) {
-      this.$client.files.fileInfo(file.name, davProperties).then(fileInfo => {
-        this.addFiles({
-          files: [fileInfo]
+      this.$nextTick().then(() => {
+        const filePath = ((this.item === 'home') ? '' : this.item) + '/' + file.name
+        this.$client.files.fileInfo(filePath, davProperties).then(fileInfo => {
+          this.fileUploadProgress = 0
+          this.fileUploadName = ''
+          this.addFiles({
+            files: [fileInfo]
+          })
+        }).catch(() => {
+          this.fileUploadProgress = 0
+          this.fileUploadName = ''
+          this.getFolder()
         })
       })
     },
 
     onFileError (error) {
-      console.log('file error ' + error)
+      this.fileUploadProgress = 0
+      this.fileUploadName = ''
+      this.showNotification({
+        title: this.$gettext('File upload failed ....'),
+        desc: error,
+        type: 'error'
+      })
+    },
+
+    onFileProgress (progress) {
+      this.fileUploadProgress = progress.progress
+      this.fileUploadName = progress.fileName
     },
 
     toggleFileSelect (item) {
@@ -172,26 +218,48 @@ export default {
       this.fileAction = file
     },
 
-    addNewFile (fileName, path) {
+    openSideBar (file, sideBarName) {
+      this.resetFileSelection()
+      this.addFileSelection(file)
+      this.$nextTick().then(() => {
+        this.$refs.fileDetails.showSidebar(sideBarName)
+      })
+    },
+
+    addNewFile (fileName) {
       this.createFile = !this.createFile
       if (fileName !== '') {
-        if (path === 'home') {
-          path = '/'
-        }
-        console.log('addNewFile', fileName, 'pathToAddto', path)
+        this.$client.files.putFileContents(((this.item === 'home') ? '' : this.item) + '/' + fileName, '')
+          .then(() => {
+            this.getFolder()
+            this.createFile = false
+            this.newFileName = ''
+          })
+          .catch(error => {
+            this.showNotification({
+              title: this.$gettext('Creating folder failed ....'),
+              desc: error,
+              type: 'error'
+            })
+          })
       }
     },
 
     addNewFolder (folderName) {
-      this.createFolder = !this.createFolder
       if (folderName !== '') {
-        this.createFolder = !this.createFolder
         this.$client.files.createFolder(((this.item === 'home') ? '' : this.item) + '/' + folderName)
           .then(() => {
             this.getFolder()
+            this.createFolder = false
             this.newFolderName = ''
           })
-          .catch(console.error)
+          .catch(error => {
+            this.showNotification({
+              title: this.$gettext('Creating folder failed ....'),
+              desc: error,
+              type: 'error'
+            })
+          })
       }
     },
 
@@ -209,22 +277,39 @@ export default {
       if (!this.iAmActive) {
         return false
       }
+      this.loading = true
       this.path = []
       let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
       this.$client.files.list(absolutePath, 1, davProperties).then(res => {
-        let files = res.splice(1)
+        let files = []
+        if (res === null) {
+          this.showNotification({
+            title: this.$gettext('Loading folder failed ....'),
+            type: 'error'
+          })
+        } else {
+          files = res.splice(1)
+        }
 
         this.loadFiles(files)
 
         this.self = files.self
 
         this.resetFileSelection()
+      }).catch(error => {
+        this.showNotification({
+          title: this.$gettext('Loading folder failed ....'),
+          desc: error.message,
+          type: 'error'
+        })
+      }).finally(() => {
+        this.loading = false
       })
     },
     getRoutes () {
       this.breadcrumbs = []
       let breadcrumb = {}
-      let absolutePath = this.route.params.item
+      let absolutePath = this.$route.params.item
       let pathSplit = absolutePath.split('/').filter((val) => val)
       if (!_includes(pathSplit, 'home')) {
         breadcrumb.text = 'home'

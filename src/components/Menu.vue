@@ -15,7 +15,7 @@
                 <v-icon>{{ n.iconMaterial }}</v-icon>
               </v-list-tile-action>
               <v-list-tile-content>
-                <v-list-tile-title v-translate>{{ n.name }}</v-list-tile-title>
+                <v-list-tile-title>{{ n.name }}</v-list-tile-title>
               </v-list-tile-content>
           </v-list-tile>
 
@@ -33,7 +33,7 @@
                           <v-icon>{{ item.icon }}</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
-                          <v-list-tile-title v-translate>{{ item.title }}</v-list-tile-title>
+                          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                         </v-list-tile-content>
                       </v-list-tile>
                       <v-list-tile
@@ -42,7 +42,7 @@
                         @click="notImplemented()"
                       >
                         <v-list-tile-content>
-                          <v-list-tile-title v-translate>{{ subItem.title }}</v-list-tile-title>
+                          <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
                         </v-list-tile-content>
 
                         <v-list-tile-action>
@@ -136,9 +136,7 @@ export default {
     },
     logout () {
       this.sidebarIsVisible = false
-      this.$store.dispatch('logout', {}).then(() => {
-        this.$router.push('/login')
-      })
+      this.$store.dispatch('logout')
     },
     navigateTo (route) {
       this.$router.push(route)
