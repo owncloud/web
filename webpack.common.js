@@ -16,8 +16,8 @@ if(fs.existsSync('config.json')) {
   var config = require('./tests/drone/config.json')
 }
 
-if(fs.existsSync(`./themes/${config.theme}/assets/gfx/favicon.jpg`)) {
-  favicon  = `./themes/${config.theme}/assets/gfx/favicon.jpg`
+if(fs.existsSync(`./themes/${config.theme}/favicon.jpg`)) {
+  favicon  = `./themes/${config.theme}/favicon.jpg`
 }
 
 config.apps
