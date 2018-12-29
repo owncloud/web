@@ -18,8 +18,8 @@
     "babel-loader": "^8.0.4",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
-    "css-loader": "^2.0.0",
-    "eslint": "^5.10.0",
+    "css-loader": "^2.1.0",
+    "eslint": "^5.11.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-import": "^2.14.0",
@@ -29,13 +29,13 @@
     "eslint-plugin-vue": "^5.0.0",
     "vue-loader": "^15.4.2",
     "vue-template-compiler": "^2.5.21",
-    "webpack": "^4.27.1",
+    "webpack": "^4.28.2",
     "webpack-cli": "^3.1.2",
     "webpack-merge": "^4.1.5"
   },
   "dependencies": {
     "filesize": "^3.6.1",
     "lodash": "^4.17.11",
-    "moment": "^2.22.2"
+    "moment": "^2.23.0"
   }
 }
