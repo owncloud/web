@@ -9,6 +9,7 @@ module.exports = {
     'markdown-editor': ['./src/app.js']
   },
   output: {
+    publicPath: '/apps/markdown-editor/',
     chunkFilename: '[name].markdown-editor.chunk.js',
     filename: "markdown-editor.bundle.js",
   },
