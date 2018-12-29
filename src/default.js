@@ -107,7 +107,7 @@ Vue.component('drop', Drop);
       // inject custom config into vuex
       store.dispatch('loadConfig', config.data)
       // inject custom theme config into vuex
-      Axios.get(`themes/${config.data.theme}/theme.json`).then(res => {
+      Axios.get(`themes/${config.data.theme}.json`).then(res => {
         store.dispatch('loadTheme', res.data)
         // TODO FOUC happens here; this color init is too late.
         OC.$vuetify.theme = res.data.colors
