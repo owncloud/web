@@ -1,6 +1,7 @@
 <template>
   <v-navigation-drawer
         v-model="sidebarIsVisible"
+        v-show="sidebarIsVisible"
         absolute
         temporary
         clipped
