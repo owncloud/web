@@ -8,7 +8,7 @@ module.exports = {
       files: ['./src/default.js']
     },
     output : {
-      publicPath: '/apps/files/',
+      publicPath: 'apps/files/',
   		chunkFilename: '[name].files.chunk.js',
   		filename : "files.bundle.js",
   	},
