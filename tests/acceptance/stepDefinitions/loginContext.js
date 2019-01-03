@@ -1,5 +1,8 @@
 const { client } = require('nightwatch-api');
 const { Given, Then, When } = require('cucumber');
+// respect custom credentials via env vars
+const OC_USER = process.env.OC_USER || null
+const OC_PASS = process.env.OC_PASS || null
 
 Given(/^the user has browsed to the login page$/,
 	() => {
@@ -26,8 +29,8 @@ When('the user logs in with username {string} and password {string} using the we
 			.page.ownCloudLoginPage();
 		return loginPage
 		.waitForElementVisible('@usernameInput', 1000)
-		.setValue('@usernameInput', username)
-		.setValue('@passwordInput', password)
+		.setValue('@usernameInput', OC_USER || username)
+		.setValue('@passwordInput', OC_PASS || password)
 		.click('@loginSubmitButton');
 	});
 

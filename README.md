@@ -12,11 +12,11 @@ Run `yarn install`
 
 ## Run
 
-- optionally: `export SERVER_HOST=0.0.0.0:8300`
+- optionally provide custom domain name: `export SERVER_HOST=0.0.0.0:8300`
 - run a webpack dev server `yarn run watch`
 
 ## Run acceptance tests
-
+- optionally provide custom credentials: `export OC_USER=admin && export OC_PASS=admin`
 - build, configure and run phoenix
 - install the Chrome browser
 - run `yarn run acceptance-tests`
