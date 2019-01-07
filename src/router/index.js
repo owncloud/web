@@ -13,12 +13,12 @@ const router = new Router({
     path: '/login',
     name: 'login',
     component: LoginPage,
-    meta: { auth: false, title: 'Login to existing account', hideHeadbar: true } },
+    meta: { auth: false, hideHeadbar: true, showBackground: true } },
   {
     path: '/error',
     name: 'error',
     component: ErrorPage,
-    meta: { auth: false, title: 'Oooops something went wrong', hideHeadbar: true }
+    meta: { auth: false, hideHeadbar: true, showBackground: true }
   }]
 })
 

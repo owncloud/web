@@ -23,7 +23,8 @@ const state = {
     logo: {
       mini: null,
       small: null,
-      big: null
+      big: null,
+      background: null
     }
   }
 }
