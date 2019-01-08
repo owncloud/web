@@ -4377,7 +4377,8 @@ js-base64@^2.1.8:
 
 "js-owncloud-client@github:owncloud/js-owncloud-client#master":
   version "0.2.0-alpha1"
-  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/bff3a0780a95a875fd0d67a890d29d7066a0e7b7"
+  uid dbc2c9e3e82f3853a845b56e3bf9a353d00d1c6b
+  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/dbc2c9e3e82f3853a845b56e3bf9a353d00d1c6b"
   dependencies:
     browser-request "^0.3.3"
     davclient.js "https://github.com/owncloud/davclient.js.git"
