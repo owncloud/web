@@ -10,11 +10,11 @@
   "author": "serv3r.de DevTeam <ownCloud@serv3r.de>",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "webpack": "^4.26.1",
-    "webpack-cli": "^3.1.2"
+    "webpack": "^4.28.1",
+    "webpack-cli": "^3.2.1"
   },
   "dependencies": {
-    "marked": "^0.5.2",
-    "vue-loader": "^15.4.2"
+    "marked": "^0.6.0",
+    "vue-loader": "^15.5.1"
   }
 }
