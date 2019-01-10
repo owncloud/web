@@ -28,6 +28,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^5.1.0",
     "vue-loader": "^15.5.1",
+    "vue-template-compiler": "^2.5.21",
     "webpack": "^4.28.1",
     "webpack-cli": "^3.2.1",
     "webpack-merge": "^4.2.1"
@@ -35,6 +36,7 @@
   "dependencies": {
     "filesize": "^3.6.1",
     "lodash": "^4.17.11",
-    "moment": "^2.23.0"
+    "moment": "^2.23.0",
+    "vuex": "^3.0.1"
   }
 }

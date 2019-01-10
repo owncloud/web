@@ -1,6 +1,4 @@
-core/js/*
-core/css/*
-core/fonts/*
+release/*
 
 **/l10n/locale
 **/l10n/template.pot
@@ -22,5 +20,6 @@ package-lock.json
 
 node_modules
 build
+dist
 
 *.log

@@ -65,7 +65,7 @@ Vue.component('drop', Drop);
   try {
     let config = await Axios.get('config.json')
     let apps = _map(config.data.apps, (app) => {
-      return `./apps/${app}/js/${app}.bundle.js`
+      return `./apps/${app}/${app}.bundle.js`
     })
 
     requirejs(apps, function () {

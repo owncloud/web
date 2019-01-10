@@ -8,7 +8,8 @@ Pushing a new design and frontend concept to ownCloud
 
 ## How to build
 
-Run `yarn install`
+- Run `yarn install` to build core
+- Run `yarn dist` to build all apps configured in config.json
 
 ## Run
 
@@ -23,7 +24,7 @@ Run `yarn install`
 
 ## How to build Phoenix as ownCloud app
 
-- run `make clean && make`
+- run `yarn install && yarn dist && yarn build:prod`
 - run `make -f Makefile.release` dist
 
 ## How to deploy the app to ownCloud
