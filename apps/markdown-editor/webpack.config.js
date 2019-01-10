@@ -5,20 +5,22 @@ module.exports = {
 		new VueLoaderPlugin()
 	],
 	devtool: 'source-map',
-	entry: './src/app.js',
-	output: {
-		path: `${__dirname}/js`,
-		chunkFilename: '[name].markdown-editor.chunk.js',
-		filename: "markdown-editor.bundle.js",
-		publicPath: 'apps/markdown-editor/js/'
-	},
+  entry: {
+    'markdown-editor': ['./src/app.js']
+  },
+  output: {
+    publicPath: 'apps/markdown-editor/',
+    chunkFilename: '[name].markdown-editor.chunk.js',
+    filename: "markdown-editor.bundle.js",
+  },
 	module: {
 		rules: [{
 			test: /\.js?$/,
 			exclude: /node_modules/
 		}, {
 			test: /\.vue$/,
-			loader: 'vue-loader'
+			loader: 'vue-loader',
+      exclude: [/node_modules/]
 		}]
 	}
 }
