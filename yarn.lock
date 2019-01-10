@@ -8055,7 +8055,7 @@ vue@^2.5.2, vue@^2.5.21:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.21.tgz#3d33dcd03bb813912ce894a8303ab553699c4a85"
   integrity sha512-Aejvyyfhn0zjVeLvXd70h4hrE4zZDx1wfZqia6ekkobLmUZ+vNFQer53B4fu0EjWBSiqApxPejzkO1Znt3joxQ==
 
-vuetify@^1.4.0:
+vuetify@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.4.1.tgz#9dc99d59f93cd7f685864f10048c6606b8d38145"
   integrity sha512-rf86frKvK3c6fdzXkbLdChamifnyhLRwLEVvXKua8zfVSrFZ4HXFK4T8zN68Pg/4vxlp+5DFxF1IQ4rq4tJ03A==
