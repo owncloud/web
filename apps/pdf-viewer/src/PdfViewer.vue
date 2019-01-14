@@ -21,7 +21,8 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'PdfViewer',
-  mounted() {
+  mounted () {
+    console.log('1')
     if (this.filePath === '') {
       this.closeApp()
       return
@@ -31,7 +32,7 @@ export default {
     let headers = new Headers()
     headers.append('Authorization', 'Bearer ' + this.getToken)
 
-    fetch(url, {headers})
+    fetch(url, { headers })
       .then(response => {
         return response.blob()
       })
@@ -49,21 +50,21 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'showNotification']),
-    filePath() {
+    filePath () {
       // TODO use mapGetters if babel exists
       return this.$store.state.apps.file.path
     },
-    loading() {
+    loading () {
       return this.content === ''
     }
   },
   methods: {
-    closeApp() {
+    closeApp () {
       this.$router.push({
         path: '/files/list/home'
       })
     },
-    error(error) {
+    error (error) {
       this.showNotification({
         title: this.$gettext('PDF could not be loaded ....'),
         desc: error,
