@@ -35,7 +35,7 @@ help:
 
 .PHONY: dist
 dist:                       ## Build distribution
-dist: distdir javascript distconf sign package
+dist: distdir javascript oc-app distconf sign package
 
 
 .PHONY: javascript
@@ -52,6 +52,11 @@ distdir:
 distconf:
 	cp config.json.dist $(dist_dir)/config.json
 
+.PHONY: oc-app
+oc-app:
+	cp -R appinfo $(dist_dir)
+	cp .htaccess $(dist_dir)
+
 .PHONY: sign
 sign:
 ifdef CAN_SIGN
@@ -62,5 +67,6 @@ endif
 
 .PHONY: package
 package:
+	rm -rf $(CURDIR)/release
 	mkdir $(CURDIR)/release
-	tar -czf $(CURDIR)/release/$(app_name).tar.gz dist/*
+	cd $(dist_dir) && tar -czf $(cur_dir)/release/$(app_name).tar.gz *
