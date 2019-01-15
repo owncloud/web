@@ -46,7 +46,7 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.11",
-    "material-design-icons-iconfont": "^4.0.3",
+    "material-design-icons-iconfont": "^4.0.4",
     "mini-css-extract-plugin": "^0.5.0",
     "nightwatch": "^1.0.18",
     "nightwatch-api": "^2.1.0",
