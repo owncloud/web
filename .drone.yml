@@ -69,6 +69,12 @@ pipeline:
       - cd /var/www/owncloud/phoenix
       - yarn run acceptance-tests-drone
 
+  build-docker-image:
+    image: toolhippie/docker:latest
+    pull: true
+    commands:
+      - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
+
   build-release:
     image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
