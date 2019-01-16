@@ -11,7 +11,7 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "vue-loader": "^15.5.1",
-    "vue-template-compiler": "^2.5.21",
+    "vue-template-compiler": "^2.5.22",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1"
   },

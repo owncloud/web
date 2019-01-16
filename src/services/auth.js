@@ -17,7 +17,12 @@ export function initVueAuthenticate (config) {
             code: 'code',
             clientId: 'client_id',
             redirectUri: 'redirect_uri'
-          }
+          },
+          // below is used for open id connect
+          scope: ['profile', 'email'],
+          scopePrefix: 'openid',
+          scopeDelimiter: ' ',
+          requiredUrlParams: ['scope']
         }
       }
     })

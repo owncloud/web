@@ -53,7 +53,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     accumulatedFilesSize () {
-      return reduce(this.items, (sum, n) => {
+      return reduce(this.selectedFiles, (sum, n) => {
         return sum + n.size
       }, 0)
     }
