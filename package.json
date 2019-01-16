@@ -14,8 +14,8 @@
     "lint-fix": "eslint src/**/*.vue src/**/*.js src/*.vue src/*.js \"tests/**/*.js\" --color --fix",
     "accessibility-tests": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
     "accessibility-tests-drone": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
-    "acceptance-tests": "cucumber-js --require-module babel-core/register --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features",
-    "acceptance-tests-drone": "cucumber-js --require-module babel-core/register --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features"
+    "acceptance-tests": "cucumber-js --require-module babel-core/register --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features -t 'not @skip'",
+    "acceptance-tests-drone": "cucumber-js --require-module babel-core/register --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features -t 'not @skip'"
   },
   "author": "Felix Heidecke",
   "license": "AGPL-3.0",
