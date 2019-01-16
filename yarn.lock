@@ -8058,10 +8058,10 @@ vue@^2.5.2, vue@^2.5.22:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.22.tgz#3bf88041af08b8539c37b268b70ca79245e9cc30"
   integrity sha512-pxY3ZHlXNJMFQbkjEgGVMaMMkSV1ONpz+4qB55kZuJzyJOhn6MSy/YZdzhdnumegNzVTL/Dn3Pp4UrVBYt1j/g==
 
-vuetify@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.4.1.tgz#9dc99d59f93cd7f685864f10048c6606b8d38145"
-  integrity sha512-rf86frKvK3c6fdzXkbLdChamifnyhLRwLEVvXKua8zfVSrFZ4HXFK4T8zN68Pg/4vxlp+5DFxF1IQ4rq4tJ03A==
+vuetify@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.4.2.tgz#3e136397463d1e980e8ccdd78e4dcfcdfa4c538c"
+  integrity sha512-HnMBBtO5FqTPzr6FXVlxnYulGMrHVlcmBL7SSLE/AQnNbdUpT6Jw9D/Kdw9fbK5mdn7JSWMcfWpPJUrqYTtK1w==
 
 vuex-persist@^2.0.0:
   version "2.0.0"
