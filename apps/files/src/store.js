@@ -4,7 +4,8 @@ const namespaced = true
 
 const state = {
   files: [],
-  selected: []
+  selected: [],
+  inProgress: []
 }
 
 function _buildFile (file) {
@@ -38,6 +39,28 @@ function _buildFile (file) {
 }
 
 const mutations = {
+  UPDATE_FILE_PROGRESS (state, progress) {
+    let fileIndex = findIndex(state.inProgress, (f) => {
+      return f.name === progress.fileName
+    })
+    if (fileIndex === -1) return
+    state.inProgress[fileIndex].progress = progress.progress
+  },
+  REMOVE_FILE_FROM_PROGRESS (state, file) {
+    let fileIndex = findIndex(state.inProgress, (f) => {
+      return f.name === file.name
+    })
+    state.inProgress.splice(fileIndex - 1, 1)
+  },
+  ADD_FILE_TO_PROGRESS (state, file) {
+    state.inProgress.push({
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      progress: 0,
+      action: 'upload'
+    })
+  },
   LOAD_FILES (state, files) {
     state.files = files
   },
@@ -69,6 +92,13 @@ const mutations = {
 }
 
 const actions = {
+  updateFileProgress ({ commit }, progress) {
+    if (progress.progress === 100) commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
+    else commit('UPDATE_FILE_PROGRESS', progress)
+  },
+  addFileToProgress ({ commit }, file) {
+    commit('ADD_FILE_TO_PROGRESS', file)
+  },
   loadFiles (context, files) {
     files = files.map(_buildFile)
     context.commit('LOAD_FILES', files)
@@ -115,6 +145,9 @@ const actions = {
 }
 
 const getters = {
+  inProgress: state => {
+    return state.inProgress
+  },
   selectedFiles: state => {
     if (state.selected.length === 0) {
       return []

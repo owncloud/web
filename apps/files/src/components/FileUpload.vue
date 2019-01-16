@@ -4,12 +4,13 @@
       <v-icon>cloud_upload</v-icon>
     </v-list-tile-action>
     <v-list-tile-title v-translate>Upload</v-list-tile-title>
-    <input id="fileUploadInput" type="file" name="file" @change="onChangeInputFile" :multiple="false" :disabled="uploading" ref="input" />
+    <input id="fileUploadInput" type="file" name="file" @change="onChangeInputFile" multiple ref="input" />
   </v-list-tile>
 </template>
 
 <script>
 import FileUpload from '../FileUpload.js'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -30,40 +31,35 @@ export default {
   },
   data () {
     return {
-      progress: 0,
-      fileName: ''
     }
   },
   computed: {
-    uploading () {
-      return this.progress > 0
-    }
+    ...mapGetters('Files', ['inProgress'])
   },
   methods: {
+    ...mapActions('Files', ['addFileToProgress']),
     triggerUpload () {
       this.$refs.input.click()
     },
     onChangeInputFile (e) {
       let files = e.target.files || e.dataTransfer.files
       if (!files.length) return
-
-      this.upload(files[0])
+      for (let file of files) {
+        this.upload(file)
+      }
     },
 
     upload (file) {
-      this.progress = 0.1
-      this.fileName = file.name
-      let fileUpload = new FileUpload(this.url, this.headers, this.onProgress, this.requestType)
+      this.addFileToProgress(file)
+      let fileUpload = new FileUpload(file, this.url, this.headers, this.onProgress, this.requestType)
       fileUpload
-        .upload(file, this.additionalData)
+        .upload(this.additionalData)
         .then(e => {
           this.$emit('success', e, file)
-          this.progress = 0
           this.cleanInput()
         })
         .catch(e => {
           this.$emit('error', e)
-          this.progress = 0
           this.cleanInput()
         })
     },
@@ -75,11 +71,11 @@ export default {
       }
     },
 
-    onProgress (e) {
-      this.progress = parseInt(e.loaded * 100 / e.total)
+    onProgress (e, file) {
+      let progress = parseInt(e.loaded * 100 / e.total)
       this.$emit('progress', {
-        fileName: this.fileName,
-        progress: this.progress
+        fileName: file.name,
+        progress
       })
     }
   }
