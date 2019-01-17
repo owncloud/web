@@ -48,6 +48,7 @@
   "odt": "x-office-document",
   "one": "x-office-document",
   "otf": "image",
+  "pdf": "application-pdf",
   "pfb": "image",
   "php": "text-code",
   "pl": "text-code",

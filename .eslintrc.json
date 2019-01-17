@@ -9,6 +9,7 @@
         "plugin:vue/essential"
         ],
     "parserOptions": {
+        "parser": "babel-eslint",
         "sourceType": "module"
     },
     "rules": {
