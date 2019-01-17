@@ -20,7 +20,29 @@
                           ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
         <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
                           ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
-        <file-upload-progress :file-name="fileUploadName" v-model="fileUploadProgress"></file-upload-progress>
+          <v-menu offset-y >
+          <v-progress-circular
+             slot="activator"
+             :value="fileUploadProgress"
+             color="primary"
+           > {{ inProgress.length }} </v-progress-circular>
+           <v-list
+           v-for="n in inProgress.length"
+           :key="n"
+           two-line
+           >
+            <v-list-tile
+            avatar
+            ripple>
+                 <v-list-tile-avatar>
+                  <v-icon color="primary">file_copy</v-icon>
+                </v-list-tile-avatar>
+                 <v-list-tile-title>{{ inProgress[n - 1].name }}</v-list-tile-title>
+                 <v-list-tile-sub-title class="text--primary">{{ inProgress[n - 1].size| fileSize}}</v-list-tile-sub-title>
+                 <v-progress-linear color="primary" :value="inProgress[n - 1].progress"></v-progress-linear>
+             </v-list-tile>
+           </v-list>
+       </v-menu>
         <v-menu
           offset-y
         >
@@ -32,7 +54,6 @@
           >
             + New
           </v-btn>
-
           <v-card>
             <v-card-title primary-title>
               <div>
@@ -100,7 +121,6 @@ import FileActionsTab from './FileactionsTab.vue'
 import FileList from './FileList.vue'
 import FileUpload from './FileUpload.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
-import FileUploadProgress from './FileUploadProgress.vue'
 import { filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
@@ -123,7 +143,6 @@ export default {
     FileActionsTab,
     FileList,
     FileUpload,
-    FileUploadProgress,
     OcDialogPrompt
   },
   data () {
@@ -164,7 +183,7 @@ export default {
     this.getFolder()
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles']),
+    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress']),
     ...mapActions(['openFile', 'showNotification']),
 
     trace () {
@@ -199,8 +218,13 @@ export default {
     },
 
     onFileProgress (progress) {
-      this.fileUploadProgress = progress.progress
-      this.fileUploadName = progress.fileName
+      this.updateFileProgress(progress)
+      let progressTotal = 0
+      for (let item of this.inProgress) {
+        progressTotal = progressTotal + item.progress
+      }
+      this.fileUploadProgress = progressTotal / this.inProgress.length
+      return this.fileUploadProgress
     },
 
     toggleFileSelect (item) {
@@ -337,9 +361,8 @@ export default {
 
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles', 'files']),
+    ...mapGetters('Files', ['selectedFiles', 'files', 'inProgress']),
     ...mapGetters(['getToken']),
-
     activeRoute () {
       return this.getRoutes()
     },

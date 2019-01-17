@@ -1,21 +1,24 @@
 class FileUpload {
-  constructor (url, headers = {}, onProgress = () => {}, type = 'POST') {
+  constructor (file, url, headers = {}, onProgress = () => {}, type = 'POST') {
+    this.file = file
     this.url = url
     this.headers = headers
     this.onProgress = onProgress
     this.type = type
   }
 
-  upload (file, additionalData = {}) {
+  upload (additionalData = {}) {
     let xhr = new XMLHttpRequest()
     xhr.responseType = 'text'
 
     // Headers
-    xhr.open(this.type, this.url + encodeURIComponent(file.name), true)
+    xhr.open(this.type, this.url + encodeURIComponent(this.file.name), true)
     this._setXhrHeaders(xhr)
 
     // Events
-    xhr.upload.addEventListener('progress', this.onProgress, false)
+    xhr.upload.addEventListener('progress', (e) => {
+      this.onProgress(e, this.file)
+    }, false)
     let promise = new Promise((resolve, reject) => {
       xhr.onload = e => {
         xhr.status >= 200 && xhr.status < 400 ? resolve(e) : reject(new Error(xhr.statusText))
@@ -27,7 +30,7 @@ class FileUpload {
 
     // Start upload
     let formData = new FormData()
-    formData.append('file', file)
+    formData.append('file', this.file)
     Object.keys(additionalData).forEach(p => {
       formData.append(p, additionalData[p])
     })
