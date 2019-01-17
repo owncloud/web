@@ -6,7 +6,7 @@
           <v-breadcrumbs class="pa-0" :items="activeRoute">
             <template slot="item" slot-scope="props">
               <drop >
-                <v-icon @click="navigateTo('files-list', props.item.route)" v-if="props.item.text === 'home'" large>
+                <v-icon @click="navigateTo('files-list', 'home')" v-if="props.item.text === 'home'" large>
                   home
                 </v-icon>
                 <span @click="navigateTo('files-list', props.item.route)" v-else class="heading font-weight-bold" style="cursor: pointer">
@@ -20,6 +20,9 @@
                           ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
         <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
                           ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
+                          <v-flex xs2>
+                            <search-bar @search="onSearch" :value="searchQuery" />
+                          </v-flex>
           <v-menu offset-y >
           <v-progress-circular
              slot="activator"
@@ -120,6 +123,7 @@ import FileDetails from './FileDetails.vue'
 import FileActionsTab from './FileactionsTab.vue'
 import FileList from './FileList.vue'
 import FileUpload from './FileUpload.vue'
+import SearchBar from 'oc_components/form/SearchBar.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
@@ -143,6 +147,7 @@ export default {
     FileActionsTab,
     FileList,
     FileUpload,
+    SearchBar,
     OcDialogPrompt
   },
   data () {
@@ -157,6 +162,7 @@ export default {
       fileName: '',
       selected: [],
       loading: false,
+      searchQuery: '',
       filters: [
         {
           name: 'Files',
@@ -288,18 +294,25 @@ export default {
           })
       }
     },
-
     ifFiltered (item) {
       for (let filter of this.filters) {
         if (item.type === filter.tag) {
-          return filter.value
+          if (!filter.value) return false
         } else if (item.name.startsWith('.')) {
-          return this.filters[2].value
+          // show hidden files ?
+          if (this.filters[2].value) return false
         }
       }
+      // respect search query for local search
+      if (this.searchQuery && !item.name.toLowerCase().includes(this.searchQuery.toLowerCase())) return false
+      return true
     },
-
+    onSearch (query) {
+      console.log('onSearch', query)
+      this.searchQuery = query
+    },
     getFolder () {
+      this.searchQuery = ''
       if (!this.iAmActive) {
         return false
       }
