@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "babel-eslint": "^10.0.1",
-    "css-loader": "^2.0.1",
+    "css-loader": "^2.1.0",
     "scss-loader": "^0.0.1",
     "vue-pdf": "^4.0.4"
   }
