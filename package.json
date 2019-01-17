@@ -76,6 +76,7 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "babel-eslint": "^10.0.1",
     "eslint-loader": "^2.1.1",
     "js-owncloud-client": "github:owncloud/js-owncloud-client#master"
   }
