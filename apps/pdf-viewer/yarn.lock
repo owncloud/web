@@ -3732,10 +3732,10 @@ vue-eslint-parser@^4.0.2:
     esquery "^1.0.1"
     lodash "^4.17.11"
 
-vue-pdf@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/vue-pdf/-/vue-pdf-4.0.4.tgz#40e4aad90b4456b4230b7b59f6e76bf4f38b87d7"
-  integrity sha512-Az7Mh0n+2FIzGQtuIRVqcqpifQq+T1SPqBPh8AKaNXWR28ZbwdSZqt4+xhsNd2/g7iTe5riiPtxbkuMKIgMQdQ==
+vue-pdf@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/vue-pdf/-/vue-pdf-4.0.5.tgz#267457d20a98c0f30d5e53e8dda9d5c0276cdd3f"
+  integrity sha512-XyQgGHjs+onVxi2bD2Hr1LC7o4f6NJFZgwUBRAYnDeYTbjGMaaGxGgEJdSuwBCmN2HzAGuMEoXENJWAKFp/evQ==
   dependencies:
     babel-plugin-syntax-dynamic-import "^6.18.0"
     pdfjs-dist "2.0.943"

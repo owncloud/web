@@ -28,6 +28,6 @@
     "babel-eslint": "^10.0.1",
     "css-loader": "^2.0.1",
     "scss-loader": "^0.0.1",
-    "vue-pdf": "^4.0.4"
+    "vue-pdf": "^4.0.5"
   }
 }
