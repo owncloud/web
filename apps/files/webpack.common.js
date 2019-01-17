@@ -1,6 +1,7 @@
+const integratePhoenix = require('../../webpack-phoenix-integration')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
-module.exports = {
+module.exports = integratePhoenix({
     plugins: [
         new VueLoaderPlugin(),
     ],
@@ -33,4 +34,4 @@ module.exports = {
             ]
         }]
     }
-}
+})
