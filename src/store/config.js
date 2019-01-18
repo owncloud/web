@@ -1,6 +1,7 @@
 'use strict'
 
 const state = {
+  state: null,
   auth: {
     clientId: null,
     apiUrl: null,
@@ -41,6 +42,8 @@ const actions = {
 const mutations = {
   LOAD_CONFIG (state, config) {
     state.auth = config.auth
+    state.state = config.state === undefined ? 'working' : config.state
+    if (config.corrupted) state.corrupted = config.corrupted
   },
   LOAD_THEME (state, theme) {
     state.theme = theme
