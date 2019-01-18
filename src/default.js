@@ -5,6 +5,7 @@ import Vue from 'vue'
 // --- Components ---
 
 import Phoenix from './Phoenix.vue'
+import errorPage from './pages/initError.vue'
 
 // --- Adding global libraries ---
 
@@ -114,6 +115,13 @@ Vue.component('drop', Drop);
       })
     })
   } catch (err) {
-    alert(err)
+    /* eslint-disable no-new */
+    new Vue({
+      el: '#owncloud',
+      data: {
+        error: err
+      },
+      render: h => h(errorPage)
+    })
   }
 })()
