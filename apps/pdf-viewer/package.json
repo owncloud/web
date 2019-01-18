@@ -12,6 +12,11 @@
   "author": "Thomas Müller",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "babel-runtime": "^6.26.0",
+    "css-loader": "^2.1.0",
+    "scss-loader": "^0.0.1",
+    "vue-pdf": "^4.0.5",
     "eslint": "^5.12.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-loader": "^2.1.1",
@@ -20,14 +25,13 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^5.1.0",
+    "vue-loader": "^15.5.1",
+    "vue-template-compiler": "^2.5.22",
+    "vuex": "3.1.0",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "babel-eslint": "^10.0.1",
-    "css-loader": "^2.1.0",
-    "scss-loader": "^0.0.1",
-    "vue-pdf": "^4.0.5"
   }
 }
