@@ -3,3 +3,298 @@ repository:
   description: Next generation frontend for ownCloud
   homepage: https://phoenix.ownlcoud.com
   has_wiki: false
+labels:
+  - name: 1 - To develop
+    color: ededed
+  - name: 2 - Developing
+    color: ededed
+  - name: 3 - To Review
+    color: ededed
+  - name: 4 - To release
+    color: ededed
+  - name: Acceptance tests
+    color: ededed
+  - name: CalDAV
+    color: ededed
+  - name: Drone
+    color: 6474c1
+  - name: 'Effort: 0.5d'
+    color: c2e0c6
+  - name: 'Effort: 1d'
+    color: c2e0c6
+  - name: 'Effort: 1w'
+    color: c2e0c6
+  - name: 'Effort: 2d'
+    color: c2e0c6
+  - name: 'Effort: 2w'
+    color: c2e0c6
+  - name: 'Effort: 4d'
+    color: c2e0c6
+  - name: 'Effort: trivial'
+    color: c2e0c6
+  - name: Hacktoberfest
+    color: fbca04
+  - name: Hardening
+    color: ededed
+  - name: PM prio 1
+    color: fbca04
+  - name: PM prio 2
+    color: fbca04
+  - name: PM prio 3
+    color: fbca04
+  - name: QA
+    color: 1d76db
+  - name: QA-blocker
+    color: 0052cc
+  - name: QA-known
+    color: 0052cc
+  - name: QA-ready
+    color: 0052cc
+  - name: QA-team
+    color: 4cc948
+  - name: QA-testing
+    color: 0052cc
+  - name: Sys Admin
+    color: ededed
+  - name: WIP
+    color: 8c8cea
+  - name: Waiting
+    color: e6e6e6
+  - name: Waiting Internal
+    color: e6e6e8
+  - name: Waiting On Review/Feedback
+    color: ededed
+  - name: app:dav
+    color: 02d7e1
+  - name: app:encryption
+    color: 02d7e1
+  - name: app:federation
+    color: 02d7e1
+  - name: app:files
+    color: 02d7e1
+  - name: app:files_encryption
+    color: 02d7e1
+  - name: app:files_external
+    color: 02d7e1
+  - name: app:files_trashbin
+    color: 02d7e1
+  - name: app:files_versions
+    color: 02d7e1
+  - name: app:objectstore
+    color: 02d7e1
+  - name: app:provisioning_api
+    color: 02d7e1
+  - name: app:search
+    color: 02d7e1
+  - name: app:user_ldap
+    color: 02d7e1
+  - name: app:windows_network_drive
+    color: ededed
+  - name: backport-request
+    color: 006b75
+  - name: blue-ticket
+    color: 0033CC
+  - name: bounty
+    color: 129e5e
+  - name: browser:chrome
+    color: 207de5
+  - name: browser:edge
+    color: 207de5
+  - name: browser:firefox
+    color: 207de5
+  - name: browser:ie
+    color: 207de5
+  - name: browser:safari
+    color: 207de5
+  - name: bug
+    color: fc2929
+  - name: bug-analysis
+    color: fbca04
+  - name: bug-solved
+    color: 0e8a16
+  - name: clarification request
+    color: d4c5f9
+  - name: comp:apps
+    color: d4c5f9
+  - name: comp:authentication
+    color: d4c5f9
+  - name: comp:caldav
+    color: d4c5f9
+  - name: comp:carddav
+    color: d4c5f9
+  - name: comp:console-occ
+    color: d4c5f9
+  - name: comp:core
+    color: d4c5f9
+  - name: comp:core-js
+    color: d4c5f9
+  - name: comp:filesystem
+    color: d4c5f9
+  - name: core-bug
+    color: ededed
+  - name: credits
+    color: e58729
+  - name: db:mariadb
+    color: '444444'
+  - name: db:mysql
+    color: '444444'
+  - name: db:oracle
+    color: '444444'
+  - name: db:postgresql
+    color: '444444'
+  - name: db:sqlite
+    color: '444444'
+  - name: dependencies
+    color: 0025ff
+  - name: design
+    color: cc317c
+  - name: dev:acceptance-tests
+    color: ff9966
+  - name: dev:appframework
+    color: FF9966
+  - name: dev:integration-tests
+    color: FF9966
+  - name: dev:js-tests
+    color: FF9966
+  - name: dev:ocp
+    color: FF9966
+  - name: dev:ocs
+    color: FF9966
+  - name: dev:phpunit-tests
+    color: FF9966
+  - name: dev:smashbox-tests
+    color: FF9966
+  - name: discussion
+    color: fbca04
+  - name: documentation
+    color: BFDADC
+  - name: enhancement
+    color: 02e10c
+  - name: enhancement-PM
+    color: FF9900
+  - name: feature:activity
+    color: d4c5f9
+  - name: feature:avatars
+    color: d4c5f9
+  - name: feature:backgroundjobs
+    color: d4c5f9
+  - name: feature:code-signing-integrity
+    color: d4c5f9
+  - name: feature:comments
+    color: d4c5f9
+  - name: feature:federated-cloud-sharing
+    color: d4c5f9
+  - name: feature:filepicker
+    color: d4c5f9
+  - name: feature:l10n
+    color: d4c5f9
+  - name: feature:locking
+    color: d4c5f9
+  - name: feature:notifications
+    color: d4c5f9
+  - name: feature:persistent-locking
+    color: d4c5f9
+  - name: feature:previews
+    color: d4c5f9
+  - name: feature:quota
+    color: d4c5f9
+  - name: feature:sharing
+    color: d4c5f9
+  - name: feature:sidebar
+    color: d4c5f9
+  - name: feature:tags
+    color: d4c5f9
+  - name: feature:theming
+    color: d4c5f9
+  - name: feature:update
+    color: d4c5f9
+  - name: gitmate-never-close
+    color: d4c5f9
+  - name: in progress
+    color: ededed
+  - name: invalid
+    color: ededed
+  - name: javascript
+    color: '168700'
+  - name: jenkins
+    color: '996633'
+  - name: junior job
+    color: f6d300
+  - name: mobile:Android
+    color: 207de5
+  - name: mobile:iOS
+    color: 207de5
+  - name: needs info
+    color: 0b02e1
+  - name: nginx
+    color: 5319e7
+  - name: old-inactive
+    color: d4c5f9
+  - name: orga
+    color: c5def5
+  - name: overview
+    color: fef2c0
+  - name: p1-urgent
+    color: fc2929
+  - name: p2-high
+    color: fc2929
+  - name: p3-medium
+    color: fc2929
+  - name: p4-low
+    color: fc2929
+  - name: packaging
+    color: F7C6C7
+  - name: performance
+    color: fbca04
+  - name: php
+    color: 45229e
+  - name: php:7.2
+    color: 006b75
+  - name: purple-ticket
+    color: 8A2EE6
+  - name: ready
+    color: ededed
+  - name: regression
+    color: e11d21
+  - name: release note
+    color: BFD4F2
+  - name: research
+    color: FFFF00
+  - name: review carefully!
+    color: ededed
+  - name: security
+    color: e11d21
+  - name: server
+    color: ededed
+  - name: server-sprint
+    color: ededed
+  - name: settings:admin
+    color: 02d7e1
+  - name: settings:apps
+    color: 02d7e1
+  - name: settings:installation
+    color: 02d7e1
+  - name: settings:login
+    color: 02d7e1
+  - name: settings:personal
+    color: 02d7e1
+  - name: settings:users
+    color: 02d7e1
+  - name: sev1-critical
+    color: fc2929
+  - name: sev2-high
+    color: fc2929
+  - name: sev3-medium
+    color: fc2929
+  - name: sev4-low
+    color: fc2929
+  - name: status/STALE
+    color: ededed
+  - name: technical debt
+    color: FFFF00
+  - name: tested
+    color: FBCA04
+  - name: v11
+    color: bfdadc
+  - name: won't fix
+    color: ffffff
