@@ -1,0 +1,149 @@
+repository:
+  name: phoenix
+  description: Next generation frontend for ownCloud
+  homepage: https://phoenix.ownlcoud.com
+  has_wiki: false
+labels:
+  - name: 1 - To develop
+    color: ededed
+  - name: 2 - Developing
+    color: ededed
+  - name: 3 - To Review
+    color: ededed
+  - name: 4 - To release
+    color: ededed
+  - name: Acceptance tests
+    color: ededed
+  - name: Drone
+    color: 6474c1
+  - name: 'Effort: 0.5d'
+    color: c2e0c6
+  - name: 'Effort: 1d'
+    color: c2e0c6
+  - name: 'Effort: 1w'
+    color: c2e0c6
+  - name: 'Effort: 2d'
+    color: c2e0c6
+  - name: 'Effort: 2w'
+    color: c2e0c6
+  - name: 'Effort: 4d'
+    color: c2e0c6
+  - name: 'Effort: trivial'
+    color: c2e0c6
+  - name: Hacktoberfest
+    color: fbca04
+  - name: Hardening
+    color: ededed
+  - name: PM prio 1
+    color: fbca04
+  - name: PM prio 2
+    color: fbca04
+  - name: PM prio 3
+    color: fbca04
+  - name: QA
+    color: 1d76db
+  - name: QA-blocker
+    color: 0052cc
+  - name: QA-known
+    color: 0052cc
+  - name: QA-ready
+    color: 0052cc
+  - name: QA-team
+    color: 4cc948
+  - name: QA-testing
+    color: 0052cc
+  - name: Sys Admin
+    color: ededed
+  - name: WIP
+    color: 8c8cea
+  - name: Waiting
+    color: e6e6e6
+  - name: Waiting Internal
+    color: e6e6e8
+  - name: Waiting On Review/Feedback
+    color: ededed
+  - name: bounty
+    color: 129e5e
+  - name: browser:chrome
+    color: 207de5
+  - name: browser:edge
+    color: 207de5
+  - name: browser:firefox
+    color: 207de5
+  - name: browser:ie
+    color: 207de5
+  - name: browser:safari
+    color: 207de5
+  - name: bug
+    color: fc2929
+  - name: bug-analysis
+    color: fbca04
+  - name: bug-solved
+    color: 0e8a16
+  - name: clarification request
+    color: d4c5f9
+  - name: core-bug
+    color: ededed
+  - name: credits
+    color: e58729
+  - name: dependencies
+    color: 0025ff
+  - name: design
+    color: cc317c
+  - name: discussion
+    color: fbca04
+  - name: documentation
+    color: BFDADC
+  - name: enhancement
+    color: 02e10c
+  - name: enhancement-PM
+    color: FF9900
+  - name: feature:files
+    color: d4c5f9
+  - name: feature:markdown-editor
+    color: d4c5f9
+  - name: feature:pdf-viewer
+    color: d4c5f9
+  - name: in progress
+    color: ededed
+  - name: invalid
+    color: ededed
+  - name: junior job
+    color: f6d300
+  - name: needs info
+    color: 0b02e1
+  - name: orga
+    color: c5def5
+  - name: overview
+    color: fef2c0
+  - name: p1-urgent
+    color: fc2929
+  - name: p2-high
+    color: fc2929
+  - name: p3-medium
+    color: fc2929
+  - name: p4-low
+    color: fc2929
+  - name: packaging
+    color: F7C6C7
+  - name: performance
+    color: fbca04
+  - name: ready
+    color: ededed
+  - name: regression
+    color: e11d21
+  - name: release note
+    color: BFD4F2
+  - name: research
+    color: FFFF00
+  - name: review carefully!
+    color: ededed
+  - name: security
+  - name: settings:admin
+    color: 02d7e1
+  - name: technical debt
+    color: FFFF00
+  - name: tested
+    color: FBCA04
+  - name: won't fix
+    color: ffffff
