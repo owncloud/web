@@ -8,6 +8,6 @@
 		"authUrl": "http://owncloud/index.php/apps/oauth2/authorize"
 	},
 	"apps" : [
-		"files"
+		"files", "markdown-editor", "pdf-viewer"
 	]
 }
