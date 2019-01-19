@@ -17,7 +17,7 @@
     "css-loader": "^2.1.0",
     "scss-loader": "^0.0.1",
     "vue-pdf": "^4.0.5",
-    "eslint": "^5.12.0",
+    "eslint": "^5.12.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-import": "^2.14.0",
