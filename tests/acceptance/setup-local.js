@@ -1,14 +1,14 @@
-import { setDefaultTimeout, AfterAll, BeforeAll } from 'cucumber';
-import { createSession, closeSession, startWebDriver, stopWebDriver} from 'nightwatch-api';
+import { setDefaultTimeout, AfterAll, BeforeAll } from 'cucumber'
+import { createSession, closeSession, startWebDriver, stopWebDriver } from 'nightwatch-api'
 
-setDefaultTimeout(60000);
+setDefaultTimeout(60000)
 
 BeforeAll(async () => {
-	await startWebDriver({ env: 'local'});
-	await createSession({ env: 'local'});
-});
+  await startWebDriver({ env: 'local' })
+  await createSession({ env: 'local' })
+})
 
 AfterAll(async () => {
-	await closeSession();
-	await stopWebDriver();
-});
+  await closeSession()
+  await stopWebDriver()
+})
