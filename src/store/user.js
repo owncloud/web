@@ -24,7 +24,6 @@ const actions = {
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
     const token = vueAuthInstance.getToken()
     this._vm.$client.loginWithBearer(token).then(res => {
-      const token = vueAuthInstance.getToken()
       context.commit('SET_USER', {
         displayname: res['display-name'],
         email: !Object.keys(res.email).length ? '' : res.email,
@@ -44,6 +43,12 @@ const actions = {
       if (vueAuthInstance.isAuthenticated) {
         context.dispatch('initAuth')
       }
+    })
+  },
+  callback (context) {
+    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
+    vueAuthInstance.authCallback().then(() => {
+      context.dispatch('initAuth')
     })
   }
 }

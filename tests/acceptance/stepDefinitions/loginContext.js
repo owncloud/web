@@ -21,12 +21,7 @@ When('the user clicks the authenticate button',
 
 When('the user logs in with username {string} and password {string} using the webUI',
   (username, password) => {
-    const loginPage = client
-      .windowHandles(function (result) {
-        var temp = result.value[1]
-        this.switchWindow(temp)
-      })
-      .page.ownCloudLoginPage()
+    const loginPage = client.page.ownCloudLoginPage()
     return loginPage
       .waitForElementVisible('@usernameInput', client.SHORT_WAIT_TIME)
       .setValue('@usernameInput', OC_USER || username)
@@ -37,10 +32,6 @@ When('the user logs in with username {string} and password {string} using the we
 When('the user authorizes access to phoenix',
   () => {
     const loginPage = client
-      .windowHandles(function (result) {
-        var temp = result.value[1]
-        this.switchWindow(temp)
-      })
       .page.ownCloudAuthorizePage()
     return loginPage
       .waitForElementPresent('@authorizeButton', client.SHORT_WAIT_TIME)
