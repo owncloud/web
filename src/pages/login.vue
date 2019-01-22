@@ -57,11 +57,6 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'LoginPage',
-  mounted () {
-    this.$nextTick(() => {
-      this.callback()
-    })
-  },
   data () {
     return {
       loading: false
@@ -71,7 +66,7 @@ export default {
     ...mapGetters(['configuration'])
   },
   methods: {
-    ...mapActions(['login', 'callback'])
+    ...mapActions(['login'])
   }
 }
 </script>

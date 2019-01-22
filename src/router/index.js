@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import LoginPage from '../pages/login.vue'
+import OidcCallbackPage from '../pages/oidcCallback.vue'
+import OidcSilentRedirectPage from '../pages/oidcSilentRedirect.vue'
 import ErrorPage from '../pages/error.vue'
 
 import store from '../store'
@@ -13,8 +15,16 @@ const router = new Router({
     path: '/login',
     name: 'login',
     component: LoginPage,
-    meta: { auth: false, hideHeadbar: true, showBackground: true } },
-  {
+    meta: { auth: false, hideHeadbar: true, showBackground: true }
+  }, {
+    path: '/oidc-callback',
+    component: OidcCallbackPage,
+    meta: { auth: false, hideHeadbar: true, showBackground: true }
+  }, {
+    path: '/oidc-silent-redirect',
+    component: OidcSilentRedirectPage,
+    meta: { auth: false, hideHeadbar: true, showBackground: true }
+  }, {
     path: '/error',
     name: 'error',
     component: ErrorPage,
