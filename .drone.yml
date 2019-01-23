@@ -5,6 +5,14 @@ workspace:
 branches: [master, release*]
 
 pipeline:
+  build-docker-image:
+    image: toolhippie/docker:latest
+    pull: true
+    environment:
+      - DOCKER_HOST=tcp://docker:2375
+    commands:
+      - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
+
   install-server:
     image: owncloudci/core
     version: ${OC_VERSION=daily-master-qa}
@@ -55,13 +63,6 @@ pipeline:
       - cd /var/www/owncloud/
       - chown www-data * -R
 
-  lint-test:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    commands:
-      - cd /var/www/owncloud/phoenix
-      - yarn run lint
-
   webui-acceptance-tests:
     image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
@@ -69,12 +70,13 @@ pipeline:
       - cd /var/www/owncloud/phoenix
       - yarn run acceptance-tests-drone
 
-#  build-docker-image:
-#    image: toolhippie/docker:latest
-#    pull: true
-#    commands:
-#      - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
-#
+  lint-test:
+    image: owncloudci/php:${PHP_VERSION=7.1}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/phoenix
+      - yarn run lint
+
   build-release:
     image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
@@ -123,3 +125,6 @@ services:
   selenium:
     image: selenium/standalone-chrome-debug:latest
     pull: true
+
+  docker:
+    image: docker:18.04-dind
