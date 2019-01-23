@@ -1,15 +1,15 @@
 <template>
     <v-container pa-0 fill-height>
       <v-layout
-        align-center
+        align-content-center
       >
-        <v-flex>
+        <v-flex v-if="configuration.state === 'working' || configuration.state === 'corrupt'">
           <v-img
-            v-if="configuration.theme.logo.big"
-            :src="configuration.theme.logo.big"
-            max-height="40%"
-            height="40%"
-            contain
+          v-if="configuration.theme.logo.big"
+          :src="configuration.theme.logo.big"
+          max-height="40%"
+          height="40%"
+          contain
           ></v-img>
           <h2 class="accent--text">
             <span v-translate>Welcome to</span> {{ configuration.theme.general.name }}
@@ -18,6 +18,18 @@
             Please click the button below to authenticate with {{ configuration.theme.general.name }} and get access to your data.
           </v-flex>
           <v-btn color="primary" id="authenticate" @click="login()"><span v-translate>Authenticate</span></v-btn>
+        </v-flex>
+        <v-flex v-if="configuration.state === 'missing'" class="text-xs-center white--text">
+          <v-img
+          v-if="configuration.theme.logo.big"
+          :src="configuration.theme.logo.big"
+          max-height="40%"
+          height="40%"
+          contain
+          ></v-img>
+              <div class="pa-5">
+                <h2> {{ configuration.state }} config.json </h2>
+              </div>
         </v-flex>
       </v-layout>
       <v-footer app>

@@ -10,7 +10,7 @@
     "info": "#6A9EFF",
     "success": "#32D296",
     "warning": "#FAA05A",
-    "error": "#F0506E"
+    "error": "#CC0000"
   },
   "logo": {
     "mini": "themes/owncloud/cloud-logo-invert.svg",

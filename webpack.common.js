@@ -41,6 +41,10 @@ const src_files = [{
 for(file of src_files){
   apps.push(file)
 }
+apps.push({
+  from: path.resolve(__dirname, 'static', 'config.default.json'),
+  to: path.resolve(__dirname, 'dist', 'static', 'config.default.json')
+})
 module.exports = {
 	plugins: [
     new WebpackCopyPlugin(apps),
