@@ -1,5 +1,6 @@
 <template>
-  <v-text-field :label="label" append-icon="search" @input="onSearch" :value="searchQuery"></v-text-field>
+  <v-text-field :label="label" append-icon="search"
+    @input="onSearch" :value="searchQuery" autofocus="autofocus"></v-text-field>
 </template>
 
 <script>
@@ -15,6 +16,11 @@ export default {
       type: String,
       required: false,
       default: ''
+    },
+    autofocus: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data: () => ({
