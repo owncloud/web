@@ -7,6 +7,7 @@ export function initVueAuthenticate (config) {
       prefix: 'oc_oAuth'
     })
     let mgr
+    const baseUrl = window.location.href.split('#')[0]
     if (config.metaDataUrl) {
       mgr = new UserManager({
         userStore: store,
@@ -14,13 +15,13 @@ export function initVueAuthenticate (config) {
         // with OAuth2 we need to se the metadata manually
         metadataUrl: config.metaDataUrl,
         client_id: config.clientId,
-        redirect_uri: window.location.origin + '/#/oidc-callback',
+        redirect_uri: baseUrl + '#/oidc-callback',
         response_type: 'code', // code triggers auth code grant flow
         response_mode: 'query',
         scope: 'openid profile offline_access',
         monitorSession: false,
-        post_logout_redirect_uri: window.location.origin + '/index.html',
-        silent_redirect_uri: window.location.origin + '/#/oidc-silent-redirect',
+        post_logout_redirect_uri: baseUrl,
+        silent_redirect_uri: baseUrl + '#/oidc-silent-redirect',
         accessTokenExpiringNotificationTime: 10,
         automaticSilentRenew: false,
         filterProtocolClaims: true,
@@ -38,17 +39,16 @@ export function initVueAuthenticate (config) {
           userinfo_endpoint: ''
         },
         client_id: config.clientId,
-        redirect_uri: window.location.origin + '/#/oidc-callback',
+        redirect_uri: baseUrl + '#/oidc-callback',
         response_type: 'token', // token is implicit flow - to be killed
         // response_type: 'code', // for authentication code flow use 'code
-        // response_type: 'id_token token', // this should enable OpenID Connect - to be tested
         response_mode: 'query',
         scope: 'openid profile',
         monitorSession: false,
         accessTokenExpiringNotificationTime: 10,
         automaticSilentRenew: false,
         filterProtocolClaims: true,
-        loadUserInfo: true
+        loadUserInfo: false
       })
     }
 
