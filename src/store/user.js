@@ -31,7 +31,6 @@ const actions = {
         token,
         isAuthenticated: true
       })
-      router.push({ path: '/' })
     }).catch((e) => {
       console.error('logout forced! Seems that your token is invalid. Error:', e)
       context.dispatch('logout')
@@ -43,6 +42,7 @@ const actions = {
     vueAuthInstance.authenticate(payload.provider, {}, {}).then(() => {
       if (vueAuthInstance.isAuthenticated) {
         context.dispatch('initAuth')
+        router.push({ path: '/' })
       }
     })
   }

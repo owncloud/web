@@ -44,7 +44,7 @@
         <v-list-tile-avatar>
           <v-icon>{{ fileTypeIcon(item) }}</v-icon>
         </v-list-tile-avatar>        <v-list-tile-content
-          @click="item.extension === false ? navigateTo('files-list', item.path) : openFileActionBar(item)"
+          @click="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
           style="cursor: pointer"
         >
           <v-list-tile-title>{{ item.name }}</v-list-tile-title>
