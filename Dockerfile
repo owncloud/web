@@ -1,7 +1,7 @@
 # build stage
 FROM node:9.11.1-alpine as build-stage
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git python make g++
+    apk add --no-cache bash git
 
 WORKDIR /app
 COPY . .
