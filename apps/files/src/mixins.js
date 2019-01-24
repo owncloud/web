@@ -6,7 +6,7 @@ export default {
   filters: {
     fileSize (int) {
       if (int < 0) {
-        return 'Pending ...'
+        return ''
       }
       if (isNaN(int)) {
         return '???'
