@@ -6,7 +6,7 @@
           <v-breadcrumbs class="pa-0" :items="activeRoute">
             <template slot="item" slot-scope="props">
               <drop >
-                <v-icon @click="navigateTo('files-list', props.item.route)" v-if="props.item.text === 'home'" large>
+                <v-icon @click="navigateTo('files-list', 'home')" v-if="props.item.text === 'home'" large>
                   home
                 </v-icon>
                 <span @click="navigateTo('files-list', props.item.route)" v-else class="heading font-weight-bold" style="cursor: pointer">
@@ -20,6 +20,8 @@
                           ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
         <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
                           ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
+                          <v-flex xs2>
+                          </v-flex>
           <v-menu offset-y >
           <v-progress-circular
              slot="activator"
@@ -91,11 +93,17 @@
           </span>
         </v-flex>
         <v-menu transition="scale-transition">
-          <v-btn slot="activator" flat><v-icon large>filter_list</v-icon></v-btn>
+          <v-btn slot="activator" flat @click="focusFilenameFilter"><v-icon large>filter_list</v-icon></v-btn>
           <v-list>
             <v-list-tile v-for="(filter, fid) in filters" :key="fid">
               <v-list-tile-title v-text="filter.name"></v-list-tile-title>
               <v-checkbox v-model="filter.value"></v-checkbox>
+            </v-list-tile>
+            <v-list-tile>
+              <v-list-tile-title>
+                <span v-translate>Name</span>
+              </v-list-tile-title>
+              <search-bar @search="onFilenameFilter" :value="fileFilterQuery" ref="filenameFilter" autofocus />
             </v-list-tile>
           </v-list>
         </v-menu>
@@ -120,6 +128,7 @@ import FileDetails from './FileDetails.vue'
 import FileActionsTab from './FileactionsTab.vue'
 import FileList from './FileList.vue'
 import FileUpload from './FileUpload.vue'
+import SearchBar from 'oc_components/form/SearchBar.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
@@ -143,6 +152,7 @@ export default {
     FileActionsTab,
     FileList,
     FileUpload,
+    SearchBar,
     OcDialogPrompt
   },
   data () {
@@ -157,6 +167,7 @@ export default {
       fileName: '',
       selected: [],
       loading: false,
+      fileFilterQuery: '',
       filters: [
         {
           name: 'Files',
@@ -189,7 +200,6 @@ export default {
     trace () {
       console.info('trace', arguments)
     },
-
     onFileSuccess (event, file) {
       this.$nextTick().then(() => {
         const filePath = ((this.item === 'home') ? '' : this.item) + '/' + file.name
@@ -288,23 +298,38 @@ export default {
           })
       }
     },
-
     ifFiltered (item) {
       for (let filter of this.filters) {
         if (item.type === filter.tag) {
-          return filter.value
+          if (!filter.value) return false
         } else if (item.name.startsWith('.')) {
-          return this.filters[2].value
+          // show hidden files ?
+          if (this.filters[2].value) return false
         }
       }
+      // respect filename filter for local 'search' in open folder
+      if (this.fileFilterQuery && !item.name.toLowerCase().includes(this.fileFilterQuery.toLowerCase())) return false
+      return true
     },
-
+    onFilenameFilter (query) {
+      this.fileFilterQuery = query
+    },
+    focusFilenameFilter () {
+      this.$refs.filenameFilter.$el.querySelector('input').focus()
+      // nested vuetify VList animation will block native autofocus, so we use this workaround...
+      setTimeout(() => {
+        // ...to set focus after the element is rendered visible
+        this.$refs.filenameFilter.$el.querySelector('input').focus()
+      }, 50)
+    },
     getFolder () {
       if (!this.iAmActive) {
         return false
       }
       this.loading = true
       this.path = []
+      // clear file filter search query when folder changes
+      this.fileFilterQuery = ''
       let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
       this.$client.files.list(absolutePath, 1, davProperties).then(res => {
         let files = []
