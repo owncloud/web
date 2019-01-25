@@ -16,8 +16,8 @@
     "lint-fix": "eslint src/**/*.vue src/**/*.js src/*.vue src/*.js \"tests/**/*.js\" --color --fix",
     "accessibility-tests": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
     "accessibility-tests-drone": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
-    "acceptance-tests": "cucumber-js --require-module babel-core/register --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features -t 'not @skip'",
-    "acceptance-tests-drone": "cucumber-js --require-module babel-core/register --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features -t 'not @skip'"
+    "acceptance-tests": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features -t 'not @skip'",
+    "acceptance-tests-drone": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features -t 'not @skip'"
   },
   "author": "Felix Heidecke",
   "license": "AGPL-3.0",
@@ -27,6 +27,8 @@
     "@babel/core": "^7.0.0",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/register": "^7.0.0",
     "axe-cli": "^3.0.0",
     "axios": "^0.18.0",
     "babel-loader": "^8.0.5",
@@ -74,7 +76,6 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "babel-eslint": "^10.0.1",
     "eslint-loader": "^2.1.1",
     "js-owncloud-client": "github:owncloud/js-owncloud-client#master",
