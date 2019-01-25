@@ -76,7 +76,10 @@ module.exports = {
 			{
 				test: /\.js?$/,
 				exclude: [/node_modules/, /apps/],
-				include: [/src/]
+				include: [/src/],
+        use: [{
+          loader: "babel-loader"
+        }]
 			}, {
 				test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
 				include: [/node_modules\/material-design-icons-iconfont\/dist/, /static\/fonts\/ocft\/font/],
