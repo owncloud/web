@@ -23,8 +23,8 @@
   "license": "AGPL-3.0",
   "homepage": "https://github.com/owncloud/phoenix",
   "devDependencies": {
-    "@babel/core": "^7.0.0",
     "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.0.0",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
     "axe-cli": "^3.0.0",
@@ -74,6 +74,7 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "babel-eslint": "^10.0.1",
     "eslint-loader": "^2.1.1",
     "js-owncloud-client": "github:owncloud/js-owncloud-client#master",

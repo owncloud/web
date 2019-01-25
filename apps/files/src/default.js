@@ -1,3 +1,4 @@
+import '@babel/polyfill'
 import FilesApp from './components/FilesApp.vue'
 import FileInfoSideBar from './components/FileInfoSidebar.vue'
 
