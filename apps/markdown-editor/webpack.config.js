@@ -6,7 +6,11 @@ module.exports = {
 	],
 	devtool: 'source-map',
   entry: {
-    'markdown-editor': ['./src/app.js']
+    'markdown-editor': [
+      "core-js/modules/es6.promise",
+      "core-js/modules/es6.array.iterator",
+      './src/app.js'
+    ]
   },
   output: {
     publicPath: 'apps/markdown-editor/',

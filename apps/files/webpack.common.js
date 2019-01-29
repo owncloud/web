@@ -6,7 +6,11 @@ module.exports = integratePhoenix({
         new VueLoaderPlugin(),
     ],
     entry: {
-      files: ['./src/default.js']
+      files: [
+        "core-js/modules/es6.promise",
+        "core-js/modules/es6.array.iterator",
+        './src/default.js'
+      ]
     },
     output : {
       publicPath: 'apps/files/',
