@@ -91,6 +91,9 @@ function loadApps () {
   router.addRoutes(_flatten(routes))
   sync(store, router)
 
+  // inject custom config into vuex
+  store.dispatch('loadConfig', config.data)
+
   const OC = new Vue({
     el: '#owncloud',
     data: {
@@ -102,8 +105,7 @@ function loadApps () {
     router,
     render: h => h(Phoenix)
   })
-  // inject custom config into vuex
-  store.dispatch('loadConfig', config.data)
+
   // inject custom theme config into vuex
   Axios.get(`themes/${config.data.theme}.json`).then(res => {
     store.dispatch('loadTheme', res.data)

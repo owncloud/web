@@ -23,19 +23,33 @@ const actions = {
     // if called from login, use available vue-authenticate instance; else re-init
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
     const token = vueAuthInstance.getToken()
-    this._vm.$client.loginWithBearer(token).then(res => {
-      const token = vueAuthInstance.getToken()
-      context.commit('SET_USER', {
-        displayname: res['display-name'],
-        email: !Object.keys(res.email).length ? '' : res.email,
-        token,
-        isAuthenticated: true
+    if (token) {
+      vueAuthInstance.events().addAccessTokenExpired(function () {
+        console.log('store/user.js - AccessToken Expired：', arguments)
+        context.dispatch('logout')
       })
-      router.push({ path: '/' })
-    }).catch((e) => {
-      console.error('logout forced! Seems that your token is invalid. Error:', e)
-      context.dispatch('logout')
-    })
+      vueAuthInstance.mgr.events.addAccessTokenExpiring(function () {
+        console.log('AccessToken Expiring：', arguments)
+        vueAuthInstance.mgr.signinSilent().then(() => {
+          console.log('token refreshed ...')
+        }).catch(error => {
+          console.log('token failed ' + error)
+        })
+      })
+
+      this._vm.$client.loginWithBearer(token).then(res => {
+        context.commit('SET_USER', {
+          displayname: res['display-name'],
+          email: !Object.keys(res.email).length ? '' : res.email,
+          token,
+          isAuthenticated: true
+        })
+        router.push({ path: '/' })
+      }).catch((e) => {
+        console.error('logout forced! Seems that your token is invalid. Error:', e)
+        context.dispatch('logout')
+      })
+    }
   },
   login (context, payload = { provider: 'oauth2' }) {
     // reset vue-authenticate
@@ -44,6 +58,18 @@ const actions = {
       if (vueAuthInstance.isAuthenticated) {
         context.dispatch('initAuth')
       }
+    })
+  },
+  callback (context) {
+    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
+    vueAuthInstance.mgr.signinRedirectCallback().then(() => {
+      context.dispatch('initAuth')
+    })
+  },
+  signinSilentCallback (context) {
+    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
+    vueAuthInstance.mgr.signinSilentCallback().then(() => {
+      context.dispatch('initAuth')
     })
   }
 }

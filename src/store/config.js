@@ -5,7 +5,8 @@ const state = {
   auth: {
     clientId: null,
     apiUrl: null,
-    authUrl: null
+    authUrl: null,
+    metaDataUrl: null
   },
   theme: {
     general: {

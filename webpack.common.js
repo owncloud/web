@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require ('html-webpack-plugin')
 
 const appFolder = path.resolve(__dirname, 'apps')
 let apps = []
-let favicon = './themes/owncloud/assets/gfx/favicon.jpg'
+let favicon = './themes/owncloud/favicon.jpg'
 
 if(fs.existsSync('config.json')) {
   var config = require('./config.json')
