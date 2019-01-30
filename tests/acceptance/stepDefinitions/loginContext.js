@@ -19,7 +19,7 @@ When('the user clicks the authenticate button',
       .click('@authenticateButton')
   })
 
-When('the user logs in with username {string} and password {string} using the webUI',
+Then('the user logs in with username {string} and password {string} using the webUI',
   (username, password) => {
     const loginPage = client.page.ownCloudLoginPage()
     return loginPage
@@ -50,5 +50,5 @@ Then('the files table should not be empty',
     const filesPage = client.page.filesPage()
     return filesPage
     // even the loading indicator is gone the table might not be rendered yet
-      .waitForElementVisible('@fileRows', client.LONG_WAIT_TIME)[0]
+      .waitForElementVisible('@fileRows', client.LONG_WAIT_TIME)
   })
