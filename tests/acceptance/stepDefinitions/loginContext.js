@@ -42,7 +42,7 @@ Then('the files table should be displayed',
   () => {
     const filesPage = client.page.filesPage()
     return filesPage
-      .waitForElementVisible('@filesTable', client.LONG_WAIT_TIME)
+      .waitForElementVisible('@filesTable', 1000000)
   })
 
 Then('the files table should not be empty',
