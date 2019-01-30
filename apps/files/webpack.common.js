@@ -17,6 +17,8 @@ module.exports = integratePhoenix({
         rules: [{
             test: /\.js?$/,
             exclude: /node_modules/,
+            include: /src/,
+            loader: 'babel-loader'
         }, {
             enforce: 'pre',
             test: /\.(js|vue)$/,

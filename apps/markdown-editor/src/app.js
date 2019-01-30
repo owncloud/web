@@ -1,16 +1,13 @@
-const pkg = require('../package.json');
+/* eslint-disable */
 
 // --- Components --------------------------------------------------------------
 
-const MarkdownEditor = () => ({
-	component: import ('./MarkdownEditor.vue')
-});
-
+import MarkdownEditor from './MarkdownEditor.vue'
 
 // --- Routing -----------------------------------------------------------------
 
 const routes = [{
-	path: '',
+	path: '/markdown-editor',
 	component: MarkdownEditor,
 	name: 'markdown-editor'
 }];

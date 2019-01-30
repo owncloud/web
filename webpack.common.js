@@ -65,19 +65,24 @@ module.exports = {
 			'./src/default.js',
 			'./node_modules/material-design-icons-iconfont/dist/material-design-icons.css',
 			'./node_modules/vuetify/dist/vuetify.css',
-			'./static/fonts/ocft/css/ocft.css']
+			'./static/fonts/ocft/css/ocft.css'
+    ]
 	},
 	output: {
 		filename: 'core/[name].bundle.js',
 		chunkFilename: 'core/[name].[id].bundle.js'
 	},
 	module: {
-		rules: [
-			{
+		rules: [{
+
+    }, {
 				test: /\.js?$/,
-				exclude: [/node_modules/, /apps/],
-				include: [/src/]
-			}, {
+				exclude: [/node_modules/],
+				include: [/src/],
+        use: [{
+          loader: 'babel-loader'
+        }]
+		}, {
 				test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
 				include: [/node_modules\/material-design-icons-iconfont\/dist/, /static\/fonts\/ocft\/font/],
 				use: [{
@@ -88,24 +93,23 @@ module.exports = {
 								outputPath: 'fonts'
 						}
 				}]
-      }, {
+    }, {
         enforce: 'pre',
         test: /\.(js|vue)$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/],
         loader: "eslint-loader",
-			},{
+		},{
 				test: /\.vue$/,
 				loader: 'vue-loader',
 				exclude: [/node_modules/]
-			}, {
+		}, {
 				test: /\.(sa|sc|c)ss$/,
-				include: [/node_modules/,/src/, /static/],
+				include: [/node_modules/,/src/, /static/, /apps/],
 				use: [
 					"style-loader",
 					MiniCssExtractPlugin.loader,
 					"css-loader"
 				]
-			}
-		]
+		}]
 	}
 };

@@ -1,6 +1,5 @@
 /* eslint-disable */
 // --- Libraries and Plugins ---
-
 import Vue from 'vue'
 
 // --- Components ---

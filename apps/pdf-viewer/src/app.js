@@ -1,11 +1,8 @@
-let pdf = import('./PdfViewer.vue')
-const PdfViewer = () => ({
-  component: pdf
-})
+import PdfViewerComponent from './PdfViewer.vue'
 
 const routes = [{
   path: `/pdf-viewer`,
-  component: PdfViewer,
+  component: PdfViewerComponent,
   name: 'pdf-viewer'
 }]
 
