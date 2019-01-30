@@ -5,11 +5,6 @@ var join = require('path').join
 var cp = require('child_process')
 var os = require('os')
 
-if(fs.existsSync('config.json')) {
-  var config = require('./config.json')
-}else{
-  var config = require('./tests/drone/config.json')
-}
 
 var npxCmd = os.platform().startsWith('win') ? 'npx.cmd' : 'npx'
 
@@ -19,7 +14,7 @@ var lib = resolve(__dirname, 'apps')
 console.log(chalk.blue('Upgrading:'), chalk.red('Core'));
 npmScript(['npm-check-updates', '-a'], resolve(__dirname))
 
-config.apps
+fs.readdirSync(lib)
   .forEach(function (mod) {
     var modPath = join(lib, mod)
 // ensure path has package.json
