@@ -22,6 +22,9 @@ Pushing a new design and frontend concept to ownCloud
 - install the Chrome browser
 - run `yarn run acceptance-tests`
 
+## Update dependencies
+- Run `yarn update` to update core and app dependencies
+
 ## How to build Phoenix as ownCloud app
 
 - run `yarn install && yarn dist && yarn build:prod`
