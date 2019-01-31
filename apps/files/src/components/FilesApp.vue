@@ -408,7 +408,7 @@ export default {
 
     url () {
       let path = this.item === 'home' ? '/' : this.item + '/'
-      return this.$client.files.getFileUrl(path)
+      return this.$client.files.getFileUrl(`/${path}`)
     },
     headers () {
       return {
