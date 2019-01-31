@@ -11,6 +11,7 @@
 <script>
 import FileUpload from '../FileUpload.js'
 import { mapActions, mapGetters } from 'vuex'
+import { find } from 'lodash'
 
 export default {
   props: {
@@ -34,10 +35,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['inProgress'])
+    ...mapGetters('Files', ['inProgress', 'files'])
   },
   methods: {
     ...mapActions('Files', ['addFileToProgress']),
+    ...mapActions(['showNotification']),
     triggerUpload () {
       this.$refs.input.click()
     },
@@ -45,7 +47,15 @@ export default {
       let files = e.target.files || e.dataTransfer.files
       if (!files.length) return
       for (let file of files) {
-        this.upload(file)
+        let exists = find(this.files, ['name', file.name])
+        if (!exists) {
+          this.upload(file)
+        } else {
+          this.showNotification({
+            title: this.$gettextInterpolate('Upload for %{file} failed - File already exists', { file: file.name }),
+            type: 'error'
+          })
+        }
       }
     },
 
