@@ -11,7 +11,6 @@ import Phoenix from './Phoenix.vue'
 
 import Vuetify from 'vuetify'
 import Client from 'js-owncloud-client'
-import Axios from 'axios'
 
 import { sync } from 'vuex-router-sync'
 import store from './store'
@@ -21,7 +20,6 @@ import router from './router'
 
 import VueEvents from 'vue-events'
 import VueRouter from 'vue-router'
-import VueAxios from 'vue-axios'
 
 // --- Gettext ----
 
@@ -36,12 +34,10 @@ const _map = require('lodash/map')
 const _flatten = require('lodash/flatten')
 const _findIndex = require('lodash/findIndex')
 
-Vue.prototype.$axios = Axios
 Vue.prototype.$client = new Client()
 
 Vue.use(VueEvents)
 Vue.use(VueRouter)
-Vue.use(VueAxios, Axios)
 Vue.use(Vuetify, {
   options: {
     customProperties: true
@@ -92,12 +88,12 @@ function loadApps () {
   sync(store, router)
 
   // inject custom config into vuex
-  store.dispatch('loadConfig', config.data)
+  store.dispatch('loadConfig', config)
 
   const OC = new Vue({
     el: '#owncloud',
     data: {
-      config: config.data,
+      config: config,
       plugins: _flatten(plugins),
       navItems: _flatten(navItems)
     },
@@ -107,10 +103,12 @@ function loadApps () {
   })
 
   // inject custom theme config into vuex
-  Axios.get(`themes/${config.data.theme}.json`).then(res => {
-    store.dispatch('loadTheme', res.data)
+  fetch(`themes/${config.theme}.json`)
+    .then(res => res.json())
+    .then(res => {
+    store.dispatch('loadTheme', res)
     // TODO FOUC happens here; this color init is too late.
-    OC.$vuetify.theme = res.data.colors
+    OC.$vuetify.theme = res.colors
   })
 }
 
@@ -124,8 +122,8 @@ function requireError (err) {
       return failedId === a.substring(2)
     })
     apps.splice(index, 1)
-    config.data.state = 'corrupt'
-    config.data.corrupted = missingApps
+    config.state = 'corrupt'
+    config.corrupted = missingApps
     requirejs(apps, loadApps, requireError)
   } else {
     throw err
@@ -135,12 +133,13 @@ function requireError (err) {
 (async function () {
   try {
     let defaultConfig = false
-    config = await Axios.get('config.json').catch(() => {
+    config = await fetch('config.json').catch(() => {
       defaultConfig = true
-      return Axios.get('static/config.default.json')
+      return fetch('static/config.default.json')
     })
-    if(defaultConfig) config.data.state = 'missing'
-    apps = _map(config.data.apps, (app) => {
+    config = await config.json()
+    if(defaultConfig) config.state = 'missing'
+    apps = _map(config.apps, (app) => {
       return `./apps/${app}/${app}.bundle.js`
     })
     requirejs(apps, loadApps, requireError)
