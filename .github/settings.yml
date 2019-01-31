@@ -1,7 +1,7 @@
 repository:
   name: phoenix
   description: Next generation frontend for ownCloud
-  homepage: https://phoenix.owncloud.com
+  homepage: https://phoenix.owncloud.com/custom/phoenix/index.html#/login
   has_wiki: false
 labels:
   - name: 1 - To develop
