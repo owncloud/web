@@ -19,7 +19,7 @@ const actions = {
     // force redirect to login page after logout
     router.push({ name: 'login' })
   },
-  initAuth (context) {
+  initAuth (context, autoRedirect = false) {
     // if called from login, use available vue-authenticate instance; else re-init
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
     const token = vueAuthInstance.getToken()
@@ -44,7 +44,7 @@ const actions = {
           token,
           isAuthenticated: true
         })
-        router.push({ path: '/' })
+        if (autoRedirect) router.push({ path: '/' })
       }).catch((e) => {
         console.error('logout forced! Seems that your token is invalid. Error:', e)
         context.dispatch('logout')
@@ -63,7 +63,7 @@ const actions = {
   callback (context) {
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
     vueAuthInstance.mgr.signinRedirectCallback().then(() => {
-      context.dispatch('initAuth')
+      context.dispatch('initAuth', true)
     })
   },
   signinSilentCallback (context) {
