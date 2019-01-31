@@ -7,7 +7,7 @@ module.exports = {
       selector: '#files-list'
     },
     fileRows: {
-      selector: '.file-row'
+      selector: 'div.file-row:nth-of-type(2)'
     }
   }
 }
