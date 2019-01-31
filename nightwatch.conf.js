@@ -4,8 +4,9 @@ const localLaunchUrl = process.env.SERVER_HOST || 'http://localhost:8300'
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
   test_settings: {
-    SHORT_WAIT_TIME: 1000,
-    LONG_WAIT_TIME: 10000,
+    SHORT_WAIT_TIME:     1000,
+    LONG_WAIT_TIME:     10000,
+    LONGER_WAIT_TIME:  100000,
     local: {
       launch_url: localLaunchUrl,
       webdriver: {
