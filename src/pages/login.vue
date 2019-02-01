@@ -7,6 +7,7 @@
           <v-img
           v-if="configuration.theme.logo.big"
           :src="configuration.theme.logo.big"
+          :lazy-src="configuration.theme.logo.big"
           max-height="40%"
           height="40%"
           contain
