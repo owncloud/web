@@ -4,7 +4,13 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
   ],
-  entry: './src/app.js',
+  entry: {
+    'pdf-viewer': [
+      "core-js/modules/es6.promise",
+      "core-js/modules/es6.array.iterator",
+      './src/app.js'
+    ]
+  },
   output : {
     publicPath: 'apps/pdf-viewer/',
     chunkFilename: '[name].pdf-viewer.chunk.js',
@@ -14,6 +20,7 @@ module.exports = {
     rules: [{
       test: /\.js?$/,
       exclude: /node_modules/,
+      loader: 'babel-loader'
     }, {
       test: /\.vue$/,
       loader: 'vue-loader'

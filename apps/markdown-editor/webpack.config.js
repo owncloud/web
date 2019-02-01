@@ -6,7 +6,11 @@ module.exports = {
 	],
 	devtool: 'source-map',
   entry: {
-    'markdown-editor': ['./src/app.js']
+    'markdown-editor': [
+      "core-js/modules/es6.promise",
+      "core-js/modules/es6.array.iterator",
+      './src/app.js'
+    ]
   },
   output: {
     publicPath: 'apps/markdown-editor/',
@@ -16,8 +20,9 @@ module.exports = {
 	module: {
 		rules: [{
 			test: /\.js?$/,
-			exclude: /node_modules/
-		}, {
+			exclude: /node_modules/,
+      loader: 'babel-loader'
+    }, {
 			test: /\.vue$/,
 			loader: 'vue-loader',
       exclude: [/node_modules/]

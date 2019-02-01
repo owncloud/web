@@ -1,3 +1,5 @@
+import '@babel/polyfill'
+
 let pdf = import('./PdfViewer.vue')
 const PdfViewer = () => ({
   component: pdf

@@ -1,4 +1,4 @@
-const pkg = require('../package.json');
+import '@babel/polyfill'
 
 // --- Components --------------------------------------------------------------
 

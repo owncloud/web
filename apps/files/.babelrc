@@ -1,12 +1,11 @@
 {
   "presets": [
     [
-      "env",
-      {
-        "targets": {
-          "node": "current"
-        }
-      }
+      "@babel/preset-env", {
+      "debug": true,
+      "useBuiltIns": "entry"
+    }
     ]
-  ]
+  ],
+  "plugins": ["@babel/plugin-syntax-dynamic-import"]
 }
