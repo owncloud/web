@@ -16,6 +16,7 @@
             </template>
           </v-breadcrumbs>
         </v-flex>
+        <search-bar :value="searchQuery" @search="onSearch" :label="$gettext('Search')" auto-trim />
         <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName"
                           ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
         <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
@@ -87,8 +88,8 @@
         </v-menu>
         <v-flex align-self-center class="text-xs-right" xs1>
           <span>
-            <translate :translate-n="filteredFiles.length" translate-plural="%{ filteredFiles.length } Results">
-              %{ filteredFiles.length } Result
+            <translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">
+              %{ activeFiles.length } Result
             </translate>
           </span>
         </v-flex>
@@ -111,7 +112,7 @@
       <v-layout row fill-height>
         <v-flex :class="{'xs12': selectedFiles.length === 0, 'xs6': selectedFiles.length > 0 }" pa-0 fill-height>
           <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear>
-          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" @sideBarOpen="openSideBar"/>
+          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
         </v-flex>
         <v-flex v-if="selectedFiles.length > 0" xs6 pa-0>
           <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
@@ -125,12 +126,12 @@
 <script>
 import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
-import FileActionsTab from './FileactionsTab.vue'
+import FileActionsTab from './FileActionsTab.vue'
 import FileList from './FileList.vue'
 import FileUpload from './FileUpload.vue'
 import SearchBar from 'oc_components/form/SearchBar.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
-import { filter } from 'lodash'
+import { map, filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 const _includes = require('lodash/includes')
@@ -168,6 +169,8 @@ export default {
       selected: [],
       loading: false,
       fileFilterQuery: '',
+      searchQuery: '',
+      searchedFiles: [],
       filters: [
         {
           name: 'Files',
@@ -196,10 +199,6 @@ export default {
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress']),
     ...mapActions(['openFile', 'showNotification']),
-
-    trace () {
-      console.info('trace', arguments)
-    },
     onFileSuccess (event, file) {
       this.$nextTick().then(() => {
         const filePath = ((this.item === 'home') ? '' : this.item) + '/' + file.name
@@ -226,7 +225,6 @@ export default {
         type: 'error'
       })
     },
-
     onFileProgress (progress) {
       this.updateFileProgress(progress)
       let progressTotal = 0
@@ -236,7 +234,26 @@ export default {
       this.fileUploadProgress = progressTotal / this.inProgress.length
       return this.fileUploadProgress
     },
-
+    onSearch (searchQuery) {
+      this.searchQuery = searchQuery
+      // do not search for empty strings
+      if (!searchQuery) return
+      this.$client.files.search(searchQuery).then((searchedFiles) => {
+        // workaround because ownCloud search does not return fileType
+        this.searchedFiles = map(searchedFiles, (f) => {
+          let ext = f.name.match(/\.\w+$/)
+          // skip folder without extension
+          if (ext) f.extension = ext[0].slice(1)
+          return f
+        })
+      }).catch((error) => {
+        this.showNotification({
+          title: this.$gettext('Error while searching.'),
+          desc: error.message,
+          type: 'error'
+        })
+      })
+    },
     toggleFileSelect (item) {
       if (_includes(this.selectedFiles, item)) {
         this.removeFileSelection(item)
@@ -246,9 +263,11 @@ export default {
     },
 
     openFileActionBar (file) {
+      // workaround: oc search returns full file path as name
+      let filePath = file.path || file.name
       this.openFile({
         client: this.$client,
-        filePath: file.path
+        filePath
       })
       this.showActionBar = true
       this.fileAction = file
@@ -391,7 +410,12 @@ export default {
     activeRoute () {
       return this.getRoutes()
     },
-
+    activeFiles () {
+      // if no search term is given, show current directory...
+      if (!this.searchQuery) return this.filteredFiles
+      // else search bar is filled; So we show search results in file list
+      else return this.searchedFiles
+    },
     filteredFiles () {
       return filter(this.files, (file) => {
         return this.ifFiltered(file)

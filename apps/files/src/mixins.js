@@ -9,7 +9,7 @@ export default {
         return ''
       }
       if (isNaN(int)) {
-        return '???'
+        return '?'
       }
       return filesize(int * 100, {
         round: 2
@@ -61,7 +61,10 @@ export default {
         if (file.type === 'folder') {
           return 'ocft icon-folder'
         }
-        const icon = fileTypeIconMappings[file.extension]
+        let fileExtension = file.extension
+        // default icon if unknown... happens while searching; could be file or folder...
+        if (!fileExtension) return 'ocft icon-x-office-document'
+        const icon = fileTypeIconMappings[fileExtension]
         if (icon) return `ocft icon-${icon}`
       }
       return 'ocft icon-x-office-document'

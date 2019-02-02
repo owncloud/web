@@ -21,6 +21,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    autoTrim: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data: () => ({
@@ -28,8 +33,8 @@ export default {
   }),
   methods: {
     onSearch (query) {
-      this.query = query
-      this.$emit('search', query)
+      this.query = (this.autoTrim) ? query.trim() : query
+      this.$emit('search', this.query)
     }
   },
   computed: {
