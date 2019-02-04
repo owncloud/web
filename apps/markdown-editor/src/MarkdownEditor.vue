@@ -34,13 +34,14 @@ import marked from 'marked'
 export default {
   name: 'MarkdownEditor',
   mounted () {
+    this.text = this.$gettext('# is Loading...')
     this.$store.dispatch('openFile', {
       client: this.$client,
       filePath: this.filePath
     }).then((f) => (this.text = f))
   },
   data: () => ({
-    text: '# is Loading...',
+    text: '',
     isTouched: false
   }),
   computed: {
