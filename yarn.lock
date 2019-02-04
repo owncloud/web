@@ -7781,10 +7781,10 @@ vue@^2.6.0:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.0.tgz#d5eeb08b3b10f338f25760fd83019db2153fbcfb"
   integrity sha512-QSKHpmV17wqDmS5jVCc8X9LyTcCCQP4M1RTRpLBO+hRveePduJaGz1FGjVpRVcE6cKYbhsooz6RW7GWLGNjKGg==
 
-vuetify@^1.4.4:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.4.4.tgz#0a08d98e685a875e3d7fd035235932d9abf3fd5b"
-  integrity sha512-i0fNciTrzP+U6NinB2kmNMC5vWXtrTy5QcVFLOxv4dhhqTiMTyHj7rV1B2lwBTZYoDhimmSAYRfqHeKdCMx+Gg==
+vuetify@^1.4.6:
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.4.6.tgz#908cbe4e39e842a23e26fe0d25f059dc39b7eef6"
+  integrity sha512-EALZORyKuxKRGhXdjDJVIRP2ulZzS8cqvhas/7wI0hpOeqONLoOLL6PTOYELf3ZFIc2xawSOLvz2HfBihuFHMQ==
 
 vuex-persist@^2.0.0:
   version "2.0.0"
