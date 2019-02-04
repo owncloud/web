@@ -15,7 +15,7 @@ export function initVueAuthenticate (config) {
         // with OAuth2 we need to se the metadata manually
         metadataUrl: config.metaDataUrl,
         client_id: config.clientId,
-        redirect_uri: baseUrl + '#/oidc-callback',
+        redirect_uri: baseUrl + 'callback.html',
         response_type: 'code', // code triggers auth code grant flow
         response_mode: 'query',
         scope: 'openid profile offline_access',
@@ -39,7 +39,7 @@ export function initVueAuthenticate (config) {
           userinfo_endpoint: ''
         },
         client_id: config.clientId,
-        redirect_uri: baseUrl + '#/oidc-callback',
+        redirect_uri: baseUrl + 'callback.html',
         response_type: 'token', // token is implicit flow - to be killed
         // response_type: 'code', // for authentication code flow use 'code
         response_mode: 'query',

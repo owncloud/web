@@ -90,6 +90,11 @@ function loadApps () {
   // inject custom config into vuex
   store.dispatch('loadConfig', config)
 
+  // init auth earlier
+  let instance = config.server || window.location.origin
+  Vue.prototype.$client.setInstance(instance)
+  store.dispatch('initAuth')
+
   const OC = new Vue({
     el: '#owncloud',
     data: {

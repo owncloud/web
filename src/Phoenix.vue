@@ -22,11 +22,6 @@ export default {
     TopBar,
     'side-menu': Menu
   },
-  beforeMount () {
-    let instance = this.$root.config.server || window.location.origin
-    this.$client.setInstance(instance)
-    this.$store.dispatch('initAuth')
-  },
   computed: {
     ...mapGetters(['configuration']),
     showHeader () {
