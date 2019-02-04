@@ -50,7 +50,7 @@
     "material-design-icons-iconfont": "^4.0.4",
     "mini-css-extract-plugin": "^0.5.0",
     "nightwatch": "^1.0.18",
-    "nightwatch-api": "^2.1.0",
+    "nightwatch-api": "^2.1.1",
     "parse-json": "^4.0.0",
     "requirejs": "^2.3.6",
     "rimraf": "^2.6.3",
