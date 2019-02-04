@@ -31,7 +31,7 @@
     "@babel/register": "^7.0.0",
     "axe-cli": "^3.0.0",
     "babel-loader": "^8.0.5",
-    "chromedriver": "^2.45.0",
+    "chromedriver": "^2.46.0",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^2.1.0",
     "cucumber": "^5.1.0",
