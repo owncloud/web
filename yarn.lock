@@ -4372,7 +4372,8 @@ js-levenshtein@^1.1.3:
 
 "js-owncloud-client@github:owncloud/js-owncloud-client#master":
   version "0.2.0-alpha1"
-  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/50fb3d97731fd422a9e93c2cdb377871b61a9b1e"
+  uid "50816b6c598fdde4169d4f0d00ee40a91bd4ca05"
+  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/50816b6c598fdde4169d4f0d00ee40a91bd4ca05"
   dependencies:
     browser-request "^0.3.3"
     davclient.js "https://github.com/owncloud/davclient.js.git"
