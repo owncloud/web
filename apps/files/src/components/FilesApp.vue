@@ -16,7 +16,7 @@
             </template>
           </v-breadcrumbs>
         </v-flex>
-        <search-bar :value="searchQuery" @search="onSearch" :label="$gettext('Search')" auto-trim />
+        <search-bar :value="searchQuery" @search="onSearch" :label="$gettext('Search')"/>
         <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName"
                           ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
         <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
@@ -133,6 +133,7 @@ import SearchBar from 'oc_components/form/SearchBar.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { map, filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
+import { _buildFile } from '../store'
 
 const _includes = require('lodash/includes')
 
@@ -241,10 +242,8 @@ export default {
       this.$client.files.search(searchQuery).then((searchedFiles) => {
         // workaround because ownCloud search does not return fileType
         this.searchedFiles = map(searchedFiles, (f) => {
-          let ext = f.name.match(/\.\w+$/)
-          // skip folder without extension
-          if (ext) f.extension = ext[0].slice(1)
-          return f
+          let file = _buildFile(f)
+          return file
         })
       }).catch((error) => {
         this.showNotification({

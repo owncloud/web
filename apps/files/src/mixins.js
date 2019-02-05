@@ -61,10 +61,7 @@ export default {
         if (file.type === 'folder') {
           return 'ocft icon-folder'
         }
-        let fileExtension = file.extension
-        // default icon if unknown... happens while searching; could be file or folder...
-        if (!fileExtension) return 'ocft icon-x-office-document'
-        const icon = fileTypeIconMappings[fileExtension]
+        const icon = fileTypeIconMappings[file.extension]
         if (icon) return `ocft icon-${icon}`
       }
       return 'ocft icon-x-office-document'

@@ -8,7 +8,7 @@ const state = {
   inProgress: []
 }
 
-function _buildFile (file) {
+export function _buildFile (file) {
   let ext = false
   if (file.type !== 'dir') {
     const ex = file.name.match(/\.[0-9a-z]+$/i)

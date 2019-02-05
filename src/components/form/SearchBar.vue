@@ -1,6 +1,6 @@
 <template>
   <v-text-field :label="label" append-icon="search"
-    @input="onSearch" :value="searchQuery" autofocus="autofocus"></v-text-field>
+    @input="onType" :value="searchQuery" autofocus="autofocus" @keydown.enter="onSearch"></v-text-field>
 </template>
 
 <script>
@@ -22,7 +22,7 @@ export default {
       required: false,
       default: false
     },
-    autoTrim: {
+    noTrim: {
       type: Boolean,
       required: false,
       default: false
@@ -33,8 +33,11 @@ export default {
   }),
   methods: {
     onSearch (query) {
-      this.query = (this.autoTrim) ? query.trim() : query
       this.$emit('search', this.query)
+    },
+    onType (query) {
+      this.query = (!this.noTrim) ? query.trim() : query
+      this.$emit('type', this.query)
     }
   },
   computed: {
