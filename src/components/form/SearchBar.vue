@@ -1,6 +1,8 @@
 <template>
   <v-text-field :label="label" append-icon="search"
-    @input="onType" :value="searchQuery" autofocus="autofocus" @keydown.enter="onSearch"></v-text-field>
+    @input="onType" :value="searchQuery" autofocus="autofocus"
+    @keydown.enter="onSearch" @click:append="onSearch">
+  </v-text-field>
 </template>
 
 <script>
