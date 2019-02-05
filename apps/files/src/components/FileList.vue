@@ -48,8 +48,8 @@
           style="cursor: pointer"
         >
           <v-list-tile-title>{{ item.name }}</v-list-tile-title>
-          <v-list-tile-sub-title class="text--primary">{{ item.size | fileSize }}</v-list-tile-sub-title>
-          <v-list-tile-sub-title>{{ item.mdate | formDateFromNow }}</v-list-tile-sub-title>
+          <v-list-tile-sub-title v-if="item.size" class="text--primary">{{ item.size | fileSize }}</v-list-tile-sub-title>
+          <v-list-tile-sub-title v-if="item.mdate">{{ item.mdate | formDateFromNow }}</v-list-tile-sub-title>
         </v-list-tile-content>
 
         <v-list-tile-action
