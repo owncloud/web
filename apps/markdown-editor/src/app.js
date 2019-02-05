@@ -2,22 +2,26 @@ import '@babel/polyfill'
 
 // --- Components --------------------------------------------------------------
 
-const MarkdownEditor = () => ({
-	component: import ('./MarkdownEditor.vue')
-});
+import MarkdownEditor from './MarkdownEditor.vue'
+import MarkdownEditorTopbar from './MarkdownEditorTopbar.vue'
 
 
 // --- Routing -----------------------------------------------------------------
 
+const store = require('./store.js')
+
 const routes = [{
 	path: '',
-	component: MarkdownEditor,
+	components: {
+    appContent: MarkdownEditor,
+    appTopbar: MarkdownEditorTopbar
+  },
 	name: 'markdown-editor'
 }];
 
 
 const appInfo = {
-	name: 'Markdown Editor',
+	name: 'MarkdownEditor',
 	id: 'markdown-editor',
 	icon: 'ocft icon-x-office-document',
 	isFileEditor: true,
@@ -32,5 +36,6 @@ const appInfo = {
 
 export default define({
 	appInfo,
-	routes
+	routes,
+  store
 })

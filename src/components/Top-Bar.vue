@@ -1,35 +1,29 @@
 <template>
-  <v-toolbar app class="theme--dark primary">
-  <v-toolbar-side-icon @click.prevent="toggleSidebar(true)" class="theme--dark"></v-toolbar-side-icon>
-  <span class="subheading" v-translate>Files</span>
-  <v-spacer></v-spacer>
-    <v-flex xs1>
-      <v-img
-        v-if="configuration.theme.logo.big"
-        :src="configuration.theme.logo.big"
-        contain
-      />
-    </v-flex>
-    <span class="font-weight-medium title">{{ configuration.theme.general.name }}</span>
-  <v-spacer></v-spacer>
-  <v-toolbar-items class="hidden-sm-and-down">
-    <v-menu offset-y v-if="configuration.state !== 'working'">
-      <v-icon slot="activator" color="error" x-large>info</v-icon>
-      <v-list
-        class="primary white--text text-xs-center"
-        v-for="app in configuration.corrupted"
-        :key="app">
-          <h4 class="pa-3">Corrupted apps</h4>
-        <v-list-tile>
-          <v-list-tile-title class="text-xs-center">
-            {{ parseApp(app) }}
-          </v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-menu>
-    <v-btn class="theme--dark" flat><v-icon class="theme--dark" medium>account_circle</v-icon>&nbsp;<span>{{ user.displayname }}</span></v-btn>
-  </v-toolbar-items>
-</v-toolbar>
+  <component :is="'div'" class="nav">
+    <div class="menu">
+      <v-icon class="icons" @click.prevent="toggleSidebar(true)" color="white">menu</v-icon>
+      <span v-translate>Files</span>
+    </div>
+    <img class="logo" :src="configuration.theme.logo.big" height="50px" />
+    <div class="user">
+      <v-icon class="icons right" color="white">account_circle</v-icon>
+      <span class="right">{{ user.displayname }}</span>
+      <v-menu offset-y v-if="configuration.state !== 'working'">
+        <v-icon slot="activator" color="error" x-large>info</v-icon>
+        <v-list
+          class="primary white--text text-xs-center"
+          v-for="app in configuration.corrupted"
+          :key="app">
+            <h4 class="pa-3">Corrupted apps</h4>
+          <v-list-tile>
+            <v-list-tile-title class="text-xs-center">
+              {{ parseApp(app) }}
+            </v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+    </div>
+  </component>
 </template>
 
 <script>
@@ -67,6 +61,45 @@ export default {
 }
 </script>
 
-<style scoped="true">
+<style scoped lang="scss">
 
+.nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "menu logo user";
+  overflow: hidden;
+  background-color: #232c47;
+  line-height: 50px;
+  position: fixed;
+  top: 0;
+  z-index: 99;
+  height: 50px;
+  width: 100%;
+}
+.icons {
+  padding: 10px;
+  margin-top: .1em;
+  float: left;
+}
+.hamburger:hover {
+  background: blue;
+  border-radius: 50%;
+}
+.menu {
+  color: white;
+  grid-area: menu;
+}
+.right {
+  float: right;
+}
+.logo {
+  margin: 0 auto;
+  grid-area: logo;
+}
+
+.user {
+  color: white;
+  grid-area: user;
+}
 </style>

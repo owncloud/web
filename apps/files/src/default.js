@@ -1,5 +1,6 @@
 import '@babel/polyfill'
 import FilesApp from './components/FilesApp.vue'
+import FilesTopBar from './components/FilesTopBar.vue'
 import FileInfoSideBar from './components/FileInfoSidebar.vue'
 
 const store = require('./store.js')
@@ -31,11 +32,18 @@ const navItems = [{
 
 const routes = [{
   path: '',
-  redirect: `/${appInfo.id}/list/home`
+  redirect: `/${appInfo.id}/list/home`,
+  components: {
+    appContent: FilesApp,
+    appTopbar: FilesTopBar
+  }
 },
 {
   path: '/list/:item',
-  component: FilesApp,
+  components: {
+    appContent: FilesApp,
+    appTopbar: FilesTopBar
+  },
   name: 'files-list',
   meta: {
     'hideHeadbar': false
