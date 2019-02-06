@@ -17,7 +17,7 @@
     "vue-loader": "^15.6.2",
     "babel-loader": "^8.0.5",
     "vue-template-compiler": "^2.6.2",
-    "webpack": "^4.29.1",
+    "webpack": "^4.29.2",
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
