@@ -239,7 +239,14 @@ export default {
       this.searchQuery = searchQuery
       // do not search for empty strings
       if (!searchQuery) return
-      this.$client.files.search(searchQuery).then((searchedFiles) => {
+      // TODO respect user selected listSize from state.config
+      this.$client.files.search(searchQuery, null, [
+        '{http://owncloud.org/ns}favorite',
+        '{DAV:}getcontentlength',
+        '{http://owncloud.org/ns}size',
+        '{DAV:}getlastmodified',
+        '{DAV:}resourcetype'
+      ]).then((searchedFiles) => {
         this.searchedFiles = map(searchedFiles, (f) => {
           let file = _buildFile(f)
           return file
