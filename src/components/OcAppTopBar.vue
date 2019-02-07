@@ -14,12 +14,11 @@
   </div>
 </template>
 <script>
-import { filter } from 'lodash'
 export default {
   computed: {
     actionSlots () {
-      let filteredSlots = filter(Object.keys(this.$slots), (s) => {
-        return s.includes('action_')
+      let filteredSlots = Object.keys(this.$slots).filter((s) => {
+        return s.startsWith('action_')
       })
       return filteredSlots.reverse()
     }
