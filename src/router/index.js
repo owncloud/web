@@ -14,15 +14,21 @@ const router = new Router({
   routes: [{
     path: '/login',
     name: 'login',
-    component: LoginPage,
+    components: {
+      fullscreen: LoginPage
+    },
     meta: { auth: false, hideHeadbar: true, showBackground: true }
   }, {
     path: '/oidc-callback',
-    component: OidcCallbackPage,
+    components: {
+      fullscreen: OidcCallbackPage
+    },
     meta: { auth: false, hideHeadbar: true, showBackground: true }
   }, {
     path: '/oidc-silent-redirect',
-    component: OidcSilentRedirectPage,
+    components: {
+      fullscreen: OidcSilentRedirectPage
+    },
     meta: { auth: false, hideHeadbar: true, showBackground: true }
   }, {
     path: '/error',

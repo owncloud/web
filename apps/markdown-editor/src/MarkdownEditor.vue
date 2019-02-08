@@ -1,22 +1,11 @@
 <template lang="html">
   <v-content>
     <v-layout column>
-      <v-layout row align-self-center>
-        <h1 class="mt-2">
-          {{ filePath }}
-        </h1>
-        <v-btn flat @click="saveContent(text)" :disabled="!isTouched">
-          <v-icon large>save</v-icon>
-        </v-btn>
-        <v-btn flat @click="closeApp">
-          <v-icon large>home</v-icon>
-        </v-btn>
-      </v-layout>
       <v-container align-content-center row>
         <v-layout row>
           <v-textarea
           name="input" box
-          full-width :value="text"
+          full-width :value="currentContent"
           @input="onType" height="30vh">
           </v-textarea>
           <v-flex xs6>
@@ -29,43 +18,29 @@
 </template>
 <script>
 import marked from 'marked'
-// import { debounce } from 'lodash'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'MarkdownEditor',
   mounted () {
-    this.text = this.$gettext('# is Loading...')
-    this.$store.dispatch('openFile', {
+    this.openFile({
       client: this.$client,
-      filePath: this.filePath
-    }).then((f) => (this.text = f))
+      filePath: this.activeFile.path
+    }).then((f) => { this.updateText(f) })
   },
-  data: () => ({
-    text: '',
-    isTouched: false
-  }),
   computed: {
+    ...mapGetters(['activeFile']),
+    ...mapGetters('MarkdownEditor', ['isTouched', 'currentContent']),
     renderedMarkdown () {
-      return marked(this.text)
+      return this.currentContent ? marked(this.currentContent) : null
     },
-    filePath () {
-      // TODO use mapGetters if babel exists
-      return this.$store.state.apps.file.path
-    }
   },
   methods: {
-    saveContent (content) {
-      this.$client.files.putFileContents(this.filePath, content).then(() => { this.isTouched = false })
-    },
+    ...mapActions(['openFile']),
+    ...mapActions('MarkdownEditor', ['touched', 'updateText']),
     onType (e) {
-      this.isTouched = true
-      this.text = e
-      // debounce(this.saveContent, 100)
-    },
-    closeApp () {
-      this.$router.push({
-        path: '/files/list/home'
-      })
+      if (!this.isTouched) this.touched(true)
+      this.updateText(e)
     }
   }
 }

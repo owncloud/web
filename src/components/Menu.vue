@@ -4,8 +4,7 @@
         absolute
         temporary
         clipped
-        class='mt-5'
-        style='top: 16px'>
+        style='top: 50px;z-index: 999;'>
         <v-list class="pt-0" dense>
           <v-list-tile
             v-for="(n, nid) in nav"

@@ -1,4 +1,6 @@
 import '@babel/polyfill'
+import PdfViewerTopbar from './PdfViewerTopbar.vue'
+const store = require('./store.js')
 
 let pdf = import('./PdfViewer.vue')
 const PdfViewer = () => ({
@@ -7,12 +9,15 @@ const PdfViewer = () => ({
 
 const routes = [{
   path: `/pdf-viewer`,
-  component: PdfViewer,
+  components: {
+    appContent: PdfViewer,
+    appTopbar: PdfViewerTopbar
+  },
   name: 'pdf-viewer'
 }]
 
 const appInfo = {
-  name: 'PDF Viewer',
+  name: 'PDFViewer',
   id: 'pdf-viewer',
   icon: 'ocft icon-application-pdf',
   isFileEditor: true,
@@ -23,5 +28,6 @@ const appInfo = {
 
 export default define({
   appInfo,
-  routes
+  routes,
+  store
 })
