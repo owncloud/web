@@ -1391,7 +1391,7 @@ boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
-brace-expansion@^1.0.0, brace-expansion@^1.1.7:
+brace-expansion@^1.1.7:
   version "1.1.11"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
   integrity sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==
@@ -4691,7 +4691,7 @@ lodash._isiterateecall@^3.0.0:
   resolved "https://registry.yarnpkg.com/lodash._isiterateecall/-/lodash._isiterateecall-3.0.9.tgz#5203ad7ba425fae842460e696db9cf3e6aac057c"
   integrity sha1-UgOte6Ql+uhCRg5pbbnPPmqsBXw=
 
-lodash.clone@^3.0.3:
+lodash.clone@3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/lodash.clone/-/lodash.clone-3.0.3.tgz#84688c73d32b5a90ca25616963f189252a997043"
   integrity sha1-hGiMc9MrWpDKJWFpY/GJJSqZcEM=
@@ -4940,13 +4940,6 @@ minimalistic-crypto-utils@^1.0.0, minimalistic-crypto-utils@^1.0.1:
   resolved "https://registry.yarnpkg.com/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
   integrity sha1-9sAMHAsIIkblxNmd+4x8CDsrWCo=
 
-minimatch@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.3.tgz#2a4e4090b96b2db06a9d7df01055a62a77c9b774"
-  integrity sha1-Kk5AkLlrLbBqnX3wEFWmKnfJt3Q=
-  dependencies:
-    brace-expansion "^1.0.0"
-
 minimatch@3.0.4, minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
@@ -5171,18 +5164,18 @@ nightwatch-api@^2.1.1:
     "@types/debug" "^0.0.31"
     debug "^4.1.1"
 
-nightwatch@^1.0.18:
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-1.0.18.tgz#23e733d9688e02e03e8a8360428b8793a8919ffb"
-  integrity sha512-BKosRh/QqpCCMxjnfP+gb8KMQV0y//TNdYDjB0RrU1pXgx2Xjyp46bK8tQWRFfqaxWDj5EKYFIPgvxFBXodIOA==
+nightwatch@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-1.0.19.tgz#f81a357618367e8df068f0f10f5a5ba0af5ed4fb"
+  integrity sha512-Dl+EN4wFp927nn7KRkCIJ7b0Th9PVjiwflzqsoqJOwLPcLuzSBz4FYBvHXQtUkaL4/nELVgXurw/KXqj2gcFSg==
   dependencies:
     assertion-error "^1.1.0"
     chai-nightwatch "0.2.1"
     ejs "^2.5.9"
-    lodash.clone "^3.0.3"
+    lodash.clone "3.0.3"
     lodash.defaultsdeep "^4.6.0"
     lodash.merge "^4.6.1"
-    minimatch "3.0.3"
+    minimatch "3.0.4"
     mkpath "1.0.0"
     optimist "^0.6.1"
     proxy-agent "^3.0.0"
