@@ -55,6 +55,7 @@ distconf:
 .PHONY: oc-app
 oc-app:
 	cp -R appinfo $(dist_dir)
+	cp -R img $(dist_dir)
 	cp .htaccess $(dist_dir)
 
 .PHONY: sign
