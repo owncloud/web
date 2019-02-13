@@ -53,6 +53,7 @@
     "mini-css-extract-plugin": "^0.5.0",
     "nightwatch": "^1.0.19",
     "nightwatch-api": "^2.1.1",
+    "npm-run-all": "^4.1.5",
     "parse-json": "^4.0.0",
     "requirejs": "^2.3.6",
     "rimraf": "^2.6.3",
