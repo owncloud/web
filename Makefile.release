@@ -40,9 +40,8 @@ dist: distdir javascript oc-app distconf sign package
 
 .PHONY: javascript
 javascript:
-	$(YARN) dist
 	$(YARN) install
-	$(YARN) run build:prod
+	$(YARN) dist
 
 .PHONY: distdir
 distdir:
