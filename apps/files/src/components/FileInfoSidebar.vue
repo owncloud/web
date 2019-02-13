@@ -9,7 +9,7 @@
                     <v-icon large>folder</v-icon>
                 </v-list-tile-avatar>
 
-                <v-list-tile-title>{{ tile.name }}</v-list-tile-title>
+                <v-list-tile-title>{{ tile.name.substr(0, 20) }}...</v-list-tile-title>
                 <v-list-tile-sub-title>{{ tile.size | fileSize }}</v-list-tile-sub-title>
             </v-list-tile>
         </v-layout>
@@ -33,7 +33,7 @@
                     <v-icon large>folder</v-icon>
                 </v-list-tile-avatar>
 
-                <v-list-tile-title>{{ tile.name }}</v-list-tile-title>
+                <v-list-tile-title>{{ tile.name.substr(0, 20) }}...</v-list-tile-title>
                 <v-list-tile-sub-title>{{ tile.size | fileSize }}</v-list-tile-sub-title>
             </v-list-tile>
         </v-layout>

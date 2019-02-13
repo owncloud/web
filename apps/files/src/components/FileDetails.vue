@@ -1,55 +1,46 @@
 <template>
-  <v-navigation-drawer
-  v-model="drawer"
-  class="grey lighten-2"
-  right
-  floating
-  permanent
-  style="width:100%"
-  >
-  <v-layout column>
-    <v-layout primary row>
-      <v-flex>
-        <v-icon color="white" class="pl-4" medium>folder</v-icon>
-      </v-flex>
-      <v-flex white--text align-self-center>
-        <span class="subheading"> {{ getTabName }} </span>
-      </v-flex>
-    </v-layout>
-    <v-layout primary row>
-      <v-spacer />
-      <v-btn @click.native="deleteSelectedFiles" flat><v-icon color="white" medium>delete</v-icon></v-btn>
-      <v-spacer />
-      <v-btn @click.native="downloadFiles" v-if="items.length <= 1" flat><v-icon color="white" medium>cloud_download</v-icon></v-btn>
-      <v-btn disabled v-else flat><v-icon color="white" medium>archive</v-icon></v-btn>
-      <v-spacer />
-    </v-layout>
-    <v-tabs
-      v-model="active"
-      color="primary lighten-5"
-      dark
-      slider-color="yellow"
-    >
-      <v-tab
-        v-for="tab of fileSideBars"
-        :key="tab.name"
-        ripple
+  <oc-app-side-bar>
+    <template slot="title">
+      <span>{{ getTabName }}</span>
+    </template>
+    <template slot="headerContent">
+      <v-layout primary row>
+        <v-spacer />
+        <v-btn @click.native="deleteSelectedFiles" flat><v-icon color="white" medium>delete</v-icon></v-btn>
+        <v-spacer />
+        <v-btn @click.native="downloadFiles" v-if="items.length <= 1" flat><v-icon color="white" medium>cloud_download</v-icon></v-btn>
+        <v-btn disabled v-else flat><v-icon color="white" medium>archive</v-icon></v-btn>
+        <v-spacer />
+      </v-layout>
+    </template>
+    <template slot="content">
+      <v-tabs
+        v-model="active"
+        color="primary lighten-5"
+        dark
+        slider-color="yellow"
       >
-        {{ tab.name }}
-      </v-tab>
-      <v-tab-item
-        v-for="tab of fileSideBars"
-        :key="tab.name"
-      >
-        <component :is="tab.component"></component>
-      </v-tab-item>
-    </v-tabs>
-</v-layout>
-</v-navigation-drawer>
+        <v-tab
+          v-for="tab of fileSideBars"
+          :key="tab.name"
+          ripple
+        >
+          {{ tab.name }}
+        </v-tab>
+        <v-tab-item
+          v-for="tab of fileSideBars"
+          :key="tab.name"
+        >
+          <component :is="tab.component"></component>
+        </v-tab-item>
+      </v-tabs>
+    </template>
+  </oc-app-side-bar>
 </template>
 
 <script>
 import Mixins from '../mixins'
+import OcAppSideBar from 'oc_components/OcAppSideBar.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -64,6 +55,7 @@ export default {
     }
   },
   components: {
+    OcAppSideBar
   },
   methods: {
     ...mapActions('Files', ['deleteFiles']),
@@ -85,12 +77,15 @@ export default {
   },
   computed: {
     ...mapGetters(['getToken', 'fileSideBars']),
-
     getTabName () {
       if (this.items.length === 0) {
         return ''
       }
-      return (this.items.length > 1) ? this.$gettext('Multiple Files') : this.items[0].name
+      if (this.items.length > 1) {
+        return this.$gettext('Multiple Files')
+      } else {
+        return (this.items[0].name.length > 16) ? `${this.items[0].name.substr(0, 10)}...` : this.items[0].name
+      }
     }
   }
 }
