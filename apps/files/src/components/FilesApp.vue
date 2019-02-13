@@ -26,10 +26,15 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 const _includes = require('lodash/includes')
 
 const davProperties = [
+  '{http://owncloud.org/ns}permissions',
   '{http://owncloud.org/ns}favorite',
+  '{http://owncloud.org/ns}id',
+  '{http://owncloud.org/ns}owner-id',
+  '{http://owncloud.org/ns}owner-display-name',
   '{DAV:}getcontentlength',
   '{http://owncloud.org/ns}size',
   '{DAV:}getlastmodified',
+  '{DAV:}getetag',
   '{DAV:}resourcetype'
 ]
 
@@ -149,15 +154,17 @@ export default {
       let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
       this.$client.files.list(absolutePath, 1, davProperties).then(res => {
         let files = []
+        let currentFolder = null
         if (res === null) {
           this.showNotification({
             title: this.$gettext('Loading folder failed ....'),
             type: 'error'
           })
         } else {
+          currentFolder = res[0]
           files = res.splice(1)
         }
-        this.loadFiles(files)
+        this.loadFiles({ currentFolder, files })
         this.self = files.self
         this.resetFileSelection()
       }).catch(error => {

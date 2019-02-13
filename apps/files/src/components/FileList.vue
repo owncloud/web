@@ -55,7 +55,7 @@
         <v-list-tile-action
           v-for="(action, index) in actions"
           :key="index">
-          <v-btn icon
+          <v-btn icon :disabled="!action.isEnabled(item)"
             @click="action.handler(item, action.handlerData)">
             <v-icon>{{ action.icon }}</v-icon>
           </v-btn>
@@ -125,13 +125,27 @@ export default {
     },
     actions () {
       let actions = [
-        { icon: 'file_download', handler: this.downloadFile },
-        { icon: 'delete', handler: this.deleteFile }
+        { icon: 'file_download',
+          handler: this.downloadFile,
+          isEnabled: function (item) {
+            return true
+          } },
+        { icon: 'delete',
+          handler: this.deleteFile,
+          isEnabled: function (item) {
+            return item.canBeDeleted()
+          } }
       ]
       for (let sideBarName in this.fileSideBars) {
         let sideBar = this.fileSideBars[sideBarName]
         if (sideBar.quickAccess) {
-          actions.push({ icon: sideBar.quickAccess.icon, handler: this.openSideBar, handlerData: sideBarName })
+          actions.push({ icon: sideBar.quickAccess.icon,
+            handler: this.openSideBar,
+            handlerData: sideBarName,
+            isEnabled: function (item) {
+              return true
+            }
+          })
         }
       }
 
