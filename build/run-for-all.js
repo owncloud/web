@@ -4,20 +4,20 @@ var resolve = require('path').resolve
 var join = require('path').join
 var cp = require('child_process')
 var runCommandsInParallel = false
-var command = process.argv[2];
-var commandArgs = process.argv.slice(3);
+var command = process.argv[2]
+var commandArgs = process.argv.slice(3)
 
 // command to be executed
 if (process.argv[2] === '-p') {
   runCommandsInParallel = true
-  command = process.argv[3];
-  commandArgs = process.argv.slice(4);
+  command = process.argv[3]
+  commandArgs = process.argv.slice(4)
 }
 
 var fullCommand = command + ' ' + commandArgs.join(' ')
 
 // get library path
-var lib = resolve(__dirname + '/..', 'apps')
+var lib = resolve(__dirname, '..', 'apps')
 
 // run command in all apps
 fs.readdirSync(lib)
@@ -33,14 +33,14 @@ fs.readdirSync(lib)
 
 // run command in core
 console.info(chalk.blue(fullCommand), chalk.red('Core'))
-runCommand(command, commandArgs, resolve(__dirname + '/..'))
+runCommand(command, commandArgs, resolve(__dirname, '..'))
 
-function runCommand(command, args, modPath) {
+function runCommand (command, args, modPath) {
   try {
     if (runCommandsInParallel) {
-      cp.spawn(command, args, {env: process.env, cwd: modPath, stdio: 'inherit'})
+      cp.spawn(command, args, { env: process.env, cwd: modPath, stdio: 'inherit' })
     } else {
-      cp.spawnSync(command, args, {env: process.env, cwd: modPath, stdio: 'inherit'})
+      cp.spawnSync(command, args, { env: process.env, cwd: modPath, stdio: 'inherit' })
     }
   } catch (err) {
     console.log(err)
