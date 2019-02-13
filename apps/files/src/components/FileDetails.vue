@@ -5,7 +5,6 @@
   right
   floating
   permanent
-  style="width:100%"
   >
   <v-layout column>
     <v-layout primary row>
