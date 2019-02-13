@@ -1,18 +1,12 @@
   <template>
-    <v-content>
-      <v-container id="files-app" fluid pa-0>
-      <v-layout row fill-height>
-        <v-flex :class="{'xs12': selectedFiles.length === 0, 'xs6': selectedFiles.length > 0 }" pa-0 fill-height>
+    <div class="oc-app" id="files-app">
+        <div class="oc-app-content" style="float:left;">
           <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear>
           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" @sideBarOpen="openSideBar"/>
-        </v-flex>
-        <v-flex v-if="selectedFiles.length > 0" xs6 pa-0>
-          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
-        </v-flex>
-        <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
-      </v-layout>
-    </v-container>
-    </v-content>
+        </div>
+            <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
+            <file-details style="float:left;" v-if="selectedFiles.length > 0" class="oc-app-sidebar" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
+  </div>
   </template>
 
 <script>

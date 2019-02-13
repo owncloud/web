@@ -12,7 +12,7 @@
       <top-bar></top-bar>
       <side-menu></side-menu>
       <router-view v-if="this.$route.matched[0].components.appTopbar" class="appTopbar" name="appTopbar"></router-view>
-      <router-view style="margin-top: 115px" name="appContent"></router-view>
+      <router-view class="" style="margin-top: 115px" name="appContent"></router-view>
     </div>
   </v-app>
 </template>
@@ -62,6 +62,24 @@ export default {
 </script>
 
 <style>
+  .oc-app {
+    display: grid;
+    height: 100%;
+    grid-template-columns: auto 2fr auto;
+    grid-template-rows: 1fr;
+    grid-template-areas: "ocAppNavbar ocAppContent ocAppSidebar";
+  }
+  .oc-app-navbar {
+    max-width: 0.5fr;
+    grid-area: ocAppNavbar;
+  }
+
+  .oc-app-sidebar {
+    max-width: 0.5fr;
+    grid-area: ocAppSidebar;
+  }
+
+  .oc-app-content { grid-area: ocAppContent; }
   .grid-container {
     display: grid;
     grid-template-columns: auto 1.5fr;
