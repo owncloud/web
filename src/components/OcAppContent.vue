@@ -11,4 +11,7 @@ export default {
 }
 </script>
 <style scoped>
+  .oc-app-content {
+    overflow-y: scroll;
+  }
 </style>

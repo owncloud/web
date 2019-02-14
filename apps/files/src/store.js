@@ -19,6 +19,7 @@ function _buildFile (file) {
   }
   return ({
     type: (file.type === 'dir') ? 'folder' : file.type,
+    id: file['fileInfo']['{http://owncloud.org/ns}fileid'],
     starred: file['fileInfo']['{http://owncloud.org/ns}favorite'] !== '0',
     mdate: file['fileInfo']['{DAV:}getlastmodified'],
     cdate: '', // TODO: Retrieve data of creation of a file
@@ -35,7 +36,6 @@ function _buildFile (file) {
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     }()),
     path: file.name,
-    id: file['fileInfo']['{http://owncloud.org/ns}size'],
     permissions: file['fileInfo']['{http://owncloud.org/ns}permissions'],
     sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],
     canUpload: function () {
@@ -63,6 +63,7 @@ const mutations = {
   },
   ADD_FILE_TO_PROGRESS (state, file) {
     state.inProgress.push({
+      id: file.id,
       name: file.name,
       type: file.type,
       size: file.size,
