@@ -15,7 +15,7 @@
           </template>
         </v-breadcrumbs>
       </template>
-      <template slot="action_progress" v-if="this.canUpload">
+      <template slot="action_progress">
         <v-menu offset-y v-show="fileUpload">
           <v-progress-circular
           style="margin: 1em;"
