@@ -1,11 +1,13 @@
   <template>
     <div class="oc-app" id="files-app">
-        <div class="oc-app-content" style="float:left;">
+      <oc-app-content>
+        <template slot="content">
           <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear>
           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" @sideBarOpen="openSideBar"/>
-        </div>
-            <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
-            <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
+        </template>
+      </oc-app-content>
+      <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
+      <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
   </div>
   </template>
 
@@ -13,6 +15,7 @@
 import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
 import FileActionsTab from './FileactionsTab.vue'
+import OcAppContent from 'oc_components/OcAppContent.vue'
 import FileList from './FileList.vue'
 import { filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
@@ -39,6 +42,7 @@ export default {
   components: {
     FileDetails,
     FileActionsTab,
+    OcAppContent,
     FileList
   },
   data () {
