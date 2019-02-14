@@ -62,6 +62,28 @@ export default {
 </script>
 
 <style>
+  .oc-app {
+    display: grid;
+    height: 100%;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: 1fr;
+    grid-template-areas: "ocAppNavbar ocAppContent ocAppSidebar";
+  }
+  .oc-app-navbar {
+    max-width: 20vw;
+    grid-area: ocAppNavbar;
+  }
+
+  .oc-app-sidebar {
+    min-width: 280px;
+    max-width: 20vw;
+    grid-area: ocAppSidebar;
+  }
+
+  .oc-app-content {
+    max-width: 100%;
+    grid-area: ocAppContent;
+  }
   .grid-container {
     display: grid;
     grid-template-columns: auto 1.5fr;
@@ -77,7 +99,6 @@ export default {
   }
   .sidebar { grid-area: sidebar;
             background-color: brown;
-            width: 300px;
             overflow: auto;
             transition: all 1s; }
 
