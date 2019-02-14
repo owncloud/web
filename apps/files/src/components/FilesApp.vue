@@ -102,12 +102,8 @@ export default {
         client: this.$client,
         filePath: file.path
       })
-      if (this.extensions) {
-        this.showActionBar = true
-        this.fileAction = file
-      } else {
-        this.downloadFile(file)
-      }
+      this.showActionBar = true
+      this.fileAction = file
     },
 
     openSideBar (file, sideBarName) {

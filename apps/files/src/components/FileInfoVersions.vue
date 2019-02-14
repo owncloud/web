@@ -23,7 +23,6 @@
 import OcList from 'oc_components/OcList.vue'
 import Mixins from '../mixins.js'
 import { mapGetters } from 'vuex'
-import { map } from 'lodash'
 
 export default {
   components: {
