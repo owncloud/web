@@ -15,7 +15,7 @@
           </template>
         </v-breadcrumbs>
       </template>
-      <template slot="action_progress">
+      <template slot="action_progress" v-if="this.canUpload">
         <v-menu offset-y v-show="fileUpload">
           <v-progress-circular
           style="margin: 1em;"
@@ -40,7 +40,7 @@
           </v-list>
         </v-menu>
       </template>
-      <template slot="action_new">
+      <template slot="action_new" v-if="this.canUpload">
     <v-menu
     class="mt-2 mr-2"
     offset-y
@@ -78,6 +78,9 @@
     </v-list>
   </v-card>
 </v-menu>
+      </template>
+      <template slot="action_new" v-if="!this.canUpload">
+        <span style="line-height: 65px;" v-translate>You have no permission to upload.</span>
       </template>
       <template slot="action_count">
         <span style="line-height: 65px;">
@@ -120,10 +123,15 @@ import Mixins from '../mixins'
 import OcAppTopBar from 'oc_components/OcAppTopBar.vue'
 
 const davProperties = [
+  '{http://owncloud.org/ns}permissions',
   '{http://owncloud.org/ns}favorite',
+  '{http://owncloud.org/ns}id',
+  '{http://owncloud.org/ns}owner-id',
+  '{http://owncloud.org/ns}owner-display-name',
   '{DAV:}getcontentlength',
   '{http://owncloud.org/ns}size',
   '{DAV:}getlastmodified',
+  '{DAV:}getetag',
   '{DAV:}resourcetype'
 ]
 
@@ -164,7 +172,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'extensions']),
-    ...mapGetters('Files', ['selectedFiles', 'files', 'inProgress']),
+    ...mapGetters('Files', ['selectedFiles', 'files', 'inProgress', 'currentFolder']),
     ...mapState(['route']),
     item () {
       return this.$route.params.item
@@ -185,6 +193,12 @@ export default {
     },
     activeRoute () {
       return this.getRoutes()
+    },
+    canUpload () {
+      if (this.currentFolder === null) {
+        return false
+      }
+      return this.currentFolder.canUpload()
     }
   },
   methods: {
@@ -221,16 +235,17 @@ export default {
       let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
       this.$client.files.list(absolutePath, 1, davProperties).then(res => {
         let files = []
+        let currentFolder = null
         if (res === null) {
           this.showNotification({
             title: this.$gettext('Loading folder failed ....'),
             type: 'error'
           })
         } else {
+          currentFolder = res[0]
           files = res.splice(1)
         }
-        console.log(files)
-        this.loadFiles(files)
+        this.loadFiles({ currentFolder, files })
         this.resetFileSelection()
       }).catch(error => {
         this.showNotification({

@@ -3,6 +3,7 @@ import { findIndex, without } from 'lodash'
 const namespaced = true
 
 const state = {
+  currentFolder: null,
   files: [],
   selected: [],
   inProgress: []
@@ -31,10 +32,18 @@ function _buildFile (file) {
     extension: ext,
     name: (function () {
       let pathList = file.name.split('/').filter(e => e !== '')
-      return pathList[pathList.length - 1]
+      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     }()),
     path: file.name,
-    id: file['fileInfo']['{DAV:}getetag']
+    id: file['fileInfo']['{http://owncloud.org/ns}size'],
+    permissions: file['fileInfo']['{http://owncloud.org/ns}permissions'],
+    sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],
+    canUpload: function () {
+      return this.permissions.indexOf('C') > 0
+    },
+    canBeDeleted: function () {
+      return this.permissions.indexOf('D') > 0
+    }
   })
 }
 
@@ -61,7 +70,8 @@ const mutations = {
       action: 'upload'
     })
   },
-  LOAD_FILES (state, files) {
+  LOAD_FILES (state, { currentFolder, files }) {
+    state.currentFolder = currentFolder
     state.files = files
   },
   ADD_FILE_SELECTION (state, file) {
@@ -99,9 +109,10 @@ const actions = {
   addFileToProgress ({ commit }, file) {
     commit('ADD_FILE_TO_PROGRESS', file)
   },
-  loadFiles (context, files) {
+  loadFiles (context, { currentFolder, files }) {
+    currentFolder = _buildFile(currentFolder)
     files = files.map(_buildFile)
-    context.commit('LOAD_FILES', files)
+    context.commit('LOAD_FILES', { currentFolder, files })
   },
   addFileSelection (context, file) {
     context.commit('ADD_FILE_SELECTION', file)
@@ -157,6 +168,9 @@ const getters = {
   },
   files: state => {
     return state.files
+  },
+  currentFolder: state => {
+    return state.currentFolder
   }
 }
 
