@@ -5,9 +5,8 @@ RUN apk update && apk upgrade && \
 
 WORKDIR /app
 COPY . .
-RUN yarn dist
 RUN yarn install
-RUN yarn build:prod
+RUN yarn dist
 
 # production stage
 FROM nginx:1.13.12-alpine as production-stage
