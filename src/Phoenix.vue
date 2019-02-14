@@ -64,9 +64,9 @@ export default {
 <style>
   .oc-app {
     display: grid;
-    height: 100%;
+    max-height: calc(100vh - 115px);
     grid-template-columns: auto 1fr auto;
-    grid-template-rows: 1fr;
+    grid-template-rows: auto;
     grid-template-areas: "ocAppNavbar ocAppContent ocAppSidebar";
   }
   .oc-app-navbar {
@@ -77,10 +77,13 @@ export default {
   .oc-app-sidebar {
     min-width: 280px;
     max-width: 20vw;
+    position: sticky;
     grid-area: ocAppSidebar;
   }
 
   .oc-app-content {
+    overflow-y: scroll;
+    height: calc(100vh - 115px);
     max-width: 100%;
     grid-area: ocAppContent;
   }
@@ -105,7 +108,7 @@ export default {
   .content { grid-area: content; }
 
   body {
-    overflow: hidden;
+    overflow-y: hidden;
   }
   .loginGradient {
     background-image: linear-gradient(var(--v-primary-base), var(--v-secondary-base)) !important;

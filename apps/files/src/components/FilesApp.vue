@@ -7,7 +7,7 @@
         </template>
       </oc-app-content>
       <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
-      <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
+      <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="getFolder"/>
   </div>
   </template>
 
@@ -29,6 +29,7 @@ const davProperties = [
   '{http://owncloud.org/ns}owner-id',
   '{http://owncloud.org/ns}owner-display-name',
   '{DAV:}getcontentlength',
+  '{http://owncloud.org/ns}fileid',
   '{http://owncloud.org/ns}size',
   '{DAV:}getlastmodified',
   '{DAV:}getetag',
@@ -101,12 +102,8 @@ export default {
         client: this.$client,
         filePath: file.path
       })
-      if (this.extensions) {
-        this.showActionBar = true
-        this.fileAction = file
-      } else {
-        this.downloadFile(file)
-      }
+      this.showActionBar = true
+      this.fileAction = file
     },
 
     openSideBar (file, sideBarName) {
