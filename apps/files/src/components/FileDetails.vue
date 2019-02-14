@@ -62,9 +62,6 @@ export default {
     close () {
       this.$emit('reset')
     },
-    showSidebar (sideBarName) {
-      this.active = Object.keys(this.fileSideBars).indexOf(sideBarName)
-    },
     downloadFiles () {
       this.downloadFile(this.items[0])
     },

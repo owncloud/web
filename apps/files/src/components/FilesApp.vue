@@ -29,6 +29,7 @@ const davProperties = [
   '{http://owncloud.org/ns}owner-id',
   '{http://owncloud.org/ns}owner-display-name',
   '{DAV:}getcontentlength',
+  '{http://owncloud.org/ns}fileid',
   '{http://owncloud.org/ns}size',
   '{DAV:}getlastmodified',
   '{DAV:}getetag',
