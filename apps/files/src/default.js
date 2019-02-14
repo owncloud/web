@@ -2,6 +2,7 @@ import '@babel/polyfill'
 import FilesApp from './components/FilesApp.vue'
 import FilesTopBar from './components/FilesTopBar.vue'
 import FileInfoSideBar from './components/FileInfoSidebar.vue'
+import FileInfoVersions from './components/FileInfoVersions.vue'
 
 const store = require('./store.js')
 
@@ -16,6 +17,10 @@ const appInfo = {
       app: 'files',
       name: 'Files',
       component: FileInfoSideBar
+    }, {
+      app: 'files-version',
+      name: 'Versions',
+      component: FileInfoVersions
     }
   ]
 }
