@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "babel-eslint": "^10.0.1",
-    "filesize": "^4.0.0",
+    "filesize": "^4.1.1",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "vuex": "^3.1.0"
