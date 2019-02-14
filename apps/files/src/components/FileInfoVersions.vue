@@ -1,15 +1,15 @@
 <template>
   <div>
-      <oc-list v-if="selectedFiles.length === 1" :data="computedVersions">
+      <oc-list v-if="selectedFiles.length === 1" :data="versions">
         <template slot="items" slot-scope="props">
           <v-list-tile avatar ripple>
             <v-list-tile-content>
-              <v-list-tile-title>{{ props.item.timestamp | formDateFromNow }}</v-list-tile-title>
+              <v-list-tile-title>{{ props.item.fileInfo['{DAV:}getlastmodified'] | formDateFromNow }}</v-list-tile-title>
               <v-list-tile-sub-title class="text--primary">{{ props.item.name }}</v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action>
-              <v-list-tile-action-text><v-btn @click="revertVersion(item)" icon><v-icon color="primary">swap_vertical_circle</v-icon></v-btn></v-list-tile-action-text>
-              <v-btn @click="downloadVersion(item)" icon><v-icon color="primary">cloud_download</v-icon></v-btn>
+              <v-list-tile-action-text><v-btn @click="revertVersion(props.item)" icon><v-icon color="primary">swap_vertical_circle</v-icon></v-btn></v-list-tile-action-text>
+              <v-btn @click="downloadVersion(props.item)" icon><v-icon color="primary">cloud_download</v-icon></v-btn>
             </v-list-tile-action>
           </v-list-tile>
         </template>
@@ -38,15 +38,6 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
-    computedVersions () {
-      return map(this.versions, (f) => {
-        return {
-          timestamp: f.fileInfo['{DAV:}getlastmodified'],
-          name: f.name,
-          type: f.type
-        }
-      })
-    },
     currentFile () {
       return this.selectedFiles[0].id
     }
@@ -57,13 +48,14 @@ export default {
         this.versions = res
       })
     },
-    revertVersion (file) {
-      this.$client.fileVersions.revertVersion(file.id).then((res) => {
+    revertVersion (file, restorePath = '/') {
+      this.$client.fileVersions.restoreFileVersion(this.currentFile, file.fileInfo['{DAV:}getetag'], restorePath).then((res) => {
         console.log(res)
       })
     },
     downloadVersion (file) {
-      this.$client.fileVersions.getFileContents(file.id).then((res) => {
+      console.log(file)
+      this.$client.fileVersions.getFileVersionContents(this.currentFile, file.fileInfo['{DAV:}getetag']).then((res) => {
         console.log(res)
       })
     }
