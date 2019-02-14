@@ -1,6 +1,8 @@
 <template>
-  <v-text-field :label="label" append-icon="search"
-    @input="onSearch" :value="searchQuery" autofocus="autofocus"></v-text-field>
+  <v-text-field :label="label" append-icon="search" :loading="loading"
+    @input="onType" :value="searchQuery" autofocus="autofocus"
+    @keydown.enter="onSearch" @click:append="onSearch">
+  </v-text-field>
 </template>
 
 <script>
@@ -17,7 +19,25 @@ export default {
       required: false,
       default: ''
     },
+    // native autofocus
     autofocus: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    // search while typing
+    autosearch: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    // do not automatically trim whitespaces around search term
+    noTrim: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    loading: {
       type: Boolean,
       required: false,
       default: false
@@ -28,8 +48,13 @@ export default {
   }),
   methods: {
     onSearch (query) {
-      this.query = query
-      this.$emit('search', query)
+      this.$emit('search', this.query)
+    },
+    onType (query) {
+      this.query = (!this.noTrim) ? query.trim() : query
+      // use input event to support model directive
+      this.$emit('input', query)
+      if (this.autosearch) this.onSearch(query)
     }
   },
   computed: {

@@ -1,12 +1,41 @@
-import { findIndex, without } from 'lodash'
-
+import { findIndex, without, map, filter } from 'lodash'
 const namespaced = true
 
 const state = {
   currentFolder: null,
   files: [],
+  filesSearched: [],
+  fileFilter: [
+    {
+      name: 'Files',
+      tag: 'file',
+      value: true
+    }, {
+      name: 'Folders',
+      tag: 'folder',
+      value: true
+    }, {
+      name: 'Hidden',
+      tag: 'hidden',
+      value: false
+    }
+  ],
   selected: [],
-  inProgress: []
+  inProgress: [],
+  searchTermGlobal: '',
+  searchTermFilter: '',
+  davProperties: [
+    '{http://owncloud.org/ns}permissions',
+    '{http://owncloud.org/ns}favorite',
+    '{http://owncloud.org/ns}id',
+    '{http://owncloud.org/ns}owner-id',
+    '{http://owncloud.org/ns}owner-display-name',
+    '{DAV:}getcontentlength',
+    '{http://owncloud.org/ns}size',
+    '{DAV:}getlastmodified',
+    '{DAV:}getetag',
+    '{DAV:}resourcetype'
+  ]
 }
 
 function _buildFile (file) {
@@ -75,6 +104,9 @@ const mutations = {
     state.currentFolder = currentFolder
     state.files = files
   },
+  LOAD_FILES_SEARCHED (state, files) {
+    state.filesSearched = files
+  },
   ADD_FILE_SELECTION (state, file) {
     state.selected.push(file)
   },
@@ -99,6 +131,19 @@ const mutations = {
   },
   REMOVE_FILE (state, file) {
     state.files = without(state.files, file)
+  },
+  SET_SEARCH_TERM (state, searchTerm) {
+    state.searchTermGlobal = searchTerm
+  },
+  SET_FILTER_TERM (state, filterTerm) {
+    state.searchTermFilter = filterTerm
+  },
+  SET_FILE_FILTER (state, filter) {
+    findIndex(state.fileFilter, (f) => {
+      console.log(f)
+      return f.name === filter.name
+    })
+    state.fileFilter = filter
   }
 }
 
@@ -153,6 +198,38 @@ const actions = {
         console.log('error: ' + file.path + ' not deleted: ' + error)
       })
     }
+  },
+  setFilterTerm (context, filterTerm) {
+    context.commit('SET_FILTER_TERM', filterTerm)
+  },
+  setFileFilter (context, filter) {
+    context.commit('SET_FILE_FILTER', filter)
+  },
+  searchForFile (context, payload) {
+    return new Promise(function (resolve, reject) {
+      let client = payload.client
+      let searchTerm = payload.searchTerm
+      context.commit('SET_SEARCH_TERM', searchTerm)
+      // TODO respect user selected listSize from state.config
+      // do not search for empty strings
+      if (!searchTerm) return
+      client.files.search(searchTerm, null, context.state.davProperties).then((filesSearched) => {
+        filesSearched = map(filesSearched, (f) => {
+          let file = _buildFile(f)
+          return file
+        })
+        context.commit('LOAD_FILES_SEARCHED', filesSearched)
+        resolve(filesSearched)
+      }).catch((error) => {
+        // TODO notification missing
+        context.dispatch('showNotification', {
+          title: this.$gettext('Error while searching.'),
+          desc: error.message,
+          type: 'error'
+        }, { root: true })
+        reject(error)
+      })
+    })
   }
 }
 
@@ -172,6 +249,39 @@ const getters = {
   },
   currentFolder: state => {
     return state.currentFolder
+  },
+  filterTerm: state => {
+    return state.searchTermFilter
+  },
+  searchTerm: state => {
+    return state.searchTermGlobal
+  },
+  atSearchPage: state => {
+    return state.searchTermGlobal !== ''
+  },
+  fileFilter: state => {
+    return state.fileFilter
+  },
+  activeFiles: state => {
+    // if searchTermGlobal is set, replace current file list with search results
+    let files = state.searchTermGlobal ? state.filesSearched : state.files
+    // respect file filters set in TopBar
+    return filter(files, (file) => {
+      for (let filter of state.fileFilter) {
+        if (file.type === filter.tag) {
+          if (!filter.value) return false
+        } else if (file.name.startsWith('.')) {
+          // show hidden files ?
+          if (state.fileFilter[2].value) return false
+        }
+      }
+      // respect filename filter for local 'search' in open folder
+      if (state.searchTermFilter && !file.name.toLowerCase().includes(state.searchTermFilter.toLowerCase())) return false
+      return true
+    })
+  },
+  davProperties: state => {
+    return state.davProperties
   }
 }
 

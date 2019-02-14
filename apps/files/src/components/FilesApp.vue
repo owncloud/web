@@ -3,7 +3,7 @@
       <oc-app-content>
         <template slot="content">
           <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear>
-          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" @sideBarOpen="openSideBar"/>
+          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
         </template>
       </oc-app-content>
       <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
@@ -17,24 +17,8 @@ import FileDetails from './FileDetails.vue'
 import FileActionsTab from './FileactionsTab.vue'
 import OcAppContent from 'oc_components/OcAppContent.vue'
 import FileList from './FileList.vue'
-import { filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
-
 const _includes = require('lodash/includes')
-
-const davProperties = [
-  '{http://owncloud.org/ns}permissions',
-  '{http://owncloud.org/ns}favorite',
-  '{http://owncloud.org/ns}id',
-  '{http://owncloud.org/ns}owner-id',
-  '{http://owncloud.org/ns}owner-display-name',
-  '{DAV:}getcontentlength',
-  '{http://owncloud.org/ns}fileid',
-  '{http://owncloud.org/ns}size',
-  '{DAV:}getlastmodified',
-  '{DAV:}getetag',
-  '{DAV:}resourcetype'
-]
 
 export default {
   mixins: [
@@ -58,21 +42,6 @@ export default {
       selected: [],
       loading: false,
       fileFilterQuery: '',
-      filters: [
-        {
-          name: 'Files',
-          tag: 'file',
-          value: true
-        }, {
-          name: 'Folders',
-          tag: 'folder',
-          value: true
-        }, {
-          name: 'Hidden',
-          tag: 'hidden',
-          value: false
-        }
-      ],
       path: [],
       breadcrumbs: [],
       self: {}
@@ -115,12 +84,12 @@ export default {
     },
 
     ifFiltered (item) {
-      for (let filter of this.filters) {
+      for (let filter of this.fileFilter) {
         if (item.type === filter.tag) {
           if (!filter.value) return false
         } else if (item.name.startsWith('.')) {
           // show hidden files ?
-          if (this.filters[2].value) return false
+          if (this.fileFilter[2].value) return false
         }
       }
       // respect filename filter for local 'search' in open folder
@@ -147,7 +116,7 @@ export default {
       // clear file filter search query when folder changes
       this.fileFilterQuery = ''
       let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
-      this.$client.files.list(absolutePath, 1, davProperties).then(res => {
+      this.$client.files.list(absolutePath, 1, this.davProperties).then(res => {
         let files = []
         let currentFolder = null
         if (res === null) {
@@ -201,16 +170,10 @@ export default {
 
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles', 'files', 'inProgress']),
+    ...mapGetters('Files', ['selectedFiles', 'inProgress', 'activeFiles', 'fileFilter', 'davProperties']),
     ...mapGetters(['getToken', 'extensions']),
     activeRoute () {
       return this.getRoutes()
-    },
-
-    filteredFiles () {
-      return filter(this.files, (file) => {
-        return this.ifFiltered(file)
-      })
     },
 
     item () {

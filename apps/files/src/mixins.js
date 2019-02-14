@@ -9,7 +9,7 @@ export default {
         return ''
       }
       if (isNaN(int)) {
-        return '???'
+        return '?'
       }
       return filesize(int * 100, {
         round: 2

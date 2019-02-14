@@ -2,7 +2,7 @@
   <div>
     <oc-app-top-bar>
       <template slot="left">
-        <v-breadcrumbs style="padding: 12px 12px;" :items="activeRoute">
+        <v-breadcrumbs style="padding: 12px 12px;" :items="activeRoute" v-if="!atSearchPage">
           <template slot="item" slot-scope="props">
             <drop >
               <v-icon @click="navigateTo('files-list', 'home')" v-if="props.item.text === 'home'" large>
@@ -14,6 +14,14 @@
             </drop>
           </template>
         </v-breadcrumbs>
+        <div style="padding: 12px 12px; cursor: pointer;"  v-else @click="onFileSearch()">
+          <v-icon large>
+            home
+          </v-icon>
+        </div>
+      </template>
+      <template slot="title">
+        <search-bar @search="onFileSearch" :value="searchTerm" :label="$gettext('Search')" :loading="isLoadingSearch"/>
       </template>
       <template slot="action_progress">
         <v-menu offset-y v-show="fileUpload">
@@ -44,6 +52,7 @@
     <v-menu
     class="mt-2 mr-2"
     offset-y
+    v-if="!atSearchPage"
     >
     <v-btn
     slot="activator"
@@ -77,8 +86,8 @@
       </template>
       <template slot="action_count">
         <span style="line-height: 65px;">
-          <translate :translate-n="filteredFiles.length" translate-plural="%{ filteredFiles.length } Results">
-            %{ filteredFiles.length } Result
+          <translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">
+            %{ activeFiles.length } Result
           </translate>
         </span>
       </template>
@@ -86,7 +95,7 @@
         <v-menu class="mt-2" transition="scale-transition">
           <v-btn slot="activator" flat @click="focusFilenameFilter"><v-icon large>filter_list</v-icon></v-btn>
           <v-list>
-            <v-list-tile v-for="(filter, fid) in filters" :key="fid">
+            <v-list-tile v-for="(filter, fid) in activeFileFilter" :key="fid">
               <v-list-tile-title v-text="filter.name"></v-list-tile-title>
               <v-checkbox v-model="filter.value"></v-checkbox>
             </v-list-tile>
@@ -94,7 +103,7 @@
               <v-list-tile-title>
                 <span v-translate>Name</span>
               </v-list-tile-title>
-              <search-bar @search="onFilenameFilter" :value="fileFilterQuery" ref="filenameFilter" autofocus />
+              <search-bar @input="setFilterTerm" :value="filterTerm" ref="filenameFilter" autofocus :label="$gettext('Search')"/>
             </v-list-tile>
           </v-list>
         </v-menu>
@@ -111,22 +120,9 @@ import FileUpload from './FileUpload.vue'
 import SearchBar from 'oc_components/form/SearchBar.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { includes, filter } from 'lodash'
+import { includes } from 'lodash'
 import Mixins from '../mixins'
 import OcAppTopBar from 'oc_components/OcAppTopBar.vue'
-
-const davProperties = [
-  '{http://owncloud.org/ns}permissions',
-  '{http://owncloud.org/ns}favorite',
-  '{http://owncloud.org/ns}id',
-  '{http://owncloud.org/ns}owner-id',
-  '{http://owncloud.org/ns}owner-display-name',
-  '{DAV:}getcontentlength',
-  '{http://owncloud.org/ns}size',
-  '{DAV:}getlastmodified',
-  '{DAV:}getetag',
-  '{DAV:}resourcetype'
-]
 
 export default {
   components: {
@@ -140,40 +136,29 @@ export default {
   ],
   data: () => ({
     createFolder: false,
+    isLoadingSearch: false,
     newFolderName: '',
     newFileName: '',
     fileUpload: false,
     fileUploadProgress: 0,
     createFile: false,
-    fileFilterQuery: '',
     path: '',
-    filters: [
-      {
-        name: 'Files',
-        tag: 'file',
-        value: true
-      }, {
-        name: 'Folders',
-        tag: 'folder',
-        value: true
-      }, {
-        name: 'Hidden',
-        tag: 'hidden',
-        value: false
-      }
-    ]
+    searchedFiles: []
   }),
   computed: {
     ...mapGetters(['getToken', 'extensions']),
-    ...mapGetters('Files', ['selectedFiles', 'files', 'inProgress', 'currentFolder']),
+    ...mapGetters('Files', ['activeFiles', 'inProgress', 'filterTerm', 'searchTerm', 'fileFilter', 'atSearchPage', 'currentFolder', 'davProperties']),
     ...mapState(['route']),
+    activeFileFilter: {
+      get () {
+        return this.fileFilter
+      },
+      set (val) {
+        this.$store.dispatch('setFileFilter', val)
+      }
+    },
     item () {
       return this.$route.params.item
-    },
-    filteredFiles () {
-      return filter(this.files, (file) => {
-        return this.ifFiltered(file)
-      })
     },
     url () {
       let path = this.item === 'home' ? '/' : `${this.item}/`
@@ -195,23 +180,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress']),
+    ...mapActions('Files', ['setFileFilter', 'resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'setFilterTerm', 'searchForFile']),
     ...mapActions(['openFile', 'showNotification']),
-    ifFiltered (item) {
-      for (let filter of this.filters) {
-        if (item.type === filter.tag) {
-          if (!filter.value) return false
-        } else if (item.name.startsWith('.')) {
-          // show hidden files ?
-          if (this.filters[2].value) return false
-        }
-      }
-      // respect filename filter for local 'search' in open folder
-      if (this.fileFilterQuery && !item.name.toLowerCase().includes(this.fileFilterQuery.toLowerCase())) return false
-      return true
+    onFilenameFilter (filterTerm) {
+      this.setFilterTerm(filterTerm)
     },
-    onFilenameFilter (query) {
-      this.fileFilterQuery = query
+    onFileSearch (searchTerm = '') {
+      this.isLoadingSearch = true
+      // write search term into files app state
+      this.searchForFile({
+        searchTerm,
+        client: this.$client
+      }).then(() => {
+        this.isLoadingSearch = false
+      })
     },
     focusFilenameFilter () {
       this.$refs.filenameFilter.$el.querySelector('input').focus()
@@ -224,9 +206,8 @@ export default {
     getFolder () {
       this.path = []
       // clear file filter search query when folder changes
-      this.fileFilterQuery = ''
       let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
-      this.$client.files.list(absolutePath, 1, davProperties).then(res => {
+      this.$client.files.list(absolutePath, 1, this.davProperties).then(res => {
         let files = []
         let currentFolder = null
         if (res === null) {
@@ -288,7 +269,7 @@ export default {
     onFileSuccess (event, file) {
       this.$nextTick().then(() => {
         const filePath = ((this.item === 'home') ? '' : this.item) + '/' + file.name
-        this.$client.files.fileInfo(filePath, davProperties).then(fileInfo => {
+        this.$client.files.fileInfo(filePath, this.davProperties).then(fileInfo => {
           this.fileUploadProgress = 0
           this.fileUploadName = ''
           this.addFiles({
