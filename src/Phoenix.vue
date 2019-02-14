@@ -95,7 +95,6 @@ export default {
   }
   .sidebar { grid-area: sidebar;
             background-color: brown;
-            width: 300px;
             overflow: auto;
             transition: all 1s; }
 

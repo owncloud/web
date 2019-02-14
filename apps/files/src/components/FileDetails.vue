@@ -85,7 +85,7 @@ export default {
       if (this.items.length > 1) {
         return this.$gettext('Multiple Files')
       } else {
-        return (this.items[0].name.length > 16) ? `${this.items[0].name.substr(0, 14)}...` : this.items[0].name
+        return (this.items[0].name.length > 16) ? `${this.items[0].name.substr(0, 10)}...` : this.items[0].name
       }
     }
   }
