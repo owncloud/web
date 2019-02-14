@@ -5,7 +5,7 @@
           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" @sideBarOpen="openSideBar"/>
         </div>
             <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
-            <file-details style="float:left;" v-if="selectedFiles.length > 0" class="oc-app-sidebar" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
+            <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
   </div>
   </template>
 

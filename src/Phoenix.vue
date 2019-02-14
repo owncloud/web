@@ -70,12 +70,12 @@ export default {
     grid-template-areas: "ocAppNavbar ocAppContent ocAppSidebar";
   }
   .oc-app-navbar {
-    max-width: 0.5fr;
+    max-width: 20vw;
     grid-area: ocAppNavbar;
   }
 
   .oc-app-sidebar {
-    max-width: 0.5fr;
+    max-width: 20vw;
     grid-area: ocAppSidebar;
   }
 
