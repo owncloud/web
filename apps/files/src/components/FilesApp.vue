@@ -1,24 +1,21 @@
   <template>
-    <v-content>
-      <v-container id="files-app" fluid pa-0>
-      <v-layout row fill-height>
-        <v-flex :class="{'xs12': selectedFiles.length === 0, 'xs6': selectedFiles.length > 0 }" pa-0 fill-height>
+    <div class="oc-app" id="files-app">
+      <oc-app-content>
+        <template slot="content">
           <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear>
           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="filteredFiles" @sideBarOpen="openSideBar"/>
-        </v-flex>
-        <v-flex v-if="selectedFiles.length > 0" xs6 pa-0>
-          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
-        </v-flex>
-        <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
-      </v-layout>
-    </v-container>
-    </v-content>
+        </template>
+      </oc-app-content>
+      <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
+      <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails"/>
+  </div>
   </template>
 
 <script>
 import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
 import FileActionsTab from './FileactionsTab.vue'
+import OcAppContent from 'oc_components/OcAppContent.vue'
 import FileList from './FileList.vue'
 import { filter } from 'lodash'
 import { mapActions, mapGetters, mapState } from 'vuex'
@@ -45,6 +42,7 @@ export default {
   components: {
     FileDetails,
     FileActionsTab,
+    OcAppContent,
     FileList
   },
   data () {
