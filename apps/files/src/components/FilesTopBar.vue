@@ -53,13 +53,6 @@
     + New
   </v-btn>
   <v-card>
-    <v-card-title primary-title>
-      <div>
-        <h3 class="headline mb-0" v-translate>Create and upload files and folder</h3>
-        <div>You can upload files and folders<br>And create folders and various files ...</div>
-      </div>
-    </v-card-title>
-    <v-divider></v-divider>
     <v-list>
       <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
       <v-divider></v-divider>
