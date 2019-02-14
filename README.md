@@ -23,14 +23,14 @@ Pushing a new design and frontend concept to ownCloud
 - run `yarn run acceptance-tests`
 
 ## Update dependencies
-- Run `yarn update` to update core and app dependencies
+- Run `yarn update-all` to update core and app dependencies
 
 ## Cleanup workspace
-- Run `yarn clean` to remove node_modules and dist folder
+- Run `yarn clean-all` to remove node_modules and dist folder
 
 ## How to build Phoenix as ownCloud app
 
-- run `yarn install && yarn dist && yarn build:prod`
+- run `yarn install && yarn dist && yarn build`
 - run `make -f Makefile.release` dist
 
 ## How to deploy the app to ownCloud
