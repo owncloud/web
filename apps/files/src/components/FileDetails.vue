@@ -31,7 +31,7 @@
           v-for="tab of fileSideBars"
           :key="tab.name"
         >
-          <component :is="tab.component"></component>
+          <component :is="tab.component" @reload="$emit('reload')"></component>
         </v-tab-item>
       </v-tabs>
     </template>
