@@ -23,7 +23,7 @@ Then('the user logs in with username {string} and password {string} using the we
   (username, password) => {
     const loginPage = client.page.ownCloudLoginPage()
     return loginPage
-      .waitForElementVisible('@usernameInput', client.SHORT_WAIT_TIME)
+      .waitForElementVisible('@usernameInput')
       .setValue('@usernameInput', OC_USER || username)
       .setValue('@passwordInput', OC_PASS || password)
       .click('@loginSubmitButton')
@@ -34,7 +34,7 @@ When('the user authorizes access to phoenix',
     const loginPage = client
       .page.ownCloudAuthorizePage()
     return loginPage
-      .waitForElementPresent('@authorizeButton', client.SHORT_WAIT_TIME)
+      .waitForElementPresent('@authorizeButton')
       .click('@authorizeButton')
   })
 
@@ -42,7 +42,7 @@ Then('the files table should be displayed',
   () => {
     const filesPage = client.page.filesPage()
     return filesPage
-      .waitForElementVisible('@filesTable', client.LONGER_WAIT_TIME)
+      .waitForElementVisible('@filesTable')
   })
 
 Then('the files table should not be empty',
@@ -50,5 +50,5 @@ Then('the files table should not be empty',
     const filesPage = client.page.filesPage()
     return filesPage
     // even the loading indicator is gone the table might not be rendered yet
-      .waitForElementVisible('@fileRows', client.LONG_WAIT_TIME)
+      .waitForElementVisible('@fileRows')
   })

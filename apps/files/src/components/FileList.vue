@@ -43,7 +43,9 @@
         </v-list-tile-action>
         <v-list-tile-avatar>
           <v-icon>{{ fileTypeIcon(item) }}</v-icon>
-        </v-list-tile-avatar>        <v-list-tile-content
+        </v-list-tile-avatar>
+        <v-list-tile-content
+          v-if="!atSearchPage"
           @click="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
           style="cursor: pointer"
         >
@@ -51,7 +53,15 @@
           <v-list-tile-sub-title class="text--primary">{{ item.size | fileSize }}</v-list-tile-sub-title>
           <v-list-tile-sub-title>{{ item.mdate | formDateFromNow }}</v-list-tile-sub-title>
         </v-list-tile-content>
-
+        <v-list-tile-content
+          v-else
+          @click="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
+          style="cursor: pointer"
+        >
+          <v-list-tile-title>{{ item.name }}</v-list-tile-title>
+          <v-list-tile-sub-title class="text--primary">{{ getBaseDirectory(item.path) }}</v-list-tile-sub-title>
+          <v-list-tile-sub-title>{{ item.mdate | formDateFromNow }} | {{ item.size | fileSize }}</v-list-tile-sub-title>
+        </v-list-tile-content>
         <v-list-tile-action
           v-for="(action, index) in actions"
           :key="index">
@@ -104,6 +114,9 @@ export default {
         file: item
       })
     },
+    getBaseDirectory (filePath) {
+      return filePath.match(/^(.*[/])/)[0].slice(0, -1)
+    },
     openFileActionBar (file) {
       this.$emit('FileAction', file)
     },
@@ -118,7 +131,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['selectedFiles']),
+    ...mapGetters('Files', ['selectedFiles', 'atSearchPage']),
     ...mapGetters(['getToken', 'fileSideBars']),
     all () {
       return this.selectedFiles.length === this.fileData.length
