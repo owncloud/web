@@ -51,14 +51,12 @@ export default {
       })
     },
     downloadFiles (file) {
-      // TODO fix missing bearer Token / broken $client
-      console.log('js-owncloud-client issue - Bearer Token missing', file)
       this.downloadFile(file)
     },
     closeTab () {
       this.$emit('close')
     }
   },
-  computed: mapGetters(['extensions'])
+  computed: mapGetters(['extensions', 'getToken'])
 }
 </script>
