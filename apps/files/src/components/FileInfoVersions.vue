@@ -19,7 +19,7 @@
       <div v-else>
         <span class="text--center" v-translate>Please choose only a single File</span>
       </div>
-      <v-list-tile v-show="!hasVersion">
+      <v-list-tile v-show="!hasVersion && selectedFiles.length === 1">
         <v-list-tile-content>
           <v-list-tile-title v-translate>No Versions available for this file</v-list-tile-title>
         </v-list-tile-content>
@@ -46,7 +46,6 @@ export default {
     ...mapGetters('Files', ['selectedFiles']),
     ...mapGetters(['getToken']),
     hasVersion () {
-      console.log(this.versions.length > 0)
       return this.versions.length > 0
     },
     currentFile () {
@@ -65,7 +64,7 @@ export default {
     },
     getFileVersions () {
       this.$client.fileVersions.listVersions(this.currentFile.id).then((res) => {
-        this.versions = res
+        if (res) this.versions = res
       })
     },
     revertVersion (file, restorePath = '/') {

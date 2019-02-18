@@ -30,7 +30,7 @@ export default {
   background: #e3e3e3;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto auto 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: "info title actions";
 }
@@ -39,9 +39,13 @@ export default {
   float:right;
 }
 
-.Info { grid-area: info; }
+.left {
+  min-width: 25vw;
+  grid-area: info; }
 
-.title { grid-area: title; }
+.title {
+  max-width: 30vw;
+  grid-area: title; }
 
 .actions {
   float: right;
