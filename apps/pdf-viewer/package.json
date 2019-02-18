@@ -32,7 +32,7 @@
     "vue-pdf": "^4.0.6",
     "vue-template-compiler": "^2.6.6",
     "vuex": "3.1.0",
-    "webpack": "^4.29.4",
+    "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3",
     "webpack-merge": "^4.2.1"
   },
