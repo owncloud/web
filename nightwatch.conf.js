@@ -4,9 +4,9 @@ const localLaunchUrl = process.env.SERVER_HOST || 'http://localhost:8300'
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
   test_settings: {
-    "default": {
-      "globals": {
-        "waitForConditionTimeout": 10000
+    'default': {
+      'globals': {
+        'waitForConditionTimeout': 10000
       }
     },
     local: {
