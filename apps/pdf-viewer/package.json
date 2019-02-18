@@ -28,7 +28,7 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^5.2.1",
-    "vue-loader": "^15.6.2",
+    "vue-loader": "^15.6.3",
     "vue-pdf": "^4.0.6",
     "vue-template-compiler": "^2.6.6",
     "vuex": "3.1.0",
