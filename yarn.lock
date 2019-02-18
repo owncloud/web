@@ -5240,6 +5240,11 @@ no-case@^2.2.0:
   dependencies:
     lower-case "^1.1.1"
 
+node-fetch@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.3.0.tgz#1a1d940bbfb916a1d3e0219f037e89e71f8c5fa5"
+  integrity sha512-MOd8pV3fxENbryESLgVIeaGKrdl+uaYhCSSVkjeOb/31/njTpcis5aWfdqgNlHIrKOLRbMnfPINPOML2CIFeXA==
+
 node-forge@0.7.5:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.5.tgz#6c152c345ce11c52f465c2abd957e8639cd674df"
@@ -7680,6 +7685,11 @@ url-parse@^1.4.3:
   dependencies:
     querystringify "^2.0.0"
     requires-port "^1.0.0"
+
+url-search-params-polyfill@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/url-search-params-polyfill/-/url-search-params-polyfill-5.0.0.tgz#09b98337c89dcf6c6a6a0bfeb096f6ba83b7526b"
+  integrity sha512-+SCD22QJp4UnqPOI5UTTR0Ljuh8cHbjEf1lIiZrZ8nHTlTixqwVsVQTSfk5vrmDz7N09/Y+ka5jQr0ff35FnQQ==
 
 url@^0.11.0:
   version "0.11.0"
