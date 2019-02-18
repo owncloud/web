@@ -33,7 +33,7 @@ export default {
     ...mapGetters('MarkdownEditor', ['isTouched', 'currentContent']),
     renderedMarkdown () {
       return this.currentContent ? marked(this.currentContent) : null
-    },
+    }
   },
   methods: {
     ...mapActions(['openFile']),
