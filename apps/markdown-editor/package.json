@@ -10,7 +10,7 @@
   "author": "serv3r.de DevTeam <ownCloud@serv3r.de>",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@babel/core": "^7.2.2",
+    "@babel/core": "^7.3.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.1",
@@ -19,7 +19,7 @@
     "babel-loader": "^8.0.5",
     "vue-loader": "^15.6.2",
     "vue-template-compiler": "^2.6.6",
-    "webpack": "^4.29.3",
+    "webpack": "^4.29.4",
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
