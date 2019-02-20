@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <v-list :key="index" two-line v-for="(item, index) in data">
-      <slot name="items" :item="item">
-        <v-list-tile >
-          <v-list-tile-title>
-            {{ item }}
-          </v-list-tile-title>
-        </v-list-tile>
-      </slot>
+  <div class="list-container">
+    <v-list class="list" two-line>
+      <div v-for="(item, index) in data" :key="index">
+        <slot name="items" :item="item">
+          <v-list-tile >
+            <v-list-tile-title>
+              {{ item }}
+            </v-list-tile-title>
+          </v-list-tile>
+        </slot>
+      </div>
     </v-list>
   </div>
 </template>
@@ -21,8 +23,9 @@ export default {
   }
 }
 </script>
-<style>
-.oc-list-item {
-  border: 2px black solid;
+<style scoped>
+.list {
+  max-height: 46em;
+  overflow-y: scroll;
 }
 </style>

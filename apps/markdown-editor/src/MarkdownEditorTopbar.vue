@@ -16,7 +16,6 @@
   </div>
 </template>
 <script>
-import marked from 'marked'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
