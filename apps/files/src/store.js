@@ -14,7 +14,7 @@ const state = {
   davProperties: [
     '{http://owncloud.org/ns}permissions',
     '{http://owncloud.org/ns}favorite',
-    '{http://owncloud.org/ns}id',
+    '{http://owncloud.org/ns}fileid',
     '{http://owncloud.org/ns}owner-id',
     '{http://owncloud.org/ns}owner-display-name',
     '{DAV:}getcontentlength',

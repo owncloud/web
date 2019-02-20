@@ -106,10 +106,17 @@ export default {
             transition: all 1s; }
 
   .content { grid-area: content; }
-
-  body {
-    overflow-y: hidden;
+  body, html {
+      overflow-y: hidden;
+      overflow: -moz-scrollbars-none;
+      -ms-overflow-style: none;  /* IE 10+ */
   }
+  body::-webkit-scrollbar { /* WebKit */
+      display: none;
+      width: 0;
+      height: 0;
+  }
+
   .loginGradient {
     background-image: linear-gradient(var(--v-primary-base), var(--v-secondary-base)) !important;
   }

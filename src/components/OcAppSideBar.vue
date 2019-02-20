@@ -21,7 +21,7 @@
           <slot name="headerContent"></slot>
         </div>
       </div>
-      <div class="body">
+      <div class="content">
         <slot name="content"></slot>
       </div>
       <div class="footer">
@@ -46,8 +46,10 @@ export default {
 </script>
 <style scoped>
 .sidebar-container {
+  max-height: calc(100vh - 115px);
   display: grid;
   width: 20vw;
+  min-width: 280px;
   grid-template-columns: 1fr;
   grid-template-rows: 0.5fr 5fr 0.5fr;
   grid-template-areas: "header" "body" "footer";
@@ -90,10 +92,10 @@ export default {
   color:white;
 }
 .title span,p {
-  font-size: .8em;
+  font-size: .6em;
   line-height: 60px;
 }
-.body { grid-area: body; }
+.content { grid-area: body; }
 
 .footer {
   display: grid;
