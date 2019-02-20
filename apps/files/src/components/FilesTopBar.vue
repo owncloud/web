@@ -92,21 +92,7 @@
         </span>
       </template>
       <template slot="action_filter">
-        <v-menu class="mt-2" transition="scale-transition">
-          <v-btn slot="activator" flat @click="focusFilenameFilter"><v-icon large>filter_list</v-icon></v-btn>
-          <v-list>
-            <v-list-tile v-for="(filter, fid) in activeFileFilter" :key="fid">
-              <v-list-tile-title v-text="filter.name"></v-list-tile-title>
-              <v-checkbox v-model="filter.value"></v-checkbox>
-            </v-list-tile>
-            <v-list-tile>
-              <v-list-tile-title>
-                <span v-translate>Name</span>
-              </v-list-tile-title>
-              <search-bar @input="setFilterTerm" :value="filterTerm" ref="filenameFilter" autofocus :label="$gettext('Search')"/>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
+        <file-filter-menu />
       </template>
     </oc-app-top-bar>
     <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName"
@@ -117,6 +103,7 @@
 </template>
 <script>
 import FileUpload from './FileUpload.vue'
+import FileFilterMenu from './FileFilterMenu.vue'
 import SearchBar from 'oc_components/form/SearchBar.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
@@ -128,6 +115,7 @@ export default {
   components: {
     OcAppTopBar,
     FileUpload,
+    FileFilterMenu,
     SearchBar,
     OcDialogPrompt
   },
@@ -147,16 +135,8 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'extensions']),
-    ...mapGetters('Files', ['activeFiles', 'inProgress', 'filterTerm', 'searchTerm', 'fileFilter', 'atSearchPage', 'currentFolder', 'davProperties']),
+    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties']),
     ...mapState(['route']),
-    activeFileFilter: {
-      get () {
-        return this.fileFilter
-      },
-      set (val) {
-        this.$store.dispatch('setFileFilter', val)
-      }
-    },
     item () {
       return this.$route.params.item
     },
@@ -180,11 +160,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['setFileFilter', 'resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'setFilterTerm', 'searchForFile']),
+    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile']),
     ...mapActions(['openFile', 'showNotification']),
-    onFilenameFilter (filterTerm) {
-      this.setFilterTerm(filterTerm)
-    },
     onFileSearch (searchTerm = '') {
       this.isLoadingSearch = true
       // write search term into files app state

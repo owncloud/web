@@ -1,25 +1,12 @@
 import { findIndex, without, map, filter } from 'lodash'
+import { fileFilters } from './fileFilters.js'
 const namespaced = true
 
 const state = {
   currentFolder: null,
   files: [],
   filesSearched: [],
-  fileFilter: [
-    {
-      name: 'Files',
-      tag: 'file',
-      value: true
-    }, {
-      name: 'Folders',
-      tag: 'folder',
-      value: true
-    }, {
-      name: 'Hidden',
-      tag: 'hidden',
-      value: false
-    }
-  ],
+  fileFilter: fileFilters,
   selected: [],
   inProgress: [],
   searchTermGlobal: '',
@@ -139,11 +126,10 @@ const mutations = {
     state.searchTermFilter = filterTerm
   },
   SET_FILE_FILTER (state, filter) {
-    findIndex(state.fileFilter, (f) => {
-      console.log(f)
+    let i = findIndex(state.fileFilter, (f) => {
       return f.name === filter.name
     })
-    state.fileFilter = filter
+    state.fileFilter[i].value = filter.value
   }
 }
 
@@ -272,7 +258,7 @@ const getters = {
           if (!filter.value) return false
         } else if (file.name.startsWith('.')) {
           // show hidden files ?
-          if (state.fileFilter[2].value) return false
+          if (!state.fileFilter[2].value) return false
         }
       }
       // respect filename filter for local 'search' in open folder
