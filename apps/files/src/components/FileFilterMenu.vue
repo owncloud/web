@@ -1,5 +1,5 @@
 <template>
-  <v-menu class="mt-2" transition="scale-transition">
+  <v-menu class="mt-2" offset-y>
     <v-btn slot="activator" flat @click="focusFilenameFilter"><v-icon large>filter_list</v-icon></v-btn>
     <v-list>
       <v-list-tile v-for="(filter, fid) in fileFilter" :key="fid">
