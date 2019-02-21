@@ -4,7 +4,7 @@ const WebpackCopyPlugin = require('copy-webpack-plugin')
 
 module.exports = merge(common, {
   plugins: [
-    WebpackCopyPlugin([{
+    new WebpackCopyPlugin([{
       from: 'README.md',
       to: 'README.md'
     }, {
