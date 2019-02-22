@@ -77,23 +77,33 @@
         :key="index"
       ></v-divider>
     </template>
+    <oc-dialog-prompt :oc-active="changeFileName" v-model="newName"
+                      ocTitle="Rename File/Folder" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
   </v-list>
 </template>
 <script>
 
+import OcDialogPrompt from './ocDialogPrompt.vue'
 import { includes } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 
 import Mixins from '../mixins'
 
 export default {
+  components: {
+    OcDialogPrompt
+  },
   mixins: [
     Mixins
   ],
   name: 'FileList',
   props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled'],
+  data: () => ({
+    changeFileName: false,
+    newName: ''
+  }),
   methods: {
-    ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'deleteFiles']),
+    ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'deleteFiles', 'renameFile']),
     ...mapActions(['openFile']),
 
     toggleAll () {
@@ -138,6 +148,11 @@ export default {
     },
     actions () {
       let actions = [
+        { icon: 'edit',
+          handler: this.changeName,
+          isEnabled: function (item) {
+            return true
+          } },
         { icon: 'file_download',
           handler: this.downloadFile,
           isEnabled: function (item) {
