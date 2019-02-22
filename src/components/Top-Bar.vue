@@ -69,7 +69,7 @@ export default {
   grid-template-rows: 1fr;
   grid-template-areas: "menu logo user";
   overflow: hidden;
-  background-color: #232c47;
+  background-color: var(--v-primary-base);
   line-height: 50px;
   position: fixed;
   top: 0;
