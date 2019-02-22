@@ -40,7 +40,6 @@
 
 <script>
 import Mixins from '../mixins'
-import OcAppSideBar from 'oc_components/OcAppSideBar.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -53,9 +52,6 @@ export default {
       tabName: '',
       active: 0
     }
-  },
-  components: {
-    OcAppSideBar
   },
   methods: {
     ...mapActions('Files', ['deleteFiles']),

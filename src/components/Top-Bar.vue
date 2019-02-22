@@ -76,6 +76,18 @@ export default {
   z-index: 99;
   height: 50px;
   width: 100%;
+  & .logo {
+    margin: 0 auto;
+    grid-area: logo;
+  }
+  & .user {
+    color: white;
+    grid-area: user;
+  }
+  & .menu {
+    color: white;
+    grid-area: menu;
+  }
 }
 .icons {
   padding: 10px;
@@ -86,20 +98,8 @@ export default {
   background: blue;
   border-radius: 50%;
 }
-.menu {
-  color: white;
-  grid-area: menu;
-}
 .right {
   float: right;
 }
-.logo {
-  margin: 0 auto;
-  grid-area: logo;
-}
 
-.user {
-  color: white;
-  grid-area: user;
-}
 </style>

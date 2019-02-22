@@ -6,6 +6,7 @@ import Vue from 'vue'
 // --- Components ---
 
 import Phoenix from './Phoenix.vue'
+import OcAppSideBar from './components/OcComponents/OcAppSideBar.vue'
 
 // --- Adding global libraries ---
 
@@ -43,6 +44,8 @@ Vue.use(Vuetify, {
     customProperties: true
   }
 })
+
+Vue.use('OcAppSideBar', OcAppSideBar)
 
 Vue.use(GetTextPlugin, {
   availableLanguages: {
