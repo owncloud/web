@@ -77,14 +77,16 @@ const mutations = {
     })
     state.inProgress.splice(fileIndex - 1, 1)
   },
-  ADD_FILE_TO_PROGRESS (state, file) {
+  ADD_FILE_TO_PROGRESS (state, progress) {
+    let file = progress.file
+    let action = progress.action
     state.inProgress.push({
       id: file.id,
       name: file.name,
       type: file.type,
       size: file.size,
-      progress: 0,
-      action: 'upload'
+      progress: progress.progress || 0,
+      action: action
     })
   },
   LOAD_FILES (state, { currentFolder, files }) {
@@ -145,8 +147,8 @@ const actions = {
     if (progress.progress === 100) commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
     else commit('UPDATE_FILE_PROGRESS', progress)
   },
-  addFileToProgress ({ commit }, file) {
-    commit('ADD_FILE_TO_PROGRESS', file)
+  addFileToProgress ({ commit }, progress) {
+    commit('ADD_FILE_TO_PROGRESS', progress)
   },
   loadFiles (context, { currentFolder, files }) {
     currentFolder = _buildFile(currentFolder)

@@ -84,7 +84,7 @@
 <script>
 
 import OcDialogPrompt from './ocDialogPrompt.vue'
-import { includes } from 'lodash'
+import { includes, findIndex } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 
 import Mixins from '../mixins'
@@ -103,7 +103,7 @@ export default {
     newName: ''
   }),
   methods: {
-    ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'deleteFiles', 'renameFile']),
+    ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'deleteFiles', 'addFileToProgress', 'updateFileProgress', 'renameFile']),
     ...mapActions(['openFile']),
 
     toggleAll () {
@@ -138,10 +138,14 @@ export default {
     },
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
+    },
+    download (file) {
+      this.addFileToProgress({ file, action: 'download', progress: 'auto' })
+      this.downloadFile(file)
     }
   },
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'atSearchPage']),
+    ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'inProgress']),
     ...mapGetters(['getToken', 'fileSideBars']),
     all () {
       return this.selectedFiles.length === this.fileData.length
@@ -154,9 +158,13 @@ export default {
             return true
           } },
         { icon: 'file_download',
-          handler: this.downloadFile,
-          isEnabled: function (item) {
-            return true
+          handler: this.download,
+          requires: this.inProgress,
+          isEnabled: (item) => {
+            let r = findIndex(this.inProgress, (f) => {
+              return f.name === item.name
+            })
+            return r < 0
           } },
         { icon: 'delete',
           handler: this.deleteFile,

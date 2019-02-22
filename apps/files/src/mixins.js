@@ -57,16 +57,20 @@ export default {
         })
       }
     },
+    detectReadableStream () {
+      const rs = new ReadableStream()
+      return typeof rs.pipeThrough === 'function'
+    },
     downloadFile (file) {
       const url = this.$client.files.getFileUrl(file.path)
       let anchor = document.createElement('a')
-
       let headers = new Headers()
       headers.append('Authorization', 'Bearer ' + this.getToken)
 
       fetch(url, { headers })
         .then(response => response.blob())
         .then(blobby => {
+          this.updateFileProgress({ fileName: file.name, progress: 100 })
           let objectUrl = window.URL.createObjectURL(blobby)
 
           anchor.href = objectUrl

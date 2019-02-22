@@ -24,7 +24,7 @@
         <search-bar @search="onFileSearch" :value="searchTerm" :label="$gettext('Search')" :loading="isLoadingSearch"/>
       </template>
       <template slot="action_progress">
-        <v-menu offset-y v-show="fileUpload">
+        <v-menu offset-y v-show="inProgress.length > 0">
           <v-progress-circular
           style="margin: 1em;"
           slot="activator"
@@ -43,7 +43,8 @@
               </v-list-tile-avatar>
               <v-list-tile-title>{{ inProgress[n - 1].name }}</v-list-tile-title>
               <v-list-tile-sub-title class="text--primary">{{ inProgress[n - 1].size| fileSize}}</v-list-tile-sub-title>
-              <v-progress-linear color="primary" :value="inProgress[n - 1].progress"></v-progress-linear>
+              <v-progress-linear v-if="inProgress[n - 1].progress === 'auto'" color="primary" indeterminate></v-progress-linear>
+              <v-progress-linear v-else color="primary" :value="inProgress[n - 1].progress"></v-progress-linear>
             </v-list-tile>
           </v-list>
         </v-menu>

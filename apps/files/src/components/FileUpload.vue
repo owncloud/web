@@ -60,7 +60,7 @@ export default {
     },
 
     upload (file) {
-      this.addFileToProgress(file)
+      this.addFileToProgress({ file, action: 'upload' })
       let fileUpload = new FileUpload(file, this.url, this.headers, this.onProgress, this.requestType)
       fileUpload
         .upload(this.additionalData)
