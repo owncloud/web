@@ -20,7 +20,7 @@
       </div>
       <div v-else>
         <v-list-tile
-          @click="downloadFiles(file)">
+          @click="$eventBus.$emit('download-file', file)">
           <v-list-tile-avatar>
             <v-avatar size="32px" tile>
               <v-icon>

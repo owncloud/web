@@ -128,6 +128,9 @@ export default {
     },
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
+    },
+    download (file) {
+      this.$eventBus.$emit('download-file', file)
     }
   },
   computed: {
@@ -139,7 +142,7 @@ export default {
     actions () {
       let actions = [
         { icon: 'file_download',
-          handler: this.downloadFile,
+          handler: this.download,
           isEnabled: function (item) {
             return true
           } },

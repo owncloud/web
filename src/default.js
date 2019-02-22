@@ -15,6 +15,9 @@ import Client from 'js-owncloud-client'
 import { sync } from 'vuex-router-sync'
 import store from './store'
 import router from './router'
+import { EventBus } from './services/eventbus.js'
+
+Vue.prototype.$eventBus = EventBus
 
 // --- Plugins ----
 
