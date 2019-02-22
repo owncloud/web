@@ -28,6 +28,9 @@ export default {
       return string.charAt(0).toUpperCase() + string.slice(1)
     }
   },
+  data: () => ({
+    selectedFile: ''
+  }),
   methods: {
     navigateTo (route, param) {
       this.$router.push({
@@ -36,6 +39,23 @@ export default {
           'item': param
         }
       })
+    },
+    changeName (item) {
+      let newName
+      this.changeFileName = !this.changeFileName
+      if (typeof item === 'object') {
+        this.selectedFile = item
+        this.newName = item.name
+      } else {
+        newName = item
+      }
+      if (newName !== '' || newName !== undefined) {
+        this.renameFile({
+          client: this.$client,
+          file: this.selectedFile,
+          newValue: newName
+        })
+      }
     },
     downloadFile (file) {
       const url = this.$client.files.getFileUrl(file.path)

@@ -130,6 +130,13 @@ const mutations = {
       return f.name === filter.name
     })
     state.fileFilter[i].value = filter.value
+  },
+  RENAME_FILE (state, { file, newValue, newPath }) {
+    let fileIndex = findIndex(state.files, (f) => {
+      return f.name === file.name
+    })
+    state.files[fileIndex].name = newValue
+    state.files[fileIndex].path = '/' + newPath + newValue
   }
 }
 
@@ -182,6 +189,17 @@ const actions = {
         context.commit('REMOVE_FILE_SELECTION', file)
       }).catch(error => {
         console.log('error: ' + file.path + ' not deleted: ' + error)
+      })
+    }
+  },
+  renameFile (context, payload) {
+    let file = payload.file
+    let newValue = payload.newValue
+    let client = payload.client
+    if (file !== undefined && newValue !== undefined && newValue !== file.name) {
+      let newPath = file.path.substr(1, file.path.lastIndexOf('/'))
+      client.files.move(file.path, (newPath + newValue)).then(() => {
+        context.commit('RENAME_FILE', { file, newValue, newPath })
       })
     }
   },
