@@ -18,7 +18,7 @@
     "vue-loader": "^15.6.4",
     "babel-loader": "^8.0.5",
     "vue-loader": "^15.6.4",
-    "vue-template-compiler": "^2.6.6",
+    "vue-template-compiler": "^2.6.7",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3"
   },
