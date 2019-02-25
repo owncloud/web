@@ -48,8 +48,6 @@ export default {
 .sidebar-container {
   max-height: calc(100vh - 115px);
   display: grid;
-  width: 20vw;
-  min-width: 280px;
   grid-template-columns: 1fr;
   grid-template-rows: 0.5fr 5fr 0.5fr;
   grid-template-areas: "header" "body" "footer";

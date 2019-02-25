@@ -75,8 +75,7 @@ export default {
   }
 
   .oc-app-sidebar {
-    min-width: 280px;
-    max-width: 20vw;
+    width: 500px;
     position: sticky;
     grid-area: ocAppSidebar;
   }
