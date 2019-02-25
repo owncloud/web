@@ -1,4 +1,3 @@
-'use strict'
 import initVueAuthenticate from '../services/auth'
 import router from '../router/'
 

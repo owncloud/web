@@ -21,7 +21,10 @@ module.exports = integratePhoenix({
     rules: [{
       test: /\.js?$/,
       exclude: /node_modules/,
-      loader: 'babel-loader'
+      loader: 'babel-loader',
+      options: {
+        rootMode: "upward",
+      }
     }, {
       test: /\.vue$/,
       loader: 'vue-loader'

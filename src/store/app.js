@@ -1,5 +1,3 @@
-'use strict'
-
 const state = {
   sidebarVisible: false,
   notifications: []

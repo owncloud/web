@@ -1,4 +1,6 @@
-import '@babel/polyfill'
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
+
 import FilesApp from './components/FilesApp.vue'
 import FilesTopBar from './components/FilesTopBar.vue'
 import FileInfoSideBar from './components/FileInfoSidebar.vue'
