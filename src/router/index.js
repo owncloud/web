@@ -10,7 +10,7 @@ import store from '../store'
 Vue.use(Router)
 
 const router = new Router({
-//  mode: 'history',
+  mode: 'history',
   routes: [{
     path: '/login',
     name: 'login',
@@ -18,14 +18,15 @@ const router = new Router({
       fullscreen: LoginPage
     },
     meta: { auth: false, hideHeadbar: true, showBackground: true }
-  }, {
-    path: '/oidc-callback',
+  },
+  {
+    path: '/login/oidc-callback',
     components: {
       fullscreen: OidcCallbackPage
     },
     meta: { auth: false, hideHeadbar: true, showBackground: true }
   }, {
-    path: '/oidc-silent-redirect',
+    path: '/login/oidc-silent-redirect',
     components: {
       fullscreen: OidcSilentRedirectPage
     },

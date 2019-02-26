@@ -10,11 +10,12 @@ let apps = []
 let favicon = './themes/owncloud/favicon.jpg'
 var config
 
-if (fs.existsSync('config.json')) {
+if (fs.existsSync('./config.json')) {
   config = require('./config.json')
 } else {
   config = require('./tests/drone/config.json')
 }
+const BASE_URL = config.base
 
 if (fs.existsSync(`./themes/${config.theme}/favicon.jpg`)) {
   favicon = `./themes/${config.theme}/favicon.jpg`
@@ -36,9 +37,9 @@ const src_files = [{
   to: path.resolve(__dirname, 'dist')
 }, {
   from: path.resolve(__dirname, 'node_modules', 'requirejs', 'require.js'),
-  to: path.resolve(__dirname, 'dist', 'node_modules', 'requirejs')
+  to: path.resolve(__dirname, 'dist')
 }]
-for (file of src_files) {
+for (let file of src_files) {
   apps.push(file)
 }
 apps.push({
@@ -49,6 +50,8 @@ module.exports = {
   plugins: [
     new WebpackCopyPlugin(apps),
     new HtmlWebpackPlugin({
+      baseUrl: BASE_URL,
+      // base: { href: BASE_URL },
       template: 'index.html',
       favicon: favicon
     }),

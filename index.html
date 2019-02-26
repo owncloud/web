@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<base href="<%= htmlWebpackPlugin.options.baseUrl %>" />
 	<meta charset="UTF-8">
 	<title>ownCloud Phoenix</title>
 	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 	<meta name="theme-color" content="#375f7E"/>
 	<link rel="manifest" href="manifest.json">
-  <script src="node_modules/requirejs/require.js"></script>
+  <script src="/require.js"></script>
 	<noscript>
 		<style>
 			#enable-js-banner {

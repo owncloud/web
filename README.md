@@ -9,11 +9,11 @@ Pushing a new design and frontend concept to ownCloud
 ## How to build
 
 - Run `yarn install` to build core
-- Run `yarn dist` to build all apps configured in config.json
+- Run `yarn dist` to build all apps configured in *config.json*
+- set custom domain name in *config.json* via *base*
 
 ## Run
 
-- optionally provide custom domain name: `export SERVER_HOST=0.0.0.0:8300`
 - run a webpack dev server `yarn run watch`
 
 ## Run acceptance tests

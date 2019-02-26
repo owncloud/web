@@ -1,5 +1,12 @@
+const fs = require('fs')
 const chromedriver = require('chromedriver')
-const localLaunchUrl = process.env.SERVER_HOST || 'http://localhost:8300'
+let localLaunchUrl = 'http://phoenix:8300'
+
+// nightwatch fallback if running in CI
+if (fs.existsSync('config.json')) {
+  const config = require('./config.json')
+  localLaunchUrl = config.base
+}
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',

@@ -1,4 +1,5 @@
 {
+	"base" : "http://phoenix:8300",
 	"server" : "http://owncloud",
 	"theme": "owncloud",
 	"version": "0.1.0",

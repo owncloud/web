@@ -1,6 +1,3 @@
-
-SERVER_HOST=0.0.0.0:8300
-
 apps=files
 all_apps=$(addprefix app-,$(apps))
 core_bundle=dist/core/core.bundle.js
@@ -48,7 +45,7 @@ clean-app-%:
 #
 .PHONY: run
 run:
-	php -t dist/ -S "$(SERVER_HOST)"
+	php -t dist/ -S "phoenix:8300"
 
 
 .PHONY: l10n-push

@@ -14,7 +14,7 @@
     "install-all": "node build/run-for-all.js yarn install",
     "build-all": "node build/run-for-all.js yarn build",
     "watch-all": "node build/run-for-all.js -p yarn watch",
-    "watch": "yarn run build:dev && webpack-dev-server --progress --colors --watch --config webpack.dev.js --public $SERVER_HOST",
+    "watch": "yarn run build:dev && webpack-dev-server --progress --colors --watch --config webpack.dev.js",
     "lint": "eslint src apps/*/src tests build --ext vue --ext js --color",
     "lint-fix": "eslint src apps/*/src tests build --ext vue --ext js --color --fix",
     "accessibility-tests": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",

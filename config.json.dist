@@ -1,5 +1,6 @@
 {
   "server" : "",
+  "base" : "",
   "theme": "owncloud",
   "version": "0.1.0",
   "auth": {
