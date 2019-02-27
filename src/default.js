@@ -30,6 +30,10 @@ import translations from '../l10n/translations.json'
 
 import { Drag, Drop } from 'vue-drag-drop'
 
+// Import the Design System
+import DesignSystem from 'owncloud-design-system'
+import 'owncloud-design-system/dist/system/system.css'
+
 const _map = require('lodash/map')
 const _flatten = require('lodash/flatten')
 const _findIndex = require('lodash/findIndex')
@@ -38,6 +42,7 @@ Vue.prototype.$client = new Client()
 
 Vue.use(VueEvents)
 Vue.use(VueRouter)
+Vue.use(DesignSystem)
 Vue.use(Vuetify, {
   options: {
     customProperties: true

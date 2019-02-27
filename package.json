@@ -20,7 +20,9 @@
     "accessibility-tests": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
     "accessibility-tests-drone": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
     "acceptance-tests": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features -t 'not @skip'",
-    "acceptance-tests-drone": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features -t 'not @skip'"
+    "acceptance-tests-drone": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features -t 'not @skip'",
+    "postinstall": "build-design-system",
+    "build-design-system": "cd node_modules/owncloud-design-system && yarn install && yarn build:system"
   },
   "author": "Felix Heidecke",
   "license": "AGPL-3.0",
@@ -81,6 +83,7 @@
     "babel-eslint": "^10.0.1",
     "eslint-loader": "^2.1.2",
     "js-owncloud-client": "github:owncloud/js-owncloud-client#master",
-    "oidc-client": "^1.6.1"
+    "oidc-client": "^1.6.1",
+    "owncloud-design-system": "https://github.com/owncloud/owncloud-design-system.git"
   }
 }
