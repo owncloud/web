@@ -49,6 +49,15 @@
         </v-menu>
       </template>
       <template slot="action_new" v-if="this.canUpload">
+        <oc-menu buttonText="+ New" v-if="!atSearchPage">
+          <!-- TODO: replace with oc-list elements-->
+          <ul class="uk-nav uk-dropdown-nav uk-nav-default">
+            <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
+            <li class="uk-nav-divider"></li>
+            <li><a @click="createFolder = true" ><oc-icon name="create_new_folder"/>New folder ...</a> </li>
+            <li><a @click="createFile = true"><oc-icon name="copy_file"/>New file ...</a> </li>
+          </ul>
+        </oc-menu>
     <v-menu
     class="mt-2 mr-2"
     offset-y
