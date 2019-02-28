@@ -64,7 +64,7 @@
     "vue-drag-drop": "^1.1.4",
     "vue-events": "^3.1.0",
     "vue-gettext": "^2.1.2",
-    "vue-loader": "^15.6.4",
+    "vue-loader": "^15.7.0",
     "vue-router": "^3.0.2",
     "vue-template-compiler": "^2.6.7",
     "vuetify": "^1.5.3",
