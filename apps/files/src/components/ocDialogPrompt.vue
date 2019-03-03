@@ -5,6 +5,8 @@
       <v-card-text v-if="ocContent">{{ ocContent }}</v-card-text>
       <v-card-text>
         <v-text-field
+          :loading="ocLoading"
+          :disabled="ocLoading"
           autofocus
           v-model="inputValue"
           ref="input"
@@ -13,8 +15,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn flat @click="onCancel">{{ ocCancelText }}</v-btn>
-        <v-btn flat @click="onConfirm">{{ ocConfirmText }}</v-btn>
+        <v-btn :disabled="ocLoading" flat @click="onCancel">{{ ocCancelText }}</v-btn>
+        <v-btn :disabled="ocLoading" flat @click="onConfirm">{{ ocConfirmText }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -31,6 +33,7 @@ export default {
     ocInputMaxlength: [String, Number],
     ocInputPlaceholder: [String, Number],
     ocContent: String,
+    ocLoading: { type: Boolean, default: false },
     ocConfirmText: {
       type: String,
       default: 'Ok'
