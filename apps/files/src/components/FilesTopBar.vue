@@ -227,7 +227,9 @@ export default {
               type: 'error'
             })
           })
-          .finally(() => this.fileFolderCreationLoading = false)
+          .finally(() => {
+            this.fileFolderCreationLoading = false
+          })
       }
     },
     addNewFile (fileName) {
@@ -246,7 +248,9 @@ export default {
               type: 'error'
             })
           })
-          .finally(() => this.fileFolderCreationLoading = false)
+          .finally(() => {
+            this.fileFolderCreationLoading = false
+          })
       }
     },
     onFileSuccess (event, file) {
