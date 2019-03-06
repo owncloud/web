@@ -156,7 +156,7 @@ export default {
         { icon: 'file_download',
           handler: this.downloadFile,
           isEnabled: function (item) {
-            return true
+            return item.canDownload()
           } },
         { icon: 'delete',
           handler: this.deleteFile,

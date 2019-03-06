@@ -258,25 +258,21 @@ export default {
         const filePath = ((this.item === 'home') ? '' : this.item) + '/' + file.name
         this.$client.files.fileInfo(filePath, this.davProperties).then(fileInfo => {
           this.fileUploadProgress = 0
-          this.fileUploadName = ''
           this.addFiles({
             files: [fileInfo]
           })
           this.fileUpload = false
         }).catch(() => {
           this.fileUploadProgress = 0
-          this.fileUploadName = ''
           this.getFolder()
         })
       })
     },
 
-    onFileError (error) {
+    onFileError () {
       this.fileUploadProgress = 0
-      this.fileUploadName = ''
       this.showNotification({
         title: this.$gettext('File upload failed ....'),
-        desc: error,
         type: 'error'
       })
       this.fileUpload = false
