@@ -3,16 +3,6 @@
     <template slot="title">
       <span>{{ getTabName }}</span>
     </template>
-    <template slot="headerContent">
-      <v-layout primary row>
-        <v-spacer />
-        <v-btn @click.native="deleteSelectedFiles" flat><v-icon color="white" medium>delete</v-icon></v-btn>
-        <v-spacer />
-        <v-btn @click.native="downloadFiles" v-if="items.length <= 1" flat><v-icon color="white" medium>cloud_download</v-icon></v-btn>
-        <v-btn disabled v-else flat><v-icon color="white" medium>archive</v-icon></v-btn>
-        <v-spacer />
-      </v-layout>
-    </template>
     <template slot="content">
       <v-tabs
         v-model="active"
@@ -84,7 +74,8 @@ export default {
       if (this.items.length > 1) {
         return this.$gettext('Multiple Files')
       } else {
-        return (this.items[0].name.length > 16) ? `${this.items[0].name.substr(0, 10)}...` : this.items[0].name
+        // return (this.items[0].name.length > 16) ? `${this.items[0].name.substr(0, 10)}...` : this.items[0].name
+        return this.items[0].name
       }
     }
   }
