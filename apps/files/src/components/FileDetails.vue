@@ -1,5 +1,5 @@
 <template>
-  <oc-app-side-bar>
+  <oc-app-side-bar :disableAction="false" @close="close()">
     <template slot="title">
       <span>{{ getTabName }}</span>
     </template>
@@ -61,6 +61,9 @@ export default {
     ...mapActions('Files', ['deleteFiles']),
     close () {
       this.$emit('reset')
+    },
+    showSidebar (sideBarName) {
+      this.active = Object.keys(this.fileSideBars).indexOf(sideBarName)
     },
     downloadFiles () {
       this.downloadFile(this.items[0])
