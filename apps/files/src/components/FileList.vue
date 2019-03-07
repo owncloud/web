@@ -79,6 +79,8 @@
     </template>
     <oc-dialog-prompt :oc-active="changeFileName" v-model="newName"
                       ocTitle="Rename File/Folder" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
+    <oc-dialog-prompt :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
+                      ocTitle="Delete File/Folder" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
   </v-list>
 </template>
 <script>
@@ -100,6 +102,8 @@ export default {
   props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled'],
   data: () => ({
     changeFileName: false,
+    deleteConfirmation: '',
+    fileToBeDeleted: '',
     newName: ''
   }),
   methods: {
@@ -131,10 +135,8 @@ export default {
       this.$emit('FileAction', file)
     },
     deleteFile (file) {
-      this.deleteFiles({
-        client: this.$client,
-        files: [file]
-      })
+      this.fileToBeDeleted = file
+      this.deleteConfirmation = this.$gettextInterpolate('Please confirm the deletion of %{file}', { file: file.name })
     },
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
