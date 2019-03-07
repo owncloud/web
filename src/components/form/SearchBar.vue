@@ -1,5 +1,5 @@
 <template>
-  <v-text-field :label="label" append-icon="search" :loading="loading"
+  <v-text-field :label="label" :append-icon="icon" :loading="loading"
     @input="onType" :value="searchQuery" autofocus="autofocus"
     @keydown.enter="onSearch" @click:append="onSearch">
   </v-text-field>
@@ -18,6 +18,11 @@ export default {
       type: String,
       required: false,
       default: ''
+    },
+    icon: {
+      type: String,
+      required: false,
+      default: 'search'
     },
     // native autofocus
     autofocus: {

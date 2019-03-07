@@ -8,9 +8,11 @@
       </v-list-tile>
       <v-list-tile>
         <v-list-tile-title>
-          <span v-translate>Name</span>
+          <span v-translate>Name Filter</span>
         </v-list-tile-title>
-        <search-bar @input="setFilterTerm" :value="filterTerm" ref="filenameFilter" autofocus :label="$gettext('Search')"/>
+        <v-list-tile-title>
+        <search-bar @input="setFilterTerm" :value="filterTerm" ref="filenameFilter" autofocus :label="$gettext('Filter')" icon="false"/>
+        </v-list-tile-title>
       </v-list-tile>
     </v-list>
   </v-menu>
