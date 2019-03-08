@@ -57,6 +57,9 @@ function _buildFile (file) {
     canUpload: function () {
       return this.permissions.indexOf('C') > 0
     },
+    canDownload: function () {
+      return this.type !== 'folder'
+    },
     canBeDeleted: function () {
       return this.permissions.indexOf('D') > 0
     }

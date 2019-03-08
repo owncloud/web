@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title class="headline" v-if="ocTitle">{{ ocTitle }}</v-card-title>
       <v-card-text v-if="ocContent">{{ ocContent }}</v-card-text>
-      <v-card-text>
+      <v-card-text v-if="ocHasInput">
         <v-text-field
           :loading="ocLoading"
           :disabled="ocLoading"
@@ -29,6 +29,7 @@ export default {
     ocActive: { type: Boolean, default: false },
     value: {},
     ocTitle: String,
+    ocHasInput: { type: Boolean, default: true },
     ocInputName: String,
     ocInputMaxlength: [String, Number],
     ocInputPlaceholder: [String, Number],
@@ -52,7 +53,7 @@ export default {
     },
     ocActive (isActive) {
       this.$nextTick().then(() => {
-        if (isActive) {
+        if (isActive && this.ocHasInput) {
           this.$refs.input.focus()
         }
       })

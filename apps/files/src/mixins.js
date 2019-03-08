@@ -40,20 +40,24 @@ export default {
         }
       })
     },
+    reallyDeleteFile () {
+      this.deleteFiles({
+        client: this.$client,
+        files: [this.fileToBeDeleted]
+      })
+      this.deleteConfirmation = ''
+      this.fileToBeDeleted = null
+    },
     changeName (item) {
-      let newName
       this.changeFileName = !this.changeFileName
       if (typeof item === 'object') {
         this.selectedFile = item
         this.newName = item.name
       } else {
-        newName = item
-      }
-      if (newName !== '' || newName !== undefined) {
         this.renameFile({
           client: this.$client,
           file: this.selectedFile,
-          newValue: newName
+          newValue: item
         })
       }
     },

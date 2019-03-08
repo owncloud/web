@@ -72,40 +72,6 @@ export default {
   data () {
     return {
       menuData: {
-        personal: {
-          title: 'Personal',
-          icon: 'account_circle',
-          subItems: [
-            { title: 'About me' },
-            { title: 'Sessions' },
-            { title: 'App passwords' },
-            { title: 'Sync clients' },
-            { title: 'Activity' },
-            { title: 'Federated Cloud' }
-          ]
-        },
-        help: {
-          title: 'Help',
-          icon: 'help',
-          subItems: [
-            { title: 'User documentation' },
-            { title: 'Online documentation' },
-            { title: 'Forum' },
-            { title: 'Issue Tracker' },
-            { title: 'Commercial Support' }
-          ]
-        },
-        admin: {
-          title: 'Administration',
-          icon: 'settings',
-          subItems: [
-            { title: 'Sharing' },
-            { title: 'External storage' },
-            { title: 'Federation' },
-            { title: 'File handling' },
-            { title: 'Email-templates' }
-          ]
-        }
       }
     }
   },
