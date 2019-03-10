@@ -699,10 +699,10 @@
   dependencies:
     "@types/babel-types" "*"
 
-"@types/debug@^0.0.31":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-0.0.31.tgz#bac8d8aab6a823e91deb7f79083b2a35fa638f33"
-  integrity sha512-LS1MCPaQKqspg7FvexuhmDbWUhE2yIJ+4AgVIyObfc06/UKZ8REgxGNjZc82wPLWmbeOm7S+gSsLgo75TanG4A==
+"@types/debug@^4.1.2":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.2.tgz#84824e9259fc583dd9385635738359c9582f7f82"
+  integrity sha512-jkf6UiWUjcOqdQbatbvOm54/YbCdjt3JjiAzT/9KS2XtMmOkYHdKsI5u8fulhbuTUuiqNBfa6J5GSDiwjK+zLA==
 
 "@types/node@*":
   version "10.12.19"
@@ -5206,12 +5206,12 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
-nightwatch-api@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/nightwatch-api/-/nightwatch-api-2.1.1.tgz#d8fc36855261950e530a70dea28a0db6c8b918fa"
-  integrity sha512-MlAPKjjPYK2o9lxTT84V6jnquZ2pILQze5lbGAxK5ZK62yCa2NTuAp7cQnkdTFs6K2XN7AGiJLge1Bt6UKAfMw==
+nightwatch-api@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/nightwatch-api/-/nightwatch-api-2.1.2.tgz#59d1016522f73b39ac1de1eb576036e53475506c"
+  integrity sha512-U1RTttzUENn4LhZvfsH1EnvymvbqMF3D7aVlbfuwtsUXmoZ+RAneHM3tMPDeCETRE9LcivtjsjDH+ZiUzFS03g==
   dependencies:
-    "@types/debug" "^0.0.31"
+    "@types/debug" "^4.1.2"
     debug "^4.1.1"
 
 nightwatch@^1.0.19:
