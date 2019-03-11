@@ -5459,9 +5459,9 @@ output-file-sync@^2.0.0:
     is-plain-obj "^1.1.0"
     mkdirp "^0.5.1"
 
-"owncloud-design-system@https://github.com/owncloud/owncloud-design-system.git":
+"owncloud-design-system@https://github.com/owncloud/owncloud-design-system.git#pure-uikit":
   version "0.0.1"
-  resolved "https://github.com/owncloud/owncloud-design-system.git#3076aa07d102bf351fee0bc764ede2d5cabc2386"
+  resolved "https://github.com/owncloud/owncloud-design-system.git#a95cd80f4ca33d049da196de4b72f3c5f499999c"
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.5.0"
@@ -5471,7 +5471,7 @@ output-file-sync@^2.0.0:
     postcss-url "^8.0.0"
     tinycolor2 "^1.4.1"
     vue "^2.6.8"
-    vue-lodash "^2.0.2"
+    vue-lodash "^2.0.0"
     vue-meta "^1.5.8"
     vue-router "^3.0.2"
     vuex "^3.1.0"
@@ -7771,7 +7771,7 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-lodash@^2.0.2:
+vue-lodash@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/vue-lodash/-/vue-lodash-2.0.2.tgz#08019cc1969ecdf3346017865f86cf4dade0618c"
   integrity sha512-qC0A6mkF5yUt9Wy2zMa8qGpt+/JTjtlJ+ch1UKfr3eWscTrlK0FlD5GhfPaU/21ZOlZcRXsFriqf/ddchYA6CQ==
