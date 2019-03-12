@@ -97,8 +97,10 @@
       </template>
     </oc-app-top-bar>
     <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName"
+                      :ocLoading="fileFolderCreationLoading"
                       ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
     <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
+                      :ocLoading="fileFolderCreationLoading"
                       ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
   </div>
 </template>
@@ -132,7 +134,8 @@ export default {
     fileUploadProgress: 0,
     createFile: false,
     path: '',
-    searchedFiles: []
+    searchedFiles: [],
+    fileFolderCreationLoading: false
   }),
   computed: {
     ...mapGetters(['getToken', 'extensions']),
@@ -211,6 +214,7 @@ export default {
     },
     addNewFolder (folderName) {
       if (folderName !== '') {
+        this.fileFolderCreationLoading = true
         this.$client.files.createFolder(((this.item === 'home') ? '' : this.item) + '/' + folderName)
           .then(() => {
             this.createFolder = false
@@ -224,11 +228,14 @@ export default {
               type: 'error'
             })
           })
+          .finally(() => {
+            this.fileFolderCreationLoading = false
+          })
       }
     },
     addNewFile (fileName) {
-      this.createFile = !this.createFile
       if (fileName !== '') {
+        this.fileFolderCreationLoading = true
         this.$client.files.putFileContents(((this.item === 'home') ? '' : this.item) + '/' + fileName, '')
           .then(() => {
             this.getFolder()
@@ -242,6 +249,9 @@ export default {
               type: 'error'
             })
           })
+          .finally(() => {
+            this.fileFolderCreationLoading = false
+          })
       }
     },
     onFileSuccess (event, file) {
@@ -249,25 +259,21 @@ export default {
         const filePath = ((this.item === 'home') ? '' : this.item) + '/' + file.name
         this.$client.files.fileInfo(filePath, this.davProperties).then(fileInfo => {
           this.fileUploadProgress = 0
-          this.fileUploadName = ''
           this.addFiles({
             files: [fileInfo]
           })
           this.fileUpload = false
         }).catch(() => {
           this.fileUploadProgress = 0
-          this.fileUploadName = ''
           this.getFolder()
         })
       })
     },
 
-    onFileError (error) {
+    onFileError () {
       this.fileUploadProgress = 0
-      this.fileUploadName = ''
       this.showNotification({
         title: this.$gettext('File upload failed ....'),
-        desc: error,
         type: 'error'
       })
       this.fileUpload = false

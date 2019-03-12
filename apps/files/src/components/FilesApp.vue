@@ -7,7 +7,7 @@
         </template>
       </oc-app-content>
       <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
-      <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="getFolder"/>
+      <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="getFolder" @reset="resetFileSelection"/>
   </div>
   </template>
 
@@ -78,8 +78,9 @@ export default {
     openSideBar (file, sideBarName) {
       this.resetFileSelection()
       this.addFileSelection(file)
+      const self = this
       this.$nextTick().then(() => {
-        this.$refs.fileDetails.showSidebar(sideBarName)
+        self.$refs.fileDetails.showSidebar(sideBarName)
       })
     },
 

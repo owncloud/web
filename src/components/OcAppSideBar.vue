@@ -2,12 +2,7 @@
   <div class="oc-app-sidebar">
     <div class="sidebar-container">
       <div class="header primary">
-        <div class="icon">
-          <slot name="icon">
-            <v-icon color="white" large>{{ icon }}</v-icon>
-          </slot>
-        </div>
-        <div class="title">
+        <div class="sidebar-title">
           <slot name="title">
             <span>Heading</span>
           </slot>
@@ -16,9 +11,6 @@
           <slot name="action">
             <button @click="$emit('close', $event)"><v-icon color="white" large>close</v-icon></button>
           </slot>
-        </div>
-        <div class="headerContent">
-          <slot name="headerContent"></slot>
         </div>
       </div>
       <div class="content">
@@ -55,9 +47,9 @@ export default {
 
 .header {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas: "iconArea title headerAction" "headerContent headerContent headerContent";
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "title headerAction" "headerContent headerContent";
   grid-area: header;
 }
 
@@ -84,14 +76,17 @@ export default {
   padding: 1em;
 }
 
-.title {
+.sidebar-title {
   grid-area: title;
-  text-align: center;
+  padding-left: 24px;
   color:white;
 }
-.title span,p {
-  font-size: .6em;
+.sidebar-title span,p {
+  display: flex;
+  align-items: center;
   line-height: 60px;
+  font-weight: bold;
+  font-size: 16px;
 }
 .content { grid-area: body; }
 

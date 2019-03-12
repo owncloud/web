@@ -3,8 +3,10 @@
     <v-card>
       <v-card-title class="headline" v-if="ocTitle">{{ ocTitle }}</v-card-title>
       <v-card-text v-if="ocContent">{{ ocContent }}</v-card-text>
-      <v-card-text>
+      <v-card-text v-if="ocHasInput">
         <v-text-field
+          :loading="ocLoading"
+          :disabled="ocLoading"
           autofocus
           v-model="inputValue"
           ref="input"
@@ -13,8 +15,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn flat @click="onCancel">{{ ocCancelText }}</v-btn>
-        <v-btn flat @click="onConfirm">{{ ocConfirmText }}</v-btn>
+        <v-btn :disabled="ocLoading" flat @click="onCancel">{{ ocCancelText }}</v-btn>
+        <v-btn :disabled="ocLoading" flat @click="onConfirm">{{ ocConfirmText }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -27,10 +29,12 @@ export default {
     ocActive: { type: Boolean, default: false },
     value: {},
     ocTitle: String,
+    ocHasInput: { type: Boolean, default: true },
     ocInputName: String,
     ocInputMaxlength: [String, Number],
     ocInputPlaceholder: [String, Number],
     ocContent: String,
+    ocLoading: { type: Boolean, default: false },
     ocConfirmText: {
       type: String,
       default: 'Ok'
@@ -49,7 +53,7 @@ export default {
     },
     ocActive (isActive) {
       this.$nextTick().then(() => {
-        if (isActive) {
+        if (isActive && this.ocHasInput) {
           this.$refs.input.focus()
         }
       })

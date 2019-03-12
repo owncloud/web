@@ -44,7 +44,7 @@ export default {
   props: ['sheet', 'file'],
   mixins: [Mixins],
   methods: {
-    ...mapActions('Files', ['addFileToProgress']),
+    ...mapActions('Files', ['addFileToProgress', 'updateFileProgress']),
     openFileAction (appId) {
       this.$emit('open', appId)
       // TODO path to state
