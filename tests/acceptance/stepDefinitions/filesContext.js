@@ -41,7 +41,6 @@ When('the user creates a folder with the name {string} using the webUI', functio
 When('the user opens folder {string} using the webUI', function (folder) {
   return client
     .url(client.launchUrl + '/#/files/list/' + folder)
-    .waitForElementVisible('#files-list-progress')
     .waitForElementNotPresent('#files-list-progress')
     .waitForElementVisible('#breadcrumb-0')
     .assert.containsText("#breadcrumb-0", folder)
