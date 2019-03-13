@@ -66,7 +66,7 @@ module.exports = {
       'core-js/modules/es6.array.iterator',
       './src/phoenix.js',
       './node_modules/material-design-icons-iconfont/dist/material-design-icons.css',
-      './node_modules/vuetify/dist/vuetify.css',
+      './node_modules/owncloud-design-system/dist/vendor.css',
       './static/fonts/ocft/css/ocft.css'
     ]
   },
