@@ -11,7 +11,7 @@ module.exports = {
     default: {
       globals: {
         waitForConditionTimeout: 10000,
-        waitForConditionPollInterval: 10000
+        waitForConditionPollInterval: 10
       }
     },
     local: {
