@@ -25,30 +25,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.grid-container {
-  background: #e3e3e3;
-  width: 100%;
-  display: grid;
-  grid-template-columns: auto auto 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: "info title actions";
-}
-
-.actionSlot {
-  float:right;
-}
-
-.left {
-  min-width: 25vw;
-  grid-area: info; }
-
-.title {
-  max-width: 30vw;
-  grid-area: title; }
-
-.actions {
-  float: right;
-  margin-right: .5em;
-  grid-area: actions; }
-</style>

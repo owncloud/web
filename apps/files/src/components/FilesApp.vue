@@ -9,8 +9,7 @@
       <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
       <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="getFolder" @reset="resetFileSelection"/>
   </div>
-  </template>
-
+</template>
 <script>
 import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
