@@ -54,6 +54,7 @@
     "mini-css-extract-plugin": "^0.5.0",
     "nightwatch": "^1.0.19",
     "nightwatch-api": "^2.1.2",
+    "node-fetch": "^2.3.0",
     "npm-run-all": "^4.1.5",
     "parse-json": "^4.0.0",
     "requirejs": "^2.3.6",
@@ -81,6 +82,7 @@
     "babel-eslint": "^10.0.1",
     "eslint-loader": "^2.1.2",
     "js-owncloud-client": "github:owncloud/js-owncloud-client#master",
-    "oidc-client": "^1.6.1"
+    "oidc-client": "^1.6.1",
+    "url-search-params-polyfill": "^5.0.0"
   }
 }

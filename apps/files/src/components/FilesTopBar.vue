@@ -8,7 +8,7 @@
               <v-icon @click="navigateTo('files-list', 'home')" v-if="props.item.text === 'home'" large>
                 home
               </v-icon>
-              <span @click="navigateTo('files-list', props.item.route)" v-else class="heading font-weight-bold pl-1 pr-1 pt-2 pb-2" style="cursor: pointer">
+              <span @click="navigateTo('files-list', props.item.route)" :id="'breadcrumb-'+props.item.index" v-else class="heading font-weight-bold pl-1 pr-1 pt-2 pb-2" style="cursor: pointer">
                 {{ props.item.text }}
               </span>
             </drop>
@@ -55,6 +55,7 @@
     v-if="!atSearchPage"
     >
     <v-btn
+      id="new-file-menu-btn"
     slot="activator"
     color="primary"
     dark
@@ -65,7 +66,7 @@
     <v-list>
       <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
       <v-divider></v-divider>
-      <v-list-tile @click="createFolder = true">
+      <v-list-tile id="new-folder-btn" @click="createFolder = true">
         <v-list-tile-action>
           <v-icon>create_new_folder</v-icon>
         </v-list-tile-action>
@@ -95,7 +96,7 @@
         <file-filter-menu />
       </template>
     </oc-app-top-bar>
-    <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName"
+    <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok"
                       :ocLoading="fileFolderCreationLoading"
                       ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
     <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
@@ -300,6 +301,7 @@ export default {
         breadcrumb = {}
       }
       for (let i = 0; i < pathSplit.length; i++) {
+        breadcrumb.index = i
         breadcrumb.text = pathSplit.slice(0, i + 1)[i]
         breadcrumb.route = '/' + pathSplit.slice(0, i + 1).join('/')
         this.breadcrumbs.push(breadcrumb)

@@ -8,6 +8,7 @@
           :loading="ocLoading"
           :disabled="ocLoading"
           autofocus
+          :id="ocInputId"
           v-model="inputValue"
           ref="input"
           @keydown.enter.native="onConfirm"
@@ -16,7 +17,9 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn :disabled="ocLoading" flat @click="onCancel">{{ ocCancelText }}</v-btn>
-        <v-btn :disabled="ocLoading" flat @click="onConfirm">{{ ocConfirmText }}</v-btn>
+        <v-btn :disabled="ocLoading" flat
+               :id="ocConfirmId"
+               @click="onConfirm">{{ ocConfirmText }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -30,11 +33,13 @@ export default {
     value: {},
     ocTitle: String,
     ocHasInput: { type: Boolean, default: true },
+    ocInputId: String,
     ocInputName: String,
     ocInputMaxlength: [String, Number],
     ocInputPlaceholder: [String, Number],
     ocContent: String,
     ocLoading: { type: Boolean, default: false },
+    ocConfirmId: String,
     ocConfirmText: {
       type: String,
       default: 'Ok'
@@ -52,6 +57,7 @@ export default {
       this.inputValue = this.value
     },
     ocActive (isActive) {
+      this.inputValue = this.value
       this.$nextTick().then(() => {
         if (isActive && this.ocHasInput) {
           this.$refs.input.focus()
