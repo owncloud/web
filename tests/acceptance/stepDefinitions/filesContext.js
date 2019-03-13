@@ -22,8 +22,8 @@ Given('the user has browsed to the files page', function () {
 });
 
 When('the user creates a folder with the name {string} using the webUI', function (folderName) {
-  client
-    .page.filesPage()
+  const filesPage = client.page.filesPage()
+  filesPage
     .waitForElementVisible('@newFileMenuButton', 500000)
     .click('@newFileMenuButton')
     .waitForElementVisible('@newFolderButton')
@@ -32,31 +32,24 @@ When('the user creates a folder with the name {string} using the webUI', functio
     .setValue('@newFolderInput', folderName)
     .click('@newFolderOkButton')
 
-  return client
-    .useXpath()
-    .waitForElementVisible('//div[contains(@class, "file-row-name")][text()="'+folderName+'"]')
-    .useCss()
+  return filesPage.waitForFileVisible(folderName)
 });
 
 When('the user opens folder {string} using the webUI', function (folder) {
-  return client
-    .url(client.launchUrl + '/#/files/list/' + folder)
-    .waitForElementNotPresent('#files-list-progress')
-    .waitForElementVisible('#breadcrumb-0')
-    .assert.containsText("#breadcrumb-0", folder)
+  return client.page.filesPage().navigateToFolder(folder)
 });
 
 Then(/there should be no files\/folders listed on the webUI/, function () {
-  return client.elements('css selector','#files-list .file-row', function (result) {
-    client.assert.equal(result.value.length, 0);
-  });
+  return client.page.filesPage().allFileRows(function (result) {
+        client.assert.equal(result.value.length, 0);
+      });
 });
 
 Then('folder {string} should be listed on the webUI', function (folder) {
   return client
-    .useXpath()
-    .waitForElementVisible('//div[contains(@class, "file-row-name")][text()="'+folder+'"]')
-    .useCss()
+    .page
+    .filesPage()
+    .waitForFileVisible(folder)
 });
 
 When('the user reloads the current page of the webUI', function () {
