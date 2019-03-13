@@ -4,13 +4,6 @@ const { Before, Given, Then, When } = require('cucumber')
 Given(/^the user has browsed to the login page$/,
   () => {
     return client
-      .deleteCookies()
-      .execute(() => {
-        if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
-          window.localStorage.clear()
-        }
-        return true
-      })
       .page
       .loginPage()
       .navigate()
@@ -53,15 +46,6 @@ Then('the files table should not be empty',
 
 // combined step
 Given('user {string} has logged in using the webUI', function (userId) {
-  client
-    .deleteCookies()
-    .execute(() => {
-      if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
-        window.localStorage.clear()
-      }
-      return true
-    })
-
   const loginPage = client.page.loginPage()
   // Given the user has browsed to the login page
   loginPage
