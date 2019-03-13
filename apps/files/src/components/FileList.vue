@@ -1,87 +1,36 @@
 <template>
-  <v-list two-line id="files-list">
-    <v-list-tile>
-      <v-list-tile-action>
-        <v-checkbox
-          :input-value="all"
-          primary
-          hide-details
-          @click.native="toggleAll"
-        ></v-checkbox>
-      </v-list-tile-action>
-      <v-list-tile-action></v-list-tile-action>
-      <v-list-tile-avatar></v-list-tile-avatar>
-      <v-list-tile-content>
-        <v-list-tile-title v-translate>Name</v-list-tile-title>
-        <v-list-tile-sub-title class="text--primary" v-translate>Size</v-list-tile-sub-title>
-        <v-list-tile-sub-title v-translate>Modification Time</v-list-tile-sub-title>
-      </v-list-tile-content>
-    </v-list-tile>
-    <v-divider></v-divider>
-    <template v-for="(item, index) in fileData">
-      <v-list-tile
-        :key="item.path"
-        class="file-row"
-        avatar
-        ripple
-      >
-        <v-list-tile-action>
-          <v-checkbox
-            @change="$emit('toggle', item)"
-            :input-value="selectedFiles.indexOf(item) >= 0"
-            primary
-            hide-details></v-checkbox>
-        </v-list-tile-action>
-        <v-list-tile-action>
-          <v-checkbox
-            @change="toggleFileFavorite(item)"
-            :input-value="item.starred"
-            primary
-            hide-details
-            color="yellow"
-            on-icon="star" off-icon="star_border" large></v-checkbox>
-        </v-list-tile-action>
-        <v-list-tile-avatar>
-          <v-icon>{{ fileTypeIcon(item) }}</v-icon>
-        </v-list-tile-avatar>
-        <v-list-tile-content
-          v-if="!atSearchPage"
-          @click="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
-          style="cursor: pointer"
-        >
-          <v-list-tile-title class="file-row-name">{{ item.name }}</v-list-tile-title>
-          <v-list-tile-sub-title class="text--primary">{{ item.size | fileSize }}</v-list-tile-sub-title>
-          <v-list-tile-sub-title>{{ formDateFromNow(item.mdate) }}</v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-content
-          v-else
-          @click="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
-          style="cursor: pointer"
-        >
-          <v-list-tile-title>{{ item.name }}</v-list-tile-title>
-          <v-list-tile-sub-title class="text--primary">{{ getBaseDirectory(item.path) }}</v-list-tile-sub-title>
-          <v-list-tile-sub-title>{{ formDateFromNow(item.mdate) }} | {{ item.size | fileSize }}</v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-action
-          v-for="(action, index) in actions"
-          :key="index">
-          <v-btn icon :disabled="!action.isEnabled(item)"
-            @click="action.handler(item, action.handlerData)">
-            <v-icon>{{ action.icon }}</v-icon>
-          </v-btn>
-        </v-list-tile-action>
-
-      </v-list-tile>
-      <v-divider
-        v-if="index + 1 < fileData.length"
-        :key="index"
-      ></v-divider>
-    </template>
-    <oc-dialog-prompt :oc-active="changeFileName" v-model="newName"
-                      :ocTitle="_renameDialogTitle" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
-    <oc-dialog-prompt :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
-                      :ocTitle="_deleteDialogTitle" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
-  </v-list>
+  <oc-table middle divider>
+    <oc-table-group>
+      <oc-table-row>
+        <oc-table-cell shrink type="head">
+          <oc-checkbox />
+        </oc-table-cell>
+        <oc-table-cell type="head" class="uk-text-truncate" v-text="'Name'"/>
+        <oc-table-cell shrink type="head" v-text="'Size'"/>
+        <oc-table-cell shrink type="head" class="uk-text-nowrap uk-visible@s" v-text="'Modification Time'"/>
+        <oc-table-cell shrink type="head" v-text="'Actions'"/>
+      </oc-table-row>
+    </oc-table-group>
+    <oc-table-group>
+      <oc-table-row v-for="(i,o) in new Array(3)" :key="o">
+        <oc-table-cell>
+          <oc-checkbox />
+        </oc-table-cell>
+        <oc-table-cell>
+          <oc-file mimeType="image/png" :name="'Picture ' + ++o"/>
+        </oc-table-cell>
+        <oc-table-cell class="uk-text-muted uk-text-nowrap" v-text=" (++o * 128) + ' Kb'" />
+        <oc-table-cell class="uk-text-muted uk-text-nowrap uk-visible@s" v-text=" ++o + ' days ago'" />
+        <oc-table-cell>
+          <div class="uk-button-group">
+            <oc-button icon="edit" aria-label="Edit Picture" />
+            <oc-button icon="file_download" aria-label="Download Picture" />
+            <oc-button icon="delete" aria-label="Delete Picture" />
+          </div>
+        </oc-table-cell>
+      </oc-table-row>
+    </oc-table-group>
+  </oc-table>
 </template>
 <script>
 
