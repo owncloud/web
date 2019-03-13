@@ -1,12 +1,12 @@
-import { setDefaultTimeout, AfterAll, BeforeAll } from 'cucumber'
+import { setDefaultTimeout, After, Before } from 'cucumber'
 import { createSession, closeSession } from 'nightwatch-api'
 
 setDefaultTimeout(60000)
 
-BeforeAll(async () => {
+Before(async () => {
   await createSession({ env: 'drone' })
 })
 
-AfterAll(async () => {
+After(async () => {
   await closeSession()
 })
