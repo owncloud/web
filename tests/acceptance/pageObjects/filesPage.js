@@ -6,22 +6,22 @@ module.exports = {
     navigateToFolder: function (folder) {
       this.api.url(this.api.launchUrl + '/#/files/list/' + folder)
       return this.waitForElementNotPresent('@filesListProgressBar')
-                     .waitForElementVisible('@breadcrumb')
-                     .assert.containsText('@breadcrumb', folder)
+        .waitForElementVisible('@breadcrumb')
+        .assert.containsText('@breadcrumb', folder)
     },
-    waitForFileVisible: function(fileName) {
-      var element = this.elements['fileRowByName'];
-      var util = require('util');
-      var selector = util.format(element.selector, fileName);
+    waitForFileVisible: function (fileName) {
+      var element = this.elements['fileRowByName']
+      var util = require('util')
+      var selector = util.format(element.selector, fileName)
       return this
-               .useXpath()
-               .waitForElementVisible(selector)
-               .useCss();
+        .useXpath()
+        .waitForElementVisible(selector)
+        .useCss()
     },
-    allFileRows: function(callback) {
+    allFileRows: function (callback) {
       this.api.elements('css selector', this.elements['fileRows'], function (result) {
-         callback(result)
-      });
+        callback(result)
+      })
     }
   },
   elements: {
@@ -34,7 +34,7 @@ module.exports = {
     newFileMenuButton: {
       selector: '#new-file-menu-btn'
     },
-    newFolderButton : {
+    newFolderButton: {
       selector: '#new-folder-btn'
     },
     newFolderInput: {
@@ -52,6 +52,6 @@ module.exports = {
     },
     fileRowByName: {
       selector: '//div[contains(@class, "file-row-name")][text()="%s"]'
-    },
+    }
   }
 }

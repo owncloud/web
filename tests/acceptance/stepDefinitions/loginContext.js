@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { Before, Given, Then, When } = require('cucumber')
+const { Given, Then, When } = require('cucumber')
 
 Given(/^the user has browsed to the login page$/,
   () => {
@@ -17,7 +17,7 @@ When('the user clicks the authenticate button',
       .click('@authenticateButton')
   })
 
-Then('the user logs in with username {string} and password {string} using the webUI',
+When('the user logs in with username {string} and password {string} using the webUI',
   (username, password) => {
     const loginPage = client.page.ownCloudLoginPage()
     return loginPage
