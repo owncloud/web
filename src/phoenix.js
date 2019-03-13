@@ -9,7 +9,6 @@ import Phoenix from './Phoenix.vue'
 
 // --- Adding global libraries ---
 
-import Vuetify from 'vuetify'
 import Client from 'js-owncloud-client'
 
 import { sync } from 'vuex-router-sync'
@@ -30,6 +29,10 @@ import coreTranslations from '../l10n/translations.json'
 
 import { Drag, Drop } from 'vue-drag-drop'
 
+// Import the Design System
+import DesignSystem from 'owncloud-design-system'
+import 'owncloud-design-system/dist/system/system.css'
+
 const _map = require('lodash/map')
 const _flatten = require('lodash/flatten')
 const _findIndex = require('lodash/findIndex')
@@ -38,11 +41,7 @@ Vue.prototype.$client = new Client()
 
 Vue.use(VueEvents)
 Vue.use(VueRouter)
-Vue.use(Vuetify, {
-  options: {
-    customProperties: true
-  }
-})
+Vue.use(DesignSystem)
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)
@@ -108,15 +107,6 @@ function loadApps () {
     store,
     router,
     render: h => h(Phoenix)
-  })
-
-  // inject custom theme config into vuex
-  fetch(`themes/${config.theme}.json`)
-    .then(res => res.json())
-    .then(res => {
-    store.dispatch('loadTheme', res)
-    // TODO FOUC happens here; this color init is too late.
-    OC.$vuetify.theme = res.colors
   })
 }
 
