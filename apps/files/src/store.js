@@ -55,13 +55,16 @@ function _buildFile (file) {
     permissions: file['fileInfo']['{http://owncloud.org/ns}permissions'],
     sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],
     canUpload: function () {
-      return this.permissions.indexOf('C') > 0
+      return this.permissions.indexOf('C') >= 0
     },
     canDownload: function () {
       return this.type !== 'folder'
     },
     canBeDeleted: function () {
-      return this.permissions.indexOf('D') > 0
+      return this.permissions.indexOf('D') >= 0
+    },
+    canRename: function () {
+      return this.permissions.indexOf('N') >= 0
     }
   })
 }
