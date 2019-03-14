@@ -153,7 +153,7 @@ export default {
         { icon: 'edit',
           handler: this.changeName,
           isEnabled: function (item) {
-            return true
+            return item.canRename()
           } },
         { icon: 'file_download',
           handler: this.downloadFile,
