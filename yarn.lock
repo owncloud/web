@@ -1334,15 +1334,6 @@ babel-loader@^8.0.5:
     mkdirp "^0.5.1"
     util.promisify "^1.0.0"
 
-babel-polyfill@>=6.9.1:
-  version "6.26.0"
-  resolved "https://registry.yarnpkg.com/babel-polyfill/-/babel-polyfill-6.26.0.tgz#379937abc67d7895970adc621f284cd966cf2153"
-  integrity sha1-N5k3q8Z9eJWXCtxiHyhM2WbPIVM=
-  dependencies:
-    babel-runtime "^6.26.0"
-    core-js "^2.5.0"
-    regenerator-runtime "^0.10.5"
-
 babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
@@ -2057,7 +2048,7 @@ copy-webpack-plugin@^5.0.1:
     serialize-javascript "^1.4.0"
     webpack-log "^2.0.0"
 
-core-js@^2.4.0, core-js@^2.5.0, core-js@^2.5.3, core-js@^2.5.7:
+core-js@^2.4.0, core-js@^2.5.3, core-js@^2.5.7:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.3.tgz#4b70938bdffdaf64931e66e2db158f0892289c49"
   integrity sha512-l00tmFFZOBHtYhN4Cz7k32VM7vTn3rE2ANjQDxdEN6zmXZ/xq1jQuutnmHvMG1ZJ7xd72+TA5YpUK8wz3rWsfQ==
@@ -4526,11 +4517,6 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-jsrsasign@^8.0.12:
-  version "8.0.12"
-  resolved "https://registry.yarnpkg.com/jsrsasign/-/jsrsasign-8.0.12.tgz#22abb9656d34a30b9530436720835e89c2e5c316"
-  integrity sha1-Iqu5ZW00owuVMENnIINeicLlwxY=
-
 jstransformer@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/jstransformer/-/jstransformer-1.0.0.tgz#ed8bf0921e2f3f1ed4d5c1a44f68709ed24722c3"
@@ -5450,14 +5436,10 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-oidc-client@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/oidc-client/-/oidc-client-1.6.1.tgz#76a7f24ad7fb5342269b6cae895bb32e1e27e785"
-  integrity sha512-buA9G0hlFjUwxoL/xuHunBtTgoICtJSojnZtATqMliUTKxPYAzHprOQ85Lj0hgF+Zv8lI/ViqaNFDG0Z5KCUKA==
-  dependencies:
-    jsrsasign "^8.0.12"
-  optionalDependencies:
-    babel-polyfill ">=6.9.1"
+oidc-client@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/oidc-client/-/oidc-client-1.7.0.tgz#41e024abb96015ddb6a7d75d106c053b397c3ff5"
+  integrity sha512-vb8En+3Wfh4VPxiWIKz6HKDWdtSR913SSY89OxHhOYeoMORM3RkMTDFXoowBe0gGBGGXZYbuzcUeuUhsInUKLg==
 
 on-finished@~2.3.0:
   version "2.3.0"
@@ -6409,11 +6391,6 @@ regenerate@^1.2.1, regenerate@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
   integrity sha512-1G6jJVDWrt0rK99kBjvEtziZNCICAuvIPkSiUFIQxVP06RCVpq3dmDo2oi6ABpYaDYaTRr67BEhL8r1wgEZZKg==
-
-regenerator-runtime@^0.10.5:
-  version "0.10.5"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
-  integrity sha1-M2w+/BIgrc7dosn6tntaeVWjNlg=
 
 regenerator-runtime@^0.11.0:
   version "0.11.1"
