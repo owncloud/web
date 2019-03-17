@@ -36,7 +36,7 @@
     "babel-loader": "^8.0.5",
     "chromedriver": "^2.46.0",
     "copy-webpack-plugin": "^5.0.1",
-    "css-loader": "^2.1.0",
+    "css-loader": "^2.1.1",
     "cucumber": "^5.1.0",
     "cucumber-pretty": "^1.5.0",
     "easygettext": "^2.7.0",
