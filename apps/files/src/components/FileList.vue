@@ -1,10 +1,11 @@
 <template>
-  <oc-table middle divider>
+  <oc-table middle divider class="oc-filelist">
     <oc-table-group>
       <oc-table-row>
         <oc-table-cell shrink type="head">
-          <oc-checkbox />
+          <oc-checkbox class="uk-margin-small-left" @click.native="toggleAll" :checked="all" />
         </oc-table-cell>
+        <oc-table-cell shrink />
         <oc-table-cell type="head" class="uk-text-truncate" v-text="'Name'"/>
         <oc-table-cell shrink type="head" v-text="'Size'"/>
         <oc-table-cell shrink type="head" class="uk-text-nowrap uk-visible@s" v-text="'Modification Time'"/>
@@ -12,20 +13,25 @@
       </oc-table-row>
     </oc-table-group>
     <oc-table-group>
-      <oc-table-row v-for="(i,o) in new Array(3)" :key="o">
+      <oc-table-row v-for="(item, index) in fileData" :key="index">
         <oc-table-cell>
-          <oc-checkbox />
+          <oc-checkbox class="uk-margin-small-left" @change.native="$emit('toggle', item)" :model="selection[index]" />
+        </oc-table-cell>
+        <oc-table-cell class="uk-padding-remove">
+          <oc-star class="uk-display-block" @click.native="toggleFileFavorite(item)" :shining="item.starred" />
         </oc-table-cell>
         <oc-table-cell>
-          <oc-file mimeType="image/png" :name="'Picture ' + ++o"/>
+          <oc-file @click.native="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)" :file="item" />
         </oc-table-cell>
-        <oc-table-cell class="uk-text-muted uk-text-nowrap" v-text=" (++o * 128) + ' Kb'" />
-        <oc-table-cell class="uk-text-muted uk-text-nowrap uk-visible@s" v-text=" ++o + ' days ago'" />
+        <oc-table-cell class="uk-text-meta uk-text-nowrap">
+          {{ item.size | fileSize }}
+        </oc-table-cell>
+        <oc-table-cell class="uk-text-meta uk-text-nowrap uk-visible@s">
+          {{ item.mdate | formDateFromNow }}
+        </oc-table-cell>
         <oc-table-cell>
-          <div class="uk-button-group">
-            <oc-button icon="edit" aria-label="Edit Picture" />
-            <oc-button icon="file_download" aria-label="Download Picture" />
-            <oc-button icon="delete" aria-label="Delete Picture" />
+          <div class="uk-button-group uk-margin-small-right">
+            <oc-button v-for="(action, index) in actions" :key="index" @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" aria-label="Edit Picture" />
           </div>
         </oc-table-cell>
       </oc-table-row>
@@ -33,8 +39,7 @@
   </oc-table>
 </template>
 <script>
-
-import OcDialogPrompt from './ocDialogPrompt.vue'
+// import OcDialogPrompt from './ocDialogPrompt.vue'
 import { includes } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -42,7 +47,7 @@ import Mixins from '../mixins'
 
 export default {
   components: {
-    OcDialogPrompt
+    // OcDialogPrompt
   },
   mixins: [
     Mixins
@@ -90,6 +95,12 @@ export default {
     },
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
+    },
+    dropExtension (name, extension) {
+      if (!extension) {
+        return name
+      }
+      return name.substring(0, name.length - extension.length - 1)
     }
   },
   computed: {
@@ -97,6 +108,11 @@ export default {
     ...mapGetters(['getToken', 'fileSideBars']),
     all () {
       return this.selectedFiles.length === this.fileData.length
+    },
+    selection () {
+      return this.fileData.map((file) => {
+        return includes(this.selectedFiles, file)
+      })
     },
     actions () {
       let actions = [
