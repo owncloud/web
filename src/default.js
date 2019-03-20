@@ -20,6 +20,8 @@ import router from './router'
 import VueEvents from 'vue-events'
 import VueRouter from 'vue-router'
 
+import UIKit from 'uikit'
+
 // --- Gettext ----
 
 import GetTextPlugin from 'vue-gettext'
@@ -38,6 +40,7 @@ const _flatten = require('lodash/flatten')
 const _findIndex = require('lodash/findIndex')
 
 Vue.prototype.$client = new Client()
+Vue.prototype.$uikit = UIKit
 
 Vue.use(VueEvents)
 Vue.use(VueRouter)

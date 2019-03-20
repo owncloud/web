@@ -84,6 +84,7 @@
     "eslint-loader": "^2.1.2",
     "js-owncloud-client": "github:owncloud/js-owncloud-client#master",
     "oidc-client": "^1.6.1",
-    "owncloud-design-system": "https://github.com/owncloud/owncloud-design-system.git#pure-uikit"
+    "owncloud-design-system": "https://github.com/owncloud/owncloud-design-system.git#pure-uikit",
+    "uikit": "^3.0.3"
   }
 }
