@@ -40,16 +40,13 @@ export default {
         }
       })
     },
-    reallyDeleteFile () {
+    reallyDeleteFile (item) {
       this.deleteFiles({
         client: this.$client,
-        files: [this.fileToBeDeleted]
+        files: [item]
       })
-      this.deleteConfirmation = ''
-      this.fileToBeDeleted = null
     },
     changeName (item) {
-      this.changeFileName = !this.changeFileName
       if (typeof item === 'object') {
         this.selectedFile = item
         this.newName = item.name
@@ -62,6 +59,8 @@ export default {
       }
     },
     downloadFile (file) {
+      this.$uikit.notification(`Download of ${file.name} will start shortly.`)
+
       const url = this.$client.files.getFileUrl(file.path)
       let anchor = document.createElement('a')
 

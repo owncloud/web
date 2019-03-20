@@ -18,7 +18,7 @@
           <oc-checkbox class="uk-margin-small-left" @change.native="$emit('toggle', item)" :model="selection[index]" />
         </oc-table-cell>
         <oc-table-cell class="uk-padding-remove">
-          <oc-star class="uk-display-block" @click.native="toggleFileFavorite(item)" :shining="item.starred" />
+          <oc-star class="uk-display-block" style="cursor:pointer" @click.native="toggleFileFavorite(item)" :shining="item.starred" />
         </oc-table-cell>
         <oc-table-cell>
           <oc-file @click.native="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)" :file="item" />
@@ -39,27 +39,15 @@
   </oc-table>
 </template>
 <script>
-// import OcDialogPrompt from './ocDialogPrompt.vue'
 import { includes } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 
 import Mixins from '../mixins'
 
 export default {
-  components: {
-    // OcDialogPrompt
-  },
-  mixins: [
-    Mixins
-  ],
+  mixins: [Mixins],
   name: 'FileList',
   props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled'],
-  data: () => ({
-    changeFileName: false,
-    deleteConfirmation: '',
-    fileToBeDeleted: '',
-    newName: ''
-  }),
   methods: {
     ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'deleteFiles', 'renameFile']),
     ...mapActions(['openFile']),
@@ -88,10 +76,6 @@ export default {
     openFileActionBar (file) {
       this.$emit('FileAction', file)
     },
-    deleteFile (file) {
-      this.fileToBeDeleted = file
-      this.deleteConfirmation = this.$gettextInterpolate('Please confirm the deletion of %{file}', { file: file.name })
-    },
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
     },
@@ -100,6 +84,22 @@ export default {
         return name
       }
       return name.substring(0, name.length - extension.length - 1)
+    },
+    promptChangeName (item) {
+      this.$uikit.modal.prompt('Rename File/Folder', item.name).then((d) => {
+        this.newName = d;
+        this.changeFileName = true;
+      });
+    },
+    confirmDeleteFile (item) {
+      let message = this.$gettextInterpolate('Please confirm the deletion of %{file}', { file: item.name })
+
+      this.$uikit.modal.confirm(message).then((d) => {
+        console.log(`removing ${item.name}`);
+        this.reallyDeleteFile(item)
+      }, () => {
+        console.log(`keeping ${item.name}`);
+      });
     }
   },
   computed: {
@@ -116,7 +116,7 @@ export default {
     actions () {
       let actions = [
         { icon: 'edit',
-          handler: this.changeName,
+          handler: this.promptChangeName,
           isEnabled: function (item) {
             return true
           } },
@@ -126,7 +126,7 @@ export default {
             return item.canDownload()
           } },
         { icon: 'delete',
-          handler: this.deleteFile,
+          handler: this.confirmDeleteFile,
           isEnabled: function (item) {
             return item.canBeDeleted()
           } }
