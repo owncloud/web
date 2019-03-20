@@ -8,6 +8,8 @@ apps/*
 !apps/markdown-editor
 !apps/pdf-viewer
 
+/owncloud-design-system/
+
 .idea
 *.bundle.js
 *.bundle.js.map
