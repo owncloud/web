@@ -4,21 +4,17 @@
         align-content-center
       >
         <v-flex v-if="configuration.state === 'working' || configuration.state === 'corrupt'">
-          <v-img
+          <oc-img
           v-if="configuration.theme.logo.big"
           :src="configuration.theme.logo.big"
-          :lazy-src="configuration.theme.logo.big"
-          max-height="40%"
-          height="40%"
-          contain
-          ></v-img>
+          ></oc-img>
           <h2 class="accent--text">
             <span v-translate>Welcome to</span> {{ configuration.theme.general.name }}
           </h2>
           <v-flex v-translate class="accent--text">
             Please click the button below to authenticate with {{ configuration.theme.general.name }} and get access to your data.
           </v-flex>
-          <v-btn color="primary" id="authenticate" @click="login()"><span v-translate>Authenticate</span></v-btn>
+          <oc-button variation="primary" id="authenticate" @click.native="login()" text="Authenticate"></oc-button>
         </v-flex>
         <v-flex v-if="configuration.state === 'missing'" class="text-xs-center white--text">
           <v-img
