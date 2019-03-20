@@ -1,5 +1,5 @@
 <template>
-  <oc-app-side-bar :disableAction="false" @close="close()">
+  <aside @close="close()">
     <template slot="title">
       <span>{{ getTabName }}</span>
     </template>
@@ -25,7 +25,7 @@
         </v-tab-item>
       </v-tabs>
     </template>
-  </oc-app-side-bar>
+  </aside>
 </template>
 
 <script>

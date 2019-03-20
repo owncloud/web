@@ -1,14 +1,17 @@
-  <template>
-    <div class="oc-app" id="files-app">
-      <oc-app-content>
+<template>
+  <section class="oc-app" id="files-app">
+    <div uk-grid uk-height-viewport>
+      <oc-app-content class="uk-width-expand">
         <template slot="content">
-          <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear>
+          <!-- <v-progress-linear v-if="loading" :indeterminate="true"></v-progress-linear> -->
           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
         </template>
       </oc-app-content>
-      <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
-      <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="getFolder" @reset="resetFileSelection"/>
-  </div>
+      <div class="uk-width-large@s" v-if="selectedFiles.length > 0">foo</div>
+    </div>
+    <!-- <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/> -->
+    <!-- <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="getFolder" @reset="resetFileSelection"/> -->
+  </section>
 </template>
 <script>
 import Mixins from '../mixins'
