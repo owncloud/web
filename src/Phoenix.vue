@@ -1,5 +1,7 @@
 <template>
-  <div id="Phoenix">
+  <div id="Phoenix" :class="{ loginGradient: showGradientBackground}"
+       :style="showImageBackground ? { 'background-image': 'url('+configuration.theme.logo.background+')',
+                 'background-size':'cover'} : {}">
     <div v-if="!showHeader">
       <router-view name="fullscreen"></router-view>
     </div>
