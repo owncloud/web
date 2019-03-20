@@ -1,5 +1,4 @@
 import { Log, User, UserManager, WebStorageStateStore } from 'oidc-client'
-import 'babel-polyfill'
 
 export function initVueAuthenticate (config) {
   if (config) {
