@@ -1,5 +1,7 @@
 import '@babel/polyfill'
 import PdfViewerTopbar from './PdfViewerTopbar.vue'
+import translationsJson from '../l10n/translations'
+
 const store = require('./store.js')
 
 let pdf = import('./PdfViewer.vue')
@@ -24,10 +26,13 @@ const appInfo = {
   extensions: [{
     extension: 'pdf'
   }
-  ] }
+  ]
+}
 
+const translations = translationsJson
 export default define({
   appInfo,
   routes,
-  store
+  store,
+  translations
 })
