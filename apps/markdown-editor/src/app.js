@@ -4,6 +4,7 @@ import '@babel/polyfill'
 
 import MarkdownEditor from './MarkdownEditor.vue'
 import MarkdownEditorTopbar from './MarkdownEditorTopbar.vue'
+import t from '../l10n/translations'
 
 // --- Routing -----------------------------------------------------------------
 
@@ -33,8 +34,10 @@ const appInfo = {
   ]
 }
 
+const translations = t
 export default define({
   appInfo,
   routes,
-  store
+  store,
+  translations
 })

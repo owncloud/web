@@ -3,6 +3,7 @@ import FilesApp from './components/FilesApp.vue'
 import FilesTopBar from './components/FilesTopBar.vue'
 import FileInfoSideBar from './components/FileInfoSidebar.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
+import translationsJson from '../l10n/translations.json'
 
 const store = require('./store.js')
 
@@ -56,9 +57,11 @@ const routes = [{
 }
 ]
 
+const translations = translationsJson
 export default define({
   appInfo,
   store,
   routes,
-  navItems
+  navItems,
+  translations
 })

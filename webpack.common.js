@@ -64,7 +64,7 @@ module.exports = {
     core: [
       'core-js/modules/es6.promise',
       'core-js/modules/es6.array.iterator',
-      './src/default.js',
+      './src/phoenix.js',
       './node_modules/material-design-icons-iconfont/dist/material-design-icons.css',
       './node_modules/vuetify/dist/vuetify.css',
       './static/fonts/ocft/css/ocft.css'

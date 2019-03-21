@@ -24,7 +24,7 @@ import VueRouter from 'vue-router'
 // --- Gettext ----
 
 import GetTextPlugin from 'vue-gettext'
-import translations from '../l10n/translations.json'
+import coreTranslations from '../l10n/translations.json'
 
 // --- Drag Drop ----
 
@@ -44,16 +44,6 @@ Vue.use(Vuetify, {
   }
 })
 
-Vue.use(GetTextPlugin, {
-  availableLanguages: {
-    en: 'English',
-    de: 'German'
-  },
-  defaultLanguage: navigator.language.substring(0, 2),
-  translations: translations,
-  silent: true
-})
-
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)
 
@@ -65,6 +55,8 @@ let config
 function loadApps () {
   let plugins = []
   let navItems = []
+  let translations = coreTranslations
+
   let routes = [{
     path: '/',
     redirect: to => arguments[0].navItems[0].route
@@ -81,7 +73,13 @@ function loadApps () {
     }
     if (app.plugins) plugins.push(app.plugins)
     if (app.navItems) navItems.push(app.navItems)
-    if (app.store) store.registerModule(app.appInfo.name, app.store.default)
+    if (app.translations) {
+      // only de for the time being ...
+      Object.assign(translations.de, app.translations.de)
+    }
+    if (app.store) {
+      store.registerModule(app.appInfo.name, app.store.default)
+    }
     store.dispatch('registerApp', app.appInfo)
   }
   router.addRoutes(_flatten(routes))
@@ -89,6 +87,16 @@ function loadApps () {
 
   // inject custom config into vuex
   store.dispatch('loadConfig', config)
+
+  Vue.use(GetTextPlugin, {
+    availableLanguages: {
+      en: 'English',
+      de: 'German'
+    },
+    defaultLanguage: navigator.language.substring(0, 2),
+    translations: translations,
+    silent: true
+  })
 
   const OC = new Vue({
     el: '#owncloud',
