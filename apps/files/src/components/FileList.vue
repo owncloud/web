@@ -51,7 +51,7 @@
         >
           <v-list-tile-title class="file-row-name">{{ item.name }}</v-list-tile-title>
           <v-list-tile-sub-title class="text--primary">{{ item.size | fileSize }}</v-list-tile-sub-title>
-          <v-list-tile-sub-title>{{ item.mdate | formDateFromNow }}</v-list-tile-sub-title>
+          <v-list-tile-sub-title>{{ formDateFromNow(item.mdate) }}</v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-content
           v-else
@@ -60,7 +60,7 @@
         >
           <v-list-tile-title>{{ item.name }}</v-list-tile-title>
           <v-list-tile-sub-title class="text--primary">{{ getBaseDirectory(item.path) }}</v-list-tile-sub-title>
-          <v-list-tile-sub-title>{{ item.mdate | formDateFromNow }} | {{ item.size | fileSize }}</v-list-tile-sub-title>
+          <v-list-tile-sub-title>{{ formDateFromNow(item.mdate) }} | {{ item.size | fileSize }}</v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-action
           v-for="(action, index) in actions"

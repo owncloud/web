@@ -21,7 +21,7 @@
         </div>
       </template>
       <template slot="title">
-        <search-bar @search="onFileSearch" :value="searchTerm" :label="$gettext('Search')" :loading="isLoadingSearch"/>
+        <search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch"/>
       </template>
       <template slot="action_progress">
         <v-menu offset-y v-show="fileUpload">
@@ -141,6 +141,9 @@ export default {
     ...mapGetters(['getToken', 'extensions']),
     ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties']),
     ...mapState(['route']),
+    searchLabel() {
+      return this.$gettext('Search')
+    },
     item () {
       return this.$route.params.item
     },

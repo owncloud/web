@@ -4,7 +4,7 @@
         <template slot="items" slot-scope="props">
             <v-list-tile avatar ripple>
               <v-list-tile-content>
-                <v-list-tile-title>{{ props.item.fileInfo['{DAV:}getlastmodified'] | formDateFromNow }}</v-list-tile-title>
+                <v-list-tile-title>{{ formDateFromNow(props.item.fileInfo['{DAV:}getlastmodified']) }}</v-list-tile-title>
                 <v-list-tile-sub-title class="text--primary">
                   {{ props.item.fileInfo['{DAV:}getcontentlength'] | fileSize }}
                 </v-list-tile-sub-title>
