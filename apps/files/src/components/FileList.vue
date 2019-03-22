@@ -51,7 +51,7 @@
         >
           <v-list-tile-title class="file-row-name">{{ item.name }}</v-list-tile-title>
           <v-list-tile-sub-title class="text--primary">{{ item.size | fileSize }}</v-list-tile-sub-title>
-          <v-list-tile-sub-title>{{ item.mdate | formDateFromNow }}</v-list-tile-sub-title>
+          <v-list-tile-sub-title>{{ formDateFromNow(item.mdate) }}</v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-content
           v-else
@@ -60,7 +60,7 @@
         >
           <v-list-tile-title>{{ item.name }}</v-list-tile-title>
           <v-list-tile-sub-title class="text--primary">{{ getBaseDirectory(item.path) }}</v-list-tile-sub-title>
-          <v-list-tile-sub-title>{{ item.mdate | formDateFromNow }} | {{ item.size | fileSize }}</v-list-tile-sub-title>
+          <v-list-tile-sub-title>{{ formDateFromNow(item.mdate) }} | {{ item.size | fileSize }}</v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-action
           v-for="(action, index) in actions"
@@ -78,9 +78,9 @@
       ></v-divider>
     </template>
     <oc-dialog-prompt :oc-active="changeFileName" v-model="newName"
-                      ocTitle="Rename File/Folder" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
+                      :ocTitle="_renameDialogTitle" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
     <oc-dialog-prompt :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
-                      ocTitle="Delete File/Folder" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
+                      :ocTitle="_deleteDialogTitle" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
   </v-list>
 </template>
 <script>
@@ -136,7 +136,8 @@ export default {
     },
     deleteFile (file) {
       this.fileToBeDeleted = file
-      this.deleteConfirmation = this.$gettextInterpolate('Please confirm the deletion of %{file}', { file: file.name })
+      let translated = this.$gettext('Please confirm the deletion of %{file}')
+      this.deleteConfirmation = this.$gettextInterpolate(translated, { file: file.name })
     },
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
@@ -180,6 +181,12 @@ export default {
       }
 
       return actions
+    },
+    _renameDialogTitle () {
+      return this.$gettext('Rename File/Folder')
+    },
+    _deleteDialogTitle () {
+      return this.$gettext('Delete File/Folder')
     }
   }
 }

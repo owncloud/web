@@ -21,7 +21,7 @@
         </div>
       </template>
       <template slot="title">
-        <search-bar @search="onFileSearch" :value="searchTerm" :label="$gettext('Search')" :loading="isLoadingSearch"/>
+        <search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch"/>
       </template>
       <template slot="action_progress">
         <v-menu offset-y v-show="fileUpload">
@@ -58,9 +58,7 @@
       id="new-file-menu-btn"
     slot="activator"
     color="primary"
-    dark
-    v-translate>
-    + New
+    dark><translate>+ New</translate>
   </v-btn>
   <v-card>
     <v-list>
@@ -98,10 +96,10 @@
     </oc-app-top-bar>
     <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok"
                       :ocLoading="fileFolderCreationLoading"
-                      ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
+                      :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
     <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
                       :ocLoading="fileFolderCreationLoading"
-                      ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
+                      :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
   </div>
 </template>
 <script>
@@ -141,6 +139,15 @@ export default {
     ...mapGetters(['getToken', 'extensions']),
     ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties']),
     ...mapState(['route']),
+    searchLabel () {
+      return this.$gettext('Search')
+    },
+    _createFolderDialogTitle () {
+      return this.$gettext('Create new folder ...')
+    },
+    _createFileDialogTitle () {
+      return this.$gettext('Create new file ...')
+    },
     item () {
       return this.$route.params.item
     },

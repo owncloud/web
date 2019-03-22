@@ -71,7 +71,7 @@ l10n-clean:
 
 .PHONY: l10n-read
 l10n-read: node_modules
-	cd l10n && make extract
+	cd l10n && rm -rf template.pot && make extract
 
 .PHONY: l10n-write
 l10n-write: node_modules
