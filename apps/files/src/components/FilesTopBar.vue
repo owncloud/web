@@ -58,9 +58,7 @@
       id="new-file-menu-btn"
     slot="activator"
     color="primary"
-    dark
-    v-translate>
-    + New
+    dark><translate>+ New</translate>
   </v-btn>
   <v-card>
     <v-list>
