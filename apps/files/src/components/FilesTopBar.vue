@@ -96,10 +96,10 @@
     </oc-app-top-bar>
     <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok"
                       :ocLoading="fileFolderCreationLoading"
-                      ocTitle="Create new folder ..." @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
+                      :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
     <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
                       :ocLoading="fileFolderCreationLoading"
-                      ocTitle="Create new file ..." @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
+                      :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
   </div>
 </template>
 <script>
@@ -141,6 +141,12 @@ export default {
     ...mapState(['route']),
     searchLabel () {
       return this.$gettext('Search')
+    },
+    _createFolderDialogTitle () {
+      return this.$gettext('Create new folder ...')
+    },
+    _createFileDialogTitle () {
+      return this.$gettext('Create new file ...')
     },
     item () {
       return this.$route.params.item
