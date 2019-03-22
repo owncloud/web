@@ -16,10 +16,10 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :disabled="ocLoading" flat @click="onCancel">{{ ocCancelText }}</v-btn>
+        <v-btn :disabled="ocLoading" flat @click="onCancel">{{ _ocCancelText }}</v-btn>
         <v-btn :disabled="ocLoading" flat
                :id="ocConfirmId"
-               @click="onConfirm">{{ ocConfirmText }}</v-btn>
+               @click="onConfirm">{{ _ocConfirmText }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -42,11 +42,11 @@ export default {
     ocConfirmId: String,
     ocConfirmText: {
       type: String,
-      default: 'Ok'
+      default: null
     },
     ocCancelText: {
       type: String,
-      default: 'Cancel'
+      default: null
     }
   },
   data: () => ({
@@ -71,6 +71,14 @@ export default {
     },
     onConfirm () {
       this.$emit('oc-confirm', this.inputValue)
+    }
+  },
+  computed: {
+    _ocConfirmText () {
+      return this.ocConfirmText ? this.ocConfirmText : this.$gettext('Ok')
+    },
+    _ocCancelText () {
+      return this.ocCancelText ? this.ocConfirmText : this.$gettext('Cancel')
     }
   },
   created () {

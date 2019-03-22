@@ -78,9 +78,9 @@
       ></v-divider>
     </template>
     <oc-dialog-prompt :oc-active="changeFileName" v-model="newName"
-                      ocTitle="Rename File/Folder" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
+                      :ocTitle="_renameDialogTitle" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
     <oc-dialog-prompt :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
-                      ocTitle="Delete File/Folder" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
+                      :ocTitle="_deleteDialogTitle" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
   </v-list>
 </template>
 <script>
@@ -136,7 +136,8 @@ export default {
     },
     deleteFile (file) {
       this.fileToBeDeleted = file
-      this.deleteConfirmation = this.$gettextInterpolate('Please confirm the deletion of %{file}', { file: file.name })
+      let translated = this.$gettext('Please confirm the deletion of %{file}')
+      this.deleteConfirmation = this.$gettextInterpolate(translated, { file: file.name })
     },
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
@@ -180,6 +181,12 @@ export default {
       }
 
       return actions
+    },
+    _renameDialogTitle () {
+      return this.$gettext('Rename File/Folder')
+    },
+    _deleteDialogTitle () {
+      return this.$gettext('Delete File/Folder')
     }
   }
 }

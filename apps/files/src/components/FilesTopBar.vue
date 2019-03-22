@@ -139,7 +139,7 @@ export default {
     ...mapGetters(['getToken', 'extensions']),
     ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties']),
     ...mapState(['route']),
-    searchLabel() {
+    searchLabel () {
       return this.$gettext('Search')
     },
     item () {
