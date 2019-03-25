@@ -35,7 +35,7 @@
     "axe-cli": "^3.0.0",
     "babel-loader": "^8.0.5",
     "chromedriver": "^2.46.0",
-    "copy-webpack-plugin": "^5.0.1",
+    "copy-webpack-plugin": "^5.0.2",
     "css-loader": "^2.1.1",
     "cucumber": "^5.1.0",
     "cucumber-pretty": "^1.5.0",
