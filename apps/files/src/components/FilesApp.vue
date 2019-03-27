@@ -2,7 +2,7 @@
     <div class="oc-app" id="files-app">
       <oc-app-content>
         <template slot="content">
-          <v-progress-linear id="files-list-progress" v-if="loading" :indeterminate="true"></v-progress-linear>
+          <oc-loader id="files-list-progress" v-if="loading"></oc-loader>
           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
         </template>
       </oc-app-content>
