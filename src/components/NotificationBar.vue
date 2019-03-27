@@ -1,20 +1,17 @@
 <template>
   <div v-show="activeNotifications.length">
-      <v-snackbar
+    <oc-alert
       v-for="notification in activeNotifications"
       :key="notification.id"
-      :value="true" :multi-line="true"
-      :timeout="4000"
-      top="top" vertical="vertical"
-      :color="notification.type || 'info'"
+      variation="notification.type || 'primary'"
       @input="deleteNotification(notification.id)">
-      <span heading>
+      <p>
+        <oc-icon name="info" class="uk-float-left uk-margin-small-right" />
         {{notification.title}}
-      </span>
-      <span content>
+        <br>
         {{notification.desc}}
-      </span>
-    </v-snackbar>
+      </p>
+    </oc-alert>
   </div>
 </template>
 

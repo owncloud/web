@@ -20,7 +20,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import SearchBar from 'oc_components/form/SearchBar.vue'
 
 export default {
   name: 'FileFilterMenu',
@@ -32,9 +31,6 @@ export default {
         'Hidden': this.$gettext('Hidden')
       }
     }
-  },
-  components: {
-    SearchBar
   },
   methods: {
     ...mapActions('Files', ['setFileFilter', 'setFilterTerm']),
