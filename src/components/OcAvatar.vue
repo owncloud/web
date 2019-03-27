@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="enabled">
     <oc-spinner v-if="loading"></oc-spinner>
     <oc-avatar width=42 height=42 v-if="!loading && avatarSource !== ''" :src="avatarSource"></oc-avatar>
     <oc-icon size="large" v-if="!loading && avatarSource === ''" name="account_circle" color="white" class="uk-display-inline"></oc-icon>
@@ -19,6 +19,9 @@ export default {
     }
   },
   mounted: function () {
+    if (!this.enabled) {
+      return;
+    }
     let headers = new Headers()
     let instance = this.$root.config.server || window.location.origin
     let url = instance + '/remote.php/dav/avatars/' + this.userid + '/128.png'
@@ -38,7 +41,10 @@ export default {
       })
   },
   computed: {
-    ...mapGetters(['getToken'])
+    ...mapGetters(['getToken']),
+    enabled: function() {
+      return this.$root.config.enableAvatars || true;
+    }
   },
   props: {
     userid: {
