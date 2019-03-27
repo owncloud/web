@@ -1,9 +1,9 @@
 <template>
   <oc-left-menu name="coreMenu" v-model="sidebarIsVisible" @close="sidebarIsVisible = false">
     <template slot="default">
-      <oc-sidebar-nav-item v-for="(n, nid) in nav" :key="nid" :text="n.name" :icon="n.iconMaterial" :target="n.route" />
+      <oc-sidebar-nav-item v-for="(n, nid) in nav" :key="nid" :text="n.name" :icon="n.iconMaterial" :target="n.route.name" />
       <oc-sidebar-nav-divider />
-      <oc-sidebar-nav-item text="Exit ownCloud" active icon="exit_to_app" target="login" />
+      <oc-sidebar-nav-item :text="_logoutItemText" active icon="exit_to_app" target="login" />
     </template>
   </oc-left-menu>
 </template>
@@ -32,6 +32,9 @@ export default {
         }
         this.toggleSidebar(newVal)
       }
+    },
+    _logoutItemText () {
+      return this.$gettextInterpolate(this.$gettext('Exit %{product}'), { product: this.configuration.theme.general.name })
     }
   },
   methods: {
