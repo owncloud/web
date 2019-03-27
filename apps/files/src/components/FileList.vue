@@ -36,10 +36,14 @@
         </oc-table-cell>
       </oc-table-row>
     </oc-table-group>
+    <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName"
+                      :ocTitle="_renameDialogTitle" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
+    <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
+                      :ocTitle="_deleteDialogTitle" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
   </oc-table>
 </template>
 <script>
-// import OcDialogPrompt from './ocDialogPrompt.vue'
+import OcDialogPrompt from './ocDialogPrompt.vue'
 import { includes } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -47,7 +51,7 @@ import Mixins from '../mixins'
 
 export default {
   components: {
-    // OcDialogPrompt
+    OcDialogPrompt
   },
   mixins: [
     Mixins
