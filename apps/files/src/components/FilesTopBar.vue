@@ -1,19 +1,35 @@
 <template>
+  <div>
   <oc-topbar variation="secondary">
     <template slot="left">
       <oc-topbar-logo icon="home" @click="navigateTo('files-list', 'home')"></oc-topbar-logo>
-      <oc-breadcrumb :items="activeRoute"></oc-breadcrumb>
+      <oc-breadcrumb :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
     </template>
     <template slot="title">
       <div class="uk-navbar-item">
-        <oc-search-bar label="Search"></oc-search-bar>
+        <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch"/>
       </div>
     </template>
     <template slot="right">
       <div class="uk-navbar-item">
+        <oc-menu v-show="fileUpload">
+          <oc-progress-pie slot="activator" :progress="0" :max="inProgress.length" show-label />
+          <ul>
+            <li
+              v-for="n in inProgress.length"
+              :key="n">
+                <oc-icon color="primary" name="file_copy"></oc-icon>
+                <span>{{ inProgress[n - 1].name }}</span>
+                <span >{{ inProgress[n - 1].size | fileSize}}</span>
+                <oc-progress color="primary" :value="inProgress[n - 1].progress"></oc-progress>
+            </li>
+          </ul>
+        </oc-menu>
+
         <oc-menu buttonText="+ New" v-if="this.canUpload">
           <!-- TODO: replace with oc-list elements-->
           <ul class="uk-nav uk-dropdown-nav uk-nav-default">
+            <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
             <li @click="createFolder = true"><a href="#"><oc-icon name="create_new_folder"/>New folder ...</a> </li>
             <li @click="createFile = true"><a href="#"><oc-icon name="save"/>New file ...</a> </li>
           </ul>
@@ -43,6 +59,13 @@
       </div>
     </template>
   </oc-topbar>
+  <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok"
+                    :ocLoading="fileFolderCreationLoading"
+                    :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
+  <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName"
+                    :ocLoading="fileFolderCreationLoading"
+                    :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
+  </div>
 </template>
 <script>
 import FileUpload from './FileUpload.vue'
