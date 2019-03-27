@@ -1,11 +1,9 @@
 <template>
-  <v-list-tile @click="triggerUpload">
-    <v-list-tile-action>
-      <v-icon>cloud_upload</v-icon>
-    </v-list-tile-action>
-    <v-list-tile-title v-translate>Upload</v-list-tile-title>
+  <li @click="triggerUpload">
+    <oc-icon name="cloud_upload"></oc-icon>
+    <span v-translate>Upload</span>
     <input id="fileUploadInput" type="file" name="file" @change="onChangeInputFile" multiple ref="input" />
-  </v-list-tile>
+  </li>
 </template>
 
 <script>

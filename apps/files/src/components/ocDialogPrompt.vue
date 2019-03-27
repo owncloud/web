@@ -1,34 +1,31 @@
 <template>
-  <v-dialog v-model="ocActive" persistent max-width="290">
-    <v-card>
-      <v-card-title class="headline" v-if="ocTitle">{{ ocTitle }}</v-card-title>
-      <v-card-text v-if="ocContent">{{ ocContent }}</v-card-text>
-      <v-card-text v-if="ocHasInput">
-        <v-text-field
-          :loading="ocLoading"
+  <oc-dialog :name="name" v-model="ocActive" :title="ocTitle">
+    <template slot="content">
+      <span v-if="ocContent">{{ ocContent }}</span>
+        <oc-text-input v-if="ocHasInput"
           :disabled="ocLoading"
           autofocus
           :id="ocInputId"
           v-model="inputValue"
           ref="input"
           @keydown.enter.native="onConfirm"
-        ></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn :disabled="ocLoading" flat @click="onCancel">{{ _ocCancelText }}</v-btn>
-        <v-btn :disabled="ocLoading" flat
-               :id="ocConfirmId"
-               @click="onConfirm">{{ _ocConfirmText }}</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+        ></oc-text-input>
+      <oc-loader v-if="ocLoading"></oc-loader>
+    </template>
+    <template slot="footer">
+        <oc-button :disabled="ocLoading" @click="onCancel" :text="_ocCancelText"></oc-button>
+        <oc-button :disabled="ocLoading"
+               :id="ocConfirmId" :text="_ocConfirmText"
+               @click="onConfirm"></oc-button>
+    </template>
+  </oc-dialog>
 </template>
 
 <script>
 export default {
   name: 'OcDialogPrompt',
   props: {
+    name: { type: String},
     ocActive: { type: Boolean, default: false },
     value: {},
     ocTitle: String,
