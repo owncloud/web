@@ -5,7 +5,7 @@
       <oc-img :src="configuration.theme.logo.big" style="height: 60px" />
     </oc-topbar-item>
     <oc-topbar-item slot="right">
-      <oc-icon name="account_circle" color="white"></oc-icon>
+      <ocAvatar class="uk-margin-small-right" :userid="user.displayname" />
       <span>{{ user.displayname }}</span>
     </oc-topbar-item>
   </oc-topbar>
@@ -14,6 +14,7 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import pluginHelper from '../mixins/pluginHelper.js'
+import OcAvatar from './OcAvatar.vue'
 
 export default {
   data () {
@@ -28,6 +29,7 @@ export default {
   mixins: [
     pluginHelper
   ],
+  components: {OcAvatar},
   methods: {
     ...mapActions(['toggleSidebar']),
     parseApp (app) {
