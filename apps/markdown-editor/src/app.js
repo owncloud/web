@@ -22,7 +22,7 @@ const routes = [{
 const appInfo = {
   name: 'MarkdownEditor',
   id: 'markdown-editor',
-  icon: 'ocft icon-x-office-document',
+  icon: 'text',
   isFileEditor: true,
   extensions: [{
     extension: 'txt'
