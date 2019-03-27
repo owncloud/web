@@ -1,6 +1,6 @@
 # WARNING - DEVELOPMENT VERSION
  0. Within this clone:
- 1. git clone -b bugfix/dist-system-css-is-almost-empty git@github.com:owncloud/owncloud-design-system.git 
+ 1. git clone git@github.com:owncloud/owncloud-design-system.git 
  2. cd owncloud-design-system
  3. yarn install && yarn build:system
  4. cd ..
