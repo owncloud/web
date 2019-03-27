@@ -11,13 +11,14 @@
     </template>
     <template slot="right">
       <div class="uk-navbar-item">
-        <oc-menu buttonText="+ New">
+        <oc-menu buttonText="+ New" v-if="this.canUpload">
           <!-- TODO: replace with oc-list elements-->
           <ul class="uk-nav uk-dropdown-nav uk-nav-default">
             <li @click="createFolder = true"><a href="#"><oc-icon name="create_new_folder"/>New folder ...</a> </li>
             <li @click="createFile = true"><a href="#"><oc-icon name="save"/>New file ...</a> </li>
           </ul>
         </oc-menu>
+        <span v-if="!this.canUpload" v-translate>You have no permission to upload.</span>
       </div>
       <div class="uk-navbar-item">
         <translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">
