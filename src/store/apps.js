@@ -1,9 +1,6 @@
 'use strict'
 
-import {
-  forEach,
-  map
-} from 'lodash'
+import { forEach, map } from 'lodash'
 
 const state = {
   file: {
@@ -85,19 +82,20 @@ const getters = {
     return state.file
   },
   extensions: state => {
-    if (!state.file.path) return []
-    // TODO regex optimization, if everything works.
-    let activeExtension = state.file.path.match(/\.[0-9a-z]+$/i)[0].substr(1)
-    // console.log('MARLIN',  state.file.path, ' has ending ', activeExtension)
-    let ext = state.extensions[activeExtension]
-    map(ext, (e) => {
-      // enhance App Chooser with App Name as label
-      e.name = state.meta[e.app].name
-      // if no icon for this filetype extension, choose the app icon
-      if (!e.icon) e.icon = state.meta[e.app].icon
-      return e
-    })
-    return ext
+    return fileExtension => {
+      let ext = state.extensions[fileExtension]
+      if (!ext) {
+        return []
+      }
+      map(ext, (e) => {
+        // enhance App Chooser with App Name as label
+        e.name = state.meta[e.app].name
+        // if no icon for this filetype extension, choose the app icon
+        if (!e.icon) e.icon = state.meta[e.app].icon
+        return e
+      })
+      return ext
+    }
   },
   fileSideBars: state => {
     return state.fileSideBars
