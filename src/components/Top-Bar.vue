@@ -7,7 +7,7 @@
     </oc-topbar-item>
 
     <oc-topbar-item slot="right">
-      <ocAvatar class="uk-margin-small-right" :userid="user.displayname" />
+      <Avatar class="uk-margin-small-right" :userid="user.displayname" />
       <span>{{ user.displayname }}</span>
       <!--<v-menu offset-y v-if="configuration.state !== 'working'">-->
         <!--<v-icon slot="activator" color="error" x-large>info</v-icon>-->
@@ -31,7 +31,7 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import pluginHelper from '../mixins/pluginHelper.js'
-import OcAvatar from './OcAvatar.vue'
+import Avatar from './Avatar.vue'
 
 export default {
   data () {
@@ -46,7 +46,7 @@ export default {
   mixins: [
     pluginHelper
   ],
-  components: {OcAvatar},
+  components: { Avatar },
   methods: {
     ...mapActions(['toggleSidebar']),
     parseApp (app) {
