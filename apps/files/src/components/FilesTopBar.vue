@@ -96,7 +96,7 @@ export default {
     fileFolderCreationLoading: false
   }),
   computed: {
-    ...mapGetters(['getToken', 'extensions']),
+    ...mapGetters(['getToken']),
     ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties']),
     ...mapState(['route']),
     searchLabel () {
