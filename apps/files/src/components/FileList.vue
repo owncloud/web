@@ -27,7 +27,7 @@
           {{ item.size | fileSize }}
         </oc-table-cell>
         <oc-table-cell class="uk-text-meta uk-text-nowrap uk-visible@s">
-          {{ item.mdate | formDateFromNow }}
+          {{ formDateFromNow(item.mdate) }}
         </oc-table-cell>
         <oc-table-cell>
           <div class="uk-button-group uk-margin-small-right">
