@@ -1,22 +1,27 @@
 <template>
-  <div></div>
+  <oc-topbar variation="secondary">
+    <template slot="left">
+      <oc-topbar-logo icon="home" @click="navigateTo('files-list', 'home')"></oc-topbar-logo>
+      <oc-breadcrumb :items="activeRoute"></oc-breadcrumb>
+    </template>
+    <template slot="title">
+      <div class="uk-navbar-item">
+        <oc-search-bar label="Search"></oc-search-bar>
+      </div>
+    </template>
+  </oc-topbar>
 </template>
 <script>
 import FileUpload from './FileUpload.vue'
 import FileFilterMenu from './FileFilterMenu.vue'
-import SearchBar from 'oc_components/form/SearchBar.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { includes } from 'lodash'
 import Mixins from '../mixins'
-import OcAppTopBar from 'oc_components/OcAppTopBar.vue'
 
 export default {
   components: {
-    OcAppTopBar,
     FileUpload,
     FileFilterMenu,
-    SearchBar,
     OcDialogPrompt
   },
   mixins: [
@@ -200,16 +205,13 @@ export default {
       let breadcrumb = {}
       let absolutePath = this.$route.params.item
       let pathSplit = absolutePath.split('/').filter((val) => val)
-      if (!includes(pathSplit, 'home')) {
-        breadcrumb.text = 'home'
-        breadcrumb.route = breadcrumb.text
-        this.breadcrumbs.push(breadcrumb)
-        breadcrumb = {}
-      }
       for (let i = 0; i < pathSplit.length; i++) {
         breadcrumb.index = i
         breadcrumb.text = pathSplit.slice(0, i + 1)[i]
         breadcrumb.route = '/' + pathSplit.slice(0, i + 1).join('/')
+        if (i === 0 && breadcrumb.text === 'home') {
+          continue
+        }
         this.breadcrumbs.push(breadcrumb)
         breadcrumb = {}
       }
