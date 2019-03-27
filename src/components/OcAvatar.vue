@@ -20,23 +20,22 @@ export default {
   },
   mounted: function () {
     let headers = new Headers()
-    let url = 'http://cloud.local/remote.php/dav/avatars/'+this.userid+'/128.png'
+    let instance = this.$root.config.server || window.location.origin
+    let url = instance + '/remote.php/dav/avatars/' + this.userid + '/128.png'
     headers.append('Authorization', 'Bearer ' + this.getToken)
     fetch(url, { headers })
-    .then(response => {
-      if(response.status === 404) {
-        this.avatarSource = '';
-        this.loading = false;
-        return;
-      } else {
-        return response.blob()
-      }
-    })
-    .then(blobby => {
-      this.loading = false;
-      this.avatarSource =  window.URL.createObjectURL(blobby)
-    })
-  
+      .then(response => {
+        if (response.status === 404) {
+          this.avatarSource = ''
+          this.loading = false
+        } else {
+          return response.blob()
+        }
+      })
+      .then(blobby => {
+        this.loading = false
+        this.avatarSource = window.URL.createObjectURL(blobby)
+      })
   },
   computed: {
     ...mapGetters(['getToken'])
