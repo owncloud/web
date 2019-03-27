@@ -3,7 +3,7 @@
     <oc-topbar-logo icon="menu" title="Files" slot="left" @click="onClick"></oc-topbar-logo>
 
     <oc-topbar-item slot="title">
-      <oc-img :src="configuration.theme.logo.big" />
+      <oc-img :src="configuration.theme.logo.big" style="height: 60px" />
     </oc-topbar-item>
 
     <oc-topbar-item slot="right">
