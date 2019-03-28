@@ -5,7 +5,7 @@
       <oc-img :src="configuration.theme.logo.big" style="height: 60px" />
     </oc-topbar-item>
     <oc-topbar-item slot="right">
-      <Avatar class="uk-margin-small-right" :userid="user.displayname" />
+      <Avatar class="uk-margin-small-right" :userid="user.id" />
       <span>{{ user.displayname }}</span>
     </oc-topbar-item>
   </oc-topbar>
