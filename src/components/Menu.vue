@@ -1,11 +1,11 @@
 <template>
-  <oc-left-menu name="coreMenu" v-model="sidebarIsVisible" @close="sidebarIsVisible = false">
+  <oc-application-menu name="coreMenu" v-model="sidebarIsVisible" @close="sidebarIsVisible = false">
     <template slot="default">
       <oc-sidebar-nav-item v-for="(n, nid) in nav" :key="nid" :text="n.name" :icon="n.iconMaterial" :target="n.route.name" />
       <oc-sidebar-nav-divider />
-      <oc-sidebar-nav-item :text="_logoutItemText" active icon="exit_to_app" target="login" />
+      <oc-sidebar-nav-item :text="_logoutItemText" active icon="exit_to_app" @click="logout()" />
     </template>
-  </oc-left-menu>
+  </oc-application-menu>
 </template>
 
 <script>
