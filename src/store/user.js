@@ -39,6 +39,7 @@ const actions = {
 
       this._vm.$client.loginWithBearer(token).then(res => {
         context.commit('SET_USER', {
+          id: res['id'],
           displayname: res['display-name'],
           email: !Object.keys(res.email).length ? '' : res.email,
           token,
