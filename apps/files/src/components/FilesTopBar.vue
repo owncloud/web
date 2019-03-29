@@ -69,7 +69,6 @@
 </template>
 <script>
 import FileUpload from './FileUpload.vue'
-import FileFilterMenu from './FileFilterMenu.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
@@ -77,7 +76,6 @@ import Mixins from '../mixins'
 export default {
   components: {
     FileUpload,
-    FileFilterMenu,
     OcDialogPrompt
   },
   mixins: [
