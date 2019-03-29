@@ -3,11 +3,11 @@
   <oc-topbar variation="secondary">
     <template slot="left">
       <oc-topbar-logo icon="home" @click="navigateTo('files-list', 'home')"></oc-topbar-logo>
-      <oc-breadcrumb :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
+      <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
     </template>
     <template slot="title">
       <div class="uk-navbar-item">
-        <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch"/>
+        <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
     </template>
     <template slot="right">
@@ -26,12 +26,13 @@
           </ul>
         </oc-menu>
 
-        <oc-menu buttonText="+ New" v-if="this.canUpload">
+        <oc-menu v-if="this.canUpload">
+          <oc-button id="new-file-menu-btn" text="+ New" slot="activator" variation="primary"></oc-button>
           <!-- TODO: replace with oc-list elements-->
           <ul class="uk-nav uk-dropdown-nav uk-nav-default">
             <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-            <li @click="createFolder = true"><a href="#"><oc-icon name="create_new_folder"/>New folder ...</a> </li>
-            <li @click="createFile = true"><a href="#"><oc-icon name="save"/>New file ...</a> </li>
+            <li @click="createFolder = true" id="new-folder-btn"><a href="#"><oc-icon name="create_new_folder"/><translate>Create new folder ...</translate></a></li>
+            <li @click="createFile = true" id="new-file-btn"><a href="#"><oc-icon name="save"/><translate>Create new file ...</translate></a></li>
           </ul>
         </oc-menu>
         <span v-if="!this.canUpload" v-translate>You have no permission to upload.</span>

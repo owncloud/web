@@ -29,7 +29,7 @@ module.exports = {
       selector: '#files-list'
     },
     fileRows: {
-      selector: 'div.file-row:nth-of-type(2)'
+      selector: 'tr.file-row'
     },
     newFileMenuButton: {
       selector: '#new-file-menu-btn'
@@ -47,11 +47,10 @@ module.exports = {
       selector: '#files-list-progress'
     },
     breadcrumb: {
-      selector: '//*[contains(@id, "breadcrumb-")]',
-      locateStrategy: 'xpath'
+      selector: '#files-breadcrumb li:nth-of-type(1)'
     },
     fileRowByName: {
-      selector: '//div[contains(@class, "file-row-name")][text()="%s"]'
+      selector: '//a[contains(@class, "file-row-name")][@filename="%s"]'
     }
   }
 }
