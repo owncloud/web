@@ -109,6 +109,10 @@ services:
     image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
     commands:
+      - git clone https://github.com/owncloud/owncloud-design-system.git
+      - cd owncloud-design-system
+      - yarn install && yarn build:system
+      - cd ..
       - yarn install
       - yarn dist
       - cp tests/drone/config.json dist/config.json

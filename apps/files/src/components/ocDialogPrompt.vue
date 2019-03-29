@@ -25,7 +25,7 @@
 export default {
   name: 'OcDialogPrompt',
   props: {
-    name: { type: String},
+    name: { type: String },
     ocActive: { type: Boolean, default: false },
     value: {},
     ocTitle: String,
