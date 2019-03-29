@@ -74,12 +74,12 @@ export default {
     fileTypeIcon (file) {
       if (file) {
         if (file.type === 'folder') {
-          return 'ocft icon-folder'
+          return 'folder'
         }
         const icon = fileTypeIconMappings[file.extension]
-        if (icon) return `ocft icon-${icon}`
+        if (icon) return `${icon}`
       }
-      return 'ocft icon-x-office-document'
+      return 'x-office-document'
     },
     label (string) {
       let cssClass = ['uk-label']
