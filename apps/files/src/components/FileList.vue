@@ -1,5 +1,5 @@
 <template>
-  <oc-table middle divider class="oc-filelist">
+  <oc-table middle divider class="oc-filelist" id="files-list">
     <oc-table-group>
       <oc-table-row>
         <oc-table-cell shrink type="head">
