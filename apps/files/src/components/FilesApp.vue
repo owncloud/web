@@ -1,19 +1,18 @@
-  <template>
-    <div class="oc-app" id="files-app">
-      <oc-app-content>
-        <template slot="content">
-          <oc-loader id="files-list-progress" v-if="loading"></oc-loader>
-          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
-        </template>
-      </oc-app-content>
-      <oc-file-actions></oc-file-actions>
+<template>
+  <div class="oc-app" id="files-app">
+    <div class="uk-grid-collapse" uk-grid>
+      <div class="uk-width-expand">
+           <oc-loader id="files-list-progress" v-if="loading"></oc-loader>
+           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
+      </div>
       <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="getFolder" @reset="resetFileSelection"/>
+    </div>
+    <oc-file-actions></oc-file-actions>
   </div>
 </template>
 <script>
 import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
-import OcAppContent from 'oc_components/OcAppContent.vue'
 import FileList from './FileList.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 const _includes = require('lodash/includes')
@@ -24,7 +23,6 @@ export default {
   ],
   components: {
     FileDetails,
-    OcAppContent,
     FileList
   },
   data () {

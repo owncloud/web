@@ -1,36 +1,17 @@
 <template>
-  <oc-app-side-bar :disableAction="false" @close="close()">
-    <template slot="title">
-      <span>{{ getTabName }}</span>
-    </template>
-    <template slot="content">
-      <v-tabs
-        v-model="active"
-        color="primary lighten-5"
-        dark
-        slider-color="yellow"
-      >
-        <v-tab
-          v-for="tab of fileSideBars"
-          :key="tab.name"
-          ripple
-        >
-          {{ tab.name }}
-        </v-tab>
-        <v-tab-item
-          v-for="tab of fileSideBars"
-          :key="tab.name"
-        >
-          <component :is="tab.component" @reload="$emit('reload')"></component>
-        </v-tab-item>
-      </v-tabs>
-    </template>
-  </oc-app-side-bar>
+  <div class="uk-width-1-5" :disableAction="false">
+    <oc-button class="uk-float-right" icon="close" @click="close()"/>
+    <span class="uk-text-lead">{{ getTabName }}</span>
+    <oc-tabs>
+      <oc-tab-item v-for="tab of fileSideBars" :title="tab.name" :key="tab.name">
+        <component :is="tab.component" @reload="$emit('reload')"></component>
+      </oc-tab-item>
+    </oc-tabs>
+  </div>
 </template>
 
 <script>
 import Mixins from '../mixins'
-import OcAppSideBar from 'oc_components/OcAppSideBar.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -43,9 +24,6 @@ export default {
       tabName: '',
       active: 0
     }
-  },
-  components: {
-    OcAppSideBar
   },
   methods: {
     ...mapActions('Files', ['deleteFiles']),
