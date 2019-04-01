@@ -1,30 +1,24 @@
 <template>
-  <div>
-    <div v-if="configuration.state === 'working' || configuration.state === 'corrupt'">
-          <oc-img
-            v-if="configuration.theme.logo.big"
-            :src="configuration.theme.logo.big"
-          ></oc-img>
-          <h2 class="text-color">
-            <span v-translate>Welcome to</span> {{ configuration.theme.general.name }}
-          </h2>
-          <div v-translate class="text-color">
-            Please click the button below to authenticate with {{ configuration.theme.general.name }} and get access to your data.
-          </div>
-          <oc-button variation="primary" id="authenticate" @click.native="login()" text="Authenticate"></oc-button>
+    <div class="oc-login" uk-height-viewport>
+        <div class="oc-login-card uk-position-center">
+            <h1 class="oc-login-logo" v-translate>
+                ownCloud
+            </h1>
+            <div class="oc-login-card-body">
+                <h3 class="oc-login-card-title">
+                    <span v-translate>Welcome to</span> {{ configuration.theme.general.name }}
+                </h3>
+                <p v-translate>
+                    Please click the button below to authenticate and get access to your data.
+                </p>
+                <oc-button size="large" variation="primary" class="oc-login-authorize-button" id="authenticate" @click.native="login()" :text="$_login_authorizeButtonText"/>
+            </div>
+            <div class="oc-login-card-footer">
+                <p>
+                    {{ configuration.theme.general.slogan }}
+                </p>
+            </div>
         </div>
-        <div v-if="configuration.state === 'missing'" class="text-xs-center white--text">
-          <oc-img
-          v-if="configuration.theme.logo.big"
-          :src="configuration.theme.logo.big"
-          ></oc-img>
-              <div class="text-color">
-                <h2 v-translate> {{ configuration.state }} config.json </h2>
-              </div>
-        </div>
-      <div class="uk-flex uk-flex-bottom uk-flex-center text-color">
-        {{ configuration.theme.general.slogan }}
-      </div>
     </div>
 </template>
 
@@ -38,16 +32,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration'])
+    ...mapGetters(['configuration']),
+    $_login_authorizeButtonText () {
+      return this.$gettext('Authorize')
+    }
   },
   methods: {
     ...mapActions(['login'])
   }
 }
 </script>
-
-<style scoped>
-  .text-color {
-    color: white;
-  }
-</style>
