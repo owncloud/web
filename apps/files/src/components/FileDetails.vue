@@ -1,29 +1,14 @@
 <template>
   <oc-app-side-bar :disableAction="false" @close="close()">
     <template slot="title">
-      <span>{{ getTabName }}</span>
+      <span class="uk-text-lead">{{ getTabName }}</span>
     </template>
     <template slot="content">
-      <v-tabs
-        v-model="active"
-        color="primary lighten-5"
-        dark
-        slider-color="yellow"
-      >
-        <v-tab
-          v-for="tab of fileSideBars"
-          :key="tab.name"
-          ripple
-        >
-          {{ tab.name }}
-        </v-tab>
-        <v-tab-item
-          v-for="tab of fileSideBars"
-          :key="tab.name"
-        >
-          <component :is="tab.component" @reload="$emit('reload')"></component>
-        </v-tab-item>
-      </v-tabs>
+      <oc-tabs>
+          <oc-tab-item v-for="tab of fileSideBars" :title="tab.name" :key="tab.name" />
+      </oc-tabs>
+      <p>hello! {{ fileSideBars.length }}</p>
+      <component :is="fileSideBars[active]" @reload="$emit('reload')"></component>
     </template>
   </oc-app-side-bar>
 </template>
@@ -32,6 +17,7 @@
 import Mixins from '../mixins'
 import OcAppSideBar from 'oc_components/OcAppSideBar.vue'
 import { mapActions, mapGetters } from 'vuex'
+import { FileSharingSidebar } from './FileSharingSidebar.vue'
 
 export default {
   mixins: [Mixins],
@@ -40,12 +26,13 @@ export default {
   data () {
     return {
       drawer: false,
-      tabName: '',
-      active: 0
+      active: 0,
+      sideBarComponent: FileSharingSidebar
     }
   },
   components: {
-    OcAppSideBar
+    OcAppSideBar,
+    FileSharingSidebar
   },
   methods: {
     ...mapActions('Files', ['deleteFiles']),
