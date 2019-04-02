@@ -34,7 +34,7 @@ export default {
       }
     },
     _logoutItemText () {
-      return this.$gettextInterpolate(this.$gettext('Exit %{product}'), { product: this.configuration.theme.general.name })
+      return this.$gettextInterpolate(this.$gettext('Exit %{product}'), { product: 'ownCloud' })
     }
   },
   methods: {

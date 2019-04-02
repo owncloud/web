@@ -8,7 +8,7 @@ const state = {
     edit: false
   },
   extensions: {},
-  fileSideBars: {},
+  fileSideBars: [],
   meta: {}
 }
 
@@ -55,9 +55,13 @@ const mutations = {
       })
     }
     if (appInfo.fileSideBars) {
+      // Merge in file side bars into global list
+      // Reassign object in whole so that it updates the state properly
+      let list = state.fileSideBars
       forEach(appInfo.fileSideBars, (sideBar) => {
-        state.fileSideBars[sideBar.app] = sideBar
+        list.push(sideBar)
       })
+      state.fileSideBars = list
     }
     if (!appInfo.id) return
     // name: use id as fallback display name
