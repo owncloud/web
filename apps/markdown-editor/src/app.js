@@ -31,6 +31,13 @@ const appInfo = {
     extension: 'md'
     // icon: 'custom_icon_class_to_override_icon_for_filetype_md'
   }
+  ],
+  fileSideBars: [
+    {
+      app: 'markdown',
+      name: 'MarkdownSideBar',
+      component: MarkdownEditor
+    }
   ]
 }
 

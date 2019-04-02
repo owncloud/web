@@ -9,7 +9,7 @@
         </div>
         <div class="sidebar-title">
           <slot name="title">
-            <span>Heading</span>
+            <span class="uk-text-lead">Heading</span>
           </slot>
         </div>
       </div>
@@ -25,10 +25,6 @@
 <script>
 export default {
   props: {
-    icon: {
-      default: 'folder',
-      type: String
-    },
     disableAction: {
       default: false,
       type: Boolean
