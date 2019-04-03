@@ -4,22 +4,29 @@ module.exports = {
   },
   commands: {
     navigateToFolder: function (folder) {
-      this.api.url(this.api.launchUrl + '/#/files/list/' + folder)
+      this.waitForFileVisible(folder)
+      this.useXpath()
+        .moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
+        .click(this.getFileRowSelectorByFileName(folder))
+        .useCss()
       return this.waitForElementNotPresent('@filesListProgressBar')
         .waitForElementVisible('@breadcrumb')
         .assert.containsText('@breadcrumb', folder)
     },
     waitForFileVisible: function (fileName) {
+      var selector = this.getFileRowSelectorByFileName(fileName)
+      return this
+        .useXpath()
+        .waitForElementVisible(selector)
+        .useCss()
+    },
+    getFileRowSelectorByFileName: function (fileName) {
       var element = this.elements['fileRowByName']
       var util = require('util')
       if (fileName.indexOf('"') > -1) {
         element.selector = element.selector.replace(/"/g, "'")
       }
-      var selector = util.format(element.selector, fileName)
-      return this
-        .useXpath()
-        .waitForElementVisible(selector)
-        .useCss()
+      return util.format(element.selector, fileName)
     },
     allFileRows: function (callback) {
       this.api.elements('css selector', this.elements['fileRows'], function (result) {
