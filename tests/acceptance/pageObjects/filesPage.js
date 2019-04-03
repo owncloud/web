@@ -12,6 +12,9 @@ module.exports = {
     waitForFileVisible: function (fileName) {
       var element = this.elements['fileRowByName']
       var util = require('util')
+      if (fileName.indexOf('"') > -1) {
+        element.selector = element.selector.replace(/"/g, "'")
+      }
       var selector = util.format(element.selector, fileName)
       return this
         .useXpath()
