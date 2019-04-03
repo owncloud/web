@@ -8,7 +8,6 @@ Feature: create folder
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @skip
   Scenario Outline: Create a folder using special characters
     When the user creates a folder with the name <folder_name> using the webUI
     Then folder <folder_name> should be listed on the webUI
@@ -21,6 +20,7 @@ Feature: create folder
       | "'somequotes2'"          |
       | "^#29][29@({"            |
       | "+-{$(882)"              |
+      | "home"                   |
 
   @skip
   Scenario Outline: Create a sub-folder inside a folder with problematic name
