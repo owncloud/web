@@ -32,7 +32,8 @@ When('the user creates a folder with the name {string} using the webUI', functio
     .setValue('@newFolderInput', folderName)
     .click('@newFolderOkButton')
 
-  return filesPage.waitForFileVisible(folderName)
+  client.waitForAjaxCallsToStartAndFinish()
+  return filesPage
 })
 
 When('the user opens folder {string} using the webUI', function (folder) {
