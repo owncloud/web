@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <v-progress-linear v-if="loading" indeterminate></v-progress-linear>
+    <oc-progress v-if="loading" :max="100" indeterminate></oc-progress>
     <pdf v-if="!loading" :page="currentPage" @error="error" @num-pages="loadPages" :src="content"></pdf>
   </div>
 </template>
@@ -45,6 +45,7 @@ export default {
   },
   methods: {
     ...mapActions('PDFViewer', ['loadPages']),
+    ...mapActions(['showNotification']),
     closeApp () {
       this.$router.push({
         path: '/files/list/home'
