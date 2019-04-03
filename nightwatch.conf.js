@@ -7,6 +7,7 @@ LOCAL_BACKEND_URL = LOCAL_BACKEND_URL.startsWith('http') ? LOCAL_BACKEND_URL : '
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
+  custom_commands_path: './tests/acceptance/customCommands',
   test_settings: {
     default: {
       globals: {
