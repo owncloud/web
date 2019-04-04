@@ -1,20 +1,18 @@
 <template>
-  <oc-top-bar>
-    <template slot="left">
+  <oc-topbar variation="secondary">
+    <oc-topbar-item slot="left">
       <oc-icon name="application-pdf"></oc-icon>
-    </template>
+    </oc-topbar-item>
     <template slot="title">
-      <span style="line-height: 65px;">{{ activeFile.path.substr(1) }}</span>
+      <oc-topbar-item>{{ activeFile.path.substr(1) }}</oc-topbar-item>
     </template>
-    <template slot="action_pages">
-      <div v-if="!loading">
-        <oc-input v-model="page" type="number" /> /{{ pageCount }}
-      </div>
-    </template>
-    <template slot="action_close">
+    <oc-topbar-item slot="right">
+      <oc-topbar-item v-if="!loading">
+        <oc-text-input v-model.number="page" type="number" :min="1" :max="pageCount" />&nbsp;/{{ pageCount }}
+      </oc-topbar-item>
       <oc-button icon="close" @click="closeApp"></oc-button>
-    </template>
-  </oc-top-bar>
+    </oc-topbar-item>
+  </oc-topbar>
 </template>
 <script>
 // TODO put active Page and max Pages into store
