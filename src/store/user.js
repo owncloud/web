@@ -6,6 +6,7 @@ let vueAuthInstance
 
 const state = {
   token: '',
+  id : '',
   displayname: null,
   email: null,
   isAuthenticated: false
@@ -39,6 +40,7 @@ const actions = {
 
       this._vm.$client.loginWithBearer(token).then(res => {
         context.commit('SET_USER', {
+          id: res['id'],
           displayname: res['display-name'],
           email: !Object.keys(res.email).length ? '' : res.email,
           token,
@@ -77,6 +79,7 @@ const actions = {
 const mutations = {
   SET_USER (state, user) {
     state.displayname = user.displayname
+    state.id = user.id
     state.email = user.email
     state.isAuthenticated = user.isAuthenticated
     state.token = user.token
