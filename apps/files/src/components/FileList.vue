@@ -3,7 +3,7 @@
     <oc-table-group>
       <oc-table-row>
         <oc-table-cell shrink type="head">
-          <oc-checkbox class="uk-margin-small-left" @click.native="toggleAll" :checked="all" />
+          <oc-checkbox class="uk-margin-small-left" @click.native="toggleAll" :value="all" />
         </oc-table-cell>
         <oc-table-cell shrink />
         <oc-table-cell type="head" class="uk-text-truncate" v-text="'Name'"/>
@@ -15,7 +15,7 @@
     <oc-table-group>
       <oc-table-row v-for="(item, index) in fileData" :key="index" class="file-row">
         <oc-table-cell>
-          <oc-checkbox class="uk-margin-small-left" @change.native="$emit('toggle', item)" v-model="selection[index]" />
+          <oc-checkbox class="uk-margin-small-left" @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
         </oc-table-cell>
         <oc-table-cell class="uk-padding-remove">
           <oc-star class="uk-display-block" @click.native="toggleFileFavorite(item)" :shining="item.starred" />
@@ -71,7 +71,7 @@ export default {
     ...mapActions(['openFile']),
 
     toggleAll () {
-      if (this.selectedFiles.length) {
+      if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
         this.resetFileSelection()
       } else {
         let selectedFiles = this.fileData.slice()
@@ -99,9 +99,9 @@ export default {
       let translated = this.$gettext('Please confirm the deletion of %{file}')
       this.deleteConfirmation = this.$gettextInterpolate(translated, { file: file.name })
     },
-    shareFile (file) {
+    /* shareFile (file) {
       this.deleteConfirmation = this.$gettextInterpolate(translated, { file: file.name })
-    },
+    }, */
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
     },
@@ -116,12 +116,7 @@ export default {
     ...mapGetters('Files', ['selectedFiles', 'atSearchPage']),
     ...mapGetters(['getToken', 'fileSideBars']),
     all () {
-      return this.selectedFiles.length === this.fileData.length
-    },
-    selection () {
-      return this.fileData.map((file) => {
-        return includes(this.selectedFiles, file)
-      })
+      return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
     },
     actions () {
       let actions = [

@@ -6,7 +6,7 @@ let vueAuthInstance
 
 const state = {
   token: '',
-  id : '',
+  id: '',
   displayname: null,
   email: null,
   isAuthenticated: false
