@@ -15,7 +15,7 @@
     <oc-table-group>
       <oc-table-row v-for="(item, index) in fileData" :key="index" class="file-row">
         <oc-table-cell>
-          <oc-checkbox class="uk-margin-small-left" @change.native="$emit('toggle', item)" :model="selection[index]" />
+          <oc-checkbox class="uk-margin-small-left" @change.native="$emit('toggle', item)" v-model="selection[index]" />
         </oc-table-cell>
         <oc-table-cell class="uk-padding-remove">
           <oc-star class="uk-display-block" @click.native="toggleFileFavorite(item)" :shining="item.starred" />
