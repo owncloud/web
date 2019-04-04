@@ -1,15 +1,3 @@
-# WARNING - DEVELOPMENT VERSION
- 0. Within this clone:
- 1. git clone git@github.com:owncloud/owncloud-design-system.git 
- 2. cd owncloud-design-system
- 3. yarn install && yarn build:system
- 4. cd ..
- 5. yarn remove owncloud-design-system
- 6. yarn cache clean
- 7. yarn add file:owncloud-design-system
- 
- Repeat 6.-8. everytime you change the owncloud-design-system
-
 # ownCloud-Phoenix
 
 Pushing a new design and frontend concept to ownCloud
