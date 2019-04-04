@@ -14,7 +14,6 @@
 
 <script>
 import Mixins from '../mixins'
-import OcAppSideBar from 'oc_components/OcAppSideBar.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -26,9 +25,6 @@ export default {
       /** String name of the tab that is activated */
       activeTab: 0
     }
-  },
-  components: {
-    OcAppSideBar
   },
   methods: {
     ...mapActions('Files', ['deleteFiles']),
