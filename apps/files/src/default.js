@@ -26,7 +26,10 @@ const appInfo = {
     }, {
       app: 'files-sharing',
       name: 'Sharing',
-      component: FileSharingSidebar
+      component: FileSharingSidebar,
+      quickAccess: {
+        icon: 'share'
+      }
     }
   ]
 }

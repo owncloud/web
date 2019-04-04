@@ -99,6 +99,9 @@ export default {
       let translated = this.$gettext('Please confirm the deletion of %{file}')
       this.deleteConfirmation = this.$gettextInterpolate(translated, { file: file.name })
     },
+    shareFile (file) {
+      this.deleteConfirmation = this.$gettextInterpolate(translated, { file: file.name })
+    },
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
     },

@@ -25,20 +25,13 @@ const appInfo = {
   icon: 'text',
   isFileEditor: true,
   extensions: [{
-    extension: 'txt'
-  },
-  {
-    extension: 'md'
-    // icon: 'custom_icon_class_to_override_icon_for_filetype_md'
-  }
-  ],
-  fileSideBars: [
+      extension: 'txt'
+    },
     {
-      app: 'markdown',
-      name: 'MarkdownSideBar',
-      component: MarkdownEditor
+      extension: 'md'
+      // icon: 'custom_icon_class_to_override_icon_for_filetype_md'
     }
-  ]
+  ],
 }
 
 const translations = t

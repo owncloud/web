@@ -5,7 +5,7 @@
     </template>
     <template slot="content">
       <oc-tabs>
-          <oc-tab-item @click="activeTab = key" v-for="(tab, key) of fileSideBars" :title="tab.name" :key="tab.name" />
+          <oc-tab-item :active="key == activeTab" @click="activeTab = key" v-for="(tab, key) of fileSideBars" :title="tab.name" :key="tab.name" />
       </oc-tabs>
       <component v-if="fileSideBars.length > 0" v-bind:is="activeTabComponent.component"></component>
     </template>
@@ -16,7 +16,6 @@
 import Mixins from '../mixins'
 import OcAppSideBar from 'oc_components/OcAppSideBar.vue'
 import { mapActions, mapGetters } from 'vuex'
-import FileSharingSidebar from './FileSharingSidebar.vue'
 
 export default {
   mixins: [Mixins],
@@ -29,16 +28,15 @@ export default {
     }
   },
   components: {
-    OcAppSideBar,
-    FileSharingSidebar
+    OcAppSideBar
   },
   methods: {
-    log (index) {
-      alert(index)
-    },
     ...mapActions('Files', ['deleteFiles']),
     close () {
       this.$emit('reset')
+    },
+    showSidebar (app) {
+      this.activeTab = app
     },
     downloadFiles () {
       this.downloadFile(this.items[0])
