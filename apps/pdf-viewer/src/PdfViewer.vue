@@ -15,6 +15,9 @@ export default {
       this.closeApp()
       return
     }
+
+    this.changePage(1)
+
     const url = this.$client.files.getFileUrl(this.activeFile.path)
 
     let headers = new Headers()
@@ -44,7 +47,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('PDFViewer', ['loadPages']),
+    ...mapActions('PDFViewer', ['loadPages', 'changePage']),
     ...mapActions(['showNotification']),
     closeApp () {
       this.$router.push({
