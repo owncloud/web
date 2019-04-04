@@ -32,11 +32,16 @@ When('the user creates a folder with the name {string} using the webUI', functio
     .setValue('@newFolderInput', folderName)
     .click('@newFolderOkButton')
 
-  return filesPage.waitForFileVisible(folderName)
+  client.waitForAjaxCallsToStartAndFinish()
+  return filesPage
 })
 
 When('the user opens folder {string} using the webUI', function (folder) {
   return client.page.filesPage().navigateToFolder(folder)
+})
+
+When('the user enables the setting to view hidden folders on the webUI', function () {
+  return client.page.filesPage().showHiddenFiles()
 })
 
 Then(/there should be no files\/folders listed on the webUI/, function () {
@@ -50,6 +55,16 @@ Then('folder {string} should be listed on the webUI', function (folder) {
     .page
     .filesPage()
     .waitForFileVisible(folder)
+})
+
+Then('folder {string} should not be listed on the webUI', function (folder) {
+  const filesPage = client.page.filesPage()
+  filesPage
+    .waitForElementVisible('@filesTable')
+  filesPage
+    .useXpath()
+    .waitForElementNotPresent(filesPage.getFileRowSelectorByFileName(folder))
+  return filesPage
 })
 
 When('the user reloads the current page of the webUI', function () {

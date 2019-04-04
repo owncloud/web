@@ -28,6 +28,15 @@ module.exports = {
       }
       return util.format(element.selector, fileName)
     },
+    showHiddenFiles: function () {
+      return this
+        .useXpath()
+        .click(this.elements['filterListButton'])
+        .waitForElementVisible(this.elements['hiddenFilesLabel'])
+        .click(this.elements['hiddenFilesCheckbox'])
+        .waitForElementNotVisible(this.elements['hiddenFilesLabel'])
+        .useCss()
+    },
     allFileRows: function (callback) {
       this.api.elements('css selector', this.elements['fileRows'], function (result) {
         callback(result)
@@ -62,6 +71,18 @@ module.exports = {
     },
     fileRowByName: {
       selector: '//div[contains(@class, "file-row-name")][text()="%s"]'
+    },
+    filterListButton: {
+      selector: '//div[@class="actionSlot"]//i[text()="filter_list"]',
+      locateStrategy: 'xpath'
+    },
+    hiddenFilesLabel: {
+      selector: '//div[contains(@class, "v-menu__content")]//div[text()="Hidden"]',
+      locateStrategy: 'xpath'
+    },
+    hiddenFilesCheckbox: {
+      selector: '//div[contains(@class, "v-menu__content")]//div[text()="Hidden"]/following-sibling::div//input/following-sibling::div',
+      locateStrategy: 'xpath'
     }
   }
 }
