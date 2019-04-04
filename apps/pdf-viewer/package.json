@@ -20,7 +20,7 @@
     "babel-loader": "^8.0.5",
     "babel-runtime": "^6.26.0",
     "css-loader": "^2.1.1",
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-loader": "^2.1.2",
     "eslint-plugin-import": "^2.16.0",
