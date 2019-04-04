@@ -21,7 +21,7 @@ const routes = [{
 const appInfo = {
   name: 'PDFViewer',
   id: 'pdf-viewer',
-  icon: 'ocft icon-application-pdf',
+  icon: 'application-pdf',
   isFileEditor: true,
   extensions: [{
     extension: 'pdf'
