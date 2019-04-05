@@ -13,7 +13,7 @@
     <template slot="right">
       <div class="uk-navbar-item">
         <oc-menu v-show="fileUpload">
-          <oc-progress-pie slot="activator" :progress="this.fileUploadProgress" :max="100" show-label />
+          <oc-progress-pie slot="activator" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
           <ul>
             <li
               v-for="n in inProgress.length"
@@ -273,6 +273,11 @@ export default {
         breadcrumb = {}
       }
       return this.breadcrumbs
+    }
+  },
+  filters: {
+    roundNumber(value) {
+      return parseInt(value.toFixed(0))
     }
   }
 }
