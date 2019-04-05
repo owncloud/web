@@ -2,16 +2,16 @@ workspace:
   base: /var/www/owncloud
   path: phoenix
 
-branches: [master, release*]
+branches: [master, release*, develop*]
 
 pipeline:
-#  build-docker-image:
-#    image: toolhippie/docker:latest
-#    pull: true
-#    environment:
-#      - DOCKER_HOST=tcp://docker:2375
-#    commands:
-#      - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
+  build-docker-image:
+    image: toolhippie/docker:latest
+    pull: true
+    environment:
+      - DOCKER_HOST=tcp://docker:2375
+    commands:
+      - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
 
   install-server:
     image: owncloudci/core
@@ -109,10 +109,6 @@ services:
     image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
     commands:
-      - git clone https://github.com/owncloud/owncloud-design-system.git
-      - cd owncloud-design-system
-      - yarn install && yarn build:system
-      - cd ..
       - yarn install
       - yarn dist
       - cp tests/drone/config.json dist/config.json
