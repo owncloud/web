@@ -254,6 +254,8 @@ export default {
       }
       if (this.inProgress.length !== 0) {
         this.fileUploadProgress = progressTotal / this.inProgress.length
+      } else {
+        this.fileUploadProgress = 100
       }
       return this.fileUploadProgress
     },
