@@ -5,13 +5,13 @@ workspace:
 branches: [master, release*]
 
 pipeline:
-#  build-docker-image:
-#    image: toolhippie/docker:latest
-#    pull: true
-#    environment:
-#      - DOCKER_HOST=tcp://docker:2375
-#    commands:
-#      - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
+  build-docker-image:
+    image: toolhippie/docker:latest
+    pull: true
+    environment:
+      - DOCKER_HOST=tcp://docker:2375
+    commands:
+      - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
 
   install-server:
     image: owncloudci/core
