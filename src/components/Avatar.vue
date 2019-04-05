@@ -63,7 +63,7 @@ export default {
     if (this.userid !== '') {
       this.setUser(this.userid)
     } else {
-      this.loading = false;
+      this.loading = false
     }
   },
   computed: {
