@@ -5745,7 +5745,7 @@ output-file-sync@^2.0.0:
     is-plain-obj "^1.1.0"
     mkdirp "^0.5.1"
 
-owncloud-design-system@^1.0.0-395:
+owncloud-design-system@^1.0.0-411:
   version "1.0.0-417"
   resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-417.tgz#d61f57bc9643c666cfe20c1dfc879535b706b1b2"
   integrity sha512-KJ+EDKrX+truPux4eZ2TIWIqcVs0ngTbRCv2HUdnnxcTARy+DVxhSStz2Y2kqiOHbqwQrWM5eS2N8j9IIdACdA==
