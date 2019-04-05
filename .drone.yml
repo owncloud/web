@@ -2,7 +2,7 @@ workspace:
   base: /var/www/owncloud
   path: phoenix
 
-branches: [master, release*]
+branches: [master, release*, develop*]
 
 pipeline:
   build-docker-image:
