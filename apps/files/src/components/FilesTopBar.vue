@@ -13,7 +13,7 @@
     <template slot="right">
       <div class="uk-navbar-item">
         <oc-menu v-show="fileUpload">
-          <oc-progress-pie slot="activator" :progress="0" :max="inProgress.length" show-label />
+          <oc-progress-pie slot="activator" :progress="this.fileUploadProgress" :max="100" show-label />
           <ul>
             <li
               v-for="n in inProgress.length"
@@ -21,7 +21,7 @@
                 <oc-icon color="primary" name="file_copy"></oc-icon>
                 <span>{{ inProgress[n - 1].name }}</span>
                 <span >{{ inProgress[n - 1].size | fileSize}}</span>
-                <oc-progress color="primary" :value="inProgress[n - 1].progress"></oc-progress>
+                <oc-progress color="primary" :value="inProgress[n - 1].progress" :max="100"></oc-progress>
             </li>
           </ul>
         </oc-menu>
@@ -252,7 +252,9 @@ export default {
       for (let item of this.inProgress) {
         progressTotal = progressTotal + item.progress
       }
-      this.fileUploadProgress = progressTotal / this.inProgress.length
+      if (this.inProgress.length !== 0) {
+        this.fileUploadProgress = progressTotal / this.inProgress.length
+      }
       return this.fileUploadProgress
     },
     getRoutes () {
