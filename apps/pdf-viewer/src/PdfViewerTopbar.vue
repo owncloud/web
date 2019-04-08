@@ -1,31 +1,23 @@
 <template>
-  <oc-app-top-bar>
-    <template slot="left">
-      <v-icon class="pa-3">ocft icon-application-pdf</v-icon>
-    </template>
+  <oc-topbar variation="secondary">
+    <oc-topbar-item slot="left">
+      <oc-icon name="application-pdf"></oc-icon>
+    </oc-topbar-item>
     <template slot="title">
-      <span style="line-height: 65px;">{{ activeFile.path.substr(1) }}</span>
+      <oc-topbar-item>{{ activeFile.path.substr(1) }}</oc-topbar-item>
     </template>
-    <template slot="action_pages">
-      <div class="mt-3" v-if="!loading">
-        <input v-model.number="page" :max="pageCount" min="1" type="number" style="width: 5em"> /{{ pageCount }}
-      </div>
-    </template>
-    <template slot="action_close">
-      <v-btn class="pa-2" icon @click="closeApp">
-        <v-icon>close</v-icon>
-      </v-btn>
-    </template>
-  </oc-app-top-bar>
+    <oc-topbar-item slot="right">
+      <oc-topbar-item v-if="!loading">
+        <oc-text-input v-model.number="page" type="number" :min="1" :max="pageCount" />&nbsp;/{{ pageCount }}
+      </oc-topbar-item>
+      <oc-button icon="close" @click="closeApp"></oc-button>
+    </oc-topbar-item>
+  </oc-topbar>
 </template>
 <script>
 // TODO put active Page and max Pages into store
-import OcAppTopBar from 'oc_components/OcAppTopBar.vue'
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  components: {
-    OcAppTopBar
-  },
   data: () => ({
   }),
   computed: {

@@ -1,90 +1,50 @@
 <template>
-  <v-list two-line id="files-list">
-    <v-list-tile>
-      <v-list-tile-action>
-        <v-checkbox
-          :input-value="all"
-          primary
-          hide-details
-          @click.native="toggleAll"
-        ></v-checkbox>
-      </v-list-tile-action>
-      <v-list-tile-action></v-list-tile-action>
-      <v-list-tile-avatar></v-list-tile-avatar>
-      <v-list-tile-content>
-        <v-list-tile-title v-translate>Name</v-list-tile-title>
-        <v-list-tile-sub-title class="text--primary" v-translate>Size</v-list-tile-sub-title>
-        <v-list-tile-sub-title v-translate>Modification Time</v-list-tile-sub-title>
-      </v-list-tile-content>
-    </v-list-tile>
-    <v-divider></v-divider>
-    <template v-for="(item, index) in fileData">
-      <v-list-tile
-        :key="item.path"
-        class="file-row"
-        avatar
-        ripple
-      >
-        <v-list-tile-action>
-          <v-checkbox
-            @change="$emit('toggle', item)"
-            :input-value="selectedFiles.indexOf(item) >= 0"
-            primary
-            hide-details></v-checkbox>
-        </v-list-tile-action>
-        <v-list-tile-action>
-          <v-checkbox
-            @change="toggleFileFavorite(item)"
-            :input-value="item.starred"
-            primary
-            hide-details
-            color="yellow"
-            on-icon="star" off-icon="star_border" large></v-checkbox>
-        </v-list-tile-action>
-        <v-list-tile-avatar>
-          <v-icon>{{ fileTypeIcon(item) }}</v-icon>
-        </v-list-tile-avatar>
-        <v-list-tile-content
-          v-if="!atSearchPage"
-          @click="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
-          style="cursor: pointer"
-        >
-          <v-list-tile-title class="file-row-name">{{ item.name }}</v-list-tile-title>
-          <v-list-tile-sub-title class="text--primary">{{ item.size | fileSize }}</v-list-tile-sub-title>
-          <v-list-tile-sub-title>{{ formDateFromNow(item.mdate) }}</v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-content
-          v-else
-          @click="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
-          style="cursor: pointer"
-        >
-          <v-list-tile-title>{{ item.name }}</v-list-tile-title>
-          <v-list-tile-sub-title class="text--primary">{{ getBaseDirectory(item.path) }}</v-list-tile-sub-title>
-          <v-list-tile-sub-title>{{ formDateFromNow(item.mdate) }} | {{ item.size | fileSize }}</v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-action
-          v-for="(action, index) in actions"
-          :key="index">
-          <v-btn icon :disabled="!action.isEnabled(item)"
-            @click="action.handler(item, action.handlerData)">
-            <v-icon>{{ action.icon }}</v-icon>
-          </v-btn>
-        </v-list-tile-action>
-
-      </v-list-tile>
-      <v-divider
-        v-if="index + 1 < fileData.length"
-        :key="index"
-      ></v-divider>
-    </template>
-    <oc-dialog-prompt :oc-active="changeFileName" v-model="newName"
+  <oc-table middle divider class="oc-filelist" id="files-list">
+    <oc-table-group>
+      <oc-table-row>
+        <oc-table-cell shrink type="head">
+          <oc-checkbox class="uk-margin-small-left" @click.native="toggleAll" :value="all" />
+        </oc-table-cell>
+        <oc-table-cell shrink />
+        <oc-table-cell type="head" class="uk-text-truncate" v-text="'Name'"/>
+        <oc-table-cell shrink type="head" v-text="'Size'"/>
+        <oc-table-cell shrink type="head" class="uk-text-nowrap uk-visible@s" v-text="'Modification Time'"/>
+        <oc-table-cell shrink type="head" v-text="'Actions'"/>
+      </oc-table-row>
+    </oc-table-group>
+    <oc-table-group>
+      <oc-table-row v-for="(item, index) in fileData" :key="index" class="file-row">
+        <oc-table-cell>
+          <oc-checkbox class="uk-margin-small-left" @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
+        </oc-table-cell>
+        <oc-table-cell class="uk-padding-remove">
+          <oc-star class="uk-display-block" @click.native="toggleFileFavorite(item)" :shining="item.starred" />
+        </oc-table-cell>
+        <oc-table-cell>
+          <oc-file @click.native="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
+                   :name="item.basename" :extension="item.extension ? item.extension : ''" class="file-row-name" :icon="fileTypeIcon(item)"
+                   :filename="item.name" :key="item.id" />
+        </oc-table-cell>
+        <oc-table-cell class="uk-text-meta uk-text-nowrap">
+          {{ item.size | fileSize }}
+        </oc-table-cell>
+        <oc-table-cell class="uk-text-meta uk-text-nowrap uk-visible@s">
+          {{ formDateFromNow(item.mdate) }}
+        </oc-table-cell>
+        <oc-table-cell>
+          <div class="uk-button-group uk-margin-small-right">
+            <oc-button v-for="(action, index) in actions" :key="index" @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" aria-label="Edit Picture" />
+          </div>
+        </oc-table-cell>
+      </oc-table-row>
+    </oc-table-group>
+    <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName"
                       :ocTitle="_renameDialogTitle" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
-    <oc-dialog-prompt :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
+    <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
                       :ocTitle="_deleteDialogTitle" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
-  </v-list>
+  </oc-table>
 </template>
 <script>
-
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { includes } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
@@ -111,7 +71,7 @@ export default {
     ...mapActions(['openFile']),
 
     toggleAll () {
-      if (this.selectedFiles.length) {
+      if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
         this.resetFileSelection()
       } else {
         let selectedFiles = this.fileData.slice()
@@ -139,15 +99,24 @@ export default {
       let translated = this.$gettext('Please confirm the deletion of %{file}')
       this.deleteConfirmation = this.$gettextInterpolate(translated, { file: file.name })
     },
+    /* shareFile (file) {
+      this.deleteConfirmation = this.$gettextInterpolate(translated, { file: file.name })
+    }, */
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
+    },
+    dropExtension (name, extension) {
+      if (!extension) {
+        return name
+      }
+      return name.substring(0, name.length - extension.length - 1)
     }
   },
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'atSearchPage']),
     ...mapGetters(['getToken', 'fileSideBars']),
     all () {
-      return this.selectedFiles.length === this.fileData.length
+      return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
     },
     actions () {
       let actions = [

@@ -1,21 +1,20 @@
   <template>
     <div class="oc-app" id="files-app">
-      <oc-app-content>
-        <template slot="content">
-          <v-progress-linear id="files-list-progress" v-if="loading" :indeterminate="true"></v-progress-linear>
+      <oc-app-layout :rightHidden="selectedFiles.length === 0">
+        <template slot="center">
+          <oc-loader id="files-list-progress" v-if="loading"></oc-loader>
           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
         </template>
-      </oc-app-content>
-      <file-actions-tab :sheet="showActionBar" :file="fileAction" @close="showActionBar = !showActionBar"/>
-      <file-details v-if="selectedFiles.length > 0" :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="getFolder" @reset="resetFileSelection"/>
+        <template slot="right">
+          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="getFolder" @reset="resetFileSelection"/>
+        </template>
+      </oc-app-layout>
+      <oc-file-actions></oc-file-actions>
   </div>
-  </template>
-
+</template>
 <script>
 import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
-import FileActionsTab from './FileactionsTab.vue'
-import OcAppContent from 'oc_components/OcAppContent.vue'
 import FileList from './FileList.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 const _includes = require('lodash/includes')
@@ -26,18 +25,14 @@ export default {
   ],
   components: {
     FileDetails,
-    FileActionsTab,
-    OcAppContent,
     FileList
   },
   data () {
     return {
-      showActionBar: false,
       createFolder: false,
       fileUploadName: '',
       fileUploadProgress: 0,
       upload: false,
-      fileAction: {},
       fileName: '',
       selected: [],
       loading: false,
@@ -66,13 +61,41 @@ export default {
       }
     },
 
+    openFileAction (appId) {
+      this.$emit('open', appId)
+      // TODO path to state
+      this.$router.push({
+        name: appId
+      })
+    },
+
     openFileActionBar (file) {
       this.openFile({
         client: this.$client,
         filePath: file.path
       })
-      this.showActionBar = true
-      this.fileAction = file
+      let actions = this.extensions(file.extension)
+      actions = actions.map(action => {
+        return {
+          label: action.name,
+          icon: action.icon,
+          onClick: () => {
+            this.openFileAction(action.app)
+          }
+        }
+      })
+      actions.push({
+        label: this.$gettext('Download'),
+        icon: 'file_download',
+        onClick: () => {
+          this.downloadFile(file)
+        }
+      })
+
+      this.$root.$emit('oc-file-actions:open', {
+        filename: file.name,
+        actions: actions
+      })
     },
 
     openSideBar (file, sideBarName) {

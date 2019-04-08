@@ -1,123 +1,82 @@
 <template>
   <div>
-    <oc-app-top-bar>
-      <template slot="left">
-        <v-breadcrumbs style="padding: 12px 12px;" :items="activeRoute" v-if="!atSearchPage">
-          <template slot="item" slot-scope="props">
-            <drop >
-              <v-icon @click="navigateTo('files-list', 'home')" v-if="props.item.text === 'home'" large>
-                home
-              </v-icon>
-              <span @click="navigateTo('files-list', props.item.route)" :id="'breadcrumb-'+props.item.index" v-else class="heading font-weight-bold pl-1 pr-1 pt-2 pb-2" style="cursor: pointer">
-                {{ props.item.text }}
-              </span>
-            </drop>
-          </template>
-        </v-breadcrumbs>
-        <div style="padding: 12px 12px; cursor: pointer;"  v-else @click="onFileSearch()">
-          <v-icon large>
-            home
-          </v-icon>
-        </div>
-      </template>
-      <template slot="title">
-        <search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch"/>
-      </template>
-      <template slot="action_progress">
-        <v-menu offset-y v-show="fileUpload">
-          <v-progress-circular
-          style="margin: 1em;"
-          slot="activator"
-          :value="fileUploadProgress"
-          color="primary"
-          > {{ inProgress.length }} </v-progress-circular>
-              <v-list
+  <oc-topbar variation="secondary">
+    <template slot="left">
+      <oc-topbar-logo icon="home" @click="navigateTo('files-list', 'home')"></oc-topbar-logo>
+      <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
+    </template>
+    <template slot="title">
+      <div class="uk-navbar-item">
+        <oc-search-bar @search="onFileSearch" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
+      </div>
+    </template>
+    <template slot="right">
+      <div class="uk-navbar-item">
+        <oc-menu v-show="fileUpload">
+          <oc-progress-pie slot="activator" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
+          <ul>
+            <li
               v-for="n in inProgress.length"
-              :key="n"
-              two-line>
-              <v-list-tile
-              avatar
-              ripple>
-              <v-list-tile-avatar>
-                <v-icon color="primary">file_copy</v-icon>
-              </v-list-tile-avatar>
-              <v-list-tile-title>{{ inProgress[n - 1].name }}</v-list-tile-title>
-              <v-list-tile-sub-title class="text--primary">{{ inProgress[n - 1].size| fileSize}}</v-list-tile-sub-title>
-              <v-progress-linear color="primary" :value="inProgress[n - 1].progress"></v-progress-linear>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
-      </template>
-      <template slot="action_new" v-if="this.canUpload">
-    <v-menu
-    class="mt-2 mr-2"
-    offset-y
-    v-if="!atSearchPage"
-    >
-    <v-btn
-      id="new-file-menu-btn"
-    slot="activator"
-    color="primary"
-    dark><translate>+ New</translate>
-  </v-btn>
-  <v-card>
-    <v-list>
-      <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-      <v-divider></v-divider>
-      <v-list-tile id="new-folder-btn" @click="createFolder = true">
-        <v-list-tile-action>
-          <v-icon>create_new_folder</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-title v-translate>New folder</v-list-tile-title>
-      </v-list-tile>
-      <v-list-tile @click="createFile = true">
-        <v-list-tile-action>
-          <v-icon>file_copy</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-title v-translate>New file</v-list-tile-title>
-      </v-list-tile>
-    </v-list>
-  </v-card>
-</v-menu>
-      </template>
-      <template slot="action_new" v-if="!this.canUpload">
-        <span style="line-height: 65px;" v-translate>You have no permission to upload.</span>
-      </template>
-      <template slot="action_count">
-        <span style="line-height: 65px;">
-          <translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">
-            %{ activeFiles.length } Result
-          </translate>
-        </span>
-      </template>
-      <template slot="action_filter">
-        <file-filter-menu />
-      </template>
-    </oc-app-top-bar>
-    <oc-dialog-prompt :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok"
-                      :ocLoading="fileFolderCreationLoading"
-                      :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
-    <oc-dialog-prompt :oc-active="createFile" v-model="newFileName"
-                      :ocLoading="fileFolderCreationLoading"
-                      :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
+              :key="n">
+                <oc-icon color="primary" name="file_copy"></oc-icon>
+                <span>{{ inProgress[n - 1].name }}</span>
+                <span >{{ inProgress[n - 1].size | fileSize}}</span>
+                <oc-progress color="primary" :value="inProgress[n - 1].progress" :max="100"></oc-progress>
+            </li>
+          </ul>
+        </oc-menu>
+
+        <oc-menu v-if="this.canUpload">
+          <oc-button id="new-file-menu-btn" text="+ New" slot="activator" variation="primary"></oc-button>
+          <!-- TODO: replace with oc-list elements-->
+          <ul class="uk-nav uk-dropdown-nav uk-nav-default">
+            <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
+            <li @click="createFolder = true" id="new-folder-btn"><a href="#"><oc-icon name="create_new_folder"/><translate>Create new folder ...</translate></a></li>
+            <li @click="createFile = true" id="new-file-btn"><a href="#"><oc-icon name="save"/><translate>Create new file ...</translate></a></li>
+          </ul>
+        </oc-menu>
+        <span v-if="!this.canUpload" v-translate>You have no permission to upload.</span>
+      </div>
+      <div class="uk-navbar-item">
+        <translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">
+          %{ activeFiles.length } Result
+        </translate>
+      </div>
+      <div class="uk-navbar-item">
+        <oc-menu>
+          <template slot="activator">
+            <div>
+              <oc-icon name="filter_list"></oc-icon>
+            </div>
+          </template>
+          <!-- TODO: replace with oc-list elements-->
+          <ul class="uk-nav uk-dropdown-nav uk-nav-default">
+            <li>Files<oc-checkbox></oc-checkbox></li>
+            <li>Folders<oc-checkbox></oc-checkbox></li>
+            <li>Hidden files<oc-checkbox></oc-checkbox></li>
+            <li>Files by name<oc-text-input></oc-text-input></li>
+          </ul>
+        </oc-menu>
+      </div>
+    </template>
+  </oc-topbar>
+  <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok"
+                    :ocLoading="fileFolderCreationLoading"
+                    :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
+  <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName"
+                    :ocLoading="fileFolderCreationLoading"
+                    :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
   </div>
 </template>
 <script>
 import FileUpload from './FileUpload.vue'
-import FileFilterMenu from './FileFilterMenu.vue'
-import SearchBar from 'oc_components/form/SearchBar.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { includes } from 'lodash'
 import Mixins from '../mixins'
-import OcAppTopBar from 'oc_components/OcAppTopBar.vue'
 
 export default {
   components: {
-    OcAppTopBar,
     FileUpload,
-    FileFilterMenu,
-    SearchBar,
     OcDialogPrompt
   },
   mixins: [
@@ -136,7 +95,7 @@ export default {
     fileFolderCreationLoading: false
   }),
   computed: {
-    ...mapGetters(['getToken', 'extensions']),
+    ...mapGetters(['getToken']),
     ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties']),
     ...mapState(['route']),
     searchLabel () {
@@ -174,7 +133,11 @@ export default {
     ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile']),
     ...mapActions(['openFile', 'showNotification']),
     onFileSearch (searchTerm = '') {
-      this.isLoadingSearch = true
+      if (searchTerm === '') {
+        this.isLoadingSearch = false
+      } else {
+        this.isLoadingSearch = true
+      }
       // write search term into files app state
       this.searchForFile({
         searchTerm,
@@ -293,7 +256,11 @@ export default {
       for (let item of this.inProgress) {
         progressTotal = progressTotal + item.progress
       }
-      this.fileUploadProgress = progressTotal / this.inProgress.length
+      if (this.inProgress.length !== 0) {
+        this.fileUploadProgress = progressTotal / this.inProgress.length
+      } else {
+        this.fileUploadProgress = 100
+      }
       return this.fileUploadProgress
     },
     getRoutes () {
@@ -301,20 +268,22 @@ export default {
       let breadcrumb = {}
       let absolutePath = this.$route.params.item
       let pathSplit = absolutePath.split('/').filter((val) => val)
-      if (!includes(pathSplit, 'home')) {
-        breadcrumb.text = 'home'
-        breadcrumb.route = breadcrumb.text
-        this.breadcrumbs.push(breadcrumb)
-        breadcrumb = {}
-      }
       for (let i = 0; i < pathSplit.length; i++) {
         breadcrumb.index = i
         breadcrumb.text = pathSplit.slice(0, i + 1)[i]
         breadcrumb.route = '/' + pathSplit.slice(0, i + 1).join('/')
+        if (i === 0 && breadcrumb.text === 'home') {
+          continue
+        }
         this.breadcrumbs.push(breadcrumb)
         breadcrumb = {}
       }
       return this.breadcrumbs
+    }
+  },
+  filters: {
+    roundNumber(value) {
+      return parseInt(value.toFixed(0))
     }
   }
 }

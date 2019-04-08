@@ -1,34 +1,20 @@
 <template>
-  <component :is="'div'" class="nav">
-    <div class="menu">
-      <v-icon class="icons" @click.prevent="toggleSidebar(true)" color="white">menu</v-icon>
-      <span v-translate>Files</span>
-    </div>
-    <img class="logo" :src="configuration.theme.logo.big" height="50px" />
-    <div class="user">
-      <v-icon class="icons right" color="white">account_circle</v-icon>
-      <span class="right">{{ user.displayname }}</span>
-      <v-menu offset-y v-if="configuration.state !== 'working'">
-        <v-icon slot="activator" color="error" x-large>info</v-icon>
-        <v-list
-          class="primary white--text text-xs-center"
-          v-for="app in configuration.corrupted"
-          :key="app">
-            <h4 class="pa-3">Corrupted apps</h4>
-          <v-list-tile>
-            <v-list-tile-title class="text-xs-center">
-              {{ parseApp(app) }}
-            </v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
-    </div>
-  </component>
+  <oc-topbar variation="primary">
+    <oc-topbar-logo icon="menu" title="Files" slot="left" @click="toggleSidebar(!isSidebarVisible)"></oc-topbar-logo>
+    <oc-topbar-item slot="title">
+      <oc-img :src="configuration.theme.logo.big" style="height: 60px" />
+    </oc-topbar-item>
+    <oc-topbar-item slot="right">
+      <Avatar class="uk-margin-small-right" :userid="user.id" />
+      <span>{{ user.displayname }}</span>
+    </oc-topbar-item>
+  </oc-topbar>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import pluginHelper from '../mixins/pluginHelper.js'
+import Avatar from './Avatar.vue'
 
 export default {
   data () {
@@ -43,6 +29,7 @@ export default {
   mixins: [
     pluginHelper
   ],
+  components: { Avatar },
   methods: {
     ...mapActions(['toggleSidebar']),
     parseApp (app) {
@@ -52,7 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'isSidebarVisible']),
     ...mapState(['user']),
     extendNavbarRight () {
       return this.getPlugins('phoenixNavbarRight')
@@ -60,46 +47,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-
-.nav {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: "menu logo user";
-  overflow: hidden;
-  background-color: var(--v-primary-base);
-  line-height: 50px;
-  position: fixed;
-  top: 0;
-  z-index: 99;
-  height: 50px;
-  width: 100%;
-}
-.icons {
-  padding: 10px;
-  margin-top: .1em;
-  float: left;
-}
-.hamburger:hover {
-  background: blue;
-  border-radius: 50%;
-}
-.menu {
-  color: white;
-  grid-area: menu;
-}
-.right {
-  float: right;
-}
-.logo {
-  margin: 0 auto;
-  grid-area: logo;
-}
-
-.user {
-  color: white;
-  grid-area: user;
-}
-</style>

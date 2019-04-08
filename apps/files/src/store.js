@@ -51,6 +51,14 @@ function _buildFile (file) {
       let pathList = file.name.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     }()),
+    basename: (function () {
+      let pathList = file.name.split('/').filter(e => e !== '')
+      let name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
+      if (ext) {
+        return name.substring(0, name.length - ext.length - 1)
+      }
+      return name
+    }()),
     path: file.name,
     permissions: file['fileInfo']['{http://owncloud.org/ns}permissions'],
     sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],

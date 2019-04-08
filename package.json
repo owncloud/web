@@ -68,7 +68,6 @@
     "vue-loader": "^15.7.0",
     "vue-router": "^3.0.2",
     "vue-template-compiler": "^2.6.10",
-    "vuetify": "^1.5.9",
     "vuex": "^3.1.0",
     "vuex-persist": "^2.0.0",
     "vuex-router-sync": "^5.0.0",
@@ -83,6 +82,7 @@
     "eslint-loader": "^2.1.2",
     "js-owncloud-client": "github:owncloud/js-owncloud-client#master",
     "oidc-client": "^1.7.0",
+    "owncloud-design-system": "^1.0.0-411",
     "url-search-params-polyfill": "^5.1.0"
   }
 }

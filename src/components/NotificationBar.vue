@@ -1,21 +1,13 @@
 <template>
-  <div v-show="activeNotifications.length">
-      <v-snackbar
-      v-for="notification in activeNotifications"
-      :key="notification.id"
-      :value="true" :multi-line="true"
-      :timeout="4000"
-      top="top" vertical="vertical"
-      :color="notification.type || 'info'"
-      @input="deleteNotification(notification.id)">
-      <span heading>
-        {{notification.title}}
-      </span>
-      <span content>
-        {{notification.desc}}
-      </span>
-    </v-snackbar>
-  </div>
+  <oc-notifications>
+    <oc-notification-message
+            v-for="(item, index) in activeNotifications"
+            :key="index"
+            :message="item.title"
+            :status="item.status"
+            @close="deleteNotification(item.id)"
+    />
+  </oc-notifications>
 </template>
 
 <script>

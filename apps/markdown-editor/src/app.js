@@ -22,16 +22,16 @@ const routes = [{
 const appInfo = {
   name: 'MarkdownEditor',
   id: 'markdown-editor',
-  icon: 'ocft icon-x-office-document',
+  icon: 'text',
   isFileEditor: true,
   extensions: [{
-    extension: 'txt'
-  },
-  {
-    extension: 'md'
-    // icon: 'custom_icon_class_to_override_icon_for_filetype_md'
-  }
-  ]
+      extension: 'txt'
+    },
+    {
+      extension: 'md'
+      // icon: 'custom_icon_class_to_override_icon_for_filetype_md'
+    }
+  ],
 }
 
 const translations = t
