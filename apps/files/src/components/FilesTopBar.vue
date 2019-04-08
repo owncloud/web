@@ -7,7 +7,7 @@
     </template>
     <template slot="title">
       <div class="uk-navbar-item">
-        <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
+        <oc-search-bar @search="onFileSearch" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
     </template>
     <template slot="right">
@@ -133,7 +133,11 @@ export default {
     ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile']),
     ...mapActions(['openFile', 'showNotification']),
     onFileSearch (searchTerm = '') {
-      this.isLoadingSearch = true
+      if (searchTerm === '') {
+        this.isLoadingSearch = false
+      } else {
+        this.isLoadingSearch = true
+      }
       // write search term into files app state
       this.searchForFile({
         searchTerm,
