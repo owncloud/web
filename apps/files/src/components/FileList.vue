@@ -23,7 +23,7 @@
         <oc-table-cell>
           <oc-file @click.native="item.extension === false ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
                    :name="item.basename" :extension="item.extension ? item.extension : ''" class="file-row-name" :icon="fileTypeIcon(item)"
-                   :filename="item.name"/>
+                   :filename="item.name" :key="item.id" />
         </oc-table-cell>
         <oc-table-cell class="uk-text-meta uk-text-nowrap">
           {{ item.size | fileSize }}
