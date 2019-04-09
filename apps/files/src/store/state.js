@@ -20,5 +20,9 @@ export default {
     '{DAV:}getetag',
     '{DAV:}resourcetype'
   ],
-  dropzone: false
+  dropzone: false,
+  shareOpen: null,
+  shares: [],
+  sharesError: null,
+  sharesLoading: false
 }

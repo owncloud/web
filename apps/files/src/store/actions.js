@@ -53,6 +53,60 @@ function _buildFile (file) {
   })
 }
 
+function _buildShare (s) {
+  let share = {
+    info: s
+  }
+  switch (s.share_type) {
+    case ('0'): // user share
+    // TODO differentiate groups from users?
+    // fall through
+    case ('1'): // group share
+      share.role = 'legacy'
+      if (s.permissions === 11) {
+        share.role = 'viewer'
+      }
+      if (s.permissions & 2) {
+        share.role = 'editor'
+      }
+      if (s.permissions & 16) {
+        share.role = 'coowner'
+      }
+      share.avatar = 'https://picsum.photos/64/64?image=1075' // TODO where do we get the avatar from? by uid? remote.php/dav/avatars/admin/128.png
+      share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
+      share.displayName = s.share_with_displayname
+      // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
+      break
+    case ('3'): // public link
+      share.role = 'public'
+      share.name = s.name
+      switch (s.permissions) {
+        case ('1'):
+          share.displayName = 'Download / View' // hover: Recipients can view or download contents.
+          break
+        case ('15'):
+          share.displayName = 'Download / View / Upload' // hover: Recipients can view, download, edit, delete and upload contents.
+          break
+        case ('4'):
+          share.displayName = 'Upload only (File Drop)' // TODO hover: Receive files from multiple recipients without revealing the contents of the folder.
+          break
+        default:
+          share.role = 'legacy'
+      }
+      share.avatar = 'link' // TODO de we have to give a path? remote.php/dav/avatars/admin/128.png or is an icon enough?
+      share.email = s.url // TODO add optional url to card, we are kind of misusing this
+      // TODO password
+      break
+  }
+
+  // expiration:Object if unset, or string "2019-04-24 00:00:00"
+  if (typeof s.expiration === 'string' || s.expiration instanceof String) {
+    share.expires = Date.parse(s.expiration)
+  }
+
+  return share
+}
+
 export default {
   updateFileProgress ({ commit }, progress) {
     if (progress.progress === 100) commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
@@ -132,8 +186,7 @@ export default {
       if (!searchTerm) return
       client.files.search(searchTerm, null, context.state.davProperties).then((filesSearched) => {
         filesSearched = map(filesSearched, (f) => {
-          let file = _buildFile(f)
-          return file
+          return _buildFile(f)
         })
         context.commit('LOAD_FILES_SEARCHED', filesSearched)
         resolve(filesSearched)
@@ -147,6 +200,88 @@ export default {
         reject(error)
       })
     })
+  },
+  shareSetOpen (context, payload) {
+    context.commit('SHARE_SET_OPEN', payload.index)
+  },
+  loadShares (context, payload) {
+    context.commit('SHARES_LOAD', [])
+    context.commit('SHARES_ERROR', null)
+    context.commit('SHARES_LOADING', true)
+
+    // see https://owncloud.github.io/js-owncloud-client/Shares.html
+    let client = payload.client
+    let path = payload.path
+    client.shares.getShares(path)
+      .then(data => {
+        context.commit('SHARES_LOAD', data.map(element => {
+          return _buildShare(element.shareInfo)
+        }))
+        context.commit('SHARES_LOADING', false)
+      })
+      .catch(error => {
+        context.commit('SHARES_ERROR', error.message)
+        context.commit('SHARES_LOADING', false)
+      })
+  },
+  sharesClearState (context, payload) {
+    context.commit('SHARES_LOAD', [])
+    context.commit('SHARES_ERROR', null)
+  },
+  changeShare (context, { client, share }) {
+    const params = {}
+    // needs better mechanism ...
+    if (share.role === 'coowner') {
+      params.perms = 31
+    }
+    if (share.role === 'editor') {
+      params.perms = 15
+    }
+    if (share.role === 'viewer') {
+      params.perms = 1
+    }
+    if (share.info.item_type === 'file') {
+      params.perms &= ~4 // CREATE permission
+      params.perms &= ~8 // DELETE permission
+    }
+
+    if (!params.perms) {
+      return new Promise((resolve, reject) => {
+        reject(new Error('Nothing changed'))
+      })
+    }
+
+    return client.shares.updateShare(share.info.id, params)
+      .then(() => {
+        // TODO: work with response once it is available: https://github.com/owncloud/owncloud-sdk/issues/208
+        share.info.permissions = params.perms
+        context.commit('SHARES_UPDATE_SHARE', share)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  },
+  addShare (context, { client, path, user }) {
+    context.commit('SHARES_LOADING', true)
+
+    client.shares.shareFileWithUser(path, user)
+      .then(share => {
+        context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
+        context.commit('SHARES_LOADING', false)
+      })
+      .catch(e => {
+        console.log(e)
+        context.commit('SHARES_LOADING', false)
+      })
+  },
+  deleteShare (context, { client, share }) {
+    client.shares.deleteShare(share.info.id)
+      .then(() => {
+        context.commit('SHARES_REMOVE_SHARE', share)
+      })
+      .catch(e => {
+        console.log(e)
+      })
   },
   resetSearch (context) {
     context.commit('SET_SEARCH_TERM', '')

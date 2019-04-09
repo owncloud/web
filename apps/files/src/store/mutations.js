@@ -90,5 +90,30 @@ export default {
   },
   DRAG_OVER (state, value) {
     state.dropzone = value
+  },
+  SHARES_SET_OPEN (state, index) {
+    state.shareOpen = index
+  },
+  SHARES_LOAD (state, shares) {
+    state.shares = shares
+  },
+  SHARES_ADD_SHARE (state, share) {
+    state.shares.push(share)
+  },
+  SHARES_REMOVE_SHARE (state, share) {
+    state.shares = without(state.shares, share)
+  },
+  SHARES_UPDATE_SHARE (state, share) {
+    let fileIndex = findIndex(state.shares, (s) => {
+      return s.info.id === share.info.id
+    })
+    state.shares[fileIndex].role = share.role
+  },
+  SHARES_ERROR (state, error) {
+    state.shares = []
+    state.sharesError = error
+  },
+  SHARES_LOADING (state, loading) {
+    state.sharesLoading = loading
   }
 }
