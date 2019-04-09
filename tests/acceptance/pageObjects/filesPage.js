@@ -80,6 +80,10 @@ module.exports = {
     hiddenFilesCheckbox: {
       selector: '//li[text()="Hidden files"]/input',
       locateStrategy: 'xpath'
+    },
+    loadingIndicator: {
+      selector: '//*[contains(@class, "oc-loader")]',
+      locateStrategy: 'xpath'
     }
   }
 }

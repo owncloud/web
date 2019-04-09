@@ -34,6 +34,7 @@ When('the user creates a folder with the name {string} using the webUI', functio
 
   client.waitForAjaxCallsToStartAndFinish()
   return filesPage
+    .waitForElementNotPresent('@loadingIndicator')
 })
 
 When('the user opens folder {string} using the webUI', function (folder) {
