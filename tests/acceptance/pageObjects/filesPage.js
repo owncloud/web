@@ -34,7 +34,6 @@ module.exports = {
         .click(this.elements['filterListButton'])
         .waitForElementVisible(this.elements['hiddenFilesLabel'])
         .click(this.elements['hiddenFilesCheckbox'])
-        .waitForElementNotVisible(this.elements['hiddenFilesLabel'])
         .useCss()
     },
     allFileRows: function (callback) {
@@ -72,15 +71,18 @@ module.exports = {
       selector: '//a[contains(@class, "file-row-name")][@filename="%s"]'
     },
     filterListButton: {
-      selector: '//div[@class="actionSlot"]//i[text()="filter_list"]',
-      locateStrategy: 'xpath'
+      selector: '#filter-list-btn'
     },
     hiddenFilesLabel: {
-      selector: '//div[contains(@class, "v-menu__content")]//div[text()="Hidden"]',
+      selector: '//li[text()="Hidden files"]',
       locateStrategy: 'xpath'
     },
     hiddenFilesCheckbox: {
-      selector: '//div[contains(@class, "v-menu__content")]//div[text()="Hidden"]/following-sibling::div//input/following-sibling::div',
+      selector: '//li[text()="Hidden files"]/input',
+      locateStrategy: 'xpath'
+    },
+    loadingIndicator: {
+      selector: '//*[contains(@class, "oc-loader")]',
       locateStrategy: 'xpath'
     }
   }

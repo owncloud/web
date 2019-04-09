@@ -45,7 +45,7 @@
       <div class="uk-navbar-item">
         <oc-menu>
           <template slot="activator">
-            <div>
+            <div id="filter-list-btn">
               <oc-icon name="filter_list"></oc-icon>
             </div>
           </template>
@@ -282,7 +282,7 @@ export default {
     }
   },
   filters: {
-    roundNumber(value) {
+    roundNumber (value) {
       return parseInt(value.toFixed(0))
     }
   }

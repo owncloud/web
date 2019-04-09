@@ -56,6 +56,13 @@ pipeline:
     commands:
       - wait-for-it -t 300 phoenix:8300
 
+  lint-test:
+    image: owncloudci/php:${PHP_VERSION=7.1}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/phoenix
+      - yarn run lint
+
   fix-permissions:
     image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
@@ -69,13 +76,6 @@ pipeline:
     commands:
       - cd /var/www/owncloud/phoenix
       - yarn run acceptance-tests-drone
-
-  lint-test:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    commands:
-      - cd /var/www/owncloud/phoenix
-      - yarn run lint
 
   build-release:
     image: owncloudci/php:${PHP_VERSION=7.1}
