@@ -34,7 +34,6 @@ module.exports = {
         .click(this.elements['filterListButton'])
         .waitForElementVisible(this.elements['hiddenFilesLabel'])
         .click(this.elements['hiddenFilesCheckbox'])
-        .waitForElementNotVisible(this.elements['hiddenFilesLabel'])
         .useCss()
     },
     allFileRows: function (callback) {
