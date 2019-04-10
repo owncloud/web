@@ -29,12 +29,7 @@ class FileUpload {
     })
 
     // Start upload
-    let formData = new FormData()
-    formData.append('file', this.file)
-    Object.keys(additionalData).forEach(p => {
-      formData.append(p, additionalData[p])
-    })
-    xhr.send(formData)
+    xhr.send(this.file)
 
     return promise
   }
