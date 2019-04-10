@@ -17,7 +17,7 @@ export default {
       if (selectedFiles.length === 1) {
         this.loadShares({
           client: this.$client,
-          path: this.selectedFiles[0].path
+          path: selectedFiles[0].path
         })
       } else {
         this.sharesClearState()
