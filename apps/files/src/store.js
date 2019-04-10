@@ -22,7 +22,11 @@ const state = {
     '{DAV:}getlastmodified',
     '{DAV:}getetag',
     '{DAV:}resourcetype'
-  ]
+  ],
+  shareOpen: null,
+  shares: [],
+  sharesError: null,
+  sharesLoading: false,
 }
 
 function _buildFile (file) {
@@ -151,6 +155,19 @@ const mutations = {
     })
     state.files[fileIndex].name = newValue
     state.files[fileIndex].path = '/' + newPath + newValue
+  },
+  SHARES_SET_OPEN (state, index) {
+    state.shareOpen = index
+  },
+  SHARES_LOAD (state, shares) {
+    state.shares = shares
+  },
+  SHARES_ERROR (state, error) {
+    state.shares = []
+    state.sharesError = error
+  },
+  SHARES_LOADING (state, loading) {
+    state.sharesLoading = loading
   }
 }
 
@@ -248,6 +265,123 @@ const actions = {
         reject(error)
       })
     })
+  },
+  shareSetOpen (context, payload) {
+    context.commit('SHARE_SET_OPEN', payload.index)
+  },
+  loadShares (context, payload) {
+    context.commit('SHARES_LOAD', [])
+    context.commit('SHARES_ERROR', null)
+    context.commit('SHARES_LOADING', true)
+
+    // see https://owncloud.github.io/js-owncloud-client/Shares.html
+    let client = payload.client
+    let path = payload.path
+    client.shares.getShares(path)
+      .then(data => {
+            context.commit('SHARES_LOAD', data.map(element => {
+              let s = element.shareInfo
+
+              let share = {
+                info: s
+              }
+              switch (s.share_type) {
+                case('0'): // user share
+                // TODO differentiate groups from users?
+                case('1'): // group share
+                  switch (s.permissions) {
+                    case('31'):
+                      share.role = 'coowner'
+                      break
+                    case('15'):
+                      share.role = 'editor'
+                      break
+                      // TODO add more roles
+                    case('1'):
+                      share.role = 'viewer'
+                      break
+                    default:
+                      share.role = 'legacy'
+                  }
+                  share.avatar = 'https://picsum.photos/64/64?image=1075' // TODO where do we get the avatar from? by uid? remote.php/dav/avatars/admin/128.png 
+                  share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
+                  share.displayName = s.share_with_displayname
+                  share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
+                  break
+                case('3'): // public link
+                  share.role = 'public'
+                  share.name = s.name
+                  switch (s.permissions) {
+                    case('1'):
+                      share.displayName = 'Download / View' // hover: Recipients can view or download contents.
+                      break
+                    case('15'):
+                      share.displayName = 'Download / View / Upload' // hover: Recipients can view, download, edit, delete and upload contents.
+                      break
+                    case('4'):
+                      share.displayName = 'Upload only (File Drop)' // TODO hover: Receive files from multiple recipients without revealing the contents of the folder.
+                      break
+                    default:
+                    share.role = 'legacy'
+                  }
+                  share.avatar = 'link' // TODO de we have to give a path? remote.php/dav/avatars/admin/128.png or is an icon enough?
+                  share.email = s.url // TODO add optional url to card, we are kind of misusing this
+                  // TODO password
+                  break
+              }
+
+              // expiration:Object if unset, or string "2019-04-24 00:00:00"
+              if ( typeof s.expiration === 'string' || s.expiration instanceof String) {
+                share.expires = Date.parse(s.expiration)
+              }
+              
+              return share
+            }))
+            context.commit('SHARES_LOADING', false)
+      })
+      .catch(error => {
+        context.commit('SHARES_ERROR', error.message)
+        context.commit('SHARES_LOADING', false)
+      })
+  },
+  sharesClearState (context, payload) {
+    context.commit('SHARES_LOAD', [])
+    context.commit('SHARES_ERROR', null)
+  },
+  changeShare (context, payload) {
+    context.commit('SHARES_LOADING', true)
+
+    context.commit('SHARES_LOADING', false)
+    /*
+    let client = payload.client
+    let path = payload.path
+    let acl = payload.acl
+    client.requests.ocs({
+      method: 'PUT',
+      service: 'apps/smb_acl',
+      action: 'acl' + path,
+      data: acl
+    })
+      .then(response => {
+        response.json()
+          .then(json => {
+            if (response.ok) {
+              context.dispatch('loadACLs', {
+                client: client,
+                path: path
+              })
+            } else {
+              context.commit('ERROR', json.ocs.meta.message)
+            }
+          })
+      })
+      .catch(error => {
+        context.commit('ERROR', error)
+      })
+      .finally(() => {
+        context.commit('LOADING', false)
+      })
+      */
   }
 }
 
@@ -300,6 +434,18 @@ const getters = {
   },
   davProperties: state => {
     return state.davProperties
+  },
+  shareOpen: state => {
+    return state.shareOpen
+  },
+  shares: state => {
+    return state.shares
+  },
+  sharesError: state => {
+    return state.sharesError
+  },
+  sharesLoading: state => {
+    return state.sharesLoading
   }
 }
 

@@ -39,7 +39,7 @@
                     />
                     <span v-if="c.role && c.expires">|</span>
                     <span v-if="c.expires">
-                      <translate :translate-params="{expires: c.expires}">Expires: %{expires}</translate>
+                      <translate :translate-params="{expires: formDateFromNow(c.expires)}">Expires: %{expires}</translate>
                     </span>
                   </span>
                 </template>
@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import Mixins from '../mixins'
 /**
  * The collaboration status shows
  *
@@ -89,6 +90,9 @@
  * - [ ] use mixin to format mtime, would add dependency to moment, can be done in phoenix
  */
 export default {
+  mixins: [
+    Mixins
+  ],
   name: 'oc-collaboration-status',
   status: 'review',
   release: '1.0.0',
@@ -161,52 +165,3 @@ export default {
   }
 }
 </script>
-
-<docs>
-```jsx
-  <template>
-    <oc-collaboration-status :owner="owner" :collaborators="collaborators" :roles="roles" />
-  </template>
-  <script>
-    export default {
-      data() {
-        return {
-          owner: {
-            avatar: "https://picsum.photos/64/64?image=1074",
-            name: "simba1",
-            displayName: "Simba",
-            email: "simba@djungle.com",
-          },
-          collaborators: [
-            {
-              avatar: "https://picsum.photos/64/64?image=1075",
-              name: "foo",
-              displayName: "Foo",
-              email: "foo@djungle.com",
-              role: "editor",
-              expires: 1554391618281,
-            },{
-              avatar: "https://picsum.photos/64/64?image=1076",
-              name: "bar",
-              displayName: "Bar",
-              email: "bar@djungle.com",
-              role: "viewer",
-              expires: 1554491618281,
-            },
-          ],
-          roles: {
-            viewer: { name: "Viewer", description: "Download and preview" },
-            editor: { name: "Editor", description: "Upload, edit, delete, download and preview" },
-            coowner: {
-              name: "Co-owner",
-              description: "Share, upload, edit, delete, download and preview",
-            },
-            hammer: { name: "MC Hammer", description: "U Can't touch this" },
-            //public: { name: "Link", description: "Public link" }, // TODO public like this maybe?
-          }
-        }
-      },
-    }
-  </script>
-  ```
-</docs>

@@ -5,12 +5,25 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import OcCollaborationStatus from './OcCollaborationStatus.vue'
 export default {
   components: {
     OcCollaborationStatus
   },
   name: 'FileSharingSidebar',
+  watch: {
+    selectedFiles: function (selectedFiles) {
+      if (selectedFiles.length === 1) {
+        this.loadShares({
+          client: this.$client,
+          path: this.selectedFiles[0].path
+        })
+      } else {
+        this.sharesClearState()
+      }
+    },
+  },
   data () {
     return {
       owner: {
@@ -19,23 +32,6 @@ export default {
         displayName: 'Simba',
         email: 'simba@djungle.com'
       },
-      collaborators: [
-        {
-          avatar: 'https://picsum.photos/64/64?image=1075',
-          name: 'foo',
-          displayName: 'Foo',
-          email: 'foo@djungle.com',
-          role: 'editor',
-          expires: 1554391618281
-        }, {
-          avatar: 'https://picsum.photos/64/64?image=1076',
-          name: 'bar',
-          displayName: 'Bar',
-          email: 'bar@djungle.com',
-          role: 'viewer',
-          expires: 1554491618281
-        }
-      ],
       roles: {
         viewer: { name: 'Viewer', description: 'Download and preview' },
         editor: { name: 'Editor', description: 'Upload, edit, delete, download and preview' },
@@ -43,9 +39,26 @@ export default {
           name: 'Co-owner',
           description: 'Share, upload, edit, delete, download and preview'
         },
+        legacy: {
+          name: "Legacy",
+          description: "Yet unmapped combinaton of permissions",
+        },
+        public: {
+          name: "Public",
+          description: "Public link",
+        },
         hammer: { name: 'MC Hammer', description: 'U Can\'t touch this' }
       }
     }
+  },
+  computed: {
+    ...mapGetters('Files', ['selectedFiles', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
+    collaborators () {
+      return this.shares
+    }
+  },
+  methods: {
+    ...mapActions('Files', ['shareSetOpen', 'loadShares', 'sharesClearState', 'changeShare']),
   }
 }
 </script>
