@@ -57,6 +57,11 @@ module.exports = {
       webdriver: {
         start_process: false
       },
+      screenshots : {
+        enabled : true,
+        path : "tests/reports/screenshots",
+        on_failure: true
+      },
       desiredCapabilities: {
         browserName: 'chrome',
         javascriptEnabled: true,
