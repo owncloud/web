@@ -271,7 +271,7 @@ export default {
       for (let i = 0; i < pathSplit.length; i++) {
         breadcrumb.index = i
         breadcrumb.text = pathSplit.slice(0, i + 1)[i]
-        breadcrumb.route = '/' + pathSplit.slice(0, i + 1).join('/')
+        breadcrumb.to = '/files/list/' + pathSplit.slice(0, i + 1).join('/')
         if (i === 0 && breadcrumb.text === 'home') {
           continue
         }
