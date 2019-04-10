@@ -4,6 +4,9 @@ let LOCAL_BACKEND_URL = process.env.BACKEND_HOST || 'http://localhost:8080'
 const BACKEND_ADMIN_USERNAME = process.env.BACKEND_USERNAME || 'admin'
 const BACKEND_ADMIN_PASSWORD = process.env.BACKEND_PASSWORD || 'admin'
 LOCAL_BACKEND_URL = LOCAL_BACKEND_URL.startsWith('http') ? LOCAL_BACKEND_URL : 'http://' + LOCAL_BACKEND_URL
+const SELENIUM_HOST = process.env.SELENIUM_HOST || ''
+const SELENIUM_PORT = process.env.SELENIUM_PORT || 4445
+const START_PROCESS = (SELENIUM_HOST === '')
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
@@ -22,11 +25,12 @@ module.exports = {
         backend_admin_username: BACKEND_ADMIN_USERNAME,
         backend_admin_password: BACKEND_ADMIN_PASSWORD
       },
+      selenium_host: SELENIUM_HOST,
       webdriver: {
-        start_process: true,
+        start_process: START_PROCESS,
         server_path: chromedriver.path,
-        port: 4445,
-        cli_args: ['--port=4445']
+        port: SELENIUM_PORT,
+        cli_args: ['--port=' + SELENIUM_PORT]
       },
       screenshots : {
         enabled : true,
