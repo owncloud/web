@@ -1,7 +1,7 @@
 <template>
   <div class="oc-collaboration-status">
     <oc-accordion uk-accordion="collapsible: false; multiple: true">
-      <oc-accordion-item class="uk-open" title="Owner(s)">
+      <oc-accordion-item class="uk-open" :title="$_ocCollaborationStatus_ownerTitle">
         <template slot="content">
           <oc-user
             :avatar="owner.avatar"
@@ -10,7 +10,7 @@
             :email="owner.email"
           >
             <template slot="properties">
-              <span>Owner</span>
+              <span v-translate>Owner</span>
             </template>
             <template slot="actions">
               <oc-icon name="delete" />
@@ -19,9 +19,9 @@
           </oc-user>
         </template>
       </oc-accordion-item>
-      <oc-accordion-item class="uk-open" title="Collaborators">
+      <oc-accordion-item class="uk-open" :title="$_ocCollaborationStatus_collaboratorsTitle">
         <template slot="content">
-          <oc-text-input placeholder="Add name(s), email(s) or federation ID's" />
+          <oc-text-input :placeholder="$_ocCollaborationStatus_autocompletePlacholder" />
           <ul class="uk-list">
             <li v-for="(c, k) in collaborators" :key="k">
               <oc-user
@@ -38,7 +38,9 @@
                       :uk-tooltip="roles[c.role].description"
                     />
                     <span v-if="c.role && c.expires">|</span>
-                    <span v-if="c.expires">Expires: {{ c.expires }}</span>
+                    <span v-if="c.expires">
+                      <translate :translate-params="{expires: c.expires}">Expires: %{expires}</translate>
+                    </span>
                   </span>
                 </template>
                 <template slot="actions">
@@ -60,7 +62,7 @@
                   </div>
                 </div>
                 <div class="uk-container uk-padding-remove uk-margin-small-top">
-                  <oc-button icon="save" class="uk-align-right" text="Save" @click="save(c)" />
+                  <oc-button icon="save" class="uk-align-right" @click="save(c)"><translate>Save</translate></oc-button>
                 </div>
               </div>
             </li>
@@ -144,6 +146,17 @@ export default {
         return s != share
       })
       */
+    }
+  },
+  computed: {
+    $_ocCollaborationStatus_ownerTitle() {
+      return this.$gettext('Owner(s)')
+    },
+    $_ocCollaborationStatus_collaboratorsTitle() {
+      return this.$gettext('Collaborators')
+    },
+    $_ocCollaborationStatus_autocompletePlacholder () {
+      return this.$gettext('Add name(s), email(s) or federation ID\'s')
     }
   }
 }
