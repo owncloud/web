@@ -26,7 +26,7 @@
                    :filename="item.name" :key="item.id" />
         </oc-table-cell>
         <oc-table-cell class="uk-text-meta uk-text-nowrap">
-          {{ item.size | fileSize }}
+          {{ item.size | multiplyFileSize | fileSize }}
         </oc-table-cell>
         <oc-table-cell class="uk-text-meta uk-text-nowrap uk-visible@s">
           {{ formDateFromNow(item.mdate) }}
