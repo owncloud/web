@@ -11,10 +11,9 @@ export default {
       if (isNaN(int)) {
         return '?'
       }
-      return filesize(int)
-    },
-    multiplyFileSize (int) {
-      return int * 100
+      return filesize(int, {
+        round: 2
+      })
     }
   },
   data: () => ({
