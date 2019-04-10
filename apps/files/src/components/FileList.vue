@@ -6,10 +6,10 @@
           <oc-checkbox class="uk-margin-small-left" @click.native="toggleAll" :value="all" />
         </oc-table-cell>
         <oc-table-cell shrink />
-        <oc-table-cell type="head" class="uk-text-truncate" v-text="'Name'"/>
-        <oc-table-cell shrink type="head" v-text="'Size'"/>
-        <oc-table-cell shrink type="head" class="uk-text-nowrap uk-visible@s" v-text="'Modification Time'"/>
-        <oc-table-cell shrink type="head" v-text="'Actions'"/>
+        <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
+        <oc-table-cell shrink type="head"><translate>Size</translate></oc-table-cell>
+        <oc-table-cell shrink type="head" class="uk-text-nowrap uk-visible@s" v-translate>Modification Time</oc-table-cell>
+        <oc-table-cell shrink type="head" v-translate>Actions</oc-table-cell>
       </oc-table-row>
     </oc-table-group>
     <oc-table-group>
