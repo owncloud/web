@@ -1,7 +1,17 @@
 <template>
   <oc-app-side-bar :disableAction="false" @close="close()">
-    <template slot="title">
-      <span class="uk-text-lead uk-margin-bottom">{{ getTabName }}</span>
+    <template slot="title" v-if="items.length === 1">
+      <div class="uk-inline">
+        <oc-icon :name="fileTypeIcon(items[0])" size="large" />
+      </div>
+      <div class="uk-inline">
+        <div>
+          {{ getTabName }} <oc-icon name="link" aria-label="Close"/>
+        </div>
+        <div>
+          <oc-star class="uk-inline" :shining="items[0].starred"/> {{ items[0].size | fileSize }}, {{ formDateFromNow(items[0].mdate) }}
+        </div>
+      </div>
     </template>
     <template slot="content">
       <oc-tabs>
