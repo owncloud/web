@@ -7,7 +7,7 @@ module.exports = {
       this.waitForFileVisible(folder)
       this.useXpath()
         .moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
-        .click(this.getFileRowSelectorByFileName(folder))
+        .click(this.getFileLinkSelectorByFileName(folder))
         .useCss()
       return this.waitForElementNotPresent('@filesListProgressBar')
         .waitForElementVisible('@breadcrumb')
@@ -27,6 +27,11 @@ module.exports = {
         element.selector = element.selector.replace(/"/g, "'")
       }
       return util.format(element.selector, fileName)
+    },
+    getFileLinkSelectorByFileName: function (fileName) {
+      return this
+        .getFileRowSelectorByFileName(fileName) +
+          this.elements['fileLinkInFileRow'].selector
     },
     showHiddenFiles: function () {
       return this
@@ -68,7 +73,10 @@ module.exports = {
       selector: '#files-breadcrumb li:nth-of-type(1)'
     },
     fileRowByName: {
-      selector: '//a[contains(@class, "file-row-name")][@filename="%s"]'
+      selector: '//a[contains(@class, "file-row-name")][@filename="%s"]/../..'
+    },
+    fileLinkInFileRow: {
+      selector: '//a[contains(@class, "file-row-name")]'
     },
     filterListButton: {
       selector: '#filter-list-btn'
