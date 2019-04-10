@@ -32,9 +32,9 @@ module.exports = {
         port: SELENIUM_PORT,
         cli_args: ['--port=' + SELENIUM_PORT]
       },
-      screenshots : {
-        enabled : true,
-        path : "tests/reports/screenshots",
+      screenshots: {
+        enabled: true,
+        path: 'tests/reports/screenshots',
         on_failure: true
       },
       desiredCapabilities: {
