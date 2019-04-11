@@ -17,10 +17,9 @@ Feature: create folders
     When the user reloads the current page of the webUI
     Then folder "sub-folder" should be listed on the webUI
 
-  @skip
   Scenario: Create a folder with existing name
     When the user creates a folder with the invalid name "simple-folder" using the webUI
-    Then the error message 'The resource you tried to create already exists' should be displayed on the webUI
+    Then the error message 'Creating folder failed ....' should be displayed on the webUI
 
   @skip @yetToImplement
   Scenario: Create a folder in a public share
