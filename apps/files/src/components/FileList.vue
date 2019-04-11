@@ -33,7 +33,7 @@
         </oc-table-cell>
         <oc-table-cell>
           <div class="uk-button-group uk-margin-small-right">
-            <oc-button v-for="(action, index) in actions" :key="index" @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :arialabel="action.ariaLabel" />
+            <oc-button v-for="(action, index) in actions" :key="index" @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :ariaLabel="action.ariaLabel" />
           </div>
         </oc-table-cell>
       </oc-table-row>

@@ -28,6 +28,21 @@ module.exports = {
       }
       return this
     },
+    deleteFile: function (fileName) {
+      const deleteBtnSelector = this.getFileRowSelectorByFileName(fileName) +
+                                this.elements['deleteButtonInFileRow'].selector
+      return this.initAjaxCounters()
+        .waitForFileVisible(fileName)
+        .useXpath()
+        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
+        .click(deleteBtnSelector)
+        .waitForElementVisible('@deleteFileConfirmationBtn')
+        .waitForAnimationToFinish()
+        .click('@deleteFileConfirmationBtn')
+        .waitForElementNotVisible('@deleteFileConfirmationDialog')
+        .waitForOutstandingAjaxCalls()
+        .useCss()
+    },
     waitForFileVisible: function (fileName) {
       var selector = this.getFileRowSelectorByFileName(fileName)
       return this
@@ -60,6 +75,13 @@ module.exports = {
       this.api.elements('css selector', this.elements['fileRows'], function (result) {
         callback(result)
       })
+    },
+    assertElementNotListed: function (element) {
+      return this
+        .waitForElementVisible('@filesTable')
+        .useXpath()
+        .waitForElementNotPresent('@loadingIndicator')
+        .waitForElementNotPresent(this.getFileRowSelectorByFileName(element))
     }
   },
   elements: {
@@ -95,6 +117,17 @@ module.exports = {
     },
     fileLinkInFileRow: {
       selector: '//a[contains(@class, "file-row-name")]'
+    },
+    deleteFileConfirmationDialog: {
+      selector: '#delete-file-confirmation-dialog'
+    },
+    deleteButtonInFileRow: {
+      selector: '//button[@aria-label="Delete"]',
+      locateStrategy: 'xpath'
+    },
+    deleteFileConfirmationBtn: {
+      selector: '//div[@id="delete-file-confirmation-dialog"]//button[@text="Ok"]',
+      locateStrategy: 'xpath'
     },
     filterListButton: {
       selector: '#filter-list-btn'
