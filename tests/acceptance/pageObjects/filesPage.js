@@ -13,6 +13,21 @@ module.exports = {
         .waitForElementVisible('@breadcrumb')
         .assert.containsText('@breadcrumb', folder)
     },
+    createFolder: function (name, expectToSucceed = true) {
+      this
+        .waitForElementVisible('@newFileMenuButton', 500000)
+        .click('@newFileMenuButton')
+        .waitForElementVisible('@newFolderButton')
+        .click('@newFolderButton')
+        .waitForElementVisible('@newFolderInput')
+        .setValue('@newFolderInput', name)
+        .click('@newFolderOkButton')
+        .waitForElementNotPresent('@loadingIndicator')
+      if (expectToSucceed) {
+        this.waitForElementNotVisible('@newFolderDialog')
+      }
+      return this
+    },
     waitForFileVisible: function (fileName) {
       var selector = this.getFileRowSelectorByFileName(fileName)
       return this

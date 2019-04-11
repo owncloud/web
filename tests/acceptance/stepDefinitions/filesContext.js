@@ -22,16 +22,11 @@ Given('the user has browsed to the files page', function () {
 })
 
 When('the user creates a folder with the name {string} using the webUI', function (folderName) {
-  return client.page.filesPage()
-    .waitForElementVisible('@newFileMenuButton', 500000)
-    .click('@newFileMenuButton')
-    .waitForElementVisible('@newFolderButton')
-    .click('@newFolderButton')
-    .waitForElementVisible('@newFolderInput')
-    .setValue('@newFolderInput', folderName)
-    .click('@newFolderOkButton')
-    .waitForElementNotPresent('@loadingIndicator')
-    .waitForElementNotVisible('@newFolderDialog')
+  return client.page.filesPage().createFolder(folderName)
+})
+
+When('the user creates a folder with the invalid name {string} using the webUI', function (folderName) {
+  return client.page.filesPage().createFolder(folderName, false)
 })
 
 When('the user opens folder {string} using the webUI', function (folder) {
