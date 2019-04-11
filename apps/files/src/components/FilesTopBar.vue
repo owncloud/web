@@ -35,20 +35,8 @@
         </translate>
       </div>
       <div class="uk-navbar-item">
-        <oc-menu>
-          <template slot="activator">
-            <div id="filter-list-btn">
-              <oc-icon name="filter_list"></oc-icon>
-            </div>
-          </template>
-          <!-- TODO: replace with oc-list elements-->
-          <ul class="uk-nav uk-dropdown-nav uk-nav-default">
-            <li>Files<oc-checkbox></oc-checkbox></li>
-            <li>Folders<oc-checkbox></oc-checkbox></li>
-            <li>Hidden files<oc-checkbox></oc-checkbox></li>
-            <li>Files by name<oc-text-input></oc-text-input></li>
-          </ul>
-        </oc-menu>
+        <oc-icon name="filter_list" id="oc-filter-list-btn" />
+        <file-filter-menu />
       </div>
     </template>
   </oc-topbar>
@@ -63,6 +51,7 @@
 
 <script>
 import FileUpload from './FileUpload.vue'
+import FileFilterMenu from './FileFilterMenu.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
@@ -70,7 +59,8 @@ import Mixins from '../mixins'
 export default {
   components: {
     FileUpload,
-    OcDialogPrompt
+    OcDialogPrompt,
+    FileFilterMenu
   },
   mixins: [
     Mixins
