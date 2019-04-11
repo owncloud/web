@@ -183,7 +183,8 @@ export default {
       })
     },
     addNewFolder (folderName) {
-      if (folderName !== '') {
+      // TODO: Get rid of home in url of root
+      if (folderName !== '' && (folderName !== 'home' || this.item !== 'home')) {
         this.fileFolderCreationLoading = true
         this.$client.files.createFolder(((this.item === 'home') ? '' : this.item) + '/' + folderName)
           .then(() => {
@@ -201,6 +202,11 @@ export default {
           .finally(() => {
             this.fileFolderCreationLoading = false
           })
+      } else {
+        this.showNotification({
+          title: this.$gettext("Can't create folder called home in root directory ...."),
+          type: 'error'
+        })
       }
     },
     addNewFile (fileName) {
