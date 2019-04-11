@@ -60,6 +60,9 @@ module.exports = {
     newFolderButton: {
       selector: '#new-folder-btn'
     },
+    newFolderDialog: {
+      selector: '#new-folder-dialog'
+    },
     newFolderInput: {
       selector: '#new-folder-input'
     },

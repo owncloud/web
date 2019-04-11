@@ -23,7 +23,7 @@ Given('the user has browsed to the files page', function () {
 
 When('the user creates a folder with the name {string} using the webUI', function (folderName) {
   const filesPage = client.page.filesPage()
-  filesPage
+  return filesPage
     .waitForElementVisible('@newFileMenuButton', 500000)
     .click('@newFileMenuButton')
     .waitForElementVisible('@newFolderButton')
@@ -31,10 +31,8 @@ When('the user creates a folder with the name {string} using the webUI', functio
     .waitForElementVisible('@newFolderInput')
     .setValue('@newFolderInput', folderName)
     .click('@newFolderOkButton')
-
-  client.waitForAjaxCallsToStartAndFinish()
-  return filesPage
     .waitForElementNotPresent('@loadingIndicator')
+    .waitForElementNotVisible('@newFolderDialog')
 })
 
 When('the user opens folder {string} using the webUI', function (folder) {

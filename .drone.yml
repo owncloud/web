@@ -77,18 +77,18 @@ pipeline:
       - cd /var/www/owncloud/phoenix
       - yarn run acceptance-tests-drone
 
-  upload-screenshots:
-    image: plugins/s3
-    bucket: phoenix
-    acl: public-read
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-    path_style: true
-    endpoint: https://minio.owncloud.com/
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    secrets: [ aws_access_key_id, aws_secret_access_key ]
-    when:
-      status: [ failure ]
+#  upload-screenshots:
+#    image: plugins/s3
+#    bucket: phoenix
+#    acl: public-read
+#    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+#    target: /screenshots/${DRONE_BUILD_NUMBER}
+#    path_style: true
+#    endpoint: https://minio.owncloud.com/
+#    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+#    secrets: [ aws_access_key_id, aws_secret_access_key ]
+#    when:
+#      status: [ failure ]
 
   build-github-comment:
     image: owncloud/ubuntu:16.04
@@ -162,3 +162,16 @@ services:
 
   docker:
     image: docker:18.04-dind
+
+matrix:
+  include:
+    - PHP_VERSION=7.1
+    - PHP_VERSION=7.1
+    - PHP_VERSION=7.1
+    - PHP_VERSION=7.1
+    - PHP_VERSION=7.1
+    - PHP_VERSION=7.1
+    - PHP_VERSION=7.1
+    - PHP_VERSION=7.1
+    - PHP_VERSION=7.1
+    - PHP_VERSION=7.1
