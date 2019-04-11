@@ -1,5 +1,3 @@
-import { setupMaster } from "cluster";
-
 <template>
   <div v-if="enabled">
     <oc-spinner v-if="loading" />
