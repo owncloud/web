@@ -14,16 +14,7 @@
       <div class="uk-navbar-item">
         <oc-menu v-show="fileUpload">
           <oc-progress-pie slot="activator" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
-          <ul>
-            <li
-              v-for="n in inProgress.length"
-              :key="n">
-                <oc-icon color="primary" name="file_copy"></oc-icon>
-                <span>{{ inProgress[n - 1].name }}</span>
-                <span >{{ inProgress[n - 1].size | fileSize}}</span>
-                <oc-progress color="primary" :value="inProgress[n - 1].progress" :max="100"></oc-progress>
-            </li>
-          </ul>
+          <oc-upload-menu :items="inProgress" />
         </oc-menu>
 
         <oc-menu v-if="this.canUpload">
