@@ -33,7 +33,7 @@
         </oc-table-cell>
         <oc-table-cell>
           <div class="uk-button-group uk-margin-small-right">
-            <oc-button v-for="(action, index) in actions" :key="index" @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" aria-label="Edit Picture" />
+            <oc-button v-for="(action, index) in actions" :key="index" @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :arialabel="action.ariaLabel" />
           </div>
         </oc-table-cell>
       </oc-table-row>
@@ -122,15 +122,18 @@ export default {
       let actions = [
         { icon: 'edit',
           handler: this.changeName,
+          ariaLabel: 'Edit',
           isEnabled: function (item) {
             return item.canRename()
           } },
         { icon: 'file_download',
           handler: this.downloadFile,
+          ariaLabel: 'Download',
           isEnabled: function (item) {
             return item.canDownload()
           } },
         { icon: 'delete',
+          ariaLabel: 'Delete',
           handler: this.deleteFile,
           isEnabled: function (item) {
             return item.canBeDeleted()
