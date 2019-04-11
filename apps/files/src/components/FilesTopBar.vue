@@ -27,13 +27,14 @@
         </oc-menu>
 
         <oc-menu v-if="this.canUpload">
-          <oc-button id="new-file-menu-btn" text="+ New" slot="activator" variation="primary"></oc-button>
-          <!-- TODO: replace with oc-list elements-->
-          <ul class="uk-nav uk-dropdown-nav uk-nav-default">
+          <oc-button id="new-file-menu-btn" slot="activator" variation="primary" type="button">
+            <translate>+ New</translate>
+          </oc-button>
+          <template slot="subnav">
             <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-            <li @click="createFolder = true" id="new-folder-btn"><a href="#"><oc-icon name="create_new_folder"/><translate>Create new folder ...</translate></a></li>
-            <li @click="createFile = true" id="new-file-btn"><a href="#"><oc-icon name="save"/><translate>Create new file ...</translate></a></li>
-          </ul>
+            <oc-menu-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder ...</translate></oc-menu-item>
+            <oc-menu-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file ...</translate></oc-menu-item>
+          </template>
         </oc-menu>
         <span v-if="!this.canUpload" v-translate>You have no permission to upload.</span>
       </div>
