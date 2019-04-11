@@ -1,8 +1,32 @@
 <template>
-  <div>
-      <p>versions side bar </p>
-  </div>
-</template>
+    <div>
+        <oc-table middle divider v-if="selectedFiles.length === 1">
+            <oc-table-group>
+                <oc-table-row v-for="(item, index) in versions" :key="index" class="file-row">
+                    <oc-table-cell>
+                        <oc-table-cell class="uk-text-meta uk-text-nowrap">
+                            {{ formDateFromNow(item.fileInfo['{DAV:}getlastmodified']) }}
+                        </oc-table-cell>
+                        <oc-table-cell class="uk-text-meta uk-text-nowrap">
+                            {{  item.fileInfo['{DAV:}getcontentlength'] | fileSize }}
+                        </oc-table-cell>
+                    </oc-table-cell>
+                    <oc-table-cell>
+                        <div class="uk-button-group uk-margin-small-right">
+                            <oc-button @click="revertVersion(item)" icon="restore"></oc-button>
+                            <oc-button @click="downloadVersion(item)" icon="cloud_download"></oc-button>
+                        </div>
+                    </oc-table-cell>
+                </oc-table-row>
+            </oc-table-group>
+        </oc-table>
+        <div v-else>
+            <span v-translate>Please choose only a single File</span>
+        </div>
+        <div v-show="!hasVersion && selectedFiles.length === 1">
+          <span v-translate>No Versions available for this file</span>
+        </div>
+    </div></template>
 <script>
 import Mixins from '../mixins.js'
 import { mapGetters } from 'vuex'
@@ -26,11 +50,6 @@ export default {
     }
   },
   methods: {
-    restorePath (file) {
-      let extension = this.currentFile.extension
-      let filename = this.currentFile.name.replace(`.${extension}`, '')
-      return `${filename}_v${this.currentVersionId(file)}.${extension}`
-    },
     currentVersionId (file) {
       let etag = file.name.split('/')
       return etag[etag.length - 1]
@@ -40,8 +59,8 @@ export default {
         if (res) this.versions = res
       })
     },
-    revertVersion (file, restorePath = '/') {
-      this.$client.fileVersions.restoreFileVersion(this.currentFile.id, this.currentVersionId(file), restorePath).then(() => {
+    revertVersion (file) {
+      this.$client.fileVersions.restoreFileVersion(this.currentFile.id, this.currentVersionId(file), this.currentFile.path).then(() => {
         this.$emit('reload')
       })
     },

@@ -41,9 +41,9 @@ function _buildFile (file) {
     cdate: '', // TODO: Retrieve data of creation of a file
     size: (function () {
       if (file.type === 'dir') {
-        return file['fileInfo']['{http://owncloud.org/ns}size'] / 100
+        return file['fileInfo']['{http://owncloud.org/ns}size']
       } else {
-        return file['fileInfo']['{DAV:}getcontentlength'] / 100
+        return file['fileInfo']['{DAV:}getcontentlength']
       }
     }()),
     extension: ext,
