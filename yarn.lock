@@ -5732,10 +5732,10 @@ output-file-sync@^2.0.0:
     is-plain-obj "^1.1.0"
     mkdirp "^0.5.1"
 
-owncloud-design-system@^1.0.0-447:
-  version "1.0.0-447"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-447.tgz#590fb29f223dbfd9dfe4bc3c41f991cece8fd6db"
-  integrity sha512-PayjsG7xAesJz0SGmnYG9DatAwfZBJpZhesvKN1sqv8VhoNPKy3/kBeMI9diXecdqzbF7sQp4wAmflxkGdBadg==
+owncloud-design-system@^1.0.0-478:
+  version "1.0.0-478"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-478.tgz#4b964a197a901ef0d3e90bfc15caa309096f0e87"
+  integrity sha512-j/wjmo7lkc9sIJBZdw4yfVtTalcDOcsm0J/lOWmHpKdIfGwdmuoRSxTyGyvoz5n5/10RqDp+VJ6micW3UhzfUg==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.5.0"
@@ -5747,7 +5747,7 @@ owncloud-design-system@^1.0.0-447:
     vue "^2.6.10"
     vue-lodash "^2.0.2"
     vue-meta "^1.6.0"
-    vue-router "^3.0.2"
+    vue-router "^3.0.3"
     vuex "^3.1.0"
     webfontloader "^1.6.28"
 
@@ -8114,7 +8114,7 @@ vue-meta@^1.6.0:
     lodash.uniqueid "^4.0.1"
     object-assign "^4.1.1"
 
-vue-router@^3.0.2, vue-router@^3.0.3:
+vue-router@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.3.tgz#370ca607475c45a1cfab2d9d2ac846feab1c534c"
   integrity sha512-62rB6GjJuyklnLL+yKST469yCYj93SXEn8rpYjxgLwv0aH/Fd6OApD8Hgi9RlraZ1OOwv3jPQvZTtf1GixYW+g==
