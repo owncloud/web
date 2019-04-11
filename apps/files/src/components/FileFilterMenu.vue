@@ -1,26 +1,25 @@
 <template>
-  <v-menu class="mt-2" offset-y>
-    <v-btn slot="activator" flat @click="focusFilenameFilter"><v-icon large>filter_list</v-icon></v-btn>
-    <v-list>
-      <v-list-tile v-for="(filter, fid) in fileFilter" :key="fid">
-        <v-list-tile-title v-text="fileFilterTranslations[filter.name]"></v-list-tile-title>
-        <v-checkbox :input-value="filter.value" @change="setFileFilter({ name: filter.name, value: $event })"></v-checkbox>
-      </v-list-tile>
-      <v-list-tile>
-        <v-list-tile-title>
-          <span v-translate>Name Filter</span>
-        </v-list-tile-title>
-        <v-list-tile-title>
-        <search-bar @input="setFilterTerm" :value="filterTerm" ref="filenameFilter" autofocus :label="$gettext('Filter')" icon="false"/>
-        </v-list-tile-title>
-      </v-list-tile>
-    </v-list>
-  </v-menu>
+  <ul class="uk-nav uk-dropdown-nav uk-nav-default">
+    <template v-for="(filter, fid) in fileFilter">
+      <oc-filter-menu-item :key="fid" :name="filter.tag" :value="filter.value" @change="setFileFilter({ name: filter.name, value: !filter.value })">
+        {{ fileFilterTranslations[filter.name] }}
+      </oc-filter-menu-item>
+    </template>
+    <oc-filter-menu-item>
+     <template v-slot:searchBar>
+       <div class="uk-margin-small-top">
+         <label>
+           <translate>Name Filter</translate>
+         </label>
+       </div>
+       <oc-search-bar :type-ahead="true" @search="setFilterTerm" :button="false" icon="" />
+     </template>
+   </oc-filter-menu-item>
+  </ul>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-
 export default {
   name: 'FileFilterMenu',
   data () {
