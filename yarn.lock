@@ -5157,15 +5157,6 @@ min-document@^2.19.0:
   dependencies:
     dom-walk "^0.1.0"
 
-mini-css-extract-plugin@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-0.5.0.tgz#ac0059b02b9692515a637115b0cc9fed3a35c7b0"
-  integrity sha512-IuaLjruM0vMKhUUT51fQdQzBYTX49dLj8w68ALEAe2A4iYNpIC4eMac67mt3NzycvjOlf07/kYxJDc0RTl1Wqw==
-  dependencies:
-    loader-utils "^1.1.0"
-    schema-utils "^1.0.0"
-    webpack-sources "^1.1.0"
-
 mini-css-extract-plugin@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-0.6.0.tgz#a3f13372d6fcde912f3ee4cd039665704801e3b9"
@@ -5751,13 +5742,13 @@ output-file-sync@^2.0.0:
     is-plain-obj "^1.1.0"
     mkdirp "^0.5.1"
 
-owncloud-design-system@^1.0.0-493:
-  version "1.0.0-493"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-493.tgz#994a41a2d5d715fe3ecb3dd2762fe41d55a39877"
-  integrity sha512-brJl1Yg0o8nrC80RSmlGXCUniPTfXmlVi0YqJ6zHAAgkJjUJxsDvQP7qMBEHX2gRxLNevY0tEG4l2KXUDbEe1w==
+owncloud-design-system@^1.0.0-500:
+  version "1.0.0-500"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-500.tgz#b90a2b0909e8062a4346e4a40c309879ece159e6"
+  integrity sha512-FAQOW6fcyw5NXJw5j9+EOi8rCXeWqdScx8jEU0In5vqlOYqAR/dGSs4Tzhr66/n6oddyPDdx6Wh5+GNoJ+4xcQ==
   dependencies:
     lodash "^4.17.11"
-    mini-css-extract-plugin "^0.5.0"
+    mini-css-extract-plugin "^0.6.0"
     postcss-import "^12.0.1"
     postcss-loader "^3.0.0"
     postcss-safe-parser "^4.0.1"
