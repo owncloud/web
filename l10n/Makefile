@@ -20,7 +20,7 @@ TEMPLATE_FILE = ./template.pot
 
 # Available locales for the app.
 
-LOCALES = de fr es it
+LOCALES = de fr es it cs
 
 # Name of the generated .po files for each available locale.
 LOCALE_FILES ?= $(foreach app,$(APPS),$(patsubst %,$(app)/l10n/locale/%/LC_MESSAGES/app.po,$(LOCALES))) $(patsubst %,./locale/%/LC_MESSAGES/app.po,$(LOCALES))

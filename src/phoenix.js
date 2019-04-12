@@ -50,6 +50,14 @@ Vue.component('drop', Drop)
 
 let apps
 let config
+const supportedLanguages = {
+  en: 'English',
+  de: 'Deutsch',
+  es: 'Español',
+  cs: 'Czech',
+  fr: 'Français',
+  it: 'Italiano',
+}
 
 function loadApps () {
   let plugins = []
@@ -73,8 +81,11 @@ function loadApps () {
     if (app.plugins) plugins.push(app.plugins)
     if (app.navItems) navItems.push(app.navItems)
     if (app.translations) {
-      // only de for the time being ...
-      Object.assign(translations.de, app.translations.de)
+      Object.keys(supportedLanguages).forEach((lang) => {
+        if (translations[lang] && app.translations[lang]) {
+          Object.assign(translations[lang], app.translations[lang])
+        }
+      })
     }
     if (app.store) {
       store.registerModule(app.appInfo.name, app.store.default)
@@ -88,10 +99,7 @@ function loadApps () {
   store.dispatch('loadConfig', config)
 
   Vue.use(GetTextPlugin, {
-    availableLanguages: {
-      en: 'English',
-      de: 'German'
-    },
+    availableLanguages: supportedLanguages,
     defaultLanguage: navigator.language.substring(0, 2),
     translations: translations,
     silent: true
