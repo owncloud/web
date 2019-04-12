@@ -6,7 +6,7 @@ import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import translationsJson from '../l10n/translations.json'
 
-const store = require('./store.js')
+const store = require('./store')
 
 const appInfo = {
   name: 'Files',
