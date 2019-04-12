@@ -1,14 +1,21 @@
 <template>
-  <oc-topbar variation="primary">
-    <oc-topbar-logo icon="menu" title="Files" slot="left" @click="toggleSidebar(!isSidebarVisible)"></oc-topbar-logo>
-    <oc-topbar-item slot="title">
-      <oc-img :src="configuration.theme.logo.big" style="height: 60px" />
-    </oc-topbar-item>
-    <oc-topbar-item slot="right">
-      <Avatar class="uk-margin-small-right" :userid="user.id" />
-      <span>{{ user.displayname }}</span>
-    </oc-topbar-item>
-  </oc-topbar>
+  <oc-navbar tag="header" class="oc-topbar">
+    <oc-navbar-item position="left">
+      <button class="oc-topbar-menu-burger" aria-label="Files" @click="toggleSidebar(!isSidebarVisible)">
+        <oc-icon name="menu" class="oc-topbar-menu-burger-icon" />
+        <span class="oc-topbar-menu-burger-label">Files</span>
+      </button>
+    </oc-navbar-item>
+    <oc-navbar-item position="center">
+      <router-link to="/" class="oc-topbar-icon">ownCloud X</router-link>
+    </oc-navbar-item>
+    <oc-navbar-item position="right">
+      <div class="oc-topbar-personal">
+        <avatar class="oc-topbar-personal-avatar" :userid="user.id" />
+        <span class="oc-topbar-personal-label">{{ user.displayname }}</span>
+      </div>
+    </oc-navbar-item>
+  </oc-navbar>
 </template>
 
 <script>
@@ -17,15 +24,6 @@ import pluginHelper from '../mixins/pluginHelper.js'
 import Avatar from './Avatar.vue'
 
 export default {
-  data () {
-    return {
-      drawer: false,
-      items: [
-        { title: 'Home', icon: 'dashboard' },
-        { title: 'About', icon: 'question_answer' }
-      ]
-    }
-  },
   mixins: [
     pluginHelper
   ],
