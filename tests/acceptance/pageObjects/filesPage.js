@@ -167,11 +167,11 @@ module.exports = {
       selector: '#filter-list-btn'
     },
     hiddenFilesLabel: {
-      selector: '//li[text()="Hidden files"]',
+      selector: '//li[text()="Hidden"]',
       locateStrategy: 'xpath'
     },
     hiddenFilesCheckbox: {
-      selector: '//li[text()="Hidden files"]/input',
+      selector: '//li[text()="Hidden"]/input',
       locateStrategy: 'xpath'
     },
     loadingIndicator: {
