@@ -7,7 +7,7 @@ export PATH := $(NODE_BINDIR):$(PATH)
 APPS =  ../apps/files ../apps/pdf-viewer ../apps/markdown-editor
 
 # Where to find core folder
-CORE = ../src
+CORE = ../
 
 # List of all files to extract
 INPUT_FILES = $(CORE) $(APPS)
@@ -51,7 +51,7 @@ $(TEMPLATE_FILE):
 			export OUT_DIR=$$app/l10n; \
 		fi; \
 		mkdir -p $$OUT_DIR; \
-		export GETTEXT_APP_SOURCES=`find $$app -name '*.vue'`;\
+		export GETTEXT_APP_SOURCES=`find $$app/src/ -name '*.vue' -o -name '*.js'`;\
 		node ../node_modules/easygettext/src/extract-cli.js --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
 	done;
 

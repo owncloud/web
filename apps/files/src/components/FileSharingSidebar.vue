@@ -6,6 +6,8 @@
 
 <script>
 export default {
-  name: 'FileSharingSidebar'
+  title: ($gettext) => {
+    return $gettext('Sharing')
+  }
 }
 </script>
