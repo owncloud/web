@@ -20,7 +20,7 @@ Pushing a new design and frontend concept to ownCloud
 - optionally provide custom credentials: `export OC_USER=admin && export OC_PASS=admin`
 - build, configure and run phoenix
 - install the Chrome browser
-- run `yarn run acceptance-tests`
+- run `yarn run acceptance-tests <feature-files-to-test>`
 
 ## Update dependencies
 - Run `yarn update-all` to update core and app dependencies
