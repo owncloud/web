@@ -23,4 +23,5 @@ exports.command = function () {
       }
     })(XMLHttpRequest.prototype.send)
   })
+  return this
 }

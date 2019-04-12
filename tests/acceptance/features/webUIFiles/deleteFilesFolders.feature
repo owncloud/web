@@ -4,27 +4,27 @@ Feature: deleting files and folders
   So that I can keep my filing system clean and tidy
 
   Background:
-    Given these users have been created with default attributes:
-      | username |
-      | user1    |
-      | user2    |
+    Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest @skip
+  @smokeTest
   Scenario: Delete files & folders one by one and check its existence after page reload
     When the user deletes the following elements using the webUI
       | name                                  |
       | simple-folder                         |
       | lorem.txt                             |
-      | strängé नेपाली folder                 |
+      | strängé नेपाली folder                   |
       | strängé filename (duplicate #2 &).txt |
     Then as "user1" folder "simple-folder" should not exist
     And as "user1" file "lorem.txt" should not exist
     And as "user1" folder "strängé नेपाली folder" should not exist
     And as "user1" file "strängé filename (duplicate #2 &).txt" should not exist
-    And the deleted elements should not be listed on the webUI
-    And the deleted elements should not be listed on the webUI after a page reload
+    Then the deleted elements should not be listed on the webUI
+    But folder "simple-empty-folder" should be listed on the webUI
+    And file "lorem-big.txt" should be listed on the webUI
+    And file "strängé नेपाली folder" should not be listed on the webUI
+    But the deleted elements should not be listed on the webUI after a page reload
 
   @skip
   Scenario: Delete a file with problematic characters
@@ -101,7 +101,6 @@ Feature: deleting files and folders
     But as "user1" file "data.zip" should not exist
     And file "data.zip" should not be listed on the webUI
 
-  @skip
   Scenario: Delete an empty folder
     When the user creates a folder with the name "my-empty-folder" using the webUI
     And the user creates a folder with the name "my-other-empty-folder" using the webUI
@@ -111,7 +110,6 @@ Feature: deleting files and folders
     But as "user1" folder "my-empty-folder" should not exist
     And folder "my-empty-folder" should not be listed on the webUI
 
-  @skip
   Scenario: Delete the last file in a folder
     When the user deletes file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then as "user1" file "zzzz-must-be-last-file-in-folder.txt" should not exist

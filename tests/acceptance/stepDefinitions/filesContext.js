@@ -1,5 +1,6 @@
 const { client } = require('nightwatch-api')
 const { Given, When, Then } = require('cucumber')
+let deletedElementsTable = []
 
 When('the user browses to the files page',
   () => {
@@ -37,29 +38,51 @@ When('the user enables the setting to view hidden folders on the webUI', functio
   return client.page.filesPage().showHiddenFiles()
 })
 
+When('the user deletes file/folder {string} using the webUI', function (element) {
+  return client.page.filesPage().deleteFile(element)
+})
+
+When('the user deletes the following elements using the webUI', function (table) {
+  for (const line of table.rows()) {
+    client.page.filesPage().deleteFile(line[0])
+    deletedElementsTable.push(line[0])
+  }
+  return client.page.filesPage()
+})
+
 Then(/there should be no files\/folders listed on the webUI/, function () {
   return client.page.filesPage().allFileRows(function (result) {
     client.assert.equal(result.value.length, 0)
   })
 })
 
-Then('folder {string} should be listed on the webUI', function (folder) {
+Then('file/folder {string} should be listed on the webUI', function (folder) {
   return client
     .page
     .filesPage()
     .waitForFileVisible(folder)
 })
 
-Then('folder {string} should not be listed on the webUI', function (folder) {
-  const filesPage = client.page.filesPage()
-  filesPage
-    .waitForElementVisible('@filesTable')
-  filesPage
-    .useXpath()
-    .waitForElementNotPresent(filesPage.getFileRowSelectorByFileName(folder))
-  return filesPage
+Then('file/folder {string} should not be listed on the webUI', function (folder) {
+  return client.page.filesPage().assertElementNotListed(folder)
+})
+
+Then('the deleted elements should not be listed on the webUI', function () {
+  return assertDeletedElementsAreNotListed()
+})
+
+Then('the deleted elements should not be listed on the webUI after a page reload', function () {
+  client.refresh()
+  return assertDeletedElementsAreNotListed()
 })
 
 When('the user reloads the current page of the webUI', function () {
   return client.refresh()
 })
+
+const assertDeletedElementsAreNotListed = function () {
+  for (const element of deletedElementsTable) {
+    client.page.filesPage().assertElementNotListed(element)
+  }
+  return client
+}
