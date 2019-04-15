@@ -17,10 +17,19 @@ Pushing a new design and frontend concept to ownCloud
 - run a webpack dev server `yarn run watch`
 
 ## Run acceptance tests
-- optionally provide custom credentials: `export OC_USER=admin && export OC_PASS=admin`
 - build, configure and run phoenix
 - install the Chrome browser
 - run `yarn run acceptance-tests <feature-files-to-test>`
+- available settings to be set by enviroment variables:
+
+| setting            | meaning                                                                | default               |
+|--------------------| -----------------------------------------------------------------------| ----------------------|
+| `SERVER_HOST`      | phoenix URL                                                            | http://localhost:8300 |
+| `BACKEND_HOST`     | owncloud server URL                                                    | http://localhost:8080 |
+| `BACKEND_USERNAME` | owncloud administrator username                                        | admin                 |
+| `BACKEND_PASSWORD` | owncloud administrator password                                        | admin                 |
+| `SELENIUM_HOST`    | selenium server host, if not set yarn will start selenum automatically |                       |
+| `SELENIUM_PORT`    | port of selenium server                                                | 4445                  |
 
 ## Update dependencies
 - Run `yarn update-all` to update core and app dependencies
