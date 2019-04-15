@@ -70,9 +70,22 @@ export default {
   },
   RENAME_FILE (state, { file, newValue, newPath }) {
     let fileIndex = findIndex(state.files, (f) => {
-      return f.name === file.name
+      return f.id === file.id
     })
-    state.files[fileIndex].name = newValue
+    let ext = ''
+    let name = newValue
+    let baseName = newValue
+    if (file.type !== 'dir') {
+      const ex = name.match(/\.[0-9a-z]+$/i)
+      if (ex !== null) {
+        ext = ex[0].substr(1)
+        baseName = name.substring(0, name.length - ext.length - 1)
+      }
+    }
+
+    state.files[fileIndex].name = name
+    state.files[fileIndex].basename = baseName
+    state.files[fileIndex].extension = ext
     state.files[fileIndex].path = '/' + newPath + newValue
   }
 }

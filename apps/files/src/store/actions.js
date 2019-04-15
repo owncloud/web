@@ -1,7 +1,7 @@
 import { map } from 'lodash'
 
 function _buildFile (file) {
-  let ext = false
+  let ext = ''
   if (file.type !== 'dir') {
     const ex = file.name.match(/\.[0-9a-z]+$/i)
     if (ex !== null) {
@@ -13,7 +13,6 @@ function _buildFile (file) {
     id: file['fileInfo']['{http://owncloud.org/ns}fileid'],
     starred: file['fileInfo']['{http://owncloud.org/ns}favorite'] !== '0',
     mdate: file['fileInfo']['{DAV:}getlastmodified'],
-    cdate: '', // TODO: Retrieve data of creation of a file
     size: (function () {
       if (file.type === 'dir') {
         return file['fileInfo']['{http://owncloud.org/ns}size']
@@ -21,7 +20,9 @@ function _buildFile (file) {
         return file['fileInfo']['{DAV:}getcontentlength']
       }
     }()),
-    extension: ext,
+    extension: (function () {
+      return ext
+    }()),
     name: (function () {
       let pathList = file.name.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
