@@ -1,5 +1,5 @@
 <template>
-  <oc-topbar variation="secondary">
+  <oc-topbar variation="secondary" uk-sticky="offset: 60">
     <oc-topbar-item slot="left">
       <oc-icon name="application-pdf"></oc-icon>
     </oc-topbar-item>

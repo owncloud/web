@@ -1,6 +1,6 @@
 <template>
   <div>
-  <oc-topbar variation="secondary">
+  <oc-topbar variation="secondary" uk-sticky="offset: 60">
     <template slot="left">
       <oc-topbar-logo icon="home" @click="navigateTo('files-list', 'home')"></oc-topbar-logo>
       <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
@@ -60,6 +60,7 @@
                     :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
   </div>
 </template>
+
 <script>
 import FileUpload from './FileUpload.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
