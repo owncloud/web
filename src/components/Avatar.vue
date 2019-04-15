@@ -38,16 +38,19 @@ export default {
       headers.append('Authorization', 'Bearer ' + this.getToken)
       fetch(url, { headers })
         .then(response => {
-          if (response.status === 404) {
-            this.avatarSource = ''
-            this.loading = false
-          } else {
+          if (response.ok) {
             return response.blob()
           }
+          throw new Error('Network response was not ok.')
         })
-        .then(blobby => {
+        .then(blob => {
           this.loading = false
-          this.avatarSource = window.URL.createObjectURL(blobby)
+          this.avatarSource = window.URL.createObjectURL(blob)
+        })
+        .catch(error => {
+          this.avatarSource = ''
+          this.loading = false
+          console.log('There has been a problem with your fetch operation: ', error.message)
         })
     }
   },
