@@ -8,14 +8,15 @@ Feature: rename folders
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @skip
-  Scenario Outline: Rename a folder using special characters
+  @issue-934
+  Scenario Outline: Rename a folder
     When the user renames folder "simple-folder" to <to_folder_name> using the webUI
-    Then folder <to_folder_name> should be listed on the webUI
+    #Then folder <to_folder_name> should be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder <to_folder_name> should be listed on the webUI
     Examples:
       | to_folder_name          |
+      | 'an other simple name'  |
       | 'सिमप्ले फोल्देर$%#?&@' |
       | '"quotes1"'             |
       | "'quotes2'"             |
@@ -31,7 +32,6 @@ Feature: rename folders
       | "strängé नेपाली folder" | "strängé नेपाली folder-#?2" |
       | "'single'quotes"        | "single-quotes"             |
 
-  @skip
   Scenario: Rename a folder using special characters and check its existence after page reload
     When the user renames folder "simple-folder" to "लोरेम।तयक्स्त $%&" using the webUI
     And the user reloads the current page of the webUI
@@ -47,6 +47,7 @@ Feature: rename folders
     Then folder "hash#And&QuestionMark?At@FolderName" should be listed on the webUI
 
   @skip
+  @issue-964
   Scenario: Rename a folder using spaces at front and/or back of the name
     When the user renames folder "simple-folder" to " space at start" using the webUI
     And the user reloads the current page of the webUI
@@ -89,21 +90,25 @@ Feature: rename folders
     And folder "simple-folder" should be listed on the webUI
 
   @skip
+  @issue-912
   Scenario: Rename a folder putting a name of a file which already exists
     When the user renames folder "simple-folder" to "lorem.txt" using the webUI
     Then near folder "simple-folder" a tooltip with the text 'lorem.txt already exists' should be displayed on the webUI
 
   @skip
+  @issue-965
   Scenario: Rename a folder to ..
     When the user renames folder "simple-folder" to ".." using the webUI
     Then near folder "simple-folder" a tooltip with the text '".." is an invalid file name.' should be displayed on the webUI
 
   @skip
+  @issue-965
   Scenario: Rename a folder to .
     When the user renames folder "simple-folder" to "." using the webUI
     Then near folder "simple-folder" a tooltip with the text '"." is an invalid file name.' should be displayed on the webUI
 
   @skip
+  @issue-965
   Scenario: Rename a folder to .part
     When the user renames folder "simple-folder" to "simple.part" using the webUI
     Then near folder "simple-folder" a tooltip with the text '"simple.part" has a forbidden file type/extension.' should be displayed on the webUI

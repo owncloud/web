@@ -8,15 +8,17 @@ Feature: rename files
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest  @skip
-  Scenario Outline: Rename a file using special characters
+  @smokeTest
+  @issue-934
+  Scenario Outline: Rename a file
     When the user renames file "lorem.txt" to <to_file_name> using the webUI
-    Then file <to_file_name> should be listed on the webUI
+    #Then file "<to_file_name>" should be listed on the webUI
     When the user reloads the current page of the webUI
     Then file <to_file_name> should be listed on the webUI
     Examples:
       | to_file_name           |
-      | 'लोरेम।तयक्स्त? $%#&@' |
+      | "simple-name.txt"      |
+      | "लोरेम।तयक्स्त? $%#&@" |
       | '"quotes1"'            |
       | "'quotes2'"            |
 
@@ -31,7 +33,7 @@ Feature: rename files
       | "strängé filename (duplicate #2 &).txt" | "strängé filename (duplicate #3).txt" |
       | "'single'quotes.txt"                    | "single-quotes.txt"                   |
 
-  @smokeTest  @skip
+  @smokeTest
   Scenario: Rename a file using special characters and check its existence after page reload
     When the user renames file "lorem.txt" to "लोरेम।तयक्स्त $%&" using the webUI
     And the user reloads the current page of the webUI
@@ -50,6 +52,7 @@ Feature: rename files
     Then file "aaaaaa.txt" should be listed on the webUI
 
   @skip
+  @issue-964
   Scenario: Rename a file using spaces at front and/or back of file name and type
     When the user renames file "lorem.txt" to " space at start" using the webUI
     And the user reloads the current page of the webUI
@@ -100,34 +103,36 @@ Feature: rename files
       | Could not rename "data.zip" |
     And file "data.zip" should be listed on the webUI
 
-  @skip
   Scenario: Rename the last file in a folder
     When the user renames file "zzzz-must-be-last-file-in-folder.txt" to "a-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "a-file.txt" should be listed on the webUI
 
-  @skip
   Scenario: Rename a file to become the last file in a folder
     When the user renames file "lorem.txt" to "zzzz-z-this-is-now-the-last-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "zzzz-z-this-is-now-the-last-file.txt" should be listed on the webUI
 
   @skip
+  @issue-912
   Scenario: Rename a file putting a name of a file which already exists
     When the user renames file "data.zip" to "lorem.txt" using the webUI
     Then near file "data.zip" a tooltip with the text 'lorem.txt already exists' should be displayed on the webUI
 
   @skip
+  @issue-965
   Scenario: Rename a file to ..
     When the user renames file "data.zip" to ".." using the webUI
     Then near file "data.zip" a tooltip with the text '".." is an invalid file name.' should be displayed on the webUI
 
   @skip
+  @issue-965
   Scenario: Rename a file to .
     When the user renames file "data.zip" to "." using the webUI
     Then near file "data.zip" a tooltip with the text '"." is an invalid file name.' should be displayed on the webUI
 
   @skip
+  @issue-965
   Scenario: Rename a file to .part
     When the user renames file "data.zip" to "data.part" using the webUI
     Then near file "data.zip" a tooltip with the text '"data.part" has a forbidden file type/extension.' should be displayed on the webUI
