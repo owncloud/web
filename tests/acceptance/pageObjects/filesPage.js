@@ -43,12 +43,31 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
         .useCss()
     },
-    waitForFileVisible: function (fileName) {
-      var selector = this.getFileRowSelectorByFileName(fileName)
-      return this
+    renameFile: function (fromName, toName) {
+      const renameBtnSelector = this.getFileRowSelectorByFileName(fromName) +
+        this.elements['renameButtonInFileRow'].selector
+      return this.initAjaxCounters()
+        .waitForFileVisible(fromName)
         .useXpath()
-        .waitForElementVisible(selector)
+        .moveToElement(this.getFileRowSelectorByFileName(fromName), 0, 0)
+        .click(renameBtnSelector)
+        .waitForElementVisible('@renameFileConfirmationBtn')
+        .waitForAnimationToFinish()
+        .clearValue('@renameFileInputField')
+        .setValue('@renameFileInputField', toName)
+        .click('@renameFileConfirmationBtn')
+        .waitForElementNotVisible('@renameFileConfirmationDialog')
+        .waitForOutstandingAjaxCalls()
         .useCss()
+    },
+    waitForFileVisible: function (fileName) {
+      const rowSelector = this.getFileRowSelectorByFileName(fileName)
+      const linkSelector = this.getFileLinkSelectorByFileName(fileName)
+      this
+        .useXpath()
+        .waitForElementVisible(rowSelector)
+        .expect.element(linkSelector).text.to.equal(fileName)
+      return this.useCss()
     },
     getFileRowSelectorByFileName: function (fileName) {
       var element = this.elements['fileRowByName']
@@ -127,6 +146,21 @@ module.exports = {
     },
     deleteFileConfirmationBtn: {
       selector: '//div[@id="delete-file-confirmation-dialog"]//button[@text="Ok"]',
+      locateStrategy: 'xpath'
+    },
+    renameFileConfirmationDialog: {
+      selector: '#change-file-dialog'
+    },
+    renameButtonInFileRow: {
+      selector: '//button[@aria-label="Edit"]',
+      locateStrategy: 'xpath'
+    },
+    renameFileInputField: {
+      selector: '//div[@id="change-file-dialog"]//input',
+      locateStrategy: 'xpath'
+    },
+    renameFileConfirmationBtn: {
+      selector: '//div[@id="change-file-dialog"]//button[@text="Ok"]',
       locateStrategy: 'xpath'
     },
     filterListButton: {

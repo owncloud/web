@@ -50,6 +50,10 @@ When('the user deletes the following elements using the webUI', function (table)
   return client.page.filesPage()
 })
 
+When('the user renames file/folder {string} to {string} using the webUI', function (fromName, toName) {
+  return client.page.filesPage().renameFile(fromName, toName)
+})
+
 Then(/there should be no files\/folders listed on the webUI/, function () {
   return client.page.filesPage().allFileRows(function (result) {
     client.assert.equal(result.value.length, 0)
