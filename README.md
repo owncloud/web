@@ -20,7 +20,7 @@ Pushing a new design and frontend concept to ownCloud
 - build, configure and run phoenix
 - install the Chrome browser
 - run `yarn run acceptance-tests <feature-files-to-test>`
-- available settings to be set by enviroment variables:
+- available settings to be set by environment variables:
 
 | setting            | meaning                                                                | default               |
 |--------------------| -----------------------------------------------------------------------| ----------------------|

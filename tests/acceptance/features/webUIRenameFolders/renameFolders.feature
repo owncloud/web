@@ -8,10 +8,9 @@ Feature: rename folders
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @issue-934
   Scenario Outline: Rename a folder
     When the user renames folder "simple-folder" to <to_folder_name> using the webUI
-    #Then folder <to_folder_name> should be listed on the webUI
+    Then folder <to_folder_name> should be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder <to_folder_name> should be listed on the webUI
     Examples:
