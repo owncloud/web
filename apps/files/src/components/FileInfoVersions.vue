@@ -33,6 +33,9 @@ import { mapGetters } from 'vuex'
 
 export default {
   mixins: [ Mixins ],
+  title: ($gettext) => {
+    return $gettext('Versions')
+  },
   data: () => ({
     versions: []
   }),

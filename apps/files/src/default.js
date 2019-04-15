@@ -17,15 +17,12 @@ const appInfo = {
   fileSideBars: [
     {
       app: 'files',
-      name: 'Files',
       component: FileInfoSideBar
     }, {
       app: 'files-version',
-      name: 'Versions',
       component: FileInfoVersions
     }, {
       app: 'files-sharing',
-      name: 'Sharing',
       component: FileSharingSidebar,
       quickAccess: {
         icon: 'share'

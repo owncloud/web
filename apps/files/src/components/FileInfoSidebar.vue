@@ -13,7 +13,9 @@ export default {
   mixins: [
     Mixins
   ],
-  name: 'FileInfoSidebar',
+  title: ($gettext) => {
+    return $gettext('File Details')
+  },
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     accumulatedFilesSize () {
