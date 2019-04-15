@@ -1,4 +1,4 @@
-import map from 'lodash'
+import { map } from 'lodash'
 
 function _buildFile (file) {
   let ext = false
