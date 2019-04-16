@@ -9,7 +9,7 @@ import Phoenix from './Phoenix.vue'
 
 // --- Adding global libraries ---
 
-import Client from 'js-owncloud-client'
+import ownCloud from 'owncloud-sdk'
 
 import { sync } from 'vuex-router-sync'
 import store from './store'
@@ -37,7 +37,9 @@ const _map = require('lodash/map')
 const _flatten = require('lodash/flatten')
 const _findIndex = require('lodash/findIndex')
 
-Vue.prototype.$client = new Client()
+console.log(ownCloud)
+
+Vue.prototype.$client = new ownCloud()
 
 Vue.use(VueEvents)
 Vue.use(VueRouter)
