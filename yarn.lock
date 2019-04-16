@@ -4559,14 +4559,14 @@ js-levenshtein@^1.1.3:
   integrity sha512-X2BB11YZtrRqY4EnQcLX5Rh373zbK4alC1FW7D7MBhL2gtcC17cTnr6DmfHZeS0s2rTHjUTMMHfG7gO8SSdw+g==
 
 "js-owncloud-client@github:owncloud/js-owncloud-client#master":
-  version "0.2.0-alpha1"
-  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/f991ec76290eb0ef57a2de7e04b1774f11c0ebef"
+  version "1.0.0-dev"
+  uid "2184766855eb6f92a797bdc8157521e4fa098761"
+  resolved "https://codeload.github.com/owncloud/js-owncloud-client/tar.gz/2184766855eb6f92a797bdc8157521e4fa098761"
   dependencies:
     browser-request "^0.3.3"
     davclient.js "https://github.com/owncloud/davclient.js.git"
     promise "^8.0.0"
     request "^2.81.0"
-    semver "^5.6.0"
     utf8 "^3.0.0"
     uuid "^3.3.2"
     xhr "^2.5.0"
