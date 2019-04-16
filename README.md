@@ -17,8 +17,12 @@ Pushing a new design and frontend concept to ownCloud
 - run a webpack dev server `yarn run watch`
 
 ## Run acceptance tests
+- clone and install testing app into owncloud from http://github.com/owncloud/testing
+- set `skeletondirectory` of ownCloud to `<oc-root>/apps/testing/data/webUISkeleton` e.g. `occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton`
 - build, configure and run phoenix
-- install the Chrome browser
+- setup selenium & browser
+    - install the Chrome browser and let yarn start & run selenium OR
+    - use docker to start the browser and selenium e.g.: `docker run -d -p 4445:4444 -p 5900:5900 -v /dev/shm:/dev/shm --name selenium selenium/standalone-chrome-debug` 
 - run `yarn run acceptance-tests <feature-files-to-test>`
 - available settings to be set by environment variables:
 
@@ -28,7 +32,7 @@ Pushing a new design and frontend concept to ownCloud
 | `BACKEND_HOST`     | owncloud server URL                                                    | http://localhost:8080 |
 | `BACKEND_USERNAME` | owncloud administrator username                                        | admin                 |
 | `BACKEND_PASSWORD` | owncloud administrator password                                        | admin                 |
-| `SELENIUM_HOST`    | selenium server host, if not set yarn will start selenum automatically |                       |
+| `SELENIUM_HOST`    | selenium server host, if not set yarn will start selenum automatically<br/>if running the selenium docker container as mentioned above set to `localhost` |                       |
 | `SELENIUM_PORT`    | port of selenium server                                                | 4445                  |
 
 ## Update dependencies
