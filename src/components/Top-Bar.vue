@@ -1,5 +1,5 @@
 <template>
-  <oc-navbar tag="header" class="oc-topbar">
+  <oc-navbar tag="header" class="oc-topbar" :sticky="true" :offset="0">
     <oc-navbar-item position="left">
       <button class="oc-topbar-menu-burger" aria-label="Files" @click="toggleSidebar(!isSidebarVisible)">
         <oc-icon name="menu" class="oc-topbar-menu-burger-icon" />

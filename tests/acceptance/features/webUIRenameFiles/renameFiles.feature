@@ -9,10 +9,9 @@ Feature: rename files
     And the user has browsed to the files page
 
   @smokeTest
-  @issue-934
   Scenario Outline: Rename a file
     When the user renames file "lorem.txt" to <to_file_name> using the webUI
-    #Then file "<to_file_name>" should be listed on the webUI
+    Then file <to_file_name> should be listed on the webUI
     When the user reloads the current page of the webUI
     Then file <to_file_name> should be listed on the webUI
     Examples:
