@@ -150,5 +150,8 @@ export default {
   },
   resetSearch (context) {
     context.commit('SET_SEARCH_TERM', '')
+  },
+  dragOver (context, value) {
+    context.commit('DRAG_OVER', value)
   }
 }
