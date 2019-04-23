@@ -81,7 +81,7 @@
     "babel-eslint": "^10.0.1",
     "eslint-loader": "^2.1.2",
     "oidc-client": "^1.7.1",
-    "owncloud-design-system": "^1.0.0-510",
+    "owncloud-design-system": "^1.0.0-531",
     "owncloud-sdk": "1.0.0-16",
     "url-search-params-polyfill": "^5.1.0"
   }
