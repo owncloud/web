@@ -5,7 +5,7 @@
       >
         <v-flex>
           <h2 class="accent--text">
-            <span v-translate>Redirecting ....</span>
+            <span v-translate>Redirecting…</span>
           </h2>
         </v-flex>
       </v-layout>
