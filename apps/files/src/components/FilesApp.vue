@@ -71,7 +71,6 @@ export default {
 
     openFileActionBar (file) {
       this.openFile({
-        client: this.$client,
         filePath: file.path
       })
       let actions = this.extensions(file.extension)

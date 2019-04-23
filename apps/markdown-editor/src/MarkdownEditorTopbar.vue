@@ -1,7 +1,8 @@
 <template>
   <oc-topbar variation="secondary" uk-sticky="offset: 60">
     <oc-topbar-item slot="left">
-      <oc-button icon="save" @click="saveContent(currentContent)" :disabled="!isTouched"></oc-button>
+      <oc-button icon="save" @click="saveContent" :disabled="!isTouched"></oc-button>
+      <oc-spinner v-if="isLoading"></oc-spinner>
     </oc-topbar-item>
     <oc-topbar-item slot="title">
       <span>{{ activeFile.path.substr(1) }}</span>
@@ -17,16 +18,18 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters(['activeFile']),
-    ...mapGetters('MarkdownEditor', ['isTouched', 'currentContent'])
+    ...mapGetters('MarkdownEditor', ['isTouched', 'isLoading'])
   },
   methods: {
-    ...mapActions('MarkdownEditor', ['touched']),
-    saveContent (content) {
-      this.$client.files.putFileContents(this.activeFile.path, content).then(() => { this.touched(false) })
+    ...mapActions('MarkdownEditor', ['saveFile']),
+    saveContent () {
+      this.saveFile({
+        client: this.$client
+      })
     },
     closeApp () {
       this.$router.push({
-        path: '/files/list/home'
+        path: '/files'
       })
     }
   }
