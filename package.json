@@ -59,7 +59,7 @@
     "parse-json": "^4.0.0",
     "requirejs": "^2.3.6",
     "rimraf": "^2.6.3",
-    "start-server-and-test": "^1.7.13",
+    "start-server-and-test": "^1.9.0",
     "style-loader": "^0.23.1",
     "vue": "^2.6.10",
     "vue-drag-drop": "^1.1.4",
