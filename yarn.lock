@@ -2392,9 +2392,10 @@ date-now@^0.1.4:
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
 
-"davclient.js@git+https://github.com/owncloud/davclient.js.git":
+"davclient.js@https://github.com/owncloud/davclient.js.git":
   version "0.1.3"
-  resolved "git+https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
+  uid "07237a4bb813eb19e19e322e2457ce216721d529"
+  resolved "https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -8111,10 +8112,10 @@ vue-events@^3.1.0:
   resolved "https://registry.yarnpkg.com/vue-events/-/vue-events-3.1.0.tgz#8e23121c345b4ff32ee054f9795995f3e344b27d"
   integrity sha512-JoE6ZlIEFdpj/vE7oW6T1T3Vz2h0Zxc4XEyz92L2tiRVc1TZ0u/nY1s6ZrnpHKoVxeEU0ouAp/FMxTKI3JBpvA==
 
-vue-gettext@^2.1.3:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/vue-gettext/-/vue-gettext-2.1.3.tgz#c9d9bda0fcc533f96f0ce0027ae3458c0afb5f27"
-  integrity sha512-eIrXC2iK3KWMu2GbHMX/maskOBkYkxNKdJ4OlTjKjIgj+U9R08fES/I1AUJXjO0squ0W+oFOMVZuVxlR9TBu1g==
+vue-gettext@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/vue-gettext/-/vue-gettext-2.1.4.tgz#f42aa8480ad45c3f63ee67ea2f56891740010e37"
+  integrity sha512-UkJ+tKMp4/cn5RKK7Nm0l5apvpTqeuzlP22/SkNYdEfAzFBasX6qxK1EMTZGTXGWlc6h/KMu9X6W8KjWCnFbtQ==
 
 vue-hot-reload-api@^2.3.0:
   version "2.3.1"
