@@ -59,6 +59,7 @@ const supportedLanguages = {
   cs: 'Czech',
   fr: 'Français',
   it: 'Italiano',
+  gl: 'Galego'
 }
 
 function loadApps () {
