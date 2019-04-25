@@ -164,15 +164,13 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     filterListButton: {
-      selector: '#filter-list-btn'
+      selector: '#oc-filter-list-btn'
     },
     hiddenFilesLabel: {
-      selector: '//li[text()="Hidden files"]',
-      locateStrategy: 'xpath'
+      selector: '#oc-filter-hidden-label'
     },
     hiddenFilesCheckbox: {
-      selector: '//li[text()="Hidden files"]/input',
-      locateStrategy: 'xpath'
+      selector: '#oc-filter-hidden-checkbox'
     },
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',

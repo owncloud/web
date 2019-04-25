@@ -12,21 +12,25 @@
     </template>
     <template slot="right">
       <div class="uk-navbar-item">
-        <oc-menu v-show="fileUpload">
-          <oc-progress-pie slot="activator" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
-          <oc-upload-menu :items="inProgress" />
-        </oc-menu>
+        <div v-show="fileUpload">
+          <oc-progress-pie id="oc-progress-pie" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
+          <oc-drop toggle="#oc-progress-pie" mode="click">
+            <oc-upload-menu :items="inProgress" />
+          </oc-drop>
+        </div>
 
-        <oc-menu v-if="this.canUpload">
-          <oc-button id="new-file-menu-btn" slot="activator" variation="primary" type="button">
+        <template v-if="this.canUpload">
+          <oc-button id="new-file-menu-btn" variation="primary" type="button">
             <translate>+ New</translate>
           </oc-button>
-          <template slot="subnav">
-            <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-            <oc-menu-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-menu-item>
-            <oc-menu-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-menu-item>
-          </template>
-        </oc-menu>
+          <oc-drop toggle="#new-file-menu-btn" mode="click">
+            <oc-nav>
+              <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
+              <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
+              <oc-nav-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
+            </oc-nav>
+          </oc-drop>
+        </template>
         <span v-if="!this.canUpload" v-translate>You have no permission to upload.</span>
       </div>
       <div class="uk-navbar-item">
@@ -35,20 +39,8 @@
         </translate>
       </div>
       <div class="uk-navbar-item">
-        <oc-menu>
-          <template slot="activator">
-            <div id="filter-list-btn">
-              <oc-icon name="filter_list"></oc-icon>
-            </div>
-          </template>
-          <!-- TODO: replace with oc-list elements-->
-          <ul class="uk-nav uk-dropdown-nav uk-nav-default">
-            <li>Files<oc-checkbox></oc-checkbox></li>
-            <li>Folders<oc-checkbox></oc-checkbox></li>
-            <li>Hidden files<oc-checkbox></oc-checkbox></li>
-            <li>Files by name<oc-text-input></oc-text-input></li>
-          </ul>
-        </oc-menu>
+        <oc-icon name="filter_list" id="oc-filter-list-btn" />
+        <file-filter-menu />
       </div>
     </template>
   </oc-topbar>
@@ -63,6 +55,7 @@
 
 <script>
 import FileUpload from './FileUpload.vue'
+import FileFilterMenu from './FileFilterMenu.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
@@ -70,7 +63,8 @@ import Mixins from '../mixins'
 export default {
   components: {
     FileUpload,
-    OcDialogPrompt
+    OcDialogPrompt,
+    FileFilterMenu
   },
   mixins: [
     Mixins
