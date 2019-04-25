@@ -144,7 +144,7 @@ export default {
         let currentFolder = null
         if (res === null) {
           this.showNotification({
-            title: this.$gettext('Loading folder failed ....'),
+            title: this.$gettext('Loading folder failed…'),
             type: 'error'
           })
         } else {
@@ -156,7 +156,7 @@ export default {
         this.resetFileSelection()
       }).catch(error => {
         this.showNotification({
-          title: this.$gettext('Loading folder failed ....'),
+          title: this.$gettext('Loading folder failed…'),
           desc: error.message,
           type: 'error'
         })

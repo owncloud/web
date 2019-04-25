@@ -56,7 +56,7 @@ export default {
     },
     error (error) {
       this.showNotification({
-        title: this.$gettext('PDF could not be loaded ....'),
+        title: this.$gettext('PDF could not be loaded…'),
         desc: error,
         type: 'error'
       })

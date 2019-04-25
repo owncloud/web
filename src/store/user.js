@@ -32,7 +32,7 @@ const actions = {
       vueAuthInstance.mgr.events.addAccessTokenExpiring(function () {
         console.log('AccessToken Expiring：', arguments)
         vueAuthInstance.mgr.signinSilent().then(() => {
-          console.log('token refreshed ...')
+          console.log('token refreshed…')
         }).catch(error => {
           console.log('token failed ' + error)
         })

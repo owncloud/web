@@ -23,8 +23,8 @@
           </oc-button>
           <template slot="subnav">
             <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-            <oc-menu-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder ...</translate></oc-menu-item>
-            <oc-menu-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file ...</translate></oc-menu-item>
+            <oc-menu-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-menu-item>
+            <oc-menu-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-menu-item>
           </template>
         </oc-menu>
         <span v-if="!this.canUpload" v-translate>You have no permission to upload.</span>
@@ -95,10 +95,10 @@ export default {
       return this.$gettext('Search')
     },
     _createFolderDialogTitle () {
-      return this.$gettext('Create new folder ...')
+      return this.$gettext('Create new folder…')
     },
     _createFileDialogTitle () {
-      return this.$gettext('Create new file ...')
+      return this.$gettext('Create new file…')
     },
     item () {
       return this.$route.params.item
@@ -156,7 +156,7 @@ export default {
         let currentFolder = null
         if (res === null) {
           this.showNotification({
-            title: this.$gettext('Loading folder failed ....'),
+            title: this.$gettext('Loading folder failed…'),
             type: 'error'
           })
         } else {
@@ -167,7 +167,7 @@ export default {
         this.resetFileSelection()
       }).catch(error => {
         this.showNotification({
-          title: this.$gettext('Loading folder failed ....'),
+          title: this.$gettext('Loading folder failed…'),
           desc: error.message,
           type: 'error'
         })
@@ -186,7 +186,7 @@ export default {
           })
           .catch(error => {
             this.showNotification({
-              title: this.$gettext('Creating folder failed ....'),
+              title: this.$gettext('Creating folder failed…'),
               desc: error,
               type: 'error'
             })
@@ -207,7 +207,7 @@ export default {
           })
           .catch(error => {
             this.showNotification({
-              title: this.$gettext('Creating folder failed ....'),
+              title: this.$gettext('Creating file failed…'),
               desc: error,
               type: 'error'
             })
@@ -236,7 +236,7 @@ export default {
     onFileError () {
       this.fileUploadProgress = 0
       this.showNotification({
-        title: this.$gettext('File upload failed ....'),
+        title: this.$gettext('File upload failed…'),
         type: 'error'
       })
       this.fileUpload = false
