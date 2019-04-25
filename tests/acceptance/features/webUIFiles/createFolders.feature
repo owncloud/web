@@ -19,7 +19,7 @@ Feature: create folders
 
   Scenario: Create a folder with existing name
     When the user creates a folder with the invalid name "simple-folder" using the webUI
-    Then the error message 'Creating folder failed ....' should be displayed on the webUI
+    Then the error message 'Creating folder failed…' should be displayed on the webUI
 
   @skip @yetToImplement
   Scenario: Create a folder in a public share

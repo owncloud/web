@@ -59,6 +59,7 @@ const supportedLanguages = {
   cs: 'Czech',
   fr: 'Français',
   it: 'Italiano',
+  gl: 'Galego'
 }
 
 function loadApps () {
@@ -73,7 +74,7 @@ function loadApps () {
 
   for (let app of arguments) {
     if (!app.appInfo) {
-      console.error('Try to load app with missing appInfo...')
+      console.error('Try to load app with missing appInfo…')
     }
     if (app.routes) {
       // rewrite relative app routes by prefix'ing their corresponding appId

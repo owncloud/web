@@ -1,6 +1,7 @@
 import filesize from 'filesize'
 import moment from 'moment'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
+import { mapActions } from 'vuex'
 
 export default {
   filters: {
@@ -20,6 +21,8 @@ export default {
     selectedFile: ''
   }),
   methods: {
+    ...mapActions(['showNotification']),
+
     formDateFromNow (date) {
       return moment(date).locale(this.$language.current).fromNow()
     },
@@ -45,6 +48,13 @@ export default {
         this.selectedFile = item
         this.newName = item.name
       } else {
+        if (item.includes('/')) {
+          this.showNotification({
+            title: this.$gettext(`Renaming of ${this.selectedFile.name} failed. The file name cannot contain a "/"`),
+            status: 'danger'
+          })
+          return
+        }
         this.renameFile({
           client: this.$client,
           file: this.selectedFile,
