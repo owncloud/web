@@ -19,5 +19,6 @@ export default {
     '{DAV:}getlastmodified',
     '{DAV:}getetag',
     '{DAV:}resourcetype'
-  ]
+  ],
+  dropzone: false
 }

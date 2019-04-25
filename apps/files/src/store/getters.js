@@ -46,5 +46,8 @@ export default {
   },
   davProperties: state => {
     return state.davProperties
+  },
+  dropzone: state => {
+    return state.dropzone
   }
 }

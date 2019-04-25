@@ -87,5 +87,8 @@ export default {
     state.files[fileIndex].basename = baseName
     state.files[fileIndex].extension = ext
     state.files[fileIndex].path = '/' + newPath + newValue
+  },
+  DRAG_OVER (state, value) {
+    state.dropzone = value
   }
 }
