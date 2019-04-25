@@ -46,7 +46,7 @@ export default {
     this.getFolder()
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress']),
+    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress', 'resetSearch']),
     ...mapActions(['openFile', 'showNotification']),
 
     trace () {
@@ -154,6 +154,9 @@ export default {
         this.loadFiles({ currentFolder, files })
         this.self = files.self
         this.resetFileSelection()
+        if (this.searchTerm !== '') {
+          this.resetSearch()
+        }
       }).catch(error => {
         this.showNotification({
           title: this.$gettext('Loading folder failed…'),
@@ -193,7 +196,7 @@ export default {
 
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles', 'inProgress', 'activeFiles', 'fileFilter', 'davProperties']),
+    ...mapGetters('Files', ['selectedFiles', 'inProgress', 'activeFiles', 'fileFilter', 'davProperties', 'searchTerm']),
     ...mapGetters(['getToken', 'extensions']),
     activeRoute () {
       return this.getRoutes()

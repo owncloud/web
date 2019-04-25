@@ -147,5 +147,8 @@ export default {
         reject(error)
       })
     })
+  },
+  resetSearch (context) {
+    context.commit('SET_SEARCH_TERM', '')
   }
 }

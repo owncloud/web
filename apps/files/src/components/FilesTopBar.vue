@@ -7,7 +7,7 @@
     </template>
     <template slot="title">
       <div class="uk-navbar-item">
-        <oc-search-bar @search="onFileSearch" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
+        <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
     </template>
     <template slot="right">

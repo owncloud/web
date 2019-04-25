@@ -1,7 +1,7 @@
 import filesize from 'filesize'
 import moment from 'moment'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   filters: {
@@ -20,13 +20,20 @@ export default {
   data: () => ({
     selectedFile: ''
   }),
+  computed: {
+    ...mapGetters('Files', ['searchTerm'])
+  },
   methods: {
+    ...mapActions('Files', ['resetSearch']),
     ...mapActions(['showNotification']),
 
     formDateFromNow (date) {
       return moment(date).locale(this.$language.current).fromNow()
     },
     navigateTo (route, param) {
+      if (this.searchTerm !== '' && this.$route.params.item === param) {
+        this.resetSearch()
+      }
       this.$router.push({
         'name': route,
         'params': {
