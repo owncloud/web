@@ -1,6 +1,6 @@
 module.exports = {
   url: function () {
-    return this.api.launchUrl + '/#/files/list/home'
+    return this.api.launchUrl + ''
   },
   commands: {
     navigateToFolder: function (folder) {
