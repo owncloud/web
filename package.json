@@ -29,7 +29,7 @@
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/polyfill": "^7.4.3",
+    "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.3",
     "@babel/register": "^7.4.0",
     "axe-cli": "^3.0.0",
