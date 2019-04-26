@@ -82,7 +82,7 @@
     "eslint-loader": "^2.1.2",
     "oidc-client": "^1.7.1",
     "owncloud-design-system": "^1.0.0-510",
-    "owncloud-sdk": "1.0.0-16",
+    "owncloud-sdk": "1.0.0-57",
     "url-search-params-polyfill": "^5.1.0"
   }
 }
