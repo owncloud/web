@@ -138,7 +138,7 @@ export default {
       this.path = []
       // clear file filter search query when folder changes
       this.fileFilterQuery = ''
-      let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
+      let absolutePath = this.$route.params.item === '' ? '/' : this.route.params.item
       this.$client.files.list(absolutePath, 1, this.davProperties).then(res => {
         let files = []
         let currentFolder = null
@@ -172,12 +172,6 @@ export default {
       let breadcrumb = {}
       let absolutePath = this.$route.params.item
       let pathSplit = absolutePath.split('/').filter((val) => val)
-      if (!_includes(pathSplit, 'home')) {
-        breadcrumb.text = 'home'
-        breadcrumb.route = breadcrumb.text
-        this.breadcrumbs.push(breadcrumb)
-        breadcrumb = {}
-      }
       for (let i = 0; i < pathSplit.length; i++) {
         breadcrumb.text = pathSplit.slice(0, i + 1)[i]
         breadcrumb.route = '/' + pathSplit.slice(0, i + 1).join('/')

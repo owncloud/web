@@ -51,7 +51,7 @@ export default {
     ...mapActions(['showNotification']),
     closeApp () {
       this.$router.push({
-        path: '/files/list/home'
+        path: '/files'
       })
     },
     error (error) {

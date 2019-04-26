@@ -39,7 +39,7 @@ export default {
     ...mapActions('PDFViewer', ['changePage']),
     closeApp () {
       this.$router.push({
-        path: '/files/list/home'
+        path: '/files/list'
       })
     }
   }
