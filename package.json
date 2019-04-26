@@ -31,7 +31,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/polyfill": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
-    "@babel/register": "^7.4.0",
+    "@babel/register": "^7.4.4",
     "axe-cli": "^3.0.0",
     "babel-loader": "^8.0.5",
     "chromedriver": "^74.0.0",
