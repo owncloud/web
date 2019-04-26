@@ -1,7 +1,7 @@
 
 SERVER_HOST=0.0.0.0:8300
 
-apps=files
+apps=files markdown-editor pdf-viewer
 all_apps=$(addprefix app-,$(apps))
 core_bundle=dist/core/core.bundle.js
 

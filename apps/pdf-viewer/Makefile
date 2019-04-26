@@ -1,5 +1,5 @@
-apps=apps/files
-bundles=dist/files.bundle.js
+apps=apps/pdf-viewer
+bundles=dist/pdf-viewer.bundle.js
 
 all: build
 

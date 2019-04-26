@@ -1,5 +1,5 @@
-apps=apps/files
-bundles=dist/files.bundle.js
+apps=apps/markdown-editor
+bundles=dist/markdown-editor.bundle.js
 
 all: build
 
@@ -9,7 +9,7 @@ build: $(bundles)
 node_modules: package.json yarn.lock
 	yarn install && touch node_modules
 
-$(bundles): webpack.common.js webpack.dev.js node_modules
+$(bundles): webpack.config.js node_modules
 	yarn run build
 
 .PHONY: clean
