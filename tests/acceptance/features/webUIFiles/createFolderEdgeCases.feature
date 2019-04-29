@@ -37,6 +37,7 @@ Feature: create folder
       | folder    |
       | "?&%0"    |
       | "^#2929@" |
+      | "home"    |
 
   @smokeTest @skip
   Scenario Outline: Create a sub-folder inside an existing folder with problematic name

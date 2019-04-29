@@ -19,6 +19,7 @@ Feature: rename folders
       | 'सिमप्ले फोल्देर$%#?&@' |
       | '"quotes1"'             |
       | "'quotes2'"             |
+      | "home"                  |
 
   @skip
   Scenario Outline: Rename a folder that has special characters in its name
