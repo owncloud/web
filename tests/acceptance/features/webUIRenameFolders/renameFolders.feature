@@ -20,7 +20,6 @@ Feature: rename folders
       | '"quotes1"'             |
       | "'quotes2'"             |
 
-  @skip
   Scenario Outline: Rename a folder that has special characters in its name
     When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI
