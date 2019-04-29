@@ -21,7 +21,6 @@ Feature: rename files
       | '"quotes1"'            |
       | "'quotes2'"            |
 
-  @skip
   Scenario Outline: Rename a file that has special characters in its name
     When the user renames file <from_name> to <to_name> using the webUI
     Then file <to_name> should be listed on the webUI
