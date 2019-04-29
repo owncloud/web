@@ -3,7 +3,7 @@
   <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
   <oc-topbar variation="secondary" uk-sticky="offset: 60">
     <template slot="left">
-      <oc-topbar-logo icon="home" @click="navigateTo('files-list', 'home')"></oc-topbar-logo>
+      <oc-topbar-logo icon="home" @click="navigateTo('files-list', '')"></oc-topbar-logo>
       <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
     </template>
     <template slot="title">
@@ -101,7 +101,7 @@ export default {
       return this.$route.params.item
     },
     url () {
-      let path = this.item === 'home' ? '/' : `${this.item}/`
+      let path = this.item === '' ? '/' : `${this.item}/`
       return this.$client.files.getFileUrl(`/${path}`)
     },
     headers () {
@@ -147,7 +147,7 @@ export default {
     getFolder () {
       this.path = []
       // clear file filter search query when folder changes
-      let absolutePath = this.$route.params.item === 'home' ? '/' : this.route.params.item
+      let absolutePath = this.$route.params.item === '' ? '/' : this.route.params.item
       this.$client.files.list(absolutePath, 1, this.davProperties).then(res => {
         let files = []
         let currentFolder = null
@@ -175,7 +175,7 @@ export default {
     addNewFolder (folderName) {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
-        this.$client.files.createFolder(((this.item === 'home') ? '' : this.item) + '/' + folderName)
+        this.$client.files.createFolder(this.item + '/' + folderName)
           .then(() => {
             this.createFolder = false
             this.newFolderName = ''
@@ -196,7 +196,7 @@ export default {
     addNewFile (fileName) {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
-        this.$client.files.putFileContents(((this.item === 'home') ? '' : this.item) + '/' + fileName, '')
+        this.$client.files.putFileContents(this.item + '/' + fileName, '')
           .then(() => {
             this.getFolder()
             this.createFile = false
@@ -216,7 +216,7 @@ export default {
     },
     onFileSuccess (event, file) {
       this.$nextTick().then(() => {
-        const filePath = ((this.item === 'home') ? '' : this.item) + '/' + file.name
+        const filePath = this.item + '/' + file.name
         this.$client.files.fileInfo(filePath, this.davProperties).then(fileInfo => {
           this.fileUploadProgress = 0
           this.addFiles({
@@ -262,7 +262,7 @@ export default {
         breadcrumb.index = i
         breadcrumb.text = pathSplit.slice(0, i + 1)[i]
         breadcrumb.to = '/files/list/' + pathSplit.slice(0, i + 1).join('/')
-        if (i === 0 && breadcrumb.text === 'home') {
+        if (i === 0 && breadcrumb.text === '') {
           continue
         }
         this.breadcrumbs.push(breadcrumb)

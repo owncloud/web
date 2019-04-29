@@ -19,6 +19,7 @@ Feature: rename folders
       | 'सिमप्ले फोल्देर$%#?&@' |
       | '"quotes1"'             |
       | "'quotes2'"             |
+      | "home"                  |
 
   Scenario Outline: Rename a folder that has special characters in its name
     When the user renames folder <from_name> to <to_name> using the webUI

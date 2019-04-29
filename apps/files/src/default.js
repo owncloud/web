@@ -36,21 +36,21 @@ const navItems = [{
   route: {
     name: 'files-list',
     params: {
-      item: 'home'
+      item: ''
     }
   }
 }]
 
 const routes = [{
   path: '',
-  redirect: `/${appInfo.id}/list/home`,
+  redirect: `/${appInfo.id}/list/`,
   components: {
     appContent: FilesApp,
     appTopbar: FilesTopBar
   }
 },
 {
-  path: '/list/:item',
+  path: '/list/:item?',
   components: {
     appContent: FilesApp,
     appTopbar: FilesTopBar
