@@ -90,6 +90,7 @@ Feature: rename files
     Then file "loremz.dat" should be listed on the webUI
 
   @skip
+  @issue-965
   Scenario: Rename a file using forbidden characters
     When the user renames file "data.zip" to one of these names using the webUI
       | lorem\txt |
