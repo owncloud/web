@@ -30,9 +30,8 @@ When('the user creates a folder with the invalid name {string} using the webUI',
   return client.page.filesPage().createFolder(folderName, false)
 })
 
-When('the user opens folder {string} using the webUI', function (folder) {
-  return client.page.filesPage().navigateToFolder(folder)
-})
+Given('the user has opened folder {string}', (folder) => client.page.filesPage().navigateToFolder(folder))
+When('the user opens folder {string} using the webUI', (folder) => client.page.filesPage().navigateToFolder(folder))
 
 When('the user enables the setting to view hidden folders on the webUI', function () {
   return client.page.filesPage().showHiddenFiles()
@@ -56,6 +55,30 @@ When('the user uploads file {string} using the webUI', function (element) {
 
 When('the user renames file/folder {string} to {string} using the webUI', function (fromName, toName) {
   return client.page.filesPage().renameFile(fromName, toName)
+})
+
+Given('the user has disabled folder filter', () => {
+  return client.page.filesPage().toggleFilterFileOrFolder('folder', 'disable')
+})
+
+When('the user disables folder filter using the webUI', () => {
+  return client.page.filesPage().toggleFilterFileOrFolder('folder', 'disable')
+})
+
+When('the user enables folder filter using the webUI', function () {
+  return client.page.filesPage().toggleFilterFileOrFolder('folder', 'enable')
+})
+
+Given('the user has disabled file filter', () => {
+  return client.page.filesPage().toggleFilterFileOrFolder('file', 'disable')
+})
+
+When('the user disables file filter using the webUI', () => {
+  return client.page.filesPage().toggleFilterFileOrFolder('file', 'disable')
+})
+
+When('the user enables file filter using the webUI', function () {
+  return client.page.filesPage().toggleFilterFileOrFolder('file', 'enable')
 })
 
 Then(/there should be no files\/folders listed on the webUI/, function () {
@@ -86,6 +109,22 @@ Then('the deleted elements should not be listed on the webUI after a page reload
 
 When('the user reloads the current page of the webUI', function () {
   return client.refresh()
+})
+
+Then('these folders/files should not be listed on the webUI', function (entryList) {
+  entryList.rows().forEach(entry => {
+    client.page.filesPage().assertElementNotListed(entry)
+  })
+  return client
+})
+
+Then('these files/folders should be listed on the webUI', function (entryList) {
+  entryList.rows().forEach(entry => {
+    // here each entry is an array with one element,
+    // which is the name of the entry from the table
+    client.page.filesPage().waitForFileVisible(entry[0])
+  })
+  return client
 })
 
 const assertDeletedElementsAreNotListed = function () {
