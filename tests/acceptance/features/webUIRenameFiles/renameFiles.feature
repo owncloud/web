@@ -102,6 +102,16 @@ Feature: rename files
       | Could not rename "data.zip" |
     And file "data.zip" should be listed on the webUI
 
+  Scenario Outline: Rename a file/folder using forward slash in its name
+    When the user renames file "<from_file_name>" to "<to_file_name>" using the webUI
+    Then the error message 'Renaming of <from_file_name> failed. The file name cannot contain a "/"' should be displayed on the webUI
+    And file "<from_file_name>" should be listed on the webUI
+    Examples:
+      | from_file_name | to_file_name                      |
+      | lorem.txt      | simple-folder/lorem.txt           |
+      | lorem.txt      | lorem/txt                         |
+      | simple-folder  | simple-empty-folder/simple-folder |
+
   Scenario: Rename the last file in a folder
     When the user renames file "zzzz-must-be-last-file-in-folder.txt" to "a-file.txt" using the webUI
     And the user reloads the current page of the webUI
