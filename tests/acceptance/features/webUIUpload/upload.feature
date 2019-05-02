@@ -16,17 +16,16 @@ Feature: File Upload
     And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
   @smokeTest
-  @skip @yetToImplement
-  Scenario: chunking upload
+  Scenario: uploading a big file (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
     When the user uploads file "big-video.mp4" using the webUI
     Then no notification should be displayed on the webUI
     And file "big-video.mp4" should be listed on the webUI
-    And the content of "big-video.mp4" should be the same as the local "big-video.mp4"
+    And as "user1" the content of "big-video.mp4" should be the same as the local "big-video.mp4"
 
   @skipOnFIREFOX
   @skip @yetToImplement
-  Scenario: conflict with a chunked file
+  Scenario: conflict with a big file (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
     When the user renames file "lorem.txt" to "big-video.mp4" using the webUI
     And the user uploads overwriting file "big-video.mp4" using the webUI and retries if the file is locked

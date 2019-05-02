@@ -10,45 +10,43 @@ Feature: File Upload
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
-  @skip
   Scenario: simple upload of a file that does not exist before
     When the user uploads file "new-'single'quotes.txt" using the webUI
     Then file "new-'single'quotes.txt" should be listed on the webUI
-    And the content of "new-'single'quotes.txt" should be the same as the local "new-'single'quotes.txt"
+    And as "user1" the content of "new-'single'quotes.txt" should be the same as the local "new-'single'quotes.txt"
 
     When the user uploads file "new-strängé filename (duplicate #2 &).txt" using the webUI
     Then file "new-strängé filename (duplicate #2 &).txt" should be listed on the webUI
-    And the content of "new-strängé filename (duplicate #2 &).txt" should be the same as the local "new-strängé filename (duplicate #2 &).txt"
+    And as "user1" the content of "new-strängé filename (duplicate #2 &).txt" should be the same as the local "new-strängé filename (duplicate #2 &).txt"
 
     When the user uploads file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" using the webUI
     Then file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be listed on the webUI
-    And the content of "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be the same as the local "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt"
+    And as "user1" the content of "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be the same as the local "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt"
 
   @smokeTest
-  @skip
   Scenario Outline: upload a new file into a sub folder
     Given a file with the size of "3000" bytes and the name "0" has been created locally
-    When the user opens folder <folder-to-upload-to> using the webUI
+    When the user opens folder "<folder-to-upload-to>" using the webUI
     And the user uploads file "0" using the webUI
     Then file "0" should be listed on the webUI
-    And the content of "0" should be the same as the local "0"
+    And as "user1" the content of "<folder-to-upload-to>/0" should be the same as the local "0"
 
     When the user uploads file "new-'single'quotes.txt" using the webUI
     Then file "new-'single'quotes.txt" should be listed on the webUI
-    And the content of "new-'single'quotes.txt" should be the same as the local "new-'single'quotes.txt"
+    And as "user1" the content of "<folder-to-upload-to>/new-'single'quotes.txt" should be the same as the local "new-'single'quotes.txt"
 
     When the user uploads file "new-strängé filename (duplicate #2 &).txt" using the webUI
     Then file "new-strängé filename (duplicate #2 &).txt" should be listed on the webUI
-    And the content of "new-strängé filename (duplicate #2 &).txt" should be the same as the local "new-strängé filename (duplicate #2 &).txt"
+    And as "user1" the content of "<folder-to-upload-to>/new-strängé filename (duplicate #2 &).txt" should be the same as the local "new-strängé filename (duplicate #2 &).txt"
 
     When the user uploads file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" using the webUI
     Then file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be listed on the webUI
-    And the content of "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be the same as the local "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt"
+    And as "user1" the content of "<folder-to-upload-to>/zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be the same as the local "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt"
     Examples:
       | folder-to-upload-to     |
-      | "0"                     |
-      | "'single'quotes"        |
-      | "strängé नेपाली folder" |
+      | 0                     |
+      | 'single'quotes        |
+      | strängé नेपाली folder |
 
   @skip
   Scenario: overwrite an existing file
@@ -84,22 +82,20 @@ Feature: File Upload
     And file "zzzz-must-be-last-file-in-folder (2).txt" should be listed on the webUI
     And the content of "zzzz-must-be-last-file-in-folder (2).txt" should be the same as the local "zzzz-must-be-last-file-in-folder.txt"
 
-  @skip
-  Scenario Outline: chunking upload using difficult names
+  Scenario Outline: upload a big file using difficult names (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name <file-name> has been created locally
     When the user uploads file <file-name> using the webUI
     Then file <file-name> should be listed on the webUI
-    And the content of <file-name> should be the same as the local <file-name>
+    And as "user1" the content of <file-name> should be the same as the local <file-name>
     Examples:
       | file-name |
       | "&#"      |
       | "TIÄFÜ"   |
 
   # upload into "simple-folder" because there is already a folder called "0" in the root
-  @skip
-  Scenario: Upload a file called "0" using chunking
+  Scenario: Upload a big file called "0" (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "0" has been created locally
     When the user opens folder "simple-folder" using the webUI
     And the user uploads file "0" using the webUI
     Then file "0" should be listed on the webUI
-    And the content of "0" should be the same as the local "0"
+    And as "user1" the content of "simple-folder/0" should be the same as the local "0"
