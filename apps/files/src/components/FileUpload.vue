@@ -1,11 +1,10 @@
 <template>
-  <li @click="triggerUpload">
-    <div class="uk-flex uk-flex-middle">
-      <oc-icon name="cloud_upload" class="uk-margin-small-right"></oc-icon>
-      <span v-translate>Upload</span>
+  <oc-nav-item icon="cloud_upload" @click="triggerUpload">
+    <span v-translate>Upload</span>
+    <div slot="outer-content">
+      <input id="fileUploadInput" type="file" name="file" @change="$_ocUpload_addToQue" multiple ref="input" />
     </div>
-    <input id="fileUploadInput" type="file" name="file" @change="$_ocUpload_addToQue" multiple ref="input" />
-  </li>
+  </oc-nav-item>
 </template>
 
 <script>
