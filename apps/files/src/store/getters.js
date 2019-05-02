@@ -42,7 +42,10 @@ export default {
       }
       // respect filename filter for local 'search' in open folder
       return !(state.searchTermFilter && !file.name.toLowerCase().includes(state.searchTermFilter.toLowerCase()))
-    })
+    }).sort(function (a, b) {
+      return a.name.localeCompare(b.name, undefined, { 'sensitivity': 'base' })
+    }
+    )
   },
   davProperties: state => {
     return state.davProperties
