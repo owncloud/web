@@ -7,6 +7,7 @@ LOCAL_BACKEND_URL = LOCAL_BACKEND_URL.startsWith('http') ? LOCAL_BACKEND_URL : '
 const SELENIUM_HOST = process.env.SELENIUM_HOST || ''
 const SELENIUM_PORT = process.env.SELENIUM_PORT || 4445
 const START_PROCESS = (SELENIUM_HOST === '')
+const FILES_FOR_UPLOAD = process.env.FILES_FOR_UPLOAD || require('path').join(__dirname, '/tests/acceptance/filesForUpload/')
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
@@ -15,7 +16,8 @@ module.exports = {
     default: {
       globals: {
         waitForConditionTimeout: 10000,
-        waitForConditionPollInterval: 10
+        waitForConditionPollInterval: 10,
+        filesForUpload: FILES_FOR_UPLOAD
       }
     },
     local: {

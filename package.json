@@ -32,6 +32,7 @@
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/register": "^7.4.4",
+    "archiver": "^3.0.0",
     "axe-cli": "^3.0.0",
     "babel-loader": "^8.0.5",
     "chromedriver": "^74.0.0",

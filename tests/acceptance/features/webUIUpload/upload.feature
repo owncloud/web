@@ -9,15 +9,14 @@ Feature: File Upload
     And user "user1" has logged in using the webUI
 
   @smokeTest
-  @skip
   Scenario: simple upload of a file that does not exist before
     When the user uploads file "new-lorem.txt" using the webUI
     Then no notification should be displayed on the webUI
     And file "new-lorem.txt" should be listed on the webUI
-    And the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
+    And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
   @smokeTest
-  @skip
+  @skip @yetToImplement
   Scenario: chunking upload
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
     When the user uploads file "big-video.mp4" using the webUI
@@ -26,7 +25,7 @@ Feature: File Upload
     And the content of "big-video.mp4" should be the same as the local "big-video.mp4"
 
   @skipOnFIREFOX
-  @skip
+  @skip @yetToImplement
   Scenario: conflict with a chunked file
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
     When the user renames file "lorem.txt" to "big-video.mp4" using the webUI
@@ -34,16 +33,15 @@ Feature: File Upload
     Then file "big-video.mp4" should be listed on the webUI
     And the content of "big-video.mp4" should be the same as the local "big-video.mp4"
 
-  @skip
   Scenario: upload a new file into a sub folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then no notification should be displayed on the webUI
     And file "new-lorem.txt" should be listed on the webUI
-    And the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
+    And as "user1" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
 
   @smokeTest
-  @skip
+  @skip @yetToImplement
   Scenario: overwrite an existing file
     When the user uploads overwriting file "lorem.txt" using the webUI and retries if the file is locked
     Then no dialog should be displayed on the webUI
@@ -52,7 +50,7 @@ Feature: File Upload
     But file "lorem (2).txt" should not be listed on the webUI
 
   @smokeTest
-  @skip
+  @skip @yetToImplement
   Scenario: keep new and existing file
     When the user uploads file "lorem.txt" using the webUI
     And the user chooses to keep the new files in the upload dialog
@@ -65,7 +63,7 @@ Feature: File Upload
     And file "lorem (2).txt" should be listed on the webUI
     And the content of "lorem (2).txt" should be the same as the local "lorem.txt"
 
-  @skip
+  @skip @yetToImplement
   Scenario: cancel conflict dialog
     When the user uploads file "lorem.txt" using the webUI
     And the user chooses "Cancel" in the upload dialog
@@ -75,14 +73,14 @@ Feature: File Upload
     And the content of "lorem.txt" should not have changed
     And file "lorem (2).txt" should not be listed on the webUI
 
-  @skip
+  @skip @yetToImplement
   Scenario: overwrite an existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads overwriting file "lorem.txt" using the webUI and retries if the file is locked
     Then file "lorem.txt" should be listed on the webUI
     And the content of "lorem.txt" should be the same as the local "lorem.txt"
 
-  @skip
+  @skip @yetToImplement
   Scenario: keep new and existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads file "lorem.txt" using the webUI
