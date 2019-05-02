@@ -5,8 +5,8 @@
         <oc-icon :name="fileTypeIcon(items[0])" size="large" />
       </div>
       <div class="uk-inline">
-        <div>
-          {{ getTabName }} <oc-icon name="link" aria-label="Close"/>
+        <div class="uk-flex uk-flex-middle">
+          <span class="uk-margin-small-right">{{ getTabName }}</span> <oc-icon name="link" aria-label="Close"/>
         </div>
         <div>
           <oc-star class="uk-inline" :shining="items[0].starred"/> {{ items[0].size | fileSize }}, {{ formDateFromNow(items[0].mdate) }}
