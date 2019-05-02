@@ -60,6 +60,23 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
         .useCss()
     },
+    uploadFile: function (localFileName) {
+      return this
+        .waitForElementVisible('@newFileMenuButton')
+        .click('@newFileMenuButton')
+        .waitForElementVisible('@fileUploadButton')
+        .uploadLocalFile(
+          '@fileUploadInput',
+          require('path').join(this.api.globals.filesForUpload, localFileName)
+        )
+        .waitForElementVisible(
+          '@fileUploadProgress',
+          this.api.globals.waitForConditionTimeout,
+          this.api.globals.waitForConditionPollInterval,
+          false
+        )
+        .waitForElementNotVisible('@fileUploadProgress')
+    },
     waitForFileVisible: function (fileName) {
       const rowSelector = this.getFileRowSelectorByFileName(fileName)
       const linkSelector = this.getFileLinkSelectorByFileName(fileName)
@@ -175,6 +192,16 @@ module.exports = {
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',
       locateStrategy: 'xpath'
+    },
+    fileUploadButton: {
+      selector: '//span[@data-msgid="Upload"]',
+      locateStrategy: 'xpath'
+    },
+    fileUploadInput: {
+      selector: '#fileUploadInput'
+    },
+    fileUploadProgress: {
+      selector: '#oc-progress-pie'
     }
   }
 }

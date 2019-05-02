@@ -1,12 +1,13 @@
-const { client } = require('nightwatch-api')
 const { Then } = require('cucumber')
 const fetch = require('node-fetch')
 require('url-search-params-polyfill')
+const httpHelper = require('../helpers/httpHelper')
+const webdavHelper = require('../helpers/webdavHelper')
 
 Then('as {string} file/folder {string} should exist', function (userId, element) {
-  const headers = createAuthHeader(userId)
+  const headers = httpHelper.createAuthHeader(userId)
   return fetch(
-    createDavPath(userId, element),
+    webdavHelper.createDavPath(userId, element),
     { method: 'GET', headers: headers }
   )
     .then(function (res) {
@@ -19,9 +20,9 @@ Then('as {string} file/folder {string} should exist', function (userId, element)
 })
 
 Then('as {string} file/folder {string} should not exist', function (userId, element) {
-  const headers = createAuthHeader(userId)
+  const headers = httpHelper.createAuthHeader(userId)
   return fetch(
-    createDavPath(userId, element),
+    webdavHelper.createDavPath(userId, element),
     { method: 'GET', headers: headers }
   )
     .then(function (res) {
@@ -32,15 +33,3 @@ Then('as {string} file/folder {string} should not exist', function (userId, elem
       }
     })
 })
-
-const createAuthHeader = function (userId) {
-  return {
-    'Authorization': 'Basic ' +
-      Buffer.from(userId + ':' + userId).toString('base64')
-  }
-}
-
-const createDavPath = function (userId, element) {
-  return client.globals.backend_url +
-         '/remote.php/dav/files/' + userId + '/' + encodeURIComponent(element)
-}

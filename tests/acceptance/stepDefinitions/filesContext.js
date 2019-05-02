@@ -50,6 +50,10 @@ When('the user deletes the following elements using the webUI', function (table)
   return client.page.filesPage()
 })
 
+When('the user uploads file {string} using the webUI', function (element) {
+  return client.page.filesPage().uploadFile(element)
+})
+
 When('the user renames file/folder {string} to {string} using the webUI', function (fromName, toName) {
   return client.page.filesPage().renameFile(fromName, toName)
 })
