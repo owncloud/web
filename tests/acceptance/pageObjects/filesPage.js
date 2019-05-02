@@ -76,6 +76,7 @@ module.exports = {
           false
         )
         .waitForElementNotVisible('@fileUploadProgress')
+        .click('@newFileMenuButton')
     },
     waitForFileVisible: function (fileName) {
       const rowSelector = this.getFileRowSelectorByFileName(fileName)

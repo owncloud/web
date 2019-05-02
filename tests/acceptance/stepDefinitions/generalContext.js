@@ -1,6 +1,16 @@
 const { client } = require('nightwatch-api')
-const { Then } = require('cucumber')
+const { After, Before, Given, Then } = require('cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
+const fs = require('fs')
+let createdFiles = []
+
+Given('a file with the size of {string} bytes and the name {string} has been created locally', function (size, name) {
+  const fullPathOflocalFile = client.globals.filesForUpload + name
+  const fh = fs.openSync(fullPathOflocalFile, 'w')
+  fs.writeSync(fh, 'A', Math.max(0, size - 1))
+  fs.closeSync(fh)
+  createdFiles.push(fullPathOflocalFile)
+})
 
 Then('the error message {string} should be displayed on the webUI', function (folder) {
   return client
@@ -23,8 +33,16 @@ Then('as {string} the content of {string} should be the same as the local {strin
 })
 
 const assertContentOFLocalFileIs = function (fullPathOflocalFile, expectedContent) {
-  const actualContent = require('fs').readFileSync(fullPathOflocalFile, { encoding: 'utf-8' })
+  const actualContent = fs.readFileSync(fullPathOflocalFile, { encoding: 'utf-8' })
   return client.assert.strictEqual(
     actualContent, expectedContent, 'asserting content of local file "' + fullPathOflocalFile + '"'
   )
 }
+
+Before(function (client) {
+  createdFiles = []
+})
+
+After(function (client) {
+  createdFiles.forEach(fileName => fs.unlinkSync(fileName))
+})
