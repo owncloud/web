@@ -3,6 +3,10 @@ module.exports = {
     return this.api.launchUrl + '/#/'
   },
   commands: {
+    /**
+     *
+     * @param {string} searchTerm
+     */
     search: function (searchTerm) {
       return this.waitForElementVisible('@searchInputField')
         .initAjaxCounters()
