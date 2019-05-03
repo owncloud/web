@@ -102,11 +102,10 @@ module.exports = {
     },
     showHiddenFiles: function () {
       return this
-        .useXpath()
-        .click(this.elements['filterListButton'])
-        .waitForElementVisible(this.elements['hiddenFilesLabel'])
-        .click(this.elements['hiddenFilesCheckbox'])
-        .useCss()
+        .waitForElementVisible('@filterListButton')
+        .click('@filterListButton')
+        .waitForElementVisible('@hiddenFilesLabel')
+        .click('@hiddenFilesCheckbox')
     },
     allFileRows: function (callback) {
       this.api.elements('css selector', this.elements['fileRows'], function (result) {
@@ -119,6 +118,24 @@ module.exports = {
         .useXpath()
         .waitForElementNotPresent('@loadingIndicator')
         .waitForElementNotPresent(this.getFileRowSelectorByFileName(element))
+    },
+    toggleFilterFileOrFolder: function (fileOrFolder, enableOrDisable) {
+      let labelSelector, checkboxId
+      if (fileOrFolder === 'folder') {
+        labelSelector = '@filterFolderLabel'
+        checkboxId = this.elements['filterFolderCheckbox']
+      } else if (fileOrFolder === 'file') {
+        labelSelector = '@filterFileLabel'
+        checkboxId = this.elements['filterFileCheckbox']
+      } else {
+        throw new Error(`Expected 'file' or 'folder', ${fileOrFolder} given`)
+      }
+      return this
+        .waitForElementVisible('@filterListButton')
+        .click('@filterListButton')
+        .waitForElementVisible(labelSelector)
+        .toggleCheckbox(enableOrDisable, checkboxId)
+        .click('@filterListButton')
     }
   },
   elements: {
@@ -189,6 +206,18 @@ module.exports = {
     },
     hiddenFilesCheckbox: {
       selector: '#oc-filter-hidden-checkbox'
+    },
+    filterFolderLabel: {
+      selector: '#oc-filter-folder-label'
+    },
+    filterFolderCheckbox: {
+      selector: '#oc-filter-folder-checkbox'
+    },
+    filterFileLabel: {
+      selector: '#oc-filter-file-label'
+    },
+    filterFileCheckbox: {
+      selector: '#oc-filter-file-checkbox'
     },
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',
