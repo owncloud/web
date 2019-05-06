@@ -126,7 +126,7 @@ export default {
         } else {
           this.showNotification({
             title: this.$gettextInterpolate('Upload for %{file} failed - File already exists', { file: file.name }),
-            type: 'error'
+            status: 'danger'
           })
         }
       }
