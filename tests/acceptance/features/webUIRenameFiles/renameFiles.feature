@@ -104,7 +104,7 @@ Feature: rename files
 
   Scenario Outline: Rename a file/folder using forward slash in its name
     When the user renames file "<from_file_name>" to "<to_file_name>" using the webUI
-    Then the error message 'Renaming of <from_file_name> failed. The file name cannot contain a "/"' should be displayed on the webUI
+    Then the error message 'Renaming of <from_file_name> failed' should be displayed on the webUI
     And file "<from_file_name>" should be listed on the webUI
     Examples:
       | from_file_name | to_file_name                      |
