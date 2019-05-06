@@ -142,7 +142,7 @@ export default {
         context.dispatch('showNotification', {
           title: this.$gettext('Error while searching.'),
           desc: error.message,
-          type: 'error'
+          status: 'danger'
         }, { root: true })
         reject(error)
       })
