@@ -5,7 +5,7 @@
     </div>
     <div v-else>
      <oc-spinner v-if="sharesLoading"></oc-spinner>
-    <oc-accordion v-if="!sharesLoading" uk-accordion="collapsible: false; multiple: true">
+    <oc-accordion v-if="!sharesLoading" :multiple=true>
       <oc-accordion-item v-if="owner" class="uk-open" :title="$_ocCollaborationStatus_ownerTitle">
         <template slot="content">
           <oc-user
