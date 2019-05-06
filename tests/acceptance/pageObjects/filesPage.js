@@ -3,6 +3,10 @@ module.exports = {
     return this.api.launchUrl + ''
   },
   commands: {
+    /**
+     *
+     * @param {string} folder
+     */
     navigateToFolder: function (folder) {
       this.waitForFileVisible(folder)
       this.useXpath()
@@ -13,6 +17,11 @@ module.exports = {
         .waitForElementVisible('@breadcrumb')
         .assert.containsText('@breadcrumb', folder)
     },
+    /**
+     *
+     * @param {string} name
+     * @param {boolean} expectToSucceed
+     */
     createFolder: function (name, expectToSucceed = true) {
       this
         .waitForElementVisible('@newFileMenuButton', 500000)
@@ -28,6 +37,10 @@ module.exports = {
       }
       return this
     },
+    /**
+     *
+     * @param {string} fileName
+     */
     deleteFile: function (fileName) {
       const deleteBtnSelector = this.getFileRowSelectorByFileName(fileName) +
                                 this.elements['deleteButtonInFileRow'].selector
@@ -43,6 +56,11 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
         .useCss()
     },
+    /**
+     *
+     * @param {string} fromName
+     * @param {string} toName
+     */
     renameFile: function (fromName, toName) {
       const renameBtnSelector = this.getFileRowSelectorByFileName(fromName) +
         this.elements['renameButtonInFileRow'].selector
@@ -60,6 +78,10 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
         .useCss()
     },
+    /**
+     *
+     * @param {string} localFileName
+     */
     uploadFile: function (localFileName) {
       return this
         .waitForElementVisible('@newFileMenuButton')
@@ -78,6 +100,10 @@ module.exports = {
         .waitForElementNotVisible('@fileUploadProgress')
         .click('@newFileMenuButton')
     },
+    /**
+     *
+     * @param {string} fileName
+     */
     waitForFileVisible: function (fileName) {
       const rowSelector = this.getFileRowSelectorByFileName(fileName)
       const linkSelector = this.getFileLinkSelectorByFileName(fileName)
@@ -87,6 +113,12 @@ module.exports = {
         .expect.element(linkSelector).text.to.equal(fileName)
       return this.useCss()
     },
+    /**
+     *
+     * @param {string} fileName
+     *
+     * @returns {string}
+     */
     getFileRowSelectorByFileName: function (fileName) {
       var element = this.elements['fileRowByName']
       var util = require('util')
@@ -95,6 +127,10 @@ module.exports = {
       }
       return util.format(element.selector, fileName)
     },
+    /**
+     *
+     * @param {string} fileName
+     */
     getFileLinkSelectorByFileName: function (fileName) {
       return this
         .getFileRowSelectorByFileName(fileName) +
@@ -107,11 +143,19 @@ module.exports = {
         .waitForElementVisible('@hiddenFilesLabel')
         .click('@hiddenFilesCheckbox')
     },
+    /**
+     *
+     * @param {function} callback
+     */
     allFileRows: function (callback) {
       this.api.elements('css selector', this.elements['fileRows'], function (result) {
         callback(result)
       })
     },
+    /**
+     *
+     * @param {string} element
+     */
     assertElementNotListed: function (element) {
       return this
         .waitForElementVisible('@filesTable')
@@ -119,6 +163,11 @@ module.exports = {
         .waitForElementNotPresent('@loadingIndicator')
         .waitForElementNotPresent(this.getFileRowSelectorByFileName(element))
     },
+    /**
+     *
+     * @param {string} fileOrFolder
+     * @param {string} enableOrDisable
+     */
     toggleFilterFileOrFolder: function (fileOrFolder, enableOrDisable) {
       let labelSelector, checkboxId
       if (fileOrFolder === 'folder') {
