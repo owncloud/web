@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {string} enableOrDisable
+ * @param {string} checkboxId
+ */
 exports.command = function (enableOrDisable, checkboxId) {
   this.element('css selector', checkboxId, (response) => {
     this.elementIdSelected(response.value.ELEMENT, (result) => {
