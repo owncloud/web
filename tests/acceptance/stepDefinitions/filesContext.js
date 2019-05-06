@@ -1,4 +1,5 @@
 const { client } = require('nightwatch-api')
+const assert = require('assert')
 const { Given, When, Then } = require('cucumber')
 let deletedElementsTable = []
 
@@ -81,6 +82,18 @@ When('the user enables file filter using the webUI', function () {
   return client.page.filesPage().toggleFilterFileOrFolder('file', 'enable')
 })
 
+Given('the user has marked file/folder {string} as favorite using the webUI', function (path) {
+  return client.page.filesPage().markAsFavorite(path)
+})
+
+When('the user marks file/folder {string} as favorite using the webUI', function (path) {
+  return client.page.filesPage().markAsFavorite(path)
+})
+
+When('the user unmarks the favorited file/folder {string} using the webUI', function (path) {
+  return client.page.filesPage().unmarkFavorite(path)
+})
+
 Then(/there should be no files\/folders listed on the webUI/, function () {
   return client.page.filesPage().allFileRows(function (result) {
     client.assert.equal(result.value.length, 0)
@@ -125,6 +138,18 @@ Then('these files/folders should be listed on the webUI', function (entryList) {
     client.page.filesPage().waitForFileVisible(entry[0])
   })
   return client
+})
+
+Then('file/folder {string} should be marked as favorite on the webUI', function (path) {
+  return client.page.filesPage().isMarkedFavorite(path, (value) => {
+    assert.strictEqual(value, true, `${path} expected to be favorite but was not`)
+  })
+})
+
+Then('file/folder {string} should not be marked as favorite on the webUI', function (path) {
+  return client.page.filesPage().isMarkedFavorite(path, (value) => {
+    assert.strictEqual(value, false, `not expected ${path} to be favorite but was`)
+  })
 })
 
 const assertDeletedElementsAreNotListed = function () {
