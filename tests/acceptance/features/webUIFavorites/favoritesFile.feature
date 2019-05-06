@@ -10,23 +10,23 @@ Feature: Mark file as favorite
     And the user has browsed to the files page
 
   @smokeTest
-  @skip @yetToImplement
-  Scenario: mark a file as favorite and list it in favorites page
+  @yetToImplement
+  Scenario: mark a file as favorite
     When the user marks file "data.zip" as favorite using the webUI
     Then file "data.zip" should be marked as favorite on the webUI
     When the user reloads the current page of the webUI
     Then file "data.zip" should be marked as favorite on the webUI
-    And file "data.zip" should be listed in the favorites page on the webUI
-    And file "lorem.txt" should not be listed in the favorites page on the webUI
+#    And file "data.zip" should be listed in the favorites page on the webUI
+#    And file "lorem.txt" should not be listed in the favorites page on the webUI
 
-  @skip @yetToImplement
-  Scenario: mark a folder as favorite and list it in favorites page
+  @yetToImplement
+  Scenario: mark a folder as favorite
     When the user marks folder "simple-folder" as favorite using the webUI
     Then folder "simple-folder" should be marked as favorite on the webUI
     When the user reloads the current page of the webUI
     Then folder "simple-folder" should be marked as favorite on the webUI
-    And folder "simple-folder" should be listed in the favorites page on the webUI
-    And folder "simple-empty-folder" should not be listed in the favorites page on the webUI
+#    And folder "simple-folder" should be listed in the favorites page on the webUI
+#    And folder "simple-empty-folder" should not be listed in the favorites page on the webUI
 
   @skip @yetToImplement
   Scenario: mark files with same name and different path as favorites and list them in favourites page
