@@ -106,6 +106,8 @@ export default {
     },
     headers () {
       return {
+        // will trigger 412 precondition failed if a file already exists
+        'If-None-Match': '*',
         'Authorization': 'Bearer ' + this.getToken
       }
     },
