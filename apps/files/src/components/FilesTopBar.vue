@@ -154,7 +154,7 @@ export default {
         if (res === null) {
           this.showNotification({
             title: this.$gettext('Loading folder failed…'),
-            type: 'error'
+            status: 'danger'
           })
         } else {
           currentFolder = res[0]
@@ -166,7 +166,7 @@ export default {
         this.showNotification({
           title: this.$gettext('Loading folder failed…'),
           desc: error.message,
-          type: 'error'
+          status: 'danger'
         })
       }).finally(() => {
         this.loading = false
@@ -185,7 +185,7 @@ export default {
             this.showNotification({
               title: this.$gettext('Creating folder failed…'),
               desc: error,
-              type: 'error'
+              status: 'danger'
             })
           })
           .finally(() => {
@@ -206,7 +206,7 @@ export default {
             this.showNotification({
               title: this.$gettext('Creating file failed…'),
               desc: error,
-              type: 'error'
+              status: 'danger'
             })
           })
           .finally(() => {
@@ -234,7 +234,7 @@ export default {
       this.fileUploadProgress = 0
       this.showNotification({
         title: this.$gettext('File upload failed…'),
-        type: 'error'
+        status: 'danger'
       })
       this.fileUpload = false
     },

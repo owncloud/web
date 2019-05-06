@@ -145,7 +145,7 @@ export default {
         if (res === null) {
           this.showNotification({
             title: this.$gettext('Loading folder failed…'),
-            type: 'error'
+            status: 'danger'
           })
         } else {
           currentFolder = res[0]
@@ -161,7 +161,7 @@ export default {
         this.showNotification({
           title: this.$gettext('Loading folder failed…'),
           desc: error.message,
-          type: 'error'
+          status: 'danger'
         })
       }).finally(() => {
         this.loading = false
