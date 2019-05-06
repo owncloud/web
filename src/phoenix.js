@@ -37,8 +37,6 @@ const _map = require('lodash/map')
 const _flatten = require('lodash/flatten')
 const _findIndex = require('lodash/findIndex')
 
-console.log(ownCloud)
-
 Vue.prototype.$client = new ownCloud()
 
 Vue.use(VueEvents)

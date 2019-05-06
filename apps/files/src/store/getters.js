@@ -52,5 +52,17 @@ export default {
   },
   dropzone: state => {
     return state.dropzone
+  },
+  shareOpen: state => {
+    return state.shareOpen
+  },
+  shares: state => {
+    return state.shares
+  },
+  sharesError: state => {
+    return state.sharesError
+  },
+  sharesLoading: state => {
+    return state.sharesLoading
   }
 }

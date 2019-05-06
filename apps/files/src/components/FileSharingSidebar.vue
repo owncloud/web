@@ -1,13 +1,206 @@
 <template>
-    <div>
-      <p>file sharing sidebar</p>
+  <div>
+    <div v-if="selectedFiles.length > 1">
+      <span v-translate>Please choose only a single File</span>
+    </div>
+    <div v-else>
+     <oc-spinner v-if="sharesLoading"></oc-spinner>
+    <oc-accordion v-if="!sharesLoading" :multiple=true>
+      <oc-accordion-item v-if="owner" class="uk-open" :title="$_ocCollaborationStatus_ownerTitle">
+        <template slot="content">
+          <oc-user
+            :avatar="owner.avatar"
+            :user-name="owner.name"
+            :display-name="owner.displayName"
+            :email="owner.email"
+          >
+            <template slot="properties">
+              <span v-translate>Owner</span>
+            </template>
+          </oc-user>
+        </template>
+      </oc-accordion-item>
+      <oc-accordion-item class="uk-open" :title="$_ocCollaborationStatus_collaboratorsTitle">
+        <template slot="content">
+          <oc-autocomplete v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress" :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"/>
+          <ul class="uk-list">
+            <li v-for="(c, k) in shares" :key="k">
+              <oc-user
+                :avatar="c.avatar"
+                :user-name="c.name"
+                :display-name="c.displayName"
+                :email="c.email"
+              >
+                <template slot="properties">
+                <span v-if="c">
+                  <span
+                    v-if="c.role && roles[c.role] && roles[c.role].name"
+                    v-text="roles[c.role].name"
+                    :uk-tooltip="roles[c.role].description"
+                  />
+                  <span v-if="c.role && c.expires">|</span>
+                  <span v-if="c.expires">
+                    <translate :translate-params="{expires: formDateFromNow(c.expires)}">Expires: %{expires}</translate>
+                  </span>
+                </span>
+                </template>
+                <template slot="actions">
+                  <oc-icon name="delete" @click="onDelete(c)" />
+                  <oc-icon v-if="editing != c" name="edit" @click="onEdit(c)" />
+                </template>
+              </oc-user>
+
+              <div v-if="editing && editing.info.id == c.info.id" class="uk-margin-small-top">
+                <div v-for="(role, r) in roles" :key="r" @click="editing.role = r">
+                  <div class="uk-inline">
+                    <oc-radio :model="editing.role" :value="r" />
+                  </div>
+                  <div class="uk-inline">
+                    <div>
+                      <strong v-text="role.name" />
+                    </div>
+                  </div>
+                </div>
+                <div class="uk-container uk-padding-remove uk-margin-small-top">
+                  <oc-spinner v-if="saving" small></oc-spinner>
+                  <oc-button @click="onSave(editing)" :disabled="saving"><translate>Save</translate></oc-button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </template>
+      </oc-accordion-item>
+    </oc-accordion>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex'
 export default {
   title: ($gettext) => {
     return $gettext('Sharing')
+  },
+  name: 'FileSharingSidebar',
+  mounted () {
+    if (this.selectedFiles.length === 1) {
+      this.loadShares({
+        client: this.$client,
+        path: this.selectedFiles[0].path
+      })
+    } else {
+      this.sharesClearState()
+    }
+  },
+  watch: {
+    selectedItem: function (newSelectedSharee) {
+      // TODO: handle groups as well
+      this.addShare({
+        client: this.$client,
+        path: this.selectedFiles[0].path,
+        user: newSelectedSharee
+      })
+    }
+  },
+  data () {
+    return {
+      autocompleteResults: [],
+      autocompleteInProgress: false,
+      selectedItem: '',
+      editing: null,
+      saving: false,
+
+      roles: {
+        viewer: { name: 'Viewer', description: 'Download and preview' },
+        editor: { name: 'Editor', description: 'Upload, edit, delete, download and preview' },
+        coowner: {
+          name: 'Co-owner',
+          description: 'Share, upload, edit, delete, download and preview'
+        },
+        legacy: {
+          name: 'Legacy',
+          description: 'Yet unmapped combination of permissions'
+        }
+      }
+    }
+  },
+  computed: {
+    ...mapGetters('Files', ['selectedFiles', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
+    ...mapState(['user']),
+    $_ocCollaborationStatus_ownerTitle () {
+      return this.$gettext('Owner(s)')
+    },
+    $_ocCollaborationStatus_collaboratorsTitle () {
+      return this.$gettext('Collaborators')
+    },
+    $_ocCollaborationStatus_autocompletePlacholder () {
+      return this.$gettext('Add name(s), email(s) or federation ID\'s')
+    },
+    owner () {
+      if (this.shares.length === 0) {
+        return {
+          avatar: 'https://picsum.photos/64/64?image=1074',
+          name: this.user.is,
+          displayName: this.user.displayname
+        }
+      }
+      const s = this.shares[0]
+      return {
+        avatar: 'https://picsum.photos/64/64?image=1074',
+        name: s.uid_owner,
+        displayName: s.info.displayname_owner
+      }
+    }
+
+  },
+  methods: {
+    ...mapActions('Files', ['shareSetOpen', 'loadShares', 'sharesClearState', 'addShare', 'deleteShare', 'changeShare']),
+    onAutocompleteInput (value) {
+      if (value.length < 3) {
+        return
+      }
+      this.autocompleteInProgress = true
+      this.autocompleteResults = []
+      // TODO: move to store & sdk
+      this.$client.requests.ocs({
+        method: 'GET',
+        service: 'apps/files_sharing',
+        action: 'api/v1/sharees?search=' + encodeURIComponent(value) + '&perPage=200&itemType=folder'
+      })
+        .then(response => {
+          this.autocompleteInProgress = false
+          response.json()
+            .then(json => {
+              this.autocompleteResults = json.ocs.data.users.map(user => {
+                return user.value.shareWith
+              })
+            })
+        })
+        .catch(error => {
+          console.log(error)
+          this.autocompleteInProgress = false
+        })
+    },
+    onDelete (share) {
+      this.deleteShare({
+        client: this.$client,
+        share: share
+      })
+    },
+    onEdit (share) {
+      this.editing = JSON.parse(JSON.stringify(share))
+    },
+    onSave () {
+      this.saving = true
+      this.changeShare({
+        client: this.$client,
+        share: this.editing
+      })
+        .then(() => {
+          this.editing = null
+          this.saving = false
+        })
+    }
   }
 }
 </script>
