@@ -1,8 +1,6 @@
 <template>
   <div v-if="enabled">
-    <oc-spinner v-if="loading" />
-    <oc-avatar width=42 height=42 v-if="!loading && avatarSource !== ''" :src="avatarSource" />
-    <oc-icon size="large" v-if="!loading && avatarSource === ''" name="account_circle" color="white" class="uk-display-inline" />
+    <oc-avatar width=42 height=42 :loading="loading" :src="avatarSource" />
   </div>
 </template>
 <script>
