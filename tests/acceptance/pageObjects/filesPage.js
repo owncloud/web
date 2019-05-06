@@ -185,6 +185,52 @@ module.exports = {
         .waitForElementVisible(labelSelector)
         .toggleCheckbox(enableOrDisable, checkboxId)
         .click('@filterListButton')
+    },
+    /**
+     *
+     * @param {string} path
+     */
+    markAsFavorite: function (path) {
+      const favoriteIconButton = this.getFileRowSelectorByFileName(path) +
+        this.elements['notMarkedFavoriteInFileRow'].selector
+
+      return this.initAjaxCounters()
+        .waitForFileVisible(path)
+        .useXpath()
+        .click(favoriteIconButton)
+        .waitForOutstandingAjaxCalls()
+        .useCss()
+    },
+    /**
+     *
+     */
+    unmarkFavorite: function (path) {
+      const unFavoriteBtn = this.getFileRowSelectorByFileName(path) +
+        this.elements['markedFavoriteInFileRow'].selector
+
+      return this.initAjaxCounters()
+        .waitForFileVisible(path)
+        .useXpath()
+        .click(unFavoriteBtn)
+        .waitForOutstandingAjaxCalls()
+        .useCss()
+    },
+    /**
+     *
+     * @param {string} path
+     * @param {function(boolean)} callback - if the file is marked as favorite
+     */
+    isMarkedFavorite: function (path, callback) {
+      const markedFavoriteIcon = this.getFileRowSelectorByFileName(path) +
+        this.elements['markedFavoriteInFileRow'].selector
+
+      return this
+        .waitForFileVisible(path)
+        .useXpath()
+        .isVisible(markedFavoriteIcon, (result) => {
+          callback(result.value)
+        })
+        .useCss()
     }
   },
   elements: {
@@ -281,6 +327,14 @@ module.exports = {
     },
     fileUploadProgress: {
       selector: '#oc-progress-pie'
+    },
+    notMarkedFavoriteInFileRow: {
+      selector: '//span[contains(@class, "oc-star-dimm")]',
+      locateStrategy: 'xpath'
+    },
+    markedFavoriteInFileRow: {
+      selector: '//span[contains(@class, "oc-star-shining")]',
+      locateStrategy: 'xpath'
     }
   }
 }
