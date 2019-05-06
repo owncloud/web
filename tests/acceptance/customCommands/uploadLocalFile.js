@@ -3,6 +3,10 @@ const util = require('util')
 const events = require('events')
 const archiver = require('archiver')
 
+/**
+ *
+ * @param {function} cb
+ */
 const handleResult = cb => result => {
   if (result.status !== 0) throw new Error(result.value.message)
   cb(result.value)
@@ -15,8 +19,8 @@ util.inherits(uploadLocalFile, events.EventEmitter)
  * uploadLocalFile is responsible for using webdriver protocol to upload a local
  * file to a remote Selenium server for use in testing uploads.
  *
- * @argument inputSelector Input selector for the file input to upload with
- * @argument filePath Local path to the file used for uploading
+ * @param {string} inputSelector Input selector for the file input to upload with
+ * @param {string} filePath Local path to the file used for uploading
  */
 uploadLocalFile.prototype.command = function uploadLocalFile (inputSelector, filePath) {
   const self = this
