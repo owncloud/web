@@ -1,6 +1,12 @@
 const { client } = require('nightwatch-api')
 let password = ''
 
+/**
+ *
+ * @param {string} userId
+ *
+ * @returns {string}
+ */
 exports.createAuthHeader = function (userId) {
   if (userId === client.globals.backend_admin_username) {
     password = client.globals.backend_admin_password
