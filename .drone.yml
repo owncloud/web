@@ -12,6 +12,16 @@ pipeline:
       - DOCKER_HOST=tcp://docker:2375
     commands:
       - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
+    when:
+      event: [ push ]
+
+  install-phoenix:
+    image: owncloudci/php:${PHP_VERSION=7.1}
+    pull: true
+    commands:
+      - yarn install
+      - yarn dist
+      - cp tests/drone/config.json dist/config.json
 
   lint-test:
     image: owncloudci/php:${PHP_VERSION=7.1}
@@ -57,12 +67,6 @@ pipeline:
     pull: true
     commands:
       - tail -f /var/www/owncloud/data/owncloud.log
-
-  wait-for-phoenix:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    commands:
-      - wait-for-it -t 300 phoenix:8300
 
   fix-permissions:
     image: owncloudci/php:${PHP_VERSION=7.1}
@@ -141,13 +145,7 @@ services:
     image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
     commands:
-      - git clone https://github.com/owncloud/owncloud-design-system.git
-      - cd owncloud-design-system
-      - yarn install && yarn build:system
-      - cd ..
-      - yarn install
-      - yarn dist
-      - cp tests/drone/config.json dist/config.json
+      - mkdir dist
       - make run SERVER_HOST=phoenix:8300
 
   owncloud:
