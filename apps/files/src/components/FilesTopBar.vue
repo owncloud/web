@@ -122,7 +122,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile']),
+    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder']),
     ...mapActions(['openFile', 'showNotification']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
@@ -146,32 +146,12 @@ export default {
         this.$refs.filenameFilter.$el.querySelector('input').focus()
       }, 50)
     },
-    getFolder () {
+    $_ocFilesFolder_getFolder () {
       this.path = []
-      // clear file filter search query when folder changes
-      let absolutePath = this.$route.params.item === '' ? '/' : this.route.params.item
-      this.$client.files.list(absolutePath, 1, this.davProperties).then(res => {
-        let files = []
-        let currentFolder = null
-        if (res === null) {
-          this.showNotification({
-            title: this.$gettext('Loading folder failed…'),
-            status: 'danger'
-          })
-        } else {
-          currentFolder = res[0]
-          files = res.splice(1)
-        }
-        this.loadFiles({ currentFolder, files })
-        this.resetFileSelection()
-      }).catch(error => {
-        this.showNotification({
-          title: this.$gettext('Loading folder failed…'),
-          desc: error.message,
-          status: 'danger'
-        })
-      }).finally(() => {
-        this.loading = false
+      this.loadFolder({
+        client: this.$client,
+        absolutePath: this.$route.params.item === '' ? '/' : this.route.params.item,
+        $gettext: this.$gettext
       })
     },
     addNewFolder (folderName) {
@@ -181,7 +161,7 @@ export default {
           .then(() => {
             this.createFolder = false
             this.newFolderName = ''
-            this.getFolder()
+            this.$_ocFilesFolder_getFolder()
           })
           .catch(error => {
             this.showNotification({
@@ -200,9 +180,9 @@ export default {
         this.fileFolderCreationLoading = true
         this.$client.files.putFileContents(this.item + '/' + fileName, '')
           .then(() => {
-            this.getFolder()
             this.createFile = false
             this.newFileName = ''
+            this.$_ocFilesFolder_getFolder()
           })
           .catch(error => {
             this.showNotification({
@@ -227,7 +207,7 @@ export default {
           this.fileUpload = false
         }).catch(() => {
           this.fileUploadProgress = 0
-          this.getFolder()
+          this.$_ocFilesFolder_getFolder()
         })
       })
     },

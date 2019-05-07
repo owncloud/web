@@ -2,11 +2,11 @@
     <div class="oc-app" id="files-app" @dragover="$_ocApp_dragOver">
       <oc-app-layout :rightHidden="selectedFiles.length === 0">
         <template slot="center">
-          <oc-loader id="files-list-progress" v-if="loading"></oc-loader>
+          <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
         </template>
         <template slot="right">
-          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="getFolder" @reset="resetFileSelection"/>
+          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="resetFileSelection"/>
         </template>
       </oc-app-layout>
       <oc-file-actions></oc-file-actions>
@@ -35,18 +35,16 @@ export default {
       upload: false,
       fileName: '',
       selected: [],
-      loading: false,
       fileFilterQuery: '',
-      path: [],
       breadcrumbs: [],
       self: {}
     }
   },
   mounted () {
-    this.getFolder()
+    this.$_ocFilesFolder_getFolder()
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress', 'resetSearch', 'dragOver']),
+    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress', 'resetSearch', 'dragOver', 'loadFolder']),
     ...mapActions(['openFile', 'showNotification']),
 
     trace () {
@@ -130,55 +128,17 @@ export default {
         this.$refs.filenameFilter.$el.querySelector('input').focus()
       }, 50)
     },
-    getFolder () {
+    $_ocFilesFolder_getFolder () {
       if (!this.iAmActive) {
         return false
       }
-      this.loading = true
-      this.path = []
       // clear file filter search query when folder changes
       this.fileFilterQuery = ''
-      let absolutePath = this.$route.params.item === '' ? '/' : this.route.params.item
-      this.$client.files.list(absolutePath, 1, this.davProperties).then(res => {
-        let files = []
-        let currentFolder = null
-        if (res === null) {
-          this.showNotification({
-            title: this.$gettext('Loading folder failed…'),
-            status: 'danger'
-          })
-        } else {
-          currentFolder = res[0]
-          files = res.splice(1)
-        }
-        this.loadFiles({ currentFolder, files })
-        this.self = files.self
-        this.resetFileSelection()
-        if (this.searchTerm !== '') {
-          this.resetSearch()
-        }
-      }).catch(error => {
-        this.showNotification({
-          title: this.$gettext('Loading folder failed…'),
-          desc: error.message,
-          status: 'danger'
-        })
-      }).finally(() => {
-        this.loading = false
+      this.loadFolder({
+        client: this.$client,
+        absolutePath: this.$route.params.item === '' ? '/' : this.route.params.item,
+        $gettext: this.$gettext
       })
-    },
-    getRoutes () {
-      this.breadcrumbs = []
-      let breadcrumb = {}
-      let absolutePath = this.$route.params.item
-      let pathSplit = absolutePath.split('/').filter((val) => val)
-      for (let i = 0; i < pathSplit.length; i++) {
-        breadcrumb.text = pathSplit.slice(0, i + 1)[i]
-        breadcrumb.route = '/' + pathSplit.slice(0, i + 1).join('/')
-        this.breadcrumbs.push(breadcrumb)
-        breadcrumb = {}
-      }
-      return this.breadcrumbs
     },
     $_ocApp_dragOver () {
       this.dragOver(true)
@@ -187,17 +147,14 @@ export default {
 
   watch: {
     item () {
-      this.getFolder()
+      this.$_ocFilesFolder_getFolder()
     }
   },
 
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles', 'inProgress', 'activeFiles', 'fileFilter', 'davProperties', 'searchTerm', 'dropzone']),
+    ...mapGetters('Files', ['selectedFiles', 'inProgress', 'activeFiles', 'fileFilter', 'davProperties', 'searchTerm', 'dropzone', 'loadingFolder']),
     ...mapGetters(['getToken', 'extensions']),
-    activeRoute () {
-      return this.getRoutes()
-    },
 
     item () {
       return this.$route.params.item

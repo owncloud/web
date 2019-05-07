@@ -115,5 +115,8 @@ export default {
   },
   SHARES_LOADING (state, loading) {
     state.sharesLoading = loading
+  },
+  UPDATE_FOLDER_LOADING (state, value) {
+    state.loadingFolder = value
   }
 }
