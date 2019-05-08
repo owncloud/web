@@ -25,18 +25,6 @@ exports.download = function (userId, file) {
     davPath,
     { method: 'GET', headers: headers }
   )
-    .then(checkStatus)
+    .then(res => httpHelper.checkStatus(res, 'Could not download file.'))
     .then(res => res.text())
-}
-
-/**
- *
- * @param {ArrayBuffer} res
- */
-function checkStatus (res) {
-  if (res.ok) { // res.status >= 200 && res.status < 300
-    return res
-  } else {
-    throw Error('Could not download file. Status:' + res.status + ' ' + res.statusText)
-  }
 }
