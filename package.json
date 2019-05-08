@@ -44,7 +44,7 @@
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-node": "^9.0.0",
+    "eslint-plugin-node": "^9.0.1",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^5.2.2",
@@ -73,7 +73,7 @@
     "vuex-persist": "^2.0.0",
     "vuex-router-sync": "^5.0.0",
     "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.1",
+    "webpack-cli": "^3.3.2",
     "webpack-copy-plugin": "^0.0.4",
     "webpack-dev-server": "^3.3.1",
     "webpack-merge": "^4.2.1"
@@ -83,7 +83,7 @@
     "eslint-loader": "^2.1.2",
     "oidc-client": "^1.7.1",
     "owncloud-design-system": "^1.0.0-584",
-    "owncloud-sdk": "1.0.0-74",
+    "owncloud-sdk": "1.0.0-92",
     "url-search-params-polyfill": "^6.0.0"
   }
 }
