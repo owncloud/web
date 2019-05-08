@@ -14,14 +14,23 @@ pipeline:
       - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
     when:
       event: [ push ]
+      AFTER_JOB: true
 
-  install-phoenix:
+  npm-install:
     image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
     commands:
       - yarn install
+
+  build-phoenix:
+    image: owncloudci/php:${PHP_VERSION=7.1}
+    pull: true
+    commands:
       - yarn dist
       - cp tests/drone/config.json dist/config.json
+    when:
+      matrix:
+        RUN_PHOENIX: true
 
   lint-test:
     image: owncloudci/php:${PHP_VERSION=7.1}
@@ -29,6 +38,9 @@ pipeline:
     commands:
       - cd /var/www/owncloud/phoenix
       - yarn run lint
+    when:
+      matrix:
+        TEST_SUITE: lint-test
 
   install-server:
     image: owncloudci/core
@@ -40,12 +52,18 @@ pipeline:
     db_username: autotest
     db_password: owncloud
     core_path: /var/www/owncloud/
+    when:
+      matrix:
+        NEED_SERVER: true
 
   clone-oauth:
     image: owncloud/ubuntu:16.04
     pull: true
     commands:
       - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+    when:
+      matrix:
+        NEED_SERVER: true
 
   configure-server:
     image: owncloudci/php:${PHP_VERSION=7.1}
@@ -60,6 +78,9 @@ pipeline:
       - php occ a:e oauth2
       - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/#/oidc-callback
       - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+    when:
+      matrix:
+        NEED_SERVER: true
 
   owncloud-log:
     image: owncloud/ubuntu:16.04
@@ -67,6 +88,9 @@ pipeline:
     pull: true
     commands:
       - tail -f /var/www/owncloud/data/owncloud.log
+    when:
+      matrix:
+        NEED_SERVER: true
 
   fix-permissions:
     image: owncloudci/php:${PHP_VERSION=7.1}
@@ -74,13 +98,21 @@ pipeline:
     commands:
       - cd /var/www/owncloud/
       - chown www-data * -R
+    when:
+      matrix:
+        NEED_SERVER: true
 
   webui-acceptance-tests:
     image: owncloudci/php:${PHP_VERSION=7.1}
     pull: true
+    environment:
+      - TEST_CONTEXT=${TEST_CONTEXT}
     commands:
       - cd /var/www/owncloud/phoenix
       - yarn run acceptance-tests-drone
+    when:
+      matrix:
+        TEST_SUITE: acceptance
 
   upload-screenshots:
     image: plugins/s3
@@ -94,6 +126,8 @@ pipeline:
     secrets: [ aws_access_key_id, aws_secret_access_key ]
     when:
       status: [ failure ]
+      matrix:
+        TEST_SUITE: acceptance
 
   build-github-comment:
     image: owncloud/ubuntu:16.04
@@ -105,6 +139,8 @@ pipeline:
       - more comments.file
     when:
       status: [ failure ]
+      matrix:
+        TEST_SUITE: acceptance
 
   github-comment:
     image: jmccann/drone-github-comment:1
@@ -112,6 +148,8 @@ pipeline:
     message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
     when:
       status: [ failure ]
+      matrix:
+        TEST_SUITE: acceptance
 
   build-release:
     image: owncloudci/php:${PHP_VERSION=7.1}
@@ -119,6 +157,10 @@ pipeline:
     commands:
       - cd /var/www/owncloud/phoenix
       - make -f Makefile.release dist
+    when:
+      event: [ push ]
+      matrix:
+        AFTER_JOB: true
 
   deploy-staging:
     image: drillster/drone-rsync:latest
@@ -139,6 +181,8 @@ pipeline:
     when:
       event: [ push ]
       branch: [ master ]
+      matrix:
+        AFTER_JOB: true
 
 services:
   phoenix:
@@ -147,6 +191,9 @@ services:
     commands:
       - mkdir dist
       - make run SERVER_HOST=phoenix:8300
+    when:
+      matrix:
+        RUN_PHOENIX: true
 
   owncloud:
     image: owncloudci/php:${PHP_VERSION=7.1}
@@ -154,10 +201,133 @@ services:
     environment:
       - APACHE_WEBROOT=/var/www/owncloud/
     command: [ "/usr/local/bin/apachectl", "-e", "debug", "-D", "FOREGROUND" ]
+    when:
+      matrix:
+        NEED_SERVER: true
 
   selenium:
     image: selenium/standalone-chrome-debug:latest
     pull: true
+    when:
+      matrix:
+        TEST_SUITE: acceptance
 
   docker:
     image: docker:18.04-dind
+    when:
+      matrix:
+        AFTER_JOB: true
+
+matrix:
+  include:
+    # lint test
+    - TEST_SUITE: lint-test
+
+    # acceptance test
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIAdminSettings
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIComments
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIFavorites
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIFiles
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUILogin
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIMoveFilesFolders
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIRenameFiles
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIRenameFolders
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIRestrictSharing
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingAcceptShares
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingExternal
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingInternalGroups
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingInternalUsers
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingNotifications
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingPublic
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUITags
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUITrashbin
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIUpload
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIWebdavLockProtection
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIWebdavLocks
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUITags
+
+    # After drone all jobs completes
+    - AFTER_JOB: true
