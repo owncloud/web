@@ -15,7 +15,9 @@
     </template>
     <template slot="content">
       <oc-tabs>
-          <oc-tab-item :active="key == activeTab" @click="activeTab = key" v-for="(tab, key) of fileSideBars" :title="tab.component.title($gettext)" :key="tab.name" />
+          <oc-tab-item :active="key == activeTab" @click="activeTab = key" v-for="(tab, key) of fileSideBars" :key="tab.name">
+            {{ tab.component.title($gettext) }}
+          </oc-tab-item>
       </oc-tabs>
       <component v-if="fileSideBars.length > 0" v-bind:is="activeTabComponent.component" @reload="$emit('reload')"></component>
     </template>

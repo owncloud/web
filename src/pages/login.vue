@@ -11,7 +11,9 @@
                 <p v-translate>
                     Please click the button below to authenticate and get access to your data.
                 </p>
-                <oc-button size="large" variation="primary" class="oc-login-authorize-button" id="authenticate" @click.native="login()" :text="$_login_authorizeButtonText"/>
+                <oc-button size="large" variation="primary" class="oc-login-authorize-button" id="authenticate" @click.native="login()">
+                  <translate>Authorize</translate>
+                </oc-button>
             </div>
             <div class="oc-login-card-footer">
                 <p>
@@ -32,10 +34,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration']),
-    $_login_authorizeButtonText () {
-      return this.$gettext('Authorize')
-    }
+    ...mapGetters(['configuration'])
   },
   methods: {
     ...mapActions(['login'])

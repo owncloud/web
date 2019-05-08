@@ -1,9 +1,9 @@
 <template>
   <oc-application-menu name="coreMenu" v-model="sidebarIsVisible" @close="sidebarIsVisible = false">
     <template slot="default">
-      <oc-sidebar-nav-item v-for="(n, nid) in nav" :key="nid" :text="n.name" :icon="n.iconMaterial" :target="n.route.name" />
+      <oc-sidebar-nav-item v-for="(n, nid) in nav" :key="nid" :icon="n.iconMaterial" :target="n.route.name">{{ n.name }}</oc-sidebar-nav-item>
 
-      <oc-sidebar-nav-item :text="_logoutItemText" active icon="exit_to_app" @click="logout()" :isolate="true"/>
+      <oc-sidebar-nav-item active icon="exit_to_app" @click="logout()" :isolate="true">{{ _logoutItemText }}</oc-sidebar-nav-item>
     </template>
   </oc-application-menu>
 </template>
