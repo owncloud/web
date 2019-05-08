@@ -58,8 +58,10 @@ export default {
         this.newName = item.name
       } else {
         if (item.includes('/')) {
+          let translated = this.$gettext('Renaming of %{ fileName} failed. The file name cannot contain a "/"')
+
           this.showNotification({
-            title: this.$gettext(`Renaming of ${this.selectedFile.name} failed. The file name cannot contain a "/"`),
+            title: this.$gettextInterpolate(translated, { fileName: this.selectedFile.name }, true),
             status: 'danger'
           })
           return
@@ -125,7 +127,7 @@ export default {
           this.$_ocUpload(file)
         } else {
           this.showNotification({
-            title: this.$gettextInterpolate('Upload for %{file} failed - File already exists', { file: file.name }),
+            title: this.$gettextInterpolate('Upload for %{file} failed - File already exists', { file: file.name }, true),
             status: 'danger'
           })
         }
