@@ -14,7 +14,8 @@ pipeline:
       - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
     when:
       event: [ push ]
-      AFTER_JOB: true
+      matrix:
+        AFTER_JOB: true
 
   npm-install:
     image: owncloudci/php:${PHP_VERSION=7.1}
