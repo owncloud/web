@@ -133,10 +133,13 @@ pipeline:
   build-github-comment:
     image: owncloud/ubuntu:16.04
     pull: true
+    environment:
+      - TEST_CONTEXT=${TEST_CONTEXT}
     commands:
       - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-      - echo "Find screenshots at https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/" >> comments.file
+      - 'echo "<details><summary>:boom: Acceptance tests <strong>${TEST_CONTEXT}</strong> failed. Please find the screenshots inside ...</summary><p>\n\n" >> comments.file'
       - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+      - echo "\n</p></details>" >> comments.file
       - more comments.file
     when:
       status: [ failure ]
