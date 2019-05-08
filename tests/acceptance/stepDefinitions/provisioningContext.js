@@ -28,3 +28,16 @@ Given('user {string} has been created with default attributes', function (userId
     .then(() => createUser(userId))
     .then(() => initUser(userId))
 })
+
+Given('the quota of user {string} has been set to {string}', function (userId, quota) {
+  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const body = new URLSearchParams()
+  body.append('key', 'quota')
+  body.append('value', quota)
+
+  return fetch(
+    client.globals.backend_url + '/ocs/v2.php/cloud/users/' + userId,
+    { method: 'PUT', body: body, headers: headers }
+  )
+    .then(res => httpHelper.checkStatus(res, 'Could not set quota.'))
+})
