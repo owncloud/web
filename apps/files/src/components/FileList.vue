@@ -38,10 +38,10 @@
         </oc-table-cell>
       </oc-table-row>
     </oc-table-group>
-    <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName" ocConfirmId="oc-rename-dialog-ok"
-                      :ocTitle="_renameDialogTitle" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
+    <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName"
+                      :ocTitle="_renameDialogTitle" ocConfirmId="oc-dialog-rename-confirm" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
     <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
-                      :ocTitle="_deleteDialogTitle" ocConfirmId="oc-delete-dialog-ok" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
+                      :ocTitle="_deleteDialogTitle" ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
   </oc-table>
 </template>
 <script>

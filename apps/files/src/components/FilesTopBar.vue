@@ -232,10 +232,11 @@ export default {
       })
     },
 
-    onFileError () {
+    onFileError (error) {
       this.fileUploadProgress = 0
       this.showNotification({
         title: this.$gettext('File upload failed…'),
+        desc: error.message,
         status: 'danger'
       })
       this.fileUpload = false
