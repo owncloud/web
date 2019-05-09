@@ -64,5 +64,8 @@ export default {
   },
   sharesLoading: state => {
     return state.sharesLoading
+  },
+  loadingFolder: state => {
+    return state.loadingFolder
   }
 }
