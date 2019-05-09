@@ -77,7 +77,7 @@ pipeline:
       - php occ log:manage --level 0
       - php occ config:list
       - php occ a:e oauth2
-      - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/#/oidc-callback
+      - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
       - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
     when:
       matrix:
@@ -110,6 +110,7 @@ pipeline:
       - TEST_CONTEXT=${TEST_CONTEXT}
     commands:
       - cd /var/www/owncloud/phoenix
+      - curl http://phoenix:8300/oidc-callback.html
       - yarn run acceptance-tests-drone
     when:
       matrix:
