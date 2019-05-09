@@ -96,7 +96,8 @@ export default {
     },
     deleteFile (file) {
       this.fileToBeDeleted = file
-      this.deleteConfirmation = this.$gettext(`Please confirm the deletion of ${file.name}`)
+      let translated = this.$gettext('Please confirm the deletion of %{ fileName }')
+      this.deleteConfirmation = this.$gettextInterpolate(translated, { fileName: file.name }, true)
     },
     /* shareFile (file) {
       this.deleteConfirmation = this.$gettextInterpolate(translated, { file: file.name })
