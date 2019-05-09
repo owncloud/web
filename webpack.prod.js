@@ -16,6 +16,12 @@ module.exports = merge(common, {
     }, {
       from: 'manifest.json',
       to: 'manifest.json'
+    }, {
+      from: 'oidc-callback.html',
+      to: 'oidc-callback.html'
+    }, {
+      from: 'oidc-silent-redirect.html',
+      to: 'oidc-silent-redirect.html'
     }])
   ],
   mode: 'production',
