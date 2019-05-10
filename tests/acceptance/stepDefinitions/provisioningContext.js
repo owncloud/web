@@ -76,4 +76,4 @@ Given('these groups have been created:', function (dataTable) {
     return deleteGroup(groupId)
       .then(() => createGroup(groupId))
   }))
-});
+})

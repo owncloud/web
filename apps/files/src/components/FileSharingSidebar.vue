@@ -167,8 +167,8 @@ export default {
       this.$client.shares.getRecipients(value, 'folder')
         .then(recipients => {
           this.autocompleteInProgress = false
-          let users   = recipients.exact.users.concat(recipients.users);
-          let groups  = recipients.exact.groups.concat(recipients.groups);
+          let users = recipients.exact.users.concat(recipients.users)
+          let groups = recipients.exact.groups.concat(recipients.groups)
           users = users.filter((user) => {
             return user.value.shareWith !== this.user.id
           })

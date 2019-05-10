@@ -83,10 +83,10 @@ module.exports = {
           result.value.forEach(function (value) {
             page.api.elementIdText(value.ELEMENT, (text) => {
               if (!text.value.toLocaleLowerCase().includes(pattern.toLocaleLowerCase())) {
-                assert.fail(`sharee ${text.value} does not contain pattern ${pattern}`);
+                assert.fail(`sharee ${text.value} does not contain pattern ${pattern}`)
               }
             })
-          });
+          })
         })
 
       return this
@@ -96,14 +96,14 @@ module.exports = {
       this.initAjaxCounters()
         .waitForElementVisible('@sharingAutoCompleteDropDownElements')
         .api.elements('css selector', this.elements['sharingAutoCompleteDropDownElements'].selector, (result) => {
-        result.value.forEach(function (value) {
-          page.api.elementIdText(value.ELEMENT, (text) => {
-            if (text.value.toLocaleLowerCase().includes(pattern.toLocaleLowerCase())) {
-              assert.fail(`sharee ${text.value} contains pattern ${pattern}`);
-            }
+          result.value.forEach(function (value) {
+            page.api.elementIdText(value.ELEMENT, (text) => {
+              if (text.value.toLocaleLowerCase().includes(pattern.toLocaleLowerCase())) {
+                assert.fail(`sharee ${text.value} contains pattern ${pattern}`)
+              }
+            })
           })
-        });
-      })
+        })
 
       return this
     },
@@ -323,11 +323,11 @@ module.exports = {
     },
     deleteButtonInFileRow: {
       selector: '//button[@aria-label="Delete"]',
-        locateStrategy: 'xpath'
+      locateStrategy: 'xpath'
     },
     shareButtonInFileRow: {
       selector: '//button[@aria-label="Share"]',
-        locateStrategy: 'xpath'
+      locateStrategy: 'xpath'
     },
     deleteFileConfirmationBtn: {
       selector: '#oc-delete-dialog-ok'

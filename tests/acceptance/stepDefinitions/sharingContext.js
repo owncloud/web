@@ -28,17 +28,17 @@ Given('user {string} has shared file/folder {string} with user {string}', functi
 
 When('the user types {string} in the share-with-field', function (input) {
   return client.page.filesPage().enterAutoComplete(input)
-});
+})
 
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', function (pattern) {
   return client.page.filesPage().sharingAutoCompleteShallContainElementsWith(pattern)
-});
+})
 
 Then('the users own name should not be listed in the autocomplete list on the webUI', function () {
   // TODO: where to get the current user from
   return client.page.filesPage().sharingAutoCompleteShallNotContainElementsWith('admin')
-});
+})
 
 Given('the user has opened the share dialog for folder {string}', function (fileName) {
   return client.page.filesPage().openSharingDialog(fileName)
-});
+})
