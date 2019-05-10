@@ -26,7 +26,6 @@ Feature: Autocompletion of share-with names
       | users-finance |
       | other         |
 
-  @skip @yetToImplement
   @smokeTest
   Scenario: autocompletion of regular existing users
     Given user "regularuser" has logged in using the webUI

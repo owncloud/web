@@ -1,3 +1,5 @@
+const assert = require('assert')
+
 module.exports = {
   url: function () {
     return this.api.launchUrl + ''
@@ -55,6 +57,55 @@ module.exports = {
         .waitForElementNotVisible('@deleteFileConfirmationDialog')
         .waitForOutstandingAjaxCalls()
         .useCss()
+    },
+    openSharingDialog: function (fileName) {
+      const shareBtnSelector = this.getFileRowSelectorByFileName(fileName) +
+        this.elements['shareButtonInFileRow'].selector
+
+      return this.initAjaxCounters()
+        .waitForFileVisible(fileName)
+        .useXpath()
+        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
+        .click(shareBtnSelector)
+        .waitForElementVisible('@sharingSideBar')
+        .useCss()
+    },
+    enterAutoComplete: function (input) {
+      return this.initAjaxCounters()
+        .waitForElementVisible('@sharingAutoComplete')
+        .setValue('@sharingAutoComplete', input)
+    },
+    sharingAutoCompleteShallContainElementsWith: function (pattern) {
+      const page = this
+      this.initAjaxCounters()
+        .waitForElementVisible('@sharingAutoCompleteDropDownElements')
+        .api.elements('css selector', this.elements['sharingAutoCompleteDropDownElements'].selector, (result) => {
+          result.value.forEach(function (value) {
+            page.api.elementIdText(value.ELEMENT, (text) => {
+              if (!text.value.toLocaleLowerCase().includes(pattern.toLocaleLowerCase())) {
+                assert.fail(`sharee ${text.value} does not contain pattern ${pattern}`);
+              }
+            })
+          });
+        })
+
+      return this
+    },
+    sharingAutoCompleteShallNotContainElementsWith: function (pattern) {
+      const page = this
+      this.initAjaxCounters()
+        .waitForElementVisible('@sharingAutoCompleteDropDownElements')
+        .api.elements('css selector', this.elements['sharingAutoCompleteDropDownElements'].selector, (result) => {
+        result.value.forEach(function (value) {
+          page.api.elementIdText(value.ELEMENT, (text) => {
+            if (text.value.toLocaleLowerCase().includes(pattern.toLocaleLowerCase())) {
+              assert.fail(`sharee ${text.value} contains pattern ${pattern}`);
+            }
+          })
+        });
+      })
+
+      return this
     },
     /**
      *
@@ -272,7 +323,11 @@ module.exports = {
     },
     deleteButtonInFileRow: {
       selector: '//button[@aria-label="Delete"]',
-      locateStrategy: 'xpath'
+        locateStrategy: 'xpath'
+    },
+    shareButtonInFileRow: {
+      selector: '//button[@aria-label="Share"]',
+        locateStrategy: 'xpath'
     },
     deleteFileConfirmationBtn: {
       selector: '#oc-delete-dialog-ok'
@@ -337,6 +392,19 @@ module.exports = {
     markedFavoriteInFileRow: {
       selector: '//span[contains(@class, "oc-star-shining")]',
       locateStrategy: 'xpath'
+    },
+    sharingSideBar: {
+      selector: '#oc-files-sharing-sidebar'
+    },
+    sharingAutoComplete: {
+      selector: '#oc-sharing-autocomplete .oc-autocomplete-input'
+    },
+    sharingAutoCompleteDropDown: {
+      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion-list'
+    },
+    sharingAutoCompleteDropDownElements: {
+      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion'
     }
+
   }
 }
