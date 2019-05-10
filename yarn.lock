@@ -5717,10 +5717,10 @@ output-file-sync@^2.0.0:
     is-plain-obj "^1.1.0"
     mkdirp "^0.5.1"
 
-owncloud-design-system@^1.0.0-611:
-  version "1.0.0-611"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-611.tgz#8b8777c9b6db908b3459b3b7fc9c55cdf499f2fe"
-  integrity sha512-BCinEefhZdsyC9uqXCq486sNKBMWx9abcH9SG+tvi+h5HuD0iqaQKh2nivv8QuTS5IPsZdaMzxKb2wJHZnN7kg==
+owncloud-design-system@^1.0.0-614:
+  version "1.0.0-614"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-614.tgz#d7140106acc2edc9a762b8c5d355875e213b653a"
+  integrity sha512-9r9NQC27JjBslLXDknOu3qdsp0hcrRw++Cmhqm1ijiC7vyAgeFmri4o2AUx8TzilVtBeVVjjw2XvvfVWGvsnxg==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.6.0"
@@ -8197,12 +8197,7 @@ vuex-router-sync@^5.0.0:
   resolved "https://registry.yarnpkg.com/vuex-router-sync/-/vuex-router-sync-5.0.0.tgz#1a225c17a1dd9e2f74af0a1b2c62072e9492b305"
   integrity sha512-Mry2sO4kiAG64714X1CFpTA/shUH1DmkZ26DFDtwoM/yyx6OtMrc+MxrU+7vvbNLO9LSpgwkiJ8W+rlmRtsM+w==
 
-vuex@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.1.0.tgz#634b81515cf0cfe976bd1ffe9601755e51f843b9"
-  integrity sha512-mdHeHT/7u4BncpUZMlxNaIdcN/HIt1GsGG5LKByArvYG/v6DvHcOxvDCts+7SRdCoIRGllK8IMZvQtQXLppDYg==
-
-vuex@^3.1.1:
+vuex@^3.1.0, vuex@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.1.1.tgz#0c264bfe30cdbccf96ab9db3177d211828a5910e"
   integrity sha512-ER5moSbLZuNSMBFnEBVGhQ1uCBNJslH9W/Dw2W7GZN23UQA69uapP5GTT9Vm8Trc0PzBSVt6LzF3hGjmv41xcg==
