@@ -142,7 +142,7 @@ export default {
       if (this.shares.length === 0) {
         return {
           avatar: 'https://picsum.photos/64/64?image=1074',
-          name: this.user.is,
+          name: this.user.id,
           displayName: this.user.displayname
         }
       }
@@ -167,7 +167,13 @@ export default {
       this.$client.shares.getRecipients(value, 'folder')
         .then(recipients => {
           this.autocompleteInProgress = false
-          this.autocompleteResults = recipients.users.concat(recipients.groups)
+          let users   = recipients.exact.users.concat(recipients.users);
+          let groups  = recipients.exact.groups.concat(recipients.groups);
+          users = users.filter((user) => {
+            return user.value.shareWith !== this.user.id
+          })
+
+          this.autocompleteResults = users.concat(groups)
         })
         .catch(error => {
           console.log(error)
