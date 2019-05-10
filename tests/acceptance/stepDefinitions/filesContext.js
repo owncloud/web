@@ -73,6 +73,10 @@ When('the user renames file/folder {string} to {string} using the webUI', functi
   return client.page.FilesPageElement.filesList().renameFile(fromName, toName)
 })
 
+When('the user renames file/folder {string} to an invalid name {string} using the webUI', function (fromName, toName) {
+  return client.page.FilesPageElement.filesList().renameFile(fromName, toName, false)
+})
+
 Given('the user has disabled folder filter', () => {
   return client.page.filesPage().toggleFilterFileOrFolder('folder', 'disable')
 })

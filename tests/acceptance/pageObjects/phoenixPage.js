@@ -26,6 +26,9 @@ module.exports = {
       selector: '//*[contains(@class, "uk-notification-message")]/div/div[contains(@class, "oc-notification-message-title")]',
       locateStrategy: 'xpath'
     },
+    ocDialogPromptAlert: {
+      selector: '#oc-dialog-prompt-alert'
+    },
     searchInputField: {
       selector: '.oc-search-input'
     },

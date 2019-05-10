@@ -39,7 +39,7 @@
         </oc-table-cell>
       </oc-table-row>
     </oc-table-group>
-    <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName"
+    <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName" :ocError="changeFileErrorMessage"
                       :ocTitle="_renameDialogTitle" ocConfirmId="oc-dialog-rename-confirm" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
     <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
                       :ocTitle="_deleteDialogTitle" ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
@@ -94,6 +94,12 @@ export default {
     openFileActionBar (file) {
       this.$emit('FileAction', file)
     },
+    checkNewName (name) {
+      if (/[/]/.test(name)) {
+        return this.$gettext('Name cannot contain "/"')
+      }
+      return null
+    },
     deleteFile (file) {
       this.fileToBeDeleted = file
       let translated = this.$gettext('Please confirm the deletion of %{ fileName }')
@@ -114,6 +120,9 @@ export default {
     ...mapGetters(['getToken', 'fileSideBars']),
     all () {
       return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
+    },
+    changeFileErrorMessage () {
+      return this.checkNewName(this.newName)
     },
     actions () {
       let actions = [

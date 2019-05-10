@@ -19,6 +19,13 @@ Then('the error message {string} should be displayed on the webUI', function (fo
     .expect.element('@message').text.to.equal(folder)
 })
 
+Then('the error message {string} should be displayed on the webUI dialog prompt', function (message) {
+  return client
+    .page.phoenixPage()
+    .waitForElementVisible('@ocDialogPromptAlert')
+    .expect.element('@ocDialogPromptAlert').text.to.equal(message)
+})
+
 Then('no notification should be displayed on the webUI', function () {
   return client
     .page.phoenixPage()
