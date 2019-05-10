@@ -74,4 +74,7 @@ Given('user {string} has logged in using the webUI', function (userId) {
   return client
     .page.filesPage()
     .waitForElementVisible('@filesTable')
+    .then(() => {
+      client.globals.currentUserName = userId
+    })
 })

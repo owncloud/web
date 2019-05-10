@@ -23,3 +23,5 @@ dist
 *.log
 .DS_Store
 .envrc
+
+tests/reports

@@ -23,6 +23,19 @@ function initUser (userId) {
   return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users/' + userId, { method: 'GET', headers: headers })
 }
 
+function createGroup (groupId) {
+  const body = new URLSearchParams()
+  body.append('groupid', groupId)
+
+  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/groups?format=json', { method: 'POST', body: body, headers: headers })
+}
+
+function deleteGroup (groupId) {
+  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/groups/' + groupId, { method: 'POST', headers: headers })
+}
+
 Given('user {string} has been created with default attributes', function (userId) {
   return deleteUser(userId)
     .then(() => createUser(userId))
@@ -40,4 +53,27 @@ Given('the quota of user {string} has been set to {string}', function (userId, q
     { method: 'PUT', body: body, headers: headers }
   )
     .then(res => httpHelper.checkStatus(res, 'Could not set quota.'))
+})
+
+Given('these users have been created with default attributes but not initialized:', function (dataTable) {
+  return Promise.all(dataTable.rows().map((userId) => {
+    return deleteUser(userId)
+      .then(() => createUser(userId))
+  }))
+})
+
+Given('these users have been created but not initialized:', function (dataTable) {
+  return Promise.all(dataTable.rows().map((user) => {
+    // TODO: handle displayname and email
+    let userId = user[0]
+    return deleteUser(userId)
+      .then(() => createUser(userId))
+  }))
+})
+
+Given('these groups have been created:', function (dataTable) {
+  return Promise.all(dataTable.rows().map((groupId) => {
+    return deleteGroup(groupId)
+      .then(() => createGroup(groupId))
+  }))
 })

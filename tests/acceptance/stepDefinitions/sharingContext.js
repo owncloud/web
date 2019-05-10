@@ -1,6 +1,7 @@
 const { client } = require('nightwatch-api')
-const { Given } = require('cucumber')
+const { When, Given, Then } = require('cucumber')
 const fetch = require('node-fetch')
+const assert = require('assert')
 const { URLSearchParams } = require('url')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
@@ -24,4 +25,38 @@ Given('user {string} has shared file/folder {string} with user {string}', functi
         throw Error('Could not create share. Message: ' + json.ocs.meta.message)
       }
     })
+})
+
+When('the user types {string} in the share-with-field', function (input) {
+  return client.page.filesPage().enterAutoComplete(input)
+})
+
+Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', function (pattern) {
+  return client.page.filesPage().getShareAutocompleteItemsList()
+    .then(itemsList => {
+      itemsList.forEach(item => {
+        if (!item.includes(pattern)) {
+          client.assert.fail(`sharee ${item} does not contain pattern ${pattern}`)
+        }
+      })
+    })
+})
+
+Then('the users own name should not be listed in the autocomplete list on the webUI', function () {
+  // TODO: where to get the current user from
+  const currentUserName = client.globals.currentUserName
+  return client.page.filesPage().getShareAutocompleteItemsList()
+    .then(itemsList => {
+      itemsList.forEach(item => {
+        assert.notStrictEqual(
+          item,
+          currentUserName,
+          `Users own name: ${currentUserName} was not expected to be listed in the autocomplete list but was`
+        )
+      })
+    })
+})
+
+Given('the user has opened the share dialog for folder {string}', function (fileName) {
+  return client.page.filesPage().openSharingDialog(fileName)
 })

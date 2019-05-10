@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="oc-files-sharing-sidebar">
     <div v-if="selectedFiles.length > 1">
       <span v-translate>Please choose only a single File</span>
     </div>
@@ -26,7 +26,7 @@
         <template slot="content">
           <oc-autocomplete v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress"
                            :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
-                           :filter="filterRecipients">
+                           :filter="filterRecipients" id="oc-sharing-autocomplete">
             <template v-slot:item="{item}">
               <span>{{ buildRecipientDisplay(item) }}</span>
             </template>          </oc-autocomplete>
@@ -158,7 +158,7 @@ export default {
   methods: {
     ...mapActions('Files', ['shareSetOpen', 'loadShares', 'sharesClearState', 'addShare', 'deleteShare', 'changeShare']),
     onAutocompleteInput (value) {
-      if (value.length < 3) {
+      if (value.length < 2) {
         return
       }
       this.autocompleteInProgress = true
@@ -167,8 +167,8 @@ export default {
       this.$client.shares.getRecipients(value, 'folder')
         .then(recipients => {
           this.autocompleteInProgress = false
-          let users   = recipients.exact.users.concat(recipients.users);
-          let groups  = recipients.exact.groups.concat(recipients.groups);
+          let users = recipients.exact.users.concat(recipients.users)
+          let groups = recipients.exact.groups.concat(recipients.groups)
           users = users.filter((user) => {
             return user.value.shareWith !== this.user.id
           })

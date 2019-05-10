@@ -25,7 +25,8 @@ const appInfo = {
       app: 'files-sharing',
       component: FileSharingSidebar,
       quickAccess: {
-        icon: 'share'
+        icon: 'share',
+        ariaLabel: 'Share'
       }
     }
   ]
