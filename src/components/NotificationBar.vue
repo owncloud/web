@@ -3,7 +3,8 @@
     <oc-notification-message
             v-for="(item, index) in activeNotifications"
             :key="index"
-            :message="item.title"
+            :title="item.title"
+            :message="item.desc"
             :status="item.status"
             @close="deleteNotification(item.id)"
     />

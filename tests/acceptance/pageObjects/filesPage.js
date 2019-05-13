@@ -275,7 +275,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     deleteFileConfirmationBtn: {
-      selector: '#oc-delete-dialog-ok'
+      selector: '#oc-dialog-delete-confirm'
     },
     renameFileConfirmationDialog: {
       selector: '#change-file-dialog'
@@ -289,7 +289,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     renameFileConfirmationBtn: {
-      selector: '#oc-rename-dialog-ok'
+      selector: '#oc-dialog-rename-confirm'
     },
     filterListButton: {
       selector: '#oc-filter-list-btn'
