@@ -6,7 +6,10 @@ export function initVueAuthenticate (config) {
       prefix: 'oc_oAuth'
     })
     let mgr
-    const baseUrl = window.location.href.split('#')[0]
+    let baseUrl = window.location.href.split('#')[0]
+    if (baseUrl.endsWith('/index.html')) {
+      baseUrl = baseUrl.substr(0, baseUrl.length - 10)
+    }
     if (config.metaDataUrl) {
       mgr = new UserManager({
         userStore: store,
