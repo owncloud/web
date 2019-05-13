@@ -108,6 +108,38 @@ function _buildShare (s) {
 }
 
 export default {
+  loadFolder (context, { client, absolutePath, $gettext }) {
+    context.commit('UPDATE_FOLDER_LOADING', true)
+
+    client.files.list(absolutePath, 1, context.getters.davProperties).then(res => {
+      let files = []
+      let currentFolder = null
+      if (res === null) {
+        context.dispatch('showNotification', {
+          title: $gettext('Loading folder failed…'),
+          status: 'danger'
+        }, { root: true })
+      } else {
+        currentFolder = res[0]
+        files = res.splice(1)
+      }
+      context.dispatch('loadFiles', {
+        currentFolder,
+        files
+      })
+      context.dispatch('resetFileSelection')
+      if (context.getters.searchTerm !== '') {
+        context.dispatch('resetSearch')
+      }
+    }).catch(() => {
+      context.dispatch('showNotification', {
+        title: $gettext('Loading folder failed…'),
+        status: 'danger'
+      }, { root: true })
+    }).finally(() => {
+      context.commit('UPDATE_FOLDER_LOADING', false)
+    })
+  },
   updateFileProgress ({ commit }, progress) {
     if (progress.progress === 100) commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
     else commit('UPDATE_FILE_PROGRESS', progress)

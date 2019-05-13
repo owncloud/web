@@ -31,7 +31,7 @@ module.exports = {
         .waitForElementVisible('@newFolderInput')
         .setValue('@newFolderInput', name)
         .click('@newFolderOkButton')
-        .waitForElementNotPresent('@loadingIndicator')
+        .waitForElementNotPresent('@createFolderLoadingIndicator')
       if (expectToSucceed) {
         this.waitForElementNotVisible('@newFolderDialog')
       }
@@ -314,6 +314,10 @@ module.exports = {
     },
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',
+      locateStrategy: 'xpath'
+    },
+    createFolderLoadingIndicator: {
+      selector: '//div[@id="new-folder-dialog"]//div[@class="oc-loader"]',
       locateStrategy: 'xpath'
     },
     fileUploadButton: {
