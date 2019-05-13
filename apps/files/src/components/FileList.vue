@@ -38,10 +38,10 @@
         </oc-table-cell>
       </oc-table-row>
     </oc-table-group>
-    <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName"
+    <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName" ocConfirmId="oc-rename-dialog-ok"
                       :ocTitle="_renameDialogTitle" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
     <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
-                      :ocTitle="_deleteDialogTitle" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
+                      :ocTitle="_deleteDialogTitle" ocConfirmId="oc-delete-dialog-ok" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
   </oc-table>
 </template>
 <script>
@@ -96,11 +96,9 @@ export default {
     },
     deleteFile (file) {
       this.fileToBeDeleted = file
-      this.deleteConfirmation = this.$gettext(`Please confirm the deletion of ${file.name}`)
+      let translated = this.$gettext('Please confirm the deletion of %{ fileName }')
+      this.deleteConfirmation = this.$gettextInterpolate(translated, { fileName: file.name }, true)
     },
-    /* shareFile (file) {
-      this.deleteConfirmation = this.$gettextInterpolate(translated, { file: file.name })
-    }, */
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
     },

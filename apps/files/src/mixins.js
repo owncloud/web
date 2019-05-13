@@ -141,7 +141,7 @@ export default {
           this.$_ocUpload(file)
         } else {
           this.showNotification({
-            title: this.$gettextInterpolate('Upload for %{file} failed - File already exists', { file: file.name }),
+            title: this.$gettextInterpolate('Upload for %{file} failed - File already exists', { file: file.name }, true),
             status: 'danger'
           })
         }

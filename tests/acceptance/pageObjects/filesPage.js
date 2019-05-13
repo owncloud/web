@@ -31,7 +31,7 @@ module.exports = {
         .waitForElementVisible('@newFolderInput')
         .setValue('@newFolderInput', name)
         .click('@newFolderOkButton')
-        .waitForElementNotPresent('@loadingIndicator')
+        .waitForElementNotPresent('@createFolderLoadingIndicator')
       if (expectToSucceed) {
         this.waitForElementNotVisible('@newFolderDialog')
       }
@@ -275,8 +275,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     deleteFileConfirmationBtn: {
-      selector: '//div[@id="delete-file-confirmation-dialog"]//button[@text="Ok"]',
-      locateStrategy: 'xpath'
+      selector: '#oc-delete-dialog-ok'
     },
     renameFileConfirmationDialog: {
       selector: '#change-file-dialog'
@@ -290,8 +289,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     renameFileConfirmationBtn: {
-      selector: '//div[@id="change-file-dialog"]//button[@text="Ok"]',
-      locateStrategy: 'xpath'
+      selector: '#oc-rename-dialog-ok'
     },
     filterListButton: {
       selector: '#oc-filter-list-btn'
@@ -316,6 +314,10 @@ module.exports = {
     },
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',
+      locateStrategy: 'xpath'
+    },
+    createFolderLoadingIndicator: {
+      selector: '//div[@id="new-folder-dialog"]//div[@class="oc-loader"]',
       locateStrategy: 'xpath'
     },
     fileUploadButton: {

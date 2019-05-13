@@ -6,7 +6,8 @@
     <div v-else>
      <oc-spinner v-if="sharesLoading"></oc-spinner>
     <oc-accordion v-if="!sharesLoading" :multiple=true>
-      <oc-accordion-item v-if="owner" class="uk-open" :title="$_ocCollaborationStatus_ownerTitle">
+      <oc-accordion-item v-if="owner" class="uk-open">
+        <span slot="title" v-translate>Owner(s)</span>
         <template slot="content">
           <oc-user
             :avatar="owner.avatar"
@@ -20,7 +21,8 @@
           </oc-user>
         </template>
       </oc-accordion-item>
-      <oc-accordion-item class="uk-open" :title="$_ocCollaborationStatus_collaboratorsTitle">
+      <oc-accordion-item class="uk-open">
+        <span slot="title" v-translate>Collaborators</span>
         <template slot="content">
           <oc-autocomplete v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress" :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"/>
           <ul class="uk-list">
@@ -127,12 +129,6 @@ export default {
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
     ...mapState(['user']),
-    $_ocCollaborationStatus_ownerTitle () {
-      return this.$gettext('Owner(s)')
-    },
-    $_ocCollaborationStatus_collaboratorsTitle () {
-      return this.$gettext('Collaborators')
-    },
     $_ocCollaborationStatus_autocompletePlacholder () {
       return this.$gettext('Add name(s), email(s) or federation ID\'s')
     },

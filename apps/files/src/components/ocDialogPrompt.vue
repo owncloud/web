@@ -13,10 +13,10 @@
       <oc-loader v-if="ocLoading"></oc-loader>
     </template>
     <template slot="footer">
-        <oc-button :disabled="ocLoading" @click="onCancel" :text="_ocCancelText"></oc-button>
+        <oc-button :disabled="ocLoading" @click="onCancel">{{ _ocCancelText }}</oc-button>
         <oc-button :disabled="ocLoading"
-               :id="ocConfirmId" :text="_ocConfirmText"
-               @click="onConfirm"></oc-button>
+               :id="ocConfirmId"
+               @click="onConfirm">{{ _ocConfirmText }}</oc-button>
     </template>
   </oc-dialog>
 </template>

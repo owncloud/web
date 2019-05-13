@@ -2393,6 +2393,7 @@ date-now@^0.1.4:
 
 "davclient.js@git+https://github.com/owncloud/davclient.js.git":
   version "0.1.3"
+  uid "07237a4bb813eb19e19e322e2457ce216721d529"
   resolved "git+https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
 
 de-indent@^1.0.2:
@@ -2711,6 +2712,11 @@ dot-prop@^4.1.1:
   integrity sha512-tUMXrxlExSW6U2EXiiKGSBVdYgtV8qlHL+C10TsW4PURY/ic+eaysnSkwB4kA/mBlCyy/IKDJ+Lc3wbWeaXtuQ==
   dependencies:
     is-obj "^1.0.0"
+
+dropzone@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.5.1.tgz#06e2f513e61d6aa363d4b556f18574f47cf7ba26"
+  integrity sha512-3VduRWLxx9hbVr42QieQN25mx/I61/mRdUSuxAmDGdDqZIN8qtP7tcKMa3KfpJjuGjOJGYYUzzeq6eGDnkzesA==
 
 duplexer@~0.1.1:
   version "0.1.1"
@@ -5015,11 +5021,6 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-material-design-icons-iconfont@^4.0.5:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/material-design-icons-iconfont/-/material-design-icons-iconfont-4.0.5.tgz#4107ba3b8a9d688a3d9325fc7363af51b17d3aee"
-  integrity sha512-ByJJ1yz8+RfCx2uNiC5WjVCR7K3UWRb8ytWV3RMaoFRzQLNr/J5x7+Wg1+3OlIZahNXrId9Hu+BfXfQIo01v7g==
-
 md5.js@^1.3.4:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/md5.js/-/md5.js-1.3.5.tgz#b5d07b8e3216e3e27cd728d72f70d1e6a342005f"
@@ -5717,10 +5718,10 @@ output-file-sync@^2.0.0:
     is-plain-obj "^1.1.0"
     mkdirp "^0.5.1"
 
-owncloud-design-system@^1.0.0-584:
-  version "1.0.0-605"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-605.tgz#67a712ec47af8eb90e91c5d1c797abec89630bed"
-  integrity sha512-TnGPi+pf2klcqFRnXqanqFNPZruH0vePmxoc9WlZ1jum5wEODtpcMT9ttIlkHC2jbxEYmZy1NExiQu6jFGHaWw==
+owncloud-design-system@^1.0.0-611:
+  version "1.0.0-611"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-611.tgz#8b8777c9b6db908b3459b3b7fc9c55cdf499f2fe"
+  integrity sha512-BCinEefhZdsyC9uqXCq486sNKBMWx9abcH9SG+tvi+h5HuD0iqaQKh2nivv8QuTS5IPsZdaMzxKb2wJHZnN7kg==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.6.0"
@@ -5736,19 +5737,19 @@ owncloud-design-system@^1.0.0-584:
     vuex "^3.1.0"
     webfontloader "^1.6.28"
 
-owncloud-sdk@1.0.0-92:
-  version "1.0.0-92"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-92.tgz#d65113238e2c82c2f670967287d404de37de0a5b"
-  integrity sha512-A2gIOhH5dKXAXsDUfRDbfJINE4raWysVDDBOwlLw/NCK7HCzxzyGt4hRsSxoCKVeg/sM81YJDnljgo8uxlO9Gw==
+owncloud-sdk@1.0.0-110:
+  version "1.0.0-110"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-110.tgz#3a35bba017ace9fb97e3252d91433ff02cbcb5ef"
+  integrity sha512-s4wsRgUOlscgzZwNiD48X8QqkCJxd3P/MCxKjy5+E8BgoSe4MozYMKq/41350I7qIjXG4c7l4UiZMm+/pBuTIw==
   dependencies:
     browser-request "^0.3.3"
-    davclient.js "https://github.com/owncloud/davclient.js.git"
-    promise "^8.0.0"
-    request "^2.81.0"
+    davclient.js "git+https://github.com/owncloud/davclient.js.git"
+    promise "^8.0.3"
+    request "^2.88.0"
     utf8 "^3.0.0"
     uuid "^3.3.2"
     xhr "^2.5.0"
-    xml-js "^1.3.2"
+    xml-js "^1.6.11"
     xmldom "^0.1.27"
 
 p-defer@^1.0.0:
@@ -6292,7 +6293,7 @@ promise@^7.0.1:
   dependencies:
     asap "~2.0.3"
 
-promise@^8.0.0:
+promise@^8.0.3:
   version "8.0.3"
   resolved "https://registry.yarnpkg.com/promise/-/promise-8.0.3.tgz#f592e099c6cddc000d538ee7283bb190452b0bf6"
   integrity sha512-HeRDUL1RJiLhyA0/grn+PTShlBAcLuh/1BJGtrvjwbvRDCTLLMEz9rOGCV+R3vHY4MixIuoMEd9Yq/XvsTPcjw==
@@ -6760,7 +6761,7 @@ repeat-string@^1.5.2, repeat-string@^1.6.1:
   resolved "https://registry.yarnpkg.com/repeat-string/-/repeat-string-1.6.1.tgz#8dcae470e1c88abc2d600fff4a776286da75e637"
   integrity sha1-jcrkcOHIirwtYA//Sndihtp15jc=
 
-request@^2.81.0, request@^2.88.0:
+request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
@@ -8172,6 +8173,13 @@ vue-template-es2015-compiler@^1.6.0, vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
+vue2-dropzone@^3.5.9:
+  version "3.5.9"
+  resolved "https://registry.yarnpkg.com/vue2-dropzone/-/vue2-dropzone-3.5.9.tgz#a63999a45a7aad24d4c21e3d35be409b4e6bdce8"
+  integrity sha512-nJz6teulVKlZIAeKgvPU7wBI/gzfIgqDOrEp1okSkQIkdprDVCoM0U7XWM0NOM4AAVX+4XGRtMoocYWdTYb3bQ==
+  dependencies:
+    dropzone "^5.5.1"
+
 vue@^2.6.10:
   version "2.6.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
@@ -8194,6 +8202,11 @@ vuex@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.1.0.tgz#634b81515cf0cfe976bd1ffe9601755e51f843b9"
   integrity sha512-mdHeHT/7u4BncpUZMlxNaIdcN/HIt1GsGG5LKByArvYG/v6DvHcOxvDCts+7SRdCoIRGllK8IMZvQtQXLppDYg==
+
+vuex@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.1.1.tgz#0c264bfe30cdbccf96ab9db3177d211828a5910e"
+  integrity sha512-ER5moSbLZuNSMBFnEBVGhQ1uCBNJslH9W/Dw2W7GZN23UQA69uapP5GTT9Vm8Trc0PzBSVt6LzF3hGjmv41xcg==
 
 wait-on@3.2.0:
   version "3.2.0"
@@ -8320,10 +8333,10 @@ webpack-sources@^1.1.0, webpack-sources@^1.3.0:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^4.30.0:
-  version "4.30.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.30.0.tgz#aca76ef75630a22c49fcc235b39b4c57591d33a9"
-  integrity sha512-4hgvO2YbAFUhyTdlR4FNyt2+YaYBYHavyzjCMbZzgglo02rlKi/pcsEzwCuCpsn1ryzIl1cq/u8ArIKu8JBYMg==
+webpack@^4.31.0:
+  version "4.31.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.31.0.tgz#ae201d45f0571336e42d1c2b5c8ab56c4d3b0c63"
+  integrity sha512-n6RVO3X0LbbipoE62akME9K/JI7qYrwwufs20VvgNNpqUoH4860KkaxJTbGq5bgkVZF9FqyyTG/0WPLH3PVNJA==
   dependencies:
     "@webassemblyjs/ast" "1.8.5"
     "@webassemblyjs/helper-module-context" "1.8.5"
@@ -8447,7 +8460,7 @@ xhr@^2.5.0:
     parse-headers "^2.0.0"
     xtend "^4.0.0"
 
-xml-js@^1.3.2:
+xml-js@^1.6.11:
   version "1.6.11"
   resolved "https://registry.yarnpkg.com/xml-js/-/xml-js-1.6.11.tgz#927d2f6947f7f1c19a316dd8eea3614e8b18f8e9"
   integrity sha512-7rVi2KMfwfWFl+GpPg6m80IVMWXLRjO+PxTq7V2CDhoGak0wzYzFgUY2m4XJ47OGdXd8eLE8EmwfAmdjw7lC1g==
