@@ -56,22 +56,36 @@ export default {
       if (typeof item === 'object') {
         this.selectedFile = item
         this.newName = item.name
-      } else {
-        if (item.includes('/')) {
-          let translated = this.$gettext('Renaming of %{ fileName} failed. The file name cannot contain a "/"')
-
-          this.showNotification({
-            title: this.$gettextInterpolate(translated, { fileName: this.selectedFile.name }, true),
-            status: 'danger'
-          })
-          return
-        }
-        this.renameFile({
-          client: this.$client,
-          file: this.selectedFile,
-          newValue: item
-        })
+        return
       }
+
+      if (item.includes('/')) {
+        let translated = this.$gettext('Renaming of %{ fileName} failed')
+        this.showNotification({
+          title: this.$gettextInterpolate(translated, { fileName: this.selectedFile.name }, true),
+          desc: this.$gettext('The file name cannot contain a "/"'),
+          status: 'danger'
+        })
+        return
+      }
+
+      let exists = find(this.files, ['name', item])
+      if (exists) {
+        let translatedTitle = this.$gettext('Cannot rename %{fileName}')
+        let translatedDesc = this.$gettext('File or folder with name "%{fileName}" already exists.')
+        this.showNotification({
+          title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
+          desc: this.$gettextInterpolate(translatedDesc, { fileName: item }, true),
+          status: 'danger'
+        })
+        return
+      }
+
+      this.renameFile({
+        client: this.$client,
+        file: this.selectedFile,
+        newValue: item
+      })
     },
     downloadFile (file) {
       const url = this.$client.files.getFileUrl(file.path)
