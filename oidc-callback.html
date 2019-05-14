@@ -2,7 +2,9 @@
 <html lang="en">
 <script>
     window.onload = function() {
-        window.location.href = "/#/oidc-callback" + window.location.search;
+		window.location.href = window.location.origin +
+			window.location.pathname.substr(0, window.location.pathname.length - 18) +
+			"index.html#/oidc-callback" + window.location.search;
     }
 </script>
 </html>
