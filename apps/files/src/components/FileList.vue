@@ -7,9 +7,9 @@
         </oc-table-cell>
         <oc-table-cell shrink />
         <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
-        <oc-table-cell shrink type="head"><translate>Size</translate></oc-table-cell>
-        <oc-table-cell shrink type="head" class="uk-text-nowrap uk-visible@s" v-translate>Modification Time</oc-table-cell>
-        <oc-table-cell shrink type="head" v-translate>Actions</oc-table-cell>
+        <oc-table-cell shrink type="head" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }"><translate>Size</translate></oc-table-cell>
+        <oc-table-cell shrink type="head" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }" class="uk-text-nowrap" v-translate>Modification Time</oc-table-cell>
+        <oc-table-cell shrink type="head" :class="{ 'uk-visible@s' : _sidebarOpen }" v-translate>Actions</oc-table-cell>
       </oc-table-row>
     </oc-table-group>
     <oc-table-group>
@@ -20,21 +20,22 @@
         <oc-table-cell class="uk-padding-remove">
           <oc-star class="uk-display-block" @click.native="toggleFileFavorite(item)" :shining="item.starred" />
         </oc-table-cell>
-        <oc-table-cell>
+        <oc-table-cell class="uk-text-truncate">
           <oc-file @click.native="item.extension === '' ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
                    :name="item.basename" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
                    :filename="item.name" :key="item.id" />
         </oc-table-cell>
-        <oc-table-cell class="uk-text-meta uk-text-nowrap">
+        <oc-table-cell class="uk-text-meta uk-text-nowrap" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }">
           {{ item.size | fileSize }}
         </oc-table-cell>
-        <oc-table-cell class="uk-text-meta uk-text-nowrap uk-visible@s">
+        <oc-table-cell class="uk-text-meta uk-text-nowrap" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }">
           {{ formDateFromNow(item.mdate) }}
         </oc-table-cell>
-        <oc-table-cell>
-          <div class="uk-button-group uk-margin-small-right">
+        <oc-table-cell :class="{ 'uk-visible@s' : _sidebarOpen }">
+          <div class="uk-button-group uk-margin-small-right" :class="{ 'uk-visible@m' : !_sidebarOpen, 'uk-visible@xl' : _sidebarOpen  }">
             <oc-button v-for="(action, index) in actions" :key="index" @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :ariaLabel="action.ariaLabel" />
           </div>
+          <oc-button icon="menu" :class="{ 'uk-hidden@m' : !_sidebarOpen, 'uk-visible@s uk-hidden@xl' : _sidebarOpen }"></oc-button>
         </oc-table-cell>
       </oc-table-row>
     </oc-table-group>
@@ -156,6 +157,9 @@ export default {
     },
     _deleteDialogTitle () {
       return this.$gettext('Delete File/Folder')
+    },
+    _sidebarOpen () {
+      return this.selectedFiles.length > 0
     }
   }
 }

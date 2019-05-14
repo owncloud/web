@@ -1,14 +1,14 @@
   <template>
     <div class="oc-app" id="files-app" @dragover="$_ocApp_dragOver">
-      <oc-app-layout :rightHidden="selectedFiles.length === 0">
-        <template slot="center">
+      <oc-grid>
+        <div class="uk-width-expand" :class="{ 'uk-visible@s' : _sidebarOpen }">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
-        </template>
-        <template slot="right">
+        </div>
+        <div class="uk-width-1-1 uk-width-medium@s uk-width-large@l" v-show="_sidebarOpen">
           <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="resetFileSelection"/>
-        </template>
-      </oc-app-layout>
+        </div>
+      </oc-grid>
       <oc-file-actions></oc-file-actions>
   </div>
 </template>
@@ -162,6 +162,10 @@ export default {
 
     iAmActive () {
       return this.$route.name === 'files-list'
+    },
+
+    _sidebarOpen () {
+      return this.selectedFiles.length > 0
     }
   }
 }
