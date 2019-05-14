@@ -2,7 +2,9 @@
 <html lang="en">
 <script>
     window.onload = function() {
-        window.location.href = "/#/oidc-silent-redirect" + window.location.search;
+		window.location.href = window.location.origin +
+			window.location.pathname.substr(0, window.location.pathname.length - 25) +
+			"index.html#/oidc-silent-redirect" + window.location.search;
     }
 </script>
 </html>
