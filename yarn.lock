@@ -5718,10 +5718,10 @@ output-file-sync@^2.0.0:
     is-plain-obj "^1.1.0"
     mkdirp "^0.5.1"
 
-owncloud-design-system@^1.0.0-616:
-  version "1.0.0-616"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-616.tgz#6c2fdd1042932207e87f8d0be25a45c9717b0c3f"
-  integrity sha512-TI2B8Oue0EGwP1whRvpTCSBsacxAaWl8ZvQUj4UoNE5BmqdVWGTpnQfda9bJNMoX2B3AnyDoLATpMrFeDMGo1A==
+owncloud-design-system@^1.0.0-632:
+  version "1.0.0-632"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-632.tgz#62045fe2f17a72283cc9d641c2e7d011470230ca"
+  integrity sha512-fd+i9KXyGPIsTLjlH9NP4cL3VfW7SrM8tXHyeuSaNkL5ATxIHkKSKfQyiYcw83vLKsXVhEuI3mVKYaXp3vMssA==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.6.0"
