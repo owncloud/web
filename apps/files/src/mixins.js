@@ -3,7 +3,6 @@ import moment from 'moment'
 import FileUpload from './FileUpload.js'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
-import { find } from 'lodash'
 
 export default {
   filters: {
@@ -69,7 +68,11 @@ export default {
         return
       }
 
-      let exists = find(this.files, ['name', item])
+      let exists = this.files.find((n) => {
+        if (n['name'] === item) {
+          return n
+        }
+      })
       if (exists) {
         let translatedTitle = this.$gettext('Cannot rename %{fileName}')
         let translatedDesc = this.$gettext('File or folder with name "%{fileName}" already exists.')

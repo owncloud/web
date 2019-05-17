@@ -1,7 +1,5 @@
 'use strict'
 
-import { forEach, map } from 'lodash'
-
 const state = {
   file: {
     path: '',
@@ -42,7 +40,7 @@ const actions = {
 const mutations = {
   REGISTER_APP (state, appInfo) {
     if (appInfo.extensions) {
-      forEach(appInfo.extensions, (e) => {
+      appInfo.extensions.forEach((e) => {
         let link = {
           app: appInfo.id,
           icon: e.icon
@@ -58,7 +56,7 @@ const mutations = {
       // Merge in file side bars into global list
       // Reassign object in whole so that it updates the state properly
       let list = state.fileSideBars
-      forEach(appInfo.fileSideBars, (sideBar) => {
+      appInfo.fileSideBars.forEach((sideBar) => {
         list.push(sideBar)
       })
       state.fileSideBars = list
@@ -91,7 +89,7 @@ const getters = {
       if (!ext) {
         return []
       }
-      map(ext, (e) => {
+      ext.map((e) => {
         // enhance App Chooser with App Name as label
         e.name = state.meta[e.app].name
         // if no icon for this filetype extension, choose the app icon
