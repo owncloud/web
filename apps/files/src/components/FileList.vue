@@ -47,7 +47,6 @@
 </template>
 <script>
 import OcDialogPrompt from './ocDialogPrompt.vue'
-import { includes } from 'lodash'
 import { mapGetters, mapActions } from 'vuex'
 
 import Mixins from '../mixins'
@@ -77,7 +76,7 @@ export default {
       } else {
         let selectedFiles = this.fileData.slice()
         for (let item of selectedFiles) {
-          if (!includes(this.selectedFiles, item)) {
+          if (!this.selectedFiles.includes(item)) {
             this.addFileSelection(item)
           }
         }

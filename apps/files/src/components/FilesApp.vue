@@ -17,7 +17,6 @@ import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
 import FileList from './FileList.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
-const _includes = require('lodash/includes')
 
 export default {
   mixins: [
@@ -52,7 +51,7 @@ export default {
     },
 
     toggleFileSelect (item) {
-      if (_includes(this.selectedFiles, item)) {
+      if (this.selectedFiles.includes(item)) {
         this.removeFileSelection(item)
       } else {
         this.addFileSelection(item)

@@ -1,6 +1,3 @@
-const _find = require('lodash/find')
-const _filter = require('lodash/filter')
-
 export default {
   methods: {
 
@@ -12,11 +9,19 @@ export default {
      */
 
     getPlugin (ext) {
-      return _find(this.$root.plugins, ['extend', ext])
+      return this.$root.plugins.find((n) => {
+        if (n['extend'] === ext) {
+          return n
+        }
+      })
     },
 
     getPlugins (ext) {
-      return _filter(this.$root.plugins, ['extend', ext])
+      return this.$root.plugins.filter((n) => {
+        if (n['extend'] === ext) {
+          return n
+        }
+      })
     }
   }
 }
