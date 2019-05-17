@@ -54,7 +54,7 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.6.0",
     "nightwatch": "^1.0.19",
-    "nightwatch-api": "^2.2.0",
+    "nightwatch-api": "^2.2.1",
     "node-fetch": "^2.5.0",
     "npm-run-all": "^4.1.5",
     "oidc-client": "^1.7.1",

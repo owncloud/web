@@ -5359,10 +5359,10 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
-nightwatch-api@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/nightwatch-api/-/nightwatch-api-2.2.0.tgz#0f4efa3a0a4759aaa48bcf1b03c3af758130e348"
-  integrity sha512-RCcLLLCU6LhAnlLjXHvPCXCQ6h+RJTIxDuXor93/Dv02dm2g3EdQ3ZScG2swgvkXAM1QJg3sNA/lgZSpDsth3Q==
+nightwatch-api@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/nightwatch-api/-/nightwatch-api-2.2.1.tgz#85c837082aae610ffa6022491f6708d52b64f2e5"
+  integrity sha512-GNXslIZSZ6Xo3mKd2issphRM/LGmTp4rbuCDPPX5ENHkAIg3QivkUgI+6mic+QJoI69M4GSpx8eTnwT0EJyhlw==
   dependencies:
     "@types/debug" "^4.1.4"
     debug "^4.1.1"
