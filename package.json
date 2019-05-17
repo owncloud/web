@@ -35,7 +35,7 @@
     "archiver": "^3.0.0",
     "axe-cli": "^3.0.0",
     "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.5",
+    "babel-loader": "^8.0.6",
     "chromedriver": "^74.0.0",
     "copy-webpack-plugin": "^5.0.3",
     "css-loader": "^2.1.1",
