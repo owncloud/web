@@ -33,10 +33,6 @@ import { Drag, Drop } from 'vue-drag-drop'
 import DesignSystem from 'owncloud-design-system'
 import 'owncloud-design-system/dist/system/system.css'
 
-const _map = require('lodash/map')
-const _flatten = require('lodash/flatten')
-const _findIndex = require('lodash/findIndex')
-
 Vue.prototype.$client = new ownCloud()
 
 Vue.use(VueEvents)
@@ -93,7 +89,7 @@ function loadApps () {
     }
     store.dispatch('registerApp', app.appInfo)
   }
-  router.addRoutes(_flatten(routes))
+  router.addRoutes(routes.flat())
   sync(store, router)
 
   // inject custom config into vuex
@@ -110,8 +106,8 @@ function loadApps () {
     el: '#owncloud',
     data: {
       config: config,
-      plugins: _flatten(plugins),
-      navItems: _flatten(navItems)
+      plugins: plugins.flat(),
+      navItems: navItems.flat()
     },
     store,
     router,
@@ -135,7 +131,7 @@ function requireError (err) {
     let missingApps = []
     var failedId = err.requireModules && err.requireModules[0]
     missingApps.push(failedId)
-    let index = _findIndex(apps, (a) => {
+    let index = apps.findIndex((a) => {
       return failedId === a.substring(2)
     })
     apps.splice(index, 1)
@@ -156,7 +152,7 @@ function requireError (err) {
     })
     config = await config.json()
     if(defaultConfig) config.state = 'missing'
-    apps = _map(config.apps, (app) => {
+    apps = config.apps.map((app) => {
       return `./apps/${app}/${app}.bundle.js`
     })
     requirejs(apps, loadApps, requireError)

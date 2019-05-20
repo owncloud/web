@@ -1,7 +1,5 @@
 'use strict'
 
-import { remove } from 'lodash'
-
 const state = {
   sidebarVisible: false,
   notifications: []
@@ -29,7 +27,7 @@ const mutations = {
     state.notifications.push(notification)
   },
   REMOVE_NOTIFICATION (state, nId) {
-    let notifications = remove(state.notifications, (n) => {
+    let notifications = state.notifications.remove((n) => {
       return n.id !== nId
     })
     state.notifications = notifications

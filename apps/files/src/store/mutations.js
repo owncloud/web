@@ -1,15 +1,13 @@
-import { findIndex, without } from 'lodash'
-
 export default {
   UPDATE_FILE_PROGRESS (state, progress) {
-    let fileIndex = findIndex(state.inProgress, (f) => {
+    let fileIndex = state.inProgress.findIndex((f) => {
       return f.name === progress.fileName
     })
     if (fileIndex === -1) return
     state.inProgress[fileIndex].progress = progress.progress
   },
   REMOVE_FILE_FROM_PROGRESS (state, file) {
-    let fileIndex = findIndex(state.inProgress, (f) => {
+    let fileIndex = state.inProgress.findIndex((f) => {
       return f.name === file.name
     })
     state.inProgress.splice(fileIndex - 1, 1)
@@ -36,7 +34,7 @@ export default {
   },
   REMOVE_FILE_SELECTION (state, file) {
     if (state.selected.length > 1) {
-      state.selected = without(state.selected, file)
+      state.selected = state.selected.filter(i => ![file].includes(i))
       return
     }
     state.selected = []
@@ -45,7 +43,7 @@ export default {
     state.selected = []
   },
   FAVORITE_FILE (state, item) {
-    let fileIndex = findIndex(state.files, (f) => {
+    let fileIndex = state.files.findIndex((f) => {
       return f.name === item.name
     })
     state.files[fileIndex].starred = !item.starred
@@ -54,7 +52,7 @@ export default {
     state.files.push(file)
   },
   REMOVE_FILE (state, file) {
-    state.files = without(state.files, file)
+    state.files = state.files.filter(i => ![file].includes(i))
   },
   SET_SEARCH_TERM (state, searchTerm) {
     state.searchTermGlobal = searchTerm
@@ -63,13 +61,13 @@ export default {
     state.searchTermFilter = filterTerm
   },
   SET_FILE_FILTER (state, filter) {
-    let i = findIndex(state.fileFilter, (f) => {
+    let i = state.fileFilter.findIndex((f) => {
       return f.name === filter.name
     })
     state.fileFilter[i].value = filter.value
   },
   RENAME_FILE (state, { file, newValue, newPath }) {
-    let fileIndex = findIndex(state.files, (f) => {
+    let fileIndex = state.files.findIndex((f) => {
       return f.id === file.id
     })
     let ext = ''
@@ -101,10 +99,10 @@ export default {
     state.shares.push(share)
   },
   SHARES_REMOVE_SHARE (state, share) {
-    state.shares = without(state.shares, share)
+    state.shares = state.shares.filter(i => ![share].includes(i))
   },
   SHARES_UPDATE_SHARE (state, share) {
-    let fileIndex = findIndex(state.shares, (s) => {
+    let fileIndex = state.shares.findIndex((s) => {
       return s.info.id === share.info.id
     })
     state.shares[fileIndex].role = share.role

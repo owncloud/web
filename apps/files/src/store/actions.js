@@ -1,5 +1,3 @@
-import { map } from 'lodash'
-
 function _buildFile (file) {
   let ext = ''
   if (file.type !== 'dir') {
@@ -217,7 +215,7 @@ export default {
       // do not search for empty strings
       if (!searchTerm) return
       client.files.search(searchTerm, null, context.state.davProperties).then((filesSearched) => {
-        filesSearched = map(filesSearched, (f) => {
+        filesSearched = filesSearched.map((f) => {
           return _buildFile(f)
         })
         context.commit('LOAD_FILES_SEARCHED', filesSearched)

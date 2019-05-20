@@ -6,7 +6,6 @@
 
 <script>
 import Mixins from '../mixins'
-import { reduce } from 'lodash'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -19,7 +18,7 @@ export default {
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
     accumulatedFilesSize () {
-      return reduce(this.selectedFiles, (sum, n) => {
+      return this.selectedFiles.reduce((sum, n) => {
         return sum + n.size
       }, 0)
     }
