@@ -1,0 +1,12 @@
+//
+// Component: OC Checkbox
+//
+// ========================================================================
+
+.oc-checkbox {
+  @extend .uk-checkbox;
+}
+
+label > .oc-checkbox + span {
+  margin-left: $global-small-margin / 2;
+}

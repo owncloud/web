@@ -1,0 +1,26 @@
+.oc-main-menu {
+  @extend .uk-nav;
+  @extend .uk-nav-default;
+  @extend .uk-nav-parent-icon;
+  @extend .uk-margin-medium-top;
+
+  // Immediate anchor
+  & > li > a {
+    text-transform: uppercase;
+  }
+
+  .oc-icon {
+    // 3px offset to align with line-height
+    transform: translate(-50%, 3px);
+
+    &,
+    & > svg {
+      width: $global-font-size + 1 !important;
+      height: $global-font-size + 1 !important;
+    }
+
+    & > svg {
+      fill: $global-color !important;
+    }
+  }
+}

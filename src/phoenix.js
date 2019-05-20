@@ -31,7 +31,6 @@ import { Drag, Drop } from 'vue-drag-drop'
 
 // Import the Design System
 import DesignSystem from 'owncloud-design-system'
-import 'owncloud-design-system/dist/system/system.css'
 
 Vue.prototype.$client = new ownCloud()
 
@@ -113,16 +112,6 @@ function loadApps () {
     router,
     render: h => h(Phoenix)
   })
-
-
-  // inject custom theme config into vuex
-  fetch(`themes/${config.theme}.json`)
-    .then(res => res.json())
-    .then(res => {
-      store.dispatch('loadTheme', res)
-      // TODO FOUC happens here; this color init is too late.
-      //OC.$vuetify.theme = res.colors
-    })
 }
 
 function requireError (err) {

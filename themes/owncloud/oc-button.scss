@@ -1,0 +1,47 @@
+//
+// Component: Base Button
+//
+// ========================================================================
+
+@mixin hook-button() {
+  text-transform: uppercase;
+}
+
+@mixin hook-button-disabled() {
+  .oc-icon > svg {
+    fill: lighten($global-muted-color, 25%);
+  }
+}
+
+//
+// Component: OC Button
+//
+// ========================================================================
+
+.oc-button {
+  @extend .uk-button;
+  @extend .uk-position-relative;
+
+  .oc-icon + span {
+    margin-left: $global-margin;
+  }
+
+  &:not(.uk-button-small):not(.uk-button-large) {
+    min-height: $global-control-height;
+  }
+
+  &.uk-button-small {
+    min-height: $global-control-small-height;
+  }
+
+  &.uk-button-large {
+    min-height: $global-control-large-height;
+  }
+
+  &.uk-button-primary,
+  &.uk-button-secondary {
+    .oc-icon > svg {
+      fill: $global-inverse-color;
+    }
+  }
+}

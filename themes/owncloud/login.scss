@@ -1,0 +1,48 @@
+@import "login-wallpaper";
+@import "owncloudx-logo-white";
+
+.oc-login {
+  @extend .uk-background-cover;
+  position: relative;
+  background-image: $login-wallpaper;
+
+  &-logo {
+    @extend .uk-background-cover;
+
+    position: absolute;
+    height: 80px;
+    width: 200px;
+    left: 50%;
+    transform: translate(-50%, calc(-100% - #{$global-margin}));
+
+    text-indent: -9999px;
+    background-image: $owncloudx-logo-white;
+  }
+
+  &-authorize-button {
+    width: 100%;
+  }
+
+  &-card {
+    @extend .uk-card;
+    @extend .uk-card-default;
+    @extend .uk-text-center;
+
+    &-title {
+      @extend .uk-card-title;
+    }
+
+    &-body {
+      @extend .uk-card-body;
+
+      p {
+        @extend .uk-text-meta;
+      }
+    }
+
+    &-footer {
+      @extend .uk-card-footer;
+      @extend .uk-text-small;
+    }
+  }
+}

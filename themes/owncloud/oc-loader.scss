@@ -1,0 +1,35 @@
+.oc-loader {
+  @extend .uk-progress;
+  @extend .uk-position-relative;
+
+  &:after {
+    @extend .uk-position-absolute;
+    @extend .uk-display-block;
+
+    content: "";
+    height: 100%;
+    width: 0;
+    background: $global-muted-color;
+
+    animation: {
+      name: oc-loader;
+      duration: $spinner-duration;
+      iteration-count: infinite;
+    }
+  }
+}
+
+@keyframes oc-loader {
+  0% {
+    width: 0%;
+    left: 0;
+  }
+  50% {
+    width: 66%;
+    left: 0;
+  }
+  100% {
+    width: 10%;
+    left: 100%;
+  }
+}

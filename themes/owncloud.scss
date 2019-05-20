@@ -1,0 +1,39 @@
+// Import UIkit default theme (or uikit.scss with only core styles)
+
+// 1. Your custom variables and variable overwrites.
+@import "owncloud/variables";
+
+// 2. Import default variables and available mixins.
+@import "../node_modules/uikit/src/scss/variables-theme.scss";
+@import "../node_modules/uikit/src/scss/mixins-theme.scss";
+
+// 3. Your custom mixin overwrites.
+@import "owncloud/main";
+@import "owncloud/login";
+@import "owncloud/menu-secondary";
+
+@import "owncloud/oc-alert";
+@import "owncloud/oc-app-container";
+@import "owncloud/oc-app-menu";
+@import "owncloud/oc-autocomplete";
+@import "owncloud/oc-avatar";
+@import "owncloud/oc-loader";
+@import "owncloud/oc-button";
+@import "owncloud/oc-progress-pie";
+@import "owncloud/oc-checkbox";
+@import "owncloud/oc-sidebar-nav-item";
+@import "owncloud/oc-file";
+@import "owncloud/oc-topbar";
+@import "owncloud/oc-icon";
+@import "owncloud/oc-search";
+@import "owncloud/oc-star";
+@import "owncloud/oc-public-share-icon";
+@import "owncloud/oc-switch";
+@import "owncloud/oc-text-input";
+@import "owncloud/oc-transitions";
+@import "owncloud/oc-user-menu";
+@import "owncloud/oc-dropzone";
+@import "owncloud/oc-file-actions";
+
+// 4. Import UIkit.
+@import "../node_modules/uikit/src/scss/uikit-theme.scss";

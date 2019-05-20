@@ -1,0 +1,9 @@
+.oc-star {
+  &-shining svg {
+    fill: #ffba0a;
+  }
+
+  &-dimm svg {
+    fill: rgba($global-muted-color, 0.5);
+  }
+}

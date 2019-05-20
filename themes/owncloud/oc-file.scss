@@ -1,0 +1,17 @@
+//
+// Component: OC File
+//
+// ========================================================================
+
+.oc-file {
+  @extend .uk-position-relative;
+
+  &-name {
+    color: $global-color;
+    padding-left: $global-gutter;
+  }
+
+  &-extension {
+    @extend .uk-text-meta;
+  }
+}

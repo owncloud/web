@@ -1,0 +1,23 @@
+.oc-file-actions {
+  @extend .uk-offcanvas;
+
+  &.uk-offcanvas-bottom {
+    left: auto;
+    height: 100vh;
+  }
+
+  & > .uk-offcanvas-bar {
+    top: auto;
+    width: 100vw;
+    background: $global-muted-background;
+    transform: translateX(0) translateY(100%);
+
+    & .oc-icon > svg {
+      fill: $system-icon-color;
+    }
+  }
+
+  &.uk-open > .uk-offcanvas-bar {
+    transform: translateX(0) translateY(0);
+  }
+}

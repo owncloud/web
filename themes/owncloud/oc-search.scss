@@ -1,0 +1,33 @@
+.oc-search {
+  @extend .uk-grid-collapse;
+  @extend .uk-flex-middle;
+
+  &-button {
+    // Prevend double borders
+    // from input and button
+    transform: translateX(-1px);
+    z-index: 0;
+  }
+
+  &-clear {
+    cursor: pointer;
+  }
+
+  &-small {
+    .oc-search-input {
+      @extend .uk-form-small;
+    }
+
+    .oc-button {
+      @extend .uk-button-small;
+    }
+
+    .oc-icon {
+      &,
+      & svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}

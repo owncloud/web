@@ -1,0 +1,47 @@
+//
+// Component: OC Switch
+//
+// ========================================================================
+
+.oc-switch {
+  position: relative;
+  display: block;
+  width: $form-radio-size * 1.75;
+  height: $form-radio-size;
+  transition: background-color 0.25s;
+
+  &,
+  * {
+    cursor: pointer;
+  }
+
+  > input[type="checkbox"] {
+    display: none;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    transform: translate(1px, 1px);
+    width: $form-radio-size - 2;
+    height: $form-radio-size - 2;
+    background-color: $global-inverse-color;
+    transition: transform 0.25s;
+  }
+
+  &[data-state="off"] {
+    background-color: $global-color;
+
+    &:before {
+      transform: translate(1px, 1px);
+    }
+  }
+
+  &[data-state="on"] {
+    background-color: $global-primary-background;
+
+    &:before {
+      transform: translate(calc(100% - 1px), 1px);
+    }
+  }
+}

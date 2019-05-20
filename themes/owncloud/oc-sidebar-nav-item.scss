@@ -1,0 +1,8 @@
+.oc-sidebar-nav-item {
+  &-wrapper {
+    @extend .uk-flex-middle;
+  }
+  &-icon {
+    @extend .uk-margin-small-right;
+  }
+}

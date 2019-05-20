@@ -1,0 +1,80 @@
+$default-size: 64px;
+
+.oc-progress-pie {
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
+
+  height: $default-size;
+  width: $default-size;
+  float: left;
+  margin: 15px;
+  position: relative;
+
+  // Shadow
+  &:after {
+    content: "";
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+    width: 100%;
+    border: $default-size / 10 solid rgba($global-muted-color, 0.333);
+    border-radius: 50%;
+  }
+
+  &-container {
+    height: 100%;
+    width: 100%;
+    clip: rect(0, $default-size, $default-size, $default-size / 2);
+    left: 0;
+    position: absolute;
+    top: 0;
+
+    &:before,
+    &:after {
+      display: block;
+      content: "";
+      height: 100%;
+      width: 100%;
+      border: ($default-size / 10) solid $global-primary-background;
+      border-radius: 50%;
+      border-color: $global-primary-background;
+      clip: rect(0, $default-size / 2, $default-size, 0);
+      left: 0;
+      position: absolute;
+      top: 0;
+    }
+  }
+
+  &-label {
+    @extend .uk-text-muted;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@for $i from 0 through 100 {
+  .oc-progress-pie[data-fill="#{$i}"] {
+    .oc-progress-pie-container:before {
+      transform: rotate($i * 3.6deg);
+    }
+
+    @if $i <= 50 {
+      .oc-progress-pie-container:after {
+        display: none;
+      }
+    } @else {
+      .oc-progress-pie-container {
+        clip: rect(auto, auto, auto, auto);
+      }
+
+      .oc-progress-pie-container:after {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}

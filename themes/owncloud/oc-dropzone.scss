@@ -1,0 +1,17 @@
+.oc-dropzone {
+  @extend .uk-position-fixed;
+  @extend .uk-flex;
+  @extend .uk-flex-center;
+  @extend .uk-flex-middle;
+  @extend .uk-position-z-index;
+
+  top: 2 * $navbar-nav-item-height;
+  left: 0;
+  width: 100%;
+  height: calc(100% - (2 * #{$navbar-nav-item-height}));
+  background-color: rgba($global-background, 0.8);
+}
+
+.oc-dropzone span {
+  pointer-events: none;
+}
