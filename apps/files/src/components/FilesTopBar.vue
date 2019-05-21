@@ -1,7 +1,7 @@
 <template>
   <div>
   <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
-  <oc-topbar variation="secondary" uk-sticky="offset: 60">
+  <oc-topbar variation="secondary">
     <template slot="left">
       <oc-topbar-logo icon="home" @click="navigateTo('files-list', '')"></oc-topbar-logo>
       <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
