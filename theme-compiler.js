@@ -7,9 +7,9 @@ const compile = (theme) => {
     file: `${__dirname}/themes/${theme}.scss`
   }, function (err, result) {
     if (err) throw err
-    fs.writeFile(`${__dirname}/dist/css/${theme}.css`, result.css, (err) => {
+    fs.writeFile(`${__dirname}/dist/themes/${theme}.css`, result.css, (err) => {
       if (err) throw err
-      console.log(`${__dirname}/dist/css/${theme}.css has been written\n`)
+      console.log(`${__dirname}/dist/themes/${theme}.css has been written\n`)
     })
   })
 }

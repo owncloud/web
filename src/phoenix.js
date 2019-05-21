@@ -112,6 +112,14 @@ function loadApps () {
     router,
     render: h => h(Phoenix)
   })
+
+
+  // inject custom theme config into vuex
+  fetch(`themes/${config.theme}.json`)
+    .then(res => res.json())
+    .then(res => {
+      store.dispatch('loadTheme', res)
+    })
 }
 
 function requireError (err) {
