@@ -8,7 +8,8 @@
               @close="clearLastError"
       />
     </oc-notifications>
-    <div class="uk-flex">
+    <markdown-editor-topbar />
+    <div class="uk-flex uk-padding-top">
       <div class="uk-container uk-width-1-2">
         <oc-textarea
                 name="input"
@@ -25,9 +26,13 @@
 <script>
 import marked from 'marked'
 import { mapActions, mapGetters } from 'vuex'
+import MarkdownEditorTopbar from './components/MarkdownEditorTopbar.vue'
 
 export default {
   name: 'MarkdownEditor',
+  components: {
+    MarkdownEditorTopbar
+  },
   mounted () {
     if (this.activeFile.path === '') {
       this.$router.push({

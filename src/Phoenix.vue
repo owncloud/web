@@ -12,7 +12,6 @@
       <notification-bar />
       <top-bar></top-bar>
       <side-menu></side-menu>
-      <router-view v-if="this.$route.matched[0].components.appTopbar" class="appTopbar" name="appTopbar"></router-view>
       <div class="uk-height-1-1 uk-overflow-auto">
         <router-view name="appContent"></router-view>
       </div>

@@ -16,6 +16,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
+  name: 'MarkdownEditorTopbar',
   computed: {
     ...mapGetters(['activeFile']),
     ...mapGetters('MarkdownEditor', ['isTouched', 'isLoading'])

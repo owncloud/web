@@ -1,5 +1,6 @@
   <template>
     <oc-grid class="oc-app uk-height-1-1" id="files-app" @dragover="$_ocApp_dragOver">
+      <files-top-bar class="uk-width-1-1" />
       <div class="uk-width-expand uk-height-1-1 uk-overflow-auto" :class="{ 'uk-visible@s' : _sidebarOpen }">
         <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
         <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
@@ -14,6 +15,7 @@
 import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
 import FileList from './FileList.vue'
+import FilesTopBar from './FilesTopBar.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
@@ -22,7 +24,8 @@ export default {
   ],
   components: {
     FileDetails,
-    FileList
+    FileList,
+    FilesTopBar
   },
   data () {
     return {

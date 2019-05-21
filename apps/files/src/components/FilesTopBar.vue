@@ -63,6 +63,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
 
 export default {
+  name: 'FilesTopBar',
   components: {
     FileUpload,
     OcDialogPrompt,

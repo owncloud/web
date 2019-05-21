@@ -18,6 +18,7 @@
 // TODO put active Page and max Pages into store
 import { mapGetters, mapActions } from 'vuex'
 export default {
+  name: 'PdfViewerTopbar',
   data: () => ({
   }),
   computed: {
