@@ -30,16 +30,27 @@ const appInfo = {
     }
   ]
 }
-const navItems = [{
-  name: appInfo.name,
-  iconMaterial: appInfo.icon,
-  route: {
-    name: 'files-list',
-    params: {
-      item: ''
+const navItems = [
+  {
+    name: 'All files',
+    iconMaterial: appInfo.icon,
+    route: {
+      name: 'files-list',
+      path: `/${appInfo.id}/list`,
+      params: {
+        item: ''
+      }
+    }
+  },
+  {
+    name: 'Favorites',
+    iconMaterial: 'star',
+    route: {
+      name: 'files-favorites',
+      path: `/${appInfo.id}/favorites`
     }
   }
-}]
+]
 
 const routes = [{
   path: '',
@@ -56,6 +67,17 @@ const routes = [{
     appTopbar: FilesTopBar
   },
   name: 'files-list',
+  meta: {
+    'hideHeadbar': false
+  }
+},
+{
+  path: '/favorites',
+  components: {
+    appContent: FilesApp,
+    appTopbar: FilesTopBar
+  },
+  name: 'files-favorites',
   meta: {
     'hideHeadbar': false
   }

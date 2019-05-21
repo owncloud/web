@@ -106,10 +106,18 @@ function _buildShare (s) {
 }
 
 export default {
-  loadFolder (context, { client, absolutePath, $gettext }) {
+  loadFolder (context, { client, absolutePath, $gettext, routeName }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
 
-    client.files.list(absolutePath, 1, context.getters.davProperties).then(res => {
+    let promise
+
+    if (routeName === 'files-favorites') {
+      promise = client.files.getFavoriteFiles(context.getters.davProperties)
+    } else {
+      promise = client.files.list(absolutePath, 1, context.getters.davProperties)
+    }
+
+    promise.then(res => {
       let files = []
       let currentFolder = null
       if (res === null) {
@@ -129,9 +137,10 @@ export default {
       if (context.getters.searchTerm !== '') {
         context.dispatch('resetSearch')
       }
-    }).catch(() => {
+    }).catch((e) => {
       context.dispatch('showNotification', {
         title: $gettext('Loading folder failed…'),
+        desc: e.message,
         status: 'danger'
       }, { root: true })
     }).finally(() => {
