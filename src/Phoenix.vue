@@ -1,17 +1,22 @@
 <template>
-  <div id="Phoenix" :class="{ loginGradient: showGradientBackground}"
-       :style="showImageBackground ? { 'background-image': 'url('+configuration.theme.logo.background+')',
-                 'background-size':'cover'} : {}">
-    <div v-if="!showHeader">
+  <div
+    id="Phoenix"
+    :class="['uk-flex uk-flex-column uk-height-1-1', { loginGradient: showGradientBackground}]"
+    :style="showImageBackground ? { 'background-image': 'url('+configuration.theme.logo.background+')',
+      'background-size':'cover'} : {}"
+  >
+    <template v-if="!showHeader">
       <router-view name="fullscreen"></router-view>
-    </div>
-    <div v-else>
+    </template>
+    <template v-else>
       <notification-bar />
       <top-bar></top-bar>
       <side-menu></side-menu>
       <router-view v-if="this.$route.matched[0].components.appTopbar" class="appTopbar" name="appTopbar"></router-view>
-      <router-view name="appContent"></router-view>
-    </div>
+      <div class="uk-height-1-1 uk-overflow-auto">
+        <router-view name="appContent"></router-view>
+      </div>
+    </template>
   </div>
 </template>
 <script>
@@ -58,3 +63,9 @@ export default {
   }
 }
 </script>
+<style>
+  body {
+    height: 100vh;
+    overflow: hidden;
+  }
+</style>
