@@ -1,5 +1,6 @@
 <template>
-  <div id="files-app-bar" class="oc-app-bar">
+  <!-- TODO: move uk-padding-small uk-background-muted to proxy-class -->
+  <div id="files-app-bar" class="oc-app-bar uk-padding-small uk-background-muted">
     <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">

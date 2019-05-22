@@ -33,31 +33,7 @@ export default {
     ...mapGetters(['configuration']),
     showHeader () {
       return this.$route.meta.hideHeadbar !== true
-    },
-    showBackground () {
-      if (!this.$route.meta.showBackground) {
-        return false
-      }
-      return this.$route.meta.showBackground === true
-    },
-    showGradientBackground () {
-      if (!this.showBackground) {
-        return false
-      }
-      return !this.configuration.theme.logo.background
-    },
-    showImageBackground () {
-      if (!this.showBackground) {
-        return false
-      }
-      return this.configuration.theme.logo.background
     }
   }
 }
 </script>
-<style>
-  body {
-    height: 100vh;
-    overflow: hidden;
-  }
-</style>
