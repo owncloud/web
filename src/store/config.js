@@ -3,30 +3,30 @@
 const state = {
   state: null,
   auth: {
-    clientId: null,
-    apiUrl: null,
-    authUrl: null,
-    metaDataUrl: null
+    clientId: String,
+    apiUrl: String,
+    authUrl: String,
+    metaDataUrl: String
   },
   theme: {
     general: {
-      name: null,
-      slogan: null
+      name: String,
+      slogan: String
     },
     colors: {
-      primary: null,
-      secondary: null,
-      accent: null,
-      info: null,
-      success: null,
-      warning: null,
-      error: null
+      primary: String,
+      secondary: String,
+      accent: String,
+      info: String,
+      success: String,
+      warning: String,
+      error: String
     },
     logo: {
-      mini: null,
-      small: null,
-      big: null,
-      background: null
+      mini: String,
+      small: String,
+      big: String,
+      background: String
     }
   }
 }
