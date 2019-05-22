@@ -2,7 +2,6 @@ import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 
 import FilesApp from './components/FilesApp.vue'
-import FilesTopBar from './components/FilesTopBar.vue'
 import FileInfoSideBar from './components/FileInfoSidebar.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
@@ -59,15 +58,13 @@ const routes = [{
   path: '',
   redirect: `/${appInfo.id}/list/`,
   components: {
-    appContent: FilesApp,
-    appTopbar: FilesTopBar
+    app: FilesApp
   }
 },
 {
   path: '/list/:item?',
   components: {
-    appContent: FilesApp,
-    appTopbar: FilesTopBar
+    app: FilesApp
   },
   name: 'files-list',
   meta: {
