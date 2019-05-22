@@ -1752,10 +1752,10 @@ center-align@^0.1.1:
     align-text "^0.1.3"
     lazy-cache "^1.0.3"
 
-chai-nightwatch@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/chai-nightwatch/-/chai-nightwatch-0.2.1.tgz#5cc8b2b005dfc0505722b6cfbea257f73de9bd70"
-  integrity sha512-2lprSMi72sHq2ZGyPTYUDQNsd2O4z81SicascbI4bkU54Xzk5Ofunn2CbrExADGC7jBH2D8r66X/aSEl+/agXQ==
+chai-nightwatch@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/chai-nightwatch/-/chai-nightwatch-0.3.0.tgz#a3506a81942fbed6aed9e0a914ae32be187f9735"
+  integrity sha512-NHpHLKQO0M7uNVJ10qlPIzHN9+6f873kYh6dYAn291a1CVESrrH6crbTJwZ3376trtzb6HPa80QYt3gMTL1o4g==
   dependencies:
     assertion-error "1.0.0"
     deep-eql "0.1.3"
@@ -2713,6 +2713,11 @@ dot-prop@^4.1.1:
   integrity sha512-tUMXrxlExSW6U2EXiiKGSBVdYgtV8qlHL+C10TsW4PURY/ic+eaysnSkwB4kA/mBlCyy/IKDJ+Lc3wbWeaXtuQ==
   dependencies:
     is-obj "^1.0.0"
+
+dotenv@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-7.0.0.tgz#a2be3cd52736673206e8a85fb5210eea29628e7c"
+  integrity sha512-M3NhsLbV1i6HuGzBUH8vXrtxOk+tWmzWKDMbAVSUp3Zsjm7ywFeuwrUXhmhQyRK1q5B5GGy7hcXPbj3bnfZg2g==
 
 dropzone@^5.5.1:
   version "5.5.1"
@@ -5227,7 +5232,7 @@ mkpath@1.0.0:
   resolved "https://registry.yarnpkg.com/mkpath/-/mkpath-1.0.0.tgz#ebb3a977e7af1c683ae6fda12b545a6ba6c5853d"
   integrity sha1-67Opd+evHGg65v2hK1Raa6bFhT0=
 
-mocha@^5.1.1:
+mocha@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/mocha/-/mocha-5.2.0.tgz#6d8ae508f59167f940f2b5b3c4a612ae50c90ae6"
   integrity sha512-2IUgKDhc3J7Uug+FxMXuqIyYzH7gJjXECKe/w43IGgQHTSj3InJi+yAA7T24L9bQMRKiUEHxEX37G5JpVUGLcQ==
@@ -5362,13 +5367,14 @@ nightwatch-api@^2.2.1:
     "@types/debug" "^4.1.4"
     debug "^4.1.1"
 
-nightwatch@^1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-1.0.19.tgz#f81a357618367e8df068f0f10f5a5ba0af5ed4fb"
-  integrity sha512-Dl+EN4wFp927nn7KRkCIJ7b0Th9PVjiwflzqsoqJOwLPcLuzSBz4FYBvHXQtUkaL4/nELVgXurw/KXqj2gcFSg==
+nightwatch@^1.1.10:
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-1.1.10.tgz#f9587f48702cb16fbba7d86a06ca23243fa42a5e"
+  integrity sha512-lMrzQoCRt5dPy20HEAIP2kI/X0ztu3DSI2mKx/NjC5SNBe/UQxh0t5eA53xD77ac8UxYMjz7Ycuge2A4m524Lg==
   dependencies:
     assertion-error "^1.1.0"
-    chai-nightwatch "0.2.1"
+    chai-nightwatch "^0.3.0"
+    dotenv "7.0.0"
     ejs "^2.5.9"
     lodash.clone "3.0.3"
     lodash.defaultsdeep "^4.6.0"
@@ -5378,7 +5384,7 @@ nightwatch@^1.0.19:
     optimist "^0.6.1"
     proxy-agent "^3.0.0"
   optionalDependencies:
-    mocha "^5.1.1"
+    mocha "^5.2.0"
 
 no-case@^2.2.0:
   version "2.3.2"
