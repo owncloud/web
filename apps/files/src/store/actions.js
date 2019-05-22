@@ -291,18 +291,30 @@ export default {
         console.log(e)
       })
   },
-  addShare (context, { client, path, user }) {
+  addShare (context, { client, path, shareWith, shareType }) {
     context.commit('SHARES_LOADING', true)
 
-    client.shares.shareFileWithUser(path, user)
-      .then(share => {
-        context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
-        context.commit('SHARES_LOADING', false)
-      })
-      .catch(e => {
-        console.log(e)
-        context.commit('SHARES_LOADING', false)
-      })
+    if (shareType === 0) {
+      client.shares.shareFileWithUser(path, shareWith)
+        .then(share => {
+          context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
+          context.commit('SHARES_LOADING', false)
+        })
+        .catch(e => {
+          console.log(e)
+          context.commit('SHARES_LOADING', false)
+        })
+    } else {
+      client.shares.shareFileWithGroup(path, shareWith)
+        .then(share => {
+          context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
+          context.commit('SHARES_LOADING', false)
+        })
+        .catch(e => {
+          console.log(e)
+          context.commit('SHARES_LOADING', false)
+        })
+    }
   },
   deleteShare (context, { client, share }) {
     client.shares.deleteShare(share.info.id)

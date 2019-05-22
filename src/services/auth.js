@@ -54,7 +54,6 @@ export function initVueAuthenticate (config) {
     }
 
     Log.logger = console
-    Log.level = Log.DEBUG
 
     mgr.events.addUserLoaded(function (user) {
       console.log('New User Loaded：', arguments)

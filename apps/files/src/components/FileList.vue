@@ -139,7 +139,9 @@ export default {
       for (let sideBarName in this.fileSideBars) {
         let sideBar = this.fileSideBars[sideBarName]
         if (sideBar.quickAccess) {
-          actions.push({ icon: sideBar.quickAccess.icon,
+          actions.push({
+            icon: sideBar.quickAccess.icon,
+            ariaLabel: sideBar.quickAccess.ariaLabel,
             handler: this.openSideBar,
             handlerData: sideBarName,
             isEnabled: function (item) {

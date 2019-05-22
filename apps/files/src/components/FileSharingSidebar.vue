@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="oc-files-sharing-sidebar">
     <div v-if="selectedFiles.length > 1">
       <span v-translate>Please choose only a single File</span>
     </div>
@@ -24,7 +24,12 @@
       <oc-accordion-item class="uk-open">
         <span slot="title" v-translate>Collaborators</span>
         <template slot="content">
-          <oc-autocomplete v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress" :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"/>
+          <oc-autocomplete v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress"
+                           :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
+                           :filter="filterRecipients" id="oc-sharing-autocomplete">
+            <template v-slot:item="{item}">
+              <span>{{ buildRecipientDisplay(item) }}</span>
+            </template>          </oc-autocomplete>
           <ul class="uk-list">
             <li v-for="(c, k) in shares" :key="k">
               <oc-user
@@ -100,7 +105,8 @@ export default {
       this.addShare({
         client: this.$client,
         path: this.selectedFiles[0].path,
-        user: newSelectedSharee
+        shareWith: newSelectedSharee.value.shareWith,
+        shareType: newSelectedSharee.value.shareType
       })
     }
   },
@@ -136,7 +142,7 @@ export default {
       if (this.shares.length === 0) {
         return {
           avatar: 'https://picsum.photos/64/64?image=1074',
-          name: this.user.is,
+          name: this.user.id,
           displayName: this.user.displayname
         }
       }
@@ -152,30 +158,38 @@ export default {
   methods: {
     ...mapActions('Files', ['shareSetOpen', 'loadShares', 'sharesClearState', 'addShare', 'deleteShare', 'changeShare']),
     onAutocompleteInput (value) {
-      if (value.length < 3) {
+      if (value.length < 2) {
         return
       }
       this.autocompleteInProgress = true
       this.autocompleteResults = []
-      // TODO: move to store & sdk
-      this.$client.requests.ocs({
-        method: 'GET',
-        service: 'apps/files_sharing',
-        action: 'api/v1/sharees?search=' + encodeURIComponent(value) + '&perPage=200&itemType=folder'
-      })
-        .then(response => {
+      // TODO: move to store
+      this.$client.shares.getRecipients(value, 'folder')
+        .then(recipients => {
           this.autocompleteInProgress = false
-          response.json()
-            .then(json => {
-              this.autocompleteResults = json.ocs.data.users.map(user => {
-                return user.value.shareWith
-              })
-            })
+          let users = recipients.exact.users.concat(recipients.users)
+          let groups = recipients.exact.groups.concat(recipients.groups)
+          users = users.filter((user) => {
+            return user.value.shareWith !== this.user.id
+          })
+
+          this.autocompleteResults = users.concat(groups)
         })
         .catch(error => {
           console.log(error)
           this.autocompleteInProgress = false
         })
+    },
+    filterRecipients (item, queryText) {
+      return item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+    },
+    buildRecipientDisplay (recipient) {
+      if (recipient.value.shareType === 1) {
+        const group = this.$gettext('group')
+        return `${recipient.label} (${group})`
+      }
+      // fallback and users get no suffix
+      return recipient.label
     },
     onDelete (share) {
       this.deleteShare({

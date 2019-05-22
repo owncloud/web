@@ -26,7 +26,6 @@ Feature: Autocompletion of share-with names
       | users-finance |
       | other         |
 
-  @skip @yetToImplement
   @smokeTest
   Scenario: autocompletion of regular existing users
     Given user "regularuser" has logged in using the webUI
@@ -36,7 +35,6 @@ Feature: Autocompletion of share-with names
     Then all users and groups that contain the string "us" in their name should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-  @skip @yetToImplement
   @smokeTest
   Scenario: autocompletion of regular existing groups
     Given user "regularuser" has logged in using the webUI
