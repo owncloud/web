@@ -1,5 +1,5 @@
 <template>
-  <div id="Phoenix" class="uk-flex uk-flex-column uk-height-1-1">
+  <div id="Phoenix" class="uk-height-1-1">
     <template v-if="!showHeader">
       <router-view name="fullscreen"></router-view>
     </template>
@@ -7,16 +7,13 @@
       <notification-bar />
       <top-bar></top-bar>
       <side-menu></side-menu>
-      <router-view v-if="this.$route.matched[0].components.appTopbar" class="appTopbar" name="appTopbar"></router-view>
-      <div class="uk-height-1-1 uk-overflow-auto">
-        <router-view name="appContent"></router-view>
-      </div>
+      <router-view name="app" class="$app-container uk-height-1-1"></router-view>
     </template>
   </div>
 </template>
 <script>
 import { mapGetters, mapState } from 'vuex'
-import TopBar from './components/Top-Bar.vue'
+import TopBar from './components/TopBar.vue'
 import Menu from './components/Menu.vue'
 import NotificationBar from './components/NotificationBar.vue'
 
