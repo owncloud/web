@@ -58,45 +58,6 @@ module.exports = {
     },
     /**
      *
-     * @param {string} fileName
-     */
-    openSharingDialog: function (fileName) {
-      const shareBtnSelector = this.getFileRowSelectorByFileName(fileName) +
-        this.elements['shareButtonInFileRow'].selector
-
-      return this.initAjaxCounters()
-        .waitForFileVisible(fileName)
-        .useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
-        .click(shareBtnSelector)
-        .waitForElementVisible('@sharingSideBar')
-        .useCss()
-    },
-    /**
-     *
-     * @param {string} input
-     */
-    enterAutoComplete: function (input) {
-      return this.initAjaxCounters()
-        .waitForElementVisible('@sharingAutoComplete')
-        .setValue('@sharingAutoComplete', input)
-    },
-    getShareAutocompleteItemsList: function () {
-      const itemsList = []
-      const page = this
-      return this
-        .waitForElementVisible('@sharingAutoCompleteDropDownElements')
-        .api.elements('css selector', this.elements['sharingAutoCompleteDropDownElements'].selector, (result) => {
-          result.value.forEach(function (value) {
-            page.api.elementIdText(value.ELEMENT, (text) => {
-              itemsList.push(text.value)
-            })
-          })
-        })
-        .then(() => itemsList)
-    },
-    /**
-     *
      * @param {string} fromName
      * @param {string} toName
      */
@@ -380,19 +341,6 @@ module.exports = {
     markedFavoriteInFileRow: {
       selector: '//span[contains(@class, "oc-star-shining")]',
       locateStrategy: 'xpath'
-    },
-    sharingSideBar: {
-      selector: '#oc-files-sharing-sidebar'
-    },
-    sharingAutoComplete: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-input'
-    },
-    sharingAutoCompleteDropDown: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion-list'
-    },
-    sharingAutoCompleteDropDownElements: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion'
     }
-
   }
 }

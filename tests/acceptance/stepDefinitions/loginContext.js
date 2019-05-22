@@ -1,6 +1,40 @@
 const { client } = require('nightwatch-api')
 const { Given, Then, When } = require('cucumber')
 
+const loginAsUser = function (userId) {
+  const loginPage = client.page.loginPage()
+  // Given the user has browsed to the login page
+  loginPage
+    .navigate()
+
+  // When the user clicks the authenticate button
+  loginPage
+    .waitForElementVisible('@authenticateButton')
+    .click('@authenticateButton')
+
+  // Then the user logs in with username {string} and password {string} using the webUi
+  const ocLoginPage = client.page.ownCloudLoginPage()
+  ocLoginPage
+    .waitForElementVisible('@usernameInput')
+    .setValue('@usernameInput', userId)
+    .setValue('@passwordInput', userId)
+    .click('@loginSubmitButton')
+
+  // When the user authorizes access to phoenix
+  client
+    .page.ownCloudAuthorizePage()
+    .waitForElementPresent('@authorizeButton')
+    .click('@authorizeButton')
+
+  // Then the files table should be displayed
+  return client
+    .page.filesPage()
+    .waitForElementVisible('@filesTable')
+    .then(() => {
+      client.globals.currentUserName = userId
+    })
+}
+
 Given(/^the user has browsed to the login page$/,
   () => {
     return client
@@ -45,36 +79,9 @@ Then('the files table should not be empty',
   })
 
 // combined step
-Given('user {string} has logged in using the webUI', function (userId) {
-  const loginPage = client.page.loginPage()
-  // Given the user has browsed to the login page
-  loginPage
-    .navigate()
+Given('user {string} has logged in using the webUI', loginAsUser)
 
-  // When the user clicks the authenticate button
-  loginPage
-    .waitForElementVisible('@authenticateButton')
-    .click('@authenticateButton')
-
-  // Then the user logs in with username {string} and password {string} using the webUi
-  const ocLoginPage = client.page.ownCloudLoginPage()
-  ocLoginPage
-    .waitForElementVisible('@usernameInput')
-    .setValue('@usernameInput', userId)
-    .setValue('@passwordInput', userId)
-    .click('@loginSubmitButton')
-
-  // When the user authorizes access to phoenix
-  client
-    .page.ownCloudAuthorizePage()
-    .waitForElementPresent('@authorizeButton')
-    .click('@authorizeButton')
-
-  // Then the files table should be displayed
-  return client
-    .page.filesPage()
-    .waitForElementVisible('@filesTable')
-    .then(() => {
-      client.globals.currentUserName = userId
-    })
+When('the user re-logs in as {string} using the webUI', function (userId) {
+  client.deleteCookies()
+  return loginAsUser(userId)
 })

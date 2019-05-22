@@ -6,6 +6,43 @@ const { URLSearchParams } = require('url')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
 
+/**
+ *
+ * @param {string} file
+ * @param {string} sharee
+ * @param {boolean} shareWithGroup
+ */
+const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithGroup = false) {
+  client.page
+    .FilesPageElement
+    .sharingDialog()
+    .closeSharingDialog()
+    .openSharingDialog(file)
+
+  return client.page
+    .FilesPageElement
+    .sharingDialog()
+    .shareWithUserOrGroup(sharee, shareWithGroup)
+}
+
+/**
+ *
+ * @param {string} file
+ * @param {string} sharee
+ */
+const userSharesFileOrFolderWithUser = function (file, sharee) {
+  return userSharesFileOrFolderWithUserOrGroup(file, sharee)
+}
+
+/**
+ *
+ * @param {string} file
+ * @param {string} sharee
+ */
+const userSharesFileOrFolderWithGroup = function (file, sharee) {
+  return userSharesFileOrFolderWithUserOrGroup(file, sharee, true)
+}
+
 Given('user {string} has shared file/folder {string} with user {string}', function (sharer, elementToShare, receiver) {
   const params = new URLSearchParams()
   params.append('shareType', '0') // 0 = user, 1 = group, 3 = public (link), 6 = federated (cloud share).
@@ -27,12 +64,20 @@ Given('user {string} has shared file/folder {string} with user {string}', functi
     })
 })
 
-When('the user types {string} in the share-with-field', function (input) {
-  return client.page.filesPage().enterAutoComplete(input)
+Given('the user has opened the share dialog for folder {string}', function (fileName) {
+  return client.page.FilesPageElement.sharingDialog().openSharingDialog(fileName)
 })
 
+When('the user types {string} in the share-with-field', function (input) {
+  return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
+})
+
+When('the user shares file/folder {string} with group {string} using the webUI', userSharesFileOrFolderWithGroup)
+
+When('the user shares file/folder {string} with user {string} using the webUI', userSharesFileOrFolderWithUser)
+
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', function (pattern) {
-  return client.page.filesPage().getShareAutocompleteItemsList()
+  return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
     .then(itemsList => {
       itemsList.forEach(item => {
         if (!item.includes(pattern)) {
@@ -45,7 +90,7 @@ Then('all users and groups that contain the string {string} in their name should
 Then('the users own name should not be listed in the autocomplete list on the webUI', function () {
   // TODO: where to get the current user from
   const currentUserName = client.globals.currentUserName
-  return client.page.filesPage().getShareAutocompleteItemsList()
+  return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
     .then(itemsList => {
       itemsList.forEach(item => {
         assert.notStrictEqual(
@@ -55,8 +100,4 @@ Then('the users own name should not be listed in the autocomplete list on the we
         )
       })
     })
-})
-
-Given('the user has opened the share dialog for folder {string}', function (fileName) {
-  return client.page.filesPage().openSharingDialog(fileName)
 })

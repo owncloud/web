@@ -35,6 +35,13 @@ function deleteGroup (groupId) {
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
   return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/groups/' + groupId, { method: 'POST', headers: headers })
 }
+function addToGroup (userId, groupId) {
+  const body = new URLSearchParams()
+  body.append('groupid', groupId)
+
+  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  return fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${userId}/groups`, { method: 'POST', body: body, headers: headers })
+}
 
 Given('user {string} has been created with default attributes', function (userId) {
   return deleteUser(userId)
@@ -71,9 +78,22 @@ Given('these users have been created but not initialized:', function (dataTable)
   }))
 })
 
+Given('these users have been created with default attributes:', function (dataTable) {
+  return Promise.all(dataTable.rows().map((user) => {
+    let userId = user[0]
+    return deleteUser(userId)
+      .then(() => createUser(userId))
+      .then(() => initUser(userId))
+  }))
+})
+
 Given('these groups have been created:', function (dataTable) {
   return Promise.all(dataTable.rows().map((groupId) => {
     return deleteGroup(groupId)
       .then(() => createGroup(groupId))
   }))
+})
+
+Given('user {string} has been added to group {string}', function (userId, groupId) {
+  return addToGroup(userId, groupId)
 })
