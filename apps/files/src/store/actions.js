@@ -1,4 +1,4 @@
-function _buildFile (file) {
+function _buildFile (file, server) {
   let ext = ''
   if (file.type !== 'dir') {
     const ex = file.name.match(/\.[0-9a-z]+$/i)
@@ -36,6 +36,11 @@ function _buildFile (file) {
     path: file.name,
     permissions: file['fileInfo']['{http://owncloud.org/ns}permissions'],
     sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],
+    owner: {
+      username: file['fileInfo']['{http://owncloud.org/ns}owner-id'],
+      displayName: file['fileInfo']['{http://owncloud.org/ns}owner-display-name'],
+      avatar: `${server}/remote.php/dav/avatars/${file['fileInfo']['{http://owncloud.org/ns}owner-id']}/128.png`
+    },
     canUpload: function () {
       return this.permissions.indexOf('C') >= 0
     },
@@ -51,7 +56,7 @@ function _buildFile (file) {
   })
 }
 
-function _buildShare (s) {
+function _buildShare (s, server) {
   let share = {
     info: s
   }
@@ -70,7 +75,7 @@ function _buildShare (s) {
       if (s.permissions & 16) {
         share.role = 'coowner'
       }
-      share.avatar = 'https://picsum.photos/64/64?image=1075' // TODO where do we get the avatar from? by uid? remote.php/dav/avatars/admin/128.png
+      share.avatar = `${server}/remote.php/dav/avatars/${s.share_with.toLowerCase()}/128.png`
       share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
       share.displayName = s.share_with_displayname
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
@@ -171,8 +176,11 @@ export default {
     commit('ADD_FILE_TO_PROGRESS', file)
   },
   loadFiles (context, { currentFolder, files }) {
+    let server = this._vm.configuration.server
     currentFolder = _buildFile(currentFolder)
-    files = files.map(_buildFile)
+    files = files.map(file => {
+      return _buildFile(file, server)
+    })
     context.commit('LOAD_FILES', { currentFolder, files })
   },
   addFileSelection (context, file) {
@@ -267,15 +275,17 @@ export default {
     // see https://owncloud.github.io/js-owncloud-client/Shares.html
     let client = payload.client
     let path = payload.path
+    let server = this._vm.configuration.server
+
     client.shares.getShares(path)
       .then(data => {
         context.commit('SHARES_LOAD', data.map(element => {
-          return _buildShare(element.shareInfo)
+          return _buildShare(element.shareInfo, server)
         }))
-        context.commit('SHARES_LOADING', false)
       })
       .catch(error => {
         context.commit('SHARES_ERROR', error.message)
+      }).finally(() => {
         context.commit('SHARES_LOADING', false)
       })
   },

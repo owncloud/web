@@ -6,14 +6,13 @@
     <div v-else>
      <oc-spinner v-if="sharesLoading"></oc-spinner>
     <oc-accordion v-if="!sharesLoading" :multiple=true>
-      <oc-accordion-item v-if="owner" class="uk-open">
+      <oc-accordion-item v-if="selectedFiles.length === 1" class="uk-open">
         <span slot="title" v-translate>Owner(s)</span>
         <template slot="content">
           <oc-user
-            :avatar="owner.avatar"
-            :user-name="owner.name"
-            :display-name="owner.displayName"
-            :email="owner.email"
+            :avatar="selectedFiles[0].owner.avatar"
+            :user-name="selectedFiles[0].owner.username"
+            :display-name="selectedFiles[0].owner.displayName"
           >
             <template slot="properties">
               <span v-translate>Owner</span>
@@ -134,27 +133,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
+    ...mapGetters('Files', ['selectedFiles', 'shareOpen', 'shares', 'sharesError', 'sharesLoading', 'davProperties']),
     ...mapState(['user']),
     $_ocCollaborationStatus_autocompletePlacholder () {
       return this.$gettext('Add name(s), email(s) or federation ID\'s')
-    },
-    owner () {
-      if (this.shares.length === 0) {
-        return {
-          avatar: 'https://picsum.photos/64/64?image=1074',
-          name: this.user.id,
-          displayName: this.user.displayname
-        }
-      }
-      const s = this.shares[0]
-      return {
-        avatar: 'https://picsum.photos/64/64?image=1074',
-        name: s.uid_owner,
-        displayName: s.info.displayname_owner
-      }
     }
-
   },
   methods: {
     ...mapActions('Files', ['shareSetOpen', 'loadShares', 'sharesClearState', 'addShare', 'deleteShare', 'changeShare']),
