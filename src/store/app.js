@@ -26,11 +26,9 @@ const mutations = {
     if (!notification.id) notification.id = Math.random().toString(36).slice(2, -1)
     state.notifications.push(notification)
   },
-  REMOVE_NOTIFICATION (state, nId) {
-    let notifications = state.notifications.remove((n) => {
-      return n.id !== nId
-    })
-    state.notifications = notifications
+  REMOVE_NOTIFICATION (state, item) {
+    let index = state.notifications.indexOf(item)
+    state.notifications.splice(index, 1)
   }
 }
 

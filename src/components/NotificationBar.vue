@@ -6,7 +6,7 @@
             :title="item.title"
             :message="item.desc"
             :status="item.status"
-            @close="deleteNotification(item.id)"
+            @close="deleteNotification(item)"
     />
   </oc-notifications>
 </template>
