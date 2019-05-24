@@ -1,13 +1,13 @@
 <template>
-  <div id="Phoenix" class="uk-height-1-1">
+  <div id="Phoenix">
     <template v-if="!showHeader">
       <router-view name="fullscreen"></router-view>
     </template>
     <template v-else>
       <notification-bar />
-      <top-bar></top-bar>
-      <side-menu></side-menu>
-      <router-view name="app" class="$app-container uk-height-1-1"></router-view>
+      <top-bar />
+      <side-menu />
+      <router-view name="app" id="app-container"></router-view>
     </template>
   </div>
 </template>
@@ -37,3 +37,9 @@ export default {
   }
 }
 </script>
+<!-- @TODO: Move to base style -->
+<style>
+#app-container {
+  height: calc(100vh - 60px);
+}
+</style>

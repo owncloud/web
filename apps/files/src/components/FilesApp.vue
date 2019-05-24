@@ -1,17 +1,17 @@
   <template>
-    <div id="files">
+    <div id="files" class="uk-flex uk-flex-column uk-height-1-1">
       <files-app-bar></files-app-bar>
-        <oc-grid class="oc-app uk-height-1-1" id="files-app">
-          <div class="uk-width-expand uk-height-1-1 uk-overflow-auto" :class="{ 'uk-visible@s' : _sidebarOpen }" @dragover="$_ocApp_dragOver">
-            <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
-            <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
-          </div>
-          <div class="uk-width-1-1 uk-width-medium@s uk-width-large@l" v-show="_sidebarOpen">
-            <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="resetFileSelection"/>
-          </div>
-        <oc-file-actions></oc-file-actions>
-      </oc-grid>
-    </div>
+      <oc-grid @dragover="$_ocApp_dragOver">
+        <div class="uk-width-expand uk-height-1-1 uk-overflow-auto" :class="{ 'uk-visible@s' : _sidebarOpen }" @dragover="$_ocApp_dragOver">
+          <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
+          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
+        </div>
+        <div class="uk-width-1-1 uk-width-medium@s uk-width-large@l" v-show="_sidebarOpen">
+          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="resetFileSelection"/>
+        </div>
+      <oc-file-actions></oc-file-actions>
+    </oc-grid>
+  </div>
 </template>
 <script>
 import Mixins from '../mixins'
