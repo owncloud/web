@@ -4,7 +4,7 @@
     <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">
-        <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
+        <oc-breadcrumb id="files-breadcrumb" :home="navigateToHome" :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
       </div>
       <div class="uk-width-auto uk-visible@m">
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
@@ -254,6 +254,9 @@ export default {
         breadcrumb = {}
       }
       return this.breadcrumbs
+    },
+    navigateToHome () {
+      this.navigateTo('files-list', '')
     }
   },
   filters: {
