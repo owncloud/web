@@ -1,4 +1,4 @@
-const { client } = require('nightwatch-api')
+const { client, createSession, closeSession, startWebDriver, stopWebDriver } = require('nightwatch-api')
 const { Given, Then, When } = require('cucumber')
 
 const loginAsUser = function (userId) {
@@ -81,7 +81,14 @@ Then('the files table should not be empty',
 // combined step
 Given('user {string} has logged in using the webUI', loginAsUser)
 
-When('the user re-logs in as {string} using the webUI', function (userId) {
-  client.deleteCookies()
+When('the user re-logs in as {string} using the webUI', async function (userId) {
+  let env = 'local'
+  if (process.env.DRONE) {
+    env = 'drone'
+  }
+  await closeSession()
+  await stopWebDriver()
+  await startWebDriver({ env })
+  await createSession({ env })
   return loginAsUser(userId)
 })

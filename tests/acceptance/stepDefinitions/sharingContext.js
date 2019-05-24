@@ -13,15 +13,11 @@ const httpHelper = require('../helpers/httpHelper')
  * @param {boolean} shareWithGroup
  */
 const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithGroup = false) {
-  client.page
+  return client.page
     .FilesPageElement
     .sharingDialog()
     .closeSharingDialog()
     .openSharingDialog(file)
-
-  return client.page
-    .FilesPageElement
-    .sharingDialog()
     .shareWithUserOrGroup(sharee, shareWithGroup)
 }
 

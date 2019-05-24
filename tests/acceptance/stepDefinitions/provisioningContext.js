@@ -40,7 +40,9 @@ function addToGroup (userId, groupId) {
   body.append('groupid', groupId)
 
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
-  return fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${userId}/groups`, { method: 'POST', body: body, headers: headers })
+  return fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${userId}/groups`,
+    { method: 'POST', body: body, headers: headers }
+  )
 }
 
 Given('user {string} has been created with default attributes', function (userId) {

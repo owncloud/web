@@ -58,6 +58,22 @@ module.exports = {
     },
     /**
      *
+     * @param {string} fileName
+     */
+    openSharingDialog: function (fileName) {
+      const shareBtnSelector = this.getFileRowSelectorByFileName(fileName) +
+        this.elements['shareButtonInFileRow'].selector
+
+      this.waitForFileVisible(fileName)
+        .useXpath()
+        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
+        .click(shareBtnSelector)
+        .waitForElementVisible('@sharingSideBar')
+        .useCss()
+      return this.api.page.FilesPageElement.sharingDialog()
+    },
+    /**
+     *
      * @param {string} fromName
      * @param {string} toName
      */
@@ -341,6 +357,9 @@ module.exports = {
     markedFavoriteInFileRow: {
       selector: '//span[contains(@class, "oc-star-shining")]',
       locateStrategy: 'xpath'
+    },
+    sharingSideBar: {
+      selector: '#oc-files-sharing-sidebar'
     }
   }
 }
