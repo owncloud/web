@@ -60,10 +60,6 @@ Given('user {string} has shared file/folder {string} with user {string}', functi
     })
 })
 
-Given('the user has opened the share dialog for folder {string}', function (fileName) {
-  return client.page.FilesPageElement.sharingDialog().openSharingDialog(fileName)
-})
-
 When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })

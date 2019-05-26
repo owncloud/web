@@ -7,25 +7,24 @@ module.exports = {
      * @param {string} sharee
      * @param {boolean} shareWithGroup
      */
-    shareWithUserOrGroup: function (sharee, shareWithGroup = false) {
+    shareWithUserOrGroup: async function (sharee, shareWithGroup = false) {
       this.enterAutoComplete(sharee)
         .waitForElementVisible('@sharingAutoCompleteDropDownElements')
-      return this.api
-        .initAjaxCounters()
-        .elements('css selector', this.elements['sharingAutoCompleteDropDownElements'].selector, (result) => {
-          result.value.forEach((value) => {
-            this.api.elementIdText(value.ELEMENT, text => {
-              if (shareWithGroup === true) {
-                sharee = sharee + groupSharePostfix
-              }
-              if (text.value === sharee) {
-                this.api
-                  .elementIdClick(value.ELEMENT)
-                  .waitForOutstandingAjaxCalls()
-              }
-            })
-          })
+
+      const webElementIdList = await this.getShareAutocompleteWebElementIdList()
+      webElementIdList.forEach((webElementId) => {
+        this.api.elementIdText(webElementId, (text) => {
+          if (shareWithGroup === true) {
+            sharee = sharee + groupSharePostfix
+          }
+          if (text.value === sharee) {
+            this.api
+              .elementIdClick(webElementId)
+              .waitForOutstandingAjaxCalls()
+          }
         })
+      })
+      return this
     },
     closeSharingDialog: function () {
       try {
@@ -44,19 +43,36 @@ module.exports = {
         .waitForElementVisible('@sharingAutoComplete')
         .setValue('@sharingAutoComplete', input)
     },
-    getShareAutocompleteItemsList: function () {
-      const itemsList = []
-      const page = this
+    /**
+     *
+     * @returns {Promise.<string[]>} Array of autocomplete items
+     */
+    getShareAutocompleteItemsList: async function () {
+      const webElementIdList = await this.getShareAutocompleteWebElementIdList()
+      let itemsListPromises = webElementIdList.map((webElementId) => {
+        return new Promise((resolve, reject) => {
+          this.api.elementIdText(webElementId, (text) => {
+            resolve(text.value)
+          })
+        })
+      })
+
+      return Promise.all(itemsListPromises)
+    },
+    /**
+     *
+     * @returns {Promise.<string[]>} Array of autocomplete webElementIds
+     */
+    getShareAutocompleteWebElementIdList: function () {
+      const webElementIdList = []
       return this
         .waitForElementVisible('@sharingAutoCompleteDropDownElements')
         .api.elements('css selector', this.elements['sharingAutoCompleteDropDownElements'].selector, (result) => {
-          result.value.forEach(function (value) {
-            page.api.elementIdText(value.ELEMENT, (text) => {
-              itemsList.push(text.value)
-            })
+          result.value.forEach((value) => {
+            webElementIdList.push(value.ELEMENT)
           })
         })
-        .then(() => itemsList)
+        .then(() => webElementIdList)
     }
   },
   elements: {

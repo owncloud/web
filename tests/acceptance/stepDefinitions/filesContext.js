@@ -34,6 +34,10 @@ When('the user creates a folder with the invalid name {string} using the webUI',
 Given('the user has opened folder {string}', (folder) => client.page.filesPage().navigateToFolder(folder))
 When('the user opens folder {string} using the webUI', (folder) => client.page.filesPage().navigateToFolder(folder))
 
+Given('the user has opened the share dialog for folder {string}', function (fileName) {
+  return client.page.filesPage().openSharingDialog(fileName)
+})
+
 When('the user enables the setting to view hidden folders on the webUI', function () {
   return client.page.filesPage().showHiddenFiles()
 })
