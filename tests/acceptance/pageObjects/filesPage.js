@@ -275,7 +275,7 @@ module.exports = {
       selector: '#files-list-progress'
     },
     breadcrumb: {
-      selector: '#files-breadcrumb li:nth-of-type(1)'
+      selector: '#files-breadcrumb li:nth-of-type(2)'
     },
     fileRowByName: {
       selector: '//a[contains(@class, "file-row-name")][@filename="%s"]/../..'
