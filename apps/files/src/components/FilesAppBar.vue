@@ -14,7 +14,7 @@
       </div>
       <div class="uk-width-auto">
         <div class="uk-button-group">
-          <oc-button v-if="this.canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
+          <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
           <oc-button v-else disabled :uk-tooltip="_cannotCreateDialogTitle"><translate>+ New</translate></oc-button>
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
         </div>
@@ -31,7 +31,7 @@
             </li>
           </ul>
         </oc-drop>
-        <oc-drop v-if="this.canUpload" toggle="#new-file-menu-btn" mode="click">
+        <oc-drop v-if="canUpload" toggle="#new-file-menu-btn" mode="click">
           <oc-nav>
             <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
             <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
@@ -41,7 +41,7 @@
         <file-filter-menu />
       </div>
       <div v-show="fileUpload" class="uk-width-auto">
-        <oc-progress-pie id="oc-progress-pie" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
+        <oc-progress-pie id="oc-progress-pie" :progress="fileUploadProgress | roundNumber" :max="100" show-label />
         <oc-drop toggle="#oc-progress-pie" mode="click">
           <oc-upload-menu :items="inProgress" />
         </oc-drop>
