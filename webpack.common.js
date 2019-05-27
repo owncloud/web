@@ -1,17 +1,23 @@
 const path = require('path')
 const fs = require('fs')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const WebpackCopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const appFolder = path.resolve(__dirname, 'apps')
 let apps = []
+let favicon = './themes/owncloud/favicon.jpg'
 var config
 
 if (fs.existsSync('config.json')) {
   config = require('./config.json')
 } else {
   config = require('./tests/drone/config.json')
+}
+
+if (fs.existsSync(`./themes/${config.theme}/favicon.jpg`)) {
+  favicon = `./themes/${config.theme}/favicon.jpg`
 }
 
 config.apps
@@ -43,9 +49,16 @@ module.exports = {
   plugins: [
     new WebpackCopyPlugin(apps),
     new HtmlWebpackPlugin({
-      template: 'index.html'
-    }),
-    new VueLoaderPlugin()
+      template: 'index.html',
+      favicon: favicon
+    })
+    // new VueLoaderPlugin(),
+    // new MiniCssExtractPlugin({
+    //   // Options similar to the same options in webpackOptions.output
+    //   // both options are optional
+    //   filename: 'css/[name].css',
+    //   chunkFilename: 'css/[name].[id].css'
+    // })
   ],
   entry: {
     core: [
