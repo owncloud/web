@@ -126,15 +126,14 @@ export default {
       }, 50)
     },
     $_ocFilesFolder_getFolder () {
-      if (!this.iAmActive) {
-        return false
-      }
       // clear file filter search query when folder changes
       this.fileFilterQuery = ''
+
       this.loadFolder({
         client: this.$client,
         absolutePath: this.$route.params.item === '' ? '/' : this.route.params.item,
-        $gettext: this.$gettext
+        $gettext: this.$gettext,
+        routeName: this.$route.name
       })
     },
     $_ocApp_dragOver () {
@@ -155,10 +154,6 @@ export default {
 
     item () {
       return this.$route.params.item
-    },
-
-    iAmActive () {
-      return this.$route.name === 'files-list'
     },
 
     _sidebarOpen () {

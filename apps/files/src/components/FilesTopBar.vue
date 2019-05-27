@@ -4,7 +4,7 @@
   <oc-topbar variation="secondary">
     <template slot="left">
       <oc-topbar-logo icon="home" @click="navigateTo('files-list', '')"></oc-topbar-logo>
-      <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
+      <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage && activeRoute"></oc-breadcrumb>
     </template>
     <template slot="title">
       <div class="uk-navbar-item">
@@ -112,7 +112,11 @@ export default {
       }
     },
     activeRoute () {
-      return this.getRoutes()
+      if (this.$route.params.item) {
+        return this.getRoutes()
+      }
+
+      return false
     },
     canUpload () {
       if (this.currentFolder === null) {
