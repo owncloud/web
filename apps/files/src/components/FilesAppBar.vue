@@ -6,6 +6,9 @@
       <div class="uk-width-expand">
         <oc-breadcrumb id="files-breadcrumb" :home="navigateToHome" :items="activeRoute" v-if="!atSearchPage"></oc-breadcrumb>
       </div>
+      <div class="uk-width-auto uk-text-meta">
+        <translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">%{ activeFiles.length } Result</translate>
+      </div>
       <div class="uk-width-auto uk-visible@m">
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
