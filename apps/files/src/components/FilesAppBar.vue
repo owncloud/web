@@ -15,7 +15,7 @@
       <div class="uk-width-auto">
         <div class="uk-button-group">
           <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
-          <oc-button v-else disabled :uk-tooltip="_cannotCreateDialogTitle"><translate>+ New</translate></oc-button>
+          <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogTitle"><translate>+ New</translate></oc-button>
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
         </div>
         <oc-drop toggle="#oc-filter-list-btn" mode="hover" :options="{pos:'bottom-right'}">
