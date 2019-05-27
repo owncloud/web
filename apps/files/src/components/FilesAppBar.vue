@@ -11,10 +11,11 @@
       </div>
       <div class="uk-width-auto">
         <div class="uk-button-group">
-          <oc-button id="new-file-menu-btn"><translate>+ New</translate></oc-button>
+          <oc-button v-if="this.canUpload" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
+          <oc-button v-else disabled :uk-tooltip="_cannotCreateDialogTitle"><translate>+ New</translate></oc-button>
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
         </div>
-        <oc-drop toggle="#new-file-menu-btn" mode="hover" :options="{pos:'bottom-right'}">
+        <oc-drop v-if="this.canUpload" toggle="#new-file-menu-btn" mode="hover" :options="{pos:'bottom-right'}">
           <ul class="uk-list">
             <li>
               <label><oc-checkbox /> <span class="uk-text-meta">Show Files</span></label>
@@ -94,6 +95,9 @@ export default {
     },
     _createFileDialogTitle () {
       return this.$gettext('Create new file…')
+    },
+    _cannotCreateDialogTitle () {
+      return this.$gettext('You have no permission to upload!')
     },
     item () {
       return this.$route.params.item
