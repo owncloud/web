@@ -14,11 +14,11 @@
       </div>
       <div class="uk-width-auto">
         <div class="uk-button-group">
-          <oc-button v-if="this.canUpload" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
+          <oc-button v-if="this.canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
           <oc-button v-else disabled :uk-tooltip="_cannotCreateDialogTitle"><translate>+ New</translate></oc-button>
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
         </div>
-        <oc-drop v-if="this.canUpload" toggle="#new-file-menu-btn" mode="hover" :options="{pos:'bottom-right'}">
+        <oc-drop toggle="#oc-filter-list-btn" mode="hover" :options="{pos:'bottom-right'}">
           <ul class="uk-list">
             <li>
               <label><oc-checkbox /> <span class="uk-text-meta">Show Files</span></label>
@@ -31,7 +31,7 @@
             </li>
           </ul>
         </oc-drop>
-        <oc-drop toggle="#new-file-menu-btn" mode="click">
+        <oc-drop v-if="this.canUpload" toggle="#new-file-menu-btn" mode="click">
           <oc-nav>
             <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
             <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
