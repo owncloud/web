@@ -1,5 +1,6 @@
 const { client, createSession, closeSession, startWebDriver, stopWebDriver } = require('nightwatch-api')
 const { Given, Then, When } = require('cucumber')
+const userSettings = require('../helpers/userSettings')
 
 const loginAsUser = function (userId) {
   const loginPage = client.page.loginPage()
@@ -12,12 +13,13 @@ const loginAsUser = function (userId) {
     .waitForElementVisible('@authenticateButton')
     .click('@authenticateButton')
 
+  const password = userSettings.getActualPassword(userId)
   // Then the user logs in with username {string} and password {string} using the webUi
   const ocLoginPage = client.page.ownCloudLoginPage()
   ocLoginPage
     .waitForElementVisible('@usernameInput')
     .setValue('@usernameInput', userId)
-    .setValue('@passwordInput', userId)
+    .setValue('@passwordInput', password)
     .click('@loginSubmitButton')
 
   // When the user authorizes access to phoenix
@@ -31,7 +33,8 @@ const loginAsUser = function (userId) {
     .page.filesPage()
     .waitForElementVisible('@filesTable')
     .then(() => {
-      client.globals.currentUserName = userId
+      const displayname = userSettings.getDisplayNameForUser()
+      client.globals.currentUserName = displayname
     })
 }
 

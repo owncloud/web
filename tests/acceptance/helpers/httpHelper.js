@@ -1,5 +1,4 @@
-const { client } = require('nightwatch-api')
-let password = ''
+const userSettings = require('../helpers/userSettings')
 
 /**
  *
@@ -8,11 +7,7 @@ let password = ''
  * @returns {string}
  */
 exports.createAuthHeader = function (userId) {
-  if (userId === client.globals.backend_admin_username) {
-    password = client.globals.backend_admin_password
-  } else {
-    password = userId
-  }
+  const password = userSettings.getActualPassword(userId)
   return {
     'Authorization': 'Basic ' +
       Buffer.from(userId + ':' + password).toString('base64')

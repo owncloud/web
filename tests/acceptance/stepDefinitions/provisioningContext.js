@@ -3,11 +3,40 @@ const { Given } = require('cucumber')
 const fetch = require('node-fetch')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
+const userSettings = require('../helpers/userSettings')
 
-function createUser (userId) {
+function createDefaultUser (userId) {
+  const password = userSettings.getPasswordForUser(userId)
+  return createUser(userId, password)
+    .then(() => {
+      const displayname = userSettings.getDisplayNameForUser(userId)
+      const email = userSettings.getEmailAddressForUser(userId)
+
+      const body = new URLSearchParams()
+      body.append('key', 'display')
+      body.append('value', displayname)
+      const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+      fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`,
+        { method: 'PUT', body: body, headers: headers }
+      )
+        .then(() => {
+          const body = new URLSearchParams()
+
+          body.append('key', 'email')
+          body.append('value', email)
+
+          fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`,
+            { method: 'PUT', body: body, headers: headers }
+          )
+        })
+    })
+}
+
+function createUser (userId, password = false) {
   const body = new URLSearchParams()
+  const userPassword = password || userId
   body.append('userid', userId)
-  body.append('password', userId)
+  body.append('password', userPassword)
 
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
   return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users?format=json', { method: 'POST', body: body, headers: headers })
@@ -47,7 +76,7 @@ function addToGroup (userId, groupId) {
 
 Given('user {string} has been created with default attributes', function (userId) {
   return deleteUser(userId)
-    .then(() => createUser(userId))
+    .then(() => createDefaultUser(userId))
     .then(() => initUser(userId))
 })
 
@@ -67,7 +96,7 @@ Given('the quota of user {string} has been set to {string}', function (userId, q
 Given('these users have been created with default attributes but not initialized:', function (dataTable) {
   return Promise.all(dataTable.rows().map((userId) => {
     return deleteUser(userId)
-      .then(() => createUser(userId))
+      .then(() => createDefaultUser(userId))
   }))
 })
 
@@ -84,7 +113,7 @@ Given('these users have been created with default attributes:', function (dataTa
   return Promise.all(dataTable.rows().map((user) => {
     let userId = user[0]
     return deleteUser(userId)
-      .then(() => createUser(userId))
+      .then(() => createDefaultUser(userId))
       .then(() => initUser(userId))
   }))
 })
