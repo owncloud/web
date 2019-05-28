@@ -10,6 +10,18 @@ When('the user browses to the files page',
       .navigate()
   })
 
+When('the user browses to the favorites page', function () {
+  return client
+    .page.favoritesPage()
+    .navigate()
+})
+
+Given('the user has browsed to the favorites page', function () {
+  return client
+    .page.favoritesPage()
+    .navigate()
+})
+
 Then('the files table should be displayed',
   () => {
     const filesPage = client.page.filesPage()
@@ -105,6 +117,15 @@ Then(/there should be no files\/folders listed on the webUI/, function () {
 })
 
 Then('file/folder {string} should be listed on the webUI', function (folder) {
+  return client
+    .page
+    .filesPage()
+    .waitForFileVisible(folder)
+})
+
+Then('file/folder {string} should be listed in the favorites page on the webUI', function (folder) {
+  client.page.phoenixPage().openCoreMenu()
+
   return client
     .page
     .filesPage()
