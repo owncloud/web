@@ -24,8 +24,7 @@ Given('the user has browsed to the favorites page', function () {
 
 Then('the files table should be displayed',
   () => {
-    const filesPage = client.page.filesPage()
-    return filesPage
+    return client.page.FilesPageElement.filesList()
       .waitForElementVisible('@filesTable')
   })
 
@@ -43,11 +42,11 @@ When('the user creates a folder with the invalid name {string} using the webUI',
   return client.page.filesPage().createFolder(folderName, false)
 })
 
-Given('the user has opened folder {string}', (folder) => client.page.filesPage().navigateToFolder(folder))
-When('the user opens folder {string} using the webUI', (folder) => client.page.filesPage().navigateToFolder(folder))
+Given('the user has opened folder {string}', (folder) => client.page.FilesPageElement.filesList().navigateToFolder(folder))
+When('the user opens folder {string} using the webUI', (folder) => client.page.FilesPageElement.filesList().navigateToFolder(folder))
 
 Given('the user has opened the share dialog for folder {string}', function (fileName) {
-  return client.page.filesPage().openSharingDialog(fileName)
+  return client.page.FilesPageElement.filesList().openSharingDialog(fileName)
 })
 
 When('the user enables the setting to view hidden folders on the webUI', function () {
@@ -55,12 +54,12 @@ When('the user enables the setting to view hidden folders on the webUI', functio
 })
 
 When('the user deletes file/folder {string} using the webUI', function (element) {
-  return client.page.filesPage().deleteFile(element)
+  return client.page.FilesPageElement.filesList().deleteFile(element)
 })
 
 When('the user deletes the following elements using the webUI', function (table) {
   for (const line of table.rows()) {
-    client.page.filesPage().deleteFile(line[0])
+    client.page.FilesPageElement.filesList().deleteFile(line[0])
     deletedElementsTable.push(line[0])
   }
   return client.page.filesPage()
@@ -71,7 +70,7 @@ When('the user uploads file {string} using the webUI', function (element) {
 })
 
 When('the user renames file/folder {string} to {string} using the webUI', function (fromName, toName) {
-  return client.page.filesPage().renameFile(fromName, toName)
+  return client.page.FilesPageElement.filesList().renameFile(fromName, toName)
 })
 
 Given('the user has disabled folder filter', () => {
@@ -99,19 +98,19 @@ When('the user enables file filter using the webUI', function () {
 })
 
 Given('the user has marked file/folder {string} as favorite using the webUI', function (path) {
-  return client.page.filesPage().markAsFavorite(path)
+  return client.page.FilesPageElement.filesList().markAsFavorite(path)
 })
 
 When('the user marks file/folder {string} as favorite using the webUI', function (path) {
-  return client.page.filesPage().markAsFavorite(path)
+  return client.page.FilesPageElement.filesList().markAsFavorite(path)
 })
 
 When('the user unmarks the favorited file/folder {string} using the webUI', function (path) {
-  return client.page.filesPage().unmarkFavorite(path)
+  return client.page.FilesPageElement.filesList().unmarkFavorite(path)
 })
 
 Then(/there should be no files\/folders listed on the webUI/, function () {
-  return client.page.filesPage().allFileRows(function (result) {
+  return client.page.FilesPageElement.filesList().allFileRows(function (result) {
     client.assert.equal(result.value.length, 0)
   })
 })
@@ -119,7 +118,7 @@ Then(/there should be no files\/folders listed on the webUI/, function () {
 Then('file/folder {string} should be listed on the webUI', function (folder) {
   return client
     .page
-    .filesPage()
+    .FilesPageElement.filesList()
     .waitForFileVisible(folder)
 })
 
@@ -128,12 +127,12 @@ Then('file/folder {string} should be listed in the favorites page on the webUI',
 
   return client
     .page
-    .filesPage()
+    .FilesPageElement.filesList()
     .waitForFileVisible(folder)
 })
 
 Then('file/folder {string} should not be listed on the webUI', function (folder) {
-  return client.page.filesPage().assertElementNotListed(folder)
+  return client.page.FilesPageElement.filesList().assertElementNotListed(folder)
 })
 
 Then('the deleted elements should not be listed on the webUI', function () {
@@ -151,7 +150,7 @@ When('the user reloads the current page of the webUI', function () {
 
 Then('these folders/files should not be listed on the webUI', function (entryList) {
   entryList.rows().forEach(entry => {
-    client.page.filesPage().assertElementNotListed(entry)
+    client.page.FilesPageElement.filesList().assertElementNotListed(entry)
   })
   return client
 })
@@ -160,26 +159,26 @@ Then('these files/folders should be listed on the webUI', function (entryList) {
   entryList.rows().forEach(entry => {
     // here each entry is an array with one element,
     // which is the name of the entry from the table
-    client.page.filesPage().waitForFileVisible(entry[0])
+    client.page.FilesPageElement.filesList().waitForFileVisible(entry[0])
   })
   return client
 })
 
 Then('file/folder {string} should be marked as favorite on the webUI', function (path) {
-  return client.page.filesPage().isMarkedFavorite(path, (value) => {
+  return client.page.FilesPageElement.filesList().isMarkedFavorite(path, (value) => {
     assert.strictEqual(value, true, `${path} expected to be favorite but was not`)
   })
 })
 
 Then('file/folder {string} should not be marked as favorite on the webUI', function (path) {
-  return client.page.filesPage().isMarkedFavorite(path, (value) => {
+  return client.page.FilesPageElement.filesList().isMarkedFavorite(path, (value) => {
     assert.strictEqual(value, false, `not expected ${path} to be favorite but was`)
   })
 })
 
 const assertDeletedElementsAreNotListed = function () {
   for (const element of deletedElementsTable) {
-    client.page.filesPage().assertElementNotListed(element)
+    client.page.FilesPageElement.filesList().assertElementNotListed(element)
   }
   return client
 }
