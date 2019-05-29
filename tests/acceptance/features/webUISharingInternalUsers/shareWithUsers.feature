@@ -13,8 +13,8 @@ Feature: Sharing files and folders with internal users
   @smokeTest
   Scenario: share a file & folder with another internal user
     Given user "user2" has logged in using the webUI
-    When the user shares folder "simple-folder" with user "user1" using the webUI
-    And the user shares file "testimage.jpg" with user "user1" using the webUI
+    When the user shares folder "simple-folder" with user "User One" using the webUI
+    And the user shares file "testimage.jpg" with user "User One" using the webUI
     And the user re-logs in as "user1" using the webUI
     Then folder "simple-folder (2)" should be listed on the webUI
 #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
