@@ -13,6 +13,12 @@ module.exports = {
         .setValue('@searchInputField', [searchTerm, this.api.Keys.ENTER])
         .waitForElementNotVisible('@searchLoadingIndicator')
         .waitForOutstandingAjaxCalls()
+    },
+    openCoreMenu: function () {
+      return this.waitForElementVisible('@coreMenuOpenButton')
+        .click('@coreMenuOpenButton')
+        .waitForElementVisible('@coreMenu')
+        .waitForAnimationToFinish()
     }
   },
   elements: {
@@ -25,6 +31,13 @@ module.exports = {
     },
     searchLoadingIndicator: {
       selector: '.appTopbar .uk-spinner'
+    },
+    coreMenuOpenButton: {
+      selector: '//header//button[@aria-label="Files"]',
+      locateStrategy: 'xpath'
+    },
+    coreMenu: {
+      selector: '#coreMenu'
     }
   }
 }

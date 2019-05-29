@@ -30,7 +30,7 @@ const loginAsUser = function (userId) {
 
   // Then the files table should be displayed
   return client
-    .page.filesPage()
+    .page.FilesPageElement.filesList()
     .waitForElementVisible('@filesTable')
     .then(() => {
       const displayname = userSettings.getDisplayNameForUser()
@@ -75,8 +75,7 @@ When('the user authorizes access to phoenix',
 
 Then('the files table should not be empty',
   () => {
-    const filesPage = client.page.filesPage()
-    return filesPage
+    return client.page.FilesPageElement.filesList()
     // even the loading indicator is gone the table might not be rendered yet
       .waitForElementVisible('@fileRows')
   })

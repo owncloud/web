@@ -32,7 +32,7 @@ module.exports = {
       } catch (e) {
         // do nothing
       }
-      return this.api.page.filesPage()
+      return this.api.page.FilesPageElement.filesList()
     },
     /**
      *
