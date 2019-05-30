@@ -1,6 +1,9 @@
 <template>
   <oc-dialog :name="name" v-model="ocActive" :title="ocTitle">
     <template slot="content">
+      <oc-alert v-if="ocError" id="oc-dialog-prompt-alert" noClose="true" variation="danger">
+        {{ ocError }}
+      </oc-alert>
       <span v-if="ocContent">{{ ocContent }}</span>
         <oc-text-input v-if="ocHasInput"
           :disabled="ocLoading"
@@ -14,7 +17,7 @@
     </template>
     <template slot="footer">
         <oc-button :disabled="ocLoading" @click="onCancel">{{ _ocCancelText }}</oc-button>
-        <oc-button :disabled="ocLoading"
+        <oc-button :disabled="ocLoading || ocError"
                :id="ocConfirmId"
                @click="onConfirm">{{ _ocConfirmText }}</oc-button>
     </template>
@@ -35,6 +38,7 @@ export default {
     ocInputMaxlength: [String, Number],
     ocInputPlaceholder: [String, Number],
     ocContent: String,
+    ocError: String,
     ocLoading: { type: Boolean, default: false },
     ocConfirmId: String,
     ocConfirmText: {
@@ -53,6 +57,9 @@ export default {
     value () {
       this.inputValue = this.value
     },
+    inputValue () {
+      this.$emit('input', this.inputValue)
+    },
     ocActive (isActive) {
       this.inputValue = this.value
       this.$nextTick().then(() => {
@@ -67,7 +74,9 @@ export default {
       this.$emit('oc-cancel')
     },
     onConfirm () {
-      this.$emit('oc-confirm', this.inputValue)
+      if (!this.ocError) {
+        this.$emit('oc-confirm', this.inputValue)
+      }
     }
   },
   computed: {

@@ -21,6 +21,14 @@ Feature: create folders
     When the user creates a folder with the invalid name "simple-folder" using the webUI
     Then the error message 'Creating folder failed…' should be displayed on the webUI
 
+  Scenario: Try to create a folder with invalid name
+    When the user creates a folder with the invalid name "../folder" using the webUI
+    Then the error message 'Folder name cannot contain "/"' should be displayed on the webUI dialog prompt
+
+  Scenario: Try to create a folder with another invalid name
+    When the user creates a folder with the invalid name "folder/subfolder" using the webUI
+    Then the error message 'Folder name cannot contain "/"' should be displayed on the webUI dialog prompt
+
   @skip @yetToImplement
   Scenario: Create a folder in a public share
     Given the user has created a new public link for folder "simple-empty-folder" using the webUI with

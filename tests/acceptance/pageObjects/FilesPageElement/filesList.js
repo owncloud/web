@@ -53,11 +53,13 @@ module.exports = {
      *
      * @param {string} fromName
      * @param {string} toName
+     * @param {boolean} expectToSucceed
      */
-    renameFile: function (fromName, toName) {
+    renameFile: function (fromName, toName, expectToSucceed = true) {
       const renameBtnSelector = this.getFileRowSelectorByFileName(fromName) +
         this.elements['renameButtonInFileRow'].selector
-      return this.initAjaxCounters()
+
+      this.initAjaxCounters()
         .waitForFileVisible(fromName)
         .useXpath()
         .moveToElement(this.getFileRowSelectorByFileName(fromName), 0, 0)
@@ -67,9 +69,14 @@ module.exports = {
         .clearValue('@renameFileInputField')
         .setValue('@renameFileInputField', toName)
         .click('@renameFileConfirmationBtn')
-        .waitForElementNotVisible('@renameFileConfirmationDialog')
         .waitForOutstandingAjaxCalls()
         .useCss()
+
+      if (expectToSucceed) {
+        this.waitForElementNotVisible('@renameFileConfirmationDialog')
+      }
+
+      return this
     },
     /**
      *
