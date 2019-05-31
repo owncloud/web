@@ -22,11 +22,29 @@ module.exports = integratePhoenix({
         loader: "babel-loader",
         include: [
           path.resolve('src'),
-          path.resolve('node_modules/vue2-dropzone/dist/')
         ],
         options: {
           rootMode: "upward",
         }
+      },
+      {
+        test: /\.jsx?$/,
+        include: /node_modules\/(?=(vue2-dropzone)\/).*/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  targets: {
+                    ie: "11",
+                  },
+                },
+              ],
+            ],
+          },
+        },
       },
       {
       enforce: 'pre',
