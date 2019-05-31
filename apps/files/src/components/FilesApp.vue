@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress', 'resetSearch', 'dragOver', 'loadFolder']),
-    ...mapActions(['openFile', 'showNotification']),
+    ...mapActions(['openFile', 'showMessage']),
 
     trace () {
       console.info('trace', arguments)

@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder']),
-    ...mapActions(['openFile', 'showNotification']),
+    ...mapActions(['openFile', 'showMessage']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
         this.isLoadingSearch = false
@@ -172,7 +172,7 @@ export default {
             this.$_ocFilesFolder_getFolder()
           })
           .catch(error => {
-            this.showNotification({
+            this.showMessage({
               title: this.$gettext('Creating folder failed…'),
               desc: error,
               status: 'danger'
@@ -209,7 +209,7 @@ export default {
             this.$_ocFilesFolder_getFolder()
           })
           .catch(error => {
-            this.showNotification({
+            this.showMessage({
               title: this.$gettext('Creating file failed…'),
               desc: error,
               status: 'danger'
@@ -254,7 +254,7 @@ export default {
 
     onFileError (error) {
       this.fileUploadProgress = 0
-      this.showNotification({
+      this.showMessage({
         title: this.$gettext('File upload failed…'),
         desc: error.message,
         status: 'danger'

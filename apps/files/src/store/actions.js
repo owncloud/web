@@ -120,7 +120,7 @@ export default {
 
     promise.then(res => {
       if (res === null) {
-        context.dispatch('showNotification', {
+        context.dispatch('showMessage', {
           title: $gettext('Loading folder failed…'),
           status: 'danger'
         }, { root: true })
@@ -145,7 +145,7 @@ export default {
         context.dispatch('resetSearch')
       }
     }).catch((e) => {
-      context.dispatch('showNotification', {
+      context.dispatch('showMessage', {
         title: $gettext('Loading folder failed…'),
         desc: e.message,
         status: 'danger'
@@ -247,7 +247,7 @@ export default {
         resolve(filesSearched)
       }).catch((error) => {
         // TODO notification missing
-        context.dispatch('showNotification', {
+        context.dispatch('showMessage', {
           title: this.$gettext('Error while searching.'),
           desc: error.message,
           status: 'danger'
@@ -326,7 +326,7 @@ export default {
           context.commit('SHARES_LOADING', false)
         })
         .catch(e => {
-          context.dispatch('showNotification', {
+          context.dispatch('showMessage', {
             title: $gettext('Error while sharing.'),
             desc: e,
             status: 'danger'
@@ -340,7 +340,7 @@ export default {
           context.commit('SHARES_LOADING', false)
         })
         .catch(e => {
-          context.dispatch('showNotification', {
+          context.dispatch('showMessage', {
             title: $gettext('Error while sharing.'),
             desc: e,
             status: 'danger'

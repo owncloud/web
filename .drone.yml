@@ -270,6 +270,12 @@ matrix:
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
+      TEST_CONTEXT: webUINotifications
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
       TEST_CONTEXT: webUIRenameFiles
       TEST_TAGS: 'not @skip'
 

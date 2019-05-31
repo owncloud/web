@@ -1,17 +1,62 @@
 const state = {
   sidebarVisible: false,
-  notifications: []
+  messages: [],
+  notifications: {
+    loading: true,
+    failed: false,
+    data: []
+  }
 }
 
 const actions = {
   toggleSidebar (context, visible) {
     context.commit('TOGGLE_SIDEBAR', visible)
   },
-  showNotification (context, notification) {
-    context.commit('ENQUEUE_NOTIFICATION', notification)
+  showMessage (context, message) {
+    context.commit('ENQUEUE_MESSAGE', message)
   },
-  deleteNotification (context, nId) {
-    context.commit('REMOVE_NOTIFICATION', nId)
+  deleteMessage (context, mId) {
+    context.commit('REMOVE_MESSAGE', mId)
+  },
+  fetchNotifications (context, client) {
+    context.commit('LOADING_NOTIFICATIONS', true)
+
+    client.requests.ocs({
+      service: 'apps/notifications',
+      action: 'api/v1/notifications'
+    })
+      .then(response => {
+        response.json()
+          .then(json => {
+            if (response.ok) {
+              context.commit('UPDATE_NOTIFICATIONS', json.ocs.data)
+            } else {
+              context.commit('ERROR_NOTIFICATIONS', json.ocs.meta.message)
+            }
+            context.commit('LOADING_NOTIFICATIONS', false)
+          })
+      })
+      .catch((error) => {
+        context.commit('ERROR_NOTIFICATIONS', error)
+        context.commit('LOADING_NOTIFICATIONS', false)
+      })
+  },
+  deleteNotification (context, { client, notification }) {
+    client.requests.ocs({
+      service: 'apps/notifications',
+      action: 'api/v1/notifications/' + notification,
+      method: 'DELETE'
+    })
+      .then(response => {
+        if (response.ok) {
+          context.commit('DELETE_NOTIFICATION', notification)
+        } else {
+          context.commit('ERROR_NOTIFICATIONS', response.ocs.meta.status)
+        }
+      })
+      .catch((error) => {
+        context.commit('ERROR_NOTIFICATIONS', error)
+      })
   }
 }
 
@@ -19,14 +64,29 @@ const mutations = {
   TOGGLE_SIDEBAR (state, visible) {
     state.sidebarVisible = visible
   },
-  ENQUEUE_NOTIFICATION (state, notification) {
+  ENQUEUE_MESSAGE (state, message) {
     // set random id to improve iteration in v-for & lodash
-    if (!notification.id) notification.id = Math.random().toString(36).slice(2, -1)
-    state.notifications.push(notification)
+    if (!message.id) message.id = Math.random().toString(36).slice(2, -1)
+    state.messages.push(message)
   },
-  REMOVE_NOTIFICATION (state, item) {
+  REMOVE_MESSAGE (state, item) {
     let index = state.notifications.indexOf(item)
     state.notifications.splice(index, 1)
+  },
+  LOADING_NOTIFICATIONS (state, loading) {
+    state.notifications.loading = loading
+  },
+  ERROR_NOTIFICATIONS (state, failed) {
+    state.notifications.failed = failed
+  },
+  UPDATE_NOTIFICATIONS (state, notifications) {
+    state.notifications.data = notifications
+  },
+  DELETE_NOTIFICATION (state, notification) {
+    let data = state.notifications.data.filter((n) => {
+      return n.notification_id !== notification
+    })
+    state.notifications.data = data
   }
 }
 
@@ -34,8 +94,11 @@ const getters = {
   isSidebarVisible: state => {
     return state.sidebarVisible
   },
+  activeMessages: state => {
+    return (state.messages.length) ? [state.messages[0]] : []
+  },
   activeNotifications: state => {
-    return (state.notifications.length) ? [state.notifications[0]] : []
+    return (state.notifications.data.length && !state.notifications.failed) ? state.notifications.data : false
   }
 }
 

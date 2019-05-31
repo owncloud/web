@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['resetSearch', 'addFileToProgress']),
-    ...mapActions(['showNotification']),
+    ...mapActions(['showMessage']),
 
     formDateFromNow (date) {
       return moment(date).locale(this.$language.current).fromNow()
@@ -65,7 +65,7 @@ export default {
       let translatedTitle = this.$gettext('Renaming of %{fileName} failed')
 
       if (item.includes('/')) {
-        this.showNotification({
+        this.showMessage({
           title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
           desc: this.$gettext('The file name cannot contain a "/"'),
           status: 'danger'
@@ -74,7 +74,7 @@ export default {
       }
 
       if (item === '.') {
-        this.showNotification({
+        this.showMessage({
           title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
           desc: this.$gettext('The file name cannot be equal to "."'),
           status: 'danger'
@@ -82,7 +82,7 @@ export default {
       }
 
       if (item === '..') {
-        this.showNotification({
+        this.showMessage({
           title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
           desc: this.$gettext('The file name cannot be equal to ".."'),
           status: 'danger'
@@ -96,7 +96,7 @@ export default {
       })
       if (exists) {
         let translatedDesc = this.$gettext('File or folder with name "%{fileName}" already exists.')
-        this.showNotification({
+        this.showMessage({
           title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
           desc: this.$gettextInterpolate(translatedDesc, { fileName: item }, true),
           status: 'danger'
@@ -172,7 +172,7 @@ export default {
         if (!exists) {
           this.$_ocUpload(file)
         } else {
-          this.showNotification({
+          this.showMessage({
             title: this.$gettextInterpolate('Upload for %{file} failed - File already exists', { file: file.name }, true),
             status: 'danger'
           })

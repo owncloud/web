@@ -26,7 +26,7 @@ Then('the error message {string} should be displayed on the webUI dialog prompt'
     .expect.element('@ocDialogPromptAlert').text.to.equal(message)
 })
 
-Then('no notification should be displayed on the webUI', function () {
+Then('no message should be displayed on the webUI', function () {
   return client
     .page.phoenixPage()
     .expect.element('@message').to.not.be.present
