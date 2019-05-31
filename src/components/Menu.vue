@@ -20,6 +20,11 @@ export default {
       isOpen: false
     }
   },
+  watch: {
+    $route () {
+      this.toggleSidebar(false)
+    }
+  },
   computed: {
     nav () {
       return this.$root.navItems
