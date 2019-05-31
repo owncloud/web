@@ -139,7 +139,11 @@ export default {
       let files = e.target.files || e.dataTransfer.files
       if (!files.length) return
       for (let file of files) {
-        let exists = find(this.files, ['name', file.name])
+        let exists = this.files.find((n) => {
+          if (n['name'] === file.name) {
+            return n
+          }
+        })
         if (!exists) {
           this.$_ocUpload(file)
         } else {
