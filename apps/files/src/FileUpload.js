@@ -9,10 +9,10 @@ class FileUpload {
 
   upload (additionalData = {}) {
     let xhr = new XMLHttpRequest()
-    xhr.responseType = 'text'
 
     // Headers
     xhr.open(this.type, this.url + encodeURIComponent(this.file.name), true)
+    xhr.responseType = 'text'
     this._setXhrHeaders(xhr)
 
     // Events
