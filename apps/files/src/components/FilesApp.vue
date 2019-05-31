@@ -1,6 +1,6 @@
   <template>
-    <oc-grid class="oc-app uk-height-1-1" id="files-app" @dragover="$_ocApp_dragOver">
-      <div class="uk-width-expand uk-height-1-1 uk-overflow-auto" :class="{ 'uk-visible@s' : _sidebarOpen }">
+    <oc-grid class="oc-app uk-height-1-1" id="files-app">
+      <div class="uk-width-expand uk-height-1-1 uk-overflow-auto" :class="{ 'uk-visible@s' : _sidebarOpen }" @dragover="$_ocApp_dragOver">
         <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
         <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
       </div>
