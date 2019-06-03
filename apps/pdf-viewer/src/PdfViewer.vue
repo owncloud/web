@@ -1,10 +1,12 @@
 <template lang="html">
   <div>
+    <PdfViewerTopbar></PdfViewerTopbar>
     <oc-progress v-if="loading" :max="100" indeterminate></oc-progress>
     <pdf v-if="!loading" :page="currentPage" @error="error" @num-pages="loadPages" :src="content"></pdf>
   </div>
 </template>
 <script>
+import PdfViewerTopbar from './PdfViewerTopbar.vue'
 import pdf from 'vue-pdf'
 import { mapGetters, mapActions } from 'vuex'
 
@@ -32,7 +34,8 @@ export default {
       })
   },
   components: {
-    pdf
+    pdf,
+    PdfViewerTopbar
   },
   data: () => ({
     content: '',

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <top-bar></top-bar>
     <oc-notifications>
       <oc-notification-message
               v-if="lastError"
@@ -23,11 +24,15 @@
   </div>
 </template>
 <script>
+import TopBar from './MarkdownEditorTopbar.vue'
 import marked from 'marked'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'MarkdownEditor',
+  components: {
+    TopBar
+  },
   mounted () {
     if (this.activeFile.path === '') {
       this.$router.push({

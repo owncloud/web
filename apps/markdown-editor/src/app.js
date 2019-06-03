@@ -13,8 +13,7 @@ const store = require('./store.js')
 const routes = [{
   path: '',
   components: {
-    appContent: MarkdownEditor,
-    appTopbar: MarkdownEditorTopbar
+    app: MarkdownEditor
   },
   name: 'markdown-editor'
 }]
