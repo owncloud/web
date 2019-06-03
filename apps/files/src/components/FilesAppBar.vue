@@ -18,19 +18,6 @@
           <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogTitle"><translate>+ New</translate></oc-button>
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
         </div>
-        <oc-drop toggle="#oc-filter-list-btn" mode="hover" :options="{pos:'bottom-right'}">
-          <ul class="uk-list">
-            <li>
-              <label><oc-checkbox /> <span class="uk-text-meta">Show Files</span></label>
-            </li>
-            <li>
-              <label><oc-checkbox /> <span class="uk-text-meta">Show Folders</span></label>
-            </li>
-            <li>
-              <oc-search-bar small placeholder="Filter by name" :icon="false" :button="false" />
-            </li>
-          </ul>
-        </oc-drop>
         <oc-drop v-if="canUpload" toggle="#new-file-menu-btn" mode="click">
           <oc-nav>
             <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
@@ -127,7 +114,7 @@ export default {
         return this.getRoutes()
       }
 
-      return false
+      return []
     },
     canUpload () {
       if (this.currentFolder === null) {
