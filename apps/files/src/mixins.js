@@ -100,14 +100,19 @@ export default {
       fetch(url, { headers })
         .then(response => response.blob())
         .then(blobby => {
-          let objectUrl = window.URL.createObjectURL(blobby)
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
+            window.navigator.msSaveOrOpenBlob(blobby, file.name)
+          } else { // for Non-IE (chrome, firefox etc.)
+            let objectUrl = window.URL.createObjectURL(blobby)
 
-          anchor.href = objectUrl
-          anchor.download = file.name
-          anchor.click()
+            anchor.href = objectUrl
+            anchor.download = file.name
+            anchor.click()
 
-          window.URL.revokeObjectURL(objectUrl)
+            window.URL.revokeObjectURL(objectUrl)
+          }
         })
+        .catch(error => console.log(error))
     },
     fileTypeIcon (file) {
       if (file) {
@@ -139,7 +144,11 @@ export default {
       let files = e.target.files || e.dataTransfer.files
       if (!files.length) return
       for (let file of files) {
-        let exists = find(this.files, ['name', file.name])
+        let exists = this.files.find((n) => {
+          if (n['name'] === file.name) {
+            return n
+          }
+        })
         if (!exists) {
           this.$_ocUpload(file)
         } else {

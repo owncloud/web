@@ -62,8 +62,7 @@ module.exports = {
   ],
   entry: {
     core: [
-      'core-js/modules/es6.promise',
-      'core-js/modules/es6.array.iterator',
+      'whatwg-fetch',
       './src/phoenix.js',
     ]
   },
@@ -72,14 +71,34 @@ module.exports = {
     chunkFilename: 'core/[name].[id].bundle.js'
   },
   module: {
-    rules: [{
-      test: /\.js?$/,
-      exclude: [/node_modules/, /apps/],
-      include: [/src/],
-      use: [{
-        loader: 'babel-loader'
-      }]
-    }, {
+    rules: [
+      {
+        test: /\.js$/,
+        use: "babel-loader",
+        include: [
+          /src/
+        ]
+      },
+      {
+        test: /\.jsx?$/,
+        include: /node_modules\/(?=(vuex-persist)\/).*/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  targets: {
+                    ie: "11",
+                  },
+                },
+              ],
+            ],
+          },
+        },
+      },
+      {
       test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
       include: [/node_modules\/material-design-icons-iconfont\/dist/, /static\/fonts\/ocft\/font/],
       use: [{

@@ -32,7 +32,7 @@ export default {
   mixins: [Mixins],
   props: ['items'],
   name: 'FileDetails',
-  data () {
+  data: function () {
     return {
       /** String name of the tab that is activated */
       activeTab: 0

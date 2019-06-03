@@ -19,14 +19,14 @@
   </vue-dropzone>
 </template>
 <script>
-import vue2Dropzone from 'vue2-dropzone'
+import vue2DropZone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import Mixins from '../mixins'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
-    vueDropzone: vue2Dropzone
+    vueDropzone: vue2DropZone
   },
   props: {
     url: { type: String, required: true },

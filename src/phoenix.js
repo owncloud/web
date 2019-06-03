@@ -1,6 +1,9 @@
 /* eslint-disable */
+import "core-js/stable"
+import "regenerator-runtime/runtime"
+import "core-js/features/symbol/iterator.js"
+
 // --- Libraries and Plugins ---
-import '@babel/polyfill'
 import Vue from 'vue'
 
 // --- Components ---
@@ -66,7 +69,7 @@ function loadApps () {
     redirect: to => arguments[0].navItems[0].route
   }]
 
-  for (let app of arguments) {
+  for (let app of Array.from(arguments)) {
     if (!app.appInfo) {
       console.error('Try to load app with missing appInfo…')
     }

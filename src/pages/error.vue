@@ -37,17 +37,6 @@ export default {
     backgroundStyle () {
       return `background-image: linear-gradient(${this.configuration.theme.colors.primary}, ${this.configuration.theme.colors.secondary});`
     }
-  },
-  methods: {
-    authenticate () {
-      this.$store.dispatch('authenticate', { provider: 'oauth2' })
-        .then(() => {
-          this.$router.push({ path: '/' })
-        })
-        .catch(() => {
-          this.$router.push('/error')
-        })
-    }
   }
 }
 </script>
