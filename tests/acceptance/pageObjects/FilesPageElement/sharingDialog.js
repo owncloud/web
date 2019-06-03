@@ -69,7 +69,13 @@ module.exports = {
         .waitForElementVisible('@sharingAutoCompleteDropDownElements')
         .api.elements('css selector', this.elements['sharingAutoCompleteDropDownElements'].selector, (result) => {
           result.value.forEach((value) => {
-            webElementIdList.push(value.ELEMENT)
+            // webElementId is returned as value.ELEMENT on chrome
+            // whereas it is returned as string constant "element-6066-11e4-a52e-4f735466cecf" on firefox
+            if (value.ELEMENT) {
+              webElementIdList.push(value.ELEMENT)
+            } else {
+              webElementIdList.push(value['element-6066-11e4-a52e-4f735466cecf'])
+            }
           })
         })
         .then(() => webElementIdList)

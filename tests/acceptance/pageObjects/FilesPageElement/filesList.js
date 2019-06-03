@@ -11,7 +11,6 @@ module.exports = {
       return this.initAjaxCounters()
         .waitForFileVisible(fileName)
         .useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
         .click(deleteBtnSelector)
         .waitForElementVisible('@deleteFileConfirmationBtn')
         .waitForAnimationToFinish()
@@ -27,7 +26,6 @@ module.exports = {
     navigateToFolder: function (folder) {
       this.waitForFileVisible(folder)
       return this.useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
         .click(this.getFileLinkSelectorByFileName(folder))
         .useCss()
         .waitForElementNotPresent('@filesListProgressBar')
@@ -43,7 +41,6 @@ module.exports = {
 
       this.waitForFileVisible(fileName)
         .useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
         .click(shareBtnSelector)
         .waitForElementVisible('@sharingSideBar')
         .useCss()
@@ -62,7 +59,6 @@ module.exports = {
       this.initAjaxCounters()
         .waitForFileVisible(fromName)
         .useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(fromName), 0, 0)
         .click(renameBtnSelector)
         .waitForElementVisible('@renameFileConfirmationBtn')
         .waitForAnimationToFinish()
@@ -71,11 +67,9 @@ module.exports = {
         .click('@renameFileConfirmationBtn')
         .waitForOutstandingAjaxCalls()
         .useCss()
-
       if (expectToSucceed) {
         this.waitForElementNotVisible('@renameFileConfirmationDialog')
       }
-
       return this
     },
     /**

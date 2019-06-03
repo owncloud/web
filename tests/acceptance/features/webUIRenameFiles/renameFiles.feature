@@ -8,30 +8,31 @@ Feature: rename files
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest
+  @smokeTest @skipOnFIREFOX
   Scenario Outline: Rename a file
     When the user renames file "lorem.txt" to <to_file_name> using the webUI
     Then file <to_file_name> should be listed on the webUI
     When the user reloads the current page of the webUI
     Then file <to_file_name> should be listed on the webUI
     Examples:
-      | to_file_name           |
-      | "simple-name.txt"      |
+      | to_file_name      |
+      | "simple-name.txt" |
       | "लोरेम।तयक्स्त? $%#&@" |
-      | '"quotes1"'            |
-      | "'quotes2'"            |
+      | '"quotes1"'       |
+      | "'quotes2'"       |
 
+  @skipOnFIREFOX
   Scenario Outline: Rename a file that has special characters in its name
     When the user renames file <from_name> to <to_name> using the webUI
     Then file <to_name> should be listed on the webUI
     When the user reloads the current page of the webUI
     Then file <to_name> should be listed on the webUI
     Examples:
-      | from_name                               | to_name                               |
+      | from_name                               | to_name                                 |
       | "strängé filename (duplicate #2 &).txt" | "strängé filename (duplicate #3).txt" |
       | "'single'quotes.txt"                    | "single-quotes.txt"                   |
 
-  @smokeTest
+  @smokeTest @skipOnFIREFOX
   Scenario: Rename a file using special characters and check its existence after page reload
     When the user renames file "lorem.txt" to "लोरेम।तयक्स्त $%&" using the webUI
     And the user reloads the current page of the webUI
@@ -102,6 +103,7 @@ Feature: rename files
       | Could not rename "data.zip" |
     And file "data.zip" should be listed on the webUI
 
+  @skipOnFIREFOX
   Scenario Outline: Rename a file/folder using forward slash in its name
     When the user renames file "<from_file_name>" to an invalid name "<to_file_name>" using the webUI
     Then the error message 'Name cannot contain "/"' should be displayed on the webUI dialog prompt
@@ -112,11 +114,13 @@ Feature: rename files
       | lorem.txt      | lorem/txt                         |
       | simple-folder  | simple-empty-folder/simple-folder |
 
+  @skipOnFIREFOX
   Scenario: Rename the last file in a folder
     When the user renames file "zzzz-must-be-last-file-in-folder.txt" to "a-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "a-file.txt" should be listed on the webUI
 
+  @skipOnFIREFOX
   Scenario: Rename a file to become the last file in a folder
     When the user renames file "lorem.txt" to "zzzz-z-this-is-now-the-last-file.txt" using the webUI
     And the user reloads the current page of the webUI

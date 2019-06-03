@@ -1,12 +1,13 @@
 import { setDefaultTimeout, After, Before } from 'cucumber'
-import { createSession, closeSession } from 'nightwatch-api'
+import { createSession, client } from 'nightwatch-api'
 
 setDefaultTimeout(60000)
 
 Before(async () => {
-  await createSession({ env: 'drone' })
+  let browser = process.env.BROWSER || 'chrome'
+  await createSession({ env: `drone_${browser}` })
 })
 
 After(async () => {
-  await closeSession()
+  await client.end()
 })

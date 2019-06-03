@@ -8,7 +8,7 @@ Feature: scroll menu of actions that can be done on a file into view
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @skip
+  @skip @skipOnFIREFOX
   Scenario: scroll the file actions menu into view
     When the user creates so many files/folders that they do not fit in one browser page
     Then the files action menu should be completely visible after opening it using the webUI

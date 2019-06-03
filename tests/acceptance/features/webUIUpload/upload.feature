@@ -8,14 +8,14 @@ Feature: File Upload
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
-  @smokeTest
+  @smokeTest @skipOnFIREFOX
   Scenario: simple upload of a file that does not exist before
     When the user uploads file "new-lorem.txt" using the webUI
     Then no notification should be displayed on the webUI
     And file "new-lorem.txt" should be listed on the webUI
     And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
-  @smokeTest
+  @smokeTest @skipOnFIREFOX
   Scenario: uploading a big file (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
     When the user uploads file "big-video.mp4" using the webUI
@@ -23,7 +23,6 @@ Feature: File Upload
     And file "big-video.mp4" should be listed on the webUI
     And as "user1" the content of "big-video.mp4" should be the same as the local "big-video.mp4"
 
-  @skipOnFIREFOX
   @skip @yetToImplement
   Scenario: conflict with a big file (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
@@ -32,6 +31,7 @@ Feature: File Upload
     Then file "big-video.mp4" should be listed on the webUI
     And the content of "big-video.mp4" should be the same as the local "big-video.mp4"
 
+  @skipOnFIREFOX
   Scenario: upload a new file into a sub folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI

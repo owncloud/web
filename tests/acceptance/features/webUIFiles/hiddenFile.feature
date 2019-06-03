@@ -10,7 +10,7 @@ Feature: Hide file/folders
     And the user has browsed to the files page
 
   @smokeTest
-  @issue-900
+  @issue-900 @skipOnFIREFOX
   Scenario: create a hidden folder
     When the user creates a folder with the name ".xyz" using the webUI
     Then folder ".xyz" should not be listed on the webUI

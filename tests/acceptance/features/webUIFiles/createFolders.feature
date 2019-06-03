@@ -8,6 +8,7 @@ Feature: create folders
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
+  @skipOnFIREFOX
   Scenario: Create a folder inside another folder
     When the user creates a folder with the name "top-folder" using the webUI
     And the user opens folder "top-folder" using the webUI
@@ -17,14 +18,17 @@ Feature: create folders
     When the user reloads the current page of the webUI
     Then folder "sub-folder" should be listed on the webUI
 
+  @skipOnFIREFOX
   Scenario: Create a folder with existing name
     When the user creates a folder with the invalid name "simple-folder" using the webUI
     Then the error message 'Creating folder failed…' should be displayed on the webUI
 
+  @skipOnFIREFOX
   Scenario: Try to create a folder with invalid name
     When the user creates a folder with the invalid name "../folder" using the webUI
     Then the error message 'Folder name cannot contain "/"' should be displayed on the webUI dialog prompt
 
+  @skipOnFIREFOX
   Scenario: Try to create a folder with another invalid name
     When the user creates a folder with the invalid name "folder/subfolder" using the webUI
     Then the error message 'Folder name cannot contain "/"' should be displayed on the webUI dialog prompt

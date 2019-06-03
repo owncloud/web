@@ -8,7 +8,7 @@ Feature: deleting files and folders
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest
+  @smokeTest @skipOnFIREFOX
   Scenario: Delete files & folders one by one and check its existence after page reload
     When the user deletes the following elements using the webUI
       | name                                  |
@@ -101,6 +101,7 @@ Feature: deleting files and folders
     But as "user1" file "data.zip" should not exist
     And file "data.zip" should not be listed on the webUI
 
+  @skipOnFIREFOX
   Scenario: Delete an empty folder
     When the user creates a folder with the name "my-empty-folder" using the webUI
     And the user creates a folder with the name "my-other-empty-folder" using the webUI
@@ -110,6 +111,7 @@ Feature: deleting files and folders
     But as "user1" folder "my-empty-folder" should not exist
     And folder "my-empty-folder" should not be listed on the webUI
 
+  @skipOnFIREFOX
   Scenario: Delete the last file in a folder
     When the user deletes file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then as "user1" file "zzzz-must-be-last-file-in-folder.txt" should not exist

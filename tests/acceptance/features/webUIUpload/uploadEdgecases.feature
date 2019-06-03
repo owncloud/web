@@ -10,6 +10,7 @@ Feature: File Upload
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
+  @skipOnFIREFOX
   Scenario: simple upload of a file that does not exist before
     When the user uploads file "new-'single'quotes.txt" using the webUI
     Then file "new-'single'quotes.txt" should be listed on the webUI
@@ -23,7 +24,7 @@ Feature: File Upload
     Then file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be listed on the webUI
     And as "user1" the content of "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be the same as the local "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt"
 
-  @smokeTest
+  @smokeTest @skipOnFIREFOX
   Scenario Outline: upload a new file into a sub folder
     Given a file with the size of "3000" bytes and the name "0" has been created locally
     When the user opens folder "<folder-to-upload-to>" using the webUI
@@ -82,6 +83,7 @@ Feature: File Upload
     And file "zzzz-must-be-last-file-in-folder (2).txt" should be listed on the webUI
     And the content of "zzzz-must-be-last-file-in-folder (2).txt" should be the same as the local "zzzz-must-be-last-file-in-folder.txt"
 
+  @skipOnFIREFOX
   Scenario Outline: upload a big file using difficult names (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name <file-name> has been created locally
     When the user uploads file <file-name> using the webUI
@@ -92,6 +94,7 @@ Feature: File Upload
       | "&#"      |
       | "TIÄFÜ"   |
 
+  @skipOnFIREFOX
   # upload into "simple-folder" because there is already a folder called "0" in the root
   Scenario: Upload a big file called "0" (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "0" has been created locally

@@ -20,7 +20,7 @@
     "accessibility-tests": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
     "accessibility-tests-drone": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
     "acceptance-tests": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t 'not @skip'",
-    "acceptance-tests-drone": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features/$TEST_CONTEXT -t 'not @skip'",
+    "acceptance-tests-drone": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features/$TEST_CONTEXT -t \"${TEST_TAGS}\"",
     "install": "cd node_modules/cucumber; yarn install"
   },
   "author": "Felix Heidecke",
@@ -59,6 +59,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^5.2.2",
     "file-loader": "^4.0.0",
+    "geckodriver": "^1.16.2",
     "html-webpack-plugin": "^3.2.0",
     "husky": ">=2",
     "lint-staged": ">=8",

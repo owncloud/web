@@ -8,19 +8,19 @@ Feature: create folder
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  Scenario Outline: Create a folder using special characters
-    When the user creates a folder with the name <folder_name> using the webUI
-    Then folder <folder_name> should be listed on the webUI
-    When the user reloads the current page of the webUI
-    Then folder <folder_name> should be listed on the webUI
-    Examples:
-      | folder_name              |
-      | 'सिमप्ले फोल्देर $%#?&@' |
-      | '"somequotes1"'          |
-      | "'somequotes2'"          |
-      | "^#29][29@({"            |
-      | "+-{$(882)"              |
-      | "home"                   |
+#  Scenario Outline: Create a folder using special characters
+#    When the user creates a folder with the name <folder_name> using the webUI
+#    Then folder <folder_name> should be listed on the webUI
+#    When the user reloads the current page of the webUI
+#    Then folder <folder_name> should be listed on the webUI
+#    Examples:
+#      | folder_name              |
+#      | 'सिमप्ले फोल्देर $%#?&@' |
+#      | '"somequotes1"'          |
+#      | "'somequotes2'"          |
+#      | "^#29][29@({"            |
+#      | "+-{$(882)"              |
+#      | "home"                   |
 
   @skip
   Scenario Outline: Create a sub-folder inside a folder with problematic name

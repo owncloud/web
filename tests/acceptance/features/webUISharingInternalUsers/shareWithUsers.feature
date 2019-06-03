@@ -10,7 +10,7 @@ Feature: Sharing files and folders with internal users
       | user2    |
 
   @yetToImplement
-  @smokeTest
+  @smokeTest @skipOnFIREFOX
   Scenario: share a file & folder with another internal user
     Given user "user2" has logged in using the webUI
     When the user shares folder "simple-folder" with user "User One" using the webUI

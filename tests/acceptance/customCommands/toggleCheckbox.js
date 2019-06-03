@@ -5,7 +5,13 @@
  */
 exports.command = function (enableOrDisable, checkboxId) {
   this.element('css selector', checkboxId, (response) => {
-    this.elementIdSelected(response.value.ELEMENT, (result) => {
+    let webElementId
+    if (response.value.ELEMENT) {
+      webElementId = response.value.ELEMENT
+    } else {
+      webElementId = response.value['element-6066-11e4-a52e-4f735466cecf']
+    }
+    this.elementIdSelected(webElementId, (result) => {
       const checked = result.value === true
       if ((enableOrDisable === 'disable' && checked) ||
         (enableOrDisable === 'enable' && !checked)) {

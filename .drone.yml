@@ -108,6 +108,8 @@ pipeline:
     pull: true
     environment:
       - TEST_CONTEXT=${TEST_CONTEXT}
+      - BROWSER=${BROWSER}
+      - TEST_TAGS=${TEST_TAGS}
     commands:
       - cd /var/www/owncloud/phoenix
       - curl http://phoenix:8300/oidc-callback.html
@@ -210,12 +212,19 @@ services:
       matrix:
         NEED_SERVER: true
 
-  selenium:
+  chrome:
     image: selenium/standalone-chrome-debug:latest
     pull: true
     when:
       matrix:
-        TEST_SUITE: acceptance
+        BROWSER: chrome
+
+  firefox:
+    image: selenium/standalone-firefox-debug:3.141.59-mercury
+    pull: true
+    when:
+      matrix:
+        BROWSER: firefox
 
   docker:
     image: docker:18.04-dind
@@ -225,114 +234,304 @@ services:
 
 matrix:
   include:
-    # lint test
+     # lint test
     - TEST_SUITE: lint-test
 
-    # acceptance test
+    # acceptance test on chrome
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIAdminSettings
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIComments
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIFavorites
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIFiles
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUILogin
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIMoveFilesFolders
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIRenameFiles
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIRenameFolders
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIRestrictSharing
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingAcceptShares
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingExternal
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingInternalGroups
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingInternalUsers
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingNotifications
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingPublic
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUITags
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUITrashbin
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIUpload
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIWebdavLockProtection
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIWebdavLocks
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUITags
+      BROWSER: chrome
+      TEST_TAGS: 'not @skip'
+
+    # acceptance test on firefox
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIAdminSettings
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIComments
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIFavorites
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIFiles
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUILogin
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIMoveFilesFolders
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIRenameFiles
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIRenameFolders
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIRestrictSharing
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingAcceptShares
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingExternal
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingInternalGroups
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingInternalUsers
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingNotifications
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUISharingPublic
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUITags
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUITrashbin
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIUpload
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIWebdavLockProtection
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUIWebdavLocks
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_CONTEXT: webUITags
+      BROWSER: firefox
+      TEST_TAGS: 'not @skip and not @skipOnFIREFOX'
 
     # After drone all jobs completes
     - AFTER_JOB: true

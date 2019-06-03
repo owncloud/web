@@ -7,6 +7,7 @@ Feature: Renaming files inside a folder with problematic name
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
+  @skipOnFIREFOX
   Scenario Outline: Rename the existing file inside a problematic folder
     When the user opens folder <folder> using the webUI
     And the user renames file "lorem.txt" to "???.txt" using the webUI

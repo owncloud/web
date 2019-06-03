@@ -84,9 +84,10 @@ Then('the files table should not be empty',
 Given('user {string} has logged in using the webUI', loginAsUser)
 
 When('the user re-logs in as {string} using the webUI', async function (userId) {
-  let env = 'local'
+  let browser = process.env.BROWSER || 'chrome'
+  let env = `local_${browser}`
   if (process.env.DRONE) {
-    env = 'drone'
+    env = `drone_${browser}`
   }
   await closeSession()
   await stopWebDriver()

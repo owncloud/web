@@ -84,24 +84,22 @@ Feature: Search
 
   Scenario: Search for a shared file
     Given user "user0" has shared file "/lorem.txt" with user "user1"
-    When the user reloads the current page of the webUI
-    And the user searches for "lorem" using the webUI
+    When the user searches for "lorem" using the webUI
     Then file "lorem (2).txt" should be listed on the webUI
 
   Scenario: Search for a re-shared file
     Given user "user2" has been created with default attributes
     And user "user2" has shared file "/lorem.txt" with user "user0"
     And user "user0" has shared file "/lorem (2).txt" with user "user1"
-    When the user reloads the current page of the webUI
-    And the user searches for "lorem" using the webUI
+    When the user searches for "lorem" using the webUI
     Then file "lorem (2).txt" should be listed on the webUI
 
   Scenario: Search for a shared folder
     Given user "user0" has shared folder "simple-folder" with user "user1"
-    When the user reloads the current page of the webUI
-    And the user searches for "simple" using the webUI
+    When the user searches for "simple" using the webUI
     Then folder "simple-folder (2)" should be listed on the webUI
 
+  @skipOnFIREFOX
   Scenario: Search for a file after name is changed
     When the user renames file "lorem.txt" to "torem.txt" using the webUI
     And the user searches for "torem" using the webUI

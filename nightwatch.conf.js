@@ -1,4 +1,5 @@
 const chromedriver = require('chromedriver')
+const geckodriver = require('geckodriver')
 const LOCAL_LAUNCH_URL = process.env.SERVER_HOST || 'http://localhost:8300'
 let LOCAL_BACKEND_URL = process.env.BACKEND_HOST || 'http://localhost:8080'
 const BACKEND_ADMIN_USERNAME = process.env.BACKEND_USERNAME || 'admin'
@@ -20,7 +21,7 @@ module.exports = {
         filesForUpload: FILES_FOR_UPLOAD
       }
     },
-    local: {
+    local_chrome: {
       launch_url: LOCAL_LAUNCH_URL,
       globals: {
         backend_url: LOCAL_BACKEND_URL,
@@ -50,21 +51,48 @@ module.exports = {
         }
       }
     },
-    drone: {
+    local_firefox: {
+      launch_url: LOCAL_LAUNCH_URL,
+      globals: {
+        backend_url: LOCAL_BACKEND_URL,
+        backend_admin_username: BACKEND_ADMIN_USERNAME,
+        backend_admin_password: BACKEND_ADMIN_PASSWORD
+      },
+      selenium_host: SELENIUM_HOST,
+      webdriver: {
+        start_process: START_PROCESS,
+        server_path: geckodriver.path,
+        port: SELENIUM_PORT,
+        cli_args: ['--port=' + SELENIUM_PORT, '--log', 'debug']
+      },
+      screenshots: {
+        enabled: true,
+        path: 'tests/reports/screenshots',
+        on_failure: true
+      },
+      desiredCapabilities: {
+        browserName: 'firefox',
+        javascriptEnabled: true,
+        acceptSslCerts: true,
+        marionette: true
+      }
+    },
+    drone_chrome: {
       launch_url: 'http://phoenix:8300',
       globals: {
         backend_url: 'http://owncloud',
         backend_admin_username: 'admin',
         backend_admin_password: 'admin'
       },
-      selenium_host: 'selenium',
+      selenium_host: 'chrome',
       webdriver: {
         start_process: false,
-        use_legacy_jsonwire: false
+        use_legacy_jsonwire: false,
+        server_path: chromedriver.path
       },
-      screenshots : {
-        enabled : true,
-        path : "tests/reports/screenshots",
+      screenshots: {
+        enabled: true,
+        path: 'tests/reports/screenshots',
         on_failure: true
       },
       desiredCapabilities: {
@@ -75,6 +103,31 @@ module.exports = {
           args: ['disable-gpu'],
           w3c: false
         }
+      }
+    },
+    drone_firefox: {
+      launch_url: 'http://phoenix:8300',
+      globals: {
+        backend_url: 'http://owncloud',
+        backend_admin_username: 'admin',
+        backend_admin_password: 'admin'
+      },
+      selenium_host: 'firefox',
+      webdriver: {
+        server_path: geckodriver.path,
+        start_process: false,
+        cli_args: ['--log', 'debug']
+      },
+      screenshots: {
+        enabled: true,
+        path: 'tests/reports/screenshots',
+        on_failure: true
+      },
+      desiredCapabilities: {
+        browserName: 'firefox',
+        javascriptEnabled: true,
+        acceptSslCerts: true,
+        marionette: true
       }
     }
   }
