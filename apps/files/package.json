@@ -14,7 +14,7 @@
   "homepage": "https://github.com/owncloud/phoenix",
   "devDependencies": {
     "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.4",
+    "@babel/core": "^7.4.5",
     "@babel/plugin-transform-classes": "^7.4.3",
     "@babel/register": "^7.4.4",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
