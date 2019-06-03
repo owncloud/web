@@ -39,7 +39,7 @@ const navItems = [
     iconMaterial: appInfo.icon,
     route: {
       name: 'files-list',
-      path: `/${appInfo.id}/list`,
+      path: `/`,
       params: {
         item: ''
       }
