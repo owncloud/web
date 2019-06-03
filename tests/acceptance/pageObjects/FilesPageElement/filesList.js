@@ -223,10 +223,10 @@ module.exports = {
       selector: '#oc-dialog-rename-confirm'
     },
     fileRowByName: {
-      selector: '//a[contains(@class, "file-row-name")][@filename="%s"]/../..'
+      selector: '//span[contains(@class, "file-row-name")][@filename="%s"]/../..'
     },
     fileLinkInFileRow: {
-      selector: '//a[contains(@class, "file-row-name")]'
+      selector: '//span[contains(@class, "file-row-name")]'
     },
     notMarkedFavoriteInFileRow: {
       selector: '//span[contains(@class, "oc-star-dimm")]',
