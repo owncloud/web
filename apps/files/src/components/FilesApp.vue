@@ -1,18 +1,22 @@
   <template>
-    <oc-grid class="oc-app uk-height-1-1" id="files-app">
-      <div class="uk-width-expand uk-height-1-1 uk-overflow-auto" :class="{ 'uk-visible@s' : _sidebarOpen }" @dragover="$_ocApp_dragOver">
-        <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
-        <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
-      </div>
-      <div class="uk-width-1-1 uk-width-medium@s uk-width-large@l" v-show="_sidebarOpen">
-        <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="resetFileSelection"/>
-      </div>
-    <oc-file-actions></oc-file-actions>
-  </oc-grid>
+    <div id="files">
+      <files-app-bar></files-app-bar>
+      <oc-grid class="uk-height-1-1" @dragover="$_ocApp_dragOver">
+        <div class="uk-width-expand uk-overflow-auto uk-height-1-1" :class="{ 'uk-visible@s' : _sidebarOpen }">
+          <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
+          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
+        </div>
+        <div class="uk-width-1-1 uk-width-medium@s uk-width-large@l" v-show="_sidebarOpen">
+          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="resetFileSelection"/>
+        </div>
+      <oc-file-actions></oc-file-actions>
+    </oc-grid>
+  </div>
 </template>
 <script>
 import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
+import FilesAppBar from './FilesAppBar.vue'
 import FileList from './FileList.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
@@ -22,7 +26,8 @@ export default {
   ],
   components: {
     FileDetails,
-    FileList
+    FileList,
+    FilesAppBar
   },
   data () {
     return {
