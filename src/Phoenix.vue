@@ -7,7 +7,9 @@
       <notification-bar />
       <top-bar></top-bar>
       <side-menu></side-menu>
-      <router-view name="app" class="$app-container uk-height-1-1"></router-view>
+      <div id="oc-app-container">
+        <router-view name="app" class="uk-height-1-1"></router-view>
+      </div>
     </template>
   </div>
 </template>
@@ -37,9 +39,3 @@ export default {
   }
 }
 </script>
-<style>
-  body {
-    height: 100vh;
-    overflow: hidden;
-  }
-</style>
