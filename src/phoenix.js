@@ -36,6 +36,9 @@ import { Drag, Drop } from 'vue-drag-drop'
 import DesignSystem from 'owncloud-design-system'
 import 'owncloud-design-system/dist/system/system.css'
 
+import wgxpath from 'wicked-good-xpath'
+wgxpath.install()
+
 Vue.prototype.$client = new ownCloud()
 
 Vue.use(VueEvents)
