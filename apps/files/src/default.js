@@ -74,7 +74,7 @@ const routes = [{
 {
   path: '/favorites',
   components: {
-    appContent: FilesApp
+    app: FilesApp
   },
   name: 'files-favorites',
   meta: {
