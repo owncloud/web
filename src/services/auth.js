@@ -5,53 +5,54 @@ export function initVueAuthenticate (config) {
     const store = new WebStorageStateStore({
       prefix: 'oc_oAuth'
     })
-    let mgr
     let baseUrl = window.location.href.split('#')[0]
     if (baseUrl.endsWith('/index.html')) {
       baseUrl = baseUrl.substr(0, baseUrl.length - 10)
     }
-    if (config.metaDataUrl) {
-      mgr = new UserManager({
-        userStore: store,
-        authority: config.url,
-        metadataUrl: config.metaDataUrl,
-        client_id: config.clientId,
-        redirect_uri: baseUrl + 'oidc-callback.html',
-        response_type: 'code', // code triggers auth code grant flow
-        response_mode: 'query',
-        scope: 'openid profile offline_access',
-        monitorSession: false,
-        post_logout_redirect_uri: baseUrl,
-        silent_redirect_uri: baseUrl + 'oidc-silent-redirect.html',
-        accessTokenExpiringNotificationTime: 10,
-        automaticSilentRenew: false,
-        filterProtocolClaims: true,
-        loadUserInfo: true
-      })
-    } else {
-      mgr = new UserManager({
-        userStore: store,
-        authority: config.url,
-        // with OAuth2 we need to se the metadata manually
-        metadata: {
-          issuer: config.url,
-          authorization_endpoint: config.authUrl,
-          token_endpoint: config.url,
-          userinfo_endpoint: ''
-        },
-        client_id: config.clientId,
-        redirect_uri: baseUrl + 'oidc-callback.html',
-        response_type: 'token', // token is implicit flow - to be killed
-        // response_type: 'code', // for authentication code flow use 'code
-        response_mode: 'query',
-        scope: 'openid profile',
-        monitorSession: false,
-        accessTokenExpiringNotificationTime: 10,
-        automaticSilentRenew: false,
-        filterProtocolClaims: true,
-        loadUserInfo: false
-      })
+    let openIdConfig = {
+      userStore: store,
+      redirect_uri: baseUrl + 'oidc-callback.html',
+      response_type: 'code', // code triggers auth code grant flow
+      response_mode: 'query',
+      scope: 'openid profile offline_access',
+      monitorSession: false,
+      post_logout_redirect_uri: baseUrl,
+      silent_redirect_uri: baseUrl + 'oidc-silent-redirect.html',
+      accessTokenExpiringNotificationTime: 10,
+      automaticSilentRenew: false,
+      filterProtocolClaims: true,
+      loadUserInfo: true
     }
+    if (config.openIdConnect && config.openIdConnect.authority) {
+      Object.assign(openIdConfig, config.openIdConnect)
+    } else {
+      // old openidconnect setup
+      if (config.auth.metaDataUrl) {
+        Object.assign(openIdConfig, {
+          authority: config.auth.url,
+          metadataUrl: config.auth.metaDataUrl,
+          client_id: config.auth.clientId
+        })
+      } else {
+        // oauth2 setup
+        Object.assign(openIdConfig, {
+          authority: config.auth.url,
+          // with OAuth2 we need to se the metadata manually
+          metadata: {
+            issuer: config.auth.url,
+            authorization_endpoint: config.auth.authUrl,
+            token_endpoint: config.auth.url,
+            userinfo_endpoint: ''
+          },
+          client_id: config.auth.clientId,
+          response_type: 'token', // token is implicit flow - to be killed
+          scope: 'openid profile',
+          loadUserInfo: false
+        })
+      }
+    }
+
+    let mgr = new UserManager(openIdConfig)
 
     Log.logger = console
 
