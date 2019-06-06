@@ -1,5 +1,5 @@
 <template>
-  <oc-app-side-bar :disableAction="false" @close="close()">
+  <oc-app-side-bar class="uk-padding-small uk-overflow-auto" :disableAction="false" @close="close()">
     <template slot="title" v-if="items.length === 1">
       <div class="uk-inline">
         <oc-icon :name="fileTypeIcon(items[0])" size="large" />
