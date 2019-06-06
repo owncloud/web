@@ -35,7 +35,22 @@
           <div class="uk-button-group uk-margin-small-right" :class="{ 'uk-visible@m' : !_sidebarOpen, 'uk-visible@xl' : _sidebarOpen  }">
             <oc-button v-for="(action, index) in actions" :key="index" @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :ariaLabel="action.ariaLabel" />
           </div>
-          <oc-button icon="menu" :class="{ 'uk-hidden@m' : !_sidebarOpen, 'uk-visible@s uk-hidden@xl' : _sidebarOpen }"></oc-button>
+          <oc-button
+            :id="'files-file-list-action-button-small-resolution-' + index"
+            icon="menu"
+            :class="{ 'uk-hidden@m' : !_sidebarOpen, 'uk-visible@s uk-hidden@xl' : _sidebarOpen }"
+          />
+          <oc-drop
+            :toggle="'#files-file-list-action-button-small-resolution-' + index"
+            :options="{ 'pos': 'bottom-center' }"
+            class="uk-width-auto"
+          >
+            <ul class="uk-list">
+              <li v-for="(action, index) in actions" :key="index">
+                <oc-button  @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :ariaLabel="action.ariaLabel" />
+              </li>
+            </ul>
+          </oc-drop>
         </oc-table-cell>
       </oc-table-row>
     </oc-table-group>
