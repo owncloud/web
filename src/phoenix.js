@@ -22,6 +22,7 @@ import router from './router'
 
 import VueEvents from 'vue-events'
 import VueRouter from 'vue-router'
+import Clipboard from 'v-clipboard'
 
 // --- Gettext ----
 
@@ -48,6 +49,7 @@ Vue.prototype.$client = new ownCloud()
 Vue.use(VueEvents)
 Vue.use(VueRouter)
 Vue.use(DesignSystem)
+Vue.use(Clipboard)
 
 Vue.directive('image-src', imageSrc)
 

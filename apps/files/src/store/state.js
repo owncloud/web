@@ -14,6 +14,7 @@ export default {
     '{http://owncloud.org/ns}fileid',
     '{http://owncloud.org/ns}owner-id',
     '{http://owncloud.org/ns}owner-display-name',
+    '{http://owncloud.org/ns}privatelink',
     '{DAV:}getcontentlength',
     '{http://owncloud.org/ns}size',
     '{DAV:}getlastmodified',
