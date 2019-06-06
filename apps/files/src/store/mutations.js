@@ -30,7 +30,12 @@ export default {
     state.filesSearched = files
   },
   ADD_FILE_SELECTION (state, file) {
-    state.selected.push(file)
+    let fileIndex = state.selected.findIndex((f) => {
+      return f.id === file.id
+    })
+    if (fileIndex === -1) {
+      state.selected.push(file)
+    }
   },
   REMOVE_FILE_SELECTION (state, file) {
     if (state.selected.length > 1) {

@@ -37,7 +37,7 @@ export default {
   data: function () {
     return {
       /** String name of the tab that is activated */
-      activeTab: 0,
+      activeTab: 0
     }
   },
   methods: {
