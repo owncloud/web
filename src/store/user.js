@@ -21,7 +21,7 @@ const actions = {
   },
   initAuth (context, autoRedirect = false) {
     // if called from login, use available vue-authenticate instance; else re-init
-    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
+    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
     const token = vueAuthInstance.getToken()
     if (token) {
       vueAuthInstance.events().addAccessTokenExpired(function () {
@@ -54,7 +54,7 @@ const actions = {
   },
   login (context, payload = { provider: 'oauth2' }) {
     // reset vue-authenticate
-    vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
+    vueAuthInstance = initVueAuthenticate(context.rootState.config)
     vueAuthInstance.authenticate(payload.provider, {}, {}).then(() => {
       if (vueAuthInstance.isAuthenticated) {
         context.dispatch('initAuth')
@@ -62,13 +62,13 @@ const actions = {
     })
   },
   callback (context) {
-    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
+    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
     vueAuthInstance.mgr.signinRedirectCallback().then(() => {
       context.dispatch('initAuth', true)
     })
   },
   signinSilentCallback (context) {
-    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config.auth)
+    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
     vueAuthInstance.mgr.signinSilentCallback().then(() => {
       context.dispatch('initAuth')
     })

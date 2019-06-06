@@ -13,6 +13,13 @@
         </div>
       </div>
     </template>
+    <template slot="title" v-if="items.length > 1">
+      <div class="uk-inline">
+        <div class="uk-flex uk-flex-middle">
+          <span class="uk-margin-small-right">{{ getTabName }}</span>
+        </div>
+      </div>
+    </template>
     <template slot="content">
       <oc-tabs>
           <oc-tab-item :active="key == activeTab" @click="activeTab = key" v-for="(tab, key) of fileSideBars" :key="tab.name">

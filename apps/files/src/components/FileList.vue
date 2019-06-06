@@ -21,7 +21,7 @@
           <oc-star class="uk-display-block" @click.native="toggleFileFavorite(item)" :shining="item.starred" />
         </oc-table-cell>
         <oc-table-cell class="uk-text-truncate">
-          <oc-file @click.native="item.extension === '' ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
+          <oc-file @click.native="item.type === 'folder' ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
                    :name="item.basename" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
                    :filename="item.name" :key="item.id" />
         </oc-table-cell>
