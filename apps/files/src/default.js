@@ -3,7 +3,6 @@ import 'regenerator-runtime/runtime'
 
 import FilesApp from './components/FilesApp.vue'
 import FilesTopBar from './components/FilesTopBar.vue'
-import FileInfoSideBar from './components/FileInfoSidebar.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import translationsJson from '../l10n/translations.json'
@@ -18,9 +17,6 @@ const appInfo = {
   extensions: [],
   fileSideBars: [
     {
-      app: 'files',
-      component: FileInfoSideBar
-    }, {
       app: 'files-version',
       component: FileInfoVersions
     }, {
