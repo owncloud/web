@@ -4,7 +4,7 @@
         <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
         <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
       </div>
-      <div class="uk-width-1-1 uk-width-medium@s uk-width-large@l" v-show="_sidebarOpen">
+      <div class="uk-width-1-1 uk-width-2-3@s uk-width-1-2@m uk-width-2-5@xl" v-show="_sidebarOpen">
         <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="resetFileSelection"/>
       </div>
     <oc-file-actions></oc-file-actions>
