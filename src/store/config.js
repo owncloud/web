@@ -1,10 +1,15 @@
 const state = {
   state: null,
+  // auth is the legacy configuration
   auth: {
     clientId: '',
     apiUrl: '',
     authUrl: '',
     metaDataUrl: ''
+  },
+  // to be used from now on
+  openIdConnect: {
+    authority: ''
   },
   theme: {
     general: {
@@ -41,6 +46,7 @@ const actions = {
 const mutations = {
   LOAD_CONFIG (state, config) {
     state.auth = config.auth
+    state.openIdConnect = config.openIdConnect
     state.state = config.state === undefined ? 'working' : config.state
     if (config.corrupted) state.corrupted = config.corrupted
   },
