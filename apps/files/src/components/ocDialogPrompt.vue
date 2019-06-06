@@ -4,7 +4,7 @@
       <oc-alert v-if="ocError" id="oc-dialog-prompt-alert" noClose="true" variation="danger">
         {{ ocError }}
       </oc-alert>
-      <span v-if="ocContent">{{ ocContent }}</span>
+      <span v-if="ocContent" class="uk-text-break">{{ ocContent }}</span>
         <oc-text-input v-if="ocHasInput"
           :disabled="ocLoading"
           autofocus
