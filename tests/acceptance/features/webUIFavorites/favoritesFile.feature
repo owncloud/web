@@ -10,23 +10,22 @@ Feature: Mark file as favorite
     And the user has browsed to the files page
 
   @smokeTest
-  @issue-1189
   Scenario: mark files as favorites
     When the user marks file "data.tar.gz" as favorite using the webUI
     And the user marks file "data.zip" as favorite using the webUI
-    Then file "data.zip" should be marked as favorite on the webUI
+    Then file "data.tar.gz" should be marked as favorite on the webUI
+    And file "data.zip" should be marked as favorite on the webUI
     When the user reloads the current page of the webUI
-    Then file "data.zip" should be marked as favorite on the webUI
+    Then file "data.tar.gz" should be marked as favorite on the webUI
+    And file "data.zip" should be marked as favorite on the webUI
     When the user browses to the favorites page
-#    Then there should be 2 files/folders listed on the webUI
-    Then there should be 1 files/folders listed on the webUI
-#    Then file "data.zip" should be listed on the webUI
-#    And file "data.zip" should be marked as favorite on the webUI
-    #And file "data.tar.gz" should be listed on the webUI
-    #And file "data.tar.gz" should be marked as favorite on the webUI
+    Then there should be 2 files/folders listed on the webUI
+    Then file "data.zip" should be listed on the webUI
+    And file "data.zip" should be marked as favorite on the webUI
+    And file "data.tar.gz" should be listed on the webUI
+    And file "data.tar.gz" should be marked as favorite on the webUI
     And file "lorem.txt" should not be listed on the webUI
 
-  @issue-1189
   Scenario: mark folders as favorites
     When the user marks folder "simple-folder" as favorite using the webUI
     And the user marks folder "strängé नेपाली folder" as favorite using the webUI
@@ -38,17 +37,14 @@ Feature: Mark file as favorite
     When the user browses to the favorites page
     Then folder "simple-folder" should be listed on the webUI
     And folder "simple-folder" should be marked as favorite on the webUI
-    But folder "strängé नेपाली folder" should not be listed on the webUI
-    #And folder "strängé नेपाली folder" should be listed on the webUI
-    #And folder "strängé नेपाली folder" should be marked as favorite on the webUI
+    And folder "strängé नेपाली folder" should be listed on the webUI
+    And folder "strängé नेपाली folder" should be marked as favorite on the webUI
     But folder "simple-folder-empty" should not be listed on the webUI
 
-  @issue-1189
   Scenario: navigate to an empty favorites page
     When the user browses to the favorites page
     Then the files table should be displayed
-    And the error message 'Loading folder failed…' should be displayed on the webUI
-    #And no notification should be displayed on the webUI
+    And no notification should be displayed on the webUI
     And there should be no files/folders listed on the webUI
 
   @issue-1194

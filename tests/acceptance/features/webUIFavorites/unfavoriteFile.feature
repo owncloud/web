@@ -9,7 +9,6 @@ Feature: Unmark file/folder as favorite
     And user "user1" has logged in using the webUI
 
   @smokeTest
-  @issue-1189
   Scenario: unmark files as favorite from files page
     Given user "user1" has favorited element "data.zip"
     And user "user1" has favorited element "data.tar.gz"
@@ -21,11 +20,9 @@ Feature: Unmark file/folder as favorite
     And file "lorem.txt" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then file "data.zip" should not be listed on the webUI
-    But file "data.tar.gz" should not be listed on the webUI
-    #But file "data.tar.gz" should be listed on the webUI
-    But file "lorem.txt" should be listed on the webUI
+    But file "data.tar.gz" should be listed on the webUI
+    And file "lorem.txt" should be listed on the webUI
 
-  @issue-1189
   Scenario: unmark a folder as favorite from files page
     Given user "user1" has favorited element "simple-folder"
     And user "user1" has favorited element "simple-empty-folder"
@@ -37,12 +34,10 @@ Feature: Unmark file/folder as favorite
     And folder "0" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then folder "simple-folder" should not be listed on the webUI
-    But folder "0" should not be listed on the webUI
-    #But file "0" should be listed on the webUI
-    But folder "simple-empty-folder" should be listed on the webUI
+    But folder "0" should be listed on the webUI
+    And folder "simple-empty-folder" should be listed on the webUI
 
   @smokeTest
-  @issue-1189
   Scenario: unmark a file as favorite from favorite page
     Given user "user1" has favorited element "data.zip"
     And user "user1" has favorited element "data.tar.gz"
@@ -53,15 +48,13 @@ Feature: Unmark file/folder as favorite
     But file "data.zip" should not be marked as favorite on the webUI
     When the user reloads the current page of the webUI
     Then file "data.zip" should not be listed on the webUI
-    And file "data.tar.gz" should not be listed on the webUI
-    #But file "data.tar.gz" should be listed on the webUI
-    But file "lorem.txt" should be listed on the webUI
+    But file "data.tar.gz" should be listed on the webUI
+    And file "lorem.txt" should be listed on the webUI
     When the user browses to the files page
     Then file "data.zip" should not be marked as favorite on the webUI
     But file "data.tar.gz" should be marked as favorite on the webUI
     And file "lorem.txt" should be marked as favorite on the webUI
 
-  @issue-1189
   Scenario: unmark a folder as favorite from favorite page
     Given user "user1" has favorited element "simple-folder"
     And user "user1" has favorited element "simple-empty-folder"
@@ -72,9 +65,8 @@ Feature: Unmark file/folder as favorite
     But folder "simple-folder" should not be marked as favorite on the webUI
     When the user reloads the current page of the webUI
     Then folder "simple-folder" should not be listed on the webUI
-    And folder "0" should not be listed on the webUI
-    #But folder "0" should be listed on the webUI
-    But folder "simple-empty-folder" should be listed on the webUI
+    But folder "0" should be listed on the webUI
+    And folder "simple-empty-folder" should be listed on the webUI
     When the user browses to the files page
     Then folder "simple-folder" should not be marked as favorite on the webUI
     But folder "simple-empty-folder" should be marked as favorite on the webUI
