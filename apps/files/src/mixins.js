@@ -55,6 +55,10 @@ export default {
       if (typeof item === 'object') {
         this.selectedFile = item
         this.newName = item.name
+        item = this.newName
+        return
+      }
+      if (this.selectedFile.name === item) {
         return
       }
 
