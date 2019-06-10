@@ -1,3 +1,4 @@
+@skipOnIphoneResolution @issue-1270
 Feature: File Upload
 
   As a QA engineer

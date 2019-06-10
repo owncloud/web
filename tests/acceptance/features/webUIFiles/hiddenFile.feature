@@ -11,6 +11,7 @@ Feature: Hide file/folders
 
   @smokeTest
   @issue-900
+  @skipOnIphoneResolution @issue-1270
   Scenario: create a hidden folder
     When the user creates a folder with the name ".xyz" using the webUI
     Then folder ".xyz" should not be listed on the webUI
