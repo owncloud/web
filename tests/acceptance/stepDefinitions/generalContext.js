@@ -46,10 +46,24 @@ const assertContentOFLocalFileIs = function (fullPathOflocalFile, expectedConten
   )
 }
 
-Before(function (client) {
+Before(function () {
   createdFiles = []
+  if (typeof process.env.SCREEN_RESOLUTION !== 'undefined' && process.env.SCREEN_RESOLUTION.trim() !== '') {
+    let resolution = process.env.SCREEN_RESOLUTION.split('x')
+    resolution[0] = parseInt(resolution[0])
+    resolution[1] = parseInt(resolution[1])
+    if (resolution[0] > 1 && resolution[1] > 1) {
+      client.resizeWindow(resolution[0], resolution[1])
+      console.log('\nINFO: setting screen resolution to ' + resolution[0] + 'x' + resolution[1] + '\n')
+    } else {
+      console.warn('\nWARNING: invalid resolution given, running tests in full resolution!\n')
+      client.maximizeWindow()
+    }
+  } else {
+    client.maximizeWindow()
+  }
 })
 
-After(function (client) {
+After(function () {
   createdFiles.forEach(fileName => fs.unlinkSync(fileName))
 })

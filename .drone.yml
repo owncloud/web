@@ -108,6 +108,8 @@ pipeline:
     pull: true
     environment:
       - TEST_CONTEXT=${TEST_CONTEXT}
+      - SCREEN_RESOLUTION=${SCREEN_RESOLUTION}
+      - TEST_TAGS=${TEST_TAGS}
     commands:
       - cd /var/www/owncloud/phoenix
       - curl http://phoenix:8300/oidc-callback.html
@@ -233,106 +235,139 @@ matrix:
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIAdminSettings
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIComments
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIFavorites
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIFiles
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUILogin
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIMoveFilesFolders
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIRenameFiles
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIRenameFolders
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIRestrictSharing
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingAcceptShares
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingExternal
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingInternalGroups
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingInternalUsers
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingNotifications
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingPublic
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUITags
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUITrashbin
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIUpload
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIWebdavLockProtection
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIWebdavLocks
+      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUITags
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+      SCREEN_RESOLUTION: 768x1024
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
+      SCREEN_RESOLUTION: 375x812
 
     # After drone all jobs completes
     - AFTER_JOB: true
