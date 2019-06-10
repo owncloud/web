@@ -154,7 +154,9 @@ module.exports = {
       this
         .useXpath()
         .waitForElementVisible(rowSelector)
-        .expect.element(linkSelector).text.to.equal(fileName)
+        .getAttribute(linkSelector, 'innerText', function (result) {
+          this.assert.strictEqual(result.value, fileName, 'displayed file name not as expected')
+        })
       return this.useCss()
     },
     /**
