@@ -25,7 +25,7 @@ const loginAsUser = function (userId) {
   // When the user authorizes access to phoenix
   client
     .page.ownCloudAuthorizePage()
-    .waitForElementPresent('@authorizeButton')
+    .waitForElementVisible('@authorizeButton')
     .click('@authorizeButton')
 
   // Then the files table should be displayed
