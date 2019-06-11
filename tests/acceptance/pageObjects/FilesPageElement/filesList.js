@@ -172,11 +172,14 @@ module.exports = {
     },
     /**
      *
-     * @param {function} callback
+     * @returns {Promise.<[]>} Array of files/folders element
      */
-    allFileRows: function (callback) {
-      this.api.elements('css selector', this.elements['fileRows'], function (result) {
-        callback(result)
+    allFileRows: async function () {
+      this.waitForElementNotPresent('@filesListProgressBar')
+      return new Promise((resolve, reject) => {
+        this.api.elements('css selector', this.elements['fileRows'], function (result) {
+          resolve(result)
+        })
       })
     }
   },

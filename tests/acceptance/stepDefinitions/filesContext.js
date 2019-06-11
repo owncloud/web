@@ -180,6 +180,11 @@ Then('file/folder {string} should not be marked as favorite on the webUI', funct
   })
 })
 
+Then(/there should be (\d+) files\/folders listed on the webUI/, async function (noOfItems) {
+  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
+  return client.assert.equal(allFileRows.value.length, noOfItems)
+})
+
 const assertDeletedElementsAreNotListed = function () {
   for (const element of deletedElementsTable) {
     client.page.FilesPageElement.filesList().assertElementNotListed(element)
