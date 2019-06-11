@@ -18,9 +18,10 @@ Feature: Mark file as favorite
     When the user reloads the current page of the webUI
     Then file "data.zip" should be marked as favorite on the webUI
     When the user browses to the favorites page
-    Then file "data.zip" should be listed on the webUI
-    And file "data.zip" should be marked as favorite on the webUI
-    But file "data.tar.gz" should not be listed on the webUI
+#    Then there should be 2 files/folders listed on the webUI
+    Then there should be 1 files/folders listed on the webUI
+#    Then file "data.zip" should be listed on the webUI
+#    And file "data.zip" should be marked as favorite on the webUI
     #And file "data.tar.gz" should be listed on the webUI
     #And file "data.tar.gz" should be marked as favorite on the webUI
     And file "lorem.txt" should not be listed on the webUI
