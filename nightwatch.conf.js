@@ -32,6 +32,7 @@ module.exports = {
         start_process: START_PROCESS,
         server_path: chromedriver.path,
         port: SELENIUM_PORT,
+        use_legacy_jsonwire: false,
         cli_args: ['--port=' + SELENIUM_PORT]
       },
       screenshots: {
@@ -44,7 +45,8 @@ module.exports = {
         javascriptEnabled: true,
         acceptSslCerts: true,
         chromeOptions: {
-          args: ['disable-gpu']
+          args: ['disable-gpu'],
+          w3c: false
         }
       }
     },
@@ -57,7 +59,8 @@ module.exports = {
       },
       selenium_host: 'selenium',
       webdriver: {
-        start_process: false
+        start_process: false,
+        use_legacy_jsonwire: false
       },
       screenshots : {
         enabled : true,
@@ -69,7 +72,8 @@ module.exports = {
         javascriptEnabled: true,
         acceptSslCerts: true,
         chromeOptions: {
-          args: ['disable-gpu']
+          args: ['disable-gpu'],
+          w3c: false
         }
       }
     }
