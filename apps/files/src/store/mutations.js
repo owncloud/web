@@ -116,5 +116,8 @@ export default {
   },
   UPDATE_FOLDER_LOADING (state, value) {
     state.loadingFolder = value
+  },
+  CHECK_QUOTA (state, freeSpace) {
+    state.freeSpace = freeSpace
   }
 }
