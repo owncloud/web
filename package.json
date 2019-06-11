@@ -19,8 +19,9 @@
     "lint-fix": "eslint src apps/*/src tests build --ext vue --ext js --color --fix",
     "accessibility-tests": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
     "accessibility-tests-drone": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
-    "acceptance-tests": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t 'not @skip'",
-    "acceptance-tests-drone": "cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features/$TEST_CONTEXT -t 'not @skip'"
+    "acceptance-tests": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t 'not @skip'",
+    "acceptance-tests-drone": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features/$TEST_CONTEXT -t 'not @skip'",
+    "install": "cd node_modules/cucumber; yarn install"
   },
   "author": "Felix Heidecke",
   "license": "AGPL-3.0",
@@ -45,7 +46,7 @@
     "copy-webpack-plugin": "^5.0.3",
     "core-js": "3",
     "css-loader": "^2.1.1",
-    "cucumber": "^5.1.0",
+    "cucumber": "cucumber/cucumber-js#issue-727-retry",
     "cucumber-pretty": "^1.5.0",
     "easygettext": "^2.7.0",
     "eslint": "^5.16.0",
