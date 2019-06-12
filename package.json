@@ -47,7 +47,7 @@
     "core-js": "3",
     "css-loader": "^2.1.1",
     "cucumber": "cucumber/cucumber-js#issue-727-retry",
-    "cucumber-pretty": "^1.5.0",
+    "cucumber-pretty": "^1.5.2",
     "easygettext": "^2.7.0",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
