@@ -1974,12 +1974,12 @@ chromedriver@^2.36.0:
     request "^2.88.0"
     tcp-port-used "^1.0.1"
 
-chromedriver@^74.0.0:
-  version "74.0.0"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-74.0.0.tgz#a060308ac858918aa445efb85428ee25dfc76183"
-  integrity sha512-xXgsq0l4gVTY9X5vuccOSVj/iEBm3Bf5MIwzSAASIRJagt4BlWw77SxQq1f4JAJ35/9Ys4NLMA/kWFbd7A/gfQ==
+chromedriver@^75.0.0:
+  version "75.0.0"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-75.0.0.tgz#a964693440ac2d28af3e25b181f92062e3ae6b82"
+  integrity sha512-bUThqrWQn41agNxV58vT0uxUqDryhNKEcMiJ6Iu0KF8pDDH0vzlnlre9BRz+dO95cwoBAilgwQUx9ig91zIC/Q==
   dependencies:
-    del "^3.0.0"
+    del "^4.1.1"
     extract-zip "^1.6.7"
     mkdirp "^0.5.1"
     request "^2.88.0"
