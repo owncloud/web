@@ -20,7 +20,7 @@
           </oc-drop>
         </div>
 
-        <template v-if="this.canUpload">
+        <template v-if="this.canUpload && this.freeSpace">
           <oc-button id="new-file-menu-btn" variation="primary" type="button">
             <translate>+ New</translate>
           </oc-button>
@@ -33,6 +33,7 @@
           </oc-drop>
         </template>
         <span v-if="!this.canUpload" v-translate>You have no permission to upload.</span>
+        <span v-if="!this.freeSpace" v-translate>You have not enough space left to upload.</span>
       </div>
       <div class="uk-navbar-item">
         <translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">
@@ -86,7 +87,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken']),
-    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties']),
+    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'freeSpace']),
     ...mapState(['route']),
     searchLabel () {
       return this.$gettext('Search')
