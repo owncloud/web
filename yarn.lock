@@ -5279,11 +5279,6 @@ lodash.union@^4.6.0:
   resolved "https://registry.yarnpkg.com/lodash.union/-/lodash.union-4.6.0.tgz#48bb5088409f16f1821666641c44dd1aaae3cd88"
   integrity sha1-SLtQiECfFvGCFmZkHETdGqrjzYg=
 
-lodash.uniqueid@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/lodash.uniqueid/-/lodash.uniqueid-4.0.1.tgz#3268f26a7c88e4f4b1758d679271814e31fa5b26"
-  integrity sha1-MmjyanyI5PSxdY1nknGBTjH6WyY=
-
 lodash@^4.15.0, lodash@^4.17.11, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
@@ -6115,10 +6110,10 @@ output-file-sync@^2.0.0:
     is-plain-obj "^1.1.0"
     mkdirp "^0.5.1"
 
-owncloud-design-system@^1.0.0-696:
-  version "1.0.0-696"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-696.tgz#ae3f13ee553826c45eba3837d2390ae22e82ae4c"
-  integrity sha512-DDaTP6glZ4jSqtM9IWeZq7Cme48camgKqVaXqb0mYaRZaxyQjK6XXFLTQ+G8sHF1uqk8yre7R0MhyAQNiLmvIA==
+owncloud-design-system@^1.0.0-712:
+  version "1.0.0-712"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-712.tgz#e47fac8ffa9e6970ca78c69f30aa2077a4d7f309"
+  integrity sha512-fwksVc6EHpvhQhfPvYVCjA3F36wC5uefqdTrsUAYER2X0CBfzSuAoChpueyj6NXC6fNPiA03q8q3e7JrHIa96g==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.7.0"
@@ -6129,7 +6124,7 @@ owncloud-design-system@^1.0.0-696:
     tinycolor2 "^1.4.1"
     vue "^2.6.10"
     vue-lodash "^2.0.2"
-    vue-meta "^1.6.0"
+    vue-meta "^2.0.2"
     vue-router "^3.0.6"
     vuex "^3.1.1"
     webfontloader "^1.6.28"
@@ -8639,15 +8634,12 @@ vue-lodash@^2.0.2:
   dependencies:
     lodash "^4.17.11"
 
-vue-meta@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/vue-meta/-/vue-meta-1.6.0.tgz#89b664f6011a207e098e8ba3b9d32e29c819b65d"
-  integrity sha512-LLHejsOYbJiSEDSgZvjHB3fFY7lUxsDFLkuSqf5eBohEvhhddBTOHa3heoFTcI5sxsZSZt26uUzoLVe4CT6Y4A==
+vue-meta@^2.0.2:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/vue-meta/-/vue-meta-2.0.3.tgz#7de9f29400f06fb20ee659338b57a5f5ceff4341"
+  integrity sha512-oV5tK6tw4ispmACHudjXx8icdpioqHkqamA2ktAM72eHkrJQXmIuCOxF2DaT/NS4SBueeWhzqil/y8ChGqe+og==
   dependencies:
     deepmerge "^3.2.0"
-    lodash.isplainobject "^4.0.6"
-    lodash.uniqueid "^4.0.1"
-    object-assign "^4.1.1"
 
 vue-router@^3.0.6:
   version "3.0.6"
