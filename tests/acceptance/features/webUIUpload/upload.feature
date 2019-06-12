@@ -15,6 +15,12 @@ Feature: File Upload
     And file "new-lorem.txt" should be listed on the webUI
     And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
+  Scenario: simple upload of a file via drop-zone that does not exist before
+    When the user uploads file "new-lorem.txt" by dropping it into the webUI
+    Then no notification should be displayed on the webUI
+    And file "new-lorem.txt" should be listed on the webUI
+    And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
+
   @smokeTest
   Scenario: uploading a big file (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally

@@ -69,6 +69,11 @@ When('the user uploads file {string} using the webUI', function (element) {
   return client.page.filesPage().uploadFile(element)
 })
 
+When('the user uploads file {string} by dropping it into the webUI', function (element) {
+  // Write code here that turns the phrase above into concrete actions
+  return client.page.filesPage().dropFileForUpload(element)
+})
+
 When('the user renames file/folder {string} to {string} using the webUI', function (fromName, toName) {
   return client.page.FilesPageElement.filesList().renameFile(fromName, toName)
 })
