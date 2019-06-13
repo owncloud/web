@@ -88,7 +88,7 @@ export function initVueAuthenticate (config) {
         return this.getToken() !== null
       },
       logout () {
-        mgr.removeUser()
+        return mgr.signoutRedirect()
       },
       mgr: mgr,
       events () {

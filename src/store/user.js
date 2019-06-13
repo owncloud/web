@@ -14,10 +14,19 @@ const state = {
 const actions = {
   logout (context, payload = {}) {
     vueAuthInstance.logout(payload.requestOptions)
-    // reset user to default state
-    context.commit('SET_USER', state)
-    // force redirect to login page after logout
-    router.push({ name: 'login' })
+      .then(ret => {
+        // reset user to default state
+        context.commit('SET_USER', state)
+        // force redirect to login page after logout
+        router.push({ name: 'login' })
+      })
+      .catch(error => {
+        console.error(error)
+        // reset user to default state
+        context.commit('SET_USER', state)
+        // force redirect to login page after logout
+        router.push({ name: 'login' })
+      })
   },
   initAuth (context, autoRedirect = false) {
     // if called from login, use available vue-authenticate instance; else re-init
