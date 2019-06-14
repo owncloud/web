@@ -1,3 +1,4 @@
+@skipOnIphoneResolution @issue-1270
 Feature: Upload a file
 
   As a user

@@ -29,6 +29,7 @@ module.exports = {
         .waitForElementNotPresent('@createFolderLoadingIndicator')
       if (expectToSucceed) {
         this.waitForElementNotVisible('@newFolderDialog')
+          .waitForAnimationToFinish()
       }
       return this
     },

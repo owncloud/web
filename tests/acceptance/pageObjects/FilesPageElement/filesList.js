@@ -1,18 +1,46 @@
 module.exports = {
   commands: {
     /**
+     * perform one of the main file actions
+     * this method does find out itself if the file-action burger has to be clicked or not
+     *
+     * @param {string} fileName
+     * @param {string} delete|share|rename
+     * @returns {*}
+     */
+    performFileAction: function (fileName, action) {
+      const btnSelectorHighResolution = '(' + this.getFileRowSelectorByFileName(fileName) +
+        this.elements[action + 'ButtonInFileRow'].selector + ')[1]'
+      const btnSelectorLowResolution = '(' + this.getFileRowSelectorByFileName(fileName) +
+        this.elements[action + 'ButtonInFileRow'].selector + ')[last()]'
+      const fileActionsBtnSelector = this.getFileRowSelectorByFileName(fileName) +
+        this.elements['fileActionsButtonInFileRow'].selector
+
+      return this.initAjaxCounters()
+        .useXpath()
+        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
+        .isVisible(fileActionsBtnSelector, (result) => {
+          if (result.value === true) {
+            this
+              .click(fileActionsBtnSelector)
+              .waitForElementVisible(btnSelectorLowResolution)
+              .click(btnSelectorLowResolution)
+          } else {
+            this
+              .waitForElementVisible(btnSelectorHighResolution)
+              .click(btnSelectorHighResolution)
+          }
+        })
+    },
+    /**
      *
      * @param {string} fileName
      */
     deleteFile: function (fileName) {
-      const deleteBtnSelector = this.getFileRowSelectorByFileName(fileName) +
-        this.elements['deleteButtonInFileRow'].selector
-      console.log(deleteBtnSelector)
       return this.initAjaxCounters()
         .waitForFileVisible(fileName)
         .useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
-        .click(deleteBtnSelector)
+        .performFileAction(fileName, 'delete')
         .waitForElementVisible('@deleteFileConfirmationBtn')
         .waitForAnimationToFinish()
         .click('@deleteFileConfirmationBtn')
@@ -38,13 +66,9 @@ module.exports = {
      * @param {string} fileName
      */
     openSharingDialog: function (fileName) {
-      const shareBtnSelector = this.getFileRowSelectorByFileName(fileName) +
-        this.elements['shareButtonInFileRow'].selector
-
       this.waitForFileVisible(fileName)
         .useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
-        .click(shareBtnSelector)
+        .performFileAction(fileName, 'share')
         .waitForElementVisible('@sharingSideBar')
         .useCss()
       return this.api.page.FilesPageElement.sharingDialog()
@@ -56,14 +80,10 @@ module.exports = {
      * @param {boolean} expectToSucceed
      */
     renameFile: function (fromName, toName, expectToSucceed = true) {
-      const renameBtnSelector = this.getFileRowSelectorByFileName(fromName) +
-        this.elements['renameButtonInFileRow'].selector
-
       this.initAjaxCounters()
         .waitForFileVisible(fromName)
         .useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(fromName), 0, 0)
-        .click(renameBtnSelector)
+        .performFileAction(fromName, 'rename')
         .waitForElementVisible('@renameFileConfirmationBtn')
         .waitForAnimationToFinish()
         .clearValue('@renameFileInputField')
@@ -134,7 +154,9 @@ module.exports = {
       this
         .useXpath()
         .waitForElementVisible(rowSelector)
-        .expect.element(linkSelector).text.to.equal(fileName)
+        .getAttribute(linkSelector, 'innerText', function (result) {
+          this.assert.strictEqual(result.value, fileName, 'displayed file name not as expected')
+        })
       return this.useCss()
     },
     /**
@@ -196,6 +218,10 @@ module.exports = {
     },
     filesListProgressBar: {
       selector: '#files-list-progress'
+    },
+    fileActionsButtonInFileRow: {
+      selector: '//button[@aria-label="show-file-actions"]',
+      locateStrategy: 'xpath'
     },
     deleteFileConfirmationDialog: {
       selector: '#delete-file-confirmation-dialog'

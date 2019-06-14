@@ -39,6 +39,7 @@
             :id="'files-file-list-action-button-small-resolution-' + index"
             icon="menu"
             :class="{ 'uk-hidden@m' : !_sidebarOpen, 'uk-visible@s uk-hidden@xl' : _sidebarOpen }"
+            :aria-label="'show-file-actions'"
           />
           <oc-drop
             :toggle="'#files-file-list-action-button-small-resolution-' + index"
