@@ -17,7 +17,7 @@
     </template>
     <template slot="footer">
         <oc-button :disabled="ocLoading" @click="onCancel">{{ _ocCancelText }}</oc-button>
-        <oc-button :disabled="ocLoading || ocError"
+        <oc-button :disabled="ocLoading || ocError || inputValue === ''"
                :id="ocConfirmId"
                @click="onConfirm">{{ _ocConfirmText }}</oc-button>
     </template>
@@ -74,7 +74,7 @@ export default {
       this.$emit('oc-cancel')
     },
     onConfirm () {
-      if (!this.ocError) {
+      if (!this.ocError && this.inputValue !== '') {
         this.$emit('oc-confirm', this.inputValue)
       }
     }
