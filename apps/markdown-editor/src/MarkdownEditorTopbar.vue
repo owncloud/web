@@ -1,5 +1,5 @@
 <template>
-  <oc-topbar variation="secondary" uk-sticky="offset: 60">
+  <oc-topbar variation="secondary">
     <oc-topbar-item slot="left">
       <oc-button icon="save" @click="saveContent" :disabled="!isTouched"></oc-button>
       <oc-spinner v-if="isLoading"></oc-spinner>
