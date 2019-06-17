@@ -99,10 +99,10 @@ export default {
       return this.$gettext('Create new file…')
     },
     item () {
-      return this.$route.params.item
+      return this.$route.params.item === undefined ? '' : this.$route.params.item
     },
     url () {
-      let path = this.item === '' ? '/' : `${this.item}/`
+      const path = this.item === '' ? '/' : `${this.item}/`
       return this.$client.files.getFileUrl(`/${path}`)
     },
     newFolderErrorMessage () {
@@ -168,7 +168,8 @@ export default {
     addNewFolder (folderName) {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
-        this.$client.files.createFolder(this.item + '/' + folderName)
+        const path = this.item === '' ? '/' : `${this.item}/`
+        this.$client.files.createFolder(path + folderName)
           .then(() => {
             this.createFolder = false
             this.newFolderName = ''
@@ -195,7 +196,8 @@ export default {
     addNewFile (fileName) {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
-        this.$client.files.putFileContents(this.item + '/' + fileName, '')
+        const path = this.item === '' ? '/' : `${this.item}/`
+        this.$client.files.putFileContents(path + fileName, '')
           .then(() => {
             this.createFile = false
             this.newFileName = ''
@@ -221,7 +223,8 @@ export default {
     },
     onFileSuccess (event, file) {
       this.$nextTick().then(() => {
-        const filePath = this.item + '/' + file.name
+        const path = this.item === '' ? '/' : `${this.item}/`
+        const filePath = path + file.name
         this.$client.files.fileInfo(filePath, this.davProperties).then(fileInfo => {
           this.fileUploadProgress = 0
           this.addFiles({
@@ -263,7 +266,7 @@ export default {
       this.breadcrumbs = []
       let breadcrumb = {}
       let absolutePath = this.$route.params.item
-      let pathSplit = absolutePath.split('/').filter((val) => val)
+      const pathSplit = absolutePath.split('/').filter((val) => val)
       for (let i = 0; i < pathSplit.length; i++) {
         breadcrumb.index = i
         breadcrumb.text = pathSplit.slice(0, i + 1)[i]
