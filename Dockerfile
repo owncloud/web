@@ -1,5 +1,5 @@
 # build stage
-FROM node:9.11.1-alpine as build-stage
+FROM node:10.15.3-alpine as build-stage
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git
 
