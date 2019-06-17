@@ -74,6 +74,8 @@ const actions = {
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
     vueAuthInstance.mgr.signinRedirectCallback().then(() => {
       context.dispatch('initAuth', true)
+    }).catch(() => {
+      context.dispatch('login')
     })
   },
   signinSilentCallback (context) {
