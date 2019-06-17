@@ -1,5 +1,5 @@
 <template>
-  <oc-table middle divider class="oc-filelist" id="files-list">
+  <oc-table middle divider class="oc-filelist" id="files-list" v-show="!loadingFolder">
     <oc-table-group>
       <oc-table-row>
         <oc-table-cell shrink type="head">
@@ -22,7 +22,7 @@
         </oc-table-cell>
         <oc-table-cell class="uk-text-truncate">
           <oc-file @click.native="item.type === 'folder' ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
-                   :name="item.basename" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
+                   :name="$_ocFileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
                    :filename="item.name" :key="item.id" />
         </oc-table-cell>
         <oc-table-cell class="uk-text-meta uk-text-nowrap" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }">
@@ -129,10 +129,18 @@ export default {
         return name
       }
       return name.substring(0, name.length - extension.length - 1)
+    },
+    $_ocFileName (item) {
+      if (this.$route.name === 'files-favorites') {
+        const pathSplit = item.path.substr(1).split('/')
+        if (pathSplit.length === 2) return `${pathSplit[pathSplit.length - 2]}/${item.basename}`
+        if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
+      }
+      return item.basename
     }
   },
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'atSearchPage']),
+    ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'loadingFolder']),
     ...mapGetters(['getToken', 'fileSideBars']),
     all () {
       return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
