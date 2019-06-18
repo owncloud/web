@@ -110,29 +110,36 @@ export default {
     context.commit('UPDATE_FOLDER_LOADING', true)
 
     let promise
+    let favorite = routeName === 'files-favorites'
 
-    if (routeName === 'files-favorites') {
+    if (favorite) {
       promise = client.files.getFavoriteFiles(context.getters.davProperties)
     } else {
       promise = client.files.list(absolutePath, 1, context.getters.davProperties)
     }
 
     promise.then(res => {
-      let files = []
-      let currentFolder = null
       if (res === null) {
         context.dispatch('showNotification', {
           title: $gettext('Loading folder failed…'),
           status: 'danger'
         }, { root: true })
       } else {
-        currentFolder = res[0]
-        files = res.splice(1)
+        if (favorite) {
+          client.files.fileInfo('', context.getters.davProperties).then(rootFolder => {
+            rootFolder['fileInfo']['{http://owncloud.org/ns}permissions'] = 'R'
+            context.dispatch('loadFiles', {
+              currentFolder: rootFolder,
+              files: res
+            })
+          })
+        } else {
+          context.dispatch('loadFiles', {
+            currentFolder: res[0],
+            files: res.splice(1)
+          })
+        }
       }
-      context.dispatch('loadFiles', {
-        currentFolder,
-        files
-      })
       context.dispatch('resetFileSelection')
       if (context.getters.searchTerm !== '') {
         context.dispatch('resetSearch')
