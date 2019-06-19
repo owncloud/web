@@ -27,6 +27,19 @@ const loginAsUser = function (userId) {
     .page.ownCloudAuthorizePage()
     .waitForElementVisible('@authorizeButton')
     .click('@authorizeButton')
+    .waitForElementNotPresent({
+      selector: '@authorizeButton',
+      abortOnFailure: false
+    }, (result) => {
+      if (result.value.length > 0) {
+        // click failed
+        console.log('WARNING: looks like I\'m still on auth page. ' +
+                    'I will click the auth button again')
+        client.page.ownCloudAuthorizePage()
+          .click('@authorizeButton')
+          .waitForElementNotPresent('@authorizeButton')
+      }
+    })
 
   // Then the files table should be displayed
   return client
