@@ -37,12 +37,8 @@
         </oc-drop>
       </div>
     </oc-grid>
-    <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok"
-                    :ocLoading="fileFolderCreationLoading" :ocError="newFolderErrorMessage"
-                    :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
-    <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName"
-                    :ocLoading="fileFolderCreationLoading" :ocError="newFileErrorMessage"
-                    :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
+    <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok" :ocLoading="fileFolderCreationLoading" :ocError="newFolderErrorMessage" :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
+    <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName" :ocLoading="fileFolderCreationLoading" :ocError="newFileErrorMessage" :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
   </div>
 </template>
 
@@ -90,13 +86,13 @@ export default {
       return this.$gettext('Create new file…')
     },
     _cannotCreateDialogText () {
-      let message
-
-      if (!this.canUpload) { message = 'You have no permission to upload!' }
-
-      if (!this.freeSpace) { message = 'You have not enough space left to upload!' }
-
-      return this.$gettext(message)
+      if (!this.canUpload) {
+        return this.$gettext('You have no permission to upload!')
+      }
+      if (!this.freeSpace) {
+        return this.$gettext('You have not enough space left to upload!')
+      }
+      return null
     },
     item () {
       return this.$route.params.item === undefined ? '' : this.$route.params.item
