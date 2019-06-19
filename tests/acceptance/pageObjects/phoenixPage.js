@@ -33,7 +33,7 @@ module.exports = {
       selector: '.oc-search-input'
     },
     searchLoadingIndicator: {
-      selector: '.appTopbar .uk-spinner'
+      selector: '.oc-app-bar .uk-spinner'
     },
     coreMenuOpenButton: {
       selector: '//header//button[@aria-label="Files"]',

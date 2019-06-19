@@ -102,9 +102,8 @@ module.exports = {
     newFolderOkButton: {
       selector: '#new-folder-ok'
     },
-
     breadcrumb: {
-      selector: '#files-breadcrumb li:nth-of-type(1)'
+      selector: '#files-breadcrumb li:nth-of-type(2)'
     },
     filterListButton: {
       selector: '#oc-filter-list-btn'
