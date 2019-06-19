@@ -61,7 +61,7 @@ function _buildShare (s) {
     // fall through
     case ('1'): // group share
       share.role = 'legacy'
-      if (s.permissions === 11) {
+      if (s.permissions & 1) {
         share.role = 'viewer'
       }
       if (s.permissions & 2) {
