@@ -7,19 +7,19 @@ When('the user browses to the files page',
   () => {
     return client
       .page.filesPage()
-      .navigate()
+      .navigateAndWaitTillLoaded()
   })
 
 When('the user browses to the favorites page', function () {
   return client
     .page.favoritesPage()
-    .navigate()
+    .navigateAndWaitTillLoaded()
 })
 
 Given('the user has browsed to the favorites page', function () {
   return client
     .page.favoritesPage()
-    .navigate()
+    .navigateAndWaitTillLoaded()
 })
 
 Then('the files table should be displayed',
@@ -31,7 +31,7 @@ Then('the files table should be displayed',
 Given('the user has browsed to the files page', function () {
   return client
     .page.filesPage()
-    .navigate()
+    .navigateAndWaitTillLoaded()
 })
 
 When('the user creates a folder with the name {string} using the webUI', function (folderName) {
