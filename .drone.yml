@@ -369,5 +369,170 @@ matrix:
       TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
       SCREEN_RESOLUTION: 375x812
 
+
+
+
+#2
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+      SCREEN_RESOLUTION: 768x1024
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
+      SCREEN_RESOLUTION: 375x812
+
+    #3
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+      SCREEN_RESOLUTION: 768x1024
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
+      SCREEN_RESOLUTION: 375x812
+
+    #4
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+      SCREEN_RESOLUTION: 768x1024
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
+      SCREEN_RESOLUTION: 375x812
+
+    #5
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+      SCREEN_RESOLUTION: 768x1024
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
+      SCREEN_RESOLUTION: 375x812
+
+    #6
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+      SCREEN_RESOLUTION: 768x1024
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
+      SCREEN_RESOLUTION: 375x812
+
+    #7
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+      SCREEN_RESOLUTION: 768x1024
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
+      SCREEN_RESOLUTION: 375x812
+
+    #8
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+      SCREEN_RESOLUTION: 768x1024
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
+      SCREEN_RESOLUTION: 375x812
+
+    #9
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+      SCREEN_RESOLUTION: 768x1024
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
+      SCREEN_RESOLUTION: 375x812
+
+    #10
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: 'not @skip'
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+      SCREEN_RESOLUTION: 768x1024
+
+    - TEST_SUITE: acceptance
+      NEED_SERVER: true
+      RUN_PHOENIX: true
+      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
+      SCREEN_RESOLUTION: 375x812
+
     # After drone all jobs completes
     - AFTER_JOB: true
