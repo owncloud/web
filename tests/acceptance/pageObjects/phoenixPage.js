@@ -8,9 +8,20 @@ module.exports = {
      * @param {string} searchTerm
      */
     search: function (searchTerm) {
-      return this.waitForElementVisible('@searchInputField')
+      return this
         .initAjaxCounters()
-        .setValue('@searchInputField', [searchTerm, this.api.Keys.ENTER])
+        .isVisible('#files-open-search-btn', (result) => {
+          if (result.value === true) {
+            this
+              .click('#files-open-search-btn')
+              .waitForElementVisible('@searchInputFieldLowResolution')
+              .setValue('@searchInputFieldLowResolution', [searchTerm, this.api.Keys.ENTER])
+          } else {
+            this
+              .waitForElementVisible('@searchInputFieldHighResolution')
+              .setValue('@searchInputFieldHighResolution', [searchTerm, this.api.Keys.ENTER])
+          }
+        })
         .waitForElementNotVisible('@searchLoadingIndicator')
         .waitForOutstandingAjaxCalls()
     },
@@ -29,8 +40,13 @@ module.exports = {
     ocDialogPromptAlert: {
       selector: '#oc-dialog-prompt-alert'
     },
-    searchInputField: {
-      selector: '.oc-search-input'
+    searchInputFieldHighResolution: {
+      selector: '(//input[contains(@class, "oc-search-input")])[1]',
+      locateStrategy: 'xpath'
+    },
+    searchInputFieldLowResolution: {
+      selector: '(//input[contains(@class, "oc-search-input")])[3]',
+      locateStrategy: 'xpath'
     },
     searchLoadingIndicator: {
       selector: '.oc-app-bar .uk-spinner'
