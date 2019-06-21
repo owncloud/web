@@ -3,7 +3,6 @@ import '@babel/polyfill'
 // --- Components --------------------------------------------------------------
 
 import MarkdownEditor from './MarkdownEditor.vue'
-import MarkdownEditorTopbar from './MarkdownEditorTopbar.vue'
 import t from '../l10n/translations'
 
 // --- Routing -----------------------------------------------------------------
@@ -13,8 +12,7 @@ const store = require('./store.js')
 const routes = [{
   path: '',
   components: {
-    appContent: MarkdownEditor,
-    appTopbar: MarkdownEditorTopbar
+    app: MarkdownEditor
   },
   name: 'markdown-editor'
 }]

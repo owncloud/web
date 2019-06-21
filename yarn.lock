@@ -6113,10 +6113,10 @@ output-file-sync@^2.0.0:
     is-plain-obj "^1.1.0"
     mkdirp "^0.5.1"
 
-owncloud-design-system@^1.0.0-712:
-  version "1.0.0-712"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-712.tgz#e47fac8ffa9e6970ca78c69f30aa2077a4d7f309"
-  integrity sha512-fwksVc6EHpvhQhfPvYVCjA3F36wC5uefqdTrsUAYER2X0CBfzSuAoChpueyj6NXC6fNPiA03q8q3e7JrHIa96g==
+owncloud-design-system@^1.0.0-734:
+  version "1.0.0-734"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-734.tgz#2260458c58f6aa48214350f7bdf9cf2054d56e8e"
+  integrity sha512-ey9nGk+2BBkvAhf7hbkSDsvM2qPxpxkjzWsILjUDkV5b47HL7nDor8o3t27eafvBBmAjpko12bLx2h94cWP65A==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.7.0"
@@ -6127,7 +6127,7 @@ owncloud-design-system@^1.0.0-712:
     tinycolor2 "^1.4.1"
     vue "^2.6.10"
     vue-lodash "^2.0.2"
-    vue-meta "^2.0.2"
+    vue-meta "^2.0.3"
     vue-router "^3.0.6"
     vuex "^3.1.1"
     webfontloader "^1.6.28"
@@ -8669,7 +8669,7 @@ vue-lodash@^2.0.2:
   dependencies:
     lodash "^4.17.11"
 
-vue-meta@^2.0.2:
+vue-meta@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-meta/-/vue-meta-2.0.3.tgz#7de9f29400f06fb20ee659338b57a5f5ceff4341"
   integrity sha512-oV5tK6tw4ispmACHudjXx8icdpioqHkqamA2ktAM72eHkrJQXmIuCOxF2DaT/NS4SBueeWhzqil/y8ChGqe+og==
