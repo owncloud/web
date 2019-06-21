@@ -55,6 +55,7 @@ module.exports = {
       return this.initAjaxCounters()
         .waitForElementVisible('@sharingAutoComplete')
         .setValue('@sharingAutoComplete', input)
+        .waitForOutstandingAjaxCalls()
     },
     /**
      *
