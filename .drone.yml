@@ -140,7 +140,7 @@ pipeline:
       - TEST_CONTEXT=${TEST_CONTEXT}
     commands:
       - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-      - 'echo "<details><summary>:boom: Acceptance tests <strong>${TEST_CONTEXT}</strong> failed. ${DRONE_BUILD_LINK} Please find the screenshots inside ...</summary><p>\n\n" >> comments.file'
+      - 'echo "<details><summary>:boom: Acceptance tests <strong>${TEST_CONTEXT}</strong> failed. ${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER} Please find the screenshots inside ...</summary><p>\n\n" >> comments.file'
       - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
       - echo "\n</p></details>" >> comments.file
       - more comments.file
