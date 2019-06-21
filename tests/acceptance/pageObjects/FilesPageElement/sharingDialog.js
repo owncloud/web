@@ -9,6 +9,8 @@ module.exports = {
      */
     shareWithUserOrGroup: async function (sharee, shareWithGroup = false) {
       this.enterAutoComplete(sharee.slice(0, -1))
+        .pause(500)
+        .enterAutoComplete(sharee.slice(-1))
       // We need waitForElementPresent here.
       // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
         .waitForElementPresent({
