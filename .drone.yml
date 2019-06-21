@@ -74,7 +74,7 @@ pipeline:
       - php occ a:e testing
       - php occ config:system:set trusted_domains 1 --value=owncloud
       - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
-      - php occ log:manage --level 0
+      - php occ log:manage --level 2
       - php occ config:list
       - php occ a:e oauth2
       - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
