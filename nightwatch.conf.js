@@ -72,7 +72,7 @@ module.exports = {
         javascriptEnabled: true,
         acceptSslCerts: true,
         chromeOptions: {
-          args: ['disable-gpu', 'disable-dev-shm-usage'],
+          args: ['disable-gpu', 'disable-dev-shm-usage', 'no-sandbox'],
           w3c: false
         }
       }
