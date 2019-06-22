@@ -316,7 +316,7 @@ export default {
         console.log(e)
       })
   },
-  addShare (context, { client, path, shareWith, shareType }) {
+  addShare (context, { client, path, $gettext, shareWith, shareType }) {
     context.commit('SHARES_LOADING', true)
 
     if (shareType === 0) {
@@ -326,7 +326,11 @@ export default {
           context.commit('SHARES_LOADING', false)
         })
         .catch(e => {
-          console.log(e)
+          context.dispatch('showNotification', {
+            title: $gettext('Error while sharing.'),
+            desc: e,
+            status: 'danger'
+          }, { root: true })
           context.commit('SHARES_LOADING', false)
         })
     } else {
@@ -336,7 +340,11 @@ export default {
           context.commit('SHARES_LOADING', false)
         })
         .catch(e => {
-          console.log(e)
+          context.dispatch('showNotification', {
+            title: $gettext('Error while sharing.'),
+            desc: e,
+            status: 'danger'
+          }, { root: true })
           context.commit('SHARES_LOADING', false)
         })
     }

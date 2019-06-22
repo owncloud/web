@@ -105,6 +105,7 @@ export default {
       this.addShare({
         client: this.$client,
         path: this.selectedFiles[0].path,
+        $gettext: this.$gettext,
         shareWith: newSelectedSharee.value.shareWith,
         shareType: newSelectedSharee.value.shareType
       })
