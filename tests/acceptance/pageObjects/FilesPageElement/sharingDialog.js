@@ -8,7 +8,7 @@ module.exports = {
      * @param {boolean} shareWithGroup
      */
     shareWithUserOrGroup: async function (sharee, shareWithGroup = false) {
-      this.enterAutoComplete(sharee.slice(0, -1))
+      this.enterAutoComplete(sharee)
       // We need waitForElementPresent here.
       // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
         .waitForElementPresent({
@@ -19,7 +19,7 @@ module.exports = {
             // sharing dropdown was not shown
             console.log('WARNING: no sharing autocomple dropdown found, retry typing')
             this.clearValue('@sharingAutoComplete')
-              .enterAutoComplete(sharee.slice(0, -1))
+              .enterAutoComplete(sharee)
               .waitForElementVisible('@sharingAutoCompleteDropDownElements')
           }
         })
