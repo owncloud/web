@@ -111,9 +111,10 @@ pipeline:
       - SCREEN_RESOLUTION=${SCREEN_RESOLUTION}
       - TEST_TAGS=${TEST_TAGS}
     commands:
+      - mkdir /var/www/owncloud/phoenix/tests/reports/
       - cd /var/www/owncloud/phoenix
       - curl http://phoenix:8300/oidc-callback.html
-      - yarn run acceptance-tests-drone
+      - yarn run acceptance-tests-drone | tee /var/www/owncloud/phoenix/tests/reports/tests.log
     when:
       matrix:
         TEST_SUITE: acceptance
@@ -141,11 +142,11 @@ pipeline:
     commands:
       - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
       - 'echo "<details><summary>:boom: Acceptance tests <strong>${TEST_CONTEXT}</strong> failed. Please find the screenshots inside ...</summary>\n\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\n\n<p>\n\n" >> comments.file'
+      - grep -A4 scenario /var/www/owncloud/phoenix/tests/reports/tests.log >> comments.file
       - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
       - echo "\n</p></details>" >> comments.file
       - more comments.file
     when:
-      status: [ failure ]
       matrix:
         TEST_SUITE: acceptance
 
@@ -154,7 +155,6 @@ pipeline:
     secrets: [ plugin_api_key ]
     message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
     when:
-      status: [ failure ]
       matrix:
         TEST_SUITE: acceptance
 
