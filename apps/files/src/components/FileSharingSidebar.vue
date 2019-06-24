@@ -30,7 +30,7 @@
             <template v-slot:item="{item}">
               <span>{{ buildRecipientDisplay(item) }}</span>
             </template>          </oc-autocomplete>
-          <ul class="uk-list">
+          <ul class="uk-list" id="file-share-list">
             <li v-for="(c, k) in shares" :key="k">
               <oc-user
                 :avatar="c.avatar"
@@ -52,8 +52,8 @@
                 </span>
                 </template>
                 <template slot="actions">
-                  <oc-icon name="delete" @click="onDelete(c)" />
-                  <oc-icon v-if="editing != c" name="edit" @click="onEdit(c)" />
+                  <oc-icon :aria-label="_deleteButtonLabel" name="delete" @click="onDelete(c)" />
+                  <oc-icon :aria-label="_editButtonLabel" v-if="editing != c" name="edit" @click="onEdit(c)" />
                 </template>
               </oc-user>
 
@@ -153,8 +153,13 @@ export default {
         name: s.uid_owner,
         displayName: s.info.displayname_owner
       }
+    },
+    _deleteButtonLabel () {
+      return this.$gettext('Delete Share')
+    },
+    _editButtonLabel () {
+      return this.$gettext('Edit Share')
     }
-
   },
   methods: {
     ...mapActions('Files', ['shareSetOpen', 'loadShares', 'sharesClearState', 'addShare', 'deleteShare', 'changeShare']),
