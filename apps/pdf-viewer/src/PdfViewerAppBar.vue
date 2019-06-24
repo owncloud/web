@@ -1,18 +1,17 @@
 <template>
-  <oc-topbar variation="secondary" uk-sticky="offset: 60">
-    <oc-topbar-item slot="left">
-      <oc-icon name="application-pdf"></oc-icon>
-    </oc-topbar-item>
-    <template slot="title">
-      <oc-topbar-item>{{ activeFile.path.substr(1) }}</oc-topbar-item>
-    </template>
-    <oc-topbar-item slot="right">
-      <oc-topbar-item v-if="!loading">
+  <div id="pdf-viewer-app-bar" class="oc-app-bar">
+    <oc-grid flex gutter="small">
+      <div class="uk-width-expand">
+        <oc-icon name="application-pdf" /> {{ activeFile.path.substr(1) }}
+      </div>
+      <div class="uk-width-auto" v-if="!loading">
         <oc-text-input v-model.number="page" type="number" :min="1" :max="pageCount" />&nbsp;/{{ pageCount }}
-      </oc-topbar-item>
-      <oc-button icon="close" @click="closeApp"></oc-button>
-    </oc-topbar-item>
-  </oc-topbar>
+      </div>
+      <div class="uk-width-auto">
+        <oc-button icon="close" @click="closeApp"></oc-button>
+      </div>
+    </oc-grid>
+  </div>
 </template>
 <script>
 // TODO put active Page and max Pages into store

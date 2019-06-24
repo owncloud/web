@@ -19,27 +19,27 @@ const router = new Router({
       components: {
         fullscreen: LoginPage
       },
-      meta: { auth: false, hideHeadbar: true, showBackground: true }
+      meta: { auth: false, hideHeadbar: true }
     },
     {
       path: '/oidc-callback',
       components: {
         fullscreen: OidcCallbackPage
       },
-      meta: { auth: false, hideHeadbar: true, showBackground: true }
+      meta: { auth: false, hideHeadbar: true }
     },
     {
       path: '/oidc-silent-redirect',
       components: {
         fullscreen: OidcSilentRedirectPage
       },
-      meta: { auth: false, hideHeadbar: true, showBackground: true }
+      meta: { auth: false, hideHeadbar: true }
     },
     {
       path: '/error',
       name: 'error',
       component: ErrorPage,
-      meta: { auth: false, hideHeadbar: true, showBackground: true }
+      meta: { auth: false, hideHeadbar: true }
     },
     {
       path: '/account',

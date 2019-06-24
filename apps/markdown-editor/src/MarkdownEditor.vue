@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div id="markdown-editor">
+    <markdown-editor-app-bar />
     <oc-notifications>
       <oc-notification-message
               v-if="lastError"
@@ -10,8 +11,7 @@
     </oc-notifications>
     <div class="uk-flex">
       <div class="uk-container uk-width-1-2">
-        <oc-textarea
-                name="input"
+        <oc-textarea name="input"
                 full-width :value="currentContent"
                 @input="onType" class="uk-height-1-1" :rows="20">
         </oc-textarea>
@@ -23,11 +23,15 @@
   </div>
 </template>
 <script>
+import MarkdownEditorAppBar from './MarkdownEditorAppBar.vue'
 import marked from 'marked'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'MarkdownEditor',
+  components: {
+    MarkdownEditorAppBar
+  },
   mounted () {
     if (this.activeFile.path === '') {
       this.$router.push({

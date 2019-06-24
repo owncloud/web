@@ -1,5 +1,4 @@
 import '@babel/polyfill'
-import PdfViewerTopbar from './PdfViewerTopbar.vue'
 import translationsJson from '../l10n/translations'
 
 const store = require('./store.js')
@@ -12,8 +11,7 @@ const PdfViewer = () => ({
 const routes = [{
   path: `/pdf-viewer`,
   components: {
-    appContent: PdfViewer,
-    appTopbar: PdfViewerTopbar
+    app: PdfViewer
   },
   name: 'pdf-viewer'
 }]
