@@ -144,15 +144,6 @@ Then('file/folder {string} should be listed on the webUI', function (folder) {
     .waitForFileVisible(folder)
 })
 
-Then('file/folder {string} should be listed in the favorites page on the webUI', function (folder) {
-  client.page.phoenixPage().openCoreMenu()
-
-  return client
-    .page
-    .FilesPageElement.filesList()
-    .waitForFileVisible(folder)
-})
-
 Then('file/folder {string} should not be listed on the webUI', function (folder) {
   return client.page.FilesPageElement.filesList().assertElementNotListed(folder)
 })
