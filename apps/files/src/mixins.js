@@ -79,6 +79,7 @@ export default {
           desc: this.$gettext('The file name cannot be equal to "."'),
           status: 'danger'
         })
+        return
       }
 
       if (item === '..') {
@@ -87,6 +88,16 @@ export default {
           desc: this.$gettext('The file name cannot be equal to ".."'),
           status: 'danger'
         })
+        return
+      }
+
+      if (/\s+$/.test(item)) {
+        this.showMessage({
+          title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
+          desc: this.$gettext('The file name cannot end with whitespace'),
+          status: 'danger'
+        })
+        return
       }
 
       let exists = this.files.find((n) => {
@@ -110,6 +121,7 @@ export default {
         newValue: item
       })
     },
+
     downloadFile (file) {
       const url = this.$client.files.getFileUrl(file.path)
       let anchor = document.createElement('a')
