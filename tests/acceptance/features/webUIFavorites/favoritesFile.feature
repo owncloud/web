@@ -20,7 +20,7 @@ Feature: Mark file as favorite
     And file "data.zip" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then there should be 2 files/folders listed on the webUI
-    Then file "data.zip" should be listed on the webUI
+    And file "data.zip" should be listed on the webUI
     And file "data.zip" should be marked as favorite on the webUI
     And file "data.tar.gz" should be listed on the webUI
     And file "data.tar.gz" should be marked as favorite on the webUI
@@ -46,6 +46,17 @@ Feature: Mark file as favorite
     Then the files table should be displayed
     And no notification should be displayed on the webUI
     And there should be no files/folders listed on the webUI
+
+  Scenario: navigate to the favorites page using the menu
+    Given user "user1" has favorited element "data.zip"
+    When the user browses to the favorites page using the webUI
+    Then there should be 1 files/folders listed on the webUI
+    And file "data.zip" should be listed on the webUI
+
+  Scenario: navigate to the favorites page and back to files page using the menu
+    Given the user has browsed to the favorites page using the webUI
+    When the user browses to the files page using the webUI
+    Then there should be 31 files/folders listed on the webUI
 
   @issue-1194
   @skip @yetToImplement

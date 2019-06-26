@@ -22,6 +22,24 @@ Given('the user has browsed to the favorites page', function () {
     .navigateAndWaitTillLoaded()
 })
 
+Given('the user has browsed to the favorites page using the webUI', function () {
+  return client
+    .page.phoenixPage()
+    .navigateToUsingMenu('Favorites')
+})
+
+When('the user browses to the favorites page using the webUI', function () {
+  return client
+    .page.phoenixPage()
+    .navigateToUsingMenu('Favorites')
+})
+
+When('the user browses to the files page using the webUI', function () {
+  return client
+    .page.phoenixPage()
+    .navigateToUsingMenu('All files')
+})
+
 Then('the files table should be displayed',
   () => {
     return client.page.FilesPageElement.filesList()
