@@ -42,13 +42,23 @@
             :aria-label="'show-file-actions'"
           />
           <oc-drop
+            v-if="!$_ocDialog_isOpen"
             :toggle="'#files-file-list-action-button-small-resolution-' + index"
             :options="{ 'pos': 'bottom-center' }"
             class="uk-width-auto"
+            :class="{ 'uk-hidden@m' : !_sidebarOpen, 'uk-visible@s uk-hidden@xl' : _sidebarOpen }"
           >
             <ul class="uk-list">
               <li v-for="(action, index) in actions" :key="index">
-                <oc-button  @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :ariaLabel="action.ariaLabel" />
+                <oc-button
+                  class="uk-width-1-1"
+                  @click.native="action.handler(item, action.handlerData)"
+                  :disabled="!action.isEnabled(item)"
+                  :icon="action.icon"
+                  :ariaLabel="action.ariaLabel"
+                >
+                  {{ action.ariaLabel }}
+                </oc-button>
               </li>
             </ul>
           </oc-drop>
@@ -152,18 +162,18 @@ export default {
       let actions = [
         { icon: 'edit',
           handler: this.changeName,
-          ariaLabel: 'Edit',
+          ariaLabel: this.$gettext('Edit'),
           isEnabled: function (item) {
             return item.canRename()
           } },
         { icon: 'file_download',
           handler: this.downloadFile,
-          ariaLabel: 'Download',
+          ariaLabel: this.$gettext('Download'),
           isEnabled: function (item) {
             return item.canDownload()
           } },
         { icon: 'delete',
-          ariaLabel: 'Delete',
+          ariaLabel: this.$gettext('Delete'),
           handler: this.deleteFile,
           isEnabled: function (item) {
             return item.canBeDeleted()
@@ -194,6 +204,9 @@ export default {
     },
     _sidebarOpen () {
       return this.selectedFiles.length > 0
+    },
+    $_ocDialog_isOpen () {
+      return this.changeFileName
     }
   }
 }
