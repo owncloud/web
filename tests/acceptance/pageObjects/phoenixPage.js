@@ -30,6 +30,22 @@ module.exports = {
         .click('@coreMenuOpenButton')
         .waitForElementVisible('@coreMenu')
         .waitForAnimationToFinish()
+    },
+    /**
+     * @param {string} page
+     */
+    navigateToUsingMenu: function (page) {
+      const util = require('util')
+      const menuItemSelector = util.format(this.elements.menuItem.selector, page)
+      return this
+        .waitForElementVisible('@menuButton')
+        .click('@menuButton')
+        .useXpath()
+        .waitForElementVisible(menuItemSelector)
+        .click(menuItemSelector)
+        .api.page.FilesPageElement.filesList()
+        .waitForElementPresent({ selector: '@filesListProgressBar', abortOnFailure: false }) // don't fail if we are too late
+        .waitForElementNotPresent('@filesListProgressBar')
     }
   },
   elements: {
@@ -57,6 +73,14 @@ module.exports = {
     },
     coreMenu: {
       selector: '#coreMenu'
+    },
+    menuButton: {
+      selector: '//button[@aria-label="Menu"]',
+      locateStrategy: 'xpath'
+    },
+    menuItem: {
+      selector: '//ul[contains(@class, "oc-main-menu")]/li/a[contains(text(),"%s")]',
+      locateStrategy: 'xpath'
     }
   }
 }
