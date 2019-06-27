@@ -62,14 +62,31 @@ export default {
         return
       }
 
+      let translatedTitle = this.$gettext('Renaming of %{fileName} failed')
+
       if (item.includes('/')) {
-        let translated = this.$gettext('Renaming of %{ fileName} failed')
         this.showNotification({
-          title: this.$gettextInterpolate(translated, { fileName: this.selectedFile.name }, true),
+          title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
           desc: this.$gettext('The file name cannot contain a "/"'),
           status: 'danger'
         })
         return
+      }
+
+      if (item === '.') {
+        this.showNotification({
+          title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
+          desc: this.$gettext('The file name cannot be equal to "."'),
+          status: 'danger'
+        })
+      }
+
+      if (item === '..') {
+        this.showNotification({
+          title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
+          desc: this.$gettext('The file name cannot be equal to ".."'),
+          status: 'danger'
+        })
       }
 
       let exists = this.files.find((n) => {
@@ -78,7 +95,6 @@ export default {
         }
       })
       if (exists) {
-        let translatedTitle = this.$gettext('Cannot rename %{fileName}')
         let translatedDesc = this.$gettext('File or folder with name "%{fileName}" already exists.')
         this.showNotification({
           title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),

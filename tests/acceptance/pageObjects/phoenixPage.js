@@ -25,12 +25,6 @@ module.exports = {
         .waitForElementNotVisible('@searchLoadingIndicator')
         .waitForOutstandingAjaxCalls()
     },
-    openCoreMenu: function () {
-      return this.waitForElementVisible('@coreMenuOpenButton')
-        .click('@coreMenuOpenButton')
-        .waitForElementVisible('@coreMenu')
-        .waitForAnimationToFinish()
-    },
     /**
      * @param {string} page
      */
@@ -66,13 +60,6 @@ module.exports = {
     },
     searchLoadingIndicator: {
       selector: '.oc-app-bar .uk-spinner'
-    },
-    coreMenuOpenButton: {
-      selector: '//header//button[@aria-label="Files"]',
-      locateStrategy: 'xpath'
-    },
-    coreMenu: {
-      selector: '#coreMenu'
     },
     menuButton: {
       selector: '//button[@aria-label="Menu"]',
