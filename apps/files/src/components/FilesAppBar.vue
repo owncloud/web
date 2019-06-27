@@ -187,6 +187,15 @@ export default {
       if (/[/]/.test(folderName)) {
         return this.$gettext('Folder name cannot contain "/"')
       }
+
+      if (folderName === '.') {
+        return this.$gettext('Folder name cannot be equal to "."')
+      }
+
+      if (folderName === '..') {
+        return this.$gettext('Folder name cannot be equal to ".."')
+      }
+
       return null
     },
     addNewFile (fileName) {
@@ -215,6 +224,15 @@ export default {
       if (/[/]/.test(fileName)) {
         return this.$gettext('File name cannot contain "/"')
       }
+
+      if (fileName === '.') {
+        return this.$gettext('File name cannot be equal to "."')
+      }
+
+      if (fileName === '..') {
+        return this.$gettext('File name cannot be equal to ".."')
+      }
+
       return null
     },
     onFileSuccess (event, file) {
