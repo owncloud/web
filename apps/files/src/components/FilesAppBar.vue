@@ -3,7 +3,7 @@
     <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">
-        <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage" :home="navigateToHome"></oc-breadcrumb>
+        <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage && activeRoute" :home="navigateToHome"></oc-breadcrumb>
       </div>
       <div class="uk-width-auto uk-visible@m">
         <span class="uk-text-meta"><translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">%{ activeFiles.length } Result</translate></span>
@@ -12,7 +12,7 @@
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
       <div class="uk-width-auto">
-        <div class="uk-button-group">
+        <div class="uk-button-group" v-if="$route.name === 'files-list'">
           <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
           <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
           <oc-button class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn"></oc-button>

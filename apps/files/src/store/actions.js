@@ -51,6 +51,25 @@ function _buildFile (file) {
   })
 }
 
+function _buildFileInTrashbin (file) {
+  let ext = ''
+  if (file.type !== 'dir') {
+    const ex = file.name.match(/\.[0-9a-z]+$/i)
+    if (ex !== null) {
+      ext = ex[0].substr(1)
+    }
+  }
+  return ({
+    type: (file.type === 'dir') ? 'folder' : file.type,
+    deleteTimestamp: new Date(Number(file['fileInfo']['{http://owncloud.org/ns}trashbin-delete-timestamp'])),
+    extension: (function () {
+      return ext
+    }()),
+    name: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename'],
+    originalLocation: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-location']
+  })
+}
+
 function _buildShare (s) {
   let share = {
     info: s
@@ -163,6 +182,35 @@ export default {
       })
     })
   },
+  loadTrashbin (context, { client, $gettext }) {
+    context.commit('UPDATE_FOLDER_LOADING', true)
+
+    client.fileTrash.list('').then(res => {
+      for (let i = 0; i < res.length; i++) {
+        console.log(res[i])
+      }
+      if (res === null) {
+        context.dispatch('showNotification', {
+          title: $gettext('Loading trashbin failed…'),
+          status: 'danger'
+        }, { root: true })
+      } else {
+        context.dispatch('loadDeletedFiles', {
+          currentFolder: res[0],
+          files: res.splice(1)
+        })
+      }
+      context.dispatch('resetFileSelection')
+    }).catch((e) => {
+      context.dispatch('showNotification', {
+        title: $gettext('Loading trashbin failed…'),
+        desc: e.message,
+        status: 'danger'
+      }, { root: true })
+    }).finally(() => {
+      context.commit('UPDATE_FOLDER_LOADING', false)
+    })
+  },
   updateFileProgress ({ commit }, progress) {
     if (progress.progress === 100) commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
     else commit('UPDATE_FILE_PROGRESS', progress)
@@ -173,6 +221,11 @@ export default {
   loadFiles (context, { currentFolder, files }) {
     currentFolder = _buildFile(currentFolder)
     files = files.map(_buildFile)
+    context.commit('LOAD_FILES', { currentFolder, files })
+  },
+  loadDeletedFiles (context, { currentFolder, files }) {
+    currentFolder = _buildFile(currentFolder)
+    files = files.map(_buildFileInTrashbin)
     context.commit('LOAD_FILES', { currentFolder, files })
   },
   addFileSelection (context, file) {

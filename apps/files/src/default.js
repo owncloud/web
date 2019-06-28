@@ -47,36 +47,55 @@ const navItems = [
       name: 'files-favorites',
       path: `/${appInfo.id}/favorites`
     }
+  },
+  {
+    name: 'Deleted files',
+    iconMaterial: 'delete',
+    route: {
+      name: 'files-trashbin',
+      path: `${appInfo.id}/trashbin`
+    }
   }
 ]
 
-const routes = [{
-  path: '',
-  redirect: `/${appInfo.id}/list/`,
-  components: {
-    app: FilesApp
-  }
-},
-{
-  path: '/list/:item?',
-  components: {
-    app: FilesApp
+const routes = [
+  {
+    path: '',
+    redirect: `/${appInfo.id}/list/`,
+    components: {
+      app: FilesApp
+    }
   },
-  name: 'files-list',
-  meta: {
-    'hideHeadbar': false
-  }
-},
-{
-  path: '/favorites',
-  components: {
-    app: FilesApp
+  {
+    path: '/list/:item?',
+    components: {
+      app: FilesApp
+    },
+    name: 'files-list',
+    meta: {
+      'hideHeadbar': false
+    }
   },
-  name: 'files-favorites',
-  meta: {
-    'hideHeadbar': false
+  {
+    path: '/favorites',
+    components: {
+      app: FilesApp
+    },
+    name: 'files-favorites',
+    meta: {
+      'hideHeadbar': false
+    }
+  },
+  {
+    path: '/trashbin',
+    components: {
+      app: FilesApp
+    },
+    name: 'files-trashbin',
+    meta: {
+      'hideHeadbar': false
+    }
   }
-}
 ]
 
 const translations = translationsJson
