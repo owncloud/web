@@ -3,7 +3,7 @@
     <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">
-        <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage && activeRoute" :home="navigateToHome"></oc-breadcrumb>
+        <!-- <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage" :home="navigateToHome"></oc-breadcrumb> -->
       </div>
       <div class="uk-width-auto uk-visible@m">
         <span class="uk-text-meta"><translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">%{ activeFiles.length } Result</translate></span>
@@ -12,7 +12,13 @@
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
       <div class="uk-width-auto">
-        <div class="uk-button-group" v-if="$route.name === 'files-list'">
+        <oc-button
+          v-if="$route.name === 'files-trashbin'" icon="delete"
+          @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()"
+        >
+          {{ $_ocAppBar_clearTrashbinButtonText }}
+        </oc-button>
+        <div class="uk-button-group" v-if="$_ocFilesApp_showActions">
           <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
           <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
           <oc-button class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn"></oc-button>
@@ -74,7 +80,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken']),
-    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'freeSpace']),
+    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'freeSpace', 'selectedFiles']),
     ...mapState(['route']),
     searchLabel () {
       return this.$gettext('Search')
@@ -126,10 +132,18 @@ export default {
         return false
       }
       return this.currentFolder.canUpload()
+    },
+
+    $_ocFilesApp_showActions () {
+      return this.$route.meta.hideFilelistActions !== true
+    },
+
+    $_ocAppBar_clearTrashbinButtonText () {
+      return this.selectedFiles.length < 1 ? this.$gettext('Clear trash bin') : this.$gettext('Delete selected')
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder']),
+    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder', 'loadTrashbin', 'setTrashbinDeleteMessage']),
     ...mapActions(['openFile', 'showMessage']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
@@ -295,6 +309,19 @@ export default {
     },
     navigateToHome () {
       this.navigateTo('files-list')
+    },
+
+    $_ocTrashbin_deleteSelected () {
+      let translated = this.$gettext('%{numberOfFiles} items will be deleted immediately. You can’t undo this action.')
+      this.setTrashbinDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
+    },
+
+    $_ocTrashbin_empty () {
+      this.$client.fileTrash.clearTrashBin()
+      this.loadTrashbin({
+        client: this.$client,
+        $gettext: this.$gettext
+      })
     }
   },
   filters: {

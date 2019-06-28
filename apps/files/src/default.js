@@ -53,7 +53,7 @@ const navItems = [
     iconMaterial: 'delete',
     route: {
       name: 'files-trashbin',
-      path: `${appInfo.id}/trashbin`
+      path: `/${appInfo.id}/trash-bin`
     }
   }
 ]
@@ -71,10 +71,7 @@ const routes = [
     components: {
       app: FilesApp
     },
-    name: 'files-list',
-    meta: {
-      'hideHeadbar': false
-    }
+    name: 'files-list'
   },
   {
     path: '/favorites',
@@ -83,17 +80,17 @@ const routes = [
     },
     name: 'files-favorites',
     meta: {
-      'hideHeadbar': false
+      hideFilelistActions: true
     }
   },
   {
-    path: '/trashbin',
+    path: '/trash-bin',
     components: {
       app: FilesApp
     },
     name: 'files-trashbin',
     meta: {
-      'hideHeadbar': false
+      hideFilelistActions: true
     }
   }
 ]

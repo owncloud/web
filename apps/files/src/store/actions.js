@@ -54,7 +54,7 @@ function _buildFile (file) {
 function _buildFileInTrashbin (file) {
   let ext = ''
   if (file.type !== 'dir') {
-    const ex = file.name.match(/\.[0-9a-z]+$/i)
+    const ex = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename'].match(/\.[0-9a-z]+$/i)
     if (ex !== null) {
       ext = ex[0].substr(1)
     }
@@ -65,8 +65,20 @@ function _buildFileInTrashbin (file) {
     extension: (function () {
       return ext
     }()),
-    name: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename'],
-    originalLocation: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-location']
+    name: (function () {
+      let fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
+      let pathList = fullName.split('/').filter(e => e !== '')
+      let name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
+      if (ext) {
+        return name.substring(0, name.length - ext.length - 1)
+      }
+      return name
+    })(),
+    originalLocation: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-location'],
+    path: (function () {
+      let pathList = file.name.split('/').filter(e => e !== '')
+      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
+    })()
   })
 }
 
@@ -186,9 +198,6 @@ export default {
     context.commit('UPDATE_FOLDER_LOADING', true)
 
     client.fileTrash.list('').then(res => {
-      for (let i = 0; i < res.length; i++) {
-        console.log(res[i])
-      }
       if (res === null) {
         context.dispatch('showNotification', {
           title: $gettext('Loading trashbin failed…'),
@@ -416,5 +425,9 @@ export default {
   },
   dragOver (context, value) {
     context.commit('DRAG_OVER', value)
+  },
+
+  setTrashbinDeleteMessage (context, message) {
+    context.commit('SET_TRASHBIN_DELETE_CONFIRMATION', message)
   }
 }
