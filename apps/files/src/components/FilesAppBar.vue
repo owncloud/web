@@ -3,7 +3,7 @@
     <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">
-        <!-- <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage" :home="navigateToHome"></oc-breadcrumb> -->
+        <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage" :home="navigateToHome"></oc-breadcrumb>
       </div>
       <div class="uk-width-auto uk-visible@m">
         <span class="uk-text-meta"><translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">%{ activeFiles.length } Result</translate></span>
@@ -145,7 +145,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder', 'loadTrashbin', 'setTrashbinDeleteMessage']),
+    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
     ...mapActions(['openFile', 'showMessage']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
@@ -320,27 +320,37 @@ export default {
 
     $_ocTrashbin_empty () {
       this.$client.fileTrash.clearTrashBin()
-      this.loadTrashbin({
-        client: this.$client,
-        $gettext: this.$gettext
-      })
+        .then(() => {
+          this.showNotification({
+            title: this.$gettext('Trash bin was successfully emtied')
+          })
+          this.removeFilesFromTrashbin(this.activeFiles)
+        })
+        .catch((error) => {
+          this.showNotification({
+            title: this.$gettext("Trash bin couldn't be emptied"),
+            desc: error.message,
+            status: 'danger'
+          })
+        })
     },
 
-    $_ocTrashbin_restoreFiles (items = this.selectedFiles) {
-      for (let i = 0; i < items.length; i++) {
-        this.$client.fileTrash.restore(items[i].id, items[i].originalLocation)
+    $_ocTrashbin_restoreFiles (files = this.selectedFiles) {
+      for (let file of files) {
+        this.$client.fileTrash.restore(file.id, file.originalLocation)
+          .then(() => {
+            let translated = this.$gettext('%{file} was succesfully restored')
+            this.showNotification({
+              title: this.$gettextInterpolate(translated, { file: file.name }, true)
+            })
+            this.removeFilesFromTrashbin([file])
+          })
           .catch(error => {
             let translated = this.$gettext('Restoration of %{file} failed')
             this.showNotification({
-              title: this.$gettextInterpolate(translated, { file: items[i].name }, true),
+              title: this.$gettextInterpolate(translated, { file: file.name }, true),
               desc: error.message,
               status: 'danger'
-            })
-          })
-          .finally(() => {
-            let translated = this.$gettext('%{file} was succesfully restored')
-            this.showNotification({
-              title: this.$gettextInterpolate(translated, { file: items[i].name }, true)
             })
           })
       }

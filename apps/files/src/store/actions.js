@@ -276,6 +276,11 @@ export default {
       })
     }
   },
+  removeFilesFromTrashbin (context, files) {
+    for (let file of files) {
+      context.commit('REMOVE_FILE', file)
+    }
+  },
   renameFile (context, payload) {
     let file = payload.file
     let newValue = payload.newValue
@@ -426,7 +431,6 @@ export default {
   dragOver (context, value) {
     context.commit('DRAG_OVER', value)
   },
-
   setTrashbinDeleteMessage (context, message) {
     context.commit('SET_TRASHBIN_DELETE_CONFIRMATION', message)
   }

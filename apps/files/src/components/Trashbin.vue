@@ -76,7 +76,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage']),
+    ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
     ...mapActions(['showNotifications']),
 
     $_ocTrashbin_deleteFile (item) {
@@ -107,13 +107,20 @@ export default {
       }
     },
 
-    $_ocTrashbin_clearTrashbinConfirmation (items = this.selectedFiles) {
-      for (let i = 0; i < items.length; i++) {
-        this.$client.fileTrash.clearTrashBin(items[i].id)
+    $_ocTrashbin_clearTrashbinConfirmation (files = this.selectedFiles) {
+      for (let file of files) {
+        this.$client.fileTrash.clearTrashBin(file.id)
+          .then(() => {
+            this.$_ocTrashbin_removeFileFromList([file])
+            let translated = this.$gettext('%{file} was succesfully deleted')
+            this.showNotification({
+              title: this.$gettextInterpolate(translated, { file: file.name }, true)
+            })
+          })
           .catch(error => {
             let translated = this.$gettext('Deletion of %{file} failed')
             this.showNotification({
-              title: this.$gettextInterpolate(translated, { file: items[i].name }, true),
+              title: this.$gettextInterpolate(translated, { file: file.name }, true),
               desc: error.message,
               status: 'danger'
             })
@@ -123,19 +130,30 @@ export default {
       this.setTrashbinDeleteMessage('')
     },
 
-    $_ocTrashbin_restoreFile (item) {
+    $_ocTrashbin_restoreFile (file) {
       this.resetFileSelection()
-      this.addFileSelection(item)
-      this.$client.fileTrash.restore(item.id, item.originalLocation)
+      this.addFileSelection(file)
+      this.$client.fileTrash.restore(file.id, file.originalLocation)
+        .then(() => {
+          this.$_ocTrashbin_removeFileFromList([file])
+          let translated = this.$gettext('%{file} was succesfully restored')
+          this.showNotification({
+            title: this.$gettextInterpolate(translated, { file: file.name }, true)
+          })
+        })
         .catch(error => {
           let translated = this.$gettext('Restoration of %{file} failed')
           this.showNotification({
-            title: this.$gettextInterpolate(translated, { file: item.name }, true),
+            title: this.$gettextInterpolate(translated, { file: file.name }, true),
             desc: error.message,
             status: 'danger'
           })
         })
       this.resetFileSelection()
+    },
+
+    $_ocTrashbin_removeFileFromList (files) {
+      this.removeFilesFromTrashbin(files)
     }
   }
 }
