@@ -24,7 +24,7 @@
             {{ formDateFromNow(item.deleteTimestamp) }}
           </oc-table-cell>
           <oc-table-cell class="uk-text-meta uk-text-nowrap">
-            <oc-button><translate>Restore</translate></oc-button>
+            <oc-button icon="restore" @click="$_ocTrashbin_restoreFile(item)"><translate>Restore</translate></oc-button>
             <oc-button icon="delete" @click="$_ocTrashbin_deleteFile(item)"><translate>Delete immediately</translate></oc-button>
           </oc-table-cell>
         </oc-table-row>
@@ -109,8 +109,7 @@ export default {
 
     $_ocTrashbin_clearTrashbinConfirmation (items = this.selectedFiles) {
       for (let i = 0; i < items.length; i++) {
-        console.log('Deleting file ' + items[i].name)
-        this.$client.fileTrash.clearTrashBin(items[i].path)
+        this.$client.fileTrash.clearTrashBin(items[i].id)
           .catch(error => {
             let translated = this.$gettext('Deletion of %{file} failed')
             this.showNotification({
@@ -122,6 +121,21 @@ export default {
       }
       this.resetFileSelection()
       this.setTrashbinDeleteMessage('')
+    },
+
+    $_ocTrashbin_restoreFile (item) {
+      this.resetFileSelection()
+      this.addFileSelection(item)
+      this.$client.fileTrash.restore(item.id, item.originalLocation)
+        .catch(error => {
+          let translated = this.$gettext('Restoration of %{file} failed')
+          this.showNotification({
+            title: this.$gettextInterpolate(translated, { file: item.name }, true),
+            desc: error.message,
+            status: 'danger'
+          })
+        })
+      this.resetFileSelection()
     }
   }
 }

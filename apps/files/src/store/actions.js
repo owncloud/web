@@ -75,7 +75,7 @@ function _buildFileInTrashbin (file) {
       return name
     })(),
     originalLocation: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-location'],
-    path: (function () {
+    id: (function () {
       let pathList = file.name.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     })()

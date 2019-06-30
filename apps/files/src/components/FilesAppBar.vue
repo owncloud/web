@@ -12,12 +12,14 @@
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
       <div class="uk-width-auto">
-        <oc-button
-          v-if="$route.name === 'files-trashbin'" icon="delete"
-          @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()"
-        >
-          {{ $_ocAppBar_clearTrashbinButtonText }}
-        </oc-button>
+        <template v-if="$route.name === 'files-trashbin'">
+          <oc-button v-if="selectedFiles.length > 0" icon="restore" @click="$_ocTrashbin_restoreFiles()">
+            <translate>Restore selected</translate>
+          </oc-button>
+          <oc-button icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
+            {{ $_ocAppBar_clearTrashbinButtonText }}
+          </oc-button>
+        </template>
         <div class="uk-button-group" v-if="$_ocFilesApp_showActions">
           <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
           <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
@@ -322,6 +324,27 @@ export default {
         client: this.$client,
         $gettext: this.$gettext
       })
+    },
+
+    $_ocTrashbin_restoreFiles (items = this.selectedFiles) {
+      for (let i = 0; i < items.length; i++) {
+        this.$client.fileTrash.restore(items[i].id, items[i].originalLocation)
+          .catch(error => {
+            let translated = this.$gettext('Restoration of %{file} failed')
+            this.showNotification({
+              title: this.$gettextInterpolate(translated, { file: items[i].name }, true),
+              desc: error.message,
+              status: 'danger'
+            })
+          })
+          .finally(() => {
+            let translated = this.$gettext('%{file} was succesfully restored')
+            this.showNotification({
+              title: this.$gettextInterpolate(translated, { file: items[i].name }, true)
+            })
+          })
+      }
+      this.resetFileSelection()
     }
   },
   filters: {
