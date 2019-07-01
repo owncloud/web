@@ -61,7 +61,7 @@ function _buildFileInTrashbin (file) {
   }
   return ({
     type: (file.type === 'dir') ? 'folder' : file.type,
-    deleteTimestamp: new Date(Number(file['fileInfo']['{http://owncloud.org/ns}trashbin-delete-timestamp'])),
+    deleteTimestamp: new Date(Number(file['fileInfo']['{http://owncloud.org/ns}trashbin-delete-timestamp']) * 1000),
     extension: (function () {
       return ext
     }()),
