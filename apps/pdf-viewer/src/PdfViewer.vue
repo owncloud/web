@@ -51,14 +51,14 @@ export default {
   },
   methods: {
     ...mapActions('PDFViewer', ['loadPages', 'changePage']),
-    ...mapActions(['showNotification']),
+    ...mapActions(['showMessage']),
     closeApp () {
       this.$router.push({
         path: '/files'
       })
     },
     error (error) {
-      this.showNotification({
+      this.showMessage({
         title: this.$gettext('PDF could not be loaded…'),
         desc: error,
         status: 'danger'

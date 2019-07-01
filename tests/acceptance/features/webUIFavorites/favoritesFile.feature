@@ -44,7 +44,7 @@ Feature: Mark file as favorite
   Scenario: navigate to an empty favorites page
     When the user browses to the favorites page
     Then the files table should be displayed
-    And no notification should be displayed on the webUI
+    And no message should be displayed on the webUI
     And there should be no files/folders listed on the webUI
 
   Scenario: navigate to the favorites page using the menu

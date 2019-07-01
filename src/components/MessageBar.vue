@@ -1,12 +1,12 @@
 <template>
   <oc-notifications>
     <oc-notification-message
-            v-for="(item, index) in activeNotifications"
+            v-for="(item, index) in activeMessages"
             :key="index"
             :title="item.title"
             :message="item.desc"
             :status="item.status"
-            @close="deleteNotification(item)"
+            @close="deleteMessage(item)"
     />
   </oc-notifications>
 </template>
@@ -16,10 +16,10 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   methods: {
-    ...mapActions(['showNotification', 'deleteNotification'])
+    ...mapActions(['showMessage', 'deleteMessage'])
   },
   computed: {
-    ...mapGetters(['activeNotifications'])
+    ...mapGetters(['activeMessages'])
   }
 }
 </script>

@@ -40,12 +40,24 @@ module.exports = {
         .api.page.FilesPageElement.filesList()
         .waitForElementPresent({ selector: '@filesListProgressBar', abortOnFailure: false }) // don't fail if we are too late
         .waitForElementNotPresent('@filesListProgressBar')
+    },
+    markNotificationAsRead: function () {
+      return this.waitForElementVisible('@notificationBell')
+        .click('@notificationBell')
+        .waitForElementVisible('@markNotificationAsReadLink')
+        .click('@markNotificationAsReadLink')
     }
   },
   elements: {
     message: {
       selector: '//*[contains(@class, "uk-notification-message")]/div/div[contains(@class, "oc-notification-message-title")]',
       locateStrategy: 'xpath'
+    },
+    notificationBell: {
+      selector: '#oc-notification-bell'
+    },
+    markNotificationAsReadLink: {
+      selector: '#resolve-notification-button'
     },
     ocDialogPromptAlert: {
       selector: '#oc-dialog-prompt-alert'
