@@ -61,7 +61,7 @@ function _buildFileInTrashbin (file) {
   }
   return ({
     type: (file.type === 'dir') ? 'folder' : file.type,
-    deleteTimestamp: new Date(Number(file['fileInfo']['{http://owncloud.org/ns}trashbin-delete-timestamp']) * 1000),
+    deleteTimestamp: file['fileInfo']['{http://owncloud.org/ns}trashbin-delete-datetime'],
     extension: (function () {
       return ext
     }()),
@@ -197,7 +197,13 @@ export default {
   loadTrashbin (context, { client, $gettext }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
 
-    client.fileTrash.list('').then(res => {
+    client.fileTrash.list('', '1', [
+      '{http://owncloud.org/ns}trashbin-original-filename',
+      '{http://owncloud.org/ns}trashbin-original-location',
+      '{http://owncloud.org/ns}trashbin-delete-datetime',
+      '{DAV:}getcontentlength',
+      '{DAV:}resourcetype'
+    ]).then(res => {
       if (res === null) {
         context.dispatch('showNotification', {
           title: $gettext('Loading trashbin failed…'),
