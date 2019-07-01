@@ -38,6 +38,10 @@ function _buildFile (file) {
     etag: file['fileInfo']['{DAV:}getetag'],
     sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],
     privateLink: file['fileInfo']['{http://owncloud.org/ns}privatelink'],
+    owner: {
+      username: file['fileInfo']['{http://owncloud.org/ns}owner-id'],
+      displayName: file['fileInfo']['{http://owncloud.org/ns}owner-display-name']
+    },
     canUpload: function () {
       return this.permissions.indexOf('C') >= 0
     },
@@ -98,19 +102,27 @@ function _buildShare (s) {
     // TODO differentiate groups from users?
     // fall through
     case ('1'): // group share
-      share.role = 'legacy'
-      if (s.permissions & 1) {
+      share.role = 'custom'
+      if (s.permissions === '1' || s.permissions === '17') {
         share.role = 'viewer'
       }
-      if (s.permissions & 2) {
+      if (s.permissions === '2' || s.permissions === '7' || s.permissions === '23') {
         share.role = 'editor'
       }
-      if (s.permissions & 16) {
-        share.role = 'coowner'
-      }
+      // Co-Owner dropped for now until we get displaying of reshares working also for him
+      // if (s.permissions === '31') {
+      //   share.role = 'coowner'
+      // }
+      share.permissions = s.permissions
+      share.canReshare = s.permissions === '16' || s.permissions === '17' || s.permissions === '19' || s.permissions === '23' || s.permissions === '31'
       share.avatar = 'https://picsum.photos/64/64?image=1075' // TODO where do we get the avatar from? by uid? remote.php/dav/avatars/admin/128.png
       share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
       share.displayName = s.share_with_displayname
+      share.customPermissions = {
+        create: s.permissions === '5' || s.permissions === '21',
+        change: s.permissions === '3' || s.permissions === '19',
+        delete: s.permissions === '9' || s.permissions === '25'
+      }
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
       break
     case ('3'): // public link
@@ -355,37 +367,42 @@ export default {
     // see https://owncloud.github.io/js-owncloud-client/Shares.html
     let client = payload.client
     let path = payload.path
-    client.shares.getShares(path)
+    client.shares.getShares(path, { 'reshares': true })
       .then(data => {
         context.commit('SHARES_LOAD', data.map(element => {
           return _buildShare(element.shareInfo)
         }))
-        context.commit('SHARES_LOADING', false)
       })
       .catch(error => {
         context.commit('SHARES_ERROR', error.message)
-        context.commit('SHARES_LOADING', false)
       })
+      .finally(context.commit('SHARES_LOADING', false))
   },
   sharesClearState (context, payload) {
     context.commit('SHARES_LOAD', [])
     context.commit('SHARES_ERROR', null)
   },
-  changeShare (context, { client, share }) {
+  changeShare (context, { client, share, reshare }) {
     const params = {}
-    // needs better mechanism ...
-    if (share.role === 'coowner') {
-      params.perms = 31
-    }
-    if (share.role === 'editor') {
-      params.perms = 15
-    }
-    if (share.role === 'viewer') {
-      params.perms = 1
-    }
-    if (share.info.item_type === 'file') {
-      params.perms &= ~4 // CREATE permission
-      params.perms &= ~8 // DELETE permission
+    switch (share.role) {
+      case ('coowner'):
+        params.perms = 31
+        break
+      case ('editor'):
+        if (share.info.item_type === 'file') {
+          params.perms = reshare ? 19 : 2
+          break
+        }
+        params.perms = reshare ? 23 : 7
+        break
+      case ('viewer'):
+        console.log(reshare)
+        params.perms = reshare ? 17 : 1
+        console.log(params.perms)
+        break
+      case ('custom'):
+        params.perms = 31
+        break
     }
 
     if (!params.perms) {
@@ -404,11 +421,11 @@ export default {
         console.log(e)
       })
   },
-  addShare (context, { client, path, $gettext, shareWith, shareType }) {
+  addShare (context, { client, path, $gettext, shareWith, shareType, permissions }) {
     context.commit('SHARES_LOADING', true)
 
     if (shareType === 0) {
-      client.shares.shareFileWithUser(path, shareWith)
+      client.shares.shareFileWithUser(path, shareWith, permissions)
         .then(share => {
           context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
           context.commit('SHARES_LOADING', false)
@@ -422,7 +439,7 @@ export default {
           context.commit('SHARES_LOADING', false)
         })
     } else {
-      client.shares.shareFileWithGroup(path, shareWith)
+      client.shares.shareFileWithGroup(path, shareWith, permissions)
         .then(share => {
           context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
           context.commit('SHARES_LOADING', false)
