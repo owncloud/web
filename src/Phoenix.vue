@@ -24,8 +24,6 @@ export default {
     TopBar
   },
   beforeMount () {
-    let instance = this.$root.config.server || window.location.origin
-    this.$client.setInstance(instance)
     this.$store.dispatch('initAuth')
   },
   computed: {

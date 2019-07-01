@@ -1,5 +1,6 @@
 const state = {
   state: null,
+  server: '',
   // auth is the legacy configuration
   auth: {
     clientId: '',
@@ -45,6 +46,7 @@ const actions = {
 
 const mutations = {
   LOAD_CONFIG (state, config) {
+    state.server = config.server
     state.auth = config.auth
     state.openIdConnect = config.openIdConnect
     state.state = config.state === undefined ? 'working' : config.state
