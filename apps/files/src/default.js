@@ -26,7 +26,7 @@ const appInfo = {
       },
       quickAccess: {
         icon: 'share',
-        ariaLabel: 'Share'
+        ariaLabel: 'Collaborators'
       }
     }
   ]

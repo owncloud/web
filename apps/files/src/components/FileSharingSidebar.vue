@@ -2,88 +2,96 @@
   <div id="oc-files-sharing-sidebar">
     <div>
      <oc-spinner v-if="sharesLoading"></oc-spinner>
-    <oc-accordion v-if="!sharesLoading" :multiple=true>
-      <oc-accordion-item v-if="owner" class="uk-open">
-        <span slot="title" v-translate>Owner(s)</span>
-        <template slot="content">
-          <oc-user
-            :avatar="owner.avatar"
-            :user-name="owner.name"
-            :display-name="owner.displayName"
-            :email="owner.email"
-          >
-            <template slot="properties">
-              <span v-translate>Owner</span>
-            </template>
-          </oc-user>
+     <template v-if="!sharesLoading">
+      <!-- TODO: Discuss placement of owner in file details instead of collaborators
+      <h4><translate>Owner</translate></h4>
+      <oc-user
+          :avatar="owner.avatar"
+          :user-name="owner.name"
+          :display-name="owner.displayName"
+          class="uk-margin-bottom"
+        >
+        <template slot="properties">
+          <span v-translate>{{ owner.email }}</span>
         </template>
-      </oc-accordion-item>
-      <oc-accordion-item class="uk-open">
-        <span slot="title" v-translate>Collaborators</span>
-        <template slot="content">
-          <oc-autocomplete v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress"
-                           :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
-                           :filter="filterRecipients" id="oc-sharing-autocomplete">
-            <template v-slot:item="{item}">
-              <span>{{ buildRecipientDisplay(item) }}</span>
-            </template>          </oc-autocomplete>
-          <ul class="uk-list" id="file-share-list">
-            <li v-for="(c, k) in shares" :key="k">
+      </oc-user> -->
+      <section>
+        <h4>Collaborators ({{ shares.length }})</h4>
+        <label class="oc-label"><translate>Invite new collaborators</translate></label>
+        <oc-autocomplete
+          v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress"
+          :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
+          :filter="filterRecipients" id="oc-sharing-autocomplete" class="uk-margin-bottom"
+        >
+          <template v-slot:item="{item}">
+            <span>{{ buildRecipientDisplay(item) }}</span>
+          </template>
+        </oc-autocomplete>
+        <oc-accordion v-if="!sharesLoading" :multiple=true>
+          <oc-accordion-item v-for="(collaborator, index) in shares" :key="index" class="uk-margin-small-bottom">
+            <template slot="title">
               <oc-user
-                :avatar="c.avatar"
-                :user-name="c.name"
-                :display-name="c.displayName"
-                :email="c.email"
+                :avatar="collaborator.avatar"
+                :user-name="collaborator.name"
+                :display-name="collaborator.displayName"
               >
                 <template slot="properties">
-                <span v-if="c">
-                  <span
-                    v-if="c.role && roles[c.role] && roles[c.role].name"
-                    v-text="roles[c.role].name"
-                    :uk-tooltip="roles[c.role].description"
-                  />
-                  <span v-if="c.role && c.expires">|</span>
-                  <span v-if="c.expires">
-                    <translate :translate-params="{expires: formDateFromNow(c.expires)}">Expires: %{expires}</translate>
-                  </span>
-                </span>
-                </template>
-                <template slot="actions">
-                  <oc-icon :aria-label="_deleteButtonLabel" name="delete" @click="onDelete(c)" />
-                  <oc-icon :aria-label="_editButtonLabel" v-if="editing != c" name="edit" @click="onEdit(c)" />
+                  <span v-translate>{{ collaborator.role }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></span>
                 </template>
               </oc-user>
-
-              <div v-if="editing && editing.info.id == c.info.id" class="uk-margin-small-top">
-                <div v-for="(role, r) in roles" :key="r" @click="editing.role = r">
-                  <div class="uk-inline">
-                    <oc-radio :model="editing.role" :value="r" />
-                  </div>
-                  <div class="uk-inline">
-                    <div>
-                      <strong v-text="role.name" />
-                    </div>
-                  </div>
+            </template>
+            <template slot="content">
+              <oc-grid gutter="small" class="uk-flex uk-flex-between uk-margin-small-bottom">
+                <div class="uk-flex uk-flex-column">
+                  <span class="uk-text-meta">Type</span>
+                  <span>User</span>
                 </div>
-                <div class="uk-container uk-padding-remove uk-margin-small-top">
-                  <oc-spinner v-if="saving" small></oc-spinner>
-                  <oc-button @click="onSave(editing)" :disabled="saving"><translate>Save</translate></oc-button>
+                <div class="uk-flex uk-flex-column">
+                  <span class="uk-text-meta">Status</span>
+                  <span>Accepted</span>
                 </div>
-              </div>
-            </li>
-          </ul>
-        </template>
-      </oc-accordion-item>
-    </oc-accordion>
+                <div class="uk-flex uk-flex-column">
+                  <span class="uk-text-meta">Shared from</span>
+                  <span>Administrator</span>
+                </div>
+              </oc-grid>
+              <oc-grid gutter="small" class="uk-margin-bottom">
+                <div class="uk-width-1-1 uk-width-1-2@xl">
+                  <label class="oc-label">Role</label>
+                  <oc-button :id="`files-collaborators-role-button-${index}`" class="uk-width-1-1 files-collaborators-role-button">{{ roles[collaborator.role].name }}</oc-button>
+                  <p class="uk-text-meta uk-margin-remove">{{ roles[collaborator.role].description }}</p>
+                  <oc-drop id="files-collaborators-roles-dropdown" :toggle="`#files-collaborators-role-button-${index}`" mode="click" :options="{ 'offset': 0 }" class="oc-autocomplete-dropdown">
+                    <ul class="oc-autocomplete-suggestion-list">
+                      <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : roles[collaborator.role] === role }" @click="onEdit(collaborator); editing.role = key">
+                        <span class="uk-text-bold">{{ role.name }}</span>
+                        <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
+                      </li>
+                    </ul>
+                  </oc-drop>
+                </div>
+                <div class="uk-width-1-1 uk-width-1-2@xl">
+                  <label class="oc-label">Expiration date <span class="uk-text-meta uk-remove-margin">(optional)</span></label>
+                  <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
+                </div>
+              </oc-grid>
+              <oc-button variation="primary" :disabled="editing.name != collaborator.name || saving" @click="onSave(editing)">Save</oc-button>
+              <oc-button :aria-label="_deleteButtonLabel" name="delete" icon="delete" @click="onDelete(collaborator)" />
+              <oc-spinner v-if="saving" small></oc-spinner>
+            </template>
+          </oc-accordion-item>
+        </oc-accordion>
+      </section>
+     </template>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+
 export default {
   title: ($gettext) => {
-    return $gettext('Sharing')
+    return $gettext('Collaborators')
   },
   name: 'FileSharingSidebar',
   mounted () {
@@ -113,20 +121,26 @@ export default {
       autocompleteResults: [],
       autocompleteInProgress: false,
       selectedItem: '',
-      editing: null,
+      editing: { name: null },
       saving: false,
 
       roles: {
-        viewer: { name: 'Viewer', description: 'Download and preview' },
-        editor: { name: 'Editor', description: 'Upload, edit, delete, download and preview' },
-        coowner: {
-          name: 'Co-owner',
-          description: 'Share, upload, edit, delete, download and preview'
+        viewer: {
+          name: this.$gettext('Viewer'),
+          description: this.$gettext('Download and preview')
         },
-        legacy: {
-          name: 'Legacy',
-          description: 'Yet unmapped combination of permissions'
+        editor: {
+          name: this.$gettext('Editor'),
+          description: this.$gettext('Upload, edit, delete, download and preview')
+        },
+        coowner: {
+          name: this.$gettext('Co-owner'),
+          description: this.$gettext('Share, upload, edit, delete, download and preview')
         }
+        // customRole: {
+        //   name: this.$gettext('Custom role'),
+        //   description: this.$gettext('Set detailed permissions')
+        // }
       }
     }
   },
@@ -134,7 +148,7 @@ export default {
     ...mapGetters('Files', ['highlightedFile', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
     ...mapState(['user']),
     $_ocCollaborationStatus_autocompletePlacholder () {
-      return this.$gettext('Add name(s), email(s) or federation ID\'s')
+      return this.$gettext('Search by name, email or federation ID\'s')
     },
     owner () {
       if (this.shares.length === 0) {
@@ -200,8 +214,8 @@ export default {
         share: share
       })
     },
-    onEdit (share) {
-      this.editing = JSON.parse(JSON.stringify(share))
+    onEdit (collaborator) {
+      this.editing = collaborator
     },
     onSave () {
       this.saving = true
@@ -210,10 +224,54 @@ export default {
         share: this.editing
       })
         .then(() => {
-          this.editing = null
+          this.editing = { name: null }
           this.saving = false
         })
     }
   }
 }
 </script>
+
+<style>
+  /* TODO: Move to design system */
+  .uk-accordion-title .oc-avatar {
+    width: 50px;
+  }
+
+  .uk-accordion-title .uk-text-lead {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .uk-accordion-title .uk-inline > span {
+    font-size: 16px;
+  }
+
+  .oc-label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .files-collaborators-role-button {
+    padding: 0 10px;
+    text-align: left;
+  }
+
+  .oc-autocomplete-suggestion {
+    transition: background-color .3s, color .3s;
+    cursor: pointer;
+  }
+
+  .oc-autocomplete-suggestion:hover {
+    color: white;
+    background-color: #002966;
+  }
+
+  .oc-autocomplete-dropdown .uk-card {
+    padding: 0 !important;
+  }
+
+  .oc-autocomplete-suggestion:hover .uk-text-meta, .oc-autocomplete-suggestion-selected .uk-text-meta {
+    color: white;
+  }
+</style>
