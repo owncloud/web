@@ -119,5 +119,8 @@ export default {
   },
   CHECK_QUOTA (state, freeSpace) {
     state.freeSpace = freeSpace
+  },
+  SET_TRASHBIN_DELETE_CONFIRMATION (state, message) {
+    state.trashbinDeleteMessage = message
   }
 }

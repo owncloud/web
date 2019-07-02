@@ -26,5 +26,6 @@ export default {
   sharesError: null,
   sharesLoading: false,
   loadingFolder: false,
-  freeSpace: 0
+  freeSpace: 0,
+  trashbinDeleteMessage: ''
 }

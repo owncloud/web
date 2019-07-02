@@ -70,5 +70,8 @@ export default {
   },
   freeSpace: state => {
     return state.freeSpace
+  },
+  trashbinDeleteMessage: state => {
+    return state.trashbinDeleteMessage
   }
 }
