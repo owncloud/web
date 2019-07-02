@@ -1981,10 +1981,10 @@ chromedriver@^2.36.0:
     request "^2.88.0"
     tcp-port-used "^1.0.1"
 
-chromedriver@^75.0.0:
-  version "75.0.0"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-75.0.0.tgz#a964693440ac2d28af3e25b181f92062e3ae6b82"
-  integrity sha512-bUThqrWQn41agNxV58vT0uxUqDryhNKEcMiJ6Iu0KF8pDDH0vzlnlre9BRz+dO95cwoBAilgwQUx9ig91zIC/Q==
+chromedriver@^75.0.1:
+  version "75.0.1"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-75.0.1.tgz#18f8c5317df294ebfebc82c414c981c09bfc80aa"
+  integrity sha512-x94nKFBcvHHuDHJkRj94BuhGnLJcJE8G64yOkXrAEEmer5vjW7N7V+TF7CzVdT/Bb8G+37h6qT+zpLD9xbQ1og==
   dependencies:
     del "^4.1.1"
     extract-zip "^1.6.7"
@@ -2558,9 +2558,10 @@ date-now@^0.1.4:
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
 
-"davclient.js@git+https://github.com/owncloud/davclient.js.git":
+"davclient.js@https://github.com/owncloud/davclient.js.git":
   version "0.1.3"
-  resolved "git+https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
+  uid "07237a4bb813eb19e19e322e2457ce216721d529"
+  resolved "https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
 
 de-indent@^1.0.2:
   version "1.0.2"
