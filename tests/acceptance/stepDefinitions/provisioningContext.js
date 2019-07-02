@@ -7,29 +7,42 @@ const userSettings = require('../helpers/userSettings')
 
 function createDefaultUser (userId) {
   const password = userSettings.getPasswordForUser(userId)
-  return createUser(userId, password)
-    .then(() => {
-      const displayname = userSettings.getDisplayNameForUser(userId)
-      const email = userSettings.getEmailAddressForUser(userId)
+  return new Promise((resolve, reject) => {
+    createUser(userId, password)
+      .then(() => {
+        const displayname = userSettings.getDisplayNameForUser(userId)
+        const email = userSettings.getEmailAddressForUser(userId)
 
-      const body = new URLSearchParams()
-      body.append('key', 'display')
-      body.append('value', displayname)
-      const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
-      fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`,
-        { method: 'PUT', body: body, headers: headers }
-      )
-        .then(() => {
-          const body = new URLSearchParams()
+        const body = new URLSearchParams()
+        body.append('key', 'display')
+        body.append('value', displayname)
+        const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+        fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`,
+          { method: 'PUT', body: body, headers: headers }
+        )
+          .then(res => {
+            if (res.status !== 200) {
+              reject(new Error('Could not set display name of user'))
+            }
+          })
+          .then(() => {
+            const body = new URLSearchParams()
 
-          body.append('key', 'email')
-          body.append('value', email)
+            body.append('key', 'email')
+            body.append('value', email)
 
-          fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`,
-            { method: 'PUT', body: body, headers: headers }
-          )
-        })
-    })
+            fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`,
+              { method: 'PUT', body: body, headers: headers }
+            )
+              .then(res => {
+                if (res.status !== 200) {
+                  reject(new Error('Could not set email of user'))
+                }
+                resolve()
+              })
+          })
+      })
+  })
 }
 
 function createUser (userId, password = false) {
@@ -116,6 +129,11 @@ Given('these users have been created with default attributes:', function (dataTa
       .then(() => createDefaultUser(userId))
       .then(() => initUser(userId))
   }))
+})
+
+Given('group {string} has been created', function (groupId) {
+  return deleteGroup(groupId)
+    .then(() => createGroup(groupId))
 })
 
 Given('these groups have been created:', function (dataTable) {

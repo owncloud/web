@@ -131,3 +131,31 @@ Feature: Sharing files and folders with internal groups
     And the user types "system-group" in the share-with-field
     Then a tooltip with the text "No users or groups found for system-group" should be shown near the share-with-field on the webUI
     And the autocomplete list should not be displayed on the webUI
+
+  @yetToImplement
+  Scenario: user shares the file/folder with a group and delete the share with user
+    Given user "user1" has logged in using the webUI
+    And user "user1" has shared file "lorem.txt" with group "grp1"
+    When the user opens the share dialog for file "lorem.txt"
+    Then "grp1" should be listed in the shared with list
+    When the user deletes share with group "grp1" for the current file
+    Then "grp1" should not be listed in the shared with list
+#    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
+    And as "user2" file "lorem (2).txt" should not exist
+
+  @yetToImplement
+  Scenario: user shares the file/folder with multiple internal users and delete the share with one user user
+    Given group "grp2" has been created
+    And user "user3" has been added to group "grp2"
+    And user "user1" has logged in using the webUI
+    And user "user1" has shared file "lorem.txt" with group "grp1"
+    And user "user1" has shared file "lorem.txt" with group "grp2"
+    When the user opens the share dialog for file "lorem.txt"
+    Then "grp1" should be listed in the shared with list
+    And "grp2" should be listed in the shared with list
+    When the user deletes share with group "grp1" for the current file
+    Then "grp1" should not be listed in the shared with list
+    And "grp2" should be listed in the shared with list
+#    And file "lorem.txt" should be listed in shared-with-others page on the webUI
+    And as "user2" file "lorem (2).txt" should not exist
+    But as "user3" file "lorem (2).txt" should exist
