@@ -400,11 +400,11 @@ export default {
         console.log(e)
       })
   },
-  addShare (context, { client, path, $gettext, shareWith, shareType }) {
+  addShare (context, { client, path, $gettext, shareWith, shareType, permissions }) {
     context.commit('SHARES_LOADING', true)
 
     if (shareType === 0) {
-      client.shares.shareFileWithUser(path, shareWith)
+      client.shares.shareFileWithUser(path, shareWith, permissions)
         .then(share => {
           context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
           context.commit('SHARES_LOADING', false)
@@ -418,7 +418,7 @@ export default {
           context.commit('SHARES_LOADING', false)
         })
     } else {
-      client.shares.shareFileWithGroup(path, shareWith)
+      client.shares.shareFileWithGroup(path, shareWith, permissions)
         .then(share => {
           context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
           context.commit('SHARES_LOADING', false)
