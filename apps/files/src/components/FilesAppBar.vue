@@ -3,7 +3,7 @@
     <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">
-        <oc-breadcrumb id="files-breadcrumb" :items="activeRoute" v-if="!atSearchPage" :home="navigateToHome"></oc-breadcrumb>
+        <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="!atSearchPage" home></oc-breadcrumb>
       </div>
       <div class="uk-width-auto uk-visible@m">
         <span class="uk-text-meta"><translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">%{ activeFiles.length } Result</translate></span>
@@ -122,13 +122,6 @@ export default {
         'Authorization': 'Bearer ' + this.getToken
       }
     },
-    activeRoute () {
-      if (this.$route.params.item) {
-        return this.getRoutes()
-      }
-
-      return false
-    },
     canUpload () {
       if (this.currentFolder === null) {
         return false
@@ -142,6 +135,27 @@ export default {
 
     $_ocAppBar_clearTrashbinButtonText () {
       return this.selectedFiles.length < 1 ? this.$gettext('Clear trash bin') : this.$gettext('Delete selected')
+    },
+
+    breadcrumbs () {
+      let breadcrumbs = [{
+        index: 0,
+        text: this.$gettext('Home'),
+        to: '/files/list'
+      }]
+
+      if (this.$route.params.item) {
+        let absolutePath = this.$route.params.item
+        const pathSplit = absolutePath.split('/').filter((val) => val)
+        for (let i = 0; i < pathSplit.length; i++) {
+          breadcrumbs.push({
+            index: i,
+            text: pathSplit.slice(0, i + 1)[i],
+            to: '/files/list/' + encodeURIComponent(pathSplit.slice(0, i + 1).join('/'))
+          })
+        }
+      }
+      return breadcrumbs
     }
   },
   methods: {
@@ -291,26 +305,6 @@ export default {
         this.fileUploadProgress = 100
       }
       return this.fileUploadProgress
-    },
-    getRoutes () {
-      this.breadcrumbs = []
-      let breadcrumb = {}
-      let absolutePath = this.$route.params.item
-      const pathSplit = absolutePath.split('/').filter((val) => val)
-      for (let i = 0; i < pathSplit.length; i++) {
-        breadcrumb.index = i
-        breadcrumb.text = pathSplit.slice(0, i + 1)[i]
-        breadcrumb.to = '/files/list/' + encodeURIComponent(pathSplit.slice(0, i + 1).join('/'))
-        if (i === 0 && breadcrumb.text === '') {
-          continue
-        }
-        this.breadcrumbs.push(breadcrumb)
-        breadcrumb = {}
-      }
-      return this.breadcrumbs
-    },
-    navigateToHome () {
-      this.navigateTo('files-list')
     },
 
     $_ocTrashbin_deleteSelected () {
