@@ -46,7 +46,23 @@ const actions = {
         })
       })
 
-      this._vm.$client.loginWithBearer(token).then(res => {
+      let instance = context.rootState.config.server || window.location.origin
+      let options = {
+        baseUrl: instance,
+        auth: {
+          bearer: token
+        }
+      }
+      if (context.state.id) {
+        options.userInfo = {
+          id: context.state.id,
+          'display-name': context.state.displayname,
+          email: context.state.email
+        }
+      }
+
+      this._vm.$client.init(options)
+      this._vm.$client.login().then(res => {
         context.commit('SET_USER', {
           id: res['id'],
           displayname: res['display-name'],

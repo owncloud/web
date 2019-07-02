@@ -4,9 +4,10 @@
       <oc-grid class="uk-height-1-1">
         <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" oc-scroll-offset=".oc-app-bar" :class="{ 'uk-visible@s' : _sidebarOpen }">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
-          <file-list @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
+          <trashbin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
+          <file-list v-else @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
         </div>
-        <div class="uk-width-1-1 uk-width-medium@s uk-width-large@l" v-if="_sidebarOpen">
+        <div class="uk-width-1-1 uk-width-medium@s uk-width-large@l" v-if="_sidebarOpen && $route.name !== 'files-trashbin'">
           <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="resetFileSelection"/>
         </div>
       <oc-file-actions></oc-file-actions>
@@ -18,6 +19,7 @@ import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
 import FilesAppBar from './FilesAppBar.vue'
 import FileList from './FileList.vue'
+import Trashbin from './Trashbin.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
@@ -27,7 +29,8 @@ export default {
   components: {
     FileDetails,
     FileList,
-    FilesAppBar
+    FilesAppBar,
+    Trashbin
   },
   data () {
     return {
@@ -43,10 +46,14 @@ export default {
     }
   },
   mounted () {
-    this.$_ocFilesFolder_getFolder()
+    if (this.$route.name === 'files-trashbin') {
+      this.$_ocTrashbin_getFiles()
+    } else {
+      this.$_ocFilesFolder_getFolder()
+    }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress', 'resetSearch', 'dragOver', 'loadFolder']),
+    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress', 'resetSearch', 'dragOver', 'loadFolder', 'loadTrashbin']),
     ...mapActions(['openFile', 'showMessage']),
 
     trace () {
@@ -141,6 +148,14 @@ export default {
         routeName: this.$route.name
       })
     },
+    $_ocTrashbin_getFiles () {
+      this.fileFilterQuery = ''
+
+      this.loadTrashbin({
+        client: this.$client,
+        $gettext: this.$gettext
+      })
+    },
     $_ocApp_dragOver () {
       this.dragOver(true)
     }
@@ -148,7 +163,11 @@ export default {
 
   watch: {
     item () {
+      if (this.$route.name === 'files-trashbin') return
       this.$_ocFilesFolder_getFolder()
+    },
+    $route (to, from) {
+      if (to.name === 'files-trashbin') this.$_ocTrashbin_getFiles()
     }
   },
 
