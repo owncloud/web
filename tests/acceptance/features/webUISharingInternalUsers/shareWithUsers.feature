@@ -234,12 +234,33 @@ Feature: Sharing files and folders with internal users
     And the share-with field should not be visible in the details panel
     And user "user1" should not be able to share file "testimage (2).jpg" with user "User Three" using the sharing API
 
-  @skip @yetToImplement
+  @yetToImplement
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared file "lorem.txt" with user "user3"
     When the user opens the share dialog for file "lorem.txt"
-    And the user deletes share with user "User Two" for the current file
-    Then the user "User Two" should not be in share with user list
-    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
+    Then "User Two" should be listed in the shared with list
+    And as "user2" file "lorem (2).txt" should exist
+    When the user deletes share with user "User Two" for the current file
+    Then "User Two" should not be listed in the shared with list
+#    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
+
+  @yetToImplement
+  Scenario: user shares the file/folder with multiple internal users and delete the share with one user user
+    Given user "user3" has been created with default attributes
+    And user "user1" has logged in using the webUI
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared file "lorem.txt" with user "user3"
+    When the user opens the share dialog for file "lorem.txt"
+    Then "User Two" should be listed in the shared with list
+    And "User Three" should be listed in the shared with list
+    And as "user2" file "lorem (2).txt" should exist
+    And as "user3" file "lorem (2).txt" should exist
+    When the user deletes share with user "User Two" for the current file
+    Then "User Two" should not be listed in the shared with list
+    And "User Three" should be listed in the shared with list
+#    And file "lorem.txt" should be listed in shared-with-others page on the webUI
+    And as "user2" file "lorem (2).txt" should not exist
+    But as "user3" file "lorem (2).txt" should exist

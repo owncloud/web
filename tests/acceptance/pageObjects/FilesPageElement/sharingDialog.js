@@ -83,10 +83,40 @@ module.exports = {
         .waitForElementVisible('@sharingAutoCompleteDropDownElements')
         .api.elements('css selector', this.elements['sharingAutoCompleteDropDownElements'].selector, (result) => {
           result.value.forEach((value) => {
-            webElementIdList.push(value.ELEMENT)
+            webElementIdList.push(value['ELEMENT'])
           })
         })
         .then(() => webElementIdList)
+    },
+    /**
+     *
+     * @returns {Promise.<string[]>} Array of autocomplete webElementIds
+     */
+    deleteShareWithUserGroup: function (item) {
+      const util = require('util')
+      const deleteSelector = util.format(this.elements.deleteShareButton.selector, item)
+      return this
+        .useXpath()
+        .waitForElementVisible(deleteSelector, () => {
+          this.api.click(deleteSelector)
+        })
+        .waitForElementNotPresent(util.format(this.elements.sharedWithListItem.selector, item))
+    },
+    /**
+     *
+     * @returns {Promise.<string[]>} Array of users/groups in share list
+     */
+    getShareList: function () {
+      const shareList = []
+      return this.waitForElementVisible('@sharedWithList')
+        .api.elements('@sharedWithNames', async result => {
+          result.value.map(item => {
+            this.api.elementIdText(item['ELEMENT'], text => {
+              shareList.push(text.value)
+            })
+          })
+        })
+        .then(() => shareList)
     }
   },
   elements: {
@@ -101,6 +131,24 @@ module.exports = {
     },
     sidebarCloseBtn: {
       selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
+      locateStrategy: 'xpath'
+    },
+    sharedWithList: {
+      selector: '#file-share-list'
+    },
+    sharedWithListItems: {
+      selector: '#file-share-list li'
+    },
+    sharedWithListItem: {
+      selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[.="%s"]/../..',
+      locateStrategy: 'xpath'
+    },
+    sharedWithNames: {
+      selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[@class="uk-text-lead"]',
+      locateStrategy: 'xpath'
+    },
+    deleteShareButton: {
+      selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[.="%s"]/../..//*[@aria-label="Delete Share"]',
       locateStrategy: 'xpath'
     }
   }
