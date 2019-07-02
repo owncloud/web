@@ -145,14 +145,15 @@ export default {
       }]
 
       if (this.$route.params.item) {
-        this.$route.params.item.split('/').forEach((element, index) => {
-          index++ // First item is home
+        let absolutePath = this.$route.params.item
+        const pathSplit = absolutePath.split('/').filter((val) => val)
+        for (let i = 0; i < pathSplit.length; i++) {
           breadcrumbs.push({
-            index,
-            text: element,
-            to: `${breadcrumbs[index - 1].to}/${element}`
+            index: i,
+            text: pathSplit.slice(0, i + 1)[i],
+            to: '/files/list/' + encodeURIComponent(pathSplit.slice(0, i + 1).join('/'))
           })
-        })
+        }
       }
       return breadcrumbs
     }
