@@ -81,7 +81,7 @@ export default {
     fileFolderCreationLoading: false
   }),
   computed: {
-    ...mapGetters(['getToken']),
+    ...mapGetters(['getToken', 'configuration']),
     ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'freeSpace', 'selectedFiles']),
     ...mapState(['route']),
     searchLabel () {
@@ -185,9 +185,18 @@ export default {
     },
     $_ocFilesFolder_getFolder () {
       this.path = []
+
+      let absolutePath
+
+      if (this.configuration.rootFolder) {
+        absolutePath = this.$route.params.item === '' ? this.configuration.rootFolder : this.route.params.item
+      } else {
+        absolutePath = this.$route.params.item === '' ? this.configuration.rootFolder : this.route.params.item
+      }
+
       this.loadFolder({
         client: this.$client,
-        absolutePath: this.$route.params.item === '' ? '/' : this.route.params.item,
+        absolutePath: absolutePath,
         $gettext: this.$gettext
       })
     },

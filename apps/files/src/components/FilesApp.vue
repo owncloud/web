@@ -141,9 +141,17 @@ export default {
       // clear file filter search query when folder changes
       this.fileFilterQuery = ''
 
+      let absolutePath
+
+      if (this.configuration.rootFolder) {
+        absolutePath = this.$route.params.item === '' ? this.configuration.rootFolder : this.route.params.item
+      } else {
+        absolutePath = this.$route.params.item === '' ? this.configuration.rootFolder : this.route.params.item
+      }
+
       this.loadFolder({
         client: this.$client,
-        absolutePath: this.$route.params.item === '' ? '/' : this.route.params.item,
+        absolutePath: absolutePath,
         $gettext: this.$gettext,
         routeName: this.$route.name
       })
@@ -174,7 +182,7 @@ export default {
   computed: {
     ...mapState(['route']),
     ...mapGetters('Files', ['selectedFiles', 'inProgress', 'activeFiles', 'fileFilter', 'davProperties', 'searchTerm', 'dropzone', 'loadingFolder']),
-    ...mapGetters(['getToken', 'extensions']),
+    ...mapGetters(['getToken', 'extensions', 'configuration']),
 
     item () {
       return this.$route.params.item
