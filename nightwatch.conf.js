@@ -1,5 +1,6 @@
 const chromedriver = require('chromedriver')
-const LOCAL_LAUNCH_URL = process.env.SERVER_HOST || 'http://localhost:8300'
+let LOCAL_LAUNCH_URL = process.env.SERVER_HOST || 'http://localhost:8300'
+LOCAL_LAUNCH_URL = LOCAL_LAUNCH_URL.startsWith('http') ? LOCAL_LAUNCH_URL : 'http://' + LOCAL_LAUNCH_URL
 let LOCAL_BACKEND_URL = process.env.BACKEND_HOST || 'http://localhost:8080'
 const BACKEND_ADMIN_USERNAME = process.env.BACKEND_USERNAME || 'admin'
 const BACKEND_ADMIN_PASSWORD = process.env.BACKEND_PASSWORD || 'admin'
