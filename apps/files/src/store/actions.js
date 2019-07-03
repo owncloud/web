@@ -205,7 +205,7 @@ export default {
       '{DAV:}resourcetype'
     ]).then(res => {
       if (res === null) {
-        context.dispatch('showNotification', {
+        context.dispatch('showMessage', {
           title: $gettext('Loading trashbin failed…'),
           status: 'danger'
         }, { root: true })
@@ -217,7 +217,7 @@ export default {
       }
       context.dispatch('resetFileSelection')
     }).catch((e) => {
-      context.dispatch('showNotification', {
+      context.dispatch('showMessage', {
         title: $gettext('Loading trashbin failed…'),
         desc: e.message,
         status: 'danger'

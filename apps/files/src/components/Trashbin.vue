@@ -77,7 +77,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
-    ...mapActions(['showNotifications']),
+    ...mapActions(['showMessage']),
 
     $_ocTrashbin_deleteFile (item) {
       this.resetFileSelection()
@@ -113,13 +113,13 @@ export default {
           .then(() => {
             this.$_ocTrashbin_removeFileFromList([file])
             let translated = this.$gettext('%{file} was succesfully deleted')
-            this.showNotification({
+            this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true)
             })
           })
           .catch(error => {
             let translated = this.$gettext('Deletion of %{file} failed')
-            this.showNotification({
+            this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true),
               desc: error.message,
               status: 'danger'
@@ -137,13 +137,13 @@ export default {
         .then(() => {
           this.$_ocTrashbin_removeFileFromList([file])
           let translated = this.$gettext('%{file} was succesfully restored')
-          this.showNotification({
+          this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true)
           })
         })
         .catch(error => {
           let translated = this.$gettext('Restoration of %{file} failed')
-          this.showNotification({
+          this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true),
             desc: error.message,
             status: 'danger'
