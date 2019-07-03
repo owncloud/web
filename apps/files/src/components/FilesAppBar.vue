@@ -16,7 +16,7 @@
           <oc-button v-if="selectedFiles.length > 0" icon="restore" @click="$_ocTrashbin_restoreFiles()">
             <translate>Restore selected</translate>
           </oc-button>
-          <oc-button icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
+          <oc-button id="delete-selected-btn" icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
             {{ $_ocAppBar_clearTrashbinButtonText }}
           </oc-button>
         </template>

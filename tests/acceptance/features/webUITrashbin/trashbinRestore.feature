@@ -31,7 +31,7 @@ Feature: Restore deleted files/folders
   @smokeTest
   @skip @yetToImplement
   Scenario: Select some trashbin files and restore them in a batch
-    Given the following files have been deleted
+    Given the following files have been deleted by user "user1"
       | name          |
       | data.zip      |
       | lorem.txt     |
@@ -54,7 +54,7 @@ Feature: Restore deleted files/folders
 
   @skip @yetToImplement
   Scenario: Select all except for some trashbin files and restore them in a batch
-    Given the following files have been deleted
+    Given the following files have been deleted by user "user1"
       | name          |
       | data.zip      |
       | lorem.txt     |
@@ -78,7 +78,7 @@ Feature: Restore deleted files/folders
 
   @skip @yetToImplement
   Scenario: Select all trashbin files and restore them in a batch
-    Given the following files have been deleted
+    Given the following files have been deleted by user "user1"
       | name          |
       | data.zip      |
       | lorem.txt     |
