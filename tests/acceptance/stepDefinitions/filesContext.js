@@ -163,7 +163,7 @@ When('the user reloads the current page of the webUI', function () {
 
 Then('these folders/files should not be listed on the webUI', function (entryList) {
   entryList.rows().forEach(entry => {
-    client.page.FilesPageElement.filesList().assertElementNotListed(entry)
+    client.page.FilesPageElement.filesList().assertElementNotListed(entry[0])
   })
   return client
 })
