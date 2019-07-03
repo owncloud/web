@@ -28,3 +28,19 @@ exports.download = function (userId, file) {
     .then(res => httpHelper.checkStatus(res, 'Could not download file.'))
     .then(res => res.text())
 }
+
+/**
+ *
+ * @param {string} userId
+ * @param {string} file
+ */
+exports.delete = function (userId, file) {
+  const headers = httpHelper.createAuthHeader(userId)
+  const davPath = exports.createDavPath(userId, file)
+  return fetch(
+    davPath,
+    { method: 'DELETE', headers: headers }
+  )
+    .then(res => httpHelper.checkStatus(res, 'Could not delete file.'))
+    .then(res => res.text())
+}

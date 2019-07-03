@@ -65,7 +65,7 @@ function _buildFileInTrashbin (file) {
     extension: (function () {
       return ext
     }()),
-    name: (function () {
+    basename: (function () {
       let fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
       let pathList = fullName.split('/').filter(e => e !== '')
       let name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
@@ -73,6 +73,11 @@ function _buildFileInTrashbin (file) {
         return name.substring(0, name.length - ext.length - 1)
       }
       return name
+    })(),
+    name: (function () {
+      let fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
+      let pathList = fullName.split('/').filter(e => e !== '')
+      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     })(),
     originalLocation: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-location'],
     id: (function () {

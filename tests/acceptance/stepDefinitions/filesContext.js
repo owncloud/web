@@ -1,6 +1,7 @@
 const { client } = require('nightwatch-api')
 const assert = require('assert')
 const { Given, When, Then } = require('cucumber')
+const webdav = require('../helpers/webdavHelper')
 let deletedElementsTable = []
 
 When('the user browses to the files page',
@@ -19,6 +20,12 @@ When('the user browses to the favorites page', function () {
 Given('the user has browsed to the favorites page', function () {
   return client
     .page.favoritesPage()
+    .navigateAndWaitTillLoaded()
+})
+
+Given('the user has browsed to the trashbin page', function () {
+  return client
+    .page.trashbinPage()
     .navigateAndWaitTillLoaded()
 })
 
@@ -79,6 +86,13 @@ When('the user deletes the following elements using the webUI', function (table)
   for (const line of table.rows()) {
     client.page.FilesPageElement.filesList().deleteFile(line[0])
     deletedElementsTable.push(line[0])
+  }
+  return client.page.filesPage()
+})
+
+Given('the following files have been deleted by user {string}', function (user, table) {
+  for (const line of table.rows()) {
+    webdav.delete(user, line[0])
   }
   return client.page.filesPage()
 })
@@ -157,8 +171,29 @@ Then('the deleted elements should not be listed on the webUI after a page reload
   return assertDeletedElementsAreNotListed()
 })
 
+Then('file/folder {string} should not be listed in the trashbin on the webUI', function (file) {
+  return client.page.FilesPageElement.filesList().assertElementNotListed(file)
+})
+
+Then('file/folder {string} should be listed in the trashbin on the webUI', function (file) {
+  return client.page.FilesPageElement.filesList().waitForFileVisible(file)
+})
+
 When('the user reloads the current page of the webUI', function () {
   return client.refresh()
+})
+
+When('the user marks all files for batch action using the webUI', function () {
+  return client.page.FilesPageElement.filesList().checkAllFiles()
+})
+
+When('the user batch deletes the marked files using the webUI', function () {
+  return client.page.filesPage().deleteAllCheckedFiles()
+})
+
+Then('the folder should be empty on the webUI', async function () {
+  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
+  return client.assert.equal(allFileRows.value.length, 0)
 })
 
 Then('these folders/files should not be listed on the webUI', function (entryList) {
