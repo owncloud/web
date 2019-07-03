@@ -2,12 +2,12 @@
     <div id="files">
       <files-app-bar />
       <oc-grid class="uk-height-1-1">
-        <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" oc-scroll-offset=".oc-app-bar" :class="{ 'uk-visible@s' : _sidebarOpen }">
+        <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" oc-scroll-offset=".oc-app-bar" :class="{ 'uk-visible@m' : _sidebarOpen }">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <trashbin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
           <file-list v-else @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
         </div>
-        <div class="uk-width-1-1 uk-width-medium@s uk-width-large@l" v-if="_sidebarOpen && $route.name !== 'files-trashbin'">
+        <div class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1" v-if="_sidebarOpen && $route.name !== 'files-trashbin'">
           <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="resetFileSelection"/>
         </div>
       <oc-file-actions></oc-file-actions>
