@@ -77,7 +77,7 @@
                 <oc-grid gutter="small" class="uk-flex uk-flex-between uk-margin-small-bottom">
                   <div class="uk-flex uk-flex-column">
                     <span class="uk-text-meta" v-translate>Type</span>
-                    <span>User</span>
+                    <span>{{ $_ocCollaborators_collaboratorType(collaborator.info.share_type) }}</span>
                   </div>
                   <div class="uk-flex uk-flex-column">
                     <span class="uk-text-meta" v-translate>Status</span>
@@ -271,6 +271,11 @@ export default {
       })
       this.selectedItem = null
       this.selectedNewRole = null
+    },
+    $_ocCollaborators_collaboratorType (type) {
+      if (type === '0') return this.$gettext('User')
+
+      return this.$gettext('Group')
     }
   }
 }
