@@ -1,6 +1,6 @@
 repository:
   name: phoenix
-  description: Next generation frontend for ownCloud
+  description: :dragon_face: Next generation frontend for ownCloud X and Infinite Scale
   homepage: https://phoenix.owncloud.com/custom/phoenix/index.html#/login
   has_wiki: false
 labels:
