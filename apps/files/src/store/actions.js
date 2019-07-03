@@ -97,11 +97,11 @@ function _buildShare (s) {
     // TODO differentiate groups from users?
     // fall through
     case ('1'): // group share
-      share.role = 'legacy'
-      if (s.permissions & 1) {
+      share.role = 'custom'
+      if (s.permissions & 1 || s.permissions & 17) {
         share.role = 'viewer'
       }
-      if (s.permissions & 2) {
+      if (s.permissions & 7 || s.permissions & 23) {
         share.role = 'editor'
       }
       if (s.permissions & 16) {
@@ -351,7 +351,7 @@ export default {
     // see https://owncloud.github.io/js-owncloud-client/Shares.html
     let client = payload.client
     let path = payload.path
-    client.shares.getShares(path)
+    client.shares.getShares(path, { 'reshares': true })
       .then(data => {
         context.commit('SHARES_LOAD', data.map(element => {
           return _buildShare(element.shareInfo)
