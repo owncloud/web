@@ -36,6 +36,7 @@ module.exports = {
         .click('@menuButton')
         .useXpath()
         .waitForElementVisible(menuItemSelector)
+        .waitForAnimationToFinish()
         .click(menuItemSelector)
         .api.page.FilesPageElement.filesList()
         .waitForElementPresent({ selector: '@filesListProgressBar', abortOnFailure: false }) // don't fail if we are too late
