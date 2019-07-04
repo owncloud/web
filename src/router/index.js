@@ -45,7 +45,7 @@ const router = new Router({
       path: '/account',
       name: 'account',
       components: {
-        appContent: Account
+        app: Account
       }
     }
   ]
