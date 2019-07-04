@@ -46,7 +46,6 @@
             :toggle="'#files-file-list-action-button-small-resolution-' + index"
             :options="{ 'pos': 'bottom-center' }"
             class="uk-width-auto"
-            :class="{ 'uk-hidden@m' : !_sidebarOpen, 'uk-visible@s uk-hidden@xl' : _sidebarOpen }"
           >
             <ul class="uk-list">
               <li v-for="(action, index) in actions" :key="index">
