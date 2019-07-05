@@ -58,8 +58,6 @@ Feature: Mark file as favorite
     When the user browses to the files page using the webUI
     Then there should be 31 files/folders listed on the webUI
 
-  @issue-1194
-  @skip @yetToImplement
   Scenario: mark files with same name and different path as favorites and list them in favourites page
     When the user marks file "lorem.txt" as favorite using the webUI
     And the user marks folder "simple-empty-folder" as favorite using the webUI
@@ -69,8 +67,9 @@ Feature: Mark file as favorite
     And the user browses to the files page
     And the user opens folder "strängé नेपाली folder" using the webUI
     And the user marks file "lorem.txt" as favorite using the webUI
-    Then file "lorem.txt" with path "/" should be listed in the favorites page on the webUI
-    And file "lorem.txt" with path "/simple-folder" should be listed in the favorites page on the webUI
-    And folder "simple-empty-folder" with path "/" should be listed in the favorites page on the webUI
-    And file "simple-empty-folder" with path "/simple-folder" should be listed in the favorites page on the webUI
-    And file "lorem.txt" with path "/strängé नेपाली folder" should be listed in the favorites page on the webUI
+    When the user browses to the favorites page
+    Then file "lorem.txt" should be listed on the webUI
+    And file "simple-folder/lorem.txt" should be listed on the webUI
+    And folder "simple-empty-folder" should be listed on the webUI
+    And folder "simple-folder/simple-empty-folder" should be listed on the webUI
+    And file "strängé नेपाली folder/lorem.txt" should be listed on the webUI

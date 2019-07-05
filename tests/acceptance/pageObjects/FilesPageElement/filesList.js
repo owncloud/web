@@ -1,3 +1,7 @@
+const util = require('util')
+const path = require('path')
+const xpathHelper = require('../../helpers/xpath')
+
 module.exports = {
   commands: {
     /**
@@ -166,12 +170,20 @@ module.exports = {
      * @returns {string}
      */
     getFileRowSelectorByFileName: function (fileName) {
-      var element = this.elements['fileRowByName']
-      var util = require('util')
-      if (fileName.indexOf('"') > -1) {
-        element.selector = element.selector.replace(/"/g, "'")
+      const parts = path.parse(fileName)
+      if (parts.ext) {
+        // keep path of nested folders intact, just remove the extension at the end
+        let filePathWithoutExt = parts.dir ? parts.dir + '/' + parts.name : parts.name
+        const element = this.elements['fileRowByNameAndExtension']
+        return util.format(
+          element.selector,
+          xpathHelper.buildXpathLiteral(filePathWithoutExt),
+          parts.ext
+        )
       }
-      return util.format(element.selector, fileName)
+
+      const element = this.elements['fileRowByName']
+      return util.format(element.selector, xpathHelper.buildXpathLiteral(fileName))
     },
     /**
      *
@@ -252,7 +264,10 @@ module.exports = {
       selector: '#oc-dialog-rename-confirm'
     },
     fileRowByName: {
-      selector: '//span[contains(@class, "file-row-name")][@filename="%s"]/../..'
+      selector: '//span[@class="oc-file-name"][text()=%s and not(../span[@class="oc-file-extension"])]/../../..'
+    },
+    fileRowByNameAndExtension: {
+      selector: '//span[span/text()=%s and span/text()="%s"]/../..'
     },
     fileLinkInFileRow: {
       selector: '//span[contains(@class, "file-row-name")]'
