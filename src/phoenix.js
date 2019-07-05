@@ -28,6 +28,10 @@ import VueRouter from 'vue-router'
 import GetTextPlugin from 'vue-gettext'
 import coreTranslations from '../l10n/translations.json'
 
+// --- Directives ----
+
+import imageSrc from './mixins/imageSrc'
+
 // --- Drag Drop ----
 
 import { Drag, Drop } from 'vue-drag-drop'
@@ -44,6 +48,8 @@ Vue.prototype.$client = new ownCloud()
 Vue.use(VueEvents)
 Vue.use(VueRouter)
 Vue.use(DesignSystem)
+
+Vue.directive('image-src', imageSrc)
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)

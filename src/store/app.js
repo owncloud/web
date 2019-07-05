@@ -70,8 +70,7 @@ const mutations = {
     state.messages.push(message)
   },
   REMOVE_MESSAGE (state, item) {
-    let index = state.notifications.indexOf(item)
-    state.notifications.splice(index, 1)
+    state.messages.splice(state.messages.indexOf(item), 1)
   },
   LOADING_NOTIFICATIONS (state, loading) {
     state.notifications.loading = loading
