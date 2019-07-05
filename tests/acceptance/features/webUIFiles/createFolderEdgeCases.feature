@@ -18,6 +18,7 @@ Feature: create folder
       | 'सिमप्ले फोल्देर $%#?&@' |
       | '"somequotes1"'          |
       | "'somequotes2'"          |
+      | "\"quote\"d-folders'"    |
       | "^#29][29@({"            |
       | "+-{$(882)"              |
       | "home"                   |

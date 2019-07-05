@@ -19,6 +19,7 @@ Feature: rename files
       | "simple-name.txt"      |
       | "लोरेम।तयक्स्त? $%#&@" |
       | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
       | "'quotes2'"            |
 
   Scenario Outline: Rename a file that has special characters in its name
