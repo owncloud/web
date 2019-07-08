@@ -1,8 +1,8 @@
   <template>
     <div id="files">
       <files-app-bar />
-      <oc-grid class="uk-height-1-1">
-        <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" oc-scroll-offset=".oc-app-bar" :class="{ 'uk-visible@m' : _sidebarOpen }">
+      <oc-grid class="uk-height-1-1" oc-scroll-offset=".oc-app-bar">
+        <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <trashbin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
           <file-list v-else @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
