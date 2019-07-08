@@ -104,6 +104,7 @@ Then('the users own name should not be listed in the autocomplete list on the we
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
     .then(itemsList => {
       itemsList.forEach(item => {
+        console.log(item)
         assert.notStrictEqual(
           item,
           currentUserName,
