@@ -3,18 +3,18 @@
     <div>
      <oc-spinner v-if="sharesLoading"></oc-spinner>
      <template v-if="!sharesLoading">
-      <!-- TODO: Discuss placement of owner in file details instead of collaborators
+      <!-- TODO: Discuss placement of owner in file details instead of collaborators -->
       <h4><translate>Owner</translate></h4>
       <oc-user
           :avatar="owner.avatar"
-          :user-name="owner.name"
-          :display-name="owner.displayName"
+          :user-name="selectedFiles[0].owner.username"
+          :display-name="selectedFiles[0].owner.displayName"
           class="uk-margin-bottom"
         >
         <template slot="properties">
           <span v-translate>{{ owner.email }}</span>
         </template>
-      </oc-user> -->
+      </oc-user>
       <section>
         <label class="oc-label"><translate>Invite new collaborators</translate></label>
         <oc-autocomplete
@@ -53,14 +53,14 @@
                 <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
                   <oc-switch class="uk-margin-small-right" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
                 </div>
-                <template v-if="selectedNewRole.name === 'Custom role'">
+                <template v-if="selectedNewRole === 'custom'">
                   <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
                     <oc-switch class="uk-margin-small-right" /> <translate>Can change</translate>
                   </div>
-                  <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                  <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
                     <oc-switch class="uk-margin-small-right" /> <translate>Can create</translate>
                   </div>
-                  <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                  <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
                     <oc-switch class="uk-margin-small-right" /> <translate>Can delete</translate>
                   </div>
                 </template>
@@ -79,7 +79,7 @@
           <h4><translate>Collaborators</translate><template v-if="shares.length > 0"> ({{ shares.length }})</template></h4>
           <div v-if="$_ocCollaborators_users.length > 0">
             <h5><translate>Users</translate> ({{ $_ocCollaborators_users.length }})</h5>
-            <oc-accordion>
+            <oc-accordion multiple>
               <oc-accordion-item v-for="(collaborator, index) in $_ocCollaborators_users" :key="collaborator.info.id" class="uk-margin-small-bottom">
                 <template slot="title">
                   <div class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
@@ -89,7 +89,7 @@
                       <div>
                         <span class="uk-text-bold">{{ collaborator.displayName }}</span><span v-if="collaborator.additionalInfo" class="uk-text-meta"> ({{ collaborator.additionalInfo }})</span>
                       </div>
-                      <div v-translate>{{ collaborator.role }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></div>
+                      <div>{{ roles[collaborator.role].name }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></div>
                       <span class="uk-text-meta">{{ $_ocCollaborators_collaboratorType(collaborator.info.share_type) }}</span>
                     </div>
                   </div>
@@ -139,7 +139,7 @@
           </div>
           <div v-if="$_ocCollaborators_groups.length > 0">
             <h5><translate>Groups</translate> ({{ $_ocCollaborators_groups.length }})</h5>
-            <oc-accordion>
+            <oc-accordion multiple>
               <oc-accordion-item v-for="(collaborator, index) in $_ocCollaborators_groups" :key="collaborator.info.id" class="uk-margin-small-bottom">
                 <template slot="title">
                   <div class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
@@ -149,7 +149,7 @@
                       <div>
                         <span class="uk-text-bold">{{ collaborator.displayName }}</span><span v-if="collaborator.additionalInfo" class="uk-text-meta"> ({{ collaborator.additionalInfo }})</span>
                       </div>
-                      <div v-translate>{{ collaborator.role }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></div>
+                      <div>{{ roles[collaborator.role].name }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></div>
                       <span class="uk-text-meta">{{ $_ocCollaborators_collaboratorType(collaborator.info.share_type) }}</span>
                     </div>
                   </div>
