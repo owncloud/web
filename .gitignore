@@ -8,6 +8,8 @@ apps/*
 !apps/markdown-editor
 !apps/pdf-viewer
 
+build/version.json
+
 .idea
 *.bundle.js
 *.bundle.js.map
