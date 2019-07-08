@@ -103,10 +103,10 @@ export default {
       return null
     },
     item () {
-      return this.$route.params.item === undefined ? '' : this.$route.params.item
+      return this.$route.params.item === undefined ? this.configuration.rootFolder : this.$route.params.item
     },
     url () {
-      const path = this.item === '' ? '/' : `${this.item}/`
+      const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
       return this.$client.files.getFileUrl(`/${path}`)
     },
     newFolderErrorMessage () {
@@ -203,7 +203,7 @@ export default {
     addNewFolder (folderName) {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
-        const path = this.item === '' ? '/' : `${this.item}/`
+        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
         this.$client.files.createFolder(path + folderName)
           .then(() => {
             this.createFolder = false
@@ -244,7 +244,7 @@ export default {
     addNewFile (fileName) {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
-        const path = this.item === '' ? '/' : `${this.item}/`
+        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
         this.$client.files.putFileContents(path + fileName, '')
           .then(() => {
             this.createFile = false
@@ -284,7 +284,7 @@ export default {
     },
     onFileSuccess (event, file) {
       this.$nextTick().then(() => {
-        const path = this.item === '' ? '/' : `${this.item}/`
+        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
         const filePath = path + file.name
         this.$client.files.fileInfo(filePath, this.davProperties).then(fileInfo => {
           this.fileUploadProgress = 0
