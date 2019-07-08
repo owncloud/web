@@ -150,7 +150,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'loadingFolder']),
-    ...mapGetters(['getToken', 'fileSideBars']),
+    ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     all () {
       return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
     },
@@ -180,6 +180,9 @@ export default {
       ]
       for (let sideBarName in this.fileSideBars) {
         let sideBar = this.fileSideBars[sideBarName]
+        if (sideBar.enabled !== undefined && !sideBar.enabled(this.capabilities)) {
+          continue
+        }
         if (sideBar.quickAccess) {
           actions.push({
             icon: sideBar.quickAccess.icon,

@@ -235,6 +235,10 @@ export default {
         return this.$gettext('Folder name cannot be equal to ".."')
       }
 
+      if (/\s+$/.test(folderName)) {
+        return this.$gettext('Folder name cannot end with whitespace')
+      }
+
       return null
     },
     addNewFile (fileName) {
@@ -270,6 +274,10 @@ export default {
 
       if (fileName === '..') {
         return this.$gettext('File name cannot be equal to ".."')
+      }
+
+      if (/\s+$/.test(fileName)) {
+        return this.$gettext('File name cannot end with whitespace')
       }
 
       return null
@@ -324,13 +332,13 @@ export default {
     $_ocTrashbin_empty () {
       this.$client.fileTrash.clearTrashBin()
         .then(() => {
-          this.showNotification({
+          this.showMessage({
             title: this.$gettext('Trash bin was successfully emtied')
           })
           this.removeFilesFromTrashbin(this.activeFiles)
         })
         .catch((error) => {
-          this.showNotification({
+          this.showMessage({
             title: this.$gettext("Trash bin couldn't be emptied"),
             desc: error.message,
             status: 'danger'
@@ -343,14 +351,14 @@ export default {
         this.$client.fileTrash.restore(file.id, file.originalLocation)
           .then(() => {
             let translated = this.$gettext('%{file} was succesfully restored')
-            this.showNotification({
+            this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true)
             })
             this.removeFilesFromTrashbin([file])
           })
           .catch(error => {
             let translated = this.$gettext('Restoration of %{file} failed')
-            this.showNotification({
+            this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true),
               desc: error.message,
               status: 'danger'

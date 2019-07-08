@@ -19,6 +19,8 @@
         <oc-button :disabled="ocLoading" @click="onCancel">{{ _ocCancelText }}</oc-button>
         <oc-button :disabled="ocLoading || ocError || inputValue === ''"
                :id="ocConfirmId"
+               ref="confirmButton"
+               :autofocus="!ocHasInput"
                @click="onConfirm">{{ _ocConfirmText }}</oc-button>
     </template>
   </oc-dialog>
@@ -62,9 +64,14 @@ export default {
     },
     ocActive (isActive) {
       this.inputValue = this.value
+
       this.$nextTick().then(() => {
-        if (isActive && this.ocHasInput) {
-          this.$refs.input.focus()
+        if (isActive) {
+          if (this.ocHasInput) {
+            this.$refs.input.$el.focus()
+            return
+          }
+          this.$refs.confirmButton.$el.focus()
         }
       })
     }
