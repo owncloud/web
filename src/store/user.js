@@ -8,24 +8,26 @@ const state = {
   id: '',
   displayname: null,
   email: null,
-  isAuthenticated: false
+  isAuthenticated: false,
+  capabilities: [],
+  version: []
 }
 
 const actions = {
   logout (context, payload = {}) {
+    const logoutFinalizer = () => {
+      // reset user to default state
+      context.commit('SET_USER', state)
+      // reset capabilities to default state
+      context.commit('SET_CAPABILITIES', { capabilities: null, version: null })
+      // force redirect to login page after logout
+      router.push({ name: 'login' })
+    }
     vueAuthInstance.logout(payload.requestOptions)
-      .then(ret => {
-        // reset user to default state
-        context.commit('SET_USER', state)
-        // force redirect to login page after logout
-        router.push({ name: 'login' })
-      })
+      .then(logoutFinalizer)
       .catch(error => {
         console.error(error)
-        // reset user to default state
-        context.commit('SET_USER', state)
-        // force redirect to login page after logout
-        router.push({ name: 'login' })
+        logoutFinalizer()
       })
   },
   initAuth (context, autoRedirect = false) {
@@ -62,15 +64,19 @@ const actions = {
       }
 
       this._vm.$client.init(options)
-      this._vm.$client.login().then(res => {
-        context.commit('SET_USER', {
-          id: res['id'],
-          displayname: res['display-name'],
-          email: !Object.keys(res.email).length ? '' : res.email,
-          token,
-          isAuthenticated: true
-        })
-        if (autoRedirect) router.push({ path: '/' })
+      return this._vm.$client.login().then(res => {
+        this._vm.$client.getCapabilities()
+          .then(cap => {
+            context.commit('SET_CAPABILITIES', cap)
+            context.commit('SET_USER', {
+              id: res['id'],
+              displayname: res['display-name'],
+              email: !Object.keys(res.email).length ? '' : res.email,
+              token,
+              isAuthenticated: true
+            })
+            if (autoRedirect) router.push({ path: '/' })
+          })
       }).catch((e) => {
         console.error('logout forced! Seems that your token is invalid. Error:', e)
         context.dispatch('logout')
@@ -109,6 +115,10 @@ const mutations = {
     state.email = user.email
     state.isAuthenticated = user.isAuthenticated
     state.token = user.token
+  },
+  SET_CAPABILITIES (state, data) {
+    state.capabilities = data.capabilities
+    state.version = data.version
   }
 }
 
@@ -121,6 +131,9 @@ const getters = {
   },
   user: (state) => {
     return state
+  },
+  capabilities: (state) => {
+    return state.capabilities
   }
 }
 

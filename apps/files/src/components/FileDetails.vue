@@ -22,7 +22,7 @@
     </template>
     <template slot="content">
       <oc-tabs>
-          <oc-tab-item :active="key == activeTab" @click="activeTab = key" v-for="(tab, key) of fileSideBars" :key="tab.name">
+          <oc-tab-item :active="key == activeTab" @click="activeTab = key" v-for="(tab, key) of fileSideBarsEnabled" :key="tab.name">
             {{ tab.component.title($gettext) }}
           </oc-tab-item>
       </oc-tabs>
@@ -64,7 +64,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getToken', 'fileSideBars']),
+    ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
+    fileSideBarsEnabled () {
+      return this.fileSideBars.filter(b => b.enabled === undefined || b.enabled(this.capabilities))
+    },
     getTabName () {
       if (this.items.length === 0) {
         return ''
@@ -72,12 +75,11 @@ export default {
       if (this.items.length > 1) {
         return this.$gettext('Multiple Files')
       } else {
-        // return (this.items[0].name.length > 16) ? `${this.items[0].name.substr(0, 10)}...` : this.items[0].name
         return this.items[0].name
       }
     },
     activeTabComponent () {
-      return this.fileSideBars[this.activeTab]
+      return this.fileSideBarsEnabled[this.activeTab]
     }
   }
 }

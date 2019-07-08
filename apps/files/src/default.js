@@ -22,6 +22,9 @@ const appInfo = {
     }, {
       app: 'files-sharing',
       component: FileSharingSidebar,
+      enabled (capabilities) {
+        return capabilities.files_sharing.api_enabled === '1'
+      },
       quickAccess: {
         icon: 'share',
         ariaLabel: 'Share'
@@ -52,6 +55,9 @@ const navItems = [
   {
     name: 'Deleted files',
     iconMaterial: 'delete',
+    enabled (capabilities) {
+      return capabilities.dav.trashbin === '1.0'
+    },
     route: {
       name: 'files-trashbin',
       path: `/${appInfo.id}/trash-bin`

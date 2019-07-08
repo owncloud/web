@@ -27,10 +27,17 @@ export default {
   },
   computed: {
     nav () {
-      return this.$root.navItems
+      return this.$root.navItems.filter(item => {
+        if (item.enabled === undefined) {
+          return true
+        }
+        if (this.capabilities === undefined) {
+          return false
+        }
+        return item.enabled(this.capabilities)
+      })
     },
-    ...mapGetters(['isSidebarVisible']),
-    ...mapGetters(['configuration']),
+    ...mapGetters(['isSidebarVisible', 'configuration', 'capabilities']),
     sidebarIsVisible: {
       get () {
         return this.isSidebarVisible
@@ -48,10 +55,6 @@ export default {
   },
   methods: {
     ...mapActions(['toggleSidebar']),
-    notImplemented () {
-      // TODO: tempelgogo's snackbarQueue
-      console.log('snackbar should be here')
-    },
     logout () {
       this.sidebarIsVisible = false
       this.$store.dispatch('logout')
