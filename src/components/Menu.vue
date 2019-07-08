@@ -1,23 +1,26 @@
 <template>
   <oc-application-menu name="coreMenu" v-model="sidebarIsVisible" @close="sidebarIsVisible = false">
-    <template slot="default">
-      <oc-sidebar-nav-item v-for="(n, nid) in nav" :key="nid" :icon="n.iconMaterial" :target="n.route.path">{{ n.name }}</oc-sidebar-nav-item>
+    <oc-sidebar-nav-item v-for="(n, nid) in nav" :key="nid" :icon="n.iconMaterial" :target="n.route.path">{{ n.name }}</oc-sidebar-nav-item>
 
-      <oc-sidebar-nav-item icon="account_circle" target="/account" :isolate="true">
-        <translate>Account</translate>
-      </oc-sidebar-nav-item>
+    <oc-sidebar-nav-item icon="account_circle" target="/account" :isolate="true">
+      <translate>Account</translate>
+    </oc-sidebar-nav-item>
 
-      <oc-sidebar-nav-item active icon="exit_to_app" @click="logout()" :isolate="true">{{ _logoutItemText }}</oc-sidebar-nav-item>
-    </template>
+    <oc-sidebar-nav-item active icon="exit_to_app" @click="logout()" :isolate="true">{{ _logoutItemText }}</oc-sidebar-nav-item>
+
+    <span class="uk-position-bottom uk-padding-small">Version: {{appVersion.version}}-{{appVersion.hash}} ({{appVersion.buildDate}})</span>
   </oc-application-menu>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import appVersionJson from '../../build/version.json'
+
 export default {
   data () {
     return {
-      isOpen: false
+      isOpen: false,
+      appVersion: appVersionJson
     }
   },
   watch: {
