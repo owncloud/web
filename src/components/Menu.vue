@@ -8,7 +8,7 @@
 
     <oc-sidebar-nav-item active icon="exit_to_app" @click="logout()" :isolate="true">{{ _logoutItemText }}</oc-sidebar-nav-item>
 
-    <span class="uk-position-bottom">Version: {{appVersion.version}}-{{appVersion.hash}} ({{appVersion.buildDate}})</span>
+    <span class="uk-position-bottom uk-padding-small">Version: {{appVersion.version}}-{{appVersion.hash}} ({{appVersion.buildDate}})</span>
   </oc-application-menu>
 </template>
 
