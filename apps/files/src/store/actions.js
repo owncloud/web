@@ -98,18 +98,28 @@ function _buildShare (s) {
     // fall through
     case ('1'): // group share
       share.role = 'custom'
-      if (s.permissions & 1 || s.permissions & 17) {
+      if (s.permissions === '1' || s.permissions === '17') {
         share.role = 'viewer'
       }
-      if (s.permissions & 7 || s.permissions & 23) {
+      if (s.permissions === '2' || s.permissions === '7' || s.permissions === '23') {
         share.role = 'editor'
       }
-      if (s.permissions & 16) {
-        share.role = 'coowner'
-      }
+      // Co-Owner dropped for now until we get displaying of reshares working also for him
+      // if (s.permissions === '31') {
+      //   share.role = 'coowner'
+      // }
+      share.permissions = s.permissions
+      share.canReshare = s.permissions === '16' || s.permissions === '17' || s.permissions === '19' || s.permissions === '23' || s.permissions === '31'
       share.avatar = 'https://picsum.photos/64/64?image=1075' // TODO where do we get the avatar from? by uid? remote.php/dav/avatars/admin/128.png
       share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
       share.displayName = s.share_with_displayname
+      if (share.role === 'custom') {
+        share.customPermissions = {
+          create: s.permissions === '5' || s.permissions === '21',
+          change: s.permissions === '3' || s.permissions === '19',
+          delete: s.permissions === '9' || s.permissions === '25'
+        }
+      }
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
       break
     case ('3'): // public link
@@ -356,12 +366,11 @@ export default {
         context.commit('SHARES_LOAD', data.map(element => {
           return _buildShare(element.shareInfo)
         }))
-        context.commit('SHARES_LOADING', false)
       })
       .catch(error => {
         context.commit('SHARES_ERROR', error.message)
-        context.commit('SHARES_LOADING', false)
       })
+      .finally(context.commit('SHARES_LOADING', false))
   },
   sharesClearState (context, payload) {
     context.commit('SHARES_LOAD', [])

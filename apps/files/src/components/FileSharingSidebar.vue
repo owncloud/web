@@ -49,9 +49,22 @@
                 <label class="oc-label"><translate>Expiration date <span class="uk-text-meta uk-remove-margin">(optional)</span></translate></label>
                 <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
               </div>
-              <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                <oc-switch class="uk-margin-small-right" /> <translate>Resharing is not allowed</translate>
-              </div>
+              <oc-grid v-if="selectedNewRole" gutter="small" class="uk-width-1-1">
+                <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                  <oc-switch class="uk-margin-small-right" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
+                </div>
+                <template v-if="selectedNewRole.name === 'Custom role'">
+                  <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                    <oc-switch class="uk-margin-small-right" /> <translate>Can change</translate>
+                  </div>
+                  <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                    <oc-switch class="uk-margin-small-right" /> <translate>Can create</translate>
+                  </div>
+                  <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                    <oc-switch class="uk-margin-small-right" /> <translate>Can delete</translate>
+                  </div>
+                </template>
+              </oc-grid>
               <div>
                 <oc-button @click="$_ocCollaborators_newCollaboratorsCancel"><translate>Cancel</translate></oc-button>
               </div>
@@ -61,14 +74,15 @@
             </oc-grid>
           </div>
         </div>
-        <template v-if="!sharesLoading">
+        <oc-loader v-if="sharesLoading" />
+        <template v-else>
           <h4><translate>Collaborators</translate><template v-if="shares.length > 0"> ({{ shares.length }})</template></h4>
           <div v-if="$_ocCollaborators_users.length > 0">
             <h5><translate>Users</translate> ({{ $_ocCollaborators_users.length }})</h5>
             <oc-accordion>
-              <oc-accordion-item v-for="(collaborator, index) in $_ocCollaborators_users" :key="index" class="uk-margin-small-bottom">
+              <oc-accordion-item v-for="(collaborator, index) in $_ocCollaborators_users" :key="collaborator.info.id" class="uk-margin-small-bottom">
                 <template slot="title">
-                  <div class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="share" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
+                  <div class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
                   <div class="uk-flex uk-flex-wrap uk-flex-middle">
                     <oc-avatar :src="collaborator.avatar" class="uk-margin-small-right" />
                     <div class="uk-flex uk-flex-column uk-flex-center">
@@ -99,9 +113,22 @@
                       <label class="oc-label">Expiration date <span class="uk-text-meta uk-remove-margin">(optional)</span></label>
                       <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
                     </div>
-                    <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                      <oc-switch class="uk-margin-small-right" /> <translate>Resharing is not allowed</translate>
-                    </div>
+                    <oc-grid gutter="small">
+                      <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                        <oc-switch class="uk-margin-small-right" :model="collaborator.canReshare" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
+                        </div>
+                      <template v-if="collaborator.role === 'custom'">
+                        <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.change" /> <translate>Can change</translate>
+                        </div>
+                        <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.create" /> <translate>Can create</translate>
+                        </div>
+                        <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.delete" /> <translate>Can delete</translate>
+                        </div>
+                      </template>
+                    </oc-grid>
                   </oc-grid>
                   <oc-button variation="primary" :disabled="editing.name != collaborator.name || saving" @click="onSave(editing)"><translate>Save</translate></oc-button>
                   <oc-button :aria-label="_deleteButtonLabel" name="delete" icon="delete" @click="onDelete(collaborator)" variation="danger" />
@@ -113,9 +140,9 @@
           <div v-if="$_ocCollaborators_groups.length > 0">
             <h5><translate>Groups</translate> ({{ $_ocCollaborators_groups.length }})</h5>
             <oc-accordion>
-              <oc-accordion-item v-for="(collaborator, index) in $_ocCollaborators_groups" :key="index" class="uk-margin-small-bottom">
+              <oc-accordion-item v-for="(collaborator, index) in $_ocCollaborators_groups" :key="collaborator.info.id" class="uk-margin-small-bottom">
                 <template slot="title">
-                  <div class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="share" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
+                  <div class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
                   <div class="uk-flex uk-flex-wrap uk-flex-middle">
                     <oc-avatar :src="collaborator.avatar" class="uk-margin-small-right" />
                     <div class="uk-flex uk-flex-column uk-flex-center">
@@ -146,9 +173,22 @@
                       <label class="oc-label">Expiration date <span class="uk-text-meta uk-remove-margin">(optional)</span></label>
                       <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
                     </div>
-                    <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                      <oc-switch class="uk-margin-small-right" /> <translate>Resharing is not allowed</translate>
-                    </div>
+                    <oc-grid gutter="small">
+                      <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                        <oc-switch class="uk-margin-small-right" :model="collaborator.canReshare" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
+                        </div>
+                      <template v-if="collaborator.role === 'custom'">
+                        <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.change" /> <translate>Can change</translate>
+                        </div>
+                        <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.create" /> <translate>Can create</translate>
+                        </div>
+                        <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.delete" /> <translate>Can delete</translate>
+                        </div>
+                      </template>
+                    </oc-grid>
                   </oc-grid>
                   <oc-button variation="primary" :disabled="editing.name != collaborator.name || saving" @click="onSave(editing)"><translate>Save</translate></oc-button>
                   <oc-button :aria-label="_deleteButtonLabel" name="delete" icon="delete" @click="onDelete(collaborator)" variation="danger" />
@@ -181,6 +221,16 @@ export default {
       this.sharesClearState()
     }
   },
+  watch: {
+    selectedFile (newItem, oldItem) {
+      if (oldItem !== newItem) {
+        this.loadShares({
+          client: this.$client,
+          path: this.selectedFiles[0].path
+        })
+      }
+    }
+  },
   data () {
     return {
       autocompleteResults: [],
@@ -193,22 +243,26 @@ export default {
         viewer: {
           name: this.$gettext('Viewer'),
           description: this.$gettext('Download and preview'),
-          perms: this.canShare ? 1 : 17
+          perms: this.canShare ? 17 : 1
         },
         editor: {
           name: this.$gettext('Editor'),
           description: this.$gettext('Upload, edit, delete, download and preview'),
-          perms: this.canShare ? 7 : 23
-        }
+          perms: function () {
+            if (this.selectedFiles[0].type === 'folder') return this.canShare ? 23 : 7
+
+            return this.canShare ? 19 : 2
+          }
+        },
         // coowner: {
         //   name: this.$gettext('Co-Owner'),
         //   description: this.$gettext('Share, upload, edit, delete, download and preview'),
         //   perms: 16
-        // }
-        // customRole: {
-        //   name: this.$gettext('Custom role'),
-        //   description: this.$gettext('Set detailed permissions')
-        // }
+        // },
+        custom: {
+          name: this.$gettext('Custom role'),
+          description: this.$gettext('Set detailed permissions')
+        }
       },
       selectedNewRole: null
     }
@@ -216,6 +270,9 @@ export default {
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
     ...mapState(['user']),
+    selectedFile () {
+      return this.selectedFiles[0]
+    },
     $_ocCollaborationStatus_autocompletePlacholder () {
       return this.$gettext('Search by name, email or federation ID\'s')
     },
@@ -306,6 +363,9 @@ export default {
           this.editing = { name: null }
           this.saving = false
         })
+        .finally(_ => {
+          this.canShare = false
+        })
     },
     $_ocCollaborators_newCollaboratorsCancel () {
       this.selectedItem = ''
@@ -324,11 +384,16 @@ export default {
       })
       this.selectedItem = null
       this.selectedNewRole = null
+      this.canShare = false
     },
     $_ocCollaborators_collaboratorType (type) {
+      console.log(this.shares)
       if (type === '0') return this.$gettext('User')
 
       return this.$gettext('Group')
+    },
+    $_ocCollaborator_canShare (value) {
+      this.canShare = value
     }
   }
 }
