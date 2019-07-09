@@ -4,7 +4,7 @@
       <oc-table-group>
         <oc-table-row>
           <oc-table-cell shrink type="head">
-            <oc-checkbox class="uk-margin-small-left" @click.native="$_ocTrashbin_toggleAll" :value="all" />
+            <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" @click.native="$_ocTrashbin_toggleAll" :value="all" />
           </oc-table-cell>
           <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
           <oc-table-cell shrink type="head" class="uk-text-nowrap" v-translate>Deletion Time</oc-table-cell>
@@ -17,20 +17,24 @@
             <oc-checkbox class="uk-margin-small-left" @change.native="$_ocTrashbin_toggleFileSelect(item)" :value="selectedFiles.indexOf(item) >= 0" />
           </oc-table-cell>
           <oc-table-cell class="uk-text-truncate">
-            <oc-file :name="item.name" :extension="item.extension" class="file-row-name"
+            <oc-file :name="item.basename" :extension="item.extension" class="file-row-name"
                     :filename="item.name" :icon="fileTypeIcon(item)" :key="item.path" />
           </oc-table-cell>
           <oc-table-cell class="uk-text-meta uk-text-nowrap">
             {{ formDateFromNow(item.deleteTimestamp) }}
           </oc-table-cell>
           <oc-table-cell class="uk-text-meta uk-text-nowrap">
-            <oc-button icon="restore" @click="$_ocTrashbin_restoreFile(item)"><translate>Restore</translate></oc-button>
-            <oc-button icon="delete" @click="$_ocTrashbin_deleteFile(item)"><translate>Delete immediately</translate></oc-button>
+            <oc-button icon="restore" @click="$_ocTrashbin_restoreFile(item)">
+              <translate>Restore</translate>
+            </oc-button>
+            <oc-button icon="delete" @click="$_ocTrashbin_deleteFile(item)" ariaLabel="Delete">
+              <translate>Delete immediately</translate>
+            </oc-button>
           </oc-table-cell>
         </oc-table-row>
       </oc-table-group>
     </oc-table>
-    <oc-dialog-prompt name="trashbin-delete-file-confirmation-dialog" :oc-active="trashbinDeleteMessage !== ''"
+    <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="trashbinDeleteMessage !== ''"
                       :oc-content="trashbinDeleteMessage" :oc-has-input="false" :ocTitle="_deleteDialogTitle"
                       ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="$_ocTrashbin_clearTrashbinConfirmation"
                       @oc-cancel="setTrashbinDeleteMessage('')"
@@ -77,7 +81,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
-    ...mapActions(['showNotifications']),
+    ...mapActions(['showMessage']),
 
     $_ocTrashbin_deleteFile (item) {
       this.resetFileSelection()
@@ -112,14 +116,14 @@ export default {
         this.$client.fileTrash.clearTrashBin(file.id)
           .then(() => {
             this.$_ocTrashbin_removeFileFromList([file])
-            let translated = this.$gettext('%{file} was succesfully deleted')
-            this.showNotification({
+            let translated = this.$gettext('%{file} was successfully deleted')
+            this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true)
             })
           })
           .catch(error => {
             let translated = this.$gettext('Deletion of %{file} failed')
-            this.showNotification({
+            this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true),
               desc: error.message,
               status: 'danger'
@@ -137,13 +141,13 @@ export default {
         .then(() => {
           this.$_ocTrashbin_removeFileFromList([file])
           let translated = this.$gettext('%{file} was succesfully restored')
-          this.showNotification({
+          this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true)
           })
         })
         .catch(error => {
           let translated = this.$gettext('Restoration of %{file} failed')
-          this.showNotification({
+          this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true),
             desc: error.message,
             status: 'danger'
