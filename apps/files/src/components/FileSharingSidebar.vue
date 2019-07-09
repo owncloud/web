@@ -134,8 +134,6 @@ export default {
       autocompleteResults: [],
       autocompleteInProgress: false,
       selectedItem: '',
-      editing: { name: null },
-      saving: false,
       canShare: false,
       roles: {
         viewer: {
@@ -147,17 +145,17 @@ export default {
           tag: 'editor',
           name: this.$gettext('Editor'),
           description: this.$gettext('Upload, edit, delete, download and preview')
-        },
+        }
         // coowner: {
         //   name: this.$gettext('Co-Owner'),
         //   description: this.$gettext('Share, upload, edit, delete, download and preview'),
         //   perms: 16
         // },
-        custom: {
-          tag: 'custom',
-          name: this.$gettext('Custom role'),
-          description: this.$gettext('Set detailed permissions')
-        }
+        // custom: {
+        //   tag: 'custom',
+        //   name: this.$gettext('Custom role'),
+        //   description: this.$gettext('Set detailed permissions')
+        // }
       },
       selectedNewRole: null
     }
