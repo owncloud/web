@@ -15,11 +15,11 @@
       <oc-grid gutter="small" class="uk-margin-bottom">
         <div class="uk-width-1-1">
           <label class="oc-label"><translate>Role</translate></label>
-          <oc-button :id="`files-collaborators-role-button-${collaborator.info.id}`" class="uk-width-1-1 files-collaborators-role-button">{{ roles[collaborator.role].name }}</oc-button>
-          <p class="uk-text-meta uk-margin-remove">{{ roles[collaborator.role].description }}</p>
+          <oc-button :id="`files-collaborators-role-button-${collaborator.info.id}`" class="uk-width-1-1 files-collaborators-role-button">{{ $_ocCollaborators_selectedRoleName(collaborator) }}</oc-button>
+          <p class="uk-text-meta uk-margin-remove">{{ $_ocCollaborators_selectedRoleDescription(collaborator) }}</p>
           <oc-drop id="files-collaborators-roles-dropdown" :toggle="`#files-collaborators-role-button-${collaborator.info.id}`" mode="click" :options="{ 'offset': 0 }" class="oc-autocomplete-dropdown">
             <ul class="oc-autocomplete-suggestion-list">
-              <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : roles[collaborator.role] === role }" @click="onEdit(collaborator)">
+              <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : roles[collaborator.role] === role }" @click="$_ocCollaborators_changeRole(role, collaborator)">
                 <span class="uk-text-bold">{{ role.name }}</span>
                 <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
               </li>
@@ -27,27 +27,27 @@
           </oc-drop>
         </div>
         <div v-if="false" class="uk-width-1-1">
-          <label class="oc-label">Expiration date <span class="uk-text-meta uk-remove-margin">(optional)</span></label>
+          <label class="oc-label"><translate>Expiration date</translate> <translate class="uk-text-meta uk-remove-margin">(optional)</translate></label>
           <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
         </div>
         <oc-grid gutter="small">
           <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-            <oc-switch class="uk-margin-small-right" :model="collaborator.canReshare" @change="$_ocCollaborator_canShare; onEdit(collaborator)" /> <translate>Can share</translate>
+            <oc-switch class="uk-margin-small-right" :model="canShare" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
           </div>
           <template v-if="collaborator.role === 'custom'">
             <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-              <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.change" @change="onEdit(collaborator)" /> <translate>Can change</translate>
+              <oc-switch class="uk-margin-small-right" :model="canChange" @change="onEdit" /> <translate>Can change</translate>
             </div>
             <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-              <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.create" @change="onEdit(collaborator)" /> <translate>Can create</translate>
+              <oc-switch class="uk-margin-small-right" :model="canCreate" @change="onEdit" /> <translate>Can create</translate>
             </div>
             <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-              <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.delete" @change="onEdit(collaborator)" /> <translate>Can delete</translate>
+              <oc-switch class="uk-margin-small-right" :model="canDelete" @change="onEdit" /> <translate>Can delete</translate>
             </div>
           </template>
         </oc-grid>
       </oc-grid>
-      <oc-button variation="primary" :disabled="editing.name != collaborator.name || saving" @click="onSave(editing)"><translate>Save</translate></oc-button>
+      <oc-button variation="primary" :disabled="!editing || saving" @click="$_ocCollaborators_saveChanges(collaborator)"><translate>Save</translate></oc-button>
       <oc-button :aria-label="_deleteButtonLabel" name="delete" icon="delete" @click="onDelete(collaborator)" variation="danger" />
       <oc-spinner v-if="saving" small></oc-spinner>
     </template>
@@ -71,9 +71,12 @@ export default {
   },
   data () {
     return {
-      editing: { name: null },
+      editing: false,
       saving: false,
-      canShare: false,
+      canShare: this.collaborator.canShare,
+      canChange: this.collaborator.customPermissions.change,
+      canCreate: this.collaborator.customPermissions.create,
+      canDelete: this.collaborator.customPermissions.delete,
       selectedNewRole: null
     }
   },
@@ -85,7 +88,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['deleteShare']),
+    ...mapActions('Files', ['deleteShare', 'changeShare']),
 
     $_ocCollaborators_collaboratorType (type) {
       if (type === '0') return this.$gettext('User')
@@ -93,6 +96,7 @@ export default {
       return this.$gettext('Group')
     },
     $_ocCollaborator_canShare (value) {
+      this.editing = true
       this.canShare = value
     },
     onDelete (share) {
@@ -101,22 +105,40 @@ export default {
         share: share
       })
     },
-    onEdit (collaborator) {
-      this.editing = collaborator
+    onEdit () {
+      this.editing = true
     },
-    onSave () {
+    $_ocCollaborators_saveChanges (collaborator) {
       this.saving = true
+      if (!this.selectedNewRole) this.selectedNewRole = this.roles[collaborator.role]
+      collaborator.role = this.selectedNewRole.tag
       this.changeShare({
         client: this.$client,
-        share: this.editing
+        share: collaborator,
+        reshare: this.canShare
       })
         .then(() => {
-          this.editing = { name: null }
-          this.saving = false
+          this.editing = false
         })
-        .finally(_ => {
-          this.canShare = false
-        })
+        .finally(this.saving = false)
+    },
+    $_ocCollaborators_changeRole (role) {
+      this.selectedNewRole = role
+      this.editing = true
+    },
+    $_ocCollaborators_selectedRoleName (collaborator) {
+      if (!this.selectedNewRole) {
+        return this.roles[collaborator.role].name
+      }
+
+      return this.selectedNewRole.name
+    },
+    $_ocCollaborators_selectedRoleDescription (collaborator) {
+      if (!this.selectedNewRole) {
+        return this.roles[collaborator.role].description
+      }
+
+      return this.selectedNewRole.description
     }
   }
 }

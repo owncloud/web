@@ -117,12 +117,10 @@ function _buildShare (s) {
       share.avatar = 'https://picsum.photos/64/64?image=1075' // TODO where do we get the avatar from? by uid? remote.php/dav/avatars/admin/128.png
       share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
       share.displayName = s.share_with_displayname
-      if (share.role === 'custom') {
-        share.customPermissions = {
-          create: s.permissions === '5' || s.permissions === '21',
-          change: s.permissions === '3' || s.permissions === '19',
-          delete: s.permissions === '9' || s.permissions === '25'
-        }
+      share.customPermissions = {
+        create: s.permissions === '5' || s.permissions === '21',
+        change: s.permissions === '3' || s.permissions === '19',
+        delete: s.permissions === '9' || s.permissions === '25'
       }
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
       break
@@ -380,21 +378,27 @@ export default {
     context.commit('SHARES_LOAD', [])
     context.commit('SHARES_ERROR', null)
   },
-  changeShare (context, { client, share }) {
+  changeShare (context, { client, share, reshare }) {
     const params = {}
-    // needs better mechanism ...
-    if (share.role === 'coowner') {
-      params.perms = 31
-    }
-    if (share.role === 'editor') {
-      params.perms = 15
-    }
-    if (share.role === 'viewer') {
-      params.perms = 1
-    }
-    if (share.info.item_type === 'file') {
-      params.perms &= ~4 // CREATE permission
-      params.perms &= ~8 // DELETE permission
+    switch (share.role) {
+      case ('coowner'):
+        params.perms = 31
+        break
+      case ('editor'):
+        if (share.info.item_type === 'file') {
+          params.perms = reshare ? 19 : 2
+          break
+        }
+        params.perms = reshare ? 23 : 7
+        break
+      case ('viewer'):
+        console.log(reshare)
+        params.perms = reshare ? 17 : 1
+        console.log(params.perms)
+        break
+      case ('custom'):
+        params.perms = 31
+        break
     }
 
     if (!params.perms) {

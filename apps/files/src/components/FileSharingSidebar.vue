@@ -44,7 +44,7 @@
                 </oc-drop>
               </div>
               <div v-if="false" class="uk-width-1-1">
-                <label class="oc-label"><translate>Expiration date <span class="uk-text-meta uk-remove-margin">(optional)</span></translate></label>
+                <label class="oc-label"><translate>Expiration date</translate> <translate class="uk-text-meta uk-remove-margin">(optional)</translate></label>
                 <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
               </div>
               <oc-grid v-if="selectedNewRole" gutter="small" class="uk-width-1-1">
@@ -74,7 +74,7 @@
         </div>
         <oc-loader v-if="sharesLoading" />
         <template v-else>
-          <h4><translate>Collaborators</translate><template v-if="shares.length > 0"> ({{ shares.length }})</template></h4>
+          <h5><translate>Collaborators</translate><template v-if="shares.length > 0"> ({{ shares.length }})</template></h5>
           <div v-if="$_ocCollaborators_users.length > 0">
             <h5><translate>Users</translate> ({{ $_ocCollaborators_users.length }})</h5>
             <oc-accordion>
@@ -84,8 +84,8 @@
             </oc-accordion>
           </div>
           <div v-if="$_ocCollaborators_groups.length > 0">
-            <h5><translate>Groups</translate> ({{ $_ocCollaborators_groups.length }})</h5>
             <oc-accordion>
+            <h5><translate>Groups</translate> ({{ $_ocCollaborators_groups.length }})</h5>
               <template v-for="(collaborator, index) in $_ocCollaborators_groups">
                 <collaborator :key="index" :collaborator="collaborator" :roles="roles" />
               </template>
@@ -139,10 +139,12 @@ export default {
       canShare: false,
       roles: {
         viewer: {
+          tag: 'viewer',
           name: this.$gettext('Viewer'),
           description: this.$gettext('Download and preview')
         },
         editor: {
+          tag: 'editor',
           name: this.$gettext('Editor'),
           description: this.$gettext('Upload, edit, delete, download and preview')
         },
@@ -152,6 +154,7 @@ export default {
         //   perms: 16
         // },
         custom: {
+          tag: 'custom',
           name: this.$gettext('Custom role'),
           description: this.$gettext('Set detailed permissions')
         }
@@ -167,9 +170,6 @@ export default {
     },
     $_ocCollaborationStatus_autocompletePlacholder () {
       return this.$gettext('Search by name, email or federation ID\'s')
-    },
-    _deleteButtonLabel () {
-      return this.$gettext('Delete Share')
     },
     $_ocCollaborators_users () {
       return this.shares.filter(collaborator => {
@@ -224,7 +224,6 @@ export default {
       this.selectedNewRole = role
     },
     $_ocCollaborators_newCollaboratorsAdd (collaborators) {
-      console.log(this.shares)
       let permissions = { perms: null }
       switch (this.selectedNewRole.name) {
         case ('Viewer'):
