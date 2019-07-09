@@ -76,7 +76,7 @@ export default {
       if (item === '.') {
         this.showMessage({
           title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
-          desc: this.$gettext('The file name cannot be equal to "."'),
+          desc: this.$gettext('File name cannot be equal to "."'),
           status: 'danger'
         })
         return
@@ -85,7 +85,7 @@ export default {
       if (item === '..') {
         this.showMessage({
           title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
-          desc: this.$gettext('The file name cannot be equal to ".."'),
+          desc: this.$gettext('File name cannot be equal to ".."'),
           status: 'danger'
         })
         return
@@ -94,7 +94,7 @@ export default {
       if (/\s+$/.test(item)) {
         this.showMessage({
           title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
-          desc: this.$gettext('The file name cannot end with whitespace'),
+          desc: this.$gettext('File name cannot end with whitespace'),
           status: 'danger'
         })
         return
