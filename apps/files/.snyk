@@ -12,3 +12,25 @@ patch:
         patched: '2019-07-04T06:36:45.449Z'
     - babel-eslint > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
         patched: '2019-07-04T06:36:45.449Z'
+    - snyk > inquirer > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
+    - snyk > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
+    - snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
+    - snyk > snyk-mvn-plugin > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
+    - snyk > @snyk/dep-graph > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
+    - snyk > snyk-nuget-plugin > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
+    - snyk > snyk-config > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
+    - snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
+    - snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
+    - snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        patched: '2019-07-09T06:16:46.823Z'
