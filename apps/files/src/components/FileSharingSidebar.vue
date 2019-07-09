@@ -6,14 +6,11 @@
       <!-- TODO: Discuss placement of owner in file details instead of collaborators -->
       <h4><translate>Owner</translate></h4>
       <oc-user
-          :avatar="owner.avatar"
+          avatar=""
           :user-name="selectedFiles[0].owner.username"
           :display-name="selectedFiles[0].owner.displayName"
           class="uk-margin-bottom"
         >
-        <template slot="properties">
-          <span v-translate>{{ owner.email }}</span>
-        </template>
       </oc-user>
       <section>
         <label class="oc-label"><translate>Invite new collaborators</translate></label>
@@ -22,12 +19,13 @@
           :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
           :filter="filterRecipients" id="oc-sharing-autocomplete" class="uk-margin-bottom">
           <template v-slot:item="{item}">
-            <span>{{ buildRecipientDisplay(item) }}</span>
+            <div class="uk-text-bold">{{ item.label }}</div>
+            <span class="uk-text-meta">{{ $_ocCollaborators_recipientType(item) }}</span>
           </template>
         </oc-autocomplete>
         <div v-if="selectedItem" class="uk-margin-medium-bottom">
           <div class="uk-flex-inline uk-flex-column uk-flex-middle uk-margin-small-bottom">
-            <oc-avatar src="https://picsum.photos/64/64?image=1075" />
+            <oc-avatar src="" />
             <span>{{ selectedItem.label }}</span>
           </div>
           <div>
@@ -79,122 +77,18 @@
           <h4><translate>Collaborators</translate><template v-if="shares.length > 0"> ({{ shares.length }})</template></h4>
           <div v-if="$_ocCollaborators_users.length > 0">
             <h5><translate>Users</translate> ({{ $_ocCollaborators_users.length }})</h5>
-            <oc-accordion multiple>
-              <oc-accordion-item v-for="(collaborator, index) in $_ocCollaborators_users" :key="collaborator.info.id" class="uk-margin-small-bottom">
-                <template slot="title">
-                  <div class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
-                  <div class="uk-flex uk-flex-wrap uk-flex-middle">
-                    <oc-avatar :src="collaborator.avatar" class="uk-margin-small-right" />
-                    <div class="uk-flex uk-flex-column uk-flex-center">
-                      <div>
-                        <span class="uk-text-bold">{{ collaborator.displayName }}</span><span v-if="collaborator.additionalInfo" class="uk-text-meta"> ({{ collaborator.additionalInfo }})</span>
-                      </div>
-                      <div>{{ roles[collaborator.role].name }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></div>
-                      <span class="uk-text-meta">{{ $_ocCollaborators_collaboratorType(collaborator.info.share_type) }}</span>
-                    </div>
-                  </div>
-                </template>
-                <template slot="content">
-                  <oc-grid gutter="small" class="uk-margin-bottom">
-                    <div class="uk-width-1-1">
-                      <label class="oc-label"><translate>Role</translate></label>
-                      <oc-button :id="`files-collaborators-role-button-${index}`" class="uk-width-1-1 files-collaborators-role-button">{{ roles[collaborator.role].name }}</oc-button>
-                      <p class="uk-text-meta uk-margin-remove">{{ roles[collaborator.role].description }}</p>
-                      <oc-drop id="files-collaborators-roles-dropdown" :toggle="`#files-collaborators-role-button-${index}`" mode="click" :options="{ 'offset': 0 }" class="oc-autocomplete-dropdown">
-                        <ul class="oc-autocomplete-suggestion-list">
-                          <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : roles[collaborator.role] === role }" @click="onEdit(collaborator); editing.role = key">
-                            <span class="uk-text-bold">{{ role.name }}</span>
-                            <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
-                          </li>
-                        </ul>
-                      </oc-drop>
-                    </div>
-                    <div v-if="false" class="uk-width-1-1">
-                      <label class="oc-label">Expiration date <span class="uk-text-meta uk-remove-margin">(optional)</span></label>
-                      <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
-                    </div>
-                    <oc-grid gutter="small">
-                      <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                        <oc-switch class="uk-margin-small-right" :model="collaborator.canReshare" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
-                        </div>
-                      <template v-if="collaborator.role === 'custom'">
-                        <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.change" /> <translate>Can change</translate>
-                        </div>
-                        <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.create" /> <translate>Can create</translate>
-                        </div>
-                        <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.delete" /> <translate>Can delete</translate>
-                        </div>
-                      </template>
-                    </oc-grid>
-                  </oc-grid>
-                  <oc-button variation="primary" :disabled="editing.name != collaborator.name || saving" @click="onSave(editing)"><translate>Save</translate></oc-button>
-                  <oc-button :aria-label="_deleteButtonLabel" name="delete" icon="delete" @click="onDelete(collaborator)" variation="danger" />
-                  <oc-spinner v-if="saving" small></oc-spinner>
-                </template>
-              </oc-accordion-item>
+            <oc-accordion>
+              <template v-for="(collaborator, index) in $_ocCollaborators_users">
+                <collaborator :key="index" :collaborator="collaborator" :roles="roles" />
+              </template>
             </oc-accordion>
           </div>
           <div v-if="$_ocCollaborators_groups.length > 0">
             <h5><translate>Groups</translate> ({{ $_ocCollaborators_groups.length }})</h5>
-            <oc-accordion multiple>
-              <oc-accordion-item v-for="(collaborator, index) in $_ocCollaborators_groups" :key="collaborator.info.id" class="uk-margin-small-bottom">
-                <template slot="title">
-                  <div class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
-                  <div class="uk-flex uk-flex-wrap uk-flex-middle">
-                    <oc-avatar :src="collaborator.avatar" class="uk-margin-small-right" />
-                    <div class="uk-flex uk-flex-column uk-flex-center">
-                      <div>
-                        <span class="uk-text-bold">{{ collaborator.displayName }}</span><span v-if="collaborator.additionalInfo" class="uk-text-meta"> ({{ collaborator.additionalInfo }})</span>
-                      </div>
-                      <div>{{ roles[collaborator.role].name }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></div>
-                      <span class="uk-text-meta">{{ $_ocCollaborators_collaboratorType(collaborator.info.share_type) }}</span>
-                    </div>
-                  </div>
-                </template>
-                <template slot="content">
-                  <oc-grid gutter="small" class="uk-margin-bottom">
-                    <div class="uk-width-1-1">
-                      <label class="oc-label"><translate>Role</translate></label>
-                      <oc-button :id="`files-collaborators-role-button-${index}`" class="uk-width-1-1 files-collaborators-role-button">{{ roles[collaborator.role].name }}</oc-button>
-                      <p class="uk-text-meta uk-margin-remove">{{ roles[collaborator.role].description }}</p>
-                      <oc-drop id="files-collaborators-roles-dropdown" :toggle="`#files-collaborators-role-button-${index}`" mode="click" :options="{ 'offset': 0 }" class="oc-autocomplete-dropdown">
-                        <ul class="oc-autocomplete-suggestion-list">
-                          <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : roles[collaborator.role] === role }" @click="onEdit(collaborator); editing.role = key">
-                            <span class="uk-text-bold">{{ role.name }}</span>
-                            <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
-                          </li>
-                        </ul>
-                      </oc-drop>
-                    </div>
-                    <div v-if="false" class="uk-width-1-1">
-                      <label class="oc-label">Expiration date <span class="uk-text-meta uk-remove-margin">(optional)</span></label>
-                      <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
-                    </div>
-                    <oc-grid gutter="small">
-                      <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                        <oc-switch class="uk-margin-small-right" :model="collaborator.canReshare" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
-                        </div>
-                      <template v-if="collaborator.role === 'custom'">
-                        <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.change" /> <translate>Can change</translate>
-                        </div>
-                        <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.create" /> <translate>Can create</translate>
-                        </div>
-                        <div v-if="selectedFiles[0].type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                          <oc-switch class="uk-margin-small-right" :model="collaborator.customPermissions.delete" /> <translate>Can delete</translate>
-                        </div>
-                      </template>
-                    </oc-grid>
-                  </oc-grid>
-                  <oc-button variation="primary" :disabled="editing.name != collaborator.name || saving" @click="onSave(editing)"><translate>Save</translate></oc-button>
-                  <oc-button :aria-label="_deleteButtonLabel" name="delete" icon="delete" @click="onDelete(collaborator)" variation="danger" />
-                  <oc-spinner v-if="saving" small></oc-spinner>
-                </template>
-              </oc-accordion-item>
+            <oc-accordion>
+              <template v-for="(collaborator, index) in $_ocCollaborators_groups">
+                <collaborator :key="index" :collaborator="collaborator" :roles="roles" />
+              </template>
             </oc-accordion>
           </div>
         </template>
@@ -205,12 +99,16 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import Collaborator from './Collaborators/Collaborator.vue'
 
 export default {
   title: ($gettext) => {
     return $gettext('Collaborators')
   },
   name: 'FileSharingSidebar',
+  components: {
+    Collaborator
+  },
   mounted () {
     if (this.highlightedFile) {
       this.loadShares({
@@ -242,17 +140,11 @@ export default {
       roles: {
         viewer: {
           name: this.$gettext('Viewer'),
-          description: this.$gettext('Download and preview'),
-          perms: this.canShare ? 17 : 1
+          description: this.$gettext('Download and preview')
         },
         editor: {
           name: this.$gettext('Editor'),
-          description: this.$gettext('Upload, edit, delete, download and preview'),
-          perms: function () {
-            if (this.selectedFiles[0].type === 'folder') return this.canShare ? 23 : 7
-
-            return this.canShare ? 19 : 2
-          }
+          description: this.$gettext('Upload, edit, delete, download and preview')
         },
         // coowner: {
         //   name: this.$gettext('Co-Owner'),
@@ -276,26 +168,8 @@ export default {
     $_ocCollaborationStatus_autocompletePlacholder () {
       return this.$gettext('Search by name, email or federation ID\'s')
     },
-    owner () {
-      if (this.shares.length === 0) {
-        return {
-          avatar: 'https://picsum.photos/64/64?image=1074',
-          name: this.user.id,
-          displayName: this.user.displayname
-        }
-      }
-      const s = this.shares[0]
-      return {
-        avatar: 'https://picsum.photos/64/64?image=1074',
-        name: s.uid_owner,
-        displayName: s.info.displayname_owner
-      }
-    },
     _deleteButtonLabel () {
       return this.$gettext('Delete Share')
-    },
-    _editButtonLabel () {
-      return this.$gettext('Edit Share')
     },
     $_ocCollaborators_users () {
       return this.shares.filter(collaborator => {
@@ -336,36 +210,12 @@ export default {
     filterRecipients (item, queryText) {
       return item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
     },
-    buildRecipientDisplay (recipient) {
+    $_ocCollaborators_recipientType (recipient) {
       if (recipient.value.shareType === 1) {
-        const group = this.$gettext('group')
-        return `${recipient.label} (${group})`
+        return this.$gettext('Group')
       }
-      // fallback and users get no suffix
-      return recipient.label
-    },
-    onDelete (share) {
-      this.deleteShare({
-        client: this.$client,
-        share: share
-      })
-    },
-    onEdit (collaborator) {
-      this.editing = collaborator
-    },
-    onSave () {
-      this.saving = true
-      this.changeShare({
-        client: this.$client,
-        share: this.editing
-      })
-        .then(() => {
-          this.editing = { name: null }
-          this.saving = false
-        })
-        .finally(_ => {
-          this.canShare = false
-        })
+
+      return this.$gettext('User')
     },
     $_ocCollaborators_newCollaboratorsCancel () {
       this.selectedItem = ''
@@ -374,13 +224,27 @@ export default {
       this.selectedNewRole = role
     },
     $_ocCollaborators_newCollaboratorsAdd (collaborators) {
+      console.log(this.shares)
+      let permissions = { perms: null }
+      switch (this.selectedNewRole.name) {
+        case ('Viewer'):
+          permissions.perms = this.canShare ? 17 : 1
+          break
+        case ('Editor'):
+          if (this.selectedFiles[0].type === 'folder') {
+            permissions.perms = this.canShare ? 23 : 7
+            break
+          }
+          permissions.perms = this.canShare ? 19 : 2
+          break
+      }
       this.addShare({
         client: this.$client,
         path: this.selectedFiles[0].path,
         $gettext: this.$gettext,
         shareWith: collaborators.value.shareWith,
         shareType: collaborators.value.shareType,
-        permissions: this.selectedNewRole
+        permissions: permissions
       })
       this.selectedItem = null
       this.selectedNewRole = null
