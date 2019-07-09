@@ -10,9 +10,9 @@ function createDefaultUser (userId) {
   return new Promise((resolve, reject) => {
     createUser(userId, password)
       .then(() => {
-        const displayname = userSettings.getDisplayNameForUser(userId)
-        const email = userSettings.getEmailAddressForUser(userId)
-
+        const displayname = userSettings.getDisplayNameOfDefaultUser(userId)
+        const email = userSettings.getEmailAddressOfDefaultUser(userId)
+        userSettings.addUserToCreatedUsersList(userId, password, displayname, email)
         const body = new URLSearchParams()
         body.append('key', 'display')
         body.append('value', displayname)
@@ -47,10 +47,11 @@ function createDefaultUser (userId) {
 
 function createUser (userId, password = false) {
   const body = new URLSearchParams()
-  const userPassword = password || userId
+  const userPassword = password || userSettings.getPasswordForUser(userId)
   body.append('userid', userId)
   body.append('password', userPassword)
 
+  userSettings.addUserToCreatedUsersList(userId, userPassword)
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
   return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users?format=json', { method: 'POST', body: body, headers: headers })
 }
