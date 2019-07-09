@@ -71,7 +71,7 @@
     "oidc-client": "^1.8.2",
     "owncloud-design-system": "^1.0.0-823",
     "owncloud-sdk": "1.0.0-217",
-    "parse-json": "^4.0.0",
+    "parse-json": "^5.0.0",
     "requirejs": "^2.3.6",
     "rimraf": "^2.6.3",
     "start-server-and-test": "^1.9.1",
