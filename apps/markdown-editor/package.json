@@ -10,15 +10,15 @@
   "author": "serv3r.de DevTeam <ownCloud@serv3r.de>",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@babel/core": "^7.4.5",
+    "@babel/core": "^7.5.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-env": "^7.5.2",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.0.0",
     "vue-loader": "^15.7.0",
     "vue-template-compiler": "^2.6.10",
-    "webpack": "^4.35.2",
+    "webpack": "^4.35.3",
     "webpack-cli": "^3.3.5"
   },
   "dependencies": {
