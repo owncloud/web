@@ -278,14 +278,17 @@ export default {
   deleteFiles (context, payload) {
     let files = payload.files
     let client = payload.client
+    let promises = []
     for (let file of files) {
-      client.files.delete(file.path).then(() => {
+      const promise = client.files.delete(file.path).then(() => {
         context.commit('REMOVE_FILE', file)
         context.commit('REMOVE_FILE_SELECTION', file)
       }).catch(error => {
         console.log('error: ' + file.path + ' not deleted: ' + error)
       })
+      promises.push(promise)
     }
+    return Promise.all(promises)
   },
   removeFilesFromTrashbin (context, files) {
     for (let file of files) {
@@ -444,5 +447,8 @@ export default {
   },
   setTrashbinDeleteMessage (context, message) {
     context.commit('SET_TRASHBIN_DELETE_CONFIRMATION', message)
+  },
+  setFilesDeleteMessage (context, message) {
+    context.commit('SET_FILES_DELETE_CONFIRMATION', message)
   }
 }

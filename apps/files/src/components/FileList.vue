@@ -66,8 +66,12 @@
     </oc-table-group>
     <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName" :ocError="changeFileErrorMessage"
                       :ocTitle="_renameDialogTitle" ocConfirmId="oc-dialog-rename-confirm" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
-    <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
-                      :ocTitle="_deleteDialogTitle" ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
+    <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="filesDeleteMessage !== ''"
+                      :oc-content="filesDeleteMessage" :oc-has-input="false" :ocTitle="_deleteDialogTitle"
+                      ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="reallyDeleteFiles"
+                      @oc-cancel="setFilesDeleteMessage('')"
+    />
+
   </oc-table>
 </template>
 <script>
@@ -87,12 +91,12 @@ export default {
   props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled'],
   data: () => ({
     changeFileName: false,
-    deleteConfirmation: '',
     fileToBeDeleted: '',
     newName: ''
   }),
   methods: {
-    ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'deleteFiles', 'renameFile']),
+    ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection',
+      'deleteFiles', 'renameFile', 'setFilesDeleteMessage']),
     ...mapActions(['openFile']),
 
     toggleAll () {
@@ -128,7 +132,7 @@ export default {
     deleteFile (file) {
       this.fileToBeDeleted = file
       let translated = this.$gettext('Please confirm the deletion of %{ fileName }')
-      this.deleteConfirmation = this.$gettextInterpolate(translated, { fileName: file.name }, true)
+      this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { fileName: file.name }, true))
     },
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
@@ -146,10 +150,20 @@ export default {
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
       }
       return item.basename
+    },
+    reallyDeleteFiles () {
+      const files = this.fileToBeDeleted ? [this.fileToBeDeleted] : this.selectedFiles
+      this.deleteFiles({
+        client: this.$client,
+        files: files
+      }).then(() => {
+        this.fileToBeDeleted = ''
+        this.setFilesDeleteMessage('')
+      })
     }
   },
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'loadingFolder']),
+    ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'loadingFolder', 'filesDeleteMessage']),
     ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     all () {
       return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0

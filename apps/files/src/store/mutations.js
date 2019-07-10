@@ -122,5 +122,8 @@ export default {
   },
   SET_TRASHBIN_DELETE_CONFIRMATION (state, message) {
     state.trashbinDeleteMessage = message
+  },
+  SET_FILES_DELETE_CONFIRMATION (state, message) {
+    state.filesDeleteMessage = message
   }
 }
