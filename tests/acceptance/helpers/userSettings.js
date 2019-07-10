@@ -158,5 +158,12 @@ module.exports = {
     } else {
       return null
     }
+  },
+  /**
+   *
+   * @returns {module.exports.createdUsers|{}}
+   */
+  getCreatedUsers: function () {
+    return this.createdUsers
   }
 }

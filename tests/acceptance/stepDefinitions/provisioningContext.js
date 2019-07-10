@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { Given } = require('cucumber')
+const { Given, After } = require('cucumber')
 const fetch = require('node-fetch')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
@@ -146,4 +146,10 @@ Given('these groups have been created:', function (dataTable) {
 
 Given('user {string} has been added to group {string}', function (userId, groupId) {
   return addToGroup(userId, groupId)
+})
+
+After(function () {
+  for (var userId in userSettings.getCreatedUsers()) {
+    deleteUser(userId)
+  }
 })
