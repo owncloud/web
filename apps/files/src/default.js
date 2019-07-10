@@ -7,7 +7,6 @@ import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import translationsJson from '../l10n/translations.json'
 
 const store = require('./store')
-const rootStore = require('./../../../src/store')
 
 const appInfo = {
   name: 'Files',
@@ -40,7 +39,7 @@ const navItems = [
       name: 'files-list',
       path: `/`,
       params: {
-        item: rootStore.Store.getters.configuration.rootFolder
+        item: ''
       }
     }
   },
@@ -68,7 +67,7 @@ const navItems = [
 const routes = [
   {
     path: '',
-    redirect: `/${appInfo.id}/list/${rootStore.Store.getters.configuration.rootFolder}`,
+    redirect: `/${appInfo.id}/list/`,
     components: {
       app: FilesApp
     }
