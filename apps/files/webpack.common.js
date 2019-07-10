@@ -1,10 +1,9 @@
-const integratePhoenix = require('../../webpack-phoenix-integration')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const path = require('path');
+const path = require('path')
 
-module.exports = integratePhoenix({
+module.exports = {
   plugins: [
-    new VueLoaderPlugin(),
+    new VueLoaderPlugin()
   ],
   entry: {
     files: './src/default.js'
@@ -19,48 +18,48 @@ module.exports = integratePhoenix({
     rules: [
       {
         test: /\.js$/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
         include: [
-          path.resolve('src'),
+          path.resolve('src')
         ],
         options: {
-          rootMode: "upward",
+          rootMode: 'upward'
         }
       },
       {
         test: /\.jsx?$/,
         include: /node_modules\/(?=(vue2-dropzone)\/).*/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
             presets: [
               [
-                "@babel/preset-env",
+                '@babel/preset-env',
                 {
                   targets: {
-                    ie: "11",
-                  },
-                },
-              ],
-            ],
-          },
-        },
+                    ie: '11'
+                  }
+                }
+              ]
+            ]
+          }
+        }
       },
       {
-      enforce: 'pre',
-      test: /\.(js|vue)$/,
-      exclude: /node_modules/,
-      loader: 'eslint-loader',
-    }, {
-      test: /\.vue$/,
-      loader: 'vue-loader',
-      exclude: [/node_modules/]
-    }, {
-      test: /\.css$/,
-      use: [
-        'vue-style-loader',
-        'css-loader'
-      ]
-    }]
+        enforce: 'pre',
+        test: /\.(js|vue)$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader'
+      }, {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        exclude: [/node_modules/]
+      }, {
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader'
+        ]
+      }]
   }
-})
+}
