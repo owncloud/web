@@ -76,5 +76,8 @@ export default {
   },
   filesDeleteMessage: state => {
     return state.filesDeleteMessage
+  },
+  highlightedFile: state => {
+    return state.highlightedFile
   }
 }

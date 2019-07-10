@@ -125,5 +125,8 @@ export default {
   },
   SET_FILES_DELETE_CONFIRMATION (state, message) {
     state.filesDeleteMessage = message
+  },
+  SET_HIGHLIGHTED_FILE (state, file) {
+    state.highlightedFile = file
   }
 }

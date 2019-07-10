@@ -1,6 +1,6 @@
 <template>
     <div>
-        <oc-table middle divider v-if="selectedFiles.length === 1">
+        <oc-table middle divider>
             <oc-table-group>
                 <oc-table-row v-for="(item, index) in versions" :key="index" class="file-row">
                     <oc-table-cell>
@@ -20,10 +20,7 @@
                 </oc-table-row>
             </oc-table-group>
         </oc-table>
-        <div v-else>
-            <span v-translate>Please choose only a single File</span>
-        </div>
-        <div v-show="!hasVersion && selectedFiles.length === 1">
+        <div v-show="!hasVersion">
           <span v-translate>No Versions available for this file</span>
         </div>
     </div></template>
@@ -43,13 +40,13 @@ export default {
     this.getFileVersions()
   },
   computed: {
-    ...mapGetters('Files', ['selectedFiles']),
+    ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['getToken']),
     hasVersion () {
       return this.versions.length > 0
     },
     currentFile () {
-      return this.selectedFiles[0]
+      return this.highlightedFile
     }
   },
   methods: {
