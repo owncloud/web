@@ -20,6 +20,11 @@
             {{ $_ocAppBar_clearTrashbinButtonText }}
           </oc-button>
         </template>
+        <template v-if="$route.name === 'files-list' && selectedFiles.length > 0">
+          <oc-button id="delete-selected-btn" icon="delete" @click="$_ocFiles_deleteSelected()">
+            <translate>Delete selected</translate>
+          </oc-button>
+        </template>
         <div class="uk-button-group" v-if="$_ocFilesApp_showActions">
           <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
           <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
@@ -159,7 +164,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
+    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile',
+      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilesDeleteMessage']),
     ...mapActions(['openFile', 'showMessage']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
@@ -323,11 +329,16 @@ export default {
       this.setTrashbinDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
     },
 
+    $_ocFiles_deleteSelected () {
+      let translated = this.$gettext('%{numberOfFiles} items will be deleted.')
+      this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
+    },
+
     $_ocTrashbin_empty () {
       this.$client.fileTrash.clearTrashBin()
         .then(() => {
           this.showMessage({
-            title: this.$gettext('Trash bin was successfully emtied')
+            title: this.$gettext('Trash bin was successfully emptied')
           })
           this.removeFilesFromTrashbin(this.activeFiles)
         })

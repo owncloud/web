@@ -42,14 +42,6 @@ export default {
         }
       })
     },
-    reallyDeleteFile () {
-      this.deleteFiles({
-        client: this.$client,
-        files: [this.fileToBeDeleted]
-      })
-      this.deleteConfirmation = ''
-      this.fileToBeDeleted = null
-    },
     changeName (item) {
       this.changeFileName = !this.changeFileName
       if (typeof item === 'object') {
