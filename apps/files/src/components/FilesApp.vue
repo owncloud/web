@@ -141,13 +141,7 @@ export default {
       // clear file filter search query when folder changes
       this.fileFilterQuery = ''
 
-      let absolutePath
-
-      if (this.configuration.rootFolder) {
-        absolutePath = this.$route.params.item === '' ? this.configuration.rootFolder : this.route.params.item
-      } else {
-        absolutePath = this.$route.params.item === '' ? this.configuration.rootFolder : this.route.params.item
-      }
+      let absolutePath = this.$route.params.item === '' || this.$route.params.item === undefined ? this.configuration.rootFolder : this.route.params.item
 
       this.loadFolder({
         client: this.$client,
