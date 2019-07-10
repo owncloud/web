@@ -5,6 +5,7 @@ const assert = require('assert')
 const { URLSearchParams } = require('url')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
+const userSettings = require('../helpers/userSettings')
 
 /**
  *
@@ -99,15 +100,14 @@ Then('all users and groups that contain the string {string} in their name should
 })
 
 Then('the users own name should not be listed in the autocomplete list on the webUI', function () {
-  // TODO: where to get the current user from
-  const currentUserName = client.globals.currentUserName
+  const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
     .then(itemsList => {
       itemsList.forEach(item => {
         assert.notStrictEqual(
           item,
-          currentUserName,
-          `Users own name: ${currentUserName} was not expected to be listed in the autocomplete list but was`
+          currentUserDisplayName,
+          `Users own name: ${currentUserDisplayName} was not expected to be listed in the autocomplete list but was`
         )
       })
     })

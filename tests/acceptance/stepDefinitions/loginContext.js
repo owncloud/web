@@ -46,7 +46,6 @@ const loginAsUser = function (userId) {
     .page.FilesPageElement.filesList()
     .waitForElementVisible('@filesTable')
     .then(() => {
-      client.globals.currentUserName = userSettings.getDisplayNameForUser(userId)
       client.globals.currentUser = userId
     })
 }

@@ -12,6 +12,8 @@ function createDefaultUser (userId) {
       .then(() => {
         const displayname = userSettings.getDisplayNameOfDefaultUser(userId)
         const email = userSettings.getEmailAddressOfDefaultUser(userId)
+
+        // update displayname and email in the created users list
         userSettings.addUserToCreatedUsersList(userId, password, displayname, email)
         const body = new URLSearchParams()
         body.append('key', 'display')
