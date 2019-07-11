@@ -126,5 +126,11 @@ export default {
   },
   SET_FILES_DELETE_CONFIRMATION (state, message) {
     state.filesDeleteMessage = message
+  },
+  SET_OVERWRITE_DIALOG_TITLE (state, title) {
+    state.overwriteDialogTitle = title
+  },
+  SET_OVERWRITE_DIALOG_MESSAGE (state, message) {
+    state.overwriteDialogMessage = message
   }
 }

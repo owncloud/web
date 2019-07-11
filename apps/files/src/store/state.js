@@ -28,5 +28,7 @@ export default {
   loadingFolder: false,
   freeSpace: 0,
   trashbinDeleteMessage: '',
-  filesDeleteMessage: ''
+  filesDeleteMessage: '',
+  overwriteDialogTitle: null,
+  overwriteDialogMessage: null
 }

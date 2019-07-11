@@ -451,5 +451,11 @@ export default {
   },
   setFilesDeleteMessage (context, message) {
     context.commit('SET_FILES_DELETE_CONFIRMATION', message)
+  },
+  setOverwriteDialogTitle (context, title) {
+    context.commit('SET_OVERWRITE_DIALOG_TITLE', title)
+  },
+  setOverwriteDialogMessage (context, message) {
+    context.commit('SET_OVERWRITE_DIALOG_MESSAGE', message)
   }
 }
