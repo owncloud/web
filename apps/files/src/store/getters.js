@@ -77,6 +77,12 @@ export default {
   filesDeleteMessage: state => {
     return state.filesDeleteMessage
   },
+  overwriteDialogTitle: state => {
+    return state.overwriteDialogTitle
+  },
+  overwriteDialogMessage: state => {
+    return state.overwriteDialogMessage
+  },
   highlightedFile: state => {
     return state.highlightedFile
   }

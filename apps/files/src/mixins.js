@@ -25,7 +25,7 @@ export default {
     ...mapGetters('Files', ['searchTerm', 'inProgress', 'files'])
   },
   methods: {
-    ...mapActions('Files', ['resetSearch', 'addFileToProgress']),
+    ...mapActions('Files', ['resetSearch', 'addFileToProgress', 'setOverwriteDialogTitle', 'setOverwriteDialogMessage']),
     ...mapActions(['showMessage']),
 
     formDateFromNow (date) {
@@ -164,7 +164,7 @@ export default {
 
       return '<span class="' + cssClass.join(' ') + '">' + string + '</span>'
     },
-    $_ocUpload_addToQue (e) {
+    async $_ocUpload_addToQue (e) {
       let files = e.target.files || e.dataTransfer.files
       if (!files.length) return
       for (let file of files) {
@@ -173,21 +173,35 @@ export default {
             return n
           }
         })
+
         if (!exists) {
           this.$_ocUpload(file)
-        } else {
-          this.showMessage({
-            title: this.$gettextInterpolate('Upload for %{file} failed - File already exists', { file: file.name }, true),
-            status: 'danger'
-          })
+          continue
         }
+
+        let translated = this.$gettext('File %{file} already exists.')
+        this.setOverwriteDialogTitle(this.$gettextInterpolate(translated, { file: file.name }, true))
+        this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
+        let overwrite = await this.$_ocUpload_confirmOverwrite()
+        if (overwrite) this.$_ocUpload(file, exists.etag)
+        this.setOverwriteDialogMessage(null)
       }
     },
-    $_ocUpload (file) {
+    $_ocUpload_confirmOverwrite (overwrite) {
+      return new Promise(resolve => {
+        let confirmButton = document.querySelector('#overwrite-ok')
+        confirmButton.addEventListener('click', (e) => {
+          resolve(e)
+        })
+      })
+    },
+    $_ocUpload (file, overwrite = null) {
       this.addFileToProgress(file)
       let fileUpload = new FileUpload(file, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType)
       fileUpload
-        .upload(this.additionalData)
+        .upload({
+          overwrite: overwrite
+        })
         .then(e => {
           this.$emit('success', e, file)
           this.$_ocUploadInput_clean()

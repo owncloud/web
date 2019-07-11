@@ -36,12 +36,6 @@ export default {
         return {}
       }
     },
-    additionalData: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
     requestType: { type: String, default: 'PUT' }
   },
   mixins: [

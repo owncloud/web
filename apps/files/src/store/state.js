@@ -29,5 +29,7 @@ export default {
   freeSpace: 0,
   trashbinDeleteMessage: '',
   filesDeleteMessage: '',
+  overwriteDialogTitle: null,
+  overwriteDialogMessage: null,
   highlightedFile: null
 }

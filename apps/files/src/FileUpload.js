@@ -7,12 +7,19 @@ class FileUpload {
     this.type = type
   }
 
-  upload (additionalData = {}) {
+  upload (options = {}) {
     let xhr = new XMLHttpRequest()
 
     // Headers
     xhr.open(this.type, this.url + encodeURIComponent(this.file.name), true)
     xhr.responseType = 'text'
+    if (options.overwrite) {
+      this.headers['If-Match'] = options.overwrite
+      delete this.headers['If-None-Match']
+    } else {
+      this.headers['If-None-Match'] = '*'
+      delete this.headers['If-Match']
+    }
     this._setXhrHeaders(xhr)
 
     // Events

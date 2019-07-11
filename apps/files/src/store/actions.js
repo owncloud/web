@@ -35,6 +35,7 @@ function _buildFile (file) {
     }()),
     path: file.name,
     permissions: file['fileInfo']['{http://owncloud.org/ns}permissions'],
+    etag: file['fileInfo']['{DAV:}getetag'],
     sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],
     canUpload: function () {
       return this.permissions.indexOf('C') >= 0
@@ -452,6 +453,12 @@ export default {
   },
   setFilesDeleteMessage (context, message) {
     context.commit('SET_FILES_DELETE_CONFIRMATION', message)
+  },
+  setOverwriteDialogTitle (context, title) {
+    context.commit('SET_OVERWRITE_DIALOG_TITLE', title)
+  },
+  setOverwriteDialogMessage (context, message) {
+    context.commit('SET_OVERWRITE_DIALOG_MESSAGE', message)
   },
   setHighlightedFile (context, file) {
     context.commit('SET_HIGHLIGHTED_FILE', file)

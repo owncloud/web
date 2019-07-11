@@ -49,6 +49,7 @@ export default {
     state.files[fileIndex].starred = !item.starred
   },
   ADD_FILE (state, file) {
+    state.files = state.files.filter(i => file.id !== i.id)
     state.files.push(file)
   },
   REMOVE_FILE (state, file) {
@@ -125,6 +126,12 @@ export default {
   },
   SET_FILES_DELETE_CONFIRMATION (state, message) {
     state.filesDeleteMessage = message
+  },
+  SET_OVERWRITE_DIALOG_TITLE (state, title) {
+    state.overwriteDialogTitle = title
+  },
+  SET_OVERWRITE_DIALOG_MESSAGE (state, message) {
+    state.overwriteDialogMessage = message
   },
   SET_HIGHLIGHTED_FILE (state, file) {
     state.highlightedFile = file
