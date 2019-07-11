@@ -123,11 +123,12 @@ Feature: rename files
     And the user reloads the current page of the webUI
     Then file "zzzz-z-this-is-now-the-last-file.txt" should be listed on the webUI
 
-  @skip
-  @issue-912
   Scenario: Rename a file putting a name of a file which already exists
     When the user renames file "data.zip" to "lorem.txt" using the webUI
-    Then near file "data.zip" a tooltip with the text 'lorem.txt already exists' should be displayed on the webUI
+    Then the error message 'Renaming of data.zip failed' should be displayed on the webUI
+    And file 'data.zip' should be listed on the webUI
+    When the user closes the message
+    Then no message should be displayed on the webUI
 
   @skip
   @issue-965

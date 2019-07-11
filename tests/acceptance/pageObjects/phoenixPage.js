@@ -47,6 +47,11 @@ module.exports = {
         .click('@notificationBell')
         .waitForElementVisible('@markNotificationAsReadLink')
         .click('@markNotificationAsReadLink')
+    },
+    closeMessage: function () {
+      return this.waitForElementPresent('@messageCloseIcon')
+        .click('@messageCloseIcon')
+        .waitForElementNotPresent('@messageCloseIcon')
     }
   },
   elements: {
@@ -81,6 +86,9 @@ module.exports = {
     menuItem: {
       selector: '//ul[contains(@class, "oc-main-menu")]/li/a[contains(text(),"%s")]',
       locateStrategy: 'xpath'
+    },
+    messageCloseIcon: {
+      selector: '.oc-alert-close-icon'
     }
   }
 }
