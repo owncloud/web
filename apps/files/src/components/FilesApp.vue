@@ -8,7 +8,7 @@
           <file-list v-else @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar"/>
         </div>
         <div class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1" v-if="_sidebarOpen && $route.name !== 'files-trashbin'">
-          <file-details :items="selectedFiles" :starsEnabled="false" :checkboxEnabled="false" ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="resetFileSelection"/>
+          <file-details ref="fileDetails" @reload="$_ocFilesFolder_getFolder" @reset="setHighlightedFile(null)"/>
         </div>
       <oc-file-actions></oc-file-actions>
     </oc-grid>
@@ -53,7 +53,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles', 'markFavorite', 'addFiles', 'updateFileProgress', 'resetSearch', 'dragOver', 'loadFolder', 'loadTrashbin']),
+    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'loadFiles',
+      'markFavorite', 'addFiles', 'updateFileProgress', 'resetSearch', 'dragOver', 'loadFolder', 'loadTrashbin',
+      'setHighlightedFile']),
     ...mapActions(['openFile', 'showMessage']),
 
     trace () {
@@ -105,30 +107,13 @@ export default {
     },
 
     openSideBar (file, sideBarName) {
-      this.resetFileSelection()
-      this.addFileSelection(file)
+      this.setHighlightedFile(file)
       const self = this
       this.$nextTick().then(() => {
         self.$refs.fileDetails.showSidebar(sideBarName)
       })
     },
 
-    ifFiltered (item) {
-      for (let filter of this.fileFilter) {
-        if (item.type === filter.tag) {
-          if (!filter.value) return false
-        } else if (item.name.startsWith('.')) {
-          // show hidden files ?
-          if (this.fileFilter[2].value) return false
-        }
-      }
-      // respect filename filter for local 'search' in open folder
-      if (this.fileFilterQuery && !item.name.toLowerCase().includes(this.fileFilterQuery.toLowerCase())) return false
-      return true
-    },
-    onFilenameFilter (query) {
-      this.fileFilterQuery = query
-    },
     focusFilenameFilter () {
       this.$refs.filenameFilter.$el.querySelector('input').focus()
       // nested vuetify VList animation will block native autofocus, so we use this workaround...
@@ -175,7 +160,8 @@ export default {
 
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles', 'inProgress', 'activeFiles', 'fileFilter', 'davProperties', 'searchTerm', 'dropzone', 'loadingFolder']),
+    ...mapGetters('Files', ['selectedFiles', 'inProgress', 'activeFiles', 'fileFilter', 'davProperties', 'searchTerm',
+      'dropzone', 'loadingFolder', 'highlightedFile']),
     ...mapGetters(['getToken', 'extensions', 'configuration']),
 
     item () {
@@ -183,7 +169,7 @@ export default {
     },
 
     _sidebarOpen () {
-      return this.selectedFiles.length > 0
+      return this.highlightedFile !== null
     }
   }
 }

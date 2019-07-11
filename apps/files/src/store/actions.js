@@ -177,6 +177,7 @@ export default {
         }
       }
       context.dispatch('resetFileSelection')
+      context.dispatch('setHighlightedFile', null)
       if (context.getters.searchTerm !== '') {
         context.dispatch('resetSearch')
       }
@@ -221,6 +222,7 @@ export default {
         })
       }
       context.dispatch('resetFileSelection')
+      context.dispatch('setHighlightedFile', null)
     }).catch((e) => {
       context.dispatch('showMessage', {
         title: $gettext('Loading trashbin failed…'),
@@ -450,5 +452,8 @@ export default {
   },
   setFilesDeleteMessage (context, message) {
     context.commit('SET_FILES_DELETE_CONFIRMATION', message)
+  },
+  setHighlightedFile (context, file) {
+    context.commit('SET_HIGHLIGHTED_FILE', file)
   }
 }
