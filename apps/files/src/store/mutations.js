@@ -49,6 +49,7 @@ export default {
     state.files[fileIndex].starred = !item.starred
   },
   ADD_FILE (state, file) {
+    state.files = state.files.filter(i => file.id !== i.id)
     state.files.push(file)
   },
   REMOVE_FILE (state, file) {

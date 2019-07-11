@@ -35,6 +35,7 @@ function _buildFile (file) {
     }()),
     path: file.name,
     permissions: file['fileInfo']['{http://owncloud.org/ns}permissions'],
+    etag: file['fileInfo']['{DAV:}getetag'],
     sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],
     canUpload: function () {
       return this.permissions.indexOf('C') >= 0

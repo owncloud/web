@@ -176,18 +176,23 @@ export default {
         if (!exists) {
           this.$_ocUpload(file)
         } else {
-          this.showMessage({
-            title: this.$gettextInterpolate('Upload for %{file} failed - File already exists', { file: file.name }, true),
-            status: 'danger'
-          })
+          let translated = this.$gettext('File %{file} already exists. Do you want to overwrite it?')
+          translated = this.$gettextInterpolate(translated, { file: file.name }, true)
+
+          const r = confirm(translated)
+          if (r === true) {
+            this.$_ocUpload(file, exists.etag)
+          }
         }
       }
     },
-    $_ocUpload (file) {
+    $_ocUpload (file, overwrite = null) {
       this.addFileToProgress(file)
       let fileUpload = new FileUpload(file, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType)
       fileUpload
-        .upload(this.additionalData)
+        .upload({
+          overwrite: overwrite
+        })
         .then(e => {
           this.$emit('success', e, file)
           this.$_ocUploadInput_clean()
