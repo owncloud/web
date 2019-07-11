@@ -238,7 +238,6 @@ Feature: Sharing files and folders with internal users
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with user "user2"
-    And user "user1" has shared file "lorem.txt" with user "user3"
     When the user opens the share dialog for file "lorem.txt"
     Then "User Two" should be listed in the shared with list
     And as "user2" file "lorem (2).txt" should exist
