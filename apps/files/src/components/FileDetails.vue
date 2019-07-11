@@ -1,28 +1,21 @@
 <template>
   <oc-app-side-bar class="uk-padding-small uk-overflow-auto uk-height-1-1" :disableAction="false" @close="close()">
-    <template slot="title" v-if="items.length === 1">
+    <template slot="title" v-if="highlightedFile">
       <div class="uk-inline">
-        <oc-icon :name="fileTypeIcon(items[0])" size="large" />
+        <oc-icon :name="fileTypeIcon(highlightedFile)" size="large" />
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
-          <span class="uk-margin-small-right">{{ getTabName }}</span> <oc-icon name="link" aria-label="Close"/>
+          <span class="uk-margin-small-right">{{ highlightedFile.name }}</span> <oc-icon name="link" aria-label="Close"/>
         </div>
         <div>
-          <oc-star class="uk-inline" :shining="items[0].starred"/> {{ items[0].size | fileSize }}, {{ formDateFromNow(items[0].mdate) }}
-        </div>
-      </div>
-    </template>
-    <template slot="title" v-if="items.length > 1">
-      <div class="uk-inline">
-        <div class="uk-flex uk-flex-middle">
-          <span class="uk-margin-small-right">{{ getTabName }}</span>
+          <oc-star class="uk-inline" :shining="highlightedFile.starred"/> {{ highlightedFile.size | fileSize }}, {{ formDateFromNow(highlightedFile.mdate) }}
         </div>
       </div>
     </template>
     <template slot="content">
       <oc-tabs>
-          <oc-tab-item :active="key == activeTab" @click="activeTab = key" v-for="(tab, key) of fileSideBars" :key="tab.name">
+          <oc-tab-item :active="key == activeTab" @click="activeTab = key" v-for="(tab, key) of fileSideBarsEnabled" :key="tab.name">
             {{ tab.component.title($gettext) }}
           </oc-tab-item>
       </oc-tabs>
@@ -37,7 +30,6 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   mixins: [Mixins],
-  props: ['items'],
   name: 'FileDetails',
   data: function () {
     return {
@@ -52,32 +44,16 @@ export default {
     },
     showSidebar (app) {
       this.activeTab = app
-    },
-    downloadFiles () {
-      this.downloadFile(this.items[0])
-    },
-    deleteSelectedFiles () {
-      this.deleteFiles({
-        client: this.$client,
-        files: this.items
-      })
     }
   },
   computed: {
-    ...mapGetters(['getToken', 'fileSideBars']),
-    getTabName () {
-      if (this.items.length === 0) {
-        return ''
-      }
-      if (this.items.length > 1) {
-        return this.$gettext('Multiple Files')
-      } else {
-        // return (this.items[0].name.length > 16) ? `${this.items[0].name.substr(0, 10)}...` : this.items[0].name
-        return this.items[0].name
-      }
+    ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
+    ...mapGetters('Files', ['highlightedFile']),
+    fileSideBarsEnabled () {
+      return this.fileSideBars.filter(b => b.enabled === undefined || b.enabled(this.capabilities))
     },
     activeTabComponent () {
-      return this.fileSideBars[this.activeTab]
+      return this.fileSideBarsEnabled[this.activeTab]
     }
   }
 }

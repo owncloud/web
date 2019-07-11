@@ -7,7 +7,6 @@ import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import translationsJson from '../l10n/translations.json'
 
 const store = require('./store')
-const rootStore = require('./../../../src/store')
 
 const appInfo = {
   name: 'Files',
@@ -22,6 +21,9 @@ const appInfo = {
     }, {
       app: 'files-sharing',
       component: FileSharingSidebar,
+      enabled (capabilities) {
+        return capabilities.files_sharing.api_enabled === '1'
+      },
       quickAccess: {
         icon: 'share',
         ariaLabel: 'Share'
@@ -37,7 +39,7 @@ const navItems = [
       name: 'files-list',
       path: `/`,
       params: {
-        item: rootStore.Store.getters.configuration.rootFolder
+        item: ''
       }
     }
   },
@@ -52,6 +54,9 @@ const navItems = [
   {
     name: 'Deleted files',
     iconMaterial: 'delete',
+    enabled (capabilities) {
+      return capabilities.dav.trashbin === '1.0'
+    },
     route: {
       name: 'files-trashbin',
       path: `/${appInfo.id}/trash-bin`
@@ -62,7 +67,7 @@ const navItems = [
 const routes = [
   {
     path: '',
-    redirect: `/${appInfo.id}/list/${rootStore.Store.getters.configuration.rootFolder}`,
+    redirect: `/${appInfo.id}/list/`,
     components: {
       app: FilesApp
     }

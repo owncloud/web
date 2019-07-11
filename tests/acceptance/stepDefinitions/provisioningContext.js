@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { Given } = require('cucumber')
+const { Given, After } = require('cucumber')
 const fetch = require('node-fetch')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
@@ -10,9 +10,11 @@ function createDefaultUser (userId) {
   return new Promise((resolve, reject) => {
     createUser(userId, password)
       .then(() => {
-        const displayname = userSettings.getDisplayNameForUser(userId)
-        const email = userSettings.getEmailAddressForUser(userId)
+        const displayname = userSettings.getDisplayNameOfDefaultUser(userId)
+        const email = userSettings.getEmailAddressOfDefaultUser(userId)
 
+        // update displayname and email in the created users list
+        userSettings.addUserToCreatedUsersList(userId, password, displayname, email)
         const body = new URLSearchParams()
         body.append('key', 'display')
         body.append('value', displayname)
@@ -47,10 +49,11 @@ function createDefaultUser (userId) {
 
 function createUser (userId, password = false) {
   const body = new URLSearchParams()
-  const userPassword = password || userId
+  const userPassword = password || userSettings.getPasswordForUser(userId)
   body.append('userid', userId)
   body.append('password', userPassword)
 
+  userSettings.addUserToCreatedUsersList(userId, userPassword)
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
   return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users?format=json', { method: 'POST', body: body, headers: headers })
 }
@@ -145,4 +148,10 @@ Given('these groups have been created:', function (dataTable) {
 
 Given('user {string} has been added to group {string}', function (userId, groupId) {
   return addToGroup(userId, groupId)
+})
+
+After(function () {
+  for (var userId in userSettings.getCreatedUsers()) {
+    deleteUser(userId)
+  }
 })

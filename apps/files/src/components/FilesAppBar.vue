@@ -16,8 +16,13 @@
           <oc-button v-if="selectedFiles.length > 0" icon="restore" @click="$_ocTrashbin_restoreFiles()">
             <translate>Restore selected</translate>
           </oc-button>
-          <oc-button icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
+          <oc-button id="delete-selected-btn" icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
             {{ $_ocAppBar_clearTrashbinButtonText }}
+          </oc-button>
+        </template>
+        <template v-if="$route.name === 'files-list' && selectedFiles.length > 0">
+          <oc-button id="delete-selected-btn" icon="delete" @click="$_ocFiles_deleteSelected()">
+            <translate>Delete selected</translate>
           </oc-button>
         </template>
         <div class="uk-button-group" v-if="$_ocFilesApp_showActions">
@@ -103,10 +108,10 @@ export default {
       return null
     },
     item () {
-      return this.$route.params.item === undefined ? '' : this.$route.params.item
+      return this.$route.params.item === undefined ? this.configuration.rootFolder : this.$route.params.item
     },
     url () {
-      const path = this.item === '' ? '/' : `${this.item}/`
+      const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
       return this.$client.files.getFileUrl(`/${path}`)
     },
     newFolderErrorMessage () {
@@ -159,7 +164,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
+    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile',
+      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilesDeleteMessage']),
     ...mapActions(['openFile', 'showMessage']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
@@ -186,13 +192,7 @@ export default {
     $_ocFilesFolder_getFolder () {
       this.path = []
 
-      let absolutePath
-
-      if (this.configuration.rootFolder) {
-        absolutePath = this.$route.params.item === '' ? this.configuration.rootFolder : this.route.params.item
-      } else {
-        absolutePath = this.$route.params.item === '' ? this.configuration.rootFolder : this.route.params.item
-      }
+      let absolutePath = this.$route.params.item === '' || this.$route.params.item === undefined ? this.configuration.rootFolder : this.route.params.item
 
       this.loadFolder({
         client: this.$client,
@@ -203,7 +203,7 @@ export default {
     addNewFolder (folderName) {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
-        const path = this.item === '' ? '/' : `${this.item}/`
+        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
         this.$client.files.createFolder(path + folderName)
           .then(() => {
             this.createFolder = false
@@ -244,7 +244,7 @@ export default {
     addNewFile (fileName) {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
-        const path = this.item === '' ? '/' : `${this.item}/`
+        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
         this.$client.files.putFileContents(path + fileName, '')
           .then(() => {
             this.createFile = false
@@ -284,7 +284,7 @@ export default {
     },
     onFileSuccess (event, file) {
       this.$nextTick().then(() => {
-        const path = this.item === '' ? '/' : `${this.item}/`
+        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
         const filePath = path + file.name
         this.$client.files.fileInfo(filePath, this.davProperties).then(fileInfo => {
           this.fileUploadProgress = 0
@@ -329,11 +329,16 @@ export default {
       this.setTrashbinDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
     },
 
+    $_ocFiles_deleteSelected () {
+      let translated = this.$gettext('%{numberOfFiles} items will be deleted.')
+      this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
+    },
+
     $_ocTrashbin_empty () {
       this.$client.fileTrash.clearTrashBin()
         .then(() => {
           this.showMessage({
-            title: this.$gettext('Trash bin was successfully emtied')
+            title: this.$gettext('Trash bin was successfully emptied')
           })
           this.removeFilesFromTrashbin(this.activeFiles)
         })
@@ -366,6 +371,7 @@ export default {
           })
       }
       this.resetFileSelection()
+      this.setHighlightedFile(null)
     }
   },
   filters: {

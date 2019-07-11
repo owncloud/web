@@ -65,7 +65,7 @@ function _buildFileInTrashbin (file) {
     extension: (function () {
       return ext
     }()),
-    name: (function () {
+    basename: (function () {
       let fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
       let pathList = fullName.split('/').filter(e => e !== '')
       let name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
@@ -73,6 +73,11 @@ function _buildFileInTrashbin (file) {
         return name.substring(0, name.length - ext.length - 1)
       }
       return name
+    })(),
+    name: (function () {
+      let fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
+      let pathList = fullName.split('/').filter(e => e !== '')
+      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     })(),
     originalLocation: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-location'],
     id: (function () {
@@ -172,6 +177,7 @@ export default {
         }
       }
       context.dispatch('resetFileSelection')
+      context.dispatch('setHighlightedFile', null)
       if (context.getters.searchTerm !== '') {
         context.dispatch('resetSearch')
       }
@@ -205,7 +211,7 @@ export default {
       '{DAV:}resourcetype'
     ]).then(res => {
       if (res === null) {
-        context.dispatch('showNotification', {
+        context.dispatch('showMessage', {
           title: $gettext('Loading trashbin failed…'),
           status: 'danger'
         }, { root: true })
@@ -216,8 +222,9 @@ export default {
         })
       }
       context.dispatch('resetFileSelection')
+      context.dispatch('setHighlightedFile', null)
     }).catch((e) => {
-      context.dispatch('showNotification', {
+      context.dispatch('showMessage', {
         title: $gettext('Loading trashbin failed…'),
         desc: e.message,
         status: 'danger'
@@ -273,14 +280,17 @@ export default {
   deleteFiles (context, payload) {
     let files = payload.files
     let client = payload.client
+    let promises = []
     for (let file of files) {
-      client.files.delete(file.path).then(() => {
+      const promise = client.files.delete(file.path).then(() => {
         context.commit('REMOVE_FILE', file)
         context.commit('REMOVE_FILE_SELECTION', file)
       }).catch(error => {
         console.log('error: ' + file.path + ' not deleted: ' + error)
       })
+      promises.push(promise)
     }
+    return Promise.all(promises)
   },
   removeFilesFromTrashbin (context, files) {
     for (let file of files) {
@@ -439,5 +449,11 @@ export default {
   },
   setTrashbinDeleteMessage (context, message) {
     context.commit('SET_TRASHBIN_DELETE_CONFIRMATION', message)
+  },
+  setFilesDeleteMessage (context, message) {
+    context.commit('SET_FILES_DELETE_CONFIRMATION', message)
+  },
+  setHighlightedFile (context, file) {
+    context.commit('SET_HIGHLIGHTED_FILE', file)
   }
 }

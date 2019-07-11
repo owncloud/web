@@ -27,5 +27,7 @@ export default {
   sharesLoading: false,
   loadingFolder: false,
   freeSpace: 0,
-  trashbinDeleteMessage: ''
+  trashbinDeleteMessage: '',
+  filesDeleteMessage: '',
+  highlightedFile: null
 }

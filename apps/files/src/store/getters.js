@@ -73,5 +73,11 @@ export default {
   },
   trashbinDeleteMessage: state => {
     return state.trashbinDeleteMessage
+  },
+  filesDeleteMessage: state => {
+    return state.filesDeleteMessage
+  },
+  highlightedFile: state => {
+    return state.highlightedFile
   }
 }

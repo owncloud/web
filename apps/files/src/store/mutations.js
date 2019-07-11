@@ -44,7 +44,7 @@ export default {
   },
   FAVORITE_FILE (state, item) {
     let fileIndex = state.files.findIndex((f) => {
-      return f.name === item.name
+      return f.id === item.id
     })
     state.files[fileIndex].starred = !item.starred
   },
@@ -122,5 +122,11 @@ export default {
   },
   SET_TRASHBIN_DELETE_CONFIRMATION (state, message) {
     state.trashbinDeleteMessage = message
+  },
+  SET_FILES_DELETE_CONFIRMATION (state, message) {
+    state.filesDeleteMessage = message
+  },
+  SET_HIGHLIGHTED_FILE (state, file) {
+    state.highlightedFile = file
   }
 }

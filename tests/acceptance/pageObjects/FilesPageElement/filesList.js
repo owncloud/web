@@ -120,6 +120,15 @@ module.exports = {
     /**
      *
      */
+    checkAllFiles: function () {
+      return this.initAjaxCounters()
+        .waitForElementVisible('@filesTable')
+        .waitForElementVisible('@checkBoxAllFiles')
+        .click('@checkBoxAllFiles')
+    },
+    /**
+     *
+     */
     unmarkFavorite: function (path) {
       const unFavoriteBtn = this.getFileRowSelectorByFileName(path) +
         this.elements['markedFavoriteInFileRow'].selector
@@ -282,6 +291,9 @@ module.exports = {
     },
     sharingSideBar: {
       selector: '#oc-files-sharing-sidebar'
+    },
+    checkBoxAllFiles: {
+      selector: '#filelist-check-all'
     }
   }
 }

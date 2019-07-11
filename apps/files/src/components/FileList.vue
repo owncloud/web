@@ -13,15 +13,15 @@
       </oc-table-row>
     </oc-table-group>
     <oc-table-group>
-      <oc-table-row v-for="(item, index) in fileData" :key="index" class="file-row">
+      <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item)">
         <oc-table-cell>
-          <oc-checkbox class="uk-margin-small-left" @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
+          <oc-checkbox class="uk-margin-small-left" @click.stop @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
         </oc-table-cell>
         <oc-table-cell class="uk-padding-remove">
-          <oc-star class="uk-display-block" @click.native="toggleFileFavorite(item)" :shining="item.starred" />
+          <oc-star class="uk-display-block" @click.native.stop="toggleFileFavorite(item)" :shining="item.starred" />
         </oc-table-cell>
         <oc-table-cell class="uk-text-truncate">
-          <oc-file @click.native="item.type === 'folder' ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
+          <oc-file @click.native.stop="item.type === 'folder' ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
                    :name="$_ocFileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
                    :filename="item.name" :key="item.id" />
         </oc-table-cell>
@@ -33,13 +33,14 @@
         </oc-table-cell>
         <oc-table-cell :class="{ 'uk-visible@s' : _sidebarOpen }">
           <div class="uk-button-group uk-margin-small-right" :class="{ 'uk-visible@m' : !_sidebarOpen, 'uk-visible@xl' : _sidebarOpen  }">
-            <oc-button v-for="(action, index) in actions" :key="index" @click.native="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :ariaLabel="action.ariaLabel" />
+            <oc-button v-for="(action, index) in actions" :key="index" @click.stop="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :ariaLabel="action.ariaLabel" />
           </div>
           <oc-button
             :id="'files-file-list-action-button-small-resolution-' + index"
             icon="menu"
             :class="{ 'uk-hidden@m' : !_sidebarOpen, 'uk-visible@s uk-hidden@xl' : _sidebarOpen }"
             :aria-label="'show-file-actions'"
+            @click.stop
           />
           <oc-drop
             v-if="!$_ocDialog_isOpen"
@@ -51,7 +52,7 @@
               <li v-for="(action, index) in actions" :key="index">
                 <oc-button
                   class="uk-width-1-1"
-                  @click.native="action.handler(item, action.handlerData)"
+                  @click.native.stop="action.handler(item, action.handlerData)"
                   :disabled="!action.isEnabled(item)"
                   :icon="action.icon"
                   :ariaLabel="action.ariaLabel"
@@ -66,8 +67,12 @@
     </oc-table-group>
     <oc-dialog-prompt name="change-file-dialog" :oc-active="changeFileName" v-model="newName" :ocError="changeFileErrorMessage"
                       :ocTitle="_renameDialogTitle" ocConfirmId="oc-dialog-rename-confirm" @oc-confirm="changeName" @oc-cancel="changeFileName = false; newName = ''"></oc-dialog-prompt>
-    <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="deleteConfirmation !== ''" :oc-content="deleteConfirmation" :oc-has-input="false"
-                      :ocTitle="_deleteDialogTitle" ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="reallyDeleteFile" @oc-cancel="deleteConfirmation = ''"></oc-dialog-prompt>
+    <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="filesDeleteMessage !== ''"
+                      :oc-content="filesDeleteMessage" :oc-has-input="false" :ocTitle="_deleteDialogTitle"
+                      ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="reallyDeleteFiles"
+                      @oc-cancel="setFilesDeleteMessage('')"
+    />
+
   </oc-table>
 </template>
 <script>
@@ -87,12 +92,12 @@ export default {
   props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled'],
   data: () => ({
     changeFileName: false,
-    deleteConfirmation: '',
     fileToBeDeleted: '',
     newName: ''
   }),
   methods: {
-    ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'deleteFiles', 'renameFile']),
+    ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection',
+      'deleteFiles', 'renameFile', 'setFilesDeleteMessage', 'setHighlightedFile']),
     ...mapActions(['openFile']),
 
     toggleAll () {
@@ -113,9 +118,6 @@ export default {
         file: item
       })
     },
-    getBaseDirectory (filePath) {
-      return filePath.match(/^(.*[/])/)[0].slice(0, -1)
-    },
     openFileActionBar (file) {
       this.$emit('FileAction', file)
     },
@@ -128,16 +130,10 @@ export default {
     deleteFile (file) {
       this.fileToBeDeleted = file
       let translated = this.$gettext('Please confirm the deletion of %{ fileName }')
-      this.deleteConfirmation = this.$gettextInterpolate(translated, { fileName: file.name }, true)
+      this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { fileName: file.name }, true))
     },
     openSideBar (file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
-    },
-    dropExtension (name, extension) {
-      if (!extension) {
-        return name
-      }
-      return name.substring(0, name.length - extension.length - 1)
     },
     $_ocFileName (item) {
       if (this.$route.name === 'files-favorites') {
@@ -146,11 +142,30 @@ export default {
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
       }
       return item.basename
+    },
+    reallyDeleteFiles () {
+      const files = this.fileToBeDeleted ? [this.fileToBeDeleted] : this.selectedFiles
+      this.deleteFiles({
+        client: this.$client,
+        files: files
+      }).then(() => {
+        this.fileToBeDeleted = ''
+        this.setFilesDeleteMessage('')
+      })
+    },
+    _rowClasses (item) {
+      if (this.highlightedFile && item.id === this.highlightedFile.id) {
+        return 'file-row uk-active'
+      }
+      return 'file-row'
+    },
+    selectRow (item) {
+      this.setHighlightedFile(item)
     }
   },
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'loadingFolder']),
-    ...mapGetters(['getToken', 'fileSideBars']),
+    ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'loadingFolder', 'filesDeleteMessage', 'highlightedFile']),
+    ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     all () {
       return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
     },
@@ -180,6 +195,9 @@ export default {
       ]
       for (let sideBarName in this.fileSideBars) {
         let sideBar = this.fileSideBars[sideBarName]
+        if (sideBar.enabled !== undefined && !sideBar.enabled(this.capabilities)) {
+          continue
+        }
         if (sideBar.quickAccess) {
           actions.push({
             icon: sideBar.quickAccess.icon,
@@ -202,7 +220,7 @@ export default {
       return this.$gettext('Delete File/Folder')
     },
     _sidebarOpen () {
-      return this.selectedFiles.length > 0
+      return this.highlightedFile !== null
     },
     $_ocDialog_isOpen () {
       return this.changeFileName

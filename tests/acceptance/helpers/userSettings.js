@@ -54,24 +54,68 @@ module.exports = {
       email: 'sharee1@example.org'
     }
   },
+  createdUsers: {},
+
   /**
+   *
+   * @param {string} userId
+   * @param {string} password
+   * @param {string} displayname
+   * @param {string} email
+   */
+  addUserToCreatedUsersList: function (userId, password, displayname = null, email = null) {
+    this.createdUsers[userId] = { password: password, displayname: displayname, email: email }
+  },
+
+  /**
+   * gets the password of a previously created user
+   * if the user was not created yet, gets the password from the default Users list
+   * if the user is not in that list either, returns the userId as password
    *
    * @param {string} userId
    * @returns {string}
    */
   getPasswordForUser: function (userId) {
-    if (userId in this.defaultUsers) {
+    if (userId in this.createdUsers) {
+      return this.createdUsers[userId].password
+    } else if (userId in this.defaultUsers) {
       return this.defaultUsers[userId].password
     } else {
-      return this.defaultUsers.regularuser.password
+      // user was not created yet and is not in the default users list, let the userId be the password
+      return userId
     }
   },
   /**
+   * gets the display name of a previously created user
+   * if the user was not created yet, gets the display name from the default Users list
+   * if the user is not in that list either, returns the userId as display name
+   *
+   * @param {string} userId
+   * @returns {string}
+   */
+  getDisplayNameForUser: function (userId) {
+    let user = {}
+    if (userId in this.createdUsers) {
+      user = this.createdUsers[userId]
+    } else if (userId in this.defaultUsers) {
+      user = this.defaultUsers[userId]
+    } else {
+      return userId
+    }
+    if ('displayname' in user && user.displayname !== null) {
+      return user.displayname
+    } else {
+      return userId
+    }
+  },
+  /**
+   * gets the display name of the specified user from the default users list
+   * returns null if the user is not in that list
    *
    * @param {string} userId
    * @returns {null|string}
    */
-  getDisplayNameForUser: function (userId) {
+  getDisplayNameOfDefaultUser: function (userId) {
     if (userId in this.defaultUsers) {
       return this.defaultUsers[userId].displayname
     } else {
@@ -79,11 +123,36 @@ module.exports = {
     }
   },
   /**
+   * gets the email address of a previously created user
+   * if the user was not created yet, gets the email address from the default Users list
+   * if the user is not in that list either, returns null
    *
    * @param {string} userId
    * @returns {null|string}
    */
   getEmailAddressForUser: function (userId) {
+    let user = {}
+    if (userId in this.createdUsers) {
+      user = this.createdUsers[userId]
+    } else if (userId in this.defaultUsers) {
+      user = this.defaultUsers[userId]
+    } else {
+      return null
+    }
+    if ('email' in user && user.email !== null) {
+      return user.email
+    } else {
+      return null
+    }
+  },
+  /**
+   * gets the email address of the specified user from the default users list
+   * returns null if the user is not in that list
+   *
+   * @param {string} userId
+   * @returns {null|string}
+   */
+  getEmailAddressOfDefaultUser: function (userId) {
     if (userId in this.defaultUsers) {
       return this.defaultUsers[userId].email
     } else {
@@ -92,14 +161,9 @@ module.exports = {
   },
   /**
    *
-   * @param {string} userId
-   * @returns {string}
+   * @returns {module.exports.createdUsers|{}}
    */
-  getActualPassword: function (userId) {
-    if (userId in this.defaultUsers) {
-      return this.defaultUsers[userId].password
-    } else {
-      return userId
-    }
+  getCreatedUsers: function () {
+    return this.createdUsers
   }
 }

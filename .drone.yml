@@ -231,17 +231,17 @@ matrix:
     - TEST_SUITE: lint-test
 
     # acceptance test
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIAdminSettings
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIComments
-      TEST_TAGS: 'not @skip'
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIAdminSettings
+#      TEST_TAGS: 'not @skip'
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIComments
+#      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
@@ -261,11 +261,11 @@ matrix:
       TEST_CONTEXT: webUILogin
       TEST_TAGS: 'not @skip'
 
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIMoveFilesFolders
-      TEST_TAGS: 'not @skip'
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIMoveFilesFolders
+#      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
@@ -285,23 +285,23 @@ matrix:
       TEST_CONTEXT: webUIRenameFolders
       TEST_TAGS: 'not @skip'
 
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIRestrictSharing
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUISharingAcceptShares
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUISharingExternal
-      TEST_TAGS: 'not @skip'
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIRestrictSharing
+#      TEST_TAGS: 'not @skip'
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUISharingAcceptShares
+#      TEST_TAGS: 'not @skip'
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUISharingExternal
+#      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
@@ -315,23 +315,23 @@ matrix:
       TEST_CONTEXT: webUISharingInternalUsers
       TEST_TAGS: 'not @skip'
 
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUISharingNotifications
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUISharingPublic
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUITags
-      TEST_TAGS: 'not @skip'
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUISharingNotifications
+#      TEST_TAGS: 'not @skip'
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUISharingPublic
+#      TEST_TAGS: 'not @skip'
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUITags
+#      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
@@ -345,23 +345,23 @@ matrix:
       TEST_CONTEXT: webUIUpload
       TEST_TAGS: 'not @skip'
 
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIWebdavLockProtection
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIWebdavLocks
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUITags
-      TEST_TAGS: 'not @skip'
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIWebdavLockProtection
+#      TEST_TAGS: 'not @skip'
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIWebdavLocks
+#      TEST_TAGS: 'not @skip'
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUITags
+#      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
