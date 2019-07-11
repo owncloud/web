@@ -30,5 +30,6 @@ export default {
   trashbinDeleteMessage: '',
   filesDeleteMessage: '',
   overwriteDialogTitle: null,
-  overwriteDialogMessage: null
+  overwriteDialogMessage: null,
+  highlightedFile: null
 }

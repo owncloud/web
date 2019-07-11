@@ -1,9 +1,6 @@
 <template>
   <div id="oc-files-sharing-sidebar">
-    <div v-if="selectedFiles.length > 1">
-      <span v-translate>Please choose only a single File</span>
-    </div>
-    <div v-else>
+    <div>
      <oc-spinner v-if="sharesLoading"></oc-spinner>
     <oc-accordion v-if="!sharesLoading" :multiple=true>
       <oc-accordion-item v-if="owner" class="uk-open">
@@ -90,10 +87,10 @@ export default {
   },
   name: 'FileSharingSidebar',
   mounted () {
-    if (this.selectedFiles.length === 1) {
+    if (this.highlightedFile) {
       this.loadShares({
         client: this.$client,
-        path: this.selectedFiles[0].path
+        path: this.highlightedFile.path
       })
     } else {
       this.sharesClearState()
@@ -104,7 +101,7 @@ export default {
       // TODO: handle groups as well
       this.addShare({
         client: this.$client,
-        path: this.selectedFiles[0].path,
+        path: this.highlightedFile.path,
         $gettext: this.$gettext,
         shareWith: newSelectedSharee.value.shareWith,
         shareType: newSelectedSharee.value.shareType
@@ -134,7 +131,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
+    ...mapGetters('Files', ['highlightedFile', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
     ...mapState(['user']),
     $_ocCollaborationStatus_autocompletePlacholder () {
       return this.$gettext('Add name(s), email(s) or federation ID\'s')

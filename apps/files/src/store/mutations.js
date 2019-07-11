@@ -44,7 +44,7 @@ export default {
   },
   FAVORITE_FILE (state, item) {
     let fileIndex = state.files.findIndex((f) => {
-      return f.name === item.name
+      return f.id === item.id
     })
     state.files[fileIndex].starred = !item.starred
   },
@@ -132,5 +132,8 @@ export default {
   },
   SET_OVERWRITE_DIALOG_MESSAGE (state, message) {
     state.overwriteDialogMessage = message
+  },
+  SET_HIGHLIGHTED_FILE (state, file) {
+    state.highlightedFile = file
   }
 }

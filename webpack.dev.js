@@ -20,8 +20,9 @@ module.exports = merge(common, {
     compress: true,
     host: '0.0.0.0',
     port: 8300,
+    disableHostCheck: true,
     watchOptions: {
-      ignored: path.resolve(__dirname, 'tests'),
+      ignored: path.resolve(__dirname, 'tests')
     }
   }
 })

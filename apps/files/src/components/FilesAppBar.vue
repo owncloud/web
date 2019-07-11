@@ -372,6 +372,7 @@ export default {
           })
       }
       this.resetFileSelection()
+      this.setHighlightedFile(null)
     }
   },
   filters: {

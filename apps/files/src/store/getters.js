@@ -82,5 +82,8 @@ export default {
   },
   overwriteDialogMessage: state => {
     return state.overwriteDialogMessage
+  },
+  highlightedFile: state => {
+    return state.highlightedFile
   }
 }
