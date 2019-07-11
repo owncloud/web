@@ -178,9 +178,17 @@ export default {
       this.searchForFile({
         searchTerm,
         client: this.$client
-      }).then(() => {
-        this.isLoadingSearch = false
       })
+        .catch(e => {
+          this.showMessage({
+            title: this.$gettext('Search failed'),
+            desc: e.message,
+            status: 'danger'
+          })
+        })
+        .finally(() => {
+          this.isLoadingSearch = false
+        })
     },
     focusFilenameFilter () {
       this.$refs.filenameFilter.$el.querySelector('input').focus()
