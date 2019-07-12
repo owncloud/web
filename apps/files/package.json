@@ -7,7 +7,7 @@
     "watch": "webpack --progress --colors --watch --mode development --config webpack.dev.js",
     "build": "webpack -p --config webpack.common.js --debug",
     "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "prepublish": "yarn run snyk-protect"
   },
   "author": "Felix Heidecke",
   "license": "AGPL-3.0",
