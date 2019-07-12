@@ -99,7 +99,7 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-import Collaborator from './Collaborators/Collaborator.vue'
+const Collaborator = _ => import('./Collaborators/Collaborator.vue')
 
 export default {
   title: ($gettext) => {
