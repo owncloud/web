@@ -127,7 +127,7 @@ module.exports = {
         .click('@checkBoxAllFiles')
     },
     /**
-     *
+     * @param {string} path
      */
     unmarkFavorite: function (path) {
       const unFavoriteBtn = this.getFileRowSelectorByFileName(path) +
@@ -139,6 +139,20 @@ module.exports = {
         .click(unFavoriteBtn)
         .waitForOutstandingAjaxCalls()
         .useCss()
+    },
+    /**
+     * Toggle enable or disable file/folder select checkbox
+     *
+     * @param {string} enableOrDisable
+     * @param {string} path
+     */
+    toggleFileOrFolderCheckbox: function (enableOrDisable, path) {
+      const fileCheckbox = this.getFileRowSelectorByFileName(path) +
+        this.elements['checkboxInFileRow'].selector
+
+      return this
+        .waitForFileVisible(path)
+        .toggleCheckbox(enableOrDisable, fileCheckbox, 'xpath')
     },
     /**
      *
@@ -294,6 +308,10 @@ module.exports = {
     },
     checkBoxAllFiles: {
       selector: '#filelist-check-all'
+    },
+    checkboxInFileRow: {
+      selector: '//input[@type="checkbox"]',
+      locateStrategy: 'xpath'
     }
   }
 }

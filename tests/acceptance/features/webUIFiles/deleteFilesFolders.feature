@@ -61,7 +61,7 @@ Feature: deleting files and folders
       | question?       |
       | &and#hash       |
 
-  @smokeTest @skip
+  @smokeTest
   Scenario: Delete multiple files at once
     When the user batch deletes these files using the webUI
       | name          |
@@ -74,7 +74,6 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
-  @skip
   Scenario: Delete all files at once
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
@@ -85,7 +84,6 @@ Feature: deleting files and folders
     And the folder should be empty on the webUI
     And the folder should be empty on the webUI after a page reload
 
-  @skip
   Scenario: Delete all except for a few files at once
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
@@ -100,6 +98,7 @@ Feature: deleting files and folders
     # Check just an example of a file that should not exist any more
     But as "user1" file "data.zip" should not exist
     And file "data.zip" should not be listed on the webUI
+    And there should be 2 files/folders listed on the webUI
 
   Scenario: Delete an empty folder
     When the user creates a folder with the name "my-empty-folder" using the webUI

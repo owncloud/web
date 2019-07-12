@@ -104,9 +104,8 @@ module.exports = {
         .waitForAnimationToFinish()
         .click('@deleteFileConfirmationBtn')
         .waitForElementNotVisible('@deleteFileConfirmationDialog')
-        .waitForOutstandingAjaxCalls()
+        .waitForAnimationToFinish()
     }
-
   },
   elements: {
     newFileMenuButton: {

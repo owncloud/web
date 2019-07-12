@@ -3,7 +3,7 @@
     <oc-table-group>
       <oc-table-row>
         <oc-table-cell shrink type="head">
-          <oc-checkbox class="uk-margin-small-left" @click.native="toggleAll" :value="all" />
+          <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" @click.native="toggleAll" :value="all" />
         </oc-table-cell>
         <oc-table-cell shrink />
         <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
