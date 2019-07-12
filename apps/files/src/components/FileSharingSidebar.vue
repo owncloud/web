@@ -3,96 +3,96 @@
     <div>
      <oc-spinner v-if="sharesLoading"></oc-spinner>
      <template v-if="!sharesLoading">
-      <!-- TODO: Discuss placement of owner in file details instead of collaborators -->
-      <h4><translate>Owner</translate></h4>
-      <oc-user
-          avatar=""
-          :user-name="selectedFiles[0].owner.username"
-          :display-name="selectedFiles[0].owner.displayName"
-          class="uk-margin-bottom"
-        >
-      </oc-user>
-      <section>
-        <label class="oc-label"><translate>Invite new collaborators</translate></label>
-        <oc-autocomplete
-          v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress"
-          :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
-          :filter="filterRecipients" id="oc-sharing-autocomplete" class="uk-margin-bottom">
-          <template v-slot:item="{item}">
-            <div class="uk-text-bold">{{ item.label }}</div>
-            <span class="uk-text-meta">{{ $_ocCollaborators_recipientType(item) }}</span>
-          </template>
-        </oc-autocomplete>
-        <div v-if="selectedItem" class="uk-margin-medium-bottom">
-          <div class="uk-flex-inline uk-flex-column uk-flex-middle uk-margin-small-bottom">
-            <oc-avatar src="" />
-            <span>{{ selectedItem.label }}</span>
-          </div>
-          <div>
-            <oc-grid gutter="small">
-              <div class="uk-width-1-1">
-                <label class="oc-label"><translate>Role</translate></label>
-                <oc-button id="files-collaborators-role-button" class="uk-width-1-1 files-collaborators-role-button"><span v-if="!selectedNewRole">Select role</span><template v-else>{{ selectedNewRole.name }}</template></oc-button>
-                <p v-if="selectedNewRole" class="uk-text-meta uk-margin-remove">{{ selectedNewRole.description }}</p>
-                <oc-drop id="files-collaborators-roles-dropdown" toggle="#files-collaborators-role-button" mode="click" :options="{ 'offset': 0 }" class="oc-autocomplete-dropdown">
-                  <ul class="oc-autocomplete-suggestion-list">
-                    <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" @click="$_ocCollaborators_newCollaboratorsSelectRole(role)">
-                      <span class="uk-text-bold">{{ role.name }}</span>
-                      <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
-                    </li>
-                  </ul>
-                </oc-drop>
-              </div>
-              <div v-if="false" class="uk-width-1-1">
-                <label class="oc-label"><translate>Expiration date</translate> <translate class="uk-text-meta uk-remove-margin">(optional)</translate></label>
-                <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
-              </div>
-              <oc-grid v-if="selectedNewRole" gutter="small" class="uk-width-1-1">
-                <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                  <oc-switch class="uk-margin-small-right" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
+        <h4><translate>Owner</translate></h4>
+        <oc-user
+            avatar=""
+            :user-name="highlightedFile.owner.username"
+            :display-name="highlightedFile.owner.displayName"
+            class="uk-margin-bottom"
+          >
+        </oc-user>
+        <section>
+          <label class="oc-label"><translate>Invite new collaborators</translate></label>
+          <oc-autocomplete
+            v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress"
+            :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
+            :filter="filterRecipients" id="oc-sharing-autocomplete" class="uk-margin-bottom">
+            <template v-slot:item="{item}">
+              <div class="uk-text-bold">{{ item.label }}</div>
+              <span class="uk-text-meta">{{ $_ocCollaborators_recipientType(item) }}</span>
+            </template>
+          </oc-autocomplete>
+          <div v-if="selectedItem" class="uk-margin-medium-bottom">
+            <div class="uk-flex-inline uk-flex-column uk-flex-middle uk-margin-small-bottom">
+              <oc-avatar src="" />
+              <span>{{ selectedItem.label }}</span>
+            </div>
+            <div>
+              <oc-grid gutter="small">
+                <div class="uk-width-1-1">
+                  <label class="oc-label"><translate>Role</translate></label>
+                  <oc-button id="files-collaborators-role-button" class="uk-width-1-1 files-collaborators-role-button"><span v-if="!selectedNewRole">Select role</span><template v-else>{{ selectedNewRole.name }}</template></oc-button>
+                  <p v-if="selectedNewRole" class="uk-text-meta uk-margin-remove">{{ selectedNewRole.description }}</p>
+                  <oc-drop id="files-collaborators-roles-dropdown" toggle="#files-collaborators-role-button" mode="click" :options="{ 'offset': 0 }" class="oc-autocomplete-dropdown">
+                    <ul class="oc-autocomplete-suggestion-list">
+                      <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" @click="$_ocCollaborators_newCollaboratorsSelectRole(role)">
+                        <span class="uk-text-bold">{{ role.name }}</span>
+                        <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
+                      </li>
+                    </ul>
+                  </oc-drop>
                 </div>
-                <template v-if="selectedNewRole === 'custom'">
+                <div v-if="false" class="uk-width-1-1">
+                  <label class="oc-label"><translate>Expiration date</translate> <translate class="uk-text-meta uk-remove-margin">(optional)</translate></label>
+                  <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
+                </div>
+                <oc-grid v-if="selectedNewRole" gutter="small" class="uk-width-1-1">
                   <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                    <oc-switch class="uk-margin-small-right" /> <translate>Can change</translate>
+                    <oc-switch class="uk-margin-small-right" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
                   </div>
-                  <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                    <oc-switch class="uk-margin-small-right" /> <translate>Can create</translate>
-                  </div>
-                  <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                    <oc-switch class="uk-margin-small-right" /> <translate>Can delete</translate>
-                  </div>
-                </template>
+                  <template v-if="selectedNewRole === 'custom'">
+                    <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                      <oc-switch class="uk-margin-small-right" /> <translate>Can change</translate>
+                    </div>
+                    <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                      <oc-switch class="uk-margin-small-right" /> <translate>Can create</translate>
+                    </div>
+                    <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                      <oc-switch class="uk-margin-small-right" /> <translate>Can delete</translate>
+                    </div>
+                  </template>
+                </oc-grid>
+                <div>
+                  <oc-button @click="$_ocCollaborators_newCollaboratorsCancel"><translate>Cancel</translate></oc-button>
+                </div>
+                <div>
+                  <oc-button variation="primary" @click="$_ocCollaborators_newCollaboratorsAdd(selectedItem)" :disabled="!selectedNewRole"><translate>Add collaborators</translate></oc-button>
+                </div>
               </oc-grid>
-              <div>
-                <oc-button @click="$_ocCollaborators_newCollaboratorsCancel"><translate>Cancel</translate></oc-button>
-              </div>
-              <div>
-                <oc-button variation="primary" @click="$_ocCollaborators_newCollaboratorsAdd(selectedItem)" :disabled="!selectedNewRole"><translate>Add collaborators</translate></oc-button>
-              </div>
-            </oc-grid>
+            </div>
           </div>
-        </div>
-        <oc-loader v-if="sharesLoading" />
-        <template v-else>
-          <h5><translate>Collaborators</translate><template v-if="shares.length > 0"> ({{ shares.length }})</template></h5>
-          <div v-if="$_ocCollaborators_users.length > 0">
-            <h5><translate>Users</translate> ({{ $_ocCollaborators_users.length }})</h5>
-            <oc-accordion>
-              <template v-for="(collaborator, index) in $_ocCollaborators_users">
-                <collaborator :key="index" :collaborator="collaborator" :roles="roles" />
-              </template>
-            </oc-accordion>
-          </div>
-          <div v-if="$_ocCollaborators_groups.length > 0">
-            <oc-accordion>
-            <h5><translate>Groups</translate> ({{ $_ocCollaborators_groups.length }})</h5>
-              <template v-for="(collaborator, index) in $_ocCollaborators_groups">
-                <collaborator :key="index" :collaborator="collaborator" :roles="roles" />
-              </template>
-            </oc-accordion>
-          </div>
-        </template>
-      </section>
+          <oc-loader v-if="sharesLoading" />
+          <template v-else>
+            <h5><translate>Collaborators</translate><template v-if="shares.length > 0"> ({{ shares.length }})</template></h5>
+            <div v-if="$_ocCollaborators_users.length > 0">
+              <h5><translate>Users</translate> ({{ $_ocCollaborators_users.length }})</h5>
+              <oc-accordion>
+                <template v-for="(collaborator, index) in $_ocCollaborators_users">
+                  <collaborator :key="index" :collaborator="collaborator" :roles="roles" />
+                </template>
+              </oc-accordion>
+            </div>
+            <div v-if="$_ocCollaborators_groups.length > 0">
+              <oc-accordion>
+              <h5><translate>Groups</translate> ({{ $_ocCollaborators_groups.length }})</h5>
+                <template v-for="(collaborator, index) in $_ocCollaborators_groups">
+                  <collaborator :key="index" :collaborator="collaborator" :roles="roles" />
+                </template>
+              </oc-accordion>
+            </div>
+          </template>
+        </section>
+      </template>
     </div>
   </div>
 </template>
@@ -124,7 +124,7 @@ export default {
       if (oldItem !== newItem) {
         this.loadShares({
           client: this.$client,
-          path: this.selectedFiles[0].path
+          path: this.highlightedFile.path
         })
       }
     }
@@ -164,7 +164,7 @@ export default {
     ...mapGetters('Files', ['highlightedFile', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
     ...mapState(['user']),
     selectedFile () {
-      return this.selectedFiles[0]
+      return this.highlightedFile
     },
     $_ocCollaborationStatus_autocompletePlacholder () {
       return this.$gettext('Search by name, email or federation ID\'s')
@@ -228,7 +228,7 @@ export default {
           permissions.perms = this.canShare ? 17 : 1
           break
         case ('Editor'):
-          if (this.selectedFiles[0].type === 'folder') {
+          if (this.highlightedFile.type === 'folder') {
             permissions.perms = this.canShare ? 23 : 7
             break
           }
@@ -237,7 +237,7 @@ export default {
       }
       this.addShare({
         client: this.$client,
-        path: this.selectedFiles[0].path,
+        path: this.highlightedFile.path,
         $gettext: this.$gettext,
         shareWith: collaborators.value.shareWith,
         shareType: collaborators.value.shareType,
