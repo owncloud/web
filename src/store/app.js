@@ -94,7 +94,7 @@ const getters = {
     return state.sidebarVisible
   },
   activeMessages: state => {
-    return (state.messages.length) ? [state.messages[0]] : []
+    return state.messages
   },
   activeNotifications: state => {
     return (state.notifications.data.length && !state.notifications.failed) ? state.notifications.data : false
