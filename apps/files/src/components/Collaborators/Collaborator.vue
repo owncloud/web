@@ -17,9 +17,9 @@
           <label class="oc-label"><translate>Role</translate></label>
           <oc-button :id="`files-collaborators-role-button-${collaborator.info.id}`" class="uk-width-1-1 files-collaborators-role-button">{{ $_ocCollaborators_selectedRoleName(collaborator) }}</oc-button>
           <p class="uk-text-meta uk-margin-remove">{{ $_ocCollaborators_selectedRoleDescription(collaborator) }}</p>
-          <oc-drop id="files-collaborators-roles-dropdown" :toggle="`#files-collaborators-role-button-${collaborator.info.id}`" mode="click" :options="{ 'offset': 0 }" class="oc-autocomplete-dropdown">
+          <oc-drop dropId="files-collaborators-roles-dropdown" closeOnClick :toggle="`#files-collaborators-role-button-${collaborator.info.id}`" mode="click" :options="{ offset: 0, delayHide: 0 }" class="oc-autocomplete-dropdown">
             <ul class="oc-autocomplete-suggestion-list">
-              <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : roles[collaborator.role] === role }" @click="$_ocCollaborators_changeRole(role, collaborator)">
+              <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : (roles[collaborator.role] === role && !selectedNewRole) || selectedNewRole === role }" @click="$_ocCollaborators_changeRole(role, collaborator)">
                 <span class="uk-text-bold">{{ role.name }}</span>
                 <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
               </li>
