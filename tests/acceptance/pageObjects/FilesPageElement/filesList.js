@@ -269,7 +269,7 @@ module.exports = {
       selector: '#oc-dialog-delete-confirm'
     },
     shareButtonInFileRow: {
-      selector: '//button[@aria-label="Share"]',
+      selector: '//button[@aria-label="Collaborators"]',
       locateStrategy: 'xpath'
     },
     renameFileConfirmationDialog: {
