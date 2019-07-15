@@ -33,6 +33,12 @@ Given('the user has browsed to the trashbin page', function () {
     .navigateAndWaitTillLoaded()
 })
 
+When('the user browses to the trashbin page', function () {
+  return client
+    .page.trashbinPage()
+    .navigateAndWaitTillLoaded()
+})
+
 Given('the user has browsed to the favorites page using the webUI', function () {
   return client
     .page.phoenixPage()
@@ -254,9 +260,55 @@ Then('the folder should be empty on the webUI after a page reload', async functi
   return client.assert.equal(allFileRows.value.length, 0)
 })
 
-const assertDeletedElementsAreNotListed = function () {
-  for (const element of deletedElements) {
+const assertElementsAreListed = function (elements) {
+  for (const element of elements) {
+    client.page.FilesPageElement.filesList().assertElementListed(element)
+  }
+  return client
+}
+
+const assertElementsAreNotListed = function (elements) {
+  for (const element of elements) {
     client.page.FilesPageElement.filesList().assertElementNotListed(element)
   }
   return client
 }
+
+const assertDeletedElementsAreNotListed = function () {
+  return assertElementsAreNotListed(deletedElements)
+}
+
+const assertDeletedElementsAreListed = function () {
+  return assertElementsAreListed(deletedElements)
+}
+
+When('the user restores file/folder {string} from the trashbin using the webUI', function (element) {
+  return client.page.FilesPageElement.filesList().restoreFile(element)
+})
+
+Then('the following files should be listed on the webUI', function (table) {
+  return assertElementsAreListed([].concat.apply([], table.rows()))
+})
+
+Then('file {string} should be listed in the folder {string} on the webUI', function (file, folder) {
+  return client
+    .page
+    .FilesPageElement
+    .filesList()
+    .navigateToFolder(folder)
+    .waitForFileVisible(file)
+})
+
+Then('the deleted elements should be listed on the webUI', function () {
+  return assertDeletedElementsAreListed()
+})
+
+Given('the user has renamed the following files', function (table) {
+  return Promise.all(table.hashes().map((row) => {
+    return webdav.move(client.globals.currentUser, row['from-name-parts'], row['to-name-parts'])
+  }))
+})
+
+Given('the user has created folder {string}', function (fileName) {
+  return webdav.createFolder(client.globals.currentUser, fileName)
+})
