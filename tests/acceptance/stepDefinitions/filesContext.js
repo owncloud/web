@@ -1,8 +1,12 @@
 const { client } = require('nightwatch-api')
 const assert = require('assert')
-const { Given, When, Then } = require('cucumber')
+const { Given, When, Then, Before } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
-let deletedElementsTable = []
+let deletedElements
+
+Before(() => {
+  deletedElements = []
+})
 
 When('the user browses to the files page',
   () => {
@@ -85,7 +89,7 @@ When('the user deletes file/folder {string} using the webUI', function (element)
 When('the user deletes the following elements using the webUI', function (table) {
   for (const line of table.rows()) {
     client.page.FilesPageElement.filesList().deleteFile(line[0])
-    deletedElementsTable.push(line[0])
+    deletedElements.push(line[0])
   }
   return client.page.filesPage()
 })
@@ -191,6 +195,21 @@ When('the user batch deletes the marked files using the webUI', function () {
   return client.page.filesPage().deleteAllCheckedFiles()
 })
 
+When('the user batch deletes these files using the webUI', function (fileOrFolders) {
+  fileOrFolders.rows().forEach(entry => {
+    client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', entry[0])
+    deletedElements.push(entry[0])
+  })
+  return client.page.filesPage().deleteAllCheckedFiles()
+})
+
+When('the user unmarks these files for batch action using the webUI', function (fileOrFolders) {
+  fileOrFolders.rows().forEach(entry => {
+    client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('disable', entry[0])
+  })
+  return client
+})
+
 Then('the folder should be empty on the webUI', async function () {
   const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
   return client.assert.equal(allFileRows.value.length, 0)
@@ -229,8 +248,14 @@ Then(/there should be (\d+) files\/folders listed on the webUI/, async function 
   return client.assert.equal(allFileRows.value.length, noOfItems)
 })
 
+Then('the folder should be empty on the webUI after a page reload', async function () {
+  await client.refresh()
+  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
+  return client.assert.equal(allFileRows.value.length, 0)
+})
+
 const assertDeletedElementsAreNotListed = function () {
-  for (const element of deletedElementsTable) {
+  for (const element of deletedElements) {
     client.page.FilesPageElement.filesList().assertElementNotListed(element)
   }
   return client
