@@ -58,6 +58,10 @@ export default {
     Mixins
   ],
 
+  mounted () {
+    this.$_ocTrashbin_getFiles()
+  },
+
   computed: {
     ...mapGetters('Files', ['loadingFolder', 'selectedFiles', 'trashbinDeleteMessage']),
 
@@ -80,9 +84,16 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
+    ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilterTerm']),
     ...mapActions(['showMessage']),
 
+    $_ocTrashbin_getFiles () {
+      this.setFilterTerm('')
+      this.loadTrashbin({
+        client: this.$client,
+        $gettext: this.$gettext
+      })
+    },
     $_ocTrashbin_deleteFile (item) {
       this.resetFileSelection()
       this.addFileSelection(item)

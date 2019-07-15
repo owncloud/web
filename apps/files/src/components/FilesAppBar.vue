@@ -12,36 +12,38 @@
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
       <div class="uk-width-auto">
-        <template v-if="$route.name === 'files-trashbin'">
-          <oc-button v-if="selectedFiles.length > 0" icon="restore" @click="$_ocTrashbin_restoreFiles()">
-            <translate>Restore selected</translate>
-          </oc-button>
-          <oc-button id="delete-selected-btn" icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
-            {{ $_ocAppBar_clearTrashbinButtonText }}
-          </oc-button>
-        </template>
-        <template v-if="$route.name === 'files-list' && selectedFiles.length > 0">
-          <oc-button id="delete-selected-btn" icon="delete" @click="$_ocFiles_deleteSelected()">
-            <translate>Delete selected</translate>
-          </oc-button>
-        </template>
-        <div class="uk-button-group" v-if="$_ocFilesApp_showActions">
-          <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
-          <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
-          <oc-button class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn"></oc-button>
+        <div class="uk-button-group" :key="actionsKey">
+          <template v-if="$_ocFilesAppBar_showActions">
+            <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
+            <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
+            <oc-drop toggle="#new-file-menu-btn" mode="click">
+              <oc-nav>
+                <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
+                <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
+                <oc-nav-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
+              </oc-nav>
+            </oc-drop>
+          </template>
+          <template v-if="$route.name === 'files-trashbin'">
+            <oc-button v-if="selectedFiles.length > 0" icon="restore" @click="$_ocTrashbin_restoreFiles()">
+              <translate>Restore selected</translate>
+            </oc-button>
+            <oc-button id="delete-selected-btn" icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
+              {{ $_ocAppBar_clearTrashbinButtonText }}
+            </oc-button>
+          </template>
+          <template v-if="$route.name === 'files-list' && selectedFiles.length > 0">
+            <oc-button id="delete-selected-btn" icon="delete" @click="$_ocFiles_deleteSelected()">
+              <translate>Delete selected</translate>
+            </oc-button>
+          </template>
+          <oc-button class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn" />
+          <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove uk-width-large">
+            <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" />
+          </oc-drop>
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
+          <file-filter-menu />
         </div>
-        <file-filter-menu />
-        <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove uk-width-large">
-          <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" />
-        </oc-drop>
-        <oc-drop toggle="#new-file-menu-btn" mode="click">
-          <oc-nav>
-            <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-            <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
-            <oc-nav-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
-          </oc-nav>
-        </oc-drop>
       </div>
       <div v-show="fileUpload" class="uk-width-auto">
         <oc-progress-pie id="oc-progress-pie" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
@@ -84,7 +86,8 @@ export default {
     createFile: false,
     path: '',
     searchedFiles: [],
-    fileFolderCreationLoading: false
+    fileFolderCreationLoading: false,
+    actionsKey: Math.floor(Math.random() * 20)
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration']),
@@ -135,7 +138,7 @@ export default {
       return this.currentFolder.canUpload()
     },
 
-    $_ocFilesApp_showActions () {
+    $_ocFilesAppBar_showActions () {
       return this.$route.meta.hideFilelistActions !== true
     },
 
@@ -166,7 +169,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile',
-      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilesDeleteMessage']),
+      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilesDeleteMessage', 'setFilterTerm']),
     ...mapActions(['openFile', 'showMessage']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
@@ -386,6 +389,13 @@ export default {
   filters: {
     roundNumber (value) {
       return parseInt(value.toFixed(0))
+    }
+  },
+  watch: {
+    // This ensures buttons will display with its right icons, values, etc.
+    // TODO: Find a better solution
+    $route (to, from) {
+      this.actionsKey = Math.floor(Math.random() * 20)
     }
   }
 }

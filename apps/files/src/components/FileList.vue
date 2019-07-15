@@ -77,7 +77,7 @@
 </template>
 <script>
 import OcDialogPrompt from './ocDialogPrompt.vue'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 import Mixins from '../mixins'
 
@@ -95,11 +95,31 @@ export default {
     fileToBeDeleted: '',
     newName: ''
   }),
+  mounted () {
+    this.$_ocFilesFolder_getFolder()
+  },
   methods: {
-    ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection',
+    ...mapActions('Files', ['loadFolder', 'setFilterTerm', 'markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection',
       'deleteFiles', 'renameFile', 'setFilesDeleteMessage', 'setHighlightedFile']),
     ...mapActions(['openFile']),
 
+    $_ocFilesFolder_getFolder () {
+      this.setFilterTerm('')
+      let absolutePath
+
+      if (this.configuration.rootFolder) {
+        absolutePath = !this.item ? this.configuration.rootFolder : this.item
+      } else {
+        absolutePath = !this.item ? this.configuration.rootFolder : this.item
+      }
+
+      this.loadFolder({
+        client: this.$client,
+        absolutePath: absolutePath,
+        $gettext: this.$gettext,
+        routeName: this.$route.name
+      })
+    },
     toggleAll () {
       if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
         this.resetFileSelection()
@@ -164,8 +184,10 @@ export default {
     }
   },
   computed: {
+    ...mapState(['route']),
     ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'loadingFolder', 'filesDeleteMessage', 'highlightedFile']),
-    ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
+    ...mapGetters(['getToken', 'fileSideBars', 'capabilities', 'configuration']),
+
     all () {
       return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
     },
@@ -224,6 +246,14 @@ export default {
     },
     $_ocDialog_isOpen () {
       return this.changeFileName
+    },
+    item () {
+      return this.$route.params.item
+    }
+  },
+  watch: {
+    item () {
+      this.$_ocFilesFolder_getFolder()
     }
   }
 }
