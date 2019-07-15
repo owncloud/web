@@ -55,6 +55,7 @@ module.exports = {
     }
   },
   createdUsers: {},
+  createdGroups: [],
 
   /**
    *
@@ -67,6 +68,20 @@ module.exports = {
     this.createdUsers[userId] = { password: password, displayname: displayname, email: email }
   },
 
+  /**
+   *
+   * @param {string} groupId
+   */
+  addGroupToCreatedGroupsList: function (groupId) {
+    this.createdGroups.push(groupId)
+  },
+  /**
+   *
+   * @param {string} userId
+   */
+  deleteGroupFromCreatedGroupsList: function (groupId) {
+    this.createdGroups = this.createdGroups.filter(item => item !== groupId)
+  },
   /**
    * gets the password of a previously created user
    * if the user was not created yet, gets the password from the default Users list
@@ -165,5 +180,12 @@ module.exports = {
    */
   getCreatedUsers: function () {
     return this.createdUsers
+  },
+  /**
+   *
+   * @returns {Array}
+   */
+  getCreatedGroups: function () {
+    return this.createdGroups
   }
 }

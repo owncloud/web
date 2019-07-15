@@ -68,17 +68,28 @@ function initUser (userId) {
   return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users/' + userId, { method: 'GET', headers: headers })
 }
 
+/**
+ *
+ * @param {string} groupId
+ * @returns {*|Promise}
+ */
 function createGroup (groupId) {
   const body = new URLSearchParams()
   body.append('groupid', groupId)
-
+  userSettings.addGroupToCreatedGroupsList(groupId)
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
   return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/groups?format=json', { method: 'POST', body: body, headers: headers })
 }
 
+/**
+ *
+ * @param {string} groupId
+ * @returns {*|Promise}
+ */
 function deleteGroup (groupId) {
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
-  return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/groups/' + groupId, { method: 'POST', headers: headers })
+  userSettings.deleteGroupFromCreatedGroupsList(groupId)
+  return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/groups/' + groupId, { method: 'DELETE', headers: headers })
 }
 function addToGroup (userId, groupId) {
   const body = new URLSearchParams()
@@ -135,14 +146,14 @@ Given('these users have been created with default attributes:', function (dataTa
 })
 
 Given('group {string} has been created', function (groupId) {
-  return deleteGroup(groupId)
-    .then(() => createGroup(groupId))
+  return deleteGroup(groupId.toString())
+    .then(() => createGroup(groupId.toString()))
 })
 
 Given('these groups have been created:', function (dataTable) {
   return Promise.all(dataTable.rows().map((groupId) => {
-    return deleteGroup(groupId)
-      .then(() => createGroup(groupId))
+    return deleteGroup(groupId.toString())
+      .then(() => createGroup(groupId.toString()))
   }))
 })
 
@@ -154,4 +165,7 @@ After(function () {
   for (var userId in userSettings.getCreatedUsers()) {
     deleteUser(userId)
   }
+  userSettings.getCreatedGroups().forEach(function (groupId) {
+    deleteGroup(groupId)
+  })
 })
