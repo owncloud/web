@@ -18,7 +18,7 @@
             :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
             :filter="filterRecipients" id="oc-sharing-autocomplete" class="uk-margin-bottom">
             <template v-slot:item="{item}">
-              <div class="uk-text-bold">{{ item.label }}</div>
+              <div class="uk-text-bold files-collaborators-autocomplete-username">{{ item.label }}</div>
               <span class="uk-text-meta">{{ $_ocCollaborators_recipientType(item) }}</span>
             </template>
           </oc-autocomplete>
@@ -33,9 +33,9 @@
                   <label class="oc-label"><translate>Role</translate></label>
                   <oc-button id="files-collaborators-role-button" class="uk-width-1-1 files-collaborators-role-button"><span v-if="!selectedNewRole">Select role</span><template v-else>{{ selectedNewRole.name }}</template></oc-button>
                   <p v-if="selectedNewRole" class="uk-text-meta uk-margin-remove">{{ selectedNewRole.description }}</p>
-                  <oc-drop id="files-collaborators-roles-dropdown" toggle="#files-collaborators-role-button" mode="click" :options="{ 'offset': 0 }" class="oc-autocomplete-dropdown">
+                  <oc-drop closeOnClick dropId="files-collaborators-roles-dropdown" toggle="#files-collaborators-role-button" mode="click" :options="{ offset: 0, delayHide: 0 }" class="oc-autocomplete-dropdown">
                     <ul class="oc-autocomplete-suggestion-list">
-                      <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" @click="$_ocCollaborators_newCollaboratorsSelectRole(role)">
+                      <li v-for="(role, key) in roles" :key="key" :id="`files-collaborator-new-collaborator-role-${role.tag}`" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : selectedNewRole === role }" @click="$_ocCollaborators_newCollaboratorsSelectRole(role)">
                         <span class="uk-text-bold">{{ role.name }}</span>
                         <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
                       </li>
@@ -66,7 +66,7 @@
                   <oc-button @click="$_ocCollaborators_newCollaboratorsCancel"><translate>Cancel</translate></oc-button>
                 </div>
                 <div>
-                  <oc-button variation="primary" @click="$_ocCollaborators_newCollaboratorsAdd(selectedItem)" :disabled="!selectedNewRole"><translate>Add collaborators</translate></oc-button>
+                  <oc-button id="files-collaborators-add-new-button" variation="primary" @click="$_ocCollaborators_newCollaboratorsAdd(selectedItem)" :disabled="!selectedNewRole"><translate>Add collaborators</translate></oc-button>
                 </div>
               </oc-grid>
             </div>
@@ -74,7 +74,7 @@
           <oc-loader v-if="sharesLoading" />
           <template v-else>
             <h5><translate>Collaborators</translate><template v-if="shares.length > 0"> ({{ shares.length }})</template></h5>
-            <div v-if="$_ocCollaborators_users.length > 0">
+            <div v-if="$_ocCollaborators_users.length > 0" id="files-collaborators-list">
               <h5><translate>Users</translate> ({{ $_ocCollaborators_users.length }})</h5>
               <oc-accordion>
                 <template v-for="(collaborator, index) in $_ocCollaborators_users">
@@ -262,40 +262,40 @@ export default {
 
 <style>
   /* TODO: Move to design system */
-  .uk-accordion-title .uk-text-lead {
+  .oc-app-side-bar .uk-accordion-title .uk-text-lead {
     font-size: 16px;
     font-weight: bold;
   }
 
-  .uk-accordion-title .uk-inline > span {
+  .oc-app-side-bar .uk-accordion-title .uk-inline > span {
     font-size: 16px;
   }
 
-  .oc-label {
+  .oc-app-side-bar .oc-label {
     display: block;
     margin-bottom: 5px;
   }
 
-  .files-collaborators-role-button {
+  .oc-app-side-bar .files-collaborators-role-button {
     padding: 0 10px;
     text-align: left;
   }
 
-  .oc-autocomplete-suggestion {
+  .oc-app-side-bar .oc-autocomplete-suggestion {
     transition: background-color .3s, color .3s;
     cursor: pointer;
   }
 
-  .oc-autocomplete-suggestion:hover {
+  .oc-app-side-bar .oc-autocomplete-suggestion:hover {
     color: white;
     background-color: #002966;
   }
 
-  .oc-autocomplete-dropdown .uk-card {
+  .oc-app-side-bar .oc-autocomplete-dropdown .uk-card {
     padding: 0 !important;
   }
 
-  .oc-autocomplete-suggestion:hover .uk-text-meta, .oc-autocomplete-suggestion-selected .uk-text-meta {
+  .oc-app-side-bar .oc-autocomplete-suggestion:hover .uk-text-meta, .oc-autocomplete-suggestion-selected .uk-text-meta {
     color: white;
   }
 </style>
