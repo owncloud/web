@@ -67,7 +67,13 @@ module.exports = {
   addUserToCreatedUsersList: function (userId, password, displayname = null, email = null) {
     this.createdUsers[userId] = { password: password, displayname: displayname, email: email }
   },
-
+  /**
+   *
+   * @param {string} userId
+   */
+  deleteUserFromCreatedUsersList: function (userId) {
+    delete this.createdUsers[userId]
+  },
   /**
    *
    * @param {string} groupId

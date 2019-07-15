@@ -60,6 +60,7 @@ function createUser (userId, password = false) {
 
 function deleteUser (userId) {
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  userSettings.deleteUserFromCreatedUsersList(userId)
   return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users/' + userId, { method: 'DELETE', headers: headers })
 }
 
