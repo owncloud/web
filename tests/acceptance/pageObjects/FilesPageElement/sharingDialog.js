@@ -117,6 +117,9 @@ module.exports = {
           })
         })
         .then(() => shareList)
+    },
+    getGroupSharePostfix: function () {
+      return groupSharePostfix
     }
   },
   elements: {

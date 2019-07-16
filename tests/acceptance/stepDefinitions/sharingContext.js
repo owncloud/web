@@ -91,9 +91,43 @@ When('the user shares file/folder {string} with user {string} using the webUI', 
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', function (pattern) {
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
     .then(itemsList => {
+      const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
+
+      // check if all created users that contain the pattern either in the display name or the username
+      // are listed in the autocomplete list
+      // in both cases the display name should be listed
+      for (var userId in userSettings.getCreatedUsers()) {
+        let userDisplayName = userSettings.getDisplayNameForUser(userId)
+        if ((userDisplayName.toLowerCase().includes(pattern) ||
+          userId.includes(pattern)) &&
+          userDisplayName !== currentUserDisplayName) {
+          assert.ok(
+            itemsList.includes(userDisplayName),
+            `could not find '${userDisplayName}' in autocomple share list`
+          )
+        }
+      }
+
+      // check if every created group that contains the pattern is listed in the autocomplete list
+      userSettings.getCreatedGroups().forEach(function (groupId) {
+        if (groupId.toLowerCase().includes(pattern)) {
+          let groupString = groupId + client.page.FilesPageElement.sharingDialog().getGroupSharePostfix()
+
+          assert.ok(
+            itemsList.includes(groupString),
+            `could not find '${groupString}' in autocomple share list`
+          )
+        }
+      })
+    })
+})
+
+Then('every item listed in the autocomplete list on the webUI should contain {string}', function (pattern) {
+  return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
+    .then(itemsList => {
       itemsList.forEach(item => {
-        if (!item.includes(pattern)) {
-          client.assert.fail(`sharee ${item} does not contain pattern ${pattern}`)
+        if (!item.toLowerCase().includes(pattern)) {
+          assert.fail(`sharee ${item} does not contain pattern ${pattern}`)
         }
       })
     })
