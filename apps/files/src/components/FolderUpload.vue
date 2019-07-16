@@ -1,15 +1,14 @@
 <template>
-  <oc-nav-item icon="file_upload" @click="triggerUpload">
-    <span id="files-file-upload-button" v-translate>Upload File</span>
-    <div slot="outer-content">
-      <input id="fileUploadInput" type="file" name="file" @change="$_ocUpload_addFileToQue" multiple ref="input" />
-    </div>
-  </oc-nav-item>
+    <oc-nav-item v-if="checkIfBrowserSupportsFolderUpload" icon="cloud_upload" @click="triggerUpload">
+        <span v-translate>Upload Folder</span>
+        <div slot="outer-content">
+            <input id="folderUploadInput" type="file" name="folder" @change="$_ocUpload_addDirectoryToQue" webkitdirectory mozdirectory allowdirs ref="input" />
+        </div>
+    </oc-nav-item>
 </template>
 
 <script>
 import Mixins from '../mixins'
-
 export default {
   props: {
     url: { type: String, required: true },
@@ -39,8 +38,8 @@ export default {
 </script>
 
 <style scoped="true">
-  #fileUploadInput {
-    position: absolute;
-    left: -99999px;
-  }
+    #folderUploadInput {
+        position: absolute;
+        left: -99999px;
+    }
 </style>
