@@ -18,7 +18,7 @@
             :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
             :filter="filterRecipients" id="oc-sharing-autocomplete" class="uk-margin-bottom">
             <template v-slot:item="{item}">
-              <div class="uk-text-bold">{{ item.label }}</div>
+              <div class="uk-text-bold files-collaborators-autocomplete-username">{{ item.label }}</div>
               <span class="uk-text-meta">{{ $_ocCollaborators_recipientType(item) }}</span>
             </template>
           </oc-autocomplete>
@@ -35,7 +35,7 @@
                   <p v-if="selectedNewRole" class="uk-text-meta uk-margin-remove">{{ selectedNewRole.description }}</p>
                   <oc-drop closeOnClick dropId="files-collaborators-roles-dropdown" toggle="#files-collaborators-role-button" mode="click" :options="{ offset: 0, delayHide: 0 }" class="oc-autocomplete-dropdown">
                     <ul class="oc-autocomplete-suggestion-list">
-                      <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : selectedNewRole === role }" @click="$_ocCollaborators_newCollaboratorsSelectRole(role)">
+                      <li v-for="(role, key) in roles" :key="key" :id="`files-collaborator-new-collaborator-role-${role.tag}`" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : selectedNewRole === role }" @click="$_ocCollaborators_newCollaboratorsSelectRole(role)">
                         <span class="uk-text-bold">{{ role.name }}</span>
                         <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
                       </li>
@@ -66,7 +66,7 @@
                   <oc-button @click="$_ocCollaborators_newCollaboratorsCancel"><translate>Cancel</translate></oc-button>
                 </div>
                 <div>
-                  <oc-button variation="primary" @click="$_ocCollaborators_newCollaboratorsAdd(selectedItem)" :disabled="!selectedNewRole"><translate>Add collaborators</translate></oc-button>
+                  <oc-button id="files-collaborators-add-new-button" variation="primary" @click="$_ocCollaborators_newCollaboratorsAdd(selectedItem)" :disabled="!selectedNewRole"><translate>Add collaborators</translate></oc-button>
                 </div>
               </oc-grid>
             </div>
@@ -74,7 +74,7 @@
           <oc-loader v-if="sharesLoading" />
           <template v-else>
             <h5><translate>Collaborators</translate><template v-if="shares.length > 0"> ({{ shares.length }})</template></h5>
-            <div v-if="$_ocCollaborators_users.length > 0">
+            <div v-if="$_ocCollaborators_users.length > 0" id="files-collaborators-list">
               <h5><translate>Users</translate> ({{ $_ocCollaborators_users.length }})</h5>
               <oc-accordion>
                 <template v-for="(collaborator, index) in $_ocCollaborators_users">

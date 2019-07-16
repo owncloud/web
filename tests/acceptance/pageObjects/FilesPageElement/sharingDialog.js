@@ -1,4 +1,4 @@
-const groupSharePostfix = ' (group)'
+// const groupSharePostfix = ' (group)'
 
 module.exports = {
   commands: {
@@ -27,9 +27,9 @@ module.exports = {
       const webElementIdList = await this.getShareAutocompleteWebElementIdList()
       webElementIdList.forEach((webElementId) => {
         this.api.elementIdText(webElementId, (text) => {
-          if (shareWithGroup === true) {
-            sharee = sharee + groupSharePostfix
-          }
+          // if (shareWithGroup === true) {
+          //   sharee = sharee + groupSharePostfix
+          // }
           if (text.value === sharee) {
             this.api
               .elementIdClick(webElementId)
@@ -37,7 +37,25 @@ module.exports = {
           }
         })
       })
+
       return this
+    },
+    /**
+     *
+     * @param {String} role
+     */
+    selectRoleForNewCollaborator: function (role) {
+      return this.waitForElementPresent('@newCollaboratorSelectRoleButton')
+        .click('@newCollaboratorSelectRoleButton')
+        .waitForElementVisible('@newCollaboratorRolesDropdown')
+        .waitForElementVisible(`@newCollaboratorRole${role}`)
+        .click(`@newCollaboratorRole${role}`)
+        .waitForElementNotVisible('@newCollaboratorRolesDropdown')
+    },
+    confirmShare: function () {
+      return this.waitForElementPresent('@addShareButton')
+        .click('@addShareButton')
+        .waitForElementNotPresent('@addShareButton')
     },
     closeSharingDialog: function () {
       try {
@@ -110,6 +128,7 @@ module.exports = {
       const shareList = []
       return this.waitForElementVisible('@sharedWithList')
         .api.elements('@sharedWithNames', async result => {
+          console.log(result)
           result.value.map(item => {
             this.api.elementIdText(item['ELEMENT'], text => {
               shareList.push(text.value)
@@ -130,29 +149,40 @@ module.exports = {
       selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion-list'
     },
     sharingAutoCompleteDropDownElements: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion'
+      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion .files-collaborators-autocomplete-username'
     },
     sidebarCloseBtn: {
       selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
       locateStrategy: 'xpath'
     },
     sharedWithList: {
-      selector: '#file-share-list'
+      selector: '#files-collaborators-list'
     },
     sharedWithListItems: {
-      selector: '#file-share-list li'
+      selector: '.files-collaborators-collaborator'
     },
     sharedWithListItem: {
       selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[.="%s"]/../..',
       locateStrategy: 'xpath'
     },
     sharedWithNames: {
-      selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[@class="uk-text-lead"]',
-      locateStrategy: 'xpath'
+      selector: '#files-collaborators-list .files-collaborators-collaborator .files-collaborators-collaborator-name'
     },
     deleteShareButton: {
       selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[.="%s"]/../..//*[@aria-label="Delete Share"]',
       locateStrategy: 'xpath'
+    },
+    addShareButton: {
+      selector: '#files-collaborators-add-new-button'
+    },
+    newCollaboratorSelectRoleButton: {
+      selector: '#files-collaborators-role-button'
+    },
+    newCollaboratorRolesDropdown: {
+      selector: '#files-collaborators-roles-dropdown'
+    },
+    newCollaboratorRoleViewer: {
+      selector: '#files-collaborator-new-collaborator-role-viewer'
     }
   }
 }

@@ -133,6 +133,14 @@ Then('every item listed in the autocomplete list on the webUI should contain {st
     })
 })
 
+Given('the user selects role {string}', function (role) {
+  return client.page.FilesPageElement.sharingDialog().selectRoleForNewCollaborator(role)
+})
+
+Given('the user confirms the share', function () {
+  return client.page.FilesPageElement.sharingDialog().confirmShare()
+})
+
 Then('the users own name should not be listed in the autocomplete list on the webUI', function () {
   const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
@@ -158,6 +166,7 @@ When('the user deletes share with user/group {string} for the current file', fun
 Then('{string} should be listed in the shared with list', function (user) {
   return client.page.FilesPageElement.sharingDialog().getShareList()
     .then(shares => {
+      console.log(shares)
       if (!shares || !shares.includes(user)) {
         assert.fail(`"${user}" was expected to be in share list but was not present.`)
       }
