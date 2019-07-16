@@ -85,6 +85,7 @@
     "vue-gettext": "^2.1.5",
     "vue-loader": "^15.7.0",
     "vue-router": "^3.0.7",
+    "vue-scrollto": "^2.15.0",
     "vue-template-compiler": "^2.6.10",
     "vuex": "^3.1.1",
     "vuex-persist": "^2.0.1",

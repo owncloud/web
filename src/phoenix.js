@@ -12,7 +12,7 @@ import Phoenix from './Phoenix.vue'
 
 // --- Adding global libraries ---
 
-import ownCloud from 'owncloud-sdk'
+import OwnCloud from 'owncloud-sdk'
 
 import { sync } from 'vuex-router-sync'
 import store from './store'
@@ -23,6 +23,7 @@ import router from './router'
 import VueEvents from 'vue-events'
 import VueRouter from 'vue-router'
 import Clipboard from 'v-clipboard'
+import VueScrollTo from 'vue-scrollto'
 
 // --- Gettext ----
 
@@ -44,12 +45,13 @@ import 'owncloud-design-system/dist/system/system.css'
 import wgxpath from 'wicked-good-xpath'
 wgxpath.install()
 
-Vue.prototype.$client = new ownCloud()
+Vue.prototype.$client = new OwnCloud()
 
 Vue.use(VueEvents)
 Vue.use(VueRouter)
 Vue.use(DesignSystem)
 Vue.use(Clipboard)
+Vue.use(VueScrollTo)
 
 Vue.directive('image-src', imageSrc)
 

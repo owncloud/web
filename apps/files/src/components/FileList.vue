@@ -13,7 +13,7 @@
       </oc-table-row>
     </oc-table-group>
     <oc-table-group>
-      <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item)">
+      <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item)" :id="'file-row-' + item.id">
         <oc-table-cell>
           <oc-checkbox class="uk-margin-small-left" @click.stop @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
         </oc-table-cell>
@@ -23,7 +23,7 @@
         <oc-table-cell class="uk-text-truncate">
           <oc-file @click.native.stop="item.type === 'folder' ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
                    :name="$_ocFileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
-                   :filename="item.name" :key="item.id" />
+                   :filename="item.name" :key="item.id"/>
         </oc-table-cell>
         <oc-table-cell class="uk-text-meta uk-text-nowrap" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }">
           {{ item.size | fileSize }}
@@ -113,11 +113,23 @@ export default {
         absolutePath = !this.item ? this.configuration.rootFolder : this.item
       }
 
+      const self = this
       this.loadFolder({
         client: this.$client,
         absolutePath: absolutePath,
         $gettext: this.$gettext,
         routeName: this.$route.name
+      }).then(() => {
+        const scrollTo = self.$route.query.scrollTo
+        if (scrollTo) {
+          self.$nextTick(() => {
+            self.setHighlightedFile(scrollTo)
+            const file = self.highlightedFile
+            self.$scrollTo(`#file-row-${file.id}`, 500, {
+              container: '#files-list-container'
+            })
+          })
+        }
       })
     },
     toggleAll () {

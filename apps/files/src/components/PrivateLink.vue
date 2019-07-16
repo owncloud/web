@@ -28,10 +28,16 @@ export default {
     // query oc10 server to translate fileId to real path
     this.loading = true
     this.$client.files.getPathForFileId(this.$route.params.fileId).then(path => {
+      const lastSlash = path.lastIndexOf('/')
+      const folder = path.substring(0, lastSlash).replace(/^(\/)/, '')
+      const file = path.substring(lastSlash + 1)
       this.$router.push({
         'name': 'files-list',
         'params': {
-          'item': encodeURIComponent(path)
+          'item': folder
+        },
+        'query': {
+          'scrollTo': file
         }
       })
     }).catch(error => {

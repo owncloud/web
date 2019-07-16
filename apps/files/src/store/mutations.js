@@ -139,6 +139,15 @@ export default {
     state.overwriteDialogMessage = message
   },
   SET_HIGHLIGHTED_FILE (state, file) {
+    if (typeof file === 'string') {
+      let fileIndex = state.files.findIndex((f) => {
+        return f.name === file
+      })
+      if (fileIndex === -1) {
+        return
+      }
+      file = state.files[fileIndex]
+    }
     state.highlightedFile = file
   }
 }
