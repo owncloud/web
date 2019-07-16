@@ -88,7 +88,7 @@
     "vuex-persist": "^2.0.1",
     "vuex-router-sync": "^5.0.0",
     "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5",
+    "webpack-cli": "^3.3.6",
     "webpack-copy-plugin": "^0.0.4",
     "webpack-dev-server": "^3.7.2",
     "webpack-merge": "^4.2.1",
