@@ -10,18 +10,18 @@ Feature: Restore deleted files/folders
     And the user has browsed to the files page
 
   @smokeTest
-  @skip @yetToImplement
   Scenario: Restore files
     When the user deletes file "data.zip" using the webUI
-    Then file "data.zip" should be listed in the trashbin on the webUI
+    And the user browses to the trashbin page
+    Then file "data.zip" should be listed on the webUI
     When the user restores file "data.zip" from the trashbin using the webUI
     Then file "data.zip" should not be listed on the webUI
     When the user browses to the files page
     Then file "data.zip" should be listed on the webUI
 
-  @skip @yetToImplement
   Scenario: Restore folder
     When the user deletes folder "folder with space" using the webUI
+    And the user browses to the trashbin page
     Then folder "folder with space" should be listed in the trashbin on the webUI
     When the user restores folder "folder with space" from the trashbin using the webUI
     Then file "folder with space" should not be listed on the webUI

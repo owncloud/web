@@ -54,6 +54,17 @@ module.exports = {
     },
     /**
      *
+     * @param {string} fileName
+     */
+    restoreFile: function (fileName) {
+      return this.initAjaxCounters()
+        .waitForFileVisible(fileName)
+        .useXpath()
+        .performFileAction(fileName, 'restore')
+        .waitForElementNotPresent(this.getFileRowSelectorByFileName(fileName))
+    },
+    /**
+     *
      * @param {string} folder
      */
     navigateToFolder: function (folder) {
@@ -229,6 +240,17 @@ module.exports = {
     },
     /**
      *
+     * @param {string} element
+     */
+    assertElementListed: function (element) {
+      return this
+        .waitForElementVisible('@filesTable')
+        .useXpath()
+        .waitForElementNotPresent('@loadingIndicator')
+        .waitForElementPresent(this.getFileRowSelectorByFileName(element))
+    },
+    /**
+     *
      * @returns {Promise.<[]>} Array of files/folders element
      */
     allFileRows: async function () {
@@ -263,6 +285,10 @@ module.exports = {
     },
     deleteButtonInFileRow: {
       selector: '//button[@aria-label="Delete"]',
+      locateStrategy: 'xpath'
+    },
+    restoreButtonInFileRow: {
+      selector: '//span[.="Restore"]',
       locateStrategy: 'xpath'
     },
     deleteFileConfirmationBtn: {
