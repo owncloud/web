@@ -4,7 +4,7 @@ NODE_BINDIR = ../node_modules/.bin
 export PATH := $(NODE_BINDIR):$(PATH)
 
 # Where to find apps (it can be multiple paths).
-APPS =  ../apps/files ../apps/pdf-viewer ../apps/markdown-editor
+APPS =  ../apps/files ../apps/pdf-viewer ../apps/markdown-editor ../apps/media-viewer
 
 # Where to find core folder
 CORE = ../

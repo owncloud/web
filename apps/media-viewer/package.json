@@ -1,0 +1,39 @@
+{
+  "name": "media-viewer",
+  "version": "1.0.0",
+  "description": "View images and videos in phoenix",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src/**/*.vue src/**/*.js --color --global requirejs --global require",
+    "lint-fix": "eslint src/**/*.vue src/**/*.js --color --global requirejs --global require --fix",
+    "watch": "webpack --progress --colors --watch --mode development --config webpack.dev.js",
+    "build": "webpack -p --config webpack.common.js"
+  },
+  "author": "Felix Heidecke",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "@babel/core": "^7.5.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.5.4",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "babel-runtime": "^6.26.0",
+    "css-loader": "^3.0.0",
+    "eslint": "^6.0.1",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-loader": "^2.2.1",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^5.2.3",
+    "query-string": "^6.8.1",
+    "vue-loader": "^15.7.0",
+    "vue-template-compiler": "^2.6.10",
+    "vuex": "3.1.1",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.6",
+    "webpack-merge": "^4.2.1"
+  }
+}

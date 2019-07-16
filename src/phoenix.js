@@ -30,9 +30,9 @@ import VueScrollTo from 'vue-scrollto'
 import GetTextPlugin from 'vue-gettext'
 import coreTranslations from '../l10n/translations.json'
 
-// --- Directives ----
+// --- Image source ----
 
-import imageSrc from './mixins/imageSrc'
+import MediaSource from './plugins/mediaSource'
 
 // --- Drag Drop ----
 
@@ -52,8 +52,7 @@ Vue.use(VueRouter)
 Vue.use(DesignSystem)
 Vue.use(Clipboard)
 Vue.use(VueScrollTo)
-
-Vue.directive('image-src', imageSrc)
+Vue.use(MediaSource)
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)
