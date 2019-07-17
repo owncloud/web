@@ -37,6 +37,7 @@ function _buildFile (file) {
     permissions: file['fileInfo']['{http://owncloud.org/ns}permissions'],
     etag: file['fileInfo']['{DAV:}getetag'],
     sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],
+    privateLink: file['fileInfo']['{http://owncloud.org/ns}privatelink'],
     canUpload: function () {
       return this.permissions.indexOf('C') >= 0
     },
@@ -146,58 +147,61 @@ export default {
   loadFolder (context, { client, absolutePath, $gettext, routeName }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
 
-    let promise
-    let favorite = routeName === 'files-favorites'
+    return new Promise((resolve, reject) => {
+      let promise
+      let favorite = routeName === 'files-favorites'
 
-    if (favorite) {
-      promise = client.files.getFavoriteFiles(context.getters.davProperties)
-    } else {
-      promise = client.files.list(absolutePath, 1, context.getters.davProperties)
-    }
-
-    promise.then(res => {
-      if (res === null) {
+      if (favorite) {
+        promise = client.files.getFavoriteFiles(context.getters.davProperties)
+      } else {
+        promise = client.files.list(absolutePath, 1, context.getters.davProperties)
+      }
+      promise.then(res => {
+        if (res === null) {
+          context.dispatch('showMessage', {
+            title: $gettext('Loading folder failed…'),
+            status: 'danger'
+          }, { root: true })
+        } else {
+          if (favorite) {
+            client.files.fileInfo('', context.getters.davProperties).then(rootFolder => {
+              rootFolder['fileInfo']['{http://owncloud.org/ns}permissions'] = 'R'
+              context.dispatch('loadFiles', {
+                currentFolder: rootFolder,
+                files: res
+              })
+            })
+          } else {
+            context.dispatch('loadFiles', {
+              currentFolder: res[0],
+              files: res.splice(1)
+            })
+          }
+        }
+        context.dispatch('resetFileSelection')
+        context.dispatch('setHighlightedFile', null)
+        if (context.getters.searchTerm !== '') {
+          context.dispatch('resetSearch')
+        }
+      }).catch((e) => {
         context.dispatch('showMessage', {
           title: $gettext('Loading folder failed…'),
+          desc: e.message,
           status: 'danger'
         }, { root: true })
-      } else {
-        if (favorite) {
-          client.files.fileInfo('', context.getters.davProperties).then(rootFolder => {
-            rootFolder['fileInfo']['{http://owncloud.org/ns}permissions'] = 'R'
-            context.dispatch('loadFiles', {
-              currentFolder: rootFolder,
-              files: res
-            })
-          })
-        } else {
-          context.dispatch('loadFiles', {
-            currentFolder: res[0],
-            files: res.splice(1)
-          })
-        }
-      }
-      context.dispatch('resetFileSelection')
-      context.dispatch('setHighlightedFile', null)
-      if (context.getters.searchTerm !== '') {
-        context.dispatch('resetSearch')
-      }
-    }).catch((e) => {
-      context.dispatch('showMessage', {
-        title: $gettext('Loading folder failed…'),
-        desc: e.message,
-        status: 'danger'
-      }, { root: true })
-    }).finally(() => {
-      context.commit('UPDATE_FOLDER_LOADING', false)
-      client.users.getUser(context.rootGetters.user.id).then(res => {
-        let enoughSpace
-        if (res.quota.relative >= 100) {
-          enoughSpace = false
-        } else {
-          enoughSpace = true
-        }
-        context.commit('CHECK_QUOTA', enoughSpace)
+        reject(e)
+      }).finally(() => {
+        context.commit('UPDATE_FOLDER_LOADING', false)
+        client.users.getUser(context.rootGetters.user.id).then(res => {
+          let enoughSpace
+          if (res.quota.relative >= 100) {
+            enoughSpace = false
+          } else {
+            enoughSpace = true
+          }
+          context.commit('CHECK_QUOTA', enoughSpace)
+          resolve()
+        })
       })
     })
   },

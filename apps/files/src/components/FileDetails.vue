@@ -6,7 +6,10 @@
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
-          <span class="uk-margin-small-right">{{ highlightedFile.name }}</span> <oc-icon name="link" aria-label="Close"/>
+          <span class="uk-margin-small-right">{{ highlightedFile.name }}</span>
+          <oc-icon name="link" v-clipboard="() => highlightedFile.privateLink"
+                   v-clipboard:success="clipboardSuccessHandler"
+          />
         </div>
         <div>
           <oc-star class="uk-inline" :shining="highlightedFile.starred"/> {{ highlightedFile.size | fileSize }}, {{ formDateFromNow(highlightedFile.mdate) }}
@@ -39,11 +42,17 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['deleteFiles']),
+    ...mapActions(['showMessage']),
     close () {
       this.$emit('reset')
     },
     showSidebar (app) {
       this.activeTab = app
+    },
+    clipboardSuccessHandler () {
+      this.showMessage({
+        title: this.$gettext('The private link has been copied to your clipboard.')
+      })
     }
   },
   computed: {

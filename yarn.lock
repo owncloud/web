@@ -771,9 +771,9 @@
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
 "@types/node@*":
-  version "12.6.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.6.3.tgz#44d507c5634f85e7164707ca36bba21b5213d487"
-  integrity sha512-7TEYTQT1/6PP53NftXXabIZDaZfaoBdeBm8Md/i7zsWRoBe0YwOXguyK8vhHs8ehgB/w9U4K/6EWuTyp0W6nIA==
+  version "12.6.6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.6.6.tgz#831587377c35bb28fa33b6fe5f849a26a3f4a412"
+  integrity sha512-SMgj3x28MkJyHdWaMv/g/ca3LYDi5gR7O8mX0VKazvFOnmlDXctSEdd/8jfSqozjKFK1R9If1QZWkafX7yQTpA==
 
 "@types/node@^8.0.7":
   version "8.10.50"
@@ -1548,6 +1548,11 @@ becke-ch--regex--s0-0-v1--base--pl--lib@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/becke-ch--regex--s0-0-v1--base--pl--lib/-/becke-ch--regex--s0-0-v1--base--pl--lib-1.4.0.tgz#429ceebbfa5f7e936e78d73fbdc7da7162b20e20"
   integrity sha1-Qpzuu/pffpNueNc/vcfacWKyDiA=
+
+bezier-easing@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/bezier-easing/-/bezier-easing-2.1.0.tgz#c04dfe8b926d6ecaca1813d69ff179b7c2025d86"
+  integrity sha1-wE3+i5JtbsrKGBPWn/F5t8ICXYY=
 
 big.js@^3.1.3:
   version "3.2.0"
@@ -2512,13 +2517,13 @@ cucumber@cucumber/cucumber-js#issue-727-retry:
     cucumber-expressions "^7.0.0"
     cucumber-tag-expressions "^1.1.1"
     duration "^0.2.1"
-    escape-string-regexp "^2.0.0"
-    figures "^3.0.0"
-    gherkin "5.0.0"
+    escape-string-regexp "^1.0.5"
+    figures "2.0.0"
+    gherkin "^5.0.0"
     glob "^7.1.3"
-    indent-string "^4.0.0"
+    indent-string "^3.1.0"
     is-generator "^1.0.2"
-    is-stream "^2.0.0"
+    is-stream "^1.1.0"
     knuth-shuffle-seeded "^1.0.6"
     lodash "^4.17.11"
     mz "^2.4.0"
@@ -2527,7 +2532,7 @@ cucumber@cucumber/cucumber-js#issue-727-retry:
     serialize-error "^4.1.0"
     stack-chain "^2.0.0"
     stacktrace-js "^2.0.0"
-    string-argv "^0.3.0"
+    string-argv "0.1.1"
     title-case "^2.1.1"
     util-arity "^1.0.2"
     verror "^1.9.0"
@@ -2966,9 +2971,9 @@ ejs@^2.5.9:
   integrity sha512-GJCAeDBKfREgkBtgrYSf9hQy9kTb3helv0zGdzqhM7iAkW8FA/ZF97VQDbwFiwIT8MQLLOe5VlPZOEvZAqtUAQ==
 
 electron-to-chromium@^1.3.191:
-  version "1.3.191"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.191.tgz#c451b422cd8b2eab84dedabab5abcae1eaefb6f0"
-  integrity sha512-jasjtY5RUy/TOyiUYM2fb4BDaPZfm6CXRFeJDMfFsXYADGxUN49RBqtgB7EL2RmJXeIRUk9lM1U6A5yk2YJMPQ==
+  version "1.3.193"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.193.tgz#de9b89959288070bffb14557daf8cf9f75b2caf8"
+  integrity sha512-WX01CG1UoPtTUFaKKwMn+u8nJ63loP6hNxePWtk1pN8ibWMyX1q6TiWPsz1ABBKXezvmaIdtP+0BwzjC1wyCaw==
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -3113,11 +3118,6 @@ escape-string-regexp@1.0.5, escape-string-regexp@^1.0.2, escape-string-regexp@^1
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
-
-escape-string-regexp@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-2.0.0.tgz#a30304e99daa32e23b2fd20f51babd07cffca344"
-  integrity sha512-UpzcLCXolUWcNu5HtVMHYdXJjArjsF9C0aNnquZYY4uW/Vu0miy5YoWvbV345HauVvcAUnpRuhMMcqTcGOY2+w==
 
 escodegen@1.x.x:
   version "1.11.1"
@@ -3596,6 +3596,13 @@ figgy-pudding@^3.5.1:
   resolved "https://registry.yarnpkg.com/figgy-pudding/-/figgy-pudding-3.5.1.tgz#862470112901c727a0e495a80744bd5baa1d6790"
   integrity sha512-vNKxJHTEKNThjfrdJwHc7brvM6eVevuO5nTj6ez8ZQ1qbXTvGthucRF7S4vf2cr71QVnT70V34v0S1DyQsti0w==
 
+figures@2.0.0, figures@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/figures/-/figures-2.0.0.tgz#3ab1a2d2a62c8bfb431a0c94cb797a2fce27c962"
+  integrity sha1-OrGi0qYsi/tDGgyUy3l6L84nyWI=
+  dependencies:
+    escape-string-regexp "^1.0.5"
+
 figures@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-1.7.0.tgz#cbe1e3affcf1cd44b80cadfed28dc793a9701d2e"
@@ -3603,13 +3610,6 @@ figures@^1.7.0:
   dependencies:
     escape-string-regexp "^1.0.5"
     object-assign "^4.1.0"
-
-figures@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/figures/-/figures-2.0.0.tgz#3ab1a2d2a62c8bfb431a0c94cb797a2fce27c962"
-  integrity sha1-OrGi0qYsi/tDGgyUy3l6L84nyWI=
-  dependencies:
-    escape-string-regexp "^1.0.5"
 
 figures@^3.0.0:
   version "3.0.0"
@@ -3955,10 +3955,10 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-gherkin@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/gherkin/-/gherkin-5.0.0.tgz#96def41198ec3908258b511af74f655a2764d2a1"
-  integrity sha1-lt70EZjsOQgli1Ea909lWidk0qE=
+gherkin@^5.0.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/gherkin/-/gherkin-5.1.0.tgz#684bbb03add24eaf7bdf544f58033eb28fb3c6d5"
+  integrity sha1-aEu7A63STq9731RPWAM+so+zxtU=
 
 glob-parent@^3.1.0:
   version "3.1.0"
@@ -4468,15 +4468,10 @@ imurmurhash@^0.1.4:
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha1-khi5srkoojixPcT7a21XbyMUU+o=
 
-indent-string@^3.0.0:
+indent-string@^3.0.0, indent-string@^3.1.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/indent-string/-/indent-string-3.2.0.tgz#4a5fd6d27cc332f37e5419a504dbb837105c9289"
   integrity sha1-Sl/W0nzDMvN+VBmlBNu4NxBckok=
-
-indent-string@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/indent-string/-/indent-string-4.0.0.tgz#624f8f4497d619b2d9768531d58f4122854d7251"
-  integrity sha512-EdDDZu4A2OyIK7Lr/2zG+w5jmbuk1DVBnEwREQvBzspBJkCEbRa8GxU1lghYcaGJCnRWibjDXlq779X1/y5xwg==
 
 indexes-of@^1.0.1:
   version "1.0.1"
@@ -4565,10 +4560,15 @@ ip@^1.1.0, ip@^1.1.5:
   resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.5.tgz#bdded70114290828c0a039e72ef25f5aaec4354a"
   integrity sha1-vd7XARQpCCjAoDnnLvJfWq7ENUo=
 
-ipaddr.js@1.9.0, ipaddr.js@^1.9.0:
+ipaddr.js@1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.0.tgz#37df74e430a0e47550fe54a2defe30d8acd95f65"
   integrity sha512-M4Sjn6N/+O6/IXSJseKqHoFc+5FdGJ22sXqnjTpdZweHK64MzEPAyQZyEU3R/KRv2GLoa7nNtg/C2Ev6m7z+eA==
+
+ipaddr.js@^1.9.0:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.1.tgz#bff38543eeb8984825079ff3a2a8e6cbd46781b3"
+  integrity sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==
 
 is-accessor-descriptor@^0.1.6:
   version "0.1.6"
@@ -6243,9 +6243,9 @@ output-file-sync@^2.0.0:
     mkdirp "^0.5.1"
 
 owncloud-design-system@^1.0.0-838:
-  version "1.0.0-838"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-838.tgz#07b6b709583a4d60ef059d7162b56b78612a5619"
-  integrity sha512-mikYrJ6EIish8LxJJsGtwA5FBr316c8LY7F7fssmTheL3xguRHgxos+kpmHGK/D9z5l89bjg66Tysws562ZMLg==
+  version "1.0.0-845"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-845.tgz#e66f265d8ad755f8459e77c2b20f7b66fd48a262"
+  integrity sha512-+zy2WsQkRnZQujN6BEQDLwcbQXROsLKBwPBbA3I+bKV5Tgla47wcicRqFI/7Sl3xzWolQ7Z4u928qE30GEgP7w==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.7.0"
@@ -6261,10 +6261,10 @@ owncloud-design-system@^1.0.0-838:
     vuex "^3.1.1"
     webfontloader "^1.6.28"
 
-owncloud-sdk@1.0.0-232:
-  version "1.0.0-232"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-232.tgz#c5ed4a5a8d0916beffaca1882eefeb96e34f9084"
-  integrity sha512-elkp1QV+uIYh36KfZMrCwX4WT6cIeSndvLgkdgUcYxJ720ILec9KnFOCDAWdPIJ4Lkf74jsdTvtXLZBo5/6WaA==
+owncloud-sdk@1.0.0-255:
+  version "1.0.0-255"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-255.tgz#067ebcdfd57bc860c1a1f4a95f33426a92496610"
+  integrity sha512-W5PPL4KfHYv5p5MR9RpKVpkGiyW7DcObw5f7PsdFr7xqFC0RWgsGrSQskWjHCLIwBPx+v93gy6YMlRVkiQ4j5g==
   dependencies:
     browser-request "^0.3.3"
     davclient.js "https://github.com/owncloud/davclient.js.git"
@@ -8069,6 +8069,11 @@ strict-uri-encode@^1.0.0:
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
   integrity sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
 
+string-argv@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/string-argv/-/string-argv-0.1.1.tgz#66bd5ae3823708eaa1916fa5412703150d4ddfaf"
+  integrity sha512-El1Va5ehZ0XTj3Ekw4WFidXvTmt9SrC0+eigdojgtJMVtPkF0qbBe9fyNSl9eQf+kUHnTSQxdQYzuHfZy8V+DQ==
+
 string-argv@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/string-argv/-/string-argv-0.3.0.tgz#0ea99e7257fea5e97a1bfcdfc19cf12d68e6ec6a"
@@ -8718,6 +8723,11 @@ uuid@^3.0.1, uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
 
+v-clipboard@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/v-clipboard/-/v-clipboard-2.2.2.tgz#6144e3c5b895ead35463386aa660360a9f88fabf"
+  integrity sha512-8Nch/q4j4e5BqHFuKUReKBvB7lzn9FQTEuPa54pmfX44VYhWnxAoSHuMwm2Qf9EnyCSEmczqj2VYPsU2BEe6Mw==
+
 v8-compile-cache@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.0.3.tgz#00f7494d2ae2b688cfe2899df6ed2c54bef91dbe"
@@ -8818,6 +8828,13 @@ vue-router@^3.0.6, vue-router@^3.0.7:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.7.tgz#b36ca107b4acb8ff5bc4ff824584059c23fcb87b"
   integrity sha512-utJ+QR3YlIC/6x6xq17UMXeAfxEvXA0VKD3PiSio7hBOZNusA1jXcbxZxVEfJunLp48oonjTepY8ORoIlRx/EQ==
+
+vue-scrollto@^2.15.0:
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/vue-scrollto/-/vue-scrollto-2.15.0.tgz#e6e4645dfd2efc0d960123f607c2ab448b81670a"
+  integrity sha512-FmJncIrXvsqvyVAN55Trc2CQWVDyxuMgdQQp1Q9I9bhoEi7XXpvXXQonhbFBktzNggJf1rpfHpVqa8KLhPeePQ==
+  dependencies:
+    bezier-easing "2.1.0"
 
 vue-style-loader@^4.1.0:
   version "4.1.2"

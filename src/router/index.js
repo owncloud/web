@@ -42,6 +42,12 @@ const router = new Router({
       meta: { auth: false, hideHeadbar: true }
     },
     {
+      path: '/f/:fileId',
+      name: 'privateLink',
+      redirect: '/files/private-link/:fileId',
+      meta: { auth: false, hideHeadbar: true }
+    },
+    {
       path: '/account',
       name: 'account',
       components: {
