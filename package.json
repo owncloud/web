@@ -71,7 +71,7 @@
     "npm-run-all": "^4.1.5",
     "oidc-client": "https://github.com/IdentityModel/oidc-client-js#35d7c79bf64ed5e89d8a41adf0e4a8a1c3d843c5",
     "owncloud-design-system": "^1.0.0-838",
-    "owncloud-sdk": "1.0.0-232",
+    "owncloud-sdk": "1.0.0-255",
     "parse-json": "^5.0.0",
     "requirejs": "^2.3.6",
     "rimraf": "^2.6.3",
