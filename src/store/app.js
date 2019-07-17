@@ -21,7 +21,7 @@ const actions = {
   fetchNotifications (context, client) {
     context.commit('LOADING_NOTIFICATIONS', true)
 
-    client.requests.ocs({
+    return client.requests.ocs({
       service: 'apps/notifications',
       action: 'api/v1/notifications'
     })
