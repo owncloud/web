@@ -117,7 +117,7 @@ exports.getTrashBinElements = function (user) {
         'oc:trashbin-original-location',
         'oc:trashbin-delete-timestamp',
         'd:getlastmodified'
-      ])
+      ], 2)
       .then(str => {
         const trashData = JSON.parse(convert.xml2json(str, { compact: true }))['d:multistatus']['d:response']
         const trashItems = []

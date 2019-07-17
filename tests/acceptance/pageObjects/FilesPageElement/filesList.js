@@ -137,6 +137,19 @@ module.exports = {
         .waitForElementVisible('@checkBoxAllFiles')
         .click('@checkBoxAllFiles')
     },
+
+    /**
+     * Restores all the selected files/folders
+     *
+     */
+    restoreSelected: function () {
+      return this.initAjaxCounters()
+        .waitForElementVisible('@restoreSelectedButton')
+        .useXpath()
+        .click('@restoreSelectedButton')
+        .waitForOutstandingAjaxCalls()
+    },
+
     /**
      * @param {string} path
      */
@@ -337,6 +350,10 @@ module.exports = {
     },
     checkboxInFileRow: {
       selector: '//input[@type="checkbox"]',
+      locateStrategy: 'xpath'
+    },
+    restoreSelectedButton: {
+      selector: '//span[contains(text(),"Restore selected")]',
       locateStrategy: 'xpath'
     }
   }
