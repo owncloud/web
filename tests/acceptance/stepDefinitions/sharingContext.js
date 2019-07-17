@@ -147,6 +147,19 @@ Then('the users own name should not be listed in the autocomplete list on the we
     })
 })
 
+Then('user {string} should not be listed in the autocomplete list on the webUI', function (displayName) {
+  return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
+    .then(itemsList => {
+      itemsList.forEach(item => {
+        assert.notStrictEqual(
+          item,
+          displayName,
+          `Users own name: ${displayName} was not expected to be listed in the autocomplete list but was`
+        )
+      })
+    })
+})
+
 When('the user opens the share dialog for file {string}', function (file) {
   return client.page.FilesPageElement.filesList().openSharingDialog(file)
 })
