@@ -28,9 +28,12 @@ module.exports = {
       const webElementIdList = await this.getShareAutocompleteWebElementIdList()
       webElementIdList.forEach((webElementId) => {
         this.api.elementIdText(webElementId, (text) => {
-          // if (shareWithGroup === true) {
-          //   sharee = sharee + groupSharePostfix
-          // }
+          if (shareWithGroup === true) {
+            sharee = sharee + groupSharePostfix
+          } else {
+            sharee = sharee + userSharePostfix
+          }
+
           if (text.value === sharee) {
             this.api
               .elementIdClick(webElementId)
