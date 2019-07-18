@@ -12,32 +12,35 @@ const userSettings = require('../helpers/userSettings')
  * @param {string} file
  * @param {string} sharee
  * @param {boolean} shareWithGroup
+ * @param {string} role
  */
-const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithGroup = false) {
+const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithGroup, role) {
   return client.page
     .FilesPageElement
     .sharingDialog()
     .closeSharingDialog()
     .openSharingDialog(file)
-    .shareWithUserOrGroup(sharee, shareWithGroup)
+    .shareWithUserOrGroup(sharee, shareWithGroup, role)
 }
 
 /**
  *
  * @param {string} file
  * @param {string} sharee
+ * @param {string} role
  */
-const userSharesFileOrFolderWithUser = function (file, sharee) {
-  return userSharesFileOrFolderWithUserOrGroup(file, sharee)
+const userSharesFileOrFolderWithUser = function (file, sharee, role) {
+  return userSharesFileOrFolderWithUserOrGroup(file, sharee, false, role)
 }
 
 /**
  *
  * @param {string} file
  * @param {string} sharee
+ * @param {string} role
  */
-const userSharesFileOrFolderWithGroup = function (file, sharee) {
-  return userSharesFileOrFolderWithUserOrGroup(file, sharee, true)
+const userSharesFileOrFolderWithGroup = function (file, sharee, role) {
+  return userSharesFileOrFolderWithUserOrGroup(file, sharee, true, role)
 }
 
 /**
@@ -84,9 +87,9 @@ When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
 
-When('the user shares file/folder {string} with group {string} using the webUI', userSharesFileOrFolderWithGroup)
+When('the user shares file/folder {string} with group {string} as {string} using the webUI', userSharesFileOrFolderWithGroup)
 
-When('the user shares file/folder {string} with user {string} using the webUI', userSharesFileOrFolderWithUser)
+When('the user shares file/folder {string} with user {string} as {string} using the webUI', userSharesFileOrFolderWithUser)
 
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', function (pattern) {
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()

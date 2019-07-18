@@ -8,7 +8,7 @@ module.exports = {
      * @param {string} sharee
      * @param {boolean} shareWithGroup
      */
-    shareWithUserOrGroup: async function (sharee, shareWithGroup = false) {
+    shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role) {
       this.enterAutoComplete(sharee)
       // We need waitForElementPresent here.
       // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
@@ -43,6 +43,8 @@ module.exports = {
       })
 
       return this
+        .selectRoleForNewCollaborator(role)
+        .confirmShare()
     },
     /**
      *

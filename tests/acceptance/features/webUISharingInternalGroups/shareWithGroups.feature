@@ -18,12 +18,8 @@ Feature: Sharing files and folders with internal groups
   @smokeTest @yetToImplement
   Scenario: share a folder with an internal group
     Given user "user3" has logged in using the webUI
-    When the user shares folder "simple-folder" with group "grp1" using the webUI
-    And the user selects role 'Viewer'
-    And the user confirms the share
-    And the user shares file "testimage.jpg" with group "grp1" using the webUI
-    And the user selects role 'Viewer'
-    And the user confirms the share
+    When the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
+    And the user shares file "testimage.jpg" with group "grp1" as "Viewer" using the webUI
     And the user re-logs in as "user1" using the webUI
     Then folder "simple-folder (2)" should be listed on the webUI
 #    And folder "simple-folder (2)" should be marked as shared with "grp1" by "User Three" on the webUI
