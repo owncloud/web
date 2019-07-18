@@ -132,7 +132,7 @@ Feature: Sharing files and folders with internal groups
     Then a tooltip with the text "No users or groups found for system-group" should be shown near the share-with-field on the webUI
     And the autocomplete list should not be displayed on the webUI
 
-  @yetToImplement
+  @skip @yetToImplement
   Scenario: user shares the file/folder with a group and delete the share with user
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with group "grp1"
@@ -143,7 +143,7 @@ Feature: Sharing files and folders with internal groups
 #    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
 
-  @yetToImplement
+  @skip @yetToImplement
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user user
     Given group "grp2" has been created
     And user "user3" has been added to group "grp2"

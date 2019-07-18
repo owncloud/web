@@ -22,12 +22,12 @@ function _buildFile (file) {
       return ext
     }()),
     name: (function () {
-      let pathList = file.name.split('/').filter(e => e !== '')
+      const pathList = file.name.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     }()),
     basename: (function () {
-      let pathList = file.name.split('/').filter(e => e !== '')
-      let name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
+      const pathList = file.name.split('/').filter(e => e !== '')
+      const name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
       if (ext) {
         return name.substring(0, name.length - ext.length - 1)
       }
@@ -72,29 +72,29 @@ function _buildFileInTrashbin (file) {
       return ext
     }()),
     basename: (function () {
-      let fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
-      let pathList = fullName.split('/').filter(e => e !== '')
-      let name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
+      const fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
+      const pathList = fullName.split('/').filter(e => e !== '')
+      const name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
       if (ext) {
         return name.substring(0, name.length - ext.length - 1)
       }
       return name
     })(),
     name: (function () {
-      let fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
-      let pathList = fullName.split('/').filter(e => e !== '')
+      const fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
+      const pathList = fullName.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     })(),
     originalLocation: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-location'],
     id: (function () {
-      let pathList = file.name.split('/').filter(e => e !== '')
+      const pathList = file.name.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     })()
   })
 }
 
 function _buildShare (s) {
-  let share = {
+  const share = {
     info: s
   }
   switch (s.share_type) {
@@ -102,7 +102,7 @@ function _buildShare (s) {
     // TODO differentiate groups from users?
     // fall through
     case ('1'): // group share
-      share.role = 'custom'
+      share.role = 'editor' // TODO: Switch to custom role when implemented
       if (s.permissions === '1' || s.permissions === '17') {
         share.role = 'viewer'
       }
@@ -161,7 +161,7 @@ export default {
 
     return new Promise((resolve, reject) => {
       let promise
-      let favorite = routeName === 'files-favorites'
+      const favorite = routeName === 'files-favorites'
 
       if (favorite) {
         promise = client.files.getFavoriteFiles(context.getters.davProperties)
@@ -277,9 +277,9 @@ export default {
     context.commit('RESET_SELECTION')
   },
   markFavorite (context, payload) {
-    let file = payload.file
-    let client = payload.client
-    let newValue = !file.starred
+    const file = payload.file
+    const client = payload.client
+    const newValue = !file.starred
     client.files.favorite(file.path, newValue)
       .then(() => {
         context.commit('FAVORITE_FILE', file)
@@ -289,16 +289,16 @@ export default {
       })
   },
   addFiles (context, payload) {
-    let files = payload.files
-    for (let file of files) {
+    const files = payload.files
+    for (const file of files) {
       context.commit('ADD_FILE', _buildFile(file))
     }
   },
   deleteFiles (context, payload) {
-    let files = payload.files
-    let client = payload.client
-    let promises = []
-    for (let file of files) {
+    const files = payload.files
+    const client = payload.client
+    const promises = []
+    for (const file of files) {
       const promise = client.files.delete(file.path).then(() => {
         context.commit('REMOVE_FILE', file)
         context.commit('REMOVE_FILE_SELECTION', file)
@@ -310,16 +310,16 @@ export default {
     return Promise.all(promises)
   },
   removeFilesFromTrashbin (context, files) {
-    for (let file of files) {
+    for (const file of files) {
       context.commit('REMOVE_FILE', file)
     }
   },
   renameFile (context, payload) {
-    let file = payload.file
-    let newValue = payload.newValue
-    let client = payload.client
+    const file = payload.file
+    const newValue = payload.newValue
+    const client = payload.client
     if (file !== undefined && newValue !== undefined && newValue !== file.name) {
-      let newPath = file.path.substr(1, file.path.lastIndexOf('/'))
+      const newPath = file.path.substr(1, file.path.lastIndexOf('/'))
       client.files.move(file.path, (newPath + newValue)).then(() => {
         context.commit('RENAME_FILE', { file, newValue, newPath })
       })
@@ -333,8 +333,8 @@ export default {
   },
   searchForFile (context, payload) {
     return new Promise(function (resolve, reject) {
-      let client = payload.client
-      let searchTerm = payload.searchTerm
+      const client = payload.client
+      const searchTerm = payload.searchTerm
       context.commit('SET_SEARCH_TERM', searchTerm)
       // TODO respect user selected listSize from state.config
       // do not search for empty strings
@@ -365,9 +365,9 @@ export default {
     context.commit('SHARES_LOADING', true)
 
     // see https://owncloud.github.io/js-owncloud-client/Shares.html
-    let client = payload.client
-    let path = payload.path
-    client.shares.getShares(path, { 'reshares': true })
+    const client = payload.client
+    const path = payload.path
+    client.shares.getShares(path, { reshares: true })
       .then(data => {
         context.commit('SHARES_LOAD', data.map(element => {
           return _buildShare(element.shareInfo)

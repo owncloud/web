@@ -104,7 +104,7 @@ Then('all users and groups that contain the string {string} in their name should
         if ((userDisplayName.toLowerCase().includes(pattern) ||
           userId.includes(pattern)) &&
           userDisplayName !== currentUserDisplayName) {
-          let userString = userDisplayName + client.page.FilesPageElement.sharingDialog().getUserSharePostfix()
+          const userString = userDisplayName + client.page.FilesPageElement.sharingDialog().getUserSharePostfix()
 
           assert.ok(
             itemsList.includes(userString),

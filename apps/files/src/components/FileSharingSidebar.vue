@@ -222,7 +222,7 @@ export default {
       this.selectedNewRole = role
     },
     $_ocCollaborators_newCollaboratorsAdd (collaborators) {
-      let permissions = { perms: null }
+      const permissions = { perms: null }
       switch (this.selectedNewRole.name) {
         case ('Viewer'):
           permissions.perms = this.canShare ? 17 : 1
