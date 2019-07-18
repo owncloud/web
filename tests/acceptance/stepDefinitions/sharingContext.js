@@ -135,11 +135,11 @@ Then('every item listed in the autocomplete list on the webUI should contain {st
     })
 })
 
-Given('the user selects role {string}', function (role) {
+When('the user selects role {string}', function (role) {
   return client.page.FilesPageElement.sharingDialog().selectRoleForNewCollaborator(role)
 })
 
-Given('the user confirms the share', function () {
+When('the user confirms the share', function () {
   return client.page.FilesPageElement.sharingDialog().confirmShare()
 })
 
