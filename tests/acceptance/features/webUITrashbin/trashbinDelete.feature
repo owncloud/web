@@ -58,11 +58,8 @@ Feature: files and folders can be deleted from the trashbin
     But file "data.zip" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
 
-  @issue-1502
   Scenario: Select all files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
-    # You can delete the line below after the issue-1502 is fixed
-    And the user reloads the current page of the webUI
     Then the folder should be empty on the webUI
 

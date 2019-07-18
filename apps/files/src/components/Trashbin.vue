@@ -45,10 +45,18 @@
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
 import OcDialogPrompt from './ocDialogPrompt.vue'
+// import PQueue from 'p-queue'
+const { default: PQueue } = require('p-queue')
 
 export default {
   name: 'Trashbin',
   props: ['fileData'],
+
+  data () {
+    return {
+      queue: new PQueue({ concurrency: 4 })
+    }
+  },
 
   components: {
     OcDialogPrompt
@@ -123,26 +131,33 @@ export default {
     },
 
     $_ocTrashbin_clearTrashbinConfirmation (files = this.selectedFiles) {
+      // TODO: use clear all if all files are selected
+      const deleteOps = []
       for (const file of files) {
-        this.$client.fileTrash.clearTrashBin(file.id)
-          .then(() => {
-            this.$_ocTrashbin_removeFileFromList([file])
-            const translated = this.$gettext('%{file} was successfully deleted')
-            this.showMessage({
-              title: this.$gettextInterpolate(translated, { file: file.name }, true)
+        const p = this.queue.add(async () => {
+          return this.$client.fileTrash.clearTrashBin(file.id)
+            .then(() => {
+              this.$_ocTrashbin_removeFileFromList([file])
+              const translated = this.$gettext('%{file} was successfully deleted')
+              this.showMessage({
+                title: this.$gettextInterpolate(translated, { file: file.name }, true)
+              })
             })
-          })
-          .catch(error => {
-            const translated = this.$gettext('Deletion of %{file} failed')
-            this.showMessage({
-              title: this.$gettextInterpolate(translated, { file: file.name }, true),
-              desc: error.message,
-              status: 'danger'
+            .catch(error => {
+              const translated = this.$gettext('Deletion of %{file} failed')
+              this.showMessage({
+                title: this.$gettextInterpolate(translated, { file: file.name }, true),
+                desc: error.message,
+                status: 'danger'
+              })
             })
-          })
+        })
+        deleteOps.push(p)
       }
-      this.resetFileSelection()
-      this.setTrashbinDeleteMessage('')
+      Promise.all(deleteOps).then(() => {
+        this.resetFileSelection()
+        this.setTrashbinDeleteMessage('')
+      })
     },
 
     $_ocTrashbin_restoreFile (file) {
