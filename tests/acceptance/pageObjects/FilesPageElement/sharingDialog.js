@@ -1,4 +1,5 @@
-// const groupSharePostfix = ' (group)'
+const groupSharePostfix = '\nGroup'
+const userSharePostfix = '\nUser'
 
 module.exports = {
   commands: {
@@ -84,7 +85,7 @@ module.exports = {
       let itemsListPromises = webElementIdList.map((webElementId) => {
         return new Promise((resolve, reject) => {
           this.api.elementIdText(webElementId, (text) => {
-            resolve(text.value)
+            resolve(text.value.trim())
           })
         })
       })
@@ -137,8 +138,19 @@ module.exports = {
         })
         .then(() => shareList)
     },
+    /**
+     *
+     * @returns {string}
+     */
     getGroupSharePostfix: function () {
       return groupSharePostfix
+    },
+    /**
+     *
+     * @returns {string}
+     */
+    getUserSharePostfix: function () {
+      return userSharePostfix
     }
   },
   elements: {
@@ -149,7 +161,7 @@ module.exports = {
       selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion-list'
     },
     sharingAutoCompleteDropDownElements: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion .files-collaborators-autocomplete-username'
+      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion'
     },
     sidebarCloseBtn: {
       selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',

@@ -101,8 +101,10 @@ Then('all users and groups that contain the string {string} in their name should
         if ((userDisplayName.toLowerCase().includes(pattern) ||
           userId.includes(pattern)) &&
           userDisplayName !== currentUserDisplayName) {
+          let userString = userDisplayName + client.page.FilesPageElement.sharingDialog().getUserSharePostfix()
+
           assert.ok(
-            itemsList.includes(userDisplayName),
+            itemsList.includes(userString),
             `could not find '${userDisplayName}' in autocomple share list`
           )
         }
