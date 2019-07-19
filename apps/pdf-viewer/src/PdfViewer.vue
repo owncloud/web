@@ -22,7 +22,7 @@ export default {
 
     const url = this.$client.files.getFileUrl(this.activeFile.path)
 
-    let headers = new Headers()
+    const headers = new Headers()
     headers.append('Authorization', 'Bearer ' + this.getToken)
 
     fetch(url, { headers })

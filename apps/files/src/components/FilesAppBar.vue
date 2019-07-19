@@ -128,7 +128,7 @@ export default {
       return {
         // will trigger 412 precondition failed if a file already exists
         'If-None-Match': '*',
-        'Authorization': 'Bearer ' + this.getToken
+        Authorization: 'Bearer ' + this.getToken
       }
     },
     canUpload () {
@@ -147,14 +147,14 @@ export default {
     },
 
     breadcrumbs () {
-      let breadcrumbs = [{
+      const breadcrumbs = [{
         index: 0,
         text: this.$gettext('Home'),
         to: '/files/list'
       }]
 
       if (this.$route.params.item) {
-        let absolutePath = this.$route.params.item
+        const absolutePath = this.$route.params.item
         const pathSplit = absolutePath.split('/').filter((val) => val)
         for (let i = 0; i < pathSplit.length; i++) {
           breadcrumbs.push({
@@ -204,7 +204,7 @@ export default {
     $_ocFilesFolder_getFolder () {
       this.path = []
 
-      let absolutePath = this.$route.params.item === '' || this.$route.params.item === undefined ? this.configuration.rootFolder : this.route.params.item
+      const absolutePath = this.$route.params.item === '' || this.$route.params.item === undefined ? this.configuration.rootFolder : this.route.params.item
 
       this.loadFolder({
         client: this.$client,
@@ -325,7 +325,7 @@ export default {
       this.fileUpload = true
       this.updateFileProgress(progress)
       let progressTotal = 0
-      for (let item of this.inProgress) {
+      for (const item of this.inProgress) {
         progressTotal = progressTotal + item.progress
       }
       if (this.inProgress.length !== 0) {
@@ -337,12 +337,12 @@ export default {
     },
 
     $_ocTrashbin_deleteSelected () {
-      let translated = this.$gettext('%{numberOfFiles} items will be deleted immediately. You can’t undo this action.')
+      const translated = this.$gettext('%{numberOfFiles} items will be deleted immediately. You can’t undo this action.')
       this.setTrashbinDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
     },
 
     $_ocFiles_deleteSelected () {
-      let translated = this.$gettext('%{numberOfFiles} items will be deleted.')
+      const translated = this.$gettext('%{numberOfFiles} items will be deleted.')
       this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
     },
 
@@ -364,17 +364,17 @@ export default {
     },
 
     $_ocTrashbin_restoreFiles (files = this.selectedFiles) {
-      for (let file of files) {
+      for (const file of files) {
         this.$client.fileTrash.restore(file.id, file.originalLocation)
           .then(() => {
-            let translated = this.$gettext('%{file} was succesfully restored')
+            const translated = this.$gettext('%{file} was succesfully restored')
             this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true)
             })
             this.removeFilesFromTrashbin([file])
           })
           .catch(error => {
-            let translated = this.$gettext('Restoration of %{file} failed')
+            const translated = this.$gettext('Restoration of %{file} failed')
             this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true),
               desc: error.message,
