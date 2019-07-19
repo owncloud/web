@@ -16,7 +16,7 @@
       <oc-loader v-if="ocLoading"></oc-loader>
     </template>
     <template slot="footer">
-        <oc-button :disabled="ocLoading" @click.stop="onCancel">{{ _ocCancelText }}</oc-button>
+        <oc-button :id="ocCancelId" :disabled="ocLoading" @click.stop="onCancel">{{ _ocCancelText }}</oc-button>
         <oc-button :disabled="ocLoading || ocError || inputValue === ''"
                :id="ocConfirmId"
                ref="confirmButton"
@@ -46,6 +46,9 @@ export default {
     ocConfirmText: {
       type: String,
       default: null
+    },
+    ocCancelId: {
+      type: String
     },
     ocCancelText: {
       type: String,
