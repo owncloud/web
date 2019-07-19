@@ -264,7 +264,7 @@ export default {
     }
   },
   watch: {
-    item () {
+    $route () {
       this.$_ocFilesFolder_getFolder()
     }
   }
