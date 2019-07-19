@@ -155,8 +155,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     fileUploadButton: {
-      selector: '//span[@data-msgid="Upload"]',
-      locateStrategy: 'xpath'
+      selector: '#files-file-upload-button'
     },
     fileUploadInput: {
       selector: '#fileUploadInput'

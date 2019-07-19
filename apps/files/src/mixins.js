@@ -164,18 +164,85 @@ export default {
 
       return '<span class="' + cssClass.join(' ') + '">' + string + '</span>'
     },
-    async $_ocUpload_addToQue (e) {
-      const files = e.target.files || e.dataTransfer.files
+    checkIfBrowserSupportsFolderUpload () {
+      const el = document.createElement('input')
+      el.type = 'file'
+      return typeof el.webkitdirectory !== 'undefined' || typeof el.mozdirectory !== 'undefined' || typeof el.directory !== 'undefined'
+    },
+    checkIfElementExists (element) {
+      const name = element.name || element
+      return this.files.find((n) => {
+        if (n['name'] === name) {
+          return n
+        }
+      })
+    },
+    processDirectoryEntryRecursively (directory) {
+      this.$client.files.createFolder(directory.fullPath).then(() => {
+        const directoryReader = directory.createReader()
+        const ctrl = this
+        directoryReader.readEntries(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isDirectory) {
+              ctrl.processDirectoryEntryRecursively(entry)
+            } else {
+              entry.file(file => {
+                ctrl.$_ocUpload(file, entry.fullPath, null, false)
+              })
+            }
+          })
+        })
+      })
+    },
+    async $_ocUpload_addDropToQue (e) {
+      const items = e.dataTransfer.items || e.dataTransfer.files
+
+      // A list of files is being dropped ...
+      if (items instanceof FileList) {
+        this.$_ocUpload_addDirectoryToQue(e)
+        return
+      }
+      for (let item of items) {
+        item = item.webkitGetAsEntry()
+        const exists = this.checkIfElementExists(item)
+        if (item.isDirectory) {
+          if (!exists) {
+            this.processDirectoryEntryRecursively(item).then(() => {
+              this.$emit('success', null, item.name)
+            })
+          } else {
+            this.showMessage({
+              title: this.$gettextInterpolate(this.$gettext('Folder %{folder} already exists.'), { folder: item.name }, true),
+              status: 'danger'
+            })
+          }
+        } else {
+          if (!exists) {
+            item.file(file => {
+              this.$_ocUpload(file, item.fullPath)
+            })
+          } else {
+            const translated = this.$gettext('File %{file} already exists.')
+            this.setOverwriteDialogTitle(this.$gettextInterpolate(translated, { file: item.name }, true))
+            this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
+            const overwrite = await this.$_ocUpload_confirmOverwrite()
+            if (overwrite) {
+              item.file(file => {
+                this.$_ocUpload(file, item.fullPath, exists.etag)
+              })
+            }
+            this.setOverwriteDialogMessage(null)
+          }
+        }
+      }
+    },
+    async $_ocUpload_addFileToQue (e) {
+      const files = e.target.files
       if (!files.length) return
       for (const file of files) {
-        const exists = this.files.find((n) => {
-          if (n['name'] === file.name) {
-            return n
-          }
-        })
-
+        const exists = this.checkIfElementExists(file)
         if (!exists) {
-          this.$_ocUpload(file)
+          this.$_ocUpload(file, file.name)
           continue
         }
 
@@ -183,11 +250,62 @@ export default {
         this.setOverwriteDialogTitle(this.$gettextInterpolate(translated, { file: file.name }, true))
         this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
         const overwrite = await this.$_ocUpload_confirmOverwrite()
-        if (overwrite) this.$_ocUpload(file, exists.etag)
+        if (overwrite) this.$_ocUpload(file, file.name, exists.etag)
         this.setOverwriteDialogMessage(null)
       }
     },
-    $_ocUpload_confirmOverwrite (overwrite) {
+    $_ocUpload_addDirectoryToQue (e) {
+      const files = e.target.files || e.dataTransfer.files
+      if (!files.length) return
+
+      // Check if base directory exists
+      let directoryPath = files[0].webkitRelativePath.replace('/' + files[0].name, '')
+      const directoryName = directoryPath.split('/')[0]
+      const directoryExists = this.checkIfElementExists(directoryName)
+
+      if (directoryExists) {
+        this.showMessage({
+          title: this.$gettextInterpolate(this.$gettext('Folder %{folder} already exists.'), { folder: directoryName }, true),
+          status: 'danger'
+        })
+      } else {
+        // Get folder structure
+        const directoriesToCreate = []
+        for (const file of files) {
+          directoryPath = file.webkitRelativePath.replace('/' + file.name, '')
+          const directories = directoryPath.split('/')
+          for (let i = 0; i < directories.length; i++) {
+            const directoryName = directories[i]
+            directories[i] = ''
+            for (let temp = directories.length - 1 - i; temp < directories.length - 1; temp++) {
+              directories[i] += directories[temp] + '/'
+            }
+            directories[i] += directoryName
+            if (!directoriesToCreate.includes(directories[i])) {
+              directoriesToCreate.push(directories[i])
+            }
+          }
+        }
+        // Create folder structure
+        const createFolderPromises = []
+        const rootDir = directoriesToCreate[0]
+        for (const directory of directoriesToCreate) {
+          createFolderPromises.push(this.$client.files.createFolder(directory))
+        }
+        // Upload files
+        const uploadPromises = []
+        Promise.all(createFolderPromises).then(() => {
+          for (const file of files) {
+            uploadPromises.push(this.$_ocUpload(file, file.webkitRelativePath, null, false))
+          }
+          // once all files are uploaded we emit the success event
+          Promise.all(uploadPromises).then(() => {
+            this.$emit('success', null, rootDir)
+          })
+        })
+      }
+    },
+    $_ocUpload_confirmOverwrite () {
       return new Promise(resolve => {
         const confirmButton = document.querySelector('#overwrite-ok')
         confirmButton.addEventListener('click', (e) => {
@@ -195,15 +313,17 @@ export default {
         })
       })
     },
-    $_ocUpload (file, overwrite = null) {
+    $_ocUpload (file, path, overwrite = null, emitSuccess = true) {
       this.addFileToProgress(file)
-      const fileUpload = new FileUpload(file, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType)
-      fileUpload
+      const fileUpload = new FileUpload(file, path, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType)
+      return fileUpload
         .upload({
           overwrite: overwrite
         })
         .then(e => {
-          this.$emit('success', e, file)
+          if (emitSuccess) {
+            this.$emit('success', e, file)
+          }
           this.$_ocUploadInput_clean()
         })
         .catch(e => {

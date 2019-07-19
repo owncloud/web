@@ -1,6 +1,7 @@
 class FileUpload {
-  constructor (file, url, headers = {}, onProgress = () => {}, type = 'POST') {
+  constructor (file, path, url, headers = {}, onProgress = () => {}, type = 'POST') {
     this.file = file
+    this.path = path
     this.url = url
     this.headers = headers
     this.onProgress = onProgress
@@ -11,7 +12,7 @@ class FileUpload {
     const xhr = new XMLHttpRequest()
 
     // Headers
-    xhr.open(this.type, this.url + encodeURIComponent(this.file.name), true)
+    xhr.open(this.type, this.url + encodeURIComponent(this.path), true)
     xhr.responseType = 'text'
     if (options.overwrite) {
       this.headers['If-Match'] = options.overwrite
