@@ -133,25 +133,38 @@ export default {
     $_ocTrashbin_clearTrashbinConfirmation (files = this.selectedFiles) {
       // TODO: use clear all if all files are selected
       const deleteOps = []
-      for (const file of files) {
-        const p = this.queue.add(async () => {
-          return this.$client.fileTrash.clearTrashBin(file.id)
+
+      const self = this
+      function deleteFile (file) {
+        return async () => {
+          return self.$client.fileTrash.clearTrashBin(file.id)
             .then(() => {
-              this.$_ocTrashbin_removeFileFromList([file])
-              const translated = this.$gettext('%{file} was successfully deleted')
-              this.showMessage({
-                title: this.$gettextInterpolate(translated, { file: file.name }, true)
+              self.$_ocTrashbin_removeFileFromList([file])
+              const translated = self.$gettext('%{file} was successfully deleted')
+              self.showMessage({
+                title: self.$gettextInterpolate(translated, { file: file.name }, true)
               })
             })
             .catch(error => {
-              const translated = this.$gettext('Deletion of %{file} failed')
-              this.showMessage({
-                title: this.$gettextInterpolate(translated, { file: file.name }, true),
+              if (error.statusCode === 423) {
+                // TODO: we need a may retry option ....
+                const p = self.queue.add(deleteFile(file))
+                deleteOps.push(p)
+                return
+              }
+
+              const translated = self.$gettext('Deletion of %{file} failed')
+              self.showMessage({
+                title: self.$gettextInterpolate(translated, { file: file.name }, true),
                 desc: error.message,
                 status: 'danger'
               })
             })
-        })
+        }
+      }
+
+      for (const file of files) {
+        const p = this.queue.add(deleteFile(file))
         deleteOps.push(p)
       }
       Promise.all(deleteOps).then(() => {
