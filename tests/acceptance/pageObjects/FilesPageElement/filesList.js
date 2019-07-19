@@ -207,7 +207,7 @@ module.exports = {
       const parts = path.parse(fileName)
       if (parts.ext) {
         // keep path of nested folders intact, just remove the extension at the end
-        let filePathWithoutExt = parts.dir ? parts.dir + '/' + parts.name : parts.name
+        const filePathWithoutExt = parts.dir ? parts.dir + '/' + parts.name : parts.name
         const element = this.elements['fileRowByNameAndExtension']
         return util.format(
           element.selector,

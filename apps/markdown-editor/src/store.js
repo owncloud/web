@@ -18,8 +18,8 @@ const actions = {
     commit('ERROR', '')
   },
   loadFile ({ commit }, payload) {
-    let filePath = payload.filePath
-    let client = payload.client
+    const filePath = payload.filePath
+    const client = payload.client
 
     commit('LOADING', true)
     commit('CURRENT_FILE', filePath)

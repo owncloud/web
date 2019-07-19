@@ -87,7 +87,7 @@ module.exports = {
      */
     getShareAutocompleteItemsList: async function () {
       const webElementIdList = await this.getShareAutocompleteWebElementIdList()
-      let itemsListPromises = webElementIdList.map((webElementId) => {
+      const itemsListPromises = webElementIdList.map((webElementId) => {
         return new Promise((resolve, reject) => {
           this.api.elementIdText(webElementId, (text) => {
             resolve(text.value.trim())

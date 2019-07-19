@@ -1,6 +1,7 @@
 class FileUpload {
-  constructor (file, url, headers = {}, onProgress = () => {}, type = 'POST') {
+  constructor (file, path, url, headers = {}, onProgress = () => {}, type = 'POST') {
     this.file = file
+    this.path = path
     this.url = url
     this.headers = headers
     this.onProgress = onProgress
@@ -8,10 +9,10 @@ class FileUpload {
   }
 
   upload (options = {}) {
-    let xhr = new XMLHttpRequest()
+    const xhr = new XMLHttpRequest()
 
     // Headers
-    xhr.open(this.type, this.url + encodeURIComponent(this.file.name), true)
+    xhr.open(this.type, this.url + encodeURIComponent(this.path), true)
     xhr.responseType = 'text'
     if (options.overwrite) {
       this.headers['If-Match'] = options.overwrite
@@ -26,7 +27,7 @@ class FileUpload {
     xhr.upload.addEventListener('progress', (e) => {
       this.onProgress(e, this.file)
     }, false)
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       xhr.onload = e => {
         xhr.status >= 200 && xhr.status < 400 ? resolve(e) : reject(new Error(xhr.statusText))
       }

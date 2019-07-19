@@ -30,9 +30,9 @@ export default {
         this.loading = false
         return
       }
-      let headers = new Headers()
-      let instance = this.$root.config.server || window.location.origin
-      let url = instance + '/remote.php/dav/avatars/' + this.userid + '/128.png'
+      const headers = new Headers()
+      const instance = this.$root.config.server || window.location.origin
+      const url = instance + '/remote.php/dav/avatars/' + this.userid + '/128.png'
       headers.append('Authorization', 'Bearer ' + this.getToken)
       fetch(url, { headers })
         .then(response => {

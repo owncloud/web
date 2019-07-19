@@ -136,8 +136,8 @@ export default {
       if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
         this.resetFileSelection()
       } else {
-        let selectedFiles = this.fileData.slice()
-        for (let item of selectedFiles) {
+        const selectedFiles = this.fileData.slice()
+        for (const item of selectedFiles) {
           if (!this.selectedFiles.includes(item)) {
             this.addFileSelection(item)
           }
@@ -161,7 +161,7 @@ export default {
     },
     deleteFile (file) {
       this.fileToBeDeleted = file
-      let translated = this.$gettext('Please confirm the deletion of %{ fileName }')
+      const translated = this.$gettext('Please confirm the deletion of %{ fileName }')
       this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { fileName: file.name }, true))
     },
     openSideBar (file, sideBarName) {
@@ -207,7 +207,7 @@ export default {
       return this.checkNewName(this.newName)
     },
     actions () {
-      let actions = [
+      const actions = [
         { icon: 'edit',
           handler: this.changeName,
           ariaLabel: this.$gettext('Edit'),
@@ -227,8 +227,8 @@ export default {
             return item.canBeDeleted()
           } }
       ]
-      for (let sideBarName in this.fileSideBars) {
-        let sideBar = this.fileSideBars[sideBarName]
+      for (const sideBarName in this.fileSideBars) {
+        const sideBar = this.fileSideBars[sideBarName]
         if (sideBar.enabled !== undefined && !sideBar.enabled(this.capabilities)) {
           continue
         }
@@ -264,7 +264,7 @@ export default {
     }
   },
   watch: {
-    item () {
+    $route () {
       this.$_ocFilesFolder_getFolder()
     }
   }

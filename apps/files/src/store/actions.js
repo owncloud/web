@@ -251,8 +251,11 @@ export default {
     })
   },
   updateFileProgress ({ commit }, progress) {
-    if (progress.progress === 100) commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
-    else commit('UPDATE_FILE_PROGRESS', progress)
+    if (progress.progress === 100) {
+      commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
+    } else {
+      commit('UPDATE_FILE_PROGRESS', progress)
+    }
   },
   addFileToProgress ({ commit }, file) {
     commit('ADD_FILE_TO_PROGRESS', file)

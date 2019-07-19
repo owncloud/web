@@ -17,10 +17,10 @@ const actions = {
   openFile (context, payload) {
     return new Promise((resolve, reject) => {
       // TODO fix js-owncloud-client & change payload to filePath
-      let filePath = payload.filePath
+      const filePath = payload.filePath
       context.commit('FETCH_FILE', filePath)
       // TODO fix js-owncloud-client & use global client
-      let client = payload.client || false
+      const client = payload.client || false
       if (client) {
         client.files.getFileContents(filePath).then(resolve).catch(reject)
       } else {
@@ -39,7 +39,7 @@ const mutations = {
   REGISTER_APP (state, appInfo) {
     if (appInfo.extensions) {
       appInfo.extensions.forEach((e) => {
-        let link = {
+        const link = {
           app: appInfo.id,
           icon: e.icon
         }
@@ -53,7 +53,7 @@ const mutations = {
     if (appInfo.fileSideBars) {
       // Merge in file side bars into global list
       // Reassign object in whole so that it updates the state properly
-      let list = state.fileSideBars
+      const list = state.fileSideBars
       appInfo.fileSideBars.forEach((sideBar) => {
         list.push(sideBar)
       })
@@ -62,7 +62,7 @@ const mutations = {
     if (!appInfo.id) return
     // name: use id as fallback display name
     // icon: use empty box as fallback icon
-    let app = {
+    const app = {
       name: appInfo.name || appInfo.id,
       id: appInfo.id,
       icon: appInfo.icon || 'check_box_outline_blank'
@@ -83,7 +83,7 @@ const getters = {
   },
   extensions: state => {
     return fileExtension => {
-      let ext = state.extensions[fileExtension]
+      const ext = state.extensions[fileExtension]
       if (!ext) {
         return []
       }
