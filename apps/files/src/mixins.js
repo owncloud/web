@@ -36,9 +36,9 @@ export default {
         this.resetSearch()
       }
       this.$router.push({
-        'name': route,
-        'params': {
-          'item': param
+        name: route,
+        params: {
+          item: param
         }
       })
     },
@@ -54,7 +54,7 @@ export default {
         return
       }
 
-      let translatedTitle = this.$gettext('Renaming of %{fileName} failed')
+      const translatedTitle = this.$gettext('Renaming of %{fileName} failed')
 
       if (item.includes('/')) {
         this.showMessage({
@@ -92,13 +92,13 @@ export default {
         return
       }
 
-      let exists = this.files.find((n) => {
+      const exists = this.files.find((n) => {
         if (n['name'] === item) {
           return n
         }
       })
       if (exists) {
-        let translatedDesc = this.$gettext('File or folder with name "%{fileName}" already exists.')
+        const translatedDesc = this.$gettext('File or folder with name "%{fileName}" already exists.')
         this.showMessage({
           title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
           desc: this.$gettextInterpolate(translatedDesc, { fileName: item }, true),
@@ -116,9 +116,9 @@ export default {
 
     downloadFile (file) {
       const url = this.$client.files.getFileUrl(file.path)
-      let anchor = document.createElement('a')
+      const anchor = document.createElement('a')
 
-      let headers = new Headers()
+      const headers = new Headers()
       headers.append('Authorization', 'Bearer ' + this.getToken)
 
       fetch(url, { headers })
@@ -127,7 +127,7 @@ export default {
           if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
             window.navigator.msSaveOrOpenBlob(blobby, file.name)
           } else { // for Non-IE (chrome, firefox etc.)
-            let objectUrl = window.URL.createObjectURL(blobby)
+            const objectUrl = window.URL.createObjectURL(blobby)
 
             anchor.href = objectUrl
             anchor.download = file.name
@@ -149,7 +149,7 @@ export default {
       return 'x-office-document'
     },
     label (string) {
-      let cssClass = ['uk-label']
+      const cssClass = ['uk-label']
 
       switch (parseInt(string)) {
         case 1:
@@ -165,10 +165,10 @@ export default {
       return '<span class="' + cssClass.join(' ') + '">' + string + '</span>'
     },
     async $_ocUpload_addToQue (e) {
-      let files = e.target.files || e.dataTransfer.files
+      const files = e.target.files || e.dataTransfer.files
       if (!files.length) return
-      for (let file of files) {
-        let exists = this.files.find((n) => {
+      for (const file of files) {
+        const exists = this.files.find((n) => {
           if (n['name'] === file.name) {
             return n
           }
@@ -179,17 +179,17 @@ export default {
           continue
         }
 
-        let translated = this.$gettext('File %{file} already exists.')
+        const translated = this.$gettext('File %{file} already exists.')
         this.setOverwriteDialogTitle(this.$gettextInterpolate(translated, { file: file.name }, true))
         this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
-        let overwrite = await this.$_ocUpload_confirmOverwrite()
+        const overwrite = await this.$_ocUpload_confirmOverwrite()
         if (overwrite) this.$_ocUpload(file, exists.etag)
         this.setOverwriteDialogMessage(null)
       }
     },
     $_ocUpload_confirmOverwrite (overwrite) {
       return new Promise(resolve => {
-        let confirmButton = document.querySelector('#overwrite-ok')
+        const confirmButton = document.querySelector('#overwrite-ok')
         confirmButton.addEventListener('click', (e) => {
           resolve(e)
         })
@@ -197,7 +197,7 @@ export default {
     },
     $_ocUpload (file, overwrite = null) {
       this.addFileToProgress(file)
-      let fileUpload = new FileUpload(file, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType)
+      const fileUpload = new FileUpload(file, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType)
       fileUpload
         .upload({
           overwrite: overwrite
@@ -212,14 +212,14 @@ export default {
         })
     },
     $_ocUpload_onProgress (e, file) {
-      let progress = parseInt(e.loaded * 100 / e.total)
+      const progress = parseInt(e.loaded * 100 / e.total)
       this.$emit('progress', {
         fileName: file.name,
         progress
       })
     },
     $_ocUploadInput_clean () {
-      let input = this.$refs.input
+      const input = this.$refs.input
       if (input) {
         input.value = ''
       }

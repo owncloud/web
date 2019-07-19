@@ -32,12 +32,12 @@ export default {
       const folder = path.substring(0, lastSlash).replace(/^(\/)/, '')
       const file = path.substring(lastSlash + 1)
       this.$router.push({
-        'name': 'files-list',
-        'params': {
-          'item': folder
+        name: 'files-list',
+        params: {
+          item: folder
         },
-        'query': {
-          'scrollTo': file
+        query: {
+          scrollTo: file
         }
       })
     }).catch(error => {

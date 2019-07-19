@@ -48,8 +48,8 @@ const actions = {
         })
       })
 
-      let instance = context.rootState.config.server || window.location.origin
-      let options = {
+      const instance = context.rootState.config.server || window.location.origin
+      const options = {
         baseUrl: instance,
         auth: {
           bearer: token

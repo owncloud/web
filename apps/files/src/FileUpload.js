@@ -8,7 +8,7 @@ class FileUpload {
   }
 
   upload (options = {}) {
-    let xhr = new XMLHttpRequest()
+    const xhr = new XMLHttpRequest()
 
     // Headers
     xhr.open(this.type, this.url + encodeURIComponent(this.file.name), true)
@@ -26,7 +26,7 @@ class FileUpload {
     xhr.upload.addEventListener('progress', (e) => {
       this.onProgress(e, this.file)
     }, false)
-    let promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       xhr.onload = e => {
         xhr.status >= 200 && xhr.status < 400 ? resolve(e) : reject(new Error(xhr.statusText))
       }

@@ -3,7 +3,7 @@ import translationsJson from '../l10n/translations'
 
 const store = require('./store.js')
 
-let pdf = import('./PdfViewer.vue')
+const pdf = import('./PdfViewer.vue')
 const PdfViewer = () => ({
   component: pdf
 })
