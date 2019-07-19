@@ -12,32 +12,35 @@ const userSettings = require('../helpers/userSettings')
  * @param {string} file
  * @param {string} sharee
  * @param {boolean} shareWithGroup
+ * @param {string} role
  */
-const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithGroup = false) {
+const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithGroup, role) {
   return client.page
     .FilesPageElement
     .sharingDialog()
     .closeSharingDialog()
     .openSharingDialog(file)
-    .shareWithUserOrGroup(sharee, shareWithGroup)
+    .shareWithUserOrGroup(sharee, shareWithGroup, role)
 }
 
 /**
  *
  * @param {string} file
  * @param {string} sharee
+ * @param {string} role
  */
-const userSharesFileOrFolderWithUser = function (file, sharee) {
-  return userSharesFileOrFolderWithUserOrGroup(file, sharee)
+const userSharesFileOrFolderWithUser = function (file, sharee, role) {
+  return userSharesFileOrFolderWithUserOrGroup(file, sharee, false, role)
 }
 
 /**
  *
  * @param {string} file
  * @param {string} sharee
+ * @param {string} role
  */
-const userSharesFileOrFolderWithGroup = function (file, sharee) {
-  return userSharesFileOrFolderWithUserOrGroup(file, sharee, true)
+const userSharesFileOrFolderWithGroup = function (file, sharee, role) {
+  return userSharesFileOrFolderWithUserOrGroup(file, sharee, true, role)
 }
 
 /**
@@ -84,9 +87,9 @@ When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
 
-When('the user shares file/folder {string} with group {string} using the webUI', userSharesFileOrFolderWithGroup)
+When('the user shares file/folder {string} with group {string} as {string} using the webUI', userSharesFileOrFolderWithGroup)
 
-When('the user shares file/folder {string} with user {string} using the webUI', userSharesFileOrFolderWithUser)
+When('the user shares file/folder {string} with user {string} as {string} using the webUI', userSharesFileOrFolderWithUser)
 
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', function (pattern) {
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
@@ -101,8 +104,10 @@ Then('all users and groups that contain the string {string} in their name should
         if ((userDisplayName.toLowerCase().includes(pattern) ||
           userId.includes(pattern)) &&
           userDisplayName !== currentUserDisplayName) {
+          const userString = userDisplayName + client.page.FilesPageElement.sharingDialog().getUserSharePostfix()
+
           assert.ok(
-            itemsList.includes(userDisplayName),
+            itemsList.includes(userString),
             `could not find '${userDisplayName}' in autocomple share list`
           )
         }
@@ -131,6 +136,14 @@ Then('every item listed in the autocomplete list on the webUI should contain {st
         }
       })
     })
+})
+
+When('the user selects role {string}', function (role) {
+  return client.page.FilesPageElement.sharingDialog().selectRoleForNewCollaborator(role)
+})
+
+When('the user confirms the share', function () {
+  return client.page.FilesPageElement.sharingDialog().confirmShare()
 })
 
 Then('the users own name should not be listed in the autocomplete list on the webUI', function () {
@@ -171,6 +184,7 @@ When('the user deletes share with user/group {string} for the current file', fun
 Then('{string} should be listed in the shared with list', function (user) {
   return client.page.FilesPageElement.sharingDialog().getShareList()
     .then(shares => {
+      console.log(shares)
       if (!shares || !shares.includes(user)) {
         assert.fail(`"${user}" was expected to be in share list but was not present.`)
       }

@@ -1,4 +1,5 @@
-const groupSharePostfix = ' (group)'
+const groupSharePostfix = '\nGroup'
+const userSharePostfix = '\nUser'
 
 module.exports = {
   commands: {
@@ -7,7 +8,7 @@ module.exports = {
      * @param {string} sharee
      * @param {boolean} shareWithGroup
      */
-    shareWithUserOrGroup: async function (sharee, shareWithGroup = false) {
+    shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role) {
       this.enterAutoComplete(sharee)
       // We need waitForElementPresent here.
       // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
@@ -29,7 +30,10 @@ module.exports = {
         this.api.elementIdText(webElementId, (text) => {
           if (shareWithGroup === true) {
             sharee = sharee + groupSharePostfix
+          } else {
+            sharee = sharee + userSharePostfix
           }
+
           if (text.value === sharee) {
             this.api
               .elementIdClick(webElementId)
@@ -37,7 +41,27 @@ module.exports = {
           }
         })
       })
+
       return this
+        .selectRoleForNewCollaborator(role)
+        .confirmShare()
+    },
+    /**
+     *
+     * @param {String} role
+     */
+    selectRoleForNewCollaborator: function (role) {
+      return this.waitForElementPresent('@newCollaboratorSelectRoleButton')
+        .click('@newCollaboratorSelectRoleButton')
+        .waitForElementVisible('@newCollaboratorRolesDropdown')
+        .waitForElementVisible(`@newCollaboratorRole${role}`)
+        .click(`@newCollaboratorRole${role}`)
+        .waitForElementNotVisible('@newCollaboratorRolesDropdown')
+    },
+    confirmShare: function () {
+      return this.waitForElementPresent('@addShareButton')
+        .click('@addShareButton')
+        .waitForElementNotPresent('@addShareButton')
     },
     closeSharingDialog: function () {
       try {
@@ -66,7 +90,7 @@ module.exports = {
       const itemsListPromises = webElementIdList.map((webElementId) => {
         return new Promise((resolve, reject) => {
           this.api.elementIdText(webElementId, (text) => {
-            resolve(text.value)
+            resolve(text.value.trim())
           })
         })
       })
@@ -110,6 +134,7 @@ module.exports = {
       const shareList = []
       return this.waitForElementVisible('@sharedWithList')
         .api.elements('@sharedWithNames', async result => {
+          console.log(result)
           result.value.map(item => {
             this.api.elementIdText(item['ELEMENT'], text => {
               shareList.push(text.value)
@@ -118,8 +143,19 @@ module.exports = {
         })
         .then(() => shareList)
     },
+    /**
+     *
+     * @returns {string}
+     */
     getGroupSharePostfix: function () {
       return groupSharePostfix
+    },
+    /**
+     *
+     * @returns {string}
+     */
+    getUserSharePostfix: function () {
+      return userSharePostfix
     }
   },
   elements: {
@@ -137,22 +173,33 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     sharedWithList: {
-      selector: '#file-share-list'
+      selector: '#files-collaborators-list'
     },
     sharedWithListItems: {
-      selector: '#file-share-list li'
+      selector: '.files-collaborators-collaborator'
     },
     sharedWithListItem: {
       selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[.="%s"]/../..',
       locateStrategy: 'xpath'
     },
     sharedWithNames: {
-      selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[@class="uk-text-lead"]',
-      locateStrategy: 'xpath'
+      selector: '#files-collaborators-list .files-collaborators-collaborator .files-collaborators-collaborator-name'
     },
     deleteShareButton: {
       selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[.="%s"]/../..//*[@aria-label="Delete Share"]',
       locateStrategy: 'xpath'
+    },
+    addShareButton: {
+      selector: '#files-collaborators-add-new-button'
+    },
+    newCollaboratorSelectRoleButton: {
+      selector: '#files-collaborators-role-button'
+    },
+    newCollaboratorRolesDropdown: {
+      selector: '#files-collaborators-roles-dropdown'
+    },
+    newCollaboratorRoleViewer: {
+      selector: '#files-collaborator-new-collaborator-role-viewer'
     }
   }
 }
