@@ -61,7 +61,7 @@ Given('user {string} has favorited element {string}', function (userId, element)
 Then('as {string} file/folder {string} should exist in trash', function (user, element) {
   return webdavHelper.getTrashBinElements(user)
     .then(items => {
-      let trashFiles = items.map(item => item.originalFilename)
+      const trashFiles = items.map(item => item.originalFilename)
       assert.strictEqual(trashFiles.includes(element), true)
     })
 })
@@ -69,7 +69,7 @@ Then('as {string} file/folder {string} should exist in trash', function (user, e
 Then('as {string} the file/folder with original path {string} should not exist in trash', function (user, path) {
   return webdavHelper.getTrashBinElements(user)
     .then(items => {
-      let trashFiles = items.map(item => item.originalLocation)
+      const trashFiles = items.map(item => item.originalLocation)
       assert.strictEqual(trashFiles.includes(path), false)
     })
 })
@@ -77,7 +77,7 @@ Then('as {string} the file/folder with original path {string} should not exist i
 Then('as {string} the file/folder with original path {string} should exist in trash', function (user, path) {
   return webdavHelper.getTrashBinElements(user)
     .then(items => {
-      let trashFiles = items.map(item => item.originalLocation)
+      const trashFiles = items.map(item => item.originalLocation)
       assert.strictEqual(trashFiles.includes(path), true)
     })
 })

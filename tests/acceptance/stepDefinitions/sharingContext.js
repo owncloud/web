@@ -97,7 +97,7 @@ Then('all users and groups that contain the string {string} in their name should
       // are listed in the autocomplete list
       // in both cases the display name should be listed
       for (var userId in userSettings.getCreatedUsers()) {
-        let userDisplayName = userSettings.getDisplayNameForUser(userId)
+        const userDisplayName = userSettings.getDisplayNameForUser(userId)
         if ((userDisplayName.toLowerCase().includes(pattern) ||
           userId.includes(pattern)) &&
           userDisplayName !== currentUserDisplayName) {
@@ -111,7 +111,7 @@ Then('all users and groups that contain the string {string} in their name should
       // check if every created group that contains the pattern is listed in the autocomplete list
       userSettings.getCreatedGroups().forEach(function (groupId) {
         if (groupId.toLowerCase().includes(pattern)) {
-          let groupString = groupId + client.page.FilesPageElement.sharingDialog().getGroupSharePostfix()
+          const groupString = groupId + client.page.FilesPageElement.sharingDialog().getGroupSharePostfix()
 
           assert.ok(
             itemsList.includes(groupString),

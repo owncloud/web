@@ -24,9 +24,9 @@ export default {
   data () {
     return {
       fileFilterTranslations: {
-        'Files': this.$gettext('Files'),
-        'Folders': this.$gettext('Folders'),
-        'Hidden': this.$gettext('Hidden')
+        Files: this.$gettext('Files'),
+        Folders: this.$gettext('Folders'),
+        Hidden: this.$gettext('Hidden')
       }
     }
   },
