@@ -58,11 +58,15 @@ export default {
     Mixins
   ],
 
+  mounted () {
+    this.$_ocTrashbin_getFiles()
+  },
+
   computed: {
     ...mapGetters('Files', ['loadingFolder', 'selectedFiles', 'trashbinDeleteMessage']),
 
     _deleteDialogTitle () {
-      let files = this.selectedFiles
+      const files = this.selectedFiles
       let translated
 
       if (files.length === 1) {
@@ -80,9 +84,16 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
+    ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilterTerm']),
     ...mapActions(['showMessage']),
 
+    $_ocTrashbin_getFiles () {
+      this.setFilterTerm('')
+      this.loadTrashbin({
+        client: this.$client,
+        $gettext: this.$gettext
+      })
+    },
     $_ocTrashbin_deleteFile (item) {
       this.resetFileSelection()
       this.addFileSelection(item)
@@ -102,8 +113,8 @@ export default {
       if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
         this.resetFileSelection()
       } else {
-        let selectedFiles = this.fileData.slice()
-        for (let item of selectedFiles) {
+        const selectedFiles = this.fileData.slice()
+        for (const item of selectedFiles) {
           if (!this.selectedFiles.includes(item)) {
             this.addFileSelection(item)
           }
@@ -112,17 +123,17 @@ export default {
     },
 
     $_ocTrashbin_clearTrashbinConfirmation (files = this.selectedFiles) {
-      for (let file of files) {
+      for (const file of files) {
         this.$client.fileTrash.clearTrashBin(file.id)
           .then(() => {
             this.$_ocTrashbin_removeFileFromList([file])
-            let translated = this.$gettext('%{file} was successfully deleted')
+            const translated = this.$gettext('%{file} was successfully deleted')
             this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true)
             })
           })
           .catch(error => {
-            let translated = this.$gettext('Deletion of %{file} failed')
+            const translated = this.$gettext('Deletion of %{file} failed')
             this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true),
               desc: error.message,
@@ -140,13 +151,13 @@ export default {
       this.$client.fileTrash.restore(file.id, file.originalLocation)
         .then(() => {
           this.$_ocTrashbin_removeFileFromList([file])
-          let translated = this.$gettext('%{file} was succesfully restored')
+          const translated = this.$gettext('%{file} was succesfully restored')
           this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true)
           })
         })
         .catch(error => {
-          let translated = this.$gettext('Restoration of %{file} failed')
+          const translated = this.$gettext('Restoration of %{file} failed')
           this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true),
             desc: error.message,

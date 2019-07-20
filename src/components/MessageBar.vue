@@ -1,13 +1,15 @@
 <template>
   <oc-notifications>
-    <oc-notification-message
-            v-for="(item, index) in activeMessages"
-            :key="index"
+    <transition-group name="oc-alerts-transition" tag="div">
+      <oc-notification-message
+            v-for="item in $_ocMessages_limited"
+            :key="item.id"
             :title="item.title"
             :message="item.desc"
             :status="item.status"
             @close="deleteMessage(item)"
     />
+    </transition-group>
   </oc-notifications>
 </template>
 
@@ -16,10 +18,14 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   methods: {
-    ...mapActions(['showMessage', 'deleteMessage'])
+    ...mapActions(['deleteMessage'])
   },
   computed: {
-    ...mapGetters(['activeMessages'])
+    ...mapGetters(['activeMessages']),
+
+    $_ocMessages_limited () {
+      return this.activeMessages ? this.activeMessages.slice(0, 5) : []
+    }
   }
 }
 </script>

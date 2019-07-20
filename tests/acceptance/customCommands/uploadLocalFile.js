@@ -28,8 +28,8 @@ uploadLocalFile.prototype.command = function uploadLocalFile (inputSelector, fil
   const api = this.api
 
   const uploadRemote = cb => {
-    let buffers = []
-    let zip = archiver('zip')
+    const buffers = []
+    const zip = archiver('zip')
     zip
       .on('data', data => { buffers.push(data) })
       .on('error', err => { throw err })

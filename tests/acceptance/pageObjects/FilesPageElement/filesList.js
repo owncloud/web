@@ -54,6 +54,17 @@ module.exports = {
     },
     /**
      *
+     * @param {string} fileName
+     */
+    restoreFile: function (fileName) {
+      return this.initAjaxCounters()
+        .waitForFileVisible(fileName)
+        .useXpath()
+        .performFileAction(fileName, 'restore')
+        .waitForElementNotPresent(this.getFileRowSelectorByFileName(fileName))
+    },
+    /**
+     *
      * @param {string} folder
      */
     navigateToFolder: function (folder) {
@@ -127,7 +138,7 @@ module.exports = {
         .click('@checkBoxAllFiles')
     },
     /**
-     *
+     * @param {string} path
      */
     unmarkFavorite: function (path) {
       const unFavoriteBtn = this.getFileRowSelectorByFileName(path) +
@@ -139,6 +150,20 @@ module.exports = {
         .click(unFavoriteBtn)
         .waitForOutstandingAjaxCalls()
         .useCss()
+    },
+    /**
+     * Toggle enable or disable file/folder select checkbox
+     *
+     * @param {string} enableOrDisable
+     * @param {string} path
+     */
+    toggleFileOrFolderCheckbox: function (enableOrDisable, path) {
+      const fileCheckbox = this.getFileRowSelectorByFileName(path) +
+        this.elements['checkboxInFileRow'].selector
+
+      return this
+        .waitForFileVisible(path)
+        .toggleCheckbox(enableOrDisable, fileCheckbox, 'xpath')
     },
     /**
      *
@@ -182,7 +207,7 @@ module.exports = {
       const parts = path.parse(fileName)
       if (parts.ext) {
         // keep path of nested folders intact, just remove the extension at the end
-        let filePathWithoutExt = parts.dir ? parts.dir + '/' + parts.name : parts.name
+        const filePathWithoutExt = parts.dir ? parts.dir + '/' + parts.name : parts.name
         const element = this.elements['fileRowByNameAndExtension']
         return util.format(
           element.selector,
@@ -212,6 +237,17 @@ module.exports = {
         .useXpath()
         .waitForElementNotPresent('@loadingIndicator')
         .waitForElementNotPresent(this.getFileRowSelectorByFileName(element))
+    },
+    /**
+     *
+     * @param {string} element
+     */
+    assertElementListed: function (element) {
+      return this
+        .waitForElementVisible('@filesTable')
+        .useXpath()
+        .waitForElementNotPresent('@loadingIndicator')
+        .waitForElementPresent(this.getFileRowSelectorByFileName(element))
     },
     /**
      *
@@ -251,11 +287,15 @@ module.exports = {
       selector: '//button[@aria-label="Delete"]',
       locateStrategy: 'xpath'
     },
+    restoreButtonInFileRow: {
+      selector: '//span[.="Restore"]',
+      locateStrategy: 'xpath'
+    },
     deleteFileConfirmationBtn: {
       selector: '#oc-dialog-delete-confirm'
     },
     shareButtonInFileRow: {
-      selector: '//button[@aria-label="Share"]',
+      selector: '//button[@aria-label="Collaborators"]',
       locateStrategy: 'xpath'
     },
     renameFileConfirmationDialog: {
@@ -294,6 +334,10 @@ module.exports = {
     },
     checkBoxAllFiles: {
       selector: '#filelist-check-all'
+    },
+    checkboxInFileRow: {
+      selector: '//input[@type="checkbox"]',
+      locateStrategy: 'xpath'
     }
   }
 }

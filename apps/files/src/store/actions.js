@@ -22,12 +22,12 @@ function _buildFile (file) {
       return ext
     }()),
     name: (function () {
-      let pathList = file.name.split('/').filter(e => e !== '')
+      const pathList = file.name.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     }()),
     basename: (function () {
-      let pathList = file.name.split('/').filter(e => e !== '')
-      let name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
+      const pathList = file.name.split('/').filter(e => e !== '')
+      const name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
       if (ext) {
         return name.substring(0, name.length - ext.length - 1)
       }
@@ -37,6 +37,11 @@ function _buildFile (file) {
     permissions: file['fileInfo']['{http://owncloud.org/ns}permissions'],
     etag: file['fileInfo']['{DAV:}getetag'],
     sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],
+    privateLink: file['fileInfo']['{http://owncloud.org/ns}privatelink'],
+    owner: {
+      username: file['fileInfo']['{http://owncloud.org/ns}owner-id'],
+      displayName: file['fileInfo']['{http://owncloud.org/ns}owner-display-name']
+    },
     canUpload: function () {
       return this.permissions.indexOf('C') >= 0
     },
@@ -67,29 +72,29 @@ function _buildFileInTrashbin (file) {
       return ext
     }()),
     basename: (function () {
-      let fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
-      let pathList = fullName.split('/').filter(e => e !== '')
-      let name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
+      const fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
+      const pathList = fullName.split('/').filter(e => e !== '')
+      const name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
       if (ext) {
         return name.substring(0, name.length - ext.length - 1)
       }
       return name
     })(),
     name: (function () {
-      let fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
-      let pathList = fullName.split('/').filter(e => e !== '')
+      const fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
+      const pathList = fullName.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     })(),
     originalLocation: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-location'],
     id: (function () {
-      let pathList = file.name.split('/').filter(e => e !== '')
+      const pathList = file.name.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     })()
   })
 }
 
 function _buildShare (s) {
-  let share = {
+  const share = {
     info: s
   }
   switch (s.share_type) {
@@ -97,19 +102,27 @@ function _buildShare (s) {
     // TODO differentiate groups from users?
     // fall through
     case ('1'): // group share
-      share.role = 'legacy'
-      if (s.permissions & 1) {
+      share.role = 'editor' // TODO: Switch to custom role when implemented
+      if (s.permissions === '1' || s.permissions === '17') {
         share.role = 'viewer'
       }
-      if (s.permissions & 2) {
+      if (s.permissions === '2' || s.permissions === '7' || s.permissions === '23') {
         share.role = 'editor'
       }
-      if (s.permissions & 16) {
-        share.role = 'coowner'
-      }
+      // Co-Owner dropped for now until we get displaying of reshares working also for him
+      // if (s.permissions === '31') {
+      //   share.role = 'coowner'
+      // }
+      share.permissions = s.permissions
+      share.canReshare = s.permissions === '16' || s.permissions === '17' || s.permissions === '19' || s.permissions === '23' || s.permissions === '31'
       share.avatar = 'https://picsum.photos/64/64?image=1075' // TODO where do we get the avatar from? by uid? remote.php/dav/avatars/admin/128.png
       share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
       share.displayName = s.share_with_displayname
+      share.customPermissions = {
+        create: s.permissions === '5' || s.permissions === '21',
+        change: s.permissions === '3' || s.permissions === '19',
+        delete: s.permissions === '9' || s.permissions === '25'
+      }
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
       break
     case ('3'): // public link
@@ -146,58 +159,61 @@ export default {
   loadFolder (context, { client, absolutePath, $gettext, routeName }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
 
-    let promise
-    let favorite = routeName === 'files-favorites'
+    return new Promise((resolve, reject) => {
+      let promise
+      const favorite = routeName === 'files-favorites'
 
-    if (favorite) {
-      promise = client.files.getFavoriteFiles(context.getters.davProperties)
-    } else {
-      promise = client.files.list(absolutePath, 1, context.getters.davProperties)
-    }
-
-    promise.then(res => {
-      if (res === null) {
+      if (favorite) {
+        promise = client.files.getFavoriteFiles(context.getters.davProperties)
+      } else {
+        promise = client.files.list(absolutePath, 1, context.getters.davProperties)
+      }
+      promise.then(res => {
+        if (res === null) {
+          context.dispatch('showMessage', {
+            title: $gettext('Loading folder failed…'),
+            status: 'danger'
+          }, { root: true })
+        } else {
+          if (favorite) {
+            client.files.fileInfo('', context.getters.davProperties).then(rootFolder => {
+              rootFolder['fileInfo']['{http://owncloud.org/ns}permissions'] = 'R'
+              context.dispatch('loadFiles', {
+                currentFolder: rootFolder,
+                files: res
+              })
+            })
+          } else {
+            context.dispatch('loadFiles', {
+              currentFolder: res[0],
+              files: res.splice(1)
+            })
+          }
+        }
+        context.dispatch('resetFileSelection')
+        context.dispatch('setHighlightedFile', null)
+        if (context.getters.searchTerm !== '') {
+          context.dispatch('resetSearch')
+        }
+      }).catch((e) => {
         context.dispatch('showMessage', {
           title: $gettext('Loading folder failed…'),
+          desc: e.message,
           status: 'danger'
         }, { root: true })
-      } else {
-        if (favorite) {
-          client.files.fileInfo('', context.getters.davProperties).then(rootFolder => {
-            rootFolder['fileInfo']['{http://owncloud.org/ns}permissions'] = 'R'
-            context.dispatch('loadFiles', {
-              currentFolder: rootFolder,
-              files: res
-            })
-          })
-        } else {
-          context.dispatch('loadFiles', {
-            currentFolder: res[0],
-            files: res.splice(1)
-          })
-        }
-      }
-      context.dispatch('resetFileSelection')
-      context.dispatch('setHighlightedFile', null)
-      if (context.getters.searchTerm !== '') {
-        context.dispatch('resetSearch')
-      }
-    }).catch((e) => {
-      context.dispatch('showMessage', {
-        title: $gettext('Loading folder failed…'),
-        desc: e.message,
-        status: 'danger'
-      }, { root: true })
-    }).finally(() => {
-      context.commit('UPDATE_FOLDER_LOADING', false)
-      client.users.getUser(context.rootGetters.user.id).then(res => {
-        let enoughSpace
-        if (res.quota.relative >= 100) {
-          enoughSpace = false
-        } else {
-          enoughSpace = true
-        }
-        context.commit('CHECK_QUOTA', enoughSpace)
+        reject(e)
+      }).finally(() => {
+        context.commit('UPDATE_FOLDER_LOADING', false)
+        client.users.getUser(context.rootGetters.user.id).then(res => {
+          let enoughSpace
+          if (res.quota.relative >= 100) {
+            enoughSpace = false
+          } else {
+            enoughSpace = true
+          }
+          context.commit('CHECK_QUOTA', enoughSpace)
+          resolve()
+        })
       })
     })
   },
@@ -235,8 +251,11 @@ export default {
     })
   },
   updateFileProgress ({ commit }, progress) {
-    if (progress.progress === 100) commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
-    else commit('UPDATE_FILE_PROGRESS', progress)
+    if (progress.progress === 100) {
+      commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
+    } else {
+      commit('UPDATE_FILE_PROGRESS', progress)
+    }
   },
   addFileToProgress ({ commit }, file) {
     commit('ADD_FILE_TO_PROGRESS', file)
@@ -261,9 +280,9 @@ export default {
     context.commit('RESET_SELECTION')
   },
   markFavorite (context, payload) {
-    let file = payload.file
-    let client = payload.client
-    let newValue = !file.starred
+    const file = payload.file
+    const client = payload.client
+    const newValue = !file.starred
     client.files.favorite(file.path, newValue)
       .then(() => {
         context.commit('FAVORITE_FILE', file)
@@ -273,16 +292,16 @@ export default {
       })
   },
   addFiles (context, payload) {
-    let files = payload.files
-    for (let file of files) {
+    const files = payload.files
+    for (const file of files) {
       context.commit('ADD_FILE', _buildFile(file))
     }
   },
   deleteFiles (context, payload) {
-    let files = payload.files
-    let client = payload.client
-    let promises = []
-    for (let file of files) {
+    const files = payload.files
+    const client = payload.client
+    const promises = []
+    for (const file of files) {
       const promise = client.files.delete(file.path).then(() => {
         context.commit('REMOVE_FILE', file)
         context.commit('REMOVE_FILE_SELECTION', file)
@@ -294,16 +313,16 @@ export default {
     return Promise.all(promises)
   },
   removeFilesFromTrashbin (context, files) {
-    for (let file of files) {
+    for (const file of files) {
       context.commit('REMOVE_FILE', file)
     }
   },
   renameFile (context, payload) {
-    let file = payload.file
-    let newValue = payload.newValue
-    let client = payload.client
+    const file = payload.file
+    const newValue = payload.newValue
+    const client = payload.client
     if (file !== undefined && newValue !== undefined && newValue !== file.name) {
-      let newPath = file.path.substr(1, file.path.lastIndexOf('/'))
+      const newPath = file.path.substr(1, file.path.lastIndexOf('/'))
       client.files.move(file.path, (newPath + newValue)).then(() => {
         context.commit('RENAME_FILE', { file, newValue, newPath })
       })
@@ -317,8 +336,8 @@ export default {
   },
   searchForFile (context, payload) {
     return new Promise(function (resolve, reject) {
-      let client = payload.client
-      let searchTerm = payload.searchTerm
+      const client = payload.client
+      const searchTerm = payload.searchTerm
       context.commit('SET_SEARCH_TERM', searchTerm)
       // TODO respect user selected listSize from state.config
       // do not search for empty strings
@@ -349,39 +368,44 @@ export default {
     context.commit('SHARES_LOADING', true)
 
     // see https://owncloud.github.io/js-owncloud-client/Shares.html
-    let client = payload.client
-    let path = payload.path
-    client.shares.getShares(path)
+    const client = payload.client
+    const path = payload.path
+    client.shares.getShares(path, { reshares: true })
       .then(data => {
         context.commit('SHARES_LOAD', data.map(element => {
           return _buildShare(element.shareInfo)
         }))
-        context.commit('SHARES_LOADING', false)
       })
       .catch(error => {
         context.commit('SHARES_ERROR', error.message)
-        context.commit('SHARES_LOADING', false)
       })
+      .finally(context.commit('SHARES_LOADING', false))
   },
   sharesClearState (context, payload) {
     context.commit('SHARES_LOAD', [])
     context.commit('SHARES_ERROR', null)
   },
-  changeShare (context, { client, share }) {
+  changeShare (context, { client, share, reshare }) {
     const params = {}
-    // needs better mechanism ...
-    if (share.role === 'coowner') {
-      params.perms = 31
-    }
-    if (share.role === 'editor') {
-      params.perms = 15
-    }
-    if (share.role === 'viewer') {
-      params.perms = 1
-    }
-    if (share.info.item_type === 'file') {
-      params.perms &= ~4 // CREATE permission
-      params.perms &= ~8 // DELETE permission
+    switch (share.role) {
+      case ('coowner'):
+        params.perms = 31
+        break
+      case ('editor'):
+        if (share.info.item_type === 'file') {
+          params.perms = reshare ? 19 : 2
+          break
+        }
+        params.perms = reshare ? 23 : 7
+        break
+      case ('viewer'):
+        console.log(reshare)
+        params.perms = reshare ? 17 : 1
+        console.log(params.perms)
+        break
+      case ('custom'):
+        params.perms = 31
+        break
     }
 
     if (!params.perms) {
@@ -400,11 +424,11 @@ export default {
         console.log(e)
       })
   },
-  addShare (context, { client, path, $gettext, shareWith, shareType }) {
+  addShare (context, { client, path, $gettext, shareWith, shareType, permissions }) {
     context.commit('SHARES_LOADING', true)
 
     if (shareType === 0) {
-      client.shares.shareFileWithUser(path, shareWith)
+      client.shares.shareFileWithUser(path, shareWith, permissions)
         .then(share => {
           context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
           context.commit('SHARES_LOADING', false)
@@ -418,7 +442,7 @@ export default {
           context.commit('SHARES_LOADING', false)
         })
     } else {
-      client.shares.shareFileWithGroup(path, shareWith)
+      client.shares.shareFileWithGroup(path, shareWith, permissions)
         .then(share => {
           context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
           context.commit('SHARES_LOADING', false)

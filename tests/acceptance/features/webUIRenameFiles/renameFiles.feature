@@ -130,17 +130,21 @@ Feature: rename files
     When the user closes the message
     Then no message should be displayed on the webUI
 
-  @skip
   @issue-965
   Scenario: Rename a file to ..
     When the user renames file "data.zip" to ".." using the webUI
-    Then near file "data.zip" a tooltip with the text '".." is an invalid file name.' should be displayed on the webUI
-
-  @skip
+    Then the error message 'Renaming of data.zip failed' should be displayed on the webUI
+    And file 'data.zip' should be listed on the webUI
+    When the user closes the message
+    Then no message should be displayed on the webUI
+    
   @issue-965
   Scenario: Rename a file to .
     When the user renames file "data.zip" to "." using the webUI
-    Then near file "data.zip" a tooltip with the text '"." is an invalid file name.' should be displayed on the webUI
+    Then the error message 'Renaming of data.zip failed' should be displayed on the webUI
+    And file 'data.zip' should be listed on the webUI
+    When the user closes the message
+    Then no message should be displayed on the webUI
 
   @skip
   @issue-965

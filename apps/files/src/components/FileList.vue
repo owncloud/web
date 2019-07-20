@@ -3,7 +3,7 @@
     <oc-table-group>
       <oc-table-row>
         <oc-table-cell shrink type="head">
-          <oc-checkbox class="uk-margin-small-left" @click.native="toggleAll" :value="all" />
+          <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" @click.native="toggleAll" :value="all" />
         </oc-table-cell>
         <oc-table-cell shrink />
         <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
@@ -13,7 +13,7 @@
       </oc-table-row>
     </oc-table-group>
     <oc-table-group>
-      <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item)">
+      <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item)" :id="'file-row-' + item.id">
         <oc-table-cell>
           <oc-checkbox class="uk-margin-small-left" @click.stop @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
         </oc-table-cell>
@@ -23,7 +23,7 @@
         <oc-table-cell class="uk-text-truncate">
           <oc-file @click.native.stop="item.type === 'folder' ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
                    :name="$_ocFileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
-                   :filename="item.name" :key="item.id" />
+                   :filename="item.name" :key="item.id"/>
         </oc-table-cell>
         <oc-table-cell class="uk-text-meta uk-text-nowrap" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }">
           {{ item.size | fileSize }}
@@ -77,7 +77,7 @@
 </template>
 <script>
 import OcDialogPrompt from './ocDialogPrompt.vue'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 
 import Mixins from '../mixins'
 
@@ -95,17 +95,49 @@ export default {
     fileToBeDeleted: '',
     newName: ''
   }),
+  mounted () {
+    this.$_ocFilesFolder_getFolder()
+  },
   methods: {
-    ...mapActions('Files', ['markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection',
+    ...mapActions('Files', ['loadFolder', 'setFilterTerm', 'markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection',
       'deleteFiles', 'renameFile', 'setFilesDeleteMessage', 'setHighlightedFile']),
     ...mapActions(['openFile']),
 
+    $_ocFilesFolder_getFolder () {
+      this.setFilterTerm('')
+      let absolutePath
+
+      if (this.configuration.rootFolder) {
+        absolutePath = !this.item ? this.configuration.rootFolder : this.item
+      } else {
+        absolutePath = !this.item ? this.configuration.rootFolder : this.item
+      }
+
+      const self = this
+      this.loadFolder({
+        client: this.$client,
+        absolutePath: absolutePath,
+        $gettext: this.$gettext,
+        routeName: this.$route.name
+      }).then(() => {
+        const scrollTo = self.$route.query.scrollTo
+        if (scrollTo) {
+          self.$nextTick(() => {
+            self.setHighlightedFile(scrollTo)
+            const file = self.highlightedFile
+            self.$scrollTo(`#file-row-${file.id}`, 500, {
+              container: '#files-list-container'
+            })
+          })
+        }
+      })
+    },
     toggleAll () {
       if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
         this.resetFileSelection()
       } else {
-        let selectedFiles = this.fileData.slice()
-        for (let item of selectedFiles) {
+        const selectedFiles = this.fileData.slice()
+        for (const item of selectedFiles) {
           if (!this.selectedFiles.includes(item)) {
             this.addFileSelection(item)
           }
@@ -129,7 +161,7 @@ export default {
     },
     deleteFile (file) {
       this.fileToBeDeleted = file
-      let translated = this.$gettext('Please confirm the deletion of %{ fileName }')
+      const translated = this.$gettext('Please confirm the deletion of %{ fileName }')
       this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { fileName: file.name }, true))
     },
     openSideBar (file, sideBarName) {
@@ -164,8 +196,10 @@ export default {
     }
   },
   computed: {
+    ...mapState(['route']),
     ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'loadingFolder', 'filesDeleteMessage', 'highlightedFile']),
-    ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
+    ...mapGetters(['getToken', 'fileSideBars', 'capabilities', 'configuration']),
+
     all () {
       return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
     },
@@ -173,7 +207,7 @@ export default {
       return this.checkNewName(this.newName)
     },
     actions () {
-      let actions = [
+      const actions = [
         { icon: 'edit',
           handler: this.changeName,
           ariaLabel: this.$gettext('Edit'),
@@ -193,8 +227,8 @@ export default {
             return item.canBeDeleted()
           } }
       ]
-      for (let sideBarName in this.fileSideBars) {
-        let sideBar = this.fileSideBars[sideBarName]
+      for (const sideBarName in this.fileSideBars) {
+        const sideBar = this.fileSideBars[sideBarName]
         if (sideBar.enabled !== undefined && !sideBar.enabled(this.capabilities)) {
           continue
         }
@@ -224,6 +258,14 @@ export default {
     },
     $_ocDialog_isOpen () {
       return this.changeFileName
+    },
+    item () {
+      return this.$route.params.item
+    }
+  },
+  watch: {
+    $route () {
+      this.$_ocFilesFolder_getFolder()
     }
   }
 }

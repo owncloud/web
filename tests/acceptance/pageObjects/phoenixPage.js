@@ -73,7 +73,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     searchInputFieldLowResolution: {
-      selector: '(//input[contains(@class, "oc-search-input")])[3]',
+      selector: '(//input[contains(@class, "oc-search-input")])[2]',
       locateStrategy: 'xpath'
     },
     searchLoadingIndicator: {

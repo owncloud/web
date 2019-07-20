@@ -1,13 +1,13 @@
 export default {
   UPDATE_FILE_PROGRESS (state, progress) {
-    let fileIndex = state.inProgress.findIndex((f) => {
+    const fileIndex = state.inProgress.findIndex((f) => {
       return f.name === progress.fileName
     })
     if (fileIndex === -1) return
     state.inProgress[fileIndex].progress = progress.progress
   },
   REMOVE_FILE_FROM_PROGRESS (state, file) {
-    let fileIndex = state.inProgress.findIndex((f) => {
+    const fileIndex = state.inProgress.findIndex((f) => {
       return f.name === file.name
     })
     state.inProgress.splice(fileIndex - 1, 1)
@@ -30,7 +30,12 @@ export default {
     state.filesSearched = files
   },
   ADD_FILE_SELECTION (state, file) {
-    state.selected.push(file)
+    const fileIndex = state.selected.findIndex((f) => {
+      return f.id === file.id
+    })
+    if (fileIndex === -1) {
+      state.selected.push(file)
+    }
   },
   REMOVE_FILE_SELECTION (state, file) {
     if (state.selected.length > 1) {
@@ -43,7 +48,7 @@ export default {
     state.selected = []
   },
   FAVORITE_FILE (state, item) {
-    let fileIndex = state.files.findIndex((f) => {
+    const fileIndex = state.files.findIndex((f) => {
       return f.id === item.id
     })
     state.files[fileIndex].starred = !item.starred
@@ -62,17 +67,17 @@ export default {
     state.searchTermFilter = filterTerm
   },
   SET_FILE_FILTER (state, filter) {
-    let i = state.fileFilter.findIndex((f) => {
+    const i = state.fileFilter.findIndex((f) => {
       return f.name === filter.name
     })
     state.fileFilter[i].value = filter.value
   },
   RENAME_FILE (state, { file, newValue, newPath }) {
-    let fileIndex = state.files.findIndex((f) => {
+    const fileIndex = state.files.findIndex((f) => {
       return f.id === file.id
     })
     let ext = ''
-    let name = newValue
+    const name = newValue
     let baseName = newValue
     if (file.type !== 'dir') {
       const ex = name.match(/\.[0-9a-z]+$/i)
@@ -103,7 +108,7 @@ export default {
     state.shares = state.shares.filter(i => ![share].includes(i))
   },
   SHARES_UPDATE_SHARE (state, share) {
-    let fileIndex = state.shares.findIndex((s) => {
+    const fileIndex = state.shares.findIndex((s) => {
       return s.info.id === share.info.id
     })
     state.shares[fileIndex].role = share.role
@@ -134,6 +139,15 @@ export default {
     state.overwriteDialogMessage = message
   },
   SET_HIGHLIGHTED_FILE (state, file) {
+    if (typeof file === 'string') {
+      const fileIndex = state.files.findIndex((f) => {
+        return f.name === file
+      })
+      if (fileIndex === -1) {
+        return
+      }
+      file = state.files[fileIndex]
+    }
     state.highlightedFile = file
   }
 }

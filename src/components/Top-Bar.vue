@@ -32,26 +32,33 @@ export default {
     Avatar,
     Notifications
   },
-  methods: {
-    ...mapActions(['toggleSidebar', 'fetchNotifications']),
-    parseApp (app) {
-      const regex = /([^/]+[.js$])\w/g
-      let matched = regex.exec(app)
-      return matched[0]
+  data () {
+    return {
+      intervalId: null
     }
+  },
+  methods: {
+    ...mapActions(['toggleSidebar', 'fetchNotifications'])
   },
   computed: {
     ...mapGetters(['configuration', 'isSidebarVisible', 'activeNotifications']),
-    ...mapState(['user']),
-    extendNavbarRight () {
-      return this.getPlugins('phoenixNavbarRight')
-    }
+    ...mapState(['user'])
   },
   created: function () {
-    this.fetchNotifications(this.$client)
-    setInterval(() => {
-      this.fetchNotifications(this.$client)
-    }, 30000)
+    this.fetchNotifications(this.$client).then(() => {
+      this.intervalId = setInterval(() => {
+        this.fetchNotifications(this.$client).catch(() => {
+          if (this.intervalId) {
+            clearInterval(this.intervalId)
+          }
+        })
+      }, 30000)
+    })
+  },
+  destroyed: function () {
+    if (this.intervalId) {
+      clearInterval(this.intervalId)
+    }
   }
 }
 </script>

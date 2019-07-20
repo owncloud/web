@@ -4,7 +4,7 @@
     ref="ocDropzone"
     id="oc-dropzone"
     :options="ocDropzone_options"
-    @vdropzone-drop="$_ocUpload_addToQue"
+    @vdropzone-drop="$_ocUpload_addDropToQue"
     @vdropzone-files-added="$_ocDropzone_dragEnd"
     @vdropzone-file-added="$_ocDropzone_removeFiles"
     @vdropzone-drag-leave="$_ocDropzone_dragEnd"

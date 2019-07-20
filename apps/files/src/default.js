@@ -4,6 +4,7 @@ import 'regenerator-runtime/runtime'
 import FilesApp from './components/FilesApp.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
+import PrivateLink from './components/PrivateLink.vue'
 import translationsJson from '../l10n/translations.json'
 
 const store = require('./store')
@@ -26,7 +27,7 @@ const appInfo = {
       },
       quickAccess: {
         icon: 'share',
-        ariaLabel: 'Share'
+        ariaLabel: 'Collaborators'
       }
     }
   ]
@@ -37,10 +38,7 @@ const navItems = [
     iconMaterial: appInfo.icon,
     route: {
       name: 'files-list',
-      path: `/`,
-      params: {
-        item: ''
-      }
+      path: '/'
     }
   },
   {
@@ -98,6 +96,14 @@ const routes = [
     meta: {
       hideFilelistActions: true
     }
+  },
+  {
+    path: '/private-link/:fileId',
+    name: 'private-link',
+    components: {
+      fullscreen: PrivateLink
+    },
+    meta: { hideHeadbar: true }
   }
 ]
 
