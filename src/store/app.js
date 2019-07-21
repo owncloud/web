@@ -82,7 +82,7 @@ const mutations = {
     state.notifications.data = notifications
   },
   DELETE_NOTIFICATION (state, notification) {
-    let data = state.notifications.data.filter((n) => {
+    const data = state.notifications.data.filter((n) => {
       return n.notification_id !== notification
     })
     state.notifications.data = data

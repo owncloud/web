@@ -119,8 +119,8 @@ exports.getTrashBinElements = function (user) {
         'd:getlastmodified'
       ])
       .then(str => {
-        let trashData = JSON.parse(convert.xml2json(str, { compact: true }))['d:multistatus']['d:response']
-        let trashItems = []
+        const trashData = JSON.parse(convert.xml2json(str, { compact: true }))['d:multistatus']['d:response']
+        const trashItems = []
         trashData.map(trash => {
           trashItems.push({
             href: trash['d:href']._text,

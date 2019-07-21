@@ -27,7 +27,7 @@ const appInfo = {
       },
       quickAccess: {
         icon: 'share',
-        ariaLabel: 'Share'
+        ariaLabel: 'Collaborators'
       }
     }
   ]
@@ -38,10 +38,7 @@ const navItems = [
     iconMaterial: appInfo.icon,
     route: {
       name: 'files-list',
-      path: `/`,
-      params: {
-        item: ''
-      }
+      path: '/'
     }
   },
   {

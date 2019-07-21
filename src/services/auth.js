@@ -9,7 +9,7 @@ export function initVueAuthenticate (config) {
     if (baseUrl.endsWith('/index.html')) {
       baseUrl = baseUrl.substr(0, baseUrl.length - 10)
     }
-    let openIdConfig = {
+    const openIdConfig = {
       userStore: store,
       redirect_uri: baseUrl + 'oidc-callback.html',
       response_type: 'code', // code triggers auth code grant flow
@@ -52,7 +52,7 @@ export function initVueAuthenticate (config) {
       }
     }
 
-    let mgr = new UserManager(openIdConfig)
+    const mgr = new UserManager(openIdConfig)
 
     Log.logger = console
 
@@ -74,9 +74,9 @@ export function initVueAuthenticate (config) {
         return mgr.signinRedirect()
       },
       getToken () {
-        let storageString = localStorage.getItem('oc_oAuth' + mgr._userStoreKey)
+        const storageString = localStorage.getItem('oc_oAuth' + mgr._userStoreKey)
         if (storageString) {
-          let user = User.fromStorageString(storageString)
+          const user = User.fromStorageString(storageString)
           if (user) {
             mgr.events.load(user, false)
             return user.access_token
