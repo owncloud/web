@@ -254,6 +254,13 @@ export default {
         return this.$gettext('Folder name cannot end with whitespace')
       }
 
+      const exists = this.activeFiles.find(file => file.name === folderName)
+
+      if (exists) {
+        const translated = this.$gettext('%{name} already exists')
+        return this.$gettextInterpolate(translated, { name: folderName }, true)
+      }
+
       return null
     },
     addNewFile (fileName) {
@@ -293,6 +300,13 @@ export default {
 
       if (/\s+$/.test(fileName)) {
         return this.$gettext('File name cannot end with whitespace')
+      }
+
+      const exists = this.activeFiles.find(file => file.name === fileName)
+
+      if (exists) {
+        const translated = this.$gettext('%{name} already exists')
+        return this.$gettextInterpolate(translated, { name: fileName }, true)
       }
 
       return null
