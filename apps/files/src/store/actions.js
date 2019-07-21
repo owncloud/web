@@ -258,13 +258,7 @@ export default {
       }).finally(() => {
         context.commit('UPDATE_FOLDER_LOADING', false)
         client.users.getUser(context.rootGetters.user.id).then(res => {
-          let enoughSpace
-          if (res.quota.relative >= 100) {
-            enoughSpace = false
-          } else {
-            enoughSpace = true
-          }
-          context.commit('CHECK_QUOTA', enoughSpace)
+          context.commit('CHECK_QUOTA', res.quota)
           resolve()
         })
       })
