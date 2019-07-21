@@ -22,7 +22,18 @@ export default {
     selectedFile: ''
   }),
   computed: {
-    ...mapGetters('Files', ['searchTerm', 'inProgress', 'files'])
+    ...mapGetters('Files', ['searchTerm', 'inProgress', 'files']),
+
+    _renameDialogTitle () {
+      let translated
+
+      if (this.selectedFile.type === 'folder') {
+        translated = this.$gettext('Rename folder %{name}')
+      } else {
+        translated = this.$gettext('Rename file %{name}')
+      }
+      return this.$gettextInterpolate(translated, { name: this.selectedFile.name }, true)
+    }
   },
   methods: {
     ...mapActions('Files', ['resetSearch', 'addFileToProgress', 'setOverwriteDialogTitle', 'setOverwriteDialogMessage']),
