@@ -247,9 +247,6 @@ export default {
 
       return actions
     },
-    _renameDialogTitle () {
-      return this.$gettext('Rename File/Folder')
-    },
     _deleteDialogTitle () {
       return this.$gettext('Delete File/Folder')
     },
