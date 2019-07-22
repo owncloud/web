@@ -82,9 +82,9 @@
                 </template>
               </oc-accordion>
             </div>
-            <div v-if="$_ocCollaborators_groups.length > 0">
-              <oc-accordion>
+            <div v-if="$_ocCollaborators_groups.length > 0" id="files-collaborators-list-groups">
               <h5><translate>Groups</translate> ({{ $_ocCollaborators_groups.length }})</h5>
+              <oc-accordion>
                 <template v-for="(collaborator, index) in $_ocCollaborators_groups">
                   <collaborator :key="index" :collaborator="collaborator" :roles="roles" />
                 </template>
