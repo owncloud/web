@@ -250,18 +250,24 @@ export default {
     async $_ocUpload_addFileToQue (e) {
       const files = e.target.files
       if (!files.length) return
-      for (const file of files) {
-        const exists = this.checkIfElementExists(file)
+      for (let i = 0; i < files.length; i++) {
+        const exists = this.checkIfElementExists(files[i])
         if (!exists) {
-          this.$_ocUpload(file, file.name)
+          this.$_ocUpload(files[i], files[i].name)
+          if ((i + 1) === files.length) this.$_ocUploadInput_clean()
           continue
         }
 
         const translated = this.$gettext('File %{file} already exists.')
-        this.setOverwriteDialogTitle(this.$gettextInterpolate(translated, { file: file.name }, true))
+        this.setOverwriteDialogTitle(this.$gettextInterpolate(translated, { file: files[i].name }, true))
         this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
         const overwrite = await this.$_ocUpload_confirmOverwrite()
-        if (overwrite) this.$_ocUpload(file, file.name, exists.etag)
+        if (overwrite === true) {
+          this.$_ocUpload(files[i], files[i].name, exists.etag)
+          if ((i + 1) === files.length) this.$_ocUploadInput_clean()
+        } else {
+          if ((i + 1) === files.length) this.$_ocUploadInput_clean()
+        }
         this.setOverwriteDialogMessage(null)
       }
     },
@@ -312,15 +318,20 @@ export default {
           // once all files are uploaded we emit the success event
           Promise.all(uploadPromises).then(() => {
             this.$emit('success', null, rootDir)
+            this.$_ocUploadInput_clean()
           })
         })
       }
     },
     $_ocUpload_confirmOverwrite () {
       return new Promise(resolve => {
-        const confirmButton = document.querySelector('#overwrite-ok')
-        confirmButton.addEventListener('click', (e) => {
-          resolve(e)
+        const confirmButton = document.querySelector('#files-overwrite-confirm')
+        const cancelButton = document.querySelector('#files-overwrite-cancel')
+        confirmButton.addEventListener('click', _ => {
+          resolve(true)
+        })
+        cancelButton.addEventListener('click', _ => {
+          resolve(false)
         })
       })
     },
@@ -335,11 +346,9 @@ export default {
           if (emitSuccess) {
             this.$emit('success', e, file)
           }
-          this.$_ocUploadInput_clean()
         })
         .catch(e => {
           this.$emit('error', e)
-          this.$_ocUploadInput_clean()
         })
     },
     $_ocUpload_onProgress (e, file) {
