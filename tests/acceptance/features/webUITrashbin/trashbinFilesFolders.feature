@@ -47,19 +47,19 @@ Feature: files and folders exist in the trashbin after being deleted
       | question?       |
       | &and#hash       |
 
-  @skip @yetToImplement
   Scenario: Delete multiple files at once and check that they are all in the trashbin
     When the user batch deletes these files using the webUI
       | name          |
       | data.zip      |
       | lorem.txt     |
       | simple-folder |
+    And the user browses to the trashbin page
     Then as "user1" file "data.zip" should exist in trash
     And as "user1" file "lorem.txt" should exist in trash
     And as "user1" folder "simple-folder" should exist in trash
-    And as "user1" file "simple-folder/lorem.txt" should exist in trash
-    And the deleted elements should be listed in the trashbin on the webUI
-    And file "lorem.txt" should be listed in the trashbin folder "simple-folder" on the webUI
+    And as "user1" the file with original path "simple-folder/lorem.txt" should exist in trash
+    And the deleted elements should be listed on the webUI
+    And file "lorem.txt" should be listed in the folder "simple-folder" on the webUI
 
   Scenario: Delete an empty folder and check it is in the trashbin
     Given the user has created folder "my-empty-folder"
@@ -74,7 +74,6 @@ Feature: files and folders exist in the trashbin after being deleted
     When the user opens folder "my-empty-folder" using the webUI
     Then there should be no files/folders listed on the webUI
 
-  @yetToImplement
   Scenario: Delete multiple file with same filename and check they are in the trashbin
     When the user deletes the following elements using the webUI
       | name      |

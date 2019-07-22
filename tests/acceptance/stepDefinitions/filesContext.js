@@ -181,14 +181,6 @@ Then('the deleted elements should not be listed on the webUI after a page reload
   return assertDeletedElementsAreNotListed()
 })
 
-Then('file/folder {string} should not be listed in the trashbin on the webUI', function (file) {
-  return client.page.FilesPageElement.filesList().assertElementNotListed(file)
-})
-
-Then('file/folder {string} should be listed in the trashbin on the webUI', function (file) {
-  return client.page.FilesPageElement.filesList().waitForFileVisible(file)
-})
-
 When('the user reloads the current page of the webUI', function () {
   return client.refresh()
 })
@@ -214,6 +206,17 @@ When('the user unmarks these files for batch action using the webUI', function (
     client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('disable', entry[0])
   })
   return client
+})
+
+When('the user marks these files for batch action using the webUI', function (fileOrFolders) {
+  fileOrFolders.rows().forEach(entry => {
+    client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', entry[0])
+  })
+  return client
+})
+
+When('the user batch restores the marked files using the webUI', function () {
+  return client.page.FilesPageElement.filesList().restoreSelected()
 })
 
 Then('the folder should be empty on the webUI', async function () {

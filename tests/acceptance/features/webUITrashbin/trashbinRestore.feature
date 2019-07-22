@@ -22,14 +22,13 @@ Feature: Restore deleted files/folders
   Scenario: Restore folder
     When the user deletes folder "folder with space" using the webUI
     And the user browses to the trashbin page
-    Then folder "folder with space" should be listed in the trashbin on the webUI
+    Then folder "folder with space" should be listed on the webUI
     When the user restores folder "folder with space" from the trashbin using the webUI
     Then file "folder with space" should not be listed on the webUI
     When the user browses to the files page
     Then folder "folder with space" should be listed on the webUI
 
-  @smokeTest
-  @skip @yetToImplement
+  @smokeTest @issue-1502
   Scenario: Select some trashbin files and restore them in a batch
     Given the following files have been deleted by user "user1"
       | name          |
@@ -43,16 +42,19 @@ Feature: Restore deleted files/folders
       | lorem.txt     |
       | lorem-big.txt |
     And the user batch restores the marked files using the webUI
+    # You can delete the line below after the issue-1502 is fixed
+    And the user reloads the current page of the webUI
     Then file "data.zip" should be listed on the webUI
     And folder "simple-folder" should be listed on the webUI
     But file "lorem.txt" should not be listed on the webUI
     And file "lorem-big.txt" should not be listed on the webUI
-    And file "lorem.txt" should be listed in the files page on the webUI
-    And file "lorem-big.txt" should be listed in the files page on the webUI
-    But file "data.zip" should not be listed in the files page on the webUI
-    And folder "simple-folder" should not be listed in the files page on the webUI
+    When the user browses to the files page
+    And file "lorem.txt" should be listed on the webUI
+    And file "lorem-big.txt" should be listed on the webUI
+    But file "data.zip" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
 
-  @skip @yetToImplement
+  @issue-1502
   Scenario: Select all except for some trashbin files and restore them in a batch
     Given the following files have been deleted by user "user1"
       | name          |
@@ -67,16 +69,18 @@ Feature: Restore deleted files/folders
       | lorem.txt     |
       | lorem-big.txt |
     And the user batch restores the marked files using the webUI
+    # You can delete the line below after the issue-1502 is fixed
+    And the user reloads the current page of the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
-    And file "data.zip" should be listed in the files page on the webUI
-    And folder "simple-folder" should be listed in the files page on the webUI
-    But file "lorem.txt" should not be listed in the files page on the webUI
-    And file "lorem-big.txt" should not be listed in the files page on the webUI
+    When the user browses to the files page
+    Then file "data.zip" should be listed on the webUI
+    And folder "simple-folder" should be listed on the webUI
+    But file "lorem.txt" should not be listed on the webUI
+    And file "lorem-big.txt" should not be listed on the webUI
 
-  @skip @yetToImplement
   Scenario: Select all trashbin files and restore them in a batch
     Given the following files have been deleted by user "user1"
       | name          |
@@ -87,7 +91,7 @@ Feature: Restore deleted files/folders
     And the user has browsed to the trashbin page
     And the user marks all files for batch action using the webUI
     And the user batch restores the marked files using the webUI
-    Then the folder should be empty on the webUI
+    Then the folder should be empty on the webUI after a page reload
     When the user browses to the files page
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI
