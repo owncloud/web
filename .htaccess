@@ -1,12 +1,13 @@
 
 # BEGIN Caching
-<ifModule mod_headers.c>
-    <filesMatch "\\.(ico|jpg|jpeg|png|gif|ttf|otf|woff|woff2|eot|svg)$">
-    Header set Cache-Control "max-age=1, private, must-revalidate"
-    </filesMatch>
-    <filesMatch "\\.(css|js|json|html)$">
-    Header set Cache-Control "max-age=1, private, must-revalidate"
-    </filesMatch>
-</ifModule>
+<filesMatch "\.(html|js|css|json|svg|jpeg)$">
+  FileETag None
+  <ifModule mod_headers.c>
+     Header unset ETag
+     Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+     Header set Pragma "no-cache"
+     Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+  </ifModule>
+</filesMatch>
 # END Caching
 
