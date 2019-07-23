@@ -206,7 +206,8 @@ export default {
         })
     },
     filterRecipients (item, queryText) {
-      return item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+      return item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1 ||
+        item.value.shareWith.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
     },
     $_ocCollaborators_recipientType (recipient) {
       if (recipient.value.shareType === 1) {
