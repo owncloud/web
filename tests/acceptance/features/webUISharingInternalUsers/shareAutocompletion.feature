@@ -16,7 +16,6 @@ Feature: Autocompletion of share-with names
       | username  | password  | displayname     | email          |
       | two       | %regular% | User Two        | u2@oc.com.np   |
       | u444      | %regular% | Four            | u3@oc.com.np   |
-      | five      | %regular% | User Group      | five@oc.com.np |
       | usersmith | %regular% | John Finn Smith | js@oc.com.np   |
     And these groups have been created:
       | groupname     |
