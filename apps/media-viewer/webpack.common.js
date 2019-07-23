@@ -5,7 +5,7 @@ module.exports = {
     new VueLoaderPlugin()
   ],
   entry: {
-    'mediaviewer': [
+    mediaviewer: [
       'core-js/modules/es6.promise',
       'core-js/modules/es6.array.iterator',
       './src/app.js'
@@ -27,11 +27,6 @@ module.exports = {
     }, {
       test: /\.vue$/,
       loader: 'vue-loader'
-    }, {
-      enforce: 'pre',
-      test: /\.(js|vue)$/,
-      exclude: /node_modules/,
-      loader: 'eslint-loader'
     }, {
       test: /\.css$/,
       use: [
