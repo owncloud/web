@@ -2,7 +2,7 @@
   <oc-accordion-item :key="collaborator.info.id" class="files-collaborators-collaborator uk-margin-small-bottom">
     <template slot="title">
       <div class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
-      <div class="uk-flex uk-flex-wrap uk-flex-middle">
+      <div class="files-collaborators-collaborator-information uk-flex uk-flex-wrap uk-flex-middle">
         <oc-avatar :src="collaborator.avatar" class="uk-margin-small-right" />
         <div class="uk-flex uk-flex-column uk-flex-center">
           <div class="oc-text"><span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.displayName }}</span><span v-if="collaborator.additionalInfo" class="uk-text-meta"> ({{ collaborator.additionalInfo }})</span></div>

@@ -75,6 +75,62 @@ const shareFileFolder = function (elementToShare, sharer, receiver, shareType = 
     })
 }
 
+/**
+ *
+ * @param {string} type user|group
+ * @param {string} name
+ * @param {string} role
+ * @returns {Promise}
+ */
+const assertCollaboratorslistContains = function (type, name, role) {
+  return client.page.FilesPageElement.sharingDialog().getCollaboratorsList()
+    .then(shares => {
+      let expectedString = name + '\n' + role
+      if (type === 'user') {
+        expectedString = expectedString + client.page.FilesPageElement.sharingDialog().getUserSharePostfix()
+      } else if (type === 'group') {
+        expectedString = expectedString + client.page.FilesPageElement.sharingDialog().getGroupSharePostfix()
+      } else {
+        throw new Error('illegal type')
+      }
+
+      if (!shares || !shares.includes(expectedString)) {
+        assert.fail(
+          `"${name}" was expected to be in share list but was not present. Found collaborators text:"` + shares + `"`
+        )
+      }
+    })
+}
+
+/**
+ *
+ * @param {string} type
+ * @param {string} name
+ * @returns {Promise}
+ */
+const assertCollaboratorslistDoesNotContain = function (type, name) {
+  return client.page.FilesPageElement.sharingDialog().getCollaboratorsList()
+    .then(shares => {
+      if (shares) {
+        var searchregex
+        if (type === 'user') {
+          searchregex = new RegExp(name + '\n.*' + client.page.FilesPageElement.sharingDialog().getUserSharePostfix())
+        } else if (type === 'group') {
+          searchregex = new RegExp(name + '\n.*' + client.page.FilesPageElement.sharingDialog().getGroupSharePostfix())
+        } else {
+          throw new Error('illegal type')
+        }
+        shares.map(share => {
+          assert.strictEqual(
+            searchregex.test(share),
+            false,
+            `"${name}" not expected to be in the share list but is present`
+          )
+        })
+      }
+    })
+}
+
 Given('user {string} has shared file/folder {string} with user {string}', function (sharer, elementToShare, receiver) {
   return shareFileFolder(elementToShare, sharer, receiver)
 })
@@ -173,35 +229,26 @@ Then('user {string} should not be listed in the autocomplete list on the webUI',
     })
 })
 
-When('the user opens the share dialog for file {string}', function (file) {
+When('the user opens the share dialog for file {string} using the webUI', function (file) {
   return client.page.FilesPageElement.filesList().openSharingDialog(file)
 })
 
-When('the user deletes share with user/group {string} for the current file', function (user) {
+When('the user deletes {string} as collaborator for the current file/folder using the webUI', function (user) {
   return client.page.FilesPageElement.sharingDialog().deleteShareWithUserGroup(user)
 })
 
-Then('{string} should be listed in the shared with list', function (user) {
-  return client.page.FilesPageElement.sharingDialog().getShareList()
-    .then(shares => {
-      console.log(shares)
-      if (!shares || !shares.includes(user)) {
-        assert.fail(`"${user}" was expected to be in share list but was not present.`)
-      }
-    })
+Then('user {string} should be listed as {string} in the collaborators list on the webUI', function (user, role) {
+  return assertCollaboratorslistContains('user', user, role)
 })
 
-Then('{string} should not be listed in the shared with list', function (user) {
-  return client.page.FilesPageElement.sharingDialog().getShareList()
-    .then(shares => {
-      if (shares) {
-        shares.map(shareUser => {
-          assert.notStrictEqual(
-            shareUser,
-            user,
-            `"${user}" not expected to be in the share list but is present`
-          )
-        })
-      }
-    })
+Then('group {string} should be listed as {string} in the collaborators list on the webUI', function (group, role) {
+  return assertCollaboratorslistContains('group', group, role)
+})
+
+Then('user {string} should not be listed in the collaborators list on the webUI', function (user) {
+  return assertCollaboratorslistDoesNotContain('user', user)
+})
+
+Then('group {string} should not be listed in the collaborators list on the webUI', function (user) {
+  return assertCollaboratorslistDoesNotContain('group', user)
 })

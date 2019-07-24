@@ -16,14 +16,16 @@ function createUser (userId, password, displayName = false, email = false) {
   const body = new URLSearchParams()
   body.append('userid', userId)
   body.append('password', password)
-  return new Promise((resolve, reject) => {
-    userSettings.addUserToCreatedUsersList(userId, password, displayName, email)
-    const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
-    return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users?format=json',
-      { method: 'POST', body: body, headers: headers }
-    )
-      .then(() => {
-        if (displayName !== false) {
+  const promiseList = []
+
+  userSettings.addUserToCreatedUsersList(userId, password, displayName, email)
+  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users?format=json',
+    { method: 'POST', body: body, headers: headers }
+  )
+    .then(() => {
+      if (displayName !== false) {
+        promiseList.push(new Promise((resolve, reject) => {
           const body = new URLSearchParams()
           body.append('key', 'display')
           body.append('value', displayName)
@@ -34,11 +36,14 @@ function createUser (userId, password, displayName = false, email = false) {
               if (res.status !== 200) {
                 reject(new Error('Could not set display name of user'))
               }
+              resolve(res)
             })
-        }
-      })
-      .then(() => {
-        if (email !== false) {
+        }))
+      }
+    })
+    .then(() => {
+      if (email !== false) {
+        promiseList.push(new Promise((resolve, reject) => {
           const body = new URLSearchParams()
           body.append('key', 'email')
           body.append('value', email)
@@ -49,11 +54,14 @@ function createUser (userId, password, displayName = false, email = false) {
               if (res.status !== 200) {
                 reject(new Error('Could not set email of user'))
               }
+              resolve()
             })
-        }
-        resolve()
-      })
-  })
+        }))
+      }
+    })
+    .then(() => {
+      return Promise.all(promiseList)
+    })
 }
 
 function deleteUser (userId) {

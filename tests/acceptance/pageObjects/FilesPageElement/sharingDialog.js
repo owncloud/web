@@ -118,30 +118,38 @@ module.exports = {
      */
     deleteShareWithUserGroup: function (item) {
       const util = require('util')
-      const deleteSelector = util.format(this.elements.deleteShareButton.selector, item)
+      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, item)
+      const moreInformationSelector = informationSelector + this.elements.collaboratorMoreInformation.selector
+      const deleteSelector = informationSelector + this.elements.deleteShareButton.selector
       return this
         .useXpath()
-        .waitForElementVisible(deleteSelector, () => {
-          this.api.click(deleteSelector)
-        })
-        .waitForElementNotPresent(util.format(this.elements.sharedWithListItem.selector, item))
+        .waitForElementVisible(moreInformationSelector)
+        .click(moreInformationSelector)
+        .waitForElementVisible(deleteSelector)
+        .waitForAnimationToFinish()
+        .click(deleteSelector)
+        .waitForElementNotPresent(informationSelector)
     },
     /**
      *
      * @returns {Promise.<string[]>} Array of users/groups in share list
      */
-    getShareList: function () {
-      const shareList = []
-      return this.waitForElementVisible('@sharedWithList')
-        .api.elements('@sharedWithNames', async result => {
-          console.log(result)
+    getCollaboratorsList: async function () {
+      const promiseList = []
+      await this.initAjaxCounters()
+        .waitForElementPresent({ selector: '@collaboratorsInformation', abortOnFailure: false })
+        .waitForOutstandingAjaxCalls()
+        .api.elements('css selector', this.elements['collaboratorsInformation'], result => {
           result.value.map(item => {
-            this.api.elementIdText(item['ELEMENT'], text => {
-              shareList.push(text.value)
+            promiseList.push(new Promise((resolve, reject) => {
+              this.api.elementIdText(item['ELEMENT'], text => {
+                resolve(text.value)
+              })
             })
+            )
           })
         })
-        .then(() => shareList)
+      return Promise.all(promiseList)
     },
     /**
      *
@@ -172,21 +180,26 @@ module.exports = {
       selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
       locateStrategy: 'xpath'
     },
-    sharedWithList: {
-      selector: '#files-collaborators-list'
-    },
-    sharedWithListItems: {
-      selector: '.files-collaborators-collaborator'
-    },
     sharedWithListItem: {
       selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[.="%s"]/../..',
       locateStrategy: 'xpath'
     },
-    sharedWithNames: {
-      selector: '#files-collaborators-list .files-collaborators-collaborator .files-collaborators-collaborator-name'
+    collaboratorsInformation: {
+      // addresses users and groups
+      selector: '.files-collaborators-collaborator .files-collaborators-collaborator-information'
+    },
+    collaboratorInformationByCollaboratorName: {
+      selector: '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::li',
+      locateStrategy: 'xpath'
+    },
+    collaboratorMoreInformation: {
+      // within collaboratorInformationByCollaboratorName
+      selector: '/a',
+      locateStrategy: 'xpath'
     },
     deleteShareButton: {
-      selector: '//*[@id="file-share-list"]//*[@class="oc-user"]//div[.="%s"]/../..//*[@aria-label="Delete Share"]',
+      // within collaboratorInformationByCollaboratorName
+      selector: '//*[@aria-label="Delete Share"]',
       locateStrategy: 'xpath'
     },
     addShareButton: {
