@@ -20,7 +20,9 @@
     "lint-fix": "eslint src apps/*/src tests build --ext vue --ext js --color --fix",
     "accessibility-tests": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
     "accessibility-tests-drone": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
-    "install": "cd node_modules/cucumber; yarn install",
+    "build-cucumber": "cd node_modules/cucumber; yarn install",
+    "build-oidc": "cd node_modules/oidc-client; npm install; npm run build",
+    "install": "run-p build-cucumber build-oidc",
     "acceptance-tests": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t 'not @skip'",
     "acceptance-tests-drone": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features/$TEST_CONTEXT -t \"${TEST_TAGS}\""
   },
