@@ -189,7 +189,7 @@ export default {
       })
     },
     processDirectoryEntryRecursively (directory) {
-      this.$client.files.createFolder(directory.fullPath).then(() => {
+      return this.$client.files.createFolder(directory.fullPath).then(() => {
         const directoryReader = directory.createReader()
         const ctrl = this
         directoryReader.readEntries(function (entries) {
@@ -337,6 +337,7 @@ export default {
     },
     $_ocUpload (file, path, overwrite = null, emitSuccess = true) {
       this.addFileToProgress(file)
+
       const fileUpload = new FileUpload(file, path, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType)
       return fileUpload
         .upload({
