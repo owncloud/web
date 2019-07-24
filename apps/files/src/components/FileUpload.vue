@@ -12,6 +12,7 @@ import Mixins from '../mixins'
 
 export default {
   props: {
+    item: { type: String, required: true },
     url: { type: String, required: true },
     headers: {
       type: Object,
