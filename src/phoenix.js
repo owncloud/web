@@ -9,6 +9,7 @@ import Vue from 'vue'
 // --- Components ---
 
 import Phoenix from './Phoenix.vue'
+import missingConfigPage from './pages/missingConfig.vue'
 
 // --- Adding global libraries ---
 
@@ -140,6 +141,23 @@ function loadApps () {
     })
 }
 
+function missingConfig () {
+  const translations = coreTranslations
+
+  Vue.use(GetTextPlugin, {
+    availableLanguages: supportedLanguages,
+    defaultLanguage: navigator.language.substring(0, 2),
+    translations: translations,
+    silent: true
+  })
+
+  const OC = new Vue({
+    el: '#owncloud',
+    store,
+    render: h => h(missingConfigPage)
+  })
+}
+
 function requireError (err) {
   if (err) {
     // display error to user
@@ -160,18 +178,16 @@ function requireError (err) {
 
 (async function () {
   try {
-    let defaultConfig = false
     config = await fetch('config.json').catch(() => {
-      defaultConfig = true
-      return fetch('static/config.default.json')
+      config.state = 'missing'
     })
     config = await config.json()
-    if(defaultConfig) config.state = 'missing'
     apps = config.apps.map((app) => {
       return `./apps/${app}/${app}.bundle.js`
     })
     requirejs(apps, loadApps, requireError)
   } catch (err) {
-    alert(err)
+    router.push('missing-config')
+    missingConfig()
   }
 })()
