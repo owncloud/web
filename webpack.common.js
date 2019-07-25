@@ -12,7 +12,7 @@ const gitNumCommits = Number(execa.sync('git', ['rev-list', 'HEAD', '--count']).
 const gitDirty = execa.sync('git', ['status', '-s', '-uall']).stdout.length > 0
 
 const appFolder = path.resolve(__dirname, 'apps')
-let apps = []
+const apps = []
 let favicon = './themes/owncloud/favicon.jpg'
 var config
 
@@ -44,13 +44,9 @@ const sourceFiles = [{
   from: path.resolve(__dirname, 'node_modules', 'requirejs', 'require.js'),
   to: path.resolve(__dirname, 'dist', 'node_modules', 'requirejs')
 }]
-for (let file of sourceFiles) {
+for (const file of sourceFiles) {
   apps.push(file)
 }
-apps.push({
-  from: path.resolve(__dirname, 'static', 'config.default.json'),
-  to: path.resolve(__dirname, 'dist', 'static', 'config.default.json')
-})
 module.exports = {
   plugins: [
     new WebpackVersionFilePlugin({
@@ -58,10 +54,10 @@ module.exports = {
       template: path.join(__dirname, 'src/version.ejs'),
       outputFile: path.join('build', 'version.json'),
       extras: {
-        'githash': gitHash,
-        'gitNumCommits': gitNumCommits,
-        'timestamp': Date.now(),
-        'dirty': gitDirty
+        githash: gitHash,
+        gitNumCommits: gitNumCommits,
+        timestamp: Date.now(),
+        dirty: gitDirty
       }
     }), new WebpackCopyPlugin(apps),
     new HtmlWebpackPlugin({
