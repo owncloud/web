@@ -2517,13 +2517,13 @@ cucumber@cucumber/cucumber-js#issue-727-retry:
     cucumber-expressions "^7.0.0"
     cucumber-tag-expressions "^1.1.1"
     duration "^0.2.1"
-    escape-string-regexp "^2.0.0"
-    figures "^3.0.0"
-    gherkin "5.0.0"
+    escape-string-regexp "^1.0.5"
+    figures "2.0.0"
+    gherkin "^5.0.0"
     glob "^7.1.3"
-    indent-string "^4.0.0"
+    indent-string "^3.1.0"
     is-generator "^1.0.2"
-    is-stream "^2.0.0"
+    is-stream "^1.1.0"
     knuth-shuffle-seeded "^1.0.6"
     lodash "^4.17.11"
     mz "^2.4.0"
@@ -2532,7 +2532,7 @@ cucumber@cucumber/cucumber-js#issue-727-retry:
     serialize-error "^4.1.0"
     stack-chain "^2.0.0"
     stacktrace-js "^2.0.0"
-    string-argv "^0.3.0"
+    string-argv "0.1.1"
     title-case "^2.1.1"
     util-arity "^1.0.2"
     verror "^1.9.0"
@@ -2581,7 +2581,6 @@ date-now@^0.1.4:
 
 "davclient.js@git+https://github.com/owncloud/davclient.js.git":
   version "0.1.3"
-  uid "07237a4bb813eb19e19e322e2457ce216721d529"
   resolved "git+https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
 
 de-indent@^1.0.2:
@@ -6155,9 +6154,9 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-"oidc-client@https://github.com/IdentityModel/oidc-client-js#35d7c79bf64ed5e89d8a41adf0e4a8a1c3d843c5":
-  version "1.8.2"
-  resolved "https://github.com/IdentityModel/oidc-client-js#35d7c79bf64ed5e89d8a41adf0e4a8a1c3d843c5"
+"oidc-client@https://github.com/DeepDiver1975/oidc-client-js#d6305cf25dd6a756dae50aaa1982a4b46522adbe":
+  version "1.8.2-deepdiver"
+  resolved "https://github.com/DeepDiver1975/oidc-client-js#d6305cf25dd6a756dae50aaa1982a4b46522adbe"
   dependencies:
     uuid "^3.3.2"
 
@@ -6299,7 +6298,7 @@ owncloud-sdk@1.0.0-284:
   integrity sha512-YepW+r84yxz9gLfcWlUcUkFAcEXbIMin4DhWDhkfNjDGDfLZQ9V0jaVy3kufwrovkU3XvllxwJcZK+6X/VSV5g==
   dependencies:
     browser-request "^0.3.3"
-    davclient.js "git+https://github.com/owncloud/davclient.js.git"
+    davclient.js "https://github.com/owncloud/davclient.js.git"
     promise "^8.0.3"
     request "^2.88.0"
     utf8 "^3.0.0"
