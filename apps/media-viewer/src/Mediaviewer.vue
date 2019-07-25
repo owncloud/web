@@ -170,6 +170,8 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['activeFiles']),
+    ...mapGetters(['getToken']),
+
     mediaFiles () {
       return this.activeFiles.filter(file => {
         return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif)/)
