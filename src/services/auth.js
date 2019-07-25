@@ -21,7 +21,8 @@ export function initVueAuthenticate (config) {
       accessTokenExpiringNotificationTime: 10,
       automaticSilentRenew: false,
       filterProtocolClaims: true,
-      loadUserInfo: true
+      loadUserInfo: true,
+      logLevel: Log.INFO
     }
     if (config.openIdConnect && config.openIdConnect.authority) {
       Object.assign(openIdConfig, config.openIdConnect)
@@ -55,6 +56,7 @@ export function initVueAuthenticate (config) {
     const mgr = new UserManager(openIdConfig)
 
     Log.logger = console
+    Log.level = openIdConfig.logLevel
 
     mgr.events.addUserLoaded(function (user) {
       console.log('New User Loaded：', arguments)
