@@ -34,20 +34,8 @@ const actions = {
     // if called from login, use available vue-authenticate instance; else re-init
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
     const token = vueAuthInstance.getToken()
-    if (token) {
-      vueAuthInstance.events().addAccessTokenExpired(function () {
-        console.log('store/user.js - AccessToken Expired：', arguments)
-        context.dispatch('logout')
-      })
-      vueAuthInstance.mgr.events.addAccessTokenExpiring(function () {
-        console.log('AccessToken Expiring：', arguments)
-        vueAuthInstance.mgr.signinSilent().then(() => {
-          console.log('token refreshed…')
-        }).catch(error => {
-          console.log('token failed ' + error)
-        })
-      })
 
+    function init (client, token) {
       const instance = context.rootState.config.server || window.location.origin
       const options = {
         baseUrl: instance,
@@ -63,9 +51,9 @@ const actions = {
         }
       }
 
-      this._vm.$client.init(options)
-      return this._vm.$client.login().then(res => {
-        this._vm.$client.getCapabilities()
+      client.init(options)
+      return client.login().then(res => {
+        client.getCapabilities()
           .then(cap => {
             context.commit('SET_CAPABILITIES', cap)
             context.commit('SET_USER', {
@@ -75,12 +63,33 @@ const actions = {
               token,
               isAuthenticated: true
             })
-            if (autoRedirect) router.push({ path: '/' })
+            if (autoRedirect) {
+              router.push({ path: '/' })
+            }
           })
       }).catch((e) => {
         console.error('logout forced! Seems that your token is invalid. Error:', e)
         context.dispatch('logout')
       })
+    }
+
+    if (token) {
+      vueAuthInstance.events().addAccessTokenExpired(function () {
+        console.log('store/user.js - AccessToken Expired：', arguments)
+        context.dispatch('logout')
+      })
+      const client = this._vm.$client
+      vueAuthInstance.mgr.events.addAccessTokenExpiring(function () {
+        console.log('AccessToken Expiring：', arguments)
+        vueAuthInstance.mgr.signinSilent().then(user => {
+          console.log('token refreshed…')
+          init(client, user.access_token)
+        }).catch(error => {
+          console.log('token failed ' + error)
+        })
+      })
+
+      init(this._vm.$client, token)
     }
   },
   login (context, payload = { provider: 'oauth2' }) {
