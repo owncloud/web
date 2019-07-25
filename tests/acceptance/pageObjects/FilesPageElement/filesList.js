@@ -1,3 +1,7 @@
+const util = require('util')
+const path = require('path')
+const xpathHelper = require('../../helpers/xpath')
+
 module.exports = {
   commands: {
     /**
@@ -47,6 +51,17 @@ module.exports = {
         .waitForElementNotVisible('@deleteFileConfirmationDialog')
         .waitForOutstandingAjaxCalls()
         .useCss()
+    },
+    /**
+     *
+     * @param {string} fileName
+     */
+    restoreFile: function (fileName) {
+      return this.initAjaxCounters()
+        .waitForFileVisible(fileName)
+        .useXpath()
+        .performFileAction(fileName, 'restore')
+        .waitForElementNotPresent(this.getFileRowSelectorByFileName(fileName))
     },
     /**
      *
@@ -116,6 +131,28 @@ module.exports = {
     /**
      *
      */
+    checkAllFiles: function () {
+      return this.initAjaxCounters()
+        .waitForElementVisible('@filesTable')
+        .waitForElementVisible('@checkBoxAllFiles')
+        .click('@checkBoxAllFiles')
+    },
+
+    /**
+     * Restores all the selected files/folders
+     *
+     */
+    restoreSelected: function () {
+      return this.initAjaxCounters()
+        .waitForElementVisible('@restoreSelectedButton')
+        .useXpath()
+        .click('@restoreSelectedButton')
+        .waitForOutstandingAjaxCalls()
+    },
+
+    /**
+     * @param {string} path
+     */
     unmarkFavorite: function (path) {
       const unFavoriteBtn = this.getFileRowSelectorByFileName(path) +
         this.elements['markedFavoriteInFileRow'].selector
@@ -126,6 +163,20 @@ module.exports = {
         .click(unFavoriteBtn)
         .waitForOutstandingAjaxCalls()
         .useCss()
+    },
+    /**
+     * Toggle enable or disable file/folder select checkbox
+     *
+     * @param {string} enableOrDisable
+     * @param {string} path
+     */
+    toggleFileOrFolderCheckbox: function (enableOrDisable, path) {
+      const fileCheckbox = this.getFileRowSelectorByFileName(path) +
+        this.elements['checkboxInFileRow'].selector
+
+      return this
+        .waitForFileVisible(path)
+        .toggleCheckbox(enableOrDisable, fileCheckbox, 'xpath')
     },
     /**
      *
@@ -166,12 +217,20 @@ module.exports = {
      * @returns {string}
      */
     getFileRowSelectorByFileName: function (fileName) {
-      var element = this.elements['fileRowByName']
-      var util = require('util')
-      if (fileName.indexOf('"') > -1) {
-        element.selector = element.selector.replace(/"/g, "'")
+      const parts = path.parse(fileName)
+      if (parts.ext) {
+        // keep path of nested folders intact, just remove the extension at the end
+        const filePathWithoutExt = parts.dir ? parts.dir + '/' + parts.name : parts.name
+        const element = this.elements['fileRowByNameAndExtension']
+        return util.format(
+          element.selector,
+          xpathHelper.buildXpathLiteral(filePathWithoutExt),
+          parts.ext
+        )
       }
-      return util.format(element.selector, fileName)
+
+      const element = this.elements['fileRowByName']
+      return util.format(element.selector, xpathHelper.buildXpathLiteral(fileName))
     },
     /**
      *
@@ -191,6 +250,17 @@ module.exports = {
         .useXpath()
         .waitForElementNotPresent('@loadingIndicator')
         .waitForElementNotPresent(this.getFileRowSelectorByFileName(element))
+    },
+    /**
+     *
+     * @param {string} element
+     */
+    assertElementListed: function (element) {
+      return this
+        .waitForElementVisible('@filesTable')
+        .useXpath()
+        .waitForElementNotPresent('@loadingIndicator')
+        .waitForElementPresent(this.getFileRowSelectorByFileName(element))
     },
     /**
      *
@@ -230,18 +300,22 @@ module.exports = {
       selector: '//button[@aria-label="Delete"]',
       locateStrategy: 'xpath'
     },
+    restoreButtonInFileRow: {
+      selector: '//span[.="Restore"]',
+      locateStrategy: 'xpath'
+    },
     deleteFileConfirmationBtn: {
       selector: '#oc-dialog-delete-confirm'
     },
     shareButtonInFileRow: {
-      selector: '//button[@aria-label="Share"]',
+      selector: '//button[@aria-label="Collaborators"]',
       locateStrategy: 'xpath'
     },
     renameFileConfirmationDialog: {
       selector: '#change-file-dialog'
     },
     renameButtonInFileRow: {
-      selector: '//button[@aria-label="Edit"]',
+      selector: '//button[@aria-label="Rename"]',
       locateStrategy: 'xpath'
     },
     renameFileInputField: {
@@ -252,7 +326,10 @@ module.exports = {
       selector: '#oc-dialog-rename-confirm'
     },
     fileRowByName: {
-      selector: '//span[contains(@class, "file-row-name")][@filename="%s"]/../..'
+      selector: '//span[@class="oc-file-name"][text()=%s and not(../span[@class="oc-file-extension"])]/../../..'
+    },
+    fileRowByNameAndExtension: {
+      selector: '//span[span/text()=%s and span/text()="%s"]/../..'
     },
     fileLinkInFileRow: {
       selector: '//span[contains(@class, "file-row-name")]'
@@ -267,6 +344,17 @@ module.exports = {
     },
     sharingSideBar: {
       selector: '#oc-files-sharing-sidebar'
+    },
+    checkBoxAllFiles: {
+      selector: '#filelist-check-all'
+    },
+    checkboxInFileRow: {
+      selector: '//input[@type="checkbox"]',
+      locateStrategy: 'xpath'
+    },
+    restoreSelectedButton: {
+      selector: '//span[contains(text(),"Restore selected")]',
+      locateStrategy: 'xpath'
     }
   }
 }

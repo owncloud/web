@@ -175,7 +175,7 @@ Feature: Locks
 
   @skip @yetToImplement
   Scenario: clicking other tabs does not change the lock symbol
-    When the user opens the share dialog for folder "simple-folder"
+    When the user opens the share dialog for folder "simple-folder" using the webUI
     Then folder "simple-folder" should not be marked as locked on the webUI
 
   @skip @yetToImplement

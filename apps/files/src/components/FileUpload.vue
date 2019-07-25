@@ -1,8 +1,8 @@
 <template>
-  <oc-nav-item icon="cloud_upload" @click="triggerUpload">
-    <span v-translate>Upload</span>
+  <oc-nav-item icon="file_upload" @click="triggerUpload">
+    <span id="files-file-upload-button" v-translate>Upload File</span>
     <div slot="outer-content">
-      <input id="fileUploadInput" type="file" name="file" @change="$_ocUpload_addToQue" multiple ref="input" />
+      <input id="fileUploadInput" type="file" name="file" @change="$_ocUpload_addFileToQue" multiple ref="input" />
     </div>
   </oc-nav-item>
 </template>

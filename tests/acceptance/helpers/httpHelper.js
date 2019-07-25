@@ -7,9 +7,9 @@ const userSettings = require('../helpers/userSettings')
  * @returns {string}
  */
 exports.createAuthHeader = function (userId) {
-  const password = userSettings.getActualPassword(userId)
+  const password = userSettings.getPasswordForUser(userId)
   return {
-    'Authorization': 'Basic ' +
+    Authorization: 'Basic ' +
       Buffer.from(userId + ':' + password).toString('base64')
   }
 }

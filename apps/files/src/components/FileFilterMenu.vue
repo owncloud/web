@@ -11,7 +11,7 @@
         <label for="oc-filter-search" class="uk-text-meta" v-translate>
           Name Filter
         </label>
-        <oc-search-bar id="oc-filter-search" small :type-ahead="true" @search="setFilterTerm" :button="false" />
+        <oc-search-bar id="oc-filter-search" small :type-ahead="true" @search="setFilterTerm" :value="filterTerm" :button="false" />
       </li>
     </ul>
  </oc-drop>
@@ -24,22 +24,14 @@ export default {
   data () {
     return {
       fileFilterTranslations: {
-        'Files': this.$gettext('Files'),
-        'Folders': this.$gettext('Folders'),
-        'Hidden': this.$gettext('Hidden')
+        Files: this.$gettext('Files'),
+        Folders: this.$gettext('Folders'),
+        Hidden: this.$gettext('Hidden')
       }
     }
   },
   methods: {
-    ...mapActions('Files', ['setFileFilter', 'setFilterTerm']),
-    focusFilenameFilter () {
-      this.$refs.filenameFilter.$el.querySelector('input').focus()
-      // nested vuetify VList animation will block native autofocus, so we use this workaround...
-      setTimeout(() => {
-        // ...to set focus after the element is rendered visible
-        this.$refs.filenameFilter.$el.querySelector('input').focus()
-      }, 50)
-    }
+    ...mapActions('Files', ['setFileFilter', 'setFilterTerm'])
   },
   computed: {
     ...mapGetters('Files', ['fileFilter', 'filterTerm'])

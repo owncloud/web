@@ -4,7 +4,7 @@
       <oc-table-group>
         <oc-table-row>
           <oc-table-cell shrink type="head">
-            <oc-checkbox class="uk-margin-small-left" @click.native="$_ocTrashbin_toggleAll" :value="all" />
+            <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" @click.native="$_ocTrashbin_toggleAll" :value="all" />
           </oc-table-cell>
           <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
           <oc-table-cell shrink type="head" class="uk-text-nowrap" v-translate>Deletion Time</oc-table-cell>
@@ -17,20 +17,24 @@
             <oc-checkbox class="uk-margin-small-left" @change.native="$_ocTrashbin_toggleFileSelect(item)" :value="selectedFiles.indexOf(item) >= 0" />
           </oc-table-cell>
           <oc-table-cell class="uk-text-truncate">
-            <oc-file :name="item.name" :extension="item.extension" class="file-row-name"
+            <oc-file :name="item.basename" :extension="item.extension" class="file-row-name"
                     :filename="item.name" :icon="fileTypeIcon(item)" :key="item.path" />
           </oc-table-cell>
           <oc-table-cell class="uk-text-meta uk-text-nowrap">
             {{ formDateFromNow(item.deleteTimestamp) }}
           </oc-table-cell>
           <oc-table-cell class="uk-text-meta uk-text-nowrap">
-            <oc-button icon="restore" @click="$_ocTrashbin_restoreFile(item)"><translate>Restore</translate></oc-button>
-            <oc-button icon="delete" @click="$_ocTrashbin_deleteFile(item)"><translate>Delete immediately</translate></oc-button>
+            <oc-button icon="restore" @click="$_ocTrashbin_restoreFile(item)">
+              <translate>Restore</translate>
+            </oc-button>
+            <oc-button icon="delete" @click="$_ocTrashbin_deleteFile(item)" ariaLabel="Delete">
+              <translate>Delete immediately</translate>
+            </oc-button>
           </oc-table-cell>
         </oc-table-row>
       </oc-table-group>
     </oc-table>
-    <oc-dialog-prompt name="trashbin-delete-file-confirmation-dialog" :oc-active="trashbinDeleteMessage !== ''"
+    <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="trashbinDeleteMessage !== ''"
                       :oc-content="trashbinDeleteMessage" :oc-has-input="false" :ocTitle="_deleteDialogTitle"
                       ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="$_ocTrashbin_clearTrashbinConfirmation"
                       @oc-cancel="setTrashbinDeleteMessage('')"
@@ -54,11 +58,15 @@ export default {
     Mixins
   ],
 
+  mounted () {
+    this.$_ocTrashbin_getFiles()
+  },
+
   computed: {
     ...mapGetters('Files', ['loadingFolder', 'selectedFiles', 'trashbinDeleteMessage']),
 
     _deleteDialogTitle () {
-      let files = this.selectedFiles
+      const files = this.selectedFiles
       let translated
 
       if (files.length === 1) {
@@ -76,9 +84,16 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
-    ...mapActions(['showNotifications']),
+    ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilterTerm']),
+    ...mapActions(['showMessage']),
 
+    $_ocTrashbin_getFiles () {
+      this.setFilterTerm('')
+      this.loadTrashbin({
+        client: this.$client,
+        $gettext: this.$gettext
+      })
+    },
     $_ocTrashbin_deleteFile (item) {
       this.resetFileSelection()
       this.addFileSelection(item)
@@ -98,8 +113,8 @@ export default {
       if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
         this.resetFileSelection()
       } else {
-        let selectedFiles = this.fileData.slice()
-        for (let item of selectedFiles) {
+        const selectedFiles = this.fileData.slice()
+        for (const item of selectedFiles) {
           if (!this.selectedFiles.includes(item)) {
             this.addFileSelection(item)
           }
@@ -108,18 +123,18 @@ export default {
     },
 
     $_ocTrashbin_clearTrashbinConfirmation (files = this.selectedFiles) {
-      for (let file of files) {
+      for (const file of files) {
         this.$client.fileTrash.clearTrashBin(file.id)
           .then(() => {
             this.$_ocTrashbin_removeFileFromList([file])
-            let translated = this.$gettext('%{file} was succesfully deleted')
-            this.showNotification({
+            const translated = this.$gettext('%{file} was successfully deleted')
+            this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true)
             })
           })
           .catch(error => {
-            let translated = this.$gettext('Deletion of %{file} failed')
-            this.showNotification({
+            const translated = this.$gettext('Deletion of %{file} failed')
+            this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true),
               desc: error.message,
               status: 'danger'
@@ -136,14 +151,14 @@ export default {
       this.$client.fileTrash.restore(file.id, file.originalLocation)
         .then(() => {
           this.$_ocTrashbin_removeFileFromList([file])
-          let translated = this.$gettext('%{file} was succesfully restored')
-          this.showNotification({
+          const translated = this.$gettext('%{file} was succesfully restored')
+          this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true)
           })
         })
         .catch(error => {
-          let translated = this.$gettext('Restoration of %{file} failed')
-          this.showNotification({
+          const translated = this.$gettext('Restoration of %{file} failed')
+          this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true),
             desc: error.message,
             status: 'danger'

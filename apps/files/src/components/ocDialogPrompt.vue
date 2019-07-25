@@ -1,7 +1,7 @@
 <template>
   <oc-dialog :name="name" v-model="ocActive" :title="ocTitle">
     <template slot="content">
-      <oc-alert v-if="ocError" id="oc-dialog-prompt-alert" noClose="true" variation="danger">
+      <oc-alert v-if="ocError" id="oc-dialog-prompt-alert" :noClose="true" variation="danger">
         {{ ocError }}
       </oc-alert>
       <span v-if="ocContent" class="uk-text-break">{{ ocContent }}</span>
@@ -16,10 +16,12 @@
       <oc-loader v-if="ocLoading"></oc-loader>
     </template>
     <template slot="footer">
-        <oc-button :disabled="ocLoading" @click="onCancel">{{ _ocCancelText }}</oc-button>
-        <oc-button :disabled="ocLoading || ocError || inputValue === ''"
+        <oc-button :id="ocCancelId" :disabled="ocLoading" @click.stop="onCancel">{{ _ocCancelText }}</oc-button>
+        <oc-button :disabled="ocLoading || ocError !== null || inputValue === ''"
                :id="ocConfirmId"
-               @click="onConfirm">{{ _ocConfirmText }}</oc-button>
+               ref="confirmButton"
+               :autofocus="!ocHasInput"
+               @click.stop="onConfirm">{{ _ocConfirmText }}</oc-button>
     </template>
   </oc-dialog>
 </template>
@@ -38,8 +40,12 @@ export default {
     ocInputMaxlength: [String, Number],
     ocInputPlaceholder: [String, Number],
     ocContent: String,
-    ocError: String,
+    ocError: {
+      type: String,
+      default: null
+    },
     ocLoading: { type: Boolean, default: false },
+    ocCancelId: String,
     ocConfirmId: String,
     ocConfirmText: {
       type: String,
@@ -62,9 +68,14 @@ export default {
     },
     ocActive (isActive) {
       this.inputValue = this.value
+
       this.$nextTick().then(() => {
-        if (isActive && this.ocHasInput) {
-          this.$refs.input.focus()
+        if (isActive) {
+          if (this.ocHasInput) {
+            this.$refs.input.$el.focus()
+            return
+          }
+          this.$refs.confirmButton.$el.focus()
         }
       })
     }

@@ -4,9 +4,12 @@ release/*
 **/l10n/template.pot
 
 apps/*
+!apps/media-viewer
 !apps/files
 !apps/markdown-editor
 !apps/pdf-viewer
+
+build/version.json
 
 .idea
 *.bundle.js

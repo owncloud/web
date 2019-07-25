@@ -1,6 +1,6 @@
 <template>
     <div>
-        <oc-table middle divider v-if="selectedFiles.length === 1">
+        <oc-table middle divider>
             <oc-table-group>
                 <oc-table-row v-for="(item, index) in versions" :key="index" class="file-row">
                     <oc-table-cell>
@@ -20,10 +20,7 @@
                 </oc-table-row>
             </oc-table-group>
         </oc-table>
-        <div v-else>
-            <span v-translate>Please choose only a single File</span>
-        </div>
-        <div v-show="!hasVersion && selectedFiles.length === 1">
+        <div v-show="!hasVersion">
           <span v-translate>No Versions available for this file</span>
         </div>
     </div></template>
@@ -32,7 +29,7 @@ import Mixins from '../mixins.js'
 import { mapGetters } from 'vuex'
 
 export default {
-  mixins: [ Mixins ],
+  mixins: [Mixins],
   title: ($gettext) => {
     return $gettext('Versions')
   },
@@ -43,18 +40,18 @@ export default {
     this.getFileVersions()
   },
   computed: {
-    ...mapGetters('Files', ['selectedFiles']),
+    ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['getToken']),
     hasVersion () {
       return this.versions.length > 0
     },
     currentFile () {
-      return this.selectedFiles[0]
+      return this.highlightedFile
     }
   },
   methods: {
     currentVersionId (file) {
-      let etag = file.name.split('/')
+      const etag = file.name.split('/')
       return etag[etag.length - 1]
     },
     getFileVersions () {
@@ -70,9 +67,9 @@ export default {
     downloadVersion (file) {
       const version = this.currentVersionId(file)
       const url = this.$client.fileVersions.getFileVersionUrl(this.currentFile.id, version)
-      let anchor = document.createElement('a')
+      const anchor = document.createElement('a')
 
-      let headers = new Headers()
+      const headers = new Headers()
       headers.append('Authorization', 'Bearer ' + this.getToken)
       fetch(url, { headers })
         .then(response => response.blob())
@@ -80,7 +77,7 @@ export default {
           if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
             window.navigator.msSaveOrOpenBlob(blobby, file.name)
           } else { // for Non-IE (chrome, firefox etc.)
-            let objectUrl = window.URL.createObjectURL(blobby)
+            const objectUrl = window.URL.createObjectURL(blobby)
 
             anchor.href = objectUrl
             anchor.download = file.name

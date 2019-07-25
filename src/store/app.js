@@ -21,7 +21,7 @@ const actions = {
   fetchNotifications (context, client) {
     context.commit('LOADING_NOTIFICATIONS', true)
 
-    client.requests.ocs({
+    return client.requests.ocs({
       service: 'apps/notifications',
       action: 'api/v1/notifications'
     })
@@ -70,8 +70,7 @@ const mutations = {
     state.messages.push(message)
   },
   REMOVE_MESSAGE (state, item) {
-    let index = state.notifications.indexOf(item)
-    state.notifications.splice(index, 1)
+    state.messages.splice(state.messages.indexOf(item), 1)
   },
   LOADING_NOTIFICATIONS (state, loading) {
     state.notifications.loading = loading
@@ -83,7 +82,7 @@ const mutations = {
     state.notifications.data = notifications
   },
   DELETE_NOTIFICATION (state, notification) {
-    let data = state.notifications.data.filter((n) => {
+    const data = state.notifications.data.filter((n) => {
       return n.notification_id !== notification
     })
     state.notifications.data = data
@@ -95,7 +94,7 @@ const getters = {
     return state.sidebarVisible
   },
   activeMessages: state => {
-    return (state.messages.length) ? [state.messages[0]] : []
+    return state.messages
   },
   activeNotifications: state => {
     return (state.notifications.data.length && !state.notifications.failed) ? state.notifications.data : false

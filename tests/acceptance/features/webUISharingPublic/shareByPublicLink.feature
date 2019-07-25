@@ -202,7 +202,7 @@ Feature: Share by public link
   Scenario: user shares a public link via email adding few addresses before and then removing some addresses afterwards
     Given parameter "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And the user has reloaded the current page of the webUI
-    When the user opens the share dialog for folder "simple-folder"
+    When the user opens the share dialog for folder "simple-folder" using the webUI
     And the user opens the public link share tab
     And the user opens the create public link share popup
     And the user adds the following email addresses using the webUI:

@@ -18,8 +18,8 @@ Feature: Sharing files and folders with internal groups
   @smokeTest @yetToImplement
   Scenario: share a folder with an internal group
     Given user "user3" has logged in using the webUI
-    When the user shares folder "simple-folder" with group "grp1" using the webUI
-    And the user shares file "testimage.jpg" with group "grp1" using the webUI
+    When the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
+    And the user shares file "testimage.jpg" with group "grp1" as "Viewer" using the webUI
     And the user re-logs in as "user1" using the webUI
     Then folder "simple-folder (2)" should be listed on the webUI
 #    And folder "simple-folder (2)" should be marked as shared with "grp1" by "User Three" on the webUI
@@ -127,7 +127,7 @@ Feature: Sharing files and folders with internal groups
     When the administrator excludes group "system-group" from receiving shares using the webUI
     And the user re-logs in as "user1" using the webUI
     And the user browses to the files page
-    And the user opens the share dialog for folder "simple-folder"
+    And the user opens the share dialog for folder "simple-folder" using the webUI
     And the user types "system-group" in the share-with-field
     Then a tooltip with the text "No users or groups found for system-group" should be shown near the share-with-field on the webUI
     And the autocomplete list should not be displayed on the webUI
@@ -136,10 +136,10 @@ Feature: Sharing files and folders with internal groups
   Scenario: user shares the file/folder with a group and delete the share with user
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with group "grp1"
-    When the user opens the share dialog for file "lorem.txt"
-    Then "grp1" should be listed in the shared with list
-    When the user deletes share with group "grp1" for the current file
-    Then "grp1" should not be listed in the shared with list
+    When the user opens the share dialog for file "lorem.txt" using the webUI
+    Then group "grp1" should be listed as "Editor" in the collaborators list on the webUI
+    When the user deletes "grp1" as collaborator for the current file using the webUI
+    Then group "grp1" should not be listed in the collaborators list on the webUI
 #    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
 
@@ -150,12 +150,12 @@ Feature: Sharing files and folders with internal groups
     And user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with group "grp1"
     And user "user1" has shared file "lorem.txt" with group "grp2"
-    When the user opens the share dialog for file "lorem.txt"
-    Then "grp1" should be listed in the shared with list
-    And "grp2" should be listed in the shared with list
-    When the user deletes share with group "grp1" for the current file
-    Then "grp1" should not be listed in the shared with list
-    And "grp2" should be listed in the shared with list
+    When the user opens the share dialog for file "lorem.txt" using the webUI
+    Then group "grp1" should be listed as "Editor" in the collaborators list on the webUI
+    And group "grp2" should be listed as "Editor" in the collaborators list on the webUI
+    When the user deletes "grp1" as collaborator for the current file using the webUI
+    Then group "grp1" should not be listed in the collaborators list on the webUI
+    And group "grp2" should be listed as "Editor" in the collaborators list on the webUI
 #    And file "lorem.txt" should be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
     But as "user3" file "lorem (2).txt" should exist

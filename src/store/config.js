@@ -50,7 +50,7 @@ const mutations = {
     state.server = config.server
     state.auth = config.auth
     state.openIdConnect = config.openIdConnect
-    state.rootFolder = config.rootFolder
+    state.rootFolder = config.rootFolder === undefined ? '/' : config.rootFolder
     state.state = config.state === undefined ? 'working' : config.state
     if (config.corrupted) state.corrupted = config.corrupted
   },

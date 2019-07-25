@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
 const webdavHelper = require('../helpers/webdavHelper')
+const assert = require('assert')
 
 Then('as {string} file/folder {string} should exist', function (userId, element) {
   const headers = httpHelper.createAuthHeader(userId)
@@ -54,5 +55,29 @@ Given('user {string} has favorited element {string}', function (userId, element)
       } else {
         throw Error('file/folder could not be favorited')
       }
+    })
+})
+
+Then('as {string} file/folder {string} should exist in trash', function (user, element) {
+  return webdavHelper.getTrashBinElements(user)
+    .then(items => {
+      const trashFiles = items.map(item => item.originalFilename)
+      assert.strictEqual(trashFiles.includes(element), true)
+    })
+})
+
+Then('as {string} the file/folder with original path {string} should not exist in trash', function (user, path) {
+  return webdavHelper.getTrashBinElements(user)
+    .then(items => {
+      const trashFiles = items.map(item => item.originalLocation)
+      assert.strictEqual(trashFiles.includes(path), false)
+    })
+})
+
+Then('as {string} the file/folder with original path {string} should exist in trash', function (user, path) {
+  return webdavHelper.getTrashBinElements(user)
+    .then(items => {
+      const trashFiles = items.map(item => item.originalLocation)
+      assert.strictEqual(trashFiles.includes(path), true)
     })
 })

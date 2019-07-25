@@ -306,7 +306,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user accepts the offered remote shares using the webUI
     And user "user1" from server "REMOTE" shares "/simple-folder (2)" with user "user2" from server "LOCAL" using the sharing API
     And user "user1" re-logs in to "%local_server%" using the webUI
-    And the user opens the share dialog for folder "simple-folder"
+    And the user opens the share dialog for folder "simple-folder" using the webUI
     And the user sets the sharing permissions of "user2@%local_server% (federated)" for "simple-folder" using the webUI to
       | edit | no |
     And user "user2" re-logs in to "%local_server%" using the webUI

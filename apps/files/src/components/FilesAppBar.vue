@@ -12,39 +12,48 @@
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
       <div class="uk-width-auto">
-        <template v-if="$route.name === 'files-trashbin'">
-          <oc-button v-if="selectedFiles.length > 0" icon="restore" @click="$_ocTrashbin_restoreFiles()">
-            <translate>Restore selected</translate>
-          </oc-button>
-          <oc-button icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
-            {{ $_ocAppBar_clearTrashbinButtonText }}
-          </oc-button>
-        </template>
-        <div class="uk-button-group" v-if="$_ocFilesApp_showActions">
-          <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
-          <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
-          <oc-button class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn"></oc-button>
+        <div class="uk-button-group" :key="actionsKey">
+          <template v-if="$_ocFilesAppBar_showActions">
+            <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
+            <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
+            <oc-drop toggle="#new-file-menu-btn" mode="click">
+              <oc-nav>
+                <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
+                <folder-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
+                <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
+                <oc-nav-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
+              </oc-nav>
+            </oc-drop>
+          </template>
+          <template v-if="$route.name === 'files-trashbin'">
+            <oc-button v-if="selectedFiles.length > 0" icon="restore" @click="$_ocTrashbin_restoreFiles()">
+              <translate>Restore selected</translate>
+            </oc-button>
+            <oc-button id="delete-selected-btn" icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
+              {{ $_ocAppBar_clearTrashbinButtonText }}
+            </oc-button>
+          </template>
+          <template v-if="$route.name === 'files-list' && selectedFiles.length > 0">
+            <oc-button id="delete-selected-btn" icon="delete" @click="$_ocFiles_deleteSelected()">
+              <translate>Delete selected</translate>
+            </oc-button>
+          </template>
+          <oc-button class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn" />
+          <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove uk-width-large">
+            <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" />
+          </oc-drop>
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
+          <file-filter-menu />
         </div>
-        <file-filter-menu />
-        <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove uk-width-large">
-          <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" />
-        </oc-drop>
-        <oc-drop toggle="#new-file-menu-btn" mode="click">
-          <oc-nav>
-            <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-            <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
-            <oc-nav-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
-          </oc-nav>
-        </oc-drop>
       </div>
-      <div v-show="fileUpload" class="uk-width-auto">
-        <oc-progress-pie id="oc-progress-pie" :progress="this.fileUploadProgress | roundNumber" :max="100" show-label />
+      <div v-show="inProgress.length > 0" class="uk-width-auto">
+        <oc-spinner id="oc-progress-pie" size="small" />
         <oc-drop toggle="#oc-progress-pie" mode="click">
-          <oc-upload-menu :items="inProgress" />
+          <upload-menu :items="inProgress" />
         </oc-drop>
       </div>
     </oc-grid>
+    <oc-dialog-prompt name="overwrite-dialog" :oc-active="overwriteDialogMessage !== null" :oc-has-input="false" ocCancelId="files-overwrite-cancel" ocConfirmId="files-overwrite-confirm" :ocTitle="overwriteDialogTitle" :oc-content="overwriteDialogMessage" @oc-confirm="$_ocUpload_confirmOverwrite(true)" @oc-cancel="$_ocUpload_confirmOverwrite(false)" />
     <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok" :ocLoading="fileFolderCreationLoading" :ocError="newFolderErrorMessage" :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
     <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName" :ocLoading="fileFolderCreationLoading" :ocError="newFileErrorMessage" :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
   </div>
@@ -52,8 +61,10 @@
 
 <script>
 import FileUpload from './FileUpload.vue'
+import FolderUpload from './FolderUpload.vue'
 import FileFilterMenu from './FileFilterMenu.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
+import UploadMenu from './UploadMenu.vue'
 import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
@@ -61,9 +72,11 @@ import Mixins from '../mixins'
 export default {
   components: {
     FileUpload,
+    FolderUpload,
     OcDialogPrompt,
     FileFilterMenu,
-    FileDrop
+    FileDrop,
+    UploadMenu
   },
   mixins: [
     Mixins
@@ -73,16 +86,15 @@ export default {
     isLoadingSearch: false,
     newFolderName: '',
     newFileName: '',
-    fileUpload: false,
-    fileUploadProgress: 0,
     createFile: false,
     path: '',
     searchedFiles: [],
-    fileFolderCreationLoading: false
+    fileFolderCreationLoading: false,
+    actionsKey: Math.floor(Math.random() * 20)
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration']),
-    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'freeSpace', 'selectedFiles']),
+    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'freeSpace', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage']),
     ...mapState(['route']),
     searchLabel () {
       return this.$gettext('Search')
@@ -103,10 +115,10 @@ export default {
       return null
     },
     item () {
-      return this.$route.params.item === undefined ? '' : this.$route.params.item
+      return this.$route.params.item === undefined ? this.configuration.rootFolder : this.$route.params.item
     },
     url () {
-      const path = this.item === '' ? '/' : `${this.item}/`
+      const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
       return this.$client.files.getFileUrl(`/${path}`)
     },
     newFolderErrorMessage () {
@@ -119,7 +131,7 @@ export default {
       return {
         // will trigger 412 precondition failed if a file already exists
         'If-None-Match': '*',
-        'Authorization': 'Bearer ' + this.getToken
+        Authorization: 'Bearer ' + this.getToken
       }
     },
     canUpload () {
@@ -129,7 +141,7 @@ export default {
       return this.currentFolder.canUpload()
     },
 
-    $_ocFilesApp_showActions () {
+    $_ocFilesAppBar_showActions () {
       return this.$route.meta.hideFilelistActions !== true
     },
 
@@ -138,14 +150,14 @@ export default {
     },
 
     breadcrumbs () {
-      let breadcrumbs = [{
+      const breadcrumbs = [{
         index: 0,
         text: this.$gettext('Home'),
         to: '/files/list'
       }]
 
       if (this.$route.params.item) {
-        let absolutePath = this.$route.params.item
+        const absolutePath = this.$route.params.item
         const pathSplit = absolutePath.split('/').filter((val) => val)
         for (let i = 0; i < pathSplit.length; i++) {
           breadcrumbs.push({
@@ -159,7 +171,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile', 'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
+    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile',
+      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilesDeleteMessage', 'setFilterTerm']),
     ...mapActions(['openFile', 'showMessage']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
@@ -171,9 +184,17 @@ export default {
       this.searchForFile({
         searchTerm,
         client: this.$client
-      }).then(() => {
-        this.isLoadingSearch = false
       })
+        .catch(e => {
+          this.showMessage({
+            title: this.$gettext('Search failed'),
+            desc: e.message,
+            status: 'danger'
+          })
+        })
+        .finally(() => {
+          this.isLoadingSearch = false
+        })
     },
     focusFilenameFilter () {
       this.$refs.filenameFilter.$el.querySelector('input').focus()
@@ -186,13 +207,7 @@ export default {
     $_ocFilesFolder_getFolder () {
       this.path = []
 
-      let absolutePath
-
-      if (this.configuration.rootFolder) {
-        absolutePath = this.$route.params.item === '' ? this.configuration.rootFolder : this.route.params.item
-      } else {
-        absolutePath = this.$route.params.item === '' ? this.configuration.rootFolder : this.route.params.item
-      }
+      const absolutePath = this.$route.params.item === '' || this.$route.params.item === undefined ? this.configuration.rootFolder : this.route.params.item
 
       this.loadFolder({
         client: this.$client,
@@ -203,7 +218,7 @@ export default {
     addNewFolder (folderName) {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
-        const path = this.item === '' ? '/' : `${this.item}/`
+        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
         this.$client.files.createFolder(path + folderName)
           .then(() => {
             this.createFolder = false
@@ -235,12 +250,23 @@ export default {
         return this.$gettext('Folder name cannot be equal to ".."')
       }
 
+      if (/\s+$/.test(folderName)) {
+        return this.$gettext('Folder name cannot end with whitespace')
+      }
+
+      const exists = this.activeFiles.find(file => file.name === folderName)
+
+      if (exists) {
+        const translated = this.$gettext('%{name} already exists')
+        return this.$gettextInterpolate(translated, { name: folderName }, true)
+      }
+
       return null
     },
     addNewFile (fileName) {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
-        const path = this.item === '' ? '/' : `${this.item}/`
+        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
         this.$client.files.putFileContents(path + fileName, '')
           .then(() => {
             this.createFile = false
@@ -272,65 +298,68 @@ export default {
         return this.$gettext('File name cannot be equal to ".."')
       }
 
+      if (/\s+$/.test(fileName)) {
+        return this.$gettext('File name cannot end with whitespace')
+      }
+
+      const exists = this.activeFiles.find(file => file.name === fileName)
+
+      if (exists) {
+        const translated = this.$gettext('%{name} already exists')
+        return this.$gettextInterpolate(translated, { name: fileName }, true)
+      }
+
       return null
     },
     onFileSuccess (event, file) {
+      if (file.name) {
+        file = file.name
+      }
       this.$nextTick().then(() => {
-        const path = this.item === '' ? '/' : `${this.item}/`
-        const filePath = path + file.name
+        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
+        const filePath = path + file
         this.$client.files.fileInfo(filePath, this.davProperties).then(fileInfo => {
-          this.fileUploadProgress = 0
           this.addFiles({
             files: [fileInfo]
           })
-          this.fileUpload = false
         }).catch(() => {
-          this.fileUploadProgress = 0
           this.$_ocFilesFolder_getFolder()
         })
       })
     },
 
     onFileError (error) {
-      this.fileUploadProgress = 0
       this.showMessage({
         title: this.$gettext('File upload failed…'),
         desc: error.message,
         status: 'danger'
       })
-      this.fileUpload = false
     },
 
     onFileProgress (progress) {
-      this.fileUpload = true
       this.updateFileProgress(progress)
-      let progressTotal = 0
-      for (let item of this.inProgress) {
-        progressTotal = progressTotal + item.progress
-      }
-      if (this.inProgress.length !== 0) {
-        this.fileUploadProgress = progressTotal / this.inProgress.length
-      } else {
-        this.fileUploadProgress = 100
-      }
-      return this.fileUploadProgress
     },
 
     $_ocTrashbin_deleteSelected () {
-      let translated = this.$gettext('%{numberOfFiles} items will be deleted immediately. You can’t undo this action.')
+      const translated = this.$gettext('%{numberOfFiles} items will be deleted immediately. You can’t undo this action.')
       this.setTrashbinDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
+    },
+
+    $_ocFiles_deleteSelected () {
+      const translated = this.$gettext('%{numberOfFiles} items will be deleted.')
+      this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
     },
 
     $_ocTrashbin_empty () {
       this.$client.fileTrash.clearTrashBin()
         .then(() => {
-          this.showNotification({
-            title: this.$gettext('Trash bin was successfully emtied')
+          this.showMessage({
+            title: this.$gettext('Trash bin was successfully emptied')
           })
           this.removeFilesFromTrashbin(this.activeFiles)
         })
         .catch((error) => {
-          this.showNotification({
+          this.showMessage({
             title: this.$gettext("Trash bin couldn't be emptied"),
             desc: error.message,
             status: 'danger'
@@ -339,18 +368,18 @@ export default {
     },
 
     $_ocTrashbin_restoreFiles (files = this.selectedFiles) {
-      for (let file of files) {
+      for (const file of files) {
         this.$client.fileTrash.restore(file.id, file.originalLocation)
           .then(() => {
-            let translated = this.$gettext('%{file} was succesfully restored')
-            this.showNotification({
+            const translated = this.$gettext('%{file} was succesfully restored')
+            this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true)
             })
             this.removeFilesFromTrashbin([file])
           })
           .catch(error => {
-            let translated = this.$gettext('Restoration of %{file} failed')
-            this.showNotification({
+            const translated = this.$gettext('Restoration of %{file} failed')
+            this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true),
               desc: error.message,
               status: 'danger'
@@ -358,11 +387,19 @@ export default {
           })
       }
       this.resetFileSelection()
+      this.setHighlightedFile(null)
     }
   },
   filters: {
     roundNumber (value) {
       return parseInt(value.toFixed(0))
+    }
+  },
+  watch: {
+    // This ensures buttons will display with its right icons, values, etc.
+    // TODO: Find a better solution
+    $route (to, from) {
+      this.actionsKey = Math.floor(Math.random() * 20)
     }
   }
 }

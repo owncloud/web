@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import TopBar from './components/Top-Bar.vue'
 import Menu from './components/Menu.vue'
 import MessageBar from './components/MessageBar.vue'
@@ -24,7 +24,7 @@ export default {
     TopBar
   },
   beforeMount () {
-    this.$store.dispatch('initAuth')
+    this.initAuth()
   },
   computed: {
     ...mapState(['route']),
@@ -32,6 +32,9 @@ export default {
     showHeader () {
       return this.$route.meta.hideHeadbar !== true
     }
+  },
+  methods: {
+    ...mapActions(['initAuth'])
   }
 }
 </script>

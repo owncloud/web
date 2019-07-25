@@ -19,6 +19,7 @@ Feature: rename files
       | "simple-name.txt"      |
       | "लोरेम।तयक्स्त? $%#&@" |
       | '"quotes1"'            |
+      | "\"quote\"d-folders'"  |
       | "'quotes2'"            |
 
   Scenario Outline: Rename a file that has special characters in its name
@@ -104,7 +105,7 @@ Feature: rename files
 
   Scenario Outline: Rename a file/folder using forward slash in its name
     When the user renames file "<from_file_name>" to an invalid name "<to_file_name>" using the webUI
-    Then the error message 'Name cannot contain "/"' should be displayed on the webUI dialog prompt
+    Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And file "<from_file_name>" should be listed on the webUI
     Examples:
       | from_file_name | to_file_name                      |
@@ -122,23 +123,20 @@ Feature: rename files
     And the user reloads the current page of the webUI
     Then file "zzzz-z-this-is-now-the-last-file.txt" should be listed on the webUI
 
-  @skip
-  @issue-912
   Scenario: Rename a file putting a name of a file which already exists
-    When the user renames file "data.zip" to "lorem.txt" using the webUI
-    Then near file "data.zip" a tooltip with the text 'lorem.txt already exists' should be displayed on the webUI
+    When the user renames file "data.zip" to an invalid name "lorem.txt" using the webUI
+    Then the error message 'The name "lorem.txt" is already taken' should be displayed on the webUI dialog prompt
+    And file 'data.zip' should be listed on the webUI
 
-  @skip
-  @issue-965
   Scenario: Rename a file to ..
-    When the user renames file "data.zip" to ".." using the webUI
-    Then near file "data.zip" a tooltip with the text '".." is an invalid file name.' should be displayed on the webUI
+    When the user renames file "data.zip" to an invalid name ".." using the webUI
+    Then the error message 'The name cannot be equal to ".."' should be displayed on the webUI dialog prompt
+    And file 'data.zip' should be listed on the webUI
 
-  @skip
-  @issue-965
   Scenario: Rename a file to .
-    When the user renames file "data.zip" to "." using the webUI
-    Then near file "data.zip" a tooltip with the text '"." is an invalid file name.' should be displayed on the webUI
+    When the user renames file "data.zip" to an invalid name "." using the webUI
+    Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
+    And file 'data.zip' should be listed on the webUI
 
   @skip
   @issue-965

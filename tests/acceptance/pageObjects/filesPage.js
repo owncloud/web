@@ -95,11 +95,24 @@ module.exports = {
         .waitForElementVisible(labelSelector)
         .toggleCheckbox(enableOrDisable, checkboxId)
         .click('@filterListButton')
+    },
+    deleteAllCheckedFiles: function () {
+      return this
+        .waitForElementVisible('@deleteSelectedButton')
+        .click('@deleteSelectedButton')
+        .waitForElementVisible('@deleteFileConfirmationBtn')
+        .waitForAnimationToFinish()
+        .click('@deleteFileConfirmationBtn')
+        .waitForElementNotVisible('@deleteFileConfirmationDialog')
+        .waitForAnimationToFinish()
     }
   },
   elements: {
     newFileMenuButton: {
       selector: '#new-file-menu-btn'
+    },
+    deleteSelectedButton: {
+      selector: '#delete-selected-btn'
     },
     newFolderButton: {
       selector: '#new-folder-btn'
@@ -142,14 +155,19 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     fileUploadButton: {
-      selector: '//span[@data-msgid="Upload"]',
-      locateStrategy: 'xpath'
+      selector: '#files-file-upload-button'
     },
     fileUploadInput: {
       selector: '#fileUploadInput'
     },
     fileUploadProgress: {
       selector: '#oc-progress-pie'
+    },
+    deleteFileConfirmationBtn: {
+      selector: '#oc-dialog-delete-confirm'
+    },
+    deleteFileConfirmationDialog: {
+      selector: '#delete-file-confirmation-dialog'
     }
   }
 }

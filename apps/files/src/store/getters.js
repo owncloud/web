@@ -29,10 +29,10 @@ export default {
   },
   activeFiles: state => {
     // if searchTermGlobal is set, replace current file list with search results
-    let files = state.searchTermGlobal ? state.filesSearched : state.files
+    const files = state.searchTermGlobal ? state.filesSearched : state.files
     // respect file filters set in TopBar
     return files.filter((file) => {
-      for (let filter of state.fileFilter) {
+      for (const filter of state.fileFilter) {
         if (file.type === filter.tag) {
           if (!filter.value) return false
         } else if (file.name.startsWith('.')) {
@@ -43,7 +43,7 @@ export default {
       // respect filename filter for local 'search' in open folder
       return !(state.searchTermFilter && !file.name.toLowerCase().includes(state.searchTermFilter.toLowerCase()))
     }).sort(function (a, b) {
-      return a.name.localeCompare(b.name, undefined, { 'sensitivity': 'base' })
+      return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
     }
     )
   },
@@ -73,5 +73,17 @@ export default {
   },
   trashbinDeleteMessage: state => {
     return state.trashbinDeleteMessage
+  },
+  filesDeleteMessage: state => {
+    return state.filesDeleteMessage
+  },
+  overwriteDialogTitle: state => {
+    return state.overwriteDialogTitle
+  },
+  overwriteDialogMessage: state => {
+    return state.overwriteDialogMessage
+  },
+  highlightedFile: state => {
+    return state.highlightedFile
   }
 }

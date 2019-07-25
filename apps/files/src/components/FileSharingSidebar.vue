@@ -1,114 +1,132 @@
 <template>
   <div id="oc-files-sharing-sidebar">
-    <div v-if="selectedFiles.length > 1">
-      <span v-translate>Please choose only a single File</span>
-    </div>
-    <div v-else>
+    <div>
      <oc-spinner v-if="sharesLoading"></oc-spinner>
-    <oc-accordion v-if="!sharesLoading" :multiple=true>
-      <oc-accordion-item v-if="owner" class="uk-open">
-        <span slot="title" v-translate>Owner(s)</span>
-        <template slot="content">
-          <oc-user
-            :avatar="owner.avatar"
-            :user-name="owner.name"
-            :display-name="owner.displayName"
-            :email="owner.email"
+     <template v-if="!sharesLoading">
+        <h4><translate>Owner</translate></h4>
+        <oc-user
+            avatar=""
+            :user-name="highlightedFile.owner.username"
+            :display-name="highlightedFile.owner.displayName"
+            class="uk-margin-bottom"
           >
-            <template slot="properties">
-              <span v-translate>Owner</span>
-            </template>
-          </oc-user>
-        </template>
-      </oc-accordion-item>
-      <oc-accordion-item class="uk-open">
-        <span slot="title" v-translate>Collaborators</span>
-        <template slot="content">
-          <oc-autocomplete v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress"
-                           :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
-                           :filter="filterRecipients" id="oc-sharing-autocomplete">
+        </oc-user>
+        <section>
+          <label class="oc-label"><translate>Invite new collaborators</translate></label>
+          <oc-autocomplete
+            v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress"
+            :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
+            :filter="filterRecipients" id="oc-sharing-autocomplete" class="uk-margin-bottom">
             <template v-slot:item="{item}">
-              <span>{{ buildRecipientDisplay(item) }}</span>
-            </template>          </oc-autocomplete>
-          <ul class="uk-list" id="file-share-list">
-            <li v-for="(c, k) in shares" :key="k">
-              <oc-user
-                :avatar="c.avatar"
-                :user-name="c.name"
-                :display-name="c.displayName"
-                :email="c.email"
-              >
-                <template slot="properties">
-                <span v-if="c">
-                  <span
-                    v-if="c.role && roles[c.role] && roles[c.role].name"
-                    v-text="roles[c.role].name"
-                    :uk-tooltip="roles[c.role].description"
-                  />
-                  <span v-if="c.role && c.expires">|</span>
-                  <span v-if="c.expires">
-                    <translate :translate-params="{expires: formDateFromNow(c.expires)}">Expires: %{expires}</translate>
-                  </span>
-                </span>
-                </template>
-                <template slot="actions">
-                  <oc-icon :aria-label="_deleteButtonLabel" name="delete" @click="onDelete(c)" />
-                  <oc-icon :aria-label="_editButtonLabel" v-if="editing != c" name="edit" @click="onEdit(c)" />
-                </template>
-              </oc-user>
-
-              <div v-if="editing && editing.info.id == c.info.id" class="uk-margin-small-top">
-                <div v-for="(role, r) in roles" :key="r" @click="editing.role = r">
-                  <div class="uk-inline">
-                    <oc-radio :model="editing.role" :value="r" />
+              <div class="uk-text-bold files-collaborators-autocomplete-username">{{ item.label }}</div>
+              <span class="uk-text-meta">{{ $_ocCollaborators_recipientType(item) }}</span>
+            </template>
+          </oc-autocomplete>
+          <div v-if="selectedItem" class="uk-margin-medium-bottom">
+            <div class="uk-flex-inline uk-flex-column uk-flex-middle uk-margin-small-bottom">
+              <oc-avatar src="" />
+              <span>{{ selectedItem.label }}</span>
+            </div>
+            <div>
+              <oc-grid gutter="small">
+                <div class="uk-width-1-1">
+                  <label class="oc-label"><translate>Role</translate></label>
+                  <oc-button id="files-collaborators-role-button" class="uk-width-1-1 files-collaborators-role-button"><span v-if="!selectedNewRole">Select role</span><template v-else>{{ selectedNewRole.name }}</template></oc-button>
+                  <p v-if="selectedNewRole" class="uk-text-meta uk-margin-remove">{{ selectedNewRole.description }}</p>
+                  <oc-drop closeOnClick dropId="files-collaborators-roles-dropdown" toggle="#files-collaborators-role-button" mode="click" :options="{ offset: 0, delayHide: 0 }" class="oc-autocomplete-dropdown">
+                    <ul class="oc-autocomplete-suggestion-list">
+                      <li v-for="(role, key) in roles" :key="key" :id="`files-collaborator-new-collaborator-role-${role.tag}`" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : selectedNewRole === role }" @click="$_ocCollaborators_newCollaboratorsSelectRole(role)">
+                        <span class="uk-text-bold">{{ role.name }}</span>
+                        <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
+                      </li>
+                    </ul>
+                  </oc-drop>
+                </div>
+                <div v-if="false" class="uk-width-1-1">
+                  <label class="oc-label"><translate>Expiration date</translate> <translate class="uk-text-meta uk-remove-margin">(optional)</translate></label>
+                  <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
+                </div>
+                <oc-grid v-if="selectedNewRole" gutter="small" class="uk-width-1-1">
+                  <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                    <oc-switch class="uk-margin-small-right" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
                   </div>
-                  <div class="uk-inline">
-                    <div>
-                      <strong v-text="role.name" />
+                  <template v-if="selectedNewRole === 'custom'">
+                    <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                      <oc-switch class="uk-margin-small-right" /> <translate>Can change</translate>
                     </div>
-                  </div>
+                    <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                      <oc-switch class="uk-margin-small-right" /> <translate>Can create</translate>
+                    </div>
+                    <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                      <oc-switch class="uk-margin-small-right" /> <translate>Can delete</translate>
+                    </div>
+                  </template>
+                </oc-grid>
+                <div>
+                  <oc-button @click="$_ocCollaborators_newCollaboratorsCancel"><translate>Cancel</translate></oc-button>
                 </div>
-                <div class="uk-container uk-padding-remove uk-margin-small-top">
-                  <oc-spinner v-if="saving" small></oc-spinner>
-                  <oc-button @click="onSave(editing)" :disabled="saving"><translate>Save</translate></oc-button>
+                <div>
+                  <oc-button id="files-collaborators-add-new-button" variation="primary" @click="$_ocCollaborators_newCollaboratorsAdd(selectedItem)" :disabled="!selectedNewRole"><translate>Add collaborators</translate></oc-button>
                 </div>
-              </div>
-            </li>
-          </ul>
-        </template>
-      </oc-accordion-item>
-    </oc-accordion>
+              </oc-grid>
+            </div>
+          </div>
+          <oc-loader v-if="sharesLoading" />
+          <template v-else>
+            <h5><translate>Collaborators</translate><template v-if="shares.length > 0"> ({{ shares.length }})</template></h5>
+            <div v-if="$_ocCollaborators_users.length > 0" id="files-collaborators-list">
+              <h5><translate>Users</translate> ({{ $_ocCollaborators_users.length }})</h5>
+              <oc-accordion>
+                <template v-for="(collaborator, index) in $_ocCollaborators_users">
+                  <collaborator :key="index" :collaborator="collaborator" :roles="roles" />
+                </template>
+              </oc-accordion>
+            </div>
+            <div v-if="$_ocCollaborators_groups.length > 0" id="files-collaborators-list-groups">
+              <h5><translate>Groups</translate> ({{ $_ocCollaborators_groups.length }})</h5>
+              <oc-accordion>
+                <template v-for="(collaborator, index) in $_ocCollaborators_groups">
+                  <collaborator :key="index" :collaborator="collaborator" :roles="roles" />
+                </template>
+              </oc-accordion>
+            </div>
+          </template>
+        </section>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+const Collaborator = _ => import('./Collaborators/Collaborator.vue')
+
 export default {
   title: ($gettext) => {
-    return $gettext('Sharing')
+    return $gettext('Collaborators')
   },
   name: 'FileSharingSidebar',
+  components: {
+    Collaborator
+  },
   mounted () {
-    if (this.selectedFiles.length === 1) {
+    if (this.highlightedFile) {
       this.loadShares({
         client: this.$client,
-        path: this.selectedFiles[0].path
+        path: this.highlightedFile.path
       })
     } else {
       this.sharesClearState()
     }
   },
   watch: {
-    selectedItem: function (newSelectedSharee) {
-      // TODO: handle groups as well
-      this.addShare({
-        client: this.$client,
-        path: this.selectedFiles[0].path,
-        $gettext: this.$gettext,
-        shareWith: newSelectedSharee.value.shareWith,
-        shareType: newSelectedSharee.value.shareType
-      })
+    selectedFile (newItem, oldItem) {
+      if (oldItem !== newItem) {
+        this.loadShares({
+          client: this.$client,
+          path: this.highlightedFile.path
+        })
+      }
     }
   },
   data () {
@@ -116,49 +134,50 @@ export default {
       autocompleteResults: [],
       autocompleteInProgress: false,
       selectedItem: '',
-      editing: null,
-      saving: false,
-
+      canShare: false,
       roles: {
-        viewer: { name: 'Viewer', description: 'Download and preview' },
-        editor: { name: 'Editor', description: 'Upload, edit, delete, download and preview' },
-        coowner: {
-          name: 'Co-owner',
-          description: 'Share, upload, edit, delete, download and preview'
+        viewer: {
+          tag: 'viewer',
+          name: this.$gettext('Viewer'),
+          description: this.$gettext('Download and preview')
         },
-        legacy: {
-          name: 'Legacy',
-          description: 'Yet unmapped combination of permissions'
+        editor: {
+          tag: 'editor',
+          name: this.$gettext('Editor'),
+          description: this.$gettext('Upload, edit, delete, download and preview')
         }
-      }
+        // coowner: {
+        //   name: this.$gettext('Co-Owner'),
+        //   description: this.$gettext('Share, upload, edit, delete, download and preview'),
+        //   perms: 16
+        // },
+        // custom: {
+        //   tag: 'custom',
+        //   name: this.$gettext('Custom role'),
+        //   description: this.$gettext('Set detailed permissions')
+        // }
+      },
+      selectedNewRole: null
     }
   },
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
+    ...mapGetters('Files', ['highlightedFile', 'shareOpen', 'shares', 'sharesError', 'sharesLoading']),
     ...mapState(['user']),
+    selectedFile () {
+      return this.highlightedFile
+    },
     $_ocCollaborationStatus_autocompletePlacholder () {
-      return this.$gettext('Add name(s), email(s) or federation ID\'s')
+      return this.$gettext('Search by name, email or federation ID\'s')
     },
-    owner () {
-      if (this.shares.length === 0) {
-        return {
-          avatar: 'https://picsum.photos/64/64?image=1074',
-          name: this.user.id,
-          displayName: this.user.displayname
-        }
-      }
-      const s = this.shares[0]
-      return {
-        avatar: 'https://picsum.photos/64/64?image=1074',
-        name: s.uid_owner,
-        displayName: s.info.displayname_owner
-      }
+    $_ocCollaborators_users () {
+      return this.shares.filter(collaborator => {
+        return collaborator.info.share_type === '0'
+      })
     },
-    _deleteButtonLabel () {
-      return this.$gettext('Delete Share')
-    },
-    _editButtonLabel () {
-      return this.$gettext('Edit Share')
+    $_ocCollaborators_groups () {
+      return this.shares.filter(collaborator => {
+        return collaborator.info.share_type === '1'
+      })
     }
   },
   methods: {
@@ -174,7 +193,7 @@ export default {
         .then(recipients => {
           this.autocompleteInProgress = false
           let users = recipients.exact.users.concat(recipients.users)
-          let groups = recipients.exact.groups.concat(recipients.groups)
+          const groups = recipients.exact.groups.concat(recipients.groups)
           users = users.filter((user) => {
             return user.value.shareWith !== this.user.id
           })
@@ -189,34 +208,94 @@ export default {
     filterRecipients (item, queryText) {
       return item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
     },
-    buildRecipientDisplay (recipient) {
+    $_ocCollaborators_recipientType (recipient) {
       if (recipient.value.shareType === 1) {
-        const group = this.$gettext('group')
-        return `${recipient.label} (${group})`
+        return this.$gettext('Group')
       }
-      // fallback and users get no suffix
-      return recipient.label
+
+      return this.$gettext('User')
     },
-    onDelete (share) {
-      this.deleteShare({
+    $_ocCollaborators_newCollaboratorsCancel () {
+      this.selectedItem = ''
+    },
+    $_ocCollaborators_newCollaboratorsSelectRole (role) {
+      this.selectedNewRole = role
+    },
+    $_ocCollaborators_newCollaboratorsAdd (collaborators) {
+      const permissions = { perms: null }
+      switch (this.selectedNewRole.name) {
+        case ('Viewer'):
+          permissions.perms = this.canShare ? 17 : 1
+          break
+        case ('Editor'):
+          if (this.highlightedFile.type === 'folder') {
+            permissions.perms = this.canShare ? 23 : 7
+            break
+          }
+          permissions.perms = this.canShare ? 19 : 2
+          break
+      }
+      this.addShare({
         client: this.$client,
-        share: share
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext,
+        shareWith: collaborators.value.shareWith,
+        shareType: collaborators.value.shareType,
+        permissions: permissions
       })
+      this.selectedItem = null
+      this.selectedNewRole = null
+      this.canShare = false
     },
-    onEdit (share) {
-      this.editing = JSON.parse(JSON.stringify(share))
+    $_ocCollaborators_collaboratorType (type) {
+      console.log(this.shares)
+      if (type === '0') return this.$gettext('User')
+
+      return this.$gettext('Group')
     },
-    onSave () {
-      this.saving = true
-      this.changeShare({
-        client: this.$client,
-        share: this.editing
-      })
-        .then(() => {
-          this.editing = null
-          this.saving = false
-        })
+    $_ocCollaborator_canShare (value) {
+      this.canShare = value
     }
   }
 }
 </script>
+
+<style>
+  /* TODO: Move to design system */
+  .oc-app-side-bar .uk-accordion-title .uk-text-lead {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .oc-app-side-bar .uk-accordion-title .uk-inline > span {
+    font-size: 16px;
+  }
+
+  .oc-app-side-bar .oc-label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .oc-app-side-bar .files-collaborators-role-button {
+    padding: 0 10px;
+    text-align: left;
+  }
+
+  .oc-app-side-bar .oc-autocomplete-suggestion {
+    transition: background-color .3s, color .3s;
+    cursor: pointer;
+  }
+
+  .oc-app-side-bar .oc-autocomplete-suggestion:hover {
+    color: white;
+    background-color: #002966;
+  }
+
+  .oc-app-side-bar .oc-autocomplete-dropdown .uk-card {
+    padding: 0 !important;
+  }
+
+  .oc-app-side-bar .oc-autocomplete-suggestion:hover .uk-text-meta, .oc-autocomplete-suggestion-selected .uk-text-meta {
+    color: white;
+  }
+</style>

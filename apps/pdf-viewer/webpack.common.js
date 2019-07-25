@@ -1,7 +1,6 @@
-const integratePhoenix = require('../../webpack-phoenix-integration')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
-module.exports = integratePhoenix({
+module.exports = {
   plugins: [
     new VueLoaderPlugin()
   ],
@@ -23,16 +22,11 @@ module.exports = integratePhoenix({
       exclude: /node_modules/,
       loader: 'babel-loader',
       options: {
-        rootMode: "upward",
+        rootMode: 'upward'
       }
     }, {
       test: /\.vue$/,
       loader: 'vue-loader'
-    }, {
-      enforce: 'pre',
-      test: /\.(js|vue)$/,
-      exclude: /node_modules/,
-      loader: 'eslint-loader'
     }, {
       test: /\.css$/,
       use: [
@@ -41,4 +35,4 @@ module.exports = integratePhoenix({
       ]
     }]
   }
-})
+}

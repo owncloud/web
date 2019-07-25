@@ -49,7 +49,7 @@ const assertContentOFLocalFileIs = function (fullPathOflocalFile, expectedConten
 Before(function () {
   createdFiles = []
   if (typeof process.env.SCREEN_RESOLUTION !== 'undefined' && process.env.SCREEN_RESOLUTION.trim() !== '') {
-    let resolution = process.env.SCREEN_RESOLUTION.split('x')
+    const resolution = process.env.SCREEN_RESOLUTION.split('x')
     resolution[0] = parseInt(resolution[0])
     resolution[1] = parseInt(resolution[1])
     if (resolution[0] > 1 && resolution[1] > 1) {

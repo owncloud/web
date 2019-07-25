@@ -48,9 +48,9 @@ pipeline:
     version: ${OC_VERSION=daily-master-qa}
     pull: true
     db_type: ${DB_TYPE=sqlite}
-    db_name: ${DB_NAME=sqlite}
+    db_name: ${DB_NAME=owncloud}
     db_host: ${DB_TYPE=sqlite}
-    db_username: autotest
+    db_username: owncloud
     db_password: owncloud
     core_path: /var/www/owncloud/
     when:
@@ -219,6 +219,17 @@ services:
       matrix:
         TEST_SUITE: acceptance
 
+  mysql:
+    image: mysql:5.5
+    environment:
+      - MYSQL_USER=owncloud
+      - MYSQL_PASSWORD=owncloud
+      - MYSQL_DATABASE=owncloud
+      - MYSQL_ROOT_PASSWORD=owncloud
+    when:
+      matrix:
+        DB_TYPE: mysql
+
   docker:
     image: docker:18.04-dind
     when:
@@ -231,149 +242,171 @@ matrix:
     - TEST_SUITE: lint-test
 
     # acceptance test
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIAdminSettings
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIComments
-      TEST_TAGS: 'not @skip'
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIAdminSettings
+#      TEST_TAGS: 'not @skip'
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIComments
+#      TEST_TAGS: 'not @skip'
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIFavorites
       TEST_TAGS: 'not @skip'
+      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIFiles
       TEST_TAGS: 'not @skip'
+      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUILogin
       TEST_TAGS: 'not @skip'
+      DB_TYPE: mysql
 
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIMoveFilesFolders
-      TEST_TAGS: 'not @skip'
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIMoveFilesFolders
+#      TEST_TAGS: 'not @skip'
+#      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUINotifications
       TEST_TAGS: 'not @skip'
+      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIRenameFiles
       TEST_TAGS: 'not @skip'
+      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIRenameFolders
       TEST_TAGS: 'not @skip'
+      DB_TYPE: mysql
 
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIRestrictSharing
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUISharingAcceptShares
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUISharingExternal
-      TEST_TAGS: 'not @skip'
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIRestrictSharing
+#      TEST_TAGS: 'not @skip'
+#      DB_TYPE: mysql
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUISharingAcceptShares
+#      TEST_TAGS: 'not @skip'
+#      DB_TYPE: mysql
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUISharingExternal
+#      TEST_TAGS: 'not @skip'
+#      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingInternalGroups
       TEST_TAGS: 'not @skip'
+      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUISharingInternalUsers
       TEST_TAGS: 'not @skip'
+      DB_TYPE: mysql
 
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUISharingNotifications
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUISharingPublic
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUITags
-      TEST_TAGS: 'not @skip'
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUISharingNotifications
+#      TEST_TAGS: 'not @skip'
+#      DB_TYPE: mysql
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUISharingPublic
+#      TEST_TAGS: 'not @skip'
+#      DB_TYPE: mysql
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUITags
+#      TEST_TAGS: 'not @skip'
+#      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUITrashbin
       TEST_TAGS: 'not @skip'
+      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_CONTEXT: webUIUpload
       TEST_TAGS: 'not @skip'
+      DB_TYPE: mysql
 
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIWebdavLockProtection
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIWebdavLocks
-      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUITags
-      TEST_TAGS: 'not @skip'
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIWebdavLockProtection
+#      TEST_TAGS: 'not @skip'
+#      DB_TYPE: mysql
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUIWebdavLocks
+#      TEST_TAGS: 'not @skip'
+#      DB_TYPE: mysql
+#
+#    - TEST_SUITE: acceptance
+#      NEED_SERVER: true
+#      RUN_PHOENIX: true
+#      TEST_CONTEXT: webUITags
+#      TEST_TAGS: 'not @skip'
+#      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
       SCREEN_RESOLUTION: 768x1024
+      DB_TYPE: mysql
 
     - TEST_SUITE: acceptance
       NEED_SERVER: true
       RUN_PHOENIX: true
       TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
       SCREEN_RESOLUTION: 375x812
+      DB_TYPE: mysql
 
     # After drone all jobs completes
     - AFTER_JOB: true

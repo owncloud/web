@@ -13,7 +13,7 @@ const loginAsUser = function (userId) {
     .waitForElementVisible('@authenticateButton')
     .click('@authenticateButton')
 
-  const password = userSettings.getActualPassword(userId)
+  const password = userSettings.getPasswordForUser(userId)
   // Then the user logs in with username {string} and password {string} using the webUi
   const ocLoginPage = client.page.ownCloudLoginPage()
   ocLoginPage
@@ -46,8 +46,7 @@ const loginAsUser = function (userId) {
     .page.FilesPageElement.filesList()
     .waitForElementVisible('@filesTable')
     .then(() => {
-      const displayname = userSettings.getDisplayNameForUser()
-      client.globals.currentUserName = displayname
+      client.globals.currentUser = userId
     })
 }
 

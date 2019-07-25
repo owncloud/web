@@ -13,8 +13,8 @@ Feature: Sharing files and folders with internal users
   @smokeTest
   Scenario: share a file & folder with another internal user
     Given user "user2" has logged in using the webUI
-    When the user shares folder "simple-folder" with user "User One" using the webUI
-    And the user shares file "testimage.jpg" with user "User One" using the webUI
+    When the user shares folder "simple-folder" with user "User One" as "Viewer" using the webUI
+    And the user shares file "testimage.jpg" with user "User One" as "Viewer" using the webUI
     And the user re-logs in as "user1" using the webUI
     Then folder "simple-folder (2)" should be listed on the webUI
 #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
@@ -238,12 +238,11 @@ Feature: Sharing files and folders with internal users
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with user "user2"
-    And user "user1" has shared file "lorem.txt" with user "user3"
-    When the user opens the share dialog for file "lorem.txt"
-    Then "User Two" should be listed in the shared with list
+    When the user opens the share dialog for file "lorem.txt" using the webUI
+    Then user "User Two" should be listed as "Editor" in the collaborators list on the webUI
     And as "user2" file "lorem (2).txt" should exist
-    When the user deletes share with user "User Two" for the current file
-    Then "User Two" should not be listed in the shared with list
+    When the user deletes "User Two" as collaborator for the current file using the webUI
+    Then user "User Two" should not be listed in the collaborators list on the webUI
 #    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
 
@@ -253,14 +252,14 @@ Feature: Sharing files and folders with internal users
     And user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with user "user2"
     And user "user1" has shared file "lorem.txt" with user "user3"
-    When the user opens the share dialog for file "lorem.txt"
-    Then "User Two" should be listed in the shared with list
-    And "User Three" should be listed in the shared with list
+    When the user opens the share dialog for file "lorem.txt" using the webUI
+    Then user "User Two" should be listed as "Editor" in the collaborators list on the webUI
+    And user "User Three" should be listed as "Editor" in the collaborators list on the webUI
     And as "user2" file "lorem (2).txt" should exist
     And as "user3" file "lorem (2).txt" should exist
-    When the user deletes share with user "User Two" for the current file
-    Then "User Two" should not be listed in the shared with list
-    And "User Three" should be listed in the shared with list
+    When the user deletes "User Two" as collaborator for the current file using the webUI
+    Then user "User Two" should not be listed in the collaborators list on the webUI
+    And user "User Three" should be listed as "Editor" in the collaborators list on the webUI
 #    And file "lorem.txt" should be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
     But as "user3" file "lorem (2).txt" should exist

@@ -36,6 +36,7 @@ module.exports = {
         .click('@menuButton')
         .useXpath()
         .waitForElementVisible(menuItemSelector)
+        .waitForAnimationToFinish()
         .click(menuItemSelector)
         .api.page.FilesPageElement.filesList()
         .waitForElementPresent({ selector: '@filesListProgressBar', abortOnFailure: false }) // don't fail if we are too late
@@ -46,6 +47,11 @@ module.exports = {
         .click('@notificationBell')
         .waitForElementVisible('@markNotificationAsReadLink')
         .click('@markNotificationAsReadLink')
+    },
+    closeMessage: function () {
+      return this.waitForElementPresent('@messageCloseIcon')
+        .click('@messageCloseIcon')
+        .waitForElementNotPresent('@messageCloseIcon')
     }
   },
   elements: {
@@ -67,7 +73,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     searchInputFieldLowResolution: {
-      selector: '(//input[contains(@class, "oc-search-input")])[3]',
+      selector: '(//input[contains(@class, "oc-search-input")])[2]',
       locateStrategy: 'xpath'
     },
     searchLoadingIndicator: {
@@ -80,6 +86,9 @@ module.exports = {
     menuItem: {
       selector: '//ul[contains(@class, "oc-main-menu")]/li/a[contains(text(),"%s")]',
       locateStrategy: 'xpath'
+    },
+    messageCloseIcon: {
+      selector: '.oc-alert-close-icon'
     }
   }
 }
