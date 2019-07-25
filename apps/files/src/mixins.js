@@ -56,65 +56,18 @@ export default {
     changeName (item) {
       this.changeFileName = !this.changeFileName
       if (typeof item === 'object') {
+        this.originalName = item.name
         this.selectedFile = item
         this.newName = item.name
         item = this.newName
         return
       }
       if (this.selectedFile.name === item) {
-        return
-      }
-
-      const translatedTitle = this.$gettext('Renaming of %{fileName} failed')
-
-      if (item.includes('/')) {
-        this.showMessage({
-          title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
-          desc: this.$gettext('The file name cannot contain a "/"'),
-          status: 'danger'
-        })
-        return
-      }
-
-      if (item === '.') {
-        this.showMessage({
-          title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
-          desc: this.$gettext('File name cannot be equal to "."'),
-          status: 'danger'
-        })
-        return
-      }
-
-      if (item === '..') {
-        this.showMessage({
-          title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
-          desc: this.$gettext('File name cannot be equal to ".."'),
-          status: 'danger'
-        })
-        return
-      }
-
-      if (/\s+$/.test(item)) {
-        this.showMessage({
-          title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
-          desc: this.$gettext('File name cannot end with whitespace'),
-          status: 'danger'
-        })
-        return
-      }
-
-      const exists = this.files.find((n) => {
-        if (n['name'] === item) {
-          return n
-        }
-      })
-      if (exists) {
-        const translatedDesc = this.$gettext('File or folder with name "%{fileName}" already exists.')
-        this.showMessage({
-          title: this.$gettextInterpolate(translatedTitle, { fileName: this.selectedFile.name }, true),
-          desc: this.$gettextInterpolate(translatedDesc, { fileName: item }, true),
-          status: 'danger'
-        })
+        // The name has to be resetted a little while later to prevent
+        // showing the error druing the fade out animation of dialog
+        setTimeout(_ => {
+          this.originalName = null
+        }, 1000)
         return
       }
 
@@ -122,7 +75,9 @@ export default {
         client: this.$client,
         file: this.selectedFile,
         newValue: item
-      })
+      }).then(setTimeout(_ => {
+        this.originalName = null
+      }, 1000))
     },
 
     downloadFile (file) {

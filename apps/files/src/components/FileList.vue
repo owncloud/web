@@ -93,7 +93,8 @@ export default {
   data: () => ({
     changeFileName: false,
     fileToBeDeleted: '',
-    newName: ''
+    newName: '',
+    originalName: null
   }),
   mounted () {
     this.$_ocFilesFolder_getFolder()
@@ -154,8 +155,23 @@ export default {
       this.$emit('FileAction', file)
     },
     checkNewName (name) {
-      if (/[/]/.test(name)) {
-        return this.$gettext('Name cannot contain "/"')
+      if (/[/]/.test(name)) return this.$gettext('The name cannot contain "/"')
+
+      if (name === '.') return this.$gettext('The name cannot be equal to "."')
+
+      if (name === '..') return this.$gettext('The name cannot be equal to ".."')
+
+      if (/\s+$/.test(name)) return this.$gettext('The name cannot end with whitespace')
+
+      const exists = this.activeFiles.find((n) => {
+        if (n['name'] === name && this.originalName !== name) {
+          return n
+        }
+      })
+
+      if (exists) {
+        const translated = this.$gettext('The name "%{name}" is already taken')
+        return this.$gettextInterpolate(translated, { name: name }, true)
       }
       return null
     },
@@ -197,7 +213,7 @@ export default {
   },
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'loadingFolder', 'filesDeleteMessage', 'highlightedFile']),
+    ...mapGetters('Files', ['selectedFiles', 'atSearchPage', 'loadingFolder', 'filesDeleteMessage', 'highlightedFile', 'activeFiles']),
     ...mapGetters(['getToken', 'fileSideBars', 'capabilities', 'configuration']),
 
     all () {
@@ -210,7 +226,7 @@ export default {
       const actions = [
         { icon: 'edit',
           handler: this.changeName,
-          ariaLabel: this.$gettext('Edit'),
+          ariaLabel: this.$gettext('Rename'),
           isEnabled: function (item) {
             return item.canRename()
           } },

@@ -17,7 +17,7 @@
     </template>
     <template slot="footer">
         <oc-button :id="ocCancelId" :disabled="ocLoading" @click.stop="onCancel">{{ _ocCancelText }}</oc-button>
-        <oc-button :disabled="ocLoading || ocError || inputValue === ''"
+        <oc-button :disabled="ocLoading || ocError !== null || inputValue === ''"
                :id="ocConfirmId"
                ref="confirmButton"
                :autofocus="!ocHasInput"
@@ -40,7 +40,10 @@ export default {
     ocInputMaxlength: [String, Number],
     ocInputPlaceholder: [String, Number],
     ocContent: String,
-    ocError: String,
+    ocError: {
+      type: String,
+      default: null
+    },
     ocLoading: { type: Boolean, default: false },
     ocCancelId: String,
     ocConfirmId: String,

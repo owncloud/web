@@ -315,7 +315,7 @@ module.exports = {
       selector: '#change-file-dialog'
     },
     renameButtonInFileRow: {
-      selector: '//button[@aria-label="Edit"]',
+      selector: '//button[@aria-label="Rename"]',
       locateStrategy: 'xpath'
     },
     renameFileInputField: {
