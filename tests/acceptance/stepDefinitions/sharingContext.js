@@ -87,6 +87,10 @@ When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
 
+When('the user shows all share-autocomplete results using the webUI', function () {
+  return client.page.FilesPageElement.sharingDialog().showAllAutoCompleteResults()
+})
+
 When('the user shares file/folder {string} with group {string} as {string} using the webUI', userSharesFileOrFolderWithGroup)
 
 When('the user shares file/folder {string} with user {string} as {string} using the webUI', userSharesFileOrFolderWithUser)
@@ -127,6 +131,35 @@ Then('all users and groups that contain the string {string} in their name should
     })
 })
 
+Then('only users and groups that contain the string {string} in their name or displayname should be listed in the autocomplete list on the webUI', function (pattern) {
+  return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
+    .then(itemsList => {
+      itemsList.forEach(item => {
+        const displayedName = item.split('\n')[0]
+        var found = false
+        for (var userId in userSettings.getCreatedUsers()) {
+          const userDisplayName = userSettings.getDisplayNameForUser(userId)
+          if (userDisplayName === displayedName &&
+               (userDisplayName.toLowerCase().includes(pattern) || userId.toLowerCase().includes(pattern))
+          ) {
+            found = true
+          }
+        }
+        userSettings.getCreatedGroups().forEach(function (groupId) {
+          if (displayedName === groupId && groupId.toLowerCase().includes(pattern)) {
+            found = true
+          }
+        })
+        assert.strictEqual(
+          found,
+          true,
+          `"${displayedName}" was listed in autocomplete list, but should not have been. ` +
+           `(check if that is a manually added user/group)`
+        )
+      })
+    })
+})
+
 Then('every item listed in the autocomplete list on the webUI should contain {string}', function (pattern) {
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
     .then(itemsList => {
@@ -151,8 +184,9 @@ Then('the users own name should not be listed in the autocomplete list on the we
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
     .then(itemsList => {
       itemsList.forEach(item => {
+        const displayedName = item.split('\n')[0]
         assert.notStrictEqual(
-          item,
+          displayedName,
           currentUserDisplayName,
           `Users own name: ${currentUserDisplayName} was not expected to be listed in the autocomplete list but was`
         )
@@ -160,14 +194,15 @@ Then('the users own name should not be listed in the autocomplete list on the we
     })
 })
 
-Then('user {string} should not be listed in the autocomplete list on the webUI', function (displayName) {
+Then('item {string} should not be listed in the autocomplete list on the webUI', function (displayName) {
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
     .then(itemsList => {
       itemsList.forEach(item => {
+        const displayedName = item.split('\n')[0]
         assert.notStrictEqual(
-          item,
+          displayedName,
           displayName,
-          `Users own name: ${displayName} was not expected to be listed in the autocomplete list but was`
+          `User: ${displayName} was not expected to be listed in the autocomplete list but was`
         )
       })
     })

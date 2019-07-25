@@ -16,6 +16,7 @@ Feature: Autocompletion of share-with names
       | username  | password  | displayname     | email          |
       | two       | %regular% | User Two        | u2@oc.com.np   |
       | u444      | %regular% | Four            | u3@oc.com.np   |
+      | five      | %regular% | User Group      | five@oc.com.np |
       | usersmith | %regular% | John Finn Smith | js@oc.com.np   |
     And these groups have been created:
       | groupname     |
@@ -25,27 +26,27 @@ Feature: Autocompletion of share-with names
       | users-finance |
       | other         |
 
-  @smokeTest @issue-1532
+  @smokeTest
   Scenario: autocompletion of regular existing users
     Given user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
     When the user types "us" in the share-with-field
-#    Then all users and groups that contain the string "us" in their name should be listed in the autocomplete list on the webUI
-    Then user "John Finn Smith" should not be listed in the autocomplete list on the webUI
-    And every item listed in the autocomplete list on the webUI should contain "us"
-    But the users own name should not be listed in the autocomplete list on the webUI
+    And the user shows all share-autocomplete results using the webUI
+    Then all users and groups that contain the string "us" in their name should be listed in the autocomplete list on the webUI
+    But only users and groups that contain the string "us" in their name or displayname should be listed in the autocomplete list on the webUI
+    And the users own name should not be listed in the autocomplete list on the webUI
 
-  @smokeTest @issue-1532
+  @smokeTest
   Scenario: autocompletion of regular existing groups
     Given user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
     When the user types "fi" in the share-with-field
-#    Then all users and groups that contain the string "fi" in their name should be listed in the autocomplete list on the webUI
-    Then user "User Group" should not be listed in the autocomplete list on the webUI
-    And every item listed in the autocomplete list on the webUI should contain "fi"
-    But the users own name should not be listed in the autocomplete list on the webUI
+    And the user shows all share-autocomplete results using the webUI
+    Then all users and groups that contain the string "fi" in their name should be listed in the autocomplete list on the webUI
+    But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI
+    And the users own name should not be listed in the autocomplete list on the webUI
 
   @skip @yetToImplement
   Scenario: autocompletion for a pattern that does not match any user or group
