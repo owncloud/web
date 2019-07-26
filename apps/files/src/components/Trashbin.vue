@@ -45,10 +45,18 @@
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
 import OcDialogPrompt from './ocDialogPrompt.vue'
+// import PQueue from 'p-queue'
+const { default: PQueue } = require('p-queue')
 
 export default {
   name: 'Trashbin',
   props: ['fileData'],
+
+  data () {
+    return {
+      queue: new PQueue({ concurrency: 4 })
+    }
+  },
 
   components: {
     OcDialogPrompt
@@ -123,26 +131,46 @@ export default {
     },
 
     $_ocTrashbin_clearTrashbinConfirmation (files = this.selectedFiles) {
-      for (const file of files) {
-        this.$client.fileTrash.clearTrashBin(file.id)
-          .then(() => {
-            this.$_ocTrashbin_removeFileFromList([file])
-            const translated = this.$gettext('%{file} was successfully deleted')
-            this.showMessage({
-              title: this.$gettextInterpolate(translated, { file: file.name }, true)
+      // TODO: use clear all if all files are selected
+      const deleteOps = []
+
+      const self = this
+      function deleteFile (file) {
+        return async () => {
+          return self.$client.fileTrash.clearTrashBin(file.id)
+            .then(() => {
+              self.$_ocTrashbin_removeFileFromList([file])
+              const translated = self.$gettext('%{file} was successfully deleted')
+              self.showMessage({
+                title: self.$gettextInterpolate(translated, { file: file.name }, true)
+              })
             })
-          })
-          .catch(error => {
-            const translated = this.$gettext('Deletion of %{file} failed')
-            this.showMessage({
-              title: this.$gettextInterpolate(translated, { file: file.name }, true),
-              desc: error.message,
-              status: 'danger'
+            .catch(error => {
+              if (error.statusCode === 423) {
+                // TODO: we need a may retry option ....
+                const p = self.queue.add(deleteFile(file))
+                deleteOps.push(p)
+                return
+              }
+
+              const translated = self.$gettext('Deletion of %{file} failed')
+              self.showMessage({
+                title: self.$gettextInterpolate(translated, { file: file.name }, true),
+                desc: error.message,
+                status: 'danger'
+              })
             })
-          })
+        }
       }
-      this.resetFileSelection()
-      this.setTrashbinDeleteMessage('')
+
+      for (const file of files) {
+        const p = this.queue.add(deleteFile(file))
+        deleteOps.push(p)
+      }
+      Promise.all(deleteOps).then(() => {
+        this.resetFileSelection()
+        this.setTrashbinDeleteMessage('')
+      })
     },
 
     $_ocTrashbin_restoreFile (file) {

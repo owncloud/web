@@ -45,7 +45,7 @@ pipeline:
 
   install-server:
     image: owncloudci/core
-    version: ${OC_VERSION=daily-master-qa}
+    version: ${OC_VERSION=daily-stable10-qa}
     pull: true
     db_type: ${DB_TYPE=sqlite}
     db_name: ${DB_NAME=owncloud}
