@@ -87,7 +87,7 @@ When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
 
-When('the user shows all share-autocomplete results using the webUI', function () {
+When('the user displays all share-autocomplete results using the webUI', function () {
   return client.page.FilesPageElement.sharingDialog().showAllAutoCompleteResults()
 })
 

@@ -32,7 +32,7 @@ Feature: Autocompletion of share-with names
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
     When the user types "us" in the share-with-field
-    And the user shows all share-autocomplete results using the webUI
+    And the user displays all share-autocomplete results using the webUI
     Then all users and groups that contain the string "us" in their name should be listed in the autocomplete list on the webUI
     But only users and groups that contain the string "us" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
@@ -43,7 +43,7 @@ Feature: Autocompletion of share-with names
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
     When the user types "fi" in the share-with-field
-    And the user shows all share-autocomplete results using the webUI
+    And the user displays all share-autocomplete results using the webUI
     Then all users and groups that contain the string "fi" in their name should be listed in the autocomplete list on the webUI
     But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
