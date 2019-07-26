@@ -14,18 +14,30 @@
         <section>
           <label class="oc-label"><translate>Invite new collaborators</translate></label>
           <oc-autocomplete
-            v-model="selectedItem" :items="autocompleteResults" :itemsLoading="autocompleteInProgress"
-            :placeholder="$_ocCollaborationStatus_autocompletePlacholder" @update:input="onAutocompleteInput"
-            :filter="filterRecipients" id="oc-sharing-autocomplete" class="uk-margin-bottom">
+            @input="$_ocCollaborators_selectAutocompleteResult" :items="autocompleteResults"
+            :itemsLoading="autocompleteInProgress" :placeholder="$_ocCollaborationStatus_autocompletePlacholder"
+            @update:input="onAutocompleteInput" :filter="filterRecipients" id="oc-sharing-autocomplete"
+            class="uk-margin-bottom">
             <template v-slot:item="{item}">
               <div class="uk-text-bold files-collaborators-autocomplete-username">{{ item.label }}</div>
               <span class="uk-text-meta">{{ $_ocCollaborators_recipientType(item) }}</span>
             </template>
           </oc-autocomplete>
-          <div v-if="selectedItem" class="uk-margin-medium-bottom">
-            <div class="uk-flex-inline uk-flex-column uk-flex-middle uk-margin-small-bottom">
-              <oc-avatar src="" />
-              <span>{{ selectedItem.label }}</span>
+          <div v-if="selectedCollaborators.length > 0" class="uk-margin-medium-bottom">
+            <div>
+              <div><translate>Selected collaborators</translate>:</div>
+              <div
+              v-for="(collaborator, index) in selectedCollaborators" :key="index"
+              class="uk-flex-inline uk-flex-row uk-flex-start uk-margin-small-bottom"
+              :class="{ 'uk-margin-small-right': (index + 1) !== selectedCollaborators.length }">
+                <div class="uk-margin-small-top">
+                  <span class="uk-text-bold">{{ collaborator.label }}</span>
+                  <translate v-if="collaborator.value.shareType" class="uk-text-meta">(group)</translate>
+                </div>
+                <oc-icon
+                  name="close" variation="danger" class="oc-cursor-pointer"
+                  role="button" @click="$_ocCollaborators_removeFromSelection(collaborator)" />
+              </div>
             </div>
             <div>
               <oc-grid gutter="small">
@@ -66,7 +78,7 @@
                   <oc-button @click="$_ocCollaborators_newCollaboratorsCancel"><translate>Cancel</translate></oc-button>
                 </div>
                 <div>
-                  <oc-button id="files-collaborators-add-new-button" variation="primary" @click="$_ocCollaborators_newCollaboratorsAdd(selectedItem)" :disabled="!selectedNewRole"><translate>Add collaborators</translate></oc-button>
+                  <oc-button id="files-collaborators-add-new-button" variation="primary" @click="$_ocCollaborators_newCollaboratorsAdd(selectedCollaborators)" :disabled="!selectedNewRole"><translate>Add collaborators</translate></oc-button>
                 </div>
               </oc-grid>
             </div>
@@ -126,6 +138,7 @@ export default {
           client: this.$client,
           path: this.highlightedFile.path
         })
+        this.selectedCollaborators = []
       }
     }
   },
@@ -133,7 +146,7 @@ export default {
     return {
       autocompleteResults: [],
       autocompleteInProgress: false,
-      selectedItem: '',
+      selectedCollaborators: [],
       canShare: false,
       roles: {
         viewer: {
@@ -184,6 +197,8 @@ export default {
     ...mapActions('Files', ['shareSetOpen', 'loadShares', 'sharesClearState', 'addShare', 'deleteShare', 'changeShare']),
     onAutocompleteInput (value) {
       if (value.length < 2) {
+        this.autocompleteInProgress = false
+        this.autocompleteResults = []
         return
       }
       this.autocompleteInProgress = true
@@ -198,7 +213,18 @@ export default {
             return user.value.shareWith !== this.user.id
           })
 
-          this.autocompleteResults = users.concat(groups)
+          const results = users.concat(groups).filter(collaborator => {
+            const selected = this.selectedCollaborators.find(selectedCollaborator => {
+              return collaborator.value.shareWith === selectedCollaborator.value.shareWith
+            })
+            if (selected) {
+              return collaborator.value.shareWith !== selected.value.shareWith
+            }
+
+            return true
+          })
+
+          this.autocompleteResults = results
         })
         .catch(error => {
           console.log(error)
@@ -216,7 +242,7 @@ export default {
       return this.$gettext('User')
     },
     $_ocCollaborators_newCollaboratorsCancel () {
-      this.selectedItem = ''
+      this.selectedCollaborators = []
     },
     $_ocCollaborators_newCollaboratorsSelectRole (role) {
       this.selectedNewRole = role
@@ -235,26 +261,37 @@ export default {
           permissions.perms = this.canShare ? 19 : 2
           break
       }
-      this.addShare({
-        client: this.$client,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext,
-        shareWith: collaborators.value.shareWith,
-        shareType: collaborators.value.shareType,
-        permissions: permissions
-      })
-      this.selectedItem = null
+      for (const collaborator of collaborators) {
+        this.addShare({
+          client: this.$client,
+          path: this.highlightedFile.path,
+          $gettext: this.$gettext,
+          shareWith: collaborator.value.shareWith,
+          shareType: collaborator.value.shareType,
+          permissions: permissions
+        })
+      }
+      this.selectedCollaborators = []
       this.selectedNewRole = null
       this.canShare = false
     },
     $_ocCollaborators_collaboratorType (type) {
-      console.log(this.shares)
       if (type === '0') return this.$gettext('User')
 
       return this.$gettext('Group')
     },
     $_ocCollaborator_canShare (value) {
       this.canShare = value
+    },
+    $_ocCollaborators_selectAutocompleteResult (collaborator) {
+      this.selectedCollaborators.push(collaborator)
+    },
+    $_ocCollaborators_removeFromSelection (collaborator) {
+      const selectedCollaborators = this.selectedCollaborators.filter(selectedCollaborator => {
+        return collaborator !== selectedCollaborator
+      })
+
+      this.selectedCollaborators = selectedCollaborators
     }
   }
 }
