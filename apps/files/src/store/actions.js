@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 function _buildFile (file) {
   let ext = ''
   if (file.type !== 'dir') {
@@ -149,6 +151,44 @@ function _buildSharedFile (file) {
       return true
     }
   }
+},
+function _buildLink (l) {
+  const link = l.shareInfo
+  let description = ''
+
+  switch (link.permissions) {
+    case ('1'):
+      description = 'Viewer' // hover: Viewer can view or download contents.
+      break
+    case ('15'):
+      description = 'Contributor' // hover: Contributor can view, download, edit, delete and upload contents.
+      break
+    case ('4'):
+      description = 'Uploader' // TODO hover: Uploader files from multiple recipients without revealing the contents of the folder.
+      break
+    case ('5'):
+      description = 'Editor' // TODO hover: Editor files from multiple recipients without revealing the contents of the folder.
+      break
+  }
+
+  return {
+    id: link.id,
+    token: link.token,
+    url: link.url,
+    path: link.path,
+    permissions: link.permissions,
+    description,
+    stime: link.stime,
+    name: link.name,
+    password: !!(link.share_with && link.share_with_displayname),
+    expiration: moment(link.expiration).format('YYYY-MM-DD'),
+    itemSource: link.item_source,
+    file: {
+      parent: link.file_parent,
+      source: link.file_source,
+      target: link.file_target
+    }
+  }
 }
 
 function _buildShare (s) {
@@ -178,26 +218,6 @@ function _buildShare (s) {
         delete: s.permissions === '9' || s.permissions === '15' || s.permissions === '25' || s.permissions === '31'
       }
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
-      break
-    case ('3'): // public link
-      share.role = 'public'
-      share.name = s.name
-      switch (s.permissions) {
-        case ('1'):
-          share.displayName = 'Download / View' // hover: Recipients can view or download contents.
-          break
-        case ('15'):
-          share.displayName = 'Download / View / Upload' // hover: Recipients can view, download, edit, delete and upload contents.
-          break
-        case ('4'):
-          share.displayName = 'Upload only (File Drop)' // TODO hover: Receive files from multiple recipients without revealing the contents of the folder.
-          break
-        default:
-          share.role = 'legacy'
-      }
-      share.avatar = 'link' // TODO de we have to give a path? remote.php/dav/avatars/admin/128.png or is an icon enough?
-      share.email = s.url // TODO add optional url to card, we are kind of misusing this
-      // TODO password
       break
   }
 
@@ -582,5 +602,75 @@ export default {
   },
   toggleCollaboratorsEdit (context, inProgress) {
     context.commit('TOGGLE_COLLABORATORS_EDIT', inProgress)
+  },
+  loadLinks (context, { client, path }) {
+    context.commit('LINKS_PURGE')
+    context.commit('LINKS_ERROR', null)
+    context.commit('LINKS_LOADING', true)
+
+    client.shares.getShares(path, {})
+      .then(data => {
+        data.forEach(share => {
+          if (share.shareInfo.share_type === '3') {
+            context.commit('LINKS_ADD', _buildLink(share))
+          }
+        })
+      })
+      .catch(error => {
+        context.commit('LINKS_ERROR', error.message)
+      })
+      .finally(context.commit('LINKS_LOADING', false))
+  },
+
+  purgeLinks (context) {
+    context.commit('LINKS_PURGE')
+  },
+
+  addLink (context, { path, client, $gettext, params }) {
+    return new Promise((resolve, reject) => {
+      context.commit('LINKS_LOADING', true)
+      client.shares.shareFileWithLink(path, params)
+        .then(data => {
+          const link = _buildLink(data)
+          context.commit('LINKS_ADD', link)
+          context.commit('LINKS_LOADING', false)
+          resolve(link)
+        })
+        .catch(e => {
+          context.dispatch('showMessage', {
+            title: $gettext('Error while sharing.'),
+            desc: e,
+            status: 'danger'
+          }, { root: true })
+          context.commit('LINKS_LOADING', false)
+          reject(e)
+        })
+    })
+  },
+  updateLink (context, { id, client, $gettext, params }) {
+    return new Promise((resolve, reject) => {
+      context.commit('LINKS_LOADING', true)
+      client.shares.updateShare(id, params)
+        .then(data => {
+          const link = _buildLink(data)
+          context.commit('LINKS_UPDATE', link)
+          context.commit('LINKS_LOADING', false)
+          resolve(link)
+        })
+        .catch(e => {
+          context.dispatch('showMessage', {
+            title: $gettext('Error while sharing.'),
+            desc: e,
+            status: 'danger'
+          }, { root: true })
+          context.commit('LINKS_LOADING', false)
+          reject(e)
+        })
+    })
+  },
+  removeLink (context, { id, client }) {
+    client.shares.deleteShare(id).then(() => {
+      context.commit('LINKS_REMOVE', id)
+    }).catch(e => console.log(e))
   }
 }

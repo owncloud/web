@@ -155,5 +155,29 @@ export default {
   },
   TOGGLE_COLLABORATORS_EDIT (state, inProgress) {
     state.collaboratorsEditInProgress = inProgress
+  },
+  LINKS_PURGE (state) {
+    state.links = []
+  },
+  LINKS_LOADING (state, loading) {
+    state.linksLoading = loading
+  },
+  LINKS_ERROR (state, error) {
+    state.linksError = error
+  },
+  LINKS_ADD (state, link) {
+    state.links.push(link)
+  },
+  LINKS_REMOVE (state, linkId) {
+    state.links = state.links.filter(link => link.id !== linkId)
+  },
+  LINKS_UPDATE (state, linkUpdated) {
+    state.links = state.links.map(link => {
+      if (link.id === linkUpdated.id) {
+        return linkUpdated
+      }
+
+      return link
+    })
   }
 }

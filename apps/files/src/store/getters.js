@@ -109,5 +109,14 @@ export default {
   },
   collaboratorsEditInProgress: state => {
     return state.collaboratorsEditInProgress
+  },
+  links: state => {
+    return state.links
+  },
+  linksError: state => {
+    return state.linksError
+  },
+  linksLoading: state => {
+    return state.linksLoading
   }
 }
