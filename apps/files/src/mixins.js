@@ -27,6 +27,8 @@ export default {
     _renameDialogTitle () {
       let translated
 
+      if (!this.selectedFile.name) return null
+
       if (this.selectedFile.type === 'folder') {
         translated = this.$gettext('Rename folder %{name}')
       } else {
