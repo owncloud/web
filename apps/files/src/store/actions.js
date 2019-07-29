@@ -102,26 +102,22 @@ function _buildShare (s) {
     // TODO differentiate groups from users?
     // fall through
     case ('1'): // group share
-      share.role = 'editor' // TODO: Switch to custom role when implemented
+      share.role = 'custom'
       if (s.permissions === '1' || s.permissions === '17') {
         share.role = 'viewer'
       }
-      if (s.permissions === '2' || s.permissions === '7' || s.permissions === '23') {
+      if (s.permissions === '3' || s.permissions === '15' || s.permissions === '19' || s.permissions === '31') {
         share.role = 'editor'
       }
-      // Co-Owner dropped for now until we get displaying of reshares working also for him
-      // if (s.permissions === '31') {
-      //   share.role = 'coowner'
-      // }
       share.permissions = s.permissions
-      share.canReshare = s.permissions === '16' || s.permissions === '17' || s.permissions === '19' || s.permissions === '23' || s.permissions === '31'
+      share.canShare = s.permissions === '17' || s.permissions === '19' || s.permissions === '21' || s.permissions === '25' || s.permissions === '31'
       share.avatar = 'https://picsum.photos/64/64?image=1075' // TODO where do we get the avatar from? by uid? remote.php/dav/avatars/admin/128.png
       share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
       share.displayName = s.share_with_displayname
       share.customPermissions = {
-        create: s.permissions === '5' || s.permissions === '21',
-        change: s.permissions === '3' || s.permissions === '19',
-        delete: s.permissions === '9' || s.permissions === '25'
+        change: s.permissions === '3' || s.permissions === '15' || s.permissions === '19' || s.permissions === '31',
+        create: s.permissions === '5' || s.permissions === '15' || s.permissions === '21' || s.permissions === '31',
+        delete: s.permissions === '9' || s.permissions === '15' || s.permissions === '25' || s.permissions === '31'
       }
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
       break
@@ -385,26 +381,31 @@ export default {
     context.commit('SHARES_LOAD', [])
     context.commit('SHARES_ERROR', null)
   },
-  changeShare (context, { client, share, reshare }) {
+  changeShare (context, { client, share, role, canShare, canChange, canCreate, canDelete }) {
+    context.commit('TOGGLE_COLLABORATOR_SAVING', true)
     const params = {}
-    switch (share.role) {
-      case ('coowner'):
-        params.perms = 31
+    switch (role) {
+      case ('viewer'):
+        params.perms = canShare ? 17 : 1
         break
       case ('editor'):
         if (share.info.item_type === 'file') {
-          params.perms = reshare ? 19 : 2
+          params.perms = canShare ? 19 : 3
           break
         }
-        params.perms = reshare ? 23 : 7
-        break
-      case ('viewer'):
-        console.log(reshare)
-        params.perms = reshare ? 17 : 1
-        console.log(params.perms)
+        params.perms = canShare ? 31 : 15
         break
       case ('custom'):
-        params.perms = 31
+        let perms = 1
+        const changePerm = 2
+        const createPerm = 4
+        const deletePerm = 8
+        const resharePerm = 16
+        if (canChange) perms += changePerm
+        if (canCreate) perms += createPerm
+        if (canDelete) perms += deletePerm
+        if (canShare) perms += resharePerm
+        params.perms = perms
         break
     }
 
@@ -414,14 +415,16 @@ export default {
       })
     }
 
-    return client.shares.updateShare(share.info.id, params)
+    client.shares.updateShare(share.info.id, params)
       .then(() => {
         // TODO: work with response once it is available: https://github.com/owncloud/owncloud-sdk/issues/208
-        share.info.permissions = params.perms
-        context.commit('SHARES_UPDATE_SHARE', share)
+        context.commit('SHARES_UPDATE_SHARE', { share, role })
       })
       .catch(e => {
         console.log(e)
+      })
+      .finally(_ => {
+        context.commit('TOGGLE_COLLABORATOR_SAVING', false)
       })
   },
   addShare (context, { client, path, $gettext, shareWith, shareType, permissions }) {
@@ -486,5 +489,8 @@ export default {
   },
   setHighlightedFile (context, file) {
     context.commit('SET_HIGHLIGHTED_FILE', file)
+  },
+  toggleCollaboratorSaving (context, saving) {
+    context.commit('TOGGLE_COLLABORATOR_SAVING', saving)
   }
 }

@@ -20,7 +20,7 @@
             class="uk-margin-bottom">
             <template v-slot:item="{item}">
               <div class="uk-text-bold files-collaborators-autocomplete-username">{{ item.label }}</div>
-              <span class="uk-text-meta">{{ $_ocCollaborators_recipientType(item) }}</span>
+              <span class="uk-text-meta">{{ $_ocCollaborators_collaboratorType(item.value.shareType) }}</span>
             </template>
           </oc-autocomplete>
           <div v-if="selectedCollaborators.length > 0" class="uk-margin-medium-bottom">
@@ -60,17 +60,17 @@
                 </div>
                 <oc-grid v-if="selectedNewRole" gutter="small" class="uk-width-1-1">
                   <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                    <oc-switch class="uk-margin-small-right" @change="$_ocCollaborator_canShare" /> <translate>Can share</translate>
+                    <oc-switch class="uk-margin-small-right" @change="$_ocCollaborators_switchPermission('canShare')" /> <translate :class="{ 'uk-text-muted': !canShare }">Can share</translate>
                   </div>
-                  <template v-if="selectedNewRole === 'custom'">
+                  <template v-if="selectedNewRole.tag === 'custom'">
                     <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                      <oc-switch class="uk-margin-small-right" /> <translate>Can change</translate>
+                      <oc-switch class="uk-margin-small-right" @change="$_ocCollaborators_switchPermission('canChange')" /> <translate :class="{ 'uk-text-muted': !canChange }">Can change</translate>
                     </div>
-                    <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                      <oc-switch class="uk-margin-small-right" /> <translate>Can create</translate>
+                    <div v-if="highlightedFile.type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                      <oc-switch class="uk-margin-small-right" @change="$_ocCollaborators_switchPermission('canCreate')" /> <translate :class="{ 'uk-text-muted': !canCreate }">Can create</translate>
                     </div>
-                    <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                      <oc-switch class="uk-margin-small-right" /> <translate>Can delete</translate>
+                    <div v-if="highlightedFile.type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
+                      <oc-switch class="uk-margin-small-right" @change="$_ocCollaborators_switchPermission('canDelete')" /> <translate :class="{ 'uk-text-muted': !canDelete }">Can delete</translate>
                     </div>
                   </template>
                 </oc-grid>
@@ -111,6 +111,7 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import Mixins from './Collaborators/mixins'
 const Collaborator = _ => import('./Collaborators/Collaborator.vue')
 
 export default {
@@ -121,6 +122,9 @@ export default {
   components: {
     Collaborator
   },
+  mixins: [
+    Mixins
+  ],
   mounted () {
     if (this.highlightedFile) {
       this.loadShares({
@@ -148,6 +152,9 @@ export default {
       autocompleteInProgress: false,
       selectedCollaborators: [],
       canShare: false,
+      canChange: false,
+      canCreate: false,
+      canDelete: false,
       roles: {
         viewer: {
           tag: 'viewer',
@@ -158,17 +165,12 @@ export default {
           tag: 'editor',
           name: this.$gettext('Editor'),
           description: this.$gettext('Upload, edit, delete, download and preview')
+        },
+        custom: {
+          tag: 'custom',
+          name: this.$gettext('Custom role'),
+          description: this.$gettext('Set detailed permissions')
         }
-        // coowner: {
-        //   name: this.$gettext('Co-Owner'),
-        //   description: this.$gettext('Share, upload, edit, delete, download and preview'),
-        //   perms: 16
-        // },
-        // custom: {
-        //   tag: 'custom',
-        //   name: this.$gettext('Custom role'),
-        //   description: this.$gettext('Set detailed permissions')
-        // }
       },
       selectedNewRole: null
     }
@@ -234,13 +236,6 @@ export default {
     filterRecipients (item, queryText) {
       return item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
     },
-    $_ocCollaborators_recipientType (recipient) {
-      if (recipient.value.shareType === 1) {
-        return this.$gettext('Group')
-      }
-
-      return this.$gettext('User')
-    },
     $_ocCollaborators_newCollaboratorsCancel () {
       this.selectedCollaborators = []
     },
@@ -249,16 +244,28 @@ export default {
     },
     $_ocCollaborators_newCollaboratorsAdd (collaborators) {
       const permissions = { perms: null }
-      switch (this.selectedNewRole.name) {
-        case ('Viewer'):
+      switch (this.selectedNewRole.tag) {
+        case ('viewer'):
           permissions.perms = this.canShare ? 17 : 1
           break
-        case ('Editor'):
+        case ('editor'):
           if (this.highlightedFile.type === 'folder') {
             permissions.perms = this.canShare ? 23 : 7
             break
           }
           permissions.perms = this.canShare ? 19 : 2
+          break
+        case ('custom'):
+          let perms = 1
+          const changePerm = 2
+          const createPerm = 4
+          const deletePerm = 8
+          const resharePerm = 16
+          if (this.canChange) perms += changePerm
+          if (this.canCreate) perms += createPerm
+          if (this.canDelete) perms += deletePerm
+          if (this.canShare) perms += resharePerm
+          permissions.perms = perms
           break
       }
       for (const collaborator of collaborators) {
@@ -273,15 +280,10 @@ export default {
       }
       this.selectedCollaborators = []
       this.selectedNewRole = null
+      this.canChange = false
+      this.canCreate = false
+      this.canDelete = false
       this.canShare = false
-    },
-    $_ocCollaborators_collaboratorType (type) {
-      if (type === '0') return this.$gettext('User')
-
-      return this.$gettext('Group')
-    },
-    $_ocCollaborator_canShare (value) {
-      this.canShare = value
     },
     $_ocCollaborators_selectAutocompleteResult (collaborator) {
       this.selectedCollaborators.push(collaborator)
