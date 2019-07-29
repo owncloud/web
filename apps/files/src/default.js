@@ -4,6 +4,7 @@ import 'regenerator-runtime/runtime'
 import FilesApp from './components/FilesApp.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
+import FileLink from './components/FileLink.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import translationsJson from '../l10n/translations.json'
 
@@ -19,6 +20,9 @@ const appInfo = {
     {
       app: 'files-version',
       component: FileInfoVersions
+    }, {
+      app: 'file-link',
+      component: FileLink
     }, {
       app: 'files-sharing',
       component: FileSharingSidebar,
