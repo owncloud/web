@@ -107,11 +107,11 @@ export default {
   SHARES_REMOVE_SHARE (state, share) {
     state.shares = state.shares.filter(i => ![share].includes(i))
   },
-  SHARES_UPDATE_SHARE (state, share) {
+  SHARES_UPDATE_SHARE (state, { share, role }) {
     const fileIndex = state.shares.findIndex((s) => {
       return s.info.id === share.info.id
     })
-    state.shares[fileIndex].role = share.role
+    state.shares[fileIndex].role = role
   },
   SHARES_ERROR (state, error) {
     state.shares = []
@@ -149,5 +149,8 @@ export default {
       file = state.files[fileIndex]
     }
     state.highlightedFile = file
+  },
+  TOGGLE_COLLABORATOR_SAVING (state, saving) {
+    state.collaboratorSaving = saving
   }
 }

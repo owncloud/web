@@ -32,5 +32,6 @@ export default {
   filesDeleteMessage: '',
   overwriteDialogTitle: null,
   overwriteDialogMessage: null,
-  highlightedFile: null
+  highlightedFile: null,
+  collaboratorSaving: false
 }

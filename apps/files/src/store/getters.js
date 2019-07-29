@@ -85,5 +85,8 @@ export default {
   },
   highlightedFile: state => {
     return state.highlightedFile
+  },
+  collaboratorSaving: state => {
+    return state.collaboratorSaving
   }
 }
