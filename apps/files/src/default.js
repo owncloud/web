@@ -5,6 +5,7 @@ import FilesApp from './components/FilesApp.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import PrivateLink from './components/PrivateLink.vue'
+import PublicLink from './components/PublicLinks/PublicLink.vue'
 import translationsJson from '../l10n/translations.json'
 
 const store = require('./store')
@@ -18,12 +19,18 @@ const appInfo = {
   fileSideBars: [
     {
       app: 'files-version',
-      component: FileInfoVersions
+      component: FileInfoVersions,
+      enabled (capabilities) {
+        return !!capabilities.core
+      }
     }, {
       app: 'files-sharing',
       component: FileSharingSidebar,
       enabled (capabilities) {
-        return capabilities.files_sharing.api_enabled === '1'
+        if (capabilities.files_sharing) {
+          return capabilities.files_sharing.api_enabled === '1'
+        }
+        return false
       },
       quickAccess: {
         icon: 'share',
@@ -53,7 +60,10 @@ const navItems = [
     name: 'Deleted files',
     iconMaterial: 'delete',
     enabled (capabilities) {
-      return capabilities.dav.trashbin === '1.0'
+      if (capabilities.dav) {
+        return capabilities.dav.trashbin === '1.0'
+      }
+      return false
     },
     route: {
       name: 'files-trashbin',
@@ -104,6 +114,22 @@ const routes = [
       fullscreen: PrivateLink
     },
     meta: { hideHeadbar: true }
+  },
+  {
+    path: '/public-link/:token',
+    name: 'public-link',
+    components: {
+      fullscreen: PublicLink
+    },
+    meta: { auth: false, hideHeadbar: true }
+  },
+  {
+    path: '/public-files/:item',
+    name: 'public-files',
+    components: {
+      app: FilesApp
+    },
+    meta: { auth: false }
   }
 ]
 

@@ -45,17 +45,6 @@ export default {
     formDateFromNow (date) {
       return moment(date).locale(this.$language.current).fromNow()
     },
-    navigateTo (route, param) {
-      if (this.searchTerm !== '' && this.$route.params.item === param) {
-        this.resetSearch()
-      }
-      this.$router.push({
-        name: route,
-        params: {
-          item: param
-        }
-      })
-    },
     changeName (item) {
       this.changeFileName = !this.changeFileName
       if (typeof item === 'object') {
@@ -81,31 +70,6 @@ export default {
       }).then(setTimeout(_ => {
         this.originalName = null
       }, 1000))
-    },
-
-    downloadFile (file) {
-      const url = this.$client.files.getFileUrl(file.path)
-      const anchor = document.createElement('a')
-
-      const headers = new Headers()
-      headers.append('Authorization', 'Bearer ' + this.getToken)
-
-      fetch(url, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
-            window.navigator.msSaveOrOpenBlob(blobby, file.name)
-          } else { // for Non-IE (chrome, firefox etc.)
-            const objectUrl = window.URL.createObjectURL(blobby)
-
-            anchor.href = objectUrl
-            anchor.download = file.name
-            anchor.click()
-
-            window.URL.revokeObjectURL(objectUrl)
-          }
-        })
-        .catch(error => console.log(error))
     },
     fileTypeIcon (file) {
       if (file) {

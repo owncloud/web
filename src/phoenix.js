@@ -33,7 +33,8 @@ import coreTranslations from '../l10n/translations.json'
 
 // --- Image source ----
 
-import MediaSource from './plugins/mediaSource'
+import MediaSource from './plugins/mediaSource.js'
+import PhoenixPlugin from './plugins/phoenix'
 
 // --- Drag Drop ----
 
@@ -54,6 +55,7 @@ Vue.use(DesignSystem)
 Vue.use(Clipboard)
 Vue.use(VueScrollTo)
 Vue.use(MediaSource)
+Vue.use(PhoenixPlugin)
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)
@@ -111,6 +113,9 @@ function loadApps () {
   // inject custom config into vuex
   store.dispatch('loadConfig', config)
 
+  // basic init of ownCloud sdk
+  Vue.prototype.$client.init({ baseUrl: config.server || window.location.origin })
+
   Vue.use(GetTextPlugin, {
     availableLanguages: supportedLanguages,
     defaultLanguage: navigator.language.substring(0, 2),
@@ -136,8 +141,6 @@ function loadApps () {
     .then(res => res.json())
     .then(res => {
       store.dispatch('loadTheme', res)
-      // TODO FOUC happens here; this color init is too late.
-      //OC.$vuetify.theme = res.colors
     })
 }
 
@@ -162,7 +165,7 @@ function requireError (err) {
   if (err) {
     // display error to user
     let missingApps = []
-    var failedId = err.requireModules && err.requireModules[0]
+    const failedId = err.requireModules && err.requireModules[0]
     missingApps.push(failedId)
     let index = apps.findIndex((a) => {
       return failedId === a.substring(2)

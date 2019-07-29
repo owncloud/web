@@ -8,7 +8,7 @@
       <div class="uk-width-auto uk-visible@m">
         <span class="uk-text-meta"><translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">%{ activeFiles.length } Result</translate></span>
       </div>
-      <div class="uk-width-auto uk-visible@m">
+      <div v-if="!publicPage()" class="uk-width-auto uk-visible@m">
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
       <div class="uk-width-auto">
@@ -38,7 +38,7 @@
               <translate>Delete selected</translate>
             </oc-button>
           </template>
-          <oc-button class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn" />
+          <oc-button v-if="!publicPage()" class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn" />
           <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove uk-width-large">
             <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" />
           </oc-drop>
@@ -150,20 +150,30 @@ export default {
     },
 
     breadcrumbs () {
-      const breadcrumbs = [{
+      let baseUrl = '/files/list/'
+      const pathSplit = this.$route.params.item ? this.$route.params.item.split('/').filter((val) => val) : []
+      let startIndex = 0
+      let breadcrumbs = [{
         index: 0,
         text: this.$gettext('Home'),
         to: '/files/list'
       }]
+      if (this.publicPage()) {
+        baseUrl = '/files/public-files/'
+        startIndex = 1
+        breadcrumbs = [{
+          index: 0,
+          text: this.$gettext('Home'),
+          to: baseUrl + pathSplit[0]
+        }]
+      }
 
       if (this.$route.params.item) {
-        const absolutePath = this.$route.params.item
-        const pathSplit = absolutePath.split('/').filter((val) => val)
-        for (let i = 0; i < pathSplit.length; i++) {
+        for (let i = startIndex; i < pathSplit.length; i++) {
           breadcrumbs.push({
             index: i,
             text: pathSplit.slice(0, i + 1)[i],
-            to: '/files/list/' + encodeURIComponent(pathSplit.slice(0, i + 1).join('/'))
+            to: baseUrl + encodeURIComponent(pathSplit.slice(0, i + 1).join('/'))
           })
         }
       }
@@ -213,6 +223,13 @@ export default {
         client: this.$client,
         absolutePath: absolutePath,
         $gettext: this.$gettext
+      }).catch((error) => {
+        // TODO: 401 public link handling necessary???
+        this.showMessage({
+          title: this.$gettext('Loading folder failed…'),
+          desc: error.message,
+          status: 'danger'
+        })
       })
     },
     addNewFolder (folderName) {

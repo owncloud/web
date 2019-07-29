@@ -8,11 +8,12 @@
         <div class="uk-flex uk-flex-middle">
           <span class="uk-margin-small-right">{{ highlightedFile.name }}</span>
           <oc-icon name="link" v-clipboard="() => highlightedFile.privateLink"
+                   v-if="highlightedFile.privateLink"
                    v-clipboard:success="clipboardSuccessHandler"
           />
         </div>
         <div>
-          <oc-star class="uk-inline" :shining="highlightedFile.starred"/> {{ highlightedFile.size | fileSize }}, {{ formDateFromNow(highlightedFile.mdate) }}
+          <oc-star v-if="!publicPage()" class="uk-inline" :shining="highlightedFile.starred"/> {{ highlightedFile.size | fileSize }}, {{ formDateFromNow(highlightedFile.mdate) }}
         </div>
       </div>
     </template>
@@ -22,7 +23,7 @@
             {{ tab.component.title($gettext) }}
           </oc-tab-item>
       </oc-tabs>
-      <component v-if="fileSideBars.length > 0" v-bind:is="activeTabComponent.component" @reload="$emit('reload')"></component>
+      <component v-if="fileSideBars.length > 0 && activeTabComponent" v-bind:is="activeTabComponent.component" @reload="$emit('reload')"></component>
     </template>
   </oc-app-side-bar>
 </template>
