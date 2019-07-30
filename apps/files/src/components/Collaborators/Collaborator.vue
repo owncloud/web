@@ -1,7 +1,7 @@
 <template>
   <oc-accordion-item :key="collaborator.info.id" class="files-collaborators-collaborator uk-margin-small-bottom">
     <template slot="title">
-      <div class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
+      <div v-if="user.id !== collaborator.info.uid_owner" class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
       <div class="files-collaborators-collaborator-information uk-flex uk-flex-wrap uk-flex-middle">
         <oc-avatar :src="collaborator.avatar" class="uk-margin-small-right" />
         <div class="uk-flex uk-flex-column uk-flex-center">
@@ -76,6 +76,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'collaboratorSaving']),
+    ...mapGetters(['user']),
 
     _deleteButtonLabel () {
       return this.$gettext('Delete Share')
