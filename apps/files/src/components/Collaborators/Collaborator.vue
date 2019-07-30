@@ -5,8 +5,13 @@
       <div class="files-collaborators-collaborator-information uk-flex uk-flex-wrap uk-flex-middle">
         <oc-avatar :src="collaborator.avatar" class="uk-margin-small-right" />
         <div class="uk-flex uk-flex-column uk-flex-center">
-          <div class="oc-text"><span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.displayName }}</span><span v-if="collaborator.additionalInfo" class="uk-text-meta"> ({{ collaborator.additionalInfo }})</span></div>
-          <div class="oc-text">{{ roles[collaborator.role].name }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></div>
+          <div class="oc-text">
+            <span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.displayName }}</span>
+            <span v-if="parseInt(collaborator.info.share_type, 10) === 0 && collaborator.info.share_with_additional_info.length > 0" class="uk-text-meta">
+              ({{ collaborator.info.share_with_additional_info }})
+            </span>
+          </div>
+          <span class="oc-text">{{ roles[collaborator.role].name }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></span>
           <span class="uk-text-meta">{{ $_ocCollaborators_collaboratorType(collaborator.info.share_type) }}</span>
         </div>
       </div>
