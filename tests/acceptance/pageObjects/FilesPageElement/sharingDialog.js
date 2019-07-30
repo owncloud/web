@@ -151,6 +151,11 @@ module.exports = {
         })
       return Promise.all(promiseList)
     },
+    showAllAutoCompleteResults: function () {
+      return this.waitForElementVisible('@sharingAutoCompleteShowAllResultsButton')
+        .click('@sharingAutoCompleteShowAllResultsButton')
+        .waitForElementNotPresent('@sharingAutoCompleteShowAllResultsButton')
+    },
     /**
      *
      * @returns {string}
@@ -175,6 +180,9 @@ module.exports = {
     },
     sharingAutoCompleteDropDownElements: {
       selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion'
+    },
+    sharingAutoCompleteShowAllResultsButton: {
+      selector: '.oc-autocomplete-suggestion-overflow'
     },
     sidebarCloseBtn: {
       selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
