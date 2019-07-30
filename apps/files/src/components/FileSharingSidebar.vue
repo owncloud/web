@@ -219,8 +219,13 @@ export default {
             const selected = this.selectedCollaborators.find(selectedCollaborator => {
               return collaborator.value.shareWith === selectedCollaborator.value.shareWith
             })
-            if (selected) {
-              return collaborator.value.shareWith !== selected.value.shareWith
+
+            const exists = this.shares.find(existingCollaborator => {
+              return collaborator.value.shareWith === existingCollaborator.name
+            })
+
+            if (selected || exists) {
+              return false
             }
 
             return true
