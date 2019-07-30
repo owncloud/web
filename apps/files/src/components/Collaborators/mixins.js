@@ -7,6 +7,7 @@ export default {
     },
     $_ocCollaborators_switchPermission (permission) {
       this[permission] = !this[permission]
+      this.editing = true
     }
   }
 }
