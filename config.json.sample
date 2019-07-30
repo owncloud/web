@@ -1,14 +1,11 @@
 {
-	"server" : "https://demo.owncloud.com",
-	"theme": "owncloud",
-	"version": "0.1.0",
-	"auth": {
+  "server" : "https://demo.owncloud.com",
+  "theme": "owncloud",
+  "version": "0.1.0",
+  "auth": {
     "clientId": "",
-    "url": "",
-    "authUrl": ""
+    "url": "https://demo.owncloud.com/index.php/apps/oauth2/api/v1/token",
+    "authUrl": "https://demo.owncloud.com/index.php/apps/oauth2/authorize"
   },
-	"enableAvatars": true,
-	"apps" : [
-		"files"
-	]
+  "apps" : ["files"]
 }
