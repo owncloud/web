@@ -503,5 +503,24 @@ export default {
   },
   toggleCollaboratorsEdit (context, inProgress) {
     context.commit('TOGGLE_COLLABORATORS_EDIT', inProgress)
+  },
+  addLink (context, { client, path, $gettext, params }) {
+    // context.commit('LINKS_LOADING', true)
+
+    client.shares.shareFileWithLink(path, params)
+      .then(share => {
+        console.log(share)
+
+        // context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
+        // context.commit('LINKS_LOADING', false)
+      })
+      .catch(e => {
+        context.dispatch('showMessage', {
+          title: $gettext('Error while sharing.'),
+          desc: e,
+          status: 'danger'
+        }, { root: true })
+        // context.commit('LINKS_LOADING', false)
+      })
   }
 }
