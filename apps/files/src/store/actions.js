@@ -486,5 +486,27 @@ export default {
   },
   setHighlightedFile (context, file) {
     context.commit('SET_HIGHLIGHTED_FILE', file)
+  },
+  //
+  // Link shares
+  // ...........
+  addLink (context, { client, path, $gettext, params }) {
+    // context.commit('LINKS_LOADING', true)
+
+    client.shares.shareFileWithLink(path, params)
+      .then(share => {
+        console.log(share)
+
+        // context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
+        // context.commit('LINKS_LOADING', false)
+      })
+      .catch(e => {
+        context.dispatch('showMessage', {
+          title: $gettext('Error while sharing.'),
+          desc: e,
+          status: 'danger'
+        }, { root: true })
+        // context.commit('LINKS_LOADING', false)
+      })
   }
 }

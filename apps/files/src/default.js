@@ -22,7 +22,10 @@ const appInfo = {
       component: FileInfoVersions
     }, {
       app: 'file-link',
-      component: FileLink
+      component: FileLink,
+      enabled (capabilities) {
+        return capabilities.files_sharing.public.enabled === '1'
+      }
     }, {
       app: 'files-sharing',
       component: FileSharingSidebar,
