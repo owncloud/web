@@ -23,6 +23,7 @@ export default {
   }),
   computed: {
     ...mapGetters('Files', ['searchTerm', 'inProgress', 'files']),
+    ...mapGetters(['getToken']),
 
     _renameDialogTitle () {
       let translated
