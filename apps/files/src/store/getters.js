@@ -53,9 +53,6 @@ export default {
   dropzone: state => {
     return state.dropzone
   },
-  shareOpen: state => {
-    return state.shareOpen
-  },
   shares: state => {
     return state.shares
   },
@@ -91,5 +88,8 @@ export default {
   },
   publicLinkPassword: state => {
     return state.publicLinkPassword
+  },
+  collaboratorsEditInProgress: state => {
+    return state.collaboratorsEditInProgress
   }
 }

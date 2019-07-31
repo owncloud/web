@@ -53,6 +53,9 @@ function _buildFile (file) {
     },
     canRename: function () {
       return this.permissions.indexOf('N') >= 0
+    },
+    canShare: function () {
+      return this.permissions.indexOf('R') >= 0
     }
   })
 }
@@ -354,9 +357,6 @@ export default {
       })
     })
   },
-  shareSetOpen (context, payload) {
-    context.commit('SHARE_SET_OPEN', payload.index)
-  },
   loadShares (context, payload) {
     context.commit('SHARES_LOAD', [])
     context.commit('SHARES_ERROR', null)
@@ -494,5 +494,8 @@ export default {
   },
   setPublicLinkPassword (context, password) {
     context.commit('SET_PUBLIC_LINK_PASSWORD', password)
+  },
+  toggleCollaboratorsEdit (context, inProgress) {
+    context.commit('TOGGLE_COLLABORATORS_EDIT', inProgress)
   }
 }
