@@ -240,7 +240,8 @@ export default {
     },
     filterRecipients (item, queryText) {
       return item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1 ||
-        item.value.shareWith.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+        item.value.shareWith.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1 ||
+        queryText.includes('@') // Allow search by email as well
     },
     $_ocCollaborators_newCollaboratorsCancel () {
       this.selectedCollaborators = []
