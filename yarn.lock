@@ -1232,10 +1232,10 @@ archiver-utils@^2.1.0:
     normalize-path "^3.0.0"
     readable-stream "^2.0.0"
 
-archiver@^3.0.0:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/archiver/-/archiver-3.0.3.tgz#7487be5172650619eb5e3a473032a348a3412cdc"
-  integrity sha512-d0W7NUyXoLklozHHfvWnHoHS3dvQk8eB22pv5tBwcu1jEO5eZY8W+gHytkAaJ0R8fU2TnNThrWYxjvFlKvRxpw==
+archiver@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/archiver/-/archiver-3.1.0.tgz#6ee398fb892bf0840b798c5ebfaf5ded9dbd7820"
+  integrity sha512-FXYAX8Eso99q0c/Kaby/P4HxGdzwLzTxjTq7WL7dKk3FQkqAdZROmji67Xdn9C2SAXJBH5kqFQeL3UEXVDvWqw==
   dependencies:
     archiver-utils "^2.1.0"
     async "^2.6.3"
@@ -1243,7 +1243,7 @@ archiver@^3.0.0:
     glob "^7.1.4"
     readable-stream "^3.4.0"
     tar-stream "^2.1.0"
-    zip-stream "^2.1.0"
+    zip-stream "^2.1.1"
 
 are-we-there-yet@~1.1.2:
   version "1.1.5"
@@ -2178,13 +2178,13 @@ component-emitter@^1.2.1:
   resolved "https://registry.yarnpkg.com/component-emitter/-/component-emitter-1.3.0.tgz#16e4070fba8ae29b679f2215853ee181ab2eabc0"
   integrity sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==
 
-compress-commons@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/compress-commons/-/compress-commons-2.0.0.tgz#c555107ef865eef0ba8a31fe56ec79f813ed3e65"
-  integrity sha512-gnETNngrfsAoLBENM8M0DoiCDJkHwz3OfIg4mBtqKDcRgE4oXNwHxHxgHvwKKlrcD7eZ7BVTy4l8t9xVF7q3FQ==
+compress-commons@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/compress-commons/-/compress-commons-2.1.0.tgz#f9f5633b7470bfd236e03242cc0d8d70ded49f48"
+  integrity sha512-H6DhMQxI7NpvOGAjjop90bIOsGIZ8O1ewdKuS6ZTlnFA4YMpIhyajc+8fyEz4Em0c3iLjkOVfPJ+wtvy3RksQA==
   dependencies:
     buffer-crc32 "^0.2.13"
-    crc32-stream "^2.0.0"
+    crc32-stream "^3.0.0"
     normalize-path "^3.0.0"
     readable-stream "^2.3.6"
 
@@ -2370,13 +2370,13 @@ cosmiconfig@^5.0.0, cosmiconfig@^5.2.1:
     js-yaml "^3.13.1"
     parse-json "^4.0.0"
 
-crc32-stream@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/crc32-stream/-/crc32-stream-2.0.0.tgz#e3cdd3b4df3168dd74e3de3fbbcb7b297fe908f4"
-  integrity sha1-483TtN8xaN10494/u8t7KX/pCPQ=
+crc32-stream@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/crc32-stream/-/crc32-stream-3.0.1.tgz#cae6eeed003b0e44d739d279de5ae63b171b4e85"
+  integrity sha512-mctvpXlbzsvK+6z8kJwSJ5crm7yBwrQMTybJzMw1O4lLGJqjlDCXY2Zw7KheiA6XBEcBmfLx1D88mjRGVJtY9w==
   dependencies:
     crc "^3.4.4"
-    readable-stream "^2.0.0"
+    readable-stream "^3.4.0"
 
 crc@^3.4.4:
   version "3.8.0"
@@ -9408,11 +9408,11 @@ yauzl@2.4.1:
   dependencies:
     fd-slicer "~1.0.1"
 
-zip-stream@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/zip-stream/-/zip-stream-2.1.0.tgz#4f94246b64341536b86318bd556654278812b726"
-  integrity sha512-F/xoLqlQShgvn1BzHQCNiYIoo2R93GQIMH+tA6JC3ckMDkme4bnhEEXSferZcG5ea/6bZNx3GqSUHqT8TUO6uQ==
+zip-stream@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/zip-stream/-/zip-stream-2.1.1.tgz#7fad7f39395fc2be0ef50fb5303ff43ad049c25a"
+  integrity sha512-v54puzKSjCN5COeMZizwIfGh9vJ6V1GR8BiRgr5Y9zZ9VngzRt8EmZHsbzCb5ktZT1JqHlt9xuN2HRv634SRPw==
   dependencies:
     archiver-utils "^2.1.0"
-    compress-commons "^2.0.0"
+    compress-commons "^2.1.0"
     readable-stream "^3.4.0"
