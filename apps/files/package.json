@@ -36,7 +36,7 @@
   "dependencies": {
     "filesize": "^4.1.2",
     "moment": "^2.24.0",
-    "snyk": "^1.199.2",
+    "snyk": "^1.208.0",
     "vuex": "^3.1.1"
   },
   "browserslist": [
