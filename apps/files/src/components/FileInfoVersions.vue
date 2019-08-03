@@ -67,26 +67,10 @@ export default {
     downloadVersion (file) {
       const version = this.currentVersionId(file)
       const url = this.$client.fileVersions.getFileVersionUrl(this.currentFile.id, version)
-      const anchor = document.createElement('a')
 
       const headers = new Headers()
       headers.append('Authorization', 'Bearer ' + this.getToken)
-      fetch(url, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
-            window.navigator.msSaveOrOpenBlob(blobby, file.name)
-          } else { // for Non-IE (chrome, firefox etc.)
-            const objectUrl = window.URL.createObjectURL(blobby)
-
-            anchor.href = objectUrl
-            anchor.download = file.name
-            anchor.click()
-
-            window.URL.revokeObjectURL(objectUrl)
-          }
-        })
-        .catch(error => console.log(error))
+      return this.downloadFileFromUrl(url, headers, file.name)
     }
   }
 }

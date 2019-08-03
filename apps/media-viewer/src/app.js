@@ -8,7 +8,8 @@ const routes = [{
   components: {
     app: Mediaviewer
   },
-  name: 'mediaviewer'
+  name: 'mediaviewer',
+  meta: { auth: false }
 }]
 
 const appInfo = {

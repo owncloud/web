@@ -33,5 +33,6 @@ export default {
   overwriteDialogTitle: null,
   overwriteDialogMessage: null,
   highlightedFile: null,
-  collaboratorSaving: false
+  collaboratorSaving: false,
+  publicLinkPassword: null
 }

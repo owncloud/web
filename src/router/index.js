@@ -48,6 +48,12 @@ const router = new Router({
       meta: { auth: false, hideHeadbar: true }
     },
     {
+      path: '/s/:token',
+      name: 'publicLink',
+      redirect: '/files/public-link/:token',
+      meta: { auth: false, hideHeadbar: true }
+    },
+    {
       path: '/account',
       name: 'account',
       components: {

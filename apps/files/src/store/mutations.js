@@ -152,5 +152,8 @@ export default {
   },
   TOGGLE_COLLABORATOR_SAVING (state, saving) {
     state.collaboratorSaving = saving
+  },
+  SET_PUBLIC_LINK_PASSWORD (state, password) {
+    state.publicLinkPassword = password
   }
 }

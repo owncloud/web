@@ -158,9 +158,13 @@ export default {
     return new Promise((resolve, reject) => {
       let promise
       const favorite = routeName === 'files-favorites'
+      const publicFiles = routeName === 'public-files'
 
       if (favorite) {
         promise = client.files.getFavoriteFiles(context.getters.davProperties)
+      } else if (publicFiles) {
+        const password = context.getters.publicLinkPassword
+        promise = client.publicFiles.list(absolutePath, password, context.getters.davProperties)
       } else {
         promise = client.files.list(absolutePath, 1, context.getters.davProperties)
       }
@@ -191,13 +195,8 @@ export default {
         if (context.getters.searchTerm !== '') {
           context.dispatch('resetSearch')
         }
-      }).catch((e) => {
-        context.dispatch('showMessage', {
-          title: $gettext('Loading folder failed…'),
-          desc: e.message,
-          status: 'danger'
-        }, { root: true })
-        reject(e)
+      }).catch(error => {
+        reject(error)
       }).finally(() => {
         context.commit('UPDATE_FOLDER_LOADING', false)
         client.users.getUser(context.rootGetters.user.id).then(res => {
@@ -492,5 +491,8 @@ export default {
   },
   toggleCollaboratorSaving (context, saving) {
     context.commit('TOGGLE_COLLABORATOR_SAVING', saving)
+  },
+  setPublicLinkPassword (context, password) {
+    context.commit('SET_PUBLIC_LINK_PASSWORD', password)
   }
 }

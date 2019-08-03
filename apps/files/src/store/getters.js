@@ -88,5 +88,8 @@ export default {
   },
   collaboratorSaving: state => {
     return state.collaboratorSaving
+  },
+  publicLinkPassword: state => {
+    return state.publicLinkPassword
   }
 }

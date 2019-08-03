@@ -16,7 +16,7 @@
           <!-- @TODO: Bring back working uk-light -->
           <span class="uk-text-small" style="color:#fff"> {{ activeIndex + 1 }} <span v-translate>of</span> {{ mediaFiles.length }} </span>
           <oc-icon role="button" class="oc-cursor-pointer" size="medium" @click="next" name="chevron_right" />
-          <oc-icon role="button" class="oc-cursor-pointer" @click="downloadFile" name="file_download"  />
+          <oc-icon role="button" class="oc-cursor-pointer" @click="downloadImage" name="file_download"  />
           <oc-icon role="button" class="oc-cursor-pointer" @click="closeApp" name="close"/>
         </div>
       </div>
@@ -69,7 +69,7 @@ export default {
       }
 
       // Fetch image
-      this.mediaSource(this.thumbPath).then(imageUrl => {
+      this.mediaSource(this.thumbPath, 'url', this.headers).then(imageUrl => {
         this.images.push({
           id: this.activeMediaFile.id,
           name: this.activeMediaFile.name,
@@ -83,32 +83,12 @@ export default {
         this.failed = true
       })
     },
-    downloadFile () {
-      if (this.loading) { return }
+    downloadImage () {
+      if (this.loading) {
+        return
+      }
 
-      const file = this.mediaFiles[this.activeIndex]
-      const url = this.$client.files.getFileUrl(file.path)
-      const anchor = document.createElement('a')
-
-      const headers = new Headers()
-      headers.append('Authorization', 'Bearer ' + this.getToken)
-
-      fetch(url, { headers })
-        .then(response => response.blob())
-        .then(blobby => {
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
-            window.navigator.msSaveOrOpenBlob(blobby, file.name)
-          } else { // for Non-IE (chrome, firefox etc.)
-            const objectUrl = window.URL.createObjectURL(blobby)
-
-            anchor.href = objectUrl
-            anchor.download = file.name
-            anchor.click()
-
-            window.URL.revokeObjectURL(objectUrl)
-          }
-        })
-        .catch(error => console.log(error))
+      return this.downloadFile(this.mediaFiles[this.activeIndex])
     },
     next () {
       if (this.loading) { return }
@@ -169,7 +149,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('Files', ['activeFiles']),
+    ...mapGetters('Files', ['activeFiles', 'publicLinkPassword']),
     ...mapGetters(['getToken']),
 
     mediaFiles () {
@@ -203,15 +183,19 @@ export default {
         default: return 3840
       }
     },
-    thumbPath () {
-      const path = [
-        '..',
-        'dav',
-        'files',
-        this.$store.getters.user.id,
-        this.activeMediaFile.path
-      ].join('/')
+    headers () {
+      if (!this.publicPage()) {
+        return null
+      }
 
+      const headers = new Headers()
+      const password = this.publicLinkPassword
+      if (password) {
+        headers.append('Authorization', 'Basic ' + Buffer.from('public:' + password).toString('base64'))
+      }
+      return headers
+    },
+    thumbPath () {
       const query = queryString.stringify({
         x: this.thumbDimensions,
         y: this.thumbDimensions,
@@ -220,6 +204,24 @@ export default {
         preview: 1,
         a: 1
       })
+
+      if (this.publicPage()) {
+        const path = [
+          '..',
+          'dav',
+          'public-files',
+          this.activeMediaFile.path
+        ].join('/')
+
+        return this.$client.files.getFileUrl(path) + '?' + query
+      }
+      const path = [
+        '..',
+        'dav',
+        'files',
+        this.$store.getters.user.id,
+        this.activeMediaFile.path
+      ].join('/')
 
       return this.$client.files.getFileUrl(path) + '?' + query
     }

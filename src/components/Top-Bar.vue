@@ -1,14 +1,14 @@
 <template>
   <oc-navbar id="oc-topbar" tag="header" class="oc-topbar">
     <oc-navbar-item position="left">
-      <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)">
+      <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!publicPage()">
         <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
       </oc-button>
     </oc-navbar-item>
     <oc-navbar-item position="center">
       <router-link to="/" class="oc-topbar-icon">ownCloud X</router-link>
     </oc-navbar-item>
-    <oc-navbar-item position="right">
+    <oc-navbar-item position="right" v-if="!publicPage()">
       <notifications v-if="activeNotifications"></notifications>
       <div class="oc-topbar-personal">
         <avatar class="oc-topbar-personal-avatar" :userid="user.id" />
@@ -45,6 +45,9 @@ export default {
     ...mapState(['user'])
   },
   created: function () {
+    if (this.publicPage()) {
+      return
+    }
     this.fetchNotifications(this.$client).then(() => {
       this.intervalId = setInterval(() => {
         this.fetchNotifications(this.$client).catch(() => {

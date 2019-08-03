@@ -5,7 +5,7 @@
         <oc-table-cell shrink type="head">
           <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" @click.native="toggleAll" :value="all" />
         </oc-table-cell>
-        <oc-table-cell shrink />
+        <oc-table-cell shrink v-if="!publicPage()"/>
         <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
         <oc-table-cell shrink type="head" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }"><translate>Size</translate></oc-table-cell>
         <oc-table-cell shrink type="head" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }" class="uk-text-nowrap" v-translate>Modification Time</oc-table-cell>
@@ -17,11 +17,11 @@
         <oc-table-cell>
           <oc-checkbox class="uk-margin-small-left" @click.stop @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
         </oc-table-cell>
-        <oc-table-cell class="uk-padding-remove">
+        <oc-table-cell class="uk-padding-remove" v-if="!publicPage()">
           <oc-star class="uk-display-block" @click.native.stop="toggleFileFavorite(item)" :shining="item.starred" />
         </oc-table-cell>
         <oc-table-cell class="uk-text-truncate">
-          <oc-file @click.native.stop="item.type === 'folder' ? navigateTo('files-list', item.path.substr(1)) : openFileActionBar(item)"
+          <oc-file @click.native.stop="item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)"
                    :name="$_ocFileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
                    :filename="item.name" :key="item.id"/>
         </oc-table-cell>
@@ -70,9 +70,7 @@
     <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="filesDeleteMessage !== ''"
                       :oc-content="filesDeleteMessage" :oc-has-input="false" :ocTitle="_deleteDialogTitle"
                       ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="reallyDeleteFiles"
-                      @oc-cancel="setFilesDeleteMessage('')"
-    />
-
+                      @oc-cancel="setFilesDeleteMessage('')"/>
   </oc-table>
 </template>
 <script>
@@ -101,7 +99,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['loadFolder', 'setFilterTerm', 'markFavorite', 'resetFileSelection', 'addFileSelection', 'removeFileSelection',
-      'deleteFiles', 'renameFile', 'setFilesDeleteMessage', 'setHighlightedFile']),
+      'deleteFiles', 'renameFile', 'setFilesDeleteMessage', 'setHighlightedFile', 'setPublicLinkPassword']),
     ...mapActions(['openFile']),
 
     $_ocFilesFolder_getFolder () {
@@ -131,6 +129,22 @@ export default {
             })
           })
         }
+      }).catch((error) => {
+        // password for public link shares is missing -> this is handled on the caller side
+        if (this.publicPage() && error.statusCode === 401) {
+          this.$router.push({
+            name: 'public-link',
+            params: {
+              token: this.$route.params.item
+            }
+          })
+          return
+        }
+        this.showMessage({
+          title: this.$gettext('Loading folder failed…'),
+          desc: error.message,
+          status: 'danger'
+        })
       })
     },
     toggleAll () {
@@ -209,6 +223,21 @@ export default {
     },
     selectRow (item) {
       this.setHighlightedFile(item)
+    },
+    navigateTo (param) {
+      if (this.searchTerm !== '' && this.$route.params.item === param) {
+        this.resetSearch()
+      }
+      let route = 'files-list'
+      if (this.publicPage()) {
+        route = 'public-files'
+      }
+      this.$router.push({
+        name: route,
+        params: {
+          item: param
+        }
+      })
     }
   },
   computed: {
