@@ -25,6 +25,7 @@ import VueEvents from 'vue-events'
 import VueRouter from 'vue-router'
 import Clipboard from 'v-clipboard'
 import VueScrollTo from 'vue-scrollto'
+import VueMeta from 'vue-meta'
 
 // --- Gettext ----
 
@@ -56,6 +57,10 @@ Vue.use(Clipboard)
 Vue.use(VueScrollTo)
 Vue.use(MediaSource)
 Vue.use(PhoenixPlugin)
+Vue.use(VueMeta, {
+  // optional pluginOptions
+  refreshOnceOnNavigation: true
+})
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)

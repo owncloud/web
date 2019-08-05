@@ -18,20 +18,8 @@ const state = {
       name: '',
       slogan: ''
     },
-    colors: {
-      primary: '',
-      secondary: '',
-      accent: '',
-      info: '',
-      success: '',
-      warning: '',
-      error: ''
-    },
     logo: {
-      mini: '',
-      small: '',
-      big: '',
-      background: ''
+      favicon: ''
     }
   }
 }
