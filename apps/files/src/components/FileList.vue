@@ -13,7 +13,7 @@
       </oc-table-row>
     </oc-table-group>
     <oc-table-group>
-      <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item)" :id="'file-row-' + item.id">
+      <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item, $event)" :id="'file-row-' + item.id">
         <oc-table-cell>
           <oc-checkbox class="uk-margin-small-left" @click.stop @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
         </oc-table-cell>
@@ -221,7 +221,11 @@ export default {
       }
       return 'file-row'
     },
-    selectRow (item) {
+    selectRow (item, event) {
+      if (event.target.tagName !== 'TD') {
+        return
+      }
+      event.stopPropagation()
       this.setHighlightedFile(item)
     },
     navigateTo (param) {
