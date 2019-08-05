@@ -95,9 +95,6 @@ export default {
   DRAG_OVER (state, value) {
     state.dropzone = value
   },
-  SHARES_SET_OPEN (state, index) {
-    state.shareOpen = index
-  },
   SHARES_LOAD (state, shares) {
     state.shares = shares
   },
@@ -155,5 +152,8 @@ export default {
   },
   SET_PUBLIC_LINK_PASSWORD (state, password) {
     state.publicLinkPassword = password
+  },
+  TOGGLE_COLLABORATORS_EDIT (state, inProgress) {
+    state.collaboratorsEditInProgress = inProgress
   }
 }

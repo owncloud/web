@@ -1,5 +1,35 @@
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
+  data () {
+    return {
+      roles: {
+        viewer: {
+          tag: 'viewer',
+          name: this.$gettext('Viewer'),
+          description: this.$gettext('Download and preview')
+        },
+        editor: {
+          tag: 'editor',
+          name: this.$gettext('Editor'),
+          description: this.$gettext(
+            'Upload, edit, delete, download and preview'
+          )
+        },
+        custom: {
+          tag: 'custom',
+          name: this.$gettext('Custom role'),
+          description: this.$gettext('Set detailed permissions')
+        }
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['getToken'])
+  },
   methods: {
+    ...mapActions('Files', ['toggleCollaboratorsEdit']),
+
     $_ocCollaborators_collaboratorType (type) {
       if (type === '0' || type === 0) return this.$gettext('User')
 
@@ -8,6 +38,33 @@ export default {
     $_ocCollaborators_switchPermission (permission) {
       this[permission] = !this[permission]
       this.editing = true
+      this.toggleCollaboratorsEdit(true)
+    },
+    $_ocCollaborators_loadAvatar (item) {
+      const dav = this.$client.helpers._davPath
+      const headers = new Headers()
+      const url = `${dav}/avatars/${item.value.shareWith}/128.png`
+
+      headers.append('Authorization', 'Bearer ' + this.getToken)
+
+      if (item.value.shareType === 0 || item.value.shareType === '0') {
+        fetch(url, { headers })
+          .then(response => {
+            if (response.ok) {
+              return response.blob()
+            }
+            throw new Error('Network response was not ok.')
+          })
+          .then(blob => {
+            this.avatar = window.URL.createObjectURL(blob)
+          })
+          .catch(_ => {
+            this.avatar = ''
+          })
+        return
+      }
+
+      this.avatar = ''
     }
   }
 }
