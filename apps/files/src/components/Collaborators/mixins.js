@@ -41,30 +41,31 @@ export default {
       this.toggleCollaboratorsEdit(true)
     },
     $_ocCollaborators_loadAvatar (item) {
+      if (item.value.shareType === 1 || item.value.shareType === 3) return
+
       const dav = this.$client.helpers._davPath
       const headers = new Headers()
       const url = `${dav}/avatars/${item.value.shareWith}/128.png`
 
       headers.append('Authorization', 'Bearer ' + this.getToken)
+      this.loading = true
 
-      if (item.value.shareType === 0 || item.value.shareType === '0') {
-        fetch(url, { headers })
-          .then(response => {
-            if (response.ok) {
-              return response.blob()
-            }
-            throw new Error('Network response was not ok.')
-          })
-          .then(blob => {
-            this.avatar = window.URL.createObjectURL(blob)
-          })
-          .catch(_ => {
-            this.avatar = ''
-          })
-        return
-      }
-
-      this.avatar = ''
+      fetch(url, { headers })
+        .then(response => {
+          if (response.ok) {
+            return response.blob()
+          }
+          throw new Error('Network response was not ok.')
+        })
+        .then(blob => {
+          this.avatar = window.URL.createObjectURL(blob)
+        })
+        .catch(_ => {
+          this.avatar = ''
+        })
+        .finally(_ => {
+          this.loading = false
+        })
     }
   }
 }
