@@ -23,6 +23,17 @@ export default {
     'side-menu': Menu,
     TopBar
   },
+  metaInfo () {
+    const metaInfo = {
+      title: this.configuration.theme.general.name
+    }
+    if (this.favicon) {
+      metaInfo.link = [
+        { rel: 'icon', href: this.favicon }
+      ]
+    }
+    return metaInfo
+  },
   beforeMount () {
     this.initAuth()
   },
@@ -31,6 +42,9 @@ export default {
     ...mapGetters(['configuration']),
     showHeader () {
       return this.$route.meta.hideHeadbar !== true
+    },
+    favicon () {
+      return this.configuration.theme.logo.favicon
     }
   },
   methods: {

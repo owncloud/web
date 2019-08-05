@@ -2,5 +2,8 @@
   "general": {
     "name": "ownCloud",
     "slogan": "ownCloud – A safe home for all your data"
+  },
+  "logo": {
+    "favicon": "themes/owncloud/favicon.jpg"
   }
 }

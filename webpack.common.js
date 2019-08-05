@@ -13,17 +13,12 @@ const gitDirty = execa.sync('git', ['status', '-s', '-uall']).stdout.length > 0
 
 const appFolder = path.resolve(__dirname, 'apps')
 const apps = []
-let favicon = './themes/owncloud/favicon.jpg'
-var config
+let config
 
 if (fs.existsSync('config.json')) {
   config = require('./config.json')
 } else {
   config = require('./tests/drone/config.json')
-}
-
-if (fs.existsSync(`./themes/${config.theme}/favicon.jpg`)) {
-  favicon = `./themes/${config.theme}/favicon.jpg`
 }
 
 config.apps
@@ -61,8 +56,7 @@ module.exports = {
       }
     }), new WebpackCopyPlugin(apps),
     new HtmlWebpackPlugin({
-      template: 'index.html',
-      favicon: favicon
+      template: 'index.html'
     }),
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
