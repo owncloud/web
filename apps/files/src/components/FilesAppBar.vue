@@ -170,10 +170,17 @@ export default {
 
       if (this.$route.params.item) {
         for (let i = startIndex; i < pathSplit.length; i++) {
+          let onClick = null
+          let to = baseUrl + encodeURIComponent(pathSplit.slice(0, i + 1).join('/'))
+          if (i === pathSplit.length - 1) {
+            to = null
+            onClick = () => this.$router.go()
+          }
           breadcrumbs.push({
             index: i,
             text: pathSplit.slice(0, i + 1)[i],
-            to: baseUrl + encodeURIComponent(pathSplit.slice(0, i + 1).join('/'))
+            to: to,
+            onClick: onClick
           })
         }
       }
