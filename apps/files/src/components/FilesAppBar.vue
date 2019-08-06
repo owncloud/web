@@ -94,7 +94,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration']),
-    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'freeSpace', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage']),
+    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'freeSpace', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
     ...mapState(['route']),
     searchLabel () {
       return this.$gettext('Search')
@@ -119,6 +119,9 @@ export default {
     },
     url () {
       const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
+      if (this.publicPage()) {
+        return this.$client.publicFiles.getFileUrl(`/${path}`)
+      }
       return this.$client.files.getFileUrl(`/${path}`)
     },
     newFolderErrorMessage () {
@@ -128,9 +131,10 @@ export default {
       return this.checkNewFileName(this.newFileName)
     },
     headers () {
+      if (this.publicPage()) {
+        return {}
+      }
       return {
-        // will trigger 412 precondition failed if a file already exists
-        'If-None-Match': '*',
         Authorization: 'Bearer ' + this.getToken
       }
     },
@@ -229,7 +233,8 @@ export default {
       this.loadFolder({
         client: this.$client,
         absolutePath: absolutePath,
-        $gettext: this.$gettext
+        $gettext: this.$gettext,
+        routeName: this.$route.name
       }).catch((error) => {
         // TODO: 401 public link handling necessary???
         this.showMessage({
@@ -243,12 +248,16 @@ export default {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
         const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
-        this.$client.files.createFolder(path + folderName)
-          .then(() => {
-            this.createFolder = false
-            this.newFolderName = ''
-            this.$_ocFilesFolder_getFolder()
-          })
+        let p = this.$client.files.createFolder(path + folderName)
+        if (this.publicPage()) {
+          p = this.$client.publicFiles.createFolder(path + folderName, null, this.publicLinkPassword)
+        }
+
+        p.then(() => {
+          this.createFolder = false
+          this.newFolderName = ''
+          this.$_ocFilesFolder_getFolder()
+        })
           .catch(error => {
             this.showMessage({
               title: this.$gettext('Creating folder failed…'),
@@ -291,12 +300,15 @@ export default {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
         const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
-        this.$client.files.putFileContents(path + fileName, '')
-          .then(() => {
-            this.createFile = false
-            this.newFileName = ''
-            this.$_ocFilesFolder_getFolder()
-          })
+        let p = this.$client.files.putFileContents(path + fileName, '')
+        if (this.publicPage()) {
+          p = this.$client.publicFiles.putFileContents(path + fileName, null, this.publicLinkPassword, '')
+        }
+        p.then(() => {
+          this.createFile = false
+          this.newFileName = ''
+          this.$_ocFilesFolder_getFolder()
+        })
           .catch(error => {
             this.showMessage({
               title: this.$gettext('Creating file failed…'),

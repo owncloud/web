@@ -66,7 +66,8 @@ export default {
       this.renameFile({
         client: this.$client,
         file: this.selectedFile,
-        newValue: item
+        newValue: item,
+        publicPage: this.publicPage()
       }).then(setTimeout(_ => {
         this.originalName = null
       }, 1000))
@@ -229,7 +230,11 @@ export default {
         const createFolderPromises = []
         const rootDir = directoriesToCreate[0]
         for (const directory of directoriesToCreate) {
-          createFolderPromises.push(this.$client.files.createFolder(directory))
+          if (this.publicPage()) {
+            createFolderPromises.push(this.$client.publicFiles.createFolder(directory))
+          } else {
+            createFolderPromises.push(this.$client.files.createFolder(directory))
+          }
         }
         // Upload files
         const uploadPromises = []
