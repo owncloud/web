@@ -209,7 +209,8 @@ export default {
       const files = this.fileToBeDeleted ? [this.fileToBeDeleted] : this.selectedFiles
       this.deleteFiles({
         client: this.$client,
-        files: files
+        files: files,
+        publicPage: this.publicPage()
       }).then(() => {
         this.fileToBeDeleted = ''
         this.setFilesDeleteMessage('')

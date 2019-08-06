@@ -66,7 +66,8 @@ export default {
       this.renameFile({
         client: this.$client,
         file: this.selectedFile,
-        newValue: item
+        newValue: item,
+        publicPage: this.publicPage()
       }).then(setTimeout(_ => {
         this.originalName = null
       }, 1000))

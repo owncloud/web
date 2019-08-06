@@ -295,12 +295,16 @@ export default {
       context.commit('ADD_FILE', _buildFile(file))
     }
   },
-  deleteFiles (context, payload) {
-    const files = payload.files
-    const client = payload.client
+  deleteFiles (context, { files, client, publicPage }) {
     const promises = []
     for (const file of files) {
-      const promise = client.files.delete(file.path).then(() => {
+      let p = null
+      if (publicPage) {
+        p = client.publicFiles.delete(file.path, context.getters.publicLinkPassword)
+      } else {
+        p = client.files.delete(file.path)
+      }
+      const promise = p.then(() => {
         context.commit('REMOVE_FILE', file)
         context.commit('REMOVE_FILE_SELECTION', file)
       }).catch(error => {
@@ -315,13 +319,15 @@ export default {
       context.commit('REMOVE_FILE', file)
     }
   },
-  renameFile (context, payload) {
-    const file = payload.file
-    const newValue = payload.newValue
-    const client = payload.client
+  renameFile (context, { file, newValue, client, publicPage }) {
     if (file !== undefined && newValue !== undefined && newValue !== file.name) {
       const newPath = file.path.substr(1, file.path.lastIndexOf('/'))
-      client.files.move(file.path, (newPath + newValue)).then(() => {
+      if (publicPage) {
+        return client.publicFiles.move(file.path, (newPath + newValue), context.getters.publicLinkPassword).then(() => {
+          context.commit('RENAME_FILE', { file, newValue, newPath })
+        })
+      }
+      return client.files.move(file.path, (newPath + newValue)).then(() => {
         context.commit('RENAME_FILE', { file, newValue, newPath })
       })
     }
