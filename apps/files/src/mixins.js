@@ -19,11 +19,15 @@ export default {
     }
   },
   data: () => ({
-    selectedFile: ''
+    selectedFile: '',
+    changeFileName: false,
+    fileToBeDeleted: '',
+    newName: '',
+    originalName: null
   }),
   computed: {
-    ...mapGetters('Files', ['searchTerm', 'inProgress', 'files']),
-    ...mapGetters(['getToken']),
+    ...mapGetters('Files', ['searchTerm', 'inProgress', 'files', 'selectedFiles', 'highlightedFile', 'activeFiles']),
+    ...mapGetters(['getToken', 'capabilities', 'fileSideBars']),
 
     _renameDialogTitle () {
       let translated
@@ -36,10 +40,69 @@ export default {
         translated = this.$gettext('Rename file %{name}')
       }
       return this.$gettextInterpolate(translated, { name: this.selectedFile.name }, true)
+    },
+
+    // Files lists
+    selectedAll () {
+      return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
+    },
+    actions () {
+      const actions = [
+        { icon: 'edit',
+          handler: this.changeName,
+          ariaLabel: this.$gettext('Rename'),
+          isEnabled: function (item) {
+            return item.canRename()
+          } },
+        { icon: 'file_download',
+          handler: this.downloadFile,
+          ariaLabel: this.$gettext('Download'),
+          isEnabled: function (item) {
+            return item.canDownload()
+          } },
+        { icon: 'delete',
+          ariaLabel: this.$gettext('Delete'),
+          handler: this.deleteFile,
+          isEnabled: function (item) {
+            return item.canBeDeleted()
+          } }
+      ]
+      for (const sideBar of this.fileSideBars) {
+        if (sideBar.enabled !== undefined && !sideBar.enabled(this.capabilities)) {
+          continue
+        }
+        if (sideBar.quickAccess) {
+          actions.push({
+            icon: sideBar.quickAccess.icon,
+            ariaLabel: sideBar.quickAccess.ariaLabel,
+            handler: this.openSideBar,
+            handlerData: sideBar.app,
+            isEnabled: function (item) {
+              return true
+            }
+          })
+        }
+      }
+
+      return actions
+    },
+    changeFileErrorMessage () {
+      return this.checkNewName(this.newName)
+    },
+    _deleteDialogTitle () {
+      return this.$gettext('Delete File/Folder')
+    },
+    $_ocDialog_isOpen () {
+      return this.changeFileName
+    },
+    _sidebarOpen () {
+      return this.highlightedFile !== null
     }
   },
   methods: {
-    ...mapActions('Files', ['resetSearch', 'addFileToProgress', 'setOverwriteDialogTitle', 'setOverwriteDialogMessage']),
+    ...mapActions('Files', ['resetSearch', 'addFileToProgress', 'resetFileSelection', 'addFileSelection',
+      'removeFileSelection', 'setOverwriteDialogTitle', 'setOverwriteDialogMessage', 'deleteFiles', 'renameFile',
+      'setHighlightedFile', 'setFilesDeleteMessage']),
     ...mapActions(['showMessage']),
 
     formDateFromNow (date) {
@@ -290,6 +353,91 @@ export default {
       if (input) {
         input.value = ''
       }
+    },
+
+    // Files lists
+    toggleAll () {
+      if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
+        this.resetFileSelection()
+      } else {
+        const selectedFiles = this.fileData.slice()
+        for (const item of selectedFiles) {
+          if (!this.selectedFiles.includes(item)) {
+            this.addFileSelection(item)
+          }
+        }
+      }
+    },
+    openFileActionBar (file) {
+      this.$emit('FileAction', file)
+    },
+    checkNewName (name) {
+      if (/[/]/.test(name)) return this.$gettext('The name cannot contain "/"')
+
+      if (name === '.') return this.$gettext('The name cannot be equal to "."')
+
+      if (name === '..') return this.$gettext('The name cannot be equal to ".."')
+
+      if (/\s+$/.test(name)) return this.$gettext('The name cannot end with whitespace')
+
+      const exists = this.activeFiles.find((n) => {
+        if (n['name'] === name && this.originalName !== name) {
+          return n
+        }
+      })
+
+      if (exists) {
+        const translated = this.$gettext('The name "%{name}" is already taken')
+        return this.$gettextInterpolate(translated, { name: name }, true)
+      }
+      return null
+    },
+    deleteFile (file) {
+      this.fileToBeDeleted = file
+      const translated = this.$gettext('Please confirm the deletion of %{ fileName }')
+      this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { fileName: file.name }, true))
+    },
+    openSideBar (file, sideBarName) {
+      this.$emit('sideBarOpen', file, sideBarName)
+    },
+    reallyDeleteFiles () {
+      const files = this.fileToBeDeleted ? [this.fileToBeDeleted] : this.selectedFiles
+      this.deleteFiles({
+        client: this.$client,
+        files: files,
+        publicPage: this.publicPage()
+      }).then(() => {
+        this.fileToBeDeleted = ''
+        this.setFilesDeleteMessage('')
+      })
+    },
+    _rowClasses (item) {
+      if (this.highlightedFile && item.id === this.highlightedFile.id) {
+        return 'file-row uk-active'
+      }
+      return 'file-row'
+    },
+    selectRow (item, event) {
+      if (event.target.tagName !== 'TD') {
+        return
+      }
+      event.stopPropagation()
+      this.setHighlightedFile(item)
+    },
+    navigateTo (param) {
+      if (this.searchTerm !== '' && this.$route.params.item === param) {
+        this.resetSearch()
+      }
+      let route = 'files-list'
+      if (this.publicPage()) {
+        route = 'public-files'
+      }
+      this.$router.push({
+        name: route,
+        params: {
+          item: param
+        }
+      })
     }
   }
 }

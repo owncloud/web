@@ -96,6 +96,61 @@ function _buildFileInTrashbin (file) {
   })
 }
 
+function _buildSharedFile (file) {
+  let ext = ''
+  if (file.item_type !== 'dir') {
+    const ex = file.path.substr(file.path.lastIndexOf('/')).match(/\.[0-9a-z]+$/i)
+    if (ex !== null) {
+      ext = ex[0].substr(1)
+    }
+  }
+  return {
+    id: file.item_source,
+    shareId: file.id,
+    type: file.item_type,
+    extension: (function () {
+      return ext
+    }()),
+    name: (function () {
+      const name = file.path.substr(file.path.lastIndexOf('/'))
+      return name.substr(1)
+    }()),
+    basename: (function () {
+      const name = file.path.substr(file.path.lastIndexOf('/'))
+      if (ext) {
+        return name.substring(1, name.length - ext.length - 1)
+      }
+      return name.substr(1)
+    }()),
+    path: file.path,
+    shareTime: file.stime * 1000,
+    owner: file.uid_file_owner,
+    ownerDisplayname: file.displayname_file_owner,
+    sharedWith: file.share_with_displayname,
+    shareType: file.share_type,
+    canUpload: function () {
+      // TODO: Find a way how to read permissions for file and not for share
+      // return file.permissions >= 4
+      return true
+    },
+    canDownload: function () {
+      return file.item_type !== 'folder'
+    },
+    canBeDeleted: function () {
+      // return file.permissions >= 8
+      return true
+    },
+    canRename: function () {
+      // return file.permissions >= 2
+      return true
+    },
+    canShare: function () {
+      // return file.permissions >= 16
+      return true
+    }
+  }
+}
+
 function _buildShare (s) {
   const share = {
     info: s
@@ -248,6 +303,31 @@ export default {
       context.commit('UPDATE_FOLDER_LOADING', false)
     })
   },
+  loadFolderSharedFromMe (context, { client, $gettext }) {
+    context.commit('UPDATE_FOLDER_LOADING', true)
+
+    client.requests.ocs({
+      service: 'apps/files_sharing',
+      action: '/api/v1/shares?format=json&include_tags=true',
+      method: 'GET'
+    }).then(res => {
+      res.json().then(json => {
+        const files = json.ocs.data
+        const uniqueFiles = Array.from(new Set(files.map(file => file.id))).map(id => {
+          return files.find(file => file.id === id)
+        })
+        context.dispatch('buildFilesSharedFromMe', uniqueFiles)
+      })
+    }).catch((e) => {
+      context.dispatch('showMessage', {
+        title: $gettext('Loading shared files failed…'),
+        desc: e.message,
+        status: 'danger'
+      }, { root: true })
+    }).finally(() => {
+      context.commit('UPDATE_FOLDER_LOADING', false)
+    })
+  },
   updateFileProgress ({ commit }, progress) {
     if (progress.progress === 100) {
       commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
@@ -266,6 +346,11 @@ export default {
   loadDeletedFiles (context, { currentFolder, files }) {
     currentFolder = _buildFile(currentFolder)
     files = files.map(_buildFileInTrashbin)
+    context.commit('LOAD_FILES', { currentFolder, files })
+  },
+  buildFilesSharedFromMe (context, files) {
+    const currentFolder = _buildSharedFile(files[0])
+    files = files.map(_buildSharedFile)
     context.commit('LOAD_FILES', { currentFolder, files })
   },
   addFileSelection (context, file) {
