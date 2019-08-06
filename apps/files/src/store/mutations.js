@@ -113,6 +113,12 @@ export default {
     })
     state.shares[fileIndex].role = share.role
   },
+  SHARES_UPDATE_LINK (state, share) {
+    const fileIndex = state.shares.findIndex((s) => {
+      return s.info.id === share.shareInfo.id
+    })
+    state.shares[fileIndex] = share
+  },
   SHARES_ERROR (state, error) {
     state.shares = []
     state.sharesError = error
@@ -149,5 +155,32 @@ export default {
       file = state.files[fileIndex]
     }
     state.highlightedFile = file
+  },
+  //
+  // LINKS
+  // .....
+  LINKS_PURGE (state) {
+    state.links = []
+  },
+  LINKS_LOADING (state, loading) {
+    state.linksLoading = loading
+  },
+  LINKS_ERROR (state, error) {
+    state.linksError = error
+  },
+  LINKS_ADD (state, link) {
+    state.links.push(link)
+  },
+  LINKS_REMOVE (state, linkId) {
+    state.links = state.links.filter(link => link.id !== linkId)
+  },
+  LINKS_UPDATE (state, linkUpdated) {
+    state.links = state.links.map(link => {
+      if (link.id === linkUpdated.id) {
+        return linkUpdated
+      }
+
+      return link
+    })
   }
 }

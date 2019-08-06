@@ -85,5 +85,14 @@ export default {
   },
   highlightedFile: state => {
     return state.highlightedFile
+  },
+  links: state => {
+    return state.links
+  },
+  linksError: state => {
+    return state.linksError
+  },
+  linksLoading: state => {
+    return state.linksLoading
   }
 }

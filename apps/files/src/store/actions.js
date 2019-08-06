@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 function _buildFile (file) {
   let ext = ''
   if (file.type !== 'dir') {
@@ -91,6 +93,43 @@ function _buildFileInTrashbin (file) {
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     })()
   })
+}
+
+function _buildLink (l) {
+  const link = l.shareInfo
+  let description = ''
+
+  switch (link.permissions) {
+    case ('1'):
+      description = 'Viewer' // hover: Recipients can view or download contents.
+      break
+    case ('15'):
+      description = 'Contributor' // hover: Recipients can view, download, edit, delete and upload contents.
+      break
+    case ('4'):
+      description = 'Uploader' // TODO hover: Receive files from multiple recipients without revealing the contents of the folder.
+      break
+    case ('5'):
+      description = 'Editor' // TODO hover: Receive files from multiple recipients without revealing the contents of the folder.
+      break
+  }
+
+  return {
+    id: link.id,
+    token: link.token,
+    url: link.url,
+    path: link.path,
+    permissions: link.permissions,
+    description,
+    stime: link.stime,
+    expiration: moment(link.expiration).format('YYYY-MM-DD'),
+    itemSource: link.item_source,
+    file: {
+      parent: link.file_parent,
+      source: link.file_source,
+      target: link.file_target
+    }
+  }
 }
 
 function _buildShare (s) {
@@ -490,23 +529,71 @@ export default {
   //
   // Link shares
   // ...........
-  addLink (context, { client, path, $gettext, params }) {
-    // context.commit('LINKS_LOADING', true)
 
-    client.shares.shareFileWithLink(path, params)
-      .then(share => {
-        console.log(share)
+  loadLinks (context, { client, path }) {
+    context.commit('LINKS_PURGE')
+    context.commit('LINKS_ERROR', null)
+    context.commit('LINKS_LOADING', true)
 
-        // context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
-        // context.commit('LINKS_LOADING', false)
+    client.shares.getShares(path, {})
+      .then(data => {
+        data.forEach(share => {
+          if (share.shareInfo.share_type === '3') {
+            context.commit('LINKS_ADD', _buildLink(share))
+          }
+        })
       })
-      .catch(e => {
-        context.dispatch('showMessage', {
-          title: $gettext('Error while sharing.'),
-          desc: e,
-          status: 'danger'
-        }, { root: true })
-        // context.commit('LINKS_LOADING', false)
+      .catch(error => {
+        context.commit('LINKS_ERROR', error.message)
       })
+      .finally(context.commit('LINKS_LOADING', false))
+  },
+
+  purgeLinks (context) {
+    context.commit('LINKS_PURGE')
+  },
+
+  addLink (context, { path, client, $gettext, params }) {
+    return new Promise((resolve, reject) => {
+      context.commit('LINKS_LOADING', true)
+
+      client.shares.shareFileWithLink(path, params)
+        .then(data => {
+          const link = _buildLink(data)
+          context.commit('LINKS_ADD', link)
+          context.commit('LINKS_LOADING', false)
+          resolve(link)
+        })
+        .catch(e => {
+          context.dispatch('showMessage', {
+            title: $gettext('Error while sharing.'),
+            desc: e,
+            status: 'danger'
+          }, { root: true })
+          context.commit('LINKS_LOADING', false)
+          reject(e)
+        })
+    })
+  },
+  updateLink (context, { id, client, $gettext, params }) {
+    return new Promise((resolve, reject) => {
+      context.commit('LINKS_LOADING', true)
+      client.shares.updateShare(id, params)
+        .then(data => {
+          const link = _buildLink(data)
+          context.commit('LINKS_UPDATE', link)
+          context.commit('LINKS_LOADING', false)
+          resolve(link)
+        })
+        .catch(e => {
+          context.dispatch('showMessage', {
+            title: $gettext('Error while sharing.'),
+            desc: e,
+            status: 'danger'
+          }, { root: true })
+          context.commit('LINKS_LOADING', false)
+          reject(e)
+        })
+    })
   }
 }
