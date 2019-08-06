@@ -125,6 +125,8 @@ function _buildLink (l) {
     permissions: link.permissions,
     description,
     stime: link.stime,
+    name: link.name,
+    password: !!(link.share_with && link.share_with_displayname),
     expiration: moment(link.expiration).format('YYYY-MM-DD'),
     itemSource: link.item_source,
     file: {
@@ -572,6 +574,7 @@ export default {
 
       client.shares.shareFileWithLink(path, params)
         .then(data => {
+          console.log(data)
           const link = _buildLink(data)
           context.commit('LINKS_ADD', link)
           context.commit('LINKS_LOADING', false)
