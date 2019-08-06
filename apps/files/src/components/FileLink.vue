@@ -11,14 +11,7 @@
       <li v-for="(link, index) in $_links" :key="index">
         <oc-grid flex gutter="small">
           <div class="uk-width-auto">
-            <!--
-              @TODO: Check if is password protected.
-              @TODO: Add Lock Icon to ODS, Remove workaround below
-            -->
-            <span v-if="index === 2" aria-label="icon" class="uk-icon-button oc-icon oc-icon-system">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-            </span>
-            <oc-icon v-else name="link" class="uk-icon-button" />
+            <oc-icon name="link" class="uk-icon-button" />
           </div>
           <div class="uk-width-expand">
             <span class="uk-text-bold">{{ link.token }}</span><br>
@@ -26,7 +19,7 @@
           </div>
           <div class="uk-width-auto uk-button-group">
             <oc-button icon="edit" @click="_editLink(link)"/>
-            <oc-button icon="delete" @click="_deleteLink(link)" />
+            <oc-button icon="delete" @click="_removeLink(link)" />
           </div>
         </oc-grid>
         <FileLinkForm v-if="linkId === link.id" class="uk-margin-top" v-bind:params="params" :context="'edit'" :linkId="linkId"/>
@@ -102,7 +95,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['loadLinks', 'purgeLinks']),
+    ...mapActions('Files', ['loadLinks', 'purgeLinks', 'removeLink']),
     resetData () {
       this.params = {
         name: this.capabilities.files_sharing.public.defaultPublicLinkShareName,
@@ -111,10 +104,10 @@ export default {
         expireDate: (this.expirationDate.days) ? moment().add(this.expirationDate.days, 'days').format('YYYY-MM-DD') : null
       }
     },
-    _deleteLink (link) {
-      this.deleteShare({
+    _removeLink (link) {
+      this.removeLink({
         client: this.$client,
-        share: link
+        id: link.id
       })
     },
     _editLink (link) {

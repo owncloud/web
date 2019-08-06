@@ -595,5 +595,10 @@ export default {
           reject(e)
         })
     })
+  },
+  removeLink (context, { id, client }) {
+    client.shares.deleteShare(id).then(() => {
+      context.commit('LINKS_REMOVE', id)
+    }).catch(e => console.log(e))
   }
 }
