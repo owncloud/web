@@ -13,10 +13,11 @@
       <li v-for="(link, index) in $_links" :key="index">
         <oc-grid flex gutter="small">
           <div class="uk-width-auto">
-            <oc-icon name="link" class="uk-icon-button" />
+            <oc-icon v-if="link.password" name="lock" class="uk-icon-button" />
+            <oc-icon v-else name="link" class="uk-icon-button" />
           </div>
           <div class="uk-width-expand">
-            <span class="uk-text-bold">{{ link.token }}</span><br>
+            <span class="uk-text-bold">{{ link.name }}</span><br>
             <span class="uk-text-meta">{{ link.description }} | Expires {{ formDateFromNow(link.expiration) }}</span>
           </div>
           <div class="uk-width-auto uk-button-group">
@@ -51,7 +52,7 @@ export default {
       // group for easy payload
       params: {
         name: '',
-        permissions: 1,
+        perms: 1,
         password: '',
         expireDate: null
       }
@@ -100,7 +101,7 @@ export default {
     $_resetData () {
       this.params = {
         name: this.capabilities.files_sharing.public.defaultPublicLinkShareName,
-        permissions: 1,
+        perms: 1,
         password: '',
         expireDate: (this.$_expirationDate.days) ? moment().add(this.$_expirationDate.days, 'days').format('YYYY-MM-DD') : null
       }
@@ -114,9 +115,9 @@ export default {
     $_editLink (link) {
       this.linkId = link.id
       this.params = {
-        name: 'Name (API MISSING)',
-        perms: parseInt(link.permissions),
-        password: '****',
+        name: link.name,
+        perms: parseInt(link.perms),
+        password: link.password,
         expireDate: moment(link.expiration).format('YYYY-MM-DD')
       }
     },

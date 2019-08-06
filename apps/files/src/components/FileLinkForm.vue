@@ -18,9 +18,9 @@
         ---------->
         <div class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
-            <input type="radio" class="uk-radio" v-model="params.permissions" value="1" />
+            <input type="radio" class="uk-radio" v-model="params.perms" value="1" />
         </div>
-        <label class="uk-width-expand" @click="params.permissions = 1">
+        <label class="uk-width-expand" @click="params.perms = 1">
             <span>Viewer</span><br>
             <span class="uk-text-meta">Recipients can view and download contents.</span>
         </label>
@@ -31,9 +31,9 @@
         --------------->
         <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
-            <input type="radio" class="uk-radio" v-model="params.permissions" value="5" />
+            <input type="radio" class="uk-radio" v-model="params.perms" value="5" />
         </div>
-        <label class="uk-width-expand" @click="params.permissions = 5">
+        <label class="uk-width-expand" @click="params.perms = 5">
             <span v-translate>Contributor</span><br>
             <span class="uk-text-meta">Recipients can view, download and upload contents.</span>
         </label>
@@ -44,9 +44,9 @@
         ---------->
         <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
-            <input type="radio" class="uk-radio" v-model="params.permissions" value="15" />
+            <input type="radio" class="uk-radio" v-model="params.perms" value="15" />
         </div>
-        <label class="uk-width-expand" @click="params.permissions = 15">
+        <label class="uk-width-expand" @click="params.perms = 15">
             <span>Editor</span><br>
             <span class="uk-text-meta">Recipients can view, download, edit, delete and upload contents.</span>
         </label>
@@ -57,9 +57,9 @@
         ------------>
         <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
-            <input type="radio" class="uk-radio" v-model="params.permissions" value="4" />
+            <input type="radio" class="uk-radio" v-model="params.perms" value="4" />
         </div>
-        <label class="uk-width-expand" @click="params.permissions = 4">
+        <label class="uk-width-expand" @click="params.perms = 4">
             <span v-translate>Uploader</span><br>
             <span class="uk-text-meta">Receive files from multiple recipients without revealing the contents of the folder.</span>
         </label>
@@ -157,7 +157,7 @@ export default {
     },
 
     $_passwordEnforced () {
-      const permissions = this.params.permissions
+      const permissions = parseInt(this.params.perms)
       const password = this.capabilities.files_sharing.public.password.enforced_for
 
       if (permissions === 1 && password.read_only === '1') { return true }
