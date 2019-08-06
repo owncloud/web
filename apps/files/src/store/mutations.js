@@ -110,12 +110,6 @@ export default {
     })
     state.shares[fileIndex].role = role
   },
-  SHARES_UPDATE_LINK (state, share) {
-    const fileIndex = state.shares.findIndex((s) => {
-      return s.info.id === share.shareInfo.id
-    })
-    state.shares[fileIndex] = share
-  },
   SHARES_ERROR (state, error) {
     state.shares = []
     state.sharesError = error
