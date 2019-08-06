@@ -8,8 +8,8 @@
         <input class="uk-input" v-model="params.name" />
         </div>
         <h4 class="uk-margin-medium-top uk-heading-divider">
-        <template v-translate v-if="isFile">File permissions</template>
-        <template v-translate v-else-if="isFolder">Folder permissions</template>
+        <template v-translate v-if="$_isFile">File permissions</template>
+        <template v-translate v-else-if="$_isFolder">Folder permissions</template>
         <template v-translate v-else>Set permissions</template>
         </h4>
 
@@ -29,7 +29,7 @@
         <!---------------
         | CONTRIBUTOR |
         --------------->
-        <div v-if="isFolder" class="uk-margin uk-grid-small" uk-grid>
+        <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
             <input type="radio" class="uk-radio" v-model="params.permissions" value="5" />
         </div>
@@ -42,7 +42,7 @@
         <!----------
         | EDITOR |
         ---------->
-        <div v-if="isFolder" class="uk-margin uk-grid-small" uk-grid>
+        <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
             <input type="radio" class="uk-radio" v-model="params.permissions" value="15" />
         </div>
@@ -55,7 +55,7 @@
         <!------------
         | UPLOADER |
         ------------>
-        <div v-if="isFolder" class="uk-margin uk-grid-small" uk-grid>
+        <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
             <input type="radio" class="uk-radio" v-model="params.permissions" value="4" />
         </div>
@@ -69,17 +69,17 @@
             Security settings
         </h4>
         <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
-        <div v-if="expirationDate" class="uk-width-1-1 uk-width-2-5@m">
-            <label class="uk-form-label" for="">Expiration date<em v-if="expirationDate.enforced" class="uk-margin-small-left">(required)</em></label>
-            <input type="text" class="uk-input" v-model="params.expireDate" />
+        <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
+            <label class="uk-form-label" for="">Expiration date<em v-if="$_expirationDate.enforced" class="uk-margin-small-left">(required)</em></label>
+            <input type="text" class="uk-input" :class="{ 'uk-form-danger': !$_expirationIsValid }" v-model="params.expireDate" />
         </div>
         <div class="uk-width-1-1 uk-width-3-5@m">
-            <label class="uk-form-label" for="">Password<em v-if="passwordEnforced" class="uk-margin-small-left">(required)</em></label>
-            <input type="password" class="uk-input" v-model="params.password"/>
+            <label class="uk-form-label" for="">Password<em v-if="$_passwordEnforced" class="uk-margin-small-left">(required)</em></label>
+            <input type="password" class="uk-input" :class="{ 'uk-form-danger': !$_passwordIsValid }" v-model="params.password"/>
         </div>
         </div>
 
-        <template v-if="sendMail">
+        <template v-if="$_sendMailEnabled">
             <h4 class="uk-margin-medium-top uk-heading-divider">
                 Send mail notification
             </h4>
@@ -97,17 +97,16 @@
             </div>
         </template>
         <div class="uk-text-right">
-            <oc-button @click="cancelLinkCreation">Cancel</oc-button>
-            <oc-button v-if="!sharesLoading && isNew" variation="primary" @click="_addLink" v-translate>Create</oc-button>
-            <oc-button v-else-if="!sharesLoading && !isNew" variation="primary" @click="_updateLink" v-translate>Save</oc-button>
-            <button v-if="sharesLoading" disabled class="uk-button uk-button-default" @click="_addLink"><oc-spinner class="uk-position-small uk-position-center-left" size="small" /><span class="uk-margin-small-left" v-translate>Working</span></button>
+            <oc-button @click="$_closeForm">Cancel</oc-button>
+            <oc-button v-if="!sharesLoading && $_isNew" :disabled="!$_isValid" variation="primary" @click="$_addLink" v-translate>Create</oc-button>
+            <oc-button v-else-if="!sharesLoading && !$_isNew" :disabled="!$_isValid" variation="primary" @click="$_updateLink" v-translate>Save</oc-button>
+            <button v-if="sharesLoading" disabled class="uk-button uk-button-default" @click="$_addLink"><oc-spinner class="uk-position-small uk-position-center-left" size="small" /><span class="uk-margin-small-left" v-translate>Working</span></button>
         </div>
     </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import mixins from '../mixins'
-import moment from 'moment'
 
 export default {
   mixins: [mixins],
@@ -119,23 +118,23 @@ export default {
     ...mapGetters('Files', ['highlightedFile', 'sharesLoading']),
     ...mapGetters(['getToken', 'capabilities']),
 
-    isNew () {
+    $_isNew () {
       return !this.linkId
     },
 
-    isFolder () {
+    $_isFolder () {
       return this.highlightedFile.type === 'folder'
     },
 
-    isFile () {
-      return !this.isFolder
+    $_isFile () {
+      return !this.$_isFolder
     },
 
-    sendMail () {
+    $_sendMailEnabled () {
       return Object.keys(this.capabilities.files_sharing.public.send_mail).length > 0
     },
 
-    expirationDate () {
+    $_expirationDate () {
       const expireDate = this.capabilities.files_sharing.public.expire_date
 
       return {
@@ -145,53 +144,58 @@ export default {
       }
     },
 
-    passwordEnforced () {
+    $_expirationIsValid () {
+      return !(this.$_expirationDate.enforced && this.params.expireDate === '')
+    },
+
+    $_passwordIsValid () {
+      return !(this.$_passwordEnforced && this.params.password === '')
+    },
+
+    $_isValid () {
+      return this.$_expirationIsValid && this.$_passwordIsValid
+    },
+
+    $_passwordEnforced () {
       const permissions = this.params.permissions
       const password = this.capabilities.files_sharing.public.password.enforced_for
 
       if (permissions === 1 && password.read_only === '1') { return true }
-
-      if (permissions > 5 && password.read_write === '1') { return true }
-
       if (permissions === 4 && password.upload_only === '1') { return true }
+      if (permissions >= 5 && password.read_write === '1') { return true }
 
       return false
     }
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink']),
-    _addLink () {
+
+    $_addLink () {
       this.addLink({
         path: this.highlightedFile.path,
         client: this.$client,
         $gettext: this.$gettext,
         params: this.params
       }).then(e => {
-        this.closeForm()
+        this.$_closeForm()
       }).catch(e => console.warn(e))
     },
-    _updateLink () {
+
+    $_updateLink () {
       this.updateLink({
         id: this.linkId,
         client: this.$client,
         $gettext: this.$gettext,
         params: this.params
       }).then(e => {
-        this.closeForm()
+        this.$_closeForm()
       }).catch(e => console.warn(e))
     },
-    cancelLinkCreation () {
-      this.$root.$emit('oc-files-file-link', {
-        action: 'cancelLinkCreation'
-      })
-    },
-    closeForm () {
+
+    $_closeForm () {
       this.$root.$emit('oc-files-file-link', {
         action: 'closeForm'
       })
-    },
-    dateLocalised (timestamp) {
-      return moment(timestamp).format('DD.MM.YYYY')
     }
   }
 }

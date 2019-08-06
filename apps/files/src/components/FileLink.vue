@@ -2,12 +2,14 @@
   <div id="oc-files-file-link">
     <FileLinkForm v-if="formOpen" v-bind:params="params" :linkId="linkId" />
     <div class="uk-text-right">
-      <oc-button v-if="!formOpen" variation="primary" icon="add" @click="openForm()" translate>Add Link</oc-button>
+      <oc-button v-if="!formOpen" variation="primary" icon="add" @click="$_openForm()" translate>Add Link</oc-button>
     </div>
-    <ul class="uk-list uk-list-divider">
-      <li v-if="linksLoading" class="uk-flex uk-flex-middle">
-        <oc-spinner class="uk-margin-small-right" /> <span class="uk-text-meta">Loading Shares</span>
-      </li>
+
+    <div v-if="linksLoading" class="uk-flex uk-flex-middle">
+       <oc-spinner class="uk-margin-small-right" /> <span class="uk-text-meta">Loading Shares</span>
+    </div>
+
+      <transition-group tag="ul" name="custom-classes-transition" :leave-active-class="'uk-animation-slide-right-medium uk-animation-reverse'" class="uk-list uk-list-divider">
       <li v-for="(link, index) in $_links" :key="index">
         <oc-grid flex gutter="small">
           <div class="uk-width-auto">
@@ -18,13 +20,13 @@
             <span class="uk-text-meta">{{ link.description }} | Expires {{ formDateFromNow(link.expiration) }}</span>
           </div>
           <div class="uk-width-auto uk-button-group">
-            <oc-button icon="edit" @click="_editLink(link)"/>
-            <oc-button icon="delete" @click="_removeLink(link)" />
+            <oc-button icon="edit" @click="$_editLink(link)"/>
+            <oc-button icon="delete" @click="$_removeLink(link)" />
           </div>
         </oc-grid>
         <FileLinkForm v-if="linkId === link.id" class="uk-margin-top" v-bind:params="params" :context="'edit'" :linkId="linkId"/>
       </li>
-    </ul>
+      </transition-group>
   </div>
 </template>
 <script>
@@ -67,9 +69,8 @@ export default {
 
     this.$root.$on('oc-files-file-link', e => {
       switch (e.action) {
-        case 'cancelLinkCreation' :
         case 'closeForm' :
-          this.closeForm()
+          this.$_closeForm()
           break
       }
     })
@@ -84,7 +85,7 @@ export default {
       })
     },
 
-    expirationDate () {
+    $_expirationDate () {
       const expireDate = this.capabilities.files_sharing.public.expire_date
 
       return {
@@ -96,21 +97,21 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['loadLinks', 'purgeLinks', 'removeLink']),
-    resetData () {
+    $_resetData () {
       this.params = {
         name: this.capabilities.files_sharing.public.defaultPublicLinkShareName,
         permissions: 1,
         password: '',
-        expireDate: (this.expirationDate.days) ? moment().add(this.expirationDate.days, 'days').format('YYYY-MM-DD') : null
+        expireDate: (this.$_expirationDate.days) ? moment().add(this.$_expirationDate.days, 'days').format('YYYY-MM-DD') : null
       }
     },
-    _removeLink (link) {
+    $_removeLink (link) {
       this.removeLink({
         client: this.$client,
         id: link.id
       })
     },
-    _editLink (link) {
+    $_editLink (link) {
       this.linkId = link.id
       this.params = {
         name: 'Name (API MISSING)',
@@ -119,11 +120,11 @@ export default {
         expireDate: moment(link.expiration).format('YYYY-MM-DD')
       }
     },
-    openForm () {
+    $_openForm () {
       this.formOpen = true
-      this.resetData()
+      this.$_resetData()
     },
-    closeForm () {
+    $_closeForm () {
       this.formOpen = false
       this.linkId = false
     }
