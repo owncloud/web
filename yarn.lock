@@ -2642,9 +2642,9 @@ date-now@^0.1.4:
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
 
-"davclient.js@git+https://github.com/owncloud/davclient.js.git":
+"davclient.js@https://github.com/owncloud/davclient.js.git":
   version "0.1.3"
-  resolved "git+https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
+  resolved "https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -8715,6 +8715,11 @@ uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
   integrity sha1-bgkk1r2mta/jSeOabWMoUKD4grc=
+
+uikit@^3.1.7:
+  version "3.1.7"
+  resolved "https://registry.yarnpkg.com/uikit/-/uikit-3.1.7.tgz#1919b5d7173ef37cfae88e820856677bfd36feaa"
+  integrity sha512-eKVrD6ccMltGpjuphLUTXpqln0Q9aNa0+4HrxEO85i1BD4N2MvpZqsva6gOSZTDnmnen0XeNbPCP+aiU2u2lmw==
 
 underscore@~1.6.0:
   version "1.6.0"
