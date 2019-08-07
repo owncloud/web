@@ -52,7 +52,7 @@ export default {
       // group for easy payload
       params: {
         name: '',
-        perms: 1,
+        permissions: 1,
         password: '',
         expireDate: null
       }
@@ -101,8 +101,8 @@ export default {
     $_resetData () {
       this.params = {
         name: this.capabilities.files_sharing.public.defaultPublicLinkShareName,
-        perms: 1,
-        password: '',
+        permissions: 1,
+        hasPassword: false,
         expireDate: (this.$_expirationDate.days) ? moment().add(this.$_expirationDate.days, 'days').format('YYYY-MM-DD') : null
       }
     },
@@ -116,8 +116,8 @@ export default {
       this.linkId = link.id
       this.params = {
         name: link.name,
-        perms: parseInt(link.perms),
-        password: link.password,
+        permissions: parseInt(link.permissions),
+        hasPassword: link.password,
         expireDate: moment(link.expiration).format('YYYY-MM-DD')
       }
     },

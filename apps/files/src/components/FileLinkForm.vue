@@ -5,80 +5,62 @@
             Add a new link
         </h4>
         <label class="uk-form-label" v-translate>Name your link</label>
-        <input class="uk-input" v-model="params.name" />
+        <input class="uk-input" v-model="name" />
         </div>
         <h4 class="uk-margin-medium-top uk-heading-divider">
         <template v-translate v-if="$_isFile">File permissions</template>
         <template v-translate v-else-if="$_isFolder">Folder permissions</template>
         <template v-translate v-else>Set permissions</template>
         </h4>
-
-        <!----------
-        | VIEWER |
-        ---------->
         <div class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
-            <input type="radio" class="uk-radio" v-model="params.perms" value="1" />
+            <input type="radio" class="uk-radio" v-model="permissions" value="1" />
         </div>
-        <label class="uk-width-expand" @click="params.perms = 1">
+        <label class="uk-width-expand" @click="permissions = 1">
             <span>Viewer</span><br>
             <span class="uk-text-meta">Recipients can view and download contents.</span>
         </label>
         </div>
-
-        <!---------------
-        | CONTRIBUTOR |
-        --------------->
         <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
-            <input type="radio" class="uk-radio" v-model="params.perms" value="5" />
+            <input type="radio" class="uk-radio" v-model="permissions" value="15" />
         </div>
-        <label class="uk-width-expand" @click="params.perms = 5">
+        <label class="uk-width-expand" @click="permissions = 15">
             <span v-translate>Contributor</span><br>
             <span class="uk-text-meta">Recipients can view, download and upload contents.</span>
         </label>
         </div>
-
-        <!----------
-        | EDITOR |
-        ---------->
         <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
-            <input type="radio" class="uk-radio" v-model="params.perms" value="15" />
+            <input type="radio" class="uk-radio" v-model="permissions" value="5" />
         </div>
-        <label class="uk-width-expand" @click="params.perms = 15">
+        <label class="uk-width-expand" @click="permissions = 5">
             <span>Editor</span><br>
             <span class="uk-text-meta">Recipients can view, download, edit, delete and upload contents.</span>
         </label>
         </div>
-
-        <!------------
-        | UPLOADER |
-        ------------>
         <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
         <div class="uk-width-auto">
-            <input type="radio" class="uk-radio" v-model="params.perms" value="4" />
+            <input type="radio" class="uk-radio" v-model="permissions" value="4" />
         </div>
-        <label class="uk-width-expand" @click="params.perms = 4">
+        <label class="uk-width-expand" @click="permissions = 4">
             <span v-translate>Uploader</span><br>
             <span class="uk-text-meta">Receive files from multiple recipients without revealing the contents of the folder.</span>
         </label>
         </div>
-
         <h4 class="uk-margin-medium-top uk-heading-divider">
             Security settings
         </h4>
         <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
         <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
             <label class="uk-form-label" for="">Expiration date<em v-if="$_expirationDate.enforced" class="uk-margin-small-left">(required)</em></label>
-            <input type="text" class="uk-input" :class="{ 'uk-form-danger': !$_expirationIsValid }" v-model="params.expireDate" />
+            <input type="text" class="uk-input" :class="{ 'uk-form-danger': !$_expirationIsValid }" v-model="expireDate" />
         </div>
         <div class="uk-width-1-1 uk-width-3-5@m">
             <label class="uk-form-label" for="">Password<em v-if="$_passwordEnforced" class="uk-margin-small-left">(required)</em></label>
-            <input type="password" class="uk-input" :class="{ 'uk-form-danger': !$_passwordIsValid }" v-model="params.password"/>
+            <input type="password" class="uk-input" :class="{ 'uk-form-danger': !$_passwordIsValid }" v-model="password" :placeholder="hasPassword && password === null? '********' : ''"/>
         </div>
         </div>
-
         <template v-if="$_sendMailEnabled">
             <h4 class="uk-margin-medium-top uk-heading-divider">
                 Send mail notification
@@ -111,6 +93,12 @@ import mixins from '../mixins'
 export default {
   mixins: [mixins],
   props: ['params', 'linkId'],
+  data () {
+    return {
+      password: null,
+      ...this.params
+    }
+  },
   title: ($gettext) => {
     return $gettext('Links')
   },
@@ -145,11 +133,13 @@ export default {
     },
 
     $_expirationIsValid () {
-      return !(this.$_expirationDate.enforced && this.params.expireDate === '')
+      return !(this.$_expirationDate.enforced && this.expireDate === '')
     },
 
     $_passwordIsValid () {
-      return !(this.$_passwordEnforced && this.params.password === '')
+      if (this.hasPassword) { return true }
+
+      return !(this.$_passwordEnforced && (this.password === '' || this.password === null))
     },
 
     $_isValid () {
@@ -157,7 +147,7 @@ export default {
     },
 
     $_passwordEnforced () {
-      const permissions = parseInt(this.params.perms)
+      const permissions = parseInt(this.permissions)
       const password = this.capabilities.files_sharing.public.password.enforced_for
 
       if (permissions === 1 && password.read_only === '1') { return true }
@@ -171,22 +161,38 @@ export default {
     ...mapActions('Files', ['addLink', 'updateLink']),
 
     $_addLink () {
+      const params = {
+        expireDate: this.expireDate,
+        permissions: this.permissions,
+        name: this.name
+      }
+
+      if (this.password !== null) { params.password = this.password }
+
       this.addLink({
         path: this.highlightedFile.path,
         client: this.$client,
         $gettext: this.$gettext,
-        params: this.params
+        params
       }).then(e => {
         this.$_closeForm()
       }).catch(e => console.warn(e))
     },
 
     $_updateLink () {
+      const params = {
+        expireDate: this.expireDate,
+        permissions: this.permissions,
+        name: this.name
+      }
+
+      if (this.password !== null) { params.password = this.password }
+
       this.updateLink({
         id: this.linkId,
         client: this.$client,
         $gettext: this.$gettext,
-        params: this.params
+        params
       }).then(e => {
         this.$_closeForm()
       }).catch(e => console.warn(e))
