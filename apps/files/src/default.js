@@ -52,8 +52,7 @@ const navItems = [
     name: 'Favorites',
     iconMaterial: 'star',
     route: {
-      name: 'files-favorites',
-      path: `/${appInfo.id}/favorites`
+      name: 'files-favorites'
     }
   },
   {
@@ -66,8 +65,7 @@ const navItems = [
       return false
     },
     route: {
-      name: 'files-trashbin',
-      path: `/${appInfo.id}/trash-bin`
+      name: 'files-trashbin'
     }
   }
 ]

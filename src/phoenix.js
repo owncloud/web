@@ -96,10 +96,31 @@ function loadApps () {
     if (app.routes) {
       // rewrite relative app routes by prefix'ing their corresponding appId
       app.routes.forEach(r => (r.path = `/${encodeURI(app.appInfo.id)}${r.path}`))
+
+      // adjust routes in nav items
+      if (app.navItems) {
+        app.navItems.forEach(nav => {
+          const r = app.routes.find(function(element) {
+            return element.name === nav.route.name;
+          });
+          if (r) {
+            r.meta = r.meta || {}
+            r.meta.pageIcon = nav.iconMaterial
+            r.meta.pageTitle = nav.name
+            nav.route.path = nav.route.path || r.path
+          } else {
+            console.error(`Unknown route name ${nav.route.name}`)
+          }
+        })
+      }
       routes.push(app.routes)
     }
-    if (app.plugins) plugins.push(app.plugins)
-    if (app.navItems) navItems.push(app.navItems)
+    if (app.plugins) {
+      plugins.push(app.plugins)
+    }
+    if (app.navItems) {
+      navItems.push(app.navItems)
+    }
     if (app.translations) {
       Object.keys(supportedLanguages).forEach((lang) => {
         if (translations[lang] && app.translations[lang]) {

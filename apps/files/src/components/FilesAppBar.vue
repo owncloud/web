@@ -3,7 +3,11 @@
     <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">
-        <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="!atSearchPage" home></oc-breadcrumb>
+        <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="showBreadcrumb" home></oc-breadcrumb>
+        <span class="uk-flex uk-flex-middle" v-if="!showBreadcrumb">
+          <oc-icon :name="pageIcon" class="uk-margin-small-right"></oc-icon>
+          <span class="uk-text-lead">{{pageTitle}}</span>
+        </span>
       </div>
       <div class="uk-width-auto uk-visible@m">
         <span class="uk-text-meta"><translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">%{ activeFiles.length } Result</translate></span>
@@ -153,6 +157,15 @@ export default {
       return this.selectedFiles.length < 1 ? this.$gettext('Clear trash bin') : this.$gettext('Delete selected')
     },
 
+    showBreadcrumb () {
+      return (this.$route.name === 'public-files' || this.$route.name === 'files-list')
+    },
+    pageIcon () {
+      return this.$route.meta.pageIcon
+    },
+    pageTitle () {
+      return this.$gettext(this.route.meta.pageTitle)
+    },
     breadcrumbs () {
       let baseUrl = '/files/list/'
       const pathSplit = this.$route.params.item ? this.$route.params.item.split('/').filter((val) => val) : []
