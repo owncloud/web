@@ -77,6 +77,7 @@
     "rimraf": "^2.6.3",
     "start-server-and-test": "^1.9.1",
     "style-loader": "^0.23.1",
+    "uikit": "^3.1.7",
     "url-search-params-polyfill": "^7.0.0",
     "v-clipboard": "^2.2.2",
     "vue": "^2.6.10",
