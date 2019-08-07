@@ -6397,7 +6397,7 @@ output-file-sync@^2.0.0:
     is-plain-obj "^1.1.0"
     mkdirp "^0.5.1"
 
-owncloud-design-system@^1.0.0-883:
+owncloud-design-system@^1.0.0-890:
   version "1.0.0-890"
   resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-890.tgz#edfad6878d752fadd5afdc97dc9a942eb89a5fee"
   integrity sha512-avpbs6b2kOvmPk7Zx9FoUYdTSuE/q8Y5eQM/i20bgV7mjgT4gDjkV53GQTfh3SZouwaYX+TxOqMYkXT/AaMhZQ==
@@ -6416,7 +6416,7 @@ owncloud-design-system@^1.0.0-883:
     vuex "^3.1.1"
     webfontloader "^1.6.28"
 
-owncloud-sdk@1.0.0-341:
+owncloud-sdk@^1.0.0-341:
   version "1.0.0-341"
   resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-341.tgz#be479b0363e533e79b6525bcc0fb655656deef74"
   integrity sha512-zILe0kjEeSBd+pEPwBztr4rjr6DZKcIX5hu5Ma1P428QJfB6bLnPnyrpbQsybfZid3rt5Gy5pMNivx9ZUo3+IA==
