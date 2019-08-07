@@ -101,16 +101,16 @@ function _buildLink (l) {
 
   switch (link.permissions) {
     case ('1'):
-      description = 'Viewer' // hover: Recipients can view or download contents.
+      description = 'Viewer' // hover: Viewer can view or download contents.
       break
     case ('15'):
-      description = 'Contributor' // hover: Recipients can view, download, edit, delete and upload contents.
+      description = 'Contributor' // hover: Contributor can view, download, edit, delete and upload contents.
       break
     case ('4'):
-      description = 'Uploader' // TODO hover: Receive files from multiple recipients without revealing the contents of the folder.
+      description = 'Uploader' // TODO hover: Uploader files from multiple recipients without revealing the contents of the folder.
       break
     case ('5'):
-      description = 'Editor' // TODO hover: Receive files from multiple recipients without revealing the contents of the folder.
+      description = 'Editor' // TODO hover: Editor files from multiple recipients without revealing the contents of the folder.
       break
   }
 
@@ -558,10 +558,8 @@ export default {
   addLink (context, { path, client, $gettext, params }) {
     return new Promise((resolve, reject) => {
       context.commit('LINKS_LOADING', true)
-
       client.shares.shareFileWithLink(path, params)
         .then(data => {
-          console.log(data)
           const link = _buildLink(data)
           context.commit('LINKS_ADD', link)
           context.commit('LINKS_LOADING', false)
