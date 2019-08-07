@@ -166,26 +166,6 @@ function _buildShare (s) {
       }
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
       break
-    case ('3'): // public link
-      share.role = 'public'
-      share.name = s.name
-      switch (s.permissions) {
-        case ('1'):
-          share.displayName = 'Download / View' // hover: Recipients can view or download contents.
-          break
-        case ('15'):
-          share.displayName = 'Download / View / Upload' // hover: Recipients can view, download, edit, delete and upload contents.
-          break
-        case ('4'):
-          share.displayName = 'Upload only (File Drop)' // TODO hover: Receive files from multiple recipients without revealing the contents of the folder.
-          break
-        default:
-          share.role = 'legacy'
-      }
-      share.avatar = 'link' // TODO de we have to give a path? remote.php/dav/avatars/admin/128.png or is an icon enough?
-      share.email = s.url // TODO add optional url to card, we are kind of misusing this
-      // TODO password
-      break
   }
 
   // expiration:Object if unset, or string "2019-04-24 00:00:00"
