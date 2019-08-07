@@ -46,7 +46,7 @@
     "chromedriver": "^76.0.0",
     "copy-webpack-plugin": "^5.0.3",
     "core-js": "3.1.4",
-    "css-loader": "^3.1.0",
+    "css-loader": "^3.2.0",
     "cucumber": "cucumber/cucumber-js#issue-727-retry",
     "cucumber-pretty": "^1.5.2",
     "easygettext": "^2.7.0",
