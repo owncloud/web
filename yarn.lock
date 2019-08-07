@@ -8992,10 +8992,10 @@ vue-meta@^2.0.4, vue-meta@^2.2.1:
   dependencies:
     deepmerge "^4.0.0"
 
-vue-router@^3.0.6, vue-router@^3.0.7:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.1.0.tgz#e193d2de7abff75fd793a038a92bdb399259327c"
-  integrity sha512-i1jCgNtJeRqIXPz91BAZ9/eSnqiQjJHXIToOmeqBtKLSqt4Ok8vzBhVJ/pd/nDDX4wQ5OfVXRn9BaCkI19nZsA==
+vue-router@^3.0.6, vue-router@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.1.1.tgz#0893c29548ba2dbe35ed104dcd1aa06743aa0ead"
+  integrity sha512-RAFCIQjs4gbDV7YNH44c1GT0jXSTFvNhKh3o0xiA/UWI1EM7Eriv45n8kM+R8NZ58wXEGtKVaDVBlrXJBuM/Bg==
 
 vue-scrollto@^2.15.0:
   version "2.15.0"
