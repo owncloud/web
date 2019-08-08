@@ -1,412 +1,2205 @@
+---
+kind: pipeline
+name: matrix-1
+
+platform:
+  os: linux
+  arch: amd64
+
 workspace:
   base: /var/www/owncloud
   path: phoenix
 
-branches: [master, release*, develop*]
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
 
-pipeline:
-  build-docker-image:
-    image: toolhippie/docker:latest
-    pull: true
-    environment:
-      - DOCKER_HOST=tcp://docker:2375
-    commands:
-      - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
-    when:
-      event: [ push ]
-      matrix:
-        AFTER_JOB: true
+- name: lint-test
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - yarn run lint
 
-  npm-install:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    commands:
-      - yarn install
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
 
-  build-phoenix:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    commands:
-      - yarn dist
-      - cp tests/drone/config.json dist/config.json
-    when:
-      matrix:
-        RUN_PHOENIX: true
+---
+kind: pipeline
+name: matrix-2
 
-  lint-test:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    commands:
-      - cd /var/www/owncloud/phoenix
-      - yarn run lint
-    when:
-      matrix:
-        TEST_SUITE: lint-test
+platform:
+  os: linux
+  arch: amd64
 
-  install-server:
-    image: owncloudci/core
-    version: ${OC_VERSION=daily-master-qa}
-    pull: true
-    db_type: ${DB_TYPE=sqlite}
-    db_name: ${DB_NAME=owncloud}
-    db_host: ${DB_TYPE=sqlite}
-    db_username: owncloud
-    db_password: owncloud
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
     core_path: /var/www/owncloud/
-    when:
-      matrix:
-        NEED_SERVER: true
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
 
-  clone-oauth:
-    image: owncloud/ubuntu:16.04
-    pull: true
-    commands:
-      - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
-    when:
-      matrix:
-        NEED_SERVER: true
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
 
-  configure-server:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    commands:
-      - cd /var/www/owncloud/
-      - php occ a:e testing
-      - php occ config:system:set trusted_domains 1 --value=owncloud
-      - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
-      - php occ log:manage --level 0
-      - php occ config:list
-      - php occ a:e oauth2
-      - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
-      - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
-    when:
-      matrix:
-        NEED_SERVER: true
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
 
-  owncloud-log:
-    image: owncloud/ubuntu:16.04
-    detach: true
-    pull: true
-    commands:
-      - tail -f /var/www/owncloud/data/owncloud.log
-    when:
-      matrix:
-        NEED_SERVER: true
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
 
-  fix-permissions:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    commands:
-      - cd /var/www/owncloud/
-      - chown www-data * -R
-    when:
-      matrix:
-        NEED_SERVER: true
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
 
-  webui-acceptance-tests:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    environment:
-      - TEST_CONTEXT=${TEST_CONTEXT}
-      - SCREEN_RESOLUTION=${SCREEN_RESOLUTION}
-      - TEST_TAGS=${TEST_TAGS}
-    commands:
-      - cd /var/www/owncloud/phoenix
-      - curl http://phoenix:8300/oidc-callback.html
-      - yarn run acceptance-tests-drone
-    when:
-      matrix:
-        TEST_SUITE: acceptance
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: ${SCREEN_RESOLUTION}
+    TEST_CONTEXT: webUIFavorites
+    TEST_TAGS: not @skip
 
-  upload-screenshots:
-    image: plugins/s3
-    bucket: phoenix
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
     acl: public-read
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-    path_style: true
+    bucket: phoenix
     endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
     strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    secrets: [ aws_access_key_id, aws_secret_access_key ]
-    when:
-      status: [ failure ]
-      matrix:
-        TEST_SUITE: acceptance
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
 
-  build-github-comment:
-    image: owncloud/ubuntu:16.04
-    pull: true
-    environment:
-      - TEST_CONTEXT=${TEST_CONTEXT}
-    commands:
-      - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-      - 'echo "<details><summary>:boom: Acceptance tests <strong>${TEST_CONTEXT}</strong> failed. Please find the screenshots inside ...</summary>\n\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\n\n<p>\n\n" >> comments.file'
-      - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-      - echo "\n</p></details>" >> comments.file
-      - more comments.file
-    when:
-      status: [ failure ]
-      matrix:
-        TEST_SUITE: acceptance
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIFavorites</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUIFavorites
+  when:
+    status:
+    - failure
 
-  github-comment:
-    image: jmccann/drone-github-comment:1
-    secrets: [ plugin_api_key ]
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
     message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-    when:
-      status: [ failure ]
-      matrix:
-        TEST_SUITE: acceptance
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
 
-  build-release:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    commands:
-      - cd /var/www/owncloud/phoenix
-      - make -f Makefile.release dist
-    when:
-      event: [ push ]
-      matrix:
-        AFTER_JOB: true
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
 
-  deploy-staging:
-    image: drillster/drone-rsync:latest
-    pull: true
-    secrets: [ rsync_key ]
-    user: deploy
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-3
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: ${SCREEN_RESOLUTION}
+    TEST_CONTEXT: webUIFiles
+    TEST_TAGS: not @skip
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIFiles</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUIFiles
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-4
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: ${SCREEN_RESOLUTION}
+    TEST_CONTEXT: webUILogin
+    TEST_TAGS: not @skip
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUILogin</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUILogin
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-5
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: ${SCREEN_RESOLUTION}
+    TEST_CONTEXT: webUINotifications
+    TEST_TAGS: not @skip
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUINotifications</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUINotifications
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-6
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: ${SCREEN_RESOLUTION}
+    TEST_CONTEXT: webUIRenameFiles
+    TEST_TAGS: not @skip
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIRenameFiles</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUIRenameFiles
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-7
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: ${SCREEN_RESOLUTION}
+    TEST_CONTEXT: webUIRenameFolders
+    TEST_TAGS: not @skip
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIRenameFolders</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUIRenameFolders
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-8
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: ${SCREEN_RESOLUTION}
+    TEST_CONTEXT: webUISharingInternalGroups
+    TEST_TAGS: not @skip
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUISharingInternalGroups</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUISharingInternalGroups
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-9
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: ${SCREEN_RESOLUTION}
+    TEST_CONTEXT: webUISharingInternalUsers
+    TEST_TAGS: not @skip
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUISharingInternalUsers</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUISharingInternalUsers
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-10
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: ${SCREEN_RESOLUTION}
+    TEST_CONTEXT: webUITrashbin
+    TEST_TAGS: not @skip
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUITrashbin</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUITrashbin
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-11
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: ${SCREEN_RESOLUTION}
+    TEST_CONTEXT: webUIUpload
+    TEST_TAGS: not @skip
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIUpload</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUIUpload
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-12
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: 768x1024
+    TEST_CONTEXT: ${TEST_CONTEXT}
+    TEST_TAGS: "@smokeTest and not @skipOnXGAPortraitResolution and not @skip"
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>${TEST_CONTEXT}</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: ${TEST_CONTEXT}
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-13
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=sqlite}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=sqlite}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    SCREEN_RESOLUTION: 375x812
+    TEST_CONTEXT: ${TEST_CONTEXT}
+    TEST_TAGS: "@smokeTest and not @skipOnIphoneResolution and not @skip"
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>${TEST_CONTEXT}</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - echo "\n</p></details>" >> comments.file
+  - more comments.file
+  environment:
+    TEST_CONTEXT: ${TEST_CONTEXT}
+  when:
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+---
+kind: pipeline
+name: matrix-14
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: build-docker-image
+  pull: always
+  image: toolhippie/docker:latest
+  commands:
+  - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  when:
+    event:
+    - push
+
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-release
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - make -f Makefile.release dist
+  when:
+    event:
+    - push
+
+- name: deploy-staging
+  pull: always
+  image: drillster/drone-rsync:latest
+  settings:
+    delete: true
     hosts: pixie.owncloud.systems
     port: 22
     recursive: true
-    delete: true
+    script:
+    - sudo docker exec phoenix occ maintenance:mode --on
+    - sudo rsync -az --chown=www-data:www-data -r --del --exclude config.json /home/deploy/phoenix/ /var/lib/phoenix/apps/phoenix
+    - sudo docker exec phoenix occ maintenance:mode --off
+    - sudo docker exec phoenix owncloud migrate
     source: dist/
     target: /home/deploy/phoenix
-    script:
-      - sudo docker exec phoenix occ maintenance:mode --on
-      - sudo rsync -az --chown=www-data:www-data -r --del --exclude config.json /home/deploy/phoenix/ /var/lib/phoenix/apps/phoenix
-      - sudo docker exec phoenix occ maintenance:mode --off
-      - sudo docker exec phoenix owncloud migrate
-    when:
-      event: [ push ]
-      branch: [ master ]
-      matrix:
-        AFTER_JOB: true
+    user: deploy
+  environment:
+    RSYNC_KEY:
+      from_secret: rsync_key
+  when:
+    branch:
+    - master
+    event:
+    - push
 
 services:
-  phoenix:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    commands:
-      - mkdir dist
-      - make run SERVER_HOST=phoenix:8300
-    when:
-      matrix:
-        RUN_PHOENIX: true
+- name: docker
+  pull: if-not-exists
+  image: docker:18.04-dind
 
-  owncloud:
-    image: owncloudci/php:${PHP_VERSION=7.1}
-    pull: true
-    environment:
-      - APACHE_WEBROOT=/var/www/owncloud/
-    command: [ "/usr/local/bin/apachectl", "-e", "debug", "-D", "FOREGROUND" ]
-    when:
-      matrix:
-        NEED_SERVER: true
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
 
-  selenium:
-    image: selenium/standalone-chrome-debug:latest
-    pull: true
-    when:
-      matrix:
-        TEST_SUITE: acceptance
-
-  mysql:
-    image: mysql:5.5
-    environment:
-      - MYSQL_USER=owncloud
-      - MYSQL_PASSWORD=owncloud
-      - MYSQL_DATABASE=owncloud
-      - MYSQL_ROOT_PASSWORD=owncloud
-    when:
-      matrix:
-        DB_TYPE: mysql
-
-  docker:
-    image: docker:18.04-dind
-    when:
-      matrix:
-        AFTER_JOB: true
-
-matrix:
-  include:
-    # lint test
-    - TEST_SUITE: lint-test
-
-    # acceptance test
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUIAdminSettings
-#      TEST_TAGS: 'not @skip'
-#
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUIComments
-#      TEST_TAGS: 'not @skip'
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIFavorites
-      TEST_TAGS: 'not @skip'
-      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIFiles
-      TEST_TAGS: 'not @skip'
-      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUILogin
-      TEST_TAGS: 'not @skip'
-      DB_TYPE: mysql
-
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUIMoveFilesFolders
-#      TEST_TAGS: 'not @skip'
-#      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUINotifications
-      TEST_TAGS: 'not @skip'
-      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIRenameFiles
-      TEST_TAGS: 'not @skip'
-      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIRenameFolders
-      TEST_TAGS: 'not @skip'
-      DB_TYPE: mysql
-
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUIRestrictSharing
-#      TEST_TAGS: 'not @skip'
-#      DB_TYPE: mysql
-#
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUISharingAcceptShares
-#      TEST_TAGS: 'not @skip'
-#      DB_TYPE: mysql
-#
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUISharingExternal
-#      TEST_TAGS: 'not @skip'
-#      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUISharingInternalGroups
-      TEST_TAGS: 'not @skip'
-      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUISharingInternalUsers
-      TEST_TAGS: 'not @skip'
-      DB_TYPE: mysql
-
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUISharingNotifications
-#      TEST_TAGS: 'not @skip'
-#      DB_TYPE: mysql
-#
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUISharingPublic
-#      TEST_TAGS: 'not @skip'
-#      DB_TYPE: mysql
-#
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUITags
-#      TEST_TAGS: 'not @skip'
-#      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUITrashbin
-      TEST_TAGS: 'not @skip'
-      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_CONTEXT: webUIUpload
-      TEST_TAGS: 'not @skip'
-      DB_TYPE: mysql
-
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUIWebdavLockProtection
-#      TEST_TAGS: 'not @skip'
-#      DB_TYPE: mysql
-#
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUIWebdavLocks
-#      TEST_TAGS: 'not @skip'
-#      DB_TYPE: mysql
-#
-#    - TEST_SUITE: acceptance
-#      NEED_SERVER: true
-#      RUN_PHOENIX: true
-#      TEST_CONTEXT: webUITags
-#      TEST_TAGS: 'not @skip'
-#      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_TAGS: '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
-      SCREEN_RESOLUTION: 768x1024
-      DB_TYPE: mysql
-
-    - TEST_SUITE: acceptance
-      NEED_SERVER: true
-      RUN_PHOENIX: true
-      TEST_TAGS: '@smokeTest and not @skipOnIphoneResolution and not @skip'
-      SCREEN_RESOLUTION: 375x812
-      DB_TYPE: mysql
-
-    # After drone all jobs completes
-    - AFTER_JOB: true
+...
