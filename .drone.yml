@@ -2178,12 +2178,7 @@ services:
 
 trigger:
   ref:
-  - refs/tags/**
-  - refs/pull/**
-  - refs/pull-requests/**
   - refs/merge-requests/**
   - refs/heads/master
-  - refs/heads/release*
-  - refs/heads/develop*
 
 ...
