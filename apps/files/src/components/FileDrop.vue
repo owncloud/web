@@ -29,6 +29,7 @@ export default {
     vueDropzone: vue2DropZone
   },
   props: {
+    rootPath: { type: String, required: true },
     url: { type: String, required: true },
     headers: {
       type: Object,
