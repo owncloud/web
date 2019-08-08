@@ -391,14 +391,14 @@ export default {
     const params = {}
     switch (role) {
       case ('viewer'):
-        params.perms = canShare ? 17 : 1
+        params.permissions = canShare ? 17 : 1
         break
       case ('editor'):
         if (share.info.item_type === 'file') {
-          params.perms = canShare ? 19 : 3
+          params.permissions = canShare ? 19 : 3
           break
         }
-        params.perms = canShare ? 31 : 15
+        params.permissions = canShare ? 31 : 15
         break
       case ('custom'):
         let perms = 1
@@ -410,11 +410,11 @@ export default {
         if (canCreate) perms += createPerm
         if (canDelete) perms += deletePerm
         if (canShare) perms += resharePerm
-        params.perms = perms
+        params.permissions = perms
         break
     }
 
-    if (!params.perms) {
+    if (!params.permissions) {
       return new Promise((resolve, reject) => {
         reject(new Error('Nothing changed'))
       })
