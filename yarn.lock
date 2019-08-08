@@ -6416,13 +6416,13 @@ owncloud-design-system@^1.0.0-883:
     vuex "^3.1.1"
     webfontloader "^1.6.28"
 
-owncloud-sdk@1.0.0-341:
-  version "1.0.0-341"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-341.tgz#be479b0363e533e79b6525bcc0fb655656deef74"
-  integrity sha512-zILe0kjEeSBd+pEPwBztr4rjr6DZKcIX5hu5Ma1P428QJfB6bLnPnyrpbQsybfZid3rt5Gy5pMNivx9ZUo3+IA==
+owncloud-sdk@1.0.0-346:
+  version "1.0.0-346"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-346.tgz#d88e868c3de4efe78a82c7adc9df161620594d33"
+  integrity sha512-6Iy3zcEj4FBL4osO3IVE08CABazvoQcc1bX3uJF9dub4JVjimNhUT8PytGSBNhZ82CyBOuaVivYDF/1HsiE6Cg==
   dependencies:
     browser-request "^0.3.3"
-    davclient.js "https://github.com/owncloud/davclient.js.git"
+    davclient.js "git+https://github.com/owncloud/davclient.js.git"
     promise "^8.0.3"
     request "^2.88.0"
     utf8 "^3.0.0"
