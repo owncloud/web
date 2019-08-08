@@ -245,17 +245,17 @@ export default {
       this.selectedNewRole = role
     },
     $_ocCollaborators_newCollaboratorsAdd (collaborators) {
-      const permissions = { perms: null }
+      const params = { permissions: null }
       switch (this.selectedNewRole.tag) {
         case 'viewer':
-          permissions.perms = this.canShare ? 17 : 1
+          params.permissions = this.canShare ? 17 : 1
           break
         case 'editor':
           if (this.highlightedFile.type === 'folder') {
-            permissions.perms = this.canShare ? 23 : 7
+            params.permissions = this.canShare ? 23 : 7
             break
           }
-          permissions.perms = this.canShare ? 19 : 2
+          params.permissions = this.canShare ? 19 : 2
           break
         case 'custom':
           let perms = 1
@@ -267,7 +267,7 @@ export default {
           if (this.canCreate) perms += createPerm
           if (this.canDelete) perms += deletePerm
           if (this.canShare) perms += resharePerm
-          permissions.perms = perms
+          params.permissions = perms
           break
       }
       for (const collaborator of collaborators) {
@@ -277,7 +277,7 @@ export default {
           $gettext: this.$gettext,
           shareWith: collaborator.value.shareWith,
           shareType: collaborator.value.shareType,
-          permissions: permissions
+          permissions: params
         })
       }
       this.selectedCollaborators = []
