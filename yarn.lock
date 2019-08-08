@@ -2642,9 +2642,10 @@ date-now@^0.1.4:
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
 
-"davclient.js@https://github.com/owncloud/davclient.js.git":
+"davclient.js@git+https://github.com/owncloud/davclient.js.git":
   version "0.1.3"
-  resolved "https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
+  uid "07237a4bb813eb19e19e322e2457ce216721d529"
+  resolved "git+https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -6416,13 +6417,13 @@ owncloud-design-system@^1.0.0-883:
     vuex "^3.1.1"
     webfontloader "^1.6.28"
 
-owncloud-sdk@1.0.0-334:
-  version "1.0.0-334"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-334.tgz#83ddcd896cd9fab7d4c37a969832e8b143c13413"
-  integrity sha512-R/q/lpkXcgL5EDeWg5vp2siUJrIBRpWGlevH579s1YywcTIvwEiq6AyknGLgA7upkDguE7PuJ69hP8KxNIFSHg==
+owncloud-sdk@1.0.0-341:
+  version "1.0.0-341"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-341.tgz#be479b0363e533e79b6525bcc0fb655656deef74"
+  integrity sha512-zILe0kjEeSBd+pEPwBztr4rjr6DZKcIX5hu5Ma1P428QJfB6bLnPnyrpbQsybfZid3rt5Gy5pMNivx9ZUo3+IA==
   dependencies:
     browser-request "^0.3.3"
-    davclient.js "https://github.com/owncloud/davclient.js.git"
+    davclient.js "git+https://github.com/owncloud/davclient.js.git"
     promise "^8.0.3"
     request "^2.88.0"
     utf8 "^3.0.0"
