@@ -1,6 +1,7 @@
 <template>
     <div id="oc-file-versions-sidebar">
-        <oc-table middle divider>
+      <oc-loader v-if="loading" />
+        <oc-table middle divider v-if="!loading && hasVersion">
             <oc-table-group>
                 <oc-table-row v-for="(item, index) in versions" :key="index" class="file-row">
                     <oc-table-cell>
@@ -20,7 +21,7 @@
                 </oc-table-row>
             </oc-table-group>
         </oc-table>
-        <div v-show="!hasVersion">
+        <div v-else>
           <span v-translate>No Versions available for this file</span>
         </div>
     </div></template>
@@ -34,10 +35,16 @@ export default {
     return $gettext('Versions')
   },
   data: () => ({
-    versions: []
+    versions: [],
+    loading: false
   }),
   mounted () {
     this.getFileVersions()
+  },
+  watch: {
+    currentFile () {
+      this.getFileVersions()
+    }
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
@@ -55,13 +62,16 @@ export default {
       return etag[etag.length - 1]
     },
     getFileVersions () {
+      this.loading = true
       this.$client.fileVersions.listVersions(this.currentFile.id).then((res) => {
         if (res) this.versions = res
+      }).finally(_ => {
+        this.loading = false
       })
     },
     revertVersion (file) {
       this.$client.fileVersions.restoreFileVersion(this.currentFile.id, this.currentVersionId(file), this.currentFile.path).then(() => {
-        this.$emit('reload')
+        this.getFileVersions()
       })
     },
     downloadVersion (file) {
