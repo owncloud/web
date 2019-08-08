@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: matrix-1
+name: lint-test
 
 platform:
   os: linux
@@ -36,7 +36,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-2
+name: acceptance-webUIFavorites
 
 platform:
   os: linux
@@ -209,7 +209,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-3
+name: acceptance-webUIFiles
 
 platform:
   os: linux
@@ -382,7 +382,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-4
+name: acceptance-webUILogin
 
 platform:
   os: linux
@@ -555,7 +555,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-5
+name: acceptance-webUINotifications
 
 platform:
   os: linux
@@ -728,7 +728,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-6
+name: acceptance-webUIRenameFiles
 
 platform:
   os: linux
@@ -901,7 +901,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-7
+name: acceptance-webUIRenameFolders
 
 platform:
   os: linux
@@ -1074,7 +1074,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-8
+name: acceptance-webUISharingInternalGroups
 
 platform:
   os: linux
@@ -1247,7 +1247,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-9
+name: acceptance-webUISharingInternalUsers
 
 platform:
   os: linux
@@ -1420,7 +1420,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-10
+name: acceptance-webUITrashbin
 
 platform:
   os: linux
@@ -1593,7 +1593,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-11
+name: acceptance-webUIUpload
 
 platform:
   os: linux
@@ -1766,7 +1766,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-12
+name: acceptance-XGAPortraitResolution
 
 platform:
   os: linux
@@ -1937,7 +1937,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-13
+name: acceptance-IphoneResolution
 
 platform:
   os: linux
@@ -2108,7 +2108,7 @@ trigger:
 
 ---
 kind: pipeline
-name: matrix-14
+name: publish-npm-and-demo-system
 
 platform:
   os: linux
