@@ -175,7 +175,7 @@ export default {
       })
     },
     processDirectoryEntryRecursively (directory) {
-      this.$client.files.createFolder(this.rootPath + directory.fullPath).then(() => {
+      return this.$client.files.createFolder(this.rootPath + directory.fullPath).then(() => {
         const directoryReader = directory.createReader()
         const ctrl = this
         directoryReader.readEntries(function (entries) {
