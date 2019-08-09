@@ -68,6 +68,7 @@ export default {
       this.$emit('input', this.inputValue)
     },
     ocActive (isActive) {
+      this.clicked = false
       this.inputValue = this.value
 
       this.$nextTick().then(() => {
