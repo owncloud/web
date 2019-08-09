@@ -15,7 +15,21 @@ Feature: Sharing files and folders with internal users
     Given user "user2" has logged in using the webUI
     When the user shares folder "simple-folder" with user "User One" as "Viewer" using the webUI
     And the user shares file "testimage.jpg" with user "User One" as "Viewer" using the webUI
-    And the user re-logs in as "user1" using the webUI
+    Then user "user1" should have received a share with these details:
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /simple-folder (2) |
+      | item_type   | folder             |
+      | permissions | 1                  |
+    And user "user1" should have received a share with these details:
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /testimage (2).jpg |
+      | item_type   | file               |
+      | permissions | 1                  |
+    When the user re-logs in as "user1" using the webUI
     Then folder "simple-folder (2)" should be listed on the webUI
 #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
     And file "testimage (2).jpg" should be listed on the webUI
