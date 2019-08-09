@@ -20,8 +20,8 @@ const appInfo = {
     {
       app: 'files-version',
       component: FileInfoVersions,
-      enabled (capabilities) {
-        return !!capabilities.core
+      enabled (capabilities, highlightedFile) {
+        return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
       }
     }, {
       app: 'files-sharing',
