@@ -62,7 +62,8 @@ export default {
     if (this.highlightedFile) {
       this.loadLinks({
         client: this.$client,
-        path: this.highlightedFile.path
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext
       })
     } else {
       this.purgeLinks()
