@@ -60,7 +60,7 @@ export default {
     ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
     fileSideBarsEnabled () {
-      return this.fileSideBars.filter(b => b.enabled === undefined || b.enabled(this.capabilities))
+      return this.fileSideBars.filter(b => b.enabled === undefined || b.enabled(this.capabilities, this.highlightedFile))
     },
     activeTabComponent () {
       return this.fileSideBarsEnabled[this.activeTab]
