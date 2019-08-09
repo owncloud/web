@@ -98,22 +98,22 @@ function _buildFileInTrashbin (file) {
   })
 }
 
-function _buildLink (l) {
+function _buildLink (l, $gettext) {
   const link = l.shareInfo
   let description = ''
 
   switch (link.permissions) {
     case ('1'):
-      description = 'Viewer' // hover: Viewer can view or download contents.
+      description = $gettext('Viewer')
       break
     case ('15'):
-      description = 'Contributor' // hover: Contributor can view, download, edit, delete and upload contents.
+      description = $gettext('Contributor')
       break
     case ('4'):
-      description = 'Uploader' // TODO hover: Uploader files from multiple recipients without revealing the contents of the folder.
+      description = $gettext('Uploader')
       break
     case ('5'):
-      description = 'Editor' // TODO hover: Editor files from multiple recipients without revealing the contents of the folder.
+      description = $gettext('Editor')
       break
   }
 
@@ -525,7 +525,7 @@ export default {
   toggleCollaboratorsEdit (context, inProgress) {
     context.commit('TOGGLE_COLLABORATORS_EDIT', inProgress)
   },
-  loadLinks (context, { client, path }) {
+  loadLinks (context, { client, path, $gettext }) {
     context.commit('LINKS_PURGE')
     context.commit('LINKS_ERROR', null)
     context.commit('LINKS_LOADING', true)
@@ -534,7 +534,7 @@ export default {
       .then(data => {
         data.forEach(share => {
           if (share.shareInfo.share_type === '3') {
-            context.commit('LINKS_ADD', _buildLink(share))
+            context.commit('LINKS_ADD', _buildLink(share, $gettext))
           }
         })
       })
@@ -553,7 +553,7 @@ export default {
       context.commit('LINKS_LOADING', true)
       client.shares.shareFileWithLink(path, params)
         .then(data => {
-          const link = _buildLink(data)
+          const link = _buildLink(data, $gettext)
           context.commit('LINKS_ADD', link)
           context.commit('LINKS_LOADING', false)
           resolve(link)
@@ -574,7 +574,7 @@ export default {
       context.commit('LINKS_LOADING', true)
       client.shares.updateShare(id, params)
         .then(data => {
-          const link = _buildLink(data)
+          const link = _buildLink(data, $gettext)
           context.commit('LINKS_UPDATE', link)
           context.commit('LINKS_LOADING', false)
           resolve(link)
