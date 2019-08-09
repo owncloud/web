@@ -17,7 +17,7 @@
     </template>
     <template slot="footer">
         <oc-button :id="ocCancelId" :disabled="ocLoading" @click.stop="onCancel">{{ _ocCancelText }}</oc-button>
-        <oc-button :disabled="ocLoading || ocError !== null || inputValue === ''"
+        <oc-button :disabled="ocLoading || ocError !== null || inputValue === '' || clicked"
                :id="ocConfirmId"
                ref="confirmButton"
                :autofocus="!ocHasInput"
@@ -57,7 +57,8 @@ export default {
     }
   },
   data: () => ({
-    inputValue: null
+    inputValue: null,
+    clicked: false
   }),
   watch: {
     value () {
@@ -86,6 +87,7 @@ export default {
     },
     onConfirm () {
       if (!this.ocError && this.inputValue !== '') {
+        this.clicked = true
         this.$emit('oc-confirm', this.inputValue)
       }
     }
