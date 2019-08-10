@@ -76,7 +76,7 @@
     "requirejs": "^2.3.6",
     "rimraf": "^2.6.3",
     "start-server-and-test": "^1.9.1",
-    "style-loader": "^0.23.1",
+    "style-loader": "^1.0.0",
     "url-search-params-polyfill": "^7.0.0",
     "v-clipboard": "^2.2.2",
     "vue": "^2.6.10",
