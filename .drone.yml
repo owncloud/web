@@ -65,10 +65,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -238,10 +238,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -411,10 +411,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -584,10 +584,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -757,10 +757,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -930,10 +930,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -1103,10 +1103,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -1276,10 +1276,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -1449,10 +1449,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -1622,10 +1622,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -1795,10 +1795,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
@@ -1966,10 +1966,10 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=sqlite}
+    db_host: ${DB_TYPE=mysql}
     db_name: ${DB_NAME=owncloud}
     db_password: owncloud
-    db_type: ${DB_TYPE=sqlite}
+    db_type: ${DB_TYPE=mysql}
     db_username: owncloud
     version: ${OC_VERSION=daily-master-qa}
 
