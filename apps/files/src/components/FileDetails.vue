@@ -6,13 +6,13 @@
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
-          <span class="uk-margin-small-right">{{ highlightedFile.name }}</span>
+          <span class="uk-margin-small-right uk-text-bold">{{ highlightedFile.name }}</span>
           <oc-icon name="link" v-clipboard="() => highlightedFile.privateLink"
                    v-if="highlightedFile.privateLink"
                    v-clipboard:success="clipboardSuccessHandler"
           />
         </div>
-        <div>
+        <div v-if="$route.name !== 'files-shared-with-others'">
           <oc-star v-if="!publicPage()" class="uk-inline" :shining="highlightedFile.starred"/> {{ highlightedFile.size | fileSize }}, {{ formDateFromNow(highlightedFile.mdate) }}
         </div>
       </div>

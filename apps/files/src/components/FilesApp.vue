@@ -5,11 +5,14 @@
         <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }" id="files-list-container">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <trashbin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
+          <SharedFilesList v-else-if="$route.name === 'files-shared-with-others'" @toggle="toggleFileSelect" :fileData="activeFiles" />
           <file-list v-else @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar" />
         </div>
-        <div class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1" v-if="_sidebarOpen && $route.name !== 'files-trashbin'">
-          <file-details ref="fileDetails" @reset="setHighlightedFile(null)"/>
-        </div>
+        <file-details
+          v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
+          ref="fileDetails" class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1"
+          @reset="setHighlightedFile(null)"
+        />
     </oc-grid>
     <oc-file-actions />
   </div>
@@ -20,6 +23,7 @@ import FileDetails from './FileDetails.vue'
 import FilesAppBar from './FilesAppBar.vue'
 import FileList from './FileList.vue'
 import Trashbin from './Trashbin.vue'
+import SharedFilesList from './Collaborators/SharedFilesList.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -30,7 +34,8 @@ export default {
     FileDetails,
     FileList,
     FilesAppBar,
-    Trashbin
+    Trashbin,
+    SharedFilesList
   },
   data () {
     return {
@@ -119,6 +124,11 @@ export default {
 
     _sidebarOpen () {
       return this.highlightedFile !== null
+    }
+  },
+  watch: {
+    $route () {
+      this.setHighlightedFile(null)
     }
   }
 }

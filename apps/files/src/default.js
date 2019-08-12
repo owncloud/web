@@ -56,6 +56,14 @@ const navItems = [
     }
   },
   {
+    name: 'Shared with others',
+    iconMaterial: 'share',
+    route: {
+      name: 'files-shared-with-others',
+      path: `/${appInfo.id}/shared-with-others`
+    }
+  },
+  {
     name: 'Deleted files',
     iconMaterial: 'delete',
     enabled (capabilities) {
@@ -91,6 +99,16 @@ const routes = [
       app: FilesApp
     },
     name: 'files-favorites',
+    meta: {
+      hideFilelistActions: true
+    }
+  },
+  {
+    path: '/shared-with-others',
+    components: {
+      app: FilesApp
+    },
+    name: 'files-shared-with-others',
     meta: {
       hideFilelistActions: true
     }
