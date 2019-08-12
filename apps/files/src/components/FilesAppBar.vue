@@ -1,6 +1,6 @@
 <template>
   <div id="files-app-bar" class="oc-app-bar">
-    <file-drop :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
+    <file-drop :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">
         <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="showBreadcrumb" home></oc-breadcrumb>
@@ -23,7 +23,7 @@
             <oc-drop toggle="#new-file-menu-btn" mode="click">
               <oc-nav>
                 <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-                <folder-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
+                <folder-upload :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
                 <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
                 <oc-nav-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
               </oc-nav>
@@ -119,10 +119,10 @@ export default {
       return null
     },
     item () {
-      return this.$route.params.item === undefined ? this.configuration.rootFolder : this.$route.params.item
+      return this.$route.params.item === undefined ? this.configuration.rootFolder + '/' : this.$route.params.item + '/'
     },
     url () {
-      const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
+      const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}`
       if (this.publicPage()) {
         return this.$client.publicFiles.getFileUrl(`/${path}`)
       }

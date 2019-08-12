@@ -112,7 +112,7 @@ export default {
       })
     },
     processDirectoryEntryRecursively (directory) {
-      this.$client.files.createFolder(directory.fullPath).then(() => {
+      this.$client.files.createFolder(this.rootPath + directory.fullPath).then(() => {
         const directoryReader = directory.createReader()
         const ctrl = this
         directoryReader.readEntries(function (entries) {
@@ -231,9 +231,9 @@ export default {
         const rootDir = directoriesToCreate[0]
         for (const directory of directoriesToCreate) {
           if (this.publicPage()) {
-            createFolderPromises.push(this.$client.publicFiles.createFolder(directory))
+            createFolderPromises.push(this.$client.publicFiles.createFolder(this.rootPath + directory))
           } else {
-            createFolderPromises.push(this.$client.files.createFolder(directory))
+            createFolderPromises.push(this.$client.files.createFolder(this.rootPath + directory))
           }
         }
         // Upload files
