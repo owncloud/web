@@ -5462,7 +5462,7 @@ lodash.defaults@^4.2.0:
   resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
   integrity sha1-0JF4cW/+pN3p5ft7N/bwgCJ0WAw=
 
-lodash.defaultsdeep@^4.6.0:
+lodash.defaultsdeep@^4.6.1:
   version "4.6.1"
   resolved "https://registry.yarnpkg.com/lodash.defaultsdeep/-/lodash.defaultsdeep-4.6.1.tgz#512e9bd721d272d94e3d3a63653fa17516741ca6"
   integrity sha512-3j8wdDzYuWO3lM3Reg03MuQR957t287Rpcxp1njpEa8oDrikb+FwGdW3n+FELh/A6qib6yPit0j/pv9G/yeAqA==
@@ -5506,7 +5506,7 @@ lodash.memoize@4.1.2:
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
 
-lodash.merge@^4.6.1:
+lodash.merge@^4.6.1, lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
@@ -6005,18 +6005,18 @@ nightwatch-api@^2.3.0:
     "@types/debug" "^4.1.4"
     debug "^4.1.1"
 
-nightwatch@^1.1.13:
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-1.1.13.tgz#3aaeed6be74e7cf8f53c920a84bdd4ba954f666c"
-  integrity sha512-p/EqaCnVqAvGB5uaKgBhPaXCT/gxspVjgDyFRp2NmQiNnmlpTpw2wun+O5eYjF/iYDtXra7FD7uUFFLBAESvNw==
+nightwatch@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-1.2.1.tgz#25cb8f54473fd18714bfb99cc160a58e76cbdfa7"
+  integrity sha512-y9ihK6Xmo6A32B6zG4XlWumF5f6gIE5QQP54o4PHpnjC4+CA9xwVMtXZL6QlnNYlqS0n34Pk/wpvKL2znjCh0g==
   dependencies:
     assertion-error "^1.1.0"
     chai-nightwatch "^0.3.0"
     dotenv "7.0.0"
     ejs "^2.5.9"
     lodash.clone "3.0.3"
-    lodash.defaultsdeep "^4.6.0"
-    lodash.merge "^4.6.1"
+    lodash.defaultsdeep "^4.6.1"
+    lodash.merge "^4.6.2"
     minimatch "3.0.4"
     mkpath "1.0.0"
     optimist "^0.6.1"
