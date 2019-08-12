@@ -277,8 +277,7 @@ export default {
             return item.canBeDeleted()
           } }
       ]
-      for (const sideBarName in this.fileSideBars) {
-        const sideBar = this.fileSideBars[sideBarName]
+      for (const sideBar of this.fileSideBars) {
         if (sideBar.enabled !== undefined && !sideBar.enabled(this.capabilities)) {
           continue
         }
@@ -287,7 +286,7 @@ export default {
             icon: sideBar.quickAccess.icon,
             ariaLabel: sideBar.quickAccess.ariaLabel,
             handler: this.openSideBar,
-            handlerData: sideBarName,
+            handlerData: sideBar.app,
             isEnabled: function (item) {
               return true
             }

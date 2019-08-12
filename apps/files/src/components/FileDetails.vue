@@ -19,8 +19,8 @@
     </template>
     <template slot="content">
       <oc-tabs>
-          <oc-tab-item :active="key == activeTab" @click="activeTab = key" v-for="(tab, key) of fileSideBarsEnabled" :key="tab.name">
-            {{ tab.component.title($gettext) }}
+          <oc-tab-item :active="tab.app == activeTab" @click="activeTab = tab.app" v-for="tab of fileSideBarsEnabled" :key="tab.name">
+            {{ tab.component.title($gettext) }} {{ tab.name }}
           </oc-tab-item>
       </oc-tabs>
       <component v-if="fileSideBars.length > 0 && activeTabComponent" v-bind:is="activeTabComponent.component" @reload="$emit('reload')"></component>
@@ -35,10 +35,10 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   mixins: [Mixins],
   name: 'FileDetails',
-  data: function () {
+  data () {
     return {
       /** String name of the tab that is activated */
-      activeTab: 0
+      activeTab: null
     }
   },
   methods: {
@@ -62,9 +62,24 @@ export default {
     fileSideBarsEnabled () {
       return this.fileSideBars.filter(b => b.enabled === undefined || b.enabled(this.capabilities, this.highlightedFile))
     },
+    defaultTab () {
+      if (this.fileSideBarsEnabled.length < 1) return null
+
+      return this.fileSideBarsEnabled[0].app
+    },
     activeTabComponent () {
-      return this.fileSideBarsEnabled[this.activeTab]
+      return this.fileSideBarsEnabled.find(sidebar => sidebar.app === this.activeTab)
     }
+  },
+  watch: {
+    // Switch back to default tab after selecting different file
+    highlightedFile () {
+      this.activeTab = this.defaultTab
+    }
+  },
+  mounted () {
+    // Ensure default tab is not undefined
+    this.activeTab = this.defaultTab
   }
 }
 </script>
