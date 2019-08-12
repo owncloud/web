@@ -5,7 +5,7 @@
     </div>
 
     <transition-group tag="ul" name="custom-classes-transition" enter-active-class="uk-animation-slide-left-medium" leave-active-class="uk-animation-slide-right-medium uk-animation-reverse" class="uk-list uk-list-divider">
-      <li v-for="(link, index) in $_links" :key="index">
+      <li v-for="(link, index) in $_links" :key="'li-' + index">
         <oc-grid flex gutter="small">
           <div class="uk-width-auto">
             <oc-icon v-if="link.password" name="lock" class="uk-icon-button" />
@@ -165,6 +165,17 @@ export default {
           break
       }
     })
+  },
+  watch: {
+    highlightedFile (n, o) {
+      if (n === o) { return }
+
+      this.loadLinks({
+        client: this.$client,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext
+      })
+    }
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'links', 'linksLoading', 'linksError']),

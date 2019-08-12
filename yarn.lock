@@ -2580,22 +2580,22 @@ cucumber@cucumber/cucumber-js#issue-727-retry:
     cucumber-expressions "^7.0.0"
     cucumber-tag-expressions "^1.1.1"
     duration "^0.2.1"
-    escape-string-regexp "^2.0.0"
-    figures "^3.0.0"
-    gherkin "5.0.0"
+    escape-string-regexp "^1.0.5"
+    figures "2.0.0"
+    gherkin "^5.0.0"
     glob "^7.1.3"
-    indent-string "^4.0.0"
+    indent-string "^3.1.0"
     is-generator "^1.0.2"
-    is-stream "^2.0.0"
+    is-stream "^1.1.0"
     knuth-shuffle-seeded "^1.0.6"
-    lodash "^4.17.14"
+    lodash "^4.17.11"
     mz "^2.4.0"
     progress "^2.0.0"
     resolve "^1.3.3"
     serialize-error "^4.1.0"
     stack-chain "^2.0.0"
     stacktrace-js "^2.0.0"
-    string-argv "^0.3.0"
+    string-argv "0.1.1"
     title-case "^2.1.1"
     util-arity "^1.0.2"
     verror "^1.9.0"
@@ -2642,9 +2642,9 @@ date-now@^0.1.4:
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
 
-"davclient.js@https://github.com/owncloud/davclient.js.git":
+"davclient.js@git+https://github.com/owncloud/davclient.js.git":
   version "0.1.3"
-  resolved "https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
+  resolved "git+https://github.com/owncloud/davclient.js.git#07237a4bb813eb19e19e322e2457ce216721d529"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -6416,10 +6416,10 @@ owncloud-design-system@^1.0.0-890:
     vuex "^3.1.1"
     webfontloader "^1.6.28"
 
-owncloud-sdk@^1.0.0-341:
-  version "1.0.0-341"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-341.tgz#be479b0363e533e79b6525bcc0fb655656deef74"
-  integrity sha512-zILe0kjEeSBd+pEPwBztr4rjr6DZKcIX5hu5Ma1P428QJfB6bLnPnyrpbQsybfZid3rt5Gy5pMNivx9ZUo3+IA==
+owncloud-sdk@^1.0.0-356:
+  version "1.0.0-356"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-356.tgz#107657102a43fb9e5956347c8b9c99de76598fbb"
+  integrity sha512-5D3szmCsWBuLtQe5qbA5zrIyZg1ByXfs2HLUg3UEiyhqAOhv466sEp36o/QOu//fJimSO/CZT5HlWB7HS8iHoQ==
   dependencies:
     browser-request "^0.3.3"
     davclient.js "https://github.com/owncloud/davclient.js.git"
