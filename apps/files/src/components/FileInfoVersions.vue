@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="oc-file-versions-sidebar">
         <oc-table middle divider>
             <oc-table-group>
                 <oc-table-row v-for="(item, index) in versions" :key="index" class="file-row">

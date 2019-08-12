@@ -11,35 +11,47 @@ Feature: User can open the details panel for any file or folder
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @skip @yetToImplement
-  @comments-app-required @files_versions-app-required
-  Scenario: View different areas of the details panel in files page
-    When the user opens the file action menu of file "lorem.txt" in the webUI
-    And the user clicks the details file action in the webUI
-    Then the details dialog should be visible in the webUI
-    And the thumbnail should be visible in the details panel
-    When the user switches to "sharing" tab in details panel using the webUI
-    Then the "sharing" details panel should be visible
-    When the user switches to "comments" tab in details panel using the webUI
-    Then the "comments" details panel should be visible
-    When the user switches to "versions" tab in details panel using the webUI
-    Then the "versions" details panel should be visible
+  @yetToImplement
+  @files_versions-app-required
+  Scenario: View different areas of the app-sidebar for a file in files page
+    When the user picks the row of file "lorem.txt" in the webUI
+    Then the app-sidebar should be visible
+    # And the thumbnail should be visible in the app-sidebar
+    And the "versions" details panel should be visible
+    When the user switches to "collaborators" tab in details panel using the webUI
+    Then the "collaborators" details panel should be visible
 
-  @skip @yetToImplement
-  @comments-app-required @files_versions-app-required
-  Scenario: View different areas of the details panel in favorites page
-    When the user marks file "lorem.txt" as favorite using the webUI
-    And the user browses to the favorites page
-    And the user opens the file action menu of file "lorem.txt" in the webUI
-    And the user clicks the details file action in the webUI
-    Then the details dialog should be visible in the webUI
-    And the thumbnail should be visible in the details panel
-    When the user switches to "sharing" tab in details panel using the webUI
-    Then the "sharing" details panel should be visible
-    When the user switches to "comments" tab in details panel using the webUI
-    Then the "comments" details panel should be visible
-    When the user switches to "versions" tab in details panel using the webUI
-    Then the "versions" details panel should be visible
+  @yetToImplement
+  @files_versions-app-required
+  Scenario: View different areas of the app-sidebar for a folder in files page
+    When the user picks the row of folder "simple-folder" in the webUI
+    Then the app-sidebar should be visible
+    # And the thumbnail should be visible in the app-sidebar
+    And the "collaborators" details panel should be visible
+    And no "versions" tab should be available in the details panel
+
+  @yetToImplement
+  @files_versions-app-required
+  Scenario: View different areas of the app-sidebar for a file in favorites page
+    Given user "user1" has favorited element "lorem.txt"
+    And the user has browsed to the favorites page
+    When the user picks the row of file "lorem.txt" in the webUI
+    Then the app-sidebar should be visible
+    # And the thumbnail should be visible in the app-sidebar
+    And the "versions" details panel should be visible
+    When the user switches to "collaborators" tab in details panel using the webUI
+    Then the "collaborators" details panel should be visible
+
+  @yetToImplement
+  @files_versions-app-required
+  Scenario: View different areas of the app-sidebar for a folder in favorites page
+    Given user "user1" has favorited element "simple-folder"
+    And the user has browsed to the favorites page
+    When the user picks the row of folder "simple-folder" in the webUI
+    Then the app-sidebar should be visible
+    # And the thumbnail should be visible in the app-sidebar
+    And the "collaborators" details panel should be visible
+    And no "versions" tab should be available in the details panel
 
   @skip @yetToImplement
   @comments-app-required @public_link_share-feature-required

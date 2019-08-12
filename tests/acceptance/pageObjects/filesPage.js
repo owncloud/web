@@ -1,3 +1,5 @@
+const util = require('util')
+
 module.exports = {
   url: function () {
     return this.api.launchUrl + ''
@@ -105,6 +107,44 @@ module.exports = {
         .click('@deleteFileConfirmationBtn')
         .waitForElementNotVisible('@deleteFileConfirmationDialog')
         .waitForAnimationToFinish()
+    },
+    /**
+     * return the complete xpath of the link to the specified tab in the side-bad
+     * @param tab
+     * @returns {string}
+     */
+    getXpathOfLinkToTabInSidePanel: function (tab) {
+      return this.elements['sideBar'].selector +
+        util.format(this.elements['tabOfSideBar'].selector, tab)
+    },
+    selectTabInSidePanel: function (tab) {
+      return this
+        .useXpath()
+        .waitForElementVisible('@sideBar')
+        .click(this.getXpathOfLinkToTabInSidePanel(tab))
+        .useCss()
+    },
+    isSidebarVisible: function (callback) {
+      return this
+        .useXpath()
+        .isVisible('@sideBar', (result) => {
+          callback(result.value)
+        })
+        .useCss()
+    },
+    isPanelVisible: function (panelName, callback) {
+      let selector = ''
+      if (panelName === 'collaborators') {
+        selector = this.page.FilesPageElement.sharingDialog().elements['sharingAutoComplete']
+      } else if (panelName === 'versions') {
+        selector = this.elements['versionsPanel']
+      } else {
+        throw new Error(`invalid panel`)
+      }
+      return this
+        .isVisible(selector, (result) => {
+          callback(result.value)
+        })
     }
   },
   elements: {
@@ -168,6 +208,21 @@ module.exports = {
     },
     deleteFileConfirmationDialog: {
       selector: '#delete-file-confirmation-dialog'
+    },
+    versionsPanel: {
+      selector: '#oc-file-versions-sidebar'
+    },
+    sideBar: {
+      selector: '//div[@class="sidebar-container"]',
+      locateStrategy: 'xpath'
+    },
+    /**
+     * path from inside the side-bar
+     */
+    tabOfSideBar: {
+      // the translate bit is to make it case-insensitive
+      selector: '//a[contains(translate(.,\'ABCDEFGHJIKLMNOPQRSTUVWXYZ\',\'abcdefghjiklmnopqrstuvwxyz\'),\'%s\')]',
+      locateStrategy: 'xpath'
     }
   }
 }
