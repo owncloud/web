@@ -276,7 +276,7 @@ export default {
     ]).then(res => {
       if (res === null) {
         context.dispatch('showMessage', {
-          title: $gettext('Loading trashbin failed…'),
+          title: $gettext('Loading trash bin failed…'),
           status: 'danger'
         }, { root: true })
       } else {
@@ -289,7 +289,7 @@ export default {
       context.dispatch('setHighlightedFile', null)
     }).catch((e) => {
       context.dispatch('showMessage', {
-        title: $gettext('Loading trashbin failed…'),
+        title: $gettext('Loading trash bin failed…'),
         desc: e.message,
         status: 'danger'
       }, { root: true })

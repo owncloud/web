@@ -161,7 +161,8 @@ export default {
       return this.$route.meta.pageIcon
     },
     pageTitle () {
-      return this.$gettext(this.route.meta.pageTitle)
+      const title = this.route.meta.pageTitle
+      return this.$gettext(title)
     },
     breadcrumbs () {
       let baseUrl = '/files/list/'
@@ -417,7 +418,7 @@ export default {
       for (const file of files) {
         this.$client.fileTrash.restore(file.id, file.originalLocation)
           .then(() => {
-            const translated = this.$gettext('%{file} was succesfully restored')
+            const translated = this.$gettext('%{file} was restored successfully')
             this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true)
             })
