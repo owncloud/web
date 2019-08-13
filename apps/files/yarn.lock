@@ -3747,10 +3747,10 @@ p-locate@^3.0.0:
   dependencies:
     p-limit "^2.0.0"
 
-p-queue@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/p-queue/-/p-queue-6.1.0.tgz#3f546275073b41e4af460e41459524b15c2753f3"
-  integrity sha512-907vNz/cY+JEsqGglo7o/Ia9E/wisahJGOp9HPfbAyCVGERQVmFGA4IyknxY1v+QRBiMKedL3ToOBXNEy9MKQA==
+p-queue@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/p-queue/-/p-queue-6.1.1.tgz#eedbaf7335b4931ef857e2e58063fed461b97e80"
+  integrity sha512-R9gq36Th88xZ+rWAptN5IXLwqkwA1gagCQhT6ZXQ6RxEfmjb9ZW+UBzRVqv9sm5TQmbbI/TsKgGLbOaA61xR5w==
   dependencies:
     eventemitter3 "^4.0.0"
     p-timeout "^3.1.0"
