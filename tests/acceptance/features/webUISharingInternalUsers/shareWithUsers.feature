@@ -21,14 +21,14 @@ Feature: Sharing files and folders with internal users
       | share_with  | user1              |
       | file_target | /simple-folder (2) |
       | item_type   | folder             |
-      | permissions | 1                  |
+      | permissions | read               |
     And user "user1" should have received a share with these details:
       | field       | value              |
       | uid_owner   | user2              |
       | share_with  | user1              |
       | file_target | /testimage (2).jpg |
       | item_type   | file               |
-      | permissions | 1                  |
+      | permissions | read               |
     When the user re-logs in as "user1" using the webUI
     Then folder "simple-folder (2)" should be listed on the webUI
 #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI

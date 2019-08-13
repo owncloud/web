@@ -6,6 +6,7 @@ const { URLSearchParams } = require('url')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
 const userSettings = require('../helpers/userSettings')
+const sharingHelper = require('../helpers/sharingHelper')
 
 /**
  *
@@ -303,6 +304,9 @@ Then('user {string} should have received a share with these details:', function 
           found = true
           for (var expectedDetailsI = 0; expectedDetailsI < expectedDetailsTable.hashes().length; expectedDetailsI++) {
             const expectedDetail = expectedDetailsTable.hashes()[expectedDetailsI]
+            if (expectedDetail.field === 'permissions') {
+              expectedDetail.value = sharingHelper.humanReadablePermissionsToBitmask(expectedDetail.value).toString()
+            }
             if (!(expectedDetail.field in share) || share[expectedDetail.field].toString() !== expectedDetail.value) {
               found = false
               break
