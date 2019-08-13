@@ -7,6 +7,7 @@ import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import FileLink from './components/FileLink.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './components/PublicLinks/PublicLink.vue'
+import FilesDrop from './components/PublicLinks/FilesDrop.vue'
 import translationsJson from '../l10n/translations.json'
 
 const store = require('./store')
@@ -155,6 +156,14 @@ const routes = [
     name: 'public-files',
     components: {
       app: FilesApp
+    },
+    meta: { auth: false }
+  },
+  {
+    path: '/files-drop/:token',
+    name: 'public-files-drop',
+    components: {
+      app: FilesDrop
     },
     meta: { auth: false }
   }
