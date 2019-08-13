@@ -120,8 +120,8 @@ export default {
   UPDATE_FOLDER_LOADING (state, value) {
     state.loadingFolder = value
   },
-  CHECK_QUOTA (state, freeSpace) {
-    state.freeSpace = freeSpace
+  CHECK_QUOTA (state, quota) {
+    state.quota = quota
   },
   SET_TRASHBIN_DELETE_CONFIRMATION (state, message) {
     state.trashbinDeleteMessage = message

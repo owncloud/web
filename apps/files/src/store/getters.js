@@ -47,6 +47,24 @@ export default {
     }
     )
   },
+  filesTotalSize: (state, getters) => {
+    let totalSize = 0
+    for (const file of getters.activeFiles) {
+      totalSize += parseInt(file.size, 10)
+    }
+
+    return totalSize
+  },
+  activeFilesCount: (state, getters) => {
+    const files = getters.activeFiles.filter(file => file.type === 'file')
+
+    const folders = getters.activeFiles.filter(file => file.type === 'folder')
+
+    return {
+      files: files.length,
+      folders: folders.length
+    }
+  },
   davProperties: state => {
     return state.davProperties
   },
@@ -65,8 +83,8 @@ export default {
   loadingFolder: state => {
     return state.loadingFolder
   },
-  freeSpace: state => {
-    return state.freeSpace
+  quota: state => {
+    return state.quota
   },
   trashbinDeleteMessage: state => {
     return state.trashbinDeleteMessage

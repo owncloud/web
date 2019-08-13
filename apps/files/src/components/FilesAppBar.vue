@@ -9,16 +9,13 @@
           <span class="uk-text-lead">{{pageTitle}}</span>
         </span>
       </div>
-      <div class="uk-width-auto uk-visible@m">
-        <span class="uk-text-meta"><translate :translate-n="activeFiles.length" translate-plural="%{ activeFiles.length } Results">%{ activeFiles.length } Result</translate></span>
-      </div>
       <div v-if="!publicPage()" class="uk-width-auto uk-visible@m">
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
       <div class="uk-width-auto">
         <div class="uk-button-group" :key="actionsKey">
           <template v-if="$_ocFilesAppBar_showActions">
-            <oc-button v-if="canUpload" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
+            <oc-button v-if="canUpload && quota.free > 0" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
             <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
             <oc-drop toggle="#new-file-menu-btn" mode="click">
               <oc-nav>
@@ -98,7 +95,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration']),
-    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'freeSpace', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
+    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'quota', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
     ...mapState(['route']),
     searchLabel () {
       return this.$gettext('Search')
@@ -113,7 +110,7 @@ export default {
       if (!this.canUpload) {
         return this.$gettext('You have no permission to upload!')
       }
-      if (!this.freeSpace) {
+      if (this.quota.free < 1) {
         return this.$gettext('You have not enough space left to upload!')
       }
       return null

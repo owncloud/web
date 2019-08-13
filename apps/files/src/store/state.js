@@ -27,7 +27,7 @@ export default {
   sharesError: null,
   sharesLoading: false,
   loadingFolder: false,
-  freeSpace: 0,
+  quota: {},
   trashbinDeleteMessage: '',
   filesDeleteMessage: '',
   overwriteDialogTitle: null,
