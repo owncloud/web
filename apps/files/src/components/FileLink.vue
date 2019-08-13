@@ -34,7 +34,7 @@ import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 import mixins from '../mixins'
 
-import FileLinkForm from './FileLinkForm.vue'
+const FileLinkForm = _ => import('./FileLinkForm.vue')
 
 export default {
   mixins: [mixins],
