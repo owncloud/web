@@ -182,7 +182,7 @@ function _buildLink (l, $gettext) {
     stime: link.stime,
     name: link.name,
     password: !!(link.share_with && link.share_with_displayname),
-    expiration: moment(link.expiration).format('YYYY-MM-DD'),
+    expiration: (typeof link.expiration === 'string') ? moment(link.expiration).format('YYYY-MM-DD') : null,
     itemSource: link.item_source,
     file: {
       parent: link.file_parent,

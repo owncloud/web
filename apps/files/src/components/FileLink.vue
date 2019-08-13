@@ -14,7 +14,7 @@
           </div>
           <div class="uk-width-expand">
             <span class="uk-text-bold">{{ link.name }}</span><br>
-            <span class="uk-text-meta">{{ link.description }} | Expires {{ formDateFromNow(link.expiration) }}</span>
+            <span class="uk-text-meta">{{ link.description }}<template v-if="link.expiration"> | Expires {{ formDateFromNow(link.expiration) }}</template></span>
           </div>
           <div class="uk-width-auto uk-button-group">
             <oc-button icon="edit" @click="$_editLink(link)"/>
@@ -126,7 +126,7 @@ export default {
         name: link.name,
         permissions: parseInt(link.permissions),
         hasPassword: link.password,
-        expireDate: moment(link.expiration).format('YYYY-MM-DD')
+        expireDate: (link.expiration !== null) ? moment(link.expiration).format('YYYY-MM-DD') : null
       }
     },
     $_openForm () {
