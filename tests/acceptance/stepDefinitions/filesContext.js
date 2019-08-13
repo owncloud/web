@@ -2,6 +2,7 @@ const { client } = require('nightwatch-api')
 const assert = require('assert')
 const { Given, When, Then, Before } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
+const loginHelper = require('../helpers/loginHelper')
 let deletedElements
 
 Before(() => {
@@ -232,20 +233,104 @@ Then('the folder should be empty on the webUI', async function () {
   return client.assert.equal(allFileRows.value.length, 0)
 })
 
-Then('these folders/files should not be listed on the webUI', function (entryList) {
+const theseResourcesShouldNotBeListed = function (entryList) {
   entryList.rows().forEach(entry => {
     client.page.FilesPageElement.filesList().assertElementNotListed(entry[0])
   })
   return client
+}
+
+/**
+ * needs a heading line in the table
+ */
+Then('these folders/files/resources should not be listed on the webUI', function (entryList) {
+  return theseResourcesShouldNotBeListed(entryList)
 })
 
-Then('these files/folders should be listed on the webUI', function (entryList) {
+/**
+ * needs a heading line in the table
+ */
+Then('as {string} these folders/files/resources should not be listed on the webUI', async function (user, entryList) {
+  if (user !== client.globals.currentUser) {
+    await loginHelper.reLoginAsUser(user)
+  }
+  return theseResourcesShouldNotBeListed(entryList)
+})
+
+/**
+ * currently this only works with the files page, on other pages the user cannot navigate into subfolders
+ *
+ * needs a heading line in the table
+ */
+Then('these folders/files/resources should not be listed in the folder {string} on the webUI', function (folder, entryList) {
+  client.page.filesPage().navigateAndWaitTillLoaded(folder)
+  return theseResourcesShouldNotBeListed(entryList)
+})
+
+/**
+ * currently this only works with the files page, on other pages the user cannot navigate into subfolders
+ *
+ * needs a heading line in the table
+ */
+Then('as {string} these folders/files/resources should not be listed in the folder {string} on the webUI', async function (user, folder, entryList) {
+  if (user !== client.globals.currentUser) {
+    await loginHelper.reLoginAsUser(user)
+  }
+  client.page.filesPage().navigateAndWaitTillLoaded(folder)
+  return theseResourcesShouldNotBeListed(entryList)
+})
+
+/**
+ *
+ * @param {DataTable} entryList the list needs a heading line
+ */
+const theseResourcesShouldBeListed = function (entryList) {
   entryList.rows().forEach(entry => {
     // here each entry is an array with one element,
     // which is the name of the entry from the table
     client.page.FilesPageElement.filesList().waitForFileVisible(entry[0])
   })
   return client
+}
+
+/**
+ * needs a heading line in the table
+ */
+Then('these files/folders/resources should be listed on the webUI', function (entryList) {
+  return theseResourcesShouldBeListed(entryList)
+})
+
+/**
+ * currently this only works with the files page, on other pages the user cannot navigate into subfolders
+ *
+ * needs a heading line in the table
+ */
+Then('these files/folders/resources should be listed in the folder {string} on the webUI', function (folder, entryList) {
+  client.page.filesPage().navigateAndWaitTillLoaded(folder)
+  return theseResourcesShouldBeListed(entryList)
+})
+
+/**
+ * needs a heading line in the table
+ */
+Then('as {string} these files/folders/resources should be listed on the webUI', async function (user, entryList) {
+  if (user !== client.globals.currentUser) {
+    await loginHelper.reLoginAsUser(user)
+  }
+  return theseResourcesShouldBeListed(entryList)
+})
+
+/**
+ * currently this only works with the files page, on other pages the user cannot navigate into subfolders
+ *
+ * needs a heading line in the table
+ */
+Then('as {string} these files/folders/resources should be listed in the folder {string} on the webUI', async function (user, folder, entryList) {
+  if (user !== client.globals.currentUser) {
+    await loginHelper.reLoginAsUser(user)
+  }
+  client.page.filesPage().navigateAndWaitTillLoaded(folder)
+  return theseResourcesShouldBeListed(entryList)
 })
 
 Then('file/folder {string} should be marked as favorite on the webUI', function (path) {

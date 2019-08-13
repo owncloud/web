@@ -29,14 +29,17 @@ Feature: Sharing files and folders with internal users
       | file_target | /testimage (2).jpg |
       | item_type   | file               |
       | permissions | read               |
-    When the user re-logs in as "user1" using the webUI
-    Then folder "simple-folder (2)" should be listed on the webUI
+    And as "user1" these resources should be listed on the webUI
+      | entry_name                  |
+      | simple-folder (2)           |
+      | testimage (2).jpg           |
+    And these resources should be listed in the folder "simple-folder (2)" on the webUI
+      | lorem.txt |
+    But these resources should not be listed in the folder "simple-folder (2)" on the webUI
+      | entry_name        |
+      | simple-folder (2) |
 #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
-    And file "testimage (2).jpg" should be listed on the webUI
 #    And file "testimage (2).jpg" should be marked as shared by "User Two" on the webUI
-    When the user opens folder "simple-folder (2)" using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    But folder "simple-folder (2)" should not be listed on the webUI
 
   @skip @yetToImplement
   Scenario: share a file with another internal user who overwrites and unshares the file
