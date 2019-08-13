@@ -617,10 +617,8 @@ export default {
           }
         })
       })
-      .catch(error => {
-        context.commit('LINKS_ERROR', error.message)
-      })
-      .finally(context.commit('LINKS_LOADING', false))
+      .catch(e => context.commit('LINKS_ERROR', e.message))
+      .finally(() => context.commit('LINKS_LOADING', false))
   },
 
   purgeLinks (context) {
@@ -670,8 +668,13 @@ export default {
     })
   },
   removeLink (context, { id, client }) {
-    client.shares.deleteShare(id).then(() => {
-      context.commit('LINKS_REMOVE', id)
-    }).catch(e => console.log(e))
+    context.commit('LINKS_LOADING', true)
+    client.shares.deleteShare(id)
+      .then(() => {
+        context.commit('LINKS_REMOVE', id)
+        context.commit('LINKS_LOADING', false)
+      })
+      .catch(e => context.commit('LINKS_ERROR', e.message))
+      .finally(() => context.commit('LINKS_LOADING', false))
   }
 }

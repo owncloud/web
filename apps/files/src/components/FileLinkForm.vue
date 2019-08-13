@@ -79,10 +79,13 @@
         </template>
         -->
         <div class="uk-text-right">
-            <oc-button @click="$_closeForm">Cancel</oc-button>
-            <oc-button v-if="!sharesLoading && $_isNew" :disabled="!$_isValid" variation="primary" @click="$_addLink" v-translate>Create</oc-button>
-            <oc-button v-else-if="!sharesLoading && !$_isNew" :disabled="!$_isValid" variation="primary" @click="$_updateLink" v-translate>Save</oc-button>
-            <button v-if="sharesLoading" disabled class="uk-button uk-button-default" @click="$_addLink"><oc-spinner class="uk-position-small uk-position-center-left" size="small" /><span class="uk-margin-small-left" v-translate>Working</span></button>
+          <oc-button :disabled="linksLoading" @click="$_closeForm">Cancel</oc-button>
+          <oc-button v-if="!linksLoading && $_isNew" :disabled="!$_isValid" variation="primary" @click="$_addLink" v-translate>Create</oc-button>
+          <oc-button v-else-if="!linksLoading && !$_isNew" :disabled="!$_isValid" variation="primary" @click="$_updateLink" v-translate>Save</oc-button>
+          <button v-else disabled class="uk-button uk-button-default uk-position-relative"><oc-spinner class="uk-position-small uk-position-center-left" size="small" />
+            <span class="uk-margin-small-left" v-if="$_isNew" v-translate>Creating</span>
+            <span class="uk-margin-small-left" v-else v-translate>Saving</span>
+          </button>
         </div>
     </div>
 </template>
@@ -110,7 +113,7 @@ export default {
     return $gettext('Links')
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'sharesLoading']),
+    ...mapGetters('Files', ['highlightedFile', 'linksLoading']),
     ...mapGetters(['getToken', 'capabilities']),
 
     $_isNew () {

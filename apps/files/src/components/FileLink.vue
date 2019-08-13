@@ -1,11 +1,11 @@
 <template>
   <div id="oc-files-file-link">
     <FileLinkForm v-if="formOpen" v-bind:params="params" :linkId="linkId" />
-    <div class="uk-text-right">
-      <oc-button v-if="!formOpen" variation="primary" icon="add" @click="$_openForm()" translate>Add Link</oc-button>
+    <div class="uk-text-right" v-if="!formOpen">
+      <oc-button v-if="!linksLoading" variation="primary" icon="add" @click="$_openForm()" v-translate>Add Link</oc-button>
+      <button v-else disabled class="uk-button uk-button-default uk-position-relative"><oc-spinner class="uk-position-small uk-position-center-left" size="small" /><span class="uk-margin-small-left" v-translate>Loading</span></button>
     </div>
-
-    <transition-group tag="ul" name="custom-classes-transition" enter-active-class="uk-animation-slide-left-medium" leave-active-class="uk-animation-slide-right-medium uk-animation-reverse" class="uk-list uk-list-divider">
+    <transition-group tag="ul" name="custom-classes-transition" enter-active-class="uk-animation-slide-left-medium" leave-active-class="uk-animation-slide-right-medium uk-animation-reverse" class="uk-list uk-list-divider uk-overflow-hidden">
       <li v-for="(link, index) in $_links" :key="'li-' + index">
         <oc-grid flex gutter="small">
           <div class="uk-width-auto">
@@ -14,7 +14,7 @@
           </div>
           <div class="uk-width-expand">
             <span class="uk-text-bold">{{ link.name }}</span><br>
-            <span class="uk-text-meta">{{ link.description }}<template v-if="link.expiration"> | Expires {{ formDateFromNow(link.expiration) }}</template></span>
+            <span class="uk-text-meta">{{ link.description }}<template v-if="link.expiration"> | <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}</template></span>
           </div>
           <div class="uk-width-auto uk-button-group">
             <oc-button icon="edit" @click="$_editLink(link)"/>
@@ -23,7 +23,7 @@
         </oc-grid>
         <FileLinkForm v-if="linkId === link.id" class="uk-margin-top" v-bind:params="params" :context="'edit'" :linkId="linkId"/>
       </li>
-      </transition-group>
+    </transition-group>
   </div>
 </template>
 <script>
