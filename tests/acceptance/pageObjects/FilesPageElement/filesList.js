@@ -165,6 +165,18 @@ module.exports = {
         .useCss()
     },
     /**
+     * @param {string} item the file/folder to click
+     */
+    clickRow: function (item) {
+      return this.initAjaxCounters()
+        .waitForFileVisible(item)
+        .useXpath()
+        .click(this.getFileRowSelectorByFileName(item))
+        .waitForOutstandingAjaxCalls()
+        .useCss()
+    },
+
+    /**
      * Toggle enable or disable file/folder select checkbox
      *
      * @param {string} enableOrDisable

@@ -219,6 +219,14 @@ When('the user batch restores the marked files using the webUI', function () {
   return client.page.FilesPageElement.filesList().restoreSelected()
 })
 
+When('the user picks the row of file/folder {string} in the webUI', function (item) {
+  return client.page.FilesPageElement.filesList().clickRow(item)
+})
+
+When('the user switches to {string} tab in details panel using the webUI', function (tab) {
+  return client.page.filesPage().selectTabInSidePanel(tab)
+})
+
 Then('the folder should be empty on the webUI', async function () {
   const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
   return client.assert.equal(allFileRows.value.length, 0)
@@ -261,6 +269,25 @@ Then('the folder should be empty on the webUI after a page reload', async functi
   await client.refresh()
   const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
   return client.assert.equal(allFileRows.value.length, 0)
+})
+
+Then('the app-sidebar should be visible', function () {
+  return client.page.filesPage().isSidebarVisible((value) => {
+    assert.strictEqual(value, true, `side-bar should be visible, but is not`)
+  })
+})
+
+Then('the {string} details panel should be visible', function (panel) {
+  return client.page.filesPage().isPanelVisible(panel, (value) => {
+    assert.strictEqual(value, true, `'${panel}-panel' should be visible, but is not`)
+  })
+})
+
+Then('no {string} tab should be available in the details panel', function (tab) {
+  const tabSelector = client.page.filesPage().getXpathOfLinkToTabInSidePanel()
+  return client.page.filesPage()
+    .useXpath()
+    .waitForElementNotPresent(tabSelector)
 })
 
 const assertElementsAreListed = function (elements) {
