@@ -19,6 +19,9 @@
           <div class="uk-width-auto uk-button-group">
             <oc-button icon="edit" @click="$_editLink(link)"/>
             <oc-button icon="delete" @click="$_removeLink(link)" />
+            <button class="uk-button uk-button-default uk-position-relative" @click.stop="$_copyToClipboard(link, $event)">
+              <oc-icon name="link" class="uk-position-center" />
+            </button>
           </div>
         </oc-grid>
         <FileLinkForm v-if="linkId === link.id" class="uk-margin-top" v-bind:params="params" :context="'edit'" :linkId="linkId"/>
@@ -136,7 +139,36 @@ export default {
     $_closeForm () {
       this.formOpen = false
       this.linkId = false
+    },
+    $_copyToClipboard (link) {
+      this.$clipboard(link.url)
+
+      const clone = event.currentTarget.firstElementChild.cloneNode(true)
+      clone.classList.add('_clipButton')
+      event.currentTarget.append(clone)
+
+      // Remove clone after animation ends
+      setTimeout(() => clone.remove(), 500)
     }
   }
 }
 </script>
+<style scoped>
+  ._clipButton {
+    animation-name: _clipButton;
+    animation-duration: .5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+  }
+
+  @keyframes _clipButton {
+    0% {
+      transform: translate(-50%,-50%);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%,-125%);
+      opacity: 0;
+    }
+  }
+</style>
