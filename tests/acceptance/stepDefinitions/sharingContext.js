@@ -19,7 +19,7 @@ const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithG
   return client.page
     .FilesPageElement
     .sharingDialog()
-    .closeSharingDialog()
+    .closeSharingDialog(100)
     .openSharingDialog(file)
     .shareWithUserOrGroup(sharee, shareWithGroup, role)
 }
@@ -280,7 +280,7 @@ Then('user {string} should be listed as {string} in the collaborators list for f
   client.page
     .FilesPageElement
     .sharingDialog()
-    .closeSharingDialog()
+    .closeSharingDialog(100)
     .openSharingDialog(resource)
   return assertCollaboratorslistContains('user', user, role)
 })
@@ -293,7 +293,7 @@ Then('group {string} should be listed as {string} in the collaborators list for 
   client.page
     .FilesPageElement
     .sharingDialog()
-    .closeSharingDialog()
+    .closeSharingDialog(100)
     .openSharingDialog(resource)
   return assertCollaboratorslistContains('group', group, role)
 })

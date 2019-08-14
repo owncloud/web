@@ -64,9 +64,14 @@ module.exports = {
         .click('@addShareButton')
         .waitForElementNotPresent('@addShareButton')
     },
-    closeSharingDialog: function () {
+    closeSharingDialog: function (timeout = null) {
+      if (timeout === null) {
+        timeout = this.api.globals.waitForConditionTimeout
+      } else {
+        timeout = parseInt(timeout, 10)
+      }
       try {
-        this.click('@sidebarCloseBtn')
+        this.click({ selector: '@sidebarCloseBtn', timeout: timeout })
       } catch (e) {
         // do nothing
       }
