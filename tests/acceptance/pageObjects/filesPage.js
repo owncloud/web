@@ -138,6 +138,8 @@ module.exports = {
         selector = this.page.FilesPageElement.sharingDialog().elements['sharingAutoComplete']
       } else if (panelName === 'versions') {
         selector = this.elements['versionsPanel']
+      } else if (panelName === 'links') {
+        selector = this.elements['linksPanel']
       } else {
         throw new Error(`invalid panel`)
       }
@@ -211,6 +213,9 @@ module.exports = {
     },
     versionsPanel: {
       selector: '#oc-file-versions-sidebar'
+    },
+    linksPanel: {
+      selector: '#oc-files-file-link'
     },
     sideBar: {
       selector: '//div[@class="sidebar-container"]',

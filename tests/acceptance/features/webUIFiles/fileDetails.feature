@@ -27,7 +27,8 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" in the webUI
     Then the app-sidebar should be visible
     # And the thumbnail should be visible in the app-sidebar
-    And the "collaborators" details panel should be visible
+    And the "links" details panel should be visible
+    And no "collaborators" tab should be available in the details panel
     And no "versions" tab should be available in the details panel
 
   @yetToImplement
@@ -50,7 +51,8 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" in the webUI
     Then the app-sidebar should be visible
     # And the thumbnail should be visible in the app-sidebar
-    And the "collaborators" details panel should be visible
+    And the "links" details panel should be visible
+    And no "collaborators" tab should be available in the details panel
     And no "versions" tab should be available in the details panel
 
   @skip @yetToImplement
