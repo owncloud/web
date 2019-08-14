@@ -277,7 +277,11 @@ Then('user {string} should be listed as {string} in the collaborators list on th
 })
 
 Then('user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', function (user, role, resource) {
-  client.page.FilesPageElement.filesList().openSharingDialog(resource)
+  client.page
+    .FilesPageElement
+    .sharingDialog()
+    .closeSharingDialog()
+    .openSharingDialog(resource)
   return assertCollaboratorslistContains('user', user, role)
 })
 
@@ -286,7 +290,11 @@ Then('group {string} should be listed as {string} in the collaborators list on t
 })
 
 Then('group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', function (group, role, resource) {
-  client.page.FilesPageElement.filesList().openSharingDialog(resource)
+  client.page
+    .FilesPageElement
+    .sharingDialog()
+    .closeSharingDialog()
+    .openSharingDialog(resource)
   return assertCollaboratorslistContains('group', group, role)
 })
 
