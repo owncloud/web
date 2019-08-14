@@ -23,7 +23,6 @@ Feature: files and folders exist in the trashbin after being deleted
     And as "user1" folder "strängé नेपाली folder" should exist in trash
     And as "user1" file "strängé filename (duplicate #2 &).txt" should exist in trash
     And the deleted elements should be listed on the webUI
-    And file "lorem.txt" should be listed in the folder "simple-folder" on the webUI
 
   Scenario: Delete a file with problematic characters and check it is in the trashbin
     Given the user has renamed the following files
@@ -59,7 +58,6 @@ Feature: files and folders exist in the trashbin after being deleted
     And as "user1" folder "simple-folder" should exist in trash
     And as "user1" the file with original path "simple-folder/lorem.txt" should exist in trash
     And the deleted elements should be listed on the webUI
-    And file "lorem.txt" should be listed in the folder "simple-folder" on the webUI
 
   Scenario: Delete an empty folder and check it is in the trashbin
     Given the user has created folder "my-empty-folder"
