@@ -421,6 +421,9 @@ export default {
       if (event.target.tagName !== 'TD') {
         return
       }
+
+      if (item.status && (item.status === 1 || item.status === 2)) return
+
       event.stopPropagation()
       this.setHighlightedFile(item)
     },

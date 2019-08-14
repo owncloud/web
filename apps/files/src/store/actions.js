@@ -128,8 +128,13 @@ function _buildSharedFile (file) {
     shareTime: file.stime * 1000,
     owner: file.uid_file_owner,
     ownerDisplayname: file.displayname_file_owner,
+    shareOwner: file.uid_owner,
+    shareOwnerDisplayname: file.displayname_owner,
     sharedWith: file.share_with_displayname,
     shareType: file.share_type,
+    status: (function () {
+      if (file.state) return file.state
+    }()),
     canUpload: function () {
       // TODO: Find a way how to read permissions for file and not for share
       // return file.permissions >= 4
@@ -321,15 +326,52 @@ export default {
   loadFolderSharedFromMe (context, { client, $gettext }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
 
+    // TODO: Move request to owncloud-sdk
     client.requests.ocs({
       service: 'apps/files_sharing',
       action: '/api/v1/shares?format=json&include_tags=true',
       method: 'GET'
     }).then(res => {
       res.json().then(json => {
+        if (json.ocs.data.length < 1) {
+          context.commit('UPDATE_FOLDER_LOADING', false)
+          return
+        }
+
         const files = json.ocs.data
         const uniqueFiles = Array.from(new Set(files.map(file => file.item_source))).map(id => {
           return files.find(file => file.item_source === id)
+        })
+        context.dispatch('buildFilesSharedFromMe', uniqueFiles)
+      })
+    }).catch((e) => {
+      context.dispatch('showMessage', {
+        title: $gettext('Loading shared files failed…'),
+        desc: e.message,
+        status: 'danger'
+      }, { root: true })
+    }).finally(() => {
+      context.commit('UPDATE_FOLDER_LOADING', false)
+    })
+  },
+  loadFolderSharedWithMe (context, { client, $gettext }) {
+    context.commit('UPDATE_FOLDER_LOADING', true)
+
+    // TODO: Move request to owncloud-sdk
+    // TODO: Load remote shares as well
+    client.requests.ocs({
+      service: 'apps/files_sharing',
+      action: '/api/v1/shares?format=json&shared_with_me=true&state=all&include_tags=true',
+      method: 'GET'
+    }).then(res => {
+      res.json().then(json => {
+        if (json.ocs.data.length < 1) {
+          context.commit('UPDATE_FOLDER_LOADING', false)
+          return
+        }
+        const files = json.ocs.data
+        const uniqueFiles = Array.from(new Set(files.map(file => file.id))).map(id => {
+          return files.find(file => file.id === id)
         })
         context.dispatch('buildFilesSharedFromMe', uniqueFiles)
       })
@@ -676,5 +718,28 @@ export default {
       })
       .catch(e => context.commit('LINKS_ERROR', e.message))
       .finally(() => context.commit('LINKS_LOADING', false))
+  },
+
+  // TODO: Think of a better name
+  pendingShare (context, { client, item, type, translate }) {
+    // TODO: Move request to owncloud-sdk
+    client.requests.ocs({
+      service: 'apps/files_sharing',
+      action: `/api/v1/shares/pending/${item.shareId}`,
+      method: type
+    })
+      .then(_ => {
+        context.dispatch('loadFolderSharedWithMe', {
+          client: client,
+          $gettext: translate
+        })
+      })
+      .catch(e => {
+        context.dispatch('showMessage', {
+          title: translate('Error while changing share state'),
+          desc: e.message,
+          status: 'danger'
+        }, { root: true })
+      })
   }
 }
