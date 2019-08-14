@@ -59,11 +59,11 @@ Feature: Sharing files and folders with internal users
     Then user "User One" should be listed as "Custom role" in the collaborators list for folder "simple-folder" on the webUI
     And user "User One" should be listed as "Custom role" in the collaborators list for file "testimage.jpg" on the webUI
     And user "user1" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user2                |
-      | share_with  | user1                |
-      | file_target | /simple-folder (2)   |
-      | item_type   | folder               |
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /simple-folder (2) |
+      | item_type   | folder             |
       | permissions | read,update,create |
     And user "user1" should have received a share with these details:
       | field       | value              |
@@ -71,7 +71,7 @@ Feature: Sharing files and folders with internal users
       | share_with  | user1              |
       | file_target | /testimage (2).jpg |
       | item_type   | file               |
-      | permissions | update |
+      | permissions | update             |
     When the user re-logs in as "user1" using the webUI
     Then there should be no files/folders listed on the webUI
     And the error message "Loading folder failed…" should be displayed on the webUI
