@@ -1,12 +1,13 @@
 <template>
-    <div id="files">
-      <div id="files-drop-container">
-          <div v-if="loading">
-            <h3 class="uk-flex uk-flex-middle uk-flex-center"><translate>Loading public link…</translate></h3>
-            <oc-spinner class="uk-flex uk-flex-middle uk-flex-center"></oc-spinner>
-          </div>
-        <div v-if="!loading">
-          <h3 class="uk-flex uk-flex-middle uk-flex-center">{{title}}</h3>
+  <div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
+    <div class="uk-padding uk-height-1-1">
+      <div class="uk-flex uk-flex-column uk-flex-middle" v-if="loading" key="loading-drop">
+        <translate tag="h3">Loading public link…</translate>
+        <oc-spinner size="medium" />
+      </div>
+      <div class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1" v-else key="loaded-drop">
+        <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
+          <h3 v-text="title" />
           <vue-dropzone
             id="oc-dropzone"
             :options="dropzoneOptions"
@@ -15,37 +16,37 @@
             :includeStyling=false
           >
             <div class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
-              <oc-icon name="file_upload"></oc-icon>
-              <translate>You can drag files here for upload</translate>
+              <oc-icon name="file_upload" />
+              <translate>Drop files here to upload or click to select file</translate>
             </div>
           </vue-dropzone>
-          <div id="previews" hidden></div>
-          <h4 class="uk-flex uk-flex-middle uk-flex-center"><translate>Uploaded files</translate></h4>
-          <oc-table>
+          <div id="previews" hidden />
+        </div>
+        <div class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1" v-if="getUploadedFiles">
+          <oc-table class="uk-width-1-1 uk-width-xxlarge@m">
             <oc-table-group>
               <oc-table-row v-for="(file, key) in getUploadedFiles" :key="key">
-                <oc-table-cell>{{file.name}}</oc-table-cell>
-                <oc-table-cell>{{file.size | fileSize}}</oc-table-cell>
-                <oc-table-cell>
-                  <oc-icon name="ready" variation="success" v-if="file.status === 'done'"></oc-icon>
-                  <oc-icon name="info" variation="danger" v-if="file.status === 'error'"></oc-icon>
-                  <oc-spinner v-if="file.status === 'uploading' || file.status === 'init'"></oc-spinner>
+                <oc-table-cell class="uk-padding-remove-left" v-text="file.name" />
+                <oc-table-cell shrink class="uk-text-nowrap uk-text-meta">{{ file.size | fileSize }}</oc-table-cell>
+                <oc-table-cell shrink class="uk-padding-remove-right uk-preserve-width">
+                  <oc-icon name="ready" variation="success" v-if="file.status === 'done'" />
+                  <oc-icon name="info" variation="danger" v-if="file.status === 'error'" />
+                  <oc-spinner v-if="file.status === 'uploading' || file.status === 'init'" />
                 </oc-table-cell>
               </oc-table-row>
             </oc-table-group>
           </oc-table>
         </div>
-          <div v-if="errorMessage">
-            <h3 class="uk-flex uk-flex-middle uk-flex-center"><translate>An error occurred while loading the public link</translate></h3>
-            <span class="uk-flex uk-flex-middle uk-flex-center">{{ errorMessage }}</span>
-          </div>
-          <div class="uk-flex uk-flex-middle uk-flex-center">
-            <p>
-              {{ configuration.theme.general.slogan }}
-            </p>
-          </div>
+        <div v-if="errorMessage" class="uk-text-center">
+          <translate tag="h3">An error occurred while loading the public link</translate>
+          <p class="uk-margin-remove" v-text="errorMessage" />
         </div>
+      </div>
     </div>
+    <div class="uk-text-center">
+      <p v-text="configuration.theme.general.slogan" />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -76,7 +77,7 @@ export default {
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['davProperties']),
     title () {
-      const translated = this.$gettext('%{owner} shared this folder with you for uploading.')
+      const translated = this.$gettext('%{owner} shared this folder with you for uploading')
       return this.$gettextInterpolate(translated, { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) })
     },
     url () {
