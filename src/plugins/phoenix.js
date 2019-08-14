@@ -1,10 +1,14 @@
+import { mapGetters } from 'vuex'
 
 export default {
   install (Vue) {
     Vue.mixin({
+      computed: {
+        ...mapGetters(['getToken', 'isAuthenticated'])
+      },
       methods: {
         publicPage () {
-          return this.$route.meta.auth === false
+          return !this.isAuthenticated
         },
         downloadFile (file) {
           if (this.publicPage()) {

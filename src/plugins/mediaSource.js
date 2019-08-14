@@ -5,7 +5,7 @@ export default {
     function _mediaSource (source, returnAs = 'url', headers = null) {
       return new Promise((resolve, reject) => {
         if (headers === null) {
-          const headers = new Headers()
+          headers = new Headers()
           headers.append('Authorization', 'Bearer ' + store.getters.getToken)
         }
 
