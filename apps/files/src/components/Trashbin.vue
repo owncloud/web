@@ -179,7 +179,7 @@ export default {
       this.$client.fileTrash.restore(file.id, file.originalLocation)
         .then(() => {
           this.$_ocTrashbin_removeFileFromList([file])
-          const translated = this.$gettext('%{file} was succesfully restored')
+          const translated = this.$gettext('%{file} was restored successfully')
           this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true)
           })

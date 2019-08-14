@@ -11,8 +11,12 @@ import translationsJson from '../l10n/translations.json'
 
 const store = require('./store')
 
+// just a dummy function to trick gettext tools
+function $gettext (msg) {
+  return msg
+}
 const appInfo = {
-  name: 'Files',
+  name: $gettext('Files'),
   id: 'files',
   icon: 'folder',
   isFileEditor: false,
@@ -41,14 +45,14 @@ const appInfo = {
       },
       quickAccess: {
         icon: 'share',
-        ariaLabel: 'Collaborators'
+        ariaLabel: $gettext('Collaborators')
       }
     }
   ]
 }
 const navItems = [
   {
-    name: 'All files',
+    name: $gettext('All files'),
     iconMaterial: appInfo.icon,
     route: {
       name: 'files-list',
@@ -56,14 +60,14 @@ const navItems = [
     }
   },
   {
-    name: 'Favorites',
+    name: $gettext('Favorites'),
     iconMaterial: 'star',
     route: {
       name: 'files-favorites'
     }
   },
   {
-    name: 'Shared with others',
+    name: $gettext('Shared with others'),
     iconMaterial: 'share',
     route: {
       name: 'files-shared-with-others',
@@ -71,7 +75,7 @@ const navItems = [
     }
   },
   {
-    name: 'Deleted files',
+    name: $gettext('Deleted files'),
     iconMaterial: 'delete',
     enabled (capabilities) {
       if (capabilities.dav) {
