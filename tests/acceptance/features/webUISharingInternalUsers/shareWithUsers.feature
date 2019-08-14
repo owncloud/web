@@ -11,24 +11,26 @@ Feature: Sharing files and folders with internal users
 
   @yetToImplement
   @smokeTest
-  Scenario: share a file & folder with another internal user
+  Scenario Outline: share a file & folder with another internal user
     Given user "user2" has logged in using the webUI
-    When the user shares folder "simple-folder" with user "User One" as "Viewer" using the webUI
-    And the user shares file "testimage.jpg" with user "User One" as "Viewer" using the webUI
-    Then user "user1" should have received a share with these details:
-      | field       | value              |
-      | uid_owner   | user2              |
-      | share_with  | user1              |
-      | file_target | /simple-folder (2) |
-      | item_type   | folder             |
-      | permissions | read               |
+    When the user shares folder "simple-folder" with user "User One" as "<set-role>" using the webUI
+    And the user shares file "testimage.jpg" with user "User One" as "<set-role>" using the webUI
+    Then user "User One" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
+    And user "User One" should be listed as "<expected-role>" in the collaborators list for file "testimage.jpg" on the webUI
+    And user "user1" should have received a share with these details:
+      | field       | value                |
+      | uid_owner   | user2                |
+      | share_with  | user1                |
+      | file_target | /simple-folder (2)   |
+      | item_type   | folder               |
+      | permissions | <permissions-folder> |
     And user "user1" should have received a share with these details:
       | field       | value              |
       | uid_owner   | user2              |
       | share_with  | user1              |
       | file_target | /testimage (2).jpg |
       | item_type   | file               |
-      | permissions | read               |
+      | permissions | <permissions-file> |
     And as "user1" these resources should be listed on the webUI
       | entry_name                  |
       | simple-folder (2)           |
@@ -40,6 +42,39 @@ Feature: Sharing files and folders with internal users
       | simple-folder (2) |
 #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
 #    And file "testimage (2).jpg" should be marked as shared by "User Two" on the webUI
+    Examples:
+      | set-role    | expected-role | permissions-folder | permissions-file |
+      | Viewer      | Viewer        | read               | read             |
+      # example for be behaviour after fixing issue 1787 & 1788
+      # | Editor      | Editor        | read,update,create | read,update      |
+      | Custom Role | Viewer        | read               | read             |
+
+  @issue-1788
+  @issue-1787
+  # after fixing the issues, delete this scenario and use the commented-out example in the previous example
+  Scenario: share a file & folder with another internal user
+    Given user "user2" has logged in using the webUI
+    When the user shares folder "simple-folder" with user "User One" as "Editor" using the webUI
+    And the user shares file "testimage.jpg" with user "User One" as "Editor" using the webUI
+    Then user "User One" should be listed as "Custom role" in the collaborators list for folder "simple-folder" on the webUI
+    And user "User One" should be listed as "Custom role" in the collaborators list for file "testimage.jpg" on the webUI
+    And user "user1" should have received a share with these details:
+      | field       | value                |
+      | uid_owner   | user2                |
+      | share_with  | user1                |
+      | file_target | /simple-folder (2)   |
+      | item_type   | folder               |
+      | permissions | read,update,create |
+    And user "user1" should have received a share with these details:
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /testimage (2).jpg |
+      | item_type   | file               |
+      | permissions | update |
+    When the user re-logs in as "user1" using the webUI
+    Then there should be no files/folders listed on the webUI
+    And the error message "Loading folder failed…" should be displayed on the webUI
 
   @skip @yetToImplement
   Scenario: share a file with another internal user who overwrites and unshares the file

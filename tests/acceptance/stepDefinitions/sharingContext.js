@@ -94,7 +94,6 @@ const assertCollaboratorslistContains = function (type, name, role) {
       } else {
         throw new Error('illegal type')
       }
-
       if (!shares || !shares.includes(expectedString)) {
         assert.fail(
           `"${name}" was expected to be in share list but was not present. Found collaborators text:"` + shares + `"`
@@ -277,7 +276,17 @@ Then('user {string} should be listed as {string} in the collaborators list on th
   return assertCollaboratorslistContains('user', user, role)
 })
 
+Then('user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', function (user, role, resource) {
+  client.page.FilesPageElement.filesList().openSharingDialog(resource)
+  return assertCollaboratorslistContains('user', user, role)
+})
+
 Then('group {string} should be listed as {string} in the collaborators list on the webUI', function (group, role) {
+  return assertCollaboratorslistContains('group', group, role)
+})
+
+Then('group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', function (group, role, resource) {
+  client.page.FilesPageElement.filesList().openSharingDialog(resource)
   return assertCollaboratorslistContains('group', group, role)
 })
 

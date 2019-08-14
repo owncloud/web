@@ -51,6 +51,7 @@ module.exports = {
      * @param {String} role
      */
     selectRoleForNewCollaborator: function (role) {
+      role = role.replace(' ', '')
       return this.waitForElementPresent('@newCollaboratorSelectRoleButton')
         .click('@newCollaboratorSelectRoleButton')
         .waitForElementVisible('@newCollaboratorRolesDropdown')
@@ -221,6 +222,12 @@ module.exports = {
     },
     newCollaboratorRoleViewer: {
       selector: '#files-collaborator-new-collaborator-role-viewer'
+    },
+    newCollaboratorRoleEditor: {
+      selector: '#files-collaborator-new-collaborator-role-editor'
+    },
+    newCollaboratorRoleCustomRole: {
+      selector: '#files-collaborator-new-collaborator-role-custom'
     }
   }
 }
