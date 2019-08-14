@@ -28,7 +28,10 @@ module.exports = {
       },
       {
         test: /\.jsx?$/,
-        include: /node_modules\/(?=(vue2-dropzone)\/).*/,
+        include: [
+          /node_modules\/vue2-dropzone\/.*/,
+          /node_modules\/p-.+/
+        ],
         use: {
           loader: 'babel-loader',
           options: {
