@@ -26,6 +26,11 @@ export default {
   shares: [],
   sharesError: null,
   sharesLoading: false,
+
+  links: [],
+  linksError: null,
+  linksLoading: false,
+
   loadingFolder: false,
   quota: {},
   trashbinDeleteMessage: '',

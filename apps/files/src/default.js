@@ -4,6 +4,7 @@ import 'regenerator-runtime/runtime'
 import FilesApp from './components/FilesApp.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
+import FileLink from './components/FileLink.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './components/PublicLinks/PublicLink.vue'
 import translationsJson from '../l10n/translations.json'
@@ -22,6 +23,12 @@ const appInfo = {
       component: FileInfoVersions,
       enabled (capabilities, highlightedFile) {
         return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
+      }
+    }, {
+      app: 'file-link',
+      component: FileLink,
+      enabled (capabilities) {
+        return capabilities.files_sharing.public.enabled === '1'
       }
     }, {
       app: 'files-sharing',
