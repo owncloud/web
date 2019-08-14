@@ -328,8 +328,8 @@ export default {
     }).then(res => {
       res.json().then(json => {
         const files = json.ocs.data
-        const uniqueFiles = Array.from(new Set(files.map(file => file.id))).map(id => {
-          return files.find(file => file.id === id)
+        const uniqueFiles = Array.from(new Set(files.map(file => file.item_source))).map(id => {
+          return files.find(file => file.item_source === id)
         })
         context.dispatch('buildFilesSharedFromMe', uniqueFiles)
       })
