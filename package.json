@@ -45,7 +45,7 @@
     "babel-plugin-transform-es2015-shorthand-properties": "^6.24.1",
     "chromedriver": "^76.0.0",
     "copy-webpack-plugin": "^5.0.3",
-    "core-js": "3.1.4",
+    "core-js": "3.2.1",
     "css-loader": "^3.1.0",
     "cucumber": "cucumber/cucumber-js#issue-727-retry",
     "cucumber-pretty": "^1.5.2",
