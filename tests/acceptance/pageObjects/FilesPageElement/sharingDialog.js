@@ -51,6 +51,7 @@ module.exports = {
      * @param {String} role
      */
     selectRoleForNewCollaborator: function (role) {
+      role = role.replace(' ', '')
       return this.waitForElementPresent('@newCollaboratorSelectRoleButton')
         .click('@newCollaboratorSelectRoleButton')
         .waitForElementVisible('@newCollaboratorRolesDropdown')
@@ -63,9 +64,14 @@ module.exports = {
         .click('@addShareButton')
         .waitForElementNotPresent('@addShareButton')
     },
-    closeSharingDialog: function () {
+    closeSharingDialog: function (timeout = null) {
+      if (timeout === null) {
+        timeout = this.api.globals.waitForConditionTimeout
+      } else {
+        timeout = parseInt(timeout, 10)
+      }
       try {
-        this.click('@sidebarCloseBtn')
+        this.click({ selector: '@sidebarCloseBtn', timeout: timeout })
       } catch (e) {
         // do nothing
       }
@@ -221,6 +227,12 @@ module.exports = {
     },
     newCollaboratorRoleViewer: {
       selector: '#files-collaborator-new-collaborator-role-viewer'
+    },
+    newCollaboratorRoleEditor: {
+      selector: '#files-collaborator-new-collaborator-role-editor'
+    },
+    newCollaboratorRoleCustomRole: {
+      selector: '#files-collaborator-new-collaborator-role-custom'
     }
   }
 }

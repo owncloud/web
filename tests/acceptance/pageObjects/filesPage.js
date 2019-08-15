@@ -7,10 +7,11 @@ module.exports = {
   commands: {
     /**
      * like build-in navigate() but also waits till for the progressbar to appear and disappear
+     * @param {string} folder - if given navigate to the folder without clicking the links
      * @returns {*}
      */
-    navigateAndWaitTillLoaded: function () {
-      this.navigate()
+    navigateAndWaitTillLoaded: function (folder = '') {
+      this.navigate(this.api.launchUrl + '/#/files/list/' + folder)
       return this
         .page.FilesPageElement.filesList()
         .waitForElementPresent({ selector: '@filesListProgressBar', abortOnFailure: false }) // don't fail if we are too late
