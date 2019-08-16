@@ -68,6 +68,14 @@ const navItems = [
     }
   },
   {
+    name: $gettext('Shared with me'),
+    iconMaterial: 'share',
+    route: {
+      name: 'files-shared-with-me',
+      path: `/${appInfo.id}/shared-with-me`
+    }
+  },
+  {
     name: $gettext('Shared with others'),
     iconMaterial: 'share',
     route: {
@@ -111,6 +119,16 @@ const routes = [
       app: FilesApp
     },
     name: 'files-favorites',
+    meta: {
+      hideFilelistActions: true
+    }
+  },
+  {
+    path: '/shared-with-me',
+    components: {
+      app: FilesApp
+    },
+    name: 'files-shared-with-me',
     meta: {
       hideFilelistActions: true
     }

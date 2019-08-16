@@ -5,7 +5,7 @@
         <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }" id="files-list-container">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <trashbin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
-          <SharedFilesList v-else-if="$route.name === 'files-shared-with-others'" @toggle="toggleFileSelect" :fileData="activeFiles" />
+          <SharedFilesList v-else-if="sharedList" @toggle="toggleFileSelect" :fileData="activeFiles" />
           <file-list v-else @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar" />
         </div>
         <file-details
@@ -124,6 +124,10 @@ export default {
 
     _sidebarOpen () {
       return this.highlightedFile !== null
+    },
+
+    sharedList () {
+      return this.$route.name === 'files-shared-with-me' || this.$route.name === 'files-shared-with-others'
     }
   },
   watch: {
