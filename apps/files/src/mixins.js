@@ -93,7 +93,7 @@ export default {
       return this.$gettext('Delete File/Folder')
     },
     $_ocDialog_isOpen () {
-      return this.changeFileName
+      return this.changeFileName || this.filesDeleteMessage !== ''
     },
     _sidebarOpen () {
       return this.highlightedFile !== null

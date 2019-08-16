@@ -34,7 +34,7 @@
               <oc-table-cell class="uk-text-meta uk-text-nowrap" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }">
                 {{ formDateFromNow(item.mdate) }}
               </oc-table-cell>
-              <oc-table-cell :class="{ 'uk-visible@s' : _sidebarOpen }">
+              <oc-table-cell :class="{ 'uk-visible@s' : _sidebarOpen }" class="uk-position-relative">
                 <div class="uk-button-group uk-margin-small-right" :class="{ 'uk-visible@m' : !_sidebarOpen, 'uk-visible@xl' : _sidebarOpen  }">
                   <oc-button v-for="(action, index) in actions" :key="index" @click.stop="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :ariaLabel="action.ariaLabel" />
                 </div>
@@ -48,15 +48,14 @@
                 <oc-drop
                   v-if="!$_ocDialog_isOpen"
                   :toggle="'#files-file-list-action-button-small-resolution-' + index"
-                  :options="{ 'pos': 'bottom-center' }"
-                  class="uk-width-auto"
+                  :options="{ offset: 0 }"
+                  position="bottom-right"
                 >
                   <ul class="uk-list">
-                    <li v-for="(action, index) in actions" :key="index">
+                    <li v-for="(action, index) in enabledActions(item)" :key="index">
                       <oc-button
                         class="uk-width-1-1"
                         @click.native.stop="action.handler(item, action.handlerData)"
-                        :disabled="!action.isEnabled(item)"
                         :icon="action.icon"
                         :ariaLabel="action.ariaLabel"
                       >
@@ -187,6 +186,10 @@ export default {
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
       }
       return item.basename
+    },
+
+    enabledActions (item) {
+      return this.actions.filter(action => action.isEnabled(item))
     }
   },
   computed: {
