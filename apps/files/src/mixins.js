@@ -409,6 +409,7 @@ export default {
       }).then(() => {
         this.fileToBeDeleted = ''
         this.setFilesDeleteMessage('')
+        this.setHighlightedFile(null)
       })
     },
     _rowClasses (item) {
