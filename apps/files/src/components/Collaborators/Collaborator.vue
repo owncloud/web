@@ -1,9 +1,16 @@
 <template>
-  <oc-accordion-item :key="collaborator.info.id" class="files-collaborators-collaborator uk-margin-small-bottom" :class="{ 'oc-disabled uk-disabled' : collaboratorsEditInProgress && !editing }">
+  <oc-accordion-item class="files-collaborators-collaborator uk-margin-small-bottom" :class="{ 'oc-disabled uk-disabled' : collaboratorsEditInProgress && !editing }">
     <template slot="title">
       <div v-if="user.id !== collaborator.info.uid_owner" class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
       <div class="files-collaborators-collaborator-information uk-flex uk-flex-wrap uk-flex-middle">
-        <oc-avatar :src="collaborator.avatar" class="uk-margin-small-right" />
+        <oc-spinner v-if="loading" key="collaborator-avatar-spinner" uk-spinner="ratio:1.6" class="uk-margin-small-right" />
+        <div v-else key="collaborator-avatar-loaded">
+          <oc-avatar v-if="avatar" :src="avatar" class="uk-margin-small-right" width=50 height=50 />
+          <div v-else key="collaborator-avatar-placeholder">
+            <oc-icon v-if="collaborator.info.share_type === '1'" class="uk-margin-small-right" name="group" size="large" />
+            <oc-icon v-else class="uk-margin-small-right" name="person" size="large" />
+          </div>
+        </div>
         <div class="uk-flex uk-flex-column uk-flex-center">
           <div class="oc-text">
             <span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.displayName }}</span>
@@ -78,6 +85,8 @@ export default {
   ],
   data () {
     return {
+      avatar: '',
+      loading: false,
       editing: false,
       canShare: this.collaborator.canShare,
       canChange: this.collaborator.customPermissions.change,
@@ -94,6 +103,9 @@ export default {
     _deleteButtonLabel () {
       return this.$gettext('Delete Share')
     }
+  },
+  mounted () {
+    this.$_ocCollaborators_loadAvatar(this.collaborator)
   },
   methods: {
     ...mapActions('Files', ['deleteShare', 'changeShare', 'toggleCollaboratorsEdit']),

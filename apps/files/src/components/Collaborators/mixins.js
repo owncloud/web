@@ -41,11 +41,20 @@ export default {
       this.toggleCollaboratorsEdit(true)
     },
     $_ocCollaborators_loadAvatar (item) {
-      if (item.value.shareType === 1 || item.value.shareType === 3) return
+      if (item.value && (item.value.shareType === 1 || item.value.shareType === 3)) return
+
+      if (item.info && (item.info.share_type === '1' || item.info.share_type === '3')) return
+
+      let name
+      if (item.value) {
+        name = item.value.shareWith
+      } else if (item.info) {
+        name = item.name
+      }
 
       const dav = this.$client.helpers._davPath
       const headers = new Headers()
-      const url = `${dav}/avatars/${item.value.shareWith}/128.png`
+      const url = `${dav}/avatars/${name}/128.png`
 
       headers.append('Authorization', 'Bearer ' + this.getToken)
       this.loading = true
