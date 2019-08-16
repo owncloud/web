@@ -252,10 +252,10 @@ export default {
           break
         case 'editor':
           if (this.highlightedFile.type === 'folder') {
-            params.permissions = this.canShare ? 23 : 7
+            params.permissions = this.canShare ? 31 : 15
             break
           }
-          params.permissions = this.canShare ? 19 : 2
+          params.permissions = this.canShare ? 19 : 3
           break
         case 'custom':
           let perms = 1
