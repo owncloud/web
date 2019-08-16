@@ -51,10 +51,6 @@ export default {
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['davProperties']),
-    title () {
-      const translated = this.$gettext('%{owner} shared this file with you.')
-      return this.$gettextInterpolate(translated, { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) })
-    },
     passwordPlaceholder () {
       return this.$gettext('Enter password')
     }
@@ -74,6 +70,15 @@ export default {
       this.$client.publicFiles.list(this.$route.params.token, this.password, properties, '0').then(files => {
         this.passwordRequired = false
         this.setPublicLinkPassword(this.password)
+        if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
+          this.$router.push({
+            name: 'public-files-drop',
+            params: {
+              item: this.$route.params.token
+            }
+          })
+          return
+        }
         this.$router.push({
           name: 'public-files',
           params: {
