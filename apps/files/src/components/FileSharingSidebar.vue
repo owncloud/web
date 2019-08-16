@@ -9,8 +9,8 @@
           ({{ $_ocCollaborators_users.length }})
         </h5>
         <oc-accordion>
-          <template v-for="(collaborator, index) in $_ocCollaborators_users">
-            <collaborator :key="index" :collaborator="collaborator" />
+          <template v-for="user in $_ocCollaborators_users">
+            <collaborator :key="user.info.id" :collaborator="user" />
           </template>
         </oc-accordion>
       </div>
@@ -20,8 +20,8 @@
           ({{ $_ocCollaborators_groups.length }})
         </h5>
         <oc-accordion>
-          <template v-for="(collaborator, index) in $_ocCollaborators_groups">
-            <collaborator :key="index" :collaborator="collaborator" />
+          <template v-for="group in $_ocCollaborators_groups">
+            <collaborator :key="group.info.id" :collaborator="group" />
           </template>
         </oc-accordion>
       </div>
