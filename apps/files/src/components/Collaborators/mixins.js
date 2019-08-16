@@ -36,6 +36,7 @@ export default {
       return this.$gettext('Group')
     },
     $_ocCollaborators_switchPermission (permission) {
+      this.permissionsChanged = true
       this[permission] = !this[permission]
       this.editing = true
       this.toggleCollaboratorsEdit(true)
