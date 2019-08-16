@@ -43,19 +43,18 @@
           <oc-grid gutter="small">
             <div class="uk-width-1-1">
               <label class="oc-label">
-                <translate>Role</translate>
+                <translate>Role</translate>:
               </label>
               <oc-button
                 id="files-collaborators-role-button"
                 class="uk-width-1-1 files-collaborators-role-button"
-              >
-                <span v-if="!selectedNewRole">Select role</span>
-                <template v-else>{{ selectedNewRole.name }}</template>
-              </oc-button>
+                v-text="selectedNewRole.name"
+              />
               <p
                 v-if="selectedNewRole"
                 class="uk-text-meta uk-margin-remove"
-              >{{ selectedNewRole.description }}</p>
+                v-text="selectedNewRole.description"
+              />
               <oc-drop
                 closeOnClick
                 dropId="files-collaborators-roles-dropdown"
@@ -175,8 +174,24 @@ export default {
 
     $_ocCollaborationStatus_autocompletePlacholder () {
       return this.$gettext("Add new collaborator by name, email or federation ID's")
+    },
+
+    defaultRole () {
+      return this.roles[Object.keys(this.roles)[0]]
     }
   },
+
+  watch: {
+    // Switch back to default role after selecting different file
+    highlightedFile () {
+      this.selectedNewRole = this.defaultRole
+    }
+  },
+  mounted () {
+    // Ensure default role is not undefined
+    this.selectedNewRole = this.defaultRole
+  },
+
   methods: {
     ...mapActions('Files', ['shareSetOpen', 'loadShares', 'sharesClearState',
       'addShare', 'deleteShare', 'changeShare', 'toggleCollaboratorsEdit']),
@@ -240,6 +255,7 @@ export default {
     $_ocCollaborators_newCollaboratorsCancel () {
       this.selectedCollaborators = []
       this.toggleCollaboratorsEdit(false)
+      this.selectedNewRole = this.defaultRole
     },
     $_ocCollaborators_newCollaboratorsSelectRole (role) {
       this.selectedNewRole = role
@@ -281,7 +297,7 @@ export default {
         })
       }
       this.selectedCollaborators = []
-      this.selectedNewRole = null
+      this.selectedNewRole = this.defaultRole
       this.canChange = false
       this.canCreate = false
       this.canDelete = false
@@ -301,7 +317,10 @@ export default {
 
       this.selectedCollaborators = selectedCollaborators
 
-      if (this.selectedCollaborators.length < 1) this.toggleCollaboratorsEdit(false)
+      if (this.selectedCollaborators.length < 1) {
+        this.toggleCollaboratorsEdit(false)
+        this.selectedNewRole = this.defaultRole
+      }
     }
   }
 }
