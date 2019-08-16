@@ -41,8 +41,10 @@ export default {
                       const anchor = document.createElement('a')
                       anchor.href = objectUrl
                       anchor.download = fileName
+                      anchor.style.display = 'none'
+                      document.body.appendChild(anchor)
                       anchor.click()
-
+                      document.body.removeChild(anchor)
                       window.URL.revokeObjectURL(objectUrl)
                     }
                   })
