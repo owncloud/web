@@ -10,7 +10,8 @@ const state = {
   email: null,
   isAuthenticated: false,
   capabilities: [],
-  version: []
+  version: [],
+  groups: []
 }
 
 const actions = {
@@ -55,17 +56,20 @@ const actions = {
       return client.login().then(res => {
         client.getCapabilities()
           .then(cap => {
-            context.commit('SET_CAPABILITIES', cap)
-            context.commit('SET_USER', {
-              id: res['id'],
-              displayname: res['display-name'],
-              email: !Object.keys(res.email).length ? '' : res.email,
-              token,
-              isAuthenticated: true
+            client.users.getUserGroups(res['id']).then(groups => {
+              context.commit('SET_CAPABILITIES', cap)
+              context.commit('SET_USER', {
+                id: res['id'],
+                displayname: res['display-name'],
+                email: !Object.keys(res.email).length ? '' : res.email,
+                token,
+                isAuthenticated: true,
+                groups: groups
+              })
+              if (autoRedirect) {
+                router.push({ path: '/' })
+              }
             })
-            if (autoRedirect) {
-              router.push({ path: '/' })
-            }
           })
       }).catch((e) => {
         console.error('logout forced! Seems that your token is invalid. Error:', e)
@@ -124,6 +128,7 @@ const mutations = {
     state.email = user.email
     state.isAuthenticated = user.isAuthenticated
     state.token = user.token
+    state.groups = user.groups
   },
   SET_CAPABILITIES (state, data) {
     state.capabilities = data.capabilities
