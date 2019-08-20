@@ -685,11 +685,6 @@ export default {
           resolve(link)
         })
         .catch(e => {
-          context.dispatch('showMessage', {
-            title: $gettext('Error while sharing.'),
-            desc: e,
-            status: 'danger'
-          }, { root: true })
           context.commit('LINKS_LOADING', false)
           reject(e)
         })
@@ -706,11 +701,6 @@ export default {
           resolve(link)
         })
         .catch(e => {
-          context.dispatch('showMessage', {
-            title: $gettext('Error while sharing.'),
-            desc: e,
-            status: 'danger'
-          }, { root: true })
           context.commit('LINKS_LOADING', false)
           reject(e)
         })
