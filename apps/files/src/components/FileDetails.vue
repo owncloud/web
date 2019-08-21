@@ -7,10 +7,13 @@
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
           <span class="uk-margin-small-right uk-text-bold">{{ highlightedFile.name }}</span>
-          <oc-icon name="link" v-clipboard="() => highlightedFile.privateLink"
-                   v-if="highlightedFile.privateLink"
-                   v-clipboard:success="clipboardSuccessHandler"
-          />
+          <template v-if="highlightedFile.privateLink">
+            <oc-icon name="ready" v-show="linkCopied" />
+            <oc-icon name="link" v-clipboard="() => highlightedFile.privateLink"
+                     v-show="!linkCopied"
+                     v-clipboard:success="clipboardSuccessHandler"
+            />
+          </template>
         </div>
         <div v-if="$route.name !== 'files-shared-with-others'">
           <oc-star v-if="!publicPage()" class="uk-inline" :shining="highlightedFile.starred"/> {{ highlightedFile.size | fileSize }}, {{ formDateFromNow(highlightedFile.mdate) }}
@@ -38,7 +41,8 @@ export default {
   data () {
     return {
       /** String name of the tab that is activated */
-      activeTab: null
+      activeTab: null,
+      linkCopied: false
     }
   },
   methods: {
@@ -51,9 +55,12 @@ export default {
       this.activeTab = app
     },
     clipboardSuccessHandler () {
-      this.showMessage({
-        title: this.$gettext('The private link has been copied to your clipboard.')
-      })
+      this.linkCopied = true
+
+      // Use copy icon after some time
+      setTimeout(() => {
+        this.linkCopied = false
+      }, 1000)
     }
   },
   computed: {
