@@ -8,9 +8,9 @@
               <h3 class="oc-login-card-title">
                   <span v-translate>Login Error</span>
               </h3>
-              <p v-translate>
-                Waiting for reasonable text by holger
-              </p>
+              <h4 v-translate>
+                You are not allowed to use this application.
+              </h4>
           </div>
           <div class="oc-login-card-footer">
               <p>{{ helpDeskText }}</p>
@@ -29,19 +29,19 @@ export default {
       if (this.configuration.theme.general.helpDeskText) {
         return this.configuration.theme.general.helpDeskText
       }
-      return this.$gettext('For help visit our documentation:')
+      return this.$gettext('Please contact your administrator if you think this message shows up in error.')
     },
     helpDeskLink () {
       if (this.configuration.theme.general.helpDeskLink) {
         return this.configuration.theme.general.helpDeskLink
       }
-      return 'https://central.owncloud.com'
+      return ''
     },
     helpDeskLinkText () {
       if (this.configuration.theme.general.helpDeskLinkText) {
         return this.configuration.theme.general.helpDeskLinkText
       }
-      return 'ownCloud Central'
+      return ''
     }
   }
 }
