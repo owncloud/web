@@ -15,16 +15,20 @@ const state = {
 }
 
 const actions = {
-  logout (context, payload = {}) {
+  logout (context, autoRedirect = false) {
     const logoutFinalizer = () => {
       // reset user to default state
       context.commit('SET_USER', state)
       // reset capabilities to default state
       context.commit('SET_CAPABILITIES', { capabilities: null, version: null })
       // force redirect to login page after logout
-      router.push({ name: 'login' })
+      if (autoRedirect) {
+        router.push({ name: 'access-denied' })
+      } else {
+        router.push({ name: 'login' })
+      }
     }
-    vueAuthInstance.logout(payload.requestOptions)
+    vueAuthInstance.logout()
       .then(logoutFinalizer)
       .catch(error => {
         console.error(error)
@@ -54,7 +58,7 @@ const actions = {
 
       client.init(options)
       return client.login().then(res => {
-        client.getCapabilities()
+        return client.getCapabilities()
           .then(cap => {
             client.users.getUserGroups(res['id']).then(groups => {
               context.commit('SET_CAPABILITIES', cap)
@@ -73,7 +77,7 @@ const actions = {
           })
       }).catch((e) => {
         console.error('logout forced! Seems that your token is invalid. Error:', e)
-        context.dispatch('logout')
+        context.dispatch('logout', autoRedirect)
       })
     }
 

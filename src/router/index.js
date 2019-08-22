@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import LoginPage from '../pages/login.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import OidcSilentRedirectPage from '../pages/oidcSilentRedirect.vue'
-import ErrorPage from '../pages/error.vue'
+import AccessDeniedPage from '../pages/accessDenied.vue'
 import Account from '../pages/account.vue'
 
 import store from '../store'
@@ -36,12 +36,6 @@ const router = new Router({
       meta: { auth: false, hideHeadbar: true }
     },
     {
-      path: '/error',
-      name: 'error',
-      component: ErrorPage,
-      meta: { auth: false, hideHeadbar: true }
-    },
-    {
       path: '/f/:fileId',
       name: 'privateLink',
       redirect: '/files/private-link/:fileId',
@@ -51,6 +45,14 @@ const router = new Router({
       path: '/s/:token',
       name: 'publicLink',
       redirect: '/files/public-link/:token',
+      meta: { auth: false, hideHeadbar: true }
+    },
+    {
+      path: '/access-denied',
+      name: 'accessDenied',
+      components: {
+        fullscreen: AccessDeniedPage
+      },
       meta: { auth: false, hideHeadbar: true }
     },
     {
