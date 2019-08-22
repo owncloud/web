@@ -16,7 +16,10 @@ const state = {
   theme: {
     general: {
       name: '',
-      slogan: ''
+      slogan: '',
+      helpDeskText: '',
+      helpDeskLink: '',
+      helpDeskLinkText: 'ownCloud Central'
     },
     logo: {
       favicon: ''
