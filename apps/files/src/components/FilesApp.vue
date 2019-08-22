@@ -4,7 +4,7 @@
       <oc-grid class="uk-height-1-1" oc-scroll-offset=".oc-app-bar">
         <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }" id="files-list-container">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
-          <trashbin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
+          <trash-bin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
           <SharedFilesList v-else-if="sharedList" @toggle="toggleFileSelect" :fileData="activeFiles" />
           <file-list v-else @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar" />
         </div>
@@ -14,7 +14,7 @@
           @reset="setHighlightedFile(null)"
         />
     </oc-grid>
-    <oc-file-actions />
+    <file-actions/>
   </div>
 </template>
 <script>
@@ -22,9 +22,10 @@ import Mixins from '../mixins'
 import FileDetails from './FileDetails.vue'
 import FilesAppBar from './FilesAppBar.vue'
 import FileList from './FileList.vue'
-import Trashbin from './Trashbin.vue'
+import TrashBin from './Trashbin.vue'
 import SharedFilesList from './Collaborators/SharedFilesList.vue'
 import { mapActions, mapGetters } from 'vuex'
+import FileActions from './FileActions.vue'
 
 export default {
   mixins: [
@@ -34,7 +35,8 @@ export default {
     FileDetails,
     FileList,
     FilesAppBar,
-    Trashbin,
+    FileActions,
+    TrashBin,
     SharedFilesList
   },
   data () {
