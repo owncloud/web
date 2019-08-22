@@ -25,13 +25,19 @@
     </template>
     <template slot="content">
       <oc-grid gutter="small" class="uk-margin-bottom">
-        <div class="uk-width-1-1">
+        <div class="uk-width-1-1 uk-position-relative">
           <label class="oc-label"><translate>Role</translate></label>
           <oc-button :id="`files-collaborators-role-button-${collaborator.info.id}`" class="uk-width-1-1 files-collaborators-role-button">{{ $_ocCollaborators_selectedRoleName(collaborator) }}</oc-button>
           <p class="uk-text-meta uk-margin-remove">{{ $_ocCollaborators_selectedRoleDescription(collaborator) }}</p>
           <oc-drop :dropId="`files-collaborators-roles-dropdown-${collaborator.info.id}`" closeOnClick :toggle="`#files-collaborators-role-button-${collaborator.info.id}`" mode="click" :options="{ offset: 0, delayHide: 0 }" class="oc-autocomplete-dropdown">
             <ul class="oc-autocomplete-suggestion-list">
-              <li v-for="(role, key) in roles" :key="key" class="oc-autocomplete-suggestion" :class="{ 'oc-autocomplete-suggestion-selected' : (roles[collaborator.role] === role.tag && !selectedNewRole) || selectedNewRole === role }" @click="$_ocCollaborators_changeRole(role, collaborator)">
+              <li
+                v-for="(role, key) in roles"
+                :key="key"
+                class="oc-autocomplete-suggestion"
+                :class="rolesDropItemClass(role)"
+                @click="$_ocCollaborators_changeRole(role); onChange()"
+              >
                 <span class="uk-text-bold">{{ role.name }}</span>
                 <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
               </li>
@@ -60,7 +66,7 @@
         </oc-grid>
       </oc-grid>
       <template v-if="editing">
-        <oc-button :disabled="collaboratorSaving" @click="$_ocCollaborators_cancelChanges(collaborator)">
+        <oc-button :disabled="collaboratorSaving" @click="$_ocCollaborators_cancelChanges">
           <translate>Cancel</translate>
         </oc-button>
         <oc-button variation="primary" :disabled="collaboratorSaving" @click="$_ocCollaborators_saveChanges(collaborator)">
@@ -93,6 +99,7 @@ export default {
       canCreate: this.collaborator.customPermissions.create,
       canDelete: this.collaborator.customPermissions.delete,
       selectedNewRole: null,
+      permissionsChanged: false,
       switchKey: Math.floor(Math.random() * 100) // Ensure switch gets back to orginal position after cancel
     }
   },
@@ -102,6 +109,10 @@ export default {
 
     _deleteButtonLabel () {
       return this.$gettext('Delete Share')
+    },
+
+    originalRole () {
+      return this.roles[this.collaborator.role].tag
     }
   },
   mounted () {
@@ -134,8 +145,6 @@ export default {
     },
     $_ocCollaborators_changeRole (role) {
       this.selectedNewRole = role
-      this.editing = true
-      this.toggleCollaboratorsEdit(true)
     },
     $_ocCollaborators_selectedRoleName (collaborator) {
       if (!this.selectedNewRole) {
@@ -151,15 +160,32 @@ export default {
 
       return this.selectedNewRole.description
     },
-    $_ocCollaborators_cancelChanges (collaborator) {
+    $_ocCollaborators_cancelChanges () {
       this.selectedNewRole = null
-      this.canShare = collaborator.canShare
-      this.canChange = collaborator.customPermissions.change
-      this.canCreate = collaborator.customPermissions.create
-      this.canDelete = collaborator.customPermissions.delete
+      this.canShare = this.collaborator.canShare
+      this.canChange = this.collaborator.customPermissions.change
+      this.canCreate = this.collaborator.customPermissions.create
+      this.canDelete = this.collaborator.customPermissions.delete
       this.editing = false
       this.switchKey = Math.floor(Math.random() * 100)
       this.toggleCollaboratorsEdit(false)
+    },
+
+    onChange () {
+      if (this.selectedNewRole.tag === this.originalRole && !this.permissionsChanged) {
+        this.editing = false
+        this.toggleCollaboratorsEdit(false)
+        return
+      }
+
+      this.editing = true
+      this.toggleCollaboratorsEdit(true)
+    },
+
+    rolesDropItemClass (role) {
+      if ((this.roles[this.collaborator.role].tag === role.tag && !this.selectedNewRole) || this.selectedNewRole === role) {
+        return 'oc-autocomplete-suggestion-selected'
+      }
     }
   }
 }
