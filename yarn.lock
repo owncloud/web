@@ -2571,7 +2571,8 @@ cucumber-tag-expressions@^1.1.1:
 
 cucumber@cucumber/cucumber-js#issue-727-retry:
   version "5.1.0"
-  resolved "https://codeload.github.com/cucumber/cucumber-js/tar.gz/1a9f98cf3c7c117d0258048b5c9fc57b9eb81d4c"
+  uid "4295e2690d5e2c9cddf12a46e6722c110b18d38e"
+  resolved "https://codeload.github.com/cucumber/cucumber-js/tar.gz/4295e2690d5e2c9cddf12a46e6722c110b18d38e"
   dependencies:
     "@babel/polyfill" "^7.2.3"
     assertion-error-formatter "^2.0.1"
