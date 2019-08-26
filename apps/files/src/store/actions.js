@@ -553,6 +553,13 @@ export default {
         if (canDelete) perms += deletePerm
         if (canShare) perms += resharePerm
         params.permissions = perms
+
+        if (perms === 1 || perms === 17) {
+          role = 'viewer'
+        }
+        if (perms === 3 || perms === 15 || perms === 19 || perms === 31) {
+          role = 'editor'
+        }
         break
     }
 
