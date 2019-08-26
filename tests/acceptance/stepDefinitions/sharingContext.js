@@ -14,14 +14,15 @@ const sharingHelper = require('../helpers/sharingHelper')
  * @param {string} sharee
  * @param {boolean} shareWithGroup
  * @param {string} role
+ * @param {string} permissions
  */
-const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithGroup, role) {
+const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithGroup, role, permissions = undefined) {
   return client.page
     .FilesPageElement
     .sharingDialog()
     .closeSharingDialog(100)
     .openSharingDialog(file)
-    .shareWithUserOrGroup(sharee, shareWithGroup, role)
+    .shareWithUserOrGroup(sharee, shareWithGroup, role, permissions)
 }
 
 /**
@@ -151,9 +152,40 @@ When('the user displays all share-autocomplete results using the webUI', functio
   return client.page.FilesPageElement.sharingDialog().showAllAutoCompleteResults()
 })
 
+When('the user changes permission of collaborator {string} for folder {string} to {string} using the webUI', function (user, resource, permissions) {
+  return client.page
+    .FilesPageElement
+    .sharingDialog()
+    .closeSharingDialog(100)
+    .openSharingDialog(resource)
+    .changeCustomPermissionsTo(user, permissions)
+})
+
+Then('custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI', function (permissions, user, resource) {
+  return client.page
+    .FilesPageElement
+    .sharingDialog()
+    .closeSharingDialog(100)
+    .openSharingDialog(resource)
+    .assertPermissionIsDisplayed(user, permissions)
+})
+
+Then('no custom permissions should be set for collaborator {string} for file/folder {string} on the webUI', function (user, resource) {
+  return client.page
+    .FilesPageElement
+    .sharingDialog()
+    .closeSharingDialog(100)
+    .openSharingDialog(resource)
+    .assertPermissionIsDisplayed(user)
+})
+
 When('the user shares file/folder {string} with group {string} as {string} using the webUI', userSharesFileOrFolderWithGroup)
 
 When('the user shares file/folder {string} with user {string} as {string} using the webUI', userSharesFileOrFolderWithUser)
+
+When('the user shares file/folder {string} with user {string} as {string} with permission/permissions {string} using the webUI', function (resource, shareWithUser, role, permissions) {
+  return userSharesFileOrFolderWithUserOrGroup(resource, shareWithUser, false, role, permissions)
+})
 
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', function (pattern) {
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
