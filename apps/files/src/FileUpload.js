@@ -12,7 +12,11 @@ class FileUpload {
     const xhr = new XMLHttpRequest()
 
     // Headers
-    xhr.open(this.type, this.url + encodeURIComponent(this.path), true)
+    this.path = this.path.replace(/(^\/+)/, '')
+    let paths = this.path.split('/')
+    paths = paths.map(path => encodeURIComponent(path))
+    this.path = paths.join('/')
+    xhr.open(this.type, this.url + this.path, true)
     xhr.responseType = 'text'
     if (options.overwrite) {
       this.headers['If-Match'] = options.overwrite

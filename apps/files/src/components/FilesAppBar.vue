@@ -116,10 +116,10 @@ export default {
       return null
     },
     item () {
-      return this.$route.params.item === undefined ? this.configuration.rootFolder + '/' : this.$route.params.item + '/'
+      return this.$route.params.item === undefined ? (this.configuration.rootFolder !== '/' ? `${this.configuration.rootFolder}/` : '/') : this.$route.params.item + '/'
     },
     url () {
-      const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}`
+      const path = this.item === '/' ? '' : this.item
       if (this.publicPage()) {
         return this.$client.publicFiles.getFileUrl(`/${path}`)
       }
