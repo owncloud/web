@@ -50,36 +50,8 @@ Feature: Sharing files and folders with internal groups
     Examples:
       | set-role    | expected-role | permissions-folder | permissions-file |
       | Viewer      | Viewer        | read               | read             |
-      # example for be behaviour after fixing issue 1787 & 1788
-      #| Editor      | Editor        | read,update,create | read,update      |
+      | Editor      | Editor        | read,update,create, delete | read,update      |
       | Custom Role | Viewer        | read               | read             |
-
-  @issue-1788
-  @issue-1787
-  # after fixing the issues, delete this scenario and use the commented-out example in the previous example
-  Scenario: share a file & folder with another internal user
-    Given user "user3" has logged in using the webUI
-    When the user shares folder "simple-folder" with group "grp1" as "Editor" using the webUI
-    And the user shares file "testimage.jpg" with group "grp1" as "Editor" using the webUI
-    Then group "grp1" should be listed as "Custom role" in the collaborators list for folder "simple-folder" on the webUI
-    And group "grp1" should be listed as "Custom role" in the collaborators list for file "testimage.jpg" on the webUI
-    And user "user1" should have received a share with these details:
-      | field       | value              |
-      | uid_owner   | user3              |
-      | share_with  | grp1               |
-      | file_target | /simple-folder (2) |
-      | item_type   | folder             |
-      | permissions | read,update,create |
-    And user "user1" should have received a share with these details:
-      | field       | value              |
-      | uid_owner   | user3              |
-      | share_with  | grp1               |
-      | file_target | /testimage (2).jpg |
-      | item_type   | file               |
-      | permissions | update             |
-    When the user re-logs in as "user1" using the webUI
-    Then there should be no files/folders listed on the webUI
-    And the error message "Loading folder failed…" should be displayed on the webUI
 
   @skip @yetToImplement
   Scenario: share a file with an internal group a member overwrites and unshares the file
