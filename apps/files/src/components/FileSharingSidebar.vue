@@ -1,6 +1,11 @@
 <template>
   <div id="oc-files-sharing-sidebar">
-    <new-collaborator v-if="$_ocCollaborators_canShare" />
+    <new-collaborator v-if="$_ocCollaborators_canShare" key="new-collaborator" />
+    <translate
+      v-else
+      key="no-reshare-permissions-message"
+      v-text="noResharePermsMessage"
+    />
     <oc-loader v-if="sharesLoading" />
     <template v-else>
       <div v-if="$_ocCollaborators_users.length > 0" id="files-collaborators-list">
@@ -90,6 +95,10 @@ export default {
     },
     $_ocCollaborators_canShare () {
       return this.highlightedFile.canShare()
+    },
+    noResharePermsMessage () {
+      const translated = this.$gettext('You don\'t have permission to share this %{type}')
+      return this.$gettextInterpolate(translated, { type: this.highlightedFile.type })
     }
   },
   methods: {
