@@ -69,7 +69,7 @@
         <oc-button :disabled="collaboratorSaving" @click="$_ocCollaborators_cancelChanges">
           <translate>Cancel</translate>
         </oc-button>
-        <oc-button variation="primary" :disabled="collaboratorSaving" @click="$_ocCollaborators_saveChanges(collaborator)">
+        <oc-button variation="primary" :disabled="collaboratorSaving" :aria-label="_saveButtonLabel" @click="$_ocCollaborators_saveChanges(collaborator)">
           <translate>Save</translate>
         </oc-button>
       </template>
@@ -109,6 +109,10 @@ export default {
 
     _deleteButtonLabel () {
       return this.$gettext('Delete Share')
+    },
+
+    _saveButtonLabel () {
+      return this.$gettext('Save Share')
     },
 
     originalRole () {
