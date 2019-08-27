@@ -141,6 +141,7 @@ export default {
         .then(() => {
           this.editing = false
           this.toggleCollaboratorsEdit(false)
+          this.selectedNewRole = null
         })
     },
     $_ocCollaborators_changeRole (role) {
