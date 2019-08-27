@@ -18,7 +18,7 @@ module.exports = {
       const btnSelectorLowResolution = '(' + this.getFileRowSelectorByFileName(fileName) +
         this.elements[action + 'ButtonInFileRow'].selector + ')[last()]'
       const fileActionsBtnSelector = this.getFileRowSelectorByFileName(fileName) +
-        this.elements['fileActionsButtonInFileRow'].selector
+        this.elements.fileActionsButtonInFileRow.selector
 
       return this.initAjaxCounters()
         .useXpath()
@@ -119,7 +119,7 @@ module.exports = {
      */
     markAsFavorite: function (path) {
       const favoriteIconButton = this.getFileRowSelectorByFileName(path) +
-        this.elements['notMarkedFavoriteInFileRow'].selector
+        this.elements.notMarkedFavoriteInFileRow.selector
 
       return this.initAjaxCounters()
         .waitForFileVisible(path)
@@ -155,7 +155,7 @@ module.exports = {
      */
     unmarkFavorite: function (path) {
       const unFavoriteBtn = this.getFileRowSelectorByFileName(path) +
-        this.elements['markedFavoriteInFileRow'].selector
+        this.elements.markedFavoriteInFileRow.selector
 
       return this.initAjaxCounters()
         .waitForFileVisible(path)
@@ -184,7 +184,7 @@ module.exports = {
      */
     toggleFileOrFolderCheckbox: function (enableOrDisable, path) {
       const fileCheckbox = this.getFileRowSelectorByFileName(path) +
-        this.elements['checkboxInFileRow'].selector
+        this.elements.checkboxInFileRow.selector
 
       return this
         .waitForFileVisible(path)
@@ -197,7 +197,7 @@ module.exports = {
      */
     isMarkedFavorite: function (path, callback) {
       const markedFavoriteIcon = this.getFileRowSelectorByFileName(path) +
-        this.elements['markedFavoriteInFileRow'].selector
+        this.elements.markedFavoriteInFileRow.selector
 
       return this
         .waitForFileVisible(path)
@@ -233,7 +233,7 @@ module.exports = {
       if (parts.ext) {
         // keep path of nested folders intact, just remove the extension at the end
         const filePathWithoutExt = parts.dir ? parts.dir + '/' + parts.name : parts.name
-        const element = this.elements['fileRowByNameAndExtension']
+        const element = this.elements.fileRowByNameAndExtension
         return util.format(
           element.selector,
           xpathHelper.buildXpathLiteral(filePathWithoutExt),
@@ -241,7 +241,7 @@ module.exports = {
         )
       }
 
-      const element = this.elements['fileRowByName']
+      const element = this.elements.fileRowByName
       return util.format(element.selector, xpathHelper.buildXpathLiteral(fileName))
     },
     /**
@@ -250,7 +250,7 @@ module.exports = {
      */
     getFileLinkSelectorByFileName: function (fileName) {
       return this.getFileRowSelectorByFileName(fileName) +
-        this.elements['fileLinkInFileRow'].selector
+        this.elements.fileLinkInFileRow.selector
     },
     /**
      *
@@ -281,7 +281,7 @@ module.exports = {
     allFileRows: async function () {
       this.waitForElementNotPresent('@filesListProgressBar')
       return new Promise((resolve, reject) => {
-        this.api.elements('css selector', this.elements['fileRows'], function (result) {
+        this.api.elements('css selector', this.elements.fileRows, function (result) {
           resolve(result)
         })
       })

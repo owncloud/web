@@ -111,9 +111,9 @@ module.exports = {
       const webElementIdList = []
       return this
         .waitForElementVisible('@sharingAutoCompleteDropDownElements')
-        .api.elements('css selector', this.elements['sharingAutoCompleteDropDownElements'].selector, (result) => {
+        .api.elements('css selector', this.elements.sharingAutoCompleteDropDownElements.selector, (result) => {
           result.value.forEach((value) => {
-            webElementIdList.push(value['ELEMENT'])
+            webElementIdList.push(value.ELEMENT)
           })
         })
         .then(() => webElementIdList)
@@ -145,10 +145,10 @@ module.exports = {
       await this.initAjaxCounters()
         .waitForElementPresent({ selector: '@collaboratorsInformation', abortOnFailure: false })
         .waitForOutstandingAjaxCalls()
-        .api.elements('css selector', this.elements['collaboratorsInformation'], result => {
+        .api.elements('css selector', this.elements.collaboratorsInformation, result => {
           result.value.map(item => {
             promiseList.push(new Promise((resolve, reject) => {
-              this.api.elementIdText(item['ELEMENT'], text => {
+              this.api.elementIdText(item.ELEMENT, text => {
                 resolve(text.value)
               })
             })

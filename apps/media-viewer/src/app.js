@@ -4,7 +4,7 @@ import translationsJson from '../l10n/translations'
 import Mediaviewer from './Mediaviewer.vue'
 
 const routes = [{
-  path: `/mediaviewer`,
+  path: '/mediaviewer',
   components: {
     app: Mediaviewer
   },

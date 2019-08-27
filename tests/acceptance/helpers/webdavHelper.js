@@ -56,7 +56,7 @@ exports.delete = function (userId, file) {
  */
 exports.move = function (userId, fromName, toName) {
   const headers = httpHelper.createAuthHeader(userId)
-  headers['Destination'] = exports.createDavPath(userId, toName)
+  headers.Destination = exports.createDavPath(userId, toName)
   const davPath = exports.createDavPath(userId, fromName)
   return fetch(
     davPath,
@@ -76,7 +76,7 @@ exports.move = function (userId, fromName, toName) {
  */
 exports.propfind = function (path, userId, password, properties, folderDepth = 1) {
   const headers = httpHelper.createAuthHeader(userId)
-  headers['Depth'] = folderDepth
+  headers.Depth = folderDepth
   const davPath = client.globals.backend_url + '/remote.php/dav' + path
   let propertyBody = ''
   properties.map(prop => {

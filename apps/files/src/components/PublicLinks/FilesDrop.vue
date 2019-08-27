@@ -130,7 +130,7 @@ export default {
       const headers = {}
       const password = this.publicLinkPassword
       if (password) {
-        headers['Authorization'] = 'Basic ' + Buffer.from('public:' + password).toString('base64')
+        headers.Authorization = 'Basic ' + Buffer.from('public:' + password).toString('base64')
       }
       this.uploadedFilesChangeTracker++
       this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'init' })
