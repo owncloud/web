@@ -39,9 +39,9 @@
               <translate>Delete selected</translate>
             </oc-button>
           </template>
-          <oc-button v-if="!publicPage()" class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn" />
+          <oc-button v-if="!publicPage()" class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn" @click="focusMobileSearchInput()"/>
           <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove uk-width-large">
-            <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" />
+            <oc-search-bar ref="mobileSearch" @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" />
           </oc-drop>
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
           <file-filter-menu />
@@ -228,12 +228,13 @@ export default {
           this.isLoadingSearch = false
         })
     },
-    focusFilenameFilter () {
-      this.$refs.filenameFilter.$el.querySelector('input').focus()
+    focusMobileSearchInput () {
+      this.$refs.mobileSearch.$el.querySelector('input').focus()
       // nested vuetify VList animation will block native autofocus, so we use this workaround...
+
       setTimeout(() => {
         // ...to set focus after the element is rendered visible
-        this.$refs.filenameFilter.$el.querySelector('input').focus()
+        this.$refs.mobileSearch.$el.querySelector('input').focus()
       }, 50)
     },
     $_ocFilesFolder_getFolder () {
