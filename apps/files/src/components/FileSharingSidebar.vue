@@ -46,6 +46,7 @@ export default {
   },
   mixins: [Mixins],
   mounted () {
+    this.toggleCollaboratorsEdit(false)
     if (this.highlightedFile) {
       this.loadShares({
         client: this.$client,
