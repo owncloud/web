@@ -138,6 +138,36 @@ module.exports = {
     },
     /**
      *
+     * @param {string} collaborator
+     * @param {string} newRole
+     * @returns {Promise}
+     */
+    changeCollaboratorRole: function (collaborator, newRole) {
+      const util = require('util')
+      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
+      const moreInformationSelector = informationSelector + this.elements.collaboratorMoreInformation.selector
+      const selectRoleButton = informationSelector + this.elements.selectRoleButtonInCollaboratorInformation.selector
+      const roleDropdown = informationSelector + this.elements.roleDropdownInCollaboratorInformation.selector
+      const roleButtonInDropdown = roleDropdown + util.format(
+        this.elements.roleButtonInDropdown.selector, newRole.toLowerCase()
+      )
+
+      return this
+        .useXpath()
+        .waitForElementVisible(moreInformationSelector)
+        .click(moreInformationSelector)
+        .waitForElementVisible(selectRoleButton)
+        .click(selectRoleButton)
+        .waitForElementVisible(roleDropdown)
+        .waitForElementVisible(roleButtonInDropdown)
+        .click(roleButtonInDropdown)
+        .waitForElementVisible('@saveShareButton')
+        .click('@saveShareButton')
+        .waitForElementNotPresent('@saveShareButton')
+        .waitForOutstandingAjaxCalls()
+    },
+    /**
+     *
      * @returns {Promise.<string[]>} Array of users/groups in share list
      */
     getCollaboratorsList: async function () {
@@ -219,6 +249,10 @@ module.exports = {
     addShareButton: {
       selector: '#files-collaborators-add-new-button'
     },
+    saveShareButton: {
+      selector: '//button[@aria-label="Save Share"]',
+      locateStrategy: 'xpath'
+    },
     newCollaboratorSelectRoleButton: {
       selector: '#files-collaborators-role-button'
     },
@@ -233,6 +267,19 @@ module.exports = {
     },
     newCollaboratorRoleCustomRole: {
       selector: '#files-collaborator-new-collaborator-role-custom'
+    },
+    selectRoleButtonInCollaboratorInformation: {
+      selector: '//button[contains(@class, "files-collaborators-role-button")]',
+      locateStrategy: 'xpath'
+    },
+    roleDropdownInCollaboratorInformation: {
+      selector: '//div[contains(@id, "files-collaborators-roles-dropdown")]',
+      locateStrategy: 'xpath'
+    },
+    roleButtonInDropdown: {
+      // the translate bit is to make it case-insensitive
+      selector: '//span[translate(.,"ABCDEFGHJIKLMNOPQRSTUVWXYZ","abcdefghjiklmnopqrstuvwxyz") ="%s"]',
+      locateStrategy: 'xpath'
     }
   }
 }
