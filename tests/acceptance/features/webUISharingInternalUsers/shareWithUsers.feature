@@ -48,6 +48,28 @@ Feature: Sharing files and folders with internal users
       | Editor      | Editor        | read,update,create,delete | read,update      |
       | Custom Role | Viewer        | read               | read             |
 
+  Scenario Outline: change the collaborators of a file & folder
+    Given user "user2" has logged in using the webUI
+    And user "user2" has shared folder "/simple-folder" with user "user1" with "<initial-permissions>" permissions
+    When the user changes the collaborator role of "User One" for folder "simple-folder" to "<set-role>" using the webUI
+    # check role without reloading the collaborators panel, see issue #1786
+    Then user "User One" should be listed as "<expected-role>" in the collaborators list on the webUI
+    # check role after reopening the collaborators panel
+    And user "User One" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
+    And user "user1" should have received a share with these details:
+      | field       | value                  |
+      | uid_owner   | user2                  |
+      | share_with  | user1                  |
+      | file_target | /simple-folder (2)     |
+      | item_type   | folder                 |
+      | permissions | <expected-permissions> |
+    Examples:
+      | initial-permissions | set-role    | expected-role | expected-permissions      |
+      | read,update,create  | Viewer      | Viewer        | read                      |
+      | read                | Editor      | Editor        | read,update,create,delete |
+      | read                | Custom role | Viewer        | read                      |
+      | all                 | Custom role | Editor        | all                       |
+
   @skip @yetToImplement
   Scenario: share a file with another internal user who overwrites and unshares the file
     Given user "user2" has logged in using the webUI

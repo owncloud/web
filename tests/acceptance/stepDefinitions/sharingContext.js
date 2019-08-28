@@ -50,13 +50,10 @@ const userSharesFileOrFolderWithGroup = function (file, sharee, role) {
  * @param {string} sharer  username of the sharer
  * @param {string} receiver  username of the reciever
  * @param {number} shareType  Type of share 0 = user, 1 = group, 3 = public (link), 6 = federated (cloud share).
- * @param {number} permissions  permissions of the share  1 = read; 2 = update; 4 = create;
- *                                                    8 = delete; 16 = share; 31 = all
- *                                                    15 = change
- *                                                    5 = uploadwriteonly
- *                                                    (default: 31)
+ * @param {string} permissions  permissions of the share for valid permissions see sharingHelper.PERMISSION_TYPES
  */
-const shareFileFolder = function (elementToShare, sharer, receiver, shareType = 0, permissions = 31) {
+const shareFileFolder = function (elementToShare, sharer, receiver, shareType = 0, permissionString = 'all') {
+  const permissions = sharingHelper.humanReadablePermissionsToBitmask(permissionString)
   const params = new URLSearchParams()
   params.append('shareType', shareType)
   params.append('shareWith', receiver)
@@ -134,6 +131,13 @@ const assertCollaboratorslistDoesNotContain = function (type, name) {
 Given('user {string} has shared file/folder {string} with user {string}', function (sharer, elementToShare, receiver) {
   return shareFileFolder(elementToShare, sharer, receiver)
 })
+
+Given(
+  'user {string} has shared file/folder {string} with user {string} with {string} permissions',
+  function (sharer, elementToShare, receiver, permissions) {
+    return shareFileFolder(elementToShare, sharer, receiver, 0, permissions)
+  }
+)
 
 Given('user {string} has shared file/folder {string} with group {string}', function (sharer, elementToShare, receiver) {
   return shareFileFolder(elementToShare, sharer, receiver, 1)
@@ -271,6 +275,15 @@ When('the user opens the share dialog for file {string} using the webUI', functi
 When('the user deletes {string} as collaborator for the current file/folder using the webUI', function (user) {
   return client.page.FilesPageElement.sharingDialog().deleteShareWithUserGroup(user)
 })
+
+When(
+  'the user changes the collaborator role of {string} for file/folder {string} to {string} using the webUI',
+  function (collaborator, ressource, newRole) {
+    return client.page.FilesPageElement.filesList()
+      .openSharingDialog(ressource)
+      .changeCollaboratorRole(collaborator, newRole)
+  }
+)
 
 Then('user {string} should be listed as {string} in the collaborators list on the webUI', function (user, role) {
   return assertCollaboratorslistContains('user', user, role)
