@@ -31,7 +31,9 @@ export default {
     ...mapActions('Files', ['toggleCollaboratorsEdit']),
 
     $_ocCollaborators_collaboratorType (type) {
-      if (type === '0' || type === 0) return this.$gettext('User')
+      if (parseInt(type, 10) === 0) return this.$gettext('User')
+
+      if (parseInt(type, 10) === 6) return this.$gettext('Remote user')
 
       return this.$gettext('Group')
     },
@@ -42,9 +44,7 @@ export default {
       this.toggleCollaboratorsEdit(true)
     },
     $_ocCollaborators_loadAvatar (item) {
-      if (item.value && (item.value.shareType === 1 || item.value.shareType === 3)) return
-
-      if (item.info && (item.info.share_type === '1' || item.info.share_type === '3')) return
+      if ((item.value && item.value.shareType !== 0) || (item.info && item.info.share_type !== '0')) return
 
       let name
       if (item.value) {

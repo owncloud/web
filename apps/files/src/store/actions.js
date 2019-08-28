@@ -205,6 +205,8 @@ function _buildShare (s) {
     case ('0'): // user share
     // TODO differentiate groups from users?
     // fall through
+    case ('6'):
+    // fall through
     case ('1'): // group share
       share.role = 'custom'
       if (s.permissions === '1' || s.permissions === '17') {
@@ -584,8 +586,8 @@ export default {
   addShare (context, { client, path, $gettext, shareWith, shareType, permissions }) {
     context.commit('SHARES_LOADING', true)
 
-    if (shareType === 0) {
-      client.shares.shareFileWithUser(path, shareWith, permissions)
+    if (shareType === 1) {
+      client.shares.shareFileWithGroup(path, shareWith, { permissions: permissions })
         .then(share => {
           context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
           context.commit('SHARES_LOADING', false)
@@ -598,21 +600,30 @@ export default {
           }, { root: true })
           context.commit('SHARES_LOADING', false)
         })
-    } else {
-      client.shares.shareFileWithGroup(path, shareWith, permissions)
-        .then(share => {
-          context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
-          context.commit('SHARES_LOADING', false)
-        })
-        .catch(e => {
-          context.dispatch('showMessage', {
-            title: $gettext('Error while sharing.'),
-            desc: e,
-            status: 'danger'
-          }, { root: true })
-          context.commit('SHARES_LOADING', false)
-        })
+      return
     }
+
+    let remoteShare
+
+    if (shareType === 6) {
+      remoteShare = true
+    } else {
+      remoteShare = false
+    }
+
+    client.shares.shareFileWithUser(path, shareWith, { permissions: permissions, remoteUser: remoteShare })
+      .then(share => {
+        context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
+        context.commit('SHARES_LOADING', false)
+      })
+      .catch(e => {
+        context.dispatch('showMessage', {
+          title: $gettext('Error while sharing.'),
+          desc: e,
+          status: 'danger'
+        }, { root: true })
+        context.commit('SHARES_LOADING', false)
+      })
   },
   deleteShare (context, { client, share }) {
     client.shares.deleteShare(share.info.id)
