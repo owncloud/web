@@ -31,7 +31,7 @@
     "vue2-dropzone": "^3.6.0",
     "webpack": "^4.36.1",
     "webpack-cli": "^3.3.5",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.2"
   },
   "dependencies": {
     "filesize": "^4.1.2",
