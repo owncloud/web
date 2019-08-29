@@ -15,7 +15,7 @@
       <div class="uk-width-auto">
         <div class="uk-button-group" :key="actionsKey">
           <template v-if="$_ocFilesAppBar_showActions">
-            <oc-button v-if="canUpload && quota.free > 0" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
+            <oc-button v-if="canUpload && hasFreeSpace" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
             <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
             <oc-drop toggle="#new-file-menu-btn" mode="click">
               <oc-nav>
@@ -110,7 +110,7 @@ export default {
       if (!this.canUpload) {
         return this.$gettext('You have no permission to upload!')
       }
-      if (this.quota.free < 1) {
+      if (!this.hasFreeSpace) {
         return this.$gettext('You have not enough space left to upload!')
       }
       return null
@@ -200,6 +200,9 @@ export default {
         }
       }
       return breadcrumbs
+    },
+    hasFreeSpace () {
+      return this.quota.free > 0 || this.currentFolder.permissions.indexOf('M') >= 0
     }
   },
   methods: {
