@@ -74,7 +74,7 @@
     "owncloud-sdk": "^1.0.0-356",
     "parse-json": "^5.0.0",
     "requirejs": "^2.3.6",
-    "rimraf": "^2.6.3",
+    "rimraf": "^3.0.0",
     "start-server-and-test": "^1.9.1",
     "style-loader": "^0.23.1",
     "url-search-params-polyfill": "^7.0.0",
