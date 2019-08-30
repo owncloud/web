@@ -48,24 +48,30 @@ export default {
     },
     actions () {
       const actions = [
-        { icon: 'edit',
+        {
+          icon: 'edit',
           handler: this.changeName,
           ariaLabel: this.$gettext('Rename'),
           isEnabled: function (item) {
             return item.canRename()
-          } },
-        { icon: 'file_download',
+          }
+        },
+        {
+          icon: 'file_download',
           handler: this.downloadFile,
           ariaLabel: this.$gettext('Download'),
           isEnabled: function (item) {
             return item.canDownload()
-          } },
-        { icon: 'delete',
+          }
+        },
+        {
+          icon: 'delete',
           ariaLabel: this.$gettext('Delete'),
           handler: this.deleteFile,
           isEnabled: function (item) {
             return item.canBeDeleted()
-          } }
+          }
+        }
       ]
       for (const sideBar of this.fileSideBars) {
         if (sideBar.enabled !== undefined && !sideBar.enabled(this.capabilities)) {
@@ -169,7 +175,7 @@ export default {
     checkIfElementExists (element) {
       const name = element.name || element
       return this.files.find((n) => {
-        if (n['name'] === name) {
+        if (n.name === name) {
           return n
         }
       })
@@ -381,7 +387,7 @@ export default {
       if (/\s+$/.test(name)) return this.$gettext('The name cannot end with whitespace')
 
       const exists = this.activeFiles.find((n) => {
-        if (n['name'] === name && this.originalName !== name) {
+        if (n.name === name && this.originalName !== name) {
           return n
         }
       })

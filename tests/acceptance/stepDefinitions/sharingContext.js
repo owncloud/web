@@ -93,7 +93,7 @@ const assertCollaboratorslistContains = function (type, name, role) {
       }
       if (!shares || !shares.includes(expectedString)) {
         assert.fail(
-          `"${name}" was expected to be in share list but was not present. Found collaborators text:"` + shares + `"`
+          `"${name}" was expected to be in share list but was not present. Found collaborators text:"` + shares + '"'
         )
       }
     })
@@ -214,7 +214,7 @@ Then('only users and groups that contain the string {string} in their name or di
           found,
           true,
           `"${displayedName}" was listed in autocomplete list, but should not have been. ` +
-           `(check if that is a manually added user/group)`
+           '(check if that is a manually added user/group)'
         )
       })
     })

@@ -85,10 +85,10 @@ module.exports = {
       let labelSelector, checkboxId
       if (fileOrFolder === 'folder') {
         labelSelector = '@filterFolderLabel'
-        checkboxId = this.elements['filterFolderCheckbox']
+        checkboxId = this.elements.filterFolderCheckbox
       } else if (fileOrFolder === 'file') {
         labelSelector = '@filterFileLabel'
-        checkboxId = this.elements['filterFileCheckbox']
+        checkboxId = this.elements.filterFileCheckbox
       } else {
         throw new Error(`Expected 'file' or 'folder', ${fileOrFolder} given`)
       }
@@ -115,8 +115,8 @@ module.exports = {
      * @returns {string}
      */
     getXpathOfLinkToTabInSidePanel: function (tab) {
-      return this.elements['sideBar'].selector +
-        util.format(this.elements['tabOfSideBar'].selector, tab)
+      return this.elements.sideBar.selector +
+        util.format(this.elements.tabOfSideBar.selector, tab)
     },
     selectTabInSidePanel: function (tab) {
       return this
@@ -136,13 +136,13 @@ module.exports = {
     isPanelVisible: function (panelName, callback) {
       let selector = ''
       if (panelName === 'collaborators') {
-        selector = this.page.FilesPageElement.sharingDialog().elements['sharingAutoComplete']
+        selector = this.page.FilesPageElement.sharingDialog().elements.sharingAutoComplete
       } else if (panelName === 'versions') {
-        selector = this.elements['versionsPanel']
+        selector = this.elements.versionsPanel
       } else if (panelName === 'links') {
-        selector = this.elements['linksPanel']
+        selector = this.elements.linksPanel
       } else {
-        throw new Error(`invalid panel`)
+        throw new Error('invalid panel')
       }
       return this
         .isVisible(selector, (result) => {

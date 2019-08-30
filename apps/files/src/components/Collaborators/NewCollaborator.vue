@@ -262,6 +262,11 @@ export default {
     },
     $_ocCollaborators_newCollaboratorsAdd (collaborators) {
       const params = { permissions: null }
+      let perms = 1
+      const changePerm = 2
+      const createPerm = 4
+      const deletePerm = 8
+      const resharePerm = 16
       switch (this.selectedNewRole.tag) {
         case 'viewer':
           params.permissions = this.canShare ? 17 : 1
@@ -274,11 +279,6 @@ export default {
           params.permissions = this.canShare ? 19 : 3
           break
         case 'custom':
-          let perms = 1
-          const changePerm = 2
-          const createPerm = 4
-          const deletePerm = 8
-          const resharePerm = 16
           if (this.canChange) perms += changePerm
           if (this.canCreate) perms += createPerm
           if (this.canDelete) perms += deletePerm

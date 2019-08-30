@@ -141,10 +141,10 @@ Given('these users have been created with default attributes but not initialized
 
 Given('these users have been created but not initialized:', function (dataTable) {
   return Promise.all(dataTable.hashes().map((user) => {
-    const userId = user['username']
-    const password = user['password'] || userSettings.getPasswordForUser(userId)
-    const displayName = user['displayname'] || false
-    const email = user['email'] || false
+    const userId = user.username
+    const password = user.password || userSettings.getPasswordForUser(userId)
+    const displayName = user.displayname || false
+    const email = user.email || false
     return deleteUser(userId)
       .then(() => createUser(userId, password, displayName, email))
   }))

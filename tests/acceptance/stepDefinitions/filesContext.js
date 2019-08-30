@@ -358,7 +358,7 @@ Then('the folder should be empty on the webUI after a page reload', async functi
 
 Then('the app-sidebar should be visible', function () {
   return client.page.filesPage().isSidebarVisible((value) => {
-    assert.strictEqual(value, true, `side-bar should be visible, but is not`)
+    assert.strictEqual(value, true, 'side-bar should be visible, but is not')
   })
 })
 

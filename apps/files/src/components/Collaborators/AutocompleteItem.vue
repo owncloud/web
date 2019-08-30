@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-flex-middle uk-light">
+  <div class="uk-flex uk-flex-middle">
     <oc-spinner v-if="loading" uk-spinner="ratio:1.6" class="uk-margin-small-right" />
     <template v-else>
       <oc-avatar v-if="avatar" :src="avatar" class="uk-margin-small-right" width=50 height=50 />

@@ -60,10 +60,10 @@ const actions = {
       return client.login().then(res => {
         return client.getCapabilities()
           .then(cap => {
-            client.users.getUserGroups(res['id']).then(groups => {
+            client.users.getUserGroups(res.id).then(groups => {
               context.commit('SET_CAPABILITIES', cap)
               context.commit('SET_USER', {
-                id: res['id'],
+                id: res.id,
                 displayname: res['display-name'],
                 email: !Object.keys(res.email).length ? '' : res.email,
                 token,

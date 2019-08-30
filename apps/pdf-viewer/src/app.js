@@ -9,7 +9,7 @@ const PdfViewer = () => ({
 })
 
 const routes = [{
-  path: `/pdf-viewer`,
+  path: '/pdf-viewer',
   components: {
     app: PdfViewer
   },

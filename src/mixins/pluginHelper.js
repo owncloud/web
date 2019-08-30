@@ -10,7 +10,7 @@ export default {
 
     getPlugin (ext) {
       return this.$root.plugins.find((n) => {
-        if (n['extend'] === ext) {
+        if (n.extend === ext) {
           return n
         }
       })
@@ -18,7 +18,7 @@ export default {
 
     getPlugins (ext) {
       return this.$root.plugins.filter((n) => {
-        if (n['extend'] === ext) {
+        if (n.extend === ext) {
           return n
         }
       })

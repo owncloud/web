@@ -10,14 +10,14 @@ function _buildFile (file) {
   }
   return ({
     type: (file.type === 'dir') ? 'folder' : file.type,
-    id: file['fileInfo']['{http://owncloud.org/ns}fileid'],
-    starred: file['fileInfo']['{http://owncloud.org/ns}favorite'] !== '0',
-    mdate: file['fileInfo']['{DAV:}getlastmodified'],
+    id: file.fileInfo['{http://owncloud.org/ns}fileid'],
+    starred: file.fileInfo['{http://owncloud.org/ns}favorite'] !== '0',
+    mdate: file.fileInfo['{DAV:}getlastmodified'],
     size: (function () {
       if (file.type === 'dir') {
-        return file['fileInfo']['{http://owncloud.org/ns}size']
+        return file.fileInfo['{http://owncloud.org/ns}size']
       } else {
-        return file['fileInfo']['{DAV:}getcontentlength']
+        return file.fileInfo['{DAV:}getcontentlength']
       }
     }()),
     extension: (function () {
@@ -36,13 +36,13 @@ function _buildFile (file) {
       return name
     }()),
     path: file.name,
-    permissions: file['fileInfo']['{http://owncloud.org/ns}permissions'] || '',
-    etag: file['fileInfo']['{DAV:}getetag'],
-    sharePermissions: file['fileInfo']['{http://open-collaboration-services.org/ns}share-permissions'],
-    privateLink: file['fileInfo']['{http://owncloud.org/ns}privatelink'],
+    permissions: file.fileInfo['{http://owncloud.org/ns}permissions'] || '',
+    etag: file.fileInfo['{DAV:}getetag'],
+    sharePermissions: file.fileInfo['{http://open-collaboration-services.org/ns}share-permissions'],
+    privateLink: file.fileInfo['{http://owncloud.org/ns}privatelink'],
     owner: {
-      username: file['fileInfo']['{http://owncloud.org/ns}owner-id'],
-      displayName: file['fileInfo']['{http://owncloud.org/ns}owner-display-name']
+      username: file.fileInfo['{http://owncloud.org/ns}owner-id'],
+      displayName: file.fileInfo['{http://owncloud.org/ns}owner-display-name']
     },
     canUpload: function () {
       return this.permissions.indexOf('C') >= 0
@@ -65,19 +65,19 @@ function _buildFile (file) {
 function _buildFileInTrashbin (file) {
   let ext = ''
   if (file.type !== 'dir') {
-    const ex = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename'].match(/\.[0-9a-z]+$/i)
+    const ex = file.fileInfo['{http://owncloud.org/ns}trashbin-original-filename'].match(/\.[0-9a-z]+$/i)
     if (ex !== null) {
       ext = ex[0].substr(1)
     }
   }
   return ({
     type: (file.type === 'dir') ? 'folder' : file.type,
-    deleteTimestamp: file['fileInfo']['{http://owncloud.org/ns}trashbin-delete-datetime'],
+    deleteTimestamp: file.fileInfo['{http://owncloud.org/ns}trashbin-delete-datetime'],
     extension: (function () {
       return ext
     }()),
     basename: (function () {
-      const fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
+      const fullName = file.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
       const pathList = fullName.split('/').filter(e => e !== '')
       const name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
       if (ext) {
@@ -86,11 +86,11 @@ function _buildFileInTrashbin (file) {
       return name
     })(),
     name: (function () {
-      const fullName = file['fileInfo']['{http://owncloud.org/ns}trashbin-original-filename']
+      const fullName = file.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
       const pathList = fullName.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
     })(),
-    originalLocation: file['fileInfo']['{http://owncloud.org/ns}trashbin-original-location'],
+    originalLocation: file.fileInfo['{http://owncloud.org/ns}trashbin-original-location'],
     id: (function () {
       const pathList = file.name.split('/').filter(e => e !== '')
       return pathList.length === 0 ? '' : pathList[pathList.length - 1]
@@ -261,7 +261,7 @@ export default {
         } else {
           if (favorite) {
             client.files.fileInfo('', context.getters.davProperties).then(rootFolder => {
-              rootFolder['fileInfo']['{http://owncloud.org/ns}permissions'] = 'R'
+              rootFolder.fileInfo['{http://owncloud.org/ns}permissions'] = 'R'
               context.dispatch('loadFiles', {
                 currentFolder: rootFolder,
                 files: res
@@ -531,6 +531,11 @@ export default {
   changeShare (context, { client, share, role, canShare, canChange, canCreate, canDelete }) {
     context.commit('TOGGLE_COLLABORATOR_SAVING', true)
     const params = {}
+    let perms = 1
+    const changePerm = 2
+    const createPerm = 4
+    const deletePerm = 8
+    const resharePerm = 16
     switch (role) {
       case ('viewer'):
         params.permissions = canShare ? 17 : 1
@@ -543,11 +548,6 @@ export default {
         params.permissions = canShare ? 31 : 15
         break
       case ('custom'):
-        let perms = 1
-        const changePerm = 2
-        const createPerm = 4
-        const deletePerm = 8
-        const resharePerm = 16
         if (canChange) perms += changePerm
         if (canCreate) perms += createPerm
         if (canDelete) perms += deletePerm
