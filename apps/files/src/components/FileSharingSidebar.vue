@@ -85,7 +85,7 @@ export default {
     },
     $_ocCollaborators_users () {
       return this.shares.filter(collaborator => {
-        return collaborator.info.share_type === '0'
+        return collaborator.info.share_type === '0' || collaborator.info.share_type === '6'
       })
     },
     $_ocCollaborators_groups () {

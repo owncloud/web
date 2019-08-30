@@ -9,9 +9,12 @@
       </template>
     </template>
     <div>
-      <div class="uk-text-bold files-collaborators-autocomplete-username">{{ item.label }}</div>
-      <div v-if="item.value.shareWithAdditionalInfo">{{ item.value.shareWithAdditionalInfo }}</div>
-      <div class="uk-text-meta">{{ $_ocCollaborators_collaboratorType(item.value.shareType) }}</div>
+      <div
+        class="uk-text-bold files-collaborators-autocomplete-username"
+        v-text="item.label"
+      />
+      <div v-if="item.value.shareWithAdditionalInfo" v-text="item.value.shareWithAdditionalInfo" />
+      <div class="uk-text-meta" v-text="$_ocCollaborators_collaboratorType(item.value.shareType)" />
     </div>
   </div>
 </template>

@@ -10,6 +10,7 @@
         id="oc-sharing-autocomplete"
         class="uk-margin-bottom"
         :disabled="collaboratorsEditInProgress && selectedCollaborators.length < 1"
+        dropdownClass="uk-width-1-1"
       >
         <template v-slot:item="{item}">
           <autocomplete-item :item="item" />
@@ -28,7 +29,7 @@
           >
             <div class="uk-margin-small-top">
               <span class="uk-text-bold">{{ collaborator.label }}</span>
-              <translate v-if="collaborator.value.shareType" class="uk-text-meta">(group)</translate>
+              <translate v-if="collaborator.value.shareType === 1" class="uk-text-meta">(group)</translate>
             </div>
             <oc-icon
               name="close"
@@ -214,8 +215,9 @@ export default {
           users = users.filter(user => {
             return user.value.shareWith !== this.user.id
           })
+          const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
-          const results = users.concat(groups).filter(collaborator => {
+          const results = users.concat(groups, remotes).filter(collaborator => {
             const selected = this.selectedCollaborators.find(
               selectedCollaborator => {
                 return (
@@ -244,6 +246,11 @@ export default {
         })
     },
     filterRecipients (item, queryText) {
+      if (item.value.shareType === 6) {
+        return item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) >
+          -1 && item.label.indexOf('@') > -1 && item.label.indexOf('.') > -1 &&
+          item.label.lastIndexOf('.') + 1 !== item.label.length
+      }
       return (
         item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) >
           -1 ||
@@ -261,29 +268,27 @@ export default {
       this.selectedNewRole = role
     },
     $_ocCollaborators_newCollaboratorsAdd (collaborators) {
-      const params = { permissions: null }
-      let perms = 1
+      let permissions = 1
       const changePerm = 2
       const createPerm = 4
       const deletePerm = 8
       const resharePerm = 16
       switch (this.selectedNewRole.tag) {
         case 'viewer':
-          params.permissions = this.canShare ? 17 : 1
+          permissions = this.canShare ? 17 : 1
           break
         case 'editor':
           if (this.highlightedFile.type === 'folder') {
-            params.permissions = this.canShare ? 31 : 15
+            permissions = this.canShare ? 31 : 15
             break
           }
-          params.permissions = this.canShare ? 19 : 3
+          permissions = this.canShare ? 19 : 3
           break
         case 'custom':
-          if (this.canChange) perms += changePerm
-          if (this.canCreate) perms += createPerm
-          if (this.canDelete) perms += deletePerm
-          if (this.canShare) perms += resharePerm
-          params.permissions = perms
+          if (this.canChange) permissions += changePerm
+          if (this.canCreate) permissions += createPerm
+          if (this.canDelete) permissions += deletePerm
+          if (this.canShare) permissions += resharePerm
           break
       }
       for (const collaborator of collaborators) {
@@ -293,7 +298,7 @@ export default {
           $gettext: this.$gettext,
           shareWith: collaborator.value.shareWith,
           shareType: collaborator.value.shareType,
-          permissions: params
+          permissions: permissions
         })
       }
       this.selectedCollaborators = []
