@@ -2,19 +2,34 @@
 
 Pushing a new design and frontend concept to ownCloud
 
-![bildschirmfoto von 2018-03-14 17-28-06](https://user-images.githubusercontent.com/1005065/37416039-20817b4c-27ad-11e8-9f14-cbe12936fd64.png)
-![bildschirmfoto von 2018-03-14 17-27-40](https://user-images.githubusercontent.com/1005065/37416040-20ad906a-27ad-11e8-8a56-ad5f824743a0.png)
+![image](https://user-images.githubusercontent.com/25989331/63966638-fd4e0080-ca9b-11e9-931a-8dd9bf3ba82f.png)
+
 [See this online Demo](https://phoenix.owncloud.com/custom/phoenix/index.html#/login)
 
 ## How to build
 
 - Run `yarn install` to build core
+- Run `yarn install-all` to install dependencies of all apps and core
 - Run `yarn dist` to build all apps configured in config.json
+
+## ownCloud server prerequisites
+### When running with oauth2
+- installed and enabled oauth2 app
+- entry for Phoenix in User Authentication in admin settings with Redirection URI: `<phoenix-env>/oidc-callback.html`
+- enabled CORS domain entry for Phoenix in config.php:
+```
+'cors.allowed-domains' => [
+'<phoenix-env>',
+]
+```
+
+## Create config.json
+- For reference look into config.json.sample (example with oauth2)
 
 ## Run
 
 - optionally provide custom domain name: `export SERVER_HOST=0.0.0.0:8300`
-- run a webpack dev server `yarn run watch`
+- run a webpack dev server `yarn watch` (`yarn watch-all` if you want to watch apps as well)
 
 ## Run acceptance tests
 - clone and install testing app into owncloud from http://github.com/owncloud/testing
@@ -22,7 +37,7 @@ Pushing a new design and frontend concept to ownCloud
 - build, configure and run phoenix
 - setup selenium & browser
     - install the Chrome browser and let yarn start & run selenium OR
-    - use docker to start the browser and selenium e.g.: `docker run -d -p 4445:4444 -p 5900:5900 -v /dev/shm:/dev/shm --name selenium selenium/standalone-chrome-debug` 
+    - use docker to start the browser and selenium e.g.: `docker run -d -p 4445:4444 -p 5900:5900 -v /dev/shm:/dev/shm --name selenium selenium/standalone-chrome-debug`
 - run `yarn run acceptance-tests <feature-files-to-test>`
 - available settings to be set by environment variables:
 
@@ -36,7 +51,7 @@ Pushing a new design and frontend concept to ownCloud
 | `SELENIUM_PORT`    | port of selenium server                                                | 4445                  |
 
 ## Update dependencies
-- Run `yarn update-all` to update core and app dependencies
+- Run `yarn upgrade-all` to update core and app dependencies
 
 ## Cleanup workspace
 - Run `yarn clean-all` to remove node_modules and dist folder
