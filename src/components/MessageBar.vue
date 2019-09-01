@@ -8,6 +8,7 @@
             :message="item.desc"
             :status="item.status"
             @close="deleteMessage(item)"
+            class="uk-width-large"
     />
     </transition-group>
   </oc-notifications>
