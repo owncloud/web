@@ -52,6 +52,10 @@ export default {
               return Promise.reject(new Error(response.statusText))
             })
             .catch(error => console.log(error))
+        },
+
+        isIE () {
+          return !!window.MSInputMethodContext && !!document.documentMode
         }
 
       }

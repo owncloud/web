@@ -20,7 +20,7 @@
             <oc-drop toggle="#new-file-menu-btn" mode="click">
               <oc-nav>
                 <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-                <folder-upload :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
+                <folder-upload v-if="!isIE()" :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
                 <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
                 <oc-nav-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
               </oc-nav>
