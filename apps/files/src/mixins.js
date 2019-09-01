@@ -264,6 +264,14 @@ export default {
       }
     },
     $_ocUpload_addDirectoryToQue (e) {
+      if (this.isIE11()) {
+        this.showMessage({
+          title: this.$gettext('Upload failed'),
+          desc: this.$gettext('Upload of a folder is not supported in Internet Explorer.'),
+          status: 'danger'
+        })
+        return
+      }
       const files = e.target.files || e.dataTransfer.files
       if (!files.length) return
 
