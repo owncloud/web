@@ -13,10 +13,17 @@ Feature: Share by public link
     And user "user1" has logged in using the webUI
 
   @smokeTest
-  @skip @yetToImplement
   Scenario: simple sharing by public link
     When the user creates a new public link for folder "simple-folder" using the webUI
-    And the public accesses the last created public link using the webUI
+    Then user "user1" should have a share with these details:
+      | field       | value          |
+      | share_type  | public_link    |
+      | uid_owner   | user1          |
+      | permissions | read           |
+      | path        | /simple-folder |
+      | name        | Public link    |
+    And a link named "Public link" should be listed with role "Viewer" in the public link list of folder "simple-folder" on the webUI
+    When the public uses the webUI to access the last public link created by user "user1"
     Then file "lorem.txt" should be listed on the webUI
 
   @skip @yetToImplement

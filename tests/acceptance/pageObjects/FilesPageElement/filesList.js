@@ -90,6 +90,20 @@ module.exports = {
     },
     /**
      *
+     * @param {string} fileName
+     */
+    openPublicLinkDialog: function (fileName) {
+      this.waitForFileVisible(fileName)
+        .useXpath()
+        .performFileAction(fileName, 'share')
+        .waitForElementVisible('@linkToPublicLinksTag')
+        .click('@linkToPublicLinksTag')
+        .waitForElementVisible('@publicLinkSideBar')
+        .useCss()
+      return this.api.page.FilesPageElement.publicLinksDialog()
+    },
+    /**
+     *
      * @param {string} fromName
      * @param {string} toName
      * @param {boolean} expectToSucceed
@@ -357,6 +371,9 @@ module.exports = {
     sharingSideBar: {
       selector: '#oc-files-sharing-sidebar'
     },
+    publicLinkSideBar: {
+      selector: '#oc-files-file-link'
+    },
     checkBoxAllFiles: {
       selector: '#filelist-check-all'
     },
@@ -366,6 +383,10 @@ module.exports = {
     },
     restoreSelectedButton: {
       selector: '//span[contains(text(),"Restore selected")]',
+      locateStrategy: 'xpath'
+    },
+    linkToPublicLinksTag: {
+      selector: '//div[@class="sidebar-container"]//a[normalize-space(.)="Links"]',
       locateStrategy: 'xpath'
     }
   }

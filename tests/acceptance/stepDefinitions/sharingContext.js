@@ -352,38 +352,9 @@ Then('group {string} should not be listed in the collaborators list on the webUI
 })
 
 Then('user {string} should have received a share with these details:', function (user, expectedDetailsTable) {
-  const headers = httpHelper.createAuthHeader(user)
-  return fetch(client.globals.backend_url + '/ocs/v2.php/apps/files_sharing/api/v1/shares?shared_with_me=true&format=json',
-    { method: 'GET', headers: headers }
-  )
-    .then(res => res.json())
-    .then(function (sharesResult) {
-      if (sharesResult.ocs.meta.statuscode === 200) {
-        const shares = sharesResult.ocs.data
-        let found
-        for (var shareI = 0; shareI < shares.length; shareI++) {
-          const share = shares[shareI]
-          found = true
-          for (var expectedDetailsI = 0; expectedDetailsI < expectedDetailsTable.hashes().length; expectedDetailsI++) {
-            const expectedDetail = expectedDetailsTable.hashes()[expectedDetailsI]
-            if (expectedDetail.field === 'permissions') {
-              expectedDetail.value = sharingHelper.humanReadablePermissionsToBitmask(expectedDetail.value).toString()
-            }
-            if (!(expectedDetail.field in share) || share[expectedDetail.field].toString() !== expectedDetail.value) {
-              found = false
-              break
-            }
-          }
-          if (found === true) {
-            break
-          }
-        }
-        assert.strictEqual(
-          found, true, 'could not find expected share in "' + JSON.stringify(sharesResult, null, 2) + '"'
-        )
-        return this
-      } else {
-        throw Error('Could not get shares. Message: ' + sharesResult.ocs.meta.message)
-      }
-    })
+  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, true)
+})
+
+Then('user {string} should have a share with these details:', function (user, expectedDetailsTable) {
+  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable)
 })
