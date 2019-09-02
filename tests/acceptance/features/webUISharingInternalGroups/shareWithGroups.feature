@@ -37,9 +37,9 @@ Feature: Sharing files and folders with internal groups
       | item_type   | file               |
       | permissions | <permissions-file> |
     And as "user1" these resources should be listed on the webUI
-      | entry_name                  |
-      | simple-folder (2)           |
-      | testimage (2).jpg           |
+      | entry_name        |
+      | simple-folder (2) |
+      | testimage (2).jpg |
     And these resources should be listed in the folder "simple-folder (2)" on the webUI
       | lorem.txt |
     But these resources should not be listed in the folder "simple-folder (2)" on the webUI
@@ -48,10 +48,10 @@ Feature: Sharing files and folders with internal groups
 #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
 #    And file "testimage (2).jpg" should be marked as shared by "User Two" on the webUI
     Examples:
-      | set-role    | expected-role | permissions-folder | permissions-file |
-      | Viewer      | Viewer        | read               | read             |
-      | Editor      | Editor        | read,update,create, delete | read,update      |
-      | Custom Role | Viewer        | read               | read             |
+      | set-role    | expected-role | permissions-folder         | permissions-file |
+      | Viewer      | Viewer        | read                       | read             |
+      | Editor      | Editor        | read,change,create, delete | read,change      |
+      | Custom Role | Viewer        | read                       | read             |
 
   @skip @yetToImplement
   Scenario: share a file with an internal group a member overwrites and unshares the file
