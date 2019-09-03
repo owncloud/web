@@ -1,7 +1,7 @@
 module.exports = {
   PERMISSION_TYPES: {
     read: 1,
-    update: 2,
+    change: 2,
     create: 4,
     delete: 8,
     share: 16,
