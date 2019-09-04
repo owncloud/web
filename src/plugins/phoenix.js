@@ -1,57 +1,90 @@
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   install (Vue) {
     Vue.mixin({
       computed: {
-        ...mapGetters(['getToken', 'isAuthenticated'])
+        ...mapGetters(['getToken', 'isAuthenticated']),
+        ...mapGetters('Files', ['publicLinkPassword'])
       },
       methods: {
+        ...mapActions('Files', ['addFileToProgress', 'updateFileProgress']),
+        ...mapActions(['showMessage']),
+
         publicPage () {
           return !this.isAuthenticated
         },
         downloadFile (file) {
+          this.addFileToProgress(file)
+          let headers = null
           if (this.publicPage()) {
             const url = this.$client.publicFiles.getFileUrl(file.path)
-            const headers = new Headers()
             const password = this.publicLinkPassword
             if (password) {
-              headers.append('Authorization', 'Basic ' + Buffer.from('public:' + password).toString('base64'))
+              headers = { Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
             }
 
-            return this.downloadFileFromUrl(url, headers, file.name)
+            return this.downloadFileFromUrl(url, headers, file)
           }
           const url = this.$client.files.getFileUrl(file.path)
-          const headers = new Headers()
-          headers.append('Authorization', 'Bearer ' + this.getToken)
+          headers = { Authorization: 'Bearer ' + this.getToken }
 
-          return this.downloadFileFromUrl(url, headers, file.name)
+          return this.downloadFileFromUrl(url, headers, file)
         },
-        downloadFileFromUrl (url, headers, fileName) {
-          return fetch(url, { headers })
-            .then(response => {
-              if (response.ok) {
-                return response.blob()
-                  .then(blob => {
-                    if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
-                      window.navigator.msSaveOrOpenBlob(blob, fileName)
-                    } else { // for Non-IE (chrome, firefox etc.)
-                      const objectUrl = window.URL.createObjectURL(blob)
+        downloadFileFromUrl (url, headers, file) {
+          const request = new XMLHttpRequest()
+          request.open('GET', url)
+          request.responseType = 'blob'
+          Object.keys(headers).forEach(p => request.setRequestHeader(p, headers[p]))
 
-                      const anchor = document.createElement('a')
-                      anchor.href = objectUrl
-                      anchor.download = fileName
-                      anchor.style.display = 'none'
-                      document.body.appendChild(anchor)
-                      anchor.click()
-                      document.body.removeChild(anchor)
-                      window.URL.revokeObjectURL(objectUrl)
-                    }
-                  })
+          request.addEventListener('readystatechange', () => {
+            if (request.readyState === 2 && request.status !== 200) {
+              this.showMessage({
+                title: this.$gettext('Download failed'),
+                desc: request.statusText,
+                status: 'danger'
+              })
+
+              // Remove item from progress queue in case the request failed
+              this.updateFileProgress({
+                fileName: file.name,
+                progress: 100
+              })
+            } else if (request.readyState === 4 && request.status === 200) {
+              // Download has finished
+              if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
+                window.navigator.msSaveOrOpenBlob(request.response, file.name)
+              } else { // for Non-IE (chrome, firefox etc.)
+                const objectUrl = window.URL.createObjectURL(request.response)
+
+                const anchor = document.createElement('a')
+                anchor.href = objectUrl
+                anchor.download = file.name
+                anchor.style.display = 'none'
+                document.body.appendChild(anchor)
+                anchor.click()
+                document.body.removeChild(anchor)
+                window.URL.revokeObjectURL(objectUrl)
+
+                // Items with small size can be fetched too fast for progress listener
+                // This ensures that they'll be removed from progress queue
+                this.updateFileProgress({
+                  fileName: file.name,
+                  progress: 100
+                })
               }
-              return Promise.reject(new Error(response.statusText))
+            }
+          })
+
+          request.addEventListener('progress', e => {
+            const progress = (e.loaded / e.total) * 100
+            this.updateFileProgress({
+              fileName: file.name,
+              progress
             })
-            .catch(error => console.log(error))
+          })
+
+          request.send()
         }
 
       }

@@ -36,7 +36,15 @@
               </oc-table-cell>
               <oc-table-cell :class="{ 'uk-visible@s' : _sidebarOpen }" class="uk-position-relative">
                 <div class="uk-button-group uk-margin-small-right" :class="{ 'uk-visible@m' : !_sidebarOpen, 'uk-visible@xl' : _sidebarOpen  }">
-                  <oc-button v-for="(action, index) in actions" :key="index" @click.stop="action.handler(item, action.handlerData)" :disabled="!action.isEnabled(item)" :icon="action.icon" :ariaLabel="action.ariaLabel" />
+                  <oc-button
+                    v-for="(action, index) in actions"
+                   :key="index"
+                   @click.stop="action.handler(item, action.handlerData)"
+                   :disabled="!action.isEnabled(item) || $_actionInProgress(item)"
+                   :icon="action.icon"
+                   :ariaLabel="action.ariaLabel"
+                   :uk-tooltip="$_disabledActionTooltip(item)"
+                  />
                 </div>
                 <oc-button
                   :id="'files-file-list-action-button-small-resolution-' + index"
@@ -190,11 +198,24 @@ export default {
 
     enabledActions (item) {
       return this.actions.filter(action => action.isEnabled(item))
+    },
+
+    $_actionInProgress (item) {
+      return this.inProgress.some(itemInProgress => itemInProgress.id === item.id)
+    },
+
+    $_disabledActionTooltip (item) {
+      if (this.$_actionInProgress(item)) {
+        const message = this.$gettext('Another action is currently in progress for this %{itemType}')
+        return this.$gettextInterpolate(message, { itemType: item.type })
+      }
+
+      return null
     }
   },
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles', 'loadingFolder', 'filesDeleteMessage', 'highlightedFile', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount']),
+    ...mapGetters('Files', ['selectedFiles', 'loadingFolder', 'filesDeleteMessage', 'highlightedFile', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount', 'inProgress']),
     ...mapGetters(['configuration']),
 
     item () {

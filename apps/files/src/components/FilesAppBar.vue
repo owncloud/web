@@ -9,6 +9,12 @@
           <span class="uk-text-lead">{{pageTitle}}</span>
         </span>
       </div>
+      <div v-show="inProgress.length > 0" class="uk-width-auto">
+        <oc-spinner id="oc-progress-pie" size="small" />
+        <oc-drop toggle="#oc-progress-pie" mode="click">
+          <upload-menu :items="inProgress" />
+        </oc-drop>
+      </div>
       <div v-if="!publicPage()" class="uk-width-auto uk-visible@m">
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
@@ -46,12 +52,6 @@
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
           <file-filter-menu />
         </div>
-      </div>
-      <div v-show="inProgress.length > 0" class="uk-width-auto">
-        <oc-spinner id="oc-progress-pie" size="small" />
-        <oc-drop toggle="#oc-progress-pie" mode="click">
-          <upload-menu :items="inProgress" />
-        </oc-drop>
       </div>
     </oc-grid>
     <oc-dialog-prompt name="overwrite-dialog" :oc-active="overwriteDialogMessage !== null" :oc-has-input="false" ocCancelId="files-overwrite-cancel" ocConfirmId="files-overwrite-confirm" :ocTitle="overwriteDialogTitle" :oc-content="overwriteDialogMessage" @oc-confirm="$_ocUpload_confirmOverwrite(true)" @oc-cancel="$_ocUpload_confirmOverwrite(false)" />
