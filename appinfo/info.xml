@@ -7,9 +7,9 @@
 This is an early release with known limitations and missing features.
 
 Please report and findings in https://talk.owncloud.com/channel/phoenix	</description>
-	<licence>AGPL</licence>
-	<author>Felix Heidecke, Oshan Mudannayake, Thomas Müller</author>
-	<version>0.1.1</version>
+	<licence>Apache 2</licence>
+	<author>Felix Heidecke, Oshan Mudannayake, Thomas Müller, Lukas Hirt, Julian Müller</author>
+	<version>0.2.0</version>
 	<category>tools</category>
 	<dependencies>
 		<owncloud min-version="10" max-version="10" />
@@ -19,5 +19,5 @@ Please report and findings in https://talk.owncloud.com/channel/phoenix	</descri
 		<order>100</order>
 		<name>Phoenix</name>
 	</navigation>
-	<screenshot>https://user-images.githubusercontent.com/1005065/37416039-20817b4c-27ad-11e8-9f14-cbe12936fd64.png</screenshot>
+	<screenshot>https://user-images.githubusercontent.com/25989331/64270381-b8aee300-cf3b-11e9-8afc-66e9b5ca05d0.png</screenshot>
 </info>
