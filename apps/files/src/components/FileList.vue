@@ -2,7 +2,7 @@
   <div class="uk-height-1-1">
     <div class="uk-flex uk-flex-column uk-height-1-1">
       <div id="files-list-container" class="uk-overflow-auto uk-flex-auto">
-        <oc-table middle divider class="oc-filelist uk-margin-remove-bottom" id="files-list" v-show="!loadingFolder">
+        <oc-table middle divider class="oc-filelist uk-margin-remove-bottom" id="files-list" v-show="!loadingFolder && !!fileData.length">
           <thead>
             <oc-table-row>
               <oc-table-cell shrink type="head">
@@ -76,6 +76,9 @@
             </oc-table-row>
           </oc-table-group>
         </oc-table>
+        <oc-grid gutter="large" class="uk-width-1-1 uk-padding-small" v-if="!loadingFolder && !fileData.length">
+          <div>{{ $_ocEmptyFolderText() }}</div>
+        </oc-grid>
       </div>
       <oc-grid gutter="large" class="uk-width-1-1 uk-padding-small" v-if="!loadingFolder">
         <div v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0" class="uk-text-nowrap uk-text-meta">
@@ -193,6 +196,13 @@ export default {
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
       }
       return item.basename
+    },
+
+    $_ocEmptyFolderText () {
+      if (this.$route.name === 'files-favorites') {
+        return this.$gettext('No favorites defined')
+      }
+      return this.$gettext('This folder is empty')
     },
 
     enabledActions (item) {

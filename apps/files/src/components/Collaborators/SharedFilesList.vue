@@ -63,6 +63,10 @@ export default {
       })
     },
 
+    $_ocEmptyFolderText () {
+      return this.$gettext('No shared files')
+    },
+
     shareStatus (status) {
       if (status === 0) return
 
@@ -84,44 +88,49 @@ export default {
 </script>
 
 <template>
-  <oc-table middle divider class="oc-filelist" id="shared-with-list" v-if="!loadingFolder">
-    <oc-table-group>
-      <oc-table-row>
-        <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
-        <oc-table-cell shrink type="head" class="uk-text-nowrap" v-text="sharedCellTitle" />
-        <oc-table-cell
-          v-if="$route.name === 'files-shared-with-me'"
-          shrink
-          type="head"
-          class="uk-text-nowrap"
-          v-translate
-        >
-          Status
-        </oc-table-cell>
-        <oc-table-cell shrink type="head" class="uk-text-nowrap" v-translate>Share time</oc-table-cell>
-      </oc-table-row>
-    </oc-table-group>
-    <oc-table-group>
-      <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item, $event)" :id="'file-row-' + item.id">
-        <oc-table-cell class="uk-text-truncate">
-          <oc-file :name="item.basename" :extension="item.extension" class="file-row-name uk-disabled"
-            :filename="item.name" :icon="fileTypeIcon(item)" :key="item.path" />
-        </oc-table-cell>
-        <oc-table-cell class="uk-text-meta uk-text-nowrap">
-          <div v-if="$route.name === 'files-shared-with-others'" key="shared-with-cell">
-            {{ item.sharedWith }} <translate v-if="item.shareType === 1">(group)</translate>
-          </div>
-          <div v-else key="shared-from-cell">
-            {{ item.shareOwnerDisplayname }}
-          </div>
-        </oc-table-cell>
-        <oc-table-cell v-if="$route.name === 'files-shared-with-me'" class="uk-text-nowrap uk-text-right" :key="item.id + item.status">
-          <a v-if="item.status === 1 || item.status === 2" class="uk-text-meta" @click="pendingShareAction(item, 'POST')" v-translate>Accept</a>
-          <a v-if="item.status === 1" class="uk-text-meta uk-margin-left" @click="pendingShareAction(item, 'DELETE')" v-translate>Decline</a>
-          <span class="uk-text-small uk-margin-left" v-text="shareStatus(item.status)" />
-        </oc-table-cell>
-        <oc-table-cell class="uk-text-meta uk-text-nowrap" v-text="formDateFromNow(item.shareTime)" />
-      </oc-table-row>
-    </oc-table-group>
-  </oc-table>
+  <div>
+    <oc-table middle divider class="oc-filelist" id="shared-with-list" v-if="!loadingFolder && !!fileData.length">
+      <oc-table-group>
+        <oc-table-row>
+          <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
+          <oc-table-cell shrink type="head" class="uk-text-nowrap" v-text="sharedCellTitle" />
+          <oc-table-cell
+            v-if="$route.name === 'files-shared-with-me'"
+            shrink
+            type="head"
+            class="uk-text-nowrap"
+            v-translate
+          >
+            Status
+          </oc-table-cell>
+          <oc-table-cell shrink type="head" class="uk-text-nowrap" v-translate>Share time</oc-table-cell>
+        </oc-table-row>
+      </oc-table-group>
+      <oc-table-group>
+        <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item, $event)" :id="'file-row-' + item.id">
+          <oc-table-cell class="uk-text-truncate">
+            <oc-file :name="item.basename" :extension="item.extension" class="file-row-name uk-disabled"
+              :filename="item.name" :icon="fileTypeIcon(item)" :key="item.path" />
+          </oc-table-cell>
+          <oc-table-cell class="uk-text-meta uk-text-nowrap">
+            <div v-if="$route.name === 'files-shared-with-others'" key="shared-with-cell">
+              {{ item.sharedWith }} <translate v-if="item.shareType === 1">(group)</translate>
+            </div>
+            <div v-else key="shared-from-cell">
+              {{ item.shareOwnerDisplayname }}
+            </div>
+          </oc-table-cell>
+          <oc-table-cell v-if="$route.name === 'files-shared-with-me'" class="uk-text-nowrap uk-text-right" :key="item.id + item.status">
+            <a v-if="item.status === 1 || item.status === 2" class="uk-text-meta" @click="pendingShareAction(item, 'POST')" v-translate>Accept</a>
+            <a v-if="item.status === 1" class="uk-text-meta uk-margin-left" @click="pendingShareAction(item, 'DELETE')" v-translate>Decline</a>
+            <span class="uk-text-small uk-margin-left" v-text="shareStatus(item.status)" />
+          </oc-table-cell>
+          <oc-table-cell class="uk-text-meta uk-text-nowrap" v-text="formDateFromNow(item.shareTime)" />
+        </oc-table-row>
+      </oc-table-group>
+    </oc-table>
+    <oc-grid gutter="large" class="uk-width-1-1 uk-padding-small" v-if="!loadingFolder && !fileData.length">
+      <div>{{ $_ocEmptyFolderText() }}</div>
+    </oc-grid>
+  </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <oc-table middle divider class="oc-filelist" id="files-list" v-show="!loadingFolder">
+    <oc-table middle divider class="oc-filelist" id="files-list" v-show="!loadingFolder && !!fileData.length">
       <oc-table-group>
         <oc-table-row>
           <oc-table-cell shrink type="head">
@@ -34,6 +34,9 @@
         </oc-table-row>
       </oc-table-group>
     </oc-table>
+    <oc-grid gutter="large" class="uk-width-1-1 uk-padding-small" v-if="!loadingFolder && !fileData.length">
+      <div>{{ $_ocEmptyFolderText() }}</div>
+    </oc-grid>
     <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="trashbinDeleteMessage !== ''"
                       :oc-content="trashbinDeleteMessage" :oc-has-input="false" :ocTitle="_deleteDialogTitle"
                       ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="$_ocTrashbin_clearTrashbinConfirmation"
@@ -206,6 +209,10 @@ export default {
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
       }
       return item.basename
+    },
+
+    $_ocEmptyFolderText () {
+      return this.$gettext('The trash bin is empty')
     }
   }
 }
