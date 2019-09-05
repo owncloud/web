@@ -22,6 +22,10 @@ Pushing a new design and frontend concept to ownCloud
 '<phoenix-env>',
 ]
 ```
+- when developing against unstable APIs (technical preview), these need to be enabled in the server core:
+```
+dav.enable.tech_preview => true,
+```
 
 ## Create config.json
 - For reference look into config.json.sample (example with oauth2)
