@@ -7,7 +7,7 @@
 This is an early release with known limitations and missing features.
 
 Please report and findings in https://talk.owncloud.com/channel/phoenix	</description>
-	<licence>Apache 2</licence>
+	<licence>AGPLv3</licence>
 	<author>Felix Heidecke, Oshan Mudannayake, Thomas Müller, Lukas Hirt, Julian Müller</author>
 	<version>0.2.0</version>
 	<category>tools</category>
