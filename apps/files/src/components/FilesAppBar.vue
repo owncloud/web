@@ -40,8 +40,8 @@
             </oc-button>
           </template>
           <oc-button v-if="!publicPage()" class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn" @click="focusMobileSearchInput()"/>
-          <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove uk-width-large">
-            <oc-search-bar ref="mobileSearch" @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" />
+          <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove">
+            <oc-search-bar ref="mobileSearch" @search="onFileSearch" :label="searchLabel" :loading="isLoadingSearch" />
           </oc-drop>
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
           <file-filter-menu />
@@ -451,6 +451,7 @@ export default {
     // TODO: Find a better solution
     $route (to, from) {
       this.actionsKey = Math.floor(Math.random() * 20)
+      this.$refs.mobileSearch.value = null
     }
   }
 }
