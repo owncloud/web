@@ -4,38 +4,78 @@ Pushing a new design and frontend concept to ownCloud
 
 ![image](https://user-images.githubusercontent.com/25989331/63966638-fd4e0080-ca9b-11e9-931a-8dd9bf3ba82f.png)
 
-[See this online Demo](https://phoenix.owncloud.com/custom/phoenix/index.html#/login)
+[See this online Demo](https://phoenix.owncloud.com/custom/phoenix/index.html#/login) (user: demo, password: demo)
 
-## How to build
+## Prerequisites
 
-- Run `yarn install` to build core
-- Run `yarn install-all` to install dependencies of all apps and core
-- Run `yarn dist` to build all apps configured in config.json
+Decide on which host and port Phoenix will be running, for example `https://phoenix-host:8300/phoenix-path/`.
+In this document, we will refer to the following:
+- `<phoenix-url>` as the full URL, for example `https://phoenix-host:8300/phoenix-path/`
+- `<phoenix-domain>` as the protocol, domain and port, for example: `https://phoenix-host:8300`
 
-## ownCloud server prerequisites
-### When running with oauth2
-- installed and enabled oauth2 app
-- entry for Phoenix in User Authentication in admin settings with Redirection URI: `<phoenix-env>/oidc-callback.html`
-- enabled CORS domain entry for Phoenix in config.php:
+## Setting up
+
+### Setting up the ownCloud Server
+
+Make sure you have an [ownCloud Server](https://owncloud.org/download/#owncloud-server) already installed.
+
+#### Adjusting config.php
+
+Add the following entries to config/config.php:
+
+- tell ownCloud where Phoenix is located:
 ```
-'cors.allowed-domains' => [
-'<phoenix-env>',
-]
+'phoenix.baseUrl' => '<phoenix-url>',
 ```
-- when developing against unstable APIs (technical preview), these need to be enabled in the server core:
+
+- add a CORS domain entry for Phoenix in config.php:
+```
+'cors.allowed-domains' => ['<phoenix-domain>'],
+```
+
+- optional: when developing against unstable APIs (technical preview), these need to be enabled in the server core:
 ```
 dav.enable.tech_preview => true,
 ```
 
-## Create config.json
-- For reference look into config.json.sample (example with oauth2)
+#### Setting up OAuth2
 
-## Run
+To connect to the ownCloud server, it is necessary to set it up with OAuth2.
+
+Install and enable the [oauth2 app](https://marketplace.owncloud.com/apps/oauth2):
+```bash
+% occ market:install oauth2
+% occ app:enable oauth2
+```
+
+Login as administrator in the ownCloud Server web interface and go to the "User Authentication" section in the admin settings and add an entry for Phoenix as follows:
+
+- pick an arbitrary name for the client
+- set the redirection URI to `<phoenix-url>/oidc-callback.html`
+- make sure to take note of the **client identifier** value as it will be needed in the Phoenix configuration later on
+
+### Setting up Phoenix
+
+In the local Phoenix checkout, copy the `config.json.sample` file to `config.json` and adjust it accordingly:
+
+- Set the "server" key to the URL of the ownCloud server including path. If the URL contains a path, please also add a **trailing slash** there.
+- Set the "clientId" key to the **client identifier** as copied from the "User Authentication" section before.
+- Adjust "url" and "authUrl" using the ownCloud server URL as prefix for both
+- Optionally adjust "apps" for the list of apps to be loaded. These match the app names inside the "apps" folder.
+
+## Building Phoenix
+
+- Run `yarn install` to build core
+- Run `yarn install-all` to install dependencies of all apps and core
+- Run `yarn dist` to build all apps configured in `config.json`
+
+## Running Phoenix
 
 - optionally provide custom domain name: `export SERVER_HOST=0.0.0.0:8300`
 - run a webpack dev server `yarn watch` (`yarn watch-all` if you want to watch apps as well)
 
-## Run acceptance tests
+## Running acceptance tests
+
 - clone and install testing app into owncloud from http://github.com/owncloud/testing
 - set `skeletondirectory` of ownCloud to `<oc-root>/apps/testing/data/webUISkeleton` e.g. `occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton`
 - build, configure and run phoenix
@@ -54,21 +94,26 @@ dav.enable.tech_preview => true,
 | `SELENIUM_HOST`    | selenium server host, if not set yarn will start selenum automatically<br/>if running the selenium docker container as mentioned above set to `localhost` |                       |
 | `SELENIUM_PORT`    | port of selenium server                                                | 4445                  |
 
-## Update dependencies
+## Updating dependencies
+
 - Run `yarn upgrade-all` to update core and app dependencies
 
-## Cleanup workspace
+## Cleaning up the workspace
+
 - Run `yarn clean-all` to remove node_modules and dist folder
 
-## How to build Phoenix as ownCloud app
+## Phoenix as an ownCloud app
+
+### Building the Phoenix ownCloud app
 
 - run `yarn install && yarn dist && yarn build`
 - run `make -f Makefile.release` dist
 
-## How to deploy the app to ownCloud
+### Deploying the Phoenix app to ownCloud
 
 - Grab build/dist/phoenix.tar.gz
 - Move to the apps folder on your ownCloud installation
 - `tar -xzf phoenix.tar.gz`
 - Run `./occ apps:enable phoenix`
 - Refresh your webui and see Phoenix in the app menu
+
