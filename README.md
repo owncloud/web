@@ -6,12 +6,14 @@ Pushing a new design and frontend concept to ownCloud
 
 [See this online Demo](https://phoenix.owncloud.com/custom/phoenix/index.html#/login) (user: demo, password: demo)
 
-## Setting up
+## Prerequisites
 
 Decide on which host and port Phoenix will be running, for example `https://phoenix-host:8300/phoenix-path/`.
 In this document, we will refer to the following:
 - `<phoenix-url>` as the full URL, for example `https://phoenix-host:8300/phoenix-path/`
 - `<phoenix-domain>` as the protocol, domain and port, for example: `https://phoenix-host:8300`
+
+## Setting up
 
 ### Setting up the ownCloud Server
 
@@ -56,7 +58,7 @@ Login as administrator in the ownCloud Server web interface and go to the "User 
 
 In the local Phoenix checkout, copy the `config.json.sample` file to `config.json` and adjust it accordingly:
 
-- Set the "server" key to the URL of the ownCloud server including path, make sure to include a **trailing slash**
+- Set the "server" key to the URL of the ownCloud server including path. If the URL contains a path, please also add a **trailing slash** there.
 - Set the "clientId" key to the **client identifier** as copied from the "User Authentication" section before.
 - Adjust "url" and "authUrl" using the ownCloud server URL as prefix for both
 - Optionally adjust "apps" for the list of apps to be loaded. These match the app names inside the "apps" folder.
