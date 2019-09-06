@@ -93,6 +93,7 @@ In the local Phoenix checkout, copy the `config.json.sample` file to `config.jso
 | `BACKEND_PASSWORD` | owncloud administrator password                                        | admin                 |
 | `SELENIUM_HOST`    | selenium server host, if not set yarn will start selenum automatically<br/>if running the selenium docker container as mentioned above set to `localhost` |                       |
 | `SELENIUM_PORT`    | port of selenium server                                                | 4445                  |
+| `SCREEN_RESOLUTION`| width and height in px to set the browser resulution to e.g. 375x812   | empty = fullscreen    |
 
 ## Updating dependencies
 
