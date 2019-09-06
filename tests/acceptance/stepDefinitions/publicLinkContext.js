@@ -10,8 +10,8 @@ When(
   'the user creates a new public link for file/folder/resource {string} using the webUI',
   function (resource) {
     return client.page.FilesPageElement
-      .sharingDialog()
-      .closeSharingDialog(100)
+      .filesList()
+      .closeSidebar(100)
       .openPublicLinkDialog(resource)
       .addNewLink()
   }
@@ -48,8 +48,8 @@ Then(
   'a link named {string} should be listed with role {string} in the public link list of file/folder/resource {string} on the webUI',
   function (name, role, resource) {
     return client.page.FilesPageElement
-      .sharingDialog()
-      .closeSharingDialog(100)
+      .filesList()
+      .closeSidebar(100)
       .openPublicLinkDialog(resource)
       .getPublicLinkList()
       .then(links => {

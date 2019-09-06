@@ -19,8 +19,8 @@ const sharingHelper = require('../helpers/sharingHelper')
 const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithGroup, role, permissions = undefined) {
   return client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(file)
     .shareWithUserOrGroup(sharee, shareWithGroup, role, permissions)
 }
@@ -155,8 +155,8 @@ When('the user displays all share-autocomplete results using the webUI', functio
 When('the user changes permission of collaborator {string} for folder {string} to {string} using the webUI', function (user, resource, permissions) {
   return client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(resource)
     .changeCustomPermissionsTo(user, permissions)
 })
@@ -164,8 +164,8 @@ When('the user changes permission of collaborator {string} for folder {string} t
 Then('custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI', function (permissions, user, resource) {
   return client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(resource)
     .assertPermissionIsDisplayed(user, permissions)
 })
@@ -173,8 +173,8 @@ Then('custom permission/permissions {string} should be set for user {string} for
 Then('no custom permissions should be set for collaborator {string} for file/folder {string} on the webUI', function (user, resource) {
   return client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(resource)
     .assertPermissionIsDisplayed(user)
 })
@@ -324,8 +324,8 @@ Then('user {string} should be listed as {string} in the collaborators list on th
 Then('user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', function (user, role, resource) {
   client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(resource)
   return assertCollaboratorslistContains('user', user, role)
 })
@@ -337,8 +337,8 @@ Then('group {string} should be listed as {string} in the collaborators list on t
 Then('group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', function (group, role, resource) {
   client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(resource)
   return assertCollaboratorslistContains('group', group, role)
 })

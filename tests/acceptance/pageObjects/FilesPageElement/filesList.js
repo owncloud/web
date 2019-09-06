@@ -102,6 +102,19 @@ module.exports = {
         .useCss()
       return this.api.page.FilesPageElement.publicLinksDialog()
     },
+    closeSidebar: function (timeout = null) {
+      if (timeout === null) {
+        timeout = this.api.globals.waitForConditionTimeout
+      } else {
+        timeout = parseInt(timeout, 10)
+      }
+      try {
+        this.click({ selector: '@sidebarCloseBtn', timeout: timeout })
+      } catch (e) {
+        // do nothing
+      }
+      return this.api.page.FilesPageElement.filesList()
+    },
     /**
      *
      * @param {string} fromName
@@ -387,6 +400,10 @@ module.exports = {
     },
     linkToPublicLinksTag: {
       selector: '//div[@class="sidebar-container"]//a[normalize-space(.)="Links"]',
+      locateStrategy: 'xpath'
+    },
+    sidebarCloseBtn: {
+      selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
       locateStrategy: 'xpath'
     }
   }
