@@ -7,9 +7,9 @@
 This is an early release with known limitations and missing features.
 
 Please report and findings in https://talk.owncloud.com/channel/phoenix	</description>
-	<licence>AGPL</licence>
-	<author>Felix Heidecke, Oshan Mudannayake, Thomas Müller</author>
-	<version>0.1.1</version>
+	<licence>AGPLv3</licence>
+	<author>Felix Heidecke, Oshan Mudannayake, Thomas Müller, Lukáš Hirt, Julian Müller</author>
+	<version>0.2.1</version>
 	<category>tools</category>
 	<dependencies>
 		<owncloud min-version="10" max-version="10" />
