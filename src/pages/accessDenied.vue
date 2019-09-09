@@ -8,13 +8,15 @@
               <h3 class="oc-login-card-title">
                   <span v-translate>Login Error</span>
               </h3>
-              <h4 v-translate>
+              <h4 v-translate class="uk-margin-remove">
                 You are not allowed to use this application.
               </h4>
           </div>
-          <div class="oc-login-card-footer">
-              <p>{{ helpDeskText }}</p>
-            <a v-if="helpDeskLink !== ''" :href="helpDeskLink">{{ helpDeskLinkText }}</a>
+          <div class="oc-login-card-footer uk-width-large">
+              <p>
+                {{ helpDeskText }}
+                <a v-if="helpDeskLink" :href="helpDeskLink" v-text="helpDeskLinkText" />
+              </p>
           </div>
       </div>
   </div>
