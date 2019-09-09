@@ -27,8 +27,9 @@ module.exports = {
         .assert.containsText('@breadcrumb', folder)
     },
     /**
+     * Create a folder with the given name
      *
-     * @param {string} name
+     * @param {string} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
     createFolder: function (name, expectToSucceed = true) {
@@ -38,8 +39,10 @@ module.exports = {
         .waitForElementVisible('@newFolderButton')
         .click('@newFolderButton')
         .waitForElementVisible('@newFolderInput')
-        .setValue('@newFolderInput', name)
-        .click('@newFolderOkButton')
+      if (name !== null) {
+        this.setValue('@newFolderInput', name)
+      }
+      this.click('@newFolderOkButton')
         .waitForElementNotPresent('@createFolderLoadingIndicator')
       if (expectToSucceed) {
         this.waitForElementNotVisible('@newFolderDialog')

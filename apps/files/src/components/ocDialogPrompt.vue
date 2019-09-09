@@ -7,6 +7,7 @@
       <span v-if="ocContent" class="uk-text-break">{{ ocContent }}</span>
         <oc-text-input v-if="ocHasInput"
           :disabled="ocLoading"
+          :placeholder="ocInputPlaceholder"
           autofocus
           :id="ocInputId"
           v-model="inputValue"

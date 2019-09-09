@@ -27,8 +27,8 @@
               <oc-nav>
                 <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
                 <folder-upload :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
-                <oc-nav-item @click="createFolder = true" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
-                <oc-nav-item @click="createFile = true" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
+                <oc-nav-item @click="showCreateFolderDialog" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
+                <oc-nav-item @click="showCreateFileDialog" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
               </oc-nav>
             </oc-drop>
           </template>
@@ -55,8 +55,8 @@
       </div>
     </oc-grid>
     <oc-dialog-prompt name="overwrite-dialog" :oc-active="overwriteDialogMessage !== null" :oc-has-input="false" ocCancelId="files-overwrite-cancel" ocConfirmId="files-overwrite-confirm" :ocTitle="overwriteDialogTitle" :oc-content="overwriteDialogMessage" @oc-confirm="$_ocUpload_confirmOverwrite(true)" @oc-cancel="$_ocUpload_confirmOverwrite(false)" />
-    <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok" :ocLoading="fileFolderCreationLoading" :ocError="newFolderErrorMessage" :ocTitle="_createFolderDialogTitle" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false; newFolderName = ''"></oc-dialog-prompt>
-    <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName" :ocLoading="fileFolderCreationLoading" :ocError="newFileErrorMessage" :ocTitle="_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false; newFileName = ''"></oc-dialog-prompt>
+    <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok" :ocLoading="fileFolderCreationLoading" :ocError="newFolderErrorMessage" :ocTitle="$_createFolderDialogTitle" :ocInputPlaceholder="$_createFolderDialogPlaceholder" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false"></oc-dialog-prompt>
+    <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName" :ocLoading="fileFolderCreationLoading" :ocError="newFileErrorMessage" :ocTitle="$_createFileDialogTitle" :ocInputPlaceholder="$_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false"></oc-dialog-prompt>
   </div>
 </template>
 
@@ -100,10 +100,16 @@ export default {
     searchLabel () {
       return this.$gettext('Search')
     },
-    _createFolderDialogTitle () {
+    $_createFolderDialogPlaceholder () {
+      return this.$gettext('Enter new folder name…')
+    },
+    $_createFolderDialogTitle () {
       return this.$gettext('Create new folder…')
     },
-    _createFileDialogTitle () {
+    $_createFileDialogPlaceholder () {
+      return this.$gettext('Enter new file name…')
+    },
+    $_createFileDialogTitle () {
       return this.$gettext('Create new file…')
     },
     _cannotCreateDialogText () {
@@ -259,6 +265,10 @@ export default {
         })
       })
     },
+    showCreateFolderDialog () {
+      this.createFolder = true
+      this.newFolderName = this.$gettext('New folder')
+    },
     addNewFolder (folderName) {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
@@ -270,7 +280,6 @@ export default {
 
         p.then(() => {
           this.createFolder = false
-          this.newFolderName = ''
           this.$_ocFilesFolder_getFolder()
         })
           .catch(error => {
@@ -286,6 +295,10 @@ export default {
       }
     },
     checkNewFolderName (folderName) {
+      if (folderName === '') {
+        return this.$gettext('Folder name cannot be empty')
+      }
+
       if (/[/]/.test(folderName)) {
         return this.$gettext('Folder name cannot contain "/"')
       }
@@ -311,6 +324,10 @@ export default {
 
       return null
     },
+    showCreateFileDialog () {
+      this.createFile = true
+      this.newFileName = this.$gettext('New file') + '.txt'
+    },
     addNewFile (fileName) {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
@@ -321,7 +338,6 @@ export default {
         }
         p.then(() => {
           this.createFile = false
-          this.newFileName = ''
           this.$_ocFilesFolder_getFolder()
         })
           .catch(error => {
@@ -337,6 +353,10 @@ export default {
       }
     },
     checkNewFileName (fileName) {
+      if (fileName === '') {
+        return this.$gettext('File name cannot be empty')
+      }
+
       if (/[/]/.test(fileName)) {
         return this.$gettext('File name cannot contain "/"')
       }
