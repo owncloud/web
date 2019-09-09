@@ -23,7 +23,7 @@ const actions = {
       context.commit('SET_CAPABILITIES', { capabilities: null, version: null })
       // force redirect to login page after logout
       if (autoRedirect) {
-        router.push({ name: 'access-denied' })
+        router.push({ name: 'accessDenied' })
       } else {
         router.push({ name: 'login' })
       }
