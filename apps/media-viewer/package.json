@@ -12,19 +12,19 @@
   "author": "Felix Heidecke",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@babel/core": "^7.5.4",
+    "@babel/core": "^7.6.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.5.4",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
     "babel-loader": "^8.0.6",
     "babel-runtime": "^6.26.0",
     "css-loader": "^3.0.0",
-    "query-string": "^6.8.1",
+    "query-string": "^6.8.3",
     "vue-loader": "^15.7.0",
     "vue-template-compiler": "^2.6.10",
     "vuex": "3.1.1",
     "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.6",
-    "webpack-merge": "^4.2.1"
+    "webpack-cli": "^3.3.8",
+    "webpack-merge": "^4.2.2"
   }
 }
