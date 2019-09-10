@@ -157,7 +157,7 @@ module.exports = {
   },
   elements: {
     newFileMenuButton: {
-      selector: '#new-file-menu-btn'
+      selector: '#new-file-menu-btn:enabled'
     },
     deleteSelectedButton: {
       selector: '#delete-selected-btn'
