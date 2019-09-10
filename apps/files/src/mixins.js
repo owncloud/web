@@ -47,13 +47,14 @@ export default {
       return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
     },
     actions () {
+      const ctrl = this
       const actions = [
         {
           icon: 'edit',
           handler: this.changeName,
           ariaLabel: this.$gettext('Rename'),
           isEnabled: function (item) {
-            return item.canRename()
+            return ctrl.$route.name === 'files-favorites' ? false : item.canRename()
           }
         },
         {
