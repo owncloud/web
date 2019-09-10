@@ -40,9 +40,11 @@ module.exports = {
         .click('@newFolderButton')
         .waitForElementVisible('@newFolderInput')
       if (name !== null) {
+        this.clearValueWithEvent('@newFolderInput')
         this.setValue('@newFolderInput', name)
       }
-      this.click('@newFolderOkButton')
+      this
+        .click('@newFolderOkButton')
         .waitForElementNotPresent('@createFolderLoadingIndicator')
       if (expectToSucceed) {
         this.waitForElementNotVisible('@newFolderDialog')
