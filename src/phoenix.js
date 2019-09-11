@@ -149,12 +149,18 @@ function loadApps () {
     silent: true
   })
 
+  // add menu items from config,json
+  navItems = navItems.flat()
+  if (config.menu && config.menu.items) {
+    navItems= navItems.concat(config.menu.items)
+  }
+
   const OC = new Vue({
     el: '#owncloud',
     data: {
       config: config,
       plugins: plugins.flat(),
-      navItems: navItems.flat()
+      navItems: navItems
     },
     store,
     router,
