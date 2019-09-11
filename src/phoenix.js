@@ -132,6 +132,9 @@ function loadApps () {
       store.registerModule(app.appInfo.name, app.store.default)
     }
     store.dispatch('registerApp', app.appInfo)
+    if (config.external_apps) {
+      store.dispatch('loadExternalAppConfig', { app: app.appInfo, config })
+    }
   }
   router.addRoutes(routes.flat())
   sync(store, router)
@@ -217,9 +220,17 @@ function requireError (err) {
       config.state = 'missing'
     })
     config = await config.json()
+
+    // Loads apps from internal server
     apps = config.apps.map((app) => {
       return `./apps/${app}/${app}.bundle.js`
     })
+
+    // Loads apps from external servers
+    if (config.external_apps) {
+      config.external_apps.map(app => apps.push(app.path))
+    }
+
     requirejs(apps, loadApps, requireError)
   } catch (err) {
     router.push('missing-config')
