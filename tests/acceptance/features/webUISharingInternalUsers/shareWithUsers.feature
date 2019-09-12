@@ -388,5 +388,24 @@ Feature: Sharing files and folders with internal users
       | Viewer      | Viewer         | share                         | share                 | read, share                         |
       | Editor      | Editor         | share                         | share                 | all                                 |
       | Custom Role | Custom role    | share, create                 | share, create         | read, share, create                 |
-      | Custom Role | Editor         | change, share                 | share                 | read, change, share                 |
+      | Custom Role | Custom role    | change, share                 | change, share         | read, change, share                 |
       | Custom Role | Editor         | delete, share, create, change | share                 | read, share, delete, change, create |
+
+  Scenario Outline: share a file with another internal user assigning a role and the permissions
+    Given user "user2" has logged in using the webUI
+    When the user shares file "testimage.jpg" with user "User One" as "<role>" with permissions "<collaborators-permissions>" using the webUI
+    Then user "User One" should be listed as "<displayed-role>" in the collaborators list for file "testimage.jpg" on the webUI
+    And custom permissions "<displayed-permissions>" should be set for user "User One" for file "testimage.jpg" on the webUI
+    And user "user1" should have received a share with these details:
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /testimage (2).jpg |
+      | item_type   | file               |
+      | permissions | <permissions>      |
+    Examples:
+      | role        | displayed-role | collaborators-permissions     | displayed-permissions | permissions                         |
+      | Viewer      | Viewer         | share                         | share                 | read, share                         |
+      | Editor      | Editor         | change, share                 | share                 | read, change, share                 |
+      | Custom Role | Editor         | change                        | change                | read, change                        |
+
