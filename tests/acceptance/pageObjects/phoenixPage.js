@@ -66,7 +66,7 @@ module.exports = {
       selector: '#resolve-notification-button'
     },
     ocDialogPromptAlert: {
-      selector: '#oc-dialog-prompt-alert'
+      selector: '.uk-modal.uk-open .oc-dialog-prompt-alert'
     },
     searchInputFieldHighResolution: {
       selector: '(//input[contains(@class, "oc-search-input")])[1]',

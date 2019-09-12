@@ -74,6 +74,14 @@ When('the user creates a folder with the name {string} using the webUI', functio
   return client.page.filesPage().createFolder(folderName)
 })
 
+When('the user creates a folder with default name using the webUI', function () {
+  return client.page.filesPage().createFolder(null, false)
+})
+
+When('the user creates a folder without name using the webUI', function () {
+  return client.page.filesPage().createFolder('', false)
+})
+
 When('the user creates a folder with the invalid name {string} using the webUI', function (folderName) {
   return client.page.filesPage().createFolder(folderName, false)
 })
