@@ -21,7 +21,9 @@
                 <oc-checkbox class="uk-margin-small-left" @click.stop @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
               </oc-table-cell>
               <oc-table-cell class="uk-padding-remove" v-if="!publicPage()">
-                <oc-star class="uk-display-block" @click.native.stop="toggleFileFavorite(item)" :shining="item.starred" />
+                <oc-button variation="link" @click.native.stop="toggleFileFavorite(item)" :ariaLabel="$_ocMarkFavoriteLabel(item.starred)">
+                  <oc-star class="uk-display-block" :shining="item.starred" />
+                </oc-button>
               </oc-table-cell>
               <oc-table-cell class="uk-text-truncate">
                 <oc-file @click.native.stop="item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)"
@@ -187,6 +189,10 @@ export default {
         file: item
       })
     },
+    $_ocMarkFavoriteLabel (state) {
+      return state ? this.$gettext('Unmark as favorite') : this.$gettext('Mark as favorite')
+    },
+
     $_ocFileName (item) {
       if (this.$route.name === 'files-favorites') {
         const pathSplit = item.path.substr(1).split('/')
