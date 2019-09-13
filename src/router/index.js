@@ -39,7 +39,7 @@ const router = new Router({
       path: '/f/:fileId',
       name: 'privateLink',
       redirect: '/files/private-link/:fileId',
-      meta: { auth: false, hideHeadbar: true }
+      meta: { hideHeadbar: true }
     },
     {
       path: '/s/:token',
@@ -66,6 +66,9 @@ const router = new Router({
 })
 
 router.beforeEach(function (to, from, next) {
+  if (to.name === 'private-link') {
+    store.dispatch('setPrivateLinkUrlPath', to.path)
+  }
   let authRequired = true
   if (to.meta.auth === false) {
     authRequired = false

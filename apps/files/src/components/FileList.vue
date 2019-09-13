@@ -1,7 +1,7 @@
 <template>
   <div class="uk-height-1-1">
     <div class="uk-flex uk-flex-column uk-height-1-1">
-      <div class="uk-overflow-auto uk-flex-auto">
+      <div id="files-list-container" class="uk-overflow-auto uk-flex-auto">
         <oc-table middle divider class="oc-filelist uk-margin-remove-bottom" id="files-list" v-show="!loadingFolder">
           <thead>
             <oc-table-row>
@@ -146,19 +146,18 @@ export default {
         absolutePath = !this.item ? this.configuration.rootFolder : this.item
       }
 
-      const self = this
       this.loadFolder({
         client: this.$client,
         absolutePath: absolutePath,
         $gettext: this.$gettext,
         routeName: this.$route.name
       }).then(() => {
-        const scrollTo = self.$route.query.scrollTo
-        if (scrollTo) {
-          self.$nextTick(() => {
-            self.setHighlightedFile(scrollTo)
-            const file = self.highlightedFile
-            self.$scrollTo(`#file-row-${file.id}`, 500, {
+        const scrollTo = this.$route.query.scrollTo
+        if (scrollTo && this.activeFiles.length > 0) {
+          this.$nextTick(() => {
+            const file = this.activeFiles.find(item => item.name === scrollTo)
+            this.setHighlightedFile(file)
+            this.$scrollTo(`#file-row-${file.id}`, 500, {
               container: '#files-list-container'
             })
           })

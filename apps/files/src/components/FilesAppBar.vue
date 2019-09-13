@@ -5,7 +5,7 @@
       <div class="uk-width-expand">
         <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="showBreadcrumb" home></oc-breadcrumb>
         <span class="uk-flex uk-flex-middle" v-if="!showBreadcrumb">
-          <oc-icon :name="pageIcon" class="uk-margin-small-right"></oc-icon>
+          <oc-icon v-if="pageIcon" :name="pageIcon" class="uk-margin-small-right" />
           <span class="uk-text-lead">{{pageTitle}}</span>
         </span>
       </div>

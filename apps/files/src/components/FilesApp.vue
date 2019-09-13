@@ -2,7 +2,7 @@
     <div id="files">
       <files-app-bar />
       <oc-grid class="uk-height-1-1" oc-scroll-offset=".oc-app-bar">
-        <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }" id="files-list-container">
+        <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <trash-bin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
           <SharedFilesList v-else-if="sharedList" @toggle="toggleFileSelect" :fileData="activeFiles" />
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'dragOver', 'setHighlightedFile', 'toggleFileSelect']),
-    ...mapActions(['openFile', 'showMessage']),
+    ...mapActions(['openFile', 'showMessage', 'setPrivateLinkUrlPath']),
 
     trace () {
       console.info('trace', arguments)
@@ -122,7 +122,7 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile']),
-    ...mapGetters(['extensions']),
+    ...mapGetters(['extensions', 'privateLinkUrlPath']),
 
     _sidebarOpen () {
       return this.highlightedFile !== null
@@ -135,6 +135,15 @@ export default {
   watch: {
     $route () {
       this.setHighlightedFile(null)
+    }
+  },
+  beforeMount () {
+    // Redirect to private link after authorization
+    if (this.privateLinkUrlPath) {
+      this.$router.push(this.privateLinkUrlPath)
+      // Resets private link path in store
+      // Needed due to persistance of that state
+      this.setPrivateLinkUrlPath(null)
     }
   }
 }
