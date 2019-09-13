@@ -22,7 +22,13 @@ module.exports = merge(common, {
     port: 8300,
     disableHostCheck: true,
     watchOptions: {
-      ignored: [path.resolve(__dirname, 'tests'), path.resolve(__dirname, 'node_modules')]
+      ignored: [
+        path.resolve(__dirname, 'tests'),
+        path.resolve(__dirname, 'build'),
+        path.resolve(__dirname, 'dist'),
+        path.resolve(__dirname, 'node_modules'),
+        path.resolve(__dirname, 'apps') + '/*/node_modules'
+      ]
     }
   }
 })
