@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [0.2.2]
+### Added
+- Show error message when user tries to upload a folder in IE11 https://github.com/owncloud/phoenix/pull/1956
+- Error message if the folder or file name is empty in create dialog and added default value https://github.com/owncloud/phoenix/pull/1938
+- Bookmarks to menu https://github.com/owncloud/phoenix/pull/1949
+- Collaborators test for changing share permissions https://github.com/owncloud/phoenix/pull/1838
+
+### Fixed
+- Redirect to access denied page if the user doesn't have access to Phoenix instance https://github.com/owncloud/phoenix/pull/1939
+- Redirect to private link after user has logged in https://github.com/owncloud/phoenix/pull/1900
+- Breaking of link to help desk on new line https://github.com/owncloud/phoenix/pull/1940
+
 ## [0.2.1]
 ### Added
 - Download feedback https://github.com/owncloud/phoenix/pull/1895
