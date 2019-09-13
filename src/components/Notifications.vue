@@ -10,8 +10,8 @@
     <oc-drop
       id="oc-notification-drop"
       toggle="#oc-notification-bell"
-      boundary="#oc-notification"
-      class="uk-overflow-auto uk-height-large uk-width-large"
+      position="bottom-right"
+      class="uk-overflow-auto uk-height-large uk-width-3-4 uk-width-large@s"
     >
       <div
         v-for="(el, index) in activeNotifications"

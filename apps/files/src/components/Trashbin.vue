@@ -17,8 +17,8 @@
             <oc-checkbox class="uk-margin-small-left" @change.native="$_ocTrashbin_toggleFileSelect(item)" :value="selectedFiles.indexOf(item) >= 0" />
           </oc-table-cell>
           <oc-table-cell class="uk-text-truncate">
-            <oc-file :name="item.basename" :extension="item.extension" class="file-row-name"
-                    :filename="item.name" :icon="fileTypeIcon(item)" :key="item.path" />
+            <oc-file :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name"
+                    :filename="item.name" :icon="fileTypeIcon(item)" :key="item.originalLocation" />
           </oc-table-cell>
           <oc-table-cell class="uk-text-meta uk-text-nowrap">
             {{ formDateFromNow(item.deleteTimestamp) }}
@@ -197,6 +197,15 @@ export default {
 
     $_ocTrashbin_removeFileFromList (files) {
       this.removeFilesFromTrashbin(files)
+    },
+
+    $_ocTrashbin_fileName (item) {
+      if (item && item.originalLocation) {
+        const pathSplit = item.originalLocation.split('/')
+        if (pathSplit.length === 2) return `${pathSplit[pathSplit.length - 2]}/${item.basename}`
+        if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
+      }
+      return item.basename
     }
   }
 }

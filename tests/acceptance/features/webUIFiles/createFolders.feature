@@ -17,6 +17,14 @@ Feature: create folders
     When the user reloads the current page of the webUI
     Then folder "sub-folder" should be listed on the webUI
 
+  Scenario: Create a folder with default name
+    When the user creates a folder with default name using the webUI
+    Then folder "New folder" should be listed on the webUI
+
+  Scenario: Try to create a folder without name
+    When the user creates a folder without name using the webUI
+    Then the error message 'Folder name cannot be empty' should be displayed on the webUI dialog prompt
+
   Scenario: Try to create a folder with existing name
     When the user creates a folder with the invalid name "simple-folder" using the webUI
     Then the error message 'simple-folder already exists' should be displayed on the webUI dialog prompt

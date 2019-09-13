@@ -1,12 +1,13 @@
 <template>
   <oc-dialog :name="name" v-model="ocActive" :title="ocTitle">
     <template slot="content">
-      <oc-alert v-if="ocError" id="oc-dialog-prompt-alert" :noClose="true" variation="danger">
+      <oc-alert v-if="ocError" class="oc-dialog-prompt-alert" :noClose="true" variation="danger">
         {{ ocError }}
       </oc-alert>
       <span v-if="ocContent" class="uk-text-break">{{ ocContent }}</span>
         <oc-text-input v-if="ocHasInput"
           :disabled="ocLoading"
+          :placeholder="ocInputPlaceholder"
           autofocus
           :id="ocInputId"
           v-model="inputValue"
