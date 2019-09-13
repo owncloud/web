@@ -1,3 +1,5 @@
+import { fileSortFunctions } from '../fileSortFunctions.js'
+
 export default {
   inProgress: state => {
     return state.inProgress
@@ -42,10 +44,7 @@ export default {
       }
       // respect filename filter for local 'search' in open folder
       return !(state.searchTermFilter && !file.name.toLowerCase().includes(state.searchTermFilter.toLowerCase()))
-    }).sort(function (a, b) {
-      return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
-    }
-    )
+    }).sort(fileSortFunctions[state.fileSortMode])
   },
   filesTotalSize: (state, getters) => {
     let totalSize = 0

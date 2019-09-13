@@ -4,6 +4,7 @@ export default {
   files: [],
   filesSearched: [],
   fileFilter: fileFilters,
+  fileSortMode: 'name',
   selected: [],
   inProgress: [],
   searchTermGlobal: '',
