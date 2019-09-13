@@ -48,15 +48,19 @@ export default {
     if (this.publicPage()) {
       return
     }
-    this.fetchNotifications(this.$client).then(() => {
-      this.intervalId = setInterval(() => {
-        this.fetchNotifications(this.$client).catch(() => {
-          if (this.intervalId) {
-            clearInterval(this.intervalId)
-          }
-        })
-      }, 30000)
-    })
+
+    // only fetch notifications if the server supports them
+    if (this.user.capabilities.notifications) {
+      this.fetchNotifications(this.$client).then(() => {
+        this.intervalId = setInterval(() => {
+          this.fetchNotifications(this.$client).catch(() => {
+            if (this.intervalId) {
+              clearInterval(this.intervalId)
+            }
+          })
+        }, 30000)
+      })
+    }
   },
   destroyed: function () {
     if (this.intervalId) {
