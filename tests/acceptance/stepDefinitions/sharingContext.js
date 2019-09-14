@@ -19,8 +19,8 @@ const sharingHelper = require('../helpers/sharingHelper')
 const userSharesFileOrFolderWithUserOrGroup = function (file, sharee, shareWithGroup, role, permissions = undefined) {
   return client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(file)
     .shareWithUserOrGroup(sharee, shareWithGroup, role, permissions)
 }
@@ -155,8 +155,8 @@ When('the user displays all share-autocomplete results using the webUI', functio
 When('the user changes permission of collaborator {string} for folder {string} to {string} using the webUI', function (user, resource, permissions) {
   return client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(resource)
     .changeCustomPermissionsTo(user, permissions)
 })
@@ -164,8 +164,8 @@ When('the user changes permission of collaborator {string} for folder {string} t
 Then('custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI', function (permissions, user, resource) {
   return client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(resource)
     .assertPermissionIsDisplayed(user, permissions)
 })
@@ -173,8 +173,8 @@ Then('custom permission/permissions {string} should be set for user {string} for
 Then('no custom permissions should be set for collaborator {string} for file/folder {string} on the webUI', function (user, resource) {
   return client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(resource)
     .assertPermissionIsDisplayed(user)
 })
@@ -324,8 +324,8 @@ Then('user {string} should be listed as {string} in the collaborators list on th
 Then('user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', function (user, role, resource) {
   client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(resource)
   return assertCollaboratorslistContains('user', user, role)
 })
@@ -337,8 +337,8 @@ Then('group {string} should be listed as {string} in the collaborators list on t
 Then('group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', function (group, role, resource) {
   client.page
     .FilesPageElement
-    .sharingDialog()
-    .closeSharingDialog(100)
+    .filesList()
+    .closeSidebar(100)
     .openSharingDialog(resource)
   return assertCollaboratorslistContains('group', group, role)
 })
@@ -352,38 +352,9 @@ Then('group {string} should not be listed in the collaborators list on the webUI
 })
 
 Then('user {string} should have received a share with these details:', function (user, expectedDetailsTable) {
-  const headers = httpHelper.createAuthHeader(user)
-  return fetch(client.globals.backend_url + '/ocs/v2.php/apps/files_sharing/api/v1/shares?shared_with_me=true&format=json',
-    { method: 'GET', headers: headers }
-  )
-    .then(res => res.json())
-    .then(function (sharesResult) {
-      if (sharesResult.ocs.meta.statuscode === 200) {
-        const shares = sharesResult.ocs.data
-        let found
-        for (var shareI = 0; shareI < shares.length; shareI++) {
-          const share = shares[shareI]
-          found = true
-          for (var expectedDetailsI = 0; expectedDetailsI < expectedDetailsTable.hashes().length; expectedDetailsI++) {
-            const expectedDetail = expectedDetailsTable.hashes()[expectedDetailsI]
-            if (expectedDetail.field === 'permissions') {
-              expectedDetail.value = sharingHelper.humanReadablePermissionsToBitmask(expectedDetail.value).toString()
-            }
-            if (!(expectedDetail.field in share) || share[expectedDetail.field].toString() !== expectedDetail.value) {
-              found = false
-              break
-            }
-          }
-          if (found === true) {
-            break
-          }
-        }
-        assert.strictEqual(
-          found, true, 'could not find expected share in "' + JSON.stringify(sharesResult, null, 2) + '"'
-        )
-        return this
-      } else {
-        throw Error('Could not get shares. Message: ' + sharesResult.ocs.meta.message)
-      }
-    })
+  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, true)
+})
+
+Then('user {string} should have a share with these details:', function (user, expectedDetailsTable) {
+  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable)
 })

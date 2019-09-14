@@ -8,14 +8,14 @@
     </transition>
     <div class="uk-margin">
       <label class="uk-form-label" v-translate>Name your link</label>
-      <input class="uk-input" v-model="name" />
+      <input class="uk-input" v-model="name" id="oc-files-file-link-name"/>
       </div>
       <h4 class="uk-margin-medium-top uk-heading-divider" v-translate>
         Set Roles
       </h4>
       <div class="uk-margin uk-grid-small" uk-grid>
       <div class="uk-width-auto">
-        <input type="radio" class="uk-radio" v-model="permissions" value="1" />
+        <input type="radio" class="uk-radio" v-model="permissions" value="1" id="oc-files-file-link-collaborator-role-viewer" />
       </div>
       <label class="uk-width-expand" @click="permissions = 1">
         <span>Viewer</span><br>
@@ -24,7 +24,7 @@
       </div>
       <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
       <div class="uk-width-auto">
-        <input type="radio" class="uk-radio" v-model="permissions" value="15" />
+        <input type="radio" class="uk-radio" v-model="permissions" value="15" id="oc-files-file-link-collaborator-role-contributor" />
       </div>
       <label class="uk-width-expand" @click="permissions = 15">
         <span v-translate>Contributor</span><br>
@@ -33,7 +33,7 @@
       </div>
       <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
       <div class="uk-width-auto">
-        <input type="radio" class="uk-radio" v-model="permissions" value="5" />
+        <input type="radio" class="uk-radio" v-model="permissions" value="5" id="oc-files-file-link-collaborator-role-editor" />
       </div>
       <label class="uk-width-expand" @click="permissions = 5">
         <span v-translate>Editor</span><br>
@@ -42,7 +42,7 @@
       </div>
       <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
       <div class="uk-width-auto">
-        <input type="radio" class="uk-radio" v-model="permissions" value="4" />
+        <input type="radio" class="uk-radio" v-model="permissions" value="4" id="oc-files-file-link-collaborator-role-uploader" />
       </div>
       <label class="uk-width-expand" @click="permissions = 4">
         <span v-translate>Uploader</span><br>
@@ -55,11 +55,11 @@
       <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
       <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
         <label class="uk-form-label" for=""><span v-translate>Expiration date</span><em v-if="$_expirationDate.enforced" class="uk-margin-small-left">(<span v-translate>required</span>)</em></label>
-        <oc-datepicker :minDatetime="$_minExpirationDate" :maxDatetime="$_maxExpirationDate" :date="expireDate" :placeholder="placeholder.expireDate" :class="{ 'uk-form-danger': !$_expirationIsValid }" @input="expireDate = $event" />
+        <oc-datepicker :minDatetime="$_minExpirationDate" :maxDatetime="$_maxExpirationDate" :date="expireDate" :placeholder="placeholder.expireDate" :class="{ 'uk-form-danger': !$_expirationIsValid }" @input="expireDate = $event" id="oc-files-file-link-expire-date" />
       </div>
       <div class="uk-width-1-1 uk-width-3-5@m">
         <label class="uk-form-label" for=""><span v-translate>Password</span><em v-if="$_passwordEnforced" class="uk-margin-small-left">(<span v-translate>required</span>)</em></label>
-        <input type="password" autocomplete="new-password" class="uk-input" :class="{ 'uk-form-danger': !$_passwordIsValid }" v-model="password" :placeholder="hasPassword && password === null? '********' : placeholder.password"/>
+        <input type="password" autocomplete="new-password" class="uk-input" :class="{ 'uk-form-danger': !$_passwordIsValid }" v-model="password" :placeholder="hasPassword && password === null? '********' : placeholder.password" id="oc-files-file-link-password" />
       </div>
       </div>
       <!-- @TODO: Enable Mail API to use the following

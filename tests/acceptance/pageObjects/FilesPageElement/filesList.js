@@ -90,6 +90,33 @@ module.exports = {
     },
     /**
      *
+     * @param {string} fileName
+     */
+    openPublicLinkDialog: function (fileName) {
+      this.waitForFileVisible(fileName)
+        .useXpath()
+        .performFileAction(fileName, 'share')
+        .waitForElementVisible('@linkToPublicLinksTag')
+        .click('@linkToPublicLinksTag')
+        .waitForElementVisible('@publicLinkSideBar')
+        .useCss()
+      return this.api.page.FilesPageElement.publicLinksDialog()
+    },
+    closeSidebar: function (timeout = null) {
+      if (timeout === null) {
+        timeout = this.api.globals.waitForConditionTimeout
+      } else {
+        timeout = parseInt(timeout, 10)
+      }
+      try {
+        this.click({ selector: '@sidebarCloseBtn', timeout: timeout })
+      } catch (e) {
+        // do nothing
+      }
+      return this.api.page.FilesPageElement.filesList()
+    },
+    /**
+     *
      * @param {string} fromName
      * @param {string} toName
      * @param {boolean} expectToSucceed
@@ -357,6 +384,9 @@ module.exports = {
     sharingSideBar: {
       selector: '#oc-files-sharing-sidebar'
     },
+    publicLinkSideBar: {
+      selector: '#oc-files-file-link'
+    },
     checkBoxAllFiles: {
       selector: '#filelist-check-all'
     },
@@ -366,6 +396,14 @@ module.exports = {
     },
     restoreSelectedButton: {
       selector: '//span[contains(text(),"Restore selected")]',
+      locateStrategy: 'xpath'
+    },
+    linkToPublicLinksTag: {
+      selector: '//div[@class="sidebar-container"]//a[normalize-space(.)="Links"]',
+      locateStrategy: 'xpath'
+    },
+    sidebarCloseBtn: {
+      selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
       locateStrategy: 'xpath'
     }
   }
