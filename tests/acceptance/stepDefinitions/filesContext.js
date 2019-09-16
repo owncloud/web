@@ -459,3 +459,18 @@ Then('file/folder {string} should be listed in shared-with-others page on the we
   client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
   return client.page.FilesPageElement.filesList().waitForFileVisible(filename)
 })
+Given('the user has created file {string}', function (fileName) {
+  return webdav.createFile(client.globals.currentUser, fileName, '')
+})
+Given('the user has created the following folders', function (entryList) {
+  entryList.rows().forEach(entry => {
+    webdav.createFolder(client.globals.currentUser, entry[0])
+  })
+  return client
+})
+Given('the user has created the following files', function (entryList) {
+  entryList.rows().forEach(entry => {
+    webdav.createFile(client.globals.currentUser, entry[0])
+  })
+  return client
+})

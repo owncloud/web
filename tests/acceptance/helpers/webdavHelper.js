@@ -147,6 +147,23 @@ exports.createFolder = function (user, folderName) {
     davPath,
     { method: 'MKCOL', headers: headers }
   )
-    .then(res => httpHelper.checkStatus(res, 'Could not create the folder.'))
+    .then(res => httpHelper.checkStatus(res, `Could not create the folder "${folderName}" for user "${user}".`))
+    .then(res => res.text())
+}
+/**
+ * Create a file using webDAV api.
+ *
+ * @param {string} user
+ * @param {string} fileName
+ * @param {string} contents
+ */
+exports.createFile = function (user, fileName, contents = '') {
+  const headers = httpHelper.createAuthHeader(user)
+  const davPath = exports.createDavPath(user, fileName)
+  return fetch(
+    davPath,
+    { method: 'PUT', headers: headers, body: contents }
+  )
+    .then(res => httpHelper.checkStatus(res, `Could not create the file "${fileName}" for user "${user}".`))
     .then(res => res.text())
 }
