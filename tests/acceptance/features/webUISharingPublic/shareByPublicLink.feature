@@ -30,6 +30,40 @@ Feature: Share by public link
       | simple-folder   |
       | lorem.txt       |
 
+  @smokeTest
+  Scenario Outline: simple sharing by public link with different roles
+    When the user creates a new public link for folder "simple-folder" using the webUI with
+      | role | <role> |
+    Then user "user1" should have a share with these details:
+      | field       | value          |
+      | share_type  | public_link    |
+      | uid_owner   | user1          |
+      | permissions | <permissions>  |
+      | path        | /simple-folder |
+      | name        | Public link    |
+    And a link named "Public link" should be listed with role "<role>" in the public link list of folder "simple-folder" on the webUI
+    When the public uses the webUI to access the last public link created by user "user1"
+    Then file "lorem.txt" should be listed on the webUI
+    Examples:
+      | role        | permissions                  |
+      | Viewer      | read                         |
+      | Editor      | read, change, create, delete |
+      | Contributor | read, create                 |
+
+  Scenario: sharing by public link with "Uploader" role
+    When the user creates a new public link for folder "simple-folder" using the webUI with
+      | role | Uploader |
+    Then user "user1" should have a share with these details:
+      | field       | value          |
+      | share_type  | public_link    |
+      | uid_owner   | user1          |
+      | permissions | create         |
+      | path        | /simple-folder |
+      | name        | Public link    |
+    And a link named "Public link" should be listed with role "Uploader" in the public link list of folder "simple-folder" on the webUI
+    When the public uses the webUI to access the last public link created by user "user1"
+    Then there should be no files/folders listed on the webUI
+
   @skip @yetToImplement
   Scenario: creating a public link with read & write permissions makes it possible to delete files via the link
     When the user creates a new public link for folder "simple-folder" using the webUI with
