@@ -46,6 +46,9 @@ const actions = {
         baseUrl: instance,
         auth: {
           bearer: token
+        },
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
         }
       }
       if (context.state.id) {
