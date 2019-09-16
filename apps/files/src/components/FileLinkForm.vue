@@ -24,18 +24,18 @@
       </div>
       <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
       <div class="uk-width-auto">
-        <input type="radio" class="uk-radio" v-model="permissions" value="15" id="oc-files-file-link-collaborator-role-contributor" />
+        <input type="radio" class="uk-radio" v-model="permissions" value="5" id="oc-files-file-link-collaborator-role-contributor" />
       </div>
-      <label class="uk-width-expand" @click="permissions = 15">
+      <label class="uk-width-expand" @click="permissions = 5">
         <span v-translate>Contributor</span><br>
         <span class="uk-text-meta" v-translate>Recipients can view, download and upload contents.</span>
       </label>
       </div>
       <div v-if="$_isFolder" class="uk-margin uk-grid-small" uk-grid>
       <div class="uk-width-auto">
-        <input type="radio" class="uk-radio" v-model="permissions" value="5" id="oc-files-file-link-collaborator-role-editor" />
+        <input type="radio" class="uk-radio" v-model="permissions" value="15" id="oc-files-file-link-collaborator-role-editor" />
       </div>
-      <label class="uk-width-expand" @click="permissions = 5">
+      <label class="uk-width-expand" @click="permissions = 15">
         <span v-translate>Editor</span><br>
         <span class="uk-text-meta" v-translate>Recipients can view, download, edit, delete and upload contents.</span>
       </label>
