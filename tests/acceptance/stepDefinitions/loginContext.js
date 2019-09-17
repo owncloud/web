@@ -1,6 +1,7 @@
 const { client } = require('nightwatch-api')
 const { Given, Then, When } = require('cucumber')
 const loginHelper = require('../helpers/loginHelper')
+const userSettings = require('../helpers/userSettings')
 
 Given(/^the user has browsed to the login page$/,
   () => {
@@ -25,6 +26,16 @@ When('the user logs in with username {string} and password {string} using the we
       .waitForElementVisible('@usernameInput')
       .setValue('@usernameInput', username)
       .setValue('@passwordInput', password)
+      .click('@loginSubmitButton')
+  })
+
+When('the user {string} logs in using the webUI',
+  (username) => {
+    const loginPage = client.page.ownCloudLoginPage()
+    return loginPage
+      .waitForElementVisible('@usernameInput')
+      .setValue('@usernameInput', username)
+      .setValue('@passwordInput', userSettings.getPasswordForUser(username))
       .click('@loginSubmitButton')
   })
 

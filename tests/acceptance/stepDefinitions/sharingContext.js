@@ -133,6 +133,10 @@ Given('user {string} has shared file/folder {string} with user {string}', functi
   return shareFileFolder(elementToShare, sharer, receiver)
 })
 
+Given('the user has shared file/folder {string} with user {string}', function (sharer, elementToShare, receiver) {
+  return shareFileFolder(elementToShare, client.globals.currentUser, receiver)
+})
+
 Given(
   'user {string} has shared file/folder {string} with user {string} with {string} permissions',
   function (sharer, elementToShare, receiver, permissions) {

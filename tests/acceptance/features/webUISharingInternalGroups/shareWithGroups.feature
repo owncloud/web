@@ -154,19 +154,17 @@ Feature: Sharing files and folders with internal groups
     Then a tooltip with the text "No users or groups found for system-group" should be shown near the share-with-field on the webUI
     And the autocomplete list should not be displayed on the webUI
 
-  @yetToImplement
-  Scenario: user shares the file/folder with a group and delete the share with user
+  Scenario: user shares the file/folder with a group and delete the share with group
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with group "grp1"
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then group "grp1" should be listed as "Editor" in the collaborators list on the webUI
     When the user deletes "grp1" as collaborator for the current file using the webUI
     Then group "grp1" should not be listed in the collaborators list on the webUI
-#    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
+    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
 
-  @yetToImplement
-  Scenario: user shares the file/folder with multiple internal users and delete the share with one user user
+  Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given group "grp2" has been created
     And user "user3" has been added to group "grp2"
     And user "user1" has logged in using the webUI
@@ -178,6 +176,6 @@ Feature: Sharing files and folders with internal groups
     When the user deletes "grp1" as collaborator for the current file using the webUI
     Then group "grp1" should not be listed in the collaborators list on the webUI
     And group "grp2" should be listed as "Editor" in the collaborators list on the webUI
-#    And file "lorem.txt" should be listed in shared-with-others page on the webUI
+    And file "lorem.txt" should be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
     But as "user3" file "lorem (2).txt" should exist

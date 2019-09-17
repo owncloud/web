@@ -28,6 +28,18 @@ Given('the user has browsed to the favorites page', function () {
     .navigateAndWaitTillLoaded()
 })
 
+When('the user browses to the shared-with-me page', function () {
+  return client
+    .page.sharedWithMePage()
+    .navigateAndWaitTillLoaded()
+})
+
+When('the user browses to the shared-with-others page', function () {
+  return client
+    .page.sharedWithOthersPage()
+    .navigateAndWaitTillLoaded()
+})
+
 Given('the user has browsed to the trashbin page', function () {
   return client
     .page.trashbinPage()
@@ -432,6 +444,18 @@ Given('the user has renamed the following files', function (table) {
   }))
 })
 
+Given('user {string} has renamed file/folder {string} to {string}', webdav.move)
+
 Given('the user has created folder {string}', function (fileName) {
   return webdav.createFolder(client.globals.currentUser, fileName)
+})
+
+Then('file/folder {string} should not be listed in shared-with-others page on the webUI', function (filename) {
+  client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
+  return client.page.FilesPageElement.filesList().assertElementNotListed(filename)
+})
+
+Then('file/folder {string} should be listed in shared-with-others page on the webUI', function (filename) {
+  client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
+  return client.page.FilesPageElement.filesList().waitForFileVisible(filename)
 })
