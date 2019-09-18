@@ -52,7 +52,6 @@ Feature: Sharing files and folders with internal groups
       | set-role    | expected-role | permissions-folder         | permissions-file |
       | Viewer      | Viewer        | read                       | read             |
       | Editor      | Editor        | read,change,create, delete | read,change      |
-      | Custom Role | Viewer        | read                       | read             |
 
   @skip @yetToImplement
   Scenario: share a file with an internal group a member overwrites and unshares the file

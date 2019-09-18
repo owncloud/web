@@ -1,9 +1,10 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  data () {
-    return {
-      roles: {
+  computed: {
+    ...mapGetters(['getToken']),
+    roles () {
+      const roles = {
         viewer: {
           tag: 'viewer',
           name: this.$gettext('Viewer'),
@@ -22,10 +23,11 @@ export default {
           description: this.$gettext('Set detailed permissions')
         }
       }
+      if (this.highlightedFile.type === 'file') {
+        delete roles.custom
+      }
+      return roles
     }
-  },
-  computed: {
-    ...mapGetters(['getToken'])
   },
   methods: {
     ...mapActions('Files', ['toggleCollaboratorsEdit']),

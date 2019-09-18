@@ -203,10 +203,6 @@ Feature: Sharing files and folders with internal users with different permission
       | Viewer      | Viewer         | ,                 | ,                     | read                |
       | Editor      | Editor         | share             | share                 | share, read, change |
       | Editor      | Editor         | ,                 | ,                     | read, change        |
-      | Custom Role | Viewer         | ,                 | ,                     | read                |
-      | Custom Role | Viewer         | share             | share                 | read, share         |
-      | Custom Role | Editor         | change            | ,                     | read, change        |
-      | Custom Role | Editor         | share, change     | share                 | read, change, share |
 
   Scenario Outline: Change permissions of the previously shared file
     Given user "user2" has shared file "lorem.txt" with user "user1" with "<initial-permissions>" permissions
@@ -256,7 +252,6 @@ Feature: Sharing files and folders with internal users with different permission
       | role        | displayed-role | collaborators-permissions | displayed-permissions | permissions         |
       | Viewer      | Viewer         | share                     | share                 | read, share         |
       | Editor      | Editor         | share                     | share                 | read, share, change |
-      | Custom Role | Editor         | share, change             | share                 | read, share, change |
 
   Scenario: Share a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions

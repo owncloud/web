@@ -55,10 +55,6 @@ Feature: Sharing files and folders with internal groups with permissions
     | Viewer      | Viewer         | ,                 | ,                     | read                |
     | Editor      | Editor         | share             | share                 | share, read, change |
     | Editor      | Editor         | ,                 | ,                     | read, change        |
-    | Custom Role | Viewer         | ,                 | ,                     | read                |
-    | Custom Role | Viewer         | share             | share                 | read, share         |
-    | Custom Role | Editor         | change            | ,                     | read, change        |
-    | Custom Role | Editor         | share, change     | share                 | read, change, share |
 
   @issue-1837 @issue-1897
   Scenario Outline: share a folder with multiple users with different roles and permissions

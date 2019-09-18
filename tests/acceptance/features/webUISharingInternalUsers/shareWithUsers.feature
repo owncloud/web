@@ -47,7 +47,6 @@ Feature: Sharing files and folders with internal users
       | set-role    | expected-role | permissions-folder        | permissions-file |
       | Viewer      | Viewer        | read                      | read             |
       | Editor      | Editor        | read,change,create,delete | read,change      |
-      | Custom Role | Viewer        | read                      | read             |
 
   Scenario Outline: change the collaborators of a file & folder
     Given user "user2" has logged in using the webUI
