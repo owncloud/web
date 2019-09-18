@@ -4,13 +4,20 @@ module.exports = {
      * creates a new public link
      * @returns {*}
      */
-    addNewLink: function () {
+    addNewLink: async function (role = null) {
       const addLinkButtonXpath = this.elements.publicLinkContainer.selector + this.elements.addLinkButton.selector
       const createLinkButtonXpath = this.elements.publicLinkContainer.selector + this.elements.createLinkButton.selector
-      return this
+      this
         .click({ locateStrategy: 'xpath', selector: addLinkButtonXpath })
         .waitForElementVisible({ locateStrategy: 'xpath', selector: createLinkButtonXpath })
-        .click({ locateStrategy: 'xpath', selector: createLinkButtonXpath })
+
+      if (role !== null) {
+        const util = require('util')
+        const roleSelectorXpath = util.format(this.elements.roleButton.selector, role)
+        await this.click({ locateStrategy: 'xpath', selector: roleSelectorXpath })
+      }
+
+      return this.click({ locateStrategy: 'xpath', selector: createLinkButtonXpath })
         .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent({ locateStrategy: 'xpath', selector: createLinkButtonXpath })
     },
@@ -54,6 +61,9 @@ module.exports = {
     createLinkButton: {
       selector: '//button[contains(.,"Create")]',
       locateStrategy: 'xpath'
+    },
+    roleButton: {
+      selector: '//*[contains(@class,"oc-files-file-link-form")]//*[.="%s"]'
     }
   }
 }

@@ -162,17 +162,18 @@ function _buildLink (l, $gettext) {
   const link = l.shareInfo
   let description = ''
 
+  // FIXME: use bitmask matching with constants
   switch (link.permissions) {
-    case ('1'):
+    case ('1'): // read (1)
       description = $gettext('Viewer')
       break
-    case ('15'):
+    case ('5'): // read (1) + create (4)
       description = $gettext('Contributor')
       break
-    case ('4'):
+    case ('4'): // create (4)
       description = $gettext('Uploader')
       break
-    case ('5'):
+    case ('15'): // read (1) + update (2) + create (4) + delete (8)
       description = $gettext('Editor')
       break
   }

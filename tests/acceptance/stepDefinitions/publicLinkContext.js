@@ -17,6 +17,18 @@ When(
   }
 )
 
+When(
+  'the user creates a new public link for file/folder/resource {string} using the webUI with',
+  function (resource, settingsTable) {
+    const settings = settingsTable.rowsHash()
+    return client.page.FilesPageElement
+      .filesList()
+      .closeSidebar(100)
+      .openPublicLinkDialog(resource)
+      .addNewLink(settings.role)
+  }
+)
+
 When('the public uses the webUI to access the last public link created by user {string}', async function (linkCreator) {
   const headers = httpHelper.createAuthHeader(linkCreator)
   const apiURL = client.globals.backend_url + '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json'
