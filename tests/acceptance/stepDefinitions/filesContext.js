@@ -474,3 +474,28 @@ Given('the user has created the following files', function (entryList) {
   })
   return client
 })
+
+When('the user copies the permalink of the current folder using the webUI', function () {
+  return client.page.filesPage().copyPermalinkFromFilesAppBar()
+})
+Then('the clipboard content should match current folder permalink', function () {
+  return client.execute(function () {
+    const myInput = document.createElement('INPUT')
+    const inputId = document.createAttribute('id')
+    inputId.value = 'helperClipboardInput'
+    myInput.setAttributeNode(inputId)
+    myInput.setAttribute('style', 'position: absolute; left:0; top:0;') // make sure its visible
+    document.body.appendChild(myInput)
+  })
+    .setValue('#helperClipboardInput', '') // just to focus the element
+    .keys([client.Keys.CONTROL, 'v']) // copy the content of the clipboard into that field
+    .getValue('#helperClipboardInput', function (clipboard) {
+      console.log('clipboardValue ' + clipboard.value)
+      const clipboardContent = clipboard.value
+      webdav.getProperties('/', client.globals.currentUser, ['oc:privatelink'])
+        .then(folderData => {
+          console.log(folderData)
+          client.assert.equal(folderData.privateLink, clipboardContent)
+        })
+    })
+})

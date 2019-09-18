@@ -167,3 +167,26 @@ exports.createFile = function (user, fileName, contents = '') {
     .then(res => httpHelper.checkStatus(res, `Could not create the file "${fileName}" for user "${user}".`))
     .then(res => res.text())
 }
+
+/**
+ * Get file or folder properties using webDAV api.
+ *
+ * @param {string} path
+ * @param {string} userId
+ * @param {array} requestedProps
+ * @param {number} folderDepth
+*/
+exports.getProperties = function (path, userId, requestedProps, folderDepth = 1) {
+  return new Promise((resolve) => {
+    exports.propfind(`/files/${userId}${path}`, userId, userSettings.getPasswordForUser(userId), requestedProps,
+      folderDepth)
+      .then(str => {
+        const response = JSON.parse(convert.xml2json(str, { compact: true }))['d:multistatus']['d:response']
+        const properties = {}
+        requestedProps.map(propertyName => {
+          properties[propertyName] = response['d:propstat']['d:prop'][propertyName]._text
+        })
+        resolve(properties)
+      })
+  })
+}

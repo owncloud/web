@@ -153,6 +153,11 @@ module.exports = {
         .isVisible(selector, (result) => {
           callback(result.value)
         })
+    },
+    copyPermalinkFromFilesAppBar: function () {
+      return this
+        .waitForElementVisible('@permalinkCopyButton')
+        .click('@permalinkCopyButton')
     }
   },
   elements: {
@@ -173,6 +178,9 @@ module.exports = {
     },
     newFolderOkButton: {
       selector: '#new-folder-ok'
+    },
+    permalinkCopyButton: {
+      selector: '#files-permalink-copy'
     },
     breadcrumb: {
       selector: '#files-breadcrumb li:nth-of-type(2)'
