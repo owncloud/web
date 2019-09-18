@@ -316,7 +316,7 @@ module.exports = {
   },
   elements: {
     filesTable: {
-      selector: '#files-list'
+      selector: '#files-list, #shared-with-list'
     },
     fileRows: {
       selector: 'tr.file-row'

@@ -141,23 +141,20 @@ Feature: Sharing files and folders with internal users
     And the user opens folder "simple-folder (2)" using the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
-  @skip @yetToImplement
   Scenario: share a folder with other user and then it should be listed on Shared with You for other user
-    Given user "user2" has logged in using the webUI
-    And the user has renamed folder "simple-folder" to "new-simple-folder" using the webUI
-    And the user has renamed file "lorem.txt" to "ipsum.txt" using the webUI
-    And the user has shared file "ipsum.txt" with user "User One" using the webUI
-    And the user has shared folder "new-simple-folder" with user "User One" using the webUI
-    When the user re-logs in as "user1" using the webUI
-    And the user browses to the shared-with-you page
+    Given user "user2" has renamed folder "simple-folder" to "new-simple-folder"
+    And user "user2" has renamed file "lorem.txt" to "ipsum.txt"
+    And user "user2" has shared file "ipsum.txt" with user "user1"
+    And user "user2" has shared folder "new-simple-folder" with user "user1"
+    And user "user1" has logged in using the webUI
+    When the user browses to the shared-with-me page
     Then file "ipsum.txt" should be listed on the webUI
     And folder "new-simple-folder" should be listed on the webUI
 
-  @skip @yetToImplement
   Scenario: share a folder with other user and then it should be listed on Shared with Others page
     Given user "user2" has logged in using the webUI
-    And the user has shared file "lorem.txt" with user "User One" using the webUI
-    And the user has shared folder "simple-folder" with user "User One" using the webUI
+    And user "user2" has shared file "lorem.txt" with user "user1"
+    And user "user2" has shared folder "simple-folder" with user "user1"
     When the user browses to the shared-with-others page
     Then file "lorem.txt" should be listed on the webUI
     And folder "simple-folder" should be listed on the webUI
@@ -280,7 +277,6 @@ Feature: Sharing files and folders with internal users
     And the share-with field should not be visible in the details panel
     And user "user1" should not be able to share file "testimage (2).jpg" with user "User Three" using the sharing API
 
-  @yetToImplement
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with user "user2"
@@ -289,10 +285,9 @@ Feature: Sharing files and folders with internal users
     And as "user2" file "lorem (2).txt" should exist
     When the user deletes "User Two" as collaborator for the current file using the webUI
     Then user "User Two" should not be listed in the collaborators list on the webUI
-#    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
+    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
 
-  @yetToImplement
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user user
     Given user "user3" has been created with default attributes
     And user "user1" has logged in using the webUI
@@ -306,7 +301,7 @@ Feature: Sharing files and folders with internal users
     When the user deletes "User Two" as collaborator for the current file using the webUI
     Then user "User Two" should not be listed in the collaborators list on the webUI
     And user "User Three" should be listed as "Editor" in the collaborators list on the webUI
-#    And file "lorem.txt" should be listed in shared-with-others page on the webUI
+    And file "lorem.txt" should be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
     But as "user3" file "lorem (2).txt" should exist
 
