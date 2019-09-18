@@ -4,14 +4,22 @@
             <h1 class="oc-login-logo" v-translate>
                 ownCloud
             </h1>
-            <div class="oc-login-card-body">
-                <h3 class="oc-login-card-title">
-                    <translate>Redirecting</translate>
-                </h3>
-                <p v-translate>
-                    Please wait a while. You are being redirected.
-                </p>
-            </div>
+          <div v-show="error" class="oc-login-card-body">
+            <h3 class="oc-login-card-title">
+              <translate>Authentication failed</translate>
+            </h3>
+            <p v-translate>
+              Please contact the administrator if this error persists.
+            </p>
+          </div>
+          <div v-show="!error" class="oc-login-card-body">
+            <h3 class="oc-login-card-title">
+              <translate>Redirecting</translate>
+            </h3>
+            <p v-translate>
+              Please wait a while. You are being redirected.
+            </p>
+          </div>
             <div class="oc-login-card-footer">
                 <p>
                     {{ configuration.theme.general.slogan }}
@@ -27,11 +35,18 @@ export default {
   name: 'OidcCallbackPage',
   mounted () {
     this.$nextTick(() => {
+      if (this.$route.query.error) {
+        this.error = true
+        console.warn('OAuth error: ' + this.$route.query.error + ' - ' + this.$route.query.error_description)
+        return
+      }
       this.callback()
     })
   },
   data () {
-    return {}
+    return {
+      error: false
+    }
   },
   computed: {
     ...mapGetters(['configuration'])
