@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [0.2.3]
+### Added
+- Acceptance tests for public links https://github.com/owncloud/phoenix/pull/1886
+- Set X-Requested-With header - required ownCloud 10.3 https://github.com/owncloud/phoenix/pull/1984
+- Use 2 spaces instead of tab for feature files https://github.com/owncloud/phoenix/pull/2004
+- Test sharing a file via public link https://github.com/owncloud/phoenix/pull/1981
+- Handle OAuth/OpenIdConnect error in callback request query string https://github.com/owncloud/phoenix/pull/2011
+- Enable loading apps from external sites https://github.com/owncloud/phoenix/pull/1986
+- Add default client side sort https://github.com/owncloud/phoenix/pull/1972
+
+### Fixed
+- Public link permissions mix up https://github.com/owncloud/phoenix/pull/1985
+- Downgrade vuex-persist to 2.0.1 to fix IE11 issues https://github.com/owncloud/phoenix/pull/2007
+
 ## [0.2.2]
 ### Added
 - Show error message when user tries to upload a folder in IE11 https://github.com/owncloud/phoenix/pull/1956
