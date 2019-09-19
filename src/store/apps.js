@@ -1,3 +1,5 @@
+const merge = require('deepmerge')
+
 const state = {
   file: {
     path: '',
@@ -30,8 +32,36 @@ const actions = {
       }
     })
   },
-  registerApp ({ commit }, app) {
+  registerApp ({ commit, dispatch }, app) {
     commit('REGISTER_APP', app)
+  },
+
+  /**
+   * Load config for external app
+   * @param {Object} app      AppInfo containing information about app and local config
+   * @param {Object} config   Config from config.json which can overwrite local config from AppInfo
+   */
+  loadExternalAppConfig ({ dispatch }, { app, config }) {
+    config.external_apps.map(extension => {
+      // Check if app is loaded from external server
+      // Extension id = id from external apps array
+      // App id = id specified in AppInfo
+      if (extension.id === app.id && (app.config || extension.config)) {
+        if (app.config && extension.config) {
+          dispatch(`${app.name}/loadConfig`, merge(app.config, extension.config), { root: true })
+          return
+        }
+
+        if (app.config) {
+          dispatch(`${app.name}/loadConfig`, app.config, { root: true })
+          return
+        }
+
+        if (extension.config) {
+          dispatch(`${app.name}/loadConfig`, extension.config, { root: true })
+        }
+      }
+    })
   }
 }
 

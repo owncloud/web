@@ -116,5 +116,8 @@
       "yarn lint --fix",
       "git add"
     ]
+  },
+  "dependencies": {
+    "deepmerge": "^4.0.0"
   }
 }
