@@ -322,6 +322,9 @@ Then('as {string} these folders/files/resources should not be listed in the fold
  * @param {DataTable} entryList the list needs a heading line
  */
 const theseResourcesShouldBeListed = function (entryList) {
+  if (entryList.rows().length <= 0) {
+    throw Error('Gerkin entry list is empty. Missing heading?')
+  }
   entryList.rows().forEach(entry => {
     // here each entry is an array with one element,
     // which is the name of the entry from the table
