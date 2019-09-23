@@ -84,7 +84,7 @@ export default {
 </script>
 
 <template>
-  <oc-table middle divider class="oc-filelist" id="shared-with-list" v-if="!loadingFolder">
+  <oc-table middle divider class="oc-filelist" id="files-list" v-if="!loadingFolder">
     <oc-table-group>
       <oc-table-row>
         <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
