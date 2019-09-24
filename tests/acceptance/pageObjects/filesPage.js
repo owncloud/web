@@ -158,6 +158,11 @@ module.exports = {
       return this
         .waitForElementVisible('@permalinkCopyButton')
         .click('@permalinkCopyButton')
+    },
+    checkSidebarItem: function (resourceName) {
+      return this.getAttribute('@sidebarItemName', 'innerText', function (itemName) {
+        this.assert.strictEqual(itemName.value, resourceName, `In sidebar is different item - ${itemName.value}`)
+      })
     }
   },
   elements: {
@@ -242,6 +247,9 @@ module.exports = {
       // the translate bit is to make it case-insensitive
       selector: '//a[contains(translate(.,\'ABCDEFGHJIKLMNOPQRSTUVWXYZ\',\'abcdefghjiklmnopqrstuvwxyz\'),\'%s\')]',
       locateStrategy: 'xpath'
+    },
+    sidebarItemName: {
+      selector: '#files-sidebar-item-name'
     }
   }
 }
