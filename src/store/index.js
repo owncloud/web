@@ -18,10 +18,17 @@ const vuexPersist = new VuexPersistence({
   filter: (mutation) => ([
     'SET_USER',
     'SET_TOKEN',
-    'SET_CAPABILITIES',
-    'SET_PRIVATE_LINK_URL_PATH'
+    'SET_CAPABILITIES'
   ].indexOf(mutation.type) > -1),
-  modules: ['user', 'links']
+  modules: ['user']
+})
+
+const vuexPersistInSession = new VuexPersistence({
+  key: 'phoenixStateInSessionStorage',
+  // Browser tab independent storage which gets deleted after the tab is closed
+  storage: window.sessionStorage,
+  filter: (mutation) => (['SET_PRIVATE_LINK_ITEM_ID'].indexOf(mutation.type) > -1),
+  modules: ['links']
 })
 
 const strict = process.env.NODE_ENV === 'development'
@@ -30,7 +37,7 @@ export const Store = new Vuex.Store({
   // state: {
   //   someModulelessState: 0
   // },
-  plugins: [vuexPersist.plugin],
+  plugins: [vuexPersist.plugin, vuexPersistInSession.plugin],
   modules: {
     app,
     apps,
