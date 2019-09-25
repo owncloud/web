@@ -475,12 +475,18 @@ Given('the user has created the following files', function (entryList) {
   return client
 })
 
+When('the user browses to the folder {string} on the files page', (folderName) => {
+  const targetFolder = folderName === '/' ? '' : folderName
+  return client
+    .page.filesPage()
+    .navigateAndWaitTillLoaded(targetFolder)
+})
 When('the user copies the permalink of the current folder using the webUI', function () {
   return client.page.filesPage().copyPermalinkFromFilesAppBar()
 })
-Then('the clipboard content should match current folder permalink', function () {
+Then('the clipboard content should match permalink of resource {string}', function (folderName) {
   return client.getClipBoardContent(function (value) {
-    webdav.getProperties('/', client.globals.currentUser, ['oc:privatelink'])
+    webdav.getProperties(folderName, client.globals.currentUser, ['oc:privatelink'])
       .then(folderData => {
         assert.strictEqual(folderData['oc:privatelink'], value)
       })

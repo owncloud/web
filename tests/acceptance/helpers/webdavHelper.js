@@ -174,12 +174,13 @@ exports.createFile = function (user, fileName, contents = '') {
  * @param {string} path
  * @param {string} userId
  * @param {array} requestedProps
- * @param {number} folderDepth
 */
-exports.getProperties = function (path, userId, requestedProps, folderDepth = 1) {
+exports.getProperties = function (path, userId, requestedProps) {
   return new Promise((resolve) => {
-    exports.propfind(`/files/${userId}${path}`, userId, userSettings.getPasswordForUser(userId), requestedProps,
-      folderDepth)
+    const trimmedPath = path.replace(/^\/+/, '') // remove a leading slash
+    const relativePath = `/files/${userId}/${trimmedPath}`
+    exports.propfind(relativePath, userId, userSettings.getPasswordForUser(userId), requestedProps,
+      0)
       .then(str => {
         const response = JSON.parse(convert.xml2json(str, { compact: true }))['d:multistatus']['d:response']
         const properties = {}
