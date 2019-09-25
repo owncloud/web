@@ -15,18 +15,14 @@ const state = {
 }
 
 const actions = {
-  logout (context, autoRedirect = false) {
+  logout (context) {
     const logoutFinalizer = () => {
       // reset user to default state
       context.commit('SET_USER', state)
       // reset capabilities to default state
       context.commit('SET_CAPABILITIES', { capabilities: null, version: null })
       // force redirect to login page after logout
-      if (autoRedirect) {
-        router.push({ name: 'accessDenied' })
-      } else {
-        router.push({ name: 'login' })
-      }
+      router.push({ name: 'login' })
     }
     vueAuthInstance.logout()
       .then(logoutFinalizer)
@@ -79,25 +75,30 @@ const actions = {
             })
           })
       }).catch((e) => {
-        console.error('logout forced! Seems that your token is invalid. Error:', e)
-        context.dispatch('logout', autoRedirect)
+        console.warn('Seems that your token is invalid. Error:', e)
+        router.push({ name: 'accessDenied' })
+      })
+    }
+
+    const tokenRefresh = function (client) {
+      vueAuthInstance.mgr.signinSilent().then(user => {
+        console.log('token refreshed…')
+        init(client, user.access_token)
+      }).catch(error => {
+        console.warn('token refresh failed ' + error)
+        router.push({ name: 'accessDenied' })
       })
     }
 
     if (token) {
+      const client = this._vm.$client
       vueAuthInstance.events().addAccessTokenExpired(function () {
         console.log('store/user.js - AccessToken Expired：', arguments)
-        context.dispatch('logout')
+        tokenRefresh(client)
       })
-      const client = this._vm.$client
       vueAuthInstance.mgr.events.addAccessTokenExpiring(function () {
         console.log('AccessToken Expiring：', arguments)
-        vueAuthInstance.mgr.signinSilent().then(user => {
-          console.log('token refreshed…')
-          init(client, user.access_token)
-        }).catch(error => {
-          console.log('token failed ' + error)
-        })
+        tokenRefresh(client)
       })
 
       init(this._vm.$client, token)
@@ -116,8 +117,9 @@ const actions = {
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
     vueAuthInstance.mgr.signinRedirectCallback().then(() => {
       context.dispatch('initAuth', true)
-    }).catch(() => {
-      context.dispatch('login')
+    }).catch((e) => {
+      console.warn('error in OpenIdConnect:', e)
+      router.push({ name: 'accessDenied' })
     })
   },
   signinSilentCallback (context) {
