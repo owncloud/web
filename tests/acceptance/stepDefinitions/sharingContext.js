@@ -7,6 +7,7 @@ require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
 const userSettings = require('../helpers/userSettings')
 const sharingHelper = require('../helpers/sharingHelper')
+const { SHARE_TYPES } = require('../helpers/sharingHelper')
 
 /**
  *
@@ -53,7 +54,7 @@ const userSharesFileOrFolderWithGroup = function (file, sharee, role) {
  * @param {number} shareType  Type of share 0 = user, 1 = group, 3 = public (link), 6 = federated (cloud share).
  * @param {string} permissions  permissions of the share for valid permissions see sharingHelper.PERMISSION_TYPES
  */
-const shareFileFolder = function (elementToShare, sharer, receiver, shareType = 0, permissionString = 'all') {
+const shareFileFolder = function (elementToShare, sharer, receiver, shareType = SHARE_TYPES.user, permissionString = 'all') {
   const permissions = sharingHelper.humanReadablePermissionsToBitmask(permissionString)
   const params = new URLSearchParams()
   params.append('shareType', shareType)
@@ -140,12 +141,12 @@ Given('the user has shared file/folder {string} with user {string}', function (s
 Given(
   'user {string} has shared file/folder {string} with user {string} with {string} permissions',
   function (sharer, elementToShare, receiver, permissions) {
-    return shareFileFolder(elementToShare, sharer, receiver, 0, permissions)
+    return shareFileFolder(elementToShare, sharer, receiver, SHARE_TYPES.user, permissions)
   }
 )
 
 Given('user {string} has shared file/folder {string} with group {string}', function (sharer, elementToShare, receiver) {
-  return shareFileFolder(elementToShare, sharer, receiver, 1)
+  return shareFileFolder(elementToShare, sharer, receiver, SHARE_TYPES.group)
 })
 
 When('the user types {string} in the share-with-field', function (input) {
