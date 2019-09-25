@@ -4,20 +4,20 @@ const fetch = require('node-fetch')
 const assert = require('assert')
 
 module.exports = {
-  PERMISSION_TYPES: {
+  SHARE_TYPES: Object.freeze({
+    user: 0,
+    group: 1,
+    public_link: 3,
+    federated_cloud_share: 6
+  }),
+  PERMISSION_TYPES: Object.freeze({
     read: 1,
     change: 2,
     create: 4,
     delete: 8,
     share: 16,
     all: 31
-  },
-  SHARE_TYPES: {
-    user: 0,
-    group: 1,
-    public_link: 3,
-    federated_cloud_share: 6
-  },
+  }),
   /**
    *
    * @param permissionsString string of permissions separated by comma. For valid permissions see this.PERMISSION_TYPES
