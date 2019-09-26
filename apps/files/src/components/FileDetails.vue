@@ -16,7 +16,11 @@
           </template>
         </div>
         <div v-if="$route.name !== 'files-shared-with-others'">
-          <oc-star v-if="!publicPage()" class="uk-inline" :shining="highlightedFile.starred"/> {{ highlightedFile.size | fileSize }}, {{ formDateFromNow(highlightedFile.mdate) }}
+          <oc-star v-if="!publicPage()" class="uk-inline" :shining="highlightedFile.starred"/>
+          <template v-if="highlightedFile.size > -1">
+            {{ highlightedFile.size | fileSize }},
+          </template>
+          {{ formDateFromNow(highlightedFile.mdate) }}
         </div>
       </div>
     </template>
