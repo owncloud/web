@@ -2193,4 +2193,143 @@ trigger:
   - refs/merge-requests/**
   - refs/heads/master
 
+---
+
+kind: pipeline
+name: acceptance-webUILogin-saucelabs
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-server
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: ${DB_TYPE=mysql}
+    db_name: ${DB_NAME=owncloud}
+    db_password: owncloud
+    db_type: ${DB_TYPE=mysql}
+    db_username: owncloud
+    version: ${OC_VERSION=daily-master-qa}
+
+- name: clone-oauth
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+
+- name: configure-server
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ log:manage --level 0
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+  - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix:8300/oidc-callback.html
+  - yarn run acceptance-tests-sauce
+  environment:
+    TEST_CONTEXT: webUILogin
+    TEST_TAGS: not @skip
+    SAUCE_USERNAME:
+      from_secret: sauce_username
+    SAUCE_ACCESS_KEY:
+      from_secret: sauce_access_key
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  commands:
+  - mkdir dist
+  - make run SERVER_HOST=phoenix:8300
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:${PHP_VERSION=7.1}
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: mysql
+  pull: if-not-exists
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+- name: saucelabs
+  pull: if-not-exists
+  image: henrrich/docker-sauce-connect:latest
+  commands:
+    - /usr/local/sauce-connect/bin/sc
+  environment:
+    SAUCE_USERNAME:
+      from_secret: sauce_username
+    SAUCE_ACCESS_KEY:
+      from_secret: sauce_access_key
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
 ...

@@ -22,6 +22,7 @@
     "accessibility-tests-drone": "node node_modules/axe-cli/axe-cli --exit --disable page-has-heading-one,meta-viewport",
     "install": "cd node_modules/cucumber; yarn install",
     "acceptance-tests": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-local.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t 'not @skip'",
+    "acceptance-tests-sauce": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-sauce.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features/$TEST_CONTEXT -t 'not @skip'",
     "acceptance-tests-drone": "cucumber-js --retry 1 --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup-drone.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty tests/acceptance/features/$TEST_CONTEXT -t \"${TEST_TAGS}\""
   },
   "author": "Felix Heidecke",
