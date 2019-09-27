@@ -9,7 +9,7 @@ This is an early release with known limitations and missing features.
 Please report and findings in https://talk.owncloud.com/channel/phoenix	</description>
 	<licence>AGPLv3</licence>
 	<author>Felix Heidecke, Oshan Mudannayake, Thomas Müller, Lukáš Hirt, Julian Müller</author>
-	<version>0.2.3</version>
+	<version>0.2.4</version>
 	<category>tools</category>
 	<dependencies>
 		<owncloud min-version="10.2.1" max-version="10" />

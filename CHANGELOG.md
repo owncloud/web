@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [0.2.4]
+### Added
+- Private link for the current folder to the app bar https://github.com/owncloud/phoenix/pull/2009
+
+### Fixed
+- Clear state in case of error in authorisation https://github.com/owncloud/phoenix/pull/2079
+- Hide comma before mdate if there is no size https://github.com/owncloud/phoenix/pull/2073
+- Don't perform OIDC logout in case of error in authorisation https://github.com/owncloud/phoenix/pull/2072
+
+
+### Changed
+- Use sharetype keys that are human readable instead of number https://github.com/owncloud/phoenix/pull/2071
+
 ## [0.2.3]
 ### Added
 - Acceptance tests for public links https://github.com/owncloud/phoenix/pull/1886
