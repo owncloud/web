@@ -1,6 +1,8 @@
 const groupSharePostfix = '\nGroup'
 const userSharePostfix = '\nUser'
 const util = require('util')
+const _ = require('lodash')
+
 const collaboratorPermissionArray = ['share', 'change', 'create', 'delete']
 
 module.exports = {
@@ -110,7 +112,7 @@ module.exports = {
      * @param {String} role
      */
     selectRoleForNewCollaborator: function (role) {
-      role = role.replace(' ', '')
+      role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
       return this.waitForElementPresent('@newCollaboratorSelectRoleButton')
         .click('@newCollaboratorSelectRoleButton')
         .waitForElementVisible('@newCollaboratorRolesDropdown')
