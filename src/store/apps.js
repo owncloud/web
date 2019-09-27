@@ -71,7 +71,9 @@ const mutations = {
       appInfo.extensions.forEach((e) => {
         const link = {
           app: appInfo.id,
-          icon: e.icon
+          icon: e.icon,
+          newTab: e.newTab || false,
+          routeName: e.routeName || appInfo.id
         }
         if (!state.extensions[e.extension]) {
           state.extensions[e.extension] = [link]
