@@ -3,7 +3,16 @@
     <file-drop :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">
-        <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="showBreadcrumb" home></oc-breadcrumb>
+        <div class="uk-flex">
+          <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="showBreadcrumb" home></oc-breadcrumb>
+          <span class="uk-margin-small-left" v-if="showBreadcrumb && currentFolder.privateLink">
+          <oc-icon name="ready" v-show="linkCopied" />
+          <oc-icon id="files-permalink-copy" name="link" v-clipboard="() => currentFolder.privateLink"
+                   v-show="!linkCopied"
+                   v-clipboard:success="clipboardSuccessHandler"
+          />
+          </span>
+        </div>
         <span class="uk-flex uk-flex-middle" v-if="!showBreadcrumb">
           <oc-icon v-if="pageIcon" :name="pageIcon" class="uk-margin-small-right" />
           <span class="uk-text-lead">{{pageTitle}}</span>
@@ -91,7 +100,8 @@ export default {
     path: '',
     searchedFiles: [],
     fileFolderCreationLoading: false,
-    actionsKey: Math.floor(Math.random() * 20)
+    actionsKey: Math.floor(Math.random() * 20),
+    linkCopied: false
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration']),
@@ -459,6 +469,15 @@ export default {
       }
       this.resetFileSelection()
       this.setHighlightedFile(null)
+    },
+    clipboardSuccessHandler () {
+      this.linkCopied = true
+
+      // Use copy icon after some time
+      const self = this
+      setTimeout(() => {
+        self.linkCopied = false
+      }, 1000)
     }
   },
   filters: {
