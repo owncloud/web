@@ -4,9 +4,10 @@ release/*
 **/l10n/template.pot
 
 apps/*
-!apps/media-viewer
+!apps/draw-io
 !apps/files
 !apps/markdown-editor
+!apps/media-viewer
 !apps/pdf-viewer
 
 build/version.json
