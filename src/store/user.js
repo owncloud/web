@@ -15,12 +15,17 @@ const state = {
 }
 
 const actions = {
+  cleanUpLoginState (context) {
+    // reset user to default state
+    context.commit('SET_USER', state)
+    // reset capabilities to default state
+    context.commit('SET_CAPABILITIES', { capabilities: null, version: null })
+    // clear oidc client state
+    vueAuthInstance.clearLoginState()
+  },
   logout (context) {
     const logoutFinalizer = () => {
-      // reset user to default state
-      context.commit('SET_USER', state)
-      // reset capabilities to default state
-      context.commit('SET_CAPABILITIES', { capabilities: null, version: null })
+      context.dispatch('cleanUpLoginState')
       // force redirect to login page after logout
       router.push({ name: 'login' })
     }
@@ -76,6 +81,7 @@ const actions = {
           })
       }).catch((e) => {
         console.warn('Seems that your token is invalid. Error:', e)
+        context.dispatch('cleanUpLoginState')
         router.push({ name: 'accessDenied' })
       })
     }
@@ -86,6 +92,7 @@ const actions = {
         init(client, user.access_token)
       }).catch(error => {
         console.warn('token refresh failed ' + error)
+        context.dispatch('cleanUpLoginState')
         router.push({ name: 'accessDenied' })
       })
     }
@@ -119,6 +126,7 @@ const actions = {
       context.dispatch('initAuth', true)
     }).catch((e) => {
       console.warn('error in OpenIdConnect:', e)
+      context.dispatch('cleanUpLoginState')
       router.push({ name: 'accessDenied' })
     })
   },

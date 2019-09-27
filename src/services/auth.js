@@ -92,6 +92,9 @@ export function initVueAuthenticate (config) {
       logout () {
         return mgr.signoutRedirect()
       },
+      clearLoginState () {
+        return mgr.removeUser()
+      },
       mgr: mgr,
       events () {
         return mgr.events
