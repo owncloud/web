@@ -24,7 +24,27 @@ module.exports = {
       options: {
         rootMode: 'upward'
       }
-    }, {
+    },
+    {
+      test: /\.jsx?$/,
+      include: /node_modules\/(?=(query-string|split-on-first|strict-uri-encode)\/).*/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: {
+                  ie: '11'
+                }
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
       test: /\.vue$/,
       loader: 'vue-loader'
     }, {
