@@ -64,7 +64,8 @@ module.exports = {
       selenium_host: SAUCE_USERNAME ? 'saucelabs' : 'selenium',
       webdriver: {
         start_process: false,
-        use_legacy_jsonwire: false
+        use_legacy_jsonwire: false,
+        port: SELENIUM_PORT,
       },
       screenshots: {
         enabled: true,
