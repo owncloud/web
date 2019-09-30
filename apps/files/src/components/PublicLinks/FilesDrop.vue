@@ -75,10 +75,14 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['davProperties']),
+    ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
     title () {
-      const translated = this.$gettext('%{owner} shared this folder with you for uploading')
-      return this.$gettextInterpolate(translated, { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) })
+      // share might not be loaded
+      if (this.share) {
+        const translated = this.$gettext('%{owner} shared this folder with you for uploading')
+        return this.$gettextInterpolate(translated, { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) })
+      }
+      return ''
     },
     url () {
       return this.$client.publicFiles.getFileUrl(this.$route.params.token) + '/'
@@ -97,7 +101,6 @@ export default {
     }
   },
   methods: {
-    ...mapGetters('Files', ['publicLinkPassword']),
     resolvePublicLink () {
       this.loading = true
       const properties = this.davProperties.concat([
@@ -108,7 +111,7 @@ export default {
         this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
       ]
       )
-      this.$client.publicFiles.list(this.$route.params.token, this.password, properties, '0').then(files => {
+      this.$client.publicFiles.list(this.$route.params.token, this.publicLinkPassword, properties, '0').then(files => {
         if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
           this.$router.push({
             name: 'public-files',
@@ -120,6 +123,16 @@ export default {
         }
         this.share = files[0]
       }).catch(error => {
+        // likely missing password, redirect to public link password prompt
+        if (error.statusCode === 401) {
+          this.$router.push({
+            name: 'public-link',
+            params: {
+              token: this.$route.params.token
+            }
+          })
+          return
+        }
         this.errorMessage = error
       }).finally(() => {
         this.loading = false
