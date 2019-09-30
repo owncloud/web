@@ -14,3 +14,13 @@ Feature: login users
     And the user authorizes access to phoenix
     Then the files table should be displayed
     And the files table should not be empty
+
+  Scenario: logging out
+    Given these users have been created with default attributes:
+      | username |
+      | user1    |
+    And user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user logs out of the webUI
+    Then the authentication page should be visible
+

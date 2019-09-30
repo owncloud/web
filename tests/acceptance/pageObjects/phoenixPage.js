@@ -87,6 +87,9 @@ module.exports = {
       selector: '//ul[contains(@class, "oc-main-menu")]/li/a[contains(text(),"%s")]',
       locateStrategy: 'xpath'
     },
+    logoutMenuItem: {
+      selector: '#logoutMenuItem'
+    },
     messageCloseIcon: {
       selector: '.oc-alert-close-icon'
     }
