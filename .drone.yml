@@ -2275,7 +2275,6 @@ steps:
   - curl http://phoenix:8300/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    TEST_CONTEXT: webUILogin
     TEST_TAGS: "@smokeTest and not @skip"
     SAUCE_USERNAME:
       from_secret: sauce_username
