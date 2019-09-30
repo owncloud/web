@@ -52,7 +52,7 @@ module.exports = {
       }
     },
     drone: {
-      launch_url: 'http://phoenix:8300',
+      launch_url: 'http://phoenix',
       globals: {
         backend_url: 'http://owncloud',
         backend_admin_username: 'admin',

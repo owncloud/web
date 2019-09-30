@@ -85,11 +85,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -112,7 +112,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     TEST_CONTEXT: webUIFavorites
@@ -171,7 +171,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -259,11 +261,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -286,7 +288,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     TEST_CONTEXT: webUIFiles
@@ -345,7 +347,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -433,11 +437,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -460,7 +464,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     TEST_CONTEXT: webUILogin
@@ -519,7 +523,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -607,11 +613,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -634,7 +640,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     TEST_CONTEXT: webUINotifications
@@ -693,7 +699,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -781,11 +789,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -808,7 +816,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     TEST_CONTEXT: webUIRenameFiles
@@ -867,7 +875,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -955,11 +965,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -982,7 +992,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     TEST_CONTEXT: webUIRenameFolders
@@ -1041,7 +1051,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -1129,11 +1141,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -1156,7 +1168,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     TEST_CONTEXT: webUISharingInternalGroups
@@ -1215,7 +1227,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -1303,11 +1317,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -1330,7 +1344,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     TEST_CONTEXT: webUISharingInternalUsers
@@ -1389,7 +1403,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -1477,11 +1493,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -1504,7 +1520,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     TEST_CONTEXT: webUITrashbin
@@ -1563,7 +1579,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -1651,11 +1669,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -1678,7 +1696,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     TEST_CONTEXT: webUIUpload
@@ -1737,7 +1755,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -1825,11 +1845,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -1852,7 +1872,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     SCREEN_RESOLUTION: 768x1024
@@ -1909,7 +1929,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
@@ -1997,11 +2019,11 @@ steps:
   - cd /var/www/owncloud/
   - php occ a:e testing
   - php occ config:system:set trusted_domains 1 --value=owncloud
-  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix:8300
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
   - php occ log:manage --level 0
   - php occ config:list
   - php occ a:e oauth2
-  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix:8300/oidc-callback.html
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
   - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
   - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
 
@@ -2024,7 +2046,7 @@ steps:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - cd /var/www/owncloud/phoenix
-  - curl http://phoenix:8300/oidc-callback.html
+  - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
     SCREEN_RESOLUTION: 375x812
@@ -2081,7 +2103,9 @@ services:
   image: owncloudci/php:${PHP_VERSION=7.1}
   commands:
   - mkdir dist
-  - make run SERVER_HOST=phoenix:8300
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
 
 - name: owncloud
   pull: always
