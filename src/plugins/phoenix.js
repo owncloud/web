@@ -12,7 +12,9 @@ export default {
         ...mapActions(['showMessage']),
 
         publicPage () {
-          return !this.isAuthenticated
+          // public page is either when not authenticated
+          // but also when accessing pages that require no auth even when authenticated
+          return !this.isAuthenticated || this.$route.meta.auth === false
         },
         downloadFile (file) {
           this.addFileToProgress(file)
