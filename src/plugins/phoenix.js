@@ -18,7 +18,7 @@ export default {
         },
         downloadFile (file) {
           this.addActionToProgress(file)
-          let headers = null
+          let headers = {}
           if (this.publicPage()) {
             const url = this.$client.publicFiles.getFileUrl(file.path)
             const password = this.publicLinkPassword
