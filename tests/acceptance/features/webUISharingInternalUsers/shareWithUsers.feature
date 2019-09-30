@@ -503,3 +503,54 @@ Feature: Sharing files and folders with internal users
       | Custom Role | Viewer         | share             | share                 | read, share         |
       | Custom Role | Editor         | change            | ,                     | read, change        |
       | Custom Role | Editor         | share, change     | share                 | read, change, share |
+
+  Scenario Outline: Change permissions of the previously shared file
+    Given user "user2" has shared file "lorem.txt" with user "user1" with "<initial-permissions>" permissions
+    And user "user2" has logged in using the webUI
+    Then no custom permissions should be set for collaborator "User One" for file "lorem.txt" on the webUI
+    When the user changes permission of collaborator "User One" for file "lorem.txt" to "share" using the webUI
+    Then custom permission "share" should be set for user "User One" for file "lorem.txt" on the webUI
+    And user "user1" should have received a share with these details:
+      | field       | value               |
+      | uid_owner   | user2               |
+      | share_with  | user1               |
+      | file_target | /lorem (2).txt      |
+      | item_type   | file                |
+      | permissions | <permissions>       |
+    Examples:
+      | initial-permissions | permissions         |
+      | read, change        | read, share, change |
+      | read                | read, share         |
+
+  Scenario: Delete all custom permissions of the previously shared file
+    Given user "user2" has shared file "lorem.txt" with user "user1" with "read, share" permissions
+    And user "user2" has logged in using the webUI
+    Then custom permissions "share" should be set for user "User One" for file "lorem.txt" on the webUI
+    When the user disables all the custom permissions of collaborator "User One" for file "lorem.txt" using the webUI
+    Then no custom permissions should be set for collaborator "User One" for file "lorem.txt" on the webUI
+    And user "user1" should have received a share with these details:
+      | field       | value               |
+      | uid_owner   | user2               |
+      | share_with  | user1               |
+      | file_target | /lorem (2).txt      |
+      | item_type   | file                |
+      | permissions | read                |
+
+  Scenario Outline: share a file with another internal user assigning a role and the permissions
+    Given user "user2" has logged in using the webUI
+    When the user shares file "lorem.txt" with user "User One" as "<role>" with permissions "<collaborators-permissions>" using the webUI
+    Then user "User One" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
+    And custom permissions "<displayed-permissions>" should be set for user "User One" for file "lorem.txt" on the webUI
+    And user "user1" should have received a share with these details:
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /lorem (2).txt     |
+      | item_type   | file               |
+      | permissions | <permissions>      |
+    Examples:
+      | role        | displayed-role | collaborators-permissions     | displayed-permissions | permissions                         |
+      | Viewer      | Viewer         | share                         | share                 | read, share                         |
+      | Editor      | Editor         | share                         | share                 | read, share, change                 |
+      | Custom Role | Editor         | share, change                 | share                 | read, share, change                 |
+

@@ -13,7 +13,7 @@ module.exports = {
      */
     getArrayFromPermissionString: function (permissions) {
       permissions = permissions.replace(/\s/g, '')
-      return permissions.split(',')
+      return permissions.split(',').filter(x => x)
     },
     /**
      *
@@ -84,9 +84,12 @@ module.exports = {
      */
     selectPermissionsOnPendingShare: async function (permissions) {
       const permissionArray = this.getArrayFromPermissionString(permissions)
+      console.log(permissionArray)
       for (const permission of permissionArray) {
         const permissionSwitchXpath = this.getPermissionSwitchXpath(permission)
-        await this.useXpath().click(permissionSwitchXpath).useCss()
+        if (this.useXpath().assert.visible(permissionSwitchXpath)) {
+          await this.useXpath().click(permissionSwitchXpath).useCss()
+        }
       }
     },
 
@@ -125,6 +128,25 @@ module.exports = {
         .click('@addShareButton')
         .waitForElementNotPresent('@addShareButton')
     },
+    saveCollaboratorPermission: function () {
+      return this.waitForElementVisible('@saveShareButton')
+        .click('@saveShareButton')
+        .waitForOutstandingAjaxCalls()
+        .waitForElementNotPresent('@saveShareButton')
+    },
+    /**
+     *
+     * @param {string} collaborator
+     */
+    expandInformationSelector: function (collaborator) {
+      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
+      const selectRoleButton = informationSelector + this.elements.selectRoleButtonInCollaboratorInformation.selector
+      this
+        .useXpath()
+        .waitForElementVisible(informationSelector)
+        .click(informationSelector)
+        .waitForElementVisible(selectRoleButton)
+    },
     /**
      *
      * @param {string} collaborator
@@ -132,15 +154,9 @@ module.exports = {
      */
     changeCustomPermissionsTo: async function (collaborator, requiredPermissions) {
       const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
-      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
-      const selectRoleButton = informationSelector + this.elements.selectRoleButtonInCollaboratorInformation.selector
 
       let permission = ''
-      this
-        .useXpath()
-        .waitForElementVisible(informationSelector)
-        .click(informationSelector)
-        .waitForElementVisible(selectRoleButton)
+      this.expandInformationSelector(collaborator)
 
       for (let i = 0; i < collaboratorPermissionArray.length; i++) {
         permission = collaboratorPermissionArray[i]
@@ -164,11 +180,7 @@ module.exports = {
           }
         })
       }
-
-      return this.waitForElementVisible('@saveShareButton')
-        .click('@saveShareButton')
-        .waitForOutstandingAjaxCalls()
-        .waitForElementNotPresent('@saveShareButton')
+      return this.saveCollaboratorPermission()
     },
     /**
      * asserts that the permission is set to "off" or not displayed at all
@@ -190,18 +202,11 @@ module.exports = {
      * @param {string} permissions
      */
     assertPermissionIsDisplayed: async function (collaborator, permissions = undefined) {
-      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
-      const selectRoleButton = informationSelector + this.elements.selectRoleButtonInCollaboratorInformation.selector
-
       let requiredPermissionArray
       if (permissions !== undefined) {
         requiredPermissionArray = this.getArrayFromPermissionString(permissions)
       }
-      this
-        .useXpath()
-        .waitForElementVisible(informationSelector)
-        .click(informationSelector)
-        .waitForElementVisible(selectRoleButton)
+      this.expandInformationSelector(collaborator)
 
       for (let i = 0; i < collaboratorPermissionArray.length; i++) {
         const permissionXpath = this.getPermissionSwitchXpath(collaboratorPermissionArray[i])
@@ -220,6 +225,32 @@ module.exports = {
           return this.assertPermissionDataStateIsOff(permissionXpath)
         }
       }
+    },
+    /**
+     *
+     * @param {string} collaborator
+     */
+    disableAllCustomPermissions: async function (collaborator) {
+      this.expandInformationSelector(collaborator)
+
+      for (let i = 0; i < collaboratorPermissionArray.length; i++) {
+        const permission = collaboratorPermissionArray[i]
+        const permissionXpath = this.getPermissionSwitchXpath(permission)
+        // Check if the xpath of permission is visible
+        await this.api.waitForElementVisible({ selector: permissionXpath, timeout: 100, abortOnFailure: false }, function (result) {
+          if (result.value === true) {
+            this
+              .getAttribute(permissionXpath, 'data-state', (state) => {
+                if (state.value === 'on') {
+                  // need to click
+                  this.useXpath()
+                    .click(permissionXpath)
+                }
+              })
+          }
+        })
+      }
+      return this.saveCollaboratorPermission()
     },
     /**
      *
