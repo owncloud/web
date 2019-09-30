@@ -11,6 +11,7 @@ const START_PROCESS = (SELENIUM_HOST === '')
 const FILES_FOR_UPLOAD = process.env.FILES_FOR_UPLOAD || require('path').join(__dirname, '/tests/acceptance/filesForUpload/')
 const SAUCE_USERNAME = process.env.SAUCE_USERNAME
 const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
+const BROWSER_NAME = process.env.BROWSER_NAME
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
@@ -53,21 +54,6 @@ module.exports = {
         }
       }
     },
-    sauce: {
-      launch_url: 'http://phoenix:8300',
-      globals: {
-        backend_url: 'http://owncloud',
-        backend_admin_username: BACKEND_ADMIN_USERNAME,
-        backend_admin_password: BACKEND_ADMIN_PASSWORD
-      },
-      selenium_host: 'saucelabs',
-      selenium_port: 4445,
-      username: SAUCE_USERNAME,
-      access_key: SAUCE_ACCESS_KEY,
-      desiredCapabilities: {
-        browserName: 'internet explorer'
-      }
-    },
     drone: {
       launch_url: 'http://phoenix:8300',
       globals: {
@@ -75,7 +61,7 @@ module.exports = {
         backend_admin_username: 'admin',
         backend_admin_password: 'admin'
       },
-      selenium_host: 'selenium',
+      selenium_host: SAUCE_USERNAME ? 'saucelabs' : 'selenium',
       webdriver: {
         start_process: false,
         use_legacy_jsonwire: false
@@ -85,11 +71,13 @@ module.exports = {
         path: 'tests/reports/screenshots',
         on_failure: true
       },
+      username: SAUCE_USERNAME,
+      access_key: SAUCE_ACCESS_KEY,
       desiredCapabilities: {
-        browserName: 'chrome',
+        browserName: BROWSER_NAME || 'chrome',
         javascriptEnabled: true,
         acceptSslCerts: true,
-        chromeOptions: {
+        chromeOptions: SAUCE_USERNAME ? undefined : {
           args: ['disable-gpu', 'disable-dev-shm-usage'],
           w3c: false
         }
