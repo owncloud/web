@@ -40,7 +40,7 @@ Tell us what happens instead
 ```
 Login as admin user into your ownCloud and access 
 http://example.com/index.php/settings/integrity/failed 
-paste the results into https://gist.github.com/ and puth the link here.
+paste the results into https://gist.github.com/ and put the link here.
 ```
 
 
@@ -50,7 +50,7 @@ paste the results into https://gist.github.com/ and puth the link here.
 Log in to the web-UI with an administrator account and click on
 'admin' -> 'Generate Config Report' -> 'Download ownCloud config report'
 This report includes the config.php settings, the list of activated apps
-and other details in a well sanitized form.
+and other details in a well-sanitized form.
 
 or 
 
@@ -61,8 +61,8 @@ from within your ownCloud installation folder
 *ATTENTION:* Do not post your config.php file in public as is. Please use one of the above
 methods whenever possible. Both, the generated reports from the web-ui and from occ config:list
 consistently remove sensitive data. You still may want to review the report before sending.
-If done manually then it is critical for your own privacy to dilligently
-remove *all* host names, passwords, usernames, salts and other credentials before posting.
+If done manually then it is critical for your own privacy to diligently
+remove *all* hostnames, passwords, usernames, salts and other credentials before posting.
 You should assume that attackers find such information and will use them against your systems.
 ```
 
