@@ -23,6 +23,7 @@ module.exports = merge(common, {
     disableHostCheck: true,
     watchOptions: {
       ignored: [
+        path.resolve(__dirname, '.*'),
         path.resolve(__dirname, 'tests'),
         path.resolve(__dirname, 'build'),
         path.resolve(__dirname, 'dist'),
