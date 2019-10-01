@@ -59,7 +59,10 @@
       </div>
       <div class="uk-width-1-1 uk-width-3-5@m">
         <label class="uk-form-label" for=""><span v-translate>Password</span><em v-if="$_passwordEnforced" class="uk-margin-small-left">(<span v-translate>required</span>)</em></label>
-        <input type="password" autocomplete="new-password" class="uk-input" :class="{ 'uk-form-danger': !$_passwordIsValid }" v-model="password" :placeholder="hasPassword && password === null? '********' : placeholder.password" id="oc-files-file-link-password" />
+        <div class="uk-position-relative">
+          <input type="password" autocomplete="new-password" class="uk-input" :class="{ 'uk-form-danger': !$_passwordIsValid }" v-model="password" :placeholder="hasPassword && password === null? '********' : placeholder.password" id="oc-files-file-link-password" />
+          <div uk-close v-if="!$_passwordEnforced && hasPassword && password!=''" class="uk-position-small uk-position-center-right oc-cursor-pointer" @click="password=''" :uk-tooltip="$_passwordRemoveText" />
+        </div>
       </div>
       </div>
       <!-- @TODO: Enable Mail API to use the following
@@ -187,6 +190,10 @@ export default {
       if (permissions >= 5 && password.read_write === '1') { return true }
 
       return false
+    },
+
+    $_passwordRemoveText () {
+      return this.$gettext('Remove password')
     }
   },
   methods: {
