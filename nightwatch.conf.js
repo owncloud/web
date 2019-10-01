@@ -12,6 +12,7 @@ const FILES_FOR_UPLOAD = process.env.FILES_FOR_UPLOAD || require('path').join(__
 const SAUCE_USERNAME = process.env.SAUCE_USERNAME
 const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
 const BROWSER_NAME = process.env.BROWSER_NAME
+const PLATFORM = process.env.PLATFORM
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
@@ -75,6 +76,7 @@ module.exports = {
       username: SAUCE_USERNAME,
       access_key: SAUCE_ACCESS_KEY,
       desiredCapabilities: {
+        platform: PLATFORM || 'Windows 10',
         browserName: BROWSER_NAME || 'chrome',
         javascriptEnabled: true,
         acceptSslCerts: true,
