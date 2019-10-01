@@ -2,45 +2,19 @@ const { client, createSession, closeSession, startWebDriver, stopWebDriver } = r
 const userSettings = require('./userSettings')
 
 module.exports = {
-  loginAsUser: function (userId) {
-    const loginPage = client.page.loginPage()
-    // Given the user has browsed to the login page
-    loginPage
-      .navigate()
+  /**
+   *
+   * @param {userId} userId
+   * @param {password} [password=null] - If not passed, default password for given `userId` will be used
+   */
+  loginAsUser: async function (userId, password = null) {
+    await client.page.loginPage().navigate().authenticate()
 
-    // When the user clicks the authenticate button
-    loginPage
-      .waitForElementVisible('@authenticateButton')
-      .click('@authenticateButton')
+    password = password || userSettings.getPasswordForUser(userId)
+    await client.page.ownCloudLoginPage().login(userId, password)
 
-    const password = userSettings.getPasswordForUser(userId)
-    // Then the user logs in with username {string} and password {string} using the webUi
-    const ocLoginPage = client.page.ownCloudLoginPage()
-    ocLoginPage
-      .waitForElementVisible('@usernameInput')
-      .setValue('@usernameInput', userId)
-      .setValue('@passwordInput', password)
-      .click('@loginSubmitButton')
+    await client.page.ownCloudAuthorizePage().authorize()
 
-    // When the user authorizes access to phoenix
-    client
-      .page.ownCloudAuthorizePage()
-      .waitForElementVisible('@authorizeButton')
-      .click('@authorizeButton')
-      .waitForElementNotPresent({
-        selector: '@authorizeButton',
-        abortOnFailure: false
-      }, (result) => {
-        if (result.value.length > 0) {
-          // click failed
-          console.log('WARNING: looks like I\'m still on auth page. ' +
-            'I will click the auth button again')
-          client.page.ownCloudAuthorizePage()
-            .click('@authorizeButton')
-            .waitForElementNotPresent('@authorizeButton')
-        }
-      })
-    // Then the files table should be displayed
     return client
       .page.FilesPageElement.filesList()
       .waitForElementVisible('@filesTable')
@@ -49,6 +23,10 @@ module.exports = {
       })
   },
 
+  /**
+   *
+   * @param {string} userId
+   */
   reLoginAsUser: async function (userId) {
     let env = 'local'
     if (process.env.DRONE) {

@@ -7,5 +7,13 @@ module.exports = {
     authenticateButton: {
       selector: '#authenticate'
     }
-  }
+  },
+  commands: [
+    {
+      authenticate: function () {
+        return this.waitForElementVisible('@authenticateButton')
+          .click('@authenticateButton')
+      }
+    }
+  ]
 }
