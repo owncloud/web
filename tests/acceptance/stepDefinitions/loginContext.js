@@ -11,47 +11,28 @@ Given(/^the user has browsed to the login page$/,
       .navigate()
   })
 
-When('the user clicks the authenticate button',
-  () => {
-    const loginPage = client.page.loginPage()
-    return loginPage
-      .waitForElementVisible('@authenticateButton')
-      .click('@authenticateButton')
-  })
+When('the user clicks the authenticate button', () => client.page.loginPage().authenticate())
 
 When('the user logs in with username {string} and password {string} using the webUI',
-  (username, password) => {
-    const loginPage = client.page.ownCloudLoginPage()
-    return loginPage
-      .waitForElementVisible('@usernameInput')
-      .setValue('@usernameInput', username)
-      .setValue('@passwordInput', password)
-      .click('@loginSubmitButton')
-  })
+  (username, password) => client.page.ownCloudLoginPage().login(username, password)
+)
 
 When('the user {string} logs in using the webUI',
-  (username) => {
-    const loginPage = client.page.ownCloudLoginPage()
-    return loginPage
-      .waitForElementVisible('@usernameInput')
-      .setValue('@usernameInput', username)
-      .setValue('@passwordInput', userSettings.getPasswordForUser(username))
-      .click('@loginSubmitButton')
-  })
+  (username) => client.page.ownCloudLoginPage()
+    .login(username, userSettings.getPasswordForUser(username))
+)
 
 When('the user authorizes access to phoenix',
   () => {
-    const loginPage = client
+    return client
       .page.ownCloudAuthorizePage()
-    return loginPage
-      .waitForElementPresent('@authorizeButton')
-      .click('@authorizeButton')
+      .authorize()
   })
 
 Then('the files table should not be empty',
   () => {
     return client.page.FilesPageElement.filesList()
-    // even the loading indicator is gone the table might not be rendered yet
+      // even the loading indicator is gone the table might not be rendered yet
       .waitForElementVisible('@fileRows')
   })
 

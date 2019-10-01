@@ -13,5 +13,21 @@ module.exports = {
     loginSubmitButton: {
       selector: '#submit'
     }
-  }
+  },
+  commands: [
+    {
+      /**
+       *
+       * @param {string} username
+       * @param {string} password
+       */
+      login: function (username, password) {
+        return this
+          .waitForElementVisible('@usernameInput')
+          .setValue('@usernameInput', username)
+          .setValue('@passwordInput', password)
+          .click('@loginSubmitButton')
+      }
+    }
+  ]
 }
