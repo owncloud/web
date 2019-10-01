@@ -121,10 +121,15 @@ When('the user deletes the following elements using the webUI', function (table)
   return client.page.filesPage()
 })
 
-Given('the following files have been deleted by user {string}', function (user, table) {
-  for (const line of table.rows()) {
-    webdav.delete(user, line[0])
-  }
+Given('the following files have been deleted by user {string}', async function (user, table) {
+  const filesToDelete = table.rows()
+  await Promise.all(
+    filesToDelete.map(
+      ([entry]) =>
+        webdav.delete(user, entry)
+    )
+  )
+
   return client.page.filesPage()
 })
 

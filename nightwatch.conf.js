@@ -16,8 +16,8 @@ module.exports = {
   test_settings: {
     default: {
       globals: {
-        waitForConditionTimeout: 10000,
-        waitForConditionPollInterval: 10,
+        waitForConditionTimeout: 60000,
+        waitForConditionPollInterval: 50,
         filesForUpload: FILES_FOR_UPLOAD
       }
     },
@@ -63,9 +63,9 @@ module.exports = {
         start_process: false,
         use_legacy_jsonwire: false
       },
-      screenshots : {
-        enabled : true,
-        path : "tests/reports/screenshots",
+      screenshots: {
+        enabled: true,
+        path: 'tests/reports/screenshots',
         on_failure: true
       },
       desiredCapabilities: {
