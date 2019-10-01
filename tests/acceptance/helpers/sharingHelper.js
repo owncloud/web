@@ -97,5 +97,42 @@ module.exports = {
           throw Error('Could not get shares. Message: ' + sharesResult.ocs.meta.message)
         }
       })
+  },
+
+  /**
+   * Asynchronously fetches the last public link created by the given link creator
+   *
+   * @async
+   * @param {string} linkCreator link creator
+   * @return {Promise<string>} last share token
+   */
+  fetchLastPublicLinkShare: async function (linkCreator) {
+    const self = this
+    const headers = httpHelper.createAuthHeader(linkCreator)
+    const apiURL = client.globals.backend_url + '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json'
+    let lastShareToken
+    await fetch(apiURL, { method: 'GET', headers: headers })
+      .then(res => res.json())
+      .then(function (sharesResult) {
+        if (sharesResult.ocs.meta.statuscode === 200) {
+          const shares = sharesResult.ocs.data
+          let lastFoundShareId = 0
+          for (var shareI = 0; shareI < shares.length; shareI++) {
+            const share = shares[shareI]
+            if (share.share_type === self.SHARE_TYPES.public_link && share.id >= lastFoundShareId) {
+              lastFoundShareId = share.id
+              lastShareToken = share.token
+            }
+          }
+          if (lastShareToken === null) {
+            throw Error('Could not find public shares. All shares: ' + JSON.stringify(shares, null, 2))
+          }
+        } else {
+          throw Error('Could not get shares. Message: ' + sharesResult.ocs.meta.message)
+        }
+      })
+
+    return lastShareToken
   }
+
 }

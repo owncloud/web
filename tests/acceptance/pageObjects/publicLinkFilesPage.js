@@ -11,6 +11,10 @@ module.exports = {
         this.api.launchUrl + '/#/files/public-files/' + token,
         this.page.FilesPageElement.filesList().elements.filesListProgressBar.selector
       )
+    },
+    navigateAndWaitForPasswordPage: function (token) {
+      this.navigate(this.api.launchUrl + '/#/files/public-files/' + token)
+      return this.page.publicLinkPasswordPage().waitForElementPresent('@passwordInput')
     }
   }
 }
