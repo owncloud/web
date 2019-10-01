@@ -6,6 +6,7 @@ const state = {
     edit: false
   },
   extensions: {},
+  newFileHandlers: [],
   fileSideBars: [],
   meta: {}
 }
@@ -73,12 +74,18 @@ const mutations = {
           app: appInfo.id,
           icon: e.icon,
           newTab: e.newTab || false,
-          routeName: e.routeName || appInfo.id
+          routeName: e.routeName || appInfo.id,
+          newFileMenu: e.newFileMenu || null
         }
         if (!state.extensions[e.extension]) {
           state.extensions[e.extension] = [link]
         } else {
           state.extensions[e.extension].push(link)
+        }
+        if (e.newFileMenu) {
+          e.newFileMenu.ext = e.extension
+          e.newFileMenu.action = link
+          state.newFileHandlers.push(e.newFileMenu)
         }
       })
     }
@@ -112,6 +119,9 @@ const getters = {
   },
   activeFile: state => {
     return state.file
+  },
+  newFileHandlers: state => {
+    return state.newFileHandlers
   },
   extensions: state => {
     return fileExtension => {

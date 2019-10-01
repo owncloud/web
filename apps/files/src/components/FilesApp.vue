@@ -70,24 +70,6 @@ export default {
       }
     },
 
-    openFileAction (action, file) {
-      if (action.newTab) {
-        const path = this.$router.resolve({ name: action.routeName, params: { filePath: file.path } }).href
-        const url = window.location.origin + '/' + path
-        const target = `${action.routeName}-${file.path}`
-        const win = window.open(url, target)
-        win.focus()
-        return
-      }
-      // TODO: rewire code below ....
-      const appId = action.app
-      this.$emit('open', appId)
-      // TODO path to state
-      this.$router.push({
-        name: appId
-      })
-    },
-
     openFileActionBar (file) {
       this.openFile({
         filePath: file.path
@@ -98,7 +80,7 @@ export default {
           label: action.name,
           icon: action.icon,
           onClick: () => {
-            this.openFileAction(action, file)
+            this.openFileAction(action, file.path)
           }
         }
       })

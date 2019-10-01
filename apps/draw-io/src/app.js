@@ -20,7 +20,12 @@ const appInfo = {
   extensions: [{
     extension: 'drawio',
     newTab: true,
-    routeName: 'draw-io-edit'
+    routeName: 'draw-io-edit',
+    newFileMenu: {
+      menuTitle ($gettext) {
+        return $gettext('Create new draw.io document…')
+      }
+    }
   }
   ]
 }
