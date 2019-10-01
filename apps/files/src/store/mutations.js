@@ -128,6 +128,10 @@ export default {
   UPDATE_FOLDER_LOADING (state, value) {
     state.loadingFolder = value
   },
+  UNSET_FOLDER (state) {
+    state.currentFolder = null
+    state.files = []
+  },
   CHECK_QUOTA (state, quota) {
     state.quota = quota
   },

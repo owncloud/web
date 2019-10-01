@@ -39,7 +39,7 @@ function _buildFile (file) {
     permissions: file.fileInfo['{http://owncloud.org/ns}permissions'] || '',
     etag: file.fileInfo['{DAV:}getetag'],
     sharePermissions: file.fileInfo['{http://open-collaboration-services.org/ns}share-permissions'],
-    privateLink: file.fileInfo['{http://owncloud.org/ns}privatelink'],
+    privateLink: (file.name !== '') ? file.fileInfo['{http://owncloud.org/ns}privatelink'] : null,
     owner: {
       username: file.fileInfo['{http://owncloud.org/ns}owner-id'],
       displayName: file.fileInfo['{http://owncloud.org/ns}owner-display-name']
@@ -247,6 +247,7 @@ function _buildShare (s) {
 export default {
   loadFolder (context, { client, absolutePath, $gettext, routeName }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
+    context.commit('UNSET_FOLDER')
 
     return new Promise((resolve, reject) => {
       let promise
