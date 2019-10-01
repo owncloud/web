@@ -1,7 +1,6 @@
 const { client } = require('nightwatch-api')
 const fetch = require('node-fetch')
 const httpHelper = require('../helpers/httpHelper')
-const userSettings = require('../helpers/userSettings')
 const convert = require('xml-js')
 
 /**
@@ -70,11 +69,10 @@ exports.move = function (userId, fromName, toName) {
  *
  * @param {string} path
  * @param {string} userId
- * @param {string} password
  * @param {array} properties
  * @param {number} folderDepth
  */
-exports.propfind = function (path, userId, password, properties, folderDepth = 1) {
+exports.propfind = function (path, userId, properties, folderDepth = 1) {
   const headers = httpHelper.createAuthHeader(userId)
   headers.Depth = folderDepth
   const davPath = client.globals.backend_url + '/remote.php/dav' + path
@@ -111,7 +109,7 @@ exports.propfind = function (path, userId, password, properties, folderDepth = 1
  */
 exports.getTrashBinElements = function (user) {
   return new Promise((resolve) => {
-    exports.propfind(`/trash-bin/${user}`, user, userSettings.getPasswordForUser(user),
+    exports.propfind(`/trash-bin/${user}`, user,
       [
         'oc:trashbin-original-filename',
         'oc:trashbin-original-location',
@@ -179,7 +177,7 @@ exports.getProperties = function (path, userId, requestedProps) {
   return new Promise((resolve) => {
     const trimmedPath = path.replace(/^\/+/, '') // remove a leading slash
     const relativePath = `/files/${userId}/${trimmedPath}`
-    exports.propfind(relativePath, userId, userSettings.getPasswordForUser(userId), requestedProps,
+    exports.propfind(relativePath, userId, requestedProps,
       0)
       .then(str => {
         const response = JSON.parse(convert.xml2json(str, { compact: true }))['d:multistatus']['d:response']
