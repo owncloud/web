@@ -59,5 +59,16 @@ module.exports = {
     await startWebDriver({ env })
     await createSession({ env })
     return this.loginAsUser(userId)
+  },
+
+  logout: function (userId) {
+    const phoenixPage = client.page.phoenixPage()
+    return phoenixPage
+      .navigate()
+      .waitForElementVisible('@menuButton')
+      .click('@menuButton')
+      .waitForElementVisible('@logoutMenuItem')
+      .waitForAnimationToFinish()
+      .click('@logoutMenuItem')
   }
 }

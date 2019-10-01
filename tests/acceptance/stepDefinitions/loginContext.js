@@ -55,9 +55,21 @@ Then('the files table should not be empty',
       .waitForElementVisible('@fileRows')
   })
 
+Then('the authentication page should be visible',
+  () => {
+    const loginPage = client
+      .page.loginPage()
+    return loginPage
+      .waitForElementPresent('@authenticateButton')
+  })
+
 // combined step
 Given('user {string} has logged in using the webUI', (user) => {
   return loginHelper.loginAsUser(user)
+})
+
+When('the user logs out of the webUI', () => {
+  return loginHelper.logout()
 })
 
 When('the user re-logs in as {string} using the webUI', (user) => {
