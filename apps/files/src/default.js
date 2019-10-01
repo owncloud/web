@@ -33,7 +33,10 @@ const appInfo = {
       app: 'file-link',
       component: FileLink,
       enabled (capabilities) {
-        return capabilities.files_sharing.public.enabled
+        if (capabilities.files_sharing) {
+          return capabilities.files_sharing.public.enabled
+        }
+        return false
       }
     }, {
       app: 'files-sharing',
