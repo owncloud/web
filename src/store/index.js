@@ -15,7 +15,12 @@ Vue.use(Vuex)
 const vuexPersist = new VuexPersistence({
   key: 'phoenixState',
   storage: window.localStorage,
-  filter: (mutation) => (['SET_USER', 'SET_TOKEN', 'SET_PRIVATE_LINK_URL_PATH'].indexOf(mutation.type) > -1),
+  filter: (mutation) => ([
+    'SET_USER',
+    'SET_TOKEN',
+    'SET_CAPABILITIES',
+    'SET_PRIVATE_LINK_URL_PATH'
+  ].indexOf(mutation.type) > -1),
   modules: ['user', 'links']
 })
 
