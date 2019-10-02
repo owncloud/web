@@ -157,13 +157,22 @@ When('the user displays all share-autocomplete results using the webUI', functio
   return client.page.FilesPageElement.sharingDialog().showAllAutoCompleteResults()
 })
 
-When('the user changes permission of collaborator {string} for folder {string} to {string} using the webUI', function (user, resource, permissions) {
+When('the user changes permission of collaborator {string} for folder/file {string} to {string} using the webUI', function (user, resource, permissions) {
   return client.page
     .FilesPageElement
     .filesList()
     .closeSidebar(100)
     .openSharingDialog(resource)
     .changeCustomPermissionsTo(user, permissions)
+})
+
+When('the user disables all the custom permissions of collaborator {string} for file/folder {string} using the webUI', function (collaborator, resource) {
+  return client.page
+    .FilesPageElement
+    .filesList()
+    .closeSidebar(100)
+    .openSharingDialog(resource)
+    .disableAllCustomPermissions(collaborator)
 })
 
 Then('custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI', function (permissions, user, resource) {
@@ -190,6 +199,27 @@ When('the user shares file/folder {string} with user {string} as {string} using 
 
 When('the user shares file/folder {string} with user {string} as {string} with permission/permissions {string} using the webUI', function (resource, shareWithUser, role, permissions) {
   return userSharesFileOrFolderWithUserOrGroup(resource, shareWithUser, false, role, permissions)
+})
+
+When('the user selects the following collaborators for the share as {string} with {string} permissions:', async function (role, permissions, usersTable) {
+  const users = usersTable.hashes()
+
+  for (const { collaborator, type } of users) {
+    await client.page.FilesPageElement.sharingDialog().selectCollaboratorForShare(collaborator, type === 'group')
+  }
+
+  client.page.FilesPageElement.sharingDialog().selectRoleForNewCollaborator(role)
+  await client.page.FilesPageElement.sharingDialog().selectPermissionsOnPendingShare(permissions)
+})
+
+When('the user removes {string} as a collaborator from the share', function (user) {
+  return client.page.FilesPageElement.sharingDialog().removePendingCollaboratorForShare(user)
+})
+
+When('the user shares with the selected collaborators', function () {
+  return client.page.FilesPageElement.sharingDialog()
+    .confirmShare()
+    .waitForOutstandingAjaxCalls()
 })
 
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', function (pattern) {
@@ -237,7 +267,7 @@ Then('only users and groups that contain the string {string} in their name or di
         for (var userId in userSettings.getCreatedUsers()) {
           const userDisplayName = userSettings.getDisplayNameForUser(userId)
           if (userDisplayName === displayedName &&
-               (userDisplayName.toLowerCase().includes(pattern) || userId.toLowerCase().includes(pattern))
+            (userDisplayName.toLowerCase().includes(pattern) || userId.toLowerCase().includes(pattern))
           ) {
             found = true
           }
@@ -251,7 +281,7 @@ Then('only users and groups that contain the string {string} in their name or di
           found,
           true,
           `"${displayedName}" was listed in autocomplete list, but should not have been. ` +
-           '(check if that is a manually added user/group)'
+          '(check if that is a manually added user/group)'
         )
       })
     })
@@ -305,7 +335,7 @@ Then('item {string} should not be listed in the autocomplete list on the webUI',
     })
 })
 
-When('the user opens the share dialog for file {string} using the webUI', function (file) {
+When('the user opens the share dialog for file/folder {string} using the webUI', function (file) {
   return client.page.FilesPageElement.filesList().openSharingDialog(file)
 })
 

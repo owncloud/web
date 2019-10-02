@@ -40,7 +40,7 @@
                     v-for="(action, index) in actions"
                    :key="index"
                    @click.stop="action.handler(item, action.handlerData)"
-                   :disabled="!action.isEnabled(item) || $_actionInProgress(item)"
+                   :disabled="!action.isEnabled(item, parentFolder) || $_actionInProgress(item)"
                    :icon="action.icon"
                    :ariaLabel="action.ariaLabel"
                    :uk-tooltip="$_disabledActionTooltip(item)"
@@ -128,7 +128,7 @@ export default {
     Mixins
   ],
   name: 'FileList',
-  props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled'],
+  props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled', 'parentFolder'],
   mounted () {
     this.$_ocFilesFolder_getFolder()
   },
@@ -196,7 +196,7 @@ export default {
     },
 
     enabledActions (item) {
-      return this.actions.filter(action => action.isEnabled(item))
+      return this.actions.filter(action => action.isEnabled(item, this.parentFolder))
     },
 
     $_actionInProgress (item) {

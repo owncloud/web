@@ -1,6 +1,8 @@
 const groupSharePostfix = '\nGroup'
 const userSharePostfix = '\nUser'
 const util = require('util')
+const _ = require('lodash')
+
 const collaboratorPermissionArray = ['share', 'change', 'create', 'delete']
 
 module.exports = {
@@ -11,7 +13,7 @@ module.exports = {
      */
     getArrayFromPermissionString: function (permissions) {
       permissions = permissions.replace(/\s/g, '')
-      return permissions.split(',')
+      return permissions.split(',').filter(x => x)
     },
     /**
      *
@@ -20,6 +22,77 @@ module.exports = {
     getPermissionSwitchXpath: function (permission) {
       return util.format(this.elements.permissionButton.selector, permission)
     },
+
+    /**
+     *
+     * @param {string} sharee
+     */
+    removePendingCollaboratorForShare: function (sharee) {
+      const newCollaboratorXpath = util.format(this.elements.newCollaboratorItems.selector, sharee)
+      const removeCollaboratorBtnXpath = newCollaboratorXpath + this.elements.newCollaboratorRemoveButton.selector
+
+      return this.useXpath().click(removeCollaboratorBtnXpath).useCss()
+    },
+
+    /**
+     *
+     * @param {string} sharee
+     * @param {boolean} [shareWithGroup=false]
+     */
+    selectCollaboratorForShare: async function (sharee, shareWithGroup = false) {
+      // We need waitForElementPresent here.
+      // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
+      await this.enterAutoComplete(sharee)
+        .waitForElementPresent({
+          selector: '@sharingAutoCompleteDropDownElements',
+          abortOnFailure: false
+        }, (result) => {
+          if (result.value === false) {
+            // sharing dropdown was not shown
+            console.log('WARNING: no sharing autocomplete dropdown found, retry typing')
+            this.clearValue('@sharingAutoComplete')
+              .enterAutoComplete(sharee)
+              .waitForElementVisible('@sharingAutoCompleteDropDownElements')
+          }
+        })
+      const webElementIdList = await this.getShareAutocompleteWebElementIdList()
+
+      let index = 0
+      for (; index !== webElementIdList.length; index++) {
+        let wasFound = false
+        const webElementId = webElementIdList[index]
+        await this.api.elementIdText(webElementId, (text) => {
+          const suffix = (shareWithGroup === true) ? groupSharePostfix : userSharePostfix
+          if (text.value === sharee + suffix) {
+            wasFound = true
+            this.api
+              .elementIdClick(webElementId)
+              .waitForOutstandingAjaxCalls()
+          }
+        })
+        if (wasFound === true) break
+      }
+
+      if (index === webElementIdList.length) {
+        // * we won't see this probably, unless dropdown gives different results than entered
+        throw new Error(`Could not find ${sharee} on the sharing auto-completion list.`)
+      }
+    },
+
+    /**
+     * @param {string} permissions
+     */
+    selectPermissionsOnPendingShare: async function (permissions) {
+      const permissionArray = this.getArrayFromPermissionString(permissions)
+      console.log(permissionArray)
+      for (const permission of permissionArray) {
+        const permissionSwitchXpath = this.getPermissionSwitchXpath(permission)
+        if (this.useXpath().assert.visible(permissionSwitchXpath)) {
+          await this.useXpath().click(permissionSwitchXpath).useCss()
+        }
+      }
+    },
+
     /**
      *
      * @param {string} sharee
@@ -28,48 +101,12 @@ module.exports = {
      * @param {string} permissions
      */
     shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions) {
-      this.enterAutoComplete(sharee)
-      // We need waitForElementPresent here.
-      // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
-        .waitForElementPresent({
-          selector: '@sharingAutoCompleteDropDownElements',
-          abortOnFailure: false
-        }, (result) => {
-          if (result.value === false) {
-            // sharing dropdown was not shown
-            console.log('WARNING: no sharing autocomple dropdown found, retry typing')
-            this.clearValue('@sharingAutoComplete')
-              .enterAutoComplete(sharee)
-              .waitForElementVisible('@sharingAutoCompleteDropDownElements')
-          }
-        })
-
-      const webElementIdList = await this.getShareAutocompleteWebElementIdList()
-      webElementIdList.forEach((webElementId) => {
-        this.api.elementIdText(webElementId, (text) => {
-          if (shareWithGroup === true) {
-            sharee = sharee + groupSharePostfix
-          } else {
-            sharee = sharee + userSharePostfix
-          }
-
-          if (text.value === sharee) {
-            this.api
-              .elementIdClick(webElementId)
-              .waitForOutstandingAjaxCalls()
-          }
-        })
-      })
+      await this.selectCollaboratorForShare(sharee, shareWithGroup)
       this.selectRoleForNewCollaborator(role)
       if (permissions === undefined) {
         return this.confirmShare()
       }
-
-      const permissionArray = this.getArrayFromPermissionString(permissions)
-      for (const permission of permissionArray) {
-        const permissionSwitchXpath = this.getPermissionSwitchXpath(permission)
-        await this.useXpath().click(permissionSwitchXpath)
-      }
+      await this.selectPermissionsOnPendingShare(permissions)
 
       return this.confirmShare()
     },
@@ -78,7 +115,7 @@ module.exports = {
      * @param {String} role
      */
     selectRoleForNewCollaborator: function (role) {
-      role = role.replace(' ', '')
+      role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
       return this.waitForElementPresent('@newCollaboratorSelectRoleButton')
         .click('@newCollaboratorSelectRoleButton')
         .waitForElementVisible('@newCollaboratorRolesDropdown')
@@ -91,6 +128,25 @@ module.exports = {
         .click('@addShareButton')
         .waitForElementNotPresent('@addShareButton')
     },
+    saveCollaboratorPermission: function () {
+      return this.waitForElementVisible('@saveShareButton')
+        .click('@saveShareButton')
+        .waitForOutstandingAjaxCalls()
+        .waitForElementNotPresent('@saveShareButton')
+    },
+    /**
+     *
+     * @param {string} collaborator
+     */
+    expandInformationSelector: function (collaborator) {
+      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
+      const selectRoleButton = informationSelector + this.elements.selectRoleButtonInCollaboratorInformation.selector
+      this
+        .useXpath()
+        .waitForElementVisible(informationSelector)
+        .click(informationSelector)
+        .waitForElementVisible(selectRoleButton)
+    },
     /**
      *
      * @param {string} collaborator
@@ -98,15 +154,9 @@ module.exports = {
      */
     changeCustomPermissionsTo: async function (collaborator, requiredPermissions) {
       const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
-      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
-      const selectRoleButton = informationSelector + this.elements.selectRoleButtonInCollaboratorInformation.selector
 
       let permission = ''
-      this
-        .useXpath()
-        .waitForElementVisible(informationSelector)
-        .click(informationSelector)
-        .waitForElementVisible(selectRoleButton)
+      this.expandInformationSelector(collaborator)
 
       for (let i = 0; i < collaboratorPermissionArray.length; i++) {
         permission = collaboratorPermissionArray[i]
@@ -130,11 +180,7 @@ module.exports = {
           }
         })
       }
-
-      return this.waitForElementVisible('@saveShareButton')
-        .click('@saveShareButton')
-        .waitForOutstandingAjaxCalls()
-        .waitForElementNotPresent('@saveShareButton')
+      return this.saveCollaboratorPermission()
     },
     /**
      * asserts that the permission is set to "off" or not displayed at all
@@ -156,18 +202,11 @@ module.exports = {
      * @param {string} permissions
      */
     assertPermissionIsDisplayed: async function (collaborator, permissions = undefined) {
-      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
-      const selectRoleButton = informationSelector + this.elements.selectRoleButtonInCollaboratorInformation.selector
-
       let requiredPermissionArray
       if (permissions !== undefined) {
         requiredPermissionArray = this.getArrayFromPermissionString(permissions)
       }
-      this
-        .useXpath()
-        .waitForElementVisible(informationSelector)
-        .click(informationSelector)
-        .waitForElementVisible(selectRoleButton)
+      this.expandInformationSelector(collaborator)
 
       for (let i = 0; i < collaboratorPermissionArray.length; i++) {
         const permissionXpath = this.getPermissionSwitchXpath(collaboratorPermissionArray[i])
@@ -186,6 +225,32 @@ module.exports = {
           return this.assertPermissionDataStateIsOff(permissionXpath)
         }
       }
+    },
+    /**
+     *
+     * @param {string} collaborator
+     */
+    disableAllCustomPermissions: async function (collaborator) {
+      this.expandInformationSelector(collaborator)
+
+      for (let i = 0; i < collaboratorPermissionArray.length; i++) {
+        const permission = collaboratorPermissionArray[i]
+        const permissionXpath = this.getPermissionSwitchXpath(permission)
+        // Check if the xpath of permission is visible
+        await this.api.waitForElementVisible({ selector: permissionXpath, timeout: 100, abortOnFailure: false }, function (result) {
+          if (result.value === true) {
+            this
+              .getAttribute(permissionXpath, 'data-state', (state) => {
+                if (state.value === 'on') {
+                  // need to click
+                  this.useXpath()
+                    .click(permissionXpath)
+                }
+              })
+          }
+        })
+      }
+      return this.saveCollaboratorPermission()
     },
     /**
      *
@@ -369,6 +434,12 @@ module.exports = {
     },
     newCollaboratorRoleEditor: {
       selector: '#files-collaborator-new-collaborator-role-editor'
+    },
+    newCollaboratorItems: {
+      selector: "//div[@id='oc-files-sharing-sidebar']//span[contains(@class, 'oc-icon-danger')]/ancestor::div[position()=1 and contains(., '%s')]"
+    },
+    newCollaboratorRemoveButton: {
+      selector: "//span[contains(@class, 'oc-icon-danger')]"
     },
     newCollaboratorRoleCustomRole: {
       selector: '#files-collaborator-new-collaborator-role-custom'

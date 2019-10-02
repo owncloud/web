@@ -6,7 +6,7 @@
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <trash-bin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
           <SharedFilesList v-else-if="sharedList" @toggle="toggleFileSelect" :fileData="activeFiles" />
-          <file-list v-else @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" @sideBarOpen="openSideBar" />
+          <file-list v-else @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" :parentFolder="currentFolder" @sideBarOpen="openSideBar" />
         </div>
         <file-details
           v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
@@ -131,7 +131,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile']),
+    ...mapGetters('Files', ['selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile', 'currentFolder']),
     ...mapGetters(['extensions']),
 
     _sidebarOpen () {
