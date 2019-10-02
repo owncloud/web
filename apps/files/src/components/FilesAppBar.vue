@@ -5,7 +5,7 @@
       <div class="uk-width-expand">
         <div class="uk-flex">
           <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="showBreadcrumb" home></oc-breadcrumb>
-          <span class="uk-margin-small-left" v-if="showBreadcrumb && currentFolder.privateLink">
+          <span class="uk-margin-small-left" v-if="showBreadcrumb && currentFolder && currentFolder.privateLink">
           <oc-icon name="ready" v-show="linkCopied" />
           <oc-icon id="files-permalink-copy" name="link" v-clipboard="() => currentFolder.privateLink"
                    v-show="!linkCopied"

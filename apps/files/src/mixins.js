@@ -52,7 +52,10 @@ export default {
           icon: 'edit',
           handler: this.changeName,
           ariaLabel: this.$gettext('Rename'),
-          isEnabled: function (item) {
+          isEnabled: function (item, parent) {
+            if (!parent.canRename()) {
+              return false
+            }
             return item.canRename()
           }
         },
@@ -68,7 +71,10 @@ export default {
           icon: 'delete',
           ariaLabel: this.$gettext('Delete'),
           handler: this.deleteFile,
-          isEnabled: function (item) {
+          isEnabled: function (item, parent) {
+            if (!parent.canBeDeleted()) {
+              return false
+            }
             return item.canBeDeleted()
           }
         }
