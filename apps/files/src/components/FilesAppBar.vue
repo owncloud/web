@@ -1,6 +1,6 @@
 <template>
   <div id="files-app-bar" class="oc-app-bar">
-    <file-drop :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
+    <file-drop v-if="!isIE11()" :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">
         <div class="uk-flex">
