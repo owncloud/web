@@ -157,13 +157,22 @@ When('the user displays all share-autocomplete results using the webUI', functio
   return client.page.FilesPageElement.sharingDialog().showAllAutoCompleteResults()
 })
 
-When('the user changes permission of collaborator {string} for folder {string} to {string} using the webUI', function (user, resource, permissions) {
+When('the user changes permission of collaborator {string} for folder/file {string} to {string} using the webUI', function (user, resource, permissions) {
   return client.page
     .FilesPageElement
     .filesList()
     .closeSidebar(100)
     .openSharingDialog(resource)
     .changeCustomPermissionsTo(user, permissions)
+})
+
+When('the user disables all the custom permissions of collaborator {string} for file/folder {string} using the webUI', function (collaborator, resource) {
+  return client.page
+    .FilesPageElement
+    .filesList()
+    .closeSidebar(100)
+    .openSharingDialog(resource)
+    .disableAllCustomPermissions(collaborator)
 })
 
 Then('custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI', function (permissions, user, resource) {
