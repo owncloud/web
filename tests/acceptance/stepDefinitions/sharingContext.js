@@ -192,6 +192,27 @@ When('the user shares file/folder {string} with user {string} as {string} with p
   return userSharesFileOrFolderWithUserOrGroup(resource, shareWithUser, false, role, permissions)
 })
 
+When('the user selects the following collaborators for the share as {string} with {string} permissions:', async function (role, permissions, usersTable) {
+  const users = usersTable.hashes()
+
+  for (const { collaborator, type } of users) {
+    await client.page.FilesPageElement.sharingDialog().selectCollaboratorForShare(collaborator, type === 'group')
+  }
+
+  client.page.FilesPageElement.sharingDialog().selectRoleForNewCollaborator(role)
+  await client.page.FilesPageElement.sharingDialog().selectPermissionsOnPendingShare(permissions)
+})
+
+When('the user removes {string} as a collaborator from the share', function (user) {
+  return client.page.FilesPageElement.sharingDialog().removePendingCollaboratorForShare(user)
+})
+
+When('the user shares with the selected collaborators', function () {
+  return client.page.FilesPageElement.sharingDialog()
+    .confirmShare()
+    .waitForOutstandingAjaxCalls()
+})
+
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', function (pattern) {
   return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
     .then(itemsList => {
@@ -237,7 +258,7 @@ Then('only users and groups that contain the string {string} in their name or di
         for (var userId in userSettings.getCreatedUsers()) {
           const userDisplayName = userSettings.getDisplayNameForUser(userId)
           if (userDisplayName === displayedName &&
-               (userDisplayName.toLowerCase().includes(pattern) || userId.toLowerCase().includes(pattern))
+            (userDisplayName.toLowerCase().includes(pattern) || userId.toLowerCase().includes(pattern))
           ) {
             found = true
           }
@@ -251,7 +272,7 @@ Then('only users and groups that contain the string {string} in their name or di
           found,
           true,
           `"${displayedName}" was listed in autocomplete list, but should not have been. ` +
-           '(check if that is a manually added user/group)'
+          '(check if that is a manually added user/group)'
         )
       })
     })
@@ -305,7 +326,7 @@ Then('item {string} should not be listed in the autocomplete list on the webUI',
     })
 })
 
-When('the user opens the share dialog for file {string} using the webUI', function (file) {
+When('the user opens the share dialog for file/folder {string} using the webUI', function (file) {
   return client.page.FilesPageElement.filesList().openSharingDialog(file)
 })
 

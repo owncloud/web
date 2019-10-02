@@ -1,6 +1,8 @@
 const groupSharePostfix = '\nGroup'
 const userSharePostfix = '\nUser'
 const util = require('util')
+const _ = require('lodash')
+
 const collaboratorPermissionArray = ['share', 'change', 'create', 'delete']
 
 module.exports = {
@@ -20,6 +22,74 @@ module.exports = {
     getPermissionSwitchXpath: function (permission) {
       return util.format(this.elements.permissionButton.selector, permission)
     },
+
+    /**
+     *
+     * @param {string} sharee
+     */
+    removePendingCollaboratorForShare: function (sharee) {
+      const newCollaboratorXpath = util.format(this.elements.newCollaboratorItems.selector, sharee)
+      const removeCollaboratorBtnXpath = newCollaboratorXpath + this.elements.newCollaboratorRemoveButton.selector
+
+      return this.useXpath().click(removeCollaboratorBtnXpath).useCss()
+    },
+
+    /**
+     *
+     * @param {string} sharee
+     * @param {boolean} [shareWithGroup=false]
+     */
+    selectCollaboratorForShare: async function (sharee, shareWithGroup = false) {
+      // We need waitForElementPresent here.
+      // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
+      await this.enterAutoComplete(sharee)
+        .waitForElementPresent({
+          selector: '@sharingAutoCompleteDropDownElements',
+          abortOnFailure: false
+        }, (result) => {
+          if (result.value === false) {
+            // sharing dropdown was not shown
+            console.log('WARNING: no sharing autocomplete dropdown found, retry typing')
+            this.clearValue('@sharingAutoComplete')
+              .enterAutoComplete(sharee)
+              .waitForElementVisible('@sharingAutoCompleteDropDownElements')
+          }
+        })
+      const webElementIdList = await this.getShareAutocompleteWebElementIdList()
+
+      let index = 0
+      for (; index !== webElementIdList.length; index++) {
+        let wasFound = false
+        const webElementId = webElementIdList[index]
+        await this.api.elementIdText(webElementId, (text) => {
+          const suffix = (shareWithGroup === true) ? groupSharePostfix : userSharePostfix
+          if (text.value === sharee + suffix) {
+            wasFound = true
+            this.api
+              .elementIdClick(webElementId)
+              .waitForOutstandingAjaxCalls()
+          }
+        })
+        if (wasFound === true) break
+      }
+
+      if (index === webElementIdList.length) {
+        // * we won't see this probably, unless dropdown gives different results than entered
+        throw new Error(`Could not find ${sharee} on the sharing auto-completion list.`)
+      }
+    },
+
+    /**
+     * @param {string} permissions
+     */
+    selectPermissionsOnPendingShare: async function (permissions) {
+      const permissionArray = this.getArrayFromPermissionString(permissions)
+      for (const permission of permissionArray) {
+        const permissionSwitchXpath = this.getPermissionSwitchXpath(permission)
+        await this.useXpath().click(permissionSwitchXpath).useCss()
+      }
+    },
+
     /**
      *
      * @param {string} sharee
@@ -28,48 +98,12 @@ module.exports = {
      * @param {string} permissions
      */
     shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions) {
-      this.enterAutoComplete(sharee)
-      // We need waitForElementPresent here.
-      // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
-        .waitForElementPresent({
-          selector: '@sharingAutoCompleteDropDownElements',
-          abortOnFailure: false
-        }, (result) => {
-          if (result.value === false) {
-            // sharing dropdown was not shown
-            console.log('WARNING: no sharing autocomple dropdown found, retry typing')
-            this.clearValue('@sharingAutoComplete')
-              .enterAutoComplete(sharee)
-              .waitForElementVisible('@sharingAutoCompleteDropDownElements')
-          }
-        })
-
-      const webElementIdList = await this.getShareAutocompleteWebElementIdList()
-      webElementIdList.forEach((webElementId) => {
-        this.api.elementIdText(webElementId, (text) => {
-          if (shareWithGroup === true) {
-            sharee = sharee + groupSharePostfix
-          } else {
-            sharee = sharee + userSharePostfix
-          }
-
-          if (text.value === sharee) {
-            this.api
-              .elementIdClick(webElementId)
-              .waitForOutstandingAjaxCalls()
-          }
-        })
-      })
+      await this.selectCollaboratorForShare(sharee, shareWithGroup)
       this.selectRoleForNewCollaborator(role)
       if (permissions === undefined) {
         return this.confirmShare()
       }
-
-      const permissionArray = this.getArrayFromPermissionString(permissions)
-      for (const permission of permissionArray) {
-        const permissionSwitchXpath = this.getPermissionSwitchXpath(permission)
-        await this.useXpath().click(permissionSwitchXpath)
-      }
+      await this.selectPermissionsOnPendingShare(permissions)
 
       return this.confirmShare()
     },
@@ -78,7 +112,7 @@ module.exports = {
      * @param {String} role
      */
     selectRoleForNewCollaborator: function (role) {
-      role = role.replace(' ', '')
+      role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
       return this.waitForElementPresent('@newCollaboratorSelectRoleButton')
         .click('@newCollaboratorSelectRoleButton')
         .waitForElementVisible('@newCollaboratorRolesDropdown')
@@ -369,6 +403,12 @@ module.exports = {
     },
     newCollaboratorRoleEditor: {
       selector: '#files-collaborator-new-collaborator-role-editor'
+    },
+    newCollaboratorItems: {
+      selector: "//div[@id='oc-files-sharing-sidebar']//span[contains(@class, 'oc-icon-danger')]/ancestor::div[position()=1 and contains(., '%s')]"
+    },
+    newCollaboratorRemoveButton: {
+      selector: "//span[contains(@class, 'oc-icon-danger')]"
     },
     newCollaboratorRoleCustomRole: {
       selector: '#files-collaborator-new-collaborator-role-custom'
