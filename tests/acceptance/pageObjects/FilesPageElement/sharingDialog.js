@@ -142,11 +142,60 @@ module.exports = {
     expandInformationSelector: function (collaborator) {
       const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
       const selectRoleButton = informationSelector + this.elements.selectRoleButtonInCollaboratorInformation.selector
-      this
+      return this
         .useXpath()
         .waitForElementVisible(informationSelector)
         .click(informationSelector)
         .waitForElementVisible(selectRoleButton)
+    },
+    /**
+     * Toggle the checkbox to set a certain permission for a share
+     * Needs the collaborator information to be expanded
+     *
+     * @param {string} permission
+     * @param {bool} abortOnFailure
+     */
+    toggleSinglePermission: async function (permission, abortOnFailure = true) {
+      const permissionXpath = this.getPermissionSwitchXpath(permission)
+      return this.api.waitForElementVisible(
+        { locateStrategy: 'xpath', timeout: 100, selector: permissionXpath, abortOnFailure },
+        `Timed out waiting for permission ${permission} to be visible`
+      )
+        .useXpath()
+        .click(permissionXpath)
+    },
+    /**
+     * Get the state of permissions for current share in the screen
+     * The keys gives the permissions that are currently visible in the screen
+     * The values {bool} gives the state of the permissions
+     *
+     * @param {string} collaborator
+     * @return {Promise<Object>}  eg - {share: true, change: false}
+     */
+    getSharePermissions: async function (collaborator) {
+      const permissions = {}
+      let collaboratorElementXpath
+      let permissionToggle
+      for (let i = 0; i < collaboratorPermissionArray.length; i++) {
+        collaboratorElementXpath = util.format(
+          this.elements.collaboratorInformationByCollaboratorName.selector,
+          collaborator
+        )
+        permissionToggle = collaboratorElementXpath + util.format(
+          this.elements.permissionButton.selector,
+          collaboratorPermissionArray[i]
+        )
+
+        await this.api.element('xpath', permissionToggle, result => {
+          if (!result.value.ELEMENT) {
+            return
+          }
+          return this.api.elementIdAttribute(result.value.ELEMENT, 'data-state', result => {
+            permissions[collaboratorPermissionArray[i]] = result.value === 'on'
+          })
+        })
+      }
+      return permissions
     },
     /**
      *
@@ -154,34 +203,27 @@ module.exports = {
      * @param {string} requiredPermissions
      */
     changeCustomPermissionsTo: async function (collaborator, requiredPermissions) {
+      await this.expandInformationSelector(collaborator)
+
       const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
+      const sharePermissions = await this.getSharePermissions(collaborator)
 
-      let permission = ''
-      this.expandInformationSelector(collaborator)
-
-      for (let i = 0; i < collaboratorPermissionArray.length; i++) {
-        permission = collaboratorPermissionArray[i]
-        const permissionXpath = this.getPermissionSwitchXpath(permission)
-        // Check if the xpath of permission is visible
-        await this.api.waitForElementVisible({ selector: permissionXpath, timeout: 100, abortOnFailure: false }, function (result) {
-          if (result.value === true) {
-            this
-              .getAttribute(permissionXpath, 'data-state', (state) => {
-                if ((state.value === 'on' && !requiredPermissionArray.includes(permission)) ||
-                  (state.value === 'off' && requiredPermissionArray.includes(permission))) {
-                  // need to click
-                  this.useXpath()
-                    .click(permissionXpath)
-                }
-              })
-          }
-          // check if the requiredPermission is not visible
-          if (result.value === false && requiredPermissionArray.includes(permission)) {
-            throw new Error(`permission ${permission} is not visible `)
-          }
-        })
+      let changed = false
+      for (const permission in sharePermissions) {
+        if (
+          (sharePermissions[permission] && !requiredPermissionArray.includes(permission)) ||
+          (!sharePermissions[permission] && requiredPermissionArray.includes(permission))
+        ) {
+          changed = true
+          await this.toggleSinglePermission(
+            permission,
+            requiredPermissionArray.includes(permission)
+          )
+        }
       }
-      return this.saveCollaboratorPermission()
+      if (changed) {
+        await this.saveCollaboratorPermission()
+      }
     },
     /**
      * asserts that the permission is set to "off" or not displayed at all
@@ -233,25 +275,10 @@ module.exports = {
      */
     disableAllCustomPermissions: async function (collaborator) {
       this.expandInformationSelector(collaborator)
-
       for (let i = 0; i < collaboratorPermissionArray.length; i++) {
-        const permission = collaboratorPermissionArray[i]
-        const permissionXpath = this.getPermissionSwitchXpath(permission)
-        // Check if the xpath of permission is visible
-        await this.api.waitForElementVisible({ selector: permissionXpath, timeout: 100, abortOnFailure: false }, function (result) {
-          if (result.value === true) {
-            this
-              .getAttribute(permissionXpath, 'data-state', (state) => {
-                if (state.value === 'on') {
-                  // need to click
-                  this.useXpath()
-                    .click(permissionXpath)
-                }
-              })
-          }
-        })
+        await this.toggleSinglePermission(collaboratorPermissionArray[i], false, false)
       }
-      return this.saveCollaboratorPermission()
+      await this.saveCollaboratorPermission()
     },
     /**
      *
@@ -455,12 +482,15 @@ module.exports = {
     },
     roleButtonInDropdown: {
       // the translate bit is to make it case-insensitive
-      selector: '//span[translate(.,"ABCDEFGHJIKLMNOPQRSTUVWXYZ","abcdefghjiklmnopqrstuvwxyz") ="%s"]',
+      selector: '//ul[contains(@class,"oc-autocomplete-suggestion-list")]//span[translate(.,"ABCDEFGHJIKLMNOPQRSTUVWXYZ","abcdefghjiklmnopqrstuvwxyz") ="%s"]',
       locateStrategy: 'xpath'
     },
     permissionButton: {
       selector: '//span[.="Can %s"]/parent::div/div',
       locateStrategy: 'xpath'
+    },
+    permissionButtons: {
+      selector: '//span[contains(., "Can")]/parent::div/div[contains(@class, "oc-switch")]'
     }
   }
 }
