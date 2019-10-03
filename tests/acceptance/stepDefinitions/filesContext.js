@@ -464,9 +464,11 @@ Then('file/folder {string} should be listed in shared-with-others page on the we
   client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
   return client.page.FilesPageElement.filesList().waitForFileVisible(filename)
 })
+
 Given('the user has created file {string}', function (fileName) {
   return webdav.createFile(client.globals.currentUser, fileName, '')
 })
+
 Given('the user has created the following folders', function (entryList) {
   entryList.rows().forEach(entry => {
     webdav.createFolder(client.globals.currentUser, entry[0])
@@ -489,12 +491,10 @@ When('the user browses to the folder {string} on the files page', (folderName) =
 When('the user copies the permalink of the current folder using the webUI', function () {
   return client.page.filesPage().copyPermalinkFromFilesAppBar()
 })
-Then('the clipboard content should match permalink of resource {string}', function (folderName) {
+Then('the clipboard content should match permalink of resource {string}', async function (folderName) {
+  const folderData = await webdav.getProperties(folderName, client.globals.currentUser, ['oc:privatelink'])
   return client.getClipBoardContent(function (value) {
-    webdav.getProperties(folderName, client.globals.currentUser, ['oc:privatelink'])
-      .then(folderData => {
-        assert.strictEqual(folderData['oc:privatelink'], value)
-      })
+    assert.strictEqual(folderData['oc:privatelink'], value)
   })
 })
 
@@ -504,4 +504,8 @@ Then('the app-sidebar for file/folder {string} should be visible on the webUI', 
       assert.strictEqual(value, true, 'sidebar should be visible, but is not')
     })
     .checkSidebarItem(resource)
+})
+
+Then('the thumbnail should be visible in the app-sidebar', function () {
+  return client.page.FilesPageElement.appSideBar().isThumbnailVisible()
 })

@@ -2,6 +2,7 @@ const { client } = require('nightwatch-api')
 const fetch = require('node-fetch')
 const httpHelper = require('../helpers/httpHelper')
 const convert = require('xml-js')
+const _ = require('lodash/object')
 
 /**
  *
@@ -174,18 +175,26 @@ exports.createFile = function (user, fileName, contents = '') {
  * @param {array} requestedProps
 */
 exports.getProperties = function (path, userId, requestedProps) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const trimmedPath = path.replace(/^\/+/, '') // remove a leading slash
     const relativePath = `/files/${userId}/${trimmedPath}`
     exports.propfind(relativePath, userId, requestedProps,
       0)
       .then(str => {
-        const response = JSON.parse(convert.xml2json(str, { compact: true }))['d:multistatus']['d:response']
+        const response = JSON.parse(convert.xml2json(str, { compact: true }))
+        const receivedProps = _.get(
+          response,
+          "['d:multistatus']['d:response']['d:propstat']['d:prop']"
+        )
+        if (receivedProps === undefined) {
+          const errMsg = "Could not find 'd:prop' inside response. Received:\n"
+          return reject(new Error(errMsg + JSON.stringify(str)))
+        }
         const properties = {}
         requestedProps.map(propertyName => {
-          properties[propertyName] = response['d:propstat']['d:prop'][propertyName]._text
+          properties[propertyName] = receivedProps[propertyName]._text
         })
-        resolve(properties)
+        return resolve(properties)
       })
   })
 }
