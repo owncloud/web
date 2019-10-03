@@ -11,15 +11,26 @@ config = {
 		'develop*'
 	],
 
-	'codestyle': False,
-
 	'yarnlint': True,
 
-	'javascript': False,
-
-	'phpunit': False,
-
-	'acceptance': False,
+	'acceptance': {
+		'webUI': {
+			'suites': [
+				'webUIFavorites',
+				'webUIFiles',
+				'webUILogin',
+				'webUINotifications',
+				'webUIPrivateLinks',
+				'webUIRenameFiles',
+				'webUIRenameFolders',
+				'webUISharingInternalGroups',
+				'webUISharingInternalUsers',
+				'webUISharingPublic',
+				'webUITrashbin',
+				'webUIUpload',
+			],
+		},
+	},
 }
 
 def main(ctx):
@@ -42,12 +53,11 @@ def beforePipelines():
 
 def stagePipelines():
 	buildPipelines = build()
-	jsPipelines = javascript()
 	acceptancePipelines = acceptance()
-	if (buildPipelines == False) or (jsPipelines == False) or (acceptancePipelines == False):
+	if (buildPipelines == False) or (acceptancePipelines == False):
 		return False
 
-	return buildPipelines + jsPipelines + acceptancePipelines
+	return buildPipelines + acceptancePipelines
 
 def afterPipelines():
 	return [
@@ -72,24 +82,9 @@ def yarnlint():
 			'base': '/var/www/owncloud',
 			'path': config['app']
 		},
-		'steps': [
-			{
-				'name': 'npm-install',
-				'image': 'owncloudci/php',
-				'pull': 'always',
-				'commands': [
-					'yarn install'
-				]
-			},
-			{
-				'name': 'lint-test',
-				'image': 'owncloudci/php',
-				'pull': 'always',
-				'commands': [
-					'yarn run lint'
-				]
-			}
-		],
+		'steps':
+			installNPM() +
+			lintTest(),
 		'depends_on': [],
 		'trigger': {
 			'ref': [
@@ -197,93 +192,6 @@ def build():
 
 	return pipelines
 
-def javascript():
-	pipelines = []
-
-	if 'javascript' not in config:
-		return pipelines
-
-	default = {
-		'coverage': False,
-		'logLevel': '2',
-		'extraSetup': [],
-		'extraServices': [],
-		'extraEnvironment': {},
-		'extraCommandsBeforeTestRun': [],
-	}
-
-	if 'defaults' in config:
-		if 'javascript' in config['defaults']:
-			for item in config['defaults']['javascript']:
-				default[item] = config['defaults']['javascript'][item]
-
-	matrix = config['javascript']
-
-	if type(matrix) == "bool":
-		if matrix:
-			# the config has 'javascript' true, so specify an empty dict that will get the defaults
-			matrix = {}
-		else:
-			return pipelines
-
-	params = {}
-	for item in default:
-		params[item] = matrix[item] if item in matrix else default[item]
-
-	result = {
-		'kind': 'pipeline',
-		'type': 'docker',
-		'name': 'javascript-tests',
-		'workspace' : {
-			'base': '/var/www/owncloud',
-			'path': 'server/apps/%s' % config['app']
-		},
-		'steps':
-			installCore('daily-master-qa', 'sqlite', False) +
-			installApp('7.0') +
-			setupServerAndApp('7.0', params['logLevel']) +
-			params['extraSetup'] +
-		[
-			{
-				'name': 'js-tests',
-				'image': 'owncloudci/php:7.0',
-				'pull': 'always',
-				'environment': params['extraEnvironment'],
-				'commands': params['extraCommandsBeforeTestRun'] + [
-					'make test-js'
-				]
-			}
-		],
-		'services': params['extraServices'],
-		'depends_on': [],
-		'trigger': {
-			'ref': [
-				'refs/pull/**',
-				'refs/tags/**'
-			]
-		}
-	}
-
-	if params['coverage']:
-		result['steps'].append({
-			'name': 'codecov-js',
-			'image': 'plugins/codecov:2',
-			'pull': 'always',
-			'settings': {
-				'paths': [
-					'coverage/*.info',
-				],
-				'token': {
-					'from_secret': 'codecov_token'
-				}
-			}
-		})
-
-	for branch in config['branches']:
-		result['trigger']['ref'].append('refs/heads/%s' % branch)
-
-	return [result]
-
 def acceptance():
 	pipelines = []
 
@@ -297,21 +205,10 @@ def acceptance():
 	errorFound = False
 
 	default = {
-		'servers': ['daily-master-qa', 'latest'],
+		'servers': ['daily-master-qa'],
 		'browsers': ['chrome'],
-		'phpVersions': ['7.0'],
-		'databases': ['mariadb:10.2'],
-		'federatedServerNeeded': False,
-		'filterTags': '',
+		'databases': ['mysql:5.5'],
 		'logLevel': '2',
-		'emailNeeded': False,
-		'extraSetup': [],
-		'extraServices': [],
-		'extraEnvironment': {},
-		'extraCommandsBeforeTestRun': [],
-		'extraApps': [],
-		'useBundledApp': False,
-		'includeKeyInMatrixName': False,
 	}
 
 	if 'defaults' in config:
@@ -328,132 +225,62 @@ def acceptance():
 			suites = matrix['suites']
 
 		for suite, shortSuiteName in suites.items():
-			isWebUI = suite.startswith('webUI')
-			isAPI = suite.startswith('api')
-			isCLI = suite.startswith('cli')
 
 			params = {}
 			for item in default:
 				params[item] = matrix[item] if item in matrix else default[item]
 
-			if isAPI or isCLI:
-				params['browsers'] = ['']
-
 			for server in params['servers']:
 				for browser in params['browsers']:
-					for phpVersion in params['phpVersions']:
-						for db in params['databases']:
-							name = 'unknown'
+					for db in params['databases']:
+						browserString = '' if browser == '' else '-' + browser
+						name = 'acceptance-%s%s' % (shortSuiteName, browserString)
+						maxLength = 50
+						nameLength = len(name)
+						if nameLength > maxLength:
+							print("Error: generated stage name of length", nameLength, "is not supported. The maximum length is " + str(maxLength) + ".", name)
+							errorFound = True
 
-							if isWebUI or isAPI or isCLI:
-								browserString = '' if browser == '' else '-' + browser
-								keyString = '-' + category if params['includeKeyInMatrixName'] else ''
-								name = '%s%s-%s%s-%s-php%s' % (shortSuiteName, keyString, server.replace('daily-', '').replace('-qa', ''), browserString, db.replace(':', ''), phpVersion)
-								maxLength = 50
-								nameLength = len(name)
-								if nameLength > maxLength:
-									print("Error: generated stage name of length", nameLength, "is not supported. The maximum length is " + str(maxLength) + ".", name)
-									errorFound = True
-
-							environment = {}
-							for env in params['extraEnvironment']:
-								environment[env] = params['extraEnvironment'][env]
-
-							environment['TEST_SERVER_URL'] = 'http://server'
-							environment['BEHAT_FILTER_TAGS'] = params['filterTags']
-							environment['BEHAT_SUITE'] = suite
-
-							if isWebUI:
-								environment['SELENIUM_HOST'] = 'selenium'
-								environment['SELENIUM_PORT'] = '4444'
-								environment['BROWSER'] = browser
-								environment['PLATFORM'] = 'Linux'
-								makeParameter = 'test-acceptance-webui'
-
-							if isAPI:
-								makeParameter = 'test-acceptance-api'
-
-							if isCLI:
-								makeParameter = 'test-acceptance-cli'
-
-							if params['emailNeeded']:
-								environment['MAILHOG_HOST'] = 'email'
-
-							result = {
-								'kind': 'pipeline',
-								'type': 'docker',
-								'name': name,
-								'workspace' : {
-									'base': '/var/www/owncloud',
-									'path': 'testrunner/apps/%s' % config['app']
-								},
-								'steps':
-									installCore(server, db, params['useBundledApp']) +
-									installTestrunner(phpVersion, params['useBundledApp']) +
-								([
-									{
-										'name': 'install-federation',
-										'image': 'owncloudci/core',
-										'pull': 'always',
-										'settings': {
-											'version': server,
-											'core_path': '/var/www/owncloud/federated'
-										}
-									},
-									{
-										'name': 'configure-federation',
-										'image': 'owncloudci/php:%s' % phpVersion,
-										'pull': 'always',
-										'commands': [
-											'echo "export TEST_SERVER_FED_URL=http://federated" > /var/www/owncloud/saved-settings.sh',
-											'cd /var/www/owncloud/federated',
-											'php occ a:l',
-											'php occ a:e testing',
-											'php occ a:l',
-											'php occ config:system:set trusted_domains 1 --value=federated',
-											'php occ log:manage --level %s' % params['logLevel'],
-											'php occ config:list'
-										]
-									}
-								] + owncloudLog('federated') if params['federatedServerNeeded'] else []) +
-									installApp(phpVersion) +
-									installExtraApps(phpVersion, params['extraApps']) +
-									setupServerAndApp(phpVersion, params['logLevel']) +
-									owncloudLog('server') +
-									params['extraSetup'] +
-									fixPermissions(phpVersion, params['federatedServerNeeded']) +
-								[
-									({
-										'name': 'acceptance-tests',
-										'image': 'owncloudci/php:%s' % phpVersion,
-										'pull': 'always',
-										'environment': environment,
-										'commands': params['extraCommandsBeforeTestRun'] + [
-											'touch /var/www/owncloud/saved-settings.sh',
-											'. /var/www/owncloud/saved-settings.sh',
-											'make %s' % makeParameter
-										]
-									}),
-								],
-								'services': databaseService(db)
-									+ browserService(browser)
-									+ emailService(params['emailNeeded'])
-									+ params['extraServices']
-									+ owncloudService(server, phpVersion, 'server', '/var/www/owncloud/server', False)
-									+ (owncloudService(server, phpVersion, 'federated', '/var/www/owncloud/federated', False) if params['federatedServerNeeded'] else []),
-								'depends_on': [],
-								'trigger': {
-									'ref': [
-										'refs/pull/**',
-										'refs/tags/**'
-									]
-								}
+						result = {
+							'kind': 'pipeline',
+							'type': 'docker',
+							'name': name,
+							'workspace' : {
+								'base': '/var/www/owncloud',
+								'path': config['app']
+							},
+							'steps':
+								installNPM() +
+								buildPhoenix() +
+								installCore(server, db) +
+								cloneOauth() +
+								setupServerAndApp(params['logLevel']) +
+								owncloudLog() +
+								fixPermissions() +
+								runWebuiAcceptanceTests(suite) +
+								uploadScreenshots() +
+								buildGithubComment(suite) +
+								githubComment(),
+							'services':
+								phoenixService() +
+								owncloudService() +
+								browserService(browser) +
+								databaseService(db),
+							'depends_on': [],
+							'trigger': {
+								'ref': [
+									'refs/tags/**',
+									'refs/pull/**',
+									'refs/pull-requests/**',
+									'refs/merge-requests/**',
+								]
 							}
+						}
 
-							for branch in config['branches']:
-								result['trigger']['ref'].append('refs/heads/%s' % branch)
+						for branch in config['branches']:
+							result['trigger']['ref'].append('refs/heads/%s' % branch)
 
-							pipelines.append(result)
+						pipelines.append(result)
 
 	if errorFound:
 		return False
@@ -540,55 +367,41 @@ def browserService(name):
 	if name == 'chrome':
 		return [{
 			'name': 'selenium',
-			'image': 'selenium/standalone-chrome-debug:3.141.59-oxygen',
+			'image': 'selenium/standalone-chrome-debug:latest',
 			'pull': 'always',
-			'environment': {
-				'JAVA_OPTS': '-Dselenium.LOGGER.level=WARNING'
-			}
 		}]
 
 	if name == 'firefox':
 		return [{
 			'name': 'selenium',
-			'image': 'selenium/standalone-firefox-debug:3.8.1',
-			'pull': 'always',
-			'environment': {
-				'JAVA_OPTS': '-Dselenium.LOGGER.level=WARNING',
-				'SE_OPTS': '-enablePassThrough false'
-			}
-		}]
-
-	return []
-
-def emailService(emailNeeded):
-	if emailNeeded:
-		return [{
-			'name': 'email',
-			'image': 'mailhog/mailhog',
+			'image': 'selenium/standalone-firefox-debug:latest',
 			'pull': 'always',
 		}]
 
 	return []
 
-def owncloudService(version, phpVersion, name = 'server', path = '/var/www/owncloud/server', ssl = True):
-	if ssl:
-		environment = {
-			'APACHE_WEBROOT': path,
-			'APACHE_CONFIG_TEMPLATE': 'ssl',
-			'APACHE_SSL_CERT_CN': 'server',
-			'APACHE_SSL_CERT': '/var/www/owncloud/%s.crt' % name,
-			'APACHE_SSL_KEY': '/var/www/owncloud/%s.key' % name
-		}
-	else:
-		environment = {
-			'APACHE_WEBROOT': path
-		}
-
+def phoenixService():
 	return [{
-		'name': name,
-		'image': 'owncloudci/php:%s' % phpVersion,
+		'name': 'phoenix',
+		'image': 'owncloudci/php:7.1',
 		'pull': 'always',
-		'environment': environment,
+		'environment': {
+			'APACHE_WEBROOT': '/var/www/owncloud/phoenix/dist',
+		},
+		'commands': [
+			'mkdir dist',
+			'/usr/local/bin/apachectl -e debug -D FOREGROUND',
+		]
+	}]
+
+def owncloudService():
+	return [{
+		'name': 'owncloud',
+		'image': 'owncloudci/php:7.1',
+		'pull': 'always',
+		'environment': {
+			'APACHE_WEBROOT': '/var/www/owncloud/',
+		},
 		'command': [
 			'/usr/local/bin/apachectl',
 			'-e',
@@ -628,7 +441,7 @@ def getDbDatabase(db):
 
 	return 'owncloud'
 
-def installCore(version, db, useBundledApp):
+def installCore(version, db):
 	host = getDbName(db)
 	dbType = host
 
@@ -651,7 +464,7 @@ def installCore(version, db, useBundledApp):
 		'pull': 'always',
 		'settings': {
 			'version': version,
-			'core_path': '/var/www/owncloud/server',
+			'core_path': '/var/www/owncloud/',
 			'db_type': dbType,
 			'db_name': database,
 			'db_host': host,
@@ -660,110 +473,184 @@ def installCore(version, db, useBundledApp):
 		}
 	}
 
-	if not useBundledApp:
-		stepDefinition['settings']['exclude'] = 'apps/%s' % config['app']
-
 	return [stepDefinition]
 
-def installTestrunner(phpVersion, useBundledApp):
-	return [{
-		'name': 'install-testrunner',
-		'image': 'owncloudci/php:%s' % phpVersion,
-		'pull': 'always',
-		'commands': [
-			'mkdir /tmp/testrunner',
-			'git clone -b master --depth=1 https://github.com/owncloud/core.git /tmp/testrunner',
-			'rsync -aIX /tmp/testrunner /var/www/owncloud',
-		] + ([
-			'cp -r /var/www/owncloud/testrunner/apps/%s /var/www/owncloud/server/apps/' % config['app']
-		] if not useBundledApp else []) + [
-			'cd /var/www/owncloud/testrunner',
-			'make install-composer-deps vendor-bin-deps'
-		]
-	}]
+def installNPM():
+	return [
+		{
+			'name': 'npm-install',
+			'image': 'owncloudci/php:7.1',
+			'pull': 'always',
+			'commands': [
+				'yarn install'
+			]
+		}
+	]
 
-def installExtraApps(phpVersion, extraApps):
-	if type(extraApps) == "list":
-		if extraApps == []:
-			return []
-		apps = {}
-		for app in extraApps:
-			apps[app] = ''
-	else:
-		apps = {}
-		for app, command in extraApps.items():
-			apps[app] = command
+def lintTest():
+	return [
+			{
+				'name': 'lint-test',
+				'image': 'owncloudci/php:7.1',
+				'pull': 'always',
+				'commands': [
+					'yarn run lint'
+				]
+			}
+	]
 
-	commandArray = []
-	for app, command in apps.items():
-		commandArray.append('git clone https://github.com/owncloud/%s.git /var/www/owncloud/testrunner/apps/%s' % (app, app))
-		commandArray.append('cp -r /var/www/owncloud/testrunner/apps/%s /var/www/owncloud/server/apps/' % app)
-		if (command != ''):
-			commandArray.append('cd /var/www/owncloud/server/apps/%s' % app)
-			commandArray.append(command)
-		commandArray.append('cd /var/www/owncloud/server')
-		commandArray.append('php occ a:l')
-		commandArray.append('php occ a:e %s' % app)
-		commandArray.append('php occ a:l')
+def buildPhoenix():
+	return [
+			{
+				'name': 'build-phoenix',
+				'image': 'owncloudci/php:7.1',
+				'pull': 'always',
+				'commands': [
+					'yarn dist',
+					'cp tests/drone/config.json dist/config.json'
+				]
+			}
+	]
 
-	return [{
-		'name': 'install-extra-apps',
-		'image': 'owncloudci/php:%s' % phpVersion,
-		'pull': 'always',
-		'commands': commandArray
-	}]
+def cloneOauth():
+	return [
+			{
+				'name': 'clone-oauth',
+				'image': 'owncloud/ubuntu:16.04',
+				'pull': 'always',
+				'commands': [
+					'git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2'
+				]
+			}
+	]
 
-def installApp(phpVersion):
-	if 'appInstallCommand' not in config:
-		return []
-
-	return [{
-		'name': 'install-app-%s' % config['app'],
-		'image': 'owncloudci/php:%s' % phpVersion,
-		'pull': 'always',
-		'commands': [
-			'cd /var/www/owncloud/server/apps/%s' % config['app'],
-			config['appInstallCommand']
-		]
-	}]
-
-def setupServerAndApp(phpVersion, logLevel):
+def setupServerAndApp(logLevel):
 	return [{
 		'name': 'setup-server-%s' % config['app'],
-		'image': 'owncloudci/php:%s' % phpVersion,
+		'image': 'owncloudci/php:7.1',
 		'pull': 'always',
 		'commands': [
-			'cd /var/www/owncloud/server',
-			'php occ a:l',
-			'php occ a:e %s' % config['app'],
+			'cd /var/www/owncloud/',
 			'php occ a:e testing',
-			'php occ a:l',
-			'php occ config:system:set trusted_domains 1 --value=server',
+			'php occ config:system:set trusted_domains 1 --value=owncloud',
+			'php occ config:system:set cors.allowed-domains 0 --value=http://phoenix',
 			'php occ log:manage --level %s' % logLevel,
+			'php occ config:list',
+			'php occ a:e oauth2',
+			'php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html',
+			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton',
+			'php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true',
+			'php occ config:system:set phoenix.baseUrl --value="http://phoenix"'
 		]
 	}]
 
-def fixPermissions(phpVersion, federatedServerNeeded):
+def fixPermissions():
 	return [{
 		'name': 'fix-permissions',
-		'image': 'owncloudci/php:%s' % phpVersion,
+		'image': 'owncloudci/php:7.1',
 		'pull': 'always',
 		'commands': [
-			'chown -R www-data /var/www/owncloud/server'
-		] + ([
-			'chown -R www-data /var/www/owncloud/federated'
-		] if federatedServerNeeded else [])
+			'cd /var/www/owncloud/',
+			'chown www-data * -R'
+		]
 	}]
 
-def owncloudLog(server):
+def owncloudLog():
 	return [{
-		'name': 'owncloud-log-%s' % server,
-		'image': 'owncloud/ubuntu:18.04',
+		'name': 'owncloud-log',
+		'image': 'owncloud/ubuntu:16.04',
 		'pull': 'always',
 		'detach': True,
 		'commands': [
-			'tail -f /var/www/owncloud/%s/data/owncloud.log' % server
+			'tail -f /var/www/owncloud/data/owncloud.log'
 		]
+	}]
+
+def runWebuiAcceptanceTests(suite):
+	return [{
+		'name': 'webui-acceptance-tests',
+		'image': 'owncloudci/php:7.1',
+		'pull': 'always',
+		'environment': {
+			'TEST_CONTEXT': suite,
+			'TEST_TAGS': 'not @skip',
+		},
+		'commands': [
+			'cd /var/www/owncloud/phoenix',
+			'curl http://phoenix/oidc-callback.html',
+			'yarn run acceptance-tests-drone',
+		]
+	}]
+
+def uploadScreenshots():
+	return [{
+		'name': 'upload-screenshots',
+		'image': 'plugins/s3',
+		'pull': 'if-not-exists',
+		'settings': {
+			'acl': 'public-read',
+			'bucket': 'phoenix',
+			'endpoint': 'https://minio.owncloud.com/',
+			'path_style': True,
+			'source': '/var/www/owncloud/phoenix/tests/reports/screenshots/**/*',
+			'strip_prefix': '/var/www/owncloud/phoenix/tests/reports/screenshots',
+			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
+		},
+		'environment': {
+			'AWS_ACCESS_KEY_ID': {
+				'from_secret': 'aws_access_key_id'
+			},
+			'AWS_SECRET_ACCESS_KEY': {
+				'from_secret': 'aws_secret_access_key'
+			},
+		},
+		'when': {
+			'status': [
+				'failure'
+			]
+		},
+	}]
+
+def buildGithubComment(suite):
+	return [{
+		'name': 'build-github-comment',
+		'image': 'owncloud/ubuntu:16.04',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/phoenix/tests/reports/screenshots/',
+			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % suite,
+			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
+			'echo "\n</p></details>" >> comments.file',
+			'more comments.file',
+		],
+		'environment': {
+			'TEST_CONTEXT': suite,
+		},
+		'when': {
+			'status': [
+				'failure'
+			]
+		},
+	}]
+
+def githubComment():
+	return [{
+		'name': 'github-comment',
+		'image': 'jmccann/drone-github-comment:1',
+		'pull': 'if-not-exists',
+		'settings': {
+			'message_file': '/var/www/owncloud/phoenix/tests/reports/screenshots/comments.file',
+		},
+		'environment': {
+			'PLUGIN_API_KEY': {
+				'from_secret': 'plugin_api_key'
+			},
+		},
+		'when': {
+			'status': [
+				'failure'
+			]
+		},
 	}]
 
 def dependsOn(earlierStages, nextStages):
