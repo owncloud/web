@@ -531,3 +531,8 @@ Then('it should not be possible to delete file/folder {string} using the webUI',
     .filesList()
     .assertActionDisabled('delete', resource)
 })
+
+When('the user uploads overwriting file {string} using the webUI', function (file) {
+  return client.page.filesPage().selectFileForUpload(file)
+    .then(() => client.page.filesPage().confirmFileOverwrite())
+})

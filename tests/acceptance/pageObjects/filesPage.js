@@ -52,11 +52,7 @@ module.exports = {
       }
       return this
     },
-    /**
-     *
-     * @param {string} localFileName
-     */
-    uploadFile: function (localFileName) {
+    selectFileForUpload: function (localFileName) {
       return this
         .waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
@@ -65,6 +61,14 @@ module.exports = {
           '@fileUploadInput',
           require('path').join(this.api.globals.filesForUpload, localFileName)
         )
+    },
+    /**
+     *
+     * @param {string} localFileName
+     */
+    uploadFile: function (localFileName) {
+      return this
+        .selectFileForUpload(localFileName)
         .waitForElementVisible(
           '@fileUploadProgress',
           this.api.globals.waitForConditionTimeout,
@@ -163,6 +167,13 @@ module.exports = {
       return this.getAttribute('@sidebarItemName', 'innerText', function (itemName) {
         this.assert.strictEqual(itemName.value, resourceName, `In sidebar is different item - ${itemName.value}`)
       })
+    },
+    confirmFileOverwrite: function () {
+      return this
+        .waitForElementVisible('@fileOverwriteConfirm')
+        .click('@fileOverwriteConfirm')
+        .waitForElementNotVisible('@fileOverwriteConfirm')
+        .waitForAjaxCallsToStartAndFinish()
     }
   },
   elements: {
@@ -240,6 +251,10 @@ module.exports = {
       selector: '//div[@class="sidebar-container"]',
       locateStrategy: 'xpath'
     },
+    fileOverwriteConfirm: {
+      selector: '#files-overwrite-confirm'
+    },
+
     /**
      * path from inside the side-bar
      */

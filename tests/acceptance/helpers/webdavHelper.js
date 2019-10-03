@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const httpHelper = require('../helpers/httpHelper')
 const convert = require('xml-js')
 const _ = require('lodash/object')
+const occHelper = require('../helpers/occHelper')
 
 /**
  *
@@ -197,4 +198,20 @@ exports.getProperties = function (path, userId, requestedProps) {
         return resolve(properties)
       })
   })
+}
+
+exports.getSkeletonFile = function (filename) {
+  return occHelper.runOcc(['config:system:get', 'skeletondirectory'])
+    .then(resp => resp.ocs.data.stdOut)
+    .then(dir => {
+      const headers = httpHelper.createAuthHeader('admin')
+      const element = dir.trim() + '/' + filename
+      return fetch(
+        client.globals.backend_url + `/ocs/v2.php/apps/testing/api/v1/file?file=${encodeURIComponent(element)}&absolute=true&format=json`,
+        { method: 'GET', headers })
+    })
+    .then(res => res.json())
+    .then(body => {
+      return decodeURIComponent(body.ocs.data[0].contentUrlEncoded)
+    })
 }
