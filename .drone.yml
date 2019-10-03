@@ -13,13 +13,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: lint-test
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - yarn run lint
@@ -49,13 +49,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -65,12 +65,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -80,7 +80,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -102,14 +102,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -168,7 +168,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -177,7 +177,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -225,13 +225,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -241,12 +241,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -256,7 +256,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -278,14 +278,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -344,7 +344,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -353,7 +353,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -401,13 +401,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -417,12 +417,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -432,7 +432,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -454,14 +454,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -520,7 +520,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -529,7 +529,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -577,13 +577,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -593,12 +593,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -608,7 +608,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -630,14 +630,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -696,7 +696,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -705,7 +705,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -753,13 +753,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -769,12 +769,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -784,7 +784,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -806,14 +806,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -872,7 +872,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -881,7 +881,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -929,13 +929,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -945,12 +945,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -960,7 +960,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -982,14 +982,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1048,7 +1048,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -1057,7 +1057,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -1105,13 +1105,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -1121,12 +1121,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -1136,7 +1136,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -1158,14 +1158,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1224,7 +1224,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -1233,7 +1233,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -1281,13 +1281,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -1297,12 +1297,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -1312,7 +1312,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -1334,14 +1334,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1400,7 +1400,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -1409,7 +1409,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -1457,13 +1457,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -1473,12 +1473,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -1488,7 +1488,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -1510,14 +1510,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1576,7 +1576,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -1585,7 +1585,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -1633,13 +1633,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -1649,12 +1649,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -1664,7 +1664,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -1686,14 +1686,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1752,7 +1752,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -1761,7 +1761,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -1809,13 +1809,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -1825,12 +1825,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -1840,7 +1840,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -1862,14 +1862,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1926,7 +1926,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -1935,7 +1935,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -1983,13 +1983,13 @@ workspace:
 steps:
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn dist
   - cp tests/drone/config.json dist/config.json
@@ -1999,12 +1999,12 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/
-    db_host: ${DB_TYPE=mysql}
-    db_name: ${DB_NAME=owncloud}
+    db_host: mysql
+    db_name: owncloud
     db_password: owncloud
-    db_type: ${DB_TYPE=mysql}
+    db_type: mysql
     db_username: owncloud
-    version: ${OC_VERSION=daily-master-qa}
+    version: daily-master-qa
 
 - name: clone-oauth
   pull: always
@@ -2014,7 +2014,7 @@ steps:
 
 - name: configure-server
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - php occ a:e testing
@@ -2036,14 +2036,14 @@ steps:
 
 - name: fix-permissions
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -2100,7 +2100,7 @@ steps:
 services:
 - name: phoenix
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - mkdir dist
   - /usr/local/bin/apachectl -e debug -D FOREGROUND
@@ -2109,7 +2109,7 @@ services:
 
 - name: owncloud
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   command:
   - /usr/local/bin/apachectl
   - -e
@@ -2168,13 +2168,13 @@ steps:
 
 - name: npm-install
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - yarn install
 
 - name: build-release
   pull: always
-  image: owncloudci/php:${PHP_VERSION=7.1}
+  image: owncloudci/php:7.1
   commands:
   - cd /var/www/owncloud/phoenix
   - make -f Makefile.release dist
