@@ -464,9 +464,11 @@ Then('file/folder {string} should be listed in shared-with-others page on the we
   client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
   return client.page.FilesPageElement.filesList().waitForFileVisible(filename)
 })
+
 Given('the user has created file {string}', function (fileName) {
   return webdav.createFile(client.globals.currentUser, fileName, '')
 })
+
 Given('the user has created the following folders', function (entryList) {
   entryList.rows().forEach(entry => {
     webdav.createFolder(client.globals.currentUser, entry[0])
@@ -496,4 +498,8 @@ Then('the clipboard content should match permalink of resource {string}', functi
         assert.strictEqual(folderData['oc:privatelink'], value)
       })
   })
+})
+
+Then('the thumbnail should be visible in the app-sidebar', function () {
+  return client.page.FilesPageElement.appSideBar().isThumbnailVisible()
 })
