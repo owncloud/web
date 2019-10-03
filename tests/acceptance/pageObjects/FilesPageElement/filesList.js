@@ -5,21 +5,49 @@ const xpathHelper = require('../../helpers/xpath')
 module.exports = {
   commands: {
     /**
+     * Action button selector for Low Resolution screens
+     *
+     * @param {string} action
+     * @param {string} fileName
+     * @returns {string}
+     */
+    getActionSelectorLowRes: function (action, fileName) {
+      return '(' + this.getFileRowSelectorByFileName(fileName) +
+        this.elements[action + 'ButtonInFileRow'].selector + ')[last()]'
+    },
+    /**
+     * Action button selector for High Resolution screens
+     *
+     * @param {string} action
+     * @param {string} fileName
+     * @returns {string}
+     */
+    getActionSelectorHighRes: function (action, fileName) {
+      return '(' + this.getFileRowSelectorByFileName(fileName) +
+        this.elements[action + 'ButtonInFileRow'].selector + ')[1]'
+    },
+    /**
+     * Get Selector for File Actions expander
+     *
+     * @param fileName
+     * @returns {string}
+     */
+    getFileActionBtnSelector: function (fileName) {
+      return this.getFileRowSelectorByFileName(fileName) +
+        this.elements.fileActionsButtonInFileRow.selector
+    },
+    /**
      * perform one of the main file actions
      * this method does find out itself if the file-action burger has to be clicked or not
      *
      * @param {string} fileName
-     * @param {string} delete|share|rename
+     * @param {string} action delete|share|rename
      * @returns {*}
      */
     performFileAction: function (fileName, action) {
-      const btnSelectorHighResolution = '(' + this.getFileRowSelectorByFileName(fileName) +
-        this.elements[action + 'ButtonInFileRow'].selector + ')[1]'
-      const btnSelectorLowResolution = '(' + this.getFileRowSelectorByFileName(fileName) +
-        this.elements[action + 'ButtonInFileRow'].selector + ')[last()]'
-      const fileActionsBtnSelector = this.getFileRowSelectorByFileName(fileName) +
-        this.elements.fileActionsButtonInFileRow.selector
-
+      const btnSelectorHighResolution = this.getActionSelectorHighRes(action, fileName)
+      const btnSelectorLowResolution = this.getActionSelectorLowRes(action, fileName)
+      const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName)
       return this.initAjaxCounters()
         .useXpath()
         .isVisible(fileActionsBtnSelector, (result) => {
@@ -302,6 +330,39 @@ module.exports = {
         .useXpath()
         .waitForElementNotPresent('@loadingIndicator')
         .waitForElementPresent(this.getFileRowSelectorByFileName(element))
+    },
+
+    /**
+     * @param {string} action
+     * @param {string} fileName
+     * @returns {Promise}
+     */
+    assertActionDisabled: function (action, fileName) {
+      const btnSelectorHighResolution = this.getActionSelectorHighRes(action, fileName)
+      const btnSelectorLowResolution = this.getActionSelectorLowRes(action, fileName)
+      const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName)
+
+      return this
+        .useXpath()
+        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
+        .isVisible(fileActionsBtnSelector, (result) => {
+          if (result.value === true) {
+            this.click(fileActionsBtnSelector)
+              .waitForElementVisible(btnSelectorLowResolution)
+              .getAttribute(btnSelectorLowResolution, 'disabled', result => {
+                this.assert.strictEqual(
+                  result.value, 'true',
+                  `expected property disabled of ${btnSelectorLowResolution} to be 'true' but found ${result.value}`)
+              })
+          } else {
+            this.waitForElementVisible(btnSelectorHighResolution)
+              .getAttribute(btnSelectorHighResolution, 'disabled', result => {
+                this.assert.strictEqual(
+                  result.value, 'true',
+                  `expected property disabled of ${btnSelectorHighResolution} to be 'true' but found ${result.value}`)
+              })
+          }
+        })
     },
     /**
      *

@@ -525,3 +525,9 @@ Then('the thumbnail should be visible in the app-sidebar', function () {
 When('the user deletes the file {string} from the deleted files list', function (element) {
   return client.page.FilesPageElement.filesList().deleteImmediately(element)
 })
+
+Then('it should not be possible to delete file/folder {string} using the webUI', function (resource) {
+  return client.page.FilesPageElement
+    .filesList()
+    .assertActionDisabled('delete', resource)
+})
