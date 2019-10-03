@@ -489,11 +489,9 @@ When('the user browses to the folder {string} on the files page', (folderName) =
 When('the user copies the permalink of the current folder using the webUI', function () {
   return client.page.filesPage().copyPermalinkFromFilesAppBar()
 })
-Then('the clipboard content should match permalink of resource {string}', function (folderName) {
+Then('the clipboard content should match permalink of resource {string}', async function (folderName) {
+  const folderData = await webdav.getProperties(folderName, client.globals.currentUser, ['oc:privatelink'])
   return client.getClipBoardContent(function (value) {
-    webdav.getProperties(folderName, client.globals.currentUser, ['oc:privatelink'])
-      .then(folderData => {
-        assert.strictEqual(folderData['oc:privatelink'], value)
-      })
+    assert.strictEqual(folderData['oc:privatelink'], value)
   })
 })
