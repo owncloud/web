@@ -9,6 +9,10 @@ const SELENIUM_HOST = process.env.SELENIUM_HOST || ''
 const SELENIUM_PORT = process.env.SELENIUM_PORT || 4444
 const START_PROCESS = (SELENIUM_HOST === '')
 const FILES_FOR_UPLOAD = process.env.FILES_FOR_UPLOAD || require('path').join(__dirname, '/tests/acceptance/filesForUpload/')
+const SAUCE_USERNAME = process.env.SAUCE_USERNAME
+const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
+const BROWSER_NAME = process.env.BROWSER_NAME
+const SAUCELABS_TUNNEL_NAME = process.env.SAUCELABS_TUNNEL_NAME
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
@@ -58,24 +62,30 @@ module.exports = {
         backend_admin_username: 'admin',
         backend_admin_password: 'admin'
       },
-      selenium_host: 'selenium',
+      selenium_host: SAUCE_USERNAME ? 'saucelabs' : 'selenium',
       webdriver: {
         start_process: false,
-        use_legacy_jsonwire: false
+        use_legacy_jsonwire: false,
+        port: SELENIUM_PORT
       },
-      screenshots : {
-        enabled : true,
-        path : "tests/reports/screenshots",
-        on_failure: true
+      screenshots: {
+        enabled: !SAUCE_USERNAME,
+        path: 'tests/reports/screenshots',
+        on_failure: !SAUCE_USERNAME
       },
       desiredCapabilities: {
-        browserName: 'chrome',
+        browserName: BROWSER_NAME || 'chrome',
         javascriptEnabled: true,
         acceptSslCerts: true,
-        chromeOptions: {
+        username: SAUCE_USERNAME,
+        access_key: SAUCE_ACCESS_KEY,
+        chromeOptions: SAUCE_USERNAME ? undefined : {
           args: ['disable-gpu', 'disable-dev-shm-usage'],
           w3c: false
-        }
+        },
+        tunnelIdentifier: SAUCELABS_TUNNEL_NAME,
+        idleTimeout: 180,
+        screenResolution: SAUCE_USERNAME ? '1280x1024' : undefined
       }
     }
   }
