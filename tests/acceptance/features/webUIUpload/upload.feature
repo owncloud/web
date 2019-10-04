@@ -1,3 +1,4 @@
+@skipOnIE
 Feature: File Upload
 
   As a user
