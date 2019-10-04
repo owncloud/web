@@ -85,7 +85,12 @@ const shareFileFolder = function (elementToShare, sharer, receiver, shareType = 
 const assertCollaboratorslistContains = function (type, name, role) {
   return client.page.FilesPageElement.sharingDialog().getCollaboratorsList()
     .then(shares => {
-      let expectedString = name + '\n' + role
+      const cleanedShares = []
+      for (var i = 0; i < shares.length; i++) {
+        cleanedShares.push(shares[i].replace(/\n/g, ' '))
+        // depending on the browser there are extra \n or not, so get rid of them all
+      }
+      let expectedString = name + ' ' + role
       if (type === 'user') {
         expectedString = expectedString + client.page.FilesPageElement.sharingDialog().getUserSharePostfix()
       } else if (type === 'group') {
@@ -93,7 +98,8 @@ const assertCollaboratorslistContains = function (type, name, role) {
       } else {
         throw new Error('illegal type')
       }
-      if (!shares || !shares.includes(expectedString)) {
+      expectedString = expectedString.replace('\n', ' ')
+      if (!shares || !cleanedShares.includes(expectedString)) {
         assert.fail(
           `"${name}" was expected to be in share list but was not present. Found collaborators text:"` + shares + '"'
         )
