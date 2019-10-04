@@ -81,7 +81,7 @@ In the local Phoenix checkout, copy the `config.json.sample` file to `config.jso
 - build, configure and run phoenix
 - setup selenium & browser
     - install the Chrome browser and let yarn start & run selenium OR
-    - use docker to start the browser and selenium e.g.: `docker run -d -p 4445:4444 -p 5900:5900 -v /dev/shm:/dev/shm --name selenium selenium/standalone-chrome-debug`
+    - use docker to start the browser and selenium e.g.: `docker run -d -p 4444:4444 -p 5900:5900 -v /dev/shm:/dev/shm --name selenium selenium/standalone-chrome-debug`
 - run `yarn run acceptance-tests <feature-files-to-test>`
 - available settings to be set by environment variables:
 
@@ -92,7 +92,7 @@ In the local Phoenix checkout, copy the `config.json.sample` file to `config.jso
 | `BACKEND_USERNAME` | owncloud administrator username                                        | admin                 |
 | `BACKEND_PASSWORD` | owncloud administrator password                                        | admin                 |
 | `SELENIUM_HOST`    | selenium server host, if not set yarn will start selenum automatically<br/>if running the selenium docker container as mentioned above set to `localhost` |                       |
-| `SELENIUM_PORT`    | port of selenium server                                                | 4445                  |
+| `SELENIUM_PORT`    | port of selenium server                                                | 4444                  |
 | `SCREEN_RESOLUTION`| width and height in px to set the browser resulution to e.g. 375x812   | empty = fullscreen    |
 
 ## Updating dependencies

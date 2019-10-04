@@ -6,7 +6,7 @@ const BACKEND_ADMIN_USERNAME = process.env.BACKEND_USERNAME || 'admin'
 const BACKEND_ADMIN_PASSWORD = process.env.BACKEND_PASSWORD || 'admin'
 LOCAL_BACKEND_URL = LOCAL_BACKEND_URL.startsWith('http') ? LOCAL_BACKEND_URL : 'http://' + LOCAL_BACKEND_URL
 const SELENIUM_HOST = process.env.SELENIUM_HOST || ''
-const SELENIUM_PORT = process.env.SELENIUM_PORT || 4445
+const SELENIUM_PORT = process.env.SELENIUM_PORT || 4444
 const START_PROCESS = (SELENIUM_HOST === '')
 const FILES_FOR_UPLOAD = process.env.FILES_FOR_UPLOAD || require('path').join(__dirname, '/tests/acceptance/filesForUpload/')
 
