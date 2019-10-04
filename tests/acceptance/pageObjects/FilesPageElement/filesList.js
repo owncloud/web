@@ -129,7 +129,7 @@ module.exports = {
         .waitForElementVisible('@renameFileConfirmationBtn')
         .waitForAnimationToFinish()
         .clearValue('@renameFileInputField')
-        .setValue('@renameFileInputField', toName)
+        .setValueBySingleKeys('@renameFileInputField', toName)
         .click('@renameFileConfirmationBtn')
         .waitForOutstandingAjaxCalls()
         .useCss()
@@ -245,7 +245,7 @@ module.exports = {
         .useXpath()
         .waitForElementVisible(rowSelector)
         .getAttribute(linkSelector, 'innerText', function (result) {
-          this.assert.strictEqual(result.value, fileName, 'displayed file name not as expected')
+          this.assert.strictEqual(result.value.trim(), fileName, 'displayed file name not as expected')
         })
       return this.useCss()
     },
