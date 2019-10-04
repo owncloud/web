@@ -1,5 +1,5 @@
 <template>
-  <oc-application-menu name="coreMenu" v-model="sidebarIsVisible" @close="sidebarIsVisible = false">
+  <oc-application-menu name="coreMenu" v-model="sidebarIsVisible" @close="sidebarIsVisible = false" :close-button-label="closeButtonLabel">
     <oc-sidebar-nav-item v-for="(n, nid) in nav" :key="nid" :icon="n.iconMaterial" :target="n.route ? n.route.path : null" @click="openItem(n.url)">{{ translateMenu(n) }}</oc-sidebar-nav-item>
 
     <oc-sidebar-nav-item icon="account_circle" target="/account" :isolate="true">
@@ -29,6 +29,9 @@ export default {
     }
   },
   computed: {
+    closeButtonLabel () {
+      return this.$gettext('Close Menu')
+    },
     nav () {
       return this.$root.navItems.filter(item => {
         if (item.enabled === undefined) {
