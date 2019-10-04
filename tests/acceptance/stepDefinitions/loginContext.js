@@ -1,7 +1,6 @@
 const { client } = require('nightwatch-api')
 const { Given, Then, When } = require('cucumber')
 const loginHelper = require('../helpers/loginHelper')
-const userSettings = require('../helpers/userSettings')
 
 Given(/^the user has browsed to the login page$/,
   () => {
@@ -18,8 +17,7 @@ When('the user logs in with username {string} and password {string} using the we
 )
 
 When('the user {string} logs in using the webUI',
-  (username) => client.page.ownCloudLoginPage()
-    .login(username, userSettings.getPasswordForUser(username))
+  (username) => loginHelper.loginAsUser(username)
 )
 
 When('the user authorizes access to phoenix',
