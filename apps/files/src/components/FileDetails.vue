@@ -1,17 +1,20 @@
 <template>
-  <oc-app-side-bar :key="highlightedFile.id" class="uk-padding-small uk-overflow-auto uk-height-1-1" :disableAction="false" @close="close()">
+  <oc-app-side-bar id="files-sidebar" :key="highlightedFile.id" class="uk-padding-small uk-overflow-auto uk-height-1-1" :disableAction="false" @close="close()">
     <template slot="title" v-if="highlightedFile">
       <div class="uk-inline">
         <oc-icon :name="fileTypeIcon(highlightedFile)" size="large" />
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
-          <span class="uk-margin-small-right uk-text-bold">{{ highlightedFile.name }}</span>
+          <span id="files-sidebar-item-name" class="uk-margin-small-right uk-text-bold" v-text="highlightedFile.name" />
           <template v-if="highlightedFile.privateLink">
-            <oc-icon name="ready" v-show="linkCopied" />
-            <oc-icon name="link" v-clipboard="() => highlightedFile.privateLink"
-                     v-show="!linkCopied"
-                     v-clipboard:success="clipboardSuccessHandler"
+            <oc-icon name="ready" id="files-sidebar-private-link-icon-copied" v-show="linkCopied" />
+            <oc-icon
+              name="link"
+              id="files-sidebar-private-link-icon"
+              v-show="!linkCopied"
+              v-clipboard:copy="highlightedFile.privateLink"
+              v-clipboard:success="clipboardSuccessHandler"
             />
           </template>
         </div>

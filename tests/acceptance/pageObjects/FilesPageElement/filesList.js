@@ -312,6 +312,17 @@ module.exports = {
           resolve(result)
         })
       })
+    },
+
+    copyPrivateLink: function () {
+      return this
+        .waitForElementVisible('@sidebar')
+        .waitForElementVisible('@sidebarPrivateLinkIcon')
+        .click('@sidebarPrivateLinkIcon')
+        .waitForElementNotVisible('@sidebarPrivateLinkIcon')
+        .waitForElementVisible('@sidebarPrivateLinkIconCopied')
+        .waitForElementNotVisible('@sidebarPrivateLinkIconCopied')
+        .waitForElementVisible('@sidebarPrivateLinkIcon')
     }
   },
   elements: {
@@ -405,6 +416,15 @@ module.exports = {
     sidebarCloseBtn: {
       selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
       locateStrategy: 'xpath'
+    },
+    sidebar: {
+      selector: '#files-sidebar'
+    },
+    sidebarPrivateLinkIcon: {
+      selector: '#files-sidebar-private-link-icon'
+    },
+    sidebarPrivateLinkIconCopied: {
+      selector: '#files-sidebar-private-link-icon-copied'
     }
   }
 }

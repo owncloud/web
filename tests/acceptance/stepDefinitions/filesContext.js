@@ -498,6 +498,14 @@ Then('the clipboard content should match permalink of resource {string}', async 
   })
 })
 
+Then('the app-sidebar for file/folder {string} should be visible on the webUI', resource => {
+  return client.page.filesPage()
+    .isSidebarVisible(value => {
+      assert.strictEqual(value, true, 'sidebar should be visible, but is not')
+    })
+    .checkSidebarItem(resource)
+})
+
 Then('the thumbnail should be visible in the app-sidebar', function () {
   return client.page.FilesPageElement.appSideBar().isThumbnailVisible()
 })

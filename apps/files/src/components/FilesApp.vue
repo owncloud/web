@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'dragOver', 'setHighlightedFile', 'toggleFileSelect']),
-    ...mapActions(['openFile', 'showMessage', 'setPrivateLinkUrlPath']),
+    ...mapActions(['openFile', 'showMessage']),
 
     trace () {
       console.info('trace', arguments)
@@ -132,7 +132,7 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile', 'currentFolder']),
-    ...mapGetters(['extensions', 'privateLinkUrlPath']),
+    ...mapGetters(['extensions']),
 
     _sidebarOpen () {
       return this.highlightedFile !== null
@@ -145,15 +145,6 @@ export default {
   watch: {
     $route () {
       this.setHighlightedFile(null)
-    }
-  },
-  beforeMount () {
-    // Redirect to private link after authorization
-    if (this.privateLinkUrlPath) {
-      this.$router.push(this.privateLinkUrlPath)
-      // Resets private link path in store
-      // Needed due to persistance of that state
-      this.setPrivateLinkUrlPath(null)
     }
   }
 }

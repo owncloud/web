@@ -1,25 +1,25 @@
 const state = {
   /**
-   * Private link path in case user needs to log in first
-   * @return {string} path to the file/folder
+   * Private link item id in case user needs to log in first
+   * @return {string} id of the file/folder shared via private link
    */
-  privateLinkUrlPath: null
+  privateLinkItemId: null
 }
 
 const actions = {
-  setPrivateLinkUrlPath ({ commit }, path) {
-    commit('SET_PRIVATE_LINK_URL_PATH', path)
+  setPrivateLinkItemId ({ commit }, id) {
+    commit('SET_PRIVATE_LINK_ITEM_ID', id)
   }
 }
 
 const mutations = {
-  SET_PRIVATE_LINK_URL_PATH (state, path) {
-    state.privateLinkUrlPath = path
+  SET_PRIVATE_LINK_ITEM_ID (state, id) {
+    state.privateLinkItemId = id
   }
 }
 
 const getters = {
-  privateLinkUrlPath: state => state.privateLinkUrlPath
+  privateLinkItemId: state => state.privateLinkItemId
 }
 
 export default {

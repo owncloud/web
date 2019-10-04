@@ -49,6 +49,7 @@
     "css-loader": "^3.1.0",
     "cucumber": "cucumber/cucumber-js#issue-727-retry",
     "cucumber-pretty": "^1.5.2",
+    "deepmerge": "^4.0.0",
     "easygettext": "^2.7.0",
     "eslint": "6.3.0",
     "eslint-config-standard": "^14.1.0",
@@ -79,8 +80,8 @@
     "start-server-and-test": "^1.9.1",
     "style-loader": "^1.0.0",
     "url-search-params-polyfill": "^7.0.0",
-    "v-clipboard": "^2.2.2",
     "vue": "^2.6.10",
+    "vue-clipboard2": "^0.3.1",
     "vue-drag-drop": "^1.1.4",
     "vue-events": "^3.1.0",
     "vue-gettext": "^2.1.5",
@@ -117,8 +118,5 @@
       "yarn lint --fix",
       "git add"
     ]
-  },
-  "dependencies": {
-    "deepmerge": "^4.0.0"
   }
 }

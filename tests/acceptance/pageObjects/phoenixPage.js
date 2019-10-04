@@ -92,6 +92,12 @@ module.exports = {
     },
     messageCloseIcon: {
       selector: '.oc-alert-close-icon'
+    },
+    phoenixContainer: {
+      selector: '#Phoenix'
+    },
+    appContainer: {
+      selector: '#oc-app-container'
     }
   }
 }

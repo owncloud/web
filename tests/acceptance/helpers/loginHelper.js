@@ -16,8 +16,8 @@ module.exports = {
     await client.page.ownCloudAuthorizePage().authorize()
 
     return client
-      .page.FilesPageElement.filesList()
-      .waitForElementVisible('@filesTable')
+      .page.phoenixPage()
+      .waitForElementVisible('@appContainer')
       .then(() => {
         client.globals.currentUser = userId
       })

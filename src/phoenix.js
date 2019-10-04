@@ -23,7 +23,7 @@ import router from './router'
 
 import VueEvents from 'vue-events'
 import VueRouter from 'vue-router'
-import Clipboard from 'v-clipboard'
+import VueClipboard from 'vue-clipboard2'
 import VueScrollTo from 'vue-scrollto'
 import VueMeta from 'vue-meta'
 
@@ -53,7 +53,7 @@ Vue.prototype.$client = new OwnCloud()
 Vue.use(VueEvents)
 Vue.use(VueRouter)
 Vue.use(DesignSystem)
-Vue.use(Clipboard)
+Vue.use(VueClipboard)
 Vue.use(VueScrollTo)
 Vue.use(MediaSource)
 Vue.use(PhoenixPlugin)
