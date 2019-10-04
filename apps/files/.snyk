@@ -12,3 +12,8 @@ patch:
         patched: '2019-07-04T06:36:45.449Z'
     - babel-eslint > @babel/traverse > @babel/helper-function-name > @babel/template > @babel/types > lodash:
         patched: '2019-07-04T06:36:45.449Z'
+  SNYK-JS-HTTPSPROXYAGENT-469131:
+    - snyk > proxy-agent > https-proxy-agent:
+        patched: '2019-10-04T06:37:52.019Z'
+    - snyk > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2019-10-04T06:37:52.019Z'
