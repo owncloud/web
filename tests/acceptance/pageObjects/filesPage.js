@@ -187,6 +187,34 @@ module.exports = {
         .click('@fileOverwriteConfirm')
         .waitForElementNotVisible('@fileOverwriteConfirm')
         .waitForAjaxCallsToStartAndFinish()
+    },
+    createNewFile: function (newFileName) {
+      return this
+        .waitForElementVisible('@newFileMenuButton')
+        .click('@newFileMenuButton')
+        .waitForElementVisible('@newFileButton')
+        .click('@newFileButton')
+        .waitForElementVisible('@newFileInputField')
+        .setValue('@newFileInputField', newFileName)
+        .waitForElementVisible('@newFileOkButton')
+        .click('@newFileOkButton')
+    },
+    triesToCreateExistingFile: function (fileName) {
+      return this.waitForElementVisible('@newFileMenuButton')
+        .click('@newFileMenuButton')
+        .waitForElementVisible('@newFileButton')
+        .click('@newFileButton')
+        .waitForElementVisible('@newFileInputField')
+        .setValue('@newFileInputField', fileName)
+    },
+    waitForErrorMessage: function (callback) {
+      return this.waitForElementVisible('@fileAlreadyExistAlert')
+        .getText('@fileAlreadyExistAlert', result => {
+          return callback(result.value)
+        })
+    },
+    checkForButtonDisabled: function () {
+      return this.waitForElementVisible('@createFileOkButtonDisabled')
     }
   },
   elements: {
@@ -202,6 +230,9 @@ module.exports = {
     newFolderButton: {
       selector: '#new-folder-btn'
     },
+    newFileButton: {
+      selector: '#new-file-btn'
+    },
     newFolderDialog: {
       selector: '#new-folder-dialog'
     },
@@ -210,6 +241,14 @@ module.exports = {
     },
     newFolderOkButton: {
       selector: '#new-folder-ok'
+    },
+    newFileOkButton: {
+      selector: "//div[@id='new-file-dialog']//span[contains(text(),'Ok')]",
+      locateStrategy: 'xpath'
+    },
+    fileAlreadyExistAlert: {
+      selector: "//div[@id='new-file-dialog']//div[contains(@class, 'alert-danger')]",
+      locateStrategy: 'xpath'
     },
     permalinkCopyButton: {
       selector: '#files-permalink-copy'
@@ -281,6 +320,14 @@ module.exports = {
     },
     sidebarItemName: {
       selector: '#files-sidebar-item-name'
+    },
+    newFileInputField: {
+      selector: "//input[contains(@placeholder, 'Create')]",
+      locateStrategy: 'xpath'
+    },
+    createFileOkButtonDisabled: {
+      selector: "//div[@id='new-file-dialog']//button[@disabled='disabled']/span[contains(text(), 'Ok')]",
+      locateStrategy: 'xpath'
     }
   }
 }
