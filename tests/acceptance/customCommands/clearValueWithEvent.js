@@ -9,11 +9,11 @@
  * @returns
  */
 exports.command = function clearValueWithEvent (selector) {
-  const { RIGHT_ARROW, BACK_SPACE } = this.Keys
+  const { END, BACK_SPACE } = this.Keys
   return this.getValue(selector, result => {
     const chars = result.value.split('')
     // Make sure we are at the end of the input
-    chars.forEach(() => this.setValue(selector, RIGHT_ARROW))
+    this.setValue(selector, END)
     // Delete all the existing characters
     chars.forEach(() => this.setValue(selector, BACK_SPACE))
   })
