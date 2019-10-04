@@ -84,8 +84,8 @@ Feature: User can open the details panel for any file or folder
 
   @yetToImplement
   @comments-app-required
-  Scenario: user shares a file via link and then the details dialog should work in a Shared with others page
-    Given the user "user2" has created a new public link for resource "simple-folder"
+  Scenario: user shares a folder via link and then the details dialog should work in a Shared with others page
+    Given the user "user1" has created a new public link for resource "simple-folder"
     When the user browses to the shared-with-others page
     Then folder "simple-folder" should be listed on the webUI
     When the user picks the row of folder "simple-folder" in the webUI
@@ -114,6 +114,20 @@ Feature: User can open the details panel for any file or folder
 #    Then the "comments" details panel should be visible
     When the user switches to "links" tab in details panel using the webUI
     Then the "links" details panel should be visible
+
+  @issue-2150
+  Scenario: without any share the shared-with-others page should be empty
+    When the user browses to the shared-with-others page using the webUI
+    Then folder "simple-folder" should be listed on the webUI
+    And file "data.zip" should be listed on the webUI
+    #Then there should be no files/folders listed on the webUI
+
+  @issue-2150
+  Scenario: without any share the shared-with-me page should be empty
+    When the user browses to the shared-with-me page using the webUI
+    Then folder "simple-folder" should be listed on the webUI
+    And file "data.zip" should be listed on the webUI
+    #Then there should be no files/folders listed on the webUI
 
   @skip @yetToImplement
   @comments-app-required

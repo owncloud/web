@@ -34,10 +34,22 @@ When('the user browses to the shared-with-me page', function () {
     .navigateAndWaitTillLoaded()
 })
 
+When('the user browses to the shared-with-me page using the webUI', function () {
+  return client
+    .page.phoenixPage()
+    .navigateToUsingMenu('Shared with me')
+})
+
 When('the user browses to the shared-with-others page', function () {
   return client
     .page.sharedWithOthersPage()
     .navigateAndWaitTillLoaded()
+})
+
+When('the user browses to the shared-with-others page using the webUI', function () {
+  return client
+    .page.phoenixPage()
+    .navigateToUsingMenu('Shared with others')
 })
 
 Given('the user has browsed to the trashbin page', function () {

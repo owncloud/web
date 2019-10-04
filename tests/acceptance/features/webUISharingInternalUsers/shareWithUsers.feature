@@ -554,3 +554,16 @@ Feature: Sharing files and folders with internal users
       | Editor      | Editor         | share                         | share                 | read, share, change                 |
       | Custom Role | Editor         | share, change                 | share                 | read, share, change                 |
 
+  Scenario: send share shows up on shared-with-others page
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user1" has logged in using the webUI
+    When the user browses to the shared-with-others page using the webUI
+    Then folder "simple-folder" should be listed on the webUI
+    But file "data.zip" should not be listed on the webUI
+
+  Scenario: received share shows up on shared-with-me page
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user2" has logged in using the webUI
+    When the user browses to the shared-with-me page using the webUI
+    Then folder "simple-folder (2)" should be listed on the webUI
+    But file "data.zip" should not be listed on the webUI
