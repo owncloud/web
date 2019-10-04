@@ -16,7 +16,7 @@ Feature: File Upload
     And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
   @smokeTest
-  Scenario: uploading a big file (when chunking in implemented that upload should be chunked)
+  Scenario: uploading a big file (when chunking is implemented this upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
     When the user uploads file "big-video.mp4" using the webUI
     Then no message should be displayed on the webUI
@@ -25,7 +25,7 @@ Feature: File Upload
 
   @skipOnFIREFOX
   @skip @yetToImplement
-  Scenario: conflict with a big file (when chunking in implemented that upload should be chunked)
+  Scenario: conflict with a big file (when chunking is implemented this upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
     When the user renames file "lorem.txt" to "big-video.mp4" using the webUI
     And the user uploads overwriting file "big-video.mp4" using the webUI and retries if the file is locked

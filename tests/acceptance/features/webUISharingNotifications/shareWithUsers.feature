@@ -14,7 +14,7 @@ Feature: Sharing files and folders with internal users
 
   @smokeTest
   @skip @yetToImplement
-  Scenario: notifications about new share is displayed when autoacepting is disabled
+  Scenario: notifications about new share is displayed when auto-accepting is disabled
     Given the setting "Automatically accept new incoming local user shares" in the section "Sharing" has been disabled
     And user "user1" has shared folder "/simple-folder" with user "user2"
     And user "user1" has shared folder "/data.zip" with user "user2"

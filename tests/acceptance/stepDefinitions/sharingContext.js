@@ -50,7 +50,7 @@ const userSharesFileOrFolderWithGroup = function (file, sharee, role) {
  *
  * @param {string} elementToShare  path of file/folder being shared
  * @param {string} sharer  username of the sharer
- * @param {string} receiver  username of the reciever
+ * @param {string} receiver  username of the receiver
  * @param {number} shareType  Type of share 0 = user, 1 = group, 3 = public (link), 6 = federated (cloud share).
  * @param {string} permissions  permissions of the share for valid permissions see sharingHelper.PERMISSION_TYPES
  */
@@ -239,7 +239,7 @@ Then('all users and groups that contain the string {string} in their name should
 
           assert.ok(
             itemsList.includes(userString),
-            `could not find '${userDisplayName}' in autocomple share list`
+            `could not find '${userDisplayName}' in autocomplete share list`
           )
         }
       }
@@ -251,7 +251,7 @@ Then('all users and groups that contain the string {string} in their name should
 
           assert.ok(
             itemsList.includes(groupString),
-            `could not find '${groupString}' in autocomple share list`
+            `could not find '${groupString}' in autocomplete share list`
           )
         }
       })
@@ -345,9 +345,9 @@ When('the user deletes {string} as collaborator for the current file/folder usin
 
 When(
   'the user changes the collaborator role of {string} for file/folder {string} to {string} using the webUI',
-  function (collaborator, ressource, newRole) {
+  function (collaborator, resource, newRole) {
     return client.page.FilesPageElement.filesList()
-      .openSharingDialog(ressource)
+      .openSharingDialog(resource)
       .changeCollaboratorRole(collaborator, newRole)
   }
 )
@@ -394,6 +394,6 @@ Then('user {string} should have a share with these details:', function (user, ex
   return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable)
 })
 
-Given('the user {string} has created a new public link for resource {string}', function (user, resource) {
+Given('user {string} has created a new public link for resource {string}', function (user, resource) {
   return shareFileFolder(resource, user, '', SHARE_TYPES.public_link)
 })
