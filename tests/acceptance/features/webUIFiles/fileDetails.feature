@@ -115,6 +115,20 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "links" tab in details panel using the webUI
     Then the "links" details panel should be visible
 
+  @issue-2150
+  Scenario: without any share the shared-with-others page should be empty
+    When the user browses to the shared-with-others page using the webUI
+    Then folder "simple-folder" should be listed on the webUI
+    And file "data.zip" should be listed on the webUI
+    #Then there should be no files/folders listed on the webUI
+
+  @issue-2150
+  Scenario: without any share the shared-with-me page should be empty
+    When the user browses to the shared-with-me page using the webUI
+    Then folder "simple-folder" should be listed on the webUI
+    And file "data.zip" should be listed on the webUI
+    #Then there should be no files/folders listed on the webUI
+
   @skip @yetToImplement
   @comments-app-required
   Scenario: View different areas of details panel for the folder with given tag in Tags page
