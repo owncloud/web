@@ -41,7 +41,7 @@ module.exports = {
         .waitForElementVisible('@newFolderInput')
       if (name !== null) {
         this.clearValueWithEvent('@newFolderInput')
-        this.setValue('@newFolderInput', name)
+        this.setValueBySingleKeys('@newFolderInput', name)
       }
       this
         .click('@newFolderOkButton')
