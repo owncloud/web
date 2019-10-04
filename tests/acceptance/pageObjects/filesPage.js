@@ -1,4 +1,5 @@
 const util = require('util')
+const navigationHelper = require('../helpers/navigationHelper')
 
 module.exports = {
   url: function () {
@@ -11,11 +12,10 @@ module.exports = {
      * @returns {*}
      */
     navigateAndWaitTillLoaded: function (folder = '') {
-      this.navigate(this.api.launchUrl + '/#/files/list/' + folder)
-      return this
-        .page.FilesPageElement.filesList()
-        .waitForElementPresent({ selector: '@filesListProgressBar', abortOnFailure: false }) // don't fail if we are too late
-        .waitForElementNotPresent('@filesListProgressBar')
+      return navigationHelper.navigateAndWaitTillLoaded(
+        this.api.launchUrl + '/#/files/list/' + folder,
+        this.page.FilesPageElement.filesList().elements.filesListProgressBar.selector
+      )
     },
     /**
      *
