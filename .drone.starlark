@@ -48,6 +48,16 @@ config = {
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
 		},
+		'webUI-IE11': {
+			'suites': {
+				'webUI[R,T,F]*': 'Rename-Trash-Files',
+				'webUISharing*': 'Sharing',
+			},
+			'browsers': [
+				'IE11',
+			],
+			'filterTags': '@smokeTest and not @skip and not @skipOnIE',
+		},
 	},
 
 	'build': True
@@ -195,7 +205,7 @@ def acceptance():
 		else:
 			suites = matrix['suites']
 
-		for suite, shortSuiteName in suites.items():
+		for suite, alternateSuiteName in suites.items():
 
 			params = {}
 			for item in default:
@@ -205,7 +215,7 @@ def acceptance():
 				for browser in params['browsers']:
 					for db in params['databases']:
 						browserString = '' if browser == '' else '-' + browser
-						name = 'acceptance-%s%s' % (shortSuiteName, browserString)
+						name = 'acceptance-%s%s' % (alternateSuiteName, browserString)
 						maxLength = 50
 						nameLength = len(name)
 						if nameLength > maxLength:
@@ -228,14 +238,16 @@ def acceptance():
 								setupServerAndApp(params['logLevel']) +
 								owncloudLog() +
 								fixPermissions() +
-								runWebuiAcceptanceTests(suite, params['filterTags'], params['extraEnvironment']) +
-								uploadScreenshots() +
-								buildGithubComment(suite, shortSuiteName) +
-								githubComment(),
+								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
+								(
+									uploadScreenshots() +
+									buildGithubComment(suite, alternateSuiteName) +
+									githubComment()
+								if isLocalBrowser(browser) else []),
 							'services':
 								phoenixService() +
 								owncloudService() +
-								browserService(browser) +
+								browserService(alternateSuiteName, browser) +
 								databaseService(db),
 							'depends_on': [],
 							'trigger': {
@@ -334,19 +346,37 @@ def databaseService(db):
 
 	return []
 
-def browserService(name):
-	if name == 'chrome':
+def browserService(alternateSuiteName, browser):
+	if browser == 'chrome':
 		return [{
 			'name': 'selenium',
 			'image': 'selenium/standalone-chrome-debug:latest',
 			'pull': 'always',
 		}]
 
-	if name == 'firefox':
+	if browser == 'firefox':
 		return [{
 			'name': 'selenium',
 			'image': 'selenium/standalone-firefox-debug:latest',
 			'pull': 'always',
+		}]
+
+	if browser == 'IE11':
+		return [{
+			'name': 'saucelabs',
+			'image': 'henrrich/docker-sauce-connect:latest',
+			'pull': 'if-not-exists',
+			'environment': {
+				'SAUCE_USERNAME': {
+					'from_secret': 'sauce_username'
+				},
+				'SAUCE_ACCESS_KEY': {
+					'from_secret': 'sauce_access_key'
+				},
+			},
+			'commands': [
+				'/usr/local/sauce-connect/bin/sc -i %s' % getSaucelabsTunnelName(alternateSuiteName, browser)
+			]
 		}]
 
 	return []
@@ -418,6 +448,12 @@ def getDbDatabase(db):
 		return 'XE'
 
 	return 'owncloud'
+
+def getSaucelabsTunnelName(alternateSuiteName, browser):
+	return '${DRONE_BUILD_NUMBER}-acceptance-%s-%s' % (alternateSuiteName, browser)
+
+def isLocalBrowser(browser):
+	return ((browser == 'chrome') or (browser == 'firefox'))
 
 def installCore(version, db):
 	host = getDbName(db)
@@ -605,14 +641,26 @@ def owncloudLog():
 		]
 	}]
 
-def runWebuiAcceptanceTests(suite, filterTags, extraEnvironment):
+def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser):
 	environment = {}
 	if (filterTags != ''):
 		environment['TEST_TAGS'] = filterTags
-	if (suite != 'all'):
-		environment['TEST_CONTEXT'] = suite
 	for env in extraEnvironment:
 		environment[env] = extraEnvironment[env]
+	if isLocalBrowser(browser):
+		if (suite != 'all'):
+			environment['TEST_CONTEXT'] = suite
+	else:
+		environment['TEST_CONTEXT'] = suite
+		environment['BROWSER_NAME'] = 'internet explorer'
+		environment['SELENIUM_PORT'] = '4445'
+		environment['SAUCELABS_TUNNEL_NAME'] = getSaucelabsTunnelName(alternateSuiteName, browser)
+		environment['SAUCE_USERNAME'] = {
+			'from_secret': 'sauce_username'
+		}
+		environment['SAUCE_ACCESS_KEY'] = {
+			'from_secret': 'sauce_access_key'
+		}
 
 	return [{
 		'name': 'webui-acceptance-tests',
@@ -655,14 +703,14 @@ def uploadScreenshots():
 		},
 	}]
 
-def buildGithubComment(suite, shortSuiteName):
+def buildGithubComment(suite, alternateSuiteName):
 	return [{
 		'name': 'build-github-comment',
 		'image': 'owncloud/ubuntu:16.04',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/phoenix/tests/reports/screenshots/',
-			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % shortSuiteName,
+			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % alternateSuiteName,
 			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
 			'echo "\n</p></details>" >> comments.file',
 			'more comments.file',
