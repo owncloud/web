@@ -8,7 +8,10 @@
         </div>
         <span class="uk-flex uk-flex-middle" v-if="!showBreadcrumb">
           <oc-icon v-if="pageIcon" :name="pageIcon" class="uk-margin-small-right" />
-          <span class="uk-text-lead">{{pageTitle}}</span>
+          <h1 class="oc-page-title">{{pageTitle}}</h1>
+        </span>
+        <span v-else-if="showBreadcrumb">
+          <h1 class="oc-visually-hidden">{{pageTitle}}</h1>
         </span>
       </div>
       <div v-if="!publicPage()" class="uk-width-auto uk-visible@m">
