@@ -5,11 +5,11 @@ const fs = require('fs')
 let createdFiles = []
 
 Given('a file with the size of {string} bytes and the name {string} has been created locally', function (size, name) {
-  const fullPathOflocalFile = client.globals.filesForUpload + name
-  const fh = fs.openSync(fullPathOflocalFile, 'w')
+  const fullPathOfLocalFile = client.globals.filesForUpload + name
+  const fh = fs.openSync(fullPathOfLocalFile, 'w')
   fs.writeSync(fh, 'A', Math.max(0, size - 1))
   fs.closeSync(fh)
-  createdFiles.push(fullPathOflocalFile)
+  createdFiles.push(fullPathOfLocalFile)
 })
 
 Then('the error message {string} should be displayed on the webUI', function (folder) {
@@ -33,16 +33,16 @@ Then('no message should be displayed on the webUI', function () {
 })
 
 Then('as {string} the content of {string} should be the same as the local {string}', function (userId, remoteFile, localFile) {
-  const fullPathOflocalFile = client.globals.filesForUpload + localFile
+  const fullPathOfLocalFile = client.globals.filesForUpload + localFile
   return webdavHelper
     .download(userId, remoteFile)
-    .then(body => assertContentOFLocalFileIs(fullPathOflocalFile, body))
+    .then(body => assertContentOFLocalFileIs(fullPathOfLocalFile, body))
 })
 
-const assertContentOFLocalFileIs = function (fullPathOflocalFile, expectedContent) {
-  const actualContent = fs.readFileSync(fullPathOflocalFile, { encoding: 'utf-8' })
+const assertContentOFLocalFileIs = function (fullPathOfLocalFile, expectedContent) {
+  const actualContent = fs.readFileSync(fullPathOfLocalFile, { encoding: 'utf-8' })
   return client.assert.strictEqual(
-    actualContent, expectedContent, 'asserting content of local file "' + fullPathOflocalFile + '"'
+    actualContent, expectedContent, 'asserting content of local file "' + fullPathOfLocalFile + '"'
   )
 }
 

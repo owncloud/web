@@ -16,4 +16,4 @@ Feature: display notifications on the webUI
     When user "user1" is sent a notification
     Then the user should see the notification bell on the webUI after a page reload
     And the user marks the notification as read
-    Then the notification bell should dissapear on the webUI
+    Then the notification bell should disappear on the webUI

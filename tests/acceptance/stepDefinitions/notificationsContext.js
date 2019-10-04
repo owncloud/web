@@ -23,6 +23,6 @@ Then('the user should see the notification bell on the webUI after a page reload
   return client.page.phoenixPage().waitForElementVisible('@notificationBell')
 })
 
-Then('the notification bell should dissapear on the webUI', function () {
+Then('the notification bell should disappear on the webUI', function () {
   return client.page.phoenixPage().waitForElementNotPresent('@notificationBell')
 })

@@ -16,7 +16,7 @@ const checkSumStartedAjaxRequests = function (api) {
   api.execute('return window.sumStartedAjaxRequests', [], sleepWhenNoNewAjaxCallsStarted)
 }
 exports.command = function () {
-  // init the ajax caounters if they haven't been initialized yet
+  // init the ajax counters if they haven't been initialized yet
   this.execute('return (typeof window.sumStartedAjaxRequests === "undefined")', [], function (result) {
     if (result.value === true) {
       this.initAjaxCounters()
