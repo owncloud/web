@@ -22,7 +22,6 @@ module.exports = {
 
       return this.initAjaxCounters()
         .useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
         .isVisible(fileActionsBtnSelector, (result) => {
           if (result.value === true) {
             this
