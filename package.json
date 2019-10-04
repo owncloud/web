@@ -77,7 +77,7 @@
     "parse-json": "^5.0.0",
     "requirejs": "^2.3.6",
     "rimraf": "^3.0.0",
-    "start-server-and-test": "^1.9.1",
+    "start-server-and-test": "^1.10.3",
     "style-loader": "^1.0.0",
     "url-search-params-polyfill": "^7.0.0",
     "vue": "^2.6.10",
