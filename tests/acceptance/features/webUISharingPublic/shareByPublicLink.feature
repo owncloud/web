@@ -65,7 +65,7 @@ Feature: Share by public link
     Then there should be no files/folders listed on the webUI
 
   Scenario: public link share shows up on shared-with-others page
-    Given the user "user1" has created a new public link for resource "simple-folder"
+    Given user "user1" has created a new public link for resource "simple-folder"
     When the user browses to the shared-with-others page using the webUI
     Then folder "simple-folder" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI

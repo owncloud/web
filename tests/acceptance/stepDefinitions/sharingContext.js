@@ -394,6 +394,6 @@ Then('user {string} should have a share with these details:', function (user, ex
   return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable)
 })
 
-Given('the user {string} has created a new public link for resource {string}', function (user, resource) {
+Given('user {string} has created a new public link for resource {string}', function (user, resource) {
   return shareFileFolder(resource, user, '', SHARE_TYPES.public_link)
 })
