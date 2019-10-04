@@ -84,8 +84,8 @@ Feature: User can open the details panel for any file or folder
 
   @yetToImplement
   @comments-app-required
-  Scenario: user shares a file via link and then the details dialog should work in a Shared with others page
-    Given the user "user2" has created a new public link for resource "simple-folder"
+  Scenario: user shares a folder via link and then the details dialog should work in a Shared with others page
+    Given the user "user1" has created a new public link for resource "simple-folder"
     When the user browses to the shared-with-others page
     Then folder "simple-folder" should be listed on the webUI
     When the user picks the row of folder "simple-folder" in the webUI
