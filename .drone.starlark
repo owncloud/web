@@ -49,6 +49,8 @@ config = {
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
 		},
 	},
+
+	'build': True
 }
 
 def main(ctx):
@@ -70,12 +72,12 @@ def beforePipelines():
 	return yarnlint()
 
 def stagePipelines():
-	buildPipelines = build()
 	acceptancePipelines = acceptance()
-	if (buildPipelines == False) or (acceptancePipelines == False):
+	buildPipelines = build()
+	if (acceptancePipelines == False) or (buildPipelines == False):
 		return False
 
-	return buildPipelines + acceptancePipelines
+	return acceptancePipelines + buildPipelines
 
 def afterPipelines():
 	return [
@@ -127,86 +129,35 @@ def build():
 	if 'build' not in config:
 		return pipelines
 
-	default = {
-		'phpVersions': ['7.0'],
-		'commands': [
-			'make dist'
-		],
-		'extraEnvironment': {},
-		'configureTarOnTag': False,
-	}
-
-	if 'defaults' in config:
-		if 'build' in config['defaults']:
-			for item in config['defaults']['build']:
-				default[item] = config['defaults']['build'][item]
-
-	matrix = config['build']
-
-	if type(matrix) == "bool":
-		if matrix:
-			# the config has 'build' true, so specify an empty dict that will get the defaults
-			matrix = {}
-		else:
+	if type(config['build']) == "bool":
+		if not config['build']:
 			return pipelines
 
-	params = {}
-	for item in default:
-		params[item] = matrix[item] if item in matrix else default[item]
-
-	for phpVersion in params['phpVersions']:
-		result = {
-			'kind': 'pipeline',
-			'type': 'docker',
-			'name': 'build',
-			'workspace' : {
-				'base': '/var/www/owncloud',
-				'path': 'server/apps/%s' % config['app']
-			},
-			'steps': [
-				{
-					'name': 'build',
-					'image': 'owncloudci/php:%s' % phpVersion,
-					'pull': 'always',
-					'environment': params['extraEnvironment'],
-					'commands': params['commands']
-				}
-			] + ([
-				{
-					'name': 'github_release',
-					'image': 'plugins/github-release',
-					'pull': 'always',
-					'settings': {
-						'checksum': 'sha256',
-						'file_exists': 'overwrite',
-						'files': 'build/dist/%s.tar.gz' % config['app'],
-						'prerelease': True,
-					},
-					'environment': {
-						'GITHUB_TOKEN': {
-							'from_secret': 'github_token'
-						},
-					},
-					'when': {
-						'event': [
-							'tag'
-						]
-					},
-				}
-			] if params['configureTarOnTag'] else []),
-			'depends_on': [],
-			'trigger': {
-				'ref': [
-					'refs/pull/**',
-					'refs/tags/**'
-				]
-			}
+	result = {
+		'kind': 'pipeline',
+		'type': 'docker',
+		'name': 'publish-npm-and-demo-system',
+		'workspace' : {
+			'base': '/var/www/owncloud',
+			'path': config['app']
+		},
+		'steps':
+			buildDockerImage() +
+			installNPM() +
+			buildRelease() +
+			deployStaging(),
+		'services':
+			dockerInDockerService(),
+		'depends_on': [],
+		'trigger': {
+			'ref': [
+				'refs/merge-requests/**',
+				'refs/heads/master'
+			]
 		}
+	}
 
-		for branch in config['branches']:
-			result['trigger']['ref'].append('refs/heads/%s' % branch)
-
-		pipelines.append(result)
+	pipelines.append(result)
 
 	return pipelines
 
@@ -431,6 +382,13 @@ def owncloudService():
 		]
 	}]
 
+def dockerInDockerService():
+	return [{
+		'name': 'docker',
+		'image': 'docker:18.04-dind',
+		'pull': 'if-not-exists'
+	}]
+
 def getDbName(db):
 	return db.split(':')[0]
 
@@ -496,53 +454,114 @@ def installCore(version, db):
 	return [stepDefinition]
 
 def installNPM():
-	return [
-		{
-			'name': 'npm-install',
-			'image': 'owncloudci/php:7.1',
-			'pull': 'always',
-			'commands': [
-				'yarn install'
-			]
-		}
-	]
+	return [{
+		'name': 'npm-install',
+		'image': 'owncloudci/php:7.1',
+		'pull': 'always',
+		'commands': [
+			'yarn install'
+		]
+	}]
 
 def lintTest():
-	return [
-			{
-				'name': 'lint-test',
-				'image': 'owncloudci/php:7.1',
-				'pull': 'always',
-				'commands': [
-					'yarn run lint'
-				]
-			}
-	]
+	return [{
+		'name': 'lint-test',
+		'image': 'owncloudci/php:7.1',
+		'pull': 'always',
+		'commands': [
+			'yarn run lint'
+		]
+	}]
 
 def buildPhoenix():
-	return [
-			{
-				'name': 'build-phoenix',
-				'image': 'owncloudci/php:7.1',
-				'pull': 'always',
-				'commands': [
-					'yarn dist',
-					'cp tests/drone/config.json dist/config.json'
-				]
-			}
-	]
+	return [{
+		'name': 'build-phoenix',
+		'image': 'owncloudci/php:7.1',
+		'pull': 'always',
+		'commands': [
+			'yarn dist',
+			'cp tests/drone/config.json dist/config.json'
+		]
+	}]
+
+def buildDockerImage():
+	return [{
+		'name': 'build-docker-image',
+		'image': 'toolhippie/docker:latest',
+		'pull': 'always',
+		'environment': {
+			'DOCKER_HOST': 'tcp://docker:2375'
+		},
+		'commands': [
+			'docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .'
+		],
+		'when': {
+			'event': [
+				'push'
+			]
+		},
+	}]
+
+def buildRelease():
+	return [{
+		'name': 'build-release',
+		'image': 'owncloudci/php:7.1',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/phoenix',
+			'make -f Makefile.release dist'
+		],
+		'when': {
+			'event': [
+				'push'
+			]
+		},
+	}]
+
+def deployStaging():
+	return [{
+		'name': 'deploy-staging',
+		'image': 'drillster/drone-rsync:latest',
+		'pull': 'always',
+		'settings': {
+			'delete': True,
+			'hosts': 'pixie.owncloud.systems',
+			'port': '22',
+			'recursive': True,
+			'script': [
+				'sudo docker exec phoenix occ maintenance:mode --on',
+				'sudo rsync -az --chown=www-data:www-data -r --del --exclude config.json /home/deploy/phoenix/ /var/lib/phoenix/apps/phoenix',
+				'sudo docker exec phoenix occ maintenance:mode --off',
+				'sudo docker exec phoenix owncloud migrate'
+			],
+			'source': 'dist/',
+			'target': '/home/deploy/phoenix',
+			'user': 'deploy'
+		},
+		'environment': {
+			'RSYNC_KEY': {
+				'from_secret': 'rsync_key'
+			},
+		},
+		'when': {
+			'branch': [
+				'master'
+			],
+			'event': [
+				'push'
+			]
+		},
+	}]
 
 def cloneOauth():
-	return [
-			{
-				'name': 'clone-oauth',
-				'image': 'owncloud/ubuntu:16.04',
-				'pull': 'always',
-				'commands': [
-					'git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2'
-				]
-			}
-	]
+	return [{
+		'name': 'clone-oauth',
+		'image': 'owncloud/ubuntu:16.04',
+		'pull': 'always',
+		'commands': [
+			'git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2'
+		]
+	}]
 
 def setupServerAndApp(logLevel):
 	return [{

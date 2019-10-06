@@ -2571,6 +2571,85 @@ depends_on:
 ---
 kind: pipeline
 type: docker
+name: publish-npm-and-demo-system
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: build-docker-image
+  pull: always
+  image: toolhippie/docker:latest
+  commands:
+  - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  when:
+    event:
+    - push
+
+- name: npm-install
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - yarn install
+
+- name: build-release
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - make -f Makefile.release dist
+  when:
+    event:
+    - push
+
+- name: deploy-staging
+  pull: always
+  image: drillster/drone-rsync:latest
+  settings:
+    delete: true
+    hosts: pixie.owncloud.systems
+    port: 22
+    recursive: true
+    script:
+    - sudo docker exec phoenix occ maintenance:mode --on
+    - sudo rsync -az --chown=www-data:www-data -r --del --exclude config.json /home/deploy/phoenix/ /var/lib/phoenix/apps/phoenix
+    - sudo docker exec phoenix occ maintenance:mode --off
+    - sudo docker exec phoenix owncloud migrate
+    source: dist/
+    target: /home/deploy/phoenix
+    user: deploy
+  environment:
+    RSYNC_KEY:
+      from_secret: rsync_key
+  when:
+    branch:
+    - master
+    event:
+    - push
+
+services:
+- name: docker
+  pull: if-not-exists
+  image: docker:18.04-dind
+
+trigger:
+  ref:
+  - refs/merge-requests/**
+  - refs/heads/master
+
+depends_on:
+- lint-test
+
+---
+kind: pipeline
+type: docker
 name: chat-notifications
 
 platform:
@@ -2611,5 +2690,6 @@ depends_on:
 - acceptance-webUIUpload-chrome
 - acceptance-XGAPortrait-chrome
 - acceptance-iPhone-chrome
+- publish-npm-and-demo-system
 
 ...
