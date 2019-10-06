@@ -30,6 +30,24 @@ config = {
 				'webUIUpload',
 			],
 		},
+		'webUI-XGA': {
+			'suites': {
+				'all': 'XGAPortrait',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-iPhone': {
+			'suites': {
+				'all': 'iPhone',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
 	},
 }
 
@@ -208,6 +226,8 @@ def acceptance():
 		'servers': ['daily-master-qa'],
 		'browsers': ['chrome'],
 		'databases': ['mysql:5.5'],
+		'extraEnvironment': {},
+		'filterTags': 'not @skip',
 		'logLevel': '2',
 	}
 
@@ -257,9 +277,9 @@ def acceptance():
 								setupServerAndApp(params['logLevel']) +
 								owncloudLog() +
 								fixPermissions() +
-								runWebuiAcceptanceTests(suite) +
+								runWebuiAcceptanceTests(suite, params['filterTags'], params['extraEnvironment']) +
 								uploadScreenshots() +
-								buildGithubComment(suite) +
+								buildGithubComment(suite, shortSuiteName) +
 								githubComment(),
 							'services':
 								phoenixService() +
@@ -566,15 +586,20 @@ def owncloudLog():
 		]
 	}]
 
-def runWebuiAcceptanceTests(suite):
+def runWebuiAcceptanceTests(suite, filterTags, extraEnvironment):
+	environment = {}
+	if (filterTags != ''):
+		environment['TEST_TAGS'] = filterTags
+	if (suite != 'all'):
+		environment['TEST_CONTEXT'] = suite
+	for env in extraEnvironment:
+		environment[env] = extraEnvironment[env]
+
 	return [{
 		'name': 'webui-acceptance-tests',
 		'image': 'owncloudci/php:7.1',
 		'pull': 'always',
-		'environment': {
-			'TEST_CONTEXT': suite,
-			'TEST_TAGS': 'not @skip',
-		},
+		'environment': environment,
 		'commands': [
 			'cd /var/www/owncloud/phoenix',
 			'curl http://phoenix/oidc-callback.html',
@@ -611,14 +636,14 @@ def uploadScreenshots():
 		},
 	}]
 
-def buildGithubComment(suite):
+def buildGithubComment(suite, shortSuiteName):
 	return [{
 		'name': 'build-github-comment',
 		'image': 'owncloud/ubuntu:16.04',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/phoenix/tests/reports/screenshots/',
-			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % suite,
+			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % shortSuiteName,
 			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
 			'echo "\n</p></details>" >> comments.file',
 			'more comments.file',
