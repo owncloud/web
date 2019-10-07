@@ -58,6 +58,16 @@ config = {
 			],
 			'filterTags': '@smokeTest and not @skip and not @skipOnIE',
 		},
+		'webUI-Edge': {
+			'suites': {
+				'webUI[R,T,F]*': 'Rename-Trash-Files',
+				'webUISharing*': 'Sharing',
+			},
+			'browsers': [
+				'Edge',
+			],
+			'filterTags': '@smokeTest and not @skip and not @skipOnEdge',
+		},
 	},
 
 	'build': True

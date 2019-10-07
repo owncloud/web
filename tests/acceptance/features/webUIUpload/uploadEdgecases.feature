@@ -1,4 +1,4 @@
-@skipOnIE
+@skipOnIE @skipOnEdge
 Feature: File Upload
 
   As a QA engineer

@@ -1,4 +1,4 @@
-@skipOnIE
+@skipOnIE @skipOnEdge
 Feature: Upload a file
 
   As a user
