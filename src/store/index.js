@@ -8,7 +8,7 @@ import app from './app'
 import apps from './apps'
 import config from './config'
 import user from './user'
-import links from './links'
+import router from './router'
 
 Vue.use(Vuex)
 
@@ -27,8 +27,8 @@ const vuexPersistInSession = new VuexPersistence({
   key: 'phoenixStateInSessionStorage',
   // Browser tab independent storage which gets deleted after the tab is closed
   storage: window.sessionStorage,
-  filter: (mutation) => (['SET_PRIVATE_LINK_ITEM_ID'].indexOf(mutation.type) > -1),
-  modules: ['links']
+  filter: (mutation) => (['SAVE_URL_BEFORE_LOGIN'].indexOf(mutation.type) > -1),
+  modules: ['router']
 })
 
 const strict = process.env.NODE_ENV === 'development'
@@ -43,7 +43,7 @@ export const Store = new Vuex.Store({
     apps,
     user,
     config,
-    links
+    router
   },
   strict
 })

@@ -67,20 +67,22 @@ const router = new Router({
 
 router.beforeEach(function (to, from, next) {
   const isAuthenticated = store.getters.isAuthenticated
-  // Sets private link item id in case user is not authenticated to allow redirect after authorisation
-  if (to.name === 'private-link' && !isAuthenticated) {
-    const itemId = to.path.substr(to.path.lastIndexOf('/') + 1)
-    store.dispatch('setPrivateLinkItemId', itemId)
-  }
   let authRequired = true
   if (to.meta.auth === false) {
     authRequired = false
   }
   if (authRequired) {
     if (isAuthenticated) {
-      next()
+      const url = store.getters.urlBeforeLogin
+      store.dispatch('saveUrlBeforeLogin', null)
+      if (url) {
+        next(url)
+      } else {
+        next()
+      }
     } else {
-      router.push({ name: 'login' })
+      store.dispatch('saveUrlBeforeLogin', to.fullPath)
+      next('/login')
     }
   } else {
     next()
