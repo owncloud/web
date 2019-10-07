@@ -36,7 +36,7 @@ const actions = {
         logoutFinalizer()
       })
   },
-  initAuth (context, payload = { autoRedirect: false, privateLinkItemId: null }) {
+  initAuth (context, payload = { autoRedirect: false }) {
     // if called from login, use available vue-authenticate instance; else re-init
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
     const token = vueAuthInstance.getToken()
@@ -77,13 +77,6 @@ const actions = {
 
               if (payload.autoRedirect) {
                 router.push({ path: '/' })
-              }
-
-              if (payload.privateLinkItemId) {
-                router.push({ name: 'private-link', params: { fileId: payload.privateLinkItemId } }).finally(() => {
-                  // Remove private link item id from store to prevent load of it in the next authorisation
-                  context.dispatch('setPrivateLinkItemId', null, { root: true })
-                })
               }
             })
           })
@@ -131,14 +124,8 @@ const actions = {
   callback (context) {
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
     vueAuthInstance.mgr.signinRedirectCallback().then(() => {
-      let autoRedirect = true
-      const privateLinkItemId = context.rootGetters.privateLinkItemId
-
-      if (privateLinkItemId) {
-        autoRedirect = false
-      }
-
-      context.dispatch('initAuth', { autoRedirect, privateLinkItemId })
+      const autoRedirect = true
+      context.dispatch('initAuth', { autoRedirect })
     }).catch((e) => {
       console.warn('error in OpenIdConnect:', e)
       context.dispatch('cleanUpLoginState')
