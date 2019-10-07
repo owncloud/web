@@ -361,7 +361,7 @@ def browserService(alternateSuiteName, browser):
 			'pull': 'always',
 		}]
 
-	if browser == 'IE11':
+	if not isLocalBrowser(browser):
 		return [{
 			'name': 'saucelabs',
 			'image': 'henrrich/docker-sauce-connect:latest',
@@ -451,6 +451,13 @@ def getDbDatabase(db):
 
 def getSaucelabsTunnelName(alternateSuiteName, browser):
 	return '${DRONE_BUILD_NUMBER}-acceptance-%s-%s' % (alternateSuiteName, browser)
+
+def getSaucelabsBrowserName(browser):
+	if (browser == 'IE11'):
+		return 'internet explorer'
+	if (browser == 'Edge'):
+		return 'MicrosoftEdge'
+	return browser
 
 def isLocalBrowser(browser):
 	return ((browser == 'chrome') or (browser == 'firefox'))
@@ -652,7 +659,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 			environment['TEST_CONTEXT'] = suite
 	else:
 		environment['TEST_CONTEXT'] = suite
-		environment['BROWSER_NAME'] = 'internet explorer'
+		environment['BROWSER_NAME'] = getSaucelabsBrowserName(browser)
 		environment['SELENIUM_PORT'] = '4445'
 		environment['SAUCELABS_TUNNEL_NAME'] = getSaucelabsTunnelName(alternateSuiteName, browser)
 		environment['SAUCE_USERNAME'] = {
