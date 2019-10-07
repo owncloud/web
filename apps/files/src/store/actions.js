@@ -58,6 +58,9 @@ function _buildFile (file) {
     },
     canShare: function () {
       return this.permissions.indexOf('R') >= 0
+    },
+    isMounted: function () {
+      return this.permissions.indexOf('M') >= 0
     }
   })
 }
@@ -154,6 +157,9 @@ function _buildSharedFile (file) {
     canShare: function () {
       // return file.permissions >= 16
       return true
+    },
+    isMounted: function () {
+      return false
     }
   }
 }

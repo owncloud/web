@@ -80,7 +80,8 @@ router.beforeEach(function (to, from, next) {
     if (isAuthenticated) {
       next()
     } else {
-      router.push({ name: 'login' })
+      store.dispatch('saveUrlBeforeLogin', to.fullPath)
+      next('/login')
     }
   } else {
     next()

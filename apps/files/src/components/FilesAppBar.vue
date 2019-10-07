@@ -5,9 +5,10 @@
       <div class="uk-width-expand">
         <div class="uk-flex">
           <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="showBreadcrumb" home></oc-breadcrumb>
-          <span class="uk-margin-small-left" v-if="showBreadcrumb && currentFolder && currentFolder.privateLink">
+          <span class="uk-margin-small-left" v-if="showBreadcrumb && privateLinkOfCurrentFolder">
           <oc-icon name="ready" v-show="linkCopied" />
-          <oc-icon id="files-permalink-copy" name="link" v-clipboard:copy="currentFolder.privateLink"
+          <oc-icon id="files-permalink-copy" name="link"
+                   v-clipboard:copy="privateLinkOfCurrentFolder"
                    v-show="!linkCopied"
                    v-clipboard:success="clipboardSuccessHandler"
           />
@@ -161,7 +162,15 @@ export default {
       }
       return this.currentFolder.canUpload()
     },
-
+    privateLinkOfCurrentFolder () {
+      if (!this.currentFolder) {
+        return false
+      }
+      if (this.currentFolder.isMounted()) {
+        return window.location.href
+      }
+      return this.currentFolder.privateLink
+    },
     $_ocFilesAppBar_showActions () {
       return this.$route.meta.hideFilelistActions !== true
     },
