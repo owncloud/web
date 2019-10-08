@@ -1,7 +1,13 @@
 <template>
   <div v-if="isOpen" :id="id" uk-offcanvas="mode: slide" class="oc-file-actions uk-offcanvas-bottom uk-open" style="display: block !important;">
     <div class="uk-offcanvas-bar">
-      <span v-text="_label"></span>
+      <oc-button
+        icon="close"
+        class="uk-position-top-right uk-position-absolute uk-margin-top uk-margin-right"
+        @click="closeActions"
+        aria-label="$_closeActionsButtonLabel"
+      />
+      <div v-text="$_label" class="uk-margin-small-bottom" />
       <ul class="uk-nav">
         <li v-for="(action, i) in actions" :key="i">
           <a class="uk-inline" @click="selectAction(action)">
@@ -30,6 +36,21 @@ export default {
       isOpen: false
     }
   },
+  computed: {
+    $_label () {
+      const translated = this.$gettext('Open %{fileName} in')
+      return this.$gettextInterpolate(translated, { fileName: this.filename })
+    },
+
+    $_closeActionsButtonLabel () {
+      return this.$gettext('Close file actions menu')
+    }
+  },
+  watch: {
+    $route () {
+      this.closeActions()
+    }
+  },
   mounted () {
     this.$root.$on('oc-file-actions:open', file => {
       this.showActions(file)
@@ -49,12 +70,6 @@ export default {
     selectAction (action) {
       this.closeActions()
       action.onClick()
-    }
-  },
-  computed: {
-    _label () {
-      const translated = this.$gettext('Open %{fileName} in')
-      return this.$gettextInterpolate(translated, { fileName: this.filename })
     }
   }
 }
