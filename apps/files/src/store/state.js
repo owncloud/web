@@ -41,5 +41,6 @@ export default {
   highlightedFile: null,
   collaboratorSaving: false,
   publicLinkPassword: null,
-  collaboratorsEditInProgress: false
+  collaboratorsEditInProgress: false,
+  uploaded: []
 }
