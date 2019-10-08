@@ -8,7 +8,7 @@ export default {
         ...mapGetters('Files', ['publicLinkPassword'])
       },
       methods: {
-        ...mapActions('Files', ['addFileToProgress', 'updateFileProgress']),
+        ...mapActions('Files', ['addActionToProgress', 'removeActionFromProgress']),
         ...mapActions(['showMessage']),
 
         publicPage () {
@@ -17,7 +17,7 @@ export default {
           return !this.isAuthenticated || this.$route.meta.auth === false
         },
         downloadFile (file) {
-          this.addFileToProgress(file)
+          this.addActionToProgress(file)
           let headers = null
           if (this.publicPage()) {
             const url = this.$client.publicFiles.getFileUrl(file.path)
@@ -48,10 +48,7 @@ export default {
               })
 
               // Remove item from progress queue in case the request failed
-              this.updateFileProgress({
-                fileName: file.name,
-                progress: 100
-              })
+              this.removeActionFromProgress(file)
             } else if (request.readyState === 4 && request.status === 200) {
               // Download has finished
               if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
@@ -67,24 +64,27 @@ export default {
                 anchor.click()
                 document.body.removeChild(anchor)
                 window.URL.revokeObjectURL(objectUrl)
+                this.removeActionFromProgress(file)
 
+                // TODO: Bring back when progress bar for download is figured out
                 // Items with small size can be fetched too fast for progress listener
                 // This ensures that they'll be removed from progress queue
-                this.updateFileProgress({
-                  fileName: file.name,
-                  progress: 100
-                })
+                // this.updateFileProgress({
+                //   fileName: file.name,
+                //   progress: 100
+                // })
               }
             }
           })
 
-          request.addEventListener('progress', e => {
-            const progress = (e.loaded / e.total) * 100
-            this.updateFileProgress({
-              fileName: file.name,
-              progress
-            })
-          })
+          // TODO: Bring back when progress bar for download is figured out
+          // request.addEventListener('progress', e => {
+          //   const progress = (e.loaded / e.total) * 100
+          //   this.updateFileProgress({
+          //     fileName: file.name,
+          //     progress
+          //   })
+          // })
 
           request.send()
         },

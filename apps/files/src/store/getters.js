@@ -118,5 +118,6 @@ export default {
   linksLoading: state => {
     return state.linksLoading
   },
-  uploaded: state => state.uploaded
+  uploaded: state => state.uploaded,
+  actionsInProgress: state => state.actionsInProgress
 }
