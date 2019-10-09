@@ -4,13 +4,20 @@
           <h1 class="oc-login-logo" v-translate>
               ownCloud
           </h1>
-          <div class="oc-login-card-body">
+          <div class="oc-login-card-body uk-width-large">
               <h3 class="oc-login-card-title">
                   <span v-translate>Login Error</span>
               </h3>
               <h4 v-translate class="uk-margin-remove">
                 You are not allowed to use this application.
               </h4>
+              <br>
+              <div v-translate class="uk-margin-remove">
+                If you like to login with a different user please proceed to <a @click="logout()">exit</a>.
+              </div>
+              <br>
+              <div v-translate class="uk-margin-remove">
+                <strong>Attention:</strong> this will log you out from all applications you are running in this browser with your current user.</div>
           </div>
           <div class="oc-login-card-footer uk-width-large">
               <p>
@@ -22,14 +29,21 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'AccessDeniedPage',
+  methods: {
+    ...mapActions(['logout'])
+  },
   computed: {
     ...mapGetters(['configuration']),
     helpDeskText () {
-      if (this.configuration.theme.general.helpDeskText) {
-        return this.configuration.theme.general.helpDeskText
+      if (this.configuration.theme.general.helpDeskText && this.configuration.theme.general.helpDeskText.en) {
+        const lang = this.$language.current
+        if (this.configuration.theme.general.helpDeskText[lang]) {
+          return this.configuration.theme.general.helpDeskText[lang]
+        }
+        return this.configuration.theme.general.helpDeskText.en
       }
       return this.$gettext('Please contact your administrator if you think this message shows up in error.')
     },
