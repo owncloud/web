@@ -20,7 +20,16 @@
         </span>
       </div>
       <div v-if="!publicPage()" class="uk-width-auto uk-visible@m">
-        <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
+        <oc-search-bar
+          @search="onFileSearch"
+          :value="searchTerm"
+          :label="searchLabel"
+          :loading="isLoadingSearch"
+          :button="false"
+          @clear="onSearchClear"
+          :key="searchBarKey"
+          ref="globalSearchBar"
+        />
       </div>
       <div class="uk-width-auto">
         <div class="uk-button-group" :key="actionsKey">
@@ -51,7 +60,14 @@
           </template>
           <oc-button v-if="!publicPage()" class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn" @click="focusMobileSearchInput()"/>
           <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove">
-            <oc-search-bar ref="mobileSearch" @search="onFileSearch" :label="searchLabel" :loading="isLoadingSearch" />
+            <oc-search-bar
+              ref="mobileSearch"
+              @search="onFileSearch"
+              :label="searchLabel"
+              :loading="isLoadingSearch"
+              @clear="onSearchClear"
+              :key="searchBarKey"
+            />
           </oc-drop>
           <oc-button id="oc-filter-list-btn" icon="filter_list" />
           <file-filter-menu />
@@ -94,7 +110,10 @@ export default {
     searchedFiles: [],
     fileFolderCreationLoading: false,
     actionsKey: Math.floor(Math.random() * 20),
-    linkCopied: false
+    linkCopied: false,
+    // In case of change of search value to empty string
+    // searchBarKey can be changed to force re-render of the component
+    searchBarKey: 0
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration']),
@@ -250,7 +269,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile',
-      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilesDeleteMessage', 'setFilterTerm']),
+      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilesDeleteMessage', 'setFilterTerm', 'resetSearch']),
     ...mapActions(['openFile', 'showMessage']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
@@ -505,6 +524,12 @@ export default {
       setTimeout(() => {
         self.linkCopied = false
       }, 1000)
+    },
+
+    onSearchClear () {
+      this.resetSearch()
+      // Forces update of search bar
+      this.searchBarKey++
     }
   },
   watch: {
@@ -513,6 +538,7 @@ export default {
     $route (to, from) {
       this.actionsKey = Math.floor(Math.random() * 20)
       this.$refs.mobileSearch.value = null
+      this.$refs.globalSearchBar.query = ''
     }
   }
 }
