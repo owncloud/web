@@ -181,15 +181,34 @@ export default {
       const title = this.route.meta.pageTitle
       return this.$gettext(title)
     },
+
     breadcrumbs () {
-      let baseUrl = '/files/list/'
-      const pathSplit = this.$route.params.item ? this.$route.params.item.split('/').filter((val) => val) : []
-      let startIndex = 0
       let breadcrumbs = [{
         index: 0,
         text: this.$gettext('Home'),
         to: '/files/list'
       }]
+
+      if (!this.currentFolder) return breadcrumbs
+
+      const rootFolder = this.configuration.rootFolder
+      let baseUrl = '/files/list/'
+
+      const pathSplit = this.currentFolder.path
+        ? this.currentFolder.path.split('/').filter((val) => {
+          if (rootFolder === '/') return val
+
+          return val !== rootFolder
+        })
+        : []
+
+      if (rootFolder !== '/') {
+        pathSplit.splice(0, 1)
+        baseUrl = `/files/list/${rootFolder}%2F`
+      }
+
+      let startIndex = 0
+
       if (this.publicPage()) {
         baseUrl = '/files/public-files/'
         startIndex = 1
@@ -200,24 +219,25 @@ export default {
         }]
       }
 
-      if (this.$route.params.item) {
-        for (let i = startIndex; i < pathSplit.length; i++) {
-          let onClick = null
-          let to = baseUrl + encodeURIComponent(pathSplit.slice(0, i + 1).join('/'))
-          if (i === pathSplit.length - 1) {
-            to = null
-            onClick = () => this.$router.go()
-          }
-          breadcrumbs.push({
-            index: i,
-            text: pathSplit.slice(0, i + 1)[i],
-            to: to,
-            onClick: onClick
-          })
+      for (let i = startIndex; i < pathSplit.length; i++) {
+        let clickHandler = null
+        let itemPath = baseUrl + encodeURIComponent(pathSplit.slice(0, i + 1).join('/'))
+        if (i === pathSplit.length - 1) {
+          itemPath = null
+          clickHandler = () => this.$router.go()
         }
+
+        breadcrumbs.push({
+          index: i,
+          text: pathSplit.slice(0, i + 1)[i],
+          to: itemPath,
+          onClick: clickHandler
+        })
       }
+
       return breadcrumbs
     },
+
     hasFreeSpace () {
       return this.quota.free > 0 || this.currentFolder.permissions.indexOf('M') >= 0
     }
