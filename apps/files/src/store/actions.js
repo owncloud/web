@@ -394,12 +394,8 @@ export default {
       context.commit('UPDATE_FOLDER_LOADING', false)
     })
   },
-  updateFileProgress ({ commit }, progress) {
-    if (progress.progress === 100) {
-      commit('REMOVE_FILE_FROM_PROGRESS', { name: progress.fileName })
-    } else {
-      commit('UPDATE_FILE_PROGRESS', progress)
-    }
+  updateFileProgress ({ commit, getters }, progress) {
+    commit('UPDATE_FILE_PROGRESS', progress)
   },
   addFileToProgress ({ commit }, file) {
     commit('ADD_FILE_TO_PROGRESS', file)

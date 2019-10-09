@@ -71,7 +71,7 @@ module.exports = {
           this.api.globals.waitForConditionPollInterval,
           false
         )
-        .waitForElementNotVisible('@fileUploadProgress')
+        .waitForElementNotPresent('@fileUploadProgress')
         .click('@newFileMenuButton')
     },
     showHiddenFiles: function () {
@@ -222,7 +222,7 @@ module.exports = {
       selector: '#fileUploadInput'
     },
     fileUploadProgress: {
-      selector: '#oc-progress-pie'
+      selector: '#files-upload-progress'
     },
     deleteFileConfirmationBtn: {
       selector: '#oc-dialog-delete-confirm'

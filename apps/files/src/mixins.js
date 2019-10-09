@@ -16,6 +16,10 @@ export default {
       return filesize(int, {
         round: 2
       })
+    },
+
+    roundNumber (int) {
+      return parseInt(int.toFixed(0))
     }
   },
   data: () => ({

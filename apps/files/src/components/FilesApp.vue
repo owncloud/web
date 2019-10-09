@@ -1,7 +1,8 @@
   <template>
-    <div id="files">
+    <div id="files" class="uk-flex uk-flex-column">
       <files-app-bar />
-      <oc-grid class="uk-height-1-1" oc-scroll-offset=".oc-app-bar">
+      <upload-progress v-if="inProgress.length" class="uk-padding-small uk-background-muted" />
+      <oc-grid class="uk-height-1-1">
         <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <trash-bin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
@@ -26,6 +27,7 @@ import TrashBin from './Trashbin.vue'
 import SharedFilesList from './Collaborators/SharedFilesList.vue'
 import { mapActions, mapGetters } from 'vuex'
 import FileActions from './FileActions.vue'
+const UploadProgress = () => import('./UploadProgress.vue')
 
 export default {
   mixins: [
@@ -37,7 +39,8 @@ export default {
     FilesAppBar,
     FileActions,
     TrashBin,
-    SharedFilesList
+    SharedFilesList,
+    UploadProgress
   },
   data () {
     return {
@@ -131,7 +134,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile', 'currentFolder']),
+    ...mapGetters('Files', ['selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile', 'currentFolder', 'inProgress']),
     ...mapGetters(['extensions']),
 
     _sidebarOpen () {

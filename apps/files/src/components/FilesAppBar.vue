@@ -19,12 +19,6 @@
           <span class="uk-text-lead">{{pageTitle}}</span>
         </span>
       </div>
-      <div v-show="inProgress.length > 0" class="uk-width-auto">
-        <oc-spinner id="oc-progress-pie" size="small" />
-        <oc-drop toggle="#oc-progress-pie" mode="click">
-          <upload-menu :items="inProgress" />
-        </oc-drop>
-      </div>
       <div v-if="!publicPage()" class="uk-width-auto uk-visible@m">
         <oc-search-bar @search="onFileSearch" :value="searchTerm" :label="searchLabel" :loading="isLoadingSearch" :button="false"/>
       </div>
@@ -75,7 +69,6 @@ import FileUpload from './FileUpload.vue'
 import FolderUpload from './FolderUpload.vue'
 import FileFilterMenu from './FileFilterMenu.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
-import UploadMenu from './UploadMenu.vue'
 import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
@@ -86,8 +79,7 @@ export default {
     FolderUpload,
     OcDialogPrompt,
     FileFilterMenu,
-    FileDrop,
-    UploadMenu
+    FileDrop
   },
   mixins: [
     Mixins
@@ -106,7 +98,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration']),
-    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'quota', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
+    ...mapGetters('Files', ['activeFiles', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'quota', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
     ...mapState(['route']),
     searchLabel () {
       return this.$gettext('Search')
@@ -487,11 +479,6 @@ export default {
       setTimeout(() => {
         self.linkCopied = false
       }, 1000)
-    }
-  },
-  filters: {
-    roundNumber (value) {
-      return parseInt(value.toFixed(0))
     }
   },
   watch: {

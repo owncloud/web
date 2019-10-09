@@ -117,5 +117,6 @@ export default {
   },
   linksLoading: state => {
     return state.linksLoading
-  }
+  },
+  uploaded: state => state.uploaded
 }

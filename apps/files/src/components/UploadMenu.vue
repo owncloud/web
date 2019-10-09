@@ -1,19 +1,17 @@
 <template>
   <ul class="uk-list uk-margin-remove">
-    <li v-if="items.length > 2">{{ headline }}</li>
-    <li v-for="(item, index) in items" :key="index">
+    <li v-for="(item, index) in items" :key="item.name">
       <div class="uk-flex">
-        <oc-icon name="file_copy" class="uk-margin-small-right uk-flex-none" />
-        <div class="uk-flex-1">
-          <span class="uk-text-bold">{{ item.name }}</span>
+        <oc-icon name="file_copy" class="uk-margin-small-right" />
+        <div class="uk-width-expand">
+          <div class="uk-text-bold" v-text="$_truncateFileName(item.name)" />
           <div class="uk-flex uk-flex-middle">
-            <span class="uk-flex-2 uk-margin-small-right">{{ item.size | fileSize }}</span>
+            <span class="uk-margin-small-right uk-text-nowrap">{{ item.size | fileSize }}</span>
             <oc-progress
-              color="primary"
               :value="item.progress | toInt"
               :max="100"
               class="uk-flex-1 uk-margin-remove"
-            ></oc-progress>
+            />
           </div>
         </div>
       </div>
@@ -38,14 +36,17 @@ export default {
     }
   },
   filters: {
-    toInt (int) {
-      return parseInt(int)
+    toInt (value) {
+      return parseInt(value)
     }
   },
-  computed: {
-    headline () {
-      const translated = this.$gettext('%{number} items to upload remaining…')
-      return this.$gettextInterpolate(translated, { number: this.items.length }, true)
+  methods: {
+    $_truncateFileName (name) {
+      if (name.length > 15) {
+        return `${name.substr(0, 6)}...${name.substr(name.length - 6)}`
+      }
+
+      return name
     }
   }
 }
