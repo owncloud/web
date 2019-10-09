@@ -149,7 +149,17 @@ export default {
         publicPage: this.publicPage()
       }).then(setTimeout(_ => {
         this.originalName = null
-      }, 1000))
+      }, 1000)).catch(error => {
+        let translated = this.$gettext('Error while renaming "%{file}"')
+        if (error.statusCode === 423) {
+          translated = this.$gettext('Error while renaming "%{file}" - the file is locked')
+        }
+        const title = this.$gettextInterpolate(translated, { file: this.selectedFile.name }, true)
+        this.showMessage({
+          title: title,
+          status: 'danger'
+        })
+      })
     },
     fileTypeIcon (file) {
       if (file) {
@@ -430,11 +440,15 @@ export default {
       this.deleteFiles({
         client: this.$client,
         files: files,
-        publicPage: this.publicPage()
+        publicPage: this.publicPage(),
+        $gettext: this.$gettext,
+        $gettextInterpolate: this.$gettextInterpolate
       }).then(() => {
         this.fileToBeDeleted = ''
         this.setFilesDeleteMessage('')
         this.setHighlightedFile(null)
+      }).catch(error => {
+        console.log(error)
       })
     },
     _rowClasses (item) {

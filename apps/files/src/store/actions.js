@@ -442,7 +442,7 @@ export default {
       context.commit('ADD_FILE', _buildFile(file))
     }
   },
-  deleteFiles (context, { files, client, publicPage }) {
+  deleteFiles (context, { files, client, publicPage, $gettext, $gettextInterpolate }) {
     const promises = []
     for (const file of files) {
       let p = null
@@ -455,7 +455,15 @@ export default {
         context.commit('REMOVE_FILE', file)
         context.commit('REMOVE_FILE_SELECTION', file)
       }).catch(error => {
-        console.log('error: ' + file.path + ' not deleted: ' + error)
+        let translated = $gettext('Error while deleting "%{file}"')
+        if (error.statusCode === 423) {
+          translated = $gettext('Error while deleting "%{file}" - the file is locked')
+        }
+        const title = $gettextInterpolate(translated, { file: file.name }, true)
+        context.dispatch('showMessage', {
+          title: title,
+          status: 'danger'
+        }, { root: true })
       })
       promises.push(promise)
     }
