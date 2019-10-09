@@ -80,6 +80,8 @@ export default {
 
       const headers = new Headers()
       headers.append('Authorization', 'Bearer ' + this.getToken)
+      headers.append('X-Requested-With', 'XMLHttpRequest')
+
       return this.downloadFileFromUrl(url, headers, file.name)
     }
   }

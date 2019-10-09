@@ -8,6 +8,7 @@ export default {
           headers = new Headers()
           headers.append('Authorization', 'Bearer ' + store.getters.getToken)
         }
+        headers.append('X-Requested-With', 'XMLHttpRequest')
 
         fetch(source, { headers }).then(response => {
           response.blob().then(blob => {

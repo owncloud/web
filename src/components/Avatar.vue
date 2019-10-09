@@ -34,6 +34,7 @@ export default {
       const instance = this.$root.config.server || window.location.origin
       const url = instance + '/remote.php/dav/avatars/' + this.userid + '/128.png'
       headers.append('Authorization', 'Bearer ' + this.getToken)
+      headers.append('X-Requested-With', 'XMLHttpRequest')
       fetch(url, { headers })
         .then(response => {
           if (response.ok) {
