@@ -752,5 +752,13 @@ export default {
           status: 'danger'
         }, { root: true })
       })
+  },
+
+  addActionToProgress ({ commit }, item) {
+    commit('ADD_ACTION_TO_PROGRESS', item)
+  },
+
+  removeActionFromProgress ({ commit }, item) {
+    commit('REMOVE_ACTION_FROM_PROGRESS', item)
   }
 }

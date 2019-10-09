@@ -27,6 +27,12 @@
                 <oc-file @click.native.stop="item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)"
                         :name="$_ocFileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
                         :filename="item.name" :key="item.id"/>
+                <oc-spinner
+                  v-if="$_actionInProgress(item)"
+                  size="small"
+                  :uk-tooltip="$_disabledActionTooltip(item)"
+                  class="uk-margin-small-left"
+                />
               </oc-table-cell>
               <oc-table-cell class="uk-text-meta uk-text-nowrap" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }">
                 {{ item.size | fileSize }}
@@ -48,8 +54,9 @@
                 </div>
                 <oc-button
                   :id="'files-file-list-action-button-small-resolution-' + index"
-                  icon="menu"
+                  icon="more_vert"
                   :class="{ 'uk-hidden@m' : !_sidebarOpen, 'uk-visible@s uk-hidden@xl' : _sidebarOpen }"
+                  :disabled="$_actionInProgress(item)"
                   :aria-label="'show-file-actions'"
                   @click.stop
                 />
@@ -200,13 +207,16 @@ export default {
     },
 
     $_actionInProgress (item) {
-      return this.inProgress.some(itemInProgress => itemInProgress.id === item.id)
+      return this.actionsInProgress.some(itemInProgress => itemInProgress.id === item.id)
     },
 
     $_disabledActionTooltip (item) {
       if (this.$_actionInProgress(item)) {
-        const message = this.$gettext('Another action is currently in progress for this %{itemType}')
-        return this.$gettextInterpolate(message, { itemType: item.type })
+        if (item.type === 'folder') {
+          return this.$gettext('There is currently an action in progress for this folder')
+        }
+
+        return this.$gettext('There is currently an action in progress for this file')
       }
 
       return null
@@ -214,7 +224,7 @@ export default {
   },
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles', 'loadingFolder', 'filesDeleteMessage', 'highlightedFile', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount', 'inProgress']),
+    ...mapGetters('Files', ['selectedFiles', 'loadingFolder', 'filesDeleteMessage', 'highlightedFile', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount', 'actionsInProgress']),
     ...mapGetters(['configuration']),
 
     item () {

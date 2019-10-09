@@ -42,5 +42,6 @@ export default {
   collaboratorSaving: false,
   publicLinkPassword: null,
   collaboratorsEditInProgress: false,
-  uploaded: []
+  uploaded: [],
+  actionsInProgress: []
 }

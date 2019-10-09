@@ -187,5 +187,17 @@ export default {
 
       return link
     })
+  },
+
+  ADD_ACTION_TO_PROGRESS (state, item) {
+    state.actionsInProgress.push(item)
+  },
+
+  REMOVE_ACTION_FROM_PROGRESS (state, item) {
+    const itemIndex = state.actionsInProgress.findIndex(i => {
+      return i === item
+    })
+
+    state.actionsInProgress.splice(itemIndex, 1)
   }
 }
