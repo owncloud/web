@@ -189,6 +189,8 @@ export default {
       }
 
       const headers = new Headers()
+      headers.append('X-Requested-With', 'XMLHttpRequest')
+
       const password = this.publicLinkPassword
       if (password) {
         headers.append('Authorization', 'Basic ' + Buffer.from('public:' + password).toString('base64'))

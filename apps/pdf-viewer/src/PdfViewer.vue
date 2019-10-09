@@ -24,6 +24,7 @@ export default {
 
     const headers = new Headers()
     headers.append('Authorization', 'Bearer ' + this.getToken)
+    headers.append('X-Requested-With', 'XMLHttpRequest')
 
     fetch(url, { headers })
       .then(response => {

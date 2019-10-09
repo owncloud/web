@@ -58,6 +58,8 @@ export default {
       const url = `${dav}/avatars/${name}/128.png`
 
       headers.append('Authorization', 'Bearer ' + this.getToken)
+      headers.append('X-Requested-With', 'XMLHttpRequest')
+
       this.loading = true
 
       fetch(url, { headers })
