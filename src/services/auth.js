@@ -58,15 +58,6 @@ export function initVueAuthenticate (config) {
     Log.logger = console
     Log.level = openIdConfig.logLevel
 
-    mgr.events.addUserLoaded(function (user) {
-      console.log('New User Loaded：', arguments)
-      console.log('Access_token: ', user.access_token)
-    })
-
-    mgr.events.addSilentRenewError(function () {
-      console.error('Silent Renew Error：', arguments)
-    })
-
     mgr.events.addUserSignedOut(function () {
       console.log('UserSignedOut：', arguments)
     })
