@@ -1,7 +1,7 @@
   <template>
     <div id="files" class="uk-flex uk-flex-column">
       <files-app-bar />
-      <upload-progress v-if="inProgress.length" class="uk-padding-small uk-background-muted" />
+      <upload-progress v-show="inProgress.length" class="uk-padding-small uk-background-muted" />
       <oc-grid class="uk-height-1-1">
         <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>

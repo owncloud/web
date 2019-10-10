@@ -71,7 +71,7 @@ module.exports = {
           this.api.globals.waitForConditionPollInterval,
           false
         )
-        .waitForElementNotPresent('@fileUploadProgress')
+        .waitForElementNotVisible('@fileUploadProgress')
         .click('@newFileMenuButton')
     },
     showHiddenFiles: function () {
