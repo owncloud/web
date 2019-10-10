@@ -40,7 +40,7 @@ const actions = {
       })
   },
   initAuth (context, payload = { autoRedirect: false }) {
-    function init (client, token) {
+    function init (client, token, doLogin = true) {
       const instance = context.rootState.config.server || window.location.origin
       const options = {
         baseUrl: instance,
@@ -60,30 +60,34 @@ const actions = {
       }
 
       client.init(options)
-      return client.login().then(res => {
-        return client.getCapabilities()
-          .then(cap => {
-            client.users.getUserGroups(res.id).then(groups => {
-              context.commit('SET_CAPABILITIES', cap)
-              context.commit('SET_USER', {
-                id: res.id,
-                displayname: res['display-name'],
-                email: !Object.keys(res.email).length ? '' : res.email,
-                token,
-                isAuthenticated: true,
-                groups: groups
-              })
+      if (doLogin) {
+        return client.login().then(res => {
+          return client.getCapabilities()
+            .then(cap => {
+              client.users.getUserGroups(res.id).then(groups => {
+                context.commit('SET_CAPABILITIES', cap)
+                context.commit('SET_USER', {
+                  id: res.id,
+                  displayname: res['display-name'],
+                  email: !Object.keys(res.email).length ? '' : res.email,
+                  token,
+                  isAuthenticated: true,
+                  groups: groups
+                })
 
-              if (payload.autoRedirect) {
-                router.push({ path: '/' })
-              }
+                if (payload.autoRedirect) {
+                  router.push({ path: '/' })
+                }
+              })
             })
-          })
-      }).catch((e) => {
-        console.warn('Seems that your token is invalid. Error:', e)
-        context.dispatch('cleanUpLoginState')
-        router.push({ name: 'accessDenied' })
-      })
+        }).catch((e) => {
+          console.warn('Seems that your token is invalid. Error:', e)
+          context.dispatch('cleanUpLoginState')
+          router.push({ name: 'accessDenied' })
+        })
+      } else {
+        context.commit('UPDATE_TOKEN', token)
+      }
     }
 
     // if called from login, use available vue-authenticate instance; else re-init
@@ -98,7 +102,7 @@ const actions = {
       })
       vueAuthInstance.events().addUserLoaded(user => {
         console.log(`New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`)
-        init(client, user.access_token)
+        init(client, user.access_token, false)
       })
       vueAuthInstance.events().addUserUnloaded(() => {
         console.log('user unloaded…')
@@ -156,6 +160,9 @@ const mutations = {
   SET_CAPABILITIES (state, data) {
     state.capabilities = data.capabilities
     state.version = data.version
+  },
+  UPDATE_TOKEN (state, token) {
+    state.token = token
   }
 }
 
