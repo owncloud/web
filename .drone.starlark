@@ -14,40 +14,6 @@ config = {
 	'yarnlint': True,
 
 	'acceptance': {
-		'webUI': {
-			'suites': [
-				'webUIFavorites',
-				'webUIFiles',
-				'webUILogin',
-				'webUINotifications',
-				'webUIPrivateLinks',
-				'webUIRenameFiles',
-				'webUIRenameFolders',
-				'webUISharingInternalGroups',
-				'webUISharingInternalUsers',
-				'webUISharingPublic',
-				'webUITrashbin',
-				'webUIUpload',
-			],
-		},
-		'webUI-XGA': {
-			'suites': {
-				'all': 'XGAPortrait',
-			},
-			'extraEnvironment': {
-				'SCREEN_RESOLUTION': '768x1024'
-			},
-			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
-		},
-		'webUI-iPhone': {
-			'suites': {
-				'all': 'iPhone',
-			},
-			'extraEnvironment': {
-				'SCREEN_RESOLUTION': '375x812'
-			},
-			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
-		},
 		'webUI-IE11': {
 			'suites': {
 				'webUI[R,T,F]*': 'Rename-Trash-Files',
@@ -56,7 +22,6 @@ config = {
 			'browsers': [
 				'IE11',
 			],
-			'cronOnly': True,
 			'filterTags': '@smokeTest and not @skip and not @skipOnIE',
 		},
 	},
