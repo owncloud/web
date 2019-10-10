@@ -16,6 +16,9 @@ const state = {
 
 const actions = {
   cleanUpLoginState (context) {
+    if (context.state.id === '') {
+      return
+    }
     // reset user to default state
     context.commit('SET_USER', state)
     // reset capabilities to default state
@@ -37,10 +40,6 @@ const actions = {
       })
   },
   initAuth (context, payload = { autoRedirect: false }) {
-    // if called from login, use available vue-authenticate instance; else re-init
-    if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
-    const token = vueAuthInstance.getToken()
-
     function init (client, token) {
       const instance = context.rootState.config.server || window.location.origin
       const options = {
@@ -87,28 +86,33 @@ const actions = {
       })
     }
 
-    const tokenRefresh = function (client) {
-      vueAuthInstance.mgr.signinSilent().then(user => {
-        console.log('token refreshed…')
+    // if called from login, use available vue-authenticate instance; else re-init
+    if (!vueAuthInstance) {
+      vueAuthInstance = initVueAuthenticate(context.rootState.config)
+      const client = this._vm.$client
+      vueAuthInstance.events().addAccessTokenExpired(function () {
+        console.log('AccessToken Expired：', arguments)
+      })
+      vueAuthInstance.mgr.events.addAccessTokenExpiring(function () {
+        console.log('AccessToken Expiring：', arguments)
+      })
+      vueAuthInstance.events().addUserLoaded(user => {
+        console.log(`New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`)
         init(client, user.access_token)
-      }).catch(error => {
-        console.warn('token refresh failed ' + error)
+      })
+      vueAuthInstance.events().addUserUnloaded(() => {
+        console.log('user unloaded…')
+        context.dispatch('cleanUpLoginState')
+        router.push({ name: 'accessDenied' })
+      })
+      vueAuthInstance.events().addSilentRenewError(error => {
+        console.error('Silent Renew Error：', error)
         context.dispatch('cleanUpLoginState')
         router.push({ name: 'accessDenied' })
       })
     }
-
+    const token = vueAuthInstance.getToken()
     if (token) {
-      const client = this._vm.$client
-      vueAuthInstance.events().addAccessTokenExpired(function () {
-        console.log('store/user.js - AccessToken Expired：', arguments)
-        tokenRefresh(client)
-      })
-      vueAuthInstance.mgr.events.addAccessTokenExpiring(function () {
-        console.log('AccessToken Expiring：', arguments)
-        tokenRefresh(client)
-      })
-
       init(this._vm.$client, token)
     }
   },
