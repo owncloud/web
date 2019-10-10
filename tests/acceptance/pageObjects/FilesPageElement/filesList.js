@@ -306,7 +306,9 @@ module.exports = {
      * @returns {Promise.<[]>} Array of files/folders element
      */
     allFileRows: async function () {
-      this.waitForElementNotPresent('@filesListProgressBar')
+      this
+        .waitForElementNotPresent('@filesListProgressBar')
+        .waitForElementVisible({ selector: '@fileRows', abortOnFailure: false })
       return new Promise((resolve, reject) => {
         this.api.elements('css selector', this.elements.fileRows, function (result) {
           resolve(result)
