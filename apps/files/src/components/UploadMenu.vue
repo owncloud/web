@@ -1,6 +1,6 @@
 <template>
   <ul class="uk-list uk-margin-remove">
-    <li v-for="(item, index) in items" :key="item.name">
+    <li v-for="(item, index) in items" :key="item.id">
       <div class="uk-flex">
         <oc-icon name="file_copy" class="uk-margin-small-right" />
         <div class="uk-width-expand">

@@ -3,6 +3,7 @@ import moment from 'moment'
 import FileUpload from './FileUpload.js'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
+const { default: PQueue } = require('p-queue')
 
 export default {
   filters: {
@@ -27,7 +28,9 @@ export default {
     changeFileName: false,
     fileToBeDeleted: '',
     newName: '',
-    originalName: null
+    originalName: null,
+    queue: new PQueue({ concurrency: 1 }),
+    uploadFileUniqueId: 0
   }),
   computed: {
     ...mapGetters('Files', ['searchTerm', 'inProgress', 'files', 'selectedFiles', 'highlightedFile', 'activeFiles']),
@@ -328,11 +331,15 @@ export default {
         const createFolderPromises = []
         const rootDir = directoriesToCreate[0]
         for (const directory of directoriesToCreate) {
+          let p
+
           if (this.publicPage()) {
-            createFolderPromises.push(this.$client.publicFiles.createFolder(this.rootPath + directory))
+            p = this.queue.add(() => this.$client.publicFiles.createFolder(this.rootPath + directory))
           } else {
-            createFolderPromises.push(this.$client.files.createFolder(this.rootPath + directory))
+            p = this.queue.add(() => this.$client.files.createFolder(this.rootPath + directory))
           }
+
+          createFolderPromises.push(p)
         }
         // Upload files
         const uploadPromises = []
@@ -361,6 +368,8 @@ export default {
       })
     },
     $_ocUpload (file, path, overwrite = null, emitSuccess = true) {
+      file.id = this.uploadFileUniqueId
+      this.uploadFileUniqueId++
       this.addFileToProgress(file)
       const fileUpload = new FileUpload(file, path, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType)
       return fileUpload
