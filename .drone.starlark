@@ -56,6 +56,7 @@ config = {
 			'browsers': [
 				'IE11',
 			],
+			'cronOnly': True,
 			'filterTags': '@smokeTest and not @skip and not @skipOnIE',
 		},
 	},
@@ -188,6 +189,7 @@ def acceptance():
 		'browsers': ['chrome'],
 		'databases': ['mysql:5.5'],
 		'extraEnvironment': {},
+		'cronOnly': False,
 		'filterTags': 'not @skip',
 		'logLevel': '2',
 	}
@@ -262,6 +264,9 @@ def acceptance():
 
 						for branch in config['branches']:
 							result['trigger']['ref'].append('refs/heads/%s' % branch)
+
+						if (params['cronOnly']):
+							result['trigger']['event'] = ['cron']
 
 						pipelines.append(result)
 

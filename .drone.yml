@@ -2704,6 +2704,8 @@ services:
     MYSQL_USER: owncloud
 
 trigger:
+  event:
+  - cron
   ref:
   - refs/tags/**
   - refs/pull/**
@@ -2852,6 +2854,8 @@ services:
     MYSQL_USER: owncloud
 
 trigger:
+  event:
+  - cron
   ref:
   - refs/tags/**
   - refs/pull/**
