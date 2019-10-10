@@ -9,8 +9,8 @@
       <li v-for="(link, index) in $_links" :key="'li-' + index">
         <oc-grid flex gutter="small">
           <div class="uk-width-auto">
-            <oc-icon v-if="link.password" name="lock" size="medium" />
-            <oc-icon v-else name="link" size="medium" />
+            <oc-icon v-show="link.password" name="lock" size="medium" />
+            <oc-icon v-show="!link.password" name="link" size="medium" />
           </div>
           <div class="uk-width-expand uk-text-truncate">
             <span class="uk-text-bold">{{ link.name }}</span><br>
