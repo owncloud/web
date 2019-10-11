@@ -314,19 +314,30 @@ export default {
         const directoriesToCreate = []
         for (const file of files) {
           directoryPath = file.webkitRelativePath.replace('/' + file.name, '')
+
+          if (directoriesToCreate.indexOf(directoryPath) > -1) {
+            continue
+          }
+
           const directories = directoryPath.split('/')
           for (let i = 0; i < directories.length; i++) {
-            const directoryName = directories[i]
-            directories[i] = ''
-            for (let temp = directories.length - 1 - i; temp < directories.length - 1; temp++) {
-              directories[i] += directories[temp] + '/'
+            if (i === 0) {
+              if (directoriesToCreate.indexOf(directories[0]) === -1) {
+                directoriesToCreate.push(directories[0])
+              }
+
+              continue
             }
-            directories[i] += directoryName
-            if (!directoriesToCreate.includes(directories[i])) {
-              directoriesToCreate.push(directories[i])
+
+            const parentDirectory = directories.slice(0, i).join('/')
+            const currentDirectory = `${parentDirectory}/${directories[i]}`
+
+            if (directoriesToCreate.indexOf(currentDirectory) === -1) {
+              directoriesToCreate.push(currentDirectory)
             }
           }
         }
+
         // Create folder structure
         const createFolderPromises = []
         const rootDir = directoriesToCreate[0]
