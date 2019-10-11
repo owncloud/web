@@ -8,6 +8,7 @@ Feature: create folders
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
+  @smokeTest
   Scenario: Create a folder inside another folder
     When the user creates a folder with the name "top-folder" using the webUI
     And the user opens folder "top-folder" using the webUI

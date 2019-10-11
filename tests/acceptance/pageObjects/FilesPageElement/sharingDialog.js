@@ -259,7 +259,7 @@ module.exports = {
     enterAutoComplete: function (input) {
       return this.initAjaxCounters()
         .waitForElementVisible('@sharingAutoComplete')
-        .setValue('@sharingAutoComplete', input)
+        .setValueBySingleKeys('@sharingAutoComplete', input)
         .waitForOutstandingAjaxCalls()
     },
     /**
@@ -288,7 +288,7 @@ module.exports = {
         .waitForElementVisible('@sharingAutoCompleteDropDownElements')
         .api.elements('css selector', this.elements.sharingAutoCompleteDropDownElements.selector, (result) => {
           result.value.forEach((value) => {
-            webElementIdList.push(value.ELEMENT)
+            webElementIdList.push(value[Object.keys(value)[0]])
           })
         })
         .then(() => webElementIdList)
@@ -352,7 +352,7 @@ module.exports = {
         .api.elements('css selector', this.elements.collaboratorsInformation, result => {
           result.value.map(item => {
             promiseList.push(new Promise((resolve, reject) => {
-              this.api.elementIdText(item.ELEMENT, text => {
+              this.api.elementIdText(item[Object.keys(item)[0]], text => {
                 resolve(text.value)
               })
             })

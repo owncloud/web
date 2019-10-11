@@ -27,7 +27,27 @@ module.exports = {
     }, {
       test: /\.vue$/,
       loader: 'vue-loader'
-    }, {
+    },
+    {
+      test: /\.jsx?$/,
+      include: /node_modules\/(?=(query-string|split-on-first|strict-uri-encode)\/).*/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: {
+                  ie: '11'
+                }
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
       test: /\.css$/,
       use: [
         'vue-style-loader',
