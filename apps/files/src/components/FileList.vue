@@ -43,8 +43,8 @@
               <oc-table-cell :class="{ 'uk-visible@s' : _sidebarOpen }" class="uk-position-relative">
                 <div class="uk-button-group uk-margin-small-right" :class="{ 'uk-visible@m' : !_sidebarOpen, 'uk-visible@xl' : _sidebarOpen  }">
                   <oc-button
-                    v-for="(action, index) in actions"
-                   :key="index"
+                    v-for="action in actions"
+                   :key="action.ariaLabel"
                    @click.stop="action.handler(item, action.handlerData)"
                    :disabled="!action.isEnabled(item, parentFolder) || $_actionInProgress(item)"
                    :icon="action.icon"
@@ -67,7 +67,7 @@
                   position="bottom-right"
                 >
                   <ul class="uk-list">
-                    <li v-for="(action, index) in enabledActions(item)" :key="index">
+                    <li v-for="action in enabledActions(item)" :key="action.ariaLabel">
                       <oc-button
                         class="uk-width-1-1"
                         @click.native.stop="action.handler(item, action.handlerData)"
