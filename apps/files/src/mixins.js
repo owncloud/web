@@ -313,6 +313,7 @@ export default {
         // Get folder structure
         const directoriesToCreate = []
         for (const file of files) {
+          this.$_addFileToUploadProgress(file)
           directoryPath = file.webkitRelativePath.replace('/' + file.name, '')
           const directories = directoryPath.split('/')
           for (let i = 0; i < directories.length; i++) {
@@ -345,7 +346,7 @@ export default {
         const uploadPromises = []
         Promise.all(createFolderPromises).then(() => {
           for (const file of files) {
-            uploadPromises.push(this.$_ocUpload(file, file.webkitRelativePath, null, false))
+            uploadPromises.push(this.$_ocUpload(file, file.webkitRelativePath, null, false, false))
           }
           // once all files are uploaded we emit the success event
           Promise.all(uploadPromises).then(() => {
@@ -367,10 +368,22 @@ export default {
         })
       })
     },
-    $_ocUpload (file, path, overwrite = null, emitSuccess = true) {
+
+    /**
+     * Adds file into the progress queue and assigns it unique id
+     * @param {Object} file File which is to be added into progress
+     */
+    $_addFileToUploadProgress (file) {
       file.id = this.uploadFileUniqueId
       this.uploadFileUniqueId++
       this.addFileToProgress(file)
+    },
+
+    $_ocUpload (file, path, overwrite = null, emitSuccess = true, addToProgress = true) {
+      if (addToProgress) {
+        this.$_addFileToUploadProgress(file)
+      }
+
       const fileUpload = new FileUpload(file, path, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType)
       return fileUpload
         .upload({
