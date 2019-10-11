@@ -12,8 +12,8 @@
                 You are not allowed to use this application.
               </h4>
               <br>
-              <div v-translate class="uk-margin-remove">
-                If you like to login with a different user please proceed to <a @click="logout()">exit</a>.
+              <div v-translate class="uk-margin-remove" @click="performLogout">
+                If you like to login with a different user please proceed to <a id='exitAnchor'>exit</a>.
               </div>
               <br>
               <div v-translate class="uk-margin-remove">
@@ -33,7 +33,12 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'AccessDeniedPage',
   methods: {
-    ...mapActions(['logout'])
+    ...mapActions(['logout']),
+    performLogout (event) {
+      if (event.target.id === 'exitAnchor') {
+        this.logout()
+      }
+    }
   },
   computed: {
     ...mapGetters(['configuration']),
