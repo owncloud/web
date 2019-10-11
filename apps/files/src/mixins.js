@@ -121,7 +121,7 @@ export default {
   methods: {
     ...mapActions('Files', ['resetSearch', 'addFileToProgress', 'resetFileSelection', 'addFileSelection',
       'removeFileSelection', 'setOverwriteDialogTitle', 'setOverwriteDialogMessage', 'deleteFiles', 'renameFile',
-      'setHighlightedFile', 'setFilesDeleteMessage']),
+      'setHighlightedFile', 'setFilesDeleteMessage', 'removeFileFromProgress']),
     ...mapActions(['showMessage']),
 
     formDateFromNow (date) {
@@ -395,7 +395,8 @@ export default {
         this.$_addFileToUploadProgress(file)
       }
 
-      const fileUpload = new FileUpload(file, path, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType)
+      const fileUpload = new FileUpload(file, path, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType, this.removeFileFromProgress)
+
       return fileUpload
         .upload({
           overwrite: overwrite
@@ -412,6 +413,7 @@ export default {
     $_ocUpload_onProgress (e, file) {
       const progress = parseInt(e.loaded * 100 / e.total)
       this.$emit('progress', {
+        id: file.id,
         fileName: file.name,
         progress
       })
