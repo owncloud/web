@@ -48,7 +48,7 @@ export default {
     ...mapGetters(['activeFile']),
     ...mapGetters('MarkdownEditor', ['currentContent', 'lastError']),
     renderedMarkdown () {
-      return this.currentContent ? marked(this.currentContent) : null
+      return this.currentContent ? marked(this.currentContent, { sanitize: true }) : null
     }
   },
   methods: {
