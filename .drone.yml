@@ -37,7 +37,7 @@ trigger:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUIFavorites-chrome
+name: Favorites-chrome
 
 platform:
   os: linux
@@ -145,7 +145,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIFavorites</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>Favorites</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -218,7 +218,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUIFiles-chrome
+name: Files-chrome
 
 platform:
   os: linux
@@ -326,7 +326,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIFiles</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>Files</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -399,7 +399,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUILogin-chrome
+name: Login-chrome
 
 platform:
   os: linux
@@ -507,7 +507,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUILogin</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>Login</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -580,7 +580,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUINotifications-chrome
+name: Notifications-chrome
 
 platform:
   os: linux
@@ -688,7 +688,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUINotifications</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>Notifications</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -761,7 +761,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUIPrivateLinks-chrome
+name: PrivateLinks-chrome
 
 platform:
   os: linux
@@ -869,7 +869,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIPrivateLinks</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>PrivateLinks</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -942,7 +942,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUIRenameFiles-chrome
+name: RenameFiles-chrome
 
 platform:
   os: linux
@@ -1050,7 +1050,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIRenameFiles</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>RenameFiles</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -1123,7 +1123,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUIRenameFolders-chrome
+name: RenameFolders-chrome
 
 platform:
   os: linux
@@ -1231,7 +1231,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIRenameFolders</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>RenameFolders</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -1304,7 +1304,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUISharingInternalGroups-chrome
+name: SharingInternalGroups-chrome
 
 platform:
   os: linux
@@ -1412,7 +1412,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUISharingInternalGroups</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingInternalGroups</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -1485,7 +1485,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUISharingInternalUsers-chrome
+name: SharingInternalUsers-chrome
 
 platform:
   os: linux
@@ -1593,7 +1593,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUISharingInternalUsers</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingInternalUsers</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -1666,7 +1666,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUISharingPublic-chrome
+name: SharingPublic-chrome
 
 platform:
   os: linux
@@ -1774,7 +1774,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUISharingPublic</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingPublic</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -1847,7 +1847,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUITrashbin-chrome
+name: Trashbin-chrome
 
 platform:
   os: linux
@@ -1955,7 +1955,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUITrashbin</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>Trashbin</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -2028,7 +2028,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-webUIUpload-chrome
+name: Upload-chrome
 
 platform:
   os: linux
@@ -2136,7 +2136,7 @@ steps:
   image: owncloud/ubuntu:16.04
   commands:
   - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>webUIUpload</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>Upload</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
   - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
   - "echo \"\n</p></details>\" >> comments.file"
   - more comments.file
@@ -2209,7 +2209,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-XGAPortrait-chrome
+name: XGAPortrait-chrome
 
 platform:
   os: linux
@@ -2390,7 +2390,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-iPhone-chrome
+name: iPhone-chrome
 
 platform:
   os: linux
@@ -2571,7 +2571,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-Rename-Trash-Files-IE11
+name: Rename-Trash-Files-IE11
 
 platform:
   os: linux
@@ -2721,7 +2721,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: acceptance-Sharing-IE11
+name: Sharing-IE11
 
 platform:
   os: linux
@@ -2976,22 +2976,22 @@ trigger:
   - refs/heads/develop*
 
 depends_on:
-- acceptance-webUIFavorites-chrome
-- acceptance-webUIFiles-chrome
-- acceptance-webUILogin-chrome
-- acceptance-webUINotifications-chrome
-- acceptance-webUIPrivateLinks-chrome
-- acceptance-webUIRenameFiles-chrome
-- acceptance-webUIRenameFolders-chrome
-- acceptance-webUISharingInternalGroups-chrome
-- acceptance-webUISharingInternalUsers-chrome
-- acceptance-webUISharingPublic-chrome
-- acceptance-webUITrashbin-chrome
-- acceptance-webUIUpload-chrome
-- acceptance-XGAPortrait-chrome
-- acceptance-iPhone-chrome
-- acceptance-Rename-Trash-Files-IE11
-- acceptance-Sharing-IE11
+- Favorites-chrome
+- Files-chrome
+- Login-chrome
+- Notifications-chrome
+- PrivateLinks-chrome
+- RenameFiles-chrome
+- RenameFolders-chrome
+- SharingInternalGroups-chrome
+- SharingInternalUsers-chrome
+- SharingPublic-chrome
+- Trashbin-chrome
+- Upload-chrome
+- XGAPortrait-chrome
+- iPhone-chrome
+- Rename-Trash-Files-IE11
+- Sharing-IE11
 - publish-npm-and-demo-system
 
 ...

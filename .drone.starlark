@@ -15,20 +15,20 @@ config = {
 
 	'acceptance': {
 		'webUI': {
-			'suites': [
-				'webUIFavorites',
-				'webUIFiles',
-				'webUILogin',
-				'webUINotifications',
-				'webUIPrivateLinks',
-				'webUIRenameFiles',
-				'webUIRenameFolders',
-				'webUISharingInternalGroups',
-				'webUISharingInternalUsers',
-				'webUISharingPublic',
-				'webUITrashbin',
-				'webUIUpload',
-			],
+			'suites': {
+				'webUIFavorites': 'Favorites',
+				'webUIFiles': 'Files',
+				'webUILogin': 'Login',
+				'webUINotifications': 'Notifications',
+				'webUIPrivateLinks': 'PrivateLinks',
+				'webUIRenameFiles': 'RenameFiles',
+				'webUIRenameFolders': 'RenameFolders',
+				'webUISharingInternalGroups': 'SharingInternalGroups',
+				'webUISharingInternalUsers': 'SharingInternalUsers',
+				'webUISharingPublic': 'SharingPublic',
+				'webUITrashbin': 'Trashbin',
+				'webUIUpload': 'Upload',
+			},
 		},
 		'webUI-XGA': {
 			'suites': {
@@ -217,7 +217,7 @@ def acceptance():
 				for browser in params['browsers']:
 					for db in params['databases']:
 						browserString = '' if browser == '' else '-' + browser
-						name = 'acceptance-%s%s' % (alternateSuiteName, browserString)
+						name = '%s%s' % (alternateSuiteName, browserString)
 						maxLength = 50
 						nameLength = len(name)
 						if nameLength > maxLength:
