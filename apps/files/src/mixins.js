@@ -1,6 +1,5 @@
 import filesize from 'filesize'
 import moment from 'moment'
-import FileUpload from './FileUpload.js'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
 const { default: PQueue } = require('p-queue')
@@ -395,20 +394,20 @@ export default {
         this.$_addFileToUploadProgress(file)
       }
 
-      const fileUpload = new FileUpload(file, path, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType, this.removeFileFromProgress)
-
-      return fileUpload
-        .upload({
-          overwrite: overwrite
-        })
-        .then(e => {
-          if (emitSuccess) {
-            this.$emit('success', e, file)
-          }
-        })
-        .catch(e => {
-          this.$emit('error', e)
-        })
+      this.$client.files.putFileContents(path, file, {
+        onProgress: (progress) => {
+          this.$_ocUpload_onProgress(progress, file)
+        },
+        overwrite: overwrite
+      }).then(e => {
+        this.removeFileFromProgress(file)
+        if (emitSuccess) {
+          this.$emit('success', e, file)
+        }
+      }).catch(e => {
+        this.removeFileFromProgress(file)
+        this.$emit('error', e)
+      })
     },
     $_ocUpload_onProgress (e, file) {
       const progress = parseInt(e.loaded * 100 / e.total)
