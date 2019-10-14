@@ -108,7 +108,10 @@ module.exports = {
         timeout = parseInt(timeout, 10)
       }
       try {
-        this.click({ selector: '@sidebarCloseBtn', timeout: timeout })
+        this.click({
+          selector: '@sidebarCloseBtn',
+          timeout: timeout
+        })
       } catch (e) {
         // do nothing
       }
@@ -307,7 +310,10 @@ module.exports = {
     allFileRows: async function () {
       this
         .waitForElementNotPresent('@filesListProgressBar')
-        .waitForElementVisible({ selector: '@fileRows', abortOnFailure: false })
+        .waitForElementVisible({
+          selector: '@fileRows',
+          abortOnFailure: false
+        })
       return new Promise((resolve, reject) => {
         this.api.elements('css selector', this.elements.fileRows, function (result) {
           resolve(result)
@@ -324,6 +330,12 @@ module.exports = {
         .waitForElementVisible('@sidebarPrivateLinkIconCopied')
         .waitForElementNotVisible('@sidebarPrivateLinkIconCopied')
         .waitForElementVisible('@sidebarPrivateLinkIcon')
+    },
+    deleteImmediately: function (fileName) {
+      return this.waitForFileVisible(fileName)
+        .performFileAction(fileName, 'deleteImmediately')
+        .waitForElementVisible('@deleteFileConfirmationBtn')
+        .click('@deleteFileConfirmationBtn')
     }
   },
   elements: {
@@ -353,6 +365,10 @@ module.exports = {
     },
     restoreButtonInFileRow: {
       selector: '//span[.="Restore"]',
+      locateStrategy: 'xpath'
+    },
+    deleteImmediatelyButtonInFileRow: {
+      selector: '//span[.="Delete immediately"]',
       locateStrategy: 'xpath'
     },
     deleteFileConfirmationBtn: {

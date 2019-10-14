@@ -521,3 +521,7 @@ Then('the app-sidebar for file/folder {string} should be visible on the webUI', 
 Then('the thumbnail should be visible in the app-sidebar', function () {
   return client.page.FilesPageElement.appSideBar().isThumbnailVisible()
 })
+
+When('the user deletes the file {string} from the deleted files list', function (element) {
+  return client.page.FilesPageElement.filesList().deleteImmediately(element)
+})

@@ -43,7 +43,7 @@ exports.delete = function (userId, file) {
     davPath,
     { method: 'DELETE', headers: headers }
   )
-    .then(res => httpHelper.checkStatus(res, 'Could not delete file.'))
+    .then(res => httpHelper.checkStatus(res, 'Could not delete file ' + file))
     .then(res => res.text())
 }
 

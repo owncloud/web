@@ -61,3 +61,8 @@ Feature: files and folders can be deleted from the trashbin
     And the user batch deletes the marked files using the webUI
     Then the folder should be empty on the webUI
 
+  Scenario: Delete single file from deleted files list
+    When the user deletes the file "lorem.txt" from the deleted files list
+    Then file "lorem.txt" should not be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
