@@ -711,6 +711,9 @@ def uploadScreenshots():
 		'when': {
 			'status': [
 				'failure'
+			],
+			'event': [
+			    'pull_request'
 			]
 		},
 	}]
@@ -733,6 +736,9 @@ def buildGithubComment(suite, alternateSuiteName):
 		'when': {
 			'status': [
 				'failure'
+			],
+			'event': [
+			    'pull_request'
 			]
 		},
 	}]
@@ -753,6 +759,9 @@ def githubComment():
 		'when': {
 			'status': [
 				'failure'
+			],
+			'event': [
+			    'pull_request'
 			]
 		},
 	}]
