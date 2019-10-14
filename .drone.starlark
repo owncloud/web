@@ -25,6 +25,7 @@ config = {
 				'webUIRenameFolders': 'RenameFolders',
 				'webUISharingInternalGroups': 'SharingInternalGroups',
 				'webUISharingInternalUsers': 'SharingInternalUsers',
+				'webUISharingPermissions': 'SharingPermissions',
 				'webUISharingPublic': 'SharingPublic',
 				'webUITrashbin': 'Trashbin',
 				'webUIUpload': 'Upload',
