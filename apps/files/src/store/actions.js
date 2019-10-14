@@ -400,6 +400,11 @@ export default {
   addFileToProgress ({ commit }, file) {
     commit('ADD_FILE_TO_PROGRESS', file)
   },
+
+  removeFileFromProgress ({ commit }, file) {
+    commit('REMOVE_FILE_FROM_PROGRESS', file)
+  },
+
   loadFiles (context, { currentFolder, files }) {
     currentFolder = _buildFile(currentFolder)
     files = files.map(_buildFile)

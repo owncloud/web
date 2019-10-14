@@ -1,25 +1,14 @@
 export default {
   UPDATE_FILE_PROGRESS (state, file) {
     const fileIndex = state.inProgress.findIndex((f) => {
-      return f.name === file.fileName
+      return f.id === file.id
     })
 
     if (fileIndex === -1) return
 
-    if (file.progress < 100) {
-      state.inProgress[fileIndex].progress = file.progress
-      return
-    }
-
-    state.inProgress.splice(fileIndex, 1)
-    if (state.inProgress.length < 1) {
-      state.inProgress = []
-      state.uploaded = []
-      return
-    }
-
-    state.uploaded.push(file)
+    state.inProgress[fileIndex].progress = file.progress
   },
+
   ADD_FILE_TO_PROGRESS (state, file) {
     state.inProgress.push({
       id: file.id,
@@ -30,6 +19,23 @@ export default {
       action: 'upload'
     })
   },
+
+  REMOVE_FILE_FROM_PROGRESS (state, file) {
+    const fileIndex = state.inProgress.findIndex((f) => {
+      return f.id === file.id
+    })
+
+    state.inProgress.splice(fileIndex, 1)
+    if (state.inProgress.length < 1) {
+      state.inProgress = []
+      state.uploaded = []
+      return
+    }
+
+    file.progress = 100
+    state.uploaded.push(file)
+  },
+
   LOAD_FILES (state, { currentFolder, files }) {
     state.currentFolder = currentFolder
     state.files = files
