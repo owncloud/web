@@ -90,7 +90,7 @@ const navItems = [
     name: $gettext('Deleted files'),
     iconMaterial: 'delete',
     enabled (capabilities) {
-      if (capabilities.dav) {
+      if (capabilities && capabilities.dav) {
         return capabilities.dav.trashbin === '1.0'
       }
       return false

@@ -1,6 +1,6 @@
 import filesize from 'filesize'
+import join from 'join-path'
 import moment from 'moment'
-import FileUpload from './FileUpload.js'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
 const { default: PQueue } = require('p-queue')
@@ -28,7 +28,7 @@ export default {
     uploadFileUniqueId: 0
   }),
   computed: {
-    ...mapGetters('Files', ['searchTerm', 'files', 'highlightedFile']),
+    ...mapGetters('Files', ['searchTerm', 'files', 'highlightedFile', 'publicLinkPassword']),
     ...mapGetters(['getToken']),
 
     _sidebarOpen () {
@@ -271,24 +271,45 @@ export default {
     },
 
     $_ocUpload (file, path, overwrite = null, emitSuccess = true, addToProgress = true) {
+      let basePath = this.path || ''
+      let relativePath = path
       if (addToProgress) {
         this.$_addFileToUploadProgress(file)
       }
 
-      const fileUpload = new FileUpload(file, path, this.url, this.headers, this.$_ocUpload_onProgress, this.requestType, this.removeFileFromProgress)
-
-      return fileUpload
-        .upload({
+      let promise
+      if (this.publicPage()) {
+        // strip out public link token from path
+        const tokenSplit = basePath.indexOf('/')
+        const token = basePath.substr(0, tokenSplit)
+        basePath = basePath.substr(tokenSplit + 1) || ''
+        relativePath = join(basePath, relativePath)
+        promise = this.$client.publicFiles.putFileContents(token, relativePath, this.publicLinkPassword, file, {
+          onProgress: (progress) => {
+            this.$_ocUpload_onProgress(progress, file)
+          },
           overwrite: overwrite
         })
-        .then(e => {
-          if (emitSuccess) {
-            this.$emit('success', e, file)
-          }
+      } else {
+        basePath = this.path || ''
+        relativePath = join(basePath, relativePath)
+        promise = this.$client.files.putFileContents(relativePath, file, {
+          onProgress: (progress) => {
+            this.$_ocUpload_onProgress(progress, file)
+          },
+          overwrite: overwrite
         })
-        .catch(e => {
-          this.$emit('error', e)
-        })
+      }
+
+      promise.then(e => {
+        this.removeFileFromProgress(file)
+        if (emitSuccess) {
+          this.$emit('success', e, file)
+        }
+      }).catch(e => {
+        this.removeFileFromProgress(file)
+        this.$emit('error', e)
+      })
     },
     $_ocUpload_onProgress (e, file) {
       const progress = parseInt(e.loaded * 100 / e.total)

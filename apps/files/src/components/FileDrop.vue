@@ -30,7 +30,7 @@ export default {
   },
   props: {
     rootPath: { type: String, required: true },
-    url: { type: String, required: true },
+    path: { type: String, required: true },
     headers: {
       type: Object,
       default: () => {
@@ -45,7 +45,7 @@ export default {
   data () {
     return {
       ocDropzone_options: {
-        url: this.url,
+        url: '#', // FIXME: unused
         clickable: false,
         autoQueue: false
       }
