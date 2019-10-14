@@ -1,6 +1,6 @@
 <template>
   <div id="files-app-bar" class="oc-app-bar">
-    <file-drop v-if="!isIE11()" :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
+    <file-drop v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
       <div class="uk-width-expand">
         <div class="uk-flex">
@@ -38,8 +38,8 @@
             <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
             <oc-drop toggle="#new-file-menu-btn" mode="click">
               <oc-nav>
-                <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-                <folder-upload v-if="!isIE11()" :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
+                <file-upload :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
+                <folder-upload v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
                 <oc-nav-item @click="showCreateFolderDialog" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
                 <oc-nav-item v-for="(newFileHandler, key) in newFileHandlers"
                   :key="key"
@@ -150,12 +150,8 @@ export default {
     item () {
       return this.$route.params.item === undefined ? (this.configuration.rootFolder !== '/' ? `${this.configuration.rootFolder}/` : '/') : this.$route.params.item + '/'
     },
-    url () {
-      const path = this.item === '/' ? '' : this.item
-      if (this.publicPage()) {
-        return this.$client.publicFiles.getFileUrl(`/${path}`)
-      }
-      return this.$client.files.getFileUrl(`/${path}`)
+    currentPath () {
+      return this.item === '/' ? '' : this.item
     },
     newFolderErrorMessage () {
       return this.checkNewFolderName(this.newFolderName)

@@ -394,7 +394,15 @@ export default {
         this.$_addFileToUploadProgress(file)
       }
 
-      this.$client.files.putFileContents(path, file, {
+      let module = this.$client.files
+      if (this.publicPage()) {
+        module = this.$client.publicFiles
+      }
+      // prepend the current folder path if available
+      if (this.path) {
+        path = this.path + '/' + path
+      }
+      module.putFileContents(path, file, {
         onProgress: (progress) => {
           this.$_ocUpload_onProgress(progress, file)
         },

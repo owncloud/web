@@ -51,7 +51,6 @@
 
 <script>
 import vue2DropZone from 'vue2-dropzone'
-import FileUpload from '../../FileUpload.js'
 import { mapGetters } from 'vuex'
 import Mixins from '../../mixins.js'
 
@@ -140,27 +139,23 @@ export default {
     },
     dropZoneFileAdded (event) {
       const uploadId = event.upload.uuid
-      const headers = {}
-      const password = this.publicLinkPassword
-      if (password) {
-        headers.Authorization = 'Basic ' + Buffer.from('public:' + password).toString('base64')
-      }
       this.uploadedFilesChangeTracker++
       this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'init' })
-      const fileUpload = new FileUpload(event, event.name, this.url, headers, (progressEvent, file) => {
+
+      this.$client.files.putFileContents(event.name, event, {
+        // automatically rename in case of duplicates
+        headers: { 'OC-Autorename': 1 },
+        onProgress: (progressEvent) => {
+          this.uploadedFilesChangeTracker++
+          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'uploading' })
+        }
+      }).then(e => {
         this.uploadedFilesChangeTracker++
-        this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'uploading' })
-      }, 'PUT')
-      fileUpload
-        .upload()
-        .then(e => {
-          this.uploadedFilesChangeTracker++
-          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'done' })
-        })
-        .catch(e => {
-          this.uploadedFilesChangeTracker++
-          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'error' })
-        })
+        this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'done' })
+      }).catch(e => {
+        this.uploadedFilesChangeTracker++
+        this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'error' })
+      })
     }
   }
 }
