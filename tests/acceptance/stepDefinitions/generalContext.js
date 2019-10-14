@@ -46,7 +46,7 @@ const assertContentOFLocalFileIs = function (fullPathOfLocalFile, expectedConten
   )
 }
 
-Before(function () {
+Before(function (testCase) {
   createdFiles = []
   if (typeof process.env.SCREEN_RESOLUTION !== 'undefined' && process.env.SCREEN_RESOLUTION.trim() !== '') {
     const resolution = process.env.SCREEN_RESOLUTION.split('x')
@@ -62,8 +62,10 @@ Before(function () {
   } else {
     client.maximizeWindow()
   }
+  console.log('  ' + testCase.sourceLocation.uri + ':' + testCase.sourceLocation.line + '\n')
 })
 
-After(function () {
+After(function (testCase) {
+  console.log('\n  Result: ' + testCase.result.status + '\n')
   createdFiles.forEach(fileName => fs.unlinkSync(fileName))
 })
