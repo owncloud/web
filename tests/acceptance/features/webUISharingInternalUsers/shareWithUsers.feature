@@ -131,12 +131,9 @@ Feature: Sharing files and folders with internal users
     Then file "lorem.txt" should be listed on the webUI
     And the content of "lorem.txt" should be the same as the original "simple-folder/lorem.txt"
 
-  @skip @yetToImplement
   Scenario: share a folder with another internal user and prohibit deleting
     Given user "user2" has logged in using the webUI
-    When the user shares folder "simple-folder" with user "User One" using the webUI
-    And the user sets the sharing permissions of "User One" for "simple-folder" using the webUI to
-      | delete | no |
+    Given user "user2" has shared folder "simple-folder" with user "user1" with "create, read, share" permissions
     And the user re-logs in as "user1" using the webUI
     And the user opens folder "simple-folder (2)" using the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI
