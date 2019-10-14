@@ -218,3 +218,4 @@ Feature: deleting files and folders
     And as "user1" folder "simple-folder/simple-empty-folder" should not exist
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
+
