@@ -6478,9 +6478,9 @@ owncloud-design-system@^1.0.0-914:
     webfontloader "^1.6.28"
 
 owncloud-sdk@^1.0.0-368:
-  version "1.0.0-414"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-414.tgz#388866f608e8aa0b954f9bd45a265bc0d45df916"
-  integrity sha512-2qZ3Ewq1OCDihJoLTUcUz7eDXWeVFyOcQqslJO4yIgIxOmA7Mo58ud++EsCAROzHN3VZlMVwuDjYuDN6bvNVbg==
+  version "1.0.0-429"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-429.tgz#76579e546584aeaf67bd101d072a7bf7e8fab342"
+  integrity sha512-TUFMW4MtOmkfHFuInLBNt/kOBkm0hE5Q5krzmukvbXGMeFD+TUBM3l2W0K2LEQ9t5/Z5K1WvHStKjwqy5QOMTw==
   dependencies:
     browser-request "^0.3.3"
     davclient.js "https://github.com/owncloud/davclient.js.git"

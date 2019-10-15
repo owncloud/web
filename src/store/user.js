@@ -41,24 +41,7 @@ const actions = {
   },
   initAuth (context, payload = { autoRedirect: false }) {
     function init (client, token, doLogin = true) {
-      const instance = context.rootState.config.server || window.location.origin
-      const options = {
-        baseUrl: instance,
-        auth: {
-          bearer: token
-        },
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        }
-      }
-      if (context.state.id) {
-        options.userInfo = {
-          id: context.state.id,
-          'display-name': context.state.displayname,
-          email: context.state.email
-        }
-      }
-
+      const options = context.getters.getClientOptions
       client.init(options)
       if (doLogin) {
         return client.login().then(res => {
@@ -178,6 +161,27 @@ const getters = {
   },
   capabilities: (state) => {
     return state.capabilities
+  },
+  getClientOptions: (state, getters, rootState) => {
+    const instance = rootState.config.server || window.location.origin
+    const options = {
+      baseUrl: instance,
+      auth: {
+        bearer: state.token
+      },
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    }
+    if (state.id) {
+      options.userInfo = {
+        id: state.id,
+        'display-name': state.displayname,
+        email: state.email
+      }
+    }
+
+    return options
   }
 }
 
