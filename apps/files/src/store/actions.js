@@ -1,4 +1,6 @@
 import moment from 'moment'
+// eslint-disable-next-line
+import Worker from 'worker-loader!../worker/FileList.js'
 
 function _buildFile (file) {
   let ext = ''
@@ -249,25 +251,30 @@ export default {
     context.commit('UPDATE_FOLDER_LOADING', true)
 
     return new Promise((resolve, reject) => {
-      let promise
-      const favorite = routeName === 'files-favorites'
-      const publicFiles = routeName === 'public-files'
+      const worker = new Worker()
+      const clientInit = context.rootGetters.getClientOptions
 
-      if (favorite) {
-        promise = client.files.getFavoriteFiles(context.getters.davProperties)
-      } else if (publicFiles) {
-        const password = context.getters.publicLinkPassword
-        promise = client.publicFiles.list(absolutePath, password, context.getters.davProperties)
-      } else {
-        promise = client.files.list(absolutePath, 1, context.getters.davProperties)
-      }
-      promise.then(res => {
+      console.log('Offload processing to worker')
+      worker.postMessage({ routeName: routeName, absolutePath: absolutePath, clientInit: clientInit, davProperties: context.getters.davProperties, publicLinkPassword: context.getters.publicLinkPassword })
+      worker.onmessage = (event) => {
+        console.log('Back from worker')
+        if (event.data.error) {
+          reject(event.data.error)
+          context.commit('UPDATE_FOLDER_LOADING', false)
+          client.users.getUser(context.rootGetters.user.id).then(res => {
+            context.commit('CHECK_QUOTA', res.quota)
+            resolve()
+          })
+          return
+        }
+        const res = event.data.res
         if (res === null) {
           context.dispatch('showMessage', {
             title: $gettext('Loading folder failed…'),
             status: 'danger'
           }, { root: true })
         } else {
+          const favorite = routeName === 'files-favorites'
           if (favorite) {
             client.files.fileInfo('', context.getters.davProperties).then(rootFolder => {
               rootFolder.fileInfo['{http://owncloud.org/ns}permissions'] = 'R'
@@ -277,10 +284,12 @@ export default {
               })
             })
           } else {
+            console.log('vuex.loadFiles')
             context.dispatch('loadFiles', {
               currentFolder: res[0],
               files: res.splice(1)
             })
+            console.log('vuex.loadFiles done')
           }
         }
         context.dispatch('resetFileSelection')
@@ -288,15 +297,12 @@ export default {
         if (context.getters.searchTerm !== '') {
           context.dispatch('resetSearch')
         }
-      }).catch(error => {
-        reject(error)
-      }).finally(() => {
         context.commit('UPDATE_FOLDER_LOADING', false)
         client.users.getUser(context.rootGetters.user.id).then(res => {
           context.commit('CHECK_QUOTA', res.quota)
           resolve()
         })
-      })
+      }
     })
   },
   loadTrashbin (context, { client, $gettext }) {

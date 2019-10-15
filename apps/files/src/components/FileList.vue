@@ -159,6 +159,7 @@ export default {
         $gettext: this.$gettext,
         routeName: this.$route.name
       }).then(() => {
+        console.log('[FileList.vue] loadFolder.then')
         const scrollTo = this.$route.query.scrollTo
         if (scrollTo && this.activeFiles.length > 0) {
           this.$nextTick(() => {
@@ -170,6 +171,7 @@ export default {
           })
         }
       }).catch((error) => {
+        console.log(error)
         // password for public link shares is missing -> this is handled on the caller side
         if (this.publicPage() && error.statusCode === 401) {
           this.$router.push({

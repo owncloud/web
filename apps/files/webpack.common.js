@@ -14,8 +14,21 @@ module.exports = {
     filename: 'files.bundle.js',
     library: 'files'
   },
+  node: {
+    fs: 'empty',
+    child_process: 'empty',
+    net: 'empty',
+    tls: 'empty'
+  },
   module: {
     rules: [
+      {
+        test: /\.worker\.js$/,
+        loader: 'worker-loader',
+        include: [
+          path.resolve('src')
+        ]
+      },
       {
         test: /\.js$/,
         loader: 'babel-loader',
