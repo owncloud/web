@@ -127,6 +127,7 @@ module.exports = {
       return this.waitForElementPresent('@addShareButton')
         .click('@addShareButton')
         .waitForElementNotPresent('@addShareButton')
+        .waitForAjaxCallsToStartAndFinish()
     },
     saveCollaboratorPermission: function () {
       return this.waitForElementVisible('@saveShareButton')
