@@ -531,3 +531,7 @@ Then('the autocomplete list should not be displayed on the webUI', function () {
 Given('user {string} has declined the share {string} offered by user {string}', async function (user, filename, sharer) {
   return sharingHelper.declineShare(filename, user, sharer)
 })
+
+Then('the file {string} shared by {string} should not be in {string} state', function (filename, sharer, status) {
+  return client.page.sharedWithMePage().assertDesiredStatusIsAbsent(filename, sharer, status)
+})

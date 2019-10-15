@@ -1,5 +1,6 @@
 const navigationHelper = require('../helpers/navigationHelper')
 const util = require('util')
+
 module.exports = {
   url: function () {
     return this.api.launchUrl + '/#/files/shared-with-me/'
@@ -27,6 +28,23 @@ module.exports = {
       requiredXpath = user === undefined ? requiredXpath : requiredXpath +
                       util.format(this.elements.getSharedFromUserName.selector, user)
       return this.waitForElementVisible({
+        locateStrategy: this.elements.assertStatusFileRow.locateStrategy,
+        selector: requiredXpath
+      })
+    },
+    /**
+     * @param {string} filename
+     * @param {string} sharer
+     * @param {string} status - It takes one of the following : declined, pending or '' for accepted
+     * Checks if the file-row of the desired file-name with the username doesn't consist of the desired status of accepted,
+     * declined or pending
+     */
+    assertDesiredStatusIsAbsent: function (filename, sharer, status) {
+      let requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
+        util.format(this.elements.assertStatusFileRow.selector, status)
+      requiredXpath = sharer === undefined ? requiredXpath : requiredXpath +
+        util.format(this.elements.getSharedFromUserName.selector, sharer)
+      return this.waitForElementNotPresent({
         locateStrategy: this.elements.assertStatusFileRow.locateStrategy,
         selector: requiredXpath
       })
