@@ -11,7 +11,7 @@ module.exports = {
      */
     navigateAndWaitTillLoaded: function () {
       return navigationHelper.navigateAndWaitTillLoaded(
-        this.url(), this.page.FilesPageElement.filesList().elements.filesListProgressBar.selector
+        this.url(), this.page.FilesPageElement.filesList().elements.filesListProgressBar
       )
     }
   }
