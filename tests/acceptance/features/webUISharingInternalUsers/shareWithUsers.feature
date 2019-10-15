@@ -36,7 +36,8 @@ Feature: Sharing files and folders with internal users
       | simple-folder (2) |
       | testimage (2).jpg |
     And these resources should be listed in the folder "simple-folder (2)" on the webUI
-      | lorem.txt |
+      | entry_name |
+      | lorem.txt  |
     But these resources should not be listed in the folder "simple-folder (2)" on the webUI
       | entry_name        |
       | simple-folder (2) |
