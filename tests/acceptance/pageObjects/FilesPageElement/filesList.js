@@ -45,9 +45,9 @@ module.exports = {
      * @returns {*}
      */
     performFileAction: function (fileName, action) {
-      const btnSelectorHighResolution = this.getActionSelectorHighRes(action, fileName)
-      const btnSelectorLowResolution = this.getActionSelectorLowRes(action, fileName)
-      const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName)
+      const { btnSelectorHighResolution, btnSelectorLowResolution, fileActionsBtnSelector } =
+        this.getFileRowButtonSelectorsByFileName(fileName, action)
+
       return this.initAjaxCounters()
         .useXpath()
         .isVisible(fileActionsBtnSelector, (result) => {
@@ -61,6 +61,42 @@ module.exports = {
               .waitForElementVisible(btnSelectorHighResolution)
               .click(btnSelectorHighResolution)
           }
+        })
+    },
+
+    /**
+     * Checks whether a given action is disabled for a given file name.
+     * This method does find out itself if the file-action burger has to be clicked or not.
+     *
+     * @param {string} fileName
+     * @param {string} delete|share|rename
+     * @param {function(boolean)} callback - whether the action is disabled
+     * @returns {*}
+     */
+    isActionDisabled: function (fileName, action, callback) {
+      const { btnSelectorHighResolution, btnSelectorLowResolution, fileActionsBtnSelector } =
+        this.getFileRowButtonSelectorsByFileName(fileName, action)
+
+      return this
+        .useXpath()
+        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
+        .isVisible(fileActionsBtnSelector, (result) => {
+          let btnSelector
+          if (result.value === true) {
+            this
+              .click(fileActionsBtnSelector)
+            btnSelector = btnSelectorLowResolution
+          } else {
+            btnSelector = btnSelectorHighResolution
+          }
+
+          this
+            .waitForElementVisible(btnSelector)
+            .useXpath()
+            .getAttribute(btnSelector, 'disabled', (disabledResult) => {
+              const isDisabled = disabledResult.value === 'true'
+              callback(isDisabled)
+            })
         })
     },
     /**
@@ -278,6 +314,13 @@ module.exports = {
           this.assert.strictEqual(result.value.trim(), fileName, 'displayed file name not as expected')
         })
       return this.useCss()
+    },
+    getFileRowButtonSelectorsByFileName: function (fileName, action) {
+      const btnSelectorHighResolution = this.getActionSelectorHighRes(action, fileName)
+      const btnSelectorLowResolution = this.getActionSelectorLowRes(action, fileName)
+      const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName)
+
+      return { btnSelectorHighResolution, btnSelectorLowResolution, fileActionsBtnSelector }
     },
     /**
      *

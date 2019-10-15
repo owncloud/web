@@ -54,13 +54,18 @@ const userSharesFileOrFolderWithGroup = function (file, sharee, role) {
  * @param {number} shareType  Type of share 0 = user, 1 = group, 3 = public (link), 6 = federated (cloud share).
  * @param {string} permissions  permissions of the share for valid permissions see sharingHelper.PERMISSION_TYPES
  */
-const shareFileFolder = function (elementToShare, sharer, receiver, shareType = SHARE_TYPES.user, permissionString = 'all') {
+const shareFileFolder = function (elementToShare, sharer, receiver, shareType = SHARE_TYPES.user, permissionString = 'all', password = null) {
   const permissions = sharingHelper.humanReadablePermissionsToBitmask(permissionString)
   const params = new URLSearchParams()
   params.append('shareType', shareType)
-  params.append('shareWith', receiver)
+  if (receiver) {
+    params.append('shareWith', receiver)
+  }
   params.append('path', elementToShare)
   params.append('permissions', permissions)
+  if (password) {
+    params.append('password', password)
+  }
   return fetch(
     client.globals.backend_url + '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json',
     { method: 'POST', headers: httpHelper.createAuthHeader(sharer), body: params }
@@ -154,6 +159,20 @@ Given(
 Given('user {string} has shared file/folder {string} with group {string}', function (sharer, elementToShare, receiver) {
   return shareFileFolder(elementToShare, sharer, receiver, SHARE_TYPES.group)
 })
+
+Given(
+  'user {string} has shared file/folder {string} with link with {string} permissions',
+  function (sharer, elementToShare, permissions) {
+    return shareFileFolder(elementToShare, sharer, null, SHARE_TYPES.public_link, permissions)
+  }
+)
+
+Given(
+  'user {string} has shared file/folder {string} with link with {string} permissions and password {string}',
+  function (sharer, elementToShare, permissions, password) {
+    return shareFileFolder(elementToShare, sharer, null, SHARE_TYPES.public_link, permissions, password)
+  }
+)
 
 When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)

@@ -142,6 +142,12 @@ export default {
     },
     headers () {
       if (this.publicPage()) {
+        const password = this.publicLinkPassword
+
+        if (password) {
+          return { Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
+        }
+
         return {}
       }
       return {
@@ -239,7 +245,7 @@ export default {
     },
 
     hasFreeSpace () {
-      return this.quota.free > 0 || this.currentFolder.permissions.indexOf('M') >= 0
+      return this.quota.free > 0 || this.currentFolder.permissions.indexOf('M') >= 0 || this.publicPage()
     }
   },
   methods: {

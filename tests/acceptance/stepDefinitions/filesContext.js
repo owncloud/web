@@ -149,6 +149,12 @@ When('the user uploads file {string} using the webUI', function (element) {
   return client.page.filesPage().uploadFile(element)
 })
 
+Then('it should not be possible to create files using the webUI', function () {
+  return client.page.filesPage().canCreateFiles((isDisabled) => {
+    client.assert.strictEqual(isDisabled, true, 'Create action must not be enabled')
+  })
+})
+
 When('the user renames file/folder {string} to {string} using the webUI', function (fromName, toName) {
   return client.page.FilesPageElement.filesList().renameFile(fromName, toName)
 })

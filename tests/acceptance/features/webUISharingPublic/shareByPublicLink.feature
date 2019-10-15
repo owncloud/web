@@ -10,10 +10,10 @@ Feature: Share by public link
 
   Background:
     Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
 
   @smokeTest
   Scenario Outline: simple sharing by public link
+    Given user "user1" has logged in using the webUI
     When the user creates a new public link for resource "<shared-resource>" using the webUI
     Then user "user1" should have a share with these details:
       | field       | value              |
@@ -32,6 +32,7 @@ Feature: Share by public link
 
   @smokeTest
   Scenario Outline: simple sharing by public link with different roles
+    Given user "user1" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | <role> |
     Then user "user1" should have a share with these details:
@@ -51,6 +52,7 @@ Feature: Share by public link
       | Contributor | read, create                 |
 
   Scenario: sharing by public link with "Uploader" role
+    Given user "user1" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Uploader |
     Then user "user1" should have a share with these details:
@@ -65,16 +67,15 @@ Feature: Share by public link
     Then there should be no files/folders listed on the webUI
 
   Scenario: public link share shows up on shared-with-others page
-    Given user "user1" has created a new public link for resource "simple-folder"
+    Given user "user1" has logged in using the webUI
+    And user "user1" has created a new public link for resource "simple-folder"
     When the user browses to the shared-with-others page using the webUI
     Then folder "simple-folder" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI
 
-  @skip @yetToImplement
-  Scenario: creating a public link with read & write permissions makes it possible to delete files via the link
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    And the public accesses the last created public link using the webUI
+  Scenario: creating a public link with "Editor" role makes it possible to delete files via the link
+    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
     And the user deletes the following elements using the webUI
       | name                                  |
       | simple-empty-folder                   |
@@ -84,12 +85,33 @@ Feature: Share by public link
     Then the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
-  @skip @yetToImplement
-  Scenario: creating a public link with read permissions only makes it impossible to delete files via the link
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | permission | read |
-    And the public accesses the last created public link using the webUI
+  Scenario: creating a public link with "Editor" role makes it possible to delete files via the link even with password set
+    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
+    And the user deletes the following elements using the webUI
+      | name                                  |
+      | simple-empty-folder                   |
+      | lorem.txt                             |
+      | strängé filename (duplicate #2 &).txt |
+      | zzzz-must-be-last-file-in-folder.txt  |
+    Then the deleted elements should not be listed on the webUI
+
+  Scenario: creating a public link with "Viewer" role only makes it impossible to delete files via the link
+    Given user "user1" has shared folder "simple-folder" with link with "read" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
     Then it should not be possible to delete file "lorem.txt" using the webUI
+
+  Scenario: creating a public link with "Editor" role makes it possible to upload files via the link even with password set
+    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
+    And the user uploads file "new-lorem.txt" using the webUI
+    Then file "new-lorem.txt" should be listed on the webUI
+    And as "user1" file "simple-folder/new-lorem.txt" should exist
+
+  Scenario: creating a public link with "Viewer" role makes it possible to create files via the link even with password set
+    Given user "user1" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
+    Then it should not be possible to create files using the webUI
 
   @skip @yetToImplement
   Scenario: mount public link
@@ -124,11 +146,9 @@ Feature: Share by public link
     Then file "lorem.txt" should be listed on the webUI
     And the content of "lorem.txt" on the remote server should be the same as the local "lorem.txt"
 
-  @skip @yetToImplement
   Scenario: public should be able to access a public link with correct password
-    When the user creates a new public link for folder "simple-folder" using the webUI with
-      | password | pass123 |
-    And the public accesses the last created public link with password "pass123" using the webUI
+    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
 
   @skip @yetToImplement

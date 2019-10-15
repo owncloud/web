@@ -452,7 +452,7 @@ export default {
     for (const file of files) {
       let p = null
       if (publicPage) {
-        p = client.publicFiles.delete(file.path, context.getters.publicLinkPassword)
+        p = client.publicFiles.delete(file.path, null, context.getters.publicLinkPassword)
       } else {
         p = client.files.delete(file.path)
       }
