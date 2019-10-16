@@ -4,6 +4,7 @@ const { Given, When, Then, Before } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
 const loginHelper = require('../helpers/loginHelper')
 let deletedElements
+let timeOfLastDeleteOperation = Date.now()
 
 Before(() => {
   deletedElements = []
@@ -133,16 +134,25 @@ When('the user deletes the following elements using the webUI', function (table)
   return client.page.filesPage()
 })
 
-Given('the following files have been deleted by user {string}', async function (user, table) {
-  const filesToDelete = table.rows()
-  await Promise.all(
-    filesToDelete.map(
-      ([entry]) =>
-        webdav.delete(user, entry)
-    )
-  )
+/**
+ * makes sure delete operations are carried out maximum once a second to avoid trashbin issues
+ * see https://github.com/owncloud/core/issues/23151
+ */
+const waitBetweenDeleteOperations = async function () {
+  const timeSinceLastDelete = Date.now() - timeOfLastDeleteOperation
+  if (timeSinceLastDelete <= 1000) {
+    await client.pause(1000 - timeSinceLastDelete + 1)
+  }
+  timeOfLastDeleteOperation = Date.now()
+}
 
-  return client.page.filesPage()
+Given('the following files have been deleted by user {string}', async function (user, table) {
+  const filesToDelete = table.hashes()
+  for (const entry of filesToDelete) {
+    await waitBetweenDeleteOperations()
+    await webdav.delete(user, entry.name)
+  }
+  return client
 })
 
 When('the user uploads file {string} using the webUI', function (element) {
