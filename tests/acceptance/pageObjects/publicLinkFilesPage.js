@@ -9,7 +9,7 @@ module.exports = {
     navigateAndWaitTillLoaded: function (token) {
       return navigationHelper.navigateAndWaitTillLoaded(
         this.api.launchUrl + '/#/files/public-files/' + token,
-        this.page.FilesPageElement.filesList().elements.filesListProgressBar.selector
+        this.page.FilesPageElement.filesList().elements.filesListProgressBar
       )
     },
     navigateAndWaitForPasswordPage: function (token) {
