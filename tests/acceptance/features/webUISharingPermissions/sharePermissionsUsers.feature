@@ -13,7 +13,7 @@ Feature: Sharing files and folders with internal users with different permission
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
     And user "user2" has logged in using the webUI
     Then no custom permissions should be set for collaborator "User One" for folder "simple-folder" on the webUI
-    When the user changes permission of collaborator "User One" for folder "simple-folder" to "share" using the webUI
+    When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "share" using the webUI
     Then custom permission "share" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
       | field       | value              |
@@ -29,7 +29,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "user2" has logged in using the webUI
     Then no custom permissions should be set for collaborator "User One" for folder "simple-folder" on the webUI
     #    Then custom permissions "share, create, delete" should be set for user "User One" for folder "simple-folder" on the webUI
-    When the user changes permission of collaborator "User One" for folder "simple-folder" to "create, delete, share" using the webUI
+    When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "create, delete, share" using the webUI
     Then no custom permissions should be set for collaborator "User One" for folder "simple-folder" on the webUI
     #    Then custom permission "share, create, delete" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
@@ -45,7 +45,7 @@ Feature: Sharing files and folders with internal users with different permission
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, create" permissions
     And user "user2" has logged in using the webUI
     Then custom permissions "share, create" should be set for user "User One" for folder "simple-folder" on the webUI
-    When the user changes permission of collaborator "User One" for folder "simple-folder" to "delete, change" using the webUI
+    When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "delete, change" using the webUI
     Then no custom permissions should be set for collaborator "User One" for folder "simple-folder" on the webUI
     #    Then custom permission "delete, change" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
@@ -60,7 +60,7 @@ Feature: Sharing files and folders with internal users with different permission
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, delete" permissions
     And user "user2" has logged in using the webUI
     Then custom permissions "delete" should be set for user "User One" for folder "simple-folder" on the webUI
-    When the user changes permission of collaborator "User One" for folder "simple-folder" to "create, share" using the webUI
+    When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "create, share" using the webUI
     Then custom permission "create, share" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
       | field       | value               |
@@ -212,7 +212,7 @@ Feature: Sharing files and folders with internal users with different permission
     Given user "user2" has shared file "lorem.txt" with user "user1" with "<initial-permissions>" permissions
     And user "user2" has logged in using the webUI
     Then no custom permissions should be set for collaborator "User One" for file "lorem.txt" on the webUI
-    When the user changes permission of collaborator "User One" for file "lorem.txt" to "share" using the webUI
+    When the user sets custom permission for current role of collaborator "User One" for file "lorem.txt" to "share" using the webUI
     Then custom permission "share" should be set for user "User One" for file "lorem.txt" on the webUI
     And user "user1" should have received a share with these details:
       | field       | value               |
