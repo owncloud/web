@@ -8,12 +8,7 @@ Feature: accept/decline shares coming from internal users
       | username |
       | user1    |
       | user2    |
-      | user3    |
-    And these groups have been created:
-      | groupname |
-      | grp1      |
-    And user "user1" has been added to group "grp1"
-    And user "user2" has been added to group "grp1"
+    And user "user2" has logged in using the webUI
 
   @smokeTest
   @skip @yetToImplement
@@ -312,3 +307,11 @@ Feature: accept/decline shares coming from internal users
     And file "testimage.jpg" should be listed in the shared-with-you page on the webUI
     And folder "simple-folder" should be in state "Pending" in the shared-with-you page on the webUI
     And file "testimage.jpg" should be in state "Pending" in the shared-with-you page on the webUI
+
+  Scenario: User receives files when auto accept share is disabled
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    When the user browses to the shared-with-me page using the webUI
+    Then the file "lorem.txt" on the webUI should be in "Pending" state
+    When the user browses to the files page
+    Then file "lorem (2).txt" should not be listed on the webUI

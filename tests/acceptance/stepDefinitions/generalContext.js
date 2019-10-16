@@ -4,7 +4,10 @@ const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const fetch = require('node-fetch')
 const fs = require('fs')
+const _ = require('lodash')
+const occHelper = require('../helpers/occHelper')
 let createdFiles = []
+let initialAppConfigSettings
 
 Given('a file with the size of {string} bytes and the name {string} has been created locally', function (size, name) {
   const fullPathOfLocalFile = client.globals.filesForUpload + name
@@ -74,6 +77,13 @@ Then('as {string} the content of {string} should be the same as the original {st
   return assertRemoteFileSameAsSkeletonFile(user, remoteFile, skeletonFile)
 })
 
+Given('the setting {string} of app {string} has been set to {string}', function (setting, app, value) {
+  return occHelper.runOcc(
+    [
+      'config:app:set', app, setting, '--value=' + value
+    ])
+})
+
 Before(function (testCase) {
   createdFiles = []
   if (typeof process.env.SCREEN_RESOLUTION !== 'undefined' && process.env.SCREEN_RESOLUTION.trim() !== '') {
@@ -105,4 +115,50 @@ After(async function (testCase) {
   await fetch(`${client.globals.backend_url}/ocs/v2.php/apps/testing/api/v1/lockprovisioning`,
     { method: 'DELETE', body: body, headers: headers }
   )
+})
+
+Before(async function () {
+  const resp = await occHelper.runOcc(
+    [
+      'config:list'
+    ])
+  let stdOut = _.get(resp, 'ocs.data.stdOut')
+  if (stdOut === undefined) {
+    throw new Error('stdOut notFound, Found:', resp)
+  }
+  stdOut = JSON.parse(stdOut)
+  initialAppConfigSettings = _.get(stdOut, 'apps')
+  if (initialAppConfigSettings === undefined) {
+    throw new Error("'apps' was not found inside stdOut of response.")
+  }
+})
+
+After(async function () {
+  const afterConfigSetting = await occHelper.runOcc(
+    [
+      'config:list'
+    ])
+  let afterStdOut = _.get(afterConfigSetting, 'ocs.data.stdOut')
+  if (afterStdOut === undefined) {
+    throw new Error('stdOut notFound, Found:', afterStdOut)
+  }
+  afterStdOut = JSON.parse(afterStdOut)
+  const appConfigSettings = _.get(afterStdOut, 'apps')
+  if (appConfigSettings === undefined) {
+    throw new Error("'apps' was not found inside stdOut of response.")
+  }
+  for (const app in initialAppConfigSettings) {
+    for (const value in initialAppConfigSettings[app]) {
+      if (appConfigSettings[app][value] !== initialAppConfigSettings[app][value]) {
+        await occHelper.runOcc(
+          [
+            'config:app:set',
+            app,
+            value,
+            '--value=' + initialAppConfigSettings[app][value]
+          ]
+        )
+      }
+    }
+  }
 })
