@@ -182,7 +182,7 @@ When('the user displays all share-autocomplete results using the webUI', functio
   return client.page.FilesPageElement.sharingDialog().showAllAutoCompleteResults()
 })
 
-When('the user changes permission of collaborator {string} for folder/file {string} to {string} using the webUI', function (user, resource, permissions) {
+When('the user sets custom permission for current role of collaborator {string} for folder/file {string} to {string} using the webUI', function (user, resource, permissions) {
   return client.page
     .FilesPageElement
     .filesList()
