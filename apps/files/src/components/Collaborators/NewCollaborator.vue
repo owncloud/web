@@ -1,204 +1,122 @@
 <template>
   <div>
     <oc-autocomplete
-        @input="$_ocCollaborators_selectAutocompleteResult"
-        :items="autocompleteResults"
-        :itemsLoading="autocompleteInProgress"
-        :placeholder="$_ocCollaborationStatus_autocompletePlacholder"
-        @update:input="onAutocompleteInput"
-        :filter="filterRecipients"
-        id="oc-sharing-autocomplete"
-        class="uk-margin-bottom"
-        :disabled="collaboratorsEditInProgress && selectedCollaborators.length < 1"
-        dropdownClass="uk-width-1-1"
-      >
-        <template v-slot:item="{item}">
-          <autocomplete-item :item="item" />
-        </template>
-      </oc-autocomplete>
-      <div v-if="selectedCollaborators.length > 0" class="uk-margin-medium-bottom">
-        <div>
-          <div>
-            <translate>Selected collaborators</translate>:
+      @input="$_ocCollaborators_selectAutocompleteResult"
+      :items="autocompleteResults"
+      :itemsLoading="autocompleteInProgress"
+      :placeholder="$_ocCollaborationStatus_autocompletePlacholder"
+      @update:input="onAutocompleteInput"
+      :filter="filterRecipients"
+      id="oc-sharing-autocomplete"
+      class="uk-margin-bottom"
+      :disabled="collaboratorsEditInProgress && selectedCollaborators.length < 1"
+      dropdownClass="uk-width-1-1"
+    >
+      <template v-slot:item="{ item }">
+        <autocomplete-item :item="item" />
+      </template>
+    </oc-autocomplete>
+    <div
+      v-if="selectedCollaborators.length > 0"
+      class="uk-margin-medium-bottom"
+    >
+      <div>
+        <div><translate>Selected collaborators</translate>:</div>
+        <div
+          v-for="(collaborator, index) in selectedCollaborators"
+          :key="collaborator.label"
+          class="uk-flex-inline uk-flex-row uk-flex-start uk-margin-small-bottom"
+          :class="{
+            'uk-margin-small-right': index + 1 !== selectedCollaborators.length
+          }"
+        >
+          <div class="uk-margin-small-top">
+            <span class="uk-text-bold" v-text="collaborator.label" />
+            <span v-if="collaborator.value.shareType === 1" class="uk-text-meta">
+              (<translate>group</translate>)
+            </span>
           </div>
-          <div
-            v-for="(collaborator, index) in selectedCollaborators"
-            :key="index"
-            class="uk-flex-inline uk-flex-row uk-flex-start uk-margin-small-bottom"
-            :class="{ 'uk-margin-small-right': (index + 1) !== selectedCollaborators.length }"
-          >
-            <div class="uk-margin-small-top">
-              <span class="uk-text-bold">{{ collaborator.label }}</span>
-              <translate v-if="collaborator.value.shareType === 1" class="uk-text-meta">(group)</translate>
-            </div>
-            <oc-icon
-              name="close"
-              variation="danger"
-              class="oc-cursor-pointer"
-              role="button"
-              @click="$_ocCollaborators_removeFromSelection(collaborator)"
-            />
-          </div>
-        </div>
-        <div>
-          <oc-grid gutter="small">
-            <div class="uk-width-1-1">
-              <label class="oc-label">
-                <translate>Role</translate>:
-              </label>
-              <oc-button
-                id="files-collaborators-role-button"
-                class="uk-width-1-1 files-collaborators-role-button"
-                v-text="selectedNewRole.name"
-              />
-              <p
-                v-if="selectedNewRole"
-                class="uk-text-meta uk-margin-remove"
-                v-text="selectedNewRole.description"
-              />
-              <oc-drop
-                closeOnClick
-                dropId="files-collaborators-roles-dropdown"
-                toggle="#files-collaborators-role-button"
-                mode="click"
-                :options="{ offset: 0, delayHide: 0 }"
-                class="oc-autocomplete-dropdown"
-              >
-                <ul class="oc-autocomplete-suggestion-list">
-                  <li
-                    v-for="(role, key) in roles"
-                    :key="key"
-                    :id="`files-collaborator-new-collaborator-role-${role.tag}`"
-                    class="oc-autocomplete-suggestion"
-                    :class="{ 'oc-autocomplete-suggestion-selected' : selectedNewRole === role }"
-                    @click="$_ocCollaborators_newCollaboratorsSelectRole(role)"
-                  >
-                    <span class="uk-text-bold">{{ role.name }}</span>
-                    <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
-                  </li>
-                </ul>
-              </oc-drop>
-            </div>
-            <div v-if="false" class="uk-width-1-1">
-              <label class="oc-label">
-                <translate>Expiration date</translate>
-                <translate class="uk-text-meta uk-remove-margin">(optional)</translate>
-              </label>
-              <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
-            </div>
-            <oc-grid v-if="selectedNewRole" gutter="small" class="uk-width-1-1">
-              <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                <oc-switch
-                  class="uk-margin-small-right"
-                  @change="$_ocCollaborators_switchPermission('canShare')"
-                />
-                <translate :class="{ 'uk-text-muted': !canShare }">Can share</translate>
-              </div>
-              <template v-if="selectedNewRole.tag === 'custom'">
-                <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-                  <oc-switch
-                    class="uk-margin-small-right"
-                    @change="$_ocCollaborators_switchPermission('canChange')"
-                  />
-                  <translate :class="{ 'uk-text-muted': !canChange }">Can change</translate>
-                </div>
-                <div
-                  v-if="highlightedFile.type === 'folder'"
-                  class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle"
-                >
-                  <oc-switch
-                    class="uk-margin-small-right"
-                    @change="$_ocCollaborators_switchPermission('canCreate')"
-                  />
-                  <translate :class="{ 'uk-text-muted': !canCreate }">Can create</translate>
-                </div>
-                <div
-                  v-if="highlightedFile.type === 'folder'"
-                  class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle"
-                >
-                  <oc-switch
-                    class="uk-margin-small-right"
-                    @change="$_ocCollaborators_switchPermission('canDelete')"
-                  />
-                  <translate :class="{ 'uk-text-muted': !canDelete }">Can delete</translate>
-                </div>
-              </template>
-            </oc-grid>
-            <div>
-              <oc-button @click="$_ocCollaborators_newCollaboratorsCancel">
-                <translate>Cancel</translate>
-              </oc-button>
-            </div>
-            <div>
-              <oc-button
-                id="files-collaborators-add-new-button"
-                variation="primary"
-                @click="$_ocCollaborators_newCollaboratorsAdd(selectedCollaborators)"
-                :disabled="!selectedNewRole"
-              >
-                <translate>Add collaborators</translate>
-              </oc-button>
-            </div>
-          </oc-grid>
+          <oc-icon
+            name="close"
+            variation="danger"
+            class="oc-cursor-pointer"
+            role="button"
+            @click="$_ocCollaborators_removeFromSelection(collaborator)"
+          />
         </div>
       </div>
+      <collaborators-edit-options class="uk-margin-bottom" @optionChange="collaboratorOptionChanged" />
+      <div class="uk-flex uk-flex-between">
+        <oc-button @click="$_ocCollaborators_newCollaboratorsCancel">
+          <translate>Cancel</translate>
+        </oc-button>
+        <oc-button
+          id="files-collaborators-add-new-button"
+          variation="primary"
+          @click="addCollaborators(selectedCollaborators)"
+        >
+          <translate>Add collaborators</translate>
+        </oc-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import Mixins from './mixins'
+import Mixins from '../../mixins/collaborators'
+import { roleToBitmask } from '../../helpers/collaborators'
 
 import AutocompleteItem from './AutocompleteItem.vue'
+const CollaboratorsEditOptions = () => import('./CollaboratorsEditOptions.vue')
 
 export default {
   name: 'NewCollaborator',
   mixins: [Mixins],
   components: {
-    AutocompleteItem
+    AutocompleteItem,
+    CollaboratorsEditOptions
   },
   data () {
     return {
       autocompleteResults: [],
       autocompleteInProgress: false,
       selectedCollaborators: [],
-      canShare: false,
-      canChange: false,
-      canCreate: false,
-      canDelete: false,
-      selectedNewRole: null
+      selectedRole: null,
+      additionalPermissions: null
     }
   },
   computed: {
-    ...mapGetters('Files', ['shares', 'highlightedFile', 'collaboratorsEditInProgress']),
+    ...mapGetters('Files', [
+      'shares',
+      'highlightedFile',
+      'collaboratorsEditInProgress'
+    ]),
     ...mapGetters(['user']),
 
     $_ocCollaborationStatus_autocompletePlacholder () {
-      return this.$gettext("Add new collaborator by name, email or federation ID's")
-    },
-
-    defaultRole () {
-      return this.roles[Object.keys(this.roles)[0]]
+      return this.$gettext(
+        "Add new collaborator by name, email or federation ID's"
+      )
     }
-  },
-
-  watch: {
-    // Switch back to default role after selecting different file
-    highlightedFile () {
-      this.selectedNewRole = this.defaultRole
-    }
-  },
-  mounted () {
-    // Ensure default role is not undefined
-    this.selectedNewRole = this.defaultRole
   },
 
   methods: {
-    ...mapActions('Files', ['shareSetOpen', 'loadShares', 'sharesClearState',
-      'addShare', 'deleteShare', 'changeShare', 'toggleCollaboratorsEdit']),
+    ...mapActions('Files', [
+      'shareSetOpen',
+      'loadShares',
+      'sharesClearState',
+      'addShare',
+      'deleteShare',
+      'changeShare',
+      'toggleCollaboratorsEdit'
+    ]),
 
     onAutocompleteInput (value) {
-      if (value.length < parseInt(this.user.capabilities.files_sharing.search_min_length, 10)) {
+      if (
+        value.length <
+        parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
+      ) {
         this.autocompleteInProgress = false
         this.autocompleteResults = []
         return
@@ -247,9 +165,14 @@ export default {
     },
     filterRecipients (item, queryText) {
       if (item.value.shareType === 6) {
-        return item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) >
-          -1 && item.label.indexOf('@') > -1 && item.label.indexOf('.') > -1 &&
+        return (
+          item.label
+            .toLocaleLowerCase()
+            .indexOf(queryText.toLocaleLowerCase()) > -1 &&
+          item.label.indexOf('@') > -1 &&
+          item.label.indexOf('.') > -1 &&
           item.label.lastIndexOf('.') + 1 !== item.label.length
+        )
       }
       return (
         item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) >
@@ -264,33 +187,7 @@ export default {
       this.toggleCollaboratorsEdit(false)
       this.selectedNewRole = this.defaultRole
     },
-    $_ocCollaborators_newCollaboratorsSelectRole (role) {
-      this.selectedNewRole = role
-    },
-    $_ocCollaborators_newCollaboratorsAdd (collaborators) {
-      let permissions = 1
-      const changePerm = 2
-      const createPerm = 4
-      const deletePerm = 8
-      const resharePerm = 16
-      switch (this.selectedNewRole.tag) {
-        case 'viewer':
-          permissions = this.canShare ? 17 : 1
-          break
-        case 'editor':
-          if (this.highlightedFile.type === 'folder') {
-            permissions = this.canShare ? 31 : 15
-            break
-          }
-          permissions = this.canShare ? 19 : 3
-          break
-        case 'custom':
-          if (this.canChange) permissions += changePerm
-          if (this.canCreate) permissions += createPerm
-          if (this.canDelete) permissions += deletePerm
-          if (this.canShare) permissions += resharePerm
-          break
-      }
+    addCollaborators (collaborators) {
       for (const collaborator of collaborators) {
         this.addShare({
           client: this.$client,
@@ -298,15 +195,10 @@ export default {
           $gettext: this.$gettext,
           shareWith: collaborator.value.shareWith,
           shareType: collaborator.value.shareType,
-          permissions: permissions
+          permissions: roleToBitmask(this.selectedRole, this.additionalPermissions, this.highlightedFile.type === 'folder')
         })
       }
       this.selectedCollaborators = []
-      this.selectedNewRole = this.defaultRole
-      this.canChange = false
-      this.canCreate = false
-      this.canDelete = false
-      this.canShare = false
       this.toggleCollaboratorsEdit(false)
     },
     $_ocCollaborators_selectAutocompleteResult (collaborator) {

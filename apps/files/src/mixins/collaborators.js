@@ -1,31 +1,51 @@
 import { mapGetters, mapActions } from 'vuex'
+import roles from '../helpers/collaboratorRolesDefinition'
 
 export default {
-  data () {
-    return {
-      roles: {
-        viewer: {
-          tag: 'viewer',
-          name: this.$gettext('Viewer'),
-          description: this.$gettext('Download and preview')
-        },
-        editor: {
-          tag: 'editor',
-          name: this.$gettext('Editor'),
-          description: this.$gettext(
-            'Upload, edit, delete, download and preview'
-          )
-        },
-        custom: {
-          tag: 'custom',
-          name: this.$gettext('Custom role'),
-          description: this.$gettext('Set detailed permissions')
+  computed: {
+    ...mapGetters(['getToken']),
+    ...mapGetters('Files', ['highlightedFile']),
+
+    advancedRole () {
+      const advancedRole = {
+        name: 'advancedRole',
+        label: this.$gettext('Advanced permissions'),
+        description: this.$gettext('Set detailed permissions'),
+        permissions: ['read'],
+        additionalPermissions: {
+          share: {
+            name: 'share',
+            description: this.$gettext('Allow re-Sharing')
+          },
+          update: {
+            name: 'update',
+            description: this.$gettext('Allow editing')
+          }
         }
       }
+
+      if (this.highlightedFile.type === 'folder') {
+        const permissions = advancedRole.additionalPermissions
+        permissions.create = {
+          name: 'create',
+          description: this.$gettext('Allow creating')
+        }
+        permissions.delete = {
+          name: 'delete',
+          description: this.$gettext('Allow deleting')
+        }
+      }
+
+      return advancedRole
+    },
+
+    roles () {
+      const isFolder = this.highlightedFile.type === 'folder'
+      const collaboratorRoles = roles({ translate: this.$gettext, isFolder: isFolder })
+      collaboratorRoles.advancedRole = this.advancedRole
+
+      return collaboratorRoles
     }
-  },
-  computed: {
-    ...mapGetters(['getToken'])
   },
   methods: {
     ...mapActions('Files', ['toggleCollaboratorsEdit']),
@@ -78,6 +98,16 @@ export default {
         .finally(_ => {
           this.loading = false
         })
+    },
+
+    collaboratorOptionChanged ({ role, permissions, propagate = true }) {
+      this.selectedRole = role
+      this.additionalPermissions = permissions
+
+      if (propagate) {
+        this.editing = true
+        this.toggleCollaboratorsEdit(true)
+      }
     }
   }
 }

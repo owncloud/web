@@ -1,6 +1,6 @@
 <template>
   <div class="uk-flex uk-flex-middle">
-    <oc-spinner v-if="loading" uk-spinner="ratio:1.6" class="uk-margin-small-right" />
+    <oc-spinner v-if="loading" uk-spinner="ratio:1.6" class="uk-margin-small-right" :aria-label="$gettext('Loading avatar')" />
     <template v-else>
       <oc-avatar v-if="avatar" :src="avatar" class="uk-margin-small-right" width=50 height=50 />
       <template v-else>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import Mixins from './mixins'
+import Mixins from '../../mixins/collaborators'
 
 export default {
   name: 'AutocompleteItem',

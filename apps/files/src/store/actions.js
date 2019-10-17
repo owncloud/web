@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { bitmaskToRole } from '../helpers/collaborators'
 
 function _buildFile (file) {
   let ext = ''
@@ -204,7 +205,7 @@ function _buildLink (l, $gettext) {
   }
 }
 
-function _buildShare (s) {
+function _buildShare (s, file) {
   const share = {
     info: s
   }
@@ -215,22 +216,17 @@ function _buildShare (s) {
     case ('6'):
     // fall through
     case ('1'): // group share
-      share.role = 'custom'
-      if (s.permissions === '1' || s.permissions === '17') {
-        share.role = 'viewer'
-      }
-      if (s.permissions === '3' || s.permissions === '15' || s.permissions === '19' || s.permissions === '31') {
-        share.role = 'editor'
-      }
+      share.role = bitmaskToRole(s.permissions, file.type === 'folder')
       share.permissions = s.permissions
-      share.canShare = s.permissions === '17' || s.permissions === '19' || s.permissions === '21' || s.permissions === '25' || s.permissions === '31'
       share.avatar = 'https://picsum.photos/64/64?image=1075' // TODO where do we get the avatar from? by uid? remote.php/dav/avatars/admin/128.png
       share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
       share.displayName = s.share_with_displayname
+      // TODO: Refactor to work with roles / prepare for roles API
       share.customPermissions = {
-        change: s.permissions === '3' || s.permissions === '15' || s.permissions === '19' || s.permissions === '31',
+        update: s.permissions === '3' || s.permissions === '15' || s.permissions === '19' || s.permissions === '31',
         create: s.permissions === '5' || s.permissions === '15' || s.permissions === '21' || s.permissions === '31',
-        delete: s.permissions === '9' || s.permissions === '15' || s.permissions === '25' || s.permissions === '31'
+        delete: s.permissions === '9' || s.permissions === '15' || s.permissions === '25' || s.permissions === '31',
+        share: s.permissions === '17' || s.permissions === '19' || s.permissions === '21' || s.permissions === '25' || s.permissions === '31'
       }
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
       break
@@ -541,7 +537,7 @@ export default {
     client.shares.getShares(path, { reshares: true })
       .then(data => {
         context.commit('SHARES_LOAD', data.map(element => {
-          return _buildShare(element.shareInfo)
+          return _buildShare(element.shareInfo, context.getters.highlightedFile)
         }))
       })
       .catch(error => {
@@ -553,39 +549,11 @@ export default {
     context.commit('SHARES_LOAD', [])
     context.commit('SHARES_ERROR', null)
   },
-  changeShare (context, { client, share, role, canShare, canChange, canCreate, canDelete }) {
-    context.commit('TOGGLE_COLLABORATOR_SAVING', true)
-    const params = {}
-    let perms = 1
-    const changePerm = 2
-    const createPerm = 4
-    const deletePerm = 8
-    const resharePerm = 16
-    switch (role) {
-      case ('viewer'):
-        params.permissions = canShare ? 17 : 1
-        break
-      case ('editor'):
-        if (share.info.item_type === 'file') {
-          params.permissions = canShare ? 19 : 3
-          break
-        }
-        params.permissions = canShare ? 31 : 15
-        break
-      case ('custom'):
-        if (canChange) perms += changePerm
-        if (canCreate) perms += createPerm
-        if (canDelete) perms += deletePerm
-        if (canShare) perms += resharePerm
-        params.permissions = perms
+  changeShare ({ commit }, { client, share, role, permissions }) {
+    commit('TOGGLE_COLLABORATOR_SAVING', true)
 
-        if (perms === 1 || perms === 17) {
-          role = 'viewer'
-        }
-        if (perms === 3 || perms === 15 || perms === 19 || perms === 31) {
-          role = 'editor'
-        }
-        break
+    const params = {
+      permissions: permissions
     }
 
     if (!params.permissions) {
@@ -597,13 +565,13 @@ export default {
     client.shares.updateShare(share.info.id, params)
       .then(() => {
         // TODO: work with response once it is available: https://github.com/owncloud/owncloud-sdk/issues/208
-        context.commit('SHARES_UPDATE_SHARE', { share, role })
+        commit('SHARES_UPDATE_SHARE', { share, role })
       })
       .catch(e => {
         console.log(e)
       })
       .finally(_ => {
-        context.commit('TOGGLE_COLLABORATOR_SAVING', false)
+        commit('TOGGLE_COLLABORATOR_SAVING', false)
       })
   },
   addShare (context, { client, path, $gettext, shareWith, shareType, permissions }) {
@@ -612,7 +580,7 @@ export default {
     if (shareType === 1) {
       client.shares.shareFileWithGroup(path, shareWith, { permissions: permissions })
         .then(share => {
-          context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
+          context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo, context.getters.highlightedFile))
           context.commit('SHARES_LOADING', false)
         })
         .catch(e => {
@@ -636,7 +604,7 @@ export default {
 
     client.shares.shareFileWithUser(path, shareWith, { permissions: permissions, remoteUser: remoteShare })
       .then(share => {
-        context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo))
+        context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo, context.getters.highlightedFile))
         context.commit('SHARES_LOADING', false)
       })
       .catch(e => {

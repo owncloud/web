@@ -36,7 +36,7 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-import Mixins from './Collaborators/mixins'
+import Mixins from '../mixins/collaborators'
 const NewCollaborator = _ => import('./Collaborators/NewCollaborator.vue')
 const Collaborator = _ => import('./Collaborators/Collaborator.vue')
 
