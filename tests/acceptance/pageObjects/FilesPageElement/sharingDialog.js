@@ -84,7 +84,6 @@ module.exports = {
      */
     selectPermissionsOnPendingShare: async function (permissions) {
       const permissionArray = this.getArrayFromPermissionString(permissions)
-      console.log(permissionArray)
       for (const permission of permissionArray) {
         const permissionSwitchXpath = this.getPermissionSwitchXpath(permission)
         if (this.useXpath().assert.visible(permissionSwitchXpath)) {
@@ -325,14 +324,12 @@ module.exports = {
      *
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
-    deleteShareWithUserGroup: function (item) {
+    deleteShareWithUserGroup: async function (item) {
       const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, item)
-      const moreInformationSelector = informationSelector + this.elements.collaboratorMoreInformation.selector
       const deleteSelector = informationSelector + this.elements.deleteShareButton.selector
+      await this.expandInformationSelector(item)
       return this
         .useXpath()
-        .waitForElementVisible(moreInformationSelector)
-        .click(moreInformationSelector)
         .waitForElementVisible(deleteSelector)
         .waitForAnimationToFinish()
         .click(deleteSelector)
@@ -344,28 +341,25 @@ module.exports = {
      * @param {string} newRole
      * @returns {Promise}
      */
-    changeCollaboratorRole: function (collaborator, newRole) {
-      const util = require('util')
-      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
-      const moreInformationSelector = informationSelector + this.elements.collaboratorMoreInformation.selector
-      const selectRoleButton = informationSelector + this.elements.selectRoleButtonInCollaboratorInformation.selector
-      const roleDropdown = informationSelector + this.elements.roleDropdownInCollaboratorInformation.selector
-      const roleButtonInDropdown = roleDropdown + util.format(
+    changeCollaboratorRole: async function (collaborator, newRole) {
+      await this.expandInformationSelector(collaborator)
+      await this.changeCollaboratorRoleInDropdown(newRole)
+      return this.saveCollaboratorPermission()
+    },
+    /**
+     * @params {string} newRole
+     * @returns {Promise}
+     */
+    changeCollaboratorRoleInDropdown: function (newRole) {
+      const newRoleButton = util.format(
         this.elements.roleButtonInDropdown.selector, newRole.toLowerCase()
       )
-
       return this
         .useXpath()
-        .waitForElementVisible(moreInformationSelector)
-        .click(moreInformationSelector)
-        .waitForElementVisible(selectRoleButton)
-        .click(selectRoleButton)
-        .waitForElementVisible(roleDropdown)
-        .waitForElementVisible(roleButtonInDropdown)
-        .click(roleButtonInDropdown)
-        .waitForElementVisible('@saveShareButton')
-        .click('@saveShareButton')
-        .waitForElementNotPresent('@saveShareButton')
+        .waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
+        .click('@selectRoleButtonInCollaboratorInformation')
+        .waitForElementVisible(newRoleButton)
+        .click(newRoleButton)
         .waitForOutstandingAjaxCalls()
     },
     /**
