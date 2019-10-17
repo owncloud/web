@@ -1,6 +1,8 @@
 const { client } = require('nightwatch-api')
 const { After, Before, Given, Then } = require('cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
+const httpHelper = require('../helpers/httpHelper')
+const fetch = require('node-fetch')
 const fs = require('fs')
 let createdFiles = []
 
@@ -91,7 +93,16 @@ Before(function (testCase) {
   console.log('  ' + testCase.sourceLocation.uri + ':' + testCase.sourceLocation.line + '\n')
 })
 
-After(function (testCase) {
+After(async function (testCase) {
   console.log('\n  Result: ' + testCase.result.status + '\n')
+
   createdFiles.forEach(fileName => fs.unlinkSync(fileName))
+
+  // clear file locks
+  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const body = new URLSearchParams()
+  body.append('global', 'true')
+  await fetch(`${client.globals.backend_url}/ocs/v2.php/apps/testing/api/v1/lockprovisioning`,
+    { method: 'DELETE', body: body, headers: headers }
+  )
 })
