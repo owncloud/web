@@ -3619,6 +3619,9 @@ trigger:
   - refs/heads/master
   - refs/heads/release*
   - refs/heads/develop*
+  status:
+  - success
+  - failure
 
 depends_on:
 - Favorites-chrome
