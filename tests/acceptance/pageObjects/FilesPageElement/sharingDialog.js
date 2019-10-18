@@ -23,6 +23,23 @@ module.exports = {
       return util.format(this.elements.permissionButton.selector, permission)
     },
 
+    assertSharingNotAllowed: function () {
+      // eslint-disable-next-line no-unused-expressions
+      this.api.expect.element(this.elements.sharingAutoComplete.selector).not.to.be.present
+      return this.api.getText(this.elements.sharingSidebarRoot.selector,
+        function (result) {
+          const noSharePermissionsMsgFormat = "You don't have permission to share this %s"
+          const noSharePermissionsFileMsg = util.format(noSharePermissionsMsgFormat, 'file')
+          const noSharePermissionsFolderMsg = util.format(noSharePermissionsMsgFormat, 'folder')
+
+          this.assert.ok(
+            noSharePermissionsFileMsg === result.value ||
+            noSharePermissionsFolderMsg === result.value
+          )
+        }
+      )
+    },
+
     /**
      *
      * @param {string} sharee
@@ -410,6 +427,9 @@ module.exports = {
     }
   },
   elements: {
+    sharingSidebarRoot: {
+      selector: '#oc-files-sharing-sidebar'
+    },
     sharingAutoComplete: {
       selector: '#oc-sharing-autocomplete .oc-autocomplete-input'
     },

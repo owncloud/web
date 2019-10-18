@@ -218,11 +218,11 @@ Then('no custom permissions should be set for collaborator {string} for file/fol
     .assertPermissionIsDisplayed(user)
 })
 
-When('the user shares file/folder {string} with group {string} as {string} using the webUI', userSharesFileOrFolderWithGroup)
+When('the user shares file/folder/resource {string} with group {string} as {string} using the webUI', userSharesFileOrFolderWithGroup)
 
-When('the user shares file/folder {string} with user {string} as {string} using the webUI', userSharesFileOrFolderWithUser)
+When('the user shares file/folder/resource {string} with user {string} as {string} using the webUI', userSharesFileOrFolderWithUser)
 
-When('the user shares file/folder {string} with user {string} as {string} with permission/permissions {string} using the webUI', function (resource, shareWithUser, role, permissions) {
+When('the user shares file/folder/resource {string} with user {string} as {string} with permission/permissions {string} using the webUI', function (resource, shareWithUser, role, permissions) {
   return userSharesFileOrFolderWithUserOrGroup(resource, shareWithUser, false, role, permissions)
 })
 
@@ -360,7 +360,7 @@ Then('item {string} should not be listed in the autocomplete list on the webUI',
     })
 })
 
-When('the user opens the share dialog for file/folder {string} using the webUI', function (file) {
+When('the user opens the share dialog for file/folder/resource {string} using the webUI', function (file) {
   return client.page.FilesPageElement.filesList().openSharingDialog(file)
 })
 
@@ -421,4 +421,23 @@ Then('user {string} should have a share with these details:', function (user, ex
 
 Given('user {string} has created a new public link for resource {string}', function (user, resource) {
   return shareFileFolder(resource, user, '', SHARE_TYPES.public_link)
+})
+
+Then('the user should not be able to share file/folder/resource {string} using the webUI', function (resource) {
+  return client.page
+    .FilesPageElement
+    .filesList()
+    .closeSidebar(100)
+    .openSharingDialog(resource)
+    .assertSharingNotAllowed()
+})
+
+Then('the collaborators list for file/folder/resource {string} should be empty', async function (resource) {
+  const count = (await client.page
+    .FilesPageElement
+    .filesList()
+    .closeSidebar(100)
+    .openSharingDialog(resource)
+    .getCollaboratorsList()).length
+  assert.strictEqual(count, 0, `Expected to have no collaborators for '${resource}', Found: ${count}`)
 })
