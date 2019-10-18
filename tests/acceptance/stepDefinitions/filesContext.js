@@ -35,6 +35,12 @@ When('the user browses to the shared-with-me page', function () {
     .navigateAndWaitTillLoaded()
 })
 
+Given('the user has browsed to the shared-with-me page', function () {
+  return client
+    .page.sharedWithMePage()
+    .navigateAndWaitTillLoaded()
+})
+
 When('the user browses to the shared-with-me page using the webUI', function () {
   return client
     .page.phoenixPage()

@@ -49,15 +49,6 @@ Feature: accept/decline shares coming from internal users
       | /simple-folder%20(2)/from_user1/ |
       | /simple-folder%20(3)/from_user2/ |
 
-  @skip @yetToImplement
-  Scenario: receive shares with same name from different users
-    Given the setting "Automatically accept new incoming local user shares" in the section "Sharing" has been disabled
-    And user "user2" has shared folder "/simple-folder" with user "user3"
-    And user "user1" has shared folder "/simple-folder" with user "user3"
-    When user "user3" logs in using the webUI
-    Then folder "simple-folder" shared by "User One" should be in state "Pending" in the shared-with-you page on the webUI
-    And folder "simple-folder" shared by "User Two" should be in state "Pending" in the shared-with-you page on the webUI
-
   @smokeTest
   @skip @yetToImplement
   Scenario: accept an offered share
@@ -312,6 +303,49 @@ Feature: accept/decline shares coming from internal users
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "user1" has shared file "lorem.txt" with user "user2"
     When the user browses to the shared-with-me page using the webUI
-    Then the file "lorem.txt" on the webUI should be in "Pending" state
+    Then the file "lorem.txt" should be in "Pending" state on the webUI
     When the user browses to the files page
     Then file "lorem (2).txt" should not be listed on the webUI
+
+  Scenario: shared file is in pending state when the Automatically accept incoming shares is disabled
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    When the user browses to the shared-with-me page using the webUI
+    Then the file "lorem.txt" should be in "Pending" state on the webUI
+    When the user browses to the files page
+    Then file "lorem (2).txt" should not be listed on the webUI
+
+  Scenario: receive shares with same name from different users
+    Given user "user3" has been created with default attributes
+    And the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "user3" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    When the user browses to the shared-with-me page using the webUI
+    Then file "lorem.txt" shared by "User One" should be in "Pending" state on the webUI
+    And file "lorem.txt" shared by "User Three" should be in "Pending" state on the webUI
+
+  Scenario: decline an offered (pending) share
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared file "testimage.jpg" with user "user2"
+    And the user has browsed to the shared-with-me page
+    When the user declines share "lorem.txt" offered by user "User One" using the webUI
+    Then the file "lorem.txt" should be in "Declined" state on the webUI
+    And the file "testimage.jpg" should be in "Pending" state on the webUI
+    When the user browses to the files page
+    Then file "lorem (2).txt" should not be listed on the webUI
+    And file "testimage (2).jpg" should not be listed on the webUI
+
+  Scenario: accept an offered (pending) share
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared file "testimage.jpg" with user "user2"
+    And the user has browsed to the shared-with-me page
+    When the user accepts share "lorem.txt" offered by user "User One" using the webUI
+    Then the file "lorem (2).txt" should be in "Accepted" state on the webUI
+    And the file "testimage.jpg" should be in "Pending" state on the webUI
+    And the file "lorem (2).txt" should be in "Accepted" state on the webUI after a page reload
+    And the file "testimage.jpg" should be in "Pending" state on the webUI after a page reload
+    When the user browses to the files page
+    Then file "lorem (2).txt" should be listed on the webUI
+    And file "testimage (2).jpg" should not be listed on the webUI
