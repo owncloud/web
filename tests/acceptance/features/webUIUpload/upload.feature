@@ -17,6 +17,18 @@ Feature: File Upload
     And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
   @smokeTest
+  Scenario: simple upload of a folder that does not exist before
+    When the user uploads a folder containing the following files in separate sub-folders using the webUI:
+      | lorem.txt     |
+      | new-lorem.txt |
+    Then no message should be displayed on the webUI
+    And the last uploaded folder should be listed on the webUI
+    And as "user1" the last uploaded folder should exist
+    And as "user1" the last uploaded folder should contain the following files inside the sub-folders:
+      | new-lorem.txt                |
+      | lorem.txt                    |
+
+  @smokeTest
   Scenario: uploading a big file (when chunking is implemented this upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
     When the user uploads file "big-video.mp4" using the webUI
