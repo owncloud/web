@@ -23,7 +23,7 @@ module.exports = {
      */
     assertDesiredStatusIsPresent: function (filename, status, user) {
       let requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-        util.format(this.elements.assertStatusFileRow.selector, status)
+                          util.format(this.elements.assertStatusFileRow.selector, status)
       requiredXpath = user === undefined ? requiredXpath : requiredXpath +
                       util.format(this.elements.getSharedFromUserName.selector, user)
       return this.waitForElementVisible({
@@ -42,8 +42,8 @@ module.exports = {
       const actionLocatorButton = {
         locateStrategy: this.elements.actionOnFileRow.locateStrategy,
         selector: this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-          util.format(this.elements.getSharedFromUserName.selector, user) +
-          util.format(this.elements.actionOnFileRow.selector, action)
+                  util.format(this.elements.getSharedFromUserName.selector, user) +
+                  util.format(this.elements.actionOnFileRow.selector, action)
       }
       return this
         .initAjaxCounters()

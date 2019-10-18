@@ -133,6 +133,39 @@ module.exports = {
       })
 
     return lastShareToken
+  },
+  getAllShares: function (user) {
+    const headers = httpHelper.createAuthHeader(user)
+    const apiURL = client.globals.backend_url + '/ocs/v2.php/apps/files_sharing/api/v1/shares?shared_with_me=true&format=json&state=all'
+    return fetch(apiURL,
+      {
+        method: 'GET',
+        headers: headers
+      })
+      .then(res => {
+        httpHelper.checkStatus(res, 'The response status is not the expected value')
+        return res.json()
+      })
+      .then(res => {
+        return res.ocs.data
+      })
+  },
+  declineShare: async function (filename, user, sharer) {
+    const allShares = await this.getAllShares(user)
+    for (const element of allShares) {
+      if (element.state === 1 && element.path.replace(/^\/|\/$/g, '') === filename && element.uid_owner === sharer) {
+        const shareID = element.id
+        const headers = httpHelper.createAuthHeader(user)
+        const apiURL = client.globals.backend_url + '/ocs/v2.php/apps/files_sharing//api/v1/shares/pending/' + shareID + '?format=json'
+        return fetch(apiURL,
+          {
+            method: 'DELETE',
+            headers: headers
+          })
+          .then(res => {
+            httpHelper.checkStatus(res, 'The response status is not the expected value')
+          })
+      }
+    }
   }
-
 }

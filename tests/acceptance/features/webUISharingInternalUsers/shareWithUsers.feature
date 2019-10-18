@@ -281,7 +281,7 @@ Feature: Sharing files and folders with internal users
     And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "user2" file "lorem (2).txt" should not exist
 
-  Scenario: user shares the file/folder with multiple internal users and delete the share with one user user
+  Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given user "user3" has been created with default attributes
     And user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with user "user2"
