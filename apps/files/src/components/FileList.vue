@@ -2,7 +2,7 @@
   <div class="uk-height-1-1">
     <div class="uk-flex uk-flex-column uk-height-1-1">
       <div id="files-list-container" class="uk-overflow-auto uk-flex-auto">
-        <oc-table middle divider class="oc-filelist uk-margin-remove-bottom" id="files-list" v-show="!loadingFolder">
+        <oc-table middle divider class="oc-filelist uk-margin-remove-bottom" id="files-list">
           <thead>
             <oc-table-row>
               <oc-table-cell shrink type="head">
@@ -84,7 +84,7 @@
           </oc-table-group>
         </oc-table>
       </div>
-      <oc-grid gutter="large" class="uk-width-1-1 uk-padding-small" v-if="!loadingFolder">
+      <oc-grid gutter="large" class="uk-width-1-1 uk-padding-small">
         <div v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0" class="uk-text-nowrap uk-text-meta">
           <template v-if="activeFilesCount.folders > 0">
             {{ activeFilesCount.folders }}
@@ -109,6 +109,9 @@
           <div class="uk-width-expand oc-align-self-center" v-if="quota.definition !== 'default' && quota.definition !== 'none'">
             <oc-progress :value="parseInt(quota.relative)" :max="100" class="uk-margin-remove" />
           </div>
+        </div>
+        <div v-if="loadingFolder">
+          <oc-spinner/>
         </div>
       </oc-grid>
     </div>

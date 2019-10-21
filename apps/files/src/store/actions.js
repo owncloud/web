@@ -250,6 +250,7 @@ export default {
   loadFolder (context, { client, absolutePath, $gettext, routeName }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
 
+    let files = []
     return new Promise((resolve, reject) => {
       const worker = new Worker()
       const clientInit = context.rootGetters.getClientOptions
@@ -257,7 +258,6 @@ export default {
       console.log('Offload processing to worker')
       worker.postMessage({ routeName: routeName, absolutePath: absolutePath, clientInit: clientInit, davProperties: context.getters.davProperties, publicLinkPassword: context.getters.publicLinkPassword })
       worker.onmessage = (event) => {
-        console.log('Back from worker')
         if (event.data.error) {
           reject(event.data.error)
           context.commit('UPDATE_FOLDER_LOADING', false)
@@ -267,6 +267,46 @@ export default {
           })
           return
         }
+        const file = event.data.file
+        if (file) {
+          if (event.data.index === 0) {
+            context.dispatch('loadFiles', {
+              currentFolder: file,
+              files: []
+            })
+          } else {
+            files.push(file)
+            if (files.length > 20) {
+              context.dispatch('addFiles', {
+                files: files
+              })
+              files = []
+            }
+          }
+          return
+        }
+        if (files.length > 0) {
+          context.dispatch('addFiles', {
+            files: files
+          })
+          files = []
+        }
+        if (event.data.finished) {
+          context.dispatch('resetFileSelection')
+          context.dispatch('setHighlightedFile', null)
+          if (context.getters.searchTerm !== '') {
+            context.dispatch('resetSearch')
+          }
+          context.commit('UPDATE_FOLDER_LOADING', false)
+          client.users.getUser(context.rootGetters.user.id).then(res => {
+            context.commit('CHECK_QUOTA', res.quota)
+            resolve()
+          })
+          return
+        }
+        console.log('Back from worker', event)
+
+        /*
         const res = event.data.res
         if (res === null) {
           context.dispatch('showMessage', {
@@ -292,16 +332,7 @@ export default {
             console.log('vuex.loadFiles done')
           }
         }
-        context.dispatch('resetFileSelection')
-        context.dispatch('setHighlightedFile', null)
-        if (context.getters.searchTerm !== '') {
-          context.dispatch('resetSearch')
-        }
-        context.commit('UPDATE_FOLDER_LOADING', false)
-        client.users.getUser(context.rootGetters.user.id).then(res => {
-          context.commit('CHECK_QUOTA', res.quota)
-          resolve()
-        })
+      */
       }
     })
   },

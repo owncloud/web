@@ -3991,6 +3991,11 @@ node-releases@^1.1.38:
   dependencies:
     semver "^6.3.0"
 
+node-xml-stream-parser@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/node-xml-stream-parser/-/node-xml-stream-parser-1.0.11.tgz#b47281b49ebe2f49762f49875abf934a51026ae4"
+  integrity sha512-c1SNabVoxA20aSln2HVzGASnONoYdc4C4duCX84aRNhrNqyZ+sJM8ceYbv94w2IjdMR5jX/kgUVEYYnucXO9kg==
+
 nopt@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/nopt/-/nopt-4.0.1.tgz#d0d4685afd5415193c8c7505602d0d17cd64474d"
@@ -6315,6 +6320,13 @@ xdg-basedir@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"
   integrity sha1-SWsswQnsqNus/i3HK2A8F8WHCtQ=
+
+xml-flow@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/xml-flow/-/xml-flow-1.0.4.tgz#2d82b7ece17d250d314ba5b2177c911d9b102f29"
+  integrity sha512-r19LXKPL7vkVGL6oWHlESoBgwUVom5w/w8opuS53qULh8+K2w+K9K72edTIQa+X/Vxx1R7ugnCabHFSZ1Tv2zA==
+  dependencies:
+    sax "^1.2.4"
 
 xml-name-validator@^3.0.0:
   version "3.0.0"

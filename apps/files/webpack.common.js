@@ -27,7 +27,8 @@ module.exports = {
         loader: 'worker-loader',
         include: [
           path.resolve('src')
-        ]
+        ],
+        options: { name: 'WorkerName.[hash].js' }
       },
       {
         test: /\.js$/,

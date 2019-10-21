@@ -85,23 +85,11 @@ Client.prototype = {
     body += '  </d:prop>\n'
     body += '</d:propfind>'
 
-    return this.request('PROPFIND', url, headers, body, undefined, streamResult).then(
-      function (result) {
-        if (depth === '0') {
-          return {
-            status: result.status,
-            body: result.body[0],
-            xhr: result.xhr
-          }
-        } else {
-          return {
-            status: result.status,
-            body: result.body,
-            xhr: result.xhr
-          }
-        }
-      }
-    )
+    return fetch(url, {
+      method: 'PROPFIND',
+      body: body,
+      headers: headers
+    })
   },
 
   /**
