@@ -22,7 +22,7 @@ module.exports = {
       return '"' + value + '"'
     } else {
       // use concat to find the literal in the xpath if they contain both quotes
-      return "concat('" + value.replace("'", "',\"'\",'") + "')"
+      return "concat('" + value.replace(/'/g, "',\"'\",'") + "')"
     }
   }
 }
