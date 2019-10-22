@@ -441,3 +441,7 @@ Then('the collaborators list for file/folder/resource {string} should be empty',
     .getCollaboratorsList()).length
   assert.strictEqual(count, 0, `Expected to have no collaborators for '${resource}', Found: ${count}`)
 })
+
+Then('the file/folder/resource {string} on the webUI should be in {string} state', function (filename, status) {
+  return client.page.sharedWithMePage().assertFileStatusIsShown(filename, status)
+})
