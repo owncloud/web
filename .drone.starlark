@@ -31,7 +31,8 @@ config = {
 				'webUISharingPublic': 'SharingPublic',
 				'webUITrashbin': 'Trashbin',
 				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares'
+				'webUISharingAcceptShares': 'SharingAcceptShares',
+				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers'
 			},
 		},
 		'webUI-XGA': {
