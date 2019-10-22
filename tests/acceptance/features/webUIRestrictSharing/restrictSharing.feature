@@ -19,40 +19,30 @@ Feature: restrict Sharing
     And user "user2" has logged in using the webUI
 
   @smokeTest
-  @skip @yetToImplement
   Scenario: Restrict users to only share with users in their groups
-    Given the setting "Restrict users to only share with users in their groups" in the section "Sharing" has been enabled
-    When the user browses to the files page
-    Then it should not be possible to share folder "simple-folder" with "User Three" using the webUI
-    When the user shares folder "simple-folder" with user "User One" using the webUI
-    And the user re-logs in as "user1" using the webUI
-    Then folder "simple-folder (2)" should be listed on the webUI
+    Given the setting "shareapi_only_share_with_group_members" of app "core" has been set to "yes"
+    When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user types "User" in the share-with-field
+    Then "user" "User Three" should not be listed in the autocomplete list on the webUI
+    But "user" "User One" should be listed in the autocomplete list on the webUI
 
   @smokeTest
-  @skip @yetToImplement
   Scenario: Restrict users to only share with groups they are member of
-    Given the setting "Restrict users to only share with groups they are member of" in the section "Sharing" has been enabled
-    When the user browses to the files page
-    Then it should not be possible to share folder "simple-folder" with "grp2" using the webUI
-    When the user shares folder "simple-folder" with group "grp1" using the webUI
-    And the user re-logs in as "user1" using the webUI
-    Then folder "simple-folder (2)" should be listed on the webUI
+    Given the setting "shareapi_only_share_with_membership_groups" of app "core" has been set to "yes"
+    When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user types "grp" in the share-with-field
+    Then "group" "grp2" should not be listed in the autocomplete list on the webUI
+    But "group" "grp1" should be listed in the autocomplete list on the webUI
 
-  @skip @yetToImplement
   Scenario: Do not restrict users to only share with groups they are member of
-    Given the setting "Restrict users to only share with groups they are member of" in the section "Sharing" has been disabled
-    And the user browses to the files page
-    When the user shares folder "simple-folder" with group "grp2" using the webUI
-    And the user re-logs in as "user3" using the webUI
-    Then folder "simple-folder (2)" should be listed on the webUI
+    Given the setting "shareapi_only_share_with_membership_groups" of app "core" has been set to "no"
+    When the user shares folder "simple-folder" with group "grp2" as "Viewer" using the webUI
+    Then as "user3" folder "simple-folder (2)" should exist
 
   @smokeTest
-  @skip @yetToImplement
   Scenario: Forbid sharing with groups
-    Given the setting "Allow sharing with groups" in the section "Sharing" has been disabled
-    When the user browses to the files page
-    Then it should not be possible to share folder "simple-folder" with "grp1" using the webUI
-    And it should not be possible to share folder "simple-folder" with "grp2" using the webUI
-    When the user shares folder "simple-folder" with user "User One" using the webUI
-    And the user re-logs in as "user1" using the webUI
-    Then folder "simple-folder (2)" should be listed on the webUI
+    Given the setting "shareapi_allow_group_sharing" of app "core" has been set to "no"
+    When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user types "grp" in the share-with-field
+    Then "group" "grp1" should not be listed in the autocomplete list on the webUI
+    And "group" "grp2" should not be listed in the autocomplete list on the webUI

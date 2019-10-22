@@ -8,6 +8,7 @@ const _ = require('lodash')
 const occHelper = require('../helpers/occHelper')
 let createdFiles = []
 let initialAppConfigSettings
+const { difference } = require('../helpers/objects')
 
 Given('a file with the size of {string} bytes and the name {string} has been created locally', function (size, name) {
   const fullPathOfLocalFile = client.globals.filesForUpload + name
@@ -147,15 +148,26 @@ After(async function () {
   if (appConfigSettings === undefined) {
     throw new Error("'apps' was not found inside stdOut of response.")
   }
-  for (const app in initialAppConfigSettings) {
-    for (const value in initialAppConfigSettings[app]) {
-      if (appConfigSettings[app][value] !== initialAppConfigSettings[app][value]) {
+  const changedConfig = difference(appConfigSettings, initialAppConfigSettings)
+
+  for (const app in changedConfig) {
+    for (const key in changedConfig[app]) {
+      const value = _.get(initialAppConfigSettings, [app, key])
+      if (value === undefined) {
+        await occHelper.runOcc(
+          [
+            'config:app:delete',
+            app,
+            key
+          ]
+        )
+      } else {
         await occHelper.runOcc(
           [
             'config:app:set',
             app,
-            value,
-            '--value=' + initialAppConfigSettings[app][value]
+            key,
+            `--value=${value}`
           ]
         )
       }

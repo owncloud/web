@@ -15,24 +15,19 @@ Feature: restrict resharing
       | grp1      |
     And user "user1" has been added to group "grp1"
     And user "user2" has been added to group "grp1"
-    And user "user2" has logged in using the webUI
 
   @smokeTest
-  @skip @yetToImplement
-  Scenario: share a folder with another internal user and prohibit resharing
-    Given the setting "Allow resharing" in the section "Sharing" has been enabled
-    And the user has browsed to the files page
-    When the user shares folder "simple-folder" with user "User One" using the webUI
-    And the user sets the sharing permissions of "User One" for "simple-folder" using the webUI to
-      | share | no |
-    And the user re-logs in as "user1" using the webUI
-    Then it should not be possible to share folder "simple-folder (2)" using the webUI
+  Scenario: disable resharing and check if the received resource can be reshared
+    Given the setting "shareapi_allow_resharing" of app "core" has been set to "no"
+    And user "user2" has shared folder "simple-folder" with user "user1"
+    When user "user1" logs in using the webUI
+    Then the user should not be able to share folder "simple-folder (2)" using the webUI
 
   @smokeTest
-  @skip @yetToImplement
-  Scenario: forbid resharing globally
-    Given the setting "Allow resharing" in the section "Sharing" has been disabled
-    And the user has browsed to the files page
-    When the user shares folder "simple-folder" with user "User One" using the webUI
-    And the user re-logs in as "user1" using the webUI
-    Then it should not be possible to share folder "simple-folder (2)" using the webUI
+  Scenario: disable resharing and check if the received resource from group share can be reshared
+    Given the setting "shareapi_allow_resharing" of app "core" has been set to "no"
+    And user "user3" has shared file "lorem.txt" with group "grp1"
+    When user "user1" logs in using the webUI
+    Then the user should not be able to share file "lorem (2).txt" using the webUI
+    When the user re-logs in as "user2" using the webUI
+    Then the user should not be able to share file "lorem (2).txt" using the webUI

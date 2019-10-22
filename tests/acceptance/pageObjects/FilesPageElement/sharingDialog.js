@@ -353,16 +353,18 @@ module.exports = {
      *
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
-    getShareAutocompleteWebElementIdList: function () {
+    getShareAutocompleteWebElementIdList: async function () {
       const webElementIdList = []
-      return this
-        .waitForElementVisible('@sharingAutoCompleteDropDownElements')
-        .api.elements('css selector', this.elements.sharingAutoCompleteDropDownElements.selector, (result) => {
-          result.value.forEach((value) => {
-            webElementIdList.push(value[Object.keys(value)[0]])
+      await this
+        .api
+        .elements('css selector',
+          this.elements.sharingAutoCompleteDropDownElements.selector,
+          (result) => {
+            result.value.forEach((value) => {
+              webElementIdList.push(value[Object.keys(value)[0]])
+            })
           })
-        })
-        .then(() => webElementIdList)
+      return webElementIdList
     },
     /**
      *

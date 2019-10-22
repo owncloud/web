@@ -141,6 +141,28 @@ const assertCollaboratorslistDoesNotContain = function (type, name) {
     })
 }
 
+/**
+ *
+ * @param {('user'|'group')} type
+ * @param {string} displayName
+ * @return {Promise<boolean>}
+ */
+const checkIsListedInAutoComplete = function (type, displayName) {
+  return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
+    .then(itemsList => {
+      if (itemsList.length === 0) {
+        return false
+      }
+      let displayNameWithType
+      if (type === 'user') {
+        displayNameWithType = displayName + '\nUser'
+      } else {
+        displayNameWithType = displayName + '\nGroup'
+      }
+      return itemsList.includes(displayNameWithType)
+    })
+}
+
 Given('user {string} has shared file/folder {string} with user {string}', function (sharer, elementToShare, receiver) {
   return shareFileFolder(elementToShare, sharer, receiver)
 })
@@ -219,6 +241,13 @@ Then('no custom permissions should be set for collaborator {string} for file/fol
 })
 
 When('the user shares file/folder/resource {string} with group {string} as {string} using the webUI', userSharesFileOrFolderWithGroup)
+
+Then('it should not be possible to share file/folder {string} using the webUI', function (resource) {
+  return client.page
+    .FilesPageElement
+    .filesList()
+    .assertSharingIsDisabled(resource)
+})
 
 When('the user shares file/folder/resource {string} with user {string} as {string} using the webUI', userSharesFileOrFolderWithUser)
 
@@ -346,18 +375,16 @@ Then('the users own name should not be listed in the autocomplete list on the we
     })
 })
 
-Then('item {string} should not be listed in the autocomplete list on the webUI', function (displayName) {
-  return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
-    .then(itemsList => {
-      itemsList.forEach(item => {
-        const displayedName = item.split('\n')[0]
-        assert.notStrictEqual(
-          displayedName,
-          displayName,
-          `User: ${displayName} was not expected to be listed in the autocomplete list but was`
-        )
-      })
-    })
+Then('{string} {string} should not be listed in the autocomplete list on the webUI', async function (type, displayName) {
+  const presence = await checkIsListedInAutoComplete(type, displayName)
+  assert.ok(presence === false,
+    `${displayName} was expected to not be listed in the autocomplete list but was found`)
+})
+
+Then('{string} {string} should be listed in the autocomplete list on the webUI', async function (type, displayName) {
+  const presence = await checkIsListedInAutoComplete(type, displayName)
+  assert.ok(presence === true,
+    `${displayName} was expected to be listed in the autocomplete list but was not found`)
 })
 
 When('the user opens the share dialog for file/folder/resource {string} using the webUI', function (file) {
