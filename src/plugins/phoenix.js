@@ -64,7 +64,6 @@ export default {
                 anchor.click()
                 document.body.removeChild(anchor)
                 window.URL.revokeObjectURL(objectUrl)
-                this.removeActionFromProgress(file)
 
                 // TODO: Bring back when progress bar for download is figured out
                 // Items with small size can be fetched too fast for progress listener
@@ -74,6 +73,8 @@ export default {
                 //   progress: 100
                 // })
               }
+
+              this.removeActionFromProgress(file)
             }
           })
 
