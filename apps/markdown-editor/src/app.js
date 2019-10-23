@@ -23,11 +23,20 @@ const appInfo = {
   icon: 'text',
   isFileEditor: true,
   extensions: [{
-    extension: 'txt'
+    extension: 'txt',
+    newFileMenu: {
+      menuTitle ($gettext) {
+        return $gettext('Create new plain text file…')
+      }
+    }
   },
   {
-    extension: 'md'
-    // icon: 'custom_icon_class_to_override_icon_for_filetype_md'
+    extension: 'md',
+    newFileMenu: {
+      menuTitle ($gettext) {
+        return $gettext('Create new mark-down file…')
+      }
+    }
   }
   ]
 }

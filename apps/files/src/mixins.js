@@ -516,6 +516,25 @@ export default {
           item: param
         }
       })
+    },
+    openFileAction (action, filePath) {
+      if (action.newTab) {
+        const path = this.$router.resolve({ name: action.routeName, params: { filePath: filePath } }).href
+        const url = window.location.origin + '/' + path
+        const target = `${action.routeName}-${filePath}`
+        const win = window.open(url, target)
+        // in case popup is blocked win will be null
+        if (win) {
+          win.focus()
+        }
+        return
+      }
+      // TODO: rewire code below ....
+      const appId = action.app
+      // TODO path to state
+      this.$router.push({
+        name: appId
+      })
     }
   }
 }

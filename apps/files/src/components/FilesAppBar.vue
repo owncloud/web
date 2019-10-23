@@ -41,7 +41,10 @@
                 <file-upload :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
                 <folder-upload v-if="!isIE11()" :rootPath='item' :url='url' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
                 <oc-nav-item @click="showCreateFolderDialog" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
-                <oc-nav-item @click="showCreateFileDialog" id="new-file-btn" icon="save"><translate>Create new file…</translate></oc-nav-item>
+                <oc-nav-item v-for="(newFileHandler, key) in newFileHandlers"
+                  :key="key"
+                  @click="showCreateFileDialog(newFileHandler.ext, newFileHandler.action)" id="new-file-btn" icon="save">
+                  {{ newFileHandler.menuTitle($gettext) }}</oc-nav-item>
               </oc-nav>
             </oc-drop>
           </template>
@@ -106,6 +109,7 @@ export default {
     newFolderName: '',
     newFileName: '',
     createFile: false,
+    newFileAction: null,
     path: '',
     searchedFiles: [],
     fileFolderCreationLoading: false,
@@ -116,8 +120,8 @@ export default {
     searchBarKey: 0
   }),
   computed: {
-    ...mapGetters(['getToken', 'configuration']),
-    ...mapGetters('Files', ['activeFiles', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'quota', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
+    ...mapGetters(['getToken', 'configuration', 'newFileHandlers']),
+    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'quota', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
     ...mapState(['route']),
     searchLabel () {
       return this.$gettext('Search')
@@ -380,9 +384,10 @@ export default {
 
       return null
     },
-    showCreateFileDialog () {
+    showCreateFileDialog (ext = 'txt', openAction = null) {
       this.createFile = true
-      this.newFileName = this.$gettext('New file') + '.txt'
+      this.newFileAction = openAction
+      this.newFileName = this.$gettext('New file') + '.' + ext
     },
     addNewFile (fileName) {
       if (fileName !== '') {
@@ -395,16 +400,24 @@ export default {
         p.then(() => {
           this.createFile = false
           this.$_ocFilesFolder_getFolder()
+          this.fileFolderCreationLoading = false
+          if (this.newFileAction) {
+            // not cool - needs refactoring
+            this.$nextTick(() => {
+              this.openFile({
+                filePath: path + fileName
+              })
+              this.openFileAction(this.newFileAction, path + fileName)
+            })
+          }
         })
           .catch(error => {
+            this.fileFolderCreationLoading = false
             this.showMessage({
               title: this.$gettext('Creating file failed…'),
               desc: error,
               status: 'danger'
             })
-          })
-          .finally(() => {
-            this.fileFolderCreationLoading = false
           })
       }
     },
