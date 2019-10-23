@@ -273,7 +273,9 @@ module.exports = {
       return this.initAjaxCounters()
         .waitForFileVisible(item)
         .useXpath()
-        .click(this.getFileRowSelectorByFileName(item))
+        // click in empty space in the tr using coordinates to avoid
+        // clicking on other elements that might be in the front
+        .clickElementAt(this.getFileRowSelectorByFileName(item), 0, 0)
         .waitForOutstandingAjaxCalls()
         .useCss()
     },

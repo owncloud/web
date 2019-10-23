@@ -426,6 +426,13 @@ export default {
   removeFileSelection (context, file) {
     context.commit('REMOVE_FILE_SELECTION', file)
   },
+  toggleFileSelection (context, file) {
+    if (context.state.selected.includes(file)) {
+      context.commit('REMOVE_FILE_SELECTION', file)
+    } else {
+      context.commit('ADD_FILE_SELECTION', file)
+    }
+  },
   resetFileSelection (context) {
     context.commit('RESET_SELECTION')
   },
@@ -659,8 +666,17 @@ export default {
   setTrashbinDeleteMessage (context, message) {
     context.commit('SET_TRASHBIN_DELETE_CONFIRMATION', message)
   },
-  setFilesDeleteMessage (context, message) {
-    context.commit('SET_FILES_DELETE_CONFIRMATION', message)
+  promptFileRename (context, item) {
+    context.commit('PROMPT_FILE_RENAME', item)
+  },
+  closePromptFileRename (context) {
+    context.commit('CLOSE_PROMPT_FILE_RENAME')
+  },
+  promptFileDelete (context, { message, items }) {
+    context.commit('PROMPT_FILE_DELETE', { message, items })
+  },
+  closePromptFileDelete (context) {
+    context.commit('CLOSE_PROMPT_FILE_DELETE')
   },
   setOverwriteDialogTitle (context, title) {
     context.commit('SET_OVERWRITE_DIALOG_TITLE', title)

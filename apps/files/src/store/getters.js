@@ -17,6 +17,8 @@ export default {
   currentFolder: state => {
     return state.currentFolder
   },
+  // a flat file list has no current folder nor parent
+  flatFileList: state => !!state.currentFolder,
   filterTerm: state => {
     return state.searchTermFilter
   },
@@ -88,8 +90,8 @@ export default {
   trashbinDeleteMessage: state => {
     return state.trashbinDeleteMessage
   },
-  filesDeleteMessage: state => {
-    return state.filesDeleteMessage
+  deleteDialogMessage: state => {
+    return state.deleteDialogMessage
   },
   overwriteDialogTitle: state => {
     return state.overwriteDialogTitle
@@ -119,5 +121,15 @@ export default {
     return state.linksLoading
   },
   uploaded: state => state.uploaded,
-  actionsInProgress: state => state.actionsInProgress
+  renameDialogOpen: state => state.renameDialogOpen,
+  renameDialogNewName: state => state.renameDialogNewName,
+  renameDialogOriginalName: state => state.renameDialogOriginalName,
+  actionsInProgress: state => state.actionsInProgress,
+  isDialogOpen: state => {
+    // FIXME: need a more obvious dialog state management
+    return state.renameDialogOpen || state.deleteDialogOpen
+  },
+  renameDialogSelectedFile: state => state.renameDialogSelectedFile,
+  deleteDialogOpen: state => state.deleteDialogOpen,
+  deleteDialogSelectedFiles: state => state.deleteDialogSelectedFiles
 }

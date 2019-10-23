@@ -24,145 +24,25 @@ export default {
     }
   },
   data: () => ({
-    selectedFile: '',
-    changeFileName: false,
-    fileToBeDeleted: '',
-    newName: '',
-    originalName: null,
     queue: new PQueue({ concurrency: 1 }),
     uploadFileUniqueId: 0
   }),
   computed: {
-    ...mapGetters('Files', ['searchTerm', 'inProgress', 'files', 'selectedFiles', 'highlightedFile', 'activeFiles']),
-    ...mapGetters(['getToken', 'capabilities', 'fileSideBars']),
+    ...mapGetters('Files', ['searchTerm', 'files', 'highlightedFile']),
+    ...mapGetters(['getToken']),
 
-    _renameDialogTitle () {
-      let translated
-
-      if (!this.selectedFile.name) return null
-
-      if (this.selectedFile.type === 'folder') {
-        translated = this.$gettext('Rename folder %{name}')
-      } else {
-        translated = this.$gettext('Rename file %{name}')
-      }
-      return this.$gettextInterpolate(translated, { name: this.selectedFile.name }, true)
-    },
-
-    // Files lists
-    selectedAll () {
-      return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
-    },
-    actions () {
-      const actions = [
-        {
-          icon: 'edit',
-          handler: this.changeName,
-          ariaLabel: this.$gettext('Rename'),
-          isEnabled: function (item, parent) {
-            if (!parent.canRename()) {
-              return false
-            }
-            return item.canRename()
-          }
-        },
-        {
-          icon: 'file_download',
-          handler: this.downloadFile,
-          ariaLabel: this.$gettext('Download'),
-          isEnabled: function (item) {
-            return item.canDownload()
-          }
-        },
-        {
-          icon: 'delete',
-          ariaLabel: this.$gettext('Delete'),
-          handler: this.deleteFile,
-          isEnabled: function (item, parent) {
-            if (!parent.canBeDeleted()) {
-              return false
-            }
-            return item.canBeDeleted()
-          }
-        }
-      ]
-      for (const sideBar of this.fileSideBars) {
-        if (sideBar.enabled !== undefined && !sideBar.enabled(this.capabilities)) {
-          continue
-        }
-        if (sideBar.quickAccess) {
-          actions.push({
-            icon: sideBar.quickAccess.icon,
-            ariaLabel: sideBar.quickAccess.ariaLabel,
-            handler: this.openSideBar,
-            handlerData: sideBar.app,
-            isEnabled: function (item) {
-              return true
-            }
-          })
-        }
-      }
-
-      return actions
-    },
-    changeFileErrorMessage () {
-      return this.checkNewName(this.newName)
-    },
-    _deleteDialogTitle () {
-      return this.$gettext('Delete File/Folder')
-    },
-    $_ocDialog_isOpen () {
-      return this.changeFileName || this.filesDeleteMessage !== ''
-    },
     _sidebarOpen () {
       return this.highlightedFile !== null
     }
   },
   methods: {
-    ...mapActions('Files', ['resetSearch', 'addFileToProgress', 'resetFileSelection', 'addFileSelection',
-      'removeFileSelection', 'setOverwriteDialogTitle', 'setOverwriteDialogMessage', 'deleteFiles', 'renameFile',
-      'setHighlightedFile', 'setFilesDeleteMessage', 'removeFileFromProgress']),
+    ...mapActions('Files', ['resetSearch', 'addFileToProgress',
+      'removeFileSelection', 'setOverwriteDialogTitle', 'setOverwriteDialogMessage',
+      'removeFileFromProgress']),
     ...mapActions(['showMessage']),
 
     formDateFromNow (date) {
       return moment(date).locale(this.$language.current).fromNow()
-    },
-    changeName (item) {
-      this.changeFileName = !this.changeFileName
-      if (typeof item === 'object') {
-        this.originalName = item.name
-        this.selectedFile = item
-        this.newName = item.name
-        item = this.newName
-        return
-      }
-      if (this.selectedFile.name === item) {
-        // The name has to be resetted a little while later to prevent
-        // showing the error druing the fade out animation of dialog
-        setTimeout(_ => {
-          this.originalName = null
-        }, 1000)
-        return
-      }
-
-      this.renameFile({
-        client: this.$client,
-        file: this.selectedFile,
-        newValue: item,
-        publicPage: this.publicPage()
-      }).then(setTimeout(_ => {
-        this.originalName = null
-      }, 1000)).catch(error => {
-        let translated = this.$gettext('Error while renaming "%{file}"')
-        if (error.statusCode === 423) {
-          translated = this.$gettext('Error while renaming "%{file}" - the file is locked')
-        }
-        const title = this.$gettextInterpolate(translated, { file: this.selectedFile.name }, true)
-        this.showMessage({
-          title: title,
-          status: 'danger'
-        })
-      })
     },
     fileTypeIcon (file) {
       if (file) {
@@ -423,118 +303,6 @@ export default {
       if (input) {
         input.value = ''
       }
-    },
-
-    // Files lists
-    toggleAll () {
-      if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
-        this.resetFileSelection()
-      } else {
-        const selectedFiles = this.fileData.slice()
-        for (const item of selectedFiles) {
-          if (!this.selectedFiles.includes(item)) {
-            this.addFileSelection(item)
-          }
-        }
-      }
-    },
-    openFileActionBar (file) {
-      this.$emit('FileAction', file)
-    },
-    checkNewName (name) {
-      if (/[/]/.test(name)) return this.$gettext('The name cannot contain "/"')
-
-      if (name === '.') return this.$gettext('The name cannot be equal to "."')
-
-      if (name === '..') return this.$gettext('The name cannot be equal to ".."')
-
-      if (/\s+$/.test(name)) return this.$gettext('The name cannot end with whitespace')
-
-      const exists = this.activeFiles.find((n) => {
-        if (n.name === name && this.originalName !== name) {
-          return n
-        }
-      })
-
-      if (exists) {
-        const translated = this.$gettext('The name "%{name}" is already taken')
-        return this.$gettextInterpolate(translated, { name: name }, true)
-      }
-      return null
-    },
-    deleteFile (file) {
-      this.fileToBeDeleted = file
-      const translated = this.$gettext('Please confirm the deletion of %{ fileName }')
-      this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { fileName: file.name }, true))
-    },
-    openSideBar (file, sideBarName) {
-      this.$emit('sideBarOpen', file, sideBarName)
-    },
-    reallyDeleteFiles () {
-      const files = this.fileToBeDeleted ? [this.fileToBeDeleted] : this.selectedFiles
-      this.deleteFiles({
-        client: this.$client,
-        files: files,
-        publicPage: this.publicPage(),
-        $gettext: this.$gettext,
-        $gettextInterpolate: this.$gettextInterpolate
-      }).then(() => {
-        this.fileToBeDeleted = ''
-        this.setFilesDeleteMessage('')
-        this.setHighlightedFile(null)
-      }).catch(error => {
-        console.log(error)
-      })
-    },
-    _rowClasses (item) {
-      if (this.highlightedFile && item.id === this.highlightedFile.id) {
-        return 'file-row uk-active'
-      }
-      return 'file-row'
-    },
-    selectRow (item, event) {
-      if (event.target.tagName !== 'TD') {
-        return
-      }
-
-      if (item.status && (item.status === 1 || item.status === 2)) return
-
-      event.stopPropagation()
-      this.setHighlightedFile(item)
-    },
-    navigateTo (param) {
-      if (this.searchTerm !== '' && this.$route.params.item === param) {
-        this.resetSearch()
-      }
-      let route = 'files-list'
-      if (this.publicPage()) {
-        route = 'public-files'
-      }
-      this.$router.push({
-        name: route,
-        params: {
-          item: param
-        }
-      })
-    },
-    openFileAction (action, filePath) {
-      if (action.newTab) {
-        const path = this.$router.resolve({ name: action.routeName, params: { filePath: filePath } }).href
-        const url = window.location.origin + '/' + path
-        const target = `${action.routeName}-${filePath}`
-        const win = window.open(url, target)
-        // in case popup is blocked win will be null
-        if (win) {
-          win.focus()
-        }
-        return
-      }
-      // TODO: rewire code below ....
-      const appId = action.app
-      // TODO path to state
-      this.$router.push({
-        name: appId
-      })
     }
   }
 }

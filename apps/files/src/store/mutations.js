@@ -140,8 +140,27 @@ export default {
   SET_TRASHBIN_DELETE_CONFIRMATION (state, message) {
     state.trashbinDeleteMessage = message
   },
-  SET_FILES_DELETE_CONFIRMATION (state, message) {
-    state.filesDeleteMessage = message
+  PROMPT_FILE_RENAME (state, file) {
+    state.renameDialogOpen = true
+    state.renameDialogOriginalName = file.name
+    state.renameDialogSelectedFile = file
+    state.renameDialogNewName = file.name
+  },
+  CLOSE_PROMPT_FILE_RENAME (state) {
+    state.renameDialogOpen = false
+    state.renameDialogOriginalName = null
+    state.renameDialogSelectedFile = null
+    state.renameDialogNewName = null
+  },
+  PROMPT_FILE_DELETE (state, { message, items }) {
+    state.deleteDialogOpen = true
+    state.deleteDialogSelectedFiles = items
+    state.deleteDialogMessage = message
+  },
+  CLOSE_PROMPT_FILE_DELETE (state, item) {
+    state.deleteDialogOpen = false
+    state.deleteDialogSelectedFiles = null
+    state.deleteDialogMessage = null
   },
   SET_OVERWRITE_DIALOG_TITLE (state, title) {
     state.overwriteDialogTitle = title

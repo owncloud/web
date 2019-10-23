@@ -311,3 +311,20 @@ Feature: Sharing files and folders with internal users
     When the user browses to the shared-with-me page using the webUI
     Then folder "simple-folder (2)" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI
+
+  Scenario: clicking a folder on shared-with-me page jumps to the main file list inside the folder
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user1" has created file "simple-folder/collaborate-on-this.txt"
+    And user "user2" has logged in using the webUI
+    When the user browses to the shared-with-me page using the webUI
+    And the user opens folder "simple-folder (2)" using the webUI
+    Then file "collaborate-on-this.txt" should be listed on the webUI
+
+  Scenario: deleting an entry on the shared-with-me page unshares from self
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user2" has logged in using the webUI
+    When the user browses to the shared-with-me page using the webUI
+    And the user deletes folder "simple-folder (2)" using the webUI
+    And the user browses to the files page
+    Then folder "simple-folder (2)" should not be listed on the webUI
+

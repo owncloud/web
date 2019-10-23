@@ -83,10 +83,10 @@ Feature: rename folders
     Then the error message '<alert_message>' should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
     Examples:
-      | from_name       | to_name           | alert_message                        |
-      | "simple-folder" | "simple\folder"   | Error while renaming "simple-folder" |
-      | "simple-folder" | "\\simple-folder" | Error while renaming "simple-folder" |
-      | "simple-folder" | ".htaccess"       | Error while renaming "simple-folder" |
+      | from_name       | to_name           | alert_message                                             |
+      | "simple-folder" | "simple\folder"   | Error while renaming "simple-folder" to "simple\folder"   |
+      | "simple-folder" | "\\simple-folder" | Error while renaming "simple-folder" to "\\simple-folder" |
+      | "simple-folder" | ".htaccess"       | Error while renaming "simple-folder" to ".htaccess"       |
 
   @issue-912
   Scenario: Rename a folder putting a name of a file which already exists
@@ -106,5 +106,5 @@ Feature: rename folders
   @issue-965
   Scenario: Rename a folder to .part
     When the user renames folder "simple-folder" to "simple.part" using the webUI
-    Then the error message 'Error while renaming "simple-folder"' should be displayed on the webUI
-    
+    Then the error message 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
+

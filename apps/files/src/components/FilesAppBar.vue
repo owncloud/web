@@ -91,6 +91,7 @@ import OcDialogPrompt from './ocDialogPrompt.vue'
 import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
+import FileActions from '../fileactions'
 
 export default {
   components: {
@@ -101,7 +102,8 @@ export default {
     FileDrop
   },
   mixins: [
-    Mixins
+    Mixins,
+    FileActions
   ],
   data: () => ({
     createFolder: false,
@@ -268,12 +270,14 @@ export default {
     },
 
     hasFreeSpace () {
-      return this.quota.free > 0 || this.currentFolder.permissions.indexOf('M') >= 0 || this.publicPage()
+      return (this.quota && this.quota.free > 0) ||
+        (this.currentFolder && this.currentFolder.permissions.indexOf('M') >= 0) ||
+        this.publicPage()
     }
   },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile',
-      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilesDeleteMessage', 'setFilterTerm', 'resetSearch']),
+      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilterTerm', 'resetSearch']),
     ...mapActions(['openFile', 'showMessage']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {
@@ -487,7 +491,10 @@ export default {
 
     $_ocFiles_deleteSelected () {
       const translated = this.$gettext('%{numberOfFiles} items will be deleted.')
-      this.setFilesDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
+      this.promptFileDelete({
+        message: this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true),
+        items: this.selectedFiles
+      })
     },
 
     $_ocTrashbin_empty () {
