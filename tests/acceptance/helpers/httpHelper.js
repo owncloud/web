@@ -1,5 +1,5 @@
 const userSettings = require('../helpers/userSettings')
-
+const _ = require('lodash')
 /**
  *
  * @param {string} userId
@@ -27,5 +27,14 @@ exports.checkStatus = function (response, message) {
     return response
   } else {
     throw Error(message + ' Status:' + response.status + ' ' + response.statusText)
+  }
+}
+
+exports.checkOCSStatus = function (response, message) {
+  const statusCode = _.get(response, 'ocs.meta.statuscode')
+  if (statusCode === 200) {
+    return response
+  } else {
+    throw Error(message + ' Status:' + statusCode)
   }
 }

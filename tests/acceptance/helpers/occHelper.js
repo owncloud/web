@@ -18,5 +18,8 @@ exports.runOcc = async function (args) {
   }).then(res => {
     httpHelper.checkStatus(res, 'Failed while executing occ command')
     return res.json()
+  }).then(res => {
+    httpHelper.checkOCSStatus(res, 'Failed while executing occ command')
+    return res
   })
 }
