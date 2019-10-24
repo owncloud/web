@@ -442,6 +442,25 @@ Then('the collaborators list for file/folder/resource {string} should be empty',
   assert.strictEqual(count, 0, `Expected to have no collaborators for '${resource}', Found: ${count}`)
 })
 
-Then('the file/folder/resource {string} on the webUI should be in {string} state', function (filename, status) {
-  return client.page.sharedWithMePage().assertFileStatusIsShown(filename, status)
+Then('the file/folder/resource {string} should be in {string} state on the webUI', function (filename, status) {
+  status = status === 'Accepted' ? '' : status
+  return client.page.sharedWithMePage().assertDesiredStatusIsPresent(filename, status)
+})
+
+Then('file {string} shared by {string} should be in {string} state on the webUI', function (filename, user, status) {
+  return client.page.sharedWithMePage().assertDesiredStatusIsPresent(filename, status, user)
+})
+
+When('the user declines share {string} offered by user {string} using the webUI', function (filename, user) {
+  return client.page.sharedWithMePage().declineAcceptFile('Decline', filename, user)
+})
+
+When('the user accepts share {string} offered by user {string} using the webUI', function (filename, user) {
+  return client.page.sharedWithMePage().declineAcceptFile('Accept', filename, user)
+})
+
+Then('the file {string} should be in {string} state on the webUI after a page reload', async function (filename, status) {
+  status = status === 'Accepted' ? '' : status
+  await client.refresh()
+  return client.page.sharedWithMePage().assertDesiredStatusIsPresent(filename, status)
 })

@@ -14,18 +14,55 @@ module.exports = {
         this.url(), this.page.FilesPageElement.filesList().elements.filesListProgressBar
       )
     },
-    assertFileStatusIsShown: function (filename, status) {
+    /**
+     * @param {string} filename
+     * @param {string} status - It takes one of the following : declined, pending or '' for accepted
+     * @param {string} user
+     * Checks if the file-row of the desired file-name with the username consists of the desired status of accepted,
+     * declined or pending
+     */
+    assertDesiredStatusIsPresent: function (filename, status, user) {
+      let requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
+        util.format(this.elements.assertStatusFileRow.selector, status)
+      requiredXpath = user === undefined ? requiredXpath : requiredXpath +
+                      util.format(this.elements.getSharedFromUserName.selector, user)
       return this.waitForElementVisible({
-        locateStrategy: this.elements.fileStatusOfFileRow.locateStrategy,
-        selector: this.api.page
-          .FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-          util.format(this.elements.fileStatusOfFileRow.selector, status)
+        locateStrategy: this.elements.assertStatusFileRow.locateStrategy,
+        selector: requiredXpath
       })
+    },
+    /**
+     * @param {string} filename
+     * @param {string} action - It takes one of the following : Decline and Accept
+     * @param {string} user
+     *Performs required action, such as accept and decline, on the file row element of the desired file name
+     *  shared by specific user
+     */
+    declineAcceptFile: function (action, filename, user) {
+      const actionLocatorButton = {
+        locateStrategy: this.elements.actionOnFileRow.locateStrategy,
+        selector: this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
+          util.format(this.elements.getSharedFromUserName.selector, user) +
+          util.format(this.elements.actionOnFileRow.selector, action)
+      }
+      return this
+        .initAjaxCounters()
+        .waitForElementVisible(actionLocatorButton)
+        .click(actionLocatorButton)
+        .waitForOutstandingAjaxCalls()
     }
   },
   elements: {
-    fileStatusOfFileRow: {
-      selector: '//span[.="%s"]',
+    assertStatusFileRow: {
+      selector: '//span[.="%s"]/../..',
+      locateStrategy: 'xpath'
+    },
+    getSharedFromUserName: {
+      selector: '//div[normalize-space(.)="%s"]',
+      locateStrategy: 'xpath'
+    },
+    actionOnFileRow: {
+      selector: '/../..//a[.="%s"]',
       locateStrategy: 'xpath'
     }
   }
