@@ -555,3 +555,21 @@ When('the user uploads overwriting file {string} using the webUI', function (fil
   return client.page.filesPage().selectFileForUpload(file)
     .then(() => client.page.filesPage().confirmFileOverwrite())
 })
+
+When('the user creates a new file {string} using the webUI', function (newFileName) {
+  return client.page.filesPage().createNewFile(newFileName)
+})
+
+When('the user tries to create a file with already existing name {string} using the webUI', function (fileName) {
+  return client.page.filesPage().triesToCreateExistingFile(fileName)
+})
+
+Then('an error message {string} should be visible', function (errorMessage) {
+  return client.page.filesPage().waitForErrorMessage((exactErrorMessage) => {
+    assert.strictEqual(errorMessage, exactErrorMessage)
+  })
+})
+
+Then('the create file button should be disabled', function () {
+  return client.page.filesPage().checkForButtonDisabled()
+})
