@@ -14,45 +14,237 @@ config = {
 	'yarnlint': True,
 
 	'acceptance': {
-		'webUI': {
+		'webUI1': {
 			'suites': {
-				'webUIFavorites': 'Favorites',
-				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingPermissionsGroups': 'SharingPermissionsGroups',
-				'webUIResharing': 'Resharing',
-				'webUISharingPublic': 'SharingPublic',
-				'webUITrashbin': 'Trashbin',
-				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers'
+				'webUITrashbin': 'Trashbin1',
 			},
 		},
-		'webUI-XGA': {
+		'webUI2': {
 			'suites': {
-				'all': 'XGAPortrait',
+				'webUITrashbin': 'Trashbin2',
+			},
+		},
+		'webUI3': {
+			'suites': {
+				'webUITrashbin': 'Trashbin3',
+			},
+		},
+		'webUI4': {
+			'suites': {
+				'webUITrashbin': 'Trashbin4',
+			},
+		},
+		'webUI5': {
+			'suites': {
+				'webUITrashbin': 'Trashbin5',
+			},
+		},
+		'webUI6': {
+			'suites': {
+				'webUITrashbin': 'Trashbin6',
+			},
+		},
+		'webUI7': {
+			'suites': {
+				'webUITrashbin': 'Trashbin7',
+			},
+		},
+		'webUI8': {
+			'suites': {
+				'webUITrashbin': 'Trashbin8',
+			},
+		},
+		'webUI9': {
+			'suites': {
+				'webUITrashbin': 'Trashbin9',
+			},
+		},
+		'webUI10': {
+			'suites': {
+				'webUITrashbin': 'Trashbin10',
+			},
+		},
+		'webUI-XGA1': {
+			'suites': {
+				'webUITrashbin': 'XGAPortrait1',
 			},
 			'extraEnvironment': {
 				'SCREEN_RESOLUTION': '768x1024'
 			},
 			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
 		},
-		'webUI-iPhone': {
+		'webUI-XGA2': {
 			'suites': {
-				'all': 'iPhone',
+				'webUITrashbin': 'XGAPortrait2',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-XGA3': {
+			'suites': {
+				'webUITrashbin': 'XGAPortrait3',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-XGA4': {
+			'suites': {
+				'webUITrashbin': 'XGAPortrait4',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-XGA5': {
+			'suites': {
+				'webUITrashbin': 'XGAPortrait5',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-XGA6': {
+			'suites': {
+				'webUITrashbin': 'XGAPortrait6',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-XGA7': {
+			'suites': {
+				'webUITrashbin': 'XGAPortrait7',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-XGA8': {
+			'suites': {
+				'webUITrashbin': 'XGAPortrait8',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-XGA9': {
+			'suites': {
+				'webUITrashbin': 'XGAPortrait9',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-XGA10': {
+			'suites': {
+				'webUITrashbin': 'XGAPortrait10',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-iPhone1': {
+			'suites': {
+				'webUITrashbin': 'iPhone1',
 			},
 			'extraEnvironment': {
 				'SCREEN_RESOLUTION': '375x812'
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
 		},
+		'webUI-iPhone2': {
+			'suites': {
+				'webUITrashbin': 'iPhone2',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+		'webUI-iPhone3': {
+			'suites': {
+				'webUITrashbin': 'iPhone3',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+		'webUI-iPhone4': {
+			'suites': {
+				'webUITrashbin': 'iPhone4',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+		'webUI-iPhone5': {
+			'suites': {
+				'webUITrashbin': 'iPhone5',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+		'webUI-iPhone6': {
+			'suites': {
+				'webUITrashbin': 'iPhone6',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+		'webUI-iPhone7': {
+			'suites': {
+				'webUITrashbin': 'iPhone7',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+		'webUI-iPhone8': {
+			'suites': {
+				'webUITrashbin': 'iPhone8',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+		'webUI-iPhone9': {
+			'suites': {
+				'webUITrashbin': 'iPhone9',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+		'webUI-iPhone10': {
+			'suites': {
+				'webUITrashbin': 'iPhone10',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+
 		'webUI-IE11': {
 			'suites': {
 				'webUI[R,T,F]*': 'Rename-Trash-Files',
