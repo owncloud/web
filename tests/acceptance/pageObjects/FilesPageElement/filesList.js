@@ -108,10 +108,19 @@ module.exports = {
         .waitForFileVisible(fileName)
         .useXpath()
         .performFileAction(fileName, 'delete')
-        .waitForElementVisible('@deleteFileConfirmationBtn')
-        .waitForAnimationToFinish()
+        .waitForElementEnabled(
+          this.elements.deleteFileConfirmationBtn.selector,
+          this.elements.deleteFileConfirmationBtn.locateStrategy
+        )
         .click('@deleteFileConfirmationBtn')
-        .waitForElementNotVisible('@deleteFileConfirmationDialog')
+        .waitForCSSPropertyEquals(
+          {
+            selector: this.elements.deleteFileConfirmationDialog.selector,
+            locateStrategy: this.elements.deleteFileConfirmationBtn.locateStrategy,
+            property: 'display',
+            value: 'none'
+          }
+        )
         .waitForOutstandingAjaxCalls()
         .useCss()
     },
@@ -461,7 +470,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     deleteFileConfirmationDialog: {
-      selector: '#delete-file-confirmation-dialog'
+      selector: '#delete-file-confirmation-dialog',
+      locateStrategy: 'css selector'
     },
     deleteButtonInFileRow: {
       selector: '//button[@aria-label="Delete"]',
