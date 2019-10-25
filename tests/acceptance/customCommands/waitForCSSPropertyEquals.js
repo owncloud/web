@@ -18,6 +18,7 @@ module.exports.command = function (
   } else {
     this.assert.fail('invalid locateStrategy')
   }
+  console.log(timeout)
   this.expect.element(selector).to.have.css(property).which.equals(value).before(timeout)
   return this
 }
