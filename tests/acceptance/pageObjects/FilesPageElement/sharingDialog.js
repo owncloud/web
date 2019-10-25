@@ -418,6 +418,9 @@ module.exports = {
      */
     getUserSharePostfix: function () {
       return userSharePostfix
+    },
+    assertAutocompleteListIsNotVisible: function () {
+      return this.waitForElementNotVisible('@sharingAutoCompleteDropDown')
     }
   },
   elements: {

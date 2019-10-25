@@ -48,14 +48,12 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-  @skip @yetToImplement
   Scenario: autocompletion for a pattern that does not match any user or group
     Given user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And the user has opened the share dialog for folder "simple-folder"
     When the user types "doesnotexist" in the share-with-field
-    Then a tooltip with the text "No users or groups found for doesnotexist" should be shown near the share-with-field on the webUI
-    And the autocomplete list should not be displayed on the webUI
+    Then the autocomplete list should not be displayed on the webUI
 
   @skip @yetToImplement
   Scenario: autocomplete short user/display names when completely typed
