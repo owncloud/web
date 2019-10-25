@@ -1,14 +1,19 @@
 <template>
-  <div id="Phoenix" class="uk-height-1-1">
-    <template v-if="!showHeader">
-      <router-view name="fullscreen"></router-view>
-    </template>
-    <template v-else>
-      <message-bar />
-      <top-bar></top-bar>
-      <side-menu></side-menu>
-      <router-view id="oc-app-container" name="app" class="uk-height-1-1"></router-view>
-    </template>
+  <div>
+    <skip-to target="main">Skip to main</skip-to>
+    <div id="Phoenix" class="uk-height-1-1">
+      <template v-if="!showHeader">
+        <router-view name="fullscreen"></router-view>
+      </template>
+      <template v-else>
+        <message-bar />
+        <top-bar></top-bar>
+        <side-menu></side-menu>
+        <main id="main">
+          <router-view id="oc-app-container" name="app" class="uk-height-1-1"></router-view>
+        </main>
+      </template>
+    </div>
   </div>
 </template>
 <script>
@@ -16,12 +21,14 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import TopBar from './components/Top-Bar.vue'
 import Menu from './components/Menu.vue'
 import MessageBar from './components/MessageBar.vue'
+import SkipTo from './components/SkipTo.vue'
 
 export default {
   components: {
     MessageBar,
     'side-menu': Menu,
-    TopBar
+    TopBar,
+    SkipTo
   },
   metaInfo () {
     const metaInfo = {
