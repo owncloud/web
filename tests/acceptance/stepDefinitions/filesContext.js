@@ -105,6 +105,10 @@ When('the user creates a folder with the name {string} using the webUI', functio
   return client.page.filesPage().createFolder(folderName)
 })
 
+When('the user creates a file with the name {string} using the webUI', function (fileName) {
+  return client.page.filesPage().createFile(fileName)
+})
+
 When('the user creates a folder with default name using the webUI', function () {
   return client.page.filesPage().createFolder(null, false)
 })
@@ -124,7 +128,7 @@ Given('the user has opened the share dialog for folder {string}', function (file
   return client.page.FilesPageElement.filesList().openSharingDialog(fileName)
 })
 
-When('the user enables the setting to view hidden folders on the webUI', function () {
+When('the user enables the setting to view hidden files/folders on the webUI', function () {
   return client.page.filesPage().showHiddenFiles()
 })
 
