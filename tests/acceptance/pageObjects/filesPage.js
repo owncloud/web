@@ -52,6 +52,32 @@ module.exports = {
       }
       return this
     },
+    /**
+     * Create a file with the given name
+     *
+     * @param {string} name to set or null to use default value from dialog
+     * @param {boolean} expectToSucceed
+     */
+    createFile: function (name, expectToSucceed = true) {
+      this
+        .waitForElementVisible('@newFileMenuButton')
+        .click('@newFileMenuButton')
+        .waitForElementVisible('@newFileButton')
+        .click('@newFileButton')
+        .waitForElementVisible('@newFileInput')
+      if (name !== null) {
+        this.clearValueWithEvent('@newFileInput')
+        this.setValue('@newFileInput', name)
+      }
+      this
+        .click('@newFileOkButton')
+        .waitForElementNotPresent('@createFileLoadingIndicator')
+      if (expectToSucceed) {
+        this.waitForElementNotVisible('@newFileDialog')
+          .waitForAnimationToFinish()
+      }
+      return this
+    },
     selectFileForUpload: function (localFileName) {
       return this
         .waitForElementVisible('@newFileMenuButton')
@@ -236,8 +262,15 @@ module.exports = {
     newFolderDialog: {
       selector: '#new-folder-dialog'
     },
+    newFileDialog: {
+      selector: '#new-file-dialog'
+    },
     newFolderInput: {
       selector: '#new-folder-input'
+    },
+    newFileInput: {
+      selector: "//input[@placeholder='Create new file…']",
+      locateStrategy: 'xpath'
     },
     newFolderOkButton: {
       selector: '#new-folder-ok'
@@ -279,6 +312,10 @@ module.exports = {
     },
     createFolderLoadingIndicator: {
       selector: '//div[@id="new-folder-dialog"]//div[@class="oc-loader"]',
+      locateStrategy: 'xpath'
+    },
+    createFileLoadingIndicator: {
+      selector: '//div[@id="new-file-dialog"]//div[@class="oc-loader"]',
       locateStrategy: 'xpath'
     },
     fileUploadButton: {
