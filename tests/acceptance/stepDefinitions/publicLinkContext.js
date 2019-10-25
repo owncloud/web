@@ -3,27 +3,30 @@ const { When, Then } = require('cucumber')
 require('url-search-params-polyfill')
 const sharingHelper = require('../helpers/sharingHelper')
 const assert = require('assert')
+const { SHARE_TYPES } = require('../helpers/sharingHelper')
+const path = require('path')
 
 When(
-  'the user creates a new public link for file/folder/resource {string} using the webUI',
-  function (resource) {
-    return client.page.FilesPageElement
+  'the user (tries to )create/creates a new public link for file/folder/resource {string} using the webUI',
+  async function (resource) {
+    await client.page.FilesPageElement
       .filesList()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
+    return client.page.FilesPageElement.publicLinksDialog()
       .addNewLink()
   }
 )
 
 When(
-  'the user creates a new public link for file/folder/resource {string} using the webUI with',
-  function (resource, settingsTable) {
+  'the user (tries to )create/creates a new public link for file/folder/resource {string} using the webUI with',
+  async function (resource, settingsTable) {
     const settings = settingsTable.rowsHash()
-    return client.page.FilesPageElement
+    await client.page.FilesPageElement
       .filesList()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
-      .addNewLink(settings.role)
+    return client.page.FilesPageElement.publicLinksDialog().addNewLink(settings)
   }
 )
 
@@ -56,19 +59,106 @@ When('the public uses the webUI to access the last public link created by user {
   return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
 })
 
-Then(
-  'a link named {string} should be listed with role {string} in the public link list of file/folder/resource {string} on the webUI',
-  function (name, role, resource) {
-    return client.page.FilesPageElement
+Then('user {string} should not have any public link',
+  async function (sharer) {
+    const resp = await sharingHelper.getAllPublicLinkShares(sharer)
+    assert.strictEqual(
+      resp.length, 0, 'User has shares. Response: ' + resp)
+  })
+
+Then('the fields of the last public link share response of user {string} should include',
+  function (linkCreator, dataTable) {
+    const fieldsData = dataTable.rowsHash()
+    return sharingHelper.assertUserLastPublicShareDetails(linkCreator, fieldsData)
+  })
+
+Then('as user {string} the folder {string} should not have any public link', async function (sharer, resource) {
+  const publicLinkShares = await sharingHelper.getAllPublicLinkShares(sharer)
+  resource = path.join('/', resource)
+  for (const share of publicLinkShares) {
+    if (share.path === resource && share.share_type === SHARE_TYPES.public_link) {
+      assert.fail(
+        'Expected share with user ' + sharer +
+        ' and resource ' + resource + ' is present!\n' + JSON.stringify(publicLinkShares)
+      )
+    }
+  }
+  return this
+})
+
+Then('the public should not get access to the publicly shared file', function () {
+  return client
+    .page
+    .publicLinkPasswordPage()
+    .assertResourceAccessDenied()
+})
+
+When('the user edits the public link named {string} of file/folder/resource {string} changing following but not saving',
+  async function (linkName, resource, dataTable) {
+    const editData = dataTable.rowsHash()
+    await client.page.FilesPageElement
       .filesList()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
+    return client.page.FilesPageElement
+      .publicLinksDialog()
+      .editPublicLink(linkName, editData)
+  })
+
+When('the user edits the public link named {string} of file/folder/resource {string} changing following',
+  async function (linkName, resource, dataTable) {
+    const editData = dataTable.rowsHash()
+    await client.page.FilesPageElement
+      .filesList()
+      .closeSidebar(100)
+      .openPublicLinkDialog(resource)
+    return client.page.FilesPageElement
+      .publicLinksDialog()
+      .editPublicLink(linkName, editData)
+      .savePublicLink()
+  })
+
+When('the user tries to edit expiration of the public link named {string} of file {string} to past date {string}',
+  async function (linkName, resource, pastDate) {
+    await client.page.FilesPageElement
+      .filesList()
+      .closeSidebar(100)
+      .openPublicLinkDialog(resource)
+    return client.page.FilesPageElement.publicLinksDialog()
+      .assertDisabledExpiryDate(linkName, pastDate)
+  })
+
+When('the user {string} removes the public link named {string} of file/folder/resource {string} using the webUI',
+  async function (sharer, linkName, resource) {
+    await client.page
+      .FilesPageElement
+      .filesList()
+      .closeSidebar(100)
+      .openPublicLinkDialog(resource)
+    return client.page.FilesPageElement.publicLinksDialog()
+      .removePublicLink(linkName)
+  })
+
+Then('public link named {string} should not be listed on the public links list on the webUI', function (linkName) {
+  return client.page.FilesPageElement.publicLinksDialog()
+    .assertPublicLinkNotPresent(linkName)
+})
+
+Then(
+  'a link named {string} should be listed with role {string} in the public link list of file/folder/resource {string} on the webUI',
+  async function (name, role, resource) {
+    await client.page.FilesPageElement
+      .filesList()
+      .closeSidebar(100)
+      .openPublicLinkDialog(resource)
+    return client.page.FilesPageElement
+      .publicLinksDialog()
       .getPublicLinkList()
       .then(links => {
         const searchregex = new RegExp(name + '\n.*' + role)
         let found = false
         for (const link of links) {
-          if (searchregex.test(link) === true) {
+          if (searchregex.test(link)) {
             found = true
             break
           }
@@ -84,6 +174,11 @@ Then('the user should see an error message on the public link share dialog sayin
   const actualMessage = await client.page.FilesPageElement
     .publicLinksDialog()
     .getErrorMessage()
-
   return client.assert.strictEqual(actualMessage, expectedMessage)
+})
+
+When('the user closes the public link details sidebar', function () {
+  return client.page.FilesPageElement
+    .filesList()
+    .closeSidebar(100)
 })
