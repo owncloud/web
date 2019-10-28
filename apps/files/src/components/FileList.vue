@@ -6,9 +6,9 @@
           <thead>
             <oc-table-row>
               <oc-table-cell shrink type="head">
-                <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" @click.native="toggleAll" :value="selectedAll" />
+                <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" labelVisuallyHidden="true" :label="labelSelectAllItems" @click.native="toggleAll" :value="selectedAll" />
               </oc-table-cell>
-              <oc-table-cell shrink type="head" v-if="!publicPage()" />
+              <oc-table-cell shrink type="head" v-if="!publicPage()"><span class="oc-visually-hidden">{{favoritesHeaderText}}</span></oc-table-cell>
               <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
               <oc-table-cell shrink type="head" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }"><translate>Size</translate></oc-table-cell>
               <oc-table-cell shrink type="head" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-visible@m'  : _sidebarOpen }" class="uk-text-nowrap" v-translate>Modification Time</oc-table-cell>
@@ -18,7 +18,7 @@
           <oc-table-group>
             <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item, $event)" :id="'file-row-' + item.id">
               <oc-table-cell>
-                <oc-checkbox class="uk-margin-small-left" @click.stop @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" />
+                <oc-checkbox class="uk-margin-small-left" @click.stop @change.native="$emit('toggle', item)" :value="selectedFiles.indexOf(item) >= 0" :label="labelSelectSingleItem(item)"/>
               </oc-table-cell>
               <oc-table-cell class="uk-padding-remove" v-if="!publicPage()">
                 <oc-star class="uk-display-block" @click.native.stop="toggleFileFavorite(item)" :shining="item.starred" />
@@ -139,6 +139,13 @@ export default {
   mounted () {
     this.$_ocFilesFolder_getFolder()
   },
+  data () {
+    return {
+      labelSelectAllItems: this.$gettext('Select all items'),
+      labelSelectSingleItemText: this.$gettext('Select %{type} %{name}'),
+      favoritesHeaderText: this.$gettext('Favorites')
+    }
+  },
   methods: {
     ...mapActions('Files', ['loadFolder', 'setFilterTerm', 'markFavorite',
       'setFilesDeleteMessage', 'setHighlightedFile', 'setPublicLinkPassword']),
@@ -187,6 +194,9 @@ export default {
         })
       })
     },
+    labelSelectSingleItem (item) {
+      return this.$gettextInterpolate(this.labelSelectSingleItemText, { name: item.name, type: item.type }, true)
+    },
     toggleFileFavorite (item) {
       this.markFavorite({
         client: this.$client,
@@ -226,7 +236,6 @@ export default {
     ...mapState(['route']),
     ...mapGetters('Files', ['selectedFiles', 'loadingFolder', 'filesDeleteMessage', 'highlightedFile', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount', 'actionsInProgress']),
     ...mapGetters(['configuration']),
-
     item () {
       return this.$route.params.item
     }
