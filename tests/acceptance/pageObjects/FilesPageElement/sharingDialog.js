@@ -346,7 +346,6 @@ module.exports = {
           })
         })
       })
-
       return Promise.all(itemsListPromises)
     },
     /**
@@ -355,15 +354,18 @@ module.exports = {
      */
     getShareAutocompleteWebElementIdList: async function () {
       const webElementIdList = []
+      const showAllResultsXpath = this.elements.sharingAutoCompleteShowAllResultsButton.selector
+      await this.api.waitForElementVisible(
+        { locateStrategy: 'css selector', timeout: 100, selector: showAllResultsXpath, abortOnFailure: false }
+      )
+
+        .click(showAllResultsXpath)
       await this
-        .api
-        .elements('css selector',
-          this.elements.sharingAutoCompleteDropDownElements.selector,
-          (result) => {
-            result.value.forEach((value) => {
-              webElementIdList.push(value[Object.keys(value)[0]])
-            })
+        .api.elements('css selector', this.elements.sharingAutoCompleteDropDownElements.selector, (result) => {
+          result.value.forEach((value) => {
+            webElementIdList.push(value[Object.keys(value)[0]])
           })
+        })
       return webElementIdList
     },
     /**

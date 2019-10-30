@@ -146,7 +146,7 @@ When('the user creates a folder with the invalid name {string} using the webUI',
 Given('the user has opened folder {string}', (folder) => client.page.FilesPageElement.filesList().navigateToFolder(folder))
 When('the user opens folder {string} using the webUI', (folder) => client.page.FilesPageElement.filesList().navigateToFolder(folder))
 
-Given('the user has opened the share dialog for folder {string}', function (fileName) {
+Given('the user has opened the share dialog for file/folder {string}', function (fileName) {
   return client.page.FilesPageElement.filesList().openSharingDialog(fileName)
 })
 
@@ -177,6 +177,7 @@ const waitBetweenDeleteOperations = async function () {
   }
   timeOfLastDeleteOperation = Date.now()
 }
+
 /**
  * makes sure upload operations are carried out maximum once a second to avoid version issues
  * see https://github.com/owncloud/core/issues/23151
