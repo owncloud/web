@@ -183,6 +183,16 @@ When('the user renames file/folder {string} to an invalid name {string} using th
   return client.page.FilesPageElement.filesList().renameFile(fromName, toName, false)
 })
 
+When('the user renames the following folder using the webUI', async function (dataTable) {
+  for (const { fromName, toName } of dataTable.hashes()) {
+    await client
+      .page.FilesPageElement.filesList().renameFile(
+        fromName,
+        toName
+      )
+  }
+})
+
 Given('the user has disabled folder filter', () => {
   return client.page.filesPage().toggleFilterFileOrFolder('folder', 'disable')
 })

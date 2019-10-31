@@ -16,7 +16,7 @@ Feature: rename folders
     Examples:
       | to_folder_name          |
       | 'an other simple name'  |
-      | 'सिमप्ले फोल्देर$%#?&@' |
+      | 'सिमप्ले फोल्देर$%#?&@'      |
       | '"quotes1"'             |
       | "'quotes2'"             |
       | "home"                  |
@@ -28,7 +28,7 @@ Feature: rename folders
     Then folder <to_name> should be listed on the webUI
     Examples:
       | from_name               | to_name                     |
-      | "strängé नेपाली folder" | "strängé नेपाली folder-#?2" |
+      | "strängé नेपाली folder"   | "strängé नेपाली folder-#?2"   |
       | "'single'quotes"        | "single-quotes"             |
 
   Scenario: Rename a folder using special characters and check its existence after page reload
@@ -58,56 +58,53 @@ Feature: rename folders
     And the user reloads the current page of the webUI
     Then folder "  multiple   spaces    all     over   " should be listed on the webUI
 
-  @skip
   Scenario: Rename a folder using both double and single quotes
     When the user renames the following folder using the webUI
-      | from-name-parts | to-name-parts         |
-      | simple-folder   | First 'single' quotes |
-      |                 | -then "double"        |
+      | fromName              | toName                     |
+      | simple-folder         | '"First 'single" quotes" ' |
+      | simple-empty-folder   | Test" 'me o'ut"            |
     And the user reloads the current page of the webUI
-    Then the following folder should be listed on the webUI
-      | name-parts            |
-      | First 'single' quotes |
-      | -then "double"        |
+    Then these folders should be listed on the webUI
+      | files                      |
+      | '"First 'single" quotes" ' |
+      | Test" 'me o'ut"            |
     When the user renames the following folder using the webUI
-      | from-name-parts       | to-name-parts   |
-      | First 'single' quotes | a normal folder |
-      | -then "double"        |                 |
+      | fromName                   | toName                |
+      | '"First 'single" quotes" ' | a normal folder       |
+      | Test" 'me o'ut"            | another normal folder |
     And the user reloads the current page of the webUI
-    Then folder "a normal folder" should be listed on the webUI
+    Then these folders should be listed on the webUI
+      | files                   |
+      | a normal folder         |
+      | another normal folder   |
 
-  @skip
-  Scenario: Rename a folder using forbidden characters
-    When the user renames folder "simple-folder" to one of these names using the webUI
-      | simple\folder   |
-      | \\simple-folder |
-      | .htaccess       |
-    Then notifications should be displayed on the webUI with the text
-      | Could not rename "simple-folder" |
-      | Could not rename "simple-folder" |
-      | Could not rename "simple-folder" |
+  Scenario Outline: Rename a folder using forbidden characters
+    When the user renames folder <from_name> to <to_name> using the webUI
+    Then the error message '<alert_message>' should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
+    Examples:
+      | from_name       | to_name           | alert_message                        |
+      | "simple-folder" | "simple\folder"   | Error while renaming "simple-folder" |
+      | "simple-folder" | "\\simple-folder" | Error while renaming "simple-folder" |
+      | "simple-folder" | ".htaccess"       | Error while renaming "simple-folder" |
 
-  @skip
   @issue-912
   Scenario: Rename a folder putting a name of a file which already exists
-    When the user renames folder "simple-folder" to "lorem.txt" using the webUI
-    Then near folder "simple-folder" a tooltip with the text 'lorem.txt already exists' should be displayed on the webUI
+    When the user renames folder "simple-folder" to an invalid name "lorem.txt" using the webUI
+    Then the error message 'The name "lorem.txt" is already taken' should be displayed on the webUI dialog prompt
 
-  @skip
   @issue-965
   Scenario: Rename a folder to ..
-    When the user renames folder "simple-folder" to ".." using the webUI
-    Then near folder "simple-folder" a tooltip with the text '".." is an invalid file name.' should be displayed on the webUI
+    When the user renames folder "simple-folder" to an invalid name ".." using the webUI
+    Then the error message 'The name cannot be equal to ".."' should be displayed on the webUI dialog prompt
 
-  @skip
   @issue-965
   Scenario: Rename a folder to .
-    When the user renames folder "simple-folder" to "." using the webUI
-    Then near folder "simple-folder" a tooltip with the text '"." is an invalid file name.' should be displayed on the webUI
+    When the user renames folder "simple-folder" to an invalid name "." using the webUI
+    Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
 
-  @skip
   @issue-965
   Scenario: Rename a folder to .part
     When the user renames folder "simple-folder" to "simple.part" using the webUI
-    Then near folder "simple-folder" a tooltip with the text '"simple.part" has a forbidden file type/extension.' should be displayed on the webUI
+    Then the error message 'Error while renaming "simple-folder"' should be displayed on the webUI
+    
