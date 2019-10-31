@@ -20,7 +20,6 @@ module.exports = {
   test_settings: {
     default: {
       globals: {
-        waitForConditionTimeout: 10000,
         waitForConditionPollInterval: 10,
         filesForUpload: FILES_FOR_UPLOAD
       }
@@ -28,6 +27,7 @@ module.exports = {
     local: {
       launch_url: LOCAL_LAUNCH_URL,
       globals: {
+        waitForConditionTimeout: 10000,
         backend_url: LOCAL_BACKEND_URL,
         backend_admin_username: BACKEND_ADMIN_USERNAME,
         backend_admin_password: BACKEND_ADMIN_PASSWORD
@@ -58,6 +58,7 @@ module.exports = {
     drone: {
       launch_url: 'http://phoenix',
       globals: {
+        waitForConditionTimeout: 20000,
         backend_url: 'http://owncloud',
         backend_admin_username: 'admin',
         backend_admin_password: 'admin'
