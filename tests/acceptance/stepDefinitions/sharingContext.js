@@ -8,6 +8,8 @@ const httpHelper = require('../helpers/httpHelper')
 const userSettings = require('../helpers/userSettings')
 const sharingHelper = require('../helpers/sharingHelper')
 const { SHARE_TYPES } = require('../helpers/sharingHelper')
+const { runOcc } = require('../helpers/occHelper')
+const _ = require('lodash')
 
 /**
  *
@@ -195,6 +197,36 @@ Given(
     return shareFileFolder(elementToShare, sharer, null, SHARE_TYPES.public_link, permissions, password)
   }
 )
+
+Given('the administrator has enabled exclude groups from sharing', function () {
+  return runOcc(
+    [
+      'config:app:set core shareapi_exclude_groups --value=yes'
+    ]
+  )
+})
+
+Given('the administrator has excluded group {string} from sharing', async function (group) {
+  const configList = await runOcc([
+    'config:list'
+  ])
+  const config = _.get(configList, 'ocs.data.stdOut')
+  const configParsed = JSON.parse(config)
+  const initialExcludedGroup = JSON.parse(_.get(configParsed, 'apps.core.shareapi_exclude_groups_list') || '[]')
+  if (!initialExcludedGroup.includes(group)) {
+    initialExcludedGroup.push(group)
+    const resultGroupList = initialExcludedGroup.map((res) => '"' + res + '"')
+    const resultToString = resultGroupList.join(',')
+    return runOcc(
+      [
+        'config:app:set',
+        'core',
+        'shareapi_exclude_groups_list',
+        '--value=[' + resultToString + ']'
+      ]
+    )
+  }
+})
 
 When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)

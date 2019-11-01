@@ -3,6 +3,8 @@ const assert = require('assert')
 const { Given, When, Then, Before } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
 const loginHelper = require('../helpers/loginHelper')
+const { createFolder } = require('../helpers/webdavHelper')
+const { move } = require('../helpers/webdavHelper')
 const path = require('path')
 let deletedElements
 let timeOfLastDeleteOperation = Date.now()
@@ -100,6 +102,14 @@ Given('the user has browsed to the files page', function () {
   return client
     .page.filesPage()
     .navigateAndWaitTillLoaded()
+})
+
+Given('user {string} has created folder {string}', function (user, folderName) {
+  return createFolder(user, folderName)
+})
+
+Given('user {string} has moved file {string} to {string}', function (user, fromName, toName) {
+  return move(user, fromName, toName)
 })
 
 When('the user creates a folder with the name {string} using the webUI', function (folderName) {
