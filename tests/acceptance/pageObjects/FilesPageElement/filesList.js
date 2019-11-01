@@ -113,6 +113,7 @@ module.exports = {
           this.elements.deleteFileConfirmationBtn.locateStrategy
         )
         .click('@deleteFileConfirmationBtn')
+        .waitForOutstandingAjaxCalls()
         .waitForCSSPropertyEquals(
           {
             selector: this.elements.deleteFileConfirmationDialog.selector,
@@ -121,7 +122,6 @@ module.exports = {
             value: 'none'
           }
         )
-        .waitForOutstandingAjaxCalls()
         .useCss()
     },
     /**
