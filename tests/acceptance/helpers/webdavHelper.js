@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const httpHelper = require('../helpers/httpHelper')
 const convert = require('xml-js')
 const _ = require('lodash/object')
+const { resolve } = require('path')
 const occHelper = require('../helpers/occHelper')
 
 /**
@@ -13,7 +14,7 @@ const occHelper = require('../helpers/occHelper')
 exports.createDavPath = function (userId, element) {
   return client.globals.backend_url +
     '/remote.php/dav/files/' + userId + '/' + encodeURIComponent(element)
-    .replace('%2F', '/')
+    .replace(/%2F/g, '/')
 }
 
 /**
@@ -77,7 +78,7 @@ exports.move = function (userId, fromName, toName) {
 exports.propfind = function (path, userId, properties, folderDepth = 1) {
   const headers = httpHelper.createAuthHeader(userId)
   headers.Depth = folderDepth
-  const davPath = client.globals.backend_url + '/remote.php/dav' + path
+  const davPath = client.globals.backend_url + '/remote.php/dav' + resolve('/', path)
   let propertyBody = ''
   properties.map(prop => {
     propertyBody += `<${prop}/>`
@@ -119,7 +120,7 @@ exports.getTrashBinElements = function (user) {
         'd:getlastmodified'
       ], 2)
       .then(str => {
-        const trashData = JSON.parse(convert.xml2json(str, { compact: true }))['d:multistatus']['d:response']
+        const trashData = convert.xml2js(str, { compact: true })['d:multistatus']['d:response']
         const trashItems = []
         trashData.map(trash => {
           trashItems.push({

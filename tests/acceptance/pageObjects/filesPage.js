@@ -1,4 +1,5 @@
 const util = require('util')
+const _ = require('lodash')
 const navigationHelper = require('../helpers/navigationHelper')
 
 module.exports = {
@@ -83,9 +84,11 @@ module.exports = {
         .waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@fileUploadButton')
-        .uploadLocalFile(
-          '@fileUploadInput',
-          require('path').join(this.api.globals.filesForUpload, localFileName)
+        .uploadRemote(
+          require('path').join(this.api.globals.filesForUpload, localFileName),
+          filePath => {
+            this.api.setValue(this.elements.fileUploadInput.selector, filePath)
+          }
         )
     },
     /**
@@ -95,6 +98,47 @@ module.exports = {
     uploadFile: function (localFileName) {
       return this
         .selectFileForUpload(localFileName)
+        .waitForElementVisible(
+          '@fileUploadProgress',
+          this.api.globals.waitForConditionTimeout,
+          this.api.globals.waitForConditionPollInterval,
+          false
+        )
+        .waitForElementNotVisible('@fileUploadProgress')
+        .click('@newFileMenuButton')
+    },
+    /**
+     * This uploads a folder that is inside the selenium host,
+     * not from the server, phoenix or where the test runner is located.
+     * So, the folder needs to be already there on the machine where the browser is running.
+     *
+     * @typedef {import('../customCommands/uploadRemote')} UploadRemote
+     * We can extract the folder path from the callback of
+     * [uploadRemote()]{@link UploadRemote.command}, which is similar to the following:
+     * `/tmp/545cfb7e4b6e6603b2bbef4d69f82627/upload1734400381952243704file/new-lorem.txt`.
+     * Extract `upload1734400381952243704file` and send it as arg here, otherwise, the whole
+     * `/tmp/<sessionID>` folder will get uploaded
+     *
+     * @see below for working information
+     *
+     * @param {string} [folderName] - should be passed in as format "/upload<uniqueId>file" or "upload<uniqueId>file"
+     */
+    uploadFolder: function (folderName = '') {
+      /*
+      files uploaded through selenium endpoints are saved in
+      /tmp/<sessionId>/upload<uniqueId>file/<filename>.
+
+      So, we are trying to upload the "/tmp/<sessionId>" (or, if the folderName is set, it's "/tmp/<sessionId>/<folderName>")
+      folder through phoenix, by setting value on folder input field to that folder, and hopefully,
+      phoenix gets the `onChange` event and uploads that folder.
+       */
+      const sessionId = this.api.sessionId
+      folderName = _.trimStart(folderName, '/')
+      folderName = `/tmp/${sessionId}/${folderName}`
+      return this.waitForElementVisible('@newFileMenuButton')
+        .click('@newFileMenuButton')
+        .waitForElementVisible('@fileUploadButton')
+        .setValue('@folderUploadInput', folderName)
         .waitForElementVisible(
           '@fileUploadProgress',
           this.api.globals.waitForConditionTimeout,
@@ -323,6 +367,9 @@ module.exports = {
     },
     fileUploadInput: {
       selector: '#fileUploadInput'
+    },
+    folderUploadInput: {
+      selector: '#folderUploadInput'
     },
     fileUploadProgress: {
       selector: '#files-upload-progress'
