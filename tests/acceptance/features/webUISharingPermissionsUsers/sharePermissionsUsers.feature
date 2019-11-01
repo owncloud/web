@@ -181,14 +181,14 @@ Feature: Sharing files and folders with internal users with different permission
     Then the error message "Error while sharing." should be displayed on the webUI
     And as "user3" folder "simple-empty-folder (2)" should not exist
 
-  Scenario: User is allowed to update reshare of sub-folder with more than what user has
+  Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
     Given user "user3" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "all" permissions
     And user "user1" has shared folder "simple-folder (2)" with user "user3" with "share, delete" permissions
     And user "user1" has logged in using the webUI
     When the user browses to the folder "simple-folder (2)" on the files page
-    Then the user shares folder "simple-empty-folder" with user "User Three" as "Custom role" with permissions "share, delete, create, change" using the webUI
-    And user "user3" should have received a share with these details:
+    And the user shares folder "simple-empty-folder" with user "User Three" as "Custom role" with permissions "share, delete, create, change" using the webUI
+    Then user "user3" should have received a share with these details:
       | field       | value                    |
       | uid_owner   | user1                    |
       | share_with  | user3                    |
