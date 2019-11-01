@@ -41,6 +41,29 @@ module.exports = {
     },
 
     /**
+     * Return first elementID that matches given selector and is visible
+     *
+     * @param {string} using
+     * @param {string} value
+     *
+     * @return {Promise<string|null>}
+     */
+    getVisibleElementID: async function (using, value) {
+      let visibleElementID = null
+      await this.api.elements(using, value, response => {
+        for (const { ELEMENT } of response.value) {
+          this.api.elementIdDisplayed(ELEMENT, function (result) {
+            if (result.value === true) {
+              visibleElementID = ELEMENT
+            }
+          })
+          if (visibleElementID !== null) break
+        }
+      })
+      return visibleElementID
+    },
+
+    /**
      *
      * @param {string} sharee
      */
@@ -103,10 +126,13 @@ module.exports = {
       const permissionArray = this.getArrayFromPermissionString(permissions)
       for (const permission of permissionArray) {
         const permissionSwitchXpath = this.getPermissionSwitchXpath(permission)
-        if (this.useXpath().assert.visible(permissionSwitchXpath)) {
-          await this.useXpath().click(permissionSwitchXpath).useCss()
+        const elementID = await this.getVisibleElementID('xpath', permissionSwitchXpath)
+        if (elementID === null) {
+          throw new Error('Button is not visible for permission:', permission)
         }
+        await this.api.elementIdClick(elementID)
       }
+      return this
     },
 
     /**
@@ -118,7 +144,7 @@ module.exports = {
      */
     shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions) {
       await this.selectCollaboratorForShare(sharee, shareWithGroup)
-      this.selectRoleForNewCollaborator(role)
+      await this.selectRoleForNewCollaborator(role)
       if (permissions === undefined) {
         return this.confirmShare()
       }
@@ -169,16 +195,16 @@ module.exports = {
      * Needs the collaborator information to be expanded
      *
      * @param {string} permission
-     * @param {bool} abortOnFailure
      */
-    toggleSinglePermission: async function (permission, abortOnFailure = true) {
+    toggleSinglePermission: async function (permission) {
       const permissionXpath = this.getPermissionSwitchXpath(permission)
-      return this.api.waitForElementVisible(
-        { locateStrategy: 'xpath', timeout: 100, selector: permissionXpath, abortOnFailure },
-        `Timed out waiting for permission ${permission} to be visible`
-      )
-        .useXpath()
-        .click(permissionXpath)
+      const elementID = await this.getVisibleElementID('xpath', permissionXpath)
+      if (!elementID) {
+        throw new Error(`permission ${permission} is not visible `)
+      }
+
+      this.api.elementIdClick(elementID)
+      return this
     },
     /**
      * Get the state of permissions for current share in the screen
@@ -186,7 +212,7 @@ module.exports = {
      * The values {bool} gives the state of the permissions
      *
      * @param {string} collaborator
-     * @return {Promise<Object>}  eg - {share: true, change: false}
+     * @return {Promise<Object.<string, boolean>>}  eg - {share: true, change: false}
      */
     getSharePermissions: async function (collaborator) {
       const permissions = {}
@@ -231,10 +257,7 @@ module.exports = {
           (!sharePermissions[permission] && requiredPermissionArray.includes(permission))
         ) {
           changed = true
-          await this.toggleSinglePermission(
-            permission,
-            requiredPermissionArray.includes(permission)
-          )
+          await this.toggleSinglePermission(permission)
         }
       }
       if (changed) {
@@ -291,8 +314,12 @@ module.exports = {
      */
     disableAllCustomPermissions: async function (collaborator) {
       this.expandInformationSelector(collaborator)
-      for (let i = 0; i < collaboratorPermissionArray.length; i++) {
-        await this.toggleSinglePermission(collaboratorPermissionArray[i], false, false)
+      const sharePermissions = await this.getSharePermissions(collaborator)
+      const enabledPermissions = Object.keys(sharePermissions)
+        .filter(permission => sharePermissions[permission] === true)
+
+      for (const permission of enabledPermissions) {
+        await this.toggleSinglePermission(permission)
       }
       await this.saveCollaboratorPermission()
     },
