@@ -1,4 +1,5 @@
 import filesize from 'filesize'
+import join from 'join-path'
 import moment from 'moment'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
@@ -32,7 +33,7 @@ export default {
     uploadFileUniqueId: 0
   }),
   computed: {
-    ...mapGetters('Files', ['searchTerm', 'inProgress', 'files', 'selectedFiles', 'highlightedFile', 'activeFiles']),
+    ...mapGetters('Files', ['searchTerm', 'inProgress', 'files', 'selectedFiles', 'highlightedFile', 'activeFiles', 'publicLinkPassword']),
     ...mapGetters(['getToken', 'capabilities', 'fileSideBars']),
 
     _renameDialogTitle () {
@@ -390,24 +391,37 @@ export default {
     },
 
     $_ocUpload (file, path, overwrite = null, emitSuccess = true, addToProgress = true) {
+      let basePath = this.path || ''
+      let relativePath = path
       if (addToProgress) {
         this.$_addFileToUploadProgress(file)
       }
 
-      let module = this.$client.files
+      let promise
       if (this.publicPage()) {
-        module = this.$client.publicFiles
+        // strip out public link token from path
+        basePath = basePath.substr(basePath.indexOf('/') + 1) || ''
+        relativePath = join(basePath, relativePath)
+        // FIXME: token not defined.
+        // it seems that .token is for files drop and .item for public page... needs refactoring for consistency!
+        promise = this.$client.publicFiles.putFileContents(this.$route.params.token, relativePath, this.publicLinkPassword, file, {
+          onProgress: (progress) => {
+            this.$_ocUpload_onProgress(progress, file)
+          },
+          overwrite: overwrite
+        })
+      } else {
+        basePath = this.path || ''
+        relativePath = join(basePath, relativePath)
+        promise = this.$client.files.putFileContents(relativePath, file, {
+          onProgress: (progress) => {
+            this.$_ocUpload_onProgress(progress, file)
+          },
+          overwrite: overwrite
+        })
       }
-      // prepend the current folder path if available
-      if (this.path) {
-        path = this.path + '/' + path
-      }
-      module.putFileContents(path, file, {
-        onProgress: (progress) => {
-          this.$_ocUpload_onProgress(progress, file)
-        },
-        overwrite: overwrite
-      }).then(e => {
+
+      promise.then(e => {
         this.removeFileFromProgress(file)
         if (emitSuccess) {
           this.$emit('success', e, file)
