@@ -29,7 +29,7 @@ Feature: Resharing shared files with different permissions
   Scenario: Reshare a folder without share permissions using API and check if the receiver can reshare
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
     And user "user1" has shared folder "simple-folder (2)" with user "user3" with "read" permissions
-    When the user "user3" logs in using the webUI
+    When user "user3" logs in using the webUI
     Then the user should not be able to share folder "simple-folder (2)" using the webUI
 
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for resharer
@@ -122,7 +122,7 @@ Feature: Resharing shared files with different permissions
 
   Scenario Outline: share a file/folder without share permissions and check if another user can reshare
     Given user "user2" has shared folder "<shared-entry-name>" with user "user1" with "read" permissions
-    When the user "user1" logs in using the webUI
+    When user "user1" logs in using the webUI
     Then the user should not be able to share resource "<received-entry-name>" using the webUI
     Examples:
     | shared-entry-name | received-entry-name |
@@ -134,7 +134,7 @@ Feature: Resharing shared files with different permissions
   Scenario Outline: share a received file/folder without share permissions and check if another user can reshare
     Given user "user2" has shared folder "<shared-entry-name>" with user "user1" with "all" permissions
     And user "user1" has shared folder "<received-entry-name>" with user "user3" with "read" permissions
-    When the user "user3" logs in using the webUI
+    When user "user3" logs in using the webUI
     Then the user should not be able to share resource "<received-entry-name>" using the webUI
     Examples:
     | shared-entry-name | received-entry-name |

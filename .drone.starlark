@@ -23,6 +23,7 @@ config = {
 				'webUIPrivateLinks': 'PrivateLinks',
 				'webUIRenameFiles': 'RenameFiles',
 				'webUIRenameFolders': 'RenameFolders',
+				'webUIRestrictSharing': 'RestrictSharing',
 				'webUISharingInternalGroups': 'SharingInternalGroups',
 				'webUISharingInternalUsers': 'SharingInternalUsers',
 				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',

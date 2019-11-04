@@ -16,7 +16,7 @@ When('the user logs in with username {string} and password {string} using the we
   (username, password) => client.page.ownCloudLoginPage().login(username, password)
 )
 
-When('the user {string} logs in using the webUI',
+When('user {string} logs in using the webUI',
   (username) => loginHelper.loginAsUser(username)
 )
 

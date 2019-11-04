@@ -383,7 +383,20 @@ module.exports = {
         .waitForElementNotPresent('@loadingIndicator')
         .waitForElementPresent(this.getFileRowSelectorByFileName(element))
     },
-
+    assertSharingIsDisabled: function (resource) {
+      const resourceRowXpath = this.getFileRowSelectorByFileName(resource)
+      const shareButtonXpath = this.elements.shareButtonInFileRow.selector
+      const resourceShareButtonXpath = resourceRowXpath + shareButtonXpath
+      return this
+        .closeSidebar(100)
+        .useXpath()
+        .assert.elementNotPresent(resourceShareButtonXpath)
+        .click(resourceRowXpath)
+        .waitForElementVisible('@sidebar')
+        .assert.elementNotPresent('@sidebarLinksTab')
+        .assert.elementNotPresent('@sidebarCollaboratorsTab')
+        .useCss()
+    },
     /**
      * @param {string} action
      * @param {string} fileName
@@ -556,6 +569,14 @@ module.exports = {
     },
     sidebarPrivateLinkIconCopied: {
       selector: '#files-sidebar-private-link-icon-copied'
+    },
+    sidebarLinksTab: {
+      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Links")]',
+      locateStrategy: 'xpath'
+    },
+    sidebarCollaboratorsTab: {
+      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Collaborators")]',
+      locateStrategy: 'xpath'
     }
   }
 }
