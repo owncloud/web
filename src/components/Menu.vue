@@ -1,6 +1,6 @@
 <template>
   <oc-application-menu name="coreMenu" v-model="sidebarIsVisible" @close="sidebarIsVisible = false">
-    <oc-sidebar-nav-item v-for="(n, nid) in nav" :key="nid" :icon="n.iconMaterial" :target="n.route ? n.route.path : null" @click="openItem(n.url)">{{ translateMenu(n) }}</oc-sidebar-nav-item>
+    <oc-sidebar-nav-item v-for="(n, nid) in nav" :active="isActive(n)" :key="nid" :icon="n.iconMaterial" :target="n.route ? n.route.path : null" @click="openItem(n.url)">{{ translateMenu(n) }}</oc-sidebar-nav-item>
 
     <oc-sidebar-nav-item icon="account_circle" target="/account" :isolate="true">
       <translate>Account</translate>
@@ -73,6 +73,9 @@ export default {
         const win = window.open(url, '_blank')
         win.focus()
       }
+    },
+    isActive (navItem) {
+      return navItem.route.name === this.$route.name
     }
   }
 }
