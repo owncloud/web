@@ -146,7 +146,7 @@ export default {
       this.linkId = false
     },
     $_copyToClipboard (link) {
-      this.$clipboard(link.url)
+      this.$copyText(link.url)
 
       const clone = event.currentTarget.firstElementChild.cloneNode(true)
       clone.classList.add('_clipButton')
