@@ -109,6 +109,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -117,6 +128,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUIFavorites
     TEST_TAGS: not @skip
 
@@ -198,6 +210,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -207,6 +222,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -296,6 +315,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -304,6 +334,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUIFiles
     TEST_TAGS: not @skip
 
@@ -385,6 +416,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -394,6 +428,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -483,6 +521,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -491,6 +540,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUILogin
     TEST_TAGS: not @skip
 
@@ -572,6 +622,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -581,6 +634,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -670,6 +727,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -678,6 +746,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUINotifications
     TEST_TAGS: not @skip
 
@@ -759,6 +828,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -768,6 +840,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -857,6 +933,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -865,6 +952,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUIPrivateLinks
     TEST_TAGS: not @skip
 
@@ -946,6 +1034,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -955,6 +1046,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -1044,6 +1139,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -1052,6 +1158,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUIRenameFiles
     TEST_TAGS: not @skip
 
@@ -1133,6 +1240,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -1142,6 +1252,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -1231,6 +1345,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -1239,6 +1364,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUIRenameFolders
     TEST_TAGS: not @skip
 
@@ -1320,6 +1446,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -1329,6 +1458,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -1418,6 +1551,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -1426,6 +1570,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUIRestrictSharing
     TEST_TAGS: not @skip
 
@@ -1507,6 +1652,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -1516,6 +1664,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -1605,6 +1757,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -1613,6 +1776,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUISharingInternalGroups
     TEST_TAGS: not @skip
 
@@ -1694,6 +1858,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -1703,6 +1870,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -1792,6 +1963,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -1800,6 +1982,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUISharingInternalUsers
     TEST_TAGS: not @skip
 
@@ -1881,6 +2064,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -1890,6 +2076,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -1979,6 +2169,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -1987,6 +2188,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUISharingPermissionsUsers
     TEST_TAGS: not @skip
 
@@ -2068,6 +2270,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -2077,6 +2282,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -2166,6 +2375,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -2174,6 +2394,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUISharingPermissionsGroups
     TEST_TAGS: not @skip
 
@@ -2255,6 +2476,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -2264,6 +2488,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -2353,6 +2581,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -2361,6 +2600,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUIResharing
     TEST_TAGS: not @skip
 
@@ -2442,6 +2682,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -2451,6 +2694,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -2540,6 +2787,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -2548,6 +2806,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUISharingPublic
     TEST_TAGS: not @skip
 
@@ -2629,6 +2888,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -2638,6 +2900,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -2727,6 +2993,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -2735,6 +3012,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUITrashbin
     TEST_TAGS: not @skip
 
@@ -2816,6 +3094,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -2825,6 +3106,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -2914,6 +3199,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -2922,6 +3218,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUIUpload
     TEST_TAGS: not @skip
 
@@ -3003,6 +3300,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -3012,6 +3312,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -3101,6 +3405,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -3109,6 +3424,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUISharingAcceptShares
     TEST_TAGS: not @skip
 
@@ -3190,6 +3506,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -3199,6 +3518,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -3288,6 +3611,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -3296,6 +3630,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     TEST_CONTEXT: webUISharingPermissionsMultipleUsers
     TEST_TAGS: not @skip
 
@@ -3377,6 +3712,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -3386,6 +3724,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -3475,6 +3817,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -3483,6 +3836,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     SCREEN_RESOLUTION: 768x1024
     TEST_TAGS: "@smokeTest and not @skipOnXGAPortraitResolution and not @skip"
 
@@ -3564,6 +3918,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -3573,6 +3930,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -3662,6 +4023,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -3670,6 +4042,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    LOCAL_UPLOAD_DIR: /home/seluser/uploads
     SCREEN_RESOLUTION: 375x812
     TEST_TAGS: "@smokeTest and not @skipOnIphoneResolution and not @skip"
 
@@ -3751,6 +4124,9 @@ services:
 - name: selenium
   pull: always
   image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /home/seluser/uploads
 
 - name: mysql
   pull: always
@@ -3760,6 +4136,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   ref:
@@ -3849,6 +4229,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -3908,6 +4299,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   event:
@@ -3999,6 +4394,17 @@ steps:
   - cd /var/www/owncloud/
   - chown www-data * -R
 
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
 - name: webui-acceptance-tests
   pull: always
   image: owncloudci/php:7.1
@@ -4058,6 +4464,10 @@ services:
     MYSQL_PASSWORD: owncloud
     MYSQL_ROOT_PASSWORD: owncloud
     MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
 
 trigger:
   event:

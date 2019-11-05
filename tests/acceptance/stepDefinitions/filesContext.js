@@ -170,6 +170,22 @@ When('the user uploads file {string} using the webUI', function (element) {
   return client.page.filesPage().uploadFile(element)
 })
 
+When('the user uploads folder {string} using the webUI', function (element) {
+  const rootUploadDir = client.globals.mountedUploadDir
+  if (rootUploadDir === undefined) {
+    throw new Error(
+      `'LOCAL_UPLOAD_DIR' environment variable is not set.
+      The step utilizes folder available inside Selenium to upload folder.
+      If you use selenium-docker, please mount 'filesForUpload' folder and set the
+      '/path/in/container' as 'LOCAL_UPLOAD_DIR'.
+      `
+    )
+  }
+
+  const name = path.join(rootUploadDir, element)
+  return client.page.filesPage().uploadFolder(name)
+})
+
 When('the user uploads a folder containing the following files in separate sub-folders using the webUI:', async function (files) {
   files = files.raw().map(item => item[0])
 
@@ -188,7 +204,7 @@ When('the user uploads a folder containing the following files in separate sub-f
     const filePath = path.join(client.globals.filesForUpload, file)
     await client.uploadRemote(filePath)
   }
-  return client.page.filesPage().uploadFolder()
+  return client.page.filesPage().uploadSessionFolder()
 })
 
 Then('it should not be possible to create files using the webUI', function () {
@@ -507,7 +523,7 @@ When('the user restores file/folder {string} from the trashbin using the webUI',
   return client.page.FilesPageElement.filesList().restoreFile(element)
 })
 
-Then('the following files should be listed on the webUI', function (table) {
+Then('the following files/folders/resources should be listed on the webUI', function (table) {
   return assertElementsAreListed([].concat.apply([], table.rows()))
 })
 

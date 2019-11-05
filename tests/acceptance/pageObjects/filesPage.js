@@ -123,7 +123,7 @@ module.exports = {
      *
      * @param {string} [folderName] - should be passed in as format "/upload<uniqueId>file" or "upload<uniqueId>file"
      */
-    uploadFolder: function (folderName = '') {
+    uploadSessionFolder: function (folderName = '') {
       /*
       files uploaded through selenium endpoints are saved in
       /tmp/<sessionId>/upload<uniqueId>file/<filename>.
@@ -135,6 +135,15 @@ module.exports = {
       const sessionId = this.api.sessionId
       folderName = _.trimStart(folderName, '/')
       folderName = `/tmp/${sessionId}/${folderName}`
+      return this.uploadFolder(folderName)
+    },
+
+    /**
+     * Upload folder which is inside selenium
+     *
+     * @param {string} folderName
+     */
+    uploadFolder: function (folderName) {
       return this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@fileUploadButton')
