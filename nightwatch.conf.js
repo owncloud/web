@@ -8,11 +8,19 @@ LOCAL_BACKEND_URL = LOCAL_BACKEND_URL.startsWith('http') ? LOCAL_BACKEND_URL : '
 const SELENIUM_HOST = process.env.SELENIUM_HOST || ''
 const SELENIUM_PORT = process.env.SELENIUM_PORT || 4444
 const START_PROCESS = (SELENIUM_HOST === '')
-const FILES_FOR_UPLOAD = process.env.FILES_FOR_UPLOAD || require('path').join(__dirname, '/tests/acceptance/filesForUpload/')
+const REMOTE_UPLOAD_DIR = process.env.REMOTE_UPLOAD_DIR || require('path').join(__dirname, '/tests/acceptance/filesForUpload/')
 const SAUCE_USERNAME = process.env.SAUCE_USERNAME
 const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
 const BROWSER_NAME = process.env.BROWSER_NAME
 const SAUCELABS_TUNNEL_NAME = process.env.SAUCELABS_TUNNEL_NAME
+const LOCAL_UPLOAD_DIR = process.env.LOCAL_UPLOAD_DIR
+
+if (process.env.LOCAL_UPLOAD_DIR === undefined) {
+  console.warn(
+    `LOCAL_UPLOAD_DIR not set. Folder uploads might fail.
+    Please refer to 'Running acceptance tests' on how to run tests.`
+  )
+}
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
@@ -21,7 +29,8 @@ module.exports = {
     default: {
       globals: {
         waitForConditionPollInterval: 10,
-        filesForUpload: FILES_FOR_UPLOAD
+        filesForUpload: REMOTE_UPLOAD_DIR,
+        mountedUploadDir: LOCAL_UPLOAD_DIR
       }
     },
     local: {
