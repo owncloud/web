@@ -246,6 +246,7 @@ def acceptance():
 								setupServerAndApp(params['logLevel']) +
 								owncloudLog() +
 								fixPermissions() +
+								copyFilesForUpload() +
 								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
 								(
 									uploadScreenshots() +
@@ -265,7 +266,11 @@ def acceptance():
 									'refs/pull-requests/**',
 									'refs/merge-requests/**',
 								]
-							}
+							},
+							'volumes': [{
+								'name': 'uploads',
+								'temp': {}
+							}]
 						}
 
 						for branch in config['branches']:
@@ -367,6 +372,10 @@ def browserService(alternateSuiteName, browser):
 			'name': 'selenium',
 			'image': 'selenium/standalone-chrome-debug:latest',
 			'pull': 'always',
+			'volumes': [{
+				'name': 'uploads',
+				'path': '/home/seluser/uploads'
+			}],
 		}]
 
 	if browser == 'firefox':
@@ -374,6 +383,10 @@ def browserService(alternateSuiteName, browser):
 			'name': 'selenium',
 			'image': 'selenium/standalone-firefox-debug:latest',
 			'pull': 'always',
+			'volumes': [{
+				'name': 'uploads',
+				'path': '/home/seluser/uploads'
+			}],
 		}]
 
 	if not isLocalBrowser(browser):
@@ -663,6 +676,22 @@ def owncloudLog():
 		]
 	}]
 
+def copyFilesForUpload():
+	return [{
+		'name': 'copy-files-for-upload',
+		'pull': 'always',
+		'image': 'owncloudci/php:7.1',
+		'volumes': [{
+			'name': 'uploads',
+			'path': '/filesForUpload'
+		}],
+		'commands': [
+			'ls -la /filesForUpload',
+			'cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload',
+			'ls -la /filesForUpload'
+		]
+	}]
+
 def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser):
 	environment = {}
 	if (filterTags != ''):
@@ -670,6 +699,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 	for env in extraEnvironment:
 		environment[env] = extraEnvironment[env]
 	if isLocalBrowser(browser):
+		environment['LOCAL_UPLOAD_DIR'] = '/home/seluser/uploads'
 		if (suite != 'all'):
 			environment['TEST_CONTEXT'] = suite
 	else:
@@ -723,7 +753,7 @@ def uploadScreenshots():
 				'failure'
 			],
 			'event': [
-			    'pull_request'
+				'pull_request'
 			]
 		},
 	}]
@@ -748,7 +778,7 @@ def buildGithubComment(suite, alternateSuiteName):
 				'failure'
 			],
 			'event': [
-			    'pull_request'
+				'pull_request'
 			]
 		},
 	}]
@@ -771,7 +801,7 @@ def githubComment():
 				'failure'
 			],
 			'event': [
-			    'pull_request'
+				'pull_request'
 			]
 		},
 	}]
