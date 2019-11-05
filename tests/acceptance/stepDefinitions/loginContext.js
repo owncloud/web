@@ -10,9 +10,15 @@ Given(/^the user has browsed to the login page$/,
       .navigate()
   })
 
+Given('the user has clicked the authenticate button', () => client.page.loginPage().authenticate())
+
 When('the user clicks the authenticate button', () => client.page.loginPage().authenticate())
 
 When('the user logs in with username {string} and password {string} using the webUI',
+  (username, password) => client.page.ownCloudLoginPage().login(username, password)
+)
+
+When('the user tries to log in with username {string} and password {string} using the webUI',
   (username, password) => client.page.ownCloudLoginPage().login(username, password)
 )
 
@@ -33,6 +39,10 @@ Then('the files table should not be empty',
       // even the loading indicator is gone the table might not be rendered yet
       .waitForElementVisible('@fileRows')
   })
+
+Then('the warning {string} should be displayed on the login page', function (message) {
+  return client.page.ownCloudLoginPage().assertLoginErrorMessage(message)
+})
 
 Then('the authentication page should be visible',
   () => {
