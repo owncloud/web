@@ -13,14 +13,7 @@ const SAUCE_USERNAME = process.env.SAUCE_USERNAME
 const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
 const BROWSER_NAME = process.env.BROWSER_NAME
 const SAUCELABS_TUNNEL_NAME = process.env.SAUCELABS_TUNNEL_NAME
-const LOCAL_UPLOAD_DIR = process.env.LOCAL_UPLOAD_DIR
-
-if (process.env.LOCAL_UPLOAD_DIR === undefined) {
-  console.warn(
-    `LOCAL_UPLOAD_DIR not set. Folder uploads might fail.
-    Please refer to 'Running acceptance tests' on how to run tests.`
-  )
-}
+const LOCAL_UPLOAD_DIR = process.env.LOCAL_UPLOAD_DIR || '/uploads'
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
