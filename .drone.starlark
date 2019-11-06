@@ -375,7 +375,7 @@ def browserService(alternateSuiteName, browser):
 			'pull': 'always',
 			'volumes': [{
 				'name': 'uploads',
-				'path': '/home/seluser/uploads'
+				'path': '/uploads'
 			}],
 		}]
 
@@ -386,7 +386,7 @@ def browserService(alternateSuiteName, browser):
 			'pull': 'always',
 			'volumes': [{
 				'name': 'uploads',
-				'path': '/home/seluser/uploads'
+				'path': '/uploads'
 			}],
 		}]
 
@@ -702,7 +702,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 	for env in extraEnvironment:
 		environment[env] = extraEnvironment[env]
 	if isLocalBrowser(browser):
-		environment['LOCAL_UPLOAD_DIR'] = '/home/seluser/uploads'
+		environment['LOCAL_UPLOAD_DIR'] = '/uploads'
 		if (suite != 'all'):
 			environment['TEST_CONTEXT'] = suite
 	else:

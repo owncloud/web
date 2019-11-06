@@ -79,12 +79,21 @@ In the local Phoenix checkout, copy the `config.json.sample` file to `config.jso
 - clone and install testing app into ownCloud from http://github.com/owncloud/testing
 - set `skeletondirectory` of ownCloud to `<oc-root>/apps/testing/data/webUISkeleton` e.g. `occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton`
 - build, configure and run phoenix
-- setup selenium & browser
-    - install the Chrome browser and let yarn start & run selenium OR
-    - use docker to start the browser and selenium e.g.:
-    ```sh
-    docker run -d -p 4444:4444 -p 5900:5900 -v /dev/shm:/dev/shm -v <repo_path>/tests/acceptance/filesForUpload:/home/seluser/uploads --name selenium selenium/standalone-chrome-debug
-    ```
+- setup selenium and browser in either of the following ways:
+    1. `yarn run selenium`: This runs selenium-docker similar to command below.
+
+        Needs setting `SELENIUM_HOST` as `localhost` and `SERVER_HOST` in the format `http://<ip_addr>:8300`. To find ip of the docker host, use
+
+        ```sh
+          docker inspect -f "{{ .NetworkSettings.Gateway }}" selenium
+        ```
+
+    2. use docker to start the browser and selenium e.g.:
+        ```sh
+        docker run -d -p 4444:4444 -p 5900:5900 -v /dev/shm:/dev/shm -v <repo_path>/tests/acceptance/filesForUpload:/uploads --name selenium selenium/standalone-chrome-debug
+        ```
+    3. install the Chrome browser and let yarn start & run selenium (remember to set `LOCAL_UPLOAD_DIR` though)
+    4. Use standalone selenium server (remember to set `SELENIUM_HOST`, `SELENIUM_PORT` and `LOCAL_UPLOAD_DIR`).
 - run `yarn run acceptance-tests <feature-files-to-test>`
 - available settings to be set by environment variables:
 
@@ -97,8 +106,8 @@ In the local Phoenix checkout, copy the `config.json.sample` file to `config.jso
 | `SELENIUM_HOST`     | selenium server host, if not set yarn will start selenium automatically<br/>if running the selenium docker container as mentioned above set to `localhost` |                       |
 | `SELENIUM_PORT`     | port of selenium server                                                   | 4444                  |
 | `SCREEN_RESOLUTION` | width and height in px to set the browser resolution to e.g. 375x812      | empty = fullscreen    |
-| `REMOTE_UPLOAD_DIR` | path to `filesForUpload` directory, used when uploading files through api | ./tests/acceptance/filesForUpload |
-| `LOCAL_UPLOAD_DIR`  | `filesForUpload` directory available for selenium for direct uploads<br/>If using selenium-docker and example above, set it as `/home/seluser/uploads`.<br/>If running local selenium, set value same as `REMOTE_UPLOAD_DIR` (please, remember to use absolute path)| |
+| `REMOTE_UPLOAD_DIR` | path to `filesForUpload` directory, used when uploading files through api | `./tests/acceptance/filesForUpload` |
+| `LOCAL_UPLOAD_DIR`  | `filesForUpload` directory available for selenium for direct uploads<br/>If using selenium-docker and example above, set it as `/uploads`.<br/>If running local selenium, set value same as `REMOTE_UPLOAD_DIR` (please, remember to use absolute path)| `/uploads` |
 
 ## Updating dependencies
 

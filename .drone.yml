@@ -130,7 +130,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIFavorites
     TEST_TAGS: not @skip
 
@@ -214,7 +214,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -338,7 +338,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIFiles
     TEST_TAGS: not @skip
 
@@ -422,7 +422,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -546,7 +546,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUILogin
     TEST_TAGS: not @skip
 
@@ -630,7 +630,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -754,7 +754,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUINotifications
     TEST_TAGS: not @skip
 
@@ -838,7 +838,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -962,7 +962,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIPrivateLinks
     TEST_TAGS: not @skip
 
@@ -1046,7 +1046,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -1170,7 +1170,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIRenameFiles
     TEST_TAGS: not @skip
 
@@ -1254,7 +1254,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -1378,7 +1378,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIRenameFolders
     TEST_TAGS: not @skip
 
@@ -1462,7 +1462,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -1586,7 +1586,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIRestrictSharing
     TEST_TAGS: not @skip
 
@@ -1670,7 +1670,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -1794,7 +1794,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingInternalGroups
     TEST_TAGS: not @skip
 
@@ -1878,7 +1878,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -2002,7 +2002,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingInternalUsers
     TEST_TAGS: not @skip
 
@@ -2086,7 +2086,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -2210,7 +2210,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingPermissionsUsers
     TEST_TAGS: not @skip
 
@@ -2294,7 +2294,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -2418,7 +2418,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingPermissionsGroups
     TEST_TAGS: not @skip
 
@@ -2502,7 +2502,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -2626,7 +2626,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIResharing
     TEST_TAGS: not @skip
 
@@ -2710,7 +2710,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -2834,7 +2834,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingPublic
     TEST_TAGS: not @skip
 
@@ -2918,7 +2918,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -3042,7 +3042,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUITrashbin
     TEST_TAGS: not @skip
 
@@ -3126,7 +3126,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -3250,7 +3250,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIUpload
     TEST_TAGS: not @skip
 
@@ -3334,7 +3334,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -3458,7 +3458,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingAcceptShares
     TEST_TAGS: not @skip
 
@@ -3542,7 +3542,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -3666,7 +3666,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingPermissionsMultipleUsers
     TEST_TAGS: not @skip
 
@@ -3750,7 +3750,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -3874,7 +3874,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingNotifications
     TEST_TAGS: not @skip
 
@@ -3958,7 +3958,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -4082,7 +4082,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     SCREEN_RESOLUTION: 768x1024
     TEST_TAGS: "@smokeTest and not @skipOnXGAPortraitResolution and not @skip"
 
@@ -4166,7 +4166,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always
@@ -4290,7 +4290,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
-    LOCAL_UPLOAD_DIR: /home/seluser/uploads
+    LOCAL_UPLOAD_DIR: /uploads
     SCREEN_RESOLUTION: 375x812
     TEST_TAGS: "@smokeTest and not @skipOnIphoneResolution and not @skip"
 
@@ -4374,7 +4374,7 @@ services:
   image: selenium/standalone-chrome-debug:latest
   volumes:
   - name: uploads
-    path: /home/seluser/uploads
+    path: /uploads
 
 - name: mysql
   pull: always

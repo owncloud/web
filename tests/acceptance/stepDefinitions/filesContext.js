@@ -172,16 +172,6 @@ When('the user uploads file {string} using the webUI', function (element) {
 
 When('the user uploads folder {string} using the webUI', function (element) {
   const rootUploadDir = client.globals.mountedUploadDir
-  if (rootUploadDir === undefined) {
-    throw new Error(
-      `'LOCAL_UPLOAD_DIR' environment variable is not set.
-      The step utilizes folder available inside Selenium to upload folder.
-      If you use selenium-docker, please mount 'filesForUpload' folder and set the
-      '/path/in/container' as 'LOCAL_UPLOAD_DIR'.
-      `
-    )
-  }
-
   const name = path.join(rootUploadDir, element)
   return client.page.filesPage().uploadFolder(name)
 })
