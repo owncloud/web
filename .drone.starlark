@@ -628,10 +628,12 @@ def deployStaging():
 def cloneOauth():
 	return [{
 		'name': 'clone-oauth',
-		'image': 'owncloud/ubuntu:16.04',
+		'image': 'owncloudci/php:7.1',
 		'pull': 'always',
 		'commands': [
-			'git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2'
+			'git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2',
+			'cd /var/www/owncloud/apps/oauth2',
+			'make vendor'
 		]
 	}]
 
