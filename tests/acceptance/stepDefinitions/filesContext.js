@@ -6,6 +6,8 @@ const loginHelper = require('../helpers/loginHelper')
 const path = require('path')
 let deletedElements
 let timeOfLastDeleteOperation = Date.now()
+let timeOfLastUploadOperation = Date.now()
+const { download } = require('../helpers/webdavHelper')
 
 Before(() => {
   deletedElements = []
@@ -101,6 +103,14 @@ Given('the user has browsed to the files page', function () {
     .page.filesPage()
     .navigateAndWaitTillLoaded()
 })
+Given('user {string} has uploaded file with content {string} to {string}', async function (user, content, filename) {
+  await waitBetweenFileUploadOperations()
+  await webdav.uploadFileWithcontent(user, content, filename)
+})
+
+When('the user browses to display the {string} details of file {string}', function (versions, filename) {
+  return client.page.FilesPageElement.filesList().getVersions(filename)
+})
 
 When('the user creates a folder with the name {string} using the webUI', function (folderName) {
   return client.page.filesPage().createFolder(folderName)
@@ -155,6 +165,17 @@ const waitBetweenDeleteOperations = async function () {
     await client.pause(1000 - timeSinceLastDelete + 1)
   }
   timeOfLastDeleteOperation = Date.now()
+}
+/**
+ * makes sure upload operations are carried out maximum once a second to avoid version issues
+ * see https://github.com/owncloud/core/issues/23151
+ */
+const waitBetweenFileUploadOperations = async function () {
+  const timeSinceLastFileUpload = Date.now() - timeOfLastUploadOperation
+  if (timeSinceLastFileUpload <= 1000) {
+    await client.pause(1001 - timeSinceLastFileUpload)
+  }
+  timeOfLastUploadOperation = Date.now()
 }
 
 Given('the following files have been deleted by user {string}', async function (user, table) {
@@ -290,6 +311,19 @@ Then('the deleted elements should not be listed on the webUI after a page reload
   client.refresh()
   return assertDeletedElementsAreNotListed()
 })
+
+Then('the versions list should contain {int} entries', function (expectedNumber) {
+  return client.page.filesPage().assertVersionsPresent(expectedNumber)
+})
+
+Then('the content of file {string} for user {string} should be {string}', function (file, user, content) {
+  return download(user, file).then(data => assert.strictEqual(content, data))
+})
+
+When('the user restores the file to last version using the webUI', function () {
+  return client.page.filesPage().restoreToPreviousVersion()
+}
+)
 
 When('the user reloads the current page of the webUI', function () {
   return client.refresh()
