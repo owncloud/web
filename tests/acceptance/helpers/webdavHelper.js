@@ -217,7 +217,7 @@ exports.getSkeletonFile = function (filename) {
     })
 }
 
-exports.uploadFileWithcontent = function (user, content, filename) {
+exports.uploadFileWithContent = function (user, content, filename) {
   const headers = httpHelper.createAuthHeader(user)
   return fetch(client.globals.backend_url +
     '/remote.php/webdav/' + filename, {

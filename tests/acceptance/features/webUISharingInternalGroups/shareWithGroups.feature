@@ -106,28 +106,27 @@ Feature: Sharing files and folders with internal groups
     And the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
     And file "data.zip" should not be listed on the webUI
 
-  @skip @yetToImplement
   @smokeTest
   Scenario: share a folder with an internal group and a member unshares the folder
     Given user "user3" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
-    And the user shares folder "new-simple-folder" with group "grp1" using the webUI
+    And the user shares folder "new-simple-folder" with group "grp1" as "Editor" using the webUI
     # unshare the received shared folder and check it is gone
     When the user re-logs in as "user1" using the webUI
-    And the user unshares folder "new-simple-folder" using the webUI
+    And the user deletes folder "new-simple-folder" using the webUI
     Then folder "new-simple-folder" should not be listed on the webUI
     # check that the folder is still visible to another group member
     When the user re-logs in as "user2" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI
     When the user opens folder "new-simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And the content of "lorem.txt" should be the same as the original "simple-folder/lorem.txt"
+    And as "user2" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
     # check that the folder is still visible for the share owner
     When the user re-logs in as "user3" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI
     When the user opens folder "new-simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And the content of "lorem.txt" should be the same as the original "simple-folder/lorem.txt"
+    And as "user3" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
 
   @skip @yetToImplement
   Scenario: user tries to share a file in a group which is excluded from receiving share
