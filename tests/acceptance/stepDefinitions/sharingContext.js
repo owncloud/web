@@ -491,6 +491,7 @@ Then('the file {string} should be in {string} state on the webUI after a page re
   await client.refresh()
   return client.page.sharedWithMePage().assertDesiredStatusIsPresent(filename, status)
 })
+
 Then('the autocomplete list should not be displayed on the webUI', function () {
   return client.page.FilesPageElement.sharingDialog().assertAutocompleteListIsNotVisible()
 })

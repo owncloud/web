@@ -1,3 +1,4 @@
+const assert = require('assert')
 module.exports = {
   url: function () {
     return this.api.launchUrl + '/#/'
@@ -52,6 +53,32 @@ module.exports = {
       return this.waitForElementPresent('@messageCloseIcon')
         .click('@messageCloseIcon')
         .waitForElementNotPresent('@messageCloseIcon')
+    },
+    getNotifications: async function () {
+      const notifications = []
+      await this
+        .click('@notificationBell')
+        .waitForElementVisible('@notificationElement')
+      await this.api.elements('@notificationElement', result => {
+        for (const element of result.value) {
+          this.api.elementIdText(element.ELEMENT, text => {
+            notifications.push(text.value)
+          })
+        }
+      })
+      return notifications
+    },
+    /**
+     * Checks if the notifications consists of all the expected notifications
+     * @param {string} expectedNotifications
+     */
+    assertNotificationIsPresent: async function (numberOfNotifications, expectedNotifications) {
+      const notifications = await this.getNotifications()
+      assert.strictEqual(notifications.length, numberOfNotifications)
+      for (const element of expectedNotifications) {
+        const isPresent = notifications.includes(element.title)
+        this.assert.ok(isPresent)
+      }
     }
   },
   elements: {
@@ -98,6 +125,10 @@ module.exports = {
     },
     appContainer: {
       selector: '#oc-app-container'
+    },
+    notificationElement: {
+      selector: '//div[@id="oc-notification"]//h5',
+      locateStrategy: 'xpath'
     }
   }
 }

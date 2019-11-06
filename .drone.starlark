@@ -33,7 +33,8 @@ config = {
 				'webUITrashbin': 'Trashbin',
 				'webUIUpload': 'Upload',
 				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers'
+				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers',
+				'webUISharingNotifications': 'SharingNotifications'
 			},
 		},
 		'webUI-XGA': {

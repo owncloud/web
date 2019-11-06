@@ -18,12 +18,13 @@ Feature: Sharing files and folders with internal groups
     And user "user2" has been added to group "grp1"
     And user "user2" has logged in using the webUI
 
-  @skip @yetToImplement
   Scenario: notifications about new share is displayed
-    Given the setting "Automatically accept new incoming local user shares" in the section "Sharing" has been disabled
-    When user "user3" has shared folder "/simple-folder" with group "grp1"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "user3" has shared folder "/simple-folder" with group "grp1"
     And user "user3" has shared folder "/data.zip" with group "grp1"
-    Then the user should see 2 notifications on the webUI with these details
+    When the user reloads the current page of the webUI
+    Then the user should see the notification bell on the webUI
+    And the user should see 2 notifications on the webUI with these details
       | title                                        |
       | "User Three" shared "simple-folder" with you |
       | "User Three" shared "data.zip" with you      |
