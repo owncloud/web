@@ -56,7 +56,7 @@
               {{ $_ocAppBar_clearTrashbinButtonText }}
             </oc-button>
           </template>
-          <template v-if="$route.name === 'files-list' && selectedFiles.length > 0">
+          <template v-if="$route.meta.hasBulkActions && selectedFiles.length > 0">
             <oc-button id="delete-selected-btn" icon="delete" @click="$_ocFiles_deleteSelected()">
               <translate>Delete selected</translate>
             </oc-button>

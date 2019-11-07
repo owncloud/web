@@ -114,7 +114,10 @@ const routes = [
     components: {
       app: FilesApp
     },
-    name: 'files-list'
+    name: 'files-list',
+    meta: {
+      hasBulkActions: true
+    }
   },
   {
     path: '/favorites',
@@ -123,7 +126,8 @@ const routes = [
     },
     name: 'files-favorites',
     meta: {
-      hideFilelistActions: true
+      hideFilelistActions: true,
+      hasBulkActions: true
     }
   },
   {
@@ -133,7 +137,8 @@ const routes = [
     },
     name: 'files-shared-with-me',
     meta: {
-      hideFilelistActions: true
+      hideFilelistActions: true,
+      hasBulkActions: true
     }
   },
   {
@@ -143,7 +148,8 @@ const routes = [
     },
     name: 'files-shared-with-others',
     meta: {
-      hideFilelistActions: true
+      hideFilelistActions: true,
+      hasBulkActions: true
     }
   },
   {
@@ -153,7 +159,9 @@ const routes = [
     },
     name: 'files-trashbin',
     meta: {
-      hideFilelistActions: true
+      hideFilelistActions: true,
+      // FIXME: should have a generic bulk actions way as it currently handles this separately
+      hasBulkActions: false
     }
   },
   {

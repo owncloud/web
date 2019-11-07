@@ -111,7 +111,7 @@ export default {
   data () {
     return {
       labelSelectAllItems: this.$gettext('Select all items'),
-      labelSelectSingleItemText: this.$gettext('Select %{type} %{name}'),
+      labelSelectSingleItemText: this.$gettext('Select %{type} %{name}')
     }
   },
   methods: {

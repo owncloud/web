@@ -328,3 +328,14 @@ Feature: Sharing files and folders with internal users
     And the user browses to the files page
     Then folder "simple-folder (2)" should not be listed on the webUI
 
+  Scenario: deleting multiple entries on the shared-with-me page
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user2" has logged in using the webUI
+    And the user browses to the shared-with-me page using the webUI
+    When the user batch deletes these files using the webUI
+      | name              |
+      | simple-folder (2) |
+      | lorem (2).txt     |
+    Then the deleted elements should not be listed on the webUI
+
