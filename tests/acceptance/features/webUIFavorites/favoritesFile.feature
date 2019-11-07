@@ -68,8 +68,8 @@ Feature: Mark file as favorite
     And the user opens folder "strängé नेपाली folder" using the webUI
     And the user marks file "lorem.txt" as favorite using the webUI
     When the user browses to the favorites page
-    Then file "lorem.txt" should be listed on the webUI
-    And file "simple-folder/lorem.txt" should be listed on the webUI
-    And folder "simple-empty-folder" should be listed on the webUI
-    And folder "simple-folder/simple-empty-folder" should be listed on the webUI
-    And file "strängé नेपाली folder/lorem.txt" should be listed on the webUI
+    Then file with path "lorem.txt" should be listed in the favorites page on the webUI
+    And file with path "simple-folder/lorem.txt" should be listed in the favorites page on the webUI
+    And folder with path "simple-empty-folder" should be listed in the favorites page on the webUI
+    And folder with path "simple-folder/simple-empty-folder" should be listed in the favorites page on the webUI
+    And file with path "strängé नेपाली folder/lorem.txt" should be listed in the favorites page on the webUI
