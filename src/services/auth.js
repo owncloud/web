@@ -3,7 +3,8 @@ import { Log, User, UserManager, WebStorageStateStore } from 'oidc-client'
 export function initVueAuthenticate (config) {
   if (config) {
     const store = new WebStorageStateStore({
-      prefix: 'oc_oAuth'
+      prefix: 'oc_oAuth',
+      store: sessionStorage
     })
     let baseUrl = window.location.href.split('#')[0]
     if (baseUrl.endsWith('/index.html')) {
@@ -67,7 +68,7 @@ export function initVueAuthenticate (config) {
         return mgr.signinRedirect()
       },
       getToken () {
-        const storageString = localStorage.getItem('oc_oAuth' + mgr._userStoreKey)
+        const storageString = sessionStorage.getItem('oc_oAuth' + mgr._userStoreKey)
         if (storageString) {
           const user = User.fromStorageString(storageString)
           if (user) {
