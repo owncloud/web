@@ -24,3 +24,16 @@ Feature: login users
     When the user logs out of the webUI
     Then the authentication page should be visible
 
+  Scenario Outline: try to login with invalid credentials
+    Given these users have been created with default attributes:
+      | username |
+      | user1    |
+    And the user has browsed to the login page
+    And the user has clicked the authenticate button
+    When the user tries to log in with username "<username>" and password "<password>" using the webUI
+    Then the warning 'Wrong password. Reset it?' should be displayed on the login page
+    Examples:
+      | username | password |
+      | user1    | invalid  |
+      | invalid  | 1234     |
+

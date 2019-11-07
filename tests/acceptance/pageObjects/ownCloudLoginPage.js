@@ -1,3 +1,5 @@
+const assert = require('assert')
+
 module.exports = {
   url: function () {
     return this.api.launchUrl
@@ -12,6 +14,9 @@ module.exports = {
     },
     loginSubmitButton: {
       selector: '#submit'
+    },
+    invalidCredentialsMessage: {
+      selector: '#lost-password'
     }
   },
   commands: [
@@ -24,9 +29,21 @@ module.exports = {
       login: function (username, password) {
         return this
           .waitForElementVisible('@usernameInput')
+          .clearValue('@usernameInput')
           .setValue('@usernameInput', username)
+          .clearValue('@passwordInput')
           .setValue('@passwordInput', password)
           .click('@loginSubmitButton')
+          .waitForAjaxCallsToStartAndFinish()
+      },
+      assertLoginErrorMessage: async function (message) {
+        await this.api.assert.visible(this.elements.usernameInput.selector)
+        await this.api.assert.visible(this.elements.passwordInput.selector)
+        await this.api.assert.visible(this.elements.loginSubmitButton.selector)
+        return this.waitForElementVisible('@invalidCredentialsMessage')
+          .getText('@invalidCredentialsMessage', actualMessage => {
+            assert.strictEqual(message, actualMessage.value)
+          })
       }
     }
   ]
