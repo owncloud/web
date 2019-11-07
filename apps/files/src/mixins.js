@@ -226,7 +226,7 @@ export default {
           let p
 
           if (this.publicPage()) {
-            p = this.queue.add(() => this.$client.publicFiles.createFolder(this.rootPath + directory))
+            p = this.queue.add(() => this.$client.publicFiles.createFolder(this.rootPath, directory, this.publicLinkPassword))
           } else {
             p = this.queue.add(() => this.$client.files.createFolder(this.rootPath + directory))
           }
