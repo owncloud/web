@@ -173,7 +173,7 @@ const routes = [
     meta: { auth: false, hideHeadbar: true }
   },
   {
-    path: '/public-files/:item',
+    path: '/public-files/:token/:item?',
     name: 'public-files',
     components: {
       app: FilesApp

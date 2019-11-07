@@ -126,6 +126,7 @@ import OcDialogPrompt from './ocDialogPrompt.vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 import Mixins from '../mixins'
+import join from 'join-path'
 
 export default {
   components: {
@@ -157,7 +158,11 @@ export default {
       if (this.configuration.rootFolder) {
         absolutePath = !this.item ? this.configuration.rootFolder : this.item
       } else {
-        absolutePath = !this.item ? this.configuration.rootFolder : this.item
+        absolutePath = this.item
+      }
+
+      if (this.$route.name === 'public-files') {
+        absolutePath = join(this.$route.params.token + '/' + absolutePath)
       }
 
       this.loadFolder({

@@ -74,7 +74,7 @@ export default {
           this.$router.push({
             name: 'public-files-drop',
             params: {
-              item: this.$route.params.token
+              token: this.$route.params.token
             }
           })
           return
@@ -82,7 +82,7 @@ export default {
         this.$router.push({
           name: 'public-files',
           params: {
-            item: this.$route.params.token
+            token: this.$route.params.token
           }
         })
       }).catch(error => {
