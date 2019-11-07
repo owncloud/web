@@ -193,7 +193,15 @@ Given('the following files have been deleted by user {string}', async function (
 })
 
 When('the user uploads file {string} using the webUI', function (element) {
-  return client.page.filesPage().uploadFile(element)
+  const uploadPath = path.join(client.globals.mountedUploadDir, element)
+  return client.page.filesPage().uploadFile(uploadPath)
+})
+
+When('the user uploads a created file {string} using the webUI', function (element) {
+  const filePath = path.join(client.globals.filesForUpload, element)
+  return client.uploadRemote(filePath, function (uploadPath) {
+    client.page.filesPage().uploadFile(uploadPath)
+  })
 })
 
 When('the user uploads folder {string} using the webUI', function (element) {
@@ -558,7 +566,7 @@ Then('the following files/folders/resources should be listed on the webUI', func
   return assertElementsAreListed([].concat.apply([], table.rows()))
 })
 
-Then('file {string} should be listed in the folder {string} on the webUI', function (file, folder) {
+Then('file/folder {string} should be listed in the folder {string} on the webUI', function (file, folder) {
   return client
     .page
     .FilesPageElement
@@ -653,7 +661,8 @@ Then('it should not be possible to delete file/folder {string} using the webUI',
 })
 
 When('the user uploads overwriting file {string} using the webUI', function (file) {
-  return client.page.filesPage().selectFileForUpload(file)
+  const uploadPath = path.join(client.globals.mountedUploadDir, file)
+  return client.page.filesPage().selectFileForUpload(uploadPath)
     .then(() => client.page.filesPage().confirmFileOverwrite())
 })
 

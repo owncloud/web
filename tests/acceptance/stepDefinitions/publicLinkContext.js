@@ -34,7 +34,6 @@ When('the public uses the webUI to access the last public link created by user {
 
 When('the public uses the webUI to access the last public link created by user {string} with password {string}', async function (linkCreator, password) {
   const lastShareToken = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-
   await client.page.publicLinkFilesPage().navigateAndWaitForPasswordPage(lastShareToken)
 
   return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)

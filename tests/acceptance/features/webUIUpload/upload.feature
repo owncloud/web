@@ -60,7 +60,7 @@ Feature: File Upload
   @smokeTest
   Scenario: uploading a big file (when chunking is implemented this upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
-    When the user uploads file "big-video.mp4" using the webUI
+    When the user uploads a created file "big-video.mp4" using the webUI
     Then no message should be displayed on the webUI
     And file "big-video.mp4" should be listed on the webUI
     And as "user1" the content of "big-video.mp4" should be the same as the local "big-video.mp4"

@@ -28,7 +28,7 @@ Feature: File Upload
   Scenario Outline: upload a new file into a sub folder
     Given a file with the size of "3000" bytes and the name "0" has been created locally
     When the user opens folder "<folder-to-upload-to>" using the webUI
-    And the user uploads file "0" using the webUI
+    And the user uploads a created file "0" using the webUI
     Then file "0" should be listed on the webUI
     And as "user1" the content of "<folder-to-upload-to>/0" should be the same as the local "0"
 
@@ -85,7 +85,7 @@ Feature: File Upload
 
   Scenario Outline: upload a big file using difficult names (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name <file-name> has been created locally
-    When the user uploads file <file-name> using the webUI
+    When the user uploads a created file <file-name> using the webUI
     Then file <file-name> should be listed on the webUI
     And as "user1" the content of <file-name> should be the same as the local <file-name>
     Examples:
@@ -97,6 +97,6 @@ Feature: File Upload
   Scenario: Upload a big file called "0" (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "0" has been created locally
     When the user opens folder "simple-folder" using the webUI
-    And the user uploads file "0" using the webUI
+    And the user uploads a created file "0" using the webUI
     Then file "0" should be listed on the webUI
     And as "user1" the content of "simple-folder/0" should be the same as the local "0"

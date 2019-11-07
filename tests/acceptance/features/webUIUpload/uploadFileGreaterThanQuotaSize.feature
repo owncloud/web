@@ -15,7 +15,7 @@ Feature: Upload a file
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
     And a file with the size of "30000000" bytes and the name "big-video.mp4" has been created locally
-    When the user uploads file "big-video.mp4" using the webUI
+    When the user uploads a created file "big-video.mp4" using the webUI
     Then file "big-video.mp4" should not be listed on the webUI
     Then the error message 'File upload failed…' should be displayed on the webUI
     #And a error message should be displayed on the webUI with the text matching
