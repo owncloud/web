@@ -446,15 +446,17 @@ Then('as {string} these files/folders/resources should be listed in the folder {
 })
 
 Then('file/folder {string} should be marked as favorite on the webUI', function (path) {
-  return client.page.FilesPageElement.filesList().isMarkedFavorite(path, (value) => {
-    assert.strictEqual(value, true, `${path} expected to be favorite but was not`)
-  })
+  return client.page.FilesPageElement.filesList().isMarkedFavorite(path)
+    .then(result => {
+      assert.strictEqual(result, true, `${path} expected to be favorite but was not`)
+    })
 })
 
 Then('file/folder {string} should not be marked as favorite on the webUI', function (path) {
-  return client.page.FilesPageElement.filesList().isMarkedFavorite(path, (value) => {
-    assert.strictEqual(value, false, `not expected ${path} to be favorite but was`)
-  })
+  return client.page.FilesPageElement.filesList().isMarkedFavorite(path)
+    .then(result => {
+      assert.strictEqual(result, false, `not expected ${path} to be favorite but was`)
+    })
 })
 
 Then(/there should be (\d+) files\/folders listed on the webUI/, async function (noOfItems) {

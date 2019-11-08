@@ -295,19 +295,19 @@ module.exports = {
     /**
      *
      * @param {string} path
-     * @param {function(boolean)} callback - if the file is marked as favorite
+     *
+     * @return {Promise<boolean>}
      */
-    isMarkedFavorite: function (path, callback) {
+    isMarkedFavorite: async function (path) {
+      let visible = false
       const markedFavoriteIcon = this.getFileRowSelectorByFileName(path) +
         this.elements.markedFavoriteInFileRow.selector
-
-      return this
-        .waitForFileVisible(path)
-        .useXpath()
-        .isVisible(markedFavoriteIcon, (result) => {
-          callback(result.value)
+      await this.waitForFileVisible(path)
+      await this.api
+        .element('xpath', markedFavoriteIcon, (result) => {
+          visible = !!result.value.ELEMENT
         })
-        .useCss()
+      return visible
     },
     /**
      *
