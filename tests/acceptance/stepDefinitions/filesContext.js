@@ -157,9 +157,9 @@ When('the user deletes file/folder {string} using the webUI', function (element)
   return client.page.FilesPageElement.filesList().deleteFile(element)
 })
 
-When('the user deletes the following elements using the webUI', function (table) {
+When('the user deletes the following elements using the webUI', async function (table) {
   for (const line of table.rows()) {
-    client.page.FilesPageElement.filesList().deleteFile(line[0])
+    await client.page.FilesPageElement.filesList().deleteFile(line[0])
     deletedElements.push(line[0])
   }
   return client.page.filesPage()
