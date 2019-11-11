@@ -1,4 +1,6 @@
 const assert = require('assert')
+const util = require('util')
+
 module.exports = {
   url: function () {
     return this.api.launchUrl + '/#/'
@@ -30,7 +32,6 @@ module.exports = {
      * @param {string} page
      */
     navigateToUsingMenu: function (page) {
-      const util = require('util')
       const menuItemSelector = util.format(this.elements.menuItem.selector, page)
       return this
         .waitForElementVisible('@menuButton')
@@ -78,6 +79,42 @@ module.exports = {
       for (const element of expectedNotifications) {
         const isPresent = notifications.includes(element.title)
         this.assert.ok(isPresent)
+      }
+    },
+    /**
+     * Perform accept action on the offered shares in the notifications
+     */
+    acceptAllSharesInNotification: async function () {
+      const notifications = await this.getNotifications()
+      for (const element of notifications) {
+        const acceptShareButton = util.format(this.elements.acceptSharesInNotifications.selector, element)
+        await this
+          .useXpath()
+          .waitForElementVisible(acceptShareButton)
+          .click(acceptShareButton)
+          .waitForAjaxCallsToStartAndFinish()
+      }
+    },
+    /**
+     * Checks to assert the notification bell is not present as well as no notifications are present
+     */
+    assertNoNotifications: function () {
+      return this.waitForElementNotPresent('@notificationBell')
+        .assert.elementNotPresent(this.elements.notificationElement)
+    },
+    /**
+     * Perform decline action on the offered shares in the notifications
+     */
+    declineAllSharesInNotification: async function () {
+      const notifications = await this.getNotifications()
+      for (const element of notifications) {
+        console.log(element)
+        const declineShareButton = util.format(this.elements.declineSharesInNotifications.selector, element)
+        await this
+          .useXpath()
+          .waitForElementVisible(declineShareButton)
+          .click(declineShareButton)
+          .waitForAjaxCallsToStartAndFinish()
       }
     }
   },
@@ -128,6 +165,14 @@ module.exports = {
     },
     notificationElement: {
       selector: '//div[@id="oc-notification"]//h5',
+      locateStrategy: 'xpath'
+    },
+    declineSharesInNotifications: {
+      selector: '//div[@id="oc-notification"]//h5[contains(text(),\'%s\')]/../div/button/span[.="Decline"]',
+      locateStrategy: 'xpath'
+    },
+    acceptSharesInNotifications: {
+      selector: '//div[@id="oc-notification"]//h5[contains(text(),\'%s\')]/../div/button/span[.="Accept"]',
       locateStrategy: 'xpath'
     }
   }
