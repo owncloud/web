@@ -587,6 +587,7 @@ Given('user {string} has renamed file/folder {string} to {string}', webdav.move)
 Given('the user has created folder {string}', function (fileName) {
   return webdav.createFolder(client.globals.currentUser, fileName)
 })
+Given('user {string} has created folder {string}', webdav.createFolder)
 
 Then('file/folder {string} should not be listed in shared-with-others page on the webUI', function (filename) {
   client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
@@ -600,6 +601,9 @@ Then('file/folder {string} should be listed in shared-with-others page on the we
 
 Given('the user has created file {string}', function (fileName) {
   return webdav.createFile(client.globals.currentUser, fileName, '')
+})
+Given('user {string} has created file {string}', function (userId, fileName) {
+  return webdav.createFile(userId, fileName, '')
 })
 
 Given('the user has created the following folders', function (entryList) {

@@ -106,7 +106,7 @@ export default {
       this.resetFileSelection()
       this.addFileSelection(item)
 
-      this.setTrashbinDeleteMessage(this.$gettext('This item will be deleted immediately. You can’t undo this action.'))
+      this.setTrashbinDeleteMessage(this.$gettext('This item will be deleted permanently. You can’t undo this action.'))
     },
 
     $_ocTrashbin_toggleFileSelect (item) {

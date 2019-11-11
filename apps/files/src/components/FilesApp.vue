@@ -6,8 +6,8 @@
         <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <trash-bin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
-          <SharedFilesList v-else-if="sharedList" @toggle="toggleFileSelect" :fileData="activeFiles" />
-          <file-list v-else @toggle="toggleFileSelect" @FileAction="openFileActionBar" :fileData="activeFiles" :parentFolder="currentFolder" @sideBarOpen="openSideBar" />
+          <shared-files-list v-else-if="sharedList" :fileData="activeFiles" @sideBarOpen="openSideBar" />
+          <all-files-list v-else @FileAction="openFileActionBar" :fileData="activeFiles" :parentFolder="currentFolder" @sideBarOpen="openSideBar" />
         </div>
         <file-details
           v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
@@ -15,32 +15,46 @@
           @reset="setHighlightedFile(null)"
         />
     </oc-grid>
-    <file-actions/>
+    <file-open-actions/>
+    {{ /* FIXME: hack to prevent conflict of dialog id with the trashbin deletion dialog */ }}
+    <template v-if="$route.name !== 'files-trashbin'">
+      <oc-dialog-prompt name="change-file-dialog" :oc-active="renameDialogOpen" :value="renameDialogNewName" :ocError="renameDialogErrorMessage"
+                        :ocTitle="$_renameDialogTitle" ocConfirmId="oc-dialog-rename-confirm" @oc-confirm="doRenameFile"
+                        @oc-cancel="cancelRenameFile" @input="$_validateFileName" />
+      <oc-dialog-prompt name="delete-file-confirmation-dialog" class="deletionConfirmationDialog" :oc-active="deleteDialogOpen"
+                        :oc-content="deleteDialogMessage" :oc-has-input="false" :ocTitle="$_deleteDialogTitle"
+                        ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="reallyDeleteFiles"
+                        @oc-cancel="cancelDeleteFile"/>
+    </template>
   </div>
 </template>
 <script>
 import Mixins from '../mixins'
+import FileActions from '../fileactions'
 import FileDetails from './FileDetails.vue'
 import FilesAppBar from './FilesAppBar.vue'
-import FileList from './FileList.vue'
+import AllFilesList from './AllFilesList.vue'
 import TrashBin from './Trashbin.vue'
 import SharedFilesList from './Collaborators/SharedFilesList.vue'
 import { mapActions, mapGetters } from 'vuex'
-import FileActions from './FileActions.vue'
+import FileOpenActions from './FileOpenActions.vue'
+import OcDialogPrompt from './ocDialogPrompt.vue'
 const UploadProgress = () => import('./UploadProgress.vue')
 
 export default {
   mixins: [
-    Mixins
+    Mixins,
+    FileActions
   ],
   components: {
     FileDetails,
-    FileList,
+    AllFilesList,
     FilesAppBar,
-    FileActions,
+    FileOpenActions,
     TrashBin,
     SharedFilesList,
-    UploadProgress
+    UploadProgress,
+    OcDialogPrompt
   },
   data () {
     return {
@@ -51,23 +65,16 @@ export default {
       fileName: '',
       selected: [],
       breadcrumbs: [],
-      self: {}
+      self: {},
+      renameDialogErrorMessage: null
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'addFileSelection', 'removeFileSelection', 'dragOver', 'setHighlightedFile', 'toggleFileSelect']),
+    ...mapActions('Files', ['dragOver', 'setHighlightedFile']),
     ...mapActions(['openFile', 'showMessage']),
 
     trace () {
       console.info('trace', arguments)
-    },
-
-    toggleFileSelect (item) {
-      if (this.selectedFiles.includes(item)) {
-        this.removeFileSelection(item)
-      } else {
-        this.addFileSelection(item)
-      }
     },
 
     openFileActionBar (file) {
@@ -112,11 +119,19 @@ export default {
 
     $_ocAppSideBar_onReload () {
       this.$refs.filesList.$_ocFilesFolder_getFolder()
+    },
+
+    $_validateFileName (value) {
+      this.renameDialogErrorMessage = this.validateFileName(value)
     }
   },
 
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile', 'currentFolder', 'inProgress']),
+    ...mapGetters('Files', [
+      'selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile', 'currentFolder', 'inProgress',
+      'renameDialogSelectedFile',
+      'deleteDialogSelectedFiles', 'deleteDialogMessage'
+    ]),
     ...mapGetters(['extensions']),
 
     _sidebarOpen () {
@@ -125,6 +140,24 @@ export default {
 
     sharedList () {
       return this.$route.name === 'files-shared-with-me' || this.$route.name === 'files-shared-with-others'
+    },
+
+    $_renameDialogTitle () {
+      let translated
+
+      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
+
+      if (this.renameDialogSelectedFile.type === 'folder') {
+        translated = this.$gettext('Rename folder %{name}')
+      } else {
+        translated = this.$gettext('Rename file %{name}')
+      }
+      return this.$gettextInterpolate(translated, { name: this.renameDialogSelectedFile.name }, true)
+    },
+
+    $_deleteDialogTitle () {
+      // FIXME: differentiate between file, folder and multiple
+      return this.$gettext('Delete File/Folder')
     }
   },
   watch: {

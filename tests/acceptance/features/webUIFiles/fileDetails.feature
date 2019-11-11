@@ -66,7 +66,6 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "comments" tab in details panel using the webUI
     Then the "comments" details panel should be visible
 
-  @yetToImplement
   @comments-app-required
   Scenario: user shares a file and then the details dialog should work in a Shared with others page
     Given user "user1" has shared folder "simple-folder" with user "user2"
@@ -82,7 +81,6 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "links" tab in details panel using the webUI
     Then the "links" details panel should be visible
 
-  @yetToImplement
   @comments-app-required
   Scenario: user shares a folder via link and then the details dialog should work in a Shared with others page
     Given user "user1" has created a new public link for resource "simple-folder"
@@ -98,7 +96,6 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "links" tab in details panel using the webUI
     Then the "links" details panel should be visible
 
-  @yetToImplement
   @comments-app-required
   Scenario: the recipient user should be able to view different areas of details panel in Shared with me page
     Given user "user1" has shared folder "simple-folder" with user "user2"

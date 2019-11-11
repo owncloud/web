@@ -35,7 +35,6 @@ export default {
   loadingFolder: false,
   quota: {},
   trashbinDeleteMessage: '',
-  filesDeleteMessage: '',
   overwriteDialogTitle: null,
   overwriteDialogMessage: null,
   highlightedFile: null,
@@ -43,5 +42,16 @@ export default {
   publicLinkPassword: null,
   collaboratorsEditInProgress: false,
   uploaded: [],
-  actionsInProgress: []
+  actionsInProgress: [],
+
+  // rename dialog
+  renameDialogOpen: false,
+  renameDialogNewName: '',
+  renameDialogOriginalName: null,
+  renameDialogSelectedFile: null,
+
+  // delete dialog
+  deleteDialogOpen: false,
+  deleteDialogSelectedFiles: null,
+  deleteDialogMessage: ''
 }
