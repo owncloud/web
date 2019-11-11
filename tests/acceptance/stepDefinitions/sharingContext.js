@@ -333,6 +333,28 @@ Given('the administrator has set the minimum characters for sharing autocomplete
   )
 })
 
+Given('the administrator has excluded group {string} from receiving shares', async function (group) {
+  const configList = await runOcc([
+    'config:list'
+  ])
+  const config = _.get(configList, 'ocs.data.stdOut')
+  const configParsed = JSON.parse(config)
+  const initialExcludedGroup = JSON.parse(_.get(configParsed, 'apps.files_sharing.blacklisted_receiver_groups') || '[]')
+  if (!initialExcludedGroup.includes(group)) {
+    initialExcludedGroup.push(group)
+    let excludedGroups = initialExcludedGroup.map((res) => `"${res}"`)
+    excludedGroups = excludedGroups.join(',')
+    return runOcc(
+      [
+        'config:app:set',
+        'files_sharing',
+        'blacklisted_receiver_groups',
+        '--value=[' + excludedGroups + ']'
+      ]
+    )
+  }
+})
+
 When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
@@ -628,4 +650,8 @@ Given('user {string} has declined the share {string} offered by user {string}', 
 
 Then('the file {string} shared by {string} should not be in {string} state', function (filename, sharer, status) {
   return client.page.sharedWithMePage().assertDesiredStatusIsAbsent(filename, sharer, status)
+})
+
+Then('file/folder {string} should be marked as shared by {string} on the webUI', function (element, sharer) {
+  return client.page.sharedWithMePage().assertSharedByUser(element, sharer)
 })
