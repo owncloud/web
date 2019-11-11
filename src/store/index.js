@@ -31,7 +31,7 @@ export const Store = new Vuex.Store({
   // state: {
   //   someModulelessState: 0
   // },
-  plugins: [vuexPersist.plugin, vuexPersistInSession.plugin],
+  plugins: [vuexPersistInSession.plugin],
   modules: {
     app,
     apps,
