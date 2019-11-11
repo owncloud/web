@@ -1,6 +1,9 @@
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path')
 
+// Polyfill for virtual scroller
+require('intersection-observer')
+
 module.exports = {
   plugins: [
     new VueLoaderPlugin()

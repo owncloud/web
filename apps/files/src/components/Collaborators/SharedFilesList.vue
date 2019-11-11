@@ -2,21 +2,21 @@
   <file-list :fileData="fileData" id="files-list" :loading="loadingFolder" :actions="actions" :compactMode="_sidebarOpen"
     :isActionEnabled="isActionEnabled">
     <template #headerColumns>
-      <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
-      <oc-table-cell shrink type="head" class="uk-text-nowrap" v-text="sharedCellTitle" />
-      <oc-table-cell
+      <div class="uk-text-truncate uk-text-meta uk-width-expand" v-translate>Name</div>
+      <div class="uk-text-nowrap uk-text-meta uk-width-small" v-text="sharedCellTitle" />
+      <div
         v-if="$route.name === 'files-shared-with-me'"
         shrink
         type="head"
-        class="uk-text-nowrap"
+        class="uk-text-nowrap uk-text-meta uk-width-small"
         v-translate
       >
         Status
-      </oc-table-cell>
-      <oc-table-cell shrink type="head" class="uk-text-nowrap" v-translate>Share time</oc-table-cell>
+      </div>
+      <div class="uk-text-nowrap uk-text-meta uk-width-small" v-translate>Share time</div>
     </template>
     <template #rowColumns="{ item }">
-      <oc-table-cell class="uk-text-truncate">
+      <div class="uk-text-truncate uk-width-expand">
         <oc-file @click.native.stop="item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)"
           :name="item.basename" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
           :filename="item.name" :key="item.path" />
@@ -26,21 +26,21 @@
           :uk-tooltip="disabledActionTooltip(item)"
           class="uk-margin-small-left"
         />
-      </oc-table-cell>
-      <oc-table-cell class="uk-text-meta uk-text-nowrap">
+      </div>
+      <div class="uk-text-meta uk-text-nowrap uk-width-small">
         <div v-if="$route.name === 'files-shared-with-others'" key="shared-with-cell">
           {{ item.sharedWith }} (<translate v-if="item.shareType === 1">group</translate>)
         </div>
         <div v-else key="shared-from-cell">
           {{ item.shareOwnerDisplayname }}
         </div>
-      </oc-table-cell>
-      <oc-table-cell v-if="$route.name === 'files-shared-with-me'" class="uk-text-nowrap uk-text-right" :key="item.id + item.status">
+      </div>
+      <div v-if="$route.name === 'files-shared-with-me'" class="uk-text-nowrap uk-width-small" :key="item.id + item.status">
         <a v-if="item.status === 1 || item.status === 2" class="uk-text-meta" @click="pendingShareAction(item, 'POST')" v-translate>Accept</a>
         <a v-if="item.status === 1" class="uk-text-meta uk-margin-left" @click="pendingShareAction(item, 'DELETE')" v-translate>Decline</a>
         <span class="uk-text-small uk-margin-left" v-text="shareStatus(item.status)" />
-      </oc-table-cell>
-      <oc-table-cell class="uk-text-meta uk-text-nowrap" v-text="formDateFromNow(item.shareTime)" />
+      </div>
+      <div class="uk-text-meta uk-text-nowrap uk-width-small" v-text="formDateFromNow(item.shareTime)" />
     </template>
   </file-list>
 </template>

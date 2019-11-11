@@ -231,5 +231,10 @@ export default {
     })
 
     state.actionsInProgress.splice(itemIndex, 1)
+  },
+
+  CLEAR_CURRENT_FILES_LIST (state) {
+    state.currentFolder = null
+    state.files = []
   }
 }

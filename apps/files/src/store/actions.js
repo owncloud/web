@@ -111,8 +111,8 @@ function _buildSharedFile (file) {
     }
   }
   return {
-    id: file.item_source,
-    shareId: file.id,
+    sourceId: file.item_source,
+    id: file.id,
     type: file.item_type,
     extension: (function () {
       return ext
@@ -243,6 +243,7 @@ function _buildShare (s, file) {
 export default {
   loadFolder (context, { client, absolutePath, $gettext, routeName }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
+    context.commit('CLEAR_CURRENT_FILES_LIST')
 
     return new Promise((resolve, reject) => {
       let promise
@@ -297,6 +298,7 @@ export default {
   },
   loadTrashbin (context, { client, $gettext }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
+    context.commit('CLEAR_CURRENT_FILES_LIST')
 
     client.fileTrash.list('', '1', [
       '{http://owncloud.org/ns}trashbin-original-filename',
@@ -330,6 +332,7 @@ export default {
   },
   loadFolderSharedFromMe (context, { client, $gettext }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
+    context.commit('CLEAR_CURRENT_FILES_LIST')
 
     // TODO: Move request to owncloud-sdk
     client.requests.ocs({
@@ -361,6 +364,7 @@ export default {
   },
   loadFolderSharedWithMe (context, { client, $gettext }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
+    context.commit('CLEAR_CURRENT_FILES_LIST')
 
     // TODO: Move request to owncloud-sdk
     // TODO: Load remote shares as well
@@ -732,7 +736,7 @@ export default {
     // TODO: Move request to owncloud-sdk
     client.requests.ocs({
       service: 'apps/files_sharing',
-      action: `/api/v1/shares/pending/${item.shareId}`,
+      action: `/api/v1/shares/pending/${item.id}`,
       method: type
     })
       .then(_ => {

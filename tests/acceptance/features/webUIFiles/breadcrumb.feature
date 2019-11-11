@@ -6,7 +6,7 @@ Feature: access breadcrumb
   Background:
     Given user "user1" has been created with default attributes
 
-  @issue-2538
+ @issue-2538
   Scenario: Check breadCrumb for folder one level below the root folder when rootFolder is set
     Given the property "rootFolder" has been set to "" in phoenix config file
     And user "user1" has logged in using the webUI
