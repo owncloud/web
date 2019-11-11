@@ -495,3 +495,7 @@ Then('the file {string} should be in {string} state on the webUI after a page re
 Then('the autocomplete list should not be displayed on the webUI', function () {
   return client.page.FilesPageElement.sharingDialog().assertAutocompleteListIsNotVisible()
 })
+
+Given('user {string} has declined the share {string} offered by user {string}', async function (user, filename, sharer) {
+  return sharingHelper.declineShare(filename, user, sharer)
+})

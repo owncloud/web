@@ -349,3 +349,30 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the files page
     Then file "lorem (2).txt" should be listed on the webUI
     And file "testimage (2).jpg" should not be listed on the webUI
+
+  Scenario: accept a previously declined share
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared file "testimage.jpg" with user "user2"
+    And user "user2" has declined the share "lorem.txt" offered by user "user1"
+    And the user has browsed to the shared-with-me page
+    When the user accepts share "lorem.txt" offered by user "User One" using the webUI
+    Then the file "lorem (2).txt" should be in "Accepted" state on the webUI
+    And the file "testimage.jpg" should be in "Pending" state on the webUI
+    When the user browses to the files page
+    Then file "lorem (2).txt" should be listed on the webUI
+    And file "testimage (2).jpg" should not be listed on the webUI
+
+  Scenario: delete an accepted share
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared file "testimage.jpg" with user "user2"
+    And the user has browsed to the shared-with-me page
+    When the user accepts share "lorem.txt" offered by user "User One" using the webUI
+    And the user browses to the files page
+    And the user deletes file "lorem (2).txt" using the webUI
+    Then file "lorem (2).txt" should not be listed on the webUI
+    And file "testimage (2).jpg" should not be listed on the webUI
+    When the user browses to the shared-with-me page using the webUI
+    Then the file "lorem.txt" should be in "Declined" state on the webUI
+    And the file "testimage.jpg" should be in "Pending" state on the webUI
