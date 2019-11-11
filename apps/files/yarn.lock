@@ -3916,10 +3916,10 @@ p-locate@^3.0.0:
   dependencies:
     p-limit "^2.0.0"
 
-p-queue@^6.1.1:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/p-queue/-/p-queue-6.2.0.tgz#c8122b9514d2bbe5f16d8a47f17dc2f9a8ac7235"
-  integrity sha512-B2LXNONcyn/G6uz2UBFsGjmSa0e/br3jznlzhEyCXg56c7VhEpiT2pZxGOfv32Q3FSyugAdys9KGpsv3kV+Sbg==
+p-queue@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/p-queue/-/p-queue-6.2.1.tgz#809a832046451b2240a0a8e48b4fa18192b22b64"
+  integrity sha512-wV8yC/rkuWpgu9LGKJIb48OynYSrE6lVl2Bx6r8WjbyVKrFAzzQ/QevAvwnDjlD+mLt8xy0LTDOU1freOvMTCg==
   dependencies:
     eventemitter3 "^4.0.0"
     p-timeout "^3.1.0"
