@@ -1,6 +1,7 @@
 const util = require('util')
 const _ = require('lodash')
 const navigationHelper = require('../helpers/navigationHelper')
+const assert = require('assert')
 
 module.exports = {
   url: function () {
@@ -294,6 +295,22 @@ module.exports = {
     },
     checkForButtonDisabled: function () {
       return this.waitForElementVisible('@createFileOkButtonDisabled')
+    },
+    assertVersionsPresent: function (expectedNumber) {
+      if (expectedNumber !== 0) {
+        return this
+          .waitForElementVisible('@versionsList')
+          .api.elements('xpath', this.elements.versionsList.selector, function (result) {
+            assert.strictEqual(expectedNumber, result.value.length)
+          })
+      } else {
+        return this.waitForElementNotPresent('@versionsList')
+      }
+    },
+    restoreToPreviousVersion: function () {
+      return this
+        .waitForElementVisible('@restorePreviousVersion')
+        .click('@restorePreviousVersion')
     }
   },
   elements: {
@@ -420,6 +437,14 @@ module.exports = {
     },
     createFileOkButtonDisabled: {
       selector: "//div[@id='new-file-dialog']//button[@disabled='disabled']/span[contains(text(), 'Ok')]",
+      locateStrategy: 'xpath'
+    },
+    versionsList: {
+      selector: '//div[@id="oc-file-versions-sidebar"]//tr[@class="file-row"]',
+      locateStrategy: 'xpath'
+    },
+    restorePreviousVersion: {
+      selector: '(//div[contains(@id,"oc-file-versions")]//tbody/tr[@class="file-row"])[1]//button[1]',
       locateStrategy: 'xpath'
     }
   }

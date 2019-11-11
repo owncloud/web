@@ -216,3 +216,17 @@ exports.getSkeletonFile = function (filename) {
       return decodeURIComponent(body.ocs.data[0].contentUrlEncoded)
     })
 }
+
+exports.uploadFileWithcontent = function (user, content, filename) {
+  const headers = httpHelper.createAuthHeader(user)
+  return fetch(client.globals.backend_url +
+    '/remote.php/webdav/' + filename, {
+    headers: {
+      'Content-Type': 'text/plain',
+      ...headers
+    },
+    method: 'PUT',
+    body: content
+  })
+    .then(res => httpHelper.checkStatus(res, 'Could not upload file' + filename + 'with content' + content))
+}

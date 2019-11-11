@@ -85,6 +85,20 @@ Given('the setting {string} of app {string} has been set to {string}', function 
     ])
 })
 
+Given('the administrator has cleared the versions for user {string}', function (userId) {
+  return occHelper.runOcc(
+    [
+      'versions:cleanup', userId
+    ])
+})
+
+Given('the administrator has cleared the versions for all users', function () {
+  return occHelper.runOcc(
+    [
+      'versions:cleanup'
+    ])
+})
+
 Before(function (testCase) {
   createdFiles = []
   if (typeof process.env.SCREEN_RESOLUTION !== 'undefined' && process.env.SCREEN_RESOLUTION.trim() !== '') {

@@ -462,6 +462,15 @@ module.exports = {
         .performFileAction(fileName, 'deleteImmediately')
         .waitForElementVisible('@deleteFileConfirmationBtn')
         .click('@deleteFileConfirmationBtn')
+    },
+    getVersions: function (filename) {
+      const formattedFileRow = this.getFileRowSelectorByFileName(filename)
+      return this
+        .useXpath()
+        .waitForElementVisible(formattedFileRow)
+        .click(formattedFileRow)
+        .waitForElementVisible('@versionsElement')
+        .click('@versionsElement')
     }
   },
   elements: {
@@ -576,6 +585,10 @@ module.exports = {
     },
     sidebarCollaboratorsTab: {
       selector: '//div[@class="sidebar-container"]//a[contains(text(),"Collaborators")]',
+      locateStrategy: 'xpath'
+    },
+    versionsElement: {
+      selector: '//div//a[normalize-space(.)="Versions"]',
       locateStrategy: 'xpath'
     }
   }
