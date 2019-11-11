@@ -48,7 +48,7 @@
     "copy-webpack-plugin": "^5.0.3",
     "core-js": "3.3.2",
     "css-loader": "^3.1.0",
-    "cucumber": "6.0.2",
+    "cucumber": "6.0.4",
     "cucumber-pretty": "^6.0.0",
     "deepmerge": "^4.2.1",
     "easygettext": "^2.7.0",
