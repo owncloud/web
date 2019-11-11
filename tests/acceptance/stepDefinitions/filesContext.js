@@ -3,7 +3,6 @@ const assert = require('assert')
 const { Given, When, Then, Before } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
 const loginHelper = require('../helpers/loginHelper')
-const { createFolder } = require('../helpers/webdavHelper')
 const { move } = require('../helpers/webdavHelper')
 const path = require('path')
 let deletedElements
@@ -112,10 +111,6 @@ Given('user {string} has uploaded file with content {string} to {string}', async
 
 When('the user browses to display the {string} details of file {string}', function (versions, filename) {
   return client.page.FilesPageElement.filesList().getVersions(filename)
-})
-
-Given('user {string} has created folder {string}', function (user, folderName) {
-  return createFolder(user, folderName)
 })
 
 Given('user {string} has moved file {string} to {string}', function (user, fromName, toName) {
