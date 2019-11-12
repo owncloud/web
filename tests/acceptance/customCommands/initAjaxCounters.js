@@ -9,7 +9,7 @@ exports.command = function () {
 
     (function (open) {
       XMLHttpRequest.prototype.open = function () {
-        this.addEventListener('load', isAllXhrComplete)
+        this.addEventListener('loadend', isAllXhrComplete)
         return open.apply(this, arguments)
       }
     })(XMLHttpRequest.prototype.open)
