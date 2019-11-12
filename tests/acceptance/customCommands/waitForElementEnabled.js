@@ -17,13 +17,14 @@
 module.exports.command = function (
   selector, locateStrategy = 'css selector', timeout = this.globals.waitForConditionTimeout
 ) {
+  let self = this
   if (locateStrategy === 'xpath') {
-    this.useXpath()
+    self = this.useXpath()
   } else if (locateStrategy === 'css selector') {
-    this.useCss()
+    self = this.useCss()
   } else {
-    this.assert.fail('invalid locateStrategy')
+    return this.assert.fail('invalid locateStrategy')
   }
-  this.expect.element(selector).enabled.before(timeout)
-  return this
+  self.expect.element(selector).enabled.before(timeout)
+  return self
 }

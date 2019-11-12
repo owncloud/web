@@ -3,7 +3,6 @@ const assert = require('assert')
 const { Given, When, Then, Before } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
 const loginHelper = require('../helpers/loginHelper')
-const { createFolder } = require('../helpers/webdavHelper')
 const { move } = require('../helpers/webdavHelper')
 const path = require('path')
 let deletedElements
@@ -114,10 +113,6 @@ When('the user browses to display the {string} details of file {string}', functi
   return client.page.FilesPageElement.filesList().getVersions(filename)
 })
 
-Given('user {string} has created folder {string}', function (user, folderName) {
-  return createFolder(user, folderName)
-})
-
 Given('user {string} has moved file {string} to {string}', function (user, fromName, toName) {
   return move(user, fromName, toName)
 })
@@ -157,9 +152,9 @@ When('the user deletes file/folder {string} using the webUI', function (element)
   return client.page.FilesPageElement.filesList().deleteFile(element)
 })
 
-When('the user deletes the following elements using the webUI', function (table) {
+When('the user deletes the following elements using the webUI', async function (table) {
   for (const line of table.rows()) {
-    client.page.FilesPageElement.filesList().deleteFile(line[0])
+    await client.page.FilesPageElement.filesList().deleteFile(line[0])
     deletedElements.push(line[0])
   }
   return client.page.filesPage()

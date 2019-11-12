@@ -103,25 +103,69 @@ module.exports = {
      *
      * @param {string} fileName
      */
-    deleteFile: function (fileName) {
-      return this.initAjaxCounters()
+    deleteFile: async function (fileName) {
+      await this
         .waitForFileVisible(fileName)
         .useXpath()
         .performFileAction(fileName, 'delete')
         .waitForElementEnabled(
           this.elements.deleteFileConfirmationBtn.selector,
-          this.elements.deleteFileConfirmationBtn.locateStrategy
+          'css selector'
         )
-        .click('@deleteFileConfirmationBtn')
-        .waitForCSSPropertyEquals(
-          {
-            selector: this.elements.deleteFileConfirmationDialog.selector,
-            locateStrategy: this.elements.deleteFileConfirmationBtn.locateStrategy,
-            property: 'display',
-            value: 'none'
-          }
-        )
-        .waitForOutstandingAjaxCalls()
+
+      const clickAction = function () {
+        return this.initAjaxCounters().click('@deleteFileConfirmationBtn')
+          .waitForOutstandingAjaxCalls()
+          .waitForElementNotVisible(
+            this.elements.deleteFileConfirmationDialog.selector,
+            this.api.globals.waitForConditionTimeout,
+            this.api.globals.waitForConditionPollInterval,
+            false,
+            function () {
+              console.log('waited for popup to disappear.')
+            }
+          )
+      }.bind(this)
+      await clickAction()
+
+      let isPopupVisible = false
+
+      /* issue: https://github.com/owncloud/phoenix/issues/1728
+         Clicking "OK" button on deletion confirmation dialog does not
+         disappear some of the times.
+
+         Why not just wait and click again later?
+         Some of the times, the "click" works and the popup starts
+         disappearing, but hasn't yet. So, it requires us to wait for
+         popup to disappear for quite a while and then, again recheck
+         if it's visible again. And, if it is, then only re-click.
+
+         We have `waitForCSSPropertyEquals` below that should check if clicking
+         once or twice really worked.
+
+         TODO: Investigate further why the "click" is not working
+      */
+      await this.isVisible(
+        {
+          selector: this.elements.deleteFileConfirmationDialog.selector,
+          locateStrategy: this.elements.deleteFileConfirmationDialog.locateStrategy,
+          suppressNotFoundErrors: true
+        },
+        ({ value }) => { isPopupVisible = value }
+      )
+      if (isPopupVisible === true) {
+        console.log('Retrying again. Popup did not disappear.')
+        await clickAction()
+      }
+
+      return this.waitForCSSPropertyEquals(
+        {
+          selector: this.elements.deleteFileConfirmationDialog.selector,
+          locateStrategy: this.elements.deleteFileConfirmationBtn.locateStrategy,
+          property: 'display',
+          value: 'none'
+        }
+      )
         .useCss()
     },
     /**
