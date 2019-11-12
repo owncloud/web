@@ -1,64 +1,75 @@
 <template>
-  <div>
-    <oc-autocomplete
-      @input="$_ocCollaborators_selectAutocompleteResult"
-      :items="autocompleteResults"
-      :itemsLoading="autocompleteInProgress"
-      :placeholder="$_ocCollaborationStatus_autocompletePlacholder"
-      @update:input="onAutocompleteInput"
-      :filter="filterRecipients"
-      id="oc-sharing-autocomplete"
-      class="uk-margin-bottom"
-      :disabled="collaboratorsEditInProgress && selectedCollaborators.length < 1"
-      dropdownClass="uk-width-1-1"
-    >
-      <template v-slot:item="{ item }">
-        <autocomplete-item :item="item" />
-      </template>
-    </oc-autocomplete>
-    <div
-      v-if="selectedCollaborators.length > 0"
-      class="uk-margin-medium-bottom"
-    >
-      <div>
-        <div><translate>Selected collaborators</translate>:</div>
-        <div
-          v-for="(collaborator, index) in selectedCollaborators"
-          :key="collaborator.label"
-          class="uk-flex-inline uk-flex-row uk-flex-start uk-margin-small-bottom"
-          :class="{
-            'uk-margin-small-right': index + 1 !== selectedCollaborators.length
-          }"
-        >
-          <div class="uk-margin-small-top">
-            <span class="uk-text-bold" v-text="collaborator.label" />
-            <span v-if="collaborator.value.shareType === 1" class="uk-text-meta">
-              (<translate>group</translate>)
-            </span>
+  <div class="files-collaborators-collaborator-add-dialog">
+    <label for="oc-sharing-autocomplete"><translate>New Collaborators:</translate></label>
+    <oc-grid gutter="small">
+      <oc-autocomplete
+        @input="$_ocCollaborators_selectAutocompleteResult"
+        :items="autocompleteResults"
+        :itemsLoading="autocompleteInProgress"
+        :placeholder="$_ocCollaborationStatus_autocompletePlacholder"
+        @update:input="onAutocompleteInput"
+        :filter="filterRecipients"
+        id="oc-sharing-autocomplete"
+        ref="ocSharingAutocomplete"
+        class="uk-width-1-1"
+        dropdownClass="uk-width-1-1"
+      >
+        <template v-slot:item="{ item }">
+          <autocomplete-item :item="item" />
+        </template>
+      </oc-autocomplete>
+    </oc-grid>
+    <oc-grid gutter="small">
+      <div
+        v-if="selectedCollaborators.length > 0"
+      >
+        <div>
+          <div>
+            <translate>Selected collaborators</translate>:
           </div>
-          <oc-icon
-            name="close"
-            variation="danger"
-            class="oc-cursor-pointer"
-            role="button"
-            @click="$_ocCollaborators_removeFromSelection(collaborator)"
-          />
+          <div
+            v-for="(collaborator, index) in selectedCollaborators"
+            :key="collaborator.label"
+            class="uk-flex-inline uk-flex-row uk-flex-start uk-margin-small-bottom"
+            :class="{
+              'uk-margin-small-right': index + 1 !== selectedCollaborators.length
+            }"
+          >
+            <div class="uk-margin-small-top">
+              <span class="uk-text-bold" v-text="collaborator.label" />
+              <span v-if="collaborator.value.shareType === 1" class="uk-text-meta">
+                (<translate>group</translate>)
+              </span>
+            </div>
+            <oc-icon
+              name="close"
+              variation="danger"
+              class="oc-cursor-pointer"
+              role="button"
+              @click="$_ocCollaborators_removeFromSelection(collaborator)"
+            />
+          </div>
         </div>
       </div>
-      <collaborators-edit-options class="uk-margin-bottom" @optionChange="collaboratorOptionChanged" />
-      <div class="uk-flex uk-flex-between">
-        <oc-button @click="$_ocCollaborators_newCollaboratorsCancel">
+    </oc-grid>
+    <hr class="divider" />
+    <collaborators-edit-options class="uk-margin-bottom" @optionChange="collaboratorOptionChanged" />
+    <hr class="divider" />
+    <oc-grid gutter="small" class="uk-margin-bottom">
+      <div>
+        <oc-button class="files-collaborators-collaborator-cancel" @click="$_ocCollaborators_newCollaboratorsCancel">
           <translate>Cancel</translate>
         </oc-button>
         <oc-button
-          id="files-collaborators-add-new-button"
+          id="files-collaborators-collaborator-save-new-share-button"
           variation="primary"
-          @click="addCollaborators(selectedCollaborators)"
+          :disabled="!selectedCollaborators.length"
+          @click="$_ocCollaborators_newCollaboratorsAdd(selectedCollaborators)"
         >
           <translate>Add collaborators</translate>
         </oc-button>
       </div>
-    </div>
+    </oc-grid>
   </div>
 </template>
 
@@ -89,8 +100,7 @@ export default {
   computed: {
     ...mapGetters('Files', [
       'shares',
-      'highlightedFile',
-      'collaboratorsEditInProgress'
+      'highlightedFile'
     ]),
     ...mapGetters(['user']),
 
@@ -99,6 +109,12 @@ export default {
         "Add new collaborator by name, email or federation ID's"
       )
     }
+  },
+  mounted () {
+    // Ensure default role is not undefined
+    this.$nextTick(() => {
+      this.$refs.ocSharingAutocomplete.focus()
+    })
   },
 
   methods: {
@@ -111,6 +127,10 @@ export default {
       'changeShare',
       'toggleCollaboratorsEdit'
     ]),
+
+    close () {
+      this.$emit('close')
+    },
 
     onAutocompleteInput (value) {
       if (
@@ -185,9 +205,9 @@ export default {
     $_ocCollaborators_newCollaboratorsCancel () {
       this.selectedCollaborators = []
       this.toggleCollaboratorsEdit(false)
-      this.selectedNewRole = this.defaultRole
+      this.close()
     },
-    addCollaborators (collaborators) {
+    $_ocCollaborators_newCollaboratorsAdd (collaborators) {
       for (const collaborator of collaborators) {
         this.addShare({
           client: this.$client,
@@ -200,6 +220,7 @@ export default {
       }
       this.selectedCollaborators = []
       this.toggleCollaboratorsEdit(false)
+      this.close()
     },
     $_ocCollaborators_selectAutocompleteResult (collaborator) {
       this.selectedCollaborators.push(collaborator)
@@ -216,7 +237,6 @@ export default {
 
       if (this.selectedCollaborators.length < 1) {
         this.toggleCollaboratorsEdit(false)
-        this.selectedNewRole = this.defaultRole
       }
     }
   }

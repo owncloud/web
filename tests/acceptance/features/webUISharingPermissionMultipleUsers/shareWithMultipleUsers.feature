@@ -18,6 +18,7 @@ Feature: Sharing files and folders with multiple internal users with different p
       | user4    |
     And user "user1" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user opens the share creation dialog in the webUI
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
       | collaborator | type |
       | Regular User | user |
@@ -83,6 +84,7 @@ Feature: Sharing files and folders with multiple internal users with different p
       | user4    |
     And user "user1" has logged in using the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
+    And the user opens the share creation dialog in the webUI
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
       | collaborator | type |
       | Regular User | user |

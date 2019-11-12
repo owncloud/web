@@ -22,6 +22,7 @@ Feature: restrict Sharing
   Scenario: Restrict users to only share with users in their groups
     Given the setting "shareapi_only_share_with_group_members" of app "core" has been set to "yes"
     When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user opens the share creation dialog in the webUI
     And the user types "User" in the share-with-field
     Then "user" "User Three" should not be listed in the autocomplete list on the webUI
     But "user" "User One" should be listed in the autocomplete list on the webUI
@@ -30,6 +31,7 @@ Feature: restrict Sharing
   Scenario: Restrict users to only share with groups they are member of
     Given the setting "shareapi_only_share_with_membership_groups" of app "core" has been set to "yes"
     When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user opens the share creation dialog in the webUI
     And the user types "grp" in the share-with-field
     Then "group" "grp2" should not be listed in the autocomplete list on the webUI
     But "group" "grp1" should be listed in the autocomplete list on the webUI
@@ -43,6 +45,7 @@ Feature: restrict Sharing
   Scenario: Forbid sharing with groups
     Given the setting "shareapi_allow_group_sharing" of app "core" has been set to "no"
     When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user opens the share creation dialog in the webUI
     And the user types "grp" in the share-with-field
     Then "group" "grp1" should not be listed in the autocomplete list on the webUI
     And "group" "grp2" should not be listed in the autocomplete list on the webUI

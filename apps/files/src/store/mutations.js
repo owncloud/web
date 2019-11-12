@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default {
   UPDATE_FILE_PROGRESS (state, file) {
     const fileIndex = state.inProgress.findIndex((f) => {
@@ -118,11 +120,16 @@ export default {
   SHARES_REMOVE_SHARE (state, share) {
     state.shares = state.shares.filter(i => ![share].includes(i))
   },
-  SHARES_UPDATE_SHARE (state, { share, role }) {
+  SHARES_UPDATE_SHARE (state, share) {
     const fileIndex = state.shares.findIndex((s) => {
       return s.info.id === share.info.id
     })
-    state.shares[fileIndex].role = role
+    if (fileIndex >= 0) {
+      Vue.set(state.shares, fileIndex, share)
+    } else {
+      // share was not present in the list while updating, add it instead
+      state.shares.push(share)
+    }
   },
   SHARES_ERROR (state, error) {
     state.shares = []

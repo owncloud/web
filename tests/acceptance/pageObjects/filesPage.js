@@ -233,7 +233,7 @@ module.exports = {
     isPanelVisible: function (panelName, callback) {
       let selector = ''
       if (panelName === 'collaborators') {
-        selector = this.page.FilesPageElement.sharingDialog().elements.sharingAutoComplete
+        selector = this.elements.collaboratorsPanel
       } else if (panelName === 'versions') {
         selector = this.elements.versionsPanel
       } else if (panelName === 'links') {
@@ -407,6 +407,9 @@ module.exports = {
     },
     versionsPanel: {
       selector: '#oc-file-versions-sidebar'
+    },
+    collaboratorsPanel: {
+      selector: '#oc-files-sharing-sidebar'
     },
     linksPanel: {
       selector: '#oc-files-file-link'

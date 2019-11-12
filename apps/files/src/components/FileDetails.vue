@@ -28,12 +28,14 @@
       </div>
     </template>
     <template slot="content">
-      <oc-tabs>
-          <oc-tab-item :active="tab.app == activeTab" @click="activeTab = tab.app" v-for="tab of fileSideBarsEnabled" :key="tab.name">
-            {{ tab.component.title($gettext) }} {{ tab.name }}
-          </oc-tab-item>
-      </oc-tabs>
-      <component v-if="fileSideBars.length > 0 && activeTabComponent" v-bind:is="activeTabComponent.component" @reload="$emit('reload')"></component>
+      <div>
+        <oc-tabs>
+            <oc-tab-item :active="tab.app == activeTab" @click="activeTab = tab.app" v-for="tab of fileSideBarsEnabled" :key="tab.name">
+              {{ tab.component.title($gettext) }} {{ tab.name }}
+            </oc-tab-item>
+        </oc-tabs>
+        <component v-if="fileSideBars.length > 0 && activeTabComponent" v-bind:is="activeTabComponent.component" @reload="$emit('reload')"></component>
+      </div>
     </template>
   </oc-app-side-bar>
 </template>

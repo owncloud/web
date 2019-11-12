@@ -3,7 +3,7 @@ const userSharePostfix = '\nUser'
 const util = require('util')
 const _ = require('lodash')
 
-const collaboratorPermissionArray = ['share', 'update', 'create', 'delete']
+const COLLABORATOR_PERMISSION_ARRAY = ['share', 'update', 'create', 'delete']
 
 module.exports = {
   commands: {
@@ -25,8 +25,8 @@ module.exports = {
 
     assertSharingNotAllowed: function () {
       // eslint-disable-next-line no-unused-expressions
-      this.api.expect.element(this.elements.sharingAutoComplete.selector).not.to.be.present
-      return this.api.getText(this.elements.sharingSidebarRoot.selector,
+      this.api.expect.element(this.elements.addShareSaveButton.selector).not.to.be.present
+      return this.api.getText(this.elements.noResharePermissions.selector,
         function (result) {
           const noSharePermissionsMsgFormat = "You don't have permission to share this %s"
           const noSharePermissionsFileMsg = util.format(noSharePermissionsMsgFormat, 'file')
@@ -95,6 +95,7 @@ module.exports = {
               .waitForElementVisible('@sharingAutoCompleteDropDownElements')
           }
         })
+
       const webElementIdList = await this.getShareAutocompleteWebElementIdList()
 
       let index = 0
@@ -143,6 +144,7 @@ module.exports = {
      * @param {string} permissions
      */
     shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions) {
+      await this.clickCreateShare()
       await this.selectCollaboratorForShare(sharee, shareWithGroup)
       await this.selectRoleForNewCollaborator(role)
       if (permissions === undefined) {
@@ -166,9 +168,9 @@ module.exports = {
         .waitForElementNotVisible('@newCollaboratorRolesDropdown')
     },
     confirmShare: function () {
-      return this.waitForElementPresent('@addShareButton')
-        .click('@addShareButton')
-        .waitForElementNotPresent('@addShareButton')
+      return this.waitForElementPresent('@addShareSaveButton')
+        .click('@addShareSaveButton')
+        .waitForElementNotPresent('@addShareSaveButton')
         .waitForAjaxCallsToStartAndFinish()
     },
     saveCollaboratorPermission: function () {
@@ -178,17 +180,33 @@ module.exports = {
         .waitForElementNotPresent('@saveShareButton')
     },
     /**
+     * Clicks the button to add a new collaborator
+     */
+    clickCreateShare: function () {
+      return this
+        .useXpath()
+        .waitForElementVisible('@createShareButton')
+        .click('@createShareButton')
+        .waitForElementVisible('@createShareDialog')
+        .waitForAnimationToFinish()
+    },
+    /**
      *
      * @param {string} collaborator
      */
-    expandInformationSelector: function (collaborator) {
+    clickEditShare: function (collaborator) {
       const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
-      const selectRoleButton = informationSelector + this.elements.selectRoleButtonInCollaboratorInformation.selector
+      const editSelector = informationSelector + this.elements.editShareButton.selector
       return this
         .useXpath()
-        .waitForElementVisible(informationSelector)
-        .click(informationSelector)
-        .waitForElementVisible(selectRoleButton)
+        .waitForElementVisible(editSelector)
+        .click(editSelector)
+        .waitForElementVisible('@editShareDialog')
+    },
+    clickCancel: function () {
+      return this
+        .waitForElementVisible('@cancelButton')
+        .click('@cancelButton')
     },
     /**
      * Toggle the checkbox to set a certain permission for a share
@@ -211,29 +229,24 @@ module.exports = {
      * The keys gives the permissions that are currently visible in the screen
      * The values {bool} gives the state of the permissions
      *
-     * @param {string} collaborator
      * @return {Promise<Object.<string, boolean>>}  eg - {share: true, change: false}
      */
-    getSharePermissions: async function (collaborator) {
+    getSharePermissions: async function () {
       const permissions = {}
-      let collaboratorElementXpath
-      let permissionCheckbox
-      for (let i = 0; i < collaboratorPermissionArray.length; i++) {
-        collaboratorElementXpath = util.format(
-          this.elements.collaboratorInformationByCollaboratorName.selector,
-          collaborator
-        )
-        permissionCheckbox = collaboratorElementXpath + util.format(
+      const panelSelector = this.elements.sharingSidebarRoot.selector
+      let permissionToggle
+      for (let i = 0; i < COLLABORATOR_PERMISSION_ARRAY.length; i++) {
+        permissionToggle = panelSelector + util.format(
           this.elements.permissionCheckbox.selector,
-          collaboratorPermissionArray[i]
+          COLLABORATOR_PERMISSION_ARRAY[i]
         )
 
-        await this.api.element('xpath', permissionCheckbox, result => {
+        await this.api.element('xpath', permissionToggle, result => {
           if (!result.value.ELEMENT) {
             return
           }
           return this.api.elementIdSelected(result.value.ELEMENT, result => {
-            permissions[collaboratorPermissionArray[i]] = result.value
+            permissions[COLLABORATOR_PERMISSION_ARRAY[i]] = result.value
           })
         })
       }
@@ -245,10 +258,10 @@ module.exports = {
      * @param {string} requiredPermissions
      */
     changeCustomPermissionsTo: async function (collaborator, requiredPermissions) {
-      await this.expandInformationSelector(collaborator)
+      await this.clickEditShare(collaborator)
 
       const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
-      const sharePermissions = await this.getSharePermissions(collaborator)
+      const sharePermissions = await this.getSharePermissions()
 
       let changed = false
       for (const permission in sharePermissions) {
@@ -262,36 +275,9 @@ module.exports = {
       }
       if (changed) {
         await this.saveCollaboratorPermission()
+      } else {
+        await this.clickCancel()
       }
-    },
-    /**
-     * asserts that the permission is set to "off" or not displayed at all
-     *
-     * @param {string} permissionCheckbox
-     */
-    assertPermissionDataStateIsOff: async function (permissionCheckbox) {
-      // TODO: Improve performance. Permissions which are not displayed are slowing this function down
-      return this.isVisible(permissionCheckbox, result => {
-        if (result.value === true) {
-          // TODO: Find if this causes some side effects or if there's a better solution
-          // eslint-disable-next-line no-unused-expressions
-          this
-            .expect
-            .element(permissionCheckbox)
-            .to.not.be.selected
-        }
-      })
-    },
-    /**
-     * asserts that the permission is set to "on" or not displayed at all
-     *
-     * @param {string} permissionCheckbox
-     */
-    assertPermissionDataStateIsOn: function (permissionCheckbox) {
-      return this
-        .expect
-        .element(permissionCheckbox)
-        .to.be.selected
     },
     /**
      *
@@ -303,40 +289,36 @@ module.exports = {
       if (permissions !== undefined) {
         requiredPermissionArray = this.getArrayFromPermissionString(permissions)
       }
-      this.expandInformationSelector(collaborator)
 
-      for (let i = 0; i < collaboratorPermissionArray.length; i++) {
-        const collaboratorElement = util.format(
-          this.elements.collaboratorInformationByCollaboratorName.selector,
-          collaborator
-        )
-        const permissionCheckbox = collaboratorElement + util.format(
-          this.elements.permissionCheckbox.selector,
-          collaboratorPermissionArray[i]
-        )
+      await this.clickEditShare(collaborator)
 
+      // read the permissions from the checkboxes
+      const currentSharePermissions = await this.getSharePermissions()
+
+      for (let i = 0; i < COLLABORATOR_PERMISSION_ARRAY.length; i++) {
+        const permissionName = COLLABORATOR_PERMISSION_ARRAY[i]
         if (permissions !== undefined) {
           // check all the required permissions are set
-          if (requiredPermissionArray.includes(collaboratorPermissionArray[i])) {
-            await this.assertPermissionDataStateIsOn(permissionCheckbox)
+          if (requiredPermissionArray.includes(permissionName)) {
+            this.assert.strictEqual(currentSharePermissions[permissionName], true, `Permission ${permissionName} is not set`)
           } else {
-            // check unexpected permissions are not set
-            await this.assertPermissionDataStateIsOff(permissionCheckbox)
+            // check unexpected permissions are not set or absent from the array
+            this.assert.ok(!currentSharePermissions[permissionName], `Permission ${permissionName} is set`)
           }
         } else {
-          // check all the permissions are not set
-          await this.assertPermissionDataStateIsOff(permissionCheckbox)
+          // check all the permissions are not set or absent from the array
+          this.assert.ok(!currentSharePermissions[permissionName], `Permission ${permissionName} is set`)
         }
       }
 
-      return this
+      await this.clickCancel()
     },
     /**
      *
      * @param {string} collaborator
      */
     disableAllCustomPermissions: async function (collaborator) {
-      this.expandInformationSelector(collaborator)
+      await this.clickEditShare(collaborator)
       const sharePermissions = await this.getSharePermissions(collaborator)
       const enabledPermissions = Object.keys(sharePermissions)
         .filter(permission => sharePermissions[permission] === true)
@@ -372,17 +354,33 @@ module.exports = {
       return Promise.all(itemsListPromises)
     },
     /**
+     * Returns all autocomplete web element ids.
+     * If the button "show all" is present, this function will click it to make
+     * sure we get an exhaustive list of results.
      *
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
     getShareAutocompleteWebElementIdList: async function () {
       const webElementIdList = []
       const showAllResultsXpath = this.elements.sharingAutoCompleteShowAllResultsButton.selector
-      await this.api.waitForElementVisible(
-        { locateStrategy: 'css selector', timeout: 100, selector: showAllResultsXpath, abortOnFailure: false }
-      )
+      // wait for autocomplete to finish loading
+      try {
+        await this.waitForElementVisible('@sharingAutoCompleteDropDown')
+      } catch (e) {
+        // FIXME: the dropdown will not appear when there are zero results
+        // (https://github.com/owncloud/owncloud-design-system/issues/547)
+        // so need to catch the error here
+        return []
+      }
+      await this.waitForElementNotPresent('@sharingAutoCompleteSpinner')
+      // note: some result lists don't have the "show all" button depending on the number of entries,
+      // so we only click it if present
+      await this.api.element('css selector', showAllResultsXpath, (result) => {
+        if (result.status !== -1) {
+          return this.click('@sharingAutoCompleteShowAllResultsButton')
+        }
+      })
 
-        .click(showAllResultsXpath)
       await this
         .api.elements('css selector', this.elements.sharingAutoCompleteDropDownElements.selector, (result) => {
           result.value.forEach((value) => {
@@ -398,7 +396,6 @@ module.exports = {
     deleteShareWithUserGroup: async function (item) {
       const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, item)
       const deleteSelector = informationSelector + this.elements.deleteShareButton.selector
-      await this.expandInformationSelector(item)
       return this
         .useXpath()
         .waitForElementVisible(deleteSelector)
@@ -413,7 +410,7 @@ module.exports = {
      * @returns {Promise}
      */
     changeCollaboratorRole: async function (collaborator, newRole) {
-      await this.expandInformationSelector(collaborator)
+      await this.clickEditShare(collaborator)
       await this.changeCollaboratorRoleInDropdown(newRole)
       return this.saveCollaboratorPermission()
     },
@@ -455,7 +452,8 @@ module.exports = {
       return Promise.all(promiseList)
     },
     showAllAutoCompleteResults: function () {
-      return this.waitForElementVisible('@sharingAutoCompleteShowAllResultsButton')
+      return this.useCss()
+        .waitForElementVisible('@sharingAutoCompleteShowAllResultsButton')
         .click('@sharingAutoCompleteShowAllResultsButton')
         .waitForElementNotPresent('@sharingAutoCompleteShowAllResultsButton')
     },
@@ -479,10 +477,17 @@ module.exports = {
   },
   elements: {
     sharingSidebarRoot: {
-      selector: '#oc-files-sharing-sidebar'
+      selector: '//*[@id="oc-files-sharing-sidebar"]',
+      locateStrategy: 'xpath'
+    },
+    noResharePermissions: {
+      selector: '#oc-files-sharing-sidebar .files-collaborators-no-reshare-permissions-message'
     },
     sharingAutoComplete: {
       selector: '#oc-sharing-autocomplete .oc-autocomplete-input'
+    },
+    sharingAutoCompleteSpinner: {
+      selector: '#oc-sharing-autocomplete .oc-autocomplete-spinner'
     },
     sharingAutoCompleteDropDown: {
       selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion-list'
@@ -502,7 +507,7 @@ module.exports = {
       selector: '.files-collaborators-collaborator .files-collaborators-collaborator-information'
     },
     collaboratorInformationByCollaboratorName: {
-      selector: '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::li',
+      selector: '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::div[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
       locateStrategy: 'xpath'
     },
     collaboratorMoreInformation: {
@@ -510,13 +515,33 @@ module.exports = {
       selector: '/a',
       locateStrategy: 'xpath'
     },
-    deleteShareButton: {
-      // within collaboratorInformationByCollaboratorName
-      selector: '//*[@aria-label="Delete Share"]',
+    createShareButton: {
+      selector: '//*[contains(@class, "files-collaborators-open-add-share-dialog-button")]',
       locateStrategy: 'xpath'
     },
-    addShareButton: {
-      selector: '#files-collaborators-add-new-button'
+    editShareButton: {
+      // within collaboratorInformationByCollaboratorName
+      selector: '//*[contains(@class, "files-collaborators-collaborator-edit")]',
+      locateStrategy: 'xpath'
+    },
+    deleteShareButton: {
+      // within collaboratorInformationByCollaboratorName
+      selector: '//*[contains(@class, "files-collaborators-collaborator-delete")]',
+      locateStrategy: 'xpath'
+    },
+    cancelButton: {
+      selector: '.files-collaborators-collaborator-cancel'
+    },
+    createShareDialog: {
+      selector: '//*[contains(@class, "files-collaborators-collaborator-add-dialog")]',
+      locateStrategy: 'xpath'
+    },
+    editShareDialog: {
+      selector: '//*[contains(@class, "files-collaborators-collaborator-edit-dialog")]',
+      locateStrategy: 'xpath'
+    },
+    addShareSaveButton: {
+      selector: '#files-collaborators-collaborator-save-new-share-button'
     },
     saveShareButton: {
       selector: '//button[@aria-label="Save Share"]',
@@ -558,10 +583,6 @@ module.exports = {
     },
     permissionCheckbox: {
       selector: '//input[@id="files-collaborators-permission-%s"]',
-      locateStrategy: 'xpath'
-    },
-    permissionCheckboxes: {
-      selector: '//input[contains(@class, "files-collaborators-permission-checkbox")]',
       locateStrategy: 'xpath'
     }
   }

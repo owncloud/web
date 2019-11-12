@@ -23,6 +23,7 @@ Scenario Outline: autocompletion of user having special characters in their user
   And user "regularuser" has logged in using the webUI
   And the user has browsed to the files page
   And the user has opened the share dialog for file "data.zip"
+  And the user opens the share creation dialog in the webUI
   When the user types "<search>" in the share-with-field
   Then only users and groups that contain the string "<search>" in their name or displayname should be listed in the autocomplete list on the webUI
   Examples:
@@ -39,6 +40,7 @@ Scenario Outline: autocompletion of user having special characters in their disp
   And user "regularuser" has logged in using the webUI
   And the user has browsed to the files page
   And the user has opened the share dialog for file "data.zip"
+  And the user opens the share creation dialog in the webUI
   When the user types "<search>" in the share-with-field
   Then only users and groups that contain the string "<search>" in their name or displayname should be listed in the autocomplete list on the webUI
     Examples:
@@ -54,6 +56,7 @@ Scenario Outline: autocompletion of groups having special characters in their na
   And user "regularuser" has logged in using the webUI
   And the user has browsed to the files page
   And the user has opened the share dialog for file "data.zip"
+  And the user opens the share creation dialog in the webUI
   When the user types "<search>" in the share-with-field
   Then only users and groups that contain the string "<search>" in their name or displayname should be listed in the autocomplete list on the webUI
     Examples:

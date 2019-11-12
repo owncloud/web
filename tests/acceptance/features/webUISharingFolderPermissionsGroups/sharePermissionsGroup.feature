@@ -21,6 +21,7 @@ Feature: Sharing folders with internal groups with permissions
     And user "user2" has been added to group "grp2"
     And user "user1" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user opens the share creation dialog in the webUI
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
     | collaborator | type  |
     | grp1         | group |
