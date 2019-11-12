@@ -26,9 +26,8 @@ Feature: deleting files and folders
     And file "strängé नेपाली folder" should not be listed on the webUI
     But the deleted elements should not be listed on the webUI after a page reload
 
-  @skip
   Scenario: Delete a file with problematic characters
-    When the user renames the following file using the webUI
+    Given user "user1" has renamed the following file
       | from-name-parts | to-name-parts   |
       | lorem.txt       | 'single'        |
       |                 | "double" quotes |
@@ -155,12 +154,10 @@ Feature: deleting files and folders
     When the user browses to the files page
     Then file "lorem.txt" should not be listed on the webUI
 
-  @skip @yetToImplement
   Scenario: delete a file on a public share
-    Given the user has created a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    And the public accesses the last created public link using the webUI
-    When the user deletes the following elements using the webUI
+    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the user deletes the following elements using the webUI
       | name                                  |
       | simple-empty-folder                   |
       | lorem.txt                             |
@@ -171,18 +168,16 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
-
- @skip @yetToImplement
   Scenario: delete a file on a public share with problematic characters
-    Given the user has created a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    And the public accesses the last created public link using the webUI
-    When the user renames the following file using the webUI
-      | from-name-parts | to-name-parts   |
-      | lorem.txt       | 'single'        |
-      |                 | "double" quotes |
-      |                 | question?       |
-      |                 | &and#hash       |
+    Given user "user1" has renamed the following file
+      | from-name-parts          | to-name-parts   |
+      | lorem.txt                | simple-folder/  |
+      |                          | 'single'        |
+      |                          | "double" quotes |
+      |                          | question?       |
+      |                          | &and#hash       |
+    And user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
     And the user deletes the following file using the webUI
       | name-parts      |
       | 'single'        |
@@ -205,10 +200,9 @@ Feature: deleting files and folders
 
   @skip @yetToImplement
   Scenario: Delete multiple files at once on a public share
-    Given the user has created a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    And the public accesses the last created public link using the webUI
-    When the user batch deletes these files using the webUI
+    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the user batch deletes these files using the webUI
       | name                |
       | data.zip            |
       | lorem.txt           |

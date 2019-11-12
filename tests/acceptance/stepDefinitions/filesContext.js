@@ -679,3 +679,24 @@ Then('an error message {string} should be visible', function (errorMessage) {
 Then('the create file button should be disabled', function () {
   return client.page.filesPage().checkForButtonDisabled()
 })
+
+When('user {string} has renamed the following file', function (user, table) {
+  const fromName = table.hashes().map(data => data['from-name-parts']).join('')
+  const toName = table.hashes().map(data => data['to-name-parts']).join('')
+  return webdav.move(user, fromName, toName)
+})
+
+Then('the following file should be listed on the webUI', function (table) {
+  const name = table.hashes().map(data => data['name-parts']).join('')
+  return client.page.FilesPageElement.filesList().assertElementListed(name)
+})
+
+Then('the following file should not be listed on the webUI', function (table) {
+  const name = table.hashes().map(data => data['name-parts']).join('')
+  return client.page.FilesPageElement.filesList().assertElementNotListed(name)
+})
+
+Then('the user deletes the following file using the webUI', function (table) {
+  const name = table.hashes().map(data => data['name-parts']).join('')
+  return client.page.FilesPageElement.filesList().deleteFile(name)
+})
