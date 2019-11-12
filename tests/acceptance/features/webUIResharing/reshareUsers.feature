@@ -178,3 +178,35 @@ Feature: Resharing shared files with different permissions
     When the user shares folder "simple-folder (2)" with user "User Three" as "Custom role" with permissions "share, delete, change" using the webUI
     Then the error message "Error while sharing." should be displayed on the webUI
     And as "user3" folder "simple-folder (2)" should not exist
+
+  Scenario: Reshare a file and folder from shared with me page
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user2" has logged in using the webUI
+    And the user has browsed to the shared-with-me page
+    When the user shares folder "simple-folder (2)" with user "User Three" as "Editor" using the webUI
+    And the user shares file "lorem (2).txt" with user "User Three" as "Editor" using the webUI
+    Then as "user3" folder "simple-folder (2)" should exist
+    And as "user3" file "lorem (2).txt" should exist
+
+  Scenario: Reshare a file and folder from shared with others page
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has logged in using the webUI
+    And the user has browsed to the shared-with-others page
+    When the user shares folder "simple-folder" with user "User Three" as "Editor" using the webUI
+    And the user shares file "lorem.txt" with user "User Three" as "Editor" using the webUI
+    Then as "user3" folder "simple-folder (2)" should exist
+    And as "user3" file "lorem (2).txt" should exist
+
+  Scenario: Reshare a file and folder from favorites page
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user2" has favorited element "simple-folder (2)"
+    And user "user2" has favorited element "lorem (2).txt"
+    And user "user2" has logged in using the webUI
+    When the user browses to the favorites page using the webUI
+    And the user shares folder "simple-folder (2)" with user "User Three" as "Editor" using the webUI
+    And the user shares file "lorem (2).txt" with user "User Three" as "Editor" using the webUI
+    Then as "user3" folder "simple-folder (2)" should exist
+    And as "user3" file "lorem (2).txt" should exist
