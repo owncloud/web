@@ -80,25 +80,20 @@ module.exports = {
       }
       return this
     },
-    selectFileForUpload: function (localFileName) {
+    selectFileForUpload: function (filePath) {
       return this
         .waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@fileUploadButton')
-        .uploadRemote(
-          require('path').join(this.api.globals.filesForUpload, localFileName),
-          filePath => {
-            this.api.setValue(this.elements.fileUploadInput.selector, filePath)
-          }
-        )
+        .setValue('@fileUploadInput', filePath)
     },
     /**
      *
-     * @param {string} localFileName
+     * @param {string} filePath
      */
-    uploadFile: function (localFileName) {
+    uploadFile: function (filePath) {
       return this
-        .selectFileForUpload(localFileName)
+        .selectFileForUpload(filePath)
         .waitForElementVisible(
           '@fileUploadProgress',
           this.api.globals.waitForConditionTimeout,
