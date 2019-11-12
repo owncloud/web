@@ -103,14 +103,14 @@ module.exports = {
    * Asynchronously fetches the last public link created by the given link creator
    *
    * @async
-   * @param {string} linkCreator link creator
-   * @return {Promise<string>} last share token
+   * @param {string[]} linkCreator link creator
+   * @return {Promise<Object>} last share token
    */
   fetchLastPublicLinkShare: async function (linkCreator) {
     const self = this
     const headers = httpHelper.createAuthHeader(linkCreator)
     const apiURL = client.globals.backend_url + '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json'
-    let lastShareToken
+    let lastShare
     await fetch(apiURL, { method: 'GET', headers: headers })
       .then(res => res.json())
       .then(function (sharesResult) {
@@ -121,10 +121,10 @@ module.exports = {
             const share = shares[shareI]
             if (share.share_type === self.SHARE_TYPES.public_link && share.id >= lastFoundShareId) {
               lastFoundShareId = share.id
-              lastShareToken = share.token
+              lastShare = share
             }
           }
-          if (lastShareToken === null) {
+          if (lastShare === null) {
             throw Error('Could not find public shares. All shares: ' + JSON.stringify(shares, null, 2))
           }
         } else {
@@ -132,7 +132,7 @@ module.exports = {
         }
       })
 
-    return lastShareToken
+    return lastShare
   },
   getAllShares: function (user) {
     const headers = httpHelper.createAuthHeader(user)

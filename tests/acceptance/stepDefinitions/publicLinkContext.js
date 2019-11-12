@@ -28,14 +28,31 @@ When(
 )
 
 When('the public uses the webUI to access the last public link created by user {string}', async function (linkCreator) {
-  const lastShareToken = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-  return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastShareToken)
+  const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
+  if (lastShare.permissions === sharingHelper.PERMISSION_TYPES.create) {
+    return client.page.filesDropPage().navigateAndWaitTillLoaded(lastShare.token)
+  }
+  return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastShare.token)
+})
+
+When('the public (tries to )open/opens the public link page of the last public link created by user {string}', async function (linkCreator) {
+  const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
+  return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastShare.token)
+})
+
+When('the public (tries to )open/opens the public link page of the last public link created by user {string} with password {string}', async function (linkCreator, password) {
+  const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
+  await client.page.publicLinkFilesPage().navigateAndWaitForPasswordPage(lastShare.token)
+  return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
 })
 
 When('the public uses the webUI to access the last public link created by user {string} with password {string}', async function (linkCreator, password) {
-  const lastShareToken = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-  await client.page.publicLinkFilesPage().navigateAndWaitForPasswordPage(lastShareToken)
-
+  const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
+  if (lastShare.permissions === sharingHelper.PERMISSION_TYPES.create) {
+    await client.page.filesDropPage().navigateAndWaitForPasswordPage(lastShare.token)
+  } else {
+    await client.page.publicLinkFilesPage().navigateAndWaitForPasswordPage(lastShare.token)
+  }
   return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
 })
 
