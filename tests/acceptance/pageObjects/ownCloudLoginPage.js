@@ -34,7 +34,6 @@ module.exports = {
           .clearValue('@passwordInput')
           .setValue('@passwordInput', password)
           .click('@loginSubmitButton')
-          .waitForAjaxCallsToStartAndFinish()
       },
       assertLoginErrorMessage: async function (message) {
         await this.api.assert.visible(this.elements.usernameInput.selector)
