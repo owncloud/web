@@ -376,3 +376,21 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the shared-with-me page using the webUI
     Then the file "lorem.txt" should be in "Declined" state on the webUI
     And the file "testimage.jpg" should be in "Pending" state on the webUI
+
+  Scenario:  shared file status is changed to declined when user deletes the file
+    Given user "user1" has shared file "lorem.txt" with user "user2"
+    And the user has reloaded the current page of the webUI
+    When the user deletes file "lorem (2).txt" using the webUI
+    And the user browses to the shared-with-me page
+    Then file "lorem.txt" shared by "User One" should be in "Declined" state on the webUI
+
+  Scenario: the deleted shared file is restored back to all files list when accepted from the shared with me file list
+    Given user "user1" has shared file "lorem.txt" with user "user2"
+    And the following files have been deleted by user "user2"
+      | name               |
+      | lorem (2).txt      |
+    And the user has browsed to the shared-with-me page
+    When the user accepts share "lorem.txt" offered by user "User One" using the webUI
+    Then the file "lorem (2).txt" shared by "User One" should not be in "Declined" state
+    When the user browses to the files page
+    Then file "lorem (2).txt" should be listed on the webUI

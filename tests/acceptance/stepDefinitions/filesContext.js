@@ -158,6 +158,10 @@ When('the user deletes file/folder {string} using the webUI', function (element)
   return client.page.FilesPageElement.filesList().deleteFile(element)
 })
 
+Given('the user has deleted file/folder/resource {string} using the webUI', function (element) {
+  return client.page.FilesPageElement.filesList().deleteFile(element)
+})
+
 When('the user deletes the following elements using the webUI', async function (table) {
   for (const line of table.rows()) {
     await client.page.FilesPageElement.filesList().deleteFile(line[0])
@@ -345,6 +349,10 @@ When('the user restores the file to last version using the webUI', function () {
 )
 
 When('the user reloads the current page of the webUI', function () {
+  return client.refresh()
+})
+
+Given('the user has reloaded the current page of the webUI', function () {
   return client.refresh()
 })
 
