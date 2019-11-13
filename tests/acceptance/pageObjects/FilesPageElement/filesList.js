@@ -356,19 +356,38 @@ module.exports = {
       return visible
     },
     /**
+     * Wait for A filerow with given filename to be visible
      *
      * @param {string} fileName
      */
     waitForFileVisible: function (fileName) {
       const rowSelector = this.getFileRowSelectorByFileName(fileName)
       const linkSelector = this.getFileLinkSelectorByFileName(fileName)
-      this
+      return this
+        .useXpath()
+        .waitForElementVisible(rowSelector)
+        .getAttribute(linkSelector, 'filename', function (result) {
+          this.assert.strictEqual(result.value, fileName, 'displayed file name not as expected')
+        })
+        .useCss()
+    },
+    /**
+     * Wait for A filerow with given path to be visible
+     * This only works in the favorites page as it uses the whole path of a file rather than just the name
+     * This does not works in cases where the path starts with a space (eg. "  ParentFolder/file.txt")
+     *
+     * @param {string} path
+     */
+    waitForFileWithPathVisible: function (path) {
+      const rowSelector = this.getFileRowSelectorByFileName(path)
+      const linkSelector = this.getFileLinkSelectorByFileName(path)
+      return this
         .useXpath()
         .waitForElementVisible(rowSelector)
         .getAttribute(linkSelector, 'innerText', function (result) {
-          this.assert.strictEqual(result.value.trim(), fileName, 'displayed file name not as expected')
+          this.assert.strictEqual(result.value.trim(), path, 'displayed file name not as expected')
         })
-      return this.useCss()
+        .useCss()
     },
     getFileRowButtonSelectorsByFileName: function (fileName, action) {
       const btnSelectorHighResolution = this.getActionSelectorHighRes(action, fileName)
@@ -385,7 +404,10 @@ module.exports = {
      */
     getFileRowSelectorByFileName: function (fileName) {
       const parts = path.parse(fileName)
-      if (parts.ext) {
+      // If our file has a extension that starts with space (for eg. "newfile. txt")
+      // Then the whole name comes in the filename part (i.e. The file has no extension in such case)
+      // Since the extension has spaces immediately after '.' we check for spaces after removing the '.' using slice().
+      if (parts.ext && !parts.ext.slice(1).startsWith(' ')) {
         // keep path of nested folders intact, just remove the extension at the end
         const filePathWithoutExt = parts.dir ? parts.dir + '/' + parts.name : parts.name
         const element = this.elements.fileRowByNameAndExtension

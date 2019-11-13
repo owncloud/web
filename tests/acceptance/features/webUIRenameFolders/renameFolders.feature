@@ -45,18 +45,26 @@ Feature: rename folders
     And the user reloads the current page of the webUI
     Then folder "hash#And&QuestionMark?At@FolderName" should be listed on the webUI
 
-  @skip
   @issue-964
   Scenario: Rename a folder using spaces at front and/or back of the name
     When the user renames folder "simple-folder" to " space at start" using the webUI
     And the user reloads the current page of the webUI
     Then folder " space at start" should be listed on the webUI
-    When the user renames folder " space at start" to "space at end " using the webUI
+    When the user renames folder " space at start" to "  multiple   spaces    all     over" using the webUI
     And the user reloads the current page of the webUI
-    Then folder "space at end " should be listed on the webUI
-    When the user renames folder "space at end " to "  multiple   spaces    all     over   " using the webUI
+    Then folder "  multiple   spaces    all     over" should be listed on the webUI
+
+  Scenario: Rename a file using spaces at end is prohibited
+    When the user renames folder "simple-folder" to an invalid name "space at end " using the webUI
+    Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
+    When the user reloads the current page of the webUI
+    Then folder "lorem.txt" should be listed on the webUI
+    And folder "space at end " should not be listed on the webUI
+    When the user renames folder "simple-folder" to an invalid name "  multiple   space    all     over   " using the webUI
+    Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
     And the user reloads the current page of the webUI
-    Then folder "  multiple   spaces    all     over   " should be listed on the webUI
+    Then folder "simple-folder" should be listed on the webUI
+    And folder "  multiple   space    all     over   " should not be listed on the webUI
 
   Scenario: Rename a folder using both double and single quotes
     When the user renames the following folder using the webUI
@@ -88,23 +96,18 @@ Feature: rename folders
       | "simple-folder" | "\\simple-folder" | Error while renaming "simple-folder" to "\\simple-folder" |
       | "simple-folder" | ".htaccess"       | Error while renaming "simple-folder" to ".htaccess"       |
 
-  @issue-912
   Scenario: Rename a folder putting a name of a file which already exists
     When the user renames folder "simple-folder" to an invalid name "lorem.txt" using the webUI
     Then the error message 'The name "lorem.txt" is already taken' should be displayed on the webUI dialog prompt
 
-  @issue-965
   Scenario: Rename a folder to ..
     When the user renames folder "simple-folder" to an invalid name ".." using the webUI
     Then the error message 'The name cannot be equal to ".."' should be displayed on the webUI dialog prompt
 
-  @issue-965
   Scenario: Rename a folder to .
     When the user renames folder "simple-folder" to an invalid name "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
 
-  @issue-965
   Scenario: Rename a folder to .part
     When the user renames folder "simple-folder" to "simple.part" using the webUI
     Then the error message 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
-

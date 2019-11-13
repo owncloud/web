@@ -255,7 +255,7 @@ When('the user renames file/folder {string} to an invalid name {string} using th
   return client.page.FilesPageElement.filesList().renameFile(fromName, toName, false)
 })
 
-When('the user renames the following folder using the webUI', async function (dataTable) {
+When('the user renames the following file/folder using the webUI', async function (dataTable) {
   for (const { fromName, toName } of dataTable.hashes()) {
     await client
       .page.FilesPageElement.filesList().renameFile(
@@ -312,6 +312,13 @@ Then('file/folder {string} should be listed on the webUI', function (folder) {
     .page
     .FilesPageElement.filesList()
     .waitForFileVisible(folder)
+})
+
+Then('file/folder with path {string} should be listed in the favorites page on the webUI', function (path) {
+  return client
+    .page
+    .FilesPageElement.filesList()
+    .waitForFileWithPathVisible(path)
 })
 
 Then('the last uploaded folder should be listed on the webUI', function () {
