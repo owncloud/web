@@ -112,7 +112,7 @@ Given('the user has browsed to the files page', function () {
 })
 Given('user {string} has uploaded file with content {string} to {string}', async function (user, content, filename) {
   await waitBetweenFileUploadOperations()
-  await webdav.uploadFileWithcontent(user, content, filename)
+  await webdav.uploadFileWithContent(user, content, filename)
 })
 
 When('the user browses to display the {string} details of file {string}', function (versions, filename) {
