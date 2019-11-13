@@ -213,3 +213,69 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
+  Scenario: Delete a file and folder from shared with me page
+    Given user "user2" has been created with default attributes
+    And user "user2" has shared folder "simple-folder" with user "user1"
+    And user "user2" has shared file "lorem.txt" with user "user1"
+    And the user has browsed to the shared-with-me page
+    When the user deletes folder "simple-folder (2)" using the webUI
+    And the user deletes file "lorem (2).txt" using the webUI
+    Then as "user1" folder "simple-folder (2)" should not exist
+    And as "user1" file "lorem (2).txt" should not exist
+
+  Scenario: Delete a file and folder in shared with others page
+    Given user "user2" has been created with default attributes
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    When the user browses to the shared-with-others page
+    And the user deletes folder "simple-folder" using the webUI
+    And the user deletes file "lorem.txt" using the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
+    When the user browses to the files page
+    Then file "lorem.txt" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
+
+  Scenario: Delete multiple files at once from shared with others page
+    Given user "user2" has been created with default attributes
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user1" has shared file "data.zip" with user "user2"
+    And the user has browsed to the shared-with-others page
+    When the user batch deletes these files using the webUI
+      | name          |
+      | data.zip      |
+      | lorem.txt     |
+      | simple-folder |
+    Then as "user1" file "data.zip" should not exist
+    And as "user1" file "lorem.txt" should not exist
+    And as "user1" folder "simple-folder" should not exist
+    And the deleted elements should not be listed on the webUI
+    And the deleted elements should not be listed on the webUI after a page reload
+
+  Scenario: Delete multiple files at once from shared with me page
+    Given user "user2" has been created with default attributes
+    And user "user2" has shared folder "simple-folder" with user "user1"
+    And user "user2" has shared file "lorem.txt" with user "user1"
+    And user "user2" has shared file "data.zip" with user "user1"
+    And the user has browsed to the shared-with-me page
+    When the user batch deletes these files using the webUI
+      | name              |
+      | data (2).zip      |
+      | lorem (2).txt     |
+      | simple-folder (2) |
+    Then as "user1" file "data.zip (2)" should not exist
+    And as "user1" file "lorem (2).txt" should not exist
+    And as "user1" folder "simple-folder (2)" should not exist
+    And the deleted elements should not be listed on the webUI
+    And the deleted elements should not be listed on the webUI after a page reload
+
+  Scenario: Try to delete file and folder from favorites page
+    Given user "user1" has favorited element "simple-folder"
+    And user "user1" has favorited element "lorem.txt"
+    When the user browses to the favorites page
+    Then it should not be possible to delete file "lorem.txt" using the webUI
+    And it should not be possible to delete folder "simple-folder" using the webUI
