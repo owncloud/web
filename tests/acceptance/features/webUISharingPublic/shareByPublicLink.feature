@@ -108,7 +108,7 @@ Feature: Share by public link
     Then file "new-lorem.txt" should be listed on the webUI
     And as "user1" file "simple-folder/new-lorem.txt" should exist
 
-  Scenario: creating a public link with "Editor" role makes it possible to upload a file inside a subdirectory
+  Scenario: creating a public link with "Editor" role makes it possible to upload a file inside a subdirectory with password set
     Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     And the user opens folder "simple-empty-folder" using the webUI
@@ -142,7 +142,7 @@ Feature: Share by public link
     Then file "new-lorem.txt" should be listed on the webUI
     And as "user1" file "simple-folder/new-lorem.txt" should exist
 
-  Scenario: creating a public link with "Editor" role makes it possible to upload files inside a subdirectory even without password
+  Scenario: creating a public link with "Editor" role makes it possible to upload files inside a subdirectory
     Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     And the user uploads folder "PARENT" using the webUI
@@ -174,6 +174,20 @@ Feature: Share by public link
     Given user "user1" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then it should not be possible to create files using the webUI
+
+  @issue-2414
+  Scenario: creating a public link with "Uploader" role makes it possible to upload a file
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the user uploads file "new-lorem.txt" using the webUI
+    Then as "user1" file "simple-folder/new-lorem.txt" should exist
+
+  @issue-2414
+  Scenario: creating a public link with "Uploader" role makes it possible to upload a folder
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the user uploads folder "PARENT" using the webUI
+    Then as "user1" file "simple-folder/PARENT/CHILD/child.txt" should exist
 
   @skip @yetToImplement
   Scenario: mount public link
