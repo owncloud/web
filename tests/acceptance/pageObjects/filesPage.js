@@ -34,22 +34,22 @@ module.exports = {
      * @param {string} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
-    createFolder: function (name, expectToSucceed = true) {
-      this
+    createFolder: async function (name, expectToSucceed = true) {
+      await this
         .waitForElementVisible('@newFileMenuButton', 500000)
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFolderButton')
         .click('@newFolderButton')
         .waitForElementVisible('@newFolderInput')
       if (name !== null) {
-        this.clearValueWithEvent('@newFolderInput')
-        this.setValueBySingleKeys('@newFolderInput', name)
+        await this.clearValueWithEvent('@newFolderInput')
+        await this.setValueBySingleKeys('@newFolderInput', name)
       }
-      this
+      await this
         .click('@newFolderOkButton')
         .waitForElementNotPresent('@createFolderLoadingIndicator')
       if (expectToSucceed) {
-        this.waitForElementNotVisible('@newFolderDialog')
+        await this.waitForElementNotVisible('@newFolderDialog')
           .waitForAnimationToFinish()
       }
       return this
