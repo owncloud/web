@@ -6423,10 +6423,10 @@ osenv@^0.1.4:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-owncloud-design-system@^1.0.0-947:
-  version "1.0.0-980"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-980.tgz#11cb501c78ff33ee98e3441f90978dd61e913522"
-  integrity sha512-4/mUeJgQkJS08BYZkhQvJjAQVInnJB9tgvqh1FhGctADD/lT0zQZGeswL/VQuelmxP0wCSglDaTEzc1WFQJSlQ==
+owncloud-design-system@^1.0.0-993:
+  version "1.0.0-993"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-993.tgz#35162bc77605563a18d91fabcf52d8ad1f923a5c"
+  integrity sha512-9WCPlN44kqex9wsH9fdvqGDg9jrfvXUQzLDZpuKmrLr5E99L0EHyUYwmBbJjN58iqLqslp5Skh0bJS+q2jCeGQ==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.7.0"
