@@ -23,7 +23,7 @@ Feature: create folder
       | "+-{$(882)"              |
       | "home"                   |
 
-  @skip
+  @issue-2467
   Scenario Outline: Create a sub-folder inside a folder with problematic name
     # First try and create a folder with problematic name
     # Then try and create a sub-folder inside the folder with problematic name
@@ -34,13 +34,14 @@ Feature: create folder
     Then folder "sub-folder" should be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder "sub-folder" should be listed on the webUI
+    And as "user1" folder "sub-folder" should exist inside folder <folder>
     Examples:
       | folder    |
-      | "?&%0"    |
+     #| "?&%0"    |
       | "^#2929@" |
       | "home"    |
 
-  @smokeTest @skip
+  @smokeTest
   Scenario Outline: Create a sub-folder inside an existing folder with problematic name
     # Use an existing folder with problematic name to create a sub-folder
     # Uses the folder created by skeleton
@@ -49,6 +50,7 @@ Feature: create folder
     Then folder "sub-folder" should be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder "sub-folder" should be listed on the webUI
+    And as "user1" folder "sub-folder" should exist inside folder <folder>
     Examples:
       | folder                  |
       | "0"                     |
