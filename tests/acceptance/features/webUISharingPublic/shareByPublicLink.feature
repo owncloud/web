@@ -175,19 +175,81 @@ Feature: Share by public link
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then it should not be possible to create files using the webUI
 
+  Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
+    When the public tries to open the public link page of the last public link created by user "user1" with password "pass123"
+    Then the user should be redirected to the files-drop page
+
+  @issue-2414
+  Scenario: opening public-link page of the files-drop link without password set should redirect to files-drop page
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions
+    When the public tries to open the public link page of the last public link created by user "user1"
+#    Then the user should be redirected to the files-drop page
+    Then the user should be redirected to the public links page
+
   @issue-2414
   Scenario: creating a public link with "Uploader" role makes it possible to upload a file
+    # FIXME: Delete this scenario after fixing the issue at large
     Given user "user1" has shared folder "simple-folder" with link with "create" permissions
-    When the public uses the webUI to access the last public link created by user "user1"
+    When the public opens the public link page of the last public link created by user "user1"
     And the user uploads file "new-lorem.txt" using the webUI
     Then as "user1" file "simple-folder/new-lorem.txt" should exist
 
   @issue-2414
   Scenario: creating a public link with "Uploader" role makes it possible to upload a folder
+    # FIXME: Delete this scenario after fixing the issue at large
     Given user "user1" has shared folder "simple-folder" with link with "create" permissions
-    When the public uses the webUI to access the last public link created by user "user1"
+    When the public opens the public link page of the last public link created by user "user1"
     And the user uploads folder "PARENT" using the webUI
     Then as "user1" file "simple-folder/PARENT/CHILD/child.txt" should exist
+
+  Scenario: creating a public link with "Uploader" role makes it possible to upload a file through files-drop page
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the public uploads file "new-lorem.txt" in files-drop page
+    Then the following files should be listed on the files-drop page:
+      | new-lorem.txt |
+    And as "user1" file "simple-folder/new-lorem.txt" should exist
+
+  Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the public uploads file "'single'quotes.txt" in files-drop page
+    And the public uploads file "new-lorem.txt" in files-drop page
+    Then the following files should be listed on the files-drop page:
+      | 'single'quotes.txt |
+      | new-lorem.txt      |
+    And as "user1" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
+    And as "user1" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
+
+  @issue-2443 @yetToImplement
+  Scenario: creating a public link with "Uploader" role makes it possible to upload a folder
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the public uploads file "FOLDER" in files-drop page
+    Then the following files should be listed on the files-drop page:
+      | FOLDER |
+    And as "user1" file "simple-folder/FOLDER" should exist
+    And the content of file "simple-folder/FOLDER" for user "user1" should be ""
+
+  Scenario: creating a public link with "Uploader" role makes it possible to create files through files-drop page even with password set
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
+    And the public uploads file "'single'quotes.txt" in files-drop page
+    Then the following files should be listed on the files-drop page:
+      | 'single'quotes.txt |
+    And as "user1" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
+
+  Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page even with password set
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
+    And the public uploads file "'single'quotes.txt" in files-drop page
+    And the public uploads file "new-lorem.txt" in files-drop page
+    Then the following files should be listed on the files-drop page:
+      | 'single'quotes.txt |
+      | new-lorem.txt      |
+    And as "user1" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
+    And as "user1" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
 
   @skip @yetToImplement
   Scenario: mount public link

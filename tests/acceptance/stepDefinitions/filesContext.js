@@ -2,6 +2,7 @@ const { client } = require('nightwatch-api')
 const assert = require('assert')
 const { Given, When, Then, Before } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
+const _ = require('lodash')
 const loginHelper = require('../helpers/loginHelper')
 const { move } = require('../helpers/webdavHelper')
 const path = require('path')
@@ -215,6 +216,27 @@ When('the user uploads a created file {string} using the webUI', function (eleme
   })
 })
 
+When('the public uploads file {string} in files-drop page', function (element) {
+  const rootUploadDir = client.globals.mountedUploadDir
+  const filePath = path.join(rootUploadDir, element)
+  return client.page.filesDropPage()
+    .initAjaxCounters()
+    .uploadFile(filePath)
+    .waitForOutstandingAjaxCalls()
+})
+
+Then('the following files should be listed on the files-drop page:', async function (filesToCheck) {
+  filesToCheck = filesToCheck.raw().map(([file]) => file)
+
+  const actualFiles = await client.page.filesDropPage().getUploadedFiles()
+  const filesNotUploaded = _.difference(filesToCheck, actualFiles)
+  assert.strictEqual(
+    filesNotUploaded.length,
+    0,
+    'Could not find following files: \n' + filesNotUploaded
+  )
+})
+
 When('the user uploads folder {string} using the webUI', function (element) {
   const rootUploadDir = client.globals.mountedUploadDir
   const name = path.join(rootUploadDir, element)
@@ -347,8 +369,12 @@ Then('the versions list should contain {int} entries', function (expectedNumber)
   return client.page.filesPage().assertVersionsPresent(expectedNumber)
 })
 
-Then('the content of file {string} for user {string} should be {string}', function (file, user, content) {
-  return download(user, file).then(data => assert.strictEqual(content, data))
+Then('the content of file {string} for user {string} should be {string}', async function (file, user, content) {
+  const remote = await download(user, file)
+  return client.assert.strictEqual(
+    remote, content,
+    `Failed asserting remote file ${file} is same as content ${content} for user${user}`
+  )
 })
 
 When('the user restores the file to last version using the webUI', function () {
@@ -731,4 +757,12 @@ Then('the following file should not be listed on the webUI', function (table) {
 Then('the user deletes the following file using the webUI', function (table) {
   const name = table.hashes().map(data => data['name-parts']).join('')
   return client.page.FilesPageElement.filesList().deleteFile(name)
+})
+
+Then('the user should be redirected to the files-drop page', async function () {
+  return client.page.filesDropPage().waitForPage()
+})
+
+Then('the user should be redirected to the public links page', async function () {
+  return client.page.publicLinkFilesPage().waitForPage()
 })
