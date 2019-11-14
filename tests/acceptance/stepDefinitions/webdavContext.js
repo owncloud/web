@@ -7,6 +7,7 @@ const { client } = require('nightwatch-api')
 const { xml2js } = require('xml-js')
 const _ = require('lodash')
 const assert = require('assert')
+const path = require('path')
 
 /**
  * Check if file exists using webdav requests
@@ -31,6 +32,10 @@ function fileExists (userId, element) {
 
 Then('as {string} file/folder {string} should exist', function (userId, element) {
   return fileExists(userId, element)
+})
+
+Then('as {string} file/folder {string} should exist inside folder {string}', function (user, file, folder) {
+  return fileExists(user, path.join(folder, file))
 })
 
 Then('as {string} the last uploaded folder should exist', function (userId) {
