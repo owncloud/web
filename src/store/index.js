@@ -12,23 +12,17 @@ import router from './router'
 
 Vue.use(Vuex)
 
-const vuexPersist = new VuexPersistence({
-  key: 'phoenixState',
-  storage: window.localStorage,
-  filter: (mutation) => ([
-    'SET_USER',
-    'SET_TOKEN',
-    'SET_CAPABILITIES'
-  ].indexOf(mutation.type) > -1),
-  modules: ['user']
-})
-
 const vuexPersistInSession = new VuexPersistence({
   key: 'phoenixStateInSessionStorage',
   // Browser tab independent storage which gets deleted after the tab is closed
   storage: window.sessionStorage,
-  filter: (mutation) => (['SAVE_URL_BEFORE_LOGIN'].indexOf(mutation.type) > -1),
-  modules: ['router']
+  filter: (mutation) => ([
+    'SAVE_URL_BEFORE_LOGIN',
+    'SET_USER',
+    'SET_TOKEN',
+    'SET_CAPABILITIES'
+  ].indexOf(mutation.type) > -1),
+  modules: ['router', 'user']
 })
 
 const strict = process.env.NODE_ENV === 'development'
@@ -37,7 +31,7 @@ export const Store = new Vuex.Store({
   // state: {
   //   someModulelessState: 0
   // },
-  plugins: [vuexPersist.plugin, vuexPersistInSession.plugin],
+  plugins: [vuexPersistInSession.plugin],
   modules: {
     app,
     apps,
