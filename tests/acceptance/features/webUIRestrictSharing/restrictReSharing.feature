@@ -17,10 +17,19 @@ Feature: restrict resharing
     And user "user2" has been added to group "grp1"
 
   @smokeTest
+  @issue-2447
   Scenario: disable resharing and check if the received resource can be reshared
     Given the setting "shareapi_allow_resharing" of app "core" has been set to "no"
     And user "user2" has shared folder "simple-folder" with user "user1"
+    And user "user1" has favorited element "simple-folder (2)"
     When user "user1" logs in using the webUI
+    Then the user should not be able to share folder "simple-folder (2)" using the webUI
+    When the user browses to the shared-with-me page
+#    Then the user should not be able to share folder "simple-folder (2)" using the webUI
+    And the user shares folder "simple-folder (2)" with user "User Three" as "Editor" using the webUI
+    Then the error message "Error while sharing." should be displayed on the webUI
+    And as "user3" folder "simple-folder (2)" should not exist
+    When the user browses to the favorites page
     Then the user should not be able to share folder "simple-folder (2)" using the webUI
 
   @smokeTest
