@@ -9,6 +9,7 @@ const occHelper = require('../helpers/occHelper')
 let createdFiles = []
 let initialAppConfigSettings
 const { difference } = require('../helpers/objects')
+let initialSearchMinLength
 
 Given('a file with the size of {string} bytes and the name {string} has been created locally', function (size, name) {
   const fullPathOfLocalFile = client.globals.filesForUpload + name
@@ -143,6 +144,7 @@ Before(async function () {
   }
   stdOut = JSON.parse(stdOut)
   initialAppConfigSettings = _.get(stdOut, 'apps')
+  initialSearchMinLength = stdOut.system['user.search_min_length']
   if (initialAppConfigSettings === undefined) {
     throw new Error("'apps' was not found inside stdOut of response.")
   }
@@ -185,6 +187,22 @@ After(async function () {
           ]
         )
       }
+    }
+  }
+
+  const finalSearchMinLength = afterStdOut.system['user.search_min_length']
+  if (finalSearchMinLength !== initialSearchMinLength) {
+    if (initialSearchMinLength === undefined) {
+      await occHelper.runOcc([
+        'config:system:delete',
+        'user.search_min_length'
+      ])
+    } else {
+      await occHelper.runOcc([
+        'config:system:set',
+        'user.search_min_length --value=' + initialSearchMinLength,
+        '--type=integer'
+      ])
     }
   }
 })
