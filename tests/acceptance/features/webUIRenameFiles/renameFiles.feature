@@ -156,3 +156,50 @@ Feature: rename files
     But file "lorem.txt" should not be listed on the webUI
     And as "user1" file "simple-folder/a-renamed-file.txt" should exist
     And as "user1" file "simple-folder/lorem.txt" should not exist
+
+  Scenario: Rename a file and folder in shared with me page
+    Given user "user2" has been created with default attributes
+    And user "user2" has shared file "lorem.txt" with user "user1"
+    And user "user2" has shared folder "simple-folder" with user "user1"
+    When the user browses to the shared-with-me page
+    And the user renames file "lorem (2).txt" to "renamed-file.txt" using the webUI
+    And the user renames folder "simple-folder (2)" to "renamed-folder" using the webUI
+    Then file "renamed-file.txt" should be listed on the webUI
+    And folder "renamed-folder" should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file "renamed-file.txt" should be listed on the webUI
+    And folder "renamed-folder" should be listed on the webUI
+    When the user browses to the files page
+    Then file "renamed-file.txt" should be listed on the webUI
+    And folder "renamed-folder" should be listed on the webUI
+    And as "user1" file "renamed-file.txt" should exist
+    And as "user1" folder "renamed-folder" should exist
+    And as "user2" file "lorem.txt" should exist
+    And as "user2" folder "simple-folder" should exist
+
+  Scenario: Rename a file and folder in shared with others page
+    Given user "user2" has been created with default attributes
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    When the user browses to the shared-with-others page
+    And the user renames file "lorem.txt" to "renamed-file.txt" using the webUI
+    And the user renames folder "simple-folder" to "renamed-folder" using the webUI
+    Then file "renamed-file.txt" should be listed on the webUI
+    And folder "renamed-folder" should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file "renamed-file.txt" should be listed on the webUI
+    And folder "renamed-folder" should be listed on the webUI
+    When the user browses to the files page
+    Then file "renamed-file.txt" should be listed on the webUI
+    And folder "renamed-folder" should be listed on the webUI
+    And as "user1" file "renamed-file.txt" should exist
+    And as "user1" folder "renamed-folder" should exist
+    And as "user2" file "lorem.txt" should exist
+    And as "user2" folder "simple-folder" should exist
+
+  Scenario: User tries to rename a file and folder in favorites page
+    Given user "user1" has favorited element "lorem.txt"
+    And user "user1" has favorited element "simple-folder"
+    When the user browses to the favorites page
+    Then it should not be possible to rename folder "simple-folder" using the webUI
+    And it should not be possible to rename file "lorem.txt" using the webUI

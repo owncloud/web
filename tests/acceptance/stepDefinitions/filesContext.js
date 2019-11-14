@@ -681,6 +681,12 @@ Then('it should not be possible to delete file/folder {string} using the webUI',
     .assertActionDisabled('delete', resource)
 })
 
+Then('it should not be possible to rename file/folder {string} using the webUI', function (resource) {
+  return client.page.FilesPageElement
+    .filesList()
+    .assertActionDisabled('rename', resource)
+})
+
 When('the user uploads overwriting file {string} using the webUI', function (file) {
   const uploadPath = path.join(client.globals.mountedUploadDir, file)
   return client.page.filesPage().selectFileForUpload(uploadPath)
