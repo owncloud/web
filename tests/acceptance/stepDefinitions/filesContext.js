@@ -237,6 +237,10 @@ Then('the following files should be listed on the files-drop page:', async funct
   )
 })
 
+When('the user unshares file/folder {string} using the webUI', function (element) {
+  return client.page.FilesPageElement.filesList().deleteFile(element)
+})
+
 When('the user uploads folder {string} using the webUI', function (element) {
   const rootUploadDir = client.globals.mountedUploadDir
   const name = path.join(rootUploadDir, element)
@@ -653,6 +657,7 @@ Then('file/folder {string} should be listed in shared-with-others page on the we
 Given('the user has created file {string}', function (fileName) {
   return webdav.createFile(client.globals.currentUser, fileName, '')
 })
+
 Given('user {string} has created file {string}', function (userId, fileName) {
   return webdav.createFile(userId, fileName, '')
 })

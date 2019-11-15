@@ -68,6 +68,20 @@ module.exports = {
         .waitForElementVisible(actionLocatorButton)
         .click(actionLocatorButton)
         .waitForOutstandingAjaxCalls()
+    },
+    /**
+     * Asserts that the element(file/folder/resource) on the shared-with-me page is shared by the desired user
+     *
+     * @param {string} element
+     * @param {string} sharer
+     */
+    assertSharedByUser: function (element, sharer) {
+      const requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(element) +
+                          util.format(this.elements.getSharedFromUserName.selector, sharer)
+      return this.waitForElementVisible({
+        locateStrategy: this.elements.getSharedFromUserName.locateStrategy,
+        selector: requiredXpath
+      })
     }
   },
   elements: {
