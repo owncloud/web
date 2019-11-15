@@ -82,12 +82,11 @@ Feature: File Upload
     And as "user1" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
 
   @smokeTest
-  @skip @yetToImplement
   Scenario: overwrite an existing file
-    When the user uploads overwriting file "lorem.txt" using the webUI and retries if the file is locked
-    Then no dialog should be displayed on the webUI
+    When the user uploads overwriting file "lorem.txt" using the webUI
+    Then no message should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
-    And the content of "lorem.txt" should be the same as the local "lorem.txt"
+    And as "user1" the content of "lorem.txt" should be the same as the local "lorem.txt"
     But file "lorem (2).txt" should not be listed on the webUI
 
   @smokeTest
@@ -114,12 +113,11 @@ Feature: File Upload
     And the content of "lorem.txt" should not have changed
     And file "lorem (2).txt" should not be listed on the webUI
 
-  @skip @yetToImplement
   Scenario: overwrite an existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
-    And the user uploads overwriting file "lorem.txt" using the webUI and retries if the file is locked
+    And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And the content of "lorem.txt" should be the same as the local "lorem.txt"
+    And as "user1" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
 
   @skip @yetToImplement
   Scenario: keep new and existing file in a sub-folder
@@ -135,27 +133,9 @@ Feature: File Upload
     And file "lorem (2).txt" should be listed on the webUI
     And the content of "lorem (2).txt" should be the same as the local "lorem.txt"
 
-  @skip @yetToImplement
-  Scenario: upload a file into a public share
-    Given the user has created a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    And the public accesses the last created public link using the webUI
-    And the user uploads file "new-lorem.txt" using the webUI
-    Then file "new-lorem.txt" should be listed on the webUI
-    And the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
-
-  @skip @yetToImplement
   Scenario: upload overwriting a file into a public share
-    Given the user has created a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    And the public accesses the last created public link using the webUI
-    And the user uploads overwriting file "lorem.txt" using the webUI and retries if the file is locked
+    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
+    And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
-
-  @skip @yetToImplement
-  Scenario: upload a file into files_drop share
-    Given the user has created a new public link for folder "simple-folder" using the webUI with
-      | permission | upload |
-    And the public accesses the last created public link using the webUI
-    Then the user uploads file "lorem.txt" using the webUI
+    And as "user1" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
