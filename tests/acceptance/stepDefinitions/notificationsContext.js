@@ -18,6 +18,14 @@ When('the user marks the notification as read', function () {
   return client.page.phoenixPage().markNotificationAsRead()
 })
 
+When('the user accepts all shares displayed in the notifications on the webUI', function () {
+  return client.page.phoenixPage().acceptAllSharesInNotification()
+})
+
+When('the user declines all shares displayed in the notifications on the webUI', function () {
+  return client.page.phoenixPage().declineAllSharesInNotification()
+})
+
 Given('app {string} has been enabled', function (app) {
   const headers = httpHelper.createAuthHeader('admin')
   return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/apps/' + app + '?format=json', {
@@ -46,4 +54,8 @@ Then('the notification bell should disappear on the webUI', function () {
 Then('the user should see {int} notifications on the webUI with these details', function (numberOfNotifications, dataTable) {
   const dataTableHashed = dataTable.hashes()
   return client.page.phoenixPage().assertNotificationIsPresent(numberOfNotifications, dataTableHashed)
+})
+
+Then('the user should have no notifications', function () {
+  return client.page.phoenixPage().assertNoNotifications()
 })
