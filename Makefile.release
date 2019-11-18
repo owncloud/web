@@ -69,4 +69,8 @@ endif
 package:
 	rm -rf $(CURDIR)/release
 	mkdir $(CURDIR)/release
-	cd $(dist_dir) && tar -czf $(cur_dir)/release/$(app_name).tar.gz *
+	rm -rf $(CURDIR)/phoenix
+	mkdir $(CURDIR)/phoenix
+	cp -R $(dist_dir) $(CURDIR)/phoenix
+	tar -czf $(CURDIR)/release/$(app_name).tar.gz -C $(CURDIR) phoenix
+
