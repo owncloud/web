@@ -1909,6 +1909,214 @@ depends_on:
 ---
 kind: pipeline
 type: docker
+name: SharingAutocompletion-chrome
+
+platform:
+  os: linux
+  arch: amd64
+
+workspace:
+  base: /var/www/owncloud
+  path: phoenix
+
+steps:
+- name: npm-install
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - yarn install
+
+- name: build-phoenix
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - yarn dist
+  - cp tests/drone/config.json dist/config.json
+
+- name: install-core
+  pull: always
+  image: owncloudci/core
+  settings:
+    core_path: /var/www/owncloud/
+    db_host: mysql
+    db_name: owncloud
+    db_password: owncloud
+    db_type: mysql
+    db_username: owncloud
+    version: daily-master-qa
+
+- name: clone-oauth
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2
+  - cd /var/www/owncloud/apps/oauth2
+  - make vendor
+
+- name: setup-server-phoenix
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - cd /var/www/owncloud/
+  - php occ a:e testing
+  - php occ config:system:set trusted_domains 1 --value=owncloud
+  - php occ config:system:set cors.allowed-domains 0 --value=http://phoenix
+  - php occ log:manage --level 2
+  - php occ config:list
+  - php occ a:e oauth2
+  - php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html
+  - php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton
+  - php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true
+  - php occ config:system:set phoenix.baseUrl --value="http://phoenix"
+
+- name: owncloud-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/data/owncloud.log
+
+- name: fix-permissions
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - cd /var/www/owncloud/
+  - chown www-data * -R
+
+- name: copy-files-for-upload
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - ls -la /filesForUpload
+  - cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload
+  - ls -la /filesForUpload
+  volumes:
+  - name: uploads
+    path: /filesForUpload
+
+- name: webui-acceptance-tests
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - cd /var/www/owncloud/phoenix
+  - curl http://phoenix/oidc-callback.html
+  - yarn run acceptance-tests-drone
+  environment:
+    LOCAL_UPLOAD_DIR: /uploads
+    TEST_CONTEXT: webUISharingAutocompletion
+    TEST_TAGS: not @skip
+
+- name: upload-screenshots
+  pull: if-not-exists
+  image: plugins/s3
+  settings:
+    acl: public-read
+    bucket: phoenix
+    endpoint: https://minio.owncloud.com/
+    path_style: true
+    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
+    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
+    target: /screenshots/${DRONE_BUILD_NUMBER}
+  environment:
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+  when:
+    event:
+    - pull_request
+    status:
+    - failure
+
+- name: build-github-comment
+  pull: always
+  image: owncloud/ubuntu:16.04
+  commands:
+  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
+  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingAutocompletion</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
+  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
+  - "echo \"\n</p></details>\" >> comments.file"
+  - more comments.file
+  environment:
+    TEST_CONTEXT: webUISharingAutocompletion
+  when:
+    event:
+    - pull_request
+    status:
+    - failure
+
+- name: github-comment
+  pull: if-not-exists
+  image: jmccann/drone-github-comment:1
+  settings:
+    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
+  environment:
+    PLUGIN_API_KEY:
+      from_secret: plugin_api_key
+  when:
+    event:
+    - pull_request
+    status:
+    - failure
+
+services:
+- name: phoenix
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - mkdir dist
+  - /usr/local/bin/apachectl -e debug -D FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/phoenix/dist
+
+- name: owncloud
+  pull: always
+  image: owncloudci/php:7.1
+  command:
+  - /usr/local/bin/apachectl
+  - -e
+  - debug
+  - -D
+  - FOREGROUND
+  environment:
+    APACHE_WEBROOT: /var/www/owncloud/
+
+- name: selenium
+  pull: always
+  image: selenium/standalone-chrome-debug:latest
+  volumes:
+  - name: uploads
+    path: /uploads
+
+- name: mysql
+  pull: always
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
+
+volumes:
+- name: uploads
+  temp: {}
+
+trigger:
+  ref:
+  - refs/tags/**
+  - refs/pull/**
+  - refs/pull-requests/**
+  - refs/merge-requests/**
+  - refs/heads/master
+  - refs/heads/release*
+  - refs/heads/develop*
+
+depends_on:
+- lint-test
+
+---
+kind: pipeline
+type: docker
 name: SharingInternalUsers-chrome
 
 platform:
@@ -4856,6 +5064,7 @@ depends_on:
 - RenameFolders-chrome
 - RestrictSharing-chrome
 - SharingInternalGroups-chrome
+- SharingAutocompletion-chrome
 - SharingInternalUsers-chrome
 - SharingPermissionsUsers-chrome
 - SharingPermissionsGroups-chrome

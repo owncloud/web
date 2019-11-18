@@ -12,7 +12,7 @@ Feature: Autocompletion of share-with names
       | usergrp     |
       | regularuser |
     # Some extra users to make the share autocompletion interesting
-    Given these users have been created but not initialized:
+    And these users have been created but not initialized:
       | username  | password  | displayname     | email          |
       | two       | %regular% | User Two        | u2@oc.com.np   |
       | u444      | %regular% | Four            | u3@oc.com.np   |
