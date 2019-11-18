@@ -18,14 +18,18 @@
       </div>
     </template>
     <template slot="content">
-      <div>
-        <oc-tabs>
-            <oc-tab-item :active="tab.app == activeTab" @click="activeTab = tab.app" v-for="tab of fileSideBarsEnabled" :key="tab.name">
-              {{ tab.component.title($gettext) }} {{ tab.name }}
-            </oc-tab-item>
-        </oc-tabs>
-        <component v-if="fileSideBars.length > 0 && activeTabComponent" v-bind:is="activeTabComponent.component" @reload="$emit('reload')"></component>
-      </div>
+      <oc-tabbed :initial="defaultTab" @activeTab="handleActiveTab">
+        <template slot="tabs">
+          <oc-tabbed-tab :name="tab.app" @click="activeTab = tab.app" :key="tab.app" v-for="tab of fileSideBarsEnabled">
+            {{ tab.component.title($gettext) }} {{ tab.name }}
+          </oc-tabbed-tab>
+        </template>
+        <template slot="panels">
+          <oc-tabbed-panel :name="tab.app" :key="tab.app" v-for="tab of fileSideBarsEnabled">
+            <component v-if="isTabActive(tab.app)" v-bind:is="activeTabComponent.component" @reload="$emit('reload')"></component>
+          </oc-tabbed-panel>
+        </template>
+      </oc-tabbed>
     </template>
   </oc-app-side-bar>
 </template>
@@ -40,7 +44,9 @@ export default {
   data () {
     return {
       /** String name of the tab that is activated */
-      activeTab: null
+      activeTab: null,
+      activeTabFromComponent: null,
+      linkCopied: false
     }
   },
   methods: {
@@ -49,8 +55,22 @@ export default {
     close () {
       this.$emit('reset')
     },
+    handleActiveTab (payload) {
+      this.activeTab = this.activeTabFromComponent = payload
+    },
     showSidebar (app) {
       this.activeTab = app
+    },
+    isTabActive (name) {
+      return this.activeTabFromComponent === name
+    },
+    clipboardSuccessHandler () {
+      this.linkCopied = true
+
+      // Use copy icon after some time
+      setTimeout(() => {
+        this.linkCopied = false
+      }, 1000)
     }
   },
   computed: {
