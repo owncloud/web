@@ -25,6 +25,7 @@ config = {
 				'webUIRenameFolders': 'RenameFolders',
 				'webUIRestrictSharing': 'RestrictSharing',
 				'webUISharingInternalGroups': 'SharingInternalGroups',
+				'webUISharingAutocompletion': 'SharingAutocompletion',
 				'webUISharingInternalUsers': 'SharingInternalUsers',
 				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
 				'webUISharingPermissionsGroups': 'SharingPermissionsGroups',
