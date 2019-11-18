@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import LoginPage from '../pages/login.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
-import OidcSilentRedirectPage from '../pages/oidcSilentRedirect.vue'
 import AccessDeniedPage from '../pages/accessDenied.vue'
 import Account from '../pages/account.vue'
 
@@ -31,7 +30,7 @@ const router = new Router({
     {
       path: '/oidc-silent-redirect',
       components: {
-        fullscreen: OidcSilentRedirectPage
+        fullscreen: OidcCallbackPage
       },
       meta: { auth: false, hideHeadbar: true }
     },

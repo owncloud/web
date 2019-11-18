@@ -12,7 +12,7 @@
                     Please click the button below to authenticate and get access to your data.
                 </p>
                 <oc-button size="large" variation="primary" class="oc-login-authorize-button" id="authenticate" @click.native="login()">
-                  <translate>Authorize</translate>
+                  <translate>Login</translate>
                 </oc-button>
             </div>
             <div class="oc-login-card-footer">

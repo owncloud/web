@@ -40,7 +40,11 @@ export default {
         console.warn('OAuth error: ' + this.$route.query.error + ' - ' + this.$route.query.error_description)
         return
       }
-      this.callback()
+      if (this.$route.path === '/oidc-silent-redirect') {
+        this.signinSilentCallback()
+      } else {
+        this.callback()
+      }
     })
   },
   data () {
@@ -52,7 +56,7 @@ export default {
     ...mapGetters(['configuration'])
   },
   methods: {
-    ...mapActions(['callback'])
+    ...mapActions(['callback', 'signinSilentCallback'])
   }
 }
 </script>

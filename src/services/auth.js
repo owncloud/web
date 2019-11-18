@@ -20,7 +20,7 @@ export function initVueAuthenticate (config) {
       post_logout_redirect_uri: baseUrl,
       silent_redirect_uri: baseUrl + 'oidc-silent-redirect.html',
       accessTokenExpiringNotificationTime: 10,
-      automaticSilentRenew: false,
+      automaticSilentRenew: true,
       filterProtocolClaims: true,
       loadUserInfo: true,
       logLevel: Log.INFO
