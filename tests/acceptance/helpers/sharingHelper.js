@@ -12,7 +12,7 @@ module.exports = {
   }),
   PERMISSION_TYPES: Object.freeze({
     read: 1,
-    change: 2,
+    update: 2,
     create: 4,
     delete: 8,
     share: 16,

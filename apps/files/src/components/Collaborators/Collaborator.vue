@@ -1,5 +1,9 @@
 <template>
-  <oc-accordion-item class="files-collaborators-collaborator uk-margin-small-bottom" :class="{ 'oc-disabled uk-disabled' : collaboratorsEditInProgress && !editing }">
+  <oc-accordion-item
+    class="files-collaborators-collaborator uk-margin-small-bottom"
+    :class="{ 'oc-disabled uk-disabled' : collaboratorsEditInProgress && !editing }"
+    :key="collaborator.id"
+  >
     <template slot="title">
       <div v-if="user.id !== collaborator.info.uid_owner" class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
       <div class="files-collaborators-collaborator-information uk-flex uk-flex-wrap uk-flex-middle">
@@ -26,7 +30,7 @@
     <template slot="content">
       <collaborators-edit-options
         :existingRole="collaborator.role"
-        :collaboratorsPermissions="collaborator.customPermissions"
+        :collaboratorsPermissions="collaboratorsPermissions"
         @optionChange="collaboratorOptionChanged"
         class="uk-margin-bottom"
       />
@@ -47,7 +51,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../../mixins/collaborators'
-import { roleToBitmask } from '../../helpers/collaborators'
+import { roleToBitmask, bitmaskToRole } from '../../helpers/collaborators'
+import filterObject from 'filter-obj'
 
 const CollaboratorsEditOptions = () => import('./CollaboratorsEditOptions.vue')
 
@@ -88,6 +93,12 @@ export default {
       }
 
       return this.roles[this.collaborator.role.name]
+    },
+
+    collaboratorsPermissions () {
+      const permissions = this.collaborator.customPermissions
+
+      return filterObject(permissions, (key, value) => value)
     }
   },
   mounted () {
@@ -106,11 +117,24 @@ export default {
     },
     saveChanges (collaborator) {
       if (!this.selectedRole) this.selectedRole = this.roles[collaborator.role.name]
+      let permissions = this.additionalPermissions
+
+      if (!permissions) {
+        permissions = []
+        for (const permission in this.collaboratorsPermissions) {
+          permissions.push(permission)
+        }
+      }
+
+      const bitmask = roleToBitmask(this.selectedRole, permissions, this.highlightedFile.type === 'folder')
+
       this.changeShare({
         client: this.$client,
         share: collaborator,
-        role: this.selectedRole,
-        permissions: roleToBitmask(this.selectedRole, this.additionalPermissions, this.highlightedFile.type === 'folder')
+        // TODO: After changing to tabs view, this can be dropped
+        // Map bitmask to role to get the correct role in case the advanced role was mapped to existing role
+        role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder'),
+        permissions: bitmask
       })
         .then(() => {
           this.editing = false

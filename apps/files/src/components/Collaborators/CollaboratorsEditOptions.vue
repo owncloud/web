@@ -54,7 +54,7 @@ export default {
 
       if (
         (
-          this.existingRole && this.existingRole.name === 'advancedRole'
+          this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole
         ) || (
           this.selectedRole && this.selectedRole.name === 'advancedRole'
         )

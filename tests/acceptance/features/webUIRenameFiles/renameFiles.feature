@@ -146,7 +146,7 @@ Feature: rename files
     Then the error message 'Error while renaming "data.zip" to "data.part"' should be displayed on the webUI
 
   Scenario: rename a file on a public share
-    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
+    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     And the user renames file "lorem.txt" to "a-renamed-file.txt" using the webUI
     Then file "a-renamed-file.txt" should be listed on the webUI

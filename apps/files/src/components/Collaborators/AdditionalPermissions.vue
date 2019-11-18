@@ -1,8 +1,9 @@
 <template>
   <oc-grid gutter="small">
-    <label v-for="permission in permissions" :key="permission.name">
+    <label v-for="permission in permissions" :key="permission.name" class="files-collaborators-permission-label">
       <oc-checkbox
-        class="uk-margin-xsmall-right"
+        :id="`files-collaborators-permission-${permission.name}`"
+        class="uk-margin-xsmall-right files-collaborators-permission-checkbox"
         v-model="permission.value"
         @change="permissionChecked"
       />

@@ -45,10 +45,10 @@ Feature: Sharing files and folders with internal users
     #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
     #    And file "testimage (2).jpg" should be marked as shared by "User Two" on the webUI
     Examples:
-      | set-role    | expected-role | permissions-folder        | permissions-file |
-      | Viewer      | Viewer        | read                      | read             |
-      | Editor      | Editor        | read,change,create,delete | read,change      |
-      | Custom Role | Viewer        | read                      | read             |
+      | set-role             | expected-role | permissions-folder        | permissions-file |
+      | Viewer               | Viewer        | read                      | read             |
+      | Editor               | Editor        | read,update,create,delete | read,update      |
+      | Advanced permissions | Viewer        | read                      | read             |
 
   Scenario Outline: change the collaborators of a file & folder
     Given user "user2" has logged in using the webUI
@@ -66,11 +66,11 @@ Feature: Sharing files and folders with internal users
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
-      | initial-permissions | set-role    | expected-role | expected-permissions      |
-      | read,change,create  | Viewer      | Viewer        | read                      |
-      | read                | Editor      | Editor        | read,change,create,delete |
-      | read                | Custom role | Viewer        | read                      |
-      | all                 | Custom role | Editor        | all                       |
+      | initial-permissions | set-role             | expected-role | expected-permissions      |
+      | read,update,create  | Viewer               | Viewer        | read                      |
+      | read                | Editor               | Editor        | read,update,create,delete |
+      | read                | Advanced permissions | Viewer        | read                      |
+      | all                 | Advanced permissions | Editor        | all                       |
 
   Scenario: share a file with another internal user who overwrites and unshares the file
     Given user "user2" has logged in using the webUI

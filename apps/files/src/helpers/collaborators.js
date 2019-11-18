@@ -27,7 +27,9 @@ export function roleToBitmask (role, additionalPermissions = []) {
 
   if (additionalPermissions) {
     for (const additionalPermission of additionalPermissions) {
-      bitmask |= permissionsBitmask[additionalPermission]
+      if (role.additionalPermissions[additionalPermission]) {
+        bitmask |= permissionsBitmask[additionalPermission]
+      }
     }
   }
 
@@ -64,7 +66,7 @@ export function bitmaskToRole (bitmask, isFolder) {
       rolePermissionsBitmask |= permissionsBitmask[additionalPermissions[additionalPermission].name]
     }
 
-    // TODO: Use bitmask
+    // TODO: Use bitmask to cover cases of more then one additional permission
     if (
       rolePermissionsBitmask === bitmask ||
       roleBasicPermissionsBitmask === bitmask

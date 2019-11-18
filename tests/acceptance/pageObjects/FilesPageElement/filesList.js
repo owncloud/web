@@ -658,6 +658,9 @@ module.exports = {
     versionsElement: {
       selector: '//div//a[normalize-space(.)="Versions"]',
       locateStrategy: 'xpath'
+    },
+    collaboratorsList: {
+      selector: '.files-collaborators-lists'
     }
   }
 }

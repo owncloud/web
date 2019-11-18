@@ -46,12 +46,12 @@ Feature: Resharing shared files with different permissions
     | item_type   | folder             |
     | permissions | <permissions>      |
     Examples:
-    | role        | displayed-role | collaborators-permissions     | displayed-permissions | permissions                         |
-    | Viewer      | Viewer         | share                         | share                 | read, share                         |
-    | Editor      | Editor         | share                         | share                 | all                                 |
-    | Custom Role | Custom role    | share, create                 | share, create         | read, share, create                 |
-    | Custom Role | Editor         | change, share                 | share                 | read, change, share                 |
-    | Custom Role | Editor         | delete, share, create, change | share                 | read, share, delete, change, create |
+    | role                 | displayed-role          | collaborators-permissions     | displayed-permissions | permissions                         |
+    | Viewer               | Viewer                  | share                         | share                 | read, share                         |
+    | Editor               | Editor                  | share                         | share                 | all                                 |
+    | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
+    | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
+    | Advanced permissions | Editor                  | delete, share, create, update | share                 | read, share, delete, update, create |
 
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "<permissions>" permissions
@@ -77,12 +77,12 @@ Feature: Resharing shared files with different permissions
     | item_type   | folder             |
     | permissions | <permissions>      |
     Examples:
-    | role        | displayed-role | collaborators-permissions     | displayed-permissions | permissions                         |
-    | Viewer      | Viewer         | share                         | share                 | read, share                         |
-    | Editor      | Editor         | share                         | share                 | all                                 |
-    | Custom Role | Custom role    | share, create                 | share, create         | read, share, create                 |
-    | Custom Role | Editor         | change, share                 | share                 | read, change, share                 |
-    | Custom Role | Editor         | delete, share, create, change | share                 | read, share, delete, change, create |
+    | role                 | displayed-role          | collaborators-permissions     | displayed-permissions | permissions                         |
+    | Viewer               | Viewer                  | share                         | share                 | read, share                         |
+    | Editor               | Editor                  | share                         | share                 | all                                 |
+    | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
+    | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
+    | Advanced permissions | Editor                  | delete, share, create, update | share                 | read, share, delete, update, create |
 
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
@@ -144,7 +144,7 @@ Feature: Resharing shared files with different permissions
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has logged in using the webUI
-    When the user shares folder "simple-folder (2)" with user "User Three" as "Custom role" with permissions "share, delete" using the webUI
+    When the user shares folder "simple-folder (2)" with user "User Three" as "Advanced permissions" with permissions "share, delete" using the webUI
     And the user re-logs in as "user3" using the webUI
     Then the collaborators list for folder "simple-folder (2)" should be empty
     And user "user3" should have received a share with these details:
@@ -158,11 +158,11 @@ Feature: Resharing shared files with different permissions
   Scenario: User is allowed to reshare a file/folder with the lesser permissions, and check if it is listed for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has logged in using the webUI
-    When the user shares folder "simple-folder (2)" with user "User Three" as "Custom role" with permissions "delete" using the webUI
+    When the user shares folder "simple-folder (2)" with user "User Three" as "Advanced permissions" with permissions "delete" using the webUI
     And the user re-logs in as "user2" using the webUI
-    Then user "User One" should be listed as "Custom role" in the collaborators list for folder "simple-folder" on the webUI
+    Then user "User One" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "share, delete" should be set for user "User One" for folder "simple-folder" on the webUI
-    And user "User Three" should be listed as "Custom role" in the collaborators list for folder "simple-folder" on the webUI
+    And user "User Three" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "delete" should be set for user "User Three" for folder "simple-folder" on the webUI
     And user "user3" should have received a share with these details:
     | field       | value              |
@@ -175,7 +175,7 @@ Feature: Resharing shared files with different permissions
   Scenario: User is not allowed to reshare a file/folder with the higher permissions
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has logged in using the webUI
-    When the user shares folder "simple-folder (2)" with user "User Three" as "Custom role" with permissions "share, delete, change" using the webUI
+    When the user shares folder "simple-folder (2)" with user "User Three" as "Advanced permissions" with permissions "share, delete, update" using the webUI
     Then the error message "Error while sharing." should be displayed on the webUI
     And as "user3" folder "simple-folder (2)" should not exist
 

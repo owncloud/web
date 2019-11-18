@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { bitmaskToRole } from '../helpers/collaborators'
+import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
 
 function _buildFile (file) {
   let ext = ''
@@ -223,10 +223,10 @@ function _buildShare (s, file) {
       share.displayName = s.share_with_displayname
       // TODO: Refactor to work with roles / prepare for roles API
       share.customPermissions = {
-        update: s.permissions === '3' || s.permissions === '15' || s.permissions === '19' || s.permissions === '31',
-        create: s.permissions === '5' || s.permissions === '15' || s.permissions === '21' || s.permissions === '31',
-        delete: s.permissions === '9' || s.permissions === '15' || s.permissions === '25' || s.permissions === '31',
-        share: s.permissions === '17' || s.permissions === '19' || s.permissions === '21' || s.permissions === '25' || s.permissions === '31'
+        update: s.permissions & permissionsBitmask.update,
+        create: s.permissions & permissionsBitmask.create,
+        delete: s.permissions & permissionsBitmask.delete,
+        share: s.permissions & permissionsBitmask.share
       }
       // share.email = 'foo@djungle.com' // hm, where do we get the mail from? share_with_additional_info:Object?
       break
