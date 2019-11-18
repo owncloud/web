@@ -18,6 +18,11 @@ module.exports = {
     share: 16,
     all: 31
   }),
+  SHARE_STATE: Object.freeze({
+    accepted: 0,
+    pending: 1,
+    declined: 2
+  }),
   /**
    *
    * @param permissionsString string of permissions separated by comma. For valid permissions see this.PERMISSION_TYPES
@@ -179,22 +184,78 @@ module.exports = {
   getAllSharesSharedByUser: function (user) {
     return this.getAllShares(user)
   },
+
+  /**
+   * Asynchronously declines the shares in pending state and meeting the conditions
+   *
+   * @async
+   * @param {string} filename
+   * @param {string} user
+   * @param {string} sharer
+   */
   declineShare: async function (filename, user, sharer) {
     const allShares = await this.getAllSharesSharedWithUser(user)
-    for (const element of allShares) {
-      if (element.state === 1 && element.path.replace(/^\/|\/$/g, '') === filename && element.uid_owner === sharer) {
-        const shareID = element.id
-        const headers = httpHelper.createAuthHeader(user)
-        const apiURL = client.globals.backend_url + '/ocs/v2.php/apps/files_sharing//api/v1/shares/pending/' + shareID + '?format=json'
-        return fetch(apiURL,
-          {
-            method: 'DELETE',
-            headers: headers
-          })
-          .then(res => {
-            httpHelper.checkStatus(res, 'The response status is not the expected value')
-          })
-      }
+    const elementsToDecline = allShares.filter((element) => {
+      return element.state === this.SHARE_STATE.pending &&
+        element.path.slice(1) === filename &&
+        element.uid_owner === sharer
+    })
+    if (elementsToDecline.length < 1) {
+      throw new Error('Could not find the share to be declined')
+    }
+    for (const element of elementsToDecline) {
+      const shareID = element.id
+      const headers = httpHelper.createAuthHeader(user)
+      const apiURL = client.globals.backend_url +
+                    '/ocs/v2.php/apps/files_sharing/api/v1/shares/pending/' + shareID + '?format=json'
+      return fetch(apiURL,
+        {
+          method: 'DELETE',
+          headers: headers
+        })
+        .then(res => {
+          res = httpHelper.checkStatus(res, 'The response status is not the expected value')
+          return res.json()
+        }).then(res => {
+          httpHelper.checkOCSStatus(res, 'Could not perform the decline action')
+        })
+    }
+  },
+
+  /**
+   * Asynchronously accepts the shares in pending state and meeting the conditions
+   *
+   * @async
+   * @param {string} filename
+   * @param {string} user
+   * @param {string} sharer
+   */
+  acceptShare: async function (filename, user, sharer) {
+    const allShares = await this.getAllSharesSharedWithUser(user)
+    const elementsToAccept = allShares.filter((element) => {
+      return element.state === this.SHARE_STATE.pending &&
+        element.path.slice(1) === filename &&
+        element.uid_owner === sharer
+    })
+    if (elementsToAccept.length < 1) {
+      throw new Error('Could not find the share to be accepted')
+    }
+    for (const element of elementsToAccept) {
+      const shareID = element.id
+      const headers = httpHelper.createAuthHeader(user)
+      const apiURL = client.globals.backend_url +
+                      '/ocs/v2.php/apps/files_sharing/api/v1/shares/pending/' + shareID + '?format=json'
+      return fetch(apiURL,
+        {
+          method: 'POST',
+          headers: headers
+        })
+        .then(res => {
+          res = httpHelper.checkStatus(res, 'The response status is not the expected value')
+          return res.json()
+        }).then(res => {
+          httpHelper.checkOCSStatus(res, 'Could not perform the accept action')
+        })
     }
   },
   /**

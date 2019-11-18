@@ -672,8 +672,9 @@ Then('the file/folder/resource {string} should be in {string} state on the webUI
   return client.page.sharedWithMePage().assertDesiredStatusIsPresent(filename, status)
 })
 
-Then('file {string} shared by {string} should be in {string} state on the webUI', function (filename, user, status) {
-  return client.page.sharedWithMePage().assertDesiredStatusIsPresent(filename, status, user)
+Then('file/folder {string} shared by {string} should be in {string} state on the webUI', function (element, user, status) {
+  status = status === 'Accepted' ? '' : status
+  return client.page.sharedWithMePage().assertDesiredStatusIsPresent(element, status, user)
 })
 
 When('the user declines share {string} offered by user {string} using the webUI', function (filename, user) {
@@ -694,8 +695,12 @@ Then('the autocomplete list should not be displayed on the webUI', function () {
   return client.page.FilesPageElement.sharingDialog().assertAutocompleteListIsNotVisible()
 })
 
-Given('user {string} has declined the share {string} offered by user {string}', async function (user, filename, sharer) {
+Given('user {string} has declined the share {string} offered by user {string}', function (user, filename, sharer) {
   return sharingHelper.declineShare(filename, user, sharer)
+})
+
+Given('user {string} has accepted the share {string} offered by user {string}', function (user, filename, sharer) {
+  return sharingHelper.acceptShare(filename, user, sharer)
 })
 
 Then('the file {string} shared by {string} should not be in {string} state', function (filename, sharer, status) {

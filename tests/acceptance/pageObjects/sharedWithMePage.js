@@ -82,6 +82,15 @@ module.exports = {
         locateStrategy: this.elements.getSharedFromUserName.locateStrategy,
         selector: requiredXpath
       })
+    },
+    isSharePresent: async function (element, sharer) {
+      const requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(element) +
+                          util.format(this.elements.getSharedFromUserName.selector, sharer)
+      let shareFound = false
+      await this.api.elements('xpath', requiredXpath, function (result) {
+        shareFound = result.value.length > 0
+      })
+      return shareFound
     }
   },
   elements: {

@@ -120,7 +120,7 @@ When('the user browses to display the {string} details of file {string}', functi
   return client.page.FilesPageElement.filesList().getVersions(filename)
 })
 
-Given('user {string} has moved file {string} to {string}', function (user, fromName, toName) {
+Given('user {string} has moved file/folder {string} to {string}', function (user, fromName, toName) {
   return move(user, fromName, toName)
 })
 
@@ -770,4 +770,9 @@ Then('the user should be redirected to the files-drop page', async function () {
 
 Then('the user should be redirected to the public links page', async function () {
   return client.page.publicLinkFilesPage().waitForPage()
+})
+
+Then('file/folder {string} shared by {string} should not be listed in the webUI', async function (element, sharer) {
+  const found = await client.page.sharedWithMePage().isSharePresent(element, sharer)
+  assert.ok(!found, element + ' shared by ' + sharer + ' was present but was not expected to be present')
 })
