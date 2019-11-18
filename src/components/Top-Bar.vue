@@ -1,7 +1,7 @@
 <template>
   <oc-navbar id="oc-topbar" tag="header" class="oc-topbar">
     <oc-navbar-item position="left">
-      <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!publicPage()">
+      <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!publicPage()" ref="menubutton">
         <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
       </oc-button>
     </oc-navbar-item>
@@ -65,6 +65,18 @@ export default {
   destroyed: function () {
     if (this.intervalId) {
       clearInterval(this.intervalId)
+    }
+  },
+  watch: {
+    isSidebarVisible: function (val) {
+      if (!val) {
+        /*
+        * Delay for screen readers Virtual buffers
+        */
+        setTimeout(() => {
+          this.$refs.menubutton.$el.focus()
+        }, 500)
+      }
     }
   }
 }

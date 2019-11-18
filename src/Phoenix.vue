@@ -17,6 +17,7 @@
   </div>
 </template>
 <script>
+import 'inert-polyfill'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import TopBar from './components/Top-Bar.vue'
 import Menu from './components/Menu.vue'

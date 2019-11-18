@@ -1,7 +1,6 @@
 <template>
-  <oc-application-menu name="coreMenu" v-model="sidebarIsVisible" @close="sidebarIsVisible = false">
+  <oc-application-menu name="coreMenu" v-model="sidebarIsVisible" :inert="!sidebarIsVisible" @close="sidebarIsVisible = false" ref="sidebar">
     <oc-sidebar-nav-item v-for="(n, nid) in nav" :active="isActive(n)" :key="nid" :icon="n.iconMaterial" :target="n.route ? n.route.path : null" @click="openItem(n.url)">{{ translateMenu(n) }}</oc-sidebar-nav-item>
-
     <oc-sidebar-nav-item icon="account_circle" target="/account" :isolate="true">
       <translate>Account</translate>
     </oc-sidebar-nav-item>
@@ -26,6 +25,11 @@ export default {
   watch: {
     $route () {
       this.toggleSidebar(false)
+    },
+    sidebarIsVisible (val) {
+      if (val) {
+        this.focusFirstLink()
+      }
     }
   },
   computed: {
@@ -76,6 +80,16 @@ export default {
     },
     isActive (navItem) {
       return navItem.route.name === this.$route.name
+    },
+    focusFirstLink () {
+      /*
+      * Delay for two reasons:
+      * - for screen readers Virtual buffer
+      * - to outsmart uikit's focus management
+      */
+      setTimeout(() => {
+        this.$refs.sidebar.$el.querySelector('a:first-of-type').focus()
+      }, 500)
     }
   }
 }
