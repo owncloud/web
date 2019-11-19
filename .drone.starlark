@@ -566,7 +566,9 @@ def buildDockerImage():
 			'DOCKER_HOST': 'tcp://docker:2375'
 		},
 		'commands': [
-			'docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .'
+			'docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .',
+			'docker tag owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} owncloud/phoenix:latest',
+			'docker push owncloud/phoenix:latest'
 		],
 		'when': {
 			'event': [
