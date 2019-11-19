@@ -114,21 +114,6 @@ Feature: deleting files and folders
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
 
   @skip @yetToImplement
-  Scenario: delete files from shared with others page
-    Given the user has shared file "lorem.txt" with user "User Two" using the webUI
-    And the user has shared folder "simple-folder" with user "User Two" using the webUI
-    And the user has browsed to the shared-with-others page
-    When the user deletes file "lorem.txt" using the webUI
-    And the user deletes folder "simple-folder" using the webUI
-    Then as "user1" file "lorem.txt" should not exist
-    And as "user1" folder "simple-folder" should not exist
-    And file "lorem.txt" should not be listed on the webUI
-    And folder "simple-folder" should not be listed on the webUI
-    When the user browses to the files page
-    Then file "lorem.txt" should not be listed on the webUI
-    And folder "simple-folder" should not be listed on the webUI
-
-  @skip @yetToImplement
   @public_link_share-feature-required
   Scenario: delete files from shared by link page
     Given the user has created a new public link for file "lorem.txt" using the webUI
@@ -238,6 +223,8 @@ Feature: deleting files and folders
     When the user browses to the files page
     Then file "lorem.txt" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
+    And as "user1" file "lorem.txt" should not exist
+    And as "user1" folder "simple-folder" should not exist
 
   Scenario: Delete multiple files at once from shared with others page
     Given user "user2" has been created with default attributes
