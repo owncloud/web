@@ -49,15 +49,13 @@ module.exports = {
      * @returns {Promise<string>}
      */
     getErrorMessage: async function () {
-      let result
-      await this.getText(
-        'xpath',
-        this.elements.publicLinkContainer.selector + this.elements.errorMessageInsidePublicLinkContainer.selector,
-        function (textValue) {
-          result = textValue.value
-        }
-      )
-      return result
+      let message
+      const errorMessageXpath = this.elements.publicLinkContainer.selector +
+                                this.elements.errorMessageInsidePublicLinkContainer.selector
+      await this.getText('xpath', errorMessageXpath, function (result) {
+        message = result.value
+      })
+      return message
     }
   },
   elements: {

@@ -658,5 +658,5 @@ Then('file/folder {string} should be marked as shared by {string} on the webUI',
 
 Then('the user {string} should not have created any shares', async function (user) {
   const shares = await sharingHelper.getAllSharesSharedByUser(user)
-  assert.deepStrictEqual(shares, [], 'There should not be any share, but there are')
+  assert.strictEqual(shares.length, 0, 'There should not be any share, but there are')
 })

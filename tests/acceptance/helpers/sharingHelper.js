@@ -134,6 +134,12 @@ module.exports = {
 
     return lastShare
   },
+  /**
+   *
+   * @param {string} user
+   * @param {boolean} sharedWithUser
+   * @returns {Promise<[*]>}
+   */
   getAllShares: function (user, sharedWithUser = false) {
     const headers = httpHelper.createAuthHeader(user)
     let sharedWithMeText = ''
@@ -160,7 +166,7 @@ module.exports = {
     return this.getAllShares(user, true)
   },
   getAllSharesSharedByUser: function (user) {
-    return this.getAllShares(user, false)
+    return this.getAllShares(user)
   },
   declineShare: async function (filename, user, sharer) {
     const allShares = await this.getAllSharesSharedWithUser(user)
