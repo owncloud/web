@@ -12,7 +12,7 @@ import Mixins from '../mixins'
 
 export default {
   props: {
-    url: { type: String, required: true },
+    path: { type: String, required: true },
     headers: {
       type: Object,
       default: () => {

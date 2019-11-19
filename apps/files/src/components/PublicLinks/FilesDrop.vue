@@ -3,7 +3,7 @@
     <div class="uk-padding uk-height-1-1">
       <div class="uk-flex uk-flex-column uk-flex-middle" v-if="loading" key="loading-drop">
         <translate tag="h3">Loading public link…</translate>
-        <oc-spinner size="medium" />
+        <oc-spinner size="medium" :aria-label="$gettext('Loading public link…')" />
       </div>
       <div class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1" v-else key="loaded-drop">
         <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
@@ -31,7 +31,7 @@
                 <oc-table-cell shrink class="uk-padding-remove-right uk-preserve-width">
                   <oc-icon name="ready" variation="success" v-if="file.status === 'done'" />
                   <oc-icon name="info" variation="danger" v-if="file.status === 'error'" />
-                  <oc-spinner v-if="file.status === 'uploading' || file.status === 'init'" />
+                  <oc-spinner v-if="file.status === 'uploading' || file.status === 'init'" :aria-label="$_ocUploadingFileMessage(file.name)" />
                 </oc-table-cell>
               </oc-table-row>
             </oc-table-group>
@@ -51,7 +51,6 @@
 
 <script>
 import vue2DropZone from 'vue2-dropzone'
-import FileUpload from '../../FileUpload.js'
 import { mapGetters } from 'vuex'
 import Mixins from '../../mixins.js'
 
@@ -76,6 +75,9 @@ export default {
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
+    publicLinkToken () {
+      return this.$route.params.token
+    },
     title () {
       // share might not be loaded
       if (this.share) {
@@ -85,7 +87,7 @@ export default {
       return ''
     },
     url () {
-      return this.$client.publicFiles.getFileUrl(this.$route.params.token) + '/'
+      return this.$client.publicFiles.getFileUrl(this.publicLinkToken) + '/'
     },
     getUploadedFiles () {
       return this.uploadedFilesChangeTracker && this.uploadedFiles.values()
@@ -111,12 +113,12 @@ export default {
         this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
       ]
       )
-      this.$client.publicFiles.list(this.$route.params.token, this.publicLinkPassword, properties, '0').then(files => {
+      this.$client.publicFiles.list(this.publicLinkToken, this.publicLinkPassword, properties, '0').then(files => {
         if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
           this.$router.push({
             name: 'public-files',
             params: {
-              item: this.$route.params.token
+              item: this.publicLinkToken
             }
           })
           return
@@ -128,7 +130,7 @@ export default {
           this.$router.push({
             name: 'public-link',
             params: {
-              token: this.$route.params.token
+              token: this.publicLinkToken
             }
           })
           return
@@ -140,27 +142,29 @@ export default {
     },
     dropZoneFileAdded (event) {
       const uploadId = event.upload.uuid
-      const headers = {}
-      const password = this.publicLinkPassword
-      if (password) {
-        headers.Authorization = 'Basic ' + Buffer.from('public:' + password).toString('base64')
-      }
       this.uploadedFilesChangeTracker++
       this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'init' })
-      const fileUpload = new FileUpload(event, event.name, this.url, headers, (progressEvent, file) => {
+
+      this.$client.publicFiles.putFileContents(this.publicLinkToken, event.name, this.publicLinkPassword, event, {
+        // automatically rename in case of duplicates
+        headers: { 'OC-Autorename': 1 },
+        onProgress: (progressEvent) => {
+          this.uploadedFilesChangeTracker++
+          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'uploading' })
+        }
+      }).then(e => {
         this.uploadedFilesChangeTracker++
-        this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'uploading' })
-      }, 'PUT')
-      fileUpload
-        .upload()
-        .then(e => {
-          this.uploadedFilesChangeTracker++
-          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'done' })
-        })
-        .catch(e => {
-          this.uploadedFilesChangeTracker++
-          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'error' })
-        })
+        this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'done' })
+      }).catch(e => {
+        console.error('Error uploading file ', event.name, ': ', e)
+        this.uploadedFilesChangeTracker++
+        this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'error' })
+      })
+    },
+
+    $_ocUploadingFileMessage (fileName) {
+      const translated = this.$gettext('Uploading file "%{fileName}"')
+      return this.$gettextInterpolate(translated, { fileName })
     }
   }
 }
