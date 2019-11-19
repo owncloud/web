@@ -153,16 +153,16 @@ Feature: Sharing files and folders with internal users
     Then file "lorem.txt" should be listed on the webUI
     And folder "simple-folder" should be listed on the webUI
 
-  @skip @yetToImplement
-  Scenario: share two file with same name but different paths
-    Given user "user2" has logged in using the webUI
-    And the user has shared file "lorem.txt" with user "User One" using the webUI
-    When the user opens folder "simple-folder" using the webUI
-    And the user shares file "lorem.txt" with user "User One" using the webUI
-    And the user browses to the shared-with-others page
-    Then file "lorem.txt" with path "" should be listed in the shared with others page on the webUI
-    And file "lorem.txt" with path "/simple-folder" should be listed in the shared with others page on the webUI
-    
+  @issue-2480 @yetToImplement
+  Scenario: check file with same name but different paths are displayed correctly in shared with others page
+    Given user "user2" has shared file "lorem.txt" with user "user1"
+    And user "user2" has shared file "simple-folder/lorem.txt" with user "user1"
+    And user "user2" has logged in using the webUI
+    When the user browses to the shared-with-others page
+    Then file "lorem.txt" should be listed on the webUI
+#    Then file "lorem.txt" with path "" should be listed in the shared with others page on the webUI
+#    And file "lorem.txt" with path "/simple-folder" should be listed in the shared with others page on the webUI
+
   @skip @yetToImplement
   Scenario: user tries to share a file from a group which is blacklisted from sharing
     Given group "grp1" has been created
@@ -227,21 +227,18 @@ Feature: Sharing files and folders with internal users
     Then the user should not be able to share file "testimage.jpg" using the webUI
     And the user should not be able to share folder "simple-folder" using the webUI
 
-  @skip @yetToImplement
   Scenario: user tries to re-share a file from a group which is blacklisted from sharing using webUI from shared with you page
     Given group "grp1" has been created
     And user "user1" has been added to group "grp1"
     And user "user3" has been created with default attributes
     And user "user2" has shared file "/testimage.jpg" with user "user1"
-    And the administrator has browsed to the admin sharing settings page
-    And the administrator has enabled exclude groups from sharing from the admin sharing settings page
-    When the administrator adds group "grp1" to the group sharing blacklist using the webUI
-    And the user re-logs in as "user1" using the webUI
-    And the user browses to the shared-with-you page
-    And the user opens the sharing tab from the file action menu of file "testimage (2).jpg" using the webUI
-    Then the user should see an error message on the share dialog saying "Sharing is not allowed"
-    And the share-with field should not be visible in the details panel
-    And user "user1" should not be able to share file "testimage (2).jpg" with user "User Three" using the sharing API
+    And the administrator has enabled exclude groups from sharing
+    And the administrator has excluded group "grp1" from sharing
+    And user "user1" has logged in using the webUI
+    When the user browses to the shared-with-me page
+    And the user opens the share dialog for file "testimage (2).jpg" using the webUI
+    And the user types "User Three" in the share-with-field
+    Then "user" "User Three" should not be listed in the autocomplete list on the webUI
 
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "user1" has logged in using the webUI
