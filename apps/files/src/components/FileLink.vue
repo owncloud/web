@@ -17,11 +17,11 @@
             <a :href="link.url" :uk-tooltip="$_tooltipTextLink" class="uk-text-small uk-link">{{ link.token }}</a> <span class="uk-text-meta">| {{ link.description }}<template v-if="link.expiration"> | <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}</template></span>
           </div>
           <div class="uk-width-auto uk-button-group">
-            <button class="uk-button uk-button-default uk-position-relative" @click.stop="$_copyToClipboard(link, $event)">
+            <button class="uk-button uk-button-default uk-position-relative" @click.stop="$_copyToClipboard(link, $event)" :aria-label="$_copyToClipboardLinkAriaLabel">
               <oc-icon name="copy_to_clipboard" class="uk-position-center" />
             </button>
-            <oc-button :disabled="!!(formOpen || linkId)" icon="edit" @click="$_editLink(link)"/>
-            <oc-button :disabled="!!(formOpen || linkId)" icon="delete" @click="$_removeLink(link)" />
+            <oc-button :disabled="!!(formOpen || linkId)" icon="edit" @click="$_editLink(link)" :ariaLabel="$_editLinkAriaLabel"/>
+            <oc-button :disabled="!!(formOpen || linkId)" icon="delete" @click="$_removeLink(link)" :ariaLabel="$_removeLinkAriaLabel"/>
           </div>
         </oc-grid>
         <FileLinkForm v-if="linkId === link.id" class="uk-margin-top" :params="params" :context="'edit'" :linkId="linkId"/>
@@ -110,6 +110,15 @@ export default {
 
     $_tooltipTextLink () {
       return `title: ${this.$gettext('Click to open the link')}; pos: bottom`
+    },
+    $_removeLinkAriaLabel () {
+      return `${this.$gettext('remove link')}`
+    },
+    $_editLinkAriaLabel () {
+      return `${this.$gettext('edit link')}`
+    },
+    $_copyToClipboardLinkAriaLabel () {
+      return `${this.$gettext('copy link url to clipboard')}`
     }
   },
   methods: {
