@@ -4958,19 +4958,6 @@ workspace:
   path: phoenix
 
 steps:
-- name: build-docker-image
-  pull: always
-  image: toolhippie/docker:latest
-  commands:
-  - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
-  - docker tag owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} owncloud/phoenix:latest
-  - docker push owncloud/phoenix:latest
-  environment:
-    DOCKER_HOST: tcp://docker:2375
-  when:
-    event:
-    - push
-
 - name: npm-install
   pull: always
   image: owncloudci/php:7.1
@@ -5009,6 +4996,19 @@ steps:
   when:
     branch:
     - master
+    event:
+    - push
+
+- name: build-docker-image
+  pull: always
+  image: toolhippie/docker:latest
+  commands:
+  - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
+  - docker tag owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} owncloud/phoenix:latest
+  - docker push owncloud/phoenix:latest
+  environment:
+    DOCKER_HOST: tcp://docker:2375
+  when:
     event:
     - push
 

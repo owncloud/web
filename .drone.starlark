@@ -161,10 +161,10 @@ def build():
 			'path': config['app']
 		},
 		'steps':
-			buildDockerImage() +
 			installNPM() +
 			buildRelease() +
-			deployStaging(),
+			deployStaging() +
+			buildDockerImage(),
 		'services':
 			dockerInDockerService(),
 		'depends_on': [],
