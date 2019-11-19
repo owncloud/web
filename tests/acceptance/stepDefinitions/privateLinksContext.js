@@ -9,7 +9,7 @@ When('the user copies the private link of the file/folder {string} using the web
     .copyPrivateLink()
 })
 
-When('the user navigates to the copied private link using the webUI', function () {
+When('the user navigates to the copied private/public link using the webUI', function () {
   return client.getClipBoardContent(function (url) {
     // If the redirect happens immediately we receive an error
     // Cannot read property 'parentNode' of null

@@ -384,6 +384,21 @@ module.exports = {
         message = result.value
       })
       return message
+    },
+    /**
+     * clicks the 'copy-public-link-uri' button of a public link
+     *
+     * @param {string} linkName Name of the public link whose URL is to be copied
+     */
+    copyPublicLinkURI: function (linkName) {
+      const copyBtnXpath = util.format(this.elements.publicLinkURLCopyButton.selector, linkName)
+      const copyBtnSelector = {
+        selector: copyBtnXpath,
+        locateStrategy: this.elements.publicLinkURLCopyButton.locateStrategy
+      }
+      return this
+        .waitForElementVisible(copyBtnSelector)
+        .click(copyBtnSelector)
     }
   },
   elements: {
@@ -425,6 +440,10 @@ module.exports = {
     },
     publicLinkDeleteButton: {
       selector: '//span[.="%s"]/../..//button[@aria-label="Delete public link"]',
+      locateStrategy: 'xpath'
+    },
+    publicLinkURLCopyButton: {
+      selector: '//span[.="%s"]/../..//button[@aria-label="Copy link url"]',
       locateStrategy: 'xpath'
     },
     publicLinkPasswordField: {
