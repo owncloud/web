@@ -193,5 +193,29 @@ module.exports = {
    */
   getCreatedGroups: function () {
     return this.createdGroups
+  },
+  /**
+   * Gets the password for the un-initialized users and replaces the password accordingly
+   *
+   * @param {string} password
+   * @returns {string}
+   */
+  replaceInlineCode: function (password) {
+    if (password === '%regular%') {
+      return regularUserPassword
+    }
+    if (password === '%alt1%') {
+      return alt1UserPassword
+    }
+    if (password === '%alt2%') {
+      return alt2UserPassword
+    }
+    if (password === '%alt3') {
+      return alt3UserPassword
+    }
+    if (password === '%alt4%') {
+      return alt4UserPassword
+    }
+    return password
   }
 }
