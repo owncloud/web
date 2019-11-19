@@ -79,3 +79,11 @@ Then(
         )
       })
   })
+
+Then('the user should see an error message on the public link share dialog saying {string}', async function (expectedMessage) {
+  const actualMessage = await client.page.FilesPageElement
+    .publicLinksDialog()
+    .getErrorMessage()
+
+  return client.assert.strictEqual(actualMessage, expectedMessage)
+})
