@@ -35,7 +35,7 @@ help:
 
 .PHONY: dist
 dist:                       ## Build distribution
-dist: distdir javascript oc-app distconf sign package docker-image
+dist: distdir javascript oc-app distconf sign package
 
 
 .PHONY: javascript
@@ -73,7 +73,3 @@ package:
 	mkdir $(CURDIR)/phoenix
 	cp -R $(dist_dir) $(CURDIR)/phoenix
 	tar -czf $(CURDIR)/release/$(app_name).tar.gz -C $(CURDIR) phoenix
-
-.PHONY: docker-image
-docker-image:
-	docker build .
