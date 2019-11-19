@@ -517,12 +517,14 @@ module.exports = {
     copyPrivateLink: function () {
       return this
         .waitForElementVisible('@sidebar')
-        .waitForElementVisible('@sidebarPrivateLinkIcon')
-        .click('@sidebarPrivateLinkIcon')
-        .waitForElementNotVisible('@sidebarPrivateLinkIcon')
+        .waitForElementVisible('@sidebarLinksTab')
+        .click('@sidebarLinksTab')
+        .waitForElementVisible('@sidebarPrivateLinkLabel')
+        .click('@sidebarPrivateLinkLabel')
+        .waitForElementNotVisible('@sidebarPrivateLinkLabel')
         .waitForElementVisible('@sidebarPrivateLinkIconCopied')
         .waitForElementNotVisible('@sidebarPrivateLinkIconCopied')
-        .waitForElementVisible('@sidebarPrivateLinkIcon')
+        .waitForElementVisible('@sidebarPrivateLinkLabel')
     },
     deleteImmediately: function (fileName) {
       return this.waitForFileVisible(fileName)
@@ -640,8 +642,8 @@ module.exports = {
     sidebar: {
       selector: '#files-sidebar'
     },
-    sidebarPrivateLinkIcon: {
-      selector: '#files-sidebar-private-link-icon'
+    sidebarPrivateLinkLabel: {
+      selector: '#files-sidebar-private-link-label'
     },
     sidebarPrivateLinkIconCopied: {
       selector: '#files-sidebar-private-link-icon-copied'

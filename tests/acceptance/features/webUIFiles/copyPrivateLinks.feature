@@ -1,3 +1,4 @@
+@skip
 Feature: copy current path as a permanent link
   As a user
   I want to copy the permanent link to the current folder

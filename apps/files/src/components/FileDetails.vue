@@ -7,16 +7,6 @@
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
           <span id="files-sidebar-item-name" class="uk-margin-small-right uk-text-bold" v-text="highlightedFile.name" />
-          <template v-if="privateLinkOfHighlightedFile">
-            <oc-icon name="ready" id="files-sidebar-private-link-icon-copied" v-show="linkCopied" />
-            <oc-icon
-              name="link"
-              id="files-sidebar-private-link-icon"
-              v-show="!linkCopied"
-              v-clipboard:copy="privateLinkOfHighlightedFile"
-              v-clipboard:success="clipboardSuccessHandler"
-            />
-          </template>
         </div>
         <div v-if="$route.name !== 'files-shared-with-others'">
           <oc-star v-if="!publicPage()" class="uk-inline" :shining="highlightedFile.starred"/>
@@ -50,8 +40,7 @@ export default {
   data () {
     return {
       /** String name of the tab that is activated */
-      activeTab: null,
-      linkCopied: false
+      activeTab: null
     }
   },
   methods: {
@@ -62,14 +51,6 @@ export default {
     },
     showSidebar (app) {
       this.activeTab = app
-    },
-    clipboardSuccessHandler () {
-      this.linkCopied = true
-
-      // Use copy icon after some time
-      setTimeout(() => {
-        this.linkCopied = false
-      }, 1000)
     }
   },
   computed: {
@@ -85,16 +66,6 @@ export default {
     },
     activeTabComponent () {
       return this.fileSideBarsEnabled.find(sidebar => sidebar.app === this.activeTab)
-    },
-    privateLinkOfHighlightedFile () {
-      if (!this.highlightedFile) {
-        return false
-      }
-      if (this.highlightedFile.isMounted()) {
-        const file = encodeURIComponent(this.highlightedFile.name)
-        return window.location.href.split('?')[0] + `?scrollTo=${file}`
-      }
-      return this.highlightedFile.privateLink
     }
   },
   watch: {

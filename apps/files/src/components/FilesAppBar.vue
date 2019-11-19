@@ -5,14 +5,6 @@
       <div class="uk-width-expand">
         <div class="uk-flex">
           <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="showBreadcrumb" home></oc-breadcrumb>
-          <span class="uk-margin-small-left" v-if="showBreadcrumb && privateLinkOfCurrentFolder">
-          <oc-icon name="ready" v-show="linkCopied" />
-          <oc-icon id="files-permalink-copy" name="link"
-                   v-clipboard:copy="privateLinkOfCurrentFolder"
-                   v-show="!linkCopied"
-                   v-clipboard:success="clipboardSuccessHandler"
-          />
-          </span>
         </div>
         <span class="uk-flex uk-flex-middle" v-if="!showBreadcrumb">
           <oc-icon v-if="pageIcon" :name="pageIcon" class="uk-margin-small-right" />
@@ -117,7 +109,6 @@ export default {
     searchedFiles: [],
     fileFolderCreationLoading: false,
     actionsKey: Math.floor(Math.random() * 20),
-    linkCopied: false,
     // In case of change of search value to empty string
     // searchBarKey can be changed to force re-render of the component
     searchBarKey: 0
@@ -181,15 +172,6 @@ export default {
         return false
       }
       return this.currentFolder.canUpload()
-    },
-    privateLinkOfCurrentFolder () {
-      if (!this.currentFolder) {
-        return false
-      }
-      if (this.currentFolder.isMounted()) {
-        return window.location.href
-      }
-      return this.currentFolder.privateLink
     },
     $_ocFilesAppBar_showActions () {
       return this.$route.meta.hideFilelistActions !== true
@@ -542,15 +524,6 @@ export default {
       }
       this.resetFileSelection()
       this.setHighlightedFile(null)
-    },
-    clipboardSuccessHandler () {
-      this.linkCopied = true
-
-      // Use copy icon after some time
-      const self = this
-      setTimeout(() => {
-        self.linkCopied = false
-      }, 1000)
     },
 
     onSearchClear () {
