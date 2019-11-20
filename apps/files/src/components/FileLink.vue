@@ -93,7 +93,9 @@ export default {
     ...mapGetters(['getToken', 'capabilities']),
 
     $_links () {
-      return this.links
+      return this.links.filter(link => {
+        return this.compareIds(link.itemSource, this.highlightedFile.id)
+      })
     },
 
     $_expirationDate () {
