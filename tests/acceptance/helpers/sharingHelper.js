@@ -134,9 +134,21 @@ module.exports = {
 
     return lastShare
   },
-  getAllShares: function (user) {
+  /**
+   *
+   * @param {string} user
+   * @param {boolean} sharedWithUser
+   * @returns {Promise<[*]>}
+   */
+  getAllShares: function (user, sharedWithUser = false) {
     const headers = httpHelper.createAuthHeader(user)
-    const apiURL = client.globals.backend_url + '/ocs/v2.php/apps/files_sharing/api/v1/shares?shared_with_me=true&format=json&state=all'
+    let sharedWithMeText = ''
+    if (sharedWithUser === true) {
+      sharedWithMeText = '&shared_with_me=true'
+    }
+    const apiURL = client.globals.backend_url +
+                   '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json&state=all' +
+                   sharedWithMeText
     return fetch(apiURL,
       {
         method: 'GET',
@@ -150,8 +162,14 @@ module.exports = {
         return res.ocs.data
       })
   },
+  getAllSharesSharedWithUser: function (user) {
+    return this.getAllShares(user, true)
+  },
+  getAllSharesSharedByUser: function (user) {
+    return this.getAllShares(user)
+  },
   declineShare: async function (filename, user, sharer) {
-    const allShares = await this.getAllShares(user)
+    const allShares = await this.getAllSharesSharedWithUser(user)
     for (const element of allShares) {
       if (element.state === 1 && element.path.replace(/^\/|\/$/g, '') === filename && element.uid_owner === sharer) {
         const shareID = element.id

@@ -305,36 +305,49 @@ Feature: Share by public link
     And the public accesses the last created public link using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
-  @skip @yetToImplement
-  Scenario: user tries to create a public link with read only permission without entering share password while enforce password on read only public share is enforced
-    Given parameter "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes"
-    When the user tries to create a new public link for folder "simple-folder" using the webUI
+  Scenario: user tries to create a public link with Viewer role without entering share password while enforce password on read only public share is enforced
+    Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes"
+    And user "user1" has logged in using the webUI
+    When the user creates a new public link for folder "simple-folder" using the webUI
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
-    And the public link should not have been generated
+    And the user "user1" should not have created any shares
 
-  @skip @yetToImplement
-  Scenario: user tries to create a public link with read-write permission without entering share password while enforce password on read-write public share is enforced
-    Given parameter "shareapi_enforce_links_password_read_write" of app "core" has been set to "yes"
-    When the user tries to create a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
-    And the public link should not have been generated
-
-  @skip @yetToImplement
-  Scenario: user tries to create a public link with write only permission without entering share password while enforce password on write only public share is enforced
-    Given parameter "shareapi_enforce_links_password_write_only" of app "core" has been set to "yes"
-    When the user tries to create a new public link for folder "simple-folder" using the webUI with
-      | permission | upload |
-    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
-    And the public link should not have been generated
-
-  @skip @yetToImplement
-  Scenario: user creates a public link with read-write permission without entering share password while enforce password on read only public share is enforced
-    Given parameter "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes"
+  Scenario: user tries to create a public link with Contributor role without entering share password while enforce password on read-write public share is enforced
+    Given the setting "shareapi_enforce_links_password_read_write" of app "core" has been set to "yes"
+    And user "user1" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    And the public accesses the last created public link using the webUI
-    Then file "lorem.txt" should be listed on the webUI
+      | role | Contributor |
+    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
+    And the user "user1" should not have created any shares
+
+  Scenario: user tries to create a public link with Editor Role without entering share password while enforce password on read-write public share is enforced
+    Given the setting "shareapi_enforce_links_password_read_write_delete" of app "core" has been set to "yes"
+    And user "user1" has logged in using the webUI
+    When the user creates a new public link for folder "simple-folder" using the webUI with
+      | role | Editor |
+    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
+    And the user "user1" should not have created any shares
+
+  Scenario: user tries to create a public link with Uploader role without entering share password while enforce password on write only public share is enforced
+    Given the setting "shareapi_enforce_links_password_write_only" of app "core" has been set to "yes"
+    And user "user1" has logged in using the webUI
+    When the user creates a new public link for folder "simple-folder" using the webUI with
+      | role | Uploader |
+    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
+    And the user "user1" should not have created any shares
+
+  Scenario: user creates a public link with Contributor Role without entering share password while enforce password on read only public share is enforced
+    Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes"
+    And user "user1" has logged in using the webUI
+    When the user creates a new public link for folder "simple-folder" using the webUI with
+      | role | Contributor |
+    Then user "user1" should have a share with these details:
+      | field       | value          |
+      | share_type  | public_link    |
+      | uid_owner   | user1          |
+      | permissions | read, create   |
+      | path        | /simple-folder |
+      | name        | Public link    |
 
   @skip @yetToImplement
   Scenario: public should be able to access the shared file through public link

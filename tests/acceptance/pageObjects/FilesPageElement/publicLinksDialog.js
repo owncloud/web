@@ -19,7 +19,7 @@ module.exports = {
 
       return this.click({ locateStrategy: 'xpath', selector: createLinkButtonXpath })
         .waitForOutstandingAjaxCalls()
-        .waitForElementNotPresent({ locateStrategy: 'xpath', selector: createLinkButtonXpath })
+        .waitForElementNotPresent({ locateStrategy: 'xpath', selector: createLinkButtonXpath, abortOnFailure: false })
     },
     /**
      * gets the text of all public links of the currently open public link tab
@@ -43,6 +43,19 @@ module.exports = {
           })
         })
       return Promise.all(promiseList)
+    },
+    /**
+     *
+     * @returns {Promise<string>}
+     */
+    getErrorMessage: async function () {
+      let message
+      const errorMessageXpath = this.elements.publicLinkContainer.selector +
+                                this.elements.errorMessageInsidePublicLinkContainer.selector
+      await this.getText('xpath', errorMessageXpath, function (result) {
+        message = result.value
+      })
+      return message
     }
   },
   elements: {
@@ -64,6 +77,10 @@ module.exports = {
     },
     roleButton: {
       selector: '//*[contains(@class,"oc-files-file-link-form")]//*[.="%s"]'
+    },
+    errorMessageInsidePublicLinkContainer: {
+      selector: '//div[contains(@class, "uk-alert-danger")]',
+      locateStrategy: 'xpath'
     }
   }
 }
