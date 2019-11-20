@@ -2,6 +2,7 @@ const { Given, Then } = require('cucumber')
 const fetch = require('node-fetch')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
+const backendHelper = require('../helpers/backendHelper')
 const webdavHelper = require('../helpers/webdavHelper')
 const { client } = require('nightwatch-api')
 const { xml2js } = require('xml-js')
@@ -32,6 +33,10 @@ function fileExists (userId, element) {
 
 Then('as {string} file/folder {string} should exist', function (userId, element) {
   return fileExists(userId, element)
+})
+
+Then('as {string} file/folder {string} should exist on remote server', function (userId, element) {
+  return backendHelper.runOnRemoteBackend(fileExists, [userId, element])
 })
 
 Then('as {string} file/folder {string} should exist inside folder {string}', function (user, file, folder) {

@@ -1,5 +1,6 @@
 const assert = require('assert')
 const util = require('util')
+const userSettings = require('../helpers/userSettings')
 
 module.exports = {
   url: function () {
@@ -55,11 +56,12 @@ module.exports = {
         .click('@messageCloseIcon')
         .waitForElementNotPresent('@messageCloseIcon')
     },
+    toggleNotificationDrawer: async function () {
+      return this.waitForElementVisible('@notificationBell').click('@notificationBell')
+    },
     getNotifications: async function () {
       const notifications = []
-      await this
-        .click('@notificationBell')
-        .waitForElementVisible('@notificationElement')
+      await this.toggleNotificationDrawer()
       await this.api.elements('@notificationElement', result => {
         for (const element of result.value) {
           this.api.elementIdText(element.ELEMENT, text => {
@@ -67,6 +69,7 @@ module.exports = {
           })
         }
       })
+      await this.toggleNotificationDrawer()
       return notifications
     },
     /**
@@ -76,16 +79,19 @@ module.exports = {
     assertNotificationIsPresent: async function (numberOfNotifications, expectedNotifications) {
       const notifications = await this.getNotifications()
       assert.strictEqual(notifications.length, numberOfNotifications)
+      const promises = []
       for (const element of expectedNotifications) {
-        const isPresent = notifications.includes(element.title)
-        this.assert.ok(isPresent)
+        const isPresent = notifications.includes(userSettings.replaceInlineCode(element.title))
+        promises.push(this.assert.ok(isPresent))
       }
+      return Promise.all(promises)
     },
     /**
      * Perform accept action on the offered shares in the notifications
      */
     acceptAllSharesInNotification: async function () {
       const notifications = await this.getNotifications()
+      await this.toggleNotificationDrawer()
       for (const element of notifications) {
         const acceptShareButton = util.format(this.elements.acceptSharesInNotifications.selector, element)
         await this
@@ -107,8 +113,8 @@ module.exports = {
      */
     declineAllSharesInNotification: async function () {
       const notifications = await this.getNotifications()
+      await this.toggleNotificationDrawer()
       for (const element of notifications) {
-        console.log(element)
         const declineShareButton = util.format(this.elements.declineSharesInNotifications.selector, element)
         await this
           .useXpath()

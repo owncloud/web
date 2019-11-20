@@ -1,3 +1,8 @@
+const { client } = require('nightwatch-api')
+const _ = require('lodash')
+
+const { BACKENDS } = require('./backendHelper')
+
 const adminUsername = process.env.ADMIN_USERNAME || 'admin'
 const adminPassword = process.env.ADMIN_PASSWORD || 'admin'
 const regularUserPassword = process.env.REGULAR_USER_PASSWORD || '123456'
@@ -61,6 +66,7 @@ module.exports = {
     }
   },
   createdUsers: {},
+  createdRemoteUsers: {},
   createdGroups: [],
 
   /**
@@ -71,7 +77,11 @@ module.exports = {
    * @param {string} email
    */
   addUserToCreatedUsersList: function (userId, password, displayname = null, email = null) {
-    this.createdUsers[userId] = { password: password, displayname: displayname, email: email }
+    if (client.globals.default_backend === BACKENDS.remote) {
+      this.createdRemoteUsers[userId] = { password, displayname, email }
+    } else {
+      this.createdUsers[userId] = { password: password, displayname: displayname, email: email }
+    }
   },
   /**
    *
@@ -190,8 +200,15 @@ module.exports = {
    *
    * @returns {module.exports.createdUsers|{}}
    */
-  getCreatedUsers: function () {
-    return this.createdUsers
+  getCreatedUsers: function (server = BACKENDS.local) {
+    switch (server) {
+      case BACKENDS.local:
+        return this.createdUsers
+      case BACKENDS.remote:
+        return this.createdRemoteUsers
+      default:
+        throw new Error('Invalid value for server. want = "REMOTE"/"LOCAL", got = ' + server)
+    }
   },
   /**
    *
@@ -203,28 +220,23 @@ module.exports = {
   /**
    * Gets the password for the un-initialized users and replaces the password accordingly
    *
-   * @param {string} password
+   * @param {string} input
    * @returns {string}
    */
-  replaceInlineCode: function (password) {
-    if (password === '%regular%') {
-      return regularUserPassword
+  replaceInlineCode: function (input) {
+    const codes = {
+      regular: regularUserPassword,
+      alt1: alt1UserPassword,
+      alt2: alt2UserPassword,
+      alt3: alt3UserPassword,
+      alt4: alt4UserPassword,
+      alt11: alt4UserPassword,
+      remote_backend_url: client.globals.remote_backend_url,
+      backend_url: client.globals.backend_url
     }
-    if (password === '%alt1%') {
-      return alt1UserPassword
-    }
-    if (password === '%alt2%') {
-      return alt2UserPassword
-    }
-    if (password === '%alt3') {
-      return alt3UserPassword
-    }
-    if (password === '%alt4%') {
-      return alt4UserPassword
-    }
-    if (password === '%alt11%') {
-      return alt11UserPassword
-    }
-    return password
+
+    _.templateSettings.interpolate = /%([\s\S]+?)%/g
+    const compiled = _.template(input)
+    return compiled(codes)
   }
 }

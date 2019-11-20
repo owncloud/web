@@ -2,6 +2,7 @@ const { client } = require('nightwatch-api')
 const { After, Before, Given, Then, When } = require('cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
+const backendHelper = require('../helpers/backendHelper')
 const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
@@ -9,6 +10,7 @@ const occHelper = require('../helpers/occHelper')
 
 let initialConfigJsonSettings
 let createdFiles = []
+const userSettings = require('../helpers/userSettings')
 
 Given('a file with the size of {string} bytes and the name {string} has been created locally', function (size, name) {
   const fullPathOfLocalFile = client.globals.filesForUpload + name
@@ -108,6 +110,12 @@ Given('the setting {string} of app {string} has been set to {string}', function 
     ])
 })
 
+Given('the setting {string} of app {string} has been set to {string} on remote server', async function (setting, app, value) {
+  return backendHelper.runOnRemoteBackend(occHelper.runOcc, [[
+    'config:app:set', app, setting, '--value=' + value
+  ]])
+})
+
 Given('the administrator has cleared the versions for user {string}', function (userId) {
   return occHelper.runOcc(
     [
@@ -120,6 +128,26 @@ Given('the administrator has cleared the versions for all users', function () {
     [
       'versions:cleanup'
     ])
+})
+
+const setTrustedServer = function (url) {
+  const body = new URLSearchParams()
+  body.append('url', userSettings.replaceInlineCode(url))
+  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const postUrl = `${backendHelper.getCurrentBackendUrl()}/ocs/v2.php/apps/testing/api/v1/trustedservers?format=json`
+  return fetch(postUrl,
+    { method: 'POST', headers, body })
+    .then(res => {
+      return httpHelper.checkStatus(res)
+    })
+}
+
+Given('server {string} has been added as trusted server', function (server) {
+  return setTrustedServer(server)
+})
+
+Given('server {string} has been added as trusted server on remote server', function (url) {
+  return backendHelper.runOnRemoteBackend(setTrustedServer, [url])
 })
 
 Before(function (testCase) {

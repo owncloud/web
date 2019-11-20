@@ -4,49 +4,48 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   So that other users have access to these files
 
   Background:
-    Given using server "REMOTE"
-    And user "user1" has been created with default attributes
-    And using server "LOCAL"
+    Given app "notifications" has been enabled
+    And the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes" on remote server
+    And the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "no"
+    And server "%remote_backend_url%" has been added as trusted server
+    And server "%backend_url%" has been added as trusted server on remote server
+    And user "user1" has been created with default attributes on remote server
     And user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
-    And parameter "auto_accept_trusted" of app "federatedfilesharing" has been set to "no"
 
-  @skip @yetToImplement
   Scenario: test the single steps of sharing a folder to a remote server
-    When the user shares folder "simple-folder" with remote user "user1@%remote_server_without_scheme%" using the webUI
-    And the user shares folder "simple-empty-folder" with remote user "user1@%remote_server_without_scheme%" using the webUI
-    And user "user1" re-logs in to "%remote_server%" using the webUI
-    And the user accepts the offered remote shares using the webUI
-    And using server "REMOTE"
-    Then as "user1" folder "/simple-folder (2)" should exist
-    And as "user1" file "/simple-folder (2)/lorem.txt" should exist
-    And as "user1" folder "/simple-empty-folder (2)" should exist
+    When the user shares folder "simple-folder" with remote user "user1" as "Editor" using the webUI
+    And the user shares folder "simple-empty-folder" with remote user "user1" as "Editor" using the webUI
+    Then as "user1" folder "/simple-folder (2)" should exist on remote server
+    And as "user1" file "/simple-folder (2)/lorem.txt" should exist on remote server
+    And as "user1" folder "/simple-empty-folder (2)" should exist on remote server
 
-  @skip @yetToImplement
+  @yetToImplement
   Scenario: test the single steps of receiving a federation share
-    Given using server "REMOTE"
-    And these users have been created with default attributes:
-      | username |
-      | user2    |
-      | user3    |
-    And user "user1" from server "REMOTE" has shared "simple-folder" with user "user1" from server "LOCAL"
-    And user "user2" from server "REMOTE" has shared "simple-empty-folder" with user "user1" from server "LOCAL"
-    And user "user3" from server "REMOTE" has shared "lorem.txt" with user "user1" from server "LOCAL"
+    Given user "user2" has been created with default attributes on remote server
+    And user "user3" has been created with default attributes on remote server
+    And user "user1" from remote server has shared "simple-folder" with user "user1" from local server
+    And user "user2" from remote server has shared "simple-empty-folder" with user "user1" from local server
+    And user "user3" from remote server has shared "lorem.txt" with user "user1" from local server
     And the user has reloaded the current page of the webUI
-    Then dialogs should be displayed on the webUI
-      | title        | content                                                                                             |
-      | Remote share | Do you want to add the remote share /simple-folder from user1@%remote_server_without_scheme%?       |
-      | Remote share | Do you want to add the remote share /simple-empty-folder from user2@%remote_server_without_scheme%? |
-      | Remote share | Do you want to add the remote share /lorem.txt from user3@%remote_server_without_scheme%?           |
-    When the user accepts the offered remote shares using the webUI
+    Then the user should see 3 notifications on the webUI with these details
+      | title                                                              |
+      | "user1@%remote_backend_url%" shared "simple-folder" with you       |
+      | "user2@%remote_backend_url%" shared "simple-empty-folder" with you |
+      | "user3@%remote_backend_url%" shared "lorem.txt" with you           |
+    When the user accepts all shares displayed in the notifications on the webUI
+    And the user reloads the current page of the webUI
     Then file "lorem (2).txt" should be listed on the webUI
-    And the content of "lorem (2).txt" on the local server should be the same as the original "lorem.txt"
+    And as "user1" the content of "lorem (2).txt" should be the same as the original "lorem.txt"
     And folder "simple-folder (2)" should be listed on the webUI
-    And file "lorem.txt" should be listed in folder "simple-folder (2)" on the webUI
-    And the content of "lorem.txt" on the local server should be the same as the original "simple-folder/lorem.txt"
-    And file "lorem (2).txt" should be listed in the shared-with-you page on the webUI
-    And folder "simple-folder (2)" should be listed in the shared-with-you page on the webUI
-    And folder "simple-empty-folder (2)" should be listed in the shared-with-you page on the webUI
+    And folder "simple-folder (2)" should be listed on the webUI
+    When the user opens folder "simple-folder (2)" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And as "user1" the content of "simple-folder (2)/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
+    #    When the user browses to the shared-with-me page
+    #    Then file "lorem (2).txt" should be listed on the webUI
+    #    And folder "simple-folder (2)" should be listed on the webUI
+    #    And folder "simple-empty-folder (2)" should be listed on the webUI
 
   @skip @yetToImplement
   Scenario: declining a federation share on the webUI

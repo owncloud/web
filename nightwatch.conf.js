@@ -2,9 +2,11 @@ const chromedriver = require('chromedriver')
 let LOCAL_LAUNCH_URL = process.env.SERVER_HOST || 'http://localhost:8300'
 LOCAL_LAUNCH_URL = LOCAL_LAUNCH_URL.startsWith('http') ? LOCAL_LAUNCH_URL : 'http://' + LOCAL_LAUNCH_URL
 let LOCAL_BACKEND_URL = process.env.BACKEND_HOST || 'http://localhost:8080'
+let REMOTE_BACKEND_URL = process.env.REMOTE_BACKEND_HOST || 'http://localhost:8080'
 const BACKEND_ADMIN_USERNAME = process.env.BACKEND_USERNAME || 'admin'
 const BACKEND_ADMIN_PASSWORD = process.env.BACKEND_PASSWORD || 'admin'
 LOCAL_BACKEND_URL = LOCAL_BACKEND_URL.startsWith('http') ? LOCAL_BACKEND_URL : 'http://' + LOCAL_BACKEND_URL
+REMOTE_BACKEND_URL = REMOTE_BACKEND_URL.startsWith('http') ? REMOTE_BACKEND_URL : 'http://' + REMOTE_BACKEND_URL
 const SELENIUM_HOST = process.env.SELENIUM_HOST || ''
 const SELENIUM_PORT = process.env.SELENIUM_PORT || 4444
 const START_PROCESS = (SELENIUM_HOST === '')
@@ -30,7 +32,9 @@ module.exports = {
       launch_url: LOCAL_LAUNCH_URL,
       globals: {
         waitForConditionTimeout: 10000,
+        default_backend: 'LOCAL',
         backend_url: LOCAL_BACKEND_URL,
+        remote_backend_url: REMOTE_BACKEND_URL,
         backend_admin_username: BACKEND_ADMIN_USERNAME,
         backend_admin_password: BACKEND_ADMIN_PASSWORD
       },
@@ -62,6 +66,8 @@ module.exports = {
       globals: {
         waitForConditionTimeout: 20000,
         backend_url: 'http://owncloud',
+        default_backend: 'LOCAL',
+        remote_backend_url: 'http://federated',
         backend_admin_username: 'admin',
         backend_admin_password: 'admin'
       },

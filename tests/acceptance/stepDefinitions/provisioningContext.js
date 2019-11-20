@@ -3,7 +3,9 @@ const { Given, After } = require('cucumber')
 const fetch = require('node-fetch')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
+const backendHelper = require('../helpers/backendHelper')
 const userSettings = require('../helpers/userSettings')
+const { join } = require('../helpers/path')
 
 function createDefaultUser (userId) {
   const password = userSettings.getPasswordForUser(userId)
@@ -20,7 +22,11 @@ function createUser (userId, password, displayName = false, email = false) {
 
   userSettings.addUserToCreatedUsersList(userId, password, displayName, email)
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
-  return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users?format=json',
+  return fetch(
+    join(
+      backendHelper.getCurrentBackendUrl(),
+      '/ocs/v2.php/cloud/users?format=json'
+    ),
     { method: 'POST', body: body, headers: headers }
   )
     .then(() => {
@@ -29,7 +35,11 @@ function createUser (userId, password, displayName = false, email = false) {
           const body = new URLSearchParams()
           body.append('key', 'display')
           body.append('value', displayName)
-          fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`,
+          fetch(
+            join(
+              backendHelper.getCurrentBackendUrl(),
+              `/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`
+            ),
             { method: 'PUT', body: body, headers: headers }
           )
             .then(res => {
@@ -47,7 +57,11 @@ function createUser (userId, password, displayName = false, email = false) {
           const body = new URLSearchParams()
           body.append('key', 'email')
           body.append('value', email)
-          fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`,
+          fetch(
+            join(
+              backendHelper.getCurrentBackendUrl(),
+              `/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`
+            ),
             { method: 'PUT', body: body, headers: headers }
           )
             .then(res => {
@@ -67,12 +81,25 @@ function createUser (userId, password, displayName = false, email = false) {
 function deleteUser (userId) {
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
   userSettings.deleteUserFromCreatedUsersList(userId)
-  return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users/' + userId, { method: 'DELETE', headers: headers })
+  return fetch(
+    join(
+      backendHelper.getCurrentBackendUrl(),
+      '/ocs/v2.php/cloud/users/',
+      userId
+    ),
+    { method: 'DELETE', headers: headers })
 }
 
 function initUser (userId) {
   const headers = httpHelper.createAuthHeader(userId)
-  return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/users/' + userId, { method: 'GET', headers: headers })
+  return fetch(
+    join(
+      backendHelper.getCurrentBackendUrl(),
+      '/ocs/v2.php/cloud/users/',
+      userId
+    ),
+    { method: 'GET', headers: headers }
+  )
 }
 
 /**
@@ -117,6 +144,15 @@ Given('user {string} has been created with default attributes', function (userId
   return deleteUser(userId)
     .then(() => createDefaultUser(userId))
     .then(() => initUser(userId))
+})
+
+Given('user {string} has been created with default attributes on remote server', function (userId) {
+  return backendHelper.runOnRemoteBackend(
+    async function (user) {
+      await deleteUser(user)
+        .then(() => createDefaultUser(user))
+        .then(() => initUser(user))
+    }, [userId])
 })
 
 Given('the quota of user {string} has been set to {string}', function (userId, quota) {
@@ -176,8 +212,14 @@ Given('user {string} has been added to group {string}', function (userId, groupI
 })
 
 After(function () {
-  for (var userId in userSettings.getCreatedUsers()) {
+  const createdUsers = userSettings.getCreatedUsers('LOCAL')
+  const createdRemoteUsers = userSettings.getCreatedUsers('REMOTE')
+
+  for (var userId in createdUsers) {
     deleteUser(userId)
+  }
+  for (userId in createdRemoteUsers) {
+    backendHelper.runOnRemoteBackend(deleteUser, [userId])
   }
   userSettings.getCreatedGroups().forEach(function (groupId) {
     deleteGroup(groupId)

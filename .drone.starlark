@@ -24,8 +24,8 @@ config = {
 				'webUIRenameFiles': 'RenameFiles',
 				'webUIRenameFolders': 'RenameFolders',
 				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
 				'webUISharingAutocompletion': 'SharingAutocompletion',
+				'webUISharingInternalGroups': 'SharingInternalGroups',
 				'webUISharingInternalUsers': 'SharingInternalUsers',
 				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
 				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
@@ -39,6 +39,13 @@ config = {
 				'webUISharingNotifications': 'SharingNotifications',
 				'webUIAccount': 'Account'
 			},
+		},
+		'webUIFederation': {
+			'suites': {
+				'webUISharingExternal': 'SharingExternal',
+			},
+			'federatedServerNeeded': True,
+			'federatedServerVersion': 'daily-master-qa'
 		},
 		'webUI-XGA': {
 			'suites': {
@@ -200,6 +207,8 @@ def acceptance():
 		'cronOnly': False,
 		'filterTags': 'not @skip',
 		'logLevel': '2',
+		'federatedServerNeeded': False,
+		'federatedServerVersion': '',
 	}
 
 	if 'defaults' in config:
@@ -224,6 +233,8 @@ def acceptance():
 			for server in params['servers']:
 				for browser in params['browsers']:
 					for db in params['databases']:
+						federatedServerVersion = params['federatedServerVersion']
+
 						browserString = '' if browser == '' else '-' + browser
 						name = '%s%s' % (alternateSuiteName, browserString)
 						maxLength = 50
@@ -248,6 +259,11 @@ def acceptance():
 								setupServerAndApp(params['logLevel']) +
 								owncloudLog() +
 								fixPermissions() +
+								(
+									installFederatedServer(federatedServerVersion, db) +
+									setupFedServerAndApp(params['logLevel']) +
+									fixPermissionsFederated() if params['federatedServerNeeded'] else []
+								) +
 								copyFilesForUpload() +
 								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
 								(
@@ -258,6 +274,9 @@ def acceptance():
 							'services':
 								phoenixService() +
 								owncloudService() +
+								(
+									owncloudFederatedService() if params['federatedServerNeeded'] else []
+								) +
 								browserService(alternateSuiteName, browser) +
 								databaseService(db),
 							'depends_on': [],
@@ -431,7 +450,24 @@ def owncloudService():
 		'image': 'owncloudci/php:7.1',
 		'pull': 'always',
 		'environment': {
-			'APACHE_WEBROOT': '/var/www/owncloud/',
+			'APACHE_WEBROOT': '/var/www/owncloud/server/',
+		},
+		'command': [
+			'/usr/local/bin/apachectl',
+			'-e',
+			'debug',
+			'-D',
+			'FOREGROUND'
+		]
+	}]
+
+def owncloudFederatedService():
+	return [{
+		'name': 'federated',
+		'image': 'owncloudci/php:7.1',
+		'pull': 'always',
+		'environment': {
+			'APACHE_WEBROOT': '/var/www/owncloud/federated/',
 		},
 		'command': [
 			'/usr/local/bin/apachectl',
@@ -508,7 +544,7 @@ def installCore(version, db):
 		'pull': 'always',
 		'settings': {
 			'version': version,
-			'core_path': '/var/www/owncloud/',
+			'core_path': '/var/www/owncloud/server',
 			'db_type': dbType,
 			'db_name': database,
 			'db_host': host,
@@ -517,6 +553,18 @@ def installCore(version, db):
 		}
 	}
 
+	return [stepDefinition]
+
+def installFederatedServer(version, db):
+	stepDefinition = {
+		'name': 'install-federated',
+		'image': 'owncloudci/core',
+		'pull': 'always',
+		'settings': {
+			'version': version,
+			'core_path': '/var/www/owncloud/federated/',
+		}
+	}
 	return [stepDefinition]
 
 def installNPM():
@@ -629,8 +677,8 @@ def cloneOauth():
 		'image': 'owncloudci/php:7.1',
 		'pull': 'always',
 		'commands': [
-			'git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/apps/oauth2',
-			'cd /var/www/owncloud/apps/oauth2',
+			'git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/server/apps/oauth2',
+			'cd /var/www/owncloud/server/apps/oauth2',
 			'make vendor'
 		]
 	}]
@@ -641,7 +689,7 @@ def setupServerAndApp(logLevel):
 		'image': 'owncloudci/php:7.1',
 		'pull': 'always',
 		'commands': [
-			'cd /var/www/owncloud/',
+			'cd /var/www/owncloud/server/',
 			'php occ a:e testing',
 			'php occ config:system:set trusted_domains 1 --value=owncloud',
 			'php occ config:system:set cors.allowed-domains 0 --value=http://phoenix',
@@ -649,9 +697,27 @@ def setupServerAndApp(logLevel):
 			'php occ config:list',
 			'php occ a:e oauth2',
 			'php occ oauth2:add-client Phoenix Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://phoenix/oidc-callback.html',
-			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton',
+			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton',
 			'php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true',
-			'php occ config:system:set phoenix.baseUrl --value="http://phoenix"'
+			'php occ config:system:set phoenix.baseUrl --value="http://phoenix"',
+			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool'
+		]
+	}]
+
+def setupFedServerAndApp(logLevel):
+	return [{
+		'name': 'setup-fed-server-%s' % config['app'],
+		'image': 'owncloudci/php:7.1',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/federated/',
+			'php occ a:e testing',
+			'php occ config:system:set trusted_domains 2 --value=federated',
+			'php occ log:manage --level %s' % logLevel,
+			'php occ config:list',
+			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/federated/apps/testing/data/webUISkeleton',
+			'php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true',
+			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool'
 		]
 	}]
 
@@ -661,7 +727,18 @@ def fixPermissions():
 		'image': 'owncloudci/php:7.1',
 		'pull': 'always',
 		'commands': [
-			'cd /var/www/owncloud/',
+			'cd /var/www/owncloud/server',
+			'chown www-data * -R'
+		]
+	}]
+
+def fixPermissionsFederated():
+	return [{
+		'name': 'fix-permissions-federated',
+		'image': 'owncloudci/php:7.1',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/federated',
 			'chown www-data * -R'
 		]
 	}]
@@ -673,7 +750,7 @@ def owncloudLog():
 		'pull': 'always',
 		'detach': True,
 		'commands': [
-			'tail -f /var/www/owncloud/data/owncloud.log'
+			'tail -f /var/www/owncloud/server/data/owncloud.log'
 		]
 	}]
 
