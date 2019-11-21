@@ -97,3 +97,22 @@ Feature: Restore deleted files/folders
     And file "lorem-big.txt" should be listed on the webUI
     And file "data.zip" should be listed on the webUI
     And folder "simple-folder" should be listed on the webUI
+
+  @issue-1753
+  Scenario: Restore a file from trashbin whose parent folder is renamed
+    Given the user has created file "simple-folder/file-to-delete-and-restore"
+    And the following files have been deleted by user "user1"
+      | name                                     |
+      | simple-folder/file-to-delete-and-restore |
+    And user "user1" has renamed folder "simple-folder" to "simple-folder-renamed"
+    When the user browses to the trashbin page
+    #And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
+    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
+    Then the error message "Restoration of file-to-delete-and-restore failed" should be displayed on the webUI
+    #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
+    #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in trash
+    And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should exist in trash
+    And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
+    #And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should exist
+    And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
+
