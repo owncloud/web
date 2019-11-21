@@ -208,8 +208,8 @@ module.exports = {
      *
      * @param {string} fileName
      */
-    openPublicLinkDialog: function (fileName) {
-      this.waitForFileVisible(fileName)
+    openPublicLinkDialog: async function (fileName) {
+      await this.waitForFileVisible(fileName)
         .useXpath()
         .performFileAction(fileName, 'share')
         .waitForElementVisible('@linkToPublicLinksTag')
@@ -514,7 +514,6 @@ module.exports = {
         })
       })
     },
-
     copyPrivateLink: function () {
       return this
         .waitForElementVisible('@sidebar')

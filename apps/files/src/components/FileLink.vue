@@ -17,11 +17,11 @@
             <a :href="link.url" :uk-tooltip="$_tooltipTextLink" class="uk-text-small uk-link">{{ link.token }}</a> <span class="uk-text-meta">| {{ link.description }}<template v-if="link.expiration"> | <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}</template></span>
           </div>
           <div class="uk-width-auto uk-button-group">
-            <button class="uk-button uk-button-default uk-position-relative" @click.stop="$_copyToClipboard(link, $event)">
+            <button class="uk-button uk-button-default uk-position-relative" :aria-label="$_copyButtonLabel" @click.stop="$_copyToClipboard(link, $event)">
               <oc-icon name="copy_to_clipboard" class="uk-position-center" />
             </button>
-            <oc-button :disabled="!!(formOpen || linkId)" icon="edit" @click="$_editLink(link)"/>
-            <oc-button :disabled="!!(formOpen || linkId)" icon="delete" @click="$_removeLink(link)" />
+            <oc-button :disabled="!!(formOpen || linkId)" :aria-label="$_editButtonLabel" icon="edit" @click="$_editLink(link)"/>
+            <oc-button :disabled="!!(formOpen || linkId)" :aria-label="$_deleteButtonLabel" icon="delete" @click="$_removeLink(link)" />
           </div>
         </oc-grid>
         <FileLinkForm v-if="linkId === link.id" class="uk-margin-top" :params="params" :context="'edit'" :linkId="linkId"/>
@@ -107,9 +107,17 @@ export default {
         enforced: expireDate.enforced === '1'
       }
     },
-
     $_tooltipTextLink () {
       return `title: ${this.$gettext('Click to open the link')}; pos: bottom`
+    },
+    $_deleteButtonLabel () {
+      return this.$gettext('Delete public link')
+    },
+    $_editButtonLabel () {
+      return this.$gettext('Edit public link')
+    },
+    $_copyButtonLabel () {
+      return this.$gettext('Copy link url')
     }
   },
   methods: {

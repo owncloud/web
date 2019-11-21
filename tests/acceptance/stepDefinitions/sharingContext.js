@@ -10,6 +10,7 @@ const sharingHelper = require('../helpers/sharingHelper')
 const { SHARE_TYPES } = require('../helpers/sharingHelper')
 const { runOcc } = require('../helpers/occHelper')
 const _ = require('lodash')
+const path = require('path')
 
 /**
  *
@@ -47,26 +48,39 @@ const userSharesFileOrFolderWithUser = function (file, sharee, role) {
 const userSharesFileOrFolderWithGroup = function (file, sharee, role) {
   return userSharesFileOrFolderWithUserOrGroup(file, sharee, true, role)
 }
-
 /**
+ * creates a new share
  *
  * @param {string} elementToShare  path of file/folder being shared
  * @param {string} sharer  username of the sharer
- * @param {string} receiver  username of the receiver
- * @param {number} shareType  Type of share 0 = user, 1 = group, 3 = public (link), 6 = federated (cloud share).
- * @param {string} permissions  permissions of the share for valid permissions see sharingHelper.PERMISSION_TYPES
+ * @param receiver  username of the receiver
+ * @param shareType  Type of share 0 = user, 1 = group, 3 = public (link), 6 = federated (cloud share).
+ * @param {string} permissionString  permissions of the share for valid permissions see sharingHelper.PERMISSION_TYPES
+ * @param {string} name name of the link (for public links), default = "New Share"
+ * @param {object} extraParams Extra parameters allowed on the share
+ * @param {string} extraParams.password Password of the share (public links)
+ * @param {string} extraParams.expireDate Expiry date of the share
  */
-const shareFileFolder = function (elementToShare, sharer, receiver, shareType = SHARE_TYPES.user, permissionString = 'all', password = null) {
-  const permissions = sharingHelper.humanReadablePermissionsToBitmask(permissionString)
+const shareFileFolder = function (
+  elementToShare, sharer, receiver = null, shareType = SHARE_TYPES.user,
+  permissionString = 'all', name = null, extraParams = {}
+) {
   const params = new URLSearchParams()
-  params.append('shareType', shareType)
+  elementToShare = path.join('/', elementToShare)
+  const permissions = sharingHelper.humanReadablePermissionsToBitmask(permissionString)
+  params.append('path', elementToShare)
   if (receiver) {
     params.append('shareWith', receiver)
   }
-  params.append('path', elementToShare)
+  params.append('shareType', shareType)
   params.append('permissions', permissions)
-  if (password) {
-    params.append('password', password)
+  if (name) {
+    params.append('name', name)
+  }
+  for (const key in extraParams) {
+    if (extraParams[key]) {
+      params.append(key, extraParams[key])
+    }
   }
   return fetch(
     client.globals.backend_url + '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json',
@@ -74,14 +88,37 @@ const shareFileFolder = function (elementToShare, sharer, receiver, shareType = 
   )
     .then(res => res.json())
     .then(function (json) {
-      if (json.ocs.meta.statuscode === 200) {
-        return json
-      } else {
-        throw Error('Could not create share. Message: ' + json.ocs.meta.message)
-      }
+      httpHelper.checkOCSStatus(json, 'Could not create share. Message: ' + json.ocs.meta.message)
     })
 }
-
+/**
+ * sets up data into a standard format for creating new public link share
+ *
+ * @param {string} sharer user creating share
+ * @param {object} data fields table with required share properties
+ * @param {string} data.name Name of the new share(public links)
+ * @param {string} data.shareType Type of share
+ * @param {string} data.shareWith Receiver of the share
+ * @param {string} data.path Path of file/folder/resource to be shared
+ * @param {string} data.password Password of the share
+ * @param {string} data.permissions Allowed permissions on the share
+ * @param {string} data.expireDate Expiry date of the share
+ */
+const createPublicLink = function (sharer, data) {
+  const { path, permissions = 'read', name, password, expireDate } = data
+  return shareFileFolder(
+    path,
+    sharer,
+    null,
+    SHARE_TYPES.public_link,
+    permissions,
+    name,
+    {
+      password,
+      expireDate
+    }
+  )
+}
 /**
  *
  * @param {string} type user|group
@@ -293,7 +330,15 @@ Given(
 Given(
   'user {string} has shared file/folder {string} with link with {string} permissions and password {string}',
   function (sharer, elementToShare, permissions, password) {
-    return shareFileFolder(elementToShare, sharer, null, SHARE_TYPES.public_link, permissions, password)
+    return shareFileFolder(
+      elementToShare,
+      sharer,
+      null,
+      SHARE_TYPES.public_link,
+      permissions,
+      null,
+      { password: password }
+    )
   }
 )
 
@@ -332,6 +377,11 @@ Given('the administrator has set the minimum characters for sharing autocomplete
     ['config:system:set user.search_min_length --value=' + value]
   )
 })
+
+Given('user {string} has created a public link with following settings',
+  function (sharer, dataTable) {
+    return createPublicLink(sharer, dataTable.rowsHash())
+  })
 
 Given('the administrator has excluded group {string} from receiving shares', async function (group) {
   const configList = await runOcc([
@@ -590,12 +640,12 @@ Then('user {string} should have received a share with these details:', function 
   return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, true)
 })
 
-Then('user {string} should have a share with these details:', function (user, expectedDetailsTable) {
-  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable)
-})
-
 Given('user {string} has created a new public link for resource {string}', function (user, resource) {
   return shareFileFolder(resource, user, '', SHARE_TYPES.public_link)
+})
+
+Then('user {string} should have a share with these details:', function (user, expectedDetailsTable) {
+  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable)
 })
 
 Then('the user should not be able to share file/folder/resource {string} using the webUI', function (resource) {
