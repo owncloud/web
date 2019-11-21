@@ -23,15 +23,13 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder             |
       | permissions | read, share        |
 
-  @issue-1853 @issue-1837
+  @issue-1853
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, create, delete" permissions
     And user "user2" has logged in using the webUI
-    Then no custom permissions should be set for collaborator "User One" for folder "simple-folder" on the webUI
-    #    Then custom permissions "share, create, delete" should be set for user "User One" for folder "simple-folder" on the webUI
+    Then custom permissions "share, create, delete" should be set for user "User One" for folder "simple-folder" on the webUI
     When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "create, delete, share" using the webUI
-    Then no custom permissions should be set for collaborator "User One" for folder "simple-folder" on the webUI
-    #    Then custom permission "share, create, delete" should be set for user "User One" for folder "simple-folder" on the webUI
+    Then custom permission "share, create, delete" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
       | field       | value                       |
       | uid_owner   | user2                       |
@@ -40,21 +38,20 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                      |
       | permissions | read, share, create, delete |
 
-  @issue-1853 @issue-1837
+  @issue-1853
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, create" permissions
     And user "user2" has logged in using the webUI
     Then custom permissions "share, create" should be set for user "User One" for folder "simple-folder" on the webUI
-    When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "delete, change" using the webUI
-    Then no custom permissions should be set for collaborator "User One" for folder "simple-folder" on the webUI
-    #    Then custom permission "delete, change" should be set for user "User One" for folder "simple-folder" on the webUI
+    When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "delete, update" using the webUI
+    Then custom permission "delete, update" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
       | field       | value                |
       | uid_owner   | user2                |
       | share_with  | user1                |
       | file_target | /simple-folder (2)   |
       | item_type   | folder               |
-      | permissions | read, change, delete |
+      | permissions | read, update, delete |
 
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, delete" permissions
@@ -83,12 +80,12 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder             |
       | permissions | <permissions>      |
     Examples:
-      | role        | displayed-role | extra-permissions             | displayed-permissions | permissions                         |
-      | Viewer      | Viewer         | share                         | share                 | read, share                         |
-      | Editor      | Editor         | share                         | share                 | all                                 |
-      | Custom Role | Custom role    | share, create                 | share, create         | read, share, create                 |
-      | Custom Role | Editor         | change, share                 | share                 | read, change, share                 |
-      | Custom Role | Editor         | delete, share, create, change | share                 | read, share, delete, change, create |
+      | role                 | displayed-role          | extra-permissions             | displayed-permissions | permissions                         |
+      | Viewer               | Viewer                  | share                         | share                 | read, share                         |
+      | Editor               | Editor                  | share                         | share                 | all                                 |
+      | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
+      | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
+      | Advanced permissions | Editor                  | delete, share, create, update | share                 | read, share, delete, update, create |
 
   Scenario Outline: Change permissions of the previously shared file
     Given user "user2" has shared file "lorem.txt" with user "user1" with "<initial-permissions>" permissions
@@ -105,7 +102,7 @@ Feature: Sharing files and folders with internal users with different permission
       | permissions | <permissions>  |
     Examples:
       | initial-permissions | permissions         |
-      | read, change        | read, share, change |
+      | read, update        | read, share, update |
       | read                | read, share         |
 
   Scenario: Delete all custom permissions of the previously shared file
@@ -135,10 +132,10 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | file           |
       | permissions | <permissions>  |
     Examples:
-      | role        | displayed-role | collaborators-permissions | displayed-permissions | permissions         |
-      | Viewer      | Viewer         | share                     | share                 | read, share         |
-      | Editor      | Editor         | share                     | share                 | read, share, change |
-      | Custom Role | Editor         | share, change             | share                 | read, share, change |
+      | role                 | displayed-role | collaborators-permissions | displayed-permissions | permissions         |
+      | Viewer               | Viewer         | share                     | share                 | read, share         |
+      | Editor               | Editor         | share                     | share                 | read, share, update |
+      | Advanced permissions | Editor         | share, update             | share                 | read, share, update |
 
   Scenario: Share a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
@@ -152,32 +149,32 @@ Feature: Sharing files and folders with internal users with different permission
     And user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has shared folder "simple-folder (2)" with user "user3" with "read, delete" permissions
     And user "user2" has logged in using the webUI
-    When the user sets custom permission for current role of collaborator "User Three" for folder "simple-folder" to "delete, change" using the webUI
-    Then custom permissions "delete, change" should be set for user "User Three" for folder "simple-folder" on the webUI
+    When the user sets custom permission for current role of collaborator "User Three" for folder "simple-folder" to "delete, update" using the webUI
+    Then custom permissions "delete, update" should be set for user "User Three" for folder "simple-folder" on the webUI
     And user "user3" should have received a share with these details:
       | field       | value                |
       | uid_owner   | user1                |
       | share_with  | user3                |
       | file_target | /simple-folder (2)   |
       | item_type   | folder               |
-      | permissions | delete, read, change |
+      | permissions | delete, read, update |
 
   Scenario: User is not allowed to reshare sub-folder with more permissions
     Given user "user3" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has logged in using the webUI
     When the user browses to the folder "simple-folder (2)" on the files page
-    And the user shares folder "simple-empty-folder" with user "User Three" as "Custom role" with permissions "share, delete, change" using the webUI
+    And the user shares folder "simple-empty-folder" with user "User Three" as "Advanced permissions" with permissions "share, delete, update" using the webUI
     Then the error message "Error while sharing." should be displayed on the webUI
     And as "user3" folder "simple-empty-folder (2)" should not exist
 
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
     Given user "user3" has been created with default attributes
-    And user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete, change" permissions
+    And user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete, update" permissions
     And user "user1" has shared folder "simple-folder (2)" with user "user3" with "share, delete" permissions
     And user "user1" has logged in using the webUI
     When the user browses to the folder "simple-folder (2)" on the files page
-    And the user shares folder "simple-empty-folder" with user "User Three" as "Custom role" with permissions "share, delete, change, create" using the webUI
+    And the user shares folder "simple-empty-folder" with user "User Three" as "Advanced permissions" with permissions "share, delete, update, create" using the webUI
     Then the error message "Error while sharing." should be displayed on the webUI
     And as "user3" folder "simple-empty-folder (2)" should not exist
 
@@ -187,7 +184,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "user1" has shared folder "simple-folder (2)" with user "user3" with "share, delete" permissions
     And user "user1" has logged in using the webUI
     When the user browses to the folder "simple-folder (2)" on the files page
-    And the user shares folder "simple-empty-folder" with user "User Three" as "Custom role" with permissions "share, delete, create, change" using the webUI
+    And the user shares folder "simple-empty-folder" with user "User Three" as "Advanced permissions" with permissions "share, delete, create, update" using the webUI
     Then user "user3" should have received a share with these details:
       | field       | value                    |
       | uid_owner   | user1                    |

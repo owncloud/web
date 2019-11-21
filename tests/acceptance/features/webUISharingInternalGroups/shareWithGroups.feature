@@ -49,10 +49,10 @@ Feature: Sharing files and folders with internal groups
     Then folder "simple-folder (2)" should be marked as shared by "User Three" on the webUI
     And file "testimage (2).jpg" should be marked as shared by "User Three" on the webUI
     Examples:
-      | set-role    | expected-role | permissions-folder         | permissions-file |
-      | Viewer      | Viewer        | read                       | read             |
-      | Editor      | Editor        | read,change,create, delete | read,change      |
-      | Custom Role | Viewer        | read                       | read             |
+      | set-role             | expected-role | permissions-folder         | permissions-file |
+      | Viewer               | Viewer        | read                       | read             |
+      | Editor               | Editor        | read,update,create, delete | read,update      |
+      | Advanced permissions | Viewer        | read                       | read             |
 
   Scenario: share a file with an internal group a member overwrites and unshares the file
     Given user "user3" has logged in using the webUI

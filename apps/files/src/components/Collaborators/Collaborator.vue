@@ -1,5 +1,9 @@
 <template>
-  <oc-accordion-item class="files-collaborators-collaborator uk-margin-small-bottom" :class="{ 'oc-disabled uk-disabled' : collaboratorsEditInProgress && !editing }">
+  <oc-accordion-item
+    class="files-collaborators-collaborator uk-margin-small-bottom"
+    :class="{ 'oc-disabled uk-disabled' : collaboratorsEditInProgress && !editing }"
+    :key="collaborator.id"
+  >
     <template slot="title">
       <div v-if="user.id !== collaborator.info.uid_owner" class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
       <div class="files-collaborators-collaborator-information uk-flex uk-flex-wrap uk-flex-middle">
@@ -18,58 +22,23 @@
               ({{ collaborator.info.share_with_additional_info }})
             </span>
           </div>
-          <span class="oc-text">{{ roles[collaborator.role].name }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></span>
-          <span class="uk-text-meta">{{ $_ocCollaborators_collaboratorType(collaborator.info.share_type) }}</span>
+          <span class="oc-text">{{ originalRole.label }}<template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></span>
+          <span class="uk-text-meta" v-text="$_ocCollaborators_collaboratorType(collaborator.info.share_type)" />
         </div>
       </div>
     </template>
     <template slot="content">
-      <oc-grid gutter="small" class="uk-margin-bottom">
-        <div class="uk-width-1-1 uk-position-relative">
-          <label class="oc-label"><translate>Role</translate></label>
-          <oc-button :id="`files-collaborators-role-button-${collaborator.info.id}`" class="uk-width-1-1 files-collaborators-role-button">{{ $_ocCollaborators_selectedRoleName(collaborator) }}</oc-button>
-          <p class="uk-text-meta uk-margin-remove">{{ $_ocCollaborators_selectedRoleDescription(collaborator) }}</p>
-          <oc-drop :dropId="`files-collaborators-roles-dropdown-${collaborator.info.id}`" closeOnClick :toggle="`#files-collaborators-role-button-${collaborator.info.id}`" mode="click" :options="{ offset: 0, delayHide: 0 }" class="oc-autocomplete-dropdown">
-            <ul class="oc-autocomplete-suggestion-list">
-              <li
-                v-for="(role, key) in roles"
-                :key="key"
-                class="oc-autocomplete-suggestion"
-                :class="rolesDropItemClass(role)"
-                @click="$_ocCollaborators_changeRole(role); onChange()"
-              >
-                <span class="uk-text-bold">{{ role.name }}</span>
-                <p class="uk-text-meta uk-margin-remove">{{ role.description }}</p>
-              </li>
-            </ul>
-          </oc-drop>
-        </div>
-        <div v-if="false" class="uk-width-1-1">
-          <label class="oc-label"><translate>Expiration date</translate> <translate class="uk-text-meta uk-remove-margin">(optional)</translate></label>
-          <oc-text-input type="date" class="uk-width-1-1 oc-button-role">04 - 07 - 2019</oc-text-input>
-        </div>
-        <oc-grid gutter="small">
-          <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-            <oc-switch :key="switchKey" class="uk-margin-small-right" :model="canShare" @change="$_ocCollaborators_switchPermission('canShare')" /> <translate :class="{ 'uk-text-muted': !canShare }">Can share</translate>
-          </div>
-          <template v-if="(collaborator.role === 'custom' && !selectedNewRole) || (selectedNewRole && selectedNewRole.tag === 'custom')">
-            <div class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-              <oc-switch :key="switchKey" class="uk-margin-small-right" :model="canChange" @change="$_ocCollaborators_switchPermission('canChange')" /> <translate :class="{ 'uk-text-muted': !canChange }">Can change</translate>
-            </div>
-            <div v-if="highlightedFile.type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-              <oc-switch :key="switchKey" class="uk-margin-small-right" :model="canCreate" @change="$_ocCollaborators_switchPermission('canCreate')" /> <translate :class="{ 'uk-text-muted': !canCreate }">Can create</translate>
-            </div>
-            <div v-if="highlightedFile.type === 'folder'" class="uk-flex uk-flex-row uk-flex-wrap uk-flex-middle">
-              <oc-switch :key="switchKey" class="uk-margin-small-right" :model="canDelete" @change="$_ocCollaborators_switchPermission('canDelete')" /> <translate :class="{ 'uk-text-muted': !canDelete }">Can delete</translate>
-            </div>
-          </template>
-        </oc-grid>
-      </oc-grid>
+      <collaborators-edit-options
+        :existingRole="collaborator.role"
+        :collaboratorsPermissions="collaboratorsPermissions"
+        @optionChange="collaboratorOptionChanged"
+        class="uk-margin-bottom"
+      />
       <template v-if="editing">
         <oc-button :disabled="collaboratorSaving" @click="$_ocCollaborators_cancelChanges">
           <translate>Cancel</translate>
         </oc-button>
-        <oc-button variation="primary" :disabled="collaboratorSaving" :aria-label="_saveButtonLabel" @click="$_ocCollaborators_saveChanges(collaborator)">
+        <oc-button variation="primary" :disabled="collaboratorSaving" :aria-label="_saveButtonLabel" @click="saveChanges(collaborator)">
           <translate>Save</translate>
         </oc-button>
       </template>
@@ -81,10 +50,17 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Mixins from './mixins'
+import Mixins from '../../mixins/collaborators'
+import { roleToBitmask, bitmaskToRole } from '../../helpers/collaborators'
+import filterObject from 'filter-obj'
+
+const CollaboratorsEditOptions = () => import('./CollaboratorsEditOptions.vue')
 
 export default {
   name: 'Collaborator',
+  components: {
+    CollaboratorsEditOptions
+  },
   props: ['collaborator'],
   mixins: [
     Mixins
@@ -94,13 +70,9 @@ export default {
       avatar: '',
       loading: false,
       editing: false,
-      canShare: this.collaborator.canShare,
-      canChange: this.collaborator.customPermissions.change,
-      canCreate: this.collaborator.customPermissions.create,
-      canDelete: this.collaborator.customPermissions.delete,
-      selectedNewRole: null,
       permissionsChanged: false,
-      switchKey: Math.floor(Math.random() * 100) // Ensure switch gets back to orginal position after cancel
+      selectedRole: null,
+      additionalPermissions: null
     }
   },
   computed: {
@@ -116,7 +88,17 @@ export default {
     },
 
     originalRole () {
-      return this.roles[this.collaborator.role].tag
+      if (this.collaborator.role.name === 'advancedRole') {
+        return this.advancedRole
+      }
+
+      return this.roles[this.collaborator.role.name]
+    },
+
+    collaboratorsPermissions () {
+      const permissions = this.collaborator.customPermissions
+
+      return filterObject(permissions, (key, value) => value)
     }
   },
   mounted () {
@@ -130,60 +112,48 @@ export default {
         client: this.$client,
         share: share
       })
+      this.editing = false
+      this.toggleCollaboratorsEdit(false)
     },
-    $_ocCollaborators_saveChanges (collaborator) {
-      if (!this.selectedNewRole) this.selectedNewRole = this.roles[collaborator.role]
+    saveChanges (collaborator) {
+      if (!this.selectedRole) this.selectedRole = this.roles[collaborator.role.name]
+      let permissions = this.additionalPermissions
+
+      if (!permissions) {
+        permissions = []
+        for (const permission in this.collaboratorsPermissions) {
+          permissions.push(permission)
+        }
+      }
+
+      const bitmask = roleToBitmask(this.selectedRole, permissions, this.highlightedFile.type === 'folder')
+
       this.changeShare({
         client: this.$client,
         share: collaborator,
-        canShare: this.canShare,
-        canChange: this.canChange,
-        canCreate: this.canCreate,
-        canDelete: this.canDelete,
-        role: this.selectedNewRole.tag
+        // TODO: After changing to tabs view, this can be dropped
+        // Map bitmask to role to get the correct role in case the advanced role was mapped to existing role
+        role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder'),
+        permissions: bitmask
       })
         .then(() => {
           this.editing = false
           this.toggleCollaboratorsEdit(false)
-          this.selectedNewRole = null
         })
     },
-    $_ocCollaborators_changeRole (role) {
-      this.selectedNewRole = role
-    },
-    $_ocCollaborators_selectedRoleName (collaborator) {
-      if (!this.selectedNewRole) {
-        return this.roles[collaborator.role].name
-      }
-
-      return this.selectedNewRole.name
-    },
-    $_ocCollaborators_selectedRoleDescription (collaborator) {
-      if (!this.selectedNewRole) {
-        return this.roles[collaborator.role].description
-      }
-
-      return this.selectedNewRole.description
-    },
     $_ocCollaborators_cancelChanges () {
-      this.selectedNewRole = null
-      this.canShare = this.collaborator.canShare
-      this.canChange = this.collaborator.customPermissions.change
-      this.canCreate = this.collaborator.customPermissions.create
-      this.canDelete = this.collaborator.customPermissions.delete
       this.editing = false
-      this.switchKey = Math.floor(Math.random() * 100)
       this.toggleCollaboratorsEdit(false)
     },
 
     onChange () {
-      if (this.selectedNewRole.tag === this.originalRole && !this.permissionsChanged) {
-        this.editing = false
-        this.toggleCollaboratorsEdit(false)
-        return
-      }
+      // TODO: Bring this back
+      // if (this.selectedRole.name === this.originalRole.name && !this.permissionsChanged) {
+      //   this.editing = false
+      //   this.toggleCollaboratorsEdit(false)
+      //   return
+      // }
 
-      this.editing = true
       this.toggleCollaboratorsEdit(true)
     },
 
@@ -197,6 +167,7 @@ export default {
 </script>
 
 <style>
+  /* TODO: Move to ODS  */
   .oc-text {
     font-size: 1rem;
   }

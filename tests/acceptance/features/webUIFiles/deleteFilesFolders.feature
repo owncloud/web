@@ -140,7 +140,7 @@ Feature: deleting files and folders
     Then file "lorem.txt" should not be listed on the webUI
 
   Scenario: delete a file on a public share
-    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
+    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     And the user deletes the following elements using the webUI
       | name                                  |
@@ -161,7 +161,7 @@ Feature: deleting files and folders
       |                          | "double" quotes |
       |                          | question?       |
       |                          | &and#hash       |
-    And user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
+    And user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     And the user deletes the following file using the webUI
       | name-parts      |
@@ -185,7 +185,7 @@ Feature: deleting files and folders
 
   @skip @yetToImplement
   Scenario: Delete multiple files at once on a public share
-    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
+    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     And the user batch deletes these files using the webUI
       | name                |

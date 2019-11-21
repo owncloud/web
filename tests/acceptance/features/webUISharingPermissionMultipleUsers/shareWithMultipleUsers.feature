@@ -50,32 +50,30 @@ Feature: Sharing files and folders with multiple internal users with different p
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" folder "simple-folder (2)" should not exist
     Examples:
-      | role        | displayed-role | extra-permissions             | displayed-permissions | actual-permissions           |
-      | Viewer      | Viewer         | share                         | share                 | read, share                  |
-      | Viewer      | Viewer         | ,                             | ,                     | read                         |
-      | Editor      | Editor         | share                         | share                 | all                          |
-      | Editor      | Editor         | ,                             | ,                     | read, change, delete, create |
-      | Custom Role | Viewer         | ,                             | ,                     | read                         |
-      | Custom Role | Viewer         | share                         | share                 | read, share                  |
-      | Custom Role | Custom role    | delete                        | delete                | read, delete                 |
-      # issue-1897: Displayed role below should have been 'Custom role'
-      | Custom Role | Editor         | change                        | ,                     | read, change                 |
-      | Custom Role | Custom role    | create                        | create                | read, create                 |
-      | Custom Role | Custom role    | share, delete                 | share, delete         | read, share, delete          |
-      # issue-1897: Displayed role below should have been 'Custom role'
-      | Custom Role | Editor         | share, change                 | share                 | read, change, share          |
-      | Custom Role | Custom role    | share, create                 | share, create         | read, share, create          |
-      | Custom Role | Custom role    | delete, change                | delete, change        | read, delete, change         |
-      | Custom Role | Custom role    | delete, create                | delete, create        | read, delete, create         |
-      | Custom Role | Custom role    | change, create                | change, create        | read, change, create         |
-      # issue-1837: Displayed Permissions below should have been 'share, delete, change'
-      | Custom Role | Custom role    | share, delete, change         | ,                     | read, share, delete, change  |
+      | role                 | displayed-role          | extra-permissions             | displayed-permissions | actual-permissions           |
+      | Viewer               | Viewer                  | share                         | share                 | read, share                  |
+      | Viewer               | Viewer                  | ,                             | ,                     | read                         |
+      | Editor               | Editor                  | share                         | share                 | all                          |
+      | Editor               | Editor                  | ,                             | ,                     | read, update, delete, create |
+      | Advanced permissions | Viewer                  | ,                             | ,                     | read                         |
+      | Advanced permissions | Viewer                  | share                         | share                 | read, share                  |
+      | Advanced permissions | Advanced role           | delete                        | delete                | read, delete                 |
+      | Advanced permissions | Advanced permissions    | update                        | ,                     | read, update                 |
+      | Advanced permissions | Advanced permissions    | create                        | create                | read, create                 |
+      | Advanced permissions | Advanced permissions    | share, delete                 | share, delete         | read, share, delete          |
+      | Advanced permissions | Advanced permissions    | share, update                 | share                 | read, update, share          |
+      | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create          |
+      | Advanced permissions | Advanced permissions    | delete, update                | delete, update        | read, delete, update         |
+      | Advanced permissions | Advanced permissions    | delete, create                | delete, create        | read, delete, create         |
+      | Advanced permissions | Advanced permissions    | update, create                | update, create        | read, update, create         |
+      # issue-1837: Displayed Permissions below should have been 'share, delete, update'
+      | Advanced permissions | Advanced permissions    | share, delete, update         | ,                     | read, share, delete, update  |
       # issue-1837: Displayed Permissions below should have been 'share, create, delete'.
-      | Custom Role | Custom role    | share, create, delete         | ,                     | read, share, delete, create  |
-      # issue-1837: Displayed Permissions below should have been 'share, change, create'.
-      | Custom Role | Custom role    | share, change, create         | ,                     | read, share, change, create  |
-      | Custom Role | Editor         | delete, change, create        | ,                     | read, delete, change, create |
-      | Custom Role | Editor         | share, delete, change, create | share                 | all                          |
+      | Advanced permissions | Advanced permissions    | share, create, delete         | ,                     | read, share, delete, create  |
+      # issue-1837: Displayed Permissions below should have been 'share, update, create'.
+      | Advanced permissions | Advanced permissions    | share, update, create         | ,                     | read, share, update, create  |
+      | Advanced permissions | Editor                  | delete, update, create        | ,                     | read, delete, update, create |
+      | Advanced permissions | Editor                  | share, delete, update, create | share                 | all                          |
 
   Scenario Outline: share a file with multiple users with different roles and permissions
     Given these users have been created with default attributes:
@@ -117,12 +115,12 @@ Feature: Sharing files and folders with multiple internal users with different p
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" file "lorem(2).txt" should not exist
     Examples:
-      | role        | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |
-      | Viewer      | Viewer         | share             | share                 | read, share         |
-      | Viewer      | Viewer         | ,                 | ,                     | read                |
-      | Editor      | Editor         | share             | share                 | share, read, change |
-      | Editor      | Editor         | ,                 | ,                     | read, change        |
-      | Custom Role | Viewer         | ,                 | ,                     | read                |
-      | Custom Role | Viewer         | share             | share                 | read, share         |
-      | Custom Role | Editor         | change            | ,                     | read, change        |
-      | Custom Role | Editor         | share, change     | share                 | read, change, share |
+      | role                 | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |
+      | Viewer               | Viewer         | share             | share                 | read, share         |
+      | Viewer               | Viewer         | ,                 | ,                     | read                |
+      | Editor               | Editor         | share             | share                 | share, read, update |
+      | Editor               | Editor         | ,                 | ,                     | read, update        |
+      | Advanced permissions | Viewer         | ,                 | ,                     | read                |
+      | Advanced permissions | Viewer         | share             | share                 | read, share         |
+      | Advanced permissions | Editor         | update            | ,                     | read, update        |
+      | Advanced permissions | Editor         | share, update     | share                 | read, update, share |
