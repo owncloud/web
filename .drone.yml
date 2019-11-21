@@ -4999,23 +4999,19 @@ steps:
     event:
     - push
 
-- name: build-docker-image
+- name: docker
   pull: always
-  image: toolhippie/docker:latest
-  commands:
-  - docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .
-  - docker tag owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} owncloud/phoenix:latest
-  - docker push owncloud/phoenix:latest
-  environment:
-    DOCKER_HOST: tcp://docker:2375
+  image: plugins/docker:18.09
+  settings:
+    auto_tag: true
+    password:
+      from_secret: docker_password
+    repo: owncloud/phoenix
+    username:
+      from_secret: docker_username
   when:
     event:
     - push
-
-services:
-- name: docker
-  pull: if-not-exists
-  image: docker:18.04-dind
 
 trigger:
   ref:
