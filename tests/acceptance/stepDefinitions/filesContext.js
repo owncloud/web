@@ -776,3 +776,8 @@ Then('file/folder {string} shared by {string} should not be listed in the webUI'
   const found = await client.page.sharedWithMePage().isSharePresent(element, sharer)
   assert.ok(!found, element + ' shared by ' + sharer + ' was present but was not expected to be present')
 })
+
+Then('the page should be empty', async function () {
+  const isVisible = await client.page.phoenixPage().isPageVisible()
+  assert.ok(!isVisible, 'The phoenix page should be empty but is not')
+})
