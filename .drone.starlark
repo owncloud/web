@@ -165,8 +165,6 @@ def build():
 			buildRelease() +
 			deployStaging() +
 			buildDockerImage(),
-		'services':
-			dockerInDockerService(),
 		'depends_on': [],
 		'trigger': {
 			'ref': [
@@ -442,13 +440,6 @@ def owncloudService():
 		]
 	}]
 
-def dockerInDockerService():
-	return [{
-		'name': 'docker',
-		'image': 'docker:18.04-dind',
-		'pull': 'if-not-exists'
-	}]
-
 def getDbName(db):
 	return db.split(':')[0]
 
@@ -559,17 +550,19 @@ def buildPhoenix():
 
 def buildDockerImage():
 	return [{
-		'name': 'build-docker-image',
-		'image': 'toolhippie/docker:latest',
-		'pull': 'always',
-		'environment': {
-			'DOCKER_HOST': 'tcp://docker:2375'
-		},
-		'commands': [
-			'docker build -t owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} .',
-			'docker tag owncloud/phoenix:${DRONE_COMMIT_SHA}-${DRONE_BUILD_NUMBER} owncloud/phoenix:latest',
-			'docker push owncloud/phoenix:latest'
-		],
+        'name': 'docker',
+        'image': 'plugins/docker:18.09',
+        'pull': 'always',
+        'settings': {
+          'username': {
+            'from_secret': 'docker_username',
+          },
+          'password': {
+            'from_secret': 'docker_password',
+          },
+          'auto_tag': True,
+          'repo': 'owncloud/phoenix',
+        },
 		'when': {
 			'event': [
 				'push'
