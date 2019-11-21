@@ -145,8 +145,11 @@ module.exports = {
      * @returns {Promise<void>}
      */
     setPublicLinkPassword: function (linkPassword) {
+      this.waitForElementVisible('@publicLinkPasswordField')
+      if (linkPassword === '') {
+        return this.click('@publicLinkDeletePasswordButton')
+      }
       return this
-        .waitForElementVisible('@publicLinkPasswordField')
         .clearValue('@publicLinkPasswordField')
         .setValue('@publicLinkPasswordField', linkPassword)
     },
@@ -426,6 +429,10 @@ module.exports = {
     },
     publicLinkPasswordField: {
       selector: '//input[@type="password"]',
+      locateStrategy: 'xpath'
+    },
+    publicLinkDeletePasswordButton: {
+      selector: '//*[@uk-tooltip="Remove password"]',
       locateStrategy: 'xpath'
     },
     publicLinkSaveButton: {
