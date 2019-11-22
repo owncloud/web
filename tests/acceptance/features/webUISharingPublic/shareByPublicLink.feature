@@ -494,13 +494,13 @@ Feature: Share by public link
 
   Scenario: user shares a file through public link and then it appears in a shared-with-others page
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
-    And user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
+    And user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     And user "user1" has logged in using the webUI
     When the user browses to the shared-with-others page
     Then folder "simple-folder" should be listed on the webUI
 
   Scenario: user edits the password of an already existing public link
-    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions and password "pass123"
+    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     And user "user1" has logged in using the webUI
     When the user edits the public link named "{}" of folder "simple-folder" changing following
       | password |  qwertyui  |
@@ -508,7 +508,7 @@ Feature: Share by public link
     Then file "lorem.txt" should be listed on the webUI
 
   Scenario: user edits the password of an already existing public link and tries to access with old password
-    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions and password "pass123"
+    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     And user "user1" has logged in using the webUI
     And the user edits the public link named "{}" of folder "simple-folder" changing following
       | password |  qwertyui  |
@@ -516,7 +516,7 @@ Feature: Share by public link
     Then the public should not get access to the publicly shared file
 
   Scenario: user edits the permission of an already existing public link from read-write to read
-    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions
+    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     And user "user1" has logged in using the webUI
     When the user edits the public link named "{}" of folder "simple-folder" changing following
       | role  | Viewer  |
