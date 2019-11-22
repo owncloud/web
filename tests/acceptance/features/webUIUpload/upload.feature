@@ -134,7 +134,7 @@ Feature: File Upload
     And the content of "lorem (2).txt" should be the same as the local "lorem.txt"
 
   Scenario: upload overwriting a file into a public share
-    Given user "user1" has shared folder "simple-folder" with link with "read, change, create, delete" permissions and password "pass123"
+    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
