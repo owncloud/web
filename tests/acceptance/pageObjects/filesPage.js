@@ -257,10 +257,14 @@ module.exports = {
       })
     },
     confirmFileOverwrite: function () {
-      return this
-        .waitForElementVisible('@fileOverwriteConfirm')
-        .click('@fileOverwriteConfirm')
-        .waitForElementNotVisible('@fileOverwriteConfirm')
+      return this.waitForElementVisible('@fileOverwriteConfirm')
+        // clicking file overwrite dialog overlay to remove file upload
+        // popup, as we upload the file directly using `setValue`. The overwrite
+        // dialog is too fast and does not give time to close the dropdown beforehand
+        .clickElementAt(this.elements.fileOverwriteDialog.selector, 0, 0)
+        .waitForElementNotVisible(this.elements.newFolderButton.selector)
+        .click(this.elements.fileOverwriteConfirm.selector)
+        .waitForElementNotVisible(this.elements.fileOverwriteConfirm.selector)
         .waitForAjaxCallsToStartAndFinish()
     },
     createNewFile: function (newFileName) {
@@ -414,7 +418,9 @@ module.exports = {
     fileOverwriteConfirm: {
       selector: '#files-overwrite-confirm'
     },
-
+    fileOverwriteDialog: {
+      selector: '#overwrite-dialog'
+    },
     /**
      * path from inside the side-bar
      */
