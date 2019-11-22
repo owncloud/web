@@ -29,6 +29,18 @@ module.exports = {
         .assert.containsText('@breadcrumb', folder)
     },
     /**
+     *
+     * @param {string} resource
+     */
+    navigateToBreadcrumb: function (resource) {
+      const breadcrumbElement = this.elements.resourceBreadcrumb
+      const resourceXpath = util.format(breadcrumbElement.selector, resource)
+      return this.useStrategy(breadcrumbElement)
+        .waitForElementVisible(resourceXpath)
+        .click(resourceXpath)
+        .useCss()
+    },
+    /**
      * Create a folder with the given name
      *
      * @param {string} name to set or null to use default value from dialog
