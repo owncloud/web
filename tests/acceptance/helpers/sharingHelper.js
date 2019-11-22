@@ -51,6 +51,23 @@ module.exports = {
     return this.SHARE_TYPES[shareTypeString]
   },
   /**
+   * if the given string starts with a `+` or `-` the function will calculate the date (from today) and return the string of the new date
+   * @param {string} dateString
+   * @returns {string}
+   */
+  calculateDate: function (dateString) {
+    if (dateString.startsWith('+') || dateString.startsWith('-')) {
+      dateString = parseInt(dateString)
+      const date = new Date()
+      date.setDate(date.getDate() + dateString)
+      dateString = date.getFullYear() + '-' +
+                   String((date.getMonth() + 1)).padStart(2, '0') + '-' +
+                   String(date.getDate()).padStart(2, '0') +
+                   ' 00:00:00'
+    }
+    return dateString
+  },
+  /**
    *
    * @param {string } user
    * @param {string } expectedDetailsTable
@@ -77,7 +94,10 @@ module.exports = {
               expectedDetail.value = sharingHelper.humanReadablePermissionsToBitmask(expectedDetail.value).toString()
             } else if (expectedDetail.field === 'share_type') {
               expectedDetail.value = sharingHelper.humanReadableShareTypeToNumber(expectedDetail.value).toString()
+            } else if (expectedDetail.field === 'expiration') {
+              expectedDetail.value = sharingHelper.calculateDate(expectedDetail.value)
             }
+
             if (!(expectedDetail.field in share) || share[expectedDetail.field].toString() !== expectedDetail.value) {
               found = false
               break
