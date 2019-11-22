@@ -105,7 +105,12 @@ const shareFileFolder = function (
  * @param {string} data.expireDate Expiry date of the share
  */
 const createPublicLink = function (sharer, data) {
-  const { path, permissions = 'read', name, password, expireDate } = data
+  let { path, permissions = 'read', name, password, expireDate } = data
+
+  if (typeof expireDate !== 'undefined') {
+    expireDate = sharingHelper.calculateDate(expireDate)
+  }
+
   return shareFileFolder(
     path,
     sharer,

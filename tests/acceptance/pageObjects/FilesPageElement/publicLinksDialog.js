@@ -1,5 +1,6 @@
 const assert = require('assert')
 const util = require('util')
+const sharingHelper = require('../../helpers/sharingHelper')
 
 module.exports = {
   commands: {
@@ -160,7 +161,12 @@ module.exports = {
      * @returns {Promise}
      */
     setPublicLinkExpiryDate: function (value) {
-      const [year, month, day] = value.split('-')
+      value = sharingHelper.calculateDate(value)
+      const dateToSet = new Date(Date.parse(value))
+      const year = dateToSet.getFullYear()
+      const month = dateToSet.toLocaleString('en-GB', { month: 'long' })
+      const day = dateToSet.getDate()
+
       return this
         .initAjaxCounters()
         .waitForElementVisible('@linkExpirationDateField')
