@@ -1,9 +1,9 @@
   <template>
     <div id="files" class="uk-flex uk-flex-column">
-      <files-app-bar />
-      <upload-progress v-show="inProgress.length" class="uk-padding-small uk-background-muted" />
+      <files-app-bar @upload-start="onUploadStart" @upload-end="onUploadEnd" />
+      <upload-progress v-show="inProgress.length" class="uk-padding-small uk-background-muted" :progressbarFocus="progressbarFocussed" />
       <oc-grid class="uk-height-1-1 uk-flex-1 uk-overflow-auto">
-        <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
+        <div ref="filesListWrapper" tabindex="-1" class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
           <trash-bin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
           <shared-files-list v-else-if="sharedList" :fileData="activeFiles" @sideBarOpen="openSideBar" />
@@ -66,7 +66,8 @@ export default {
       selected: [],
       breadcrumbs: [],
       self: {},
-      renameDialogErrorMessage: null
+      renameDialogErrorMessage: null,
+      progressbarFocussed: false
     }
   },
   methods: {
@@ -75,6 +76,14 @@ export default {
 
     trace () {
       console.info('trace', arguments)
+    },
+
+    onUploadStart () {
+      this.progressbarFocussed = true
+    },
+    onUploadEnd () {
+      this.progressbarFocussed = false
+      this.$refs.filesListWrapper.focus()
     },
 
     openFileActionBar (file) {

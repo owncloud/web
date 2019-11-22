@@ -38,8 +38,8 @@
             <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
             <oc-drop toggle="#new-file-menu-btn" mode="click">
               <oc-nav>
-                <file-upload :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-                <folder-upload v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
+                <file-upload :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" @upload-start="onUploadStart" @upload-end="onUploadEnd"></file-upload>
+                <folder-upload v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" @upload-start="onUploadStart" @upload-end="onUploadEnd"></folder-upload>
                 <oc-nav-item @click="showCreateFolderDialog" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
                 <oc-nav-item v-for="(newFileHandler, key) in newFileHandlers"
                   :key="key"
@@ -297,6 +297,12 @@ export default {
         .finally(() => {
           this.isLoadingSearch = false
         })
+    },
+    onUploadStart () {
+      this.$emit('upload-start')
+    },
+    onUploadEnd () {
+      this.$emit('upload-end')
     },
     focusMobileSearchInput () {
       this.$refs.mobileSearch.$el.querySelector('input').focus()

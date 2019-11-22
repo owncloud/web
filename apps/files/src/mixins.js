@@ -271,6 +271,7 @@ export default {
     },
 
     $_ocUpload (file, path, overwrite = null, emitSuccess = true, addToProgress = true) {
+      this.$emit('upload-start')
       let basePath = this.path || ''
       let relativePath = path
       if (addToProgress) {
@@ -302,6 +303,7 @@ export default {
       }
 
       promise.then(e => {
+        this.$emit('upload-end')
         this.removeFileFromProgress(file)
         if (emitSuccess) {
           this.$emit('success', e, file)

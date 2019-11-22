@@ -9,25 +9,30 @@
         id="files-upload-progress-dropdown-trigger"
         icon="expand_more"
       />
-      <translate
-        :translate-n="count"
-        translate-plural="Uploading %{ count } items"
-      >
-        Uploading %{ count } item
-      </translate>
+      <span id="upload-label">
+        <translate
+          :translate-n="count"
+          translate-plural="Uploading %{ count } items"
+        >
+          Uploading %{ count } item
+        </translate>
+      </span>
       <oc-grid
         gutter="small"
         flex
         class="uk-width-1-1 uk-width-medium@s"
       >
         <oc-progress
+          ref="progressbar"
           :value="totalUploadProgress"
           :max="100"
+          aria-labelledby="upload-label"
           class="uk-width-expand uk-margin-remove-bottom"
         />
         <span>
           {{ totalUploadProgress | roundNumber}} %
         </span>
+        <oc-hidden-announcer level="assertive" :announcement="announcement" />
       </oc-grid>
     </oc-grid>
     <oc-drop
@@ -47,15 +52,30 @@ import Mixins from '../mixins'
 
 export default {
   name: 'UploadProgress',
-
+  data () {
+    return {
+      announcement: '',
+      announcementOnComplete: this.$gettext('Upload complete')
+    }
+  },
+  props: {
+    progressbarFocus: {
+      type: Boolean,
+      default: false,
+      required: true
+    }
+  },
   components: {
     UploadMenu
   },
-
   mixins: [
     Mixins
   ],
-
+  methods: {
+    focusProgressbar () {
+      this.$refs.progressbar.$el.focus()
+    }
+  },
   computed: {
     ...mapGetters('Files', ['inProgress', 'uploaded']),
 
@@ -81,6 +101,18 @@ export default {
       }
 
       return progressTotal
+    }
+  },
+  watch: {
+    progressbarFocus (value) {
+      if (value) {
+        this.focusProgressbar()
+      }
+    },
+    totalUploadProgress (value) {
+      if (value === 100) {
+        this.announcement = this.announcementOnComplete
+      }
     }
   }
 }
