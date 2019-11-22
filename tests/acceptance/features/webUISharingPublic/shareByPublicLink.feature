@@ -558,6 +558,41 @@ Feature: Share by public link
     Then the fields of the last public link share response of user "user1" should include
       | expireDate | 2038-10-14 |
 
+  Scenario Outline: auto set expiration date on public link (with default amount of expiry days)
+    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
+    And user "user1" has logged in using the webUI
+    When the user creates a new public link for resource "<shared-resource>" using the webUI
+    Then user "user1" should have a share with these details:
+      | field       | value              |
+      | share_type  | public_link        |
+      | uid_owner   | user1              |
+      | permissions | read               |
+      | path        | /<shared-resource> |
+      | name        | Public link        |
+      | expiration  | +7                 |
+    Examples:
+      | shared-resource |
+      | lorem.txt       |
+      | simple-folder   |
+
+  Scenario Outline: auto set expiration date on public link (with set amount expiry days)
+    Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
+    And the setting "shareapi_expire_after_n_days" of app "core" has been set to "42"
+    And user "user1" has logged in using the webUI
+    When the user creates a new public link for resource "<shared-resource>" using the webUI
+    Then user "user1" should have a share with these details:
+      | field       | value              |
+      | share_type  | public_link        |
+      | uid_owner   | user1              |
+      | permissions | read               |
+      | path        | /<shared-resource> |
+      | name        | Public link        |
+      | expiration  | +42                |
+    Examples:
+      | shared-resource |
+      | lorem.txt       |
+      | simple-folder   |
+
   @skip @yetToImplement
   Scenario: share two file with same name but different paths by public link
     When the user creates a new public link for file "lorem.txt" using the webUI
