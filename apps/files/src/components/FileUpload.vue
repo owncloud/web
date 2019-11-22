@@ -2,7 +2,7 @@
   <oc-nav-item icon="file_upload" @click="triggerUpload">
     <span id="files-file-upload-button" v-translate>Upload File</span>
     <div slot="outer-content">
-      <input id="fileUploadInput" type="file" name="file" @change="$_ocUpload_addFileToQue" multiple ref="input" />
+      <input id="fileUploadInput" type="file" aria-labelledby="files-file-upload-button" name="file" @change="$_ocUpload_addFileToQue" multiple ref="input" />
     </div>
   </oc-nav-item>
 </template>

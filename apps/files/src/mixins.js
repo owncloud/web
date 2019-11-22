@@ -45,6 +45,12 @@ export default {
     formDateFromNow (date) {
       return moment(date).locale(this.$language.current).fromNow()
     },
+    delayForScreenreader (func, delay = 500) {
+      /*
+      * Delay for screen readers Virtual buffers
+      */
+      setTimeout(() => func(), delay)
+    },
     fileTypeIcon (file) {
       if (file) {
         if (file.type === 'folder') {
@@ -287,6 +293,7 @@ export default {
     },
 
     $_ocUpload (file, path, overwrite = null, emitSuccess = true, addToProgress = true) {
+      this.$root.$emit('upload-start')
       let basePath = this.path || ''
       let relativePath = path
       if (addToProgress) {
@@ -318,6 +325,7 @@ export default {
       }
 
       promise.then(e => {
+        this.$root.$emit('upload-end')
         this.removeFileFromProgress(file)
         if (emitSuccess) {
           this.$emit('success', e, file)
