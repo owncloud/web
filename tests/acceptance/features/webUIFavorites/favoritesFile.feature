@@ -73,3 +73,22 @@ Feature: Mark file as favorite
     And folder with path "simple-empty-folder" should be listed in the favorites page on the webUI
     And folder with path "simple-folder/simple-empty-folder" should be listed in the favorites page on the webUI
     And file with path "strängé नेपाली folder/lorem.txt" should be listed in the favorites page on the webUI
+
+  @issue-1720
+  Scenario: Try to favorite file and folder that used to exist but does not anymore
+    Given the user has browsed to the files page
+    And the following files have been deleted by user "user1"
+      | name          |
+      | lorem.txt     |
+      | simple-folder |
+    When the user marks file "lorem.txt" as favorite using the webUI
+    Then no message should be displayed on the webUI
+    # Then the error message 'Error while marking "lorem.txt" as favorite' should be displayed on the webUI
+    And file "lorem.txt" should not be marked as favorite on the webUI
+    # When the user clears all error message from the webUI
+    When the user marks folder "simple-folder" as favorite using the webUI
+    Then no message should be displayed on the webUI
+    # Then the error message 'Error while marking "simple-folder" as favorite' should be displayed on the webUI
+    And folder "simple-folder" should not be marked as favorite on the webUI
+    And as "user1" file "lorem.txt" should not exist
+    And as "user1" folder "simple-folder" should not exist

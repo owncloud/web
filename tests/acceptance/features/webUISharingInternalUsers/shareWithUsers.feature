@@ -310,3 +310,21 @@ Feature: Sharing files and folders with internal users
       | lorem (2).txt     |
     Then the deleted elements should not be listed on the webUI
 
+  Scenario: Try to share file and folder that used to exist but does not anymore
+    Given user "user1" has logged in using the webUI
+    And the following files have been deleted by user "user1"
+      | name          |
+      | lorem.txt     |
+      | simple-folder |
+    When the user shares file "lorem.txt" with user "User Two" as "Editor" using the webUI
+    Then the error message 'Error while sharing.' should be displayed on the webUI
+    And user "UserTwo" should not be listed in the collaborators list on the webUI
+    When the user clears all error message from the webUI
+    And the user shares folder "simple-folder" with user "User Two" as "Editor" using the webUI
+    Then the error message 'Error while sharing.' should be displayed on the webUI
+    And user "UserTwo" should not be listed in the collaborators list on the webUI
+    When the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
+    And as "user1" file "lorem.txt" should not exist
+    And as "user1" folder "simple-folder" should not exist

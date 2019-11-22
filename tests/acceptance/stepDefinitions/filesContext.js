@@ -195,7 +195,7 @@ const waitBetweenFileUploadOperations = async function () {
   timeOfLastUploadOperation = Date.now()
 }
 
-Given('the following files have been deleted by user {string}', async function (user, table) {
+Given('the following files/folders/resources have been deleted by user {string}', async function (user, table) {
   const filesToDelete = table.hashes()
   for (const entry of filesToDelete) {
     await waitBetweenDeleteOperations()
@@ -780,4 +780,8 @@ Then('file/folder {string} shared by {string} should not be listed in the webUI'
 Then('the page should be empty', async function () {
   const isVisible = await client.page.phoenixPage().isPageVisible()
   assert.ok(!isVisible, 'The phoenix page should be empty but is not')
+})
+
+When('the user downloads file/folder {string} using the webUI', function (file) {
+  return client.page.FilesPageElement.filesList().downloadFile(file)
 })
