@@ -539,17 +539,18 @@ export default {
         context.commit('SHARES_LOAD', data.map(element => {
           return _buildShare(element.shareInfo, context.getters.highlightedFile)
         }))
+        context.commit('SHARES_LOADING', false)
       })
       .catch(error => {
         context.commit('SHARES_ERROR', error.message)
+        context.commit('SHARES_LOADING', false)
       })
-      .finally(context.commit('SHARES_LOADING', false))
   },
   sharesClearState (context, payload) {
     context.commit('SHARES_LOAD', [])
     context.commit('SHARES_ERROR', null)
   },
-  changeShare ({ commit }, { client, share, role, permissions }) {
+  changeShare ({ commit, getters }, { client, share, role, permissions }) {
     commit('TOGGLE_COLLABORATOR_SAVING', true)
 
     const params = {
@@ -563,15 +564,13 @@ export default {
     }
 
     client.shares.updateShare(share.info.id, params)
-      .then(() => {
-        // TODO: work with response once it is available: https://github.com/owncloud/owncloud-sdk/issues/208
-        commit('SHARES_UPDATE_SHARE', { share, role })
+      .then((updatedShare) => {
+        commit('SHARES_UPDATE_SHARE', _buildShare(updatedShare.shareInfo, getters.highlightedFile))
+        commit('TOGGLE_COLLABORATOR_SAVING', false)
       })
       .catch(e => {
-        console.log(e)
-      })
-      .finally(_ => {
         commit('TOGGLE_COLLABORATOR_SAVING', false)
+        console.log(e)
       })
   },
   addShare (context, { client, path, $gettext, shareWith, shareType, permissions }) {

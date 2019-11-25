@@ -298,7 +298,7 @@ const assertUsersGroupsWithPatternInAutocompleteListExcluding = async function (
 
   // check if every created group that contains the pattern is listed in the autocomplete list
   const groupMatchingPattern = getGroupsMatchingPattern(pattern).filter(group => group !== alreadySharedUserOrGroup)
-  assertGroupsInAutocompleteList(groupMatchingPattern)
+  return assertGroupsInAutocompleteList(groupMatchingPattern)
 }
 
 Given('user {string} has shared file/folder {string} with user {string}', function (sharer, elementToShare, receiver) {
@@ -405,6 +405,14 @@ Given('the administrator has excluded group {string} from receiving shares', asy
   }
 })
 
+When('the user opens the share creation dialog in the webUI', function () {
+  return client.page.FilesPageElement.sharingDialog().clickCreateShare()
+})
+
+When('the user cancels the share creation dialog in the webUI', function () {
+  return client.page.FilesPageElement.sharingDialog().clickCancel()
+})
+
 When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
@@ -466,13 +474,14 @@ When('the user shares file/folder/resource {string} with user {string} as {strin
 
 When('the user selects the following collaborators for the share as {string} with {string} permissions:', async function (role, permissions, usersTable) {
   const users = usersTable.hashes()
+  const dialog = client.page.FilesPageElement.sharingDialog()
 
   for (const { collaborator, type } of users) {
-    await client.page.FilesPageElement.sharingDialog().selectCollaboratorForShare(collaborator, type === 'group')
+    await dialog.selectCollaboratorForShare(collaborator, type === 'group')
   }
 
-  client.page.FilesPageElement.sharingDialog().selectRoleForNewCollaborator(role)
-  await client.page.FilesPageElement.sharingDialog().selectPermissionsOnPendingShare(permissions)
+  await dialog.selectRoleForNewCollaborator(role)
+  await dialog.selectPermissionsOnPendingShare(permissions)
 })
 
 When('the user removes {string} as a collaborator from the share', function (user) {
@@ -485,7 +494,7 @@ When('the user shares with the selected collaborators', function () {
     .waitForOutstandingAjaxCalls()
 })
 
-Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', function (pattern) {
+Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', async function (pattern) {
   const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
 
   // check if all created users that contain the pattern either in the display name or the username
@@ -496,10 +505,10 @@ Then('all users and groups that contain the string {string} in their name should
       return displayName !== currentUserDisplayName
     }
   )
-  assertUsersInAutocompleteList(usersMatchingPattern)
+  await assertUsersInAutocompleteList(usersMatchingPattern)
   // check if every created group that contains the pattern is listed in the autocomplete list
   const groupMatchingPattern = getGroupsMatchingPattern(pattern)
-  assertGroupsInAutocompleteList(groupMatchingPattern)
+  await assertGroupsInAutocompleteList(groupMatchingPattern)
 })
 
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI except user {string}', function (pattern, alreadySharedUser) {

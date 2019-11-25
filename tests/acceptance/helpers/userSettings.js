@@ -5,6 +5,7 @@ const alt1UserPassword = process.env.ALT1_USER_PASSWORD || '1234'
 const alt2UserPassword = process.env.ALT2_USER_PASSWORD || 'AaBb2Cc3Dd4'
 const alt3UserPassword = process.env.ALT3_USER_PASSWORD || 'aVeryLongPassword42TheMeaningOfLife'
 const alt4UserPassword = process.env.ALT4_USER_PASSWORD || 'ThisIsThe4thAlternatePwd'
+const alt11UserPassword = process.env.ALT11_USER_PASSWORD || 'E-leven'
 
 module.exports = {
   // list of default users
@@ -42,6 +43,11 @@ module.exports = {
       displayname: 'User Four',
       password: alt4UserPassword,
       email: 'user4@example.org'
+    },
+    user11: {
+      displayname: 'User Eleven',
+      password: alt11UserPassword,
+      email: 'user11@example.org'
     },
     usergrp: {
       displayname: 'User Grp',
@@ -215,6 +221,9 @@ module.exports = {
     }
     if (password === '%alt4%') {
       return alt4UserPassword
+    }
+    if (password === '%alt11%') {
+      return alt11UserPassword
     }
     return password
   }

@@ -40,6 +40,7 @@ Feature: Sharing files and folders with internal groups
       | user1    |
       | user2    |
       | user3    |
+      | user11   |
     And these groups have been created:
       | groupname |
       | user1     |
@@ -48,6 +49,7 @@ Feature: Sharing files and folders with internal groups
     And user "user3" has logged in using the webUI
     When the user shares file "randomfile.txt" with user "User One" as "Editor" using the webUI
 #    And the user shares file "randomfile.txt" with group "user1" as "Editor" using the webUI
+    And the user opens the share creation dialog in the webUI
     And the user types "user1" in the share-with-field
     Then "group" "user1" should not be listed in the autocomplete list on the webUI
     And the content of file "randomfile.txt" for user "user1" should be "user3 file"
@@ -68,6 +70,7 @@ Feature: Sharing files and folders with internal groups
     And user "user3" has logged in using the webUI
     When the user shares file "randomfile.txt" with group "user1" as "Editor" using the webUI
 #    And the user shares file "randomfile.txt" with user "User One" as "Editor" using the webUI
+    And the user opens the share creation dialog in the webUI
     And the user types "user" in the share-with-field
     Then "user" "User One" should not be listed in the autocomplete list on the webUI
     And the content of file "randomfile.txt" for user "user2" should be "user3 file"
