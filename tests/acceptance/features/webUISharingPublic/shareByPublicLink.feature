@@ -810,3 +810,14 @@ Feature: Share by public link
     And the user navigates to the copied public link using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
+  Scenario Outline: user creates multiple public links with same name for the same file/folder
+    Given user "user1" has logged in using the webUI
+    When the user creates a new public link for <element> "<name>" using the webUI with
+      | name | same_link_name |
+    And the user creates a new public link for <element> "<name>" using the webUI with
+      | name | same_link_name |
+    Then the tokens should be unique for each public links on the webUI
+    Examples:
+      | element | name          |
+      | folder  | simple-folder |
+      | file    | lorem.txt     |
