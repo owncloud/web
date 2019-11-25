@@ -1,7 +1,7 @@
 const util = require('util')
 const path = require('path')
 const xpathHelper = require('../../helpers/xpath')
-const { join } = require('../../helpers/join')
+const { join } = require('../../helpers/path')
 
 module.exports = {
   commands: {
