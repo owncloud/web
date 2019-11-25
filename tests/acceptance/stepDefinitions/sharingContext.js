@@ -10,7 +10,7 @@ const sharingHelper = require('../helpers/sharingHelper')
 const { SHARE_TYPES } = require('../helpers/sharingHelper')
 const { runOcc } = require('../helpers/occHelper')
 const _ = require('lodash')
-const path = require('path')
+const path = require('../helpers/path')
 
 /**
  *
@@ -66,7 +66,7 @@ const shareFileFolder = function (
   permissionString = 'all', name = null, extraParams = {}
 ) {
   const params = new URLSearchParams()
-  elementToShare = path.join('/', elementToShare)
+  elementToShare = path.resolve(elementToShare)
   const permissions = sharingHelper.humanReadablePermissionsToBitmask(permissionString)
   params.append('path', elementToShare)
   if (receiver) {

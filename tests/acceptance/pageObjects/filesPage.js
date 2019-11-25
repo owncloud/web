@@ -1,6 +1,6 @@
 const util = require('util')
-const _ = require('lodash')
 const navigationHelper = require('../helpers/navigationHelper')
+const { join, normalize } = require('../helpers/path')
 const assert = require('assert')
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
      */
     navigateAndWaitTillLoaded: function (folder = '') {
       return navigationHelper.navigateAndWaitTillLoaded(
-        this.api.launchUrl + '/#/files/list/' + folder,
+        join(this.api.launchUrl, '#/files/list', folder),
         this.page.FilesPageElement.filesList().elements.filesListProgressBar
       )
     },
@@ -129,7 +129,7 @@ module.exports = {
       phoenix gets the `onChange` event and uploads that folder.
        */
       const sessionId = this.api.sessionId
-      folderName = _.trimStart(folderName, '/')
+      folderName = normalize(folderName)
       folderName = `/tmp/${sessionId}/${folderName}`
       return this.uploadFolder(folderName)
     },

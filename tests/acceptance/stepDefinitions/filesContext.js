@@ -5,7 +5,7 @@ const webdav = require('../helpers/webdavHelper')
 const _ = require('lodash')
 const loginHelper = require('../helpers/loginHelper')
 const { move } = require('../helpers/webdavHelper')
-const path = require('path')
+const path = require('../helpers/path')
 let deletedElements
 let timeOfLastDeleteOperation = Date.now()
 let timeOfLastUploadOperation = Date.now()

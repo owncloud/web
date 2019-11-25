@@ -1,6 +1,7 @@
 const util = require('util')
 const path = require('path')
 const xpathHelper = require('../../helpers/xpath')
+const { join } = require('../../helpers/join')
 
 module.exports = {
   commands: {
@@ -409,7 +410,7 @@ module.exports = {
       // Since the extension has spaces immediately after '.' we check for spaces after removing the '.' using slice().
       if (parts.ext && !parts.ext.slice(1).startsWith(' ')) {
         // keep path of nested folders intact, just remove the extension at the end
-        const filePathWithoutExt = parts.dir ? parts.dir + '/' + parts.name : parts.name
+        const filePathWithoutExt = parts.dir ? join(parts.dir, parts.name) : parts.name
         const element = this.elements.fileRowByNameAndExtension
         return util.format(
           element.selector,

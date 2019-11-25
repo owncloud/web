@@ -3,7 +3,7 @@ const fetch = require('node-fetch')
 const httpHelper = require('../helpers/httpHelper')
 const convert = require('xml-js')
 const _ = require('lodash/object')
-const { resolve } = require('path')
+const { resolve, normalize, join } = require('../helpers/path')
 const occHelper = require('../helpers/occHelper')
 
 /**
@@ -78,7 +78,7 @@ exports.move = function (userId, fromName, toName) {
 exports.propfind = function (path, userId, properties, folderDepth = 1) {
   const headers = httpHelper.createAuthHeader(userId)
   headers.Depth = folderDepth
-  const davPath = client.globals.backend_url + '/remote.php/dav' + resolve('/', path)
+  const davPath = client.globals.backend_url + '/remote.php/dav' + resolve(path)
   let propertyBody = ''
   properties.map(prop => {
     propertyBody += `<${prop}/>`
@@ -178,7 +178,7 @@ exports.createFile = function (user, fileName, contents = '') {
 */
 exports.getProperties = function (path, userId, requestedProps) {
   return new Promise((resolve, reject) => {
-    const trimmedPath = path.replace(/^\/+/, '') // remove a leading slash
+    const trimmedPath = normalize(path) // remove a leading slash
     const relativePath = `/files/${userId}/${trimmedPath}`
     exports.propfind(relativePath, userId, requestedProps,
       0)
@@ -206,7 +206,7 @@ exports.getSkeletonFile = function (filename) {
     .then(resp => resp.ocs.data.stdOut)
     .then(dir => {
       const headers = httpHelper.createAuthHeader('admin')
-      const element = dir.trim() + '/' + filename
+      const element = join(dir.trim(), filename)
       return fetch(
         client.globals.backend_url + `/ocs/v2.php/apps/testing/api/v1/file?file=${encodeURIComponent(element)}&absolute=true&format=json`,
         { method: 'GET', headers })
