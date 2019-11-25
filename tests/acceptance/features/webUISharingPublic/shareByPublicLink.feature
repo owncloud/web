@@ -346,6 +346,66 @@ Feature: Share by public link
       | path        | /simple-folder |
       | name        | Public link    |
 
+  Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
+    Given the setting "<setting-name>" of app "core" has been set to "yes"
+    And user "user1" has shared folder "simple-folder" with link with "<initial-permissions>" permissions
+    And user "user1" has logged in using the webUI
+    When the user edits the public link named "{}" of folder "simple-folder" changing following
+      | role | <role> |
+    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
+    And user "user1" should have a share with these details:
+      | field       | value                 |
+      | share_type  | public_link           |
+      | uid_owner   | user1                 |
+      | permissions | <initial-permissions> |
+      | path        | /simple-folder        |
+    Examples:
+      | initial-permissions | role        | setting-name                                      |
+      | read, create        | Viewer      | shareapi_enforce_links_password_read_only         |
+      | read                | Contributor | shareapi_enforce_links_password_read_write        |
+      | read                | Editor      | shareapi_enforce_links_password_read_write_delete |
+      | read, create        | Uploader    | shareapi_enforce_links_password_write_only        |
+
+  Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
+    Given the setting "<setting-name>" of app "core" has been set to "yes"
+    And user "user1" has shared folder "simple-folder" with link with "<initial-permissions>" permissions and password "123"
+    And user "user1" has logged in using the webUI
+    When the user edits the public link named "{}" of folder "simple-folder" changing following
+      | password | |
+    Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
+    And user "user1" should have a share with these details:
+      | field       | value                 |
+      | share_type  | public_link           |
+      | uid_owner   | user1                 |
+      | permissions | <initial-permissions> |
+      | path        | /simple-folder        |
+    Examples:
+      | initial-permissions          | setting-name                                      |
+      | read                         | shareapi_enforce_links_password_read_only         |
+      | read, create                 | shareapi_enforce_links_password_read_write        |
+      | read, update, create, delete | shareapi_enforce_links_password_read_write_delete |
+      | create                       | shareapi_enforce_links_password_write_only        |
+
+  Scenario Outline: user changes the role of an existing public link role without entering share password while enforce password for the original role is enforced
+    Given the setting "<setting-name>" of app "core" has been set to "yes"
+    And user "user1" has shared folder "simple-folder" with link with "<initial-permissions>" permissions and password "123"
+    And user "user1" has logged in using the webUI
+    When the user edits the public link named "{}" of folder "simple-folder" changing following
+      | role     | <role> |
+      | password |        |
+    Then user "user1" should have a share with these details:
+      | field       | value                  |
+      | share_type  | public_link            |
+      | uid_owner   | user1                  |
+      | permissions | <expected-permissions> |
+      | path        | /simple-folder         |
+    Examples:
+      | initial-permissions          | role        | setting-name                                      | expected-permissions         |
+      | read                         | Contributor | shareapi_enforce_links_password_read_only         | read, create                 |
+      | read, create                 | Viewer      | shareapi_enforce_links_password_read_write        | read                         |
+      | read, update, create, delete | Uploader    | shareapi_enforce_links_password_read_write_delete | create                       |
+      | create                       | Editor      | shareapi_enforce_links_password_write_only        | read, update, create, delete |
+
   @yetToImplement
   Scenario: public should be able to access the shared file through public link
     Given user "user1" has logged in using the webUI
