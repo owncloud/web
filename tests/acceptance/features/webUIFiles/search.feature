@@ -131,3 +131,25 @@ Feature: Search
     When the user searches for "strängéनेपाली" using the webUI
     Then file "strängéनेपालीloremfile.txt" with path "/" should be listed in the search results in the other folders section on the webUI
     And file "strängéनेपालीloremfile.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
+
+  @issue-1726
+  Scenario: Search for deleted folder in trashbin
+    Given user "user1" has created folder "deleted folder"
+    And user "user1" has created folder "not deleted folder"
+    And the following files have been deleted by user "user1"
+      | name               |
+      | deleted folder     |
+    When the user browses to the trashbin page
+    And the user searches for "folder" using the webUI
+    Then folder "not deleted folder" should be listed on the webUI
+    And folder "deleted folder" should not be listed on the webUI
+
+  @issue-1726
+  Scenario: Search for favorited folder in favorites page
+    Given user "user1" has created folder "favorite folder"
+    And user "user1" has created folder "not favorite folder"
+    And user "user1" has favorited element "favorite folder"
+    When the user browses to the favorites page
+    And the user searches for "favorite" using the webUI
+    Then folder "favorite folder" should be listed on the webUI
+    And folder "not favorite folder" should be listed on the webUI
