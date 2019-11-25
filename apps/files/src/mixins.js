@@ -102,7 +102,7 @@ export default {
     },
     compareIds (x, y) {
       if (!isNaN(x)) { // OC10 autoincrement id
-        return parseInt(x) === parseInt(y)
+        return parseInt(x, 10) === parseInt(y, 10)
       } else if (atob(y).split(':').length === 2) { // OC10: https://github.com/cs3org/reva/blob/e7830e2f752a05a081178ed26c384ced983b8fde/internal/http/services/owncloud/ocdav/ocdav.go#L169-L175
         const opaqueid = atob(y).split(':')[1] // https://cs3org.github.io/cs3apis/#cs3.storageproviderv0alpha.ResourceId
         return x === opaqueid
