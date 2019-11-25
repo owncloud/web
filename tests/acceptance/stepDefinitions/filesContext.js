@@ -6,6 +6,7 @@ const _ = require('lodash')
 const loginHelper = require('../helpers/loginHelper')
 const { move } = require('../helpers/webdavHelper')
 const path = require('../helpers/path')
+const util = require('util')
 let deletedElements
 let timeOfLastDeleteOperation = Date.now()
 let timeOfLastUploadOperation = Date.now()
@@ -169,6 +170,14 @@ When('the user deletes the following elements using the webUI', async function (
     deletedElements.push(line[0])
   }
   return client.page.filesPage()
+})
+
+Then('there should be no breadcrumb displayed on the webUI', function () {
+  return assertBreadCrumbIsNotDisplayed()
+})
+
+Then('breadcrumb for folder {string} should be displayed on the webUI', function (resource) {
+  return assertBreadcrumbIsDisplayedFor(resource)
 })
 
 /**
@@ -502,6 +511,25 @@ const theseResourcesShouldBeListed = function (entryList) {
     client.page.FilesPageElement.filesList().waitForFileVisible(entry[0])
   })
   return client
+}
+
+const assertBreadCrumbIsNotDisplayed = function () {
+  const breadcrumbXpath = client.page.filesPage().elements.breadcrumb.selector
+  return client.expect.element(breadcrumbXpath).to.not.be.present
+}
+
+/**
+ *
+ * @param {string} resource
+ */
+const assertBreadcrumbIsDisplayedFor = function (resource) {
+  const breadcrumbElement = client.page.filesPage().elements.resourceBreadcrumb
+  const resourceBreadcrumbXpath = util.format(breadcrumbElement.selector, resource)
+  return client
+    .useStrategy(breadcrumbElement)
+    .assert
+    .visible(resourceBreadcrumbXpath,
+      `Resource ${resourceBreadcrumbXpath} expected to be visible but is not visible .`)
 }
 
 /**
