@@ -275,7 +275,7 @@ module.exports = {
         .initAjaxCounters()
         .waitForElementVisible('@publicLinkSaveButton')
         .click('@publicLinkSaveButton')
-        .waitForElementNotPresent('@publicLinkSaveButton')
+        .waitForElementNotPresent({ selector: '@publicLinkSaveButton', abortOnFailure: false })
         .waitForOutstandingAjaxCalls()
     },
     /**
