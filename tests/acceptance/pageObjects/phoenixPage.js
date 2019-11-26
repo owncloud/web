@@ -116,6 +116,19 @@ module.exports = {
           .click(declineShareButton)
           .waitForAjaxCallsToStartAndFinish()
       }
+    },
+    /**
+     * Checks if the phoenix page contains any elements on the phoenix container
+     *
+     * @returns {boolean}
+     */
+    isPageVisible: async function () {
+      let isVisible = true
+      await this.api.elements(this.elements.phoenixContainer.locateStrategy,
+        this.elements.phoenixContainer.selector, function (result) {
+          isVisible = result.value.length > 0
+        })
+      return isVisible
     }
   },
   elements: {
