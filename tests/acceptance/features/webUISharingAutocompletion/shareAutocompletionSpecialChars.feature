@@ -15,6 +15,7 @@ Background:
     | groupname     |
     | finance1      |
     | finance2      |
+  And the setting "outgoing_server2server_share_enabled" of app "files_sharing" has been set to "no"
 
 Scenario Outline: autocompletion of user having special characters in their usernames
   Given these users have been created but not initialized:
