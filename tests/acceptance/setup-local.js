@@ -1,8 +1,8 @@
 import { setDefaultTimeout, After, Before } from 'cucumber'
 import { createSession, closeSession, startWebDriver, stopWebDriver, client } from 'nightwatch-api'
-import join from 'join-path'
 import fetch from 'node-fetch'
-const httpHelper = require('./helpers/httpHelper')
+import httpHelper from './helpers/httpHelper'
+import { join } from './helpers/path'
 
 setDefaultTimeout(60000)
 
