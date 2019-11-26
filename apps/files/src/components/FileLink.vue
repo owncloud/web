@@ -1,6 +1,22 @@
 <template>
   <div id="oc-files-file-link">
-    <div class="uk-text-right">
+    <template v-if="$_privateLinkOfHighlightedFile">
+      <div class="uk-text-bold">
+        Private Link
+      </div>
+      <div name="link" class="uk-link" v-show="!linkCopied"
+         id="files-sidebar-private-link-label"
+         v-clipboard:copy="$_privateLinkOfHighlightedFile"
+         v-clipboard:success="$_clipboardSuccessHandler">
+        {{ $_copyPrivateLinkLabel }}
+      </div>
+      <oc-icon name="ready" id="files-sidebar-private-link-icon-copied" v-show="linkCopied" />
+    </template>
+    <hr v-if="$_privateLinkOfHighlightedFile" />
+    <div class="uk-text-bold">
+      Public Link
+    </div>
+    <div class="uk-text-left">
       <oc-button v-if="!linksLoading" :disabled="!!(formOpen || linkId)" variation="primary" icon="add" @click="$_openForm()" v-translate>Add Link</oc-button>
       <button v-else disabled class="uk-button uk-button-default uk-position-relative"><oc-spinner class="uk-position-small uk-position-center-left" size="small" /><span class="uk-margin-small-left" v-translate>Loading</span></button>
     </div>
@@ -50,6 +66,7 @@ export default {
       // Render template only when needed
       formOpen: false,
       linkId: false,
+      linkCopied: false,
 
       // group for easy payload
       params: {
@@ -118,6 +135,19 @@ export default {
     },
     $_copyButtonLabel () {
       return this.$gettext('Copy link url')
+    },
+    $_copyPrivateLinkLabel () {
+      return this.$gettext('Copy Private Link')
+    },
+    $_privateLinkOfHighlightedFile () {
+      if (!this.highlightedFile) {
+        return false
+      }
+      if (this.highlightedFile.isMounted()) {
+        const file = encodeURIComponent(this.highlightedFile.name)
+        return window.location.href.split('?')[0] + `?scrollTo=${file}`
+      }
+      return this.highlightedFile.privateLink
     }
   },
   methods: {
@@ -162,6 +192,14 @@ export default {
 
       // Remove clone after animation ends
       setTimeout(() => clone.remove(), 500)
+    },
+    $_clipboardSuccessHandler () {
+      this.linkCopied = true
+
+      // Use copy icon after some time
+      setTimeout(() => {
+        this.linkCopied = false
+      }, 1000)
     }
   }
 }
