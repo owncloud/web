@@ -48,8 +48,8 @@
     "copy-webpack-plugin": "^5.0.3",
     "core-js": "3.3.2",
     "css-loader": "^3.1.0",
-    "cucumber": "6.0.2",
-    "cucumber-pretty": "^6.0.0",
+    "cucumber": ">=6.0.5",
+    "cucumber-pretty": ">=6.0.0",
     "deepmerge": "^4.2.1",
     "easygettext": "^2.7.0",
     "eslint": "6.3.0",
@@ -70,13 +70,14 @@
     "lint-staged": ">=9",
     "lodash": "^4.17.15",
     "mini-css-extract-plugin": "^0.8.0",
-    "nightwatch": "^1.2.2",
+    "nightwatch": "1.2.4",
     "nightwatch-api": "^2.3.0",
     "node-fetch": "^2.6.0",
     "npm-run-all": "^4.1.5",
     "oidc-client": "^1.9.1",
     "owncloud-design-system": "^1.0.0-993",
     "owncloud-sdk": "^1.0.0-368",
+    "p-limit": "^2.2.1",
     "parse-json": "^5.0.0",
     "requirejs": "^2.3.6",
     "rimraf": "^3.0.0",
@@ -123,8 +124,7 @@
     ]
   },
   "dependencies": {
-    "deepmerge": "^4.0.0",
-    "inert-polyfill": "^0.2.5",
-    "p-limit": "^2.2.1"
+    "deepmerge": "^4.2.1",
+    "inert-polyfill": "^0.2.5"
   }
 }
