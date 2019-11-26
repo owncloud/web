@@ -1,5 +1,7 @@
 const { client } = require('nightwatch-api')
 const httpHelper = require('./httpHelper')
+const { normalize } = require('./path')
+
 const fetch = require('node-fetch')
 const assert = require('assert')
 
@@ -217,7 +219,7 @@ module.exports = {
     const allShares = await this.getAllSharesSharedWithUser(user)
     const elementsToDecline = allShares.filter((element) => {
       return element.state === this.SHARE_STATE.pending &&
-        element.path.slice(1) === filename &&
+        normalize(element.path) === filename &&
         element.uid_owner === sharer
     })
     if (elementsToDecline.length < 1) {

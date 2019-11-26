@@ -7,7 +7,7 @@ const { client } = require('nightwatch-api')
 const { xml2js } = require('xml-js')
 const _ = require('lodash')
 const assert = require('assert')
-const path = require('path')
+const path = require('../helpers/path')
 
 /**
  * Check if file exists using webdav requests

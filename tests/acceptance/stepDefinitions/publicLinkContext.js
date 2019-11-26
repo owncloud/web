@@ -4,7 +4,7 @@ require('url-search-params-polyfill')
 const sharingHelper = require('../helpers/sharingHelper')
 const assert = require('assert')
 const { SHARE_TYPES } = require('../helpers/sharingHelper')
-const path = require('path')
+const path = require('../helpers/path')
 
 When(
   'the user (tries to )create/creates a new public link for file/folder/resource {string} using the webUI',
@@ -74,7 +74,7 @@ Then('the fields of the last public link share response of user {string} should 
 
 Then('as user {string} the folder {string} should not have any public link', async function (sharer, resource) {
   const publicLinkShares = await sharingHelper.getAllPublicLinkShares(sharer)
-  resource = path.join('/', resource)
+  resource = path.resolve(resource)
   for (const share of publicLinkShares) {
     if (share.path === resource && share.share_type === SHARE_TYPES.public_link) {
       assert.fail(
