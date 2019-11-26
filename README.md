@@ -77,7 +77,6 @@ In the local Phoenix checkout, copy the `config.json.sample` file to `config.jso
 ## Running acceptance tests
 
 - clone and install testing app into ownCloud from http://github.com/owncloud/testing
-- set `skeletondirectory` of ownCloud to `<oc-root>/apps/testing/data/webUISkeleton` e.g. `occ config:system:set skeletondirectory --value=/var/www/owncloud/apps/testing/data/webUISkeleton`
 - build, configure and run phoenix
 - setup selenium and browser in either of the following ways:
     1. `yarn run selenium`: This runs selenium-docker similar to command below.
