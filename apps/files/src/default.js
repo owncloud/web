@@ -4,6 +4,7 @@ import 'regenerator-runtime/runtime'
 import FilesApp from './components/FilesApp.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
+import FileSidebarWebComponent from './components/FileSidebarWebComponent.vue'
 import FileLink from './components/FileLink.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './components/PublicLinks/PublicLink.vue'
@@ -16,6 +17,20 @@ const store = require('./store')
 function $gettext (msg) {
   return msg
 }
+const filesConfig = window.phoenixConfig.files || []
+const filesSidebars = filesConfig.sidebars || []
+const sidebarsFromConfig = filesSidebars.map(s => {
+  return {
+    app: s.tabTitle,
+    component: FileSidebarWebComponent,
+    title: s.tabTitle,
+    propsData: {
+      componentName: s.componentName,
+      componentUrl: s.componentUrl
+    }
+  }
+})
+
 const appInfo = {
   name: $gettext('Files'),
   id: 'files',
@@ -51,7 +66,7 @@ const appInfo = {
         icon: 'share',
         ariaLabel: $gettext('Collaborators')
       }
-    }
+    }, ...sidebarsFromConfig
   ]
 }
 const navItems = [

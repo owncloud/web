@@ -21,10 +21,14 @@
       <div>
         <oc-tabs>
             <oc-tab-item :active="tab.app == activeTab" @click="activeTab = tab.app" v-for="tab of fileSideBarsEnabled" :key="tab.name">
-              {{ tab.component.title($gettext) }} {{ tab.name }}
+              {{ tab.title || tab.component.title($gettext) }} {{ tab.name }}
             </oc-tab-item>
         </oc-tabs>
-        <component v-if="fileSideBars.length > 0 && activeTabComponent" v-bind:is="activeTabComponent.component" @reload="$emit('reload')"></component>
+        <component v-if="fileSideBars.length > 0 && activeTabComponent"
+          v-bind:is="activeTabComponent.component"
+           @reload="$emit('reload')"
+          :componentName="activeTabComponent.propsData ? activeTabComponent.propsData.componentName : ''"
+          :componentUrl="activeTabComponent.propsData ? activeTabComponent.propsData.componentUrl: ''"></component>
       </div>
     </template>
   </oc-app-side-bar>
