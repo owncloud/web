@@ -19,11 +19,11 @@ Given('a file with the size of {string} bytes and the name {string} has been cre
   createdFiles.push(fullPathOfLocalFile)
 })
 
-Then('the error message {string} should be displayed on the webUI', function (folder) {
+Then('the error message {string} should be displayed on the webUI', function (message) {
   return client
     .page.phoenixPage()
     .waitForElementVisible('@message')
-    .expect.element('@message').text.to.equal(folder)
+    .expect.element('@message').text.to.equal(message)
 })
 
 Then('the error message {string} should be displayed on the webUI dialog prompt', function (message) {
