@@ -117,6 +117,7 @@ module.exports = {
           .waitForAjaxCallsToStartAndFinish()
       }
     },
+
     /**
      * Checks if the phoenix page contains any elements on the phoenix container
      *
@@ -129,11 +130,43 @@ module.exports = {
           isVisible = result.value.length > 0
         })
       return isVisible
+    },
+
+    /**
+     * Clear all error messages from the webUI
+     *
+     * @returns {Promise<void>}
+     */
+    clearAllErrorMessages: async function () {
+      let notificationElements, cancelButtons
+      await this.api.element('@messages', result => {
+        notificationElements = result.value.ELEMENT
+      })
+      if (!notificationElements) {
+        return
+      }
+      await this.api.elementIdElements(notificationElements,
+        this.elements.clearErrorMessage.locateStrategy,
+        this.elements.clearErrorMessage.selector,
+        res => {
+          cancelButtons = res.value
+        })
+      for (const btn of cancelButtons) {
+        await this.api.elementIdClick(btn.ELEMENT).waitForAnimationToFinish()
+      }
     }
   },
   elements: {
     message: {
       selector: '//*[contains(@class, "uk-notification-message")]/div/div[contains(@class, "oc-notification-message-title")]',
+      locateStrategy: 'xpath'
+    },
+    messages: {
+      selector: '//*[contains(@class, "uk-notification-message")]',
+      locateStrategy: 'xpath'
+    },
+    clearErrorMessage: {
+      selector: '//a[contains(@class, "oc-alert-close-icon")]',
       locateStrategy: 'xpath'
     },
     notificationBell: {

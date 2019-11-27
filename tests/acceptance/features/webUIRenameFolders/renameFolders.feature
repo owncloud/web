@@ -111,3 +111,16 @@ Feature: rename folders
   Scenario: Rename a folder to .part
     When the user renames folder "simple-folder" to "simple.part" using the webUI
     Then the error message 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
+
+  Scenario: User tries to rename a folder that used to exist but does not anymore
+    Given the user has browsed to the files page
+    And the following files have been deleted by user "user1"
+      | name          |
+      | simple-folder |
+    When the user renames file "simple-folder" to "new-simple-folder" using the webUI
+    Then the error message 'Error while renaming "simple-folder" to "new-simple-folder"' should be displayed on the webUI
+    When the user reloads the current page of the webUI
+    Then folder "simple-folder" should not be listed on the webUI
+    And folder "new-simple-folder" should not be listed on the webUI
+    And as "user1" folder "simple-folder" should not exist
+    And as "user1" folder "new-simple-folder" should not exist

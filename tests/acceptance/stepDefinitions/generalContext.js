@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { After, Before, Given, Then } = require('cucumber')
+const { After, Before, Given, Then, When } = require('cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const fetch = require('node-fetch')
@@ -31,6 +31,12 @@ Then('the error message {string} should be displayed on the webUI dialog prompt'
     .page.phoenixPage()
     .waitForElementVisible('@ocDialogPromptAlert')
     .expect.element('@ocDialogPromptAlert').text.to.equal(message)
+})
+
+When('the user clears all error message from the webUI', function () {
+  return client
+    .page.phoenixPage()
+    .clearAllErrorMessages()
 })
 
 Then('no message should be displayed on the webUI', function () {

@@ -266,3 +266,20 @@ Feature: deleting files and folders
     When the user browses to the favorites page
     Then it should not be possible to delete file "lorem.txt" using the webUI
     And it should not be possible to delete folder "simple-folder" using the webUI
+
+  Scenario: Try to delete file and folder that used to exist but does not anymore
+    Given the user has browsed to the files page
+    And the following files have been deleted by user "user1"
+      | name          |
+      | lorem.txt     |
+      | simple-folder |
+    When the user deletes file "lorem.txt" using the webUI
+    Then the error message 'Error while deleting "lorem.txt"' should be displayed on the webUI
+    When the user clears all error message from the webUI
+    And the user deletes folder "simple-folder" using the webUI
+    Then the error message 'Error while deleting "simple-folder"' should be displayed on the webUI
+    When the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
+    And as "user1" file "lorem.txt" should not exist
+    And as "user1" folder "simple-folder" should not exist

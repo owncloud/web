@@ -42,7 +42,7 @@ module.exports = {
      * this method does find out itself if the file-action burger has to be clicked or not
      *
      * @param {string} fileName
-     * @param {string} action delete|share|rename
+     * @param {string} action delete|share|rename|download
      * @returns {*}
      */
     performFileAction: function (fileName, action) {
@@ -259,6 +259,16 @@ module.exports = {
       }
 
       return this
+    },
+    /**
+     *
+     * @param {string} fromName
+     */
+    downloadFile: function (fromName) {
+      return this.initAjaxCounters()
+        .waitForFileVisible(fromName)
+        .performFileAction(fromName, 'download')
+        .waitForOutstandingAjaxCalls()
     },
     /**
      *
@@ -567,6 +577,10 @@ module.exports = {
     },
     deleteButtonInFileRow: {
       selector: '//button[@aria-label="Delete"]',
+      locateStrategy: 'xpath'
+    },
+    downloadButtonInFileRow: {
+      selector: '//button[@aria-label="Download"]',
       locateStrategy: 'xpath'
     },
     restoreButtonInFileRow: {

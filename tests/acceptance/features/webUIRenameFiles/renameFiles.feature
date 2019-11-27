@@ -203,3 +203,16 @@ Feature: rename files
     When the user browses to the favorites page
     Then it should not be possible to rename folder "simple-folder" using the webUI
     And it should not be possible to rename file "lorem.txt" using the webUI
+
+  Scenario: User tries to rename a file that used to exist but does not anymore
+    Given the user has browsed to the files page
+    And the following files have been deleted by user "user1"
+      | name          |
+      | lorem.txt     |
+    When the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
+    Then the error message 'Error while renaming "lorem.txt" to "new-lorem.txt"' should be displayed on the webUI
+    When the user reloads the current page of the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    And file "new-lorem.txt" should not be listed on the webUI
+    And as "user1" file "lorem.txt" should not exist
+    And as "user1" file "new-lorem.txt" should not exist
