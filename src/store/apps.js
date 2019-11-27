@@ -33,8 +33,11 @@ const actions = {
       }
     })
   },
-  registerApp ({ commit, dispatch }, app) {
+  registerApp ({ commit }, app) {
     commit('REGISTER_APP', app)
+  },
+  addFileAction ({ commit }, action) {
+    commit('ADD_FILE_ACTION', action)
   },
 
   /**
@@ -68,6 +71,23 @@ const actions = {
 
 const mutations = {
   REGISTER_APP (state, appInfo) {
+    if (appInfo.fileActions) {
+      appInfo.fileActions.forEach(a => {
+        a.extensions.forEach(e => {
+          const action = {
+            version: 3,
+            url: a.url,
+            icon: a.icon,
+            title: a.title
+          }
+          if (!state.extensions[e]) {
+            state.extensions[e] = [action]
+          } else {
+            state.extensions[e].push(action)
+          }
+        })
+      })
+    }
     if (appInfo.extensions) {
       appInfo.extensions.forEach((e) => {
         const link = {
@@ -130,6 +150,9 @@ const getters = {
         return []
       }
       ext.map((e) => {
+        if (e.version === 3) {
+          return e
+        }
         // enhance App Chooser with App Name as label
         e.name = state.meta[e.app].name
         // if no icon for this filetype extension, choose the app icon

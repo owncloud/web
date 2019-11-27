@@ -11,7 +11,7 @@
       <ul class="uk-nav">
         <li v-for="(action, i) in actions" :key="i">
           <a class="uk-inline" @click="selectAction(action)">
-            <oc-icon v-if="action.icon" :name="action.icon" />
+            <oc-icon v-if="action.icon || action.iconUrl" :name="action.icon" :url="action.iconUrl"/>
             <span class="uk-text-top" v-text="action.label" />
           </a>
         </li>

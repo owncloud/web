@@ -100,6 +100,15 @@ export default {
       })
       let actions = this.extensions(file.extension)
       actions = actions.map(action => {
+        if (action.version === 3) {
+          return {
+            label: action.title[this.$language.current] || action.title.en,
+            iconUrl: action.icon,
+            onClick: () => {
+              this.openFileAction(action, file)
+            }
+          }
+        }
         return {
           label: action.name,
           icon: action.icon,

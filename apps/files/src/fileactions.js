@@ -190,6 +190,18 @@ export default {
       })
     },
     openFileAction (action, filePath) {
+      if (action.version === 3) {
+        // TODO: replace more placeholder in the final version
+        const finalUrl = action.url
+          .replace('{PATH}', encodeURIComponent(filePath.path))
+          .replace('{FILEID}', encodeURIComponent(filePath.id))
+        const win = window.open(finalUrl, '_blank')
+        // in case popup is blocked win will be null
+        if (win) {
+          win.focus()
+        }
+        return
+      }
       if (action.newTab) {
         const path = this.$router.resolve({ name: action.routeName, params: { filePath: filePath } }).href
         const url = window.location.origin + '/' + path
