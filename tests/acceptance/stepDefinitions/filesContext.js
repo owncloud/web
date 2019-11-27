@@ -433,6 +433,10 @@ When('the user marks these files for batch action using the webUI', function (fi
   return client
 })
 
+When('the user clears the trashbin', function () {
+  return client.page.trashbinPage().clearTrashbin()
+})
+
 When('the user batch restores the marked files using the webUI', function () {
   return client.page.FilesPageElement.filesList().restoreSelected()
 })
@@ -448,6 +452,11 @@ When('the user switches to {string} tab in details panel using the webUI', funct
 Then('the folder should be empty on the webUI', async function () {
   const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
   return client.assert.equal(allFileRows.value.length, 0)
+})
+
+Then('the trashbin should be empty on the webUI', async function () {
+  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
+  return client.assert.strictEqual(allFileRows.value.length, 0)
 })
 
 const theseResourcesShouldNotBeListed = function (entryList) {

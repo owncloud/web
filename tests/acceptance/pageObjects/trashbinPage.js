@@ -13,6 +13,18 @@ module.exports = {
       return navigationHelper.navigateAndWaitTillLoaded(
         this.url(), this.page.FilesPageElement.filesList().elements.filesListProgressBar
       )
+    },
+    clearTrashbin: function () {
+      return this
+        .waitForElementVisible('@clearTrashbin')
+        .initAjaxCounters()
+        .click('@clearTrashbin')
+        .waitForOutstandingAjaxCalls()
+    }
+  },
+  elements: {
+    clearTrashbin: {
+      selector: '#delete-selected-btn'
     }
   }
 }
