@@ -802,3 +802,11 @@ Feature: Share by public link
     When the user uploads file "lorem.txt" keeping both new and existing files using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem (2).txt" should be listed on the webUI
+
+  Scenario: user browses to public link share using copy link button
+    Given user "user1" has shared folder "simple-folder" with link with "read" permissions
+    And user "user1" has logged in using the webUI
+    When the user copies the url of public link named "{}" of folder "simple-folder" using the webUI
+    And the user navigates to the copied public link using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+
