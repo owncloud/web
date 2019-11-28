@@ -4,14 +4,11 @@ const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const fetch = require('node-fetch')
 const fs = require('fs')
-const _ = require('lodash')
 const path = require('path')
 const occHelper = require('../helpers/occHelper')
-let createdFiles = []
-let initialAppConfigSettings
-const { difference } = require('../helpers/objects')
-let initialSearchMinLength
+
 let initialConfigJsonSettings
+let createdFiles = []
 
 Given('a file with the size of {string} bytes and the name {string} has been created locally', function (size, name) {
   const fullPathOfLocalFile = client.globals.filesForUpload + name
@@ -152,23 +149,6 @@ After(async function (testCase) {
   )
 })
 
-Before(async function () {
-  const resp = await occHelper.runOcc(
-    [
-      'config:list'
-    ])
-  let stdOut = _.get(resp, 'ocs.data.stdOut')
-  if (stdOut === undefined) {
-    throw new Error('stdOut notFound, Found:', resp)
-  }
-  stdOut = JSON.parse(stdOut)
-  initialAppConfigSettings = _.get(stdOut, 'apps')
-  initialSearchMinLength = stdOut.system['user.search_min_length']
-  if (initialAppConfigSettings === undefined) {
-    throw new Error("'apps' was not found inside stdOut of response.")
-  }
-})
-
 Before(function () {
   this.fullPathOfConfigFile = path.join(__dirname, '/../../../dist/config.json')
   initialConfigJsonSettings = getConfigJsonContent(this.fullPathOfConfigFile)
@@ -177,61 +157,4 @@ Before(function () {
 After(function () {
   fs.writeFileSync(this.fullPathOfConfigFile,
     JSON.stringify(initialConfigJsonSettings, null, 4))
-})
-
-After(async function () {
-  const afterConfigSetting = await occHelper.runOcc(
-    [
-      'config:list'
-    ])
-  let afterStdOut = _.get(afterConfigSetting, 'ocs.data.stdOut')
-  if (afterStdOut === undefined) {
-    throw new Error('stdOut notFound, Found:', afterStdOut)
-  }
-  afterStdOut = JSON.parse(afterStdOut)
-  const appConfigSettings = _.get(afterStdOut, 'apps')
-  if (appConfigSettings === undefined) {
-    throw new Error("'apps' was not found inside stdOut of response.")
-  }
-  const changedConfig = difference(appConfigSettings, initialAppConfigSettings)
-
-  for (const app in changedConfig) {
-    for (const key in changedConfig[app]) {
-      const value = _.get(initialAppConfigSettings, [app, key])
-      if (value === undefined) {
-        await occHelper.runOcc(
-          [
-            'config:app:delete',
-            app,
-            key
-          ]
-        )
-      } else {
-        await occHelper.runOcc(
-          [
-            'config:app:set',
-            app,
-            key,
-            `--value=${value}`
-          ]
-        )
-      }
-    }
-  }
-
-  const finalSearchMinLength = afterStdOut.system['user.search_min_length']
-  if (finalSearchMinLength !== initialSearchMinLength) {
-    if (initialSearchMinLength === undefined) {
-      await occHelper.runOcc([
-        'config:system:delete',
-        'user.search_min_length'
-      ])
-    } else {
-      await occHelper.runOcc([
-        'config:system:set',
-        'user.search_min_length --value=' + initialSearchMinLength,
-        '--type=integer'
-      ])
-    }
-  }
 })
