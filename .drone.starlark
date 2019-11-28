@@ -36,7 +36,8 @@ config = {
 				'webUIUpload': 'Upload',
 				'webUISharingAcceptShares': 'SharingAcceptShares',
 				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers',
-				'webUISharingNotifications': 'SharingNotifications'
+				'webUISharingNotifications': 'SharingNotifications',
+				'webUIAccount': 'Account'
 			},
 		},
 		'webUI-XGA': {
