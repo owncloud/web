@@ -175,10 +175,11 @@ module.exports = {
      */
     restoreFile: function (fileName) {
       return this.initAjaxCounters()
-        .waitForFileVisible(fileName)
+        .waitForFileWithPathVisible(fileName)
         .useXpath()
         .performFileAction(fileName, 'restore')
-        .waitForElementNotPresent(this.getFileRowSelectorByFileName(fileName))
+        .waitForOutstandingAjaxCalls()
+        .useCss()
     },
     /**
      *
