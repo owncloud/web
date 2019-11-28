@@ -27,7 +27,8 @@ async function setSkeletonDirectory (server, admin) {
   httpHelper.checkStatus(resp, 'Could not set skeletondirectory.')
 }
 
-async function rollbackSystemConfigs (configToChange, oldSysConfig) {
+async function rollbackSystemConfigs (oldSysConfig, newSysConfig) {
+  const configToChange = difference(newSysConfig, oldSysConfig)
   for (const key in configToChange) {
     if (typeof configToChange[key] === 'object') {
       continue
@@ -48,7 +49,8 @@ async function rollbackSystemConfigs (configToChange, oldSysConfig) {
   }
 }
 
-async function rollbackAppConfigs (configToChange, oldAppConfig) {
+async function rollbackAppConfigs (oldAppConfig, newAppConfig) {
+  const configToChange = difference(newAppConfig, oldAppConfig)
   for (const app in configToChange) {
     for (const key in configToChange[app]) {
       const value = _.get(oldAppConfig, [app, key])
@@ -105,11 +107,11 @@ export async function rollbackConfigs () {
   const initialSysConfig = _.get(config, 'system')
 
   await rollbackSystemConfigs(
-    difference(systemConfig, initialSysConfig),
-    initialSysConfig
+    initialSysConfig,
+    systemConfig
   )
   await rollbackAppConfigs(
-    difference(appConfig, initialAppConfig),
-    initialAppConfig
+    initialAppConfig,
+    appConfig
   )
 }
