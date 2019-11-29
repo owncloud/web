@@ -5,11 +5,13 @@ const httpHelper = require('../helpers/httpHelper')
 const fetch = require('node-fetch')
 const fs = require('fs')
 const _ = require('lodash')
+const path = require('path')
 const occHelper = require('../helpers/occHelper')
 let createdFiles = []
 let initialAppConfigSettings
 const { difference } = require('../helpers/objects')
 let initialSearchMinLength
+let initialConfigJsonSettings
 
 Given('a file with the size of {string} bytes and the name {string} has been created locally', function (size, name) {
   const fullPathOfLocalFile = client.globals.filesForUpload + name
@@ -17,6 +19,17 @@ Given('a file with the size of {string} bytes and the name {string} has been cre
   fs.writeSync(fh, 'A', Math.max(0, size - 1))
   fs.closeSync(fh)
   createdFiles.push(fullPathOfLocalFile)
+})
+
+const getConfigJsonContent = function (fullPathOfConfigFile) {
+  const rawdata = fs.readFileSync(fullPathOfConfigFile)
+  return JSON.parse(rawdata)
+}
+
+Given('the rootFolder has been set to {string} in phoenix config file', function (value) {
+  const data = getConfigJsonContent(this.fullPathOfConfigFile)
+  data.rootFolder = value
+  return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
 })
 
 Then('the error message {string} should be displayed on the webUI', function (message) {
@@ -154,6 +167,16 @@ Before(async function () {
   if (initialAppConfigSettings === undefined) {
     throw new Error("'apps' was not found inside stdOut of response.")
   }
+})
+
+Before(function () {
+  this.fullPathOfConfigFile = path.join(__dirname, '/../../../dist/config.json')
+  initialConfigJsonSettings = getConfigJsonContent(this.fullPathOfConfigFile)
+})
+
+After(function () {
+  fs.writeFileSync(this.fullPathOfConfigFile,
+    JSON.stringify(initialConfigJsonSettings, null, 4))
 })
 
 After(async function () {

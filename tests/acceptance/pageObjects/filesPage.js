@@ -358,6 +358,10 @@ module.exports = {
     breadcrumb: {
       selector: '#files-breadcrumb li:nth-of-type(2)'
     },
+    resourceBreadcrumb: {
+      selector: '//div[@id="files-breadcrumb"]//a[contains(text(),"%s")]',
+      locateStrategy: 'xpath'
+    },
     filterListButton: {
       selector: '#oc-filter-list-btn'
     },
