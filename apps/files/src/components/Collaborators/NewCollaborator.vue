@@ -185,14 +185,8 @@ export default {
     },
     filterRecipients (item, queryText) {
       if (item.value.shareType === 6) {
-        return (
-          item.label
-            .toLocaleLowerCase()
-            .indexOf(queryText.toLocaleLowerCase()) > -1 &&
-          item.label.indexOf('@') > -1 &&
-          item.label.indexOf('.') > -1 &&
-          item.label.lastIndexOf('.') + 1 !== item.label.length
-        )
+        // done on server side
+        return true
       }
       return (
         item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) >
