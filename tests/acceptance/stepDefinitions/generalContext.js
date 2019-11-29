@@ -29,7 +29,7 @@ Given('the rootFolder has been set to {string} in phoenix config file', function
   return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
 })
 
-Then('the error message {string} should be displayed on the webUI', function (message) {
+Then('the success/error message {string} should be displayed on the webUI', function (message) {
   return client
     .page.phoenixPage()
     .waitForElementVisible('@message')

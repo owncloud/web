@@ -66,3 +66,8 @@ Feature: files and folders can be deleted from the trashbin
     Then file "lorem.txt" should not be listed on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
+
+  Scenario: Clear trashbin
+    When the user clears the trashbin
+    Then the success message "Trash bin was successfully emptied" should be displayed on the webUI
+    And the trashbin should be empty on the webUI
