@@ -100,3 +100,75 @@ Feature: Filter files/folders
       | desktopapp.png             |
       | testimagelarge.svg         |
 
+  Scenario: user filters files and folders using keyword when the files filter, folders filter, and hidden filter are enabled
+    When the user enables file filter using the webUI
+    And the user enables folder filter using the webUI
+    And the user enables the setting to view hidden files on the webUI
+    And the user filters the file list by "simple" on the webUI
+    Then as "user1" all files and folders containing pattern "simple" in their name should be listed in files list on the webUI
+
+  Scenario: user filters files and folders using keyword when the hidden filter is disabled
+    Given the user has created file ".simpleHiddenFile"
+    And the user has created folder ".simpleHiddenFolder"
+    And the user has reloaded the current page of the webUI
+    When the user enables file filter using the webUI
+    And the user enables folder filter using the webUI
+    And the user filters the file list by "simple" on the webUI
+    Then as "user1" all files and folders containing pattern "simple" in their name should be listed in files list on the webUI except of hidden elements
+
+  Scenario: user filters files using keyword when the hidden filter and the folder filter are disabled
+    Given the user has created file ".simpleHiddenFile"
+    And the user has created folder ".simpleHiddenFolder"
+    And the user has reloaded the current page of the webUI
+    When the user enables file filter using the webUI
+    And the user disables folder filter using the webUI
+    And the user filters the file list by "simple" on the webUI
+    Then as "user1" only files containing pattern "simple" in their name should be listed in files list on the webUI except hidden elements
+
+  Scenario: user filters folders using keyword when the hidden filter and the file filter are disabled
+    Given the user has created file ".simpleHiddenFile"
+    And the user has created folder ".simpleHiddenFolder"
+    And the user has reloaded the current page of the webUI
+    When the user disables file filter using the webUI
+    And the user enables folder filter using the webUI
+    And the user filters the file list by "simple" on the webUI
+    Then as "user1" only folders containing pattern "simple" in their name should be listed in files list on the webUI except hidden elements
+
+  Scenario: user filters folders using keyword when the hidden filter and the folder filter are enabled
+    Given the user has created file ".simpleHiddenFile"
+    And the user has created folder ".simpleHiddenFolder"
+    And the user has reloaded the current page of the webUI
+    When the user disables file filter using the webUI
+    And the user enables folder filter using the webUI
+    And the user enables the setting to view hidden folders on the webUI
+    And the user filters the file list by "simple" on the webUI
+    Then as "user1" only folders containing pattern "simple" in their name should be listed in files list on the webUI
+
+  Scenario: user filters files using keyword when the hidden filter and the file filter are enabled
+    Given the user has created file ".simpleHiddenFile"
+    And the user has created folder ".simpleHiddenFolder"
+    And the user has reloaded the current page of the webUI
+    When the user disables folder filter using the webUI
+    And the user enables file filter using the webUI
+    And the user enables the setting to view hidden folders on the webUI
+    And the user filters the file list by "simple" on the webUI
+    Then as "user1" only files containing pattern "simple" in their name should be listed in files list on the webUI
+
+  Scenario: user filters files using keyword when the folder filter and file filter are disabled and hidden filter is enabled
+    Given the user has created file ".simpleHiddenFile"
+    And the user has created folder ".simpleHiddenFolder"
+    And the user has reloaded the current page of the webUI
+    When the user disables folder filter using the webUI
+    And the user disables file filter using the webUI
+    And the user enables the setting to view hidden folders on the webUI
+    And the user filters the file list by "simple" on the webUI
+    Then there should be no files/folders listed on the webUI
+
+  Scenario: user filters files using keyword when the folder filter, file filter and hidden filter are disabled
+    Given the user has created file ".simpleHiddenFile"
+    And the user has created folder ".simpleHiddenFolder"
+    And the user has reloaded the current page of the webUI
+    When the user disables folder filter using the webUI
+    And the user disables file filter using the webUI
+    And the user filters the file list by "simple" on the webUI
+    Then there should be no files/folders listed on the webUI
