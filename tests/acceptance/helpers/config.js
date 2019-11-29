@@ -4,6 +4,10 @@ const occHelper = require('./occHelper')
 const { join } = require('./path')
 const { difference } = require('./objects')
 const _ = require('lodash')
+const pLimit = require('p-limit')
+
+// run 10 promises at once at max
+const limit = pLimit(10)
 
 let config
 
@@ -27,53 +31,58 @@ async function setSkeletonDirectory (server, admin) {
   httpHelper.checkStatus(resp, 'Could not set skeletondirectory.')
 }
 
-async function rollbackSystemConfigs (oldSysConfig, newSysConfig) {
+function rollbackSystemConfigs (oldSysConfig, newSysConfig) {
   const configToChange = difference(newSysConfig, oldSysConfig)
+  const _rollbacks = []
+
   for (const key in configToChange) {
     if (typeof configToChange[key] === 'object') {
       continue
     }
     const value = _.get(oldSysConfig, [key])
     if (value === undefined) {
-      await occHelper.runOcc([
-        'config:system:delete',
-        key
-      ])
+      _rollbacks.push(limit(occHelper.runOcc, ['config:system:delete', key]))
     } else {
-      await occHelper.runOcc([
-        'config:system:set',
-        key,
-        `--value=${value}`
-      ])
+      _rollbacks.push(
+        limit(
+          occHelper.runOcc, [
+            'config:system:set',
+            key,
+          `--value=${value}`
+          ]
+        )
+      )
     }
   }
+
+  return Promise.all(_rollbacks)
 }
 
-async function rollbackAppConfigs (oldAppConfig, newAppConfig) {
+function rollbackAppConfigs (oldAppConfig, newAppConfig) {
   const configToChange = difference(newAppConfig, oldAppConfig)
+
+  const _rollbacks = []
+
   for (const app in configToChange) {
     for (const key in configToChange[app]) {
       const value = _.get(oldAppConfig, [app, key])
       if (value === undefined) {
-        await occHelper.runOcc(
-          [
-            'config:app:delete',
-            app,
-            key
-          ]
-        )
+        _rollbacks.push(limit(occHelper.runOcc, ['config:app:delete', app, key]))
       } else {
-        await occHelper.runOcc(
-          [
-            'config:app:set',
-            app,
-            key,
-            `--value=${value}`
-          ]
+        _rollbacks.push(
+          limit(
+            occHelper.runOcc,
+            [
+              'config:app:set', app, key,
+              `--value=${value}`
+            ]
+          )
         )
       }
     }
   }
+
+  return Promise.all(_rollbacks)
 }
 
 export async function getConfigs () {
@@ -106,12 +115,8 @@ export async function rollbackConfigs () {
   const initialAppConfig = _.get(config, 'apps')
   const initialSysConfig = _.get(config, 'system')
 
-  await rollbackSystemConfigs(
-    initialSysConfig,
-    systemConfig
-  )
-  await rollbackAppConfigs(
-    initialAppConfig,
-    appConfig
-  )
+  await Promise.all([
+    rollbackSystemConfigs(initialSysConfig, systemConfig),
+    rollbackAppConfigs(initialAppConfig, appConfig)
+  ])
 }

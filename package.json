@@ -124,6 +124,7 @@
   },
   "dependencies": {
     "deepmerge": "^4.0.0",
-    "inert-polyfill": "^0.2.5"
+    "inert-polyfill": "^0.2.5",
+    "p-limit": "^2.2.1"
   }
 }
