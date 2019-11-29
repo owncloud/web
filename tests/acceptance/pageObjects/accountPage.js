@@ -36,6 +36,10 @@ module.exports = {
         actualAccInfo[key] = value
       }
       return actualAccInfo
+    },
+    logout: function () {
+      return this.waitForElementVisible('@logoutButton')
+        .click('@logoutButton')
     }
   },
   elements: {
@@ -45,6 +49,10 @@ module.exports = {
     },
     accountInformationElements: {
       selector: '//div/span[.="Account Information"]/../../div[@class="uk-flex uk-flex-wrap"]/div',
+      locateStrategy: 'xpath'
+    },
+    logoutButton: {
+      selector: '//div//span/span[.="Logout"]/../..',
       locateStrategy: 'xpath'
     }
   }
