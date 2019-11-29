@@ -50,7 +50,7 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['davProperties']),
+    ...mapGetters('Files', []),
     passwordPlaceholder () {
       return this.$gettext('Enter password')
     }
@@ -59,15 +59,7 @@ export default {
     ...mapActions('Files', ['setPublicLinkPassword']),
     resolvePublicLink () {
       this.loading = true
-      const properties = this.davProperties.concat([
-        this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
-        this.$client.publicFiles.PUBLIC_LINK_PERMISSION,
-        this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
-      ]
-      )
-      this.$client.publicFiles.list(this.$route.params.token, this.password, properties, '0').then(files => {
+      this.$client.publicFiles.listExtended(this.$route.params.token, this.password, '0').then(files => {
         this.passwordRequired = false
         this.setPublicLinkPassword(this.password)
         if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {

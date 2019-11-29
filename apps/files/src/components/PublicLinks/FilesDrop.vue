@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
+    ...mapGetters('Files', ['publicLinkPassword']),
     publicLinkToken () {
       return this.$route.params.token
     },
@@ -82,7 +82,7 @@ export default {
       // share might not be loaded
       if (this.share) {
         const translated = this.$gettext('%{owner} shared this folder with you for uploading')
-        return this.$gettextInterpolate(translated, { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) })
+        return this.$gettextInterpolate(translated, { owner: this.share.getOwner() })
       }
       return ''
     },
@@ -105,15 +105,7 @@ export default {
   methods: {
     resolvePublicLink () {
       this.loading = true
-      const properties = this.davProperties.concat([
-        this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
-        this.$client.publicFiles.PUBLIC_LINK_PERMISSION,
-        this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
-        this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
-      ]
-      )
-      this.$client.publicFiles.list(this.publicLinkToken, this.publicLinkPassword, properties, '0').then(files => {
+      this.$client.publicFiles.listExtended(this.publicLinkToken, this.publicLinkPassword, '0').then(files => {
         if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
           this.$router.push({
             name: 'public-files',

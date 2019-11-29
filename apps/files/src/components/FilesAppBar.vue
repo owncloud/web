@@ -115,7 +115,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration', 'newFileHandlers']),
-    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'quota', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
+    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'quota', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
     ...mapState(['route']),
     searchLabel () {
       return this.$gettext('Search')
@@ -442,7 +442,7 @@ export default {
         const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
         const filePath = join(path + file)
         if (this.publicPage()) {
-          this.$client.publicFiles.list(filePath, this.publicLinkPassword, this.davProperties, '0').then(files => {
+          this.$client.publicFiles.list(filePath, this.publicLinkPassword, '0').then(files => {
             this.addFiles({
               files: files
             })
@@ -450,7 +450,7 @@ export default {
             this.$_ocFilesFolder_getFolder()
           })
         } else {
-          this.$client.files.fileInfo(filePath, this.davProperties).then(fileInfo => {
+          this.$client.files.fileInfo(filePath).then(fileInfo => {
             this.addFiles({
               files: [fileInfo]
             })

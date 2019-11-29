@@ -39,6 +39,7 @@ const actions = {
 const mutations = {
   LOAD_CONFIG (state, config) {
     state.server = config.server
+    state.connector = config.connector
     state.auth = config.auth
     state.openIdConnect = config.openIdConnect
     state.rootFolder = config.rootFolder === undefined ? '/' : config.rootFolder

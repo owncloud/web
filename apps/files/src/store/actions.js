@@ -1,151 +1,97 @@
 import moment from 'moment'
 import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
 
+// TODO so many thing are similar.. we prob don't need these functions to change the object and
+// instead we could reuse what we get from oc-sdk
 function _buildFile (file) {
-  let ext = ''
-  if (file.type !== 'dir') {
-    const ex = file.name.match(/\.[0-9a-z]+$/i)
-    if (ex !== null) {
-      ext = ex[0].substr(1)
-    }
-  }
   return ({
-    type: (file.type === 'dir') ? 'folder' : file.type,
-    id: file.fileInfo['{http://owncloud.org/ns}fileid'],
-    starred: file.fileInfo['{http://owncloud.org/ns}favorite'] !== '0',
-    mdate: file.fileInfo['{DAV:}getlastmodified'],
-    size: (function () {
-      if (file.type === 'dir') {
-        return file.fileInfo['{http://owncloud.org/ns}size']
-      } else {
-        return file.fileInfo['{DAV:}getcontentlength']
-      }
-    }()),
-    extension: (function () {
-      return ext
-    }()),
-    name: (function () {
-      const pathList = file.name.split('/').filter(e => e !== '')
-      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
-    }()),
-    basename: (function () {
-      const pathList = file.name.split('/').filter(e => e !== '')
-      const name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
-      if (ext) {
-        return name.substring(0, name.length - ext.length - 1)
-      }
-      return name
-    }()),
-    path: file.name,
-    permissions: file.fileInfo['{http://owncloud.org/ns}permissions'] || '',
-    etag: file.fileInfo['{DAV:}getetag'],
-    sharePermissions: file.fileInfo['{http://open-collaboration-services.org/ns}share-permissions'],
-    privateLink: file.fileInfo['{http://owncloud.org/ns}privatelink'],
+    type: file.isDir ? 'folder' : file.type,
+    id: file.id,
+    starred: file.isStarred,
+    mdate: file.lastModified,
+    size: file.size,
+    extension: file.extension,
+    name: file.name,
+    basename: file.baseName,
+    path: file.fullPath,
+    permissions: file.permissions,
+    etag: file.eTag,
+    // TODO is this part of a normal file?
+    // sharePermissions: file.fileInfo['{http://open-collaboration-services.org/ns}share-permissions'],
+    // privateLink: file.fileInfo['{http://owncloud.org/ns}privatelink'],
     owner: {
-      username: file.fileInfo['{http://owncloud.org/ns}owner-id'],
-      displayName: file.fileInfo['{http://owncloud.org/ns}owner-display-name']
+      username: file.owner.uid,
+      displayName: file.owner.name
     },
     canUpload: function () {
-      return this.permissions.indexOf('C') >= 0
+      return this.permissions.canUpload
     },
     canDownload: function () {
-      return this.type !== 'folder'
+      return this.permissions.canDownload
     },
     canBeDeleted: function () {
-      return this.permissions.indexOf('D') >= 0
+      return this.permissions.canBeDeleted
     },
     canRename: function () {
-      return this.permissions.indexOf('N') >= 0
+      return this.permissions.canRename
     },
     canShare: function () {
-      return this.permissions.indexOf('R') >= 0
+      return this.permissions.canShare
     },
     isMounted: function () {
-      return this.permissions.indexOf('M') >= 0
+      return this.permissions.isMounted
     }
   })
 }
 
 function _buildFileInTrashbin (file) {
-  let ext = ''
-  if (file.type !== 'dir') {
-    const ex = file.fileInfo['{http://owncloud.org/ns}trashbin-original-filename'].match(/\.[0-9a-z]+$/i)
-    if (ex !== null) {
-      ext = ex[0].substr(1)
-    }
-  }
   return ({
-    type: (file.type === 'dir') ? 'folder' : file.type,
-    deleteTimestamp: file.fileInfo['{http://owncloud.org/ns}trashbin-delete-datetime'],
-    extension: (function () {
-      return ext
-    }()),
+    type: file.isDir ? 'folder' : file.type,
+    deleteTimestamp: file.deletionTimestamp,
+    extension: file.extension,
     basename: (function () {
-      const fullName = file.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
-      const pathList = fullName.split('/').filter(e => e !== '')
-      const name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
-      if (ext) {
-        return name.substring(0, name.length - ext.length - 1)
+      const name = file.name
+      if (file.extension) {
+        return name.substring(0, name.length - file.extension.length - 1)
       }
       return name
     })(),
-    name: (function () {
-      const fullName = file.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
-      const pathList = fullName.split('/').filter(e => e !== '')
-      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
-    })(),
-    originalLocation: file.fileInfo['{http://owncloud.org/ns}trashbin-original-location'],
-    id: (function () {
-      const pathList = file.name.split('/').filter(e => e !== '')
-      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
-    })()
+    name: file.name,
+    originalLocation: file.originalLocation,
+    id: file.name
   })
 }
 
-function _buildSharedFile (file) {
-  let ext = ''
-  if (file.item_type !== 'dir') {
-    const ex = file.path.substr(file.path.lastIndexOf('/')).match(/\.[0-9a-z]+$/i)
-    if (ex !== null) {
-      ext = ex[0].substr(1)
-    }
-  }
+function _buildSharedFile (share) {
   return {
-    id: file.item_source,
-    shareId: file.id,
-    type: file.item_type,
-    extension: (function () {
-      return ext
-    }()),
-    name: (function () {
-      const name = file.path.substr(file.path.lastIndexOf('/'))
-      return name.substr(1)
-    }()),
+    id: share.getFile().getItemSource(),
+    shareId: share.id,
+    type: share.file.type,
+    extension: share.file.extension,
+    name: share.file.name,
     basename: (function () {
-      const name = file.path.substr(file.path.lastIndexOf('/'))
-      if (ext) {
-        return name.substring(1, name.length - ext.length - 1)
+      const name = share.file.name
+      if (share.file.extension) {
+        return name.substring(0, name.length - share.file.extension.length - 1)
       }
-      return name.substr(1)
+      return name
     }()),
-    path: file.path,
-    shareTime: file.stime * 1000,
-    owner: file.uid_file_owner,
-    ownerDisplayname: file.displayname_file_owner,
-    shareOwner: file.uid_owner,
-    shareOwnerDisplayname: file.displayname_owner,
-    sharedWith: file.share_with_displayname,
-    shareType: file.share_type,
-    status: (function () {
-      if (file.state) return file.state
-    }()),
+    path: share.file.fullPath,
+    shareTime: share.shareTime * 1000,
+    owner: share.file.owner.uid,
+    ownerDisplayname: share.file.owner.name,
+    shareOwner: share.sharer.uid,
+    shareOwnerDisplayname: share.sharer.name,
+    sharedWith: share.sharedWith,
+    shareType: share.type,
+    status: share.status,
     canUpload: function () {
       // TODO: Find a way how to read permissions for file and not for share
       // return file.permissions >= 4
       return true
     },
     canDownload: function () {
-      return file.item_type !== 'folder'
+      return share.file.type !== 'folder'
     },
     canBeDeleted: function () {
       // return file.permissions >= 8
@@ -250,22 +196,22 @@ export default {
       const publicFiles = routeName === 'public-files'
 
       if (favorite) {
-        promise = client.files.getFavoriteFiles(context.getters.davProperties)
+        promise = client.files.getFavoriteFiles()
       } else if (publicFiles) {
         const password = context.getters.publicLinkPassword
-        promise = client.publicFiles.list(absolutePath, password, context.getters.davProperties)
+        promise = client.publicFiles.listExtended(absolutePath, password)
       } else {
-        promise = client.files.list(absolutePath, 1, context.getters.davProperties)
+        promise = client.files.list(absolutePath, 1)
       }
       promise.then(res => {
         if (res === null) {
           context.dispatch('showMessage', {
-            title: $gettext('Loading folder failed…'),
+            title: $gettext('Loading folder failed4…'),
             status: 'danger'
           }, { root: true })
         } else {
           if (favorite) {
-            client.files.fileInfo('', context.getters.davProperties).then(rootFolder => {
+            client.files.fileInfo('').then(rootFolder => {
               rootFolder.fileInfo['{http://owncloud.org/ns}permissions'] = 'R'
               context.dispatch('loadFiles', {
                 currentFolder: rootFolder,
@@ -298,13 +244,7 @@ export default {
   loadTrashbin (context, { client, $gettext }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
 
-    client.fileTrash.list('', '1', [
-      '{http://owncloud.org/ns}trashbin-original-filename',
-      '{http://owncloud.org/ns}trashbin-original-location',
-      '{http://owncloud.org/ns}trashbin-delete-datetime',
-      '{DAV:}getcontentlength',
-      '{DAV:}resourcetype'
-    ]).then(res => {
+    client.fileTrash.list('', '1').then(res => {
       if (res === null) {
         context.dispatch('showMessage', {
           title: $gettext('Loading trash bin failed…'),
@@ -509,7 +449,7 @@ export default {
       // TODO respect user selected listSize from state.config
       // do not search for empty strings
       if (!searchTerm) return
-      client.files.search(searchTerm, null, context.state.davProperties).then((filesSearched) => {
+      client.files.search(searchTerm, null).then((filesSearched) => {
         filesSearched = filesSearched.map((f) => {
           return _buildFile(f)
         })

@@ -58,6 +58,14 @@ const actions = {
           email: context.state.email
         }
       }
+      const connector = context.rootState.config.connector
+      if (connector) {
+        options.connector = {
+          type: connector.type,
+          server: connector.server,
+          clientId: connector.client_id
+        }
+      }
 
       client.init(options)
       if (doLogin) {

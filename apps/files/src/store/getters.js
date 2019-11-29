@@ -66,9 +66,6 @@ export default {
       folders: folders.length
     }
   },
-  davProperties: state => {
-    return state.davProperties
-  },
   dropzone: state => {
     return state.dropzone
   },
