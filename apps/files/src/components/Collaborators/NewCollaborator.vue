@@ -9,6 +9,7 @@
         :placeholder="$_ocCollaborationStatus_autocompletePlacholder"
         @update:input="onAutocompleteInput"
         :filter="filterRecipients"
+        :fillOnSelection="false"
         id="oc-sharing-autocomplete"
         ref="ocSharingAutocomplete"
         class="uk-width-1-1"
@@ -41,13 +42,12 @@
                 (<translate>group</translate>)
               </span>
             </div>
-            <oc-icon
-              name="close"
-              variation="danger"
-              class="oc-cursor-pointer"
-              role="button"
-              @click="$_ocCollaborators_removeFromSelection(collaborator)"
-            />
+            <oc-button :ariaLabel="$gettext('Delete share')" variation="raw" class="oc-cursor-pointer"  @click="$_ocCollaborators_removeFromSelection(collaborator)">
+              <oc-icon
+                name="close"
+                variation="danger"
+              />
+            </oc-button>
           </div>
         </div>
       </div>
@@ -70,6 +70,7 @@
         </oc-button>
       </div>
     </oc-grid>
+    <oc-hidden-announcer level="assertive" :announcement="announcement" />
   </div>
 </template>
 
@@ -91,6 +92,8 @@ export default {
   data () {
     return {
       autocompleteResults: [],
+      announcement: '',
+      announcementWhenCollaboratorAdded: this.$gettext('Collaborator was added'),
       autocompleteInProgress: false,
       selectedCollaborators: [],
       selectedRole: null,
@@ -173,6 +176,7 @@ export default {
               return false
             }
 
+            this.announcement = this.announcementWhenCollaboratorAdded
             return true
           })
 
