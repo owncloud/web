@@ -4,6 +4,7 @@ release/*
 **/l10n/template.pot
 
 apps/*
+!apps/compat-settings
 !apps/draw-io
 !apps/files
 !apps/markdown-editor
