@@ -4,13 +4,40 @@
   </div>
 </template>
 <script>
+import queryString from 'query-string'
 import { mapGetters } from 'vuex'
 
 export default {
+  data () {
+    return {
+      sectionId: this.$route.query.sectionid || 'personal/general'
+    }
+  },
   computed: {
     ...mapGetters(['configuration']),
     iframeSource () {
-      return this.configuration.server + 'index.php/settings?noheader=true'
+      const sectionParts = this.sectionId && this.sectionId.split('/')
+      let sectionBase = 'personal'
+      let sectionSub = 'general'
+      if (sectionParts && sectionParts.length === 2) {
+        if (sectionParts[0] === 'admin') {
+          sectionBase = 'admin'
+        }
+        sectionSub = sectionParts[1]
+      }
+      const query = queryString.stringify({
+        cacheBuster: new Date().getTime() + Math.floor(Math.random() * 1000),
+        phoenix: true,
+        sectionid: sectionSub
+      })
+      return this.configuration.server + 'index.php/settings/' + sectionBase + '?' + query
+    }
+  },
+  watch: {
+    $route (to, from) {
+      if (to.name === 'compat-settings') {
+        this.sectionId = to.query.sectionid
+      }
     }
   }
 }
