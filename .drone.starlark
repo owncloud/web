@@ -717,7 +717,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 
 	return [{
 		'name': 'webui-acceptance-tests',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/nodejs:11',
 		'pull': 'always',
 		'environment': environment,
 		'commands': [
