@@ -821,3 +821,20 @@ Feature: Share by public link
       | element | name          |
       | folder  | simple-folder |
       | file    | lorem.txt     |
+
+  @issue-2090
+  Scenario: access details dialog of public share and check the tabs displayed
+    Given user "user1" has logged in using the webUI
+    When the user creates a new public link for folder "simple-folder" using the webUI with
+      | role | Editor |
+    And the public uses the webUI to access the last public link created by user "user1"
+    And the user picks the row of file "lorem.txt" in the webUI
+    Then the following tabs should be visible in the details dialog
+      | name          |
+      | versions      |
+      | links         |
+      | collaborators |
+#    Then the following tabs should not be visible in the details dialog
+#      | name          |
+#      | links         |
+#      | collaborators |

@@ -246,6 +246,19 @@ module.exports = {
           callback(result.value)
         })
     },
+    getVisibleTabs: async function () {
+      const tabs = []
+      let elements
+      await this.api.elements('@tabsInSideBar', function (result) {
+        elements = result.value
+      })
+      for (const { ELEMENT } of elements) {
+        await this.api.elementIdText(ELEMENT, function (result) {
+          tabs.push(result.value.toLowerCase())
+        })
+      }
+      return tabs
+    },
     copyPermalinkFromFilesAppBar: function () {
       return this
         .waitForElementVisible('@permalinkCopyButton')
@@ -453,6 +466,10 @@ module.exports = {
     },
     restorePreviousVersion: {
       selector: '(//div[contains(@id,"oc-file-versions")]//tbody/tr[@class="file-row"])[1]//button[1]',
+      locateStrategy: 'xpath'
+    },
+    tabsInSideBar: {
+      selector: '//div[@class="sidebar-container"]//li/a',
       locateStrategy: 'xpath'
     }
   }

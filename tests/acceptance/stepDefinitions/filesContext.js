@@ -618,6 +618,15 @@ Then('the {string} details panel should be visible', function (panel) {
   })
 })
 
+Then('the following tabs should be visible in the details dialog', async function (table) {
+  const visibleTabs = await client.page.filesPage().getVisibleTabs()
+  const expectedVisibleTabs = table.rows()
+  const difference = _.difference(expectedVisibleTabs.flat(), visibleTabs)
+  if (difference.length !== 0) {
+    throw new Error(`${difference} tabs was expected to be visible but not found.`)
+  }
+})
+
 Then('no {string} tab should be available in the details panel', function (tab) {
   const tabSelector = client.page.filesPage().getXpathOfLinkToTabInSidePanel()
   return client.page.filesPage()
