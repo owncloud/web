@@ -1,0 +1,655 @@
+<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns" xmlns:oc="http://owncloud.org/ns">
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:25 GMT</d:getlastmodified>
+                <d:resourcetype>
+                    <d:collection/>
+                </d:resourcetype>
+                <d:quota-used-bytes>2740027</d:quota-used-bytes>
+                <d:quota-available-bytes>-3</d:quota-available-bytes>
+                <d:getetag>&quot;5de4ee8de82e2&quot;</d:getetag>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/%27single%27quotes/</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:24 GMT</d:getlastmodified>
+                <d:resourcetype>
+                    <d:collection/>
+                </d:resourcetype>
+                <d:quota-used-bytes>592</d:quota-used-bytes>
+                <d:quota-available-bytes>-3</d:quota-available-bytes>
+                <d:getetag>&quot;5de4ee8c6f073&quot;</d:getetag>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:getcontentlength/>
+                <d:getcontenttype/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/%27single%27quotes.txt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:24 GMT</d:getlastmodified>
+                <d:getcontentlength>446</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;4d30574cde1323e4b3adc2acc6f3e3e1&quot;</d:getetag>
+                <d:getcontenttype>text/plain</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/0/</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:resourcetype>
+                    <d:collection/>
+                </d:resourcetype>
+                <d:quota-used-bytes>519</d:quota-used-bytes>
+                <d:quota-available-bytes>-3</d:quota-available-bytes>
+                <d:getetag>&quot;5de4ee88dcb9a&quot;</d:getetag>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:getcontentlength/>
+                <d:getcontenttype/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/block-aligned-plus-one.txt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:21 GMT</d:getlastmodified>
+                <d:getcontentlength>8193</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;e25d90741c91ac0104ae2391878d491c&quot;</d:getetag>
+                <d:getcontenttype>text/plain</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/block-aligned.txt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:24 GMT</d:getlastmodified>
+                <d:getcontentlength>8192</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;655ff879a5d4c2fa3fb263d7efb1ff1d&quot;</d:getetag>
+                <d:getcontenttype>text/plain</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/data.tar.gz</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:22 GMT</d:getlastmodified>
+                <d:getcontentlength>4195</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;f903881867dab9a17dbbcb8ef7a29648&quot;</d:getetag>
+                <d:getcontenttype>application/x-gzip</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/data.zip</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:22 GMT</d:getlastmodified>
+                <d:getcontentlength>4705</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;2c8a0decce4c2ae63b09b571cc96772b&quot;</d:getetag>
+                <d:getcontenttype>application/zip</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/desktopapp.png</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:getcontentlength>2364</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;701f91bf8aff8d50a6401c181bc8683f&quot;</d:getetag>
+                <d:getcontenttype>image/png</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/desktopapp.svg</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:getcontentlength>1314</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;adbd03f28f3b0aa99f5c18abad4adf08&quot;</d:getetag>
+                <d:getcontenttype>image/svg+xml</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/folder%20with%20space/</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:24 GMT</d:getlastmodified>
+                <d:resourcetype>
+                    <d:collection/>
+                </d:resourcetype>
+                <d:quota-used-bytes>684503</d:quota-used-bytes>
+                <d:quota-available-bytes>-3</d:quota-available-bytes>
+                <d:getetag>&quot;5de4ee8c1cbd8&quot;</d:getetag>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:getcontentlength/>
+                <d:getcontenttype/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/lorem-big.txt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:getcontentlength>9273</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;442f4398dc9e0c5be41c9eacd475ee67&quot;</d:getetag>
+                <d:getcontenttype>text/plain</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/lorem.txt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:22 GMT</d:getlastmodified>
+                <d:getcontentlength>446</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;96b0fa9afd6fabfc620129937d97618f&quot;</d:getetag>
+                <d:getcontenttype>text/plain</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/simple-empty-folder/</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:resourcetype>
+                    <d:collection/>
+                </d:resourcetype>
+                <d:quota-used-bytes>0</d:quota-used-bytes>
+                <d:quota-available-bytes>-3</d:quota-available-bytes>
+                <d:getetag>&quot;5de4ee88832e3&quot;</d:getetag>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:getcontentlength/>
+                <d:getcontenttype/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/simple-folder/</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:22 GMT</d:getlastmodified>
+                <d:resourcetype>
+                    <d:collection/>
+                </d:resourcetype>
+                <d:quota-used-bytes>684671</d:quota-used-bytes>
+                <d:quota-available-bytes>-3</d:quota-available-bytes>
+                <d:getetag>&quot;5de4ee8a92dbb&quot;</d:getetag>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:getcontentlength/>
+                <d:getcontenttype/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/str%c3%a4ng%c3%a9%20filename%20(duplicate%20%232%20%26).txt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:22 GMT</d:getlastmodified>
+                <d:getcontentlength>446</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;086cda860ec17390c49be6058ce8f838&quot;</d:getetag>
+                <d:getcontenttype>text/plain</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>
+            /core/remote.php/dav/files/user1/str%c3%a4ng%c3%a9%20%e0%a4%a8%e0%a5%87%e0%a4%aa%e0%a4%be%e0%a4%b2%e0%a5%80%20folder/
+        </d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:25 GMT</d:getlastmodified>
+                <d:resourcetype>
+                    <d:collection/>
+                </d:resourcetype>
+                <d:quota-used-bytes>684687</d:quota-used-bytes>
+                <d:quota-available-bytes>-3</d:quota-available-bytes>
+                <d:getetag>&quot;5de4ee8dcb4a4&quot;</d:getetag>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:getcontentlength/>
+                <d:getcontenttype/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>
+            /core/remote.php/dav/files/user1/str%c3%a4ng%c3%a9%20%e0%a4%a8%e0%a5%87%e0%a4%aa%e0%a4%be%e0%a4%b2%e0%a5%80%20folder%20empty/
+        </d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:resourcetype>
+                    <d:collection/>
+                </d:resourcetype>
+                <d:quota-used-bytes>0</d:quota-used-bytes>
+                <d:quota-available-bytes>-3</d:quota-available-bytes>
+                <d:getetag>&quot;5de4ee88546dd&quot;</d:getetag>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:getcontentlength/>
+                <d:getcontenttype/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testapp.zip</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:24 GMT</d:getlastmodified>
+                <d:getcontentlength>689</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;8fee2565a457d8e4b453cd723affc84d&quot;</d:getetag>
+                <d:getcontenttype>application/zip</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testapp2.zip</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:25 GMT</d:getlastmodified>
+                <d:getcontentlength>2240</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;0b612a8caeea12aeb8ae3bb4d0761ddf&quot;</d:getetag>
+                <d:getcontenttype>application/zip</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testavatar.png</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:getcontentlength>3705</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;0fb9c64f1640f608fa827bd673b89c6b&quot;</d:getetag>
+                <d:getcontenttype>image/png</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testimage-wide.png</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:21 GMT</d:getlastmodified>
+                <d:getcontentlength>173080</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;4d5a55121e97a88ac108a2eccccb70dd&quot;</d:getetag>
+                <d:getcontenttype>image/png</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testimage.eps</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:21 GMT</d:getlastmodified>
+                <d:getcontentlength>8949</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;69088df834d998e6238cd4a8f02e09a5&quot;</d:getetag>
+                <d:getcontenttype>application/postscript</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testimage.gif</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:getcontentlength>362</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;66a111f34c87dd8b6516330bc24470c0&quot;</d:getetag>
+                <d:getcontenttype>image/gif</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testimage.jpg</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:getcontentlength>25392</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;86dbe4eaa0af4e6d1a658c3a4d0ef87c&quot;</d:getetag>
+                <d:getcontenttype>image/jpeg</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testimage.mp3</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:22 GMT</d:getlastmodified>
+                <d:getcontentlength>6144</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;de6bee434adc1d1ea381d9571b9f74d8&quot;</d:getetag>
+                <d:getcontenttype>audio/mpeg</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testimage.mp4</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:getcontentlength>383631</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;b70491902cf8dca0f06db10007ba96cc&quot;</d:getetag>
+                <d:getcontenttype>video/mp4</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testimage.odt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:25 GMT</d:getlastmodified>
+                <d:getcontentlength>32925</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;76016a81629d12b60be008fe641f9a29&quot;</d:getetag>
+                <d:getcontenttype>application/vnd.oasis.opendocument.text</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testimage.png</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:getcontentlength>3670</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;331f93ab60749444a63cb5195eebe34e&quot;</d:getetag>
+                <d:getcontenttype>image/png</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/testimagelarge.svg</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:getcontentlength>4492</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;e15d2063070001eafe28c0d91a5106f3&quot;</d:getetag>
+                <d:getcontenttype>image/svg+xml</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/textfile0.txt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:21 GMT</d:getlastmodified>
+                <d:getcontentlength>26</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;7e4c92c7a26d62f70e4e5e82fb24e162&quot;</d:getetag>
+                <d:getcontenttype>text/plain</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+    <d:response>
+        <d:href>/core/remote.php/dav/files/user1/zzzz-must-be-last-file-in-folder.txt</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:getlastmodified>Mon, 02 Dec 2019 10:59:20 GMT</d:getlastmodified>
+                <d:getcontentlength>176</d:getcontentlength>
+                <d:resourcetype/>
+                <d:getetag>&quot;6438a4c3a4450a9e7886d8c993f997e8&quot;</d:getetag>
+                <d:getcontenttype>text/plain</d:getcontenttype>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+        <d:propstat>
+            <d:prop>
+                <d:quota-used-bytes/>
+                <d:quota-available-bytes/>
+            </d:prop>
+            <d:status>HTTP/1.1 404 Not Found</d:status>
+        </d:propstat>
+    </d:response>
+</d:multistatus>
