@@ -625,7 +625,8 @@ module.exports = {
       selector: 'tr.file-row'
     },
     allFiles: {
-      selector: 'span.oc-file.file-row-name'
+      selector: 'span.oc-file.file-row-name',
+      locateStrategy: 'css selector'
     },
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',

@@ -137,7 +137,6 @@ exports.getTrashBinElements = function (user) {
       })
   })
 }
-
 /**
  * Create a folder using webDAV api.
  *
