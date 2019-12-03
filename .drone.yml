@@ -124,7 +124,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -332,7 +332,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -540,7 +540,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -748,7 +748,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -956,7 +956,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1164,7 +1164,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1372,7 +1372,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1580,7 +1580,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1788,7 +1788,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -1996,7 +1996,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -2204,7 +2204,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -2412,7 +2412,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -2620,7 +2620,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -2828,7 +2828,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -3036,7 +3036,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -3244,7 +3244,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -3452,7 +3452,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -3660,7 +3660,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -3868,7 +3868,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -4076,7 +4076,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -4284,7 +4284,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -4492,7 +4492,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -4700,7 +4700,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -4908,7 +4908,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -5116,7 +5116,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
@@ -5283,7 +5283,7 @@ steps:
 
 - name: webui-acceptance-tests
   pull: always
-  image: owncloudci/php:7.1
+  image: owncloudci/nodejs:11
   commands:
   - cd /var/www/owncloud/phoenix
   - curl http://phoenix/oidc-callback.html
