@@ -46,6 +46,10 @@ import DesignSystem from 'owncloud-design-system'
 import 'owncloud-design-system/dist/system/system.css'
 
 import wgxpath from 'wicked-good-xpath'
+
+import TopBar from './components/Top-Bar.vue'
+import Menu from './components/Menu.vue'
+
 wgxpath.install()
 
 Vue.prototype.$client = new OwnCloud()
@@ -87,6 +91,23 @@ function loadApps () {
   let routes = [{
     path: '/',
     redirect: to => arguments[0].navItems[0].route
+  }, {
+    name: 'components-header',
+    path: '/components/header',
+    components: {
+      fullscreen: TopBar,
+    },
+    meta: { hideHeadbar: true }
+  }, {
+    name: 'components-menu',
+    path: '/components/menu',
+    components: {
+      fullscreen: Menu,
+    },
+    meta: {
+      hideHeadbar: true,
+      alwaysVisible: true
+    }
   }]
 
   for (let app of Array.from(arguments)) {

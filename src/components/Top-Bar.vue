@@ -1,7 +1,7 @@
 <template>
   <oc-navbar id="oc-topbar" tag="header" class="oc-topbar">
     <oc-navbar-item position="left">
-      <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!publicPage()" ref="menubutton">
+      <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="$_toggleSidebar(!isSidebarVisible)" v-if="!publicPage()" ref="menubutton">
         <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
       </oc-button>
     </oc-navbar-item>
@@ -38,7 +38,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['toggleSidebar', 'fetchNotifications'])
+    ...mapActions(['toggleSidebar', 'fetchNotifications']),
+    $_toggleSidebar (flag) {
+      if (window.parent !== window) {
+        // window.parent.postMessage({ 'toggleSidebar': flag }, this.configuration.server)
+        window.parent.postMessage({ toggleSidebar: flag }, '*') // FIXME: use correct domain
+      } else {
+        this.toggleSidebar(flag)
+      }
+    }
   },
   computed: {
     ...mapGetters(['configuration', 'isSidebarVisible', 'activeNotifications']),

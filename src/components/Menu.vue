@@ -47,7 +47,7 @@ export default {
     ...mapGetters(['isSidebarVisible', 'configuration', 'capabilities']),
     sidebarIsVisible: {
       get () {
-        return this.isSidebarVisible
+        return this.isSidebarVisible || this.$route.meta.alwaysVisible
       },
       set (newVal) {
         if (newVal) {
