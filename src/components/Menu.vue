@@ -1,70 +1,38 @@
 <template>
-  <oc-application-menu name="coreMenu" v-model="sidebarIsVisible" :inert="!sidebarIsVisible" @close="sidebarIsVisible = false" ref="sidebar">
-    <oc-sidebar-nav-item v-for="(n, nid) in nav" :active="isActive(n)" :key="nid" :icon="n.iconMaterial" :target="n.route ? n.route.path : null" @click="openItem(n.url)">{{ translateMenu(n) }}</oc-sidebar-nav-item>
-    <oc-sidebar-nav-item icon="account_circle" target="/account" :isolate="true">
-      <translate>Account</translate>
-    </oc-sidebar-nav-item>
-
-    <oc-sidebar-nav-item id="logoutMenuItem" active icon="exit_to_app" @click="logout()" :isolate="true">{{ _logoutItemText }}</oc-sidebar-nav-item>
-
-    <span class="uk-position-bottom uk-padding-small">Version: {{appVersion.version}}-{{appVersion.hash}} ({{appVersion.buildDate}})</span>
+  <oc-application-menu name="coreMenu" v-model="visible" :inert="!visible" ref="sidebar" @close="close">
+    <oc-sidebar-nav-item v-for="(n, nid) in entries" :active="isActive(n)" :key="nid" :icon="n.iconMaterial" :target="n.route ? n.route.path : null" @click="openItem(n.url)">{{ translateMenu(n) }}</oc-sidebar-nav-item>
   </oc-application-menu>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-import appVersionJson from '../../build/version.json'
-
 export default {
+  props: {
+    visible: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    entries: {
+      type: Array,
+      required: false,
+      default: () => []
+    }
+  },
   data () {
     return {
-      isOpen: false,
-      appVersion: appVersionJson
     }
   },
   watch: {
-    $route () {
-      this.toggleSidebar(false)
-    },
-    sidebarIsVisible (val) {
+    visible (val) {
+      this.isOpen = val
       if (val) {
         this.focusFirstLink()
       }
     }
   },
-  computed: {
-    nav () {
-      return this.$root.navItems.filter(item => {
-        if (item.enabled === undefined) {
-          return true
-        }
-        if (this.capabilities === undefined) {
-          return false
-        }
-        return item.enabled(this.capabilities)
-      })
-    },
-    ...mapGetters(['isSidebarVisible', 'configuration', 'capabilities']),
-    sidebarIsVisible: {
-      get () {
-        return this.isSidebarVisible
-      },
-      set (newVal) {
-        if (newVal) {
-          return
-        }
-        this.toggleSidebar(newVal)
-      }
-    },
-    _logoutItemText () {
-      return this.$gettextInterpolate(this.$gettext('Exit %{product}'), { product: this.configuration.theme.general.name })
-    }
-  },
   methods: {
-    ...mapActions(['toggleSidebar']),
-    logout () {
-      this.sidebarIsVisible = false
-      this.$store.dispatch('logout')
+    close () {
+      this.$emit('closed')
     },
     navigateTo (route) {
       this.$router.push(route)
@@ -77,6 +45,7 @@ export default {
         const win = window.open(url, '_blank')
         win.focus()
       }
+      this.close()
     },
     isActive (navItem) {
       return navItem.route.name === this.$route.name

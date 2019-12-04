@@ -43,6 +43,7 @@ const mutations = {
     state.openIdConnect = config.openIdConnect
     state.rootFolder = config.rootFolder === undefined ? '/' : config.rootFolder
     state.state = config.state === undefined ? 'working' : config.state
+    state.applications = config.applications === undefined ? [] : config.applications
     if (config.corrupted) state.corrupted = config.corrupted
   },
   LOAD_THEME (state, theme) {

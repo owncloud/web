@@ -195,6 +195,9 @@ module.exports = {
     searchLoadingIndicator: {
       selector: '.oc-app-bar .uk-spinner'
     },
+    userMenuButton: {
+      selector: '#_userMenuButton'
+    },
     menuButton: {
       selector: '//button[@aria-label="Menu"]',
       locateStrategy: 'xpath'
