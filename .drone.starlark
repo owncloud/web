@@ -16,28 +16,12 @@ config = {
 	'acceptance': {
 		'webUI': {
 			'suites': {
-				'webUIFavorites': 'Favorites',
-				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingAutocompletion': 'SharingAutocompletion',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-				'webUIResharing': 'Resharing',
-				'webUISharingPublic': 'SharingPublic',
-				'webUITrashbin': 'Trashbin',
-				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers',
-				'webUISharingNotifications': 'SharingNotifications',
-				'webUIAccount': 'Account'
+                'webUITrashbin1': 'Trashbin1',
+				'webUITrashbin2': 'Trashbin2',
+                'webUITrashbin3': 'Trashbin3',
+                'webUITrashbin4': 'Trashbin4',
+                'webUITrashbin5': 'Trashbin5',
+                'webUITrashbin6': 'Trashbin6'
 			},
 		},
 		'webUI-XGA': {
