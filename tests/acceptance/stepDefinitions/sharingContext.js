@@ -464,11 +464,31 @@ Then('no custom permissions should be set for collaborator {string} for file/fol
 
 When('the user shares file/folder/resource {string} with group {string} as {string} using the webUI', userSharesFileOrFolderWithGroup)
 
-Then('it should not be possible to share file/folder {string} using the webUI', function (resource) {
-  return client.page
+Then('it should not be possible to share file/folder {string} using the webUI', async function (resource) {
+  const state = await client.page
     .FilesPageElement
     .filesList()
-    .assertSharingIsDisabled(resource)
+    .isSharingBtnPresent(resource)
+  assert.ok(
+    !state,
+    `Error: Sharing button for resource ${resource} is not in disabled state`
+  )
+  const sidebarLinkTabState = await client.page
+    .FilesPageElement
+    .filesList()
+    .isSidebarLinksTabPresent(resource)
+  assert.ok(
+    !sidebarLinkTabState,
+    `Error: Sidebar 'Links' tab for resource ${resource} is present`
+  )
+  const sidebarCollaboratorsTabState = await client.page
+    .FilesPageElement
+    .filesList()
+    .isSidebarCollaboratorsTabPresent(resource)
+  assert.ok(
+    !sidebarCollaboratorsTabState,
+    `Error: Sidebar 'Collaborators' tab for resource ${resource} is present`
+  )
 })
 
 When('the user shares file/folder/resource {string} with user {string} as {string} using the webUI', userSharesFileOrFolderWithUser)

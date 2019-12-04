@@ -442,52 +442,105 @@ module.exports = {
         this.elements.fileLinkInFileRow.selector
     },
     /**
+     * checks whether the element is listed or not on the filesList
      *
-     * @param {string} element
+     * @param {string} element Name of the file/folder/resource
+     * @returns {boolean}
      */
-    assertElementNotListed: function (element) {
-      return this
+    isElementListed: async function (element) {
+      let isListed = true
+      await this
         .waitForElementVisible('@filesTable')
         .useXpath()
         .waitForElementNotPresent('@loadingIndicator')
-        .waitForElementNotPresent(this.getFileRowSelectorByFileName(element))
+        .api.elements(
+          'xpath',
+          this.getFileRowSelectorByFileName(element),
+          (result) => {
+            isListed = result.value.length > 0
+          })
+        .useCss()
+      return isListed
     },
     /**
+     * checks whether sharing button of given file-row is present
      *
-     * @param {string} element
+     * @param {string} fileName
+     * @returns {Promise<boolean>}
      */
-    assertElementListed: function (element) {
-      return this
-        .waitForElementVisible('@filesTable')
-        .useXpath()
-        .waitForElementNotPresent('@loadingIndicator')
-        .waitForElementPresent(this.getFileRowSelectorByFileName(element))
-    },
-    assertSharingIsDisabled: function (resource) {
-      const resourceRowXpath = this.getFileRowSelectorByFileName(resource)
+    isSharingBtnPresent: async function (fileName) {
+      const resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
       const shareButtonXpath = this.elements.shareButtonInFileRow.selector
       const resourceShareButtonXpath = resourceRowXpath + shareButtonXpath
-      return this
+      let isPresent = true
+      await this
         .closeSidebar(100)
-        .useXpath()
-        .assert.elementNotPresent(resourceShareButtonXpath)
-        .click(resourceRowXpath)
-        .waitForElementVisible('@sidebar')
-        .assert.elementNotPresent('@sidebarLinksTab')
-        .assert.elementNotPresent('@sidebarCollaboratorsTab')
-        .useCss()
+        .api.elements(
+          this.elements.shareButtonInFileRow.locateStrategy,
+          resourceShareButtonXpath,
+          (result) => {
+            isPresent = result.value.length > 0
+          })
+      return isPresent
     },
     /**
+     * checks if the given tabs are present on the files-page-sidebar
+     *
+     * @param {string} rowSelector xpath for given resource row selector
+     * @param {string} tabSelector xpath for given tab
+     * @returns {Promise<boolean>}
+     */
+    isSidebarTabPresent: async function (rowSelector, tabSelector) {
+      let isPresent = true
+      await this
+        .closeSidebar(100)
+        .useXpath()
+        .click(rowSelector)
+        .waitForElementVisible('@sidebar')
+        .api.elements(
+          'xpath',
+          tabSelector,
+          (result) => {
+            isPresent = result.value.length > 0
+          })
+        .useCss()
+      return isPresent
+    },
+    /**
+     *
+     * @param {string} fileName
+     * @returns {Promise<boolean>}
+     */
+    isSidebarLinksTabPresent: function (fileName) {
+      return this.isSidebarTabPresent(
+        this.getFileRowSelectorByFileName(fileName),
+        this.elements.sidebarLinksTab.selector
+      )
+    },
+    /**
+     *
+     * @param {string} fileName
+     * @returns {Promise<boolean>}
+     */
+    isSidebarCollaboratorsTabPresent: function (fileName) {
+      return this.isSidebarTabPresent(
+        this.getFileRowSelectorByFileName(fileName),
+        this.elements.sidebarCollaboratorsTab.selector
+      )
+    },
+    /**
+     * returns the disabled state of given action
+     *
      * @param {string} action
      * @param {string} fileName
-     * @returns {Promise}
+     * @returns {Promise<boolean>}
      */
-    assertActionDisabled: function (action, fileName) {
+    getActionDisabledAttr: async function (action, fileName) {
       const btnSelectorHighResolution = this.getActionSelectorHighRes(action, fileName)
       const btnSelectorLowResolution = this.getActionSelectorLowRes(action, fileName)
       const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName)
-
-      return this
+      let disabledState
+      await this
         .useXpath()
         .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
         .isVisible(fileActionsBtnSelector, (result) => {
@@ -495,19 +548,17 @@ module.exports = {
             this.click(fileActionsBtnSelector)
               .waitForElementVisible(btnSelectorLowResolution)
               .getAttribute(btnSelectorLowResolution, 'disabled', result => {
-                this.assert.strictEqual(
-                  result.value, 'true',
-                  `expected property disabled of ${btnSelectorLowResolution} to be 'true' but found ${result.value}`)
+                disabledState = result.value
               })
           } else {
             this.waitForElementVisible(btnSelectorHighResolution)
               .getAttribute(btnSelectorHighResolution, 'disabled', result => {
-                this.assert.strictEqual(
-                  result.value, 'true',
-                  `expected property disabled of ${btnSelectorHighResolution} to be 'true' but found ${result.value}`)
+                disabledState = result.value
               })
           }
         })
+        .useCss()
+      return disabledState
     },
     /**
      *
