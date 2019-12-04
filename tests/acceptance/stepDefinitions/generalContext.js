@@ -23,9 +23,15 @@ const getConfigJsonContent = function (fullPathOfConfigFile) {
   return JSON.parse(rawdata)
 }
 
-Given('the rootFolder has been set to {string} in phoenix config file', function (value) {
+Given('the property {string} has been set to {string} in phoenix config file', function (key, value) {
   const data = getConfigJsonContent(this.fullPathOfConfigFile)
-  data.rootFolder = value
+  data[key] = value
+  return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
+})
+
+Given('the property {string} has been deleted in phoenix config file', function (key) {
+  const data = getConfigJsonContent(this.fullPathOfConfigFile)
+  delete data[key]
   return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
 })
 

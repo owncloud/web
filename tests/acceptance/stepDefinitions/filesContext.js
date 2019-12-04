@@ -156,6 +156,9 @@ When('the user enables the setting to view hidden files/folders on the webUI', f
   return client.page.filesPage().showHiddenFiles()
 })
 
+When('the user browses to folder {string} using the breadcrumb on the webUI', (resource) =>
+  client.page.filesPage().navigateToBreadcrumb(resource))
+
 When('the user deletes file/folder {string} using the webUI', function (element) {
   return client.page.FilesPageElement.filesList().deleteFile(element)
 })
