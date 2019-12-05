@@ -90,7 +90,9 @@ function loadApps () {
 
   let routes = [{
     path: '/',
-    redirect: to => arguments[0].navItems[0].route
+    // FIXME: HACK
+    //redirect: to => arguments[0].navItems[0].route
+    redirect: to => '/files/list'
   }, {
     name: 'components-header',
     path: '/components/header',

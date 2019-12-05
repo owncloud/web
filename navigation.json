@@ -1,8 +1,18 @@
 [
   {
-    "name": "Phoenix Files",
+    "name": "Files",
     "iconMaterial": "folder",
-    "url": "http://vvortex.local:8300/index.html#"
+    "url": "http://vvortex.local:8300/index.html#/files/list"
+  },
+  {
+    "name": "Calendar",
+    "iconMaterial": "calendar_today",
+    "url": "http://vvortex.local/owncloud/index.php/apps/calendar"
+  },
+  {
+    "name": "Contacts",
+    "iconMaterial": "people",
+    "url": "http://vvortex.local/owncloud/index.php/apps/contacts"
   },
   {
     "name": "Settings",

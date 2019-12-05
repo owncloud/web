@@ -1,19 +1,24 @@
-  <template>
-    <div id="files" class="uk-flex uk-flex-column">
-      <files-app-bar />
-      <upload-progress v-show="inProgress.length" class="uk-padding-small uk-background-muted" />
-      <oc-grid class="uk-height-1-1 uk-flex-1 uk-overflow-auto">
-        <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
-          <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
-          <trash-bin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
-          <shared-files-list v-else-if="sharedList" :fileData="activeFiles" @sideBarOpen="openSideBar" />
-          <all-files-list v-else @FileAction="openFileActionBar" :fileData="activeFiles" :parentFolder="currentFolder" @sideBarOpen="openSideBar" />
-        </div>
-        <file-details
-          v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
-          ref="fileDetails" class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1"
-          @reset="setHighlightedFile(null)"
-        />
+<template>
+  <div id="files" class="uk-flex uk-flex-column">
+    <phoenix-top-bar :user-id="user.id"
+      :user-display-name="user.displayname"
+      :applications-list-url="phoenixUrl + '/navigation.json'"
+      :appNavigation="navItems"
+    />
+    <files-app-bar />
+    <upload-progress v-show="inProgress.length" class="uk-padding-small uk-background-muted" />
+    <oc-grid class="uk-height-1-1 uk-flex-1 uk-overflow-auto">
+      <div class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
+        <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
+        <trash-bin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
+        <shared-files-list v-else-if="sharedList" :fileData="activeFiles" @sideBarOpen="openSideBar" />
+        <all-files-list v-else @FileAction="openFileActionBar" :fileData="activeFiles" :parentFolder="currentFolder" @sideBarOpen="openSideBar" />
+      </div>
+      <file-details
+        v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
+        ref="fileDetails" class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1"
+        @reset="setHighlightedFile(null)"
+      />
     </oc-grid>
     <file-open-actions/>
     {{ /* FIXME: hack to prevent conflict of dialog id with the trashbin deletion dialog */ }}
@@ -29,6 +34,8 @@
   </div>
 </template>
 <script>
+// TODO: replace by loading web component phoenix-top-bar.js
+import PhoenixTopBar from '../../../../src/components/Top-Bar.vue'
 import Mixins from '../mixins'
 import FileActions from '../fileactions'
 import FileDetails from './FileDetails.vue'
@@ -36,7 +43,7 @@ import FilesAppBar from './FilesAppBar.vue'
 import AllFilesList from './AllFilesList.vue'
 import TrashBin from './Trashbin.vue'
 import SharedFilesList from './Collaborators/SharedFilesList.vue'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import FileOpenActions from './FileOpenActions.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 const UploadProgress = () => import('./UploadProgress.vue')
@@ -47,6 +54,7 @@ export default {
     FileActions
   ],
   components: {
+    PhoenixTopBar,
     FileDetails,
     AllFilesList,
     FilesAppBar,
@@ -127,12 +135,74 @@ export default {
   },
 
   computed: {
+    ...mapState(['user']),
     ...mapGetters('Files', [
       'selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile', 'currentFolder', 'inProgress',
       'renameDialogSelectedFile',
       'deleteDialogSelectedFiles', 'deleteDialogMessage'
     ]),
     ...mapGetters(['extensions']),
+
+    phoenixUrl () {
+      // FIXME, read from config ?
+      return ''
+    },
+
+    navItems () {
+      if (this.isPublicPage) {
+        return []
+      }
+      const navItems = [
+        {
+          name: this.$gettext('All files'),
+          iconMaterial: 'folder',
+          route: {
+            name: 'files-list',
+            path: '/files/list'
+          }
+        },
+        {
+          name: this.$gettext('Favorites'),
+          iconMaterial: 'star',
+          route: {
+            name: 'files-favorites',
+            path: '/files/favorites'
+          }
+        },
+        {
+          name: this.$gettext('Shared with me'),
+          iconMaterial: 'share',
+          route: {
+            name: 'files-shared-with-me',
+            path: '/files/shared-with-me'
+          }
+        },
+        {
+          name: this.$gettext('Shared with others'),
+          iconMaterial: 'share',
+          route: {
+            name: 'files-shared-with-others',
+            path: '/files/shared-with-others'
+          }
+        },
+        {
+          name: this.$gettext('Deleted files'),
+          iconMaterial: 'delete',
+          enabled (capabilities) {
+            if (capabilities && capabilities.dav) {
+              return capabilities.dav.trashbin === '1.0'
+            }
+            return false
+          },
+          route: {
+            name: 'files-trashbin',
+            path: '/files/trash-bin'
+          }
+        }
+      ]
+
+      return navItems
+    },
 
     _sidebarOpen () {
       return this.highlightedFile !== null

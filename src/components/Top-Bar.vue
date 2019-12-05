@@ -1,27 +1,26 @@
 <template>
   <div>
     <link v-if="cssUrl" rel="stylesheet" :href="cssUrl" />
-    <side-menu :nav="nav" :navListUrl="navListUrl" :visible="isSidebarVisible" @closed="toggleSidebar(false)"></side-menu>
+    <message-bar />
+    <applications-menu :applicationsListUrl="applicationsListUrl" :visible="isApplicationsMenuVisible" @closed="toggleApplicationsMenu(false)" />
+    <side-menu v-if="appNavigation.length" :entries="appNavigation" :visible="isSideMenuVisible" />
     <oc-navbar id="oc-topbar" tag="header" class="oc-topbar uk-position-relative uk-navbar">
       <oc-navbar-item position="left">
-        <!--
-        <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!isPublicPage" ref="menubutton">
+        <oc-button v-if="appNavigation.length" icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSideMenu(!isSideMenuVisible)" ref="menubutton">
           <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
         </oc-button>
-        -->
       </oc-navbar-item>
       <oc-navbar-item position="center">
         <router-link to="/" class="oc-topbar-icon">ownCloud X</router-link>
       </oc-navbar-item>
       <oc-navbar-item position="right" v-if="!isPublicPage">
-        <notifications v-if="activeNotifications"></notifications>
+        <notifications v-if="activeNotifications.length"></notifications>
+        <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleApplicationsMenu(!isApplicationsMenuVisible)" v-if="!isPublicPage" ref="menubutton">
+        </oc-button>
         <div class="oc-topbar-personal">
           <avatar class="oc-topbar-personal-avatar" :userid="userId" />
           <span class="oc-topbar-personal-label">{{ userDisplayName }}</span>
         </div>
-        <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!isPublicPage" ref="menubutton">
-          <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
-        </oc-button>
       </oc-navbar-item>
     </oc-navbar>
   </div>
@@ -29,9 +28,11 @@
 
 <script>
 import pluginHelper from '../mixins/pluginHelper.js'
-// import Avatar from './Avatar.vue'
-import Menu from './Menu.vue'
-// import Notifications from './Notifications.vue'
+import Avatar from './Avatar.vue'
+import ApplicationsMenu from './ApplicationsMenu.vue'
+import SideMenu from './Menu.vue'
+import MessageBar from './MessageBar.vue'
+import Notifications from './Notifications.vue'
 /* eslint-disable no-unused-vars */
 import DesignSystem from 'owncloud-design-system'
 
@@ -40,9 +41,11 @@ export default {
     pluginHelper
   ],
   components: {
-  //    Avatar,
-  //    Notifications,
-    'side-menu': Menu
+    Avatar,
+    Notifications,
+    ApplicationsMenu,
+    SideMenu,
+    MessageBar
   },
   props: {
     showNotifications: {
@@ -61,12 +64,12 @@ export default {
       required: false,
       default: null
     },
-    navListUrl: {
+    applicationsListUrl: {
       type: String,
       required: false,
       default: () => null
     },
-    nav: {
+    appNavigation: {
       type: Array,
       required: false,
       default: () => []
@@ -79,14 +82,23 @@ export default {
   data () {
     return {
       intervalId: null,
-      isSidebarVisible: false,
+      isApplicationsMenuVisible: false,
+      isSideMenuVisible: false,
       activeNotifications: []
     }
   },
   methods: {
-    toggleSidebar (newState) {
-      console.log('toggleSidebar: oldState=', this.isSidebarVisible, ' newState=', newState)
-      this.isSidebarVisible = newState
+    toggleApplicationsMenu (newState) {
+      this.isApplicationsMenuVisible = newState
+      if (newState) {
+        this.isSideMenuVisible = false
+      }
+    },
+    toggleSideMenu (newState) {
+      this.isSideMenuVisible = newState
+      if (newState) {
+        this.isApplicationsMenuVisible = false
+      }
     },
     fetchNotifications () {
       // TODO
@@ -121,7 +133,7 @@ export default {
     }
   },
   watch: {
-    isSidebarVisible: function (val) {
+    isApplicationsMenuVisible: function (val) {
       if (!val) {
         /*
         * Delay for screen readers Virtual buffers

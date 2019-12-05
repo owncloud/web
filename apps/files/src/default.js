@@ -54,53 +54,6 @@ const appInfo = {
     }
   ]
 }
-const navItems = [
-  {
-    name: $gettext('All files'),
-    iconMaterial: appInfo.icon,
-    route: {
-      name: 'files-list',
-      path: '/'
-    }
-  },
-  {
-    name: $gettext('Favorites'),
-    iconMaterial: 'star',
-    route: {
-      name: 'files-favorites'
-    }
-  },
-  {
-    name: $gettext('Shared with me'),
-    iconMaterial: 'share',
-    route: {
-      name: 'files-shared-with-me',
-      path: `/${appInfo.id}/shared-with-me`
-    }
-  },
-  {
-    name: $gettext('Shared with others'),
-    iconMaterial: 'share',
-    route: {
-      name: 'files-shared-with-others',
-      path: `/${appInfo.id}/shared-with-others`
-    }
-  },
-  {
-    name: $gettext('Deleted files'),
-    iconMaterial: 'delete',
-    enabled (capabilities) {
-      if (capabilities && capabilities.dav) {
-        return capabilities.dav.trashbin === '1.0'
-      }
-      return false
-    },
-    route: {
-      name: 'files-trashbin'
-    }
-  }
-]
-
 const routes = [
   {
     path: '',
@@ -203,6 +156,5 @@ export default define({
   appInfo,
   store,
   routes,
-  navItems,
   translations
 })
