@@ -1,7 +1,6 @@
 const util = require('util')
 const navigationHelper = require('../helpers/navigationHelper')
 const { join, normalize } = require('../helpers/path')
-const assert = require('assert')
 
 module.exports = {
   url: function () {
@@ -320,16 +319,15 @@ module.exports = {
     checkForButtonDisabled: function () {
       return this.waitForElementVisible('@createFileOkButtonDisabled')
     },
-    assertVersionsPresent: function (expectedNumber) {
-      if (expectedNumber !== 0) {
-        return this
-          .waitForElementVisible('@versionsList')
-          .api.elements('xpath', this.elements.versionsList.selector, function (result) {
-            assert.strictEqual(expectedNumber, result.value.length)
+    getVersionsCount: async function () {
+      let count = 0
+      await this
+        .api.elements(
+          '@versionsList',
+          function (result) {
+            count = result.value.length
           })
-      } else {
-        return this.waitForElementNotPresent('@versionsList')
-      }
+      return count
     },
     restoreToPreviousVersion: function () {
       return this

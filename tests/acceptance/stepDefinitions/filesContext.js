@@ -384,8 +384,11 @@ Then('the deleted elements should not be listed on the webUI after a page reload
   return assertDeletedElementsAreNotListed()
 })
 
-Then('the versions list should contain {int} entries', function (expectedNumber) {
-  return client.page.filesPage().assertVersionsPresent(expectedNumber)
+Then('the versions list should contain {int} entries', async function (expectedNumber) {
+  const count = await client.page.filesPage().getVersionsCount()
+  return assert.strictEqual(
+    expectedNumber, count
+  )
 })
 
 Then('the content of file {string} for user {string} should be {string}', async function (file, user, content) {
