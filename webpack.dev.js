@@ -21,6 +21,10 @@ module.exports = merge(common, {
     host: '0.0.0.0',
     port: 8300,
     disableHostCheck: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*'
+    },
     watchOptions: {
       ignored: [
         path.resolve(__dirname, '.*'),

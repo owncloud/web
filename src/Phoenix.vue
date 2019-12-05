@@ -7,7 +7,7 @@
       </template>
       <template v-else>
         <message-bar />
-        <top-bar :nav="nav" :userId="user.id" :userDisplayName="user.displayname"></top-bar>
+        <top-bar navListUrl="navigation.json" :userId="user.id" :userDisplayName="user.displayname"></top-bar>
         <main id="main">
           <router-view id="oc-app-container" name="app" class="uk-height-1-1"></router-view>
         </main>

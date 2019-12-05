@@ -1,24 +1,27 @@
 <template>
   <div>
     <link v-if="cssUrl" rel="stylesheet" :href="cssUrl" />
-    <div id="menuContainer" class="uk-offcanvas-container">
-      <side-menu :nav="nav" :visible="isSidebarVisible" @closed="toggleSidebar(false)"></side-menu>
-    </div>
-    <oc-navbar id="oc-topbar" tag="header" class="oc-topbar uk-position-relative">
+    <side-menu :nav="nav" :navListUrl="navListUrl" :visible="isSidebarVisible" @closed="toggleSidebar(false)"></side-menu>
+    <oc-navbar id="oc-topbar" tag="header" class="oc-topbar uk-position-relative uk-navbar">
       <oc-navbar-item position="left">
+        <!--
         <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!isPublicPage" ref="menubutton">
           <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
         </oc-button>
+        -->
       </oc-navbar-item>
       <oc-navbar-item position="center">
         <router-link to="/" class="oc-topbar-icon">ownCloud X</router-link>
       </oc-navbar-item>
       <oc-navbar-item position="right" v-if="!isPublicPage">
-        <!-- <notifications v-if="activeNotifications"></notifications> -->
+        <notifications v-if="activeNotifications"></notifications>
         <div class="oc-topbar-personal">
-          <!--    <avatar class="oc-topbar-personal-avatar" :userid="userId" /> -->
+          <avatar class="oc-topbar-personal-avatar" :userid="userId" />
           <span class="oc-topbar-personal-label">{{ userDisplayName }}</span>
         </div>
+        <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!isPublicPage" ref="menubutton">
+          <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
+        </oc-button>
       </oc-navbar-item>
     </oc-navbar>
   </div>
@@ -57,6 +60,11 @@ export default {
       type: String,
       required: false,
       default: null
+    },
+    navListUrl: {
+      type: String,
+      required: false,
+      default: () => null
     },
     nav: {
       type: Array,

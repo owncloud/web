@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Phoenix Files",
+    "iconMaterial": "folder",
+    "url": "http://vvortex.local:8300/index.html#"
+  },
+  {
+    "name": "Settings",
+    "iconMaterial": "settings",
+    "url": "http://vvortex.local/owncloud/index.php/settings/personal"
+  },
+  {
+    "name": "Users",
+    "iconMaterial": "settings",
+    "url": "http://vvortex.local/owncloud/index.php/settings/users"
+  }
+]
