@@ -124,6 +124,7 @@
     ]
   },
   "dependencies": {
+    "@vue/cli": "^4.1.1",
     "deepmerge": "^4.2.1",
     "inert-polyfill": "^0.2.5"
   }

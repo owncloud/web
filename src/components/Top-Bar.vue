@@ -1,64 +1,101 @@
 <template>
-  <oc-navbar id="oc-topbar" tag="header" class="oc-topbar">
-    <oc-navbar-item position="left">
-      <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="$_toggleSidebar(!isSidebarVisible)" v-if="!publicPage()" ref="menubutton">
-        <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
-      </oc-button>
-    </oc-navbar-item>
-    <oc-navbar-item position="center">
-      <router-link to="/" class="oc-topbar-icon">ownCloud X</router-link>
-    </oc-navbar-item>
-    <oc-navbar-item position="right" v-if="!publicPage()">
-      <notifications v-if="activeNotifications"></notifications>
-      <div class="oc-topbar-personal">
-        <avatar class="oc-topbar-personal-avatar" :userid="user.id" />
-        <span class="oc-topbar-personal-label">{{ user.displayname }}</span>
-      </div>
-    </oc-navbar-item>
-  </oc-navbar>
+  <div>
+    <link v-if="cssUrl" rel="stylesheet" :href="cssUrl" />
+    <div id="menuContainer" class="uk-offcanvas-container">
+      <side-menu :nav="nav" :visible="isSidebarVisible" @closed="toggleSidebar(false)"></side-menu>
+    </div>
+    <oc-navbar id="oc-topbar" tag="header" class="oc-topbar uk-position-relative">
+      <oc-navbar-item position="left">
+        <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!isPublicPage" ref="menubutton">
+          <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
+        </oc-button>
+      </oc-navbar-item>
+      <oc-navbar-item position="center">
+        <router-link to="/" class="oc-topbar-icon">ownCloud X</router-link>
+      </oc-navbar-item>
+      <oc-navbar-item position="right" v-if="!isPublicPage">
+        <!-- <notifications v-if="activeNotifications"></notifications> -->
+        <div class="oc-topbar-personal">
+          <!--    <avatar class="oc-topbar-personal-avatar" :userid="userId" /> -->
+          <span class="oc-topbar-personal-label">{{ userDisplayName }}</span>
+        </div>
+      </oc-navbar-item>
+    </oc-navbar>
+  </div>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
 import pluginHelper from '../mixins/pluginHelper.js'
-import Avatar from './Avatar.vue'
-import Notifications from './Notifications.vue'
+// import Avatar from './Avatar.vue'
+import Menu from './Menu.vue'
+// import Notifications from './Notifications.vue'
+/* eslint-disable no-unused-vars */
+import DesignSystem from 'owncloud-design-system'
 
 export default {
   mixins: [
     pluginHelper
   ],
   components: {
-    Avatar,
-    Notifications
+  //    Avatar,
+  //    Notifications,
+    'side-menu': Menu
+  },
+  props: {
+    showNotifications: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+
+    userId: {
+      type: String,
+      required: false,
+      default: null
+    },
+    userDisplayName: {
+      type: String,
+      required: false,
+      default: null
+    },
+    nav: {
+      type: Array,
+      required: false,
+      default: () => []
+    },
+    cssUrl: {
+      type: String,
+      required: false
+    }
   },
   data () {
     return {
-      intervalId: null
+      intervalId: null,
+      isSidebarVisible: false,
+      activeNotifications: []
     }
   },
   methods: {
-    ...mapActions(['toggleSidebar', 'fetchNotifications']),
-    $_toggleSidebar (flag) {
-      if (window.parent !== window) {
-        // window.parent.postMessage({ 'toggleSidebar': flag }, this.configuration.server)
-        window.parent.postMessage({ toggleSidebar: flag }, '*') // FIXME: use correct domain
-      } else {
-        this.toggleSidebar(flag)
-      }
+    toggleSidebar (newState) {
+      console.log('toggleSidebar: oldState=', this.isSidebarVisible, ' newState=', newState)
+      this.isSidebarVisible = newState
+    },
+    fetchNotifications () {
+      // TODO
     }
   },
   computed: {
-    ...mapGetters(['configuration', 'isSidebarVisible', 'activeNotifications']),
-    ...mapState(['user'])
+    isPublicPage () {
+      return !this.userId
+    }
   },
   created: function () {
-    if (this.publicPage()) {
+    if (this.isPublicPage) {
       return
     }
 
     // only fetch notifications if the server supports them
-    if (this.user.capabilities.notifications) {
+    if (this.showNotifications) {
       this.fetchNotifications(this.$client).then(() => {
         this.intervalId = setInterval(() => {
           this.fetchNotifications(this.$client).catch(() => {

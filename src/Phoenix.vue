@@ -7,8 +7,7 @@
       </template>
       <template v-else>
         <message-bar />
-        <top-bar></top-bar>
-        <side-menu></side-menu>
+        <top-bar :nav="nav" :userId="user.id" :userDisplayName="user.displayname"></top-bar>
         <main id="main">
           <router-view id="oc-app-container" name="app" class="uk-height-1-1"></router-view>
         </main>
@@ -20,14 +19,12 @@
 import 'inert-polyfill'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import TopBar from './components/Top-Bar.vue'
-import Menu from './components/Menu.vue'
 import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
 
 export default {
   components: {
     MessageBar,
-    'side-menu': Menu,
     TopBar,
     SkipTo
   },
@@ -46,13 +43,24 @@ export default {
     this.initAuth()
   },
   computed: {
-    ...mapState(['route']),
+    ...mapState(['route', 'user']),
     ...mapGetters(['configuration']),
     showHeader () {
       return this.$route.meta.hideHeadbar !== true
     },
     favicon () {
       return this.configuration.theme.logo.favicon
+    },
+    nav () {
+      return this.$root.navItems.filter(item => {
+        if (item.enabled === undefined) {
+          return true
+        }
+        if (this.capabilities === undefined) {
+          return false
+        }
+        return item.enabled(this.capabilities)
+      })
     }
   },
   methods: {
