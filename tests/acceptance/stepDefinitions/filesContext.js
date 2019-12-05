@@ -906,3 +906,10 @@ Then('as {string} only files containing pattern {string} in their name should be
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
 })
+
+Then('all the files and folders containing pattern {string} in their name should be listed in the trash', async function (pattern) {
+  const allListedFilesFolders = await getAllFilesListed()
+  const trashbinElems = await getAllTrashbinElements()
+  console.log(trashbinElems)
+  assert.strictEqual(allListedFilesFolders, trashbinElems)
+})
