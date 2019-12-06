@@ -1,5 +1,5 @@
 <template>
-  <oc-navbar id="oc-topbar" tag="header" class="oc-topbar uk-position-relative uk-navbar">
+  <oc-navbar id="oc-topbar" tag="header" class="oc-topbar uk-navbar">
     <oc-navbar-item position="left">
       <oc-button
         v-if="hasAppNavigation"
@@ -20,7 +20,7 @@
     </oc-navbar-item>
     <oc-navbar-item position="right" v-if="!isPublicPage">
       <notifications v-if="activeNotifications.length" />
-      <applications-menu :applicationsList="applicationsList"/>
+      <applications-menu :applicationsList="$_applicationsList"/>
       <user-menu :user-id="userId" :user-display-name="userDisplayName" />
     </oc-navbar-item>
   </oc-navbar>
@@ -28,7 +28,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import pluginHelper from '../mixins/pluginHelper.js'
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
@@ -39,9 +38,6 @@ export default {
     ApplicationsMenu,
     UserMenu
   },
-  mixins: [
-    pluginHelper
-  ],
   props: {
     userId: {
       type: String,
@@ -56,7 +52,7 @@ export default {
     applicationsList: {
       type: Array,
       required: false,
-      default: () => null
+      default: () => []
     },
     hasAppNavigation: {
       type: Boolean,
@@ -77,7 +73,14 @@ export default {
     },
 
     currentExtensionName () {
+      if (!this.apps[this.currentExtension]) {
+        return null
+      }
       return this.$gettext(this.apps[this.currentExtension].name)
+    },
+
+    $_applicationsList () {
+      return this.applicationsList
     }
   },
   methods: {

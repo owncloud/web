@@ -6,7 +6,7 @@
         <div class="oc-topbar-personal-label">{{ userDisplayName }}</div>
       </oc-grid>
     </oc-button>
-    <oc-drop toggle="#_userMenuButton" mode="click" :options="{pos:'bottom-right'}" class="uk-width-large" ref="menu">
+    <oc-drop toggle="#_userMenuButton" mode="click" :options="{pos:'bottom-right'}" id="userMenuDropDown" class="uk-width-large uk-position-relative" ref="menu">
       <div class="uk-card-body uk-flex uk-flex-middle uk-flex-column" id="account-info-container">
         <avatar-image
           :userid="userId"
@@ -92,5 +92,9 @@ export default {
 }
 .oc-topbar-personal-label {
   margin-left: 0px !important;
+}
+
+#userMenuDropDown {
+  z-index: 10;
 }
 </style>

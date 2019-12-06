@@ -75,6 +75,8 @@ export default {
       // FIXME: use store or other ways, not $root
       const items = this.$root.navItems[this.currentExtension]
 
+      console.log('navItems: ', items)
+
       if (!items) {
         return []
       }

@@ -39,7 +39,7 @@ export default {
     applicationsList: {
       type: Array,
       required: false,
-      default: () => null
+      default: () => []
     }
   },
   computed: {
