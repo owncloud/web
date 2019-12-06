@@ -23,6 +23,7 @@ package-lock.json
 
 node_modules
 dist
+dist-wc
 
 *.log
 .DS_Store

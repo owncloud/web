@@ -1,6 +1,6 @@
 <template>
   <div>
-    <link v-if="cssUrl" rel="stylesheet" :href="cssUrl" />
+    <link v-if="phoenixUrl" rel="stylesheet" :href="phoenixUrl + '/dist-wc/design-system/system.css'" />
     <message-bar />
     <applications-menu :applicationsListUrl="applicationsListUrl" :visible="isApplicationsMenuVisible" @closed="toggleApplicationsMenu(false)" />
     <side-menu v-if="appNavigation.length" :entries="appNavigation" :visible="isSideMenuVisible" />
@@ -27,12 +27,14 @@
 </template>
 
 <script>
+// import externalComponent from '../utils/external-component.js'
 import pluginHelper from '../mixins/pluginHelper.js'
 import Avatar from './Avatar.vue'
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import SideMenu from './Menu.vue'
 import MessageBar from './MessageBar.vue'
 import Notifications from './Notifications.vue'
+// FIXME: replace with dynamic load with externalComponent()
 /* eslint-disable no-unused-vars */
 import DesignSystem from 'owncloud-design-system'
 
@@ -74,7 +76,7 @@ export default {
       required: false,
       default: () => []
     },
-    cssUrl: {
+    phoenixUrl: {
       type: String,
       required: false
     }
@@ -110,6 +112,7 @@ export default {
     }
   },
   created: function () {
+    // await externalComponent(this.phoenixUrl + '/dist-wc/design-system/system.js')
     if (this.isPublicPage) {
       return
     }
