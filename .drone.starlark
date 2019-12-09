@@ -14,54 +14,153 @@ config = {
 	'yarnlint': True,
 
 	'acceptance': {
-		'webUI': {
+		'webUI1': {
 			'suites': {
-				'webUIFavorites': 'Favorites',
-				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingAutocompletion': 'SharingAutocompletion',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-				'webUIResharing': 'Resharing',
-				'webUISharingPublic': 'SharingPublic',
-				'webUITrashbin': 'Trashbin',
-				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers',
-				'webUISharingNotifications': 'SharingNotifications',
-				'webUIAccount': 'Account'
+				'webUIFavorites': 'Favorites1',
+				'webUIFiles': 'Files1',
+				'webUILogin': 'Login1',
+				'webUINotifications': 'Notifications1',
+				'webUIPrivateLinks': 'PrivateLinks1',
+				'webUIRenameFiles': 'RenameFiles1',
+				'webUIRenameFolders': 'RenameFolders1',
+				'webUIRestrictSharing': 'RestrictSharing1',
+				'webUISharingInternalGroups': 'SharingInternalGroups1',
+				'webUISharingAutocompletion': 'SharingAutocompletion1',
+				'webUISharingInternalUsers': 'SharingInternalUsers1',
+				'webUISharingPermissionsUsers': 'SharingPermissionsUsers1',
+				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups1',
+				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups1',
+				'webUIResharing': 'Resharing1',
+				'webUISharingPublic': 'SharingPublic1',
+				'webUITrashbin': 'Trashbin1',
+				'webUIUpload': 'Upload1',
+				'webUISharingAcceptShares': 'SharingAcceptShares1',
+				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers1',
+				'webUISharingNotifications': 'SharingNotifications1',
+				'webUIAccount': 'Account1',
 			},
 		},
-		'webUI-XGA': {
+        'webUI2': {
 			'suites': {
-				'all': 'XGAPortrait',
+				'webUIFavorites': 'Favorites2',
+				'webUIFiles': 'Files2',
+				'webUILogin': 'Login2',
+				'webUINotifications': 'Notifications2',
+				'webUIPrivateLinks': 'PrivateLinks2',
+				'webUIRenameFiles': 'RenameFiles2',
+				'webUIRenameFolders': 'RenameFolders2',
+				'webUIRestrictSharing': 'RestrictSharing2',
+				'webUISharingInternalGroups': 'SharingInternalGroups2',
+				'webUISharingAutocompletion': 'SharingAutocompletion2',
+				'webUISharingInternalUsers': 'SharingInternalUsers2',
+				'webUISharingPermissionsUsers': 'SharingPermissionsUsers2',
+				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups2',
+				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups2',
+				'webUIResharing': 'Resharing2',
+				'webUISharingPublic': 'SharingPublic2',
+				'webUITrashbin': 'Trashbin2',
+				'webUIUpload': 'Upload2',
+				'webUISharingAcceptShares': 'SharingAcceptShares2',
+				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers2',
+				'webUISharingNotifications': 'SharingNotifications2',
+				'webUIAccount': 'Account2',
+			},
+		},
+        'webUI3': {
+			'suites': {
+				'webUIFavorites': 'Favorites3',
+				'webUIFiles': 'Files3',
+				'webUILogin': 'Login3',
+				'webUINotifications': 'Notifications3',
+				'webUIPrivateLinks': 'PrivateLinks3',
+				'webUIRenameFiles': 'RenameFiles3',
+				'webUIRenameFolders': 'RenameFolders3',
+				'webUIRestrictSharing': 'RestrictSharing3',
+				'webUISharingInternalGroups': 'SharingInternalGroups3',
+				'webUISharingAutocompletion': 'SharingAutocompletion3',
+				'webUISharingInternalUsers': 'SharingInternalUsers3',
+				'webUISharingPermissionsUsers': 'SharingPermissionsUsers3',
+				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups3',
+				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups3',
+				'webUIResharing': 'Resharing3',
+				'webUISharingPublic': 'SharingPublic3',
+				'webUITrashbin': 'Trashbin3',
+				'webUIUpload': 'Upload3',
+				'webUISharingAcceptShares': 'SharingAcceptShares3',
+				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers3',
+				'webUISharingNotifications': 'SharingNotifications3',
+				'webUIAccount': 'Account3',
+			},
+		},
+		'webUI-XGA1': {
+			'suites': {
+				'all': 'XGAPortrait1',
 			},
 			'extraEnvironment': {
 				'SCREEN_RESOLUTION': '768x1024'
 			},
 			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
 		},
-		'webUI-iPhone': {
+		'webUI-XGA2': {
 			'suites': {
-				'all': 'iPhone',
+				'all': 'XGAPortrait2',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-XGA3': {
+			'suites': {
+				'all': 'XGAPortrait3',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+		},
+		'webUI-iPhone1': {
+			'suites': {
+				'all': 'iPhone1',
 			},
 			'extraEnvironment': {
 				'SCREEN_RESOLUTION': '375x812'
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
 		},
-		'webUI-IE11': {
+		'webUI-iPhone2': {
 			'suites': {
-				'webUI[R,T,F]*': 'Rename-Trash-Files',
-				'webUISharing*': 'Sharing',
+				'all': 'iPhone2',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+		'webUI-iPhone3': {
+			'suites': {
+				'all': 'iPhone3',
+			},
+			'extraEnvironment': {
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+		},
+		'webUI-IE11-1': {
+			'suites': {
+				'webUI[R,T,F]*': 'Rename-Trash-Files1',
+				'webUISharing*': 'Sharing1',
+			},
+			'browsers': [
+				'IE11',
+			],
+			'cronOnly': True,
+			'filterTags': '@smokeTest and not @skip and not @skipOnIE',
+		},
+		'webUI-IE11-2': {
+			'suites': {
+				'webUI[R,T,F]*': 'Rename-Trash-Files2',
+				'webUISharing*': 'Sharing2',
 			},
 			'browsers': [
 				'IE11',
