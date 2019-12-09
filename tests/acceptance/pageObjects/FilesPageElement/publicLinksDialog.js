@@ -205,7 +205,7 @@ module.exports = {
     isExpiryDateDisabled: async function (linkName, pastDate) {
       await this.clickLinkEditBtn(linkName)
       const [year, month, day] = pastDate.split(/-/)
-      let disabled
+      let disabled = false
       const iDay = parseInt(day)
       const yearSelector = this.setExpiryDateYearSelectorXpath(year)
       const monthSelector = this.setExpiryDateMonthSelectorXpath(month)
@@ -248,9 +248,7 @@ module.exports = {
             disabled = true
           }
         })
-      if (disabled) {
-        return disabled
-      } else { return false }
+      return disabled
     },
     /**
      * sets up public link share edit form
