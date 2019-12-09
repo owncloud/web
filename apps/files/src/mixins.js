@@ -24,7 +24,8 @@ export default {
     }
   },
   data: () => ({
-    queue: new PQueue({ concurrency: 1 }),
+    uploadQueue: new PQueue({ concurrency: 1 }),
+    directoryQueue: new PQueue({ concurrency: 1 }),
     uploadFileUniqueId: 0
   }),
   computed: {
@@ -226,9 +227,9 @@ export default {
           let p
 
           if (this.publicPage()) {
-            p = this.queue.add(() => this.$client.publicFiles.createFolder(this.rootPath, directory, this.publicLinkPassword))
+            p = this.directoryQueue.add(() => this.$client.publicFiles.createFolder(this.rootPath, directory, this.publicLinkPassword))
           } else {
-            p = this.queue.add(() => this.$client.files.createFolder(this.rootPath + directory))
+            p = this.directoryQueue.add(() => this.$client.files.createFolder(this.rootPath + directory))
           }
 
           createFolderPromises.push(p)
@@ -284,21 +285,21 @@ export default {
         const token = basePath.substr(0, tokenSplit)
         basePath = basePath.substr(tokenSplit + 1) || ''
         relativePath = join(basePath, relativePath)
-        promise = this.$client.publicFiles.putFileContents(token, relativePath, this.publicLinkPassword, file, {
+        promise = this.uploadQueue.add(() => this.$client.publicFiles.putFileContents(token, relativePath, this.publicLinkPassword, file, {
           onProgress: (progress) => {
             this.$_ocUpload_onProgress(progress, file)
           },
           overwrite: overwrite
-        })
+        }))
       } else {
         basePath = this.path || ''
         relativePath = join(basePath, relativePath)
-        promise = this.$client.files.putFileContents(relativePath, file, {
+        promise = this.uploadQueue.add(() => this.$client.files.putFileContents(relativePath, file, {
           onProgress: (progress) => {
             this.$_ocUpload_onProgress(progress, file)
           },
           overwrite: overwrite
-        })
+        }))
       }
 
       promise.then(e => {
