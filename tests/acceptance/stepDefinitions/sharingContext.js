@@ -745,7 +745,7 @@ Then('file/folder {string} should be marked as shared by {string} on the webUI',
   return client.page.sharedWithMePage().assertSharedByUser(element, sharer)
 })
 
-Then('the user {string} should not have created any shares', async function (user) {
+Then('user {string} should not have created any shares', async function (user) {
   const shares = await sharingHelper.getAllSharesSharedByUser(user)
   assert.strictEqual(shares.length, 0, 'There should not be any share, but there are')
 })
