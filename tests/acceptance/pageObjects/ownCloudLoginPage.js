@@ -41,7 +41,6 @@ module.exports = {
         await this
           .waitForElementVisible('@invalidCredentialsMessage')
           .getText('@invalidCredentialsMessage', (result) => {
-            console.log(result)
             errorMessage = result.value
           })
         return errorMessage
