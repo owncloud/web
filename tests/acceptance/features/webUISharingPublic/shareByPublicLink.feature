@@ -307,7 +307,7 @@ Feature: Share by public link
     And user "user1" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
-    And the user "user1" should not have created any shares
+    And user "user1" should not have created any shares
 
   Scenario: user tries to create a public link with Contributor role without entering share password while enforce password on read-write public share is enforced
     Given the setting "shareapi_enforce_links_password_read_write" of app "core" has been set to "yes"
@@ -315,7 +315,7 @@ Feature: Share by public link
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Contributor |
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
-    And the user "user1" should not have created any shares
+    And user "user1" should not have created any shares
 
   Scenario: user tries to create a public link with Editor Role without entering share password while enforce password on read-write public share is enforced
     Given the setting "shareapi_enforce_links_password_read_write_delete" of app "core" has been set to "yes"
@@ -323,7 +323,7 @@ Feature: Share by public link
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Editor |
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
-    And the user "user1" should not have created any shares
+    And user "user1" should not have created any shares
 
   Scenario: user tries to create a public link with Uploader role without entering share password while enforce password on write only public share is enforced
     Given the setting "shareapi_enforce_links_password_write_only" of app "core" has been set to "yes"
@@ -331,7 +331,7 @@ Feature: Share by public link
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Uploader |
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
-    And the user "user1" should not have created any shares
+    And user "user1" should not have created any shares
 
   Scenario: user creates a public link with Contributor Role without entering share password while enforce password on read only public share is enforced
     Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes"
@@ -660,7 +660,7 @@ Feature: Share by public link
     When the user tries to create a new public link for resource "simple-folder" using the webUI with
       | expireDate | +8 |
     Then the user should see an error message on the public link share dialog saying "Cannot set expiration date more than 7 days in the future"
-    And the user "user1" should not have created any shares
+    And user "user1" should not have created any shares
 
   Scenario: user cannot change the expiry date of an existing public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
