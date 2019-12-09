@@ -1,6 +1,7 @@
 const { client } = require('nightwatch-api')
 const { Given, Then, When } = require('cucumber')
 const loginHelper = require('../helpers/loginHelper')
+const assert = require('assert')
 
 Given(/^the user has browsed to the login page$/,
   () => {
@@ -40,8 +41,11 @@ Then('the files table should not be empty',
       .waitForElementVisible('@fileRows')
   })
 
-Then('the warning {string} should be displayed on the login page', function (message) {
-  return client.page.ownCloudLoginPage().assertLoginErrorMessage(message)
+Then('the warning {string} should be displayed on the login page', async function (expectedMessage) {
+  const actualMessage = await client.page.ownCloudLoginPage().getLoginErrorMessage()
+  return assert.strictEqual(
+    actualMessage, expectedMessage, `Error message miss-match, Expected: '${expectedMessage}', Found: '${actualMessage}'`
+  )
 })
 
 Then('the authentication page should be visible',
