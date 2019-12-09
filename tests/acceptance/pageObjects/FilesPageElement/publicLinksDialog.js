@@ -1,4 +1,3 @@
-const assert = require('assert')
 const util = require('util')
 const sharingHelper = require('../../helpers/sharingHelper')
 
@@ -195,15 +194,15 @@ module.exports = {
       return this
     },
     /**
-     * checks if the provided expiryDate is selectors are disabled or not
+     * checks if the given expiryDate is disabled or not
      *
-     * @param linkName name of the public link
-     * @param pastDate provided past date for inspection
+     * @param {string} linkName name of the public link
+     * @param {string} pastDate provided past date for inspection
      *  pastDate should be in form 2000-August-7 | 2000-Aug-7
      *  leading zeros before day are removed
-     * @returns {Promise<void>}
+     * @returns {Promise<boolean>}
      */
-    assertDisabledExpiryDate: async function (linkName, pastDate) {
+    isExpiryDateDisabled: async function (linkName, pastDate) {
       await this.clickLinkEditBtn(linkName)
       const [year, month, day] = pastDate.split(/-/)
       let disabled = false
@@ -227,7 +226,7 @@ module.exports = {
             disabled = true
           }
         })
-      if (disabled) { return }
+      if (disabled) { return disabled }
       await this
         .click(yearSelector)
         .click('@dateTimeOkButton')
@@ -239,7 +238,7 @@ module.exports = {
             disabled = true
           }
         })
-      if (disabled) { return }
+      if (disabled) { return disabled }
       await this
         .click(monthSelector)
         .click('@dateTimeOkButton')
@@ -249,9 +248,7 @@ module.exports = {
             disabled = true
           }
         })
-      assert.strictEqual(
-        disabled, true, 'Provided date is not disabled'
-      )
+      return disabled
     },
     /**
      * sets up public link share edit form
@@ -303,18 +300,23 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
     },
     /**
-     * checks if public link share with provided name is present
+     * checks if public link share with given name is present
      *
      * @param {string} linkName - Name of the public link share to be asserted
-     * @returns {*}
+     * @returns {boolean}
      */
-    assertPublicLinkNotPresent: function (linkName) {
+    isPublicLinkPresent: async function (linkName) {
       const fileNameSelectorXpath = this.elements.publicLinkContainer.selector + this.elements.publicLinkName.selector
-      return this
-        .waitForElementNotPresent({
-          selector: util.format(fileNameSelectorXpath, linkName),
-          locateStrategy: this.elements.publicLinkName.locateStrategy
-        })
+      let isPresent
+      await this
+        .waitForAnimationToFinish()
+        .api.elements(
+          this.elements.publicLinkName.locateStrategy,
+          util.format(fileNameSelectorXpath, linkName),
+          (result) => {
+            isPresent = result.value.length > 0
+          })
+      return isPresent
     },
     /**
      * creates a new public link

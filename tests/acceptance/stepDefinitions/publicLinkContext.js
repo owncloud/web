@@ -124,8 +124,13 @@ When('the user tries to edit expiration of the public link named {string} of fil
       .filesList()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
-    return client.page.FilesPageElement.publicLinksDialog()
-      .assertDisabledExpiryDate(linkName, pastDate)
+    const isDisabled = await client.page.FilesPageElement
+      .publicLinksDialog()
+      .isExpiryDateDisabled(linkName, pastDate)
+    return assert.ok(
+      isDisabled,
+      'Expected expiration date to be disabled but found not disabled'
+    )
   })
 
 When('the user {string} removes the public link named {string} of file/folder/resource {string} using the webUI',
@@ -139,9 +144,15 @@ When('the user {string} removes the public link named {string} of file/folder/re
       .removePublicLink(linkName)
   })
 
-Then('public link named {string} should not be listed on the public links list on the webUI', function (linkName) {
-  return client.page.FilesPageElement.publicLinksDialog()
-    .assertPublicLinkNotPresent(linkName)
+Then('public link named {string} should not be listed on the public links list on the webUI', async function (linkName) {
+  const isPresent = await client.page
+    .FilesPageElement
+    .publicLinksDialog()
+    .isPublicLinkPresent(linkName)
+  return assert.ok(
+    !isPresent,
+    `expected public-link '${linkName}' to be 'not listed' but got found`
+  )
 })
 
 Then(
