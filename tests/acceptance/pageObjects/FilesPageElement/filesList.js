@@ -104,18 +104,18 @@ module.exports = {
      *
      * @param {string} fileName
      */
-    deleteFile: async function (fileName) {
-      await this
+    deleteFile: function (fileName) {
+      return this
         .waitForFileVisible(fileName)
         .useXpath()
         .performFileAction(fileName, 'delete')
-        .waitForElementEnabled(
-          this.elements.deleteFileConfirmationBtn.selector,
-          'css selector'
-        )
-
+        .confirmDeletion()
+    },
+    confirmDeletion: async function () {
       const clickAction = function () {
-        return this.initAjaxCounters().click('@deleteFileConfirmationBtn')
+        return this.initAjaxCounters()
+          .waitForElementEnabled('@deleteFileConfirmationBtn')
+          .click('@deleteFileConfirmationBtn')
           .waitForOutstandingAjaxCalls()
           .waitForElementNotVisible(
             this.elements.deleteFileConfirmationDialog.selector,
@@ -592,8 +592,7 @@ module.exports = {
     deleteImmediately: function (fileName) {
       return this.waitForFileVisible(fileName)
         .performFileAction(fileName, 'deleteImmediately')
-        .waitForElementVisible('@deleteFileConfirmationBtn')
-        .click('@deleteFileConfirmationBtn')
+        .confirmDeletion()
     },
     getVersions: function (filename) {
       const formattedFileRow = this.getFileRowSelectorByFileName(filename)
