@@ -101,6 +101,21 @@ export default {
         })
       })
     },
+    compareIds (a, b) {
+      if (!isNaN(a)) { // OC10 autoincrement id
+        return parseInt(a, 10) === parseInt(b, 10)
+      } else if (this.isOcisId(b)) {
+        return a === this.extractOpaqueId(b)
+      }
+
+      return false
+    },
+    isOcisId (id) {
+      return atob(id).split(':').length === 2
+    },
+    extractOpaqueId (id) {
+      return atob(id).split(':')[1]
+    },
     async $_ocUpload_addDropToQue (e) {
       const items = e.dataTransfer.items || e.dataTransfer.files
 

@@ -111,7 +111,7 @@ export default {
 
     $_links () {
       return this.links.filter(link => {
-        return parseInt(link.itemSource) === parseInt(this.highlightedFile.id)
+        return this.compareIds(link.itemSource, this.highlightedFile.id)
       })
     },
 
