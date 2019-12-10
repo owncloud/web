@@ -5,8 +5,8 @@
       <translate>Account</translate>
     </oc-sidebar-nav-item>
 
-    <oc-sidebar-nav-item icon="account_circle" target="/theme-config" :isolate="true">
-      <translate>Theme config</translate>
+    <oc-sidebar-nav-item icon="color_lens" target="/theme-config">
+      Theme config
     </oc-sidebar-nav-item>
 
     <oc-sidebar-nav-item id="logoutMenuItem" active icon="exit_to_app" @click="logout()" :isolate="true">{{ _logoutItemText }}</oc-sidebar-nav-item>
