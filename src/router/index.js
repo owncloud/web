@@ -4,6 +4,7 @@ import LoginPage from '../pages/login.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import AccessDeniedPage from '../pages/accessDenied.vue'
 import Account from '../pages/account.vue'
+import ThemeConfig from '../pages/themeConfig.vue'
 
 import store from '../store'
 
@@ -59,6 +60,13 @@ const router = new Router({
       name: 'account',
       components: {
         app: Account
+      }
+    },
+    {
+      path: '/theme-config',
+      name: 'themeConfig',
+      components: {
+        app: ThemeConfig
       }
     }
   ]

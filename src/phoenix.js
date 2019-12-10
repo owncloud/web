@@ -236,12 +236,6 @@ async function loadTheme () {
   
   style.type = 'text/css';
   style.appendChild(document.createTextNode(css));
-
-  // Initialise css custom properties ponyfill
-  // Needs to happen after appending the theme
-  cssVars({
-    shadowDOM: true
-  })
 }
 
 (async function () {
@@ -264,6 +258,13 @@ async function loadTheme () {
     await loadTheme()
 
     requirejs(apps, loadApps, requireError)
+
+    // Initialise css custom properties ponyfill
+    // Needs to happen after load of theme and apps
+    cssVars({
+      shadowDOM: true,
+      watch: true
+    })
   } catch (err) {
     router.push('missing-config')
     missingConfig()
