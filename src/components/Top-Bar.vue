@@ -1,7 +1,7 @@
 <template>
-  <oc-navbar id="oc-topbar" tag="header" class="oc-topbar">
+  <oc-navbar id="oc-topbar" tag="header" class="oc-topbar oc-background-primary">
     <oc-navbar-item position="left">
-      <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!publicPage()" ref="menubutton">
+      <oc-button icon="menu" variation="primary" class="oc-topbar-menu-burger uk-height-1-1 oc-background-primary" aria-label="Menu" @click="toggleSidebar(!isSidebarVisible)" v-if="!publicPage()" ref="menubutton">
         <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
       </oc-button>
     </oc-navbar-item>
@@ -81,3 +81,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .oc-background-primary {
+    background-color: var(--primary-background) !important;
+  }
+</style>

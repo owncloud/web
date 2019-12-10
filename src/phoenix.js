@@ -45,6 +45,9 @@ import { Drag, Drop } from 'vue-drag-drop'
 import DesignSystem from 'owncloud-design-system'
 import 'owncloud-design-system/dist/system/system.css'
 
+// --- Ponyfills ----
+import cssVars from 'css-vars-ponyfill'
+
 import wgxpath from 'wicked-good-xpath'
 wgxpath.install()
 
@@ -69,6 +72,7 @@ Vue.component('drop', Drop)
 
 let apps
 let config
+let theme
 const supportedLanguages = {
   en: 'English',
   de: 'Deutsch',
@@ -172,11 +176,7 @@ function loadApps () {
 
 
   // inject custom theme config into vuex
-  fetch(`themes/${config.theme}.json`)
-    .then(res => res.json())
-    .then(res => {
-      store.dispatch('loadTheme', res)
-    })
+  store.dispatch('loadTheme', theme)
 }
 
 function missingConfig () {
@@ -214,22 +214,54 @@ function requireError (err) {
   }
 }
 
+async function loadTheme () {
+  // Fetch the theme
+  await fetch(`themes/${config.theme}.json`)
+    .then(res => res.json())
+    .then(res => {
+      theme = res
+    })
+
+  // Append theme into head
+  const css = `
+  :root {
+    --primary-background: ${theme.colors.primaryBackground};
+    --primary-action: ${theme.colors.primaryAction};
+  }
+  `
+  const head = document.head || document.getElementsByTagName('head')
+  const style = document.createElement('style');
+  
+  head.appendChild(style);
+  
+  style.type = 'text/css';
+  style.appendChild(document.createTextNode(css));
+
+  // Initialise css custom properties ponyfill
+  // Needs to happen after appending the theme
+  cssVars({
+    shadowDOM: true
+  })
+}
+
 (async function () {
   try {
     config = await fetch('config.json').catch(() => {
       config.state = 'missing'
     })
     config = await config.json()
-
+    
     // Loads apps from internal server
     apps = config.apps.map((app) => {
       return `./apps/${app}/${app}.bundle.js`
     })
-
+    
     // Loads apps from external servers
     if (config.external_apps) {
       config.external_apps.map(app => apps.push(app.path))
     }
+    
+    await loadTheme()
 
     requirejs(apps, loadApps, requireError)
   } catch (err) {

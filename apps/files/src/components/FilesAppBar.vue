@@ -26,7 +26,7 @@
       <div class="uk-width-auto">
         <div class="uk-button-group" :key="actionsKey">
           <template v-if="$_ocFilesAppBar_showActions">
-            <oc-button v-if="canUpload && hasFreeSpace" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
+            <oc-button v-if="canUpload && hasFreeSpace" variation="primary" id="new-file-menu-btn" class="oc-action-primary"><translate>+ New</translate></oc-button>
             <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
             <oc-drop toggle="#new-file-menu-btn" mode="click">
               <oc-nav>
@@ -64,7 +64,7 @@
               :key="searchBarKey"
             />
           </oc-drop>
-          <oc-button id="oc-filter-list-btn" icon="filter_list" />
+          <oc-button id="oc-filter-list-btn" class="oc-action-secondary" icon="filter_list" />
           <file-filter-menu />
         </div>
       </div>
@@ -543,3 +543,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .oc-action-primary {
+    background-color: var(--primary-action) !important;
+  }
+</style>

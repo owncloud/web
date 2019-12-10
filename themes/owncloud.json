@@ -5,5 +5,9 @@
   },
   "logo": {
     "favicon": "themes/owncloud/favicon.jpg"
+  },
+  "colors": {
+    "primaryBackground": "#1f2939",
+    "primaryAction": "#0066ff"
   }
 }
