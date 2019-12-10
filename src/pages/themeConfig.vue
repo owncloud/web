@@ -9,16 +9,11 @@
 <script>
 export default {
   name: 'ThemeConfig',
-  computed: {
-    color () {
-      return this.$refs.colorInput.value
-    }
-  },
   methods: {
     saveColor () {
       const css = `
       :root {
-        --test-var: ${this.color};
+        --test-var: ${this.$refs.colorInput.value};
       }
       `
       const head = document.head || document.getElementsByTagName('head')
