@@ -10,12 +10,16 @@
  * @returns
  */
 exports.command = function setValueBySingleKeys (selector, inputValue) {
-  const chars = inputValue.split('')
-  if (chars.length === 0) {
-    return this.setValue(selector, '')
+  if (inputValue) {
+    const chars = inputValue.split('').slice(0, -2)
+    const charsEnd = inputValue.split('').slice(-2)
+    const charPromise = chars.map((char) => this.setValue(selector, char)) || []
+
+    // Sometimes the autocomplete list is not displayed when the characters are entered very fast
+    // So we add a small pause for entering the last two characters
+    const charEndPromise = charsEnd.map((char) => this.setValue(selector, char).pause(100)) || []
+
+    return Promise.all(charPromise.concat(charEndPromise))
   }
-  return Promise.all(chars.map((char) => {
-    return this.setValue(selector, char)
-  })
-  )
+  return this.pause(1)
 }

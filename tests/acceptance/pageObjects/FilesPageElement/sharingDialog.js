@@ -1,5 +1,6 @@
 const groupSharePostfix = '\nGroup'
 const userSharePostfix = '\nUser'
+const federationSharePostfix = '\nRemote user'
 const util = require('util')
 const _ = require('lodash')
 
@@ -79,7 +80,9 @@ module.exports = {
      * @param {string} sharee
      * @param {boolean} [shareWithGroup=false]
      */
-    selectCollaboratorForShare: async function (sharee, shareWithGroup = false) {
+    selectCollaboratorForShare: async function (receiver, shareWithGroup = false, remoteShare = false) {
+      let sharee = receiver
+      if (remoteShare) sharee = util.format('%s@%s', receiver, this.api.globals.remote_backend_url)
       // We need waitForElementPresent here.
       // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
       await this.enterAutoComplete(sharee)
@@ -103,7 +106,8 @@ module.exports = {
         let wasFound = false
         const webElementId = webElementIdList[index]
         await this.api.elementIdText(webElementId, (text) => {
-          const suffix = (shareWithGroup === true) ? groupSharePostfix : userSharePostfix
+          let suffix = (shareWithGroup === true) ? groupSharePostfix : userSharePostfix
+          suffix = (remoteShare === true) ? federationSharePostfix : suffix
           if (text.value === sharee + suffix) {
             wasFound = true
             this.api
@@ -143,9 +147,9 @@ module.exports = {
      * @param {string} role
      * @param {string} permissions
      */
-    shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions) {
+    shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions, remote = false) {
       await this.clickCreateShare()
-      await this.selectCollaboratorForShare(sharee, shareWithGroup)
+      await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
       await this.selectRoleForNewCollaborator(role)
       if (permissions === undefined) {
         return this.confirmShare()

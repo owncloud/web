@@ -1,6 +1,7 @@
 const { client } = require('nightwatch-api')
 const fetch = require('node-fetch')
 const httpHelper = require('../helpers/httpHelper')
+const backendHelper = require('./backendHelper')
 const convert = require('xml-js')
 const _ = require('lodash/object')
 const { resolve, normalize, join } = require('../helpers/path')
@@ -10,9 +11,10 @@ const occHelper = require('../helpers/occHelper')
  *
  * @param {string} userId
  * @param {string} element
+ * @param {string} server - (REMOTE/LOCAL) server to use for dav path
  */
 exports.createDavPath = function (userId, element) {
-  return client.globals.backend_url +
+  return backendHelper.getCurrentBackendUrl() +
     '/remote.php/dav/files/' + userId + '/' + encodeURIComponent(element)
     .replace(/%2F/g, '/')
 }
