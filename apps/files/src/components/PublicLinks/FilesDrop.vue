@@ -145,14 +145,14 @@ export default {
       this.uploadedFilesChangeTracker++
       this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'init' })
 
-      this.$client.publicFiles.putFileContents(this.publicLinkToken, event.name, this.publicLinkPassword, event, {
+      this.uploadQueue.add(() => this.$client.publicFiles.putFileContents(this.publicLinkToken, event.name, this.publicLinkPassword, event, {
         // automatically rename in case of duplicates
         headers: { 'OC-Autorename': 1 },
         onProgress: (progressEvent) => {
           this.uploadedFilesChangeTracker++
           this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'uploading' })
         }
-      }).then(e => {
+      })).then(e => {
         this.uploadedFilesChangeTracker++
         this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'done' })
       }).catch(e => {
