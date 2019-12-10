@@ -47,7 +47,7 @@
                 &dash; {{ filesTotalSize | fileSize }}
               </template>
             </div>
-            <div v-if="!publicPage()" class="uk-visible@s uk-width-2-3 uk-width-1-2@xl uk-text-meta uk-flex" :class="{ 'uk-visible@xl' : _sidebarOpen  }">
+            <div v-if="quotaVisible" class="uk-visible@s uk-width-2-3 uk-width-1-2@xl uk-text-meta uk-flex" :class="{ 'uk-visible@xl' : _sidebarOpen  }">
               <span class="uk-margin-small-right">
                 <translate>Used space:</translate> {{ quota.used | fileSize }}
                 <template v-if="quota.definition !== 'default' && quota.definition !== 'none'">
@@ -158,11 +158,19 @@ export default {
   },
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['loadingFolder', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount']),
+    ...mapGetters('Files', ['loadingFolder', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount', 'currentFolder']),
     ...mapGetters(['configuration']),
 
     item () {
       return this.$route.params.item
+    },
+
+    quotaVisible () {
+      return (
+        !this.publicPage() &&
+        this.currentFolder &&
+        !this.currentFolder.isMounted()
+      )
     }
   },
   watch: {
