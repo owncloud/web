@@ -6,8 +6,8 @@
           <oc-table-cell shrink type="head">
             <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" @click.native="$_ocTrashbin_toggleAll" :value="all" />
           </oc-table-cell>
-          <oc-table-cell type="head" class="uk-text-truncate" v-translate>Name</oc-table-cell>
-          <oc-table-cell shrink type="head" class="uk-text-nowrap" v-translate>Deletion Time</oc-table-cell>
+          <oc-table-cell type="head" class="uk-text-nowrap" v-translate>Name</oc-table-cell>
+          <oc-table-cell shrink type="head" class="uk-text-nowrap uk-visible@m" v-translate>Deletion Time</oc-table-cell>
           <oc-table-cell shrink type="head" v-translate>Actions</oc-table-cell>
         </oc-table-row>
       </oc-table-group>
@@ -20,16 +20,42 @@
             <oc-file :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name"
                     :filename="item.name" :icon="fileTypeIcon(item)" :key="item.originalLocation" />
           </oc-table-cell>
-          <oc-table-cell class="uk-text-meta uk-text-nowrap">
+          <oc-table-cell class="uk-text-meta uk-text-nowrap uk-visible@m">
             {{ formDateFromNow(item.deleteTimestamp) }}
           </oc-table-cell>
           <oc-table-cell class="uk-text-meta uk-text-nowrap">
-            <oc-button icon="restore" @click="$_ocTrashbin_restoreFile(item)">
+            <oc-button icon="restore" class="uk-visible@m" @click="$_ocTrashbin_restoreFile(item)">
               <translate>Restore</translate>
             </oc-button>
-            <oc-button icon="delete" @click="$_ocTrashbin_deleteFile(item)" ariaLabel="Delete">
+            <oc-button icon="delete" class="uk-visible@m" @click="$_ocTrashbin_deleteFile(item)" ariaLabel="Delete">
               <translate>Delete immediately</translate>
             </oc-button>
+            <oc-button
+              :id="'files-trashbin-action-button-small-resolution-' + index"
+              icon="more_vert"
+              class="uk-hidden@m"
+              :aria-label="'show-file-actions'"
+              @click.stop
+            />
+            <oc-drop
+              v-if="!ocDialogIsOpen"
+              :toggle="'#files-trashbin-action-button-small-resolution-' + index"
+              :options="{ offset: 0 }"
+              position="bottom-right"
+            >
+              <ul class="uk-list">
+                <li>
+                  <oc-button icon="restore" class="uk-width-1-1" @click="$_ocTrashbin_restoreFile(item)" ariaLabel="Restore">
+                    <translate>Restore</translate>
+                  </oc-button>
+                </li>
+                <li>
+                  <oc-button icon="delete" class="uk-width-1-1" @click="$_ocTrashbin_deleteFile(item)" ariaLabel="Delete">
+                    <translate>Delete immediately</translate>
+                  </oc-button>
+                </li>
+              </ul>
+            </oc-drop>
           </oc-table-cell>
         </oc-table-row>
       </oc-table-group>
@@ -37,7 +63,7 @@
     <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="trashbinDeleteMessage !== ''"
                       :oc-content="trashbinDeleteMessage" :oc-has-input="false" :ocTitle="_deleteDialogTitle"
                       ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="$_ocTrashbin_clearTrashbinConfirmation"
-                      @oc-cancel="setTrashbinDeleteMessage('')"
+                      @oc-cancel="$_ocTrashbin_cancelTrashbinConfirmation"
     />
   </div>
 </template>
@@ -54,7 +80,8 @@ export default {
 
   data () {
     return {
-      queue: new PQueue({ concurrency: 4 })
+      queue: new PQueue({ concurrency: 4 }),
+      ocDialogIsOpen: false
     }
   },
 
@@ -103,6 +130,7 @@ export default {
       })
     },
     $_ocTrashbin_deleteFile (item) {
+      this.ocDialogIsOpen = true
       this.resetFileSelection()
       this.addFileSelection(item)
 
@@ -132,6 +160,7 @@ export default {
 
     $_ocTrashbin_clearTrashbinConfirmation (files = this.selectedFiles) {
       // TODO: use clear all if all files are selected
+      this.ocDialogIsOpen = false
       const deleteOps = []
 
       const self = this
@@ -171,6 +200,11 @@ export default {
         this.resetFileSelection()
         this.setTrashbinDeleteMessage('')
       })
+    },
+
+    $_ocTrashbin_cancelTrashbinConfirmation () {
+      this.setTrashbinDeleteMessage('')
+      this.ocDialogIsOpen = false
     },
 
     $_ocTrashbin_restoreFile (file) {
