@@ -42,8 +42,8 @@ Feature: Sharing files and folders with internal users
     Then folder "simple-folder (2)" should be listed on the webUI
     And folder "simple-empty-folder (2)" should be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then the folder "simple-folder (2)" should be in "Accepted" state on the webUI
-    And the folder "simple-empty-folder (2)" should be in "Accepted" state on the webUI
+    Then folder "simple-folder (2)" shared by "User One" should be in "Accepted" state on the webUI
+    And folder "simple-empty-folder (2)" shared by "User One" should be in "Accepted" state on the webUI
 
   @smokeTest
   Scenario: reject an offered share
@@ -55,6 +55,6 @@ Feature: Sharing files and folders with internal users
     Then folder "simple-folder (2)" should not be listed on the webUI
     And folder "simple-empty-folder (2)" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then the folder "simple-folder" should be in "Declined" state on the webUI
-    And the folder "simple-empty-folder" should be in "Declined" state on the webUI
+    Then folder "simple-folder" shared by "User One" should be in "Declined" state on the webUI
+    And folder "simple-empty-folder" shared by "User One" should be in "Declined" state on the webUI
 

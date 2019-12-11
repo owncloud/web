@@ -207,7 +207,7 @@ Feature: accept/decline shares coming from internal users
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "user1" has shared file "lorem.txt" with user "user2"
     When the user browses to the shared-with-me page using the webUI
-    Then the file "lorem.txt" should be in "Pending" state on the webUI
+    Then file "lorem.txt" shared by "User One" should be in "Pending" state on the webUI
     When the user browses to the files page
     Then file "lorem (2).txt" should not be listed on the webUI
 
@@ -215,7 +215,7 @@ Feature: accept/decline shares coming from internal users
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "user1" has shared file "lorem.txt" with user "user2"
     When the user browses to the shared-with-me page using the webUI
-    Then the file "lorem.txt" should be in "Pending" state on the webUI
+    Then file "lorem.txt" shared by "User One" should be in "Pending" state on the webUI
     When the user browses to the files page
     Then file "lorem (2).txt" should not be listed on the webUI
 
@@ -234,8 +234,8 @@ Feature: accept/decline shares coming from internal users
     And user "user1" has shared file "testimage.jpg" with user "user2"
     And the user has browsed to the shared-with-me page
     When the user declines share "lorem.txt" offered by user "User One" using the webUI
-    Then the file "lorem.txt" should be in "Declined" state on the webUI
-    And the file "testimage.jpg" should be in "Pending" state on the webUI
+    Then file "lorem.txt" shared by "User One" should be in "Declined" state on the webUI
+    And file "testimage.jpg" shared by "User One" should be in "Pending" state on the webUI
     When the user browses to the files page
     Then file "lorem (2).txt" should not be listed on the webUI
     And file "testimage (2).jpg" should not be listed on the webUI
@@ -246,10 +246,10 @@ Feature: accept/decline shares coming from internal users
     And user "user1" has shared file "testimage.jpg" with user "user2"
     And the user has browsed to the shared-with-me page
     When the user accepts share "lorem.txt" offered by user "User One" using the webUI
-    Then the file "lorem (2).txt" should be in "Accepted" state on the webUI
-    And the file "testimage.jpg" should be in "Pending" state on the webUI
-    And the file "lorem (2).txt" should be in "Accepted" state on the webUI after a page reload
-    And the file "testimage.jpg" should be in "Pending" state on the webUI after a page reload
+    Then file "lorem (2).txt" shared by "User One" should be in "Accepted" state on the webUI
+    And file "testimage.jpg" shared by "User One" should be in "Pending" state on the webUI
+    And the file "lorem (2).txt" shared by "User One" should be in "Accepted" state on the webUI after a page reload
+    And the file "testimage.jpg" shared by "User One" should be in "Pending" state on the webUI after a page reload
     When the user browses to the files page
     Then file "lorem (2).txt" should be listed on the webUI
     And file "testimage (2).jpg" should not be listed on the webUI
@@ -261,8 +261,8 @@ Feature: accept/decline shares coming from internal users
     And user "user2" has declined the share "lorem.txt" offered by user "user1"
     And the user has browsed to the shared-with-me page
     When the user accepts share "lorem.txt" offered by user "User One" using the webUI
-    Then the file "lorem (2).txt" should be in "Accepted" state on the webUI
-    And the file "testimage.jpg" should be in "Pending" state on the webUI
+    Then file "lorem (2).txt" shared by "User One" should be in "Accepted" state on the webUI
+    And file "testimage.jpg" shared by "User One" should be in "Pending" state on the webUI
     When the user browses to the files page
     Then file "lorem (2).txt" should be listed on the webUI
     And file "testimage (2).jpg" should not be listed on the webUI
@@ -278,8 +278,8 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem (2).txt" should not be listed on the webUI
     And file "testimage (2).jpg" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then the file "lorem.txt" should be in "Declined" state on the webUI
-    And the file "testimage.jpg" should be in "Pending" state on the webUI
+    Then file "lorem.txt" shared by "User One" should be in "Declined" state on the webUI
+    And file "testimage.jpg" shared by "User One" should be in "Pending" state on the webUI
 
   Scenario:  shared file status is changed to declined when user deletes the file
     Given user "user1" has shared file "lorem.txt" with user "user2"
