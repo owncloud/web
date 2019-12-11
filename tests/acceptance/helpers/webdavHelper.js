@@ -112,7 +112,7 @@ exports.propfind = function (path, userId, properties, folderDepth = 1) {
  *
  * @param {string} user
  */
-exports.getTrashBinElements = function (user) {
+exports.getTrashBinElements = function (user, depth = 2) {
   return new Promise((resolve) => {
     exports.propfind(`/trash-bin/${user}`, user,
       [
@@ -120,7 +120,7 @@ exports.getTrashBinElements = function (user) {
         'oc:trashbin-original-location',
         'oc:trashbin-delete-timestamp',
         'd:getlastmodified'
-      ], 2)
+      ], depth)
       .then(str => {
         const trashData = convert.xml2js(str, { compact: true })['d:multistatus']['d:response']
         const trashItems = []
@@ -133,6 +133,7 @@ exports.getTrashBinElements = function (user) {
             lastModified: trash['d:propstat']['d:prop']['d:getlastmodified']._text
           })
         })
+        console.log(trashItems)
         resolve(trashItems)
       })
   })

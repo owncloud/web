@@ -910,6 +910,6 @@ Then('as {string} only files containing pattern {string} in their name should be
 Then('all the files and folders containing pattern {string} in their name should be listed in the trash', async function (pattern) {
   const allListedFilesFolders = await getAllFilesListed()
   const trashbinElems = await getAllTrashbinElements()
-  console.log(trashbinElems)
-  assert.strictEqual(allListedFilesFolders, trashbinElems)
+  const filesMatchingPattern = trashbinElems.filter(elems => elems.includes(pattern))
+  assert.deepStrictEqual(allListedFilesFolders, filesMatchingPattern)
 })
