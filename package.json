@@ -75,7 +75,7 @@
     "node-fetch": "^2.6.0",
     "npm-run-all": "^4.1.5",
     "oidc-client": "^1.9.1",
-    "owncloud-design-system": "^1.0.0-993",
+    "owncloud-design-system": "^1.0.0-1030",
     "owncloud-sdk": "^1.0.0-368",
     "p-limit": "^2.2.1",
     "parse-json": "^5.0.0",
