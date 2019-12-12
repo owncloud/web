@@ -648,11 +648,11 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     linkToPublicLinksTag: {
-      selector: '//div[@class="sidebar-container"]//a[normalize-space(.)="Links"]',
+      selector: '//div[@class="oc-tabbed"]//button[normalize-space(.)="Links"]',
       locateStrategy: 'xpath'
     },
     sidebarCloseBtn: {
-      selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
+      selector: '//div[@class="oc-tabbed"]//div[@class="action"]//button',
       locateStrategy: 'xpath'
     },
     sidebar: {
@@ -665,11 +665,11 @@ module.exports = {
       selector: '#files-sidebar-private-link-icon-copied'
     },
     sidebarLinksTab: {
-      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Links")]',
+      selector: '//div[@class="oc-tabbed"]//button[contains(text(),"Links")]',
       locateStrategy: 'xpath'
     },
     sidebarCollaboratorsTab: {
-      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Collaborators")]',
+      selector: '//div[@class="oc-tabbed"]//a[button(text(),"Collaborators")]',
       locateStrategy: 'xpath'
     },
     versionsElement: {

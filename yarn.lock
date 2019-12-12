@@ -6443,9 +6443,9 @@ osenv@^0.1.4:
     os-tmpdir "^1.0.0"
 
 owncloud-design-system@^1.0.0-993:
-  version "1.0.0-1007"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-1007.tgz#70bf85dd6a8dc99ee0d4f3ffc741733ac493ba4b"
-  integrity sha512-v2u+jmFOxS9op0B9O0XEwgZsQxOaO+xOvB/LErL6yDfbZSa7TSZAfpYLBBsPXS1krJF04gGUiVhBwJm3eIhMDQ==
+  version "1.0.0-1030"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-1030.tgz#fd61d2e2d3c5caf2e453ae320f1737263949a8ac"
+  integrity sha512-jjQBk/FnsG0JmRJmut4mFP7CTh2s2uOVE81wCYCwQP11JwCusR+1/75fECJUZR2Q2GXLD6ytd/VvaSA9XhyFWA==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.7.0"
@@ -7015,9 +7015,9 @@ postcss@^6.0.20:
     supports-color "^5.4.0"
 
 postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.2:
-  version "7.0.23"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.23.tgz#9f9759fad661b15964f3cfc3140f66f1e05eadc1"
-  integrity sha512-hOlMf3ouRIFXD+j2VJecwssTwbvsPGJVMzupptg+85WA+i7MwyrydmQAgY3R+m0Bc0exunhbJmijy8u8+vufuQ==
+  version "7.0.24"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.24.tgz#972c3c5be431b32e40caefe6c81b5a19117704c2"
+  integrity sha512-Xl0XvdNWg+CblAXzNvbSOUvgJXwSjmbAKORqyw9V2AlHrm1js2gFw9y3jibBAhpKZi8b5JzJCVh/FyzPsTtgTA==
   dependencies:
     chalk "^2.4.2"
     source-map "^0.6.1"
