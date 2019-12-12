@@ -4,7 +4,7 @@
       <oc-table-group>
         <oc-table-row>
           <oc-table-cell shrink type="head">
-            <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" @click.native="$_ocTrashbin_toggleAll" :value="all" />
+            <oc-checkbox :hideLabel="true" class="uk-margin-small-left" id="filelist-check-all" @click.native="$_ocTrashbin_toggleAll" :value="all" />
           </oc-table-cell>
           <oc-table-cell type="head" class="uk-text-nowrap" v-translate>Name</oc-table-cell>
           <oc-table-cell shrink type="head" class="uk-text-nowrap uk-visible@m" v-translate>Deletion Time</oc-table-cell>
@@ -14,7 +14,7 @@
       <oc-table-group>
         <oc-table-row v-for="(item, index) in fileData" :key="index" class="file-row">
           <oc-table-cell>
-            <oc-checkbox class="uk-margin-small-left" @change.native="$_ocTrashbin_toggleFileSelect(item)" :value="selectedFiles.indexOf(item) >= 0" />
+            <oc-checkbox :hideLabel="true" class="uk-margin-small-left" @change.native="$_ocTrashbin_toggleFileSelect(item)" :value="selectedFiles.indexOf(item) >= 0" />
           </oc-table-cell>
           <oc-table-cell class="uk-text-truncate">
             <oc-file :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name"
