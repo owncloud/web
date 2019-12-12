@@ -133,7 +133,6 @@ exports.getTrashBinElements = function (user, depth = 2) {
             lastModified: trash['d:propstat']['d:prop']['d:getlastmodified']._text
           })
         })
-        console.log(trashItems)
         resolve(trashItems)
       })
   })
