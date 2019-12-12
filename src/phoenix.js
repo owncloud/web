@@ -170,6 +170,8 @@ function loadApps () {
     render: h => h(Phoenix)
   })
 
+  // externalize Vue - this is not the Vue instance but the class
+  window.Vue = Vue
 
   // inject custom theme config into vuex
   fetch(`themes/${config.theme}.json`)
@@ -230,6 +232,10 @@ function requireError (err) {
     if (config.external_apps) {
       config.external_apps.map(app => apps.push(app.path))
     }
+
+    // provide global config object
+    // TODO: frozen object would be great ...
+    window.phoenixConfig = config
 
     requirejs(apps, loadApps, requireError)
   } catch (err) {
