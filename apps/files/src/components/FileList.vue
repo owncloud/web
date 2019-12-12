@@ -6,7 +6,7 @@
           <thead>
             <oc-table-row>
               <oc-table-cell shrink type="head">
-                <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" labelVisuallyHidden="true" :label="labelSelectAllItems" @click.native="toggleAll" :value="selectedAll" />
+                <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" :hideLabel="true" :label="labelSelectAllItems" @click.native="toggleAll" :value="selectedAll" />
               </oc-table-cell>
               <slot name="headerColumns"/>
               <oc-table-cell shrink type="head" :class="{ 'uk-visible@s' : compactMode }" v-translate>Actions</oc-table-cell>
@@ -15,7 +15,7 @@
           <oc-table-group>
             <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item, $event)" :id="'file-row-' + item.id">
               <oc-table-cell>
-                <oc-checkbox class="uk-margin-small-left" @click.stop @change.native="toggleFileSelect(item)" :value="selectedFiles.indexOf(item) >= 0" :label="labelSelectSingleItem(item)"/>
+                <oc-checkbox :hideLabel="true" class="uk-margin-small-left" @click.stop @change.native="toggleFileSelect(item)" :value="selectedFiles.indexOf(item) >= 0" :label="labelSelectSingleItem(item)"/>
               </oc-table-cell>
               <slot name="rowColumns" :item="item" :index="index" />
               <oc-table-cell :class="{ 'uk-visible@s' : compactMode }" class="uk-position-relative">
