@@ -183,6 +183,7 @@ module.exports = {
         .click('@filterListButton')
         .waitForElementVisible('@hiddenFilesLabel')
         .click('@hiddenFilesCheckbox')
+        .click('@filterListButton')
     },
     /**
      *
@@ -333,6 +334,26 @@ module.exports = {
       return this
         .waitForElementVisible('@restorePreviousVersion')
         .click('@restorePreviousVersion')
+    },
+    filterElementsList: function (input) {
+      return this.initAjaxCounters()
+        .click('@filterListButton')
+        .waitForElementVisible('@filterTextField')
+        .clearValue('@filterTextField')
+        .setValue('@filterTextField', input)
+        .waitForOutstandingAjaxCalls()
+        // This click is for closing the filter list
+        .click('@filterListButton')
+    },
+    getAllListedResources: async function () {
+      const allFileRows = await this.api.page.FilesPageElement.filesList().getListedFilesFolders()
+      const allFilesListed = []
+      for (const elemId of allFileRows.value) {
+        await this.api.elementIdText(elemId.ELEMENT, function (result) {
+          allFilesListed.push(result.value)
+        })
+      }
+      return allFilesListed
     }
   },
   elements: {
@@ -481,6 +502,9 @@ module.exports = {
     tabsInSideBar: {
       selector: '//div[@class="sidebar-container"]//li/a',
       locateStrategy: 'xpath'
+    },
+    filterTextField: {
+      selector: '#oc-filter-search .oc-search-input'
     }
   }
 }
