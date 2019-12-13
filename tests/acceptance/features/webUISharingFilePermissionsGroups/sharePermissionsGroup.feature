@@ -34,7 +34,7 @@ Feature: Sharing files with internal groups with permissions
     And group "grp2" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
     And user "User Three" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
     And user "user2" should have received a share with these details:
-    | field       | value                |
+      | field       | value                |
     | uid_owner   | user1                |
     | share_with  | grp2                 |
     | file_target | /lorem (2).txt       |

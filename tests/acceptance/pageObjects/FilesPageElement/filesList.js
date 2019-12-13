@@ -48,21 +48,23 @@ module.exports = {
     performFileAction: function (fileName, action) {
       const { btnSelectorHighResolution, btnSelectorLowResolution, fileActionsBtnSelector } =
         this.getFileRowButtonSelectorsByFileName(fileName, action)
-
-      return this.initAjaxCounters()
+      let isVisiblee = false
+      this.initAjaxCounters()
         .useXpath()
         .isVisible(fileActionsBtnSelector, (result) => {
-          if (result.value === true) {
-            this
-              .click(fileActionsBtnSelector)
-              .waitForElementVisible(btnSelectorLowResolution)
-              .click(btnSelectorLowResolution)
-          } else {
-            this
-              .waitForElementVisible(btnSelectorHighResolution)
-              .click(btnSelectorHighResolution)
-          }
+          console.log(result)
+          isVisiblee = result.value
         })
+      if (isVisiblee) {
+        this
+          .angryClick(fileActionsBtnSelector)
+          .waitForElementVisible(btnSelectorLowResolution)
+          .click(btnSelectorLowResolution)
+      } else {
+        this
+          .waitForElementVisible(btnSelectorHighResolution)
+          .click(btnSelectorHighResolution)
+      }
     },
 
     /**
@@ -227,11 +229,14 @@ module.exports = {
         timeout = parseInt(timeout, 10)
       }
       try {
+        console.log('here')
         this.click({
           selector: '@sidebarCloseBtn',
           timeout: timeout
         })
+        console.log('here1')
       } catch (e) {
+        console.log('here2')
         // do nothing
       }
       return this.api.page.FilesPageElement.filesList()
