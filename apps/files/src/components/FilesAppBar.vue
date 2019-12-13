@@ -28,15 +28,17 @@
           <template v-if="$_ocFilesAppBar_showActions">
             <oc-button v-if="canUpload && hasFreeSpace" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
             <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
-            <oc-drop toggle="#new-file-menu-btn" mode="click">
+            <oc-drop drop-id="new-file-menu-drop" toggle="#new-file-menu-btn" mode="click" closeOnClick>
               <oc-nav>
                 <file-upload :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
                 <folder-upload v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
                 <oc-nav-item @click="showCreateFolderDialog" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
                 <oc-nav-item v-for="(newFileHandler, key) in newFileHandlers"
                   :key="key"
-                  @click="showCreateFileDialog(newFileHandler.ext, newFileHandler.action)" id="new-file-btn" icon="save">
-                  {{ newFileHandler.menuTitle($gettext) }}</oc-nav-item>
+                  @click="showCreateFileDialog(newFileHandler.ext, newFileHandler.action)"
+                  :class="'new-file-btn-' + newFileHandler.ext"
+                  icon="save"
+                >{{ newFileHandler.menuTitle($gettext) }}</oc-nav-item>
               </oc-nav>
             </oc-drop>
           </template>
@@ -69,9 +71,43 @@
         </div>
       </div>
     </oc-grid>
-    <oc-dialog-prompt name="overwrite-dialog" :oc-active="overwriteDialogMessage !== null" :oc-has-input="false" ocCancelId="files-overwrite-cancel" ocConfirmId="files-overwrite-confirm" :ocTitle="overwriteDialogTitle" :oc-content="overwriteDialogMessage" @oc-confirm="$_ocUpload_confirmOverwrite(true)" @oc-cancel="$_ocUpload_confirmOverwrite(false)" />
-    <oc-dialog-prompt name="new-folder-dialog" :oc-active="createFolder" v-model="newFolderName" ocInputId="new-folder-input" ocConfirmId="new-folder-ok" :ocLoading="fileFolderCreationLoading" :ocError="newFolderErrorMessage" :ocTitle="$_createFolderDialogTitle" :ocInputPlaceholder="$_createFolderDialogPlaceholder" @oc-confirm="addNewFolder" @oc-cancel="createFolder = false"></oc-dialog-prompt>
-    <oc-dialog-prompt name="new-file-dialog" :oc-active="createFile" v-model="newFileName" :ocLoading="fileFolderCreationLoading" :ocError="newFileErrorMessage" :ocTitle="$_createFileDialogTitle" :ocInputPlaceholder="$_createFileDialogTitle" @oc-confirm="addNewFile" @oc-cancel="createFile = false"></oc-dialog-prompt>
+    <oc-dialog-prompt
+      name="overwrite-dialog"
+      :oc-active="overwriteDialogMessage !== null"
+      :oc-has-input="false"
+      ocCancelId="files-overwrite-cancel"
+      ocConfirmId="files-overwrite-confirm"
+      :ocTitle="overwriteDialogTitle"
+      :oc-content="overwriteDialogMessage"
+      @oc-confirm="$_ocUpload_confirmOverwrite(true)"
+      @oc-cancel="$_ocUpload_confirmOverwrite(false)"
+    />
+    <oc-dialog-prompt
+      name="new-folder-dialog"
+      :oc-active="createFolder"
+      v-model="newFolderName"
+      ocInputId="new-folder-input"
+      ocConfirmId="new-folder-ok"
+      :ocLoading="fileFolderCreationLoading"
+      :ocError="newFolderErrorMessage"
+      :ocTitle="$_createFolderDialogTitle"
+      :ocInputPlaceholder="$_createFolderDialogPlaceholder"
+      :ocInputLabel="$_createFolderDialogLabel"
+      @oc-confirm="addNewFolder"
+      @oc-cancel="createFolder = false"
+    />
+    <oc-dialog-prompt
+      name="new-file-dialog"
+      :oc-active="createFile"
+      v-model="newFileName"
+      :ocLoading="fileFolderCreationLoading"
+      :ocError="newFileErrorMessage"
+      :ocTitle="$_createFileDialogTitle"
+      :ocInputPlaceholder="$_createFileDialogPlaceholder"
+      :ocInputLabel="$_createFileDialogLabel"
+      @oc-confirm="addNewFile"
+      @oc-cancel="createFile = false"
+    />
   </div>
 </template>
 
@@ -123,11 +159,17 @@ export default {
     $_createFolderDialogPlaceholder () {
       return this.$gettext('Enter new folder name…')
     },
+    $_createFolderDialogLabel () {
+      return this.$gettext('Folder name')
+    },
     $_createFolderDialogTitle () {
       return this.$gettext('Create new folder…')
     },
     $_createFileDialogPlaceholder () {
       return this.$gettext('Enter new file name…')
+    },
+    $_createFileDialogLabel () {
+      return this.$gettext('File name')
     },
     $_createFileDialogTitle () {
       return this.$gettext('Create new file…')

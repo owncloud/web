@@ -172,7 +172,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     clearErrorMessage: {
-      selector: '//a[contains(@class, "oc-alert-close-icon")]',
+      selector: '//*[contains(@class, "oc-alert-close-icon")]',
       locateStrategy: 'xpath'
     },
     notificationBell: {

@@ -77,10 +77,10 @@ module.exports = {
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFileButton')
         .click('@newFileButton')
-        .waitForElementVisible('@newFileInput')
+        .waitForElementVisible('@newFileInputField')
       if (name !== null) {
-        this.clearValueWithEvent('@newFileInput')
-        this.setValue('@newFileInput', name)
+        this.clearValueWithEvent('@newFileInputField')
+        this.setValue('@newFileInputField', name)
       }
       this
         .click('@newFileOkButton')
@@ -332,8 +332,10 @@ module.exports = {
     },
     restoreToPreviousVersion: function () {
       return this
+        .initAjaxCounters()
         .waitForElementVisible('@restorePreviousVersion')
         .click('@restorePreviousVersion')
+        .waitForOutstandingAjaxCalls()
     },
     filterElementsList: function (input) {
       return this.initAjaxCounters()
@@ -370,7 +372,7 @@ module.exports = {
       selector: '#new-folder-btn'
     },
     newFileButton: {
-      selector: '#new-file-btn'
+      selector: '#new-file-menu-drop .new-file-btn-txt'
     },
     newFolderDialog: {
       selector: '#new-folder-dialog'
@@ -380,10 +382,6 @@ module.exports = {
     },
     newFolderInput: {
       selector: '#new-folder-input'
-    },
-    newFileInput: {
-      selector: "//input[@placeholder='Create new file…']",
-      locateStrategy: 'xpath'
     },
     newFolderOkButton: {
       selector: '#new-folder-ok'
@@ -410,22 +408,22 @@ module.exports = {
       selector: '#oc-filter-list-btn'
     },
     hiddenFilesLabel: {
-      selector: '#oc-filter-hidden-label'
-    },
-    hiddenFilesCheckbox: {
       selector: '#oc-filter-hidden-checkbox'
     },
-    filterFolderLabel: {
-      selector: '#oc-filter-folder-label'
+    hiddenFilesCheckbox: {
+      selector: '#oc-filter-hidden-checkbox>.oc-checkbox'
     },
-    filterFolderCheckbox: {
+    filterFolderLabel: {
       selector: '#oc-filter-folder-checkbox'
     },
+    filterFolderCheckbox: {
+      selector: '#oc-filter-folder-checkbox>.oc-checkbox'
+    },
     filterFileLabel: {
-      selector: '#oc-filter-file-label'
+      selector: '#oc-filter-file-checkbox'
     },
     filterFileCheckbox: {
-      selector: '#oc-filter-file-checkbox'
+      selector: '#oc-filter-file-checkbox>.oc-checkbox'
     },
     createFolderLoadingIndicator: {
       selector: '//div[@id="new-folder-dialog"]//div[@class="oc-loader"]',
@@ -484,7 +482,7 @@ module.exports = {
       selector: '#files-sidebar-item-name'
     },
     newFileInputField: {
-      selector: "//input[contains(@placeholder, 'Create')]",
+      selector: "//div[@id='new-file-dialog']//input[@type='text']",
       locateStrategy: 'xpath'
     },
     createFileOkButtonDisabled: {

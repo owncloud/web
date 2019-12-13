@@ -1,14 +1,14 @@
 <template>
   <oc-grid gutter="small">
-    <label v-for="permission in permissions" :key="permission.name" class="files-collaborators-permission-label">
-      <oc-checkbox
-        :id="`files-collaborators-permission-${permission.name}`"
-        class="uk-margin-xsmall-right files-collaborators-permission-checkbox"
-        v-model="permission.value"
-        @change="permissionChecked"
-      />
-      {{ permission.description }}
-    </label>
+    <oc-checkbox
+      v-for="permission in permissions"
+      :key="permission.name"
+      :id="`files-collaborators-permission-${permission.name}`"
+      :label="permission.description"
+      class="uk-margin-xsmall-right files-collaborators-permission-checkbox"
+      v-model="permission.value"
+      @change="permissionChecked"
+    />
   </oc-grid>
 </template>
 

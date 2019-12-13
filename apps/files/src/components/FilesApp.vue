@@ -18,13 +18,30 @@
     <file-open-actions/>
     {{ /* FIXME: hack to prevent conflict of dialog id with the trashbin deletion dialog */ }}
     <template v-if="$route.name !== 'files-trashbin'">
-      <oc-dialog-prompt name="change-file-dialog" :oc-active="renameDialogOpen" :value="renameDialogNewName" :ocError="renameDialogErrorMessage"
-                        :ocTitle="$_renameDialogTitle" ocConfirmId="oc-dialog-rename-confirm" @oc-confirm="doRenameFile"
-                        @oc-cancel="cancelRenameFile" @input="$_validateFileName" />
-      <oc-dialog-prompt name="delete-file-confirmation-dialog" class="deletionConfirmationDialog" :oc-active="deleteDialogOpen"
-                        :oc-content="deleteDialogMessage" :oc-has-input="false" :ocTitle="$_deleteDialogTitle"
-                        ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="reallyDeleteFiles"
-                        @oc-cancel="cancelDeleteFile"/>
+      <oc-dialog-prompt
+        name="change-file-dialog"
+        :oc-active="renameDialogOpen"
+        :value="renameDialogNewName"
+        :ocError="renameDialogErrorMessage"
+        :ocTitle="$_renameDialogTitle"
+        ocConfirmId="oc-dialog-rename-confirm"
+        @oc-confirm="doRenameFile"
+        @oc-cancel="cancelRenameFile"
+        @input="$_validateFileName"
+        :oc-input-placeholder="$_renameDialogPlaceholder"
+        :oc-input-label="$_renameDialogLabel"
+      />
+      <oc-dialog-prompt
+        name="delete-file-confirmation-dialog"
+        class="deletionConfirmationDialog"
+        :oc-active="deleteDialogOpen"
+        :oc-content="deleteDialogMessage"
+        :oc-has-input="false"
+        :ocTitle="$_deleteDialogTitle"
+        ocConfirmId="oc-dialog-delete-confirm"
+        @oc-confirm="reallyDeleteFiles"
+        @oc-cancel="cancelDeleteFile"
+      />
     </template>
   </div>
 </template>
@@ -140,6 +157,30 @@ export default {
 
     sharedList () {
       return this.$route.name === 'files-shared-with-me' || this.$route.name === 'files-shared-with-others'
+    },
+
+    $_renameDialogPlaceholder () {
+      let translated
+      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
+
+      if (this.renameDialogSelectedFile.type === 'folder') {
+        translated = this.$gettext('Enter new folder name…')
+      } else {
+        translated = this.$gettext('Enter new file name…')
+      }
+      return translated
+    },
+
+    $_renameDialogLabel () {
+      let translated
+      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
+
+      if (this.renameDialogSelectedFile.type === 'folder') {
+        translated = this.$gettext('Folder name')
+      } else {
+        translated = this.$gettext('File name')
+      }
+      return translated
     },
 
     $_renameDialogTitle () {

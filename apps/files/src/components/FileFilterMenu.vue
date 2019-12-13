@@ -2,10 +2,7 @@
   <oc-drop toggle="#oc-filter-list-btn" mode="click">
     <ul class="uk-list">
       <li v-for="(filter, fid) in fileFilter" :key="fid">
-        <oc-checkbox :id="'oc-filter-' + filter.tag + '-checkbox'" :name="filter.tag" :value="filter.value" @change="setFileFilter({ name: filter.name, value: !filter.value })" />
-        <label :id="'oc-filter-' + filter.tag + '-label'" :for="'oc-filter-' + filter.tag + '-checkbox'" class="uk-text-meta">
-          {{ fileFilterTranslations[filter.name] }}
-        </label>
+        <oc-checkbox :label="fileFilterTranslations[filter.name]" :id="'oc-filter-' + filter.tag + '-checkbox'" :name="filter.tag" :value="filter.value" @change="setFileFilter({ name: filter.name, value: !filter.value })" />
       </li>
       <li>
         <label for="oc-filter-search" class="uk-text-meta" v-translate>
