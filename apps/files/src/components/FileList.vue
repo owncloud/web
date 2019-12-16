@@ -6,7 +6,7 @@
           <thead>
             <oc-table-row>
               <oc-table-cell shrink type="head">
-                <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" :hideLabel="true" :label="labelSelectAllItems" @click.native="toggleAll" :value="selectedAll" />
+                <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" :hideLabel="true" :label="labelSelectAllItems" @click.stop @change.native="toggleAll" :value="selectedAll" />
               </oc-table-cell>
               <slot name="headerColumns"/>
               <oc-table-cell shrink type="head" :class="{ 'uk-visible@s' : compactMode }" v-translate>Actions</oc-table-cell>

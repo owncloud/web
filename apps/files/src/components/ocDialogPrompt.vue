@@ -5,15 +5,16 @@
         {{ ocError }}
       </oc-alert>
       <span v-if="ocContent" class="uk-text-break">{{ ocContent }}</span>
-        <oc-text-input v-if="ocHasInput"
-          :disabled="ocLoading"
-          :placeholder="ocInputPlaceholder"
-          autofocus
-          :id="ocInputId"
-          v-model="inputValue"
-          ref="input"
-          @keydown.enter.native="onConfirm"
-        ></oc-text-input>
+      <oc-text-input v-if="ocHasInput"
+        :disabled="ocLoading"
+        :placeholder="ocInputPlaceholder"
+        :label="ocInputLabel"
+        autofocus
+        :id="ocInputId"
+        v-model="inputValue"
+        ref="input"
+        @keydown.enter.native="onConfirm"
+      ></oc-text-input>
       <oc-loader v-if="ocLoading"></oc-loader>
     </template>
     <template slot="footer">
@@ -40,6 +41,7 @@ export default {
     ocInputName: String,
     ocInputMaxlength: [String, Number],
     ocInputPlaceholder: [String, Number],
+    ocInputLabel: [String, Number],
     ocContent: String,
     ocError: {
       type: String,
