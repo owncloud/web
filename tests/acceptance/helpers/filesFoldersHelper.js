@@ -54,6 +54,7 @@ exports.getTrashbinFiles = async function (user) {
   return trashbinResources.filter(elements => !elements.href.endsWith('/'))
     .map(elements => elements.originalFilename)
 }
+
 exports.getSharedWithMeFolders = async function (user) {
   const sharedWithMeElements = await sharingHelper.getAllSharesSharedWithUser(user)
   return sharedWithMeElements.filter(elements => elements.mimetype.includes('httpd/unix-directory'))
@@ -63,5 +64,17 @@ exports.getSharedWithMeFolders = async function (user) {
 exports.getSharedWithMeFiles = async function (user) {
   const sharedWithMeElements = await sharingHelper.getAllSharesSharedWithUser(user)
   return sharedWithMeElements.filter(elements => elements.mimetype.includes('application/octet-stream'))
+    .map(elements => normalize(elements.path))
+}
+
+exports.getSharedWithOthersFolders = async function (user) {
+  const sharedWithOthersElements = await sharingHelper.getAllSharesSharedByUser(user)
+  return sharedWithOthersElements.filter(elements => elements.mimetype.includes('httpd/unix-directory'))
+    .map(elements => normalize(elements.path))
+}
+
+exports.getSharedWithOthersFiles = async function (user) {
+  const sharedWithOthersElements = await sharingHelper.getAllSharesSharedWithUser(user)
+  return sharedWithOthersElements.filter(elements => elements.mimetype.includes('application/octet-stream'))
     .map(elements => normalize(elements.path))
 }
