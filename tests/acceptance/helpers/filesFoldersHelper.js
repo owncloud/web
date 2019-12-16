@@ -32,14 +32,8 @@ exports.getAllFiles = async function (user) {
   return filenames.filter(elements => !elements.endsWith('/'))
 }
 
-exports.getFilesMatchingPattern = async function (pattern, files) {
+exports.getElementsMatchingPattern = async function (pattern, files) {
   return files.filter(elements => elements.toLowerCase().includes(pattern))
-}
-
-exports.getFilesFoldersMatchingPattern = async function (pattern, files, folders) {
-  const filesMatchingPattern = await exports.getFilesMatchingPattern(pattern, files)
-  const foldersMatchingPattern = await exports.getFilesMatchingPattern(pattern, folders)
-  return foldersMatchingPattern.concat(filesMatchingPattern)
 }
 
 exports.getAllFilesStartingWithDot = function (elements) {
