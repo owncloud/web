@@ -2,6 +2,7 @@ const { client } = require('nightwatch-api')
 const { propfind, getTrashBinElements } = require('./webdavHelper')
 const convert = require('xml-js')
 const { relativeTo, normalize, join } = require('./path')
+const sharingHelper = require('../helpers/sharingHelper')
 
 exports.getAllFilesFolders = function (user) {
   const backendURL = client.globals.backend_url
@@ -52,4 +53,15 @@ exports.getTrashbinFiles = async function (user) {
   const trashbinResources = trashbinElements.splice(1)
   return trashbinResources.filter(elements => !elements.href.endsWith('/'))
     .map(elements => elements.originalFilename)
+}
+exports.getSharedWithMeFolders = async function (user) {
+  const sharedWithMeElements = await sharingHelper.getAllSharesSharedWithUser(user)
+  return sharedWithMeElements.filter(elements => elements.mimetype.includes('httpd/unix-directory'))
+    .map(elements => normalize(elements.path))
+}
+
+exports.getSharedWithMeFiles = async function (user) {
+  const sharedWithMeElements = await sharingHelper.getAllSharesSharedWithUser(user)
+  return sharedWithMeElements.filter(elements => elements.mimetype.includes('application/octet-stream'))
+    .map(elements => normalize(elements.path))
 }
