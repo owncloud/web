@@ -201,6 +201,7 @@ module.exports = {
       })
   },
   getAllSharesSharedWithUser: function (user) {
+    console.log(this)
     return this.getAllShares(user, true)
   },
   getAllSharesSharedByUser: function (user) {
