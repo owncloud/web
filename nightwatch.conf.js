@@ -47,9 +47,7 @@ module.exports = {
         cli_args: ['--port=' + SELENIUM_PORT]
       },
       screenshots: {
-        enabled: true,
-        path: 'tests/reports/screenshots',
-        on_failure: true
+        enabled: false
       },
       desiredCapabilities: {
         browserName: 'chrome',
@@ -78,9 +76,7 @@ module.exports = {
         port: SELENIUM_PORT
       },
       screenshots: {
-        enabled: !SAUCE_USERNAME,
-        path: 'tests/reports/screenshots',
-        on_failure: !SAUCE_USERNAME
+        enabled: false
       },
       desiredCapabilities: {
         browserName: BROWSER_NAME || 'chrome',
