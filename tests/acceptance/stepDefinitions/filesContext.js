@@ -13,6 +13,8 @@ let timeOfLastUploadOperation = Date.now()
 const { download } = require('../helpers/webdavHelper')
 const { getElementsMatchingPattern, getAllFilesStartingWithDot } = require('../helpers/filesFoldersHelper')
 const { getTrashbinFolders, getTrashbinFiles, getAllFiles, getAllFolders } = require('../helpers/filesFoldersHelper')
+const { getAllSharesSharedWithUser } = require('../helpers/sharingHelper')
+const sharingHelper = require('../helpers/sharingHelper')
 
 const assertDesiredResourcesListed = async function (resourcesMatchingPattern, listedResources) {
   const diff = _.difference(resourcesMatchingPattern, listedResources)
@@ -965,4 +967,11 @@ Then('only files containing pattern {string} in their name should be listed in t
   const filesMatchingPattern = await getElementsMatchingPattern(pattern, trashbinFiles)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
+})
+
+Then('all files and folders containing pattern {string} in their name should be listed in the shared-with-me page on the webUI', async function (pattern) {
+  const user = client.globals.currentUser
+  console.log(user)
+  const sharedWithMeResources = await getAllSharesSharedWithUser(client.globals.currentUser).bind(sharingHelper)
+  console.log(sharedWithMeResources)
 })
