@@ -212,7 +212,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -421,7 +421,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -630,7 +630,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -839,7 +839,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -1048,7 +1048,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -1257,7 +1257,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -1466,7 +1466,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -1675,7 +1675,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -1884,7 +1884,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -2093,7 +2093,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -2302,7 +2302,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -2511,7 +2511,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -2720,7 +2720,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -2929,7 +2929,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -3138,7 +3138,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -3347,7 +3347,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -3556,7 +3556,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -3765,7 +3765,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -3974,7 +3974,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -4183,7 +4183,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -4392,7 +4392,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -4601,7 +4601,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -4849,7 +4849,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -5058,7 +5058,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
@@ -5267,7 +5267,7 @@ services:
 
 - name: selenium
   pull: always
-  image: selenium/standalone-chrome-debug:latest
+  image: selenium/standalone-chrome-debug:3.141.59-xenon
   volumes:
   - name: uploads
     path: /uploads
