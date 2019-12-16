@@ -1016,8 +1016,6 @@ Then('only files containing pattern {string} in their name should be listed in t
 })
 
 Then('all files and folders containing pattern {string} in their name should be listed in the shared-with-me page on the webUI', async function (pattern) {
-  const user = client.globals.currentUser
-  console.log(user)
-  const sharedWithMeResources = await getAllSharesSharedWithUser(client.globals.currentUser).bind(sharingHelper)
+  const sharedWithMeResources = await sharingHelper.getAllSharesSharedWithUser(client.globals.currentUser)
   console.log(sharedWithMeResources)
 })
