@@ -169,7 +169,10 @@ export default {
             )
 
             const exists = this.shares.find(existingCollaborator => {
-              return collaborator.value.shareWith === existingCollaborator.name
+              return (
+                collaborator.value.shareWith === existingCollaborator.name &&
+                parseInt(collaborator.value.shareType, 10) === parseInt(existingCollaborator.info.share_type, 10)
+              )
             })
 
             if (selected || exists) {
