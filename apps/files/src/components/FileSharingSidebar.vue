@@ -1,6 +1,6 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
-    <div>
+    <div :aria-hidden="visiblePanel == 'newCollaborator'" :inert="visiblePanel == 'newCollaborator'">
       <oc-loader v-if="sharesLoading" aria-label="Loading collaborator list" />
       <template v-else>
         <div v-if="$_ocCollaborators_canShare" class="uk-text-right">
@@ -20,11 +20,15 @@
           <template v-for="user in $_ocCollaborators_users">
             <oc-grid :key="user.info.id" gutter="small" class="files-collaborators-collaborator">
               <div>
-                <oc-icon class="files-collaborators-collaborator-delete" role="button" name="close" :aria-label="$gettext('Delete share')" @click="$_ocCollaborators_deleteShare(user)" />
+                <oc-button :ariaLabel="$gettext('Delete share')" @click="$_ocCollaborators_deleteShare(user)" variation="raw" class="files-collaborators-collaborator-delete">
+                  <oc-icon name="close" />
+                </oc-button>
               </div>
               <collaborator class="uk-width-expand" :collaborator="user" />
               <div class="uk-width-auto">
-                <oc-icon class="files-collaborators-collaborator-edit" role="button" name="edit" :aria-label="$gettext('Edit share')" @click="$_ocCollaborators_editShare(user)" />
+                <oc-button :aria-label="$gettext('Edit share')" @click="$_ocCollaborators_editShare(user)" variation="raw" class="files-collaborators-collaborator-edit">
+                  <oc-icon name="edit" />
+                </oc-button>
               </div>
             </oc-grid>
           </template>
@@ -36,24 +40,26 @@
           </h5>
           <template v-for="group in $_ocCollaborators_groups">
             <oc-grid :key="group.info.id" gutter="small" class="files-collaborators-collaborator">
-              <div>
-                <oc-icon class="files-collaborators-collaborator-delete uk-vertical-align" role="button" name="close" :aria-label="$gettext('Delete share')" @click="$_ocCollaborators_deleteShare(group)" />
-              </div>
+              <oc-button :aria-label="$gettext('Delete share')" @click="$_ocCollaborators_deleteShare(group)" variation="raw" class="files-collaborators-collaborator-delete uk-vertical-align">
+                <oc-icon name="close" />
+              </oc-button>
               <collaborator class="uk-width-expand" :collaborator="group" />
-              <div class="uk-width-auto">
-                <oc-icon class="files-collaborators-collaborator-edit" role="button" name="edit" :aria-label="$gettext('Edit share')" @click="$_ocCollaborators_editShare(group)" />
-              </div>
+              <oc-button :aria-label="$gettext('Edit share')" @click="$_ocCollaborators_editShare(group)" variation="raw" class="files-collaborators-collaborator-edit">
+                <oc-icon name="edit" />
+              </oc-button>
             </oc-grid>
           </template>
         </div>
         <div v-if="!shares.length && !sharesLoading" key="oc-collaborators-no-results"><translate>No collaborators</translate></div>
       </template>
     </div>
-    <transition name="custom-classes-transition" enter-active-class="uk-animation-slide-right uk-animation-fast" leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast">
-      <div v-if="visiblePanel == 'newCollaborator'" class="uk-position-cover oc-default-background">
-        <new-collaborator v-if="$_ocCollaborators_canShare" key="new-collaborator" @close="visiblePanel='collaboratorList'" />
-      </div>
-    </transition>
+    <div :aria-hidden="visiblePanel != 'newCollaborator'" :inert="visiblePanel != 'newCollaborator'">
+      <transition name="custom-classes-transition" enter-active-class="uk-animation-slide-right uk-animation-fast" leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast">
+        <div v-if="visiblePanel == 'newCollaborator'" class="uk-position-cover oc-default-background" >
+          <new-collaborator v-if="$_ocCollaborators_canShare" key="new-collaborator" @close="visiblePanel='collaboratorList'" />
+        </div>
+      </transition>
+    </div>
     <transition name="custom-classes-transition" enter-active-class="uk-animation-slide-right uk-animation-fast" leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast">
       <div v-if="visiblePanel == 'editCollaborator'" class="uk-position-cover oc-default-background">
         <edit-collaborator v-if="$_ocCollaborators_canShare" key="edit-collaborator" @close="visiblePanel='collaboratorList'; currentShare = null" :collaborator="currentShare" />
