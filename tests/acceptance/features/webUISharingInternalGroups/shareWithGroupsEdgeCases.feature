@@ -33,7 +33,6 @@ Feature: Sharing files and folders with internal groups
       | ?\?@#%@,; |
       | नेपाली    |
 
-  @issue-2419
   Scenario: Share file with a user and a group with same name
     Given these users have been created with default attributes:
       | username |
@@ -48,14 +47,13 @@ Feature: Sharing files and folders with internal groups
     And user "user3" has uploaded file with content "user3 file" to "/randomfile.txt"
     And user "user3" has logged in using the webUI
     When the user shares file "randomfile.txt" with user "User One" as "Editor" using the webUI
-#    And the user shares file "randomfile.txt" with group "user1" as "Editor" using the webUI
+    And the user shares file "randomfile.txt" with group "user1" as "Editor" using the webUI
     And the user opens the share creation dialog in the webUI
     And the user types "user1" in the share-with-field
     Then "group" "user1" should not be listed in the autocomplete list on the webUI
     And the content of file "randomfile.txt" for user "user1" should be "user3 file"
-#    And the content of file "randmfile.txt" for user "user2" should be "user3 file"
+    And the content of file "randomfile.txt" for user "user2" should be "user3 file"
 
-  @issue-2419
   Scenario: Share file with a group and a user with same name
     Given these users have been created with default attributes:
       | username |
@@ -69,12 +67,12 @@ Feature: Sharing files and folders with internal groups
     And user "user3" has uploaded file with content "user3 file" to "/randomfile.txt"
     And user "user3" has logged in using the webUI
     When the user shares file "randomfile.txt" with group "user1" as "Editor" using the webUI
-#    And the user shares file "randomfile.txt" with user "User One" as "Editor" using the webUI
+    And the user shares file "randomfile.txt" with user "User One" as "Editor" using the webUI
     And the user opens the share creation dialog in the webUI
     And the user types "user" in the share-with-field
     Then "user" "User One" should not be listed in the autocomplete list on the webUI
     And the content of file "randomfile.txt" for user "user2" should be "user3 file"
-#    And the content of file "randmfile.txt" for user "user1" should be "user3 file"
+    And the content of file "randomfile.txt" for user "user1" should be "user3 file"
 
   @yetToImplement
   Scenario: Share file with a user and again with a group with same name but different case
