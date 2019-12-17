@@ -1,6 +1,7 @@
 import { setDefaultTimeout, After, Before } from 'cucumber'
 import { createSession, closeSession, client, startWebDriver, stopWebDriver } from 'nightwatch-api'
 import { rollbackConfigs, setConfigs, cacheConfigs } from './helpers/config'
+import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
 
 const RUNNING_ON_CI = !!process.env.CI
 const RUNNING_ON_SAUCELABS = !!process.env.SAUCE_USERNAME
@@ -47,6 +48,13 @@ Before(function cacheAndSetConfigsOnLocal () {
 Before(function cacheAndSetConfigsOnRemoteIfExists () {
   if (client.globals.remote_backend_url) {
     return cacheAndSetConfigs(client.globals.remote_backend_url)
+  }
+})
+
+After(async function tryToReadBrowserConsoleOnFailure ({ result }) {
+  if (result.status === 'failed') {
+    const logs = await getAllLogsWithDateTime()
+    console.log(logs)
   }
 })
 
