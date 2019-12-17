@@ -37,6 +37,7 @@ const appInfo = {
   icon: 'folder',
   isFileEditor: false,
   extensions: [],
+  fileActions: filesConfig.actions || [],
   fileSideBars: [
     {
       app: 'files-version',
