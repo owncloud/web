@@ -76,7 +76,8 @@ module.exports = {
         screenResolution: '1280x1024',
         username: SAUCE_USERNAME,
         access_key: SAUCE_ACCESS_KEY,
-        idleTimeout: 180
+        idleTimeout: 180,
+        loggingPrefs: { browser: 'ALL' }
       }
     }
   }

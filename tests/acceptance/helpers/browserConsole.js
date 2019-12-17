@@ -27,6 +27,7 @@ export async function getAllLogsWithDateTime (level = null) {
   }
 
   return logs
-    .filter(e => !e.message.includes('favicon.ico'))
+    // avatar issue https://github.com/owncloud/phoenix/issues/2977
+    .filter(e => !e.message.includes('favicon.ico') && !e.message.includes('/dav/avatars/'))
     .map(formatLog)
 }

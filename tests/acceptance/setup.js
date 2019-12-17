@@ -1,3 +1,4 @@
+import assert from 'assert'
 import { setDefaultTimeout, After, Before, defineParameterType } from 'cucumber'
 import { createSession, closeSession, client, startWebDriver, stopWebDriver } from 'nightwatch-api'
 import { rollbackConfigs, setConfigs, cacheConfigs } from './helpers/config'
@@ -79,12 +80,16 @@ After(function closeSessionForEnv () {
   return closeSession()
 })
 
-After(async function tryToReadBrowserConsoleOnFailure ({ result }) {
+After(async function checkBrowserConsole ({ result }) {
+  let scope = 'SEVERE'
   if (result.status === 'failed') {
-    const logs = await getAllLogsWithDateTime('SEVERE')
-    if (logs.length > 0) {
-      console.log('\nThe following logs were found in the browser console:\n')
-      logs.forEach(log => console.log(log))
-    }
+    // also grab debug messages in case they are helpful
+    scope = 'DEBUG'
+  }
+  const logs = await getAllLogsWithDateTime(scope)
+  if (logs.length > 0) {
+    console.log('\nThe following logs were found in the browser console:\n')
+    logs.forEach(log => console.log(log))
+    assert.fail('There were errors in the log')
   }
 })
