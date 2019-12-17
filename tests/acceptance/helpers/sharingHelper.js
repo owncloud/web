@@ -1,7 +1,7 @@
 const { client } = require('nightwatch-api')
 const httpHelper = require('./httpHelper')
-const { normalize } = require('./path')
-
+const { normalize, join } = require('./path')
+const userSettings = require('./userSettings')
 const fetch = require('node-fetch')
 const assert = require('assert')
 
@@ -79,16 +79,16 @@ module.exports = {
    *
    * @param {string } user
    * @param {string } expectedDetailsTable
-   * @param {boolean} sharedWithThisUser if `true` check shares that were shared with the given user (adding 'shared_with_me=true' to the API call)
+   * @param {Object} filters - extra argument to filter list of shares
+   *
    * @returns {Promise<unknown>}
    */
-  assertUserHasShareWithDetails: function (user, expectedDetailsTable, sharedWithThisUser = false) {
+  assertUserHasShareWithDetails: function (user, expectedDetailsTable, filters = {}) {
     const headers = httpHelper.createAuthHeader(user)
     const sharingHelper = this
-    let apiURL = client.globals.backend_url + '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json'
-    if (sharedWithThisUser === true) {
-      apiURL = apiURL + '&shared_with_me=true'
-    }
+    const apiURL = new URL(join(client.globals.backend_url, '/ocs/v2.php/apps/files_sharing/api/v1/shares'))
+    apiURL.search = new URLSearchParams({ format: 'json', ...filters }).toString()
+
     return fetch(apiURL, { method: 'GET', headers: headers })
       .then(res => res.json())
       .then(function (sharesResult) {
@@ -98,6 +98,7 @@ module.exports = {
         for (const share of shares) {
           found = true
           for (const expectedDetail of expectedDetailsTable.hashes()) {
+            expectedDetail.value = userSettings.replaceInlineCode(expectedDetail.value)
             if (expectedDetail.field === 'permissions') {
               expectedDetail.value = sharingHelper.humanReadablePermissionsToBitmask(expectedDetail.value).toString()
             } else if (expectedDetail.field === 'share_type') {

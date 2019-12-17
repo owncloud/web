@@ -4,6 +4,7 @@ const httpHelper = require('../helpers/httpHelper')
 const userSettings = require('../helpers/userSettings')
 const fetch = require('node-fetch')
 const assert = require('assert')
+const util = require('util')
 
 When('user {string} is sent a notification', function (user) {
   const body = new URLSearchParams()
@@ -28,15 +29,26 @@ When('the user declines all shares displayed in the notifications on the webUI',
   return client.page.phoenixPage().declineAllSharesInNotification()
 })
 
-Given('app {string} has been enabled', function (app) {
+Given('app {string} has been {}', function (app, action) {
+  assert.ok(
+    action === 'enabled' || action === 'disabled',
+    "only supported either 'enabled' or 'disabled'. Passed: " + action
+  )
   const headers = httpHelper.createAuthHeader('admin')
+  const method = action === 'enabled' ? 'POST' : 'DELETE'
+
+  const errorMessage = util.format(
+    'Failed while trying to %s the app',
+    action === 'enabled' ? 'enable' : 'disable'
+  )
   return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/apps/' + app + '?format=json', {
     headers,
-    body: {},
-    method: 'POST'
+    method
   }).then(res => {
-    httpHelper.checkStatus(res, 'Failed while trying to enable the app')
+    httpHelper.checkStatus(res, errorMessage)
     return res.json()
+  }).then(data => {
+    httpHelper.checkOCSStatus(data, errorMessage)
   })
 })
 

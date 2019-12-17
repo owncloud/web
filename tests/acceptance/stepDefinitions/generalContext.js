@@ -110,10 +110,10 @@ Given('the setting {string} of app {string} has been set to {string}', function 
     ])
 })
 
-Given('the setting {string} of app {string} has been set to {string} on remote server', async function (setting, app, value) {
-  return backendHelper.runOnRemoteBackend(occHelper.runOcc, [[
+Given('the setting {string} of app {string} has been set to {string} on remote server', function (setting, app, value) {
+  return backendHelper.runOnRemoteBackend(occHelper.runOcc, [
     'config:app:set', app, setting, '--value=' + value
-  ]])
+  ])
 })
 
 Given('the administrator has cleared the versions for user {string}', function (userId) {
@@ -147,7 +147,7 @@ Given('server {string} has been added as trusted server', function (server) {
 })
 
 Given('server {string} has been added as trusted server on remote server', function (url) {
-  return backendHelper.runOnRemoteBackend(setTrustedServer, [url])
+  return backendHelper.runOnRemoteBackend(setTrustedServer, url)
 })
 
 Before(function (testCase) {

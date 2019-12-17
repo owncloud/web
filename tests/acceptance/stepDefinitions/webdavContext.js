@@ -18,33 +18,47 @@ const path = require('../helpers/path')
  */
 function fileExists (userId, element) {
   const headers = httpHelper.createAuthHeader(userId)
+  const davPath = webdavHelper.createDavPath(userId, element)
   return fetch(
-    webdavHelper.createDavPath(userId, element),
+    davPath,
     { method: 'GET', headers: headers }
   )
-    .then(function (res) {
-      if (res.status === 200) {
-        return res
-      } else {
-        throw Error('file/folder should exist, but does not')
-      }
-    })
 }
 
+const fileShouldExist = function (userId, element) {
+  return fileExists(userId, element).then(function (res) {
+    assert.strictEqual(res.status, 200, 'File should exist, but does not')
+  })
+}
+
+const fileShouldNotExist = function (userId, element) {
+  return fileExists(userId, element).then(function (res) {
+    assert.ok([404, 401].includes(res.status), 'file/folder should not exist, but does')
+  })
+}
+
+Then('as {string} file/folder {string} should not exist', function (userId, element) {
+  return fileShouldNotExist(userId, element)
+})
+
+Then('as {string} file/folder {string} should not exist on remote server', function (userId, element) {
+  return backendHelper.runOnRemoteBackend(fileShouldNotExist, userId, element)
+})
+
 Then('as {string} file/folder {string} should exist', function (userId, element) {
-  return fileExists(userId, element)
+  return fileShouldExist(userId, element)
 })
 
 Then('as {string} file/folder {string} should exist on remote server', function (userId, element) {
-  return backendHelper.runOnRemoteBackend(fileExists, [userId, element])
+  return backendHelper.runOnRemoteBackend(fileShouldExist, userId, element)
 })
 
 Then('as {string} file/folder {string} should exist inside folder {string}', function (user, file, folder) {
-  return fileExists(user, path.join(folder, file))
+  return fileShouldExist(user, path.join(folder, file))
 })
 
 Then('as {string} the last uploaded folder should exist', function (userId) {
-  return fileExists(userId, client.sessionId)
+  return fileShouldExist(userId, client.sessionId)
 })
 
 Then(
@@ -87,21 +101,6 @@ Then(
     )
   }
 )
-
-Then('as {string} file/folder {string} should not exist', function (userId, element) {
-  const headers = httpHelper.createAuthHeader(userId)
-  return fetch(
-    webdavHelper.createDavPath(userId, element),
-    { method: 'GET', headers: headers }
-  )
-    .then(function (res) {
-      if (res.status === 401 || res.status === 404) {
-        return res
-      } else {
-        throw Error('file/folder should not exist, but does')
-      }
-    })
-})
 
 Given('user {string} has favorited element {string}', function (userId, element) {
   const headers = httpHelper.createAuthHeader(userId)

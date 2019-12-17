@@ -1,52 +1,53 @@
 const { client } = require('nightwatch-api')
 
+/**
+ * @enum {string}
+ * @readonly
+ */
 const BACKENDS = exports.BACKENDS = Object.freeze({
   local: 'LOCAL',
   remote: 'REMOTE'
 })
 
 /**
- * Give the address of the backend url
- *
- * @param {string} server - REMOTE/LOCAL
- * @returns {string}
- */
-exports.getBackendUrl = function (server = 'LOCAL') {
-  return server === BACKENDS.local ? client.globals.backend_url : client.globals.remote_backend_url
-}
-
-/**
  * Give the backend URL for currently default backend
  */
 exports.getCurrentBackendUrl = function () {
-  return client.globals.default_backend === BACKENDS.local ? client.globals.backend_url : client.globals.remote_backend_url
+  // eslint-disable-next-line camelcase
+  const { backend_url, remote_backend_url, default_backend } = client.globals
+  // eslint-disable-next-line camelcase
+  return default_backend === BACKENDS.local ? backend_url : remote_backend_url
 }
 
 /**
- * change current default backend
- */
-exports.changeBackend = function (server) {
-  if (!server) {
-    throw new Error('Empty value provided, please provide "REMOTE" or "LOCAL"')
-  }
-  client.globals.default_backend = server
-}
-/**
  * Run a function using the remote backend
  *
- * @callback fn - the function to run using the remote backend
- * @param args - the arguments to pass to the function
+ * @param fn - the function to run using the remote backend
+ * @param {...*} args - the arguments to pass to the function
+ *
+ * @example using multiple functions concurrently by using closures
+ * runOnRemoteBackend(() => Promise.all([...list_of_promises]);
+ * // probably, we need a async-mutex here :evil_laugh:
+ *
+ * @example
+ * runOnRemoteBackend(doSomething, arg1, arg2); // if you don't want unnecessary closures
+ * runOnRemoteBackend(() => doSomething(arg1, arg2)); // use closure to get better completion
  */
-exports.runOnRemoteBackend = async function (fn, args = []) {
-  this.changeBackend(BACKENDS.remote)
+exports.runOnRemoteBackend = async function (fn, ...args) {
+  if (typeof fn !== 'function') {
+    throw new Error('expected function, received: ' + typeof fn)
+  }
+
+  client.globals.default_backend = BACKENDS.remote
   let errorFound, res
   try {
     res = await fn(...args)
   } catch (e) {
     errorFound = e
   } finally {
-    this.changeBackend(BACKENDS.local)
+    client.globals.default_backend = BACKENDS.local
   }
+
   if (errorFound) {
     throw errorFound
   }
