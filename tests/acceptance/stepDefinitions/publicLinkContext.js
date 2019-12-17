@@ -86,11 +86,17 @@ Then('as user {string} the folder {string} should not have any public link', asy
   return this
 })
 
-Then('the public should not get access to the publicly shared file', function () {
-  return client
+Then('the public should not get access to the publicly shared file', async function () {
+  const message = await client
     .page
     .publicLinkPasswordPage()
-    .assertResourceAccessDenied()
+    .submitLinkPasswordForm() // form is submitted as password input is filled in the step before this particular step in 'when' part
+    .getResourceAccessDeniedMsg()
+  return assert.strictEqual(
+    'This resource is password-protected.',
+    message,
+    'Resource protected message invalid, Found: ', message
+  )
 })
 
 When('the user edits the public link named {string} of file/folder/resource {string} changing following but not saving',
