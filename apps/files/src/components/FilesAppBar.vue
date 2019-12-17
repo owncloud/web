@@ -17,6 +17,7 @@
           :value="searchTerm"
           :label="searchLabel"
           :loading="isLoadingSearch"
+          buttonHidden="true"
           :button="false"
           @clear="onSearchClear"
           :key="searchBarKey"
