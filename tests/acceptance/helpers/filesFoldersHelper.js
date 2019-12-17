@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { propfind } = require('./webdavHelper')
+const { propfind, getTrashBinElements } = require('./webdavHelper')
 const convert = require('xml-js')
 const { relativeTo, normalize, join } = require('./path')
 
@@ -32,22 +32,24 @@ exports.getAllFiles = async function (user) {
   return filenames.filter(elements => !elements.endsWith('/'))
 }
 
-exports.getFilesMatchingPattern = async function (user, pattern) {
-  const files = await exports.getAllFiles(user)
+exports.getElementsMatchingPattern = async function (pattern, files) {
   return files.filter(elements => elements.toLowerCase().includes(pattern))
-}
-
-exports.getFoldersMatchingPattern = async function (user, pattern) {
-  const files = await exports.getAllFolders(user)
-  return files.filter(elements => elements.toLowerCase().includes(pattern))
-}
-
-exports.getFilesFoldersMatchingPattern = async function (user, pattern) {
-  const filesMatchingPattern = await exports.getFilesMatchingPattern(user, pattern)
-  const foldersMatchingPattern = await exports.getFoldersMatchingPattern(user, pattern)
-  return foldersMatchingPattern.concat(filesMatchingPattern)
 }
 
 exports.getAllFilesStartingWithDot = function (elements) {
   return elements.filter(elem => !elem.startsWith('.'))
+}
+
+exports.getTrashbinFolders = async function (user) {
+  const trashbinElements = await getTrashBinElements(user, 1)
+  const trashbinResources = trashbinElements.splice(1)
+  return trashbinResources.filter(elements => elements.href.endsWith('/'))
+    .map(elements => elements.originalFilename)
+}
+
+exports.getTrashbinFiles = async function (user) {
+  const trashbinElements = await getTrashBinElements(user, 1)
+  const trashbinResources = trashbinElements.splice(1)
+  return trashbinResources.filter(elements => !elements.href.endsWith('/'))
+    .map(elements => elements.originalFilename)
 }
