@@ -1,78 +1,107 @@
 <template>
-  <div class="uk-height-1-1">
+  <!-- TODO: Take care of outside click overall and not just in files list -->
+  <div :id="id" class="uk-height-1-1 uk-position-relative" @click="hideRowActionsDropdown">
     <div class="uk-flex uk-flex-column uk-height-1-1">
-      <div id="files-list-container" class="uk-overflow-auto uk-flex-auto">
-        <oc-table middle divider class="oc-filelist uk-margin-remove-bottom" :id="id" v-show="!loading">
-          <thead>
-            <oc-table-row>
-              <oc-table-cell shrink type="head">
-                <oc-checkbox class="uk-margin-small-left" id="filelist-check-all" :hideLabel="true" :label="labelSelectAllItems" @click.stop @change.native="toggleAll" :value="selectedAll" />
-              </oc-table-cell>
-              <slot name="headerColumns"/>
-              <oc-table-cell shrink type="head" :class="{ 'uk-visible@s' : compactMode }" v-translate>Actions</oc-table-cell>
-            </oc-table-row>
-          </thead>
-          <oc-table-group>
-            <oc-table-row v-for="(item, index) in fileData" :key="index" :class="_rowClasses(item)" @click="selectRow(item, $event)" :id="'file-row-' + item.id">
-              <oc-table-cell>
-                <oc-checkbox :hideLabel="true" class="uk-margin-small-left" @click.stop @change.native="toggleFileSelect(item)" :value="selectedFiles.indexOf(item) >= 0" :label="labelSelectSingleItem(item)"/>
-              </oc-table-cell>
-              <slot name="rowColumns" :item="item" :index="index" />
-              <oc-table-cell :class="{ 'uk-visible@s' : compactMode }" class="uk-position-relative">
-                <div class="uk-button-group uk-margin-small-right" :class="{ 'uk-visible@m' : !compactMode, 'uk-visible@xl' : compactMode  }">
-                  <oc-button
-                    v-for="action in actions"
-                   :key="action.ariaLabel"
-                   @click.stop="action.handler(item, action.handlerData)"
-                   :disabled="!$_isActionEnabled(item, action) || $_actionInProgress(item)"
-                   :icon="action.icon"
-                   :ariaLabel="action.ariaLabel"
-                   :uk-tooltip="$_disabledActionTooltip(item)"
-                  />
-                </div>
+      <oc-grid gutter="small" flex id="files-table-header" class="uk-padding-small">
+        <div>
+          <oc-checkbox
+            class="uk-margin-small-left"
+            id="filelist-check-all"
+            :hideLabel="true"
+            :label="labelSelectAllItems"
+            @click.stop
+            @change.native="toggleAll"
+            :value="selectedAll"
+          />
+        </div>
+        <slot name="headerColumns"/>
+        <div
+          class="uk-text-meta uk-text-right uk-width-auto "
+          :class="{ 'uk-width-small@s uk-width-medium@m' : !compactMode }"
+          v-translate
+        >
+          Actions
+        </div>
+      </oc-grid>
+      <RecycleScroller
+        id="files-list-container"
+        class="uk-flex-1"
+        :items="fileData"
+        :item-size="70"
+        v-slot="{ item, index, active }"
+        v-if="!loading"
+        :key="fileData.length"
+      >
+        <div
+          :data-is-visible="active"
+          @click="selectRow(item, $event); hideRowActionsDropdown()"
+        >
+          <oc-grid gutter="small" flex class="uk-padding-small oc-border-top" :class="_rowClasses(item)" :id="'file-row-' + item.id">
+            <div>
+              <oc-checkbox
+                class="uk-margin-small-left"
+                @click.stop @change.native="toggleFileSelect(item)"
+                :value="selectedFiles.indexOf(item) >= 0"
+                :label="labelSelectSingleItem(item)"
+                :hideLabel="true"
+              />
+            </div>
+            <slot name="rowColumns" :item="item" :index="item.id" />
+            <div :class="{ 'uk-visible@s' : compactMode, 'uk-width-small@s uk-width-medium@m': !compactMode }" class="uk-width-auto uk-text-right">
+              <div
+                class="uk-button-group"
+                :class="{
+                  'uk-visible@m' : !compactMode,
+                  'uk-visible@xl' : compactMode
+                }"
+              >
                 <oc-button
-                  :id="'files-file-list-action-button-small-resolution-' + index"
-                  icon="more_vert"
-                  :class="{ 'uk-hidden@m' : !compactMode, 'uk-visible@s uk-hidden@xl' : compactMode }"
-                  :disabled="$_actionInProgress(item)"
-                  :aria-label="'show-file-actions'"
-                  @click.stop
+                  v-for="action in actions"
+                  :key="action.ariaLabel"
+                  @click.stop="action.handler(item, action.handlerData)"
+                  :disabled="!$_isActionEnabled(item, action) || $_actionInProgress(item)"
+                  :icon="action.icon"
+                  :ariaLabel="action.ariaLabel"
+                  :uk-tooltip="$_disabledActionTooltip(item)"
                 />
-                <oc-drop
-                  v-if="!isDialogOpen"
-                  :toggle="'#files-file-list-action-button-small-resolution-' + index"
-                  :options="{ offset: 0 }"
-                  position="bottom-right"
-                >
-                  <ul class="uk-list">
-                    <li v-for="action in $_enabledActions(item)" :key="action.ariaLabel">
-                      <oc-button
-                        class="uk-width-1-1"
-                        @click.native.stop="action.handler(item, action.handlerData)"
-                        :icon="action.icon"
-                        :ariaLabel="action.ariaLabel"
-                      >
-                        {{ action.ariaLabel }}
-                      </oc-button>
-                    </li>
-                  </ul>
-                </oc-drop>
-              </oc-table-cell>
-            </oc-table-row>
-          </oc-table-group>
-        </oc-table>
-      </div>
+              </div>
+              <oc-button
+                :id="`files-file-list-action-button-small-resolution-${item.id}${{ '-active': active }}`"
+                icon="more_vert"
+                :class="{ 'uk-hidden@m' : !compactMode, 'uk-visible@s uk-hidden@xl' : compactMode }"
+                :disabled="$_actionInProgress(item)"
+                :aria-label="'show-file-actions'"
+                @click.stop="toggleRowActionsDropdown(item)"
+              />
+            </div>
+          </oc-grid>
+        </div>
+      </RecycleScroller>
       <oc-grid gutter="large" class="uk-width-1-1 uk-padding-small" v-if="!loading">
         <slot name="footer" />
       </oc-grid>
     </div>
+    <row-actions-dropdown
+      :displayed="rowActionsDisplayed"
+      :item="rowActionsItem"
+      :actions="rowActions"
+      @actionClicked="hideRowActionsDropdown"
+    />
   </div>
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import { RecycleScroller } from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+
+const RowActionsDropdown = () => import('./FilesLists/RowActionsDropdown.vue')
 
 export default {
   name: 'FileList',
+  components: {
+    RecycleScroller,
+    RowActionsDropdown
+  },
   props: {
     id: {
       type: String,
@@ -111,7 +140,10 @@ export default {
   data () {
     return {
       labelSelectAllItems: this.$gettext('Select all items'),
-      labelSelectSingleItemText: this.$gettext('Select %{type} %{name}')
+      labelSelectSingleItemText: this.$gettext('Select %{type} %{name}'),
+      rowActions: [],
+      rowActionsDisplayed: false,
+      rowActionsItem: {}
     }
   },
   methods: {
@@ -210,15 +242,11 @@ export default {
     },
     _rowClasses (item) {
       if (this.highlightedFile && item.id === this.highlightedFile.id) {
-        return 'file-row uk-active'
+        return 'file-row oc-background-selected'
       }
       return 'file-row'
     },
     selectRow (item, event) {
-      if (event.target.tagName !== 'TD') {
-        return
-      }
-
       if (item.status && (item.status === 1 || item.status === 2)) return
 
       event.stopPropagation()
@@ -241,12 +269,29 @@ export default {
           }
         }
       }
+    },
+
+    toggleRowActionsDropdown (item) {
+      if (item === this.rowActionsItem) {
+        this.hideRowActionsDropdown()
+        return
+      }
+
+      this.rowActionsDisplayed = true
+      this.rowActionsItem = item
+      this.rowActions = this.$_enabledActions(item)
+    },
+
+    hideRowActionsDropdown () {
+      this.rowActionsDisplayed = false
+      this.rowActionsItem = {}
+      this.rowActions = []
     }
   },
   computed: {
     ...mapState(['route']),
     ...mapGetters('Files', ['selectedFiles', 'highlightedFile', 'activeFiles', 'quota',
-      'filesTotalSize', 'activeFilesCount', 'actionsInProgress', 'isDialogOpen']),
+      'filesTotalSize', 'activeFilesCount', 'actionsInProgress']),
     ...mapGetters(['configuration']),
 
     selectedAll () {

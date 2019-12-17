@@ -12,9 +12,16 @@ module.exports = {
      * @param {string} fileName
      * @returns {string}
      */
-    getActionSelectorLowRes: function (action, fileName) {
-      return '(' + this.getFileRowSelectorByFileName(fileName) +
-        this.elements[action + 'ButtonInFileRow'].selector + ')[last()]'
+    getActionSelectorLowRes: function (action, itemName) {
+      // Escape double quotes inside of selector
+      if (itemName.indexOf('"') > -1) {
+        itemName = this.replaceChar(itemName, '"', '&quot;')
+      }
+
+      const actionsDropdownSelector = util.format(this.elements.itemActionsDropdown.selector, itemName)
+      const actionSelector = this.elements[action + 'ButtonInFileRow'].selector
+
+      return `${actionsDropdownSelector}${actionSelector}`
     },
     /**
      * Action button selector for High Resolution screens
@@ -104,12 +111,15 @@ module.exports = {
      *
      * @param {string} fileName
      */
-    deleteFile: function (fileName) {
-      return this
-        .waitForFileVisible(fileName)
+    deleteFile: async function (fileName) {
+      await this.waitForFileVisible(fileName)
+
+      await this
         .useXpath()
         .performFileAction(fileName, 'delete')
         .confirmDeletion()
+
+      return this
     },
     confirmDeletion: async function () {
       const clickAction = function () {
@@ -185,25 +195,31 @@ module.exports = {
      *
      * @param {string} folder
      */
-    navigateToFolder: function (folder) {
-      this.waitForFileVisible(folder)
-      return this.useXpath()
+    navigateToFolder: async function (folder) {
+      await this.waitForFileVisible(folder)
+
+      await this.useXpath()
         .moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
         .click(this.getFileLinkSelectorByFileName(folder))
         .useCss()
         .waitForElementNotPresent('@filesListProgressBar')
+
+      return this
     },
 
     /**
      *
      * @param {string} fileName
      */
-    openSharingDialog: function (fileName) {
-      this.waitForFileVisible(fileName)
+    openSharingDialog: async function (fileName) {
+      await this.waitForFileVisible(fileName)
+
+      await this
         .useXpath()
         .performFileAction(fileName, 'share')
         .waitForElementVisible('@sharingSideBar')
         .useCss()
+
       return this.api.page.FilesPageElement.sharingDialog()
     },
     /**
@@ -212,12 +228,15 @@ module.exports = {
      */
     openPublicLinkDialog: async function (fileName) {
       await this.waitForFileVisible(fileName)
+
+      await this
         .useXpath()
         .performFileAction(fileName, 'share')
         .waitForElementVisible('@linkToPublicLinksTag')
         .click('@linkToPublicLinksTag')
         .waitForElementVisible('@publicLinkSideBar')
         .useCss()
+
       return this.api.page.FilesPageElement.publicLinksDialog()
     },
     closeSidebar: function (timeout = null) {
@@ -242,9 +261,10 @@ module.exports = {
      * @param {string} toName
      * @param {boolean} expectToSucceed
      */
-    renameFile: function (fromName, toName, expectToSucceed = true) {
-      this.initAjaxCounters()
-        .waitForFileVisible(fromName)
+    renameFile: async function (fromName, toName, expectToSucceed = true) {
+      await this.waitForFileVisible(fromName)
+
+      await this.initAjaxCounters()
         .useXpath()
         .performFileAction(fromName, 'rename')
         .waitForElementVisible('@renameFileConfirmationBtn')
@@ -256,7 +276,7 @@ module.exports = {
         .useCss()
 
       if (expectToSucceed) {
-        this.waitForElementNotVisible('@renameFileConfirmationDialog')
+        await this.waitForElementNotVisible('@renameFileConfirmationDialog')
       }
 
       return this
@@ -265,9 +285,10 @@ module.exports = {
      *
      * @param {string} fromName
      */
-    downloadFile: function (fromName) {
-      return this.initAjaxCounters()
-        .waitForFileVisible(fromName)
+    downloadFile: async function (fromName) {
+      await this.waitForFileVisible(fromName)
+
+      await this.initAjaxCounters()
         .performFileAction(fromName, 'download')
         .waitForOutstandingAjaxCalls()
     },
@@ -275,16 +296,19 @@ module.exports = {
      *
      * @param {string} path
      */
-    markAsFavorite: function (path) {
+    markAsFavorite: async function (path) {
+      await this.waitForFileVisible(path)
+
       const favoriteIconButton = this.getFileRowSelectorByFileName(path) +
         this.elements.notMarkedFavoriteInFileRow.selector
 
-      return this.initAjaxCounters()
-        .waitForFileVisible(path)
+      await this.initAjaxCounters()
         .useXpath()
         .click(favoriteIconButton)
         .waitForOutstandingAjaxCalls()
         .useCss()
+
+      return this
     },
     /**
      *
@@ -311,29 +335,35 @@ module.exports = {
     /**
      * @param {string} path
      */
-    unmarkFavorite: function (path) {
+    unmarkFavorite: async function (path) {
       const unFavoriteBtn = this.getFileRowSelectorByFileName(path) +
         this.elements.markedFavoriteInFileRow.selector
 
-      return this.initAjaxCounters()
-        .waitForFileVisible(path)
+      await this.waitForFileVisible(path)
+
+      await this.initAjaxCounters()
         .useXpath()
         .click(unFavoriteBtn)
         .waitForOutstandingAjaxCalls()
         .useCss()
+
+      return this
     },
     /**
      * @param {string} item the file/folder to click
      */
-    clickRow: function (item) {
-      return this.initAjaxCounters()
-        .waitForFileVisible(item)
+    clickRow: async function (item) {
+      await this.waitForFileVisible(item)
+
+      await this.initAjaxCounters()
         .useXpath()
         // click in empty space in the tr using coordinates to avoid
         // clicking on other elements that might be in the front
         .clickElementAt(this.getFileRowSelectorByFileName(item), 0, 0)
         .waitForOutstandingAjaxCalls()
         .useCss()
+
+      return this
     },
 
     /**
@@ -342,13 +372,15 @@ module.exports = {
      * @param {string} enableOrDisable
      * @param {string} path
      */
-    toggleFileOrFolderCheckbox: function (enableOrDisable, path) {
+    toggleFileOrFolderCheckbox: async function (enableOrDisable, path) {
+      await this.waitForFileVisible(path)
+
       const fileCheckbox = this.getFileRowSelectorByFileName(path) +
         this.elements.checkboxInFileRow.selector
 
+      await this.toggleCheckbox(enableOrDisable, fileCheckbox, 'xpath')
+
       return this
-        .waitForFileVisible(path)
-        .toggleCheckbox(enableOrDisable, fileCheckbox, 'xpath')
     },
     /**
      *
@@ -372,16 +404,40 @@ module.exports = {
      *
      * @param {string} fileName
      */
-    waitForFileVisible: function (fileName) {
-      const rowSelector = this.getFileRowSelectorByFileName(fileName)
+    waitForFileVisible: async function (fileName) {
       const linkSelector = this.getFileLinkSelectorByFileName(fileName)
-      return this
+
+      await this.waitForElementPresent('@filesTableContainer')
+
+      await this.filesListScrollToTop()
+
+      // TODO: After virtual scroll is implemented also in trashbin get rid of this
+      let trashbin = false
+      await this.api.url(result => {
+        if (result.value.indexOf('trash-bin') > -1) {
+          trashbin = true
+        }
+      })
+
+      if (trashbin) {
+        const rowSelector = this.getFileRowSelectorByFileName(fileName)
+
+        this
+          .useXpath()
+          .waitForElementVisible(rowSelector)
+      } else {
+        await this.findItemInFilesList(fileName)
+      }
+
+      // Find the item in files list if it's not in the view
+      await this
         .useXpath()
-        .waitForElementVisible(rowSelector)
         .getAttribute(linkSelector, 'filename', function (result) {
           this.assert.strictEqual(result.value, fileName, 'displayed file name not as expected')
         })
         .useCss()
+
+      return this
     },
     /**
      * Wait for A filerow with given path to be visible
@@ -602,27 +658,143 @@ module.exports = {
         .waitForElementNotVisible('@sidebarPrivateLinkIconCopied')
         .waitForElementVisible('@sidebarPrivateLinkLabel')
     },
-    deleteImmediately: function (fileName) {
-      return this.waitForFileVisible(fileName)
+    deleteImmediately: async function (fileName) {
+      await this.waitForFileVisible(fileName)
+      await this
         .performFileAction(fileName, 'deleteImmediately')
         .confirmDeletion()
-    },
-    getVersions: function (filename) {
-      const formattedFileRow = this.getFileRowSelectorByFileName(filename)
+
       return this
+    },
+    getVersions: async function (filename) {
+      const formattedFileRow = this.getFileRowSelectorByFileName(filename)
+
+      await this.waitForFileVisible(filename)
+
+      await this
         .useXpath()
-        .waitForElementVisible(formattedFileRow)
         .click(formattedFileRow)
         .waitForElementVisible('@versionsElement')
         .click('@versionsElement')
+
+      return this
+    },
+    countFilesAndFolders: async function () {
+      let filesCount = 0
+      let foldersCount = 0
+
+      await this.waitForElementVisible('@filesCount')
+        .getText('@filesCount', result => {
+          filesCount = parseInt(result.value, 10)
+        })
+
+      await this.waitForElementVisible('@foldersCount')
+        .getText('@foldersCount', result => {
+          foldersCount = parseInt(result.value, 10)
+        })
+
+      return filesCount + foldersCount
+    },
+
+    /**
+     * Find an item in the files list. Scrolls down in case the item is not visible in viewport
+     */
+    findItemInFilesList: async function (itemName) {
+      // Escape double quotes inside of selector
+      if (itemName.indexOf('"') > -1) {
+        itemName = this.replaceChar(itemName, '"', '\\"')
+      }
+
+      await this.api.executeAsync(
+        function (
+          {
+            itemName,
+            listContainerSelector,
+            scrollWrapperSelector,
+            listHeaderSelector
+          },
+          done
+        ) {
+          const filesListContainer = document.querySelector(listContainerSelector)
+          const virtualScrollWrapper = document.querySelector(scrollWrapperSelector)
+          const tableHeaderPosition = document.querySelector(listHeaderSelector).getBoundingClientRect().top
+          let scrollDistance = filesListContainer.scrollTop
+
+          function scrollUntilElementVisible () {
+            const item = document.querySelector(`[filename="${itemName}"]`)
+
+            if (item) {
+              const position = item.getBoundingClientRect()
+              // Add position from top to list container height to properly decide if the item is visible
+              const visiblePosition = filesListContainer.clientHeight + tableHeaderPosition
+
+              // Check if the item is inside the view after it's renredered
+              if (position.top > -1 && position.top <= visiblePosition) {
+                done()
+                return
+              }
+            }
+
+            if (virtualScrollWrapper.scrollHeight <= scrollDistance) {
+              done()
+              return
+            }
+
+            scrollDistance += filesListContainer.clientHeight
+            filesListContainer.scrollTop = scrollDistance
+            setTimeout(function () {
+              scrollUntilElementVisible()
+            }, 500)
+          }
+
+          scrollUntilElementVisible()
+        }, [{
+          itemName: itemName,
+          listContainerSelector: this.elements.filesTableContainer.selector,
+          scrollWrapperSelector: this.elements.virtualScrollWrapper.selector,
+          listHeaderSelector: this.elements.filesTableHeader.selector
+        }])
+
+      return this
+    },
+
+    /**
+     * Scroll the files list to the beginning
+     */
+    filesListScrollToTop: async function () {
+      await this.api.executeAsync(function (listContainerSelector, done) {
+        const filesListScroll = document.querySelector(listContainerSelector)
+        if (filesListScroll.scrollTop > 0) {
+          filesListScroll.scrollTop = 0
+        }
+
+        done()
+      }, [this.elements.filesTableContainer.selector])
+
+      return this
+    },
+
+    /**
+     * Returns original string with replaced target character
+     * @param   {string} string     String in which will be the target character replaced
+     * @param   {string} targetChar Target character which is to be replaced
+     * @param   {string} newChar    New character which will replace target character
+     * @returns {string}            String with replaced target character
+     */
+    replaceChar: function (string, targetChar, newChar) {
+      const regex = new RegExp(targetChar, 'g')
+      return string.replace(regex, newChar)
     }
   },
   elements: {
     filesTable: {
       selector: '#files-list, #shared-with-list'
     },
+    filesTableContainer: {
+      selector: '#files-list-container'
+    },
     fileRows: {
-      selector: 'tr.file-row'
+      selector: '.file-row'
     },
     allFiles: {
       selector: 'span.oc-file.file-row-name'
@@ -680,10 +852,12 @@ module.exports = {
       selector: '#oc-dialog-rename-confirm'
     },
     fileRowByName: {
-      selector: '//span[@class="oc-file-name"][text()=%s and not(../span[@class="oc-file-extension"])]/../../..'
+      // FIXME: When the virtual scroll is implemented in trashbin adjust the selector
+      selector: '//span[@class="oc-file-name"][text()=%s and not(../span[@class="oc-file-extension"])]/../../../../../*[@data-is-visible="true"]'
     },
     fileRowByNameAndExtension: {
-      selector: '//span[span/text()=%s and span/text()="%s"]/../..'
+      // FIXME: When the virtual scroll is implemented in trashbin adjust the selector
+      selector: '//span[span/text()=%s and span/text()="%s"]/../../../../*[@data-is-visible="true"]'
     },
     fileLinkInFileRow: {
       selector: '//span[contains(@class, "file-row-name")]'
@@ -744,6 +918,22 @@ module.exports = {
     },
     collaboratorsList: {
       selector: '.files-collaborators-lists'
+    },
+    itemActionsDropdown: {
+      // FIXME: Use id after virtual scroll was implemented in trashbin
+      selector: '//div[@data-actions-dropdown-for-item="%s"]'
+    },
+    foldersCount: {
+      selector: '#files-list-count-folders'
+    },
+    filesCount: {
+      selector: '#files-list-count-files'
+    },
+    virtualScrollWrapper: {
+      selector: '.vue-recycle-scroller__item-wrapper'
+    },
+    filesTableHeader: {
+      selector: '#files-table-header'
     }
   }
 }

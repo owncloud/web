@@ -2,11 +2,12 @@ const { client } = require('nightwatch-api')
 const { When } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
 
-When('the user copies the private link of the file/folder {string} using the webUI', function (resource) {
-  return client.page.FilesPageElement
-    .filesList()
+When('the user copies the private link of the file/folder {string} using the webUI', async function (resource) {
+  const api = client.page.FilesPageElement.filesList()
+  await api
     .clickRow(resource)
-    .copyPrivateLink()
+
+  return api.copyPrivateLink()
 })
 
 When('the user navigates to the copied private/public link using the webUI', function () {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="files-list-container">
     <oc-table middle divider class="oc-filelist" id="files-list" v-show="!loadingFolder">
       <oc-table-group>
         <oc-table-row>
@@ -11,14 +11,16 @@
           <oc-table-cell shrink type="head" v-translate>Actions</oc-table-cell>
         </oc-table-row>
       </oc-table-group>
-      <oc-table-group>
-        <oc-table-row v-for="(item, index) in fileData" :key="index" class="file-row">
+      <oc-table-group v-for="(item, index) in fileData" :key="index">
+        <oc-table-row class="file-row" data-is-visible="true">
           <oc-table-cell>
             <oc-checkbox :hideLabel="true" class="uk-margin-small-left" @click.stop @change.native="$_ocTrashbin_toggleFileSelect(item)" :value="selectedFiles.indexOf(item) >= 0" />
           </oc-table-cell>
           <oc-table-cell class="uk-text-truncate">
-            <oc-file :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name"
+            <div>
+              <oc-file :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name"
                     :filename="item.name" :icon="fileTypeIcon(item)" :key="item.originalLocation" />
+            </div>
           </oc-table-cell>
           <oc-table-cell class="uk-text-meta uk-text-nowrap uk-visible@m">
             {{ formDateFromNow(item.deleteTimestamp) }}
@@ -42,6 +44,7 @@
               :toggle="'#files-trashbin-action-button-small-resolution-' + index"
               :options="{ offset: 0 }"
               position="bottom-right"
+              :data-actions-dropdown-for-item="nameForDropdownData(item.name)"
             >
               <ul class="uk-list">
                 <li>
@@ -240,6 +243,15 @@ export default {
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
       }
       return item.basename
+    },
+    // FIXME: Remove as soon as trashbin has virtual scroll
+    nameForDropdownData (name) {
+      // Escape double quotes inside of selector
+      if (name.indexOf('"') > -1) {
+        name = name.replace(/\\([\s\S])|(")/g, '&quot;')
+      }
+
+      return name
     }
   }
 }

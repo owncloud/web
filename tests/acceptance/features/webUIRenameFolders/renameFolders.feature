@@ -58,7 +58,6 @@ Feature: rename folders
     When the user renames folder "simple-folder" to an invalid name "space at end " using the webUI
     Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
     When the user reloads the current page of the webUI
-    Then folder "lorem.txt" should be listed on the webUI
     And folder "space at end " should not be listed on the webUI
     When the user renames folder "simple-folder" to an invalid name "  multiple   space    all     over   " using the webUI
     Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt

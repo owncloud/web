@@ -157,8 +157,10 @@ When('the user creates a folder with the invalid name {string} using the webUI',
 Given('the user has opened folder {string}', (folder) => client.page.FilesPageElement.filesList().navigateToFolder(folder))
 When('the user opens folder {string} using the webUI', (folder) => client.page.FilesPageElement.filesList().navigateToFolder(folder))
 
-Given('the user has opened the share dialog for file/folder {string}', function (fileName) {
-  return client.page.FilesPageElement.filesList().openSharingDialog(fileName)
+Given('the user has opened the share dialog for file/folder {string}', async function (fileName) {
+  await client.page.FilesPageElement.filesList().openSharingDialog(fileName)
+
+  return client
 })
 
 When('the user enables the setting to view hidden files/folders on the webUI', function () {
@@ -373,12 +375,14 @@ Then('file/folder with path {string} should be listed in the favorites page on t
     .waitForFileWithPathVisible(path)
 })
 
-Then('the last uploaded folder should be listed on the webUI', function () {
+Then('the last uploaded folder should be listed on the webUI', async function () {
   const folder = client.sessionId
-  return client
+  await client
     .page
     .FilesPageElement.filesList()
     .waitForFileVisible(folder)
+
+  return client
 })
 
 Then('file/folder {string} should not be listed on the webUI', async function (folder) {
@@ -433,26 +437,25 @@ When('the user batch deletes the marked files using the webUI', function () {
   return client.page.filesPage().deleteAllCheckedFiles()
 })
 
-When('the user batch deletes these files using the webUI', function (fileOrFolders) {
-  fileOrFolders.rows().forEach(entry => {
-    client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', entry[0])
-    deletedElements.push(entry[0])
-  })
+When('the user batch deletes these files using the webUI', async function (fileOrFolders) {
+  for (const item of fileOrFolders.rows()) {
+    await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
+    deletedElements.push(item[0])
+  }
+
   return client.page.filesPage().deleteAllCheckedFiles()
 })
 
-When('the user unmarks these files for batch action using the webUI', function (fileOrFolders) {
-  fileOrFolders.rows().forEach(entry => {
-    client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('disable', entry[0])
-  })
-  return client
+When('the user unmarks these files for batch action using the webUI', async function (fileOrFolders) {
+  for (const item of fileOrFolders.rows()) {
+    await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('disable', item[0])
+  }
 })
 
-When('the user marks these files for batch action using the webUI', function (fileOrFolders) {
-  fileOrFolders.rows().forEach(entry => {
-    client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', entry[0])
-  })
-  return client
+When('the user marks these files for batch action using the webUI', async function (fileOrFolders) {
+  for (const item of fileOrFolders.rows()) {
+    await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
+  }
 })
 
 When('the user clears the trashbin', function () {
@@ -532,15 +535,15 @@ Then('as {string} these folders/files/resources should not be listed in the fold
  *
  * @param {DataTable} entryList the list needs a heading line
  */
-const theseResourcesShouldBeListed = function (entryList) {
+const theseResourcesShouldBeListed = async function (entryList) {
   if (entryList.rows().length <= 0) {
     throw Error('Gerkin entry list is empty. Missing heading?')
   }
-  entryList.rows().forEach(entry => {
-    // here each entry is an array with one element,
-    // which is the name of the entry from the table
-    client.page.FilesPageElement.filesList().waitForFileVisible(entry[0])
-  })
+
+  for (const item of entryList.rows()) {
+    await client.page.FilesPageElement.filesList().waitForFileVisible(item[0])
+  }
+
   return client
 }
 
@@ -618,8 +621,8 @@ Then('file/folder {string} should not be marked as favorite on the webUI', funct
 })
 
 Then(/there should be (\d+) files\/folders listed on the webUI/, async function (noOfItems) {
-  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
-  return client.assert.equal(allFileRows.value.length, noOfItems)
+  const itemsCount = await client.page.FilesPageElement.filesList().countFilesAndFolders()
+  return client.assert.equal(itemsCount, noOfItems)
 })
 
 Then('the folder should be empty on the webUI after a page reload', async function () {
@@ -692,13 +695,17 @@ Then('the following files/folders/resources should be listed on the webUI', func
   return assertElementsAreListed([].concat.apply([], table.rows()))
 })
 
-Then('file/folder {string} should be listed in the folder {string} on the webUI', function (file, folder) {
-  return client
+Then('file/folder {string} should be listed in the folder {string} on the webUI', async function (file, folder) {
+  const api = client
     .page
     .FilesPageElement
     .filesList()
-    .navigateToFolder(folder)
-    .waitForFileVisible(file)
+
+  await api.navigateToFolder(folder)
+
+  await api.waitForFileVisible(file)
+
+  return client
 })
 
 Then('the deleted elements should be listed on the webUI', function () {
@@ -726,9 +733,11 @@ Then('file/folder {string} should not be listed in shared-with-others page on th
   )
 })
 
-Then('file/folder {string} should be listed in shared-with-others page on the webUI', function (filename) {
-  client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
-  return client.page.FilesPageElement.filesList().waitForFileVisible(filename)
+Then('file/folder {string} should be listed in shared-with-others page on the webUI', async function (filename) {
+  await client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
+  await client.page.FilesPageElement.filesList().waitForFileVisible(filename)
+
+  return client
 })
 
 Given('the user has created file {string}', function (fileName) {

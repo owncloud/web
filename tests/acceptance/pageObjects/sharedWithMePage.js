@@ -22,15 +22,21 @@ module.exports = {
      * Checks if the file-row of the desired file-name with the username consists of the desired status of accepted,
      * declined or pending
      */
-    assertDesiredStatusIsPresent: function (filename, status, user) {
+    assertDesiredStatusIsPresent: async function (filename, status, user) {
+      // TODO: Needs to be optimised
+      await this.api.page.FilesPageElement.filesList().waitForFileVisible(filename)
+
       let requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
                           util.format(this.elements.assertStatusFileRow.selector, status)
       requiredXpath = user === undefined ? requiredXpath : requiredXpath +
                       util.format(this.elements.getSharedFromUserName.selector, user)
-      return this.waitForElementVisible({
+
+      await this.waitForElementVisible({
         locateStrategy: this.elements.assertStatusFileRow.locateStrategy,
         selector: requiredXpath
       })
+
+      return this
     },
     /**
      * @param {string} filename
