@@ -21,7 +21,7 @@
     "css-loader": "^3.1.0",
     "vue-loader": "^15.7.1",
     "vue-pdf": "^4.0.7",
-    "vue-template-compiler": "^2.6.10",
+    "vue-template-compiler": "^2.6.11",
     "vuex": "3.1.1",
     "webpack": "^4.36.1",
     "webpack-cli": "^3.3.8",
