@@ -186,7 +186,7 @@ export default {
 
     $_renameDialogLabel () {
       let translated
-      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
+      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return ''
 
       if (this.renameDialogSelectedFile.type === 'folder') {
         translated = this.$gettext('Folder name')
