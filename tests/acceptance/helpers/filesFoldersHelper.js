@@ -1,8 +1,8 @@
 const { client } = require('nightwatch-api')
-const { propfind, getTrashBinElements } = require('./webdavHelper')
+const { propfind, getTrashBinElements, getFavouritedResources } = require('./webdavHelper')
 const convert = require('xml-js')
-const { relativeTo, normalize, join } = require('./path')
 const sharingHelper = require('../helpers/sharingHelper')
+const { relativeTo, normalize, join } = require('./path')
 
 exports.getAllFilesFolders = function (user) {
   const backendURL = client.globals.backend_url
@@ -77,4 +77,14 @@ exports.getSharedWithOthersFiles = async function (user) {
   const sharedWithOthersElements = await sharingHelper.getAllSharesSharedByUser(user)
   return sharedWithOthersElements.filter(elements => elements.mimetype.includes('application/octet-stream'))
     .map(elements => normalize(elements.path))
+}
+
+exports.getFavouritedFolders = async function (user) {
+  const favElems = await getFavouritedResources(user)
+  return favElems.filter(element => element.isFolder).map(element => element.resource)
+}
+
+exports.getFavouritedFiles = async function (user) {
+  const favElems = await getFavouritedResources(user)
+  return favElems.filter(element => !element.isFolder).map(element => element.resource)
 }

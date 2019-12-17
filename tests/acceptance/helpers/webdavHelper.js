@@ -4,7 +4,7 @@ const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('./backendHelper')
 const convert = require('xml-js')
 const _ = require('lodash/object')
-const { resolve, normalize, join } = require('../helpers/path')
+const { resolve, normalize, join, filename } = require('../helpers/path')
 const occHelper = require('../helpers/occHelper')
 
 /**
@@ -231,4 +231,32 @@ exports.uploadFileWithContent = function (user, content, filename) {
     body: content
   })
     .then(res => httpHelper.checkStatus(res, 'Could not upload file' + filename + 'with content' + content))
+}
+
+exports.getFavouritedResources = function (user) {
+  const headers = httpHelper.createAuthHeader(user)
+  const body = `<oc:filter-files  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
+                 <d:prop><d:resourcetype /></d:prop>
+                 <oc:filter-rules>
+                     <oc:favorite>1</oc:favorite>
+                 </oc:filter-rules>
+                </oc:filter-files>`
+  return fetch(client.globals.backend_url + `/remote.php/dav/files/${user}`,
+    {
+      method: 'REPORT',
+      headers,
+      body
+    })
+    .then(res => res.text())
+    .then(res => {
+      const favData = convert.xml2js(res, { compact: true })['d:multistatus']['d:response']
+      const favItems = []
+      favData.map(favourite => {
+        favItems.push({
+          resource: filename(favourite['d:href']._text),
+          isFolder: !(Object.keys(favourite['d:propstat']['d:prop']['d:resourcetype']).length === 0)
+        })
+      })
+      return favItems
+    })
 }

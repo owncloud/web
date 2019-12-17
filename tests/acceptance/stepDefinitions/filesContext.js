@@ -11,7 +11,7 @@ let deletedElements
 let timeOfLastDeleteOperation = Date.now()
 let timeOfLastUploadOperation = Date.now()
 const { download } = require('../helpers/webdavHelper')
-const { getElementsMatchingPattern, getAllFilesStartingWithDot } = require('../helpers/filesFoldersHelper')
+const { getElementsMatchingPattern, getAllFilesStartingWithDot, getFavouritedFolders, getFavouritedFiles } = require('../helpers/filesFoldersHelper')
 const { getTrashbinFolders, getTrashbinFiles, getAllFiles, getAllFolders } = require('../helpers/filesFoldersHelper')
 const { getSharedWithMeFiles, getSharedWithMeFolders } = require('../helpers/filesFoldersHelper')
 const { getSharedWithOthersFiles, getSharedWithOthersFolders } = require('../helpers/filesFoldersHelper')
@@ -1070,6 +1070,55 @@ Then('only folders containing pattern {string} in their name should be listed in
 Then('only files containing pattern {string} in their name should be listed in the shared-with-others page on the webUI', async function (pattern) {
   const sharedWithOthersFiles = await getSharedWithOthersFiles(client.globals.currentUser)
   const filesMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithOthersFiles)
+  const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
+  return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
+})
+
+Then('all files and folders containing pattern {string} in their name should be listed in the favourites list on the webUI', async function (pattern) {
+  const favFolders = await getFavouritedFolders(client.globals.currentUser)
+  const favFiles = await getFavouritedFiles(client.globals.currentUser)
+  const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
+  const favResources = favFiles.concat(favFolders)
+  const filesMatchingPattern = await getElementsMatchingPattern(pattern, favResources)
+  return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
+})
+
+Then('all files and folders containing pattern {string} in their name should be listed in the favourites list on the webUI except of hidden elements', async function (pattern) {
+  const favFolders = await getFavouritedFolders(client.globals.currentUser)
+  const favFiles = await getFavouritedFiles(client.globals.currentUser)
+  const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
+  const favResources = favFiles.concat(favFolders)
+  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, favResources)
+  const nonHiddenElements = await getAllFilesStartingWithDot(filesFoldersMatchingPattern)
+  return assertDesiredResourcesListed(nonHiddenElements, allListedFilesFolders)
+})
+
+Then('only files containing pattern {string} in their name should be listed in the favourites list on the webUI except of hidden elements', async function (pattern) {
+  const favFiles = await getFavouritedFiles(client.globals.currentUser)
+  const filesMatchingPattern = await getElementsMatchingPattern(pattern, favFiles)
+  const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
+  const nonHiddenFiles = await getAllFilesStartingWithDot(filesMatchingPattern)
+  return assertDesiredResourcesListed(nonHiddenFiles, allListedFilesFolders)
+})
+
+Then('only folders containing pattern {string} in their name should be listed in the favourites list on the webUI except of hidden elements', async function (pattern) {
+  const favFolders = await getFavouritedFolders(client.globals.currentUser)
+  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, favFolders)
+  const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
+  const nonHiddenFiles = await getAllFilesStartingWithDot(foldersMatchingPattern)
+  return assertDesiredResourcesListed(nonHiddenFiles, allListedFilesFolders)
+})
+
+Then('only folders containing pattern {string} in their name should be listed in the favourites list on the webUI', async function (pattern) {
+  const favFolders = await getFavouritedFolders(client.globals.currentUser)
+  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, favFolders)
+  const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
+  return assertDesiredResourcesListed(foldersMatchingPattern, allListedFilesFolders)
+})
+
+Then('only files containing pattern {string} in their name should be listed in the favourites list on the webUI', async function (pattern) {
+  const favFiles = await getFavouritedFiles(client.globals.currentUser)
+  const filesMatchingPattern = await getElementsMatchingPattern(pattern, favFiles)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
 })
