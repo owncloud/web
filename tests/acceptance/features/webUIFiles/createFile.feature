@@ -9,7 +9,7 @@ Feature: create files
     And the user has browsed to the files page
 
   Scenario: create a new file
-    When the user creates a new file "sample.txt" using the webUI
+    When the user creates a file with the name "sample.txt" using the webUI
     And the user browses to the files page
     Then file "sample.txt" should be listed on the webUI
 
