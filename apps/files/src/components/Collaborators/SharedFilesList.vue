@@ -29,7 +29,10 @@
       </div>
       <div class="uk-text-meta uk-text-nowrap uk-width-small">
         <div v-if="$route.name === 'files-shared-with-others'" key="shared-with-cell">
-          {{ item.sharedWith }} (<translate v-if="item.shareType === 1">group</translate>)
+          <span v-text="item.sharedWith" />
+          <span v-if="item.shareType === 1">
+            (<translate>group</translate>)
+          </span>
         </div>
         <div v-else key="shared-from-cell">
           {{ item.shareOwnerDisplayname }}
