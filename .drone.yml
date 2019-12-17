@@ -135,59 +135,6 @@ steps:
     TEST_CONTEXT: webUIFavorites
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>Favorites</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUIFavorites
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -343,59 +290,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIFiles
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>Files</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUIFiles
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -553,59 +447,6 @@ steps:
     TEST_CONTEXT: webUILogin
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>Login</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUILogin
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -761,59 +602,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUINotifications
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>Notifications</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUINotifications
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -971,59 +759,6 @@ steps:
     TEST_CONTEXT: webUIPrivateLinks
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>PrivateLinks</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUIPrivateLinks
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -1179,59 +914,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIRenameFiles
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>RenameFiles</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUIRenameFiles
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -1389,59 +1071,6 @@ steps:
     TEST_CONTEXT: webUIRenameFolders
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>RenameFolders</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUIRenameFolders
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -1597,59 +1226,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIRestrictSharing
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>RestrictSharing</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUIRestrictSharing
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -1807,59 +1383,6 @@ steps:
     TEST_CONTEXT: webUISharingAutocompletion
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingAutocompletion</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingAutocompletion
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -2015,59 +1538,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingInternalGroups
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingInternalGroups</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingInternalGroups
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -2225,59 +1695,6 @@ steps:
     TEST_CONTEXT: webUISharingInternalUsers
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingInternalUsers</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingInternalUsers
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -2433,59 +1850,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingPermissionsUsers
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingPermissionsUsers</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingPermissionsUsers
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -2643,59 +2007,6 @@ steps:
     TEST_CONTEXT: webUISharingFilePermissionsGroups
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingFilePermissionsGroups</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingFilePermissionsGroups
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -2851,59 +2162,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingFolderPermissionsGroups
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingFolderPermissionsGroups</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingFolderPermissionsGroups
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -3061,59 +2319,6 @@ steps:
     TEST_CONTEXT: webUIResharing
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>Resharing</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUIResharing
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -3269,59 +2474,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingPublic
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingPublic</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingPublic
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -3479,59 +2631,6 @@ steps:
     TEST_CONTEXT: webUITrashbin
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>Trashbin</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUITrashbin
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -3687,59 +2786,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIUpload
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>Upload</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUIUpload
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -3897,59 +2943,6 @@ steps:
     TEST_CONTEXT: webUISharingAcceptShares
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingAcceptShares</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingAcceptShares
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -4105,59 +3098,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUISharingPermissionsMultipleUsers
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingPermissionsMultipleUsers</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingPermissionsMultipleUsers
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -4315,59 +3255,6 @@ steps:
     TEST_CONTEXT: webUISharingNotifications
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingNotifications</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingNotifications
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -4523,59 +3410,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     TEST_CONTEXT: webUIAccount
     TEST_TAGS: not @skip
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>Account</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUIAccount
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
@@ -4760,59 +3594,6 @@ steps:
     TEST_CONTEXT: webUISharingExternal
     TEST_TAGS: not @skip
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>SharingExternal</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: webUISharingExternal
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -4981,59 +3762,6 @@ steps:
     SCREEN_RESOLUTION: 768x1024
     TEST_TAGS: "@smokeTest and not @skipOnXGAPortraitResolution and not @skip"
 
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>XGAPortrait</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: all
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
 services:
 - name: phoenix
   pull: always
@@ -5189,59 +3917,6 @@ steps:
     LOCAL_UPLOAD_DIR: /uploads
     SCREEN_RESOLUTION: 375x812
     TEST_TAGS: "@smokeTest and not @skipOnIphoneResolution and not @skip"
-
-- name: upload-screenshots
-  pull: if-not-exists
-  image: plugins/s3
-  settings:
-    acl: public-read
-    bucket: phoenix
-    endpoint: https://minio.owncloud.com/
-    path_style: true
-    source: /var/www/owncloud/phoenix/tests/reports/screenshots/**/*
-    strip_prefix: /var/www/owncloud/phoenix/tests/reports/screenshots
-    target: /screenshots/${DRONE_BUILD_NUMBER}
-  environment:
-    AWS_ACCESS_KEY_ID:
-      from_secret: aws_access_key_id
-    AWS_SECRET_ACCESS_KEY:
-      from_secret: aws_secret_access_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: build-github-comment
-  pull: always
-  image: owncloud/ubuntu:16.04
-  commands:
-  - cd /var/www/owncloud/phoenix/tests/reports/screenshots/
-  - "echo \"<details><summary>:boom: Acceptance tests <strong>iPhone</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n\" >> comments.file"
-  - for f in *.png; do echo '!'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done
-  - "echo \"\n</p></details>\" >> comments.file"
-  - more comments.file
-  environment:
-    TEST_CONTEXT: all
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
-
-- name: github-comment
-  pull: if-not-exists
-  image: jmccann/drone-github-comment:1
-  settings:
-    message_file: /var/www/owncloud/phoenix/tests/reports/screenshots/comments.file
-  environment:
-    PLUGIN_API_KEY:
-      from_secret: plugin_api_key
-  when:
-    event:
-    - pull_request
-    status:
-    - failure
 
 services:
 - name: phoenix
