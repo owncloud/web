@@ -3,8 +3,7 @@ const userSharePostfix = '\nUser'
 const federationSharePostfix = '\nRemote user'
 const util = require('util')
 const _ = require('lodash')
-
-const COLLABORATOR_PERMISSION_ARRAY = ['share', 'update', 'create', 'delete']
+const { COLLABORATOR_PERMISSION_ARRAY } = require('../../helpers/sharingHelper')
 
 module.exports = {
   commands: {
@@ -23,22 +22,21 @@ module.exports = {
     getPermissionCheckbox: function (permission) {
       return util.format(this.elements.permissionCheckbox.selector, permission)
     },
-
-    assertSharingNotAllowed: function () {
+    /**
+     * gets share permission message whether is allowed to share or not
+     *
+     * @returns {Promise<string>}
+     */
+    getSharingPermissionMsg: async function () {
+      let shareResponse
       // eslint-disable-next-line no-unused-expressions
       this.api.expect.element(this.elements.addShareSaveButton.selector).not.to.be.present
-      return this.api.getText(this.elements.noResharePermissions.selector,
+      await this.api.getText(this.elements.noResharePermissions.selector,
         function (result) {
-          const noSharePermissionsMsgFormat = "You don't have permission to share this %s"
-          const noSharePermissionsFileMsg = util.format(noSharePermissionsMsgFormat, 'file')
-          const noSharePermissionsFolderMsg = util.format(noSharePermissionsMsgFormat, 'folder')
-
-          this.assert.ok(
-            noSharePermissionsFileMsg === result.value ||
-            noSharePermissionsFolderMsg === result.value
-          )
+          shareResponse = result.value
         }
       )
+      return shareResponse
     },
 
     /**
@@ -288,34 +286,12 @@ module.exports = {
      * @param {string} collaborator
      * @param {string} permissions
      */
-    assertPermissionIsDisplayed: async function (collaborator, permissions = undefined) {
-      let requiredPermissionArray
-      if (permissions !== undefined) {
-        requiredPermissionArray = this.getArrayFromPermissionString(permissions)
-      }
-
+    getDisplayedPermission: async function (collaborator) {
       await this.clickEditShare(collaborator)
-
       // read the permissions from the checkboxes
       const currentSharePermissions = await this.getSharePermissions()
-
-      for (let i = 0; i < COLLABORATOR_PERMISSION_ARRAY.length; i++) {
-        const permissionName = COLLABORATOR_PERMISSION_ARRAY[i]
-        if (permissions !== undefined) {
-          // check all the required permissions are set
-          if (requiredPermissionArray.includes(permissionName)) {
-            this.assert.strictEqual(currentSharePermissions[permissionName], true, `Permission ${permissionName} is not set`)
-          } else {
-            // check unexpected permissions are not set or absent from the array
-            this.assert.ok(!currentSharePermissions[permissionName], `Permission ${permissionName} is set`)
-          }
-        } else {
-          // check all the permissions are not set or absent from the array
-          this.assert.ok(!currentSharePermissions[permissionName], `Permission ${permissionName} is set`)
-        }
-      }
-
       await this.clickCancel()
+      return currentSharePermissions
     },
     /**
      *
@@ -475,8 +451,20 @@ module.exports = {
     getUserSharePostfix: function () {
       return userSharePostfix
     },
-    assertAutocompleteListIsNotVisible: function () {
-      return this.waitForElementNotVisible('@sharingAutoCompleteDropDown')
+    /**
+     * checks whether autocomplete list is visible
+     *
+     * @returns {Promise<boolean>}
+     */
+    isAutocompleteListVisible: async function () {
+      let isVisible = false
+      await this.api.elements(
+        '@sharingAutoCompleteDropDownElements',
+        (result) => {
+          isVisible = result.value.length > 0
+        }
+      )
+      return isVisible
     }
   },
   elements: {

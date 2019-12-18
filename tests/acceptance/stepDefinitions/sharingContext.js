@@ -14,6 +14,7 @@ const { runOcc } = require('../helpers/occHelper')
 const _ = require('lodash')
 const path = require('../helpers/path')
 const util = require('util')
+const { COLLABORATOR_PERMISSION_ARRAY } = require('../helpers/sharingHelper')
 
 /**
  *
@@ -483,26 +484,51 @@ When('the user disables all the custom permissions of collaborator {string} for 
   return api.sharingDialog().disableAllCustomPermissions(collaborator)
 })
 
-Then('custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI', async function (permissions, user, resource) {
-  const api = client.page
-    .FilesPageElement
+const assertSharePermissions = async function (currentSharePermissions, permissions = undefined) {
+  let expectedPermissionArray
+  if (permissions !== undefined) {
+    expectedPermissionArray = await client.page.FilesPageElement.sharingDialog().getArrayFromPermissionString(permissions)
+  }
+  for (let i = 0; i < COLLABORATOR_PERMISSION_ARRAY.length; i++) {
+    const permissionName = COLLABORATOR_PERMISSION_ARRAY[i]
+    if (permissions !== undefined) {
+      // check all the required permissions are set
+      if (expectedPermissionArray.includes(permissionName)) {
+        assert.strictEqual(currentSharePermissions[permissionName], true, `Permission ${permissionName} is not set`)
+      } else {
+        // check unexpected permissions are not set or absent from the array
+        assert.ok(!currentSharePermissions[permissionName], `Permission ${permissionName} is set`)
+      }
+    } else {
+      // check all the permissions are not set or absent from the array
+      assert.ok(!currentSharePermissions[permissionName], `Permission ${permissionName} is set`)
+    }
+  }
+}
 
-  await api.filesList().closeSidebar(100)
+Then('custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI',
+  async function (permissions, user, resource) {
+    await client.page
+      .FilesPageElement
+      .filesList()
+      .closeSidebar(100)
+      .openSharingDialog(resource)
+    const currentSharePermissions = await client.page.FilesPageElement.sharingDialog()
+      .getDisplayedPermission(user)
 
-  await api.filesList().openSharingDialog(resource)
-
-  return api.sharingDialog().assertPermissionIsDisplayed(user, permissions)
-})
+    return assertSharePermissions(currentSharePermissions, permissions)
+  })
 
 Then('no custom permissions should be set for collaborator {string} for file/folder {string} on the webUI', async function (user, resource) {
-  const api = client.page
+  await client.page
     .FilesPageElement
+    .filesList()
+    .closeSidebar(100)
+    .openSharingDialog(resource)
+  const currentSharePermissions = await client.page.FilesPageElement.sharingDialog()
+    .getDisplayedPermission(user)
 
-  await api.filesList().closeSidebar(100)
-
-  await api.filesList().openSharingDialog(resource)
-
-  return api.sharingDialog().assertPermissionIsDisplayed(user)
+  return assertSharePermissions(currentSharePermissions)
 })
 
 When('the user shares file/folder/resource {string} with group {string} as {string} using the webUI', userSharesFileOrFolderWithGroup)
@@ -736,14 +762,21 @@ Then('user {string} should have a share with these details:', function (user, ex
 })
 
 Then('the user should not be able to share file/folder/resource {string} using the webUI', async function (resource) {
-  const api = client.page
+  await client.page
     .FilesPageElement
-
-  await api.filesList().closeSidebar(100)
-
-  await api.filesList().openSharingDialog(resource)
-
-  return api.sharingDialog().assertSharingNotAllowed()
+    .filesList()
+    .closeSidebar(100)
+    .openSharingDialog(resource)
+  const shareResponse = await client.page.FilesPageElement.sharingDialog()
+    .getSharingPermissionMsg()
+  const noSharePermissionsMsgFormat = "You don't have permission to share this %s"
+  const noSharePermissionsFileMsg = util.format(noSharePermissionsMsgFormat, 'file')
+  const noSharePermissionsFolderMsg = util.format(noSharePermissionsMsgFormat, 'folder')
+  return assert.ok(
+    noSharePermissionsFileMsg === shareResponse ||
+    noSharePermissionsFolderMsg === shareResponse,
+    `Expected: no permission to share resource '${resource}' but found: '${shareResponse}'`
+  )
 })
 
 Then('the collaborators list for file/folder/resource {string} should be empty', async function (resource) {
@@ -784,8 +817,9 @@ Then('the file {string} should be in {string} state on the webUI after a page re
   return client.page.sharedWithMePage().assertDesiredStatusIsPresent(filename, status)
 })
 
-Then('the autocomplete list should not be displayed on the webUI', function () {
-  return client.page.FilesPageElement.sharingDialog().assertAutocompleteListIsNotVisible()
+Then('the autocomplete list should not be displayed on the webUI', async function () {
+  const isVisible = await client.page.FilesPageElement.sharingDialog().isAutocompleteListVisible()
+  return assert.ok(!isVisible, 'Expected: autocomplete list "not visible" but found "visible"')
 })
 
 Given('user {string} has declined the share {string} offered by user {string}', function (user, filename, sharer) {

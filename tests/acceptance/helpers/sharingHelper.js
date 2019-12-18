@@ -25,6 +25,7 @@ module.exports = {
     pending: 1,
     declined: 2
   }),
+  COLLABORATOR_PERMISSION_ARRAY: ['share', 'update', 'create', 'delete'],
   /**
    *
    * @param permissionsString string of permissions separated by comma. For valid permissions see this.PERMISSION_TYPES
