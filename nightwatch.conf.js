@@ -1,12 +1,11 @@
 const chromedriver = require('chromedriver')
-let LOCAL_LAUNCH_URL = process.env.SERVER_HOST || 'http://localhost:8300'
-LOCAL_LAUNCH_URL = LOCAL_LAUNCH_URL.startsWith('http') ? LOCAL_LAUNCH_URL : 'http://' + LOCAL_LAUNCH_URL
-let LOCAL_BACKEND_URL = process.env.BACKEND_HOST || 'http://localhost:8080'
-let REMOTE_BACKEND_URL = process.env.REMOTE_BACKEND_HOST || 'http://localhost:8080'
+const withHttp = url => /^https?:\/\//i.test(url) ? url : `http://${url}`
+
+const LOCAL_LAUNCH_URL = withHttp(process.env.SERVER_HOST || 'http://localhost:8300')
+const LOCAL_BACKEND_URL = withHttp(process.env.BACKEND_HOST || 'http://localhost:8080')
+const REMOTE_BACKEND_URL = process.env.REMOTE_BACKEND_HOST ? withHttp(process.env.REMOTE_BACKEND_HOST || 'http://localhost:8080') : undefined
 const BACKEND_ADMIN_USERNAME = process.env.BACKEND_USERNAME || 'admin'
 const BACKEND_ADMIN_PASSWORD = process.env.BACKEND_PASSWORD || 'admin'
-LOCAL_BACKEND_URL = LOCAL_BACKEND_URL.startsWith('http') ? LOCAL_BACKEND_URL : 'http://' + LOCAL_BACKEND_URL
-REMOTE_BACKEND_URL = REMOTE_BACKEND_URL.startsWith('http') ? REMOTE_BACKEND_URL : 'http://' + REMOTE_BACKEND_URL
 const SELENIUM_HOST = process.env.SELENIUM_HOST || ''
 const SELENIUM_PORT = process.env.SELENIUM_PORT || 4444
 const START_PROCESS = (SELENIUM_HOST === '')
@@ -22,75 +21,62 @@ module.exports = {
   custom_commands_path: './tests/acceptance/customCommands',
   test_settings: {
     default: {
-      globals: {
-        waitForConditionPollInterval: 10,
-        filesForUpload: REMOTE_UPLOAD_DIR,
-        mountedUploadDir: LOCAL_UPLOAD_DIR
-      }
-    },
-    local: {
       launch_url: LOCAL_LAUNCH_URL,
       globals: {
-        waitForConditionTimeout: 10000,
-        default_backend: 'LOCAL',
+        waitForConditionTimeout: 20000,
+        waitForConditionPollInterval: 10,
+        filesForUpload: REMOTE_UPLOAD_DIR,
+        mountedUploadDir: LOCAL_UPLOAD_DIR,
         backend_url: LOCAL_BACKEND_URL,
         remote_backend_url: REMOTE_BACKEND_URL,
         backend_admin_username: BACKEND_ADMIN_USERNAME,
-        backend_admin_password: BACKEND_ADMIN_PASSWORD
+        backend_admin_password: BACKEND_ADMIN_PASSWORD,
+        default_backend: 'LOCAL'
       },
       selenium_host: SELENIUM_HOST,
-      webdriver: {
-        start_process: START_PROCESS,
-        server_path: chromedriver.path,
-        port: SELENIUM_PORT,
-        use_legacy_jsonwire: false,
-        cli_args: ['--port=' + SELENIUM_PORT]
-      },
-      screenshots: {
-        enabled: false
-      },
       desiredCapabilities: {
-        browserName: 'chrome',
+        browserName: BROWSER_NAME || 'chrome',
         javascriptEnabled: true,
         acceptSslCerts: true,
         chromeOptions: {
           args: ['disable-gpu'],
           w3c: false
         }
+      },
+      webdriver: {
+        start_process: false,
+        port: SELENIUM_PORT,
+        use_legacy_jsonwire: false
+      }
+    },
+    local: {
+      globals: {
+        waitForConditionTimeout: 10000
+      },
+      webdriver: {
+        start_process: START_PROCESS,
+        server_path: chromedriver.path,
+        cli_args: ['--port=' + SELENIUM_PORT]
       }
     },
     drone: {
-      launch_url: 'http://phoenix',
-      globals: {
-        waitForConditionTimeout: 20000,
-        backend_url: 'http://owncloud',
-        default_backend: 'LOCAL',
-        remote_backend_url: 'http://federated',
-        backend_admin_username: 'admin',
-        backend_admin_password: 'admin'
-      },
-      selenium_host: SAUCE_USERNAME ? 'saucelabs' : 'selenium',
-      webdriver: {
-        start_process: false,
-        use_legacy_jsonwire: false,
-        port: SELENIUM_PORT
-      },
-      screenshots: {
-        enabled: false
-      },
+      selenium_host: 'selenium',
       desiredCapabilities: {
-        browserName: BROWSER_NAME || 'chrome',
-        javascriptEnabled: true,
-        acceptSslCerts: true,
-        username: SAUCE_USERNAME,
-        access_key: SAUCE_ACCESS_KEY,
-        chromeOptions: SAUCE_USERNAME ? undefined : {
+        chromeOptions: {
           args: ['disable-gpu', 'disable-dev-shm-usage'],
           w3c: false
         },
+        idleTimeout: 180
+      }
+    },
+    saucelabs: {
+      selenium_host: 'saucelabs',
+      desiredCapabilities: {
         tunnelIdentifier: SAUCELABS_TUNNEL_NAME,
-        idleTimeout: 180,
-        screenResolution: SAUCE_USERNAME ? '1280x1024' : undefined
+        screenResolution: '1280x1024',
+        username: SAUCE_USERNAME,
+        access_key: SAUCE_ACCESS_KEY,
+        idleTimeout: 180
       }
     }
   }

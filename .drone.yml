@@ -131,7 +131,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUIFavorites
     TEST_TAGS: not @skip
 
@@ -287,7 +289,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUIFiles
     TEST_TAGS: not @skip
 
@@ -443,7 +447,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUILogin
     TEST_TAGS: not @skip
 
@@ -599,7 +605,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUINotifications
     TEST_TAGS: not @skip
 
@@ -755,7 +763,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUIPrivateLinks
     TEST_TAGS: not @skip
 
@@ -911,7 +921,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUIRenameFiles
     TEST_TAGS: not @skip
 
@@ -1067,7 +1079,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUIRenameFolders
     TEST_TAGS: not @skip
 
@@ -1223,7 +1237,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUIRestrictSharing
     TEST_TAGS: not @skip
 
@@ -1379,7 +1395,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingAutocompletion
     TEST_TAGS: not @skip
 
@@ -1535,7 +1553,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingInternalGroups
     TEST_TAGS: not @skip
 
@@ -1691,7 +1711,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingInternalUsers
     TEST_TAGS: not @skip
 
@@ -1847,7 +1869,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingPermissionsUsers
     TEST_TAGS: not @skip
 
@@ -2003,7 +2027,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingFilePermissionsGroups
     TEST_TAGS: not @skip
 
@@ -2159,7 +2185,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingFolderPermissionsGroups
     TEST_TAGS: not @skip
 
@@ -2315,7 +2343,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUIResharing
     TEST_TAGS: not @skip
 
@@ -2471,7 +2501,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingPublic
     TEST_TAGS: not @skip
 
@@ -2627,7 +2659,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUITrashbin
     TEST_TAGS: not @skip
 
@@ -2783,7 +2817,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUIUpload
     TEST_TAGS: not @skip
 
@@ -2939,7 +2975,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingAcceptShares
     TEST_TAGS: not @skip
 
@@ -3095,7 +3133,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingPermissionsMultipleUsers
     TEST_TAGS: not @skip
 
@@ -3251,7 +3291,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingNotifications
     TEST_TAGS: not @skip
 
@@ -3407,7 +3449,9 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUIAccount
     TEST_TAGS: not @skip
 
@@ -3590,7 +3634,10 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
+    REMOTE_BACKEND_HOST: http://federated
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharingExternal
     TEST_TAGS: not @skip
 
@@ -3758,8 +3805,10 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
     SCREEN_RESOLUTION: 768x1024
+    SERVER_HOST: http://phoenix
     TEST_TAGS: "@smokeTest and not @skipOnXGAPortraitResolution and not @skip"
 
 services:
@@ -3914,8 +3963,10 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
     SCREEN_RESOLUTION: 375x812
+    SERVER_HOST: http://phoenix
     TEST_TAGS: "@smokeTest and not @skipOnIphoneResolution and not @skip"
 
 services:
@@ -4070,6 +4121,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     BROWSER_NAME: internet explorer
     SAUCELABS_TUNNEL_NAME: ${DRONE_BUILD_NUMBER}-acceptance-Rename-Trash-Files-IE11
     SAUCE_ACCESS_KEY:
@@ -4077,6 +4129,7 @@ steps:
     SAUCE_USERNAME:
       from_secret: sauce_username
     SELENIUM_PORT: 4445
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUI[R,T,F]*
     TEST_TAGS: "@smokeTest and not @skip and not @skipOnIE"
 
@@ -4238,6 +4291,7 @@ steps:
   - curl http://phoenix/oidc-callback.html
   - yarn run acceptance-tests-drone
   environment:
+    BACKEND_HOST: http://owncloud
     BROWSER_NAME: internet explorer
     SAUCELABS_TUNNEL_NAME: ${DRONE_BUILD_NUMBER}-acceptance-Sharing-IE11
     SAUCE_ACCESS_KEY:
@@ -4245,6 +4299,7 @@ steps:
     SAUCE_USERNAME:
       from_secret: sauce_username
     SELENIUM_PORT: 4445
+    SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharing*
     TEST_TAGS: "@smokeTest and not @skip and not @skipOnIE"
 
