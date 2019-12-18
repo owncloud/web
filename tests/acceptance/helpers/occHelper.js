@@ -7,7 +7,7 @@ const backendHelper = require('../helpers/backendHelper')
  *
  * @param {Array} args
  */
-exports.runOcc = async function (args) {
+exports.runOcc = function (args) {
   const headers = httpHelper.createAuthHeader('admin')
   const params = new URLSearchParams()
   params.append('command', args.join(' '))

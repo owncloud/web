@@ -44,6 +44,9 @@ config = {
 			'suites': {
 				'webUISharingExternal': 'SharingExternal',
 			},
+			'extraEnvironment': {
+				'REMOTE_BACKEND_HOST': 'http://federated'
+			},
 			'federatedServerNeeded': True,
 			'federatedServerVersion': 'daily-master-qa'
 		},
@@ -242,7 +245,6 @@ def acceptance():
 						if nameLength > maxLength:
 							print("Error: generated stage name of length", nameLength, "is not supported. The maximum length is " + str(maxLength) + ".", name)
 							errorFound = True
-
 						result = {
 							'kind': 'pipeline',
 							'type': 'docker',
@@ -787,6 +789,8 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 			'from_secret': 'sauce_access_key'
 		}
 
+	environment['SERVER_HOST'] = 'http://phoenix'
+	environment['BACKEND_HOST'] = 'http://owncloud'
 	return [{
 		'name': 'webui-acceptance-tests',
 		'image': 'owncloudci/nodejs:11',

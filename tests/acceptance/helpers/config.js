@@ -9,7 +9,7 @@ const pLimit = require('p-limit')
 // run 10 promises at once at max
 const limit = pLimit(10)
 
-let config
+const config = {}
 
 async function setSkeletonDirectory (server, admin) {
   const data = JSON.stringify({ directory: 'webUISkeleton' })
@@ -97,8 +97,8 @@ export async function getConfigs () {
   return stdOut
 }
 
-export async function cacheConfigs () {
-  config = await getConfigs()
+export async function cacheConfigs (server) {
+  config[server] = await getConfigs()
   return config
 }
 
@@ -106,14 +106,14 @@ export async function setConfigs (server, admin = 'admin') {
   await setSkeletonDirectory(server, admin)
 }
 
-export async function rollbackConfigs () {
+export async function rollbackConfigs (server) {
   const newConfig = await getConfigs()
 
   const appConfig = _.get(newConfig, 'apps')
   const systemConfig = _.get(newConfig, 'system')
 
-  const initialAppConfig = _.get(config, 'apps')
-  const initialSysConfig = _.get(config, 'system')
+  const initialAppConfig = _.get(config[server], 'apps')
+  const initialSysConfig = _.get(config[server], 'system')
 
   await Promise.all([
     rollbackSystemConfigs(initialSysConfig, systemConfig),
