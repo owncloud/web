@@ -1,8 +1,9 @@
 const navigationHelper = require('../helpers/navigationHelper')
+const { join } = require('../helpers/path')
 
 module.exports = {
   url: function () {
-    return this.api.launchUrl + '/#/files/trash-bin/'
+    return join(this.api.launchUrl, '/#/files/trash-bin/')
   },
   commands: {
     /**

@@ -1,6 +1,8 @@
+const { join } = require('../helpers/path')
+
 module.exports = {
   url: function () {
-    return this.api.launchUrl + '/index.html#/account/'
+    return join(this.api.launchUrl, '/index.html#/account/')
   },
   commands: {
     /**

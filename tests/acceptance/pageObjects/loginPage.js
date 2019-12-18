@@ -1,6 +1,8 @@
+const { join } = require('../helpers/path')
+
 module.exports = {
   url: function () {
-    return this.api.launchUrl + '/#/login'
+    return join(this.api.launchUrl, '/#/login')
   },
   elements: {
     body: 'body',

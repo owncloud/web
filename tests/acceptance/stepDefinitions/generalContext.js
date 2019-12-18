@@ -7,6 +7,7 @@ const fetch = require('node-fetch')
 const fs = require('fs')
 const path = require('path')
 const occHelper = require('../helpers/occHelper')
+const { join } = require('../helpers/path')
 
 let initialConfigJsonSettings
 let createdFiles = []
@@ -134,7 +135,7 @@ const setTrustedServer = function (url) {
   const body = new URLSearchParams()
   body.append('url', userSettings.replaceInlineCode(url))
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
-  const postUrl = `${backendHelper.getCurrentBackendUrl()}/ocs/v2.php/apps/testing/api/v1/trustedservers?format=json`
+  const postUrl = join(backendHelper.getCurrentBackendUrl(), '/ocs/v2.php/apps/testing/api/v1/trustedservers?format=json')
   return fetch(postUrl,
     { method: 'POST', headers, body })
     .then(res => {
@@ -178,7 +179,7 @@ After(async function (testCase) {
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
   const body = new URLSearchParams()
   body.append('global', 'true')
-  await fetch(`${client.globals.backend_url}/ocs/v2.php/apps/testing/api/v1/lockprovisioning`,
+  await fetch(join(client.globals.backend_url, '/ocs/v2.php/apps/testing/api/v1/lockprovisioning'),
     { method: 'DELETE', body: body, headers: headers }
   )
 })
