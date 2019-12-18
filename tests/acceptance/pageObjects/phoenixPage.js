@@ -1,6 +1,4 @@
-const assert = require('assert')
 const util = require('util')
-const userSettings = require('../helpers/userSettings')
 
 module.exports = {
   url: function () {
@@ -59,6 +57,11 @@ module.exports = {
     toggleNotificationDrawer: async function () {
       return this.waitForElementVisible('@notificationBell').click('@notificationBell')
     },
+    /**
+     * gets list of notifications
+     *
+     * @return {Promise<array>}
+     */
     getNotifications: async function () {
       const notifications = []
       await this.toggleNotificationDrawer()
@@ -73,20 +76,6 @@ module.exports = {
       return notifications
     },
     /**
-     * Checks if the notifications consists of all the expected notifications
-     * @param {string} expectedNotifications
-     */
-    assertNotificationIsPresent: async function (numberOfNotifications, expectedNotifications) {
-      const notifications = await this.getNotifications()
-      assert.strictEqual(notifications.length, numberOfNotifications)
-      const promises = []
-      for (const element of expectedNotifications) {
-        const isPresent = notifications.includes(userSettings.replaceInlineCode(element.title))
-        promises.push(this.assert.ok(isPresent))
-      }
-      return Promise.all(promises)
-    },
-    /**
      * Perform accept action on the offered shares in the notifications
      */
     acceptAllSharesInNotification: async function () {
@@ -99,14 +88,26 @@ module.exports = {
           .waitForElementVisible(acceptShareButton)
           .click(acceptShareButton)
           .waitForAjaxCallsToStartAndFinish()
+          .useCss()
       }
     },
     /**
-     * Checks to assert the notification bell is not present as well as no notifications are present
+     * notification bell is present only when the user have got some notifications to show
+     * after clicking the notification bell then only user can see notifications received
+     * So,there would be no notifications when the notification bell on the top-bar of webUI is not visible
+     *
+     * @return boolean
      */
-    assertNoNotifications: function () {
-      return this.waitForElementNotPresent('@notificationBell')
-        .assert.elementNotPresent(this.elements.notificationElement)
+    isNotificationBellVisible: async function () {
+      let isVisible = false
+      await this
+        .api.element(
+          '@notificationBell',
+          result => {
+            isVisible = result.value === 0
+          }
+        )
+      return isVisible
     },
     /**
      * Perform decline action on the offered shares in the notifications
