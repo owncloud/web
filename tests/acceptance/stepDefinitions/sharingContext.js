@@ -508,22 +508,24 @@ const assertSharePermissions = async function (currentSharePermissions, permissi
 
 Then('custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI',
   async function (permissions, user, resource) {
-    const currentSharePermissions = await client.page
+    await client.page
       .FilesPageElement
       .filesList()
       .closeSidebar(100)
       .openSharingDialog(resource)
+    const currentSharePermissions = await client.page.FilesPageElement.sharingDialog()
       .getDisplayedPermission(user)
 
     return assertSharePermissions(currentSharePermissions, permissions)
   })
 
 Then('no custom permissions should be set for collaborator {string} for file/folder {string} on the webUI', async function (user, resource) {
-  const currentSharePermissions = await client.page
+  await client.page
     .FilesPageElement
     .filesList()
     .closeSidebar(100)
     .openSharingDialog(resource)
+  const currentSharePermissions = await client.page.FilesPageElement.sharingDialog()
     .getDisplayedPermission(user)
 
   return assertSharePermissions(currentSharePermissions)
@@ -760,11 +762,12 @@ Then('user {string} should have a share with these details:', function (user, ex
 })
 
 Then('the user should not be able to share file/folder/resource {string} using the webUI', async function (resource) {
-  const shareResponse = await client.page
+  await client.page
     .FilesPageElement
     .filesList()
     .closeSidebar(100)
     .openSharingDialog(resource)
+  const shareResponse = await client.page.FilesPageElement.sharingDialog()
     .getSharingPermissionMsg()
   const noSharePermissionsMsgFormat = "You don't have permission to share this %s"
   const noSharePermissionsFileMsg = util.format(noSharePermissionsMsgFormat, 'file')
