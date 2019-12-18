@@ -16,44 +16,32 @@ module.exports = {
       )
     },
     /**
-     * @param {string} filename
-     * @param {string} status - It takes one of the following : declined, pending or '' for accepted
-     * @param {string} user
-     * Checks if the file-row of the desired file-name with the username consists of the desired status of accepted,
-     * declined or pending
-     */
-    assertDesiredStatusIsPresent: async function (filename, status, user) {
-      // TODO: Needs to be optimised
-      await this.api.page.FilesPageElement.filesList().waitForFileVisible(filename)
-
-      let requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-                          util.format(this.elements.assertStatusFileRow.selector, status)
-      requiredXpath = user === undefined ? requiredXpath : requiredXpath +
-                      util.format(this.elements.getSharedFromUserName.selector, user)
-
-      await this.waitForElementVisible({
-        locateStrategy: this.elements.assertStatusFileRow.locateStrategy,
-        selector: requiredXpath
-      })
-
-      return this
-    },
-    /**
+     * gets displayed share status of file-name (shared by user of given username)
+     *
      * @param {string} filename
      * @param {string} sharer
-     * @param {string} status - It takes one of the following : declined, pending or '' for accepted
-     * Checks if the file-row of the desired file-name with the username doesn't consist of the desired status of accepted,
-     * declined or pending
+     *
+     * @return {Promise<string>}
      */
-    assertDesiredStatusIsAbsent: function (filename, sharer, status) {
-      let requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-        util.format(this.elements.assertStatusFileRow.selector, status)
-      requiredXpath = sharer === undefined ? requiredXpath : requiredXpath +
-        util.format(this.elements.getSharedFromUserName.selector, sharer)
-      return this.waitForElementNotPresent({
-        locateStrategy: this.elements.assertStatusFileRow.locateStrategy,
-        selector: requiredXpath
-      })
+    getShareStatusOfResource: async function (filename, sharer) {
+      let status
+      const requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
+        util.format(this.elements.getSharedFromUserName.selector, sharer) +
+        this.elements.shareStatusOnFileRow.selector
+      await this
+        .useXpath()
+        .waitForAnimationToFinish()
+        .api.getText(requiredXpath,
+          (result) => {
+            if (result.status === 0) {
+              status = result.value === '' ? 'Accepted' : result.value
+            } else {
+              throw new Error(`Expected: share status of the resource but found unexpected response: ${result}`)
+            }
+          }
+        )
+        .useCss()
+      return status
     },
     /**
      * @param {string} filename
@@ -76,18 +64,28 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
     },
     /**
-     * Asserts that the element(file/folder/resource) on the shared-with-me page is shared by the desired user
+     * gets the username of user that the element(file/folder/resource) on the shared-with-me page is shared by
      *
      * @param {string} element
-     * @param {string} sharer
+     *
+     * @return {Promise<string>}
      */
-    assertSharedByUser: function (element, sharer) {
+    getSharedByUser: async function (element) {
+      let username
       const requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(element) +
-                          util.format(this.elements.getSharedFromUserName.selector, sharer)
-      return this.waitForElementVisible({
-        locateStrategy: this.elements.getSharedFromUserName.locateStrategy,
+          this.elements.sharedFrom.selector
+      await this.waitForElementVisible({
+        locateStrategy: this.elements.sharedFrom.locateStrategy,
         selector: requiredXpath
       })
+        .api.getText(
+          this.elements.sharedFrom.locateStrategy,
+          requiredXpath,
+          (result) => {
+            username = result.value
+          }
+        )
+      return username
     },
     isSharePresent: async function (element, sharer) {
       const requiredXpath = this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(element) +
@@ -100,12 +98,16 @@ module.exports = {
     }
   },
   elements: {
-    assertStatusFileRow: {
-      selector: '//span[.="%s"]/../..',
+    shareStatusOnFileRow: {
+      selector: "/../..//div[@class='uk-text-nowrap uk-width-small']/span",
       locateStrategy: 'xpath'
     },
     getSharedFromUserName: {
       selector: '//div[normalize-space(.)="%s"]',
+      locateStrategy: 'xpath'
+    },
+    sharedFrom: {
+      selector: "//div[@class='uk-text-meta uk-text-nowrap uk-width-small']/div",
       locateStrategy: 'xpath'
     },
     actionOnFileRow: {
