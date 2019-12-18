@@ -43,8 +43,8 @@ module.exports = {
     const phoenixPage = client.page.phoenixPage()
     return phoenixPage
       .navigate()
-      .waitForElementVisible('@menuButton')
-      .click('@menuButton')
+      .waitForElementVisible('@userMenuButton')
+      .click('@userMenuButton')
       .waitForElementVisible('@logoutMenuItem')
       .waitForAnimationToFinish()
       .click('@logoutMenuItem')

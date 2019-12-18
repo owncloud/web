@@ -1,5 +1,4 @@
 const state = {
-  sidebarVisible: false,
   messages: [],
   notifications: {
     loading: true,
@@ -61,9 +60,6 @@ const actions = {
 }
 
 const mutations = {
-  TOGGLE_SIDEBAR (state, visible) {
-    state.sidebarVisible = visible
-  },
   ENQUEUE_MESSAGE (state, message) {
     // set random id to improve iteration in v-for & lodash
     if (!message.id) message.id = Math.random().toString(36).slice(2, -1)
@@ -90,9 +86,6 @@ const mutations = {
 }
 
 const getters = {
-  isSidebarVisible: state => {
-    return state.sidebarVisible
-  },
   activeMessages: state => {
     return state.messages
   },

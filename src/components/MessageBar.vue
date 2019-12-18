@@ -15,15 +15,20 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-
 export default {
+  props: {
+    activeMessages: {
+      type: Array,
+      required: false,
+      default: () => []
+    }
+  },
   methods: {
-    ...mapActions(['deleteMessage'])
+    deleteMessage (item) {
+      this.$emit('deleteMessage', item)
+    }
   },
   computed: {
-    ...mapGetters(['activeMessages']),
-
     $_ocMessages_limited () {
       return this.activeMessages ? this.activeMessages.slice(0, 5) : []
     }

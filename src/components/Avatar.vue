@@ -1,7 +1,7 @@
 <template>
-  <div v-if="enabled">
-    <oc-avatar :width=42 :height=42 :loading="loading" :src="avatarSource" />
-  </div>
+  <component :is="type" v-if="enabled">
+    <oc-avatar :width="width" :height="width" :loading="loading" :src="avatarSource" />
+  </component>
 </template>
 <script>
 import { mapGetters } from 'vuex'
@@ -73,11 +73,27 @@ export default {
     }
   },
   props: {
+    /**
+     * The html element used for the avatar container.
+     * `div, span`
+     */
+    type: {
+      type: String,
+      default: 'div',
+      validator: value => {
+        return value.match(/(div|span)/)
+      }
+    },
     userid: {
       /**
        * Allow empty string to show placeholder
        */
       default: ''
+    },
+    width: {
+      type: Number,
+      required: false,
+      default: 42
     }
   }
 }
