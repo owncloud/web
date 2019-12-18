@@ -264,7 +264,8 @@ def acceptance():
 								(
 									installFederatedServer(federatedServerVersion, db) +
 									setupFedServerAndApp(params['logLevel']) +
-									fixPermissionsFederated() if params['federatedServerNeeded'] else []
+									fixPermissionsFederated() +
+									owncloudLogFederated() if params['federatedServerNeeded'] else []
 								) +
 								copyFilesForUpload() +
 								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser),
@@ -748,6 +749,17 @@ def owncloudLog():
 		'detach': True,
 		'commands': [
 			'tail -f /var/www/owncloud/server/data/owncloud.log'
+		]
+	}]
+
+def owncloudLogFederated():
+	return [{
+		'name': 'owncloud-federated-log',
+		'image': 'owncloud/ubuntu:16.04',
+		'pull': 'always',
+		'detach': True,
+		'commands': [
+			'tail -f /var/www/owncloud/federated/data/owncloud.log'
 		]
 	}]
 
