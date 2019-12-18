@@ -17,8 +17,10 @@ const { getSharedWithMeFiles, getSharedWithMeFolders } = require('../helpers/fil
 const { getSharedWithOthersFiles, getSharedWithOthersFolders } = require('../helpers/filesFoldersHelper')
 
 const assertDesiredResourcesListed = async function (resourcesMatchingPattern, listedResources) {
-  const diff = _.difference(resourcesMatchingPattern, listedResources)
-  return assert.strictEqual(diff.length, 0, `Expected : ${resourcesMatchingPattern} but got ${listedResources}`)
+  const unlistedResourcesMatchingPattern = _.difference(resourcesMatchingPattern, listedResources)
+  const listedResourcesNotMatchingPattern = _.difference(listedResources, resourcesMatchingPattern)
+  await assert.strictEqual(unlistedResourcesMatchingPattern.length, 0, `Expected : ${resourcesMatchingPattern} but got ${listedResources}`)
+  return assert.strictEqual(listedResourcesNotMatchingPattern.length, 0, `Expected : ${resourcesMatchingPattern} but got ${listedResources}`)
 }
 
 Before(() => {
@@ -982,14 +984,16 @@ Then('all files and folders containing pattern {string} in their name should be 
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   const sharedWithMeFolders = await getSharedWithMeFolders(client.globals.currentUser)
   const sharedWithMeFiles = await getSharedWithMeFiles(client.globals.currentUser)
-  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithMeFiles, sharedWithMeFolders)
+  const sharedWithMeResources = sharedWithMeFiles.concat(sharedWithMeFolders)
+  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithMeResources)
   return assertDesiredResourcesListed(filesFoldersMatchingPattern, allListedFilesFolders)
 })
 
 Then('all files and folders containing pattern {string} in their name should be listed in the shared-with-me page on the webUI except of hidden elements', async function (pattern) {
   const sharedWithMeFiles = await getSharedWithMeFiles(client.globals.currentUser)
   const sharedWithMeFolders = await getSharedWithMeFolders(client.globals.currentUser)
-  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithMeFiles, sharedWithMeFolders)
+  const sharedWithMeResources = sharedWithMeFiles.concat(sharedWithMeFolders)
+  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithMeResources)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   const nonHiddenElements = await getAllFilesStartingWithDot(filesFoldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenElements, allListedFilesFolders)

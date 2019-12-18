@@ -74,7 +74,7 @@ exports.getSharedWithOthersFolders = async function (user) {
 }
 
 exports.getSharedWithOthersFiles = async function (user) {
-  const sharedWithOthersElements = await sharingHelper.getAllSharesSharedWithUser(user)
+  const sharedWithOthersElements = await sharingHelper.getAllSharesSharedByUser(user)
   return sharedWithOthersElements.filter(elements => elements.mimetype.includes('application/octet-stream'))
     .map(elements => normalize(elements.path))
 }
