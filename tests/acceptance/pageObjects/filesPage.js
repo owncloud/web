@@ -77,10 +77,10 @@ module.exports = {
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFileButton')
         .click('@newFileButton')
-        .waitForElementVisible('@newFileInputField')
+        .waitForElementVisible('@newFileInput')
       if (name !== null) {
-        this.clearValueWithEvent('@newFileInputField')
-        this.setValue('@newFileInputField', name)
+        this.clearValueWithEvent('@newFileInput')
+        this.setValue('@newFileInput', name)
       }
       this
         .click('@newFileOkButton')
@@ -292,24 +292,13 @@ module.exports = {
         .waitForElementNotVisible(this.elements.fileOverwriteConfirm.selector)
         .waitForAjaxCallsToStartAndFinish()
     },
-    createNewFile: function (newFileName) {
-      return this
-        .waitForElementVisible('@newFileMenuButton')
-        .click('@newFileMenuButton')
-        .waitForElementVisible('@newFileButton')
-        .click('@newFileButton')
-        .waitForElementVisible('@newFileInputField')
-        .setValue('@newFileInputField', newFileName)
-        .waitForElementVisible('@newFileOkButton')
-        .click('@newFileOkButton')
-    },
     triesToCreateExistingFile: function (fileName) {
       return this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFileButton')
         .click('@newFileButton')
-        .waitForElementVisible('@newFileInputField')
-        .setValue('@newFileInputField', fileName)
+        .waitForElementVisible('@newFileInput')
+        .setValue('@newFileInput', fileName)
     },
     waitForErrorMessage: function (callback) {
       return this.waitForElementVisible('@fileAlreadyExistAlert')
@@ -382,6 +371,10 @@ module.exports = {
     },
     newFolderInput: {
       selector: '#new-folder-input'
+    },
+    newFileInput: {
+      selector: "//div[@id='new-file-dialog']//input[@type='text']",
+      locateStrategy: 'xpath'
     },
     newFolderOkButton: {
       selector: '#new-folder-ok'
@@ -480,10 +473,6 @@ module.exports = {
     },
     sidebarItemName: {
       selector: '#files-sidebar-item-name'
-    },
-    newFileInputField: {
-      selector: "//div[@id='new-file-dialog']//input[@type='text']",
-      locateStrategy: 'xpath'
     },
     createFileOkButtonDisabled: {
       selector: "//div[@id='new-file-dialog']//button[@disabled='disabled']/span[contains(text(), 'Ok')]",
