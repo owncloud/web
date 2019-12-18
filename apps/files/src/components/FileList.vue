@@ -23,60 +23,61 @@
           Actions
         </div>
       </oc-grid>
-      <RecycleScroller
-        id="files-list-container"
-        class="uk-flex-1"
-        :items="fileData"
-        :item-size="70"
-        v-slot="{ item, index, active }"
-        v-if="!loading"
-        :key="fileData.length"
-      >
-        <div
-          :data-is-visible="active"
-          @click="selectRow(item, $event); hideRowActionsDropdown()"
+      <div id="files-list-container" class="uk-flex-1" v-if="!loading">
+        <RecycleScroller
+          class="uk-height-1-1"
+          :items="fileData"
+          :item-size="70"
+          v-slot="{ item, index, active }"
+          v-if="fileData.length"
+          :key="fileData.length"
         >
-          <oc-grid gutter="small" flex class="uk-padding-small oc-border-top" :class="_rowClasses(item)" :id="'file-row-' + item.id">
-            <div>
-              <oc-checkbox
-                class="uk-margin-small-left"
-                @click.stop @change.native="toggleFileSelect(item)"
-                :value="selectedFiles.indexOf(item) >= 0"
-                :label="labelSelectSingleItem(item)"
-                :hideLabel="true"
-              />
-            </div>
-            <slot name="rowColumns" :item="item" :index="item.id" />
-            <div :class="{ 'uk-visible@s' : compactMode, 'uk-width-small@s uk-width-medium@m': !compactMode }" class="uk-width-auto uk-text-right">
-              <div
-                class="uk-button-group"
-                :class="{
-                  'uk-visible@m' : !compactMode,
-                  'uk-visible@xl' : compactMode
-                }"
-              >
-                <oc-button
-                  v-for="action in actions"
-                  :key="action.ariaLabel"
-                  @click.stop="action.handler(item, action.handlerData)"
-                  :disabled="!$_isActionEnabled(item, action) || $_actionInProgress(item)"
-                  :icon="action.icon"
-                  :ariaLabel="action.ariaLabel"
-                  :uk-tooltip="$_disabledActionTooltip(item)"
+          <div
+            :data-is-visible="active"
+            @click="selectRow(item, $event); hideRowActionsDropdown()"
+          >
+            <oc-grid gutter="small" flex class="uk-padding-small oc-border-top" :class="_rowClasses(item)" :id="'file-row-' + item.id">
+              <div>
+                <oc-checkbox
+                  class="uk-margin-small-left"
+                  @click.stop @change.native="toggleFileSelect(item)"
+                  :value="selectedFiles.indexOf(item) >= 0"
+                  :label="labelSelectSingleItem(item)"
+                  :hideLabel="true"
                 />
               </div>
-              <oc-button
-                :id="actionsDropdownButtonId(item.id, active)"
-                icon="more_vert"
-                :class="{ 'uk-hidden@m' : !compactMode, 'uk-visible@s uk-hidden@xl' : compactMode }"
-                :disabled="$_actionInProgress(item)"
-                :aria-label="'show-file-actions'"
-                @click.stop="toggleRowActionsDropdown(item)"
-              />
-            </div>
-          </oc-grid>
-        </div>
-      </RecycleScroller>
+              <slot name="rowColumns" :item="item" :index="item.id" />
+              <div :class="{ 'uk-visible@s' : compactMode, 'uk-width-small@s uk-width-medium@m': !compactMode }" class="uk-width-auto uk-text-right">
+                <div
+                  class="uk-button-group"
+                  :class="{
+                    'uk-visible@m' : !compactMode,
+                    'uk-visible@xl' : compactMode
+                  }"
+                >
+                  <oc-button
+                    v-for="action in actions"
+                    :key="action.ariaLabel"
+                    @click.stop="action.handler(item, action.handlerData)"
+                    :disabled="!$_isActionEnabled(item, action) || $_actionInProgress(item)"
+                    :icon="action.icon"
+                    :ariaLabel="action.ariaLabel"
+                    :uk-tooltip="$_disabledActionTooltip(item)"
+                  />
+                </div>
+                <oc-button
+                  :id="actionsDropdownButtonId(item.id, active)"
+                  icon="more_vert"
+                  :class="{ 'uk-hidden@m' : !compactMode, 'uk-visible@s uk-hidden@xl' : compactMode }"
+                  :disabled="$_actionInProgress(item)"
+                  :aria-label="'show-file-actions'"
+                  @click.stop="toggleRowActionsDropdown(item)"
+                />
+              </div>
+            </oc-grid>
+          </div>
+        </RecycleScroller>
+      </div>
       <oc-grid gutter="large" class="uk-width-1-1 uk-padding-small" v-if="!loading">
         <slot name="footer" />
       </oc-grid>
