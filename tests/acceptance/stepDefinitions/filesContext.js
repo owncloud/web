@@ -123,6 +123,12 @@ Given('the user has browsed to the files page', function () {
     .page.filesPage()
     .navigateAndWaitTillLoaded()
 })
+
+When('the user opens folder {string} directly on the webUI', function (folder) {
+  folder = encodeURIComponent(path.normalize(folder))
+  return client.page.filesPage().navigateAndWaitTillLoaded(folder)
+})
+
 Given('user {string} has uploaded file with content {string} to {string}', async function (user, content, filename) {
   await waitBetweenFileUploadOperations()
   await webdav.uploadFileWithContent(user, content, filename)

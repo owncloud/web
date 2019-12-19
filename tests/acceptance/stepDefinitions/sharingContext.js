@@ -9,7 +9,6 @@ const backendHelper = require('../helpers/backendHelper')
 const userSettings = require('../helpers/userSettings')
 const sharingHelper = require('../helpers/sharingHelper')
 const { SHARE_TYPES } = require('../helpers/sharingHelper')
-const { BACKENDS } = require('../helpers/backendHelper')
 const { runOcc } = require('../helpers/occHelper')
 const _ = require('lodash')
 const path = require('../helpers/path')
@@ -67,19 +66,18 @@ const userSharesFileOrFolderWithGroup = function (file, sharee, role) {
 }
 
 Given('user {string} from remote server has shared {string} with user {string} from local server', function (sharer, file, receiver) {
-  receiver = util.format('%s@%s', receiver, backendHelper.getBackendUrl(BACKENDS.local))
+  receiver = util.format('%s@%s', receiver, client.globals.backend_url)
   return backendHelper.runOnRemoteBackend(
-    shareFileFolder, [file, sharer, receiver, SHARE_TYPES.federated_cloud_share]
+    shareFileFolder, file, sharer, receiver, SHARE_TYPES.federated_cloud_share
   )
 })
 
-Given(
-  'user {string} from local server has shared {string} with user {string} from remote server',
-  function (sharer, shareServer, file, receiver, receiverServer
-  ) {
-    receiver = `${receiver}@${httpHelper.getBackendUrl(BACKENDS.remote)}`
-    return shareFileFolder(file, sharer, receiver, SHARE_TYPES.federated_cloud_share)
-  })
+Given('user {string} from remote server has shared {string} with user {string} from local server with {string} permissions', function (sharer, file, receiver, permission) {
+  receiver = util.format('%s@%s', receiver, client.globals.backend_url)
+  return backendHelper.runOnRemoteBackend(
+    shareFileFolder, file, sharer, receiver, SHARE_TYPES.federated_cloud_share, permission
+  )
+})
 
 /**
  * creates a new share
@@ -750,11 +748,19 @@ Then('group {string} should not be listed in the collaborators list on the webUI
 })
 
 Then('user {string} should have received a share with these details:', function (user, expectedDetailsTable) {
-  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, true)
+  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, { shared_with_me: true })
 })
 
 Given('user {string} has created a new public link for resource {string}', function (user, resource) {
   return shareFileFolder(resource, user, '', SHARE_TYPES.public_link)
+})
+
+Then('user {string} should have shared a file/folder with these details:', function (user, expectedDetailsTable) {
+  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, { shared_with_me: false })
+})
+
+Then('user {string} should have shared a file/folder {string} with these details:', function (user, path, expectedDetailsTable) {
+  return sharingHelper.assertUserHasShareWithDetails(user, expectedDetailsTable, { shared_with_me: false, path })
 })
 
 Then('user {string} should have a share with these details:', function (user, expectedDetailsTable) {
@@ -834,7 +840,7 @@ Given('user {string} has declined the share {string} offered by user {string}', 
 })
 
 Given('user {string} has accepted the share {string} offered by user {string}', function (user, filename, sharer) {
-  return sharingHelper.acceptShare(filename, user, sharer)
+  return sharingHelper.acceptShare(filename, user, userSettings.replaceInlineCode(sharer))
 })
 
 Then('the file {string} shared by {string} should not be in {string} state',

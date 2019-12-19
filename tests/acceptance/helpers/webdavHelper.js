@@ -80,7 +80,7 @@ exports.move = function (userId, fromName, toName) {
 exports.propfind = function (path, userId, properties, folderDepth = 1) {
   const headers = httpHelper.createAuthHeader(userId)
   headers.Depth = folderDepth
-  const davPath = client.globals.backend_url + '/remote.php/dav' + resolve(path)
+  const davPath = backendHelper.getCurrentBackendUrl() + '/remote.php/dav' + resolve(path)
   let propertyBody = ''
   properties.map(prop => {
     propertyBody += `<${prop}/>`
@@ -221,7 +221,7 @@ exports.getSkeletonFile = function (filename) {
 
 exports.uploadFileWithContent = function (user, content, filename) {
   const headers = httpHelper.createAuthHeader(user)
-  return fetch(client.globals.backend_url +
+  return fetch(backendHelper.getCurrentBackendUrl() +
     '/remote.php/webdav/' + filename, {
     headers: {
       'Content-Type': 'text/plain',

@@ -115,4 +115,3 @@ Feature: Restore deleted files/folders
     And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
     #And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should exist
     And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
-

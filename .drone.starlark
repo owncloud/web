@@ -237,6 +237,10 @@ def acceptance():
 				for browser in params['browsers']:
 					for db in params['databases']:
 						federatedServerVersion = params['federatedServerVersion']
+						federationDbSuffix = '-federated'
+
+						if params['federatedServerNeeded'] and getDbName(db) not in ['mariadb', 'mysql']:
+							errorFound = True
 
 						browserString = '' if browser == '' else '-' + browser
 						name = '%s%s' % (alternateSuiteName, browserString)
@@ -262,7 +266,7 @@ def acceptance():
 								owncloudLog() +
 								fixPermissions() +
 								(
-									installFederatedServer(federatedServerVersion, db) +
+									installFederatedServer(federatedServerVersion, db, federationDbSuffix) +
 									setupFedServerAndApp(params['logLevel']) +
 									fixPermissionsFederated() +
 									owncloudLogFederated() if params['federatedServerNeeded'] else []
@@ -273,7 +277,9 @@ def acceptance():
 								phoenixService() +
 								owncloudService() +
 								(
-									owncloudFederatedService() if params['federatedServerNeeded'] else []
+									owncloudFederatedService() +
+									databaseServiceForFederation(db, federationDbSuffix)
+									if params['federatedServerNeeded'] else []
 								) +
 								browserService(alternateSuiteName, browser) +
 								databaseService(db),
@@ -342,6 +348,26 @@ def notify():
 		result['trigger']['ref'].append('refs/heads/%s' % branch)
 
 	return result
+
+def databaseServiceForFederation(db, suffix):
+	dbName = getDbName(db)
+
+	# only support mariadb, for phoenix, it's not important to support others
+	if dbName not in ['mariadb', 'mysql']:
+		print('Not implemented federated database for', dbName)
+		return []
+
+	return [{
+		'name': dbName + suffix,
+		'image': db,
+		'pull': 'always',
+		'environment': {
+			'MYSQL_USER': getDbUsername(db),
+			'MYSQL_PASSWORD': getDbPassword(db),
+			'MYSQL_DATABASE': getDbDatabase(db) + suffix,
+			'MYSQL_ROOT_PASSWORD': getDbRootPassword()
+		}
+	}]
 
 def databaseService(db):
 	dbName = getDbName(db)
@@ -553,7 +579,21 @@ def installCore(version, db):
 
 	return [stepDefinition]
 
-def installFederatedServer(version, db):
+def installFederatedServer(version, db, dbSuffix = '-federated'):
+	host = getDbName(db)
+	dbType = host
+
+	username = getDbUsername(db)
+	password = getDbPassword(db)
+	database = getDbDatabase(db) + dbSuffix
+
+	if host == 'mariadb':
+		dbType = 'mysql'
+	elif host == 'postgres':
+		dbType = 'pgsql'
+	elif host == 'oracle':
+		dbType = 'oci'
+
 	stepDefinition = {
 		'name': 'install-federated',
 		'image': 'owncloudci/core',
@@ -561,6 +601,11 @@ def installFederatedServer(version, db):
 		'settings': {
 			'version': version,
 			'core_path': '/var/www/owncloud/federated/',
+			'db_type': dbType,
+			'db_name': database,
+			'db_host': host + dbSuffix,
+			'db_username': username,
+			'db_password': password
 		}
 	}
 	return [stepDefinition]

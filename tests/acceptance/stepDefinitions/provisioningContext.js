@@ -148,11 +148,11 @@ Given('user {string} has been created with default attributes', function (userId
 
 Given('user {string} has been created with default attributes on remote server', function (userId) {
   return backendHelper.runOnRemoteBackend(
-    async function (user) {
-      await deleteUser(user)
-        .then(() => createDefaultUser(user))
-        .then(() => initUser(user))
-    }, [userId])
+    async function () {
+      await deleteUser()
+        .then(() => createDefaultUser(userId))
+        .then(() => initUser(userId))
+    })
 })
 
 Given('the quota of user {string} has been set to {string}', function (userId, quota) {
@@ -211,17 +211,18 @@ Given('user {string} has been added to group {string}', function (userId, groupI
   return addToGroup(userId, groupId)
 })
 
-After(function () {
-  const createdUsers = userSettings.getCreatedUsers('LOCAL')
-  const createdRemoteUsers = userSettings.getCreatedUsers('REMOTE')
+After(async function () {
+  const createdUsers = Object.keys(userSettings.getCreatedUsers('LOCAL'))
+  const createdRemoteUsers = Object.keys(userSettings.getCreatedUsers('REMOTE'))
+  const createdGroups = userSettings.getCreatedGroups()
 
-  for (var userId in createdUsers) {
-    deleteUser(userId)
+  await Promise.all(
+    [...createdUsers.map(deleteUser), ...createdGroups.map(deleteGroup)]
+  )
+
+  if (client.globals.remote_backend_url) {
+    return backendHelper.runOnRemoteBackend(
+      () => Promise.all(createdRemoteUsers.map(deleteUser))
+    )
   }
-  for (userId in createdRemoteUsers) {
-    backendHelper.runOnRemoteBackend(deleteUser, [userId])
-  }
-  userSettings.getCreatedGroups().forEach(function (groupId) {
-    deleteGroup(groupId)
-  })
 })
