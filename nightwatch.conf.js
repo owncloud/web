@@ -70,7 +70,6 @@ module.exports = {
       }
     },
     saucelabs: {
-      selenium_host: 'saucelabs',
       desiredCapabilities: {
         tunnelIdentifier: SAUCELABS_TUNNEL_NAME,
         screenResolution: '1280x1024',

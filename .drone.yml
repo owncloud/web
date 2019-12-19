@@ -4149,6 +4149,7 @@ steps:
       from_secret: sauce_access_key
     SAUCE_USERNAME:
       from_secret: sauce_username
+    SELENIUM_HOST: saucelabs
     SELENIUM_PORT: 4445
     SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUI[R,T,F]*
@@ -4319,6 +4320,7 @@ steps:
       from_secret: sauce_access_key
     SAUCE_USERNAME:
       from_secret: sauce_username
+    SELENIUM_HOST: saucelabs
     SELENIUM_PORT: 4445
     SERVER_HOST: http://phoenix
     TEST_CONTEXT: webUISharing*

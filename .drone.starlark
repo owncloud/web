@@ -76,6 +76,9 @@ config = {
 			'browsers': [
 				'IE11',
 			],
+			'extraEnvironment': {
+				'SELENIUM_HOST': 'saucelabs'
+			},
 			'cronOnly': True,
 			'filterTags': '@smokeTest and not @skip and not @skipOnIE',
 		},
