@@ -68,20 +68,6 @@ config = {
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
 		},
-		'webUI-IE11': {
-			'suites': {
-				'webUI[R,T,F]*': 'Rename-Trash-Files',
-				'webUISharing*': 'Sharing',
-			},
-			'browsers': [
-				'IE11',
-			],
-			'extraEnvironment': {
-				'SELENIUM_HOST': 'saucelabs'
-			},
-			'cronOnly': True,
-			'filterTags': '@smokeTest and not @skip and not @skipOnIE',
-		},
 	},
 
 	'build': True
