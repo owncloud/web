@@ -6358,10 +6358,10 @@ os-tmpdir@~1.0.1, os-tmpdir@~1.0.2:
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
 
-owncloud-design-system@1.0.0-1057:
-  version "1.0.0-1057"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-1057.tgz#6511f4bb8b6a88439f4e3643dcf3fb23f47a1e89"
-  integrity sha512-GO7Lc9H4GJoP920qeF7MFOfVxvR2PBBMD0qTbmic3heq9IyvxozS6lJnzPtGSB4bkQB6/5uRQubZZyMAxE0B/Q==
+owncloud-design-system@^1.0.0-1065:
+  version "1.0.0-1065"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-1065.tgz#abb78e6ec1b1fdc5859aa002df4e996ca2315dba"
+  integrity sha512-xR26yIvTNbUe3hRXTjdIObrH5RlylCm31FMcOYvOpId51v2l0nwoo0z1HxpX3kOwwW71rS6V6fFQ/sEFzzfstg==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.7.0"
@@ -6372,6 +6372,7 @@ owncloud-design-system@1.0.0-1057:
     tinycolor2 "^1.4.1"
     uikit "3.2.3"
     vue "^2.6.10"
+    vue-avatar "^2.1.8"
     vue-lodash "^2.0.2"
     vue-meta "^2.0.4"
     vue-router "^3.0.6"
@@ -8941,6 +8942,11 @@ void-elements@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
+
+vue-avatar@^2.1.8:
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/vue-avatar/-/vue-avatar-2.1.8.tgz#3a8069aa70ecbf89eea2440a7b54f716a46f9935"
+  integrity sha512-IrtZV4D90yfvnSz/04cYUnc//Lu83xGwREoxLJ5B6YFB4fj1BgqKZSZolO/yg48J/HhEhHLMnjGNg5sqj5cZKA==
 
 vue-clipboard2@^0.3.1:
   version "0.3.1"

@@ -4,6 +4,7 @@
     <oc-grid gutter="small">
       <oc-autocomplete
         @input="$_ocCollaborators_selectAutocompleteResult"
+        :ariaLabel="$gettext('Select a collaborator to add')"
         :items="autocompleteResults"
         :itemsLoading="autocompleteInProgress"
         :placeholder="$_ocCollaborationStatus_autocompletePlacholder"

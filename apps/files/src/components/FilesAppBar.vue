@@ -15,9 +15,9 @@
         <oc-search-bar
           @search="onFileSearch"
           :value="searchTerm"
-          :label="searchLabel"
+          :label="$_searchLabel"
           :loading="isLoadingSearch"
-          buttonHidden="true"
+          :buttonHidden="true"
           :button="false"
           @clear="onSearchClear"
           :key="searchBarKey"
@@ -61,7 +61,7 @@
             <oc-search-bar
               ref="mobileSearch"
               @search="onFileSearch"
-              :label="searchLabel"
+              :label="$_searchLabel"
               :loading="isLoadingSearch"
               @clear="onSearchClear"
               :key="searchBarKey"
@@ -154,7 +154,7 @@ export default {
     ...mapGetters(['getToken', 'configuration', 'newFileHandlers']),
     ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'quota', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
     ...mapState(['route']),
-    searchLabel () {
+    $_searchLabel () {
       return this.$gettext('Search')
     },
     $_createFolderDialogPlaceholder () {

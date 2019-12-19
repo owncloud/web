@@ -8,7 +8,7 @@
         <label for="oc-filter-search" class="uk-text-meta" v-translate>
           Name Filter
         </label>
-        <oc-search-bar id="oc-filter-search" small :type-ahead="true" @search="setFilterTerm" :value="filterTerm" :button="false" />
+        <oc-search-bar id="oc-filter-search" :label="$gettext('Name Filter')" small :type-ahead="true" @search="setFilterTerm" :value="filterTerm" :button="false" />
       </li>
     </ul>
  </oc-drop>
