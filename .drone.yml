@@ -3615,6 +3615,13 @@ steps:
   - cd /var/www/owncloud/federated
   - chown www-data * -R
 
+- name: owncloud-federated-log
+  pull: always
+  image: owncloud/ubuntu:16.04
+  detach: true
+  commands:
+  - tail -f /var/www/owncloud/federated/data/owncloud.log
+
 - name: copy-files-for-upload
   pull: always
   image: owncloudci/php:7.1
