@@ -3,6 +3,18 @@ const path = require('path')
 const xpathHelper = require('../../helpers/xpath')
 const { join } = require('../../helpers/path')
 
+/**
+ * @enum {string}
+ * @readonly
+ */
+const FileAction = Object.freeze({
+  download: 'download',
+  delete: 'delete',
+  restore: 'restore',
+  share: 'share',
+  rename: 'rename',
+  deleteImmediately: 'deleteImmediately'
+})
 module.exports = {
   commands: {
     /**
@@ -116,7 +128,7 @@ module.exports = {
 
       await this
         .useXpath()
-        .performFileAction(fileName, 'delete')
+        .performFileAction(fileName, FileAction.delete)
         .confirmDeletion()
 
       return this
@@ -187,7 +199,7 @@ module.exports = {
       return this.initAjaxCounters()
         .waitForFileWithPathVisible(fileName)
         .useXpath()
-        .performFileAction(fileName, 'restore')
+        .performFileAction(fileName, FileAction.restore)
         .waitForOutstandingAjaxCalls()
         .useCss()
     },
@@ -216,7 +228,7 @@ module.exports = {
 
       await this
         .useXpath()
-        .performFileAction(fileName, 'share')
+        .performFileAction(fileName, FileAction.share)
         .waitForElementVisible('@sharingSideBar')
         .useCss()
 
@@ -231,7 +243,7 @@ module.exports = {
 
       await this
         .useXpath()
-        .performFileAction(fileName, 'share')
+        .performFileAction(fileName, FileAction.share)
         .waitForElementVisible('@linkToPublicLinksTag')
         .click('@linkToPublicLinksTag')
         .waitForElementVisible('@publicLinkSideBar')
@@ -266,7 +278,7 @@ module.exports = {
 
       await this.initAjaxCounters()
         .useXpath()
-        .performFileAction(fromName, 'rename')
+        .performFileAction(fromName, FileAction.rename)
         .waitForElementVisible('@renameFileConfirmationBtn')
         .waitForAnimationToFinish()
         .clearValue('@renameFileInputField')
@@ -289,7 +301,7 @@ module.exports = {
       await this.waitForFileVisible(fromName)
 
       await this.initAjaxCounters()
-        .performFileAction(fromName, 'download')
+        .performFileAction(fromName, FileAction.download)
         .waitForOutstandingAjaxCalls()
     },
     /**
@@ -661,7 +673,7 @@ module.exports = {
     deleteImmediately: async function (fileName) {
       await this.waitForFileVisible(fileName)
       await this
-        .performFileAction(fileName, 'deleteImmediately')
+        .performFileAction(fileName, FileAction.deleteImmediately)
         .confirmDeletion()
 
       return this
