@@ -112,7 +112,7 @@ function createGroup (groupId) {
   body.append('groupid', groupId)
   userSettings.addGroupToCreatedGroupsList(groupId)
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
-  return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/groups?format=json', {
+  return fetch(join(client.globals.backend_url, '/ocs/v2.php/cloud/groups?format=json'), {
     method: 'POST',
     body: body,
     headers: headers
@@ -127,7 +127,8 @@ function createGroup (groupId) {
 function deleteGroup (groupId) {
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
   userSettings.deleteGroupFromCreatedGroupsList(groupId)
-  return fetch(client.globals.backend_url + '/ocs/v2.php/cloud/groups/' + groupId, { method: 'DELETE', headers: headers })
+  return fetch(join(client.globals.backend_url, '/ocs/v2.php/cloud/groups/', groupId),
+    { method: 'DELETE', headers: headers })
 }
 
 function addToGroup (userId, groupId) {
@@ -135,7 +136,7 @@ function addToGroup (userId, groupId) {
   body.append('groupid', groupId)
 
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
-  return fetch(`${client.globals.backend_url}/ocs/v2.php/cloud/users/${userId}/groups`,
+  return fetch(join(client.globals.backend_url, `/ocs/v2.php/cloud/users/${userId}/groups`),
     { method: 'POST', body: body, headers: headers }
   )
 }
@@ -161,8 +162,7 @@ Given('the quota of user {string} has been set to {string}', function (userId, q
   body.append('key', 'quota')
   body.append('value', quota)
 
-  return fetch(
-    client.globals.backend_url + '/ocs/v2.php/cloud/users/' + userId,
+  return fetch(join(client.globals.backend_url, '/ocs/v2.php/cloud/users/', userId),
     { method: 'PUT', body: body, headers: headers }
   )
     .then(res => httpHelper.checkStatus(res, 'Could not set quota.'))

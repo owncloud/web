@@ -4,7 +4,7 @@ const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('./backendHelper')
 const convert = require('xml-js')
 const _ = require('lodash/object')
-const { resolve, normalize, join, filename } = require('../helpers/path')
+const { normalize, join, filename } = require('../helpers/path')
 const occHelper = require('../helpers/occHelper')
 
 /**
@@ -14,9 +14,8 @@ const occHelper = require('../helpers/occHelper')
  * @param {string} server - (REMOTE/LOCAL) server to use for dav path
  */
 exports.createDavPath = function (userId, element) {
-  return backendHelper.getCurrentBackendUrl() +
-    '/remote.php/dav/files/' + userId + '/' + encodeURIComponent(element)
-    .replace(/%2F/g, '/')
+  const replaceEncoded = encodeURIComponent(element).replace(/%2F/g, '/')
+  return join(backendHelper.getCurrentBackendUrl(), '/remote.php/dav/files/', userId, replaceEncoded)
 }
 
 /**
@@ -80,7 +79,7 @@ exports.move = function (userId, fromName, toName) {
 exports.propfind = function (path, userId, properties, folderDepth = 1) {
   const headers = httpHelper.createAuthHeader(userId)
   headers.Depth = folderDepth
-  const davPath = backendHelper.getCurrentBackendUrl() + '/remote.php/dav' + resolve(path)
+  const davPath = join(backendHelper.getCurrentBackendUrl(), '/remote.php/dav', path)
   let propertyBody = ''
   properties.map(prop => {
     propertyBody += `<${prop}/>`
@@ -209,8 +208,11 @@ exports.getSkeletonFile = function (filename) {
     .then(dir => {
       const headers = httpHelper.createAuthHeader('admin')
       const element = join(dir.trim(), filename)
-      return fetch(
-        client.globals.backend_url + `/ocs/v2.php/apps/testing/api/v1/file?file=${encodeURIComponent(element)}&absolute=true&format=json`,
+      const apiURL = join(client.globals.backend_url,
+        '/ocs/v2.php/apps/testing/api/v1/file',
+        `?file=${encodeURIComponent(element)}&absolute=true&format=json`
+      )
+      return fetch(apiURL,
         { method: 'GET', headers })
     })
     .then(res => res.json())
@@ -221,15 +223,16 @@ exports.getSkeletonFile = function (filename) {
 
 exports.uploadFileWithContent = function (user, content, filename) {
   const headers = httpHelper.createAuthHeader(user)
-  return fetch(backendHelper.getCurrentBackendUrl() +
-    '/remote.php/webdav/' + filename, {
-    headers: {
-      'Content-Type': 'text/plain',
-      ...headers
-    },
-    method: 'PUT',
-    body: content
-  })
+  const apiURL = join(backendHelper.getCurrentBackendUrl(), '/remote.php/webdav/', filename)
+  return fetch(apiURL,
+    {
+      headers: {
+        'Content-Type': 'text/plain',
+        ...headers
+      },
+      method: 'PUT',
+      body: content
+    })
     .then(res => httpHelper.checkStatus(res, 'Could not upload file' + filename + 'with content' + content))
 }
 

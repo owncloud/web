@@ -1,9 +1,10 @@
 const navigationHelper = require('../helpers/navigationHelper')
 const util = require('util')
+const { join } = require('../helpers/path')
 
 module.exports = {
   url: function () {
-    return this.api.launchUrl + '/#/files/shared-with-me/'
+    return join(this.api.launchUrl, '/#/files/shared-with-me/')
   },
   commands: {
     /**
