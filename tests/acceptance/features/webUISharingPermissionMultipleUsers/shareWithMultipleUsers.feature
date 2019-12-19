@@ -9,7 +9,6 @@ Feature: Sharing files and folders with multiple internal users with different p
       | user1    |
       | user2    |
 
-  @issue-1837 @issue-1897
   Scenario Outline: share a folder with multiple users with different roles and permissions
     Given these users have been created with default attributes:
       | username |
@@ -58,21 +57,18 @@ Feature: Sharing files and folders with multiple internal users with different p
       | Editor               | Editor                  | ,                             | ,                     | read, update, delete, create |
       | Advanced permissions | Viewer                  | ,                             | ,                     | read                         |
       | Advanced permissions | Viewer                  | share                         | share                 | read, share                  |
-      | Advanced permissions | Advanced role           | delete                        | delete                | read, delete                 |
-      | Advanced permissions | Advanced permissions    | update                        | ,                     | read, update                 |
+      | Advanced permissions | Advanced permissions    | delete                        | delete                | read, delete                 |
+      | Advanced permissions | Advanced permissions    | update                        | update                | read, update                 |
       | Advanced permissions | Advanced permissions    | create                        | create                | read, create                 |
       | Advanced permissions | Advanced permissions    | share, delete                 | share, delete         | read, share, delete          |
-      | Advanced permissions | Advanced permissions    | share, update                 | share                 | read, update, share          |
+      | Advanced permissions | Advanced permissions    | share, update                 | share, update         | read, update, share          |
       | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create          |
       | Advanced permissions | Advanced permissions    | delete, update                | delete, update        | read, delete, update         |
       | Advanced permissions | Advanced permissions    | delete, create                | delete, create        | read, delete, create         |
       | Advanced permissions | Advanced permissions    | update, create                | update, create        | read, update, create         |
-      # issue-1837: Displayed Permissions below should have been 'share, delete, update'
-      | Advanced permissions | Advanced permissions    | share, delete, update         | ,                     | read, share, delete, update  |
-      # issue-1837: Displayed Permissions below should have been 'share, create, delete'.
-      | Advanced permissions | Advanced permissions    | share, create, delete         | ,                     | read, share, delete, create  |
-      # issue-1837: Displayed Permissions below should have been 'share, update, create'.
-      | Advanced permissions | Advanced permissions    | share, update, create         | ,                     | read, share, update, create  |
+      | Advanced permissions | Advanced permissions    | share, delete, update         | share, delete, update | read, share, delete, update  |
+      | Advanced permissions | Advanced permissions    | share, create, delete         | share, create, delete | read, share, delete, create  |
+      | Advanced permissions | Advanced permissions    | share, update, create         | share, update, create | read, share, update, create  |
       | Advanced permissions | Editor                  | delete, update, create        | ,                     | read, delete, update, create |
       | Advanced permissions | Editor                  | share, delete, update, create | share                 | all                          |
 

@@ -3039,7 +3039,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: SharingPermissionsMultipleUsers-chrome
+name: SharingPermissionMultipleUsers-chrome
 
 platform:
   os: linux
@@ -3136,7 +3136,7 @@ steps:
     BACKEND_HOST: http://owncloud
     LOCAL_UPLOAD_DIR: /uploads
     SERVER_HOST: http://phoenix
-    TEST_CONTEXT: webUISharingPermissionsMultipleUsers
+    TEST_CONTEXT: webUISharingPermissionMultipleUsers
     TEST_TAGS: not @skip
 
 services:
@@ -4515,7 +4515,7 @@ depends_on:
 - Trashbin-chrome
 - Upload-chrome
 - SharingAcceptShares-chrome
-- SharingPermissionsMultipleUsers-chrome
+- SharingPermissionMultipleUsers-chrome
 - SharingNotifications-chrome
 - Account-chrome
 - SharingExternal-chrome
