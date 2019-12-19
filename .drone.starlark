@@ -35,7 +35,7 @@ config = {
 				'webUITrashbin': 'Trashbin',
 				'webUIUpload': 'Upload',
 				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingPermissionsMultipleUsers': 'SharingPermissionsMultipleUsers',
+				'webUISharingPermissionMultipleUsers': 'SharingPermissionMultipleUsers',
 				'webUISharingNotifications': 'SharingNotifications',
 				'webUIAccount': 'Account'
 			},
