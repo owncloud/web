@@ -3593,6 +3593,11 @@ steps:
   image: owncloudci/core
   settings:
     core_path: /var/www/owncloud/federated/
+    db_host: mysql-federated
+    db_name: owncloud-federated
+    db_password: owncloud
+    db_type: mysql
+    db_username: owncloud
     version: daily-master-qa
 
 - name: setup-fed-server-phoenix
@@ -3681,6 +3686,15 @@ services:
   - FOREGROUND
   environment:
     APACHE_WEBROOT: /var/www/owncloud/federated/
+
+- name: mysql-federated
+  pull: always
+  image: mysql:5.5
+  environment:
+    MYSQL_DATABASE: owncloud-federated
+    MYSQL_PASSWORD: owncloud
+    MYSQL_ROOT_PASSWORD: owncloud
+    MYSQL_USER: owncloud
 
 - name: selenium
   pull: always
