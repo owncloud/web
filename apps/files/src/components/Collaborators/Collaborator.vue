@@ -4,13 +4,13 @@
     <div class="files-collaborators-collaborator-information uk-flex uk-flex-wrap uk-flex-middle">
       <oc-spinner v-if="loading" key="collaborator-avatar-spinner" uk-spinner="ratio:1.6" class="uk-margin-small-right" :aria-label="$gettext('Loading')"/>
       <div v-else key="collaborator-avatar-loaded">
-        <oc-avatar v-if="avatar" :src="avatar" class="uk-margin-small-right" width=50 height=50 :userName="collaborator.displayName" />
+        <oc-avatar v-if="collaborator.info.share_type === '0'" :src="avatar" class="uk-margin-small-right" :width="50" :userName="collaborator.displayName" />
         <div v-else key="collaborator-avatar-placeholder">
           <oc-icon v-if="collaborator.info.share_type === '1'" class="uk-margin-small-right" name="group" size="large" />
           <oc-icon v-else class="uk-margin-small-right" name="person" size="large" />
         </div>
       </div>
-      <div class="uk-flex uk-flex-column uk-flex-center">
+      <div class="uk-flex uk-flex-column uk-flex-center files-collaborators-collaborator-information-text">
         <div class="oc-text">
           <span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.displayName }}</span>
           <span v-if="parseInt(collaborator.info.share_type, 10) === 0 && collaborator.info.share_with_additional_info.length > 0" class="uk-text-meta">
