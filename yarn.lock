@@ -6358,10 +6358,10 @@ os-tmpdir@~1.0.1, os-tmpdir@~1.0.2:
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
 
-owncloud-design-system@^1.0.0-1065:
-  version "1.0.0-1065"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-1065.tgz#abb78e6ec1b1fdc5859aa002df4e996ca2315dba"
-  integrity sha512-xR26yIvTNbUe3hRXTjdIObrH5RlylCm31FMcOYvOpId51v2l0nwoo0z1HxpX3kOwwW71rS6V6fFQ/sEFzzfstg==
+owncloud-design-system@^1.0.0-1069:
+  version "1.0.0-1069"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-1069.tgz#46d1ac0b2848dbbd9cc3eb043b2a09adeeb57fe0"
+  integrity sha512-FHTaqkoSqfPbuIm2jwC1eM1/se0QyovJpxtnCi4KOtt7pElCiVUaK4FMInn5NSGbz8np32HcMyJAoZNrC0JdNQ==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.7.0"
