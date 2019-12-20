@@ -4,7 +4,7 @@
     <div class="files-collaborators-collaborator-information uk-flex uk-flex-wrap uk-flex-middle">
       <oc-spinner v-if="loading" key="collaborator-avatar-spinner" uk-spinner="ratio:1.6" class="uk-margin-small-right" :aria-label="$gettext('Loading')"/>
       <div v-else key="collaborator-avatar-loaded">
-        <oc-avatar v-if="avatar" :src="avatar" class="uk-margin-small-right" width=50 height=50 />
+        <oc-avatar v-if="avatar" :src="avatar" class="uk-margin-small-right" width=50 height=50 :userName="collaborator.displayName" />
         <div v-else key="collaborator-avatar-placeholder">
           <oc-icon v-if="collaborator.info.share_type === '1'" class="uk-margin-small-right" name="group" size="large" />
           <oc-icon v-else class="uk-margin-small-right" name="person" size="large" />
