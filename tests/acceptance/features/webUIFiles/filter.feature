@@ -114,7 +114,7 @@ Feature: Filter files/folders
     When the user enables file filter using the webUI
     And the user enables folder filter using the webUI
     And the user filters the file list by "simple" on the webUI
-    Then as "user1" all files and folders containing pattern "simple" in their name should be listed in files list on the webUI except of hidden elements
+    Then as "user1" all files and folders containing pattern "simple" in their name should be listed in files list on the webUI except for hidden elements
 
   Scenario: user filters files using keyword when the hidden filter and the folder filter are disabled
     Given the user has created file ".simpleHiddenFile"
@@ -123,7 +123,7 @@ Feature: Filter files/folders
     When the user enables file filter using the webUI
     And the user disables folder filter using the webUI
     And the user filters the file list by "simple" on the webUI
-    Then as "user1" only files containing pattern "simple" in their name should be listed in files list on the webUI except hidden elements
+    Then as "user1" only files containing pattern "simple" in their name should be listed in files list on the webUI except for hidden elements
 
   Scenario: user filters folders using keyword when the hidden filter and the file filter are disabled
     Given the user has created file ".simpleHiddenFile"
@@ -132,7 +132,7 @@ Feature: Filter files/folders
     When the user disables file filter using the webUI
     And the user enables folder filter using the webUI
     And the user filters the file list by "simple" on the webUI
-    Then as "user1" only folders containing pattern "simple" in their name should be listed in files list on the webUI except hidden elements
+    Then as "user1" only folders containing pattern "simple" in their name should be listed in files list on the webUI except for hidden elements
 
   Scenario: user filters folders using keyword when the hidden filter and the folder filter are enabled
     Given the user has created file ".simpleHiddenFile"

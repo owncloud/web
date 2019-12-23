@@ -29,39 +29,39 @@ Feature: Filter files/folders
     And the user enables folder filter using the webUI
     And the user enables the setting to view hidden files on the webUI
     And the user filters the file list by "simple" on the webUI
-    Then all files and folders containing pattern "simple" in their name should be listed in the favourites list on the webUI
+    Then all favorite files and folders containing pattern "simple" in their name should be listed on the webUI
 
   Scenario: user filters files and folders using keyword when the hidden filter is disabled
     When the user enables file filter using the webUI
     And the user enables folder filter using the webUI
     And the user filters the file list by "simple" on the webUI
-    Then all files and folders containing pattern "simple" in their name should be listed in the favourites list on the webUI except of hidden elements
+    Then all favorite files and folders containing pattern "simple" in their name should be listed on the webUI except for hidden elements
 
   Scenario: user filters files using keyword when the hidden filter and the folder filter are disabled
     When the user enables file filter using the webUI
     And the user disables folder filter using the webUI
     And the user filters the file list by "simple" on the webUI
-    Then only files containing pattern "simple" in their name should be listed in the favourites list on the webUI except of hidden elements
+    Then only favorite files containing pattern "simple" in their name should be listed on the webUI except for hidden elements
 
   Scenario: user filters folders using keyword when the hidden filter and the file filter are disabled
     When the user disables file filter using the webUI
     And the user enables folder filter using the webUI
     And the user filters the file list by "simple" on the webUI
-    Then only folders containing pattern "simple" in their name should be listed in the favourites list on the webUI except of hidden elements
+    Then only favorite folders containing pattern "simple" in their name should be listed on the webUI except for hidden elements
 
   Scenario: user filters folders using keyword when the hidden filter and the folder filter are enabled
     When the user disables file filter using the webUI
     And the user enables folder filter using the webUI
     And the user enables the setting to view hidden folders on the webUI
     And the user filters the file list by "simple" on the webUI
-    Then only folders containing pattern "simple" in their name should be listed in the favourites list on the webUI
+    Then only favorite folders containing pattern "simple" in their name should be listed on the webUI
 
   Scenario: user filters files using keyword when the hidden filter and the file filter are enabled
     When the user disables folder filter using the webUI
     And the user enables file filter using the webUI
     And the user enables the setting to view hidden folders on the webUI
     And the user filters the file list by "simple" on the webUI
-    Then only files containing pattern "simple" in their name should be listed in the favourites list on the webUI
+    Then only favorite files containing pattern "simple" in their name should be listed on the webUI
 
   Scenario: user filters files using keyword when the folder filter and file filter are disabled and hidden filter is enabled
     When the user disables folder filter using the webUI
