@@ -1,6 +1,7 @@
 import { setDefaultTimeout, After, Before } from 'cucumber'
 import { createSession, closeSession, client, startWebDriver, stopWebDriver } from 'nightwatch-api'
 import { rollbackConfigs, setConfigs, cacheConfigs } from './helpers/config'
+import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
 
 const RUNNING_ON_CI = !!process.env.CI
 const RUNNING_ON_SAUCELABS = !!process.env.SAUCE_USERNAME
@@ -50,20 +51,32 @@ Before(function cacheAndSetConfigsOnRemoteIfExists () {
   }
 })
 
-After(function closeSessionForEnv () {
-  return closeSession()
-})
-
-After(function stopDriverIfOnLocal () {
-  return RUNNING_ON_CI || stopWebDriver()
+// After hooks are run in reverse order in which they are defined
+// https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/hooks.md#hooks
+After(function rollbackConfigsOnRemoteIfExists () {
+  if (client.globals.remote_backend_url) {
+    return rollbackConfigs(client.globals.remote_backend_url)
+  }
 })
 
 After(function rollbackConfigsOnLocal () {
   return rollbackConfigs(client.globals.backend_url)
 })
 
-After(function rollbackConfigsOnRemoteIfExists () {
-  if (client.globals.remote_backend_url) {
-    return rollbackConfigs(client.globals.remote_backend_url)
+After(function stopDriverIfOnLocal () {
+  return RUNNING_ON_CI || stopWebDriver()
+})
+
+After(function closeSessionForEnv () {
+  return closeSession()
+})
+
+After(async function tryToReadBrowserConsoleOnFailure ({ result }) {
+  if (result.status === 'failed') {
+    const logs = await getAllLogsWithDateTime('SEVERE')
+    if (logs.length > 0) {
+      console.log('\nThe following logs were found in the browser console:\n')
+      logs.forEach(log => console.log(log))
+    }
   }
 })

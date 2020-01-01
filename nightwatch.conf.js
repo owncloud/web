@@ -41,7 +41,8 @@ module.exports = {
         chromeOptions: {
           args: ['disable-gpu'],
           w3c: false
-        }
+        },
+        loggingPrefs: { browser: 'ALL' }
       },
       webdriver: {
         start_process: false,
