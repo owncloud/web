@@ -162,6 +162,9 @@ module.exports = {
       for (const btn of cancelButtons) {
         await this.api.elementIdClick(btn.ELEMENT).waitForAnimationToFinish()
       }
+    },
+    browseToUserProfile: function () {
+      return this.click('@userMenuButton')
     }
   },
   elements: {
