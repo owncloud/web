@@ -1,67 +1,69 @@
 const { client } = require('nightwatch-api')
-const _ = require('lodash')
 
 const { BACKENDS } = require('./backendHelper')
 
-const adminUsername = process.env.ADMIN_USERNAME || 'admin'
-const adminPassword = process.env.ADMIN_PASSWORD || 'admin'
-const regularUserPassword = process.env.REGULAR_USER_PASSWORD || '123456'
-const alt1UserPassword = process.env.ALT1_USER_PASSWORD || '1234'
-const alt2UserPassword = process.env.ALT2_USER_PASSWORD || 'AaBb2Cc3Dd4'
-const alt3UserPassword = process.env.ALT3_USER_PASSWORD || 'aVeryLongPassword42TheMeaningOfLife'
-const alt4UserPassword = process.env.ALT4_USER_PASSWORD || 'ThisIsThe4thAlternatePwd'
-const alt11UserPassword = process.env.ALT11_USER_PASSWORD || 'E-leven'
+const passwords = {
+  admin: process.env.ADMIN_PASSWORD || 'admin',
+  regular: process.env.REGULAR_USER_PASSWORD || '123456',
+  alt1: process.env.ALT1_USER_PASSWORD || '1234',
+  alt2: process.env.ALT2_USER_PASSWORD || 'AaBb2Cc3Dd4',
+  alt3: process.env.ALT3_USER_PASSWORD || 'aVeryLongPassword42TheMeaningOfLife',
+  alt4: process.env.ALT4_USER_PASSWORD || 'ThisIsThe4thAlternatePwd',
+  alt11: process.env.ALT11_USER_PASSWORD || 'E-leven'
+}
 
+const adminUsername = process.env.ADMIN_USERNAME || 'admin'
 module.exports = {
+  passwords,
   // list of default users
   defaultUsers: {
     admin: {
       displayname: adminUsername,
-      password: adminPassword
+      password: passwords.admin
     },
     regularuser: {
       displayname: 'Regular User',
-      password: regularUserPassword,
+      password: passwords.regular,
       email: 'regularuser@example.org'
     },
     user0: {
       displayname: 'Regular User',
-      password: regularUserPassword,
+      password: passwords.regular,
       email: 'user0@example.org'
     },
     user1: {
       displayname: 'User One',
-      password: alt1UserPassword,
+      password: passwords.alt1,
       email: 'user1@example.org'
     },
     user2: {
       displayname: 'User Two',
-      password: alt2UserPassword,
+      password: passwords.alt2,
       email: 'user2@example.org'
     },
     user3: {
       displayname: 'User Three',
-      password: alt3UserPassword,
+      password: passwords.alt3,
       email: 'user3@example.org'
     },
     user4: {
       displayname: 'User Four',
-      password: alt4UserPassword,
+      password: passwords.alt4,
       email: 'user4@example.org'
     },
     user11: {
       displayname: 'User Eleven',
-      password: alt11UserPassword,
+      password: passwords.alt11,
       email: 'user11@example.org'
     },
     usergrp: {
       displayname: 'User Grp',
-      password: regularUserPassword,
+      password: passwords.regular,
       email: 'usergrp@example.org'
     },
     sharee1: {
       displayname: 'Sharee One',
-      password: regularUserPassword,
+      password: passwords.regular,
       email: 'sharee1@example.org'
     }
   },
@@ -78,9 +80,17 @@ module.exports = {
    */
   addUserToCreatedUsersList: function (userId, password, displayname = null, email = null) {
     if (client.globals.default_backend === BACKENDS.remote) {
-      this.createdRemoteUsers[userId] = { password, displayname, email }
+      this.createdRemoteUsers[userId] = {
+        password,
+        displayname,
+        email
+      }
     } else {
-      this.createdUsers[userId] = { password: password, displayname: displayname, email: email }
+      this.createdUsers[userId] = {
+        password: password,
+        displayname: displayname,
+        email: email
+      }
     }
   },
   /**
@@ -216,27 +226,5 @@ module.exports = {
    */
   getCreatedGroups: function () {
     return this.createdGroups
-  },
-  /**
-   * Gets the password for the un-initialized users and replaces the password accordingly
-   *
-   * @param {string} input
-   * @returns {string}
-   */
-  replaceInlineCode: function (input) {
-    const codes = {
-      regular: regularUserPassword,
-      alt1: alt1UserPassword,
-      alt2: alt2UserPassword,
-      alt3: alt3UserPassword,
-      alt4: alt4UserPassword,
-      alt11: alt4UserPassword,
-      remote_backend_url: client.globals.remote_backend_url,
-      backend_url: client.globals.backend_url
-    }
-
-    _.templateSettings.interpolate = /%([\s\S]+?)%/g
-    const compiled = _.template(input)
-    return compiled(codes)
   }
 }

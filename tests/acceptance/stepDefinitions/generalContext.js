@@ -11,7 +11,6 @@ const { join } = require('../helpers/path')
 
 let initialConfigJsonSettings
 let createdFiles = []
-const userSettings = require('../helpers/userSettings')
 
 Given('a file with the size of {string} bytes and the name {string} has been created locally', function (size, name) {
   const fullPathOfLocalFile = client.globals.filesForUpload + name
@@ -133,7 +132,7 @@ Given('the administrator has cleared the versions for all users', function () {
 
 const setTrustedServer = function (url) {
   const body = new URLSearchParams()
-  body.append('url', userSettings.replaceInlineCode(url))
+  body.append('url', url)
   const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
   const postUrl = join(backendHelper.getCurrentBackendUrl(), '/ocs/v2.php/apps/testing/api/v1/trustedservers?format=json')
   return fetch(postUrl,
@@ -143,11 +142,11 @@ const setTrustedServer = function (url) {
     })
 }
 
-Given('server {string} has been added as trusted server', function (server) {
+Given('server {code} has been added as trusted server', function (server) {
   return setTrustedServer(server)
 })
 
-Given('server {string} has been added as trusted server on remote server', function (url) {
+Given('server {code} has been added as trusted server on remote server', function (url) {
   return backendHelper.runOnRemoteBackend(setTrustedServer, url)
 })
 

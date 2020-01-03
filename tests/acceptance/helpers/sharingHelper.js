@@ -1,7 +1,7 @@
 const { client } = require('nightwatch-api')
 const httpHelper = require('./httpHelper')
 const { normalize, join } = require('./path')
-const userSettings = require('./userSettings')
+const codify = require('../helpers/codify')
 const fetch = require('node-fetch')
 const assert = require('assert')
 
@@ -84,6 +84,7 @@ module.exports = {
    * @returns {Promise<unknown>}
    */
   assertUserHasShareWithDetails: function (user, expectedDetailsTable, filters = {}) {
+    codify.replaceInlineTable(expectedDetailsTable)
     const headers = httpHelper.createAuthHeader(user)
     const sharingHelper = this
     const apiURL = new URL(join(client.globals.backend_url, '/ocs/v2.php/apps/files_sharing/api/v1/shares'))
@@ -98,7 +99,6 @@ module.exports = {
         for (const share of shares) {
           found = true
           for (const expectedDetail of expectedDetailsTable.hashes()) {
-            expectedDetail.value = userSettings.replaceInlineCode(expectedDetail.value)
             if (expectedDetail.field === 'permissions') {
               expectedDetail.value = sharingHelper.humanReadablePermissionsToBitmask(expectedDetail.value).toString()
             } else if (expectedDetail.field === 'share_type') {

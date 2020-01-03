@@ -1,7 +1,7 @@
 const { client } = require('nightwatch-api')
 const { Given, When, Then } = require('cucumber')
 const httpHelper = require('../helpers/httpHelper')
-const userSettings = require('../helpers/userSettings')
+const codify = require('../helpers/codify')
 const fetch = require('node-fetch')
 const assert = require('assert')
 const util = require('util')
@@ -69,6 +69,7 @@ Then('the notification bell should disappear on the webUI', function () {
 
 Then('the user should see {int} notifications on the webUI with these details',
   async function (numberOfNotifications, dataTable) {
+    codify.replaceInlineTable(dataTable)
     const expectedNotifications = dataTable.hashes()
     const notifications = await client.page.phoenixPage().getNotifications()
     assert.strictEqual(
@@ -77,7 +78,7 @@ Then('the user should see {int} notifications on the webUI with these details',
       'Notification count miss-match!'
     )
     for (const element of expectedNotifications) {
-      const isPresent = notifications.includes(userSettings.replaceInlineCode(element.title))
+      const isPresent = notifications.includes(element.title)
       assert.ok(
         isPresent,
         `Expected: '${element.title}' to be present but found: not present in ${notifications}`)
