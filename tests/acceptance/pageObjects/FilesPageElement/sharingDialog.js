@@ -373,7 +373,7 @@ module.exports = {
      *
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
-    deleteShareWithUserGroup: async function (item) {
+    deleteShareWithUserGroup: function (item) {
       const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, item)
       const deleteSelector = informationSelector + this.elements.deleteShareButton.selector
       return this

@@ -633,7 +633,7 @@ module.exports = {
      * @returns {Promise.<[]>} Array of files/folders element
      */
     allFileRows: async function () {
-      this
+      await this
         .waitForElementNotPresent('@filesListProgressBar')
         .waitForElementVisible({
           selector: '@fileRows',

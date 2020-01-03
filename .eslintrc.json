@@ -13,6 +13,7 @@
         "sourceType": "module"
     },
     "rules": {
+      "require-await": "warn"
     },
     "globals": {
       "require": false,
