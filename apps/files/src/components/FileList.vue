@@ -66,7 +66,7 @@
                 />
               </div>
               <oc-button
-                :id="`files-file-list-action-button-small-resolution-${item.id}${{ '-active': active }}`"
+                :id="actionsDropdownButtonId(item.id, active)"
                 icon="more_vert"
                 :class="{ 'uk-hidden@m' : !compactMode, 'uk-visible@s uk-hidden@xl' : compactMode }"
                 :disabled="$_actionInProgress(item)"
@@ -135,6 +135,11 @@ export default {
     isActionEnabled: {
       type: Function,
       required: true
+    },
+    selectableRow: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   data () {
@@ -247,6 +252,8 @@ export default {
       return 'file-row'
     },
     selectRow (item, event) {
+      if (!this.selectableRow) return
+
       if (item.status && (item.status === 1 || item.status === 2)) return
 
       event.stopPropagation()
@@ -286,6 +293,14 @@ export default {
       this.rowActionsDisplayed = false
       this.rowActionsItem = {}
       this.rowActions = []
+    },
+
+    actionsDropdownButtonId (id, active) {
+      if (active) {
+        return `files-file-list-action-button-small-resolution-${id}-active`
+      }
+
+      return `files-file-list-action-button-small-resolution-${id}`
     }
   },
   computed: {

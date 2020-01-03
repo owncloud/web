@@ -24,13 +24,8 @@ module.exports = {
      * @param {string} fileName
      * @returns {string}
      */
-    getActionSelectorLowRes: function (action, itemName) {
-      // Escape double quotes inside of selector
-      if (itemName.indexOf('"') > -1) {
-        itemName = this.replaceChar(itemName, '"', '&quot;')
-      }
-
-      const actionsDropdownSelector = util.format(this.elements.itemActionsDropdown.selector, itemName)
+    getActionSelectorLowRes: function (action) {
+      const actionsDropdownSelector = this.elements.itemActionsDropdown.selector
       const actionSelector = this.elements[action + 'ButtonInFileRow'].selector
 
       return `${actionsDropdownSelector}${actionSelector}`
@@ -420,26 +415,8 @@ module.exports = {
       const linkSelector = this.getFileLinkSelectorByFileName(fileName)
 
       await this.waitForElementPresent('@filesTableContainer')
-
       await this.filesListScrollToTop()
-
-      // TODO: After virtual scroll is implemented also in trashbin get rid of this
-      let trashbin = false
-      await this.api.url(result => {
-        if (result.value.indexOf('trash-bin') > -1) {
-          trashbin = true
-        }
-      })
-
-      if (trashbin) {
-        const rowSelector = this.getFileRowSelectorByFileName(fileName)
-
-        this
-          .useXpath()
-          .waitForElementVisible(rowSelector)
-      } else {
-        await this.findItemInFilesList(fileName)
-      }
+      await this.findItemInFilesList(fileName)
 
       // Find the item in files list if it's not in the view
       await this
@@ -835,11 +812,11 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     restoreButtonInFileRow: {
-      selector: '//span[.="Restore"]',
+      selector: '//button[@aria-label="Restore"]',
       locateStrategy: 'xpath'
     },
     deleteImmediatelyButtonInFileRow: {
-      selector: '//span[.="Delete immediately"]',
+      selector: '//button[@aria-label="Delete"]',
       locateStrategy: 'xpath'
     },
     deleteFileConfirmationBtn: {
@@ -864,12 +841,10 @@ module.exports = {
       selector: '#oc-dialog-rename-confirm'
     },
     fileRowByName: {
-      // FIXME: When the virtual scroll is implemented in trashbin adjust the selector
-      selector: '//span[@class="oc-file-name"][text()=%s and not(../span[@class="oc-file-extension"])]/../../../../../*[@data-is-visible="true"]'
+      selector: '//span[@class="oc-file-name"][text()=%s and not(../span[@class="oc-file-extension"])]/../../../../../div[@data-is-visible="true"]'
     },
     fileRowByNameAndExtension: {
-      // FIXME: When the virtual scroll is implemented in trashbin adjust the selector
-      selector: '//span[span/text()=%s and span/text()="%s"]/../../../../*[@data-is-visible="true"]'
+      selector: '//span[span/text()=%s and span/text()="%s"]/../../../../div[@data-is-visible="true"]'
     },
     fileLinkInFileRow: {
       selector: '//span[contains(@class, "file-row-name")]'
@@ -932,8 +907,8 @@ module.exports = {
       selector: '.files-collaborators-lists'
     },
     itemActionsDropdown: {
-      // FIXME: Use id after virtual scroll was implemented in trashbin
-      selector: '//div[@data-actions-dropdown-for-item="%s"]'
+      selector: '//div[@id="files-list-row-actions-dropdown"]',
+      locateStrategy: 'xpath'
     },
     foldersCount: {
       selector: '#files-list-count-folders'

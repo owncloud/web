@@ -1,68 +1,37 @@
 <template>
-  <div id="files-list-container">
-    <oc-table middle divider class="oc-filelist" id="files-list" v-show="!loadingFolder">
-      <oc-table-group>
-        <oc-table-row>
-          <oc-table-cell shrink type="head">
-            <oc-checkbox :hideLabel="true" class="uk-margin-small-left" id="filelist-check-all" @click.stop @change.native="$_ocTrashbin_toggleAll" :value="all" />
-          </oc-table-cell>
-          <oc-table-cell type="head" class="uk-text-nowrap" v-translate>Name</oc-table-cell>
-          <oc-table-cell shrink type="head" class="uk-text-nowrap uk-visible@m" v-translate>Deletion Time</oc-table-cell>
-          <oc-table-cell shrink type="head" v-translate>Actions</oc-table-cell>
-        </oc-table-row>
-      </oc-table-group>
-      <oc-table-group v-for="(item, index) in fileData" :key="index">
-        <oc-table-row class="file-row" data-is-visible="true">
-          <oc-table-cell>
-            <oc-checkbox :hideLabel="true" class="uk-margin-small-left" @click.stop @change.native="$_ocTrashbin_toggleFileSelect(item)" :value="selectedFiles.indexOf(item) >= 0" />
-          </oc-table-cell>
-          <oc-table-cell class="uk-text-truncate">
-            <div>
-              <oc-file :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name"
-                    :filename="item.name" :icon="fileTypeIcon(item)" :key="item.originalLocation" />
-            </div>
-          </oc-table-cell>
-          <oc-table-cell class="uk-text-meta uk-text-nowrap uk-visible@m">
+  <div id="files-list-container" class="uk-height-1-1">
+    <div class="uk-overflow-auto uk-height-1-1">
+      <file-list
+        id="files-list"
+        :fileData="fileData"
+        :loading="loadingFolder"
+        :actions="actions"
+        :isActionEnabled="isActionEnabled"
+        :selectableRow="false"
+      >
+        <template #headerColumns>
+          <div class="uk-text-truncate uk-text-meta uk-width-expand" v-translate>Name</div>
+          <div
+            type="head"
+            :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }"
+            class="uk-text-nowrap uk-text-meta uk-width-small"
+            v-translate
+          >
+            Deletion Time
+          </div>
+        </template>
+        <template #rowColumns="{ item }">
+          <div class="uk-text-truncate uk-width-expand">
+            <oc-file
+              :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
+              :filename="item.name" :key="item.id"/>
+          </div>
+          <div class="uk-text-meta uk-text-nowrap uk-width-small" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }">
             {{ formDateFromNow(item.deleteTimestamp) }}
-          </oc-table-cell>
-          <oc-table-cell class="uk-text-meta uk-text-nowrap">
-            <oc-button icon="restore" class="uk-visible@m" @click="$_ocTrashbin_restoreFile(item)">
-              <translate>Restore</translate>
-            </oc-button>
-            <oc-button icon="delete" class="uk-visible@m" @click="$_ocTrashbin_deleteFile(item)" ariaLabel="Delete">
-              <translate>Delete immediately</translate>
-            </oc-button>
-            <oc-button
-              :id="'files-trashbin-action-button-small-resolution-' + index"
-              icon="more_vert"
-              class="uk-hidden@m"
-              :aria-label="'show-file-actions'"
-              @click.stop
-            />
-            <oc-drop
-              v-if="!ocDialogIsOpen"
-              :toggle="'#files-trashbin-action-button-small-resolution-' + index"
-              :options="{ offset: 0 }"
-              position="bottom-right"
-              :data-actions-dropdown-for-item="nameForDropdownData(item.name)"
-            >
-              <ul class="uk-list">
-                <li>
-                  <oc-button icon="restore" class="uk-width-1-1" @click="$_ocTrashbin_restoreFile(item)" ariaLabel="Restore">
-                    <translate>Restore</translate>
-                  </oc-button>
-                </li>
-                <li>
-                  <oc-button icon="delete" class="uk-width-1-1" @click="$_ocTrashbin_deleteFile(item)" ariaLabel="Delete">
-                    <translate>Delete immediately</translate>
-                  </oc-button>
-                </li>
-              </ul>
-            </oc-drop>
-          </oc-table-cell>
-        </oc-table-row>
-      </oc-table-group>
-    </oc-table>
+          </div>
+        </template>
+      </file-list>
+    </div>
     <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="trashbinDeleteMessage !== ''"
                       :oc-content="trashbinDeleteMessage" :oc-has-input="false" :ocTitle="_deleteDialogTitle"
                       ocConfirmId="oc-dialog-delete-confirm" @oc-confirm="$_ocTrashbin_clearTrashbinConfirmation"
@@ -73,8 +42,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
+import FileList from './FileList.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
-// import PQueue from 'p-queue'
 const { default: PQueue } = require('p-queue')
 
 export default {
@@ -89,7 +58,8 @@ export default {
   },
 
   components: {
-    OcDialogPrompt
+    OcDialogPrompt,
+    FileList
   },
 
   mixins: [
@@ -116,8 +86,21 @@ export default {
       return this.$gettextInterpolate(translated, { numberOfFiles: files.length }, true)
     },
 
-    all () {
-      return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
+    actions () {
+      return [
+        {
+          icon: 'restore',
+          ariaLabel: this.$gettext('Restore'),
+          handler: this.$_ocTrashbin_restoreFile,
+          isEnabled: () => true
+        },
+        {
+          icon: 'delete',
+          ariaLabel: this.$gettext('Delete'),
+          handler: this.$_ocTrashbin_deleteFile,
+          isEnabled: () => true
+        }
+      ]
     }
   },
 
@@ -138,27 +121,6 @@ export default {
       this.addFileSelection(item)
 
       this.setTrashbinDeleteMessage(this.$gettext('This item will be deleted permanently. You can’t undo this action.'))
-    },
-
-    $_ocTrashbin_toggleFileSelect (item) {
-      if (this.selectedFiles.includes(item)) {
-        this.removeFileSelection(item)
-      } else {
-        this.addFileSelection(item)
-      }
-    },
-
-    $_ocTrashbin_toggleAll () {
-      if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
-        this.resetFileSelection()
-      } else {
-        const selectedFiles = this.fileData.slice()
-        for (const item of selectedFiles) {
-          if (!this.selectedFiles.includes(item)) {
-            this.addFileSelection(item)
-          }
-        }
-      }
     },
 
     $_ocTrashbin_clearTrashbinConfirmation (files = this.selectedFiles) {
@@ -244,14 +206,9 @@ export default {
       }
       return item.basename
     },
-    // FIXME: Remove as soon as trashbin has virtual scroll
-    nameForDropdownData (name) {
-      // Escape double quotes inside of selector
-      if (name.indexOf('"') > -1) {
-        name = name.replace(/\\([\s\S])|(")/g, '&quot;')
-      }
 
-      return name
+    isActionEnabled (item, action) {
+      return action.isEnabled(item, this.parentFolder)
     }
   }
 }

@@ -3,11 +3,10 @@
     v-if="displayed"
     :boundary="`#files-file-list-action-button-small-resolution-${item.id}-active`"
     :options="{ offset: 0 }"
-    :toggle="`#files-file-list-action-button-small-resolution-${item.id}`"
+    :toggle="`#files-file-list-action-button-small-resolution-${item.id}-active`"
     position="bottom-right"
     id="files-list-row-actions-dropdown"
     class="uk-open uk-drop-stack"
-    :data-actions-dropdown-for-item="nameForDropdownData(item.name)"
   >
     <ul class="uk-list">
       <li v-for="action in actions" :key="action.ariaLabel">
