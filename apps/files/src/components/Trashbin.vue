@@ -168,7 +168,7 @@ export default {
 
       const self = this
       function deleteFile (file) {
-        return async () => {
+        return () => {
           return self.$client.fileTrash.clearTrashBin(file.id)
             .then(() => {
               self.$_ocTrashbin_removeFileFromList([file])

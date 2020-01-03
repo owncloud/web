@@ -33,7 +33,7 @@ exports.getAllFiles = async function (user) {
   return filenames.filter(elements => !elements.endsWith('/'))
 }
 
-exports.getElementsMatchingPattern = async function (pattern, files) {
+exports.getElementsMatchingPattern = function (pattern, files) {
   return files.filter(elements => elements.toLowerCase().includes(pattern))
 }
 

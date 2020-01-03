@@ -862,11 +862,11 @@ Then('the user deletes the following file using the webUI', function (table) {
   return client.page.FilesPageElement.filesList().deleteFile(name)
 })
 
-Then('the user should be redirected to the files-drop page', async function () {
+Then('the user should be redirected to the files-drop page', function () {
   return client.page.filesDropPage().waitForPage()
 })
 
-Then('the user should be redirected to the public links page', async function () {
+Then('the user should be redirected to the public links page', function () {
   return client.page.publicLinkFilesPage().waitForPage()
 })
 
@@ -888,7 +888,7 @@ Then('as {string} all files and folders containing pattern {string} in their nam
   const files = await getAllFiles(user)
   const folders = await getAllFolders(user)
   const resources = files.concat(folders)
-  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, resources)
+  const filesFoldersMatchingPattern = getElementsMatchingPattern(pattern, resources)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(filesFoldersMatchingPattern, allListedFilesFolders)
 })
@@ -897,38 +897,38 @@ Then('as {string} all files and folders containing pattern {string} in their nam
   const files = await getAllFiles(user)
   const folders = await getAllFolders(user)
   const resources = files.concat(folders)
-  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, resources)
+  const filesFoldersMatchingPattern = getElementsMatchingPattern(pattern, resources)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenElements = await getAllFilesStartingWithDot(filesFoldersMatchingPattern)
+  const nonHiddenElements = getAllFilesStartingWithDot(filesFoldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenElements, allListedFilesFolders)
 })
 
 Then('as {string} only files containing pattern {string} in their name should be listed in files list on the webUI except for hidden elements', async function (user, pattern) {
   const files = await getAllFiles(user)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, files)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, files)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenFiles = await getAllFilesStartingWithDot(filesMatchingPattern)
+  const nonHiddenFiles = getAllFilesStartingWithDot(filesMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenFiles, allListedFilesFolders)
 })
 
 Then('as {string} only folders containing pattern {string} in their name should be listed in files list on the webUI except for hidden elements', async function (user, pattern) {
   const folders = await getAllFolders(user)
-  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, folders)
+  const foldersMatchingPattern = getElementsMatchingPattern(pattern, folders)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenFolders = await getAllFilesStartingWithDot(foldersMatchingPattern)
+  const nonHiddenFolders = getAllFilesStartingWithDot(foldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenFolders, allListedFilesFolders)
 })
 
 Then('as {string} only folders containing pattern {string} in their name should be listed in files list on the webUI', async function (user, pattern) {
   const folders = await getAllFolders(user)
-  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, folders)
+  const foldersMatchingPattern = getElementsMatchingPattern(pattern, folders)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(foldersMatchingPattern, allListedFilesFolders)
 })
 
 Then('as {string} only files containing pattern {string} in their name should be listed in files list on the webUI', async function (user, pattern) {
   const files = await getAllFiles(user)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, files)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, files)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
 })
@@ -938,7 +938,7 @@ Then('all trashbin files and folders containing pattern {string} in their name s
   const trashbinFolders = await getTrashbinFolders(client.globals.currentUser)
   const trashbinFiles = await getTrashbinFiles(client.globals.currentUser)
   const trashbinResources = trashbinFiles.concat(trashbinFolders)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, trashbinResources)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, trashbinResources)
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
 })
 
@@ -946,38 +946,38 @@ Then('all trashbin files and folders containing pattern {string} in their name s
   const trashbinFiles = await getTrashbinFiles(client.globals.currentUser)
   const trashbinFolders = await getTrashbinFolders(client.globals.currentUser)
   const trashbinResources = trashbinFiles.concat(trashbinFolders)
-  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, trashbinResources)
+  const filesFoldersMatchingPattern = getElementsMatchingPattern(pattern, trashbinResources)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenElements = await getAllFilesStartingWithDot(filesFoldersMatchingPattern)
+  const nonHiddenElements = getAllFilesStartingWithDot(filesFoldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenElements, allListedFilesFolders)
 })
 
 Then('only trashbin files containing pattern {string} in their name should be listed on the webUI except for hidden elements', async function (pattern) {
   const trashbinFiles = await getTrashbinFiles(client.globals.currentUser)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, trashbinFiles)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, trashbinFiles)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenFiles = await getAllFilesStartingWithDot(filesMatchingPattern)
+  const nonHiddenFiles = getAllFilesStartingWithDot(filesMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenFiles, allListedFilesFolders)
 })
 
 Then('only trashbin folders containing pattern {string} in their name should be listed on the webUI except for hidden elements', async function (pattern) {
   const trashbinFolders = await getTrashbinFolders(client.globals.currentUser)
-  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, trashbinFolders)
+  const foldersMatchingPattern = getElementsMatchingPattern(pattern, trashbinFolders)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenFolders = await getAllFilesStartingWithDot(foldersMatchingPattern)
+  const nonHiddenFolders = getAllFilesStartingWithDot(foldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenFolders, allListedFilesFolders)
 })
 
 Then('only trashbin folders containing pattern {string} in their name should be listed on the webUI', async function (pattern) {
   const trashbinFolders = await getTrashbinFolders(client.globals.currentUser)
-  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, trashbinFolders)
+  const foldersMatchingPattern = getElementsMatchingPattern(pattern, trashbinFolders)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(foldersMatchingPattern, allListedFilesFolders)
 })
 
 Then('only trashbin files containing pattern {string} in their name should be listed on the webUI', async function (pattern) {
   const trashbinFiles = await getTrashbinFiles(client.globals.currentUser)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, trashbinFiles)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, trashbinFiles)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
 })
@@ -987,7 +987,7 @@ Then('all shared-with-me files and folders containing pattern {string} in their 
   const sharedWithMeFolders = await getSharedWithMeFolders(client.globals.currentUser)
   const sharedWithMeFiles = await getSharedWithMeFiles(client.globals.currentUser)
   const sharedWithMeResources = sharedWithMeFiles.concat(sharedWithMeFolders)
-  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithMeResources)
+  const filesFoldersMatchingPattern = getElementsMatchingPattern(pattern, sharedWithMeResources)
   return assertDesiredResourcesListed(filesFoldersMatchingPattern, allListedFilesFolders)
 })
 
@@ -995,38 +995,38 @@ Then('all shared-with-me files and folders containing pattern {string} in their 
   const sharedWithMeFiles = await getSharedWithMeFiles(client.globals.currentUser)
   const sharedWithMeFolders = await getSharedWithMeFolders(client.globals.currentUser)
   const sharedWithMeResources = sharedWithMeFiles.concat(sharedWithMeFolders)
-  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithMeResources)
+  const filesFoldersMatchingPattern = getElementsMatchingPattern(pattern, sharedWithMeResources)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenElements = await getAllFilesStartingWithDot(filesFoldersMatchingPattern)
+  const nonHiddenElements = getAllFilesStartingWithDot(filesFoldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenElements, allListedFilesFolders)
 })
 
 Then('only shared-with-me files containing pattern {string} in their name should be listed on the webUI except for hidden elements', async function (pattern) {
   const sharedWithMeFiles = await getSharedWithMeFiles(client.globals.currentUser)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithMeFiles)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, sharedWithMeFiles)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenFiles = await getAllFilesStartingWithDot(filesMatchingPattern)
+  const nonHiddenFiles = getAllFilesStartingWithDot(filesMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenFiles, allListedFilesFolders)
 })
 
 Then('only shared-with-me folders containing pattern {string} in their name should be listed on the webUI except for hidden elements', async function (pattern) {
   const sharedWithMeFolders = await getSharedWithMeFolders(client.globals.currentUser)
-  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithMeFolders)
+  const foldersMatchingPattern = getElementsMatchingPattern(pattern, sharedWithMeFolders)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenFolders = await getAllFilesStartingWithDot(foldersMatchingPattern)
+  const nonHiddenFolders = getAllFilesStartingWithDot(foldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenFolders, allListedFilesFolders)
 })
 
 Then('only shared-with-me folders containing pattern {string} in their name should be listed on the webUI', async function (pattern) {
   const sharedWithMeFolders = await getSharedWithMeFolders(client.globals.currentUser)
-  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithMeFolders)
+  const foldersMatchingPattern = getElementsMatchingPattern(pattern, sharedWithMeFolders)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(foldersMatchingPattern, allListedFilesFolders)
 })
 
 Then('only shared-with-me files containing pattern {string} in their name should be listed on the webUI', async function (pattern) {
   const sharedWithMeFiles = await getSharedWithMeFiles(client.globals.currentUser)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithMeFiles)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, sharedWithMeFiles)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
 })
@@ -1036,7 +1036,7 @@ Then('all shared-with-others files and folders containing pattern {string} in th
   const sharedWithOthersFolders = await getSharedWithOthersFolders(client.globals.currentUser)
   const sharedWithOthersFiles = await getSharedWithOthersFiles(client.globals.currentUser)
   const sharedWithOthersResources = sharedWithOthersFiles.concat(sharedWithOthersFolders)
-  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithOthersResources)
+  const filesFoldersMatchingPattern = getElementsMatchingPattern(pattern, sharedWithOthersResources)
   return assertDesiredResourcesListed(filesFoldersMatchingPattern, allListedFilesFolders)
 })
 
@@ -1044,38 +1044,38 @@ Then('all shared-with-others files and folders containing pattern {string} in th
   const sharedWithOthersFiles = await getSharedWithOthersFiles(client.globals.currentUser)
   const sharedWithOthersFolders = await getSharedWithOthersFolders(client.globals.currentUser)
   const sharedWithOthersResources = sharedWithOthersFiles.concat(sharedWithOthersFolders)
-  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithOthersResources)
+  const filesFoldersMatchingPattern = getElementsMatchingPattern(pattern, sharedWithOthersResources)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenElements = await getAllFilesStartingWithDot(filesFoldersMatchingPattern)
+  const nonHiddenElements = getAllFilesStartingWithDot(filesFoldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenElements, allListedFilesFolders)
 })
 
 Then('only shared-with-others files containing pattern {string} in their name should be listed on the webUI except for hidden elements', async function (pattern) {
   const sharedWithOthersFiles = await getSharedWithOthersFiles(client.globals.currentUser)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithOthersFiles)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, sharedWithOthersFiles)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenFiles = await getAllFilesStartingWithDot(filesMatchingPattern)
+  const nonHiddenFiles = getAllFilesStartingWithDot(filesMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenFiles, allListedFilesFolders)
 })
 
 Then('only shared-with-others folders containing pattern {string} in their name should be listed on the webUI except for hidden elements', async function (pattern) {
   const sharedWithOthersFolders = await getSharedWithOthersFolders(client.globals.currentUser)
-  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithOthersFolders)
+  const foldersMatchingPattern = getElementsMatchingPattern(pattern, sharedWithOthersFolders)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenFolders = await getAllFilesStartingWithDot(foldersMatchingPattern)
+  const nonHiddenFolders = getAllFilesStartingWithDot(foldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenFolders, allListedFilesFolders)
 })
 
 Then('only shared-with-others folders containing pattern {string} in their name should be listed on the webUI', async function (pattern) {
   const sharedWithOthersFolders = await getSharedWithOthersFolders(client.globals.currentUser)
-  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithOthersFolders)
+  const foldersMatchingPattern = getElementsMatchingPattern(pattern, sharedWithOthersFolders)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(foldersMatchingPattern, allListedFilesFolders)
 })
 
 Then('only shared-with-others files containing pattern {string} in their name should be listed on the webUI', async function (pattern) {
   const sharedWithOthersFiles = await getSharedWithOthersFiles(client.globals.currentUser)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, sharedWithOthersFiles)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, sharedWithOthersFiles)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
 })
@@ -1085,7 +1085,7 @@ Then('all favorite files and folders containing pattern {string} in their name s
   const favFiles = await getFavouritedFiles(client.globals.currentUser)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   const favResources = favFiles.concat(favFolders)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, favResources)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, favResources)
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
 })
 
@@ -1094,37 +1094,37 @@ Then('all favorite files and folders containing pattern {string} in their name s
   const favFiles = await getFavouritedFiles(client.globals.currentUser)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   const favResources = favFiles.concat(favFolders)
-  const filesFoldersMatchingPattern = await getElementsMatchingPattern(pattern, favResources)
-  const nonHiddenElements = await getAllFilesStartingWithDot(filesFoldersMatchingPattern)
+  const filesFoldersMatchingPattern = getElementsMatchingPattern(pattern, favResources)
+  const nonHiddenElements = getAllFilesStartingWithDot(filesFoldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenElements, allListedFilesFolders)
 })
 
 Then('only favorite files containing pattern {string} in their name should be listed on the webUI except for hidden elements', async function (pattern) {
   const favFiles = await getFavouritedFiles(client.globals.currentUser)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, favFiles)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, favFiles)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenFiles = await getAllFilesStartingWithDot(filesMatchingPattern)
+  const nonHiddenFiles = getAllFilesStartingWithDot(filesMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenFiles, allListedFilesFolders)
 })
 
 Then('only favorite folders containing pattern {string} in their name should be listed on the webUI except for hidden elements', async function (pattern) {
   const favFolders = await getFavouritedFolders(client.globals.currentUser)
-  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, favFolders)
+  const foldersMatchingPattern = getElementsMatchingPattern(pattern, favFolders)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
-  const nonHiddenFiles = await getAllFilesStartingWithDot(foldersMatchingPattern)
+  const nonHiddenFiles = getAllFilesStartingWithDot(foldersMatchingPattern)
   return assertDesiredResourcesListed(nonHiddenFiles, allListedFilesFolders)
 })
 
 Then('only favorite folders containing pattern {string} in their name should be listed on the webUI', async function (pattern) {
   const favFolders = await getFavouritedFolders(client.globals.currentUser)
-  const foldersMatchingPattern = await getElementsMatchingPattern(pattern, favFolders)
+  const foldersMatchingPattern = getElementsMatchingPattern(pattern, favFolders)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(foldersMatchingPattern, allListedFilesFolders)
 })
 
 Then('only favorite files containing pattern {string} in their name should be listed on the webUI', async function (pattern) {
   const favFiles = await getFavouritedFiles(client.globals.currentUser)
-  const filesMatchingPattern = await getElementsMatchingPattern(pattern, favFiles)
+  const filesMatchingPattern = getElementsMatchingPattern(pattern, favFiles)
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
 })

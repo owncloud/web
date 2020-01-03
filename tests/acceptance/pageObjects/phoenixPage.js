@@ -55,7 +55,7 @@ module.exports = {
         .click('@messageCloseIcon')
         .waitForElementNotPresent('@messageCloseIcon')
     },
-    toggleNotificationDrawer: async function () {
+    toggleNotificationDrawer: function () {
       return this.waitForElementVisible('@notificationBell').click('@notificationBell')
     },
     /**
