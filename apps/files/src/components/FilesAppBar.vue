@@ -255,7 +255,7 @@ export default {
         })
         : []
 
-      if (rootFolder !== '/') {
+      if (rootFolder && rootFolder !== '/') {
         pathSplit.splice(0, 1)
         baseUrl = `/files/list/${rootFolder}%2F`
       }
