@@ -17,6 +17,11 @@ async function getAllLogs () {
   await client.getLog('browser', entries => {
     logs = entries
   })
+  if (!logs) {
+    await client.elementIdText('debugArray', text => {
+      logs = 'from debugArray: ' + text.value
+    })
+  }
   return logs
 }
 

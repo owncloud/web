@@ -1,5 +1,6 @@
   <template>
     <div id="files" class="uk-flex uk-flex-column">
+      <div id="debugArray" class="uk-hidden">{{debugArray}}</div>
       <files-app-bar />
       <upload-progress v-show="inProgress.length" class="uk-padding-small uk-background-muted" />
       <oc-grid class="uk-height-1-1 uk-flex-1 uk-overflow-auto">
@@ -163,6 +164,10 @@ export default {
       'deleteDialogSelectedFiles', 'deleteDialogMessage'
     ]),
     ...mapGetters(['extensions']),
+
+    debugArray () {
+      return window.debugArray
+    },
 
     _sidebarOpen () {
       return this.highlightedFile !== null
