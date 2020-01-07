@@ -485,7 +485,7 @@ module.exports = {
       selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion-list'
     },
     sharingAutoCompleteDropDownElements: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion'
+      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion .files-collaborators-autocomplete-user-text'
     },
     sharingAutoCompleteShowAllResultsButton: {
       selector: '.oc-autocomplete-suggestion-overflow'
@@ -496,7 +496,7 @@ module.exports = {
     },
     collaboratorsInformation: {
       // addresses users and groups
-      selector: '.files-collaborators-collaborator .files-collaborators-collaborator-information'
+      selector: '.files-collaborators-collaborator .files-collaborators-collaborator-information-text'
     },
     collaboratorInformationByCollaboratorName: {
       selector: '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::div[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',

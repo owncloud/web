@@ -2,13 +2,13 @@
   <div class="uk-flex uk-flex-middle">
     <oc-spinner v-if="loading" uk-spinner="ratio:1.6" class="uk-margin-small-right" :aria-label="$gettext('Loading avatar')" />
     <template v-else>
-      <oc-avatar v-if="avatar" :src="avatar" class="uk-margin-small-right" width=50 height=50 />
+      <oc-avatar v-if="item.value.shareType === 0" :src="avatar" class="uk-margin-small-right" :width="50" :userName="item.label" />
       <template v-else>
         <oc-icon v-if="item.value.shareType === 1" class="uk-margin-small-right" name="group" size="large" />
         <oc-icon v-else class="uk-margin-small-right" name="person" size="large" />
       </template>
     </template>
-    <div>
+    <div class="files-collaborators-autocomplete-user-text">
       <div
         class="uk-text-bold files-collaborators-autocomplete-username"
         v-text="item.label"

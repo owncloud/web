@@ -1,6 +1,6 @@
 <template>
   <component :is="type" v-if="enabled">
-    <oc-avatar :width="width" :height="width" :loading="loading" :src="avatarSource" />
+    <oc-avatar :width="width" :loading="loading" :src="avatarSource" :userName="userName" />
   </component>
 </template>
 <script>
@@ -83,6 +83,10 @@ export default {
       validator: value => {
         return value.match(/(div|span)/)
       }
+    },
+    userName: {
+      type: String,
+      default: ''
     },
     userid: {
       /**

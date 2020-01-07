@@ -1,13 +1,16 @@
 <template>
   <div>
     <oc-button id="_userMenuButton" class="oc-topbar-personal uk-height-1-1" variation="primary" aria-label="$gettext('User Menu')" ref="menuButton">
-      <avatar type="span" class="oc-topbar-personal-avatar" :userid="userId" />
-      <span class="oc-topbar-personal-label">{{ userDisplayName }}</span>
+      <oc-grid gutter="small">
+        <avatar class="oc-topbar-personal-avatar" :width="32" :userid="userId" :userName="userDisplayName"/>
+        <div class="oc-topbar-personal-label">{{ userDisplayName }}</div>
+      </oc-grid>
     </oc-button>
     <oc-drop toggle="#_userMenuButton" mode="click" :options="{pos:'bottom-right'}" class="uk-width-large" ref="menu">
       <div class="uk-card-body uk-flex uk-flex-middle uk-flex-column">
         <avatar
           :userid="userId"
+          :userName="userDisplayName"
           :width="128"
         />
         <h3 class="uk-card-title">{{ userDisplayName }}</h3>
@@ -86,3 +89,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+/* FIXME: https://github.com/owncloud/owncloud-design-system/issues/596 */
+.oc-topbar-personal-avatar {
+  margin-top: 3px;
+}
+.oc-topbar-personal-label {
+  margin-left: 0px !important;
+}
+</style>
