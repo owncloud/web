@@ -11,8 +11,6 @@ Feature: access breadcrumb
     And user "user1" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
     Then breadcrumb for folder "simple-folder" should be displayed on the webUI
-    When the user opens folder "simple-empty-folder" using the webUI
-    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
 
   Scenario: Change rootFolder to simple-folder and check for the displayed files
     Given the property "rootFolder" has been set to "simple-folder" in phoenix config file
