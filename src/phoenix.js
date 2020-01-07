@@ -48,6 +48,12 @@ import 'owncloud-design-system/dist/system/system.css'
 import wgxpath from 'wicked-good-xpath'
 wgxpath.install()
 
+console.log('Let\'s find out if the Promise is loaded correctly')
+console.log('Promise object: ', Promise)
+console.log('Promise finally method: ', Promise.finally)
+console.log('Promise finally method exists on instance: ', Promise.resolve('test').finally)
+console.log('Promise finally method called on instance: ', Promise.resolve('test').finally(() => {console.log('finally was called')}))
+
 Vue.prototype.$client = new OwnCloud()
 
 Vue.use(VueEvents)
