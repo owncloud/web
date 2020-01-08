@@ -5,7 +5,7 @@ import FilesApp from './components/FilesApp.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import FileSidebarWebComponent from './components/FileSidebarWebComponent.vue'
-import FileLink from './components/FileLink.vue'
+import FileLinkSidebar from './components/FileLinkSidebar.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './components/PublicLinks/PublicLink.vue'
 import FilesDrop from './components/PublicLinks/FilesDrop.vue'
@@ -47,7 +47,7 @@ const appInfo = {
       }
     }, {
       app: 'file-link',
-      component: FileLink,
+      component: FileLinkSidebar,
       enabled (capabilities) {
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.public.enabled
