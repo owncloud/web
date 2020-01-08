@@ -3,7 +3,8 @@ import { client } from 'nightwatch-api'
 export async function getAllLogsWithDateTime (level = null) {
   let logs
   await client.elementIdText('debugArray', text => {
-    logs = 'from debugArray: ' + text.value
+    console.log('found debugArray text: ', text.value)
+    logs = text.value.split('\n')
   })
   return logs
 }
