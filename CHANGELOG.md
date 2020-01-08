@@ -4,6 +4,44 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [0.2.6]
+### Added
+- Skip to component, id attribute for <main> https://github.com/owncloud/phoenix/pull/2326
+- Focus management regarding off canvas main nav https://github.com/owncloud/phoenix/pull/2101
+- Publish docker on tag https://github.com/owncloud/phoenix/pull/2485
+- New collaborators flow https://github.com/owncloud/phoenix/pull/2450
+- Hide quota on external storage https://github.com/owncloud/phoenix/pull/2652
+- Focus management for uploads https://github.com/owncloud/phoenix/pull/2542
+- File actions can be defined using config settings https://github.com/owncloud/phoenix/pull/2651
+- Files table virtual scroller https://github.com/owncloud/phoenix/pull/2280
+- Virtual scroll in trash bin https://github.com/owncloud/phoenix/pull/2809
+
+### Fixed
+- Wrong method for copy action of public link https://github.com/owncloud/phoenix/pull/2363
+- Token refresh flow https://github.com/owncloud/phoenix/pull/2472
+- App tar balls need to contain top level folder named like the app itself https://github.com/owncloud/phoenix/pull/2449
+- Scroll behavior on mozilla firefox https://github.com/owncloud/phoenix/pull/2475
+- Steps order on release/publish https://github.com/owncloud/phoenix/pull/2491
+- Don't re-filter autocomplete collaborators results for remote user https://github.com/owncloud/phoenix/pull/2569
+- Limit concurrent uploads to one https://github.com/owncloud/phoenix/pull/2653
+- Extend share id check in public links https://github.com/owncloud/phoenix/pull/2494
+- Made the trashbin table responsive https://github.com/owncloud/phoenix/pull/2287
+- Hide checkbox label in files list https://github.com/owncloud/phoenix/pull/2680
+- Share flow accessibility https://github.com/owncloud/phoenix/pull/2622
+- Remove empty parentheses in shared with others list https://github.com/owncloud/phoenix/pull/2725
+- Do not hide collaborator if another entry with the same name exists if they are not the same type https://github.com/owncloud/phoenix/pull/2724
+- Display breadcrumb if rootFolder is set with no value https://github.com/owncloud/phoenix/pull/2811
+- Include avatar placeholder in relevant places https://github.com/owncloud/phoenix/pull/2783
+
+### Changed
+- Decouple base file list into a separate component https://github.com/owncloud/phoenix/pull/2318
+- Switched the storage of the auth service from local to session storage https://github.com/owncloud/phoenix/pull/2416
+- Don't build the docker image in the release make file https://github.com/owncloud/phoenix/pull/2495
+- Use owncloud-sdk for uploading files https://github.com/owncloud/phoenix/pull/2239
+- Refactor collaborators to use helper classes and to map permissions https://github.com/owncloud/phoenix/pull/2373
+- Moved private link icon to "links" section https://github.com/owncloud/phoenix/pull/2496
+- Separate app switcher from app navigation sidebar https://github.com/owncloud/phoenix/pull/2669
+
 ## [0.2.5]
 ### Added
 - IE11 support https://github.com/owncloud/phoenix/pull/2082
