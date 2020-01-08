@@ -18,8 +18,11 @@ module.exports = {
     return client
       .page.phoenixPage()
       .waitForElementVisible('@appContainer')
-      .then(() => {
+      .then(async () => {
         client.globals.currentUser = userId
+        await client.elementIdText('debugArray', text => {
+          console.log('found debugArray text: ', text.value)
+        })
       })
   },
 
