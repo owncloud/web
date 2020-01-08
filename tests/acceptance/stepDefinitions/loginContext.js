@@ -68,3 +68,25 @@ When('the user logs out of the webUI', () => {
 When('the user re-logs in as {string} using the webUI', (user) => {
   return loginHelper.reLoginAsUser(user)
 })
+
+Then('the user profile should be visible in the webUI', function () {
+  return client.page.phoenixPage().waitForElementVisible('@userMenuButton')
+})
+
+When('the user opens the user profile', function () {
+  return client.page.phoenixPage().browseToUserProfile()
+})
+
+Then('username {string} should be visible in the webUI', async function (username) {
+  const profileUserName = await client.page.profilePage().getUserProfileName()
+  assert.strictEqual(profileUserName, username)
+})
+
+When('the user browses to manage the account', function () {
+  return client.page.profilePage().browseToManageAccount()
+})
+
+Then('the accounts page should be visible in the webUI', async function () {
+  const isPageVisible = await client.page.accountPage().isPageVisible()
+  return assert.ok(isPageVisible)
+})

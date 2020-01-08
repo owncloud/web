@@ -7,7 +7,7 @@
       </oc-grid>
     </oc-button>
     <oc-drop toggle="#_userMenuButton" mode="click" :options="{pos:'bottom-right'}" class="uk-width-large" ref="menu">
-      <div class="uk-card-body uk-flex uk-flex-middle uk-flex-column">
+      <div class="uk-card-body uk-flex uk-flex-middle uk-flex-column" id="account-info-container">
         <avatar
           :userid="userId"
           :userName="userDisplayName"
