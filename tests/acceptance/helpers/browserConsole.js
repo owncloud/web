@@ -17,16 +17,17 @@ async function getAllLogs () {
   await client.getLog('browser', entries => {
     logs = entries
   })
-  if (!logs) {
-    await client.elementIdText('debugArray', text => {
-      logs = 'from debugArray: ' + text.value
-    })
-  }
   return logs
 }
 
 export async function getAllLogsWithDateTime (level = null) {
   let logs = await getAllLogs()
+  if (!logs) {
+    await client.elementIdText('debugArray', text => {
+      logs = 'from debugArray: ' + text.value
+    })
+    return logs
+  }
   if (level) {
     logs = logs.filter(entry => entry.level === level)
   }
