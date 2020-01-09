@@ -19,8 +19,8 @@ module.exports = {
       .page.phoenixPage()
       .waitForElementVisible('@appContainer')
       .waitForElementPresent('#debugArray')
-      .getText('#debugArray', function (result) {
-        console.log('found debugArray text: ', result.value)
+      .getValue('#debugArray', function (result) {
+        console.log('found debugArray value: ', result.value)
       })
       .then(async () => {
         client.globals.currentUser = userId
