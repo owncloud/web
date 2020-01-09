@@ -69,4 +69,4 @@ endif
 package:
 	rm -rf $(CURDIR)/release
 	mkdir $(CURDIR)/release
-	cd $(dist_dir) && tar -czf $(CURDIR)/release/$(app_name).tar.gz -C $(dist_dir) *
+	cd $(dist_dir) && tar -czf $(CURDIR)/release/$(app_name).tar.gz -C $(dist_dir) * .htaccess
