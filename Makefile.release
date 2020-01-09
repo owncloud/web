@@ -4,8 +4,10 @@ YARN := $(shell command -v yarn 2> /dev/null)
 ifndef YARN
     $(error yarn is not available on your system, please install npm)
 endif
-
-
+UNAME_S := $(shell uname -s)
+ifneq ($(UNAME_S),Linux)
+    $(error Linux is required to properly build a release)
+endif
 
 app_name=phoenix
 cur_dir=$(CURDIR)
@@ -66,7 +68,18 @@ else
 endif
 
 .PHONY: package
-package:
+package: create-release-folder package-plain package-ocx
+
+.PHONY: create-release-folder
+create-release-folder:
 	rm -rf $(CURDIR)/release
 	mkdir $(CURDIR)/release
-	cd $(dist_dir) && tar -czf $(CURDIR)/release/$(app_name).tar.gz -C $(dist_dir) * .htaccess
+
+.PHONY: package-plain
+package-plain:
+	cd $(dist_dir) && tar -czf $(CURDIR)/release/$(app_name).tar.gz --exclude=appinfo -C $(dist_dir) * .htaccess
+
+.PHONY: package-ocx
+package-ocx:
+	tar -czf $(CURDIR)/release/$(app_name)-app.tar.gz --transform='s,dist,phoenix,' dist
+
