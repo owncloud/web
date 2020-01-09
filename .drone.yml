@@ -4114,6 +4114,21 @@ steps:
     event:
     - push
 
+- name: github_release
+  pull: always
+  image: plugins/github-release
+  settings:
+    checksum: sha256
+    file_exists: overwrite
+    files: release/phoenix.tar.gz
+    prerelease: true
+  environment:
+    GITHUB_TOKEN:
+      from_secret: github_token
+  when:
+    event:
+    - tag
+
 trigger:
   ref:
   - refs/merge-requests/**

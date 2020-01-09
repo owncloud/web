@@ -165,7 +165,8 @@ def build():
 			installNPM() +
 			buildRelease() +
 			deployStaging() +
-			buildDockerImage(),
+			buildDockerImage() +
+			pushGithubRelease(),
 		'depends_on': [],
 		'trigger': {
 			'ref': [
@@ -667,6 +668,31 @@ def buildRelease():
 			]
 		},
 	}]
+
+def pushGithubRelease():
+	return [
+		{
+			'name': 'github_release',
+			'image': 'plugins/github-release',
+			'pull': 'always',
+			'settings': {
+				'checksum': 'sha256',
+				'file_exists': 'overwrite',
+				'files': 'release/phoenix.tar.gz',
+				'prerelease': True,
+			},
+			'environment': {
+				'GITHUB_TOKEN': {
+					'from_secret': 'github_token'
+				},
+			},
+			'when': {
+				'event': [
+					'tag'
+				]
+			},
+		}
+	]
 
 def deployStaging():
 	return [{
