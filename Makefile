@@ -14,7 +14,7 @@ build: core $(all_apps)
 clean: clean-core $(addprefix clean-app-,$(apps))
 
 node_modules: package.json yarn.lock
-	yarn install && touch node_modules
+	yarn install --frozen-lockfile && touch node_modules
 
 dist/core/core.bundle.js: node_modules
 	yarn run build:dev

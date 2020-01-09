@@ -605,7 +605,7 @@ def installNPM():
 		'image': 'owncloudci/php:7.1',
 		'pull': 'always',
 		'commands': [
-			'yarn install'
+			'yarn install --frozen-lockfile'
 		]
 	}]
 
