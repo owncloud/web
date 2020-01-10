@@ -8,12 +8,9 @@
       </div>
     </transition>
     <div class="uk-margin">
-      <label class="oc-label" v-translate>Name your link</label>
+      <label class="oc-label"><translate>Name your link</translate>:</label>
       <input class="uk-input" id="oc-files-file-link-name" v-model="name"/>
     </div>
-    <h4 class="uk-margin-medium-top uk-heading-divider" v-translate>
-      Set Roles
-    </h4>
     <oc-grid gutter="small" childWidth="1-1">
       <roles-select
         mode="file-links"
@@ -28,7 +25,7 @@
     </h4>
     <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
       <div class="uk-width-1-1 uk-width-2-5@m" v-if="$_expirationDate">
-        <label class="oc-label" for=""><span v-translate>Expiration date</span><em class="uk-margin-small-left"
+        <label class="oc-label" for=""><span v-translate>Expiration date</span>:<em class="uk-margin-small-left"
                                                                                         v-if="$_expirationDate.enforced">(<span
           v-translate>required</span>)</em></label>
         <oc-datepicker :class="{ 'uk-form-danger': !$_expirationIsValid }" :date="expireDate" :maxDatetime="$_maxExpirationDate"
@@ -36,7 +33,7 @@
                        @input="expireDate = $event" id="oc-files-file-link-expire-date"/>
       </div>
       <div class="uk-width-1-1 uk-width-3-5@m">
-        <label class="oc-label" for=""><span v-translate>Password</span><em class="uk-margin-small-left"
+        <label class="oc-label" for=""><span v-translate>Password</span>:<em class="uk-margin-small-left"
                                                                                  v-if="$_passwordEnforced">(<span
           v-translate>required</span>)</em></label>
         <div class="uk-position-relative">
