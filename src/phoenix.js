@@ -128,9 +128,11 @@ function loadApps () {
         }
       })
     }
+
     if (app.store) {
-      store.registerModule(app.appInfo.name, app.store.default)
+      registerStoreModule(app)
     }
+
     store.dispatch('registerApp', app.appInfo)
     if (config.external_apps) {
       store.dispatch('loadExternalAppConfig', { app: app.appInfo, config })
@@ -174,6 +176,14 @@ function loadApps () {
     .then(res => {
       store.dispatch('loadTheme', res)
     })
+}
+
+function registerStoreModule (app) {
+  if (app.store.default) {
+    return store.registerModule(app.appInfo.name, app.store.default)
+  }
+
+  return store.registerModule(app.appInfo.name, app.store)
 }
 
 function missingConfig () {
