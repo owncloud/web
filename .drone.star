@@ -171,7 +171,7 @@ def build(ctx):
 			'ref': [
 				'refs/merge-requests/**',
 				'refs/heads/master',
-	            'refs/tags/**',
+				'refs/tags/**',
 			]
 		}
 	}
@@ -181,104 +181,103 @@ def build(ctx):
 	return pipelines
 
 def changelog(ctx):
-    pipelines = []
+	pipelines = []
 
-    result = {
-        'kind': 'pipeline',
-        'type': 'docker',
-        'name': 'changelog',
-        'clone': {
-            'disable': True,
-        },
-        'steps':
-            [
-				{
-					'name': 'clone',
-					'image': 'plugins/git-action:1',
-					'pull': 'always',
-					'settings': {
-						'actions': [
-							'clone',
-						],
-						'remote': 'https://github.com/%s' % (ctx.repo.slug),
-						'branch': ctx.build.source if ctx.build.event == 'pull_request' else 'master',
-						'path': '/drone/src',
-						'netrc_machine': 'github.com',
-						'netrc_username': {
-							'from_secret': 'github_username',
-						},
-						'netrc_password': {
-							'from_secret': 'github_token',
-						},
+	result = {
+		'kind': 'pipeline',
+		'type': 'docker',
+		'name': 'changelog',
+		'clone': {
+			'disable': True,
+		},
+		'steps': [
+			{
+				'name': 'clone',
+				'image': 'plugins/git-action:1',
+				'pull': 'always',
+				'settings': {
+					'actions': [
+						'clone',
+					],
+					'remote': 'https://github.com/%s' % (ctx.repo.slug),
+					'branch': ctx.build.source if ctx.build.event == 'pull_request' else 'master',
+					'path': '/drone/src',
+					'netrc_machine': 'github.com',
+					'netrc_username': {
+						'from_secret': 'github_username',
+					},
+					'netrc_password': {
+						'from_secret': 'github_token',
 					},
 				},
-                {
-                    'name': 'generate',
-                    'image': 'toolhippie/calens:latest',
-                    'pull': 'always',
-                    'commands': [
-                        'calens >| CHANGELOG.md',
-                    ],
-                },
-                {
-                    'name': 'diff',
-                    'image': 'owncloud/alpine:latest',
-                    'pull': 'always',
-                    'commands': [
-                        'git diff',
-                    ],
-                },
-                {
-                    'name': 'output',
-                    'image': 'toolhippie/calens:latest',
-                    'pull': 'always',
-                    'commands': [
-                        'cat CHANGELOG.md',
-                    ],
-                },
-                {
-                    'name': 'publish',
-                    'image': 'plugins/git-action:1',
-                    'pull': 'always',
-                    'settings': {
-                        'actions': [
-                            'commit',
-                            'push',
-                        ],
-                        'message': 'Automated changelog update [skip ci]',
-                        'branch': 'master',
-                        'author_email': 'devops@owncloud.com',
-                        'author_name': 'ownClouders',
-                        'netrc_machine': 'github.com',
-                        'netrc_username': {
-                            'from_secret': 'github_username',
-                        },
-                        'netrc_password': {
-                            'from_secret': 'github_token',
-                        },
-                    },
-                    'when': {
-                        'ref': {
-                            'exclude': [
-                                'refs/pull/**',
-								'refs/tags/**'
-                            ],
-                        },
-                    },
-                },
-            ],
-        'depends_on': [],
-        'trigger': {
-            'ref': [
-                'refs/heads/master',
-                'refs/pull/**',
-            ],
-        },
-    }
+			},
+			{
+				'name': 'generate',
+				'image': 'toolhippie/calens:latest',
+				'pull': 'always',
+				'commands': [
+					'calens >| CHANGELOG.md',
+				],
+			},
+			{
+				'name': 'diff',
+				'image': 'owncloud/alpine:latest',
+				'pull': 'always',
+				'commands': [
+					'git diff',
+				],
+			},
+			{
+				'name': 'output',
+				'image': 'toolhippie/calens:latest',
+				'pull': 'always',
+				'commands': [
+					'cat CHANGELOG.md',
+				],
+			},
+			{
+				'name': 'publish',
+				'image': 'plugins/git-action:1',
+				'pull': 'always',
+				'settings': {
+					'actions': [
+						'commit',
+						'push',
+					],
+					'message': 'Automated changelog update [skip ci]',
+					'branch': 'master',
+					'author_email': 'devops@owncloud.com',
+					'author_name': 'ownClouders',
+					'netrc_machine': 'github.com',
+					'netrc_username': {
+						'from_secret': 'github_username',
+					},
+					'netrc_password': {
+						'from_secret': 'github_token',
+					},
+				},
+				'when': {
+					'ref': {
+						'exclude': [
+							'refs/pull/**',
+							'refs/tags/**'
+						],
+					},
+				},
+			},
+			],
+		'depends_on': [],
+		'trigger': {
+			'ref': [
+				'refs/heads/master',
+				'refs/pull/**',
+			],
+		},
+	}
 
-    pipelines.append(result)
+	pipelines.append(result)
 
-    return pipelines
+	return pipelines
 
 def acceptance():
 	pipelines = []
@@ -733,19 +732,19 @@ def buildPhoenix():
 
 def buildDockerImage():
 	return [{
-        'name': 'docker',
-        'image': 'plugins/docker:18.09',
-        'pull': 'always',
-        'settings': {
-          'username': {
-            'from_secret': 'docker_username',
-          },
-          'password': {
-            'from_secret': 'docker_password',
-          },
-          'auto_tag': True,
-          'repo': 'owncloud/phoenix',
-        },
+		'name': 'docker',
+		'image': 'plugins/docker:18.09',
+		'pull': 'always',
+		'settings': {
+			'username': {
+			'from_secret': 'docker_username',
+		},
+		'password': {
+			'from_secret': 'docker_password',
+		},
+		'auto_tag': True,
+		'repo': 'owncloud/phoenix',
+		},
 		'when': {
 			'event': [
 				'push'
@@ -802,7 +801,7 @@ def buildRelease(ctx):
 				],
 			}
 		},
-      ]
+	]
 
 def deployStaging():
 	return [{
