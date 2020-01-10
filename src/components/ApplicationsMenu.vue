@@ -4,11 +4,16 @@
     <oc-drop toggle="#_appSwitcherButton" mode="click" :options="{pos:'bottom-right'}" class="uk-width-large" ref="menu">
       <div class="uk-grid-small uk-text-center" uk-grid>
         <div class="uk-width-1-3" v-for="(n, nid) in $_applicationsList" :key="nid">
-          <a target="_blank" :href="n.url">
+          <a v-if="n.url" key="external-link" target="_blank" :href="n.url">
             <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="large" />
             <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="large" />
             <div>{{ n.title }}</div>
           </a>
+          <router-link v-else key="internal-link" :to="n.path">
+            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="large" />
+            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="large" />
+            <div v-text="n.title" />
+          </router-link>
         </div>
       </div>
     </oc-drop>
@@ -59,12 +64,22 @@ export default {
         } else {
           iconUrl = item.icon
         }
-        return {
+
+        const app = {
           iconMaterial: iconMaterial,
           iconUrl: iconUrl,
-          title: title,
-          url: item.url
+          title: title
         }
+
+        if (item.url) {
+          app.url = item.url
+        }
+
+        if (item.path) {
+          app.path = item.path
+        }
+
+        return app
       })
     }
   },

@@ -8,14 +8,23 @@
     "authUrl": "https://demo.owncloud.com/index.php/apps/oauth2/authorize"
   },
   "apps" : ["files"],
-  "applications": [{
-    "title": {
-      "en": "Files",
-      "de": "Dateien",
-      "fr": "Fichiers",
-	  "zh_CN": "文件"
+  "applications": [
+    {
+      "title": {
+        "en": "Files",
+        "de": "Dateien",
+        "fr": "Fichiers",
+        "zh_CN": "文件"
+        },
+      "icon": "folder",
+      "url": "http://demo.owncloud.com/index.html#/files/list"
     },
-    "icon": "folder",
-    "url": "http://demo.owncloud.com/index.html#/files/list"
-  }]
+    {
+      "title": {
+        "en": ""App living inside of Phoenix core SPA"
+      },
+      "icon": "info",
+      "path": "/internal-app"
+    }
+  ]
 }
