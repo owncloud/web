@@ -1,6 +1,8 @@
 <template>
   <oc-grid gutter="small" childWidth="1-1">
     <roles-select
+      mode="collaborators"
+      :roles="roles"
       :selectedRole="role"
       @roleSelected="selectRole"
     />
@@ -17,11 +19,11 @@
     <hr v-if="$_ocCollaborators_expirationSupported" class="divider" />
     <oc-grid v-if="$_ocCollaborators_expirationSupported" gutter="small">
       <div class="uk-width-1-1">
-          <label class="oc-label" for="files-collaborator-new-collaborator-expiration">
+          <label class="oc-label" for="files-collaborators-new-collaborator-expiration">
             <translate>Expiration date</translate>
             <translate class="uk-text-meta uk-remove-margin">(optional)</translate>
           </label>
-          <oc-text-input type="date" class="uk-width-1-1 oc-button-role" id="files-collaborator-new-collaborator-expiration" :value="expirationDate">04 - 07 - 2019</oc-text-input>
+          <oc-text-input type="date" class="uk-width-1-1 oc-button-role" id="files-collaborators-new-collaborator-expiration" :value="expirationDate">04 - 07 - 2019</oc-text-input>
       </div>
     </oc-grid>
   </oc-grid>
@@ -30,7 +32,7 @@
 <script>
 import collaboratorsMixins from '../../mixins/collaborators'
 
-const RolesSelect = () => import('./RolesSelect.vue')
+const RolesSelect = () => import('../Roles/RolesSelect.vue')
 const AdditionalPermissions = () => import('./AdditionalPermissions.vue')
 
 export default {

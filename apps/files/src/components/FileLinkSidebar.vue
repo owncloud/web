@@ -244,3 +244,20 @@ export default {
     }
   }
 </style>
+<style>
+  /* TODO: Move to design system (copied from FileSharingSidebar.vue) */
+  .oc-app-side-bar .oc-label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .oc-app-side-bar .files-file-links-role-button {
+    padding: 0 10px;
+    text-align: left;
+  }
+
+  /** needed to cover the container below when transitioning */
+  .oc-app-side-bar .oc-default-background {
+    background-color: white;
+  }
+</style>

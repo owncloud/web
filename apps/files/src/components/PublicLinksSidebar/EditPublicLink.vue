@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-files-edit-public-link uk-background-muted uk-padding-small">
+  <div class="oc-files-edit-public-link">
     <transition enter-active-class="uk-animation-slide-top-small" leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
                 name="custom-classes-transition">
       <div class="uk-alert-danger" uk-alert v-if="errors">
@@ -8,58 +8,27 @@
       </div>
     </transition>
     <div class="uk-margin">
-      <label class="uk-form-label" v-translate>Name your link</label>
+      <label class="oc-label" v-translate>Name your link</label>
       <input class="uk-input" id="oc-files-file-link-name" v-model="name"/>
     </div>
     <h4 class="uk-margin-medium-top uk-heading-divider" v-translate>
       Set Roles
     </h4>
-    <div class="uk-margin uk-grid-small" uk-grid>
-      <div class="uk-width-auto">
-        <input class="uk-radio" id="oc-files-file-link-collaborator-role-viewer" type="radio" v-model="permissions"
-               value="1"/>
-      </div>
-      <label @click="permissions = 1" class="uk-width-expand">
-        <span>Viewer</span><br>
-        <span class="uk-text-meta" v-translate>Recipients can view and download contents.</span>
-      </label>
-    </div>
-    <div class="uk-margin uk-grid-small" uk-grid v-if="$_isFolder">
-      <div class="uk-width-auto">
-        <input class="uk-radio" id="oc-files-file-link-collaborator-role-contributor" type="radio" v-model="permissions"
-               value="5"/>
-      </div>
-      <label @click="permissions = 5" class="uk-width-expand">
-        <span v-translate>Contributor</span><br>
-        <span class="uk-text-meta" v-translate>Recipients can view, download and upload contents.</span>
-      </label>
-    </div>
-    <div class="uk-margin uk-grid-small" uk-grid v-if="$_isFolder">
-      <div class="uk-width-auto">
-        <input class="uk-radio" id="oc-files-file-link-collaborator-role-editor" type="radio" v-model="permissions"
-               value="15"/>
-      </div>
-      <label @click="permissions = 15" class="uk-width-expand">
-        <span v-translate>Editor</span><br>
-        <span class="uk-text-meta" v-translate>Recipients can view, download, edit, delete and upload contents.</span>
-      </label>
-    </div>
-    <div class="uk-margin uk-grid-small" uk-grid v-if="$_isFolder">
-      <div class="uk-width-auto">
-        <input class="uk-radio" id="oc-files-file-link-collaborator-role-uploader" type="radio" v-model="permissions"
-               value="4"/>
-      </div>
-      <label @click="permissions = 4" class="uk-width-expand">
-        <span v-translate>Uploader</span><br>
-        <span class="uk-text-meta" v-translate>Receive files from multiple recipients without revealing the contents of the folder.</span>
-      </label>
-    </div>
+    <oc-grid gutter="small" childWidth="1-1">
+      <roles-select
+        mode="file-links"
+        :roles="$_roles"
+        :selectedRole="$_selectedRole"
+        @roleSelected="$_selectRole"
+      />
+      <div v-if="$_selectedRole_description" class="uk-text-muted" v-text="$_selectedRole_description"></div>
+    </oc-grid>
     <h4 class="uk-margin-medium-top uk-heading-divider" v-translate>
       Security settings
     </h4>
     <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
       <div class="uk-width-1-1 uk-width-2-5@m" v-if="$_expirationDate">
-        <label class="uk-form-label" for=""><span v-translate>Expiration date</span><em class="uk-margin-small-left"
+        <label class="oc-label" for=""><span v-translate>Expiration date</span><em class="uk-margin-small-left"
                                                                                         v-if="$_expirationDate.enforced">(<span
           v-translate>required</span>)</em></label>
         <oc-datepicker :class="{ 'uk-form-danger': !$_expirationIsValid }" :date="expireDate" :maxDatetime="$_maxExpirationDate"
@@ -67,7 +36,7 @@
                        @input="expireDate = $event" id="oc-files-file-link-expire-date"/>
       </div>
       <div class="uk-width-1-1 uk-width-3-5@m">
-        <label class="uk-form-label" for=""><span v-translate>Password</span><em class="uk-margin-small-left"
+        <label class="oc-label" for=""><span v-translate>Password</span><em class="uk-margin-small-left"
                                                                                  v-if="$_passwordEnforced">(<span
           v-translate>required</span>)</em></label>
         <div class="uk-position-relative">
@@ -109,10 +78,18 @@
 import { mapGetters, mapActions } from 'vuex'
 import mixins from '../../mixins'
 import moment from 'moment'
+import filter from 'lodash/filter'
+import first from 'lodash/first'
+import values from 'lodash/values'
+import publicLinkRoles from '../../helpers/publicLinkRolesDefinition'
+const RolesSelect = () => import('../Roles/RolesSelect.vue')
 
 export default {
   mixins: [mixins],
   props: ['params'],
+  components: {
+    RolesSelect
+  },
   data () {
     return {
       password: null,
@@ -155,6 +132,25 @@ export default {
 
     $_sendMailEnabled () {
       return Object.keys(this.capabilities.files_sharing.public.send_mail).length > 0
+    },
+
+    $_roles () {
+      return publicLinkRoles({ translate: this.$gettext, isFolder: this.$_isFolder })
+    },
+
+    $_selectedRole () {
+      const permissions = parseInt(this.permissions)
+      if (permissions) {
+        const matchingRoles = filter(this.$_roles, r => r.permissions === permissions)
+        if (matchingRoles.length > 0) {
+          return first(values(matchingRoles))
+        }
+      }
+      return this.$_roles.viewer
+    },
+
+    $_selectedRole_description () {
+      return this.$_selectedRole ? this.$_selectedRole.description : ''
     },
 
     $_expirationDate () {
@@ -220,6 +216,9 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink']),
+    $_selectRole (role) {
+      this.permissions = role.permissions
+    },
 
     $_addLink () {
       const params = {

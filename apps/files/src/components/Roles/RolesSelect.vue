@@ -4,14 +4,14 @@
       <translate>Role</translate>:
     </label>
     <oc-button
-      id="files-collaborators-role-button"
-      class="uk-width-1-1 files-collaborators-role-button"
+      :id="`files-${mode}-role-button`"
+      :class="`uk-width-1-1 files-${mode}-role-button`"
       v-text="selectedRole.label"
     />
     <oc-drop
       closeOnClick
-      dropId="files-collaborators-roles-dropdown"
-      toggle="#files-collaborators-role-button"
+      :dropId="`files-${mode}-roles-dropdown`"
+      :toggle="`#files-${mode}-role-button`"
       mode="click"
       :options="{ offset: 0, delayHide: 0 }"
       class="oc-autocomplete-dropdown"
@@ -20,7 +20,7 @@
         <li
           v-for="role in roles"
           :key="role.name"
-          :id="`files-collaborator-new-collaborator-role-${role.name}`"
+          :id="`files-${mode}-role-${role.name}`"
           class="oc-autocomplete-suggestion"
           :class="{ 'oc-autocomplete-suggestion-selected': role.name === selectedRole.name }"
           @click="selectRole(role)"
@@ -37,14 +37,20 @@
 </template>
 
 <script>
-import collaboratorsMixin from '../../mixins/collaborators'
-
 export default {
   name: 'RolesSelect',
-  mixins: [
-    collaboratorsMixin
-  ],
   props: {
+    mode: {
+      type: String,
+      required: true,
+      validator (value) {
+        return ['collaborators', 'file-links'].indexOf(value) !== -1
+      }
+    },
+    roles: {
+      type: Object,
+      required: true
+    },
     selectedRole: {
       type: Object,
       required: true
