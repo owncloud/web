@@ -76,7 +76,7 @@ config = {
 def main(ctx):
 	before = beforePipelines()
 
-	stages = stagePipelines()
+	stages = stagePipelines(ctx)
 	if (stages == False):
 		print('Errors detected. Review messages above.')
 		return []
@@ -91,9 +91,9 @@ def main(ctx):
 def beforePipelines():
 	return yarnlint()
 
-def stagePipelines():
+def stagePipelines(ctx):
 	acceptancePipelines = acceptance()
-	buildPipelines = build()
+	buildPipelines = build(ctx)
 	if (acceptancePipelines == False) or (buildPipelines == False):
 		return False
 
@@ -143,7 +143,7 @@ def yarnlint():
 
 	return pipelines
 
-def build():
+def build(ctx):
 	pipelines = []
 
 	if 'build' not in config:
@@ -163,7 +163,7 @@ def build():
 		},
 		'steps':
 			installNPM() +
-			buildRelease() +
+			buildRelease(ctx) +
 			deployStaging() +
 			buildDockerImage(),
 		'depends_on': [],
@@ -652,7 +652,7 @@ def buildDockerImage():
 		},
 	}]
 
-def buildRelease():
+def buildRelease(ctx):
 	return [{
 		'name': 'build-release',
 		'image': 'owncloudci/php:7.1',
@@ -666,7 +666,27 @@ def buildRelease():
 				'push'
 			]
 		},
-	}]
+	},{
+        'name': 'release-to-github',
+        'image': 'plugins/github-release:1',
+        'pull': 'always',
+        'settings': {
+          'api_key': {
+            'from_secret': 'github_token',
+          },
+          'files': [
+            'release/*',
+          ],
+          'title': ctx.build.ref.replace("refs/tags/", ""),
+          'note': '# Changelog\nhttps://github.com/owncloud/phoenix/blob/master/CHANGELOG.md',
+          'overwrite': True,
+        },
+        'when': {
+          'ref': [
+            'refs/tags/**',
+          ],
+        },
+      }]
 
 def deployStaging():
 	return [{
