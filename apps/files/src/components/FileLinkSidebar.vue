@@ -15,7 +15,7 @@
           <hr/>
         </template>
         <div class="uk-text-bold" v-translate>Public Links</div>
-        <div class="uk-text-right">
+        <div class="uk-margin-small-top uk-margin-small-bottom">
           <oc-button @click="$_addPublicLink" icon="add" variation="primary">{{ $_addButtonLabel }}</oc-button>
         </div>
         <transition-group class="uk-list uk-list-divider uk-overflow-hidden"

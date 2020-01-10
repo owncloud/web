@@ -1,4 +1,5 @@
 const util = require('util')
+const _ = require('lodash')
 const sharingHelper = require('../../helpers/sharingHelper')
 
 module.exports = {
@@ -117,14 +118,13 @@ module.exports = {
      * @returns {Promise<void>}
      */
     setPublicLinkRole: function (role) {
-      const roleSelectorXpath = util.format(this.elements.roleButton.selector, role)
-      const roleSelector = {
-        locateStrategy: this.elements.roleButton.locateStrategy,
-        selector: roleSelectorXpath
-      }
-      return this
-        .waitForElementVisible(roleSelector)
-        .click(roleSelector)
+      role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
+      return this.waitForElementPresent('@selectRoleButton')
+        .click('@selectRoleButton')
+        .waitForElementVisible('@rolesDropdown')
+        .waitForElementVisible(`@role${role}`)
+        .click(`@role${role}`)
+        .waitForElementNotVisible('@rolesDropdown')
     },
     /**
      * sets name of the public link share on webUI
@@ -156,10 +156,13 @@ module.exports = {
     /**
      * sets expire date of the public link share using webUI
      *
-     * @param {string} value - provided date in format YYYY-MM-DD
+     * @param {string} value - provided date in format YYYY-MM-DD, or empty string to unset date
      * @returns {Promise}
      */
     setPublicLinkExpiryDate: function (value) {
+      if (value === '') {
+        return this.click('@publicLinkDeleteExpirationDateButton')
+      }
       value = sharingHelper.calculateDate(value)
       const dateToSet = new Date(Date.parse(value))
       const year = dateToSet.getFullYear()
@@ -423,16 +426,30 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     addLinkButton: {
-      selector: '//button[contains(.,"Add Link")]',
+      selector: '//button[contains(.,"Add public link")]',
       locateStrategy: 'xpath'
     },
     createLinkButton: {
       selector: '//button[contains(.,"Create")]',
       locateStrategy: 'xpath'
     },
-    roleButton: {
-      selector: '//*[contains(@class,"oc-files-file-link-form")]//*[.="%s"]',
-      locateStrategy: 'xpath'
+    selectRoleButton: {
+      selector: '#files-file-links-role-button'
+    },
+    rolesDropdown: {
+      selector: '#files-file-links-roles-dropdown'
+    },
+    roleViewer: {
+      selector: '#files-file-links-role-viewer'
+    },
+    roleContributor: {
+      selector: '#files-file-links-role-contributor'
+    },
+    roleEditor: {
+      selector: '#files-file-links-role-editor'
+    },
+    roleUploader: {
+      selector: '#files-file-links-role-uploader'
     },
     errorMessageInsidePublicLinkContainer: {
       selector: '//div[contains(@class, "uk-alert-danger")]',
@@ -464,6 +481,10 @@ module.exports = {
     },
     publicLinkSaveButton: {
       selector: '//button/span[.="Save"]',
+      locateStrategy: 'xpath'
+    },
+    publicLinkDeleteExpirationDateButton: {
+      selector: '//*[@uk-tooltip="Remove expiration date"]',
       locateStrategy: 'xpath'
     },
     linkExpirationDateField: {

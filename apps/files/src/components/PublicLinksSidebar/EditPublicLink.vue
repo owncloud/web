@@ -1,79 +1,85 @@
 <template>
-  <div class="oc-files-edit-public-link">
-    <transition enter-active-class="uk-animation-slide-top-small" leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
-                name="custom-classes-transition">
-      <div class="uk-alert-danger" uk-alert v-if="errors">
-        <a class="uk-alert-close" uk-close/>
-        <p v-text="errors"/>
+  <div class="oc-files-edit-public-link oc-files-file-link-form">
+    <form @submit.prevent>
+      <transition enter-active-class="uk-animation-slide-top-small" leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
+                  name="custom-classes-transition">
+        <div class="uk-alert-danger" uk-alert v-if="errors">
+          <a class="uk-alert-close" uk-close/>
+          <p v-text="errors"/>
+        </div>
+      </transition>
+      <div class="uk-margin">
+        <label class="oc-label"><span v-translate>Name your link</span>:</label>
+        <input class="uk-input" id="oc-files-file-link-name" v-model="name"/>
       </div>
-    </transition>
-    <div class="uk-margin">
-      <label class="oc-label"><translate>Name your link</translate>:</label>
-      <input class="uk-input" id="oc-files-file-link-name" v-model="name"/>
-    </div>
-    <oc-grid gutter="small" childWidth="1-1">
-      <roles-select
-        mode="file-links"
-        :roles="$_roles"
-        :selectedRole="$_selectedRole"
-        @roleSelected="$_selectRole"
-      />
-      <div v-if="$_selectedRole_description" class="uk-text-muted" v-text="$_selectedRole_description"></div>
-    </oc-grid>
-    <h4 class="uk-margin-medium-top uk-heading-divider" v-translate>
-      Security settings
-    </h4>
-    <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
-      <div class="uk-width-1-1 uk-width-2-5@m" v-if="$_expirationDate">
-        <label class="oc-label" for=""><span v-translate>Expiration date</span>:<em class="uk-margin-small-left"
-                                                                                        v-if="$_expirationDate.enforced">(<span
-          v-translate>required</span>)</em></label>
-        <div class="uk-position-relative">
-          <oc-datepicker :class="{ 'uk-form-danger': !$_expirationIsValid }" :date="expireDate" :maxDatetime="$_maxExpirationDate"
-                         :minDatetime="$_minExpirationDate" :placeholder="placeholder.expireDate"
-                         @input="expireDate = $event" id="oc-files-file-link-expire-date" :key="'oc-datepicker-' + expireDate"/>
-          <div :uk-tooltip="$_expirationDateRemoveText" @click="expireDate=null"
-               class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
-               v-if="!!expireDate"/>
+      <oc-grid childWidth="1-1" gutter="small">
+        <roles-select :roles="$_roles" :selectedRole="$_selectedRole" @roleSelected="$_selectRole" mode="file-links"/>
+        <div class="uk-text-muted" v-if="$_selectedRole_description" v-text="$_selectedRole_description"></div>
+      </oc-grid>
+      <h4 class="uk-margin-medium-top uk-heading-divider" v-translate>
+        Security settings
+      </h4>
+      <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
+        <div class="uk-width-1-1 uk-width-2-5@m" v-if="$_expirationDate">
+          <label class="oc-label" for="oc-files-file-link-expire-date">
+            <span v-translate>Expiration date</span>:<em class="uk-margin-small-left" v-if="$_expirationDate.enforced">(<span v-translate>required</span>)</em>
+          </label>
+          <div class="uk-position-relative">
+            <oc-datepicker :class="{ 'uk-form-danger': !$_expirationIsValid }" :date="expireDate" :key="'oc-datepicker-' + expireDate"
+                           :maxDatetime="$_maxExpirationDate" :minDatetime="$_minExpirationDate"
+                           :placeholder="placeholder.expireDate" @input="expireDate = $event" id="oc-files-file-link-expire-date"/>
+            <div :uk-tooltip="$_expirationDateRemoveText" @click="expireDate=null" class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
+                 v-if="!!expireDate"/>
+          </div>
+        </div>
+        <div class="uk-width-1-1 uk-width-3-5@m">
+          <label class="oc-label" for="oc-files-file-link-password">
+            <span v-translate>Password</span>:<em class="uk-margin-small-left" v-if="$_passwordEnforced">(<span v-translate>required</span>)</em>
+          </label>
+          <div class="uk-position-relative">
+            <input :class="{ 'uk-form-danger': !$_passwordIsValid }" :placeholder="hasPassword && password === null? '********' : placeholder.password"
+                   autocomplete="new-password" class="uk-input" id="oc-files-file-link-password" type="password" v-model="password"/>
+            <div :uk-tooltip="$_passwordRemoveText" @click="password=''" class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
+                 v-if="!$_passwordEnforced && hasPassword"/>
+          </div>
         </div>
       </div>
-      <div class="uk-width-1-1 uk-width-3-5@m">
-        <label class="oc-label" for=""><span v-translate>Password</span>:<em class="uk-margin-small-left"
-                                                                                 v-if="$_passwordEnforced">(<span
-          v-translate>required</span>)</em></label>
-        <div class="uk-position-relative">
-          <input :class="{ 'uk-form-danger': !$_passwordIsValid }" :placeholder="hasPassword && password === null? '********' : placeholder.password" autocomplete="new-password"
-                 class="uk-input" id="oc-files-file-link-password"
-                 type="password"
-                 v-model="password"/>
-          <div :uk-tooltip="$_passwordRemoveText" @click="password=''"
-               class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
-               v-if="!$_passwordEnforced && hasPassword"/>
+      <!-- @TODO: Enable Mail API to use the following
+                  ++++++++++++++++++++++++++++++++++++
+        <template v-if="$_sendMailEnabled">
+            <h4 class="uk-margin-medium-top uk-heading-divider">
+                Send mail notification
+            </h4>
+            <div class="uk-margin">
+                <input type="text" class="uk-input" :placeholder="placeholder.mailTo" />
+            </div>
+            <div class="uk-margin">
+                <textarea class="uk-textarea" :placeholder="placeholder.mailBody rows="4"></textarea>
+            </div>
+            <div class="uk-margin">
+                <label><input type="checkbox" class="uk-checkbox uk-margin-small-right" v-translate>Send a copy to myself</label>
+            </div>
+        </template>
+        -->
+      <hr class="divider"/>
+      <oc-grid class="uk-margin-bottom" gutter="small">
+        <div>
+          <oc-button :disabled="linksLoading" @click="$_closeForm"><translate>Cancel</translate></oc-button>
+          <oc-button :disabled="!$_isValid" @click="$_addLink" v-if="!linksLoading && $_isNew" variation="primary"><translate>Create</translate></oc-button>
+          <oc-button :disabled="!$_isValid || !$_hasChanges" @click="$_updateLink" v-else-if="!linksLoading && !$_isNew" variation="primary"><translate>Save</translate></oc-button>
+          <button class="uk-button uk-button-default uk-position-relative" disabled v-else>
+            <template v-if="$_isNew">
+              <oc-spinner :ariaLabel="$gettext('Creating Public Link')" class="uk-position-small uk-position-center-left" size="small"/>
+              <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Creating Public Link</span>
+            </template>
+            <template v-else>
+              <oc-spinner :ariaLabel="$gettext('Saving Public Link')" class="uk-position-small uk-position-center-left" size="small"/>
+              <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Saving Public Link</span>
+            </template>
+          </button>
         </div>
-      </div>
-    </div>
-    <hr class="divider"/>
-    <oc-grid class="uk-margin-bottom" gutter="small">
-      <div>
-        <oc-button :disabled="linksLoading" @click="$_closeForm" v-translate>Cancel</oc-button>
-        <oc-button :disabled="!$_isValid" @click="$_addLink" v-if="!linksLoading && $_isNew" v-translate
-                   variation="primary">Create
-        </oc-button>
-        <oc-button :disabled="!$_isValid || !$_hasChanges" @click="$_updateLink" v-else-if="!linksLoading && !$_isNew"
-                   v-translate variation="primary">Save
-        </oc-button>
-        <button class="uk-button uk-button-default uk-position-relative" disabled v-else>
-          <template v-if="$_isNew">
-            <oc-spinner :ariaLabel="$gettext('Creating Public Link')" class="uk-position-small uk-position-center-left" size="small"/>
-            <span class="uk-margin-small-left" :aria-hidden="true" v-translate>Creating Public Link</span>
-          </template>
-          <template v-else>
-            <oc-spinner :ariaLabel="$gettext('Saving Public Link')" class="uk-position-small uk-position-center-left" size="small"/>
-            <span class="uk-margin-small-left" :aria-hidden="true" v-translate>Saving Public Link</span>
-          </template>
-        </button>
-      </div>
-    </oc-grid>
+      </oc-grid>
+    </form>
   </div>
 </template>
 <script>
@@ -137,7 +143,10 @@ export default {
     },
 
     $_roles () {
-      return publicLinkRoles({ translate: this.$gettext, isFolder: this.$_isFolder })
+      return publicLinkRoles({
+        translate: this.$gettext,
+        isFolder: this.$_isFolder
+      })
     },
 
     $_selectedRole () {
