@@ -74,7 +74,7 @@ config = {
 }
 
 def main(ctx):
-	before = beforePipelines()
+	before = beforePipelines(ctx)
 
 	stages = stagePipelines(ctx)
 	if (stages == False):
@@ -88,8 +88,8 @@ def main(ctx):
 
 	return before + stages + after
 
-def beforePipelines():
-	return yarnlint()
+def beforePipelines(ctx):
+	return yarnlint() + changelog(ctx)
 
 def stagePipelines(ctx):
 	acceptancePipelines = acceptance()
@@ -179,6 +179,106 @@ def build(ctx):
 	pipelines.append(result)
 
 	return pipelines
+
+def changelog(ctx):
+    pipelines = []
+
+    result = {
+        'kind': 'pipeline',
+        'type': 'docker',
+        'name': 'changelog',
+        'clone': {
+            'disable': True,
+        },
+        'steps':
+            [
+				{
+					'name': 'clone',
+					'image': 'plugins/git-action:1',
+					'pull': 'always',
+					'settings': {
+						'actions': [
+							'clone',
+						],
+						'remote': 'https://github.com/%s' % (ctx.repo.slug),
+						'branch': ctx.build.source if ctx.build.event == 'pull_request' else 'master',
+						'path': '/drone/src',
+						'netrc_machine': 'github.com',
+						'netrc_username': {
+							'from_secret': 'github_username',
+						},
+						'netrc_password': {
+							'from_secret': 'github_token',
+						},
+					},
+				},
+                {
+                    'name': 'generate',
+                    'image': 'toolhippie/calens:latest',
+                    'pull': 'always',
+                    'commands': [
+                        'calens >| CHANGELOG.md',
+                    ],
+                },
+                {
+                    'name': 'diff',
+                    'image': 'owncloud/alpine:latest',
+                    'pull': 'always',
+                    'commands': [
+                        'git diff',
+                    ],
+                },
+                {
+                    'name': 'output',
+                    'image': 'toolhippie/calens:latest',
+                    'pull': 'always',
+                    'commands': [
+                        'cat CHANGELOG.md',
+                    ],
+                },
+                {
+                    'name': 'publish',
+                    'image': 'plugins/git-action:1',
+                    'pull': 'always',
+                    'settings': {
+                        'actions': [
+                            'commit',
+                            'push',
+                        ],
+                        'message': 'Automated changelog update [skip ci]',
+                        'branch': 'master',
+                        'author_email': 'devops@owncloud.com',
+                        'author_name': 'ownClouders',
+                        'netrc_machine': 'github.com',
+                        'netrc_username': {
+                            'from_secret': 'github_username',
+                        },
+                        'netrc_password': {
+                            'from_secret': 'github_token',
+                        },
+                    },
+                    'when': {
+                        'ref': {
+                            'exclude': [
+                                'refs/pull/**',
+								'refs/tags/**'
+                            ],
+                        },
+                    },
+                },
+            ],
+        'depends_on': [],
+        'trigger': {
+            'ref': [
+                'refs/heads/master',
+                'refs/pull/**',
+            ],
+        },
+    }
+
+    pipelines.append(result)
+
+    return pipelines
 
 def acceptance():
 	pipelines = []
@@ -654,35 +754,55 @@ def buildDockerImage():
 	}]
 
 def buildRelease(ctx):
-	return [{
-		'name': 'build-release',
-		'image': 'owncloudci/php:7.1',
-		'pull': 'always',
-		'commands': [
-			'cd /var/www/owncloud/phoenix',
-			'make -f Makefile.release dist'
-		],
-	},{
-        'name': 'release-to-github',
-        'image': 'plugins/github-release:1',
-        'pull': 'always',
-        'settings': {
-          'api_key': {
-            'from_secret': 'github_token',
-          },
-          'files': [
-            'release/*',
-          ],
-          'title': ctx.build.ref.replace("refs/tags/", ""),
-          'note': '# Changelog\nhttps://github.com/owncloud/phoenix/blob/master/CHANGELOG.md',
-          'overwrite': True,
-        },
-        'when': {
-          'ref': [
-            'refs/tags/**',
-          ],
-        },
-      }]
+	return [
+		{
+			'name': 'build-release',
+			'image': 'owncloudci/php:7.1',
+			'pull': 'always',
+			'commands': [
+				'cd /var/www/owncloud/phoenix',
+				'make -f Makefile.release dist'
+			],
+		},
+		{
+			'name': 'build-changelog',
+			'image': 'toolhippie/calens:latest',
+			'pull': 'always',
+			'commands': [
+			'calens --version %s -o dist/CHANGELOG.md' % ctx.build.ref.replace("refs/tags/v", "").split("-")[0],
+			],
+			'when': {
+				'ref': [
+					'refs/tags/**',
+				],
+			},
+		},
+		{
+			'name': 'release-to-github',
+			'image': 'plugins/github-release:1',
+			'pull': 'always',
+			'settings': {
+				'api_key': {
+					'from_secret': 'github_token',
+				},
+				'files': [
+					'release/*',
+				],
+				'checksum': [
+					'md5',
+					'sha256'
+				],
+				'title': ctx.build.ref.replace("refs/tags/", ""),
+				'note': 'dist/CHANGELOG.md',
+				'overwrite': True,
+			},
+			'when': {
+				'ref': [
+					'refs/tags/**',
+				],
+			}
+		},
+      ]
 
 def deployStaging():
 	return [{
