@@ -28,9 +28,14 @@
         <label class="oc-label" for=""><span v-translate>Expiration date</span>:<em class="uk-margin-small-left"
                                                                                         v-if="$_expirationDate.enforced">(<span
           v-translate>required</span>)</em></label>
-        <oc-datepicker :class="{ 'uk-form-danger': !$_expirationIsValid }" :date="expireDate" :maxDatetime="$_maxExpirationDate"
-                       :minDatetime="$_minExpirationDate" :placeholder="placeholder.expireDate"
-                       @input="expireDate = $event" id="oc-files-file-link-expire-date"/>
+        <div class="uk-position-relative">
+          <oc-datepicker :class="{ 'uk-form-danger': !$_expirationIsValid }" :date="expireDate" :maxDatetime="$_maxExpirationDate"
+                         :minDatetime="$_minExpirationDate" :placeholder="placeholder.expireDate"
+                         @input="expireDate = $event" id="oc-files-file-link-expire-date" :key="'oc-datepicker-' + expireDate"/>
+          <div :uk-tooltip="$_expirationDateRemoveText" @click="expireDate=null"
+               class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
+               v-if="!!expireDate"/>
+        </div>
       </div>
       <div class="uk-width-1-1 uk-width-3-5@m">
         <label class="oc-label" for=""><span v-translate>Password</span>:<em class="uk-margin-small-left"
@@ -205,6 +210,10 @@ export default {
       }
 
       return false
+    },
+
+    $_expirationDateRemoveText () {
+      return this.$gettext('Remove expiration date')
     },
 
     $_passwordRemoveText () {
