@@ -170,7 +170,8 @@ def build(ctx):
 		'trigger': {
 			'ref': [
 				'refs/merge-requests/**',
-				'refs/heads/master'
+				'refs/heads/master',
+	            'refs/tags/**',
 			]
 		}
 	}
@@ -661,11 +662,6 @@ def buildRelease(ctx):
 			'cd /var/www/owncloud/phoenix',
 			'make -f Makefile.release dist'
 		],
-		'when': {
-			'event': [
-				'push'
-			]
-		},
 	},{
         'name': 'release-to-github',
         'image': 'plugins/github-release:1',
