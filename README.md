@@ -108,6 +108,14 @@ In the local Phoenix checkout, copy the `config.json.sample` file to `config.jso
 | `REMOTE_UPLOAD_DIR` | path to `filesForUpload` directory, used when uploading files through api | `./tests/acceptance/filesForUpload` |
 | `LOCAL_UPLOAD_DIR`  | `filesForUpload` directory available for selenium for direct uploads<br/>If using selenium-docker and example above, set it as `/uploads`.<br/>If running local selenium, set value same as `REMOTE_UPLOAD_DIR` (please, remember to use absolute path)| `/uploads` |
 
+## Running acceptance tests with Docker Desktop for Mac
+In order to run acceptance tests with selenium running in Docker Desktop for Mac while having ownCloud Server and Phoenix running as services
+on the host machine, `localhost` will not work as URL. Use the Docker host ip `172.17.0.1` or its alias `host.docker.internal` instead. 
+This requires to adjust all relevant config files to use `host.docker.internal` instead of `localhost` (config.json in Phoenix and 
+config/config.php in oC10) and to change the phoenix OIDC-callback url. Set the `SERVER_HOST` and `BACKEND_HOST` environment variables 
+accordingly. In order to use the same url for development on the host machine, define it as an alias to `127.0.0.1` in `/etc/hosts`. 
+After all these changes Phoenix will be accessible at `http://host.docker.internal:8300` for both development and acceptance tests.
+
 ## Updating dependencies
 
 - Run `yarn upgrade-all` to update core and app dependencies
