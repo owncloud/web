@@ -19,10 +19,10 @@ module.exports = {
       .page.phoenixPage()
       .waitForElementVisible('@appContainer')
       .waitForElementPresent('#debugArray')
-      .getValue('#debugArray', function (result) {
+      .getAttribute('#debugArray', 'innerHTML', function (result) {
         console.log('found debugArray value: ', result.value)
       })
-      .then(async () => {
+      .then(() => {
         client.globals.currentUser = userId
       })
   },
