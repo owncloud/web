@@ -10,7 +10,7 @@
   "author": "serv3r.de DevTeam <ownCloud@serv3r.de>",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@babel/core": "^7.6.0",
+    "@babel/core": "^7.8.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
