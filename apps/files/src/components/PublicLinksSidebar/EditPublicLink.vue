@@ -143,8 +143,9 @@ export default {
     },
 
     $_roles () {
+      const $gettext = this.$gettext
       return publicLinkRoles({
-        translate: this.$gettext,
+        $gettext,
         isFolder: this.$_isFolder
       })
     },

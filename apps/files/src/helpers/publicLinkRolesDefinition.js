@@ -10,32 +10,32 @@ function returnOriginal (string) {
  * @param {function} $gettext  Function to translate necessary strings
  * @returns {object}  Public link roles
  */
-export default ({ isFolder = false, translate = returnOriginal }) => {
+export default ({ isFolder = false, $gettext = returnOriginal }) => {
   const roles = {
     viewer: {
       name: 'viewer',
-      label: translate('Viewer'),
-      description: translate('Recipients can view and download contents.'),
+      label: $gettext('Viewer'),
+      description: $gettext('Recipients can view and download contents.'),
       permissions: 1
     }
   }
   if (isFolder) {
     roles.contributor = {
       name: 'contributor',
-      label: translate('Contributor'),
-      description: translate('Recipients can view, download and upload contents.'),
+      label: $gettext('Contributor'),
+      description: $gettext('Recipients can view, download and upload contents.'),
       permissions: 5
     }
     roles.editor = {
       name: 'editor',
-      label: translate('Editor'),
-      description: translate('Recipients can view, download, edit, delete and upload contents.'),
+      label: $gettext('Editor'),
+      description: $gettext('Recipients can view, download, edit, delete and upload contents.'),
       permissions: 15
     }
     roles.uploader = {
       name: 'uploader',
-      label: translate('Uploader'),
-      description: translate('Receive files from multiple recipients without revealing the contents of the folder.'),
+      label: $gettext('Uploader'),
+      description: $gettext('Receive files from multiple recipients without revealing the contents of the folder.'),
       permissions: 4
     }
   }

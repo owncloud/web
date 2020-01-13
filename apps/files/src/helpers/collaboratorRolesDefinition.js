@@ -7,33 +7,33 @@ function returnOriginal (string) {
 /**
    * Returns object with collaborator roles
    * @param {boolean} isFolder  Defines if the item is folder
-   * @param {function} translate  Function to translate neccessary strings
+   * @param {function} $gettext  Function to translate neccessary strings
    * @returns {object}  Collaborator roles
    */
-export default ({ isFolder = false, translate = returnOriginal }) => {
+export default ({ isFolder = false, $gettext = returnOriginal }) => {
   if (isFolder) {
     return {
       viewer: {
         name: 'viewer',
-        label: translate('Viewer'),
-        description: translate('Download and preview'),
+        label: $gettext('Viewer'),
+        description: $gettext('Download and preview'),
         permissions: ['read'],
         additionalPermissions: {
           share: {
             name: 'share',
-            description: translate('Allow re-Sharing')
+            description: $gettext('Allow re-Sharing')
           }
         }
       },
       editor: {
         name: 'editor',
-        label: translate('Editor'),
-        description: translate('Upload, edit, delete, download and preview'),
+        label: $gettext('Editor'),
+        description: $gettext('Upload, edit, delete, download and preview'),
         permissions: ['read', 'update', 'create', 'delete'],
         additionalPermissions: {
           share: {
             name: 'share',
-            description: translate('Allow re-Sharing')
+            description: $gettext('Allow re-Sharing')
           }
         }
       }
@@ -43,25 +43,25 @@ export default ({ isFolder = false, translate = returnOriginal }) => {
   return {
     viewer: {
       name: 'viewer',
-      label: translate('Viewer'),
-      description: translate('Download and preview'),
+      label: $gettext('Viewer'),
+      description: $gettext('Download and preview'),
       permissions: ['read'],
       additionalPermissions: {
         share: {
           name: 'share',
-          description: translate('Allow re-Sharing')
+          description: $gettext('Allow re-Sharing')
         }
       }
     },
     editor: {
       name: 'editor',
-      label: translate('Editor'),
-      description: translate('Edit, download and preview'),
+      label: $gettext('Editor'),
+      description: $gettext('Edit, download and preview'),
       permissions: ['read', 'update'],
       additionalPermissions: {
         share: {
           name: 'share',
-          description: translate('Allow re-Sharing')
+          description: $gettext('Allow re-Sharing')
         }
       }
     }
