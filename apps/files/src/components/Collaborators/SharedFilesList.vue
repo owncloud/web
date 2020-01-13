@@ -93,7 +93,7 @@ export default {
       }
     }
   },
-  mounted () {
+  beforeMount () {
     if (this.$route.name === 'files-shared-with-me') {
       this.$_ocSharedWithMe_getFiles()
     } else {

@@ -85,7 +85,7 @@ export default {
       favoritesHeaderText: this.$gettext('Favorites')
     }
   },
-  mounted () {
+  beforeMount () {
     this.$_ocFilesFolder_getFolder()
   },
   methods: {

@@ -66,7 +66,7 @@ export default {
     Mixins
   ],
 
-  mounted () {
+  beforeMount () {
     this.$_ocTrashbin_getFiles()
   },
 
