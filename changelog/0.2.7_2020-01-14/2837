@@ -1,0 +1,5 @@
+Bugfix: Register store which is imported instead of required
+
+As some extensions export store not as a module we need to handle that case as well.
+
+https://github.com/owncloud/phoenix/issues/2837
