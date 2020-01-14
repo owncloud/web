@@ -1,7 +1,8 @@
-import { setDefaultTimeout, After, Before } from 'cucumber'
+import { setDefaultTimeout, After, Before, defineParameterType } from 'cucumber'
 import { createSession, closeSession, client, startWebDriver, stopWebDriver } from 'nightwatch-api'
 import { rollbackConfigs, setConfigs, cacheConfigs } from './helpers/config'
 import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
+const codify = require('./helpers/codify')
 
 const RUNNING_ON_CI = !!process.env.CI
 const RUNNING_ON_SAUCELABS = !!process.env.SAUCE_USERNAME
@@ -14,6 +15,13 @@ setDefaultTimeout(CUCUMBER_TIMEOUT)
 
 let env = RUNNING_ON_CI ? 'drone' : 'local'
 env = RUNNING_ON_SAUCELABS ? 'saucelabs' : env
+
+defineParameterType({
+  name: 'code',
+  regexp: /"([^"\\]*(\\.[^"\\]*)*)"|'([^'\\]*(\\.[^'\\]*)*)'/,
+  type: String,
+  transformer: s => codify.replaceInlineCode(s)
+})
 
 Before(function startDriverOnLocal () {
   return RUNNING_ON_CI || startWebDriver({ env })

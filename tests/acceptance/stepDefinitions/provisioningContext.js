@@ -5,6 +5,7 @@ require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
 const userSettings = require('../helpers/userSettings')
+const codify = require('../helpers/codify')
 const { join } = require('../helpers/path')
 
 function createDefaultUser (userId) {
@@ -176,9 +177,10 @@ Given('these users have been created with default attributes but not initialized
 })
 
 Given('these users have been created but not initialized:', function (dataTable) {
+  codify.replaceInlineTable(dataTable)
   return Promise.all(dataTable.hashes().map((user) => {
     const userId = user.username
-    const password = userSettings.replaceInlineCode(user.password) || userSettings.getPasswordForUser(userId)
+    const password = user.password || userSettings.getPasswordForUser(userId)
     const displayName = user.displayname || false
     const email = user.email || false
     return deleteUser(userId)

@@ -839,8 +839,8 @@ Given('user {string} has declined the share {string} offered by user {string}', 
   return sharingHelper.declineShare(filename, user, sharer)
 })
 
-Given('user {string} has accepted the share {string} offered by user {string}', function (user, filename, sharer) {
-  return sharingHelper.acceptShare(filename, user, userSettings.replaceInlineCode(sharer))
+Given('user {string} has accepted the share {string} offered by user {code}', function (user, filename, sharer) {
+  return sharingHelper.acceptShare(filename, user, sharer)
 })
 
 Then('the file {string} shared by {string} should not be in {string} state',
