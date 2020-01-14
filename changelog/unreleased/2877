@@ -1,0 +1,11 @@
+Enhancement: Add share indicator for direct and indirect shares in file list
+
+We've added the ability for the user to directly see whether a resource is shared in the file list.
+For this, share indicators in the form of a group icon and link icon will appear in a new column near the shared resource.
+The blue color of an icon tells whether outgoing shares exist directly on the resource.
+The grey color of an icon tells that incoming or outgoing shares exist on any of the parent folders.
+
+https://github.com/owncloud/phoenix/issues/2060
+https://github.com/owncloud/phoenix/issues/2894
+https://github.com/owncloud/phoenix/pull/2877
+

@@ -838,3 +838,148 @@ Feature: Share by public link
 #      | name          |
 #      | links         |
 #      | collaborators |
+
+  @issue-2060
+  Scenario: sharing indicator inside a shared folder
+    Given user "user1" has created folder "/simple-folder/sub-folder"
+    And user "user1" has uploaded file with content "test" to "/simple-folder/textfile.txt"
+    And user "user1" has shared folder "simple-folder" with link with "read" permissions
+    When user "user1" has logged in using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | link-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName     | expectedIndicators |
+      | sub-folder   | link-indirect      |
+      | textfile.txt | link-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator for file uploaded inside a shared folder
+    Given user "user1" has shared folder "simple-folder" with link with "read" permissions
+    And user "user1" has logged in using the webUI
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads file "new-lorem.txt" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | new-lorem.txt | link-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator for folder created inside a shared folder
+    Given user "user1" has shared folder "simple-folder" with link with "read" permissions
+    And user "user1" has logged in using the webUI
+    When the user opens folder "simple-folder" using the webUI
+    And the user creates a folder with the name "sub-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName   | expectedIndicators |
+      | sub-folder | link-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicators public link and collaborators inside a shared folder
+    Given user "user2" has been created with default attributes
+    And user "user1" has created folder "/simple-folder/sub-folder"
+    And user "user1" has uploaded file with content "test" to "/simple-folder/textfile.txt"
+    And user "user1" has shared folder "simple-folder" with link with "read" permissions
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    When user "user1" has logged in using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators      |
+      | simple-folder | link-direct,user-direct |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName     | expectedIndicators |
+      | sub-folder   | link-indirect,user-indirect |
+      | textfile.txt | link-indirect,user-indirect |
+
+  @issue-2060
+  Scenario: sharing indicators public link from reshare
+    Given user "user2" has been created with default attributes
+    And user "user1" has created folder "/simple-folder/sub-folder"
+    And user "user1" has uploaded file with content "test" to "/simple-folder/textfile.txt"
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user2" has shared folder "simple-folder (2)" with link with "read" permissions
+    When user "user2" has logged in using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName          | expectedIndicators        |
+      | simple-folder (2) | link-direct,user-indirect |
+    When the user opens folder "simple-folder (2)" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName     | expectedIndicators |
+      | sub-folder   | link-indirect,user-indirect |
+      | textfile.txt | link-indirect,user-indirect |
+
+  @issue-2060
+  Scenario: sharing indicators public link from child of reshare
+    Given user "user2" has been created with default attributes
+    And user "user1" has created folder "/simple-folder/sub-folder"
+    And user "user1" has uploaded file with content "test" to "/simple-folder/textfile.txt"
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user2" has shared folder "simple-folder (2)/sub-folder" with link with "read" permissions
+    When user "user2" has logged in using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName          | expectedIndicators |
+      | simple-folder (2) | user-indirect      |
+    When the user opens folder "simple-folder (2)" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName     | expectedIndicators          |
+      | sub-folder   | link-direct,user-indirect   |
+      | textfile.txt | user-indirect |
+
+  @issue-2060
+  Scenario: no sharing indicator visible in file list from public link
+    Given user "user2" has been created with default attributes
+    And user "user3" has been created with default attributes
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user2" has shared folder "simple-folder (2)/simple-empty-folder" with user "user3"
+    And user "user2" has shared folder "simple-folder (2)" with link with "read" permissions
+    When the public uses the webUI to access the last public link created by user "user2"
+    Then the following resources should not have share indicators on the webUI
+      | simple-empty-folder |
+
+  @skip @yetToImplement @issue-2897
+  Scenario: sharing details of items inside a shared folder
+    Given user "user1" has created folder "/simple-folder"
+    And user "user1" has created folder "/simple-folder/sub-folder"
+    And user "user1" has uploaded file "filesForUpload/textfile.txt" to "/simple-folder/textfile.txt"
+    And user "user1" has created a public link share with settings
+      | path | /simple-folder |
+      | name | Public Link    |
+    And user "user1" has logged in using the webUI
+    When the user opens folder "simple-folder" using the webUI
+    And the user opens the share dialog for folder "sub-folder"
+    And the user opens the public link share tab
+    Then public link "Public Link" should be listed as share receiver via "simple-folder" on the webUI
+
+  @skip @yetToImplement @issue-2897
+  Scenario: sharing details of multiple public link shares with different link names
+    Given user "user1" has created folder "/simple-folder"
+    And user "user1" has created folder "/simple-folder/sub-folder"
+    And user "user1" has uploaded file "filesForUpload/textfile.txt" to "/simple-folder/sub-folder/textfile.txt"
+    And user "user1" has created a public link share with settings
+      | path | /simple-folder |
+      | name | Public Link    |
+    And user "user1" has created a public link share with settings
+      | path | /simple-folder/sub-folder      |
+      | name | strängé लिंक नाम (#2 &).नेपाली |
+    And user "user1" has logged in using the webUI
+    When the user opens folder "simple-folder" using the webUI
+    And the user opens the share dialog for folder "sub-folder"
+    And the user opens the public link share tab
+    Then public link "Public Link" should be listed as share receiver via "simple-folder" on the webUI
+    When the user opens folder "sub-folder" using the webUI
+    And the user opens the share dialog for file "textfile.txt"
+    And the user opens the public link share tab
+    Then public link "strängé लिंक नाम (#2 &).नेपाली" should be listed as share receiver via "sub-folder" on the webUI
+    And public link "Public Link" should be listed as share receiver via "simple-folder" on the webUI
+
+  @skip @yetToImplement @issue-2897
+  Scenario: sharing detail of items in the webUI shared by public links with empty name
+    Given user "user1" has created folder "/simple-folder"
+    And user "user1" has uploaded file "filesForUpload/textfile.txt" to "/simple-folder/textfile.txt"
+    And user "user1" has created a public link share with settings
+      | path | /simple-folder |
+    And user "user1" has logged in using the webUI
+    When the user opens folder "simple-folder" using the webUI
+    And the user opens the share dialog for file "textfile.txt"
+    And the user opens the public link share tab
+    Then public link with last share token should be listed as share receiver via "simple-folder" on the webUI

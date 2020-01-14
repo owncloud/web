@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import _ from 'lodash'
 
 export default {
   UPDATE_FILE_PROGRESS (state, file) {
@@ -137,6 +138,42 @@ export default {
   },
   SHARES_LOADING (state, loading) {
     state.sharesLoading = loading
+  },
+  SHARESTREE_CLEAR (state) {
+    state.sharesTree = {}
+  },
+  SHARESTREE_PRUNE_OUTSIDE_PATH (state, pathToKeep) {
+    if (pathToKeep !== '' && pathToKeep !== '/') {
+      // clear all children unrelated to the given path
+      //
+      // for example if the following paths are cached:
+      // - a
+      // - a/b
+      // - a/b/c
+      // - d/e/f
+      //
+      // and we request to keep only "a/b", the remaining tree becomes:
+      // - a
+      // - a/b
+      pathToKeep += '/'
+      if (pathToKeep.charAt(0) !== '/') {
+        pathToKeep = '/' + pathToKeep
+      }
+      state.sharesTree = _.pickBy(state.sharesTree, (shares, path) => {
+        return _.startsWith(pathToKeep, path + '/')
+      })
+    } else {
+      state.sharesTree = {}
+    }
+  },
+  SHARESTREE_ADD (state, sharesTree) {
+    Object.assign(state.sharesTree, sharesTree)
+  },
+  SHARESTREE_ERROR (state, error) {
+    state.sharesTreeError = error
+  },
+  SHARESTREE_LOADING (state, loading) {
+    state.sharesTreeLoading = loading
   },
   UPDATE_FOLDER_LOADING (state, value) {
     state.loadingFolder = value

@@ -763,6 +763,42 @@ module.exports = {
       return this
     },
 
+    getShareIndicatorsForResource: async function (fileName) {
+      const resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
+      const shareIndicatorsXpath = resourceRowXpath + this.elements.shareIndicatorsInFileRow.selector
+      const indicators = []
+      await this
+        .useXpath()
+        .moveToElement(resourceRowXpath, 0, 0)
+        .api.elements(
+          this.elements.shareIndicatorsInFileRow.locateStrategy,
+          shareIndicatorsXpath,
+          (result) => {
+            result.value.forEach(async element => {
+              await this.api.elementIdAttribute(element.ELEMENT, 'aria-label', (attr) => {
+                switch (attr.value) {
+                  case 'Directly shared with collaborators':
+                    indicators.push('user-direct')
+                    break
+                  case 'Shared with collaborators through one of the parent folders':
+                    indicators.push('user-indirect')
+                    break
+                  case 'Directly shared with links':
+                    indicators.push('link-direct')
+                    break
+                  case 'Shared with links through one of the parent folders':
+                    indicators.push('link-indirect')
+                    break
+                  default:
+                    console.warn('Unknown share indicator found: "' + attr + '"')
+                }
+              })
+            })
+          }
+        )
+      return indicators
+    },
+
     /**
      * Returns original string with replaced target character
      * @param   {string} string     String in which will be the target character replaced
@@ -855,6 +891,10 @@ module.exports = {
     },
     markedFavoriteInFileRow: {
       selector: '//span[contains(@class, "oc-star-shining")]',
+      locateStrategy: 'xpath'
+    },
+    shareIndicatorsInFileRow: {
+      selector: '//*[contains(@class, "file-row-share-indicator")]',
       locateStrategy: 'xpath'
     },
     sharingSideBar: {

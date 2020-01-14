@@ -1,5 +1,8 @@
 import moment from 'moment'
+import _ from 'lodash'
+import { getParentPaths } from '../helpers/path'
 import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
+const { default: PQueue } = require('p-queue')
 
 function _buildFile (file) {
   let ext = ''
@@ -40,6 +43,17 @@ function _buildFile (file) {
     permissions: file.fileInfo['{http://owncloud.org/ns}permissions'] || '',
     etag: file.fileInfo['{DAV:}getetag'],
     sharePermissions: file.fileInfo['{http://open-collaboration-services.org/ns}share-permissions'],
+    shareTypes: (function () {
+      let shareTypes = file.fileInfo['{http://owncloud.org/ns}share-types']
+      if (shareTypes) {
+        shareTypes = _.chain(shareTypes).filter((xmlvalue) =>
+          (xmlvalue.namespaceURI === 'http://owncloud.org/ns' && xmlvalue.nodeName.split(':')[1] === 'share-type')
+        ).map((xmlvalue) =>
+          parseInt(xmlvalue.textContent || xmlvalue.text, 10)
+        ).value()
+      }
+      return shareTypes || []
+    }()),
     privateLink: file.fileInfo['{http://owncloud.org/ns}privatelink'],
     owner: {
       username: file.fileInfo['{http://owncloud.org/ns}owner-id'],
@@ -62,6 +76,9 @@ function _buildFile (file) {
     },
     isMounted: function () {
       return this.permissions.indexOf('M') >= 0
+    },
+    isReceivedShare: function () {
+      return this.permissions.indexOf('S') >= 0
     }
   })
 }
@@ -241,7 +258,7 @@ function _buildShare (s, file) {
 }
 
 export default {
-  loadFolder (context, { client, absolutePath, $gettext, routeName }) {
+  loadFolder (context, { client, absolutePath, $gettext, routeName, loadSharesTree = false }) {
     context.commit('UPDATE_FOLDER_LOADING', true)
     context.commit('CLEAR_CURRENT_FILES_LIST')
 
@@ -278,6 +295,12 @@ export default {
               currentFolder: res[0],
               files: res.splice(1)
             })
+            if (loadSharesTree) {
+              context.dispatch('loadSharesTree', {
+                client: client,
+                path: absolutePath
+              })
+            }
           }
         }
         context.dispatch('resetFileSelection')
@@ -630,6 +653,79 @@ export default {
   },
   resetSearch (context) {
     context.commit('SET_SEARCH_TERM', '')
+  },
+  /**
+   * Prune all branches of the shares tree that are
+   * unrelated to the given path
+   */
+  pruneSharesTreeOutsidePath (context, path) {
+    context.commit('SHARESTREE_PRUNE_OUTSIDE_PATH', path)
+  },
+  /**
+   * Load shares for each parent of the given path.
+   * This will add new entries into the shares tree and will
+   * not remove unrelated existing ones.
+   */
+  loadSharesTree (context, { client, path }) {
+    context.commit('SHARESTREE_ERROR', null)
+    // prune shares tree cache for all unrelated paths, keeping only
+    // existing relevant parent entries
+    context.dispatch('pruneSharesTreeOutsidePath', path)
+
+    const parentPaths = getParentPaths(path, true)
+    const sharesTree = {}
+
+    if (!parentPaths.length) {
+      return Promise.resolve()
+    }
+
+    // remove last entry which is the root folder
+    parentPaths.pop()
+
+    context.commit('SHARESTREE_LOADING', true)
+
+    const shareQueriesQueue = new PQueue({ concurrency: 2 })
+    const shareQueriesPromises = []
+    parentPaths.forEach((queryPath) => {
+      // skip already cached paths
+      if (context.getters.sharesTree[queryPath]) {
+        return
+      }
+      sharesTree[queryPath] = []
+      // query the outgoing share information for each of the parent paths
+      shareQueriesPromises.push(shareQueriesQueue.add(() =>
+        client.shares.getShares(queryPath, { reshares: true })
+          .then(data => {
+            data.forEach(element => {
+              sharesTree[queryPath].push({ ..._buildShare(element.shareInfo, { type: 'folder' }), outgoing: true })
+            })
+          })
+          .catch(error => {
+            console.error('SHARESTREE_ERROR', error)
+            context.commit('SHARESTREE_ERROR', error.message)
+            context.commit('SHARESTREE_LOADING', false)
+          })
+      ))
+      // query the incoming share information for each of the parent paths
+      shareQueriesPromises.push(shareQueriesQueue.add(() =>
+        client.shares.getShares(queryPath, { reshares: true, shared_with_me: true })
+          .then(data => {
+            data.forEach(element => {
+              sharesTree[queryPath].push({ ..._buildShare(element.shareInfo, { type: 'folder' }), incoming: true })
+            })
+          })
+          .catch(error => {
+            console.error('SHARESTREE_ERROR', error)
+            context.commit('SHARESTREE_ERROR', error.message)
+            context.commit('SHARESTREE_LOADING', false)
+          })
+      ))
+    })
+
+    return Promise.all(shareQueriesPromises).then(() => {
+      context.commit('SHARESTREE_ADD', sharesTree)
+      context.commit('SHARESTREE_LOADING', false)
+    })
   },
   dragOver (context, value) {
     context.commit('DRAG_OVER', value)
