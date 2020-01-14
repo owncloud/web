@@ -1,0 +1,5 @@
+Bugfix: Display files list only if there is at least one item
+
+Vue virtual scroll was throwing an error in console in case that the files list was empty. We prevent this error by displaying the files list only if there is at least one item.
+
+https://github.com/owncloud/phoenix/issues/2745

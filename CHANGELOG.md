@@ -1,8 +1,39 @@
-# Changelog
+Changelog for ownCloud Phoenix [0.2.7] (2020-01-14)
+=======================================
+The following sections list the changes in ownCloud phoenix 0.2.7 relevant to
+ownCloud admins and users.
 
-All notable changes to this project will be documented in this file.
+[0.2.7]: https://github.com/owncloud/phoenix/compare/v0.2.6...v0.2.7
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+Summary
+-------
+
+* Bugfix - Display files list only if there is at least one item: [#2745](https://github.com/owncloud/phoenix/issues/2745)
+* Bugfix - Register store which is imported instead of required: [#2837](https://github.com/owncloud/phoenix/issues/2837)
+* Enhancement - Internal links in app switcher: [#2838](https://github.com/owncloud/phoenix/issues/2838)
+
+Details
+-------
+
+* Bugfix - Display files list only if there is at least one item: [#2745](https://github.com/owncloud/phoenix/issues/2745)
+
+   Vue virtual scroll was throwing an error in console in case that the files list was empty. We
+   prevent this error by displaying the files list only if there is at least one item.
+
+   https://github.com/owncloud/phoenix/issues/2745
+
+* Bugfix - Register store which is imported instead of required: [#2837](https://github.com/owncloud/phoenix/issues/2837)
+
+   As some extensions export store not as a module we need to handle that case as well.
+
+   https://github.com/owncloud/phoenix/issues/2837
+
+* Enhancement - Internal links in app switcher: [#2838](https://github.com/owncloud/phoenix/issues/2838)
+
+   In case extensions integrates itself into Phonix core and not as own SPA we need to handle the
+   navigation via router-link inside of Phoenix core SPA.
+
+   https://github.com/owncloud/phoenix/issues/2838
 
 ## [0.2.6]
 ### Added
@@ -148,4 +179,3 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://github.com/owncloud/phoenix/compare/0.1.0...master
 [0.1.0]: https://github.com/owncloud/phoenix/compare/d1cfc2d5f82202ac30c91e903e4810f42650c183...0.1.0
-

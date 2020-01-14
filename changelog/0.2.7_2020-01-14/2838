@@ -1,0 +1,5 @@
+Enhancement: Internal links in app switcher
+
+In case extensions integrates itself into Phonix core and not as own SPA we need to handle the navigation via router-link inside of Phoenix core SPA.
+
+https://github.com/owncloud/phoenix/issues/2838

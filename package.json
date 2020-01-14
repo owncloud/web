@@ -2,7 +2,7 @@
   "name": "owncloud_phoenix",
   "title": "ownCloud Phoenix",
   "icon": "folder",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "A safe home for all your data",
   "main": "core/core.bundle.js",
   "scripts": {
