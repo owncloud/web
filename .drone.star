@@ -83,7 +83,7 @@ def main(ctx):
 
 	dependsOn(before, stages)
 
-	after = afterPipelines()
+	after = afterPipelines(ctx)
 	dependsOn(stages, after)
 
 	return before + stages + after
@@ -93,16 +93,13 @@ def beforePipelines(ctx):
 
 def stagePipelines(ctx):
 	acceptancePipelines = acceptance()
-	buildPipelines = build(ctx)
-	if (acceptancePipelines == False) or (buildPipelines == False):
+	if acceptancePipelines == False:
 		return False
 
-	return acceptancePipelines + buildPipelines
+	return acceptancePipelines
 
-def afterPipelines():
-	return [
-		notify()
-	]
+def afterPipelines(ctx):
+	return build(ctx) + notify()
 
 def yarnlint():
 	pipelines = []
@@ -401,6 +398,8 @@ def acceptance():
 	return pipelines
 
 def notify():
+	pipelines = []
+
 	result = {
 		'kind': 'pipeline',
 		'type': 'docker',
@@ -436,7 +435,9 @@ def notify():
 	for branch in config['branches']:
 		result['trigger']['ref'].append('refs/heads/%s' % branch)
 
-	return result
+	pipelines.append(result)
+
+	return pipelines
 
 def databaseServiceForFederation(db, suffix):
 	dbName = getDbName(db)
@@ -753,41 +754,10 @@ def buildDockerImage():
 	}]
 
 def buildRelease(ctx):
-<<<<<<< HEAD
-	return [{
-		'name': 'build-release',
-		'image': 'owncloudci/nodejs:10',
-		'pull': 'always',
-		'commands': [
-			'cd /var/www/owncloud/phoenix',
-			'make -f Makefile.release dist'
-		],
-	},{
-        'name': 'release-to-github',
-        'image': 'plugins/github-release:1',
-        'pull': 'always',
-        'settings': {
-          'api_key': {
-            'from_secret': 'github_token',
-          },
-          'files': [
-            'release/*',
-          ],
-          'title': ctx.build.ref.replace("refs/tags/", ""),
-          'note': '# Changelog\nhttps://github.com/owncloud/phoenix/blob/master/CHANGELOG.md',
-          'overwrite': True,
-        },
-        'when': {
-          'ref': [
-            'refs/tags/**',
-          ],
-        },
-      }]
-=======
 	return [
 		{
 			'name': 'build-release',
-			'image': 'owncloudci/php:7.1',
+			'image': 'owncloudci/nodejs:10',
 			'pull': 'always',
 			'commands': [
 				'cd /var/www/owncloud/phoenix',
@@ -799,7 +769,7 @@ def buildRelease(ctx):
 			'image': 'toolhippie/calens:latest',
 			'pull': 'always',
 			'commands': [
-			'calens --version %s -o dist/CHANGELOG.md' % ctx.build.ref.replace("refs/tags/v", "").split("-")[0],
+			'calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl' % ctx.build.ref.replace("refs/tags/v", "").split("-")[0],
 			],
 			'when': {
 				'ref': [
@@ -822,7 +792,7 @@ def buildRelease(ctx):
 					'md5',
 					'sha256'
 				],
-				'title': ctx.build.ref.replace("refs/tags/", ""),
+				'title': ctx.build.ref.replace("refs/tags/v", ""),
 				'note': 'dist/CHANGELOG.md',
 				'overwrite': True,
 			},
@@ -831,13 +801,8 @@ def buildRelease(ctx):
 					'refs/tags/**',
 				],
 			}
-		},
-<<<<<<< HEAD
-      ]
->>>>>>> Add calens changelog generator
-=======
+		}
 	]
->>>>>>> Add calens changelog generator
 
 def deployStaging():
 	return [{
