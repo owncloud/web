@@ -603,7 +603,7 @@ def installFederatedServer(version, db, dbSuffix = '-federated'):
 def installNPM():
 	return [{
 		'name': 'npm-install',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/nodejs:10',
 		'pull': 'always',
 		'commands': [
 			'yarn install --frozen-lockfile'
@@ -613,7 +613,7 @@ def installNPM():
 def lintTest():
 	return [{
 		'name': 'lint-test',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/nodejs:10',
 		'pull': 'always',
 		'commands': [
 			'yarn run lint'
@@ -623,7 +623,7 @@ def lintTest():
 def buildPhoenix():
 	return [{
 		'name': 'build-phoenix',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/nodejs:10',
 		'pull': 'always',
 		'commands': [
 			'yarn dist',
@@ -656,7 +656,7 @@ def buildDockerImage():
 def buildRelease(ctx):
 	return [{
 		'name': 'build-release',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/nodejs:10',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/phoenix',
