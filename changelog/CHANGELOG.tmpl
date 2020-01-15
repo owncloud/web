@@ -1,40 +1,52 @@
-Changelog for ownCloud Phoenix [0.2.7] (2020-01-14)
+{{ $allVersions := . }}
+{{- range $index, $changes := . }}{{ with $changes -}}
+Changelog for ownCloud Phoenix [{{ .Version }}] ({{ .Date }})
 =======================================
-The following sections list the changes in ownCloud phoenix 0.2.7 relevant to
+The following sections list the changes in ownCloud phoenix {{ .Version }} relevant to
 ownCloud admins and users.
 
-[0.2.7]: https://github.com/owncloud/phoenix/compare/v0.2.6...v0.2.7
+{{/* creating version compare links */ -}}
+{{ $next := add1 $index -}}
+{{ if ne (len $allVersions) $next -}}
+{{ $previousVersion := (index $allVersions $next).Version -}}
+{{ if eq .Version "unreleased" -}}
+[{{ .Version }}]: https://github.com/owncloud/phoenix/compare/v{{ $previousVersion }}...master
+{{- else -}}
+[{{ .Version }}]: https://github.com/owncloud/phoenix/compare/v{{ $previousVersion }}...v{{ .Version }}
+{{- end -}}
+{{ end -}}
+
+{{- /* last version managed by calens, end of the loop */ -}}
+{{ if eq .Version "0.2.7" -}}
+[{{ .Version }}]: https://github.com/owncloud/phoenix/compare/v0.2.6...v{{ .Version }}
+{{- end }}
 
 Summary
 -------
-
-* Bugfix - Display files list only if there is at least one item: [#2745](https://github.com/owncloud/phoenix/issues/2745)
-* Bugfix - Register store which is imported instead of required: [#2837](https://github.com/owncloud/phoenix/issues/2837)
-* Enhancement - Internal links in app switcher: [#2838](https://github.com/owncloud/phoenix/issues/2838)
+{{ range $entry := .Entries }}{{ with $entry }}
+* {{ .Type }} - {{ .Title }}: [#{{ .PrimaryID }}]({{ .PrimaryURL }})
+{{- end }}{{ end }}
 
 Details
 -------
+{{ range $entry := .Entries }}{{ with $entry }}
+* {{ .Type }} - {{ .Title }}: [#{{ .PrimaryID }}]({{ .PrimaryURL }})
+{{ range $par := .Paragraphs }}
+   {{ wrapIndent $par 80 3 }}
+{{ end -}}
+{{ range $url := .IssueURLs }}
+   {{ $url -}}
+{{ end -}}
+{{ range $url := .PRURLs }}
+   {{ $url -}}
+{{ end -}}
+{{ range $url := .OtherURLs }}
+   {{ $url -}}
+{{ end }}
+{{ end }}{{ end }}
+{{ end }}{{ end -}}
 
-* Bugfix - Display files list only if there is at least one item: [#2745](https://github.com/owncloud/phoenix/issues/2745)
-
-   Vue virtual scroll was throwing an error in console in case that the files list was empty. We
-   prevent this error by displaying the files list only if there is at least one item.
-
-   https://github.com/owncloud/phoenix/issues/2745
-
-* Bugfix - Register store which is imported instead of required: [#2837](https://github.com/owncloud/phoenix/issues/2837)
-
-   As some extensions export store not as a module we need to handle that case as well.
-
-   https://github.com/owncloud/phoenix/issues/2837
-
-* Enhancement - Internal links in app switcher: [#2838](https://github.com/owncloud/phoenix/issues/2838)
-
-   In case extensions integrates itself into Phonix core and not as own SPA we need to handle the
-   navigation via router-link inside of Phoenix core SPA.
-
-   https://github.com/owncloud/phoenix/issues/2838
-
+{{/* Start of old changelog */ -}}
 ## [0.2.6]
 ### Added
 - Skip to component, id attribute for <main> https://github.com/owncloud/phoenix/pull/2326
