@@ -1,3 +1,25 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.2.7...master
+
+Summary
+-------
+
+* Bugfix - Transform route titles into real h1 headings: [#2681](https://github.com/owncloud/phoenix/pull/2681)
+
+Details
+-------
+
+* Bugfix - Transform route titles into real h1 headings: [#2681](https://github.com/owncloud/phoenix/pull/2681)
+
+   We transformed spans that held the page title to h1 elements. In the case of the file list, a h1 is
+   existing for accessibility reasons but can only be perceived via a screen reader.
+
+   https://github.com/owncloud/phoenix/pull/2681
+
 Changelog for ownCloud Phoenix [0.2.7] (2020-01-14)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.2.7 relevant to
