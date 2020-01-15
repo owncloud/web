@@ -25,7 +25,7 @@
       </oc-grid>
       <div id="files-list-container" class="uk-flex-1" v-if="!loading">
         <RecycleScroller
-          class="uk-height-1-1"
+          class="uk-height-1-1 files-list-scroller"
           :items="fileData"
           :item-size="70"
           v-slot="{ item, index, active }"

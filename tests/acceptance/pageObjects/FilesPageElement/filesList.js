@@ -698,13 +698,13 @@ module.exports = {
         function (
           {
             itemName,
-            listContainerSelector,
+            listScrollerSelector,
             scrollWrapperSelector,
             listHeaderSelector
           },
           done
         ) {
-          const filesListContainer = document.querySelector(listContainerSelector)
+          const filesListContainer = document.querySelector(listScrollerSelector)
           const virtualScrollWrapper = document.querySelector(scrollWrapperSelector)
           const tableHeaderPosition = document.querySelector(listHeaderSelector).getBoundingClientRect().top
           let scrollDistance = filesListContainer.scrollTop
@@ -739,7 +739,7 @@ module.exports = {
           scrollUntilElementVisible()
         }, [{
           itemName: itemName,
-          listContainerSelector: this.elements.filesTableContainer.selector,
+          listScrollerSelector: this.elements.filesListScoller.selector,
           scrollWrapperSelector: this.elements.virtualScrollWrapper.selector,
           listHeaderSelector: this.elements.filesTableHeader.selector
         }])
@@ -751,14 +751,14 @@ module.exports = {
      * Scroll the files list to the beginning
      */
     filesListScrollToTop: async function () {
-      await this.api.executeAsync(function (listContainerSelector, done) {
-        const filesListScroll = document.querySelector(listContainerSelector)
+      await this.api.executeAsync(function (listScrollerSelector, done) {
+        const filesListScroll = document.querySelector(listScrollerSelector)
         if (filesListScroll.scrollTop > 0) {
           filesListScroll.scrollTop = 0
         }
 
         done()
-      }, [this.elements.filesTableContainer.selector])
+      }, [this.elements.filesListScoller.selector])
 
       return this
     },
@@ -921,6 +921,9 @@ module.exports = {
     },
     filesTableHeader: {
       selector: '#files-table-header'
+    },
+    filesListScoller: {
+      selector: '#files-list-scroller'
     }
   }
 }
