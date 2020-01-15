@@ -151,7 +151,7 @@ export default {
     },
 
     $_selectedRole () {
-      const permissions = parseInt(this.permissions)
+      const permissions = parseInt(this.permissions, 10)
       if (permissions) {
         const matchingRoles = filter(this.$_roles, r => r.permissions === permissions)
         if (matchingRoles.length > 0) {
@@ -184,7 +184,7 @@ export default {
         return null
       }
 
-      const days = parseInt(this.$_expirationDate.days)
+      const days = parseInt(this.$_expirationDate.days, 10)
 
       return moment().add(days, 'days').endOf('day').toISOString()
     },
@@ -206,7 +206,7 @@ export default {
     },
 
     $_passwordEnforced () {
-      const permissions = parseInt(this.permissions)
+      const permissions = parseInt(this.permissions, 10)
       const password = this.capabilities.files_sharing.public.password.enforced_for
 
       if (permissions === 1 && password.read_only === '1') {
