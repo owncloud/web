@@ -251,7 +251,7 @@ export default {
     margin-bottom: 5px;
   }
 
-  .oc-app-side-bar .files-file-links-role-button {
+  .oc-app-side-bar .files-file-link-role-button {
     padding: 0 10px;
     text-align: left;
   }

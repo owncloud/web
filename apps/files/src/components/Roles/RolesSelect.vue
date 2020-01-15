@@ -13,7 +13,8 @@
       :dropId="`files-${mode}-roles-dropdown`"
       :toggle="`#files-${mode}-role-button`"
       mode="click"
-      :options="{ offset: 0, delayHide: 0 }"
+      position="bottom-justify"
+      :options="{ offset: 0, delayHide: 0, flip: false }"
       class="oc-autocomplete-dropdown"
     >
       <ul class="oc-autocomplete-suggestion-list">
