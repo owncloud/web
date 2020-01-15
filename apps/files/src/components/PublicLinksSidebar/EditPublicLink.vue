@@ -16,9 +16,6 @@
         <roles-select :roles="$_roles" :selectedRole="$_selectedRole" @roleSelected="$_selectRole" mode="file-link"/>
         <div class="uk-text-muted" v-if="$_selectedRole_description" v-text="$_selectedRole_description"></div>
       </oc-grid>
-      <h4 class="uk-margin-medium-top uk-heading-divider" v-translate>
-        Security settings
-      </h4>
       <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
         <div class="uk-width-1-1 uk-width-2-5@m" v-if="$_expirationDate">
           <label class="oc-label" for="oc-files-file-link-expire-date">
