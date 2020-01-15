@@ -226,6 +226,7 @@ export default {
 }
 </script>
 <style scoped>
+  /* TODO: Move to design system */
   ._clipButton {
     animation-name: _clipButton;
     animation-duration: .5s;
