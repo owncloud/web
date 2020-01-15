@@ -58,8 +58,7 @@ module.exports = {
   },
   elements: {
     accountDisplay: {
-      selector: '//div//span[.="Account"]',
-      locateStrategy: 'xpath'
+      selector: '#account-page-title'
     },
     accountInformationElements: {
       selector: '//div/span[.="Account Information"]/../../div[@class="uk-flex uk-flex-wrap"]/div',

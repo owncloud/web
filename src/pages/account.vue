@@ -3,7 +3,7 @@
     <oc-loader v-if="loading" />
     <div v-if="!loading" class="uk-width-3-4@m uk-container uk-padding">
       <div class="uk-flex uk-flex-between uk-flex-middle">
-        <span class="uk-text-lead" v-translate>Account</span>
+        <h1 id="account-page-title" class="oc-page-title" v-translate>Account</h1>
         <oc-button icon="exit_to_app" @click="$_oc_settingsAccount_logout"><translate>Logout</translate></oc-button>
       </div>
       <hr />
