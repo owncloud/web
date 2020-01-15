@@ -35,7 +35,7 @@ export default ({ isFolder = false, $gettext = returnOriginal }) => {
     roles.uploader = {
       name: 'uploader',
       label: $gettext('Uploader'),
-      description: $gettext('Receive files from multiple recipients without revealing the contents of the folder.'),
+      description: $gettext('Recipients can upload but existing contents are not revealed.'),
       permissions: 4
     }
   }
