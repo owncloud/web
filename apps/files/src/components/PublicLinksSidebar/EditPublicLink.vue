@@ -13,7 +13,7 @@
         <input class="uk-input" id="oc-files-file-link-name" v-model="name"/>
       </div>
       <oc-grid childWidth="1-1" gutter="small">
-        <roles-select :roles="$_roles" :selectedRole="$_selectedRole" @roleSelected="$_selectRole" mode="file-links"/>
+        <roles-select :roles="$_roles" :selectedRole="$_selectedRole" @roleSelected="$_selectRole" mode="file-link"/>
         <div class="uk-text-muted" v-if="$_selectedRole_description" v-text="$_selectedRole_description"></div>
       </oc-grid>
       <h4 class="uk-margin-medium-top uk-heading-divider" v-translate>
@@ -29,7 +29,7 @@
                            :maxDatetime="$_maxExpirationDate" :minDatetime="$_minExpirationDate"
                            :placeholder="placeholder.expireDate" @input="expireDate = $event" id="oc-files-file-link-expire-date"/>
             <div :uk-tooltip="$_expirationDateRemoveText" @click="expireDate=null" class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
-                 v-if="!!expireDate"/>
+                 id="oc-files-file-link-expire-date-delete" v-if="!!expireDate"/>
           </div>
         </div>
         <div class="uk-width-1-1 uk-width-3-5@m">
@@ -40,7 +40,7 @@
             <input :class="{ 'uk-form-danger': !$_passwordIsValid }" :placeholder="hasPassword && password === null? '********' : placeholder.password"
                    autocomplete="new-password" class="uk-input" id="oc-files-file-link-password" type="password" v-model="password"/>
             <div :uk-tooltip="$_passwordRemoveText" @click="password=''" class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
-                 v-if="!$_passwordEnforced && hasPassword"/>
+                 id="oc-files-file-link-password-delete" v-if="!$_passwordEnforced && hasPassword"/>
           </div>
         </div>
       </div>
@@ -64,9 +64,15 @@
       <hr class="divider"/>
       <oc-grid class="uk-margin-bottom" gutter="small">
         <div>
-          <oc-button :disabled="linksLoading" @click="$_closeForm"><translate>Cancel</translate></oc-button>
-          <oc-button :disabled="!$_isValid" @click="$_addLink" v-if="!linksLoading && $_isNew" variation="primary"><translate>Create</translate></oc-button>
-          <oc-button :disabled="!$_isValid || !$_hasChanges" @click="$_updateLink" v-else-if="!linksLoading && !$_isNew" variation="primary"><translate>Save</translate></oc-button>
+          <oc-button :disabled="linksLoading" @click="$_closeForm" id="oc-files-file-link-cancel">
+            <translate>Cancel</translate>
+          </oc-button>
+          <oc-button :disabled="!$_isValid" @click="$_addLink" v-if="!linksLoading && $_isNew" variation="primary" id="oc-files-file-link-create">
+            <translate>Create Public Link</translate>
+          </oc-button>
+          <oc-button :disabled="!$_isValid || !$_hasChanges" @click="$_updateLink" v-else-if="!linksLoading && !$_isNew" variation="primary" id="oc-files-file-link-save">
+            <translate>Save Public Link</translate>
+          </oc-button>
           <button class="uk-button uk-button-default uk-position-relative" disabled v-else>
             <template v-if="$_isNew">
               <oc-spinner :ariaLabel="$gettext('Creating Public Link')" class="uk-position-small uk-position-center-left" size="small"/>

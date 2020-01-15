@@ -11,7 +11,8 @@ module.exports = {
      * @returns {Promise<void>}
      */
     clickLinkEditBtn: function (linkName) {
-      const linkRowEditButtonSelector = util.format(this.elements.publicLinkEditButton.selector, linkName)
+      const linkRowEditButtonSelector = this.elements.publicLinkContainer.selector +
+        util.format(this.elements.publicLinkEditButton.selector, linkName)
       const linkRowEditButton = {
         locateStrategy: this.elements.publicLinkEditButton.locateStrategy,
         selector: linkRowEditButtonSelector
@@ -291,7 +292,8 @@ module.exports = {
      * @returns {exports}
      */
     removePublicLink: function (linkName) {
-      const linkRowDeleteButtonSelector = util.format(this.elements.publicLinkDeleteButton.selector, linkName)
+      const linkRowDeleteButtonSelector = this.elements.publicLinkContainer.selector +
+        util.format(this.elements.publicLinkDeleteButton.selector, linkName)
       const linkRowDeleteButton = {
         locateStrategy: this.elements.publicLinkDeleteButton.locateStrategy,
         selector: linkRowDeleteButtonSelector
@@ -332,22 +334,10 @@ module.exports = {
      * @returns {*}
      */
     addNewLink: async function (settings = null) {
-      const addLinkButtonXpath = this.elements.publicLinkContainer.selector +
-        this.elements.addLinkButton.selector
-      const createLinkButtonXpath = this.elements.publicLinkContainer.selector +
-        this.elements.createLinkButton.selector
-      const addLinkButton = {
-        locateStrategy: this.elements.addLinkButton.locateStrategy,
-        selector: addLinkButtonXpath
-      }
-      const createLinkButton = {
-        locateStrategy: this.elements.createLinkButton.locateStrategy,
-        selector: createLinkButtonXpath
-      }
       await this
-        .waitForElementVisible(addLinkButton)
-        .click(addLinkButton)
-        .waitForElementVisible(createLinkButton)
+        .waitForElementVisible('@publicLinkAddButton')
+        .click('@publicLinkAddButton')
+        .waitForElementVisible('@publicLinkCreateButton')
       if (settings !== null) {
         for (const [key, value] of Object.entries(settings)) {
           await this.setPublicLinkForm(key, value)
@@ -355,9 +345,9 @@ module.exports = {
       }
       return this
         .initAjaxCounters()
-        .waitForElementVisible(createLinkButton)
-        .click(createLinkButton)
-        .waitForElementNotPresent(createLinkButton)
+        .waitForElementVisible('@publicLinkCreateButton')
+        .click('@publicLinkCreateButton')
+        .waitForElementNotPresent('@publicLinkCreateButton')
         .waitForOutstandingAjaxCalls()
     },
     /**
@@ -402,7 +392,8 @@ module.exports = {
      * @param {string} linkName Name of the public link whose URL is to be copied
      */
     copyPublicLinkURI: function (linkName) {
-      const copyBtnXpath = util.format(this.elements.publicLinkURLCopyButton.selector, linkName)
+      const copyBtnXpath = this.elements.publicLinkContainer.selector +
+        util.format(this.elements.publicLinkURLCopyButton.selector, linkName)
       const copyBtnSelector = {
         selector: copyBtnXpath,
         locateStrategy: this.elements.publicLinkURLCopyButton.locateStrategy
@@ -425,31 +416,29 @@ module.exports = {
       selector: '//li//span[.="%s"]',
       locateStrategy: 'xpath'
     },
-    addLinkButton: {
-      selector: '//button[contains(.,"Add public link")]',
-      locateStrategy: 'xpath'
+    publicLinkAddButton: {
+      selector: '#files-file-link-add'
     },
-    createLinkButton: {
-      selector: '//button[contains(.,"Create")]',
-      locateStrategy: 'xpath'
+    addLinkButton: {
+      selector: '#files-file-link-add'
     },
     selectRoleButton: {
-      selector: '#files-file-links-role-button'
+      selector: '#files-file-link-role-button'
     },
     rolesDropdown: {
-      selector: '#files-file-links-roles-dropdown'
+      selector: '#files-file-link-roles-dropdown'
     },
     roleViewer: {
-      selector: '#files-file-links-role-viewer'
+      selector: '#files-file-link-role-viewer'
     },
     roleContributor: {
-      selector: '#files-file-links-role-contributor'
+      selector: '#files-file-link-role-contributor'
     },
     roleEditor: {
-      selector: '#files-file-links-role-editor'
+      selector: '#files-file-link-role-editor'
     },
     roleUploader: {
-      selector: '#files-file-links-role-uploader'
+      selector: '#files-file-link-role-uploader'
     },
     errorMessageInsidePublicLinkContainer: {
       selector: '//div[contains(@class, "uk-alert-danger")]',
@@ -460,15 +449,15 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     publicLinkEditButton: {
-      selector: '//span[.="%s"]/../..//button[@aria-label="Edit public link"]',
+      selector: '//a[.="%s"]/../..//button[contains(@class, "oc-files-file-link-edit")]',
       locateStrategy: 'xpath'
     },
     publicLinkDeleteButton: {
-      selector: '//span[.="%s"]/../..//button[@aria-label="Delete public link"]',
+      selector: '//a[.="%s"]/../..//button[contains(@class, "oc-files-file-link-delete")]',
       locateStrategy: 'xpath'
     },
     publicLinkURLCopyButton: {
-      selector: '//span[.="%s"]/../..//button[@aria-label="Copy link url"]',
+      selector: '//a[.="%s"]/../..//button[contains(@class, "oc-files-file-link-copy-url")]',
       locateStrategy: 'xpath'
     },
     publicLinkPasswordField: {
@@ -476,16 +465,16 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     publicLinkDeletePasswordButton: {
-      selector: '//*[@uk-tooltip="Remove password"]',
-      locateStrategy: 'xpath'
+      selector: '#oc-files-file-link-password-delete'
+    },
+    publicLinkCreateButton: {
+      selector: '#oc-files-file-link-create'
     },
     publicLinkSaveButton: {
-      selector: '//button/span[.="Save"]',
-      locateStrategy: 'xpath'
+      selector: '#oc-files-file-link-save'
     },
     publicLinkDeleteExpirationDateButton: {
-      selector: '//*[@uk-tooltip="Remove expiration date"]',
-      locateStrategy: 'xpath'
+      selector: '#oc-files-file-link-expire-date-delete'
     },
     linkExpirationDateField: {
       selector: '.vdatetime-input'

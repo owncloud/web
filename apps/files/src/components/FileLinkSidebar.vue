@@ -16,7 +16,7 @@
         </template>
         <div class="uk-text-bold" v-translate>Public Links</div>
         <div class="uk-margin-small-top uk-margin-small-bottom">
-          <oc-button @click="$_addPublicLink" icon="add" variation="primary">{{ $_addButtonLabel }}</oc-button>
+          <oc-button @click="$_addPublicLink" icon="add" variation="primary" id="files-file-link-add">{{ $_addButtonLabel }}</oc-button>
         </div>
         <transition-group class="uk-list uk-list-divider uk-overflow-hidden"
                           enter-active-class="uk-animation-slide-left-medium"
@@ -36,11 +36,11 @@
               </div>
               <div class="uk-width-auto uk-button-group">
                 <button :aria-label="$_copyButtonLabel" @click.stop="$_copyToClipboard(link, $event)"
-                        class="uk-button uk-button-default uk-position-relative">
+                        class="uk-button uk-button-default uk-position-relative oc-files-file-link-copy-url">
                   <oc-icon class="uk-position-center" name="copy_to_clipboard"/>
                 </button>
-                <oc-button :aria-label="$_editButtonLabel" @click="$_editPublicLink(link)" icon="edit"/>
-                <oc-button :aria-label="$_deleteButtonLabel" @click="$_removePublicLink(link)" icon="delete"/>
+                <oc-button :aria-label="$_editButtonLabel" @click="$_editPublicLink(link)" icon="edit" class="oc-files-file-link-edit"/>
+                <oc-button :aria-label="$_deleteButtonLabel" @click="$_removePublicLink(link)" icon="delete" class="oc-files-file-link-delete"/>
               </div>
             </oc-grid>
           </li>

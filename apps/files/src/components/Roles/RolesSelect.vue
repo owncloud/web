@@ -44,7 +44,7 @@ export default {
       type: String,
       required: true,
       validator (value) {
-        return ['collaborators', 'file-links'].indexOf(value) !== -1
+        return ['collaborators', 'file-link'].indexOf(value) !== -1
       }
     },
     roles: {
