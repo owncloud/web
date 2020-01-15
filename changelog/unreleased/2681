@@ -1,0 +1,5 @@
+Bugfix: Transform route titles into real h1 headings
+
+We transformed spans that held the page title to h1 elements. In the case of the file list, a h1 is existing for accessibility reasons but can only be perceived via a screen reader.
+
+https://github.com/owncloud/phoenix/pull/2681
