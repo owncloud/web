@@ -3,7 +3,7 @@
     <div :aria-hidden="visiblePanel == 'newCollaborator'" :inert="visiblePanel == 'newCollaborator'">
       <oc-loader v-if="sharesLoading" aria-label="Loading collaborator list" />
       <template v-else>
-        <div v-if="$_ocCollaborators_canShare" class="uk-text-right">
+        <div v-if="$_ocCollaborators_canShare" class="uk-margin-small-top uk-margin-small-bottom">
           <oc-button variation="primary" icon="add" @click="visiblePanel = 'newCollaborator'" class="files-collaborators-open-add-share-dialog-button"><translate>Add Collaborators</translate></oc-button>
         </div>
         <translate

@@ -209,13 +209,7 @@ When('the user copies the url of public link named {string} of file/folder/resou
     .copyPublicLinkURI(linkName)
 })
 Then('the tokens should be unique for each public links on the webUI', async function () {
-  const tokens = []
-  const publicLinkList = await client.page.FilesPageElement.publicLinksDialog().getPublicLinkList()
-  for (let element of publicLinkList) {
-    element = element.substring(0, element.lastIndexOf('|'))
-    element = element.substring(element.lastIndexOf('\n') + 1)
-    tokens.push(element)
-  }
-  const isUnique = tokens.length === (new Set(tokens).size)
+  const publicLinkUrls = await client.page.FilesPageElement.publicLinksDialog().getPublicLinkUrls()
+  const isUnique = publicLinkUrls.length === (new Set(publicLinkUrls).size)
   return assert.ok(isUnique)
 })

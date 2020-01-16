@@ -431,12 +431,6 @@ module.exports = {
         })
       return Promise.all(promiseList)
     },
-    showAllAutoCompleteResults: function () {
-      return this.useCss()
-        .waitForElementVisible('@sharingAutoCompleteShowAllResultsButton')
-        .click('@sharingAutoCompleteShowAllResultsButton')
-        .waitForElementNotPresent('@sharingAutoCompleteShowAllResultsButton')
-    },
     /**
      *
      * @returns {string}
@@ -546,10 +540,10 @@ module.exports = {
       selector: '#files-collaborators-roles-dropdown'
     },
     newCollaboratorRoleViewer: {
-      selector: '#files-collaborator-new-collaborator-role-viewer'
+      selector: '#files-collaborators-role-viewer'
     },
     newCollaboratorRoleEditor: {
-      selector: '#files-collaborator-new-collaborator-role-editor'
+      selector: '#files-collaborators-role-editor'
     },
     newCollaboratorItems: {
       selector: "//div[@id='oc-files-sharing-sidebar']//span[contains(@class, 'oc-icon-danger')]/ancestor::div[position()=1 and contains(., '%s')]"
@@ -558,7 +552,7 @@ module.exports = {
       selector: "//span[contains(@class, 'oc-icon-danger')]"
     },
     newCollaboratorRoleAdvancedPermissions: {
-      selector: '#files-collaborator-new-collaborator-role-advancedRole'
+      selector: '#files-collaborators-role-advancedRole'
     },
     selectRoleButtonInCollaboratorInformation: {
       selector: '//button[contains(@class, "files-collaborators-role-button")]',

@@ -41,7 +41,8 @@ export default {
 
     roles () {
       const isFolder = this.highlightedFile.type === 'folder'
-      const collaboratorRoles = roles({ translate: this.$gettext, isFolder: isFolder })
+      const $gettext = this.$gettext
+      const collaboratorRoles = roles({ $gettext, isFolder: isFolder })
       collaboratorRoles.advancedRole = this.advancedRole
 
       return collaboratorRoles
