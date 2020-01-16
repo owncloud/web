@@ -457,10 +457,6 @@ When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
 
-When('the user displays all share-autocomplete results using the webUI', function () {
-  return client.page.FilesPageElement.sharingDialog().showAllAutoCompleteResults()
-})
-
 When('the user sets custom permission for current role of collaborator {string} for folder/file {string} to {string} using the webUI', async function (user, resource, permissions) {
   const api = client.page
     .FilesPageElement

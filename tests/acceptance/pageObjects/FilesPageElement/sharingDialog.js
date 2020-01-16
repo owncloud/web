@@ -431,12 +431,6 @@ module.exports = {
         })
       return Promise.all(promiseList)
     },
-    showAllAutoCompleteResults: function () {
-      return this.useCss()
-        .waitForElementVisible('@sharingAutoCompleteShowAllResultsButton')
-        .click('@sharingAutoCompleteShowAllResultsButton')
-        .waitForElementNotPresent('@sharingAutoCompleteShowAllResultsButton')
-    },
     /**
      *
      * @returns {string}
