@@ -30,7 +30,7 @@
                 <oc-icon name="link" size="medium" v-show="!link.password"/>
               </div>
               <div class="uk-width-expand uk-text-truncate">
-                <a :href="link.url" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold">{{ link.name }}</a><br>
+                <a :href="link.url" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold oc-files-file-link-url">{{ link.name }}</a><br>
                 <span class="uk-text-meta">{{ link.description }}<template v-if="link.expiration"> | <span
                   v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}</template></span>
               </div>

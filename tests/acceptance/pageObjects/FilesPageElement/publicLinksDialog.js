@@ -374,6 +374,29 @@ module.exports = {
       return Promise.all(promiseList)
     },
     /**
+     * gets the urls of all public links of the currently open public link tab
+     *
+     * @returns {Promise<string>}
+     */
+    getPublicLinkUrls: async function () {
+      const promiseList = []
+      const publicLinkUrlXpath = this.elements.publicLinkContainer.selector + this.elements.publicLinkInformation.selector + this.elements.publicLinkUrl.selector
+      await this.initAjaxCounters()
+        .waitForElementPresent({ locateStrategy: 'xpath', selector: publicLinkUrlXpath, abortOnFailure: false })
+        .waitForOutstandingAjaxCalls()
+        .api.elements('xpath', publicLinkUrlXpath, result => {
+          result.value.map(item => {
+            promiseList.push(new Promise((resolve) => {
+              this.api.elementIdAttribute(item.ELEMENT, 'href', href => {
+                resolve(href.value)
+              })
+            })
+            )
+          })
+        })
+      return Promise.all(promiseList)
+    },
+    /**
      *
      * @returns {Promise<string>}
      */
@@ -410,6 +433,10 @@ module.exports = {
     },
     publicLinkInformation: {
       selector: '//li',
+      locateStrategy: 'xpath'
+    },
+    publicLinkUrl: {
+      selector: '//a[contains(@class, "oc-files-file-link-url")]',
       locateStrategy: 'xpath'
     },
     publicLinkName: {
