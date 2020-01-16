@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Transform route titles into real h1 headings: [#2681](https://github.com/owncloud/phoenix/pull/2681)
+* Change - Bring UI/UX of file links sidebar in line with sharing sidebar: [#1907](https://github.com/owncloud/phoenix/issues/1907)
 
 Details
 -------
@@ -19,6 +20,17 @@ Details
    existing for accessibility reasons but can only be perceived via a screen reader.
 
    https://github.com/owncloud/phoenix/pull/2681
+
+* Change - Bring UI/UX of file links sidebar in line with sharing sidebar: [#1907](https://github.com/owncloud/phoenix/issues/1907)
+
+   The file links sidebar had inline forms for link creation/editing while the sharing sidebar
+   navigates to a new panel when showing forms. Also, within the file link creation/editing form
+   the role selection was solved through radio buttons while roles for collaborators are
+   selected through a dropdown menu. We adapted both UI aspects of the file links sidebar to
+   resemble the sharing sidebar.
+
+   https://github.com/owncloud/phoenix/issues/1907
+   https://github.com/owncloud/phoenix/pull/2841
 
 Changelog for ownCloud Phoenix [0.2.7] (2020-01-14)
 =======================================
