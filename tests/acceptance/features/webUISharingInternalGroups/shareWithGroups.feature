@@ -278,12 +278,22 @@ Feature: Sharing files and folders with internal groups
   @skip @yetToImplement @issue-2897
   Scenario: sharing details of items inside a shared folder shared with user and group
     Given user "user3" has created folder "/simple-folder/sub-folder"
-    And user "user3" has uploaded file "filesForUpload/lorem.txt" to "/simple-folder/sub-folder/lorem.txt"
+    And user "user3" has uploaded file with content "test" to "/simple-folder/sub-folder/lorem.txt"
     And user "user3" has shared folder "simple-folder" with user "user2"
     And user "user3" has shared folder "/simple-folder/sub-folder" with group "grp1"
     And user "user3" has logged in using the webUI
-    When the user opens folder "simple-folder/sub-folder" using the webUI
-    And the user opens the sharing tab from the file action menu of file "lorem.txt" using the webUI
-    Then user "User Two" should be listed as share receiver via "simple-folder" on the webUI
-    And group "grp1" should be listed as share receiver via "sub-folder" on the webUI
+    When the user opens folder "simple-folder/sub-folder" directly on the webUI
+    And the user opens the share dialog for file "lorem.txt" using the webUI
+    Then user "User Two" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    And group "grp1" should be listed as "Editor" via "sub-folder" in the collaborators list on the webUI
 
+  @skip @yetToImplement @issue-2898
+  Scenario: see resource owner of parent group shares in collaborators list
+    Given user "user3" has been created with default attributes
+    And user "user1" has shared folder "simple-folder" with group "grp1"
+    And user "user2" has shared folder "simple-folder (2)/simple-empty-folder" with user "user3"
+    And user "user3" has logged in using the webUI
+    And the user opens folder "simple-folder (2)" using the webUI
+    When the user opens the share dialog for folder "simple-empty-folder" using the webUI
+    # TODO: maybe there is already such step as the reshare icon is used already in other scenarios
+    Then user "User One" should be listed as "Owner" through "User Two" via "simple-folder (2)" in the collaborators list on the webUI

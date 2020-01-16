@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="user.id !== collaborator.info.uid_owner" class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
+    <div v-if="$_reshareInformation" class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ $_reshareInformation }}</div>
     <div class="files-collaborators-collaborator-information uk-flex uk-flex-wrap uk-flex-middle">
       <oc-spinner v-if="loading" key="collaborator-avatar-spinner" uk-spinner="ratio:1.6" class="uk-margin-small-right" :aria-label="$gettext('Loading')"/>
       <div v-else key="collaborator-avatar-loaded">
@@ -43,12 +43,27 @@ export default {
   computed: {
     ...mapGetters(['user']),
 
+    $_reshareInformation () {
+      if (this.collaborator.role.name === 'owner' || this.collaborator.role.name === 'resharer' || this.user.id === this.collaborator.info.uid_owner) {
+        return null
+      }
+
+      return this.collaborator.info.displayname_owner
+    },
+
     originalRole () {
       if (this.collaborator.role.name === 'advancedRole') {
         return this.advancedRole
       }
 
-      return this.roles[this.collaborator.role.name]
+      const role = this.displayRoles[this.collaborator.role.name]
+      if (role) {
+        return role
+      }
+
+      return {
+        label: this.$gettext('Unknown Role')
+      }
     }
   },
   mounted () {

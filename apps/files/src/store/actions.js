@@ -573,9 +573,33 @@ export default {
         context.commit('SHARES_LOADING', false)
       })
   },
+  loadIncomingShares (context, payload) {
+    context.commit('INCOMING_SHARES_LOAD', [])
+    context.commit('INCOMING_SHARES_ERROR', null)
+    context.commit('INCOMING_SHARES_LOADING', true)
+
+    // see https://owncloud.github.io/js-owncloud-client/Shares.html
+    const client = payload.client
+    const path = payload.path
+    client.shares.getShares(path, { shared_with_me: true })
+      .then(data => {
+        context.commit('INCOMING_SHARES_LOAD', data.map(element => {
+          return _buildShare(element.shareInfo, context.getters.highlightedFile)
+        }))
+        context.commit('INCOMING_SHARES_LOADING', false)
+      })
+      .catch(error => {
+        context.commit('INCOMING_SHARES_ERROR', error.message)
+        context.commit('INCOMING_SHARES_LOADING', false)
+      })
+  },
   sharesClearState (context, payload) {
     context.commit('SHARES_LOAD', [])
     context.commit('SHARES_ERROR', null)
+  },
+  incomingSharesClearState (context, payload) {
+    context.commit('INCOMING_SHARES_LOAD', [])
+    context.commit('INCOMING_SHARES_ERROR', null)
   },
   changeShare ({ commit, getters }, { client, share, role, permissions }) {
     commit('TOGGLE_COLLABORATOR_SAVING', true)
@@ -708,7 +732,7 @@ export default {
       ))
       // query the incoming share information for each of the parent paths
       shareQueriesPromises.push(shareQueriesQueue.add(() =>
-        client.shares.getShares(queryPath, { reshares: true, shared_with_me: true })
+        client.shares.getShares(queryPath, { shared_with_me: true })
           .then(data => {
             data.forEach(element => {
               sharesTree[queryPath].push({ ..._buildShare(element.shareInfo, { type: 'folder' }), incoming: true })
