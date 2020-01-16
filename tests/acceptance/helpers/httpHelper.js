@@ -4,7 +4,7 @@ const _ = require('lodash')
  *
  * @param {string} userId
  *
- * @returns {string}
+ * @returns {{Authorization: string}}
  */
 exports.createAuthHeader = function (userId) {
   const password = userSettings.getPasswordForUser(userId)
@@ -13,7 +13,18 @@ exports.createAuthHeader = function (userId) {
       Buffer.from(userId + ':' + password).toString('base64')
   }
 }
-
+/**
+ *
+ * @param {string} userId
+ *
+ * @returns {{<header>: string}}
+ */
+exports.createOCSRequestHeaders = function (userId) {
+  return {
+    ...this.createAuthHeader(userId),
+    'OCS-APIREQUEST': true
+  }
+}
 /**
  *
  * @param {node-fetch.Response} response

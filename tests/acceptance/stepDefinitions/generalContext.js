@@ -133,7 +133,7 @@ Given('the administrator has cleared the versions for all users', function () {
 const setTrustedServer = function (url) {
   const body = new URLSearchParams()
   body.append('url', url)
-  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   const postUrl = join(backendHelper.getCurrentBackendUrl(), '/ocs/v2.php/apps/testing/api/v1/trustedservers?format=json')
   return fetch(postUrl,
     { method: 'POST', headers, body })
@@ -175,7 +175,7 @@ After(async function (testCase) {
   createdFiles.forEach(fileName => fs.unlinkSync(fileName))
 
   // clear file locks
-  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   const body = new URLSearchParams()
   body.append('global', 'true')
   await fetch(join(client.globals.backend_url, '/ocs/v2.php/apps/testing/api/v1/lockprovisioning'),

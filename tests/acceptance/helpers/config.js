@@ -14,7 +14,7 @@ const config = {}
 async function setSkeletonDirectory (server, admin) {
   const data = JSON.stringify({ directory: 'webUISkeleton' })
   const headers = {
-    ...httpHelper.createAuthHeader(admin),
+    ...httpHelper.createOCSRequestHeaders(admin),
     'Content-Type': 'application/json'
   }
   const apiUrl = join(
