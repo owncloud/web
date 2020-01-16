@@ -207,11 +207,11 @@ export default {
         a: 1
       })
 
+      this.activeMediaFile.path = this.activeMediaFile.path.replace(/^\//, '');
       if (this.publicPage()) {
         const path = [
           '..',
-          'dav',
-          'public-files',
+          'webdav',
           this.activeMediaFile.path
         ].join('/')
 
@@ -219,8 +219,7 @@ export default {
       }
       const path = [
         '..',
-        'dav',
-        'files',
+        'webdav',
         this.$store.getters.user.id,
         this.activeMediaFile.path
       ].join('/')
