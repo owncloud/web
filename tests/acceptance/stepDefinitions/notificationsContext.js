@@ -13,7 +13,7 @@ When('user {string} is sent a notification', function (user) {
   const apiURL = join(client.globals.backend_url, '/ocs/v2.php/apps/testing/api/v1/notifications')
 
   return fetch(apiURL,
-    { method: 'POST', headers: httpHelper.createAuthHeader(user), body: body }
+    { method: 'POST', headers: httpHelper.createOCSRequestHeaders(user), body: body }
   )
     .then(res => httpHelper.checkStatus(res, 'Could not generate notification.'))
 })
@@ -35,7 +35,7 @@ Given('app {string} has been {}', function (app, action) {
     action === 'enabled' || action === 'disabled',
     "only supported either 'enabled' or 'disabled'. Passed: " + action
   )
-  const headers = httpHelper.createAuthHeader('admin')
+  const headers = httpHelper.createOCSRequestHeaders('admin')
   const method = action === 'enabled' ? 'POST' : 'DELETE'
 
   const errorMessage = util.format(

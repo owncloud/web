@@ -113,12 +113,13 @@ const shareFileFolder = function (
       params.append(key, extraParams[key])
     }
   }
+
   return fetch(
     path.join(
       backendHelper.getCurrentBackendUrl(),
       '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json'
     ),
-    { method: 'POST', headers: httpHelper.createAuthHeader(sharer), body: params }
+    { method: 'POST', headers: httpHelper.createOCSRequestHeaders(sharer), body: params }
   )
     .then(res => res.json())
     .then(function (json) {

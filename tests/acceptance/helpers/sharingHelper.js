@@ -85,7 +85,8 @@ module.exports = {
    */
   assertUserHasShareWithDetails: function (user, expectedDetailsTable, filters = {}) {
     codify.replaceInlineTable(expectedDetailsTable)
-    const headers = httpHelper.createAuthHeader(user)
+    const headers = httpHelper.createOCSRequestHeaders(user)
+
     const sharingHelper = this
     const apiURL = new URL(join(client.globals.backend_url, '/ocs/v2.php/apps/files_sharing/api/v1/shares'))
     apiURL.search = new URLSearchParams({ format: 'json', ...filters }).toString()
@@ -131,7 +132,7 @@ module.exports = {
    */
   fetchLastPublicLinkShare: async function (linkCreator) {
     const self = this
-    const headers = httpHelper.createAuthHeader(linkCreator)
+    const headers = httpHelper.createOCSRequestHeaders(linkCreator)
     const apiURL = join(client.globals.backend_url, '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json')
     let lastShareToken
     let lastShare
@@ -164,7 +165,7 @@ module.exports = {
    * @returns {Object<[]>}
    */
   getAllPublicLinkShares: async function (sharer) {
-    const headers = httpHelper.createAuthHeader(sharer)
+    const headers = httpHelper.createOCSRequestHeaders(sharer)
     const data = []
     const apiURL = join(client.globals.backend_url, '/ocs/v2.php/apps/files_sharing/api/v1/shares?&format=json')
     const response = await fetch(apiURL, {
@@ -187,7 +188,7 @@ module.exports = {
    * @returns {Promise<[*]>}
    */
   getAllShares: function (user, sharedWithUser = false) {
-    const headers = httpHelper.createAuthHeader(user)
+    const headers = httpHelper.createOCSRequestHeaders(user)
     const params = new URLSearchParams()
     if (sharedWithUser === true) {
       params.set('shared_with_me', 'true')
@@ -236,7 +237,7 @@ module.exports = {
     }
     for (const element of elementsToDecline) {
       const shareID = element.id
-      const headers = httpHelper.createAuthHeader(user)
+      const headers = httpHelper.createOCSRequestHeaders(user)
       const apiURL = join(client.globals.backend_url,
         '/ocs/v2.php/apps/files_sharing/api/v1/shares/pending/',
         shareID,
@@ -276,7 +277,7 @@ module.exports = {
     }
     for (const element of elementsToAccept) {
       const shareID = element.id
-      const headers = httpHelper.createAuthHeader(user)
+      const headers = httpHelper.createOCSRequestHeaders(user)
       const apiURL = join(client.globals.backend_url,
         '/ocs/v2.php/apps/files_sharing/api/v1/shares/pending/',
         shareID,

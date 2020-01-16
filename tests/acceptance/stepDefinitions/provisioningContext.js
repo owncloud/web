@@ -22,7 +22,7 @@ function createUser (userId, password, displayName = false, email = false) {
   const promiseList = []
 
   userSettings.addUserToCreatedUsersList(userId, password, displayName, email)
-  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   return fetch(
     join(
       backendHelper.getCurrentBackendUrl(),
@@ -80,7 +80,7 @@ function createUser (userId, password, displayName = false, email = false) {
 }
 
 function deleteUser (userId) {
-  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   userSettings.deleteUserFromCreatedUsersList(userId)
   return fetch(
     join(
@@ -92,7 +92,7 @@ function deleteUser (userId) {
 }
 
 function initUser (userId) {
-  const headers = httpHelper.createAuthHeader(userId)
+  const headers = httpHelper.createOCSRequestHeaders(userId)
   return fetch(
     join(
       backendHelper.getCurrentBackendUrl(),
@@ -112,7 +112,7 @@ function createGroup (groupId) {
   const body = new URLSearchParams()
   body.append('groupid', groupId)
   userSettings.addGroupToCreatedGroupsList(groupId)
-  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   return fetch(join(client.globals.backend_url, '/ocs/v2.php/cloud/groups?format=json'), {
     method: 'POST',
     body: body,
@@ -126,7 +126,7 @@ function createGroup (groupId) {
  * @returns {*|Promise}
  */
 function deleteGroup (groupId) {
-  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   userSettings.deleteGroupFromCreatedGroupsList(groupId)
   return fetch(join(client.globals.backend_url, '/ocs/v2.php/cloud/groups/', groupId),
     { method: 'DELETE', headers: headers })
@@ -136,7 +136,7 @@ function addToGroup (userId, groupId) {
   const body = new URLSearchParams()
   body.append('groupid', groupId)
 
-  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   return fetch(join(client.globals.backend_url, `/ocs/v2.php/cloud/users/${userId}/groups`),
     { method: 'POST', body: body, headers: headers }
   )
@@ -158,7 +158,7 @@ Given('user {string} has been created with default attributes on remote server',
 })
 
 Given('the quota of user {string} has been set to {string}', function (userId, quota) {
-  const headers = httpHelper.createAuthHeader(client.globals.backend_admin_username)
+  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   const body = new URLSearchParams()
   body.append('key', 'quota')
   body.append('value', quota)
