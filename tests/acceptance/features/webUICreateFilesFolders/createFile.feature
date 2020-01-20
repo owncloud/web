@@ -17,4 +17,3 @@ Feature: create files
     When the user tries to create a file with already existing name "lorem.txt" using the webUI
     Then an error message "lorem.txt already exists" should be visible
     And the create file button should be disabled
-

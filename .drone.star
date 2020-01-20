@@ -16,6 +16,7 @@ config = {
 	'acceptance': {
 		'webUI': {
 			'suites': {
+				'webUICreateFilesFolders': 'createFilesFolders',
 				'webUIFavorites': 'Favorites',
 				'webUIFiles': 'Files',
 				'webUILogin': 'Login',
