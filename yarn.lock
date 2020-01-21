@@ -2751,9 +2751,9 @@ date-fns@^1.27.2:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
   integrity sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==
 
-"davclient.js@https://github.com/owncloud/davclient.js.git":
+"davclient.js@git+https://github.com/owncloud/davclient.js.git":
   version "0.2.1"
-  resolved "https://github.com/owncloud/davclient.js.git#1ab200d099a3c2cd2ef919c3a56353ce26865994"
+  resolved "git+https://github.com/owncloud/davclient.js.git#1ab200d099a3c2cd2ef919c3a56353ce26865994"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -6481,10 +6481,10 @@ os-tmpdir@~1.0.1, os-tmpdir@~1.0.2:
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
 
-owncloud-design-system@^1.0.0-1089:
-  version "1.0.0-1089"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-1089.tgz#9968e6e2820702fe6a1637bd41402c03dac755a6"
-  integrity sha512-iIscFJxY11Caiku0aa85OJlfvL/mTSp6RtEAyY/zZR+WCqVPwoFZzBuTSVko/fYWdlcT/C+SUGUQHVLP+EUz3A==
+owncloud-design-system@^1.0.0-1095:
+  version "1.0.0-1095"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.0.0-1095.tgz#c3ddab9b184223d80c972b98bee3c561daa2a3d3"
+  integrity sha512-DuuNsx6942m+iKXR/AJZXbrvZjkZrwkPzF6lMXyVfFVowEfqI6atrR7u2rAIOyd5ZEuOq++R/GkJA2zXyGSvFA==
   dependencies:
     lodash "^4.17.11"
     mini-css-extract-plugin "^0.7.0"
@@ -6502,7 +6502,7 @@ owncloud-design-system@^1.0.0-1089:
     vuex "^3.1.1"
     webfontloader "^1.6.28"
 
-owncloud-sdk@^1.0.0-368:
+owncloud-sdk@^1.0.0-490:
   version "1.0.0-490"
   resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-490.tgz#f49285548405dd56c95b909da781e9de824f8a22"
   integrity sha512-yqG2pyJUGgFBe/3PvjwRxfoJX+0LuN3yqja4ftMGKy00Fyq4VaYH8WxYwXj1ztNRprMM6VA4e7I9GGPleDiBVw==
