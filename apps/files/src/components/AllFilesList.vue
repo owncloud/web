@@ -11,7 +11,7 @@
             </div>
             <div class="uk-text-truncate uk-text-meta uk-width-expand" v-translate>Name</div>
             <div :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-meta uk-width-small" v-translate>Size</div>
-            <div type="head" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-nowrap uk-text-meta uk-width-small" v-translate>Modification Time</div>
+            <div type="head" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-nowrap uk-text-meta uk-width-small" v-translate>Updated</div>
           </template>
           <template #rowColumns="{ item }">
             <div v-if="!publicPage()">
