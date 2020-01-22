@@ -36,7 +36,7 @@
               <oc-nav>
                 <file-upload :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
                 <folder-upload v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
-                <oc-nav-item @click="showCreateFolderDialog" id="new-folder-btn" icon="create_new_folder"><translate>Create new folder…</translate></oc-nav-item>
+                <oc-nav-item @click="showCreateFolderDialog" id="new-folder-btn" icon="create_new_folder"><translate>New folder…</translate></oc-nav-item>
                 <oc-nav-item v-for="(newFileHandler, key) in newFileHandlers"
                   :key="key"
                   @click="showCreateFileDialog(newFileHandler.ext, newFileHandler.action)"
@@ -167,7 +167,7 @@ export default {
       return this.$gettext('Folder name')
     },
     $_createFolderDialogTitle () {
-      return this.$gettext('Create new folder…')
+      return this.$gettext('New folder…')
     },
     $_createFileDialogPlaceholder () {
       return this.$gettext('Enter new file name…')
@@ -176,7 +176,7 @@ export default {
       return this.$gettext('File name')
     },
     $_createFileDialogTitle () {
-      return this.$gettext('Create new file…')
+      return this.$gettext('New file…')
     },
     _cannotCreateDialogText () {
       if (!this.canUpload) {
