@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Transform route titles into real h1 headings: [#2681](https://github.com/owncloud/phoenix/pull/2681)
 * Change - Bring UI/UX of file links sidebar in line with sharing sidebar: [#1907](https://github.com/owncloud/phoenix/issues/1907)
+* Change - Adjusted labels in files list: [#2902](https://github.com/owncloud/phoenix/pull/2902)
 
 Details
 -------
@@ -31,6 +32,15 @@ Details
 
    https://github.com/owncloud/phoenix/issues/1907
    https://github.com/owncloud/phoenix/pull/2841
+
+* Change - Adjusted labels in files list: [#2902](https://github.com/owncloud/phoenix/pull/2902)
+
+   Renamed "Modification time" to "Updated" to make it look less technical. Replace "Create new"
+   with "New" in the "New" menu as it makes it look less cluttered when trying to spot a matching
+   entry.
+
+   https://github.com/owncloud/phoenix/pull/2902
+   https://github.com/owncloud/phoenix/pull/2905
 
 Changelog for ownCloud Phoenix [0.2.7] (2020-01-14)
 =======================================
