@@ -50,6 +50,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import Mixins from '../mixins/collaborators'
+import { textUtils } from '../helpers/textUtils'
 const NewCollaborator = _ => import('./Collaborators/NewCollaborator.vue')
 const EditCollaborator = _ => import('./Collaborators/EditCollaborator.vue')
 const Collaborator = _ => import('./Collaborators/Collaborator.vue')
@@ -118,7 +119,7 @@ export default {
               return this.$_ocCollaborators_isGroup(c1) ? -1 : 1
             }
           } else {
-            return name1 < name2 ? -1 : 1
+            return textUtils.naturalSortCompare(name1, name2)
           }
         })
     },
