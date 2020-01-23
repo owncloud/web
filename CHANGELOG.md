@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Transform route titles into real h1 headings: [#2681](https://github.com/owncloud/phoenix/pull/2681)
 * Change - Bring UI/UX of file links sidebar in line with sharing sidebar: [#1907](https://github.com/owncloud/phoenix/issues/1907)
+* Change - Join users and groups into a single list in collaborators sidebar: [#2900](https://github.com/owncloud/phoenix/issues/2900)
 * Change - Adjusted labels in files list: [#2902](https://github.com/owncloud/phoenix/pull/2902)
 * Enhancement - Add share indicator for direct and indirect shares in file list: [#2060](https://github.com/owncloud/phoenix/issues/2060)
 
@@ -33,6 +34,14 @@ Details
 
    https://github.com/owncloud/phoenix/issues/1907
    https://github.com/owncloud/phoenix/pull/2841
+
+* Change - Join users and groups into a single list in collaborators sidebar: [#2900](https://github.com/owncloud/phoenix/issues/2900)
+
+   Users and groups were shown as two separate lists (users, then groups) in the collaborators
+   sidebar. This separation is now removed, i.e. there is only one list with all collaborators,
+   sorted by display name (lower case, ascending). On equal names groups are shown first.
+
+   https://github.com/owncloud/phoenix/issues/2900
 
 * Change - Adjusted labels in files list: [#2902](https://github.com/owncloud/phoenix/pull/2902)
 
