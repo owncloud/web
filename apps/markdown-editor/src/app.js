@@ -26,7 +26,7 @@ const appInfo = {
     extension: 'txt',
     newFileMenu: {
       menuTitle ($gettext) {
-        return $gettext('Create new plain text file…')
+        return $gettext('New plain text file…')
       }
     }
   },
@@ -34,7 +34,7 @@ const appInfo = {
     extension: 'md',
     newFileMenu: {
       menuTitle ($gettext) {
-        return $gettext('Create new mark-down file…')
+        return $gettext('New mark-down file…')
       }
     }
   }

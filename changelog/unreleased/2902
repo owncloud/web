@@ -1,0 +1,7 @@
+Change: Adjusted labels in files list
+
+Renamed "Modification time" to "Updated" to make it look less technical.
+Replace "Create new" with "New" in the "New" menu as it makes it look less cluttered when trying to spot a matching entry.
+
+https://github.com/owncloud/phoenix/pull/2902
+https://github.com/owncloud/phoenix/pull/2905

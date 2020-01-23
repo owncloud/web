@@ -23,7 +23,7 @@ const appInfo = {
     routeName: 'draw-io-edit',
     newFileMenu: {
       menuTitle ($gettext) {
-        return $gettext('Create new draw.io document…')
+        return $gettext('New draw.io document…')
       }
     }
   }
