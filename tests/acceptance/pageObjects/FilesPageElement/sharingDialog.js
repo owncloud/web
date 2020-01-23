@@ -315,7 +315,7 @@ module.exports = {
     enterAutoComplete: function (input) {
       return this.initAjaxCounters()
         .waitForElementVisible('@sharingAutoComplete')
-        .setValue('@sharingAutoComplete', input)
+        .setValueBySingleKeys('@sharingAutoComplete', input)
         .waitForOutstandingAjaxCalls()
     },
     /**
