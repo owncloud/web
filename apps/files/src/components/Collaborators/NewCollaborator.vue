@@ -8,7 +8,7 @@
         :items="autocompleteResults"
         :itemsLoading="autocompleteInProgress"
         :placeholder="$_ocCollaborationStatus_autocompletePlacholder"
-        @update:input="onAutocompleteInput"
+        @update:input="$_onAutocompleteInput"
         :filter="filterRecipients"
         :fillOnSelection="false"
         id="oc-sharing-autocomplete"
@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapActions, mapGetters } from 'vuex'
 import Mixins from '../../mixins/collaborators'
 import { roleToBitmask } from '../../helpers/collaborators'
@@ -119,6 +120,8 @@ export default {
     this.$nextTick(() => {
       this.$refs.ocSharingAutocomplete.focus()
     })
+
+    this.$_onAutocompleteInput = _.debounce(this.$_onAutocompleteInput, 1000)
   },
 
   methods: {
@@ -136,7 +139,7 @@ export default {
       this.$emit('close')
     },
 
-    onAutocompleteInput (value) {
+    $_onAutocompleteInput (value) {
       if (
         value.length <
         parseInt(this.user.capabilities.files_sharing.search_min_length, 10)

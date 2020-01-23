@@ -15,6 +15,7 @@ export default {
     '{http://owncloud.org/ns}fileid',
     '{http://owncloud.org/ns}owner-id',
     '{http://owncloud.org/ns}owner-display-name',
+    '{http://owncloud.org/ns}share-types',
     '{http://owncloud.org/ns}privatelink',
     '{DAV:}getcontentlength',
     '{http://owncloud.org/ns}size',
@@ -24,13 +25,27 @@ export default {
   ],
   dropzone: false,
   shareOpen: null,
+
+  /**
+   * Collaborator shares from currently highlighted element
+   */
   shares: [],
   sharesError: null,
   sharesLoading: false,
 
+  /**
+   * Link shares from currently highlighted element
+   */
   links: [],
   linksError: null,
   linksLoading: false,
+
+  /**
+   * Shares from parent folders
+   **/
+  sharesTree: {},
+  sharesTreeError: null,
+  sharesTreeLoading: false,
 
   loadingFolder: false,
   quota: {},

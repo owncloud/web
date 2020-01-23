@@ -222,3 +222,99 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Then file "for-git-commit" should not be listed on the webUI
     And as "user1" file "'single'quotes (2)/simple-empty-folder/for-git-commit" should not exist
     And as "user1" file "'single'quotes/simple-empty-folder/for-git-commit" should not exist on remote server
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a shared folder two levels down
+    Given user "user1" has created folder "/simple-folder/simple-empty-folder/new-folder"
+    And user "user1" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/lorem.txt"
+    And the user shares folder "simple-folder" with remote user "user1" as "Editor" using the webUI
+    When the user opens folder "/" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-folder       | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-indirect      |
+    When the user opens folder "simple-empty-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName   | expectedIndicators |
+      | new-folder | user-indirect      |
+      | lorem.txt  | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a re-shared folder
+    Given user "user2" has been created with default attributes
+    And user "user3" has been created with default attributes
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And the user re-logs in as "user2" using the webUI
+    And user "user2" has shared folder "simple-folder (2)" with user "user3"
+    And the user opens folder "simple-folder (2)" using the webUI
+    And the user shares folder "simple-empty-folder" with remote user "user1" as "Editor" using the webUI
+    When the user opens folder "/" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-folder (2)   | user-direct        |
+    When the user opens folder "simple-folder (2)" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-direct        |
+      | lorem.txt           | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator of items inside a re-shared subfolder
+    Given user "user2" has been created with default attributes
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And the user re-logs in as "user2" using the webUI
+    And the user opens folder "simple-folder (2)" using the webUI
+    And the user shares folder "simple-empty-folder" with remote user "user1" as "Editor" using the webUI
+    When the user opens folder "/" directly on the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-folder (2)   | user-indirect      |
+    When the user opens folder "simple-folder (2)" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName            | expectedIndicators |
+      | simple-empty-folder | user-direct        |
+      | lorem.txt           | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator for file uploaded inside a shared folder
+    Given the user shares folder "simple-empty-folder" with remote user "user1" as "Editor" using the webUI
+    When the user opens folder "simple-empty-folder" using the webUI
+    And the user uploads file "new-lorem.txt" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | new-lorem.txt | user-indirect      |
+
+  @issue-2060
+  Scenario: sharing indicator for folder created inside a shared folder
+    Given the user shares folder "simple-empty-folder" with remote user "user1" as "Editor" using the webUI
+    When the user opens folder "simple-empty-folder" using the webUI
+    And the user creates a folder with the name "sub-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | sub-folder    | user-indirect      |
+
+  @skip @yetToImplement @issue-2897
+  Scenario: sharing details inside folder shared using federated sharing
+    Given user "user1" has created folder "/simple-folder/sub-folder"
+    And user "user1" has uploaded file "filesForUpload/textfile.txt" to "/simple-folder/textfile.txt"
+    And user "user1" from server "LOCAL" has shared "/simple-folder" with user "user1" from server "REMOTE"
+    When the user opens folder "simple-folder" using the webUI
+    And the user opens the share dialog for folder "sub-folder"
+    Then federated user "user1@%remote_server% (Remote share)" should be listed as share receiver via "simple-folder" on the webUI
+    When the user opens the share dialog for file "textfile.txt"
+    Then federated user "user1@%remote_server% (Remote share)" should be listed as share receiver via "simple-folder" on the webUI
+
+  @skip @yetToImplement @issue-2897
+  Scenario: sharing details of items inside a shared folder shared with local user and federated user
+    Given user "user2" has been created with default attributes and without skeleton files
+    And user "user1" has created folder "/simple-folder/sub-folder"
+    And user "user1" has uploaded file "filesForUpload/textfile.txt" to "/simple-folder/sub-folder/textfile.txt"
+    And user "user1" from server "LOCAL" has shared "/simple-folder" with user "user1" from server "REMOTE"
+    And user "user1" has shared folder "simple-folder/sub-folder" with user "user2"
+    When the user opens folder "simple-folder/sub-folder" using the webUI
+    And the user opens the share dialog for file "textfile.txt"
+    Then federated user "user1@%remote_server% (Remote share)" should be listed as share receiver via "simple-folder" on the webUI
+    And user "User Two" should be listed as share receiver via "sub-folder" on the webUI

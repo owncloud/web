@@ -1128,3 +1128,25 @@ Then('only favorite files containing pattern {string} in their name should be li
   const allListedFilesFolders = await client.page.filesPage().getAllListedResources()
   return assertDesiredResourcesListed(filesMatchingPattern, allListedFilesFolders)
 })
+
+Then('the following resources should have share indicators on the webUI', async function (dataTable) {
+  for (const { fileName, expectedIndicators } of dataTable.hashes()) {
+    const indicatorsArray = await client
+      .page.FilesPageElement.filesList().getShareIndicatorsForResource(fileName)
+
+    const expectedIndicatorsArray = expectedIndicators.split(',').map(s => s.trim())
+    assert.ok(
+      _.intersection(indicatorsArray, expectedIndicatorsArray).length === expectedIndicatorsArray.length,
+      `Expected share indicators to be the same for "${fileName}": expected [` + expectedIndicatorsArray.join(', ') + '] got [' + indicatorsArray.join(', ') + ']'
+    )
+  }
+})
+
+Then('the following resources should not have share indicators on the webUI', async function (dataTable) {
+  for (const fileName in dataTable.rows()) {
+    const indicatorsArray = await client
+      .page.FilesPageElement.filesList().getShareIndicatorsForResource(fileName)
+
+    assert.ok(!indicatorsArray.length, `Expected no share indicators present for "${fileName}"`)
+  }
+})

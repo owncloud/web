@@ -81,8 +81,10 @@ export default {
   sharesLoading: state => {
     return state.sharesLoading
   },
+  sharesTree: state => state.sharesTree,
+  sharesTreeLoading: state => state.sharesTreeLoading,
   loadingFolder: state => {
-    return state.loadingFolder
+    return state.loadingFolder || state.sharesTreeLoading
   },
   quota: state => {
     return state.quota
