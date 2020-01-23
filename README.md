@@ -94,12 +94,12 @@ In the local Phoenix checkout, copy the `config.json.sample` file to `config.jso
     3. install the Chrome browser and let yarn start & run selenium (remember to set `LOCAL_UPLOAD_DIR` though)
     4. Use standalone selenium server (remember to set `SELENIUM_HOST`, `SELENIUM_PORT` and `LOCAL_UPLOAD_DIR`).
 - run `yarn run acceptance-tests <feature-files-to-test>`
-- to run federation tests, follow the steps below:                         
-   1. Install and setup a remote ownCloud server with different name than that of already installed local ownCloud server.
+- to run federation tests:                        
+   1. Install and setup a second ownCloud server-instance that is accessible by a different URL. That second server-instance must have its own database and data directory.
    
-   2. clone and install testing app into remote ownCloud server from http://github.com/owncloud/testing .
+   2. clone and install testing app into the second ownCloud server-instance from http://github.com/owncloud/testing .
 
-   3. run `REMOTE_BACKEND_HOST=http://<ip_address_of_remote_ownCloud_server> yarn run acceptance-tests <feature-files-to-test>` .
+   3. when running the acceptance tests use `REMOTE_BACKEND_HOST` environment variable to define its address. for e.g. `REMOTE_BACKEND_HOST=http://<ip_address_of_second_ownCloud_server-instance> yarn run acceptance-tests <feature-files-to-test>` .
 - available settings to be set by environment variables:
 
 | setting             | meaning                                                                | default               |
