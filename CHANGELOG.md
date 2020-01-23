@@ -11,6 +11,7 @@ Summary
 * Bugfix - Transform route titles into real h1 headings: [#2681](https://github.com/owncloud/phoenix/pull/2681)
 * Change - Bring UI/UX of file links sidebar in line with sharing sidebar: [#1907](https://github.com/owncloud/phoenix/issues/1907)
 * Change - Adjusted labels in files list: [#2902](https://github.com/owncloud/phoenix/pull/2902)
+* Enhancement - Add share indicator for direct and indirect shares in file list: [#2060](https://github.com/owncloud/phoenix/issues/2060)
 
 Details
 -------
@@ -41,6 +42,18 @@ Details
 
    https://github.com/owncloud/phoenix/pull/2902
    https://github.com/owncloud/phoenix/pull/2905
+
+* Enhancement - Add share indicator for direct and indirect shares in file list: [#2060](https://github.com/owncloud/phoenix/issues/2060)
+
+   We've added the ability for the user to directly see whether a resource is shared in the file
+   list. For this, share indicators in the form of a group icon and link icon will appear in a new
+   column near the shared resource. The blue color of an icon tells whether outgoing shares exist
+   directly on the resource. The grey color of an icon tells that incoming or outgoing shares exist
+   on any of the parent folders.
+
+   https://github.com/owncloud/phoenix/issues/2060
+   https://github.com/owncloud/phoenix/issues/2894
+   https://github.com/owncloud/phoenix/pull/2877
 
 Changelog for ownCloud Phoenix [0.2.7] (2020-01-14)
 =======================================
