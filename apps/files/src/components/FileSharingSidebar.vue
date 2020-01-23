@@ -14,7 +14,7 @@
         />
         <div v-if="$_ocCollaborators.length > 0" id="files-collaborators-list" key="oc-collaborators-user-list">
           <template v-for="collaborator in $_ocCollaborators">
-            <oc-grid :key="collaborator.info.id" gutter="small" class="files-collaborators-collaborator">
+            <oc-grid :key="collaborator.info.id" :flex="true" gutter="small" class="files-collaborators-collaborator">
               <div>
                 <oc-button :ariaLabel="$gettext('Delete share')" @click="$_ocCollaborators_deleteShare(collaborator)" variation="raw" class="files-collaborators-collaborator-delete">
                   <oc-icon name="close" />
