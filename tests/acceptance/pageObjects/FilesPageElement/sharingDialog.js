@@ -421,12 +421,31 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
         .api.elements('css selector', this.elements.collaboratorsInformation, result => {
           result.value.map(item => {
-            promiseList.push(new Promise((resolve, reject) => {
+            promiseList.push(new Promise((resolve) => {
               this.api.elementIdText(item[Object.keys(item)[0]], text => {
                 resolve(text.value)
               })
-            })
-            )
+            }))
+          })
+        })
+      return Promise.all(promiseList)
+    },
+    /**
+     *
+     * @returns {Promise.<string[]>} Array of user/group display names in share list
+     */
+    getCollaboratorsListNames: async function () {
+      const promiseList = []
+      await this.initAjaxCounters()
+        .waitForElementPresent({ selector: '@collaboratorsInformation', abortOnFailure: false })
+        .waitForOutstandingAjaxCalls()
+        .api.elements('css selector', this.elements.collaboratorInformationName, result => {
+          result.value.map(item => {
+            promiseList.push(new Promise((resolve) => {
+              this.api.elementIdText(item[Object.keys(item)[0]], text => {
+                resolve(text.value)
+              })
+            }))
           })
         })
       return Promise.all(promiseList)
@@ -495,6 +514,9 @@ module.exports = {
     collaboratorInformationByCollaboratorName: {
       selector: '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::div[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
       locateStrategy: 'xpath'
+    },
+    collaboratorInformationName: {
+      selector: '.files-collaborators-collaborator .files-collaborators-collaborator-information-text .files-collaborators-collaborator-name'
     },
     collaboratorMoreInformation: {
       // within collaboratorInformationByCollaboratorName
