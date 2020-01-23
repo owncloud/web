@@ -12,8 +12,17 @@ Feature: Sharing files and folders with internal groups
     And these groups have been created:
       | groupname |
       | grp1      |
+      | grp11     |
     And user "user1" has been added to group "grp1"
     And user "user2" has been added to group "grp1"
+
+  Scenario: share a folder with multiple collaborators and check collaborator list order
+    Given user "user3" has logged in using the webUI
+    When the user shares folder "simple-folder" with group "grp11" as "Viewer" using the webUI
+    And the user shares folder "simple-folder" with user "User Two" as "Viewer" using the webUI
+    And the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
+    And the user shares folder "simple-folder" with user "User One" as "Viewer" using the webUI
+    Then the current collaborators list should have order "grp1,grp11,User One,User Two"
 
   Scenario Outline: share a file & folder with another internal user
     Given user "user3" has logged in using the webUI

@@ -740,8 +740,8 @@ Then('user {string} should not be listed in the collaborators list on the webUI'
   return assertCollaboratorslistDoesNotContain('user', user)
 })
 
-Then('group {string} should not be listed in the collaborators list on the webUI', function (user) {
-  return assertCollaboratorslistDoesNotContain('group', user)
+Then('group {string} should not be listed in the collaborators list on the webUI', function (group) {
+  return assertCollaboratorslistDoesNotContain('group', group)
 })
 
 Then('user {string} should have received a share with these details:', function (user, expectedDetailsTable) {
@@ -794,6 +794,11 @@ Then('the collaborators list for file/folder/resource {string} should be empty',
     .getCollaboratorsList()
   ).length
   assert.strictEqual(count, 0, `Expected to have no collaborators for '${resource}', Found: ${count}`)
+})
+
+Then('the current collaborators list should have order {string}', async function (expectedNames) {
+  const actualNames = (await client.page.FilesPageElement.sharingDialog().getCollaboratorsListNames()).join(',')
+  assert.strictEqual(actualNames, expectedNames, `Expected to have collaborators in order '${expectedNames}', Found: ${actualNames}`)
 })
 
 Then('file/folder {string} shared by {string} should be in {string} state on the webUI',
