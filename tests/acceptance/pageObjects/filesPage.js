@@ -54,7 +54,7 @@ module.exports = {
         .waitForElementVisible('@newFolderInput')
       if (name !== null) {
         await this.clearValueWithEvent('@newFolderInput')
-        await this.setValueBySingleKeys('@newFolderInput', name)
+        await this.setValue('@newFolderInput', name)
       }
       await this
         .click('@newFolderOkButton')
