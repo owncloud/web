@@ -182,6 +182,7 @@ def build(ctx):
 
 def changelog(ctx):
 	pipelines = []
+	repo_slug = ctx.build.source_repo if ctx.build.source_repo else ctx.repo.slug
 
 	result = {
 		'kind': 'pipeline',
@@ -199,7 +200,7 @@ def changelog(ctx):
 					'actions': [
 						'clone',
 					],
-					'remote': 'https://github.com/%s' % (ctx.repo.slug),
+					'remote': 'https://github.com/%s' % (repo_slug),
 					'branch': ctx.build.source if ctx.build.event == 'pull_request' else 'master',
 					'path': '/drone/src',
 					'netrc_machine': 'github.com',
