@@ -26,7 +26,7 @@
                            :maxDatetime="$_maxExpirationDate" :minDatetime="$_minExpirationDate"
                            :placeholder="placeholder.expireDate" @input="expireDate = $event" id="oc-files-file-link-expire-date"/>
             <div :uk-tooltip="$_expirationDateRemoveText" @click="expireDate=null" class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
-                 id="oc-files-file-link-expire-date-delete" v-if="!!expireDate"/>
+                 id="oc-files-file-link-expire-date-delete" v-if="!$_expirationDate.enforced && !!expireDate"/>
           </div>
         </div>
         <div class="uk-width-1-1 uk-width-3-5@m">
