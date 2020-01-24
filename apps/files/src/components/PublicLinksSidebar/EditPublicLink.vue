@@ -135,10 +135,12 @@ export default {
     },
 
     $_hasChanges () {
-      return (this.expireDate !== this.params.expireDate) ||
+      const expireDateBefore = this.params.expireDate ? moment(this.params.expireDate).format('DD-MM-YYYY') : null
+      const expireDateNow = this.expireDate ? moment(this.expireDate).format('DD-MM-YYYY') : null
+      return (expireDateNow !== expireDateBefore) ||
           (this.name !== this.params.name) ||
           (this.permissions !== this.params.permissions) ||
-          (this.password !== null)
+          (this.params.hasPassword ? this.password !== null : (this.password !== null && this.password.trim().length > 0))
     },
 
     $_sendMailEnabled () {
