@@ -1,6 +1,7 @@
 const { client } = require('nightwatch-api')
 const { Given, After } = require('cucumber')
 const fetch = require('node-fetch')
+const fs = require('fs-extra')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
@@ -8,10 +9,15 @@ const userSettings = require('../helpers/userSettings')
 const codify = require('../helpers/codify')
 const { join } = require('../helpers/path')
 
+const ldap = require('../helpers/ldapHelper')
+
 function createDefaultUser (userId) {
   const password = userSettings.getPasswordForUser(userId)
   const displayname = userSettings.getDisplayNameOfDefaultUser(userId)
   const email = userSettings.getEmailAddressOfDefaultUser(userId)
+  if (client.globals.ocis) {
+    return ldap.createUser(client.globals.ldapClient, userId)
+  }
   return createUser(userId, password, displayname, email)
 }
 
@@ -109,6 +115,14 @@ function initUser (userId) {
  * @returns {*|Promise}
  */
 function createGroup (groupId) {
+  if (client.globals.ocis) {
+    return ldap.createGroup(client.globals.ldapClient, groupId)
+      .then((err) => {
+        if (!err) {
+          userSettings.addGroupToCreatedGroupsList(groupId)
+        }
+      })
+  }
   const body = new URLSearchParams()
   body.append('groupid', groupId)
   userSettings.addGroupToCreatedGroupsList(groupId)
@@ -133,6 +147,9 @@ function deleteGroup (groupId) {
 }
 
 function addToGroup (userId, groupId) {
+  if (client.globals.ocis) {
+    return ldap.addUserToGroup(client.globals.ldapClient, userId, groupId)
+  }
   const body = new URLSearchParams()
   body.append('groupid', groupId)
 
@@ -218,9 +235,34 @@ After(async function () {
   const createdRemoteUsers = Object.keys(userSettings.getCreatedUsers('REMOTE'))
   const createdGroups = userSettings.getCreatedGroups()
 
-  await Promise.all(
-    [...createdUsers.map(deleteUser), ...createdGroups.map(deleteGroup)]
-  )
+  if (client.globals.ocis) {
+    const deleteUserPromises = createdUsers.map(
+      user => ldap.deleteUser(client.globals.ldapClient, user)
+        .then(() => {
+          const dataDir = client.globals.ocis_data_dir
+          if (fs.existsSync(join(dataDir, 'data', user))) {
+            fs.emptyDirSync(join(dataDir, 'data', user))
+            fs.rmdirSync(join(dataDir, 'data', user))
+          }
+          console.log('Deleted LDAP User: ', user)
+        })
+    )
+    const deleteGroupPromises = createdGroups.map(
+      group => ldap.deleteGroup(client.globals.ldapClient, group)
+        .then(() => {
+          console.log('Deleted LDAP Group: ', group)
+        })
+    )
+    await Promise.all([...deleteUserPromises, ...deleteGroupPromises])
+      .then(() => {
+        userSettings.resetCreatedUsers()
+        userSettings.resetCreatedGroups()
+      })
+  } else {
+    await Promise.all(
+      [...createdUsers.map(deleteUser), ...createdGroups.map(deleteGroup)]
+    )
+  }
 
   if (client.globals.remote_backend_url) {
     return backendHelper.runOnRemoteBackend(

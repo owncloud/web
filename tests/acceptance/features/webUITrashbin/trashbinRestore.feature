@@ -1,4 +1,4 @@
-@files_trashbin-app-required
+@files_trashbin-app-required @skipOnOCIS @ocis-phoenix-issue-51
 Feature: Restore deleted files/folders
   As a user
   I would like to restore files/folders

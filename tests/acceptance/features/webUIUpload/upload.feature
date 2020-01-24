@@ -15,7 +15,7 @@ Feature: File Upload
     And file "new-lorem.txt" should be listed on the webUI
     And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
-  @smokeTest
+  @smokeTest @skipOnOCIS @ocis-reva-issue-106
   Scenario: simple upload of a folder that does not exist before
     When the user uploads a folder containing the following files in separate sub-folders using the webUI:
       | lorem.txt     |
@@ -27,7 +27,7 @@ Feature: File Upload
       | new-lorem.txt                |
       | lorem.txt                    |
 
-  @smokeTest
+  @smokeTest @skipOnOCIS @ocis-reva-issue-106
   Scenario: simple upload of a folder that does not exist before
     When the user uploads folder "PARENT" using the webUI
     Then no message should be displayed on the webUI
@@ -41,7 +41,7 @@ Feature: File Upload
     And as "user1" file "PARENT/parent.txt" should exist
     And as "user1" folder "PARENT/CHILD" should exist
 
-  @smokeTest
+  @smokeTest @skipOnOCIS @ocis-reva-issue-106
   Scenario: Upload of a folder inside a subdirectory
     When the user browses to the folder "simple-empty-folder" on the files page
     And the user uploads folder "PARENT" using the webUI
@@ -89,7 +89,7 @@ Feature: File Upload
     And the versions list for resource "lorem.txt" should contain 1 entry
     But file "lorem (2).txt" should not be listed on the webUI
 
-  @smokeTest
+  @smokeTest @skipOnOCIS @issue-ocis-reva-54
   Scenario: overwrite an existing file when versioning is disabled
     Given the app "files_versions" has been disabled
     When the user uploads overwriting file "lorem.txt" using the webUI
@@ -128,7 +128,7 @@ Feature: File Upload
     Then file "lorem.txt" should be listed on the webUI
     And as "user1" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
 
-  @skip @yetToImplement
+  @skip @yetToImplement @ocis-reva-issue-64
   Scenario: keep new and existing file in a sub-folder
     When the user opens folder "simple-folder" using the webUI
     And the user uploads file "lorem.txt" using the webUI
@@ -142,6 +142,7 @@ Feature: File Upload
     And file "lorem (2).txt" should be listed on the webUI
     And the content of "lorem (2).txt" should be the same as the local "lorem.txt"
 
+  @skipOnOCIS @ocis-reva-issue-64
   Scenario: upload overwriting a file into a public share
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"

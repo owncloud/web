@@ -23,7 +23,7 @@ Feature: create folder
       | "+-{$(882)"              |
       | "home"                   |
 
-  @issue-2467
+  @issue-2467 @skipOnOCIS @ocis-reva-issue-106
   Scenario Outline: Create a sub-folder inside a folder with problematic name
     # First try and create a folder with problematic name
     # Then try and create a sub-folder inside the folder with problematic name
@@ -41,7 +41,7 @@ Feature: create folder
       | "^#2929@" |
       | "home"    |
 
-  @smokeTest
+  @smokeTest @skipOnOCIS @ocis-reva-issue-106
   Scenario Outline: Create a sub-folder inside an existing folder with problematic name
     # Use an existing folder with problematic name to create a sub-folder
     # Uses the folder created by skeleton

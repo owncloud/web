@@ -16,6 +16,14 @@ const BROWSER_NAME = process.env.BROWSER_NAME
 const SAUCELABS_TUNNEL_NAME = process.env.SAUCELABS_TUNNEL_NAME
 const LOCAL_UPLOAD_DIR = process.env.LOCAL_UPLOAD_DIR || '/uploads'
 
+const RUN_ON_OCIS = !!process.env.RUN_ON_OCIS
+const OCIS_REVA_DATA_ROOT = process.env.OCIS_REVA_DATA_ROOT || '/var/tmp/reva'
+const LDAP_SERVER_URL = process.env.LDAP_SERVER_URL || 'ldap://127.0.0.1'
+const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
+const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
+const OCIS_SKELETON_DIR = process.env.OCIS_SKELETON_DIR
+const OCIS_PHOENIX_CONFIG = process.env.OCIS_PHOENIX_CONFIG || false
+
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
   custom_commands_path: './tests/acceptance/customCommands',
@@ -31,7 +39,14 @@ module.exports = {
         remote_backend_url: REMOTE_BACKEND_URL,
         backend_admin_username: BACKEND_ADMIN_USERNAME,
         backend_admin_password: BACKEND_ADMIN_PASSWORD,
-        default_backend: 'LOCAL'
+        default_backend: 'LOCAL',
+        ocis: RUN_ON_OCIS,
+        ldap_url: LDAP_SERVER_URL,
+        ocis_data_dir: OCIS_REVA_DATA_ROOT,
+        ldap_base_dn: LDAP_BASE_DN,
+        ocis_skeleton_dir: OCIS_SKELETON_DIR,
+        ldap_password: LDAP_ADMIN_PASSWORD,
+        ocis_phoenix_config: OCIS_PHOENIX_CONFIG
       },
       selenium_host: SELENIUM_HOST,
       desiredCapabilities: {
@@ -39,7 +54,7 @@ module.exports = {
         javascriptEnabled: true,
         acceptSslCerts: true,
         chromeOptions: {
-          args: ['disable-gpu'],
+          args: ['disable-gpu', 'ignore-certificate-errors'],
           w3c: false
         },
         loggingPrefs: { browser: 'ALL' }

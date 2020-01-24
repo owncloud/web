@@ -4,6 +4,8 @@ import { rollbackConfigs, setConfigs, cacheConfigs } from './helpers/config'
 import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
 const codify = require('./helpers/codify')
 
+const ldap = require('./helpers/ldapHelper')
+
 const RUNNING_ON_CI = !!process.env.CI
 const RUNNING_ON_SAUCELABS = !!process.env.SAUCE_USERNAME
 
@@ -41,7 +43,24 @@ Before(function logSessionInfoOnSauceLabs () {
   }
 })
 
+Before(function createLdapClient () {
+  if (client.globals.ocis) {
+    return ldap.createClient().then(ldapClient => {
+      client.globals.ldapClient = ldapClient
+    })
+  }
+})
+
+After(function deleteLdapClient () {
+  if (client.globals.ocis && client.globals.ldapClient) {
+    return ldap.terminate(client.globals.ldapClient)
+  }
+})
+
 async function cacheAndSetConfigs (server) {
+  if (client.globals.ocis) {
+    return
+  }
   await cacheConfigs(server)
   return setConfigs(
     server,
@@ -50,10 +69,16 @@ async function cacheAndSetConfigs (server) {
 }
 
 Before(function cacheAndSetConfigsOnLocal () {
+  if (client.globals.ocis) {
+    return
+  }
   return cacheAndSetConfigs(client.globals.backend_url)
 })
 
 Before(function cacheAndSetConfigsOnRemoteIfExists () {
+  if (client.globals.ocis) {
+    return
+  }
   if (client.globals.remote_backend_url) {
     return cacheAndSetConfigs(client.globals.remote_backend_url)
   }
@@ -62,12 +87,18 @@ Before(function cacheAndSetConfigsOnRemoteIfExists () {
 // After hooks are run in reverse order in which they are defined
 // https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/hooks.md#hooks
 After(function rollbackConfigsOnRemoteIfExists () {
+  if (client.globals.ocis) {
+    return
+  }
   if (client.globals.remote_backend_url) {
     return rollbackConfigs(client.globals.remote_backend_url)
   }
 })
 
 After(function rollbackConfigsOnLocal () {
+  if (client.globals.ocis) {
+    return
+  }
   return rollbackConfigs(client.globals.backend_url)
 })
 
@@ -80,6 +111,9 @@ After(function closeSessionForEnv () {
 })
 
 After(async function tryToReadBrowserConsoleOnFailure ({ result }) {
+  if (client.globals.ocis) {
+    return
+  }
   if (result.status === 'failed') {
     const logs = await getAllLogsWithDateTime('SEVERE')
     if (logs.length > 0) {

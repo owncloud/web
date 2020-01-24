@@ -1,3 +1,4 @@
+@skipOnOCIS @ocis-issue-130
 Feature: display notifications on the webUI
 
   As a user

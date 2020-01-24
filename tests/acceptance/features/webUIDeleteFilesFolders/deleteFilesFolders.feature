@@ -26,6 +26,7 @@ Feature: deleting files and folders
     And file "strängé नेपाली folder" should not be listed on the webUI
     But the deleted elements should not be listed on the webUI after a page reload
 
+  @skipOnOCIS @ocis-reva-issue-14
   Scenario: Delete a file with problematic characters
     Given user "user1" has renamed the following file
       | from-name-parts | to-name-parts   |
@@ -83,6 +84,7 @@ Feature: deleting files and folders
     And the folder should be empty on the webUI
     And the folder should be empty on the webUI after a page reload
 
+  @skipOnOCIS @ocis-reva-issue-106
   Scenario: Delete all except for a few files at once
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
@@ -99,6 +101,7 @@ Feature: deleting files and folders
     And file "data.zip" should not be listed on the webUI
     And there should be 2 files/folders listed on the webUI
 
+  @skipOnOCIS @ocis-reva-issue-106
   Scenario: Delete an empty folder
     When the user creates a folder with the name "my-empty-folder" using the webUI
     And the user creates a folder with the name "my-other-empty-folder" using the webUI
@@ -139,6 +142,7 @@ Feature: deleting files and folders
     When the user browses to the files page
     Then file "lorem.txt" should not be listed on the webUI
 
+  @skipOnOCIS @ocis-reva-issue-64
   Scenario: delete a file on a public share
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
@@ -153,6 +157,7 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
+  @skipOnOCIS @ocis-reva-issue-64
   Scenario: delete a file on a public share with problematic characters
     Given user "user1" has renamed the following file
       | from-name-parts          | to-name-parts   |
@@ -198,6 +203,7 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
+  @skipOnOCIS @ocis-reva-issue-64
   Scenario: Delete a file and folder from shared with me page
     Given user "user2" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1"
@@ -208,6 +214,7 @@ Feature: deleting files and folders
     Then as "user1" folder "simple-folder (2)" should not exist
     And as "user1" file "lorem (2).txt" should not exist
 
+  @skipOnOCIS @ocis-reva-issue-64
   Scenario: Delete a file and folder in shared with others page
     Given user "user2" has been created with default attributes
     And user "user1" has shared file "lorem.txt" with user "user2"
@@ -226,6 +233,7 @@ Feature: deleting files and folders
     And as "user1" file "lorem.txt" should not exist
     And as "user1" folder "simple-folder" should not exist
 
+  @skipOnOCIS @ocis-reva-issue-64
   Scenario: Delete multiple files at once from shared with others page
     Given user "user2" has been created with default attributes
     And user "user1" has shared file "lorem.txt" with user "user2"
@@ -243,6 +251,7 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
+  @skipOnOCIS @ocis-reva-issue-39
   Scenario: Try to delete file and folder from favorites page
     Given user "user1" has favorited element "simple-folder"
     And user "user1" has favorited element "lorem.txt"
