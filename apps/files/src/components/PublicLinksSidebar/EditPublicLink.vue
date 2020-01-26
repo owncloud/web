@@ -9,7 +9,7 @@
         </div>
       </transition>
       <div class="uk-margin">
-        <label class="oc-label"><span v-translate>Name your link</span>:</label>
+        <label class="oc-label"><span v-translate>Name</span>:</label>
         <input class="uk-input" id="oc-files-file-link-name" v-model="name"/>
       </div>
       <oc-grid childWidth="1-1" gutter="small">
