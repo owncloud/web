@@ -32,7 +32,10 @@
                 </oc-button>
               </div>
               <div class="uk-width-expand">
-                <a :href="link.url" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a><br>
+                <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">
+                  {{ link.name }}
+                </a>
+                <br>
                 <span class="uk-text-meta uk-text-break">
                   {{ link.description }}
                   <template v-if="link.expiration"> |
