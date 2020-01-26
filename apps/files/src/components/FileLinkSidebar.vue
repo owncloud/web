@@ -6,15 +6,23 @@
         <template v-if="$_privateLinkOfHighlightedFile">
           <div class="uk-text-bold">
             <span v-translate>Private Link</span>
-            <oc-button :aria-label="$_privateLinkCopyLabel" variation="raw">
+            <oc-button :aria-label="$_privateLinkCopyLabel" variation="raw" class="uk-margin-small-left">
               <oc-icon v-if="!linksCopied[$_privateLinkOfHighlightedFile]" name="copy_to_clipboard" size="small" id="files-sidebar-private-link-label"
                        v-clipboard:copy="$_privateLinkOfHighlightedFile" v-clipboard:success="$_clipboardSuccessHandler"/>
               <oc-icon v-else name="ready" size="small" id="files-sidebar-private-link-icon-copied" class="_clipboard-success-animation"/>
             </oc-button>
           </div>
+          <div class="uk-text-meta">
+            <i><translate>Only invited collaborators can use this link.</translate></i>
+          </div>
           <hr/>
         </template>
-        <div class="uk-text-bold" v-translate>Public Links</div>
+        <div class="uk-text-bold">
+          <translate>Public Links</translate>
+        </div>
+        <div class="uk-text-meta">
+          <i><translate>Anyone with the respective link can access this resource. No sign-in required. Assign a password to avoid unintended document exposure.</translate></i>
+        </div>
         <div class="uk-margin-small-top uk-margin-small-bottom">
           <oc-button @click="$_addPublicLink" icon="add" variation="primary" id="files-file-link-add">{{ $_addButtonLabel }}</oc-button>
         </div>
