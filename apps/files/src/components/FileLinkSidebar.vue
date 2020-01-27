@@ -18,7 +18,8 @@
         <div class="uk-margin-small-top uk-margin-small-bottom">
           <oc-button @click="$_addPublicLink" icon="add" variation="primary" id="files-file-link-add">{{ $_addButtonLabel }}</oc-button>
         </div>
-        <transition-group class="uk-list uk-list-divider uk-overflow-hidden"
+        <transition-group v-if="$_links.length > 0"
+                          class="uk-list uk-list-divider uk-overflow-hidden"
                           enter-active-class="uk-animation-slide-left-medium"
                           leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
                           name="custom-classes-transition"
@@ -45,9 +46,7 @@
             </oc-grid>
           </li>
         </transition-group>
-        <p class="uk-text-meta" v-if="$_links.length === 0" v-translate>
-          Links can be shared with external collaborators.
-        </p>
+        <p class="uk-text-meta" v-else><translate>Links can be shared with external collaborators.</translate></p>
       </template>
     </div>
     <div v-else-if="visiblePanel === PANEL_EDIT">

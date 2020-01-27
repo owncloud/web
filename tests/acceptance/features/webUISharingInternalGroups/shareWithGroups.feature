@@ -287,13 +287,14 @@ Feature: Sharing files and folders with internal groups
     Then user "User Two" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
     And group "grp1" should be listed as "Editor" via "sub-folder" in the collaborators list on the webUI
 
-  @skip @yetToImplement @issue-2898
+  @issue-2898
   Scenario: see resource owner of parent group shares in collaborators list
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with group "grp1"
-    And user "user2" has shared folder "simple-folder (2)/simple-empty-folder" with user "user3"
+    And user "user2" has shared folder "simple-folder (2)" with user "user3"
     And user "user3" has logged in using the webUI
     And the user opens folder "simple-folder (2)" using the webUI
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    # TODO: maybe there is already such step as the reshare icon is used already in other scenarios
-    Then user "User One" should be listed as "Owner" through "User Two" via "simple-folder (2)" in the collaborators list on the webUI
+    Then user "User One" should be listed as "Owner" via "simple-folder (2)" in the collaborators list on the webUI
+    And user "User Two" should be listed as "Resharer" via "simple-folder (2)" in the collaborators list on the webUI
+    And the current collaborators list should have order "User One,User Two"

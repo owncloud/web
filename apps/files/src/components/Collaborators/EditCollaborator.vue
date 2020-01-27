@@ -1,7 +1,7 @@
 <template>
   <div class="files-collaborators-collaborator-edit-dialog">
     <div v-if="user.id !== collaborator.info.uid_owner" class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
-    <div class="files-collaborators-collaborator-information uk-flex uk-flex-wrap uk-flex-middle">
+    <div class="uk-flex uk-flex-wrap uk-flex-middle">
       <collaborator class="uk-width-expand" :collaborator="collaborator" />
     </div>
     <hr class="divider" />

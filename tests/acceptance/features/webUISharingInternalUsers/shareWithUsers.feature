@@ -467,24 +467,34 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for folder "simple-folder (2)" using the webUI
     Then user "User One" should be listed as "Owner" in the collaborators list on the webUI
 
-  @skip @yetToImplement @issue-2898
+  @issue-2898
   Scenario: see resource owner in collaborators list for reshares
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has shared folder "simple-folder (2)" with user "user3"
     And user "user3" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder (2)" using the webUI
-    # TODO: maybe there is already such step as the reshare icon is used already in other scenarios
-    Then user "User One" should be listed as "Owner" through "User Two" in the collaborators list on the webUI
+    Then user "User One" should be listed as "Owner" in the collaborators list on the webUI
+    And user "User Two" should be listed as "Resharer" in the collaborators list on the webUI
+    And the current collaborators list should have order "User One,User Two"
 
-  @skip @yetToImplement @skip @issue-2898
+  @issue-2898
   Scenario: see resource owner of parent shares in collaborators list
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has shared folder "simple-folder (2)/simple-empty-folder" with user "user3"
+    And user "user2" has shared folder "simple-folder (2)" with user "user3"
     And user "user3" has logged in using the webUI
     And the user opens folder "simple-folder (2)" using the webUI
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    # TODO: maybe there is already such step as the reshare icon is used already in other scenarios
-    Then user "User One" should be listed as "Owner" through "User Two" via "simple-folder (2)" in the collaborators list on the webUI
+    Then user "User One" should be listed as "Owner" via "simple-folder (2)" in the collaborators list on the webUI
+    And user "User Two" should be listed as "Resharer" via "simple-folder (2)" in the collaborators list on the webUI
+    And the current collaborators list should have order "User One,User Two"
+
+  @issue-2898
+  Scenario: see resource owner for direct shares in "shared with me"
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user2" has logged in using the webUI
+    When the user browses to the shared-with-me page
+    And the user opens the share dialog for folder "simple-folder (2)" using the webUI
+    Then user "User One" should be listed as "Owner" in the collaborators list on the webUI
 

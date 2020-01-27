@@ -1,0 +1,8 @@
+Enhancement: Add owner and resharer in collaborators list
+
+The top of the collaborators list now display new entries for the resource owner and the resharer when applicable,
+and also visible when viewing a child resource of a shared folder (indirect share).
+
+https://github.com/owncloud/phoenix/issues/2898
+https://github.com/owncloud/phoenix/pull/2915
+https://github.com/owncloud/phoenix/pull/2918

@@ -123,5 +123,8 @@
       "yarn lint --fix",
       "git add"
     ]
+  },
+  "dependencies": {
+    "path": "^0.12.7"
   }
 }
