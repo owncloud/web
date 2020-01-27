@@ -648,9 +648,9 @@ module.exports = {
         .click('@sidebarLinksTab')
         .waitForElementVisible('@sidebarPrivateLinkLabel')
         .click('@sidebarPrivateLinkLabel')
-        .waitForElementNotVisible('@sidebarPrivateLinkLabel')
+        .waitForElementNotPresent('@sidebarPrivateLinkLabel')
         .waitForElementVisible('@sidebarPrivateLinkIconCopied')
-        .waitForElementNotVisible('@sidebarPrivateLinkIconCopied')
+        .waitForElementNotPresent('@sidebarPrivateLinkIconCopied')
         .waitForElementVisible('@sidebarPrivateLinkLabel')
     },
     deleteImmediately: async function (fileName) {
