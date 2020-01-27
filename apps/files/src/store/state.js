@@ -27,11 +27,18 @@ export default {
   shareOpen: null,
 
   /**
-   * Collaborator shares from currently highlighted element
+   * Outgoing shares from currently highlighted element
    */
   shares: [],
   sharesError: null,
   sharesLoading: false,
+
+  /**
+   * Incoming shares from currently highlighted element
+   */
+  incomingShares: {},
+  incomingSharesError: null,
+  incomingSharesLoading: false,
 
   /**
    * Link shares from currently highlighted element

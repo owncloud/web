@@ -6,6 +6,20 @@ export default {
     ...mapGetters(['getToken']),
     ...mapGetters('Files', ['highlightedFile']),
 
+    ownerRole () {
+      return {
+        name: 'owner',
+        label: this.$gettext('Owner')
+      }
+    },
+
+    resharerRole () {
+      return {
+        name: 'resharer',
+        label: this.$gettext('Resharer')
+      }
+    },
+
     advancedRole () {
       const advancedRole = {
         name: 'advancedRole',
@@ -46,6 +60,12 @@ export default {
       collaboratorRoles.advancedRole = this.advancedRole
 
       return collaboratorRoles
+    },
+    displayRoles () {
+      const result = this.roles
+      result[this.resharerRole.name] = this.resharerRole
+      result[this.ownerRole.name] = this.ownerRole
+      return result
     }
   },
   methods: {

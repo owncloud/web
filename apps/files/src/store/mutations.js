@@ -139,6 +139,16 @@ export default {
   SHARES_LOADING (state, loading) {
     state.sharesLoading = loading
   },
+  INCOMING_SHARES_LOAD (state, shares) {
+    state.incomingShares = shares
+  },
+  INCOMING_SHARES_ERROR (state, error) {
+    state.incomingShares = []
+    state.incomingSharesError = error
+  },
+  INCOMING_SHARES_LOADING (state, loading) {
+    state.incomingSharesLoading = loading
+  },
   SHARESTREE_CLEAR (state) {
     state.sharesTree = {}
   },

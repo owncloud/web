@@ -218,7 +218,7 @@ module.exports = {
      *
      * @param {string} fileName
      */
-    openSharingDialog: async function (fileName) {
+    openSharingDialog: async function (fileName, targetTab = 'collaborators') {
       await this.waitForFileVisible(fileName)
 
       await this
@@ -226,6 +226,12 @@ module.exports = {
         .performFileAction(fileName, FileAction.share)
         .waitForElementVisible('@sharingSideBar')
         .useCss()
+
+      if (targetTab === 'links') {
+        await this
+          .waitForElementVisible('@sidebarLinksTab')
+          .click('@sidebarLinksTab')
+      }
 
       return this.api.page.FilesPageElement.sharingDialog()
     },

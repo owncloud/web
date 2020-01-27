@@ -166,7 +166,7 @@ const createPublicLink = function (sharer, data) {
  * @param {string} role
  * @returns {Promise}
  */
-const assertCollaboratorslistContains = function (type, name, role) {
+const assertCollaboratorslistContains = function (type, name, role, via = null) {
   return client.page.FilesPageElement.sharingDialog().getCollaboratorsList()
     .then(shares => {
       const cleanedShares = []
@@ -175,6 +175,9 @@ const assertCollaboratorslistContains = function (type, name, role) {
         // depending on the browser there are extra \n or not, so get rid of them all
       }
       let expectedString = name + ' ' + role
+      if (via) {
+        expectedString += ' via ' + via
+      }
       if (type === 'user') {
         expectedString = expectedString + client.page.FilesPageElement.sharingDialog().getUserSharePostfix()
       } else if (type === 'group') {
@@ -686,7 +689,11 @@ Then('{string} {string} should be listed in the autocomplete list on the webUI',
 })
 
 When('the user opens the share dialog for file/folder/resource {string} using the webUI', function (file) {
-  return client.page.FilesPageElement.filesList().openSharingDialog(file)
+  return client.page.FilesPageElement.filesList().openSharingDialog(file, 'collaborators')
+})
+
+When('the user opens the link share dialog for file/folder/resource {string} using the webUI', function (file) {
+  return client.page.FilesPageElement.filesList().openSharingDialog(file, 'link')
 })
 
 When('the user deletes {string} as collaborator for the current file/folder using the webUI', function (user) {
@@ -708,6 +715,10 @@ Then('user {string} should be listed as {string} in the collaborators list on th
   return assertCollaboratorslistContains('user', user, role)
 })
 
+Then('user {string} should be listed as {string} via {string} in the collaborators list on the webUI', function (user, role, via) {
+  return assertCollaboratorslistContains('user', user, role, via)
+})
+
 Then('user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', async function (user, role, resource) {
   const api = client.page
     .FilesPageElement
@@ -722,6 +733,10 @@ Then('user {string} should be listed as {string} in the collaborators list for f
 
 Then('group {string} should be listed as {string} in the collaborators list on the webUI', function (group, role) {
   return assertCollaboratorslistContains('group', group, role)
+})
+
+Then('group {string} should be listed as {string} via {string} in the collaborators list on the webUI', function (group, role, via) {
+  return assertCollaboratorslistContains('group', group, role, via)
 })
 
 Then('group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', async function (group, role, resource) {
