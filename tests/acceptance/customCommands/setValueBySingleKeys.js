@@ -12,13 +12,13 @@ exports.command = function setValueBySingleKeys (selector, inputValue) {
   if (inputValue) {
     const chars = inputValue.split('').slice(0, -2)
     const charsEnd = inputValue.split('').slice(-2)
-    const charPromise = chars.map((char) => this.setValue(selector, char)) || []
+    const charPromise = this.setValue(selector, chars)
 
     // Sometimes the autocomplete list is not displayed when the characters are entered very fast
     // So we add a small pause for entering the last two characters
     const charEndPromise = charsEnd.map((char) => this.setValue(selector, char).pause(100)) || []
 
-    return Promise.all(charPromise.concat(charEndPromise))
+    return Promise.all([charPromise, ...charEndPromise])
   }
   return this.pause(1)
 }
