@@ -70,9 +70,6 @@ export default {
       return filterObject(permissions, (key, value) => value)
     }
   },
-  mounted () {
-    this.$_ocCollaborators_loadAvatar(this.collaborator)
-  },
   methods: {
     ...mapActions('Files', ['changeShare', 'toggleCollaboratorsEdit']),
 

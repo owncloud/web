@@ -2,13 +2,13 @@
   <div>
     <oc-button id="_userMenuButton" class="oc-topbar-personal uk-height-1-1" variation="primary" aria-label="$gettext('User Menu')" ref="menuButton">
       <oc-grid gutter="small">
-        <avatar class="oc-topbar-personal-avatar" :width="32" :userid="userId" :userName="userDisplayName"/>
+        <avatar-image class="oc-topbar-personal-avatar" :width="32" :userid="userId" :userName="userDisplayName"/>
         <div class="oc-topbar-personal-label">{{ userDisplayName }}</div>
       </oc-grid>
     </oc-button>
     <oc-drop toggle="#_userMenuButton" mode="click" :options="{pos:'bottom-right'}" class="uk-width-large" ref="menu">
       <div class="uk-card-body uk-flex uk-flex-middle uk-flex-column" id="account-info-container">
-        <avatar
+        <avatar-image
           :userid="userId"
           :userName="userDisplayName"
           :width="128"
@@ -28,12 +28,8 @@
 
 <script>
 import appVersionJson from '../../build/version.json'
-import Avatar from './Avatar.vue'
 
 export default {
-  components: {
-    Avatar
-  },
   props: {
     userId: {
       type: String,

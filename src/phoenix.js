@@ -45,6 +45,8 @@ import { Drag, Drop } from 'vue-drag-drop'
 import DesignSystem from 'owncloud-design-system'
 import 'owncloud-design-system/dist/system/system.css'
 
+import Avatar from './components/Avatar.vue'
+
 import wgxpath from 'wicked-good-xpath'
 wgxpath.install()
 
@@ -64,6 +66,7 @@ Vue.use(VueMeta, {
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)
+Vue.component('avatar-image', Avatar)
 
 // --- Router ----
 

@@ -1,12 +1,15 @@
 <template>
   <component :is="type" v-if="enabled">
-    <oc-avatar :width="width" :loading="loading" :src="avatarSource" :userName="userName" />
+    <oc-spinner v-if="loading" size="small" key="avatar-loading" :aria-label="$gettext('Loading')"
+     :style="'width:' + width + 'px;height:' + width + 'px'" />
+    <oc-avatar v-else key="avatar-loaded" :width="width" :src="avatarSource" :userName="userName" />
   </component>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 
 export default {
+  name: 'Avatar',
   data () {
     return {
       /**
@@ -40,16 +43,23 @@ export default {
           if (response.ok) {
             return response.blob()
           }
-          throw new Error('Network response was not ok.')
+          if (response.status !== 404) {
+            throw new Error(`Unexpected status code ${response.status}`)
+          }
         })
         .then(blob => {
           this.loading = false
-          this.avatarSource = window.URL.createObjectURL(blob)
+          if (blob) {
+            this.avatarSource = window.URL.createObjectURL(blob)
+          } else {
+            // 404, none found
+            this.avatarSource = ''
+          }
         })
         .catch(error => {
           this.avatarSource = ''
           this.loading = false
-          console.log('There has been a problem with your fetch operation: ', error.message)
+          console.error(`Error loading avatar image for user "${this.userid}": `, error.message)
         })
     }
   },
