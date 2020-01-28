@@ -1,4 +1,4 @@
- Configuration for update-docs - https://github.com/behaviorbot/update-docs
+# Configuration for update-docs - https://github.com/behaviorbot/update-docs
 
 # Comment to be posted to on PRs that don't update documentation
 updateDocsComment: >
