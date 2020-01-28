@@ -3,7 +3,7 @@
     <div v-if="visiblePanel === PANEL_SHOW">
       <oc-loader :aria-label="$gettext('Loading list of file links')" v-if="linksLoading"/>
       <template v-else>
-        <template v-if="$_privateLinkOfHighlightedFile">
+        <section v-if="$_privateLinkOfHighlightedFile">
           <div class="uk-text-bold">
             <span v-translate>Private Link</span>
             <oc-button :aria-label="$_privateLinkCopyLabel" variation="raw" class="uk-margin-small-left">
@@ -16,56 +16,58 @@
             <i><translate>Only invited collaborators can use this link.</translate></i>
           </div>
           <hr/>
-        </template>
-        <div class="uk-text-bold">
-          <translate>Public Links</translate>
-        </div>
-        <div class="uk-text-meta">
-          <i><translate>Anyone with the respective link can access this resource. No sign-in required. Assign a password to avoid unintended document exposure.</translate></i>
-        </div>
-        <div class="uk-margin-small-top uk-margin-small-bottom">
-          <oc-button @click="$_addPublicLink" icon="add" variation="primary" id="files-file-link-add">{{ $_addButtonLabel }}</oc-button>
-        </div>
-        <transition-group v-if="$_links.length > 0"
-                          class="uk-list uk-list-divider uk-overflow-hidden"
-                          enter-active-class="uk-animation-slide-left-medium"
-                          leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
-                          name="custom-classes-transition"
-                          tag="ul">
-          <li :key="'li-' + index" v-for="(link, index) in $_links">
-            <oc-grid flex gutter="small">
-              <div>
-                <oc-button :aria-label="$_deleteButtonLabel" @click="$_removePublicLink(link)" variation="raw" class="oc-files-file-link-delete">
-                  <oc-icon name="close" />
-                </oc-button>
-              </div>
-              <div class="uk-width-expand">
-                <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a>
-                <br>
-                <span class="uk-text-meta uk-text-break">
-                  {{ link.description }}
-                  <template v-if="link.expiration"> |
-                    <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}
-                  </template>
-                  <template v-if="link.password"> |
-                    <span v-translate>Password protected</span>
-                  </template>
-                </span>
-              </div>
-              <div>
-                <oc-button :aria-label="$_publicLinkCopyLabel" variation="raw" class="oc-files-file-link-copy-url">
-                  <oc-icon v-if="!linksCopied[link.url]"  name="copy_to_clipboard" size="small"
-                           v-clipboard:copy="link.url" v-clipboard:success="$_clipboardSuccessHandler"/>
-                  <oc-icon v-else name="ready" size="small" class="oc-files-file-link-copied-url _clipboard-success-animation"/>
-                </oc-button>
-                <oc-button :aria-label="$_editButtonLabel" @click="$_editPublicLink(link)" variation="raw" class="oc-files-file-link-edit">
-                  <oc-icon name="edit" size="small"/>
-                </oc-button>
-              </div>
-            </oc-grid>
-          </li>
-        </transition-group>
-        <p class="uk-text-meta" v-else><translate>Links can be shared with external collaborators.</translate></p>
+        </section>
+        <section>
+          <div class="uk-text-bold">
+            <translate>Public Links</translate>
+          </div>
+          <div class="uk-text-meta">
+            <i><translate>Any external collaborator with the respective link can access this resource. No sign-in required. Assign a password to avoid unintended document exposure.</translate></i>
+          </div>
+          <div class="uk-margin-small-top uk-margin-small-bottom">
+            <oc-button @click="$_addPublicLink" icon="add" variation="primary" id="files-file-link-add">{{ $_addButtonLabel }}</oc-button>
+          </div>
+          <transition-group v-if="$_links.length > 0"
+                            class="uk-list uk-list-divider uk-overflow-hidden"
+                              enter-active-class="uk-animation-slide-left-medium"
+                              leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
+                              name="custom-classes-transition"
+                              tag="ul">
+            <li :key="'li-' + index" v-for="(link, index) in $_links">
+              <oc-grid flex gutter="small">
+                <div>
+                  <oc-button :aria-label="$_deleteButtonLabel" @click="$_removePublicLink(link)" variation="raw" class="oc-files-file-link-delete">
+                    <oc-icon name="close" />
+                  </oc-button>
+                </div>
+                <div class="uk-width-expand">
+                  <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a>
+                  <br>
+                  <span class="uk-text-meta uk-text-break">
+                    {{ link.description }}
+                    <template v-if="link.expiration"> |
+                      <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}
+                    </template>
+                    <template v-if="link.password"> |
+                      <span v-translate>Password protected</span>
+                    </template>
+                  </span>
+                </div>
+                <div>
+                  <oc-button :aria-label="$_publicLinkCopyLabel" variation="raw" class="oc-files-file-link-copy-url">
+                    <oc-icon v-if="!linksCopied[link.url]"  name="copy_to_clipboard" size="small"
+                             v-clipboard:copy="link.url" v-clipboard:success="$_clipboardSuccessHandler"/>
+                    <oc-icon v-else name="ready" size="small" class="oc-files-file-link-copied-url _clipboard-success-animation"/>
+                  </oc-button>
+                  <oc-button :aria-label="$_editButtonLabel" @click="$_editPublicLink(link)" variation="raw" class="oc-files-file-link-edit">
+                    <oc-icon name="edit" size="small"/>
+                  </oc-button>
+                </div>
+              </oc-grid>
+            </li>
+          </transition-group>
+          <p class="uk-text-meta" v-else><translate>Links can be shared with external collaborators.</translate></p>
+        </section>
       </template>
     </div>
     <div v-else-if="visiblePanel === PANEL_EDIT">
@@ -231,7 +233,7 @@ export default {
 }
 </script>
 <style scoped>
-  /* TODO: Move to design system */
+  /* FIXME: Move to design system */
   ._clipboard-success-animation {
     animation-name: _clipboard-success-animation;
     animation-duration: .5s;
@@ -252,7 +254,7 @@ export default {
   }
 </style>
 <style>
-  /* TODO: Move to design system (copied from FileSharingSidebar.vue) */
+  /* FIXME: Move to design system (copied from FileSharingSidebar.vue) */
   .oc-app-side-bar .oc-label {
     display: block;
     margin-bottom: 5px;
