@@ -34,36 +34,38 @@
                               name="custom-classes-transition"
                               tag="ul">
             <li :key="'li-' + index" v-for="(link, index) in $_links">
-              <oc-grid flex gutter="small">
-                <div>
-                  <oc-button :aria-label="$_deleteButtonLabel" @click="$_removePublicLink(link)" variation="raw" class="oc-files-file-link-delete">
-                    <oc-icon name="close" />
-                  </oc-button>
-                </div>
-                <div class="uk-width-expand">
-                  <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a>
-                  <br>
-                  <span class="uk-text-meta uk-text-break">
-                    {{ link.description }}
-                    <template v-if="link.expiration"> |
-                      <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}
-                    </template>
-                    <template v-if="link.password"> |
-                      <span v-translate>Password protected</span>
-                    </template>
-                  </span>
-                </div>
-                <div>
-                  <oc-button :aria-label="$_publicLinkCopyLabel" variation="raw" class="oc-files-file-link-copy-url">
-                    <oc-icon v-if="!linksCopied[link.url]"  name="copy_to_clipboard" size="small"
-                             v-clipboard:copy="link.url" v-clipboard:success="$_clipboardSuccessHandler"/>
-                    <oc-icon v-else name="ready" size="small" class="oc-files-file-link-copied-url _clipboard-success-animation"/>
-                  </oc-button>
-                  <oc-button :aria-label="$_editButtonLabel" @click="$_editPublicLink(link)" variation="raw" class="oc-files-file-link-edit">
-                    <oc-icon name="edit" size="small"/>
-                  </oc-button>
-                </div>
-              </oc-grid>
+              <oc-table midldle class="files-file-links-link">
+                <oc-table-row class="files-file-links-link-table-row-info">
+                  <oc-table-cell shrink>
+                    <oc-button :aria-label="$_deleteButtonLabel" @click="$_removePublicLink(link)" variation="raw" class="oc-files-file-link-delete">
+                      <oc-icon name="close" />
+                    </oc-button>
+                  </oc-table-cell>
+                  <oc-table-cell>
+                    <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a>
+                    <br>
+                    <span class="uk-text-meta uk-text-break">
+                      <span>{{ link.description }}</span>
+                      <template v-if="link.expiration"> |
+                        <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}
+                      </template>
+                      <template v-if="link.password"> |
+                        <span v-translate>Password protected</span>
+                      </template>
+                    </span>
+                  </oc-table-cell>
+                  <oc-table-cell shrink class="uk-text-nowrap">
+                    <oc-button :aria-label="$_publicLinkCopyLabel" variation="raw" class="oc-files-file-link-copy-url">
+                      <oc-icon v-if="!linksCopied[link.url]"  name="copy_to_clipboard" size="small"
+                               v-clipboard:copy="link.url" v-clipboard:success="$_clipboardSuccessHandler"/>
+                      <oc-icon v-else name="ready" size="small" class="oc-files-file-link-copied-url _clipboard-success-animation"/>
+                    </oc-button>
+                    <oc-button :aria-label="$_editButtonLabel" @click="$_editPublicLink(link)" variation="raw" class="oc-files-file-link-edit">
+                      <oc-icon name="edit" size="small"/>
+                    </oc-button>
+                  </oc-table-cell>
+                </oc-table-row>
+              </oc-table>
             </li>
           </transition-group>
           <p class="uk-text-meta" v-else><translate>Links can be shared with external collaborators.</translate></p>
@@ -251,6 +253,12 @@ export default {
     100% {
       opacity: 0;
     }
+  }
+</style>
+<style scoped="scoped">
+  /* FIXME: Move to ODS somehow */
+  .files-file-links-link-table-row-info > td {
+    padding: 0 10px 0 0;
   }
 </style>
 <style>
