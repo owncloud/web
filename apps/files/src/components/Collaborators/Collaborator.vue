@@ -71,11 +71,11 @@ export default {
   computed: {
     ...mapGetters(['user']),
 
-    $_isIndirectIncomingShare () {
+    $_isIndirectShare () {
       // it is assumed that the "incoming" attribute only exists
       // on shares coming from this.sharesTree which are all indirect
       // and not related to the current folder
-      return this.collaborator.incoming
+      return this.collaborator.incoming || this.collaborator.outgoing
     },
 
     $_reshareInformation () {
@@ -91,7 +91,7 @@ export default {
     },
 
     $_getViaLabel () {
-      if (!this.$_isIndirectIncomingShare) {
+      if (!this.$_isIndirectShare) {
         return null
       }
       const translated = this.$gettext('Via %{folderName}')
