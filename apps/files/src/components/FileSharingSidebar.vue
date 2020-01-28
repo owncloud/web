@@ -106,6 +106,11 @@ export default {
     $_sharesLoading () {
       return this.sharesLoading && this.incomingSharesLoading
     },
+    /**
+     * Returns all incoming shares, direct and indirect
+     *
+     * @return {Array.<Object>} list of incoming shares
+     */
     $_allIncomingShares () {
       const allShares = [...this.incomingShares]
       const parentPaths = getParentPaths(this.highlightedFile.path, true)
@@ -129,8 +134,9 @@ export default {
 
       return allShares
     },
-    $_ocCollaborators () {
-      const shares = this.shares
+    $_directOutgoingShares () {
+      // direct outgoing shares
+      return this.shares
         .filter(collaborator => this.$_ocCollaborators_isUser(collaborator) || this.$_ocCollaborators_isGroup(collaborator))
         .sort((c1, c2) => {
           const name1 = c1.displayName.toLowerCase().trim()
@@ -151,14 +157,14 @@ export default {
           collaborator.modifiable = true
           return collaborator
         })
-
+    },
+    $_shareOwnerAsCollaborator () {
       if (!this.$_allIncomingShares.length) {
-        return shares
+        return {}
       }
 
-      const resharers = new Map()
       const firstShare = this.$_allIncomingShares[0]
-      const owner = {
+      return {
         ...firstShare,
         name: firstShare.info.uid_file_owner,
         displayName: firstShare.info.displayname_file_owner,
@@ -172,6 +178,10 @@ export default {
         role: this.ownerRole,
         modifiable: false
       }
+    },
+    $_resharersAsCollaborators () {
+      const resharers = new Map()
+      const owner = this.$_shareOwnerAsCollaborator
 
       this.$_allIncomingShares.forEach(share => {
         if (share.info.uid_owner !== owner.name) {
@@ -192,8 +202,15 @@ export default {
         }
       })
 
-      Array.prototype.unshift.apply(shares, Array.from(resharers.values()))
-      shares.unshift(owner)
+      // make them unique
+      return Array.from(resharers.values())
+    },
+    $_ocCollaborators () {
+      const shares = [
+        this.$_shareOwnerAsCollaborator,
+        ...this.$_resharersAsCollaborators,
+        ...this.$_directOutgoingShares
+      ]
 
       return shares
     },
