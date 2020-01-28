@@ -14,18 +14,42 @@
           key="no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <transition-group v-if="$_ocCollaborators.length > 0"
-                          id="files-collaborators-list"
-                          class="uk-list uk-list-divider uk-overflow-hidden"
-                          enter-active-class="uk-animation-slide-left-medium"
-                          leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
-                          name="custom-classes-transition"
-                          tag="ul">
-          <li v-for="collaborator in $_ocCollaborators" :key="collaborator.key">
-            <collaborator :collaborator="collaborator" @onDelete="$_ocCollaborators_deleteShare" @onEdit="$_ocCollaborators_editShare"/>
-          </li>
-        </transition-group>
-        <div v-else-if="!$_sharesLoading" key="oc-collaborators-no-results"><translate>No collaborators</translate></div>
+        <section v-if="$_ownerAndResharers.length > 0" class="uk-margin-medium-bottom">
+          <div class="uk-text-bold">
+            <translate>Owner</translate>
+          </div>
+          <ul class="uk-list uk-list-divider uk-overflow-hidden">
+            <li v-for="collaborator in $_ownerAndResharers" :key="collaborator.key">
+              <collaborator :collaborator="collaborator"/>
+            </li>
+          </ul>
+        </section>
+        <section v-if="$_directOutgoingShares.length > 0" class="uk-margin-medium-bottom">
+          <div class="uk-text-bold">
+            <translate>Shares</translate>
+          </div>
+          <transition-group id="files-collaborators-list"
+                            class="uk-list uk-list-divider uk-overflow-hidden"
+                            enter-active-class="uk-animation-slide-left-medium"
+                            leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
+                            name="custom-classes-transition"
+                            tag="ul">
+            <li v-for="collaborator in $_directOutgoingShares" :key="collaborator.key">
+              <collaborator :collaborator="collaborator" :modifiable="true" @onDelete="$_ocCollaborators_deleteShare" @onEdit="$_ocCollaborators_editShare"/>
+            </li>
+          </transition-group>
+        </section>
+        <section v-if="$_indirectOutgoingShares.length > 0" class="uk-margin-medium-bottom">
+          <div class="uk-text-bold">
+            <translate>Via Parent</translate>
+          </div>
+          <ul class="uk-list uk-list-divider uk-overflow-hidden">
+            <li v-for="collaborator in $_indirectOutgoingShares" :key="collaborator.key">
+              <collaborator :collaborator="collaborator"/>
+            </li>
+          </ul>
+        </section>
+        <div v-if="$_noCollaborators && !$_sharesLoading" key="oc-collaborators-no-results"><translate>No collaborators</translate></div>
       </template>
     </div>
     <div :aria-hidden="visiblePanel != 'newCollaborator'" :inert="visiblePanel != 'newCollaborator'">
@@ -106,6 +130,67 @@ export default {
     $_sharesLoading () {
       return this.sharesLoading && this.incomingSharesLoading
     },
+
+    $_noCollaborators () {
+      return this.$_ownerAndResharers.length === 0 &&
+        this.$_directOutgoingShares.length === 0 &&
+        this.$_indirectOutgoingShares.length === 0
+    },
+
+    $_ownerAndResharers () {
+      const ownerArray = this.$_shareOwnerAsCollaborator ? [this.$_shareOwnerAsCollaborator] : []
+      return [
+        ...ownerArray,
+        ...this.$_resharersAsCollaborators
+      ]
+    },
+    $_shareOwnerAsCollaborator () {
+      if (!this.$_allIncomingShares.length) {
+        return null
+      }
+
+      const firstShare = this.$_allIncomingShares[0]
+      return {
+        ...firstShare,
+        name: firstShare.info.uid_file_owner,
+        displayName: firstShare.info.displayname_file_owner,
+        key: 'owner-' + firstShare.info.id,
+        info: {
+          path: firstShare.info.path,
+          // set to user share for displaying user
+          share_type: '' + shareTypes.user, // most code requires string..
+          share_with_additional_info: firstShare.info.additional_info_file_owner || []
+        },
+        role: this.ownerRole
+      }
+    },
+
+    $_resharersAsCollaborators () {
+      const resharers = new Map()
+      const owner = this.$_shareOwnerAsCollaborator
+
+      this.$_allIncomingShares.forEach(share => {
+        if (share.info.uid_owner !== owner.name) {
+          resharers.set(share.info.uid_owner, {
+            ...share,
+            name: share.info.uid_owner,
+            displayName: share.info.displayname_owner,
+            role: this.resharerRole,
+            key: 'resharer-' + share.info.id,
+            info: {
+              path: share.info.path,
+              // set to user share for displaying user
+              share_type: '' + shareTypes.user, // most code requires string..
+              share_with_additional_info: share.info.additional_info_owner || []
+            }
+          })
+        }
+      })
+
+      // make them unique then sort
+      return Array.from(resharers.values()).sort(this.$_collaboratorsComparator.bind(this))
+    },
+
     /**
      * Returns all incoming shares, direct and indirect
      *
@@ -137,6 +222,18 @@ export default {
 
       return allShares
     },
+
+    $_directOutgoingShares () {
+      // direct outgoing shares
+      return this.shares
+        .filter(this.$_isCollaboratorShare.bind(this))
+        .sort(this.$_collaboratorsComparator.bind(this))
+        .map(collaborator => {
+          collaborator.key = 'collaborator-' + collaborator.info.id
+          return collaborator
+        })
+    },
+
     $_indirectOutgoingShares () {
       const allShares = []
       const parentPaths = getParentPaths(this.highlightedFile.path, true)
@@ -153,7 +250,6 @@ export default {
           shares.forEach((share) => {
             if (share.outgoing && this.$_isCollaboratorShare(share)) {
               share.key = 'indirect-collaborator-' + share.info.id
-              share.modifiable = false
               allShares.push(share)
             }
           })
@@ -162,72 +258,7 @@ export default {
 
       return allShares
     },
-    $_directOutgoingShares () {
-      // direct outgoing shares
-      return this.shares
-        .filter(this.$_isCollaboratorShare.bind(this))
-        .sort(this.$_collaboratorsComparator.bind(this))
-        .map(collaborator => {
-          collaborator.key = 'collaborator-' + collaborator.info.id
-          collaborator.modifiable = true
-          return collaborator
-        })
-    },
-    $_shareOwnerAsCollaborator () {
-      if (!this.$_allIncomingShares.length) {
-        return {}
-      }
 
-      const firstShare = this.$_allIncomingShares[0]
-      return {
-        ...firstShare,
-        name: firstShare.info.uid_file_owner,
-        displayName: firstShare.info.displayname_file_owner,
-        key: 'owner-' + firstShare.info.id,
-        info: {
-          path: firstShare.info.path,
-          // set to user share for displaying user
-          share_type: '' + shareTypes.user, // most code requires string..
-          share_with_additional_info: firstShare.info.additional_info_file_owner || []
-        },
-        role: this.ownerRole,
-        modifiable: false
-      }
-    },
-    $_resharersAsCollaborators () {
-      const resharers = new Map()
-      const owner = this.$_shareOwnerAsCollaborator
-
-      this.$_allIncomingShares.forEach(share => {
-        if (share.info.uid_owner !== owner.name) {
-          resharers.set(share.info.uid_owner, {
-            ...share,
-            name: share.info.uid_owner,
-            displayName: share.info.displayname_owner,
-            role: this.resharerRole,
-            key: 'resharer-' + share.info.id,
-            info: {
-              path: share.info.path,
-              // set to user share for displaying user
-              share_type: '' + shareTypes.user, // most code requires string..
-              share_with_additional_info: share.info.additional_info_owner || []
-            },
-            modifiable: false
-          })
-        }
-      })
-
-      // make them unique then sort
-      return Array.from(resharers.values()).sort(this.$_collaboratorsComparator.bind(this))
-    },
-    $_ocCollaborators () {
-      return [
-        this.$_shareOwnerAsCollaborator,
-        ...this.$_resharersAsCollaborators,
-        ...this.$_directOutgoingShares,
-        ...this.$_indirectOutgoingShares
-      ]
-    },
     $_ocCollaborators_canShare () {
       return this.highlightedFile.canShare()
     },
