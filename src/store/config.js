@@ -23,6 +23,9 @@ const state = {
     },
     logo: {
       favicon: ''
+    },
+    filesList: {
+      hideDefaultStatusIndicators: false
     }
   }
 }

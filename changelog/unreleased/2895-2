@@ -1,0 +1,6 @@
+Enhancement: Add theme option to disable default files list status indicators
+
+We've added the option into the theme to disable default files list status indicators.
+
+https://github.com/owncloud/phoenix/issues/2895
+https://github.com/owncloud/phoenix/pull/2928
