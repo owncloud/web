@@ -301,6 +301,7 @@ module.exports = {
       return this
         .initAjaxCounters()
         .waitForElementVisible(linkRowDeleteButton)
+        .pause(500)
         .click(linkRowDeleteButton)
         .waitForOutstandingAjaxCalls()
     },
