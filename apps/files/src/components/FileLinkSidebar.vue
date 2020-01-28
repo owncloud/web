@@ -1,8 +1,8 @@
 <template>
   <div class="uk-position-relative" id="oc-files-file-link">
-    <div v-if="visiblePanel === PANEL_SHOW">
-      <oc-loader :aria-label="$gettext('Loading list of file links')" v-if="linksLoading"/>
-      <template v-else>
+    <div v-show="visiblePanel === PANEL_SHOW" :aria-hidden="visiblePanel !== PANEL_SHOW">
+      <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')"/>
+      <template>
         <section v-if="$_privateLinkOfHighlightedFile">
           <div class="uk-text-bold">
             <span v-translate>Private Link</span>
@@ -29,11 +29,11 @@
           </div>
           <transition-group v-if="$_links.length > 0"
                             class="uk-list uk-list-divider uk-overflow-hidden"
-                              enter-active-class="uk-animation-slide-left-medium"
-                              leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
-                              name="custom-classes-transition"
-                              tag="ul">
-            <li :key="'li-' + index" v-for="(link, index) in $_links">
+                            enter-active-class="uk-animation-slide-left-medium"
+                            leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
+                            name="custom-classes-transition"
+                            tag="ul">
+            <li v-for="link in $_links" :key="'li-' + link.id">
               <oc-table midldle class="files-file-links-link">
                 <oc-table-row class="files-file-links-link-table-row-info">
                   <oc-table-cell shrink>
@@ -71,7 +71,7 @@
         </section>
       </template>
     </div>
-    <div v-else-if="visiblePanel === PANEL_EDIT">
+    <div v-if="visiblePanel === PANEL_EDIT">
       <transition enter-active-class="uk-animation-slide-right uk-animation-fast"
                   leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
                   name="custom-classes-transition">
