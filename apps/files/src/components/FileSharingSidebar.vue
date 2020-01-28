@@ -112,7 +112,10 @@ export default {
      * @return {Array.<Object>} list of incoming shares
      */
     $_allIncomingShares () {
+      // direct incoming shares
       const allShares = [...this.incomingShares]
+
+      // indirect incoming shares
       const parentPaths = getParentPaths(this.highlightedFile.path, true)
       if (parentPaths.length === 0) {
         return []
@@ -134,24 +137,36 @@ export default {
 
       return allShares
     },
+    $_indirectOutgoingShares () {
+      const allShares = []
+      const parentPaths = getParentPaths(this.highlightedFile.path, true)
+      if (parentPaths.length === 0) {
+        return []
+      }
+
+      // remove root entry
+      parentPaths.pop()
+
+      parentPaths.forEach((parentPath) => {
+        const shares = this.sharesTree[parentPath]
+        if (shares) {
+          shares.forEach((share) => {
+            if (share.outgoing && this.$_isCollaboratorShare(share)) {
+              share.key = 'indirect-collaborator-' + share.info.id
+              share.modifiable = false
+              allShares.push(share)
+            }
+          })
+        }
+      })
+
+      return allShares
+    },
     $_directOutgoingShares () {
       // direct outgoing shares
       return this.shares
-        .filter(collaborator => this.$_ocCollaborators_isUser(collaborator) || this.$_ocCollaborators_isGroup(collaborator))
-        .sort((c1, c2) => {
-          const name1 = c1.displayName.toLowerCase().trim()
-          const name2 = c2.displayName.toLowerCase().trim()
-          // sorting priority 1: display name (lower case, ascending), 2: share type (groups first), 3: id (ascending)
-          if (name1 === name2) {
-            if (this.$_ocCollaborators_isGroup(c1) === this.$_ocCollaborators_isGroup(c2)) {
-              return parseInt(c1.info.id, 10) < parseInt(c2.info.id, 10) ? -1 : 1
-            } else {
-              return this.$_ocCollaborators_isGroup(c1) ? -1 : 1
-            }
-          } else {
-            return textUtils.naturalSortCompare(name1, name2)
-          }
-        })
+        .filter(this.$_isCollaboratorShare.bind(this))
+        .sort(this.$_collaboratorsComparator.bind(this))
         .map(collaborator => {
           collaborator.key = 'collaborator-' + collaborator.info.id
           collaborator.modifiable = true
@@ -202,17 +217,16 @@ export default {
         }
       })
 
-      // make them unique
-      return Array.from(resharers.values())
+      // make them unique then sort
+      return Array.from(resharers.values()).sort(this.$_collaboratorsComparator.bind(this))
     },
     $_ocCollaborators () {
-      const shares = [
+      return [
         this.$_shareOwnerAsCollaborator,
         ...this.$_resharersAsCollaborators,
-        ...this.$_directOutgoingShares
+        ...this.$_directOutgoingShares,
+        ...this.$_indirectOutgoingShares
       ]
-
-      return shares
     },
     $_ocCollaborators_canShare () {
       return this.highlightedFile.canShare()
@@ -230,6 +244,23 @@ export default {
       'loadIncomingShares',
       'incomingSharesClearState'
     ]),
+    $_isCollaboratorShare (collaborator) {
+      return this.$_ocCollaborators_isUser(collaborator) || this.$_ocCollaborators_isGroup(collaborator)
+    },
+    $_collaboratorsComparator (c1, c2) {
+      const name1 = c1.displayName.toLowerCase().trim()
+      const name2 = c2.displayName.toLowerCase().trim()
+      // sorting priority 1: display name (lower case, ascending), 2: share type (groups first), 3: id (ascending)
+      if (name1 === name2) {
+        if (this.$_ocCollaborators_isGroup(c1) === this.$_ocCollaborators_isGroup(c2)) {
+          return parseInt(c1.info.id, 10) < parseInt(c2.info.id, 10) ? -1 : 1
+        } else {
+          return this.$_ocCollaborators_isGroup(c1) ? -1 : 1
+        }
+      } else {
+        return textUtils.naturalSortCompare(name1, name2)
+      }
+    },
     $_ocCollaborators_editShare (share) {
       this.currentShare = share
       this.visiblePanel = 'editCollaborator'
