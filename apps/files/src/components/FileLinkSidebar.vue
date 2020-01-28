@@ -68,7 +68,6 @@
               </oc-table>
             </li>
           </transition-group>
-          <p class="uk-text-meta" v-else><translate>Links can be shared with external collaborators.</translate></p>
         </section>
       </template>
     </div>
