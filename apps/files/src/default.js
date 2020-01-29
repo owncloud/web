@@ -46,15 +46,6 @@ const appInfo = {
         return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
       }
     }, {
-      app: 'file-link',
-      component: FileLinkSidebar,
-      enabled (capabilities) {
-        if (capabilities.files_sharing) {
-          return capabilities.files_sharing.public.enabled
-        }
-        return false
-      }
-    }, {
       app: 'files-sharing',
       component: FileSharingSidebar,
       enabled (capabilities) {
@@ -66,6 +57,15 @@ const appInfo = {
       quickAccess: {
         icon: 'share',
         ariaLabel: $gettext('Collaborators')
+      }
+    }, {
+      app: 'file-link',
+      component: FileLinkSidebar,
+      enabled (capabilities) {
+        if (capabilities.files_sharing) {
+          return capabilities.files_sharing.public.enabled
+        }
+        return false
       }
     }, ...sidebarsFromConfig
   ]

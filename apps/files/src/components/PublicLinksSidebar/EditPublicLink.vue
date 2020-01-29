@@ -9,7 +9,7 @@
         </div>
       </transition>
       <div class="uk-margin">
-        <label class="oc-label"><span v-translate>Name your link</span>:</label>
+        <label class="oc-label"><span v-translate>Name</span>:</label>
         <input class="uk-input" id="oc-files-file-link-name" v-model="name"/>
       </div>
       <oc-grid childWidth="1-1" gutter="small">
@@ -26,7 +26,7 @@
                            :maxDatetime="$_maxExpirationDate" :minDatetime="$_minExpirationDate"
                            :placeholder="placeholder.expireDate" @input="expireDate = $event" id="oc-files-file-link-expire-date"/>
             <div :uk-tooltip="$_expirationDateRemoveText" @click="expireDate=null" class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
-                 id="oc-files-file-link-expire-date-delete" v-if="!!expireDate"/>
+                 id="oc-files-file-link-expire-date-delete" v-if="!$_expirationDate.enforced && !!expireDate"/>
           </div>
         </div>
         <div class="uk-width-1-1 uk-width-3-5@m">
@@ -135,10 +135,12 @@ export default {
     },
 
     $_hasChanges () {
-      return (this.expireDate !== this.params.expireDate) ||
+      const expireDateBefore = this.params.expireDate ? moment(this.params.expireDate).format('DD-MM-YYYY') : null
+      const expireDateNow = this.expireDate ? moment(this.expireDate).format('DD-MM-YYYY') : null
+      return (expireDateNow !== expireDateBefore) ||
           (this.name !== this.params.name) ||
           (this.permissions !== this.params.permissions) ||
-          (this.password !== null)
+          (this.params.hasPassword ? this.password !== null : (this.password !== null && this.password.trim().length > 0))
     },
 
     $_sendMailEnabled () {
