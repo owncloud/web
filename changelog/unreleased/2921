@@ -1,0 +1,7 @@
+Bugfix: Prevent jumpy behavior when loading user avatars
+
+When loading a user avatar, the container size was smaller so as soon as the avatar was loaded, it resulted in jumpy behavior.
+This is fixed now by applying the same size to the loading spinner element.
+
+https://github.com/owncloud/phoenix/issues/2921
+https://github.com/owncloud/phoenix/pull/2927

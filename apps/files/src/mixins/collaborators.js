@@ -84,43 +84,6 @@ export default {
       this.editing = true
       this.toggleCollaboratorsEdit(true)
     },
-    $_ocCollaborators_loadAvatar (item) {
-      if ((item.value && item.value.shareType !== 0) || (item.info && item.info.share_type !== '0')) return
-
-      let name
-      if (item.value) {
-        name = item.value.shareWith
-      } else if (item.info) {
-        name = item.name
-      }
-
-      const dav = this.$client.helpers._davPath
-      const headers = new Headers()
-      const url = `${dav}/avatars/${name}/128.png`
-
-      headers.append('Authorization', 'Bearer ' + this.getToken)
-      headers.append('X-Requested-With', 'XMLHttpRequest')
-
-      this.loading = true
-
-      fetch(url, { headers })
-        .then(response => {
-          if (response.ok) {
-            return response.blob()
-          }
-          throw new Error('Network response was not ok.')
-        })
-        .then(blob => {
-          this.avatar = window.URL.createObjectURL(blob)
-        })
-        .catch(_ => {
-          this.avatar = ''
-        })
-        .finally(_ => {
-          this.loading = false
-        })
-    },
-
     collaboratorOptionChanged ({ role, permissions, propagate = true }) {
       this.selectedRole = role
       this.additionalPermissions = permissions

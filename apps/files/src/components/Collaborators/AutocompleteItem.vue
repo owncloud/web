@@ -1,12 +1,9 @@
 <template>
   <div class="uk-flex uk-flex-middle">
-    <oc-spinner v-if="loading" uk-spinner="ratio:1.6" class="uk-margin-small-right" :aria-label="$gettext('Loading avatar')" />
+    <avatar-image v-if="item.value.shareType === shareTypes.user" class="uk-margin-small-right" :width="50" :userid="item.value.shareWith" :userName="item.label" />
     <template v-else>
-      <oc-avatar v-if="item.value.shareType === 0" :src="avatar" class="uk-margin-small-right" :width="50" :userName="item.label" />
-      <template v-else>
-        <oc-icon v-if="item.value.shareType === 1" class="uk-margin-small-right" name="group" size="large" />
-        <oc-icon v-else class="uk-margin-small-right" name="person" size="large" />
-      </template>
+      <oc-icon v-if="item.value.shareType === shareTypes.group" class="uk-margin-small-right" name="group" size="large" key="avatar-group" />
+      <oc-icon v-else class="uk-margin-small-right" name="person" size="large" key="avatar-generic-person" />
     </template>
     <div class="files-collaborators-autocomplete-user-text">
       <div
@@ -21,18 +18,16 @@
 
 <script>
 import Mixins from '../../mixins/collaborators'
+import { shareTypes } from '../../helpers/shareTypes'
 
 export default {
   name: 'AutocompleteItem',
   props: ['item'],
   mixins: [Mixins],
-  mounted () {
-    this.$_ocCollaborators_loadAvatar(this.item)
-  },
   data () {
     return {
-      loading: false,
-      avatar: ''
+      shareTypes,
+      loading: false
     }
   }
 }

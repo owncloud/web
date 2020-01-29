@@ -235,7 +235,6 @@ function _buildShare (s, file) {
     case ('1'): // group share
       share.role = bitmaskToRole(s.permissions, file.type === 'folder')
       share.permissions = s.permissions
-      share.avatar = 'https://picsum.photos/64/64?image=1075' // TODO where do we get the avatar from? by uid? remote.php/dav/avatars/admin/128.png
       share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
       share.displayName = s.share_with_displayname
       // TODO: Refactor to work with roles / prepare for roles API
