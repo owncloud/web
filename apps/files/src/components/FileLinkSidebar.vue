@@ -2,7 +2,7 @@
   <div class="uk-position-relative" id="oc-files-file-link">
     <div v-show="visiblePanel === PANEL_SHOW" :aria-hidden="visiblePanel !== PANEL_SHOW">
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')"/>
-      <template>
+      <template v-else>
         <section v-if="$_privateLinkOfHighlightedFile">
           <div class="uk-text-bold">
             <span v-translate>Private Link</span>
