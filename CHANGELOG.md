@@ -14,6 +14,7 @@ Summary
 * Change - Join users and groups into a single list in collaborators sidebar: [#2900](https://github.com/owncloud/phoenix/issues/2900)
 * Change - Adjusted labels in files list: [#2902](https://github.com/owncloud/phoenix/pull/2902)
 * Enhancement - Add share indicator for direct and indirect shares in file list: [#2060](https://github.com/owncloud/phoenix/issues/2060)
+* Enhancement - Show indirect outgoing shares in collaborators list: [#2897](https://github.com/owncloud/phoenix/issues/2897)
 * Enhancement - Add owner and resharer in collaborators list: [#2898](https://github.com/owncloud/phoenix/issues/2898)
 
 Details
@@ -75,6 +76,15 @@ Details
    https://github.com/owncloud/phoenix/issues/2060
    https://github.com/owncloud/phoenix/issues/2894
    https://github.com/owncloud/phoenix/pull/2877
+
+* Enhancement - Show indirect outgoing shares in collaborators list: [#2897](https://github.com/owncloud/phoenix/issues/2897)
+
+   Whenever outgoing shares exist on any parent resource from the currently viewed resource, the
+   collaborators panel will now show these outgoing shares with a link to jump to the matching
+   parent resource.
+
+   https://github.com/owncloud/phoenix/issues/2897
+   https://github.com/owncloud/phoenix/pull/2929
 
 * Enhancement - Add owner and resharer in collaborators list: [#2898](https://github.com/owncloud/phoenix/issues/2898)
 
