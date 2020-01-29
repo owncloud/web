@@ -14,6 +14,7 @@ Summary
 * Change - Join users and groups into a single list in collaborators sidebar: [#2900](https://github.com/owncloud/phoenix/issues/2900)
 * Change - Adjusted labels in files list: [#2902](https://github.com/owncloud/phoenix/pull/2902)
 * Enhancement - Add share indicator for direct and indirect shares in file list: [#2060](https://github.com/owncloud/phoenix/issues/2060)
+* Enhancement - Add owner and resharer in collaborators list: [#2898](https://github.com/owncloud/phoenix/issues/2898)
 
 Details
 -------
@@ -73,6 +74,16 @@ Details
    https://github.com/owncloud/phoenix/issues/2060
    https://github.com/owncloud/phoenix/issues/2894
    https://github.com/owncloud/phoenix/pull/2877
+
+* Enhancement - Add owner and resharer in collaborators list: [#2898](https://github.com/owncloud/phoenix/issues/2898)
+
+   The top of the collaborators list now display new entries for the resource owner and the
+   resharer when applicable, and also visible when viewing a child resource of a shared folder
+   (indirect share).
+
+   https://github.com/owncloud/phoenix/issues/2898
+   https://github.com/owncloud/phoenix/pull/2915
+   https://github.com/owncloud/phoenix/pull/2918
 
 Changelog for ownCloud Phoenix [0.2.7] (2020-01-14)
 =======================================
