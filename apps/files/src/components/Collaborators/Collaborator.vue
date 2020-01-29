@@ -18,7 +18,7 @@
     </oc-table-row>
     <oc-table-row class="files-collaborators-collaborator-table-row-info">
       <oc-table-cell shrink>
-        <oc-button v-if="collaborator.modifiable" :ariaLabel="$gettext('Delete share')" @click="$emit('onDelete', collaborator)" variation="raw" class="files-collaborators-collaborator-delete">
+        <oc-button v-if="modifiable" :ariaLabel="$gettext('Delete share')" @click="$emit('onDelete', collaborator)" variation="raw" class="files-collaborators-collaborator-delete">
           <oc-icon name="close" />
         </oc-button>
         <oc-icon v-else name="lock"></oc-icon>
@@ -43,7 +43,7 @@
         </div>
       </oc-table-cell>
       <oc-table-cell shrink>
-        <oc-button v-if="collaborator.modifiable" :aria-label="$gettext('Edit share')" @click="$emit('onEdit', collaborator)" variation="raw" class="files-collaborators-collaborator-edit">
+        <oc-button v-if="modifiable" :aria-label="$gettext('Edit share')" @click="$emit('onEdit', collaborator)" variation="raw" class="files-collaborators-collaborator-edit">
           <oc-icon name="edit" />
         </oc-button>
       </oc-table-cell>
@@ -59,7 +59,16 @@ import Mixins from '../../mixins/collaborators'
 
 export default {
   name: 'Collaborator',
-  props: ['collaborator'],
+  props: {
+    collaborator: {
+      type: Object,
+      required: true
+    },
+    modifiable: {
+      type: Boolean,
+      default: false
+    }
+  },
   mixins: [
     Mixins
   ],
@@ -71,11 +80,11 @@ export default {
   computed: {
     ...mapGetters(['user']),
 
-    $_isIndirectIncomingShare () {
+    $_isIndirectShare () {
       // it is assumed that the "incoming" attribute only exists
       // on shares coming from this.sharesTree which are all indirect
       // and not related to the current folder
-      return this.collaborator.incoming
+      return this.collaborator.incoming || this.collaborator.outgoing
     },
 
     $_reshareInformation () {
@@ -91,7 +100,7 @@ export default {
     },
 
     $_getViaLabel () {
-      if (!this.$_isIndirectIncomingShare) {
+      if (!this.$_isIndirectShare) {
         return null
       }
       const translated = this.$gettext('Via %{folderName}')

@@ -422,7 +422,7 @@ Feature: Sharing files and folders with internal users
       | fileName      | expectedIndicators |
       | sub-folder    | user-indirect      |
 
-  @skip @yetToImplement @issue-2897
+  @issue-2897
   Scenario: sharing details of items inside a shared folder
     Given user "user3" has been created with default attributes
     And user "user1" has uploaded file with content "test" to "/simple-folder/lorem.txt"
@@ -434,26 +434,26 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "User Two" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
 
-  @skip @yetToImplement @issue-2897
+  @issue-2897
   Scenario: sharing details of items inside a re-shared folder
     Given user "user3" has been created with default attributes
     And user "user1" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has shared folder "simple-folder" with user "user3"
+    And user "user2" has shared folder "simple-folder (2)" with user "user3"
     And user "user2" has logged in using the webUI
     And the user opens folder "simple-folder (2)" using the webUI
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "User Three" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    Then user "User Three" should be listed as "Editor" via "simple-folder (2)" in the collaborators list on the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "User Three" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    Then user "User Three" should be listed as "Editor" via "simple-folder (2)" in the collaborators list on the webUI
 
-  @skip @yetToImplement @issue-2897
+  @issue-2897
   Scenario: sharing details of items inside a shared folder shared with multiple users
     Given user "user3" has been created with default attributes
     And user "user1" has created folder "/simple-folder/sub-folder"
     And user "user1" has uploaded file with content "test" to "/simple-folder/sub-folder/lorem.txt"
     And user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user1" has shared folder "/simple-folder/sub-folder" with user "user3"
+    And user "user1" has shared folder "simple-folder/sub-folder" with user "user3"
     And user "user1" has logged in using the webUI
     And the user opens folder "simple-folder/sub-folder" directly on the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
