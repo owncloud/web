@@ -37,14 +37,15 @@ Details
 
 * Change - Bring UI/UX of file links sidebar in line with sharing sidebar: [#1907](https://github.com/owncloud/phoenix/issues/1907)
 
-   The file links sidebar had inline forms for link creation/editing while the sharing sidebar
-   navigates to a new panel when showing forms. Also, within the file link creation/editing form
-   the role selection was solved through radio buttons while roles for collaborators are
-   selected through a dropdown menu. We adapted both UI aspects of the file links sidebar to
-   resemble the sharing sidebar.
+   We adapted the UI/UX of the file links sidebar to be in line with the UI/UX of the collaborators
+   sidebar. The order of the two sidebars has been reversed (collaborators first, file links
+   second). We added info messages to support a clear understanding of the purpose of both private
+   and public links. Most notably the file links sidebar has no inline forms anymore.
 
    https://github.com/owncloud/phoenix/issues/1907
+   https://github.com/owncloud/phoenix/issues/1307
    https://github.com/owncloud/phoenix/pull/2841
+   https://github.com/owncloud/phoenix/pull/2917
 
 * Change - Join users and groups into a single list in collaborators sidebar: [#2900](https://github.com/owncloud/phoenix/issues/2900)
 
