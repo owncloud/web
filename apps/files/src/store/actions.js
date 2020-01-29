@@ -2,6 +2,7 @@ import moment from 'moment'
 import _ from 'lodash'
 import { getParentPaths } from '../helpers/path'
 import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
+import { shareTypes } from '../helpers/shareTypes'
 const { default: PQueue } = require('p-queue')
 
 function _buildFile (file) {
@@ -182,8 +183,7 @@ function _buildSharedFile (file) {
   }
 }
 
-function _buildLink (l, $gettext) {
-  const link = l.shareInfo
+function _buildLink (link, $gettext) {
   let description = ''
 
   // FIXME: use bitmask matching with constants
@@ -214,6 +214,7 @@ function _buildLink (l, $gettext) {
     password: !!(link.share_with && link.share_with_displayname),
     expiration: (typeof link.expiration === 'string') ? moment(link.expiration).format('YYYY-MM-DD') : null,
     itemSource: link.item_source,
+    info: link,
     file: {
       parent: link.file_parent,
       source: link.file_source,
@@ -222,17 +223,25 @@ function _buildLink (l, $gettext) {
   }
 }
 
-function _buildShare (s, file) {
+function _buildShare (s, file, $gettext) {
+  if (parseInt(s.share_type, 10) === shareTypes.link) {
+    return _buildLink(s, $gettext)
+  }
+  return _buildCollaboratorShare(s, file)
+}
+
+function _buildCollaboratorShare (s, file) {
   const share = {
+    shareType: parseInt(s.share_type, 10),
     info: s
   }
-  switch (s.share_type) {
-    case ('0'): // user share
+  switch (share.shareType) {
+    case (shareTypes.user): // user share
     // TODO differentiate groups from users?
     // fall through
-    case ('6'):
+    case (shareTypes.remote):
     // fall through
-    case ('1'): // group share
+    case (shareTypes.group): // group share
       share.role = bitmaskToRole(s.permissions, file.type === 'folder')
       share.permissions = s.permissions
       share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
@@ -296,8 +305,9 @@ export default {
             })
             if (loadSharesTree) {
               context.dispatch('loadSharesTree', {
-                client: client,
-                path: absolutePath
+                client,
+                path: absolutePath,
+                $gettext
               })
             }
           }
@@ -563,7 +573,7 @@ export default {
     client.shares.getShares(path, { reshares: true })
       .then(data => {
         context.commit('SHARES_LOAD', data.map(element => {
-          return _buildShare(element.shareInfo, context.getters.highlightedFile)
+          return _buildCollaboratorShare(element.shareInfo, context.getters.highlightedFile)
         }))
         context.commit('SHARES_LOADING', false)
       })
@@ -583,7 +593,7 @@ export default {
     client.shares.getShares(path, { shared_with_me: true })
       .then(data => {
         context.commit('INCOMING_SHARES_LOAD', data.map(element => {
-          return _buildShare(element.shareInfo, context.getters.highlightedFile)
+          return _buildCollaboratorShare(element.shareInfo, context.getters.highlightedFile)
         }))
         context.commit('INCOMING_SHARES_LOADING', false)
       })
@@ -615,7 +625,7 @@ export default {
 
     client.shares.updateShare(share.info.id, params)
       .then((updatedShare) => {
-        commit('SHARES_UPDATE_SHARE', _buildShare(updatedShare.shareInfo, getters.highlightedFile))
+        commit('SHARES_UPDATE_SHARE', _buildCollaboratorShare(updatedShare.shareInfo, getters.highlightedFile))
         commit('TOGGLE_COLLABORATOR_SAVING', false)
       })
       .catch(e => {
@@ -629,7 +639,7 @@ export default {
     if (shareType === 1) {
       client.shares.shareFileWithGroup(path, shareWith, { permissions: permissions })
         .then(share => {
-          context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo, context.getters.highlightedFile))
+          context.commit('SHARES_ADD_SHARE', _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile))
           context.commit('SHARES_LOADING', false)
         })
         .catch(e => {
@@ -653,7 +663,7 @@ export default {
 
     client.shares.shareFileWithUser(path, shareWith, { permissions: permissions, remoteUser: remoteShare })
       .then(share => {
-        context.commit('SHARES_ADD_SHARE', _buildShare(share.shareInfo, context.getters.highlightedFile))
+        context.commit('SHARES_ADD_SHARE', _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile))
         context.commit('SHARES_LOADING', false)
       })
       .catch(e => {
@@ -689,7 +699,7 @@ export default {
    * This will add new entries into the shares tree and will
    * not remove unrelated existing ones.
    */
-  loadSharesTree (context, { client, path }) {
+  loadSharesTree (context, { client, path, $gettext }) {
     context.commit('SHARESTREE_ERROR', null)
     // prune shares tree cache for all unrelated paths, keeping only
     // existing relevant parent entries
@@ -720,7 +730,7 @@ export default {
         client.shares.getShares(queryPath, { reshares: true })
           .then(data => {
             data.forEach(element => {
-              sharesTree[queryPath].push({ ..._buildShare(element.shareInfo, { type: 'folder' }), outgoing: true })
+              sharesTree[queryPath].push({ ..._buildShare(element.shareInfo, { type: 'folder' }, $gettext), outgoing: true })
             })
           })
           .catch(error => {
@@ -734,7 +744,7 @@ export default {
         client.shares.getShares(queryPath, { shared_with_me: true })
           .then(data => {
             data.forEach(element => {
-              sharesTree[queryPath].push({ ..._buildShare(element.shareInfo, { type: 'folder' }), incoming: true })
+              sharesTree[queryPath].push({ ..._buildCollaboratorShare(element.shareInfo, { type: 'folder' }), incoming: true })
             })
           })
           .catch(error => {
@@ -795,7 +805,7 @@ export default {
       .then(data => {
         data.forEach(share => {
           if (share.shareInfo.share_type === '3') {
-            context.commit('LINKS_ADD', _buildLink(share, $gettext))
+            context.commit('LINKS_ADD', _buildLink(share.shareInfo, $gettext))
           }
         })
       })
@@ -812,7 +822,7 @@ export default {
       context.commit('LINKS_LOADING', true)
       client.shares.shareFileWithLink(path, params)
         .then(data => {
-          const link = _buildLink(data, $gettext)
+          const link = _buildLink(data.shareInfo, $gettext)
           context.commit('LINKS_ADD', link)
           context.commit('LINKS_LOADING', false)
           resolve(link)
@@ -828,7 +838,7 @@ export default {
       context.commit('LINKS_LOADING', true)
       client.shares.updateShare(id, params)
         .then(data => {
-          const link = _buildLink(data, $gettext)
+          const link = _buildLink(data.shareInfo, $gettext)
           context.commit('LINKS_UPDATE', link)
           context.commit('LINKS_LOADING', false)
           resolve(link)

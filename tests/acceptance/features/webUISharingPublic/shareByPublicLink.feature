@@ -935,43 +935,29 @@ Feature: Share by public link
     Then the following resources should not have share indicators on the webUI
       | simple-empty-folder |
 
-  @skip @yetToImplement @issue-2897
-  Scenario: sharing details of items inside a shared folder
+  @issue-2897
+  Scenario: sharing details of indirect items inside a shared folder
     Given user "user1" has created folder "/simple-folder/sub-folder"
     And user "user1" has uploaded file with content "test" to "/simple-folder/textfile.txt"
-    And user "user1" has created a public link share with following settings
+    And user "user1" has created a public link with following settings
       | path | /simple-folder |
       | name | Public Link    |
     And user "user1" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
-    And the user opens the link share dialog for folder "sub-folder"
-    Then public link "Public Link" should be listed as share receiver via "simple-folder" on the webUI
+    Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "sub-folder" via "simple-folder" on the webUI
 
-  @skip @yetToImplement @issue-2897
-  Scenario: sharing details of multiple public link shares with different link names
+  @issue-2897
+  Scenario: sharing details of multiple indirect public link shares
     Given user "user1" has created folder "/simple-folder/sub-folder"
     And user "user1" has uploaded file with content "test" to "/simple-folder/sub-folder/textfile.txt"
-    And user "user1" has created a public link share with following settings
+    And user "user1" has created a public link with following settings
       | path | /simple-folder |
       | name | Public Link    |
-    And user "user1" has created a public link share with following settings
+    And user "user1" has created a public link with following settings
       | path | /simple-folder/sub-folder      |
       | name | strängé लिंक नाम (#2 &).नेपाली |
     And user "user1" has logged in using the webUI
-    When the user opens folder "simple-folder" using the webUI
-    And the user opens the link share dialog for folder "sub-folder"
-    Then public link "Public Link" should be listed as share receiver via "simple-folder" on the webUI
-    When the user opens folder "sub-folder" using the webUI
-    And the user opens the link share dialog for file "textfile.txt"
-    Then public link "strängé लिंक नाम (#2 &).नेपाली" should be listed as share receiver via "sub-folder" on the webUI
-    And public link "Public Link" should be listed as share receiver via "simple-folder" on the webUI
+    When the user opens folder "simple-folder/sub-folder" directly on the webUI
+    Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "simple-folder" on the webUI
+    And a link named "strängé लिंक नाम (#2 &).नेपाली" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "sub-folder" on the webUI
 
-  @skip @yetToImplement @issue-2897
-  Scenario: sharing detail of items in the webUI shared by public links with empty name
-    Given user "user1" has uploaded file with content "test" to "/simple-folder/textfile.txt"
-    And user "user1" has created a public link share with following settings
-      | path | /simple-folder |
-    And user "user1" has logged in using the webUI
-    When the user opens folder "simple-folder" using the webUI
-    And the user opens the link share dialog for file "textfile.txt"
-    Then public link with last share token should be listed as share receiver via "simple-folder" on the webUI

@@ -352,27 +352,62 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
     },
     /**
-     * gets the text of all public links of the currently open public link tab
+     * Gets the data of all public links of the currently open public link tab
      *
-     * @returns {Promise<string[]>}
+     * @param {Object.<String,Object>} subSelectors Map of arbitrary attribute name to selector to query
+     * inside the collaborator element, defaults to all when null
+     * @returns {Array.<Object>} array of link data
      */
-    getPublicLinkList: async function () {
-      const promiseList = []
-      const publicLinkInfoXpath = this.elements.publicLinkContainer.selector + this.elements.publicLinkInformation.selector
+    getPublicLinkList: async function (subSelectors = null) {
+      if (subSelectors === null) {
+        subSelectors = {
+          name: this.elements.publicLinkSubName,
+          role: this.elements.publicLinkSubRole,
+          viaLabel: this.elements.publicLinkSubVia
+        }
+      }
+
+      const informationSelector = this.elements.publicLinkContainer.selector + this.elements.publicLinkInformation.selector
+
+      let results = []
+
+      let linkElementIds = null
       await this.initAjaxCounters()
-        .waitForElementPresent({ locateStrategy: 'xpath', selector: publicLinkInfoXpath, abortOnFailure: false })
+        .waitForElementPresent({ locateStrategy: 'xpath', selector: informationSelector, abortOnFailure: false })
         .waitForOutstandingAjaxCalls()
-        .api.elements('xpath', publicLinkInfoXpath, result => {
-          result.value.map(item => {
-            promiseList.push(new Promise((resolve) => {
-              this.api.elementIdText(item.ELEMENT, text => {
-                resolve(text.value)
-              })
-            })
-            )
-          })
+        .api.elements('xpath', informationSelector, result => {
+          linkElementIds = result.value.map(item => item[Object.keys(item)[0]])
         })
-      return Promise.all(promiseList)
+
+      results = linkElementIds.map(async (linkElementId) => {
+        const linkResult = {}
+        for (const attrName in subSelectors) {
+          let attrElementId = null
+          await this.api.elementIdElement(
+            linkElementId,
+            'css selector',
+            subSelectors[attrName],
+            (result) => {
+              if (result.status !== -1) {
+                attrElementId = result.value.ELEMENT
+              }
+            }
+          )
+
+          if (attrElementId) {
+            await this.api.elementIdText(attrElementId, (text) => {
+              linkResult[attrName] = text.value
+            })
+          } else {
+            linkResult[attrName] = null
+          }
+        }
+
+        return linkResult
+      })
+
+      results = await Promise.all(results)
+      return results
     },
     /**
      * gets the urls of all public links of the currently open public link tab
@@ -443,6 +478,15 @@ module.exports = {
     publicLinkName: {
       selector: '//li//span[.="%s"]',
       locateStrategy: 'xpath'
+    },
+    publicLinkSubName: {
+      selector: '.oc-files-file-link-url'
+    },
+    publicLinkSubRole: {
+      selector: '.oc-files-file-link-role'
+    },
+    publicLinkSubVia: {
+      selector: '.oc-files-file-link-via'
     },
     publicLinkAddButton: {
       selector: '#files-file-link-add'

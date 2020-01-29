@@ -45,7 +45,57 @@
                     <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a>
                     <br>
                     <span class="uk-text-meta uk-text-break">
-                      <span>{{ link.description }}</span>
+                      <span class="oc-files-file-link-role">{{ link.description }}</span>
+                      <template v-if="link.expiration"> |
+                        <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}
+                      </template>
+                      <template v-if="link.password"> |
+                        <span v-translate>Password protected</span>
+                      </template>
+                    </span>
+                  </oc-table-cell>
+                  <oc-table-cell shrink class="uk-text-nowrap">
+                    <oc-button :aria-label="$_publicLinkCopyLabel" variation="raw" class="oc-files-file-link-copy-url">
+                      <oc-icon v-if="!linksCopied[link.url]"  name="copy_to_clipboard" size="small"
+                               v-clipboard:copy="link.url" v-clipboard:success="$_clipboardSuccessHandler"/>
+                      <oc-icon v-else name="ready" size="small" class="oc-files-file-link-copied-url _clipboard-success-animation"/>
+                    </oc-button>
+                    <oc-button :aria-label="$_editButtonLabel" @click="$_editPublicLink(link)" variation="raw" class="oc-files-file-link-edit">
+                      <oc-icon name="edit" size="small"/>
+                    </oc-button>
+                  </oc-table-cell>
+                </oc-table-row>
+              </oc-table>
+            </li>
+          </transition-group>
+        </section>
+        <section v-if="$_indirectLinks.length > 0" class="uk-margin-medium-bottom">
+          <div class="uk-text-bold">
+            <translate>Public Links Via Parent</translate>
+          </div>
+          <transition-group class="uk-list uk-list-divider uk-overflow-hidden"
+                            enter-active-class="uk-animation-slide-left-medium"
+                            leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
+                            name="custom-classes-transition"
+                            tag="ul">
+            <li v-for="link in $_indirectLinks" :key="'li-' + link.id">
+              <div class="uk-text-meta">
+                <router-link :to="$_getViaRouterParams(link)" :aria-label="$gettext('Navigate to parent')"
+                             class="oc-files-file-link-via uk-flex uk-flex-middle">
+                  <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
+                  <span class="oc-file-name uk-padding-remove uk-text-truncate files-collaborators-collaborator-via-label">{{ $_getViaLabel(link) }}</span>
+                </router-link>
+              </div>
+              <oc-table midldle class="files-file-links-link">
+                <oc-table-row class="files-file-links-link-table-row-info">
+                  <oc-table-cell shrink>
+                    <oc-icon name="lock" />
+                  </oc-table-cell>
+                  <oc-table-cell>
+                    <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a>
+                    <br>
+                    <span class="uk-text-meta uk-text-break">
+                      <span class="oc-files-file-link-role">{{ link.description }}</span>
                       <template v-if="link.expiration"> |
                         <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}
                       </template>
@@ -83,9 +133,12 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import moment from 'moment'
 import mixins from '../mixins'
+import { shareTypes } from '../helpers/shareTypes'
+import { basename, dirname } from 'path'
+import { getParentPaths } from '../helpers/path'
 
 const EditPublicLink = _ => import('./PublicLinksSidebar/EditPublicLink.vue')
 
@@ -145,6 +198,34 @@ export default {
   computed: {
     ...mapGetters('Files', ['highlightedFile', 'links', 'linksLoading', 'linksError']),
     ...mapGetters(['getToken', 'capabilities']),
+    ...mapState('Files', [
+      'sharesTree'
+    ]),
+
+    $_indirectLinks () {
+      const allShares = []
+      const parentPaths = getParentPaths(this.highlightedFile.path, true)
+      if (parentPaths.length === 0) {
+        return []
+      }
+
+      // remove root entry
+      parentPaths.pop()
+
+      parentPaths.forEach((parentPath) => {
+        const shares = this.sharesTree[parentPath]
+        if (shares) {
+          shares.forEach((share) => {
+            if (share.outgoing && parseInt(share.info.share_type, 10) === shareTypes.link) {
+              share.key = 'indirect-link-' + share.info.id
+              allShares.push(share)
+            }
+          })
+        }
+      })
+
+      return allShares
+    },
 
     $_links () {
       return this.links.filter(link => {
@@ -199,6 +280,22 @@ export default {
         permissions: 1,
         hasPassword: false,
         expireDate: (this.$_expirationDate.days) ? moment().add(this.$_expirationDate.days, 'days').endOf('day').toISOString() : null
+      }
+    },
+    $_getViaLabel (link) {
+      const translated = this.$gettext('Via %{folderName}')
+      return this.$gettextInterpolate(translated, { folderName: basename(link.info.path) }, false)
+    },
+    $_getViaRouterParams (link) {
+      const viaPath = link.info.path
+      return {
+        name: 'files-list',
+        params: {
+          item: dirname(viaPath) || '/'
+        },
+        query: {
+          scrollTo: basename(viaPath)
+        }
       }
     },
     $_removePublicLink (link) {
