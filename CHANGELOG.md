@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Transform route titles into real h1 headings: [#2681](https://github.com/owncloud/phoenix/pull/2681)
+* Bugfix - Prevent jumpy behavior when loading user avatars: [#2921](https://github.com/owncloud/phoenix/issues/2921)
 * Change - Bring UI/UX of file links sidebar in line with sharing sidebar: [#1907](https://github.com/owncloud/phoenix/issues/1907)
 * Change - Join users and groups into a single list in collaborators sidebar: [#2900](https://github.com/owncloud/phoenix/issues/2900)
 * Change - Adjusted labels in files list: [#2902](https://github.com/owncloud/phoenix/pull/2902)
@@ -23,6 +24,15 @@ Details
    existing for accessibility reasons but can only be perceived via a screen reader.
 
    https://github.com/owncloud/phoenix/pull/2681
+
+* Bugfix - Prevent jumpy behavior when loading user avatars: [#2921](https://github.com/owncloud/phoenix/issues/2921)
+
+   When loading a user avatar, the container size was smaller so as soon as the avatar was loaded, it
+   resulted in jumpy behavior. This is fixed now by applying the same size to the loading spinner
+   element.
+
+   https://github.com/owncloud/phoenix/issues/2921
+   https://github.com/owncloud/phoenix/pull/2927
 
 * Change - Bring UI/UX of file links sidebar in line with sharing sidebar: [#1907](https://github.com/owncloud/phoenix/issues/1907)
 
