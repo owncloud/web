@@ -4,7 +4,9 @@
       <oc-loader v-if="$_sharesLoading" aria-label="Loading collaborator list" />
       <template v-else>
         <div v-if="$_ocCollaborators_canShare" class="uk-margin-small-top uk-margin-small-bottom">
-          <oc-button variation="primary" icon="add" @click="visiblePanel = 'newCollaborator'" class="files-collaborators-open-add-share-dialog-button"><translate>Add Collaborators</translate></oc-button>
+          <oc-button variation="primary" icon="add" @click="visiblePanel = 'newCollaborator'" class="files-collaborators-open-add-share-dialog-button">
+            <translate>Add Collaborators</translate>
+          </oc-button>
         </div>
         <translate
           v-else
@@ -12,29 +14,17 @@
           key="no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <div v-if="$_ocCollaborators.length > 0" id="files-collaborators-list" key="oc-collaborators-user-list">
-          <template v-for="collaborator in $_ocCollaborators">
-            <oc-grid :key="collaborator.key" :flex="true" gutter="small" class="files-collaborators-collaborator">
-              <div>
-                <oc-button v-if="collaborator.modifiable" :ariaLabel="$gettext('Delete share')" @click="$_ocCollaborators_deleteShare(collaborator)" variation="raw" class="files-collaborators-collaborator-delete">
-                  <oc-icon name="close" />
-                </oc-button>
-                <oc-icon v-else name="lock"></oc-icon>
-              </div>
-              <collaborator class="uk-width-expand" :collaborator="collaborator" />
-              <div class="uk-width-auto" v-if="!collaborator.viaLabel">
-                <oc-button v-if="collaborator.modifiable" :aria-label="$gettext('Edit share')" @click="$_ocCollaborators_editShare(collaborator)" variation="raw" class="files-collaborators-collaborator-edit">
-                  <oc-icon name="edit" />
-                </oc-button>
-              </div>
-              <div class="uk-width-auto" v-if="collaborator.viaLabel">
-                <oc-button :aria-label="$gettext('Focus on parent')" @click="$_ocCollaborators_followVia(collaborator.viaPath)" variation="raw" class="files-collaborators-collaborator-follow-via">
-                  <oc-icon name="link" /><!-- TODO replace with "redo" arrow icon after ODS update -->
-                </oc-button>
-              </div>
-            </oc-grid>
-          </template>
-        </div>
+        <transition-group v-if="$_ocCollaborators.length > 0"
+                          id="files-collaborators-list"
+                          class="uk-list uk-list-divider uk-overflow-hidden"
+                          enter-active-class="uk-animation-slide-left-medium"
+                          leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
+                          name="custom-classes-transition"
+                          tag="ul">
+          <li v-for="collaborator in $_ocCollaborators" :key="collaborator.key">
+            <collaborator :collaborator="collaborator" @onDelete="$_ocCollaborators_deleteShare" @onEdit="$_ocCollaborators_editShare"/>
+          </li>
+        </transition-group>
         <div v-else-if="!$_sharesLoading" key="oc-collaborators-no-results"><translate>No collaborators</translate></div>
       </template>
     </div>
@@ -58,6 +48,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import Mixins from '../mixins/collaborators'
 import { textUtils } from '../helpers/textUtils'
 import { shareTypes } from '../helpers/shareTypes'
+import { getParentPaths } from '../helpers/path'
 const NewCollaborator = _ => import('./Collaborators/NewCollaborator.vue')
 const EditCollaborator = _ => import('./Collaborators/EditCollaborator.vue')
 const Collaborator = _ => import('./Collaborators/Collaborator.vue')
@@ -105,7 +96,8 @@ export default {
     ...mapState('Files', [
       'incomingShares',
       'incomingSharesError',
-      'incomingSharesLoading'
+      'incomingSharesLoading',
+      'sharesTree'
     ]),
     ...mapState(['user']),
     selectedFile () {
@@ -113,6 +105,29 @@ export default {
     },
     $_sharesLoading () {
       return this.sharesLoading && this.incomingSharesLoading
+    },
+    $_allIncomingShares () {
+      const allShares = [...this.incomingShares]
+      const parentPaths = getParentPaths(this.highlightedFile.path, true)
+      if (parentPaths.length === 0) {
+        return []
+      }
+
+      // remove root entry
+      parentPaths.pop()
+
+      parentPaths.forEach((parentPath) => {
+        const shares = this.sharesTree[parentPath]
+        if (shares) {
+          shares.forEach((share) => {
+            if (share.incoming) {
+              allShares.push(share)
+            }
+          })
+        }
+      })
+
+      return allShares
     },
     $_ocCollaborators () {
       const shares = this.shares
@@ -137,33 +152,39 @@ export default {
           return collaborator
         })
 
-      if (!this.incomingShares.length) {
+      if (!this.$_allIncomingShares.length) {
         return shares
       }
 
       const resharers = new Map()
-      const firstShare = this.incomingShares[0]
+      const firstShare = this.$_allIncomingShares[0]
       const owner = {
+        ...firstShare,
         name: firstShare.info.uid_file_owner,
         displayName: firstShare.info.displayname_file_owner,
         key: 'owner-' + firstShare.info.id,
         info: {
-          share_type: shareTypes.user,
+          path: firstShare.info.path,
+          // set to user share for displaying user
+          share_type: '' + shareTypes.user, // most code requires string..
           share_with_additional_info: firstShare.info.additional_info_file_owner || []
         },
         role: this.ownerRole,
         modifiable: false
       }
 
-      this.incomingShares.forEach(share => {
+      this.$_allIncomingShares.forEach(share => {
         if (share.info.uid_owner !== owner.name) {
           resharers.set(share.info.uid_owner, {
+            ...share,
             name: share.info.uid_owner,
             displayName: share.info.displayname_owner,
             role: this.resharerRole,
             key: 'resharer-' + share.info.id,
             info: {
-              share_type: shareTypes.user,
+              path: share.info.path,
+              // set to user share for displaying user
+              share_type: '' + shareTypes.user, // most code requires string..
               share_with_additional_info: share.info.additional_info_owner || []
             },
             modifiable: false
@@ -192,23 +213,6 @@ export default {
       'loadIncomingShares',
       'incomingSharesClearState'
     ]),
-    $_extractKinds (name) {
-      return name.substr(name.indexOf('(') + 1)
-    },
-    $_ocCollaborators_followVia (viaPath) {
-      let path = viaPath.split('/')
-      const scrollTo = path.pop()
-      path = path.join('/')
-      this.$router.push({
-        name: 'files-list',
-        params: {
-          item: path || '/'
-        },
-        query: {
-          scrollTo: scrollTo
-        }
-      })
-    },
     $_ocCollaborators_editShare (share) {
       this.currentShare = share
       this.visiblePanel = 'editCollaborator'

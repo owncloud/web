@@ -167,29 +167,25 @@ const createPublicLink = function (sharer, data) {
  * @returns {Promise}
  */
 const assertCollaboratorslistContains = function (type, name, role, via = null) {
-  return client.page.FilesPageElement.sharingDialog().getCollaboratorsList()
+  if (type !== 'user' && type !== 'group') {
+    throw new Error('illegal type')
+  }
+
+  return client.page.FilesPageElement.sharingDialog().getCollaboratorsList(null, name)
     .then(shares => {
-      const cleanedShares = []
-      for (var i = 0; i < shares.length; i++) {
-        cleanedShares.push(shares[i].replace(/\n/g, ' '))
-        // depending on the browser there are extra \n or not, so get rid of them all
-      }
-      let expectedString = name + ' ' + role
-      if (via) {
-        expectedString += ' via ' + via
-      }
-      if (type === 'user') {
-        expectedString = expectedString + client.page.FilesPageElement.sharingDialog().getUserSharePostfix()
-      } else if (type === 'group') {
-        expectedString = expectedString + client.page.FilesPageElement.sharingDialog().getGroupSharePostfix()
-      } else {
-        throw new Error('illegal type')
-      }
-      expectedString = expectedString.replace('\n', ' ')
-      if (!shares || !cleanedShares.includes(expectedString)) {
+      const share = shares.find(share => {
+        return (name === share.displayName && type === share.shareType.toLowerCase())
+      })
+
+      if (!share) {
         assert.fail(
-          `"${name}" was expected to be in share list but was not present. Found collaborators text:"` + shares + '"'
+          `"${name}" was expected to be in share list but was not present. Found collaborators: ` + shares.map(share => share.displayName)
         )
+      }
+
+      assert.strictEqual(role, share.role)
+      if (via !== null) {
+        assert.strictEqual('Via ' + via, share.viaLabel)
       }
     })
 }
@@ -201,26 +197,24 @@ const assertCollaboratorslistContains = function (type, name, role, via = null) 
  * @returns {Promise}
  */
 const assertCollaboratorslistDoesNotContain = function (type, name) {
-  return client.page.FilesPageElement.sharingDialog().getCollaboratorsList()
-    .then(shares => {
-      if (shares) {
-        var searchregex
-        if (type === 'user') {
-          searchregex = new RegExp(name + '\n.*' + client.page.FilesPageElement.sharingDialog().getUserSharePostfix())
-        } else if (type === 'group') {
-          searchregex = new RegExp(name + '\n.*' + client.page.FilesPageElement.sharingDialog().getGroupSharePostfix())
-        } else {
-          throw new Error('illegal type')
-        }
-        shares.map(share => {
-          assert.strictEqual(
-            searchregex.test(share),
-            false,
-            `"${name}" not expected to be in the share list but is present`
-          )
-        })
-      }
+  if (type !== 'user' && type !== 'group') {
+    throw new Error('illegal type')
+  }
+  const sharingDialog = client.page.FilesPageElement.sharingDialog()
+  return sharingDialog.getCollaboratorsList({
+    displayName: sharingDialog.elements.collaboratorInformationSubName,
+    shareType: sharingDialog.elements.collaboratorInformationSubShareType
+  }, name).then(shares => {
+    const share = shares.find(share => {
+      return (name === share.displayName && type === share.shareType.toLowerCase())
     })
+
+    if (share) {
+      assert.fail(
+        `"${name}" was expected to not be in share list but was present.`
+      )
+    }
+  })
 }
 
 /**
@@ -806,7 +800,7 @@ Then('the collaborators list for file/folder/resource {string} should be empty',
 
   const count = (await api
     .sharingDialog()
-    .getCollaboratorsList()
+    .getCollaboratorsList({})
   ).length
   assert.strictEqual(count, 0, `Expected to have no collaborators for '${resource}', Found: ${count}`)
 })

@@ -412,43 +412,81 @@ module.exports = {
     },
     /**
      *
+     * @param {Object.<String,Object>} subSelectors Map of arbitrary attribute name to selector to query
+     * inside the collaborator element, defaults to all when null
      * @returns {Promise.<string[]>} Array of users/groups in share list
      */
-    getCollaboratorsList: async function () {
-      const promiseList = []
+    getCollaboratorsList: async function (subSelectors = null, filterDisplayName = null) {
+      let results = []
+      let informationSelector = {
+        selector: '@collaboratorsInformation',
+        abortOnFailure: false
+      }
+      if (filterDisplayName !== null) {
+        informationSelector = {
+          selector: util.format(this.elements.collaboratorInformationByCollaboratorName.selector, filterDisplayName),
+          locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
+          abortOnFailure: false
+        }
+      }
+
+      if (subSelectors === null) {
+        subSelectors = {
+          displayName: this.elements.collaboratorInformationSubName,
+          role: this.elements.collaboratorInformationSubRole,
+          shareType: this.elements.collaboratorInformationSubShareType,
+          additionalInfo: this.elements.collaboratorInformationSubAdditionalInfo,
+          viaLabel: this.elements.collaboratorInformationSubVia
+        }
+      }
+
+      let collaboratorsElementIds = null
       await this.initAjaxCounters()
-        .waitForElementPresent({ selector: '@collaboratorsInformation', abortOnFailure: false })
+        .waitForElementPresent(informationSelector)
         .waitForOutstandingAjaxCalls()
         .api.elements('css selector', this.elements.collaboratorsInformation, result => {
-          result.value.map(item => {
-            promiseList.push(new Promise((resolve) => {
-              this.api.elementIdText(item[Object.keys(item)[0]], text => {
-                resolve(text.value)
-              })
-            }))
-          })
+          collaboratorsElementIds = result.value.map(item => item[Object.keys(item)[0]])
         })
-      return Promise.all(promiseList)
+
+      results = collaboratorsElementIds.map(async (collaboratorElementId) => {
+        const collaboratorResult = {}
+        for (const attrName in subSelectors) {
+          let attrElementId = null
+          await this.api.elementIdElement(
+            collaboratorElementId,
+            'css selector',
+            subSelectors[attrName],
+            (result) => {
+              if (result.status !== -1) {
+                attrElementId = result.value.ELEMENT
+              }
+            }
+          )
+
+          if (attrElementId) {
+            await this.api.elementIdText(attrElementId, (text) => {
+              collaboratorResult[attrName] = text.value
+            })
+          } else {
+            collaboratorResult[attrName] = null
+          }
+        }
+
+        return collaboratorResult
+      })
+
+      results = await Promise.all(results)
+      return results
     },
     /**
      *
      * @returns {Promise.<string[]>} Array of user/group display names in share list
      */
     getCollaboratorsListNames: async function () {
-      const promiseList = []
-      await this.initAjaxCounters()
-        .waitForElementPresent({ selector: '@collaboratorsInformation', abortOnFailure: false })
-        .waitForOutstandingAjaxCalls()
-        .api.elements('css selector', this.elements.collaboratorInformationName, result => {
-          result.value.map(item => {
-            promiseList.push(new Promise((resolve) => {
-              this.api.elementIdText(item[Object.keys(item)[0]], text => {
-                resolve(text.value)
-              })
-            }))
-          })
-        })
-      return Promise.all(promiseList)
+      const list = await this.getCollaboratorsList({
+        name: this.elements.collaboratorInformationSubName
+      })
+      return list.map(result => result.name)
     },
     /**
      *
@@ -509,14 +547,31 @@ module.exports = {
     },
     collaboratorsInformation: {
       // addresses users and groups
-      selector: '.files-collaborators-collaborator .files-collaborators-collaborator-information-text'
+      selector: '.files-collaborators-collaborator'
     },
     collaboratorInformationByCollaboratorName: {
-      selector: '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::div[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
+      selector: '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
       locateStrategy: 'xpath'
     },
-    collaboratorInformationName: {
-      selector: '.files-collaborators-collaborator .files-collaborators-collaborator-information-text .files-collaborators-collaborator-name'
+    collaboratorInformationSubName: {
+      // within collaboratorsInformation
+      selector: '.files-collaborators-collaborator-name'
+    },
+    collaboratorInformationSubRole: {
+      // within collaboratorsInformation
+      selector: '.files-collaborators-collaborator-role'
+    },
+    collaboratorInformationSubShareType: {
+      // within collaboratorsInformation
+      selector: '.files-collaborators-collaborator-share-type'
+    },
+    collaboratorInformationSubAdditionalInfo: {
+      // within collaboratorsInformation
+      selector: '.files-collaborators-collaborator-additional-info'
+    },
+    collaboratorInformationSubVia: {
+      // within collaboratorsInformation
+      selector: '.files-collaborators-collaborator-via-label'
     },
     collaboratorMoreInformation: {
       // within collaboratorInformationByCollaboratorName

@@ -36,7 +36,7 @@ export default {
   /**
    * Incoming shares from currently highlighted element
    */
-  incomingShares: {},
+  incomingShares: [],
   incomingSharesError: null,
   incomingSharesLoading: false,
 
