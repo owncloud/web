@@ -31,7 +31,7 @@
         </oc-button>
       </oc-table-cell>
     </oc-table-row>
-    <oc-table-row v-if="$_viaLabel" class="files-file-links-link-table-row-extra">
+    <oc-table-row v-if="$_viaLabel" class="files-file-links-link-table-row-bottom">
       <oc-table-cell shrink></oc-table-cell>
       <oc-table-cell colspan="2">
         <div class="uk-text-meta">
@@ -114,11 +114,11 @@ export default {
 
 <style scoped="scoped">
   /* FIXME: Move to ODS somehow */
-  .files-file-links-link-table-row-extra > td {
-    padding: 0 10px 5px 0;
-  }
   .files-file-links-link-table-row-info > td {
     padding: 0 10px 0 0;
+  }
+  .files-file-links-link-table-row-bottom > td {
+    padding: 3px 10px 0 0;
   }
   .files-file-links-link-via-label {
     max-width: 65%;

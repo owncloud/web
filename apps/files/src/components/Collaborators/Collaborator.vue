@@ -1,6 +1,6 @@
 <template>
   <oc-table middle class="files-collaborators-collaborator">
-    <oc-table-row v-if="$_reshareInformation" class="files-collaborators-collaborator-table-row-extra">
+    <oc-table-row v-if="$_reshareInformation" class="files-collaborators-collaborator-table-row-top">
       <oc-table-cell shrink colspan="2"></oc-table-cell>
       <oc-table-cell colspan="2">
         <div class="uk-text-meta uk-flex uk-flex-middle">
@@ -41,7 +41,7 @@
         </oc-button>
       </oc-table-cell>
     </oc-table-row>
-    <oc-table-row v-if="$_viaLabel" class="files-collaborators-collaborator-table-row-extra">
+    <oc-table-row v-if="$_viaLabel" class="files-collaborators-collaborator-table-row-bottom">
       <oc-table-cell shrink colspan="2"></oc-table-cell>
       <oc-table-cell colspan="2">
         <div class="uk-text-meta">
@@ -145,11 +145,14 @@ export default {
 
 <style scoped="scoped">
   /* FIXME: Move to ODS somehow */
-  .files-collaborators-collaborator-table-row-extra > td {
-    padding: 0 10px 5px 0;
+  .files-collaborators-collaborator-table-row-top > td {
+    padding: 0 10px 3px 0;
   }
   .files-collaborators-collaborator-table-row-info > td {
     padding: 0 10px 0 0;
+  }
+  .files-collaborators-collaborator-table-row-bottom > td {
+    padding: 3px 10px 0 0;
   }
   .files-collaborators-collaborator-via-label {
     max-width: 75%;
