@@ -43,11 +43,9 @@
                                      @onEdit="$_editPublicLink" />
             </li>
           </transition-group>
+          <hr v-if="$_links.length > 0"/>
         </section>
-        <section v-if="$_indirectLinks.length > 0" class="uk-margin-medium-top">
-          <div class="uk-text-bold">
-            <translate>Public Links Via Parent</translate>
-          </div>
+        <section v-if="$_indirectLinks.length > 0">
           <transition-group class="uk-list uk-list-divider uk-overflow-hidden"
                             enter-active-class="uk-animation-slide-left-medium"
                             leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
