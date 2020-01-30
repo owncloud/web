@@ -7,7 +7,7 @@
           <router-link :to="$_viaRouterParams" :aria-label="$gettext('Navigate to parent')"
                        class="oc-files-file-link-via uk-flex uk-flex-middle">
             <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
-            <span class="oc-file-name uk-padding-remove uk-text-truncate files-file-links-link-via-label">{{ $_viaLabel }}</span>
+            <span class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-file-links-link-via-label">{{ $_viaLabel }}</span>
           </router-link>
         </div>
       </oc-table-cell>
