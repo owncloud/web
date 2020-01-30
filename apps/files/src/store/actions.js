@@ -605,8 +605,6 @@ export default {
     context.commit('INCOMING_SHARES_ERROR', null)
   },
   changeShare ({ commit, getters }, { client, share, role, permissions }) {
-    commit('TOGGLE_COLLABORATOR_SAVING', true)
-
     const params = {
       permissions: permissions
     }
@@ -617,24 +615,19 @@ export default {
       })
     }
 
-    client.shares.updateShare(share.info.id, params)
+    return client.shares.updateShare(share.info.id, params)
       .then((updatedShare) => {
         commit('SHARES_UPDATE_SHARE', _buildCollaboratorShare(updatedShare.shareInfo, getters.highlightedFile))
-        commit('TOGGLE_COLLABORATOR_SAVING', false)
       })
       .catch(e => {
-        commit('TOGGLE_COLLABORATOR_SAVING', false)
         console.log(e)
       })
   },
   addShare (context, { client, path, $gettext, shareWith, shareType, permissions }) {
-    context.commit('SHARES_LOADING', true)
-
     if (shareType === 1) {
       client.shares.shareFileWithGroup(path, shareWith, { permissions: permissions })
         .then(share => {
           context.commit('SHARES_ADD_SHARE', _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile))
-          context.commit('SHARES_LOADING', false)
         })
         .catch(e => {
           context.dispatch('showMessage', {
@@ -642,23 +635,14 @@ export default {
             desc: e,
             status: 'danger'
           }, { root: true })
-          context.commit('SHARES_LOADING', false)
         })
       return
     }
 
-    let remoteShare
-
-    if (shareType === 6) {
-      remoteShare = true
-    } else {
-      remoteShare = false
-    }
-
+    const remoteShare = shareType === shareTypes.remote
     client.shares.shareFileWithUser(path, shareWith, { permissions: permissions, remoteUser: remoteShare })
       .then(share => {
         context.commit('SHARES_ADD_SHARE', _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile))
-        context.commit('SHARES_LOADING', false)
       })
       .catch(e => {
         context.dispatch('showMessage', {
@@ -666,7 +650,6 @@ export default {
           desc: e,
           status: 'danger'
         }, { root: true })
-        context.commit('SHARES_LOADING', false)
       })
   },
   deleteShare (context, { client, share }) {
@@ -781,14 +764,8 @@ export default {
   setHighlightedFile (context, file) {
     context.commit('SET_HIGHLIGHTED_FILE', file)
   },
-  toggleCollaboratorSaving (context, saving) {
-    context.commit('TOGGLE_COLLABORATOR_SAVING', saving)
-  },
   setPublicLinkPassword (context, password) {
     context.commit('SET_PUBLIC_LINK_PASSWORD', password)
-  },
-  toggleCollaboratorsEdit (context, inProgress) {
-    context.commit('TOGGLE_COLLABORATORS_EDIT', inProgress)
   },
   loadLinks (context, { client, path, $gettext }) {
     context.commit('LINKS_PURGE')
@@ -813,45 +790,36 @@ export default {
 
   addLink (context, { path, client, $gettext, params }) {
     return new Promise((resolve, reject) => {
-      context.commit('LINKS_LOADING', true)
       client.shares.shareFileWithLink(path, params)
         .then(data => {
           const link = _buildLink(data.shareInfo, $gettext)
           context.commit('LINKS_ADD', link)
-          context.commit('LINKS_LOADING', false)
           resolve(link)
         })
         .catch(e => {
-          context.commit('LINKS_LOADING', false)
           reject(e)
         })
     })
   },
   updateLink (context, { id, client, $gettext, params }) {
     return new Promise((resolve, reject) => {
-      context.commit('LINKS_LOADING', true)
       client.shares.updateShare(id, params)
         .then(data => {
           const link = _buildLink(data.shareInfo, $gettext)
           context.commit('LINKS_UPDATE', link)
-          context.commit('LINKS_LOADING', false)
           resolve(link)
         })
         .catch(e => {
-          context.commit('LINKS_LOADING', false)
           reject(e)
         })
     })
   },
   removeLink (context, { id, client }) {
-    context.commit('LINKS_LOADING', true)
     client.shares.deleteShare(id)
       .then(() => {
         context.commit('LINKS_REMOVE', id)
-        context.commit('LINKS_LOADING', false)
       })
       .catch(e => context.commit('LINKS_ERROR', e.message))
-      .finally(() => context.commit('LINKS_LOADING', false))
   },
 
   // TODO: Think of a better name

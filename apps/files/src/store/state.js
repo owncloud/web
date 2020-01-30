@@ -57,9 +57,7 @@ export default {
   overwriteDialogTitle: null,
   overwriteDialogMessage: null,
   highlightedFile: null,
-  collaboratorSaving: false,
   publicLinkPassword: null,
-  collaboratorsEditInProgress: false,
   uploaded: [],
   actionsInProgress: [],
 

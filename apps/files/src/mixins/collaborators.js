@@ -1,4 +1,4 @@
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import roles from '../helpers/collaboratorRolesDefinition'
 
 export default {
@@ -69,8 +69,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['toggleCollaboratorsEdit']),
-
     $_ocCollaborators_collaboratorType (type) {
       if (parseInt(type, 10) === 0) return this.$gettext('User')
 
@@ -78,20 +76,9 @@ export default {
 
       return this.$gettext('Group')
     },
-    $_ocCollaborators_switchPermission (permission) {
-      this.permissionsChanged = true
-      this[permission] = !this[permission]
-      this.editing = true
-      this.toggleCollaboratorsEdit(true)
-    },
-    collaboratorOptionChanged ({ role, permissions, propagate = true }) {
+    collaboratorOptionChanged ({ role, permissions }) {
       this.selectedRole = role
       this.additionalPermissions = permissions
-
-      if (propagate) {
-        this.editing = true
-        this.toggleCollaboratorsEdit(true)
-      }
     }
   }
 }

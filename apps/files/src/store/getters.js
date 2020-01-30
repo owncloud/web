@@ -87,14 +87,8 @@ export default {
   highlightedFile: state => {
     return state.highlightedFile
   },
-  collaboratorSaving: state => {
-    return state.collaboratorSaving
-  },
   publicLinkPassword: state => {
     return state.publicLinkPassword
-  },
-  collaboratorsEditInProgress: state => {
-    return state.collaboratorsEditInProgress
   },
   links: state => {
     return state.links
