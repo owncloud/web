@@ -1,6 +1,6 @@
 <template>
   <div class="uk-flex uk-flex-middle">
-    <avatar-image v-if="item.value.shareType === shareTypes.user" class="uk-margin-small-right" :width="50" :userid="item.value.shareWith" :userName="item.label" />
+    <avatar-image v-if="item.value.shareType === shareTypes.user" class="uk-margin-small-right" :width="48" :userid="item.value.shareWith" :userName="item.label" />
     <template v-else>
       <oc-icon v-if="item.value.shareType === shareTypes.group" class="uk-margin-small-right" name="group" size="large" key="avatar-group" />
       <oc-icon v-else class="uk-margin-small-right" name="person" size="large" key="avatar-generic-person" />

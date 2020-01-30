@@ -25,7 +25,7 @@
       </oc-table-cell>
       <oc-table-cell shrink>
         <div key="collaborator-avatar-loaded">
-          <avatar-image v-if="$_shareType === shareTypes.user" class="uk-margin-small-right" :width="50" :userid="collaborator.name" :userName="collaborator.displayName" />
+          <avatar-image v-if="$_shareType === shareTypes.user" class="uk-margin-small-right" :width="48" :userid="collaborator.name" :userName="collaborator.displayName" />
           <div v-else key="collaborator-avatar-placeholder">
             <oc-icon v-if="$_shareType === shareTypes.group" class="uk-margin-small-right" name="group" size="large" key="avatar-group" />
             <oc-icon v-else class="uk-margin-small-right" name="person" size="large" key="avatar-generic-person" />
