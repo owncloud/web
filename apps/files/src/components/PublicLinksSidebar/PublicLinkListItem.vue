@@ -48,6 +48,7 @@
 
 <script>
 import { basename, dirname } from 'path'
+import mixins from '../../mixins'
 
 export default {
   name: 'PublicLinkListItem',
@@ -69,6 +70,7 @@ export default {
       default: () => {}
     }
   },
+  mixins: [mixins],
   computed: {
     $_viaLabel () {
       if (!this.indirect) {
