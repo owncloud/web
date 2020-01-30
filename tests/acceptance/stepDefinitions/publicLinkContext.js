@@ -161,31 +161,43 @@ Then('public link named {string} should not be listed on the public links list o
   )
 })
 
+async function findMatchingPublicLinkByName (name, role, resource, via = null) {
+  await client.page.FilesPageElement
+    .filesList()
+    .closeSidebar(100)
+    .openPublicLinkDialog(resource)
+
+  const shares = await client.page.FilesPageElement
+    .publicLinksDialog()
+    .getPublicLinkList()
+
+  const share = shares.find(link => link.name === name)
+
+  if (!share) {
+    assert.fail(
+      `Link with name "${name}" was expected to be in share list but was not present. Found links: ` + shares.map(share => share.name)
+    )
+  }
+
+  assert.strictEqual(role, share.role)
+  if (via !== null) {
+    assert.strictEqual('Via ' + via, share.viaLabel)
+  }
+}
+
 Then(
   'a link named {string} should be listed with role {string} in the public link list of file/folder/resource {string} on the webUI',
   async function (name, role, resource) {
-    await client.page.FilesPageElement
-      .filesList()
-      .closeSidebar(100)
-      .openPublicLinkDialog(resource)
-    return client.page.FilesPageElement
-      .publicLinksDialog()
-      .getPublicLinkList()
-      .then(links => {
-        const searchregex = new RegExp(name + '\n.*' + role)
-        let found = false
-        for (const link of links) {
-          if (searchregex.test(link)) {
-            found = true
-            break
-          }
-        }
-        assert.strictEqual(
-          found, true,
-          `could not find public link named "${name}" with role "${role}"`
-        )
-      })
-  })
+    await findMatchingPublicLinkByName(name, role, resource)
+  }
+)
+
+Then(
+  'a link named {string} should be listed with role {string} in the public link list of file/folder/resource {string} via {string} on the webUI',
+  async function (name, role, resource, via) {
+    await findMatchingPublicLinkByName(name, role, resource, via)
+  }
+)
 
 Then('the user should see an error message on the public link share dialog saying {string}', async function (expectedMessage) {
   const actualMessage = await client.page.FilesPageElement

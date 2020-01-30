@@ -1,8 +1,10 @@
-Enhancement: Show indirect outgoing shares in collaborators list
+Enhancement: Show indirect outgoing shares in shares panel
 
 Whenever outgoing shares exist on any parent resource from the currently viewed resource,
-the collaborators panel will now show these outgoing shares with a link to jump to the matching parent
+the shares panel will now show these outgoing shares with a link to jump to the matching parent
 resource.
+This applies to both indirect collaborators shares and also to indirect public link shares.
 
 https://github.com/owncloud/phoenix/issues/2897
 https://github.com/owncloud/phoenix/pull/2929
+https://github.com/owncloud/phoenix/pull/2932
