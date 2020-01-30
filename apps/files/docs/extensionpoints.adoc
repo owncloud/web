@@ -1,4 +1,4 @@
-## Extensionpoints
+## Extension points
 
 #### file-details-panel
 
@@ -17,3 +17,76 @@
 
 OC.$extend.request('files', 'file-details-panel', payload).then( response => {});
 ----
+
+### Files list status indicators
+
+An extension can extend status indicators in files list with custom component, properties and methods.
+Extending this list can be done by creating a new object inside of appInfo called `filesListIndicators`. This object can contain keys `name` and `component`.
+
+#### Props
+
+Please see known issues before using props in custom indicators.
+
+- `item`: resource to which are indicators assigned
+- `parentPath`: parent folder path of the item
+
+#### Example:
+
+##### App entry point
+[source,js]
+----
+import ExampleIndicators from './components/ExampleIndicators.vue'
+
+const appInfo = {
+  name: 'ExampleIndicators',
+  id: 'ExampleIndicators',
+  icon: 'info',
+  isFileEditor: false,
+  extensions: [],
+  filesListIndicators: [{
+    name: 'CustomIndicators',
+    component: ExampleIndicators
+  }]
+}
+----
+
+##### ExampleIndicators component
+[source,vue]
+----
+<template>
+  <oc-button
+    v-if="isFolder"
+    class="file-row-share-indicator uk-text-middle"
+    aria-label="Custom indicator"
+    @click="triggerAlert"
+    variation="raw"
+  >
+    <oc-icon
+      name="folder"
+      class="uk-text-middle"
+      size="small"
+      variation="active"
+    />
+  </oc-button>
+</template>
+
+<script>
+  export default {
+    name: 'ExampleIndicators',
+    computed: {
+      isFolder () {
+        return this.$parent.item.type === 'folder'
+      }
+    },
+    methods: {
+      triggerAlert () {
+        alert('Hello world')
+      }
+    }
+  }
+</script>
+----
+
+#### Known issues:
+
+Passing resource as a prop into the dynamic component causes Vuex mutation error. To avoid this, access resource direcly via parent component - `this.$parent.item`

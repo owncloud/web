@@ -29,14 +29,7 @@
                 class="uk-margin-small-left"
               />
             </div>
-            <div>
-              <oc-button v-if="$_isUserShare(item)" class="file-row-share-indicator uk-text-middle" :aria-label="$_shareUserIconLabel(item)" @click="$_openSideBar(item, 'files-sharing')" variation="raw">
-                <oc-icon name="group" class="uk-text-middle" size="small" :variation="$_shareUserIconVariation(item)"/>
-              </oc-button>
-              <oc-button v-if="$_isLinkShare(item)" class="file-row-share-indicator uk-text-middle" :aria-label="$_shareLinkIconLabel(item)" @click="$_openSideBar(item, 'file-link')" variation="raw">
-                <oc-icon name="link" class="uk-text-middle" size="small" :variation="$_shareLinkIconVariation(item)"/>
-              </oc-button>
-            </div>
+            <StatusIndicators :item="item" :parentPath="currentFolder.path" @click="$_openSideBar" />
             <div class="uk-text-meta uk-text-nowrap uk-width-small" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }">
               {{ item.size | fileSize }}
             </div>
@@ -75,18 +68,16 @@
 <script>
 import FileList from './FileList.vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
-import { shareTypes } from '../helpers/shareTypes'
-import { getParentPaths } from '../helpers/path'
 
 import Mixins from '../mixins'
 import FileActions from '../fileactions'
-import intersection from 'lodash/intersection'
 
-const userShareTypes = [shareTypes.user, shareTypes.group, shareTypes.guest, shareTypes.remote]
+const StatusIndicators = () => import('./FilesLists/StatusIndicators/StatusIndicators.vue')
 
 export default {
   components: {
-    FileList
+    FileList,
+    StatusIndicators
   },
   mixins: [
     Mixins,
@@ -108,46 +99,6 @@ export default {
 
     $_openSideBar (item, sideBarName) {
       this.$emit('sideBarOpen', item, sideBarName)
-    },
-
-    $_isDirectUserShare (item) {
-      return (intersection(userShareTypes, item.shareTypes).length > 0)
-    },
-
-    $_isIndirectUserShare (item) {
-      return (item.isReceivedShare() || intersection(userShareTypes, this.$_shareTypesIndirect).length > 0)
-    },
-
-    $_isDirectLinkShare (item) {
-      return (item.shareTypes.indexOf(shareTypes.link) >= 0)
-    },
-
-    $_isIndirectLinkShare (item) {
-      return (this.$_shareTypesIndirect.indexOf(shareTypes.link) >= 0)
-    },
-
-    $_isUserShare (item) {
-      return this.$_isDirectUserShare(item) || this.$_isIndirectUserShare(item)
-    },
-
-    $_isLinkShare (item) {
-      return this.$_isDirectLinkShare(item) || this.$_isIndirectLinkShare(item)
-    },
-
-    $_shareUserIconVariation (item) {
-      return this.$_isDirectUserShare(item) ? 'active' : 'passive'
-    },
-
-    $_shareLinkIconVariation (item) {
-      return this.$_isDirectLinkShare(item) ? 'active' : 'passive'
-    },
-
-    $_shareUserIconLabel (item) {
-      return this.$_isDirectUserShare(item) ? this.$gettext('Directly shared with collaborators') : this.$gettext('Shared with collaborators through one of the parent folders')
-    },
-
-    $_shareLinkIconLabel (item) {
-      return this.$_isDirectLinkShare(item) ? this.$gettext('Directly shared with links') : this.$gettext('Shared with links through one of the parent folders')
     },
 
     $_ocFilesFolder_getFolder () {
@@ -216,36 +167,11 @@ export default {
   },
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['loadingFolder', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount', 'currentFolder', 'sharesTree']),
+    ...mapGetters('Files', ['loadingFolder', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount', 'currentFolder']),
     ...mapGetters(['configuration']),
 
     item () {
       return this.$route.params.item
-    },
-
-    $_shareTypesIndirect () {
-      const parentPaths = getParentPaths(this.currentFolder.path, true)
-      if (parentPaths.length === 0) {
-        return []
-      }
-
-      // remove root entry
-      parentPaths.pop()
-
-      const shareTypes = {}
-      parentPaths.forEach((parentPath) => {
-        // TODO: optimize for performance by skipping once we got all known types
-        const shares = this.sharesTree[parentPath]
-        if (shares) {
-          shares.forEach((share) => {
-            // note: no distinction between incoming and outgoing shares as we display the same
-            // indirect indicator for them
-            shareTypes[share.info.share_type] = true
-          })
-        }
-      })
-
-      return Object.keys(shareTypes).map(shareType => parseInt(shareType, 10))
     },
 
     quotaVisible () {

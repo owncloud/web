@@ -5,5 +5,8 @@
   },
   "logo": {
     "favicon": "themes/owncloud/favicon.jpg"
+  },
+  "filesList": {
+    "hideDefaultStatusIndicators": false
   }
 }

@@ -1,0 +1,7 @@
+Enhancement: Add files list status indicators extension point
+
+We've added the ability for the extension to inject custom status indicator into files list.
+New indicators will then appear next to the default one.
+
+https://github.com/owncloud/phoenix/issues/2895
+https://github.com/owncloud/phoenix/pull/2928

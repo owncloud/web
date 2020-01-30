@@ -8,6 +8,7 @@ const state = {
   extensions: {},
   newFileHandlers: [],
   fileSideBars: [],
+  customFilesListIndicators: [],
   meta: {}
 }
 
@@ -118,6 +119,15 @@ const mutations = {
       })
       state.fileSideBars = list
     }
+
+    if (appInfo.filesListIndicators) {
+      const indicators = state.customFilesListIndicators
+      appInfo.filesListIndicators.forEach(indicator => {
+        indicators.push(indicator)
+      })
+      state.customFilesListIndicators = indicators
+    }
+
     if (!appInfo.id) return
     // name: use id as fallback display name
     // icon: use empty box as fallback icon
@@ -164,7 +174,8 @@ const getters = {
   },
   fileSideBars: state => {
     return state.fileSideBars
-  }
+  },
+  customFilesListIndicators: state => state.customFilesListIndicators
 }
 
 export default {
