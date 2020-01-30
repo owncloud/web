@@ -17,7 +17,7 @@
         <oc-button v-if="modifiable" :aria-label="$_deleteButtonLabel" @click="$emit('onDelete', link)" variation="raw" class="oc-files-file-link-delete">
           <oc-icon name="close" />
         </oc-button>
-        <oc-icon v-else name="lock" />
+        <oc-icon v-else name="lock" class="uk-invisible" />
       </oc-table-cell>
       <oc-table-cell>
         <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a>

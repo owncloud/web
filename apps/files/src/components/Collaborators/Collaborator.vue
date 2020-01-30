@@ -21,7 +21,7 @@
         <oc-button v-if="modifiable" :ariaLabel="$gettext('Delete share')" @click="$emit('onDelete', collaborator)" variation="raw" class="files-collaborators-collaborator-delete">
           <oc-icon name="close" />
         </oc-button>
-        <oc-icon v-else name="lock"></oc-icon>
+        <oc-icon v-else name="lock" class="uk-invisible"></oc-icon>
       </oc-table-cell>
       <oc-table-cell shrink>
         <div key="collaborator-avatar-loaded">
