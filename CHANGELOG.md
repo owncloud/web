@@ -16,7 +16,7 @@ Summary
 * Enhancement - Add share indicator for direct and indirect shares in file list: [#2060](https://github.com/owncloud/phoenix/issues/2060)
 * Enhancement - Add files list status indicators extension point: [#2895](https://github.com/owncloud/phoenix/issues/2895)
 * Enhancement - Add theme option to disable default files list status indicators: [#2895](https://github.com/owncloud/phoenix/issues/2895)
-* Enhancement - Show indirect outgoing shares in collaborators list: [#2897](https://github.com/owncloud/phoenix/issues/2897)
+* Enhancement - Show indirect outgoing shares in shares panel: [#2897](https://github.com/owncloud/phoenix/issues/2897)
 * Enhancement - Add owner and resharer in collaborators list: [#2898](https://github.com/owncloud/phoenix/issues/2898)
 
 Details
@@ -94,14 +94,16 @@ Details
    https://github.com/owncloud/phoenix/issues/2895
    https://github.com/owncloud/phoenix/pull/2928
 
-* Enhancement - Show indirect outgoing shares in collaborators list: [#2897](https://github.com/owncloud/phoenix/issues/2897)
+* Enhancement - Show indirect outgoing shares in shares panel: [#2897](https://github.com/owncloud/phoenix/issues/2897)
 
    Whenever outgoing shares exist on any parent resource from the currently viewed resource, the
-   collaborators panel will now show these outgoing shares with a link to jump to the matching
-   parent resource.
+   shares panel will now show these outgoing shares with a link to jump to the matching parent
+   resource. This applies to both indirect collaborators shares and also to indirect public link
+   shares.
 
    https://github.com/owncloud/phoenix/issues/2897
    https://github.com/owncloud/phoenix/pull/2929
+   https://github.com/owncloud/phoenix/pull/2932
 
 * Enhancement - Add owner and resharer in collaborators list: [#2898](https://github.com/owncloud/phoenix/issues/2898)
 
