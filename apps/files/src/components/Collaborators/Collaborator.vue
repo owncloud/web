@@ -1,17 +1,17 @@
 <template>
   <oc-table middle class="files-collaborators-collaborator">
-    <oc-table-row v-if="$_reshareInformation || $_getViaLabel" class="files-collaborators-collaborator-table-row-extra">
+    <oc-table-row v-if="$_reshareInformation || $_viaLabel" class="files-collaborators-collaborator-table-row-extra">
       <oc-table-cell shrink colspan="2"></oc-table-cell>
       <oc-table-cell colspan="2">
         <div v-if="$_reshareInformation" class="uk-text-meta uk-flex uk-flex-middle">
           <oc-icon name="repeat" class="uk-preserve-width" />
           <span>{{ $_reshareInformation }}</span>
         </div>
-        <div v-if="$_getViaLabel" class="uk-text-meta">
-          <router-link :to="$_getViaRouterParams" :aria-label="$gettext('Navigate to parent')"
+        <div v-if="$_viaLabel" class="uk-text-meta">
+          <router-link :to="$_viaRouterParams" :aria-label="$gettext('Navigate to parent')"
                        class="files-collaborators-collaborator-follow-via uk-flex uk-flex-middle">
             <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
-            <span class="oc-file-name uk-padding-remove uk-text-truncate files-collaborators-collaborator-via-label">{{ $_getViaLabel }}</span>
+            <span class="oc-file-name uk-padding-remove uk-text-truncate files-collaborators-collaborator-via-label">{{ $_viaLabel }}</span>
           </router-link>
         </div>
       </oc-table-cell>
@@ -99,7 +99,7 @@ export default {
       return parseInt(this.collaborator.info.share_type, 10)
     },
 
-    $_getViaLabel () {
+    $_viaLabel () {
       if (!this.$_isIndirectShare) {
         return null
       }
@@ -107,7 +107,7 @@ export default {
       return this.$gettextInterpolate(translated, { folderName: basename(this.collaborator.info.path) }, false)
     },
 
-    $_getViaRouterParams () {
+    $_viaRouterParams () {
       const viaPath = this.collaborator.info.path
       return {
         name: 'files-list',
