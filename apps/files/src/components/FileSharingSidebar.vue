@@ -1,10 +1,10 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
-    <div :aria-hidden="visiblePanel == 'newCollaborator'" :inert="visiblePanel == 'newCollaborator'">
-      <oc-loader v-if="$_sharesLoading" aria-label="Loading collaborator list" />
+    <div v-show="visiblePanel === PANEL_SHOW" :aria-hidden="visiblePanel !== PANEL_SHOW" :key="PANEL_SHOW">
+      <oc-loader v-if="$_sharesLoading" :aria-label="$gettext('Loading collaborator list')" />
       <template v-else>
         <div v-if="$_ocCollaborators_canShare" class="uk-margin-small-top uk-margin-small-bottom">
-          <oc-button variation="primary" icon="add" @click="visiblePanel = 'newCollaborator'" class="files-collaborators-open-add-share-dialog-button">
+          <oc-button variation="primary" icon="add" @click="$_ocCollaborators_addShare" class="files-collaborators-open-add-share-dialog-button">
             <translate>Add Collaborators</translate>
           </oc-button>
         </div>
@@ -52,18 +52,24 @@
         <div v-if="$_noCollaborators && !$_sharesLoading" key="oc-collaborators-no-results"><translate>No collaborators</translate></div>
       </template>
     </div>
-    <div :aria-hidden="visiblePanel != 'newCollaborator'" :inert="visiblePanel != 'newCollaborator'">
-      <transition name="custom-classes-transition" enter-active-class="uk-animation-slide-right uk-animation-fast" leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast">
-        <div v-if="visiblePanel == 'newCollaborator'" class="uk-position-cover oc-default-background" >
-          <new-collaborator v-if="$_ocCollaborators_canShare" key="new-collaborator" @close="visiblePanel='collaboratorList'" />
+    <div v-if="visiblePanel === PANEL_NEW" :key="PANEL_NEW">
+      <transition enter-active-class="uk-animation-slide-right uk-animation-fast"
+                  leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
+                  name="custom-classes-transition">
+        <div class="uk-position-cover oc-default-background" >
+          <new-collaborator v-if="$_ocCollaborators_canShare" key="new-collaborator" @close="$_ocCollaborators_showList" />
         </div>
       </transition>
     </div>
-    <transition name="custom-classes-transition" enter-active-class="uk-animation-slide-right uk-animation-fast" leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast">
-      <div v-if="visiblePanel == 'editCollaborator'" class="uk-position-cover oc-default-background">
-        <edit-collaborator v-if="$_ocCollaborators_canShare" key="edit-collaborator" @close="visiblePanel='collaboratorList'; currentShare = null" :collaborator="currentShare" />
-      </div>
-    </transition>
+    <div v-if="visiblePanel === PANEL_EDIT" :key="PANEL_EDIT">
+      <transition enter-active-class="uk-animation-slide-right uk-animation-fast"
+                  leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
+                  name="custom-classes-transition">
+        <div class="uk-position-cover oc-default-background">
+          <edit-collaborator v-if="$_ocCollaborators_canShare" key="edit-collaborator" @close="$_ocCollaborators_showList" :collaborator="currentShare" />
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -77,6 +83,10 @@ const NewCollaborator = _ => import('./Collaborators/NewCollaborator.vue')
 const EditCollaborator = _ => import('./Collaborators/EditCollaborator.vue')
 const Collaborator = _ => import('./Collaborators/Collaborator.vue')
 
+const PANEL_SHOW = 'showCollaborators'
+const PANEL_EDIT = 'editCollaborator'
+const PANEL_NEW = 'newCollaborator'
+
 export default {
   title: $gettext => {
     return $gettext('Collaborators')
@@ -87,10 +97,15 @@ export default {
     EditCollaborator,
     Collaborator
   },
-  data: () => {
+  data () {
     return {
-      visiblePanel: 'collaboratorList',
-      currentShare: null
+      visiblePanel: PANEL_SHOW,
+      currentShare: null,
+
+      // panel types
+      PANEL_SHOW: PANEL_SHOW,
+      PANEL_EDIT: PANEL_EDIT,
+      PANEL_NEW: PANEL_NEW
     }
   },
   mixins: [Mixins],
@@ -292,15 +307,22 @@ export default {
         return textUtils.naturalSortCompare(name1, name2)
       }
     },
+    $_ocCollaborators_addShare () {
+      this.visiblePanel = PANEL_NEW
+    },
     $_ocCollaborators_editShare (share) {
       this.currentShare = share
-      this.visiblePanel = 'editCollaborator'
+      this.visiblePanel = PANEL_EDIT
     },
     $_ocCollaborators_deleteShare (share) {
       this.deleteShare({
         client: this.$client,
         share: share
       })
+    },
+    $_ocCollaborators_showList () {
+      this.visiblePanel = PANEL_SHOW
+      this.currentShare = null
     },
     $_ocCollaborators_isUser (collaborator) {
       return collaborator.info.share_type === '0' || collaborator.info.share_type === '6'
