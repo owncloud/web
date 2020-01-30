@@ -1,18 +1,11 @@
 <template>
   <oc-table middle class="files-collaborators-collaborator">
-    <oc-table-row v-if="$_reshareInformation || $_viaLabel" class="files-collaborators-collaborator-table-row-extra">
+    <oc-table-row v-if="$_reshareInformation" class="files-collaborators-collaborator-table-row-extra">
       <oc-table-cell shrink colspan="2"></oc-table-cell>
       <oc-table-cell colspan="2">
-        <div v-if="$_reshareInformation" class="uk-text-meta uk-flex uk-flex-middle">
+        <div class="uk-text-meta uk-flex uk-flex-middle">
           <oc-icon name="repeat" class="uk-preserve-width" />
-          <span>{{ $_reshareInformation }}</span>
-        </div>
-        <div v-if="$_viaLabel" class="uk-text-meta">
-          <router-link :to="$_viaRouterParams" :aria-label="$gettext('Navigate to parent')"
-                       class="files-collaborators-collaborator-follow-via uk-flex uk-flex-middle">
-            <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
-            <span class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-via-label">{{ $_viaLabel }}</span>
-          </router-link>
+          <span class="uk-padding-remove uk-margin-xsmall-left uk-text-truncate">{{ $_reshareInformation }}</span>
         </div>
       </oc-table-cell>
     </oc-table-row>
@@ -46,6 +39,18 @@
         <oc-button v-if="modifiable" :aria-label="$gettext('Edit share')" @click="$emit('onEdit', collaborator)" variation="raw" class="files-collaborators-collaborator-edit">
           <oc-icon name="edit" />
         </oc-button>
+      </oc-table-cell>
+    </oc-table-row>
+    <oc-table-row v-if="$_viaLabel" class="files-collaborators-collaborator-table-row-extra">
+      <oc-table-cell shrink colspan="2"></oc-table-cell>
+      <oc-table-cell colspan="2">
+        <div class="uk-text-meta">
+          <router-link :to="$_viaRouterParams" :aria-label="$gettext('Navigate to parent')"
+                       class="files-collaborators-collaborator-follow-via uk-flex uk-flex-middle">
+            <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
+            <span class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-via-label">{{ $_viaLabel }}</span>
+          </router-link>
+        </div>
       </oc-table-cell>
     </oc-table-row>
   </oc-table>

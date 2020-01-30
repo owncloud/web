@@ -1,17 +1,5 @@
 <template>
   <oc-table middle class="files-file-links-link">
-    <oc-table-row v-if="$_viaLabel" class="files-file-links-link-table-row-extra">
-      <oc-table-cell shrink></oc-table-cell>
-      <oc-table-cell colspan="2">
-        <div class="uk-text-meta">
-          <router-link :to="$_viaRouterParams" :aria-label="$gettext('Navigate to parent')"
-                       class="oc-files-file-link-via uk-flex uk-flex-middle">
-            <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
-            <span class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-file-links-link-via-label">{{ $_viaLabel }}</span>
-          </router-link>
-        </div>
-      </oc-table-cell>
-    </oc-table-row>
     <oc-table-row class="files-file-links-link-table-row-info">
       <oc-table-cell shrink>
         <oc-button v-if="modifiable" :aria-label="$_deleteButtonLabel" @click="$emit('onDelete', link)" variation="raw" class="oc-files-file-link-delete">
@@ -41,6 +29,18 @@
                    v-clipboard:copy="link.url" v-clipboard:success="$_clipboardSuccessHandler"/>
           <oc-icon v-else name="ready" size="small" class="oc-files-file-link-copied-url _clipboard-success-animation"/>
         </oc-button>
+      </oc-table-cell>
+    </oc-table-row>
+    <oc-table-row v-if="$_viaLabel" class="files-file-links-link-table-row-extra">
+      <oc-table-cell shrink></oc-table-cell>
+      <oc-table-cell colspan="2">
+        <div class="uk-text-meta">
+          <router-link :to="$_viaRouterParams" :aria-label="$gettext('Navigate to parent')"
+                       class="oc-files-file-link-via uk-flex uk-flex-middle">
+            <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
+            <span class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-file-links-link-via-label">{{ $_viaLabel }}</span>
+          </router-link>
+        </div>
       </oc-table-cell>
     </oc-table-row>
   </oc-table>
