@@ -1,6 +1,6 @@
 <template>
   <div class="uk-position-relative" id="oc-files-file-link">
-    <div v-show="visiblePanel === PANEL_SHOW" :aria-hidden="visiblePanel !== PANEL_SHOW">
+    <div v-show="visiblePanel === PANEL_SHOW" :aria-hidden="visiblePanel !== PANEL_SHOW" :key="PANEL_SHOW">
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')"/>
       <template v-else>
         <section v-if="$_privateLinkOfHighlightedFile">
@@ -71,7 +71,7 @@
         </section>
       </template>
     </div>
-    <div v-if="visiblePanel === PANEL_EDIT">
+    <div v-if="visiblePanel === PANEL_EDIT" :key="PANEL_EDIT">
       <transition enter-active-class="uk-animation-slide-right uk-animation-fast"
                   leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
                   name="custom-classes-transition">
