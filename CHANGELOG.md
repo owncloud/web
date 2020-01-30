@@ -14,6 +14,8 @@ Summary
 * Change - Join users and groups into a single list in collaborators sidebar: [#2900](https://github.com/owncloud/phoenix/issues/2900)
 * Change - Adjusted labels in files list: [#2902](https://github.com/owncloud/phoenix/pull/2902)
 * Enhancement - Add share indicator for direct and indirect shares in file list: [#2060](https://github.com/owncloud/phoenix/issues/2060)
+* Enhancement - Add files list status indicators extension point: [#2895](https://github.com/owncloud/phoenix/issues/2895)
+* Enhancement - Add theme option to disable default files list status indicators: [#2895](https://github.com/owncloud/phoenix/issues/2895)
 * Enhancement - Show indirect outgoing shares in collaborators list: [#2897](https://github.com/owncloud/phoenix/issues/2897)
 * Enhancement - Add owner and resharer in collaborators list: [#2898](https://github.com/owncloud/phoenix/issues/2898)
 
@@ -76,6 +78,21 @@ Details
    https://github.com/owncloud/phoenix/issues/2060
    https://github.com/owncloud/phoenix/issues/2894
    https://github.com/owncloud/phoenix/pull/2877
+
+* Enhancement - Add files list status indicators extension point: [#2895](https://github.com/owncloud/phoenix/issues/2895)
+
+   We've added the ability for the extension to inject custom status indicator into files list.
+   New indicators will then appear next to the default one.
+
+   https://github.com/owncloud/phoenix/issues/2895
+   https://github.com/owncloud/phoenix/pull/2928
+
+* Enhancement - Add theme option to disable default files list status indicators: [#2895](https://github.com/owncloud/phoenix/issues/2895)
+
+   We've added the option into the theme to disable default files list status indicators.
+
+   https://github.com/owncloud/phoenix/issues/2895
+   https://github.com/owncloud/phoenix/pull/2928
 
 * Enhancement - Show indirect outgoing shares in collaborators list: [#2897](https://github.com/owncloud/phoenix/issues/2897)
 
