@@ -33,13 +33,13 @@
                     </span>
       </oc-table-cell>
       <oc-table-cell shrink class="uk-text-nowrap">
+        <oc-button v-if="modifiable" :aria-label="$_editButtonLabel" @click="$emit('onEdit', link)" variation="raw" class="oc-files-file-link-edit">
+          <oc-icon name="edit" size="small"/>
+        </oc-button>
         <oc-button :aria-label="$_publicLinkCopyLabel" variation="raw" class="oc-files-file-link-copy-url">
           <oc-icon v-if="!linksCopied[link.url]"  name="copy_to_clipboard" size="small"
                    v-clipboard:copy="link.url" v-clipboard:success="$_clipboardSuccessHandler"/>
           <oc-icon v-else name="ready" size="small" class="oc-files-file-link-copied-url _clipboard-success-animation"/>
-        </oc-button>
-        <oc-button v-if="modifiable" :aria-label="$_editButtonLabel" @click="$emit('onEdit', link)" variation="raw" class="oc-files-file-link-edit">
-          <oc-icon name="edit" size="small"/>
         </oc-button>
       </oc-table-cell>
     </oc-table-row>
