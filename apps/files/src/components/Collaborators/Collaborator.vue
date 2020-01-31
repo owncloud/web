@@ -29,7 +29,7 @@
         <div class="uk-flex uk-flex-column uk-flex-center">
           <div class="oc-text">
             <span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.displayName }}</span>
-            <span v-if="$_shareType === shareTypes.user && collaborator.info.share_with_additional_info.length > 0" class="uk-text-meta">({{ collaborator.info.share_with_additional_info }})</span>
+            <span v-if="$_shareType === shareTypes.user && collaborator.info.share_with_additional_info.length > 0" class="uk-text-meta files-collaborators-collaborator-additional-info">({{ collaborator.info.share_with_additional_info }})</span>
           </div>
           <span class="oc-text"><span class="files-collaborators-collaborator-role">{{ originalRole.label }}</span><template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></span>
           <span class="uk-text-meta files-collaborators-collaborator-share-type" v-text="$_ocCollaborators_collaboratorType(collaborator.info.share_type)" />

@@ -166,7 +166,7 @@ const createPublicLink = function (sharer, data) {
  * @param {string} role
  * @returns {Promise}
  */
-const assertCollaboratorslistContains = function (type, name, role, via = null, resharedThrough = null) {
+const assertCollaboratorslistContains = function (type, name, role = null, via = null, resharedThrough = null, additionalInfo = null) {
   if (type !== 'user' && type !== 'group') {
     throw new Error('illegal type')
   }
@@ -183,12 +183,17 @@ const assertCollaboratorslistContains = function (type, name, role, via = null, 
         )
       }
 
-      assert.strictEqual(role, share.role)
+      if (role !== null) {
+        assert.strictEqual(role, share.role)
+      }
       if (via !== null) {
         assert.strictEqual('Via ' + via, share.viaLabel)
       }
       if (resharedThrough !== null) {
         assert.strictEqual(resharedThrough, share.resharer)
+      }
+      if (additionalInfo !== null) {
+        assert.strictEqual(additionalInfo, share.additionalInfo)
       }
     })
 }
@@ -718,6 +723,14 @@ Then('user {string} should be listed as {string} via {string} in the collaborato
 
 Then('user {string} should be listed as {string} reshared through {string} in the collaborators list on the webUI', function (user, role, resharedThrough) {
   return assertCollaboratorslistContains('user', user, role, null, resharedThrough)
+})
+
+Then('user {string} should be listed with additional info {string} in the collaborators list on the webUI', function (user, additionalInfo) {
+  return assertCollaboratorslistContains('user', user, null, null, null, additionalInfo)
+})
+
+Then('user {string} should be listed without additional info in the collaborators list on the webUI', function (user) {
+  return assertCollaboratorslistContains('user', user, null, null, null, false)
 })
 
 Then('user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', async function (user, role, resource) {

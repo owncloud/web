@@ -469,7 +469,7 @@ module.exports = {
               collaboratorResult[attrName] = text.value
             })
           } else {
-            collaboratorResult[attrName] = null
+            collaboratorResult[attrName] = false
           }
         }
 

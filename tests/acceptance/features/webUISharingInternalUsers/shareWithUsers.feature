@@ -507,3 +507,21 @@ Feature: Sharing files and folders with internal users
     Then user "User Two" should be listed as "Editor" in the collaborators list on the webUI
     And user "User Three" should be listed as "Editor" reshared through "User Two" in the collaborators list on the webUI
 
+  Scenario Outline: collaborators list contains additional info when enabled
+    Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>"
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    When user "user1" has logged in using the webUI
+    And the user opens the share dialog for folder "simple-folder" using the webUI
+    Then user "User Two" should be listed with additional info "<additional-info-result>" in the collaborators list on the webUI
+    Examples:
+      | additional-info-field | additional-info-result |
+      | id                    | (user2)                |
+      | email                 | (user2@example.org)    |
+
+  Scenario: collaborators list does not contain additional info when disabled
+    Given the setting "user_additional_info_field" of app "core" has been set to ""
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    When user "user1" has logged in using the webUI
+    And the user opens the share dialog for folder "simple-folder" using the webUI
+    Then user "User Two" should be listed without additional info in the collaborators list on the webUI
+
