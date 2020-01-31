@@ -498,3 +498,12 @@ Feature: Sharing files and folders with internal users
     And the user opens the share dialog for folder "simple-folder (2)" using the webUI
     Then user "User One" should be listed as "Owner" in the collaborators list on the webUI
 
+  Scenario: resource owner sees resharer in collaborators list
+    Given user "user3" has been created with default attributes
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user2" has shared folder "simple-folder (2)" with user "user3"
+    When user "user1" has logged in using the webUI
+    And the user opens the share dialog for folder "simple-folder" using the webUI
+    Then user "User Two" should be listed as "Editor" in the collaborators list on the webUI
+    And user "User Three" should be listed as "Editor" reshared through "User Two" in the collaborators list on the webUI
+

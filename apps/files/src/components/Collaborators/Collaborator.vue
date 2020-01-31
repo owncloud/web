@@ -5,7 +5,7 @@
       <oc-table-cell colspan="2">
         <div class="uk-text-meta uk-flex uk-flex-middle">
           <oc-icon name="repeat" class="uk-preserve-width" />
-          <span class="uk-padding-remove uk-margin-xsmall-left uk-text-truncate">{{ $_reshareInformation }}</span>
+          <span class="uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-reshare-information">{{ $_reshareInformation }}</span>
         </div>
       </oc-table-cell>
     </oc-table-row>

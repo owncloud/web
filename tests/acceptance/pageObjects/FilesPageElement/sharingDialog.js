@@ -436,7 +436,8 @@ module.exports = {
           role: this.elements.collaboratorInformationSubRole,
           shareType: this.elements.collaboratorInformationSubShareType,
           additionalInfo: this.elements.collaboratorInformationSubAdditionalInfo,
-          viaLabel: this.elements.collaboratorInformationSubVia
+          viaLabel: this.elements.collaboratorInformationSubVia,
+          resharer: this.elements.collaboratorInformationSubResharer
         }
       }
 
@@ -572,6 +573,10 @@ module.exports = {
     collaboratorInformationSubVia: {
       // within collaboratorsInformation
       selector: '.files-collaborators-collaborator-via-label'
+    },
+    collaboratorInformationSubResharer: {
+      // within collaboratorsInformation
+      selector: '.files-collaborators-collaborator-reshare-information'
     },
     collaboratorMoreInformation: {
       // within collaboratorInformationByCollaboratorName
