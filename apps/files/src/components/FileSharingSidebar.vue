@@ -14,20 +14,15 @@
           key="no-reshare-permissions-message"
           v-text="noResharePermsMessage"
         />
-        <section v-if="$_ownerAndResharers.length > 0" class="uk-margin-medium-bottom">
-          <div class="uk-text-bold">
-            <translate>Owner</translate>
-          </div>
+        <section v-if="$_ownerAndResharers.length > 0">
           <ul class="uk-list uk-list-divider uk-overflow-hidden">
             <li v-for="collaborator in $_ownerAndResharers" :key="collaborator.key">
               <collaborator :collaborator="collaborator"/>
             </li>
           </ul>
+          <hr/>
         </section>
-        <section v-if="$_directOutgoingShares.length > 0" class="uk-margin-medium-bottom">
-          <div class="uk-text-bold">
-            <translate>Shares</translate>
-          </div>
+        <section v-if="$_directOutgoingShares.length > 0">
           <transition-group id="files-collaborators-list"
                             class="uk-list uk-list-divider uk-overflow-hidden"
                             enter-active-class="uk-animation-slide-left-medium"
@@ -38,16 +33,15 @@
               <collaborator :collaborator="collaborator" :modifiable="true" @onDelete="$_ocCollaborators_deleteShare" @onEdit="$_ocCollaborators_editShare"/>
             </li>
           </transition-group>
+          <hr/>
         </section>
-        <section v-if="$_indirectOutgoingShares.length > 0" class="uk-margin-medium-bottom">
-          <div class="uk-text-bold">
-            <translate>Via Parent</translate>
-          </div>
+        <section v-if="$_indirectOutgoingShares.length > 0">
           <ul class="uk-list uk-list-divider uk-overflow-hidden">
             <li v-for="collaborator in $_indirectOutgoingShares" :key="collaborator.key">
               <collaborator :collaborator="collaborator"/>
             </li>
           </ul>
+          <hr/>
         </section>
         <div v-if="$_noCollaborators && !$_sharesLoading" key="oc-collaborators-no-results"><translate>No collaborators</translate></div>
       </template>

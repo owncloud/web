@@ -1,18 +1,11 @@
 <template>
   <oc-table middle class="files-collaborators-collaborator">
-    <oc-table-row v-if="$_reshareInformation || $_viaLabel" class="files-collaborators-collaborator-table-row-extra">
+    <oc-table-row v-if="$_reshareInformation" class="files-collaborators-collaborator-table-row-top">
       <oc-table-cell shrink colspan="2"></oc-table-cell>
       <oc-table-cell colspan="2">
-        <div v-if="$_reshareInformation" class="uk-text-meta uk-flex uk-flex-middle">
+        <div class="uk-text-meta uk-flex uk-flex-middle">
           <oc-icon name="repeat" class="uk-preserve-width" />
-          <span>{{ $_reshareInformation }}</span>
-        </div>
-        <div v-if="$_viaLabel" class="uk-text-meta">
-          <router-link :to="$_viaRouterParams" :aria-label="$gettext('Navigate to parent')"
-                       class="files-collaborators-collaborator-follow-via uk-flex uk-flex-middle">
-            <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
-            <span class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-via-label">{{ $_viaLabel }}</span>
-          </router-link>
+          <span class="uk-padding-remove uk-margin-xsmall-left uk-text-truncate">{{ $_reshareInformation }}</span>
         </div>
       </oc-table-cell>
     </oc-table-row>
@@ -21,11 +14,11 @@
         <oc-button v-if="modifiable" :ariaLabel="$gettext('Delete share')" @click="$emit('onDelete', collaborator)" variation="raw" class="files-collaborators-collaborator-delete">
           <oc-icon name="close" />
         </oc-button>
-        <oc-icon v-else name="lock"></oc-icon>
+        <oc-icon v-else name="lock" class="uk-invisible"></oc-icon>
       </oc-table-cell>
       <oc-table-cell shrink>
         <div key="collaborator-avatar-loaded">
-          <avatar-image v-if="$_shareType === shareTypes.user" class="uk-margin-small-right" :width="50" :userid="collaborator.name" :userName="collaborator.displayName" />
+          <avatar-image v-if="$_shareType === shareTypes.user" class="uk-margin-small-right" :width="48" :userid="collaborator.name" :userName="collaborator.displayName" />
           <div v-else key="collaborator-avatar-placeholder">
             <oc-icon v-if="$_shareType === shareTypes.group" class="uk-margin-small-right" name="group" size="large" key="avatar-group" />
             <oc-icon v-else class="uk-margin-small-right" name="person" size="large" key="avatar-generic-person" />
@@ -46,6 +39,18 @@
         <oc-button v-if="modifiable" :aria-label="$gettext('Edit share')" @click="$emit('onEdit', collaborator)" variation="raw" class="files-collaborators-collaborator-edit">
           <oc-icon name="edit" />
         </oc-button>
+      </oc-table-cell>
+    </oc-table-row>
+    <oc-table-row v-if="$_viaLabel" class="files-collaborators-collaborator-table-row-bottom">
+      <oc-table-cell shrink colspan="2"></oc-table-cell>
+      <oc-table-cell colspan="2">
+        <div class="uk-text-meta">
+          <router-link :to="$_viaRouterParams" :aria-label="$gettext('Navigate to parent')"
+                       class="files-collaborators-collaborator-follow-via uk-flex uk-flex-middle">
+            <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
+            <span class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-via-label">{{ $_viaLabel }}</span>
+          </router-link>
+        </div>
       </oc-table-cell>
     </oc-table-row>
   </oc-table>
@@ -140,11 +145,14 @@ export default {
 
 <style scoped="scoped">
   /* FIXME: Move to ODS somehow */
-  .files-collaborators-collaborator-table-row-extra > td {
-    padding: 0 10px 5px 0;
+  .files-collaborators-collaborator-table-row-top > td {
+    padding: 0 10px 3px 0;
   }
   .files-collaborators-collaborator-table-row-info > td {
     padding: 0 10px 0 0;
+  }
+  .files-collaborators-collaborator-table-row-bottom > td {
+    padding: 3px 10px 0 0;
   }
   .files-collaborators-collaborator-via-label {
     max-width: 75%;

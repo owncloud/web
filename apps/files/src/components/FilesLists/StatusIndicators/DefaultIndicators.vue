@@ -4,7 +4,7 @@
       v-for="(indicator, index) in indicators"
       :key="index"
       class="file-row-share-indicator uk-text-middle"
-      :class="{ 'uk-margin-xsmall-left' : index > 0 }"
+      :class="{ 'uk-margin-xsmall-left' : index > 0, 'uk-invisible' : !indicator.visible }"
       :aria-label="indicator.label"
       @click="indicator.handler(item, indicator.id)"
       variation="raw"
@@ -45,29 +45,21 @@ export default {
     ...mapGetters('Files', ['sharesTree']),
 
     indicators () {
-      const indicators = []
-
-      if (this.isUserShare(this.item)) {
-        indicators.push({
-          id: 'files-sharing',
-          label: this.shareUserIconLabel(this.item),
-          icon: 'group',
-          status: this.shareUserIconVariation(this.item),
-          handler: this.indicatorHandler
-        })
-      }
-
-      if (this.isLinkShare(this.item)) {
-        indicators.push({
-          id: 'file-link',
-          label: this.shareLinkIconLabel(this.item),
-          icon: 'link',
-          status: this.shareLinkIconVariation(this.item),
-          handler: this.indicatorHandler
-        })
-      }
-
-      return indicators
+      return [{
+        id: 'files-sharing',
+        label: this.shareUserIconLabel(this.item),
+        visible: this.isUserShare(this.item),
+        icon: 'group',
+        status: this.shareUserIconVariation(this.item),
+        handler: this.indicatorHandler
+      }, {
+        id: 'file-link',
+        label: this.shareLinkIconLabel(this.item),
+        visible: this.isLinkShare(this.item),
+        icon: 'link',
+        status: this.shareLinkIconVariation(this.item),
+        handler: this.indicatorHandler
+      }]
     },
 
     shareTypesIndirect () {

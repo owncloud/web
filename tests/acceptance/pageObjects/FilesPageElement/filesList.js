@@ -780,24 +780,29 @@ module.exports = {
           this.elements.shareIndicatorsInFileRow.locateStrategy,
           shareIndicatorsXpath,
           (result) => {
-            result.value.forEach(async element => {
-              await this.api.elementIdAttribute(element.ELEMENT, 'aria-label', (attr) => {
-                switch (attr.value) {
-                  case 'Directly shared with collaborators':
-                    indicators.push('user-direct')
-                    break
-                  case 'Shared with collaborators through one of the parent folders':
-                    indicators.push('user-indirect')
-                    break
-                  case 'Directly shared with links':
-                    indicators.push('link-direct')
-                    break
-                  case 'Shared with links through one of the parent folders':
-                    indicators.push('link-indirect')
-                    break
-                  default:
-                    console.warn('Unknown share indicator found: "' + attr + '"')
+            result.value.forEach(element => {
+              return this.api.elementIdAttribute(element.ELEMENT, 'class', (attr) => {
+                if (attr.value.indexOf('uk-invisible') >= 0) {
+                  return
                 }
+                return this.api.elementIdAttribute(element.ELEMENT, 'aria-label', (attr) => {
+                  switch (attr.value) {
+                    case 'Directly shared with collaborators':
+                      indicators.push('user-direct')
+                      break
+                    case 'Shared with collaborators through one of the parent folders':
+                      indicators.push('user-indirect')
+                      break
+                    case 'Directly shared with links':
+                      indicators.push('link-direct')
+                      break
+                    case 'Shared with links through one of the parent folders':
+                      indicators.push('link-indirect')
+                      break
+                    default:
+                      console.warn('Unknown share indicator found: "' + attr + '"')
+                  }
+                })
               })
             })
           }
