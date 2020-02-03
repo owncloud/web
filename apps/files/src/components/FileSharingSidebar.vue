@@ -91,6 +91,7 @@ export default {
     EditCollaborator,
     Collaborator
   },
+  mixins: [Mixins],
   data () {
     return {
       visiblePanel: PANEL_SHOW,
@@ -100,23 +101,6 @@ export default {
       PANEL_SHOW: PANEL_SHOW,
       PANEL_EDIT: PANEL_EDIT,
       PANEL_NEW: PANEL_NEW
-    }
-  },
-  mixins: [Mixins],
-  mounted () {
-    this.toggleCollaboratorsEdit(false)
-    if (this.highlightedFile) {
-      this.$_reloadShares()
-    } else {
-      this.$_clearShares()
-    }
-  },
-  watch: {
-    selectedFile (newItem, oldItem) {
-      if (oldItem !== newItem) {
-        this.$_reloadShares()
-        this.selectedCollaborators = []
-      }
     }
   },
   computed: {
@@ -274,6 +258,22 @@ export default {
     noResharePermsMessage () {
       const translated = this.$gettext('You don\'t have permission to share this %{type}')
       return this.$gettextInterpolate(translated, { type: this.highlightedFile.type })
+    }
+  },
+  watch: {
+    selectedFile (newItem, oldItem) {
+      if (oldItem !== newItem) {
+        this.$_reloadShares()
+        this.selectedCollaborators = []
+      }
+    }
+  },
+  mounted () {
+    this.toggleCollaboratorsEdit(false)
+    if (this.highlightedFile) {
+      this.$_reloadShares()
+    } else {
+      this.$_clearShares()
     }
   },
   methods: {

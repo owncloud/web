@@ -87,11 +87,11 @@ const PANEL_SHOW = 'showLinks'
 const PANEL_EDIT = 'editPublicLink'
 
 export default {
-  mixins: [mixins],
   components: {
     EditPublicLink,
     PublicLinkListItem
   },
+  mixins: [mixins],
   title: ($gettext) => {
     return $gettext('Links')
   },
@@ -112,29 +112,6 @@ export default {
         hasPassword: false,
         expireDate: null
       }
-    }
-  },
-  mounted () {
-    if (this.highlightedFile && this.$_links.length === 0) {
-      this.loadLinks({
-        client: this.$client,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext
-      })
-    }
-  },
-  watch: {
-    highlightedFile (n, o) {
-      if (n === o) {
-        return
-      }
-
-      this.visiblePanel = PANEL_SHOW
-      this.loadLinks({
-        client: this.$client,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext
-      })
     }
   },
   computed: {
@@ -199,6 +176,29 @@ export default {
         return window.location.href.split('?')[0] + `?scrollTo=${file}`
       }
       return this.highlightedFile.privateLink
+    }
+  },
+  watch: {
+    highlightedFile (n, o) {
+      if (n === o) {
+        return
+      }
+
+      this.visiblePanel = PANEL_SHOW
+      this.loadLinks({
+        client: this.$client,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext
+      })
+    }
+  },
+  mounted () {
+    if (this.highlightedFile && this.$_links.length === 0) {
+      this.loadLinks({
+        client: this.$client,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext
+      })
     }
   },
   methods: {

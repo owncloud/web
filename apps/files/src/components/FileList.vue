@@ -152,6 +152,20 @@ export default {
       rowActionsItem: {}
     }
   },
+  computed: {
+    ...mapState(['route']),
+    ...mapGetters('Files', ['selectedFiles', 'highlightedFile', 'activeFiles', 'quota',
+      'filesTotalSize', 'activeFilesCount', 'actionsInProgress']),
+    ...mapGetters(['configuration']),
+
+    selectedAll () {
+      return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
+    },
+
+    item () {
+      return this.$route.params.item
+    }
+  },
   methods: {
     ...mapActions('Files', ['loadFolder', 'setFilterTerm', 'markFavorite',
       'setHighlightedFile', 'setPublicLinkPassword',
@@ -302,20 +316,6 @@ export default {
       }
 
       return `files-file-list-action-button-small-resolution-${id}`
-    }
-  },
-  computed: {
-    ...mapState(['route']),
-    ...mapGetters('Files', ['selectedFiles', 'highlightedFile', 'activeFiles', 'quota',
-      'filesTotalSize', 'activeFilesCount', 'actionsInProgress']),
-    ...mapGetters(['configuration']),
-
-    selectedAll () {
-      return this.selectedFiles.length === this.fileData.length && this.fileData.length !== 0
-    },
-
-    item () {
-      return this.$route.params.item
     }
   }
 }

@@ -32,6 +32,13 @@ export default {
   components: {
     MarkdownEditorAppBar
   },
+  computed: {
+    ...mapGetters(['activeFile']),
+    ...mapGetters('MarkdownEditor', ['currentContent', 'lastError']),
+    renderedMarkdown () {
+      return this.currentContent ? marked(this.currentContent, { sanitize: true }) : null
+    }
+  },
   mounted () {
     if (this.activeFile.path === '') {
       this.$router.push({
@@ -43,13 +50,6 @@ export default {
       filePath: this.activeFile.path,
       client: this.$client
     })
-  },
-  computed: {
-    ...mapGetters(['activeFile']),
-    ...mapGetters('MarkdownEditor', ['currentContent', 'lastError']),
-    renderedMarkdown () {
-      return this.currentContent ? marked(this.currentContent, { sanitize: true }) : null
-    }
   },
   methods: {
     ...mapActions('MarkdownEditor', ['updateText', 'loadFile', 'clearLastError']),

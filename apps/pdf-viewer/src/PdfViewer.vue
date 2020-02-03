@@ -12,6 +12,22 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'PdfViewer',
+  components: {
+    pdf,
+    PdfViewerAppBar
+  },
+  data: () => ({
+    content: '',
+    numPages: 0,
+    page: 1
+  }),
+  computed: {
+    ...mapGetters(['getToken', 'activeFile']),
+    ...mapGetters('PDFViewer', ['currentPage']),
+    loading () {
+      return this.content === ''
+    }
+  },
   mounted () {
     if (this.activeFile.path === '') {
       this.closeApp()
@@ -33,22 +49,6 @@ export default {
       .then(blob => {
         this.content = window.URL.createObjectURL(blob)
       })
-  },
-  components: {
-    pdf,
-    PdfViewerAppBar
-  },
-  data: () => ({
-    content: '',
-    numPages: 0,
-    page: 1
-  }),
-  computed: {
-    ...mapGetters(['getToken', 'activeFile']),
-    ...mapGetters('PDFViewer', ['currentPage']),
-    loading () {
-      return this.content === ''
-    }
   },
   methods: {
     ...mapActions('PDFViewer', ['loadPages', 'changePage']),

@@ -25,6 +25,11 @@
 import Mixins from '../mixins'
 
 export default {
+  filters: {
+    toInt (value) {
+      return parseInt(value)
+    }
+  },
   mixins: [
     Mixins
   ],
@@ -33,11 +38,6 @@ export default {
       type: Array,
       default: () => [],
       required: true
-    }
-  },
-  filters: {
-    toInt (value) {
-      return parseInt(value)
     }
   },
   methods: {

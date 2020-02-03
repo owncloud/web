@@ -10,6 +10,34 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'Avatar',
+  props: {
+    /**
+         * The html element used for the avatar container.
+         * `div, span`
+         */
+    type: {
+      type: String,
+      default: 'div',
+      validator: value => {
+        return value.match(/(div|span)/)
+      }
+    },
+    userName: {
+      type: String,
+      default: ''
+    },
+    userid: {
+      /**
+           * Allow empty string to show placeholder
+           */
+      default: ''
+    },
+    width: {
+      type: Number,
+      required: false,
+      default: 42
+    }
+  },
   data () {
     return {
       /**
@@ -20,6 +48,25 @@ export default {
        * Shows spinner in place whilst loading avatar from server
        */
       loading: true
+    }
+  },
+  computed: {
+    ...mapGetters(['getToken']),
+    enabled: function () {
+      return this.$root.config.enableAvatars || true
+    }
+  },
+  watch: {
+    userid: function (userid, old) {
+      this.setUser(userid)
+    }
+  },
+  mounted: function () {
+    // Handled mounted situation. Userid might not be set yet so try placeholder
+    if (this.userid !== '') {
+      this.setUser(this.userid)
+    } else {
+      this.loading = false
     }
   },
   methods: {
@@ -61,53 +108,6 @@ export default {
           this.loading = false
           console.error(`Error loading avatar image for user "${this.userid}": `, error.message)
         })
-    }
-  },
-  watch: {
-    userid: function (userid, old) {
-      this.setUser(userid)
-    }
-  },
-  mounted: function () {
-    // Handled mounted situation. Userid might not be set yet so try placeholder
-    if (this.userid !== '') {
-      this.setUser(this.userid)
-    } else {
-      this.loading = false
-    }
-  },
-  computed: {
-    ...mapGetters(['getToken']),
-    enabled: function () {
-      return this.$root.config.enableAvatars || true
-    }
-  },
-  props: {
-    /**
-     * The html element used for the avatar container.
-     * `div, span`
-     */
-    type: {
-      type: String,
-      default: 'div',
-      validator: value => {
-        return value.match(/(div|span)/)
-      }
-    },
-    userName: {
-      type: String,
-      default: ''
-    },
-    userid: {
-      /**
-       * Allow empty string to show placeholder
-       */
-      default: ''
-    },
-    width: {
-      type: Number,
-      required: false,
-      default: 42
     }
   }
 }

@@ -300,6 +300,15 @@ export default {
         this.publicPage()
     }
   },
+  watch: {
+    // This ensures buttons will display with its right icons, values, etc.
+    // TODO: Find a better solution
+    $route (to, from) {
+      this.actionsKey = Math.floor(Math.random() * 20)
+      this.$refs.mobileSearch.value = null
+      this.$refs.globalSearchBar.query = ''
+    }
+  },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile',
       'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilterTerm', 'resetSearch']),
@@ -576,15 +585,6 @@ export default {
       this.resetSearch()
       // Forces update of search bar
       this.searchBarKey++
-    }
-  },
-  watch: {
-    // This ensures buttons will display with its right icons, values, etc.
-    // TODO: Find a better solution
-    $route (to, from) {
-      this.actionsKey = Math.floor(Math.random() * 20)
-      this.$refs.mobileSearch.value = null
-      this.$refs.globalSearchBar.query = ''
     }
   }
 }

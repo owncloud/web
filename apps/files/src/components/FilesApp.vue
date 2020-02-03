@@ -59,10 +59,6 @@ import OcDialogPrompt from './ocDialogPrompt.vue'
 const UploadProgress = () => import('./UploadProgress.vue')
 
 export default {
-  mixins: [
-    Mixins,
-    FileActions
-  ],
   components: {
     FileDetails,
     AllFilesList,
@@ -73,6 +69,10 @@ export default {
     UploadProgress,
     OcDialogPrompt
   },
+  mixins: [
+    Mixins,
+    FileActions
+  ],
   data () {
     return {
       createFolder: false,
@@ -85,6 +85,74 @@ export default {
       self: {},
       renameDialogErrorMessage: null
     }
+  },
+  computed: {
+    ...mapGetters('Files', [
+      'selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile', 'currentFolder', 'inProgress',
+      'renameDialogSelectedFile',
+      'deleteDialogSelectedFiles', 'deleteDialogMessage'
+    ]),
+    ...mapGetters(['extensions']),
+
+    _sidebarOpen () {
+      return this.highlightedFile !== null
+    },
+
+    sharedList () {
+      return this.$route.name === 'files-shared-with-me' || this.$route.name === 'files-shared-with-others'
+    },
+
+    $_renameDialogPlaceholder () {
+      let translated
+      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
+
+      if (this.renameDialogSelectedFile.type === 'folder') {
+        translated = this.$gettext('Enter new folder name…')
+      } else {
+        translated = this.$gettext('Enter new file name…')
+      }
+      return translated
+    },
+
+    $_renameDialogLabel () {
+      let translated
+      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return ''
+
+      if (this.renameDialogSelectedFile.type === 'folder') {
+        translated = this.$gettext('Folder name')
+      } else {
+        translated = this.$gettext('File name')
+      }
+      return translated
+    },
+
+    $_renameDialogTitle () {
+      let translated
+
+      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
+
+      if (this.renameDialogSelectedFile.type === 'folder') {
+        translated = this.$gettext('Rename folder %{name}')
+      } else {
+        translated = this.$gettext('Rename file %{name}')
+      }
+      return this.$gettextInterpolate(translated, { name: this.renameDialogSelectedFile.name }, true)
+    },
+
+    $_deleteDialogTitle () {
+      // FIXME: differentiate between file, folder and multiple
+      return this.$gettext('Delete File/Folder')
+    }
+  },
+  watch: {
+    $route () {
+      this.setHighlightedFile(null)
+    }
+  },
+  created () {
+    this.$root.$on('upload-end', () => {
+      this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
+    })
   },
   methods: {
     ...mapActions('Files', ['dragOver', 'setHighlightedFile']),
@@ -149,74 +217,6 @@ export default {
 
     $_validateFileName (value) {
       this.renameDialogErrorMessage = this.validateFileName(value)
-    }
-  },
-  created () {
-    this.$root.$on('upload-end', () => {
-      this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
-    })
-  },
-  computed: {
-    ...mapGetters('Files', [
-      'selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile', 'currentFolder', 'inProgress',
-      'renameDialogSelectedFile',
-      'deleteDialogSelectedFiles', 'deleteDialogMessage'
-    ]),
-    ...mapGetters(['extensions']),
-
-    _sidebarOpen () {
-      return this.highlightedFile !== null
-    },
-
-    sharedList () {
-      return this.$route.name === 'files-shared-with-me' || this.$route.name === 'files-shared-with-others'
-    },
-
-    $_renameDialogPlaceholder () {
-      let translated
-      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
-
-      if (this.renameDialogSelectedFile.type === 'folder') {
-        translated = this.$gettext('Enter new folder name…')
-      } else {
-        translated = this.$gettext('Enter new file name…')
-      }
-      return translated
-    },
-
-    $_renameDialogLabel () {
-      let translated
-      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return ''
-
-      if (this.renameDialogSelectedFile.type === 'folder') {
-        translated = this.$gettext('Folder name')
-      } else {
-        translated = this.$gettext('File name')
-      }
-      return translated
-    },
-
-    $_renameDialogTitle () {
-      let translated
-
-      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
-
-      if (this.renameDialogSelectedFile.type === 'folder') {
-        translated = this.$gettext('Rename folder %{name}')
-      } else {
-        translated = this.$gettext('Rename file %{name}')
-      }
-      return this.$gettextInterpolate(translated, { name: this.renameDialogSelectedFile.name }, true)
-    },
-
-    $_deleteDialogTitle () {
-      // FIXME: differentiate between file, folder and multiple
-      return this.$gettext('Delete File/Folder')
-    }
-  },
-  watch: {
-    $route () {
-      this.setHighlightedFile(null)
     }
   }
 }

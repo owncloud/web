@@ -13,7 +13,8 @@
         "sourceType": "module"
     },
     "rules": {
-      "require-await": "warn"
+      "require-await": "warn",
+      "vue/order-in-components": "error"
     },
     "globals": {
       "require": false,

@@ -34,15 +34,6 @@ export default {
       default: () => null
     }
   },
-  watch: {
-    visible (val) {
-      if (val) {
-        this.focusFirstLink()
-      } else {
-        this.$emit('closed')
-      }
-    }
-  },
   computed: {
     $_applicationsList () {
       return this.applicationsList.map((item) => {
@@ -81,6 +72,15 @@ export default {
 
         return app
       })
+    }
+  },
+  watch: {
+    visible (val) {
+      if (val) {
+        this.focusFirstLink()
+      } else {
+        this.$emit('closed')
+      }
     }
   },
   methods: {

@@ -51,24 +51,17 @@ import Mixins from '../mixins'
 
 export default {
   name: 'UploadProgress',
-  data () {
-    return {
-      announcement: '',
-      announcementOnComplete: this.$gettext('Upload complete')
-    }
-  },
   components: {
     UploadMenu
   },
   mixins: [
     Mixins
   ],
-  created () {
-    this.$root.$on('upload-start', () => {
-      this.$nextTick(() => {
-        this.delayForScreenreader(() => this.$refs.progressbar.$el.focus())
-      })
-    })
+  data () {
+    return {
+      announcement: '',
+      announcementOnComplete: this.$gettext('Upload complete')
+    }
   },
   computed: {
     ...mapGetters('Files', ['inProgress', 'uploaded']),
@@ -103,6 +96,13 @@ export default {
         this.announcement = this.announcementOnComplete
       }
     }
+  },
+  created () {
+    this.$root.$on('upload-start', () => {
+      this.$nextTick(() => {
+        this.delayForScreenreader(() => this.$refs.progressbar.$el.focus())
+      })
+    })
   }
 }
 </script>

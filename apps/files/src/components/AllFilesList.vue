@@ -75,6 +75,7 @@ import FileActions from '../fileactions'
 const StatusIndicators = () => import('./FilesLists/StatusIndicators/StatusIndicators.vue')
 
 export default {
+  name: 'AllFilesList',
   components: {
     FileList,
     StatusIndicators
@@ -83,11 +84,32 @@ export default {
     Mixins,
     FileActions
   ],
-  name: 'AllFilesList',
   props: ['fileData', 'starsEnabled', 'checkboxEnabled', 'dateEnabled', 'parentFolder'],
   data () {
     return {
       favoritesHeaderText: this.$gettext('Favorites')
+    }
+  },
+  computed: {
+    ...mapState(['route']),
+    ...mapGetters('Files', ['loadingFolder', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount', 'currentFolder']),
+    ...mapGetters(['configuration']),
+
+    item () {
+      return this.$route.params.item
+    },
+
+    quotaVisible () {
+      return (
+        !this.publicPage() &&
+          this.currentFolder &&
+          !this.currentFolder.isMounted()
+      )
+    }
+  },
+  watch: {
+    $route () {
+      this.$_ocFilesFolder_getFolder()
     }
   },
   beforeMount () {
@@ -163,28 +185,6 @@ export default {
 
     isActionEnabled (item, action) {
       return action.isEnabled(item, this.parentFolder)
-    }
-  },
-  computed: {
-    ...mapState(['route']),
-    ...mapGetters('Files', ['loadingFolder', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount', 'currentFolder']),
-    ...mapGetters(['configuration']),
-
-    item () {
-      return this.$route.params.item
-    },
-
-    quotaVisible () {
-      return (
-        !this.publicPage() &&
-        this.currentFolder &&
-        !this.currentFolder.isMounted()
-      )
-    }
-  },
-  watch: {
-    $route () {
-      this.$_ocFilesFolder_getFolder()
     }
   }
 }

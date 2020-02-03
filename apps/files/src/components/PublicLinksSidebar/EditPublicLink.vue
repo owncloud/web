@@ -96,11 +96,11 @@ import publicLinkRoles from '../../helpers/publicLinkRolesDefinition'
 const RolesSelect = () => import('../Roles/RolesSelect.vue')
 
 export default {
-  mixins: [mixins],
-  props: ['params'],
   components: {
     RolesSelect
   },
+  mixins: [mixins],
+  props: ['params'],
   data () {
     return {
       password: null,

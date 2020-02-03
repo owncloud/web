@@ -45,109 +45,6 @@ export default {
     }
   },
 
-  watch: {
-    activeIndex (o, n) {
-      if (o !== n) {
-        this.loadImage()
-      }
-    }
-  },
-
-  methods: {
-    loadImage () {
-      this.loading = true
-
-      // Don't bother loading if files i chached
-      if (this.activeMediaFileCached) {
-        setTimeout(() => {
-          this.image = this.activeMediaFileCached
-          this.loading = false
-        },
-        // Delay to animate
-        this.animationDuration / 2)
-        return
-      }
-
-      // Fetch image
-      this.mediaSource(this.thumbPath, 'url', this.headers).then(imageUrl => {
-        this.images.push({
-          id: this.activeMediaFile.id,
-          name: this.activeMediaFile.name,
-          url: imageUrl
-        })
-        this.image = this.activeMediaFileCached
-        this.loading = false
-        this.failed = false
-      }).catch(e => {
-        this.loading = false
-        this.failed = true
-      })
-    },
-    downloadImage () {
-      if (this.loading) {
-        return
-      }
-
-      return this.downloadFile(this.mediaFiles[this.activeIndex])
-    },
-    next () {
-      if (this.loading) { return }
-
-      this.direction = 'rtl'
-      if ((this.activeIndex + 1) >= this.mediaFiles.length) {
-        this.activeIndex = 0
-        return
-      }
-      this.activeIndex++
-    },
-    prev () {
-      if (this.loading) { return }
-
-      this.direction = 'ltr'
-      if (this.activeIndex === 0) {
-        this.activeIndex = this.mediaFiles.length - 1
-        return
-      }
-      this.activeIndex--
-    },
-    handleKeyPress (e) {
-      if (!e) return false
-      else if (e.key === 'ArrowRight') this.next()
-      else if (e.key === 'ArrowLeft') this.prev()
-    },
-    closeApp () {
-      this.$router.go(-1)
-    }
-  },
-
-  mounted () {
-    document.addEventListener('keyup', this.handleKeyPress)
-
-    // Return if no Image is selected
-    if (this.$store.getters.activeFile.path === '') {
-      this.$router.push({
-        path: '/files'
-      })
-      return
-    }
-
-    // Set initial file
-    for (let i = 0; i < this.mediaFiles.length; i++) {
-      if (this.mediaFiles[i].path === this.$store.getters.activeFile.path) {
-        this.activeIndex = i
-        break
-      }
-    }
-  },
-
-  beforeDestroy () {
-    document.removeEventListener('keyup', this.handleKeyPress)
-
-    this.images.forEach(image => {
-      window.URL.revokeObjectURL(image.url)
-    })
-  },
-
   computed: {
     ...mapGetters('Files', ['activeFiles', 'publicLinkPassword']),
     ...mapGetters(['getToken']),
@@ -227,6 +124,110 @@ export default {
 
       return this.$client.files.getFileUrl(path) + '?' + query
     }
+  },
+
+  watch: {
+    activeIndex (o, n) {
+      if (o !== n) {
+        this.loadImage()
+      }
+    }
+  },
+
+  mounted () {
+    document.addEventListener('keyup', this.handleKeyPress)
+
+    // Return if no Image is selected
+    if (this.$store.getters.activeFile.path === '') {
+      this.$router.push({
+        path: '/files'
+      })
+      return
+    }
+
+    // Set initial file
+    for (let i = 0; i < this.mediaFiles.length; i++) {
+      if (this.mediaFiles[i].path === this.$store.getters.activeFile.path) {
+        this.activeIndex = i
+        break
+      }
+    }
+  },
+
+  beforeDestroy () {
+    document.removeEventListener('keyup', this.handleKeyPress)
+
+    this.images.forEach(image => {
+      window.URL.revokeObjectURL(image.url)
+    })
+  },
+
+  methods: {
+    loadImage () {
+      this.loading = true
+
+      // Don't bother loading if files i chached
+      if (this.activeMediaFileCached) {
+        setTimeout(() => {
+          this.image = this.activeMediaFileCached
+          this.loading = false
+        },
+        // Delay to animate
+        this.animationDuration / 2)
+        return
+      }
+
+      // Fetch image
+      this.mediaSource(this.thumbPath, 'url', this.headers).then(imageUrl => {
+        this.images.push({
+          id: this.activeMediaFile.id,
+          name: this.activeMediaFile.name,
+          url: imageUrl
+        })
+        this.image = this.activeMediaFileCached
+        this.loading = false
+        this.failed = false
+      }).catch(e => {
+        this.loading = false
+        this.failed = true
+      })
+    },
+    downloadImage () {
+      if (this.loading) {
+        return
+      }
+
+      return this.downloadFile(this.mediaFiles[this.activeIndex])
+    },
+    next () {
+      if (this.loading) { return }
+
+      this.direction = 'rtl'
+      if ((this.activeIndex + 1) >= this.mediaFiles.length) {
+        this.activeIndex = 0
+        return
+      }
+      this.activeIndex++
+    },
+    prev () {
+      if (this.loading) { return }
+
+      this.direction = 'ltr'
+      if (this.activeIndex === 0) {
+        this.activeIndex = this.mediaFiles.length - 1
+        return
+      }
+      this.activeIndex--
+    },
+    handleKeyPress (e) {
+      if (!e) return false
+      else if (e.key === 'ArrowRight') this.next()
+      else if (e.key === 'ArrowLeft') this.prev()
+    },
+    closeApp () {
+      this.$router.go(-1)
+    }
   }
+
 }
 </script>
