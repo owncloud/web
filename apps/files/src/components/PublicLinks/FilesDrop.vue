@@ -69,9 +69,6 @@ export default {
       uploadedFilesChangeTracker: 0
     }
   },
-  mounted () {
-    this.resolvePublicLink()
-  },
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
@@ -101,6 +98,9 @@ export default {
         previewsContainer: '#previews'
       }
     }
+  },
+  mounted () {
+    this.resolvePublicLink()
   },
   methods: {
     resolvePublicLink () {

@@ -23,14 +23,14 @@ import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 
 export default {
-  mixins: [
-    pluginHelper
-  ],
   components: {
     Notifications,
     ApplicationsMenu,
     UserMenu
   },
+  mixins: [
+    pluginHelper
+  ],
   props: {
     userId: {
       type: String,
@@ -58,14 +58,14 @@ export default {
       default: () => []
     }
   },
-  methods: {
-    $_onOpenAppNavigation () {
-      this.$emit('toggleAppNavigation')
-    }
-  },
   computed: {
     isPublicPage () {
       return !this.userId
+    }
+  },
+  methods: {
+    $_onOpenAppNavigation () {
+      this.$emit('toggleAppNavigation')
     }
   }
 }

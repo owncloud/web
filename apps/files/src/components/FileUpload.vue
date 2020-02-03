@@ -11,6 +11,9 @@
 import Mixins from '../mixins'
 
 export default {
+  mixins: [
+    Mixins
+  ],
   props: {
     path: { type: String, required: true },
     headers: {
@@ -27,9 +30,6 @@ export default {
     },
     requestType: { type: String, default: 'PUT' }
   },
-  mixins: [
-    Mixins
-  ],
   methods: {
     triggerUpload () {
       this.$refs.input.click()

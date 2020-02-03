@@ -10,6 +10,9 @@
 <script>
 import Mixins from '../mixins'
 export default {
+  mixins: [
+    Mixins
+  ],
   props: {
     rootPath: { type: String, required: true },
     path: { type: String, required: true },
@@ -27,9 +30,6 @@ export default {
     },
     requestType: { type: String, default: 'PUT' }
   },
-  mixins: [
-    Mixins
-  ],
   methods: {
     triggerUpload () {
       this.$refs.input.click()

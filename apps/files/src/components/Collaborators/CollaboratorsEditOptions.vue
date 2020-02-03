@@ -37,6 +37,10 @@ const AdditionalPermissions = () => import('./AdditionalPermissions.vue')
 
 export default {
   name: 'CollaboratorsEditOptions',
+  components: {
+    RolesSelect,
+    AdditionalPermissions
+  },
   mixins: [
     collaboratorsMixins
   ],
@@ -53,10 +57,6 @@ export default {
       type: String,
       required: false
     }
-  },
-  components: {
-    RolesSelect,
-    AdditionalPermissions
   },
   data () {
     return {

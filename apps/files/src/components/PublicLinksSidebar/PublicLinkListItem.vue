@@ -52,6 +52,7 @@ import mixins from '../../mixins'
 
 export default {
   name: 'PublicLinkListItem',
+  mixins: [mixins],
   props: {
     link: {
       type: Object,
@@ -70,7 +71,6 @@ export default {
       default: () => {}
     }
   },
-  mixins: [mixins],
   computed: {
     $_viaLabel () {
       if (!this.indirect) {

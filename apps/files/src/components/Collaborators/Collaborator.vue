@@ -64,6 +64,9 @@ import Mixins from '../../mixins/collaborators'
 
 export default {
   name: 'Collaborator',
+  mixins: [
+    Mixins
+  ],
   props: {
     collaborator: {
       type: Object,
@@ -74,9 +77,6 @@ export default {
       default: false
     }
   },
-  mixins: [
-    Mixins
-  ],
   data: function () {
     return {
       shareTypes

@@ -45,15 +45,15 @@ export default {
       password: null
     }
   },
-  mounted () {
-    this.resolvePublicLink()
-  },
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['davProperties']),
     passwordPlaceholder () {
       return this.$gettext('Enter password')
     }
+  },
+  mounted () {
+    this.resolvePublicLink()
   },
   methods: {
     ...mapActions('Files', ['setPublicLinkPassword']),

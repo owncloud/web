@@ -27,11 +27,11 @@ export default {
       }
     }
   },
-  methods: {
-    ...mapActions('Files', ['setFileFilter', 'setFilterTerm'])
-  },
   computed: {
     ...mapGetters('Files', ['fileFilter', 'filterTerm'])
+  },
+  methods: {
+    ...mapActions('Files', ['setFileFilter', 'setFilterTerm'])
   }
 }
 </script>

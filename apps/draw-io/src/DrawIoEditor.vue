@@ -11,23 +11,6 @@ export default {
     filePath: '',
     currentETag: null
   }),
-  created () {
-    this.filePath = this.$route.params.filePath
-
-    window.addEventListener('message', event => {
-      console.log(event)
-      if (event.data.length > 0) {
-        var payload = JSON.parse(event.data)
-        if (payload.event === 'init') {
-          this.load()
-        } else if (payload.event === 'save') {
-          this.save(payload)
-        } else if (payload.event === 'exit') {
-          this.exit()
-        }
-      }
-    })
-  },
   computed: {
     ...mapGetters(['getToken']),
     loading () {
@@ -45,6 +28,23 @@ export default {
 
       return 'https://www.draw.io?' + query
     }
+  },
+  created () {
+    this.filePath = this.$route.params.filePath
+
+    window.addEventListener('message', event => {
+      console.log(event)
+      if (event.data.length > 0) {
+        var payload = JSON.parse(event.data)
+        if (payload.event === 'init') {
+          this.load()
+        } else if (payload.event === 'save') {
+          this.save(payload)
+        } else if (payload.event === 'exit') {
+          this.exit()
+        }
+      }
+    })
   },
   methods: {
     ...mapActions(['showMessage']),

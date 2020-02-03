@@ -48,14 +48,6 @@ const { default: PQueue } = require('p-queue')
 
 export default {
   name: 'Trashbin',
-  props: ['fileData'],
-
-  data () {
-    return {
-      queue: new PQueue({ concurrency: 4 }),
-      ocDialogIsOpen: false
-    }
-  },
 
   components: {
     OcDialogPrompt,
@@ -65,9 +57,13 @@ export default {
   mixins: [
     Mixins
   ],
+  props: ['fileData'],
 
-  beforeMount () {
-    this.$_ocTrashbin_getFiles()
+  data () {
+    return {
+      queue: new PQueue({ concurrency: 4 }),
+      ocDialogIsOpen: false
+    }
   },
 
   computed: {
@@ -102,6 +98,10 @@ export default {
         }
       ]
     }
+  },
+
+  beforeMount () {
+    this.$_ocTrashbin_getFiles()
   },
 
   methods: {

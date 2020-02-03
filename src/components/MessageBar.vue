@@ -23,14 +23,14 @@ export default {
       default: () => []
     }
   },
-  methods: {
-    deleteMessage (item) {
-      this.$emit('deleteMessage', item)
-    }
-  },
   computed: {
     $_ocMessages_limited () {
       return this.activeMessages ? this.activeMessages.slice(0, 5) : []
+    }
+  },
+  methods: {
+    deleteMessage (item) {
+      this.$emit('deleteMessage', item)
     }
   }
 }

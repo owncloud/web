@@ -33,6 +33,14 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'OidcCallbackPage',
+  data () {
+    return {
+      error: false
+    }
+  },
+  computed: {
+    ...mapGetters(['configuration'])
+  },
   mounted () {
     this.$nextTick(() => {
       if (this.$route.query.error) {
@@ -46,14 +54,6 @@ export default {
         this.callback()
       }
     })
-  },
-  data () {
-    return {
-      error: false
-    }
-  },
-  computed: {
-    ...mapGetters(['configuration'])
   },
   methods: {
     ...mapActions(['callback', 'signinSilentCallback'])

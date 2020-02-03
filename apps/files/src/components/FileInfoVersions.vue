@@ -38,14 +38,6 @@ export default {
     versions: [],
     loading: false
   }),
-  mounted () {
-    this.getFileVersions()
-  },
-  watch: {
-    currentFile () {
-      this.getFileVersions()
-    }
-  },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['getToken']),
@@ -55,6 +47,14 @@ export default {
     currentFile () {
       return this.highlightedFile
     }
+  },
+  watch: {
+    currentFile () {
+      this.getFileVersions()
+    }
+  },
+  mounted () {
+    this.getFileVersions()
   },
   methods: {
     currentVersionId (file) {

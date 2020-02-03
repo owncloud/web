@@ -39,22 +39,12 @@ import Mixins from '../mixins'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  mixins: [Mixins],
   name: 'FileDetails',
+  mixins: [Mixins],
   data () {
     return {
       /** String name of the tab that is activated */
       activeTab: null
-    }
-  },
-  methods: {
-    ...mapActions('Files', ['deleteFiles']),
-    ...mapActions(['showMessage']),
-    close () {
-      this.$emit('reset')
-    },
-    showSidebar (app) {
-      this.activeTab = app
     }
   },
   computed: {
@@ -81,6 +71,16 @@ export default {
   mounted () {
     // Ensure default tab is not undefined
     this.activeTab = this.defaultTab
+  },
+  methods: {
+    ...mapActions('Files', ['deleteFiles']),
+    ...mapActions(['showMessage']),
+    close () {
+      this.$emit('reset')
+    },
+    showSidebar (app) {
+      this.activeTab = app
+    }
   }
 }
 </script>

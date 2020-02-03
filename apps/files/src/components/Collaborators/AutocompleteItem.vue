@@ -22,8 +22,8 @@ import { shareTypes } from '../../helpers/shareTypes'
 
 export default {
   name: 'AutocompleteItem',
-  props: ['item'],
   mixins: [Mixins],
+  props: ['item'],
   data () {
     return {
       shareTypes,

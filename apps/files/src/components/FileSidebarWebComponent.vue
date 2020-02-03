@@ -16,9 +16,6 @@ export default {
   title: ($gettext) => {
     return null
   },
-  data: () => ({
-    loading: true
-  }),
   props: {
     componentName: {
       type: String,
@@ -27,6 +24,16 @@ export default {
     componentUrl: {
       type: String,
       required: true
+    }
+  },
+  data: () => ({
+    loading: true
+  }),
+  computed: {
+    ...mapGetters('Files', ['highlightedFile']),
+    ...mapGetters(['getToken']),
+    highlightedFileAsJson () {
+      return JSON.stringify(this.highlightedFile)
     }
   },
   mounted () {
@@ -41,13 +48,6 @@ export default {
     }, error => {
       console.log(error)
     })
-  },
-  computed: {
-    ...mapGetters('Files', ['highlightedFile']),
-    ...mapGetters(['getToken']),
-    highlightedFileAsJson () {
-      return JSON.stringify(this.highlightedFile)
-    }
   },
   methods: {
   }

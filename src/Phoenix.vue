@@ -37,25 +37,6 @@ export default {
       $_notificationsInterval: null
     }
   },
-  destroyed () {
-    if (this.$_notificationsInterval) {
-      clearInterval(this.$_notificationsInterval)
-    }
-  },
-  metaInfo () {
-    const metaInfo = {
-      title: this.configuration.theme.general.name
-    }
-    if (this.favicon) {
-      metaInfo.link = [
-        { rel: 'icon', href: this.favicon }
-      ]
-    }
-    return metaInfo
-  },
-  beforeMount () {
-    this.initAuth()
-  },
   computed: {
     ...mapState(['route', 'user']),
     ...mapGetters(['configuration', 'activeNotifications', 'activeMessages', 'capabilities']),
@@ -86,21 +67,6 @@ export default {
       return this.configuration.theme.logo.favicon
     }
   },
-  methods: {
-    ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
-    $_toggleAppNavigation (state) {
-      this.appNavigationVisible = state
-    },
-    $_updateNotifications () {
-      this.fetchNotifications(this.$client).catch((error) => {
-        console.error('Error while loading notifications: ', error)
-        clearInterval(this.$_notificationsInterval)
-      })
-    },
-    $_deleteMessage (item) {
-      this.deleteMessage(item)
-    }
-  },
   watch: {
     $route () {
       this.appNavigationVisible = false
@@ -120,6 +86,40 @@ export default {
           this.$_updateNotifications()
         }, 30000)
       }
+    }
+  },
+  destroyed () {
+    if (this.$_notificationsInterval) {
+      clearInterval(this.$_notificationsInterval)
+    }
+  },
+  metaInfo () {
+    const metaInfo = {
+      title: this.configuration.theme.general.name
+    }
+    if (this.favicon) {
+      metaInfo.link = [
+        { rel: 'icon', href: this.favicon }
+      ]
+    }
+    return metaInfo
+  },
+  beforeMount () {
+    this.initAuth()
+  },
+  methods: {
+    ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
+    $_toggleAppNavigation (state) {
+      this.appNavigationVisible = state
+    },
+    $_updateNotifications () {
+      this.fetchNotifications(this.$client).catch((error) => {
+        console.error('Error while loading notifications: ', error)
+        clearInterval(this.$_notificationsInterval)
+      })
+    },
+    $_deleteMessage (item) {
+      this.deleteMessage(item)
     }
   }
 }

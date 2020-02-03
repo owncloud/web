@@ -36,14 +36,14 @@ import Mixins from '../../mixins/collaborators'
 
 export default {
   name: 'EditCollaborator',
-  props: ['collaborator'],
-  mixins: [
-    Mixins
-  ],
   components: {
     Collaborator,
     CollaboratorsEditOptions
   },
+  mixins: [
+    Mixins
+  ],
+  props: ['collaborator'],
   data () {
     return {
       editing: false,

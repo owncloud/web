@@ -32,14 +32,6 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'AccessDeniedPage',
-  methods: {
-    ...mapActions(['logout']),
-    performLogout (event) {
-      if (event.target.id === 'exitAnchor') {
-        this.logout()
-      }
-    }
-  },
   computed: {
     ...mapGetters(['configuration']),
     helpDeskText () {
@@ -63,6 +55,14 @@ export default {
         return this.configuration.theme.general.helpDeskLinkText
       }
       return ''
+    }
+  },
+  methods: {
+    ...mapActions(['logout']),
+    performLogout (event) {
+      if (event.target.id === 'exitAnchor') {
+        this.logout()
+      }
     }
   }
 }

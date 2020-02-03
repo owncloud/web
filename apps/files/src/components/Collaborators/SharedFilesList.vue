@@ -56,13 +56,13 @@ import FileList from '../FileList.vue'
 
 export default {
   name: 'SharedFilesList',
+  components: {
+    FileList
+  },
   mixins: [
     Mixins,
     FileActions
   ],
-  components: {
-    FileList
-  },
   props: {
     /**
        * Array of active files

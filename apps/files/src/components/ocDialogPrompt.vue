@@ -63,6 +63,14 @@ export default {
     inputValue: null,
     clicked: false
   }),
+  computed: {
+    _ocConfirmText () {
+      return this.ocConfirmText ? this.ocConfirmText : this.$gettext('Ok')
+    },
+    _ocCancelText () {
+      return this.ocCancelText ? this.ocConfirmText : this.$gettext('Cancel')
+    }
+  },
   watch: {
     value () {
       this.inputValue = this.value
@@ -85,6 +93,9 @@ export default {
       })
     }
   },
+  created () {
+    this.inputValue = this.value
+  },
   methods: {
     onCancel () {
       this.$emit('oc-cancel')
@@ -95,17 +106,6 @@ export default {
         this.$emit('oc-confirm', this.inputValue)
       }
     }
-  },
-  computed: {
-    _ocConfirmText () {
-      return this.ocConfirmText ? this.ocConfirmText : this.$gettext('Ok')
-    },
-    _ocCancelText () {
-      return this.ocCancelText ? this.ocConfirmText : this.$gettext('Cancel')
-    }
-  },
-  created () {
-    this.inputValue = this.value
   }
 }
 </script>

@@ -86,11 +86,11 @@ const CollaboratorsEditOptions = () => import('./CollaboratorsEditOptions.vue')
 
 export default {
   name: 'NewCollaborator',
-  mixins: [Mixins],
   components: {
     AutocompleteItem,
     CollaboratorsEditOptions
   },
+  mixins: [Mixins],
   data () {
     return {
       autocompleteResults: [],
