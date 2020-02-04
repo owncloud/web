@@ -32,12 +32,18 @@ const actions = {
       // force redirect to login page after logout
       router.push({ name: 'login' })
     }
-    vueAuthInstance.logout()
-      .then(logoutFinalizer)
-      .catch(error => {
-        console.error(error)
-        logoutFinalizer()
-      })
+    // TODO: only call logout if we still have the id token
+    const u = vueAuthInstance.getStoredUserObject()
+    if (u && u.id_token) {
+      vueAuthInstance.logout()
+        .then(logoutFinalizer)
+        .catch(error => {
+          console.error(error)
+          logoutFinalizer()
+        })
+    } else {
+      logoutFinalizer()
+    }
   },
   initAuth (context, payload = { autoRedirect: false }) {
     function init (client, token, doLogin = true) {
@@ -107,7 +113,7 @@ const actions = {
       vueAuthInstance.events().addUserUnloaded(() => {
         console.log('user unloaded…')
         context.dispatch('cleanUpLoginState')
-        router.push({ name: 'accessDenied' })
+        router.push({ name: 'login' })
       })
       vueAuthInstance.events().addSilentRenewError(error => {
         console.error('Silent Renew Error：', error)

@@ -1,0 +1,8 @@
+Bugfix: Fix logout when no tokens are known anymore
+
+Single Log Out requires the id_token and in cases where this token is no
+longer known calling the SLO endpoint will result in an error.
+
+This has been fixed.
+
+https://github.com/owncloud/phoenix/pull/2961

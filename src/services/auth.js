@@ -78,6 +78,17 @@ export function initVueAuthenticate (config) {
         }
         return null
       },
+      getStoredUserObject () {
+        const storageString = sessionStorage.getItem('oc_oAuth' + mgr._userStoreKey)
+        if (storageString) {
+          const user = User.fromStorageString(storageString)
+          if (user) {
+            mgr.events.load(user, false)
+            return user
+          }
+        }
+        return null
+      },
       isAuthenticated () {
         return this.getToken() !== null
       },
