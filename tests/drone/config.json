@@ -8,7 +8,7 @@
 		"authUrl": "http://owncloud/index.php/apps/oauth2/authorize"
 	},
 	"apps" : [
-		"files", "markdown-editor", "pdf-viewer", "media-viewer", "draw-io"
+		"files", "markdown-editor", "pdf-viewer", "media-viewer"
 	],
 	"rootFolder": ""
 }
