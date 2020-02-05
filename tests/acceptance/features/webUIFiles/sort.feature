@@ -1,4 +1,4 @@
-Feature: Filter files/folders
+Feature: Sort files/folders
 
   As a user
   I would like to sort files/folders

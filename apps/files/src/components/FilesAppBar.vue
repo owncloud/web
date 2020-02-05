@@ -70,8 +70,6 @@
               :key="searchBarKey"
             />
           </oc-drop>
-          <oc-button id="oc-filter-list-btn" icon="filter_list" />
-          <file-filter-menu />
         </div>
       </div>
     </oc-grid>
@@ -118,7 +116,6 @@
 <script>
 import FileUpload from './FileUpload.vue'
 import FolderUpload from './FolderUpload.vue'
-import FileFilterMenu from './FileFilterMenu.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
@@ -131,7 +128,6 @@ export default {
     FileUpload,
     FolderUpload,
     OcDialogPrompt,
-    FileFilterMenu,
     FileDrop
   },
   mixins: [
@@ -311,7 +307,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile',
-      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilterTerm', 'resetSearch']),
+      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'resetSearch']),
     ...mapActions(['openFile', 'showMessage']),
     onFileSearch (searchTerm = '') {
       if (searchTerm === '') {

@@ -19,34 +19,17 @@ export default {
   },
   // a flat file list has no current folder nor parent
   flatFileList: state => !!state.currentFolder,
-  filterTerm: state => {
-    return state.searchTermFilter
-  },
   searchTerm: state => {
     return state.searchTermGlobal
   },
   atSearchPage: state => {
     return state.searchTermGlobal !== ''
   },
-  fileFilter: state => {
-    return state.fileFilter
-  },
   activeFiles: state => {
     // if searchTermGlobal is set, replace current file list with search results
     const files = state.searchTermGlobal ? state.filesSearched : state.files
-    // respect file filters set in TopBar
-    return files.filter((file) => {
-      for (const filter of state.fileFilter) {
-        if (file.type === filter.tag) {
-          if (!filter.value) return false
-        } else if (file.name.startsWith('.')) {
-          // show hidden files ?
-          if (!state.fileFilter[2].value) return false
-        }
-      }
-      // respect filename filter for local 'search' in open folder
-      return !(state.searchTermFilter && !file.name.toLowerCase().includes(state.searchTermFilter.toLowerCase()))
-    }).sort(fileSortFunctions[state.fileSortMode])
+    // make a copy of array for sorting as sort() would modify the original array
+    return ([].concat(files)).sort(fileSortFunctions[state.fileSortMode])
   },
   filesTotalSize: (state, getters) => {
     let totalSize = 0
