@@ -30,6 +30,11 @@
             {{ formDateFromNow(item.deleteTimestamp) }}
           </div>
         </template>
+        <template #noContentMessage>
+          <no-content-message icon="delete">
+            <template #message><span v-translate>Your trash bin is empty.</span></template>
+          </no-content-message>
+        </template>
       </file-list>
     </div>
     <oc-dialog-prompt name="delete-file-confirmation-dialog" :oc-active="trashbinDeleteMessage !== ''"
@@ -43,6 +48,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
 import FileList from './FileList.vue'
+import NoContentMessage from './NoContentMessage.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 const { default: PQueue } = require('p-queue')
 
@@ -51,7 +57,8 @@ export default {
 
   components: {
     OcDialogPrompt,
-    FileList
+    FileList,
+    NoContentMessage
   },
 
   mixins: [

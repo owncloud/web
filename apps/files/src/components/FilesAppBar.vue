@@ -50,7 +50,7 @@
             <oc-button v-if="selectedFiles.length > 0" icon="restore" @click="$_ocTrashbin_restoreFiles()">
               <translate>Restore selected</translate>
             </oc-button>
-            <oc-button id="delete-selected-btn" icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
+            <oc-button id="delete-selected-btn" icon="delete" :disabled="files.length === 0" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
               {{ $_ocAppBar_clearTrashbinButtonText }}
             </oc-button>
           </template>
@@ -220,7 +220,7 @@ export default {
     },
 
     $_ocAppBar_clearTrashbinButtonText () {
-      return this.selectedFiles.length < 1 ? this.$gettext('Clear trash bin') : this.$gettext('Delete selected')
+      return this.selectedFiles.length < 1 ? this.$gettext('Empty trash bin') : this.$gettext('Delete selected')
     },
 
     showBreadcrumb () {

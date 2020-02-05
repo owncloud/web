@@ -3,7 +3,7 @@
     :isActionEnabled="isActionEnabled">
     <template #headerColumns>
       <div class="uk-text-truncate uk-text-meta uk-width-expand" v-translate>Name</div>
-      <div class="uk-text-nowrap uk-text-meta uk-width-small" v-text="sharedCellTitle" />
+      <div class="uk-text-nowrap uk-text-meta uk-width-small" v-text="$_sharedCellTitle" />
       <div
         v-if="$route.name === 'files-shared-with-me'"
         shrink
@@ -45,6 +45,14 @@
       </div>
       <div class="uk-text-meta uk-text-nowrap uk-width-small" v-text="formDateFromNow(item.shareTime)" />
     </template>
+    <template #noContentMessage>
+      <no-content-message icon="share">
+        <template #message>
+          <span v-if="$_isSharedWithMe" v-translate>You are currently not collaborating on other people's resources.</span>
+          <span v-else v-translate>You are currently not collaborating on any of your resources with other people.</span>
+        </template>
+      </no-content-message>
+    </template>
   </file-list>
 </template>
 
@@ -53,11 +61,13 @@ import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../../mixins'
 import FileActions from '../../fileactions'
 import FileList from '../FileList.vue'
+import NoContentMessage from '../NoContentMessage.vue'
 
 export default {
   name: 'SharedFilesList',
   components: {
-    FileList
+    FileList,
+    NoContentMessage
   },
   mixins: [
     Mixins,
@@ -76,12 +86,16 @@ export default {
   computed: {
     ...mapGetters('Files', ['loadingFolder']),
 
-    sharedCellTitle () {
-      if (this.$route.name === 'files-shared-with-me') {
-        return this.$gettext('Shared from')
+    $_isSharedWithMe () {
+      return (this.$route.name === 'files-shared-with-me')
+    },
+
+    $_sharedCellTitle () {
+      if (this.$_isSharedWithMe) {
+        return this.$gettext('Owner')
       }
 
-      return this.$gettext('Shared with')
+      return this.$gettext('Collaborators')
     }
   },
   watch: {

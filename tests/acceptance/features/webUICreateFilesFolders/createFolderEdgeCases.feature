@@ -29,7 +29,7 @@ Feature: create folder
     # Then try and create a sub-folder inside the folder with problematic name
     When the user creates a folder with the name <folder> using the webUI
     And the user opens folder <folder> using the webUI
-    Then there should be no files/folders listed on the webUI
+    Then there should be no resources listed on the webUI
     When the user creates a folder with the name "sub-folder" using the webUI
     Then folder "sub-folder" should be listed on the webUI
     When the user reloads the current page of the webUI

@@ -59,6 +59,7 @@ Feature: files and folders exist in the trashbin after being deleted
     And as "user1" the file with original path "simple-folder/lorem.txt" should exist in trash
     And the deleted elements should be listed on the webUI
 
+  @issue-1725 @issue-1910
   Scenario: Delete an empty folder and check it is in the trashbin
     Given the user has created folder "my-empty-folder"
     And the user has created folder "my-other-empty-folder"
@@ -69,8 +70,9 @@ Feature: files and folders exist in the trashbin after being deleted
     When the user browses to the trashbin page
     Then folder "my-empty-folder" should be listed on the webUI
     But folder "my-other-empty-folder" should not be listed on the webUI
-    When the user opens folder "my-empty-folder" using the webUI
-    Then there should be no files/folders listed on the webUI
+    # Uncomment after https://github.com/owncloud/phoenix/issues/1725 is solved
+    #When the user opens folder "my-empty-folder" using the webUI
+    #Then there should be no resources listed on the webUI
 
   Scenario: Delete multiple file with same filename and check they are in the trashbin
     When the user deletes the following elements using the webUI
@@ -93,3 +95,9 @@ Feature: files and folders exist in the trashbin after being deleted
 #    And file "lorem.txt" with path "./lorem.txt" should be listed in the trashbin on the webUI
 #    And file "lorem.txt" with path "simple-folder/lorem.txt" should be listed in the trashbin on the webUI
 #    And file "lorem.txt" with path "strängé नेपाली folder/lorem.txt" should be listed in the trashbin on the webUI
+
+  @issue-1910
+  Scenario: trashbin list appears empty when no deleted files exist
+    When the user browses to the trashbin page
+    Then there should be no resources listed on the webUI
+

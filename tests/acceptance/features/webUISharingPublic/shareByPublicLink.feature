@@ -53,18 +53,19 @@ Feature: Share by public link
 
   Scenario: sharing by public link with "Uploader" role
     Given user "user1" has logged in using the webUI
-    When the user creates a new public link for folder "simple-folder" using the webUI with
+    When the user creates a folder with the name "shared-folder" using the webUI
+    And the user creates a new public link for folder "shared-folder" using the webUI with
       | role | Uploader |
     Then user "user1" should have a share with these details:
       | field       | value          |
       | share_type  | public_link    |
       | uid_owner   | user1          |
       | permissions | create         |
-      | path        | /simple-folder |
+      | path        | /shared-folder |
       | name        | Public link    |
-    And a link named "Public link" should be listed with role "Uploader" in the public link list of folder "simple-folder" on the webUI
+    And a link named "Public link" should be listed with role "Uploader" in the public link list of folder "shared-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "user1"
-    Then there should be no files/folders listed on the webUI
+    Then there should be no resources listed on the webUI
 
   Scenario: public link share shows up on shared-with-others page
     Given user "user1" has logged in using the webUI
