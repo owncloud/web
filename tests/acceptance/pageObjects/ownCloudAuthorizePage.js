@@ -12,7 +12,6 @@ module.exports = {
     {
       authorize: function () {
         return this
-          .waitForElementVisible('@authorizeButton')
           .click('@authorizeButton')
           .waitForElementNotPresent({
             selector: '@authorizeButton',
