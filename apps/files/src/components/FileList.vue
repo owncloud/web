@@ -16,11 +16,10 @@
         </div>
         <slot name="headerColumns"/>
         <div
-          class="uk-text-meta uk-text-right uk-width-auto "
-          :class="{ 'uk-width-small@s uk-width-medium@m' : !compactMode }"
+          class="uk-text-meta uk-text-right uk-width-small uk-margin-small-right"
           v-translate
         >
-          Actions
+          More
         </div>
       </oc-grid>
       <div id="files-list-container" class="uk-flex-1" v-if="!loading">
@@ -47,32 +46,21 @@
                 />
               </div>
               <slot name="rowColumns" :item="item" :index="item.id" />
-              <div :class="{ 'uk-visible@s' : compactMode, 'uk-width-small@s uk-width-medium@m': !compactMode }" class="uk-width-auto uk-text-right">
-                <div
-                  class="uk-button-group"
-                  :class="{
-                    'uk-visible@m' : !compactMode,
-                    'uk-visible@xl' : compactMode
-                  }"
-                >
-                  <oc-button
-                    v-for="action in actions"
-                    :key="action.ariaLabel"
-                    @click.stop="action.handler(item, action.handlerData)"
-                    :disabled="!$_isActionEnabled(item, action) || $_actionInProgress(item)"
-                    :icon="action.icon"
-                    :ariaLabel="action.ariaLabel"
-                    :uk-tooltip="$_disabledActionTooltip(item)"
-                  />
-                </div>
+              <div class="uk-width-small uk-text-right uk-margin-small-right">
                 <oc-button
                   :id="actionsDropdownButtonId(item.id, active)"
-                  icon="more_vert"
-                  :class="{ 'uk-hidden@m' : !compactMode, 'uk-visible@s uk-hidden@xl' : compactMode }"
+                  class="files-list-row-show-actions"
                   :disabled="$_actionInProgress(item)"
-                  :aria-label="'show-file-actions'"
+                  :aria-label="$gettext('Show file actions')"
                   @click.stop="toggleRowActionsDropdown(item)"
-                />
+                  variation="raw"
+                >
+                  <oc-icon
+                    name="more_vert"
+                    class="uk-text-middle"
+                    size="small"
+                  />
+                </oc-button>
               </div>
             </oc-grid>
           </div>
