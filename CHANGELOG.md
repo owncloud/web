@@ -1,3 +1,28 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.3.0...master
+
+Summary
+-------
+
+* Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
+
+Details
+-------
+
+* Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
+
+   Removed the confusing filter button in the files list header, so the following are now removed
+   as well: - ability to toggle files and folders visibility which wasn't that useful and not
+   really a requirement - filter text box as it is is redundant as one can already use the global
+   search box - ability to hide dot files, we'll look into providing this again in the future with an
+   improved UI
+
+   https://github.com/owncloud/phoenix/issues/2971
+
 Changelog for ownCloud Phoenix [0.3.0] (2020-01-31)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.3.0 relevant to
