@@ -80,15 +80,6 @@ export default {
   SET_SEARCH_TERM (state, searchTerm) {
     state.searchTermGlobal = searchTerm
   },
-  SET_FILTER_TERM (state, filterTerm) {
-    state.searchTermFilter = filterTerm
-  },
-  SET_FILE_FILTER (state, filter) {
-    const i = state.fileFilter.findIndex((f) => {
-      return f.name === filter.name
-    })
-    state.fileFilter[i].value = filter.value
-  },
   RENAME_FILE (state, { file, newValue, newPath }) {
     const fileIndex = state.files.findIndex((f) => {
       return f.id === file.id

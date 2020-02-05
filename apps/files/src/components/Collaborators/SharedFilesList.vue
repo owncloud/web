@@ -104,7 +104,6 @@ export default {
     ...mapActions('Files', ['loadFolderSharedFromMe', 'loadFolderSharedWithMe', 'setFilterTerm', 'pendingShare']),
 
     $_ocSharedFromMe_getFiles () {
-      this.setFilterTerm('')
       this.loadFolderSharedFromMe({
         client: this.$client,
         $gettext: this.$gettext
@@ -112,7 +111,6 @@ export default {
     },
 
     $_ocSharedWithMe_getFiles () {
-      this.setFilterTerm('')
       this.loadFolderSharedWithMe({
         client: this.$client,
         $gettext: this.$gettext

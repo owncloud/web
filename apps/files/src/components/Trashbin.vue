@@ -105,11 +105,10 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'setFilterTerm']),
+    ...mapActions('Files', ['loadTrashbin', 'addFileSelection', 'removeFileSelection', 'resetFileSelection', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin']),
     ...mapActions(['showMessage']),
 
     $_ocTrashbin_getFiles () {
-      this.setFilterTerm('')
       this.loadTrashbin({
         client: this.$client,
         $gettext: this.$gettext

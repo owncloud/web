@@ -177,37 +177,6 @@ module.exports = {
           callback(isDisabled)
         })
     },
-    showHiddenFiles: function () {
-      return this
-        .waitForElementVisible('@filterListButton')
-        .click('@filterListButton')
-        .waitForElementVisible('@hiddenFilesLabel')
-        .click('@hiddenFilesCheckbox')
-        .click('@filterListButton')
-    },
-    /**
-     *
-     * @param {string} fileOrFolder
-     * @param {string} enableOrDisable
-     */
-    toggleFilterFileOrFolder: function (fileOrFolder, enableOrDisable) {
-      let labelSelector, checkboxId
-      if (fileOrFolder === 'folder') {
-        labelSelector = '@filterFolderLabel'
-        checkboxId = this.elements.filterFolderCheckbox
-      } else if (fileOrFolder === 'file') {
-        labelSelector = '@filterFileLabel'
-        checkboxId = this.elements.filterFileCheckbox
-      } else {
-        throw new Error(`Expected 'file' or 'folder', ${fileOrFolder} given`)
-      }
-      return this
-        .waitForElementVisible('@filterListButton')
-        .click('@filterListButton')
-        .waitForElementVisible(labelSelector)
-        .toggleCheckbox(enableOrDisable, checkboxId)
-        .click('@filterListButton')
-    },
     deleteAllCheckedFiles: function () {
       return this
         .waitForElementVisible('@deleteSelectedButton')
@@ -326,16 +295,6 @@ module.exports = {
         .click('@restorePreviousVersion')
         .waitForOutstandingAjaxCalls()
     },
-    filterElementsList: function (input) {
-      return this.initAjaxCounters()
-        .click('@filterListButton')
-        .waitForElementVisible('@filterTextField')
-        .clearValue('@filterTextField')
-        .setValue('@filterTextField', input)
-        .waitForOutstandingAjaxCalls()
-        // This click is for closing the filter list
-        .click('@filterListButton')
-    },
     getAllListedResources: async function () {
       const allFileRows = await this.api.page.FilesPageElement.filesList().getListedFilesFolders()
       const allFilesListed = []
@@ -396,27 +355,6 @@ module.exports = {
     resourceBreadcrumb: {
       selector: '//div[@id="files-breadcrumb"]//a[contains(text(),"%s")]',
       locateStrategy: 'xpath'
-    },
-    filterListButton: {
-      selector: '#oc-filter-list-btn'
-    },
-    hiddenFilesLabel: {
-      selector: '#oc-filter-hidden-checkbox'
-    },
-    hiddenFilesCheckbox: {
-      selector: '#oc-filter-hidden-checkbox>.oc-checkbox'
-    },
-    filterFolderLabel: {
-      selector: '#oc-filter-folder-checkbox'
-    },
-    filterFolderCheckbox: {
-      selector: '#oc-filter-folder-checkbox>.oc-checkbox'
-    },
-    filterFileLabel: {
-      selector: '#oc-filter-file-checkbox'
-    },
-    filterFileCheckbox: {
-      selector: '#oc-filter-file-checkbox>.oc-checkbox'
     },
     createFolderLoadingIndicator: {
       selector: '//div[@id="new-folder-dialog"]//div[@class="oc-loader"]',
@@ -489,9 +427,6 @@ module.exports = {
     tabsInSideBar: {
       selector: '//div[@class="sidebar-container"]//li/a',
       locateStrategy: 'xpath'
-    },
-    filterTextField: {
-      selector: '#oc-filter-search .oc-search-input'
     }
   }
 }

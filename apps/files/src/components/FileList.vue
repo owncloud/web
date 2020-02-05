@@ -167,13 +167,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['loadFolder', 'setFilterTerm', 'markFavorite',
+    ...mapActions('Files', ['loadFolder', 'markFavorite',
       'setHighlightedFile', 'setPublicLinkPassword',
       'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'toggleFileSelection'
     ]),
 
     $_ocFilesFolder_getFolder () {
-      this.setFilterTerm('')
       let absolutePath
 
       if (this.configuration.rootFolder) {

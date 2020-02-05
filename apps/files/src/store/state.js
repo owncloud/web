@@ -1,14 +1,11 @@
-import { fileFilters } from '../fileFilters.js'
 export default {
   currentFolder: null,
   files: [],
   filesSearched: [],
-  fileFilter: fileFilters,
   fileSortMode: 'name',
   selected: [],
   inProgress: [],
   searchTermGlobal: '',
-  searchTermFilter: '',
   davProperties: [
     '{http://owncloud.org/ns}permissions',
     '{http://owncloud.org/ns}favorite',

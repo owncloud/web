@@ -531,12 +531,6 @@ export default {
       })
     }
   },
-  setFilterTerm (context, filterTerm) {
-    context.commit('SET_FILTER_TERM', filterTerm)
-  },
-  setFileFilter (context, filter) {
-    context.commit('SET_FILE_FILTER', filter)
-  },
   searchForFile (context, payload) {
     return new Promise(function (resolve, reject) {
       const client = payload.client

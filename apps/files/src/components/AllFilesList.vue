@@ -116,7 +116,7 @@ export default {
     this.$_ocFilesFolder_getFolder()
   },
   methods: {
-    ...mapActions('Files', ['loadFolder', 'setFilterTerm', 'markFavorite',
+    ...mapActions('Files', ['loadFolder', 'markFavorite',
       'setHighlightedFile', 'setPublicLinkPassword']),
 
     $_openSideBar (item, sideBarName) {
@@ -124,7 +124,6 @@ export default {
     },
 
     $_ocFilesFolder_getFolder () {
-      this.setFilterTerm('')
       let absolutePath
 
       if (this.configuration.rootFolder) {

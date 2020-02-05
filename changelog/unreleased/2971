@@ -1,0 +1,8 @@
+Change: Removed filter button in files list header
+
+Removed the confusing filter button in the files list header, so the following are now removed as well:
+- ability to toggle files and folders visibility which wasn't that useful and not really a requirement
+- filter text box as it is is redundant as one can already use the global search box
+- ability to hide dot files, we'll look into providing this again in the future with an improved UI
+
+https://github.com/owncloud/phoenix/issues/2971
