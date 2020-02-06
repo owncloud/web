@@ -167,8 +167,8 @@ const createPublicLink = function (sharer, data) {
  * @returns {Promise}
  */
 const assertCollaboratorslistContains = function (type, name, role = null, via = null, resharedThrough = null, additionalInfo = null) {
-  if (type !== 'user' && type !== 'group') {
-    throw new Error('illegal type')
+  if (type !== 'user' && type !== 'group' && type !== 'remote user') {
+    throw new Error(`illegal type "${type}"`)
   }
 
   return client.page.FilesPageElement.sharingDialog().getCollaboratorsList(null, name)
@@ -179,7 +179,7 @@ const assertCollaboratorslistContains = function (type, name, role = null, via =
 
       if (!share) {
         assert.fail(
-          `"${name}" was expected to be in share list but was not present. Found collaborators: ` + shares.map(share => share.displayName)
+          `"${name}" with type "${type}" was expected to be in share list but was not present. Found collaborators: ` + shares.map(share => `name=${share.displayName} type=${share.shareType}`)
         )
       }
 
@@ -720,6 +720,11 @@ When(
 
 Then('user {string} should be listed as {string} in the collaborators list on the webUI', function (user, role) {
   return assertCollaboratorslistContains('user', user, role)
+})
+
+Then('remote user {string} should be listed as {string} via {string} in the collaborators list on the webUI', function (user, role, via) {
+  user = util.format('%s@%s', user, client.globals.remote_backend_url)
+  return assertCollaboratorslistContains('remote user', user, role, via)
 })
 
 Then('user {string} should be listed as {string} via {string} in the collaborators list on the webUI', function (user, role, via) {

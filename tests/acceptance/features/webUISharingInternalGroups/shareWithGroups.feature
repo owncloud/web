@@ -316,7 +316,7 @@ Feature: Sharing files and folders with internal groups
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
 
-  @skip @yetToImplement @issue-2897
+  @issue-2897
   Scenario: sharing details of items inside a shared folder shared with user and group
     Given user "user3" has created folder "/simple-folder/sub-folder"
     And user "user3" has uploaded file with content "test" to "/simple-folder/sub-folder/lorem.txt"

@@ -306,25 +306,25 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
 
-  @skip @yetToImplement @issue-2897
+  @issue-2897
   Scenario: sharing details inside folder shared using federated sharing
     Given user "user1" has created folder "/simple-folder/sub-folder"
     And user "user1" has uploaded file with content "test" to "/simple-folder/textfile.txt"
     And the user shares folder "simple-folder" with remote user "user1" as "Editor" using the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user opens the share dialog for folder "sub-folder" using the webUI
-    Then user "user1@%remote_server% (Remote share)" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
-    When the user opens the share dialog for file "textfile.txt"
-    Then user "user1@%remote_server% (Remote share)" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    Then remote user "user1" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    When the user opens the share dialog for file "textfile.txt" using the webUI
+    Then remote user "user1" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
 
-  @skip @yetToImplement @issue-2897
+  @issue-2897
   Scenario: sharing details of items inside a shared folder shared with local user and federated user
     Given user "user2" has been created with default attributes
     And user "user1" has created folder "/simple-folder/sub-folder"
     And user "user1" has uploaded file with content "test" to "/simple-folder/sub-folder/textfile.txt"
     And the user shares folder "simple-folder" with remote user "user1" as "Editor" using the webUI
     And user "user1" has shared folder "simple-folder/sub-folder" with user "user2"
-    When the user opens folder "sub-folder" using the webUI
+    When the user opens folder "simple-folder/sub-folder" directly on the webUI
     And the user opens the share dialog for file "textfile.txt" using the webUI
-    Then user "user1@%remote_server% (Remote share)" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    Then remote user "user1" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
     And user "User Two" should be listed as "Editor" via "sub-folder" in the collaborators list on the webUI
