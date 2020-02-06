@@ -183,6 +183,13 @@ function _buildSharedFile (file) {
   }
 }
 
+function _buildShare (s, file, $gettext) {
+  if (parseInt(s.share_type, 10) === shareTypes.link) {
+    return _buildLink(s, $gettext)
+  }
+  return _buildCollaboratorShare(s, file)
+}
+
 function _buildLink (link, $gettext) {
   let description = ''
 
@@ -203,6 +210,7 @@ function _buildLink (link, $gettext) {
   }
 
   return {
+    shareType: parseInt(link.share_type, 10),
     id: link.id,
     token: link.token,
     url: link.url,
@@ -223,17 +231,11 @@ function _buildLink (link, $gettext) {
   }
 }
 
-function _buildShare (s, file, $gettext) {
-  if (parseInt(s.share_type, 10) === shareTypes.link) {
-    return _buildLink(s, $gettext)
-  }
-  return _buildCollaboratorShare(s, file)
-}
-
 function _buildCollaboratorShare (s, file) {
   const share = {
     shareType: parseInt(s.share_type, 10),
-    info: s
+    info: s,
+    id: s.id
   }
   switch (share.shareType) {
     case (shareTypes.user): // user share
@@ -556,24 +558,23 @@ export default {
       })
     })
   },
-  loadShares (context, payload) {
-    context.commit('SHARES_LOAD', [])
-    context.commit('SHARES_ERROR', null)
-    context.commit('SHARES_LOADING', true)
+  loadCurrentFileOutgoingShares (context, { client, path, $gettext }) {
+    context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
+    context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
+    context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
     // see https://owncloud.github.io/js-owncloud-client/Shares.html
-    const client = payload.client
-    const path = payload.path
     client.shares.getShares(path, { reshares: true })
       .then(data => {
-        context.commit('SHARES_LOAD', data.map(element => {
-          return _buildCollaboratorShare(element.shareInfo, context.getters.highlightedFile)
+        context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', data.map(element => {
+          return _buildShare(element.shareInfo, context.getters.highlightedFile, $gettext)
         }))
-        context.commit('SHARES_LOADING', false)
+        context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+        context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
       })
       .catch(error => {
-        context.commit('SHARES_ERROR', error.message)
-        context.commit('SHARES_LOADING', false)
+        context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', error.message)
+        context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', false)
       })
   },
   loadIncomingShares (context, payload) {
@@ -597,8 +598,8 @@ export default {
       })
   },
   sharesClearState (context, payload) {
-    context.commit('SHARES_LOAD', [])
-    context.commit('SHARES_ERROR', null)
+    context.commit('CURRENT_FILE_OUTGOING_SHARES_SET', [])
+    context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
   },
   incomingSharesClearState (context, payload) {
     context.commit('INCOMING_SHARES_LOAD', [])
@@ -617,17 +618,18 @@ export default {
 
     return client.shares.updateShare(share.info.id, params)
       .then((updatedShare) => {
-        commit('SHARES_UPDATE_SHARE', _buildCollaboratorShare(updatedShare.shareInfo, getters.highlightedFile))
+        commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', _buildCollaboratorShare(updatedShare.shareInfo, getters.highlightedFile))
       })
       .catch(e => {
         console.log(e)
       })
   },
   addShare (context, { client, path, $gettext, shareWith, shareType, permissions }) {
-    if (shareType === 1) {
+    if (shareType === shareTypes.group) {
       client.shares.shareFileWithGroup(path, shareWith, { permissions: permissions })
         .then(share => {
-          context.commit('SHARES_ADD_SHARE', _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile))
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile))
+          context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
         })
         .catch(e => {
           context.dispatch('showMessage', {
@@ -642,7 +644,8 @@ export default {
     const remoteShare = shareType === shareTypes.remote
     client.shares.shareFileWithUser(path, shareWith, { permissions: permissions, remoteUser: remoteShare })
       .then(share => {
-        context.commit('SHARES_ADD_SHARE', _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile))
+        context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile))
+        context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
       })
       .catch(e => {
         context.dispatch('showMessage', {
@@ -655,7 +658,8 @@ export default {
   deleteShare (context, { client, share }) {
     client.shares.deleteShare(share.info.id)
       .then(() => {
-        context.commit('SHARES_REMOVE_SHARE', share)
+        context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
+        context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
       })
       .catch(e => {
         console.log(e)
@@ -767,33 +771,14 @@ export default {
   setPublicLinkPassword (context, password) {
     context.commit('SET_PUBLIC_LINK_PASSWORD', password)
   },
-  loadLinks (context, { client, path, $gettext }) {
-    context.commit('LINKS_PURGE')
-    context.commit('LINKS_ERROR', null)
-    context.commit('LINKS_LOADING', true)
-
-    client.shares.getShares(path, {})
-      .then(data => {
-        data.forEach(share => {
-          if (share.shareInfo.share_type === '3') {
-            context.commit('LINKS_ADD', _buildLink(share.shareInfo, $gettext))
-          }
-        })
-      })
-      .catch(e => context.commit('LINKS_ERROR', e.message))
-      .finally(() => context.commit('LINKS_LOADING', false))
-  },
-
-  purgeLinks (context) {
-    context.commit('LINKS_PURGE')
-  },
 
   addLink (context, { path, client, $gettext, params }) {
     return new Promise((resolve, reject) => {
       client.shares.shareFileWithLink(path, params)
         .then(data => {
-          const link = _buildLink(data.shareInfo, $gettext)
-          context.commit('LINKS_ADD', link)
+          const link = _buildShare(data.shareInfo, null, $gettext)
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
+          context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
           resolve(link)
         })
         .catch(e => {
@@ -805,8 +790,8 @@ export default {
     return new Promise((resolve, reject) => {
       client.shares.updateShare(id, params)
         .then(data => {
-          const link = _buildLink(data.shareInfo, $gettext)
-          context.commit('LINKS_UPDATE', link)
+          const link = _buildShare(data.shareInfo, null, $gettext)
+          context.commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', link)
           resolve(link)
         })
         .catch(e => {
@@ -814,12 +799,13 @@ export default {
         })
     })
   },
-  removeLink (context, { id, client }) {
-    client.shares.deleteShare(id)
+  removeLink (context, { share, client }) {
+    client.shares.deleteShare(share.id)
       .then(() => {
-        context.commit('LINKS_REMOVE', id)
+        context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
+        context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
       })
-      .catch(e => context.commit('LINKS_ERROR', e.message))
+      .catch(e => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
   },
 
   // TODO: Think of a better name

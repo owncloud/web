@@ -1,4 +1,5 @@
 import { fileSortFunctions } from '../fileSortFunctions.js'
+import { shareTypes } from '../helpers/shareTypes'
 
 export default {
   inProgress: state => {
@@ -55,14 +56,19 @@ export default {
   dropzone: state => {
     return state.dropzone
   },
-  shares: state => {
-    return state.shares
+  currentFileOutgoingCollaborators: state => {
+    const userShareTypes = [shareTypes.user, shareTypes.group, shareTypes.guest, shareTypes.remote]
+    return state.currentFileOutgoingShares.filter(share => {
+      return userShareTypes.includes(parseInt(share.shareType, 10))
+    })
   },
-  sharesError: state => {
-    return state.sharesError
+  currentFileOutgoingLinks: state => {
+    return state.currentFileOutgoingShares.filter(share => {
+      return parseInt(share.shareType, 10) === shareTypes.link
+    })
   },
-  sharesLoading: state => {
-    return state.sharesLoading
+  currentFileOutgoingSharesLoading: state => {
+    return state.currentFileOutgoingSharesLoading
   },
   sharesTree: state => state.sharesTree,
   sharesTreeLoading: state => state.sharesTreeLoading,
@@ -89,15 +95,6 @@ export default {
   },
   publicLinkPassword: state => {
     return state.publicLinkPassword
-  },
-  links: state => {
-    return state.links
-  },
-  linksError: state => {
-    return state.linksError
-  },
-  linksLoading: state => {
-    return state.linksLoading
   },
   uploaded: state => state.uploaded,
   renameDialogOpen: state => state.renameDialogOpen,

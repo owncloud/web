@@ -139,8 +139,8 @@ When('the user tries to edit expiration of the public link named {string} of fil
     )
   })
 
-When('the user {string} removes the public link named {string} of file/folder/resource {string} using the webUI',
-  async function (sharer, linkName, resource) {
+When('the user removes the public link named {string} of file/folder/resource {string} using the webUI',
+  async function (linkName, resource) {
     await client.page
       .FilesPageElement
       .filesList()

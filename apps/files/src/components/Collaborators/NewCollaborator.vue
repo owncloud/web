@@ -109,7 +109,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', [
-      'shares',
+      'currentFileOutgoingCollaborators',
       'highlightedFile'
     ]),
     ...mapGetters(['user']),
@@ -136,14 +136,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', [
-      'shareSetOpen',
-      'loadShares',
-      'sharesClearState',
-      'addShare',
-      'deleteShare',
-      'changeShare'
-    ]),
+    ...mapActions('Files', ['addShare']),
 
     close () {
       this.$emit('close')
@@ -182,7 +175,7 @@ export default {
               }
             )
 
-            const exists = this.shares.find(existingCollaborator => {
+            const exists = this.currentFileOutgoingCollaborators.find(existingCollaborator => {
               return (
                 collaborator.value.shareWith === existingCollaborator.name &&
                 parseInt(collaborator.value.shareType, 10) === parseInt(existingCollaborator.info.share_type, 10)
