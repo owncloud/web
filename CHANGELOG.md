@@ -8,10 +8,23 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Prevent loader in sidebar on add/remove: [#2937](https://github.com/owncloud/phoenix/issues/2937)
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
 
 Details
 -------
+
+* Bugfix - Prevent loader in sidebar on add/remove: [#2937](https://github.com/owncloud/phoenix/issues/2937)
+
+   When adding or removing a public link or collaborator, the respective list view sidebar panels
+   briefly hid the panel and showed a loader instead. The UI is supposed to show a visual transition
+   of a new list item into the list on adding, as well as a visual transition out of the list on
+   deletion. This is fixed now by not triggering the loading state on add and remove actions
+   anymore. A loading state is only meant to appear when the user navigates to the shares of another
+   file/folder.
+
+   https://github.com/owncloud/phoenix/issues/2937
+   https://github.com/owncloud/phoenix/pull/2952
 
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
 
