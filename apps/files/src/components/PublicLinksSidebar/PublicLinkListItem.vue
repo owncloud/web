@@ -2,9 +2,10 @@
   <oc-table middle class="files-file-links-link">
     <oc-table-row class="files-file-links-link-table-row-info">
       <oc-table-cell shrink>
-        <oc-button v-if="modifiable" :aria-label="$_deleteButtonLabel" @click="$emit('onDelete', link)" variation="raw" class="oc-files-file-link-delete">
+        <oc-button v-if="$_deleteButtonVisible" :aria-label="$_deleteButtonLabel" @click="$_removeLink" variation="raw" class="oc-files-file-link-delete">
           <oc-icon name="close" />
         </oc-button>
+        <oc-spinner v-else-if="$_loadingSpinnerVisible" :aria-label="$gettext('Removing public link') + '...'" size="small" />
         <oc-icon v-else name="lock" class="uk-invisible" />
       </oc-table-cell>
       <oc-table-cell>
@@ -21,7 +22,7 @@
                     </span>
       </oc-table-cell>
       <oc-table-cell shrink class="uk-text-nowrap">
-        <oc-button v-if="modifiable" :aria-label="$_editButtonLabel" @click="$emit('onEdit', link)" variation="raw" class="oc-files-file-link-edit">
+        <oc-button v-if="$_editButtonVisible" :aria-label="$_editButtonLabel" @click="$emit('onEdit', link)" variation="raw" class="oc-files-file-link-edit">
           <oc-icon name="edit" size="small"/>
         </oc-button>
         <oc-button :aria-label="$_publicLinkCopyLabel" variation="raw" class="oc-files-file-link-copy-url">
@@ -71,7 +72,21 @@ export default {
       default: () => {}
     }
   },
+  data () {
+    return {
+      removalInProgress: false
+    }
+  },
   computed: {
+    $_loadingSpinnerVisible () {
+      return this.modifiable && this.removalInProgress
+    },
+    $_deleteButtonVisible () {
+      return this.modifiable && !this.removalInProgress
+    },
+    $_editButtonVisible () {
+      return this.modifiable && !this.removalInProgress
+    },
     $_viaLabel () {
       if (!this.indirect) {
         return null
@@ -107,6 +122,10 @@ export default {
   methods: {
     $_clipboardSuccessHandler (event) {
       this.$emit('onCopy', event)
+    },
+    $_removeLink () {
+      this.removalInProgress = true
+      this.$emit('onDelete', this.link)
     }
   }
 }
