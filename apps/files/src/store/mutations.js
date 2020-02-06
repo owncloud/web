@@ -1,6 +1,18 @@
 import Vue from 'vue'
 import _ from 'lodash'
 
+/**
+ * @param {Array.<Object>} shares array of shares
+ * @return {Array.<Integer>} array of share types
+ */
+function computeShareTypes (shares) {
+  const shareTypes = new Set()
+  shares.forEach(share => {
+    shareTypes.add(share.shareType)
+  })
+  return Array.from(shareTypes)
+}
+
 export default {
   UPDATE_FILE_PROGRESS (state, file) {
     const fileIndex = state.inProgress.findIndex((f) => {
@@ -80,6 +92,15 @@ export default {
   SET_SEARCH_TERM (state, searchTerm) {
     state.searchTermGlobal = searchTerm
   },
+  UPDATE_CURRENT_FILE_SHARE_TYPES (state) {
+    if (!state.highlightedFile) {
+      return
+    }
+    const fileIndex = state.files.findIndex((f) => {
+      return f.id === state.highlightedFile.id
+    })
+    state.files[fileIndex].shareTypes = computeShareTypes(state.currentFileOutgoingShares)
+  },
   RENAME_FILE (state, { file, newValue, newPath }) {
     const fileIndex = state.files.findIndex((f) => {
       return f.id === file.id
@@ -103,32 +124,32 @@ export default {
   DRAG_OVER (state, value) {
     state.dropzone = value
   },
-  SHARES_LOAD (state, shares) {
-    state.shares = shares
+  CURRENT_FILE_OUTGOING_SHARES_SET (state, shares) {
+    state.currentFileOutgoingShares = shares
   },
-  SHARES_ADD_SHARE (state, share) {
-    state.shares.push(share)
+  CURRENT_FILE_OUTGOING_SHARES_ADD (state, share) {
+    state.currentFileOutgoingShares.push(share)
   },
-  SHARES_REMOVE_SHARE (state, share) {
-    state.shares = state.shares.filter(i => ![share].includes(i))
+  CURRENT_FILE_OUTGOING_SHARES_REMOVE (state, share) {
+    state.currentFileOutgoingShares = state.currentFileOutgoingShares.filter(s => share.id !== s.id)
   },
-  SHARES_UPDATE_SHARE (state, share) {
-    const fileIndex = state.shares.findIndex((s) => {
+  CURRENT_FILE_OUTGOING_SHARES_UPDATE (state, share) {
+    const fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
       return s.info.id === share.info.id
     })
     if (fileIndex >= 0) {
-      Vue.set(state.shares, fileIndex, share)
+      Vue.set(state.currentFileOutgoingShares, fileIndex, share)
     } else {
       // share was not present in the list while updating, add it instead
-      state.shares.push(share)
+      state.currentFileOutgoingShares.push(share)
     }
   },
-  SHARES_ERROR (state, error) {
-    state.shares = []
-    state.sharesError = error
+  CURRENT_FILE_OUTGOING_SHARES_ERROR (state, error) {
+    state.currentFileOutgoingShares = []
+    state.currentFileOutgoingSharesError = error
   },
-  SHARES_LOADING (state, loading) {
-    state.sharesLoading = loading
+  CURRENT_FILE_OUTGOING_SHARES_LOADING (state, loading) {
+    state.currentFileOutgoingSharesLoading = loading
   },
   INCOMING_SHARES_LOAD (state, shares) {
     state.incomingShares = shares
@@ -139,9 +160,6 @@ export default {
   },
   INCOMING_SHARES_LOADING (state, loading) {
     state.incomingSharesLoading = loading
-  },
-  SHARESTREE_CLEAR (state) {
-    state.sharesTree = {}
   },
   SHARESTREE_PRUNE_OUTSIDE_PATH (state, pathToKeep) {
     if (pathToKeep !== '' && pathToKeep !== '/') {
@@ -227,30 +245,6 @@ export default {
   },
   SET_PUBLIC_LINK_PASSWORD (state, password) {
     state.publicLinkPassword = password
-  },
-  LINKS_PURGE (state) {
-    state.links = []
-  },
-  LINKS_LOADING (state, loading) {
-    state.linksLoading = loading
-  },
-  LINKS_ERROR (state, error) {
-    state.linksError = error
-  },
-  LINKS_ADD (state, link) {
-    state.links.push(link)
-  },
-  LINKS_REMOVE (state, linkId) {
-    state.links = state.links.filter(link => link.id !== linkId)
-  },
-  LINKS_UPDATE (state, linkUpdated) {
-    state.links = state.links.map(link => {
-      if (link.id === linkUpdated.id) {
-        return linkUpdated
-      }
-
-      return link
-    })
   },
 
   ADD_ACTION_TO_PROGRESS (state, item) {

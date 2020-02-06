@@ -728,7 +728,7 @@ Feature: Share by public link
   Scenario: user removes the public link of a file using webUI
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with link with "read" permissions
-    When the user "user1" removes the public link named "{}" of file "lorem.txt" using the webUI
+    When the user removes the public link named "{}" of file "lorem.txt" using the webUI
     Then user "user1" should not have any public link
 
   @skip @yetToImplement
@@ -749,7 +749,7 @@ Feature: Share by public link
       | path       | lorem.txt        |
       | name       | third-name       |
     And user "user1" has logged in using the webUI
-    When the user "user1" removes the public link named "first-name" of file "lorem.txt" using the webUI
+    When the user removes the public link named "first-name" of file "lorem.txt" using the webUI
     Then public link named "first-name" should not be listed on the public links list on the webUI
     And a link named "second-name" should be listed with role "Viewer" in the public link list of file "lorem.txt" on the webUI
     And a link named "third-name" should be listed with role "Viewer" in the public link list of folder "lorem.txt" on the webUI
@@ -765,7 +765,7 @@ Feature: Share by public link
       | path       | lorem.txt        |
       | name       | third-name       |
     And user "user1" has logged in using the webUI
-    When the user "user1" removes the public link named "second-name" of file "lorem.txt" using the webUI
+    When the user removes the public link named "second-name" of file "lorem.txt" using the webUI
     Then public link named "second-name" should not be listed on the public links list on the webUI
     And a link named "first-name" should be listed with role "Viewer" in the public link list of file "lorem.txt" on the webUI
     And a link named "third-name" should be listed with role "Viewer" in the public link list of folder "lorem.txt" on the webUI
@@ -781,7 +781,7 @@ Feature: Share by public link
       | path       | lorem.txt        |
       | name       | third-name       |
     And user "user1" has logged in using the webUI
-    When the user "user1" removes the public link named "third-name" of file "lorem.txt" using the webUI
+    When the user removes the public link named "third-name" of file "lorem.txt" using the webUI
     Then public link named "third-name" should not be listed on the public links list on the webUI
     And a link named "first-name" should be listed with role "Viewer" in the public link list of file "lorem.txt" on the webUI
     And a link named "second-name" should be listed with role "Viewer" in the public link list of folder "lorem.txt" on the webUI
@@ -934,6 +934,50 @@ Feature: Share by public link
     When the public uses the webUI to access the last public link created by user "user2"
     Then the following resources should not have share indicators on the webUI
       | simple-empty-folder |
+
+  @issue-2939
+  Scenario: sharing indicator for link shares stays up to date
+    Given user "user2" has been created with default attributes
+    When user "user1" has logged in using the webUI
+    Then the following resources should not have share indicators on the webUI
+      | simple-folder |
+    When the user shares folder "simple-folder" with user "User Two" as "Viewer" using the webUI
+    And the user creates a new public link for resource "simple-folder" using the webUI with
+      | field | value  |
+      | name  | first |
+    And the user creates a new public link for resource "simple-folder" using the webUI with
+      | field | value  |
+      | name  | second |
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators      |
+      | simple-folder | user-direct,link-direct |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators          |
+      | testimage.png | user-indirect,link-indirect |
+    When the user creates a new public link for resource "testimage.png" using the webUI with
+      | field | value  |
+      | name  | third |
+    # the indicator changes from link-indirect to link-direct to show the direct share
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators        |
+      | testimage.png | user-indirect,link-direct |
+    # removing the last link reverts the indicator to user-indirect
+    When the user removes the public link named "third" of resource "testimage.png" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators          |
+      | testimage.png | user-indirect,link-indirect |
+    When the user opens folder "" directly on the webUI
+    And the user removes the public link named "second" of resource "simple-folder" using the webUI
+    # because there is still another link share left, the indicator stays
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators      |
+      | simple-folder | user-direct,link-direct |
+    # deleting the last collaborator removes the indicator
+    When the user removes the public link named "first" of resource "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
 
   @issue-2897
   Scenario: sharing details of indirect items inside a shared folder

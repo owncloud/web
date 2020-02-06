@@ -1,7 +1,7 @@
 <template>
   <div class="uk-position-relative" id="oc-files-file-link">
     <div v-show="visiblePanel === PANEL_SHOW" :aria-hidden="visiblePanel !== PANEL_SHOW" :key="PANEL_SHOW">
-      <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')"/>
+      <oc-loader v-if="currentFileOutgoingSharesLoading" :aria-label="$gettext('Loading list of file links')"/>
       <template v-else>
         <section v-if="$_privateLinkOfHighlightedFile">
           <div class="uk-text-bold">
@@ -114,7 +114,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'links', 'linksLoading', 'linksError']),
+    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingLinks', 'currentFileOutgoingSharesLoading']),
     ...mapGetters(['getToken', 'capabilities']),
     ...mapState('Files', [
       'sharesTree'
@@ -146,7 +146,7 @@ export default {
     },
 
     $_links () {
-      return this.links.filter(link => {
+      return this.currentFileOutgoingLinks.filter(link => {
         return this.compareIds(link.itemSource, this.highlightedFile.id)
       })
     },
@@ -184,7 +184,7 @@ export default {
       }
 
       this.visiblePanel = PANEL_SHOW
-      this.loadLinks({
+      this.loadCurrentFileOutgoingShares({
         client: this.$client,
         path: this.highlightedFile.path,
         $gettext: this.$gettext
@@ -193,7 +193,7 @@ export default {
   },
   mounted () {
     if (this.highlightedFile && this.$_links.length === 0) {
-      this.loadLinks({
+      this.loadCurrentFileOutgoingShares({
         client: this.$client,
         path: this.highlightedFile.path,
         $gettext: this.$gettext
@@ -201,7 +201,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['loadLinks', 'purgeLinks', 'removeLink']),
+    ...mapActions('Files', ['loadCurrentFileOutgoingShares', 'removeLink']),
     $_resetData () {
       this.params = {
         id: null,
@@ -214,7 +214,7 @@ export default {
     $_removePublicLink (link) {
       this.removeLink({
         client: this.$client,
-        id: link.id
+        share: link
       })
     },
     $_editPublicLink (link) {

@@ -275,6 +275,47 @@ Feature: Sharing files and folders with internal groups
       | fileName      | expectedIndicators |
       | sub-folder    | user-indirect      |
 
+  @issue-2939
+  Scenario: sharing indicator for group shares stays up to date
+    Given these groups have been created:
+      | groupname |
+      | grp2      |
+      | grp3      |
+      | grp4      |
+    When user "user1" has logged in using the webUI
+    Then the following resources should not have share indicators on the webUI
+      | simple-folder |
+    When the user shares folder "simple-folder" with group "grp2" as "Viewer" using the webUI
+    And the user shares folder "simple-folder" with group "grp3" as "Viewer" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | testimage.png | user-indirect      |
+    When the user shares file "testimage.png" with group "grp4" as "Viewer" using the webUI
+    # the indicator changes from user-indirect to user-direct to show the direct share
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | testimage.png | user-direct        |
+    # removing the last collaborator reverts the indicator to user-indirect
+    When the user deletes "grp4" as collaborator for the current file using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | testimage.png | user-indirect      |
+    When the user opens folder "" directly on the webUI
+    And the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user deletes "grp3" as collaborator for the current file using the webUI
+    # because there is still another share left, the indicator stays
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    # deleting the last collaborator removes the indicator
+    When the user deletes "grp2" as collaborator for the current file using the webUI
+    Then the following resources should not have share indicators on the webUI
+      | simple-folder |
+
   @skip @yetToImplement @issue-2897
   Scenario: sharing details of items inside a shared folder shared with user and group
     Given user "user3" has created folder "/simple-folder/sub-folder"

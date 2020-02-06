@@ -171,12 +171,14 @@ module.exports = {
     },
     confirmShare: function () {
       return this.waitForElementPresent('@addShareSaveButton')
+        .initAjaxCounters()
         .click('@addShareSaveButton')
+        .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@addShareSaveButton')
-        .waitForAjaxCallsToStartAndFinish()
     },
     saveCollaboratorPermission: function () {
       return this.waitForElementVisible('@saveShareButton')
+        .initAjaxCounters()
         .click('@saveShareButton')
         .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@saveShareButton')
@@ -186,9 +188,11 @@ module.exports = {
      */
     clickCreateShare: function () {
       return this
+        .initAjaxCounters()
         .useXpath()
         .waitForElementVisible('@createShareButton')
         .click('@createShareButton')
+        .waitForOutstandingAjaxCalls()
         .waitForElementVisible('@createShareDialog')
         .waitForAnimationToFinish()
     },

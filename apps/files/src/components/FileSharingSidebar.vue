@@ -106,13 +106,11 @@ export default {
   computed: {
     ...mapGetters('Files', [
       'highlightedFile',
-      'shares',
-      'sharesError',
-      'sharesLoading'
+      'currentFileOutgoingCollaborators',
+      'currentFileOutgoingSharesLoading'
     ]),
     ...mapState('Files', [
       'incomingShares',
-      'incomingSharesError',
       'incomingSharesLoading',
       'sharesTree'
     ]),
@@ -121,7 +119,7 @@ export default {
       return this.highlightedFile
     },
     $_sharesLoading () {
-      return this.sharesLoading && this.incomingSharesLoading
+      return this.currentFileOutgoingSharesLoading && this.incomingSharesLoading
     },
 
     $_noCollaborators () {
@@ -218,7 +216,7 @@ export default {
 
     $_directOutgoingShares () {
       // direct outgoing shares
-      return this.shares
+      return this.currentFileOutgoingCollaborators
         .filter(this.$_isCollaboratorShare.bind(this))
         .sort(this.$_collaboratorsComparator.bind(this))
         .map(collaborator => {
@@ -277,7 +275,7 @@ export default {
   },
   methods: {
     ...mapActions('Files', [
-      'loadShares',
+      'loadCurrentFileOutgoingShares',
       'sharesClearState',
       'deleteShare',
       'loadIncomingShares',
@@ -324,13 +322,15 @@ export default {
       return collaborator.info.share_type === '1'
     },
     $_reloadShares () {
-      this.loadShares({
+      this.loadCurrentFileOutgoingShares({
         client: this.$client,
-        path: this.highlightedFile.path
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext
       })
       this.loadIncomingShares({
         client: this.$client,
-        path: this.highlightedFile.path
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext
       })
     },
     $_clearShares () {

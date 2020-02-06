@@ -296,6 +296,16 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | fileName      | expectedIndicators |
       | sub-folder    | user-indirect      |
 
+  @issue-2939
+  Scenario: sharing indicator for federated shares stays up to date
+    When the user shares folder "simple-folder" with remote user "user1" as "Editor" using the webUI
+    Then the following resources should have share indicators on the webUI
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
+    When the user deletes "user1" as remote collaborator for the current file using the webUI
+    Then the following resources should not have share indicators on the webUI
+      | simple-folder |
+
   @skip @yetToImplement @issue-2897
   Scenario: sharing details inside folder shared using federated sharing
     Given user "user1" has created folder "/simple-folder/sub-folder"

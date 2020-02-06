@@ -24,11 +24,11 @@ export default {
   shareOpen: null,
 
   /**
-   * Outgoing shares from currently highlighted element
+   * Outgoing shares and links from currently highlighted element
    */
-  shares: [],
-  sharesError: null,
-  sharesLoading: false,
+  currentFileOutgoingShares: [],
+  currentFileOutgoingSharesError: null,
+  currentFileOutgoingSharesLoading: false,
 
   /**
    * Incoming shares from currently highlighted element
@@ -36,13 +36,6 @@ export default {
   incomingShares: [],
   incomingSharesError: null,
   incomingSharesLoading: false,
-
-  /**
-   * Link shares from currently highlighted element
-   */
-  links: [],
-  linksError: null,
-  linksLoading: false,
 
   /**
    * Shares from parent folders
