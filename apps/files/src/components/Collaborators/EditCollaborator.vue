@@ -1,10 +1,7 @@
 <template>
   <div class="files-collaborators-collaborator-edit-dialog">
     <div v-if="user.id !== collaborator.info.uid_owner" class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.info.displayname_owner }}</div>
-    <div class="uk-flex uk-flex-wrap uk-flex-middle">
-      <collaborator class="uk-width-expand" :collaborator="collaborator" />
-    </div>
-    <hr class="divider" />
+    <collaborator class="uk-width-expand" :collaborator="collaborator" :first-column="false" />
     <collaborators-edit-options
       :existingRole="$_originalRole"
       :collaboratorsPermissions="$_originalPermissions"
@@ -14,14 +11,16 @@
     <hr class="divider" />
     <oc-grid gutter="small" class="uk-margin-bottom">
       <div>
-        <oc-button class="files-collaborators-collaborator-cancel" :disabled="saving" @click="$_ocCollaborators_cancelChanges">
+        <oc-button :disabled="saving" @click="$_ocCollaborators_cancelChanges" class="files-collaborators-collaborator-cancel" key="edit-collaborator-cancel-button">
           <translate>Cancel</translate>
         </oc-button>
-        <oc-button v-if="saving" :disabled="true">
+        <oc-button :disabled="true" key="edit-collaborator-saving-button" v-if="saving">
           <oc-spinner :aria-label="$gettext('Saving Share')" class="uk-position-small uk-position-center-left" size="xsmall"/>
           <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Saving Share</span>
         </oc-button>
-        <oc-button v-else variation="primary" :disabled="!$_hasChanges" :aria-label="$gettext('Save Share')" @click="$_ocCollaborators_saveChanges">
+        <oc-button :aria-label="$gettext('Save Share')" :disabled="!$_hasChanges" @click="$_ocCollaborators_saveChanges" id="files-collaborators-collaborator-save-share-button"
+                   key="edit-collaborator-saving-button" v-else
+                   variation="primary">
           <translate>Save Share</translate>
         </oc-button>
       </div>

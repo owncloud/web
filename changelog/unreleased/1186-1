@@ -1,0 +1,10 @@
+Change: Improve UI/UX of collaborator forms
+
+Applied several UI/UX improvements to the collaborator forms (adding and editing).
+- Showing avatars for selected collaborators on a new share and fixed styling/layouting of said collaborators in the list.
+- Added sensible margins on text about missing permissions for re-sharing in the sharing sidebar.
+- Fixed alignment of displayed collaborator in editing view for collaborators.
+- Removed separators from the forms that were cluttering the view.
+- Moved role description on role selection (links and collaborators) into the form element. Not shown below the form element anymore.
+
+https://github.com/owncloud/phoenix/issues/1186

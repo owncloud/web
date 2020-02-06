@@ -22,10 +22,8 @@
 <script>
 import intersection from 'lodash/intersection'
 import { mapGetters } from 'vuex'
-import { shareTypes } from '../../../helpers/shareTypes'
+import { shareTypes, userShareTypes } from '../../../helpers/shareTypes'
 import { getParentPaths } from '../../../helpers/path'
-
-const userShareTypes = [shareTypes.user, shareTypes.group, shareTypes.guest, shareTypes.remote]
 
 export default {
   name: 'StatusIndicators',

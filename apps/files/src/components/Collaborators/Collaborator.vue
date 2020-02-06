@@ -1,7 +1,7 @@
 <template>
   <oc-table middle class="files-collaborators-collaborator">
     <oc-table-row v-if="$_reshareInformation" class="files-collaborators-collaborator-table-row-top">
-      <oc-table-cell shrink colspan="2"></oc-table-cell>
+      <oc-table-cell shrink :colspan="firstColumn ? 2 : 1"></oc-table-cell>
       <oc-table-cell colspan="2">
         <div class="uk-text-meta uk-flex uk-flex-middle">
           <oc-icon name="repeat" class="uk-preserve-width" />
@@ -10,7 +10,7 @@
       </oc-table-cell>
     </oc-table-row>
     <oc-table-row class="files-collaborators-collaborator-table-row-info">
-      <oc-table-cell shrink>
+      <oc-table-cell shrink v-if="firstColumn">
         <oc-button v-if="$_deleteButtonVisible" :ariaLabel="$gettext('Delete share')" @click="$_removeShare" variation="raw" class="files-collaborators-collaborator-delete">
           <oc-icon name="close" />
         </oc-button>
@@ -43,7 +43,7 @@
       </oc-table-cell>
     </oc-table-row>
     <oc-table-row v-if="$_viaLabel" class="files-collaborators-collaborator-table-row-bottom">
-      <oc-table-cell shrink colspan="2"></oc-table-cell>
+      <oc-table-cell shrink :colspan="firstColumn ? 2 : 1"></oc-table-cell>
       <oc-table-cell colspan="2">
         <div class="uk-text-meta">
           <router-link :to="$_viaRouterParams" :aria-label="$gettext('Navigate to parent')"
@@ -76,6 +76,10 @@ export default {
     modifiable: {
       type: Boolean,
       default: false
+    },
+    firstColumn: {
+      type: Boolean,
+      default: true
     }
   },
   data: function () {

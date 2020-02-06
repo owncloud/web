@@ -6,17 +6,14 @@
       :selectedRole="role"
       @roleSelected="selectRole"
     />
-    <div v-if="$_ocCollaborators_currentRoleDescription" class="uk-text-muted" v-text="$_ocCollaborators_currentRoleDescription"></div>
-    <hr v-if="$_ocCollaborators_hasAdditionalPermissions" class="divider" />
     <label class="oc-label" v-if="$_ocCollaborators_hasAdditionalPermissions">
-      <translate>Additional permissions</translate>
+      <translate>Additional permissions:</translate>
     </label>
     <additional-permissions
       :availablePermissions="role.additionalPermissions"
       :collaboratorsPermissions="collaboratorsPermissions"
       @permissionChecked="checkAdditionalPermissions"
     />
-    <hr v-if="$_ocCollaborators_expirationSupported" class="divider" />
     <oc-grid v-if="$_ocCollaborators_expirationSupported" gutter="small">
       <div class="uk-width-1-1">
           <label class="oc-label" for="files-collaborators-new-collaborator-expiration">
@@ -67,13 +64,6 @@ export default {
   computed: {
     $_ocCollaborators_expirationSupported () {
       return false
-    },
-
-    $_ocCollaborators_currentRoleDescription () {
-      if (this.selectedRole && this.selectedRole.name !== 'advancedRole') {
-        return this.selectedRole.description
-      }
-      return ''
     },
 
     $_ocCollaborators_hasAdditionalPermissions () {

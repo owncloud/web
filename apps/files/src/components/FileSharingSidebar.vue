@@ -8,42 +8,42 @@
             <translate>Add Collaborators</translate>
           </oc-button>
         </div>
-        <translate
-          v-else
-          class="files-collaborators-no-reshare-permissions-message"
-          key="no-reshare-permissions-message"
-          v-text="noResharePermsMessage"
+        <p class="files-collaborators-no-reshare-permissions-message"
+           key="no-reshare-permissions-message"
+           v-else
+           v-text="noResharePermsMessage"
         />
         <section v-if="$_ownerAndResharers.length > 0">
-          <ul class="uk-list uk-list-divider uk-overflow-hidden">
+          <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
             <li v-for="collaborator in $_ownerAndResharers" :key="collaborator.key">
               <collaborator :collaborator="collaborator"/>
             </li>
           </ul>
-          <hr/>
+          <hr class="uk-margin-small-top uk-margin-small-bottom" v-if="$_directOutgoingShares.length > 0 || $_indirectOutgoingShares.length > 0" />
         </section>
         <section>
           <transition-group id="files-collaborators-list"
-                            class="uk-list uk-list-divider uk-overflow-hidden"
-                            enter-active-class="uk-animation-slide-left-medium"
-                            leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
+                            class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove"
+                            :enter-active-class="$_transitionGroupEnter"
+                            :leave-active-class="$_transitionGroupLeave"
                             name="custom-classes-transition"
                             tag="ul">
             <li v-for="collaborator in $_directOutgoingShares" :key="collaborator.key">
               <collaborator :collaborator="collaborator" :modifiable="true" @onDelete="$_ocCollaborators_deleteShare" @onEdit="$_ocCollaborators_editShare"/>
             </li>
           </transition-group>
-          <hr v-if="$_directOutgoingShares.length > 0" />
+          <hr class="uk-margin-small-top uk-margin-small-bottom" v-if="$_directOutgoingShares.length > 0 && $_indirectOutgoingShares.length > 0" />
         </section>
         <section v-if="$_indirectOutgoingShares.length > 0">
-          <ul class="uk-list uk-list-divider uk-overflow-hidden">
+          <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
             <li v-for="collaborator in $_indirectOutgoingShares" :key="collaborator.key">
               <collaborator :collaborator="collaborator"/>
             </li>
           </ul>
-          <hr/>
         </section>
-        <div v-if="$_noCollaborators && !$_sharesLoading" key="oc-collaborators-no-results"><translate>No collaborators</translate></div>
+        <div v-if="$_noCollaborators" key="oc-collaborators-no-results">
+          <translate>No collaborators</translate>
+        </div>
       </template>
     </div>
     <div v-if="visiblePanel === PANEL_NEW" :key="PANEL_NEW">
@@ -71,7 +71,7 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import Mixins from '../mixins/collaborators'
 import { textUtils } from '../helpers/textUtils'
-import { shareTypes } from '../helpers/shareTypes'
+import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
 const NewCollaborator = _ => import('./Collaborators/NewCollaborator.vue')
 const EditCollaborator = _ => import('./Collaborators/EditCollaborator.vue')
@@ -96,6 +96,7 @@ export default {
     return {
       visiblePanel: PANEL_SHOW,
       currentShare: null,
+      transitionGroupActive: false,
 
       // panel types
       PANEL_SHOW,
@@ -115,17 +116,20 @@ export default {
       'sharesTree'
     ]),
     ...mapState(['user']),
-    selectedFile () {
-      return this.highlightedFile
+
+    $_transitionGroupEnter () {
+      return this.transitionGroupActive ? 'uk-animation-slide-left-medium' : ''
     },
+    $_transitionGroupLeave () {
+      return this.transitionGroupActive ? 'uk-animation-slide-right-medium uk-animation-reverse' : ''
+    },
+
     $_sharesLoading () {
       return this.currentFileOutgoingSharesLoading && this.incomingSharesLoading
     },
 
     $_noCollaborators () {
-      return this.$_ownerAndResharers.length === 0 &&
-        this.$_directOutgoingShares.length === 0 &&
-        this.$_indirectOutgoingShares.length === 0
+      return (this.$_ownerAndResharers.length + this.$_directOutgoingShares.length + this.$_indirectOutgoingShares.length) === 0
     },
 
     $_ownerAndResharers () {
@@ -216,9 +220,8 @@ export default {
 
     $_directOutgoingShares () {
       // direct outgoing shares
-      return this.currentFileOutgoingCollaborators
-        .filter(this.$_isCollaboratorShare.bind(this))
-        .sort(this.$_collaboratorsComparator.bind(this))
+      return [...this.currentFileOutgoingCollaborators]
+        .sort(this.$_collaboratorsComparator)
         .map(collaborator => {
           collaborator.key = 'collaborator-' + collaborator.info.id
           return collaborator
@@ -254,24 +257,21 @@ export default {
       return this.highlightedFile.canShare()
     },
     noResharePermsMessage () {
-      const translated = this.$gettext('You don\'t have permission to share this %{type}')
+      const translated = this.$gettext('You don\'t have permission to share this %{type}.')
       return this.$gettextInterpolate(translated, { type: this.highlightedFile.type })
     }
   },
   watch: {
-    selectedFile (newItem, oldItem) {
+    highlightedFile (newItem, oldItem) {
       if (oldItem !== newItem) {
+        this.transitionGroupActive = false
         this.$_reloadShares()
-        this.selectedCollaborators = []
       }
     }
   },
   mounted () {
-    if (this.highlightedFile) {
-      this.$_reloadShares()
-    } else {
-      this.$_clearShares()
-    }
+    this.transitionGroupActive = false
+    this.$_reloadShares()
   },
   methods: {
     ...mapActions('Files', [
@@ -282,23 +282,26 @@ export default {
       'incomingSharesClearState'
     ]),
     $_isCollaboratorShare (collaborator) {
-      return this.$_ocCollaborators_isUser(collaborator) || this.$_ocCollaborators_isGroup(collaborator)
+      return userShareTypes.includes(collaborator.shareType)
     },
     $_collaboratorsComparator (c1, c2) {
       const name1 = c1.displayName.toLowerCase().trim()
       const name2 = c2.displayName.toLowerCase().trim()
       // sorting priority 1: display name (lower case, ascending), 2: share type (groups first), 3: id (ascending)
       if (name1 === name2) {
-        if (this.$_ocCollaborators_isGroup(c1) === this.$_ocCollaborators_isGroup(c2)) {
-          return parseInt(c1.info.id, 10) < parseInt(c2.info.id, 10) ? -1 : 1
+        const c1GroupShare = c1.shareType === shareTypes.group
+        const c2GroupShare = c2.shareType === shareTypes.group
+        if (c1GroupShare === c2GroupShare) {
+          return textUtils.naturalSortCompare(c1.info.id + '', c2.info.id + '')
         } else {
-          return this.$_ocCollaborators_isGroup(c1) ? -1 : 1
+          return c1GroupShare ? -1 : 1
         }
       } else {
         return textUtils.naturalSortCompare(name1, name2)
       }
     },
     $_ocCollaborators_addShare () {
+      this.transitionGroupActive = true
       this.visiblePanel = PANEL_NEW
     },
     $_ocCollaborators_editShare (share) {
@@ -306,6 +309,7 @@ export default {
       this.visiblePanel = PANEL_EDIT
     },
     $_ocCollaborators_deleteShare (share) {
+      this.transitionGroupActive = true
       this.deleteShare({
         client: this.$client,
         share: share
@@ -316,12 +320,13 @@ export default {
       this.currentShare = null
     },
     $_ocCollaborators_isUser (collaborator) {
-      return collaborator.info.share_type === '0' || collaborator.info.share_type === '6'
+      return collaborator.shareType === shareTypes.user || collaborator.shareType === shareTypes.remote
     },
     $_ocCollaborators_isGroup (collaborator) {
-      return collaborator.info.share_type === '1'
+      return collaborator.shareType === shareTypes.group
     },
     $_reloadShares () {
+      this.$_ocCollaborators_showList()
       this.loadCurrentFileOutgoingShares({
         client: this.$client,
         path: this.highlightedFile.path,
@@ -332,10 +337,6 @@ export default {
         path: this.highlightedFile.path,
         $gettext: this.$gettext
       })
-    },
-    $_clearShares () {
-      this.sharesClearState()
-      this.incomingSharesClearState()
     }
   }
 }

@@ -1,0 +1,7 @@
+Bugfix: Fix collaborator selection on new collaborator shares
+
+When typing text into the search box for new collaborators, selecting a user and a group with identical names was not possible.
+This was due to the fact that when one (group or user) got selected, the other was excluded because of a matching name. Fixed by
+including the share type (group or user) in matching.
+
+https://github.com/owncloud/phoenix/issues/1186

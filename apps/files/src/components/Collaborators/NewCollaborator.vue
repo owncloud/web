@@ -21,55 +21,44 @@
         </template>
       </oc-autocomplete>
     </oc-grid>
-    <oc-grid gutter="small">
-      <div
-        v-if="selectedCollaborators.length > 0"
-      >
+    <oc-grid gutter="small" v-if="selectedCollaborators.length > 0">
+      <div>
         <div>
-          <div>
-            <translate>Selected collaborators</translate>:
-          </div>
-          <div
-            v-for="(collaborator, index) in selectedCollaborators"
-            :key="collaborator.label"
-            class="uk-flex-inline uk-flex-row uk-flex-start uk-margin-small-bottom"
-            :class="{
-              'uk-margin-small-right': index + 1 !== selectedCollaborators.length
-            }"
-          >
-            <div class="uk-margin-small-top">
-              <span class="uk-text-bold" v-text="collaborator.label" />
-              <span v-if="collaborator.value.shareType === 1" class="uk-text-meta">
-                (<translate>group</translate>)
-              </span>
-            </div>
-            <oc-button :ariaLabel="$gettext('Delete share')" variation="raw" class="oc-cursor-pointer"  @click="$_ocCollaborators_removeFromSelection(collaborator)">
-              <oc-icon
-                name="close"
-                variation="danger"
-              />
-            </oc-button>
-          </div>
+          <translate>Selected collaborators:</translate>
         </div>
+          <oc-table middle class="uk-width-expand files-collaborators-collaborator-autocomplete-item">
+            <oc-table-row v-for="collaborator in selectedCollaborators" :key="collaborator.value.shareWith + '-' + collaborator.value.shareType">
+              <oc-table-cell shrink>
+                <oc-button :ariaLabel="$gettext('Delete share')" variation="raw" size="small"
+                           @click="$_ocCollaborators_removeFromSelection(collaborator)"
+                           class="files-collaborators-collaborator-autocomplete-item-remove">
+                  <oc-icon name="close" />
+                </oc-button>
+              </oc-table-cell>
+              <oc-table-cell>
+                <autocomplete-item :item="collaborator" />
+              </oc-table-cell>
+            </oc-table-row>
+          </oc-table>
       </div>
     </oc-grid>
-    <hr class="divider" />
     <collaborators-edit-options class="uk-margin-bottom" @optionChange="collaboratorOptionChanged" />
     <hr class="divider" />
     <oc-grid gutter="small" class="uk-margin-bottom">
       <div>
-        <oc-button class="files-collaborators-collaborator-cancel" :disabled="saving" @click="$_ocCollaborators_newCollaboratorsCancel">
+        <oc-button :disabled="saving" @click="$_ocCollaborators_newCollaboratorsCancel" class="files-collaborators-collaborator-cancel" key="new-collaborator-cancel-button">
           <translate>Cancel</translate>
         </oc-button>
-        <oc-button v-if="saving" :disabled="true">
+        <oc-button :disabled="true" key="new-collaborator-saving-button" v-if="saving">
           <oc-spinner :aria-label="$gettext('Adding Collaborators')" class="uk-position-small uk-position-center-left" size="xsmall"/>
           <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Adding Collaborators</span>
         </oc-button>
-        <oc-button v-else
-          id="files-collaborators-collaborator-save-new-share-button"
-          variation="primary"
-          :disabled="!$_isValid"
-          @click="$_ocCollaborators_newCollaboratorsAdd(selectedCollaborators)"
+        <oc-button :disabled="!$_isValid"
+                   @click="$_ocCollaborators_newCollaboratorsAdd(selectedCollaborators)"
+                   id="files-collaborators-collaborator-save-new-share-button"
+                   key="new-collaborator-save-button"
+                   v-else
+                   variation="primary"
         >
           <translate>Add Collaborators</translate>
         </oc-button>
@@ -86,6 +75,8 @@ import Mixins from '../../mixins/collaborators'
 import { roleToBitmask } from '../../helpers/collaborators'
 
 import AutocompleteItem from './AutocompleteItem.vue'
+import { shareTypes } from '../../helpers/shareTypes'
+
 const CollaboratorsEditOptions = () => import('./CollaboratorsEditOptions.vue')
 const { default: PQueue } = require('p-queue')
 
@@ -143,10 +134,8 @@ export default {
     },
 
     $_onAutocompleteInput (value) {
-      if (
-        value.length <
-        parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
-      ) {
+      const minSearchLength = parseInt(this.user.capabilities.files_sharing.search_min_length, 10)
+      if (value.length < minSearchLength) {
         this.autocompleteInProgress = false
         this.autocompleteResults = []
         return
@@ -165,20 +154,16 @@ export default {
           })
           const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
-          const results = users.concat(groups, remotes).filter(collaborator => {
-            const selected = this.selectedCollaborators.find(
-              selectedCollaborator => {
-                return (
-                  collaborator.value.shareWith ===
-                  selectedCollaborator.value.shareWith
-                )
-              }
-            )
+          this.autocompleteResults = users.concat(groups, remotes).filter(collaborator => {
+            const selected = this.selectedCollaborators.find(selectedCollaborator => {
+              return collaborator.value.shareWith === selectedCollaborator.value.shareWith &&
+                parseInt(collaborator.value.shareType, 10) === parseInt(selectedCollaborator.value.shareType, 10)
+            })
 
             const exists = this.currentFileOutgoingCollaborators.find(existingCollaborator => {
               return (
                 collaborator.value.shareWith === existingCollaborator.name &&
-                parseInt(collaborator.value.shareType, 10) === parseInt(existingCollaborator.info.share_type, 10)
+                parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
               )
             })
 
@@ -189,8 +174,6 @@ export default {
             this.announcement = this.$_announcementWhenCollaboratorAdded
             return true
           })
-
-          this.autocompleteResults = results
         })
         .catch(error => {
           console.log(error)
@@ -198,13 +181,12 @@ export default {
         })
     },
     filterRecipients (item, queryText) {
-      if (item.value.shareType === 6) {
+      if (item.value.shareType === shareTypes.remote) {
         // done on server side
         return true
       }
       return (
-        item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) >
-          -1 ||
+        item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1 ||
         item.value.shareWith
           .toLocaleLowerCase()
           .indexOf(queryText.toLocaleLowerCase()) > -1
@@ -239,17 +221,17 @@ export default {
       this.selectedCollaborators.push(collaborator)
     },
     $_ocCollaborators_removeFromSelection (collaborator) {
-      const selectedCollaborators = this.selectedCollaborators.filter(
-        selectedCollaborator => {
-          return collaborator !== selectedCollaborator
-        }
-      )
-
-      this.selectedCollaborators = selectedCollaborators
-
-      if (this.selectedCollaborators.length < 1) {
-      }
+      this.selectedCollaborators = this.selectedCollaborators.filter(selectedCollaborator => {
+        return collaborator !== selectedCollaborator
+      })
     }
   }
 }
 </script>
+
+<style scoped="scoped">
+  /* FIXME: Move to ODS somehow */
+  .files-collaborators-collaborator-autocomplete-item td {
+    padding: 0 10px 10px 0;
+  }
+</style>
