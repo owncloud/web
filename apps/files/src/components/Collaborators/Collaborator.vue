@@ -11,9 +11,10 @@
     </oc-table-row>
     <oc-table-row class="files-collaborators-collaborator-table-row-info">
       <oc-table-cell shrink>
-        <oc-button v-if="modifiable" :ariaLabel="$gettext('Delete share')" @click="$emit('onDelete', collaborator)" variation="raw" class="files-collaborators-collaborator-delete">
+        <oc-button v-if="$_deleteButtonVisible" :ariaLabel="$gettext('Delete share')" @click="$_removeShare" variation="raw" class="files-collaborators-collaborator-delete">
           <oc-icon name="close" />
         </oc-button>
+        <oc-spinner v-else-if="$_loadingSpinnerVisible" :aria-label="$gettext('Removing collaborator') + '...'" size="small" />
         <oc-icon v-else name="lock" class="uk-invisible"></oc-icon>
       </oc-table-cell>
       <oc-table-cell shrink>
@@ -36,7 +37,7 @@
         </div>
       </oc-table-cell>
       <oc-table-cell shrink>
-        <oc-button v-if="modifiable" :aria-label="$gettext('Edit share')" @click="$emit('onEdit', collaborator)" variation="raw" class="files-collaborators-collaborator-edit">
+        <oc-button v-if="$_editButtonVisible" :aria-label="$gettext('Edit share')" @click="$emit('onEdit', collaborator)" variation="raw" class="files-collaborators-collaborator-edit">
           <oc-icon name="edit" />
         </oc-button>
       </oc-table-cell>
@@ -79,11 +80,22 @@ export default {
   },
   data: function () {
     return {
-      shareTypes
+      shareTypes,
+      removalInProgress: false
     }
   },
   computed: {
     ...mapGetters(['user']),
+
+    $_loadingSpinnerVisible () {
+      return this.modifiable && this.removalInProgress
+    },
+    $_deleteButtonVisible () {
+      return this.modifiable && !this.removalInProgress
+    },
+    $_editButtonVisible () {
+      return this.modifiable && !this.removalInProgress
+    },
 
     $_isIndirectShare () {
       // it is assumed that the "incoming" attribute only exists
@@ -138,6 +150,12 @@ export default {
       return {
         label: this.$gettext('Unknown Role')
       }
+    }
+  },
+  methods: {
+    $_removeShare () {
+      this.removalInProgress = true
+      this.$emit('onDelete', this.collaborator)
     }
   }
 }
