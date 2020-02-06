@@ -27,8 +27,7 @@
           <div class="uk-margin-small-top uk-margin-small-bottom">
             <oc-button @click="$_addPublicLink" icon="add" variation="primary" id="files-file-link-add">{{ $_addButtonLabel }}</oc-button>
           </div>
-          <transition-group v-if="$_links.length > 0"
-                            class="uk-list uk-list-divider uk-overflow-hidden"
+          <transition-group class="uk-list uk-list-divider uk-overflow-hidden"
                             enter-active-class="uk-animation-slide-left-medium"
                             leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
                             name="custom-classes-transition"

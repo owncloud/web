@@ -225,14 +225,8 @@ export default {
     }
     state.highlightedFile = file
   },
-  TOGGLE_COLLABORATOR_SAVING (state, saving) {
-    state.collaboratorSaving = saving
-  },
   SET_PUBLIC_LINK_PASSWORD (state, password) {
     state.publicLinkPassword = password
-  },
-  TOGGLE_COLLABORATORS_EDIT (state, inProgress) {
-    state.collaboratorsEditInProgress = inProgress
   },
   LINKS_PURGE (state) {
     state.links = []

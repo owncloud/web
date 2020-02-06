@@ -111,15 +111,17 @@ export default {
     }
   },
   methods: {
-    selectRole (role, propagate = true) {
+    selectRole (role) {
       this.selectedRole = role
-
-      this.$emit('optionChange', { role: this.selectedRole, permissions: this.additionalPermissions, expirationDate: this.expirationDate, propagate: propagate })
+      this.publishChange()
     },
 
     checkAdditionalPermissions (permissions) {
       this.additionalPermissions = permissions
+      this.publishChange()
+    },
 
+    publishChange () {
       this.$emit('optionChange', { role: this.selectedRole, permissions: this.additionalPermissions, expirationDate: this.expirationDate })
     }
   }

@@ -22,7 +22,7 @@
           </ul>
           <hr/>
         </section>
-        <section v-if="$_directOutgoingShares.length > 0">
+        <section>
           <transition-group id="files-collaborators-list"
                             class="uk-list uk-list-divider uk-overflow-hidden"
                             enter-active-class="uk-animation-slide-left-medium"
@@ -33,7 +33,7 @@
               <collaborator :collaborator="collaborator" :modifiable="true" @onDelete="$_ocCollaborators_deleteShare" @onEdit="$_ocCollaborators_editShare"/>
             </li>
           </transition-group>
-          <hr/>
+          <hr v-if="$_directOutgoingShares.length > 0" />
         </section>
         <section v-if="$_indirectOutgoingShares.length > 0">
           <ul class="uk-list uk-list-divider uk-overflow-hidden">
@@ -98,9 +98,9 @@ export default {
       currentShare: null,
 
       // panel types
-      PANEL_SHOW: PANEL_SHOW,
-      PANEL_EDIT: PANEL_EDIT,
-      PANEL_NEW: PANEL_NEW
+      PANEL_SHOW,
+      PANEL_EDIT,
+      PANEL_NEW
     }
   },
   computed: {
@@ -269,7 +269,6 @@ export default {
     }
   },
   mounted () {
-    this.toggleCollaboratorsEdit(false)
     if (this.highlightedFile) {
       this.$_reloadShares()
     } else {

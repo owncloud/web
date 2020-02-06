@@ -61,16 +61,10 @@
       <hr class="divider"/>
       <oc-grid class="uk-margin-bottom" gutter="small">
         <div>
-          <oc-button :disabled="linksLoading" @click="$_closeForm" id="oc-files-file-link-cancel">
+          <oc-button :disabled="saving" @click="$_closeForm" id="oc-files-file-link-cancel">
             <translate>Cancel</translate>
           </oc-button>
-          <oc-button :disabled="!$_isValid" @click="$_addLink" v-if="!linksLoading && $_isNew" variation="primary" id="oc-files-file-link-create">
-            <translate>Create Public Link</translate>
-          </oc-button>
-          <oc-button :disabled="!$_isValid || !$_hasChanges" @click="$_updateLink" v-else-if="!linksLoading && !$_isNew" variation="primary" id="oc-files-file-link-save">
-            <translate>Save Public Link</translate>
-          </oc-button>
-          <button class="uk-button uk-button-default uk-position-relative" disabled v-else>
+          <button v-if="saving" class="uk-button uk-button-default uk-position-relative" disabled>
             <template v-if="$_isNew">
               <oc-spinner :ariaLabel="$gettext('Creating Public Link')" class="uk-position-small uk-position-center-left" size="small"/>
               <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Creating Public Link</span>
@@ -80,6 +74,14 @@
               <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Saving Public Link</span>
             </template>
           </button>
+          <template v-else>
+            <oc-button v-if="$_isNew" :disabled="!$_isValid" @click="$_addLink" variation="primary" id="oc-files-file-link-create">
+              <translate>Create Public Link</translate>
+            </oc-button>
+            <oc-button v-else :disabled="!$_isValid || !$_hasChanges" @click="$_updateLink" variation="primary" id="oc-files-file-link-save">
+              <translate>Save Public Link</translate>
+            </oc-button>
+          </template>
         </div>
       </oc-grid>
     </form>
@@ -103,6 +105,7 @@ export default {
   props: ['params'],
   data () {
     return {
+      saving: false,
       password: null,
       errors: false,
       ...this.params,
@@ -119,7 +122,7 @@ export default {
     return $gettext('Links')
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'linksLoading']),
+    ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['getToken', 'capabilities']),
 
     $_isNew () {
@@ -242,6 +245,8 @@ export default {
     },
 
     $_addLink () {
+      this.saving = true
+
       const params = {
         expireDate: this.expireDate,
         permissions: this.permissions,
@@ -258,14 +263,18 @@ export default {
         $gettext: this.$gettext,
         params
       }).then(e => {
+        this.saving = false
         this.errors = false
         this.$_closeForm()
       }).catch(e => {
+        this.saving = false
         this.errors = e
       })
     },
 
     $_updateLink () {
+      this.saving = true
+
       const params = {
         expireDate: this.expireDate,
         permissions: this.permissions,
@@ -282,9 +291,11 @@ export default {
         $gettext: this.$gettext,
         params
       }).then(() => {
+        this.saving = false
         this.errors = false
         this.$_closeForm()
       }).catch(e => {
+        this.saving = false
         this.errors = e
       })
     },

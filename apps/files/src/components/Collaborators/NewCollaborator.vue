@@ -7,7 +7,7 @@
         :ariaLabel="$gettext('Select a collaborator to add')"
         :items="autocompleteResults"
         :itemsLoading="autocompleteInProgress"
-        :placeholder="$_ocCollaborationStatus_autocompletePlacholder"
+        :placeholder="$_ocCollaborationStatus_autocompletePlaceholder"
         @update:input="$_onAutocompleteInput"
         :filter="filterRecipients"
         :fillOnSelection="false"
@@ -58,16 +58,20 @@
     <hr class="divider" />
     <oc-grid gutter="small" class="uk-margin-bottom">
       <div>
-        <oc-button class="files-collaborators-collaborator-cancel" @click="$_ocCollaborators_newCollaboratorsCancel">
+        <oc-button class="files-collaborators-collaborator-cancel" :disabled="saving" @click="$_ocCollaborators_newCollaboratorsCancel">
           <translate>Cancel</translate>
         </oc-button>
-        <oc-button
+        <oc-button v-if="saving" :disabled="true">
+          <oc-spinner :aria-label="$gettext('Adding Collaborators')" class="uk-position-small uk-position-center-left" size="small"/>
+          <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Adding Collaborators</span>
+        </oc-button>
+        <oc-button v-else
           id="files-collaborators-collaborator-save-new-share-button"
           variation="primary"
-          :disabled="!selectedCollaborators.length"
+          :disabled="!$_isValid"
           @click="$_ocCollaborators_newCollaboratorsAdd(selectedCollaborators)"
         >
-          <translate>Add collaborators</translate>
+          <translate>Add Collaborators</translate>
         </oc-button>
       </div>
     </oc-grid>
@@ -83,6 +87,7 @@ import { roleToBitmask } from '../../helpers/collaborators'
 
 import AutocompleteItem from './AutocompleteItem.vue'
 const CollaboratorsEditOptions = () => import('./CollaboratorsEditOptions.vue')
+const { default: PQueue } = require('p-queue')
 
 export default {
   name: 'NewCollaborator',
@@ -95,11 +100,11 @@ export default {
     return {
       autocompleteResults: [],
       announcement: '',
-      announcementWhenCollaboratorAdded: this.$gettext('Collaborator was added'),
       autocompleteInProgress: false,
       selectedCollaborators: [],
       selectedRole: null,
-      additionalPermissions: null
+      additionalPermissions: null,
+      saving: false
     }
   },
   computed: {
@@ -109,10 +114,16 @@ export default {
     ]),
     ...mapGetters(['user']),
 
-    $_ocCollaborationStatus_autocompletePlacholder () {
-      return this.$gettext(
-        "Add new collaborator by name, email or federation ID's"
-      )
+    $_ocCollaborationStatus_autocompletePlaceholder () {
+      return this.$gettext("Add new collaborator by name, email or federation ID's")
+    },
+
+    $_announcementWhenCollaboratorAdded () {
+      return this.$gettext('Collaborator was added')
+    },
+
+    $_isValid () {
+      return this.selectedCollaborators.length > 0
     }
   },
   mounted () {
@@ -131,8 +142,7 @@ export default {
       'sharesClearState',
       'addShare',
       'deleteShare',
-      'changeShare',
-      'toggleCollaboratorsEdit'
+      'changeShare'
     ]),
 
     close () {
@@ -183,7 +193,7 @@ export default {
               return false
             }
 
-            this.announcement = this.announcementWhenCollaboratorAdded
+            this.announcement = this.$_announcementWhenCollaboratorAdded
             return true
           })
 
@@ -209,27 +219,31 @@ export default {
     },
     $_ocCollaborators_newCollaboratorsCancel () {
       this.selectedCollaborators = []
-      this.toggleCollaboratorsEdit(false)
+      this.saving = false
       this.close()
     },
     $_ocCollaborators_newCollaboratorsAdd (collaborators) {
-      for (const collaborator of collaborators) {
-        this.addShare({
+      this.saving = true
+
+      const saveQueue = new PQueue({ concurrency: 4 })
+      const savePromises = []
+      collaborators.forEach(collaborator => {
+        savePromises.push(saveQueue.add(() => this.addShare({
           client: this.$client,
           path: this.highlightedFile.path,
           $gettext: this.$gettext,
           shareWith: collaborator.value.shareWith,
           shareType: collaborator.value.shareType,
-          permissions: roleToBitmask(this.selectedRole, this.additionalPermissions, this.highlightedFile.type === 'folder')
-        })
-      }
-      this.selectedCollaborators = []
-      this.toggleCollaboratorsEdit(false)
-      this.close()
+          permissions: roleToBitmask(this.selectedRole, this.additionalPermissions)
+        })))
+      })
+
+      return Promise.all(savePromises).then(() => {
+        this.$_ocCollaborators_newCollaboratorsCancel()
+      })
     },
     $_ocCollaborators_selectAutocompleteResult (collaborator) {
       this.selectedCollaborators.push(collaborator)
-      this.toggleCollaboratorsEdit(true)
     },
     $_ocCollaborators_removeFromSelection (collaborator) {
       const selectedCollaborators = this.selectedCollaborators.filter(
@@ -241,7 +255,6 @@ export default {
       this.selectedCollaborators = selectedCollaborators
 
       if (this.selectedCollaborators.length < 1) {
-        this.toggleCollaboratorsEdit(false)
       }
     }
   }
