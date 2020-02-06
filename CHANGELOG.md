@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Prevent loader in sidebar on add/remove: [#2937](https://github.com/owncloud/phoenix/issues/2937)
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
+* Change - File actions now always behind three dots button: [#2974](https://github.com/owncloud/phoenix/pull/2974)
 
 Details
 -------
@@ -35,6 +36,14 @@ Details
    improved UI
 
    https://github.com/owncloud/phoenix/issues/2971
+
+* Change - File actions now always behind three dots button: [#2974](https://github.com/owncloud/phoenix/pull/2974)
+
+   The inline file actions button didn't look very nice and made the UI look cluttered. This change
+   hides them behind a three dots button on the line, the same that was already visible in
+   responsive mode. The three dots button also now has no more border and looks nicer.
+
+   https://github.com/owncloud/phoenix/pull/2974
 
 Changelog for ownCloud Phoenix [0.3.0] (2020-01-31)
 =======================================
