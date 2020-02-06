@@ -18,28 +18,17 @@ const FileAction = Object.freeze({
 module.exports = {
   commands: {
     /**
-     * Action button selector for Low Resolution screens
+     * Action button selector
      *
      * @param {string} action
      * @param {string} fileName
      * @returns {string}
      */
-    getActionSelectorLowRes: function (action) {
+    getActionSelector: function (action) {
       const actionsDropdownSelector = this.elements.itemActionsDropdown.selector
       const actionSelector = this.elements[action + 'ButtonInFileRow'].selector
 
       return `${actionsDropdownSelector}${actionSelector}`
-    },
-    /**
-     * Action button selector for High Resolution screens
-     *
-     * @param {string} action
-     * @param {string} fileName
-     * @returns {string}
-     */
-    getActionSelectorHighRes: function (action, fileName) {
-      return '(' + this.getFileRowSelectorByFileName(fileName) +
-        this.elements[action + 'ButtonInFileRow'].selector + ')[1]'
     },
     /**
      * Get Selector for File Actions expander
@@ -60,23 +49,16 @@ module.exports = {
      * @returns {*}
      */
     performFileAction: function (fileName, action) {
-      const { btnSelectorHighResolution, btnSelectorLowResolution, fileActionsBtnSelector } =
+      const { btnSelector, fileActionsBtnSelector } =
         this.getFileRowButtonSelectorsByFileName(fileName, action)
 
       return this.initAjaxCounters()
         .useXpath()
-        .isVisible(fileActionsBtnSelector, (result) => {
-          if (result.value === true) {
-            this
-              .click(fileActionsBtnSelector)
-              .waitForElementVisible(btnSelectorLowResolution)
-              .click(btnSelectorLowResolution)
-          } else {
-            this
-              .waitForElementVisible(btnSelectorHighResolution)
-              .click(btnSelectorHighResolution)
-          }
-        })
+        .waitForElementVisible(fileActionsBtnSelector)
+        .click(fileActionsBtnSelector)
+        .waitForElementVisible(btnSelector)
+        .click(btnSelector)
+        .useCss()
     },
 
     /**
@@ -89,30 +71,18 @@ module.exports = {
      * @returns {*}
      */
     isActionDisabled: function (fileName, action, callback) {
-      const { btnSelectorHighResolution, btnSelectorLowResolution, fileActionsBtnSelector } =
+      const { btnSelector, fileActionsBtnSelector } =
         this.getFileRowButtonSelectorsByFileName(fileName, action)
 
       return this
         .useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
-        .isVisible(fileActionsBtnSelector, (result) => {
-          let btnSelector
-          if (result.value === true) {
-            this
-              .click(fileActionsBtnSelector)
-            btnSelector = btnSelectorLowResolution
-          } else {
-            btnSelector = btnSelectorHighResolution
-          }
-
-          this
-            .waitForElementVisible(btnSelector)
-            .useXpath()
-            .getAttribute(btnSelector, 'disabled', (disabledResult) => {
-              const isDisabled = disabledResult.value === 'true'
-              callback(isDisabled)
-            })
+        .click(fileActionsBtnSelector)
+        .waitForElementVisible(btnSelector)
+        .getAttribute(btnSelector, 'disabled', (disabledResult) => {
+          const isDisabled = disabledResult.value === 'true'
+          callback(isDisabled)
         })
+        .useCss()
     },
     /**
      *
@@ -453,11 +423,10 @@ module.exports = {
         .useCss()
     },
     getFileRowButtonSelectorsByFileName: function (fileName, action) {
-      const btnSelectorHighResolution = this.getActionSelectorHighRes(action, fileName)
-      const btnSelectorLowResolution = this.getActionSelectorLowRes(action, fileName)
+      const btnSelector = this.getActionSelector(action, fileName)
       const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName)
 
-      return { btnSelectorHighResolution, btnSelectorLowResolution, fileActionsBtnSelector }
+      return { btnSelector, fileActionsBtnSelector }
     },
     /**
      *
@@ -587,28 +556,19 @@ module.exports = {
      * @returns {Promise<boolean>}
      */
     getActionDisabledAttr: async function (action, fileName) {
-      const btnSelectorHighResolution = this.getActionSelectorHighRes(action, fileName)
-      const btnSelectorLowResolution = this.getActionSelectorLowRes(action, fileName)
+      const btnSelector = this.getActionSelector(action, fileName)
       const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName)
       let disabledState
       await this
         .useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(fileName), 0, 0)
-        .isVisible(fileActionsBtnSelector, (result) => {
-          if (result.value === true) {
-            this.click(fileActionsBtnSelector)
-              .waitForElementVisible(btnSelectorLowResolution)
-              .getAttribute(btnSelectorLowResolution, 'disabled', result => {
-                disabledState = result.value
-              })
-          } else {
-            this.waitForElementVisible(btnSelectorHighResolution)
-              .getAttribute(btnSelectorHighResolution, 'disabled', result => {
-                disabledState = result.value
-              })
-          }
+        .click(fileActionsBtnSelector)
+      await this.api
+        .element('xpath', btnSelector, result => {
+          // action is disabled when not visible in dropdown menu
+          disabledState = result.status === -1
         })
         .useCss()
+
       return disabledState
     },
     /**
@@ -843,7 +803,7 @@ module.exports = {
       selector: '#files-list-progress'
     },
     fileActionsButtonInFileRow: {
-      selector: '//button[@aria-label="show-file-actions"]',
+      selector: '//button[contains(@class, "files-list-row-show-actions")]',
       locateStrategy: 'xpath'
     },
     deleteFileConfirmationDialog: {
