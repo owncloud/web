@@ -5,7 +5,7 @@
         <oc-button v-if="$_deleteButtonVisible" :aria-label="$_deleteButtonLabel" @click="$_removeLink" variation="raw" class="oc-files-file-link-delete">
           <oc-icon name="close" />
         </oc-button>
-        <oc-spinner v-else-if="$_loadingSpinnerVisible" :aria-label="$gettext('Removing public link') + '...'" size="small" />
+        <oc-spinner v-else-if="$_loadingSpinnerVisible" :aria-label="$gettext('Removing public link…')" size="small" />
         <oc-icon v-else name="lock" class="uk-invisible" />
       </oc-table-cell>
       <oc-table-cell>

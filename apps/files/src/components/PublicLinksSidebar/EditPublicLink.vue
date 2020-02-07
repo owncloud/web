@@ -66,11 +66,11 @@
           </oc-button>
           <button v-if="saving" class="uk-button uk-button-default uk-position-relative" disabled>
             <template v-if="$_isNew">
-              <oc-spinner :ariaLabel="$gettext('Creating Public Link')" class="uk-position-small uk-position-center-left" size="small"/>
+              <oc-spinner :ariaLabel="$gettext('Creating Public Link')" class="uk-position-small uk-position-center-left" size="xsmall"/>
               <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Creating Public Link</span>
             </template>
             <template v-else>
-              <oc-spinner :ariaLabel="$gettext('Saving Public Link')" class="uk-position-small uk-position-center-left" size="small"/>
+              <oc-spinner :ariaLabel="$gettext('Saving Public Link')" class="uk-position-small uk-position-center-left" size="xsmall"/>
               <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Saving Public Link</span>
             </template>
           </button>

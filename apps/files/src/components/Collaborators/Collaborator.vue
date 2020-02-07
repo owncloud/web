@@ -14,7 +14,7 @@
         <oc-button v-if="$_deleteButtonVisible" :ariaLabel="$gettext('Delete share')" @click="$_removeShare" variation="raw" class="files-collaborators-collaborator-delete">
           <oc-icon name="close" />
         </oc-button>
-        <oc-spinner v-else-if="$_loadingSpinnerVisible" :aria-label="$gettext('Removing collaborator') + '...'" size="small" />
+        <oc-spinner v-else-if="$_loadingSpinnerVisible" :aria-label="$gettext('Removing collaborator…')" size="small" />
         <oc-icon v-else name="lock" class="uk-invisible"></oc-icon>
       </oc-table-cell>
       <oc-table-cell shrink>
