@@ -4,6 +4,9 @@
         <oc-table middle divider v-if="!loading && hasVersion">
             <oc-table-group>
                 <oc-table-row v-for="(item, index) in versions" :key="index" class="file-row">
+                    <oc-table-cell shrink>
+                      <oc-icon :name="fileTypeIcon(highlightedFile)" />
+                    </oc-table-cell>
                     <oc-table-cell>
                         <oc-table-cell class="uk-text-meta uk-text-nowrap">
                             {{ formDateFromNow(item.fileInfo['{DAV:}getlastmodified']) }}
@@ -12,11 +15,19 @@
                             {{  item.fileInfo['{DAV:}getcontentlength'] | fileSize }}
                         </oc-table-cell>
                     </oc-table-cell>
-                    <oc-table-cell>
-                        <div class="uk-button-group uk-margin-small-right">
-                            <oc-button @click="revertVersion(item)" icon="restore"></oc-button>
-                            <oc-button @click="downloadVersion(item)" icon="cloud_download"></oc-button>
-                        </div>
+                    <oc-table-cell shrink>
+                      <div class="uk-button-group uk-margin-small-right">
+                        <oc-button variation="raw" @click="revertVersion(item)" :aria-label="$gettext('Restore older version')">
+                          <oc-icon name="restore" />
+                        </oc-button>
+                      </div>
+                    </oc-table-cell>
+                    <oc-table-cell shrink>
+                      <div class="uk-button-group uk-margin-small-right">
+                        <oc-button variation="raw" @click="downloadVersion(item)" :aria-label="$gettext('Download older version')">
+                          <oc-icon name="cloud_download" />
+                        </oc-button>
+                      </div>
                     </oc-table-cell>
                 </oc-table-row>
             </oc-table-group>
