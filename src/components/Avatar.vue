@@ -1,7 +1,7 @@
 <template>
   <component :is="type" v-if="enabled">
     <oc-spinner v-if="loading" size="small" key="avatar-loading" :aria-label="$gettext('Loading')"
-     :style="'width:' + width + 'px;height:' + width + 'px'" />
+     :style="`width: ${width}px; height: ${width}px;`" />
     <oc-avatar v-else key="avatar-loaded" :width="width" :src="avatarSource" :userName="userName" />
   </component>
 </template>

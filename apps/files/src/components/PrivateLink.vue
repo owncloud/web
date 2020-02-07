@@ -5,8 +5,8 @@
         ownCloud
       </h1>
       <div class="oc-login-card-body" v-if="loading">
-        <h3 class="oc-login-card-title"><translate>Resolving private link…</translate></h3>
-        <oc-spinner></oc-spinner>
+        <h3 class="oc-login-card-title" :aria-hidden="true">{{ $_resolvingPrivateLinkTitle }}</h3>
+        <oc-spinner :aria-label="$_resolvingPrivateLinkTitle"></oc-spinner>
       </div>
       <div class="oc-login-card-body" v-if="errorMessage">
         <h3 class="oc-login-card-title"><translate>An error occurred while resolving the private link</translate></h3>
@@ -22,6 +22,11 @@ export default {
     return {
       loading: true,
       errorMessage: null
+    }
+  },
+  computed: {
+    $_resolvingPrivateLinkTitle () {
+      return this.$gettext('Resolving private link…')
     }
   },
   mounted () {

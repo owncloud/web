@@ -62,7 +62,7 @@
           <translate>Cancel</translate>
         </oc-button>
         <oc-button v-if="saving" :disabled="true">
-          <oc-spinner :aria-label="$gettext('Adding Collaborators')" class="uk-position-small uk-position-center-left" size="small"/>
+          <oc-spinner :aria-label="$gettext('Adding Collaborators')" class="uk-position-small uk-position-center-left" size="xsmall"/>
           <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Adding Collaborators</span>
         </oc-button>
         <oc-button v-else

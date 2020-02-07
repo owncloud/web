@@ -18,7 +18,7 @@
           <translate>Cancel</translate>
         </oc-button>
         <oc-button v-if="saving" :disabled="true">
-          <oc-spinner :aria-label="$gettext('Saving Share')" class="uk-position-small uk-position-center-left" size="small"/>
+          <oc-spinner :aria-label="$gettext('Saving Share')" class="uk-position-small uk-position-center-left" size="xsmall"/>
           <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Saving Share</span>
         </oc-button>
         <oc-button v-else variation="primary" :disabled="!$_hasChanges" :aria-label="$gettext('Save Share')" @click="$_ocCollaborators_saveChanges">

@@ -2,8 +2,8 @@
   <div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
     <div class="uk-padding uk-height-1-1">
       <div class="uk-flex uk-flex-column uk-flex-middle" v-if="loading" key="loading-drop">
-        <translate tag="h3">Loading public link…</translate>
-        <oc-spinner size="medium" :aria-label="$gettext('Loading public link…')" />
+        <h3 :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
+        <oc-spinner size="medium" :aria-label="$_loadingPublicLinkTitle" />
       </div>
       <div class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1" v-else key="loaded-drop">
         <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
@@ -29,9 +29,9 @@
                 <oc-table-cell class="uk-padding-remove-left" v-text="file.name" />
                 <oc-table-cell shrink class="uk-text-nowrap uk-text-meta">{{ file.size | fileSize }}</oc-table-cell>
                 <oc-table-cell shrink class="uk-padding-remove-right uk-preserve-width">
-                  <oc-icon name="ready" variation="success" v-if="file.status === 'done'" />
-                  <oc-icon name="info" variation="danger" v-if="file.status === 'error'" />
-                  <oc-spinner v-if="file.status === 'uploading' || file.status === 'init'" :aria-label="$_ocUploadingFileMessage(file.name)" />
+                  <oc-icon name="ready" size="xsmall" variation="success" v-if="file.status === 'done'" />
+                  <oc-icon name="info" size="xsmall" variation="danger" v-if="file.status === 'error'" />
+                  <oc-spinner size="xsmall" v-if="file.status === 'uploading' || file.status === 'init'" :aria-label="$_ocUploadingFileMessage(file.name)" />
                 </oc-table-cell>
               </oc-table-row>
             </oc-table-group>
@@ -97,6 +97,9 @@ export default {
         autoQueue: false,
         previewsContainer: '#previews'
       }
+    },
+    $_loadingPublicLinkTitle () {
+      return this.$gettext('Loading public link…')
     }
   },
   mounted () {
