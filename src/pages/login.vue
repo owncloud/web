@@ -6,7 +6,7 @@
             </h1>
             <div class="oc-login-card-body">
                 <h3 class="oc-login-card-title">
-                    <span v-translate>Welcome to</span> {{ configuration.theme.general.name }}
+                  <translate :translate-params="{productName: $_productName}">Welcome to %{productName}</translate>
                 </h3>
                 <p v-translate>
                     Please click the button below to authenticate and get access to your data.
@@ -34,7 +34,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['configuration'])
+    ...mapGetters(['configuration']),
+
+    $_productName () {
+      return this.configuration.theme.general.name
+    }
   },
   methods: {
     ...mapActions(['login'])
