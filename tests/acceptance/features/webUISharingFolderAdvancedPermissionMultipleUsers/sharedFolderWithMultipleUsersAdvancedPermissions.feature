@@ -1,6 +1,6 @@
-Feature: Sharing folders with multiple internal users with different permissions
+Feature: Sharing folders with multiple internal users using advanced permissions
   As a user
-  I want to set different permissions on shared folders with other users
+  I want to set advanced permissions on shared folders with other users
   So that I can control the access on those folders by other collaborators
 
   Background:
@@ -9,7 +9,7 @@ Feature: Sharing folders with multiple internal users with different permissions
       | user1    |
       | user2    |
 
-  Scenario Outline: share a folder with multiple users with different roles and permissions
+  Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
     Given these users have been created with default attributes:
       | username |
       | user0    |
@@ -50,12 +50,16 @@ Feature: Sharing folders with multiple internal users with different permissions
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" folder "simple-folder (2)" should not exist
     Examples:
-      | role                 | displayed-role          | extra-permissions             | displayed-permissions | actual-permissions           |
-      | Viewer               | Viewer                  | share                         | share                 | read, share                  |
-      | Viewer               | Viewer                  | ,                             | ,                     | read                         |
-      | Editor               | Editor                  | share                         | share                 | all                          |
-      | Editor               | Editor                  | ,                             | ,                     | read, update, delete, create |
-      | Advanced permissions | Viewer                  | ,                             | ,                     | read                         |
-      | Advanced permissions | Viewer                  | share                         | share                 | read, share                  |
-      | Advanced permissions | Editor                  | delete, update, create        | ,                     | read, delete, update, create |
-      | Advanced permissions | Editor                  | share, delete, update, create | share                 | all                          |
+      | role                 | displayed-role       | extra-permissions             | displayed-permissions | actual-permissions           |
+      | Advanced permissions | Advanced permissions | delete                        | delete                | read, delete                 |
+      | Advanced permissions | Advanced permissions | update                        | update                | read, update                 |
+      | Advanced permissions | Advanced permissions | create                        | create                | read, create                 |
+      | Advanced permissions | Advanced permissions | share, delete                 | share, delete         | read, share, delete          |
+      | Advanced permissions | Advanced permissions | share, update                 | share, update         | read, update, share          |
+      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create          |
+      | Advanced permissions | Advanced permissions | delete, update                | delete, update        | read, delete, update         |
+      | Advanced permissions | Advanced permissions | delete, create                | delete, create        | read, delete, create         |
+      | Advanced permissions | Advanced permissions | update, create                | update, create        | read, update, create         |
+      | Advanced permissions | Advanced permissions | share, delete, update         | share, delete, update | read, share, delete, update  |
+      | Advanced permissions | Advanced permissions | share, create, delete         | share, create, delete | read, share, delete, create  |
+      | Advanced permissions | Advanced permissions | share, update, create         | share, update, create | read, share, update, create  |

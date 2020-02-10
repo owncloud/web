@@ -39,6 +39,7 @@ config = {
 				'webUISharingAcceptShares': 'SharingAcceptShares',
 				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
 				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
+				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
 				'webUISharingNotifications': 'SharingNotifications',
 				'webUIAccount': 'Account'
 			},
