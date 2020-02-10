@@ -8,13 +8,24 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix collaborator selection on new collaborator shares: [#1186](https://github.com/owncloud/phoenix/issues/1186)
 * Bugfix - Prevent loader in sidebar on add/remove: [#2937](https://github.com/owncloud/phoenix/issues/2937)
+* Change - Improve UI/UX of collaborator forms: [#1186](https://github.com/owncloud/phoenix/issues/1186)
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
 * Change - File actions now always behind three dots button: [#2974](https://github.com/owncloud/phoenix/pull/2974)
 * Change - Improve ownCloud Design System (ODS): [#2989](https://github.com/owncloud/phoenix/issues/2989)
 
 Details
 -------
+
+* Bugfix - Fix collaborator selection on new collaborator shares: [#1186](https://github.com/owncloud/phoenix/issues/1186)
+
+   When typing text into the search box for new collaborators, selecting a user and a group with
+   identical names was not possible. This was due to the fact that when one (group or user) got
+   selected, the other was excluded because of a matching name. Fixed by including the share type
+   (group or user) in matching.
+
+   https://github.com/owncloud/phoenix/issues/1186
 
 * Bugfix - Prevent loader in sidebar on add/remove: [#2937](https://github.com/owncloud/phoenix/issues/2937)
 
@@ -27,6 +38,18 @@ Details
 
    https://github.com/owncloud/phoenix/issues/2937
    https://github.com/owncloud/phoenix/pull/2952
+
+* Change - Improve UI/UX of collaborator forms: [#1186](https://github.com/owncloud/phoenix/issues/1186)
+
+   Applied several UI/UX improvements to the collaborator forms (adding and editing). - Showing
+   avatars for selected collaborators on a new share and fixed styling/layouting of said
+   collaborators in the list. - Added sensible margins on text about missing permissions for
+   re-sharing in the sharing sidebar. - Fixed alignment of displayed collaborator in editing
+   view for collaborators. - Removed separators from the forms that were cluttering the view. -
+   Moved role description on role selection (links and collaborators) into the form element. Not
+   shown below the form element anymore.
+
+   https://github.com/owncloud/phoenix/issues/1186
 
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
 
