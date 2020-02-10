@@ -65,8 +65,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     logoutButton: {
-      selector: '//div//span/span[.="Logout"]/../..',
-      locateStrategy: 'xpath'
+      selector: '.account-logout-button'
     }
   }
 }
