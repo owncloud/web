@@ -9,17 +9,16 @@
         </div>
       </transition>
       <div class="uk-margin">
-        <label class="oc-label"><span v-translate>Name</span>:</label>
+        <label class="oc-label"><span v-translate>Name:</span></label>
         <input class="uk-input" id="oc-files-file-link-name" v-model="name"/>
       </div>
       <oc-grid childWidth="1-1" gutter="small">
         <roles-select :roles="$_roles" :selectedRole="$_selectedRole" @roleSelected="$_selectRole" mode="file-link"/>
-        <div class="uk-text-muted" v-if="$_selectedRole_description" v-text="$_selectedRole_description"></div>
       </oc-grid>
       <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
         <div class="uk-width-1-1 uk-width-2-5@m" v-if="$_expirationDate">
           <label class="oc-label" for="oc-files-file-link-expire-date">
-            <span v-translate>Expiration date</span>:<em class="uk-margin-small-left" v-if="$_expirationDate.enforced">(<span v-translate>required</span>)</em>
+            <span v-translate>Expiration date:</span><em class="uk-margin-small-left" v-if="$_expirationDate.enforced">(<span v-translate>required</span>)</em>
           </label>
           <div class="uk-position-relative">
             <oc-datepicker :class="{ 'uk-form-danger': !$_expirationIsValid }" :date="expireDate" :key="'oc-datepicker-' + expireDate"
@@ -31,7 +30,7 @@
         </div>
         <div class="uk-width-1-1 uk-width-3-5@m">
           <label class="oc-label" for="oc-files-file-link-password">
-            <span v-translate>Password</span>:<em class="uk-margin-small-left" v-if="$_passwordEnforced">(<span v-translate>required</span>)</em>
+            <span v-translate>Password:</span><em class="uk-margin-small-left" v-if="$_passwordEnforced">(<span v-translate>required</span>)</em>
           </label>
           <div class="uk-position-relative">
             <input :class="{ 'uk-form-danger': !$_passwordIsValid }" :placeholder="hasPassword && password === null? '********' : placeholder.password"
@@ -167,10 +166,6 @@ export default {
         }
       }
       return this.$_roles.viewer
-    },
-
-    $_selectedRole_description () {
-      return this.$_selectedRole ? this.$_selectedRole.description : ''
     },
 
     $_expirationDate () {

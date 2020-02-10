@@ -811,7 +811,7 @@ Then('the user should not be able to share file/folder/resource {string} using t
     .openSharingDialog(resource)
   const shareResponse = await client.page.FilesPageElement.sharingDialog()
     .getSharingPermissionMsg()
-  const noSharePermissionsMsgFormat = "You don't have permission to share this %s"
+  const noSharePermissionsMsgFormat = "You don't have permission to share this %s."
   const noSharePermissionsFileMsg = util.format(noSharePermissionsMsgFormat, 'file')
   const noSharePermissionsFolderMsg = util.format(noSharePermissionsMsgFormat, 'folder')
   return assert.ok(

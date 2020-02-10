@@ -27,12 +27,12 @@
           <div class="uk-margin-small-top uk-margin-small-bottom">
             <oc-button @click="$_addPublicLink" icon="add" variation="primary" id="files-file-link-add">{{ $_addButtonLabel }}</oc-button>
           </div>
-          <transition-group class="uk-list uk-list-divider uk-overflow-hidden"
-                            enter-active-class="uk-animation-slide-left-medium"
-                            leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
+          <transition-group class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove"
+                            :enter-active-class="$_transitionGroupEnter"
+                            :leave-active-class="$_transitionGroupLeave"
                             name="custom-classes-transition"
                             tag="ul">
-            <li v-for="link in $_links" :key="'li-' + link.id">
+            <li v-for="link in $_directLinks" :key="link.key">
               <public-link-list-item :link="link"
                                      :modifiable="true"
                                      :indirect="false"
@@ -42,14 +42,10 @@
                                      @onEdit="$_editPublicLink" />
             </li>
           </transition-group>
-          <hr v-if="$_links.length > 0"/>
+          <hr class="uk-margin-small-top uk-margin-small-bottom" v-if="$_directLinks.length > 0 && $_indirectLinks.length > 0"/>
         </section>
         <section v-if="$_indirectLinks.length > 0">
-          <transition-group class="uk-list uk-list-divider uk-overflow-hidden"
-                            enter-active-class="uk-animation-slide-left-medium"
-                            leave-active-class="uk-animation-slide-right-medium uk-animation-reverse"
-                            name="custom-classes-transition"
-                            tag="ul">
+          <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
             <li v-for="link in $_indirectLinks" :key="'li-' + link.id">
               <public-link-list-item :link="link"
                                      :modifiable="false"
@@ -57,8 +53,11 @@
                                      :linksCopied="linksCopied"
                                      @onCopy="$_clipboardSuccessHandler" />
             </li>
-          </transition-group>
+          </ul>
         </section>
+        <div v-if="$_noPublicLinks" key="oc-file-links-no-results">
+          <translate>No public links</translate>
+        </div>
       </template>
     </div>
     <div v-if="visiblePanel === PANEL_EDIT" :key="PANEL_EDIT">
@@ -78,6 +77,7 @@ import moment from 'moment'
 import mixins from '../mixins'
 import { shareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
+import { textUtils } from '../helpers/textUtils'
 
 const EditPublicLink = _ => import('./PublicLinksSidebar/EditPublicLink.vue')
 const PublicLinkListItem = _ => import('./PublicLinksSidebar/PublicLinkListItem.vue')
@@ -98,6 +98,7 @@ export default {
     return {
       visiblePanel: 'showLinks',
       linksCopied: {},
+      transitionGroupActive: false,
 
       // panel types
       PANEL_SHOW: PANEL_SHOW,
@@ -120,6 +121,22 @@ export default {
       'sharesTree'
     ]),
 
+    $_transitionGroupEnter () {
+      return this.transitionGroupActive ? 'uk-animation-slide-left-medium' : ''
+    },
+    $_transitionGroupLeave () {
+      return this.transitionGroupActive ? 'uk-animation-slide-right-medium uk-animation-reverse' : ''
+    },
+
+    $_directLinks () {
+      return [...this.currentFileOutgoingLinks]
+        .sort(this.$_linksComparator)
+        .map(share => {
+          share.key = 'direct-link-' + share.id
+          return share
+        })
+    },
+
     $_indirectLinks () {
       const allShares = []
       const parentPaths = getParentPaths(this.highlightedFile.path, true)
@@ -134,21 +151,19 @@ export default {
         const shares = this.sharesTree[parentPath]
         if (shares) {
           shares.forEach((share) => {
-            if (share.outgoing && parseInt(share.info.share_type, 10) === shareTypes.link) {
-              share.key = 'indirect-link-' + share.info.id
+            if (share.outgoing && share.shareType === shareTypes.link) {
+              share.key = 'indirect-link-' + share.id
               allShares.push(share)
             }
           })
         }
       })
 
-      return allShares
+      return allShares.sort(this.$_linksComparator)
     },
 
-    $_links () {
-      return this.currentFileOutgoingLinks.filter(link => {
-        return this.compareIds(link.itemSource, this.highlightedFile.id)
-      })
+    $_noPublicLinks () {
+      return (this.$_directLinks.length + this.$_indirectLinks.length) === 0
     },
 
     $_expirationDate () {
@@ -178,27 +193,16 @@ export default {
     }
   },
   watch: {
-    highlightedFile (n, o) {
-      if (n === o) {
-        return
+    highlightedFile (newItem, oldItem) {
+      if (oldItem !== newItem) {
+        this.transitionGroupActive = false
+        this.$_reloadLinks()
       }
-
-      this.visiblePanel = PANEL_SHOW
-      this.loadCurrentFileOutgoingShares({
-        client: this.$client,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext
-      })
     }
   },
   mounted () {
-    if (this.highlightedFile && this.$_links.length === 0) {
-      this.loadCurrentFileOutgoingShares({
-        client: this.$client,
-        path: this.highlightedFile.path,
-        $gettext: this.$gettext
-      })
-    }
+    this.transitionGroupActive = false
+    this.$_reloadLinks()
   },
   methods: {
     ...mapActions('Files', ['loadCurrentFileOutgoingShares', 'removeLink']),
@@ -212,6 +216,7 @@ export default {
       }
     },
     $_removePublicLink (link) {
+      this.transitionGroupActive = true
       this.removeLink({
         client: this.$client,
         share: link
@@ -228,6 +233,7 @@ export default {
       this.visiblePanel = PANEL_EDIT
     },
     $_addPublicLink () {
+      this.transitionGroupActive = true
       this.$_resetData()
       this.visiblePanel = PANEL_EDIT
     },
@@ -239,6 +245,24 @@ export default {
     },
     $_showList () {
       this.visiblePanel = PANEL_SHOW
+    },
+    $_reloadLinks () {
+      this.$_showList()
+      this.loadCurrentFileOutgoingShares({
+        client: this.$client,
+        path: this.highlightedFile.path,
+        $gettext: this.$gettext
+      })
+    },
+    $_linksComparator (l1, l2) {
+      const name1 = l1.name.toLowerCase().trim()
+      const name2 = l2.name.toLowerCase().trim()
+      // sorting priority 1: display name (lower case, ascending), 2: id (ascending)
+      if (name1 === name2) {
+        return textUtils.naturalSortCompare(l1.info.id + '', l2.info.id + '')
+      } else {
+        return textUtils.naturalSortCompare(name1, name2)
+      }
     }
   }
 }

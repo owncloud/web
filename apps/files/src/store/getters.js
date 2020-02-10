@@ -1,5 +1,5 @@
 import { fileSortFunctions } from '../fileSortFunctions.js'
-import { shareTypes } from '../helpers/shareTypes'
+import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 
 export default {
   inProgress: state => {
@@ -57,14 +57,13 @@ export default {
     return state.dropzone
   },
   currentFileOutgoingCollaborators: state => {
-    const userShareTypes = [shareTypes.user, shareTypes.group, shareTypes.guest, shareTypes.remote]
     return state.currentFileOutgoingShares.filter(share => {
-      return userShareTypes.includes(parseInt(share.shareType, 10))
+      return userShareTypes.includes(share.shareType)
     })
   },
   currentFileOutgoingLinks: state => {
     return state.currentFileOutgoingShares.filter(share => {
-      return parseInt(share.shareType, 10) === shareTypes.link
+      return share.shareType === shareTypes.link
     })
   },
   currentFileOutgoingSharesLoading: state => {

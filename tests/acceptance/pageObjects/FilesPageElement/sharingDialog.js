@@ -616,8 +616,7 @@ module.exports = {
       selector: '#files-collaborators-collaborator-save-new-share-button'
     },
     saveShareButton: {
-      selector: '//button[@aria-label="Save Share"]',
-      locateStrategy: 'xpath'
+      selector: '#files-collaborators-collaborator-save-share-button'
     },
     newCollaboratorSelectRoleButton: {
       selector: '#files-collaborators-role-button'
@@ -632,10 +631,10 @@ module.exports = {
       selector: '#files-collaborators-role-editor'
     },
     newCollaboratorItems: {
-      selector: "//div[@id='oc-files-sharing-sidebar']//span[contains(@class, 'oc-icon-danger')]/ancestor::div[position()=1 and contains(., '%s')]"
+      selector: "//div[@id='oc-files-sharing-sidebar']//table[contains(@class, 'files-collaborators-collaborator-autocomplete-item')]//div[contains(., '%s')]/ancestor::tr[position()=1]"
     },
     newCollaboratorRemoveButton: {
-      selector: "//span[contains(@class, 'oc-icon-danger')]"
+      selector: "//button[contains(@class, 'files-collaborators-collaborator-autocomplete-item-remove')]"
     },
     newCollaboratorRoleAdvancedPermissions: {
       selector: '#files-collaborators-role-advancedRole'

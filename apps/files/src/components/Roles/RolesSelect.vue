@@ -1,13 +1,14 @@
 <template>
   <div>
     <label class="oc-label">
-      <translate>Role</translate>:
+      <translate>Role:</translate>
     </label>
     <oc-button
       :id="`files-${mode}-role-button`"
       :class="`uk-width-1-1 files-${mode}-role-button`"
-      v-text="selectedRole.label"
-    />
+    >
+      <role-item :role="selectedRole" class="uk-margin-small-bottom" />
+    </oc-button>
     <oc-drop
       closeOnClick
       :dropId="`files-${mode}-roles-dropdown`"
@@ -26,11 +27,7 @@
           :class="{ 'oc-autocomplete-suggestion-selected': role.name === selectedRole.name }"
           @click="selectRole(role)"
         >
-          <span class="uk-text-bold" v-text="role.label" />
-          <p
-            class="uk-text-meta uk-margin-remove"
-            v-text="role.description"
-          />
+          <role-item :role="role" />
         </li>
       </ul>
     </oc-drop>
@@ -38,8 +35,10 @@
 </template>
 
 <script>
+const RoleItem = () => import('./RoleItem.vue')
 export default {
   name: 'RolesSelect',
+  components: { RoleItem },
   props: {
     mode: {
       type: String,
