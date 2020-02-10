@@ -1,4 +1,4 @@
-Feature: Sharing folders with multiple internal users with advanced permissions
+Feature: Sharing folders with multiple internal users using advanced permissions
   As a user
   I want to set advanced permissions on shared folders with other users
   So that I can control the access on those folders by other collaborators
@@ -9,7 +9,7 @@ Feature: Sharing folders with multiple internal users with advanced permissions
       | user1    |
       | user2    |
 
-  Scenario Outline: share a folder with multiple users with advanced role and different permissions
+  Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
     Given these users have been created with default attributes:
       | username |
       | user0    |
