@@ -525,14 +525,18 @@ export default {
     },
 
     $_ocTrashbin_deleteSelected () {
-      const translated = this.$gettext('%{numberOfFiles} items will be deleted immediately. You can’t undo this action.')
-      this.setTrashbinDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true))
+      const translated = this.$ngettext(
+        "%{numberOfFiles} item will be deleted immediately. You can't undo this action.",
+        "%{numberOfFiles} items will be deleted immediately. You can't undo this action.",
+        this.selectedFiles.length
+      )
+      this.setTrashbinDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, false))
     },
 
     $_ocFiles_deleteSelected () {
-      const translated = this.$gettext('%{numberOfFiles} items will be deleted.')
+      const translated = this.$ngettext('%{numberOfFiles} item will be deleted.', '%{numberOfFiles} items will be deleted.', this.selectedFiles.length)
       this.promptFileDelete({
-        message: this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, true),
+        message: this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, false),
         items: this.selectedFiles
       })
     },

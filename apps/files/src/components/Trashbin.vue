@@ -79,7 +79,7 @@ export default {
       }
 
       translated = this.$gettext('Are you sure you want delete %{numberOfFiles} selected items?')
-      return this.$gettextInterpolate(translated, { numberOfFiles: files.length }, true)
+      return this.$gettextInterpolate(translated, { numberOfFiles: files.length }, false)
     },
 
     actions () {
