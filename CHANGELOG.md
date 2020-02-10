@@ -11,6 +11,7 @@ Summary
 * Bugfix - Prevent loader in sidebar on add/remove: [#2937](https://github.com/owncloud/phoenix/issues/2937)
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
 * Change - File actions now always behind three dots button: [#2974](https://github.com/owncloud/phoenix/pull/2974)
+* Change - Improve ownCloud Design System (ODS): [#2989](https://github.com/owncloud/phoenix/issues/2989)
 
 Details
 -------
@@ -44,6 +45,27 @@ Details
    responsive mode. The three dots button also now has no more border and looks nicer.
 
    https://github.com/owncloud/phoenix/pull/2974
+
+* Change - Improve ownCloud Design System (ODS): [#2989](https://github.com/owncloud/phoenix/issues/2989)
+
+   During the work on this release, there have been several changes in ODS which directly affect
+   Phoenix. - Proper text truncate in breadcrumb component. This fixes the mobile view of the
+   current folder breadcrumb in the top bar. - New icon sizes `xlarge` and `xxlarge` in oc-icon
+   component. Those are used for the `No content` messages e.g. when navigating to an empty
+   folder. - Provide new icon size `xsmall` and align spinner-sizes with icon-sizes. The
+   `xsmall` icon size turned out to be prettier in some places. The size alignments fixed layout
+   glitches when removing collaborators or public links. - Fix aria label on spinner in
+   oc-autocomplete. Warning were cluttering the JavaScript console when adding
+   collaborators. - Reset input on selection in oc-autocomplete, when
+   `fillOnSelection=false`. This makes sure that when a new collaborator has been selected, the
+   search input field goes back to being blank for a new search.
+
+   https://github.com/owncloud/phoenix/issues/2989
+   https://github.com/owncloud/owncloud-design-system/pull/630
+   https://github.com/owncloud/owncloud-design-system/pull/632
+   https://github.com/owncloud/owncloud-design-system/pull/633
+   https://github.com/owncloud/owncloud-design-system/pull/634
+   https://github.com/owncloud/owncloud-design-system/pull/635
 
 Changelog for ownCloud Phoenix [0.3.0] (2020-01-31)
 =======================================
