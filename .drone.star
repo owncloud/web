@@ -32,6 +32,7 @@ config = {
 				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
 				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
 				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
+				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
 				'webUIResharing': 'Resharing',
 				'webUISharingPublic': 'SharingPublic',
 				'webUITrashbin': 'Trashbin',
