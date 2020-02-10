@@ -1,0 +1,6 @@
+Enhancement: Fixed header for files tables
+
+We've made the header of files tables fixed so it is easier to know the meaning of table columns.
+
+https://github.com/owncloud/phoenix/issues/1952
+https://github.com/owncloud/phoenix/pull/2995

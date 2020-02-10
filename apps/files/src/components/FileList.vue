@@ -22,7 +22,7 @@
           More
         </div>
       </oc-grid>
-      <div id="files-list-container" class="uk-flex-1" v-if="!loading">
+      <div id="files-list-container" class="uk-flex-1 uk-overflow-auto" v-if="!loading">
         <RecycleScroller
           class="uk-height-1-1"
           :items="fileData"
