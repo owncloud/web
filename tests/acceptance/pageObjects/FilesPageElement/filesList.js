@@ -36,8 +36,8 @@ module.exports = {
      * @param fileName
      * @returns {string}
      */
-    getFileActionBtnSelector: function (fileName) {
-      return this.getFileRowSelectorByFileName(fileName) +
+    getFileActionBtnSelector: function (fileName, elementType = 'file') {
+      return this.getFileRowSelectorByFileName(fileName, elementType) +
         this.elements.fileActionsButtonInFileRow.selector
     },
     /**
@@ -48,10 +48,9 @@ module.exports = {
      * @param {string} action delete|share|rename|download
      * @returns {*}
      */
-    performFileAction: function (fileName, action) {
+    performFileAction: function (fileName, action, elementType = 'file') {
       const { btnSelector, fileActionsBtnSelector } =
-        this.getFileRowButtonSelectorsByFileName(fileName, action)
-
+        this.getFileRowButtonSelectorsByFileName(fileName, action, elementType)
       return this.initAjaxCounters()
         .useXpath()
         .waitForElementVisible(fileActionsBtnSelector)
@@ -60,7 +59,6 @@ module.exports = {
         .click(btnSelector)
         .useCss()
     },
-
     /**
      * Checks whether a given action is disabled for a given file name.
      * This method does find out itself if the file-action burger has to be clicked or not.
@@ -159,12 +157,15 @@ module.exports = {
     /**
      *
      * @param {string} fileName
+     * @param {string} elementType
+     * @returns {Promise<void>}
      */
-    restoreFile: function (fileName) {
-      return this.initAjaxCounters()
-        .waitForFileWithPathVisible(fileName)
+    restoreFile: async function (fileName, elementType = 'file') {
+      await this
+        .initAjaxCounters()
+        .waitForFileWithPathVisible(fileName, elementType)
         .useXpath()
-        .performFileAction(fileName, FileAction.restore)
+        .performFileAction(fileName, FileAction.restore, elementType)
         .waitForOutstandingAjaxCalls()
         .useCss()
     },
@@ -386,9 +387,10 @@ module.exports = {
      * Wait for A filerow with given filename to be visible
      *
      * @param {string} fileName
+     * @param {string} elementType
      */
-    waitForFileVisible: async function (fileName) {
-      const linkSelector = this.getFileLinkSelectorByFileName(fileName)
+    waitForFileVisible: async function (fileName, elementType = 'file') {
+      const linkSelector = this.getFileLinkSelectorByFileName(fileName, elementType)
 
       await this.waitForElementPresent('@filesTableContainer')
       await this.filesListScrollToTop()
@@ -401,7 +403,6 @@ module.exports = {
           this.assert.strictEqual(result.value, fileName, 'displayed file name not as expected')
         })
         .useCss()
-
       return this
     },
     /**
@@ -410,10 +411,11 @@ module.exports = {
      * This does not works in cases where the path starts with a space (eg. "  ParentFolder/file.txt")
      *
      * @param {string} path
+     * @param {string} elementType
      */
-    waitForFileWithPathVisible: function (path) {
-      const rowSelector = this.getFileRowSelectorByFileName(path)
-      const linkSelector = this.getFileLinkSelectorByFileName(path)
+    waitForFileWithPathVisible: function (path, elementType = 'file') {
+      const linkSelector = this.getFileLinkSelectorByFileName(path, elementType)
+      const rowSelector = this.getFileRowSelectorByFileName(path, elementType)
       return this
         .useXpath()
         .waitForElementVisible(rowSelector)
@@ -422,52 +424,65 @@ module.exports = {
         })
         .useCss()
     },
-    getFileRowButtonSelectorsByFileName: function (fileName, action) {
-      const btnSelector = this.getActionSelector(action, fileName)
-      const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName)
+    /**
+     *
+     * @param {string} fileName
+     * @param {string} action
+     * @param {string} elementType
+     * @returns {{btnSelector: string, fileActionsBtnSelector: string}}
+     */
+    getFileRowButtonSelectorsByFileName: function (fileName, action, elementType = 'file') {
+      const btnSelector = this.getActionSelector(action)
+      const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName, elementType)
 
       return { btnSelector, fileActionsBtnSelector }
     },
     /**
      *
      * @param {string} fileName
+     * @param {string} elementType
      *
      * @returns {string}
      */
-    getFileRowSelectorByFileName: function (fileName) {
-      const parts = path.parse(fileName)
-      // If our file has a extension that starts with space (for eg. "newfile. txt")
-      // Then the whole name comes in the filename part (i.e. The file has no extension in such case)
-      // Since the extension has spaces immediately after '.' we check for spaces after removing the '.' using slice().
-      if (parts.ext && !parts.ext.slice(1).startsWith(' ')) {
-        // keep path of nested folders intact, just remove the extension at the end
-        const filePathWithoutExt = parts.dir ? join(parts.dir, parts.name) : parts.name
-        const element = this.elements.fileRowByNameAndExtension
-        return util.format(
-          element.selector,
-          xpathHelper.buildXpathLiteral(filePathWithoutExt),
-          parts.ext
-        )
+    getFileRowSelectorByFileName: function (fileName, elementType = 'file') {
+      if (elementType === 'file') {
+        const parts = path.parse(fileName)
+        // If our file has a extension that starts with space (for eg. "newfile. txt")
+        // Then the whole name comes in the filename part (i.e. The file has no extension in such case)
+        // Since the extension has spaces immediately after '.' we check for spaces after removing the '.' using slice().
+        if (parts.ext && !parts.ext.slice(1).startsWith(' ')) {
+          // keep path of nested folders intact, just remove the extension at the end
+          const filePathWithoutExt = parts.dir ? join(parts.dir, parts.name) : parts.name
+          const element = this.elements.fileRowByNameAndExtension
+          return util.format(
+            element.selector,
+            xpathHelper.buildXpathLiteral(filePathWithoutExt),
+            parts.ext
+          )
+        }
       }
-
       const element = this.elements.fileRowByName
       return util.format(element.selector, xpathHelper.buildXpathLiteral(fileName))
     },
     /**
      *
      * @param {string} fileName
+     * @param {string} elementType
+     * @returns {string}
      */
-    getFileLinkSelectorByFileName: function (fileName) {
-      return this.getFileRowSelectorByFileName(fileName) +
+
+    getFileLinkSelectorByFileName: function (fileName, elementType) {
+      return this.getFileRowSelectorByFileName(fileName, elementType) +
         this.elements.fileLinkInFileRow.selector
     },
     /**
      * checks whether the element is listed or not on the filesList
      *
      * @param {string} element Name of the file/folder/resource
+     * @param {string} elementType
      * @returns {boolean}
      */
-    isElementListed: async function (element) {
+    isElementListed: async function (element, elementType = 'file') {
       let isListed = true
       await this
         .waitForElementVisible('@filesTable')
@@ -475,7 +490,7 @@ module.exports = {
         .waitForElementNotPresent('@loadingIndicator')
         .api.elements(
           'xpath',
-          this.getFileRowSelectorByFileName(element),
+          this.getFileRowSelectorByFileName(element, elementType),
           (result) => {
             isListed = result.value.length > 0
           })

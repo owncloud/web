@@ -115,3 +115,39 @@ Feature: Restore deleted files/folders
     And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
     #And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should exist
     And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
+
+  @issue-1723
+  Scenario: Delete and restore a file that has the same name like a deleted folder
+    Given the following files have been deleted by user "user1"
+      | name      |
+      | lorem.txt |
+    And the user has created folder "lorem.txt"
+    And the following folders have been deleted by user "user1"
+      | name      |
+      | lorem.txt |
+    When the user browses to the trashbin page
+    And the user restores file "lorem.txt" from the trashbin using the webUI
+    Then the success message "lorem.txt was restored successfully" should be displayed on the webUI
+    And file "lorem.txt" should not be listed on the webUI
+    And folder "lorem.txt" should be listed on the webUI
+    When the user browses to the files page using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And folder "lorem.txt" should not be listed on the webUI
+
+  Scenario: Delete and restore a folder that has the same name like a deleted file
+    Given the user has created file "lorem.txt"
+    And the following files have been deleted by user "user1"
+      | name      |
+      | lorem.txt |
+    And the user has created folder "lorem.txt"
+    And the following folders have been deleted by user "user1"
+      | name      |
+      | lorem.txt |
+    When the user browses to the trashbin page
+    And the user restores folder "lorem.txt" from the trashbin using the webUI
+    Then the success message "lorem.txt was restored successfully" should be displayed on the webUI
+    And folder "lorem.txt" should not be listed on the webUI
+    And file "lorem.txt" should be listed on the webUI
+    When the user browses to the files page using the webUI
+    Then folder "lorem.txt" should be listed on the webUI
+    And file "lorem.txt" should not be listed on the webUI

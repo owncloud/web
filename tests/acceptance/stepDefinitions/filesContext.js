@@ -340,11 +340,18 @@ Then('there should be no files/folders/resources listed on the webUI', async fun
   assert.ok(allRowsResult.value.length === 0, `No resources are listed, ${allRowsResult.length} found`)
 })
 
-Then('file/folder {string} should be listed on the webUI', function (folder) {
+Then('file {string} should be listed on the webUI', function (folder) {
   return client
     .page
     .FilesPageElement.filesList()
-    .waitForFileVisible(folder)
+    .waitForFileVisible(folder, 'file')
+})
+
+Then('folder {string} should be listed on the webUI', (folder) => {
+  return client
+    .page
+    .FilesPageElement.filesList()
+    .waitForFileVisible(folder, 'folder')
 })
 
 Then('file/folder with path {string} should be listed in the favorites page on the webUI', function (path) {
@@ -364,8 +371,15 @@ Then('the last uploaded folder should be listed on the webUI', async function ()
   return client
 })
 
-Then('file/folder {string} should not be listed on the webUI', async function (folder) {
-  const state = await client.page.FilesPageElement.filesList().isElementListed(folder)
+Then('file {string} should not be listed on the webUI', async function (folder) {
+  const state = await client.page.FilesPageElement.filesList().isElementListed(folder, 'file')
+  return client.assert.ok(
+    !state, `Error: Resource ${folder} is listed on the filesList`
+  )
+})
+
+Then('folder {string} should not be listed on the webUI', async (folder) => {
+  const state = await client.page.FilesPageElement.filesList().isElementListed(folder, 'folder')
   return client.assert.ok(
     !state, `Error: Resource ${folder} is listed on the filesList`
   )
@@ -666,8 +680,8 @@ const assertDeletedElementsAreListed = function () {
   return assertElementsAreListed(deletedElements)
 }
 
-When('the user restores file/folder {string} from the trashbin using the webUI', function (element) {
-  return client.page.FilesPageElement.filesList().restoreFile(element)
+When(/^the user restores (file|folder) "([^"]*)" from the trashbin using the webUI$/, function (elementType, element) {
+  return client.page.FilesPageElement.filesList().restoreFile(element, elementType)
 })
 
 Then('the following files/folders/resources should be listed on the webUI', function (table) {
