@@ -1,7 +1,15 @@
 <template>
   <div v-if="!!applicationsList.length">
     <oc-button id="_appSwitcherButton" icon="apps" variation="primary" class="oc-topbar-menu-burger uk-height-1-1"  aria-label="$gettext('Application Switcher')" ref="menubutton" />
-    <oc-drop toggle="#_appSwitcherButton" mode="click" :options="{pos:'bottom-right'}" class="uk-width-large" ref="menu">
+    <oc-drop
+      dropId="app-switcher-dropdown"
+      toggle="#_appSwitcherButton"
+      mode="click"
+      :options="{pos:'bottom-right', delayHide: 0}"
+      class="uk-width-large"
+      ref="menu"
+      closeOnClick
+    >
       <div class="uk-grid-small uk-text-center" uk-grid>
         <div class="uk-width-1-3" v-for="(n, nid) in $_applicationsList" :key="nid">
           <a v-if="n.url" key="external-link" target="_blank" :href="n.url">
@@ -36,14 +44,14 @@ export default {
   },
   computed: {
     $_applicationsList () {
-      return this.applicationsList.map((item) => {
+      return this.applicationsList.map(item => {
         const lang = this.$language.current
         // TODO: move language resolution to a common function
         // FIXME: need to handle logic for variants like en_US vs en_GB
-        let title = item.title.en
+        let title = item.title ? item.title.en : item.name
         let iconMaterial
         let iconUrl
-        if (item.title[lang]) {
+        if (item.title && item.title[lang]) {
           title = item.title[lang]
         }
 
@@ -64,10 +72,10 @@ export default {
 
         if (item.url) {
           app.url = item.url
-        }
-
-        if (item.path) {
+        } else if (item.path) {
           app.path = item.path
+        } else {
+          app.path = `/${item.id}`
         }
 
         return app

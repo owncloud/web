@@ -84,7 +84,7 @@ const supportedLanguages = {
 
 function loadApps () {
   let plugins = []
-  let navItems = []
+  let navItems = {}
   let translations = coreTranslations
 
   let routes = [{
@@ -122,7 +122,7 @@ function loadApps () {
       plugins.push(app.plugins)
     }
     if (app.navItems) {
-      navItems.push(app.navItems)
+      navItems[app.appInfo.id] = app.navItems
     }
     if (app.translations) {
       Object.keys(supportedLanguages).forEach((lang) => {
@@ -157,7 +157,6 @@ function loadApps () {
     silent: true
   })
 
-  navItems = navItems.flat()
   const OC = new Vue({
     el: '#owncloud',
     data: {

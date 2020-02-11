@@ -7,8 +7,20 @@
       </template>
       <template v-else>
         <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-        <top-bar :applicationsList="$_applicationsList" :activeNotifications="activeNotifications" :user-id="user.id" :user-display-name="user.displayname" :hasAppNavigation="!!appNavigationEntries.length" @toggleAppNavigation="$_toggleAppNavigation(!appNavigationVisible)"></top-bar>
-        <side-menu :visible="appNavigationVisible" :entries="appNavigationEntries" @closed="$_toggleAppNavigation(false)"></side-menu>
+        <top-bar
+          :applicationsList="$_applicationsList"
+          :activeNotifications="activeNotifications"
+          :user-id="user.id"
+          :user-display-name="user.displayname"
+          :hasAppNavigation="appNavigationEntries.length > 1"
+          @toggleAppNavigationVisibility="toggleAppNavigationVisibility"
+        />
+        <side-menu
+          v-if="appNavigationEntries.length > 1"
+          :visible="appNavigationVisible"
+          :entries="appNavigationEntries"
+          @closed="hideAppNavigation"
+        />
         <main id="main">
           <router-view id="oc-app-container" name="app" class="uk-height-1-1"></router-view>
         </main>
@@ -39,27 +51,47 @@ export default {
   },
   computed: {
     ...mapState(['route', 'user']),
-    ...mapGetters(['configuration', 'activeNotifications', 'activeMessages', 'capabilities']),
+    ...mapGetters(['configuration', 'activeNotifications', 'activeMessages', 'capabilities', 'apps']),
     $_applicationsList () {
-      return this.configuration.applications
+      const list = []
+
+      // Get extensions manually added into config
+      list.push(this.configuration.applications)
+
+      // Get extensions which have at least one nav item
+      const navItems = this.$root.navItems
+      for (const extensionId in navItems) {
+        list.push(this.apps[extensionId])
+      }
+
+      return list.flat()
     },
 
     appNavigationEntries () {
       if (this.publicPage()) {
         return []
       }
+
       // FIXME: use store or other ways, not $root
-      return this.$root.navItems.filter(item => {
-        // FIXME: filter to only show current app
+      const items = this.$root.navItems[this.currentExtension]
+
+      if (!items) {
+        return []
+      }
+
+      return items.filter(item => {
         if (item.enabled === undefined) {
           return true
         }
+
         if (this.capabilities === undefined) {
           return false
         }
+
         return item.enabled(this.capabilities)
       })
     },
+
     showHeader () {
       return this.$route.meta.hideHeadbar !== true
     },
@@ -109,15 +141,22 @@ export default {
   },
   methods: {
     ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
-    $_toggleAppNavigation (state) {
-      this.appNavigationVisible = state
+
+    hideAppNavigation () {
+      this.appNavigationVisible = false
     },
+
+    toggleAppNavigationVisibility () {
+      this.appNavigationVisible = !this.appNavigationVisible
+    },
+
     $_updateNotifications () {
       this.fetchNotifications(this.$client).catch((error) => {
         console.error('Error while loading notifications: ', error)
         clearInterval(this.$_notificationsInterval)
       })
     },
+
     $_deleteMessage (item) {
       this.deleteMessage(item)
     }
