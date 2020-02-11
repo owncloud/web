@@ -5,3 +5,4 @@ This change hides them behind a three dots button on the line, the same that was
 The three dots button also now has no more border and looks nicer.
 
 https://github.com/owncloud/phoenix/pull/2974
+https://github.com/owncloud/phoenix/issues/2998

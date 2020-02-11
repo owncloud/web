@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-flex uk-flex-middle">
+  <span>
     <DefaultIndicators
       v-if="displayDefaultIndicators"
       :item="item"
@@ -14,7 +14,7 @@
         :key="index"
       />
     </template>
-  </div>
+  </span>
 </template>
 
 <script>
