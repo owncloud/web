@@ -32,7 +32,7 @@
           <template v-if="$_ocFilesAppBar_showActions">
             <oc-button v-if="canUpload && hasFreeSpace" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
             <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
-            <oc-drop drop-id="new-file-menu-drop" toggle="#new-file-menu-btn" mode="click" closeOnClick>
+            <oc-drop drop-id="new-file-menu-drop" toggle="#new-file-menu-btn" mode="click" closeOnClick :options="{delayHide: 0}">
               <oc-nav>
                 <file-upload :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
                 <folder-upload v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
