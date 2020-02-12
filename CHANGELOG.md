@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fix collaborator selection on new collaborator shares: [#1186](https://github.com/owncloud/phoenix/issues/1186)
 * Bugfix - Prevent loader in sidebar on add/remove: [#2937](https://github.com/owncloud/phoenix/issues/2937)
+* Bugfix - Fix issue with translate function for pending shares: [#3012](https://github.com/owncloud/phoenix/issues/3012)
 * Change - Improve UI/UX of collaborator forms: [#1186](https://github.com/owncloud/phoenix/issues/1186)
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
 * Change - File actions now always behind three dots button: [#2974](https://github.com/owncloud/phoenix/pull/2974)
@@ -39,6 +40,15 @@ Details
 
    https://github.com/owncloud/phoenix/issues/2937
    https://github.com/owncloud/phoenix/pull/2952
+
+* Bugfix - Fix issue with translate function for pending shares: [#3012](https://github.com/owncloud/phoenix/issues/3012)
+
+   The pending shares was wrongly passing in a translation function, which caused translations
+   to be missing in the error message but also it broke the general translation sync process with
+   Transifex. Thanks to this change the translations will be up to date again.
+
+   https://github.com/owncloud/phoenix/issues/3012
+   https://github.com/owncloud/phoenix/pull/3014
 
 * Change - Improve UI/UX of collaborator forms: [#1186](https://github.com/owncloud/phoenix/issues/1186)
 
