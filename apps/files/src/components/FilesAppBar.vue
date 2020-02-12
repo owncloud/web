@@ -32,7 +32,7 @@
           <template v-if="$_ocFilesAppBar_showActions">
             <oc-button v-if="canUpload && hasFreeSpace" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
             <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
-            <oc-drop drop-id="new-file-menu-drop" toggle="#new-file-menu-btn" mode="click" closeOnClick>
+            <oc-drop drop-id="new-file-menu-drop" toggle="#new-file-menu-btn" mode="click" closeOnClick :options="{delayHide: 0}">
               <oc-nav>
                 <file-upload :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
                 <folder-upload v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
@@ -50,7 +50,7 @@
             <oc-button v-if="selectedFiles.length > 0" icon="restore" @click="$_ocTrashbin_restoreFiles()">
               <translate>Restore selected</translate>
             </oc-button>
-            <oc-button id="delete-selected-btn" icon="delete" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
+            <oc-button id="delete-selected-btn" icon="delete" :disabled="files.length === 0" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
               {{ $_ocAppBar_clearTrashbinButtonText }}
             </oc-button>
           </template>
@@ -220,7 +220,7 @@ export default {
     },
 
     $_ocAppBar_clearTrashbinButtonText () {
-      return this.selectedFiles.length < 1 ? this.$gettext('Clear trash bin') : this.$gettext('Delete selected')
+      return this.selectedFiles.length < 1 ? this.$gettext('Empty trash bin') : this.$gettext('Delete selected')
     },
 
     showBreadcrumb () {

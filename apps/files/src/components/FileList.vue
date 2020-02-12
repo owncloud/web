@@ -2,7 +2,7 @@
   <!-- TODO: Take care of outside click overall and not just in files list -->
   <div :id="id" class="uk-height-1-1 uk-position-relative" @click="hideRowActionsDropdown">
     <div class="uk-flex uk-flex-column uk-height-1-1">
-      <oc-grid gutter="small" flex id="files-table-header" class="uk-padding-small">
+      <oc-grid gutter="small" flex id="files-table-header" class="uk-padding-small" v-if="fileData.length > 0" key="files-list-results-existence">
         <div>
           <oc-checkbox
             class="uk-margin-small-left"
@@ -65,6 +65,9 @@
             </oc-grid>
           </div>
         </RecycleScroller>
+        <div v-else class="uk-position-center files-list-no-content-message" key="files-list-results-absence">
+          <slot name="noContentMessage" />
+        </div>
       </div>
       <oc-grid gutter="large" class="uk-width-1-1 uk-padding-small" v-if="!loading">
         <slot name="footer" />

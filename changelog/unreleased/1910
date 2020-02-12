@@ -1,0 +1,7 @@
+Enhancement: Add empty folder message in file list views
+
+Whenever a folder contains no entries in any of the file list views,
+a message is now shown indicating that the folder is empty, or that there are no favorites, etc.
+
+https://github.com/owncloud/phoenix/issues/1910
+https://github.com/owncloud/phoenix/pull/2975

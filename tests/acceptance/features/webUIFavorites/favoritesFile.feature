@@ -45,7 +45,7 @@ Feature: Mark file as favorite
     When the user browses to the favorites page
     Then the files table should be displayed
     And no message should be displayed on the webUI
-    And there should be no files/folders listed on the webUI
+    And there should be no resources listed on the webUI
 
   Scenario: navigate to the favorites page using the menu
     Given user "user1" has favorited element "data.zip"
@@ -57,6 +57,11 @@ Feature: Mark file as favorite
     Given the user has browsed to the favorites page using the webUI
     When the user browses to the files page using the webUI
     Then there should be 31 files/folders listed on the webUI
+
+  @issue-1910
+  Scenario: favorites list appears empty when no favorites are defined
+    When the user has browsed to the favorites page using the webUI
+    Then there should be no resources listed on the webUI
 
   Scenario: mark files with same name and different path as favorites and list them in favourites page
     When the user marks file "lorem.txt" as favorite using the webUI

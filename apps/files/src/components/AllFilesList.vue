@@ -37,6 +37,16 @@
               {{ formDateFromNow(item.mdate) }}
             </div>
           </template>
+          <template #noContentMessage>
+            <no-content-message v-if="!$_isFavoritesList" icon="folder">
+              <template #message><span v-translate>There are no resources in this folder.</span></template>
+              <template #callToAction><span v-translate>Drag files and folders here or use the "+ New" button to upload.</span></template>
+            </no-content-message>
+            <no-content-message v-else icon="star">
+              <template #message><span v-translate>There are no resources marked as favorite.</span></template>
+              <template #callToAction><span v-translate>You can mark some by clicking on the star icon in the file list.</span></template>
+            </no-content-message>
+          </template>
           <template #footer>
             <div v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0" class="uk-text-nowrap uk-text-meta">
               <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
@@ -67,6 +77,7 @@
 </template>
 <script>
 import FileList from './FileList.vue'
+import NoContentMessage from './NoContentMessage.vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 import Mixins from '../mixins'
@@ -78,7 +89,8 @@ export default {
   name: 'AllFilesList',
   components: {
     FileList,
-    StatusIndicators
+    StatusIndicators,
+    NoContentMessage
   },
   mixins: [
     Mixins,
@@ -97,6 +109,10 @@ export default {
 
     item () {
       return this.$route.params.item
+    },
+
+    $_isFavoritesList () {
+      return (this.$route.name === 'files-favorites')
     },
 
     quotaVisible () {
@@ -174,7 +190,7 @@ export default {
       })
     },
     $_ocFileName (item) {
-      if (this.$route.name === 'files-favorites') {
+      if (this.$_isFavoritesList) {
         const pathSplit = item.path.substr(1).split('/')
         if (pathSplit.length === 2) return `${pathSplit[pathSplit.length - 2]}/${item.basename}`
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`

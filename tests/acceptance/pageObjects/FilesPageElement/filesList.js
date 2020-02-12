@@ -572,21 +572,40 @@ module.exports = {
       return disabledState
     },
     /**
-     *
-     * @returns {Promise.<[]>} Array of files/folders element
+     * @returns {Array} array of files/folders element
      */
     allFileRows: async function () {
+      let returnResult = null
       await this
         .waitForElementNotPresent('@filesListProgressBar')
-        .waitForElementVisible({
-          selector: '@fileRows',
-          abortOnFailure: false
-        })
-      return new Promise((resolve, reject) => {
-        this.api.elements('css selector', this.elements.fileRows, function (result) {
-          resolve(result)
-        })
+      await this.api.elements('css selector', this.elements.fileRows, function (result) {
+        returnResult = result
       })
+      return returnResult
+    },
+    /**
+     * Returns whether the empty folder message is visible
+     *
+     * @return {Boolean} true if the message is visible, false otherwise
+     */
+    isNoContentMessageVisible: async function () {
+      let visible = false
+      let elementId = null
+      await this.waitForElementNotPresent('@filesListProgressBar')
+      await this.api.element('@filesListNoContentMessage', result => {
+        if (result.status !== -1) {
+          elementId = result.value.ELEMENT
+        }
+      })
+      if (elementId !== null) {
+        await this.api.elementIdText(elementId, result => {
+          // verify that at least some text is displayed, not an empty container
+          if (result.status !== -1 && result.value.trim() !== '') {
+            visible = true
+          }
+        })
+      }
+      return visible
     },
     getListedFilesFolders: function () {
       this
@@ -801,6 +820,9 @@ module.exports = {
     },
     filesListProgressBar: {
       selector: '#files-list-progress'
+    },
+    filesListNoContentMessage: {
+      selector: '#files-list-container .files-list-no-content-message'
     },
     fileActionsButtonInFileRow: {
       selector: '//button[contains(@class, "files-list-row-show-actions")]',

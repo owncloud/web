@@ -12,7 +12,7 @@ Feature: create folders
   Scenario: Create a folder inside another folder
     When the user creates a folder with the name "top-folder" using the webUI
     And the user opens folder "top-folder" using the webUI
-    Then there should be no files/folders listed on the webUI
+    Then there should be no resources listed on the webUI
     When the user creates a folder with the name "sub-folder" using the webUI
     Then folder "sub-folder" should be listed on the webUI
     When the user reloads the current page of the webUI
@@ -53,7 +53,7 @@ Feature: create folders
     And the public accesses the last created public link using the webUI
     When the user creates a folder with the name "top-folder" using the webUI
     And the user opens folder "top-folder" using the webUI
-    Then there should be no files/folders listed on the webUI
+    Then there should be no resources listed on the webUI
     When the user creates a folder with the name "sub-folder" using the webUI
     Then folder "sub-folder" should be listed on the webUI
     When the user reloads the current page of the webUI
