@@ -1,0 +1,9 @@
+Bugfix: Fix issue with translate function for pending shares
+
+The pending shares was wrongly passing in a translation function, which caused
+translations to be missing in the error message but also it broke the general
+translation sync process with Transifex.
+Thanks to this change the translations will be up to date again.
+
+https://github.com/owncloud/phoenix/issues/3012
+https://github.com/owncloud/phoenix/pull/3014

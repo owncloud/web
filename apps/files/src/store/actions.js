@@ -809,7 +809,7 @@ export default {
   },
 
   // TODO: Think of a better name
-  pendingShare (context, { client, item, type, translate }) {
+  pendingShare (context, { client, item, type, $gettext }) {
     // TODO: Move request to owncloud-sdk
     client.requests.ocs({
       service: 'apps/files_sharing',
@@ -819,12 +819,12 @@ export default {
       .then(_ => {
         context.dispatch('loadFolderSharedWithMe', {
           client: client,
-          $gettext: translate
+          $gettext: $gettext
         })
       })
       .catch(e => {
         context.dispatch('showMessage', {
-          title: translate('Error while changing share state'),
+          title: $gettext('Error while changing share state'),
           desc: e.message,
           status: 'danger'
         }, { root: true })
