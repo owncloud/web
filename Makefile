@@ -53,19 +53,19 @@ run:
 
 .PHONY: l10n-push
 l10n-push:
-	cd l10n && tx -d push -s --skip --no-interactive
-	cd apps/files/l10n && tx -d push -s --skip --no-interactive
-	cd apps/markdown-editor/l10n && tx -d push -s --skip --no-interactive
-	cd apps/pdf-viewer/l10n && tx -d push -s --skip --no-interactive
-	cd apps/media-viewer/l10n && tx -d push -s --skip --no-interactive
+	cd l10n && tx -d push -s --no-interactive
+	cd apps/files/l10n && tx -d push -s --no-interactive
+	cd apps/markdown-editor/l10n && tx -d push -s --no-interactive
+	cd apps/pdf-viewer/l10n && tx -d push -s --no-interactive
+	cd apps/media-viewer/l10n && tx -d push -s --no-interactive
 
 .PHONY: l10n-pull
 l10n-pull:
-	cd l10n && tx -d pull -a --skip
-	cd apps/files/l10n && tx -d pull -a --skip
-	cd apps/markdown-editor/l10n && tx -d pull -a --skip
-	cd apps/pdf-viewer/l10n && tx -d pull -a --skip
-	cd apps/media-viewer/l10n && tx -d pull -a --skip
+	cd l10n && tx -d pull -a
+	cd apps/files/l10n && tx -d pull -a
+	cd apps/markdown-editor/l10n && tx -d pull -a
+	cd apps/pdf-viewer/l10n && tx -d pull -a
+	cd apps/media-viewer/l10n && tx -d pull -a
 
 .PHONY: l10n-clean
 l10n-clean:

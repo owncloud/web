@@ -148,7 +148,7 @@ export default {
         client: this.$client,
         item: item,
         type: type,
-        translate: this.$gettext()
+        $gettext: this.$gettext
       })
     }
   }
