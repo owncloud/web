@@ -16,6 +16,7 @@ Summary
 * Change - File actions now always behind three dots button: [#2974](https://github.com/owncloud/phoenix/pull/2974)
 * Change - Improve ownCloud Design System (ODS): [#2989](https://github.com/owncloud/phoenix/issues/2989)
 * Enhancement - Add empty folder message in file list views: [#1910](https://github.com/owncloud/phoenix/issues/1910)
+* Enhancement - Fixed header for files tables: [#1952](https://github.com/owncloud/phoenix/issues/1952)
 
 Details
 -------
@@ -108,6 +109,13 @@ Details
 
    https://github.com/owncloud/phoenix/issues/1910
    https://github.com/owncloud/phoenix/pull/2975
+
+* Enhancement - Fixed header for files tables: [#1952](https://github.com/owncloud/phoenix/issues/1952)
+
+   We've made the header of files tables fixed so it is easier to know the meaning of table columns.
+
+   https://github.com/owncloud/phoenix/issues/1952
+   https://github.com/owncloud/phoenix/pull/2995
 
 Changelog for ownCloud Phoenix [0.3.0] (2020-01-31)
 =======================================
