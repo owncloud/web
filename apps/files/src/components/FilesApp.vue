@@ -1,7 +1,7 @@
   <template>
     <div id="files" class="uk-flex uk-flex-column">
       <files-app-bar />
-      <upload-progress v-show="inProgress.length" class="uk-padding-small uk-background-muted" />
+      <upload-progress v-show="$_uploadProgressVisible" class="uk-padding-small uk-background-muted" />
       <oc-grid class="uk-height-1-1 uk-flex-1 uk-overflow-auto">
         <div ref="filesListWrapper" tabindex="-1" class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
           <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
@@ -100,6 +100,10 @@ export default {
 
     sharedList () {
       return this.$route.name === 'files-shared-with-me' || this.$route.name === 'files-shared-with-others'
+    },
+
+    $_uploadProgressVisible () {
+      return this.inProgress.length > 0
     },
 
     $_renameDialogPlaceholder () {
