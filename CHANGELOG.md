@@ -14,6 +14,7 @@ Summary
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
 * Change - File actions now always behind three dots button: [#2974](https://github.com/owncloud/phoenix/pull/2974)
 * Change - Improve ownCloud Design System (ODS): [#2989](https://github.com/owncloud/phoenix/issues/2989)
+* Enhancement - Add empty folder message in file list views: [#1910](https://github.com/owncloud/phoenix/issues/1910)
 
 Details
 -------
@@ -89,6 +90,14 @@ Details
    https://github.com/owncloud/owncloud-design-system/pull/633
    https://github.com/owncloud/owncloud-design-system/pull/634
    https://github.com/owncloud/owncloud-design-system/pull/635
+
+* Enhancement - Add empty folder message in file list views: [#1910](https://github.com/owncloud/phoenix/issues/1910)
+
+   Whenever a folder contains no entries in any of the file list views, a message is now shown
+   indicating that the folder is empty, or that there are no favorites, etc.
+
+   https://github.com/owncloud/phoenix/issues/1910
+   https://github.com/owncloud/phoenix/pull/2975
 
 Changelog for ownCloud Phoenix [0.3.0] (2020-01-31)
 =======================================
