@@ -21,7 +21,7 @@
     },
     {
       "title": {
-        "en": ""App living inside of Phoenix core SPA"
+        "en": "App living inside of Phoenix core SPA"
       },
       "icon": "info",
       "path": "/internal-app"
