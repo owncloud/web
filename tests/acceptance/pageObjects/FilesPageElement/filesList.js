@@ -715,7 +715,7 @@ module.exports = {
             }
 
             scrollDistance += filesListContainer.clientHeight
-            filesListContainer.scrollTop = scrollDistance
+            virtualScrollWrapper.scrollTop = scrollDistance
             setTimeout(function () {
               scrollUntilElementVisible()
             }, 500)
@@ -736,14 +736,14 @@ module.exports = {
      * Scroll the files list to the beginning
      */
     filesListScrollToTop: async function () {
-      await this.api.executeAsync(function (listContainerSelector, done) {
-        const filesListScroll = document.querySelector(listContainerSelector)
+      await this.api.executeAsync(function (scrollerContainerSelector, done) {
+        const filesListScroll = document.querySelector(scrollerContainerSelector)
         if (filesListScroll.scrollTop > 0) {
           filesListScroll.scrollTop = 0
         }
 
         done()
-      }, [this.elements.filesTableContainer.selector])
+      }, [this.elements.virtualScrollWrapper.selector])
 
       return this
     },
@@ -752,9 +752,10 @@ module.exports = {
       const resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
       const shareIndicatorsXpath = resourceRowXpath + this.elements.shareIndicatorsInFileRow.selector
       const indicators = []
+
+      await this.waitForFileVisible(fileName)
+
       await this
-        .useXpath()
-        .moveToElement(resourceRowXpath, 0, 0)
         .api.elements(
           this.elements.shareIndicatorsInFileRow.locateStrategy,
           shareIndicatorsXpath,
@@ -950,7 +951,7 @@ module.exports = {
       selector: '#files-list-count-files'
     },
     virtualScrollWrapper: {
-      selector: '.vue-recycle-scroller__item-wrapper'
+      selector: '.vue-recycle-scroller'
     },
     filesTableHeader: {
       selector: '#files-table-header'

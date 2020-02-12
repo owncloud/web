@@ -869,7 +869,7 @@ Then('the following resources should have share indicators on the webUI', async 
 })
 
 Then('the following resources should not have share indicators on the webUI', async function (dataTable) {
-  for (const fileName in dataTable.rows()) {
+  for (const [fileName] of dataTable.raw()) {
     const indicatorsArray = await client
       .page.FilesPageElement.filesList().getShareIndicatorsForResource(fileName)
 
