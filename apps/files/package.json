@@ -42,9 +42,11 @@
     "vuex": "^3.1.1"
   },
   "browserslist": [
-    "last 1 version",
-    "> 1%",
-    "IE 11"
+    "last 2 version",
+    "> .2%",
+    "not dead",
+    "not IE 11",
+    "not IE_Mob 11"
   ],
   "snyk": true
 }
