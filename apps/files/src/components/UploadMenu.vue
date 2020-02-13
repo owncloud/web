@@ -1,23 +1,26 @@
 <template>
-  <ul class="uk-list uk-margin-remove">
-    <li v-for="(item, index) in items" :key="item.id">
-      <div class="uk-flex">
+  <ul class="uk-list uk-list-divider uk-margin-remove-left uk-margin-remove-right">
+    <li v-for="item in items" :key="item.id">
+      <div class="uk-flex uk-flex-middle">
         <oc-icon name="file_copy" class="uk-margin-small-right" />
         <div class="uk-width-expand">
-          <div class="uk-text-bold" v-text="$_truncateFileName(item.name)" />
-          <div class="uk-flex uk-flex-middle">
-            <span class="uk-margin-small-right uk-text-nowrap">{{ item.size | fileSize }}</span>
+          <div class="uk-flex">
+            <div class="uk-text-bold uk-width-expand uk-text-truncate">{{ item.name }}</div>
+            <div class="uk-width-auto uk-text-nowrap">{{ item.size | fileSize }}</div>
+          </div>
+          <div class="uk-margin-remove uk-position-relative uk-width-expand">
             <oc-progress
-              :value="item.progress | toInt"
+              :aria-hidden="true"
               :max="100"
-              class="uk-flex-1 uk-margin-remove"
+              :value="item.progress | toInt"
+              class="uk-width-expand uk-margin-remove"
             />
+            <span :aria-hidden="true" class="uk-position-center oc-progress-text">
+              {{ item.progress | roundNumber }} %
+            </span>
           </div>
         </div>
       </div>
-      <template v-if="index !== items.length - 1">
-        <hr class="uk-margin-bottom uk-margin-top" />
-      </template>
     </li>
   </ul>
 </template>
@@ -38,15 +41,6 @@ export default {
       type: Array,
       default: () => [],
       required: true
-    }
-  },
-  methods: {
-    $_truncateFileName (name) {
-      if (name.length > 15) {
-        return `${name.substr(0, 6)}...${name.substr(name.length - 6)}`
-      }
-
-      return name
     }
   }
 }

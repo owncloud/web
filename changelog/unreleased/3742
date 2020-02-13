@@ -1,0 +1,9 @@
+Change: Improve visual appearance of upload progress
+
+- Changed the layout of the upload progress to be a narrow standalone full width row below the app top bar.
+- Transformed textual information into a single row below the progress bar and made it very clear that it can be clicked to show upload progress details.
+- Changed layout of upload progress details list items, so that the progress bars always have the same width.
+- Changed visuals of all progress bars in upload context to have a narrow outline and the percentage numbers inside of the progress bars.
+- Fixed the calculation of the overall upload progress to be weighted by file sizes instead of just adding up percentages and dividing by number of uploads.
+
+https://github.com/owncloud/enterprise/issues/3742
