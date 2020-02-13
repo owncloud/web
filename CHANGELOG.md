@@ -11,6 +11,7 @@ Summary
 * Bugfix - Fix collaborator selection on new collaborator shares: [#1186](https://github.com/owncloud/phoenix/issues/1186)
 * Bugfix - Prevent loader in sidebar on add/remove: [#2937](https://github.com/owncloud/phoenix/issues/2937)
 * Bugfix - Fix issue with translate function for pending shares: [#3012](https://github.com/owncloud/phoenix/issues/3012)
+* Bugfix - Properly manage escaping of all translations: [#3032](https://github.com/owncloud/phoenix/pull/3032)
 * Change - Improve UI/UX of collaborator forms: [#1186](https://github.com/owncloud/phoenix/issues/1186)
 * Change - Display only items for current extension in sidebar menu: [#2746](https://github.com/owncloud/phoenix/issues/2746)
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
@@ -52,6 +53,16 @@ Details
 
    https://github.com/owncloud/phoenix/issues/3012
    https://github.com/owncloud/phoenix/pull/3014
+
+* Bugfix - Properly manage escaping of all translations: [#3032](https://github.com/owncloud/phoenix/pull/3032)
+
+   We've stopped escaping translations which contained resource names or user names because
+   they can contain special characters which were then not properly displayed. We've done this
+   only with translations which are using mustache syntax which does escaping on its own so we
+   don't introduce poteintial XSS vulnerability. For all other translations, we've explicitly
+   set the escaping.
+
+   https://github.com/owncloud/phoenix/pull/3032
 
 * Change - Improve UI/UX of collaborator forms: [#1186](https://github.com/owncloud/phoenix/issues/1186)
 
