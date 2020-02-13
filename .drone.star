@@ -35,6 +35,7 @@ config = {
 				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
 				'webUIResharing': 'Resharing',
 				'webUISharingPublic': 'SharingPublic',
+				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
 				'webUITrashbin': 'Trashbin',
 				'webUIUpload': 'Upload',
 				'webUISharingAcceptShares': 'SharingAcceptShares',
