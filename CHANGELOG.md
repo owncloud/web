@@ -15,6 +15,7 @@ Summary
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
 * Change - File actions now always behind three dots button: [#2974](https://github.com/owncloud/phoenix/pull/2974)
 * Change - Improve ownCloud Design System (ODS): [#2989](https://github.com/owncloud/phoenix/issues/2989)
+* Change - Improve visual appearance of upload progress: [#3742](https://github.com/owncloud/enterprise/issues/3742)
 * Enhancement - Add empty folder message in file list views: [#1910](https://github.com/owncloud/phoenix/issues/1910)
 * Enhancement - Fixed header for files tables: [#1952](https://github.com/owncloud/phoenix/issues/1952)
 
@@ -101,6 +102,19 @@ Details
    https://github.com/owncloud/owncloud-design-system/pull/633
    https://github.com/owncloud/owncloud-design-system/pull/634
    https://github.com/owncloud/owncloud-design-system/pull/635
+
+* Change - Improve visual appearance of upload progress: [#3742](https://github.com/owncloud/enterprise/issues/3742)
+
+   - Changed the layout of the upload progress to be a narrow standalone full width row below the app
+   top bar. - Transformed textual information into a single row below the progress bar and made it
+   very clear that it can be clicked to show upload progress details. - Changed layout of upload
+   progress details list items, so that the progress bars always have the same width. - Changed
+   visuals of all progress bars in upload context to have a narrow outline and the percentage
+   numbers inside of the progress bars. - Fixed the calculation of the overall upload progress to
+   be weighted by file sizes instead of just adding up percentages and dividing by number of
+   uploads.
+
+   https://github.com/owncloud/enterprise/issues/3742
 
 * Enhancement - Add empty folder message in file list views: [#1910](https://github.com/owncloud/phoenix/issues/1910)
 
