@@ -125,7 +125,7 @@ export default {
         return null
       }
       const translated = this.$gettext('Via %{folderName}')
-      return this.$gettextInterpolate(translated, { folderName: basename(this.collaborator.info.path) }, false)
+      return this.$gettextInterpolate(translated, { folderName: basename(this.collaborator.info.path) }, true)
     },
 
     $_viaRouterParams () {

@@ -39,7 +39,7 @@ export default {
   computed: {
     $_label () {
       const translated = this.$gettext('Open %{fileName} in')
-      return this.$gettextInterpolate(translated, { fileName: this.filename })
+      return this.$gettextInterpolate(translated, { fileName: this.filename }, true)
     },
 
     $_closeActionsButtonLabel () {

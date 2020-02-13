@@ -258,7 +258,7 @@ export default {
     },
     noResharePermsMessage () {
       const translated = this.$gettext('You don\'t have permission to share this %{type}.')
-      return this.$gettextInterpolate(translated, { type: this.highlightedFile.type })
+      return this.$gettextInterpolate(translated, { type: this.highlightedFile.type }, false)
     }
   },
   watch: {
