@@ -12,14 +12,16 @@
         <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a>
         <br>
         <span class="uk-text-meta uk-text-break">
-                      <span class="oc-files-file-link-role">{{ link.description }}</span>
-                      <template v-if="link.expiration"> |
-                        <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}
-                      </template>
-                      <template v-if="link.password"> |
-                        <span v-translate>Password protected</span>
-                      </template>
-                    </span>
+          <span class="oc-files-file-link-role">{{ link.description }}</span>
+          <template v-if="link.expiration"> |
+            <oc-icon size="xsmall" name="text-calendar" class="fix-icon-baseline" :aria-hidden="true" />
+            <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}
+          </template>
+          <template v-if="link.password"> |
+            <oc-icon size="xsmall" name="lock" class="fix-icon-baseline" :aria-hidden="true" />
+            <span v-translate>Password protected</span>
+          </template>
+        </span>
       </oc-table-cell>
       <oc-table-cell shrink class="uk-text-nowrap">
         <oc-button v-if="$_editButtonVisible" :aria-label="$_editButtonLabel" @click="$emit('onEdit', link)" variation="raw" class="oc-files-file-link-edit">
@@ -141,5 +143,8 @@ export default {
   }
   .files-file-links-link-via-label {
     max-width: 65%;
+  }
+  .fix-icon-baseline {
+    margin-bottom: -2px;
   }
 </style>
