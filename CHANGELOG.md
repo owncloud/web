@@ -12,6 +12,7 @@ Summary
 * Bugfix - Prevent loader in sidebar on add/remove: [#2937](https://github.com/owncloud/phoenix/issues/2937)
 * Bugfix - Fix issue with translate function for pending shares: [#3012](https://github.com/owncloud/phoenix/issues/3012)
 * Change - Improve UI/UX of collaborator forms: [#1186](https://github.com/owncloud/phoenix/issues/1186)
+* Change - Display only items for current extension in sidebar menu: [#2746](https://github.com/owncloud/phoenix/issues/2746)
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
 * Change - File actions now always behind three dots button: [#2974](https://github.com/owncloud/phoenix/pull/2974)
 * Change - Improve ownCloud Design System (ODS): [#2989](https://github.com/owncloud/phoenix/issues/2989)
@@ -63,6 +64,15 @@ Details
    shown below the form element anymore.
 
    https://github.com/owncloud/phoenix/issues/1186
+
+* Change - Display only items for current extension in sidebar menu: [#2746](https://github.com/owncloud/phoenix/issues/2746)
+
+   We've filtered out nav items in the sidebar menu. Now only items for current extension will be
+   displayed. In case the extension has only one nav item, the sidebar menu is hidden and instead of
+   menu button is displayed the name of extension.
+
+   https://github.com/owncloud/phoenix/issues/2746
+   https://github.com/owncloud/phoenix/pull/3013
 
 * Change - Removed filter button in files list header: [#2971](https://github.com/owncloud/phoenix/issues/2971)
 
