@@ -79,7 +79,7 @@ export default {
       // share might not be loaded
       if (this.share) {
         const translated = this.$gettext('%{owner} shared this folder with you for uploading')
-        return this.$gettextInterpolate(translated, { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) })
+        return this.$gettextInterpolate(translated, { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) }, true)
       }
       return ''
     },
@@ -167,7 +167,7 @@ export default {
 
     $_ocUploadingFileMessage (fileName) {
       const translated = this.$gettext('Uploading file "%{fileName}"')
-      return this.$gettextInterpolate(translated, { fileName })
+      return this.$gettextInterpolate(translated, { fileName }, true)
     }
   }
 }
