@@ -1,7 +1,7 @@
 @mailhog @public_link_share-feature-required
-Feature: Share by public link
+Feature: Share by public link with different roles
   As a user
-  I want to share files through a publicly accessible link
+  I want to share files through a publicly accessible link with different roles
   So that users who do not have an account on my ownCloud server can access them
 
   As an admin
