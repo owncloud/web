@@ -1,0 +1,7 @@
+Change: Display only items for current extension in sidebar menu
+
+We've filtered out nav items in the sidebar menu. Now only items for current extension will be displayed.
+In case the extension has only one nav item, the sidebar menu is hidden and instead of menu button is displayed the name of extension.
+
+https://github.com/owncloud/phoenix/issues/2746
+https://github.com/owncloud/phoenix/pull/3013

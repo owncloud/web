@@ -5,7 +5,11 @@ export default {
     Vue.mixin({
       computed: {
         ...mapGetters(['getToken', 'isAuthenticated']),
-        ...mapGetters('Files', ['publicLinkPassword'])
+        ...mapGetters('Files', ['publicLinkPassword']),
+
+        currentExtension () {
+          return this.$route.path.split('/')[1]
+        }
       },
       methods: {
         ...mapActions('Files', ['addActionToProgress', 'removeActionFromProgress']),
