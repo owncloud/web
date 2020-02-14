@@ -301,8 +301,13 @@ export default {
     // TODO: Find a better solution
     $route (to, from) {
       this.actionsKey = Math.floor(Math.random() * 20)
-      this.$refs.mobileSearch.value = null
-      this.$refs.globalSearchBar.query = ''
+      // note: the search bars are not available on all views
+      if (this.$refs.mobileSearch) {
+        this.$refs.mobileSearch.value = null
+      }
+      if (this.$refs.globalSearchBar) {
+        this.$refs.globalSearchBar.query = ''
+      }
     }
   },
   methods: {
