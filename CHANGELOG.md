@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Various fixes for files app in responsive mode: [#2998](https://github.com/owncloud/phoenix/issues/2998)
+* Bugfix - Fix accessible labels that said $gettext: [#3039](https://github.com/owncloud/phoenix/pull/3039)
 
 Details
 -------
@@ -20,6 +21,13 @@ Details
 
    https://github.com/owncloud/phoenix/issues/2998
    https://github.com/owncloud/phoenix/pull/2999
+
+* Bugfix - Fix accessible labels that said $gettext: [#3039](https://github.com/owncloud/phoenix/pull/3039)
+
+   Fixed three accessible aria labels that were saying "$gettext" instead of their actual
+   translated text.
+
+   https://github.com/owncloud/phoenix/pull/3039
 
 Changelog for ownCloud Phoenix [0.4.0] (2020-02-14)
 =======================================
