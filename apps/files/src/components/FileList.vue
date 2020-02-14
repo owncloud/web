@@ -2,7 +2,8 @@
   <!-- TODO: Take care of outside click overall and not just in files list -->
   <div :id="id" class="uk-height-1-1 uk-position-relative" @click="hideRowActionsDropdown">
     <div class="uk-flex uk-flex-column uk-height-1-1">
-      <oc-grid gutter="small" flex id="files-table-header" class="uk-padding-small" v-if="fileData.length > 0" key="files-list-results-existence">
+      <resize-observer @notify="$_resizeHeader" />
+      <oc-grid ref="headerRow" gutter="small" flex id="files-table-header" class="uk-padding-small" v-if="fileData.length > 0" key="files-list-results-existence">
         <div>
           <oc-checkbox
             class="uk-margin-small-left"
@@ -15,12 +16,7 @@
           />
         </div>
         <slot name="headerColumns"/>
-        <div
-          class="uk-text-meta uk-text-right uk-width-small uk-margin-small-right"
-          v-translate
-        >
-          More
-        </div>
+        <div class="uk-margin-small-right oc-icon" />
       </oc-grid>
       <div id="files-list-container" class="uk-flex-1 uk-overflow-auto" v-if="!loading">
         <RecycleScroller
@@ -35,7 +31,7 @@
             :data-is-visible="active"
             @click="selectRow(item, $event); hideRowActionsDropdown()"
           >
-            <oc-grid gutter="small" flex class="uk-padding-small oc-border-top" :class="_rowClasses(item)" :id="'file-row-' + item.id">
+            <oc-grid :ref="index === 0 ? 'firstRow' : null" gutter="small" flex class="uk-padding-small oc-border-top" :class="_rowClasses(item)" :id="'file-row-' + item.id">
               <div>
                 <oc-checkbox
                   class="uk-margin-small-left"
@@ -45,8 +41,8 @@
                   :hideLabel="true"
                 />
               </div>
-              <slot name="rowColumns" :item="item" :index="item.id" />
-              <div class="uk-width-small uk-text-right uk-margin-small-right">
+              <slot name="rowColumns" :item="item" :index="index" />
+              <div class="uk-text-right uk-margin-small-right">
                 <oc-button
                   :id="actionsDropdownButtonId(item.id, active)"
                   class="files-list-row-show-actions"
@@ -155,6 +151,12 @@ export default {
 
     item () {
       return this.$route.params.item
+    }
+  },
+  watch: {
+    compactMode (val) {
+      // sidebar opens, recalculate header sizes
+      this.$_resizeHeader()
     }
   },
   methods: {
@@ -302,10 +304,20 @@ export default {
 
     actionsDropdownButtonId (id, active) {
       if (active) {
-        return `files-file-list-action-button-small-resolution-${id}-active`
+        return `files-file-list-action-button-${id}-active`
       }
 
-      return `files-file-list-action-button-small-resolution-${id}`
+      return `files-file-list-action-button-${id}`
+    },
+
+    $_resizeHeader () {
+      this.$nextTick(() => {
+        const headerRow = this.$refs.headerRow
+        const firstRow = this.$refs.firstRow
+        if (headerRow && firstRow) {
+          headerRow.$el.style.width = getComputedStyle(firstRow.$el).width
+        }
+      })
     }
   }
 }

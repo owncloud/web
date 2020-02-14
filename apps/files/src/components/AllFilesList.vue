@@ -6,16 +6,16 @@
         <span class="oc-visually-hidden" v-text="favoritesHeaderText" />
         <oc-star id="files-table-header-star" aria-hidden="true" class="uk-display-block uk-disabled" />
       </div>
-      <div></div>
-      <div class="uk-text-truncate uk-text-meta uk-width-expand" v-translate>Name</div>
+      <div class="uk-text-truncate uk-text-meta uk-width-expand" v-translate ref="headerNameColumn" >Name</div>
+      <div><!-- indicators column --></div>
       <div :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-meta uk-width-small" v-translate>Size</div>
       <div type="head" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-nowrap uk-text-meta uk-width-small" v-translate>Updated</div>
     </template>
-    <template #rowColumns="{ item }">
+    <template #rowColumns="{ item, index }">
       <div v-if="!publicPage()">
         <oc-star class="uk-display-block" @click.native.stop="toggleFileFavorite(item)" :shining="item.starred" />
       </div>
-      <div class="uk-text-truncate uk-width-expand">
+      <div class="uk-text-truncate uk-width-expand" :ref="index === 0 ? 'firstRowNameColumn' : null">
         <oc-file @click.native.stop="item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)"
           :name="$_ocFileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
           :filename="item.name" :key="item.id"/>
@@ -26,7 +26,9 @@
           class="uk-margin-small-left"
         />
       </div>
-      <StatusIndicators :item="item" :parentPath="currentFolder.path" @click="$_openSideBar" />
+      <div class="uk-flex uk-flex-middle">
+        <StatusIndicators :item="item" :parentPath="currentFolder.path" @click="$_openSideBar" />
+      </div>
       <div class="uk-text-meta uk-text-nowrap uk-width-small" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }">
         {{ item.size | fileSize }}
       </div>

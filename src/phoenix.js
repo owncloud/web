@@ -5,6 +5,8 @@ import "core-js/features/symbol/iterator.js"
 
 // --- Libraries and Plugins ---
 import Vue from 'vue'
+import 'vue-resize/dist/vue-resize.css'
+import VueResize from 'vue-resize'
 
 // --- Components ---
 
@@ -59,6 +61,7 @@ Vue.use(VueClipboard)
 Vue.use(VueScrollTo)
 Vue.use(MediaSource)
 Vue.use(PhoenixPlugin)
+Vue.use(VueResize)
 Vue.use(VueMeta, {
   // optional pluginOptions
   refreshOnceOnNavigation: true
