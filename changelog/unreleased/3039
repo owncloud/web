@@ -1,0 +1,5 @@
+Bugfix: Fix accessible labels that said $gettext
+
+Fixed three accessible aria labels that were saying "$gettext" instead of their actual translated text.
+
+https://github.com/owncloud/phoenix/pull/3039

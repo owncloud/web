@@ -1,6 +1,6 @@
 <template>
   <div>
-    <oc-button id="_userMenuButton" class="oc-topbar-personal uk-height-1-1" variation="primary" aria-label="$gettext('User Menu')" ref="menuButton">
+    <oc-button id="_userMenuButton" class="oc-topbar-personal uk-height-1-1" variation="primary" :aria-label="$gettext('User Menu')" ref="menuButton">
       <oc-grid gutter="small">
         <avatar-image class="oc-topbar-personal-avatar" :width="32" :userid="userId" :userName="userDisplayName"/>
         <div class="oc-topbar-personal-label">{{ userDisplayName }}</div>
