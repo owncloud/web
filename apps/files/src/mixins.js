@@ -1,5 +1,5 @@
 import filesize from 'filesize'
-import join from 'join-path'
+import pathUtil from 'path'
 import moment from 'moment'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
@@ -232,7 +232,7 @@ export default {
               continue
             }
 
-            const parentDirectory = directories.slice(0, i).join('/')
+            const parentDirectory = pathUtil.join.apply(null, directories.slice(0, i))
             const currentDirectory = `${parentDirectory}/${directories[i]}`
 
             if (directoriesToCreate.indexOf(currentDirectory) === -1) {
@@ -306,7 +306,7 @@ export default {
         const tokenSplit = basePath.indexOf('/')
         const token = basePath.substr(0, tokenSplit)
         basePath = basePath.substr(tokenSplit + 1) || ''
-        relativePath = join(basePath, relativePath)
+        relativePath = pathUtil.join(basePath, relativePath)
         promise = this.uploadQueue.add(() => this.$client.publicFiles.putFileContents(token, relativePath, this.publicLinkPassword, file, {
           onProgress: (progress) => {
             this.$_ocUpload_onProgress(progress, file)
@@ -315,7 +315,7 @@ export default {
         }))
       } else {
         basePath = this.path || ''
-        relativePath = join(basePath, relativePath)
+        relativePath = pathUtil.join(basePath, relativePath)
         promise = this.uploadQueue.add(() => this.$client.files.putFileContents(relativePath, file, {
           onProgress: (progress) => {
             this.$_ocUpload_onProgress(progress, file)

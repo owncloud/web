@@ -121,7 +121,7 @@ import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
 import FileActions from '../fileactions'
-import join from 'join-path'
+import pathUtil from 'path'
 
 export default {
   components: {
@@ -273,7 +273,7 @@ export default {
 
       for (let i = startIndex; i < pathSplit.length; i++) {
         let clickHandler = null
-        let itemPath = baseUrl + encodeURIComponent(pathSplit.slice(0, i + 1).join('/'))
+        let itemPath = baseUrl + encodeURIComponent(pathUtil.join.apply(null, pathSplit.slice(0, i + 1)))
         if (i === pathSplit.length - 1) {
           itemPath = null
           clickHandler = () => this.$router.go()
@@ -432,9 +432,10 @@ export default {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
         const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
-        let p = this.$client.files.putFileContents(path + fileName, '')
+        const filePath = pathUtil.join(path, fileName)
+        let p = this.$client.files.putFileContents(filePath, '')
         if (this.publicPage()) {
-          p = this.$client.publicFiles.putFileContents(path + fileName, null, this.publicLinkPassword, '')
+          p = this.$client.publicFiles.putFileContents(filePath, null, this.publicLinkPassword, '')
         }
         p.then(() => {
           this.createFile = false
@@ -444,9 +445,9 @@ export default {
             // not cool - needs refactoring
             this.$nextTick(() => {
               this.openFile({
-                filePath: path + fileName
+                filePath: filePath
               })
-              this.openFileAction(this.newFileAction, path + fileName)
+              this.openFileAction(this.newFileAction, filePath)
             })
           }
         })
@@ -496,7 +497,7 @@ export default {
       }
       this.$nextTick().then(() => {
         const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
-        const filePath = join(path + file)
+        const filePath = pathUtil.join(path, file)
         if (this.publicPage()) {
           this.$client.publicFiles.list(filePath, this.publicLinkPassword, this.davProperties, '0').then(files => {
             this.addFiles({
