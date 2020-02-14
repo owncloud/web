@@ -1,3 +1,26 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.4.0...master
+
+Summary
+-------
+
+* Bugfix - Various fixes for files app in responsive mode: [#2998](https://github.com/owncloud/phoenix/issues/2998)
+
+Details
+-------
+
+* Bugfix - Various fixes for files app in responsive mode: [#2998](https://github.com/owncloud/phoenix/issues/2998)
+
+   Fixed properly alignment of header columns with the body of the files table which stays even
+   after resizing. Removed the column label for the actions column as it looks nicer.
+
+   https://github.com/owncloud/phoenix/issues/2998
+   https://github.com/owncloud/phoenix/pull/2999
+
 Changelog for ownCloud Phoenix [0.4.0] (2020-02-14)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.4.0 relevant to
@@ -101,6 +124,7 @@ Details
    hides them behind a three dots button on the line, the same that was already visible in
    responsive mode. The three dots button also now has no more border and looks nicer.
 
+   https://github.com/owncloud/phoenix/issues/2998
    https://github.com/owncloud/phoenix/pull/2974
 
 * Change - Improve ownCloud Design System (ODS): [#2989](https://github.com/owncloud/phoenix/issues/2989)
