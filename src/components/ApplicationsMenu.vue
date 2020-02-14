@@ -1,6 +1,6 @@
 <template>
   <div v-if="!!applicationsList.length">
-    <oc-button id="_appSwitcherButton" icon="apps" variation="primary" class="oc-topbar-menu-burger uk-height-1-1"  aria-label="$gettext('Application Switcher')" ref="menubutton" />
+    <oc-button id="_appSwitcherButton" icon="apps" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" :aria-label="$gettext('Application Switcher')" ref="menubutton" />
     <oc-drop
       dropId="app-switcher-dropdown"
       toggle="#_appSwitcherButton"

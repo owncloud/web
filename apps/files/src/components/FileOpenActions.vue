@@ -5,7 +5,7 @@
         icon="close"
         class="uk-position-top-right uk-position-absolute uk-margin-top uk-margin-right"
         @click="closeActions"
-        aria-label="$_closeActionsButtonLabel"
+        :aria-label="$gettext('Close file actions menu')"
       />
       <div v-text="$_label" class="uk-margin-small-bottom" />
       <ul class="uk-nav">
@@ -40,10 +40,6 @@ export default {
     $_label () {
       const translated = this.$gettext('Open %{fileName} in')
       return this.$gettextInterpolate(translated, { fileName: this.filename }, true)
-    },
-
-    $_closeActionsButtonLabel () {
-      return this.$gettext('Close file actions menu')
     }
   },
   watch: {
