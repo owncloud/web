@@ -1,0 +1,7 @@
+Bugfix: Fix console warning about search query in public page
+
+Fixed console warning about the search query attribute not being available
+whenever the search fields are not visible, for example when
+accessing a public link page.
+
+https://github.com/owncloud/phoenix/pull/3041
