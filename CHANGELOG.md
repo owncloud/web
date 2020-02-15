@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Various fixes for files app in responsive mode: [#2998](https://github.com/owncloud/phoenix/issues/2998)
 * Bugfix - Fix accessible labels that said $gettext: [#3039](https://github.com/owncloud/phoenix/pull/3039)
+* Bugfix - Fix console warning about search query in public page: [#3041](https://github.com/owncloud/phoenix/pull/3041)
 
 Details
 -------
@@ -28,6 +29,13 @@ Details
    translated text.
 
    https://github.com/owncloud/phoenix/pull/3039
+
+* Bugfix - Fix console warning about search query in public page: [#3041](https://github.com/owncloud/phoenix/pull/3041)
+
+   Fixed console warning about the search query attribute not being available whenever the
+   search fields are not visible, for example when accessing a public link page.
+
+   https://github.com/owncloud/phoenix/pull/3041
 
 Changelog for ownCloud Phoenix [0.4.0] (2020-02-14)
 =======================================
