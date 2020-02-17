@@ -192,3 +192,10 @@ After(function () {
   fs.writeFileSync(this.fullPathOfConfigFile,
     JSON.stringify(initialConfigJsonSettings, null, 4))
 })
+
+Given('the app {string} has been disabled', function (app) {
+  return occHelper.runOcc(
+    [
+      'app:disable', app
+    ])
+})

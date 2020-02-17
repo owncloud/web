@@ -86,6 +86,16 @@ Feature: File Upload
     Then no message should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
     And as "user1" the content of "lorem.txt" should be the same as the local "lorem.txt"
+    And the versions list for resource "lorem.txt" should contain 1 entry
+    But file "lorem (2).txt" should not be listed on the webUI
+
+  @smokeTest
+  Scenario: overwrite an existing file when versioning is disabled
+    Given the app "files_versions" has been disabled
+    When the user uploads overwriting file "lorem.txt" using the webUI
+    Then no message should be displayed on the webUI
+    And file "lorem.txt" should be listed on the webUI
+    And as "user1" the content of "lorem.txt" should be the same as the local "lorem.txt"
     But file "lorem (2).txt" should not be listed on the webUI
 
   @smokeTest
