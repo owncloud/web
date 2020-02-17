@@ -914,3 +914,16 @@ Then('user {string} should not have created any shares', async function (user) {
   const shares = await sharingHelper.getAllSharesSharedByUser(user)
   assert.strictEqual(shares.length, 0, 'There should not be any share, but there are')
 })
+
+Then('the following resources should have the following collaborators', async function (dataTable) {
+  for (const { fileName, expectedCollaborators } of dataTable.hashes()) {
+    const collaboratorsArray = await client
+      .page.FilesPageElement.filesList().getCollaboratorsForResource(fileName)
+
+    const expectedCollaboratorsArray = expectedCollaborators.split(',').map(s => s.trim())
+    assert.ok(
+      _.intersection(collaboratorsArray, expectedCollaboratorsArray).length === expectedCollaboratorsArray.length,
+      `Expected collaborators to be the same for "${fileName}": expected [` + expectedCollaboratorsArray.join(', ') + '] got [' + collaboratorsArray.join(', ') + ']'
+    )
+  }
+})

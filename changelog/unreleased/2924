@@ -1,0 +1,10 @@
+Enhancement: Improved collaborators column in shared file lists
+
+Fixed issue with the collaborators column where only one was being displayed in the "shared with you" file list.
+This is done by properly aggregating all share entries under each file entry for the list, which now
+also includes group shares and link shares.
+
+Improved the look of the collaborators by adding avatars and icons there for the shares in the collaborators and owner columns.
+
+https://github.com/owncloud/phoenix/issues/2924
+https://github.com/owncloud/phoenix/pull/3049

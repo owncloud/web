@@ -33,3 +33,4 @@ Feature: Sharing files and folders with internal groups
       | title                                        |
       | "User Three" shared "simple-folder" with you |
       | "User Three" shared "data.zip" with you      |
+

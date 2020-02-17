@@ -34,7 +34,9 @@ Feature: Share by public link
     Given user "user1" has logged in using the webUI
     And user "user1" has shared folder "simple-folder" with link with "read" permissions
     When the user browses to the shared-with-others page using the webUI
-    Then folder "simple-folder" should be listed on the webUI
+    Then the following resources should have the following collaborators
+      | fileName            | expectedCollaborators |
+      | simple-folder       | Public                |
     But file "data.zip" should not be listed on the webUI
 
   Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page

@@ -37,7 +37,7 @@ export default {
     },
     parentPath: {
       type: String,
-      required: true
+      required: false
     }
   },
 

@@ -37,10 +37,9 @@ Feature: accept/decline shares coming from internal users
     When the user shares folder "simple-folder (2)" with group "grp1" as "Viewer" using the webUI
     And the user unshares folder "simple-folder (2)" using the webUI
     And the user browses to the shared-with-me page using the webUI
-    Then folder "simple-folder" shared by "User One" should be in "Declined" state on the webUI
-    And folder "simple-folder" shared by "User Two" should be in "Pending" state on the webUI
-   # And folder "simple-folder" shared by "User Two" should not be listed in the webUI
-    And folder "simple-folder (2)" should not be listed on the webUI
+    Then folder "simple-folder (2)" shared by "User One" should be in "Declined" state on the webUI
+    And folder "simple-folder" shared by "User Two" should not be listed in the webUI
+    And folder "simple-folder" should not be listed on the webUI
 
   @smokeTest
   Scenario: unshare an accepted share on the "All files" page
@@ -59,8 +58,8 @@ Feature: accept/decline shares coming from internal users
     Then folder "simple-folder (2)" should not be listed on the webUI
     And file "testimage (2).jpg" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then folder "simple-folder" shared by "User One" should be in "Declined" state on the webUI
-    And file "testimage.jpg" shared by "User One" should be in "Declined" state on the webUI
+    Then folder "simple-folder (2)" shared by "User One" should be in "Declined" state on the webUI
+    And file "testimage (2).jpg" shared by "User One" should be in "Declined" state on the webUI
 
   @smokeTest
   Scenario: Auto-accept shares
@@ -92,8 +91,8 @@ Feature: accept/decline shares coming from internal users
     Then folder "simple-folder (2)" should not be listed on the webUI
     And file "testimage (2).jpg" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then folder "simple-folder" shared by "User One" should be in "Declined" state on the webUI
-    And file "testimage.jpg" shared by "User One" should be in "Declined" state on the webUI
+    Then folder "simple-folder (2)" shared by "User One" should be in "Declined" state on the webUI
+    And file "testimage (2).jpg" shared by "User One" should be in "Declined" state on the webUI
 
   Scenario: unshare auto-accepted shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
@@ -110,8 +109,8 @@ Feature: accept/decline shares coming from internal users
     Then folder "simple-folder (2)" should not be listed on the webUI
     And file "testimage (2).jpg" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then folder "simple-folder" shared by "User One" should be in "Declined" state on the webUI
-    And file "testimage.jpg" shared by "User One" should be in "Declined" state on the webUI
+    Then folder "simple-folder (2)" shared by "User One" should be in "Declined" state on the webUI
+    And file "testimage (2).jpg" shared by "User One" should be in "Declined" state on the webUI
 
   Scenario: unshare renamed shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
@@ -121,7 +120,7 @@ Feature: accept/decline shares coming from internal users
     When the user unshares folder "simple-folder-renamed" using the webUI
     Then folder "simple-folder-renamed" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then folder "simple-folder" shared by "User One" should be in "Declined" state on the webUI
+    Then folder "simple-folder-renamed" shared by "User One" should be in "Declined" state on the webUI
 
   Scenario: unshare moved shares
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
@@ -132,7 +131,7 @@ Feature: accept/decline shares coming from internal users
     And the user unshares folder "shared" using the webUI
     Then folder "shared" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then folder "simple-folder" shared by "User One" should be in "Declined" state on the webUI
+    Then folder "shared" shared by "User One" should be in "Declined" state on the webUI
 
   Scenario: unshare renamed shares, accept it again
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
@@ -141,7 +140,7 @@ Feature: accept/decline shares coming from internal users
     And the user has reloaded the current page of the webUI
     When the user unshares folder "simple-folder-renamed" using the webUI
     And the user browses to the shared-with-me page using the webUI
-    And the user accepts share "simple-folder" offered by user "User One" using the webUI
+    And the user accepts share "simple-folder-renamed" offered by user "User One" using the webUI
     Then folder "simple-folder-renamed" shared by "User One" should be in "Accepted" state on the webUI
     When the user browses to the files page
     Then folder "simple-folder-renamed" should be listed on the webUI
@@ -278,15 +277,37 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem (2).txt" should not be listed on the webUI
     And file "testimage (2).jpg" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then file "lorem.txt" shared by "User One" should be in "Declined" state on the webUI
+    Then file "lorem (2).txt" shared by "User One" should be in "Declined" state on the webUI
     And file "testimage.jpg" shared by "User One" should be in "Pending" state on the webUI
 
-  Scenario:  shared file status is changed to declined when user deletes the file
+  @issue-3101 @skip
+  Scenario: Delete multiple accepted shares at once from shared with me page
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "user1" has been created with default attributes
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user1" has shared file "lorem.txt" with user "user2"
+    And user "user1" has shared file "data.zip" with user "user2"
+    And the user has browsed to the shared-with-me page
+    And the user accepts share "lorem.txt" offered by user "User One" using the webUI
+    When the user batch deletes these files using the webUI
+      | name          |
+      | data.zip      |
+      | lorem (2).txt |
+      | simple-folder |
+    Then file "data.zip" should not be listed on the webUI
+    And file "lorem (2).txt" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
+    When the user has reloaded the current page of the webUI
+    Then file "data.zip" shared by "User One" should be in "Declined" state on the webUI
+    And file "lorem (2).txt" shared by "User One" should be in "Declined" state on the webUI
+    And folder "simple-folder" shared by "User One" should be in "Declined" state on the webUI
+
+  Scenario: shared file status is changed to declined when user deletes the file
     Given user "user1" has shared file "lorem.txt" with user "user2"
     And the user has reloaded the current page of the webUI
     When the user deletes file "lorem (2).txt" using the webUI
     And the user browses to the shared-with-me page
-    Then file "lorem.txt" shared by "User One" should be in "Declined" state on the webUI
+    Then file "lorem (2).txt" shared by "User One" should be in "Declined" state on the webUI
 
   Scenario: the deleted shared file is restored back to all files list when accepted from the shared with me file list
     Given user "user1" has shared file "lorem.txt" with user "user2"
@@ -294,7 +315,7 @@ Feature: accept/decline shares coming from internal users
       | name          |
       | lorem (2).txt |
     And the user has browsed to the shared-with-me page
-    When the user accepts share "lorem.txt" offered by user "User One" using the webUI
+    When the user accepts share "lorem (2).txt" offered by user "User One" using the webUI
     Then the file "lorem (2).txt" shared by "User One" should not be in "Declined" state
     When the user browses to the files page
     Then file "lorem (2).txt" should be listed on the webUI

@@ -146,12 +146,16 @@ Feature: Sharing files and folders with internal users
     And folder "new-simple-folder" should be listed on the webUI
 
   Scenario: share a folder with other user and then it should be listed on Shared with Others page
-    Given user "user2" has logged in using the webUI
+    Given user "user3" has been created with default attributes
+    And user "user2" has logged in using the webUI
     And user "user2" has shared file "lorem.txt" with user "user1"
     And user "user2" has shared folder "simple-folder" with user "user1"
+    And user "user2" has shared folder "simple-folder" with user "user3"
     When the user browses to the shared-with-others page
-    Then file "lorem.txt" should be listed on the webUI
-    And folder "simple-folder" should be listed on the webUI
+    Then the following resources should have the following collaborators
+      | fileName            | expectedCollaborators |
+      | lorem.txt           | User One              |
+      | simple-folder       | User One, User Three  |
 
   @issue-2480 @yetToImplement
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
