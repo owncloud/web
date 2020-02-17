@@ -99,3 +99,9 @@ Feature: File Upload
     And the user uploads a created file "0" using the webUI
     Then file "0" should be listed on the webUI
     And as "user1" the content of "simple-folder/0" should be the same as the local "0"
+
+  @issue-2480
+  Scenario: Upload a file with a name with same folder name exist
+    Given the user has created folder "new.txt"
+    When the user uploads overwriting file "new.txt" using the webUI
+    #Then an error message "PUT is not allowed on non-files." should be visible
