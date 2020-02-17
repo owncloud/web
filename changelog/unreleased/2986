@@ -1,0 +1,7 @@
+Enhancement: Display decimals in resource size column only for MBs or higher
+
+We've stopped displaying decimals in resource size column for sizes smaller than 1 MB.
+We've also started displaying only one decimal.
+
+https://github.com/owncloud/phoenix/issues/2986
+https://github.com/owncloud/phoenix/pull/3051

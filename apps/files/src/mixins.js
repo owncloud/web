@@ -11,11 +11,16 @@ export default {
       if (int < 0) {
         return ''
       }
+
       if (isNaN(int)) {
         return '?'
       }
+
+      const mb = 1048576
+
+      // TODO: Pass current language as locale to display correct separator
       return filesize(int, {
-        round: 2
+        round: int < mb ? 0 : 1
       })
     },
 
