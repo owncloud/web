@@ -15,5 +15,5 @@ Feature: create files
 
   Scenario: try to create a file that already exists
     When the user tries to create a file with already existing name "lorem.txt" using the webUI
-    Then an error message "lorem.txt already exists" should be visible
+    Then the error message "lorem.txt already exists" should be displayed on the webUI dialog prompt
     And the create file button should be disabled

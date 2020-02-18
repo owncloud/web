@@ -796,12 +796,6 @@ When('the user tries to create a file with already existing name {string} using 
   return client.page.filesPage().triesToCreateExistingFile(fileName)
 })
 
-Then('an error message {string} should be visible', function (errorMessage) {
-  return client.page.filesPage().waitForErrorMessage((exactErrorMessage) => {
-    assert.strictEqual(errorMessage, exactErrorMessage)
-  })
-})
-
 Then('the create file button should be disabled', function () {
   return client.page.filesPage().checkForButtonDisabled()
 })
