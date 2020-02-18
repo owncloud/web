@@ -47,8 +47,7 @@ Feature: Sharing files with internal groups with permissions
     | file_target | /lorem (2).txt       |
     | item_type   | file                 |
     | permissions | <actual-permissions> |
-    But user "User One" should not be listed in the collaborators list on the webUI
-    And group "grp1" should not be listed in the collaborators list on the webUI
+    But group "grp1" should not be listed in the collaborators list on the webUI
     And as "user1" file "lorem (2).txt" should not exist
     Examples:
     | role                 | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |

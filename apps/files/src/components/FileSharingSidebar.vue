@@ -13,10 +13,15 @@
            v-else
            v-text="noResharePermsMessage"
         />
-        <section v-if="$_ownerAndResharers.length > 0">
+        <section>
           <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
-            <li v-for="collaborator in $_ownerAndResharers" :key="collaborator.key">
-              <collaborator :collaborator="collaborator"/>
+            <template v-if="$_ownerAndResharers.length > 0">
+              <li v-for="collaborator in $_ownerAndResharers" :key="collaborator.key">
+                <collaborator :collaborator="collaborator"/>
+              </li>
+            </template>
+            <li>
+              <collaborator :collaborator="currentUserAsCollaborator"/>
             </li>
           </ul>
           <hr class="uk-margin-small-top uk-margin-small-bottom" v-if="$_directOutgoingShares.length > 0 || $_indirectOutgoingShares.length > 0" />
@@ -41,9 +46,6 @@
             </li>
           </ul>
         </section>
-        <div v-if="$_noCollaborators" key="oc-collaborators-no-results">
-          <translate>No collaborators</translate>
-        </div>
       </template>
     </div>
     <div v-if="visiblePanel === PANEL_NEW" :key="PANEL_NEW">
@@ -73,6 +75,7 @@ import Mixins from '../mixins/collaborators'
 import { textUtils } from '../helpers/textUtils'
 import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
+import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
 const NewCollaborator = _ => import('./Collaborators/NewCollaborator.vue')
 const EditCollaborator = _ => import('./Collaborators/EditCollaborator.vue')
 const Collaborator = _ => import('./Collaborators/Collaborator.vue')
@@ -128,8 +131,26 @@ export default {
       return this.currentFileOutgoingSharesLoading && this.incomingSharesLoading
     },
 
-    $_noCollaborators () {
-      return (this.$_ownerAndResharers.length + this.$_directOutgoingShares.length + this.$_indirectOutgoingShares.length) === 0
+    currentUserAsCollaborator () {
+      const permissions = this.currentUsersPermissions
+      const isFolder = this.highlightedFile.type === 'folder'
+      let role = { name: '' }
+
+      if (permissions > 0) {
+        role = bitmaskToRole(permissions, isFolder)
+      } else {
+        role.name = 'owner'
+      }
+
+      return {
+        name: this.user.id,
+        displayName: this.user.displayname,
+        info: {
+          share_type: 0,
+          share_with_additional_info: {}
+        },
+        role
+      }
     },
 
     $_ownerAndResharers () {
@@ -259,6 +280,20 @@ export default {
     noResharePermsMessage () {
       const translated = this.$gettext('You don\'t have permission to share this %{type}.')
       return this.$gettextInterpolate(translated, { type: this.highlightedFile.type }, false)
+    },
+
+    currentUsersPermissions () {
+      if (this.incomingShares.length > 0) {
+        let permissions = permissionsBitmask.read
+
+        for (const share of this.incomingShares) {
+          permissions |= share.permissions
+        }
+
+        return permissions
+      }
+
+      return null
     }
   },
   watch: {

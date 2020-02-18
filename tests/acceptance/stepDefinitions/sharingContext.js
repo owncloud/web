@@ -356,7 +356,7 @@ Given('the user has shared file/folder {string} with user {string}', function (e
 })
 
 Given(
-  'user {string} has shared file/folder {string} with user {string} with {string} permissions',
+  'user {string} has shared file/folder {string} with user {string} with {string} permission/permissions',
   function (sharer, elementToShare, receiver, permissions) {
     return shareFileFolder(elementToShare, sharer, receiver, SHARE_TYPES.user, permissions)
   }
@@ -365,6 +365,11 @@ Given(
 Given('user {string} has shared file/folder {string} with group {string}', function (sharer, elementToShare, receiver) {
   return shareFileFolder(elementToShare, sharer, receiver, SHARE_TYPES.group)
 })
+
+Given('user {string} has shared file/folder {string} with group {string} with {string} permission/permissions',
+  function (sharer, elementToShare, receiver, permissions) {
+    return shareFileFolder(elementToShare, sharer, receiver, SHARE_TYPES.group, permissions)
+  })
 
 Given(
   'user {string} has shared file/folder {string} with link with {string} permissions',
