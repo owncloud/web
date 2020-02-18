@@ -1,8 +1,6 @@
-const { client } = require('nightwatch-api')
 const httpHelper = require('./httpHelper')
-const { normalize, join } = require('./path')
+const { normalize } = require('./path')
 const codify = require('../helpers/codify')
-const fetch = require('node-fetch')
 const assert = require('assert')
 
 module.exports = {
@@ -85,13 +83,11 @@ module.exports = {
    */
   assertUserHasShareWithDetails: function (user, expectedDetailsTable, filters = {}) {
     codify.replaceInlineTable(expectedDetailsTable)
-    const headers = httpHelper.createOCSRequestHeaders(user)
-
     const sharingHelper = this
-    const apiURL = new URL(join(client.globals.backend_url, '/ocs/v2.php/apps/files_sharing/api/v1/shares'))
-    apiURL.search = new URLSearchParams({ format: 'json', ...filters }).toString()
+    const apiURL = 'apps/files_sharing/api/v1/shares?'
+    const search = new URLSearchParams(filters).toString()
 
-    return fetch(apiURL, { method: 'GET', headers: headers })
+    return httpHelper.getOCS(apiURL + search, user)
       .then(res => res.json())
       .then(function (sharesResult) {
         httpHelper.checkOCSStatus(sharesResult, 'Could not get shares. Message: ' + sharesResult.ocs.meta.message)
@@ -132,14 +128,10 @@ module.exports = {
    */
   fetchLastPublicLinkShare: async function (linkCreator) {
     const self = this
-    const headers = httpHelper.createOCSRequestHeaders(linkCreator)
-    const apiURL = join(client.globals.backend_url, '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json')
+    const apiURL = 'apps/files_sharing/api/v1/shares'
     let lastShareToken
     let lastShare
-    await fetch(apiURL, {
-      method: 'GET',
-      headers: headers
-    })
+    await httpHelper.getOCS(apiURL, linkCreator)
       .then(res => res.json())
       .then(function (sharesResult) {
         httpHelper.checkOCSStatus(sharesResult, 'Could not get shares. Message: ' + sharesResult.ocs.meta.message)
@@ -165,13 +157,9 @@ module.exports = {
    * @returns {Object<[]>}
    */
   getAllPublicLinkShares: async function (sharer) {
-    const headers = httpHelper.createOCSRequestHeaders(sharer)
     const data = []
-    const apiURL = join(client.globals.backend_url, '/ocs/v2.php/apps/files_sharing/api/v1/shares?&format=json')
-    const response = await fetch(apiURL, {
-      method: 'GET',
-      headers: headers
-    })
+    const apiURL = 'apps/files_sharing/api/v1/shares'
+    const response = await httpHelper.getOCS(apiURL, sharer)
     const jsonResponse = await response.json()
     httpHelper.checkOCSStatus(jsonResponse, 'Could not get shares. Message: ' + jsonResponse.ocs.meta.message)
     for (const share of jsonResponse.ocs.data) {
@@ -188,20 +176,14 @@ module.exports = {
    * @returns {Promise<[*]>}
    */
   getAllShares: function (user, sharedWithUser = false) {
-    const headers = httpHelper.createOCSRequestHeaders(user)
     const params = new URLSearchParams()
     if (sharedWithUser === true) {
       params.set('shared_with_me', 'true')
     }
     params.set('format', 'json')
     params.set('state', 'all')
-    const apiURL = join(client.globals.backend_url,
-      '/ocs/v2.php/apps/files_sharing/api/v1/shares', `?${params.toString()}`)
-    return fetch(apiURL,
-      {
-        method: 'GET',
-        headers: headers
-      })
+    const apiURL = `apps/files_sharing/api/v1/shares?${params.toString()}`
+    return httpHelper.getOCS(apiURL, user)
       .then(res => {
         httpHelper.checkStatus(res, 'The response status is not the expected value')
         return res.json()
@@ -237,17 +219,8 @@ module.exports = {
     }
     for (const element of elementsToDecline) {
       const shareID = element.id
-      const headers = httpHelper.createOCSRequestHeaders(user)
-      const apiURL = join(client.globals.backend_url,
-        '/ocs/v2.php/apps/files_sharing/api/v1/shares/pending/',
-        shareID,
-        '?format=json'
-      )
-      return fetch(apiURL,
-        {
-          method: 'DELETE',
-          headers: headers
-        })
+      const apiURL = `apps/files_sharing/api/v1/shares/pending/${shareID}`
+      return httpHelper.deleteOCS(apiURL, user)
         .then(res => {
           res = httpHelper.checkStatus(res, 'The response status is not the expected value')
           return res.json()
@@ -277,17 +250,8 @@ module.exports = {
     }
     for (const element of elementsToAccept) {
       const shareID = element.id
-      const headers = httpHelper.createOCSRequestHeaders(user)
-      const apiURL = join(client.globals.backend_url,
-        '/ocs/v2.php/apps/files_sharing/api/v1/shares/pending/',
-        shareID,
-        '?format=json'
-      )
-      return fetch(apiURL,
-        {
-          method: 'POST',
-          headers: headers
-        })
+      const apiURL = `apps/files_sharing/api/v1/shares/pending/${shareID}`
+      return httpHelper.postOCS(apiURL, user)
         .then(res => {
           res = httpHelper.checkStatus(res, 'The response status is not the expected value')
           return res.json()

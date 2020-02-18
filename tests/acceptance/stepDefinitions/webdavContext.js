@@ -1,5 +1,4 @@
 const { Given, Then } = require('cucumber')
-const fetch = require('node-fetch')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
@@ -17,12 +16,8 @@ const path = require('../helpers/path')
  * @returns {Promise<Response|Error>}
  */
 function fileExists (userId, element) {
-  const headers = httpHelper.createAuthHeader(userId)
   const davPath = webdavHelper.createDavPath(userId, element)
-  return fetch(
-    davPath,
-    { method: 'GET', headers: headers }
-  )
+  return httpHelper.get(davPath, userId)
 }
 
 const fileShouldExist = function (userId, element) {
@@ -103,7 +98,6 @@ Then(
 )
 
 Given('user {string} has favorited element {string}', function (userId, element) {
-  const headers = httpHelper.createAuthHeader(userId)
   const body = '<?xml version="1.0"?>\n' +
     '<d:propertyupdate xmlns:d="DAV:"\n' +
     'xmlns:oc="http://owncloud.org/ns">\n' +
@@ -112,9 +106,10 @@ Given('user {string} has favorited element {string}', function (userId, element)
     '  </d:set>\n' +
     '</d:propertyupdate>'
 
-  return fetch(
+  return httpHelper.proppatch(
     webdavHelper.createDavPath(userId, element),
-    { method: 'PROPPATCH', headers: headers, body: body }
+    userId,
+    body
   )
     .then(function (res) {
       if (res.status === 207) {
