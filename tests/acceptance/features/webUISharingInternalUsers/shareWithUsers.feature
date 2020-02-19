@@ -317,11 +317,11 @@ Feature: Sharing files and folders with internal users
       | lorem.txt     |
       | simple-folder |
     When the user shares file "lorem.txt" with user "User Two" as "Editor" using the webUI
-    Then the error message 'Error while sharing.' should be displayed on the webUI
+    Then the error message with header 'Error while sharing.' should be displayed on the webUI
     And user "UserTwo" should not be listed in the collaborators list on the webUI
     When the user clears all error message from the webUI
     And the user shares folder "simple-folder" with user "User Two" as "Editor" using the webUI
-    Then the error message 'Error while sharing.' should be displayed on the webUI
+    Then the error message with header 'Error while sharing.' should be displayed on the webUI
     And user "UserTwo" should not be listed in the collaborators list on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI

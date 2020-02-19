@@ -13,7 +13,7 @@ Feature: download files
       | name          |
       | lorem.txt     |
     When the user downloads file "lorem.txt" using the webUI
-    Then the error message 'Download failed' should be displayed on the webUI
+    Then the error message with header 'Download failed' should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And as "user1" file "lorem.txt" should not exist

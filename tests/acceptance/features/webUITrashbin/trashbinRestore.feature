@@ -108,7 +108,7 @@ Feature: Restore deleted files/folders
     When the user browses to the trashbin page
     #And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
-    Then the error message "Restoration of file-to-delete-and-restore failed" should be displayed on the webUI
+    Then the error message with header "Restoration of file-to-delete-and-restore failed" should be displayed on the webUI
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in trash
     And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should exist in trash
@@ -127,7 +127,7 @@ Feature: Restore deleted files/folders
       | lorem.txt |
     When the user browses to the trashbin page
     And the user restores file "lorem.txt" from the trashbin using the webUI
-    Then the success message "lorem.txt was restored successfully" should be displayed on the webUI
+    Then the success message with header "lorem.txt was restored successfully" should be displayed on the webUI
     And file "lorem.txt" should not be listed on the webUI
     And folder "lorem.txt" should be listed on the webUI
     When the user browses to the files page using the webUI
@@ -145,7 +145,7 @@ Feature: Restore deleted files/folders
       | lorem.txt |
     When the user browses to the trashbin page
     And the user restores folder "lorem.txt" from the trashbin using the webUI
-    Then the success message "lorem.txt was restored successfully" should be displayed on the webUI
+    Then the success message with header "lorem.txt was restored successfully" should be displayed on the webUI
     And folder "lorem.txt" should not be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
     When the user browses to the files page using the webUI

@@ -274,10 +274,10 @@ Feature: deleting files and folders
       | lorem.txt     |
       | simple-folder |
     When the user deletes file "lorem.txt" using the webUI
-    Then the error message 'Error while deleting "lorem.txt"' should be displayed on the webUI
+    Then the error message with header 'Error while deleting "lorem.txt"' should be displayed on the webUI
     When the user clears all error message from the webUI
     And the user deletes folder "simple-folder" using the webUI
-    Then the error message 'Error while deleting "simple-folder"' should be displayed on the webUI
+    Then the error message with header 'Error while deleting "simple-folder"' should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI

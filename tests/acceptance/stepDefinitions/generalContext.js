@@ -37,7 +37,7 @@ Given('the property {string} has been deleted in phoenix config file', function 
   return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
 })
 
-Then('the success/error message {string} should be displayed on the webUI', function (message) {
+Then('the success/error message with header {string} should be displayed on the webUI', function (message) {
   return client
     .page.phoenixPage()
     .waitForElementVisible('@message')

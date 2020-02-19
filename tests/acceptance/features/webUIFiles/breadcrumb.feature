@@ -27,7 +27,7 @@ Feature: access breadcrumb
     And user "user1" has logged in using the webUI
     When the user opens folder "folder%2Fwith%2FSlashes" using the webUI
     And the user browses to folder "folder%2Fwith%2FSlashes" using the breadcrumb on the webUI
-    Then the error message "Loading folder failed…" should be displayed on the webUI
+    Then the error message with header "Loading folder failed…" should be displayed on the webUI
 #    Then no message should be displayed on the webUI
 
   @issue-1883
@@ -36,5 +36,5 @@ Feature: access breadcrumb
     And user "user1" has logged in using the webUI
     When the user opens folder "folder%2Fwith%2FSlashes" using the webUI
     And the user reloads the current page of the webUI
-    Then the error message "Loading folder failed…" should be displayed on the webUI
+    Then the error message with header "Loading folder failed…" should be displayed on the webUI
 #    Then no message should be displayed on the webUI
