@@ -269,12 +269,6 @@ module.exports = {
         .waitForElementVisible('@newFileInput')
         .setValue('@newFileInput', fileName)
     },
-    waitForErrorMessage: function (callback) {
-      return this.waitForElementVisible('@fileAlreadyExistAlert')
-        .getText('@fileAlreadyExistAlert', result => {
-          return callback(result.value)
-        })
-    },
     checkForButtonDisabled: function () {
       return this.waitForElementVisible('@createFileOkButtonDisabled')
     },
@@ -340,10 +334,6 @@ module.exports = {
     },
     newFileOkButton: {
       selector: "//div[@id='new-file-dialog']//span[contains(text(),'Ok')]",
-      locateStrategy: 'xpath'
-    },
-    fileAlreadyExistAlert: {
-      selector: "//div[@id='new-file-dialog']//div[contains(@class, 'alert-danger')]",
       locateStrategy: 'xpath'
     },
     permalinkCopyButton: {
