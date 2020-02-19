@@ -44,6 +44,13 @@ Then('the success/error message {string} should be displayed on the webUI', func
     .expect.element('@message').text.to.equal(message)
 })
 
+Then('the following success/error message should be displayed on the webUI', function (message) {
+  return client
+    .page.phoenixPage()
+    .waitForElementVisible('@messages')
+    .expect.element('@messages').text.to.equal(message)
+})
+
 Then('the error message {string} should be displayed on the webUI dialog prompt', function (message) {
   return client
     .page.phoenixPage()
