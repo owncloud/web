@@ -10,7 +10,7 @@ When(
   'the user (tries to )create/creates a new public link for file/folder/resource {string} using the webUI',
   async function (resource) {
     await client.page.FilesPageElement
-      .filesList()
+      .appSideBar()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
     return client.page.FilesPageElement.publicLinksDialog()
@@ -23,7 +23,7 @@ When(
   async function (resource, settingsTable) {
     const settings = settingsTable.rowsHash()
     await client.page.FilesPageElement
-      .filesList()
+      .appSideBar()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
     return client.page.FilesPageElement.publicLinksDialog().addNewLink(settings)
@@ -103,7 +103,7 @@ When('the user edits the public link named {string} of file/folder/resource {str
   async function (linkName, resource, dataTable) {
     const editData = dataTable.rowsHash()
     await client.page.FilesPageElement
-      .filesList()
+      .appSideBar()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
     return client.page.FilesPageElement
@@ -115,7 +115,7 @@ When('the user edits the public link named {string} of file/folder/resource {str
   async function (linkName, resource, dataTable) {
     const editData = dataTable.rowsHash()
     await client.page.FilesPageElement
-      .filesList()
+      .appSideBar()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
     return client.page.FilesPageElement
@@ -127,7 +127,7 @@ When('the user edits the public link named {string} of file/folder/resource {str
 When('the user tries to edit expiration of the public link named {string} of file {string} to past date {string}',
   async function (linkName, resource, pastDate) {
     await client.page.FilesPageElement
-      .filesList()
+      .appSideBar()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
     const isDisabled = await client.page.FilesPageElement
@@ -143,7 +143,7 @@ When('the user removes the public link named {string} of file/folder/resource {s
   async function (linkName, resource) {
     await client.page
       .FilesPageElement
-      .filesList()
+      .appSideBar()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
     return client.page.FilesPageElement.publicLinksDialog()
@@ -163,7 +163,7 @@ Then('public link named {string} should not be listed on the public links list o
 
 async function findMatchingPublicLinkByName (name, role, resource, via = null) {
   await client.page.FilesPageElement
-    .filesList()
+    .appSideBar()
     .closeSidebar(100)
     .openPublicLinkDialog(resource)
 
@@ -208,13 +208,13 @@ Then('the user should see an error message on the public link share dialog sayin
 
 When('the user closes the public link details sidebar', function () {
   return client.page.FilesPageElement
-    .filesList()
+    .appSideBar()
     .closeSidebar(100)
 })
 
 When('the user copies the url of public link named {string} of file/folder/resource {string} using the webUI', async function (linkName, resource) {
   await client.page.FilesPageElement
-    .filesList()
+    .appSideBar()
     .closeSidebar(100)
     .openPublicLinkDialog(resource)
   return client.page.FilesPageElement.publicLinksDialog()
