@@ -223,22 +223,6 @@ module.exports = {
 
       return this.api.page.FilesPageElement.publicLinksDialog()
     },
-    closeSidebar: function (timeout = null) {
-      if (timeout === null) {
-        timeout = this.api.globals.waitForConditionTimeout
-      } else {
-        timeout = parseInt(timeout, 10)
-      }
-      try {
-        this.click({
-          selector: '@sidebarCloseBtn',
-          timeout: timeout
-        })
-      } catch (e) {
-        // do nothing
-      }
-      return this.api.page.FilesPageElement.filesList()
-    },
     /**
      *
      * @param {string} fromName
@@ -509,7 +493,8 @@ module.exports = {
       const resourceShareButtonXpath = resourceRowXpath + shareButtonXpath
       let isPresent = true
       await this
-        .closeSidebar(100)
+        .api.page.FilesPageElement.appSideBar().closeSidebar(100)
+      await this
         .api.elements(
           this.elements.shareButtonInFileRow.locateStrategy,
           resourceShareButtonXpath,
@@ -528,7 +513,7 @@ module.exports = {
     isSidebarTabPresent: async function (rowSelector, tabSelector) {
       let isPresent = true
       await this
-        .closeSidebar(100)
+        .api.page.FilesPageElement.appSideBar().closeSidebar(100)
         .useXpath()
         .click(rowSelector)
         .waitForElementVisible('@sidebar')
@@ -925,10 +910,6 @@ module.exports = {
     },
     linkToPublicLinksTag: {
       selector: '//div[@class="sidebar-container"]//a[normalize-space(.)="Links"]',
-      locateStrategy: 'xpath'
-    },
-    sidebarCloseBtn: {
-      selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
       locateStrategy: 'xpath'
     },
     sidebar: {
