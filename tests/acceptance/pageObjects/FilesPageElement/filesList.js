@@ -46,6 +46,8 @@ module.exports = {
      *
      * @param {string} fileName
      * @param {string} action delete|share|rename|download
+
+     * @throws Error
      * @returns {*}
      */
     performFileAction: function (fileName, action, elementType = 'file') {
@@ -53,8 +55,13 @@ module.exports = {
         this.getFileRowButtonSelectorsByFileName(fileName, action, elementType)
       return this.initAjaxCounters()
         .useXpath()
-        .waitForElementVisible(fileActionsBtnSelector)
-        .angryClick(fileActionsBtnSelector)
+        .waitForElementVisible(fileActionsBtnSelector, (result) => {
+          if (!result.value) {
+            throw new Error('Expected: File action button to be visible but found:' +
+              result.value.toString())
+          }
+        })
+        .click(fileActionsBtnSelector)
         .waitForElementVisible(btnSelector)
         .click(btnSelector)
         .useCss()
