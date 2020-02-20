@@ -123,8 +123,14 @@ Given('user {string} has uploaded file with content {string} to {string}', async
   await webdav.uploadFileWithContent(user, content, filename)
 })
 
-When('the user browses to display the {string} details of file {string}', function (versions, filename) {
-  return client.page.FilesPageElement.filesList().getVersions(filename)
+When('the user browses to display the {string} details of file {string}', async function (versions, filename) {
+  const api = client.page.FilesPageElement
+  await api
+    .filesList()
+    .clickRow(filename)
+  api.appSideBar()
+    .openVersionsTab()
+  return client
 })
 
 Given('user {string} has moved file/folder {string} to {string}', function (user, fromName, toName) {
@@ -395,15 +401,20 @@ Then('the deleted elements should not be listed on the webUI after a page reload
 })
 
 Then('the versions list should contain {int} entries', async function (expectedNumber) {
-  const count = await client.page.filesPage().getVersionsCount()
+  const count = await client.page.FilesPageElement.versionsDialog().getVersionsCount()
   return assert.strictEqual(
     expectedNumber, count
   )
 })
 
 Then('the versions list for resource {string} should contain {int} entry/entries', async function (resourceName, expectedNumber) {
-  await client.page.FilesPageElement.filesList().getVersions(resourceName)
-  const count = await client.page.filesPage().getVersionsCount()
+  const api = client.page.FilesPageElement
+  await api
+    .filesList()
+    .clickRow(resourceName)
+  api.appSideBar()
+    .openVersionsTab()
+  const count = await api.versionsDialog().getVersionsCount()
 
   assert.strictEqual(
     expectedNumber, count
@@ -423,7 +434,7 @@ Then('the content of file {string} for user {string} should be {string}', async 
 })
 
 When('the user restores the file to last version using the webUI', function () {
-  return client.page.filesPage().restoreToPreviousVersion()
+  return client.page.FilesPageElement.versionsDialog().restoreToPreviousVersion()
 }
 )
 

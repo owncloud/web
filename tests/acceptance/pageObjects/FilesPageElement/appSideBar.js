@@ -5,6 +5,14 @@ module.exports = {
         .waitForElementVisible(this.elements.sideBar)
         .waitForElementVisible(this.elements.sidebarThumbnail)
     },
+    /**
+     * @returns {*}
+     */
+    openVersionsTab: function () {
+      return this
+        .waitForElementVisible('@sidebarVersionsTab')
+        .click('@sidebarVersionsTab')
+    },
     closeSidebar: function (timeout = null) {
       if (timeout === null) {
         timeout = this.api.globals.waitForConditionTimeout
@@ -75,6 +83,10 @@ module.exports = {
     },
     sidebarCollaboratorsTab: {
       selector: '//div[@class="sidebar-container"]//a[contains(text(),"Collaborators")]',
+      locateStrategy: 'xpath'
+    },
+    sidebarVersionsTab: {
+      selector: '//div//a[normalize-space(.)="Versions"]',
       locateStrategy: 'xpath'
     }
   }

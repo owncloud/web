@@ -271,23 +271,6 @@ module.exports = {
     },
     checkForButtonDisabled: function () {
       return this.waitForElementVisible('@createFileOkButtonDisabled')
-    },
-    getVersionsCount: async function () {
-      let count = 0
-      await this
-        .api.elements(
-          '@versionsList',
-          function (result) {
-            count = result.value.length
-          })
-      return count
-    },
-    restoreToPreviousVersion: function () {
-      return this
-        .initAjaxCounters()
-        .waitForElementVisible('@restorePreviousVersion')
-        .click('@restorePreviousVersion')
-        .waitForOutstandingAjaxCalls()
     }
   },
   elements: {
@@ -394,14 +377,6 @@ module.exports = {
     },
     createFileOkButtonDisabled: {
       selector: "//div[@id='new-file-dialog']//button[@disabled='disabled']/span[contains(text(), 'Ok')]",
-      locateStrategy: 'xpath'
-    },
-    versionsList: {
-      selector: '//div[@id="oc-file-versions-sidebar"]//tr[@class="file-row"]',
-      locateStrategy: 'xpath'
-    },
-    restorePreviousVersion: {
-      selector: '(//div[contains(@id,"oc-file-versions")]//tbody/tr[@class="file-row"])[1]//button[1]',
       locateStrategy: 'xpath'
     },
     tabsInSideBar: {
