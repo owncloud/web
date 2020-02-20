@@ -698,7 +698,7 @@ When('the user opens the share dialog for file/folder/resource {string} using th
 })
 
 When('the user opens the link share dialog for file/folder/resource {string} using the webUI', function (file) {
-  return client.page.FilesPageElement.filesList().openSharingDialog(file, 'link')
+  return client.page.FilesPageElement.filesList().openSharingDialog(file, 'links')
 })
 
 When('the user deletes {string} as collaborator for the current file/folder using the webUI', function (user) {

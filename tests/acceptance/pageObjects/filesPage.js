@@ -310,7 +310,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     permalinkCopyButton: {
-      selector: '#files-permalink-copy'
+      selector: '#files-sidebar-private-link-label'
     },
     breadcrumb: {
       selector: '#files-breadcrumb li:nth-of-type(2)'
