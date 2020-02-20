@@ -12,6 +12,7 @@ Summary
 * Bugfix - Fix accessible labels that said $gettext: [#3039](https://github.com/owncloud/phoenix/pull/3039)
 * Bugfix - Fix console warning about search query in public page: [#3041](https://github.com/owncloud/phoenix/pull/3041)
 * Enhancement - Display decimals in resource size column only for MBs or higher: [#2986](https://github.com/owncloud/phoenix/issues/2986)
+* Enhancement - Current user entry in collaborators list in sidebar: [#3808](https://github.com/owncloud/phoenix/issues/3808)
 
 Details
 -------
@@ -45,6 +46,13 @@ Details
 
    https://github.com/owncloud/phoenix/issues/2986
    https://github.com/owncloud/phoenix/pull/3051
+
+* Enhancement - Current user entry in collaborators list in sidebar: [#3808](https://github.com/owncloud/phoenix/issues/3808)
+
+   We've added a new entry into the collaborators list in sidebar which contains current user.
+
+   https://github.com/owncloud/phoenix/issues/3808
+   https://github.com/owncloud/phoenix/pull/3060
 
 Changelog for ownCloud Phoenix [0.4.0] (2020-02-14)
 =======================================
