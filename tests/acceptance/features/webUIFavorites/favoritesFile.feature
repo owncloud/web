@@ -88,12 +88,12 @@ Feature: Mark file as favorite
       | simple-folder |
     When the user marks file "lorem.txt" as favorite using the webUI
     Then no message should be displayed on the webUI
-    # Then the error message 'Error while marking "lorem.txt" as favorite' should be displayed on the webUI
+    # Then the error message with header 'Error while marking "lorem.txt" as favorite' should be displayed on the webUI
     And file "lorem.txt" should not be marked as favorite on the webUI
     # When the user clears all error message from the webUI
     When the user marks folder "simple-folder" as favorite using the webUI
     Then no message should be displayed on the webUI
-    # Then the error message 'Error while marking "simple-folder" as favorite' should be displayed on the webUI
+    # Then the error message with header 'Error while marking "simple-folder" as favorite' should be displayed on the webUI
     And folder "simple-folder" should not be marked as favorite on the webUI
     And as "user1" file "lorem.txt" should not exist
     And as "user1" folder "simple-folder" should not exist

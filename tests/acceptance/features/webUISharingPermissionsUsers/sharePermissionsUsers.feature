@@ -165,7 +165,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "user1" has logged in using the webUI
     When the user browses to the folder "simple-folder (2)" on the files page
     And the user shares folder "simple-empty-folder" with user "User Three" as "Advanced permissions" with permissions "share, delete, update" using the webUI
-    Then the error message "Error while sharing." should be displayed on the webUI
+    Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "user3" folder "simple-empty-folder (2)" should not exist
 
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
@@ -175,7 +175,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "user1" has logged in using the webUI
     When the user browses to the folder "simple-folder (2)" on the files page
     And the user shares folder "simple-empty-folder" with user "User Three" as "Advanced permissions" with permissions "share, delete, update, create" using the webUI
-    Then the error message "Error while sharing." should be displayed on the webUI
+    Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "user3" folder "simple-empty-folder (2)" should not exist
 
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received

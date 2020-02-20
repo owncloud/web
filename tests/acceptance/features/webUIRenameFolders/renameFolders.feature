@@ -87,7 +87,7 @@ Feature: rename folders
 
   Scenario Outline: Rename a folder using forbidden characters
     When the user renames folder <from_name> to <to_name> using the webUI
-    Then the error message '<alert_message>' should be displayed on the webUI
+    Then the error message with header '<alert_message>' should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
     Examples:
       | from_name       | to_name           | alert_message                                             |
@@ -109,7 +109,7 @@ Feature: rename folders
 
   Scenario: Rename a folder to .part
     When the user renames folder "simple-folder" to "simple.part" using the webUI
-    Then the error message 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
+    Then the error message with header 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
 
   Scenario: User tries to rename a folder that used to exist but does not anymore
     Given the user has browsed to the files page
@@ -117,7 +117,7 @@ Feature: rename folders
       | name          |
       | simple-folder |
     When the user renames file "simple-folder" to "new-simple-folder" using the webUI
-    Then the error message 'Error while renaming "simple-folder" to "new-simple-folder"' should be displayed on the webUI
+    Then the error message with header 'Error while renaming "simple-folder" to "new-simple-folder"' should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then folder "simple-folder" should not be listed on the webUI
     And folder "new-simple-folder" should not be listed on the webUI

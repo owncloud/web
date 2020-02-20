@@ -69,5 +69,5 @@ Feature: files and folders can be deleted from the trashbin
 
   Scenario: Clear trashbin
     When the user clears the trashbin
-    Then the success message "Trash bin was successfully emptied" should be displayed on the webUI
+    Then the success message with header "Trash bin was successfully emptied" should be displayed on the webUI
     And the trashbin should be empty on the webUI

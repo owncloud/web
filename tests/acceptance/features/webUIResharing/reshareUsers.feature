@@ -179,7 +179,7 @@ Feature: Resharing shared files with different permissions
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has logged in using the webUI
     When the user shares folder "simple-folder (2)" with user "User Three" as "Advanced permissions" with permissions "share, delete, update" using the webUI
-    Then the error message "Error while sharing." should be displayed on the webUI
+    Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "user3" folder "simple-folder (2)" should not exist
 
   Scenario: Reshare a file and folder from shared with me page

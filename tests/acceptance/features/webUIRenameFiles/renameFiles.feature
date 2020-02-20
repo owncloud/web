@@ -97,7 +97,7 @@ Feature: rename files
 
   Scenario Outline: Rename a file using forbidden characters
     When the user renames file "data.zip" to "<filename>" using the webUI
-    Then the error message 'Error while renaming "data.zip" to "<filename>"' should be displayed on the webUI
+    Then the error message with header 'Error while renaming "data.zip" to "<filename>"' should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
     And file "<filename>" should not be listed on the webUI
     Examples:
@@ -143,7 +143,7 @@ Feature: rename files
 
   Scenario: Rename a file to .part
     When the user renames file "data.zip" to "data.part" using the webUI
-    Then the error message 'Error while renaming "data.zip" to "data.part"' should be displayed on the webUI
+    Then the error message with header 'Error while renaming "data.zip" to "data.part"' should be displayed on the webUI
 
   Scenario: rename a file on a public share
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
@@ -210,7 +210,7 @@ Feature: rename files
       | name          |
       | lorem.txt     |
     When the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
-    Then the error message 'Error while renaming "lorem.txt" to "new-lorem.txt"' should be displayed on the webUI
+    Then the error message with header 'Error while renaming "lorem.txt" to "new-lorem.txt"' should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And file "new-lorem.txt" should not be listed on the webUI

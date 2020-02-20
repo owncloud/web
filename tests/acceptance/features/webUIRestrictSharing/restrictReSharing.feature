@@ -27,7 +27,7 @@ Feature: restrict resharing
     When the user browses to the shared-with-me page
 #    Then the user should not be able to share folder "simple-folder (2)" using the webUI
     And the user shares folder "simple-folder (2)" with user "User Three" as "Editor" using the webUI
-    Then the error message "Error while sharing." should be displayed on the webUI
+    Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "user3" folder "simple-folder (2)" should not exist
     When the user browses to the favorites page
     Then the user should not be able to share folder "simple-folder (2)" using the webUI
