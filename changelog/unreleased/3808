@@ -1,0 +1,6 @@
+Enhancement: Current user entry in collaborators list in sidebar
+
+We've added a new entry into the collaborators list in sidebar which contains current user.
+
+https://github.com/owncloud/phoenix/issues/3808
+https://github.com/owncloud/phoenix/pull/3060

@@ -31,6 +31,13 @@
           <div class="oc-text">
             <span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.displayName }}</span>
             <span v-if="$_shareType === shareTypes.user && collaborator.info.share_with_additional_info.length > 0" class="uk-text-meta files-collaborators-collaborator-additional-info">({{ collaborator.info.share_with_additional_info }})</span>
+            <translate
+              v-if="collaborator.name === user.id"
+              translate-comment="Indicator for current user in collaborators list"
+              class="uk-text-meta files-collaborators-collaborator-additional-info"
+            >
+              (me)
+            </translate>
           </div>
           <span class="oc-text"><span class="files-collaborators-collaborator-role">{{ originalRole.label }}</span><template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></span>
           <span class="uk-text-meta files-collaborators-collaborator-share-type" v-text="$_ocCollaborators_collaboratorType(collaborator.info.share_type)" />

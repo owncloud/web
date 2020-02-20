@@ -514,7 +514,7 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for folder "simple-folder (2)" using the webUI
     Then user "User One" should be listed as "Owner" in the collaborators list on the webUI
     And user "User Two" should be listed as "Resharer" in the collaborators list on the webUI
-    And the current collaborators list should have order "User One,User Two"
+    And the current collaborators list should have order "User One,User Two,User Three"
 
   @issue-2898
   Scenario: see resource owner of parent shares in collaborators list
@@ -526,7 +526,7 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
     Then user "User One" should be listed as "Owner" via "simple-folder (2)" in the collaborators list on the webUI
     And user "User Two" should be listed as "Resharer" via "simple-folder (2)" in the collaborators list on the webUI
-    And the current collaborators list should have order "User One,User Two"
+    And the current collaborators list should have order "User One,User Two,User Three"
 
   @issue-2898
   Scenario: see resource owner for direct shares in "shared with me"
@@ -563,3 +563,22 @@ Feature: Sharing files and folders with internal users
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "User Two" should be listed without additional info in the collaborators list on the webUI
 
+  Scenario: collaborators list contains the current user when they are an owner
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    When user "user1" has logged in using the webUI
+    And the user opens the share dialog for folder "simple-folder" using the webUI
+    Then user "User One" should be listed with additional info "(me)" in the collaborators list on the webUI
+
+  Scenario: collaborators list contains the current user when they are a receiver of the resource
+    Given user "user1" has shared folder "simple-folder" with user "user2"
+    When user "user2" has logged in using the webUI
+    And the user opens the share dialog for folder "simple-folder (2)" using the webUI
+    Then user "User Two" should be listed with additional info "(me)" in the collaborators list on the webUI
+
+  Scenario: current user should see the highest role in their entry in collaborators list
+    Given group "grp1" has been created
+    And user "user2" has been added to group "grp1"
+    And user "user1" has shared folder "simple-folder" with user "user2" with "read" permission
+    And user "user1" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
+    When user "user2" has logged in using the webUI
+    Then user "User Two" should be listed as "Editor" in the collaborators list for folder "simple-folder (2)" on the webUI

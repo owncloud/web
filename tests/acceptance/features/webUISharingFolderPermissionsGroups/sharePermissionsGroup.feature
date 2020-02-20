@@ -48,8 +48,7 @@ Feature: Sharing folders with internal groups with different roles and permissio
     | file_target | /simple-folder (2)   |
     | item_type   | folder               |
     | permissions | <actual-permissions> |
-    But user "User One" should not be listed in the collaborators list on the webUI
-    And group "grp1" should not be listed in the collaborators list on the webUI
+    But group "grp1" should not be listed in the collaborators list on the webUI
     And as "user1" folder "simple-folder (2)" should not exist
     Examples:
     | role                 | displayed-role          | extra-permissions             | displayed-permissions | actual-permissions           |

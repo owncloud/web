@@ -22,7 +22,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares folder "simple-folder" with user "User Two" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with user "User One" as "Viewer" using the webUI
-    Then the current collaborators list should have order "grp1,grp11,User One,User Two"
+    Then the current collaborators list should have order "User Three,grp1,grp11,User One,User Two"
 
   Scenario Outline: share a file & folder with another internal user
     Given user "user3" has logged in using the webUI
@@ -338,4 +338,4 @@ Feature: Sharing files and folders with internal groups
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
     Then user "User One" should be listed as "Owner" via "simple-folder (2)" in the collaborators list on the webUI
     And user "User Two" should be listed as "Resharer" via "simple-folder (2)" in the collaborators list on the webUI
-    And the current collaborators list should have order "User One,User Two"
+    And the current collaborators list should have order "User One,User Two,User Three"

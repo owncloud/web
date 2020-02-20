@@ -147,7 +147,7 @@ Feature: Resharing shared files with different permissions
     When the user shares folder "simple-folder (2)" with user "User Three" as "Advanced permissions" with permissions "share, delete" using the webUI
     And the user re-logs in as "user3" using the webUI
     And the user opens the share dialog for folder "simple-folder (2)" using the webUI
-    Then the current collaborators list should have order "User Two,User One"
+    Then the current collaborators list should have order "User Two,User One,User Three"
     And user "User Two" should be listed as "Owner" in the collaborators list on the webUI
     And user "User One" should be listed as "Resharer" in the collaborators list on the webUI
     And user "user3" should have received a share with these details:
