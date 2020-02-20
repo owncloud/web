@@ -288,16 +288,6 @@ module.exports = {
         .waitForElementVisible('@restorePreviousVersion')
         .click('@restorePreviousVersion')
         .waitForOutstandingAjaxCalls()
-    },
-    getAllListedResources: async function () {
-      const allFileRows = await this.api.page.FilesPageElement.filesList().getListedFilesFolders()
-      const allFilesListed = []
-      for (const elemId of allFileRows.value) {
-        await this.api.elementIdText(elemId.ELEMENT, function (result) {
-          allFilesListed.push(result.value)
-        })
-      }
-      return allFilesListed
     }
   },
   elements: {
