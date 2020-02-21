@@ -15,13 +15,11 @@
         />
         <section>
           <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
-            <template v-if="$_ownerAndResharers.length > 0">
-              <li v-for="collaborator in $_ownerAndResharers" :key="collaborator.key">
-                <collaborator :collaborator="collaborator"/>
-              </li>
-            </template>
+            <li  v-if="$_ownerAsCollaborator" :key="$_ownerAsCollaborator.key">
+              <collaborator :collaborator="$_ownerAsCollaborator"/>
+            </li>
             <li>
-              <collaborator :collaborator="currentUserAsCollaborator"/>
+              <collaborator :collaborator="$_currentUserAsCollaborator"/>
             </li>
           </ul>
           <hr class="uk-margin-small-top uk-margin-small-bottom" v-if="$_directOutgoingShares.length > 0 || $_indirectOutgoingShares.length > 0" />
@@ -131,7 +129,7 @@ export default {
       return this.currentFileOutgoingSharesLoading && this.incomingSharesLoading
     },
 
-    currentUserAsCollaborator () {
+    $_currentUserAsCollaborator () {
       const permissions = this.currentUsersPermissions
       const isFolder = this.highlightedFile.type === 'folder'
       let role = { name: '' }
@@ -153,58 +151,40 @@ export default {
       }
     },
 
-    $_ownerAndResharers () {
-      const ownerArray = this.$_shareOwnerAsCollaborator ? [this.$_shareOwnerAsCollaborator] : []
-      return [
-        ...ownerArray,
-        ...this.$_resharersAsCollaborators
-      ]
-    },
-    $_shareOwnerAsCollaborator () {
+    $_ownerAsCollaborator () {
       if (!this.$_allIncomingShares.length) {
         return null
       }
 
-      const firstShare = this.$_allIncomingShares[0]
-      return {
-        ...firstShare,
-        name: firstShare.info.uid_file_owner,
-        displayName: firstShare.info.displayname_file_owner,
-        key: 'owner-' + firstShare.info.id,
-        info: {
-          path: firstShare.info.path,
-          // set to user share for displaying user
-          share_type: '' + shareTypes.user, // most code requires string..
-          share_with_additional_info: firstShare.info.additional_info_file_owner || []
-        },
-        role: this.ownerRole
-      }
-    },
+      const ownerAsCollaborator = this.$_allIncomingShares[0]
 
-    $_resharersAsCollaborators () {
-      const resharers = new Map()
-      const owner = this.$_shareOwnerAsCollaborator
-
+      let resharers = new Map()
       this.$_allIncomingShares.forEach(share => {
-        if (share.info.uid_owner !== owner.name) {
+        if (share.info.uid_owner !== ownerAsCollaborator.info.uid_owner) {
           resharers.set(share.info.uid_owner, {
-            ...share,
             name: share.info.uid_owner,
-            displayName: share.info.displayname_owner,
-            role: this.resharerRole,
-            key: 'resharer-' + share.info.id,
-            info: {
-              path: share.info.path,
-              // set to user share for displaying user
-              share_type: '' + shareTypes.user, // most code requires string..
-              share_with_additional_info: share.info.additional_info_owner || []
-            }
+            displayName: share.info.displayname_owner
           })
         }
       })
 
       // make them unique then sort
-      return Array.from(resharers.values()).sort(this.$_collaboratorsComparator.bind(this))
+      resharers = Array.from(resharers.values()).sort(this.$_collaboratorsComparator.bind(this))
+
+      return {
+        ...ownerAsCollaborator,
+        name: ownerAsCollaborator.info.uid_file_owner,
+        displayName: ownerAsCollaborator.info.displayname_file_owner,
+        key: 'owner-' + ownerAsCollaborator.info.id,
+        info: {
+          path: ownerAsCollaborator.info.path,
+          // set to user share for displaying user
+          share_type: shareTypes.user,
+          share_with_additional_info: ownerAsCollaborator.info.additional_info_file_owner || []
+        },
+        role: this.ownerRole,
+        resharers: resharers
+      }
     },
 
     /**

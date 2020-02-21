@@ -1,0 +1,10 @@
+Bugfix: Moved resharers to the top of owner collaborator entry
+
+For received shares, the resharers user display names are now shown
+on top of the owner entry in the collaborators list, with a reshare
+icon, instead of having their own entry in the collaborators list.
+
+This makes the reshare situation more clear and removes the ambiguity
+about the formerly displayed "resharer" role which doesn't exist.
+
+https://github.com/owncloud/phoenix/issues/3850

@@ -4,7 +4,7 @@
       <oc-table-cell shrink :colspan="firstColumn ? 2 : 1"></oc-table-cell>
       <oc-table-cell colspan="2">
         <div class="uk-text-meta uk-flex uk-flex-middle">
-          <oc-icon name="repeat" class="uk-preserve-width" />
+          <oc-icon name="repeat" class="uk-preserve-width oc-icon-xsmall" />
           <span class="uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-reshare-information">{{ $_reshareInformation }}</span>
         </div>
       </oc-table-cell>
@@ -19,9 +19,9 @@
       </oc-table-cell>
       <oc-table-cell shrink>
         <div key="collaborator-avatar-loaded">
-          <avatar-image v-if="$_shareType === shareTypes.user" class="uk-margin-small-right" :width="48" :userid="collaborator.name" :userName="collaborator.displayName" />
+          <avatar-image v-if="collaborator.shareType === shareTypes.user" class="uk-margin-small-right" :width="48" :userid="collaborator.name" :userName="collaborator.displayName" />
           <div v-else key="collaborator-avatar-placeholder">
-            <oc-icon v-if="$_shareType === shareTypes.group" class="uk-margin-small-right" name="group" size="large" key="avatar-group" />
+            <oc-icon v-if="collaborator.shareType === shareTypes.group" class="uk-margin-small-right" name="group" size="large" key="avatar-group" />
             <oc-icon v-else class="uk-margin-small-right" name="person" size="large" key="avatar-generic-person" />
           </div>
         </div>
@@ -30,7 +30,7 @@
         <div class="uk-flex uk-flex-column uk-flex-center">
           <div class="oc-text">
             <span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.displayName }}</span>
-            <span v-if="$_shareType === shareTypes.user && collaborator.info.share_with_additional_info.length > 0" class="uk-text-meta files-collaborators-collaborator-additional-info">({{ collaborator.info.share_with_additional_info }})</span>
+            <span v-if="collaborator.shareType === shareTypes.user && collaborator.info.share_with_additional_info.length > 0" class="uk-text-meta files-collaborators-collaborator-additional-info">({{ collaborator.info.share_with_additional_info }})</span>
             <translate
               v-if="collaborator.name === user.id"
               translate-comment="Indicator for current user in collaborators list"
@@ -116,15 +116,18 @@ export default {
     },
 
     $_reshareInformation () {
-      if (this.collaborator.role.name === 'owner' || this.collaborator.role.name === 'resharer' || this.user.id === this.collaborator.info.uid_owner) {
+      if (this.user.id === this.collaborator.info.uid_owner) {
+        return null
+      }
+
+      if (this.collaborator.role.name === 'owner') {
+        if (this.collaborator.resharers) {
+          return this.collaborator.resharers.map(share => share.displayName).join(', ')
+        }
         return null
       }
 
       return this.collaborator.info.displayname_owner
-    },
-
-    $_shareType () {
-      return parseInt(this.collaborator.info.share_type, 10)
     },
 
     $_viaLabel () {
