@@ -12,6 +12,7 @@ Summary
 * Bugfix - Fix accessible labels that said $gettext: [#3039](https://github.com/owncloud/phoenix/pull/3039)
 * Bugfix - Fix console warning about search query in public page: [#3041](https://github.com/owncloud/phoenix/pull/3041)
 * Enhancement - Display decimals in resource size column only for MBs or higher: [#2986](https://github.com/owncloud/phoenix/issues/2986)
+* Enhancement - Different message in overwrite dialog when versioning is enabled: [#3047](https://github.com/owncloud/phoenix/issues/3047)
 * Enhancement - Current user entry in collaborators list in sidebar: [#3808](https://github.com/owncloud/phoenix/issues/3808)
 
 Details
@@ -46,6 +47,15 @@ Details
 
    https://github.com/owncloud/phoenix/issues/2986
    https://github.com/owncloud/phoenix/pull/3051
+
+* Enhancement - Different message in overwrite dialog when versioning is enabled: [#3047](https://github.com/owncloud/phoenix/issues/3047)
+
+   We've added a new message in the overwrite dialog when versioning is enabled. This message is
+   intended to make it clear that the resource won't be overwritten but a new version of it will be
+   created.
+
+   https://github.com/owncloud/phoenix/issues/3047
+   https://github.com/owncloud/phoenix/pull/3050
 
 * Enhancement - Current user entry in collaborators list in sidebar: [#3808](https://github.com/owncloud/phoenix/issues/3808)
 
