@@ -67,29 +67,6 @@ module.exports = {
         .useCss()
     },
     /**
-     * Checks whether a given action is disabled for a given file name.
-     * This method does find out itself if the file-action burger has to be clicked or not.
-     *
-     * @param {string} fileName
-     * @param {string} delete|share|rename
-     * @param {function(boolean)} callback - whether the action is disabled
-     * @returns {*}
-     */
-    isActionDisabled: function (fileName, action, callback) {
-      const { btnSelector, fileActionsBtnSelector } =
-        this.getFileRowButtonSelectorsByFileName(fileName, action)
-
-      return this
-        .useXpath()
-        .click(fileActionsBtnSelector)
-        .waitForElementVisible(btnSelector)
-        .getAttribute(btnSelector, 'disabled', (disabledResult) => {
-          const isDisabled = disabledResult.value === 'true'
-          callback(isDisabled)
-        })
-        .useCss()
-    },
-    /**
      *
      * @param {string} fileName
      */
@@ -581,19 +558,6 @@ module.exports = {
         })
       }
       return visible
-    },
-    getListedFilesFolders: function () {
-      this
-        .waitForElementNotPresent('@filesListProgressBar')
-        .waitForElementVisible({
-          selector: '@allFiles',
-          abortOnFailure: false
-        })
-      return new Promise((resolve, reject) => {
-        this.api.elements('@allFiles', function (result) {
-          resolve(result)
-        })
-      })
     },
     copyPrivateLink: function () {
       const appSideBar = this.api.page.FilesPageElement.appSideBar()
