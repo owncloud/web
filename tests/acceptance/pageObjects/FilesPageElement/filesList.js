@@ -3,83 +3,121 @@ const path = require('path')
 const xpathHelper = require('../../helpers/xpath')
 const { join } = require('../../helpers/path')
 
-/**
- * @enum {string}
- * @readonly
- */
-const FileAction = Object.freeze({
-  download: 'download',
-  delete: 'delete',
-  restore: 'restore',
-  share: 'share',
-  rename: 'rename',
-  deleteImmediately: 'deleteImmediately'
-})
 module.exports = {
   commands: {
     /**
-     * Action button selector
-     *
-     * @param {string} action
-     * @param {string} fileName
-     * @returns {string}
-     */
-    getActionSelector: function (action) {
-      const actionsDropdownSelector = this.elements.itemActionsDropdown.selector
-      const actionSelector = this.elements[action + 'ButtonInFileRow'].selector
-
-      return `${actionsDropdownSelector}${actionSelector}`
-    },
-    /**
      * Get Selector for File Actions expander
      *
-     * @param fileName
-     * @returns {string}
+     * @param {string} fileName
+     * @param {string} elementType
+     * @returns {string} file action button selector
      */
     getFileActionBtnSelector: function (fileName, elementType = 'file') {
       return this.getFileRowSelectorByFileName(fileName, elementType) +
-        this.elements.fileActionsButtonInFileRow.selector
+        this.api.page.FilesPageElement.fileActionsMenu().elements
+          .fileActionsButtonInFileRow.selector
     },
     /**
-     * perform one of the main file actions
-     * this method does find out itself if the file-action burger has to be clicked or not
-     *
      * @param {string} fileName
-     * @param {string} action delete|share|rename|download
-
-     * @throws Error
-     * @returns {*}
+     * @return {Promise<*>}
      */
-    performFileAction: function (fileName, action, elementType = 'file') {
-      const { btnSelector, fileActionsBtnSelector } =
-        this.getFileRowButtonSelectorsByFileName(fileName, action, elementType)
-      return this.initAjaxCounters()
-        .useXpath()
-        .waitForElementVisible(fileActionsBtnSelector, (result) => {
-          if (!result.value) {
-            throw new Error('Expected: File action button to be visible but found:' +
-              result.value.toString())
-          }
-        })
-        .click(fileActionsBtnSelector)
-        .waitForElementVisible(btnSelector)
-        .click(btnSelector)
-        .useCss()
-    },
-    /**
-     *
-     * @param {string} fileName
-     */
-    deleteFile: async function (fileName) {
+    openSharingDialog: async function (fileName) {
       await this.waitForFileVisible(fileName)
-
+      return this.openFileActionsMenu(fileName)
+        .openCollaboratorsDialog()
+    },
+    /**
+     * @param {string} fileName
+     * @return {Promise<*>}
+     */
+    openPublicLinksDialog: async function (fileName) {
+      await this.waitForFileVisible(fileName)
+      return this.openFileActionsMenu(fileName)
+        .openLinksDialog()
+    },
+    /**
+     * @param {string} resource
+     * @return {Promise<module.exports.commands>}
+     */
+    deleteFile: async function (resource) {
+      await this.waitForFileVisible(resource)
       await this
-        .useXpath()
-        .performFileAction(fileName, FileAction.delete)
-        .confirmDeletion()
-
+        .openFileActionsMenu(resource)
+        .delete()
       return this
     },
+    /**
+     * @param {string} fromName
+     * @param {string} toName
+     * @param {boolean} expectToSucceed
+     * @return {Promise<module.exports.commands>}
+     */
+    renameFile: async function (fromName, toName, expectToSucceed = true) {
+      await this.waitForFileVisible(fromName)
+      await this
+        .openFileActionsMenu(fromName)
+        .rename(toName, expectToSucceed)
+      return this
+    },
+    /**
+     * @param {string} element
+     * @param {string} elementType
+     * @return {Promise<module.exports.commands>}
+     */
+    restoreFile: async function (element, elementType) {
+      await this.waitForFileWithPathVisible(element, elementType)
+      await this
+        .openFileActionsMenu(element, elementType)
+        .restore()
+      return this
+    },
+    /**
+     * @param {string} resource
+     * @return {Promise<module.exports.commands>}
+     */
+    deleteImmediately: async function (resource) {
+      await this.waitForFileVisible(resource)
+      await this
+        .openFileActionsMenu(resource)
+        .deleteResourceImmediately(resource)
+      return this
+    },
+    /**
+     * @param {string} action
+     * @param {string} resource
+     * @return {Promise<boolean>}
+     */
+    isActionAttributeDisabled: async function (action, resource) {
+      await this.waitForFileVisible(resource)
+      return this
+        .openFileActionsMenu(resource)
+        .getActionDisabledAttr('delete')
+    },
+    /**
+     * @param {string} resource
+     * @return {Promise<module.exports.commands>}
+     */
+    downloadFile: async function (resource) {
+      await this.waitForFileVisible(resource)
+      await this
+        .openFileActionsMenu(resource)
+        .download()
+      return this
+    },
+    /**
+     * @param {string} resource
+     * @return {Promise<module.exports.commands>}
+     */
+    isSharingButtonPresent: async function (resource) {
+      await this.waitForFileVisible(resource)
+      await this
+        .openFileActionsMenu(resource)
+        .isSharingBtnPresent()
+      return this
+    },
+    /**
+     * @return {Promise<*>}
+     */
     confirmDeletion: async function () {
       const clickAction = function () {
         return this.initAjaxCounters()
@@ -140,21 +178,6 @@ module.exports = {
     },
     /**
      *
-     * @param {string} fileName
-     * @param {string} elementType
-     * @returns {Promise<void>}
-     */
-    restoreFile: async function (fileName, elementType = 'file') {
-      await this
-        .initAjaxCounters()
-        .waitForFileWithPathVisible(fileName, elementType)
-        .useXpath()
-        .performFileAction(fileName, FileAction.restore, elementType)
-        .waitForOutstandingAjaxCalls()
-        .useCss()
-    },
-    /**
-     *
      * @param {string} folder
      */
     navigateToFolder: async function (folder) {
@@ -168,31 +191,6 @@ module.exports = {
 
       return this
     },
-
-    /**
-     *
-     * @param {string} fileName
-     */
-    openSharingDialog: async function (fileName, targetTab = 'collaborators') {
-      const sidebarLinksTabXpath = this.api.page.FilesPageElement.appSideBar().elements.sidebarLinksTab.selector
-      await this.waitForFileVisible(fileName)
-
-      await this
-        .useXpath()
-        .performFileAction(fileName, FileAction.share)
-        .waitForElementVisible('@sharingSideBar')
-        .useCss()
-
-      if (targetTab === 'links') {
-        await this
-          .useXpath()
-          .waitForElementVisible(sidebarLinksTabXpath)
-          .click(sidebarLinksTabXpath)
-          .useCss()
-      }
-
-      return this.api.page.FilesPageElement.sharingDialog()
-    },
     /**
      * opens sidebar for given resource
      *
@@ -204,59 +202,21 @@ module.exports = {
       return this.api.page.FilesPageElement.appSideBar()
     },
     /**
+     * @param {string} resource name
+     * @param {string} resource type (file|folder)
      *
-     * @param {string} fileName
+     * @return
      */
-    openPublicLinkDialog: async function (fileName) {
-      await this.waitForFileVisible(fileName)
-
-      await this
+    openFileActionsMenu: function (resource, elementType = 'file') {
+      const fileActionsBtnSelector = this.getFileActionBtnSelector(resource, elementType)
+      this
         .useXpath()
-        .performFileAction(fileName, FileAction.share)
-        .waitForElementVisible('@linkToPublicLinksTag')
-        .click('@linkToPublicLinksTag')
-        .waitForElementVisible('@publicLinkSideBar')
+        .waitForElementVisible(fileActionsBtnSelector)
+        .click(fileActionsBtnSelector)
         .useCss()
-
-      return this.api.page.FilesPageElement.publicLinksDialog()
+      return this.api.page.FilesPageElement.fileActionsMenu()
     },
-    /**
-     *
-     * @param {string} fromName
-     * @param {string} toName
-     * @param {boolean} expectToSucceed
-     */
-    renameFile: async function (fromName, toName, expectToSucceed = true) {
-      await this.waitForFileVisible(fromName)
 
-      await this.initAjaxCounters()
-        .useXpath()
-        .performFileAction(fromName, FileAction.rename)
-        .waitForElementVisible('@renameFileConfirmationBtn')
-        .waitForAnimationToFinish()
-        .clearValue('@renameFileInputField')
-        .setValue('@renameFileInputField', toName)
-        .click('@renameFileConfirmationBtn')
-        .waitForOutstandingAjaxCalls()
-        .useCss()
-
-      if (expectToSucceed) {
-        await this.waitForElementNotVisible('@renameFileConfirmationDialog')
-      }
-
-      return this
-    },
-    /**
-     *
-     * @param {string} fromName
-     */
-    downloadFile: async function (fromName) {
-      await this.waitForFileVisible(fromName)
-
-      await this.initAjaxCounters()
-        .performFileAction(fromName, FileAction.download)
-        .waitForOutstandingAjaxCalls()
-    },
     /**
      *
      * @param {string} path
@@ -371,18 +331,28 @@ module.exports = {
      */
     waitForFileVisible: async function (fileName, elementType = 'file') {
       const linkSelector = this.getFileLinkSelectorByFileName(fileName, elementType)
-
-      await this.waitForElementPresent('@filesTableContainer')
-      await this.filesListScrollToTop()
-      await this.findItemInFilesList(fileName)
-
-      // Find the item in files list if it's not in the view
       await this
+        .waitForElementPresent('@filesTableContainer')
+        // Find the item in files list if it's not in the view
+        .filesListScrollToTop()
+      await this.findItemInFilesList(fileName)
+      await this
+        .waitForAnimationToFinish()
         .useXpath()
-        .getAttribute(linkSelector, 'filename', function (result) {
-          if (result.value.error) {
-            this.assert.fail(result.value.error)
-          }
+        .api.execute((selector) => {
+          let result
+          do {
+            const el = document.evaluate(
+              selector,
+              document,
+              null,
+              XPathResult.FIRST_ORDERED_NODE_TYPE,
+              null
+            ).singleNodeValue
+            result = el.getAttribute('filename')
+          } while (result.value === 0)
+          return result
+        }, [linkSelector], (result) => {
           this.assert.strictEqual(result.value, fileName, 'displayed file name not as expected')
         })
         .useCss()
@@ -406,19 +376,6 @@ module.exports = {
           this.assert.strictEqual(result.value.trim(), path, 'displayed file name not as expected')
         })
         .useCss()
-    },
-    /**
-     *
-     * @param {string} fileName
-     * @param {string} action
-     * @param {string} elementType
-     * @returns {{btnSelector: string, fileActionsBtnSelector: string}}
-     */
-    getFileRowButtonSelectorsByFileName: function (fileName, action, elementType = 'file') {
-      const btnSelector = this.getActionSelector(action)
-      const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName, elementType)
-
-      return { btnSelector, fileActionsBtnSelector }
     },
     /**
      *
@@ -481,51 +438,6 @@ module.exports = {
       return isListed
     },
     /**
-     * checks whether sharing button of given file-row is present
-     *
-     * @param {string} fileName
-     * @returns {Promise<boolean>}
-     */
-    isSharingBtnPresent: async function (fileName) {
-      const resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
-      const shareButtonXpath = this.elements.shareButtonInFileRow.selector
-      const resourceShareButtonXpath = resourceRowXpath + shareButtonXpath
-      let isPresent = true
-      await this
-        .api.page.FilesPageElement.appSideBar().closeSidebar(100)
-      await this
-        .api.elements(
-          this.elements.shareButtonInFileRow.locateStrategy,
-          resourceShareButtonXpath,
-          (result) => {
-            isPresent = result.value.length > 0
-          })
-      return isPresent
-    },
-    /**
-     * returns the disabled state of given action
-     *
-     * @param {string} action
-     * @param {string} fileName
-     * @returns {Promise<boolean>}
-     */
-    getActionDisabledAttr: async function (action, fileName) {
-      const btnSelector = this.getActionSelector(action, fileName)
-      const fileActionsBtnSelector = this.getFileActionBtnSelector(fileName)
-      let disabledState
-      await this
-        .useXpath()
-        .click(fileActionsBtnSelector)
-      await this.api
-        .element('xpath', btnSelector, result => {
-          // action is disabled when not visible in dropdown menu
-          disabledState = result.status === -1
-        })
-        .useCss()
-
-      return disabledState
-    },
-    /**
      * @returns {Array} array of files/folders element
      */
     allFileRows: async function () {
@@ -560,13 +472,6 @@ module.exports = {
         })
       }
       return visible
-    },
-    deleteImmediately: async function (fileName) {
-      await this.waitForFileVisible(fileName)
-      await this
-        .performFileAction(fileName, FileAction.deleteImmediately)
-        .confirmDeletion()
-      return this
     },
     countFilesAndFolders: async function () {
       let filesCount = 0
@@ -785,29 +690,9 @@ module.exports = {
     filesListNoContentMessage: {
       selector: '#files-list-container .files-list-no-content-message'
     },
-    fileActionsButtonInFileRow: {
-      selector: '//button[contains(@class, "files-list-row-show-actions")]',
-      locateStrategy: 'xpath'
-    },
     deleteFileConfirmationDialog: {
       selector: '#delete-file-confirmation-dialog',
       locateStrategy: 'css selector'
-    },
-    deleteButtonInFileRow: {
-      selector: '//button[@aria-label="Delete"]',
-      locateStrategy: 'xpath'
-    },
-    downloadButtonInFileRow: {
-      selector: '//button[@aria-label="Download"]',
-      locateStrategy: 'xpath'
-    },
-    restoreButtonInFileRow: {
-      selector: '//button[@aria-label="Restore"]',
-      locateStrategy: 'xpath'
-    },
-    deleteImmediatelyButtonInFileRow: {
-      selector: '//button[@aria-label="Delete"]',
-      locateStrategy: 'xpath'
     },
     deleteFileConfirmationBtn: {
       selector: '#oc-dialog-delete-confirm'
@@ -816,20 +701,6 @@ module.exports = {
       selector: '//button[@aria-label="Collaborators"]',
       locateStrategy: 'xpath'
     },
-    renameFileConfirmationDialog: {
-      selector: '#change-file-dialog'
-    },
-    renameButtonInFileRow: {
-      selector: '//button[@aria-label="Rename"]',
-      locateStrategy: 'xpath'
-    },
-    renameFileInputField: {
-      selector: '//div[@id="change-file-dialog"]//input',
-      locateStrategy: 'xpath'
-    },
-    renameFileConfirmationBtn: {
-      selector: '#oc-dialog-rename-confirm'
-    },
     fileRowByName: {
       selector: '//span[@class="oc-file-name"][text()=%s and not(../span[@class="oc-file-extension"])]/../../../../../div[@data-is-visible="true"]'
     },
@@ -837,7 +708,7 @@ module.exports = {
       selector: '//span[span/text()=%s and span/text()="%s"]/../../../../div[@data-is-visible="true"]'
     },
     fileLinkInFileRow: {
-      selector: '//span[contains(@class, "file-row-name")]'
+      selector: '//span[@role="button"]'
     },
     notMarkedFavoriteInFileRow: {
       selector: '//span[contains(@class, "oc-star-dimm")]',
@@ -854,9 +725,6 @@ module.exports = {
     shareIndicatorsInFileRow: {
       selector: '//*[contains(@class, "file-row-share-indicator")]',
       locateStrategy: 'xpath'
-    },
-    sharingSideBar: {
-      selector: '#oc-files-sharing-sidebar'
     },
     publicLinkSideBar: {
       selector: '#oc-files-file-link'
@@ -878,10 +746,6 @@ module.exports = {
     },
     collaboratorsList: {
       selector: '.files-collaborators-lists'
-    },
-    itemActionsDropdown: {
-      selector: '//div[@id="files-list-row-actions-dropdown"]',
-      locateStrategy: 'xpath'
     },
     foldersCount: {
       selector: '#files-list-count-folders'

@@ -182,7 +182,7 @@ When('the user deletes the following elements using the webUI', async function (
     await client.page.FilesPageElement.filesList().deleteFile(line[0])
     deletedElements.push(line[0])
   }
-  return client.page.filesPage()
+  return client
 })
 
 Then('there should be no breadcrumb displayed on the webUI', function () {
@@ -312,6 +312,7 @@ When('the user renames the following file/folder using the webUI', async functio
         toName
       )
   }
+  return client
 })
 
 Given('the user has marked file/folder {string} as favorite using the webUI', function (path) {
@@ -815,14 +816,14 @@ When('the user deletes the file {string} from the deleted files list', function 
 Then('it should not be possible to delete file/folder {string} using the webUI', async function (resource) {
   const state = await client.page.FilesPageElement
     .filesList()
-    .getActionDisabledAttr('delete', resource)
+    .isActionAttributeDisabled('delete', resource)
   assert.ok(state, `expected property disabled of ${resource} to be 'true' but found ${state}`)
 })
 
 Then('it should not be possible to rename file/folder {string} using the webUI', async function (resource) {
   const state = await client.page.FilesPageElement
     .filesList()
-    .getActionDisabledAttr('rename', resource)
+    .isActionAttributeDisabled('rename', resource)
   assert.ok(state, `expected property disabled of ${resource} to be 'true' but found ${state}`)
 })
 
