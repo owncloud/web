@@ -401,6 +401,19 @@ Then('the versions list should contain {int} entries', async function (expectedN
   )
 })
 
+Then('the versions list for resource {string} should contain {int} entry/entries', async function (resourceName, expectedNumber) {
+  await client.page.FilesPageElement.filesList().getVersions(resourceName)
+  const count = await client.page.filesPage().getVersionsCount()
+
+  assert.strictEqual(
+    expectedNumber, count
+  )
+
+  client.page.FilesPageElement.filesList().closeSidebar(100)
+
+  return this
+})
+
 Then('the content of file {string} for user {string} should be {string}', async function (file, user, content) {
   const remote = await download(user, file)
   return client.assert.strictEqual(

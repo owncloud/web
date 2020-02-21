@@ -35,7 +35,7 @@ export default {
   }),
   computed: {
     ...mapGetters('Files', ['searchTerm', 'files', 'highlightedFile', 'publicLinkPassword']),
-    ...mapGetters(['getToken']),
+    ...mapGetters(['getToken', 'capabilities']),
 
     _sidebarOpen () {
       return this.highlightedFile !== null
@@ -157,7 +157,13 @@ export default {
           } else {
             const translated = this.$gettext('File %{file} already exists.')
             this.setOverwriteDialogTitle(this.$gettextInterpolate(translated, { file: item.name }, true))
-            this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
+
+            if (this.capabilities.files.versioning) {
+              this.setOverwriteDialogMessage(this.$gettext('Do you want to create a new version?'))
+            } else {
+              this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
+            }
+
             const overwrite = await this.$_ocUpload_confirmOverwrite()
             if (overwrite) {
               item.file(file => {
@@ -182,7 +188,13 @@ export default {
 
         const translated = this.$gettext('File %{file} already exists.')
         this.setOverwriteDialogTitle(this.$gettextInterpolate(translated, { file: files[i].name }, true))
-        this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
+
+        if (this.capabilities.files.versioning) {
+          this.setOverwriteDialogMessage(this.$gettext('Do you want to create a new version?'))
+        } else {
+          this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
+        }
+
         const overwrite = await this.$_ocUpload_confirmOverwrite()
         if (overwrite === true) {
           this.$_ocUpload(files[i], files[i].name, exists.etag)

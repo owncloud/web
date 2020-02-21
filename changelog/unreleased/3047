@@ -1,0 +1,7 @@
+Enhancement: Different message in overwrite dialog when versioning is enabled
+
+We've added a new message in the overwrite dialog when versioning is enabled.
+This message is intended to make it clear that the resource won't be overwritten but a new version of it will be created.
+
+https://github.com/owncloud/phoenix/issues/3047
+https://github.com/owncloud/phoenix/pull/3050
