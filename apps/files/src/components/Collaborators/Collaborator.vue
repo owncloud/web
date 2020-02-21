@@ -3,9 +3,35 @@
     <oc-table-row v-if="$_reshareInformation" class="files-collaborators-collaborator-table-row-top">
       <oc-table-cell shrink :colspan="firstColumn ? 2 : 1"></oc-table-cell>
       <oc-table-cell colspan="2">
-        <div class="uk-text-meta uk-flex uk-flex-middle">
-          <oc-icon name="repeat" class="uk-preserve-width oc-icon-xsmall" />
-          <span class="uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-reshare-information">{{ $_reshareInformation }}</span>
+        <div class="uk-text-meta">
+          <oc-button variation="raw" :id="$_resharerToggleId" :aria-label="$gettext('Show resharer details')">
+            <span class="uk-flex uk-flex-middle">
+              <oc-icon name="repeat" class="uk-preserve-width oc-icon-xsmall" />
+              <span class="uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-reshare-information">{{ $_reshareInformation }}</span>
+            </span>
+          </oc-button>
+          <oc-drop
+            :dropId="$_resharerToggleId + '-drop'"
+            :toggle="'#' + $_resharerToggleId"
+            mode="click"
+            :options="{pos:'bottom-left', delayHide: 0}"
+            class="uk-width-large uk-margin-small-top"
+            ref="menu"
+            closeOnClick
+          >
+            <translate tag="h4">Shared by:</translate>
+            <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
+              <li v-for="resharer in collaborator.resharers" :key="resharer.name">
+                <div class="uk-flex uk-flex-middle uk-flex-left">
+                  <avatar-image class="uk-margin-small-right" :width="48" :userid="resharer.name" :userName="resharer.displayName" />
+                  <div>
+                    <span class="files-collaborators-resharer-name uk-text-bold">{{ resharer.displayName }}</span>
+                    <span v-if="resharer.additionalInfo" class="uk-text-meta files-collaborators-resharer-additional-info">({{ resharer.additionalInfo }})</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </oc-drop>
         </div>
       </oc-table-cell>
     </oc-table-row>
@@ -19,7 +45,7 @@
       </oc-table-cell>
       <oc-table-cell shrink>
         <div key="collaborator-avatar-loaded">
-          <avatar-image v-if="collaborator.shareType === shareTypes.user" class="uk-margin-small-right" :width="48" :userid="collaborator.name" :userName="collaborator.displayName" />
+          <avatar-image v-if="collaborator.shareType === shareTypes.user" class="uk-margin-small-right" :width="48" :userid="collaborator.collaborator.name" :userName="collaborator.collaborator.displayName" />
           <div v-else key="collaborator-avatar-placeholder">
             <oc-icon v-if="collaborator.shareType === shareTypes.group" class="uk-margin-small-right" name="group" size="large" key="avatar-group" />
             <oc-icon v-else class="uk-margin-small-right" name="person" size="large" key="avatar-generic-person" />
@@ -29,10 +55,10 @@
       <oc-table-cell>
         <div class="uk-flex uk-flex-column uk-flex-center">
           <div class="oc-text">
-            <span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.displayName }}</span>
-            <span v-if="collaborator.shareType === shareTypes.user && collaborator.info.share_with_additional_info.length > 0" class="uk-text-meta files-collaborators-collaborator-additional-info">({{ collaborator.info.share_with_additional_info }})</span>
+            <span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.collaborator.displayName }}</span>
+            <span v-if="collaborator.shareType === shareTypes.user && collaborator.collaborator.additionalInfo" class="uk-text-meta files-collaborators-collaborator-additional-info">({{ collaborator.collaborator.additionalInfo }})</span>
             <translate
-              v-if="collaborator.name === user.id"
+              v-if="collaborator.collaborator.name === user.id"
               translate-comment="Indicator for current user in collaborators list"
               class="uk-text-meta files-collaborators-collaborator-additional-info"
             >
@@ -40,7 +66,7 @@
             </translate>
           </div>
           <span class="oc-text"><span class="files-collaborators-collaborator-role">{{ originalRole.label }}</span><template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></span>
-          <span class="uk-text-meta files-collaborators-collaborator-share-type" v-text="$_ocCollaborators_collaboratorType(collaborator.info.share_type)" />
+          <span class="uk-text-meta files-collaborators-collaborator-share-type" v-text="$_ocCollaborators_collaboratorType(collaborator.shareType)" />
         </div>
       </oc-table-cell>
       <oc-table-cell shrink>
@@ -98,6 +124,10 @@ export default {
   computed: {
     ...mapGetters(['user']),
 
+    $_resharerToggleId () {
+      return 'collaborator-' + this.collaborator.collaborator.name + '-resharer-details-toggle'
+    },
+
     $_loadingSpinnerVisible () {
       return this.modifiable && this.removalInProgress
     },
@@ -110,24 +140,16 @@ export default {
 
     $_isIndirectShare () {
       // it is assumed that the "incoming" attribute only exists
-      // on shares coming from this.sharesTree which are all indirect
+      // on shares coming from this.collaborator.sTree which are all indirect
       // and not related to the current folder
       return this.collaborator.incoming || this.collaborator.outgoing
     },
 
     $_reshareInformation () {
-      if (this.user.id === this.collaborator.info.uid_owner) {
+      if (!this.collaborator.resharers) {
         return null
       }
-
-      if (this.collaborator.role.name === 'owner') {
-        if (this.collaborator.resharers) {
-          return this.collaborator.resharers.map(share => share.displayName).join(', ')
-        }
-        return null
-      }
-
-      return this.collaborator.info.displayname_owner
+      return this.collaborator.resharers.map(share => share.displayName).join(', ')
     },
 
     $_viaLabel () {
@@ -135,11 +157,11 @@ export default {
         return null
       }
       const translated = this.$gettext('Via %{folderName}')
-      return this.$gettextInterpolate(translated, { folderName: basename(this.collaborator.info.path) }, true)
+      return this.$gettextInterpolate(translated, { folderName: basename(this.collaborator.path) }, true)
     },
 
     $_viaRouterParams () {
-      const viaPath = this.collaborator.info.path
+      const viaPath = this.collaborator.path
       return {
         name: 'files-list',
         params: {

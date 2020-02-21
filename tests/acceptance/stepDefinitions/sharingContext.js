@@ -167,7 +167,7 @@ const createPublicLink = function (sharer, data) {
  * @param {string} role
  * @returns {Promise}
  */
-const assertCollaboratorslistContains = function (type, name, role = null, via = null, resharedThrough = null, additionalInfo = null) {
+const assertCollaboratorslistContains = function (type, name, { role = null, via = null, resharedThrough = null, additionalInfo = null }) {
   if (type !== 'user' && type !== 'group' && type !== 'remote user') {
     throw new Error(`illegal type "${type}"`)
   }
@@ -724,28 +724,32 @@ When(
 )
 
 Then('user {string} should be listed as {string} in the collaborators list on the webUI', function (user, role) {
-  return assertCollaboratorslistContains('user', user, role)
+  return assertCollaboratorslistContains('user', user, { role })
 })
 
 Then('remote user {string} should be listed as {string} via {string} in the collaborators list on the webUI', function (user, role, via) {
   user = util.format('%s@%s', user, client.globals.remote_backend_url)
-  return assertCollaboratorslistContains('remote user', user, role, via)
+  return assertCollaboratorslistContains('remote user', user, { role, via })
 })
 
 Then('user {string} should be listed as {string} via {string} in the collaborators list on the webUI', function (user, role, via) {
-  return assertCollaboratorslistContains('user', user, role, via)
+  return assertCollaboratorslistContains('user', user, { role, via })
 })
 
 Then('user {string} should be listed as {string} reshared through {string} in the collaborators list on the webUI', function (user, role, resharedThrough) {
-  return assertCollaboratorslistContains('user', user, role, null, resharedThrough)
+  return assertCollaboratorslistContains('user', user, { role, resharedThrough })
+})
+
+Then('user {string} should be listed as {string} reshared through {string} via {string} in the collaborators list on the webUI', function (user, role, resharedThrough, via) {
+  return assertCollaboratorslistContains('user', user, { role, resharedThrough, via })
 })
 
 Then('user {string} should be listed with additional info {string} in the collaborators list on the webUI', function (user, additionalInfo) {
-  return assertCollaboratorslistContains('user', user, null, null, null, additionalInfo)
+  return assertCollaboratorslistContains('user', user, { additionalInfo })
 })
 
 Then('user {string} should be listed without additional info in the collaborators list on the webUI', function (user) {
-  return assertCollaboratorslistContains('user', user, null, null, null, false)
+  return assertCollaboratorslistContains('user', user, { additionalInfo: false })
 })
 
 Then('user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', async function (user, role, resource) {
@@ -755,15 +759,15 @@ Then('user {string} should be listed as {string} in the collaborators list for f
     .closeSidebar(100)
     .openSharingDialog(resource)
 
-  return assertCollaboratorslistContains('user', user, role)
+  return assertCollaboratorslistContains('user', user, { role })
 })
 
 Then('group {string} should be listed as {string} in the collaborators list on the webUI', function (group, role) {
-  return assertCollaboratorslistContains('group', group, role)
+  return assertCollaboratorslistContains('group', group, { role })
 })
 
 Then('group {string} should be listed as {string} via {string} in the collaborators list on the webUI', function (group, role, via) {
-  return assertCollaboratorslistContains('group', group, role, via)
+  return assertCollaboratorslistContains('group', group, { role, via })
 })
 
 Then('group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', async function (group, role, resource) {
@@ -773,7 +777,7 @@ Then('group {string} should be listed as {string} in the collaborators list for 
     .closeSidebar(100)
     .openSharingDialog(resource)
 
-  return assertCollaboratorslistContains('group', group, role)
+  return assertCollaboratorslistContains('group', group, { role })
 })
 
 Then('user {string} should not be listed in the collaborators list on the webUI', function (user) {

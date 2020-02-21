@@ -336,6 +336,5 @@ Feature: Sharing files and folders with internal groups
     And user "user3" has logged in using the webUI
     And the user opens folder "simple-folder (2)" using the webUI
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "User One" should be listed as "Owner" via "simple-folder (2)" in the collaborators list on the webUI
-    And user "User Two" should be listed as "Resharer" via "simple-folder (2)" in the collaborators list on the webUI
-    And the current collaborators list should have order "User One,User Two,User Three"
+    Then user "User One" should be listed as "Owner" reshared through "User Two" via "simple-folder (2)" in the collaborators list on the webUI
+    And the current collaborators list should have order "User One,User Three"
