@@ -544,26 +544,21 @@ When('the user shares file/folder/resource {string} with group {string} as {stri
 When('the user shares file/folder/resource {string} with remote user {string} as {string} using the webUI', userSharesFileOrFolderWithRemoteUser)
 
 Then('it should not be possible to share file/folder {string} using the webUI', async function (resource) {
-  const state = await client.page
-    .FilesPageElement
-    .filesList()
-    .isSharingBtnPresent(resource)
+  const appSideBar = client.page.FilesPageElement.appSideBar()
+  const filesList = client.page.FilesPageElement.filesList()
+  // assumes current webUI state as no sidebar open for any resource
+  const state = await filesList.isSharingBtnPresent(resource)
   assert.ok(
     !state,
     `Error: Sharing button for resource ${resource} is not in disabled state`
   )
-  const sidebarLinkTabState = await client.page
-    .FilesPageElement
-    .filesList()
-    .isSidebarLinksTabPresent(resource)
+  await filesList.openSideBar(resource)
+  const sidebarLinkTabState = await appSideBar.isLinksTabPresentOnCurrentSidebar()
   assert.ok(
     !sidebarLinkTabState,
     `Error: Sidebar 'Links' tab for resource ${resource} is present`
   )
-  const sidebarCollaboratorsTabState = await client.page
-    .FilesPageElement
-    .filesList()
-    .isSidebarCollaboratorsTabPresent(resource)
+  const sidebarCollaboratorsTabState = await appSideBar.isCollaboratorsTabPresentOnCurrentSidebar()
   assert.ok(
     !sidebarCollaboratorsTabState,
     `Error: Sidebar 'Collaborators' tab for resource ${resource} is present`

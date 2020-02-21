@@ -46,6 +46,8 @@ module.exports = {
      *
      * @param {string} fileName
      * @param {string} action delete|share|rename|download
+
+     * @throws Error
      * @returns {*}
      */
     performFileAction: function (fileName, action, elementType = 'file') {
@@ -53,7 +55,12 @@ module.exports = {
         this.getFileRowButtonSelectorsByFileName(fileName, action, elementType)
       return this.initAjaxCounters()
         .useXpath()
-        .waitForElementVisible(fileActionsBtnSelector)
+        .waitForElementVisible(fileActionsBtnSelector, (result) => {
+          if (!result.value) {
+            throw new Error('Expected: File action button to be visible but found:' +
+              result.value.toString())
+          }
+        })
         .click(fileActionsBtnSelector)
         .waitForElementVisible(btnSelector)
         .click(btnSelector)
@@ -190,6 +197,7 @@ module.exports = {
      * @param {string} fileName
      */
     openSharingDialog: async function (fileName, targetTab = 'collaborators') {
+      const sidebarLinksTabXpath = this.api.page.FilesPageElement.appSideBar().elements.sidebarLinksTab.selector
       await this.waitForFileVisible(fileName)
 
       await this
@@ -200,11 +208,23 @@ module.exports = {
 
       if (targetTab === 'links') {
         await this
-          .waitForElementVisible('@sidebarLinksTab')
-          .click('@sidebarLinksTab')
+          .useXpath()
+          .waitForElementVisible(sidebarLinksTabXpath)
+          .click(sidebarLinksTabXpath)
+          .useCss()
       }
 
       return this.api.page.FilesPageElement.sharingDialog()
+    },
+    /**
+     * opens sidebar for given resource
+     *
+     * @param {string} resource
+     * @returns {*}
+     */
+    openSideBar: async function (resource) {
+      await this.clickRow(resource)
+      return this.api.page.FilesPageElement.appSideBar()
     },
     /**
      *
@@ -504,51 +524,6 @@ module.exports = {
       return isPresent
     },
     /**
-     * checks if the given tabs are present on the files-page-sidebar
-     *
-     * @param {string} rowSelector xpath for given resource row selector
-     * @param {string} tabSelector xpath for given tab
-     * @returns {Promise<boolean>}
-     */
-    isSidebarTabPresent: async function (rowSelector, tabSelector) {
-      let isPresent = true
-      await this
-        .api.page.FilesPageElement.appSideBar().closeSidebar(100)
-        .useXpath()
-        .click(rowSelector)
-        .waitForElementVisible('@sidebar')
-        .api.elements(
-          'xpath',
-          tabSelector,
-          (result) => {
-            isPresent = result.value.length > 0
-          })
-        .useCss()
-      return isPresent
-    },
-    /**
-     *
-     * @param {string} fileName
-     * @returns {Promise<boolean>}
-     */
-    isSidebarLinksTabPresent: function (fileName) {
-      return this.isSidebarTabPresent(
-        this.getFileRowSelectorByFileName(fileName),
-        this.elements.sidebarLinksTab.selector
-      )
-    },
-    /**
-     *
-     * @param {string} fileName
-     * @returns {Promise<boolean>}
-     */
-    isSidebarCollaboratorsTabPresent: function (fileName) {
-      return this.isSidebarTabPresent(
-        this.getFileRowSelectorByFileName(fileName),
-        this.elements.sidebarCollaboratorsTab.selector
-      )
-    },
-    /**
      * returns the disabled state of given action
      *
      * @param {string} action
@@ -621,16 +596,22 @@ module.exports = {
       })
     },
     copyPrivateLink: function () {
+      const appSideBar = this.api.page.FilesPageElement.appSideBar()
+      const sidebarLinksTabXpath = appSideBar.elements.sidebarLinksTab.selector
+      const sidebarCss = appSideBar.elements.sideBar.selector
+
       return this
-        .waitForElementVisible('@sidebar')
-        .waitForElementVisible('@sidebarLinksTab')
-        .click('@sidebarLinksTab')
+        .waitForElementVisible(sidebarCss)
+        .useXpath()
+        .waitForElementVisible(sidebarLinksTabXpath)
+        .click(sidebarLinksTabXpath)
         .waitForElementVisible('@sidebarPrivateLinkLabel')
         .click('@sidebarPrivateLinkLabel')
         .waitForElementNotPresent('@sidebarPrivateLinkLabel')
         .waitForElementVisible('@sidebarPrivateLinkIconCopied')
         .waitForElementNotPresent('@sidebarPrivateLinkIconCopied')
         .waitForElementVisible('@sidebarPrivateLinkLabel')
+        .useCss()
     },
     deleteImmediately: async function (fileName) {
       await this.waitForFileVisible(fileName)
@@ -912,22 +893,11 @@ module.exports = {
       selector: '//div[@class="sidebar-container"]//a[normalize-space(.)="Links"]',
       locateStrategy: 'xpath'
     },
-    sidebar: {
-      selector: '#files-sidebar'
-    },
     sidebarPrivateLinkLabel: {
       selector: '#files-sidebar-private-link-label'
     },
     sidebarPrivateLinkIconCopied: {
       selector: '#files-sidebar-private-link-icon-copied'
-    },
-    sidebarLinksTab: {
-      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Links")]',
-      locateStrategy: 'xpath'
-    },
-    sidebarCollaboratorsTab: {
-      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Collaborators")]',
-      locateStrategy: 'xpath'
     },
     versionsElement: {
       selector: '//div//a[normalize-space(.)="Versions"]',

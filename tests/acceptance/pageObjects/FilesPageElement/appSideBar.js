@@ -20,6 +20,42 @@ module.exports = {
         // do nothing
       }
       return this.api.page.FilesPageElement.filesList()
+    },
+    /**
+     * checks if the given tabs are present on the files-page-sidebar
+     *
+     * @param {string} tabSelectorXpath
+     * @returns {Promise<boolean>}
+     */
+    isTabPresentOnCurrentSidebar: async function (tabSelectorXpath) {
+      let isPresent = true
+      await this
+        .useXpath()
+        .waitForElementVisible('@sideBar') // sidebar is expected to be opened and visible
+        .api.elements(
+          'xpath',
+          tabSelectorXpath,
+          (result) => {
+            isPresent = result.value.length > 0
+          })
+        .useCss()
+      return isPresent
+    },
+    /**
+     * @returns {Promise<boolean>}
+     */
+    isLinksTabPresentOnCurrentSidebar: function () {
+      return this.isTabPresentOnCurrentSidebar(
+        this.elements.sidebarLinksTab.selector
+      )
+    },
+    /**
+     * @returns {Promise<boolean>}
+     */
+    isCollaboratorsTabPresentOnCurrentSidebar: function () {
+      return this.isTabPresentOnCurrentSidebar(
+        this.elements.sidebarCollaboratorsTab.selector
+      )
     }
   },
   elements: {
@@ -31,6 +67,14 @@ module.exports = {
     },
     sidebarCloseBtn: {
       selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
+      locateStrategy: 'xpath'
+    },
+    sidebarLinksTab: {
+      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Links")]',
+      locateStrategy: 'xpath'
+    },
+    sidebarCollaboratorsTab: {
+      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Collaborators")]',
       locateStrategy: 'xpath'
     }
   }
