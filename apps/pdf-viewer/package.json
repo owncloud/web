@@ -20,7 +20,7 @@
     "babel-runtime": "^6.26.0",
     "css-loader": "^3.1.0",
     "vue-loader": "^15.7.1",
-    "vue-pdf": "^4.0.7",
+    "vue-pdf": "^4.0.8",
     "vue-template-compiler": "^2.6.10",
     "vuex": "3.1.1",
     "webpack": "^4.36.1",
