@@ -225,7 +225,6 @@ function _buildLink (link, $gettext) {
     password: !!(link.share_with && link.share_with_displayname),
     expiration: (typeof link.expiration === 'string') ? moment(link.expiration).format('YYYY-MM-DD') : null,
     itemSource: link.item_source,
-    info: link,
     file: {
       parent: link.file_parent,
       source: link.file_source,
@@ -244,7 +243,6 @@ function _fixAdditionalInfo (data) {
 function _buildCollaboratorShare (s, file) {
   const share = {
     shareType: parseInt(s.share_type, 10),
-    info: s,
     id: s.id
   }
   switch (share.shareType) {
@@ -644,7 +642,7 @@ export default {
       })
     }
 
-    return client.shares.updateShare(share.info.id, params)
+    return client.shares.updateShare(share.id, params)
       .then((updatedShare) => {
         commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', _buildCollaboratorShare(updatedShare.shareInfo, getters.highlightedFile))
       })
@@ -684,7 +682,7 @@ export default {
       })
   },
   deleteShare (context, { client, share }) {
-    client.shares.deleteShare(share.info.id)
+    client.shares.deleteShare(share.id)
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
         context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')

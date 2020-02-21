@@ -139,7 +139,7 @@ export default {
   },
   CURRENT_FILE_OUTGOING_SHARES_UPDATE (state, share) {
     const fileIndex = state.currentFileOutgoingShares.findIndex((s) => {
-      return s.info.id === share.info.id
+      return s.id === share.id
     })
     if (fileIndex >= 0) {
       Vue.set(state.currentFileOutgoingShares, fileIndex, share)

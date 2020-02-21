@@ -94,10 +94,10 @@ export default {
         return null
       }
       const translated = this.$gettext('Via %{folderName}')
-      return this.$gettextInterpolate(translated, { folderName: basename(this.link.info.path) }, true)
+      return this.$gettextInterpolate(translated, { folderName: basename(this.link.path) }, true)
     },
     $_viaRouterParams () {
-      const viaPath = this.link.info.path
+      const viaPath = this.link.path
       return {
         name: 'files-list',
         params: {

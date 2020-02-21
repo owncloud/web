@@ -77,7 +77,7 @@ export default {
           shares.forEach((share) => {
             // note: no distinction between incoming and outgoing shares as we display the same
             // indirect indicator for them
-            shareTypes[share.info.share_type] = true
+            shareTypes[share.shareType] = true
           })
         }
       })
