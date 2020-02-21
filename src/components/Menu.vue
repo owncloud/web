@@ -63,3 +63,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  /* Workaround until we decide what to do with the sidebar navigation */
+  #coreMenu {
+    top: 60px;
+  }
+</style>
