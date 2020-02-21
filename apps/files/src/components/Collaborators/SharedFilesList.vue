@@ -2,7 +2,11 @@
   <file-list :fileData="fileData" id="files-list" :loading="loadingFolder" :actions="actions" :compactMode="_sidebarOpen"
     :isActionEnabled="isActionEnabled">
     <template #headerColumns>
-      <div class="uk-text-truncate uk-text-meta uk-width-expand" v-translate>Name</div>
+      <div class="uk-text-truncate uk-text-meta uk-width-expand">
+        <sortable-column-header @click="toggleSort('name')" :aria-label="$gettext('Sort files by name')" :is-active="fileSortField == 'name'" :is-desc="fileSortDirectionDesc">
+          <translate translate-context="Name column in files table">Name</translate>
+        </sortable-column-header>
+      </div>
       <div class="uk-text-nowrap uk-text-meta uk-width-small" v-text="$_sharedCellTitle" />
       <div
         v-if="$route.name === 'files-shared-with-me'"
@@ -13,7 +17,11 @@
       >
         Status
       </div>
-      <div class="uk-text-nowrap uk-text-meta uk-width-small" v-translate>Share time</div>
+      <div class="uk-text-nowrap uk-text-meta uk-width-small">
+        <sortable-column-header @click="toggleSort('shareTimeMoment')" :aria-label="$gettext('Sort files by share time')" :is-active="fileSortField == 'shareTimeMoment'" :is-desc="fileSortDirectionDesc">
+          <translate translate-context="Share time column in files table">Share time</translate>
+        </sortable-column-header>
+      </div>
     </template>
     <template #rowColumns="{ item }">
       <div class="uk-text-truncate uk-width-expand">
@@ -62,12 +70,14 @@ import Mixins from '../../mixins'
 import FileActions from '../../fileactions'
 import FileList from '../FileList.vue'
 import NoContentMessage from '../NoContentMessage.vue'
+import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 
 export default {
   name: 'SharedFilesList',
   components: {
     FileList,
-    NoContentMessage
+    NoContentMessage,
+    SortableColumnHeader
   },
   mixins: [
     Mixins,

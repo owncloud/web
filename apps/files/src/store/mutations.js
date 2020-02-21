@@ -58,6 +58,10 @@ export default {
   LOAD_FILES_SEARCHED (state, files) {
     state.filesSearched = files
   },
+  SET_FILES_SORT (state, { field, directionIsDesc }) {
+    state.fileSortDirectionDesc = directionIsDesc
+    state.fileSortField = field
+  },
   ADD_FILE_SELECTION (state, file) {
     const fileIndex = state.selected.findIndex((f) => {
       return f.id === file.id

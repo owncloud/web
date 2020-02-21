@@ -908,3 +908,14 @@ Then('the following resources should not have share indicators on the webUI', as
     assert.ok(!indicatorsArray.length, `Expected no share indicators present for "${fileName}"`)
   }
 })
+
+async function _setFilesTableSort (column, isDesc) {
+  await client.page.FilesPageElement.filesList().setSort(column, isDesc)
+}
+
+When('the user has set the sort order of the {string} column to descending order', async function (column) {
+  await _setFilesTableSort(column, true)
+})
+When('the user has set the sort order of the {string} column to ascending order', async function (column) {
+  await _setFilesTableSort(column, false)
+})

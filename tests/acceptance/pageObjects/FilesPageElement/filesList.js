@@ -721,6 +721,29 @@ module.exports = {
       return indicators
     },
 
+    setSort: async function (column, isDesc = false) {
+      const columnSelector = util.format(this.elements.filesTableHeaderColumn.selector, xpathHelper.buildXpathLiteral(column))
+      await this.useXpath()
+        .waitForElementVisible(columnSelector)
+        .click(columnSelector)
+        .waitForElementVisible(columnSelector)
+        .useCss()
+
+      let currentClass = null
+      await this.useXpath().getAttribute(columnSelector, 'class', result => {
+        currentClass = result.value
+      })
+      if (currentClass.includes('-asc') && isDesc) {
+        // click again to match expected sort order
+        await this.useXpath()
+          .waitForElementVisible(columnSelector)
+          .click(columnSelector)
+          .useCss()
+      }
+
+      return this.useCss()
+    },
+
     /**
      * Returns original string with replaced target character
      * @param   {string} string     String in which will be the target character replaced
@@ -867,6 +890,10 @@ module.exports = {
     },
     filesTableHeader: {
       selector: '#files-table-header'
+    },
+    filesTableHeaderColumn: {
+      selector: '//*[contains(@class, "oc-sortable-column-header")]//*[text()=%s]/ancestor::button',
+      locateStrategy: 'xpath'
     }
   }
 }

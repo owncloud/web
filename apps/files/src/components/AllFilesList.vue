@@ -6,10 +6,22 @@
         <span class="oc-visually-hidden" v-text="favoritesHeaderText" />
         <oc-star id="files-table-header-star" aria-hidden="true" class="uk-display-block uk-disabled" />
       </div>
-      <div class="uk-text-truncate uk-text-meta uk-width-expand" v-translate ref="headerNameColumn" >Name</div>
+      <div class="uk-text-truncate uk-text-meta uk-width-expand" ref="headerNameColumn" >
+        <sortable-column-header @click="toggleSort('name')" :aria-label="$gettext('Sort files by name')" :is-active="fileSortField == 'name'" :is-desc="fileSortDirectionDesc">
+          <translate translate-context="Name column in files table">Name</translate>
+        </sortable-column-header>
+      </div>
       <div><!-- indicators column --></div>
-      <div :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-meta uk-width-small" v-translate>Size</div>
-      <div type="head" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-nowrap uk-text-meta uk-width-small" v-translate>Updated</div>
+      <div :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-meta uk-width-small">
+        <sortable-column-header @click="toggleSort('size')" :aria-label="$gettext('Sort files by size')" :is-active="fileSortField == 'size'" :is-desc="fileSortDirectionDesc">
+          <translate translate-context="Size column in files table">Size</translate>
+        </sortable-column-header>
+      </div>
+      <div :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-nowrap uk-text-meta uk-width-small">
+        <sortable-column-header @click="toggleSort('mdateMoment')" :aria-label="$gettext('Sort files by updated time')" :is-active="fileSortField == 'mdateMoment'" :is-desc="fileSortDirectionDesc">
+          <translate translate-context="Short column label in files able for the time at which a file was modified">Updated</translate>
+        </sortable-column-header>
+      </div>
     </template>
     <template #rowColumns="{ item, index }">
       <div v-if="!publicPage()">
@@ -78,6 +90,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 
 import Mixins from '../mixins'
 import FileActions from '../fileactions'
+import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
 
 const StatusIndicators = () => import('./FilesLists/StatusIndicators/StatusIndicators.vue')
 
@@ -86,7 +99,8 @@ export default {
   components: {
     FileList,
     StatusIndicators,
-    NoContentMessage
+    NoContentMessage,
+    SortableColumnHeader
   },
   mixins: [
     Mixins,
@@ -100,7 +114,16 @@ export default {
   },
   computed: {
     ...mapState(['route']),
-    ...mapGetters('Files', ['loadingFolder', 'activeFiles', 'quota', 'filesTotalSize', 'activeFilesCount', 'currentFolder']),
+    ...mapGetters('Files', [
+      'loadingFolder',
+      'activeFiles',
+      'quota',
+      'filesTotalSize',
+      'activeFilesCount',
+      'currentFolder',
+      'fileSortField',
+      'fileSortDirectionDesc'
+    ]),
     ...mapGetters(['configuration']),
 
     item () {
@@ -128,8 +151,11 @@ export default {
     this.$_ocFilesFolder_getFolder()
   },
   methods: {
-    ...mapActions('Files', ['loadFolder', 'markFavorite',
-      'setHighlightedFile', 'setPublicLinkPassword']),
+    ...mapActions('Files', [
+      'loadFolder',
+      'markFavorite',
+      'setHighlightedFile'
+    ]),
 
     $_openSideBar (item, sideBarName) {
       this.$emit('sideBarOpen', item, sideBarName)

@@ -18,6 +18,8 @@ export default {
   currentFolder: state => {
     return state.currentFolder
   },
+  fileSortField: state => state.fileSortField,
+  fileSortDirectionDesc: state => state.fileSortDirectionDesc,
   // a flat file list has no current folder nor parent
   flatFileList: state => !!state.currentFolder,
   searchTerm: state => {
@@ -30,7 +32,8 @@ export default {
     // if searchTermGlobal is set, replace current file list with search results
     const files = state.searchTermGlobal ? state.filesSearched : state.files
     // make a copy of array for sorting as sort() would modify the original array
-    return ([].concat(files)).sort(fileSortFunctions[state.fileSortMode])
+    const direction = state.fileSortDirectionDesc ? 'desc' : 'asc'
+    return ([].concat(files)).sort(fileSortFunctions[state.fileSortField][direction])
   },
   filesTotalSize: (state, getters) => {
     let totalSize = 0

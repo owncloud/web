@@ -10,17 +10,21 @@
         :selectableRow="false"
       >
         <template #headerColumns>
-          <div class="uk-text-truncate uk-text-meta uk-width-expand" v-translate>Name</div>
+          <div class="uk-text-truncate uk-text-meta uk-width-expand">
+            <sortable-column-header @click="toggleSort('name')" :aria-label="$gettext('Sort files by name')" :is-active="fileSortField == 'name'" :is-desc="fileSortDirectionDesc">
+              <translate translate-context="Name column in files table">Name</translate>
+            </sortable-column-header>
+          </div>
           <div
-            type="head"
             :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }"
             class="uk-text-nowrap uk-text-meta uk-width-small"
-            v-translate
           >
-            Deletion Time
+            <sortable-column-header @click="toggleSort('deleteTimestampMoment')" :aria-label="$gettext('Sort files by deletion time')" :is-active="fileSortField == 'deleteTimestampMoment'" :is-desc="fileSortDirectionDesc">
+              <translate translate-context="Deletion time column in trashbin files table">Deletion Time</translate>
+            </sortable-column-header>
           </div>
         </template>
-        <template #rowColumns="{ item }">
+        <template #rowColumns="{ item, index }">
           <div class="uk-text-truncate uk-width-expand">
             <oc-file
               :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
@@ -50,6 +54,7 @@ import Mixins from '../mixins'
 import FileList from './FileList.vue'
 import NoContentMessage from './NoContentMessage.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
+import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
 const { default: PQueue } = require('p-queue')
 
 export default {
@@ -58,7 +63,8 @@ export default {
   components: {
     OcDialogPrompt,
     FileList,
-    NoContentMessage
+    NoContentMessage,
+    SortableColumnHeader
   },
 
   mixins: [
