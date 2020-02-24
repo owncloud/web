@@ -1,0 +1,6 @@
+Bugfix: Responsive buttons layout in app bar when multiple files are selected
+
+We've fixed the responsive buttons layout in files app bar when multiple files are selected where bulk actions where overlapping and height of the buttons was increased.
+
+https://github.com/owncloud/phoenix/issues/3011
+https://github.com/owncloud/phoenix/pull/3083
