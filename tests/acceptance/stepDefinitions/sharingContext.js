@@ -172,7 +172,7 @@ const assertCollaboratorslistContains = function (type, name, role = null, via =
     throw new Error(`illegal type "${type}"`)
   }
 
-  return client.page.FilesPageElement.sharingDialog().getCollaboratorsList(null, name)
+  return client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorsList(null, name)
     .then(shares => {
       const share = shares.find(share => {
         return (name === share.displayName && type === share.shareType.toLowerCase())
@@ -209,10 +209,10 @@ const assertCollaboratorslistDoesNotContain = function (type, name) {
   if (type !== 'user' && type !== 'group') {
     throw new Error('illegal type')
   }
-  const sharingDialog = client.page.FilesPageElement.sharingDialog()
-  return sharingDialog.getCollaboratorsList({
-    displayName: sharingDialog.elements.collaboratorInformationSubName,
-    shareType: sharingDialog.elements.collaboratorInformationSubShareType
+  const collaboratorsDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
+  return collaboratorsDialog.getCollaboratorsList({
+    displayName: collaboratorsDialog.elements.collaboratorInformationSubName,
+    shareType: collaboratorsDialog.elements.collaboratorInformationSubShareType
   }, name).then(shares => {
     const share = shares.find(share => {
       return (name === share.displayName && type === share.shareType.toLowerCase())
@@ -830,14 +830,14 @@ Then('the collaborators list for file/folder/resource {string} should be empty',
     .openSharingDialog(resource)
 
   const count = (await api
-    .sharingDialog()
+    .SharingDialog.collaboratorsDialog()
     .getCollaboratorsList({})
   ).length
   assert.strictEqual(count, 0, `Expected to have no collaborators for '${resource}', Found: ${count}`)
 })
 
 Then('the current collaborators list should have order {string}', async function (expectedNames) {
-  const actualNames = (await client.page.FilesPageElement.sharingDialog().getCollaboratorsListNames()).join(',')
+  const actualNames = (await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorsListNames()).join(',')
   assert.strictEqual(actualNames, expectedNames, `Expected to have collaborators in order '${expectedNames}', Found: ${actualNames}`)
 })
 
