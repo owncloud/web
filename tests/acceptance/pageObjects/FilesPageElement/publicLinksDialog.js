@@ -24,19 +24,6 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
     },
     /**
-     * sets up the xpath for year in expiry date of public link
-     *
-     * @param year
-     * @returns {{locateStrategy: string, selector: *}}
-     */
-    setExpiryDateYearSelectorXpath: function (year) {
-      const yearSelectorXpath = util.format(this.elements.dateTimeYearPicker.selector, year)
-      return {
-        selector: yearSelectorXpath,
-        locateStrategy: this.elements.dateTimeYearPicker.locateStrategy
-      }
-    },
-    /**
      * sets up the xpath for month in expiry date of public link
      *
      * @param month
@@ -69,7 +56,10 @@ module.exports = {
      * @returns {Promise<void>}
      */
     setExpiryDateYear: function (year) {
-      const yearSelector = this.setExpiryDateYearSelectorXpath(year)
+      const yearSelector = this.api.page
+        .FilesPageElement
+        .publicLinksCreationForm()
+        .setExpiryDateYearSelectorXpath(year)
       return this
         .waitForElementVisible('@dateTimePopupYear')
         .waitForAnimationToFinish()
@@ -211,7 +201,10 @@ module.exports = {
       const [year, month, day] = pastDate.split(/-/)
       let disabled = false
       const iDay = parseInt(day)
-      const yearSelector = this.setExpiryDateYearSelectorXpath(year)
+      const yearSelector = this.api.page
+        .FilesPageElement
+        .publicLinksCreationForm()
+        .setExpiryDateYearSelectorXpath(year)
       const monthSelector = this.setExpiryDateMonthSelectorXpath(month)
       const daySelector = this.setExpiryDateDaySelectorXpath(iDay)
       await this
@@ -562,10 +555,6 @@ module.exports = {
     },
     dateTimeMonthPicker: {
       selector: '//div[@class="vdatetime-month-picker"]//div[contains(text(),"%s")]',
-      locateStrategy: 'xpath'
-    },
-    dateTimeYearPicker: {
-      selector: '//div[@class="vdatetime-year-picker"]//div[normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
     },
     dateTimeDayPicker: {
