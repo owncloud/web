@@ -201,7 +201,11 @@ module.exports = {
      * @param {string} collaborator
      */
     clickEditShare: function (collaborator) {
-      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, collaborator)
+      const informationSelector = util.format(this.api.page
+        .FilesPageElement
+        .SharingDialog
+        .collaboratorsDialog()
+        .elements.collaboratorInformationByCollaboratorName.selector, collaborator)
       const editSelector = informationSelector + this.elements.editShareButton.selector
       return this
         .useXpath()
@@ -375,20 +379,6 @@ module.exports = {
     },
     /**
      *
-     * @returns {Promise.<string[]>} Array of autocomplete webElementIds
-     */
-    deleteShareWithUserGroup: function (item) {
-      const informationSelector = util.format(this.elements.collaboratorInformationByCollaboratorName.selector, item)
-      const deleteSelector = informationSelector + this.elements.deleteShareButton.selector
-      return this
-        .useXpath()
-        .waitForElementVisible(deleteSelector)
-        .waitForAnimationToFinish()
-        .click(deleteSelector)
-        .waitForElementNotPresent(informationSelector)
-    },
-    /**
-     *
      * @param {string} collaborator
      * @param {string} newRole
      * @returns {Promise}
@@ -554,13 +544,13 @@ module.exports = {
       // addresses users and groups
       selector: '.files-collaborators-collaborator'
     },
-    collaboratorInformationByCollaboratorName: {
-      selector: '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
-      locateStrategy: 'xpath'
-    },
     collaboratorInformationSubName: {
       // within collaboratorsInformation
       selector: '.files-collaborators-collaborator-name'
+    },
+    collaboratorInformationByCollaboratorName: {
+      selector: '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
+      locateStrategy: 'xpath'
     },
     collaboratorInformationSubRole: {
       // within collaboratorsInformation
@@ -594,11 +584,6 @@ module.exports = {
     editShareButton: {
       // within collaboratorInformationByCollaboratorName
       selector: '//*[contains(@class, "files-collaborators-collaborator-edit")]',
-      locateStrategy: 'xpath'
-    },
-    deleteShareButton: {
-      // within collaboratorInformationByCollaboratorName
-      selector: '//*[contains(@class, "files-collaborators-collaborator-delete")]',
       locateStrategy: 'xpath'
     },
     cancelButton: {
