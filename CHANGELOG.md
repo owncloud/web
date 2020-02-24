@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Various fixes for files app in responsive mode: [#2998](https://github.com/owncloud/phoenix/issues/2998)
+* Bugfix - Responsive buttons layout in app bar when multiple files are selected: [#3011](https://github.com/owncloud/phoenix/issues/3011)
 * Bugfix - Fix accessible labels that said $gettext: [#3039](https://github.com/owncloud/phoenix/pull/3039)
 * Bugfix - Fix console warning about search query in public page: [#3041](https://github.com/owncloud/phoenix/pull/3041)
 * Enhancement - Display decimals in resource size column only for MBs or higher: [#2986](https://github.com/owncloud/phoenix/issues/2986)
@@ -25,6 +26,14 @@ Details
 
    https://github.com/owncloud/phoenix/issues/2998
    https://github.com/owncloud/phoenix/pull/2999
+
+* Bugfix - Responsive buttons layout in app bar when multiple files are selected: [#3011](https://github.com/owncloud/phoenix/issues/3011)
+
+   We've fixed the responsive buttons layout in files app bar when multiple files are selected
+   where bulk actions where overlapping and height of the buttons was increased.
+
+   https://github.com/owncloud/phoenix/issues/3011
+   https://github.com/owncloud/phoenix/pull/3083
 
 * Bugfix - Fix accessible labels that said $gettext: [#3039](https://github.com/owncloud/phoenix/pull/3039)
 
