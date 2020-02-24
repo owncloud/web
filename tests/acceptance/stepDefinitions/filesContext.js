@@ -409,7 +409,7 @@ Then('the versions list for resource {string} should contain {int} entry/entries
     expectedNumber, count
   )
 
-  client.page.FilesPageElement.filesList().closeSidebar(100)
+  client.page.FilesPageElement.appSideBar().closeSidebar(100)
 
   return this
 })
