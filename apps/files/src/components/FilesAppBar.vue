@@ -2,7 +2,7 @@
   <div id="files-app-bar" class="oc-app-bar">
     <file-drop v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
     <oc-grid flex gutter="small">
-      <div class="uk-width-expand">
+      <div class="uk-flex-1">
         <div class="uk-flex">
           <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="showBreadcrumb" home></oc-breadcrumb>
         </div>
@@ -27,11 +27,10 @@
           ref="globalSearchBar"
         />
       </div>
-      <div class="uk-width-auto">
-        <div class="uk-button-group" :key="actionsKey">
-          <template v-if="$_ocFilesAppBar_showActions">
-            <oc-button v-if="canUpload && hasFreeSpace" variation="primary" id="new-file-menu-btn"><translate>+ New</translate></oc-button>
-            <oc-button v-else disabled id="new-file-menu-btn" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
+      <div>
+        <template v-if="$_ocFilesAppBar_showActions">
+          <template v-if="canUpload && hasFreeSpace">
+            <oc-button variation="primary" id="new-file-menu-btn" key="new-file-menu-btn-enabled"><translate>+ New</translate></oc-button>
             <oc-drop drop-id="new-file-menu-drop" toggle="#new-file-menu-btn" mode="click" closeOnClick :options="{delayHide: 0}">
               <oc-nav>
                 <file-upload :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
@@ -46,31 +45,38 @@
               </oc-nav>
             </oc-drop>
           </template>
-          <template v-if="$route.name === 'files-trashbin'">
-            <oc-button v-if="selectedFiles.length > 0" icon="restore" @click="$_ocTrashbin_restoreFiles()">
-              <translate>Restore selected</translate>
-            </oc-button>
-            <oc-button id="delete-selected-btn" icon="delete" :disabled="files.length === 0" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
-              {{ $_ocAppBar_clearTrashbinButtonText }}
-            </oc-button>
-          </template>
-          <template v-if="$route.meta.hasBulkActions && selectedFiles.length > 0">
-            <oc-button id="delete-selected-btn" icon="delete" @click="$_ocFiles_deleteSelected()">
-              <translate>Delete selected</translate>
-            </oc-button>
-          </template>
-          <oc-button v-if="!publicPage()" class="uk-hidden@m" icon="search" aria-label="search" id="files-open-search-btn" @click="focusMobileSearchInput()"/>
-          <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove">
-            <oc-search-bar
-              ref="mobileSearch"
-              @search="onFileSearch"
-              :label="$_searchLabel"
-              :loading="isLoadingSearch"
-              @clear="onSearchClear"
-              :key="searchBarKey"
-            />
-          </oc-drop>
-        </div>
+          <!-- FIXME: Unite new file menu btn -->
+          <oc-button v-else disabled id="new-file-menu-btn" key="new-file-menu-btn-disabled" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
+        </template>
+        <template v-if="$route.name === 'files-trashbin'">
+          <oc-button v-if="selectedFiles.length > 0" key="restore-btn" icon="restore" @click="$_ocTrashbin_restoreFiles()">
+            <translate>Restore selected</translate>
+          </oc-button>
+          <oc-button id="delete-selected-btn" icon="delete" key="delete-btn" :disabled="files.length === 0" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
+            {{ $_ocAppBar_clearTrashbinButtonText }}
+          </oc-button>
+        </template>
+        <oc-button v-if="!publicPage()" class="uk-hidden@m" key="mobile-search-button" icon="search" aria-label="search" id="files-open-search-btn" @click="focusMobileSearchInput()"/>
+        <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove">
+          <oc-search-bar
+            ref="mobileSearch"
+            @search="onFileSearch"
+            :label="$_searchLabel"
+            :loading="isLoadingSearch"
+            @clear="onSearchClear"
+            :key="searchBarKey"
+          />
+        </oc-drop>
+      </div>
+      <div v-if="displayBulkActions">
+        <oc-button
+          id="delete-selected-btn"
+          key="delete-selected-btn"
+          icon="delete"
+          @click="$_ocFiles_deleteSelected()"
+        >
+          <translate>Delete selected</translate>
+        </oc-button>
       </div>
     </oc-grid>
     <oc-dialog-prompt
@@ -144,7 +150,6 @@ export default {
     path: '',
     searchedFiles: [],
     fileFolderCreationLoading: false,
-    actionsKey: Math.floor(Math.random() * 20),
     // In case of change of search value to empty string
     // searchBarKey can be changed to force re-render of the component
     searchBarKey: 0
@@ -294,13 +299,14 @@ export default {
       return (this.quota && this.quota.free > 0) ||
         (this.currentFolder && this.currentFolder.permissions.indexOf('M') >= 0) ||
         this.publicPage()
+    },
+
+    displayBulkActions () {
+      return this.$route.meta.hasBulkActions && this.selectedFiles.length > 0
     }
   },
   watch: {
-    // This ensures buttons will display with its right icons, values, etc.
-    // TODO: Find a better solution
     $route (to, from) {
-      this.actionsKey = Math.floor(Math.random() * 20)
       // note: the search bars are not available on all views
       if (this.$refs.mobileSearch) {
         this.$refs.mobileSearch.value = null
