@@ -5,6 +5,8 @@
     <collaborators-edit-options
       :existingRole="$_originalRole"
       :collaboratorsPermissions="$_originalPermissions"
+      :expirationDate="originalExpirationDate"
+      :existingCollaboratorType="collaboratorType"
       @optionChange="collaboratorOptionChanged"
       class="uk-margin-bottom"
     />
@@ -31,7 +33,9 @@
 <script>
 import filterObject from 'filter-obj'
 import { mapGetters, mapActions } from 'vuex'
+import moment from 'moment'
 import { roleToBitmask, bitmaskToRole } from '../../helpers/collaborators'
+import { shareTypes } from '../../helpers/shareTypes'
 import Collaborator from './Collaborator.vue'
 import CollaboratorsEditOptions from './CollaboratorsEditOptions.vue'
 import Mixins from '../../mixins/collaborators'
@@ -55,12 +59,31 @@ export default {
     return {
       selectedRole: null,
       additionalPermissions: null,
-      saving: false
+      saving: false,
+      expirationDate: null
     }
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['user']),
+
+    collaboratorType () {
+      const collaboratorShareType = this.collaborator.shareType
+
+      if (
+        collaboratorShareType === shareTypes.user ||
+        collaboratorShareType === shareTypes.guest ||
+        collaboratorShareType === shareTypes.remote
+      ) {
+        return 'user'
+      }
+
+      if (collaboratorShareType === shareTypes.group) {
+        return 'group'
+      }
+
+      return null
+    },
 
     $_originalPermissions () {
       const permissions = this.collaborator.customPermissions
@@ -82,8 +105,28 @@ export default {
         // if the role has changed, always return true. The user doesn't need to understand if two bitmasks of different roles are the same!
         return true
       }
+
+      // FIXME: Datepicker is not displaying correct timezone so for now we add it manually
+      const originalExpirationDate = this.originalExpirationDate
+        ? moment(this.originalExpirationDate).add(moment().utcOffset(), 'm').toISOString()
+        : null
+
+      if (this.expirationDate !== originalExpirationDate) {
+        return true
+      }
+
       const originalBitmask = roleToBitmask(this.$_originalRole, Object.keys(this.$_originalPermissions))
       return originalBitmask !== this.$_permissionsBitmask
+    },
+
+    originalExpirationDate () {
+      const expirationDate = this.collaborator.expires
+
+      if (expirationDate) {
+        return expirationDate
+      }
+
+      return null
     }
   },
   methods: {
@@ -100,7 +143,8 @@ export default {
         share: this.collaborator,
         // Map bitmask to role to get the correct role in case the advanced role was mapped to existing role
         role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder'),
-        permissions: bitmask
+        permissions: bitmask,
+        expirationDate: this.expirationDate
       })
         .then(() => this.$_ocCollaborators_cancelChanges())
         .catch(() => {
@@ -111,6 +155,7 @@ export default {
     $_ocCollaborators_cancelChanges () {
       this.selectedRole = null
       this.additionalPermissions = null
+      this.expirationDate = this.originalExpirationDate
       this.saving = false
       this.close()
     },

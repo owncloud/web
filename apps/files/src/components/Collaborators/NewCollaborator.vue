@@ -95,7 +95,8 @@ export default {
       selectedCollaborators: [],
       selectedRole: null,
       additionalPermissions: null,
-      saving: false
+      saving: false,
+      expirationDate: null
     }
   },
   computed: {
@@ -209,7 +210,8 @@ export default {
           $gettext: this.$gettext,
           shareWith: collaborator.value.shareWith,
           shareType: collaborator.value.shareType,
-          permissions: roleToBitmask(this.selectedRole, this.additionalPermissions)
+          permissions: roleToBitmask(this.selectedRole, this.additionalPermissions),
+          expirationDate: this.expirationDate
         })))
       })
 

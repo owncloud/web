@@ -76,9 +76,10 @@ export default {
 
       return this.$gettext('Group')
     },
-    collaboratorOptionChanged ({ role, permissions }) {
+    collaboratorOptionChanged ({ role, permissions, expirationDate }) {
       this.selectedRole = role
       this.additionalPermissions = permissions
+      this.expirationDate = expirationDate
     }
   }
 }

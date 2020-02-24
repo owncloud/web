@@ -310,7 +310,7 @@ function _buildCollaboratorShare (s, file) {
 
   // expiration:Object if unset, or string "2019-04-24 00:00:00"
   if (typeof s.expiration === 'string' || s.expiration instanceof String) {
-    share.expires = Date.parse(s.expiration)
+    share.expires = new Date(s.expiration)
   }
   share.path = s.path
   share.stime = s.stime
@@ -656,9 +656,10 @@ export default {
     context.commit('INCOMING_SHARES_LOAD', [])
     context.commit('INCOMING_SHARES_ERROR', null)
   },
-  changeShare ({ commit, getters }, { client, share, role, permissions }) {
+  changeShare ({ commit, getters }, { client, share, role, permissions, expirationDate }) {
     const params = {
-      permissions: permissions
+      permissions: permissions,
+      expireDate: expirationDate
     }
 
     if (!params.permissions) {
@@ -675,9 +676,9 @@ export default {
         console.log(e)
       })
   },
-  addShare (context, { client, path, $gettext, shareWith, shareType, permissions }) {
+  addShare (context, { client, path, $gettext, shareWith, shareType, permissions, expirationDate }) {
     if (shareType === shareTypes.group) {
-      client.shares.shareFileWithGroup(path, shareWith, { permissions: permissions })
+      client.shares.shareFileWithGroup(path, shareWith, { permissions: permissions, expirationDate: expirationDate })
         .then(share => {
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile))
           context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
@@ -693,7 +694,7 @@ export default {
     }
 
     const remoteShare = shareType === shareTypes.remote
-    client.shares.shareFileWithUser(path, shareWith, { permissions: permissions, remoteUser: remoteShare })
+    client.shares.shareFileWithUser(path, shareWith, { permissions: permissions, remoteUser: remoteShare, expirationDate: expirationDate })
       .then(share => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile))
         context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')

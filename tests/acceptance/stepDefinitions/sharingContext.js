@@ -14,6 +14,7 @@ const _ = require('lodash')
 const path = require('../helpers/path')
 const util = require('util')
 const { COLLABORATOR_PERMISSION_ARRAY } = require('../helpers/sharingHelper')
+const { join } = require('../helpers/path')
 
 /**
  *
@@ -345,6 +346,84 @@ const assertUsersGroupsWithPatternInAutocompleteListExcluding = async function (
   // check if every created group that contains the pattern is listed in the autocomplete list
   const groupMatchingPattern = getGroupsMatchingPattern(pattern).filter(group => group !== alreadySharedUserOrGroup)
   return assertGroupsInAutocompleteList(groupMatchingPattern)
+}
+
+/**
+ *
+ * @param {string} resource
+ * @param {string} sharee
+ * @param {int} days
+ * @param {boolean} shareWithGroup
+ * @param {boolean} remote
+ */
+const userSharesFileOrFolderWithUserOrGroupWithExpirationDate = async function ({
+  resource, sharee, days, shareWithGroup = false, remote = false
+}) {
+  const api = client.page
+    .FilesPageElement
+
+  await api
+    .appSideBar()
+    .closeSidebar(100)
+    .openSharingDialog(resource)
+
+  return api.sharingDialog().shareWithUserOrGroup(sharee, shareWithGroup, 'Viewer', undefined, remote, days)
+}
+
+/**
+ * @param {string} collaborator
+ * @param {string} resource
+ * @param {string} value
+ */
+const checkCollaboratorsExpirationDate = async function (collaborator, resource, value) {
+  const api = client.page
+    .FilesPageElement
+
+  await api
+    .appSideBar()
+    .closeSidebar(100)
+    .openSharingDialog(resource)
+
+  return api.sharingDialog().checkExpirationDate(collaborator, value)
+}
+
+const checkReceivedSharesExpirationDate = function (user, target, days) {
+  const headers = httpHelper.createOCSRequestHeaders(user)
+
+  const apiURL = new URL(join(client.globals.backend_url, '/ocs/v2.php/apps/files_sharing/api/v1/shares'))
+  apiURL.search = new URLSearchParams({ format: 'json', shared_with_me: true }).toString()
+
+  return fetch(apiURL, { method: 'GET', headers: headers })
+    .then(res => res.json())
+    .then(function (result) {
+      httpHelper.checkOCSStatus(result, 'Could not get shares. Message: ' + result.ocs.meta.message)
+      const shares = result.ocs.data
+      const currentDate = new Date()
+      let expectedExpirationDate = new Date(currentDate.setDate(currentDate.getDate() + days))
+      // Set time to midnight
+      expectedExpirationDate = new Date(expectedExpirationDate.setHours(0, 0, 0, 0))
+      let found = false
+      const foundDates = []
+
+      for (const share of shares) {
+        if (share.file_target === `/${target}` && expectedExpirationDate.getTime() === new Date(share.expiration).getTime()) {
+          found = true
+          break
+        }
+
+        if (share.expiration) {
+          foundDates.push(`${share.file_target.substr(1)}: ${new Date(share.expiration)}`)
+        }
+      }
+
+      foundDates.join(', ')
+
+      const message = found
+        ? 'Expiration date was found'
+        : `Expected ${target}: ${expectedExpirationDate}. Found ${foundDates || 'none'}`
+
+      return client.assert.ok(found, message)
+    })
 }
 
 Given('user {string} has shared file/folder {string} with user {string}', function (sharer, elementToShare, receiver) {
@@ -926,4 +1005,20 @@ Then('the following resources should have the following collaborators', async fu
       `Expected collaborators to be the same for "${fileName}": expected [` + expectedCollaboratorsArray.join(', ') + '] got [' + collaboratorsArray.join(', ') + ']'
     )
   }
+})
+
+When('the user shares file/folder/resource {string} with user {string} which expires after {int} day/days using the webUI', function (resource, sharee, days) {
+  return userSharesFileOrFolderWithUserOrGroupWithExpirationDate({ resource, sharee, days })
+})
+
+When('the user shares file/folder/resource {string} with user {string} using the webUI', function (resource, user) {
+  return userSharesFileOrFolderWithUser(resource, user, 'Viewer')
+})
+
+Then('the fields of the {string} collaborator for file/folder/resource {string} should contain expiration date with value {string} on the webUI', function (collaborator, resource, value) {
+  return checkCollaboratorsExpirationDate(collaborator, resource, value)
+})
+
+Then('user {string} should have received a share with target {string} and expiration date in {int} day/days', function (user, target, days) {
+  return checkReceivedSharesExpirationDate(user, target, days)
 })
