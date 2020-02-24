@@ -409,9 +409,15 @@ module.exports = {
      */
     getPublicLinkUrls: async function () {
       const promiseList = []
-      const publicLinkUrlXpath = this.elements.publicLinkContainer.selector + this.elements.publicLinkInformation.selector + this.elements.publicLinkUrl.selector
+      const publicLinkUrlXpath = this.elements.publicLinkContainer.selector +
+        this.elements.publicLinkInformation.selector +
+        this.elements.publicLinkUrl.selector
       await this.initAjaxCounters()
-        .waitForElementPresent({ locateStrategy: 'xpath', selector: publicLinkUrlXpath, abortOnFailure: false })
+        .waitForElementPresent({
+          locateStrategy: 'xpath',
+          selector: publicLinkUrlXpath,
+          abortOnFailure: false
+        })
         .waitForOutstandingAjaxCalls()
         .api.elements('xpath', publicLinkUrlXpath, result => {
           result.value.map(item => {
