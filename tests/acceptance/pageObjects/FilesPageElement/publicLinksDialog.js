@@ -24,19 +24,6 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
     },
     /**
-     * sets up the xpath for year in expiry date of public link
-     *
-     * @param day
-     * @returns {{locateStrategy: string, selector: *}}
-     */
-    setExpiryDateDaySelectorXpath: function (day) {
-      const daySelectorXpath = util.format(this.elements.dateTimeDayPicker.selector, day)
-      return {
-        selector: daySelectorXpath,
-        locateStrategy: this.elements.dateTimeDayPicker.locateStrategy
-      }
-    },
-    /**
      * sets provided year in expiry date field on webUI
      *
      * @param {string} year
@@ -85,7 +72,10 @@ module.exports = {
      * @returns {Promise<void>}
      */
     setExpiryDateDay: function (day) {
-      const daySelector = this.setExpiryDateDaySelectorXpath(day)
+      const daySelector = this.api.page
+        .FilesPageElement
+        .publicLinksCreationForm()
+        .setExpiryDateDaySelectorXpath(day)
       return this
         .waitForElementVisible(daySelector)
         .click(daySelector)
@@ -199,7 +189,10 @@ module.exports = {
         .FilesPageElement
         .publicLinksCreationForm()
         .setExpiryDateMonthSelectorXpath(month)
-      const daySelector = this.setExpiryDateDaySelectorXpath(iDay)
+      const daySelector = this.api.page
+        .FilesPageElement
+        .publicLinksCreationForm()
+        .setExpiryDateDaySelectorXpath(iDay)
       await this
         .initAjaxCounters()
         .waitForElementVisible('@linkExpirationDateField')
@@ -551,10 +544,6 @@ module.exports = {
     },
     dateTimePopupDate: {
       selector: '.vdatetime-popup__date'
-    },
-    dateTimeDayPicker: {
-      selector: '//div[@class="vdatetime-calendar"]//span/span[normalize-space(.)="%s"]/../..',
-      locateStrategy: 'xpath'
     },
     dateTimeOkButton: {
       selector: '//div[@class="vdatetime-popup__actions"]/div[.="Ok"]',

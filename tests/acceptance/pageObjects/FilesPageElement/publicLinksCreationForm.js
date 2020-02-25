@@ -27,6 +27,19 @@ module.exports = {
         selector: monthSelectorXpath,
         locateStrategy: this.elements.dateTimeMonthPicker.locateStrategy
       }
+    },
+    /**
+     * sets up the xpath for year in expiry date of public link
+     *
+     * @param day
+     * @returns {{locateStrategy: string, selector: *}}
+     */
+    setExpiryDateDaySelectorXpath: function (day) {
+      const daySelectorXpath = util.format(this.elements.dateTimeDayPicker.selector, day)
+      return {
+        selector: daySelectorXpath,
+        locateStrategy: this.elements.dateTimeDayPicker.locateStrategy
+      }
     }
   },
   elements: {
@@ -36,6 +49,10 @@ module.exports = {
     },
     dateTimeMonthPicker: {
       selector: '//div[@class="vdatetime-month-picker"]//div[contains(text(),"%s")]',
+      locateStrategy: 'xpath'
+    },
+    dateTimeDayPicker: {
+      selector: '//div[@class="vdatetime-calendar"]//span/span[normalize-space(.)="%s"]/../..',
       locateStrategy: 'xpath'
     }
   }
