@@ -319,12 +319,11 @@ module.exports = {
      */
     clickRow: async function (item) {
       await this.waitForFileVisible(item)
-
       await this.initAjaxCounters()
         .useXpath()
         // click in empty space in the tr using coordinates to avoid
         // clicking on other elements that might be in the front
-        .clickElementAt(this.getFileRowSelectorByFileName(item), 0, 0)
+        .clickElementAt(this.getFileRowSelectorByFileName(item), 1, 1)
         .waitForOutstandingAjaxCalls()
         .useCss()
 
@@ -582,19 +581,6 @@ module.exports = {
       await this
         .performFileAction(fileName, FileAction.deleteImmediately)
         .confirmDeletion()
-
-      return this
-    },
-    getVersions: async function (filename) {
-      const formattedFileRow = this.getFileRowSelectorByFileName(filename)
-
-      await this.waitForFileVisible(filename)
-
-      await this
-        .useXpath()
-        .click(formattedFileRow)
-        .waitForElementVisible('@versionsElement')
-        .click('@versionsElement')
 
       return this
     },
@@ -862,10 +848,6 @@ module.exports = {
     },
     sidebarPrivateLinkIconCopied: {
       selector: '#files-sidebar-private-link-icon-copied'
-    },
-    versionsElement: {
-      selector: '//div//a[normalize-space(.)="Versions"]',
-      locateStrategy: 'xpath'
     },
     collaboratorsList: {
       selector: '.files-collaborators-lists'
