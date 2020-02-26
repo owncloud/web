@@ -702,12 +702,12 @@ When('the user opens the link share dialog for file/folder/resource {string} usi
 })
 
 When('the user deletes {string} as collaborator for the current file/folder using the webUI', function (user) {
-  return client.page.FilesPageElement.sharingDialog().deleteShareWithUserGroup(user)
+  return client.page.FilesPageElement.SharingDialog.collaboratorsDialog().deleteShareWithUserGroup(user)
 })
 
 When('the user deletes {string} as remote collaborator for the current file/folder using the webUI', function (user) {
   user = util.format('%s@%s', user, client.globals.remote_backend_url)
-  return client.page.FilesPageElement.sharingDialog().deleteShareWithUserGroup(user)
+  return client.page.FilesPageElement.SharingDialog.collaboratorsDialog().deleteShareWithUserGroup(user)
 })
 
 When(
