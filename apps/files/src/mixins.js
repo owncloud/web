@@ -34,7 +34,14 @@ export default {
     uploadFileUniqueId: 0
   }),
   computed: {
-    ...mapGetters('Files', ['searchTerm', 'files', 'highlightedFile', 'publicLinkPassword']),
+    ...mapGetters('Files', [
+      'searchTerm',
+      'files',
+      'highlightedFile',
+      'publicLinkPassword',
+      'fileSortField',
+      'fileSortDirectionDesc'
+    ]),
     ...mapGetters(['getToken', 'capabilities']),
 
     _sidebarOpen () {
@@ -42,11 +49,26 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetSearch', 'addFileToProgress',
-      'removeFileSelection', 'setOverwriteDialogTitle', 'setOverwriteDialogMessage',
-      'removeFileFromProgress']),
+    ...mapActions('Files', [
+      'resetSearch',
+      'addFileToProgress',
+      'removeFileSelection',
+      'setOverwriteDialogTitle',
+      'setOverwriteDialogMessage',
+      'removeFileFromProgress',
+      'setFilesSort'
+    ]),
     ...mapActions(['showMessage']),
 
+    toggleSort (fieldId) {
+      if (this.fileSortField === fieldId) {
+        // reverse direction
+        this.setFilesSort({ field: fieldId, directionIsDesc: !this.fileSortDirectionDesc })
+      } else {
+        // switch to the other column
+        this.setFilesSort({ field: fieldId, directionIsDesc: false })
+      }
+    },
     formDateFromNow (date) {
       return moment(date).locale(this.$language.current).fromNow()
     },

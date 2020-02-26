@@ -18,6 +18,7 @@ function _buildFile (file) {
     id: file.fileInfo['{http://owncloud.org/ns}fileid'],
     starred: file.fileInfo['{http://owncloud.org/ns}favorite'] !== '0',
     mdate: file.fileInfo['{DAV:}getlastmodified'],
+    mdateMoment: moment(file.fileInfo['{DAV:}getlastmodified']),
     size: (function () {
       if (file.type === 'dir') {
         return file.fileInfo['{http://owncloud.org/ns}size']
@@ -95,6 +96,7 @@ function _buildFileInTrashbin (file) {
   return ({
     type: (file.type === 'dir') ? 'folder' : file.type,
     deleteTimestamp: file.fileInfo['{http://owncloud.org/ns}trashbin-delete-datetime'],
+    deleteTimestampMoment: moment(file.fileInfo['{http://owncloud.org/ns}trashbin-delete-datetime']),
     extension: (function () {
       return ext
     }()),
@@ -148,6 +150,7 @@ function _buildSharedFile (file) {
     }()),
     path: file.path,
     shareTime: file.stime * 1000,
+    shareTimeMoment: moment(file.stime * 1000),
     owner: file.uid_file_owner,
     ownerDisplayname: file.displayname_file_owner,
     shareOwner: file.uid_owner,
@@ -453,6 +456,9 @@ export default {
     const currentFolder = _buildSharedFile(files[0])
     files = files.map(_buildSharedFile)
     context.commit('LOAD_FILES', { currentFolder, files })
+  },
+  setFilesSort (context, { field, directionIsDesc }) {
+    context.commit('SET_FILES_SORT', { field, directionIsDesc })
   },
   addFileSelection (context, file) {
     context.commit('ADD_FILE_SELECTION', file)

@@ -48,3 +48,35 @@ Feature: Sort files/folders
       | b10.txt         |
       | z.txt           |
 
+  Scenario: Resources can be sorted in reverse alphabetical order
+    When the user has browsed to the files page
+    And the user has set the sort order of the "Name" column to descending order
+    Then these resources should be listed in the folder "test_sort" on the webUI
+      | entry_name      |
+      | z.txt           |
+      | b10.txt         |
+      | b2.txt          |
+      | b1.txt          |
+      | a space 文件夹  |
+      | a space 文件    |
+      | a space (2).txt |
+      | a space.txt     |
+      | a.txt           |
+      | z               |
+      | 10              |
+      | 2               |
+      | 1               |
+      | a 文件          |
+      | a               |
+
+  Scenario: Resources can be sorted by updated time
+    When the user has browsed to the files page
+    And the user has set the sort order of the "Updated" column to ascending order
+    Then these resources should be listed in the folder "test_sort" on the webUI
+      | entry_name |
+      | a          |
+      | a 文件     |
+      | 10         |
+      | 1          |
+      | 2          |
+      | z          |
