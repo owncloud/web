@@ -12,6 +12,7 @@ Summary
 * Bugfix - Responsive buttons layout in app bar when multiple files are selected: [#3011](https://github.com/owncloud/phoenix/issues/3011)
 * Bugfix - Fix accessible labels that said $gettext: [#3039](https://github.com/owncloud/phoenix/pull/3039)
 * Bugfix - Fix console warning about search query in public page: [#3041](https://github.com/owncloud/phoenix/pull/3041)
+* Enhancement - Added ability to click file list columns for sorting: [#1854](https://github.com/owncloud/phoenix/issues/1854)
 * Enhancement - Display decimals in resource size column only for MBs or higher: [#2986](https://github.com/owncloud/phoenix/issues/2986)
 * Enhancement - Different message in overwrite dialog when versioning is enabled: [#3047](https://github.com/owncloud/phoenix/issues/3047)
 * Enhancement - Current user entry in collaborators list in sidebar: [#3808](https://github.com/owncloud/phoenix/issues/3808)
@@ -48,6 +49,12 @@ Details
    search fields are not visible, for example when accessing a public link page.
 
    https://github.com/owncloud/phoenix/pull/3041
+
+* Enhancement - Added ability to click file list columns for sorting: [#1854](https://github.com/owncloud/phoenix/issues/1854)
+
+   The sorting mode of the file list can now be changed by clicking on the column headers.
+
+   https://github.com/owncloud/phoenix/issues/1854
 
 * Enhancement - Display decimals in resource size column only for MBs or higher: [#2986](https://github.com/owncloud/phoenix/issues/2986)
 
