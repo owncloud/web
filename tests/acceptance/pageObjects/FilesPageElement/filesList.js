@@ -339,14 +339,19 @@ module.exports = {
       await this
         .waitForAnimationToFinish()
         .useXpath()
-        .waitForElementVisible(linkSelector)
+        .waitForElementVisible({
+          selector: linkSelector,
+          abortOnFailure: false
+        }, (result) => {
+          if (result.status !== 0) {
+            console.log('WARNING: resource is not located yet, Retrying...')
+            this.waitForElementVisible(linkSelector)
+          }
+        })
         .api.execute((selector) => {
           const el = document.evaluate(
-            selector,
-            document,
-            null,
-            XPathResult.FIRST_ORDERED_NODE_TYPE,
-            null
+            selector, document, null,
+            XPathResult.FIRST_ORDERED_NODE_TYPE, null
           ).singleNodeValue
           return el.getAttribute('filename')
         }, [linkSelector], (result) => {
