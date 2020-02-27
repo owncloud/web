@@ -339,19 +339,16 @@ module.exports = {
       await this
         .waitForAnimationToFinish()
         .useXpath()
+        .waitForElementVisible(linkSelector)
         .api.execute((selector) => {
-          let result
-          do {
-            const el = document.evaluate(
-              selector,
-              document,
-              null,
-              XPathResult.FIRST_ORDERED_NODE_TYPE,
-              null
-            ).singleNodeValue
-            result = el.getAttribute('filename')
-          } while (result.value === 0)
-          return result
+          const el = document.evaluate(
+            selector,
+            document,
+            null,
+            XPathResult.FIRST_ORDERED_NODE_TYPE,
+            null
+          ).singleNodeValue
+          return el.getAttribute('filename')
         }, [linkSelector], (result) => {
           this.assert.strictEqual(result.value, fileName, 'displayed file name not as expected')
         })
