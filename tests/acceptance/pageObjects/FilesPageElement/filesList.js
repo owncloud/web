@@ -558,30 +558,11 @@ module.exports = {
       }
       return visible
     },
-    copyPrivateLink: function () {
-      const appSideBar = this.api.page.FilesPageElement.appSideBar()
-      const sidebarLinksTabXpath = appSideBar.elements.sidebarLinksTab.selector
-      const sidebarCss = appSideBar.elements.sideBar.selector
-
-      return this
-        .waitForElementVisible(sidebarCss)
-        .useXpath()
-        .waitForElementVisible(sidebarLinksTabXpath)
-        .click(sidebarLinksTabXpath)
-        .waitForElementVisible('@sidebarPrivateLinkLabel')
-        .click('@sidebarPrivateLinkLabel')
-        .waitForElementNotPresent('@sidebarPrivateLinkLabel')
-        .waitForElementVisible('@sidebarPrivateLinkIconCopied')
-        .waitForElementNotPresent('@sidebarPrivateLinkIconCopied')
-        .waitForElementVisible('@sidebarPrivateLinkLabel')
-        .useCss()
-    },
     deleteImmediately: async function (fileName) {
       await this.waitForFileVisible(fileName)
       await this
         .performFileAction(fileName, FileAction.deleteImmediately)
         .confirmDeletion()
-
       return this
     },
     countFilesAndFolders: async function () {
@@ -865,12 +846,6 @@ module.exports = {
     linkToPublicLinksTag: {
       selector: '//div[@class="sidebar-container"]//a[normalize-space(.)="Links"]',
       locateStrategy: 'xpath'
-    },
-    sidebarPrivateLinkLabel: {
-      selector: '#files-sidebar-private-link-label'
-    },
-    sidebarPrivateLinkIconCopied: {
-      selector: '#files-sidebar-private-link-icon-copied'
     },
     collaboratorsList: {
       selector: '.files-collaborators-lists'

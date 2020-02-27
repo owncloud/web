@@ -3,11 +3,10 @@ const { When } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
 
 When('the user copies the private link of the file/folder {string} using the webUI', async function (resource) {
-  const api = client.page.FilesPageElement.filesList()
-  await api
-    .clickRow(resource)
+  const api = client.page.FilesPageElement
+  await api.filesList().clickRow(resource)
 
-  return api.copyPrivateLink()
+  return api.publicLinksDialog().copyPrivateLink()
 })
 
 When('the user navigates to the copied private/public link using the webUI', function () {

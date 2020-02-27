@@ -460,6 +460,24 @@ module.exports = {
       return this
         .waitForElementVisible(copyBtnSelector)
         .click(copyBtnSelector)
+    },
+    copyPrivateLink: function () {
+      const appSideBarElements = this.api.page.FilesPageElement.appSideBar().elements
+      const sidebarLinksTabXpath = appSideBarElements.sidebarLinksTab.selector
+      const sidebarCss = appSideBarElements.sideBar.selector
+
+      return this
+        .waitForElementVisible(sidebarCss)
+        .useXpath()
+        .waitForElementVisible(sidebarLinksTabXpath)
+        .click(sidebarLinksTabXpath)
+        .waitForElementVisible('@sidebarPrivateLinkLabel')
+        .click('@sidebarPrivateLinkLabel')
+        .waitForElementNotPresent('@sidebarPrivateLinkLabel')
+        .waitForElementVisible('@sidebarPrivateLinkIconCopied')
+        .waitForElementNotPresent('@sidebarPrivateLinkIconCopied')
+        .waitForElementVisible('@sidebarPrivateLinkLabel')
+        .useCss()
     }
   },
   elements: {
@@ -579,6 +597,12 @@ module.exports = {
     dateTimeCancelButton: {
       selector: '//div[@class="vdatetime-popup__actions"]/div[.="Cancel"]',
       locateStrategy: 'xpath'
+    },
+    sidebarPrivateLinkLabel: {
+      selector: '#files-sidebar-private-link-label'
+    },
+    sidebarPrivateLinkIconCopied: {
+      selector: '#files-sidebar-private-link-icon-copied'
     }
   }
 }
