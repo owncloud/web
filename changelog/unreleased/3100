@@ -1,0 +1,9 @@
+Bugfix: Fixed height of rows in file list
+
+A recent library update in ODS for the recycle scroller seem to have
+changed the logic or calculation of the height.
+
+This fix accomodates for that change and restores the row height to a
+correct value.
+
+https://github.com/owncloud/phoenix/pull/3100
