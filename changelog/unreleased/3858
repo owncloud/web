@@ -1,0 +1,5 @@
+Change: Moved sidebar navigation under top bar
+
+We've adjusted the position of the sidebar navigation to be under the top bar.
+
+https://github.com/owncloud/phoenix/pull/3077
