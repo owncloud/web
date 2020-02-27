@@ -3,7 +3,7 @@ const util = require('util')
 module.exports = {
   commands: {
     /**
-     * @param collaborator
+     * @param {string} collaborator
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
     deleteShareWithUserGroup: function (collaborator) {
@@ -31,6 +31,24 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
         .waitForElementVisible('@createShareDialog')
         .waitForAnimationToFinish()
+        .useCss()
+    },
+    /**
+     *
+     * @param {string} collaborator
+     */
+    clickEditShare: function (collaborator) {
+      const informationSelector = util.format(
+        this.elements.collaboratorInformationByCollaboratorName.selector,
+        collaborator
+      )
+      const editSelector = informationSelector + this.elements.editShareButton.selector
+      return this
+        .useXpath()
+        .waitForElementVisible(editSelector)
+        .click(editSelector)
+        .waitForElementVisible('@editShareDialog')
+        .useCss()
     }
   },
   elements: {
@@ -49,6 +67,15 @@ module.exports = {
     },
     createShareDialog: {
       selector: '//*[contains(@class, "files-collaborators-collaborator-add-dialog")]',
+      locateStrategy: 'xpath'
+    },
+    editShareButton: {
+      // within collaboratorInformationByCollaboratorName
+      selector: '//*[contains(@class, "files-collaborators-collaborator-edit")]',
+      locateStrategy: 'xpath'
+    },
+    editShareDialog: {
+      selector: '//*[contains(@class, "files-collaborators-collaborator-edit-dialog")]',
       locateStrategy: 'xpath'
     }
   }

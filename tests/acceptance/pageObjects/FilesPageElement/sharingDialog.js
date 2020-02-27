@@ -4,6 +4,8 @@ const federationSharePostfix = '\nRemote user'
 const util = require('util')
 const _ = require('lodash')
 const { COLLABORATOR_PERMISSION_ARRAY } = require('../../helpers/sharingHelper')
+const { client } = require('nightwatch-api')
+const collaboratorDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
 
 module.exports = {
   commands: {
@@ -146,7 +148,7 @@ module.exports = {
      * @param {string} permissions
      */
     shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions, remote = false) {
-      await this.api.page.FilesPageElement.SharingDialog.collaboratorsDialog().clickCreateShare()
+      await collaboratorDialog.clickCreateShare()
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
       await this.selectRoleForNewCollaborator(role)
       if (permissions === undefined) {
@@ -182,22 +184,6 @@ module.exports = {
         .click('@saveShareButton')
         .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@saveShareButton')
-    },
-    /**
-     *
-     * @param {string} collaborator
-     */
-    clickEditShare: function (collaborator) {
-      const informationSelector = util.format(
-        this.elements.collaboratorInformationByCollaboratorName.selector,
-        collaborator
-      )
-      const editSelector = informationSelector + this.elements.editShareButton.selector
-      return this
-        .useXpath()
-        .waitForElementVisible(editSelector)
-        .click(editSelector)
-        .waitForElementVisible('@editShareDialog')
     },
     clickCancel: function () {
       return this
@@ -254,7 +240,7 @@ module.exports = {
      * @param {string} requiredPermissions
      */
     changeCustomPermissionsTo: async function (collaborator, requiredPermissions) {
-      await this.clickEditShare(collaborator)
+      await collaboratorDialog.clickEditShare(collaborator)
 
       const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
       const sharePermissions = await this.getSharePermissions()
@@ -281,7 +267,7 @@ module.exports = {
      * @param {string} permissions
      */
     getDisplayedPermission: async function (collaborator) {
-      await this.clickEditShare(collaborator)
+      await collaboratorDialog.clickEditShare(collaborator)
       // read the permissions from the checkboxes
       const currentSharePermissions = await this.getSharePermissions()
       await this.clickCancel()
@@ -292,7 +278,7 @@ module.exports = {
      * @param {string} collaborator
      */
     disableAllCustomPermissions: async function (collaborator) {
-      await this.clickEditShare(collaborator)
+      await collaboratorDialog.clickEditShare(collaborator)
       const sharePermissions = await this.getSharePermissions(collaborator)
       const enabledPermissions = Object.keys(sharePermissions)
         .filter(permission => sharePermissions[permission] === true)
@@ -370,7 +356,7 @@ module.exports = {
      * @returns {Promise}
      */
     changeCollaboratorRole: async function (collaborator, newRole) {
-      await this.clickEditShare(collaborator)
+      await collaboratorDialog.clickEditShare(collaborator)
       await this.changeCollaboratorRoleInDropdown(newRole)
       return this.saveCollaboratorPermission()
     },
@@ -569,17 +555,8 @@ module.exports = {
       selector: '/a',
       locateStrategy: 'xpath'
     },
-    editShareButton: {
-      // within collaboratorInformationByCollaboratorName
-      selector: '//*[contains(@class, "files-collaborators-collaborator-edit")]',
-      locateStrategy: 'xpath'
-    },
     cancelButton: {
       selector: '.files-collaborators-collaborator-cancel'
-    },
-    editShareDialog: {
-      selector: '//*[contains(@class, "files-collaborators-collaborator-edit-dialog")]',
-      locateStrategy: 'xpath'
     },
     addShareSaveButton: {
       selector: '#files-collaborators-collaborator-save-new-share-button'
