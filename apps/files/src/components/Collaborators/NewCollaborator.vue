@@ -162,7 +162,7 @@ export default {
 
             const exists = this.currentFileOutgoingCollaborators.find(existingCollaborator => {
               return (
-                collaborator.value.shareWith === existingCollaborator.name &&
+                collaborator.value.shareWith === existingCollaborator.collaborator.name &&
                 parseInt(collaborator.value.shareType, 10) === existingCollaborator.shareType
               )
             })

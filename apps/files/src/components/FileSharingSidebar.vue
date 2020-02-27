@@ -15,13 +15,11 @@
         />
         <section>
           <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
-            <template v-if="$_ownerAndResharers.length > 0">
-              <li v-for="collaborator in $_ownerAndResharers" :key="collaborator.key">
-                <collaborator :collaborator="collaborator"/>
-              </li>
-            </template>
+            <li  v-if="$_ownerAsCollaborator" :key="$_ownerAsCollaborator.key">
+              <collaborator :collaborator="$_ownerAsCollaborator"/>
+            </li>
             <li>
-              <collaborator :collaborator="currentUserAsCollaborator"/>
+              <collaborator :collaborator="$_currentUserAsCollaborator"/>
             </li>
           </ul>
           <hr class="uk-margin-small-top uk-margin-small-bottom" v-if="$_directOutgoingShares.length > 0 || $_indirectOutgoingShares.length > 0" />
@@ -131,7 +129,7 @@ export default {
       return this.currentFileOutgoingSharesLoading && this.incomingSharesLoading
     },
 
-    currentUserAsCollaborator () {
+    $_currentUserAsCollaborator () {
       const permissions = this.currentUsersPermissions
       const isFolder = this.highlightedFile.type === 'folder'
       let role = { name: '' }
@@ -143,68 +141,42 @@ export default {
       }
 
       return {
-        name: this.user.id,
-        displayName: this.user.displayname,
-        info: {
-          share_type: 0,
-          share_with_additional_info: {}
+        collaborator: {
+          name: this.user.id,
+          displayName: this.user.displayname,
+          additionalInfo: null
         },
+        owner: {},
+        fileOwner: {},
+        shareType: shareTypes.user,
         role
       }
     },
 
-    $_ownerAndResharers () {
-      const ownerArray = this.$_shareOwnerAsCollaborator ? [this.$_shareOwnerAsCollaborator] : []
-      return [
-        ...ownerArray,
-        ...this.$_resharersAsCollaborators
-      ]
-    },
-    $_shareOwnerAsCollaborator () {
+    $_ownerAsCollaborator () {
       if (!this.$_allIncomingShares.length) {
         return null
       }
-
       const firstShare = this.$_allIncomingShares[0]
-      return {
+      const ownerAsCollaborator = {
         ...firstShare,
-        name: firstShare.info.uid_file_owner,
-        displayName: firstShare.info.displayname_file_owner,
-        key: 'owner-' + firstShare.info.id,
-        info: {
-          path: firstShare.info.path,
-          // set to user share for displaying user
-          share_type: '' + shareTypes.user, // most code requires string..
-          share_with_additional_info: firstShare.info.additional_info_file_owner || []
-        },
+        collaborator: firstShare.fileOwner,
+        owner: {},
+        fileOwner: {},
+        key: 'owner-' + firstShare.id,
         role: this.ownerRole
       }
-    },
 
-    $_resharersAsCollaborators () {
       const resharers = new Map()
-      const owner = this.$_shareOwnerAsCollaborator
-
       this.$_allIncomingShares.forEach(share => {
-        if (share.info.uid_owner !== owner.name) {
-          resharers.set(share.info.uid_owner, {
-            ...share,
-            name: share.info.uid_owner,
-            displayName: share.info.displayname_owner,
-            role: this.resharerRole,
-            key: 'resharer-' + share.info.id,
-            info: {
-              path: share.info.path,
-              // set to user share for displaying user
-              share_type: '' + shareTypes.user, // most code requires string..
-              share_with_additional_info: share.info.additional_info_owner || []
-            }
-          })
+        if (share.owner.name !== ownerAsCollaborator.collaborator.name) {
+          resharers.set(share.owner.name, share.owner)
         }
       })
 
       // make them unique then sort
-      return Array.from(resharers.values()).sort(this.$_collaboratorsComparator.bind(this))
+      ownerAsCollaborator.resharers = Array.from(resharers.values()).sort(this.$_collaboratorsComparator.bind(this))
+      return ownerAsCollaborator
     },
 
     /**
@@ -244,7 +216,10 @@ export default {
       return [...this.currentFileOutgoingCollaborators]
         .sort(this.$_collaboratorsComparator)
         .map(collaborator => {
-          collaborator.key = 'collaborator-' + collaborator.info.id
+          collaborator.key = 'collaborator-' + collaborator.id
+          if (collaborator.owner.name !== collaborator.fileOwner.name && collaborator.owner.name !== this.user.id) {
+            collaborator.resharers = [collaborator.owner]
+          }
           return collaborator
         })
     },
@@ -264,7 +239,7 @@ export default {
         if (shares) {
           shares.forEach((share) => {
             if (share.outgoing && this.$_isCollaboratorShare(share)) {
-              share.key = 'indirect-collaborator-' + share.info.id
+              share.key = 'indirect-collaborator-' + share.id
               allShares.push(share)
             }
           })
@@ -320,14 +295,18 @@ export default {
       return userShareTypes.includes(collaborator.shareType)
     },
     $_collaboratorsComparator (c1, c2) {
-      const name1 = c1.displayName.toLowerCase().trim()
-      const name2 = c2.displayName.toLowerCase().trim()
+      // resharer entries have displayName on first level,
+      // but shares/collaborators have it under the collaborator attribute
+      const c1DisplayName = c1.collaborator ? c1.collaborator.displayName : c1.displayName
+      const c2DisplayName = c2.collaborator ? c2.collaborator.displayName : c2.displayName
+      const name1 = c1DisplayName.toLowerCase().trim()
+      const name2 = c2DisplayName.toLowerCase().trim()
       // sorting priority 1: display name (lower case, ascending), 2: share type (groups first), 3: id (ascending)
       if (name1 === name2) {
         const c1GroupShare = c1.shareType === shareTypes.group
         const c2GroupShare = c2.shareType === shareTypes.group
         if (c1GroupShare === c2GroupShare) {
-          return textUtils.naturalSortCompare(c1.info.id + '', c2.info.id + '')
+          return textUtils.naturalSortCompare(c1.id + '', c2.id + '')
         } else {
           return c1GroupShare ? -1 : 1
         }

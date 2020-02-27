@@ -147,9 +147,8 @@ Feature: Resharing shared files with different permissions
     When the user shares folder "simple-folder (2)" with user "User Three" as "Advanced permissions" with permissions "share, delete" using the webUI
     And the user re-logs in as "user3" using the webUI
     And the user opens the share dialog for folder "simple-folder (2)" using the webUI
-    Then the current collaborators list should have order "User Two,User One,User Three"
-    And user "User Two" should be listed as "Owner" in the collaborators list on the webUI
-    And user "User One" should be listed as "Resharer" in the collaborators list on the webUI
+    Then the current collaborators list should have order "User Two,User Three"
+    And user "User Two" should be listed as "Owner" reshared through "User One" in the collaborators list on the webUI
     And user "user3" should have received a share with these details:
     | field       | value               |
     | uid_owner   | user1               |
@@ -213,3 +212,26 @@ Feature: Resharing shared files with different permissions
     And the user shares file "lorem (2).txt" with user "User Three" as "Editor" using the webUI
     Then as "user3" folder "simple-folder (2)" should exist
     And as "user3" file "lorem (2).txt" should exist
+
+  Scenario: Resource owner sees resharer in collaborators list
+    Given user "user3" has been created with default attributes
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user2" has shared folder "simple-folder (2)" with user "user3"
+    When user "user1" has logged in using the webUI
+    And the user opens the share dialog for folder "simple-folder" using the webUI
+    Then user "User Two" should be listed as "Editor" in the collaborators list on the webUI
+    And user "User Three" should be listed as "Editor" reshared through "User Two" in the collaborators list on the webUI
+
+  Scenario: Share recipient sees resharer in collaborators list
+    Given user "user3" has been created with default attributes
+    And user "user4" has been created with default attributes
+    And group "user4grp" has been created
+    And user "user4" has been added to group "user4grp"
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user1" has shared folder "simple-folder" with user "user3"
+    And user "user2" has shared folder "simple-folder (2)" with user "user4"
+    And user "user3" has shared folder "simple-folder (2)" with group "user4grp"
+    When user "user4" has logged in using the webUI
+    And the user opens the share dialog for folder "simple-folder (2)" using the webUI
+    Then user "User One" should be listed as "Owner" reshared through "User Three, User Two" in the collaborators list on the webUI
+

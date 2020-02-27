@@ -259,7 +259,7 @@ export default {
       const name2 = l2.name.toLowerCase().trim()
       // sorting priority 1: display name (lower case, ascending), 2: id (ascending)
       if (name1 === name2) {
-        return textUtils.naturalSortCompare(l1.info.id + '', l2.info.id + '')
+        return textUtils.naturalSortCompare(l1.id + '', l2.id + '')
       } else {
         return textUtils.naturalSortCompare(name1, name2)
       }

@@ -225,7 +225,6 @@ function _buildLink (link, $gettext) {
     password: !!(link.share_with && link.share_with_displayname),
     expiration: (typeof link.expiration === 'string') ? moment(link.expiration).format('YYYY-MM-DD') : null,
     itemSource: link.item_source,
-    info: link,
     file: {
       parent: link.file_parent,
       source: link.file_source,
@@ -234,10 +233,16 @@ function _buildLink (link, $gettext) {
   }
 }
 
+function _fixAdditionalInfo (data) {
+  if (typeof data !== 'string') {
+    return null
+  }
+  return data
+}
+
 function _buildCollaboratorShare (s, file) {
   const share = {
     shareType: parseInt(s.share_type, 10),
-    info: s,
     id: s.id
   }
   switch (share.shareType) {
@@ -249,8 +254,22 @@ function _buildCollaboratorShare (s, file) {
     case (shareTypes.group): // group share
       share.role = bitmaskToRole(s.permissions, file.type === 'folder')
       share.permissions = s.permissions
-      share.name = s.share_with // this is the recipient userid, rename to uid or subject? add separate field userName?
-      share.displayName = s.share_with_displayname
+      // FIXME: SDK is returning empty object for additional info when empty
+      share.collaborator = {
+        name: s.share_with,
+        displayName: s.share_with_displayname,
+        additionalInfo: _fixAdditionalInfo(s.share_with_additional_info)
+      }
+      share.owner = {
+        name: s.uid_owner,
+        displayName: s.displayname_owner,
+        additionalInfo: _fixAdditionalInfo(s.additional_info_owner)
+      }
+      share.fileOwner = {
+        name: s.uid_file_owner,
+        displayName: s.displayname_file_owner,
+        additionalInfo: _fixAdditionalInfo(s.additional_info_file_owner)
+      }
       // TODO: Refactor to work with roles / prepare for roles API
       share.customPermissions = {
         update: s.permissions & permissionsBitmask.update,
@@ -266,6 +285,7 @@ function _buildCollaboratorShare (s, file) {
   if (typeof s.expiration === 'string' || s.expiration instanceof String) {
     share.expires = Date.parse(s.expiration)
   }
+  share.path = s.path
 
   return share
 }
@@ -622,7 +642,7 @@ export default {
       })
     }
 
-    return client.shares.updateShare(share.info.id, params)
+    return client.shares.updateShare(share.id, params)
       .then((updatedShare) => {
         commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', _buildCollaboratorShare(updatedShare.shareInfo, getters.highlightedFile))
       })
@@ -662,7 +682,7 @@ export default {
       })
   },
   deleteShare (context, { client, share }) {
-    client.shares.deleteShare(share.info.id)
+    client.shares.deleteShare(share.id)
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
         context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
