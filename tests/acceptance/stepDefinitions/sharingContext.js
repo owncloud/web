@@ -457,11 +457,11 @@ Given('the administrator has excluded group {string} from receiving shares', asy
 })
 
 When('the user opens the share creation dialog in the webUI', function () {
-  return client.page.FilesPageElement.sharingDialog().clickCreateShare()
+  return client.page.FilesPageElement.SharingDialog.collaboratorsDialog().clickCreateShare()
 })
 
 When('the user cancels the share creation dialog in the webUI', function () {
-  return client.page.FilesPageElement.sharingDialog().clickCancel()
+  return client.page.FilesPageElement.collaboratorsDialog().clickCancel()
 })
 
 When('the user types {string} in the share-with-field', function (input) {

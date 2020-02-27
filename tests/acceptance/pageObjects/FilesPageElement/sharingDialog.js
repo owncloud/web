@@ -146,7 +146,7 @@ module.exports = {
      * @param {string} permissions
      */
     shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions, remote = false) {
-      await this.clickCreateShare()
+      await this.api.page.FilesPageElement.SharingDialog.collaboratorsDialog().clickCreateShare()
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
       await this.selectRoleForNewCollaborator(role)
       if (permissions === undefined) {
@@ -184,28 +184,14 @@ module.exports = {
         .waitForElementNotPresent('@saveShareButton')
     },
     /**
-     * Clicks the button to add a new collaborator
-     */
-    clickCreateShare: function () {
-      return this
-        .initAjaxCounters()
-        .useXpath()
-        .waitForElementVisible('@createShareButton')
-        .click('@createShareButton')
-        .waitForOutstandingAjaxCalls()
-        .waitForElementVisible('@createShareDialog')
-        .waitForAnimationToFinish()
-    },
-    /**
      *
      * @param {string} collaborator
      */
     clickEditShare: function (collaborator) {
-      const informationSelector = util.format(this.api.page
-        .FilesPageElement
-        .SharingDialog
-        .collaboratorsDialog()
-        .elements.collaboratorInformationByCollaboratorName.selector, collaborator)
+      const informationSelector = util.format(
+        this.elements.collaboratorInformationByCollaboratorName.selector,
+        collaborator
+      )
       const editSelector = informationSelector + this.elements.editShareButton.selector
       return this
         .useXpath()
@@ -418,8 +404,14 @@ module.exports = {
       }
       if (filterDisplayName !== null) {
         informationSelector = {
-          selector: util.format(this.elements.collaboratorInformationByCollaboratorName.selector, filterDisplayName),
-          locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
+          selector: util.format(this.api.page.FilesPageElement
+            .SharingDialog
+            .collaboratorsDialog()
+            .elements.collaboratorInformationByCollaboratorName.selector, filterDisplayName),
+          locateStrategy: this.api.page.FilesPageElement
+            .SharingDialog
+            .collaboratorsDialog()
+            .elements.collaboratorInformationByCollaboratorName.locateStrategy,
           abortOnFailure: false
         }
       }
@@ -577,10 +569,6 @@ module.exports = {
       selector: '/a',
       locateStrategy: 'xpath'
     },
-    createShareButton: {
-      selector: '//*[contains(@class, "files-collaborators-open-add-share-dialog-button")]',
-      locateStrategy: 'xpath'
-    },
     editShareButton: {
       // within collaboratorInformationByCollaboratorName
       selector: '//*[contains(@class, "files-collaborators-collaborator-edit")]',
@@ -588,10 +576,6 @@ module.exports = {
     },
     cancelButton: {
       selector: '.files-collaborators-collaborator-cancel'
-    },
-    createShareDialog: {
-      selector: '//*[contains(@class, "files-collaborators-collaborator-add-dialog")]',
-      locateStrategy: 'xpath'
     },
     editShareDialog: {
       selector: '//*[contains(@class, "files-collaborators-collaborator-edit-dialog")]',
