@@ -13,6 +13,7 @@ Summary
 * Bugfix - Fix accessible labels that said $gettext: [#3039](https://github.com/owncloud/phoenix/pull/3039)
 * Bugfix - Fix console warning about search query in public page: [#3041](https://github.com/owncloud/phoenix/pull/3041)
 * Bugfix - Moved resharers to the top of owner collaborator entry: [#3850](https://github.com/owncloud/phoenix/issues/3850)
+* Change - Moved sidebar navigation under top bar: [#3077](https://github.com/owncloud/phoenix/pull/3077)
 * Enhancement - Added ability to click file list columns for sorting: [#1854](https://github.com/owncloud/phoenix/issues/1854)
 * Enhancement - Display decimals in resource size column only for MBs or higher: [#2986](https://github.com/owncloud/phoenix/issues/2986)
 * Enhancement - Different message in overwrite dialog when versioning is enabled: [#3047](https://github.com/owncloud/phoenix/issues/3047)
@@ -61,6 +62,12 @@ Details
    displayed "resharer" role which doesn't exist.
 
    https://github.com/owncloud/phoenix/issues/3850
+
+* Change - Moved sidebar navigation under top bar: [#3077](https://github.com/owncloud/phoenix/pull/3077)
+
+   We've adjusted the position of the sidebar navigation to be under the top bar.
+
+   https://github.com/owncloud/phoenix/pull/3077
 
 * Enhancement - Added ability to click file list columns for sorting: [#1854](https://github.com/owncloud/phoenix/issues/1854)
 
