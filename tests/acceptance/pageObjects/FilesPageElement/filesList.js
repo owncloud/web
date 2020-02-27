@@ -345,9 +345,7 @@ module.exports = {
         }, (result) => {
           if (result.status !== 0) {
             console.log('WARNING: Resource is not located yet, Retrying...')
-            this
-              .pause(2000)
-              .waitForElementVisible(linkSelector)
+            this.waitForElementVisible(linkSelector)
           }
         })
         .api.execute((selector) => {
@@ -357,6 +355,9 @@ module.exports = {
           ).singleNodeValue
           return el.getAttribute('filename')
         }, [linkSelector], (result) => {
+          if (result.value.error) {
+            this.assert.fail(result.value.error)
+          }
           this.assert.strictEqual(result.value, fileName, 'displayed file name not as expected')
         })
         .useCss()
