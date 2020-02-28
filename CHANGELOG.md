@@ -15,6 +15,7 @@ Summary
 * Bugfix - Moved resharers to the top of owner collaborator entry: [#3850](https://github.com/owncloud/phoenix/issues/3850)
 * Change - Moved sidebar navigation under top bar: [#3077](https://github.com/owncloud/phoenix/pull/3077)
 * Enhancement - Added ability to click file list columns for sorting: [#1854](https://github.com/owncloud/phoenix/issues/1854)
+* Enhancement - Improved collaborators column in shared file lists: [#2924](https://github.com/owncloud/phoenix/issues/2924)
 * Enhancement - Display decimals in resource size column only for MBs or higher: [#2986](https://github.com/owncloud/phoenix/issues/2986)
 * Enhancement - Different message in overwrite dialog when versioning is enabled: [#3047](https://github.com/owncloud/phoenix/issues/3047)
 * Enhancement - Current user entry in collaborators list in sidebar: [#3808](https://github.com/owncloud/phoenix/issues/3808)
@@ -74,6 +75,18 @@ Details
    The sorting mode of the file list can now be changed by clicking on the column headers.
 
    https://github.com/owncloud/phoenix/issues/1854
+
+* Enhancement - Improved collaborators column in shared file lists: [#2924](https://github.com/owncloud/phoenix/issues/2924)
+
+   Fixed issue with the collaborators column where only one was being displayed in the "shared
+   with you" file list. This is done by properly aggregating all share entries under each file
+   entry for the list, which now also includes group shares and link shares.
+
+   Improved the look of the collaborators by adding avatars and icons there for the shares in the
+   collaborators and owner columns.
+
+   https://github.com/owncloud/phoenix/issues/2924
+   https://github.com/owncloud/phoenix/pull/3049
 
 * Enhancement - Display decimals in resource size column only for MBs or higher: [#2986](https://github.com/owncloud/phoenix/issues/2986)
 
