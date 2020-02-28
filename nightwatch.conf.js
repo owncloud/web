@@ -48,6 +48,11 @@ module.exports = {
         start_process: false,
         port: SELENIUM_PORT,
         use_legacy_jsonwire: false
+      },
+      screenshots: {
+        enabled: true,
+        path: 'tests/reports/screenshots',
+        on_failure: true
       }
     },
     local: {
@@ -62,6 +67,11 @@ module.exports = {
     },
     drone: {
       selenium_host: 'selenium',
+      screenshots: {
+        enabled: !SAUCE_USERNAME,
+        path: 'tests/reports/screenshots',
+        on_failure: !SAUCE_USERNAME
+      },
       desiredCapabilities: {
         chromeOptions: {
           args: ['disable-gpu', 'disable-dev-shm-usage'],

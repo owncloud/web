@@ -365,7 +365,12 @@ def acceptance():
 									owncloudLogFederated() if params['federatedServerNeeded'] else []
 								) +
 								copyFilesForUpload() +
-								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser),
+								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
+                                (
+                                    uploadScreenshots() +
+                                    buildGithubComment(suite, alternateSuiteName) +
+                                    githubComment()
+                                if isLocalBrowser(browser) else []),
 							'services':
 								phoenixService() +
 								owncloudService() +
@@ -990,6 +995,86 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 			'curl http://phoenix/oidc-callback.html',
 			'yarn run acceptance-tests-drone',
 		]
+	}]
+
+def uploadScreenshots():
+	return [{
+		'name': 'upload-screenshots',
+		'image': 'plugins/s3',
+		'pull': 'if-not-exists',
+		'settings': {
+			'acl': 'public-read',
+			'bucket': 'phoenix',
+			'endpoint': 'https://minio.owncloud.com/',
+			'path_style': True,
+			'source': '/var/www/owncloud/phoenix/tests/reports/screenshots/**/*',
+			'strip_prefix': '/var/www/owncloud/phoenix/tests/reports/screenshots',
+			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
+		},
+		'environment': {
+			'AWS_ACCESS_KEY_ID': {
+				'from_secret': 'aws_access_key_id'
+			},
+			'AWS_SECRET_ACCESS_KEY': {
+				'from_secret': 'aws_secret_access_key'
+			},
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
+	}]
+
+def buildGithubComment(suite, alternateSuiteName):
+	return [{
+		'name': 'build-github-comment',
+		'image': 'owncloud/ubuntu:16.04',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/phoenix/tests/reports/screenshots/',
+			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % alternateSuiteName,
+			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
+			'echo "\n</p></details>" >> comments.file',
+			'more comments.file',
+		],
+		'environment': {
+			'TEST_CONTEXT': suite,
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
+	}]
+
+def githubComment():
+	return [{
+		'name': 'github-comment',
+		'image': 'jmccann/drone-github-comment:1',
+		'pull': 'if-not-exists',
+		'settings': {
+			'message_file': '/var/www/owncloud/phoenix/tests/reports/screenshots/comments.file',
+		},
+		'environment': {
+			'PLUGIN_API_KEY': {
+				'from_secret': 'plugin_api_key'
+			},
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
 	}]
 
 def dependsOn(earlierStages, nextStages):

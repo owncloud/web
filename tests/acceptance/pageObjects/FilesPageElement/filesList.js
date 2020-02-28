@@ -344,7 +344,7 @@ module.exports = {
           abortOnFailure: false
         }, (result) => {
           if (result.status !== 0) {
-            console.log('WARNING: resource is not located yet, Retrying...')
+            console.log('WARNING: Resource is not located yet, Retrying...')
             this
               .pause(2000)
               .waitForElementVisible(linkSelector)
