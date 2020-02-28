@@ -110,8 +110,8 @@ Feature: Restore deleted files/folders
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the error message with header "Restoration of file-to-delete-and-restore failed" should be displayed on the webUI
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
-    #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in trash
-    And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should exist in trash
+    #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
+    And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin
     And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
     #And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should exist
     And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist

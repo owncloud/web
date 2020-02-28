@@ -133,7 +133,7 @@ Feature: Search
     And file "strängéनेपालीloremfile.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
 
   @issue-1726
-  Scenario: Search for deleted folder in trashbin
+  Scenario: Search for deleted folder in the trashbin
     Given user "user1" has created folder "deleted folder"
     And user "user1" has created folder "not deleted folder"
     And the following files have been deleted by user "user1"
@@ -165,4 +165,4 @@ Feature: Search
     Then file "lorem-big.txt" should be listed on the webUI
     #Then file "lorem-big.txt" should not be listed on the webUI
     And as "user1" file "lorem-big.txt" should not exist
-    And as "user1" the file with original path "lorem-big.txt" should exist in trash
+    And as "user1" the file with original path "lorem-big.txt" should exist in the trashbin
