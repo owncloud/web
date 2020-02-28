@@ -831,10 +831,14 @@ Then('user {string} should have a share with these details:', function (user, ex
 
 Then('the user should not be able to share file/folder/resource {string} using the webUI', async function (resource) {
   const api = client.page.FilesPageElement
-  await api.appSideBar()
+  await api
+    .appSideBar()
     .closeSidebar(100)
-    .openSharingDialog(resource)
-  const shareResponse = await api.sharingDialog()
+    .waitForFileVisible(resource)
+  const shareResponse = await api
+    .filesList()
+    .openFileActionsMenu(resource)
+    .openCollaboratorsDialog()
     .getSharingPermissionMsg()
   const noSharePermissionsMsgFormat = "You don't have permission to share this %s."
   const noSharePermissionsFileMsg = util.format(noSharePermissionsMsgFormat, 'file')
