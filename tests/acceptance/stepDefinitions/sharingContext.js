@@ -521,8 +521,12 @@ Then('custom permission/permissions {string} should be set for user {string} for
       .FilesPageElement
       .appSideBar()
       .closeSidebar(100)
-      .openSharingDialog(resource)
-    const currentSharePermissions = await client.page.FilesPageElement.sharingDialog()
+      .waitForFileVisible(resource)
+    const currentSharePermissions = await client.page
+      .FilesPageElement
+      .filesList()
+      .openFileActionsMenu(resource)
+      .openCollaboratorsDialog()
       .getDisplayedPermission(user)
 
     return assertSharePermissions(currentSharePermissions, permissions)
@@ -533,8 +537,12 @@ Then('no custom permissions should be set for collaborator {string} for file/fol
     .FilesPageElement
     .appSideBar()
     .closeSidebar(100)
-    .openSharingDialog(resource)
-  const currentSharePermissions = await client.page.FilesPageElement.sharingDialog()
+    .waitForFileVisible(resource)
+  const currentSharePermissions = await client.page
+    .FilesPageElement
+    .filesList()
+    .openFileActionsMenu(resource)
+    .openCollaboratorsDialog()
     .getDisplayedPermission(user)
   return assertSharePermissions(currentSharePermissions)
 })
@@ -758,7 +766,12 @@ Then('user {string} should be listed as {string} in the collaborators list for f
       .FilesPageElement
       .appSideBar()
       .closeSidebar(100)
-      .openSharingDialog(resource)
+      .waitForFileVisible(resource)
+    await client.page
+      .FilesPageElement
+      .filesList()
+      .openFileActionsMenu(resource)
+      .openCollaboratorsDialog()
 
     return assertCollaboratorslistContains('user', user, { role })
   })
@@ -773,11 +786,14 @@ Then('group {string} should be listed as {string} via {string} in the collaborat
 
 Then('group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI',
   async function (group, role, resource) {
-    await client.page.FilesPageElement.filesList().waitForFileVisible(resource)
     await client.page
       .FilesPageElement
       .appSideBar()
       .closeSidebar(100)
+      .waitForFileVisible(resource)
+    await client.page
+      .FilesPageElement
+      .filesList()
       .openFileActionsMenu(resource)
       .openCollaboratorsDialog()
     return assertCollaboratorslistContains('group', group, { role })
