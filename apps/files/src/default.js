@@ -55,7 +55,7 @@ const appInfo = {
         return false
       },
       quickAccess: {
-        icon: 'share',
+        icon: 'group',
         ariaLabel: $gettext('Collaborators')
       }
     }, {
@@ -88,7 +88,7 @@ const navItems = [
   },
   {
     name: $gettext('Shared with me'),
-    iconMaterial: 'share',
+    iconMaterial: 'group',
     route: {
       name: 'files-shared-with-me',
       path: `/${appInfo.id}/shared-with-me`
@@ -96,7 +96,7 @@ const navItems = [
   },
   {
     name: $gettext('Shared with others'),
-    iconMaterial: 'share',
+    iconMaterial: 'group',
     route: {
       name: 'files-shared-with-others',
       path: `/${appInfo.id}/shared-with-others`
