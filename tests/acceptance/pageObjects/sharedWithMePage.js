@@ -37,7 +37,7 @@ module.exports = {
             if (result.status === 0) {
               status = result.value === '' ? 'Accepted' : result.value
             } else {
-              throw new Error(`Expected: share status of the resource but found unexpected response: ${result}`)
+              throw new Error(`Expected: share status of the resource but found unexpected response: ${result.value.error}`)
             }
           }
         )
@@ -53,10 +53,10 @@ module.exports = {
      */
     declineAcceptFile: function (action, filename, user) {
       const actionLocatorButton = {
-        locateStrategy: this.elements.actionOnFileRow.locateStrategy,
+        locateStrategy: this.elements.shareStatusActionOnFileRow.locateStrategy,
         selector: this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
                   util.format(this.elements.getSharedFromUserName.selector, user) +
-                  util.format(this.elements.actionOnFileRow.selector, action)
+                  util.format(this.elements.shareStatusActionOnFileRow.selector, action)
       }
       return this
         .initAjaxCounters()
@@ -100,19 +100,19 @@ module.exports = {
   },
   elements: {
     shareStatusOnFileRow: {
-      selector: "/../..//div[@class='uk-text-nowrap uk-width-small']/span",
+      selector: "/../..//*[contains(@class,'file-row-share-status-text')]",
       locateStrategy: 'xpath'
     },
     getSharedFromUserName: {
-      selector: '//div[normalize-space(.)="%s"]',
+      selector: '//*[contains(@class,"file-row-owner-name")][normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
     },
     sharedFrom: {
-      selector: "//div[@class='uk-text-meta uk-text-nowrap uk-width-small']/div",
+      selector: "//*[contains(@class,'file-row-owner-name')]",
       locateStrategy: 'xpath'
     },
-    actionOnFileRow: {
-      selector: '/../..//a[.="%s"]',
+    shareStatusActionOnFileRow: {
+      selector: '/../..//*[contains(@class,"file-row-share-status-action")][normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
     }
   }

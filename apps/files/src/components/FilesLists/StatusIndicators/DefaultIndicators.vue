@@ -35,7 +35,7 @@ export default {
     },
     parentPath: {
       type: String,
-      required: true
+      required: false
     }
   },
 
@@ -61,6 +61,9 @@ export default {
     },
 
     shareTypesIndirect () {
+      if (!this.parentPath) {
+        return []
+      }
       const parentPaths = getParentPaths(this.parentPath, true)
       if (parentPaths.length === 0) {
         return []
@@ -87,8 +90,19 @@ export default {
   },
 
   methods: {
+    $_shareTypes (item) {
+      if (typeof item.shareTypes !== 'undefined') {
+        return item.shareTypes
+      }
+
+      if (item.shares) {
+        return Array.from(new Set(item.shares.map(share => parseInt(share.type, 10))))
+      }
+      return []
+    },
+
     isDirectUserShare (item) {
-      return (intersection(userShareTypes, item.shareTypes).length > 0)
+      return (intersection(userShareTypes, this.$_shareTypes(item)).length > 0)
     },
 
     isIndirectUserShare (item) {
@@ -96,7 +110,7 @@ export default {
     },
 
     isDirectLinkShare (item) {
-      return (item.shareTypes.indexOf(shareTypes.link) >= 0)
+      return (this.$_shareTypes(item).indexOf(shareTypes.link) >= 0)
     },
 
     isIndirectLinkShare () {

@@ -338,3 +338,13 @@ Feature: Sharing files and folders with internal groups
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
     Then user "User One" should be listed as "Owner" reshared through "User Two" via "simple-folder (2)" in the collaborators list on the webUI
     And the current collaborators list should have order "User One,User Three"
+
+  Scenario: share a folder with other group and then it should be listed on Shared with Others page
+    Given user "user1" has logged in using the webUI
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user1" has shared folder "simple-folder" with group "grp1"
+    When the user browses to the shared-with-others page
+    Then the following resources should have the following collaborators
+      | fileName            | expectedCollaborators |
+      | simple-folder       | User Two, grp1        |
+

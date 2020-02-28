@@ -3,16 +3,20 @@ import _ from 'lodash'
 import { getParentPaths } from '../helpers/path'
 import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
 import { shareTypes } from '../helpers/shareTypes'
+import path from 'path'
 const { default: PQueue } = require('p-queue')
 
-function _buildFile (file) {
+function _extName (fileName) {
   let ext = ''
-  if (file.type !== 'dir') {
-    const ex = file.name.match(/\.[0-9a-z]+$/i)
-    if (ex !== null) {
-      ext = ex[0].substr(1)
-    }
+  const ex = fileName.match(/\.[0-9a-z]+$/i)
+  if (ex) {
+    ext = ex[0].substr(1)
   }
+  return ext
+}
+
+function _buildFile (file) {
+  const ext = (file.type !== 'dir') ? _extName(file.name) : ''
   return ({
     type: (file.type === 'dir') ? 'folder' : file.type,
     id: file.fileInfo['{http://owncloud.org/ns}fileid'],
@@ -36,6 +40,8 @@ function _buildFile (file) {
     basename: (function () {
       const pathList = file.name.split('/').filter(e => e !== '')
       const name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
+      // FIXME: this is really just a view/formatting thing, should better
+      // be processed at render time instead of storing an extra value
       if (ext) {
         return name.substring(0, name.length - ext.length - 1)
       }
@@ -122,68 +128,89 @@ function _buildFileInTrashbin (file) {
   })
 }
 
-function _buildSharedFile (file) {
-  let ext = ''
-  if (file.item_type !== 'dir') {
-    const ex = file.path.substr(file.path.lastIndexOf('/')).match(/\.[0-9a-z]+$/i)
-    if (ex !== null) {
-      ext = ex[0].substr(1)
-    }
-  }
-  return {
-    sourceId: file.item_source,
-    id: file.id,
-    type: file.item_type,
-    extension: (function () {
-      return ext
-    }()),
-    name: (function () {
-      const name = file.path.substr(file.path.lastIndexOf('/'))
-      return name.substr(1)
-    }()),
-    basename: (function () {
-      const name = file.path.substr(file.path.lastIndexOf('/'))
-      if (ext) {
-        return name.substring(1, name.length - ext.length - 1)
+function _aggregateFileShares (data, incomingShares = false) {
+  // borrowed from owncloud's apps/files_sharing/js/sharedfilelist.js#_makeFilesFromShares(data)
+  var files = data
+  files = _.chain(files)
+    // convert share data to file data
+    .map(share => {
+      var file = {
+        id: share.item_source,
+        type: share.item_type
       }
-      return name.substr(1)
-    }()),
-    path: file.path,
-    shareTime: file.stime * 1000,
-    shareTimeMoment: moment(file.stime * 1000),
-    owner: file.uid_file_owner,
-    ownerDisplayname: file.displayname_file_owner,
-    shareOwner: file.uid_owner,
-    shareOwnerDisplayname: file.displayname_owner,
-    sharedWith: file.share_with_displayname,
-    shareType: file.share_type,
-    status: (function () {
-      if (file.state) return file.state
-    }()),
-    canUpload: function () {
-      // TODO: Find a way how to read permissions for file and not for share
-      // return file.permissions >= 4
-      return true
-    },
-    canDownload: function () {
-      return file.item_type !== 'folder'
-    },
-    canBeDeleted: function () {
-      // return file.permissions >= 8
-      return true
-    },
-    canRename: function () {
-      // return file.permissions >= 2
-      return true
-    },
-    canShare: function () {
-      // return file.permissions >= 16
-      return true
-    },
-    isMounted: function () {
-      return false
-    }
-  }
+
+      if (incomingShares) {
+        file.owner = {
+          username: share.uid_file_owner,
+          displayName: share.displayname_file_owner
+        }
+        file.shareOwner = {
+          username: share.uid_owner,
+          displayName: share.displayname_owner
+        }
+        file.status = share.state
+        file.name = path.basename(share.file_target)
+        file.basename = path.basename(share.file_target, file.extension)
+        file.path = share.file_target
+        file.isReceivedShare = () => true
+      } else {
+        file.shareOwner = share.uid_owner
+        file.shareOwnerDisplayname = share.displayname_owner
+        file.name = path.basename(share.path)
+        file.basename = path.basename(share.path, file.extension)
+        file.path = share.path
+        // permissions irrelevant here
+        file.isReceivedShare = () => false
+      }
+
+      // FIXME: add actual permission parsing
+      file.canUpload = () => true
+      file.canBeDeleted = () => true
+      file.canRename = () => true
+      file.canShare = () => true
+      file.isMounted = () => false
+      file.canDownload = () => file.item_type !== 'folder'
+      file.extension = (file.type !== 'folder') ? _extName(file.name) : ''
+      if (file.extension) {
+        // remove extension from basename like _buildFile does
+        file.basename = file.basename.substring(0, file.basename.length - file.extension.length - 1)
+      }
+      file.share = _buildShare(share, file)
+
+      return file
+    })
+    // Group all files and have a "shares" array with
+    // the share info for each file.
+    //
+    // This uses a hash memo to cumulate share information
+    // inside the same file object (by file id).
+    .reduce((memo, file) => {
+      var data = memo[file.id]
+      if (!data) {
+        data = memo[file.id] = file
+        data.shares = [file.share]
+        data.shareTime = file.share.stime * 1000
+        data.shareTimeMoment = moment(file.share.stime * 1000)
+        if (incomingShares) {
+          data.shareId = file.share.id
+        }
+      } else {
+        // always take the most recent stime
+        if (file.share.stime * 1000 > data.shareTime) {
+          data.shareTime = file.share.stime * 1000
+          data.shareTimeMoment = moment(file.share.stime * 1000)
+        }
+        data.shares.push(file.share)
+      }
+
+      delete file.share
+      return memo
+    }, {})
+    // Retrieve only the values of the returned hash
+    .values()
+    .value()
+
+  return files
 }
 
 function _buildShare (s, file, $gettext) {
@@ -286,6 +313,7 @@ function _buildCollaboratorShare (s, file) {
     share.expires = Date.parse(s.expiration)
   }
   share.path = s.path
+  share.stime = s.stime
 
   return share
 }
@@ -394,7 +422,7 @@ export default {
     // TODO: Move request to owncloud-sdk
     client.requests.ocs({
       service: 'apps/files_sharing',
-      action: '/api/v1/shares?format=json&include_tags=true',
+      action: '/api/v1/shares?format=json&reshares=true&include_tags=false',
       method: 'GET'
     }).then(res => {
       res.json().then(json => {
@@ -404,9 +432,7 @@ export default {
         }
 
         const files = json.ocs.data
-        const uniqueFiles = Array.from(new Set(files.map(file => file.item_source))).map(id => {
-          return files.find(file => file.item_source === id)
-        })
+        const uniqueFiles = _aggregateFileShares(files, false)
         context.dispatch('buildFilesSharedFromMe', uniqueFiles)
       })
     }).catch((e) => {
@@ -427,7 +453,7 @@ export default {
     // TODO: Load remote shares as well
     client.requests.ocs({
       service: 'apps/files_sharing',
-      action: '/api/v1/shares?format=json&shared_with_me=true&state=all&include_tags=true',
+      action: '/api/v1/shares?format=json&shared_with_me=true&state=all&include_tags=false',
       method: 'GET'
     }).then(res => {
       res.json().then(json => {
@@ -436,9 +462,7 @@ export default {
           return
         }
         const files = json.ocs.data
-        const uniqueFiles = Array.from(new Set(files.map(file => file.id))).map(id => {
-          return files.find(file => file.id === id)
-        })
+        const uniqueFiles = _aggregateFileShares(files, true)
         context.dispatch('buildFilesSharedFromMe', uniqueFiles)
       })
     }).catch((e) => {
@@ -463,7 +487,9 @@ export default {
   },
 
   loadFiles (context, { currentFolder, files }) {
-    currentFolder = _buildFile(currentFolder)
+    if (currentFolder) {
+      currentFolder = _buildFile(currentFolder)
+    }
     files = files.map(_buildFile)
     context.commit('LOAD_FILES', { currentFolder, files })
   },
@@ -473,8 +499,7 @@ export default {
     context.commit('LOAD_FILES', { currentFolder, files })
   },
   buildFilesSharedFromMe (context, files) {
-    const currentFolder = _buildSharedFile(files[0])
-    files = files.map(_buildSharedFile)
+    const currentFolder = files[0]
     context.commit('LOAD_FILES', { currentFolder, files })
   },
   setFilesSort (context, { field, directionIsDesc }) {
@@ -839,7 +864,7 @@ export default {
     // TODO: Move request to owncloud-sdk
     client.requests.ocs({
       service: 'apps/files_sharing',
-      action: `/api/v1/shares/pending/${item.id}`,
+      action: `/api/v1/shares/pending/${item.shareId}`,
       method: type
     })
       .then(_ => {
