@@ -345,7 +345,8 @@ module.exports = {
         }, (result) => {
           if (result.status !== 0) {
             console.log('WARNING: resource is not located yet, Retrying...')
-            this.waitForAnimationToFinish()
+            this
+              .pause(2000)
               .waitForElementVisible(linkSelector)
           }
         })

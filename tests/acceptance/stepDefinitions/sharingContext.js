@@ -29,10 +29,12 @@ const userSharesFileOrFolderWithUserOrGroup = async function (
   const api = client.page
     .FilesPageElement
 
+  await api.appSideBar().closeSidebar(100)
+  await api.filesList().waitForFileVisible(file)
   await api
-    .appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(file)
+    .filesList()
+    .openFileActionsMenu(file)
+    .openCollaboratorsDialog()
 
   return api.sharingDialog().shareWithUserOrGroup(sharee, shareWithGroup, role, permissions, remote)
 }
