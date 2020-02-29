@@ -14,66 +14,123 @@ config = {
 	'yarnlint': True,
 
 	'acceptance': {
-		'webUI': {
+		'webUI1': {
 			'suites': {
-				'webUICreateFilesFolders': 'createFilesFolders',
-				'webUIDeleteFilesFolders': 'deleteFilesFolders',
-				'webUIFavorites': 'Favorites',
-				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingAutocompletion': 'SharingAutocompletion',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
-				'webUIResharing': 'Resharing',
-				'webUISharingPublic': 'SharingPublic',
-				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
-				'webUITrashbin': 'Trashbin',
-				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
-				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
-				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-				'webUISharingNotifications': 'SharingNotifications',
-				'webUIAccount': 'Account'
+				'webUISharingInternalUsers': 'SharingInternalUsers1',
 			},
 		},
-		'webUIFederation': {
-			'suites': {
-				'webUISharingExternal': 'SharingExternal',
-			},
-			'extraEnvironment': {
-				'REMOTE_BACKEND_HOST': 'http://federated'
-			},
-			'federatedServerNeeded': True,
-			'federatedServerVersion': 'daily-master-qa'
-		},
+		'webUI2': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers2',
+            },
+        },
+        'webUI3': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers3',
+            },
+        },
+        'webUI4': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers4',
+            },
+        },
+        'webUI5': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers5',
+            },
+        },
+        'webUI6': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers6',
+            },
+        },
+        'webUI7': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers7',
+            },
+        },
+        'webUI8': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers8',
+            },
+        },
+        'webUI9': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers9',
+            },
+        },
 		'webUI-XGA': {
 			'suites': {
-				'all': 'XGAPortrait',
+				'webUISharingInternalUsers': 'XGAPortrait',
 			},
 			'extraEnvironment': {
 				'SCREEN_RESOLUTION': '768x1024'
 			},
 			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
 		},
+		'webUI-XGA1': {
+            'suites': {
+                'webUISharingInternalUsers': 'XGAPortrait1',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '768x1024'
+            },
+            'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+        },
+        'webUI-XGA2': {
+            'suites': {
+                'webUISharingInternalUsers': 'XGAPortrait2',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '768x1024'
+            },
+            'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+        },
+        'webUI-XGA3': {
+            'suites': {
+                'webUISharingInternalUsers': 'XGAPortrait3',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '768x1024'
+            },
+            'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+        },
 		'webUI-iPhone': {
 			'suites': {
-				'all': 'iPhone',
+				'webUISharingInternalUsers': 'iPhone',
 			},
 			'extraEnvironment': {
 				'SCREEN_RESOLUTION': '375x812'
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
 		},
+		'webUI-iPhone1': {
+            'suites': {
+                'webUISharingInternalUsers': 'iPhone1',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '375x812'
+            },
+            'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+        },
+        'webUI-iPhone2': {
+            'suites': {
+                'webUISharingInternalUsers': 'iPhone2',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '375x812'
+            },
+            'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+        },
+        'webUI-iPhone3': {
+            'suites': {
+                'webUISharingInternalUsers': 'iPhone3',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '375x812'
+            },
+            'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+        },
 	},
 
 	'build': True
