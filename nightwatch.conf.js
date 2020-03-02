@@ -58,10 +58,20 @@ module.exports = {
         start_process: START_PROCESS,
         server_path: chromedriver.path,
         cli_args: ['--port=' + SELENIUM_PORT]
+      },
+      screenshots: {
+        enabled: true,
+        path: 'tests/reports/screenshots',
+        on_failure: true
       }
     },
     drone: {
       selenium_host: 'selenium',
+      screenshots: {
+        enabled: !SAUCE_USERNAME,
+        path: 'tests/reports/screenshots',
+        on_failure: !SAUCE_USERNAME
+      },
       desiredCapabilities: {
         chromeOptions: {
           args: ['disable-gpu', 'disable-dev-shm-usage'],

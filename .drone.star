@@ -14,66 +14,118 @@ config = {
 	'yarnlint': True,
 
 	'acceptance': {
-		'webUI': {
+		'webUI1': {
 			'suites': {
-				'webUICreateFilesFolders': 'createFilesFolders',
-				'webUIDeleteFilesFolders': 'deleteFilesFolders',
-				'webUIFavorites': 'Favorites',
-				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingAutocompletion': 'SharingAutocompletion',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
-				'webUIResharing': 'Resharing',
-				'webUISharingPublic': 'SharingPublic',
-				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
-				'webUITrashbin': 'Trashbin',
-				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
-				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
-				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-				'webUISharingNotifications': 'SharingNotifications',
-				'webUIAccount': 'Account'
+				'webUISharingInternalUsers': 'SharingInternalUsers1',
 			},
 		},
-		'webUIFederation': {
+		'webUI2': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers2',
+            },
+        },
+		'webUI3': {
 			'suites': {
-				'webUISharingExternal': 'SharingExternal',
+				'webUISharingInternalUsers': 'SharingInternalUsers3',
 			},
-			'extraEnvironment': {
-				'REMOTE_BACKEND_HOST': 'http://federated'
-			},
-			'federatedServerNeeded': True,
-			'federatedServerVersion': 'daily-master-qa'
 		},
-		'webUI-XGA': {
+		'webUI4': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers4',
+            },
+        },
+        'webUI5': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers5',
+            },
+        },
+        'webUI6': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers6',
+            },
+        },
+        'webUI7': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers7',
+            },
+        },
+        'webUI8': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers8',
+            },
+        },
+		'webUI-XGA1': {
 			'suites': {
-				'all': 'XGAPortrait',
+				'webUISharingInternalUsers': 'XGAPortrait1',
 			},
 			'extraEnvironment': {
 				'SCREEN_RESOLUTION': '768x1024'
 			},
 			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
 		},
-		'webUI-iPhone': {
+        'webUI-XGA2': {
+            'suites': {
+                'webUISharingInternalUsers': 'XGAPortrait2',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '768x1024'
+            },
+            'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+        },
+        'webUI-XGA3': {
+            'suites': {
+                'webUISharingInternalUsers': 'XGAPortrait3',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '768x1024'
+            },
+            'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+        },
+        'webUI-XGA4': {
+            'suites': {
+                'webUISharingInternalUsers': 'XGAPortrait4',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '768x1024'
+            },
+            'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+        },
+		'webUI-iPhone1': {
 			'suites': {
-				'all': 'iPhone',
+				'webUISharingInternalUsers': 'iPhone1',
 			},
 			'extraEnvironment': {
 				'SCREEN_RESOLUTION': '375x812'
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
 		},
+		'webUI-iPhone2': {
+            'suites': {
+                'webUISharingInternalUsers': 'iPhone2',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '375x812'
+            },
+            'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+        },
+        'webUI-iPhone3': {
+            'suites': {
+                'webUISharingInternalUsers': 'iPhone3',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '375x812'
+            },
+            'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+        },
+        'webUI-iPhone4': {
+            'suites': {
+                'webUISharingInternalUsers4': 'iPhone4',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '375x812'
+            },
+            'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+        },
 	},
 
 	'build': True
@@ -365,7 +417,12 @@ def acceptance():
 									owncloudLogFederated() if params['federatedServerNeeded'] else []
 								) +
 								copyFilesForUpload() +
-								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser),
+								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
+								(
+									uploadScreenshots() +
+									buildGithubComment(suite, alternateSuiteName) +
+									githubComment()
+								if isLocalBrowser(browser) else []),
 							'services':
 								phoenixService() +
 								owncloudService() +
@@ -990,6 +1047,86 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 			'curl http://phoenix/oidc-callback.html',
 			'yarn run acceptance-tests-drone',
 		]
+	}]
+
+def uploadScreenshots():
+	return [{
+		'name': 'upload-screenshots',
+		'image': 'plugins/s3',
+		'pull': 'if-not-exists',
+		'settings': {
+			'acl': 'public-read',
+			'bucket': 'phoenix',
+			'endpoint': 'https://minio.owncloud.com/',
+			'path_style': True,
+			'source': '/var/www/owncloud/phoenix/tests/reports/screenshots/**/*',
+			'strip_prefix': '/var/www/owncloud/phoenix/tests/reports/screenshots',
+			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
+		},
+		'environment': {
+			'AWS_ACCESS_KEY_ID': {
+				'from_secret': 'aws_access_key_id'
+			},
+			'AWS_SECRET_ACCESS_KEY': {
+				'from_secret': 'aws_secret_access_key'
+			},
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
+	}]
+
+def buildGithubComment(suite, alternateSuiteName):
+	return [{
+		'name': 'build-github-comment',
+		'image': 'owncloud/ubuntu:16.04',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/phoenix/tests/reports/screenshots/',
+			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % alternateSuiteName,
+			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
+			'echo "\n</p></details>" >> comments.file',
+			'more comments.file',
+		],
+		'environment': {
+			'TEST_CONTEXT': suite,
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
+	}]
+
+def githubComment():
+	return [{
+		'name': 'github-comment',
+		'image': 'jmccann/drone-github-comment:1',
+		'pull': 'if-not-exists',
+		'settings': {
+			'message_file': '/var/www/owncloud/phoenix/tests/reports/screenshots/comments.file',
+		},
+		'environment': {
+			'PLUGIN_API_KEY': {
+				'from_secret': 'plugin_api_key'
+			},
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
 	}]
 
 def dependsOn(earlierStages, nextStages):
