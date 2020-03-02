@@ -784,8 +784,10 @@ When('the user browses to the folder {string} on the files page', (folderName) =
     .page.filesPage()
     .navigateAndWaitTillLoaded(targetFolder)
 })
-When('the user copies the permalink of the current folder using the webUI', function () {
-  return client.page.filesPage().copyPermalinkFromFilesAppBar()
+When('the user copies the permalink of the file/folder/resource {string} using the webUI', async function (file) {
+  await client.page.FilesPageElement.filesList().openSharingDialog(file, 'links')
+  await client.page.filesPage().copyPermalinkFromFilesAppBar()
+  return client
 })
 Then('the clipboard content should match permalink of resource {string}', async function (folderName) {
   const folderData = await webdav.getProperties(folderName, client.globals.currentUser, ['oc:privatelink'])
