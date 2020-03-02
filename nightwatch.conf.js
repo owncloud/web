@@ -48,11 +48,6 @@ module.exports = {
         start_process: false,
         port: SELENIUM_PORT,
         use_legacy_jsonwire: false
-      },
-      screenshots: {
-        enabled: true,
-        path: 'tests/reports/screenshots',
-        on_failure: true
       }
     },
     local: {
@@ -63,6 +58,11 @@ module.exports = {
         start_process: START_PROCESS,
         server_path: chromedriver.path,
         cli_args: ['--port=' + SELENIUM_PORT]
+      },
+      screenshots: {
+        enabled: true,
+        path: 'tests/reports/screenshots',
+        on_failure: true
       }
     },
     drone: {

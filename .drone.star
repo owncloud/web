@@ -15,11 +15,11 @@ config = {
 
 	'acceptance': {
 		'webUI1': {
-			'suites': {
-				'webUISharingInternalUsers': 'SharingInternalUsers1',
-			},
-		},
-		'webUI2': {
+            'suites': {
+                'webUISharingInternalUsers': 'SharingInternalUsers1',
+            },
+        },
+        'webUI2': {
             'suites': {
                 'webUISharingInternalUsers': 'SharingInternalUsers2',
             },
@@ -59,16 +59,16 @@ config = {
                 'webUISharingInternalUsers': 'SharingInternalUsers9',
             },
         },
-		'webUI-XGA': {
-			'suites': {
-				'webUISharingInternalUsers': 'XGAPortrait',
-			},
-			'extraEnvironment': {
-				'SCREEN_RESOLUTION': '768x1024'
-			},
-			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
-		},
-		'webUI-XGA1': {
+        'webUI-XGA': {
+            'suites': {
+                'webUISharingInternalUsers': 'XGAPortrait',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '768x1024'
+            },
+            'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
+        },
+        'webUI-XGA1': {
             'suites': {
                 'webUISharingInternalUsers': 'XGAPortrait1',
             },
@@ -95,16 +95,16 @@ config = {
             },
             'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip'
         },
-		'webUI-iPhone': {
-			'suites': {
-				'webUISharingInternalUsers': 'iPhone',
-			},
-			'extraEnvironment': {
-				'SCREEN_RESOLUTION': '375x812'
-			},
-			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
-		},
-		'webUI-iPhone1': {
+        'webUI-iPhone': {
+            'suites': {
+                'webUISharingInternalUsers': 'iPhone',
+            },
+            'extraEnvironment': {
+                'SCREEN_RESOLUTION': '375x812'
+            },
+            'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
+        },
+        'webUI-iPhone1': {
             'suites': {
                 'webUISharingInternalUsers': 'iPhone1',
             },
@@ -132,7 +132,6 @@ config = {
             'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip'
         },
 	},
-
 	'build': True
 }
 
@@ -465,63 +464,6 @@ def acceptance():
 		return False
 
 	return pipelines
-
-def uploadScreenshots():
-	return [{
-		'name': 'upload-screenshots',
-		'image': 'plugins/s3',
-		'pull': 'if-not-exists',
-		'settings': {
-			'acl': 'public-read',
-			'bucket': 'phoenix',
-			'endpoint': 'https://minio.owncloud.com/',
-			'path_style': True,
-			'source': '/var/www/owncloud/phoenix/tests/reports/screenshots/**/*',
-			'strip_prefix': '/var/www/owncloud/phoenix/tests/reports/screenshots',
-			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
-		},
-		'environment': {
-			'AWS_ACCESS_KEY_ID': {
-				'from_secret': 'aws_access_key_id'
-			},
-			'AWS_SECRET_ACCESS_KEY': {
-				'from_secret': 'aws_secret_access_key'
-			},
-		},
-		'when': {
-			'status': [
-				'failure'
-			],
-			'event': [
-				'pull_request'
-			]
-		},
-	}]
-
-def buildGithubComment(suite, alternateSuiteName):
-	return [{
-		'name': 'build-github-comment',
-		'image': 'owncloud/ubuntu:16.04',
-		'pull': 'always',
-		'commands': [
-			'cd /var/www/owncloud/phoenix/tests/reports/screenshots/',
-			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % alternateSuiteName,
-			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
-			'echo "\n</p></details>" >> comments.file',
-			'more comments.file',
-		],
-		'environment': {
-			'TEST_CONTEXT': suite,
-		},
-		'when': {
-			'status': [
-				'failure'
-			],
-			'event': [
-				'pull_request'
-			]
-		},
-	}]
 
 def notify():
 	pipelines = []
@@ -1111,6 +1053,68 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 		]
 	}]
 
+def dependsOn(earlierStages, nextStages):
+	for earlierStage in earlierStages:
+		for nextStage in nextStages:
+			nextStage['depends_on'].append(earlierStage['name'])
+
+def uploadScreenshots():
+	return [{
+		'name': 'upload-screenshots',
+		'image': 'plugins/s3',
+		'pull': 'if-not-exists',
+		'settings': {
+			'acl': 'public-read',
+			'bucket': 'phoenix',
+			'endpoint': 'https://minio.owncloud.com/',
+			'path_style': True,
+			'source': '/var/www/owncloud/phoenix/tests/reports/screenshots/**/*',
+			'strip_prefix': '/var/www/owncloud/phoenix/tests/reports/screenshots',
+			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
+		},
+		'environment': {
+			'AWS_ACCESS_KEY_ID': {
+				'from_secret': 'aws_access_key_id'
+			},
+			'AWS_SECRET_ACCESS_KEY': {
+				'from_secret': 'aws_secret_access_key'
+			},
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
+	}]
+
+def buildGithubComment(suite, alternateSuiteName):
+	return [{
+		'name': 'build-github-comment',
+		'image': 'owncloud/ubuntu:16.04',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/phoenix/tests/reports/screenshots/',
+			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % alternateSuiteName,
+			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
+			'echo "\n</p></details>" >> comments.file',
+			'more comments.file',
+		],
+		'environment': {
+			'TEST_CONTEXT': suite,
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
+	}]
+
 def githubComment():
 	return [{
 		'name': 'github-comment',
@@ -1133,8 +1137,3 @@ def githubComment():
 			]
 		},
 	}]
-
-def dependsOn(earlierStages, nextStages):
-	for earlierStage in earlierStages:
-		for nextStage in nextStages:
-			nextStage['depends_on'].append(earlierStage['name'])
