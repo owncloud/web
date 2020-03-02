@@ -68,9 +68,9 @@ module.exports = {
     drone: {
       selenium_host: 'selenium',
       screenshots: {
-        enabled: !SAUCE_USERNAME,
+        enabled: true,
         path: 'tests/reports/screenshots',
-        on_failure: !SAUCE_USERNAME
+        on_failure: true
       },
       desiredCapabilities: {
         chromeOptions: {
