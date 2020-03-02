@@ -8,10 +8,23 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fixed layout of file lists: [#3100](https://github.com/owncloud/phoenix/pull/3100)
 * Bugfix - Changed share icons to collaborators icons: [#3116](https://github.com/owncloud/phoenix/pull/3116)
 
 Details
 -------
+
+* Bugfix - Fixed layout of file lists: [#3100](https://github.com/owncloud/phoenix/pull/3100)
+
+   A recent library update in ODS for the recycle scroller seem to have changed the logic or
+   calculation of the height.
+
+   This fix accomodates for that change and restores the row height to a correct value.
+
+   The shared file lists are now more responsive, the collaborators/owner and share time columns
+   are now hidden on small screens.
+
+   https://github.com/owncloud/phoenix/pull/3100
 
 * Bugfix - Changed share icons to collaborators icons: [#3116](https://github.com/owncloud/phoenix/pull/3116)
 
