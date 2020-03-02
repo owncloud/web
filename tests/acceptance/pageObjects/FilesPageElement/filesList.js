@@ -342,9 +342,11 @@ module.exports = {
         .waitForElementVisible({
           selector: linkSelector,
           abortOnFailure: false
-        }, (result) => {
+        }, async (result) => {
           if (result.status !== 0) {
             console.log('WARNING: Resource is not located yet, Retrying...')
+            await this.filesListScrollToTop()
+            await this.findItemInFilesList(fileName)
             this.waitForElementVisible(linkSelector)
           }
         })
