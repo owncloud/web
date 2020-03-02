@@ -66,7 +66,7 @@
       <div class="uk-text-meta uk-text-nowrap uk-width-small" v-text="formDateFromNow(item.shareTime)" />
     </template>
     <template #noContentMessage>
-      <no-content-message icon="share">
+      <no-content-message icon="group">
         <template #message>
           <span v-if="$_isSharedWithMe" v-translate>You are currently not collaborating on other people's resources.</span>
           <span v-else v-translate>You are currently not collaborating on any of your resources with other people.</span>

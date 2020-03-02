@@ -1,0 +1,6 @@
+Bugfix: Changed share icons to collaborators icons
+
+Adjust icon in files app navigation bar and also in the file actions
+dropdown to use the group icon.
+
+https://github.com/owncloud/phoenix/pull/3116
