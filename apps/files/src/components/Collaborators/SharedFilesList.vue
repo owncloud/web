@@ -8,8 +8,8 @@
         </sortable-column-header>
       </div>
       <div><!-- indicators column --></div>
-      <div key="shared-with-header-cell" v-if="!$_isSharedWithMe" class="uk-text-nowrap uk-text-meta uk-width-medium" translate-context="Collaborators table column" v-text="$gettext('Collaborators')" />
-      <div key="shared-with-header-cell" v-else class="uk-text-nowrap uk-text-meta uk-width-small" translate-context="Owner table column" v-text="$gettext('Owner')" />
+      <div key="shared-with-header-cell" v-if="!$_isSharedWithMe" class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-medium" translate-context="Collaborators table column" v-text="$gettext('Collaborators')" />
+      <div key="shared-with-header-cell" v-else class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-small" translate-context="Owner table column" v-text="$gettext('Owner')" />
       <div
         v-if="$route.name === 'files-shared-with-me'"
         shrink
@@ -19,7 +19,7 @@
       >
         Status
       </div>
-      <div class="uk-text-nowrap uk-text-meta uk-width-small">
+      <div class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-small">
         <sortable-column-header @click="toggleSort('shareTimeMoment')" :aria-label="$gettext('Sort files by share time')" :is-active="fileSortField == 'shareTimeMoment'" :is-desc="fileSortDirectionDesc">
           <translate translate-context="Share time column in files table">Share time</translate>
         </sortable-column-header>
@@ -38,7 +38,7 @@
         />
       </div>
       <div><!-- indicators column --></div>
-      <div key="shared-with-cell" v-if="!$_isSharedWithMe" class="uk-text-meta uk-text-nowrap uk-text-truncate uk-width-medium uk-flex file-row-collaborators">
+      <div key="shared-with-cell" v-if="!$_isSharedWithMe" class="uk-visible@s uk-text-meta uk-text-nowrap uk-text-truncate uk-width-medium uk-flex file-row-collaborators">
         <span v-for="share in item.shares" :key="share.id" class="uk-margin-small-right uk-flex uk-flex-middle">
           <avatar-image :key="'avatar-' + share.id" v-if="share.shareType === shareTypes.user && share.collaborator" class="uk-margin-xsmall-right" :width="24" :userid="share.collaborator.name" :userName="share.collaborator.displayName" />
           <oc-icon
@@ -54,16 +54,16 @@
           <translate :key="'collaborator-name-public-' + share.id" v-if="share.shareType === shareTypes.link" class="file-row-collaborator-name" translate-context="Short public link indicator">Public</translate>
         </span>
       </div>
-      <div v-else key="shared-from-cell" class="uk-text-meta uk-text-nowrap uk-text-truncate uk-width-small uk-flex uk-flex-middle file-row-collaborators">
+      <div v-else key="shared-from-cell" class="uk-visible@s uk-text-meta uk-text-nowrap uk-text-truncate uk-width-small uk-flex uk-flex-middle file-row-collaborators">
         <avatar-image class="uk-margin-xsmall-right" :width="24" :userid="item.shareOwner.username" :userName="item.shareOwner.displayName" />
         <span class="file-row-owner-name" v-text="item.shareOwner.displayName"/>
       </div>
-      <div v-if="$route.name === 'files-shared-with-me'" class="uk-text-nowrap uk-width-small" :key="item.id + item.status">
+      <div v-if="$_isSharedWithMe" class="uk-text-nowrap uk-width-small" :key="item.id + item.status">
         <a v-if="item.status === 1 || item.status === 2" class="file-row-share-status-action uk-text-meta" @click="pendingShareAction(item, 'POST')" v-translate>Accept</a>
         <a v-if="item.status === 1" class="file-row-share-status-action uk-text-meta uk-margin-left" @click="pendingShareAction(item, 'DELETE')" v-translate>Decline</a>
         <span class="uk-text-small uk-margin-left file-row-share-status-text" v-text="shareStatus(item.status)" />
       </div>
-      <div class="uk-text-meta uk-text-nowrap uk-width-small" v-text="formDateFromNow(item.shareTime)" />
+      <div class="uk-visible@s uk-text-meta uk-text-nowrap uk-width-small" v-text="formDateFromNow(item.shareTime)" />
     </template>
     <template #noContentMessage>
       <no-content-message icon="share">
