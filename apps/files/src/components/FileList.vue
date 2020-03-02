@@ -22,7 +22,7 @@
         <RecycleScroller
           class="uk-height-1-1"
           :items="fileData"
-          :item-size="70"
+          :item-size="55"
           v-slot="{ item, index, active }"
           v-if="fileData.length"
           :key="fileData.length"

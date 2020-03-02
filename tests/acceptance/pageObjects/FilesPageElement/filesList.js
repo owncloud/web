@@ -594,6 +594,7 @@ module.exports = {
         itemName = this.replaceChar(itemName, '"', '\\"')
       }
 
+      await this.waitForElementVisible('@virtualScrollWrapper')
       await this.api.executeAsync(
         function (
           {
@@ -651,6 +652,7 @@ module.exports = {
      * Scroll the files list to the beginning
      */
     filesListScrollToTop: async function () {
+      await this.waitForElementVisible('@virtualScrollWrapper')
       await this.api.executeAsync(function (scrollerContainerSelector, done) {
         const filesListScroll = document.querySelector(scrollerContainerSelector)
         if (filesListScroll.scrollTop > 0) {
