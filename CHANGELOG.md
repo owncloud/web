@@ -1,3 +1,25 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.5.0...master
+
+Summary
+-------
+
+* Bugfix - Changed share icons to collaborators icons: [#3116](https://github.com/owncloud/phoenix/pull/3116)
+
+Details
+-------
+
+* Bugfix - Changed share icons to collaborators icons: [#3116](https://github.com/owncloud/phoenix/pull/3116)
+
+   Adjust icon in files app navigation bar and also in the file actions dropdown to use the group
+   icon.
+
+   https://github.com/owncloud/phoenix/pull/3116
+
 Changelog for ownCloud Phoenix [0.5.0] (2020-03-02)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.5.0 relevant to
