@@ -212,8 +212,7 @@ const assertCollaboratorslistDoesNotContain = function (type, name) {
   }
   const collaboratorsDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
   return collaboratorsDialog.getCollaboratorsList({
-    displayName: collaboratorsDialog.elements.collaboratorInformationSubName,
-    shareType: collaboratorsDialog.elements.collaboratorInformationSubShareType
+    displayName: collaboratorsDialog.elements.collaboratorInformationSubName
   }, name).then(shares => {
     const share = shares.find(share => {
       return (name === share.displayName && type === share.shareType.toLowerCase())
@@ -225,29 +224,6 @@ const assertCollaboratorslistDoesNotContain = function (type, name) {
       )
     }
   })
-}
-
-/**
- *
- * @param {('user'|'group')} type
- * @param {string} displayName
- * @return {Promise<boolean>}
- */
-const checkIsListedInAutoComplete = function (type, displayName) {
-  return client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
-    .then(itemsList => {
-      if (itemsList.length === 0) {
-        return false
-      }
-      let displayNameWithType
-      if (type === 'user') {
-        displayNameWithType = displayName + '\nUser'
-      } else {
-        displayNameWithType = displayName + '\nGroup'
-      }
-      return itemsList.includes(displayNameWithType)
-    }
-    )
 }
 
 /**
@@ -283,40 +259,6 @@ const getGroupsMatchingPattern = function (pattern) {
 }
 
 /**
- * Checks if the users found in the autocomplete list consists of all the created users whose display name or userId
- * matches with the pattern
- *
- * @param {string} usersMatchingPattern
- *
- */
-const assertUsersInAutocompleteList = async function (usersMatchingPattern) {
-  const itemsList = await client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
-  const userPostfix = client.page.FilesPageElement.sharingDialog().getUserSharePostfix()
-  const usersNotFound = _.difference(
-    usersMatchingPattern.map(name => name + userPostfix),
-    itemsList
-  )
-  assert.strictEqual(usersNotFound.length, 0, `could not find ${usersNotFound} in the itemsList`)
-}
-
-/**
- * Checks if the groups found in the autocomplete list consists of all the created groups whose name
- * matches with the pattern
- *
- * @param {string} groupMatchingPattern
- *
- */
-const assertGroupsInAutocompleteList = async function (groupMatchingPattern) {
-  const itemsList = await client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
-  const groupPostfix = client.page.FilesPageElement.sharingDialog().getGroupSharePostfix()
-  const groupsNotFound = _.difference(
-    groupMatchingPattern.map(name => name + groupPostfix),
-    itemsList
-  )
-  assert.strictEqual(groupsNotFound.length, 0, `could not find ${groupsNotFound} in the itemsList`)
-}
-
-/**
  * Checks if the users or groups found in the autocomplete list consists of all the created users and groups
  *  with the matched pattern except the current user name and the already shared user or group name
  *
@@ -325,27 +267,23 @@ const assertGroupsInAutocompleteList = async function (groupMatchingPattern) {
  * @param {string} userOrGroup
  */
 const assertUsersGroupsWithPatternInAutocompleteListExcluding = async function (pattern, alreadySharedUserOrGroup, userOrGroup) {
-  const itemsList = await client.page.FilesPageElement.sharingDialog().getShareAutocompleteItemsList()
+  const sharingDialog = client.page.FilesPageElement.sharingDialog()
   const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
   const usersMatchingPattern = getUsersMatchingPattern(pattern).filter(
     displayName => {
       return displayName !== currentUserDisplayName && displayName !== alreadySharedUserOrGroup
     }
   )
-  const groupPostfix = client.page.FilesPageElement.sharingDialog().getGroupSharePostfix()
-  const userPostfix = client.page.FilesPageElement.sharingDialog().getUserSharePostfix()
-  await assertUsersInAutocompleteList(usersMatchingPattern)
-  assert.ok(
-    !itemsList.includes(
-      alreadySharedUserOrGroup +
-      userOrGroup === 'group' ? groupPostfix : userPostfix
-    ),
-    `"${alreadySharedUserOrGroup}" was listed in the autocompletion list but should not have been`
-  )
-
-  // check if every created group that contains the pattern is listed in the autocomplete list
   const groupMatchingPattern = getGroupsMatchingPattern(pattern).filter(group => group !== alreadySharedUserOrGroup)
-  return assertGroupsInAutocompleteList(groupMatchingPattern)
+
+  if (usersMatchingPattern.length + groupMatchingPattern.length > 5) {
+    await sharingDialog.displayAllCollaboratorsAutocompleteResults()
+  }
+
+  return sharingDialog
+    .assertUsersInAutocompleteList(usersMatchingPattern)
+    .assertGroupsInAutocompleteList(groupMatchingPattern)
+    .assertAlreadyExistingCollaboratorIsNotInAutocompleteList(alreadySharedUserOrGroup, userOrGroup)
 }
 
 /**
@@ -673,6 +611,7 @@ When('the user shares with the selected collaborators', function () {
 })
 
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI', async function (pattern) {
+  const sharingDialog = client.page.FilesPageElement.sharingDialog()
   const currentUserDisplayName = userSettings.getDisplayNameForUser(client.globals.currentUser)
 
   // check if all created users that contain the pattern either in the display name or the username
@@ -683,10 +622,15 @@ Then('all users and groups that contain the string {string} in their name should
       return displayName !== currentUserDisplayName
     }
   )
-  await assertUsersInAutocompleteList(usersMatchingPattern)
+
   // check if every created group that contains the pattern is listed in the autocomplete list
   const groupMatchingPattern = getGroupsMatchingPattern(pattern)
-  await assertGroupsInAutocompleteList(groupMatchingPattern)
+
+  if (usersMatchingPattern.length + groupMatchingPattern.length > 5) {
+    await sharingDialog.displayAllCollaboratorsAutocompleteResults()
+  }
+
+  return sharingDialog.assertUsersInAutocompleteList(usersMatchingPattern).assertGroupsInAutocompleteList(groupMatchingPattern)
 })
 
 Then('all users and groups that contain the string {string} in their name should be listed in the autocomplete list on the webUI except user {string}', function (pattern, alreadySharedUser) {
@@ -760,16 +704,12 @@ Then('the users own name should not be listed in the autocomplete list on the we
     })
 })
 
-Then('{string} {string} should not be listed in the autocomplete list on the webUI', async function (type, displayName) {
-  const presence = await checkIsListedInAutoComplete(type, displayName)
-  assert.ok(presence === false,
-    `${displayName} was expected to not be listed in the autocomplete list but was found`)
+Then('{string} {string} should not be listed in the autocomplete list on the webUI', function (type, displayName) {
+  return client.page.FilesPageElement.sharingDialog().assertCollaboratorsInAutocompleteList(displayName, type, false)
 })
 
-Then('{string} {string} should be listed in the autocomplete list on the webUI', async function (type, displayName) {
-  const presence = await checkIsListedInAutoComplete(type, displayName)
-  assert.ok(presence === true,
-    `${displayName} was expected to be listed in the autocomplete list but was not found`)
+Then('{string} {string} should be listed in the autocomplete list on the webUI', function (type, displayName) {
+  return client.page.FilesPageElement.sharingDialog().assertCollaboratorsInAutocompleteList(displayName, type)
 })
 
 When('the user opens the share dialog for file/folder/resource {string} using the webUI', function (file) {

@@ -1,0 +1,5 @@
+Change: Moved collaborators additional info on own row and removed type row
+
+We've moved collaborators additional info on own row under the name of collaborator and removed collaborator type row.
+
+https://github.com/owncloud/phoenix/pull/3130

@@ -69,13 +69,6 @@ export default {
     }
   },
   methods: {
-    $_ocCollaborators_collaboratorType (type) {
-      if (parseInt(type, 10) === 0) return this.$gettext('User')
-
-      if (parseInt(type, 10) === 6) return this.$gettext('Remote user')
-
-      return this.$gettext('Group')
-    },
     collaboratorOptionChanged ({ role, permissions, expirationDate }) {
       this.selectedRole = role
       this.additionalPermissions = permissions

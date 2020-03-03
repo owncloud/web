@@ -1,11 +1,13 @@
-const groupSharePostfix = '\nGroup'
-const userSharePostfix = '\nUser'
-const federationSharePostfix = '\nRemote user'
 const util = require('util')
 const _ = require('lodash')
 const { COLLABORATOR_PERMISSION_ARRAY } = require('../../helpers/sharingHelper')
 const { client } = require('nightwatch-api')
 const collaboratorDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
+const SHARE_TYPE_STRING = {
+  user: 'user',
+  group: 'group',
+  federation: 'remote'
+}
 
 module.exports = {
   commands: {
@@ -99,29 +101,14 @@ module.exports = {
           }
         })
 
-      const webElementIdList = await this.getShareAutocompleteWebElementIdList()
+      let receiverType = (shareWithGroup === true) ? SHARE_TYPE_STRING.group : SHARE_TYPE_STRING.user
+      receiverType = (remoteShare === true) ? SHARE_TYPE_STRING.federation : receiverType
 
-      let index = 0
-      for (; index !== webElementIdList.length; index++) {
-        let wasFound = false
-        const webElementId = webElementIdList[index]
-        await this.api.elementIdText(webElementId, (text) => {
-          let suffix = (shareWithGroup === true) ? groupSharePostfix : userSharePostfix
-          suffix = (remoteShare === true) ? federationSharePostfix : suffix
-          if (text.value === sharee + suffix) {
-            wasFound = true
-            this.api
-              .elementIdClick(webElementId)
-              .waitForOutstandingAjaxCalls()
-          }
-        })
-        if (wasFound === true) break
-      }
+      const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(sharee, receiverType)
 
-      if (index === webElementIdList.length) {
-        // * we won't see this probably, unless dropdown gives different results than entered
-        throw new Error(`Could not find ${sharee} on the sharing auto-completion list.`)
-      }
+      await this.useXpath().click(collaboratorSelector)
+
+      return this
     },
 
     /**
@@ -403,20 +390,6 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
     },
     /**
-     *
-     * @returns {string}
-     */
-    getGroupSharePostfix: function () {
-      return groupSharePostfix
-    },
-    /**
-     *
-     * @returns {string}
-     */
-    getUserSharePostfix: function () {
-      return userSharePostfix
-    },
-    /**
      * checks whether autocomplete list is visible
      *
      * @returns {Promise<boolean>}
@@ -430,6 +403,88 @@ module.exports = {
         }
       )
       return isVisible
+    },
+
+    /**
+     * Checks if the users found in the autocomplete list consists of all the created users whose display name or userId
+     * matches with the pattern
+     *
+     * @param {string} usersMatchingPattern
+     *
+     */
+    assertUsersInAutocompleteList: function (usersMatchingPattern) {
+      usersMatchingPattern.map(user => {
+        const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(user, 'user')
+
+        return this.useXpath().expect.element(collaboratorSelector).to.be.visible
+      })
+
+      return this
+    },
+
+    /**
+     * Retures a xpath for the collaborator in the autocomplete list
+     * @param {string} collaborator Name of the collaborator which should be found
+     * @param {string} type Type of the collaborator which should be found
+     * @returns {string} xpath of the collaborator
+     */
+    getCollaboratorInAutocompleteListSelector: function (collaborator, type) {
+      return (
+        util.format(this.elements.collaboratorAutocompleteItem.selector, type) +
+        util.format(this.elements.collaboratorAutocompleteItemName.selector, collaborator)
+      )
+    },
+
+    displayAllCollaboratorsAutocompleteResults: function () {
+      return this.click('@sharingAutoCompleteShowAllResultsButton')
+    },
+
+    /**
+     * Checks if the groups found in the autocomplete list consists of all the created groups whose name
+     * matches with the pattern
+     *
+     * @param {string} groupMatchingPattern
+     *
+     */
+    assertGroupsInAutocompleteList: function (groupMatchingPattern) {
+      groupMatchingPattern.map(user => {
+        const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(user, 'group')
+
+        return this.useXpath().expect.element(collaboratorSelector).to.be.visible
+      })
+
+      return this
+    },
+
+    /**
+     * Checks if the already existingCollaborator is not in the autocomplete list
+     *
+     * @param {string} name Name of the collaborator
+     * @param {string} type Type of the collaborator. Can be either user, group or remote
+     *
+     */
+    assertAlreadyExistingCollaboratorIsNotInAutocompleteList: function (name, type) {
+      const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(name, type)
+
+      return this.useXpath().expect.element(collaboratorSelector).to.not.be.present
+    },
+
+    /**
+     * Checks if the collaborator is in the autocomplete list
+     *
+     * @param {string} name Name of the collaborator
+     * @param {string} type Type of the collaborator. Can be either user, group or remote
+     * @param {boolean} shouldBePresent Whether the collaborator should be found in the list or not
+     *
+     */
+    assertCollaboratorsInAutocompleteList: function (name, type, shouldBePresent = true) {
+      const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(name, type)
+
+      if (shouldBePresent) {
+        return this.useXpath().expect.element(collaboratorSelector).to.be.visible
+      }
+
+      return this.useXpath().expect.element(collaboratorSelector).to.not.be.present
     }
   },
   elements: {
@@ -526,6 +581,22 @@ module.exports = {
     },
     collaboratorExpirationDate: {
       selector: '//span[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../../span/span[contains(@class, "files-collaborators-collaborator-expires")]',
+      locateStrategy: 'xpath'
+    },
+    collaboratorAutocompleteItem: {
+      selector: '//div[contains(@class, "files-collaborators-search-%s")]',
+      locateStrategy: 'xpath'
+    },
+    collaboratorAutocompleteItemName: {
+      selector: '//div[contains(@class, "files-collaborators-autocomplete-username") and text()="%s"]',
+      locateStrategy: 'xpath'
+    },
+    collaboratorsListItemInfo: {
+      selector: '//div[contains(@class, "files-collaborators-collaborator-info-%s")]',
+      locateStrategy: 'xpath'
+    },
+    collaboratorsListItemName: {
+      selector: '//span[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]',
       locateStrategy: 'xpath'
     }
   }
