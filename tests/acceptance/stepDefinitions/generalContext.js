@@ -206,3 +206,13 @@ Given('the app {string} has been disabled', function (app) {
       'app:disable', app
     ])
 })
+
+Given('default expiration date for users is set to {int} day/days', function (days) {
+  occHelper.runOcc(
+    [
+      `config:app:set --value ${days} core shareapi_expire_after_n_days_user_share`
+    ]
+  )
+
+  return this
+})

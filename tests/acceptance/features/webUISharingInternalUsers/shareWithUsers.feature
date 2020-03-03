@@ -575,3 +575,15 @@ Feature: Sharing files and folders with internal users
     And user "user1" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
     When user "user2" has logged in using the webUI
     Then user "User Two" should be listed as "Editor" in the collaborators list for folder "simple-folder (2)" on the webUI
+
+  Scenario: share a file with another internal user which should expire after 2 days
+    Given user "user1" has logged in using the webUI
+    When the user shares file "testimage.jpg" with user "User Two" which expires after 2 days using the webUI
+    Then user "user2" should have received a share with target "testimage (2).jpg" and expiration date in 2 days
+
+  Scenario: share a file with another internal user with default expiration date
+    Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
+    And default expiration date for users is set to 3 days
+    And user "user1" has logged in using the webUI
+    When the user shares file "testimage.jpg" with user "User Two" using the webUI
+    Then user "user2" should have received a share with target "testimage (2).jpg" and expiration date in 3 days

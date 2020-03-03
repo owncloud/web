@@ -141,20 +141,45 @@ module.exports = {
     },
 
     /**
+     * @param {int} days
+     */
+    selectExpirationDaysOnPendingShare: async function (days) {
+      const currentDate = new Date()
+      const currentDay = currentDate.getDate()
+      const currentMonth = currentDate.getMonth()
+      const expirationDate = new Date(currentDate.setDate(currentDay + days))
+      const dateSelector = util.format(this.elements.collaboratorExpirationDateModalDay.selector, expirationDate.getDate())
+
+      if (expirationDate.getMonth() !== currentMonth) {
+        await this.click('@collaboratorExpirationDateModalNextMonthButton')
+      }
+
+      await this.click('@collaboratorExpirationDateInput')
+      await this.useXpath().click(dateSelector)
+      await this.click('@collaboratorExpirationDateModalConfirmButton')
+
+      return this
+    },
+
+    /**
      *
      * @param {string} sharee
      * @param {boolean} shareWithGroup
      * @param {string} role
      * @param {string} permissions
      */
-    shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions, remote = false) {
+    shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions, remote = false, days) {
       await collaboratorDialog.clickCreateShare()
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
       await this.selectRoleForNewCollaborator(role)
-      if (permissions === undefined) {
-        return this.confirmShare()
+
+      if (permissions) {
+        await this.selectPermissionsOnPendingShare(permissions)
       }
-      await this.selectPermissionsOnPendingShare(permissions)
+
+      if (days) {
+        await this.selectExpirationDaysOnPendingShare(days)
+      }
 
       return this.confirmShare()
     },
@@ -483,6 +508,23 @@ module.exports = {
     },
     permissionCheckbox: {
       selector: '//label[@id="files-collaborators-permission-%s"]/input',
+      locateStrategy: 'xpath'
+    },
+    collaboratorExpirationDateInput: {
+      selector: '#files-collaborators-collaborator-expiration-input'
+    },
+    collaboratorExpirationDateModalNextMonthButton: {
+      selector: '.vdatetime-calendar__navigation--next'
+    },
+    collaboratorExpirationDateModalDay: {
+      selector: '//div[contains(@class, "vdatetime-calendar__month__day")]/span/span[text()="%s"]',
+      locateStrategy: 'xpath'
+    },
+    collaboratorExpirationDateModalConfirmButton: {
+      selector: '.vdatetime-popup__actions__button--confirm'
+    },
+    collaboratorExpirationDate: {
+      selector: '//span[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../../span/span[contains(@class, "files-collaborators-collaborator-expires")]',
       locateStrategy: 'xpath'
     }
   }

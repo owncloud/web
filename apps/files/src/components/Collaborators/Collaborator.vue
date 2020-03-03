@@ -65,8 +65,8 @@
               (me)
             </translate>
           </div>
-          <span class="oc-text"><span class="files-collaborators-collaborator-role">{{ originalRole.label }}</span><template v-if="collaborator.expires"> | <translate :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires: %{expires}</translate></template></span>
           <span class="uk-text-meta files-collaborators-collaborator-share-type" v-text="$_ocCollaborators_collaboratorType(collaborator.shareType)" />
+          <span class="oc-text"><span class="files-collaborators-collaborator-role">{{ originalRole.label }}</span><template v-if="collaborator.expires"> | <translate class="files-collaborators-collaborator-expires" :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires %{expires}</translate></template></span>
         </div>
       </oc-table-cell>
       <oc-table-cell shrink>
@@ -94,12 +94,14 @@
 import { mapGetters } from 'vuex'
 import { shareTypes } from '../../helpers/shareTypes'
 import { basename, dirname } from 'path'
-import Mixins from '../../mixins/collaborators'
+import CollaboratorsMixins from '../../mixins/collaborators'
+import Mixins from '../../mixins'
 
 export default {
   name: 'Collaborator',
   mixins: [
-    Mixins
+    Mixins,
+    CollaboratorsMixins
   ],
   props: {
     collaborator: {
