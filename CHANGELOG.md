@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fixed layout of file lists: [#3100](https://github.com/owncloud/phoenix/pull/3100)
 * Bugfix - Changed share icons to collaborators icons: [#3116](https://github.com/owncloud/phoenix/pull/3116)
+* Enhancement - Expiration date for collaborators: [#2543](https://github.com/owncloud/phoenix/issues/2543)
 
 Details
 -------
@@ -32,6 +33,15 @@ Details
    icon.
 
    https://github.com/owncloud/phoenix/pull/3116
+
+* Enhancement - Expiration date for collaborators: [#2543](https://github.com/owncloud/phoenix/issues/2543)
+
+   We've added an expiration date for collaborators. Users can choose an expiration date for
+   users and groups. After the date is reached the collaborator is automatically removed. Admins
+   can set default expiration date or enforce it.
+
+   https://github.com/owncloud/phoenix/issues/2543
+   https://github.com/owncloud/phoenix/pull/3086
 
 Changelog for ownCloud Phoenix [0.5.0] (2020-03-02)
 =======================================
