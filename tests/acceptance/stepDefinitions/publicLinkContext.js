@@ -118,9 +118,11 @@ When('the user edits the public link named {string} of file/folder/resource {str
       .appSideBar()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
-    return client.page.FilesPageElement
+    await client.page.FilesPageElement
       .publicLinksDialog()
       .editPublicLink(linkName, editData)
+    return client.page.FilesPageElement
+      .publicLinksDialog()
       .savePublicLink()
   })
 
@@ -130,9 +132,10 @@ When('the user tries to edit expiration of the public link named {string} of fil
       .appSideBar()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
+    await client.page.FilesPageElement.publicLinksDialog().clickLinkEditBtn(linkName)
     const isDisabled = await client.page.FilesPageElement
-      .publicLinksDialog()
-      .isExpiryDateDisabled(linkName, pastDate)
+      .publicLinksDatePicker()
+      .isExpiryDateDisabled(pastDate)
     return assert.ok(
       isDisabled,
       'Expected expiration date to be disabled but found not disabled'
