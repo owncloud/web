@@ -599,16 +599,14 @@ module.exports = {
         function (
           {
             itemName,
-            listContainerSelector,
             scrollWrapperSelector,
             listHeaderSelector
           },
           done
         ) {
-          const filesListContainer = document.querySelector(listContainerSelector)
           const virtualScrollWrapper = document.querySelector(scrollWrapperSelector)
           const tableHeaderPosition = document.querySelector(listHeaderSelector).getBoundingClientRect().top
-          let scrollDistance = filesListContainer.scrollTop
+          let scrollDistance = virtualScrollWrapper.scrollTop
 
           function scrollUntilElementVisible () {
             const item = document.querySelector(`[filename="${itemName}"]`)
@@ -616,7 +614,7 @@ module.exports = {
             if (item) {
               const position = item.getBoundingClientRect()
               // Add position from top to list container height to properly decide if the item is visible
-              const visiblePosition = filesListContainer.clientHeight + tableHeaderPosition
+              const visiblePosition = virtualScrollWrapper.clientHeight + tableHeaderPosition
 
               // Check if the item is inside the view after it's renredered
               if (position.top > -1 && position.top <= visiblePosition) {
@@ -630,7 +628,7 @@ module.exports = {
               return
             }
 
-            scrollDistance += filesListContainer.clientHeight
+            scrollDistance += virtualScrollWrapper.clientHeight
             virtualScrollWrapper.scrollTop = scrollDistance
             setTimeout(function () {
               scrollUntilElementVisible()
@@ -640,7 +638,6 @@ module.exports = {
           scrollUntilElementVisible()
         }, [{
           itemName: itemName,
-          listContainerSelector: this.elements.filesTableContainer.selector,
           scrollWrapperSelector: this.elements.virtualScrollWrapper.selector,
           listHeaderSelector: this.elements.filesTableHeader.selector
         }])
