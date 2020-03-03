@@ -22,7 +22,7 @@
     "vue-loader": "^15.7.1",
     "vue-pdf": "^4.0.7",
     "vue-template-compiler": "^2.6.10",
-    "vuex": "3.1.1",
+    "vuex": "3.1.2",
     "webpack": "^4.36.1",
     "webpack-cli": "^3.3.8",
     "webpack-merge": "^4.2.2"
