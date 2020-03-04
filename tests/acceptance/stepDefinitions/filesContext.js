@@ -160,10 +160,11 @@ When('the user creates a folder with the invalid name {string} using the webUI',
 Given('the user has opened folder {string}', (folder) => client.page.FilesPageElement.filesList().navigateToFolder(folder))
 When('the user opens folder {string} using the webUI', (folder) => client.page.FilesPageElement.filesList().navigateToFolder(folder))
 
-Given('the user has opened the share dialog for file/folder {string}', async function (fileName) {
-  await client.page.FilesPageElement.filesList().openSharingDialog(fileName)
-
-  return client
+Given('the user has opened the share dialog for file/folder {string}', function (fileName) {
+  return client.page.FilesPageElement
+    .appSideBar()
+    .closeSidebar(100)
+    .openSharingDialog(fileName)
 })
 
 When('the user browses to folder {string} using the breadcrumb on the webUI', (resource) =>
@@ -312,6 +313,7 @@ When('the user renames the following file/folder using the webUI', async functio
         toName
       )
   }
+  return client
 })
 
 Given('the user has marked file/folder {string} as favorite using the webUI', function (path) {
@@ -785,7 +787,10 @@ When('the user browses to the folder {string} on the files page', (folderName) =
     .navigateAndWaitTillLoaded(targetFolder)
 })
 When('the user copies the permalink of the file/folder/resource {string} using the webUI', async function (file) {
-  await client.page.FilesPageElement.filesList().openSharingDialog(file, 'links')
+  await client.page.FilesPageElement
+    .appSideBar()
+    .closeSidebar(100)
+    .openPublicLinkDialog(file)
   await client.page.filesPage().copyPermalinkFromFilesAppBar()
   return client
 })
@@ -815,14 +820,14 @@ When('the user deletes the file {string} from the deleted files list', function 
 Then('it should not be possible to delete file/folder {string} using the webUI', async function (resource) {
   const state = await client.page.FilesPageElement
     .filesList()
-    .getActionDisabledAttr('delete', resource)
+    .isActionAttributeDisabled('delete', resource)
   assert.ok(state, `expected property disabled of ${resource} to be 'true' but found ${state}`)
 })
 
 Then('it should not be possible to rename file/folder {string} using the webUI', async function (resource) {
   const state = await client.page.FilesPageElement
     .filesList()
-    .getActionDisabledAttr('rename', resource)
+    .isActionAttributeDisabled('rename', resource)
   assert.ok(state, `expected property disabled of ${resource} to be 'true' but found ${state}`)
 })
 

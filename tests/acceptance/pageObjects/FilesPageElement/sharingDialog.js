@@ -394,6 +394,7 @@ module.exports = {
         this.elements.roleButtonInDropdown.selector, newRole.toLowerCase()
       )
       return this
+        .initAjaxCounters()
         .useXpath()
         .waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
         .click('@selectRoleButtonInCollaboratorInformation')

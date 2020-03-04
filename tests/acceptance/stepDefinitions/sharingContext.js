@@ -547,29 +547,30 @@ When('the user types {string} in the share-with-field', function (input) {
   return client.page.FilesPageElement.sharingDialog().enterAutoComplete(input)
 })
 
-When('the user sets custom permission for current role of collaborator {string} for folder/file {string} to {string} using the webUI', async function (user, resource, permissions) {
-  const api = client.page
-    .FilesPageElement
+When('the user sets custom permission for current role of collaborator {string} for folder/file {string} to {string} using the webUI',
+  async function (user, resource, permissions) {
+    const api = client.page
+      .FilesPageElement
 
-  await api
-    .appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(resource)
+    await api
+      .appSideBar()
+      .closeSidebar(100)
+      .openSharingDialog(resource)
 
-  return api.sharingDialog().changeCustomPermissionsTo(user, permissions)
-})
+    return api.sharingDialog().changeCustomPermissionsTo(user, permissions)
+  })
 
-When('the user disables all the custom permissions of collaborator {string} for file/folder {string} using the webUI', async function (collaborator, resource) {
-  const api = client.page
-    .FilesPageElement
+When('the user disables all the custom permissions of collaborator {string} for file/folder {string} using the webUI',
+  async function (collaborator, resource) {
+    const api = client.page
+      .FilesPageElement
 
-  await api
-    .appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(resource)
+    await api.appSideBar()
+      .closeSidebar(100)
+      .openSharingDialog(resource)
 
-  return api.sharingDialog().disableAllCustomPermissions(collaborator)
-})
+    return api.sharingDialog().disableAllCustomPermissions(collaborator)
+  })
 
 const assertSharePermissions = async function (currentSharePermissions, permissions = undefined) {
   let expectedPermissionArray
@@ -614,7 +615,6 @@ Then('no custom permissions should be set for collaborator {string} for file/fol
     .openSharingDialog(resource)
   const currentSharePermissions = await client.page.FilesPageElement.sharingDialog()
     .getDisplayedPermission(user)
-
   return assertSharePermissions(currentSharePermissions)
 })
 
@@ -626,7 +626,7 @@ Then('it should not be possible to share file/folder {string} using the webUI', 
   const appSideBar = client.page.FilesPageElement.appSideBar()
   const filesList = client.page.FilesPageElement.filesList()
   // assumes current webUI state as no sidebar open for any resource
-  const state = await filesList.isSharingBtnPresent(resource)
+  const state = await filesList.isSharingButtonPresent(resource)
   assert.ok(
     !state,
     `Error: Sharing button for resource ${resource} is not in disabled state`
@@ -773,11 +773,11 @@ Then('{string} {string} should be listed in the autocomplete list on the webUI',
 })
 
 When('the user opens the share dialog for file/folder/resource {string} using the webUI', function (file) {
-  return client.page.FilesPageElement.filesList().openSharingDialog(file, 'collaborators')
+  return client.page.FilesPageElement.filesList().openSharingDialog(file)
 })
 
 When('the user opens the link share dialog for file/folder/resource {string} using the webUI', function (file) {
-  return client.page.FilesPageElement.filesList().openSharingDialog(file, 'links')
+  return client.page.FilesPageElement.filesList().openPublicLinkDialog(file)
 })
 
 When('the user deletes {string} as collaborator for the current file/folder using the webUI', function (user) {
@@ -831,15 +831,16 @@ Then('user {string} should be listed without additional info in the collaborator
   return assertCollaboratorslistContains('user', user, { additionalInfo: false })
 })
 
-Then('user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', async function (user, role, resource) {
-  await client.page
-    .FilesPageElement
-    .appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(resource)
+Then('user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI',
+  async function (user, role, resource) {
+    await client.page
+      .FilesPageElement
+      .appSideBar()
+      .closeSidebar(100)
+      .openSharingDialog(resource)
 
-  return assertCollaboratorslistContains('user', user, { role })
-})
+    return assertCollaboratorslistContains('user', user, { role })
+  })
 
 Then('group {string} should be listed as {string} in the collaborators list on the webUI', function (group, role) {
   return assertCollaboratorslistContains('group', group, { role })
@@ -849,15 +850,15 @@ Then('group {string} should be listed as {string} via {string} in the collaborat
   return assertCollaboratorslistContains('group', group, { role, via })
 })
 
-Then('group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI', async function (group, role, resource) {
-  await client.page
-    .FilesPageElement
-    .appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(resource)
-
-  return assertCollaboratorslistContains('group', group, { role })
-})
+Then('group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI',
+  async function (group, role, resource) {
+    await client.page
+      .FilesPageElement
+      .appSideBar()
+      .closeSidebar(100)
+      .openSharingDialog(resource)
+    return assertCollaboratorslistContains('group', group, { role })
+  })
 
 Then('user {string} should not be listed in the collaborators list on the webUI', function (user) {
   return assertCollaboratorslistDoesNotContain('user', user)
@@ -888,12 +889,13 @@ Then('user {string} should have a share with these details:', function (user, ex
 })
 
 Then('the user should not be able to share file/folder/resource {string} using the webUI', async function (resource) {
-  await client.page
-    .FilesPageElement
+  const api = client.page.FilesPageElement
+  await api
     .appSideBar()
     .closeSidebar(100)
     .openSharingDialog(resource)
-  const shareResponse = await client.page.FilesPageElement.sharingDialog()
+  const shareResponse = await api
+    .sharingDialog()
     .getSharingPermissionMsg()
   const noSharePermissionsMsgFormat = "You don't have permission to share this %s."
   const noSharePermissionsFileMsg = util.format(noSharePermissionsMsgFormat, 'file')

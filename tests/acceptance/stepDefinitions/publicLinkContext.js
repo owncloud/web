@@ -215,14 +215,16 @@ When('the user closes the public link details sidebar', function () {
     .closeSidebar(100)
 })
 
-When('the user copies the url of public link named {string} of file/folder/resource {string} using the webUI', async function (linkName, resource) {
-  await client.page.FilesPageElement
-    .appSideBar()
-    .closeSidebar(100)
-    .openPublicLinkDialog(resource)
-  return client.page.FilesPageElement.publicLinksDialog()
-    .copyPublicLinkURI(linkName)
-})
+When('the user copies the url of public link named {string} of file/folder/resource {string} using the webUI',
+  async function (linkName, resource) {
+    await client.page.FilesPageElement
+      .appSideBar()
+      .closeSidebar(100)
+      .openPublicLinkDialog(resource)
+    return client.page.FilesPageElement.publicLinksDialog()
+      .copyPublicLinkURI(linkName)
+  })
+
 Then('the tokens should be unique for each public links on the webUI', async function () {
   const publicLinkUrls = await client.page.FilesPageElement.publicLinksDialog().getPublicLinkUrls()
   const isUnique = publicLinkUrls.length === (new Set(publicLinkUrls).size)
