@@ -74,10 +74,11 @@ module.exports = {
         subSelectors = {
           displayName: this.elements.collaboratorInformationSubName,
           role: this.elements.collaboratorInformationSubRole,
-          shareType: this.elements.collaboratorInformationSubShareType,
           additionalInfo: this.elements.collaboratorInformationSubAdditionalInfo,
           viaLabel: this.elements.collaboratorInformationSubVia,
-          resharer: this.elements.collaboratorInformationSubResharer
+          resharer: this.elements.collaboratorInformationSubResharer,
+          // Type of user is stored in aria-label of indicator so we use the selector for the indicator
+          shareType: this.elements.collaboratorIndicator
         }
       }
 
@@ -105,9 +106,16 @@ module.exports = {
           )
 
           if (attrElementId) {
-            await this.api.elementIdText(attrElementId, (text) => {
-              collaboratorResult[attrName] = text.value
-            })
+            // Get collaborator type via aria-label of indicator
+            if (attrName === 'shareType') {
+              await this.api.elementIdAttribute(attrElementId, 'aria-label', (label) => {
+                collaboratorResult[attrName] = label.value
+              })
+            } else {
+              await this.api.elementIdText(attrElementId, (text) => {
+                collaboratorResult[attrName] = text.value
+              })
+            }
           } else {
             collaboratorResult[attrName] = false
           }
@@ -169,10 +177,6 @@ module.exports = {
       // within collaboratorsInformation
       selector: '.files-collaborators-collaborator-role'
     },
-    collaboratorInformationSubShareType: {
-      // within collaboratorsInformation
-      selector: '.files-collaborators-collaborator-share-type'
-    },
     collaboratorInformationSubAdditionalInfo: {
       // within collaboratorsInformation
       selector: '.files-collaborators-collaborator-additional-info'
@@ -184,6 +188,9 @@ module.exports = {
     collaboratorInformationSubResharer: {
       // within collaboratorsInformation
       selector: '.files-collaborators-collaborator-reshare-information'
+    },
+    collaboratorIndicator: {
+      selector: '.files-collaborators-collaborator-indicator'
     }
   }
 }

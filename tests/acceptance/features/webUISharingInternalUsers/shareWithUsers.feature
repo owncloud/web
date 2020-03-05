@@ -546,8 +546,8 @@ Feature: Sharing files and folders with internal users
     Then user "User Two" should be listed with additional info "<additional-info-result>" in the collaborators list on the webUI
     Examples:
       | additional-info-field | additional-info-result |
-      | id                    | (user2)                |
-      | email                 | (user2@example.org)    |
+      | id                    | user2                  |
+      | email                 | user2@example.org      |
 
   Scenario: collaborators list does not contain additional info when disabled
     Given the setting "user_additional_info_field" of app "core" has been set to ""

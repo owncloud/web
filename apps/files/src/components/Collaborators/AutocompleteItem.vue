@@ -1,6 +1,9 @@
 <template>
-  <div class="uk-flex uk-flex-middle">
-    <avatar-image v-if="item.value.shareType === shareTypes.user" class="uk-margin-small-right" :width="48" :userid="item.value.shareWith" :userName="item.label" />
+  <div
+    class="uk-flex uk-flex-middle"
+    :class="collaboratorClass"
+  >
+    <avatar-image v-if="isUser" class="uk-margin-small-right" :width="48" :userid="item.value.shareWith" :userName="item.label" />
     <template v-else>
       <oc-icon v-if="item.value.shareType === shareTypes.group" class="uk-margin-small-right" name="group" size="large" key="avatar-group" />
       <oc-icon v-else class="uk-margin-small-right" name="person" size="large" key="avatar-generic-person" />
@@ -11,7 +14,6 @@
         v-text="item.label"
       />
       <div v-if="item.value.shareWithAdditionalInfo" v-text="item.value.shareWithAdditionalInfo" />
-      <div class="uk-text-meta" v-text="$_ocCollaborators_collaboratorType(item.value.shareType)" />
     </div>
   </div>
 </template>
@@ -22,12 +24,33 @@ import { shareTypes } from '../../helpers/shareTypes'
 
 export default {
   name: 'AutocompleteItem',
+
   mixins: [Mixins],
+
   props: ['item'],
+
   data () {
     return {
       shareTypes,
       loading: false
+    }
+  },
+
+  computed: {
+    isUser () {
+      return this.item.value.shareType === shareTypes.user
+    },
+
+    isRemoteUser () {
+      return this.item.value.shareType === shareTypes.remote
+    },
+
+    collaboratorClass () {
+      const isUser = this.isUser || this.isRemoteUser
+
+      return 'files-collaborators-search-' + (
+        isUser ? (this.isRemoteUser ? 'remote' : 'user') : 'group'
+      )
     }
   }
 }

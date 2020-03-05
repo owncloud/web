@@ -45,18 +45,41 @@
       </oc-table-cell>
       <oc-table-cell shrink>
         <div key="collaborator-avatar-loaded">
-          <avatar-image v-if="collaborator.shareType === shareTypes.user" class="uk-margin-small-right" :width="48" :userid="collaborator.collaborator.name" :userName="collaborator.collaborator.displayName" />
+          <avatar-image
+            v-if="isUser"
+            class="uk-margin-small-right files-collaborators-collaborator-indicator"
+            :width="48"
+            :userid="collaborator.collaborator.name"
+            :userName="collaborator.collaborator.displayName"
+            :aria-label="$gettext('User')"
+          />
           <div v-else key="collaborator-avatar-placeholder">
-            <oc-icon v-if="collaborator.shareType === shareTypes.group" class="uk-margin-small-right" name="group" size="large" key="avatar-group" />
-            <oc-icon v-else class="uk-margin-small-right" name="person" size="large" key="avatar-generic-person" />
+            <oc-icon
+              v-if="collaborator.shareType === shareTypes.group"
+              class="uk-margin-small-right files-collaborators-collaborator-indicator"
+              name="group"
+              size="large"
+              key="avatar-group"
+              :aria-label="$gettext('Group')"
+            />
+            <oc-icon
+              v-else
+              class="uk-margin-small-right files-collaborators-collaborator-indicator"
+              name="person"
+              size="large"
+              key="avatar-generic-person"
+              :aria-label="$gettext('Remote user')"
+            />
           </div>
         </div>
       </oc-table-cell>
       <oc-table-cell>
-        <div class="uk-flex uk-flex-column uk-flex-center">
+        <div
+          class="uk-flex uk-flex-column uk-flex-center"
+          :class="collaboratorListItemClass"
+        >
           <div class="oc-text">
             <span class="files-collaborators-collaborator-name uk-text-bold">{{ collaborator.collaborator.displayName }}</span>
-            <span v-if="collaborator.shareType === shareTypes.user && collaborator.collaborator.additionalInfo" class="uk-text-meta files-collaborators-collaborator-additional-info">({{ collaborator.collaborator.additionalInfo }})</span>
             <translate
               v-if="collaborator.collaborator.name === user.id"
               translate-comment="Indicator for current user in collaborators list"
@@ -65,7 +88,11 @@
               (me)
             </translate>
           </div>
-          <span class="uk-text-meta files-collaborators-collaborator-share-type" v-text="$_ocCollaborators_collaboratorType(collaborator.shareType)" />
+          <span
+            v-if="collaborator.collaborator.additionalInfo"
+            class="uk-text-meta files-collaborators-collaborator-additional-info"
+            v-text="collaborator.collaborator.additionalInfo"
+          />
           <span class="oc-text"><span class="files-collaborators-collaborator-role">{{ originalRole.label }}</span><template v-if="collaborator.expires"> | <translate class="files-collaborators-collaborator-expires" :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires %{expires}</translate></template></span>
         </div>
       </oc-table-cell>
@@ -188,6 +215,22 @@ export default {
       return {
         label: this.$gettext('Unknown Role')
       }
+    },
+
+    isUser () {
+      return this.collaborator.shareType === shareTypes.user
+    },
+
+    isRemoteUser () {
+      return this.collaborator.shareType === shareTypes.remote
+    },
+
+    collaboratorListItemClass () {
+      const isUser = this.isUser || this.isRemoteUser
+
+      return 'files-collaborators-collaborator-info-' + (
+        isUser ? (this.isRemoteUser ? 'remote' : 'user') : 'group'
+      )
     }
   },
   methods: {
