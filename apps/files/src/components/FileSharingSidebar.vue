@@ -1,7 +1,7 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
     <div v-show="visiblePanel === PANEL_SHOW" :aria-hidden="visiblePanel !== PANEL_SHOW" :key="PANEL_SHOW">
-      <oc-loader v-if="$_sharesLoading" :aria-label="$gettext('Loading collaborator list')" />
+      <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading collaborator list')" />
       <template v-else>
         <div v-if="$_ocCollaborators_canShare" class="uk-margin-small-top uk-margin-small-bottom">
           <oc-button variation="primary" icon="add" @click="$_ocCollaborators_addShare" class="files-collaborators-open-add-share-dialog-button">
@@ -65,6 +65,7 @@ import Mixins from '../mixins/collaborators'
 import { textUtils } from '../helpers/textUtils'
 import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
+import { dirname } from 'path'
 import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
 const NewCollaborator = _ => import('./Collaborators/NewCollaborator.vue')
 const EditCollaborator = _ => import('./Collaborators/EditCollaborator.vue')
@@ -101,7 +102,8 @@ export default {
     ...mapGetters('Files', [
       'highlightedFile',
       'currentFileOutgoingCollaborators',
-      'currentFileOutgoingSharesLoading'
+      'currentFileOutgoingSharesLoading',
+      'sharesTreeLoading'
     ]),
     ...mapState('Files', [
       'incomingShares',
@@ -117,8 +119,8 @@ export default {
       return this.transitionGroupActive ? 'uk-animation-slide-right-medium uk-animation-reverse' : ''
     },
 
-    $_sharesLoading () {
-      return this.currentFileOutgoingSharesLoading && this.incomingSharesLoading
+    sharesLoading () {
+      return this.currentFileOutgoingSharesLoading || this.incomingSharesLoading || this.sharesTreeLoading
     },
 
     $_currentUserAsCollaborator () {
@@ -217,7 +219,7 @@ export default {
 
     indirectOutgoingShares () {
       const allShares = []
-      const parentPaths = getParentPaths(this.highlightedFile.path, true)
+      const parentPaths = getParentPaths(this.highlightedFile.path, false)
       if (parentPaths.length === 0) {
         return []
       }
@@ -277,6 +279,7 @@ export default {
   methods: {
     ...mapActions('Files', [
       'loadCurrentFileOutgoingShares',
+      'loadSharesTree',
       'sharesClearState',
       'deleteShare',
       'loadIncomingShares',
@@ -345,6 +348,11 @@ export default {
       this.loadIncomingShares({
         client: this.$client,
         path: this.highlightedFile.path,
+        $gettext: this.$gettext
+      })
+      this.loadSharesTree({
+        client: this.$client,
+        path: dirname(this.highlightedFile.path),
         $gettext: this.$gettext
       })
     }

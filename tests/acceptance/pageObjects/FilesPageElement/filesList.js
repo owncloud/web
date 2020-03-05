@@ -361,7 +361,9 @@ module.exports = {
           if (result.value.error) {
             this.assert.fail(result.value.error)
           }
-          this.assert.strictEqual(result.value, fileName, 'displayed file name not as expected')
+          // using basename because some file lists display the full path while the
+          // file name attribute only contains the basename
+          this.assert.strictEqual(result.value, path.basename(fileName), 'displayed file name not as expected')
         })
         .useCss()
       return this

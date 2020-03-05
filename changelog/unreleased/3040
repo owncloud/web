@@ -1,0 +1,9 @@
+Bugfix: Indirect share info now visible in favorite and other file lists
+
+When open the share panel of other flat file lists like the favorites,
+the collaborators list and link list are now showing the same entries like
+in the "All files" list, which includes indirect shares (via) that were
+previously missing.
+
+https://github.com/owncloud/phoenix/issues/3040
+https://github.com/owncloud/phoenix/pull/3135
