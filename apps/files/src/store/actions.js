@@ -763,7 +763,7 @@ export default {
         client.shares.getShares(queryPath, { reshares: true })
           .then(data => {
             data.forEach(element => {
-              sharesTree[queryPath].push({ ..._buildShare(element.shareInfo, { type: 'folder' }, $gettext), outgoing: true })
+              sharesTree[queryPath].push({ ..._buildShare(element.shareInfo, { type: 'folder' }, $gettext), outgoing: true, indirect: true })
             })
           })
           .catch(error => {
@@ -777,7 +777,7 @@ export default {
         client.shares.getShares(queryPath, { shared_with_me: true })
           .then(data => {
             data.forEach(element => {
-              sharesTree[queryPath].push({ ..._buildCollaboratorShare(element.shareInfo, { type: 'folder' }), incoming: true })
+              sharesTree[queryPath].push({ ..._buildCollaboratorShare(element.shareInfo, { type: 'folder' }), incoming: true, indirect: true })
             })
           })
           .catch(error => {

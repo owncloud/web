@@ -1,0 +1,7 @@
+Change: New sort order for collaborators and public links
+
+We've changed the sort order for collaborators and public links.
+Collaborators are now sorted by: collaborator type, is collaborator direct, display name and creation date.
+Public links are now sorted by: is public link direct, display name and creation date.
+
+https://github.com/owncloud/phoenix/pull/3136
