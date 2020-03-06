@@ -93,7 +93,7 @@
             class="uk-text-meta files-collaborators-collaborator-additional-info"
             v-text="collaborator.collaborator.additionalInfo"
           />
-          <span class="oc-text"><span class="files-collaborators-collaborator-role">{{ originalRole.label }}</span><template v-if="collaborator.expires"> | <translate class="files-collaborators-collaborator-expires" :translate-params="{expires: formDateFromNow(collaborator.expires)}">Expires %{expires}</translate></template></span>
+          <span class="oc-text"><span class="files-collaborators-collaborator-role">{{ originalRole.label }}</span><template v-if="collaborator.expires"> | <translate class="files-collaborators-collaborator-expires" :translate-params="{expires: formDateFromNow(expirationDate)}">Expires %{expires}</translate></template></span>
         </div>
       </oc-table-cell>
       <oc-table-cell shrink>
@@ -119,6 +119,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 import { shareTypes } from '../../helpers/shareTypes'
 import { basename, dirname } from 'path'
 import CollaboratorsMixins from '../../mixins/collaborators'
@@ -231,6 +232,10 @@ export default {
       return 'files-collaborators-collaborator-info-' + (
         isUser ? (this.isRemoteUser ? 'remote' : 'user') : 'group'
       )
+    },
+
+    expirationDate () {
+      return moment(this.collaborator.expires).endOf('day')
     }
   },
   methods: {
