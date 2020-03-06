@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fixed layout of file lists: [#3100](https://github.com/owncloud/phoenix/pull/3100)
 * Bugfix - Changed share icons to collaborators icons: [#3116](https://github.com/owncloud/phoenix/pull/3116)
+* Bugfix - Use end of the day in expiration date: [#3158](https://github.com/owncloud/phoenix/pull/3158)
 * Change - Moved collaborators additional info on own row and removed type row: [#3130](https://github.com/owncloud/phoenix/pull/3130)
 * Enhancement - Expiration date for collaborators: [#2543](https://github.com/owncloud/phoenix/issues/2543)
 
@@ -34,6 +35,12 @@ Details
    icon.
 
    https://github.com/owncloud/phoenix/pull/3116
+
+* Bugfix - Use end of the day in expiration date: [#3158](https://github.com/owncloud/phoenix/pull/3158)
+
+   We've changed the expiration date field in the collaborators list to the end of the day.
+
+   https://github.com/owncloud/phoenix/pull/3158
 
 * Change - Moved collaborators additional info on own row and removed type row: [#3130](https://github.com/owncloud/phoenix/pull/3130)
 
