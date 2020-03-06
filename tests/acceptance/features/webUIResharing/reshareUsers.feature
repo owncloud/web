@@ -1,3 +1,4 @@
+@skipOnOCIS @ocis-reva-issue-64
 Feature: Resharing shared files with different permissions
   As a user
   I want to reshare received files and folders with other users with different permissions

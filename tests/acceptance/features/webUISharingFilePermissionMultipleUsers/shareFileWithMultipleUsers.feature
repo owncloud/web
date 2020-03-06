@@ -1,3 +1,4 @@
+@skipOnOCIS @ocis-reva-issue-64
 Feature: Sharing files with multiple internal users with different permissions
   As a user
   I want to set different permissions on shared files with other users

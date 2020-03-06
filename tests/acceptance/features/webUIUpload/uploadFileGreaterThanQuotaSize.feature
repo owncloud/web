@@ -8,7 +8,7 @@ Feature: Upload a file
     Given user "user1" has been created with default attributes
 
   @smokeTest
-  @issue-1049
+  @issue-1049 @skipOnOCIS
   Scenario: simple upload of a file with the size greater than the size of quota
     Given the quota of user "user1" has been set to "10 MB"
     And user "user1" has logged in using the webUI

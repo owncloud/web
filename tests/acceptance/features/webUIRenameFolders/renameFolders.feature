@@ -1,3 +1,4 @@
+@skipOnOCIS @ocis-reva-issue-14
 Feature: rename folders
   As a user
   I want to rename folders

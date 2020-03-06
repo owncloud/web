@@ -1,3 +1,4 @@
+@skipOnOCIS
 Feature: Access private link
    As a user I want to directly access item which I have received private link for
 

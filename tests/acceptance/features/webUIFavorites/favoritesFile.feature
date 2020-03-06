@@ -1,3 +1,4 @@
+@skipOnOCIS @ocis-reva-issue-39
 Feature: Mark file as favorite
 
   As a user

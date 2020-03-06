@@ -16,11 +16,21 @@ Given('the user has clicked the authenticate button', () => client.page.loginPag
 When('the user clicks the authenticate button', () => client.page.loginPage().authenticate())
 
 When('the user logs in with username {string} and password {string} using the webUI',
-  (username, password) => client.page.ownCloudLoginPage().login(username, password)
+  (username, password) => {
+    if (client.globals.ocis) {
+      return client.page.ocisLoginPage().login(username, password)
+    }
+    return client.page.ownCloudLoginPage().login(username, password)
+  }
 )
 
 When('the user tries to log in with username {string} and password {string} using the webUI',
-  (username, password) => client.page.ownCloudLoginPage().login(username, password)
+  (username, password) => {
+    if (client.globals.ocis) {
+      return client.page.ocisLoginPage().login(username, password)
+    }
+    return client.page.ownCloudLoginPage().login(username, password)
+  }
 )
 
 When('user {string} logs in using the webUI',

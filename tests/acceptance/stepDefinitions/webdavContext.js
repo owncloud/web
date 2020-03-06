@@ -33,7 +33,7 @@ const fileShouldExist = function (userId, element) {
 
 const fileShouldNotExist = function (userId, element) {
   return fileExists(userId, element).then(function (res) {
-    assert.ok([404, 401].includes(res.status), 'file/folder should not exist, but does')
+    assert.ok(res.status < 300 || res.status >= 200, 'file/folder should not exist, but does')
   })
 }
 

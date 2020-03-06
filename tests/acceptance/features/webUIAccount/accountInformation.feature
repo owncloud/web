@@ -1,3 +1,4 @@
+@skipOnOCIS @ocis-reva-issue-107 @ocis-konnectd-issue-42
 Feature: View account information
   As a user
   I would like to view my account information

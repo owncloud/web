@@ -11,10 +11,13 @@ module.exports = {
     await client.page.loginPage().navigate().authenticate()
 
     password = password || userSettings.getPasswordForUser(userId)
-    await client.page.ownCloudLoginPage().login(userId, password)
-
-    await client.page.ownCloudAuthorizePage().authorize()
-
+    if (client.globals.ocis) {
+      await client.page.ocisLoginPage().login(userId, password)
+      await client.page.kopanoAuthorizePage().authorize()
+    } else {
+      await client.page.ownCloudLoginPage().login(userId, password)
+      await client.page.ownCloudAuthorizePage().authorize()
+    }
     return client
       .page.phoenixPage()
       .waitForElementVisible('@appContainer')
