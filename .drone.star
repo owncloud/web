@@ -812,7 +812,7 @@ def buildRelease(ctx):
 			'pull': 'always',
 			'commands': [
 				'cd /var/www/owncloud/phoenix',
-				'make -f Makefile.release dist'
+				'make -f Makefile.release'
 			],
 		},
 		{
