@@ -12,6 +12,7 @@ Summary
 * Bugfix - Changed share icons to collaborators icons: [#3116](https://github.com/owncloud/phoenix/pull/3116)
 * Bugfix - Use end of the day in expiration date: [#3158](https://github.com/owncloud/phoenix/pull/3158)
 * Change - Moved collaborators additional info on own row and removed type row: [#3130](https://github.com/owncloud/phoenix/pull/3130)
+* Change - New sort order for collaborators and public links: [#3136](https://github.com/owncloud/phoenix/pull/3136)
 * Enhancement - Expiration date for collaborators: [#2543](https://github.com/owncloud/phoenix/issues/2543)
 
 Details
@@ -48,6 +49,14 @@ Details
    removed collaborator type row.
 
    https://github.com/owncloud/phoenix/pull/3130
+
+* Change - New sort order for collaborators and public links: [#3136](https://github.com/owncloud/phoenix/pull/3136)
+
+   We've changed the sort order for collaborators and public links. Collaborators are now sorted
+   by: collaborator type, is collaborator direct, display name and creation date. Public links
+   are now sorted by: is public link direct, display name and creation date.
+
+   https://github.com/owncloud/phoenix/pull/3136
 
 * Enhancement - Expiration date for collaborators: [#2543](https://github.com/owncloud/phoenix/issues/2543)
 
