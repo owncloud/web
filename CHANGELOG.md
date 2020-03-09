@@ -13,6 +13,7 @@ Summary
 * Bugfix - Use end of the day in expiration date: [#3158](https://github.com/owncloud/phoenix/pull/3158)
 * Change - Moved collaborators additional info on own row and removed type row: [#3130](https://github.com/owncloud/phoenix/pull/3130)
 * Change - New sort order for collaborators and public links: [#3136](https://github.com/owncloud/phoenix/pull/3136)
+* Change - Stop support for deployment of Phoenix as an ownCloud app: [#3162](https://github.com/owncloud/phoenix/pull/3162)
 * Enhancement - Expiration date for collaborators: [#2543](https://github.com/owncloud/phoenix/issues/2543)
 
 Details
@@ -57,6 +58,13 @@ Details
    are now sorted by: is public link direct, display name and creation date.
 
    https://github.com/owncloud/phoenix/pull/3136
+
+* Change - Stop support for deployment of Phoenix as an ownCloud app: [#3162](https://github.com/owncloud/phoenix/pull/3162)
+
+   We've stopped supporting deployment of Phoenix as an ownCloud app. In the release is no longer
+   available Phoenix ownCloud 10 app package.
+
+   https://github.com/owncloud/phoenix/pull/3162
 
 * Enhancement - Expiration date for collaborators: [#2543](https://github.com/owncloud/phoenix/issues/2543)
 
