@@ -22,7 +22,7 @@
               <collaborator :collaborator="$_currentUserAsCollaborator"/>
             </li>
           </ul>
-          <hr class="uk-margin-small-top uk-margin-small-bottom" v-if="$_directOutgoingShares.length > 0 || $_indirectOutgoingShares.length > 0" />
+          <hr class="uk-margin-small-top uk-margin-small-bottom" v-if="collaborators.length > 0" />
         </section>
         <section>
           <transition-group id="files-collaborators-list"
@@ -31,18 +31,10 @@
                             :leave-active-class="$_transitionGroupLeave"
                             name="custom-classes-transition"
                             tag="ul">
-            <li v-for="collaborator in $_directOutgoingShares" :key="collaborator.key">
-              <collaborator :collaborator="collaborator" :modifiable="true" @onDelete="$_ocCollaborators_deleteShare" @onEdit="$_ocCollaborators_editShare"/>
+            <li v-for="collaborator in collaborators" :key="collaborator.key">
+              <collaborator :collaborator="collaborator" :modifiable="!collaborator.indirect" @onDelete="$_ocCollaborators_deleteShare" @onEdit="$_ocCollaborators_editShare"/>
             </li>
           </transition-group>
-          <hr class="uk-margin-small-top uk-margin-small-bottom" v-if="$_directOutgoingShares.length > 0 && $_indirectOutgoingShares.length > 0" />
-        </section>
-        <section v-if="$_indirectOutgoingShares.length > 0">
-          <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
-            <li v-for="collaborator in $_indirectOutgoingShares" :key="collaborator.key">
-              <collaborator :collaborator="collaborator"/>
-            </li>
-          </ul>
         </section>
       </template>
     </div>
@@ -175,7 +167,7 @@ export default {
       })
 
       // make them unique then sort
-      ownerAsCollaborator.resharers = Array.from(resharers.values()).sort(this.$_collaboratorsComparator.bind(this))
+      ownerAsCollaborator.resharers = Array.from(resharers.values()).sort(this.collaboratorsComparator.bind(this))
       return ownerAsCollaborator
     },
 
@@ -211,10 +203,9 @@ export default {
       return allShares
     },
 
-    $_directOutgoingShares () {
-      // direct outgoing shares
-      return [...this.currentFileOutgoingCollaborators]
-        .sort(this.$_collaboratorsComparator)
+    collaborators () {
+      return [...this.currentFileOutgoingCollaborators, ...this.indirectOutgoingShares]
+        .sort(this.collaboratorsComparator)
         .map(collaborator => {
           collaborator.key = 'collaborator-' + collaborator.id
           if (collaborator.owner.name !== collaborator.fileOwner.name && collaborator.owner.name !== this.user.id) {
@@ -224,7 +215,7 @@ export default {
         })
     },
 
-    $_indirectOutgoingShares () {
+    indirectOutgoingShares () {
       const allShares = []
       const parentPaths = getParentPaths(this.highlightedFile.path, true)
       if (parentPaths.length === 0) {
@@ -294,25 +285,30 @@ export default {
     $_isCollaboratorShare (collaborator) {
       return userShareTypes.includes(collaborator.shareType)
     },
-    $_collaboratorsComparator (c1, c2) {
-      // resharer entries have displayName on first level,
-      // but shares/collaborators have it under the collaborator attribute
+    collaboratorsComparator (c1, c2) {
+      // Sorted by: type, direct, display name, creation date
       const c1DisplayName = c1.collaborator ? c1.collaborator.displayName : c1.displayName
       const c2DisplayName = c2.collaborator ? c2.collaborator.displayName : c2.displayName
       const name1 = c1DisplayName.toLowerCase().trim()
       const name2 = c2DisplayName.toLowerCase().trim()
-      // sorting priority 1: display name (lower case, ascending), 2: share type (groups first), 3: id (ascending)
-      if (name1 === name2) {
-        const c1GroupShare = c1.shareType === shareTypes.group
-        const c2GroupShare = c2.shareType === shareTypes.group
-        if (c1GroupShare === c2GroupShare) {
-          return textUtils.naturalSortCompare(c1.id + '', c2.id + '')
-        } else {
-          return c1GroupShare ? -1 : 1
+      const c1UserShare = c1.shareType === shareTypes.user || c1.shareType === shareTypes.remote
+      const c2UserShare = c2.shareType === shareTypes.user || c1.shareType === shareTypes.remote
+      const c1DirectShare = !c1.indirect
+      const c2DirectShare = !c2.indirect
+
+      if (c1UserShare === c2UserShare) {
+        if (c1DirectShare === c2DirectShare) {
+          if (name1 === name2) {
+            return textUtils.naturalSortCompare(c1.stime + '', c2.stime + '')
+          }
+
+          return textUtils.naturalSortCompare(name1, name2)
         }
-      } else {
-        return textUtils.naturalSortCompare(name1, name2)
+
+        return c1DirectShare ? -1 : 1
       }
+
+      return c1UserShare ? -1 : 1
     },
     $_ocCollaborators_addShare () {
       this.transitionGroupActive = true

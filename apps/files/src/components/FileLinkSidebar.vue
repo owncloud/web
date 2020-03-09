@@ -32,28 +32,16 @@
                             :leave-active-class="$_transitionGroupLeave"
                             name="custom-classes-transition"
                             tag="ul">
-            <li v-for="link in $_directLinks" :key="link.key">
+            <li v-for="link in links" :key="link.key">
               <public-link-list-item :link="link"
-                                     :modifiable="true"
-                                     :indirect="false"
+                                     :modifiable="!link.indirect"
+                                     :indirect="link.indirect"
                                      :linksCopied="linksCopied"
                                      @onCopy="$_clipboardSuccessHandler"
                                      @onDelete="$_removePublicLink"
                                      @onEdit="$_editPublicLink" />
             </li>
           </transition-group>
-          <hr class="uk-margin-small-top uk-margin-small-bottom" v-if="$_directLinks.length > 0 && $_indirectLinks.length > 0"/>
-        </section>
-        <section v-if="$_indirectLinks.length > 0">
-          <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
-            <li v-for="link in $_indirectLinks" :key="'li-' + link.id">
-              <public-link-list-item :link="link"
-                                     :modifiable="false"
-                                     :indirect="true"
-                                     :linksCopied="linksCopied"
-                                     @onCopy="$_clipboardSuccessHandler" />
-            </li>
-          </ul>
         </section>
         <div v-if="$_noPublicLinks" key="oc-file-links-no-results">
           <translate>No public links</translate>
@@ -128,16 +116,16 @@ export default {
       return this.transitionGroupActive ? 'uk-animation-slide-right-medium uk-animation-reverse' : ''
     },
 
-    $_directLinks () {
-      return [...this.currentFileOutgoingLinks]
-        .sort(this.$_linksComparator)
+    links () {
+      return [...this.currentFileOutgoingLinks, ...this.indirectLinks]
+        .sort(this.linksComparator)
         .map(share => {
           share.key = 'direct-link-' + share.id
           return share
         })
     },
 
-    $_indirectLinks () {
+    indirectLinks () {
       const allShares = []
       const parentPaths = getParentPaths(this.highlightedFile.path, true)
       if (parentPaths.length === 0) {
@@ -159,11 +147,11 @@ export default {
         }
       })
 
-      return allShares.sort(this.$_linksComparator)
+      return allShares.sort(this.linksComparator)
     },
 
     $_noPublicLinks () {
-      return (this.$_directLinks.length + this.$_indirectLinks.length) === 0
+      return this.links.length === 0
     },
 
     $_expirationDate () {
@@ -254,15 +242,22 @@ export default {
         $gettext: this.$gettext
       })
     },
-    $_linksComparator (l1, l2) {
+    linksComparator (l1, l2) {
+      // sorting priority 1: display name (lower case, ascending), 2: creation time (descending)
       const name1 = l1.name.toLowerCase().trim()
       const name2 = l2.name.toLowerCase().trim()
-      // sorting priority 1: display name (lower case, ascending), 2: id (ascending)
-      if (name1 === name2) {
-        return textUtils.naturalSortCompare(l1.id + '', l2.id + '')
-      } else {
+      const l1Direct = !l1.indirect
+      const l2Direct = !l2.indirect
+
+      if (l1Direct === l2Direct) {
+        if (name1 === name2) {
+          return textUtils.naturalSortCompare(l1.id + '', l2.id + '')
+        }
+
         return textUtils.naturalSortCompare(name1, name2)
       }
+
+      return l1Direct ? -1 : 1
     }
   }
 }
