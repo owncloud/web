@@ -131,19 +131,3 @@ After all these changes Phoenix will be accessible at `http://host.docker.intern
 ## Cleaning up the workspace
 
 - Run `yarn clean-all` to remove node_modules and dist folder
-
-## Phoenix as an ownCloud app
-
-### Building the Phoenix ownCloud app
-
-- run `yarn install && yarn dist && yarn build`
-- run `make -f Makefile.release` dist
-
-### Deploying the Phoenix app to ownCloud
-
-- Grab build/dist/phoenix.tar.gz
-- Move to the apps folder on your ownCloud installation
-- `tar -xzf phoenix.tar.gz`
-- Run `./occ apps:enable phoenix`
-- Refresh your webui and see Phoenix in the app menu
-
