@@ -19,7 +19,13 @@
             :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }"
             class="uk-text-nowrap uk-text-meta uk-width-small"
           >
-            <sortable-column-header @click="toggleSort('deleteTimestampMoment')" :aria-label="$gettext('Sort files by deletion time')" :is-active="fileSortField == 'deleteTimestampMoment'" :is-desc="fileSortDirectionDesc">
+            <sortable-column-header
+              class="uk-align-right uk-margin-right"
+              @click="toggleSort('deleteTimestampMoment')"
+              :aria-label="$gettext('Sort files by deletion time')"
+              :is-active="fileSortField == 'deleteTimestampMoment'"
+              :is-desc="fileSortDirectionDesc"
+            >
               <translate translate-context="Deletion time column in trashbin files table">Deletion Time</translate>
             </sortable-column-header>
           </div>
@@ -30,7 +36,7 @@
               :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
               :filename="item.name" :key="item.id"/>
           </div>
-          <div class="uk-text-meta uk-text-nowrap uk-width-small" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }">
+          <div class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }">
             {{ formDateFromNow(item.deleteTimestamp) }}
           </div>
         </template>
