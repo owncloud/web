@@ -4,6 +4,9 @@ SERVER_HOST=0.0.0.0:8300
 apps=files
 all_apps=$(addprefix app-,$(apps))
 core_bundle=dist/core/core.bundle.js
+DIST := dist
+HUGO := hugo
+NAME := phoenix
 
 all: build
 
@@ -27,7 +30,7 @@ core: dist/core/core.bundle.js
 
 .PHONY: clean-core
 clean-core:
-	rm -rf dist
+	rm -rf $(DIST) $(HUGO)
 	rm -rf node_modules
 
 #
@@ -42,6 +45,28 @@ app-%:
 clean-app-%:
 	@echo Cleaning up app $*
 	$(MAKE) -C apps/$* clean
+
+#
+# Docs
+#
+.PHONY: docs-copy
+docs-copy:
+	mkdir -p $(HUGO); \
+	mkdir -p $(HUGO)/content/extensions; \
+	cd $(HUGO); \
+	git init; \
+	git remote rm origin; \
+	git remote add origin https://github.com/owncloud/owncloud.github.io; \
+	git fetch; \
+	git checkout origin/source -f; \
+	rsync --delete -ax ../docs/ content/$(NAME)
+
+.PHONY: docs-build
+docs-build:
+	cd $(HUGO); hugo
+
+.PHONY: docs
+docs: docs-copy docs-build
 
 #
 # Test server

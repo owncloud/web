@@ -239,11 +239,7 @@ After(async function () {
     const deleteUserPromises = createdUsers.map(
       user => ldap.deleteUser(client.globals.ldapClient, user)
         .then(() => {
-          const dataDir = client.globals.ocis_data_dir
-          if (fs.existsSync(join(dataDir, 'data', user))) {
-            fs.emptyDirSync(join(dataDir, 'data', user))
-            fs.rmdirSync(join(dataDir, 'data', user))
-          }
+          fs.removeSync(join(client.globals.ocis_data_dir, 'data', user))
           console.log('Deleted LDAP User: ', user)
         })
     )
