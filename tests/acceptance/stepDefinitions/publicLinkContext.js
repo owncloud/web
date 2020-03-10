@@ -133,9 +133,11 @@ When('the user tries to edit expiration of the public link named {string} of fil
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
     await client.page.FilesPageElement.publicLinksDialog().clickLinkEditBtn(linkName)
+    const value = sharingHelper.calculateDate(pastDate)
+    const dateToSet = new Date(Date.parse(value))
     const isDisabled = await client.page.FilesPageElement
-      .publicLinksDatePicker()
-      .isExpiryDateDisabled(pastDate)
+      .expirationDatePicker()
+      .isExpiryDateDisabled(dateToSet)
     return assert.ok(
       isDisabled,
       'Expected expiration date to be disabled but found not disabled'
