@@ -61,11 +61,7 @@
         key="shared-with-cell"
         class="uk-visible@s uk-text-meta uk-text-nowrap uk-text-truncate uk-width-medium uk-flex file-row-collaborators uk-flex-right"
       >
-        <span
-          v-for="share in item.shares"
-          :key="share.id"
-          class="uk-margin-small-left uk-flex uk-flex-middle"
-        >
+        <span v-for="share in prepareCollaborators(item.shares)" :key="share.id" class="uk-margin-small-right uk-flex uk-flex-middle">
           <avatar-image :key="'avatar-' + share.id" v-if="share.shareType === shareTypes.user && share.collaborator" class="uk-margin-xsmall-right" :width="24" :userid="share.collaborator.name" :userName="share.collaborator.displayName" />
           <oc-icon
             v-else
@@ -117,6 +113,7 @@ import FileList from '../FileList.vue'
 import NoContentMessage from '../NoContentMessage.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 import { shareTypes } from '../../helpers/shareTypes'
+import { textUtils } from '../../helpers/textUtils'
 
 export default {
   name: 'SharedFilesList',
@@ -168,6 +165,42 @@ export default {
   },
   methods: {
     ...mapActions('Files', ['loadFolderSharedFromMe', 'loadFolderSharedWithMe', 'setFilterTerm', 'pendingShare']),
+
+    /**
+     * Prepare the given collaboratoes list for display.
+     * Sorts first by share type (user, group, link, remote)
+     * and then by the collaborator's display name using natural
+     * sort. Public links entries are deduplicated into a single
+     * one in order to only show "Public" once even when
+     * there are multiple link shares.
+     *
+     * @param {Array.<Object>} shares shares to sort
+     * @return {Array.<Object>} sorted shares
+     */
+    prepareCollaborators (shares) {
+      let hasLink = false
+      const results = []
+      shares.forEach(share => {
+        if (share.shareType === shareTypes.link) {
+          if (!hasLink) {
+            results.push(share)
+            hasLink = true
+          }
+        } else {
+          results.push(share)
+        }
+      })
+      return results.sort((s1, s2) => {
+        if (s1.shareType !== s2.shareType) {
+          // sort by share type: user, group, link, remote
+          return s1.shareType - s2.shareType
+        }
+        if (!s1.collaborator) {
+          return 0
+        }
+        return textUtils.naturalSortCompare(s1.collaborator.displayName, s2.collaborator.displayName)
+      })
+    },
 
     $_shareTypeIcon (type) {
       switch (type) {
