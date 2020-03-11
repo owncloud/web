@@ -12,6 +12,8 @@ apps/*
 
 build/version.json
 
+/hugo
+
 .idea
 *.bundle.js
 *.bundle.js.map
