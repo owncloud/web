@@ -916,7 +916,7 @@ def website(ctx):
 				'settings': {
 					'server': 'https://cloud.drone.io/',
 					'token': {
-						'from_secret': 'drone_token',
+						'from_secret': 'drone_token_cloud',
 					},
 					'repositories': [
 						'owncloud/owncloud.github.io@source',
