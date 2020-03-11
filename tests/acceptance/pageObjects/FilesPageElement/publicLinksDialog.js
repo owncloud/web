@@ -72,7 +72,7 @@ module.exports = {
      * @returns {Promise}
      */
     setPublicLinkExpiryDate: async function (value) {
-      const publicLinkDatePicker = this.api.page.FilesPageElement.publicLinksDatePicker()
+      const expirationDatePicker = this.api.page.FilesPageElement.expirationDatePicker()
       if (value === '') {
         return this.click('@publicLinkDeleteExpirationDateButton')
       }
@@ -81,12 +81,12 @@ module.exports = {
       const year = dateToSet.getFullYear()
       const month = dateToSet.toLocaleString('en-GB', { month: 'long' })
       const day = dateToSet.getDate()
-
+      const linkExpirationDateField = expirationDatePicker.elements.linkExpirationDateField.selector
       await this
         .initAjaxCounters()
-        .waitForElementVisible('@linkExpirationDateField')
-        .click('@linkExpirationDateField')
-      return publicLinkDatePicker
+        .waitForElementVisible(linkExpirationDateField)
+        .click(linkExpirationDateField)
+      return expirationDatePicker
         .setExpiryDateYear(year)
         .setExpiryDateMonth(month)
         .setExpiryDateDay(day)
@@ -425,13 +425,6 @@ module.exports = {
     publicLinkSaveButton: {
       selector: '#oc-files-file-link-save'
     },
-    dateTimePopup: {
-      selector: '.vdatetime-popup'
-    },
-    dateTimeCancelButton: {
-      selector: '//div[@class="vdatetime-popup__actions"]/div[.="Cancel"]',
-      locateStrategy: 'xpath'
-    },
     sidebarPrivateLinkLabel: {
       selector: '#files-sidebar-private-link-label'
     },
@@ -440,9 +433,6 @@ module.exports = {
     },
     publicLinkDeleteExpirationDateButton: {
       selector: '#oc-files-file-link-expire-date-delete'
-    },
-    linkExpirationDateField: {
-      selector: '.vdatetime-input'
     }
   }
 }

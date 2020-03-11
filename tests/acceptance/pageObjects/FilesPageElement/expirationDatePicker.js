@@ -3,7 +3,7 @@ const util = require('util')
 module.exports = {
   commands: {
     /**
-     * sets up the xpath for year in expiry date of public link
+     * sets up the xpath for year of expiry date
      *
      * @param year
      * @returns {{locateStrategy: string, selector: *}}
@@ -16,9 +16,9 @@ module.exports = {
       }
     },
     /**
-     * sets up the xpath for month in expiry date of public link
+     * sets up the xpath for month of expiry date
      *
-     * @param month
+     * @param {string} month month name
      * @returns {{locateStrategy: string, selector: *}}
      */
     setExpiryDateMonthSelectorXpath: function (month) {
@@ -29,7 +29,7 @@ module.exports = {
       }
     },
     /**
-     * sets up the xpath for year in expiry date of public link
+     * sets up the xpath for year of expiry date
      *
      * @param day
      * @returns {{locateStrategy: string, selector: *}}
@@ -64,7 +64,7 @@ module.exports = {
     /**
      * sets provided month in expiry date field on webUI
      *
-     * @param {string} month
+     * @param {number} month
      * @returns {Promise<void>}
      */
     setExpiryDateMonth: function (month) {
@@ -94,23 +94,21 @@ module.exports = {
     /**
      * checks if the given expiryDate is disabled or not
      *
-     * @param {string} pastDate provided past date for inspection
-     *  pastDate should be in form 2000-August-7 | 2000-Aug-7
-     *  leading zeros before day are removed
+     * @param {Date} pastDate provided past date for inspection
+     *
      * @returns {Promise<boolean>}
      */
     isExpiryDateDisabled: async function (pastDate) {
-      const [year, month, day] = pastDate.split(/-/)
       let disabled = false
-      const iDay = parseInt(day)
-      const yearSelector = this.setExpiryDateYearSelectorXpath(year)
-      const monthSelector = this.setExpiryDateMonthSelectorXpath(month)
-      const daySelector = this.setExpiryDateDaySelectorXpath(iDay)
-      const linkExpirationDateField = this.api.page.FilesPageElement.publicLinksDialog().elements.linkExpirationDateField.selector
+      const yearSelector = this.setExpiryDateYearSelectorXpath(pastDate.getFullYear())
+      const monthSelector = this.setExpiryDateMonthSelectorXpath(
+        pastDate.toLocaleString('en-GB', { month: 'long' })
+      )
+      const daySelector = this.setExpiryDateDaySelectorXpath(pastDate.getDay())
       await this
         .initAjaxCounters()
-        .waitForElementVisible(linkExpirationDateField)
-        .click(linkExpirationDateField)
+        .waitForElementVisible('@linkExpirationDateField')
+        .click('@linkExpirationDateField')
         .waitForElementVisible('@dateTimePopupYear')
         .waitForAnimationToFinish()
         .waitForElementEnabled(
@@ -170,6 +168,9 @@ module.exports = {
     },
     dateTimePopupDate: {
       selector: '.vdatetime-popup__date'
+    },
+    linkExpirationDateField: {
+      selector: '.vdatetime-input'
     }
   }
 }

@@ -369,7 +369,7 @@ Feature: Share by public link
       | name       | Public link      |
       | expireDate | 2038-10-14       |
     And user "user1" has logged in using the webUI
-    When the user tries to edit expiration of the public link named "Public link" of file "lorem.txt" to past date "2019-Oct-10"
+    When the user tries to edit expiration of the public link named "Public link" of file "lorem.txt" to past date "2019 October 10"
     Then the fields of the last public link share response of user "user1" should include
       | expireDate | 2038-10-14 |
 
