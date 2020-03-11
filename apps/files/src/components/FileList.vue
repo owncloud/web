@@ -42,7 +42,7 @@
                 />
               </div>
               <slot name="rowColumns" :item="item" :index="index" />
-              <div class="uk-text-right uk-margin-small-right">
+              <div class="uk-text-right uk-margin-left uk-margin-small-right">
                 <oc-button
                   :id="actionsDropdownButtonId(item.id, active)"
                   class="files-list-row-show-actions"

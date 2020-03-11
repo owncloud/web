@@ -43,21 +43,33 @@ export default {
     ...mapGetters('Files', ['sharesTree']),
 
     indicators () {
-      return [{
+      const collaborators = {
         id: 'files-sharing',
         label: this.shareUserIconLabel(this.item),
         visible: this.isUserShare(this.item),
         icon: 'group',
         status: this.shareUserIconVariation(this.item),
         handler: this.indicatorHandler
-      }, {
+      }
+      const links = {
         id: 'file-link',
         label: this.shareLinkIconLabel(this.item),
         visible: this.isLinkShare(this.item),
         icon: 'link',
         status: this.shareLinkIconVariation(this.item),
         handler: this.indicatorHandler
-      }]
+      }
+      const indicators = []
+
+      if (collaborators.visible) {
+        indicators.push(collaborators)
+      }
+
+      if (links.visible) {
+        indicators.push(links)
+      }
+
+      return indicators
     },
 
     shareTypesIndirect () {

@@ -7,18 +7,38 @@
         <oc-star id="files-table-header-star" aria-hidden="true" class="uk-display-block uk-disabled" />
       </div>
       <div class="uk-text-truncate uk-text-meta uk-width-expand" ref="headerNameColumn" >
-        <sortable-column-header @click="toggleSort('name')" :aria-label="$gettext('Sort files by name')" :is-active="fileSortField == 'name'" :is-desc="fileSortDirectionDesc">
+        <sortable-column-header
+          @click="toggleSort('name')"
+          :aria-label="$gettext('Sort files by name')"
+          :is-active="fileSortField == 'name'"
+          :is-desc="fileSortDirectionDesc"
+        >
           <translate translate-context="Name column in files table">Name</translate>
         </sortable-column-header>
       </div>
       <div v-if="!$_isFavoritesList"><!-- indicators column --></div>
       <div :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-meta uk-width-small">
-        <sortable-column-header @click="toggleSort('size')" :aria-label="$gettext('Sort files by size')" :is-active="fileSortField == 'size'" :is-desc="fileSortDirectionDesc">
+        <sortable-column-header
+          @click="toggleSort('size')"
+          :aria-label="$gettext('Sort files by size')"
+          :is-active="fileSortField == 'size'"
+          :is-desc="fileSortDirectionDesc"
+          class="uk-align-right"
+        >
           <translate translate-context="Size column in files table">Size</translate>
         </sortable-column-header>
       </div>
-      <div :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }" class="uk-text-nowrap uk-text-meta uk-width-small">
-        <sortable-column-header @click="toggleSort('mdateMoment')" :aria-label="$gettext('Sort files by updated time')" :is-active="fileSortField == 'mdateMoment'" :is-desc="fileSortDirectionDesc">
+      <div
+        :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }"
+        class="uk-text-nowrap uk-text-meta uk-width-small uk-margin-right"
+      >
+        <sortable-column-header
+          @click="toggleSort('mdateMoment')"
+          :aria-label="$gettext('Sort files by updated time')"
+          :is-active="fileSortField == 'mdateMoment'"
+          :is-desc="fileSortDirectionDesc"
+          class="uk-align-right"
+        >
           <translate translate-context="Short column label in files able for the time at which a file was modified">Updated</translate>
         </sortable-column-header>
       </div>
@@ -38,13 +58,19 @@
           class="uk-margin-small-left"
         />
       </div>
-      <div v-if="!$_isFavoritesList" class="uk-flex uk-flex-middle">
+      <div v-if="!$_isFavoritesList" class="uk-flex uk-flex-middle uk-flex-right">
         <StatusIndicators :item="item" :parentPath="currentFolder.path" @click="$_openSideBar" />
       </div>
-      <div class="uk-text-meta uk-text-nowrap uk-width-small" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }">
+      <div
+        class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
+        :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }"
+      >
         {{ item.size | fileSize }}
       </div>
-      <div class="uk-text-meta uk-text-nowrap uk-width-small" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }">
+      <div
+        class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
+        :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }"
+      >
         {{ formDateFromNow(item.mdate) }}
       </div>
     </template>
