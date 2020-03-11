@@ -30,7 +30,7 @@
             </sortable-column-header>
           </div>
         </template>
-        <template #rowColumns="{ item, index }">
+        <template #rowColumns="{ item }">
           <div class="uk-text-truncate uk-width-expand">
             <oc-file
               :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
