@@ -1,7 +1,5 @@
 /* eslint-disable */
-import "core-js/stable"
 import "regenerator-runtime/runtime"
-import "core-js/features/symbol/iterator.js"
 
 // --- Libraries and Plugins ---
 import Vue from 'vue'
