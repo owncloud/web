@@ -1,7 +1,7 @@
 <template>
   <div class="uk-position-relative" id="oc-files-file-link">
     <div v-show="visiblePanel === PANEL_SHOW" :aria-hidden="visiblePanel !== PANEL_SHOW" :key="PANEL_SHOW">
-      <oc-loader v-if="currentFileOutgoingSharesLoading" :aria-label="$gettext('Loading list of file links')"/>
+      <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')"/>
       <template v-else>
         <section v-if="$_privateLinkOfHighlightedFile">
           <div class="uk-text-bold">
@@ -65,6 +65,7 @@ import moment from 'moment'
 import mixins from '../mixins'
 import { shareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
+import { dirname } from 'path'
 import { textUtils } from '../helpers/textUtils'
 
 const EditPublicLink = _ => import('./PublicLinksSidebar/EditPublicLink.vue')
@@ -103,7 +104,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', ['highlightedFile', 'currentFileOutgoingLinks', 'currentFileOutgoingSharesLoading']),
+    ...mapGetters('Files', [
+      'highlightedFile',
+      'currentFileOutgoingLinks',
+      'currentFileOutgoingSharesLoading',
+      'sharesTreeLoading'
+    ]),
     ...mapGetters(['getToken', 'capabilities']),
     ...mapState('Files', [
       'sharesTree'
@@ -114,6 +120,10 @@ export default {
     },
     $_transitionGroupLeave () {
       return this.transitionGroupActive ? 'uk-animation-slide-right-medium uk-animation-reverse' : ''
+    },
+
+    linksLoading () {
+      return this.currentFileOutgoingSharesLoading || this.sharesTreeLoading
     },
 
     links () {
@@ -127,7 +137,7 @@ export default {
 
     indirectLinks () {
       const allShares = []
-      const parentPaths = getParentPaths(this.highlightedFile.path, true)
+      const parentPaths = getParentPaths(this.highlightedFile.path, false)
       if (parentPaths.length === 0) {
         return []
       }
@@ -193,7 +203,11 @@ export default {
     this.$_reloadLinks()
   },
   methods: {
-    ...mapActions('Files', ['loadCurrentFileOutgoingShares', 'removeLink']),
+    ...mapActions('Files', [
+      'loadSharesTree',
+      'loadCurrentFileOutgoingShares',
+      'removeLink'
+    ]),
     $_resetData () {
       this.params = {
         id: null,
@@ -239,6 +253,11 @@ export default {
       this.loadCurrentFileOutgoingShares({
         client: this.$client,
         path: this.highlightedFile.path,
+        $gettext: this.$gettext
+      })
+      this.loadSharesTree({
+        client: this.$client,
+        path: dirname(this.highlightedFile.path),
         $gettext: this.$gettext
       })
     },

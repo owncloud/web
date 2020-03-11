@@ -755,7 +755,7 @@ export default {
     parentPaths.forEach((queryPath) => {
       // skip already cached paths
       if (context.getters.sharesTree[queryPath]) {
-        return
+        return Promise.resolve()
       }
       sharesTree[queryPath] = []
       // query the outgoing share information for each of the parent paths

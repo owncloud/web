@@ -761,3 +761,19 @@ Feature: Share by public link
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "simple-folder" on the webUI
     And a link named "strängé लिंक नाम (#2 &).नेपाली" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "sub-folder" on the webUI
 
+  @issue-3040
+  Scenario: sharing details of indirect link share in "favorites" file lists
+    Given user "user1" has created a public link with following settings
+      | path | /simple-folder |
+      | name | Public Link    |
+    And user "user1" has created a public link with following settings
+      | path | /simple-folder/simple-empty-folder |
+      | name | Public Link Sub                    |
+    And user "user1" has favorited element "simple-folder/simple-empty-folder"
+    And user "user1" has logged in using the webUI
+    When the user browses to the shared-with-others page
+    And the user opens the share dialog for folder "simple-empty-folder" using the webUI
+    Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-empty-folder" via "simple-folder" on the webUI
+    And a link named "Public Link Sub" should be listed with role "Viewer" in the public link list of resource "simple-empty-folder" on the webUI
+    When the user browses to the favorites page using the webUI
+    Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
