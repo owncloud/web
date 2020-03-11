@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Indirect share info now visible in favorite and other file lists: [#3040](https://github.com/owncloud/phoenix/issues/3040)
 * Bugfix - Fixed layout of file lists: [#3100](https://github.com/owncloud/phoenix/pull/3100)
 * Bugfix - Changed share icons to collaborators icons: [#3116](https://github.com/owncloud/phoenix/pull/3116)
 * Bugfix - Use end of the day in expiration date: [#3158](https://github.com/owncloud/phoenix/pull/3158)
@@ -18,6 +19,15 @@ Summary
 
 Details
 -------
+
+* Bugfix - Indirect share info now visible in favorite and other file lists: [#3040](https://github.com/owncloud/phoenix/issues/3040)
+
+   When open the share panel of other flat file lists like the favorites, the collaborators list
+   and link list are now showing the same entries like in the "All files" list, which includes
+   indirect shares (via) that were previously missing.
+
+   https://github.com/owncloud/phoenix/issues/3040
+   https://github.com/owncloud/phoenix/pull/3135
 
 * Bugfix - Fixed layout of file lists: [#3100](https://github.com/owncloud/phoenix/pull/3100)
 
