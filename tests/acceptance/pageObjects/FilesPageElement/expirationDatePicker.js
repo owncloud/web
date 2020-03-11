@@ -1,5 +1,4 @@
 const util = require('util')
-const sharingHelper = require('../../helpers/sharingHelper')
 
 module.exports = {
   commands: {
@@ -105,11 +104,8 @@ module.exports = {
       const monthSelector = this.setExpiryDateMonthSelectorXpath(
         pastDate.toLocaleString('en-GB', { month: 'long' })
       )
-      const daySelector = this.setExpiryDateDaySelectorXpath(pastDate.getDay())
+      const daySelector = this.setExpiryDateDaySelectorXpath(pastDate.getDate())
       await this
-        .initAjaxCounters()
-        .waitForElementVisible('@linkExpirationDateField')
-        .click('@linkExpirationDateField')
         .waitForElementVisible('@dateTimePopupYear')
         .waitForAnimationToFinish()
         .waitForElementEnabled(
@@ -150,25 +146,32 @@ module.exports = {
      * sets expiration date on collaborators/public-link shares
      *
      * @param {string} value - provided date in format YYYY-MM-DD, or empty string to unset date
-     * @returns {Promise}
+     * @param {string} shareType link|collaborator
+     * @returns {Promise<boolean>} returns true if succeeds to set provided expiration date
      */
-    setExpirationDate: async function (value) {
+    setExpirationDate: async function (value, shareType = 'collaborator') {
       if (value === '') {
         return this.click('@publicLinkDeleteExpirationDateButton')
       }
-      value = sharingHelper.calculateDate(value)
       const dateToSet = new Date(Date.parse(value))
+      if (shareType === 'collaborator') {
+        const disabled = await this.isExpiryDateDisabled(dateToSet)
+        if (disabled) {
+          console.log('WARNING: Cannot change expiration date to disabled value!')
+          await this
+            .waitForElementVisible('@dateTimeCancelButton')
+            .click('@dateTimeCancelButton')
+          return false
+        }
+      }
       const year = dateToSet.getFullYear()
       const month = dateToSet.toLocaleString('en-GB', { month: 'long' })
       const day = dateToSet.getDate()
       await this
-        .initAjaxCounters()
-        .waitForElementVisible('@linkExpirationDateField')
-        .click('@linkExpirationDateField')
-      return this
         .setExpiryDateYear(year)
         .setExpiryDateMonth(month)
         .setExpiryDateDay(day)
+      return true
     }
   },
   elements: {
@@ -191,11 +194,12 @@ module.exports = {
       selector: '//div[@class="vdatetime-popup__actions"]/div[.="Ok"]',
       locateStrategy: 'xpath'
     },
+    dateTimeCancelButton: {
+      selector: '//div[@class="vdatetime-popup__actions"]/div[.="Cancel"]',
+      locateStrategy: 'xpath'
+    },
     dateTimePopupDate: {
       selector: '.vdatetime-popup__date'
-    },
-    linkExpirationDateField: {
-      selector: '.vdatetime-input'
     },
     publicLinkDeleteExpirationDateButton: {
       selector: '#oc-files-file-link-expire-date-delete'

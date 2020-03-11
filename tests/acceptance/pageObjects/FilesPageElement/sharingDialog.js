@@ -1,6 +1,6 @@
 const util = require('util')
 const _ = require('lodash')
-const { COLLABORATOR_PERMISSION_ARRAY } = require('../../helpers/sharingHelper')
+const { COLLABORATOR_PERMISSION_ARRAY, calculateDate } = require('../../helpers/sharingHelper')
 const { client } = require('nightwatch-api')
 const collaboratorDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
 const SHARE_TYPE_STRING = {
@@ -79,8 +79,9 @@ module.exports = {
 
     /**
      *
-     * @param {string} sharee
+     * @param {string} receiver
      * @param {boolean} [shareWithGroup=false]
+     * @param {boolean} remoteShare
      */
     selectCollaboratorForShare: async function (receiver, shareWithGroup = false, remoteShare = false) {
       let sharee = receiver
@@ -128,32 +129,15 @@ module.exports = {
     },
 
     /**
-     * @param {int} days
-     */
-    selectExpirationDaysOnPendingShare: async function (days) {
-      const currentDate = new Date()
-      const currentDay = currentDate.getDate()
-      const currentMonth = currentDate.getMonth()
-      const expirationDate = new Date(currentDate.setDate(currentDay + days))
-      const dateSelector = util.format(this.elements.collaboratorExpirationDateModalDay.selector, expirationDate.getDate())
-
-      if (expirationDate.getMonth() !== currentMonth) {
-        await this.click('@collaboratorExpirationDateModalNextMonthButton')
-      }
-
-      await this.click('@collaboratorExpirationDateInput')
-      await this.useXpath().click(dateSelector)
-      await this.click('@collaboratorExpirationDateModalConfirmButton')
-
-      return this
-    },
-
-    /**
      *
      * @param {string} sharee
      * @param {boolean} shareWithGroup
      * @param {string} role
      * @param {string} permissions
+     * @param {boolean} remote
+     * @param {string} days
+     *
+     * @return void
      */
     shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions, remote = false, days) {
       await collaboratorDialog.clickCreateShare()
@@ -165,7 +149,14 @@ module.exports = {
       }
 
       if (days) {
-        await this.selectExpirationDaysOnPendingShare(days)
+        const dateToSet = calculateDate(days)
+        const isExpiryDateChanged = await this
+          .openExpirationDatePicker()
+          .setExpirationDate(dateToSet)
+        if (!isExpiryDateChanged) {
+          console.log('WARNING: Cannot create share with disabled expiration date!')
+          return
+        }
       }
 
       return this.confirmShare()
@@ -494,11 +485,52 @@ module.exports = {
      */
     changeCollaboratorExpiryDate: async function (collaborator, days) {
       await collaboratorDialog.clickEditShare(collaborator)
-      await this.api.page
-        .FilesPageElement
-        .expirationDatePicker()
-        .setExpirationDate(days)
+      const dateToSet = calculateDate(days)
+      const isExpiryDateChanged = await this
+        .openExpirationDatePicker()
+        .setExpirationDate(dateToSet)
+      if (!isExpiryDateChanged) {
+        console.log('WARNING: Cannot create share with disabled expiration date!')
+        return
+      }
       return this.saveChanges()
+    },
+    /**
+     * opens expiration date field on the webUI
+     * @return {*}
+     */
+    openExpirationDatePicker: function () {
+      this
+        .initAjaxCounters()
+        .waitForElementVisible('@expirationDateField')
+        .click('@expirationDateField')
+      return client.page.FilesPageElement.expirationDatePicker()
+    },
+    /**
+     * extracts set value in expiration date field
+     * @return {Promise<*>}
+     */
+    getExpirationDateFromInputField: async function () {
+      let expirationDate
+      await this
+        .waitForElementVisible('@expirationDateField')
+        .getValue('@expirationDateField', (result) => {
+          expirationDate = result.value
+        })
+      return expirationDate
+    },
+    /**
+     * gets disabled status of save share button
+     * @return {Promise<*>}
+     */
+    getDisabledAttributeOfSaveShareButton: async function () {
+      let disabled
+      await this
+        .waitForElementVisible('@saveShareButton')
+        .getAttribute('@saveShareButton', 'disabled', (result) => {
+          disabled = result.value
+        })
+      return disabled
     }
   },
   elements: {
@@ -612,6 +644,9 @@ module.exports = {
     collaboratorsListItemName: {
       selector: '//span[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]',
       locateStrategy: 'xpath'
+    },
+    expirationDateField: {
+      selector: '.vdatetime-input'
     }
   }
 }

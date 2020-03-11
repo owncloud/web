@@ -358,7 +358,7 @@ Feature: Sharing files and folders with internal groups
     And user "user3" has logged in using the webUI
     When the user edits the collaborator expiry date of "grp1" of file "lorem.txt" to "+7" days using the webUI
     Then user "user1" should have received a share with target "lorem (2).txt" and expiration date in 7 days
-    Then user "user2" should have received a share with target "lorem (2).txt" and expiration date in 7 days
+    And user "user2" should have received a share with target "lorem (2).txt" and expiration date in 7 days
     And user "user3" should have a share with these details:
       | field      | value      |
       | path       | /lorem.txt |
@@ -367,3 +367,50 @@ Feature: Sharing files and folders with internal groups
       | share_with | grp1       |
       | expiration | +7         |
 
+  Scenario: share a resource with another internal group with default expiration date
+    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
+    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "42"
+    And user "user3" has logged in using the webUI
+    When the user shares folder "lorem.txt" with group "grp1" as "Viewer" using the webUI
+    Then user "user3" should have a share with these details:
+      | field      | value              |
+      | path       | /lorem.txt         |
+      | share_type | group              |
+      | uid_owner  | user3              |
+      | share_with | grp1               |
+      | expiration | +42                |
+    And user "user1" should have received a share with target "lorem (2).txt" and expiration date in 42 days
+    And user "user2" should have received a share with target "lorem (2).txt" and expiration date in 42 days
+
+  Scenario Outline: share a resource with another internal group with expiration date beyond maximum enforced expiration date
+    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
+    And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
+    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5"
+    And user "user3" has logged in using the webUI
+    When the user tries to share resource "<shared-resource>" with group "grp1" which expires in "+6" days using the webUI
+    Then the expiration date shown on the webUI should be "+5" days
+    And user "user1" should not have created any shares
+    Examples:
+      | shared-resource |
+      | lorem.txt       |
+      | simple-folder   |
+
+  Scenario Outline: share a resource with another internal group with expiration date within maximum enforced expiration date
+    Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
+    And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
+    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5"
+    And user "user3" has created a new share with following settings
+      | path            | <shared-resource> |
+      | shareTypeString | group             |
+      | shareWith       | grp1              |
+      | expireDate      | +4                |
+    And user "user3" has logged in using the webUI
+    When the user tries to edit the collaborator expiry date of "grp1" of resource "<shared-resource>" to "+7" days using the webUI
+    Then the expiration date shown on the webUI should be "+4" days
+    And it should not be possible to save the pending share on the webUI
+    And user "user1" should have received a share with target "<target-resource>" and expiration date in 4 days
+    And user "user2" should have received a share with target "<target-resource>" and expiration date in 4 days
+    Examples:
+      | shared-resource | target-resource   |
+      | lorem.txt       | lorem (2).txt     |
+      | simple-folder   | simple-folder (2) |
