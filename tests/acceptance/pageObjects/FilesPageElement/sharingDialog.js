@@ -190,7 +190,7 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@addShareSaveButton')
     },
-    saveCollaboratorPermission: function () {
+    saveChanges: function () {
       return this.waitForElementVisible('@saveShareButton')
         .initAjaxCounters()
         .click('@saveShareButton')
@@ -268,7 +268,7 @@ module.exports = {
         }
       }
       if (changed) {
-        await this.saveCollaboratorPermission()
+        await this.saveChanges()
       } else {
         await this.clickCancel()
       }
@@ -298,7 +298,7 @@ module.exports = {
       for (const permission of enabledPermissions) {
         await this.toggleSinglePermission(permission)
       }
-      await this.saveCollaboratorPermission()
+      await this.saveChanges()
     },
     /**
      *
@@ -370,7 +370,7 @@ module.exports = {
     changeCollaboratorRole: async function (collaborator, newRole) {
       await collaboratorDialog.clickEditShare(collaborator)
       await this.changeCollaboratorRoleInDropdown(newRole)
-      return this.saveCollaboratorPermission()
+      return this.saveChanges()
     },
     /**
      * @params {string} newRole
@@ -485,6 +485,20 @@ module.exports = {
       }
 
       return this.useXpath().expect.element(collaboratorSelector).to.not.be.present
+    },
+    /**
+     * @param {string} collaborator Name of the collaborator
+     * @param {string} days number of days to be added or subtracted from current date
+     *
+     * @return {Promise<*>}
+     */
+    changeCollaboratorExpiryDate: async function (collaborator, days) {
+      await collaboratorDialog.clickEditShare(collaborator)
+      await this.api.page
+        .FilesPageElement
+        .expirationDatePicker()
+        .setExpirationDate(days)
+      return this.saveChanges()
     }
   },
   elements: {

@@ -602,3 +602,19 @@ Feature: Sharing files and folders with internal users
     And user "user1" has logged in using the webUI
     When the user shares file "testimage.jpg" with user "User Two" using the webUI
     Then user "user2" should have received a share with target "testimage (2).jpg" and expiration date in 3 days
+
+  Scenario: change existing expiration date of an existing share with another internal user
+    Given user "user1" has created a new share with following settings
+      | path       | lorem.txt  |
+      | shareWith  | user2      |
+      | expireDate | +14        |
+    And user "user1" has logged in using the webUI
+    When the user edits the collaborator expiry date of "User Two" of file "lorem.txt" to "+7" days using the webUI
+    Then user "user2" should have received a share with target "lorem (2).txt" and expiration date in 7 days
+    And user "user1" should have a share with these details:
+      | field      | value      |
+      | path       | /lorem.txt |
+      | share_type | user       |
+      | uid_owner  | user1      |
+      | share_with | user2      |
+      | expiration | +7         |

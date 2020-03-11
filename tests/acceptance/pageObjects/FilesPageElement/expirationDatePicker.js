@@ -1,4 +1,5 @@
 const util = require('util')
+const sharingHelper = require('../../helpers/sharingHelper')
 
 module.exports = {
   commands: {
@@ -144,6 +145,30 @@ module.exports = {
           }
         })
       return disabled
+    },
+    /**
+     * sets expiration date on collaborators/public-link shares
+     *
+     * @param {string} value - provided date in format YYYY-MM-DD, or empty string to unset date
+     * @returns {Promise}
+     */
+    setExpirationDate: async function (value) {
+      if (value === '') {
+        return this.click('@publicLinkDeleteExpirationDateButton')
+      }
+      value = sharingHelper.calculateDate(value)
+      const dateToSet = new Date(Date.parse(value))
+      const year = dateToSet.getFullYear()
+      const month = dateToSet.toLocaleString('en-GB', { month: 'long' })
+      const day = dateToSet.getDate()
+      await this
+        .initAjaxCounters()
+        .waitForElementVisible('@linkExpirationDateField')
+        .click('@linkExpirationDateField')
+      return this
+        .setExpiryDateYear(year)
+        .setExpiryDateMonth(month)
+        .setExpiryDateDay(day)
     }
   },
   elements: {
@@ -171,6 +196,9 @@ module.exports = {
     },
     linkExpirationDateField: {
       selector: '.vdatetime-input'
+    },
+    publicLinkDeleteExpirationDateButton: {
+      selector: '#oc-files-file-link-expire-date-delete'
     }
   }
 }
