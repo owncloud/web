@@ -11,6 +11,7 @@ Summary
 * Bugfix - Indirect share info now visible in favorite and other file lists: [#3040](https://github.com/owncloud/phoenix/issues/3040)
 * Bugfix - Fixed layout of file lists: [#3100](https://github.com/owncloud/phoenix/pull/3100)
 * Bugfix - Changed share icons to collaborators icons: [#3116](https://github.com/owncloud/phoenix/pull/3116)
+* Bugfix - Sorted collaborators column, deduplicate public entry: [#3137](https://github.com/owncloud/phoenix/issues/3137)
 * Bugfix - Use end of the day in expiration date: [#3158](https://github.com/owncloud/phoenix/pull/3158)
 * Change - Moved collaborators additional info on own row and removed type row: [#3130](https://github.com/owncloud/phoenix/pull/3130)
 * Change - New sort order for collaborators and public links: [#3136](https://github.com/owncloud/phoenix/pull/3136)
@@ -48,6 +49,16 @@ Details
    icon.
 
    https://github.com/owncloud/phoenix/pull/3116
+
+* Bugfix - Sorted collaborators column, deduplicate public entry: [#3137](https://github.com/owncloud/phoenix/issues/3137)
+
+   The collaborators column that appears in the "shared with others" section are now sorted:
+   first by share type (user, group, link, remote) and then by display name using natural sort.
+   Additionally, if there is more than one public link for the resource, the text "Public" only
+   appears once in the collaborators column.
+
+   https://github.com/owncloud/phoenix/issues/3137
+   https://github.com/owncloud/phoenix/pull/3171
 
 * Bugfix - Use end of the day in expiration date: [#3158](https://github.com/owncloud/phoenix/pull/3158)
 
