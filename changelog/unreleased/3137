@@ -1,0 +1,10 @@
+Bugfix: Sorted collaborators column, deduplicate public entry
+
+The collaborators column that appears in the "shared with others"
+section are now sorted: first by share type (user, group, link, remote) and then by
+display name using natural sort.
+Additionally, if there is more than one public link for the resource, the text "Public"
+only appears once in the collaborators column.
+
+https://github.com/owncloud/phoenix/issues/3137
+https://github.com/owncloud/phoenix/pull/3171
