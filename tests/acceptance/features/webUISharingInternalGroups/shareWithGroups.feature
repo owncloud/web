@@ -349,3 +349,21 @@ Feature: Sharing files and folders with internal groups
       | fileName            | expectedCollaborators |
       | simple-folder       | User Two, grp1        |
 
+  Scenario: change existing expiration date of an existing share with another internal group
+    Given user "user3" has created a new share with following settings
+      | path            | lorem.txt  |
+      | shareTypeString | group      |
+      | shareWith       | grp1       |
+      | expireDate      | +14        |
+    And user "user3" has logged in using the webUI
+    When the user edits the collaborator expiry date of "grp1" of file "lorem.txt" to "+7" days using the webUI
+    Then user "user1" should have received a share with target "lorem (2).txt" and expiration date in 7 days
+    Then user "user2" should have received a share with target "lorem (2).txt" and expiration date in 7 days
+    And user "user3" should have a share with these details:
+      | field      | value      |
+      | path       | /lorem.txt |
+      | share_type | group      |
+      | uid_owner  | user3      |
+      | share_with | grp1       |
+      | expiration | +7         |
+

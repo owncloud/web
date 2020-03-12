@@ -129,6 +129,41 @@ const shareFileFolder = function (
     })
 }
 /**
+ * create any share using dataTable
+ *
+ * @param {string} sharer
+ * @param {object} dataTable (attrs like: path, shareWith, expireDate, name, permissionString,
+ * shareTypeString, password can be passed inside dataTable)
+ *
+ * @return void
+ */
+Given('user {string} has created a new share with following settings',
+  function (sharer, dataTable) {
+    const settings = dataTable.rowsHash()
+    const expireDate = settings.expireDate
+    let dateToSet = ''
+    if (typeof expireDate !== 'undefined') {
+      dateToSet = sharingHelper.calculateDate(expireDate)
+    }
+    let targetShareType = null
+    if (settings.shareTypeString) {
+      targetShareType = sharingHelper.humanReadableShareTypeToNumber(settings.shareTypeString)
+    }
+    return shareFileFolder(
+      settings.path,
+      sharer,
+      settings.shareWith,
+      targetShareType,
+      settings.permissionString,
+      settings.name,
+      {
+        expireDate: dateToSet,
+        password: settings.password
+      }
+    )
+  })
+
+/**
  * sets up data into a standard format for creating new public link share
  *
  * @param {string} sharer user creating share
@@ -741,6 +776,16 @@ When(
     return api.sharingDialog().changeCollaboratorRole(collaborator, newRole)
   }
 )
+
+When('the user edits the collaborator expiry date of {string} of file/folder/resource {string} to {string} days/day using the webUI',
+  async function (collaborator, resource, days) {
+    const api = client.page.FilesPageElement
+    await api
+      .appSideBar()
+      .closeSidebar(100)
+      .openSharingDialog(resource)
+    return api.sharingDialog().changeCollaboratorExpiryDate(collaborator, days)
+  })
 
 Then('user {string} should be listed as {string} in the collaborators list on the webUI', function (user, role) {
   return assertCollaboratorslistContains('user', user, { role })

@@ -1,6 +1,5 @@
 const util = require('util')
 const _ = require('lodash')
-const sharingHelper = require('../../helpers/sharingHelper')
 
 module.exports = {
   commands: {
@@ -66,32 +65,6 @@ module.exports = {
         .setValue('@publicLinkPasswordField', linkPassword)
     },
     /**
-     * sets expire date of the public link share using webUI
-     *
-     * @param {string} value - provided date in format YYYY-MM-DD, or empty string to unset date
-     * @returns {Promise}
-     */
-    setPublicLinkExpiryDate: async function (value) {
-      const expirationDatePicker = this.api.page.FilesPageElement.expirationDatePicker()
-      if (value === '') {
-        return this.click('@publicLinkDeleteExpirationDateButton')
-      }
-      value = sharingHelper.calculateDate(value)
-      const dateToSet = new Date(Date.parse(value))
-      const year = dateToSet.getFullYear()
-      const month = dateToSet.toLocaleString('en-GB', { month: 'long' })
-      const day = dateToSet.getDate()
-      const linkExpirationDateField = expirationDatePicker.elements.linkExpirationDateField.selector
-      await this
-        .initAjaxCounters()
-        .waitForElementVisible(linkExpirationDateField)
-        .click(linkExpirationDateField)
-      return expirationDatePicker
-        .setExpiryDateYear(year)
-        .setExpiryDateMonth(month)
-        .setExpiryDateDay(day)
-    },
-    /**
      * function sets different fields for public link
      *
      * @param key fields like name, password, expireDate, role
@@ -106,7 +79,10 @@ module.exports = {
       } else if (key === 'password') {
         return this.setPublicLinkPassword(value)
       } else if (key === 'expireDate') {
-        return this.setPublicLinkExpiryDate(value)
+        return this.api.page
+          .FilesPageElement
+          .expirationDatePicker()
+          .setExpirationDate(value)
       }
       return this
     },
@@ -430,9 +406,6 @@ module.exports = {
     },
     sidebarPrivateLinkIconCopied: {
       selector: '#files-sidebar-private-link-icon-copied'
-    },
-    publicLinkDeleteExpirationDateButton: {
-      selector: '#oc-files-file-link-expire-date-delete'
     }
   }
 }
