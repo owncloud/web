@@ -175,7 +175,7 @@ def build(ctx):
 	result = {
 		'kind': 'pipeline',
 		'type': 'docker',
-		'name': 'publish-npm-and-demo-system',
+		'name': 'build',
 		'workspace' : {
 			'base': '/var/www/owncloud',
 			'path': config['app']
@@ -183,7 +183,6 @@ def build(ctx):
 		'steps':
 			installNPM() +
 			buildRelease(ctx) +
-			deployStaging() +
 			buildDockerImage(),
 		'depends_on': [],
 		'trigger': {
@@ -807,7 +806,7 @@ def buildDockerImage():
 def buildRelease(ctx):
 	return [
 		{
-			'name': 'build-release',
+			'name': 'make',
 			'image': 'owncloudci/nodejs:10',
 			'pull': 'always',
 			'commands': [
@@ -816,7 +815,7 @@ def buildRelease(ctx):
 			],
 		},
 		{
-			'name': 'build-changelog',
+			'name': 'changelog',
 			'image': 'toolhippie/calens:latest',
 			'pull': 'always',
 			'commands': [
@@ -829,7 +828,7 @@ def buildRelease(ctx):
 			},
 		},
 		{
-			'name': 'release-to-github',
+			'name': 'publish',
 			'image': 'plugins/github-release:1',
 			'pull': 'always',
 			'settings': {
@@ -940,41 +939,6 @@ def website(ctx):
 		},
 	}
   ]
-
-def deployStaging():
-	return [{
-		'name': 'deploy-staging',
-		'image': 'drillster/drone-rsync:latest',
-		'pull': 'always',
-		'settings': {
-			'delete': True,
-			'hosts': 'pixie.owncloud.systems',
-			'port': '22',
-			'recursive': True,
-			'script': [
-				'sudo docker exec phoenix occ maintenance:mode --on',
-				'sudo rsync -az --chown=www-data:www-data -r --del --exclude config.json /home/deploy/phoenix/ /var/lib/phoenix/apps/phoenix',
-				'sudo docker exec phoenix occ maintenance:mode --off',
-				'sudo docker exec phoenix owncloud migrate'
-			],
-			'source': 'dist/',
-			'target': '/home/deploy/phoenix',
-			'user': 'deploy'
-		},
-		'environment': {
-			'RSYNC_KEY': {
-				'from_secret': 'rsync_key'
-			},
-		},
-		'when': {
-			'branch': [
-				'master'
-			],
-			'event': [
-				'push'
-			]
-		},
-	}]
 
 def cloneOauth():
 	return [{
