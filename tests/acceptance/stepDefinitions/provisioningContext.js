@@ -236,20 +236,25 @@ After(async function () {
   const createdGroups = userSettings.getCreatedGroups()
 
   if (client.globals.ocis) {
+    const dataDir = (user) => join(client.globals.ocis_data_dir, 'data', user)
     const deleteUserPromises = createdUsers.map(
       user => ldap.deleteUser(client.globals.ldapClient, user)
         .then(() => {
-          fs.removeSync(join(client.globals.ocis_data_dir, 'data', user))
           console.log('Deleted LDAP User: ', user)
         })
     )
+    const deleteUserDirectories = createdUsers.map(user => fs.remove(dataDir(user)))
     const deleteGroupPromises = createdGroups.map(
       group => ldap.deleteGroup(client.globals.ldapClient, group)
         .then(() => {
           console.log('Deleted LDAP Group: ', group)
         })
     )
-    await Promise.all([...deleteUserPromises, ...deleteGroupPromises])
+    await Promise.all([
+      ...deleteUserPromises,
+      ...deleteGroupPromises,
+      ...deleteUserDirectories
+    ])
       .then(() => {
         userSettings.resetCreatedUsers()
         userSettings.resetCreatedGroups()
