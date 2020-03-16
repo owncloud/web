@@ -32,9 +32,12 @@
         </template>
         <template #rowColumns="{ item }">
           <div class="uk-text-truncate uk-width-expand">
-            <oc-file
-              :name="$_ocTrashbin_fileName(item)" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
-              :filename="item.name" :key="item.id"/>
+            <file-item
+              :item="item"
+              :name="$_ocTrashbin_fileName(item)"
+              class="file-row-name"
+              :key="item.viewId"
+            />
           </div>
           <div class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right" :class="{ 'uk-visible@s' : !_sidebarOpen, 'uk-hidden'  : _sidebarOpen }">
             {{ formDateFromNow(item.deleteTimestamp) }}
@@ -58,6 +61,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
 import FileList from './FileList.vue'
+import FileItem from './FileItem.vue'
 import NoContentMessage from './NoContentMessage.vue'
 import OcDialogPrompt from './ocDialogPrompt.vue'
 import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
@@ -69,6 +73,7 @@ export default {
   components: {
     OcDialogPrompt,
     FileList,
+    FileItem,
     NoContentMessage,
     SortableColumnHeader
   },

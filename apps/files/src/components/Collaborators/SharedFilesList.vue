@@ -45,9 +45,12 @@
     </template>
     <template #rowColumns="{ item }">
       <div class="uk-text-truncate uk-width-expand">
-        <oc-file @click.native.stop="item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)"
-          :name="item.basename" :extension="item.extension" class="file-row-name" :icon="fileTypeIcon(item)"
-          :filename="item.name" :key="item.path" />
+        <file-item
+          @click.native.stop="item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)"
+          :item="item"
+          :dav-url="davUrl"
+          class="file-row-name"
+          :key="item.path" />
         <oc-spinner
           v-if="actionInProgress(item)"
           size="small"
@@ -110,6 +113,7 @@ import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../../mixins'
 import FileActions from '../../fileactions'
 import FileList from '../FileList.vue'
+import FileItem from '../FileItem.vue'
 import NoContentMessage from '../NoContentMessage.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 import { shareTypes } from '../../helpers/shareTypes'
@@ -119,6 +123,7 @@ export default {
   name: 'SharedFilesList',
   components: {
     FileList,
+    FileItem,
     NoContentMessage,
     SortableColumnHeader
   },
@@ -145,7 +150,19 @@ export default {
 
     $_isSharedWithMe () {
       return (this.$route.name === 'files-shared-with-me')
+    },
+
+    davUrl () {
+      // FIXME: use SDK once it switches to DAV v2
+      const davUrl = [
+        '..',
+        'dav',
+        'files',
+        this.$store.getters.user.id
+      ].join('/')
+      return this.$client.files.getFileUrl(davUrl)
     }
+
   },
   watch: {
     $route () {

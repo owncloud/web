@@ -368,6 +368,37 @@ module.exports = {
         .useCss()
       return this
     },
+    getResourceThumbnail: async function (resourceName) {
+      const fileRowPreviewSelector = this.getFileRowSelectorByFileName(resourceName) + this.elements.filePreviewInFileRow.selector
+      const fileRowIconSelector = this.getFileRowSelectorByFileName(resourceName) + this.elements.fileIconInFileRow.selector
+      let iconUrl = null
+      await this.waitForFileVisible(resourceName)
+      // while the preview is loading, it will first display the file type icon,
+      // so we might misdetect if we don't wait long enough
+      await this.useXpath()
+        .getAttribute(
+          {
+            selector: fileRowPreviewSelector,
+            timeout: 5000,
+            suppressNotFoundErrors: true
+          },
+          'src',
+          (result) => {
+            // somehow when element was not found the result.value is an empty array...
+            if (result.status !== -1 && typeof result.value === 'string') {
+              iconUrl = result.value
+            }
+          }
+        )
+        .useCss()
+      if (!iconUrl) {
+        // check that at least the file type icon svg is displayed
+        await this.useXpath()
+          .waitForElementVisible(fileRowIconSelector)
+          .useCss()
+      }
+      return iconUrl
+    },
     /**
      * Wait for A filerow with given path to be visible
      * This only works in the favorites page as it uses the whole path of a file rather than just the name
@@ -718,6 +749,12 @@ module.exports = {
     },
     fileLinkInFileRow: {
       selector: '//span[contains(@class, "file-row-name")]'
+    },
+    fileIconInFileRow: {
+      selector: '//span[contains(@class, "file-row-name")]//*[local-name() = "svg"]'
+    },
+    filePreviewInFileRow: {
+      selector: '//span[contains(@class, "file-row-name")]//img'
     },
     notMarkedFavoriteInFileRow: {
       selector: '//span[contains(@class, "oc-star-dimm")]',

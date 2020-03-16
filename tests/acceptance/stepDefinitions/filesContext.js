@@ -926,3 +926,17 @@ When('the user has set the sort order of the {string} column to descending order
 When('the user has set the sort order of the {string} column to ascending order', async function (column) {
   await _setFilesTableSort(column, false)
 })
+Then('the file/folder/resource {string} should have a thumbnail displayed on the webUI', async function (resource) {
+  const iconUrl = await client
+    .page
+    .FilesPageElement.filesList()
+    .getResourceThumbnail(resource)
+  assert.ok(iconUrl && iconUrl.startsWith('blob:'), 'Icon URL expected to be set when thumbnail is displayed')
+})
+Then('the file/folder/resource {string} should have a file type icon displayed on the webUI', async function (resource) {
+  const iconUrl = await client
+    .page
+    .FilesPageElement.filesList()
+    .getResourceThumbnail(resource)
+  assert.strictEqual(null, iconUrl, 'No icon URL expected when file type icon is displayed')
+})

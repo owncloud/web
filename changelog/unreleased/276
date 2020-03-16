@@ -1,0 +1,7 @@
+Enhancement: Added thumbnails in file list
+
+Thumbnails are now displayed in the file list for known file types.
+When no thumbnail was returned, fall back to the file type icon.
+
+https://github.com/owncloud/phoenix/issues/276
+https://github.com/owncloud/phoenix/pull/3187
