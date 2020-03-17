@@ -8,7 +8,8 @@ module.exports = merge(common, {
   resolve: {
     alias: {
       vue: 'vue/dist/vue.js'
-    }
+    },
+    symlinks: false
   },
   devServer: {
     contentBase: path.resolve(__dirname),
