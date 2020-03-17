@@ -128,15 +128,17 @@ When('the user edits the public link named {string} of file/folder/resource {str
 
 When('the user tries to edit expiration of the public link named {string} of file {string} to past date {string}',
   async function (linkName, resource, pastDate) {
-    await client.page.FilesPageElement
+    const api = client.page.FilesPageElement
+    await api
       .appSideBar()
       .closeSidebar(100)
       .openPublicLinkDialog(resource)
-    await client.page.FilesPageElement.publicLinksDialog().clickLinkEditBtn(linkName)
+    await api.publicLinksDialog().clickLinkEditBtn(linkName)
     const value = sharingHelper.calculateDate(pastDate)
     const dateToSet = new Date(Date.parse(value))
-    const isDisabled = await client.page.FilesPageElement
-      .expirationDatePicker()
+    const isDisabled = await api
+      .sharingDialog()
+      .openExpirationDatePicker()
       .isExpiryDateDisabled(dateToSet)
     return assert.ok(
       isDisabled,

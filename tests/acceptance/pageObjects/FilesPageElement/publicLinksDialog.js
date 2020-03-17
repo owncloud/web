@@ -1,5 +1,6 @@
 const util = require('util')
 const _ = require('lodash')
+const sharingHelper = require('../../helpers/sharingHelper')
 
 module.exports = {
   commands: {
@@ -79,10 +80,12 @@ module.exports = {
       } else if (key === 'password') {
         return this.setPublicLinkPassword(value)
       } else if (key === 'expireDate') {
+        value = sharingHelper.calculateDate(value)
         return this.api.page
           .FilesPageElement
-          .expirationDatePicker()
-          .setExpirationDate(value)
+          .sharingDialog()
+          .openExpirationDatePicker()
+          .setExpirationDate(value, 'link')
       }
       return this
     },
@@ -97,10 +100,10 @@ module.exports = {
      * @param {string} editData.expireDate - Expire date for a public link share
      * @returns {exports}
      */
-    editPublicLink: function (linkName, editData) {
-      this.clickLinkEditBtn(linkName)
+    editPublicLink: async function (linkName, editData) {
+      await this.clickLinkEditBtn(linkName)
       for (const [key, value] of Object.entries(editData)) {
-        this.setPublicLinkForm(key, value)
+        await this.setPublicLinkForm(key, value)
       }
       return this
     },

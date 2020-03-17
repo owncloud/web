@@ -325,9 +325,10 @@ const assertUsersGroupsWithPatternInAutocompleteListExcluding = async function (
  *
  * @param {string} resource
  * @param {string} sharee
- * @param {int} days
+ * @param {string} days
  * @param {boolean} shareWithGroup
  * @param {boolean} remote
+ * @param {boolean} expectToSucceed
  */
 const userSharesFileOrFolderWithUserOrGroupWithExpirationDate = async function ({
   resource, sharee, days, shareWithGroup = false, remote = false
@@ -777,7 +778,7 @@ When(
   }
 )
 
-When('the user edits the collaborator expiry date of {string} of file/folder/resource {string} to {string} days/day using the webUI',
+When('the user (tries to )edit/edits the collaborator expiry date of {string} of file/folder/resource {string} to {string} days/day using the webUI',
   async function (collaborator, resource, days) {
     const api = client.page.FilesPageElement
     await api
@@ -994,9 +995,15 @@ Then('the following resources should have the following collaborators', async fu
   }
 })
 
-When('the user shares file/folder/resource {string} with user {string} which expires after {int} day/days using the webUI', function (resource, sharee, days) {
-  return userSharesFileOrFolderWithUserOrGroupWithExpirationDate({ resource, sharee, days })
-})
+When('the user (tries to )share/shares file/folder/resource {string} with user {string} which expires in {string} day/days using the webUI',
+  function (resource, sharee, days) {
+    return userSharesFileOrFolderWithUserOrGroupWithExpirationDate({ resource, sharee, days })
+  })
+
+When('the user (tries to )share/shares file/folder/resource {string} with group {string} which expires in {string} day/days using the webUI',
+  function (resource, sharee, days) {
+    return userSharesFileOrFolderWithUserOrGroupWithExpirationDate({ resource, sharee, days, shareWithGroup: true })
+  })
 
 When('the user shares file/folder/resource {string} with user {string} using the webUI', function (resource, user) {
   return userSharesFileOrFolderWithUser(resource, user, 'Viewer')
@@ -1008,4 +1015,29 @@ Then('the fields of the {string} collaborator for file/folder/resource {string} 
 
 Then('user {string} should have received a share with target {string} and expiration date in {int} day/days', function (user, target, days) {
   return checkReceivedSharesExpirationDate(user, target, days)
+})
+
+Then('the expiration date shown on the webUI should be {string} days',
+  async function (expectedDays) {
+    let expectedDate = sharingHelper.calculateDate(expectedDays)
+    expectedDate = new Date((Date.parse(expectedDate)))
+    const expectedDateString = expectedDate.toLocaleString('en-GB', { month: 'short' }) + ' ' +
+      (expectedDate.getDate()).toString() + ', ' + expectedDate.getFullYear()
+    const dateStringFromInputField = await client.page.FilesPageElement
+      .sharingDialog()
+      .getExpirationDateFromInputField()
+    assert.strictEqual(
+      expectedDateString,
+      dateStringFromInputField,
+      `Expected: Expiration date field with ${expectedDateString}, but found ${dateStringFromInputField}`
+    )
+  })
+
+Then('it should not be possible to save the pending share on the webUI', async function () {
+  const state = await client.page.FilesPageElement.sharingDialog().getDisabledAttributeOfSaveShareButton()
+  assert.strictEqual(
+    'true',
+    state,
+    'Expected: save share button to be disabled but got enabled'
+  )
 })

@@ -593,7 +593,7 @@ Feature: Sharing files and folders with internal users
 
   Scenario: share a file with another internal user which should expire after 2 days
     Given user "user1" has logged in using the webUI
-    When the user shares file "testimage.jpg" with user "User Two" which expires after 2 days using the webUI
+    When the user shares file "testimage.jpg" with user "User Two" which expires in "+2" days using the webUI
     Then user "user2" should have received a share with target "testimage (2).jpg" and expiration date in 2 days
 
   Scenario: share a file with another internal user with default expiration date
@@ -618,3 +618,97 @@ Feature: Sharing files and folders with internal users
       | uid_owner  | user1      |
       | share_with | user2      |
       | expiration | +7         |
+
+  Scenario: share a resource with another internal user with expiration date within enforced maximum expiration date
+    Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "5"
+    And user "user1" has logged in using the webUI
+    When the user shares file "lorem.txt" with user "User Two" which expires in "+4" days using the webUI
+    Then user "user1" should have a share with these details:
+      | field      | value      |
+      | path       | /lorem.txt |
+      | share_type | user       |
+      | uid_owner  | user1      |
+      | share_with | user2      |
+      | expiration | +4         |
+
+  Scenario Outline: share a resource with another internal user with expiration date beyond enforced maximum expiration date
+    Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "5"
+    And user "user1" has logged in using the webUI
+    When the user tries to share resource "<shared-resource>" with user "User Two" which expires in "+6" days using the webUI
+    Then the expiration date shown on the webUI should be "+5" days
+    And user "user1" should not have created any shares
+    Examples:
+      | shared-resource |
+      | lorem.txt       |
+      | simple-folder   |
+
+  Scenario Outline: edit a share with another internal user changing expiration date within enforced maximum expiration date
+    Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "5"
+    And user "user1" has created a new share with following settings
+      | path       | <shared-resource> |
+      | shareWith  | user2             |
+      | expireDate | +4                |
+    And user "user1" has logged in using the webUI
+    When the user tries to edit the collaborator expiry date of "User Two" of resource "<shared-resource>" to "+7" days using the webUI
+    Then the expiration date shown on the webUI should be "+4" days
+    And it should not be possible to save the pending share on the webUI
+    Examples:
+      | shared-resource |
+      | lorem.txt       |
+      | simple-folder   |
+
+  @issue-3174
+  Scenario Outline: enforced expiry date for group affect user shares
+    Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
+    And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
+    And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "10"
+    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5"
+    And user "user1" has logged in using the webUI
+    When the user tries to share resource "<shared-resource>" with user "User Two" which expires in "+6" days using the webUI
+    Then the expiration date shown on the webUI should be "+5" days
+#    Then the expiration date shown on the webUI should be "+6" days
+#    Then user "user1" should have a share with these details:
+#      | field      | value             |
+#      | path       | <shared-resource> |
+#      | share_type | user              |
+#      | uid_owner  | user1             |
+#      | share_with | user2             |
+#      | expiration | +6                |
+    Examples:
+      | shared-resource |
+      | lorem.txt       |
+      | simple-folder   |
+
+  @issue-3174
+  Scenario Outline: enforced expiry date for users affect group sharess
+    Given group "grp1" has been created
+    And user "user2" has been added to group "grp1"
+    And the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
+    And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
+    And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "5"
+    And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "10"
+    And user "user1" has logged in using the webUI
+    When the user tries to share resource "<shared-resource>" with group "grp1" which expires in "+6" days using the webUI
+    Then the expiration date shown on the webUI should be "+5" days
+#    Then the expiration date shown on the webUI should be "+6" days
+#    Then user "user1" should have a share with these details:
+#      | field      | value             |
+#      | path       | <shared-resource> |
+#      | share_type | group             |
+#      | uid_owner  | user1             |
+#      | share_with | grp1              |
+#      | expiration | +6                |
+    Examples:
+      | shared-resource |
+      | lorem.txt       |
+      | simple-folder   |
