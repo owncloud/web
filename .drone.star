@@ -14,69 +14,39 @@ config = {
 	'yarnlint': True,
 
 	'acceptance': {
-		'webUI': {
-			'suites': {
-				'webUICreateFilesFolders': 'createFilesFolders',
-				'webUIDeleteFilesFolders': 'deleteFilesFolders',
-				'webUIFavorites': 'Favorites',
-				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingAutocompletion': 'SharingAutocompletion',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
-				'webUIResharing': 'Resharing',
-				'webUISharingPublic': 'SharingPublic',
-				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
-				'webUITrashbin': 'Trashbin',
-				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
-				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
-				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-				'webUISharingNotifications': 'SharingNotifications',
-				'webUIAccount': 'Account'
-			},
-		},
-		'webUIFederation': {
-			'suites': {
-				'webUISharingExternal': 'SharingExternal',
-			},
-			'extraEnvironment': {
-				'REMOTE_BACKEND_HOST': 'http://federated'
-			},
-			'federatedServerNeeded': True,
-			'federatedServerVersion': 'daily-master-qa'
-		},
-		'webUI-XGA': {
-			'suites': {
-				'all': 'XGAPortrait',
-			},
-			'extraEnvironment': {
-				'SCREEN_RESOLUTION': '768x1024'
-			},
-			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
-		},
-		'webUI-iPhone': {
-			'suites': {
-				'all': 'iPhone',
-			},
-			'extraEnvironment': {
-				'SCREEN_RESOLUTION': '375x812'
-			},
-			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and @skipOnOC10'
-		},
 		'webUI-ocis': {
 			'suites': {
-				'all': 'webUIOCIS'
+				'all': 'webUIOCIS',
+				'all1': 'webUIOCIS1',
+				'all2': 'webUIOCIS2',
+				'all3': 'webUIOCIS3',
+				'all4': 'webUIOCIS4',
+				'all5': 'webUIOCIS5',
+				'all6': 'webUIOCIS6',
+				'all7': 'webUIOCIS7',
+				'all8': 'webUIOCIS8',
+				'all9': 'webUIOCIS9',
+				'all10': 'webUIOCIS10',
+				'all11': 'webUIOCIS11',
+				'all12': 'webUIOCIS12',
+				'all13': 'webUIOCIS13',
+				'all14': 'webUIOCIS14',
+				'all15': 'webUIOCIS15',
+				'all16': 'webUIOCIS16',
+				'all17': 'webUIOCIS17',
+				'all18': 'webUIOCIS18',
+				'all19': 'webUIOCIS19',
+				'all20': 'webUIOCIS20',
+				'all21': 'webUIOCIS21',
+				'all22': 'webUIOCIS22',
+				'all23': 'webUIOCIS23',
+				'all24': 'webUIOCIS24',
+				'all25': 'webUIOCIS25',
+				'all26': 'webUIOCIS26',
+				'all27': 'webUIOCIS27',
+				'all28': 'webUIOCIS28',
+				'all29': 'webUIOCIS29',
+				'all30': 'webUIOCIS30',
 			},
 			'extraEnvironment': {
 				'SERVER_HOST': 'http://ocis:9100',
@@ -96,7 +66,8 @@ config = {
 }
 
 def main(ctx):
-	before = beforePipelines(ctx)
+	# before = beforePipelines(ctx)
+	before = []
 
 	stages = stagePipelines(ctx)
 	if (stages == False):
