@@ -190,10 +190,6 @@ module.exports = {
     renameFileConfirmationBtn: {
       selector: '#oc-dialog-rename-confirm'
     },
-    fileActionsButtonInFileRow: {
-      selector: '//button[contains(@class, "files-list-row-show-actions")]',
-      locateStrategy: 'xpath'
-    },
     shareButtonInFileRow: {
       selector: '//button[@aria-label="Collaborators"]',
       locateStrategy: 'xpath'
