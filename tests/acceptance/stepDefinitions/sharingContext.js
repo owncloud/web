@@ -12,7 +12,7 @@ const { runOcc } = require('../helpers/occHelper')
 const _ = require('lodash')
 const path = require('../helpers/path')
 const util = require('util')
-const { COLLABORATOR_PERMISSION_ARRAY } = require('../helpers/sharingHelper')
+const { COLLABORATOR_PERMISSION_ARRAY, calculateDate } = require('../helpers/sharingHelper')
 
 /**
  *
@@ -780,6 +780,20 @@ Then('user {string} should be listed as {string} in the collaborators list on th
   return assertCollaboratorslistContains('user', user, { role })
 })
 
+Then('the share {string} shared with user {string} should have no expiration information', async function (item, user) {
+  await client.page.FilesPageElement.filesList().clickRow(item)
+  await client.page.filesPage().selectTabInSidePanel('collaborators')
+  const elementID = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(user)
+  return assert.strictEqual(elementID, undefined, 'The expiration information was present unexpectedly')
+})
+
+Then('the expiration information of share {string} shared with user {string} should be {string}', async function (item, user, information) {
+  await client.page.FilesPageElement.filesList().clickRow(item)
+  await client.page.filesPage().selectTabInSidePanel('collaborators')
+  const actualInfo = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(user)
+  return assert.strictEqual(actualInfo, information, `Expected expiry information '${information}' but got '${actualInfo}' instead`)
+})
+
 Then('remote user {string} should be listed as {string} via {string} in the collaborators list on the webUI', function (user, role, via) {
   user = util.format('%s@%s', user, client.globals.remote_backend_url)
   return assertCollaboratorslistContains('remote user', user, { role, via })
@@ -893,6 +907,20 @@ Then('the collaborators list for file/folder/resource {string} should be empty',
     .getCollaboratorsList({})
   ).length
   assert.strictEqual(count, 0, `Expected to have no collaborators for '${resource}', Found: ${count}`)
+})
+
+Then('the expiration date field should be marked as required on the WebUI', async function () {
+  await client.page.FilesPageElement.sharingDialog().waitForElementVisible('@requiredLabelInCollaboratorsExpirationDate')
+})
+
+Then('the expiration date for {string} should be disabled', async function (expiration) {
+  const dateToSet = calculateDate(expiration)
+  const isEnabled = await client.page.FilesPageElement.sharingDialog()
+    .openExpirationDatePicker()
+    .setExpirationDate(dateToSet)
+  return assert.strictEqual(
+    isEnabled, false,
+    `The expiration date for ${expiration} was expected to be disabled, but is found enabled`)
 })
 
 Then('the current collaborators list should have order {string}', async function (expectedNames) {
@@ -1015,8 +1043,8 @@ Then('the expiration date shown on the webUI should be {string} days',
       .sharingDialog()
       .getExpirationDateFromInputField()
     assert.strictEqual(
-      expectedDateString,
       dateStringFromInputField,
+      expectedDateString,
       `Expected: Expiration date field with ${expectedDateString}, but found ${dateStringFromInputField}`
     )
   })

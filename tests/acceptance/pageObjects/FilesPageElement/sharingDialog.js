@@ -503,6 +503,7 @@ module.exports = {
       this
         .initAjaxCounters()
         .waitForElementVisible('@expirationDateField')
+        .waitForElementNotPresent('@elementInterceptingCollaboratorsExpirationInput')
         .click('@expirationDateField')
       return client.page.FilesPageElement.expirationDatePicker()
     },
@@ -647,6 +648,13 @@ module.exports = {
     },
     expirationDateField: {
       selector: '.vdatetime-input'
+    },
+    requiredLabelInCollaboratorsExpirationDate: {
+      selector: '//label[@for="files-collaborators-collaborator-expiration-input"]/em[.="(required)"]',
+      locateStrategy: 'xpath'
+    },
+    elementInterceptingCollaboratorsExpirationInput: {
+      selector: '.vdatetime-overlay.vdatetime-fade-leave-active.vdatetime-fade-leave-to'
     }
   }
 }
