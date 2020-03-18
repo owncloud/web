@@ -988,6 +988,8 @@ def konnectdService():
 			'LDAP_URI': 'ldap://ldap:389',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
 			'KONNECTD_ISS': 'https://konnectd:9130',
+			'KONNECTD_TLS': 'true',
+			'LDAP_BINDPW': 'admin',
 		},
 		'commands': [
 			'cd /var/www/owncloud',
