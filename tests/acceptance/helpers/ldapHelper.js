@@ -101,7 +101,7 @@ exports.createUser = async function (ldapClient, user, password = null, displayN
   email = email || userHelper.getEmailAddressForUser(user)
   const uid = await exports.getNewUID(ldapClient)
   return exports.createEntry(ldapClient, `uid=${user},${USERS_OU}`, {
-    cn: user.charAt(0).toUpperCase() + user.slice(1),
+    cn: user,
     sn: user,
     objectclass: ['posixAccount', 'inetOrgPerson'],
     homeDirectory: `/home/openldap/${user}`,
@@ -110,10 +110,10 @@ exports.createUser = async function (ldapClient, user, password = null, displayN
     mail: email,
     gidNumber: 5000,
     uidNumber: uid,
-    gecos: user.charAt(0).toUpperCase() + user.slice(1),
+    gecos: user,
     loginshell: '/bin/bash',
     uid: user,
-    givenname: user.charAt(0).toUpperCase() + user.slice(1)
+    givenname: user
   }).then(err => {
     if (!err) {
       userHelper.addUserToCreatedUsersList(user, password, displayName, email)
