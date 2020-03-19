@@ -590,11 +590,11 @@ module.exports = {
           shareIndicatorsXpath,
           (result) => {
             result.value.forEach(element => {
-              return this.api.elementIdAttribute(element.ELEMENT, 'class', (attr) => {
+              this.api.elementIdAttribute(element.ELEMENT, 'class', (attr) => {
                 if (attr.value.indexOf('uk-invisible') >= 0) {
                   return
                 }
-                return this.api.elementIdAttribute(element.ELEMENT, 'aria-label', (attr) => {
+                this.api.elementIdAttribute(element.ELEMENT, 'aria-label', (attr) => {
                   switch (attr.value) {
                     case 'Directly shared with collaborators':
                       indicators.push('user-direct')
