@@ -1,0 +1,7 @@
+Enhancement: Add UI to accept invite
+
+This is a first stab to add a UI where the user can accept an invite by adding a token
+(received beforehand). The logic for receiving and sending the token is not in place.
+
+https://github.com/sciencemesh/sciencemesh/issues/13
+https://github.com/owncloud/phoenix/pull/3203
