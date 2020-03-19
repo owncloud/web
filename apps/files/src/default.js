@@ -6,6 +6,7 @@ import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import FileSidebarWebComponent from './components/FileSidebarWebComponent.vue'
 import FileLinkSidebar from './components/FileLinkSidebar.vue'
+import AccpetInvite from './components/AcceptInvite.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './components/PublicLinks/PublicLink.vue'
 import FilesDrop from './components/PublicLinks/FilesDrop.vue'
@@ -77,6 +78,14 @@ const navItems = [
     route: {
       name: 'files-list',
       path: `/${appInfo.id}/list`
+    }
+  },
+  {
+    name: 'Accept invite', // TODO add translation
+    iconMaterial: 'group',
+    route: {
+      name: 'accept-invite',
+      path: `/${appInfo.id}/accept-invite`
     }
   },
   {
@@ -187,6 +196,14 @@ const routes = [
       fullscreen: PrivateLink
     },
     meta: { hideHeadbar: true }
+  },
+  {
+    path: '/accept-invite',
+    name: 'accept-invite',
+    components: {
+      app: AccpetInvite
+    }
+
   },
   {
     path: '/public-link/:token',
