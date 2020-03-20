@@ -13,7 +13,21 @@ In this document, we will refer to the following:
 - `<phoenix-url>` as the full URL, for example `https://phoenix-host:8300/phoenix-path/`
 - `<phoenix-domain>` as the protocol, domain and port, for example: `https://phoenix-host:8300`
 
-## Setting up
+### Building Phoenix
+
+- Run `yarn install` to build core
+- Run `yarn install-all` to install dependencies of all apps and core
+- Run `yarn dist` to build all apps configured in `config.json`
+
+### Backends
+
+Phoenix can run against either ownCloud 10 as backend or OCIS.
+Depending which one you chose, please check the matching section:
+- [Using ownCloud as backend](#using-ownCloud-10-as-backend)
+- [Using OCIS as backend](#using-ocis-as-backend)
+
+
+## Using ownCloud 10 as backend
 
 ### Setting up the ownCloud Server
 
@@ -54,25 +68,55 @@ Login as administrator in the ownCloud Server web interface and go to the "User 
 - set the redirection URI to `<phoenix-url>/oidc-callback.html`
 - make sure to take note of the **client identifier** value as it will be needed in the Phoenix configuration later on
 
-### Setting up Phoenix
+#### Setting up Phoenix for ownCloud 10 backend
 
-In the local Phoenix checkout, copy the `config.json.sample` file to `config.json` and adjust it accordingly:
+In the local Phoenix checkout, copy the `config.json.sample-oc10` file to `config.json` and adjust it accordingly:
 
 - Set the "server" key to the URL of the ownCloud server including path. If the URL contains a path, please also add a **trailing slash** there.
 - Set the "clientId" key to the **client identifier** as copied from the "User Authentication" section before.
 - Adjust "url" and "authUrl" using the ownCloud server URL as prefix for both
 - Optionally adjust "apps" for the list of apps to be loaded. These match the app names inside the "apps" folder.
 
-## Building Phoenix
-
-- Run `yarn install` to build core
-- Run `yarn install-all` to install dependencies of all apps and core
-- Run `yarn dist` to build all apps configured in `config.json`
-
 ## Running Phoenix
 
 - optionally provide custom domain name: `export SERVER_HOST=0.0.0.0:8300`
 - run a webpack dev server `yarn watch` (`yarn watch-all` if you want to watch apps as well)
+- when working on the Phoenix code, webpack will recompile the code automatically
+
+## Running acceptance tests
+
+For testing, please refer to the [ownCloud 10 testing section](#running-acceptance-tests-using-ownCloud10-backend)
+
+## Using OCIS as backend
+
+### Setting up OCIS services
+
+- Setup OCIS by cloning the [ocis repository](https://github.com/owncloud/ocis) and following the setup instructions there.
+- Do not start the whole server but run `./bin/ocis --log-level debug $EXTENSION` for all the existing extensions **except the phoenix service**. A list of extensions can be found by running `./bin/ocis` without arguments and looking at the "Extensions" section.
+
+### Setting up ocis-phoenix service
+
+- Clone the [ocis-phoenix repository](https://github.com/owncloud/ocis-phoenix) and follow the setup instructions there.
+
+### Setting up Phoenix for OCIS backend
+
+- Copy "config.json.sample-ocis" to "config.json" and change the URLs according if `localhost` is not suitable.
+- Set the environment variables as follows:
+   - `export PHOENIX_CHECKOUT=...` and specify the path to the local git checkout of the [phoenix repository](https://github.com/owncloud/phoenix)
+   - `export PHOENIX_ASSET_PATH=$PHOENIX_CHECKOUT/dist`
+   - `export PHOENIX_WEB_CONFIG=$PHOENIX_CHECKOUT/phoenix/config.json`
+- Run "ocis-phoenix": `./bin/ocis-phoenix --log-level debug server`
+
+### Running Phoenix with OCIS
+
+- in the Phoenix checkout folder, run `yarn watch-all-ocis`
+- open "https://localhost:9200" and accept the certificate.
+- when signing in, use one of the [available test users](https://github.com/owncloud/ocis#quickstart)
+- whenever code changes were made, you need to manually reload the browser page (no hot reload)
+
+### Running acceptance tests
+
+For testing, please refer to the [OCIS testing section](#running-acceptance-tests-using-ocis-backend)
 
 ## Running acceptance tests
 
@@ -121,7 +165,7 @@ setup selenium and browser in either of the following ways:
     docker run -e REDIS_DATABASES=1 -p 6379:6379 -d webhippie/redis:latest
     ```
 - Run the OCIS services with necessary configurations
-    - Run `ocis-phoenix` and provide `PHOENIX_ASSET_PATH=/<path to phoenix dist dir>/` to use the latest version of phoenix and `PHOENIX_WEB_CONFIG=/<path to phoneix config file>/`
+    - Run `ocis-phoenix` and provide `PHOENIX_ASSET_PATH=/<path to phoenix dist dir>/` to use the latest version of phoenix and `PHOENIX_WEB_CONFIG=/<path to phoenix config file>/`
 
         **You need to create a new phoenix config.json file. Use [this config](https://github.com/owncloud/phoenix/blob/master/tests/drone/ocis-config.json) with necessary changes in the urls**
 

@@ -7,6 +7,7 @@
   "main": "core/core.bundle.js",
   "scripts": {
     "build:dev": "webpack -d --config webpack.dev.js",
+    "build:dev-ocis": "yarn run build:dev && rm -Rf dist/apps/*; mkdir -p dist/apps; cd apps; for APP in *; do rm -Rf ../dist/$APP; ln -s ../../apps/$APP/dist ../dist/apps/$APP; done",
     "build": "webpack -p --config webpack.prod.js",
     "dist": "run-s clean-all install-all build-all",
     "clean-all": "rimraf apps/*/node_modules apps/*/dist node_modules dist/",
@@ -15,6 +16,7 @@
     "install-all": "yarn install --frozen-lockfile && node build/run-for-all.js yarn install --frozen-lockfile",
     "build-all": "node build/run-for-all.js yarn build",
     "watch-all": "node build/run-for-all.js -p yarn watch",
+    "watch-all-ocis": "yarn run build:dev-ocis && node build/run-for-all.js -p yarn watch",
     "watch": "yarn run build:dev && webpack-dev-server --progress --colors --watch --config webpack.dev.js --public $SERVER_HOST",
     "lint": "eslint src apps/*/src tests build --ext vue --ext js --color",
     "lint-fix": "eslint src apps/*/src tests build --ext vue --ext js --color --fix",
