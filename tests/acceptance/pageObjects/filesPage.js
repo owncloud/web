@@ -12,11 +12,13 @@ module.exports = {
      * @param {string} folder - if given navigate to the folder without clicking the links
      * @returns {*}
      */
-    navigateAndWaitTillLoaded: function (folder = '') {
-      return navigationHelper.navigateAndWaitTillLoaded(
+    navigateAndWaitTillLoaded: async function (folder = '') {
+      await navigationHelper.navigateAndWaitTillLoaded(
         join(this.api.launchUrl, '#/files/list', folder),
         this.page.FilesPageElement.filesList().elements.filesListProgressBar
       )
+      // wait for thumbnails
+      await this.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
     },
     /**
      *

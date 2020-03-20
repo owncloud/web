@@ -12,6 +12,10 @@ export default {
         headers.append('X-Requested-With', 'XMLHttpRequest')
 
         fetch(source, { headers }).then(response => {
+          if (!response.ok) {
+            reject(response)
+            return
+          }
           response.blob().then(blob => {
             if (returnAs === 'base64') {
               const reader = new FileReader()

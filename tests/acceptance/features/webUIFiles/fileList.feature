@@ -22,17 +22,17 @@ Feature: User can view files inside a folder
   @issue-276
   Scenario: Thumbnails are loaded for known file types
     When the user uploads file "new-lorem.txt" using the webUI
-    Then the resource "new-lorem.txt" should have a thumbnail displayed on the webUI
+    Then the file "new-lorem.txt" should have a thumbnail displayed on the webUI
 
   @issue-276
   Scenario: Thumbnails are loaded for paths containing special characters
     Given user "user1" has renamed folder "simple-folder" to "strängé folder name (duplicate #2 &)"
     When the user has browsed to the files page
-    And the user opens folder "strängé folder name (duplicate #2 &)" using the webUI
-    Then the resource "strängé filename (duplicate #2 &).txt" should have a thumbnail displayed on the webUI
+    And the user opens folder "strängé folder name (duplicate #2 &)" directly on the webUI
+    Then the file "strängé filename (duplicate #2 &).txt" should have a thumbnail displayed on the webUI
 
   @issue-276
   Scenario: Thumbnails are not loaded for known file types
     When the user uploads file "new-data.zip" using the webUI
-    Then the resource "new-data.zip" should have a file type icon displayed on the webUI
+    Then the file "new-data.zip" should have a file type icon displayed on the webUI
 

@@ -75,9 +75,11 @@ Feature: Sharing files and folders with internal users
 
   Scenario: share a file with another internal user who overwrites and unshares the file
     Given user "user2" has logged in using the webUI
+    And the user browses to the files page
     And user "user2" has renamed file "lorem.txt" to "new-lorem.txt"
     And user "user2" has shared file "new-lorem.txt" with user "user1" with "all" permissions
     When the user re-logs in as "user1" using the webUI
+    And the user browses to the files page
     Then as "user1" the content of "new-lorem.txt" should not be the same as the local "new-lorem.txt"
     # overwrite the received shared file
     When the user uploads overwriting file "new-lorem.txt" using the webUI
@@ -317,6 +319,8 @@ Feature: Sharing files and folders with internal users
 
   Scenario: Try to share file and folder that used to exist but does not anymore
     Given user "user1" has logged in using the webUI
+    And the user browses to the files page
+    # deleted concurrently
     And the following files have been deleted by user "user1"
       | name          |
       | lorem.txt     |

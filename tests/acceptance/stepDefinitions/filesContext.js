@@ -107,15 +107,17 @@ Then('the files table should be displayed',
       .waitForElementVisible('@filesTable')
   })
 
-Given('the user has browsed to the files page', function () {
-  return client
+Given('the user has browsed to the files page', async function () {
+  await client
     .page.filesPage()
     .navigateAndWaitTillLoaded()
+  await client.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
 })
 
-When('the user opens folder {string} directly on the webUI', function (folder) {
+When('the user opens folder {string} directly on the webUI', async function (folder) {
   folder = encodeURIComponent(path.normalize(folder))
-  return client.page.filesPage().navigateAndWaitTillLoaded(folder)
+  await client.page.filesPage().navigateAndWaitTillLoaded(folder)
+  await client.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
 })
 
 Given('user {string} has uploaded file with content {string} to {string}', async function (user, content, filename) {
@@ -532,8 +534,8 @@ Then('as {string} these folders/files/resources should not be listed on the webU
  *
  * needs a heading line in the table
  */
-Then('these folders/files/resources should not be listed in the folder {string} on the webUI', function (folder, entryList) {
-  client.page.filesPage().navigateAndWaitTillLoaded(folder)
+Then('these folders/files/resources should not be listed in the folder {string} on the webUI', async function (folder, entryList) {
+  await client.page.filesPage().navigateAndWaitTillLoaded(folder)
   return theseResourcesShouldNotBeListed(entryList)
 })
 
@@ -546,7 +548,7 @@ Then('as {string} these folders/files/resources should not be listed in the fold
   if (user !== client.globals.currentUser) {
     await loginHelper.reLoginAsUser(user)
   }
-  client.page.filesPage().navigateAndWaitTillLoaded(folder)
+  await client.page.filesPage().navigateAndWaitTillLoaded(folder)
   return theseResourcesShouldNotBeListed(entryList)
 })
 
@@ -597,8 +599,8 @@ Then('these files/folders/resources should be listed on the webUI', function (en
  *
  * needs a heading line in the table
  */
-Then('these files/folders/resources should be listed in the folder {string} on the webUI', function (folder, entryList) {
-  client.page.filesPage().navigateAndWaitTillLoaded(folder)
+Then('these files/folders/resources should be listed in the folder {string} on the webUI', async function (folder, entryList) {
+  await client.page.filesPage().navigateAndWaitTillLoaded(folder)
   return theseResourcesShouldBeListed(entryList)
 })
 
@@ -621,7 +623,7 @@ Then('as {string} these files/folders/resources should be listed in the folder {
   if (user !== client.globals.currentUser) {
     await loginHelper.reLoginAsUser(user)
   }
-  client.page.filesPage().navigateAndWaitTillLoaded(folder)
+  await client.page.filesPage().navigateAndWaitTillLoaded(folder)
   return theseResourcesShouldBeListed(entryList)
 })
 
@@ -745,7 +747,7 @@ Given('the user has created folder {string}', function (fileName) {
 Given('user {string} has created folder {string}', webdav.createFolder)
 
 Then('file/folder {string} should not be listed in shared-with-others page on the webUI', async function (filename) {
-  client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
+  await client.page.sharedWithOthersPage().navigateAndWaitTillLoaded()
   const state = await client.page.FilesPageElement.filesList().isElementListed(filename)
   assert.ok(
     !state, `Error: Resource ${filename} is present on the shared-with-others page on the webUI`
@@ -926,17 +928,17 @@ When('the user has set the sort order of the {string} column to descending order
 When('the user has set the sort order of the {string} column to ascending order', async function (column) {
   await _setFilesTableSort(column, false)
 })
-Then('the file/folder/resource {string} should have a thumbnail displayed on the webUI', async function (resource) {
+Then('the file {string} should have a thumbnail displayed on the webUI', async function (resource) {
   const iconUrl = await client
     .page
     .FilesPageElement.filesList()
-    .getResourceThumbnail(resource)
+    .getResourceThumbnail(resource, 'file')
   assert.ok(iconUrl && iconUrl.startsWith('blob:'), 'Icon URL expected to be set when thumbnail is displayed')
 })
-Then('the file/folder/resource {string} should have a file type icon displayed on the webUI', async function (resource) {
+Then('the file {string} should have a file type icon displayed on the webUI', async function (resource) {
   const iconUrl = await client
     .page
     .FilesPageElement.filesList()
-    .getResourceThumbnail(resource)
+    .getResourceThumbnail(resource, 'file')
   assert.strictEqual(null, iconUrl, 'No icon URL expected when file type icon is displayed')
 })

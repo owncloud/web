@@ -69,6 +69,7 @@ Feature: Sharing files and folders with internal groups
     When the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
     And the user shares file "new-lorem.txt" with group "grp1" as "Editor" using the webUI
     And the user re-logs in as "user1" using the webUI
+    And the user browses to the files page
     Then as "user1" the content of "new-lorem.txt" should not be the same as the local "new-lorem.txt"
     # overwrite the received shared file
     When the user uploads overwriting file "new-lorem.txt" using the webUI
