@@ -83,6 +83,11 @@ module.exports = {
           w3c: false
         },
         idleTimeout: 180
+      },
+      screenshots: {
+        enabled: true,
+        path: 'tests/reports/screenshots',
+        on_failure: true
       }
     },
     saucelabs: {
