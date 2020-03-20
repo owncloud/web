@@ -23,5 +23,21 @@ exports.command = function () {
       }
     })(XMLHttpRequest.prototype.send)
   })
+  this.execute(function () {
+    (function (wrappedFetch) {
+      window.fetch = function () {
+        window.activeAjaxCount++
+        window.sumStartedAjaxRequests++
+        const fetchResult = wrappedFetch.apply(this, arguments)
+        fetchResult.then(function () {
+          window.activeAjaxCount--
+        })
+        fetchResult.catch(function () {
+          window.activeAjaxCount--
+        })
+        return fetchResult
+      }
+    })(window.fetch)
+  })
   return this
 }
