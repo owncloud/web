@@ -59,7 +59,7 @@
         />
       </div>
       <div v-if="!$_isFavoritesList" class="uk-flex uk-flex-middle uk-flex-right">
-        <StatusIndicators :item="item" :parentPath="currentFolder.path" @click="$_openSideBar" />
+        <Indicators :defaultIndicators="indicatorArray(item)" :item="item" @click="$_openSideBar" />
       </div>
       <div
         class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
@@ -111,20 +111,22 @@
 </template>
 <script>
 import FileList from './FileList.vue'
+import Indicators from './FilesLists/Indicators.vue'
 import NoContentMessage from './NoContentMessage.vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 import Mixins from '../mixins'
 import FileActions from '../fileactions'
 import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
-
-const StatusIndicators = () => import('./FilesLists/StatusIndicators/StatusIndicators.vue')
+import intersection from 'lodash/intersection'
+import { shareTypes, userShareTypes } from '../helpers/shareTypes'
+import { getParentPaths } from '../helpers/path'
 
 export default {
   name: 'AllFilesList',
   components: {
     FileList,
-    StatusIndicators,
+    Indicators,
     NoContentMessage,
     SortableColumnHeader
   },
@@ -148,12 +150,42 @@ export default {
       'activeFilesCount',
       'currentFolder',
       'fileSortField',
-      'fileSortDirectionDesc'
+      'fileSortDirectionDesc',
+      'sharesTree'
     ]),
     ...mapGetters(['configuration']),
 
     item () {
       return this.$route.params.item
+    },
+
+    shareTypesIndirect () {
+      const parentPath = this.currentFolder.path
+      if (!parentPath) {
+        return []
+      }
+      const parentPaths = getParentPaths(parentPath, true)
+      if (parentPaths.length === 0) {
+        return []
+      }
+
+      // remove root entry
+      parentPaths.pop()
+
+      const shareTypes = {}
+      parentPaths.forEach((parentPath) => {
+        // TODO: optimize for performance by skipping once we got all known types
+        const shares = this.sharesTree[parentPath]
+        if (shares) {
+          shares.forEach((share) => {
+            // note: no distinction between incoming and outgoing shares as we display the same
+            // indirect indicator for them
+            shareTypes[share.shareType] = true
+          })
+        }
+      })
+
+      return Object.keys(shareTypes).map(shareType => parseInt(shareType, 10))
     },
 
     $_isFavoritesList () {
@@ -248,6 +280,91 @@ export default {
 
     isActionEnabled (item, action) {
       return action.isEnabled(item, this.parentFolder)
+    },
+
+    indicatorArray (item) {
+      const collaborators = {
+        id: 'files-sharing',
+        label: this.shareUserIconLabel(item),
+        visible: this.isUserShare(item),
+        icon: 'group',
+        status: this.shareUserIconVariation(item),
+        handler: this.indicatorHandler
+      }
+      const links = {
+        id: 'file-link',
+        label: this.shareLinkIconLabel(item),
+        visible: this.isLinkShare(item),
+        icon: 'link',
+        status: this.shareLinkIconVariation(item),
+        handler: this.indicatorHandler
+      }
+      const indicators = []
+
+      if (collaborators.visible) {
+        indicators.push(collaborators)
+      }
+
+      if (links.visible) {
+        indicators.push(links)
+      }
+
+      return indicators
+    },
+
+    $_shareTypes (item) {
+      if (typeof item.shareTypes !== 'undefined') {
+        return item.shareTypes
+      }
+
+      if (item.shares) {
+        return Array.from(new Set(item.shares.map(share => parseInt(share.type, 10))))
+      }
+      return []
+    },
+
+    isDirectUserShare (item) {
+      return (intersection(userShareTypes, this.$_shareTypes(item)).length > 0)
+    },
+
+    isIndirectUserShare (item) {
+      return (item.isReceivedShare() || intersection(userShareTypes, this.shareTypesIndirect).length > 0)
+    },
+
+    isDirectLinkShare (item) {
+      return (this.$_shareTypes(item).indexOf(shareTypes.link) >= 0)
+    },
+
+    isIndirectLinkShare () {
+      return (this.shareTypesIndirect.indexOf(shareTypes.link) >= 0)
+    },
+
+    isUserShare (item) {
+      return this.isDirectUserShare(item) || this.isIndirectUserShare(item)
+    },
+
+    isLinkShare (item) {
+      return this.isDirectLinkShare(item) || this.isIndirectLinkShare(item)
+    },
+
+    shareUserIconVariation (item) {
+      return this.isDirectUserShare(item) ? 'active' : 'passive'
+    },
+
+    shareLinkIconVariation (item) {
+      return this.isDirectLinkShare(item) ? 'active' : 'passive'
+    },
+
+    shareUserIconLabel (item) {
+      return this.isDirectUserShare(item) ? this.$gettext('Directly shared with collaborators') : this.$gettext('Shared with collaborators through one of the parent folders')
+    },
+
+    shareLinkIconLabel (item) {
+      return this.isDirectLinkShare(item) ? this.$gettext('Directly shared with links') : this.$gettext('Shared with links through one of the parent folders')
+    },
+
+    indicatorHandler (item, sideBarName) {
+      this.$emit('click', item, sideBarName)
     }
   }
 }

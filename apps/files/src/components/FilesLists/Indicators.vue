@@ -1,12 +1,24 @@
 <template>
   <span>
-    <DefaultIndicators
-      v-if="displayDefaultIndicators"
-      :item="item"
-      :parentPath="parentPath"
-      :class="{ 'uk-margin-xsmall-right' : customIndicators }"
-      @click="openSidebar"
-    />
+    <div v-if="displayDefaultIndicators" :class="{ 'uk-margin-xsmall-right' : customIndicators }"
+         @click="openSidebar">
+      <oc-button
+        v-for="(indicator, index) in defaultIndicators"
+        :key="index"
+        class="file-row-share-indicator uk-text-middle"
+        :class="{ 'uk-margin-xsmall-left' : index > 0, 'uk-invisible' : !indicator.visible }"
+        :aria-label="indicator.label"
+        @click="indicator.handler(item, indicator.id)"
+        variation="raw"
+      >
+        <oc-icon
+          :name="indicator.icon"
+          class="uk-text-middle"
+          size="small"
+          :variation="indicator.status"
+        />
+      </oc-button>
+    </div>
     <template v-if="customIndicators">
       <component
         v-for="(indicator, index) in customIndicators"
@@ -20,14 +32,8 @@
 <script>
 import { mapGetters } from 'vuex'
 
-const DefaultIndicators = () => import('./DefaultIndicators.vue')
-
 export default {
-  name: 'StatusIndicators',
-
-  components: {
-    DefaultIndicators
-  },
+  name: 'Indicators',
 
   props: {
     // FIXME: Find a way to pass item into dynamic component as a prop without mutation error
@@ -35,9 +41,9 @@ export default {
       type: Object,
       required: true
     },
-    parentPath: {
-      type: String,
-      required: false
+    defaultIndicators: {
+      type: Array,
+      required: true
     }
   },
 

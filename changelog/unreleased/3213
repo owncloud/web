@@ -1,0 +1,7 @@
+Bugfix: Files list status indicators are now appearing without any delay
+
+We've stopped loading file list status indicators asynchronously to prevent them from appearing delayed. They 
+appear now at the same time as the file list.
+
+https://github.com/owncloud/phoenix/issues/2973
+https://github.com/owncloud/phoenix/pull/3213
