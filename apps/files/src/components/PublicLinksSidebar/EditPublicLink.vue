@@ -17,7 +17,8 @@
       <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
         <div class="uk-width-1-1 uk-width-2-5@m" v-if="$_expirationDate">
           <label class="oc-label" for="oc-files-file-link-expire-date">
-            <span v-translate>Expiration date:</span><em class="uk-margin-small-left" v-if="$_expirationDate.enforced">(<span v-translate>required</span>)</em>
+            <span v-translate>Expiration date:</span>
+            <translate v-if="$_expirationDate.enforced" tag="em">(required)</translate>
           </label>
           <div class="uk-position-relative">
             <oc-datepicker :class="{ 'uk-form-danger': !$_expirationIsValid }" :date="expireDate" :key="'oc-datepicker-' + expireDate"
@@ -173,7 +174,7 @@ export default {
       return {
         enabled: !!expireDate.enabled,
         days: (expireDate.days) ? expireDate.days : false,
-        enforced: expireDate.enforced === '1'
+        enforced: !!expireDate.enforced
       }
     },
 
