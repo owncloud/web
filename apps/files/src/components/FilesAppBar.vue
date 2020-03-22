@@ -17,7 +17,6 @@
       <div v-if="!publicPage()" class="uk-width-auto uk-visible@m">
         <oc-search-bar
           @search="onFileSearch"
-          :value="searchTerm"
           :label="$_searchLabel"
           :loading="isLoadingSearch"
           :buttonHidden="true"
@@ -108,6 +107,7 @@
       name="new-file-dialog"
       :oc-active="createFile"
       v-model="newFileName"
+      ocInputId="new-file-input"
       :ocLoading="fileFolderCreationLoading"
       :ocError="newFileErrorMessage"
       :ocTitle="$_createFileDialogTitle"

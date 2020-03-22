@@ -1,0 +1,9 @@
+Enhancement: Visual improvement to errors in input prompts
+
+We've adjusted the input prompts to show a visually less prominent text below the input field.
+Also, error messages now appear with a small delay, so that those happening during
+typing get ignored (e.g. trailing whitespace is not allowed in folder names and previously caused
+an error to show on every typed blank).
+
+https://github.com/owncloud/phoenix/issues/1906
+https://github.com/owncloud/phoenix/pull/3240

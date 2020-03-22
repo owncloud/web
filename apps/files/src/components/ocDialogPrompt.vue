@@ -1,9 +1,6 @@
 <template>
   <oc-dialog :name="name" v-model="ocActive" :title="ocTitle">
     <template slot="content">
-      <oc-alert v-if="ocError" class="oc-dialog-prompt-alert" :noClose="true" variation="danger">
-        {{ ocError }}
-      </oc-alert>
       <span v-if="ocContent" class="uk-text-break">{{ ocContent }}</span>
       <oc-text-input v-if="ocHasInput"
         :disabled="ocLoading"
@@ -14,12 +11,22 @@
         v-model="inputValue"
         ref="input"
         @keydown.enter.native="onConfirm"
+        :error-message="ocErrorDelayed"
+        :fix-message-line="true"
+        class="oc-dialog-prompt-input-offset"
       ></oc-text-input>
+      <transition name="custom-classes-transition"
+                  enter-active-class="uk-animation-slide-left-small uk-animation-fast"
+                  leave-active-class="uk-animation-slide-right-small uk-animation-fast uk-animation-reverse">
+        <oc-alert v-if="ocErrorDelayed" class="oc-dialog-prompt-alert" :noClose="true" variation="danger">
+          {{ ocErrorDelayed }}
+        </oc-alert>
+      </transition>
       <oc-loader v-if="ocLoading"></oc-loader>
     </template>
     <template slot="footer">
         <oc-button :id="ocCancelId" :disabled="ocLoading" @click.stop="onCancel">{{ _ocCancelText }}</oc-button>
-        <oc-button :disabled="ocLoading || ocError !== null || inputValue === '' || clicked"
+        <oc-button :disabled="ocLoading || !!ocError || inputValue === '' || clicked"
                :id="ocConfirmId"
                ref="confirmButton"
                :autofocus="!ocHasInput"
@@ -29,6 +36,7 @@
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
 export default {
   name: 'OcDialogPrompt',
   props: {
@@ -61,7 +69,8 @@ export default {
   },
   data: () => ({
     inputValue: null,
-    clicked: false
+    clicked: false,
+    ocErrorDelayed: null
   }),
   computed: {
     _ocConfirmText () {
@@ -91,7 +100,10 @@ export default {
           this.$refs.confirmButton.$el.focus()
         }
       })
-    }
+    },
+    ocError: debounce(function (error) {
+      this.ocErrorDelayed = error
+    }, 400)
   },
   created () {
     this.inputValue = this.value
@@ -109,3 +121,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  /* FIXME: this is ugly, but required so that the bottom padding doesn't look off when reserving vertical space for error messages below the input. */
+  .oc-dialog-prompt-input-offset {
+    margin-bottom: -20px;
+  }
+</style>
