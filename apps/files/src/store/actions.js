@@ -671,13 +671,17 @@ export default {
       })
     }
 
-    return client.shares.updateShare(share.id, params)
-      .then((updatedShare) => {
-        commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', _buildCollaboratorShare(updatedShare.shareInfo, getters.highlightedFile))
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    return new Promise((resolve, reject) => {
+      client.shares.updateShare(share.id, params)
+        .then((updatedShare) => {
+          const share = _buildCollaboratorShare(updatedShare.shareInfo, getters.highlightedFile)
+          commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', share)
+          resolve(share)
+        })
+        .catch(e => {
+          reject(e)
+        })
+    })
   },
   addShare (context, { client, path, $gettext, shareWith, shareType, permissions, expirationDate }) {
     if (shareType === shareTypes.group) {
