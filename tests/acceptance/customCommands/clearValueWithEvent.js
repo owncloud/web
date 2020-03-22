@@ -8,7 +8,7 @@
  * @param {string} selector
  * @returns
  */
-exports.command = function clearValueWithEvent (selector) {
+exports.command = function clearValueWithEvent(selector) {
   const { END, BACK_SPACE } = this.Keys
   return this.getValue(selector, result => {
     const chars = result.value.split('')

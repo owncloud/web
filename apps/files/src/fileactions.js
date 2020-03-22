@@ -3,19 +3,26 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters('Files', [
-      'renameDialogSelectedFile', 'renameDialogOpen', 'renameDialogNewName', 'renameDialogOriginalName',
-      'deleteDialogOpen', 'deleteDialogSelectedFiles',
-      'actionsInProgress', 'activeFiles', 'selectedFiles', 'highlightedFile'
+      'renameDialogSelectedFile',
+      'renameDialogOpen',
+      'renameDialogNewName',
+      'renameDialogOriginalName',
+      'deleteDialogOpen',
+      'deleteDialogSelectedFiles',
+      'actionsInProgress',
+      'activeFiles',
+      'selectedFiles',
+      'highlightedFile'
     ]),
     ...mapGetters(['capabilities', 'fileSideBars']),
     // Files lists
-    actions () {
+    actions() {
       const actions = [
         {
           icon: 'edit',
           ariaLabel: this.$gettext('Rename'),
           handler: this.promptFileRename,
-          isEnabled: function (item, parent) {
+          isEnabled: function(item, parent) {
             if (parent && !parent.canRename()) {
               return false
             }
@@ -26,7 +33,7 @@ export default {
           icon: 'file_download',
           handler: this.downloadFile,
           ariaLabel: this.$gettext('Download'),
-          isEnabled: function (item) {
+          isEnabled: function(item) {
             return item.canDownload()
           }
         },
@@ -34,7 +41,7 @@ export default {
           icon: 'delete',
           ariaLabel: this.$gettext('Delete'),
           handler: this.deleteFile,
-          isEnabled: function (item, parent) {
+          isEnabled: function(item, parent) {
             if (parent && !parent.canBeDeleted()) {
               return false
             }
@@ -53,7 +60,7 @@ export default {
             ariaLabel: sideBar.quickAccess.ariaLabel,
             handler: this.openSideBar,
             handlerData: sideBar.app,
-            isEnabled: function (item) {
+            isEnabled: function(item) {
               return true
             }
           })
@@ -65,16 +72,20 @@ export default {
   },
   methods: {
     ...mapActions('Files', [
-      'renameFile', 'promptFileRename', 'closePromptFileRename',
-      'deleteFiles', 'promptFileDelete', 'closePromptFileDelete'
+      'renameFile',
+      'promptFileRename',
+      'closePromptFileRename',
+      'deleteFiles',
+      'promptFileDelete',
+      'closePromptFileDelete'
     ]),
     ...mapActions(['showMessage']),
 
-    actionInProgress (item) {
+    actionInProgress(item) {
       return this.actionsInProgress.some(itemInProgress => itemInProgress.id === item.id)
     },
 
-    disabledActionTooltip (item) {
+    disabledActionTooltip(item) {
       if (this.actionInProgress(item)) {
         if (item.type === 'folder') {
           return this.$gettext('There is currently an action in progress for this folder')
@@ -86,46 +97,56 @@ export default {
       return null
     },
 
-    cancelRenameFile () {
+    cancelRenameFile() {
       this.closePromptFileRename()
     },
 
-    doRenameFile (newName) {
+    doRenameFile(newName) {
       this.renameFile({
         client: this.$client,
         // selected file from prompt
         file: this.renameDialogSelectedFile,
         newValue: newName,
         publicPage: this.publicPage()
-      }).then(() => {
-        this.closePromptFileRename()
-      }).catch(error => {
-        let translated = this.$gettext('Error while renaming "%{file}" to "%{newName}"')
-        if (error.statusCode === 423) {
-          translated = this.$gettext('Error while renaming "%{file}" to "%{newName}" - the file is locked')
-        }
-        const title = this.$gettextInterpolate(translated, { file: this.renameDialogSelectedFile.name, newName: newName }, true)
-        this.showMessage({
-          title: title,
-          status: 'danger'
-        })
-        this.closePromptFileRename()
       })
+        .then(() => {
+          this.closePromptFileRename()
+        })
+        .catch(error => {
+          let translated = this.$gettext('Error while renaming "%{file}" to "%{newName}"')
+          if (error.statusCode === 423) {
+            translated = this.$gettext(
+              'Error while renaming "%{file}" to "%{newName}" - the file is locked'
+            )
+          }
+          const title = this.$gettextInterpolate(
+            translated,
+            { file: this.renameDialogSelectedFile.name, newName: newName },
+            true
+          )
+          this.showMessage({
+            title: title,
+            status: 'danger'
+          })
+          this.closePromptFileRename()
+        })
     },
 
-    cancelDeleteFile () {
+    cancelDeleteFile() {
       this.closePromptFileDelete()
     },
 
-    deleteFile (file) {
+    deleteFile(file) {
       const translated = this.$gettext('Please confirm the deletion of %{ fileName }')
       this.promptFileDelete({
         message: this.$gettextInterpolate(translated, { fileName: file.name }, true),
         items: file
       })
     },
-    reallyDeleteFiles () {
-      let files = this.deleteDialogSelectedFiles ? this.deleteDialogSelectedFiles : this.selectedFiles
+    reallyDeleteFiles() {
+      let files = this.deleteDialogSelectedFiles
+        ? this.deleteDialogSelectedFiles
+        : this.selectedFiles
       if (!Array.isArray(files)) {
         files = [files]
       }
@@ -135,16 +156,18 @@ export default {
         publicPage: this.publicPage(),
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate
-      }).then(() => {
-        this.closePromptFileDelete()
-        this.setHighlightedFile(null)
-      }).catch(error => {
-        console.log(error)
-        this.closePromptFileDelete()
       })
+        .then(() => {
+          this.closePromptFileDelete()
+          this.setHighlightedFile(null)
+        })
+        .catch(error => {
+          console.log(error)
+          this.closePromptFileDelete()
+        })
     },
 
-    validateFileName (name) {
+    validateFileName(name) {
       if (/[/]/.test(name)) return this.$gettext('The name cannot contain "/"')
 
       if (name === '.') return this.$gettext('The name cannot be equal to "."')
@@ -154,7 +177,7 @@ export default {
       if (/\s+$/.test(name)) return this.$gettext('The name cannot end with whitespace')
 
       if (!this.flatFileList) {
-        const exists = this.activeFiles.find((n) => {
+        const exists = this.activeFiles.find(n => {
           if (n.name === name && this.renameDialogOriginalName !== name) {
             return n
           }
@@ -168,13 +191,13 @@ export default {
       return null
     },
     // Files lists
-    openFileActionBar (file) {
+    openFileActionBar(file) {
       this.$emit('FileAction', file)
     },
-    openSideBar (file, sideBarName) {
+    openSideBar(file, sideBarName) {
       this.$emit('sideBarOpen', file, sideBarName)
     },
-    navigateTo (param) {
+    navigateTo(param) {
       if (this.searchTerm !== '' && this.$route.params.item === param) {
         this.resetSearch()
       }
@@ -189,7 +212,7 @@ export default {
         }
       })
     },
-    openFileAction (action, filePath) {
+    openFileAction(action, filePath) {
       if (action.version === 3) {
         // TODO: replace more placeholder in the final version
         const finalUrl = action.url
@@ -203,7 +226,10 @@ export default {
         return
       }
       if (action.newTab) {
-        const path = this.$router.resolve({ name: action.routeName, params: { filePath: filePath } }).href
+        const path = this.$router.resolve({
+          name: action.routeName,
+          params: { filePath: filePath }
+        }).href
         const url = window.location.origin + '/' + path
         const target = `${action.routeName}-${filePath}`
         const win = window.open(url, target)

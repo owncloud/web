@@ -1,7 +1,7 @@
 const { join } = require('../helpers/path')
 
 module.exports = {
-  url: function () {
+  url: function() {
     return join(this.api.launchUrl, '/#/login')
   },
   elements: {
@@ -12,9 +12,8 @@ module.exports = {
   },
   commands: [
     {
-      authenticate: function () {
-        return this.waitForElementVisible('@authenticateButton')
-          .click('@authenticateButton')
+      authenticate: function() {
+        return this.waitForElementVisible('@authenticateButton').click('@authenticateButton')
       }
     }
   ]

@@ -8,7 +8,7 @@ module.exports = {
      * @param year
      * @returns {{locateStrategy: string, selector: *}}
      */
-    setExpiryDateYearSelectorXpath: function (year) {
+    setExpiryDateYearSelectorXpath: function(year) {
       const yearSelectorXpath = util.format(this.elements.dateTimeYearPicker.selector, year)
       return {
         selector: yearSelectorXpath,
@@ -21,7 +21,7 @@ module.exports = {
      * @param {string} month month name
      * @returns {{locateStrategy: string, selector: *}}
      */
-    setExpiryDateMonthSelectorXpath: function (month) {
+    setExpiryDateMonthSelectorXpath: function(month) {
       const monthSelectorXpath = util.format(this.elements.dateTimeMonthPicker.selector, month)
       return {
         selector: monthSelectorXpath,
@@ -34,7 +34,7 @@ module.exports = {
      * @param day
      * @returns {{locateStrategy: string, selector: *}}
      */
-    setExpiryDateDaySelectorXpath: function (day) {
+    setExpiryDateDaySelectorXpath: function(day) {
       const daySelectorXpath = util.format(this.elements.dateTimeDayPicker.selector, day)
       return {
         selector: daySelectorXpath,
@@ -47,14 +47,11 @@ module.exports = {
      * @param {string} year
      * @returns {Promise<void>}
      */
-    setExpiryDateYear: function (year) {
+    setExpiryDateYear: function(year) {
       const yearSelector = this.setExpiryDateYearSelectorXpath(year)
-      return this
-        .waitForElementVisible('@dateTimePopupYear')
+      return this.waitForElementVisible('@dateTimePopupYear')
         .waitForAnimationToFinish()
-        .waitForElementEnabled(
-          this.elements.dateTimePopupYear.selector
-        )
+        .waitForElementEnabled(this.elements.dateTimePopupYear.selector)
         .click('@dateTimePopupYear')
         .waitForElementVisible(yearSelector)
         .click(yearSelector)
@@ -67,10 +64,9 @@ module.exports = {
      * @param {number} month
      * @returns {Promise<void>}
      */
-    setExpiryDateMonth: function (month) {
+    setExpiryDateMonth: function(month) {
       const monthSelector = this.setExpiryDateMonthSelectorXpath(month)
-      return this
-        .waitForElementVisible('@dateTimePopupDate')
+      return this.waitForElementVisible('@dateTimePopupDate')
         .click('@dateTimePopupDate')
         .waitForElementVisible(monthSelector)
         .click(monthSelector)
@@ -83,10 +79,9 @@ module.exports = {
      * @param {string} day
      * @returns {Promise<void>}
      */
-    setExpiryDateDay: function (day) {
+    setExpiryDateDay: function(day) {
       const daySelector = this.setExpiryDateDaySelectorXpath(day)
-      return this
-        .waitForElementVisible(daySelector)
+      return this.waitForElementVisible(daySelector)
         .click(daySelector)
         .click('@dateTimeOkButton')
         .waitForElementNotPresent(daySelector)
@@ -98,44 +93,43 @@ module.exports = {
      *
      * @returns {Promise<boolean>}
      */
-    isExpiryDateDisabled: async function (pastDate) {
+    isExpiryDateDisabled: async function(pastDate) {
       let disabled = false
       const yearSelector = this.setExpiryDateYearSelectorXpath(pastDate.getFullYear())
       const monthSelector = this.setExpiryDateMonthSelectorXpath(
         pastDate.toLocaleString('en-GB', { month: 'long' })
       )
       const daySelector = this.setExpiryDateDaySelectorXpath(pastDate.getDate())
-      await this
-        .waitForElementVisible('@dateTimePopupYear')
+      await this.waitForElementVisible('@dateTimePopupYear')
         .waitForAnimationToFinish()
-        .waitForElementEnabled(
-          this.elements.dateTimePopupYear.selector
-        )
+        .waitForElementEnabled(this.elements.dateTimePopupYear.selector)
         .angryClick('@dateTimePopupYear')
         .waitForElementVisible(yearSelector)
-        .getAttribute(yearSelector, 'class', (result) => {
+        .getAttribute(yearSelector, 'class', result => {
           if (result.value.includes('--disabled') === true) {
             disabled = true
           }
         })
-      if (disabled) { return disabled }
-      await this
-        .click(yearSelector)
+      if (disabled) {
+        return disabled
+      }
+      await this.click(yearSelector)
         .click('@dateTimeOkButton')
         .waitForElementVisible('@dateTimePopupDate')
         .click('@dateTimePopupDate')
         .waitForElementVisible(monthSelector)
-        .getAttribute(monthSelector, 'class', (result) => {
+        .getAttribute(monthSelector, 'class', result => {
           if (result.value.includes('--disabled') === true) {
             disabled = true
           }
         })
-      if (disabled) { return disabled }
-      await this
-        .click(monthSelector)
+      if (disabled) {
+        return disabled
+      }
+      await this.click(monthSelector)
         .click('@dateTimeOkButton')
         .waitForElementVisible(daySelector)
-        .getAttribute(daySelector, 'class', (result) => {
+        .getAttribute(daySelector, 'class', result => {
           if (result.value.includes('--disabled') === true) {
             disabled = true
           }
@@ -149,7 +143,7 @@ module.exports = {
      * @param {string} shareType link|collaborator
      * @returns {Promise<boolean>} returns true if succeeds to set provided expiration date
      */
-    setExpirationDate: async function (value, shareType = 'collaborator') {
+    setExpirationDate: async function(value, shareType = 'collaborator') {
       if (value === '') {
         return this.click('@publicLinkDeleteExpirationDateButton')
       }
@@ -158,17 +152,14 @@ module.exports = {
         const disabled = await this.isExpiryDateDisabled(dateToSet)
         if (disabled) {
           console.log('WARNING: Cannot change expiration date to disabled value!')
-          await this
-            .waitForElementVisible('@dateTimeCancelButton')
-            .click('@dateTimeCancelButton')
+          await this.waitForElementVisible('@dateTimeCancelButton').click('@dateTimeCancelButton')
           return false
         }
       }
       const year = dateToSet.getFullYear()
       const month = dateToSet.toLocaleString('en-GB', { month: 'long' })
       const day = dateToSet.getDate()
-      await this
-        .setExpiryDateYear(year)
+      await this.setExpiryDateYear(year)
         .setExpiryDateMonth(month)
         .setExpiryDateDay(day)
       return true

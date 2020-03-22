@@ -13,10 +13,10 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken']),
-    loading () {
+    loading() {
       return this.content === ''
     },
-    iframeSource () {
+    iframeSource() {
       const query = queryString.stringify({
         embed: 1,
         picker: 0,
@@ -29,7 +29,7 @@ export default {
       return 'https://www.draw.io?' + query
     }
   },
-  created () {
+  created() {
     this.filePath = this.$route.params.filePath
 
     window.addEventListener('message', event => {
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     ...mapActions(['showMessage']),
-    error (error) {
+    error(error) {
       this.showMessage({
         title: this.$gettext('PDF could not be loaded…'),
         desc: error,
@@ -56,29 +56,36 @@ export default {
       })
     },
 
-    load () {
-      this.$client.files.getFileContents(this.filePath, { resolveWithResponseObject: true })
+    load() {
+      this.$client.files
+        .getFileContents(this.filePath, { resolveWithResponseObject: true })
         .then(resp => {
           this.currentETag = resp.headers.ETag
-          this.$refs.drawIoEditor.contentWindow.postMessage(JSON.stringify({
-            action: 'load',
-            xml: resp.body
-          }), '*')
+          this.$refs.drawIoEditor.contentWindow.postMessage(
+            JSON.stringify({
+              action: 'load',
+              xml: resp.body
+            }),
+            '*'
+          )
         })
         .catch(error => {
           this.error(error)
         })
     },
-    save (payload) {
-      this.$client.files.putFileContents(this.filePath, payload.xml, {
-        previousEntityTag: this.currentETag
-      }).then((resp) => {
-        this.currentETag = resp.ETag
-      }).catch(error => {
-        this.error(error)
-      })
+    save(payload) {
+      this.$client.files
+        .putFileContents(this.filePath, payload.xml, {
+          previousEntityTag: this.currentETag
+        })
+        .then(resp => {
+          this.currentETag = resp.ETag
+        })
+        .catch(error => {
+          this.error(error)
+        })
     },
-    exit () {
+    exit() {
       window.close()
     }
   }
@@ -99,5 +106,4 @@ export default {
   overflow: hidden;
   z-index: 999999;
 }
-
 </style>

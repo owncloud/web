@@ -1,15 +1,15 @@
 // Return original string in case no translate function is provided
-function returnOriginal (string) {
+function returnOriginal(string) {
   return string
 }
 
 // TODO: Bring default role in here. Later might go to the roles API
 /**
-   * Returns object with collaborator roles
-   * @param {boolean} isFolder  Defines if the item is folder
-   * @param {function} $gettext  Function to translate neccessary strings
-   * @returns {object}  Collaborator roles
-   */
+ * Returns object with collaborator roles
+ * @param {boolean} isFolder  Defines if the item is folder
+ * @param {function} $gettext  Function to translate neccessary strings
+ * @returns {object}  Collaborator roles
+ */
 export default ({ isFolder = false, $gettext = returnOriginal }) => {
   if (isFolder) {
     return {

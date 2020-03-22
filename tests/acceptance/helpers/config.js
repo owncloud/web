@@ -9,20 +9,17 @@ const limit = pLimit(10)
 
 const config = {}
 
-async function setSkeletonDirectory (server, admin) {
+async function setSkeletonDirectory(server, admin) {
   const data = JSON.stringify({ directory: 'webUISkeleton' })
   const apiUrl = 'apps/testing/api/v1/testingskeletondirectory'
-  const resp = await httpHelper.postOCS(
-    apiUrl,
-    'admin',
-    data,
-    { 'Content-Type': 'application/json' }
-  )
+  const resp = await httpHelper.postOCS(apiUrl, 'admin', data, {
+    'Content-Type': 'application/json'
+  })
 
   httpHelper.checkStatus(resp, 'Could not set skeletondirectory.')
 }
 
-function rollbackSystemConfigs (oldSysConfig, newSysConfig) {
+function rollbackSystemConfigs(oldSysConfig, newSysConfig) {
   const configToChange = difference(newSysConfig, oldSysConfig)
   const _rollbacks = []
 
@@ -34,22 +31,14 @@ function rollbackSystemConfigs (oldSysConfig, newSysConfig) {
     if (value === undefined) {
       _rollbacks.push(limit(occHelper.runOcc, ['config:system:delete', key]))
     } else {
-      _rollbacks.push(
-        limit(
-          occHelper.runOcc, [
-            'config:system:set',
-            key,
-          `--value=${value}`
-          ]
-        )
-      )
+      _rollbacks.push(limit(occHelper.runOcc, ['config:system:set', key, `--value=${value}`]))
     }
   }
 
   return Promise.all(_rollbacks)
 }
 
-function rollbackAppConfigs (oldAppConfig, newAppConfig) {
+function rollbackAppConfigs(oldAppConfig, newAppConfig) {
   const configToChange = difference(newAppConfig, oldAppConfig)
 
   const _rollbacks = []
@@ -60,15 +49,7 @@ function rollbackAppConfigs (oldAppConfig, newAppConfig) {
       if (value === undefined) {
         _rollbacks.push(limit(occHelper.runOcc, ['config:app:delete', app, key]))
       } else {
-        _rollbacks.push(
-          limit(
-            occHelper.runOcc,
-            [
-              'config:app:set', app, key,
-              `--value=${value}`
-            ]
-          )
-        )
+        _rollbacks.push(limit(occHelper.runOcc, ['config:app:set', app, key, `--value=${value}`]))
       }
     }
   }
@@ -76,10 +57,8 @@ function rollbackAppConfigs (oldAppConfig, newAppConfig) {
   return Promise.all(_rollbacks)
 }
 
-export async function getConfigs () {
-  const resp = await occHelper.runOcc([
-    'config:list'
-  ])
+export async function getConfigs() {
+  const resp = await occHelper.runOcc(['config:list'])
   let stdOut = _.get(resp, 'ocs.data.stdOut')
   if (stdOut === undefined) {
     throw new Error('stdOut notFound, Found:', resp)
@@ -88,16 +67,16 @@ export async function getConfigs () {
   return stdOut
 }
 
-export async function cacheConfigs (server) {
+export async function cacheConfigs(server) {
   config[server] = await getConfigs()
   return config
 }
 
-export async function setConfigs (server, admin = 'admin') {
+export async function setConfigs(server, admin = 'admin') {
   await setSkeletonDirectory(server, admin)
 }
 
-export async function rollbackConfigs (server) {
+export async function rollbackConfigs(server) {
   const newConfig = await getConfigs()
 
   const appConfig = _.get(newConfig, 'apps')

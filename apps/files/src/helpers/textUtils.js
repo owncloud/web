@@ -1,11 +1,15 @@
-function _chunkify (t) {
+function _chunkify(t) {
   // Adapted from http://my.opera.com/GreyWyvern/blog/show.dml/1671288
-  const tz = []; let x = 0; let y = -1; let n = 0; let c
+  const tz = []
+  let x = 0
+  let y = -1
+  let n = 0
+  let c
 
   while (x < t.length) {
     c = t.charAt(x)
     // only include the dot in strings
-    const m = ((!n && c === '.') || (c >= '0' && c <= '9'))
+    const m = (!n && c === '.') || (c >= '0' && c <= '9')
     if (m !== n) {
       // next chunk
       y++
@@ -25,7 +29,7 @@ function _chunkify (t) {
  * @return number Negative integer if b comes before a, positive integer if a comes before b
  * or 0 if the strings are identical
  */
-function naturalSortCompare (a, b) {
+function naturalSortCompare(a, b) {
   const aa = _chunkify(a)
   const bb = _chunkify(b)
   let x, aNum, bNum

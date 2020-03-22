@@ -10,7 +10,7 @@ import store from '../store'
 Vue.use(Router)
 
 const router = new Router({
-//  mode: 'history',
+  //  mode: 'history',
   routes: [
     {
       path: '/login',
@@ -64,7 +64,7 @@ const router = new Router({
   ]
 })
 
-router.beforeEach(function (to, from, next) {
+router.beforeEach(function(to, from, next) {
   const isAuthenticated = store.getters.isAuthenticated
   let authRequired = true
   if (to.meta.auth === false) {

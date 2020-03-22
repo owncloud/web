@@ -3,10 +3,10 @@
     :name="fileName"
     :extension="item.extension"
     :icon="previewIcon"
-    :iconUrl="previewUrl"
+    :icon-url="previewUrl"
     :filename="item.name"
     :data-preview-loaded="previewLoaded"
-    />
+  />
 </template>
 <script>
 import queryString from 'query-string'
@@ -14,26 +14,29 @@ import Mixins from '../mixins'
 
 export default {
   name: 'FileItem',
-  mixins: [
-    Mixins
-  ],
+  mixins: [Mixins],
   props: {
     item: {
-      type: Object
+      type: Object,
+      required: true
     },
     // override for file name
     name: {
-      type: String
+      type: String,
+      required: false,
+      default: undefined
     },
     davUrl: {
-      type: String
+      type: String,
+      required: false,
+      default: undefined
     },
     showPath: {
       type: Boolean,
       default: false
     }
   },
-  data: function () {
+  data: function() {
     return {
       previewUrl: this.item.previewUrl,
       // 'false' while the preview is loading (needs string for Vue.js to render the attribute)
@@ -43,26 +46,28 @@ export default {
     }
   },
   computed: {
-    fileName () {
+    fileName() {
       if (this.name) {
         return this.name
       }
       if (this.showPath) {
         const pathSplit = this.item.path.substr(1).split('/')
-        if (pathSplit.length === 2) return `${pathSplit[pathSplit.length - 2]}/${this.item.basename}`
-        if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${this.item.basename}`
+        if (pathSplit.length === 2)
+          return `${pathSplit[pathSplit.length - 2]}/${this.item.basename}`
+        if (pathSplit.length > 2)
+          return `…/${pathSplit[pathSplit.length - 2]}/${this.item.basename}`
       }
       return this.item.basename
     },
-    previewIcon () {
+    previewIcon() {
       return this.fileTypeIcon(this.item)
     }
   },
-  mounted () {
+  mounted() {
     this.loadPreview()
   },
   methods: {
-    loadPreview () {
+    loadPreview() {
       if (this.item.previewUrl) {
         this.previewUrl = this.item.previewUrl
         this.previewLoaded = true
@@ -71,7 +76,11 @@ export default {
 
       // TODO: check if previews are globally enabled (requires capability entry)
       // don't load previews for pending or rejected shares (status)
-      if (!this.davUrl || this.item.type === 'folder' || (typeof this.item.status !== 'undefined' && this.item.status !== 0)) {
+      if (
+        !this.davUrl ||
+        this.item.type === 'folder' ||
+        (typeof this.item.status !== 'undefined' && this.item.status !== 0)
+      ) {
         this.previewLoaded = true
         return
       }
@@ -95,16 +104,19 @@ export default {
         itemPath = itemPath.substr(1)
       }
 
-      const previewUrl = this.davUrl + '/' + this.encodePath(itemPath) + '?' + queryString.stringify(query)
+      const previewUrl =
+        this.davUrl + '/' + this.encodePath(itemPath) + '?' + queryString.stringify(query)
 
-      this.mediaSource(previewUrl, 'url', this.requestHeaders).then(dataUrl => {
-        // cache inside item
-        this.previewUrl = this.item.previewUrl = dataUrl
-        this.previewLoaded = true
-      }).catch((e) => {
-        this.previewUrl = null
-        this.previewLoaded = true
-      })
+      this.mediaSource(previewUrl, 'url', this.requestHeaders)
+        .then(dataUrl => {
+          // cache inside item
+          this.previewUrl = this.item.previewUrl = dataUrl
+          this.previewLoaded = true
+        })
+        .catch(e => {
+          this.previewUrl = null
+          this.previewLoaded = true
+        })
     }
   }
 }

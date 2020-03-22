@@ -3,15 +3,15 @@ const filesList = client.page.FilesPageElement.filesList()
 
 module.exports = {
   commands: {
-
     /**
      *
      * @param {string} path
      */
-    markAsFavorite: async function (path) {
+    markAsFavorite: async function(path) {
       await filesList.waitForFileVisible(path)
 
-      const favoriteIconButton = filesList.getFileRowSelectorByFileName(path) +
+      const favoriteIconButton =
+        filesList.getFileRowSelectorByFileName(path) +
         this.elements.notMarkedFavoriteInFileRow.selector
 
       await this.initAjaxCounters()
@@ -28,22 +28,23 @@ module.exports = {
      *
      * @return {Promise<boolean>}
      */
-    isMarkedFavorite: async function (path) {
+    isMarkedFavorite: async function(path) {
       let visible = false
-      const markedFavoriteIcon = filesList.getFileRowSelectorByFileName(path) +
+      const markedFavoriteIcon =
+        filesList.getFileRowSelectorByFileName(path) +
         this.elements.markedFavoriteInFileRow.selector
       await filesList.waitForFileVisible(path)
-      await this.api
-        .element('xpath', markedFavoriteIcon, (result) => {
-          visible = !!result.value.ELEMENT
-        })
+      await this.api.element('xpath', markedFavoriteIcon, result => {
+        visible = !!result.value.ELEMENT
+      })
       return visible
     },
     /**
      * @param {string} path
      */
-    unmarkFavorite: async function (path) {
-      const unFavoriteBtn = filesList.getFileRowSelectorByFileName(path) +
+    unmarkFavorite: async function(path) {
+      const unFavoriteBtn =
+        filesList.getFileRowSelectorByFileName(path) +
         this.elements.markedFavoriteInFileRow.selector
 
       await filesList.waitForFileVisible(path)
@@ -63,9 +64,11 @@ module.exports = {
      * @param {string} elementType
      * @returns {string} file action button selector
      */
-    getFileActionBtnSelector: function (fileName, elementType = 'file') {
-      return filesList.getFileRowSelectorByFileName(fileName, elementType) +
+    getFileActionBtnSelector: function(fileName, elementType = 'file') {
+      return (
+        filesList.getFileRowSelectorByFileName(fileName, elementType) +
         this.elements.fileActionsButtonInFileRow.selector
+      )
     },
     /**
      * opens file-actions menu for given resource
@@ -75,10 +78,9 @@ module.exports = {
      *
      * @returns {*}
      */
-    openFileActionsMenu: function (resource, elementType = 'file') {
+    openFileActionsMenu: function(resource, elementType = 'file') {
       const fileActionsBtnSelector = this.getFileActionBtnSelector(resource, elementType)
-      this
-        .useXpath()
+      this.useXpath()
         .waitForElementVisible(fileActionsBtnSelector)
         .click(fileActionsBtnSelector)
         .useCss()

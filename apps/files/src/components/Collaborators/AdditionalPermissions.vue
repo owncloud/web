@@ -2,11 +2,11 @@
   <oc-grid gutter="small">
     <oc-checkbox
       v-for="permission in permissions"
-      :key="permission.name"
       :id="`files-collaborators-permission-${permission.name}`"
+      :key="permission.name"
+      v-model="permission.value"
       :label="permission.description"
       class="uk-margin-xsmall-right files-collaborators-permission-checkbox"
-      v-model="permission.value"
       @change="permissionChecked"
     />
   </oc-grid>
@@ -30,11 +30,12 @@ export default {
      */
     collaboratorsPermissions: {
       type: Object,
-      required: false
+      required: false,
+      default: () => {}
     }
   },
   computed: {
-    permissions () {
+    permissions() {
       const permissions = this.availablePermissions
 
       for (const permission in permissions) {
@@ -50,7 +51,7 @@ export default {
     }
   },
   methods: {
-    permissionChecked () {
+    permissionChecked() {
       const selectedPermissions = []
       const permissions = filterObject(this.permissions, (key, value) => {
         return value.value === true

@@ -6,21 +6,21 @@ export default {
     ...mapGetters(['getToken']),
     ...mapGetters('Files', ['highlightedFile']),
 
-    ownerRole () {
+    ownerRole() {
       return {
         name: 'owner',
         label: this.$gettext('Owner')
       }
     },
 
-    resharerRole () {
+    resharerRole() {
       return {
         name: 'resharer',
         label: this.$gettext('Resharer')
       }
     },
 
-    advancedRole () {
+    advancedRole() {
       const advancedRole = {
         name: 'advancedRole',
         label: this.$gettext('Advanced permissions'),
@@ -53,7 +53,7 @@ export default {
       return advancedRole
     },
 
-    roles () {
+    roles() {
       const isFolder = this.highlightedFile.type === 'folder'
       const $gettext = this.$gettext
       const collaboratorRoles = roles({ $gettext, isFolder: isFolder })
@@ -61,7 +61,7 @@ export default {
 
       return collaboratorRoles
     },
-    displayRoles () {
+    displayRoles() {
       const result = this.roles
       result[this.resharerRole.name] = this.resharerRole
       result[this.ownerRole.name] = this.ownerRole
@@ -69,7 +69,7 @@ export default {
     }
   },
   methods: {
-    collaboratorOptionChanged ({ role, permissions, expirationDate }) {
+    collaboratorOptionChanged({ role, permissions, expirationDate }) {
       this.selectedRole = role
       this.additionalPermissions = permissions
       this.expirationDate = expirationDate

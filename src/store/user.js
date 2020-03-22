@@ -15,7 +15,7 @@ const state = {
 }
 
 const actions = {
-  cleanUpLoginState (context) {
+  cleanUpLoginState(context) {
     if (context.state.id === '') {
       return
     }
@@ -26,7 +26,7 @@ const actions = {
     // clear oidc client state
     vueAuthInstance.clearLoginState()
   },
-  logout (context) {
+  logout(context) {
     const logoutFinalizer = () => {
       context.dispatch('cleanUpLoginState')
       // force redirect to login page after logout
@@ -35,7 +35,8 @@ const actions = {
     // TODO: only call logout if we still have the id token
     const u = vueAuthInstance.getStoredUserObject()
     if (u && u.id_token) {
-      vueAuthInstance.logout()
+      vueAuthInstance
+        .logout()
         .then(logoutFinalizer)
         .catch(error => {
           console.error(error)
@@ -45,8 +46,8 @@ const actions = {
       logoutFinalizer()
     }
   },
-  initAuth (context, payload = { autoRedirect: false }) {
-    function init (client, token, doLogin = true) {
+  initAuth(context, payload = { autoRedirect: false }) {
+    function init(client, token, doLogin = true) {
       const instance = context.rootState.config.server || window.location.origin
       const options = {
         baseUrl: instance,
@@ -67,9 +68,10 @@ const actions = {
 
       client.init(options)
       if (doLogin) {
-        return client.login().then(res => {
-          return client.getCapabilities()
-            .then(cap => {
+        return client
+          .login()
+          .then(res => {
+            return client.getCapabilities().then(cap => {
               client.users.getUserGroups(res.id).then(groups => {
                 context.commit('SET_CAPABILITIES', cap)
                 context.commit('SET_USER', {
@@ -86,11 +88,12 @@ const actions = {
                 }
               })
             })
-        }).catch((e) => {
-          console.warn('Seems that your token is invalid. Error:', e)
-          context.dispatch('cleanUpLoginState')
-          router.push({ name: 'accessDenied' })
-        })
+          })
+          .catch(e => {
+            console.warn('Seems that your token is invalid. Error:', e)
+            context.dispatch('cleanUpLoginState')
+            router.push({ name: 'accessDenied' })
+          })
       } else {
         context.commit('UPDATE_TOKEN', token)
       }
@@ -100,14 +103,18 @@ const actions = {
     if (!vueAuthInstance) {
       vueAuthInstance = initVueAuthenticate(context.rootState.config)
       const client = this._vm.$client
-      vueAuthInstance.events().addAccessTokenExpired(function () {
+      vueAuthInstance.events().addAccessTokenExpired(function() {
         console.log('AccessToken Expired：', arguments)
       })
-      vueAuthInstance.mgr.events.addAccessTokenExpiring(function () {
+      vueAuthInstance.mgr.events.addAccessTokenExpiring(function() {
         console.log('AccessToken Expiring：', arguments)
       })
       vueAuthInstance.events().addUserLoaded(user => {
-        console.log(`New User Loaded. access_token： ${user.access_token}, refresh_token: ${user.refresh_token}`)
+        console.log(
+          `New User Loaded. access_token： ${user.access_token}, refresh_token: ${
+            user.refresh_token
+          }`
+        )
         init(client, user.access_token, false)
       })
       vueAuthInstance.events().addUserUnloaded(() => {
@@ -126,7 +133,7 @@ const actions = {
       init(this._vm.$client, token)
     }
   },
-  login (context, payload = { provider: 'oauth2' }) {
+  login(context, payload = { provider: 'oauth2' }) {
     // reset vue-authenticate
     vueAuthInstance = initVueAuthenticate(context.rootState.config)
     vueAuthInstance.authenticate(payload.provider, {}, {}).then(() => {
@@ -135,18 +142,21 @@ const actions = {
       }
     })
   },
-  callback (context) {
+  callback(context) {
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
-    vueAuthInstance.mgr.signinRedirectCallback().then(() => {
-      const autoRedirect = true
-      context.dispatch('initAuth', { autoRedirect })
-    }).catch((e) => {
-      console.warn('error in OpenIdConnect:', e)
-      context.dispatch('cleanUpLoginState')
-      router.push({ name: 'accessDenied' })
-    })
+    vueAuthInstance.mgr
+      .signinRedirectCallback()
+      .then(() => {
+        const autoRedirect = true
+        context.dispatch('initAuth', { autoRedirect })
+      })
+      .catch(e => {
+        console.warn('error in OpenIdConnect:', e)
+        context.dispatch('cleanUpLoginState')
+        router.push({ name: 'accessDenied' })
+      })
   },
-  signinSilentCallback (context) {
+  signinSilentCallback(context) {
     if (!vueAuthInstance) vueAuthInstance = initVueAuthenticate(context.rootState.config)
     vueAuthInstance.mgr.signinSilentCallback().then(() => {
       context.dispatch('initAuth')
@@ -155,7 +165,7 @@ const actions = {
 }
 
 const mutations = {
-  SET_USER (state, user) {
+  SET_USER(state, user) {
     state.displayname = user.displayname
     state.id = user.id
     state.email = user.email
@@ -163,26 +173,26 @@ const mutations = {
     state.token = user.token
     state.groups = user.groups
   },
-  SET_CAPABILITIES (state, data) {
+  SET_CAPABILITIES(state, data) {
     state.capabilities = data.capabilities
     state.version = data.version
   },
-  UPDATE_TOKEN (state, token) {
+  UPDATE_TOKEN(state, token) {
     state.token = token
   }
 }
 
 const getters = {
-  isAuthenticated: (state) => {
+  isAuthenticated: state => {
     return state.isAuthenticated
   },
-  getToken: (state) => {
+  getToken: state => {
     return state.token
   },
-  user: (state) => {
+  user: state => {
     return state
   },
-  capabilities: (state) => {
+  capabilities: state => {
     return state.capabilities
   }
 }

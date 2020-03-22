@@ -1,12 +1,11 @@
 const { client } = require('nightwatch-api')
 
 module.exports = {
-
   /**
    * @param {string} url
    * @param {object} loadingIndicatorSelector - object that can have properties {selector [,locateStrategy]}
    */
-  navigateAndWaitTillLoaded: function (url, loadingIndicatorSelector) {
+  navigateAndWaitTillLoaded: function(url, loadingIndicatorSelector) {
     client.url(url)
     client.refresh() // IE11 needs an extra refresh because of the hash in the url
     const locator = {}

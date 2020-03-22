@@ -8,22 +8,25 @@ const PdfViewer = () => ({
   component: pdf
 })
 
-const routes = [{
-  path: '/pdf-viewer',
-  components: {
-    app: PdfViewer
-  },
-  name: 'pdf-viewer'
-}]
+const routes = [
+  {
+    path: '/pdf-viewer',
+    components: {
+      app: PdfViewer
+    },
+    name: 'pdf-viewer'
+  }
+]
 
 const appInfo = {
   name: 'PDFViewer',
   id: 'pdf-viewer',
   icon: 'application-pdf',
   isFileEditor: true,
-  extensions: [{
-    extension: 'pdf'
-  }
+  extensions: [
+    {
+      extension: 'pdf'
+    }
   ]
 }
 

@@ -1,11 +1,11 @@
 <template>
   <oc-button
     variation="raw"
-    @click="$_onClick"
     :aria-label="ariaLabel"
     class="uk-flex uk-flex-middle oc-sortable-column-header"
     :class="{ 'oc-sortable-column-header-desc': isDesc, 'oc-sortable-column-header-asc': !isDesc }"
-    >
+    @click="$_onClick"
+  >
     <span class="uk-flex uk-flex-middle">
       <slot />
       <oc-icon
@@ -37,12 +37,12 @@ export default {
     }
   },
   computed: {
-    $_indicatorIconName () {
+    $_indicatorIconName() {
       return this.isDesc ? 'expand_less' : 'expand_more'
     }
   },
   methods: {
-    $_onClick () {
+    $_onClick() {
       this.$emit('click', arguments)
     }
   }

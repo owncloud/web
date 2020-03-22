@@ -2,7 +2,7 @@ const util = require('util')
 const { join } = require('../helpers/path')
 
 module.exports = {
-  url: function () {
+  url: function() {
     return join(this.api.launchUrl, '/#/')
   },
   commands: {
@@ -10,19 +10,18 @@ module.exports = {
      *
      * @param {string} searchTerm
      */
-    search: function (searchTerm) {
-      return this
-        .initAjaxCounters()
-        .isVisible('#files-open-search-btn', (result) => {
+    search: function(searchTerm) {
+      return this.initAjaxCounters()
+        .isVisible('#files-open-search-btn', result => {
           if (result.value === true) {
-            this
-              .click('#files-open-search-btn')
+            this.click('#files-open-search-btn')
               .waitForElementVisible('@searchInputFieldLowResolution')
               .setValue('@searchInputFieldLowResolution', [searchTerm, this.api.Keys.ENTER])
           } else {
-            this
-              .waitForElementVisible('@searchInputFieldHighResolution')
-              .setValue('@searchInputFieldHighResolution', [searchTerm, this.api.Keys.ENTER])
+            this.waitForElementVisible('@searchInputFieldHighResolution').setValue(
+              '@searchInputFieldHighResolution',
+              [searchTerm, this.api.Keys.ENTER]
+            )
           }
         })
         .waitForElementNotVisible('@searchLoadingIndicator')
@@ -31,10 +30,9 @@ module.exports = {
     /**
      * @param {string} page
      */
-    navigateToUsingMenu: function (page) {
+    navigateToUsingMenu: function(page) {
       const menuItemSelector = util.format(this.elements.menuItem.selector, page)
-      return this
-        .waitForElementVisible('@menuButton')
+      return this.waitForElementVisible('@menuButton')
         .click('@menuButton')
         .useXpath()
         .waitForElementVisible(menuItemSelector)
@@ -44,18 +42,18 @@ module.exports = {
         .waitForElementPresent({ selector: '@filesListProgressBar', abortOnFailure: false }) // don't fail if we are too late
         .waitForElementNotPresent('@filesListProgressBar')
     },
-    markNotificationAsRead: function () {
+    markNotificationAsRead: function() {
       return this.waitForElementVisible('@notificationBell')
         .click('@notificationBell')
         .waitForElementVisible('@markNotificationAsReadLink')
         .click('@markNotificationAsReadLink')
     },
-    closeMessage: function () {
+    closeMessage: function() {
       return this.waitForElementPresent('@messageCloseIcon')
         .click('@messageCloseIcon')
         .waitForElementNotPresent('@messageCloseIcon')
     },
-    toggleNotificationDrawer: function () {
+    toggleNotificationDrawer: function() {
       return this.waitForElementVisible('@notificationBell').click('@notificationBell')
     },
     /**
@@ -63,7 +61,7 @@ module.exports = {
      *
      * @return {Promise<array>}
      */
-    getNotifications: async function () {
+    getNotifications: async function() {
       const notifications = []
       await this.toggleNotificationDrawer()
       await this.api.elements('@notificationElement', result => {
@@ -79,13 +77,15 @@ module.exports = {
     /**
      * Perform accept action on the offered shares in the notifications
      */
-    acceptAllSharesInNotification: async function () {
+    acceptAllSharesInNotification: async function() {
       const notifications = await this.getNotifications()
       await this.toggleNotificationDrawer()
       for (const element of notifications) {
-        const acceptShareButton = util.format(this.elements.acceptSharesInNotifications.selector, element)
-        await this
-          .useXpath()
+        const acceptShareButton = util.format(
+          this.elements.acceptSharesInNotifications.selector,
+          element
+        )
+        await this.useXpath()
           .waitForElementVisible(acceptShareButton)
           .click(acceptShareButton)
           .waitForAjaxCallsToStartAndFinish()
@@ -99,27 +99,25 @@ module.exports = {
      *
      * @return boolean
      */
-    isNotificationBellVisible: async function () {
+    isNotificationBellVisible: async function() {
       let isVisible = false
-      await this
-        .api.element(
-          '@notificationBell',
-          result => {
-            isVisible = result.value === 0
-          }
-        )
+      await this.api.element('@notificationBell', result => {
+        isVisible = result.value === 0
+      })
       return isVisible
     },
     /**
      * Perform decline action on the offered shares in the notifications
      */
-    declineAllSharesInNotification: async function () {
+    declineAllSharesInNotification: async function() {
       const notifications = await this.getNotifications()
       await this.toggleNotificationDrawer()
       for (const element of notifications) {
-        const declineShareButton = util.format(this.elements.declineSharesInNotifications.selector, element)
-        await this
-          .useXpath()
+        const declineShareButton = util.format(
+          this.elements.declineSharesInNotifications.selector,
+          element
+        )
+        await this.useXpath()
           .waitForElementVisible(declineShareButton)
           .click(declineShareButton)
           .waitForAjaxCallsToStartAndFinish()
@@ -131,12 +129,15 @@ module.exports = {
      *
      * @returns {boolean}
      */
-    isPageVisible: async function () {
+    isPageVisible: async function() {
       let isVisible = true
-      await this.api.elements(this.elements.phoenixContainer.locateStrategy,
-        this.elements.phoenixContainer.selector, function (result) {
+      await this.api.elements(
+        this.elements.phoenixContainer.locateStrategy,
+        this.elements.phoenixContainer.selector,
+        function(result) {
           isVisible = result.value.length > 0
-        })
+        }
+      )
       return isVisible
     },
 
@@ -145,7 +146,7 @@ module.exports = {
      *
      * @returns {Promise<void>}
      */
-    clearAllErrorMessages: async function () {
+    clearAllErrorMessages: async function() {
       let notificationElements, cancelButtons
       await this.api.element('@messages', result => {
         notificationElements = result.value.ELEMENT
@@ -153,23 +154,26 @@ module.exports = {
       if (!notificationElements) {
         return
       }
-      await this.api.elementIdElements(notificationElements,
+      await this.api.elementIdElements(
+        notificationElements,
         this.elements.clearErrorMessage.locateStrategy,
         this.elements.clearErrorMessage.selector,
         res => {
           cancelButtons = res.value
-        })
+        }
+      )
       for (const btn of cancelButtons) {
         await this.api.elementIdClick(btn.ELEMENT).waitForAnimationToFinish()
       }
     },
-    browseToUserProfile: function () {
+    browseToUserProfile: function() {
       return this.click('@userMenuButton')
     }
   },
   elements: {
     message: {
-      selector: '//*[contains(@class, "uk-notification-message")]/div/div[contains(@class, "oc-notification-message-title")]',
+      selector:
+        '//*[contains(@class, "uk-notification-message")]/div/div[contains(@class, "oc-notification-message-title")]',
       locateStrategy: 'xpath'
     },
     messages: {
@@ -228,11 +232,13 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     declineSharesInNotifications: {
-      selector: '//div[@id="oc-notification"]//h5[contains(text(),\'%s\')]/../div/button/span[.="Decline"]',
+      selector:
+        '//div[@id="oc-notification"]//h5[contains(text(),\'%s\')]/../div/button/span[.="Decline"]',
       locateStrategy: 'xpath'
     },
     acceptSharesInNotifications: {
-      selector: '//div[@id="oc-notification"]//h5[contains(text(),\'%s\')]/../div/button/span[.="Accept"]',
+      selector:
+        '//div[@id="oc-notification"]//h5[contains(text(),\'%s\')]/../div/button/span[.="Accept"]',
       locateStrategy: 'xpath'
     }
   }

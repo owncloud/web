@@ -1,19 +1,19 @@
 <template>
   <div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
     <div class="uk-padding uk-height-1-1">
-      <div class="uk-flex uk-flex-column uk-flex-middle" v-if="loading" key="loading-drop">
+      <div v-if="loading" key="loading-drop" class="uk-flex uk-flex-column uk-flex-middle">
         <h3 :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
         <oc-spinner size="medium" :aria-label="$_loadingPublicLinkTitle" />
       </div>
-      <div class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1" v-else key="loaded-drop">
+      <div v-else key="loaded-drop" class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
         <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
           <h3 v-text="title" />
           <vue-dropzone
             id="oc-dropzone"
             :options="dropzoneOptions"
+            :use-custom-slot="true"
+            :include-styling="false"
             @vdropzone-file-added="dropZoneFileAdded"
-            :useCustomSlot=true
-            :includeStyling=false
           >
             <div class="uk-flex uk-flex-middle uk-flex-center uk-placeholder">
               <oc-icon name="file_upload" />
@@ -22,16 +22,32 @@
           </vue-dropzone>
           <div id="previews" hidden />
         </div>
-        <div class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1" v-if="getUploadedFiles">
+        <div v-if="getUploadedFiles" class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1">
           <oc-table class="uk-width-1-1 uk-width-xxlarge@m">
             <oc-table-group>
               <oc-table-row v-for="(file, key) in getUploadedFiles" :key="key">
                 <oc-table-cell class="uk-padding-remove-left" v-text="file.name" />
-                <oc-table-cell shrink class="uk-text-nowrap uk-text-meta">{{ file.size | fileSize }}</oc-table-cell>
+                <oc-table-cell shrink class="uk-text-nowrap uk-text-meta">{{
+                  file.size | fileSize
+                }}</oc-table-cell>
                 <oc-table-cell shrink class="uk-padding-remove-right uk-preserve-width">
-                  <oc-icon name="ready" size="xsmall" variation="success" v-if="file.status === 'done'" />
-                  <oc-icon name="info" size="xsmall" variation="danger" v-if="file.status === 'error'" />
-                  <oc-spinner size="xsmall" v-if="file.status === 'uploading' || file.status === 'init'" :aria-label="$_ocUploadingFileMessage(file.name)" />
+                  <oc-icon
+                    v-if="file.status === 'done'"
+                    name="ready"
+                    size="xsmall"
+                    variation="success"
+                  />
+                  <oc-icon
+                    v-if="file.status === 'error'"
+                    name="info"
+                    size="xsmall"
+                    variation="danger"
+                  />
+                  <oc-spinner
+                    v-if="file.status === 'uploading' || file.status === 'init'"
+                    size="xsmall"
+                    :aria-label="$_ocUploadingFileMessage(file.name)"
+                  />
                 </oc-table-cell>
               </oc-table-row>
             </oc-table-group>
@@ -58,10 +74,8 @@ export default {
   components: {
     vueDropzone: vue2DropZone
   },
-  mixins: [
-    Mixins
-  ],
-  data () {
+  mixins: [Mixins],
+  data() {
     return {
       loading: true,
       errorMessage: null,
@@ -72,24 +86,28 @@ export default {
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
-    publicLinkToken () {
+    publicLinkToken() {
       return this.$route.params.token
     },
-    title () {
+    title() {
       // share might not be loaded
       if (this.share) {
         const translated = this.$gettext('%{owner} shared this folder with you for uploading')
-        return this.$gettextInterpolate(translated, { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) }, true)
+        return this.$gettextInterpolate(
+          translated,
+          { owner: this.share.getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER) },
+          true
+        )
       }
       return ''
     },
-    url () {
+    url() {
       return this.$client.publicFiles.getFileUrl(this.publicLinkToken) + '/'
     },
-    getUploadedFiles () {
+    getUploadedFiles() {
       return this.uploadedFilesChangeTracker && this.uploadedFiles.values()
     },
-    dropzoneOptions () {
+    dropzoneOptions() {
       return {
         url: this.url,
         clickable: true,
@@ -98,15 +116,15 @@ export default {
         previewsContainer: '#previews'
       }
     },
-    $_loadingPublicLinkTitle () {
+    $_loadingPublicLinkTitle() {
       return this.$gettext('Loading public link…')
     }
   },
-  mounted () {
+  mounted() {
     this.resolvePublicLink()
   },
   methods: {
-    resolvePublicLink () {
+    resolvePublicLink() {
       this.loading = true
       const properties = this.davProperties.concat([
         this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
@@ -114,58 +132,76 @@ export default {
         this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
         this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
         this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
-      ]
-      )
-      this.$client.publicFiles.list(this.publicLinkToken, this.publicLinkPassword, properties, '0').then(files => {
-        if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
-          this.$router.push({
-            name: 'public-files',
-            params: {
-              item: this.publicLinkToken
-            }
-          })
-          return
-        }
-        this.share = files[0]
-      }).catch(error => {
-        // likely missing password, redirect to public link password prompt
-        if (error.statusCode === 401) {
-          this.$router.push({
-            name: 'public-link',
-            params: {
-              token: this.publicLinkToken
-            }
-          })
-          return
-        }
-        this.errorMessage = error
-      }).finally(() => {
-        this.loading = false
-      })
+      ])
+      this.$client.publicFiles
+        .list(this.publicLinkToken, this.publicLinkPassword, properties, '0')
+        .then(files => {
+          if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
+            this.$router.push({
+              name: 'public-files',
+              params: {
+                item: this.publicLinkToken
+              }
+            })
+            return
+          }
+          this.share = files[0]
+        })
+        .catch(error => {
+          // likely missing password, redirect to public link password prompt
+          if (error.statusCode === 401) {
+            this.$router.push({
+              name: 'public-link',
+              params: {
+                token: this.publicLinkToken
+              }
+            })
+            return
+          }
+          this.errorMessage = error
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
-    dropZoneFileAdded (event) {
+    dropZoneFileAdded(event) {
       const uploadId = event.upload.uuid
       this.uploadedFilesChangeTracker++
       this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'init' })
 
-      this.uploadQueue.add(() => this.$client.publicFiles.putFileContents(this.publicLinkToken, event.name, this.publicLinkPassword, event, {
-        // automatically rename in case of duplicates
-        headers: { 'OC-Autorename': 1 },
-        onProgress: (progressEvent) => {
+      this.uploadQueue
+        .add(() =>
+          this.$client.publicFiles.putFileContents(
+            this.publicLinkToken,
+            event.name,
+            this.publicLinkPassword,
+            event,
+            {
+              // automatically rename in case of duplicates
+              headers: { 'OC-Autorename': 1 },
+              onProgress: progressEvent => {
+                this.uploadedFilesChangeTracker++
+                this.uploadedFiles.set(uploadId, {
+                  name: event.name,
+                  size: event.size,
+                  status: 'uploading'
+                })
+              }
+            }
+          )
+        )
+        .then(e => {
           this.uploadedFilesChangeTracker++
-          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'uploading' })
-        }
-      })).then(e => {
-        this.uploadedFilesChangeTracker++
-        this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'done' })
-      }).catch(e => {
-        console.error('Error uploading file ', event.name, ': ', e)
-        this.uploadedFilesChangeTracker++
-        this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'error' })
-      })
+          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'done' })
+        })
+        .catch(e => {
+          console.error('Error uploading file ', event.name, ': ', e)
+          this.uploadedFilesChangeTracker++
+          this.uploadedFiles.set(uploadId, { name: event.name, size: event.size, status: 'error' })
+        })
     },
 
-    $_ocUploadingFileMessage (fileName) {
+    $_ocUploadingFileMessage(fileName) {
       const translated = this.$gettext('Uploading file "%{fileName}"')
       return this.$gettextInterpolate(translated, { fileName }, true)
     }

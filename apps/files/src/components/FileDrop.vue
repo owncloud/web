@@ -1,16 +1,16 @@
 <template>
   <vue-dropzone
     v-if="dropzone"
-    ref="ocDropzone"
     id="oc-dropzone"
+    ref="ocDropzone"
     :options="ocDropzone_options"
+    :use-custom-slot="true"
+    :include-styling="false"
     @vdropzone-drop="$_ocUpload_addDropToQue"
     @vdropzone-files-added="$_ocDropzone_dragEnd"
     @vdropzone-file-added="$_ocDropzone_removeFiles"
     @vdropzone-drag-leave="$_ocDropzone_dragEnd"
-    :useCustomSlot=true
-    :includeStyling=false
-    >
+  >
     <oc-dropzone>
       <translate>
         Drag and drop to upload content into current folder
@@ -28,9 +28,7 @@ export default {
   components: {
     vueDropzone: vue2DropZone
   },
-  mixins: [
-    Mixins
-  ],
+  mixins: [Mixins],
   props: {
     rootPath: { type: String, required: true },
     path: { type: String, required: true },
@@ -42,7 +40,7 @@ export default {
     },
     requestType: { type: String, default: 'PUT' }
   },
-  data () {
+  data() {
     return {
       ocDropzone_options: {
         url: '#', // FIXME: unused
@@ -57,10 +55,10 @@ export default {
   methods: {
     ...mapActions('Files', ['dragOver']),
 
-    $_ocDropzone_dragEnd () {
+    $_ocDropzone_dragEnd() {
       this.dragOver(false)
     },
-    $_ocDropzone_removeFiles (file) {
+    $_ocDropzone_removeFiles(file) {
       this.$refs.ocDropzone.removeFile(file)
     }
   }

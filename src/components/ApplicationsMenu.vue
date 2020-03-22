@@ -1,17 +1,24 @@
 <template>
   <div v-if="!!applicationsList.length">
-    <oc-button id="_appSwitcherButton" icon="apps" variation="primary" class="oc-topbar-menu-burger uk-height-1-1" :aria-label="$gettext('Application Switcher')" ref="menubutton" />
+    <oc-button
+      id="_appSwitcherButton"
+      ref="menubutton"
+      icon="apps"
+      variation="primary"
+      class="oc-topbar-menu-burger uk-height-1-1"
+      :aria-label="$gettext('Application Switcher')"
+    />
     <oc-drop
-      dropId="app-switcher-dropdown"
+      ref="menu"
+      drop-id="app-switcher-dropdown"
       toggle="#_appSwitcherButton"
       mode="click"
-      :options="{pos:'bottom-right', delayHide: 0}"
+      :options="{ pos: 'bottom-right', delayHide: 0 }"
       class="uk-width-large"
-      ref="menu"
-      closeOnClick
+      close-on-click
     >
       <div class="uk-grid-small uk-text-center" uk-grid>
-        <div class="uk-width-1-3" v-for="(n, nid) in $_applicationsList" :key="nid">
+        <div v-for="(n, nid) in $_applicationsList" :key="nid" class="uk-width-1-3">
           <a v-if="n.url" key="external-link" target="_blank" :href="n.url">
             <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="large" />
             <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="large" />
@@ -43,7 +50,7 @@ export default {
     }
   },
   computed: {
-    $_applicationsList () {
+    $_applicationsList() {
       return this.applicationsList.map(item => {
         const lang = this.$language.current
         // TODO: move language resolution to a common function
@@ -83,7 +90,7 @@ export default {
     }
   },
   watch: {
-    visible (val) {
+    visible(val) {
       if (val) {
         this.focusFirstLink()
       } else {
@@ -92,16 +99,16 @@ export default {
     }
   },
   methods: {
-    logout () {
+    logout() {
       this.visible = false
       this.$store.dispatch('logout')
     },
-    focusFirstLink () {
+    focusFirstLink() {
       /*
-      * Delay for two reasons:
-      * - for screen readers Virtual buffer
-      * - to outsmart uikit's focus management
-      */
+       * Delay for two reasons:
+       * - for screen readers Virtual buffer
+       * - to outsmart uikit's focus management
+       */
       setTimeout(() => {
         this.$refs.menu.$el.querySelector('a:first-of-type').focus()
       }, 500)

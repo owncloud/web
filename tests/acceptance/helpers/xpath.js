@@ -13,7 +13,7 @@ module.exports = {
    * @param {string} value
    * @returns {string}
    */
-  buildXpathLiteral: function (value) {
+  buildXpathLiteral: function(value) {
     if (!value.includes("'")) {
       // if we don't have any single quotes, then wrap them with single quotes
       return "'" + value + "'"

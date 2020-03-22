@@ -1,22 +1,35 @@
 <template>
-    <div class="oc-login" uk-height-viewport>
+  <div class="oc-login" uk-height-viewport>
     <div class="oc-login-card uk-position-center">
-      <h1 class="oc-login-logo" v-translate>
+      <h1 v-translate class="oc-login-logo">
         ownCloud
       </h1>
-      <div class="oc-login-card-body" v-if="loading">
+      <div v-if="loading" class="oc-login-card-body">
         <h3 class="oc-login-card-title" :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
         <oc-spinner :aria-label="$_loadingPublicLinkTitle"></oc-spinner>
       </div>
-      <div class="oc-login-card-body" v-if="errorMessage">
-        <h3 class="oc-login-card-title"><translate>An error occurred while loading the public link</translate></h3>
+      <div v-if="errorMessage" class="oc-login-card-body">
+        <h3 class="oc-login-card-title">
+          <translate>An error occurred while loading the public link</translate>
+        </h3>
         <span>{{ errorMessage }}</span>
       </div>
-      <div class="oc-login-card-body" v-if="passwordRequired">
-        <h2 class="oc-login-card-title"><translate>This resource is password-protected.</translate></h2>
+      <div v-if="passwordRequired" class="oc-login-card-body">
+        <h2 class="oc-login-card-title">
+          <translate>This resource is password-protected.</translate>
+        </h2>
 
-        <oc-text-input type="password" v-model="password" :placeholder="passwordPlaceholder" class="uk-margin-small-bottom"></oc-text-input>
-        <oc-button variation="primary" class="oc-login-authorize-button" @click.native="resolvePublicLink()">
+        <oc-text-input
+          v-model="password"
+          type="password"
+          :placeholder="passwordPlaceholder"
+          class="uk-margin-small-bottom"
+        ></oc-text-input>
+        <oc-button
+          variation="primary"
+          class="oc-login-authorize-button"
+          @click.native="resolvePublicLink()"
+        >
           <translate>Continue</translate>
         </oc-button>
       </div>
@@ -34,10 +47,8 @@ import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../../mixins.js'
 
 export default {
-  mixins: [
-    Mixins
-  ],
-  data () {
+  mixins: [Mixins],
+  data() {
     return {
       loading: true,
       errorMessage: null,
@@ -48,19 +59,19 @@ export default {
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['davProperties']),
-    passwordPlaceholder () {
+    passwordPlaceholder() {
       return this.$gettext('Enter password')
     },
-    $_loadingPublicLinkTitle () {
+    $_loadingPublicLinkTitle() {
       return this.$gettext('Loading public link…')
     }
   },
-  mounted () {
+  mounted() {
     this.resolvePublicLink()
   },
   methods: {
     ...mapActions('Files', ['setPublicLinkPassword']),
-    resolvePublicLink () {
+    resolvePublicLink() {
       this.loading = true
       const properties = this.davProperties.concat([
         this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
@@ -68,35 +79,38 @@ export default {
         this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
         this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
         this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
-      ]
-      )
-      this.$client.publicFiles.list(this.$route.params.token, this.password, properties, '0').then(files => {
-        this.passwordRequired = false
-        this.setPublicLinkPassword(this.password)
-        if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
+      ])
+      this.$client.publicFiles
+        .list(this.$route.params.token, this.password, properties, '0')
+        .then(files => {
+          this.passwordRequired = false
+          this.setPublicLinkPassword(this.password)
+          if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
+            this.$router.push({
+              name: 'public-files-drop',
+              params: {
+                item: this.$route.params.token
+              }
+            })
+            return
+          }
           this.$router.push({
-            name: 'public-files-drop',
+            name: 'public-files',
             params: {
               item: this.$route.params.token
             }
           })
-          return
-        }
-        this.$router.push({
-          name: 'public-files',
-          params: {
-            item: this.$route.params.token
+        })
+        .catch(error => {
+          if (error.statusCode === 401) {
+            this.passwordRequired = true
+          } else {
+            this.errorMessage = error
           }
         })
-      }).catch(error => {
-        if (error.statusCode === 401) {
-          this.passwordRequired = true
-        } else {
-          this.errorMessage = error
-        }
-      }).finally(() => {
-        this.loading = false
-      })
+        .finally(() => {
+          this.loading = false
+        })
     }
   }
 }

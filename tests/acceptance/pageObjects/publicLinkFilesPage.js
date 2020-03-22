@@ -7,13 +7,13 @@ module.exports = {
      * like build-in navigate() but also waits till for the progressbar to appear and disappear
      * @returns {*}
      */
-    navigateAndWaitTillLoaded: function (token) {
-      return navigationHelper.navigateAndWaitTillLoaded(join(
-        this.api.launchUrl, '/#/files/public-files/', token),
-      this.page.FilesPageElement.filesList().elements.filesListProgressBar
+    navigateAndWaitTillLoaded: function(token) {
+      return navigationHelper.navigateAndWaitTillLoaded(
+        join(this.api.launchUrl, '/#/files/public-files/', token),
+        this.page.FilesPageElement.filesList().elements.filesListProgressBar
       )
     },
-    navigateAndWaitForPasswordPage: function (token) {
+    navigateAndWaitForPasswordPage: function(token) {
       this.navigate(join(this.api.launchUrl, '/#/files/public-files/', token))
       return this.page.publicLinkPasswordPage().waitForElementPresent('@passwordInput')
     },
@@ -24,9 +24,10 @@ module.exports = {
      *
      * @return {Promise<boolean>}
      */
-    waitForPage: function () {
+    waitForPage: function() {
       const menuButton = this.page.phoenixPage().elements.menuButton
-      return this.api.waitForElementPresent(this.elements.filesListContainer.selector)
+      return this.api
+        .waitForElementPresent(this.elements.filesListContainer.selector)
         .useStrategy(menuButton)
         .assert.elementNotPresent(menuButton)
         .useCss()

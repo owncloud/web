@@ -1,12 +1,25 @@
 <template>
   <div id="files-app-bar" class="oc-app-bar">
-    <file-drop v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress" />
+    <file-drop
+      v-if="!isIE11()"
+      :root-path="item"
+      :path="currentPath"
+      :headers="headers"
+      @success="onFileSuccess"
+      @error="onFileError"
+      @progress="onFileProgress"
+    />
     <oc-grid flex gutter="small">
       <div class="uk-flex-1">
         <div class="uk-flex">
-          <oc-breadcrumb id="files-breadcrumb" :items="breadcrumbs" v-if="showBreadcrumb" home></oc-breadcrumb>
+          <oc-breadcrumb
+            v-if="showBreadcrumb"
+            id="files-breadcrumb"
+            :items="breadcrumbs"
+            home
+          ></oc-breadcrumb>
         </div>
-        <span class="uk-flex uk-flex-middle" v-if="!showBreadcrumb">
+        <span v-if="!showBreadcrumb" class="uk-flex uk-flex-middle">
           <oc-icon v-if="pageIcon" :name="pageIcon" class="uk-margin-small-right" />
           <h1 class="oc-page-title" v-text="pageTitle" />
         </span>
@@ -16,54 +29,115 @@
       </div>
       <div v-if="!publicPage()" class="uk-width-auto uk-visible@m">
         <oc-search-bar
-          @search="onFileSearch"
-          :label="$_searchLabel"
-          :loading="isLoadingSearch"
-          :buttonHidden="true"
-          :button="false"
-          @clear="onSearchClear"
           :key="searchBarKey"
           ref="globalSearchBar"
+          :label="$_searchLabel"
+          :loading="isLoadingSearch"
+          :button-hidden="true"
+          :button="false"
+          @search="onFileSearch"
+          @clear="onSearchClear"
         />
       </div>
       <div>
         <template v-if="$_ocFilesAppBar_showActions">
           <template v-if="canUpload && hasFreeSpace">
-            <oc-button variation="primary" id="new-file-menu-btn" key="new-file-menu-btn-enabled"><translate>+ New</translate></oc-button>
-            <oc-drop drop-id="new-file-menu-drop" toggle="#new-file-menu-btn" mode="click" closeOnClick :options="{delayHide: 0}">
+            <oc-button id="new-file-menu-btn" key="new-file-menu-btn-enabled" variation="primary"
+              ><translate>+ New</translate></oc-button
+            >
+            <oc-drop
+              drop-id="new-file-menu-drop"
+              toggle="#new-file-menu-btn"
+              mode="click"
+              close-on-click
+              :options="{ delayHide: 0 }"
+            >
               <oc-nav>
-                <file-upload :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></file-upload>
-                <folder-upload v-if="!isIE11()" :rootPath='item' :path='currentPath' :headers="headers" @success="onFileSuccess" @error="onFileError" @progress="onFileProgress"></folder-upload>
-                <oc-nav-item @click="showCreateFolderDialog" id="new-folder-btn" icon="create_new_folder"><translate>New folder…</translate></oc-nav-item>
-                <oc-nav-item v-for="(newFileHandler, key) in newFileHandlers"
+                <file-upload
+                  :path="currentPath"
+                  :headers="headers"
+                  @success="onFileSuccess"
+                  @error="onFileError"
+                  @progress="onFileProgress"
+                ></file-upload>
+                <folder-upload
+                  v-if="!isIE11()"
+                  :root-path="item"
+                  :path="currentPath"
+                  :headers="headers"
+                  @success="onFileSuccess"
+                  @error="onFileError"
+                  @progress="onFileProgress"
+                ></folder-upload>
+                <oc-nav-item
+                  id="new-folder-btn"
+                  icon="create_new_folder"
+                  @click="showCreateFolderDialog"
+                  ><translate>New folder…</translate></oc-nav-item
+                >
+                <oc-nav-item
+                  v-for="(newFileHandler, key) in newFileHandlers"
                   :key="key"
-                  @click="showCreateFileDialog(newFileHandler.ext, newFileHandler.action)"
                   :class="'new-file-btn-' + newFileHandler.ext"
                   icon="save"
-                >{{ newFileHandler.menuTitle($gettext) }}</oc-nav-item>
+                  @click="showCreateFileDialog(newFileHandler.ext, newFileHandler.action)"
+                  >{{ newFileHandler.menuTitle($gettext) }}</oc-nav-item
+                >
               </oc-nav>
             </oc-drop>
           </template>
           <!-- FIXME: Unite new file menu btn -->
-          <oc-button v-else disabled id="new-file-menu-btn" key="new-file-menu-btn-disabled" :uk-tooltip="_cannotCreateDialogText"><translate>+ New</translate></oc-button>
+          <oc-button
+            v-else
+            id="new-file-menu-btn"
+            key="new-file-menu-btn-disabled"
+            disabled
+            :uk-tooltip="_cannotCreateDialogText"
+            ><translate>+ New</translate></oc-button
+          >
         </template>
         <template v-if="$route.name === 'files-trashbin'">
-          <oc-button v-if="selectedFiles.length > 0" key="restore-btn" icon="restore" @click="$_ocTrashbin_restoreFiles()">
+          <oc-button
+            v-if="selectedFiles.length > 0"
+            key="restore-btn"
+            icon="restore"
+            @click="$_ocTrashbin_restoreFiles()"
+          >
             <translate>Restore selected</translate>
           </oc-button>
-          <oc-button id="delete-selected-btn" icon="delete" key="delete-btn" :disabled="files.length === 0" @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()">
+          <oc-button
+            id="delete-selected-btn"
+            key="delete-btn"
+            icon="delete"
+            :disabled="files.length === 0"
+            @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()"
+          >
             {{ $_ocAppBar_clearTrashbinButtonText }}
           </oc-button>
         </template>
-        <oc-button v-if="!publicPage()" class="uk-hidden@m" key="mobile-search-button" icon="search" aria-label="search" id="files-open-search-btn" @click="focusMobileSearchInput()"/>
-        <oc-drop toggle="#files-open-search-btn" boundary="#files-app-bar" pos="bottom-right" mode="click" class="uk-margin-remove">
+        <oc-button
+          v-if="!publicPage()"
+          id="files-open-search-btn"
+          key="mobile-search-button"
+          class="uk-hidden@m"
+          icon="search"
+          aria-label="search"
+          @click="focusMobileSearchInput()"
+        />
+        <oc-drop
+          toggle="#files-open-search-btn"
+          boundary="#files-app-bar"
+          pos="bottom-right"
+          mode="click"
+          class="uk-margin-remove"
+        >
           <oc-search-bar
             ref="mobileSearch"
-            @search="onFileSearch"
+            :key="searchBarKey"
             :label="$_searchLabel"
             :loading="isLoadingSearch"
+            @search="onFileSearch"
             @clear="onSearchClear"
-            :key="searchBarKey"
           />
         </oc-drop>
       </div>
@@ -82,37 +156,37 @@
       name="overwrite-dialog"
       :oc-active="overwriteDialogMessage !== null"
       :oc-has-input="false"
-      ocCancelId="files-overwrite-cancel"
-      ocConfirmId="files-overwrite-confirm"
-      :ocTitle="overwriteDialogTitle"
+      oc-cancel-id="files-overwrite-cancel"
+      oc-confirm-id="files-overwrite-confirm"
+      :oc-title="overwriteDialogTitle"
       :oc-content="overwriteDialogMessage"
       @oc-confirm="$_ocUpload_confirmOverwrite(true)"
       @oc-cancel="$_ocUpload_confirmOverwrite(false)"
     />
     <oc-dialog-prompt
+      v-model="newFolderName"
       name="new-folder-dialog"
       :oc-active="createFolder"
-      v-model="newFolderName"
-      ocInputId="new-folder-input"
-      ocConfirmId="new-folder-ok"
-      :ocLoading="fileFolderCreationLoading"
-      :ocError="newFolderErrorMessage"
-      :ocTitle="$_createFolderDialogTitle"
-      :ocInputPlaceholder="$_createFolderDialogPlaceholder"
-      :ocInputLabel="$_createFolderDialogLabel"
+      oc-input-id="new-folder-input"
+      oc-confirm-id="new-folder-ok"
+      :oc-loading="fileFolderCreationLoading"
+      :oc-error="newFolderErrorMessage"
+      :oc-title="$_createFolderDialogTitle"
+      :oc-input-placeholder="$_createFolderDialogPlaceholder"
+      :oc-input-label="$_createFolderDialogLabel"
       @oc-confirm="addNewFolder"
       @oc-cancel="createFolder = false"
     />
     <oc-dialog-prompt
+      v-model="newFileName"
       name="new-file-dialog"
       :oc-active="createFile"
-      v-model="newFileName"
-      ocInputId="new-file-input"
-      :ocLoading="fileFolderCreationLoading"
-      :ocError="newFileErrorMessage"
-      :ocTitle="$_createFileDialogTitle"
-      :ocInputPlaceholder="$_createFileDialogPlaceholder"
-      :ocInputLabel="$_createFileDialogLabel"
+      oc-input-id="new-file-input"
+      :oc-loading="fileFolderCreationLoading"
+      :oc-error="newFileErrorMessage"
+      :oc-title="$_createFileDialogTitle"
+      :oc-input-placeholder="$_createFileDialogPlaceholder"
+      :oc-input-label="$_createFileDialogLabel"
       @oc-confirm="addNewFile"
       @oc-cancel="createFile = false"
     />
@@ -136,10 +210,7 @@ export default {
     OcDialogPrompt,
     FileDrop
   },
-  mixins: [
-    Mixins,
-    FileActions
-  ],
+  mixins: [Mixins, FileActions],
   data: () => ({
     createFolder: false,
     isLoadingSearch: false,
@@ -156,30 +227,42 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration', 'newFileHandlers']),
-    ...mapGetters('Files', ['activeFiles', 'inProgress', 'searchTerm', 'atSearchPage', 'currentFolder', 'davProperties', 'quota', 'selectedFiles', 'overwriteDialogTitle', 'overwriteDialogMessage', 'publicLinkPassword']),
+    ...mapGetters('Files', [
+      'activeFiles',
+      'inProgress',
+      'searchTerm',
+      'atSearchPage',
+      'currentFolder',
+      'davProperties',
+      'quota',
+      'selectedFiles',
+      'overwriteDialogTitle',
+      'overwriteDialogMessage',
+      'publicLinkPassword'
+    ]),
     ...mapState(['route']),
-    $_searchLabel () {
+    $_searchLabel() {
       return this.$gettext('Search')
     },
-    $_createFolderDialogPlaceholder () {
+    $_createFolderDialogPlaceholder() {
       return this.$gettext('Enter new folder name…')
     },
-    $_createFolderDialogLabel () {
+    $_createFolderDialogLabel() {
       return this.$gettext('Folder name')
     },
-    $_createFolderDialogTitle () {
+    $_createFolderDialogTitle() {
       return this.$gettext('New folder…')
     },
-    $_createFileDialogPlaceholder () {
+    $_createFileDialogPlaceholder() {
       return this.$gettext('Enter new file name…')
     },
-    $_createFileDialogLabel () {
+    $_createFileDialogLabel() {
       return this.$gettext('File name')
     },
-    $_createFileDialogTitle () {
+    $_createFileDialogTitle() {
       return this.$gettext('New file…')
     },
-    _cannotCreateDialogText () {
+    _cannotCreateDialogText() {
       if (!this.canUpload) {
         return this.$gettext('You have no permission to upload!')
       }
@@ -188,19 +271,23 @@ export default {
       }
       return null
     },
-    item () {
-      return this.$route.params.item === undefined ? (this.configuration.rootFolder !== '/' ? `${this.configuration.rootFolder}/` : '/') : this.$route.params.item + '/'
+    item() {
+      return this.$route.params.item === undefined
+        ? this.configuration.rootFolder !== '/'
+          ? `${this.configuration.rootFolder}/`
+          : '/'
+        : this.$route.params.item + '/'
     },
-    currentPath () {
+    currentPath() {
       return this.item === '/' ? '' : this.item
     },
-    newFolderErrorMessage () {
+    newFolderErrorMessage() {
       return this.checkNewFolderName(this.newFolderName)
     },
-    newFileErrorMessage () {
+    newFileErrorMessage() {
       return this.checkNewFileName(this.newFileName)
     },
-    headers () {
+    headers() {
       if (this.publicPage()) {
         const password = this.publicLinkPassword
 
@@ -214,37 +301,41 @@ export default {
         Authorization: 'Bearer ' + this.getToken
       }
     },
-    canUpload () {
+    canUpload() {
       if (this.currentFolder === null) {
         return false
       }
       return this.currentFolder.canUpload()
     },
-    $_ocFilesAppBar_showActions () {
+    $_ocFilesAppBar_showActions() {
       return this.$route.meta.hideFilelistActions !== true
     },
 
-    $_ocAppBar_clearTrashbinButtonText () {
-      return this.selectedFiles.length < 1 ? this.$gettext('Empty trash bin') : this.$gettext('Delete selected')
+    $_ocAppBar_clearTrashbinButtonText() {
+      return this.selectedFiles.length < 1
+        ? this.$gettext('Empty trash bin')
+        : this.$gettext('Delete selected')
     },
 
-    showBreadcrumb () {
-      return (this.$route.name === 'public-files' || this.$route.name === 'files-list')
+    showBreadcrumb() {
+      return this.$route.name === 'public-files' || this.$route.name === 'files-list'
     },
-    pageIcon () {
+    pageIcon() {
       return this.$route.meta.pageIcon
     },
-    pageTitle () {
+    pageTitle() {
       const title = this.route.meta.pageTitle
       return this.$gettext(title)
     },
 
-    breadcrumbs () {
-      let breadcrumbs = [{
-        index: 0,
-        text: this.$gettext('Home'),
-        to: '/files/list'
-      }]
+    breadcrumbs() {
+      let breadcrumbs = [
+        {
+          index: 0,
+          text: this.$gettext('Home'),
+          to: '/files/list'
+        }
+      ]
 
       if (!this.currentFolder) return breadcrumbs
 
@@ -252,11 +343,11 @@ export default {
       let baseUrl = '/files/list/'
 
       const pathSplit = this.currentFolder.path
-        ? this.currentFolder.path.split('/').filter((val) => {
-          if (rootFolder === '/') return val
+        ? this.currentFolder.path.split('/').filter(val => {
+            if (rootFolder === '/') return val
 
-          return val !== rootFolder
-        })
+            return val !== rootFolder
+          })
         : []
 
       if (rootFolder && rootFolder !== '/') {
@@ -269,16 +360,19 @@ export default {
       if (this.publicPage()) {
         baseUrl = '/files/public-files/'
         startIndex = 1
-        breadcrumbs = [{
-          index: 0,
-          text: this.$gettext('Home'),
-          to: baseUrl + pathSplit[0]
-        }]
+        breadcrumbs = [
+          {
+            index: 0,
+            text: this.$gettext('Home'),
+            to: baseUrl + pathSplit[0]
+          }
+        ]
       }
 
       for (let i = startIndex; i < pathSplit.length; i++) {
         let clickHandler = null
-        let itemPath = baseUrl + encodeURIComponent(pathUtil.join.apply(null, pathSplit.slice(0, i + 1)))
+        let itemPath =
+          baseUrl + encodeURIComponent(pathUtil.join.apply(null, pathSplit.slice(0, i + 1)))
         if (i === pathSplit.length - 1) {
           itemPath = null
           clickHandler = () => this.$router.go()
@@ -295,18 +389,20 @@ export default {
       return breadcrumbs
     },
 
-    hasFreeSpace () {
-      return (this.quota && this.quota.free > 0) ||
+    hasFreeSpace() {
+      return (
+        (this.quota && this.quota.free > 0) ||
         (this.currentFolder && this.currentFolder.permissions.indexOf('M') >= 0) ||
         this.publicPage()
+      )
     },
 
-    displayBulkActions () {
+    displayBulkActions() {
       return this.$route.meta.hasBulkActions && this.selectedFiles.length > 0
     }
   },
   watch: {
-    $route (to, from) {
+    $route(to, from) {
       // note: the search bars are not available on all views
       if (this.$refs.mobileSearch) {
         this.$refs.mobileSearch.value = null
@@ -317,10 +413,19 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['resetFileSelection', 'loadFiles', 'addFiles', 'updateFileProgress', 'searchForFile',
-      'loadFolder', 'setTrashbinDeleteMessage', 'removeFilesFromTrashbin', 'resetSearch']),
+    ...mapActions('Files', [
+      'resetFileSelection',
+      'loadFiles',
+      'addFiles',
+      'updateFileProgress',
+      'searchForFile',
+      'loadFolder',
+      'setTrashbinDeleteMessage',
+      'removeFilesFromTrashbin',
+      'resetSearch'
+    ]),
     ...mapActions(['openFile', 'showMessage']),
-    onFileSearch (searchTerm = '') {
+    onFileSearch(searchTerm = '') {
       if (searchTerm === '') {
         this.isLoadingSearch = false
       } else {
@@ -342,7 +447,7 @@ export default {
           this.isLoadingSearch = false
         })
     },
-    focusMobileSearchInput () {
+    focusMobileSearchInput() {
       this.$refs.mobileSearch.$el.querySelector('input').focus()
       // nested vuetify VList animation will block native autofocus, so we use this workaround...
 
@@ -351,17 +456,20 @@ export default {
         this.$refs.mobileSearch.$el.querySelector('input').focus()
       }, 50)
     },
-    $_ocFilesFolder_getFolder () {
+    $_ocFilesFolder_getFolder() {
       this.path = []
 
-      const absolutePath = this.$route.params.item === '' || this.$route.params.item === undefined ? this.configuration.rootFolder : this.route.params.item
+      const absolutePath =
+        this.$route.params.item === '' || this.$route.params.item === undefined
+          ? this.configuration.rootFolder
+          : this.route.params.item
 
       this.loadFolder({
         client: this.$client,
         absolutePath: absolutePath,
         $gettext: this.$gettext,
         routeName: this.$route.name
-      }).catch((error) => {
+      }).catch(error => {
         // TODO: 401 public link handling necessary???
         this.showMessage({
           title: this.$gettext('Loading folder failed…'),
@@ -370,17 +478,26 @@ export default {
         })
       })
     },
-    showCreateFolderDialog () {
+    showCreateFolderDialog() {
       this.createFolder = true
       this.newFolderName = this.$gettext('New folder')
     },
-    addNewFolder (folderName) {
+    addNewFolder(folderName) {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
-        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
+        const path =
+          this.item === ''
+            ? this.configuration.rootFolder
+              ? `${this.configuration.rootFolder}/`
+              : '/'
+            : `${this.item}/`
         let p = this.$client.files.createFolder(path + folderName)
         if (this.publicPage()) {
-          p = this.$client.publicFiles.createFolder(path + folderName, null, this.publicLinkPassword)
+          p = this.$client.publicFiles.createFolder(
+            path + folderName,
+            null,
+            this.publicLinkPassword
+          )
         }
 
         p.then(() => {
@@ -399,7 +516,7 @@ export default {
           })
       }
     },
-    checkNewFolderName (folderName) {
+    checkNewFolderName(folderName) {
       if (folderName === '') {
         return this.$gettext('Folder name cannot be empty')
       }
@@ -429,15 +546,20 @@ export default {
 
       return null
     },
-    showCreateFileDialog (ext = 'txt', openAction = null) {
+    showCreateFileDialog(ext = 'txt', openAction = null) {
       this.createFile = true
       this.newFileAction = openAction
       this.newFileName = this.$gettext('New file') + '.' + ext
     },
-    addNewFile (fileName) {
+    addNewFile(fileName) {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
-        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
+        const path =
+          this.item === ''
+            ? this.configuration.rootFolder
+              ? `${this.configuration.rootFolder}/`
+              : '/'
+            : `${this.item}/`
         const filePath = pathUtil.join(path, fileName)
         let p = this.$client.files.putFileContents(filePath, '')
         if (this.publicPage()) {
@@ -456,18 +578,17 @@ export default {
               this.openFileAction(this.newFileAction, filePath)
             })
           }
-        })
-          .catch(error => {
-            this.fileFolderCreationLoading = false
-            this.showMessage({
-              title: this.$gettext('Creating file failed…'),
-              desc: error,
-              status: 'danger'
-            })
+        }).catch(error => {
+          this.fileFolderCreationLoading = false
+          this.showMessage({
+            title: this.$gettext('Creating file failed…'),
+            desc: error,
+            status: 'danger'
           })
+        })
       }
     },
-    checkNewFileName (fileName) {
+    checkNewFileName(fileName) {
       if (fileName === '') {
         return this.$gettext('File name cannot be empty')
       }
@@ -497,34 +618,45 @@ export default {
 
       return null
     },
-    onFileSuccess (event, file) {
+    onFileSuccess(event, file) {
       if (file.name) {
         file = file.name
       }
       this.$nextTick().then(() => {
-        const path = this.item === '' ? (this.configuration.rootFolder ? `${this.configuration.rootFolder}/` : '/') : `${this.item}/`
+        const path =
+          this.item === ''
+            ? this.configuration.rootFolder
+              ? `${this.configuration.rootFolder}/`
+              : '/'
+            : `${this.item}/`
         const filePath = pathUtil.join(path, file)
         if (this.publicPage()) {
-          this.$client.publicFiles.list(filePath, this.publicLinkPassword, this.davProperties, '0').then(files => {
-            this.addFiles({
-              files: files
+          this.$client.publicFiles
+            .list(filePath, this.publicLinkPassword, this.davProperties, '0')
+            .then(files => {
+              this.addFiles({
+                files: files
+              })
             })
-          }).catch(() => {
-            this.$_ocFilesFolder_getFolder()
-          })
+            .catch(() => {
+              this.$_ocFilesFolder_getFolder()
+            })
         } else {
-          this.$client.files.fileInfo(filePath, this.davProperties).then(fileInfo => {
-            this.addFiles({
-              files: [fileInfo]
+          this.$client.files
+            .fileInfo(filePath, this.davProperties)
+            .then(fileInfo => {
+              this.addFiles({
+                files: [fileInfo]
+              })
             })
-          }).catch(() => {
-            this.$_ocFilesFolder_getFolder()
-          })
+            .catch(() => {
+              this.$_ocFilesFolder_getFolder()
+            })
         }
       })
     },
 
-    onFileError (error) {
+    onFileError(error) {
       this.showMessage({
         title: this.$gettext('File upload failed…'),
         desc: error.message,
@@ -532,36 +664,47 @@ export default {
       })
     },
 
-    onFileProgress (progress) {
+    onFileProgress(progress) {
       this.updateFileProgress(progress)
     },
 
-    $_ocTrashbin_deleteSelected () {
+    $_ocTrashbin_deleteSelected() {
       const translated = this.$ngettext(
         "%{numberOfFiles} item will be deleted immediately. You can't undo this action.",
         "%{numberOfFiles} items will be deleted immediately. You can't undo this action.",
         this.selectedFiles.length
       )
-      this.setTrashbinDeleteMessage(this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, false))
+      this.setTrashbinDeleteMessage(
+        this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, false)
+      )
     },
 
-    $_ocFiles_deleteSelected () {
-      const translated = this.$ngettext('%{numberOfFiles} item will be deleted.', '%{numberOfFiles} items will be deleted.', this.selectedFiles.length)
+    $_ocFiles_deleteSelected() {
+      const translated = this.$ngettext(
+        '%{numberOfFiles} item will be deleted.',
+        '%{numberOfFiles} items will be deleted.',
+        this.selectedFiles.length
+      )
       this.promptFileDelete({
-        message: this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, false),
+        message: this.$gettextInterpolate(
+          translated,
+          { numberOfFiles: this.selectedFiles.length },
+          false
+        ),
         items: this.selectedFiles
       })
     },
 
-    $_ocTrashbin_empty () {
-      this.$client.fileTrash.clearTrashBin()
+    $_ocTrashbin_empty() {
+      this.$client.fileTrash
+        .clearTrashBin()
         .then(() => {
           this.showMessage({
             title: this.$gettext('Trash bin was successfully emptied')
           })
           this.removeFilesFromTrashbin(this.activeFiles)
         })
-        .catch((error) => {
+        .catch(error => {
           this.showMessage({
             title: this.$gettext("Trash bin couldn't be emptied"),
             desc: error.message,
@@ -570,9 +713,10 @@ export default {
         })
     },
 
-    $_ocTrashbin_restoreFiles (files = this.selectedFiles) {
+    $_ocTrashbin_restoreFiles(files = this.selectedFiles) {
       for (const file of files) {
-        this.$client.fileTrash.restore(file.id, file.originalLocation)
+        this.$client.fileTrash
+          .restore(file.id, file.originalLocation)
           .then(() => {
             const translated = this.$gettext('%{file} was restored successfully')
             this.showMessage({
@@ -593,7 +737,7 @@ export default {
       this.setHighlightedFile(null)
     },
 
-    onSearchClear () {
+    onSearchClear() {
       this.resetSearch()
       // Forces update of search bar
       this.searchBarKey++

@@ -2,7 +2,7 @@
   <div id="markdown-editor-app-bar" class="oc-app-bar">
     <oc-grid flex gutter="small">
       <div class="uk-width-auto">
-        <oc-button icon="save" @click="saveContent" :disabled="!isTouched"></oc-button>
+        <oc-button icon="save" :disabled="!isTouched" @click="saveContent"></oc-button>
         <oc-spinner v-if="isLoading"></oc-spinner>
       </div>
       <div class="uk-width-expand uk-text-center">
@@ -24,12 +24,12 @@ export default {
   },
   methods: {
     ...mapActions('MarkdownEditor', ['saveFile']),
-    saveContent () {
+    saveContent() {
       this.saveFile({
         client: this.$client
       })
     },
-    closeApp () {
+    closeApp() {
       this.$router.push({
         path: '/files'
       })

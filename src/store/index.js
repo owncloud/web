@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 
 /* STORE MODULES
-*/
+ */
 import app from './app'
 import apps from './apps'
 import config from './config'
@@ -16,12 +16,9 @@ const vuexPersistInSession = new VuexPersistence({
   key: 'phoenixStateInSessionStorage',
   // Browser tab independent storage which gets deleted after the tab is closed
   storage: window.sessionStorage,
-  filter: (mutation) => ([
-    'SAVE_URL_BEFORE_LOGIN',
-    'SET_USER',
-    'SET_TOKEN',
-    'SET_CAPABILITIES'
-  ].indexOf(mutation.type) > -1),
+  filter: mutation =>
+    ['SAVE_URL_BEFORE_LOGIN', 'SET_USER', 'SET_TOKEN', 'SET_CAPABILITIES'].indexOf(mutation.type) >
+    -1,
   modules: ['router', 'user']
 })
 

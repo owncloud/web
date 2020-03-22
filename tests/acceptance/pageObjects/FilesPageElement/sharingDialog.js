@@ -15,7 +15,7 @@ module.exports = {
      *
      * @param {string} permissions
      */
-    getArrayFromPermissionString: function (permissions) {
+    getArrayFromPermissionString: function(permissions) {
       permissions = permissions.replace(/\s/g, '')
       return permissions.split(',').filter(x => x)
     },
@@ -23,7 +23,7 @@ module.exports = {
      *
      * @param {string} permission
      */
-    getPermissionCheckbox: function (permission) {
+    getPermissionCheckbox: function(permission) {
       return util.format(this.elements.permissionCheckbox.selector, permission)
     },
     /**
@@ -31,15 +31,13 @@ module.exports = {
      *
      * @returns {Promise<string>}
      */
-    getSharingPermissionMsg: async function () {
+    getSharingPermissionMsg: async function() {
       let shareResponse
       // eslint-disable-next-line no-unused-expressions
       this.api.expect.element(this.elements.addShareSaveButton.selector).not.to.be.present
-      await this.api.getText(this.elements.noResharePermissions.selector,
-        function (result) {
-          shareResponse = result.value
-        }
-      )
+      await this.api.getText(this.elements.noResharePermissions.selector, function(result) {
+        shareResponse = result.value
+      })
       return shareResponse
     },
 
@@ -51,11 +49,11 @@ module.exports = {
      *
      * @return {Promise<string|null>}
      */
-    getVisibleElementID: async function (using, value) {
+    getVisibleElementID: async function(using, value) {
       let visibleElementID = null
       await this.api.elements(using, value, response => {
         for (const { ELEMENT } of response.value) {
-          this.api.elementIdDisplayed(ELEMENT, function (result) {
+          this.api.elementIdDisplayed(ELEMENT, function(result) {
             if (result.value === true) {
               visibleElementID = ELEMENT
             }
@@ -70,11 +68,14 @@ module.exports = {
      *
      * @param {string} sharee
      */
-    removePendingCollaboratorForShare: function (sharee) {
+    removePendingCollaboratorForShare: function(sharee) {
       const newCollaboratorXpath = util.format(this.elements.newCollaboratorItems.selector, sharee)
-      const removeCollaboratorBtnXpath = newCollaboratorXpath + this.elements.newCollaboratorRemoveButton.selector
+      const removeCollaboratorBtnXpath =
+        newCollaboratorXpath + this.elements.newCollaboratorRemoveButton.selector
 
-      return this.useXpath().click(removeCollaboratorBtnXpath).useCss()
+      return this.useXpath()
+        .click(removeCollaboratorBtnXpath)
+        .useCss()
     },
 
     /**
@@ -83,16 +84,21 @@ module.exports = {
      * @param {boolean} [shareWithGroup=false]
      * @param {boolean} remoteShare
      */
-    selectCollaboratorForShare: async function (receiver, shareWithGroup = false, remoteShare = false) {
+    selectCollaboratorForShare: async function(
+      receiver,
+      shareWithGroup = false,
+      remoteShare = false
+    ) {
       let sharee = receiver
       if (remoteShare) sharee = util.format('%s@%s', receiver, this.api.globals.remote_backend_url)
       // We need waitForElementPresent here.
       // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
-      await this.enterAutoComplete(sharee)
-        .waitForElementPresent({
+      await this.enterAutoComplete(sharee).waitForElementPresent(
+        {
           selector: '@sharingAutoCompleteDropDownElements',
           abortOnFailure: false
-        }, (result) => {
+        },
+        result => {
           if (result.value === false) {
             // sharing dropdown was not shown
             console.log('WARNING: no sharing autocomplete dropdown found, retry typing')
@@ -100,12 +106,16 @@ module.exports = {
               .enterAutoComplete(sharee)
               .waitForElementVisible('@sharingAutoCompleteDropDownElements')
           }
-        })
+        }
+      )
 
-      let receiverType = (shareWithGroup === true) ? SHARE_TYPE_STRING.group : SHARE_TYPE_STRING.user
-      receiverType = (remoteShare === true) ? SHARE_TYPE_STRING.federation : receiverType
+      let receiverType = shareWithGroup === true ? SHARE_TYPE_STRING.group : SHARE_TYPE_STRING.user
+      receiverType = remoteShare === true ? SHARE_TYPE_STRING.federation : receiverType
 
-      const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(sharee, receiverType)
+      const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(
+        sharee,
+        receiverType
+      )
 
       await this.useXpath().click(collaboratorSelector)
 
@@ -115,7 +125,7 @@ module.exports = {
     /**
      * @param {string} permissions
      */
-    selectPermissionsOnPendingShare: async function (permissions) {
+    selectPermissionsOnPendingShare: async function(permissions) {
       const permissionArray = this.getArrayFromPermissionString(permissions)
       for (const permission of permissionArray) {
         const permissionCheckbox = this.getPermissionCheckbox(permission)
@@ -139,7 +149,14 @@ module.exports = {
      *
      * @return void
      */
-    shareWithUserOrGroup: async function (sharee, shareWithGroup = false, role, permissions, remote = false, days) {
+    shareWithUserOrGroup: async function(
+      sharee,
+      shareWithGroup = false,
+      role,
+      permissions,
+      remote = false,
+      days
+    ) {
       await collaboratorDialog.clickCreateShare()
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
       await this.selectRoleForNewCollaborator(role)
@@ -150,9 +167,9 @@ module.exports = {
 
       if (days) {
         const dateToSet = calculateDate(days)
-        const isExpiryDateChanged = await this
-          .openExpirationDatePicker()
-          .setExpirationDate(dateToSet)
+        const isExpiryDateChanged = await this.openExpirationDatePicker().setExpirationDate(
+          dateToSet
+        )
         if (!isExpiryDateChanged) {
           console.log('WARNING: Cannot create share with disabled expiration date!')
           return
@@ -165,8 +182,13 @@ module.exports = {
      *
      * @param {String} role
      */
-    selectRoleForNewCollaborator: function (role) {
-      role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
+    selectRoleForNewCollaborator: function(role) {
+      role = _(role)
+        .chain()
+        .toLower()
+        .startCase()
+        .replace(/\s/g, '')
+        .value()
       return this.waitForElementPresent('@newCollaboratorSelectRoleButton')
         .click('@newCollaboratorSelectRoleButton')
         .waitForElementVisible('@newCollaboratorRolesDropdown')
@@ -174,24 +196,22 @@ module.exports = {
         .click(`@newCollaboratorRole${role}`)
         .waitForElementNotVisible('@newCollaboratorRolesDropdown')
     },
-    confirmShare: function () {
+    confirmShare: function() {
       return this.waitForElementPresent('@addShareSaveButton')
         .initAjaxCounters()
         .click('@addShareSaveButton')
         .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@addShareSaveButton')
     },
-    saveChanges: function () {
+    saveChanges: function() {
       return this.waitForElementVisible('@saveShareButton')
         .initAjaxCounters()
         .click('@saveShareButton')
         .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@saveShareButton')
     },
-    clickCancel: function () {
-      return this
-        .waitForElementVisible('@cancelButton')
-        .click('@cancelButton')
+    clickCancel: function() {
+      return this.waitForElementVisible('@cancelButton').click('@cancelButton')
     },
     /**
      * Toggle the checkbox to set a certain permission for a share
@@ -199,7 +219,7 @@ module.exports = {
      *
      * @param {string} permission
      */
-    toggleSinglePermission: async function (permission) {
+    toggleSinglePermission: async function(permission) {
       const permissionCheckbox = this.getPermissionCheckbox(permission)
       const elementID = await this.getVisibleElementID('xpath', permissionCheckbox)
       if (!elementID) {
@@ -216,15 +236,14 @@ module.exports = {
      *
      * @return {Promise<Object.<string, boolean>>}  eg - {share: true, change: false}
      */
-    getSharePermissions: async function () {
+    getSharePermissions: async function() {
       const permissions = {}
       const panelSelector = this.elements.sharingSidebarRoot.selector
       let permissionToggle
       for (let i = 0; i < COLLABORATOR_PERMISSION_ARRAY.length; i++) {
-        permissionToggle = panelSelector + util.format(
-          this.elements.permissionCheckbox.selector,
-          COLLABORATOR_PERMISSION_ARRAY[i]
-        )
+        permissionToggle =
+          panelSelector +
+          util.format(this.elements.permissionCheckbox.selector, COLLABORATOR_PERMISSION_ARRAY[i])
 
         await this.api.element('xpath', permissionToggle, result => {
           if (!result.value.ELEMENT) {
@@ -242,7 +261,7 @@ module.exports = {
      * @param {string} collaborator
      * @param {string} requiredPermissions
      */
-    changeCustomPermissionsTo: async function (collaborator, requiredPermissions) {
+    changeCustomPermissionsTo: async function(collaborator, requiredPermissions) {
       await collaboratorDialog.clickEditShare(collaborator)
 
       const requiredPermissionArray = this.getArrayFromPermissionString(requiredPermissions)
@@ -269,7 +288,7 @@ module.exports = {
      * @param {string} collaborator
      * @param {string} permissions
      */
-    getDisplayedPermission: async function (collaborator) {
+    getDisplayedPermission: async function(collaborator) {
       await collaboratorDialog.clickEditShare(collaborator)
       // read the permissions from the checkboxes
       const currentSharePermissions = await this.getSharePermissions()
@@ -280,11 +299,12 @@ module.exports = {
      *
      * @param {string} collaborator
      */
-    disableAllCustomPermissions: async function (collaborator) {
+    disableAllCustomPermissions: async function(collaborator) {
       await collaboratorDialog.clickEditShare(collaborator)
       const sharePermissions = await this.getSharePermissions(collaborator)
-      const enabledPermissions = Object.keys(sharePermissions)
-        .filter(permission => sharePermissions[permission] === true)
+      const enabledPermissions = Object.keys(sharePermissions).filter(
+        permission => sharePermissions[permission] === true
+      )
 
       for (const permission of enabledPermissions) {
         await this.toggleSinglePermission(permission)
@@ -295,7 +315,7 @@ module.exports = {
      *
      * @param {string} input
      */
-    enterAutoComplete: function (input) {
+    enterAutoComplete: function(input) {
       return this.initAjaxCounters()
         .waitForElementVisible('@sharingAutoComplete')
         .setValueBySingleKeys('@sharingAutoComplete', input)
@@ -305,11 +325,11 @@ module.exports = {
      *
      * @returns {Promise.<string[]>} Array of autocomplete items
      */
-    getShareAutocompleteItemsList: async function () {
+    getShareAutocompleteItemsList: async function() {
       const webElementIdList = await this.getShareAutocompleteWebElementIdList()
-      const itemsListPromises = webElementIdList.map((webElementId) => {
+      const itemsListPromises = webElementIdList.map(webElementId => {
         return new Promise((resolve, reject) => {
-          this.api.elementIdText(webElementId, (text) => {
+          this.api.elementIdText(webElementId, text => {
             resolve(text.value.trim())
           })
         })
@@ -323,7 +343,7 @@ module.exports = {
      *
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
-    getShareAutocompleteWebElementIdList: async function () {
+    getShareAutocompleteWebElementIdList: async function() {
       const webElementIdList = []
       const showAllResultsXpath = this.elements.sharingAutoCompleteShowAllResultsButton.selector
       // wait for autocomplete to finish loading
@@ -338,18 +358,21 @@ module.exports = {
       await this.waitForElementNotPresent('@sharingAutoCompleteSpinner')
       // note: some result lists don't have the "show all" button depending on the number of entries,
       // so we only click it if present
-      await this.api.element('css selector', showAllResultsXpath, (result) => {
+      await this.api.element('css selector', showAllResultsXpath, result => {
         if (result.status !== -1) {
           return this.click('@sharingAutoCompleteShowAllResultsButton')
         }
       })
 
-      await this
-        .api.elements('css selector', this.elements.sharingAutoCompleteDropDownElements.selector, (result) => {
-          result.value.forEach((value) => {
+      await this.api.elements(
+        'css selector',
+        this.elements.sharingAutoCompleteDropDownElements.selector,
+        result => {
+          result.value.forEach(value => {
             webElementIdList.push(value[Object.keys(value)[0]])
           })
-        })
+        }
+      )
       return webElementIdList
     },
     /**
@@ -358,7 +381,7 @@ module.exports = {
      * @param {string} newRole
      * @returns {Promise}
      */
-    changeCollaboratorRole: async function (collaborator, newRole) {
+    changeCollaboratorRole: async function(collaborator, newRole) {
       await collaboratorDialog.clickEditShare(collaborator)
       await this.changeCollaboratorRoleInDropdown(newRole)
       return this.saveChanges()
@@ -367,12 +390,12 @@ module.exports = {
      * @params {string} newRole
      * @returns {Promise}
      */
-    changeCollaboratorRoleInDropdown: function (newRole) {
+    changeCollaboratorRoleInDropdown: function(newRole) {
       const newRoleButton = util.format(
-        this.elements.roleButtonInDropdown.selector, newRole.toLowerCase()
+        this.elements.roleButtonInDropdown.selector,
+        newRole.toLowerCase()
       )
-      return this
-        .initAjaxCounters()
+      return this.initAjaxCounters()
         .useXpath()
         .waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
         .click('@selectRoleButtonInCollaboratorInformation')
@@ -385,14 +408,11 @@ module.exports = {
      *
      * @returns {Promise<boolean>}
      */
-    isAutocompleteListVisible: async function () {
+    isAutocompleteListVisible: async function() {
       let isVisible = false
-      await this.api.elements(
-        '@sharingAutoCompleteDropDownElements',
-        (result) => {
-          isVisible = result.value.length > 0
-        }
-      )
+      await this.api.elements('@sharingAutoCompleteDropDownElements', result => {
+        isVisible = result.value.length > 0
+      })
       return isVisible
     },
 
@@ -403,7 +423,7 @@ module.exports = {
      * @param {string} usersMatchingPattern
      *
      */
-    assertUsersInAutocompleteList: function (usersMatchingPattern) {
+    assertUsersInAutocompleteList: function(usersMatchingPattern) {
       usersMatchingPattern.map(user => {
         const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(user, 'user')
 
@@ -419,14 +439,14 @@ module.exports = {
      * @param {string} type Type of the collaborator which should be found
      * @returns {string} xpath of the collaborator
      */
-    getCollaboratorInAutocompleteListSelector: function (collaborator, type) {
+    getCollaboratorInAutocompleteListSelector: function(collaborator, type) {
       return (
         util.format(this.elements.collaboratorAutocompleteItem.selector, type) +
         util.format(this.elements.collaboratorAutocompleteItemName.selector, collaborator)
       )
     },
 
-    displayAllCollaboratorsAutocompleteResults: function () {
+    displayAllCollaboratorsAutocompleteResults: function() {
       return this.click('@sharingAutoCompleteShowAllResultsButton')
     },
 
@@ -437,7 +457,7 @@ module.exports = {
      * @param {string} groupMatchingPattern
      *
      */
-    assertGroupsInAutocompleteList: function (groupMatchingPattern) {
+    assertGroupsInAutocompleteList: function(groupMatchingPattern) {
       groupMatchingPattern.map(user => {
         const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(user, 'group')
 
@@ -454,7 +474,7 @@ module.exports = {
      * @param {string} type Type of the collaborator. Can be either user, group or remote
      *
      */
-    assertAlreadyExistingCollaboratorIsNotInAutocompleteList: function (name, type) {
+    assertAlreadyExistingCollaboratorIsNotInAutocompleteList: function(name, type) {
       const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(name, type)
 
       return this.useXpath().expect.element(collaboratorSelector).to.not.be.present
@@ -468,7 +488,7 @@ module.exports = {
      * @param {boolean} shouldBePresent Whether the collaborator should be found in the list or not
      *
      */
-    assertCollaboratorsInAutocompleteList: function (name, type, shouldBePresent = true) {
+    assertCollaboratorsInAutocompleteList: function(name, type, shouldBePresent = true) {
       const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(name, type)
 
       if (shouldBePresent) {
@@ -483,12 +503,10 @@ module.exports = {
      *
      * @return {Promise<*>}
      */
-    changeCollaboratorExpiryDate: async function (collaborator, days) {
+    changeCollaboratorExpiryDate: async function(collaborator, days) {
       await collaboratorDialog.clickEditShare(collaborator)
       const dateToSet = calculateDate(days)
-      const isExpiryDateChanged = await this
-        .openExpirationDatePicker()
-        .setExpirationDate(dateToSet)
+      const isExpiryDateChanged = await this.openExpirationDatePicker().setExpirationDate(dateToSet)
       if (!isExpiryDateChanged) {
         console.log('WARNING: Cannot create share with disabled expiration date!')
         return
@@ -499,9 +517,8 @@ module.exports = {
      * opens expiration date field on the webUI
      * @return {*}
      */
-    openExpirationDatePicker: function () {
-      this
-        .initAjaxCounters()
+    openExpirationDatePicker: function() {
+      this.initAjaxCounters()
         .waitForElementVisible('@expirationDateField')
         .waitForElementNotPresent('@elementInterceptingCollaboratorsExpirationInput')
         .click('@expirationDateField')
@@ -511,26 +528,29 @@ module.exports = {
      * extracts set value in expiration date field
      * @return {Promise<*>}
      */
-    getExpirationDateFromInputField: async function () {
+    getExpirationDateFromInputField: async function() {
       let expirationDate
-      await this
-        .waitForElementVisible('@expirationDateField')
-        .getValue('@expirationDateField', (result) => {
+      await this.waitForElementVisible('@expirationDateField').getValue(
+        '@expirationDateField',
+        result => {
           expirationDate = result.value
-        })
+        }
+      )
       return expirationDate
     },
     /**
      * gets disabled status of save share button
      * @return {Promise<*>}
      */
-    getDisabledAttributeOfSaveShareButton: async function () {
+    getDisabledAttributeOfSaveShareButton: async function() {
       let disabled
-      await this
-        .waitForElementVisible('@saveShareButton')
-        .getAttribute('@saveShareButton', 'disabled', (result) => {
+      await this.waitForElementVisible('@saveShareButton').getAttribute(
+        '@saveShareButton',
+        'disabled',
+        result => {
           disabled = result.value
-        })
+        }
+      )
       return disabled
     },
     /**
@@ -538,13 +558,12 @@ module.exports = {
      * @param {string} collaborator Name of the collaborator
      * @return {*}
      */
-    changeCollaboratorSettings: async function (collaborator, editData) {
+    changeCollaboratorSettings: async function(collaborator, editData) {
       await collaboratorDialog.clickEditShare(collaborator)
       for (const [key, value] of Object.entries(editData)) {
         await this.setCollaboratorForm(key, value)
       }
-      return this.waitForElementVisible('@saveShareButton')
-        .click('@saveShareButton')
+      return this.waitForElementVisible('@saveShareButton').click('@saveShareButton')
     },
     /**
      * function sets different fields for collaborator form
@@ -553,13 +572,12 @@ module.exports = {
      * @param value values for the different fields to be set
      * @returns {*|Promise<void>|exports}
      */
-    setCollaboratorForm: function (key, value) {
+    setCollaboratorForm: function(key, value) {
       if (key === 'permissionString') {
         return this.changeCollaboratorRoleInDropdown(value)
       } else if (key === 'expireDate') {
         const dateToSet = calculateDate(value)
-        return this.openExpirationDatePicker()
-          .setExpirationDate(dateToSet)
+        return this.openExpirationDatePicker().setExpirationDate(dateToSet)
       }
       return this
     },
@@ -567,12 +585,15 @@ module.exports = {
      *
      * @returns {Promise<string>}
      */
-    getErrorMessage: async function () {
+    getErrorMessage: async function() {
       let message
-      await this.waitForElementVisible('@collaboratorErrorAlert')
-        .getText('xpath', this.elements.collaboratorErrorAlert.selector, function (result) {
+      await this.waitForElementVisible('@collaboratorErrorAlert').getText(
+        'xpath',
+        this.elements.collaboratorErrorAlert.selector,
+        function(result) {
           message = result.value
-        })
+        }
+      )
       return message
     }
   },
@@ -598,7 +619,8 @@ module.exports = {
       selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion-list'
     },
     sharingAutoCompleteDropDownElements: {
-      selector: '#oc-sharing-autocomplete .oc-autocomplete-suggestion .files-collaborators-autocomplete-user-text'
+      selector:
+        '#oc-sharing-autocomplete .oc-autocomplete-suggestion .files-collaborators-autocomplete-user-text'
     },
     sharingAutoCompleteShowAllResultsButton: {
       selector: '.oc-autocomplete-suggestion-overflow'
@@ -634,10 +656,12 @@ module.exports = {
       selector: '#files-collaborators-role-editor'
     },
     newCollaboratorItems: {
-      selector: "//div[@id='oc-files-sharing-sidebar']//table[contains(@class, 'files-collaborators-collaborator-autocomplete-item')]//div[contains(., '%s')]/ancestor::tr[position()=1]"
+      selector:
+        "//div[@id='oc-files-sharing-sidebar']//table[contains(@class, 'files-collaborators-collaborator-autocomplete-item')]//div[contains(., '%s')]/ancestor::tr[position()=1]"
     },
     newCollaboratorRemoveButton: {
-      selector: "//button[contains(@class, 'files-collaborators-collaborator-autocomplete-item-remove')]"
+      selector:
+        "//button[contains(@class, 'files-collaborators-collaborator-autocomplete-item-remove')]"
     },
     newCollaboratorRoleAdvancedPermissions: {
       selector: '#files-collaborators-role-advancedRole'
@@ -652,7 +676,8 @@ module.exports = {
     },
     roleButtonInDropdown: {
       // the translate bit is to make it case-insensitive
-      selector: '//ul[contains(@class,"oc-autocomplete-suggestion-list")]//span[translate(.,"ABCDEFGHJIKLMNOPQRSTUVWXYZ","abcdefghjiklmnopqrstuvwxyz") ="%s"]',
+      selector:
+        '//ul[contains(@class,"oc-autocomplete-suggestion-list")]//span[translate(.,"ABCDEFGHJIKLMNOPQRSTUVWXYZ","abcdefghjiklmnopqrstuvwxyz") ="%s"]',
       locateStrategy: 'xpath'
     },
     permissionCheckbox: {
@@ -673,7 +698,8 @@ module.exports = {
       selector: '.vdatetime-popup__actions__button--confirm'
     },
     collaboratorExpirationDate: {
-      selector: '//span[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../../span/span[contains(@class, "files-collaborators-collaborator-expires")]',
+      selector:
+        '//span[contains(@class, "files-collaborators-collaborator-name") and text()="%s"]/../../span/span[contains(@class, "files-collaborators-collaborator-expires")]',
       locateStrategy: 'xpath'
     },
     collaboratorAutocompleteItem: {
@@ -681,7 +707,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     collaboratorAutocompleteItemName: {
-      selector: '//div[contains(@class, "files-collaborators-autocomplete-username") and text()="%s"]',
+      selector:
+        '//div[contains(@class, "files-collaborators-autocomplete-username") and text()="%s"]',
       locateStrategy: 'xpath'
     },
     collaboratorsListItemInfo: {
@@ -696,7 +723,8 @@ module.exports = {
       selector: '.vdatetime-input'
     },
     requiredLabelInCollaboratorsExpirationDate: {
-      selector: '//label[@for="files-collaborators-collaborator-expiration-input"]/em[.="(required)"]',
+      selector:
+        '//label[@for="files-collaborators-collaborator-expiration-input"]/em[.="(required)"]',
       locateStrategy: 'xpath'
     },
     elementInterceptingCollaboratorsExpirationInput: {

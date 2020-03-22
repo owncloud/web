@@ -1,13 +1,13 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  install (Vue) {
+  install(Vue) {
     Vue.mixin({
       computed: {
         ...mapGetters(['getToken', 'isAuthenticated']),
         ...mapGetters('Files', ['publicLinkPassword']),
 
-        currentExtension () {
+        currentExtension() {
           return this.$route.path.split('/')[1]
         }
       },
@@ -15,13 +15,13 @@ export default {
         ...mapActions('Files', ['addActionToProgress', 'removeActionFromProgress']),
         ...mapActions(['showMessage']),
 
-        publicPage () {
+        publicPage() {
           // public page is either when not authenticated
           // but also when accessing pages that require no auth even when authenticated
           return !this.isAuthenticated || this.$route.meta.auth === false
         },
         // FIXME: optional publicContext parameter is a mess
-        downloadFile (file, publicContext = null) {
+        downloadFile(file, publicContext = null) {
           this.addActionToProgress(file)
           const publicPage = publicContext !== null ? publicContext : this.publicPage()
           let headers = {}
@@ -29,7 +29,9 @@ export default {
             const url = this.$client.publicFiles.getFileUrl(file.path)
             const password = this.publicLinkPassword
             if (password) {
-              headers = { Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64') }
+              headers = {
+                Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64')
+              }
             }
 
             return this.downloadFileFromUrl(url, headers, file)
@@ -39,7 +41,7 @@ export default {
 
           return this.downloadFileFromUrl(url, headers, file)
         },
-        downloadFileFromUrl (url, headers, file) {
+        downloadFileFromUrl(url, headers, file) {
           const request = new XMLHttpRequest()
           request.open('GET', url)
           request.responseType = 'blob'
@@ -57,9 +59,11 @@ export default {
               this.removeActionFromProgress(file)
             } else if (request.readyState === 4 && request.status === 200) {
               // Download has finished
-              if (window.navigator && window.navigator.msSaveOrOpenBlob) { // for IE
+              if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                // for IE
                 window.navigator.msSaveOrOpenBlob(request.response, file.name)
-              } else { // for Non-IE (chrome, firefox etc.)
+              } else {
+                // for Non-IE (chrome, firefox etc.)
                 const objectUrl = window.URL.createObjectURL(request.response)
 
                 const anchor = document.createElement('a')
@@ -100,7 +104,7 @@ export default {
          * Checks whether the browser is Internet Explorer 11
          * @return {boolean} true if the browser is Internet Expoler 11
          */
-        isIE11 () {
+        isIE11() {
           return !!window.MSInputMethodContext && !!document.documentMode
         },
         /**
@@ -109,7 +113,7 @@ export default {
          * @param path path
          * @return encoded path
          */
-        encodePath: function (path) {
+        encodePath: function(path) {
           if (!path) {
             return path
           }

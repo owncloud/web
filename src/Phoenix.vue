@@ -8,11 +8,11 @@
       <template v-else>
         <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
         <top-bar
-          :applicationsList="$_applicationsList"
-          :activeNotifications="activeNotifications"
+          :applications-list="$_applicationsList"
+          :active-notifications="activeNotifications"
           :user-id="user.id"
           :user-display-name="user.displayname"
-          :hasAppNavigation="appNavigationEntries.length > 1"
+          :has-app-navigation="appNavigationEntries.length > 1"
           @toggleAppNavigationVisibility="toggleAppNavigationVisibility"
         />
         <side-menu
@@ -43,7 +43,7 @@ export default {
     TopBar,
     SkipTo
   },
-  data () {
+  data() {
     return {
       appNavigationVisible: false,
       $_notificationsInterval: null
@@ -51,8 +51,14 @@ export default {
   },
   computed: {
     ...mapState(['route', 'user']),
-    ...mapGetters(['configuration', 'activeNotifications', 'activeMessages', 'capabilities', 'apps']),
-    $_applicationsList () {
+    ...mapGetters([
+      'configuration',
+      'activeNotifications',
+      'activeMessages',
+      'capabilities',
+      'apps'
+    ]),
+    $_applicationsList() {
       const list = []
 
       // Get extensions manually added into config
@@ -67,7 +73,7 @@ export default {
       return list.flat()
     },
 
-    appNavigationEntries () {
+    appNavigationEntries() {
       if (this.publicPage()) {
         return []
       }
@@ -92,18 +98,18 @@ export default {
       })
     },
 
-    showHeader () {
+    showHeader() {
       return this.$route.meta.hideHeadbar !== true
     },
-    favicon () {
+    favicon() {
       return this.configuration.theme.logo.favicon
     }
   },
   watch: {
-    $route () {
+    $route() {
       this.appNavigationVisible = false
     },
-    capabilities (caps) {
+    capabilities(caps) {
       if (!caps) {
         // capabilities not loaded yet
         return
@@ -120,52 +126,50 @@ export default {
       }
     }
   },
-  destroyed () {
+  destroyed() {
     if (this.$_notificationsInterval) {
       clearInterval(this.$_notificationsInterval)
     }
   },
-  metaInfo () {
+  metaInfo() {
     const metaInfo = {
       title: this.configuration.theme.general.name
     }
     if (this.favicon) {
-      metaInfo.link = [
-        { rel: 'icon', href: this.favicon }
-      ]
+      metaInfo.link = [{ rel: 'icon', href: this.favicon }]
     }
     return metaInfo
   },
-  beforeMount () {
+  beforeMount() {
     this.initAuth()
   },
   methods: {
     ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
 
-    hideAppNavigation () {
+    hideAppNavigation() {
       this.appNavigationVisible = false
     },
 
-    toggleAppNavigationVisibility () {
+    toggleAppNavigationVisibility() {
       this.appNavigationVisible = !this.appNavigationVisible
     },
 
-    $_updateNotifications () {
-      this.fetchNotifications(this.$client).catch((error) => {
+    $_updateNotifications() {
+      this.fetchNotifications(this.$client).catch(error => {
         console.error('Error while loading notifications: ', error)
         clearInterval(this.$_notificationsInterval)
       })
     },
 
-    $_deleteMessage (item) {
+    $_deleteMessage(item) {
       this.deleteMessage(item)
     }
   }
 }
 </script>
 <style>
-  body {
-    height: 100vh;
-    overflow: hidden;
-  }
+body {
+  height: 100vh;
+  overflow: hidden;
+}
 </style>

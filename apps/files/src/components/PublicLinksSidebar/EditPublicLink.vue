@@ -1,42 +1,79 @@
 <template>
   <div class="oc-files-edit-public-link oc-files-file-link-form">
     <form @submit.prevent>
-      <transition enter-active-class="uk-animation-slide-top-small" leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
-                  name="custom-classes-transition">
+      <transition
+        enter-active-class="uk-animation-slide-top-small"
+        leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
+        name="custom-classes-transition"
+      >
         <oc-alert v-if="errors" class="oc-files-file-link-error-alert" variation="danger">
           {{ errors }}
         </oc-alert>
       </transition>
       <div class="uk-margin">
         <label class="oc-label"><span v-translate>Name:</span></label>
-        <input class="uk-input" id="oc-files-file-link-name" v-model="name"/>
+        <input id="oc-files-file-link-name" v-model="name" class="uk-input" />
       </div>
-      <oc-grid childWidth="1-1" gutter="small">
-        <roles-select :roles="$_roles" :selectedRole="$_selectedRole" @roleSelected="$_selectRole" mode="file-link"/>
+      <oc-grid child-width="1-1" gutter="small">
+        <roles-select
+          :roles="$_roles"
+          :selected-role="$_selectedRole"
+          mode="file-link"
+          @roleSelected="$_selectRole"
+        />
       </oc-grid>
       <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
-        <div class="uk-width-1-1 uk-width-2-5@m" v-if="$_expirationDate">
+        <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
           <label class="oc-label" for="oc-files-file-link-expire-date">
             <span v-translate>Expiration date:</span>
             <translate v-if="$_expirationDate.enforced" tag="em">(required)</translate>
           </label>
           <div class="uk-position-relative">
-            <oc-datepicker :class="{ 'uk-form-danger': !$_expirationIsValid }" :date="expireDate" :key="'oc-datepicker-' + expireDate"
-                           :maxDatetime="$_maxExpirationDate" :minDatetime="$_minExpirationDate"
-                           :placeholder="placeholder.expireDate" @input="expireDate = $event" id="oc-files-file-link-expire-date"/>
-            <div :uk-tooltip="$_expirationDateRemoveText" @click="expireDate=null" class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
-                 id="oc-files-file-link-expire-date-delete" v-if="!$_expirationDate.enforced && !!expireDate"/>
+            <oc-datepicker
+              id="oc-files-file-link-expire-date"
+              :key="'oc-datepicker-' + expireDate"
+              :class="{ 'uk-form-danger': !$_expirationIsValid }"
+              :date="expireDate"
+              :max-datetime="$_maxExpirationDate"
+              :min-datetime="$_minExpirationDate"
+              :placeholder="placeholder.expireDate"
+              @input="expireDate = $event"
+            />
+            <div
+              v-if="!$_expirationDate.enforced && !!expireDate"
+              id="oc-files-file-link-expire-date-delete"
+              :uk-tooltip="$_expirationDateRemoveText"
+              class="uk-position-small uk-position-center-right oc-cursor-pointer"
+              uk-close
+              @click="expireDate = null"
+            />
           </div>
         </div>
         <div class="uk-width-1-1 uk-width-3-5@m">
           <label class="oc-label" for="oc-files-file-link-password">
-            <span v-translate>Password:</span><em class="uk-margin-small-left" v-if="$_passwordEnforced">(<span v-translate>required</span>)</em>
+            <span v-translate>Password:</span
+            ><em v-if="$_passwordEnforced" class="uk-margin-small-left"
+              >(<span v-translate>required</span>)</em
+            >
           </label>
           <div class="uk-position-relative">
-            <input :class="{ 'uk-form-danger': !$_passwordIsValid }" :placeholder="hasPassword && password === null? '********' : placeholder.password"
-                   autocomplete="new-password" class="uk-input" id="oc-files-file-link-password" type="password" v-model="password"/>
-            <div :uk-tooltip="$_passwordRemoveText" @click="password=''" class="uk-position-small uk-position-center-right oc-cursor-pointer" uk-close
-                 id="oc-files-file-link-password-delete" v-if="!$_passwordEnforced && hasPassword"/>
+            <input
+              id="oc-files-file-link-password"
+              v-model="password"
+              :class="{ 'uk-form-danger': !$_passwordIsValid }"
+              :placeholder="hasPassword && password === null ? '********' : placeholder.password"
+              autocomplete="new-password"
+              class="uk-input"
+              type="password"
+            />
+            <div
+              v-if="!$_passwordEnforced && hasPassword"
+              id="oc-files-file-link-password-delete"
+              :uk-tooltip="$_passwordRemoveText"
+              class="uk-position-small uk-position-center-right oc-cursor-pointer"
+              uk-close
+              @click="password = ''"
+            />
           </div>
         </div>
       </div>
@@ -57,27 +94,51 @@
             </div>
         </template>
         -->
-      <hr class="divider"/>
+      <hr class="divider" />
       <oc-grid class="uk-margin-bottom" gutter="small">
         <div>
-          <oc-button :disabled="saving" @click="$_closeForm" id="oc-files-file-link-cancel">
+          <oc-button id="oc-files-file-link-cancel" :disabled="saving" @click="$_closeForm">
             <translate>Cancel</translate>
           </oc-button>
           <button v-if="saving" class="uk-button uk-button-default uk-position-relative" disabled>
             <template v-if="$_isNew">
-              <oc-spinner :ariaLabel="$gettext('Creating Public Link')" class="uk-position-small uk-position-center-left" size="xsmall"/>
-              <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Creating Public Link</span>
+              <oc-spinner
+                :aria-label="$gettext('Creating Public Link')"
+                class="uk-position-small uk-position-center-left"
+                size="xsmall"
+              />
+              <span v-translate :aria-hidden="true" class="uk-margin-small-left"
+                >Creating Public Link</span
+              >
             </template>
             <template v-else>
-              <oc-spinner :ariaLabel="$gettext('Saving Public Link')" class="uk-position-small uk-position-center-left" size="xsmall"/>
-              <span :aria-hidden="true" class="uk-margin-small-left" v-translate>Saving Public Link</span>
+              <oc-spinner
+                :aria-label="$gettext('Saving Public Link')"
+                class="uk-position-small uk-position-center-left"
+                size="xsmall"
+              />
+              <span v-translate :aria-hidden="true" class="uk-margin-small-left"
+                >Saving Public Link</span
+              >
             </template>
           </button>
           <template v-else>
-            <oc-button v-if="$_isNew" :disabled="!$_isValid" @click="$_addLink" variation="primary" id="oc-files-file-link-create">
+            <oc-button
+              v-if="$_isNew"
+              id="oc-files-file-link-create"
+              :disabled="!$_isValid"
+              variation="primary"
+              @click="$_addLink"
+            >
               <translate>Create Public Link</translate>
             </oc-button>
-            <oc-button v-else :disabled="!$_isValid || !$_hasChanges" @click="$_updateLink" variation="primary" id="oc-files-file-link-save">
+            <oc-button
+              v-else
+              id="oc-files-file-link-save"
+              :disabled="!$_isValid || !$_hasChanges"
+              variation="primary"
+              @click="$_updateLink"
+            >
               <translate>Save Public Link</translate>
             </oc-button>
           </template>
@@ -101,8 +162,13 @@ export default {
     RolesSelect
   },
   mixins: [mixins],
-  props: ['params'],
-  data () {
+  props: {
+    params: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
     return {
       saving: false,
       password: null,
@@ -117,39 +183,45 @@ export default {
       }
     }
   },
-  title: ($gettext) => {
+  title: $gettext => {
     return $gettext('Links')
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['getToken', 'capabilities']),
 
-    $_isNew () {
+    $_isNew() {
       return !this.params.id
     },
 
-    $_isFolder () {
+    $_isFolder() {
       return this.highlightedFile.type === 'folder'
     },
 
-    $_isFile () {
+    $_isFile() {
       return !this.$_isFolder
     },
 
-    $_hasChanges () {
-      const expireDateBefore = this.params.expireDate ? moment(this.params.expireDate).format('DD-MM-YYYY') : null
+    $_hasChanges() {
+      const expireDateBefore = this.params.expireDate
+        ? moment(this.params.expireDate).format('DD-MM-YYYY')
+        : null
       const expireDateNow = this.expireDate ? moment(this.expireDate).format('DD-MM-YYYY') : null
-      return (expireDateNow !== expireDateBefore) ||
-          (this.name !== this.params.name) ||
-          (this.permissions !== this.params.permissions) ||
-          (this.params.hasPassword ? this.password !== null : (this.password !== null && this.password.trim().length > 0))
+      return (
+        expireDateNow !== expireDateBefore ||
+        this.name !== this.params.name ||
+        this.permissions !== this.params.permissions ||
+        (this.params.hasPassword
+          ? this.password !== null
+          : this.password !== null && this.password.trim().length > 0)
+      )
     },
 
-    $_sendMailEnabled () {
+    $_sendMailEnabled() {
       return Object.keys(this.capabilities.files_sharing.public.send_mail).length > 0
     },
 
-    $_roles () {
+    $_roles() {
       const $gettext = this.$gettext
       return publicLinkRoles({
         $gettext,
@@ -157,7 +229,7 @@ export default {
       })
     },
 
-    $_selectedRole () {
+    $_selectedRole() {
       const permissions = parseInt(this.permissions, 10)
       if (permissions) {
         const matchingRoles = filter(this.$_roles, r => r.permissions === permissions)
@@ -168,35 +240,41 @@ export default {
       return this.$_roles.viewer
     },
 
-    $_expirationDate () {
+    $_expirationDate() {
       const expireDate = this.capabilities.files_sharing.public.expire_date
 
       return {
         enabled: !!expireDate.enabled,
-        days: (expireDate.days) ? expireDate.days : false,
+        days: expireDate.days ? expireDate.days : false,
         enforced: !!expireDate.enforced
       }
     },
 
-    $_minExpirationDate () {
-      return moment().add(1, 'days').endOf('day').toISOString()
+    $_minExpirationDate() {
+      return moment()
+        .add(1, 'days')
+        .endOf('day')
+        .toISOString()
     },
 
-    $_maxExpirationDate () {
+    $_maxExpirationDate() {
       if (!this.$_expirationDate.enforced) {
         return null
       }
 
       const days = parseInt(this.$_expirationDate.days, 10)
 
-      return moment().add(days, 'days').endOf('day').toISOString()
+      return moment()
+        .add(days, 'days')
+        .endOf('day')
+        .toISOString()
     },
 
-    $_expirationIsValid () {
+    $_expirationIsValid() {
       return !(this.$_expirationDate.enforced && this.expireDate === '')
     },
 
-    $_passwordIsValid () {
+    $_passwordIsValid() {
       if (this.hasPassword) {
         return true
       }
@@ -204,11 +282,11 @@ export default {
       return !(this.$_passwordEnforced && (this.password === '' || this.password === null))
     },
 
-    $_isValid () {
+    $_isValid() {
       return this.$_expirationIsValid && this.$_passwordIsValid
     },
 
-    $_passwordEnforced () {
+    $_passwordEnforced() {
       const permissions = parseInt(this.permissions, 10)
       const password = this.capabilities.files_sharing.public.password.enforced_for
 
@@ -225,21 +303,21 @@ export default {
       return false
     },
 
-    $_expirationDateRemoveText () {
+    $_expirationDateRemoveText() {
       return this.$gettext('Remove expiration date')
     },
 
-    $_passwordRemoveText () {
+    $_passwordRemoveText() {
       return this.$gettext('Remove password')
     }
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink']),
-    $_selectRole (role) {
+    $_selectRole(role) {
       this.permissions = role.permissions
     },
 
-    $_addLink () {
+    $_addLink() {
       this.saving = true
 
       const params = {
@@ -257,17 +335,19 @@ export default {
         client: this.$client,
         $gettext: this.$gettext,
         params
-      }).then(e => {
-        this.saving = false
-        this.errors = false
-        this.$_closeForm()
-      }).catch(e => {
-        this.saving = false
-        this.errors = e
       })
+        .then(e => {
+          this.saving = false
+          this.errors = false
+          this.$_closeForm()
+        })
+        .catch(e => {
+          this.saving = false
+          this.errors = e
+        })
     },
 
-    $_updateLink () {
+    $_updateLink() {
       this.saving = true
 
       const params = {
@@ -285,17 +365,19 @@ export default {
         client: this.$client,
         $gettext: this.$gettext,
         params
-      }).then(() => {
-        this.saving = false
-        this.errors = false
-        this.$_closeForm()
-      }).catch(e => {
-        this.saving = false
-        this.errors = e
       })
+        .then(() => {
+          this.saving = false
+          this.errors = false
+          this.$_closeForm()
+        })
+        .catch(e => {
+          this.saving = false
+          this.errors = e
+        })
     },
 
-    $_closeForm () {
+    $_closeForm() {
       this.$emit('close')
     }
   }

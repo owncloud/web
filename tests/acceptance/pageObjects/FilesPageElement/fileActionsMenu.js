@@ -19,7 +19,7 @@ module.exports = {
      * @param {string} action
      * @returns {string}
      */
-    getActionSelector: function (action) {
+    getActionSelector: function(action) {
       const actionsDropdownSelector = this.elements.itemActionsDropdown.selector
       const actionSelector = this.elements[action + 'ButtonInFileRow'].selector
 
@@ -33,10 +33,9 @@ module.exports = {
      * @throws Error
      * @returns {*}
      */
-    performFileAction: function (action) {
+    performFileAction: function(action) {
       const fileActionBtnSelectorXpath = this.getActionSelector(action)
-      return this
-        .useXpath()
+      return this.useXpath()
         .waitForElementVisible(fileActionBtnSelectorXpath)
         .click(fileActionBtnSelectorXpath)
         .useCss()
@@ -47,14 +46,13 @@ module.exports = {
      * @param {string} action
      * @returns {Promise<boolean>}
      */
-    getActionDisabledAttr: async function (action) {
+    getActionDisabledAttr: async function(action) {
       let disabledState
       const btnSelector = this.getActionSelector(action)
-      await this
-        .api.element('xpath', btnSelector, result => {
-          // action is disabled when not visible in dropdown menu
-          disabledState = result.status === -1
-        })
+      await this.api.element('xpath', btnSelector, result => {
+        // action is disabled when not visible in dropdown menu
+        disabledState = result.status === -1
+      })
 
       return disabledState
     },
@@ -62,7 +60,7 @@ module.exports = {
      * deletes resource using fileActions 'delete' button
      * @returns {Promise<*>}
      */
-    delete: async function () {
+    delete: async function() {
       this.performFileAction(this.FileAction.delete)
       await this.api.page.FilesPageElement.filesList().confirmDeletion()
       return this
@@ -72,7 +70,7 @@ module.exports = {
      * @param {boolean} expectToSucceed
      * @return {*}
      */
-    rename: async function (toName, expectToSucceed = true) {
+    rename: async function(toName, expectToSucceed = true) {
       await this.initAjaxCounters()
         .useXpath()
         .performFileAction(this.FileAction.rename)
@@ -95,11 +93,10 @@ module.exports = {
      * assumes filesAction menu for the resource to be opened
      * @return {*}
      */
-    openCollaboratorsDialog: function () {
+    openCollaboratorsDialog: function() {
       const api = this.api.page.FilesPageElement
       api.appSideBar().closeSidebar(500)
-      this
-        .useXpath()
+      this.useXpath()
         .performFileAction(this.FileAction.share)
         .waitForElementVisible('@sharingSideBar')
         .useCss()
@@ -110,26 +107,24 @@ module.exports = {
      *
      * @returns {Promise<boolean>}
      */
-    isSharingBtnPresent: async function () {
+    isSharingBtnPresent: async function() {
       const shareButtonXpath = this.elements.shareButtonInFileRow.selector
       let isPresent = true
-      await this
-        .api.page.FilesPageElement.appSideBar().closeSidebar(100)
-      await this
-        .api.elements(
-          this.elements.shareButtonInFileRow.locateStrategy,
-          shareButtonXpath,
-          (result) => {
-            isPresent = result.value.length > 0
-          })
+      await this.api.page.FilesPageElement.appSideBar().closeSidebar(100)
+      await this.api.elements(
+        this.elements.shareButtonInFileRow.locateStrategy,
+        shareButtonXpath,
+        result => {
+          isPresent = result.value.length > 0
+        }
+      )
       return isPresent
     },
     /**
      * @return {Promise<module.exports.commands>}
      */
-    restore: async function () {
-      await this
-        .initAjaxCounters()
+    restore: async function() {
+      await this.initAjaxCounters()
         .useXpath()
         .performFileAction(this.FileAction.restore)
         .waitForOutstandingAjaxCalls()
@@ -139,9 +134,8 @@ module.exports = {
     /**
      * @return {Promise<module.exports.commands>}
      */
-    download: async function () {
-      await this
-        .initAjaxCounters()
+    download: async function() {
+      await this.initAjaxCounters()
         .performFileAction(this.FileAction.download)
         .waitForOutstandingAjaxCalls()
       return this
@@ -149,7 +143,7 @@ module.exports = {
     /**
      * @return {Promise<module.exports.commands>}
      */
-    deleteResourceImmediately: async function () {
+    deleteResourceImmediately: async function() {
       this.performFileAction(this.FileAction.deleteImmediately)
       await this.api.page.FilesPageElement.filesList().confirmDeletion()
 

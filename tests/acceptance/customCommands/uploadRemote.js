@@ -11,7 +11,7 @@ class UploadRemote extends events.EventEmitter {
    * @param {string} filePath Local path to the file used for uploading
    * @param {function (string): void} [callback] - called when file gets uploaded with path to uploaded file
    */
-  command (filePath, callback) {
+  command(filePath, callback) {
     const buffers = []
     const zip = archiver('zip')
     /*
@@ -21,8 +21,12 @@ class UploadRemote extends events.EventEmitter {
     was uploaded) which we can retrieve from the callback
      */
     zip
-      .on('data', data => { buffers.push(data) })
-      .on('error', err => { throw err })
+      .on('data', data => {
+        buffers.push(data)
+      })
+      .on('error', err => {
+        throw err
+      })
       .on('warning', console.log)
       .on('finish', () => {
         const file = Buffer.concat(buffers).toString('base64')

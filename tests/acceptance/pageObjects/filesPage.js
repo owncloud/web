@@ -3,7 +3,7 @@ const navigationHelper = require('../helpers/navigationHelper')
 const { join, normalize } = require('../helpers/path')
 
 module.exports = {
-  url: function () {
+  url: function() {
     return this.api.launchUrl + ''
   },
   commands: {
@@ -12,7 +12,7 @@ module.exports = {
      * @param {string} folder - if given navigate to the folder without clicking the links
      * @returns {*}
      */
-    navigateAndWaitTillLoaded: async function (folder = '') {
+    navigateAndWaitTillLoaded: async function(folder = '') {
       await navigationHelper.navigateAndWaitTillLoaded(
         join(this.api.launchUrl, '#/files/list', folder),
         this.page.FilesPageElement.filesList().elements.filesListProgressBar
@@ -24,8 +24,9 @@ module.exports = {
      *
      * @param {string} folder
      */
-    navigateToFolder: function (folder) {
-      return this.page.FilesPageElement.filesList().navigateToFolder(folder)
+    navigateToFolder: function(folder) {
+      return this.page.FilesPageElement.filesList()
+        .navigateToFolder(folder)
         .waitForElementVisible('@breadcrumb')
         .assert.containsText('@breadcrumb', folder)
     },
@@ -33,7 +34,7 @@ module.exports = {
      *
      * @param {string} resource
      */
-    navigateToBreadcrumb: function (resource) {
+    navigateToBreadcrumb: function(resource) {
       const breadcrumbElement = this.elements.resourceBreadcrumb
       const resourceXpath = util.format(breadcrumbElement.selector, resource)
       return this.useStrategy(breadcrumbElement)
@@ -47,9 +48,8 @@ module.exports = {
      * @param {string} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
-    createFolder: async function (name, expectToSucceed = true) {
-      await this
-        .waitForElementVisible('@newFileMenuButton', 500000)
+    createFolder: async function(name, expectToSucceed = true) {
+      await this.waitForElementVisible('@newFileMenuButton', 500000)
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFolderButton')
         .click('@newFolderButton')
@@ -58,12 +58,11 @@ module.exports = {
         await this.clearValueWithEvent('@newFolderInput')
         await this.setValue('@newFolderInput', name)
       }
-      await this
-        .click('@newFolderOkButton')
-        .waitForElementNotPresent('@createFolderLoadingIndicator')
+      await this.click('@newFolderOkButton').waitForElementNotPresent(
+        '@createFolderLoadingIndicator'
+      )
       if (expectToSucceed) {
-        await this.waitForElementNotVisible('@newFolderDialog')
-          .waitForAnimationToFinish()
+        await this.waitForElementNotVisible('@newFolderDialog').waitForAnimationToFinish()
       }
       return this
     },
@@ -73,9 +72,8 @@ module.exports = {
      * @param {string} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
-    createFile: function (name, expectToSucceed = true) {
-      this
-        .waitForElementVisible('@newFileMenuButton')
+    createFile: function(name, expectToSucceed = true) {
+      this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFileButton')
         .click('@newFileButton')
@@ -84,18 +82,14 @@ module.exports = {
         this.clearValueWithEvent('@newFileInput')
         this.setValue('@newFileInput', name)
       }
-      this
-        .click('@newFileOkButton')
-        .waitForElementNotPresent('@createFileLoadingIndicator')
+      this.click('@newFileOkButton').waitForElementNotPresent('@createFileLoadingIndicator')
       if (expectToSucceed) {
-        this.waitForElementNotVisible('@newFileDialog')
-          .waitForAnimationToFinish()
+        this.waitForElementNotVisible('@newFileDialog').waitForAnimationToFinish()
       }
       return this
     },
-    selectFileForUpload: function (filePath) {
-      return this
-        .waitForElementVisible('@newFileMenuButton')
+    selectFileForUpload: function(filePath) {
+      return this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@fileUploadButton')
         .setValue('@fileUploadInput', filePath)
@@ -104,9 +98,8 @@ module.exports = {
      *
      * @param {string} filePath
      */
-    uploadFile: function (filePath) {
-      return this
-        .selectFileForUpload(filePath)
+    uploadFile: function(filePath) {
+      return this.selectFileForUpload(filePath)
         .waitForElementVisible(
           '@fileUploadProgress',
           this.api.globals.waitForConditionTimeout,
@@ -132,7 +125,7 @@ module.exports = {
      *
      * @param {string} [folderName] - should be passed in as format "/upload<uniqueId>file" or "upload<uniqueId>file"
      */
-    uploadSessionFolder: function (folderName = '') {
+    uploadSessionFolder: function(folderName = '') {
       /*
       files uploaded through selenium endpoints are saved in
       /tmp/<sessionId>/upload<uniqueId>file/<filename>.
@@ -152,7 +145,7 @@ module.exports = {
      *
      * @param {string} folderName
      */
-    uploadFolder: function (folderName) {
+    uploadFolder: function(folderName) {
       return this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@fileUploadButton')
@@ -171,17 +164,18 @@ module.exports = {
      *
      * @param {Function} callback callback with result
      */
-    canCreateFiles: function (callback) {
-      return this
-        .waitForElementVisible('@newFileMenuButtonAnyState')
-        .getAttribute('@newFileMenuButtonAnyState', 'disabled', (result) => {
+    canCreateFiles: function(callback) {
+      return this.waitForElementVisible('@newFileMenuButtonAnyState').getAttribute(
+        '@newFileMenuButtonAnyState',
+        'disabled',
+        result => {
           const isDisabled = result.value === 'true'
           callback(isDisabled)
-        })
+        }
+      )
     },
-    deleteAllCheckedFiles: function () {
-      return this
-        .waitForElementVisible('@deleteSelectedButton')
+    deleteAllCheckedFiles: function() {
+      return this.waitForElementVisible('@deleteSelectedButton')
         .click('@deleteSelectedButton')
         .waitForElementVisible('@deleteFileConfirmationBtn')
         .waitForAnimationToFinish()
@@ -194,26 +188,23 @@ module.exports = {
      * @param tab
      * @returns {string}
      */
-    getXpathOfLinkToTabInSidePanel: function (tab) {
-      return this.elements.sideBar.selector +
-        util.format(this.elements.tabOfSideBar.selector, tab)
+    getXpathOfLinkToTabInSidePanel: function(tab) {
+      return this.elements.sideBar.selector + util.format(this.elements.tabOfSideBar.selector, tab)
     },
-    selectTabInSidePanel: function (tab) {
-      return this
-        .useXpath()
+    selectTabInSidePanel: function(tab) {
+      return this.useXpath()
         .waitForElementVisible('@sideBar')
         .click(this.getXpathOfLinkToTabInSidePanel(tab))
         .useCss()
     },
-    isSidebarVisible: function (callback) {
-      return this
-        .useXpath()
-        .isVisible('@sideBar', (result) => {
+    isSidebarVisible: function(callback) {
+      return this.useXpath()
+        .isVisible('@sideBar', result => {
           callback(result.value)
         })
         .useCss()
     },
-    isPanelVisible: function (panelName, callback) {
+    isPanelVisible: function(panelName, callback) {
       let selector = ''
       if (panelName === 'collaborators') {
         selector = this.elements.collaboratorsPanel
@@ -224,46 +215,49 @@ module.exports = {
       } else {
         throw new Error('invalid panel')
       }
-      return this
-        .isVisible(selector, (result) => {
-          callback(result.value)
-        })
+      return this.isVisible(selector, result => {
+        callback(result.value)
+      })
     },
-    getVisibleTabs: async function () {
+    getVisibleTabs: async function() {
       const tabs = []
       let elements
-      await this.api.elements('@tabsInSideBar', function (result) {
+      await this.api.elements('@tabsInSideBar', function(result) {
         elements = result.value
       })
       for (const { ELEMENT } of elements) {
-        await this.api.elementIdText(ELEMENT, function (result) {
+        await this.api.elementIdText(ELEMENT, function(result) {
           tabs.push(result.value.toLowerCase())
         })
       }
       return tabs
     },
-    copyPermalinkFromFilesAppBar: function () {
-      return this
-        .waitForElementVisible('@permalinkCopyButton')
-        .click('@permalinkCopyButton')
+    copyPermalinkFromFilesAppBar: function() {
+      return this.waitForElementVisible('@permalinkCopyButton').click('@permalinkCopyButton')
     },
-    checkSidebarItem: function (resourceName) {
-      return this.getAttribute('@sidebarItemName', 'innerText', function (itemName) {
-        this.assert.strictEqual(itemName.value, resourceName, `In sidebar is different item - ${itemName.value}`)
+    checkSidebarItem: function(resourceName) {
+      return this.getAttribute('@sidebarItemName', 'innerText', function(itemName) {
+        this.assert.strictEqual(
+          itemName.value,
+          resourceName,
+          `In sidebar is different item - ${itemName.value}`
+        )
       })
     },
-    confirmFileOverwrite: function () {
-      return this.waitForElementVisible('@fileOverwriteConfirm')
-        // clicking file overwrite dialog overlay to remove file upload
-        // popup, as we upload the file directly using `setValue`. The overwrite
-        // dialog is too fast and does not give time to close the dropdown beforehand
-        .clickElementAt(this.elements.fileOverwriteDialog.selector, 0, 0)
-        .waitForElementNotVisible(this.elements.newFolderButton.selector)
-        .click(this.elements.fileOverwriteConfirm.selector)
-        .waitForElementNotVisible(this.elements.fileOverwriteConfirm.selector)
-        .waitForAjaxCallsToStartAndFinish()
+    confirmFileOverwrite: function() {
+      return (
+        this.waitForElementVisible('@fileOverwriteConfirm')
+          // clicking file overwrite dialog overlay to remove file upload
+          // popup, as we upload the file directly using `setValue`. The overwrite
+          // dialog is too fast and does not give time to close the dropdown beforehand
+          .clickElementAt(this.elements.fileOverwriteDialog.selector, 0, 0)
+          .waitForElementNotVisible(this.elements.newFolderButton.selector)
+          .click(this.elements.fileOverwriteConfirm.selector)
+          .waitForElementNotVisible(this.elements.fileOverwriteConfirm.selector)
+          .waitForAjaxCallsToStartAndFinish()
+      )
     },
-    triesToCreateExistingFile: function (fileName) {
+    triesToCreateExistingFile: function(fileName) {
       return this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFileButton')
@@ -271,7 +265,7 @@ module.exports = {
         .waitForElementVisible('@newFileInput')
         .setValue('@newFileInput', fileName)
     },
-    checkForButtonDisabled: function () {
+    checkForButtonDisabled: function() {
       return this.waitForElementVisible('@createFileOkButtonDisabled')
     }
   },
@@ -370,14 +364,16 @@ module.exports = {
      */
     tabOfSideBar: {
       // the translate bit is to make it case-insensitive
-      selector: '//a[contains(translate(.,\'ABCDEFGHJIKLMNOPQRSTUVWXYZ\',\'abcdefghjiklmnopqrstuvwxyz\'),\'%s\')]',
+      selector:
+        "//a[contains(translate(.,'ABCDEFGHJIKLMNOPQRSTUVWXYZ','abcdefghjiklmnopqrstuvwxyz'),'%s')]",
       locateStrategy: 'xpath'
     },
     sidebarItemName: {
       selector: '#files-sidebar-item-name'
     },
     createFileOkButtonDisabled: {
-      selector: "//div[@id='new-file-dialog']//button[@disabled='disabled']/span[contains(text(), 'Ok')]",
+      selector:
+        "//div[@id='new-file-dialog']//button[@disabled='disabled']/span[contains(text(), 'Ok')]",
       locateStrategy: 'xpath'
     },
     tabsInSideBar: {

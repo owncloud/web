@@ -1,45 +1,81 @@
 <template>
-  <div class="uk-position-relative" id="oc-files-file-link">
-    <div v-show="visiblePanel === PANEL_SHOW" :aria-hidden="visiblePanel !== PANEL_SHOW" :key="PANEL_SHOW">
-      <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')"/>
+  <div id="oc-files-file-link" class="uk-position-relative">
+    <div
+      v-show="visiblePanel === PANEL_SHOW"
+      :key="PANEL_SHOW"
+      :aria-hidden="visiblePanel !== PANEL_SHOW"
+    >
+      <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
         <section v-if="$_privateLinkOfHighlightedFile">
           <div class="uk-text-bold">
             <span v-translate>Private Link</span>
-            <oc-button :aria-label="$_privateLinkCopyLabel" variation="raw" class="uk-margin-small-left">
-              <oc-icon v-if="!linksCopied[$_privateLinkOfHighlightedFile]" name="copy_to_clipboard" size="small" id="files-sidebar-private-link-label"
-                       v-clipboard:copy="$_privateLinkOfHighlightedFile" v-clipboard:success="$_clipboardSuccessHandler"/>
-              <oc-icon v-else name="ready" size="small" id="files-sidebar-private-link-icon-copied" class="_clipboard-success-animation"/>
+            <oc-button
+              :aria-label="$_privateLinkCopyLabel"
+              variation="raw"
+              class="uk-margin-small-left"
+            >
+              <oc-icon
+                v-if="!linksCopied[$_privateLinkOfHighlightedFile]"
+                id="files-sidebar-private-link-label"
+                v-clipboard:copy="$_privateLinkOfHighlightedFile"
+                v-clipboard:success="$_clipboardSuccessHandler"
+                name="copy_to_clipboard"
+                size="small"
+              />
+              <oc-icon
+                v-else
+                id="files-sidebar-private-link-icon-copied"
+                name="ready"
+                size="small"
+                class="_clipboard-success-animation"
+              />
             </oc-button>
           </div>
           <div class="uk-text-meta">
             <i><translate>Only invited collaborators can use this link.</translate></i>
           </div>
-          <hr/>
+          <hr />
         </section>
         <section>
           <div class="uk-text-bold">
             <translate>Public Links</translate>
           </div>
           <div class="uk-text-meta">
-            <i><translate>Any external collaborator with the respective link can access this resource. No sign-in required. Assign a password to avoid unintended document exposure.</translate></i>
+            <i
+              ><translate
+                >Any external collaborator with the respective link can access this resource. No
+                sign-in required. Assign a password to avoid unintended document
+                exposure.</translate
+              ></i
+            >
           </div>
           <div class="uk-margin-small-top uk-margin-small-bottom">
-            <oc-button @click="$_addPublicLink" icon="add" variation="primary" id="files-file-link-add">{{ $_addButtonLabel }}</oc-button>
+            <oc-button
+              id="files-file-link-add"
+              icon="add"
+              variation="primary"
+              @click="$_addPublicLink"
+              >{{ $_addButtonLabel }}</oc-button
+            >
           </div>
-          <transition-group class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove"
-                            :enter-active-class="$_transitionGroupEnter"
-                            :leave-active-class="$_transitionGroupLeave"
-                            name="custom-classes-transition"
-                            tag="ul">
+          <transition-group
+            class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove"
+            :enter-active-class="$_transitionGroupEnter"
+            :leave-active-class="$_transitionGroupLeave"
+            name="custom-classes-transition"
+            tag="ul"
+          >
             <li v-for="link in links" :key="link.key">
-              <public-link-list-item :link="link"
-                                     :modifiable="!link.indirect"
-                                     :indirect="link.indirect"
-                                     :linksCopied="linksCopied"
-                                     @onCopy="$_clipboardSuccessHandler"
-                                     @onDelete="$_removePublicLink"
-                                     @onEdit="$_editPublicLink" />
+              <public-link-list-item
+                :link="link"
+                :modifiable="!link.indirect"
+                :indirect="link.indirect"
+                :links-copied="linksCopied"
+                @onCopy="$_clipboardSuccessHandler"
+                @onDelete="$_removePublicLink"
+                @onEdit="$_editPublicLink"
+              />
             </li>
           </transition-group>
         </section>
@@ -49,11 +85,13 @@
       </template>
     </div>
     <div v-if="visiblePanel === PANEL_EDIT" :key="PANEL_EDIT">
-      <transition enter-active-class="uk-animation-slide-right uk-animation-fast"
-                  leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
-                  name="custom-classes-transition">
+      <transition
+        enter-active-class="uk-animation-slide-right uk-animation-fast"
+        leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
+        name="custom-classes-transition"
+      >
         <div class="uk-position-cover oc-default-background">
-          <edit-public-link :params="params" @close="$_showList()"/>
+          <edit-public-link :params="params" @close="$_showList()" />
         </div>
       </transition>
     </div>
@@ -80,10 +118,10 @@ export default {
     PublicLinkListItem
   },
   mixins: [mixins],
-  title: ($gettext) => {
+  title: $gettext => {
     return $gettext('Links')
   },
-  data () {
+  data() {
     return {
       visiblePanel: 'showLinks',
       linksCopied: {},
@@ -111,22 +149,22 @@ export default {
       'sharesTreeLoading'
     ]),
     ...mapGetters(['getToken', 'capabilities']),
-    ...mapState('Files', [
-      'sharesTree'
-    ]),
+    ...mapState('Files', ['sharesTree']),
 
-    $_transitionGroupEnter () {
+    $_transitionGroupEnter() {
       return this.transitionGroupActive ? 'uk-animation-slide-left-medium' : ''
     },
-    $_transitionGroupLeave () {
-      return this.transitionGroupActive ? 'uk-animation-slide-right-medium uk-animation-reverse' : ''
+    $_transitionGroupLeave() {
+      return this.transitionGroupActive
+        ? 'uk-animation-slide-right-medium uk-animation-reverse'
+        : ''
     },
 
-    linksLoading () {
+    linksLoading() {
       return this.currentFileOutgoingSharesLoading || this.sharesTreeLoading
     },
 
-    links () {
+    links() {
       return [...this.currentFileOutgoingLinks, ...this.indirectLinks]
         .sort(this.linksComparator)
         .map(share => {
@@ -135,7 +173,7 @@ export default {
         })
     },
 
-    indirectLinks () {
+    indirectLinks() {
       const allShares = []
       const parentPaths = getParentPaths(this.highlightedFile.path, false)
       if (parentPaths.length === 0) {
@@ -145,10 +183,10 @@ export default {
       // remove root entry
       parentPaths.pop()
 
-      parentPaths.forEach((parentPath) => {
+      parentPaths.forEach(parentPath => {
         const shares = this.sharesTree[parentPath]
         if (shares) {
-          shares.forEach((share) => {
+          shares.forEach(share => {
             if (share.outgoing && share.shareType === shareTypes.link) {
               share.key = 'indirect-link-' + share.id
               allShares.push(share)
@@ -160,26 +198,26 @@ export default {
       return allShares.sort(this.linksComparator)
     },
 
-    $_noPublicLinks () {
+    $_noPublicLinks() {
       return this.links.length === 0
     },
 
-    $_expirationDate () {
+    $_expirationDate() {
       const expireDate = this.capabilities.files_sharing.public.expire_date
 
       return {
         enabled: !!expireDate.enabled,
-        days: (expireDate.days) ? expireDate.days : false,
+        days: expireDate.days ? expireDate.days : false,
         enforced: expireDate.enforced === '1'
       }
     },
-    $_addButtonLabel () {
+    $_addButtonLabel() {
       return this.$gettext('Add public link')
     },
-    $_privateLinkCopyLabel () {
+    $_privateLinkCopyLabel() {
       return this.$gettext('Copy private link url')
     },
-    $_privateLinkOfHighlightedFile () {
+    $_privateLinkOfHighlightedFile() {
       if (!this.highlightedFile) {
         return false
       }
@@ -191,64 +229,70 @@ export default {
     }
   },
   watch: {
-    highlightedFile (newItem, oldItem) {
+    highlightedFile(newItem, oldItem) {
       if (oldItem !== newItem) {
         this.transitionGroupActive = false
         this.$_reloadLinks()
       }
     }
   },
-  mounted () {
+  mounted() {
     this.transitionGroupActive = false
     this.$_reloadLinks()
   },
   methods: {
-    ...mapActions('Files', [
-      'loadSharesTree',
-      'loadCurrentFileOutgoingShares',
-      'removeLink'
-    ]),
-    $_resetData () {
+    ...mapActions('Files', ['loadSharesTree', 'loadCurrentFileOutgoingShares', 'removeLink']),
+    $_resetData() {
       this.params = {
         id: null,
         name: this.capabilities.files_sharing.public.defaultPublicLinkShareName,
         permissions: 1,
         hasPassword: false,
-        expireDate: (this.$_expirationDate.days) ? moment().add(this.$_expirationDate.days, 'days').endOf('day').toISOString() : null
+        expireDate: this.$_expirationDate.days
+          ? moment()
+              .add(this.$_expirationDate.days, 'days')
+              .endOf('day')
+              .toISOString()
+          : null
       }
     },
-    $_removePublicLink (link) {
+    $_removePublicLink(link) {
       this.transitionGroupActive = true
       this.removeLink({
         client: this.$client,
         share: link
       })
     },
-    $_editPublicLink (link) {
+    $_editPublicLink(link) {
       this.params = {
         id: link.id,
         name: link.name,
         permissions: parseInt(link.permissions),
         hasPassword: link.password,
-        expireDate: (link.expiration !== null) ? moment(link.expiration).endOf('day').toISOString() : null
+        expireDate:
+          link.expiration !== null
+            ? moment(link.expiration)
+                .endOf('day')
+                .toISOString()
+            : null
       }
       this.visiblePanel = PANEL_EDIT
     },
-    $_addPublicLink () {
+    $_addPublicLink() {
       this.transitionGroupActive = true
       this.$_resetData()
       this.visiblePanel = PANEL_EDIT
     },
-    $_clipboardSuccessHandler (event) {
+    $_clipboardSuccessHandler(event) {
       this.$set(this.linksCopied, event.text, true)
       setTimeout(() => {
         this.linksCopied[event.text] = false
       }, 550)
     },
-    $_showList () {
+    $_showList() {
       this.visiblePanel = PANEL_SHOW
     },
-    $_reloadLinks () {
+    $_reloadLinks() {
       this.$_showList()
       this.loadCurrentFileOutgoingShares({
         client: this.$client,
@@ -261,7 +305,7 @@ export default {
         $gettext: this.$gettext
       })
     },
-    linksComparator (l1, l2) {
+    linksComparator(l1, l2) {
       // sorting priority 1: display name (lower case, ascending), 2: creation time (descending)
       const name1 = l1.name.toLowerCase().trim()
       const name2 = l2.name.toLowerCase().trim()
@@ -282,40 +326,40 @@ export default {
 }
 </script>
 <style scoped>
-  /* FIXME: Move to design system */
-  ._clipboard-success-animation {
-    animation-name: _clipboard-success-animation;
-    animation-duration: .5s;
-    animation-timing-function: ease-out;
-    animation-fill-mode: both;
-  }
+/* FIXME: Move to design system */
+._clipboard-success-animation {
+  animation-name: _clipboard-success-animation;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
 
-  @keyframes _clipboard-success-animation {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.9;
-    }
-    100% {
-      opacity: 0;
-    }
+@keyframes _clipboard-success-animation {
+  0% {
+    opacity: 1;
   }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 </style>
 <style>
-  /* FIXME: Move to design system (copied from FileSharingSidebar.vue) */
-  .oc-app-side-bar .oc-label {
-    display: block;
-    margin-bottom: 5px;
-  }
+/* FIXME: Move to design system (copied from FileSharingSidebar.vue) */
+.oc-app-side-bar .oc-label {
+  display: block;
+  margin-bottom: 5px;
+}
 
-  .oc-app-side-bar .files-file-link-role-button {
-    padding: 0 10px;
-    text-align: left;
-  }
+.oc-app-side-bar .files-file-link-role-button {
+  padding: 0 10px;
+  text-align: left;
+}
 
-  /** needed to cover the container below when transitioning */
-  .oc-app-side-bar .oc-default-background {
-    background-color: white;
-  }
+/** needed to cover the container below when transitioning */
+.oc-app-side-bar .oc-default-background {
+  background-color: white;
+}
 </style>

@@ -4,23 +4,28 @@
       <oc-button
         v-if="hasAppNavigation"
         key="extension-navigation-button"
+        ref="menubutton"
         icon="menu"
         variation="primary"
         class="oc-topbar-menu-burger uk-height-1-1"
         :aria-label="$gettext('Menu')"
         @click="toggleAppNavigationVisibility"
-        ref="menubutton"
       >
-        <span class="oc-topbar-menu-burger-label" v-translate>Menu</span>
+        <span v-translate class="oc-topbar-menu-burger-label">Menu</span>
       </oc-button>
-      <span v-else key="extension-title" class="topbar-current-extension-title uk-margin-left" v-text="currentExtensionName" />
+      <span
+        v-else
+        key="extension-title"
+        class="topbar-current-extension-title uk-margin-left"
+        v-text="currentExtensionName"
+      />
     </oc-navbar-item>
     <oc-navbar-item position="center">
       <router-link to="/" class="oc-topbar-icon">ownCloud X</router-link>
     </oc-navbar-item>
-    <oc-navbar-item position="right" v-if="!isPublicPage">
+    <oc-navbar-item v-if="!isPublicPage" position="right">
       <notifications v-if="activeNotifications.length" />
-      <applications-menu :applicationsList="applicationsList"/>
+      <applications-menu :applications-list="applicationsList" />
       <user-menu :user-id="userId" :user-display-name="userDisplayName" />
     </oc-navbar-item>
   </oc-navbar>
@@ -39,9 +44,7 @@ export default {
     ApplicationsMenu,
     UserMenu
   },
-  mixins: [
-    pluginHelper
-  ],
+  mixins: [pluginHelper],
   props: {
     userId: {
       type: String,
@@ -72,16 +75,16 @@ export default {
   computed: {
     ...mapGetters(['apps']),
 
-    isPublicPage () {
+    isPublicPage() {
       return !this.userId
     },
 
-    currentExtensionName () {
+    currentExtensionName() {
       return this.$gettext(this.apps[this.currentExtension].name)
     }
   },
   methods: {
-    toggleAppNavigationVisibility () {
+    toggleAppNavigationVisibility() {
       this.$emit('toggleAppNavigationVisibility')
     }
   }
@@ -91,6 +94,6 @@ export default {
 TODO: Move to ODS and enable theming
 <style scoped>
 .topbar-current-extension-title {
-  color: white
+  color: white;
 }
 </style>
