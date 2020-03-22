@@ -1,6 +1,14 @@
 <template>
   <div class="files-collaborators-collaborator-edit-dialog">
-    <div v-if="user.id !== collaborator.owner.name" class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"><oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.owner.displayName }}</div>
+    <transition enter-active-class="uk-animation-slide-top-small" leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
+                name="custom-classes-transition">
+      <oc-alert v-if="errors" class="oc-files-collaborators-collaborator-error-alert" variation="danger">
+        {{ errors }}
+      </oc-alert>
+    </transition>
+    <div v-if="user.id !== collaborator.owner.name" class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom">
+      <oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.owner.displayName }}
+    </div>
     <collaborator class="uk-width-expand" :collaborator="collaborator" :first-column="false" />
     <collaborators-edit-options
       :existingRole="$_originalRole"
@@ -60,7 +68,8 @@ export default {
       selectedRole: null,
       additionalPermissions: null,
       saving: false,
-      expirationDate: null
+      expirationDate: null,
+      errors: false
     }
   },
   computed: {
@@ -147,7 +156,8 @@ export default {
         expirationDate: this.expirationDate
       })
         .then(() => this.$_ocCollaborators_cancelChanges())
-        .catch((errors) => {
+        .catch(errors => {
+          this.errors = errors
           this.saving = false
         })
     },
@@ -156,6 +166,7 @@ export default {
       this.selectedRole = null
       this.additionalPermissions = null
       this.expirationDate = this.originalExpirationDate
+      this.errors = false
       this.saving = false
       this.close()
     },
