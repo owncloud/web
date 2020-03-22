@@ -147,7 +147,7 @@ export default {
         expirationDate: this.expirationDate
       })
         .then(() => this.$_ocCollaborators_cancelChanges())
-        .catch(() => {
+        .catch((errors) => {
           this.saving = false
         })
     },
