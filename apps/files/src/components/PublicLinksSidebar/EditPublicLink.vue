@@ -3,10 +3,9 @@
     <form @submit.prevent>
       <transition enter-active-class="uk-animation-slide-top-small" leave-active-class="uk-animation-slide-top-small uk-animation-reverse"
                   name="custom-classes-transition">
-        <div class="uk-alert-danger" uk-alert v-if="errors">
-          <a class="uk-alert-close" uk-close/>
-          <p v-text="errors"/>
-        </div>
+        <oc-alert v-if="errors" class="oc-files-file-link-error-alert" variation="danger">
+          {{ errors }}
+        </oc-alert>
       </transition>
       <div class="uk-margin">
         <label class="oc-label"><span v-translate>Name:</span></label>
