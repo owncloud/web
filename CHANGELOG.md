@@ -1,3 +1,26 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.6.0...master
+
+Summary
+-------
+
+* Bugfix - Files list status indicators are now appearing without any delay: [#2973](https://github.com/owncloud/phoenix/issues/2973)
+
+Details
+-------
+
+* Bugfix - Files list status indicators are now appearing without any delay: [#2973](https://github.com/owncloud/phoenix/issues/2973)
+
+   We've stopped loading file list status indicators asynchronously to prevent them from
+   appearing delayed. They appear now at the same time as the file list.
+
+   https://github.com/owncloud/phoenix/issues/2973
+   https://github.com/owncloud/phoenix/pull/3213
+
 Changelog for ownCloud Phoenix [0.6.0] (2020-03-16)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.6.0 relevant to
