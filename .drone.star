@@ -14,66 +14,66 @@ config = {
 	'yarnlint': True,
 
 	'acceptance': {
-		'webUI': {
-			'suites': {
-				'webUICreateFilesFolders': 'createFilesFolders',
-				'webUIDeleteFilesFolders': 'deleteFilesFolders',
-				'webUIFavorites': 'Favorites',
-				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingAutocompletion': 'SharingAutocompletion',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
-				'webUIResharing': 'Resharing',
-				'webUISharingPublic': 'SharingPublic',
-				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
-				'webUITrashbin': 'Trashbin',
-				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
-				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
-				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-				'webUISharingNotifications': 'SharingNotifications',
-				'webUIAccount': 'Account'
-			},
-		},
-		'webUIFederation': {
-			'suites': {
-				'webUISharingExternal': 'SharingExternal',
-			},
-			'extraEnvironment': {
-				'REMOTE_BACKEND_HOST': 'http://federated'
-			},
-			'federatedServerNeeded': True,
-			'federatedServerVersion': 'daily-master-qa'
-		},
-		'webUI-XGA': {
-			'suites': {
-				'all': 'XGAPortrait',
-			},
-			'extraEnvironment': {
-				'SCREEN_RESOLUTION': '768x1024'
-			},
-			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
-		},
-		'webUI-iPhone': {
-			'suites': {
-				'all': 'iPhone',
-			},
-			'extraEnvironment': {
-				'SCREEN_RESOLUTION': '375x812'
-			},
-			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and @skipOnOC10'
-		},
+		# 'webUI': {
+		# 	'suites': {
+		# 		'webUICreateFilesFolders': 'createFilesFolders',
+		# 		'webUIDeleteFilesFolders': 'deleteFilesFolders',
+		# 		'webUIFavorites': 'Favorites',
+		# 		'webUIFiles': 'Files',
+		# 		'webUILogin': 'Login',
+		# 		'webUINotifications': 'Notifications',
+		# 		'webUIPrivateLinks': 'PrivateLinks',
+		# 		'webUIRenameFiles': 'RenameFiles',
+		# 		'webUIRenameFolders': 'RenameFolders',
+		# 		'webUIRestrictSharing': 'RestrictSharing',
+		# 		'webUISharingAutocompletion': 'SharingAutocompletion',
+		# 		'webUISharingInternalGroups': 'SharingInternalGroups',
+		# 		'webUISharingInternalUsers': 'SharingInternalUsers',
+		# 		'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
+		# 		'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
+		# 		'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
+		# 		'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
+		# 		'webUIResharing': 'Resharing',
+		# 		'webUISharingPublic': 'SharingPublic',
+		# 		'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
+		# 		'webUITrashbin': 'Trashbin',
+		# 		'webUIUpload': 'Upload',
+		# 		'webUISharingAcceptShares': 'SharingAcceptShares',
+		# 		'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
+		# 		'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
+		# 		'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
+		# 		'webUISharingNotifications': 'SharingNotifications',
+		# 		'webUIAccount': 'Account'
+		# 	},
+		# },
+		# 'webUIFederation': {
+		# 	'suites': {
+		# 		'webUISharingExternal': 'SharingExternal',
+		# 	},
+		# 	'extraEnvironment': {
+		# 		'REMOTE_BACKEND_HOST': 'http://federated'
+		# 	},
+		# 	'federatedServerNeeded': True,
+		# 	'federatedServerVersion': 'daily-master-qa'
+		# },
+		# 'webUI-XGA': {
+		# 	'suites': {
+		# 		'all': 'XGAPortrait',
+		# 	},
+		# 	'extraEnvironment': {
+		# 		'SCREEN_RESOLUTION': '768x1024'
+		# 	},
+		# 	'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
+		# },
+		# 'webUI-iPhone': {
+		# 	'suites': {
+		# 		'all': 'iPhone',
+		# 	},
+		# 	'extraEnvironment': {
+		# 		'SCREEN_RESOLUTION': '375x812'
+		# 	},
+		# 	'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and @skipOnOC10'
+		# },
 		'webUI-ocis': {
 			'suites': {
 				'all': 'webUIOCIS'
@@ -89,6 +89,7 @@ config = {
 			},
 			'runningOnOCIS': True,
 			'filterTags': 'not @skip and not @skipOnOCIS',
+			'screenShots': True,
 		}
 	},
 

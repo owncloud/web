@@ -1,0 +1,20 @@
+{
+    "server": "http://localhost/core/",
+    "theme": "owncloud",
+    "version": "0.1.0",
+    "openIdConnect": {
+        "metadata_url": "http://172.17.0.1:9130/.well-known/openid-configuration",
+        "authority": "http://172.17.0.1:9130",
+        "client_id": "oc10",
+        "response_type": "code",
+        "scope": "openid profile email",
+        "client_secret": "UBntmLjC2yYCeHwsyj73Uwo9TAaecAetRwMw0xYcvNL9yRdLSUi0hUAHfvCHFeFh"
+    },
+    "apps": [
+        "files",
+        "draw-io",
+        "pdf-viewer",
+        "markdown-editor",
+        "media-viewer"
+    ]
+}
