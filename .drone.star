@@ -79,7 +79,7 @@ config = {
 				'all': 'webUIOCIS'
 			},
 			'extraEnvironment': {
-				'SERVER_HOST': 'http://ocis:9100',
+				'SERVER_HOST': 'http://phoenix:9100',
 				'BACKEND_HOST': 'http://reva:9140',
 				'RUN_ON_OCIS': 'true',
 				'OCIS_SKELETON_DIR': '/var/www/owncloud/server/apps/testing/data/webUISkeleton',
@@ -89,6 +89,7 @@ config = {
 			},
 			'runningOnOCIS': True,
 			'filterTags': 'not @skip and not @skipOnOCIS',
+			'screenShots': True,
 		}
 	},
 
@@ -385,11 +386,11 @@ def acceptance():
 										)
 									) if not params['runningOnOCIS'] else (
 										buildKonnectd() +
-										buildOcis() +
+										buildOcisPhoenix() +
 										buildReva() +
 										konnectdService() +
 										revaService() +
-										ocisServices() +
+										ocisPhoenixService() +
 										redisService()
 									)
 								) +
@@ -1010,9 +1011,9 @@ def konnectdService():
 		}],
 	}]
 
-def buildOcis():
+def buildOcisPhoenix():
 	return[{
-		'name': 'build-ocis',
+		'name': 'build-ocis-phoenix',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'commands': [
@@ -1020,10 +1021,10 @@ def buildOcis():
 			'cd $GOPATH/src',
 			'mkdir -p github.com/owncloud/',
 			'cd github.com/owncloud/',
-			'git clone http://github.com/owncloud/ocis',
-			'cd ocis',
+			'git clone http://github.com/owncloud/ocis-phoenix.git',
+			'cd ocis-phoenix',
 			'make build',
-			'cp bin/ocis /var/www/owncloud'
+			'cp bin/ocis-phoenix /var/www/owncloud'
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1034,9 +1035,9 @@ def buildOcis():
 		}],
 	}]
 
-def ocisServices():
+def ocisPhoenixService():
 	return[{
-		'name': 'ocis',
+		'name': 'phoenix',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'detach': True,
@@ -1046,8 +1047,7 @@ def ocisServices():
 		},
 		'commands': [
 			'cd /var/www/owncloud',
-			'./ocis devldap &',
-			'./ocis phoenix'
+			'./ocis-phoenix server',
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1261,7 +1261,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 			'cd /var/www/owncloud/phoenix',
 			'timeout 60 bash -c \'while [[ "$(curl -s -o /dev/null -w \'\'%{http_code}\'\' http://phoenix/oidc-callback.html)" != "200" ]]; do sleep 5; done\''
 			if not runningOnOCIS else
-			'timeout 60 bash -c \'while [[ "$(curl -s -o /dev/null -w \'\'%{http_code}\'\' http://ocis:9100/oidc-callback.html)" != "200" ]]; do sleep 5; done\'',
+			'timeout 60 bash -c \'while [[ "$(curl -s -o /dev/null -w \'\'%{http_code}\'\' http://phoenix:9100/oidc-callback.html)" != "200" ]]; do sleep 5; done\'',
 			'yarn run acceptance-tests-drone',
 		],
 		'volumes': [{
