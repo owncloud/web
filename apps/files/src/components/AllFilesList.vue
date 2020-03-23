@@ -240,7 +240,7 @@ export default {
           this.$nextTick(() => {
             const file = this.activeFiles.find(item => item.name === scrollTo)
             this.setHighlightedFile(file)
-            this.$scrollTo(`#file-row-${file.id}`, 500, {
+            this.$scrollTo(`#file-row-${file.viewId}`, 500, {
               container: '#files-list-container'
             })
           })
