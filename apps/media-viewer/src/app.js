@@ -24,6 +24,10 @@ const appInfo = {
     extension: 'jpeg'
   }, {
     extension: 'gif'
+  }, {
+    extension: 'webm'
+  }, {
+    extension: 'mp4'
   }]
 }
 

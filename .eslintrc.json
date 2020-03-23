@@ -14,7 +14,8 @@
     },
     "rules": {
       "require-await": "warn",
-      "vue/order-in-components": "error"
+      "vue/order-in-components": "error",
+      "standard/no-callback-literal": 0
     },
     "globals": {
       "require": false,

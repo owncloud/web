@@ -1,11 +1,14 @@
 <template>
   <div id="mediaviewer" class="uk-position-relative">
     <div class="uk-position-center uk-padding-small">
-      <transition name="custom-classes-transition" :enter-active-class="activeClass.enter" :leave-active-class="activeClass.leave">
+      <transition v-show="activeMediaFileIsAnImage" name="custom-classes-transition" :enter-active-class="activeClass.enter" :leave-active-class="activeClass.leave">
         <img v-show="!loading && activeMediaFileCached" :src="image.url" :alt="image.name" :data-id="image.id" style="max-width:90vw;max-height:90vh" class="uk-box-shadow-medium">
       </transition>
+      <transition v-show="!activeMediaFileIsAnImage" name="custom-classes-transition" :enter-active-class="activeClass.enter" :leave-active-class="activeClass.leave">
+        <video controls ref="video" v-show="!loading"></video>
+      </transition>
     </div>
-    <oc-spinner class="uk-position-center" v-if="loading" size="large" />
+    <oc-spinner class="uk-position-center" v-if="loading" size="large" ariaLabel="" />
     <oc-icon v-if="failed" name="review" variation="danger" size="large" class="uk-position-center uk-z-index" />
 
     <div class="uk-position-medium uk-position-bottom-center">
@@ -24,8 +27,9 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import queryString from 'query-string'
+import MP4Box from 'mp4box'
 
 export default {
   name: 'Mediaviewer',
@@ -51,7 +55,7 @@ export default {
 
     mediaFiles () {
       return this.activeFiles.filter(file => {
-        return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif)/)
+        return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif|webm|mp4)/)
       })
     },
     activeMediaFile () {
@@ -60,6 +64,12 @@ export default {
     activeMediaFileCached () {
       const cached = this.images.find(i => i.id === this.activeMediaFile.id)
       return (cached !== undefined) ? cached : false
+    },
+    activeMediaFileIsAnImage () {
+      if (this.activeIndex === null) {
+        return true
+      }
+      return this.mediaFiles[this.activeIndex].extension.toLowerCase().match(/(png|jpg|jpeg|gif)/)
     },
     activeClass () {
       const direction = ['right', 'left']
@@ -129,7 +139,17 @@ export default {
   watch: {
     activeIndex (o, n) {
       if (o !== n) {
-        this.loadImage()
+        const isImage = this.mediaFiles[o].extension.toLowerCase().match(/(png|jpg|jpeg|gif)/)
+
+        if (isImage) {
+          this.loadImage()
+          return
+        }
+        // load video ...
+        const video = this.$refs.video
+        const mediaSource = new MediaSource()
+        video.src = URL.createObjectURL(mediaSource)
+        mediaSource.addEventListener('sourceopen', this.videoSourceOpen)
       }
     }
   },
@@ -163,9 +183,9 @@ export default {
   },
 
   methods: {
+    ...mapActions(['showMessage']),
     loadImage () {
       this.loading = true
-
       // Don't bother loading if files i chached
       if (this.activeMediaFileCached) {
         setTimeout(() => {
@@ -226,6 +246,85 @@ export default {
     },
     closeApp () {
       this.$router.go(-1)
+    },
+    videoSourceOpen (event) {
+      // console.log(this.readyState); // open
+      var mediaSource = event.target
+      const path = [
+        '..',
+        'dav',
+        'files',
+        this.$store.getters.user.id,
+        this.activeMediaFile.path
+      ].join('/')
+
+      const assetURL = this.$client.files.getFileUrl(path)
+      const self = this
+      this.fetchCodec(assetURL, function (mimeType, error) {
+        if (error) {
+          self.showMessage({
+            title: self.$gettext('Cannot play video'),
+            desc: error,
+            status: 'danger'
+          })
+          return
+        }
+        var sourceBuffer = mediaSource.addSourceBuffer(mimeType)
+        self.fetchAB(assetURL, function (buf) {
+          self.loading = false
+          sourceBuffer.addEventListener('updateend', function (foo) {
+            const video = self.$refs.video
+            if (video.error) {
+              self.showMessage({
+                title: self.$gettext('Cannot play video'),
+                desc: video.error,
+                status: 'danger'
+              })
+            } else {
+              mediaSource.endOfStream()
+              video.play()
+            }
+          })
+          sourceBuffer.appendBuffer(buf)
+        })
+      })
+    },
+    fetchCodec (url, cb) {
+      fetch(url, {
+        headers: {
+          range: 'bytes=0-50000',
+          Authorization: 'Bearer ' + this.$store.getters.getToken,
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      }).then(function (response) {
+        return response.arrayBuffer()
+      }).then(function (arrayBuffer) {
+        arrayBuffer.fileStart = 0
+        const mp4boxfile = MP4Box.createFile()
+        mp4boxfile.onReady = function (info) {
+          const codecs = info.videoTracks.map(x => x.codec)
+            .concat(info.audioTracks.map(x => x.codec))
+            .join(',')
+          cb(`video/mp4; codecs="${codecs}"`, false)
+        }
+        mp4boxfile.onError = function (err) {
+          cb(null, err)
+        }
+        mp4boxfile.appendBuffer(arrayBuffer)
+      }).catch(err => {
+        cb(null, err)
+      })
+    },
+    fetchAB (url, cb) {
+      var xhr = new XMLHttpRequest()
+      xhr.open('get', url)
+      xhr.setRequestHeader('Authorization', 'Bearer ' + this.$store.getters.getToken)
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+      xhr.responseType = 'arraybuffer'
+      xhr.onload = function () {
+        cb(xhr.response)
+      }
+      xhr.send()
     }
   }
 

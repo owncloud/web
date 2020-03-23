@@ -17,8 +17,11 @@ export default {
 
         publicPage () {
           // public page is either when not authenticated
+          if (this.isAuthenticated) {
+            return false
+          }
           // but also when accessing pages that require no auth even when authenticated
-          return !this.isAuthenticated || this.$route.meta.auth === false
+          return this.$route.meta.auth === false
         },
         downloadFile (file) {
           this.addActionToProgress(file)
