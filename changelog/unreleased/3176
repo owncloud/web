@@ -1,0 +1,7 @@
+Bugfix: Display errors when saving collaborator fails
+
+When saving a collaborator has failed, the UI was still behaving like it saved everything successfully. This has been
+fixed by displaying the errors at the top of the collaborator editing form and staying in the editing view.
+
+https://github.com/owncloud/phoenix/issues/3176
+https://github.com/owncloud/phoenix/pull/3241
