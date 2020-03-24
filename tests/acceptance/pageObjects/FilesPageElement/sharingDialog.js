@@ -230,7 +230,7 @@ module.exports = {
           if (!result.value.ELEMENT) {
             return
           }
-          return this.api.elementIdSelected(result.value.ELEMENT, result => {
+          this.api.elementIdSelected(result.value.ELEMENT, result => {
             permissions[COLLABORATOR_PERMISSION_ARRAY[i]] = result.value
           })
         })
