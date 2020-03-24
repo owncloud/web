@@ -1,6 +1,5 @@
 const { client } = require('nightwatch-api')
 const { When, Given, Then } = require('cucumber')
-const fetch = require('node-fetch')
 const assert = require('assert')
 const { URLSearchParams } = require('url')
 require('url-search-params-polyfill')
@@ -14,7 +13,6 @@ const _ = require('lodash')
 const path = require('../helpers/path')
 const util = require('util')
 const { COLLABORATOR_PERMISSION_ARRAY } = require('../helpers/sharingHelper')
-const { join } = require('../helpers/path')
 
 /**
  *
@@ -115,14 +113,8 @@ const shareFileFolder = function (
       params.append(key, extraParams[key])
     }
   }
-
-  return fetch(
-    path.join(
-      backendHelper.getCurrentBackendUrl(),
-      '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json'
-    ),
-    { method: 'POST', headers: httpHelper.createOCSRequestHeaders(sharer), body: params }
-  )
+  const url = 'apps/files_sharing/api/v1/shares'
+  return httpHelper.postOCS(url, sharer, params)
     .then(res => res.json())
     .then(function (json) {
       httpHelper.checkOCSStatus(json, 'Could not create share. Message: ' + json.ocs.meta.message)
@@ -362,12 +354,8 @@ const checkCollaboratorsExpirationDate = async function (collaborator, resource,
 }
 
 const checkReceivedSharesExpirationDate = function (user, target, days) {
-  const headers = httpHelper.createOCSRequestHeaders(user)
-
-  const apiURL = new URL(join(client.globals.backend_url, '/ocs/v2.php/apps/files_sharing/api/v1/shares'))
-  apiURL.search = new URLSearchParams({ format: 'json', shared_with_me: true }).toString()
-
-  return fetch(apiURL, { method: 'GET', headers: headers })
+  const apiURL = 'apps/files_sharing/api/v1/shares?shared_with_me=true'
+  return httpHelper.getOCS(apiURL, user)
     .then(res => res.json())
     .then(function (result) {
       httpHelper.checkOCSStatus(result, 'Could not get shares. Message: ' + result.ocs.meta.message)

@@ -1,7 +1,5 @@
-const fetch = require('node-fetch')
 const httpHelper = require('./httpHelper')
 const occHelper = require('./occHelper')
-const { join } = require('./path')
 const { difference } = require('./objects')
 const _ = require('lodash')
 const pLimit = require('p-limit')
@@ -13,19 +11,12 @@ const config = {}
 
 async function setSkeletonDirectory (server, admin) {
   const data = JSON.stringify({ directory: 'webUISkeleton' })
-  const headers = {
-    ...httpHelper.createOCSRequestHeaders(admin),
-    'Content-Type': 'application/json'
-  }
-  const apiUrl = join(
-    server,
-    '/ocs/v2.php/apps/testing',
-    '/api/v1/testingskeletondirectory?format=json'
-  )
-
-  const resp = await fetch(
+  const apiUrl = 'apps/testing/api/v1/testingskeletondirectory'
+  const resp = await httpHelper.postOCS(
     apiUrl,
-    { method: 'POST', headers, body: data }
+    'admin',
+    data,
+    { 'Content-Type': 'application/json' }
   )
 
   httpHelper.checkStatus(resp, 'Could not set skeletondirectory.')

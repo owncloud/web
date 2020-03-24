@@ -1,6 +1,5 @@
 const { client } = require('nightwatch-api')
 const { Given, After } = require('cucumber')
-const fetch = require('node-fetch')
 const fs = require('fs-extra')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
@@ -28,27 +27,16 @@ function createUser (userId, password, displayName = false, email = false) {
   const promiseList = []
 
   userSettings.addUserToCreatedUsersList(userId, password, displayName, email)
-  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
-  return fetch(
-    join(
-      backendHelper.getCurrentBackendUrl(),
-      '/ocs/v2.php/cloud/users?format=json'
-    ),
-    { method: 'POST', body: body, headers: headers }
-  )
+  const url = 'cloud/users'
+  return httpHelper.postOCS(url, 'admin', body)
     .then(() => {
       if (displayName !== false) {
         promiseList.push(new Promise((resolve, reject) => {
           const body = new URLSearchParams()
           body.append('key', 'display')
           body.append('value', displayName)
-          fetch(
-            join(
-              backendHelper.getCurrentBackendUrl(),
-              `/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`
-            ),
-            { method: 'PUT', body: body, headers: headers }
-          )
+          const url = `cloud/users/${encodeURIComponent(userId)}`
+          httpHelper.putOCS(url, 'admin', body)
             .then(res => {
               if (res.status !== 200) {
                 reject(new Error('Could not set display name of user'))
@@ -64,13 +52,8 @@ function createUser (userId, password, displayName = false, email = false) {
           const body = new URLSearchParams()
           body.append('key', 'email')
           body.append('value', email)
-          fetch(
-            join(
-              backendHelper.getCurrentBackendUrl(),
-              `/ocs/v2.php/cloud/users/${encodeURIComponent(userId)}?format=json`
-            ),
-            { method: 'PUT', body: body, headers: headers }
-          )
+          const url = `cloud/users/${encodeURIComponent(userId)}`
+          httpHelper.putOCS(url, 'admin', body)
             .then(res => {
               if (res.status !== 200) {
                 reject(new Error('Could not set email of user'))
@@ -86,27 +69,14 @@ function createUser (userId, password, displayName = false, email = false) {
 }
 
 function deleteUser (userId) {
-  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   userSettings.deleteUserFromCreatedUsersList(userId)
-  return fetch(
-    join(
-      backendHelper.getCurrentBackendUrl(),
-      '/ocs/v2.php/cloud/users/',
-      userId
-    ),
-    { method: 'DELETE', headers: headers })
+  const url = `cloud/users/${userId}`
+  return httpHelper.deleteOCS(url)
 }
 
 function initUser (userId) {
-  const headers = httpHelper.createOCSRequestHeaders(userId)
-  return fetch(
-    join(
-      backendHelper.getCurrentBackendUrl(),
-      '/ocs/v2.php/cloud/users/',
-      userId
-    ),
-    { method: 'GET', headers: headers }
-  )
+  const url = `cloud/users/${userId}`
+  return httpHelper.getOCS(url, userId)
 }
 
 /**
@@ -126,12 +96,8 @@ function createGroup (groupId) {
   const body = new URLSearchParams()
   body.append('groupid', groupId)
   userSettings.addGroupToCreatedGroupsList(groupId)
-  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
-  return fetch(join(client.globals.backend_url, '/ocs/v2.php/cloud/groups?format=json'), {
-    method: 'POST',
-    body: body,
-    headers: headers
-  })
+  const url = 'cloud/groups'
+  return httpHelper.postOCS(url, 'admin', body)
 }
 
 /**
@@ -140,10 +106,9 @@ function createGroup (groupId) {
  * @returns {*|Promise}
  */
 function deleteGroup (groupId) {
-  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   userSettings.deleteGroupFromCreatedGroupsList(groupId)
-  return fetch(join(client.globals.backend_url, '/ocs/v2.php/cloud/groups/', groupId),
-    { method: 'DELETE', headers: headers })
+  const url = `cloud/groups/${groupId}`
+  return httpHelper.deleteOCS(url)
 }
 
 function addToGroup (userId, groupId) {
@@ -152,11 +117,8 @@ function addToGroup (userId, groupId) {
   }
   const body = new URLSearchParams()
   body.append('groupid', groupId)
-
-  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
-  return fetch(join(client.globals.backend_url, `/ocs/v2.php/cloud/users/${userId}/groups`),
-    { method: 'POST', body: body, headers: headers }
-  )
+  const url = `cloud/users/${userId}/groups`
+  return httpHelper.postOCS(url, 'admin', body)
 }
 
 Given('user {string} has been created with default attributes', function (userId) {
@@ -175,14 +137,11 @@ Given('user {string} has been created with default attributes on remote server',
 })
 
 Given('the quota of user {string} has been set to {string}', function (userId, quota) {
-  const headers = httpHelper.createOCSRequestHeaders(client.globals.backend_admin_username)
   const body = new URLSearchParams()
   body.append('key', 'quota')
   body.append('value', quota)
-
-  return fetch(join(client.globals.backend_url, '/ocs/v2.php/cloud/users/', userId),
-    { method: 'PUT', body: body, headers: headers }
-  )
+  const url = `cloud/users/${userId}`
+  return httpHelper.putOCS(url, 'admin', body)
     .then(res => httpHelper.checkStatus(res, 'Could not set quota.'))
 })
 
