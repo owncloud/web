@@ -56,6 +56,13 @@ Then('the error message {string} should be displayed on the webUI dialog prompt'
     .expect.element('@ocDialogPromptAlert').text.to.equal(message)
 })
 
+Then('the user should see the following error message on the login card dialog', function (message) {
+  return client
+    .page.publicLinkPasswordPage()
+    .waitForElementVisible('@loginCardDialogBox')
+    .expect.element('@loginCardDialogBox').text.to.equal(message)
+})
+
 When('the user clears all error message from the webUI', function () {
   return client
     .page.phoenixPage()
