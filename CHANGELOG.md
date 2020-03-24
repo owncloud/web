@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Files list status indicators are now appearing without any delay: [#2973](https://github.com/owncloud/phoenix/issues/2973)
+* Bugfix - Fix file actions menu when using OCIS backend: [#3214](https://github.com/owncloud/phoenix/issues/3214)
 
 Details
 -------
@@ -20,6 +21,18 @@ Details
 
    https://github.com/owncloud/phoenix/issues/2973
    https://github.com/owncloud/phoenix/pull/3213
+
+* Bugfix - Fix file actions menu when using OCIS backend: [#3214](https://github.com/owncloud/phoenix/issues/3214)
+
+   When using OCIS as backend, the ids of resources is a string instead of integer. So we cannot
+   embed those into DOM node ids and need to use another alternative. This fix introduces a unique
+   viewId which is only there to provide uniqueness across the current list and should not be used
+   for any data related operation.
+
+   This fixes the file actions menu when using OCIS as backend.
+
+   https://github.com/owncloud/phoenix/issues/3214
+   https://github.com/owncloud/ocis-phoenix/issues/51
 
 Changelog for ownCloud Phoenix [0.6.0] (2020-03-16)
 =======================================
