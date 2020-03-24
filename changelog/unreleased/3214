@@ -1,0 +1,12 @@
+Bugfix: Fix file actions menu when using OCIS backend
+
+When using OCIS as backend, the ids of resources is a string instead of
+integer. So we cannot embed those into DOM node ids and need to use
+another alternative. This fix introduces a unique viewId which is only
+there to provide uniqueness across the current list and should not be
+used for any data related operation.
+
+This fixes the file actions menu when using OCIS as backend.
+
+https://github.com/owncloud/phoenix/issues/3214
+https://github.com/owncloud/ocis-phoenix/issues/51

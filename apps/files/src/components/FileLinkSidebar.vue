@@ -270,7 +270,7 @@ export default {
 
       if (l1Direct === l2Direct) {
         if (name1 === name2) {
-          return textUtils.naturalSortCompare(l1.id + '', l2.id + '')
+          return l1.stime - l2.stime
         }
 
         return textUtils.naturalSortCompare(name1, name2)

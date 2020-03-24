@@ -1,9 +1,9 @@
 <template>
   <oc-drop
     v-if="displayed"
-    :boundary="`#files-file-list-action-button-${item.id}-active`"
+    :boundary="`#files-file-list-action-button-${item.viewId}-active`"
     :options="{ offset: 0 }"
-    :toggle="`#files-file-list-action-button-${item.id}-active`"
+    :toggle="`#files-file-list-action-button-${item.viewId}-active`"
     position="bottom-right"
     id="files-list-row-actions-dropdown"
     class="uk-open uk-drop-stack"

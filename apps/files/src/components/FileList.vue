@@ -31,7 +31,7 @@
             :data-is-visible="active"
             @click="selectRow(item, $event); hideRowActionsDropdown()"
           >
-            <oc-grid :ref="index === 0 ? 'firstRow' : null" gutter="small" flex class="uk-padding-small oc-border-top" :class="_rowClasses(item)" :id="'file-row-' + item.id">
+            <oc-grid :ref="index === 0 ? 'firstRow' : null" gutter="small" flex class="uk-padding-small oc-border-top" :class="_rowClasses(item)" :id="'file-row-' + item.viewId">
               <div>
                 <oc-checkbox
                   class="uk-margin-small-left"
@@ -44,7 +44,7 @@
               <slot name="rowColumns" :item="item" :index="index" />
               <div class="uk-text-right uk-margin-left uk-margin-small-right">
                 <oc-button
-                  :id="actionsDropdownButtonId(item.id, active)"
+                  :id="actionsDropdownButtonId(item.viewId, active)"
                   class="files-list-row-show-actions"
                   :disabled="$_actionInProgress(item)"
                   :aria-label="$gettext('Show file actions')"
@@ -165,49 +165,6 @@ export default {
       'resetFileSelection', 'addFileSelection', 'removeFileSelection', 'toggleFileSelection'
     ]),
 
-    $_ocFilesFolder_getFolder () {
-      let absolutePath
-
-      if (this.configuration.rootFolder) {
-        absolutePath = !this.item ? this.configuration.rootFolder : this.item
-      } else {
-        absolutePath = !this.item ? this.configuration.rootFolder : this.item
-      }
-
-      this.loadFolder({
-        client: this.$client,
-        absolutePath: absolutePath,
-        $gettext: this.$gettext,
-        routeName: this.$route.name
-      }).then(() => {
-        const scrollTo = this.$route.query.scrollTo
-        if (scrollTo && this.activeFiles.length > 0) {
-          this.$nextTick(() => {
-            const file = this.activeFiles.find(item => item.name === scrollTo)
-            this.setHighlightedFile(file)
-            this.$scrollTo(`#file-row-${file.id}`, 500, {
-              container: '#files-list-container'
-            })
-          })
-        }
-      }).catch((error) => {
-        // password for public link shares is missing -> this is handled on the caller side
-        if (this.publicPage() && error.statusCode === 401) {
-          this.$router.push({
-            name: 'public-link',
-            params: {
-              token: this.$route.params.item
-            }
-          })
-          return
-        }
-        this.showMessage({
-          title: this.$gettext('Loading folder failed…'),
-          desc: error.message,
-          status: 'danger'
-        })
-      })
-    },
     labelSelectSingleItem (item) {
       return this.$gettextInterpolate(this.labelSelectSingleItemText, { name: item.name, type: item.type }, true)
     },
@@ -302,12 +259,12 @@ export default {
       this.rowActions = []
     },
 
-    actionsDropdownButtonId (id, active) {
+    actionsDropdownButtonId (viewId, active) {
       if (active) {
-        return `files-file-list-action-button-${id}-active`
+        return `files-file-list-action-button-${viewId}-active`
       }
 
-      return `files-file-list-action-button-${id}`
+      return `files-file-list-action-button-${viewId}`
     },
 
     $_resizeHeader () {

@@ -19,7 +19,10 @@ function _buildFile (file) {
   const ext = (file.type !== 'dir') ? _extName(file.name) : ''
   return ({
     type: (file.type === 'dir') ? 'folder' : file.type,
+    // actual file id (string)
     id: file.fileInfo['{http://owncloud.org/ns}fileid'],
+    // temporary list id, to be used for view only and for uniqueness inside the list
+    viewId: _.uniqueId('file-'),
     starred: file.fileInfo['{http://owncloud.org/ns}favorite'] !== '0',
     mdate: file.fileInfo['{DAV:}getlastmodified'],
     mdateMoment: moment(file.fileInfo['{DAV:}getlastmodified']),
