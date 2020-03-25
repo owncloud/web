@@ -26,7 +26,7 @@ Feature: deleting files and folders
     And file "strängé नेपाली folder" should not be listed on the webUI
     But the deleted elements should not be listed on the webUI after a page reload
 
-  @skipOnOCIS @ocis-reva-issue-14
+  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Delete a file with problematic characters
     Given user "user1" has renamed the following file
       | from-name-parts | to-name-parts   |

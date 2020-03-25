@@ -1,4 +1,3 @@
-@skipOnOCIS @ocis-reva-issue-14
 Feature: rename files
   As a user
   I want to rename files
@@ -18,10 +17,20 @@ Feature: rename files
     Examples:
       | to_file_name           |
       | "simple-name.txt"      |
-      | "लोरेम।तयक्स्त? $%#&@" |
       | '"quotes1"'            |
       | "\"quote\"d-folders'"  |
       | "'quotes2'"            |
+
+  # Merge with scenario above once the issue is resolved
+  @smokeTest @skipOnOCIS @ocis-phoenix-issue-58
+  Scenario Outline: Rename a file
+    When the user renames file "lorem.txt" to <to_file_name> using the webUI
+    Then file <to_file_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_file_name> should be listed on the webUI
+    Examples:
+      | to_file_name           |
+      | "लोरेम।तयक्स्त? $%#&@" |
 
   Scenario Outline: Rename a file that has special characters in its name
     When the user renames file <from_name> to <to_name> using the webUI
@@ -30,10 +39,20 @@ Feature: rename files
     Then file <to_name> should be listed on the webUI
     Examples:
       | from_name                               | to_name                               |
-      | "strängé filename (duplicate #2 &).txt" | "strängé filename (duplicate #3).txt" |
       | "'single'quotes.txt"                    | "single-quotes.txt"                   |
 
-  @smokeTest
+  # Merge with scenario above once the issue is resolved
+  @skipOnOCIS @ocis-phoenix-issue-58
+  Scenario Outline: Rename a file that has special characters in its name
+    When the user renames file <from_name> to <to_name> using the webUI
+    Then file <to_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then file <to_name> should be listed on the webUI
+    Examples:
+      | from_name                               | to_name                               |
+      | "strängé filename (duplicate #2 &).txt" | "strängé filename (duplicate #3).txt" |
+
+  @smokeTest @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Rename a file using special characters and check its existence after page reload
     When the user renames file "lorem.txt" to "लोरेम।तयक्स्त $%&" using the webUI
     And the user reloads the current page of the webUI
@@ -96,6 +115,8 @@ Feature: rename files
     Then file "loremz.dat" should be listed on the webUI
     Then file "loremy.tad" should be listed on the webUI
 
+  # these are valid file names for ocis
+  @skipOnOCIS
   Scenario Outline: Rename a file using forbidden characters
     When the user renames file "data.zip" to "<filename>" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "<filename>"' should be displayed on the webUI
@@ -117,11 +138,13 @@ Feature: rename files
       | lorem.txt      | lorem/txt                         |
       | simple-folder  | simple-empty-folder/simple-folder |
 
+  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Rename the last file in a folder
     When the user renames file "zzzz-must-be-last-file-in-folder.txt" to "a-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "a-file.txt" should be listed on the webUI
 
+  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Rename a file to become the last file in a folder
     When the user renames file "lorem.txt" to "zzzz-z-this-is-now-the-last-file.txt" using the webUI
     And the user reloads the current page of the webUI
@@ -142,10 +165,13 @@ Feature: rename files
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
 
+  # This is valid file name for ocis
+  @skipOnOCIS
   Scenario: Rename a file to .part
     When the user renames file "data.zip" to "data.part" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "data.part"' should be displayed on the webUI
 
+  @skipOnOCIS @ocis-reva-issue-64
   Scenario: rename a file on a public share
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
@@ -158,6 +184,7 @@ Feature: rename files
     And as "user1" file "simple-folder/a-renamed-file.txt" should exist
     And as "user1" file "simple-folder/lorem.txt" should not exist
 
+  @skipOnOCIS @ocis-reva-issue-64
   Scenario: Rename a file and folder in shared with me page
     Given user "user2" has been created with default attributes
     And user "user2" has shared file "lorem.txt" with user "user1"
@@ -178,6 +205,7 @@ Feature: rename files
     And as "user2" file "lorem.txt" should exist
     And as "user2" folder "simple-folder" should exist
 
+  @skipOnOCIS @ocis-reva-issue-64
   Scenario: Rename a file and folder in shared with others page
     Given user "user2" has been created with default attributes
     And user "user1" has shared file "lorem.txt" with user "user2"
@@ -198,6 +226,7 @@ Feature: rename files
     And as "user2" file "lorem.txt" should exist
     And as "user2" folder "simple-folder" should exist
 
+  @skipOnOCIS @ocis-reva-issue-39
   Scenario: User tries to rename a file and folder in favorites page
     Given user "user1" has favorited element "lorem.txt"
     And user "user1" has favorited element "simple-folder"
