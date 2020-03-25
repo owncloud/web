@@ -1,4 +1,3 @@
-@skipOnOCIS @ocis-reva-issue-14
 Feature: rename folders
   As a user
   I want to rename folders
@@ -17,10 +16,20 @@ Feature: rename folders
     Examples:
       | to_folder_name          |
       | 'an other simple name'  |
-      | 'सिमप्ले फोल्देर$%#?&@'      |
       | '"quotes1"'             |
       | "'quotes2'"             |
       | "home"                  |
+
+  # Merge with scenario above once the issue is resolved
+  @skipOnOCIS @ocis-phoenix-issue-58
+  Scenario Outline: Rename a folder
+    When the user renames folder "simple-folder" to <to_folder_name> using the webUI
+    Then folder <to_folder_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then folder <to_folder_name> should be listed on the webUI
+    Examples:
+      | to_folder_name          |
+      | 'सिमप्ले फोल्देर$%#?&@'      |
 
   Scenario Outline: Rename a folder that has special characters in its name
     When the user renames folder <from_name> to <to_name> using the webUI
@@ -29,9 +38,20 @@ Feature: rename folders
     Then folder <to_name> should be listed on the webUI
     Examples:
       | from_name               | to_name                     |
-      | "strängé नेपाली folder"   | "strängé नेपाली folder-#?2"   |
       | "'single'quotes"        | "single-quotes"             |
 
+  # Merge with scenario above once the issue is resolved
+  @skipOnOCIS @ocis-phoenix-issue-58
+  Scenario Outline: Rename a folder that has special characters in its name
+    When the user renames folder <from_name> to <to_name> using the webUI
+    Then folder <to_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then folder <to_name> should be listed on the webUI
+    Examples:
+      | from_name               | to_name                     |
+      | "strängé नेपाली folder"   | "strängé नेपाली folder-#?2"   |
+
+  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Rename a folder using special characters and check its existence after page reload
     When the user renames folder "simple-folder" to "लोरेम।तयक्स्त $%&" using the webUI
     And the user reloads the current page of the webUI
@@ -86,6 +106,8 @@ Feature: rename folders
       | a normal folder         |
       | another normal folder   |
 
+  # These are valid file names for ocis
+  @skipOnOCIS
   Scenario Outline: Rename a folder using forbidden characters
     When the user renames folder <from_name> to <to_name> using the webUI
     Then the error message with header '<alert_message>' should be displayed on the webUI
@@ -108,6 +130,8 @@ Feature: rename folders
     When the user renames folder "simple-folder" to an invalid name "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
 
+  # This is valid file name for ocis
+  @skipOnOCIS
   Scenario: Rename a folder to .part
     When the user renames folder "simple-folder" to "simple.part" using the webUI
     Then the error message with header 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
