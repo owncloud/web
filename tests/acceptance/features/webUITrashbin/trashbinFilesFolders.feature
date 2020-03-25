@@ -9,7 +9,7 @@ Feature: files and folders exist in the trashbin after being deleted
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest @skipOnOCIS @ocis-reva-issue-110
+  @smokeTest @skipOnOCIS @ocis-reva-issue-111 @ocis-phoenix-issue-58
   Scenario: Delete files & folders one by one and check that they are all in the trashbin
     When the user deletes the following elements using the webUI
       | name                                  |
@@ -24,7 +24,7 @@ Feature: files and folders exist in the trashbin after being deleted
     And as "user1" file "strängé filename (duplicate #2 &).txt" should exist in the trashbin
     And the deleted elements should be listed on the webUI
 
-  @skipOnOCIS @ocis-reva-issue-14
+  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Delete a file with problematic characters and check it is in the trashbin
     Given the user has renamed the following files
       | from-name-parts | to-name-parts   |
@@ -47,7 +47,7 @@ Feature: files and folders exist in the trashbin after being deleted
       | question?       |
       | &and#hash       |
 
-  @skipOnOCIS @ocis-reva-issue-110
+  @skipOnOCIS @ocis-reva-issue-111
   Scenario: Delete multiple files at once and check that they are all in the trashbin
     When the user batch deletes these files using the webUI
       | name          |
@@ -61,7 +61,7 @@ Feature: files and folders exist in the trashbin after being deleted
     And as "user1" the file with original path "simple-folder/lorem.txt" should exist in the trashbin
     And the deleted elements should be listed on the webUI
 
-  @skipOnOCIS @issue-1725 @issue-1910 @ocis-reva-issue-110
+  @skipOnOCIS @issue-1725 @issue-1910 @ocis-reva-issue-111
   Scenario: Delete an empty folder and check it is in the trashbin
     Given the user has created folder "my-empty-folder"
     And the user has created folder "my-other-empty-folder"
@@ -76,7 +76,7 @@ Feature: files and folders exist in the trashbin after being deleted
     #When the user opens folder "my-empty-folder" using the webUI
     #Then there should be no resources listed on the webUI
 
-  @skipOnOCIS @ocis-reva-issue-110
+  @skipOnOCIS @ocis-reva-issue-111 @ocis-phoenix-issue-58
   Scenario: Delete multiple file with same filename and check they are in the trashbin
     When the user deletes the following elements using the webUI
       | name      |
