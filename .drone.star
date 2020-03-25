@@ -74,22 +74,22 @@ config = {
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and @skipOnOC10'
 		},
-		# 'webUI-ocis': {
-		# 	'suites': {
-		# 		'all': 'webUIOCIS'
-		# 	},
-		# 	'extraEnvironment': {
-		# 		'SERVER_HOST': 'http://ocis:9100',
-		# 		'BACKEND_HOST': 'http://reva:9140',
-		# 		'RUN_ON_OCIS': 'true',
-		# 		'OCIS_SKELETON_DIR': '/var/www/owncloud/server/apps/testing/data/webUISkeleton',
-		# 		'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
-		# 		'LDAP_SERVER_URL': 'ldap://ldap',
-		# 		'OCIS_PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
-		# 	},
-		# 	'runningOnOCIS': True,
-		# 	'filterTags': 'not @skip and not @skipOnOCIS',
-		# }
+		'webUI-ocis': {
+			'suites': {
+				'all': 'webUIOCIS'
+			},
+			'extraEnvironment': {
+				'SERVER_HOST': 'http://ocis:9100',
+				'BACKEND_HOST': 'http://reva:9140',
+				'RUN_ON_OCIS': 'true',
+				'OCIS_SKELETON_DIR': '/var/www/owncloud/server/apps/testing/data/webUISkeleton',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+				'LDAP_SERVER_URL': 'ldap://ldap',
+				'OCIS_PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+			},
+			'runningOnOCIS': True,
+			'filterTags': 'not @skip and not @skipOnOCIS',
+		}
 	},
 
 	'build': True

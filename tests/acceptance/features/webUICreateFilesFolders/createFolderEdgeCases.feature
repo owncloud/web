@@ -15,13 +15,23 @@ Feature: create folder
     Then folder <folder_name> should be listed on the webUI
     Examples:
       | folder_name              |
-      | 'सिमप्ले फोल्देर $%#?&@' |
       | '"somequotes1"'          |
       | "'somequotes2'"          |
       | "\"quote\"d-folders'"    |
       | "^#29][29@({"            |
       | "+-{$(882)"              |
       | "home"                   |
+
+  # Merge with the scenario above once the issue is resolved
+  @skipOnOCIS @ocis-phoenix-issue-58
+  Scenario Outline: Create a folder using special characters
+    When the user creates a folder with the name <folder_name> using the webUI
+    Then folder <folder_name> should be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then folder <folder_name> should be listed on the webUI
+    Examples:
+      | folder_name              |
+      | 'सिमप्ले फोल्देर $%#?&@' |
 
   @issue-2467 @skipOnOCIS @ocis-reva-issue-106
   Scenario Outline: Create a sub-folder inside a folder with problematic name
