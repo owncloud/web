@@ -24,7 +24,7 @@
     "@babel/plugin-transform-runtime": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
     "@babel/register": "^7.6.0",
-    "babel-loader": "^8.0.6",
+    "babel-loader": "^8.1.0",
     "core-js": "3.6.4",
     "css-loader": "^3.1.0",
     "intersection-observer": "^0.7.0",
