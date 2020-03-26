@@ -1,0 +1,5 @@
+Change: Don't import whole core-js bundle directly into core
+
+We've stopped importing whole core-js bundle directly into core and instead load only used parts with babel.
+
+https://github.com/owncloud/phoenix/pull/3173
