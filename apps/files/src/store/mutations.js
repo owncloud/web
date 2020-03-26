@@ -58,6 +58,9 @@ export default {
   LOAD_FILES_SEARCHED(state, files) {
     state.filesSearched = files
   },
+  REMOVE_FILE_FROM_SEARCHED(state, file) {
+    state.filesSearched = state.filesSearched.filter(i => file.id !== i.id)
+  },
   SET_FILES_SORT(state, { field, directionIsDesc }) {
     state.fileSortDirectionDesc = directionIsDesc
     state.fileSortField = field
@@ -72,7 +75,7 @@ export default {
   },
   REMOVE_FILE_SELECTION(state, file) {
     if (state.selected.length > 1) {
-      state.selected = state.selected.filter(i => ![file].includes(i))
+      state.selected = state.selected.filter(i => file.id !== i.id)
       return
     }
     state.selected = []
@@ -91,7 +94,7 @@ export default {
     state.files.push(file)
   },
   REMOVE_FILE(state, file) {
-    state.files = state.files.filter(i => ![file].includes(i))
+    state.files = state.files.filter(i => file.id !== i.id)
   },
   SET_SEARCH_TERM(state, searchTerm) {
     state.searchTermGlobal = searchTerm

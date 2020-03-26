@@ -600,6 +600,7 @@ export default {
         .then(() => {
           context.commit('REMOVE_FILE', file)
           context.commit('REMOVE_FILE_SELECTION', file)
+          context.commit('REMOVE_FILE_FROM_SEARCHED', file)
         })
         .catch(error => {
           let translated = $gettext('Error while deleting "%{file}"')
