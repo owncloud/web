@@ -8,12 +8,22 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix logout when no tokens are known anymore: [#2961](https://github.com/owncloud/phoenix/pull/2961)
 * Bugfix - Files list status indicators are now appearing without any delay: [#2973](https://github.com/owncloud/phoenix/issues/2973)
 * Bugfix - Fix file actions menu when using OCIS backend: [#3214](https://github.com/owncloud/phoenix/issues/3214)
 * Change - Don't import whole core-js bundle directly into core: [#3173](https://github.com/owncloud/phoenix/pull/3173)
 
 Details
 -------
+
+* Bugfix - Fix logout when no tokens are known anymore: [#2961](https://github.com/owncloud/phoenix/pull/2961)
+
+   Single Log Out requires the id_token and in cases where this token is no longer known calling the
+   SLO endpoint will result in an error.
+
+   This has been fixed.
+
+   https://github.com/owncloud/phoenix/pull/2961
 
 * Bugfix - Files list status indicators are now appearing without any delay: [#2973](https://github.com/owncloud/phoenix/issues/2973)
 
