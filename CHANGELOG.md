@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Files list status indicators are now appearing without any delay: [#2973](https://github.com/owncloud/phoenix/issues/2973)
 * Bugfix - Fix file actions menu when using OCIS backend: [#3214](https://github.com/owncloud/phoenix/issues/3214)
+* Change - Don't import whole core-js bundle directly into core: [#3173](https://github.com/owncloud/phoenix/pull/3173)
 
 Details
 -------
@@ -33,6 +34,13 @@ Details
 
    https://github.com/owncloud/phoenix/issues/3214
    https://github.com/owncloud/ocis-phoenix/issues/51
+
+* Change - Don't import whole core-js bundle directly into core: [#3173](https://github.com/owncloud/phoenix/pull/3173)
+
+   We've stopped importing whole core-js bundle directly into core and instead load only used
+   parts with babel.
+
+   https://github.com/owncloud/phoenix/pull/3173
 
 Changelog for ownCloud Phoenix [0.6.0] (2020-03-16)
 =======================================
