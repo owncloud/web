@@ -18,12 +18,13 @@ module.exports = {
       await client.page.ownCloudLoginPage().login(userId, password)
       await client.page.ownCloudAuthorizePage().authorize()
     }
-    return client
+    await client
       .page.phoenixPage()
       .waitForElementVisible('@appContainer')
       .then(() => {
         client.globals.currentUser = userId
       })
+    await client.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
   },
 
   /**

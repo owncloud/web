@@ -7,7 +7,6 @@ Feature: files and folders can be deleted from the trashbin
   Background:
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
-    And the user has browsed to the files page
     And the following files have been deleted by user "user1"
       | name          |
       | data.zip      |
