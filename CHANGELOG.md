@@ -12,6 +12,7 @@ Summary
 * Bugfix - Files list status indicators are now appearing without any delay: [#2973](https://github.com/owncloud/phoenix/issues/2973)
 * Bugfix - Fix file actions menu when using OCIS backend: [#3214](https://github.com/owncloud/phoenix/issues/3214)
 * Change - Don't import whole core-js bundle directly into core: [#3173](https://github.com/owncloud/phoenix/pull/3173)
+* Enhancement - Added thumbnails in file list: [#276](https://github.com/owncloud/phoenix/issues/276)
 
 Details
 -------
@@ -51,6 +52,14 @@ Details
    parts with babel.
 
    https://github.com/owncloud/phoenix/pull/3173
+
+* Enhancement - Added thumbnails in file list: [#276](https://github.com/owncloud/phoenix/issues/276)
+
+   Thumbnails are now displayed in the file list for known file types. When no thumbnail was
+   returned, fall back to the file type icon.
+
+   https://github.com/owncloud/phoenix/issues/276
+   https://github.com/owncloud/phoenix/pull/3187
 
 Changelog for ownCloud Phoenix [0.6.0] (2020-03-16)
 =======================================
