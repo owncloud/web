@@ -100,6 +100,19 @@ export default {
          */
         isIE11 () {
           return !!window.MSInputMethodContext && !!document.documentMode
+        },
+        /**
+         * URI-Encodes a file path but keep the path slashes.
+         *
+         * @param path path
+         * @return encoded path
+         */
+        encodePath: function (path) {
+          if (!path) {
+            return path
+          }
+          var parts = path.split('/').map(part => encodeURIComponent(part))
+          return parts.join('/')
         }
       }
     })

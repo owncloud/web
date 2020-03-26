@@ -9,6 +9,7 @@ Feature: File Upload
   Background:
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
+    And the user browses to the files page
 
   @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: simple upload of a file that does not exist before

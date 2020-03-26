@@ -9,6 +9,7 @@ Feature: Locks
       | username       |
       | brand-new-user |
     And user "brand-new-user" has logged in using the webUI
+    And the user browses to the files page
 
   @skip @yetToImplement
   Scenario Outline: uploading a file, trying to overwrite a locked file

@@ -1,4 +1,5 @@
 import store from '../store'
+const { default: PQueue } = require('p-queue')
 
 export default {
   install (Vue) {
@@ -11,6 +12,10 @@ export default {
         headers.append('X-Requested-With', 'XMLHttpRequest')
 
         fetch(source, { headers }).then(response => {
+          if (!response.ok) {
+            reject(response)
+            return
+          }
           response.blob().then(blob => {
             if (returnAs === 'base64') {
               const reader = new FileReader()
@@ -44,9 +49,14 @@ export default {
     })
 
     Vue.mixin({
+      data: function () {
+        return {
+          mediaSourceQueue: new PQueue({ concurrency: 2 })
+        }
+      },
       methods: {
         mediaSource (source, returnAs = 'url', headers = null) {
-          return _mediaSource(source, returnAs, headers)
+          return this.mediaSourceQueue.add(() => _mediaSource(source, returnAs, headers))
         }
       }
     })

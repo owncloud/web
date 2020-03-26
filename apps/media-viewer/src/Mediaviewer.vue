@@ -98,7 +98,8 @@ export default {
       const query = queryString.stringify({
         x: this.thumbDimensions,
         y: this.thumbDimensions,
-        c: this.activeMediaFile.etag,
+        // strip double quotes from etag
+        c: this.activeMediaFile.etag.substr(1, this.activeMediaFile.etag.length - 2),
         scalingup: 0,
         preview: 1,
         a: 1

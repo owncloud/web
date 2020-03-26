@@ -39,6 +39,20 @@ Feature: Share by public link
       | simple-folder       | Public                |
     But file "data.zip" should not be listed on the webUI
 
+  @issue-276
+  Scenario: Thumbnails are loaded for known file types in public link file list
+    Given user "user1" has shared folder "simple-folder" with link with "read,create" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the user uploads file "new-lorem.txt" using the webUI
+    Then the file "new-lorem.txt" should have a thumbnail displayed on the webUI
+
+  @issue-276
+  Scenario: Thumbnails are not loaded for known file types in public link file list
+    Given user "user1" has shared folder "simple-folder" with link with "read,create" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the user uploads file "new-data.zip" using the webUI
+    Then the file "new-data.zip" should have a file type icon displayed on the webUI
+
   Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page
     Given user "user1" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
     When the public tries to open the public link page of the last public link created by user "user1" with password "pass123"

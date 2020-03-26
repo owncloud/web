@@ -84,6 +84,7 @@
     "owncloud-design-system": "^1.1.1",
     "owncloud-sdk": "^1.0.0-523",
     "p-limit": "^2.2.1",
+    "p-queue": "^6.1.1",
     "parse-json": "^5.0.0",
     "path": "^0.12.7",
     "requirejs": "^2.3.6",

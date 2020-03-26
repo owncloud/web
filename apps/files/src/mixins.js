@@ -46,6 +46,21 @@ export default {
 
     _sidebarOpen () {
       return this.highlightedFile !== null
+    },
+
+    requestHeaders () {
+      if (!this.publicPage()) {
+        return null
+      }
+
+      const headers = new Headers()
+      headers.append('X-Requested-With', 'XMLHttpRequest')
+
+      const password = this.publicLinkPassword
+      if (password) {
+        headers.append('Authorization', 'Basic ' + Buffer.from('public:' + password).toString('base64'))
+      }
+      return headers
     }
   },
   methods: {
