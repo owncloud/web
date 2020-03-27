@@ -136,6 +136,31 @@ module.exports = {
         name: this.elements.collaboratorInformationSubName
       })
       return list.map(result => result.name)
+    },
+    /**
+     * check if the expiration date is present in the collaborator share and then get the expiration information
+     * @return {Promise.<string>}
+     */
+    getCollaboratorExpirationInfo: async function (user) {
+      let elementId
+      let text
+      const formattedWithUserName = util.format(this.elements.collaboratorExpirationInfo.selector, user)
+      const formattedCollaboratorInfoByCollaboratorName = util.format(
+        this.elements.collaboratorInformationByCollaboratorName.selector, user)
+      await this
+        .useXpath()
+        .waitForElementVisible(formattedCollaboratorInfoByCollaboratorName)
+      await this.api.element('xpath', formattedWithUserName, function (result) {
+        elementId = result.value.ELEMENT
+      })
+      if (elementId === undefined) {
+        return elementId
+      } else {
+        await this.api.elementIdText(elementId, result => {
+          text = result.value
+        })
+        return text
+      }
     }
   },
   elements: {
@@ -191,6 +216,10 @@ module.exports = {
     },
     collaboratorIndicator: {
       selector: '.files-collaborators-collaborator-indicator'
+    },
+    collaboratorExpirationInfo: {
+      selector: '//div/span[.="%s"]/parent::div/following-sibling::span/span[contains(text(), "Expires")]',
+      locateStrategy: 'xpath'
     }
   }
 }
