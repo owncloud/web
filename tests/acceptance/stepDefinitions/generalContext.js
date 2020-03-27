@@ -202,12 +202,19 @@ Before(function () {
     }
     return
   }
+  if (client.globals.openid_login) {
+    if (client.globals.ocOpenidConfig) {
+      this.fullPathOfConfigFile = client.globals.ocis_phoenix_config
+      initialConfigJsonSettings = getConfigJsonContent(this.fullPathOfConfigFile)
+    }
+    return
+  }
   this.fullPathOfConfigFile = path.join(__dirname, '/../../../dist/config.json')
   initialConfigJsonSettings = getConfigJsonContent(this.fullPathOfConfigFile)
 })
 
 After(function () {
-  if (client.globals.ocis) {
+  if (client.globals.ocis || client.globals.openid_login) {
     return
   }
   fs.writeFileSync(this.fullPathOfConfigFile,

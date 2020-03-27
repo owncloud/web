@@ -11,7 +11,7 @@ module.exports = {
     await client.page.loginPage().navigate().authenticate()
 
     password = password || userSettings.getPasswordForUser(userId)
-    if (client.globals.ocis) {
+    if (client.globals.openid_login) {
       await client.page.ocisLoginPage().login(userId, password)
       await client.page.kopanoAuthorizePage().authorize()
     } else {

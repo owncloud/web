@@ -121,10 +121,10 @@ function addToGroup (userId, groupId) {
   return httpHelper.postOCS(url, 'admin', body)
 }
 
-Given('user {string} has been created with default attributes', function (userId) {
-  return deleteUser(userId)
-    .then(() => createDefaultUser(userId))
-    .then(() => initUser(userId))
+Given('user {string} has been created with default attributes', async function (userId) {
+  await deleteUser(userId)
+  await createDefaultUser(userId)
+  await initUser(userId)
 })
 
 Given('user {string} has been created with default attributes on remote server', function (userId) {

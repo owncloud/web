@@ -90,6 +90,19 @@ config = {
 			'runningOnOCIS': True,
 			'filterTags': 'not @skip and not @skipOnOCIS',
 			'screenShots': True,
+		},
+		'webUI-openid': {
+			'suites': {
+				'all': 'webUIOpenId'
+			},
+			'extraEnvironment': {
+				'SERVER_HOST': 'http://phoenix:9100',
+				'OPENID_LOGIN': True,
+				'OCIS_PHOENIX_CONFIG': '/srv/config/drone/openid-oc10-config.json'
+			},
+			'openId': True,
+			'filterTags': 'not @skip and @smokeTest',
+			'screenShots': True
 		}
 	},
 
@@ -323,6 +336,7 @@ def acceptance():
 		'federatedServerVersion': '',
 		'runningOnOCIS': False,
 		'screenShots': False,
+		'openId': False,
 	}
 
 	if 'defaults' in config:
@@ -375,37 +389,46 @@ def acceptance():
 								(
 									(
 										cloneOauth() +
-										setupServerAndApp(params['logLevel']) +
 										owncloudLog() +
-										fixPermissions() +
+										setupServerAndApp(params['logLevel']) +
 										(
 											installFederatedServer(federatedServerVersion, db, federationDbSuffix) +
 											setupFedServerAndApp(params['logLevel']) +
 											fixPermissionsFederated() +
 											owncloudLogFederated() if params['federatedServerNeeded'] else []
-										)
+										) +
+										(
+											setupGraphapiOIdC() +
+											buildGlauth() +
+											buildKonnectd() +
+											buildOcisPhoenix() +
+											konnectdService(True) +
+											ocisPhoenixService(True) +
+											glauthService() if params['openId'] else []
+										) +
+										fixPermissions()
 									) if not params['runningOnOCIS'] else (
 										buildKonnectd() +
 										buildOcisPhoenix() +
 										buildReva() +
 										konnectdService() +
 										revaService() +
-										ocisPhoenixService() +
-										redisService()
+										ocisPhoenixService(False)
 									)
 								) +
 								copyFilesForUpload() +
-								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser, params['runningOnOCIS']) +
+								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser, params['runningOnOCIS'] or params['openId'] ) +
 								(
 									uploadScreenshots() +
 									buildGithubComment(suite, alternateSuiteName) +
 									githubComment()
 								if isLocalBrowser(browser) and params['screenShots'] else []),
 							'services':
+								( redisService() if params['runningOnOCIS'] else []) +
 								browserService(alternateSuiteName, browser) +
 								databaseService(db) +
 								(
-									phoenixService() +
+									( phoenixService() if not params['openId'] else [] ) +
 									owncloudService() +
 									(
 										owncloudFederatedService() +
@@ -959,6 +982,80 @@ def cloneOauth():
 		]
 	}]
 
+def setupGraphapiOIdC():
+	return [{
+		'name': 'setup-graphapi',
+		'image': 'owncloudci/php:7.1',
+		'pull': 'always',
+		'commands': [
+			'git clone -b master https://github.com/owncloud/graphapi.git /var/www/owncloud/server/apps/graphapi',
+			'cd /var/www/owncloud/server/apps/graphapi',
+			'make vendor',
+			'git clone -b master https://github.com/owncloud/openidconnect.git /var/www/owncloud/server/apps/openidconnect',
+			'cd /var/www/owncloud/server/apps/openidconnect',
+			'make vendor',
+			'cd /var/www/owncloud/server/',
+			'php occ a:e graphapi',
+			'php occ a:e openidconnect',
+			'php occ config:system:set trusted_domains 2 --value=phoenix',
+			'php occ config:system:set openid-connect provider-url --value="https://konnectd:9130"',
+			'php occ config:system:set openid-connect loginButtonName --value=OpenId-Connect',
+			'php occ config:system:set openid-connect client-id --value=phoenix',
+			'php occ config:system:set cors.allowed-domains 0 --value="http://phoenix:9100"',
+			'php occ config:system:set memcache.local --value="\\\\OC\\\\Memcache\\\\APCu"',
+			'php occ config:system:set phoenix.baseUrl --value="http://phoenix:9100"',
+			'php occ config:system:set debug --value=true --type=bool',
+			'php occ config:list'
+		]
+	}]
+
+def buildGlauth():
+	return[{
+		'name': 'build-glauth',
+		'image': 'webhippie/golang:1.13',
+		'pull': 'always',
+		'commands': [
+			'mkdir -p /srv/app/src',
+			'cd $GOPATH/src',
+			'mkdir -p github.com/owncloud/',
+			'cd github.com/owncloud/',
+			'git clone http://github.com/owncloud/ocis-glauth',
+			'cd ocis-glauth',
+			'make build',
+			'cp bin/ocis-glauth /var/www/owncloud'
+		],
+		'volumes': [{
+			'name': 'gopath',
+			'path': '/srv/app',
+		}, {
+			'name': 'configs',
+			'path': '/srv/config'
+		}],
+	}]
+
+def glauthService():
+	return[{
+		'name': 'glauth',
+		'image': 'webhippie/golang:1.13',
+		'pull': 'always',
+		'detach': True,
+		'environment' : {
+			'GLAUTH_BACKEND_DATASTORE': 'owncloud',
+			'GLAUTH_BACKEND_BASEDN': 'dc=example,dc=com',
+		},
+		'commands': [
+			'cd /var/www/owncloud',
+			'./ocis-glauth --log-level debug server --backend-server http://owncloud/'
+		],
+		'volumes': [{
+			'name': 'gopath',
+			'path': '/srv/app',
+		}, {
+			'name': 'configs',
+			'path': '/srv/config'
+		}],
+	}]
+
 def buildKonnectd():
 	return[{
 		'name': 'build-konnectd',
@@ -983,24 +1080,31 @@ def buildKonnectd():
 		}],
 	}]
 
-def konnectdService():
+def konnectdService(glauth = False):
 	return[{
 		'name': 'konnectd',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'LDAP_BASEDN': 'ou=TestUsers,dc=owncloud,dc=com',
-			'LDAP_BINDDN': 'cn=admin,dc=owncloud,dc=com',
-			'LDAP_URI': 'ldap://ldap:389',
+			'LDAP_BASEDN': 'dc=example,dc=com' if glauth else 'ou=TestUsers,dc=owncloud,dc=com',
+			'LDAP_BINDDN': 'cn=admin,ou=users,dc=example,dc=com' if glauth else 'cn=admin,dc=owncloud,dc=com',
+			'LDAP_URI': 'ldap://glauth:9125' if glauth else 'ldap://ldap:389',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
 			'KONNECTD_ISS': 'https://konnectd:9130',
 			'KONNECTD_TLS': 'true',
 			'LDAP_BINDPW': 'admin',
+			'LDAP_SCOPE': 'sub',
+			'LDAP_LOGIN_ATTRIBUTE': 'uid',
+			'LDAP_EMAIL_ATTRIBUTE': 'mail',
+			'LDAP_NAME_ATTRIBUTE': 'givenName',
+			'LDAP_UUID_ATTRIBUTE': 'uid',
+			'LDAP_UUID_ATTRIBUTE_TYPE': 'text',
+			'LDAP_FILTER': "(objectClass=posixaccount)"
 		},
 		'commands': [
 			'cd /var/www/owncloud',
-			'./ocis-konnectd server'
+			'./ocis-konnectd  --log-level debug server --signing-kid gen1-2020-02-27',
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1035,19 +1139,20 @@ def buildOcisPhoenix():
 		}],
 	}]
 
-def ocisPhoenixService():
+def ocisPhoenixService(glauth = False):
 	return[{
 		'name': 'phoenix',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
-			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist'
+			'PHOENIX_WEB_CONFIG': '/srv/config/drone/openid-oc10-config.json' if glauth else '/srv/config/drone/ocis-config.json',
+			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
+			'PHOENIX_OIDC_CLIENT_ID': 'phoenix'
 		},
 		'commands': [
 			'cd /var/www/owncloud',
-			'./ocis-phoenix server',
+			'./ocis-phoenix --log-level debug server',
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1292,7 +1397,6 @@ def redisService():
 		'name': 'redis',
 		'image': 'webhippie/redis',
 		'pull': 'always',
-		'detach': True,
 		'environment': {
 			'REDIS_DATABASES': 1
 		},

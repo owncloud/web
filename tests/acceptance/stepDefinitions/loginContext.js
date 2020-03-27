@@ -17,7 +17,7 @@ When('the user clicks the authenticate button', () => client.page.loginPage().au
 
 When('the user logs in with username {string} and password {string} using the webUI',
   (username, password) => {
-    if (client.globals.ocis) {
+    if (client.globals.openid_login) {
       return client.page.ocisLoginPage().login(username, password)
     }
     return client.page.ownCloudLoginPage().login(username, password)
@@ -26,7 +26,7 @@ When('the user logs in with username {string} and password {string} using the we
 
 When('the user tries to log in with username {string} and password {string} using the webUI',
   (username, password) => {
-    if (client.globals.ocis) {
+    if (client.globals.openid_login) {
       return client.page.ocisLoginPage().login(username, password)
     }
     return client.page.ownCloudLoginPage().login(username, password)
