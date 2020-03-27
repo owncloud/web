@@ -79,7 +79,7 @@ module.exports = {
       selenium_host: 'selenium',
       desiredCapabilities: {
         chromeOptions: {
-          args: ['disable-gpu', 'disable-dev-shm-usage'],
+          args: ['disable-gpu', 'disable-dev-shm-usage', 'ignore-certificate-errors'],
           w3c: false
         },
         idleTimeout: 180
