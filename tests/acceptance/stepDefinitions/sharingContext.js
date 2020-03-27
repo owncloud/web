@@ -780,18 +780,23 @@ Then('user {string} should be listed as {string} in the collaborators list on th
   return assertCollaboratorslistContains('user', user, { role })
 })
 
-Then('the share {string} shared with user {string} should have no expiration information', async function (item, user) {
+Then('the share {string} shared with user {string} should have no expiration information displayed on the WebUI', async function (item, user) {
   await client.page.FilesPageElement.filesList().clickRow(item)
   await client.page.filesPage().selectTabInSidePanel('collaborators')
   const elementID = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(user)
   return assert.strictEqual(elementID, undefined, 'The expiration information was present unexpectedly')
 })
 
-Then('the expiration information of share {string} shared with user {string} should be {string}', async function (item, user, information) {
+Then('the expiration information displayed on the WebUI of share {string} shared with user {string} should be {string} or {string}', async function (item, user, information1, information2) {
   await client.page.FilesPageElement.filesList().clickRow(item)
   await client.page.filesPage().selectTabInSidePanel('collaborators')
   const actualInfo = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(user)
-  return assert.strictEqual(actualInfo, information, `Expected expiry information '${information}' but got '${actualInfo}' instead`)
+  if (actualInfo === information1) {
+    return true
+  } else {
+    return assert.strictEqual(actualInfo, information2,
+      `The expected expiration information was either '${information1}' or '${information2}', but got '${actualInfo}'`)
+  }
 })
 
 Then('remote user {string} should be listed as {string} via {string} in the collaborators list on the webUI', function (user, role, via) {
@@ -913,7 +918,7 @@ Then('the expiration date field should be marked as required on the WebUI', asyn
   await client.page.FilesPageElement.sharingDialog().waitForElementVisible('@requiredLabelInCollaboratorsExpirationDate')
 })
 
-Then('the expiration date for {string} should be disabled', async function (expiration) {
+Then('the expiration date for {string} should be disabled on the WebUI', async function (expiration) {
   const dateToSet = calculateDate(expiration)
   const isEnabled = await client.page.FilesPageElement.sharingDialog()
     .openExpirationDatePicker()
