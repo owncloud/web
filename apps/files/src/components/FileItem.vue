@@ -87,7 +87,7 @@ export default {
       if (this.item.etag) {
         // add etag for URL based caching
         // strip double quotes from etag
-        query.c = this.item.etag.substr(2, this.item.etag.length - 2)
+        query.c = this.item.etag.substr(1, this.item.etag.length - 2)
       }
 
       let itemPath = this.item.path

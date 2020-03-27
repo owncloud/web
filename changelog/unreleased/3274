@@ -1,0 +1,6 @@
+Bugfix: Do not remove first character of etag
+
+When stripping away double quotes in etag of the file thumbnails, we accidentally
+removed first character as well. We've stopped removing that character.
+
+https://github.com/owncloud/phoenix/pull/3274
