@@ -11,6 +11,7 @@ Summary
 * Bugfix - Fix logout when no tokens are known anymore: [#2961](https://github.com/owncloud/phoenix/pull/2961)
 * Bugfix - Files list status indicators are now appearing without any delay: [#2973](https://github.com/owncloud/phoenix/issues/2973)
 * Bugfix - Fix file actions menu when using OCIS backend: [#3214](https://github.com/owncloud/phoenix/issues/3214)
+* Bugfix - Do not remove first character of etag: [#3274](https://github.com/owncloud/phoenix/pull/3274)
 * Change - Don't import whole core-js bundle directly into core: [#3173](https://github.com/owncloud/phoenix/pull/3173)
 * Enhancement - Added thumbnails in file list: [#276](https://github.com/owncloud/phoenix/issues/276)
 
@@ -45,6 +46,13 @@ Details
 
    https://github.com/owncloud/phoenix/issues/3214
    https://github.com/owncloud/ocis-phoenix/issues/51
+
+* Bugfix - Do not remove first character of etag: [#3274](https://github.com/owncloud/phoenix/pull/3274)
+
+   When stripping away double quotes in etag of the file thumbnails, we accidentally removed
+   first character as well. We've stopped removing that character.
+
+   https://github.com/owncloud/phoenix/pull/3274
 
 * Change - Don't import whole core-js bundle directly into core: [#3173](https://github.com/owncloud/phoenix/pull/3173)
 
