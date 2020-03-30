@@ -2,28 +2,18 @@ const util = require('util')
 const path = require('path')
 const xpathHelper = require('../../helpers/xpath')
 const { join } = require('../../helpers/path')
+const { client } = require('nightwatch-api')
+const filesRow = client.page.FilesPageElement.filesRow()
 
 module.exports = {
   commands: {
-    /**
-     * Get Selector for File Actions expander
-     *
-     * @param {string} fileName
-     * @param {string} elementType
-     * @returns {string} file action button selector
-     */
-    getFileActionBtnSelector: function (fileName, elementType = 'file') {
-      return this.getFileRowSelectorByFileName(fileName, elementType) +
-        this.api.page.FilesPageElement.fileActionsMenu().elements
-          .fileActionsButtonInFileRow.selector
-    },
     /**
      * @param {string} fileName
      * @return {Promise<*>}
      */
     openSharingDialog: async function (fileName) {
       await this.waitForFileVisible(fileName)
-      return this.openFileActionsMenu(fileName)
+      return filesRow.openFileActionsMenu(fileName)
         .openCollaboratorsDialog()
     },
     /**
@@ -49,7 +39,7 @@ module.exports = {
      */
     openPublicLinkDialog: async function (fileName) {
       await this.waitForFileVisible(fileName)
-      await this.openFileActionsMenu(fileName)
+      await filesRow.openFileActionsMenu(fileName)
       return this.openLinksDialog()
     },
     /**
@@ -58,7 +48,7 @@ module.exports = {
      */
     deleteFile: async function (resource) {
       await this.waitForFileVisible(resource)
-      await this
+      await filesRow
         .openFileActionsMenu(resource)
         .delete()
       return this
@@ -71,7 +61,7 @@ module.exports = {
      */
     renameFile: async function (fromName, toName, expectToSucceed = true) {
       await this.waitForFileVisible(fromName)
-      await this
+      await filesRow
         .openFileActionsMenu(fromName)
         .rename(toName, expectToSucceed)
       return this
@@ -83,7 +73,7 @@ module.exports = {
      */
     restoreFile: async function (element, elementType) {
       await this.waitForFileWithPathVisible(element, elementType)
-      await this
+      await filesRow
         .openFileActionsMenu(element, elementType)
         .restore()
       return this
@@ -94,7 +84,7 @@ module.exports = {
      */
     deleteImmediately: async function (resource) {
       await this.waitForFileVisible(resource)
-      await this
+      await filesRow
         .openFileActionsMenu(resource)
         .deleteResourceImmediately(resource)
       return this
@@ -106,7 +96,7 @@ module.exports = {
      */
     isActionAttributeDisabled: async function (action, resource) {
       await this.waitForFileVisible(resource)
-      return this
+      return filesRow
         .openFileActionsMenu(resource)
         .getActionDisabledAttr('delete')
     },
@@ -116,7 +106,7 @@ module.exports = {
      */
     downloadFile: async function (resource) {
       await this.waitForFileVisible(resource)
-      await this
+      await filesRow
         .openFileActionsMenu(resource)
         .download()
       return this
@@ -127,7 +117,7 @@ module.exports = {
      */
     isSharingButtonPresent: async function (resource) {
       await this.waitForFileVisible(resource)
-      await this
+      await filesRow
         .openFileActionsMenu(resource)
         .isSharingBtnPresent()
       return this
@@ -224,42 +214,6 @@ module.exports = {
       return this.api.page.FilesPageElement.appSideBar()
     },
     /**
-     * opens file-actions menu for given resource
-     *
-     * @param {string} resource name
-     * @param {string} resource type (file|folder)
-     *
-     * @returns {*}
-     */
-    openFileActionsMenu: function (resource, elementType = 'file') {
-      const fileActionsBtnSelector = this.getFileActionBtnSelector(resource, elementType)
-      this
-        .useXpath()
-        .waitForElementVisible(fileActionsBtnSelector)
-        .click(fileActionsBtnSelector)
-        .useCss()
-      return this.api.page.FilesPageElement.fileActionsMenu()
-    },
-
-    /**
-     *
-     * @param {string} path
-     */
-    markAsFavorite: async function (path) {
-      await this.waitForFileVisible(path)
-
-      const favoriteIconButton = this.getFileRowSelectorByFileName(path) +
-        this.elements.notMarkedFavoriteInFileRow.selector
-
-      await this.initAjaxCounters()
-        .useXpath()
-        .click(favoriteIconButton)
-        .waitForOutstandingAjaxCalls()
-        .useCss()
-
-      return this
-    },
-    /**
      *
      */
     checkAllFiles: function () {
@@ -268,7 +222,6 @@ module.exports = {
         .waitForElementVisible('@checkBoxAllFiles')
         .click('@checkBoxAllFiles')
     },
-
     /**
      * Restores all the selected files/folders
      *
@@ -279,24 +232,6 @@ module.exports = {
         .useXpath()
         .click('@restoreSelectedButton')
         .waitForOutstandingAjaxCalls()
-    },
-
-    /**
-     * @param {string} path
-     */
-    unmarkFavorite: async function (path) {
-      const unFavoriteBtn = this.getFileRowSelectorByFileName(path) +
-        this.elements.markedFavoriteInFileRow.selector
-
-      await this.waitForFileVisible(path)
-
-      await this.initAjaxCounters()
-        .useXpath()
-        .click(unFavoriteBtn)
-        .waitForOutstandingAjaxCalls()
-        .useCss()
-
-      return this
     },
     /**
      * @param {string} item the file/folder to click
@@ -329,23 +264,6 @@ module.exports = {
       await this.toggleCheckbox(enableOrDisable, fileCheckbox, 'xpath')
 
       return this
-    },
-    /**
-     *
-     * @param {string} path
-     *
-     * @return {Promise<boolean>}
-     */
-    isMarkedFavorite: async function (path) {
-      let visible = false
-      const markedFavoriteIcon = this.getFileRowSelectorByFileName(path) +
-        this.elements.markedFavoriteInFileRow.selector
-      await this.waitForFileVisible(path)
-      await this.api
-        .element('xpath', markedFavoriteIcon, (result) => {
-          visible = !!result.value.ELEMENT
-        })
-      return visible
     },
     /**
      * Wait for A filerow with given filename to be visible
@@ -473,7 +391,6 @@ module.exports = {
      * @param {string} elementType
      * @returns {string}
      */
-
     getFileLinkSelectorByFileName: function (fileName, elementType) {
       return this.getFileRowSelectorByFileName(fileName, elementType) +
         this.elements.fileLinkInFileRow.selector
