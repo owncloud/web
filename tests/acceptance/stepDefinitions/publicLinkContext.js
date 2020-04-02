@@ -30,6 +30,17 @@ When(
   }
 )
 
+When(
+  'the user (tries to) create a new public link for file/folder/resource {string} which expires in {string} day/days using the webUI',
+  async function (resource, days) {
+    await client.page.FilesPageElement
+      .appSideBar()
+      .closeSidebar(100)
+      .openPublicLinkDialog(resource)
+    return client.page.FilesPageElement.publicLinksDialog().setPublicLinkDate(days)
+  }
+)
+
 When('the public uses the webUI to access the last public link created by user {string}', async function (linkCreator) {
   const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
   if (lastShare.permissions === sharingHelper.PERMISSION_TYPES.create) {

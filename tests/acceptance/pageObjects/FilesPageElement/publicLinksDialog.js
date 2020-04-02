@@ -187,6 +187,31 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
     },
     /**
+     * tries to create a new public link in specified date
+     *
+     * @param {string} settings.expireDate - Expire date for a public link share
+     * @returns {*}
+     */
+    setPublicLinkDate: async function (days) {
+      await this
+        .waitForElementVisible('@publicLinkAddButton')
+        .click('@publicLinkAddButton')
+        .waitForElementVisible('@publicLinkCreateButton')
+      if (days) {
+        const isExpiryDateChanged = await this.setPublicLinkForm('expireDate', days)
+        if (!isExpiryDateChanged) {
+          console.log('WARNING: Cannot create share with disabled expiration date!')
+          return
+        }
+      }
+      return this
+        .initAjaxCounters()
+        .waitForElementVisible('@publicLinkCreateButton')
+        .click('@publicLinkCreateButton')
+        .waitForElementNotPresent('@publicLinkCreateButton')
+        .waitForOutstandingAjaxCalls()
+    },
+    /**
      * Gets the data of all public links of the currently open public link tab
      *
      * @param {Object.<String,Object>} subSelectors Map of arbitrary attribute name to selector to query
