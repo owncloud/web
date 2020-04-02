@@ -1,3 +1,25 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.7.0...master
+
+Summary
+-------
+
+* Bugfix - Fix oidc redirect after logout: [#3284](https://github.com/owncloud/phoenix/pull/3284)
+
+Details
+-------
+
+* Bugfix - Fix oidc redirect after logout: [#3284](https://github.com/owncloud/phoenix/pull/3284)
+
+   Changed the redirect uri to not contain a trailing slash so that the redirect in the oidc
+   provider works.
+
+   https://github.com/owncloud/phoenix/pull/3284
+
 Changelog for ownCloud Phoenix [0.7.0] (2020-03-30)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.7.0 relevant to
