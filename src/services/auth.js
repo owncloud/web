@@ -17,7 +17,7 @@ export function initVueAuthenticate (config) {
       response_mode: 'query',
       scope: 'openid profile offline_access',
       monitorSession: false,
-      post_logout_redirect_uri: baseUrl,
+      post_logout_redirect_uri: baseUrl.replace(/\/$/, ''), // trim the trailing slash
       silent_redirect_uri: baseUrl + 'oidc-silent-redirect.html',
       accessTokenExpiringNotificationTime: 10,
       automaticSilentRenew: true,
