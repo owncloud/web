@@ -81,7 +81,7 @@ export default {
       }
     },
     headers () {
-      if (!this.publicPage()) {
+      if (!this.isPublicContext()) {
         return null
       }
 
@@ -105,7 +105,7 @@ export default {
         a: 1
       })
 
-      if (this.publicPage()) {
+      if (this.isPublicContext()) {
         const path = [
           '..',
           'dav',
@@ -164,6 +164,12 @@ export default {
   },
 
   methods: {
+    isPublicContext () {
+      // TODO: Can we rely on not being "authenticated" while viewing a public link?
+      // Currently it works. We cannot use publicPage() because that will still return
+      // true when opening the mediaviewer from authenticated routes
+      return !this.isAuthenticated
+    },
     loadImage () {
       this.loading = true
 
