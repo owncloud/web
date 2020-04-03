@@ -8,17 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
-* Bugfix - Fix oidc redirect after logout: [#3284](https://github.com/owncloud/phoenix/pull/3284)
+* Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
 
 Details
 -------
 
-* Bugfix - Fix oidc redirect after logout: [#3284](https://github.com/owncloud/phoenix/pull/3284)
+* Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
 
-   Changed the redirect uri to not contain a trailing slash so that the redirect in the oidc
-   provider works.
+   After the logout the idp sent a redirect to `<redirectUri>?state=` which was then redirected
+   to `<redirectUri>?state=#/login` by phoenix. Having the query parameters in between broke
+   the application. To prevent the whole login url `<baseUrl>#/login` should be sent then the
+   query parameter will be appended to the end.
 
-   https://github.com/owncloud/phoenix/pull/3284
+   https://github.com/owncloud/phoenix/issues/3285
 
 Changelog for ownCloud Phoenix [0.7.0] (2020-03-30)
 =======================================
