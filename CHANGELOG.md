@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Update owncloud-sdk 1.0.0-544: [#3292](https://github.com/owncloud/phoenix/pull/3292)
+* Bugfix - Set a higher timeout for requirejs: [#3293](https://github.com/owncloud/phoenix/pull/3293)
 * Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
 
 Details
@@ -19,6 +20,13 @@ Details
    This sdk version is much smaller in size
 
    https://github.com/owncloud/phoenix/pull/3292
+
+* Bugfix - Set a higher timeout for requirejs: [#3293](https://github.com/owncloud/phoenix/pull/3293)
+
+   In slow networks requirejs requests can timeout. The timeout is now set to a higher value (200
+   secs)
+
+   https://github.com/owncloud/phoenix/pull/3293
 
 * Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
 
