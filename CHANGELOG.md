@@ -8,10 +8,17 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Update owncloud-sdk 1.0.0-544: [#3292](https://github.com/owncloud/phoenix/pull/3292)
 * Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
 
 Details
 -------
+
+* Bugfix - Update owncloud-sdk 1.0.0-544: [#3292](https://github.com/owncloud/phoenix/pull/3292)
+
+   This sdk version is much smaller in size
+
+   https://github.com/owncloud/phoenix/pull/3292
 
 * Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
 
