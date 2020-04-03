@@ -245,6 +245,10 @@ function requireError (err) {
     // TODO: frozen object would be great ...
     window.phoenixConfig = config
 
+    // requirejs.config({waitSeconds:200}) is not really working ... reason unknown
+    // we are manipulating requirejs directly
+    requirejs.s.contexts._.config.waitSeconds = 200
+
     requirejs(apps, loadApps, requireError)
   } catch (err) {
     router.push('missing-config')

@@ -1,0 +1,5 @@
+Bugfix: Set a higher timeout for requirejs
+
+ In slow networks requirejs requests can timeout. The timeout is now set to a higher value (200 secs)
+
+ https://github.com/owncloud/phoenix/pull/3293
