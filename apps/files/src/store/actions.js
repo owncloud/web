@@ -258,7 +258,7 @@ function _buildLink(link, $gettext) {
     permissions: link.permissions,
     description,
     stime: link.stime,
-    name: link.name,
+    name: typeof link.name === 'string' ? link.name : '',
     password: !!(link.share_with && link.share_with_displayname),
     expiration:
       typeof link.expiration === 'string' ? moment(link.expiration).format('YYYY-MM-DD') : null,
