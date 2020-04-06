@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Update owncloud-sdk 1.0.0-544: [#3292](https://github.com/owncloud/phoenix/pull/3292)
 * Bugfix - Set a higher timeout for requirejs: [#3293](https://github.com/owncloud/phoenix/pull/3293)
+* Bugfix - Fix media-viewer on private pages: [#3288](https://github.com/owncloud/phoenix/pull/3288)
 * Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
 
 Details
@@ -27,6 +28,12 @@ Details
    secs)
 
    https://github.com/owncloud/phoenix/pull/3293
+
+* Bugfix - Fix media-viewer on private pages: [#3288](https://github.com/owncloud/phoenix/pull/3288)
+
+   Media-viewer incorrectly assumed it was on a public page when opened from a private page.
+
+   https://github.com/owncloud/phoenix/pull/3288
 
 * Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
 
