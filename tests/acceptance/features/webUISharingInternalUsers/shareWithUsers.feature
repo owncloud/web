@@ -687,6 +687,27 @@ Feature: Sharing files and folders with internal users
       | expiration  | +30        |
       | permissions | read       |
 
+  Scenario: user cannot update the date of a share after the system maximum expiry date has been reduced
+    Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
+    And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "30"
+    And user "user1" has created a new share with following settings
+      | path             | lorem.txt |
+      | shareWith        | user2     |
+      | expireDate       | +30       |
+    And user "user1" has logged in using the webUI
+    And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "10"
+    When the user tries to edit the collaborator "User Two" of file "lorem.txt" changing following
+      | expireDate       | +15    |
+    Then the user should see an error message on the collaborator share dialog saying "Cannot set expiration date more than 10 days in the future"
+    And user "user1" should have a share with these details:
+      | field       | value      |
+      | path        | /lorem.txt |
+      | share_type  | user       |
+      | uid_owner   | user1      |
+      | share_with  | user2      |
+      | expiration  | +30        |
+
   @issue-3174
   Scenario Outline: enforced expiry date for group affect user shares
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
