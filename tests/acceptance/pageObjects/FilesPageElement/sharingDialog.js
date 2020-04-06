@@ -531,9 +531,55 @@ module.exports = {
           disabled = result.value
         })
       return disabled
+    },
+    /**
+     * tries to change the settings of collaborator
+     * @param {string} collaborator Name of the collaborator
+     * @return {*}
+     */
+    changeCollaboratorSettings: async function (collaborator, editData) {
+      await collaboratorDialog.clickEditShare(collaborator)
+      for (const [key, value] of Object.entries(editData)) {
+        await this.setCollaboratorForm(key, value)
+      }
+      return this.waitForElementVisible('@saveShareButton')
+        .click('@saveShareButton')
+    },
+    /**
+     * function sets different fields for collaborator form
+     *
+     * @param key fields like permissionString, expireDate
+     * @param value values for the different fields to be set
+     * @returns {*|Promise<void>|exports}
+     */
+    setCollaboratorForm: function (key, value) {
+      if (key === 'permissionString') {
+        return this.changeCollaboratorRoleInDropdown(value)
+      } else if (key === 'expireDate') {
+        const dateToSet = calculateDate(value)
+        return this.openExpirationDatePicker()
+          .setExpirationDate(dateToSet)
+      }
+      return this
+    },
+    /**
+     *
+     * @returns {Promise<string>}
+     */
+    getErrorMessage: async function () {
+      let message
+      await this.waitForElementVisible('@collaboratorErrorAlert')
+        .getText('xpath', this.elements.collaboratorErrorAlert.selector, function (result) {
+          message = result.value
+        })
+      return message
     }
   },
   elements: {
+    collaboratorErrorAlert: {
+      selector: '//div[contains(@class, "collaborator-error-alert")]',
+      locateStrategy: 'xpath'
+    },
     sharingSidebarRoot: {
       selector: '//*[@id="oc-files-sharing-sidebar"]',
       locateStrategy: 'xpath'

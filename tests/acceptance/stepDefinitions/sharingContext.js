@@ -163,6 +163,24 @@ Given('user {string} has created a new share with following settings',
     )
   })
 
+When('the user tries to edit the collaborator {string} of file/folder/resource {string} changing following',
+  async function (collaborator, resource, dataTable) {
+    const settings = dataTable.rowsHash()
+    const api = client.page.FilesPageElement
+    await api
+      .appSideBar()
+      .closeSidebar(100)
+      .openSharingDialog(resource)
+    return api.sharingDialog().changeCollaboratorSettings(collaborator, settings)
+  })
+
+Then('the user should see an error message on the collaborator share dialog saying {string}', async function (expectedMessage) {
+  const actualMessage = await client.page.FilesPageElement
+    .sharingDialog()
+    .getErrorMessage()
+  return client.assert.strictEqual(actualMessage, expectedMessage)
+})
+
 /**
  * sets up data into a standard format for creating new public link share
  *
