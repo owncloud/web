@@ -4,7 +4,6 @@ const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
 const fs = require('fs')
-const path = require('path')
 const occHelper = require('../helpers/occHelper')
 
 let initialConfigJsonSettings
@@ -195,22 +194,8 @@ After(async function (testCase) {
 })
 
 Before(function () {
-  if (client.globals.ocis) {
-    if (client.globals.ocis_phoenix_config) {
-      this.fullPathOfConfigFile = client.globals.ocis_phoenix_config
-      initialConfigJsonSettings = getConfigJsonContent(this.fullPathOfConfigFile)
-    }
-    return
-  }
-  if (client.globals.openid_login) {
-    if (client.globals.ocOpenidConfig) {
-      this.fullPathOfConfigFile = client.globals.ocis_phoenix_config
-      initialConfigJsonSettings = getConfigJsonContent(this.fullPathOfConfigFile)
-    }
-    return
-  }
-  this.fullPathOfConfigFile = path.join(__dirname, '/../../../dist/config.json')
-  initialConfigJsonSettings = getConfigJsonContent(this.fullPathOfConfigFile)
+  this.fullPathOfConfigFile = client.globals.phoenix_config
+  initialConfigJsonSettings = getConfigJsonContent(client.globals.phoenix_config)
 })
 
 After(function () {

@@ -81,39 +81,49 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | permissions | read                       |
     And as "user1" folder "simple-empty-folder" should exist on remote server
 
+  @issue-3309
   Scenario: share a folder with an remote user and prohibit deleting - remote server shares - local server receives
     Given user "user1" from remote server has shared "simple-folder" with user "user1" from local server with "read" permissions
     When the user reloads the current page of the webUI
     And the user accepts all shares displayed in the notifications on the webUI
     And the user opens folder "simple-folder (2)" directly on the webUI
+    And the user reloads the current page of the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
+  @issue-3309
   Scenario: overwrite a file in a received share - remote server shares - local server receives
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "user1" from remote server has shared "simple-folder" with user "user1" from local server
     And the user opens folder "simple-folder (2)" directly on the webUI
+    And the user reloads the current page of the webUI
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then as "user1" the content of "simple-folder (2)/lorem.txt" should be the same as the local "lorem.txt"
 
+  @issue-3309
   Scenario: upload a new file in a received share - remote server shares - local server receives
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "user1" from remote server has shared "simple-folder" with user "user1" from local server
     When the user opens folder "simple-folder (2)" directly on the webUI
+    And the user reloads the current page of the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then as "user1" file "simple-folder/new-lorem.txt" should exist on remote server
 
+  @issue-3309
   Scenario: rename a file in a received share - remote server shares - local server receives
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "user1" from remote server has shared "simple-folder" with user "user1" from local server
     When the user opens folder "simple-folder (2)" directly on the webUI
+    And the user reloads the current page of the webUI
     And the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
     Then as "user1" file "simple-folder/new-lorem.txt" should exist on remote server
     But as "user1" file "simple-folder/lorem.txt" should not exist on remote server
 
+  @issue-3309
   Scenario: delete a file in a received share - remote server shares - local server receives
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "user1" from remote server has shared "simple-folder" with user "user1" from local server
     When the user opens folder "simple-folder (2)" directly on the webUI
+    And the user reloads the current page of the webUI
     And the user deletes file "lorem.txt" using the webUI
     Then as "user1" file "simple-folder/lorem.txt" should not exist on remote server
 
