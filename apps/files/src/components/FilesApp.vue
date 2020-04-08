@@ -170,7 +170,7 @@ export default {
       this.openFile({
         filePath: file.path
       })
-      let actions = this.extensions(file.extension)
+      let actions = this.extensions(file.extension.toLowerCase())
       actions = actions.map(action => {
         if (action.version === 3) {
           return {

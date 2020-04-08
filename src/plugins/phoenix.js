@@ -20,10 +20,12 @@ export default {
           // but also when accessing pages that require no auth even when authenticated
           return !this.isAuthenticated || this.$route.meta.auth === false
         },
-        downloadFile (file) {
+        // FIXME: optional publicContext parameter is a mess
+        downloadFile (file, publicContext = null) {
           this.addActionToProgress(file)
+          const publicPage = publicContext !== null ? publicContext : this.publicPage()
           let headers = {}
-          if (this.publicPage()) {
+          if (publicPage) {
             const url = this.$client.publicFiles.getFileUrl(file.path)
             const password = this.publicLinkPassword
             if (password) {
