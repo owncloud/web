@@ -12,6 +12,7 @@ Summary
 * Bugfix - Set a higher timeout for requirejs: [#3293](https://github.com/owncloud/phoenix/pull/3293)
 * Bugfix - Fix media-viewer on private pages: [#3288](https://github.com/owncloud/phoenix/pull/3288)
 * Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
+* Enhancement - Add state to app urls: [#3294](https://github.com/owncloud/phoenix/pull/3294)
 
 Details
 -------
@@ -43,6 +44,13 @@ Details
    query parameter will be appended to the end.
 
    https://github.com/owncloud/phoenix/issues/3285
+
+* Enhancement - Add state to app urls: [#3294](https://github.com/owncloud/phoenix/pull/3294)
+
+   Currently opened file can be added to app routes so reloading the page can be made to work For now
+   it's only implemented in mediaviewer
+
+   https://github.com/owncloud/phoenix/pull/3294
 
 Changelog for ownCloud Phoenix [0.7.0] (2020-03-30)
 =======================================
