@@ -4,11 +4,11 @@ import translationsJson from '../l10n/translations'
 import Mediaviewer from './Mediaviewer.vue'
 
 const routes = [{
-  path: '/mediaviewer',
+  path: '/:contextRouteName/:filePath',
   components: {
     app: Mediaviewer
   },
-  name: 'mediaviewer',
+  name: 'mediaviewer/image',
   meta: { auth: false }
 }]
 
@@ -17,13 +17,17 @@ const appInfo = {
   id: 'mediaviewer',
   icon: 'image',
   extensions: [{
-    extension: 'png'
+    extension: 'png',
+    routeName: 'image'
   }, {
-    extension: 'jpg'
+    extension: 'jpg',
+    routeName: 'image'
   }, {
-    extension: 'jpeg'
+    extension: 'jpeg',
+    routeName: 'image'
   }, {
-    extension: 'gif'
+    extension: 'gif',
+    routeName: 'image'
   }]
 }
 

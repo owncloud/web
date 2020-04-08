@@ -213,11 +213,16 @@ export default {
         }
         return
       }
-      // TODO: rewire code below ....
-      const appId = action.app
-      // TODO path to state
+
+      const routeName = action.routeName ? action.app + '/' + action.routeName : action.app
+      const params = {
+        filePath,
+        contextRouteName: this.$route.name
+      }
+
       this.$router.push({
-        name: appId
+        name: routeName,
+        params
       })
     }
   }
