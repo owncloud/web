@@ -214,7 +214,7 @@ const waitBetweenDeleteOperations = async function () {
  */
 const waitBetweenFileUploadOperations = async function () {
   const timeSinceLastFileUpload = Date.now() - timeOfLastUploadOperation
-  if (timeSinceLastFileUpload <= 1000) {
+  if (timeSinceLastFileUpload <= 1001) {
     await client.pause(1001 - timeSinceLastFileUpload)
   }
   timeOfLastUploadOperation = Date.now()
