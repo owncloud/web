@@ -23,7 +23,7 @@ const LDAP_SERVER_URL = process.env.LDAP_SERVER_URL || 'ldap://127.0.0.1'
 const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
 const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
 const OCIS_SKELETON_DIR = process.env.OCIS_SKELETON_DIR
-const OPENID_LOGIN = !!process.env.OPENID_LOGIN || true
+const OPENID_LOGIN = RUN_ON_OCIS || !!process.env.OPENID_LOGIN
 const PHOENIX_CONFIG = process.env.PHOENIX_CONFIG || path.join(__dirname, 'dist/config.json')
 
 module.exports = {
