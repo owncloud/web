@@ -187,14 +187,14 @@ module.exports = {
       selector: '#resolve-notification-button'
     },
     ocDialogPromptAlert: {
-      selector: '.uk-modal.uk-open .oc-dialog-prompt-alert'
+      selector: '.uk-modal.uk-open .oc-text-input-message'
     },
     searchInputFieldHighResolution: {
-      selector: '(//input[contains(@class, "oc-search-input")])[1]',
+      selector: '(//div[contains(@class, "oc-search-input")]//input)[1]',
       locateStrategy: 'xpath'
     },
     searchInputFieldLowResolution: {
-      selector: '(//input[contains(@class, "oc-search-input")])[2]',
+      selector: '(//div[contains(@class, "oc-search-input")]//input)[2]',
       locateStrategy: 'xpath'
     },
     searchLoadingIndicator: {

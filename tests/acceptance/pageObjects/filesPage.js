@@ -301,8 +301,7 @@ module.exports = {
       selector: '#new-folder-input'
     },
     newFileInput: {
-      selector: "//div[@id='new-file-dialog']//input[@type='text']",
-      locateStrategy: 'xpath'
+      selector: '#new-file-input'
     },
     newFolderOkButton: {
       selector: '#new-folder-ok'
