@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Display errors when saving collaborator fails: [#3176](https://github.com/owncloud/phoenix/issues/3176)
 * Bugfix - Update owncloud-sdk 1.0.0-544: [#3292](https://github.com/owncloud/phoenix/pull/3292)
 * Bugfix - Set a higher timeout for requirejs: [#3293](https://github.com/owncloud/phoenix/pull/3293)
 * Bugfix - Fix media-viewer on private pages: [#3288](https://github.com/owncloud/phoenix/pull/3288)
@@ -16,6 +17,15 @@ Summary
 
 Details
 -------
+
+* Bugfix - Display errors when saving collaborator fails: [#3176](https://github.com/owncloud/phoenix/issues/3176)
+
+   When saving a collaborator has failed, the UI was still behaving like it saved everything
+   successfully. This has been fixed by displaying the errors at the top of the collaborator
+   editing form and staying in the editing view.
+
+   https://github.com/owncloud/phoenix/issues/3176
+   https://github.com/owncloud/phoenix/pull/3241
 
 * Bugfix - Update owncloud-sdk 1.0.0-544: [#3292](https://github.com/owncloud/phoenix/pull/3292)
 
