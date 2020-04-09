@@ -13,6 +13,7 @@ Summary
 * Bugfix - Set a higher timeout for requirejs: [#3293](https://github.com/owncloud/phoenix/pull/3293)
 * Bugfix - Fix media-viewer on private pages: [#3288](https://github.com/owncloud/phoenix/pull/3288)
 * Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
+* Enhancement - Visual improvement to errors in input prompts: [#1906](https://github.com/owncloud/phoenix/issues/1906)
 * Enhancement - Add state to app urls: [#3294](https://github.com/owncloud/phoenix/pull/3294)
 
 Details
@@ -54,6 +55,16 @@ Details
    query parameter will be appended to the end.
 
    https://github.com/owncloud/phoenix/issues/3285
+
+* Enhancement - Visual improvement to errors in input prompts: [#1906](https://github.com/owncloud/phoenix/issues/1906)
+
+   We've adjusted the input prompts to show a visually less prominent text below the input field.
+   Also, error messages now appear with a small delay, so that those happening during typing get
+   ignored (e.g. trailing whitespace is not allowed in folder names and previously caused an
+   error to show on every typed blank).
+
+   https://github.com/owncloud/phoenix/issues/1906
+   https://github.com/owncloud/phoenix/pull/3240
 
 * Enhancement - Add state to app urls: [#3294](https://github.com/owncloud/phoenix/pull/3294)
 
