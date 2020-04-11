@@ -118,9 +118,12 @@ Feature: Share by public link
 
   Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
-    And user "user1" has shared folder "simple-folder" with link with "<initial-permissions>" permissions
+    And user "user1" has created a public link with following settings
+      | path        | simple-folder         |
+      | name        | Public-link           |
+      | permissions | <initial-permissions> |
     And user "user1" has logged in using the webUI
-    When the user edits the public link named "{}" of folder "simple-folder" changing following
+    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | role | <role> |
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "user1" should have a share with these details:
@@ -138,9 +141,13 @@ Feature: Share by public link
 
   Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
-    And user "user1" has shared folder "simple-folder" with link with "<initial-permissions>" permissions and password "123"
+    And user "user1" has created a public link with following settings
+      | path        | simple-folder         |
+      | name        | Public-link           |
+      | permissions | <initial-permissions> |
+      | password    | 123                   |
     And user "user1" has logged in using the webUI
-    When the user edits the public link named "{}" of folder "simple-folder" changing following
+    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | password | |
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "user1" should have a share with these details:
@@ -158,9 +165,13 @@ Feature: Share by public link
 
   Scenario Outline: user changes the role of an existing public link role without entering share password while enforce password for the original role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
-    And user "user1" has shared folder "simple-folder" with link with "<initial-permissions>" permissions and password "123"
+    And user "user1" has created a public link with following settings
+      | path        | simple-folder         |
+      | name        | Public-link           |
+      | permissions | <initial-permissions> |
+      | password    | 123                   |
     And user "user1" has logged in using the webUI
-    When the user edits the public link named "{}" of folder "simple-folder" changing following
+    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | role     | <role> |
       | password |        |
     Then user "user1" should have a share with these details:
@@ -315,8 +326,12 @@ Feature: Share by public link
 
   Scenario: user edits a name of an already existing public link
     Given user "user1" has logged in using the webUI
-    And user "user1" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
-    When the user edits the public link named "{}" of folder "simple-folder" changing following
+    And user "user1" has created a public link with following settings
+      | path        | simple-folder |
+      | name        | Public-link   |
+      | permissions | read          |
+      | password    | pass123       |
+    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
     | name  | simple-folder Share |
     And the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
@@ -333,34 +348,49 @@ Feature: Share by public link
       | simple-folder       | Public |
 
   Scenario: user edits the password of an already existing public link
-    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
+    Given user "user1" has created a public link with following settings
+      | path        | simple-folder                |
+      | name        | Public-link                  |
+      | permissions | read, update, create, delete |
+      | password    | pass123                      |
     And user "user1" has logged in using the webUI
-    When the user edits the public link named "{}" of folder "simple-folder" changing following
+    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | password |  qwertyui  |
     And the public uses the webUI to access the last public link created by user "user1" with password "qwertyui"
     Then file "lorem.txt" should be listed on the webUI
 
   Scenario: user edits the password of an already existing public link and tries to access with old password
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
+    Given user "user1" has created a public link with following settings
+      | path        | simple-folder                |
+      | name        | Public-link                  |
+      | permissions | read, update, create, delete |
+      | password    | pass123                      |
     And user "user1" has logged in using the webUI
-    And the user edits the public link named "{}" of folder "simple-folder" changing following
+    And the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | password |  qwertyui  |
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then the public should not get access to the publicly shared file
 
   Scenario: user edits the permission of an already existing public link from read-write to read
-    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    Given user "user1" has created a public link with following settings
+      | path        | simple-folder                |
+      | name        | Public-link                  |
+      | permissions | read, update, create, delete |
     And user "user1" has logged in using the webUI
-    When the user edits the public link named "{}" of folder "simple-folder" changing following
+    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | role  | Viewer  |
     And the public uses the webUI to access the last public link created by user "user1"
     Then file "lorem.txt" should be listed on the webUI
     And it should not be possible to delete file "lorem.txt" using the webUI
 
   Scenario: user edits the permission of an already existing public link from read to read-write
-    Given user "user1" has shared folder "simple-folder" with link with "read" permissions
+    Given user "user1" has created a public link with following settings
+      | path        | simple-folder |
+      | name        | Public-link   |
+      | permissions | read          |
     And user "user1" has logged in using the webUI
-    When the user edits the public link named "{}" of folder "simple-folder" changing following
+    When the user edits the public link named "Public-link" of folder "simple-folder" changing following
       | role | Editor |
     And the public uses the webUI to access the last public link created by user "user1"
     And the user deletes the following elements using the webUI
@@ -474,7 +504,7 @@ Feature: Share by public link
       | path        | /lorem.txt  |
       | name        | Public link |
       | expiration  | +16         |
-    
+
   Scenario: user can set an expiry date when creating a public link to a date that is before the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
@@ -521,8 +551,11 @@ Feature: Share by public link
 
   Scenario: user removes the public link of a file using webUI
     Given user "user1" has logged in using the webUI
-    And user "user1" has shared file "lorem.txt" with link with "read" permissions
-    When the user removes the public link named "{}" of file "lorem.txt" using the webUI
+    And user "user1" has created a public link with following settings
+      | path        | lorem.txt   |
+      | name        | Public-link |
+      | permissions | read        |
+    When the user removes the public link named "Public-link" of file "lorem.txt" using the webUI
     Then user "user1" should not have any public link
 
   @skip @yetToImplement
@@ -597,9 +630,12 @@ Feature: Share by public link
     And file "lorem (2).txt" should be listed on the webUI
 
   Scenario: user browses to public link share using copy link button
-    Given user "user1" has shared folder "simple-folder" with link with "read" permissions
+    Given user "user1" has created a public link with following settings
+      | path        | simple-folder  |
+      | name        | Public-link    |
+      | permissions | read           |
     And user "user1" has logged in using the webUI
-    When the user copies the url of public link named "{}" of folder "simple-folder" using the webUI
+    When the user copies the url of public link named "Public-link" of folder "simple-folder" using the webUI
     And the user navigates to the copied public link using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
@@ -815,3 +851,9 @@ Feature: Share by public link
     And a link named "Public Link Sub" should be listed with role "Viewer" in the public link list of resource "simple-empty-folder" on the webUI
     When the user browses to the favorites page using the webUI
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
+
+  Scenario: token is shown for links without a name
+    When user "user1" has created a public link with following settings
+      | path | /simple-folder |
+    And user "user1" logs in using the webUI
+    Then a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
