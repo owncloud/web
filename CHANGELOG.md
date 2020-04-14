@@ -1,3 +1,26 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.8.0...master
+
+Summary
+-------
+
+* Bugfix - Remove duplicate error display in input prompt: [#3342](https://github.com/owncloud/phoenix/pull/3342)
+
+Details
+-------
+
+* Bugfix - Remove duplicate error display in input prompt: [#3342](https://github.com/owncloud/phoenix/pull/3342)
+
+   Validation errors within the input prompt dialog were showing up twice. One of them is a
+   leftover from the old version. We've fixed the dialog by removing the old validation error
+   type.
+
+   https://github.com/owncloud/phoenix/pull/3342
+
 Changelog for ownCloud Phoenix [0.8.0] (2020-04-14)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.8.0 relevant to
