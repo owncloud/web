@@ -15,13 +15,6 @@
         :fix-message-line="true"
         class="oc-dialog-prompt-input-offset"
       ></oc-text-input>
-      <transition name="custom-classes-transition"
-                  enter-active-class="uk-animation-slide-left-small uk-animation-fast"
-                  leave-active-class="uk-animation-slide-right-small uk-animation-fast uk-animation-reverse">
-        <oc-alert v-if="ocErrorDelayed" class="oc-dialog-prompt-alert" :noClose="true" variation="danger">
-          {{ ocErrorDelayed }}
-        </oc-alert>
-      </transition>
       <oc-loader v-if="ocLoading"></oc-loader>
     </template>
     <template slot="footer">

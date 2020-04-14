@@ -1,0 +1,6 @@
+Bugfix: Remove duplicate error display in input prompt
+
+Validation errors within the input prompt dialog were showing up twice. One of them is a leftover from the
+old version. We've fixed the dialog by removing the old validation error type.
+
+https://github.com/owncloud/phoenix/pull/3342
