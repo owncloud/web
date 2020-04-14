@@ -1,18 +1,18 @@
-Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+Changelog for ownCloud Phoenix [0.8.0] (2020-04-14)
 =======================================
-The following sections list the changes in ownCloud phoenix unreleased relevant to
+The following sections list the changes in ownCloud phoenix 0.8.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/phoenix/compare/v0.7.0...master
+[0.8.0]: https://github.com/owncloud/phoenix/compare/v0.7.0...v0.8.0
 
 Summary
 -------
 
 * Bugfix - Display errors when saving collaborator fails: [#3176](https://github.com/owncloud/phoenix/issues/3176)
-* Bugfix - Update owncloud-sdk 1.0.0-544: [#3292](https://github.com/owncloud/phoenix/pull/3292)
-* Bugfix - Set a higher timeout for requirejs: [#3293](https://github.com/owncloud/phoenix/pull/3293)
 * Bugfix - Fix media-viewer on private pages: [#3288](https://github.com/owncloud/phoenix/pull/3288)
 * Bugfix - Fix oidc redirect after logout: [#3285](https://github.com/owncloud/phoenix/issues/3285)
+* Bugfix - Update owncloud-sdk 1.0.0-544: [#3292](https://github.com/owncloud/phoenix/pull/3292)
+* Bugfix - Set a higher timeout for requirejs: [#3293](https://github.com/owncloud/phoenix/pull/3293)
 * Enhancement - Visual improvement to errors in input prompts: [#1906](https://github.com/owncloud/phoenix/issues/1906)
 * Enhancement - Add state to app urls: [#3294](https://github.com/owncloud/phoenix/pull/3294)
 
@@ -28,19 +28,6 @@ Details
    https://github.com/owncloud/phoenix/issues/3176
    https://github.com/owncloud/phoenix/pull/3241
 
-* Bugfix - Update owncloud-sdk 1.0.0-544: [#3292](https://github.com/owncloud/phoenix/pull/3292)
-
-   This sdk version is much smaller in size
-
-   https://github.com/owncloud/phoenix/pull/3292
-
-* Bugfix - Set a higher timeout for requirejs: [#3293](https://github.com/owncloud/phoenix/pull/3293)
-
-   In slow networks requirejs requests can timeout. The timeout is now set to a higher value (200
-   secs)
-
-   https://github.com/owncloud/phoenix/pull/3293
-
 * Bugfix - Fix media-viewer on private pages: [#3288](https://github.com/owncloud/phoenix/pull/3288)
 
    Media-viewer incorrectly assumed it was on a public page when opened from a private page.
@@ -55,6 +42,19 @@ Details
    query parameter will be appended to the end.
 
    https://github.com/owncloud/phoenix/issues/3285
+
+* Bugfix - Update owncloud-sdk 1.0.0-544: [#3292](https://github.com/owncloud/phoenix/pull/3292)
+
+   This sdk version is much smaller in size
+
+   https://github.com/owncloud/phoenix/pull/3292
+
+* Bugfix - Set a higher timeout for requirejs: [#3293](https://github.com/owncloud/phoenix/pull/3293)
+
+   In slow networks requirejs requests can timeout. The timeout is now set to a higher value (200
+   secs)
+
+   https://github.com/owncloud/phoenix/pull/3293
 
 * Enhancement - Visual improvement to errors in input prompts: [#1906](https://github.com/owncloud/phoenix/issues/1906)
 
