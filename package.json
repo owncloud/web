@@ -95,6 +95,7 @@
     "rimraf": "^3.0.0",
     "start-server-and-test": "^1.9.1",
     "style-loader": "^1.0.0",
+    "tus-js-client": "^1.8.0",
     "url-search-params-polyfill": "^8.0.0",
     "vue": "^2.6.10",
     "vue-clipboard2": "^0.3.1",

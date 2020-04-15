@@ -45,6 +45,7 @@ const mutations = {
     state.auth = config.auth
     state.openIdConnect = config.openIdConnect
     state.rootFolder = config.rootFolder === undefined ? '/' : config.rootFolder
+    state.uploadChunkSize = config.uploadChunkSize === undefined ? Infinity : config.uploadChunkSize
     state.state = config.state === undefined ? 'working' : config.state
     state.applications = config.applications === undefined ? [] : config.applications
     if (config.corrupted) state.corrupted = config.corrupted

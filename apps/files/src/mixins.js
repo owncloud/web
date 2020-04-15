@@ -40,9 +40,10 @@ export default {
       'highlightedFile',
       'publicLinkPassword',
       'fileSortField',
+      'currentFolder',
       'fileSortDirectionDesc'
     ]),
-    ...mapGetters(['getToken', 'capabilities']),
+    ...mapGetters(['getToken', 'capabilities', 'configuration']),
 
     _sidebarOpen() {
       return this.highlightedFile !== null
@@ -408,14 +409,27 @@ export default {
       } else {
         basePath = this.path || ''
         relativePath = pathUtil.join(basePath, relativePath)
-        promise = this.uploadQueue.add(() =>
-          this.$client.files.putFileContents(relativePath, file, {
-            onProgress: progress => {
-              this.$_ocUpload_onProgress(progress, file)
-            },
-            overwrite: overwrite
+        // FIXME: this might break if relativePath is not the currentFolder
+        // and is a mount point that has no chunk support
+        if (this.browserSupportsChunked && this.currentFolder.isChunkedUploadSupported) {
+          promise = this.uploadQueue.add(() => {
+            return this.uploadChunkedFile(file, pathUtil.dirname(relativePath), {
+              chunkSize: this.configuration.uploadChunkSize,
+              emitProgress: progress => {
+                this.$_ocUpload_onProgress(progress, file)
+              }
+            })
           })
-        )
+        } else {
+          promise = this.uploadQueue.add(() =>
+            this.$client.files.putFileContents(relativePath, file, {
+              onProgress: progress => {
+                this.$_ocUpload_onProgress(progress, file)
+              },
+              overwrite: overwrite
+            })
+          )
+        }
       }
 
       promise

@@ -36,6 +36,7 @@ import coreTranslations from '../l10n/translations.json'
 
 import MediaSource from './plugins/mediaSource.js'
 import PhoenixPlugin from './plugins/phoenix'
+import ChunkedUpload from './plugins/upload'
 
 // --- Drag Drop ----
 
@@ -64,6 +65,7 @@ Vue.use(VueMeta, {
   // optional pluginOptions
   refreshOnceOnNavigation: true
 })
+Vue.use(ChunkedUpload)
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)
