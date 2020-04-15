@@ -7,7 +7,7 @@ const { default: PQueue } = require('p-queue')
 
 export default {
   filters: {
-    fileSize (int) {
+    fileSize(int) {
       if (int < 0) {
         return ''
       }
@@ -24,7 +24,7 @@ export default {
       })
     },
 
-    roundNumber (int) {
+    roundNumber(int) {
       return parseInt(int.toFixed(0))
     }
   },
@@ -44,11 +44,11 @@ export default {
     ]),
     ...mapGetters(['getToken', 'capabilities']),
 
-    _sidebarOpen () {
+    _sidebarOpen() {
       return this.highlightedFile !== null
     },
 
-    requestHeaders () {
+    requestHeaders() {
       if (!this.publicPage()) {
         return null
       }
@@ -58,7 +58,10 @@ export default {
 
       const password = this.publicLinkPassword
       if (password) {
-        headers.append('Authorization', 'Basic ' + Buffer.from('public:' + password).toString('base64'))
+        headers.append(
+          'Authorization',
+          'Basic ' + Buffer.from('public:' + password).toString('base64')
+        )
       }
       return headers
     }
@@ -75,7 +78,7 @@ export default {
     ]),
     ...mapActions(['showMessage']),
 
-    toggleSort (fieldId) {
+    toggleSort(fieldId) {
       if (this.fileSortField === fieldId) {
         // reverse direction
         this.setFilesSort({ field: fieldId, directionIsDesc: !this.fileSortDirectionDesc })
@@ -84,16 +87,18 @@ export default {
         this.setFilesSort({ field: fieldId, directionIsDesc: false })
       }
     },
-    formDateFromNow (date) {
-      return moment(date).locale(this.$language.current).fromNow()
+    formDateFromNow(date) {
+      return moment(date)
+        .locale(this.$language.current)
+        .fromNow()
     },
-    delayForScreenreader (func, delay = 500) {
+    delayForScreenreader(func, delay = 500) {
       /*
-      * Delay for screen readers Virtual buffers
-      */
+       * Delay for screen readers Virtual buffers
+       */
       setTimeout(() => func(), delay)
     },
-    fileTypeIcon (file) {
+    fileTypeIcon(file) {
       if (file) {
         if (file.type === 'folder') {
           return 'folder'
@@ -103,7 +108,7 @@ export default {
       }
       return 'x-office-document'
     },
-    label (string) {
+    label(string) {
       const cssClass = ['uk-label']
 
       switch (parseInt(string)) {
@@ -119,25 +124,29 @@ export default {
 
       return '<span class="' + cssClass.join(' ') + '">' + string + '</span>'
     },
-    checkIfBrowserSupportsFolderUpload () {
+    checkIfBrowserSupportsFolderUpload() {
       const el = document.createElement('input')
       el.type = 'file'
-      return typeof el.webkitdirectory !== 'undefined' || typeof el.mozdirectory !== 'undefined' || typeof el.directory !== 'undefined'
+      return (
+        typeof el.webkitdirectory !== 'undefined' ||
+        typeof el.mozdirectory !== 'undefined' ||
+        typeof el.directory !== 'undefined'
+      )
     },
-    checkIfElementExists (element) {
+    checkIfElementExists(element) {
       const name = element.name || element
-      return this.files.find((n) => {
+      return this.files.find(n => {
         if (n.name === name) {
           return n
         }
       })
     },
-    processDirectoryEntryRecursively (directory) {
+    processDirectoryEntryRecursively(directory) {
       return this.$client.files.createFolder(this.rootPath + directory.fullPath).then(() => {
         const directoryReader = directory.createReader()
         const ctrl = this
-        directoryReader.readEntries(function (entries) {
-          entries.forEach(function (entry) {
+        directoryReader.readEntries(function(entries) {
+          entries.forEach(function(entry) {
             if (entry.isDirectory) {
               ctrl.processDirectoryEntryRecursively(entry)
             } else {
@@ -149,8 +158,9 @@ export default {
         })
       })
     },
-    compareIds (a, b) {
-      if (!isNaN(a)) { // OC10 autoincrement id
+    compareIds(a, b) {
+      if (!isNaN(a)) {
+        // OC10 autoincrement id
         return parseInt(a, 10) === parseInt(b, 10)
       } else if (this.isOcisId(b)) {
         return a === this.extractOpaqueId(b)
@@ -158,13 +168,13 @@ export default {
 
       return false
     },
-    isOcisId (id) {
+    isOcisId(id) {
       return atob(id).split(':').length === 2
     },
-    extractOpaqueId (id) {
+    extractOpaqueId(id) {
       return atob(id).split(':')[1]
     },
-    async $_ocUpload_addDropToQue (e) {
+    async $_ocUpload_addDropToQue(e) {
       const items = e.dataTransfer.items || e.dataTransfer.files
 
       // A list of files is being dropped ...
@@ -182,7 +192,11 @@ export default {
             })
           } else {
             this.showMessage({
-              title: this.$gettextInterpolate(this.$gettext('Folder %{folder} already exists.'), { folder: item.name }, true),
+              title: this.$gettextInterpolate(
+                this.$gettext('Folder %{folder} already exists.'),
+                { folder: item.name },
+                true
+              ),
               status: 'danger'
             })
           }
@@ -193,7 +207,9 @@ export default {
             })
           } else {
             const translated = this.$gettext('File %{file} already exists.')
-            this.setOverwriteDialogTitle(this.$gettextInterpolate(translated, { file: item.name }, true))
+            this.setOverwriteDialogTitle(
+              this.$gettextInterpolate(translated, { file: item.name }, true)
+            )
 
             if (this.capabilities.files.versioning) {
               this.setOverwriteDialogMessage(this.$gettext('Do you want to create a new version?'))
@@ -212,19 +228,21 @@ export default {
         }
       }
     },
-    async $_ocUpload_addFileToQue (e) {
+    async $_ocUpload_addFileToQue(e) {
       const files = e.target.files
       if (!files.length) return
       for (let i = 0; i < files.length; i++) {
         const exists = this.checkIfElementExists(files[i])
         if (!exists) {
           this.$_ocUpload(files[i], files[i].name)
-          if ((i + 1) === files.length) this.$_ocUploadInput_clean()
+          if (i + 1 === files.length) this.$_ocUploadInput_clean()
           continue
         }
 
         const translated = this.$gettext('File %{file} already exists.')
-        this.setOverwriteDialogTitle(this.$gettextInterpolate(translated, { file: files[i].name }, true))
+        this.setOverwriteDialogTitle(
+          this.$gettextInterpolate(translated, { file: files[i].name }, true)
+        )
 
         if (this.capabilities.files.versioning) {
           this.setOverwriteDialogMessage(this.$gettext('Do you want to create a new version?'))
@@ -235,14 +253,14 @@ export default {
         const overwrite = await this.$_ocUpload_confirmOverwrite()
         if (overwrite === true) {
           this.$_ocUpload(files[i], files[i].name, exists.etag)
-          if ((i + 1) === files.length) this.$_ocUploadInput_clean()
+          if (i + 1 === files.length) this.$_ocUploadInput_clean()
         } else {
-          if ((i + 1) === files.length) this.$_ocUploadInput_clean()
+          if (i + 1 === files.length) this.$_ocUploadInput_clean()
         }
         this.setOverwriteDialogMessage(null)
       }
     },
-    $_ocUpload_addDirectoryToQue (e) {
+    $_ocUpload_addDirectoryToQue(e) {
       if (this.isIE11()) {
         this.showMessage({
           title: this.$gettext('Upload failed'),
@@ -262,7 +280,11 @@ export default {
 
       if (directoryExists) {
         this.showMessage({
-          title: this.$gettextInterpolate(this.$gettext('Folder %{folder} already exists.'), { folder: directoryName }, true),
+          title: this.$gettextInterpolate(
+            this.$gettext('Folder %{folder} already exists.'),
+            { folder: directoryName },
+            true
+          ),
           status: 'danger'
         })
       } else {
@@ -302,9 +324,17 @@ export default {
           let p
 
           if (this.publicPage()) {
-            p = this.directoryQueue.add(() => this.$client.publicFiles.createFolder(this.rootPath, directory, this.publicLinkPassword))
+            p = this.directoryQueue.add(() =>
+              this.$client.publicFiles.createFolder(
+                this.rootPath,
+                directory,
+                this.publicLinkPassword
+              )
+            )
           } else {
-            p = this.directoryQueue.add(() => this.$client.files.createFolder(this.rootPath + directory))
+            p = this.directoryQueue.add(() =>
+              this.$client.files.createFolder(this.rootPath + directory)
+            )
           }
 
           createFolderPromises.push(p)
@@ -323,7 +353,7 @@ export default {
         })
       }
     },
-    $_ocUpload_confirmOverwrite () {
+    $_ocUpload_confirmOverwrite() {
       return new Promise(resolve => {
         const confirmButton = document.querySelector('#files-overwrite-confirm')
         const cancelButton = document.querySelector('#files-overwrite-cancel')
@@ -340,13 +370,13 @@ export default {
      * Adds file into the progress queue and assigns it unique id
      * @param {Object} file File which is to be added into progress
      */
-    $_addFileToUploadProgress (file) {
+    $_addFileToUploadProgress(file) {
       file.id = this.uploadFileUniqueId
       this.uploadFileUniqueId++
       this.addFileToProgress(file)
     },
 
-    $_ocUpload (file, path, overwrite = null, emitSuccess = true, addToProgress = true) {
+    $_ocUpload(file, path, overwrite = null, emitSuccess = true, addToProgress = true) {
       this.$root.$emit('upload-start')
       let basePath = this.path || ''
       let relativePath = path
@@ -361,43 +391,55 @@ export default {
         const token = basePath.substr(0, tokenSplit)
         basePath = basePath.substr(tokenSplit + 1) || ''
         relativePath = pathUtil.join(basePath, relativePath)
-        promise = this.uploadQueue.add(() => this.$client.publicFiles.putFileContents(token, relativePath, this.publicLinkPassword, file, {
-          onProgress: (progress) => {
-            this.$_ocUpload_onProgress(progress, file)
-          },
-          overwrite: overwrite
-        }))
+        promise = this.uploadQueue.add(() =>
+          this.$client.publicFiles.putFileContents(
+            token,
+            relativePath,
+            this.publicLinkPassword,
+            file,
+            {
+              onProgress: progress => {
+                this.$_ocUpload_onProgress(progress, file)
+              },
+              overwrite: overwrite
+            }
+          )
+        )
       } else {
         basePath = this.path || ''
         relativePath = pathUtil.join(basePath, relativePath)
-        promise = this.uploadQueue.add(() => this.$client.files.putFileContents(relativePath, file, {
-          onProgress: (progress) => {
-            this.$_ocUpload_onProgress(progress, file)
-          },
-          overwrite: overwrite
-        }))
+        promise = this.uploadQueue.add(() =>
+          this.$client.files.putFileContents(relativePath, file, {
+            onProgress: progress => {
+              this.$_ocUpload_onProgress(progress, file)
+            },
+            overwrite: overwrite
+          })
+        )
       }
 
-      promise.then(e => {
-        this.$root.$emit('upload-end')
-        this.removeFileFromProgress(file)
-        if (emitSuccess) {
-          this.$emit('success', e, file)
-        }
-      }).catch(e => {
-        this.removeFileFromProgress(file)
-        this.$emit('error', e)
-      })
+      promise
+        .then(e => {
+          this.$root.$emit('upload-end')
+          this.removeFileFromProgress(file)
+          if (emitSuccess) {
+            this.$emit('success', e, file)
+          }
+        })
+        .catch(e => {
+          this.removeFileFromProgress(file)
+          this.$emit('error', e)
+        })
     },
-    $_ocUpload_onProgress (e, file) {
-      const progress = parseInt(e.loaded * 100 / e.total)
+    $_ocUpload_onProgress(e, file) {
+      const progress = parseInt((e.loaded * 100) / e.total)
       this.$emit('progress', {
         id: file.id,
         fileName: file.name,
         progress
       })
     },
-    $_ocUploadInput_clean () {
+    $_ocUploadInput_clean() {
       const input = this.$refs.input
       if (input) {
         input.value = ''

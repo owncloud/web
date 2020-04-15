@@ -6,20 +6,20 @@
 export default {
   props: {
     /*
-    * The element to focus and to skip to
-    */
+     * The element to focus and to skip to
+     */
     target: {
       type: String,
       required: true
     }
   },
   computed: {
-    targetElement () {
+    targetElement() {
       return document.getElementById(this.target)
     }
   },
   methods: {
-    skipToTarget () {
+    skipToTarget() {
       // Make targetElement programmatically focusable
       this.targetElement.setAttribute('tabindex', '-1')
 
@@ -41,7 +41,7 @@ export default {
   border: none;
   background-color: #ffffff;
   font: inherit;
-  padding: .25em .5em;
+  padding: 0.25em 0.5em;
 }
 
 .skip-button:focus {

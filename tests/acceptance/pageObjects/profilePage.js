@@ -1,9 +1,8 @@
 module.exports = {
   commands: {
-    getUserProfileName: async function () {
+    getUserProfileName: async function() {
       let userInfo
-      await this
-        .waitForElementVisible('@profileInfoContainer')
+      await this.waitForElementVisible('@profileInfoContainer')
         .waitForElementVisible('@userProfileName')
         .api.element('@userProfileName', result => {
           this.api.elementIdText(result.value.ELEMENT, text => {
@@ -12,9 +11,8 @@ module.exports = {
         })
       return userInfo
     },
-    browseToManageAccount: function () {
-      return this.waitForElementVisible('@manageAccount')
-        .click('@manageAccount')
+    browseToManageAccount: function() {
+      return this.waitForElementVisible('@manageAccount').click('@manageAccount')
     }
   },
   elements: {

@@ -1,20 +1,23 @@
 <template>
   <oc-drop
     v-if="displayed"
+    id="files-list-row-actions-dropdown"
     :boundary="`#files-file-list-action-button-${item.viewId}-active`"
     :options="{ offset: 0 }"
     :toggle="`#files-file-list-action-button-${item.viewId}-active`"
     position="bottom-right"
-    id="files-list-row-actions-dropdown"
     class="uk-open uk-drop-stack"
   >
     <ul class="uk-list">
       <li v-for="action in actions" :key="action.ariaLabel">
         <oc-button
           class="uk-width-1-1"
-          @click.native.stop="action.handler(item, action.handlerData); actionClicked()"
           :icon="action.icon"
-          :ariaLabel="action.ariaLabel"
+          :aria-label="action.ariaLabel"
+          @click.native.stop="
+            action.handler(item, action.handlerData)
+            actionClicked()
+          "
         >
           {{ action.ariaLabel }}
         </oc-button>
@@ -56,11 +59,11 @@ export default {
     ...mapGetters('Files', ['isDialogOpen'])
   },
   methods: {
-    actionClicked () {
+    actionClicked() {
       this.$emit('actionClicked')
     },
     // FIXME: Remove as soon as trashbin has virtual scroll
-    nameForDropdownData (name) {
+    nameForDropdownData(name) {
       // Escape double quotes inside of selector
       if (name.indexOf('"') > -1) {
         name = name.replace(/\\([\s\S])|(")/g, '&quot;')

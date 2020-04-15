@@ -1,8 +1,19 @@
 <template>
   <component :is="type" v-if="enabled">
-    <oc-spinner v-if="loading" size="small" key="avatar-loading" :aria-label="$gettext('Loading')"
-     :style="`width: ${width}px; height: ${width}px;`" />
-    <oc-avatar v-else key="avatar-loaded" :width="width" :src="avatarSource" :userName="userName" />
+    <oc-spinner
+      v-if="loading"
+      key="avatar-loading"
+      size="small"
+      :aria-label="$gettext('Loading')"
+      :style="`width: ${width}px; height: ${width}px;`"
+    />
+    <oc-avatar
+      v-else
+      key="avatar-loaded"
+      :width="width"
+      :src="avatarSource"
+      :user-name="userName"
+    />
   </component>
 </template>
 <script>
@@ -12,9 +23,9 @@ export default {
   name: 'Avatar',
   props: {
     /**
-         * The html element used for the avatar container.
-         * `div, span`
-         */
+     * The html element used for the avatar container.
+     * `div, span`
+     */
     type: {
       type: String,
       default: 'div',
@@ -28,8 +39,9 @@ export default {
     },
     userid: {
       /**
-           * Allow empty string to show placeholder
-           */
+       * Allow empty string to show placeholder
+       */
+      type: String,
       default: ''
     },
     width: {
@@ -38,7 +50,7 @@ export default {
       default: 42
     }
   },
-  data () {
+  data() {
     return {
       /**
        * Set to object URL when loaded, or on failure, icon placeholder is shown
@@ -52,16 +64,16 @@ export default {
   },
   computed: {
     ...mapGetters(['getToken']),
-    enabled: function () {
+    enabled: function() {
       return this.$root.config.enableAvatars || true
     }
   },
   watch: {
-    userid: function (userid, old) {
+    userid: function(userid, old) {
       this.setUser(userid)
     }
   },
-  mounted: function () {
+  mounted: function() {
     // Handled mounted situation. Userid might not be set yet so try placeholder
     if (this.userid !== '') {
       this.setUser(this.userid)
@@ -73,7 +85,7 @@ export default {
     /**
      * Load a new avatar from this userid
      */
-    setUser (userid) {
+    setUser(userid) {
       this.loading = true
       this.avatarSource = ''
       if (!this.enabled || userid === '') {

@@ -18,8 +18,8 @@ export default {
 </script>
 
 <style>
-  /* FIXME: move into ODS? */
-  .roles-select-role-item {
-    text-transform: none;
-  }
+/* FIXME: move into ODS? */
+.roles-select-role-item {
+  text-transform: none;
+}
 </style>

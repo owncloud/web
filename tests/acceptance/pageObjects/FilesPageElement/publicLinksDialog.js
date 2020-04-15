@@ -10,15 +10,15 @@ module.exports = {
      * @param linkName Name of the public link
      * @returns {Promise<void>}
      */
-    clickLinkEditBtn: function (linkName) {
-      const linkRowEditButtonSelector = this.elements.publicLinkContainer.selector +
+    clickLinkEditBtn: function(linkName) {
+      const linkRowEditButtonSelector =
+        this.elements.publicLinkContainer.selector +
         util.format(this.elements.publicLinkEditButton.selector, linkName)
       const linkRowEditButton = {
         locateStrategy: this.elements.publicLinkEditButton.locateStrategy,
         selector: linkRowEditButtonSelector
       }
-      return this
-        .initAjaxCounters()
+      return this.initAjaxCounters()
         .waitForElementVisible(linkRowEditButton)
         .click(linkRowEditButton)
         .waitForOutstandingAjaxCalls()
@@ -29,8 +29,13 @@ module.exports = {
      * @param {string} role - e.g. Viewer, Contributor, Editor, Uploader
      * @returns {Promise<void>}
      */
-    setPublicLinkRole: function (role) {
-      role = _(role).chain().toLower().startCase().replace(/\s/g, '').value()
+    setPublicLinkRole: function(role) {
+      role = _(role)
+        .chain()
+        .toLower()
+        .startCase()
+        .replace(/\s/g, '')
+        .value()
       return this.waitForElementPresent('@selectRoleButton')
         .click('@selectRoleButton')
         .waitForElementVisible('@rolesDropdown')
@@ -44,9 +49,8 @@ module.exports = {
      * @param {string} linkName Name of the public link share
      *
      */
-    setPublicLinkName: function (linkName) {
-      return this
-        .waitForElementVisible('@publicLinkNameInputField')
+    setPublicLinkName: function(linkName) {
+      return this.waitForElementVisible('@publicLinkNameInputField')
         .clearValue('@publicLinkNameInputField')
         .setValue('@publicLinkNameInputField', linkName)
     },
@@ -56,14 +60,15 @@ module.exports = {
      * @param {string} linkPassword
      * @returns {Promise<void>}
      */
-    setPublicLinkPassword: function (linkPassword) {
+    setPublicLinkPassword: function(linkPassword) {
       this.waitForElementVisible('@publicLinkPasswordField')
       if (linkPassword === '') {
         return this.click('@publicLinkDeletePasswordButton')
       }
-      return this
-        .clearValue('@publicLinkPasswordField')
-        .setValue('@publicLinkPasswordField', linkPassword)
+      return this.clearValue('@publicLinkPasswordField').setValue(
+        '@publicLinkPasswordField',
+        linkPassword
+      )
     },
     /**
      * function sets different fields for public link
@@ -72,7 +77,7 @@ module.exports = {
      * @param value values for the different fields to be set
      * @returns {*|Promise<void>|exports}
      */
-    setPublicLinkForm: function (key, value) {
+    setPublicLinkForm: function(key, value) {
       if (key === 'role') {
         return this.setPublicLinkRole(value)
       } else if (key === 'name') {
@@ -81,9 +86,7 @@ module.exports = {
         return this.setPublicLinkPassword(value)
       } else if (key === 'expireDate') {
         value = sharingHelper.calculateDate(value)
-        return this.api.page
-          .FilesPageElement
-          .sharingDialog()
+        return this.api.page.FilesPageElement.sharingDialog()
           .openExpirationDatePicker()
           .setExpirationDate(value, 'link')
       }
@@ -100,7 +103,7 @@ module.exports = {
      * @param {string} editData.expireDate - Expire date for a public link share
      * @returns {exports}
      */
-    editPublicLink: async function (linkName, editData) {
+    editPublicLink: async function(linkName, editData) {
       await this.clickLinkEditBtn(linkName)
       for (const [key, value] of Object.entries(editData)) {
         await this.setPublicLinkForm(key, value)
@@ -112,9 +115,8 @@ module.exports = {
      *
      * @returns {exports}
      */
-    savePublicLink: function () {
-      return this
-        .initAjaxCounters()
+    savePublicLink: function() {
+      return this.initAjaxCounters()
         .waitForElementVisible('@publicLinkSaveButton')
         .click('@publicLinkSaveButton')
         .waitForElementNotPresent({ selector: '@publicLinkSaveButton', abortOnFailure: false })
@@ -126,15 +128,15 @@ module.exports = {
      * @param {string} linkName Name of the public link share of a resource to be deleted
      * @returns {exports}
      */
-    removePublicLink: function (linkName) {
-      const linkRowDeleteButtonSelector = this.elements.publicLinkContainer.selector +
+    removePublicLink: function(linkName) {
+      const linkRowDeleteButtonSelector =
+        this.elements.publicLinkContainer.selector +
         util.format(this.elements.publicLinkDeleteButton.selector, linkName)
       const linkRowDeleteButton = {
         locateStrategy: this.elements.publicLinkDeleteButton.locateStrategy,
         selector: linkRowDeleteButtonSelector
       }
-      return this
-        .initAjaxCounters()
+      return this.initAjaxCounters()
         .waitForElementVisible(linkRowDeleteButton)
         .pause(500)
         .click(linkRowDeleteButton)
@@ -146,17 +148,17 @@ module.exports = {
      * @param {string} linkName - Name of the public link share to be asserted
      * @returns {boolean}
      */
-    isPublicLinkPresent: async function (linkName) {
-      const fileNameSelectorXpath = this.elements.publicLinkContainer.selector + this.elements.publicLinkName.selector
+    isPublicLinkPresent: async function(linkName) {
+      const fileNameSelectorXpath =
+        this.elements.publicLinkContainer.selector + this.elements.publicLinkName.selector
       let isPresent
-      await this
-        .waitForAnimationToFinish()
-        .api.elements(
-          this.elements.publicLinkName.locateStrategy,
-          util.format(fileNameSelectorXpath, linkName),
-          (result) => {
-            isPresent = result.value.length > 0
-          })
+      await this.waitForAnimationToFinish().api.elements(
+        this.elements.publicLinkName.locateStrategy,
+        util.format(fileNameSelectorXpath, linkName),
+        result => {
+          isPresent = result.value.length > 0
+        }
+      )
       return isPresent
     },
     /**
@@ -169,9 +171,8 @@ module.exports = {
      * @param {string} settings.expireDate - Expire date for a public link share
      * @returns {*}
      */
-    addNewLink: async function (settings = null) {
-      await this
-        .waitForElementVisible('@publicLinkAddButton')
+    addNewLink: async function(settings = null) {
+      await this.waitForElementVisible('@publicLinkAddButton')
         .click('@publicLinkAddButton')
         .waitForElementVisible('@publicLinkCreateButton')
       if (settings !== null) {
@@ -179,8 +180,7 @@ module.exports = {
           await this.setPublicLinkForm(key, value)
         }
       }
-      return this
-        .initAjaxCounters()
+      return this.initAjaxCounters()
         .waitForElementVisible('@publicLinkCreateButton')
         .click('@publicLinkCreateButton')
         .waitForElementNotPresent('@publicLinkCreateButton')
@@ -192,9 +192,8 @@ module.exports = {
      * @param {string} settings.expireDate - Expire date for a public link share
      * @returns {*}
      */
-    setPublicLinkDate: async function (days) {
-      await this
-        .waitForElementVisible('@publicLinkAddButton')
+    setPublicLinkDate: async function(days) {
+      await this.waitForElementVisible('@publicLinkAddButton')
         .click('@publicLinkAddButton')
         .waitForElementVisible('@publicLinkCreateButton')
       if (days) {
@@ -204,8 +203,7 @@ module.exports = {
           return
         }
       }
-      return this
-        .initAjaxCounters()
+      return this.initAjaxCounters()
         .waitForElementVisible('@publicLinkCreateButton')
         .click('@publicLinkCreateButton')
         .waitForElementNotPresent('@publicLinkCreateButton')
@@ -218,7 +216,7 @@ module.exports = {
      * inside the collaborator element, defaults to all when null
      * @returns {Array.<Object>} array of link data
      */
-    getPublicLinkList: async function (subSelectors = null) {
+    getPublicLinkList: async function(subSelectors = null) {
       if (subSelectors === null) {
         subSelectors = {
           name: this.elements.publicLinkSubName,
@@ -227,19 +225,24 @@ module.exports = {
         }
       }
 
-      const informationSelector = this.elements.publicLinkContainer.selector + this.elements.publicLinkInformation.selector
+      const informationSelector =
+        this.elements.publicLinkContainer.selector + this.elements.publicLinkInformation.selector
 
       let results = []
 
       let linkElementIds = null
       await this.initAjaxCounters()
-        .waitForElementPresent({ locateStrategy: 'xpath', selector: informationSelector, abortOnFailure: false })
+        .waitForElementPresent({
+          locateStrategy: 'xpath',
+          selector: informationSelector,
+          abortOnFailure: false
+        })
         .waitForOutstandingAjaxCalls()
         .api.elements('xpath', informationSelector, result => {
           linkElementIds = result.value.map(item => item[Object.keys(item)[0]])
         })
 
-      results = linkElementIds.map(async (linkElementId) => {
+      results = linkElementIds.map(async linkElementId => {
         const linkResult = {}
         for (const attrName in subSelectors) {
           let attrElementId = null
@@ -247,7 +250,7 @@ module.exports = {
             linkElementId,
             'css selector',
             subSelectors[attrName],
-            (result) => {
+            result => {
               if (result.status !== -1) {
                 attrElementId = result.value.ELEMENT
               }
@@ -255,7 +258,7 @@ module.exports = {
           )
 
           if (attrElementId) {
-            await this.api.elementIdText(attrElementId, (text) => {
+            await this.api.elementIdText(attrElementId, text => {
               linkResult[attrName] = text.value
             })
           } else {
@@ -274,9 +277,10 @@ module.exports = {
      *
      * @returns {Promise<string>}
      */
-    getPublicLinkUrls: async function () {
+    getPublicLinkUrls: async function() {
       const promiseList = []
-      const publicLinkUrlXpath = this.elements.publicLinkContainer.selector +
+      const publicLinkUrlXpath =
+        this.elements.publicLinkContainer.selector +
         this.elements.publicLinkInformation.selector +
         this.elements.publicLinkUrl.selector
       await this.initAjaxCounters()
@@ -288,11 +292,12 @@ module.exports = {
         .waitForOutstandingAjaxCalls()
         .api.elements('xpath', publicLinkUrlXpath, result => {
           result.value.map(item => {
-            promiseList.push(new Promise((resolve) => {
-              this.api.elementIdAttribute(item.ELEMENT, 'href', href => {
-                resolve(href.value)
+            promiseList.push(
+              new Promise(resolve => {
+                this.api.elementIdAttribute(item.ELEMENT, 'href', href => {
+                  resolve(href.value)
+                })
               })
-            })
             )
           })
         })
@@ -302,11 +307,12 @@ module.exports = {
      *
      * @returns {Promise<string>}
      */
-    getErrorMessage: async function () {
+    getErrorMessage: async function() {
       let message
-      const errorMessageXpath = this.elements.publicLinkContainer.selector +
+      const errorMessageXpath =
+        this.elements.publicLinkContainer.selector +
         this.elements.errorMessageInsidePublicLinkContainer.selector
-      await this.getText('xpath', errorMessageXpath, function (result) {
+      await this.getText('xpath', errorMessageXpath, function(result) {
         message = result.value
       })
       return message
@@ -316,24 +322,22 @@ module.exports = {
      *
      * @param {string} linkName Name of the public link whose URL is to be copied
      */
-    copyPublicLinkURI: function (linkName) {
-      const copyBtnXpath = this.elements.publicLinkContainer.selector +
+    copyPublicLinkURI: function(linkName) {
+      const copyBtnXpath =
+        this.elements.publicLinkContainer.selector +
         util.format(this.elements.publicLinkURLCopyButton.selector, linkName)
       const copyBtnSelector = {
         selector: copyBtnXpath,
         locateStrategy: this.elements.publicLinkURLCopyButton.locateStrategy
       }
-      return this
-        .waitForElementVisible(copyBtnSelector)
-        .click(copyBtnSelector)
+      return this.waitForElementVisible(copyBtnSelector).click(copyBtnSelector)
     },
-    copyPrivateLink: function () {
+    copyPrivateLink: function() {
       const appSideBarElements = this.api.page.FilesPageElement.appSideBar().elements
       const sidebarLinksTabXpath = appSideBarElements.sidebarLinksTab.selector
       const sidebarCss = appSideBarElements.sideBar.selector
 
-      return this
-        .waitForElementVisible(sidebarCss)
+      return this.waitForElementVisible(sidebarCss)
         .useXpath()
         .waitForElementVisible(sidebarLinksTabXpath)
         .click(sidebarLinksTabXpath)

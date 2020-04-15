@@ -1,6 +1,5 @@
 export default {
   methods: {
-
     /**
      * Path to application file
      *
@@ -8,16 +7,16 @@ export default {
      * @param plugin Plugin
      */
 
-    getPlugin (ext) {
-      return this.$root.plugins.find((n) => {
+    getPlugin(ext) {
+      return this.$root.plugins.find(n => {
         if (n.extend === ext) {
           return n
         }
       })
     },
 
-    getPlugins (ext) {
-      return this.$root.plugins.filter((n) => {
+    getPlugins(ext) {
+      return this.$root.plugins.filter(n => {
         if (n.extend === ext) {
           return n
         }

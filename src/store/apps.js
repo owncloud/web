@@ -18,7 +18,7 @@ const actions = {
    * Open a file via webdav
    * @param {object} payload - filePath & client reference
    */
-  openFile (context, payload) {
+  openFile(context, payload) {
     return new Promise((resolve, reject) => {
       // TODO fix js-owncloud-client & change payload to filePath
       const filePath = payload.filePath
@@ -26,7 +26,10 @@ const actions = {
       // TODO fix js-owncloud-client & use global client
       const client = payload.client || false
       if (client) {
-        client.files.getFileContents(filePath).then(resolve).catch(reject)
+        client.files
+          .getFileContents(filePath)
+          .then(resolve)
+          .catch(reject)
       } else {
         // if no client is given, implicit resolve without fetching the file...
         // useful for images
@@ -34,10 +37,10 @@ const actions = {
       }
     })
   },
-  registerApp ({ commit }, app) {
+  registerApp({ commit }, app) {
     commit('REGISTER_APP', app)
   },
-  addFileAction ({ commit }, action) {
+  addFileAction({ commit }, action) {
     commit('ADD_FILE_ACTION', action)
   },
 
@@ -46,7 +49,7 @@ const actions = {
    * @param {Object} app      AppInfo containing information about app and local config
    * @param {Object} config   Config from config.json which can overwrite local config from AppInfo
    */
-  loadExternalAppConfig ({ dispatch }, { app, config }) {
+  loadExternalAppConfig({ dispatch }, { app, config }) {
     config.external_apps.map(extension => {
       // Check if app is loaded from external server
       // Extension id = id from external apps array
@@ -71,7 +74,7 @@ const actions = {
 }
 
 const mutations = {
-  REGISTER_APP (state, appInfo) {
+  REGISTER_APP(state, appInfo) {
     if (appInfo.fileActions) {
       appInfo.fileActions.forEach(a => {
         a.extensions.forEach(e => {
@@ -90,7 +93,7 @@ const mutations = {
       })
     }
     if (appInfo.extensions) {
-      appInfo.extensions.forEach((e) => {
+      appInfo.extensions.forEach(e => {
         const link = {
           app: appInfo.id,
           icon: e.icon,
@@ -114,7 +117,7 @@ const mutations = {
       // Merge in file side bars into global list
       // Reassign object in whole so that it updates the state properly
       const list = state.fileSideBars
-      appInfo.fileSideBars.forEach((sideBar) => {
+      appInfo.fileSideBars.forEach(sideBar => {
         list.push(sideBar)
       })
       state.fileSideBars = list
@@ -138,7 +141,7 @@ const mutations = {
     }
     state.meta[app.id] = app
   },
-  FETCH_FILE (state, filePath) {
+  FETCH_FILE(state, filePath) {
     state.file.path = filePath
   }
 }
@@ -159,7 +162,7 @@ const getters = {
       if (!ext) {
         return []
       }
-      ext.map((e) => {
+      ext.map(e => {
         if (e.version === 3) {
           return e
         }

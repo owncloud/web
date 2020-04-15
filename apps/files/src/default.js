@@ -14,7 +14,7 @@ import translationsJson from '../l10n/translations.json'
 const store = require('./store')
 
 // just a dummy function to trick gettext tools
-function $gettext (msg) {
+function $gettext(msg) {
   return msg
 }
 const filesConfig = window.phoenixConfig.files || []
@@ -42,13 +42,14 @@ const appInfo = {
     {
       app: 'files-version',
       component: FileInfoVersions,
-      enabled (capabilities, highlightedFile) {
+      enabled(capabilities, highlightedFile) {
         return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
       }
-    }, {
+    },
+    {
       app: 'files-sharing',
       component: FileSharingSidebar,
-      enabled (capabilities) {
+      enabled(capabilities) {
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.api_enabled
         }
@@ -58,16 +59,18 @@ const appInfo = {
         icon: 'group',
         ariaLabel: $gettext('Collaborators')
       }
-    }, {
+    },
+    {
       app: 'file-link',
       component: FileLinkSidebar,
-      enabled (capabilities) {
+      enabled(capabilities) {
         if (capabilities.files_sharing) {
           return capabilities.files_sharing.public.enabled
         }
         return false
       }
-    }, ...sidebarsFromConfig
+    },
+    ...sidebarsFromConfig
   ]
 }
 const navItems = [
@@ -105,7 +108,7 @@ const navItems = [
   {
     name: $gettext('Trash bin'),
     iconMaterial: 'delete',
-    enabled (capabilities) {
+    enabled(capabilities) {
       if (capabilities && capabilities.dav) {
         return capabilities.dav.trashbin === '1.0'
       }

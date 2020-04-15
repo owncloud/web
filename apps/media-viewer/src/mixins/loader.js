@@ -9,18 +9,18 @@ import { basename, dirname } from 'path'
 export default {
   computed: {
     ...mapGetters('Files', ['publicLinkPassword']),
-    $_loader_publicContext () {
+    $_loader_publicContext() {
       // TODO: Can we rely on not being "authenticated" while viewing a public link?
       // Currently it works. We cannot use publicPage() because that will still return
       // true when opening the mediaviewer from authenticated routes
       return !this.isAuthenticated
     },
-    $_loader_folderLoading () {
+    $_loader_folderLoading() {
       return this.$_internal_loader_folderLoading
     }
   },
 
-  data () {
+  data() {
     return {
       $_internal_loader_folderLoading: true
     }
@@ -30,7 +30,7 @@ export default {
     ...mapActions('Files', ['loadFolder']),
 
     // This methods ensures the folder is loaded if we don't have a folder loaded currently
-    async $_loader_loadFolder (contextRouteName, filePath) {
+    $_loader_loadFolder(contextRouteName, filePath) {
       // FIXME: handle public-files with passwords and everything, until then we redirect to the main public link page
       if (this.$store.getters.activeFile.path === '' && contextRouteName === 'public-files') {
         const path = this.$route.params.filePath.substring(1)
@@ -56,56 +56,47 @@ export default {
           $gettext: this.$gettext,
           routeName: contextRouteName,
           loadSharesTree: !this.publicPage()
-        }).then(() => {
-          this.$data.$_internal_loader_folderLoading = false
-        }).catch((error) => {
-          // FIXME: Loading of public link folders doesn't work at all and is disabled hence, so this code should be unreachable
-
-          // // password for public link shares is missing -> this is handled on the caller side
-          // if (this.$_loader_publicContext && error.statusCode === 401) {
-          //   this.$router.push({
-          //     name: 'public-link',
-          //     params: {
-          //       token: this.$route.params.item
-          //     }
-          //   })
-          //   return
-          // }
-
-          this.showMessage({
-            title: this.$gettext('Loading folder failed…'),
-            desc: error.message,
-            status: 'danger'
-          })
         })
+          .then(() => {
+            this.$data.$_internal_loader_folderLoading = false
+          })
+          .catch(error => {
+            // FIXME: Loading of public link folders doesn't work at all and is disabled hence, so this code should be unreachable
+
+            // // password for public link shares is missing -> this is handled on the caller side
+            // if (this.$_loader_publicContext && error.statusCode === 401) {
+            //   this.$router.push({
+            //     name: 'public-link',
+            //     params: {
+            //       token: this.$route.params.item
+            //     }
+            //   })
+            //   return
+            // }
+
+            this.showMessage({
+              title: this.$gettext('Loading folder failed…'),
+              desc: error.message,
+              status: 'danger'
+            })
+          })
       }
 
       // folder already loaded, nothing to do …
       this.$data.$_internal_loader_folderLoading = false
     },
 
-    $_loader_getDavFilePath (filePath, query) {
-      let path = [
-        '..',
-        'dav',
-        'public-files',
-        filePath
-      ].join('/')
+    $_loader_getDavFilePath(filePath, query) {
+      let path = ['..', 'dav', 'public-files', filePath].join('/')
 
       if (!this.$_loader_publicContext) {
-        path = [
-          '..',
-          'dav',
-          'files',
-          this.$store.getters.user.id,
-          filePath
-        ].join('/')
+        path = ['..', 'dav', 'files', this.$store.getters.user.id, filePath].join('/')
       }
 
       return this.$client.files.getFileUrl(path) + '?' + queryString.stringify(query)
     },
 
-    $_loader_headers () {
+    $_loader_headers() {
       if (!this.$_loader_publicContext) {
         return null
       }
@@ -115,12 +106,15 @@ export default {
 
       const password = this.publicLinkPassword
       if (password) {
-        headers.append('Authorization', 'Basic ' + Buffer.from('public:' + password).toString('base64'))
+        headers.append(
+          'Authorization',
+          'Basic ' + Buffer.from('public:' + password).toString('base64')
+        )
       }
       return headers
     },
 
-    $_loader_navigateToContextRoute (contextRouteName, filePath) {
+    $_loader_navigateToContextRoute(contextRouteName, filePath) {
       this.$router.push({
         name: contextRouteName,
         params: {

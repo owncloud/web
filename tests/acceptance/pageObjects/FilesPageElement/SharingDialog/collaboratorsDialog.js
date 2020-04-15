@@ -6,14 +6,13 @@ module.exports = {
      * @param {string} collaborator
      * @returns {Promise.<string[]>} Array of autocomplete webElementIds
      */
-    deleteShareWithUserGroup: function (collaborator) {
+    deleteShareWithUserGroup: function(collaborator) {
       const informationSelector = util.format(
         this.elements.collaboratorInformationByCollaboratorName.selector,
         collaborator
       )
       const deleteSelector = informationSelector + this.elements.deleteShareButton.selector
-      return this
-        .useXpath()
+      return this.useXpath()
         .waitForElementVisible(deleteSelector)
         .waitForAnimationToFinish()
         .click(deleteSelector)
@@ -22,9 +21,8 @@ module.exports = {
     /**
      * Clicks the button to add a new collaborator
      */
-    clickCreateShare: function () {
-      return this
-        .initAjaxCounters()
+    clickCreateShare: function() {
+      return this.initAjaxCounters()
         .useXpath()
         .waitForElementVisible('@createShareButton')
         .click('@createShareButton')
@@ -37,14 +35,13 @@ module.exports = {
      *
      * @param {string} collaborator
      */
-    clickEditShare: function (collaborator) {
+    clickEditShare: function(collaborator) {
       const informationSelector = util.format(
         this.elements.collaboratorInformationByCollaboratorName.selector,
         collaborator
       )
       const editSelector = informationSelector + this.elements.editShareButton.selector
-      return this
-        .useXpath()
+      return this.useXpath()
         .waitForElementVisible(editSelector)
         .click(editSelector)
         .waitForElementVisible('@editShareDialog')
@@ -56,7 +53,7 @@ module.exports = {
      * inside the collaborator element, defaults to all when null
      * @returns {Promise.<string[]>} Array of users/groups in share list
      */
-    getCollaboratorsList: async function (subSelectors = null, filterDisplayName = null) {
+    getCollaboratorsList: async function(subSelectors = null, filterDisplayName = null) {
       let results = []
       let informationSelector = {
         selector: '@collaboratorsInformation',
@@ -64,7 +61,10 @@ module.exports = {
       }
       if (filterDisplayName !== null) {
         informationSelector = {
-          selector: util.format(this.elements.collaboratorInformationByCollaboratorName.selector, filterDisplayName),
+          selector: util.format(
+            this.elements.collaboratorInformationByCollaboratorName.selector,
+            filterDisplayName
+          ),
           locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
           abortOnFailure: false
         }
@@ -90,7 +90,7 @@ module.exports = {
           collaboratorsElementIds = result.value.map(item => item[Object.keys(item)[0]])
         })
 
-      results = collaboratorsElementIds.map(async (collaboratorElementId) => {
+      results = collaboratorsElementIds.map(async collaboratorElementId => {
         const collaboratorResult = {}
         for (const attrName in subSelectors) {
           let attrElementId = null
@@ -98,7 +98,7 @@ module.exports = {
             collaboratorElementId,
             'css selector',
             subSelectors[attrName],
-            (result) => {
+            result => {
               if (result.status !== -1) {
                 attrElementId = result.value.ELEMENT
               }
@@ -108,11 +108,11 @@ module.exports = {
           if (attrElementId) {
             // Get collaborator type via aria-label of indicator
             if (attrName === 'shareType') {
-              await this.api.elementIdAttribute(attrElementId, 'aria-label', (label) => {
+              await this.api.elementIdAttribute(attrElementId, 'aria-label', label => {
                 collaboratorResult[attrName] = label.value
               })
             } else {
-              await this.api.elementIdText(attrElementId, (text) => {
+              await this.api.elementIdText(attrElementId, text => {
                 collaboratorResult[attrName] = text.value
               })
             }
@@ -131,7 +131,7 @@ module.exports = {
      *
      * @returns {Promise.<string[]>} Array of user/group display names in share list
      */
-    getCollaboratorsListNames: async function () {
+    getCollaboratorsListNames: async function() {
       const list = await this.getCollaboratorsList({
         name: this.elements.collaboratorInformationSubName
       })
@@ -141,16 +141,19 @@ module.exports = {
      * check if the expiration date is present in the collaborator share and then get the expiration information
      * @return {Promise.<string>}
      */
-    getCollaboratorExpirationInfo: async function (user) {
+    getCollaboratorExpirationInfo: async function(user) {
       let elementId
       let text
-      const formattedWithUserName = util.format(this.elements.collaboratorExpirationInfo.selector, user)
+      const formattedWithUserName = util.format(
+        this.elements.collaboratorExpirationInfo.selector,
+        user
+      )
       const formattedCollaboratorInfoByCollaboratorName = util.format(
-        this.elements.collaboratorInformationByCollaboratorName.selector, user)
-      await this
-        .useXpath()
-        .waitForElementVisible(formattedCollaboratorInfoByCollaboratorName)
-      await this.api.element('xpath', formattedWithUserName, function (result) {
+        this.elements.collaboratorInformationByCollaboratorName.selector,
+        user
+      )
+      await this.useXpath().waitForElementVisible(formattedCollaboratorInfoByCollaboratorName)
+      await this.api.element('xpath', formattedWithUserName, function(result) {
         elementId = result.value.ELEMENT
       })
       if (elementId === undefined) {
@@ -165,7 +168,8 @@ module.exports = {
   },
   elements: {
     collaboratorInformationByCollaboratorName: {
-      selector: '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
+      selector:
+        '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
       locateStrategy: 'xpath'
     },
     deleteShareButton: {
@@ -218,7 +222,8 @@ module.exports = {
       selector: '.files-collaborators-collaborator-indicator'
     },
     collaboratorExpirationInfo: {
-      selector: '//div/span[.="%s"]/parent::div/following-sibling::span/span[contains(text(), "Expires")]',
+      selector:
+        '//div/span[.="%s"]/parent::div/following-sibling::span/span[contains(text(), "Expires")]',
       locateStrategy: 'xpath'
     }
   }

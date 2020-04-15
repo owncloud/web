@@ -1,17 +1,17 @@
 <template>
-  <oc-grid gutter="small" childWidth="1-1">
+  <oc-grid gutter="small" child-width="1-1">
     <roles-select
       mode="collaborators"
       :roles="roles"
-      :selectedRole="role"
+      :selected-role="role"
       @roleSelected="selectRole"
     />
-    <label class="oc-label" v-if="$_ocCollaborators_hasAdditionalPermissions">
+    <label v-if="$_ocCollaborators_hasAdditionalPermissions" class="oc-label">
       <translate>Additional permissions:</translate>
     </label>
     <additional-permissions
-      :availablePermissions="role.additionalPermissions"
-      :collaboratorsPermissions="collaboratorsPermissions"
+      :available-permissions="role.additionalPermissions"
+      :collaborators-permissions="collaboratorsPermissions"
       @permissionChecked="checkAdditionalPermissions"
     />
     <div v-if="expirationSupported">
@@ -24,8 +24,8 @@
           id="files-collaborators-collaborator-expiration-input"
           :key="`collaborator-datepicker-${enteredExpirationDate}`"
           :date="enteredExpirationDate"
-          :maxDatetime="maxExpirationDate"
-          :minDatetime="minExpirationDate"
+          :max-datetime="maxExpirationDate"
+          :min-datetime="minExpirationDate"
           :placeholder="expirationDatePlaceholder"
           @input="setExpirationDate"
         />
@@ -34,8 +34,8 @@
           id="files-collaborators-collaborator-expiration-delete"
           class="uk-position-small uk-position-center-right oc-cursor-pointer"
           :uk-tooltip="expirationDateRemoveTooltip"
-          @click="resetExpirationDate"
           uk-close
+          @click="resetExpirationDate"
         />
       </div>
     </div>
@@ -58,33 +58,35 @@ export default {
     AdditionalPermissions
   },
 
-  mixins: [
-    collaboratorsMixins
-  ],
+  mixins: [collaboratorsMixins],
 
   props: {
     existingRole: {
       type: Object,
-      required: false
+      required: false,
+      default: undefined
     },
     collaboratorsPermissions: {
       type: Object,
-      required: false
+      required: false,
+      default: undefined
     },
     expirationDate: {
       type: Date,
-      required: false
+      required: false,
+      default: undefined
     },
     existingCollaboratorType: {
       type: [Object, String],
       required: false,
-      validator: function (value) {
+      default: null,
+      validator: function(value) {
         return ['user', 'group'].indexOf(value) > -1 || value === null
       }
     }
   },
 
-  data () {
+  data() {
     return {
       selectedRole: null,
       additionalPermissions: null,
@@ -95,22 +97,22 @@ export default {
   computed: {
     ...mapGetters(['capabilities']),
 
-    editingUser () {
+    editingUser() {
       return this.existingCollaboratorType === 'user'
     },
 
-    editingGroup () {
+    editingGroup() {
       return this.existingCollaboratorType === 'group'
     },
 
-    $_ocCollaborators_hasAdditionalPermissions () {
+    $_ocCollaborators_hasAdditionalPermissions() {
       if (this.selectedRole && this.selectedRole.name !== 'advancedRole') {
         return Object.keys(this.selectedRole.additionalPermissions).length > 0
       }
       return false
     },
 
-    role () {
+    role() {
       // Returns default role
       if (!this.existingRole && !this.selectedRole) {
         const defaultRole = this.roles[Object.keys(this.roles)[0]]
@@ -119,11 +121,8 @@ export default {
       }
 
       if (
-        (
-          this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole
-        ) || (
-          this.selectedRole && this.selectedRole.name === 'advancedRole'
-        )
+        (this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole) ||
+        (this.selectedRole && this.selectedRole.name === 'advancedRole')
       ) {
         this.selectRole(this.advancedRole, false)
         return this.advancedRole
@@ -137,11 +136,11 @@ export default {
       return this.selectedRole
     },
 
-    expirationSupported () {
+    expirationSupported() {
       return this.userExpirationDate && this.groupExpirationDate
     },
 
-    defaultExpirationDateSet () {
+    defaultExpirationDateSet() {
       if (this.editingUser) {
         return this.userExpirationDate.enabled
       }
@@ -153,15 +152,15 @@ export default {
       return this.userExpirationDate.enabled || this.groupExpirationDate.enabled
     },
 
-    userExpirationDate () {
+    userExpirationDate() {
       return this.capabilities.files_sharing.user.expire_date
     },
 
-    groupExpirationDate () {
+    groupExpirationDate() {
       return this.capabilities.files_sharing.group.expire_date
     },
 
-    defaultExpirationDate () {
+    defaultExpirationDate() {
       if (!this.defaultExpirationDateSet) {
         return null
       }
@@ -170,11 +169,17 @@ export default {
       const groupMaxExpirationDays = parseInt(this.groupExpirationDate.days, 10)
 
       if (this.editingUser) {
-        return moment().add(userMaxExpirationDays, 'days').endOf('day').toISOString()
+        return moment()
+          .add(userMaxExpirationDays, 'days')
+          .endOf('day')
+          .toISOString()
       }
 
       if (this.editingGroup) {
-        return moment().add(groupMaxExpirationDays, 'days').endOf('day').toISOString()
+        return moment()
+          .add(groupMaxExpirationDays, 'days')
+          .endOf('day')
+          .toISOString()
       }
 
       // Since we are not separating process for adding users and groups as collaborators
@@ -187,10 +192,13 @@ export default {
         days = userMaxExpirationDays || groupMaxExpirationDays
       }
 
-      return moment().add(days, 'days').endOf('day').toISOString()
+      return moment()
+        .add(days, 'days')
+        .endOf('day')
+        .toISOString()
     },
 
-    expirationDateEnforced () {
+    expirationDateEnforced() {
       if (this.editingUser) {
         return this.userExpirationDate.enforced
       }
@@ -202,7 +210,7 @@ export default {
       return this.userExpirationDate.enforced || this.groupExpirationDate.enforced
     },
 
-    maxExpirationDate () {
+    maxExpirationDate() {
       if (!this.expirationDateEnforced) {
         return null
       }
@@ -210,57 +218,64 @@ export default {
       return this.defaultExpirationDate
     },
 
-    minExpirationDate () {
-      return moment().add(1, 'days').endOf('day').toISOString()
+    minExpirationDate() {
+      return moment()
+        .add(1, 'days')
+        .endOf('day')
+        .toISOString()
     },
 
-    expirationDatePlaceholder () {
+    expirationDatePlaceholder() {
       return this.$gettext('Expiration date')
     },
 
-    expirationDateRemoveTooltip () {
+    expirationDateRemoveTooltip() {
       return this.$gettext('Remove expiration date')
     },
 
-    canResetExpirationDate () {
+    canResetExpirationDate() {
       return !this.expirationDateEnforced && this.enteredExpirationDate
     }
   },
 
-  mounted () {
+  mounted() {
     if (this.editingUser || this.editingGroup) {
       // FIXME: Datepicker is not displaying correct timezone so for now we add it manually
       // this.enteredExpirationDate = this.expirationDate ? moment(this.expirationDate).toISOString(true) : null
-      this.enteredExpirationDate = this.expirationDate ? moment(this.expirationDate).add(moment().utcOffset(), 'm').toISOString() : null
+      this.enteredExpirationDate = this.expirationDate
+        ? moment(this.expirationDate)
+            .add(moment().utcOffset(), 'm')
+            .toISOString()
+        : null
     } else {
       this.enteredExpirationDate = this.defaultExpirationDate
     }
   },
 
   methods: {
-    selectRole (role) {
+    selectRole(role) {
       this.selectedRole = role
       this.publishChange()
     },
 
-    checkAdditionalPermissions (permissions) {
+    checkAdditionalPermissions(permissions) {
       this.additionalPermissions = permissions
       this.publishChange()
     },
 
-    setExpirationDate (date) {
+    setExpirationDate(date) {
       // Expiration date picker is emitting empty string when the component is initialised
       // This ensures it will be null as we treat it everywhere in that way
       this.enteredExpirationDate = date === '' ? null : date
       this.publishChange()
     },
 
-    resetExpirationDate () {
+    resetExpirationDate() {
       this.enteredExpirationDate = null
       this.publishChange()
     },
 
-    publishChange () {
+    publishChange() {
       this.$emit('optionChange', {
         role: this.selectedRole,
         permissions: this.additionalPermissions,

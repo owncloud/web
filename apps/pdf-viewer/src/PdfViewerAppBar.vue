@@ -4,8 +4,10 @@
       <div class="uk-width-expand">
         <oc-icon name="application-pdf" /> {{ activeFile.path.substr(1) }}
       </div>
-      <div class="uk-width-auto" v-if="!loading">
-        <oc-text-input v-model.number="page" type="number" :min="1" :max="pageCount" />&nbsp;/{{ pageCount }}
+      <div v-if="!loading" class="uk-width-auto">
+        <oc-text-input v-model.number="page" type="number" :min="1" :max="pageCount" />&nbsp;/{{
+          pageCount
+        }}
       </div>
       <div class="uk-width-auto">
         <oc-button icon="close" @click="closeApp"></oc-button>
@@ -17,26 +19,25 @@
 // TODO put active Page and max Pages into store
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  data: () => ({
-  }),
+  data: () => ({}),
   computed: {
     ...mapGetters(['activeFile']),
     ...mapGetters('PDFViewer', ['pageCount', 'currentPage']),
     page: {
-      get () {
+      get() {
         return this.currentPage
       },
-      set (val) {
+      set(val) {
         this.changePage(val)
       }
     },
-    loading () {
+    loading() {
       return this.content === ''
     }
   },
   methods: {
     ...mapActions('PDFViewer', ['changePage']),
-    closeApp () {
+    closeApp() {
       this.$router.push({
         path: '/files/list'
       })

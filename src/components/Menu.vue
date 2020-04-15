@@ -1,6 +1,20 @@
 <template>
-  <oc-application-menu name="coreMenu" v-model="visible" :inert="!visible" ref="sidebar" @close="close">
-    <oc-sidebar-nav-item v-for="(n, nid) in entries" :active="isActive(n)" :key="nid" :icon="n.iconMaterial" :target="n.route ? n.route.path : null" @click="openItem(n.url)">{{ translateMenu(n) }}</oc-sidebar-nav-item>
+  <oc-application-menu
+    ref="sidebar"
+    v-model="visible"
+    name="coreMenu"
+    :inert="!visible"
+    @close="close"
+  >
+    <oc-sidebar-nav-item
+      v-for="(n, nid) in entries"
+      :key="nid"
+      :active="isActive(n)"
+      :icon="n.iconMaterial"
+      :target="n.route ? n.route.path : null"
+      @click="openItem(n.url)"
+      >{{ translateMenu(n) }}</oc-sidebar-nav-item
+    >
   </oc-application-menu>
 </template>
 
@@ -18,12 +32,11 @@ export default {
       default: () => []
     }
   },
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
   watch: {
-    visible (val) {
+    visible(val) {
       this.isOpen = val
       if (val) {
         this.focusFirstLink()
@@ -31,31 +44,31 @@ export default {
     }
   },
   methods: {
-    close () {
+    close() {
       this.$emit('closed')
     },
-    navigateTo (route) {
+    navigateTo(route) {
       this.$router.push(route)
     },
-    translateMenu (navItem) {
+    translateMenu(navItem) {
       return this.$gettext(navItem.name)
     },
-    openItem (url) {
+    openItem(url) {
       if (url) {
         const win = window.open(url, '_blank')
         win.focus()
       }
       this.close()
     },
-    isActive (navItem) {
+    isActive(navItem) {
       return navItem.route.name === this.$route.name
     },
-    focusFirstLink () {
+    focusFirstLink() {
       /*
-      * Delay for two reasons:
-      * - for screen readers Virtual buffer
-      * - to outsmart uikit's focus management
-      */
+       * Delay for two reasons:
+       * - for screen readers Virtual buffer
+       * - to outsmart uikit's focus management
+       */
       setTimeout(() => {
         this.$refs.sidebar.$el.querySelector('a:first-of-type').focus()
       }, 500)
@@ -65,8 +78,8 @@ export default {
 </script>
 
 <style scoped>
-  /* Workaround until we decide what to do with the sidebar navigation */
-  #coreMenu {
-    top: 60px;
-  }
+/* Workaround until we decide what to do with the sidebar navigation */
+#coreMenu {
+  top: 60px;
+}
 </style>

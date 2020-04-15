@@ -1,19 +1,17 @@
 module.exports = {
   commands: {
-    isThumbnailVisible: function () {
-      return this
-        .waitForElementVisible(this.elements.sideBar)
-        .waitForElementVisible(this.elements.sidebarThumbnail)
+    isThumbnailVisible: function() {
+      return this.waitForElementVisible(this.elements.sideBar).waitForElementVisible(
+        this.elements.sidebarThumbnail
+      )
     },
     /**
      * @returns {*}
      */
-    openVersionsTab: function () {
-      return this
-        .waitForElementVisible('@sidebarVersionsTab')
-        .click('@sidebarVersionsTab')
+    openVersionsTab: function() {
+      return this.waitForElementVisible('@sidebarVersionsTab').click('@sidebarVersionsTab')
     },
-    closeSidebar: function (timeout = null) {
+    closeSidebar: function(timeout = null) {
       if (timeout === null) {
         timeout = this.api.globals.waitForConditionTimeout
       } else {
@@ -35,35 +33,27 @@ module.exports = {
      * @param {string} tabSelectorXpath
      * @returns {Promise<boolean>}
      */
-    isTabPresentOnCurrentSidebar: async function (tabSelectorXpath) {
+    isTabPresentOnCurrentSidebar: async function(tabSelectorXpath) {
       let isPresent = true
-      await this
-        .useXpath()
+      await this.useXpath()
         .waitForElementVisible('@sideBar') // sidebar is expected to be opened and visible
-        .api.elements(
-          'xpath',
-          tabSelectorXpath,
-          (result) => {
-            isPresent = result.value.length > 0
-          })
+        .api.elements('xpath', tabSelectorXpath, result => {
+          isPresent = result.value.length > 0
+        })
         .useCss()
       return isPresent
     },
     /**
      * @returns {Promise<boolean>}
      */
-    isLinksTabPresentOnCurrentSidebar: function () {
-      return this.isTabPresentOnCurrentSidebar(
-        this.elements.sidebarLinksTab.selector
-      )
+    isLinksTabPresentOnCurrentSidebar: function() {
+      return this.isTabPresentOnCurrentSidebar(this.elements.sidebarLinksTab.selector)
     },
     /**
      * @returns {Promise<boolean>}
      */
-    isCollaboratorsTabPresentOnCurrentSidebar: function () {
-      return this.isTabPresentOnCurrentSidebar(
-        this.elements.sidebarCollaboratorsTab.selector
-      )
+    isCollaboratorsTabPresentOnCurrentSidebar: function() {
+      return this.isTabPresentOnCurrentSidebar(this.elements.sidebarCollaboratorsTab.selector)
     }
   },
   elements: {

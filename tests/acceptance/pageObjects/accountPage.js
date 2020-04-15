@@ -1,7 +1,7 @@
 const { join } = require('../helpers/path')
 
 module.exports = {
-  url: function () {
+  url: function() {
     return join(this.api.launchUrl, '/index.html#/account/')
   },
   commands: {
@@ -9,9 +9,8 @@ module.exports = {
      * like build-in navigate() but also waits for the account display element
      * @returns {Promise}
      */
-    navigateAndWaitTillLoaded: function () {
-      return this.navigate(this.url())
-        .waitForElementVisible('@accountDisplay')
+    navigateAndWaitTillLoaded: function() {
+      return this.navigate(this.url()).waitForElementVisible('@accountDisplay')
     },
 
     /**
@@ -19,15 +18,19 @@ module.exports = {
      *
      * @returns {object}
      */
-    getAccountInformation: async function () {
+    getAccountInformation: async function() {
       const accountInformation = []
       let accountInfoElementIds = []
-      await this.waitForElementVisible('@accountInformationElements')
-        .api.elements('@accountInformationElements', function (result) {
+      await this.waitForElementVisible('@accountInformationElements').api.elements(
+        '@accountInformationElements',
+        function(result) {
           accountInfoElementIds = result.value
-        })
+        }
+      )
       for (const elementIdIndex in accountInfoElementIds) {
-        await this.api.elementIdText(accountInfoElementIds[elementIdIndex].ELEMENT, function (elementText) {
+        await this.api.elementIdText(accountInfoElementIds[elementIdIndex].ELEMENT, function(
+          elementText
+        ) {
           accountInformation.push(elementText.value)
         })
       }
@@ -39,14 +42,13 @@ module.exports = {
       }
       return actualAccInfo
     },
-    logout: function () {
-      return this.waitForElementVisible('@logoutButton')
-        .click('@logoutButton')
+    logout: function() {
+      return this.waitForElementVisible('@logoutButton').click('@logoutButton')
     },
-    isPageVisible: async function () {
+    isPageVisible: async function() {
       let isVisible = false
       const handle = []
-      await this.api.windowHandles(function (result) {
+      await this.api.windowHandles(function(result) {
         handle.push(result.value[1])
       })
       await this.api.switchWindow(handle[0])

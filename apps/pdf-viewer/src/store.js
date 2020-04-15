@@ -6,19 +6,19 @@ const state = {
 }
 
 const actions = {
-  loadPages ({ commit }, pages) {
+  loadPages({ commit }, pages) {
     commit('LOAD_PAGES', pages)
   },
-  changePage ({ commit }, page) {
+  changePage({ commit }, page) {
     commit('CHANGE_PAGE', page)
   }
 }
 
 const mutations = {
-  CHANGE_PAGE (state, page) {
+  CHANGE_PAGE(state, page) {
     state.activePage = page
   },
-  LOAD_PAGES (state, pages) {
+  LOAD_PAGES(state, pages) {
     state.pageCount = pages
   }
 }

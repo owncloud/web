@@ -31,16 +31,16 @@ const state = {
 }
 
 const actions = {
-  loadConfig (context, config) {
+  loadConfig(context, config) {
     context.commit('LOAD_CONFIG', config)
   },
-  loadTheme (context, theme) {
+  loadTheme(context, theme) {
     context.commit('LOAD_THEME', theme)
   }
 }
 
 const mutations = {
-  LOAD_CONFIG (state, config) {
+  LOAD_CONFIG(state, config) {
     state.server = config.server
     state.auth = config.auth
     state.openIdConnect = config.openIdConnect
@@ -49,7 +49,7 @@ const mutations = {
     state.applications = config.applications === undefined ? [] : config.applications
     if (config.corrupted) state.corrupted = config.corrupted
   },
-  LOAD_THEME (state, theme) {
+  LOAD_THEME(state, theme) {
     state.theme = theme
   }
 }

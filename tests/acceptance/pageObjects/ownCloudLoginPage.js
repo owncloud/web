@@ -1,5 +1,5 @@
 module.exports = {
-  url: function () {
+  url: function() {
     return this.api.launchUrl
   },
   elements: {
@@ -24,25 +24,25 @@ module.exports = {
        * @param {string} username
        * @param {string} password
        */
-      login: function (username, password) {
-        return this
-          .waitForElementVisible('@usernameInput')
+      login: function(username, password) {
+        return this.waitForElementVisible('@usernameInput')
           .clearValue('@usernameInput')
           .setValue('@usernameInput', username)
           .clearValue('@passwordInput')
           .setValue('@passwordInput', password)
           .click('@loginSubmitButton')
       },
-      getLoginErrorMessage: async function () {
+      getLoginErrorMessage: async function() {
         let errorMessage
         await this.api.assert.visible(this.elements.usernameInput.selector)
         await this.api.assert.visible(this.elements.passwordInput.selector)
         await this.api.assert.visible(this.elements.loginSubmitButton.selector)
-        await this
-          .waitForElementVisible('@invalidCredentialsMessage')
-          .getText('@invalidCredentialsMessage', (result) => {
+        await this.waitForElementVisible('@invalidCredentialsMessage').getText(
+          '@invalidCredentialsMessage',
+          result => {
             errorMessage = result.value
-          })
+          }
+        )
         return errorMessage
       }
     }

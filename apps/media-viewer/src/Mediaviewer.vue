@@ -1,23 +1,71 @@
 <template>
   <div id="mediaviewer" class="uk-position-relative">
     <div class="uk-position-center uk-padding-small">
-      <transition name="custom-classes-transition" :enter-active-class="activeClass.enter" :leave-active-class="activeClass.leave">
-        <img v-show="!loading && activeMediaFileCached" :src="image.url" :alt="image.name" :data-id="image.id" style="max-width:90vw;max-height:90vh" class="uk-box-shadow-medium">
+      <transition
+        name="custom-classes-transition"
+        :enter-active-class="activeClass.enter"
+        :leave-active-class="activeClass.leave"
+      >
+        <img
+          v-show="!loading && activeMediaFileCached"
+          :src="image.url"
+          :alt="image.name"
+          :data-id="image.id"
+          style="max-width:90vw;max-height:90vh"
+          class="uk-box-shadow-medium"
+        />
       </transition>
     </div>
-    <oc-spinner :ariaLabel="this.$gettext('Loading media')" class="uk-position-center" v-if="loading" size="large" />
-    <oc-icon v-if="failed" name="review" variation="danger" size="large" class="uk-position-center uk-z-index" />
+    <oc-spinner
+      v-if="loading"
+      :aria-label="this.$gettext('Loading media')"
+      class="uk-position-center"
+      size="large"
+    />
+    <oc-icon
+      v-if="failed"
+      name="review"
+      variation="danger"
+      size="large"
+      class="uk-position-center uk-z-index"
+    />
 
     <div class="uk-position-medium uk-position-bottom-center">
-      <div class="uk-overlay uk-overlay-default uk-padding-small uk-text-center uk-text-meta uk-text-truncate">{{ image.name }}</div>
+      <div
+        class="uk-overlay uk-overlay-default uk-padding-small uk-text-center uk-text-meta uk-text-truncate"
+      >
+        {{ image.name }}
+      </div>
       <div class="uk-overlay uk-overlay-primary uk-light uk-padding-small">
-        <div class="uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around" style="user-select:none;">
-          <oc-icon role="button" class="oc-cursor-pointer" size="medium" @click="prev" name="chevron_left" />
+        <div
+          class="uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around"
+          style="user-select:none;"
+        >
+          <oc-icon
+            role="button"
+            class="oc-cursor-pointer"
+            size="medium"
+            name="chevron_left"
+            @click="prev"
+          />
           <!-- @TODO: Bring back working uk-light -->
-          <span v-if="!$_loader_folderLoading" class="uk-text-small" style="color:#fff"> {{ activeIndex + 1 }} <span v-translate>of</span> {{ mediaFiles.length }} </span>
-          <oc-icon role="button" class="oc-cursor-pointer" size="medium" @click="next" name="chevron_right" />
-          <oc-icon role="button" class="oc-cursor-pointer" @click="downloadImage" name="file_download"  />
-          <oc-icon role="button" class="oc-cursor-pointer" @click="closeApp" name="close"/>
+          <span v-if="!$_loader_folderLoading" class="uk-text-small" style="color:#fff">
+            {{ activeIndex + 1 }} <span v-translate>of</span> {{ mediaFiles.length }}
+          </span>
+          <oc-icon
+            role="button"
+            class="oc-cursor-pointer"
+            size="medium"
+            name="chevron_right"
+            @click="next"
+          />
+          <oc-icon
+            role="button"
+            class="oc-cursor-pointer"
+            name="file_download"
+            @click="downloadImage"
+          />
+          <oc-icon role="button" class="oc-cursor-pointer" name="close" @click="closeApp" />
         </div>
       </div>
     </div>
@@ -29,10 +77,8 @@ import Loader from './mixins/loader.js'
 
 export default {
   name: 'Mediaviewer',
-  mixins: [
-    Loader
-  ],
-  data () {
+  mixins: [Loader],
+  data() {
     return {
       loading: true,
       failed: false,
@@ -52,38 +98,45 @@ export default {
     ...mapGetters('Files', ['activeFiles']),
     ...mapGetters(['getToken']),
 
-    mediaFiles () {
+    mediaFiles() {
       return this.activeFiles.filter(file => {
         return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif)/)
       })
     },
-    activeMediaFile () {
+    activeMediaFile() {
       return this.mediaFiles[this.activeIndex]
     },
-    activeMediaFileCached () {
+    activeMediaFileCached() {
       const cached = this.images.find(i => i.id === this.activeMediaFile.id)
-      return (cached !== undefined) ? cached : false
+      return cached !== undefined ? cached : false
     },
-    activeClass () {
+    activeClass() {
       const direction = ['right', 'left']
 
-      if (this.direction === 'ltr') { direction.reverse() }
+      if (this.direction === 'ltr') {
+        direction.reverse()
+      }
 
       return {
         enter: `uk-animation-slide-${direction[0]}-small`,
         leave: `uk-animation-slide-${direction[1]}-medium uk-animation-reverse`
       }
     },
-    thumbDimensions () {
+    thumbDimensions() {
       switch (true) {
-        case (window.innerWidth <= 1024) : return 1024
-        case (window.innerWidth <= 1280) : return 1280
-        case (window.innerWidth <= 1920) : return 1920
-        case (window.innerWidth <= 2160) : return 2160
-        default: return 3840
+        case window.innerWidth <= 1024:
+          return 1024
+        case window.innerWidth <= 1280:
+          return 1280
+        case window.innerWidth <= 1920:
+          return 1920
+        case window.innerWidth <= 2160:
+          return 2160
+        default:
+          return 3840
       }
     },
-    thumbPath () {
+    thumbPath() {
       const query = {
         x: this.thumbDimensions,
         y: this.thumbDimensions,
@@ -99,14 +152,14 @@ export default {
   },
 
   watch: {
-    activeIndex (o, n) {
+    activeIndex(o, n) {
       if (o !== n) {
         this.loadImage()
       }
     }
   },
 
-  async mounted () {
+  async mounted() {
     document.addEventListener('keyup', this.handleKeyPress)
 
     // keep a local history for this component
@@ -117,7 +170,7 @@ export default {
     this.setCurrentFile(filePath)
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     document.removeEventListener('keyup', this.handleKeyPress)
 
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
@@ -128,7 +181,7 @@ export default {
   },
 
   methods: {
-    setCurrentFile (filePath) {
+    setCurrentFile(filePath) {
       for (let i = 0; i < this.mediaFiles.length; i++) {
         if (this.mediaFiles[i].path === filePath) {
           this.activeIndex = i
@@ -138,67 +191,75 @@ export default {
     },
 
     // react to PopStateEvent ()
-    handleLocalHistoryEvent () {
+    handleLocalHistoryEvent() {
       const result = this.$router.resolve(document.location)
       this.setCurrentFile(result.route.params.filePath)
     },
 
     // update route and url
-    updateLocalHistory () {
+    updateLocalHistory() {
       this.$route.params.filePath = this.activeMediaFile.path
       history.pushState({}, document.title, this.$router.resolve(this.$route).href)
     },
 
-    loadImage () {
+    loadImage() {
       this.loading = true
 
       // Don't bother loading if files i chached
       if (this.activeMediaFileCached) {
-        setTimeout(() => {
-          this.image = this.activeMediaFileCached
-          this.loading = false
-        },
-        // Delay to animate
-        this.animationDuration / 2)
+        setTimeout(
+          () => {
+            this.image = this.activeMediaFileCached
+            this.loading = false
+          },
+          // Delay to animate
+          this.animationDuration / 2
+        )
         return
       }
 
       // Fetch image
-      this.mediaSource(this.thumbPath, 'url', this.headers).then(imageUrl => {
-        this.images.push({
-          id: this.activeMediaFile.id,
-          name: this.activeMediaFile.name,
-          url: imageUrl
+      this.mediaSource(this.thumbPath, 'url', this.headers)
+        .then(imageUrl => {
+          this.images.push({
+            id: this.activeMediaFile.id,
+            name: this.activeMediaFile.name,
+            url: imageUrl
+          })
+          this.image = this.activeMediaFileCached
+          this.loading = false
+          this.failed = false
         })
-        this.image = this.activeMediaFileCached
-        this.loading = false
-        this.failed = false
-      }).catch(e => {
-        this.loading = false
-        this.failed = true
-      })
+        .catch(e => {
+          this.loading = false
+          this.failed = true
+        })
     },
 
-    downloadImage () {
+    downloadImage() {
       if (this.loading) {
         return
       }
 
       return this.downloadFile(this.mediaFiles[this.activeIndex], this.$_loader_publicContext)
     },
-    next () {
-      if (this.loading) { return }
+    next() {
+      if (this.loading) {
+        return
+      }
 
       this.direction = 'rtl'
-      if ((this.activeIndex + 1) >= this.mediaFiles.length) {
+      if (this.activeIndex + 1 >= this.mediaFiles.length) {
         this.activeIndex = 0
         return
       }
       this.activeIndex++
       this.updateLocalHistory()
     },
-    prev () {
-      if (this.loading) { return }
+    prev() {
+      if (this.loading) {
+        return
+      }
 
       this.direction = 'ltr'
       if (this.activeIndex === 0) {
@@ -208,15 +269,17 @@ export default {
       this.activeIndex--
       this.updateLocalHistory()
     },
-    handleKeyPress (e) {
+    handleKeyPress(e) {
       if (!e) return false
       else if (e.key === 'ArrowRight') this.next()
       else if (e.key === 'ArrowLeft') this.prev()
     },
-    closeApp () {
-      this.$_loader_navigateToContextRoute(this.$route.params.contextRouteName, this.$route.params.filePath)
+    closeApp() {
+      this.$_loader_navigateToContextRoute(
+        this.$route.params.contextRouteName,
+        this.$route.params.filePath
+      )
     }
   }
-
 }
 </script>

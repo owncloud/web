@@ -33,7 +33,7 @@ export default {
     const files = state.searchTermGlobal ? state.filesSearched : state.files
     // make a copy of array for sorting as sort() would modify the original array
     const direction = state.fileSortDirectionDesc ? 'desc' : 'asc'
-    return ([].concat(files)).sort(fileSortFunctions[state.fileSortField][direction])
+    return [].concat(files).sort(fileSortFunctions[state.fileSortField][direction])
   },
   filesTotalSize: (state, getters) => {
     let totalSize = 0

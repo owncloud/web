@@ -10,4 +10,9 @@ export const shareTypes = {
   remote: 6
 }
 
-export const userShareTypes = [shareTypes.user, shareTypes.group, shareTypes.guest, shareTypes.remote]
+export const userShareTypes = [
+  shareTypes.user,
+  shareTypes.group,
+  shareTypes.guest,
+  shareTypes.remote
+]

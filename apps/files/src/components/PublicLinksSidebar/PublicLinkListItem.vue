@@ -2,35 +2,78 @@
   <oc-table middle class="files-file-links-link">
     <oc-table-row class="files-file-links-link-table-row-info">
       <oc-table-cell shrink>
-        <oc-button v-if="$_deleteButtonVisible" :aria-label="$_deleteButtonLabel" @click="$_removeLink" variation="raw" class="oc-files-file-link-delete">
+        <oc-button
+          v-if="$_deleteButtonVisible"
+          :aria-label="$_deleteButtonLabel"
+          variation="raw"
+          class="oc-files-file-link-delete"
+          @click="$_removeLink"
+        >
           <oc-icon name="close" />
         </oc-button>
-        <oc-spinner v-else-if="$_loadingSpinnerVisible" :aria-label="$gettext('Removing public link…')" size="small" />
+        <oc-spinner
+          v-else-if="$_loadingSpinnerVisible"
+          :aria-label="$gettext('Removing public link…')"
+          size="small"
+        />
         <oc-icon v-else name="lock" class="uk-invisible" />
       </oc-table-cell>
       <oc-table-cell>
-        <a :href="link.url" target="_blank" :uk-tooltip="$_tooltipTextLink" class="uk-text-bold uk-text-truncate oc-files-file-link-url">{{ link.name }}</a>
-        <br>
+        <a
+          :href="link.url"
+          target="_blank"
+          :uk-tooltip="$_tooltipTextLink"
+          class="uk-text-bold uk-text-truncate oc-files-file-link-url"
+          >{{ link.name }}</a
+        >
+        <br />
         <span class="uk-text-meta uk-text-break">
           <span class="oc-files-file-link-role">{{ link.description }}</span>
-          <template v-if="link.expiration"> |
-            <oc-icon size="xsmall" name="text-calendar" class="fix-icon-baseline" :aria-hidden="true" />
+          <template v-if="link.expiration">
+            |
+            <oc-icon
+              size="xsmall"
+              name="text-calendar"
+              class="fix-icon-baseline"
+              :aria-hidden="true"
+            />
             <span v-translate>Expires</span> {{ formDateFromNow(link.expiration) }}
           </template>
-          <template v-if="link.password"> |
+          <template v-if="link.password">
+            |
             <oc-icon size="xsmall" name="lock" class="fix-icon-baseline" :aria-hidden="true" />
             <span v-translate>Password protected</span>
           </template>
         </span>
       </oc-table-cell>
       <oc-table-cell shrink class="uk-text-nowrap">
-        <oc-button v-if="$_editButtonVisible" :aria-label="$_editButtonLabel" @click="$emit('onEdit', link)" variation="raw" class="oc-files-file-link-edit">
-          <oc-icon name="edit" size="small"/>
+        <oc-button
+          v-if="$_editButtonVisible"
+          :aria-label="$_editButtonLabel"
+          variation="raw"
+          class="oc-files-file-link-edit"
+          @click="$emit('onEdit', link)"
+        >
+          <oc-icon name="edit" size="small" />
         </oc-button>
-        <oc-button :aria-label="$_publicLinkCopyLabel" variation="raw" class="oc-files-file-link-copy-url">
-          <oc-icon v-if="!linksCopied[link.url]"  name="copy_to_clipboard" size="small"
-                   v-clipboard:copy="link.url" v-clipboard:success="$_clipboardSuccessHandler"/>
-          <oc-icon v-else name="ready" size="small" class="oc-files-file-link-copied-url _clipboard-success-animation"/>
+        <oc-button
+          :aria-label="$_publicLinkCopyLabel"
+          variation="raw"
+          class="oc-files-file-link-copy-url"
+        >
+          <oc-icon
+            v-if="!linksCopied[link.url]"
+            v-clipboard:copy="link.url"
+            v-clipboard:success="$_clipboardSuccessHandler"
+            name="copy_to_clipboard"
+            size="small"
+          />
+          <oc-icon
+            v-else
+            name="ready"
+            size="small"
+            class="oc-files-file-link-copied-url _clipboard-success-animation"
+          />
         </oc-button>
       </oc-table-cell>
     </oc-table-row>
@@ -38,10 +81,16 @@
       <oc-table-cell shrink></oc-table-cell>
       <oc-table-cell colspan="2">
         <div class="uk-text-meta">
-          <router-link :to="$_viaRouterParams" :aria-label="$gettext('Navigate to parent')"
-                       class="oc-files-file-link-via uk-flex uk-flex-middle">
+          <router-link
+            :to="$_viaRouterParams"
+            :aria-label="$gettext('Navigate to parent')"
+            class="oc-files-file-link-via uk-flex uk-flex-middle"
+          >
             <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
-            <span class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-file-links-link-via-label">{{ $_viaLabel }}</span>
+            <span
+              class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-file-links-link-via-label"
+              >{{ $_viaLabel }}</span
+            >
           </router-link>
         </div>
       </oc-table-cell>
@@ -74,29 +123,29 @@ export default {
       default: () => {}
     }
   },
-  data () {
+  data() {
     return {
       removalInProgress: false
     }
   },
   computed: {
-    $_loadingSpinnerVisible () {
+    $_loadingSpinnerVisible() {
       return this.modifiable && this.removalInProgress
     },
-    $_deleteButtonVisible () {
+    $_deleteButtonVisible() {
       return this.modifiable && !this.removalInProgress
     },
-    $_editButtonVisible () {
+    $_editButtonVisible() {
       return this.modifiable && !this.removalInProgress
     },
-    $_viaLabel () {
+    $_viaLabel() {
       if (!this.indirect) {
         return null
       }
       const translated = this.$gettext('Via %{folderName}')
       return this.$gettextInterpolate(translated, { folderName: basename(this.link.path) }, true)
     },
-    $_viaRouterParams () {
+    $_viaRouterParams() {
       const viaPath = this.link.path
       return {
         name: 'files-list',
@@ -108,24 +157,24 @@ export default {
         }
       }
     },
-    $_tooltipTextLink () {
+    $_tooltipTextLink() {
       return `title: ${this.$gettext('Click to open the link')}; pos: bottom`
     },
-    $_deleteButtonLabel () {
+    $_deleteButtonLabel() {
       return this.$gettext('Delete public link')
     },
-    $_editButtonLabel () {
+    $_editButtonLabel() {
       return this.$gettext('Edit public link')
     },
-    $_publicLinkCopyLabel () {
+    $_publicLinkCopyLabel() {
       return this.$gettext('Copy public link url')
     }
   },
   methods: {
-    $_clipboardSuccessHandler (event) {
+    $_clipboardSuccessHandler(event) {
       this.$emit('onCopy', event)
     },
-    $_removeLink () {
+    $_removeLink() {
       this.removalInProgress = true
       this.$emit('onDelete', this.link)
     }
@@ -134,17 +183,17 @@ export default {
 </script>
 
 <style scoped="scoped">
-  /* FIXME: Move to ODS somehow */
-  .files-file-links-link-table-row-info > td {
-    padding: 0 10px 0 0;
-  }
-  .files-file-links-link-table-row-bottom > td {
-    padding: 3px 10px 0 0;
-  }
-  .files-file-links-link-via-label {
-    max-width: 65%;
-  }
-  .fix-icon-baseline {
-    margin-bottom: -2px;
-  }
+/* FIXME: Move to ODS somehow */
+.files-file-links-link-table-row-info > td {
+  padding: 0 10px 0 0;
+}
+.files-file-links-link-table-row-bottom > td {
+  padding: 3px 10px 0 0;
+}
+.files-file-links-link-via-label {
+  max-width: 65%;
+}
+.fix-icon-baseline {
+  margin-bottom: -2px;
+}
 </style>

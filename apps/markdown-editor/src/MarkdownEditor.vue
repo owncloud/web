@@ -3,17 +3,22 @@
     <markdown-editor-app-bar />
     <oc-notifications>
       <oc-notification-message
-              v-if="lastError"
-              :message="lastError"
-              status="danger"
-              @close="clearLastError"
+        v-if="lastError"
+        :message="lastError"
+        status="danger"
+        @close="clearLastError"
       />
     </oc-notifications>
     <div class="uk-flex">
       <div class="uk-container uk-width-1-2">
-        <oc-textarea name="input"
-                full-width :value="currentContent"
-                @input="onType" class="uk-height-1-1" :rows="20">
+        <oc-textarea
+          name="input"
+          full-width
+          :value="currentContent"
+          class="uk-height-1-1"
+          :rows="20"
+          @input="onType"
+        >
         </oc-textarea>
       </div>
       <div class="uk-container uk-width-1-2">
@@ -35,11 +40,11 @@ export default {
   computed: {
     ...mapGetters(['activeFile']),
     ...mapGetters('MarkdownEditor', ['currentContent', 'lastError']),
-    renderedMarkdown () {
+    renderedMarkdown() {
       return this.currentContent ? marked(this.currentContent, { sanitize: true }) : null
     }
   },
-  mounted () {
+  mounted() {
     if (this.activeFile.path === '') {
       this.$router.push({
         path: '/files'
@@ -53,7 +58,7 @@ export default {
   },
   methods: {
     ...mapActions('MarkdownEditor', ['updateText', 'loadFile', 'clearLastError']),
-    onType (e) {
+    onType(e) {
       this.updateText(e)
     }
   }

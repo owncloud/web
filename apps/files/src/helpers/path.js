@@ -10,7 +10,7 @@
  * @param {Boolean} includeCurrent whether to include the current path (with leading slash)
  * @return {Array.<String>} parent paths
  */
-export function getParentPaths (path, includeCurrent = false) {
+export function getParentPaths(path, includeCurrent = false) {
   if (path === '' || path === '/') {
     return []
   }

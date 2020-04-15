@@ -29,13 +29,11 @@ import Mixins from '../mixins'
 
 export default {
   filters: {
-    toInt (value) {
+    toInt(value) {
       return parseInt(value)
     }
   },
-  mixins: [
-    Mixins
-  ],
+  mixins: [Mixins],
   props: {
     items: {
       type: Array,

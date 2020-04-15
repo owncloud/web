@@ -9,35 +9,38 @@ import t from '../l10n/translations'
 
 const store = require('./store.js')
 
-const routes = [{
-  path: '',
-  components: {
-    app: MarkdownEditor
-  },
-  name: 'markdown-editor'
-}]
+const routes = [
+  {
+    path: '',
+    components: {
+      app: MarkdownEditor
+    },
+    name: 'markdown-editor'
+  }
+]
 
 const appInfo = {
   name: 'MarkdownEditor',
   id: 'markdown-editor',
   icon: 'text',
   isFileEditor: true,
-  extensions: [{
-    extension: 'txt',
-    newFileMenu: {
-      menuTitle ($gettext) {
-        return $gettext('New plain text file…')
+  extensions: [
+    {
+      extension: 'txt',
+      newFileMenu: {
+        menuTitle($gettext) {
+          return $gettext('New plain text file…')
+        }
+      }
+    },
+    {
+      extension: 'md',
+      newFileMenu: {
+        menuTitle($gettext) {
+          return $gettext('New mark-down file…')
+        }
       }
     }
-  },
-  {
-    extension: 'md',
-    newFileMenu: {
-      menuTitle ($gettext) {
-        return $gettext('New mark-down file…')
-      }
-    }
-  }
   ]
 }
 

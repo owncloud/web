@@ -8,9 +8,13 @@
  * @returns {exports}
  */
 
-module.exports.command = function (
-  { selector, locateStrategy = 'css selector', property, value, timeout = this.globals.waitForConditionTimeout }
-) {
+module.exports.command = function({
+  selector,
+  locateStrategy = 'css selector',
+  property,
+  value,
+  timeout = this.globals.waitForConditionTimeout
+}) {
   if (locateStrategy === 'xpath') {
     this.useXpath()
   } else if (locateStrategy === 'css selector') {
@@ -18,6 +22,10 @@ module.exports.command = function (
   } else {
     this.assert.fail('invalid locateStrategy')
   }
-  this.expect.element(selector).to.have.css(property).which.equals(value).before(timeout)
+  this.expect
+    .element(selector)
+    .to.have.css(property)
+    .which.equals(value)
+    .before(timeout)
   return this
 }

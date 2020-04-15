@@ -12,7 +12,7 @@ class UseStrategy extends events.EventEmitter {
    * useSelector(selector).assert.elementNotPresent.useCss() // selector is string
    * useSelector({locateStrategy: selector})
    */
-  command (strategy = this.client.locateStrategy) {
+  command(strategy = this.client.locateStrategy) {
     if (typeof strategy === 'object' && strategy.locateStrategy) {
       strategy = strategy.locateStrategy
     }

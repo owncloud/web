@@ -18,7 +18,7 @@ export const permissionsBitmask = {
  * @param {array} additionalPermissions  Array of selected additional permissions
  * @returns {integer}  Role bitmask
  */
-export function roleToBitmask (role, additionalPermissions = []) {
+export function roleToBitmask(role, additionalPermissions = []) {
   let bitmask = 0
 
   for (const permission of role.permissions) {
@@ -42,7 +42,7 @@ export function roleToBitmask (role, additionalPermissions = []) {
  * @param {boolean} isFolder Defines if the item is folder
  * @returns {object} Role mapped to the bitmask
  */
-export function bitmaskToRole (bitmask, isFolder) {
+export function bitmaskToRole(bitmask, isFolder) {
   // TODO: inject the result of "roles()" in the function header and have the caller of bitmaskToRole call roles() with appropriate arguments including translation
   // Not passing in translation as we don't need it
   const currentRoles = roles({ isFolder: isFolder })
@@ -67,10 +67,7 @@ export function bitmaskToRole (bitmask, isFolder) {
     }
 
     // TODO: Use bitmask to cover cases of more then one additional permission
-    if (
-      rolePermissionsBitmask === bitmask ||
-      roleBasicPermissionsBitmask === bitmask
-    ) {
+    if (rolePermissionsBitmask === bitmask || roleBasicPermissionsBitmask === bitmask) {
       return currentRole
     }
   }

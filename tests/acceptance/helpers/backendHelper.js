@@ -4,15 +4,15 @@ const { client } = require('nightwatch-api')
  * @enum {string}
  * @readonly
  */
-const BACKENDS = exports.BACKENDS = Object.freeze({
+const BACKENDS = (exports.BACKENDS = Object.freeze({
   local: 'LOCAL',
   remote: 'REMOTE'
-})
+}))
 
 /**
  * Give the backend URL for currently default backend
  */
-exports.getCurrentBackendUrl = function () {
+exports.getCurrentBackendUrl = function() {
   // eslint-disable-next-line camelcase
   const { backend_url, remote_backend_url, default_backend } = client.globals
   // eslint-disable-next-line camelcase
@@ -33,7 +33,7 @@ exports.getCurrentBackendUrl = function () {
  * runOnRemoteBackend(doSomething, arg1, arg2); // if you don't want unnecessary closures
  * runOnRemoteBackend(() => doSomething(arg1, arg2)); // use closure to get better completion
  */
-exports.runOnRemoteBackend = async function (fn, ...args) {
+exports.runOnRemoteBackend = async function(fn, ...args) {
   if (typeof fn !== 'function') {
     throw new Error('expected function, received: ' + typeof fn)
   }

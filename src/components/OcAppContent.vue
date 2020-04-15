@@ -1,17 +1,15 @@
 <template>
   <div class="oc-app-content">
-      <slot name="content"></slot>
+    <slot name="content"></slot>
   </div>
 </template>
 <script>
 export default {
-  data: () => ({
-
-  })
+  data: () => ({})
 }
 </script>
 <style scoped>
-  .oc-app-content {
-    overflow-y: scroll;
-  }
+.oc-app-content {
+  overflow-y: scroll;
+}
 </style>

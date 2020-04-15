@@ -1,15 +1,18 @@
 <template>
   <span>
-    <div v-if="displayDefaultIndicators" :class="{ 'uk-margin-xsmall-right' : customIndicators }"
-         @click="openSidebar">
+    <div
+      v-if="displayDefaultIndicators"
+      :class="{ 'uk-margin-xsmall-right': customIndicators }"
+      @click="openSidebar"
+    >
       <oc-button
         v-for="(indicator, index) in defaultIndicators"
         :key="index"
         class="file-row-share-indicator uk-text-middle"
-        :class="{ 'uk-margin-xsmall-left' : index > 0, 'uk-invisible' : !indicator.visible }"
+        :class="{ 'uk-margin-xsmall-left': index > 0, 'uk-invisible': !indicator.visible }"
         :aria-label="indicator.label"
-        @click="indicator.handler(item, indicator.id)"
         variation="raw"
+        @click="indicator.handler(item, indicator.id)"
       >
         <oc-icon
           :name="indicator.icon"
@@ -21,8 +24,8 @@
     </div>
     <template v-if="customIndicators">
       <component
-        v-for="(indicator, index) in customIndicators"
         :is="indicator.component"
+        v-for="(indicator, index) in customIndicators"
         :key="index"
       />
     </template>
@@ -50,18 +53,18 @@ export default {
   computed: {
     ...mapGetters(['configuration', 'customFilesListIndicators']),
 
-    displayDefaultIndicators () {
+    displayDefaultIndicators() {
       return !this.configuration.theme.filesList.hideDefaultStatusIndicators
     },
 
-    customIndicators () {
+    customIndicators() {
       return this.customFilesListIndicators
     }
   },
 
   methods: {
     // TODO: Adjust to send the event via store
-    openSidebar (item, indicatorId) {
+    openSidebar(item, indicatorId) {
       this.$emit('click', item, indicatorId)
     }
   }

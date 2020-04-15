@@ -2,7 +2,13 @@
   <div id="pdf-viewer">
     <pdf-viewer-app-bar />
     <oc-progress v-if="loading" :max="100" indeterminate></oc-progress>
-    <pdf v-if="!loading" :page="currentPage" @error="error" @num-pages="loadPages" :src="content"></pdf>
+    <pdf
+      v-if="!loading"
+      :page="currentPage"
+      :src="content"
+      @error="error"
+      @num-pages="loadPages"
+    ></pdf>
   </div>
 </template>
 <script>
@@ -24,11 +30,11 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'activeFile']),
     ...mapGetters('PDFViewer', ['currentPage']),
-    loading () {
+    loading() {
       return this.content === ''
     }
   },
-  mounted () {
+  mounted() {
     if (this.activeFile.path === '') {
       this.closeApp()
       return
@@ -53,12 +59,12 @@ export default {
   methods: {
     ...mapActions('PDFViewer', ['loadPages', 'changePage']),
     ...mapActions(['showMessage']),
-    closeApp () {
+    closeApp() {
       this.$router.push({
         path: '/files'
       })
     },
-    error (error) {
+    error(error) {
       this.showMessage({
         title: this.$gettext('PDF could not be loaded…'),
         desc: error,

@@ -3,22 +3,18 @@ module.exports = {
     /**
      * @returns {Promise<number>}
      */
-    getVersionsCount: async function () {
+    getVersionsCount: async function() {
       let count = 0
-      await this
-        .api.elements(
-          '@versionsList',
-          function (result) {
-            count = result.value.length
-          })
+      await this.api.elements('@versionsList', function(result) {
+        count = result.value.length
+      })
       return count
     },
     /**
      * @returns {*}
      */
-    restoreToPreviousVersion: function () {
-      return this
-        .initAjaxCounters()
+    restoreToPreviousVersion: function() {
+      return this.initAjaxCounters()
         .waitForElementVisible('@restorePreviousVersion')
         .click('@restorePreviousVersion')
         .waitForOutstandingAjaxCalls()
@@ -30,7 +26,8 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     restorePreviousVersion: {
-      selector: '(//div[contains(@id,"oc-file-versions")]//tbody/tr[@class="file-row"])[1]//button[1]',
+      selector:
+        '(//div[contains(@id,"oc-file-versions")]//tbody/tr[@class="file-row"])[1]//button[1]',
       locateStrategy: 'xpath'
     }
   }

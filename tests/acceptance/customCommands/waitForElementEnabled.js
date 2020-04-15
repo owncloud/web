@@ -14,8 +14,10 @@
  * @param timeout defaults to this.globals.waitForConditionTimeout
  * @returns {exports}
  */
-module.exports.command = function (
-  selector, locateStrategy = 'css selector', timeout = this.globals.waitForConditionTimeout
+module.exports.command = function(
+  selector,
+  locateStrategy = 'css selector',
+  timeout = this.globals.waitForConditionTimeout
 ) {
   let self = this
   if (locateStrategy === 'xpath') {

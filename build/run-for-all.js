@@ -20,22 +20,21 @@ var fullCommand = command + ' ' + commandArgs.join(' ')
 var lib = resolve(__dirname, '..', 'apps')
 
 // run command in all apps
-fs.readdirSync(lib)
-  .forEach(function (mod) {
-    var modPath = join(lib, mod)
-    // ensure path has package.json
-    if (!fs.existsSync(join(modPath, 'package.json'))) return
+fs.readdirSync(lib).forEach(function(mod) {
+  var modPath = join(lib, mod)
+  // ensure path has package.json
+  if (!fs.existsSync(join(modPath, 'package.json'))) return
 
-    // Run command
-    console.info(chalk.blue(fullCommand), chalk.red(mod))
-    runCommand(command, commandArgs, modPath)
-  })
+  // Run command
+  console.info(chalk.blue(fullCommand), chalk.red(mod))
+  runCommand(command, commandArgs, modPath)
+})
 
 // run command in core
 console.info(chalk.blue(fullCommand), chalk.red('Core'))
 runCommand(command, commandArgs, resolve(__dirname, '..'))
 
-function runCommand (command, args, modPath) {
+function runCommand(command, args, modPath) {
   try {
     if (runCommandsInParallel) {
       cp.spawn(command, args, { env: process.env, cwd: modPath, stdio: 'inherit' })

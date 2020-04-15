@@ -1,35 +1,55 @@
-  <template>
-    <div id="files" class="uk-flex uk-flex-column">
-      <files-app-bar />
-      <upload-progress v-show="$_uploadProgressVisible" class="uk-padding-small uk-background-muted" />
-      <oc-grid class="uk-height-1-1 uk-flex-1 uk-overflow-auto">
-        <div ref="filesListWrapper" tabindex="-1" class="uk-width-expand uk-overflow-auto uk-height-1-1" @dragover="$_ocApp_dragOver" :class="{ 'uk-visible@m' : _sidebarOpen }">
-          <oc-loader id="files-list-progress" v-if="loadingFolder"></oc-loader>
-          <trash-bin v-if="$route.name === 'files-trashbin'" :fileData="activeFiles" />
-          <shared-files-list v-else-if="sharedList" :fileData="activeFiles" @sideBarOpen="openSideBar" />
-          <all-files-list v-else @FileAction="openFileActionBar" :fileData="activeFiles" :parentFolder="currentFolder" @sideBarOpen="openSideBar" />
-        </div>
-        <file-details
-          v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
-          ref="fileDetails" class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1"
-          @reset="setHighlightedFile(null)"
+<template>
+  <div id="files" class="uk-flex uk-flex-column">
+    <files-app-bar />
+    <upload-progress
+      v-show="$_uploadProgressVisible"
+      class="uk-padding-small uk-background-muted"
+    />
+    <oc-grid class="uk-height-1-1 uk-flex-1 uk-overflow-auto">
+      <div
+        ref="filesListWrapper"
+        tabindex="-1"
+        class="uk-width-expand uk-overflow-auto uk-height-1-1"
+        :class="{ 'uk-visible@m': _sidebarOpen }"
+        @dragover="$_ocApp_dragOver"
+      >
+        <oc-loader v-if="loadingFolder" id="files-list-progress"></oc-loader>
+        <trash-bin v-if="$route.name === 'files-trashbin'" :file-data="activeFiles" />
+        <shared-files-list
+          v-else-if="sharedList"
+          :file-data="activeFiles"
+          @sideBarOpen="openSideBar"
         />
+        <all-files-list
+          v-else
+          :file-data="activeFiles"
+          :parent-folder="currentFolder"
+          @FileAction="openFileActionBar"
+          @sideBarOpen="openSideBar"
+        />
+      </div>
+      <file-details
+        v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
+        ref="fileDetails"
+        class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1"
+        @reset="setHighlightedFile(null)"
+      />
     </oc-grid>
-    <file-open-actions/>
+    <file-open-actions />
     {{ /* FIXME: hack to prevent conflict of dialog id with the trashbin deletion dialog */ }}
     <template v-if="$route.name !== 'files-trashbin'">
       <oc-dialog-prompt
         name="change-file-dialog"
         :oc-active="renameDialogOpen"
         :value="renameDialogNewName"
-        :ocError="renameDialogErrorMessage"
-        :ocTitle="$_renameDialogTitle"
-        ocConfirmId="oc-dialog-rename-confirm"
+        :oc-error="renameDialogErrorMessage"
+        :oc-title="$_renameDialogTitle"
+        oc-confirm-id="oc-dialog-rename-confirm"
+        :oc-input-placeholder="$_renameDialogPlaceholder"
+        :oc-input-label="$_renameDialogLabel"
         @oc-confirm="doRenameFile"
         @oc-cancel="cancelRenameFile"
         @input="$_validateFileName"
-        :oc-input-placeholder="$_renameDialogPlaceholder"
-        :oc-input-label="$_renameDialogLabel"
       />
       <oc-dialog-prompt
         name="delete-file-confirmation-dialog"
@@ -37,8 +57,8 @@
         :oc-active="deleteDialogOpen"
         :oc-content="deleteDialogMessage"
         :oc-has-input="false"
-        :ocTitle="$_deleteDialogTitle"
-        ocConfirmId="oc-dialog-delete-confirm"
+        :oc-title="$_deleteDialogTitle"
+        oc-confirm-id="oc-dialog-delete-confirm"
         @oc-confirm="reallyDeleteFiles"
         @oc-cancel="cancelDeleteFile"
       />
@@ -69,11 +89,8 @@ export default {
     UploadProgress,
     OcDialogPrompt
   },
-  mixins: [
-    Mixins,
-    FileActions
-  ],
-  data () {
+  mixins: [Mixins, FileActions],
+  data() {
     return {
       createFolder: false,
       fileUploadName: '',
@@ -88,25 +105,35 @@ export default {
   },
   computed: {
     ...mapGetters('Files', [
-      'selectedFiles', 'activeFiles', 'dropzone', 'loadingFolder', 'highlightedFile', 'currentFolder', 'inProgress',
+      'selectedFiles',
+      'activeFiles',
+      'dropzone',
+      'loadingFolder',
+      'highlightedFile',
+      'currentFolder',
+      'inProgress',
       'renameDialogSelectedFile',
-      'deleteDialogSelectedFiles', 'deleteDialogMessage'
+      'deleteDialogSelectedFiles',
+      'deleteDialogMessage'
     ]),
     ...mapGetters(['extensions']),
 
-    _sidebarOpen () {
+    _sidebarOpen() {
       return this.highlightedFile !== null
     },
 
-    sharedList () {
-      return this.$route.name === 'files-shared-with-me' || this.$route.name === 'files-shared-with-others'
+    sharedList() {
+      return (
+        this.$route.name === 'files-shared-with-me' ||
+        this.$route.name === 'files-shared-with-others'
+      )
     },
 
-    $_uploadProgressVisible () {
+    $_uploadProgressVisible() {
       return this.inProgress.length > 0
     },
 
-    $_renameDialogPlaceholder () {
+    $_renameDialogPlaceholder() {
       let translated
       if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
 
@@ -118,7 +145,7 @@ export default {
       return translated
     },
 
-    $_renameDialogLabel () {
+    $_renameDialogLabel() {
       let translated
       if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return ''
 
@@ -130,7 +157,7 @@ export default {
       return translated
     },
 
-    $_renameDialogTitle () {
+    $_renameDialogTitle() {
       let translated
 
       if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
@@ -140,20 +167,24 @@ export default {
       } else {
         translated = this.$gettext('Rename file %{name}')
       }
-      return this.$gettextInterpolate(translated, { name: this.renameDialogSelectedFile.name }, true)
+      return this.$gettextInterpolate(
+        translated,
+        { name: this.renameDialogSelectedFile.name },
+        true
+      )
     },
 
-    $_deleteDialogTitle () {
+    $_deleteDialogTitle() {
       // FIXME: differentiate between file, folder and multiple
       return this.$gettext('Delete File/Folder')
     }
   },
   watch: {
-    $route () {
+    $route() {
       this.setHighlightedFile(null)
     }
   },
-  created () {
+  created() {
     this.$root.$on('upload-end', () => {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
     })
@@ -162,11 +193,11 @@ export default {
     ...mapActions('Files', ['dragOver', 'setHighlightedFile']),
     ...mapActions(['openFile', 'showMessage']),
 
-    trace () {
+    trace() {
       console.info('trace', arguments)
     },
 
-    openFileActionBar (file) {
+    openFileActionBar(file) {
       this.openFile({
         filePath: file.path
       })
@@ -203,7 +234,7 @@ export default {
       })
     },
 
-    openSideBar (file, sideBarName) {
+    openSideBar(file, sideBarName) {
       this.setHighlightedFile(file)
       const self = this
       this.$nextTick().then(() => {
@@ -211,15 +242,15 @@ export default {
       })
     },
 
-    $_ocApp_dragOver () {
+    $_ocApp_dragOver() {
       this.dragOver(true)
     },
 
-    $_ocAppSideBar_onReload () {
+    $_ocAppSideBar_onReload() {
       this.$refs.filesList.$_ocFilesFolder_getFolder()
     },
 
-    $_validateFileName (value) {
+    $_validateFileName(value) {
       this.renameDialogErrorMessage = this.validateFileName(value)
     }
   }

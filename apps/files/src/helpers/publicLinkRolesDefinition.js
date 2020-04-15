@@ -1,5 +1,5 @@
 // Return original string in case no translate function is provided
-function returnOriginal (string) {
+function returnOriginal(string) {
   return string
 }
 

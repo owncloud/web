@@ -1,7 +1,7 @@
 var numAjaxRequestsStart = 0
 var start = 0
 var end = 0
-const sleepWhenNoNewAjaxCallsStarted = function (result) {
+const sleepWhenNoNewAjaxCallsStarted = function(result) {
   var currentTime = Date.now()
   if (result.value <= numAjaxRequestsStart && currentTime < end) {
     this.pause(this.globals.waitForConditionPollInterval)
@@ -12,18 +12,20 @@ const sleepWhenNoNewAjaxCallsStarted = function (result) {
   }
 }
 
-const checkSumStartedAjaxRequests = function (api) {
+const checkSumStartedAjaxRequests = function(api) {
   api.execute('return window.sumStartedAjaxRequests', [], sleepWhenNoNewAjaxCallsStarted)
 }
-exports.command = function () {
+exports.command = function() {
   // init the ajax counters if they haven't been initialized yet
-  this.execute('return (typeof window.sumStartedAjaxRequests === "undefined")', [], function (result) {
+  this.execute('return (typeof window.sumStartedAjaxRequests === "undefined")', [], function(
+    result
+  ) {
     if (result.value === true) {
       this.initAjaxCounters()
     }
   })
 
-  this.execute('return window.sumStartedAjaxRequests', [], function (result) {
+  this.execute('return window.sumStartedAjaxRequests', [], function(result) {
     numAjaxRequestsStart = result.value
   })
   start = Date.now()
