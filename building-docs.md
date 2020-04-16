@@ -1,27 +1,13 @@
 ---
-title: "Building from source"
-date: 2018-05-02T00:00:00+00:00
-weight: 20
+title: "Building the documentation"
+date: 2020-04-15T00:00:00+00:00
+weight: 80
 geekdocRepo: https://github.com/owncloud/phoenix
 geekdocEditPath: edit/master/docs
-geekdocFilePath: building.md
+geekdocFilePath: building-docs.md
 ---
 
 {{< toc >}}
-
-## Building Phoenix
-
-- Run `yarn install` to install core dependencies
-- Run `yarn install-all` to install dependencies of all apps and core
-- Run `yarn dist` to build Phoenix and all apps included in the `apps` folder
-
-## Updating dependencies
-
-- Run `yarn upgrade-all` to update core and app dependencies
-
-## Cleaning up the workspace
-
-- Run `yarn clean-all` to remove node_modules and dist folder
 
 ## Buildling the documentation
 
