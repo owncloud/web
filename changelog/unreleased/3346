@@ -1,0 +1,4 @@
+Bugfix: Fix translation message extraction from plain javascript files
+
+https://github.com/owncloud/phoenix/pull/3346
+https://github.com/Polyconseil/easygettext/issues/81
