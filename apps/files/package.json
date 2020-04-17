@@ -33,7 +33,7 @@
     "vue-template-compiler": "^2.6.10",
     "vue-virtual-scroller": "^1.0.0-rc.2",
     "vue2-dropzone": "^3.6.0",
-    "webpack": "^4.36.1",
+    "webpack": "^4.42.1",
     "webpack-cli": "^3.3.8",
     "webpack-merge": "^4.2.2"
   },
