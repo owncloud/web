@@ -608,7 +608,7 @@ def browserService(alternateSuiteName, browser):
 def owncloudService():
 	return [{
 		'name': 'owncloud',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/php:7.3',
 		'pull': 'always',
 		'environment': {
 			'APACHE_WEBROOT': '/var/www/owncloud/server/',
@@ -625,7 +625,7 @@ def owncloudService():
 def owncloudFederatedService():
 	return [{
 		'name': 'federated',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/php:7.3',
 		'pull': 'always',
 		'environment': {
 			'APACHE_WEBROOT': '/var/www/owncloud/federated/',
@@ -947,7 +947,7 @@ def website(ctx):
 def setupGraphapiOIdC():
 	return [{
 		'name': 'setup-graphapi',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/php:7.3',
 		'pull': 'always',
 		'commands': [
 			'git clone -b master https://github.com/owncloud/graphapi.git /var/www/owncloud/server/apps/graphapi',
@@ -1198,7 +1198,7 @@ def revaService():
 def setupServerAndApp(logLevel):
 	return [{
 		'name': 'setup-server-%s' % config['app'],
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/php:7.3',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/server/',
@@ -1217,7 +1217,7 @@ def setupServerAndApp(logLevel):
 def setupFedServerAndApp(logLevel):
 	return [{
 		'name': 'setup-fed-server-%s' % config['app'],
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/php:7.3',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/federated/',
@@ -1234,7 +1234,7 @@ def setupFedServerAndApp(logLevel):
 def fixPermissions():
 	return [{
 		'name': 'fix-permissions',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/php:7.3',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/server',
@@ -1245,7 +1245,7 @@ def fixPermissions():
 def fixPermissionsFederated():
 	return [{
 		'name': 'fix-permissions-federated',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/php:7.3',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/federated',
@@ -1279,7 +1279,7 @@ def copyFilesForUpload():
 	return [{
 		'name': 'copy-files-for-upload',
 		'pull': 'always',
-		'image': 'owncloudci/php:7.1',
+		'image': 'owncloudci/php:7.3',
 		'volumes': [{
 			'name': 'uploads',
 			'path': '/filesForUpload'
