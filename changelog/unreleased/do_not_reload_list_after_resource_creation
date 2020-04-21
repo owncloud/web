@@ -1,0 +1,7 @@
+Bugfix: Do not reload files list after resource has been created
+
+We've stopped reloading the whole files list after a resource has been created.
+Instead we push the resource into the files list and automatically scroll to or open it.
+
+https://github.com/owncloud/phoenix/issues/3184
+https://github.com/owncloud/phoenix/pull/3358

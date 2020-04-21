@@ -1011,5 +1011,13 @@ export default {
 
   removeActionFromProgress({ commit }, item) {
     commit('REMOVE_ACTION_FROM_PROGRESS', item)
+  },
+
+  pushNewResource({ commit }, resource) {
+    resource = _buildFile(resource)
+    commit('PUSH_NEW_RESOURCE', resource)
+
+    // Return build resource
+    return resource
   }
 }

@@ -272,5 +272,9 @@ export default {
       }
     })
     state.files = []
+  },
+
+  PUSH_NEW_RESOURCE(state, resource) {
+    state.files.push(resource)
   }
 }

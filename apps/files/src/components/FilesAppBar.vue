@@ -282,10 +282,18 @@ export default {
       return this.item === '/' ? '' : this.item
     },
     newFolderErrorMessage() {
-      return this.checkNewFolderName(this.newFolderName)
+      if (this.createFolder) {
+        return this.checkNewFolderName(this.newFolderName)
+      }
+
+      return null
     },
     newFileErrorMessage() {
-      return this.checkNewFileName(this.newFileName)
+      if (this.createFile) {
+        return this.checkNewFileName(this.newFileName)
+      }
+
+      return null
     },
     headers() {
       if (this.publicPage()) {
@@ -422,7 +430,9 @@ export default {
       'loadFolder',
       'setTrashbinDeleteMessage',
       'removeFilesFromTrashbin',
-      'resetSearch'
+      'resetSearch',
+      'pushNewResource',
+      'setHighlightedFile'
     ]),
     ...mapActions(['openFile', 'showMessage']),
     onFileSearch(searchTerm = '') {
@@ -483,38 +493,55 @@ export default {
       this.newFolderName = this.$gettext('New folder')
     },
     addNewFolder(folderName) {
-      if (folderName !== '') {
-        this.fileFolderCreationLoading = true
-        const path =
-          this.item === ''
-            ? this.configuration.rootFolder
-              ? `${this.configuration.rootFolder}/`
-              : '/'
-            : `${this.item}/`
-        let p = this.$client.files.createFolder(path + folderName)
-        if (this.publicPage()) {
-          p = this.$client.publicFiles.createFolder(
-            path + folderName,
-            null,
-            this.publicLinkPassword
-          )
-        }
-
-        p.then(() => {
-          this.createFolder = false
-          this.$_ocFilesFolder_getFolder()
-        })
-          .catch(error => {
-            this.showMessage({
-              title: this.$gettext('Creating folder failed…'),
-              desc: error,
-              status: 'danger'
-            })
-          })
-          .finally(() => {
-            this.fileFolderCreationLoading = false
-          })
+      if (folderName === '') {
+        return
       }
+
+      this.fileFolderCreationLoading = true
+
+      const path =
+        this.item === ''
+          ? this.configuration.rootFolder
+            ? `${this.configuration.rootFolder}/`
+            : '/'
+          : `${this.item}/`
+      let p
+
+      if (this.publicPage()) {
+        p = this.$client.publicFiles.createFolder(path + folderName, null, this.publicLinkPassword)
+      } else {
+        p = this.$client.files.createFolder(path + folderName)
+      }
+
+      p.then(async () => {
+        const folder = this.publicPage()
+          ? await this.$client.publicFiles.fileInfo(
+              path + folderName,
+              this.publicLinkPassword,
+              this.davProperties
+            )
+          : await this.$client.files.fileInfo(path + folderName, this.davProperties)
+
+        // Push into files list
+        const resource = await this.pushNewResource(folder)
+
+        // Scroll to the folder
+        this.$scrollTo(`#file-row-${resource.viewId}`, 500, {
+          container: '#files-list-container'
+        })
+
+        this.createFolder = false
+      })
+        .catch(error => {
+          this.showMessage({
+            title: this.$gettext('Creating folder failed…'),
+            desc: error,
+            status: 'danger'
+          })
+        })
+        .finally(() => {
+          this.fileFolderCreationLoading = false
+        })
     },
     checkNewFolderName(folderName) {
       if (folderName === '') {
@@ -552,41 +579,58 @@ export default {
       this.newFileName = this.$gettext('New file') + '.' + ext
     },
     addNewFile(fileName) {
-      if (fileName !== '') {
-        this.fileFolderCreationLoading = true
-        const path =
-          this.item === ''
-            ? this.configuration.rootFolder
-              ? `${this.configuration.rootFolder}/`
-              : '/'
-            : `${this.item}/`
-        const filePath = pathUtil.join(path, fileName)
-        let p = this.$client.files.putFileContents(filePath, '')
-        if (this.publicPage()) {
-          p = this.$client.publicFiles.putFileContents(filePath, null, this.publicLinkPassword, '')
-        }
-        p.then(() => {
-          this.createFile = false
-          this.$_ocFilesFolder_getFolder()
-          this.fileFolderCreationLoading = false
-          if (this.newFileAction) {
-            // not cool - needs refactoring
-            this.$nextTick(() => {
-              this.openFile({
-                filePath: filePath
-              })
-              this.openFileAction(this.newFileAction, filePath)
-            })
-          }
-        }).catch(error => {
-          this.fileFolderCreationLoading = false
-          this.showMessage({
-            title: this.$gettext('Creating file failed…'),
-            desc: error,
-            status: 'danger'
-          })
-        })
+      if (fileName === '') {
+        return
       }
+
+      this.fileFolderCreationLoading = true
+
+      const path =
+        this.item === ''
+          ? this.configuration.rootFolder
+            ? `${this.configuration.rootFolder}/`
+            : '/'
+          : `${this.item}/`
+      const filePath = pathUtil.join(path, fileName)
+      let p
+
+      if (this.publicPage()) {
+        p = this.$client.publicFiles.putFileContents(filePath, null, this.publicLinkPassword, '')
+      } else {
+        p = this.$client.files.putFileContents(filePath, '')
+      }
+
+      p.then(async () => {
+        const file = this.publicPage()
+          ? await this.$client.publicFiles.fileInfo(
+              path + fileName,
+              this.publicLinkPassword,
+              this.davProperties
+            )
+          : await this.$client.files.fileInfo(path + fileName, this.davProperties)
+
+        // Push into files list
+        this.pushNewResource(file)
+        this.createFile = false
+        this.fileFolderCreationLoading = false
+
+        if (this.newFileAction) {
+          // not cool - needs refactoring
+          this.$nextTick(() => {
+            this.openFile({
+              filePath: filePath
+            })
+            this.openFileAction(this.newFileAction, filePath)
+          })
+        }
+      }).catch(error => {
+        this.fileFolderCreationLoading = false
+        this.showMessage({
+          title: this.$gettext('Creating file failed…'),
+          desc: error,
+          status: 'danger'
+        })
+      })
     },
     checkNewFileName(fileName) {
       if (fileName === '') {
