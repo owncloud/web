@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Remove duplicate error display in input prompt: [#3342](https://github.com/owncloud/phoenix/pull/3342)
 * Bugfix - Fix translation message extraction from plain javascript files: [#3346](https://github.com/owncloud/phoenix/pull/3346)
+* Change - Update owncloud-sdk: [#3369](https://github.com/owncloud/phoenix/pull/3369)
 
 Details
 -------
@@ -26,6 +27,12 @@ Details
 
    https://github.com/Polyconseil/easygettext/issues/81
    https://github.com/owncloud/phoenix/pull/3346
+
+* Change - Update owncloud-sdk: [#3369](https://github.com/owncloud/phoenix/pull/3369)
+
+   Updated owncloud-sdk to v1.0.0-604
+
+   https://github.com/owncloud/phoenix/pull/3369
 
 Changelog for ownCloud Phoenix [0.8.0] (2020-04-14)
 =======================================
