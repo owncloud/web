@@ -11,6 +11,7 @@ Summary
 * Bugfix - Show token string if link name is empty in FileLinkSidebar: [#3297](https://github.com/owncloud/phoenix/pull/3297)
 * Bugfix - Remove duplicate error display in input prompt: [#3342](https://github.com/owncloud/phoenix/pull/3342)
 * Bugfix - Fix translation message extraction from plain javascript files: [#3346](https://github.com/owncloud/phoenix/pull/3346)
+* Bugfix - Fix name of selected extension on broken apps: [#3376](https://github.com/owncloud/phoenix/pull/3376)
 * Change - Update owncloud-sdk: [#3369](https://github.com/owncloud/phoenix/pull/3369)
 * Enhancement - Add chunked upload with tus-js-client: [#67](https://github.com/owncloud/phoenix/issues/67)
 
@@ -38,6 +39,14 @@ Details
 
    https://github.com/Polyconseil/easygettext/issues/81
    https://github.com/owncloud/phoenix/pull/3346
+
+* Bugfix - Fix name of selected extension on broken apps: [#3376](https://github.com/owncloud/phoenix/pull/3376)
+
+   With the edge case of a broken app in config.json, the top bar is broken, because appInfo can't be
+   loaded. We made ocis-web more robust by just showing the extension id in the top bar when the
+   appInfo is not available.
+
+   https://github.com/owncloud/phoenix/pull/3376
 
 * Change - Update owncloud-sdk: [#3369](https://github.com/owncloud/phoenix/pull/3369)
 
