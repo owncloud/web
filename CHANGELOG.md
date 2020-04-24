@@ -8,12 +8,23 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Show token string if link name is empty in FileLinkSidebar: [#3297](https://github.com/owncloud/phoenix/pull/3297)
 * Bugfix - Remove duplicate error display in input prompt: [#3342](https://github.com/owncloud/phoenix/pull/3342)
 * Bugfix - Fix translation message extraction from plain javascript files: [#3346](https://github.com/owncloud/phoenix/pull/3346)
 * Change - Update owncloud-sdk: [#3369](https://github.com/owncloud/phoenix/pull/3369)
+* Enhancement - Add chunked upload with tus-js-client: [#67](https://github.com/owncloud/phoenix/issues/67)
 
 Details
 -------
+
+* Bugfix - Show token string if link name is empty in FileLinkSidebar: [#3297](https://github.com/owncloud/phoenix/pull/3297)
+
+   Owncloud-js-client was parsing empty link name xml attribute as empty object. The empty
+   object was changed with an empty string. Also, FileLinkSidebar behaviour fixed by showing
+   token as name for the link shares without a name.
+
+   https://github.com/owncloud/phoenix/issues/2517
+   https://github.com/owncloud/phoenix/pull/3297
 
 * Bugfix - Remove duplicate error display in input prompt: [#3342](https://github.com/owncloud/phoenix/pull/3342)
 
@@ -33,6 +44,15 @@ Details
    Updated owncloud-sdk to v1.0.0-604
 
    https://github.com/owncloud/phoenix/pull/3369
+
+* Enhancement - Add chunked upload with tus-js-client: [#67](https://github.com/owncloud/phoenix/issues/67)
+
+   Whenever the backend server advertises TUS support, uploading files will use TUS as well for
+   uploading, which makes it possible to resume failed uploads. It is also possible to optionally
+   set a chunk size by setting a numeric value for "uploadChunkSize" in bytes in config.json.
+
+   https://github.com/owncloud/phoenix/issues/67
+   https://github.com/owncloud/phoenix/pull/3345
 
 Changelog for ownCloud Phoenix [0.8.0] (2020-04-14)
 =======================================
