@@ -24,7 +24,7 @@
           target="_blank"
           :uk-tooltip="$_tooltipTextLink"
           class="uk-text-bold uk-text-truncate oc-files-file-link-url"
-          >{{ link.name }}</a
+          >{{ $_linkNameText }}</a
         >
         <br />
         <span class="uk-text-meta uk-text-break">
@@ -129,6 +129,9 @@ export default {
     }
   },
   computed: {
+    $_linkNameText() {
+      return this.link.name ? this.link.name : this.link.token
+    },
     $_loadingSpinnerVisible() {
       return this.modifiable && this.removalInProgress
     },

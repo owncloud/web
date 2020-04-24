@@ -253,3 +253,16 @@ Then('the tokens should be unique for each public links on the webUI', async fun
   const isUnique = publicLinkUrls.length === new Set(publicLinkUrls).size
   return assert.ok(isUnique)
 })
+
+Then(
+  'a public link with the last created link share token as name should be listed for resource {string} on the webUI',
+  async function(resource) {
+    const lastShare = await sharingHelper.fetchLastPublicLinkShare(client.globals.currentUser)
+    await client.page.FilesPageElement.appSideBar()
+      .closeSidebar(100)
+      .openPublicLinkDialog(resource)
+    const shares = await client.page.FilesPageElement.publicLinksDialog().getPublicLinkList()
+    const share = shares.find(link => link.name === lastShare.token)
+    return assert.ok(share.name.length > 0)
+  }
+)

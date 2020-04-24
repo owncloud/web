@@ -1,0 +1,7 @@
+Bugfix: Show token string if link name is empty in FileLinkSidebar
+
+owncloud-js-client was parsing empty link name xml attribute as empty object. The empty object was changed with
+an empty string. Also, FileLinkSidebar behaviour fixed by showing token as name for the link shares without a name.
+
+https://github.com/owncloud/phoenix/pull/3297
+https://github.com/owncloud/phoenix/issues/2517
