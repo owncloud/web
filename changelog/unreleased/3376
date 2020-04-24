@@ -1,0 +1,6 @@
+Bugfix: Fix name of selected extension on broken apps
+
+With the edge case of a broken app in config.json, the top bar is broken, because appInfo can't be loaded.
+We made ocis-web more robust by just showing the extension id in the top bar when the appInfo is not available.
+
+https://github.com/owncloud/phoenix/pull/3376

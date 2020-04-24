@@ -80,7 +80,10 @@ export default {
     },
 
     currentExtensionName() {
-      return this.$gettext(this.apps[this.currentExtension].name)
+      if (this.apps[this.currentExtension]) {
+        return this.$gettext(this.apps[this.currentExtension].name)
+      }
+      return this.currentExtension
     }
   },
   methods: {
