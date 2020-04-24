@@ -421,8 +421,15 @@ export default {
             })
           })
         } else {
+          const extraHeaders = {}
+          if (file.lastModifiedDate) {
+            extraHeaders['X-OC-Mtime'] = '' + file.lastModifiedDate.getTime() / 1000
+          } else if (file.lastModified) {
+            extraHeaders['X-OC-Mtime'] = '' + file.lastModified / 1000
+          }
           promise = this.uploadQueue.add(() =>
             this.$client.files.putFileContents(relativePath, file, {
+              headers: extraHeaders,
               onProgress: progress => {
                 this.$_ocUpload_onProgress(progress, file)
               },
