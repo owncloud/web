@@ -1,0 +1,9 @@
+Enhancement: Add chunked upload with tus-js-client
+
+Whenever the backend server advertises TUS support, uploading files will
+use TUS as well for uploading, which makes it possible to resume failed uploads.
+It is also possible to optionally set a chunk size by setting a numeric value
+for "uploadChunkSize" in bytes in config.json.
+
+https://github.com/owncloud/phoenix/issues/67
+https://github.com/owncloud/phoenix/pull/3345
