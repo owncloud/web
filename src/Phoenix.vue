@@ -34,6 +34,31 @@
           </main>
         </div>
       </div>
+      <transition
+        enter-active-class="uk-animation-fade uk-animation-fast"
+        leave-active-class="uk-animation-fade uk-animation-reverse uk-animation-fast"
+        name="custom-classes-transition"
+      >
+        <oc-modal
+          v-if="modal.displayed"
+          :variation="modal.variation"
+          :icon="modal.icon"
+          :title="modal.title"
+          :message="modal.message"
+          :has-input="modal.hasInput"
+          :input-label="modal.inputLabel"
+          :input-disabled="modal.inputDisabled"
+          :input-value="modal.inputValue"
+          :input-placeholder="modal.inputPlaceholder"
+          :input-error="modal.inputError"
+          :button-cancel-text="modal.cancelText"
+          :button-confirm-text="modal.confirmText"
+          :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
+          @cancel="modal.onCancel"
+          @confirm="modal.onConfirm"
+          @input="modal.onInput"
+        />
+      </transition>
     </div>
   </div>
 </template>
@@ -58,7 +83,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['route', 'user']),
+    ...mapState(['route', 'user', 'modal']),
     ...mapGetters([
       'configuration',
       'activeNotifications',

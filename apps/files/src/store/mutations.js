@@ -93,8 +93,8 @@ export default {
     state.files = state.files.filter(i => file.id !== i.id)
     state.files.push(file)
   },
-  REMOVE_FILE(state, file) {
-    state.files = state.files.filter(i => file.id !== i.id)
+  REMOVE_FILE(state, removedFile) {
+    state.files = state.files.filter(file => file.id !== removedFile.id)
   },
   SET_SEARCH_TERM(state, searchTerm) {
     state.searchTermGlobal = searchTerm
@@ -206,37 +206,6 @@ export default {
   },
   CHECK_QUOTA(state, quota) {
     state.quota = quota
-  },
-  SET_TRASHBIN_DELETE_CONFIRMATION(state, message) {
-    state.trashbinDeleteMessage = message
-  },
-  PROMPT_FILE_RENAME(state, file) {
-    state.renameDialogOpen = true
-    state.renameDialogOriginalName = file.name
-    state.renameDialogSelectedFile = file
-    state.renameDialogNewName = file.name
-  },
-  CLOSE_PROMPT_FILE_RENAME(state) {
-    state.renameDialogOpen = false
-    state.renameDialogOriginalName = null
-    state.renameDialogSelectedFile = null
-    state.renameDialogNewName = null
-  },
-  PROMPT_FILE_DELETE(state, { message, items }) {
-    state.deleteDialogOpen = true
-    state.deleteDialogSelectedFiles = items
-    state.deleteDialogMessage = message
-  },
-  CLOSE_PROMPT_FILE_DELETE(state, item) {
-    state.deleteDialogOpen = false
-    state.deleteDialogSelectedFiles = null
-    state.deleteDialogMessage = null
-  },
-  SET_OVERWRITE_DIALOG_TITLE(state, title) {
-    state.overwriteDialogTitle = title
-  },
-  SET_OVERWRITE_DIALOG_MESSAGE(state, message) {
-    state.overwriteDialogMessage = message
   },
   SET_HIGHLIGHTED_FILE(state, file) {
     if (typeof file === 'string') {

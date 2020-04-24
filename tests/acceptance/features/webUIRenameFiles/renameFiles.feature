@@ -85,12 +85,12 @@ Feature: rename files
     Then file "  multiple   space    all     over   .  dat" should be listed on the webUI
 
   Scenario: Rename a file using spaces at end is prohibited
-    When the user renames file "lorem.txt" to an invalid name "space at end " using the webUI
+    When the user tries to rename file "lorem.txt" to "space at end " using the webUI
     Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "space at end " should not be listed on the webUI
-    When the user renames file "lorem.txt" to an invalid name "  multiple   space    all     over   .  dat  " using the webUI
+    When the user tries to rename file "lorem.txt" to "  multiple   space    all     over   .  dat  " using the webUI
     Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
     And the user reloads the current page of the webUI
     Then file "lorem.txt" should be listed on the webUI
@@ -117,7 +117,7 @@ Feature: rename files
   # these are valid file names for ocis
   @skipOnOCIS
   Scenario Outline: Rename a file using forbidden characters
-    When the user renames file "data.zip" to "<filename>" using the webUI
+    When the user tries to rename file "data.zip" to "<filename>" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "<filename>"' should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
     And file "<filename>" should not be listed on the webUI
@@ -128,7 +128,7 @@ Feature: rename files
       | .htaccess |
 
   Scenario Outline: Rename a file/folder using forward slash in its name
-    When the user renames file "<from_file_name>" to an invalid name "<to_file_name>" using the webUI
+    When the user tries to rename file "<from_file_name>" to "<to_file_name>" using the webUI
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And file "<from_file_name>" should be listed on the webUI
     Examples:
@@ -148,24 +148,24 @@ Feature: rename files
     Then file "zzzz-z-this-is-now-the-last-file.txt" should be listed on the webUI
 
   Scenario: Rename a file putting a name of a file which already exists
-    When the user renames file "data.zip" to an invalid name "lorem.txt" using the webUI
+    When the user tries to rename file "data.zip" to "lorem.txt" using the webUI
     Then the error message 'The name "lorem.txt" is already taken' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
 
   Scenario: Rename a file to ..
-    When the user renames file "data.zip" to an invalid name ".." using the webUI
+    When the user tries to rename file "data.zip" to ".." using the webUI
     Then the error message 'The name cannot be equal to ".."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
 
   Scenario: Rename a file to .
-    When the user renames file "data.zip" to an invalid name "." using the webUI
+    When the user tries to rename file "data.zip" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
 
   # This is valid file name for ocis
   @skipOnOCIS
   Scenario: Rename a file to .part
-    When the user renames file "data.zip" to "data.part" using the webUI
+    When the user tries to rename file "data.zip" to "data.part" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "data.part"' should be displayed on the webUI
 
   @skipOnOCIS @ocis-reva-issue-64
@@ -236,7 +236,7 @@ Feature: rename files
     And the following files have been deleted by user "user1"
       | name          |
       | lorem.txt     |
-    When the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
+    When the user tries to rename file "lorem.txt" to "new-lorem.txt" using the webUI
     Then the error message with header 'Error while renaming "lorem.txt" to "new-lorem.txt"' should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI

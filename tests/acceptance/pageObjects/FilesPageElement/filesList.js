@@ -129,62 +129,12 @@ module.exports = {
     /**
      * @return {Promise<*>}
      */
-    confirmDeletion: async function() {
-      const clickAction = function() {
-        return this.initAjaxCounters()
-          .waitForElementEnabled('@deleteFileConfirmationBtn')
-          .click('@deleteFileConfirmationBtn')
-          .waitForOutstandingAjaxCalls()
-          .waitForElementNotVisible(
-            this.elements.deleteFileConfirmationDialog.selector,
-            this.api.globals.waitForConditionTimeout,
-            this.api.globals.waitForConditionPollInterval,
-            false,
-            function() {
-              console.log('waited for popup to disappear.')
-            }
-          )
-      }.bind(this)
-      await clickAction()
-
-      let isPopupVisible = false
-
-      /* issue: https://github.com/owncloud/phoenix/issues/1728
-         Clicking "OK" button on deletion confirmation dialog does not
-         disappear some of the times.
-
-         Why not just wait and click again later?
-         Some of the times, the "click" works and the popup starts
-         disappearing, but hasn't yet. So, it requires us to wait for
-         popup to disappear for quite a while and then, again recheck
-         if it's visible again. And, if it is, then only re-click.
-
-         We have `waitForCSSPropertyEquals` below that should check if clicking
-         once or twice really worked.
-
-         TODO: Investigate further why the "click" is not working
-      */
-      await this.isVisible(
-        {
-          selector: this.elements.deleteFileConfirmationDialog.selector,
-          locateStrategy: this.elements.deleteFileConfirmationDialog.locateStrategy,
-          suppressNotFoundErrors: true
-        },
-        ({ value }) => {
-          isPopupVisible = value
-        }
-      )
-      if (isPopupVisible === true) {
-        console.log('Retrying again. Popup did not disappear.')
-        await clickAction()
-      }
-
-      return this.waitForCSSPropertyEquals({
-        selector: this.elements.deleteFileConfirmationDialog.selector,
-        locateStrategy: this.elements.deleteFileConfirmationBtn.locateStrategy,
-        property: 'display',
-        value: 'none'
-      }).useCss()
+    confirmDeletion: function() {
+      return this.initAjaxCounters()
+        .waitForElementEnabled('@dialogConfirmBtn')
+        .click('@dialogConfirmBtn')
+        .waitForOutstandingAjaxCalls()
+        .waitForElementNotPresent('@dialog')
     },
     /**
      *
@@ -684,13 +634,6 @@ module.exports = {
     filesListNoContentMessage: {
       selector: '#files-list-container .files-list-no-content-message'
     },
-    deleteFileConfirmationDialog: {
-      selector: '#delete-file-confirmation-dialog',
-      locateStrategy: 'css selector'
-    },
-    deleteFileConfirmationBtn: {
-      selector: '#oc-dialog-delete-confirm'
-    },
     shareButtonInFileRow: {
       selector: '//button[@aria-label="Collaborators"]',
       locateStrategy: 'xpath'
@@ -770,6 +713,13 @@ module.exports = {
     filesTableHeaderColumn: {
       selector: '//*[contains(@class, "oc-sortable-column-header")]//*[text()=%s]/ancestor::button',
       locateStrategy: 'xpath'
+    },
+    // TODO: Merge with selectors in filesPage
+    dialog: {
+      selector: '.oc-modal'
+    },
+    dialogConfirmBtn: {
+      selector: '.oc-modal-body-actions-confirm'
     }
   }
 }

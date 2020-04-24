@@ -47,22 +47,8 @@ export default {
 
   loadingFolder: false,
   quota: {},
-  trashbinDeleteMessage: '',
-  overwriteDialogTitle: null,
-  overwriteDialogMessage: null,
   highlightedFile: null,
   publicLinkPassword: null,
   uploaded: [],
-  actionsInProgress: [],
-
-  // rename dialog
-  renameDialogOpen: false,
-  renameDialogNewName: '',
-  renameDialogOriginalName: null,
-  renameDialogSelectedFile: null,
-
-  // delete dialog
-  deleteDialogOpen: false,
-  deleteDialogSelectedFiles: null,
-  deleteDialogMessage: ''
+  actionsInProgress: []
 }
