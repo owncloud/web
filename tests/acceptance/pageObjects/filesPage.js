@@ -48,22 +48,23 @@ module.exports = {
      * @param {string} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
-    createFolder: async function(name, expectToSucceed = true) {
-      await this.waitForElementVisible('@newFileMenuButton', 500000)
+    createFolder: function(name, expectToSucceed = true) {
+      this.waitForElementVisible('@newFileMenuButton', 500000)
         .click('@newFileMenuButton')
-        .waitForElementVisible('@newFolderButton')
         .click('@newFolderButton')
-        .waitForElementVisible('@newFolderInput')
+        .waitForElementNotVisible('@dialog')
+
       if (name !== null) {
-        await this.clearValueWithEvent('@newFolderInput')
-        await this.setValue('@newFolderInput', name)
+        this.clearValueWithEvent('@dialogInput')
+        this.setValue('@dialogInput', name)
       }
-      await this.click('@newFolderOkButton').waitForElementNotPresent(
-        '@createFolderLoadingIndicator'
-      )
+
+      this.click('@dialogConfirmBtn')
+
       if (expectToSucceed) {
-        await this.waitForElementNotVisible('@newFolderDialog').waitForAnimationToFinish()
+        this.waitForElementNotVisible('@dialog').waitForAnimationToFinish()
       }
+
       return this
     },
     /**
@@ -77,15 +78,19 @@ module.exports = {
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFileButton')
         .click('@newFileButton')
-        .waitForElementVisible('@newFileInput')
+        .waitForElementVisible('@dialog')
+
       if (name !== null) {
-        this.clearValueWithEvent('@newFileInput')
-        this.setValue('@newFileInput', name)
+        this.clearValueWithEvent('@dialogInput')
+        this.setValue('@dialogInput', name)
       }
-      this.click('@newFileOkButton').waitForElementNotPresent('@createFileLoadingIndicator')
+
+      this.click('@dialogConfirmBtn')
+
       if (expectToSucceed) {
-        this.waitForElementNotVisible('@newFileDialog').waitForAnimationToFinish()
+        this.waitForElementNotVisible('@dialog').waitForAnimationToFinish()
       }
+
       return this
     },
     selectFileForUpload: function(filePath) {
@@ -177,10 +182,10 @@ module.exports = {
     deleteAllCheckedFiles: function() {
       return this.waitForElementVisible('@deleteSelectedButton')
         .click('@deleteSelectedButton')
-        .waitForElementVisible('@deleteFileConfirmationBtn')
+        .waitForElementVisible('@dialog')
         .waitForAnimationToFinish()
-        .click('@deleteFileConfirmationBtn')
-        .waitForElementNotVisible('@deleteFileConfirmationDialog')
+        .click('@dialogConfirmBtn')
+        .waitForElementNotVisible('@dialog')
         .waitForAnimationToFinish()
     },
     /**
@@ -246,15 +251,15 @@ module.exports = {
     },
     confirmFileOverwrite: function() {
       return (
-        this.waitForElementVisible('@fileOverwriteConfirm')
+        this.waitForElementVisible('@dialog')
           // clicking file overwrite dialog overlay to remove file upload
           // popup, as we upload the file directly using `setValue`. The overwrite
           // dialog is too fast and does not give time to close the dropdown beforehand
-          .clickElementAt(this.elements.fileOverwriteDialog.selector, 0, 0)
-          .waitForElementNotVisible(this.elements.newFolderButton.selector)
-          .click(this.elements.fileOverwriteConfirm.selector)
-          .waitForElementNotVisible(this.elements.fileOverwriteConfirm.selector)
-          .waitForAjaxCallsToStartAndFinish()
+          .clickElementAt(this.elements.dialog.selector, 0, 0)
+          .waitForElementNotVisible('@newFolderButton')
+          .click('@dialogConfirmBtn')
+          .waitForElementNotVisible('@dialog')
+          .waitForAnimationToFinish()
       )
     },
     triesToCreateExistingFile: function(fileName) {
@@ -262,8 +267,8 @@ module.exports = {
         .click('@newFileMenuButton')
         .waitForElementVisible('@newFileButton')
         .click('@newFileButton')
-        .waitForElementVisible('@newFileInput')
-        .setValue('@newFileInput', fileName)
+        .waitForElementVisible('@dialogInput')
+        .setValue('@dialogInput', fileName)
     },
     checkForButtonDisabled: function() {
       return this.waitForElementVisible('@createFileOkButtonDisabled')
@@ -285,12 +290,6 @@ module.exports = {
     newFileButton: {
       selector: '#new-file-menu-drop .new-file-btn-txt'
     },
-    newFolderDialog: {
-      selector: '#new-folder-dialog'
-    },
-    newFileDialog: {
-      selector: '#new-file-dialog'
-    },
     newFolderInput: {
       selector: '#new-folder-input'
     },
@@ -300,10 +299,6 @@ module.exports = {
     newFolderOkButton: {
       selector: '#new-folder-ok'
     },
-    newFileOkButton: {
-      selector: "//div[@id='new-file-dialog']//span[contains(text(),'Ok')]",
-      locateStrategy: 'xpath'
-    },
     permalinkCopyButton: {
       selector: '#files-sidebar-private-link-label'
     },
@@ -312,14 +307,6 @@ module.exports = {
     },
     resourceBreadcrumb: {
       selector: '//div[@id="files-breadcrumb"]//a[contains(text(),"%s")]',
-      locateStrategy: 'xpath'
-    },
-    createFolderLoadingIndicator: {
-      selector: '//div[@id="new-folder-dialog"]//div[@class="oc-loader"]',
-      locateStrategy: 'xpath'
-    },
-    createFileLoadingIndicator: {
-      selector: '//div[@id="new-file-dialog"]//div[@class="oc-loader"]',
       locateStrategy: 'xpath'
     },
     fileUploadButton: {
@@ -333,12 +320,6 @@ module.exports = {
     },
     fileUploadProgress: {
       selector: '#files-upload-progress'
-    },
-    deleteFileConfirmationBtn: {
-      selector: '#oc-dialog-delete-confirm'
-    },
-    deleteFileConfirmationDialog: {
-      selector: '#delete-file-confirmation-dialog'
     },
     versionsPanel: {
       selector: '#oc-file-versions-sidebar'
@@ -356,9 +337,6 @@ module.exports = {
     fileOverwriteConfirm: {
       selector: '#files-overwrite-confirm'
     },
-    fileOverwriteDialog: {
-      selector: '#overwrite-dialog'
-    },
     /**
      * path from inside the side-bar
      */
@@ -371,14 +349,21 @@ module.exports = {
     sidebarItemName: {
       selector: '#files-sidebar-item-name'
     },
-    createFileOkButtonDisabled: {
-      selector:
-        "//div[@id='new-file-dialog']//button[@disabled='disabled']/span[contains(text(), 'Ok')]",
-      locateStrategy: 'xpath'
-    },
     tabsInSideBar: {
       selector: '//div[@class="sidebar-container"]//li/a',
       locateStrategy: 'xpath'
+    },
+    dialog: {
+      selector: '.oc-modal'
+    },
+    dialogConfirmBtn: {
+      selector: '.oc-modal-body-actions-confirm'
+    },
+    dialogCancelBtn: {
+      selector: '.oc-modal-body-actions-cancel'
+    },
+    dialogInput: {
+      selector: '.oc-modal-body-input > input'
     }
   }
 }

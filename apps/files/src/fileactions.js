@@ -1,18 +1,16 @@
 import { mapActions, mapGetters } from 'vuex'
+import MixinDeleteResources from './mixins/deleteResources'
 
 export default {
+  mixins: [MixinDeleteResources],
+
   computed: {
     ...mapGetters('Files', [
-      'renameDialogSelectedFile',
-      'renameDialogOpen',
-      'renameDialogNewName',
-      'renameDialogOriginalName',
-      'deleteDialogOpen',
-      'deleteDialogSelectedFiles',
       'actionsInProgress',
       'activeFiles',
       'selectedFiles',
-      'highlightedFile'
+      'highlightedFile',
+      'flatFileList'
     ]),
     ...mapGetters(['capabilities', 'fileSideBars']),
     // Files lists
@@ -21,7 +19,7 @@ export default {
         {
           icon: 'edit',
           ariaLabel: this.$gettext('Rename'),
-          handler: this.promptFileRename,
+          handler: this.$_fileActions_displayRenameDialog,
           isEnabled: function(item, parent) {
             if (parent && !parent.canRename()) {
               return false
@@ -40,7 +38,7 @@ export default {
         {
           icon: 'delete',
           ariaLabel: this.$gettext('Delete'),
-          handler: this.deleteFile,
+          handler: this.$_fileActions_deleteResource,
           isEnabled: function(item, parent) {
             if (parent && !parent.canBeDeleted()) {
               return false
@@ -71,15 +69,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'renameFile',
-      'promptFileRename',
-      'closePromptFileRename',
-      'deleteFiles',
-      'promptFileDelete',
-      'closePromptFileDelete'
-    ]),
-    ...mapActions(['showMessage']),
+    ...mapActions('Files', ['renameFile']),
+    ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
 
     actionInProgress(item) {
       return this.actionsInProgress.some(itemInProgress => itemInProgress.id === item.id)
@@ -97,99 +88,10 @@ export default {
       return null
     },
 
-    cancelRenameFile() {
-      this.closePromptFileRename()
+    $_fileActions_deleteResource(resource) {
+      this.$_deleteResources_displayDialog(resource, true)
     },
 
-    doRenameFile(newName) {
-      this.renameFile({
-        client: this.$client,
-        // selected file from prompt
-        file: this.renameDialogSelectedFile,
-        newValue: newName,
-        publicPage: this.publicPage()
-      })
-        .then(() => {
-          this.closePromptFileRename()
-        })
-        .catch(error => {
-          let translated = this.$gettext('Error while renaming "%{file}" to "%{newName}"')
-          if (error.statusCode === 423) {
-            translated = this.$gettext(
-              'Error while renaming "%{file}" to "%{newName}" - the file is locked'
-            )
-          }
-          const title = this.$gettextInterpolate(
-            translated,
-            { file: this.renameDialogSelectedFile.name, newName: newName },
-            true
-          )
-          this.showMessage({
-            title: title,
-            status: 'danger'
-          })
-          this.closePromptFileRename()
-        })
-    },
-
-    cancelDeleteFile() {
-      this.closePromptFileDelete()
-    },
-
-    deleteFile(file) {
-      const translated = this.$gettext('Please confirm the deletion of %{ fileName }')
-      this.promptFileDelete({
-        message: this.$gettextInterpolate(translated, { fileName: file.name }, true),
-        items: file
-      })
-    },
-    reallyDeleteFiles() {
-      let files = this.deleteDialogSelectedFiles
-        ? this.deleteDialogSelectedFiles
-        : this.selectedFiles
-      if (!Array.isArray(files)) {
-        files = [files]
-      }
-      this.deleteFiles({
-        client: this.$client,
-        files: files,
-        publicPage: this.publicPage(),
-        $gettext: this.$gettext,
-        $gettextInterpolate: this.$gettextInterpolate
-      })
-        .then(() => {
-          this.closePromptFileDelete()
-          this.setHighlightedFile(null)
-        })
-        .catch(error => {
-          console.log(error)
-          this.closePromptFileDelete()
-        })
-    },
-
-    validateFileName(name) {
-      if (/[/]/.test(name)) return this.$gettext('The name cannot contain "/"')
-
-      if (name === '.') return this.$gettext('The name cannot be equal to "."')
-
-      if (name === '..') return this.$gettext('The name cannot be equal to ".."')
-
-      if (/\s+$/.test(name)) return this.$gettext('The name cannot end with whitespace')
-
-      if (!this.flatFileList) {
-        const exists = this.activeFiles.find(n => {
-          if (n.name === name && this.renameDialogOriginalName !== name) {
-            return n
-          }
-        })
-
-        if (exists) {
-          const translated = this.$gettext('The name "%{name}" is already taken')
-          return this.$gettextInterpolate(translated, { name: name }, true)
-        }
-      }
-      return null
-    },
     // Files lists
     openFileActionBar(file) {
       this.$emit('FileAction', file)
@@ -250,6 +152,108 @@ export default {
         name: routeName,
         params
       })
+    },
+
+    $_fileActions_renameResource(resource, newName) {
+      this.toggleModalConfirmButton()
+
+      this.renameFile({
+        client: this.$client,
+        file: resource,
+        newValue: newName,
+        publicPage: this.publicPage()
+      })
+        .then(() => {
+          this.hideModal()
+        })
+        .catch(error => {
+          this.toggleModalConfirmButton()
+          let translated = this.$gettext('Error while renaming "%{file}" to "%{newName}"')
+          if (error.statusCode === 423) {
+            translated = this.$gettext(
+              'Error while renaming "%{file}" to "%{newName}" - the file is locked'
+            )
+          }
+          const title = this.$gettextInterpolate(
+            translated,
+            { file: resource.name, newName: newName },
+            true
+          )
+          this.showMessage({
+            title: title,
+            status: 'danger'
+          })
+        })
+    },
+
+    $_fileActions_renameDialog_checkNewName(currentName, newName) {
+      if (!newName) {
+        return this.setModalInputErrorMessage(this.$gettext('The name cannot be empty'))
+      }
+
+      if (/[/]/.test(newName)) {
+        return this.setModalInputErrorMessage(this.$gettext('The name cannot contain "/"'))
+      }
+
+      if (newName === '.') {
+        return this.setModalInputErrorMessage(this.$gettext('The name cannot be equal to "."'))
+      }
+
+      if (newName === '..') {
+        return this.setModalInputErrorMessage(this.$gettext('The name cannot be equal to ".."'))
+      }
+
+      if (/\s+$/.test(newName)) {
+        return this.setModalInputErrorMessage(this.$gettext('The name cannot end with whitespace'))
+      }
+
+      if (!this.flatFileList) {
+        const exists = this.activeFiles.find(n => {
+          if (n.name === newName && currentName !== newName) {
+            return n
+          }
+        })
+
+        if (exists) {
+          const translated = this.$gettext('The name "%{name}" is already taken')
+
+          this.setModalInputErrorMessage(
+            this.$gettextInterpolate(translated, { name: newName }, true)
+          )
+        }
+      }
+
+      this.setModalInputErrorMessage(null)
+    },
+
+    $_fileActions_displayRenameDialog(resource) {
+      const isFolder = resource.type === 'folder'
+      const confirmAction = newName => {
+        this.$_fileActions_renameResource(resource, newName)
+      }
+      const checkName = newName => {
+        this.$_fileActions_renameDialog_checkNewName(resource.name, newName)
+      }
+
+      const modal = {
+        variation: 'info',
+        title: isFolder
+          ? this.$gettext('Rename folder ') + resource.name
+          : this.$gettext('Rename file ' + resource.name),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Rename'),
+        hasInput: true,
+        inputValue: resource.name,
+        inputPlaceholder: isFolder
+          ? this.$gettext('Enter new folder name…')
+          : this.$gettext('Enter new file name…'),
+        inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
+        onCancel: this.hideModal,
+        onConfirm: confirmAction,
+        onType: checkName
+      }
+
+      this.createModal(modal)
     }
   }
 }

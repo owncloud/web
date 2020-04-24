@@ -23,6 +23,31 @@
         />
         <main id="main">
           <router-view id="oc-app-container" name="app" class="uk-height-1-1"></router-view>
+          <transition
+            enter-active-class="uk-animation-fade uk-animation-fast"
+            leave-active-class="uk-animation-fade uk-animation-reverse uk-animation-fast"
+            name="custom-classes-transition"
+          >
+            <oc-modal
+              v-if="modal.displayed"
+              :variation="modal.variation"
+              :icon="modal.icon"
+              :title="modal.title"
+              :message="modal.message"
+              :has-input="modal.hasInput"
+              :input-label="modal.inputLabel"
+              :input-disabled="modal.inputDisabled"
+              :input-value="modal.inputValue"
+              :input-placeholder="modal.inputPlaceholder"
+              :input-error="modal.inputError"
+              :button-cancel-text="modal.cancelText"
+              :button-confirm-text="modal.confirmText"
+              :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
+              @cancel="modal.onCancel"
+              @confirm="modal.onConfirm"
+              @type="modal.onType"
+            />
+          </transition>
         </main>
       </template>
     </div>
@@ -50,7 +75,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['route', 'user']),
+    ...mapState(['route', 'user', 'modal']),
     ...mapGetters([
       'configuration',
       'activeNotifications',
@@ -171,5 +196,11 @@ export default {
 body {
   height: 100vh;
   overflow: hidden;
+}
+
+.oc-modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 </style>

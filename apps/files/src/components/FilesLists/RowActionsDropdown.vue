@@ -27,8 +27,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   name: 'FileActionsDropdown',
   props: {
@@ -54,9 +52,6 @@ export default {
       type: Array,
       required: true
     }
-  },
-  computed: {
-    ...mapGetters('Files', ['isDialogOpen'])
   },
   methods: {
     actionClicked() {

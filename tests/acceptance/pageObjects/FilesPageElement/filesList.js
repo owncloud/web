@@ -114,11 +114,11 @@ module.exports = {
     confirmDeletion: async function() {
       const clickAction = function() {
         return this.initAjaxCounters()
-          .waitForElementEnabled('@deleteFileConfirmationBtn')
-          .click('@deleteFileConfirmationBtn')
+          .waitForElementEnabled('@dialogConfirmBtn')
+          .click('@dialogConfirmBtn')
           .waitForOutstandingAjaxCalls()
           .waitForElementNotVisible(
-            this.elements.deleteFileConfirmationDialog.selector,
+            this.elements.dialog.selector,
             this.api.globals.waitForConditionTimeout,
             this.api.globals.waitForConditionPollInterval,
             false,
@@ -148,8 +148,8 @@ module.exports = {
       */
       await this.isVisible(
         {
-          selector: this.elements.deleteFileConfirmationDialog.selector,
-          locateStrategy: this.elements.deleteFileConfirmationDialog.locateStrategy,
+          selector: this.elements.dialog.selector,
+          locateStrategy: this.elements.dialog.locateStrategy,
           suppressNotFoundErrors: true
         },
         ({ value }) => {
@@ -162,7 +162,7 @@ module.exports = {
       }
 
       return this.waitForCSSPropertyEquals({
-        selector: this.elements.deleteFileConfirmationDialog.selector,
+        selector: this.elements.dialog.selector,
         locateStrategy: this.elements.deleteFileConfirmationBtn.locateStrategy,
         property: 'display',
         value: 'none'
@@ -666,13 +666,6 @@ module.exports = {
     filesListNoContentMessage: {
       selector: '#files-list-container .files-list-no-content-message'
     },
-    deleteFileConfirmationDialog: {
-      selector: '#delete-file-confirmation-dialog',
-      locateStrategy: 'css selector'
-    },
-    deleteFileConfirmationBtn: {
-      selector: '#oc-dialog-delete-confirm'
-    },
     shareButtonInFileRow: {
       selector: '//button[@aria-label="Collaborators"]',
       locateStrategy: 'xpath'
@@ -760,6 +753,13 @@ module.exports = {
     filesTableHeaderColumn: {
       selector: '//*[contains(@class, "oc-sortable-column-header")]//*[text()=%s]/ancestor::button',
       locateStrategy: 'xpath'
+    },
+    // TODO: Merge with selectors in filesPage
+    dialog: {
+      selector: '.oc-modal'
+    },
+    dialogConfirmBtn: {
+      selector: '.oc-modal-body-actions-confirm'
     }
   }
 }

@@ -31,9 +31,9 @@
               :is-desc="fileSortDirectionDesc"
               @click="toggleSort('deleteTimestampMoment')"
             >
-              <translate translate-context="Deletion time column in trashbin files table"
-                >Deletion Time</translate
-              >
+              <translate translate-context="Deletion time column in trashbin files table">
+                Deletion Time
+              </translate>
             </sortable-column-header>
           </div>
         </template>
@@ -55,47 +55,36 @@
         </template>
         <template #noContentMessage>
           <no-content-message icon="delete">
-            <template #message
-              ><span v-translate>Your trash bin is empty.</span></template
-            >
+            <template #message>
+              <span v-translate>Your trash bin is empty.</span>
+            </template>
           </no-content-message>
         </template>
       </file-list>
     </div>
-    <oc-dialog-prompt
-      name="delete-file-confirmation-dialog"
-      :oc-active="trashbinDeleteMessage !== ''"
-      :oc-content="trashbinDeleteMessage"
-      :oc-has-input="false"
-      :oc-title="_deleteDialogTitle"
-      oc-confirm-id="oc-dialog-delete-confirm"
-      @oc-confirm="$_ocTrashbin_clearTrashbinConfirmation"
-      @oc-cancel="$_ocTrashbin_cancelTrashbinConfirmation"
-    />
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
+import MixinDeleteResources from '../mixins/deleteResources'
 import FileList from './FileList.vue'
 import FileItem from './FileItem.vue'
 import NoContentMessage from './NoContentMessage.vue'
-import OcDialogPrompt from './ocDialogPrompt.vue'
 import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
-const { default: PQueue } = require('p-queue')
 
 export default {
   name: 'Trashbin',
 
   components: {
-    OcDialogPrompt,
     FileList,
     FileItem,
     NoContentMessage,
     SortableColumnHeader
   },
 
-  mixins: [Mixins],
+  mixins: [Mixins, MixinDeleteResources],
+
   props: {
     fileData: {
       type: Array,
@@ -103,28 +92,8 @@ export default {
     }
   },
 
-  data() {
-    return {
-      queue: new PQueue({ concurrency: 4 }),
-      ocDialogIsOpen: false
-    }
-  },
-
   computed: {
-    ...mapGetters('Files', ['loadingFolder', 'selectedFiles', 'trashbinDeleteMessage']),
-
-    _deleteDialogTitle() {
-      const files = this.selectedFiles
-      let translated
-
-      if (files.length === 1) {
-        translated = this.$gettext('Are you sure you want to delete "%{file}"?')
-        return this.$gettextInterpolate(translated, { file: files[0].name }, true)
-      }
-
-      translated = this.$gettext('Are you sure you want delete %{numberOfFiles} selected items?')
-      return this.$gettextInterpolate(translated, { numberOfFiles: files.length }, false)
-    },
+    ...mapGetters('Files', ['loadingFolder']),
 
     actions() {
       return [
@@ -137,7 +106,7 @@ export default {
         {
           icon: 'delete',
           ariaLabel: this.$gettext('Delete'),
-          handler: this.$_ocTrashbin_deleteFile,
+          handler: this.deleteSingleResource,
           isEnabled: () => true
         }
       ]
@@ -152,9 +121,7 @@ export default {
     ...mapActions('Files', [
       'loadTrashbin',
       'addFileSelection',
-      'removeFileSelection',
       'resetFileSelection',
-      'setTrashbinDeleteMessage',
       'removeFilesFromTrashbin'
     ]),
     ...mapActions(['showMessage']),
@@ -165,65 +132,6 @@ export default {
         $gettext: this.$gettext
       })
     },
-    $_ocTrashbin_deleteFile(item) {
-      this.ocDialogIsOpen = true
-      this.resetFileSelection()
-      this.addFileSelection(item)
-
-      this.setTrashbinDeleteMessage(
-        this.$gettext('This item will be deleted permanently. You can’t undo this action.')
-      )
-    },
-
-    $_ocTrashbin_clearTrashbinConfirmation(files = this.selectedFiles) {
-      // TODO: use clear all if all files are selected
-      this.ocDialogIsOpen = false
-      const deleteOps = []
-
-      const self = this
-      function deleteFile(file) {
-        return () => {
-          return self.$client.fileTrash
-            .clearTrashBin(file.id)
-            .then(() => {
-              self.$_ocTrashbin_removeFileFromList([file])
-              const translated = self.$gettext('%{file} was successfully deleted')
-              self.showMessage({
-                title: self.$gettextInterpolate(translated, { file: file.name }, true)
-              })
-            })
-            .catch(error => {
-              if (error.statusCode === 423) {
-                // TODO: we need a may retry option ....
-                const p = self.queue.add(deleteFile(file))
-                deleteOps.push(p)
-                return
-              }
-
-              const translated = self.$gettext('Deletion of %{file} failed')
-              self.showMessage({
-                title: self.$gettextInterpolate(translated, { file: file.name }, true),
-                desc: error.message,
-                status: 'danger'
-              })
-            })
-        }
-      }
-
-      for (const file of files) {
-        const p = this.queue.add(deleteFile(file))
-        deleteOps.push(p)
-      }
-      Promise.all(deleteOps).then(() => {
-        this.resetFileSelection()
-        this.setTrashbinDeleteMessage('')
-      })
-    },
-
-    $_ocTrashbin_cancelTrashbinConfirmation() {
-      this.setTrashbinDeleteMessage('')
-      this.ocDialogIsOpen = false
-    },
 
     $_ocTrashbin_restoreFile(file) {
       this.resetFileSelection()
@@ -231,7 +139,7 @@ export default {
       this.$client.fileTrash
         .restore(file.id, file.originalLocation)
         .then(() => {
-          this.$_ocTrashbin_removeFileFromList([file])
+          this.removeFilesFromTrashbin([file])
           const translated = this.$gettext('%{file} was restored successfully')
           this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true)
@@ -248,10 +156,6 @@ export default {
       this.resetFileSelection()
     },
 
-    $_ocTrashbin_removeFileFromList(files) {
-      this.removeFilesFromTrashbin(files)
-    },
-
     $_ocTrashbin_fileName(item) {
       if (item && item.originalLocation) {
         const pathSplit = item.originalLocation.split('/')
@@ -263,6 +167,10 @@ export default {
 
     isActionEnabled(item, action) {
       return action.isEnabled(item, this.parentFolder)
+    },
+
+    deleteSingleResource(resource) {
+      this.$_deleteResources_displayDialog(resource, true)
     }
   }
 }

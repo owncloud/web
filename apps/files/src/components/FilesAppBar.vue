@@ -72,7 +72,7 @@
                 <oc-nav-item
                   id="new-folder-btn"
                   icon="create_new_folder"
-                  @click="showCreateFolderDialog"
+                  @click="showCreateResourceModal"
                   ><translate>New folder…</translate></oc-nav-item
                 >
                 <oc-nav-item
@@ -80,7 +80,7 @@
                   :key="key"
                   :class="'new-file-btn-' + newFileHandler.ext"
                   icon="save"
-                  @click="showCreateFileDialog(newFileHandler.ext, newFileHandler.action)"
+                  @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
                   >{{ newFileHandler.menuTitle($gettext) }}</oc-nav-item
                 >
               </oc-nav>
@@ -110,7 +110,9 @@
             key="delete-btn"
             icon="delete"
             :disabled="files.length === 0"
-            @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_ocTrashbin_deleteSelected()"
+            @click="
+              selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_deleteResources_displayDialog()
+            "
           >
             {{ $_ocAppBar_clearTrashbinButtonText }}
           </oc-button>
@@ -146,77 +148,35 @@
           id="delete-selected-btn"
           key="delete-selected-btn"
           icon="delete"
-          @click="$_ocFiles_deleteSelected()"
+          @click="$_deleteResources_displayDialog()"
         >
           <translate>Delete selected</translate>
         </oc-button>
       </div>
     </oc-grid>
-    <oc-dialog-prompt
-      name="overwrite-dialog"
-      :oc-active="overwriteDialogMessage !== null"
-      :oc-has-input="false"
-      oc-cancel-id="files-overwrite-cancel"
-      oc-confirm-id="files-overwrite-confirm"
-      :oc-title="overwriteDialogTitle"
-      :oc-content="overwriteDialogMessage"
-      @oc-confirm="$_ocUpload_confirmOverwrite(true)"
-      @oc-cancel="$_ocUpload_confirmOverwrite(false)"
-    />
-    <oc-dialog-prompt
-      v-model="newFolderName"
-      name="new-folder-dialog"
-      :oc-active="createFolder"
-      oc-input-id="new-folder-input"
-      oc-confirm-id="new-folder-ok"
-      :oc-loading="fileFolderCreationLoading"
-      :oc-error="newFolderErrorMessage"
-      :oc-title="$_createFolderDialogTitle"
-      :oc-input-placeholder="$_createFolderDialogPlaceholder"
-      :oc-input-label="$_createFolderDialogLabel"
-      @oc-confirm="addNewFolder"
-      @oc-cancel="createFolder = false"
-    />
-    <oc-dialog-prompt
-      v-model="newFileName"
-      name="new-file-dialog"
-      :oc-active="createFile"
-      oc-input-id="new-file-input"
-      :oc-loading="fileFolderCreationLoading"
-      :oc-error="newFileErrorMessage"
-      :oc-title="$_createFileDialogTitle"
-      :oc-input-placeholder="$_createFileDialogPlaceholder"
-      :oc-input-label="$_createFileDialogLabel"
-      @oc-confirm="addNewFile"
-      @oc-cancel="createFile = false"
-    />
   </div>
 </template>
 
 <script>
 import FileUpload from './FileUpload.vue'
 import FolderUpload from './FolderUpload.vue'
-import OcDialogPrompt from './ocDialogPrompt.vue'
 import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
 import FileActions from '../fileactions'
+import MixinDeleteResources from '../mixins/deleteResources'
 import pathUtil from 'path'
+import debounce from 'lodash/debounce'
 
 export default {
   components: {
     FileUpload,
     FolderUpload,
-    OcDialogPrompt,
     FileDrop
   },
-  mixins: [Mixins, FileActions],
+  mixins: [Mixins, FileActions, MixinDeleteResources],
   data: () => ({
-    createFolder: false,
     isLoadingSearch: false,
-    newFolderName: '',
-    newFileName: '',
-    createFile: false,
     newFileAction: null,
     path: '',
     searchedFiles: [],
@@ -236,31 +196,11 @@ export default {
       'davProperties',
       'quota',
       'selectedFiles',
-      'overwriteDialogTitle',
-      'overwriteDialogMessage',
       'publicLinkPassword'
     ]),
     ...mapState(['route']),
     $_searchLabel() {
       return this.$gettext('Search')
-    },
-    $_createFolderDialogPlaceholder() {
-      return this.$gettext('Enter new folder name…')
-    },
-    $_createFolderDialogLabel() {
-      return this.$gettext('Folder name')
-    },
-    $_createFolderDialogTitle() {
-      return this.$gettext('New folder…')
-    },
-    $_createFileDialogPlaceholder() {
-      return this.$gettext('Enter new file name…')
-    },
-    $_createFileDialogLabel() {
-      return this.$gettext('File name')
-    },
-    $_createFileDialogTitle() {
-      return this.$gettext('New file…')
     },
     _cannotCreateDialogText() {
       if (!this.canUpload) {
@@ -280,12 +220,6 @@ export default {
     },
     currentPath() {
       return this.item === '/' ? '' : this.item
-    },
-    newFolderErrorMessage() {
-      return this.checkNewFolderName(this.newFolderName)
-    },
-    newFileErrorMessage() {
-      return this.checkNewFileName(this.newFileName)
     },
     headers() {
       if (this.publicPage()) {
@@ -420,11 +354,11 @@ export default {
       'updateFileProgress',
       'searchForFile',
       'loadFolder',
-      'setTrashbinDeleteMessage',
       'removeFilesFromTrashbin',
       'resetSearch'
     ]),
-    ...mapActions(['openFile', 'showMessage']),
+    ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
+
     onFileSearch(searchTerm = '') {
       if (searchTerm === '') {
         this.isLoadingSearch = false
@@ -478,10 +412,44 @@ export default {
         })
       })
     },
-    showCreateFolderDialog() {
-      this.createFolder = true
-      this.newFolderName = this.$gettext('New folder')
+
+    showCreateResourceModal(isFolder = true, ext = 'txt', openAction = null) {
+      const defaultName = isFolder
+        ? this.$gettext('New folder')
+        : this.$gettext('New file') + '.' + ext
+      const checkInputValue = debounce(value => {
+        this.setModalInputErrorMessage(
+          isFolder ? this.checkNewFolderName(value) : this.checkNewFileName(value)
+        )
+      }, 400)
+
+      // Sets action to be executed after creation of the file
+      if (!isFolder) {
+        this.newFileAction = openAction
+      }
+
+      const modal = {
+        variation: 'info',
+        title: isFolder ? this.$gettext('Create a new folder') : this.$gettext('Create a new file'),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: this.$gettext('Create'),
+        hasInput: true,
+        inputValue: defaultName,
+        inputPlaceholder: isFolder
+          ? this.$gettext('Enter new folder name…')
+          : this.$gettext('Enter new file name…'),
+        inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
+        inputError: isFolder
+          ? this.checkNewFolderName(defaultName)
+          : this.checkNewFileName(defaultName),
+        onCancel: this.hideModal,
+        onConfirm: isFolder ? this.addNewFolder : this.addNewFile,
+        onType: checkInputValue
+      }
+
+      this.createModal(modal)
     },
+
     addNewFolder(folderName) {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
@@ -501,8 +469,8 @@ export default {
         }
 
         p.then(() => {
-          this.createFolder = false
           this.$_ocFilesFolder_getFolder()
+          this.hideModal()
         })
           .catch(error => {
             this.showMessage({
@@ -546,11 +514,7 @@ export default {
 
       return null
     },
-    showCreateFileDialog(ext = 'txt', openAction = null) {
-      this.createFile = true
-      this.newFileAction = openAction
-      this.newFileName = this.$gettext('New file') + '.' + ext
-    },
+
     addNewFile(fileName) {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
@@ -566,7 +530,6 @@ export default {
           p = this.$client.publicFiles.putFileContents(filePath, null, this.publicLinkPassword, '')
         }
         p.then(() => {
-          this.createFile = false
           this.$_ocFilesFolder_getFolder()
           this.fileFolderCreationLoading = false
           if (this.newFileAction) {
@@ -578,6 +541,8 @@ export default {
               this.openFileAction(this.newFileAction, filePath)
             })
           }
+
+          this.hideModal()
         }).catch(error => {
           this.fileFolderCreationLoading = false
           this.showMessage({
@@ -666,33 +631,6 @@ export default {
 
     onFileProgress(progress) {
       this.updateFileProgress(progress)
-    },
-
-    $_ocTrashbin_deleteSelected() {
-      const translated = this.$ngettext(
-        "%{numberOfFiles} item will be deleted immediately. You can't undo this action.",
-        "%{numberOfFiles} items will be deleted immediately. You can't undo this action.",
-        this.selectedFiles.length
-      )
-      this.setTrashbinDeleteMessage(
-        this.$gettextInterpolate(translated, { numberOfFiles: this.selectedFiles.length }, false)
-      )
-    },
-
-    $_ocFiles_deleteSelected() {
-      const translated = this.$ngettext(
-        '%{numberOfFiles} item will be deleted.',
-        '%{numberOfFiles} items will be deleted.',
-        this.selectedFiles.length
-      )
-      this.promptFileDelete({
-        message: this.$gettextInterpolate(
-          translated,
-          { numberOfFiles: this.selectedFiles.length },
-          false
-        ),
-        items: this.selectedFiles
-      })
     },
 
     $_ocTrashbin_empty() {

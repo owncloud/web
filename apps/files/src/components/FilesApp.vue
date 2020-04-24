@@ -36,33 +36,6 @@
       />
     </oc-grid>
     <file-open-actions />
-    {{ /* FIXME: hack to prevent conflict of dialog id with the trashbin deletion dialog */ }}
-    <template v-if="$route.name !== 'files-trashbin'">
-      <oc-dialog-prompt
-        name="change-file-dialog"
-        :oc-active="renameDialogOpen"
-        :value="renameDialogNewName"
-        :oc-error="renameDialogErrorMessage"
-        :oc-title="$_renameDialogTitle"
-        oc-confirm-id="oc-dialog-rename-confirm"
-        :oc-input-placeholder="$_renameDialogPlaceholder"
-        :oc-input-label="$_renameDialogLabel"
-        @oc-confirm="doRenameFile"
-        @oc-cancel="cancelRenameFile"
-        @input="$_validateFileName"
-      />
-      <oc-dialog-prompt
-        name="delete-file-confirmation-dialog"
-        class="deletionConfirmationDialog"
-        :oc-active="deleteDialogOpen"
-        :oc-content="deleteDialogMessage"
-        :oc-has-input="false"
-        :oc-title="$_deleteDialogTitle"
-        oc-confirm-id="oc-dialog-delete-confirm"
-        @oc-confirm="reallyDeleteFiles"
-        @oc-cancel="cancelDeleteFile"
-      />
-    </template>
   </div>
 </template>
 <script>
@@ -75,7 +48,6 @@ import TrashBin from './Trashbin.vue'
 import SharedFilesList from './Collaborators/SharedFilesList.vue'
 import { mapActions, mapGetters } from 'vuex'
 import FileOpenActions from './FileOpenActions.vue'
-import OcDialogPrompt from './ocDialogPrompt.vue'
 const UploadProgress = () => import('./UploadProgress.vue')
 
 export default {
@@ -86,8 +58,7 @@ export default {
     FileOpenActions,
     TrashBin,
     SharedFilesList,
-    UploadProgress,
-    OcDialogPrompt
+    UploadProgress
   },
   mixins: [Mixins, FileActions],
   data() {
@@ -99,8 +70,7 @@ export default {
       fileName: '',
       selected: [],
       breadcrumbs: [],
-      self: {},
-      renameDialogErrorMessage: null
+      self: {}
     }
   },
   computed: {
@@ -111,10 +81,7 @@ export default {
       'loadingFolder',
       'highlightedFile',
       'currentFolder',
-      'inProgress',
-      'renameDialogSelectedFile',
-      'deleteDialogSelectedFiles',
-      'deleteDialogMessage'
+      'inProgress'
     ]),
     ...mapGetters(['extensions']),
 
@@ -131,52 +98,6 @@ export default {
 
     $_uploadProgressVisible() {
       return this.inProgress.length > 0
-    },
-
-    $_renameDialogPlaceholder() {
-      let translated
-      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
-
-      if (this.renameDialogSelectedFile.type === 'folder') {
-        translated = this.$gettext('Enter new folder name…')
-      } else {
-        translated = this.$gettext('Enter new file name…')
-      }
-      return translated
-    },
-
-    $_renameDialogLabel() {
-      let translated
-      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return ''
-
-      if (this.renameDialogSelectedFile.type === 'folder') {
-        translated = this.$gettext('Folder name')
-      } else {
-        translated = this.$gettext('File name')
-      }
-      return translated
-    },
-
-    $_renameDialogTitle() {
-      let translated
-
-      if (!this.renameDialogSelectedFile || !this.renameDialogSelectedFile.name) return null
-
-      if (this.renameDialogSelectedFile.type === 'folder') {
-        translated = this.$gettext('Rename folder %{name}')
-      } else {
-        translated = this.$gettext('Rename file %{name}')
-      }
-      return this.$gettextInterpolate(
-        translated,
-        { name: this.renameDialogSelectedFile.name },
-        true
-      )
-    },
-
-    $_deleteDialogTitle() {
-      // FIXME: differentiate between file, folder and multiple
-      return this.$gettext('Delete File/Folder')
     }
   },
   watch: {
@@ -248,10 +169,6 @@ export default {
 
     $_ocAppSideBar_onReload() {
       this.$refs.filesList.$_ocFilesFolder_getFolder()
-    },
-
-    $_validateFileName(value) {
-      this.renameDialogErrorMessage = this.validateFileName(value)
     }
   }
 }

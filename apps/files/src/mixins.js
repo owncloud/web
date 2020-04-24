@@ -31,7 +31,11 @@ export default {
   data: () => ({
     uploadQueue: new PQueue({ concurrency: 1 }),
     directoryQueue: new PQueue({ concurrency: 1 }),
-    uploadFileUniqueId: 0
+    uploadFileUniqueId: 0,
+    /**
+     * Resources in the upload queue which already exists
+     */
+    existingResources: []
   }),
   computed: {
     ...mapGetters('Files', [
@@ -72,12 +76,10 @@ export default {
       'resetSearch',
       'addFileToProgress',
       'removeFileSelection',
-      'setOverwriteDialogTitle',
-      'setOverwriteDialogMessage',
       'removeFileFromProgress',
       'setFilesSort'
     ]),
-    ...mapActions(['showMessage']),
+    ...mapActions(['showMessage', 'createModal', 'hideModal']),
 
     toggleSort(fieldId) {
       if (this.fileSortField === fieldId) {
@@ -175,23 +177,65 @@ export default {
     extractOpaqueId(id) {
       return atob(id).split(':')[1]
     },
-    async $_ocUpload_addDropToQue(e) {
+
+    hideOverwriteDialog() {
+      this.existingResources = []
+      this.hideModal()
+    },
+
+    confirmOverwrite() {
+      for (const resource of this.existingResources) {
+        this.$_ocUpload(resource.file, resource.path, resource.etag)
+      }
+
+      this.hideOverwriteDialog()
+    },
+
+    displayOverwriteDialog() {
+      const translated = this.$gettext('File %{file} already exists')
+      const isVersioningEnabled = this.capabilities.files.versioning
+      // TODO: Handle properly case of multiple existing files
+      const title =
+        this.existingResources.length > 1
+          ? this.$gettext('Multiple files already exists')
+          : this.$gettextInterpolate(
+              translated,
+              { file: this.existingResources[0].file.name },
+              true
+            )
+
+      const modal = {
+        variation: isVersioningEnabled ? 'info' : 'danger',
+        icon: 'cloud_upload',
+        title,
+        message: isVersioningEnabled
+          ? this.$gettext('Do you want to create a new version?')
+          : this.$gettext('Do you want to overwrite it?'),
+        cancelText: this.$gettext('Cancel'),
+        confirmText: isVersioningEnabled ? this.$gettext('Create') : this.$gettext('Overwrite'),
+        onCancel: this.hideOverwriteDialog,
+        onConfirm: this.confirmOverwrite
+      }
+
+      this.createModal(modal)
+    },
+
+    $_ocUpload_addDropToQue(e) {
       const items = e.dataTransfer.items || e.dataTransfer.files
+      const promises = []
 
       // A list of files is being dropped ...
       if (items instanceof FileList) {
         this.$_ocUpload_addDirectoryToQue(e)
         return
       }
+
       for (let item of items) {
         item = item.webkitGetAsEntry()
         const exists = this.checkIfElementExists(item)
+
         if (item.isDirectory) {
-          if (!exists) {
-            this.processDirectoryEntryRecursively(item).then(() => {
-              this.$emit('success', null, item.name)
-            })
-          } else {
+          if (exists) {
             this.showMessage({
               title: this.$gettextInterpolate(
                 this.$gettext('Folder %{folder} already exists.'),
@@ -200,67 +244,70 @@ export default {
               ),
               status: 'danger'
             })
-          }
-        } else {
-          if (!exists) {
-            item.file(file => {
-              this.$_ocUpload(file, item.fullPath)
-            })
-          } else {
-            const translated = this.$gettext('File %{file} already exists.')
-            this.setOverwriteDialogTitle(
-              this.$gettextInterpolate(translated, { file: item.name }, true)
-            )
 
-            if (this.capabilities.files.versioning) {
-              this.setOverwriteDialogMessage(this.$gettext('Do you want to create a new version?'))
-            } else {
-              this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
-            }
-
-            const overwrite = await this.$_ocUpload_confirmOverwrite()
-            if (overwrite) {
-              item.file(file => {
-                this.$_ocUpload(file, item.fullPath, exists.etag)
-              })
-            }
-            this.setOverwriteDialogMessage(null)
+            continue
           }
-        }
-      }
-    },
-    async $_ocUpload_addFileToQue(e) {
-      const files = e.target.files
-      if (!files.length) return
-      for (let i = 0; i < files.length; i++) {
-        const exists = this.checkIfElementExists(files[i])
-        if (!exists) {
-          this.$_ocUpload(files[i], files[i].name)
-          if (i + 1 === files.length) this.$_ocUploadInput_clean()
+
+          this.processDirectoryEntryRecursively(item).then(() => {
+            this.$emit('success', null, item.name)
+          })
+
           continue
         }
 
-        const translated = this.$gettext('File %{file} already exists.')
-        this.setOverwriteDialogTitle(
-          this.$gettextInterpolate(translated, { file: files[i].name }, true)
-        )
+        if (exists) {
+          promises.push(
+            new Promise(resolve => {
+              item.file(file => {
+                this.existingResources.push({ file, path: item.fullPath, etag: exists.etag })
 
-        if (this.capabilities.files.versioning) {
-          this.setOverwriteDialogMessage(this.$gettext('Do you want to create a new version?'))
-        } else {
-          this.setOverwriteDialogMessage(this.$gettext('Do you want to overwrite it?'))
+                resolve()
+              })
+            })
+          )
+
+          continue
         }
 
-        const overwrite = await this.$_ocUpload_confirmOverwrite()
-        if (overwrite === true) {
-          this.$_ocUpload(files[i], files[i].name, exists.etag)
-          if (i + 1 === files.length) this.$_ocUploadInput_clean()
-        } else {
-          if (i + 1 === files.length) this.$_ocUploadInput_clean()
-        }
-        this.setOverwriteDialogMessage(null)
+        item.file(file => {
+          this.$_ocUpload(file, item.fullPath)
+        })
+      }
+
+      // Ensures with promises that all files will be properly pushed into the existingResources array
+      if (promises.length > 0) {
+        Promise.all(promises).then(() => {
+          this.displayOverwriteDialog()
+        })
       }
     },
+
+    $_ocUpload_addFileToQue(e) {
+      const files = e.target.files
+
+      if (files.length < 1) {
+        return
+      }
+
+      for (let i = 0; i < files.length; i++) {
+        const exists = this.checkIfElementExists(files[i])
+
+        if (exists) {
+          this.existingResources.push({ file: files[i], path: files[i].name, etag: exists.etag })
+
+          continue
+        }
+
+        this.$_ocUpload(files[i], files[i].name)
+      }
+
+      this.$_ocUploadInput_clean()
+
+      if (this.existingResources.length > 0) {
+        this.displayOverwriteDialog()
+      }
+    },
+
     $_ocUpload_addDirectoryToQue(e) {
       if (this.isIE11()) {
         this.showMessage({
@@ -353,18 +400,6 @@ export default {
           })
         })
       }
-    },
-    $_ocUpload_confirmOverwrite() {
-      return new Promise(resolve => {
-        const confirmButton = document.querySelector('#files-overwrite-confirm')
-        const cancelButton = document.querySelector('#files-overwrite-cancel')
-        confirmButton.addEventListener('click', _ => {
-          resolve(true)
-        })
-        cancelButton.addEventListener('click', _ => {
-          resolve(false)
-        })
-      })
     },
 
     /**
