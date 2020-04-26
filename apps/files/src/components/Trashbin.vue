@@ -130,13 +130,13 @@ export default {
       return [
         {
           icon: 'restore',
-          ariaLabel: this.$gettext('Restore'),
+          ariaLabel: () => this.$gettext('Restore'),
           handler: this.$_ocTrashbin_restoreFile,
           isEnabled: () => true
         },
         {
           icon: 'delete',
-          ariaLabel: this.$gettext('Delete'),
+          ariaLabel: () => this.$gettext('Delete'),
           handler: this.$_ocTrashbin_deleteFile,
           isEnabled: () => true
         }

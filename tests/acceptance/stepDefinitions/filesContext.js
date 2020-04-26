@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 const { client } = require('nightwatch-api')
 const assert = require('assert')
 const { Given, When, Then, Before } = require('cucumber')
@@ -307,15 +308,33 @@ When('the user renames the following file/folder using the webUI', async functio
 })
 
 Given('the user has marked file/folder {string} as favorite using the webUI', function(path) {
-  return client.page.FilesPageElement.filesRow().markAsFavorite(path)
+  return client.page.FilesPageElement.filesList().markFavorite(path)
 })
 
 When('the user marks file/folder {string} as favorite using the webUI', function(path) {
-  return client.page.FilesPageElement.filesRow().markAsFavorite(path)
+  return client.page.FilesPageElement.filesList().markFavorite(path)
 })
 
 When('the user unmarks the favorited file/folder {string} using the webUI', function(path) {
-  return client.page.FilesPageElement.filesRow().unmarkFavorite(path)
+  return client.page.FilesPageElement.filesList().unmarkFavorite(path)
+})
+
+When('the user marks file/folder {string} as favorite using the webUI sidebar', async function(
+  path
+) {
+  const api = client.page.FilesPageElement
+  await api.filesList().clickRow(path)
+  api.appSideBar().markFavoriteSidebar()
+  return client
+})
+
+When('the user unmarks the favorited file/folder {string} using the webUI sidebar', async function(
+  path
+) {
+  const api = client.page.FilesPageElement
+  await api.filesList().clickRow(path)
+  api.appSideBar().unmarkFavoriteSidebar()
+  return client
 })
 
 Then('there should be no files/folders/resources listed on the webUI', async function() {
@@ -622,20 +641,38 @@ Then(
   }
 )
 
-Then('file/folder {string} should be marked as favorite on the webUI', function(path) {
-  return client.page.FilesPageElement.filesRow()
-    .isMarkedFavorite(path)
-    .then(result => {
-      assert.strictEqual(result, true, `${path} expected to be favorite but was not`)
-    })
+Then('file/folder {string} should be marked as favorite', async function(path) {
+  let isFavorite = await webdav.getProperties(path, client.globals.currentUser, ['oc:favorite'])
+  isFavorite = isFavorite['oc:favorite']
+
+  return assert.strictEqual(isFavorite, '1', `${path} expected to be favorite but was not`)
 })
 
-Then('file/folder {string} should not be marked as favorite on the webUI', function(path) {
-  return client.page.FilesPageElement.filesRow()
-    .isMarkedFavorite(path)
-    .then(result => {
-      assert.strictEqual(result, false, `not expected ${path} to be favorite but was`)
-    })
+Then('file/folder {string} should not be marked as favorite', async function(path) {
+  let isFavorite = await webdav.getProperties(path, client.globals.currentUser, ['oc:favorite'])
+  isFavorite = isFavorite['oc:favorite']
+
+  return assert.strictEqual(isFavorite, '0', `not expected ${path} to be favorite but was`)
+})
+
+Then('file/folder {string} should be marked as favorite on the webUI', async function(path) {
+  const selector = client.page.FilesPageElement.appSideBar().elements.favoriteStarShining
+  await client.page.FilesPageElement.filesList().clickRow(path)
+
+  client.expect.element(selector).to.be.visible
+  client.page.FilesPageElement.appSideBar().closeSidebar()
+
+  return client
+})
+
+Then('file/folder {string} should not be marked as favorite on the webUI', async function(path) {
+  const selector = client.page.FilesPageElement.appSideBar().elements.favoriteStarDimm
+  await client.page.FilesPageElement.filesList().clickRow(path)
+
+  client.expect.element(selector).to.be.visible
+  client.page.FilesPageElement.appSideBar().closeSidebar()
+
+  return client
 })
 
 Then(/there should be (\d+) files\/folders listed on the webUI/, async function(noOfItems) {

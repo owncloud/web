@@ -14,14 +14,16 @@ export default {
       'selectedFiles',
       'highlightedFile'
     ]),
-    ...mapGetters(['capabilities', 'fileSideBars']),
+    ...mapGetters(['capabilities', 'fileSideBars', 'isAuthenticated']),
     // Files lists
     actions() {
       const actions = [
         {
           icon: 'edit',
-          ariaLabel: this.$gettext('Rename'),
           handler: this.promptFileRename,
+          ariaLabel: () => {
+            return this.$gettext('Rename')
+          },
           isEnabled: function(item, parent) {
             if (parent && !parent.canRename()) {
               return false
@@ -32,20 +34,37 @@ export default {
         {
           icon: 'file_download',
           handler: this.downloadFile,
-          ariaLabel: this.$gettext('Download'),
+          ariaLabel: () => {
+            return this.$gettext('Download')
+          },
           isEnabled: function(item) {
             return item.canDownload()
           }
         },
         {
           icon: 'delete',
-          ariaLabel: this.$gettext('Delete'),
           handler: this.deleteFile,
+          ariaLabel: () => {
+            return this.$gettext('Delete')
+          },
           isEnabled: function(item, parent) {
             if (parent && !parent.canBeDeleted()) {
               return false
             }
             return item.canBeDeleted()
+          }
+        },
+        {
+          icon: 'star',
+          handler: this.toggleFileFavorite,
+          ariaLabel: item => {
+            if (item.starred) {
+              return this.$gettext('Unmark as favorite')
+            }
+            return this.$gettext('Mark as favorite')
+          },
+          isEnabled: () => {
+            return this.isAuthenticated
           }
         }
       ]
@@ -57,7 +76,9 @@ export default {
         if (sideBar.quickAccess) {
           actions.push({
             icon: sideBar.quickAccess.icon,
-            ariaLabel: sideBar.quickAccess.ariaLabel,
+            ariaLabel: item => {
+              return sideBar.quickAccess.ariaLabel
+            },
             handler: this.openSideBar,
             handlerData: sideBar.app,
             isEnabled: function(item) {
@@ -77,7 +98,8 @@ export default {
       'closePromptFileRename',
       'deleteFiles',
       'promptFileDelete',
-      'closePromptFileDelete'
+      'closePromptFileDelete',
+      'markFavorite'
     ]),
     ...mapActions(['showMessage']),
 
@@ -131,7 +153,19 @@ export default {
           this.closePromptFileRename()
         })
     },
-
+    toggleFileFavorite(file) {
+      this.markFavorite({
+        client: this.$client,
+        file: file
+      }).catch(() => {
+        const translated = this.$gettext('Error while starring "%{file}"')
+        const title = this.$gettextInterpolate(translated, { file: file.name }, true)
+        this.showMessage({
+          title: title,
+          status: 'danger'
+        })
+      })
+    },
     cancelDeleteFile() {
       this.closePromptFileDelete()
     },

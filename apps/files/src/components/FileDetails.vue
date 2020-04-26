@@ -19,7 +19,13 @@
           />
         </div>
         <div v-if="$route.name !== 'files-shared-with-others'">
-          <oc-star v-if="!publicPage()" class="uk-inline" :shining="highlightedFile.starred" />
+          <oc-star
+            v-if="!publicPage()"
+            id="files-sidebar-star-icon"
+            class="uk-inline"
+            :shining="highlightedFile.starred"
+            @click.native.stop="toggleFileFavorite(highlightedFile)"
+          />
           <template v-if="highlightedFile.size > -1">
             {{ highlightedFile.size | fileSize }},
           </template>
@@ -96,13 +102,19 @@ export default {
     this.activeTab = this.defaultTab
   },
   methods: {
-    ...mapActions('Files', ['deleteFiles']),
+    ...mapActions('Files', ['deleteFiles', 'markFavorite']),
     ...mapActions(['showMessage']),
     close() {
       this.$emit('reset')
     },
     showSidebar(app) {
       this.activeTab = app
+    },
+    toggleFileFavorite(file) {
+      this.markFavorite({
+        client: this.$client,
+        file: file
+      })
     }
   }
 }

@@ -9,17 +9,17 @@
     class="uk-open uk-drop-stack"
   >
     <ul class="uk-list">
-      <li v-for="action in actions" :key="action.ariaLabel">
+      <li v-for="action in actions" :key="action.ariaLabel(item)">
         <oc-button
           class="uk-width-1-1"
           :icon="action.icon"
-          :aria-label="action.ariaLabel"
+          :aria-Label="action.ariaLabel(item)"
           @click.native.stop="
             action.handler(item, action.handlerData)
             actionClicked()
           "
         >
-          {{ action.ariaLabel }}
+          {{ action.ariaLabel(item) }}
         </oc-button>
       </li>
     </ul>
