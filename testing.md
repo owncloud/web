@@ -21,16 +21,6 @@ There are multiple ways to run Selenium:
 
 - Set the environment variables `SELENIUM_HOST` as `localhost` and `SERVER_HOST` in the format `http://<ip_addr>:9100`.
 - Run `yarn run selenium`
-- Find the IP address of the docker host with:
-```sh
-docker inspect -f "{{ .NetworkSettings.Gateway }}" selenium`
-```
-
-Alternatively, you can run this command which is equivalen to `yarn run selenium`:
-
-```sh
-docker run -d -p 4444:4444 -p 5900:5900 -v /dev/shm:/dev/shm -v <repo_path>/tests/acceptance/filesForUpload:/uploads --name selenium selenium/standalone-chrome-debug
-```
 
 ### Setup using Docker Desktop for Mac
 
@@ -45,9 +35,9 @@ After all these changes Phoenix will be accessible at `http://host.docker.intern
 
 When running a standalone Selenium server, make sure to set the environment variable `SELENIUM_HOST`, `SELENIUM_PORT` and `LOCAL_UPLOAD_DIR` accordingly.
 
-## Setting up the backends
+## run tests
 
-### Setting up for ownCloud 10 backend
+### with ownCloud 10 backend
 
 - setup the [ownCloud 10 backend]({{< ref "backend-oc10.md" >}})
 - clone and install [testing app](http://github.com/owncloud/testing) into ownCloud
@@ -59,14 +49,22 @@ When running a standalone Selenium server, make sure to set the environment vari
    1. Install and setup a second ownCloud server-instance that is accessible by a different URL. That second server-instance must have its own database and data directory.
    2. clone and install testing app into the second ownCloud server-instance from http://github.com/owncloud/testing .
    3. when running the acceptance tests use `REMOTE_BACKEND_HOST` environment variable to define its address. for e.g. `REMOTE_BACKEND_HOST=http://<ip_address_of_second_ownCloud_server-instance> yarn run acceptance-tests <feature-files-to-test>` .
-- see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
-- jump to the [running tests](#running-tests) section
+-set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
+-set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
 
-### Setting up for OCIS backend
+Run `yarn run acceptance-tests <feature-files-to-test>`.
 
-- clone and build [ocis-phoenix](https://github.com/owncloud/ocis-phoenix), [ocis-reva](https://github.com/owncloud/ocis-reva) and [ocis-konnectd](https://github.com/owncloud/ocis-konnectd) into their respective binaries
+The feature files are located in the "tests/acceptance/features" subdirectories.
+
+see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
+
+### with OCIS backend
+
+- clone and build [ocis](https://github.com/owncloud/ocis)
+- clone the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
+
 - Run ldap server and redis server using docker
-    ```
+    ```sh
     docker run --hostname ldap.my-company.com \
     -e LDAP_TLS_VERIFY_CLIENT=never \
     -e LDAP_DOMAIN=owncloud.com \
@@ -75,27 +73,46 @@ When running a standalone Selenium server, make sure to set the environment vari
     --name docker-slapd \
     -p 127.0.0.1:389:389 \
     -p 636:636 -d osixia/openldap
-    ```
-    ```
+
     docker run -e REDIS_DATABASES=1 -p 6379:6379 -d webhippie/redis:latest
     ```
-- Run the OCIS services with necessary configurations
-    - Run `ocis-phoenix` and provide `PHOENIX_ASSET_PATH=/<path to phoenix dist dir>/` to use the latest version of phoenix and `PHOENIX_WEB_CONFIG=/<path to phoenix config file>/`
 
-        **You need to create a new phoenix config.json file. Use [this config](https://github.com/owncloud/phoenix/blob/master/tests/drone/ocis-config.json) with necessary changes in the urls**
+- create a new phoenix config.json file.
+  Use [this config](https://github.com/owncloud/phoenix/blob/master/tests/drone/ocis-config.json) and change the URLs to match your environment.
 
-        **If you choose to run selenium and the browser inside a docker container then your `server`, `metadata_url` and `authority` needs to be accessible from inside the docker container**
+- Run the OCIS server with necessary configurations
 
-    - Run `ocis-reva` using the ldap user driver and also provide redis server url with `REVA_STORAGE_OWNCLOUD_REDIS_ADDR=localhost:6379`
+    ```sh
+    export REVA_LDAP_HOSTNAME='localhost'
+    export REVA_LDAP_PORT=636
+    export REVA_LDAP_BIND_PASSWORD='admin'
+    export REVA_LDAP_BIND_DN='cn=admin,dc=owncloud,dc=com'
+    export REVA_LDAP_BASE_DN='dc=owncloud,dc=com'
+    export REVA_STORAGE_OWNCLOUD_REDIS_ADDR='localhost:6379'
+    export PHOENIX_WEB_CONFIG='<path-to-config-file>/ocis-config.json'
+    export PHOENIX_ASSET_PATH='<path-to-phoenix-clone>/dist'
+    export LDAP_URI='ldap://localhost'
+    export LDAP_BINDDN='cn=admin,dc=owncloud,dc=com'
+    export LDAP_BINDPW='admin'
+    export LDAP_BASEDN='dc=owncloud,dc=com'
+    
+    bin/ocis server
+    ```
 
-    - Run `ocis-konnectd` using the same ldap server used with `ocis-reva`
-
-        **You need to create a new identifier registration file. Use [this file](https://github.com/owncloud/phoenix/blob/master/tests/drone/identifier-registration.yml) with necessary changes in the urls**
-
-        **If you choose to run selenium and the browser inside a docker container then your `redirect_uris` needs to be accessible from inside the docker container**
-
+- set the `SERVER_HOST` environment variable to point to the URL where ocis serves Phoenix, by default "http://localhost:9100"
+- set the `BACKEND_HOST` environment variable to point to the URL of the backend, by default "http://localhost:9140"
+- set the `RUN_ON_OCIS` environment variable to `true`
+- set the `OCIS_SKELETON_DIR` environment variable to the `data/webUISkeleton` folder inside the testing app
+ 
 - [setup and build Phoenix]({{< ref "building.md" >}})
-- jump to the [running tests](#running-tests) section
+-set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
+-set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
+
+Run `yarn run acceptance-tests-ocis <feature-files-to-test>`.
+
+The feature files are located in the "tests/acceptance/features" subdirectories.
+
+see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
 
 ## Available settings to be set by environment variables
 
@@ -120,10 +137,4 @@ These values can be set using the environment variables to match your local test
 | `LDAP_ADMIN_PASSWORD`       | Password for ldap bind dn                                                            | cn=admin,dc=owncloud,dc=com |
 | `OCIS_SKELETON_DIR`       | Skeleton files directory for new users                                                           | - |
 | `OCIS_PHOENIX_CONFIG`       | Path for the phoenix web config file used by OCIS                                                            | - |
-
-## Running tests
-
-Run `yarn run acceptance-tests <feature-files-to-test>`.
-
-The feature files are located in the "tests/acceptance/features" subdirectories.
 
