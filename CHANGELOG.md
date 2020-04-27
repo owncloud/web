@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Remove deleted files from search result: [#3266](https://github.com/owncloud/phoenix/pull/3266)
 * Bugfix - Show token string if link name is empty in FileLinkSidebar: [#3297](https://github.com/owncloud/phoenix/pull/3297)
 * Bugfix - Remove duplicate error display in input prompt: [#3342](https://github.com/owncloud/phoenix/pull/3342)
 * Bugfix - Fix translation message extraction from plain javascript files: [#3346](https://github.com/owncloud/phoenix/pull/3346)
@@ -17,6 +18,15 @@ Summary
 
 Details
 -------
+
+* Bugfix - Remove deleted files from search result: [#3266](https://github.com/owncloud/phoenix/pull/3266)
+
+   Deleted file has been removed from filesSearched state by adding a new mutation. Also, filter
+   condition in remove file mutations has been changed from object reference to unique file id.
+
+   https://github.com/owncloud/phoenix/issues/3043
+   https://github.com/owncloud/phoenix/issues/3044
+   https://github.com/owncloud/phoenix/pull/3266
 
 * Bugfix - Show token string if link name is empty in FileLinkSidebar: [#3297](https://github.com/owncloud/phoenix/pull/3297)
 
