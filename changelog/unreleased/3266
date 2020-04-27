@@ -1,0 +1,8 @@
+Bugfix: Remove deleted files from search result
+
+Deleted file has been removed from filesSearched state by adding a new mutation.
+Also, filter condition in remove file mutations has been changed from object reference to unique file id.
+
+https://github.com/owncloud/phoenix/pull/3266
+https://github.com/owncloud/phoenix/issues/3043
+https://github.com/owncloud/phoenix/issues/3044

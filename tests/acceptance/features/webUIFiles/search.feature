@@ -155,15 +155,10 @@ Feature: Search
     Then folder "favorite folder" should be listed on the webUI
     And folder "not favorite folder" should be listed on the webUI
 
-  @issue-3044
   Scenario: Delete file from search list
-    Given the following files have been deleted by user "user1"
-      | name          |
-      | lorem-big.txt |
-    And user "user1" has uploaded file with content "uploaded content" to "lorem-big.txt"
-    When the user searches for "lorem-big" using the webUI
-    And the user deletes file "lorem-big.txt" using the webUI
-    Then file "lorem-big.txt" should be listed on the webUI
-    #Then file "lorem-big.txt" should not be listed on the webUI
-    And as "user1" file "lorem-big.txt" should not exist
-    And as "user1" the file with original path "lorem-big.txt" should exist in the trashbin
+    Given user "user1" has uploaded file with content "uploaded content" to "file-to-delete.txt"
+    When the user searches for "file-to" using the webUI
+    And the user deletes file "file-to-delete.txt" using the webUI
+    Then file "file-to-delete.txt" should not be listed on the webUI
+    And as "user1" file "file-to-delete.txt" should not exist
+    And as "user1" the file with original path "file-to-delete.txt" should exist in the trashbin
