@@ -2879,9 +2879,10 @@ date-fns@^1.27.2:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
   integrity sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==
 
-"davclient.js@git+https://github.com/owncloud/davclient.js.git":
+"davclient.js@https://github.com/owncloud/davclient.js.git":
   version "0.2.1"
-  resolved "git+https://github.com/owncloud/davclient.js.git#bf19f590451b3c0658913568053ec7f300f7dfc1"
+  uid bf19f590451b3c0658913568053ec7f300f7dfc1
+  resolved "https://github.com/owncloud/davclient.js.git#bf19f590451b3c0658913568053ec7f300f7dfc1"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -6986,10 +6987,10 @@ p-limit@^1.1.0:
   dependencies:
     p-try "^1.0.0"
 
-p-limit@^2.0.0, p-limit@^2.2.0, p-limit@^2.2.1:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.2.2.tgz#61279b67721f5287aa1c13a9a7fbbc48c9291b1e"
-  integrity sha512-WGR+xHecKTr7EbUEhyLSh5Dube9JtdiG78ufaeLxTgpudf/20KqyMioIUZJAezlTIi6evxuoUs9YXc11cU+yzQ==
+p-limit@^2.0.0, p-limit@^2.2.0, p-limit@^2.2.1, p-limit@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.3.0.tgz#3dd33c647a214fdfffd835933eb086da0dc21db1"
+  integrity sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==
   dependencies:
     p-try "^2.0.0"
 
