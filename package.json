@@ -139,5 +139,8 @@
       "yarn lint --fix",
       "git add"
     ]
+  },
+  "engines": { 
+    "node": ">=10 <13" 
   }
 }
