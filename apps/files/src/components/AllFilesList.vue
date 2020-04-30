@@ -91,11 +91,7 @@
         />
       </div>
       <div v-if="!$_isFavoritesList" class="uk-flex uk-flex-middle uk-flex-right">
-        <Indicators
-          :default-indicators="indicatorArray(rowItem)"
-          :item="rowItem"
-          @click="$_openSideBar"
-        />
+        <Indicators :default-indicators="indicatorArray(rowItem)" :item="rowItem" />
       </div>
       <div
         class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
@@ -444,7 +440,7 @@ export default {
     },
 
     indicatorHandler(item, sideBarName) {
-      this.$emit('click', item, sideBarName)
+      this.$_openSideBar(item, sideBarName)
     }
   }
 }
