@@ -1,3 +1,26 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.9.0...master
+
+Summary
+-------
+
+* Bugfix - Fix share indicators click to open the correct panel: [#3324](https://github.com/owncloud/phoenix/issues/3324)
+
+Details
+-------
+
+* Bugfix - Fix share indicators click to open the correct panel: [#3324](https://github.com/owncloud/phoenix/issues/3324)
+
+   When clicking on a share indicator inside a file list row, the correct share panel will now be
+   displayed.
+
+   https://github.com/owncloud/phoenix/issues/3324
+   https://github.com/owncloud/phoenix/pull/3420
+
 Changelog for ownCloud Phoenix [0.9.0] (2020-04-27)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.9.0 relevant to
