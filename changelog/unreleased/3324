@@ -1,0 +1,6 @@
+Bugfix: Fix share indicators click to open the correct panel
+
+When clicking on a share indicator inside a file list row, the correct share panel will now be displayed.
+
+https://github.com/owncloud/phoenix/issues/3324
+https://github.com/owncloud/phoenix/pull/3420

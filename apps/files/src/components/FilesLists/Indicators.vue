@@ -1,10 +1,6 @@
 <template>
   <span>
-    <div
-      v-if="displayDefaultIndicators"
-      :class="{ 'uk-margin-xsmall-right': customIndicators }"
-      @click="openSidebar"
-    >
+    <div v-if="displayDefaultIndicators" :class="{ 'uk-margin-xsmall-right': customIndicators }">
       <oc-button
         v-for="(indicator, index) in defaultIndicators"
         :key="index"
@@ -59,13 +55,6 @@ export default {
 
     customIndicators() {
       return this.customFilesListIndicators
-    }
-  },
-
-  methods: {
-    // TODO: Adjust to send the event via store
-    openSidebar(item, indicatorId) {
-      this.$emit('click', item, indicatorId)
     }
   }
 }
