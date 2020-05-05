@@ -27,6 +27,7 @@ export default {
               removeFingerprintOnSuccess: true,
               overridePatchMethod: !!options.overridePatchMethod,
               retryDelays: [0, 3000, 5000, 10000, 20000],
+              uploadDataDuringCreation: options.uploadDataDuringCreation || false,
               metadata: {
                 filename: file.name,
                 filetype: file.type,

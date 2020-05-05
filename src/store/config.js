@@ -48,6 +48,7 @@ const mutations = {
     state.openIdConnect = config.openIdConnect
     state.rootFolder = config.rootFolder === undefined ? '/' : config.rootFolder
     state.uploadChunkSize = config.uploadChunkSize === undefined ? Infinity : config.uploadChunkSize
+    state.uploadChunkDirect = config.uploadChunkDirect !== false // defaults to true if undefined
     state.state = config.state === undefined ? 'working' : config.state
     state.applications = config.applications === undefined ? [] : config.applications
     if (config.corrupted) state.corrupted = config.corrupted

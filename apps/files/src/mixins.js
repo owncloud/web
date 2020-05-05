@@ -446,7 +446,16 @@ export default {
         relativePath = pathUtil.join(basePath, relativePath)
         // FIXME: this might break if relativePath is not the currentFolder
         // and is a mount point that has no chunk support
-        if (this.browserSupportsChunked && this.currentFolder.isChunkedUploadSupported) {
+        if (this.browserSupportsChunked && this.currentFolder.chunkUploadSupport) {
+          const extraOptions = {}
+          // enable direct upload if enabled and supported
+          // instead of create + upload in two requests
+          if (
+            this.configuration.uploadChunkDirect &&
+            this.currentFolder.chunkUploadSupport.extension.includes('creation-with-upload')
+          ) {
+            extraOptions.uploadDataDuringCreation = true
+          }
           let chunkSize = this.configuration.uploadChunkSize
           if (this.capabilities.files.tus_support.max_chunk_size > 0) {
             if (
@@ -463,7 +472,8 @@ export default {
               overridePatchMethod: !!this.capabilities.files.tus_support.http_method_override,
               emitProgress: progress => {
                 this.$_ocUpload_onProgress(progress, file)
-              }
+              },
+              ...extraOptions
             })
           })
         } else {
