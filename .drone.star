@@ -96,7 +96,6 @@ config = {
 			},
 			'runningOnOCIS': True,
 			'filterTags': 'not @skip and not @skipOnOCIS',
-			'screenShots': True,
 		}
 	},
 
@@ -336,6 +335,9 @@ def acceptance():
 		if 'acceptance' in config['defaults']:
 			for item in config['defaults']['acceptance']:
 				default[item] = config['defaults']['acceptance'][item]
+
+	if (default['screenShots']):
+		default['extraEnvironment'].update({"SCREENSHOTS": "true"})
 
 	for category, matrix in config['acceptance'].items():
 		if type(matrix['suites']) == "list":
