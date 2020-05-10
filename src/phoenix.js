@@ -26,6 +26,7 @@ import VueRouter from 'vue-router'
 import VueClipboard from 'vue-clipboard2'
 import VueScrollTo from 'vue-scrollto'
 import VueMeta from 'vue-meta'
+import Vue2TouchEvents from 'vue2-touch-events'
 
 // --- Gettext ----
 
@@ -66,6 +67,7 @@ Vue.use(VueMeta, {
   refreshOnceOnNavigation: true
 })
 Vue.use(ChunkedUpload)
+Vue.use(Vue2TouchEvents)
 
 Vue.component('drag', Drag)
 Vue.component('drop', Drop)
@@ -179,7 +181,7 @@ function loadApps () {
   fetch(`themes/${config.theme}.json`)
     .then(res => res.json())
     .then(res => {
-      store.dispatch('loadTheme', res)
+      store.dispatch('loadTheme', { theme: res, name: config.theme })
     })
 }
 

@@ -1,10 +1,9 @@
 <template>
-  <div id="oc-notification" class="uk-navbar-item">
+  <div id="oc-notification">
     <oc-icon
       id="oc-notification-bell"
-      class="oc-cursor-pointer"
+      class="oc-cursor-pointer uk-flex uk-flex-middle"
       name="bell"
-      variation="inverted"
       aria-label="Notifications"
     />
     <oc-drop

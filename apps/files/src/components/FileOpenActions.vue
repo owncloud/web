@@ -80,3 +80,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.oc-file-actions.uk-open > .uk-offcanvas-bar {
+  width: calc(100vw - 300px);
+}
+
+@media screen and (max-width: 960px) {
+  .oc-file-actions.uk-open > .uk-offcanvas-bar {
+    width: 100vw;
+  }
+}
+</style>

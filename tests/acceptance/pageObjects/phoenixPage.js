@@ -30,17 +30,31 @@ module.exports = {
     /**
      * @param {string} page
      */
-    navigateToUsingMenu: function(page) {
+    navigateToUsingMenu: async function(page) {
       const menuItemSelector = util.format(this.elements.menuItem.selector, page)
-      return this.waitForElementVisible('@menuButton')
-        .click('@menuButton')
-        .useXpath()
+      let isAppNavigationVisible = false
+
+      // Check if the navigation is visible
+      await this.api.element('@appNavigation', result => {
+        if (result.status > -1) {
+          isAppNavigationVisible = true
+        }
+      })
+
+      // If app navigation is not visible, try to click on the menu button
+      if (!isAppNavigationVisible) {
+        this.click('@menuButton').waitForAnimationToFinish()
+      }
+
+      this.useXpath()
         .waitForElementVisible(menuItemSelector)
-        .waitForAnimationToFinish()
         .click(menuItemSelector)
         .api.page.FilesPageElement.filesList()
         .waitForElementPresent({ selector: '@filesListProgressBar', abortOnFailure: false }) // don't fail if we are too late
         .waitForElementNotPresent('@filesListProgressBar')
+        .useCss()
+
+      return this
     },
     markNotificationAsRead: function() {
       return this.waitForElementVisible('@notificationBell')
@@ -208,11 +222,10 @@ module.exports = {
       selector: '#_userMenuButton'
     },
     menuButton: {
-      selector: '//button[@aria-label="Menu"]',
-      locateStrategy: 'xpath'
+      selector: '.oc-app-navigation-toggle'
     },
     menuItem: {
-      selector: '//ul[contains(@class, "oc-main-menu")]/li/a[contains(text(),"%s")]',
+      selector: '//nav[contains(@class, "oc-sidebar-nav")]/ul/li/a[contains(text(),"%s")]',
       locateStrategy: 'xpath'
     },
     logoutMenuItem: {
@@ -240,6 +253,9 @@ module.exports = {
       selector:
         '//div[@id="oc-notification"]//h5[contains(text(),\'%s\')]/../div/button/span[.="Accept"]',
       locateStrategy: 'xpath'
+    },
+    appNavigation: {
+      selector: '.oc-app-navigation'
     }
   }
 }
