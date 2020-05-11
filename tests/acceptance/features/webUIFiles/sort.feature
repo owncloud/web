@@ -1,3 +1,4 @@
+@skipOnOCIS @ocis-reva-issue-188
 Feature: Sort files/folders
 
   As a user

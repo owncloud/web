@@ -8,7 +8,7 @@ Feature: rename files
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest
+  @smokeTest @skipOnOCIS @ocis-reva-issue-188
   Scenario Outline: Rename a file
     When the user renames file "lorem.txt" to <to_file_name> using the webUI
     Then file <to_file_name> should be listed on the webUI
@@ -32,6 +32,7 @@ Feature: rename files
       | to_file_name           |
       | "लोरेम।तयक्स्त? $%#&@" |
 
+  @skipOnOCIS @ocis-reva-issue-188
   Scenario Outline: Rename a file that has special characters in its name
     When the user renames file <from_name> to <to_name> using the webUI
     Then file <to_name> should be listed on the webUI
