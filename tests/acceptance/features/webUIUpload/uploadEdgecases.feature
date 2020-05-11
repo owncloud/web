@@ -1,3 +1,4 @@
+@skipOnOCIS @ocis-reva-issue-188
 Feature: File Upload
 
   As a QA engineer

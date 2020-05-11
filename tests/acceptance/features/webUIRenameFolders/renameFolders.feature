@@ -8,6 +8,7 @@ Feature: rename folders
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
+  @skipOnOCIS @ocis-reva-issue-188
   Scenario Outline: Rename a folder
     When the user renames folder "simple-folder" to <to_folder_name> using the webUI
     Then folder <to_folder_name> should be listed on the webUI
@@ -31,6 +32,7 @@ Feature: rename folders
       | to_folder_name          |
       | 'सिमप्ले फोल्देर$%#?&@'      |
 
+  @skipOnOCIS @ocis-reva-issue-188
   Scenario Outline: Rename a folder that has special characters in its name
     When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI
