@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Fix share indicators click to open the correct panel: [#3324](https://github.com/owncloud/phoenix/issues/3324)
+* Bugfix - Set server config to ocis proxy in example config file: [#3454](https://github.com/owncloud/phoenix/pull/3454)
 
 Details
 -------
@@ -20,6 +21,13 @@ Details
 
    https://github.com/owncloud/phoenix/issues/3324
    https://github.com/owncloud/phoenix/pull/3420
+
+* Bugfix - Set server config to ocis proxy in example config file: [#3454](https://github.com/owncloud/phoenix/pull/3454)
+
+   We fixed the ocis example config to point to the default oCIS Proxy address instead of the
+   default Phoenix service address.
+
+   https://github.com/owncloud/phoenix/pull/3454
 
 Changelog for ownCloud Phoenix [0.9.0] (2020-04-27)
 =======================================
