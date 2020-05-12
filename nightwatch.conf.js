@@ -1,16 +1,20 @@
 const chromedriver = require('chromedriver')
 const path = require('path')
-const withHttp = url => /^https?:\/\//i.test(url) ? url : `http://${url}`
+const withHttp = url => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 
 const LOCAL_LAUNCH_URL = withHttp(process.env.SERVER_HOST || 'http://localhost:8300')
 const LOCAL_BACKEND_URL = withHttp(process.env.BACKEND_HOST || 'http://localhost:8080')
-const REMOTE_BACKEND_URL = process.env.REMOTE_BACKEND_HOST ? withHttp(process.env.REMOTE_BACKEND_HOST || 'http://localhost:8080') : undefined
+const REMOTE_BACKEND_URL = process.env.REMOTE_BACKEND_HOST
+  ? withHttp(process.env.REMOTE_BACKEND_HOST || 'http://localhost:8080')
+  : undefined
 const BACKEND_ADMIN_USERNAME = process.env.BACKEND_USERNAME || 'admin'
 const BACKEND_ADMIN_PASSWORD = process.env.BACKEND_PASSWORD || 'admin'
 const SELENIUM_HOST = process.env.SELENIUM_HOST || ''
 const SELENIUM_PORT = process.env.SELENIUM_PORT || 4444
-const START_PROCESS = (SELENIUM_HOST === '')
-const REMOTE_UPLOAD_DIR = process.env.REMOTE_UPLOAD_DIR || require('path').join(__dirname, '/tests/acceptance/filesForUpload/')
+const START_PROCESS = SELENIUM_HOST === ''
+const REMOTE_UPLOAD_DIR =
+  process.env.REMOTE_UPLOAD_DIR ||
+  require('path').join(__dirname, '/tests/acceptance/filesForUpload/')
 const SAUCE_USERNAME = process.env.SAUCE_USERNAME
 const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
 const BROWSER_NAME = process.env.BROWSER_NAME
@@ -25,6 +29,7 @@ const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
 const OCIS_SKELETON_DIR = process.env.OCIS_SKELETON_DIR
 const OPENID_LOGIN = RUN_ON_OCIS || !!process.env.OPENID_LOGIN
 const PHOENIX_CONFIG = process.env.PHOENIX_CONFIG || path.join(__dirname, 'dist/config.json')
+const SCREENSHOTS = !!process.env.SCREENSHOTS
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
@@ -88,7 +93,7 @@ module.exports = {
         idleTimeout: 180
       },
       screenshots: {
-        enabled: true,
+        enabled: SCREENSHOTS,
         path: 'tests/reports/screenshots',
         on_failure: true
       }
