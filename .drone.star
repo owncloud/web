@@ -1053,7 +1053,7 @@ def konnectdService(glauth = False):
 			'LDAP_BINDDN': 'cn=admin,ou=users,dc=example,dc=com' if glauth else 'cn=admin,dc=owncloud,dc=com',
 			'LDAP_URI': 'ldap://glauth:9125' if glauth else 'ldap://ldap:389',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
-			'KONNECTD_ISS': 'https://konnectd:9130',
+			'KONNECTD_ISS': 'https://konnectd:9200',
 			'KONNECTD_TLS': 'true',
 			'LDAP_BINDPW': 'admin',
 			'LDAP_SCOPE': 'sub',
