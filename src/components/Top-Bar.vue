@@ -3,16 +3,25 @@
     id="oc-topbar"
     class="uk-flex uk-flex-middle uk-flex-wrap oc-border-bottom uk-padding-small"
   >
-    <oc-button
+    <oc-grid v-if="!publicPage()" gutter="large" flex>
+      <div class="uk-hidden@l">
+        <oc-button
+          variation="raw"
+          class="oc-app-navigation-toggle"
+          :aria-label="$gettext('Open navigation menu')"
+          @click="toggleAppNavigationVisibility"
+        >
+          <oc-icon name="menu" class="uk-flex" aria-hidden="true" />
+        </oc-button>
+      </div>
+      <search-bar />
+    </oc-grid>
+    <oc-grid
       v-if="!isPublicPage"
-      variation="raw"
-      class="oc-app-navigation-toggle uk-hidden@l"
-      :aria-label="$gettext('Open navigation menu')"
-      @click="toggleAppNavigationVisibility"
+      flex
+      gutter="small"
+      class="uk-width-expand uk-flex-right uk-margin-remove-top"
     >
-      <oc-icon name="menu" class="uk-flex" aria-hidden="true" />
-    </oc-button>
-    <oc-grid v-if="!isPublicPage" flex gutter="small" class="uk-width-expand uk-flex-right">
       <notifications v-if="activeNotifications.length" />
       <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
       <user-menu :user-id="userId" :user-display-name="userDisplayName" />
@@ -26,12 +35,14 @@ import pluginHelper from '../mixins/pluginHelper.js'
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
+import SearchBar from './SearchBar.vue'
 
 export default {
   components: {
     Notifications,
     ApplicationsMenu,
-    UserMenu
+    UserMenu,
+    SearchBar
   },
   mixins: [pluginHelper],
   props: {

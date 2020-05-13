@@ -27,18 +27,6 @@
           <h1 class="oc-visually-hidden" v-text="pageTitle" />
         </span>
       </div>
-      <div v-if="!publicPage()" class="uk-width-auto uk-visible@m">
-        <oc-search-bar
-          :key="searchBarKey"
-          ref="globalSearchBar"
-          :label="$_searchLabel"
-          :loading="isLoadingSearch"
-          :button-hidden="true"
-          :button="false"
-          @search="onFileSearch"
-          @clear="onSearchClear"
-        />
-      </div>
       <div>
         <template v-if="$_ocFilesAppBar_showActions">
           <template v-if="canUpload && hasFreeSpace">
@@ -117,31 +105,6 @@
             {{ $_ocAppBar_clearTrashbinButtonText }}
           </oc-button>
         </template>
-        <oc-button
-          v-if="!publicPage()"
-          id="files-open-search-btn"
-          key="mobile-search-button"
-          class="uk-hidden@m"
-          icon="search"
-          aria-label="search"
-          @click="focusMobileSearchInput()"
-        />
-        <oc-drop
-          toggle="#files-open-search-btn"
-          boundary="#files-app-bar"
-          pos="bottom-right"
-          mode="click"
-          class="uk-margin-remove"
-        >
-          <oc-search-bar
-            ref="mobileSearch"
-            :key="searchBarKey"
-            :label="$_searchLabel"
-            :loading="isLoadingSearch"
-            @search="onFileSearch"
-            @clear="onSearchClear"
-          />
-        </oc-drop>
       </div>
       <div v-if="displayBulkActions">
         <oc-button
@@ -175,22 +138,15 @@ export default {
   },
   mixins: [Mixins, FileActions, MixinDeleteResources],
   data: () => ({
-    isLoadingSearch: false,
     newFileAction: null,
     path: '',
-    searchedFiles: [],
-    fileFolderCreationLoading: false,
-    // In case of change of search value to empty string
-    // searchBarKey can be changed to force re-render of the component
-    searchBarKey: 0
+    fileFolderCreationLoading: false
   }),
   computed: {
     ...mapGetters(['getToken', 'configuration', 'newFileHandlers']),
     ...mapGetters('Files', [
       'activeFiles',
       'inProgress',
-      'searchTerm',
-      'atSearchPage',
       'currentFolder',
       'davProperties',
       'quota',
@@ -198,9 +154,7 @@ export default {
       'publicLinkPassword'
     ]),
     ...mapState(['route']),
-    $_searchLabel() {
-      return this.$gettext('Search')
-    },
+
     _cannotCreateDialogText() {
       if (!this.canUpload) {
         return this.$gettext('You have no permission to upload!')
@@ -334,61 +288,17 @@ export default {
       return this.$route.meta.hasBulkActions && this.selectedFiles.length > 0
     }
   },
-  watch: {
-    $route(to, from) {
-      // note: the search bars are not available on all views
-      if (this.$refs.mobileSearch) {
-        this.$refs.mobileSearch.value = null
-      }
-      if (this.$refs.globalSearchBar) {
-        this.$refs.globalSearchBar.query = ''
-      }
-    }
-  },
   methods: {
     ...mapActions('Files', [
       'resetFileSelection',
       'loadFiles',
       'addFiles',
       'updateFileProgress',
-      'searchForFile',
       'loadFolder',
-      'removeFilesFromTrashbin',
-      'resetSearch'
+      'removeFilesFromTrashbin'
     ]),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
 
-    onFileSearch(searchTerm = '') {
-      if (searchTerm === '') {
-        this.isLoadingSearch = false
-      } else {
-        this.isLoadingSearch = true
-      }
-      // write search term into files app state
-      this.searchForFile({
-        searchTerm,
-        client: this.$client
-      })
-        .catch(e => {
-          this.showMessage({
-            title: this.$gettext('Search failed'),
-            desc: e.message,
-            status: 'danger'
-          })
-        })
-        .finally(() => {
-          this.isLoadingSearch = false
-        })
-    },
-    focusMobileSearchInput() {
-      this.$refs.mobileSearch.$el.querySelector('input').focus()
-      // nested vuetify VList animation will block native autofocus, so we use this workaround...
-
-      setTimeout(() => {
-        // ...to set focus after the element is rendered visible
-        this.$refs.mobileSearch.$el.querySelector('input').focus()
-      }, 50)
-    },
     $_ocFilesFolder_getFolder() {
       this.path = []
 
@@ -672,12 +582,6 @@ export default {
       }
       this.resetFileSelection()
       this.setHighlightedFile(null)
-    },
-
-    onSearchClear() {
-      this.resetSearch()
-      // Forces update of search bar
-      this.searchBarKey++
     }
   }
 }
