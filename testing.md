@@ -78,7 +78,29 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
     ```
 
 - create a new phoenix config.json file.
-  Use [this config](https://github.com/owncloud/phoenix/blob/master/tests/drone/ocis-config.json) and change the URLs to match your environment.
+
+  Here an example that should work when running every service on localhost
+  ```
+  {
+    "server": "https://localhost:9200",
+    "theme": "owncloud",
+    "version": "0.1.0",
+    "openIdConnect": {
+      "metadata_url": "https://localhost:9200/.well-known/openid-configuration",
+      "authority": "https://localhost:9200",
+      "client_id": "phoenix",
+      "response_type": "code",
+      "scope": "openid profile email"
+    },
+    "apps": [
+      "files",
+      "draw-io",
+      "pdf-viewer",
+      "markdown-editor",
+      "media-viewer"
+    ]
+  }
+  ```
 
 - Run the OCIS server with necessary configurations
 
@@ -99,14 +121,14 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
     bin/ocis server
     ```
 
-- set the `SERVER_HOST` environment variable to point to the URL where ocis serves Phoenix, by default "http://localhost:9100"
+- set the `SERVER_HOST` environment variable to point to the URL where ocis serves Phoenix, by default "https://localhost:9200"
 - set the `BACKEND_HOST` environment variable to point to the URL of the backend, by default "http://localhost:9140"
 - set the `RUN_ON_OCIS` environment variable to `true`
 - set the `OCIS_SKELETON_DIR` environment variable to the `data/webUISkeleton` folder inside the testing app
  
 - [setup and build Phoenix]({{< ref "building.md" >}})
--set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
--set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
+- set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
+- set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
 
 Run `yarn run acceptance-tests-ocis <feature-files-to-test>`.
 
@@ -138,3 +160,11 @@ These values can be set using the environment variables to match your local test
 | `OCIS_SKELETON_DIR`       | Skeleton files directory for new users                                                           | - |
 | `OCIS_PHOENIX_CONFIG`       | Path for the phoenix web config file used by OCIS                                                            | - |
 
+## Tipps
+
+### too many open files
+If tests were running fine and then suddenly start to fail your system might run into open file limits.
+In that case you will see messages in the OCIS log output that look like this:
+`2020-05-12 11:33:43.974552 I | http: Accept error: accept tcp [::]:9200: accept4: too many open files; retrying in 1s`
+
+In that case increase the open file limits, how to do that would be beyond the scope of this documentation.
