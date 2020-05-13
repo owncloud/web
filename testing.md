@@ -20,7 +20,9 @@ There are multiple ways to run Selenium:
 ### Setup using Docker
 
 - Set the environment variables `SELENIUM_HOST` as `localhost` and `SERVER_HOST` in the format `http://<ip_addr>:9100`.
-- Run `yarn run selenium`
+- Run `yarn run selenium` (available only on Linux)
+- If you are a Mac user, you can run `yarn run selenium:mac`
+  - This command creates docker container which uses port forwarding instead of host networking [which is not supported on Mac](https://docs.docker.com/network/host/)
 
 ### Setup using Docker Desktop for Mac
 
