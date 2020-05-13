@@ -1,4 +1,3 @@
-@skipOnOCIS @ocis-reva-issue-188
 Feature: File Upload
 
   As a QA engineer
@@ -118,7 +117,7 @@ Feature: File Upload
     Then file "0" should be listed on the webUI
     And as "user1" the content of "simple-folder/0" should be the same as the local "0"
 
-  @issue-3015 @skipOnOCIS
+  @issue-3015 @skipOnOCIS @issue-ocis-reva-200
   Scenario: Upload a file with the same name as already existing folder
     Given the user has created folder "new-lorem.txt"
     And the user has reloaded the current page of the webUI
@@ -134,7 +133,7 @@ Feature: File Upload
     #   """
 
   # When this issue is fixed merge with the scenario above
-  @issue-3015 @skipOnOC10
+  @issue-3015 @skipOnOC10 @skipOnOCIS @issue-ocis-reva-200
   Scenario: Upload a file with the same name as already existing folder
     Given the user has created folder "new-lorem.txt"
     And the user has reloaded the current page of the webUI

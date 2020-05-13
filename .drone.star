@@ -1162,6 +1162,8 @@ def revaService():
 			'REVA_STORAGE_LOCAL_ROOT': '/srv/app/tmp/reva/root',
 			'REVA_STORAGE_OWNCLOUD_DATADIR': '/srv/app/tmp/reva/data',
 			'REVA_STORAGE_OC_DATA_TEMP_FOLDER': '/srv/app/tmp/',
+			'REVA_STORAGE_OC_DATA_URL': 'reva:9164',
+			'REVA_STORAGE_OC_DATA_SERVER_URL': 'http://reva:9164/data',
 			'REVA_OIDC_ISSUER': 'https://konnectd:9130',
 			'REVA_USERS_DRIVER': 'ldap',
 			'REVA_LDAP_HOSTNAME': 'ldap',
