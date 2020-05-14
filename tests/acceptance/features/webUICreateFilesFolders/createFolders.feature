@@ -8,7 +8,7 @@ Feature: create folders
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest @skipOnOCIS @ocis-phoenix-issue-58
+  @smokeTest
   Scenario: Create a folder inside another folder
     When the user creates a folder with the name "top-folder" using the webUI
     And the user opens folder "top-folder" using the webUI
@@ -38,7 +38,7 @@ Feature: create folders
     When the user creates a folder with the invalid name "folder/subfolder" using the webUI
     Then the error message 'Folder name cannot contain "/"' should be displayed on the webUI dialog prompt
 
-  @issue-2467 @skipOnOCIS @ocis-phoenix-issue-58
+  @issue-2467
   Scenario: Create folder with special characters in its name and browse to that folder
     When the user creates a folder with the name "?&%0" using the webUI
     And the user opens folder "?&%0" using the webUI

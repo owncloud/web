@@ -23,7 +23,6 @@ Feature: create folder
       | "home"                   |
 
   # Merge with the scenario above once the issue is resolved
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario Outline: Create a folder using special characters
     When the user creates a folder with the name <folder_name> using the webUI
     Then folder <folder_name> should be listed on the webUI

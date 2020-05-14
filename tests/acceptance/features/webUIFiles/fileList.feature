@@ -7,7 +7,6 @@ Feature: User can view files inside a folder
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Resources are listed
     When the user has browsed to the files page
     Then folder "simple-folder" should be listed on the webUI

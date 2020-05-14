@@ -12,7 +12,6 @@ Feature: File Upload
     And user "user1" has logged in using the webUI
     And the user browses to the files page
 
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: simple upload of a file that does not exist before
     When the user uploads file "new-'single'quotes.txt" using the webUI
     Then file "new-'single'quotes.txt" should be listed on the webUI
@@ -48,7 +47,7 @@ Feature: File Upload
       | 'single'quotes        |
 
     # Merge with the scenario above once the issue is resolved
-    @smokeTest @skipOnOCIS @ocis-phoenix-issue-58
+    @smokeTest
     Scenario Outline: upload a new file into a sub folder
       Given a file with the size of "3000" bytes and the name "0" has been created locally
       When the user opens folder "<folder-to-upload-to>" using the webUI
@@ -101,7 +100,6 @@ Feature: File Upload
     And file "zzzz-must-be-last-file-in-folder (2).txt" should be listed on the webUI
     And the content of "zzzz-must-be-last-file-in-folder (2).txt" should be the same as the local "zzzz-must-be-last-file-in-folder.txt"
 
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario Outline: upload a big file using difficult names (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name <file-name> has been created locally
     When the user uploads a created file <file-name> using the webUI
