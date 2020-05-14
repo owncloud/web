@@ -22,7 +22,7 @@ Feature: rename files
       | "'quotes2'"            |
 
   # Merge with scenario above once the issue is resolved
-  @smokeTest @skipOnOCIS @ocis-phoenix-issue-58
+  @smokeTest
   Scenario Outline: Rename a file
     When the user renames file "lorem.txt" to <to_file_name> using the webUI
     Then file <to_file_name> should be listed on the webUI
@@ -42,7 +42,6 @@ Feature: rename files
       | "'single'quotes.txt"                    | "single-quotes.txt"                   |
 
   # Merge with scenario above once the issue is resolved
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario Outline: Rename a file that has special characters in its name
     When the user renames file <from_name> to <to_name> using the webUI
     Then file <to_name> should be listed on the webUI
@@ -52,7 +51,7 @@ Feature: rename files
       | from_name                               | to_name                               |
       | "strängé filename (duplicate #2 &).txt" | "strängé filename (duplicate #3).txt" |
 
-  @smokeTest @skipOnOCIS @ocis-phoenix-issue-58
+  @smokeTest
   Scenario: Rename a file using special characters and check its existence after page reload
     When the user renames file "lorem.txt" to "लोरेम।तयक्स्त $%&" using the webUI
     And the user reloads the current page of the webUI
@@ -138,13 +137,11 @@ Feature: rename files
       | lorem.txt      | lorem/txt                         |
       | simple-folder  | simple-empty-folder/simple-folder |
 
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Rename the last file in a folder
     When the user renames file "zzzz-must-be-last-file-in-folder.txt" to "a-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "a-file.txt" should be listed on the webUI
 
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Rename a file to become the last file in a folder
     When the user renames file "lorem.txt" to "zzzz-z-this-is-now-the-last-file.txt" using the webUI
     And the user reloads the current page of the webUI

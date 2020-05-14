@@ -18,7 +18,6 @@ Feature: Renaming files inside a folder with problematic name
       | "0"                     |
       | "'single'quotes"        |
 
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario Outline: Rename the existing file inside a problematic folder
     When the user opens folder <folder> using the webUI
     And the user renames file "lorem.txt" to "???.txt" using the webUI

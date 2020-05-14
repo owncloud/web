@@ -21,7 +21,6 @@ Feature: rename folders
       | "home"                  |
 
   # Merge with scenario above once the issue is resolved
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario Outline: Rename a folder
     When the user renames folder "simple-folder" to <to_folder_name> using the webUI
     Then folder <to_folder_name> should be listed on the webUI
@@ -41,7 +40,6 @@ Feature: rename folders
       | "'single'quotes"        | "single-quotes"             |
 
   # Merge with scenario above once the issue is resolved
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario Outline: Rename a folder that has special characters in its name
     When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI
@@ -51,7 +49,6 @@ Feature: rename folders
       | from_name               | to_name                     |
       | "strängé नेपाली folder"   | "strängé नेपाली folder-#?2"   |
 
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Rename a folder using special characters and check its existence after page reload
     When the user renames folder "simple-folder" to "लोरेम।तयक्स्त $%&" using the webUI
     And the user reloads the current page of the webUI

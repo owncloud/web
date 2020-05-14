@@ -8,7 +8,7 @@ Feature: deleting files and folders
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest @skipOnOCIS @ocis-phoenix-issue-58
+  @smokeTest
   Scenario: Delete files & folders one by one and check its existence after page reload
     When the user deletes the following elements using the webUI
       | name                                  |
@@ -26,7 +26,6 @@ Feature: deleting files and folders
     And file "strängé नेपाली folder" should not be listed on the webUI
     But the deleted elements should not be listed on the webUI after a page reload
 
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Delete a file with problematic characters
     Given user "user1" has renamed the following file
       | from-name-parts | to-name-parts   |
@@ -111,7 +110,6 @@ Feature: deleting files and folders
     But as "user1" folder "my-empty-folder" should not exist
     And folder "my-empty-folder" should not be listed on the webUI
 
-  @skipOnOCIS @ocis-phoenix-issue-58
   Scenario: Delete the last file in a folder
     When the user deletes file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then as "user1" file "zzzz-must-be-last-file-in-folder.txt" should not exist
