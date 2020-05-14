@@ -96,6 +96,7 @@ config = {
 			},
 			'runningOnOCIS': True,
 			'filterTags': 'not @skip and not @skipOnOCIS',
+			'screenShots': True,
 		}
 	},
 
