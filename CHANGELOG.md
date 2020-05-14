@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fix share indicators click to open the correct panel: [#3324](https://github.com/owncloud/phoenix/issues/3324)
 * Bugfix - Set server config to ocis proxy in example config file: [#3454](https://github.com/owncloud/phoenix/pull/3454)
+* Change - Removed favorite button from file list and added it in the sidebar: [#1987](https://github.com/owncloud/phoenix/issues/1987)
 
 Details
 -------
@@ -28,6 +29,15 @@ Details
    default Phoenix service address.
 
    https://github.com/owncloud/phoenix/pull/3454
+
+* Change - Removed favorite button from file list and added it in the sidebar: [#1987](https://github.com/owncloud/phoenix/issues/1987)
+
+   We've removed the favorite star button in the file list and added instead a functionality to the
+   before non-working star button in the file's sidebar. We also added a new action in the file
+   action dropdown menu which allows you to toggle the favorite status of your file.
+
+   https://github.com/owncloud/phoenix/issues/1987
+   https://github.com/owncloud/phoenix/pull/3336
 
 Changelog for ownCloud Phoenix [0.9.0] (2020-04-27)
 =======================================
