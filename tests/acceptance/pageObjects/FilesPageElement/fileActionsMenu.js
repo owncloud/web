@@ -7,6 +7,8 @@ module.exports = {
     FileAction: Object.freeze({
       download: 'download',
       delete: 'delete',
+      favorite: 'favorite',
+      unmarkFavorite: 'unmarkFavorite',
       restore: 'restore',
       share: 'share',
       rename: 'rename',
@@ -89,6 +91,20 @@ module.exports = {
       return this
     },
     /**
+     * mark as favorite resource using fileActions 'favorite' button
+     * @returns {Promise<*>}
+     */
+    favorite: function() {
+      return this.performFileAction(this.FileAction.favorite)
+    },
+    /**
+     * unmark as favorite resource using fileActions 'favorite' button
+     * @returns {Promise<*>}
+     */
+    unmarkFavorite: function() {
+      return this.performFileAction(this.FileAction.unmarkFavorite)
+    },
+    /**
      * opens sharing dialog for given resource
      * assumes filesAction menu for the resource to be opened
      * @return {*}
@@ -164,6 +180,14 @@ module.exports = {
     },
     downloadButtonInFileRow: {
       selector: '//button[@aria-label="Download"]',
+      locateStrategy: 'xpath'
+    },
+    favoriteButtonInFileRow: {
+      selector: '//button[@aria-label="Mark as favorite"]',
+      locateStrategy: 'xpath'
+    },
+    unmarkFavoriteButtonInFileRow: {
+      selector: '//button[@aria-label="Unmark as favorite"]',
       locateStrategy: 'xpath'
     },
     restoreButtonInFileRow: {

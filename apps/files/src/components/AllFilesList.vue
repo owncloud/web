@@ -8,14 +8,6 @@
     :is-action-enabled="isActionEnabled"
   >
     <template #headerColumns>
-      <div v-if="!publicPage()">
-        <span class="oc-visually-hidden" v-text="favoritesHeaderText" />
-        <oc-star
-          id="files-table-header-star"
-          aria-hidden="true"
-          class="uk-display-block uk-disabled"
-        />
-      </div>
       <div ref="headerNameColumn" class="uk-text-truncate uk-text-meta uk-width-expand">
         <sortable-column-header
           :aria-label="$gettext('Sort files by name')"
@@ -60,13 +52,6 @@
       </div>
     </template>
     <template #rowColumns="{ item: rowItem, index }">
-      <div v-if="!publicPage()">
-        <oc-star
-          class="uk-display-block"
-          :shining="rowItem.starred"
-          @click.native.stop="toggleFileFavorite(rowItem)"
-        />
-      </div>
       <div
         :ref="index === 0 ? 'firstRowNameColumn' : null"
         class="uk-text-truncate uk-width-expand"
@@ -340,12 +325,6 @@ export default {
             status: 'danger'
           })
         })
-    },
-    toggleFileFavorite(item) {
-      this.markFavorite({
-        client: this.$client,
-        file: item
-      })
     },
 
     isActionEnabled(item, action) {

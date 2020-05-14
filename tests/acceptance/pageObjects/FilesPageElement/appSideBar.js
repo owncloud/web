@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 module.exports = {
   commands: {
     isThumbnailVisible: function() {
@@ -54,6 +56,19 @@ module.exports = {
      */
     isCollaboratorsTabPresentOnCurrentSidebar: function() {
       return this.isTabPresentOnCurrentSidebar(this.elements.sidebarCollaboratorsTab.selector)
+    },
+    markFavoriteSidebar: function() {
+      return this.useXpath()
+        .waitForElementVisible('@sideBar')
+        .waitForElementVisible('@favoriteStarDimm')
+        .click('@sidebarToggleFavoriteButton')
+        .waitForElementVisible('@favoriteStarShining')
+    },
+    unmarkFavoriteSidebar: function() {
+      return this.waitForElementVisible('@sideBar')
+        .waitForElementVisible('@favoriteStarShining')
+        .click('@sidebarToggleFavoriteButton')
+        .waitForElementVisible('@favoriteStarDimm')
     }
   },
   elements: {
@@ -78,6 +93,15 @@ module.exports = {
     sidebarVersionsTab: {
       selector: '//div//a[normalize-space(.)="Versions"]',
       locateStrategy: 'xpath'
+    },
+    sidebarToggleFavoriteButton: {
+      selector: '#files-sidebar-star-icon'
+    },
+    favoriteStarDimm: {
+      selector: '.oc-star-dimm'
+    },
+    favoriteStarShining: {
+      selector: '.oc-star-shining'
     }
   }
 }

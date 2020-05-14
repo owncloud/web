@@ -185,7 +185,6 @@ export default {
   methods: {
     ...mapActions('Files', [
       'loadFolder',
-      'markFavorite',
       'setHighlightedFile',
       'setPublicLinkPassword',
       'resetFileSelection',
@@ -200,12 +199,6 @@ export default {
         { name: item.name, type: item.type },
         true
       )
-    },
-    toggleFileFavorite(item) {
-      this.markFavorite({
-        client: this.$client,
-        file: item
-      })
     },
     $_ocFileName(item) {
       if (this.$route.name === 'files-favorites') {

@@ -1,0 +1,8 @@
+Change: Removed favorite button from file list and added it in the sidebar
+
+We've removed the favorite star button in the file list and added instead a functionality 
+to the before non-working star button in the file's sidebar. We also added a new action in 
+the file action dropdown menu which allows you to toggle the favorite status of your file.
+
+https://github.com/owncloud/phoenix/issues/1987
+https://github.com/owncloud/phoenix/pull/3336

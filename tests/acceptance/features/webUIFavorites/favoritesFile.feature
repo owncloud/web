@@ -14,33 +14,34 @@ Feature: Mark file as favorite
   Scenario: mark files as favorites
     When the user marks file "data.tar.gz" as favorite using the webUI
     And the user marks file "data.zip" as favorite using the webUI
-    Then file "data.tar.gz" should be marked as favorite on the webUI
-    And file "data.zip" should be marked as favorite on the webUI
-    When the user reloads the current page of the webUI
-    Then file "data.tar.gz" should be marked as favorite on the webUI
+    Then file "data.tar.gz" should be marked as favorite
+    And file "data.tar.gz" should be marked as favorite on the webUI
+    And file "data.zip" should be marked as favorite
     And file "data.zip" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then there should be 2 files/folders listed on the webUI
     And file "data.zip" should be listed on the webUI
-    And file "data.zip" should be marked as favorite on the webUI
     And file "data.tar.gz" should be listed on the webUI
-    And file "data.tar.gz" should be marked as favorite on the webUI
-    And file "lorem.txt" should not be listed on the webUI
 
   Scenario: mark folders as favorites
     When the user marks folder "simple-folder" as favorite using the webUI
     And the user marks folder "strängé नेपाली folder" as favorite using the webUI
-    Then folder "simple-folder" should be marked as favorite on the webUI
-    And folder "strängé नेपाली folder" should be marked as favorite on the webUI
-    When the user reloads the current page of the webUI
-    Then folder "simple-folder" should be marked as favorite on the webUI
+    Then folder "simple-folder" should be marked as favorite
+    And folder "simple-folder" should be marked as favorite on the webUI
+    And folder "strängé नेपाली folder" should be marked as favorite
     And folder "strängé नेपाली folder" should be marked as favorite on the webUI
     When the user browses to the favorites page
-    Then folder "simple-folder" should be listed on the webUI
-    And folder "simple-folder" should be marked as favorite on the webUI
+    Then there should be 2 files/folders listed on the webUI
+    And folder "simple-folder" should be listed on the webUI
     And folder "strängé नेपाली folder" should be listed on the webUI
-    And folder "strängé नेपाली folder" should be marked as favorite on the webUI
-    But folder "simple-folder-empty" should not be listed on the webUI
+
+  Scenario: mark files/folders as favorites using the sidebar
+    When the user marks folder "simple-folder" as favorite using the webUI sidebar
+    And the user marks file "data.zip" as favorite using the webUI sidebar
+    Then folder "simple-folder" should be marked as favorite on the webUI
+    And folder "simple-folder" should be marked as favorite
+    And file "data.zip" should be marked as favorite on the webUI
+    And file "data.zip" should be marked as favorite
 
   Scenario: navigate to an empty favorites page
     When the user browses to the favorites page

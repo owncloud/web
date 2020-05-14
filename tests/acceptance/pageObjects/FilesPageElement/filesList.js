@@ -63,6 +63,24 @@ module.exports = {
       return this
     },
     /**
+     * @param {string} path
+     * @return {Promise<module.exports.commands>}
+     */
+    markFavorite: async function(path) {
+      await this.waitForFileVisible(path)
+      await filesRow.openFileActionsMenu(path).favorite()
+      return this
+    },
+    /**
+     * @param {string} path
+     * @return {Promise<module.exports.commands>}
+     */
+    unmarkFavorite: async function(path) {
+      await this.waitForFileVisible(path)
+      await filesRow.openFileActionsMenu(path).unmarkFavorite()
+      return this
+    },
+    /**
      * @param {string} element
      * @param {string} elementType
      * @return {Promise<module.exports.commands>}
@@ -706,14 +724,6 @@ module.exports = {
     filePreviewLoadedInFileRow: {
       selector:
         '//span[contains(@class, "file-row-name") and (@data-preview-loaded="true" or not(@data-preview-loaded))]',
-      locateStrategy: 'xpath'
-    },
-    notMarkedFavoriteInFileRow: {
-      selector: '//span[contains(@class, "oc-star-dimm")]',
-      locateStrategy: 'xpath'
-    },
-    markedFavoriteInFileRow: {
-      selector: '//span[contains(@class, "oc-star-shining")]',
       locateStrategy: 'xpath'
     },
     collaboratorsInFileRow: {
