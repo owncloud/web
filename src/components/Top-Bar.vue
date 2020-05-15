@@ -1,34 +1,23 @@
 <template>
-  <oc-navbar id="oc-topbar" tag="header" class="oc-topbar uk-position-relative uk-navbar">
-    <oc-navbar-item position="left">
-      <oc-button
-        v-if="hasAppNavigation"
-        key="extension-navigation-button"
-        ref="menubutton"
-        icon="menu"
-        variation="primary"
-        class="oc-topbar-menu-burger uk-height-1-1"
-        :aria-label="$gettext('Menu')"
-        @click="toggleAppNavigationVisibility"
-      >
-        <span v-translate class="oc-topbar-menu-burger-label">Menu</span>
-      </oc-button>
-      <span
-        v-else
-        key="extension-title"
-        class="topbar-current-extension-title uk-margin-left"
-        v-text="currentExtensionName"
-      />
-    </oc-navbar-item>
-    <oc-navbar-item position="center">
-      <router-link to="/" class="oc-topbar-icon">ownCloud X</router-link>
-    </oc-navbar-item>
-    <oc-navbar-item v-if="!isPublicPage" position="right">
+  <header
+    id="oc-topbar"
+    class="uk-flex uk-flex-middle uk-flex-wrap oc-border-bottom uk-padding-small"
+  >
+    <oc-button
+      v-if="!isPublicPage"
+      variation="raw"
+      class="oc-app-navigation-toggle uk-hidden@l"
+      :aria-label="$gettext('Open navigation menu')"
+      @click="toggleAppNavigationVisibility"
+    >
+      <oc-icon name="menu" class="uk-flex" aria-hidden="true" />
+    </oc-button>
+    <oc-grid v-if="!isPublicPage" flex gutter="small" class="uk-width-expand uk-flex-right">
       <notifications v-if="activeNotifications.length" />
-      <applications-menu :applications-list="applicationsList" />
+      <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
       <user-menu :user-id="userId" :user-display-name="userDisplayName" />
-    </oc-navbar-item>
-  </oc-navbar>
+    </oc-grid>
+  </header>
 </template>
 
 <script>
@@ -94,7 +83,6 @@ export default {
 }
 </script>
 
-TODO: Move to ODS and enable theming
 <style scoped>
 .topbar-current-extension-title {
   color: white;

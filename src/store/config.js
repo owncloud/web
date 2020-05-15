@@ -14,6 +14,7 @@ const state = {
   },
   rootFolder: '',
   theme: {
+    name: 'owncloud',
     general: {
       name: '',
       slogan: '',
@@ -34,7 +35,8 @@ const actions = {
   loadConfig(context, config) {
     context.commit('LOAD_CONFIG', config)
   },
-  loadTheme(context, theme) {
+  loadTheme(context, { theme, name }) {
+    theme.name = name
     context.commit('LOAD_THEME', theme)
   }
 }

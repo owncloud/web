@@ -1,13 +1,14 @@
 <template>
-  <div v-if="!!applicationsList.length">
+  <div>
     <oc-button
       id="_appSwitcherButton"
       ref="menubutton"
-      icon="apps"
-      variation="primary"
-      class="oc-topbar-menu-burger uk-height-1-1"
+      variation="raw"
+      class="oc-topbar-menu-burger"
       :aria-label="$gettext('Application Switcher')"
-    />
+    >
+      <oc-icon name="apps" aria-hidden="true" class="uk-flex" />
+    </oc-button>
     <oc-drop
       ref="menu"
       drop-id="app-switcher-dropdown"

@@ -1,0 +1,6 @@
+Change: Permanently visible branded left navigation sidebar
+
+We've made left navigation sidebar permanently visible and moved branding (logo and brand color) into it.
+
+https://github.com/owncloud/phoenix/issues/3395
+https://github.com/owncloud/phoenix/pull/3442
