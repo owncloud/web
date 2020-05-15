@@ -11,6 +11,7 @@ Summary
 * Bugfix - Fix share indicators click to open the correct panel: [#3324](https://github.com/owncloud/phoenix/issues/3324)
 * Bugfix - Set server config to ocis proxy in example config file: [#3454](https://github.com/owncloud/phoenix/pull/3454)
 * Change - Removed favorite button from file list and added it in the sidebar: [#1987](https://github.com/owncloud/phoenix/issues/1987)
+* Change - Permanently visible branded left navigation sidebar: [#3395](https://github.com/owncloud/phoenix/issues/3395)
 
 Details
 -------
@@ -38,6 +39,14 @@ Details
 
    https://github.com/owncloud/phoenix/issues/1987
    https://github.com/owncloud/phoenix/pull/3336
+
+* Change - Permanently visible branded left navigation sidebar: [#3395](https://github.com/owncloud/phoenix/issues/3395)
+
+   We've made left navigation sidebar permanently visible and moved branding (logo and brand
+   color) into it.
+
+   https://github.com/owncloud/phoenix/issues/3395
+   https://github.com/owncloud/phoenix/pull/3442
 
 Changelog for ownCloud Phoenix [0.9.0] (2020-04-27)
 =======================================
