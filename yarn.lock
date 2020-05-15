@@ -5993,7 +5993,7 @@ lodash.memoize@4.1.2:
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
 
-lodash.merge@^4.6.1, lodash.merge@^4.6.2:
+lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
@@ -9793,13 +9793,13 @@ vue@^2.6.10, vue@^2.6.11:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
 
-vuex-persist@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/vuex-persist/-/vuex-persist-2.0.1.tgz#411ef2becc04db3f222779f7c5d2e6615cbdd4ca"
-  integrity sha512-V3WSBYmxcAP6ei0VVt2lxGloeWJZgk1Ao4r+iOxLMhAv+UYIK91qbjwvqk6Xr3tAi052jzSwn8aoamtuz8ArsQ==
+vuex-persist@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/vuex-persist/-/vuex-persist-2.2.0.tgz#4acec75562896b045c43d319690b93d6bc1b2bbc"
+  integrity sha512-o/qbBeMcKZZqMvCXc7kfIew/5cjHxlP1f53rx5YYp3r2tk2kxXYK/UZumxKn7OXywlurl2r0mgkuBzH6nIWFjw==
   dependencies:
     flatted "^2.0.0"
-    lodash.merge "^4.6.1"
+    lodash.merge "^4.6.2"
 
 vuex-router-sync@^5.0.0:
   version "5.0.0"
