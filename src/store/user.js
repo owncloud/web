@@ -29,6 +29,7 @@ const actions = {
   logout(context) {
     const logoutFinalizer = () => {
       context.dispatch('cleanUpLoginState')
+      context.dispatch('loadSettingsValues')
       // force redirect to login page after logout
       router.push({ name: 'login' })
     }
@@ -82,6 +83,7 @@ const actions = {
                   isAuthenticated: true,
                   groups: groups
                 })
+                context.dispatch('loadSettingsValues')
 
                 if (payload.autoRedirect) {
                   router.push({ path: '/' })
