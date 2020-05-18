@@ -1,3 +1,4 @@
+@uploadTest
 Feature: Upload a file
 
   As a user
