@@ -502,7 +502,7 @@ def browserService(alternateSuiteName, browser):
 	if browser == 'chrome':
 		return [{
 			'name': 'selenium',
-			'image': 'selenium/standalone-chrome-debug:3.141.59-20200326',
+			'image': 'selenium/standalone-chrome-debug:3.141.59-zinc',
 			'pull': 'always',
 			'volumes': [{
 				'name': 'uploads',
