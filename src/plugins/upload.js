@@ -35,6 +35,9 @@ export default {
 
               onError: error => {
                 console.error(`Error uploading file "${file}" to "${path}"`, error)
+                // TODO: parse actual error message from body instead of using the default TUS one
+                // and set it on "error.message"
+                // should we generate error messages from the client for known status codes ?
                 reject(error)
               },
 
@@ -44,6 +47,15 @@ export default {
 
               onSuccess: () => {
                 resolve(`File ${upload.file.name} was successfully uploaded`)
+              },
+
+              onShouldRetry: err => {
+                const status = err.originalResponse ? err.originalResponse.getStatus() : 0
+                // don't retry on: "forbidden", "conflict", "precondition failed" and "locked"
+                if (status === 403 || status === 409 || status === 412 || status === 423) {
+                  return false
+                }
+                return true
               }
             })
 
