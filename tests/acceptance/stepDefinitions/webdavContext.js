@@ -17,12 +17,12 @@ const path = require('../helpers/path')
  */
 function fileExists(userId, element) {
   const davPath = webdavHelper.createDavPath(userId, element)
-  return httpHelper.get(davPath, userId)
+  return httpHelper.propfind(davPath, userId)
 }
 
 const fileShouldExist = function(userId, element) {
   return fileExists(userId, element).then(function(res) {
-    assert.strictEqual(res.status, 200, 'File should exist, but does not')
+    assert.strictEqual(res.status, 207, 'File should exist, but does not')
   })
 }
 

@@ -16,7 +16,7 @@ Feature: File Upload
     And file "new-lorem.txt" should be listed on the webUI
     And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
-  @smokeTest @skipOnOCIS @ocis-reva-issue-106
+  @smokeTest @skipOnOCIS @issue-phoenix-3458
   Scenario: simple upload of a folder that does not exist before
     When the user uploads a folder containing the following files in separate sub-folders using the webUI:
       | lorem.txt     |
@@ -28,7 +28,7 @@ Feature: File Upload
       | new-lorem.txt                |
       | lorem.txt                    |
 
-  @smokeTest @skipOnOCIS @ocis-reva-issue-106
+  @smokeTest
   Scenario: simple upload of a folder that does not exist before
     When the user uploads folder "PARENT" using the webUI
     Then no message should be displayed on the webUI
@@ -42,7 +42,7 @@ Feature: File Upload
     And as "user1" file "PARENT/parent.txt" should exist
     And as "user1" folder "PARENT/CHILD" should exist
 
-  @smokeTest @skipOnOCIS @ocis-reva-issue-106
+  @smokeTest
   Scenario: Upload of a folder inside a subdirectory
     When the user browses to the folder "simple-empty-folder" on the files page
     And the user uploads folder "PARENT" using the webUI
