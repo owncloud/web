@@ -15,7 +15,7 @@ Feature: File Upload
     And file "new-lorem.txt" should be listed on the webUI
     And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
-  @smokeTest @skipOnOCIS @issue-phoenix-3458
+  @smokeTest
   Scenario: simple upload of a folder that does not exist before
     When the user uploads a folder containing the following files in separate sub-folders using the webUI:
       | lorem.txt     |
