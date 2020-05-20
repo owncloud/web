@@ -114,7 +114,7 @@ exports.createUser = async function(
   return exports
     .createEntry(ldapClient, `uid=${user},${USERS_OU}`, {
       cn: user,
-      sn: user,
+      sn: displayName,
       objectclass: ['posixAccount', 'inetOrgPerson'],
       homeDirectory: `/home/openldap/${user}`,
       userPassword: password,

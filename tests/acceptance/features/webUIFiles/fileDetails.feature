@@ -112,7 +112,7 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "links" tab in details panel using the webUI
     Then the "links" details panel should be visible
 
-  @skipOnOCIS @ocis-phoenix-issue-50
+  @ocis-reva-issue-106
   Scenario: without any share the shared-with-others page should be empty
     When the user browses to the shared-with-others page using the webUI
     Then there should be no resources listed on the webUI
