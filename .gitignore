@@ -31,3 +31,4 @@ dist
 .envrc
 
 tests/reports
+tests/acceptance/filesForUpload
