@@ -110,6 +110,7 @@ config = {
 				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
 			},
 			'runningOnOCIS': True,
+			'screenShots': True,
 			'filterTags': 'not @skip and not @skipOnOCIS',
 		}
 	},
@@ -1104,6 +1105,30 @@ def konnectdService(glauth = False):
 		}],
 	}]
 
+def buildOcisProxy():
+	return[{
+		'name': 'build-ocis-proxy',
+		'image': 'webhippie/golang:1.13',
+		'pull': 'always',
+		'commands': [
+			'mkdir -p /srv/app/src',
+			'cd $GOPATH/src',
+			'mkdir -p github.com/owncloud/',
+			'cd github.com/owncloud/',
+			'git clone http://github.com/owncloud/ocis-proxy.git',
+			'cd ocis-proxy',
+			'make build',
+			'cp bin/ocis-proxy /var/www/owncloud'
+		],
+		'volumes': [{
+			'name': 'gopath',
+			'path': '/srv/app',
+		}, {
+			'name': 'configs',
+			'path': '/srv/config'
+		}],
+	}]
+
 def buildOcisPhoenix():
 	return[{
 		'name': 'build-ocis-phoenix',
@@ -1174,6 +1199,22 @@ def buildReva():
 			'name': 'configs',
 			'path': '/srv/config'
 		}],
+	}]
+
+def proxyService():
+	return[{
+		'name': 'ocis',
+		'image': 'webhippie/golang:1.13',
+		'detach': True,
+		'commands': [
+			'cd /var/www/owncloud',
+			'./ocis-proxy server',
+		],
+		'volumes': [{
+			'name': 'gopath',
+			'path': '/srv/app',
+		}],
+		'pull': 'always',
 	}]
 
 def revaService():
@@ -1382,14 +1423,6 @@ def ldapService():
 			'LDAP_TLS_VERIFY_CLIENT': 'never',
 			'HOSTNAME': 'ldap'
 		},
-	}]
-
-def proxyService():
-	return[{
-		'name': 'ocis',
-		'image': 'owncloud/ocis-proxy',
-		'detach': True,
-		'pull': 'always',
 	}]
 
 def redisService():
