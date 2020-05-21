@@ -10,7 +10,10 @@ clients:
     redirect_uris:
       - http://phoenix:9100/oidc-callback.html
       - http://phoenix:9100/
+      - https://ocis:9200/oidc-callback.html
+      - https://ocis:9200/
     origins:
       -  http://phoenix:9100
+      -  https://ocis:9200
 
 authorities:
