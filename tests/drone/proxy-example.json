@@ -1,0 +1,55 @@
+{
+  "HTTP": {
+    "Namespace": "com.owncloud"
+  },
+  "policy_selector": {
+    "static": {"policy" : "reva"}
+  },
+  "policies": [
+    {
+      "name": "reva",
+      "routes": [
+        {
+          "endpoint": "/",
+          "backend": "http://phoenix:9100"
+        },
+        {
+          "endpoint": "/.well-known/",
+          "backend": "http://konnectd:9130"
+        },
+        {
+          "endpoint": "/konnect/",
+          "backend": "http://konnectd:9130"
+        },
+        {
+          "endpoint": "/signin/",
+          "backend": "http://konnectd:9130"
+        },
+        {
+          "endpoint": "/ocs/",
+          "backend": "http://reva:9140"
+        },
+        {
+          "endpoint": "/remote.php/",
+          "backend": "http://reva:9140"
+        },
+        {
+          "endpoint": "/dav/",
+          "backend": "http://reva:9140"
+        },
+        {
+          "endpoint": "/webdav/",
+          "backend": "http://reva:9140"
+        },
+        {
+          "endpoint": "/status.php",
+          "backend": "http://reva:9140"
+        },
+        {
+          "endpoint": "/index.php/",
+          "backend": "http://reva:9140"
+        }
+      ]
+    }
+  ]
+}

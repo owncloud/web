@@ -83,31 +83,31 @@ config = {
 		# },
 		'webUI-ocis': {
 			'suites': {
-				'webUIOCIS1': [
-					'webUICreateFilesFolders',
-					'webUIDeleteFilesFolders',
-					'webUIFavorites',
-					'webUIFiles',
-					'webUILogin',
-					'webUINotifications',
-				],
+				# 'webUIOCIS1': [
+				# 	'webUICreateFilesFolders',
+				# 	'webUIDeleteFilesFolders',
+				# 	'webUIFavorites',
+				# 	'webUIFiles',
+				# 	'webUILogin',
+				# 	'webUINotifications',
+				# ],
 				'webUIOCIS2': [
-					'webUIPrivateLinks',
-					'webUIRenameFiles',
-					'webUIRenameFolders',
-					'webUITrashbin',
-					'webUIUpload',
+				# 	'webUIPrivateLinks',
+				# 	'webUIRenameFiles',
+				# 	'webUIRenameFolders',
+				# 	'webUITrashbin',
+				# 	'webUIUpload',
 					'webUIAccount'
 				]
 			},
 			'extraEnvironment': {
-				'SERVER_HOST': 'http://ocis:9200',
+				'SERVER_HOST': 'https://ocis:9200',
 				'BACKEND_HOST': 'http://reva:9140',
 				'RUN_ON_OCIS': 'true',
 				'OCIS_SKELETON_DIR': '/var/www/owncloud/server/apps/testing/data/webUISkeleton',
 				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
 				'LDAP_SERVER_URL': 'ldap://ldap',
-				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json',
 			},
 			'runningOnOCIS': True,
 			'screenShots': True,
@@ -427,6 +427,7 @@ def acceptance():
 									) if not params['runningOnOCIS'] else (
 										buildKonnectd() +
 										buildOcisPhoenix() +
+										buildOcisProxy() +
 										buildReva() +
 										konnectdService() +
 										revaService() +
@@ -1081,8 +1082,8 @@ def konnectdService(glauth = False):
 			'LDAP_BINDDN': 'cn=admin,ou=users,dc=example,dc=com' if glauth else 'cn=admin,dc=owncloud,dc=com',
 			'LDAP_URI': 'ldap://glauth:9125' if glauth else 'ldap://ldap:389',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
-			'KONNECTD_ISS': 'https://konnectd:9130',
-			'KONNECTD_TLS': 'true',
+			'KONNECTD_ISS': 'https://ocis:9200',
+			# 'KONNECTD_TLS': 'true',
 			'LDAP_BINDPW': 'admin',
 			'LDAP_SCOPE': 'sub',
 			'LDAP_LOGIN_ATTRIBUTE': 'uid',
@@ -1206,13 +1207,19 @@ def proxyService():
 		'name': 'ocis',
 		'image': 'webhippie/golang:1.13',
 		'detach': True,
+		'environment': {
+			'PROXY_CONFIG_FILE': '/srv/config/drone/proxy-example.json',
+		},
 		'commands': [
 			'cd /var/www/owncloud',
-			'./ocis-proxy server',
+			'./ocis-proxy --log-level debug server',
 		],
 		'volumes': [{
 			'name': 'gopath',
 			'path': '/srv/app',
+		}, {
+			'name': 'configs',
+			'path': '/srv/config'
 		}],
 		'pull': 'always',
 	}]
@@ -1230,7 +1237,7 @@ def revaService():
 			'REVA_STORAGE_OC_DATA_TEMP_FOLDER': '/srv/app/tmp/',
 			'REVA_STORAGE_OC_DATA_URL': 'reva:9164',
 			'REVA_STORAGE_OC_DATA_SERVER_URL': 'http://reva:9164/data',
-			'REVA_OIDC_ISSUER': 'https://konnectd:9130',
+			'REVA_OIDC_ISSUER': 'https://ocis:9200',
 			'REVA_USERS_DRIVER': 'ldap',
 			'REVA_LDAP_HOSTNAME': 'ldap',
 			'REVA_STORAGE_HOME_EXPOSE_DATA_SERVER': '1',
@@ -1399,7 +1406,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 		'environment': environment,
 		'commands': [
 			'cd /var/www/owncloud/phoenix',
-			'timeout 60 bash -c \'while [[ "$(curl -s -o /dev/null -w \'\'%{http_code}\'\' http://phoenix:9100/oidc-callback.html)" != "200" ]]; do sleep 5; done\'',
+			# 'timeout 60 bash -c \'while [[ "$(curl -s -o /dev/null -w \'\'%{http_code}\'\' https://ocis:9200/oidc-callback.html)" != "200" ]]; do sleep 5; done\'',
 			'yarn run acceptance-tests-drone',
 		],
 		'volumes': [{
