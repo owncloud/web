@@ -3,21 +3,32 @@ const state = {
 }
 
 const actions = {
-  async loadSettingsValues({ commit }) {
-    commit('CLEAR_SETTINGS_VALUES')
-    const values = await this._vm.$client.settings.getSettingsValues()
-    commit('SET_SETTINGS_VALUES', values)
+  async loadSettingsValues({ commit, state, dispatch }) {
+    const oldSettingsValues = state.settingsValues
+    commit('SET_SETTINGS_VALUES', null)
+    try {
+      const values = await this._vm.$client.settings.getSettingsValues()
+      commit('SET_SETTINGS_VALUES', values)
+    } catch (error) {
+      commit('SET_SETTINGS_VALUES', oldSettingsValues)
+      dispatch('showMessage', {
+        title: 'Failed to load settings values.',
+        desc: error.response.statusText,
+        status: 'danger'
+      })
+    }
   }
 }
 
 const mutations = {
-  CLEAR_SETTINGS_VALUES(state) {
-    state.settingsValues = null
-  },
   SET_SETTINGS_VALUES(state, settingsValues) {
-    const map = new Map()
-    Array.from(settingsValues).forEach(value => applySettingsValueToMap(value, map))
-    state.settingsValues = map
+    if (settingsValues === null) {
+      state.settingsValues = null
+    } else {
+      const map = new Map()
+      Array.from(settingsValues).forEach(value => applySettingsValueToMap(value, map))
+      state.settingsValues = map
+    }
   },
   SET_SETTINGS_VALUE(state, settingsValue) {
     const map = new Map(state.settingsValues)
