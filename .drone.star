@@ -83,7 +83,22 @@ config = {
 		},
 		'webUI-ocis': {
 			'suites': {
-				'all': 'webUIOCIS'
+				'webUIOCIS1': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				]
 			},
 			'extraEnvironment': {
 				'SERVER_HOST': 'http://phoenix:9100',
@@ -347,7 +362,16 @@ def acceptance():
 		else:
 			suites = matrix['suites']
 
-		for suite, alternateSuiteName in suites.items():
+		for key, value in suites.items():
+
+			if type(value) == "list":
+				suite = value
+				suiteName = key
+				alternateSuiteName = key
+			else:
+				suite = key
+				alternateSuiteName = value
+				suiteName = value
 
 			params = {}
 			for item in default:
@@ -363,7 +387,7 @@ def acceptance():
 							errorFound = True
 
 						browserString = '' if browser == '' else '-' + browser
-						name = '%s%s' % (alternateSuiteName, browserString)
+						name = '%s%s' % (suiteName, browserString)
 						maxLength = 50
 						nameLength = len(name)
 						if nameLength > maxLength:
@@ -412,7 +436,7 @@ def acceptance():
 								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
 								(
 									uploadScreenshots() +
-									buildGithubComment(suite, alternateSuiteName) +
+									buildGithubComment(suiteName, alternateSuiteName) +
 									githubComment()
 								if isLocalBrowser(browser) and params['screenShots'] else []),
 							'services':
@@ -1301,7 +1325,12 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 		environment['TEST_TAGS'] = filterTags
 	if isLocalBrowser(browser):
 		environment['LOCAL_UPLOAD_DIR'] = '/uploads'
-		if (suite != 'all'):
+		if type(suite) == "list":
+			paths = ""
+			for path in suite:
+				paths = paths + "tests/acceptance/features/" + path + " "
+			environment['TEST_PATHS'] = paths
+		elif (suite != 'all'):
 			environment['TEST_CONTEXT'] = suite
 	else:
 		environment['TEST_CONTEXT'] = suite
