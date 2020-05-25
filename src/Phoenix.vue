@@ -187,10 +187,12 @@ export default {
     },
     selectedLanguage: {
       handler(language) {
-        if (language !== null) {
-          this.$language.current = language.listValue.values[0].stringValue
-        } else if (this.$language.defaultLanguage) {
-          this.$language.current = this.$language.defaultLanguage
+        let languageCode = this.$language.defaultLanguage
+        if (language !== null && language.listValue.values.length > 0) {
+          languageCode = language.listValue.values[0].stringValue
+        }
+        if (languageCode) {
+          this.$language.current = languageCode
         }
       },
       immediate: true
