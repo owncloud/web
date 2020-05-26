@@ -14,89 +14,89 @@ config = {
 	'yarnlint': True,
 
 	'acceptance': {
-		# 'webUI': {
-		# 	'suites': {
-		# 		'webUICreateFilesFolders': 'createFilesFolders',
-		# 		'webUIDeleteFilesFolders': 'deleteFilesFolders',
-		# 		'webUIFavorites': 'Favorites',
-		# 		'webUIFiles': 'Files',
-		# 		'webUILogin': 'Login',
-		# 		'webUINotifications': 'Notifications',
-		# 		'webUIPrivateLinks': 'PrivateLinks',
-		# 		'webUIRenameFiles': 'RenameFiles',
-		# 		'webUIRenameFolders': 'RenameFolders',
-		# 		'webUIRestrictSharing': 'RestrictSharing',
-		# 		'webUISharingAutocompletion': 'SharingAutocompletion',
-		# 		'webUISharingInternalGroups': 'SharingInternalGroups',
-		# 		'webUISharingInternalUsers': 'SharingInternalUsers',
-		# 		'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-		# 		'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-		# 		'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-		# 		'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
-		# 		'webUIResharing': 'Resharing',
-		# 		'webUISharingPublic': 'SharingPublic',
-		# 		'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
-		# 		'webUITrashbin': 'Trashbin',
-		# 		'webUIUpload': 'Upload',
-		# 		'webUISharingAcceptShares': 'SharingAcceptShares',
-		# 		'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
-		# 		'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
-		# 		'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-		# 		'webUISharingNotifications': 'SharingNotifications',
-		# 		'webUIAccount': 'Account'
-		# 	},
-		# 	'extraEnvironment': {
-		# 		'OPENID_LOGIN': 'true',
-		# 		'PHOENIX_CONFIG': '/srv/config/drone/config.json'
-		# 	}
-		# },
-		# 'webUIFederation': {
-		# 	'suites': {
-		# 		'webUISharingExternal': 'SharingExternal',
-		# 	},
-		# 	'extraEnvironment': {
-		# 		'OPENID_LOGIN': 'true',
-		# 		'REMOTE_BACKEND_HOST': 'http://federated'
-		# 	},
-		# 	'federatedServerNeeded': True,
-		# 	'federatedServerVersion': 'daily-master-qa'
-		# },
-		# 'webUI-XGA': {
-		# 	'suites': {
-		# 		'all': 'XGAPortrait',
-		# 	},
-		# 	'extraEnvironment': {
-		# 		'OPENID_LOGIN': 'true',
-		# 		'SCREEN_RESOLUTION': '768x1024'
-		# 	},
-		# 	'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
-		# },
-		# 'webUI-iPhone': {
-		# 	'suites': {
-		# 		'all': 'iPhone',
-		# 	},
-		# 	'extraEnvironment': {
-		# 		'OPENID_LOGIN': 'true',
-		# 		'SCREEN_RESOLUTION': '375x812'
-		# 	},
-		# 	'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and @skipOnOC10'
-		# },
+		'webUI': {
+			'suites': {
+				'webUICreateFilesFolders': 'createFilesFolders',
+				'webUIDeleteFilesFolders': 'deleteFilesFolders',
+				'webUIFavorites': 'Favorites',
+				'webUIFiles': 'Files',
+				'webUILogin': 'Login',
+				'webUINotifications': 'Notifications',
+				'webUIPrivateLinks': 'PrivateLinks',
+				'webUIRenameFiles': 'RenameFiles',
+				'webUIRenameFolders': 'RenameFolders',
+				'webUIRestrictSharing': 'RestrictSharing',
+				'webUISharingAutocompletion': 'SharingAutocompletion',
+				'webUISharingInternalGroups': 'SharingInternalGroups',
+				'webUISharingInternalUsers': 'SharingInternalUsers',
+				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
+				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
+				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
+				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
+				'webUIResharing': 'Resharing',
+				'webUISharingPublic': 'SharingPublic',
+				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
+				'webUITrashbin': 'Trashbin',
+				'webUIUpload': 'Upload',
+				'webUISharingAcceptShares': 'SharingAcceptShares',
+				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
+				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
+				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
+				'webUISharingNotifications': 'SharingNotifications',
+				'webUIAccount': 'Account'
+			},
+			'extraEnvironment': {
+				'OPENID_LOGIN': 'true',
+				'PHOENIX_CONFIG': '/srv/config/drone/config.json'
+			}
+		},
+		'webUIFederation': {
+			'suites': {
+				'webUISharingExternal': 'SharingExternal',
+			},
+			'extraEnvironment': {
+				'OPENID_LOGIN': 'true',
+				'REMOTE_BACKEND_HOST': 'http://federated'
+			},
+			'federatedServerNeeded': True,
+			'federatedServerVersion': 'daily-master-qa'
+		},
+		'webUI-XGA': {
+			'suites': {
+				'all': 'XGAPortrait',
+			},
+			'extraEnvironment': {
+				'OPENID_LOGIN': 'true',
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
+		},
+		'webUI-iPhone': {
+			'suites': {
+				'all': 'iPhone',
+			},
+			'extraEnvironment': {
+				'OPENID_LOGIN': 'true',
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and @skipOnOC10'
+		},
 		'webUI-ocis': {
 			'suites': {
-				# 'webUIOCIS1': [
-				# 	'webUICreateFilesFolders',
-				# 	'webUIDeleteFilesFolders',
-				# 	'webUIFavorites',
-				# 	'webUIFiles',
-				# 	'webUILogin',
-				# 	'webUINotifications',
-				# ],
+				'webUIOCIS1': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
 				'webUIOCIS2': [
-				# 	'webUIPrivateLinks',
-				# 	'webUIRenameFiles',
-				# 	'webUIRenameFolders',
-				# 	'webUITrashbin',
-				# 	'webUIUpload',
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
 					'webUIAccount'
 				]
 			},
@@ -1083,7 +1083,6 @@ def konnectdService(glauth = False):
 			'LDAP_URI': 'ldap://glauth:9125' if glauth else 'ldap://ldap:389',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
 			'KONNECTD_ISS': 'https://ocis:9200',
-			# 'KONNECTD_TLS': 'true',
 			'LDAP_BINDPW': 'admin',
 			'LDAP_SCOPE': 'sub',
 			'LDAP_LOGIN_ATTRIBUTE': 'uid',
@@ -1406,7 +1405,6 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 		'environment': environment,
 		'commands': [
 			'cd /var/www/owncloud/phoenix',
-			# 'timeout 60 bash -c \'while [[ "$(curl -s -o /dev/null -w \'\'%{http_code}\'\' https://ocis:9200/oidc-callback.html)" != "200" ]]; do sleep 5; done\'',
 			'yarn run acceptance-tests-drone',
 		],
 		'volumes': [{
