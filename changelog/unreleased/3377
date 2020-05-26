@@ -1,0 +1,9 @@
+Enhancement: Send mtime with uploads
+
+When uploading a file, the modification time is now sent along.
+This means that the uploaded file will have the same modification time
+like the one it had on disk.
+This aligns the behavior with the desktop client which also keeps the mtime.
+
+https://github.com/owncloud/phoenix/issues/2969
+https://github.com/owncloud/phoenix/pull/3377
