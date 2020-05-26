@@ -38,6 +38,10 @@
           "backend": "http://reva:9140"
         },
         {
+          "endpoint": "/data/",
+          "backend": "http://reva:9140"
+        },
+        {
           "endpoint": "/webdav/",
           "backend": "http://reva:9140"
         },
