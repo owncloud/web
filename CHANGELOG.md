@@ -1,3 +1,27 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.10.0...master
+
+Summary
+-------
+
+* Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
+
+Details
+-------
+
+* Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
+
+   When uploading a file, the modification time is now sent along. This means that the uploaded
+   file will have the same modification time like the one it had on disk. This aligns the behavior
+   with the desktop client which also keeps the mtime.
+
+   https://github.com/owncloud/phoenix/issues/2969
+   https://github.com/owncloud/phoenix/pull/3377
+
 Changelog for ownCloud Phoenix [0.10.0] (2020-05-26)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.10.0 relevant to
