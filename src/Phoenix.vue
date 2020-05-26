@@ -64,7 +64,8 @@ export default {
       'activeNotifications',
       'activeMessages',
       'capabilities',
-      'apps'
+      'apps',
+      'getSettingsValueByIdentifier'
     ]),
     $_applicationsList() {
       const list = []
@@ -154,6 +155,14 @@ export default {
       }
 
       return 'fade'
+    },
+
+    selectedLanguage() {
+      return this.getSettingsValueByIdentifier({
+        extension: 'ocis-accounts',
+        bundleKey: 'profile',
+        settingKey: 'language'
+      })
     }
   },
   watch: {
@@ -175,6 +184,18 @@ export default {
           this.$_updateNotifications()
         }, 30000)
       }
+    },
+    selectedLanguage: {
+      handler(language) {
+        let languageCode = this.$language.defaultLanguage
+        if (language !== null && language.listValue.values.length > 0) {
+          languageCode = language.listValue.values[0].stringValue
+        }
+        if (languageCode) {
+          this.$language.current = languageCode
+        }
+      },
+      immediate: true
     }
   },
 

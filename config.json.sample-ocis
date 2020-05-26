@@ -15,5 +15,11 @@
     "pdf-viewer",
     "markdown-editor",
     "media-viewer"
+  ],
+  "external_apps": [
+    {
+      "id": "settings",
+      "path": "http://localhost:9190/settings.js"
+    }
   ]
 }

@@ -1,0 +1,5 @@
+Change: Use language setting
+
+We've changed phoenix to make use of the language the authenticated user has chosen in the settings.
+
+https://github.com/owncloud/phoenix/pull/3484

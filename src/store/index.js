@@ -9,6 +9,7 @@ import apps from './apps'
 import config from './config'
 import user from './user'
 import router from './router'
+import settings from './settings'
 
 Vue.use(Vuex)
 
@@ -34,7 +35,8 @@ export const Store = new Vuex.Store({
     apps,
     user,
     config,
-    router
+    router,
+    settings
   },
   strict
 })
