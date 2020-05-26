@@ -71,7 +71,7 @@ exports.move = function(userId, fromName, toName) {
  * @param {array} properties
  * @param {number} folderDepth
  */
-exports.propfind = function(path, userId, properties, folderDepth = 1) {
+exports.propfind = function(path, userId, properties, folderDepth = '1') {
   const davPath = encodeURI(path)
   let propertyBody = ''
   properties.map(prop => {

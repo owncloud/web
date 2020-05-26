@@ -69,7 +69,12 @@ Then(
     files = files.raw().map(item => item[0])
 
     const sessionId = client.sessionId
-    const response = await webdavHelper.propfind(`/files/${user}/${sessionId}`, user, [], 2)
+    const response = await webdavHelper.propfind(
+      `/files/${user}/${sessionId}`,
+      user,
+      [],
+      'infinity'
+    )
     const result = xml2js(response, { compact: true })
 
     const elements = _.get(result, 'd:multistatus.d:response')
