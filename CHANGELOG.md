@@ -11,6 +11,8 @@ Summary
 * Bugfix - Fix share indicators click to open the correct panel: [#3324](https://github.com/owncloud/phoenix/issues/3324)
 * Bugfix - Set server config to ocis proxy in example config file: [#3454](https://github.com/owncloud/phoenix/pull/3454)
 * Change - Removed favorite button from file list and added it in the sidebar: [#1987](https://github.com/owncloud/phoenix/issues/1987)
+* Change - Make settings available in phoenix: [#3484](https://github.com/owncloud/phoenix/pull/3484)
+* Change - Use language setting: [#3484](https://github.com/owncloud/phoenix/pull/3484)
 * Change - Permanently visible branded left navigation sidebar: [#3395](https://github.com/owncloud/phoenix/issues/3395)
 
 Details
@@ -39,6 +41,21 @@ Details
 
    https://github.com/owncloud/phoenix/issues/1987
    https://github.com/owncloud/phoenix/pull/3336
+
+* Change - Make settings available in phoenix: [#3484](https://github.com/owncloud/phoenix/pull/3484)
+
+   We upgraded to a new owncloud-sdk version which provides loading settings from the settings
+   service, if available. The settings values are available throughout phoenix and all
+   extensions.
+
+   https://github.com/owncloud/phoenix/pull/3484
+
+* Change - Use language setting: [#3484](https://github.com/owncloud/phoenix/pull/3484)
+
+   We've changed phoenix to make use of the language the authenticated user has chosen in the
+   settings.
+
+   https://github.com/owncloud/phoenix/pull/3484
 
 * Change - Permanently visible branded left navigation sidebar: [#3395](https://github.com/owncloud/phoenix/issues/3395)
 
