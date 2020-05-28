@@ -39,7 +39,7 @@
         },
         {
           "endpoint": "/data/",
-          "backend": "http://reva:9140"
+          "backend": "http://reva:9164"
         },
         {
           "endpoint": "/webdav/",
