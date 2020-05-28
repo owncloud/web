@@ -1247,6 +1247,8 @@ def revaService():
 			'REVA_LDAP_BIND_DN': 'cn=admin,dc=owncloud,dc=com',
 			'REVA_LDAP_BIND_PASSWORD': 'admin',
 			'REVA_LDAP_BASE_DN': 'dc=owncloud,dc=com',
+			'REVA_LOG_PRETTY': 'true',
+			'REVA_LOG_COLOR': 'true',
 		},
 		'commands': [
 			'mkdir -p $REVA_STORAGE_HOME_DATA_TEMP_FOLDER',
