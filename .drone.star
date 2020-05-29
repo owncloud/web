@@ -102,7 +102,7 @@ config = {
 			},
 			'extraEnvironment': {
 				'SERVER_HOST': 'https://ocis:9200',
-				'BACKEND_HOST': 'http://reva:9140',
+				'BACKEND_HOST': 'https://ocis:9200',
 				'RUN_ON_OCIS': 'true',
 				'OCIS_SKELETON_DIR': '/var/www/owncloud/server/apps/testing/data/webUISkeleton',
 				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
