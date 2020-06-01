@@ -261,6 +261,7 @@ module.exports = {
           .waitForElementNotVisible('@newFolderButton')
           .click('@dialogConfirmBtn')
           .waitForElementNotPresent('@dialog')
+          .waitForAjaxCallsToStartAndFinish()
       )
     },
     triesToCreateExistingFile: function(fileName) {
