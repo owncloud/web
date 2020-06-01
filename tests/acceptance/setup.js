@@ -18,6 +18,8 @@ setDefaultTimeout(CUCUMBER_TIMEOUT)
 let env = RUNNING_ON_CI ? 'drone' : 'local'
 env = RUNNING_ON_SAUCELABS ? 'saucelabs' : env
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 defineParameterType({
   name: 'code',
   regexp: /"([^"\\]*(\\.[^"\\]*)*)"|'([^'\\]*(\\.[^'\\]*)*)'/,
