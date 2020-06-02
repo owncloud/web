@@ -10,12 +10,7 @@
         variation="raw"
         @click="indicator.handler(item, indicator.id)"
       >
-        <oc-icon
-          :name="indicator.icon"
-          class="uk-text-middle"
-          size="small"
-          :variation="indicator.status"
-        />
+        <oc-icon :name="indicator.icon" class="uk-text-middle" size="small" variation="system" />
       </oc-button>
     </div>
     <template v-if="customIndicators">
