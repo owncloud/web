@@ -69,8 +69,7 @@ export default {
       upload: false,
       fileName: '',
       selected: [],
-      breadcrumbs: [],
-      self: {}
+      breadcrumbs: []
     }
   },
   computed: {

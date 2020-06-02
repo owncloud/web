@@ -1,0 +1,5 @@
+Bugfix: Add missing question mark to delete confirmation dialog in trashbin
+
+We've added missing question mark to the delete confirmation dialog inside of the trashbin.
+
+https://github.com/owncloud/phoenix/pull/3566
