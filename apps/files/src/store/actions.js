@@ -911,27 +911,6 @@ export default {
   dragOver(context, value) {
     context.commit('DRAG_OVER', value)
   },
-  setTrashbinDeleteMessage(context, message) {
-    context.commit('SET_TRASHBIN_DELETE_CONFIRMATION', message)
-  },
-  promptFileRename(context, item) {
-    context.commit('PROMPT_FILE_RENAME', item)
-  },
-  closePromptFileRename(context) {
-    context.commit('CLOSE_PROMPT_FILE_RENAME')
-  },
-  promptFileDelete(context, { message, items }) {
-    context.commit('PROMPT_FILE_DELETE', { message, items })
-  },
-  closePromptFileDelete(context) {
-    context.commit('CLOSE_PROMPT_FILE_DELETE')
-  },
-  setOverwriteDialogTitle(context, title) {
-    context.commit('SET_OVERWRITE_DIALOG_TITLE', title)
-  },
-  setOverwriteDialogMessage(context, message) {
-    context.commit('SET_OVERWRITE_DIALOG_MESSAGE', message)
-  },
   setHighlightedFile(context, file) {
     context.commit('SET_HIGHLIGHTED_FILE', file)
   },
@@ -1012,5 +991,13 @@ export default {
 
   removeActionFromProgress({ commit }, item) {
     commit('REMOVE_ACTION_FROM_PROGRESS', item)
+  },
+
+  pushResourcesToDeleteList({ commit }, resources) {
+    commit('PUSH_RESOURCES_TO_DELETE_LIST', resources)
+  },
+
+  clearResourcesToDeleteList({ commit }) {
+    commit('CLEAR_RESOURCES_TO_DELETE_LIST')
   }
 }

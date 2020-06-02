@@ -72,20 +72,20 @@ module.exports = {
      * @param {boolean} expectToSucceed
      * @return {*}
      */
-    rename: async function(toName, expectToSucceed = true) {
-      await this.initAjaxCounters()
+    rename: function(toName, expectToSucceed = true) {
+      this.initAjaxCounters()
         .useXpath()
         .performFileAction(this.FileAction.rename)
-        .waitForElementVisible('@renameFileConfirmationBtn')
+        .waitForElementVisible('@dialog')
         .waitForAnimationToFinish()
-        .clearValue('@renameFileInputField')
-        .setValue('@renameFileInputField', toName)
-        .click('@renameFileConfirmationBtn')
+        .clearValue('@dialogInput')
+        .setValue('@dialogInput', toName)
+        .click('@dialogConfirmBtn')
         .waitForOutstandingAjaxCalls()
         .useCss()
 
       if (expectToSucceed) {
-        await this.waitForElementNotVisible('@renameFileConfirmationDialog')
+        this.waitForElementNotPresent('@dialog')
       }
 
       return this
@@ -194,19 +194,9 @@ module.exports = {
       selector: '//button[@aria-label="Restore"]',
       locateStrategy: 'xpath'
     },
-    renameFileConfirmationDialog: {
-      selector: '#change-file-dialog'
-    },
     renameButtonInFileRow: {
       selector: '//button[@aria-label="Rename"]',
       locateStrategy: 'xpath'
-    },
-    renameFileInputField: {
-      selector: '//div[@id="change-file-dialog"]//input',
-      locateStrategy: 'xpath'
-    },
-    renameFileConfirmationBtn: {
-      selector: '#oc-dialog-rename-confirm'
     },
     shareButtonInFileRow: {
       selector: '//button[@aria-label="Collaborators"]',
@@ -215,6 +205,16 @@ module.exports = {
     deleteImmediatelyButtonInFileRow: {
       selector: '//button[@aria-label="Delete"]',
       locateStrategy: 'xpath'
+    },
+    // TODO: Merge with selectors in filesPage
+    dialog: {
+      selector: '.oc-modal'
+    },
+    dialogConfirmBtn: {
+      selector: '.oc-modal-body-actions-confirm'
+    },
+    dialogInput: {
+      selector: '.oc-modal-body-input > input'
     }
   }
 }

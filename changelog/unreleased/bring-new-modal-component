@@ -1,0 +1,6 @@
+Change: Bring new modal component
+
+We've updated our modal component with a new one coming from ODS.
+
+https://github.com/owncloud/phoenix/issues/2263
+https://github.com/owncloud/phoenix/pull/3378

@@ -21,7 +21,7 @@ export default {
   fileSortField: state => state.fileSortField,
   fileSortDirectionDesc: state => state.fileSortDirectionDesc,
   // a flat file list has no current folder nor parent
-  flatFileList: state => !!state.currentFolder,
+  flatFileList: state => !!state.currentFolder === false,
   searchTerm: state => {
     return state.searchTermGlobal
   },
@@ -84,18 +84,6 @@ export default {
   quota: state => {
     return state.quota
   },
-  trashbinDeleteMessage: state => {
-    return state.trashbinDeleteMessage
-  },
-  deleteDialogMessage: state => {
-    return state.deleteDialogMessage
-  },
-  overwriteDialogTitle: state => {
-    return state.overwriteDialogTitle
-  },
-  overwriteDialogMessage: state => {
-    return state.overwriteDialogMessage
-  },
   highlightedFile: state => {
     return state.highlightedFile
   },
@@ -103,15 +91,5 @@ export default {
     return state.publicLinkPassword
   },
   uploaded: state => state.uploaded,
-  renameDialogOpen: state => state.renameDialogOpen,
-  renameDialogNewName: state => state.renameDialogNewName,
-  renameDialogOriginalName: state => state.renameDialogOriginalName,
-  actionsInProgress: state => state.actionsInProgress,
-  isDialogOpen: state => {
-    // FIXME: need a more obvious dialog state management
-    return state.renameDialogOpen || state.deleteDialogOpen
-  },
-  renameDialogSelectedFile: state => state.renameDialogSelectedFile,
-  deleteDialogOpen: state => state.deleteDialogOpen,
-  deleteDialogSelectedFiles: state => state.deleteDialogSelectedFiles
+  actionsInProgress: state => state.actionsInProgress
 }
