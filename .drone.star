@@ -1132,7 +1132,7 @@ def ocisService(glauth = False):
 			'REVA_STORAGE_OC_DATA_TEMP_FOLDER': '/srv/app/tmp/',
 			'REVA_STORAGE_OWNCLOUD_REDIS_ADDR': 'redis:6379',
 			'REVA_OIDC_ISSUER': 'https://ocis:9200',
-			'REVA_STORAGE_OC_DATA_SERVER_URL': 'http://ocis:9164/data',
+			'REVA_STORAGE_OC_DATA_SERVER_URL': 'https://ocis:9200/data',
 			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
 			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
@@ -1141,7 +1141,8 @@ def ocisService(glauth = False):
 			'LDAP_URI': 'ldap://ldap',
 			'LDAP_BINDDN': 'cn=admin,dc=owncloud,dc=com',
 			'LDAP_BINDPW': 'admin',
-			'LDAP_BASEDN': 'dc=owncloud,dc=com'
+			'LDAP_BASEDN': 'dc=owncloud,dc=com',
+			'OCIS_CONFIG_FILE': '/srv/config/drone/proxy.json',
 		},
 		'commands': [
 			'cd /var/www/owncloud',
