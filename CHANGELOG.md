@@ -8,10 +8,18 @@ ownCloud admins and users.
 Summary
 -------
 
+* Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
 
 Details
 -------
+
+* Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
+
+   We've updated our modal component with a new one coming from ODS.
+
+   https://github.com/owncloud/phoenix/issues/2263
+   https://github.com/owncloud/phoenix/pull/3378
 
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
 
