@@ -1,0 +1,11 @@
+Enhancement: Use TUS settings from capabilities
+
+The TUS settings advertise the maximum chunk size, so we now use the smallest chunk size from
+the one configured in config.json and the one from the capabilities.
+
+If the capabilities report that one should use the X-HTTP-Override-Method header,
+the upload will now use a POST request for uploads with that header set
+instead of PATCH.
+
+https://github.com/owncloud/ocis-reva/issues/177
+https://github.com/owncloud/phoenix/pull/3568

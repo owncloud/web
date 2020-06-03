@@ -447,9 +447,20 @@ export default {
         // FIXME: this might break if relativePath is not the currentFolder
         // and is a mount point that has no chunk support
         if (this.browserSupportsChunked && this.currentFolder.isChunkedUploadSupported) {
+          let chunkSize = this.configuration.uploadChunkSize
+          if (this.capabilities.files.tus_support.max_chunk_size > 0) {
+            if (
+              chunkSize === null ||
+              chunkSize === 0 ||
+              chunkSize > this.capabilities.files.tus_support.max_chunk_size
+            ) {
+              chunkSize = this.capabilities.files.tus_support.max_chunk_size
+            }
+          }
           promise = this.uploadQueue.add(() => {
             return this.uploadChunkedFile(file, pathUtil.dirname(relativePath), {
-              chunkSize: this.configuration.uploadChunkSize,
+              chunkSize: chunkSize,
+              overridePatchMethod: !!this.capabilities.files.tus_support.http_method_override,
               emitProgress: progress => {
                 this.$_ocUpload_onProgress(progress, file)
               }
