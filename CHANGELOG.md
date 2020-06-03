@@ -8,12 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
 * Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
+* Change - Unite files list status indicators: [#3567](https://github.com/owncloud/phoenix/pull/3567)
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
 * Enhancement - Use TUS settings from capabilities: [#177](https://github.com/owncloud/ocis-reva/issues/177)
 
 Details
 -------
+
+* Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
+
+   We've added missing question mark to the delete confirmation dialog inside of the trashbin.
+
+   https://github.com/owncloud/phoenix/pull/3566
 
 * Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
 
@@ -21,6 +29,14 @@ Details
 
    https://github.com/owncloud/phoenix/issues/2263
    https://github.com/owncloud/phoenix/pull/3378
+
+* Change - Unite files list status indicators: [#3567](https://github.com/owncloud/phoenix/pull/3567)
+
+   We've merged direct and indirect status indicators in the files list. With this change, we
+   focus on the important information of the indicator (e.g. resource is shared). Any additional
+   information can then be displayed in the related tab of the sidebar.
+
+   https://github.com/owncloud/phoenix/pull/3567
 
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
 
