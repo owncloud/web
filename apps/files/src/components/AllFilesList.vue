@@ -337,7 +337,6 @@ export default {
         label: this.shareUserIconLabel(item),
         visible: this.isUserShare(item),
         icon: 'group',
-        status: this.shareUserIconVariation(item),
         handler: this.indicatorHandler
       }
       const links = {
@@ -345,7 +344,6 @@ export default {
         label: this.shareLinkIconLabel(item),
         visible: this.isLinkShare(item),
         icon: 'link',
-        status: this.shareLinkIconVariation(item),
         handler: this.indicatorHandler
       }
       const indicators = []
@@ -396,14 +394,6 @@ export default {
 
     isLinkShare(item) {
       return this.isDirectLinkShare(item) || this.isIndirectLinkShare(item)
-    },
-
-    shareUserIconVariation(item) {
-      return this.isDirectUserShare(item) ? 'active' : 'passive'
-    },
-
-    shareLinkIconVariation(item) {
-      return this.isDirectLinkShare(item) ? 'active' : 'passive'
     },
 
     shareUserIconLabel(item) {
