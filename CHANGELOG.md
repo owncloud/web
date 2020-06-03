@@ -10,6 +10,7 @@ Summary
 
 * Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
+* Enhancement - Use TUS settings from capabilities: [#177](https://github.com/owncloud/ocis-reva/issues/177)
 
 Details
 -------
@@ -29,6 +30,17 @@ Details
 
    https://github.com/owncloud/phoenix/issues/2969
    https://github.com/owncloud/phoenix/pull/3377
+
+* Enhancement - Use TUS settings from capabilities: [#177](https://github.com/owncloud/ocis-reva/issues/177)
+
+   The TUS settings advertise the maximum chunk size, so we now use the smallest chunk size from the
+   one configured in config.json and the one from the capabilities.
+
+   If the capabilities report that one should use the X-HTTP-Override-Method header, the upload
+   will now use a POST request for uploads with that header set instead of PATCH.
+
+   https://github.com/owncloud/ocis-reva/issues/177
+   https://github.com/owncloud/phoenix/pull/3568
 
 Changelog for ownCloud Phoenix [0.10.0] (2020-05-26)
 =======================================
