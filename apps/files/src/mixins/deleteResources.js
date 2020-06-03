@@ -68,7 +68,7 @@ export default {
         ? this.$gettext(
             'Are you sure you want to delete all selected resources? All their content will be permanently removed. This action cannot be undone.'
           )
-        : this.$gettext('Are you sure you want to delete all selected resources')
+        : this.$gettext('Are you sure you want to delete all selected resources?')
     }
   },
 
