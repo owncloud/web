@@ -14,7 +14,8 @@ module.exports = {
       selector: 'button[type="submit"]'
     },
     invalidCredentialsMessage: {
-      selector: '#lost-password'
+      locateStrategy: 'xpath',
+      selector: '//form/h6'
     }
   },
   commands: [
@@ -37,12 +38,12 @@ module.exports = {
         await this.api.assert.visible(this.elements.usernameInput.selector)
         await this.api.assert.visible(this.elements.passwordInput.selector)
         await this.api.assert.visible(this.elements.loginSubmitButton.selector)
-        await this.waitForElementVisible('@invalidCredentialsMessage').getText(
-          '@invalidCredentialsMessage',
-          result => {
+        await this.useXpath()
+          .waitForElementVisible('@invalidCredentialsMessage')
+          .getText('@invalidCredentialsMessage', result => {
             errorMessage = result.value
-          }
-        )
+          })
+          .useCss()
         return errorMessage
       }
     }

@@ -46,7 +46,7 @@ Then('the files table should not be empty', () => {
 })
 
 Then('the warning {string} should be displayed on the login page', async function(expectedMessage) {
-  const actualMessage = await client.page.ownCloudLoginPage().getLoginErrorMessage()
+  const actualMessage = await client.page.ocisLoginPage().getLoginErrorMessage()
   return assert.strictEqual(
     actualMessage,
     expectedMessage,
@@ -57,6 +57,10 @@ Then('the warning {string} should be displayed on the login page', async functio
 Then('the authentication page should be visible', () => {
   const loginPage = client.page.loginPage()
   return loginPage.waitForElementPresent('@authenticateButton')
+})
+
+Then('the redirected url should contain {string}', function(urlContent) {
+  return client.assert.urlEquals(client.launchUrl + urlContent)
 })
 
 // combined step
