@@ -89,7 +89,6 @@ const supportedLanguages = {
 
 function loadApps () {
   let plugins = []
-  let navItems = {}
   let translations = coreTranslations
 
   let routes = [{
@@ -127,7 +126,10 @@ function loadApps () {
       plugins.push(app.plugins)
     }
     if (app.navItems) {
-      navItems[app.appInfo.id] = app.navItems
+      store.commit('SET_NAV_ITEMS_FROM_CONFIG', {
+        extension: app.appInfo.id,
+        navItems: app.navItems
+      })
     }
     if (app.translations) {
       Object.keys(supportedLanguages).forEach((lang) => {
@@ -166,8 +168,7 @@ function loadApps () {
     el: '#owncloud',
     data: {
       config: config,
-      plugins: plugins.flat(),
-      navItems: navItems
+      plugins: plugins.flat()
     },
     store,
     router,
