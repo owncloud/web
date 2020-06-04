@@ -13,6 +13,7 @@ Summary
 * Change - Unite files list status indicators: [#3567](https://github.com/owncloud/phoenix/pull/3567)
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
 * Enhancement - Use TUS settings from capabilities: [#177](https://github.com/owncloud/ocis-reva/issues/177)
+* Enhancement - Dynamically loaded nav items: [#3497](https://github.com/owncloud/phoenix/issues/3497)
 
 Details
 -------
@@ -57,6 +58,17 @@ Details
 
    https://github.com/owncloud/ocis-reva/issues/177
    https://github.com/owncloud/phoenix/pull/3568
+
+* Enhancement - Dynamically loaded nav items: [#3497](https://github.com/owncloud/phoenix/issues/3497)
+
+   We have moved the navItems from application configuration into a store module. We extended
+   it's functionality by introducing statically and dynamically loaded navItems. This way
+   navItems can be loaded based on extension data, as soon as the extension becomes active. Please
+   note that having at least one static navItem (coming from the appInfo object of an extension) is
+   still a requirement for the extension appearing in the app switcher.
+
+   https://github.com/owncloud/phoenix/issues/3497
+   https://github.com/owncloud/phoenix/pull/3570
 
 Changelog for ownCloud Phoenix [0.10.0] (2020-05-26)
 =======================================
