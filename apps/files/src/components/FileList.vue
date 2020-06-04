@@ -24,7 +24,14 @@
           />
         </div>
         <slot name="headerColumns" />
-        <div class="uk-margin-small-right oc-icon" />
+        <div
+          v-if="$scopedSlots.rowActions"
+          class="uk-text-nowrap uk-text-meta uk-text-right uk-width-small"
+        >
+          <translate translate-context="Short column label in files table for the actions"
+            >Actions</translate
+          >
+        </div>
       </oc-grid>
       <div v-if="!loading" id="files-list-container" class="uk-flex-1 uk-overflow-auto">
         <RecycleScroller
@@ -61,7 +68,11 @@
                 />
               </div>
               <slot name="rowColumns" :item="rowItem" :index="index" />
-              <div class="uk-text-right uk-margin-left uk-margin-small-right">
+              <div
+                class="uk-flex uk-flex-middle uk-flex-right"
+                :class="{ 'uk-width-small': $scopedSlots.rowActions }"
+              >
+                <slot name="rowActions" :item="rowItem" />
                 <oc-button
                   :id="actionsDropdownButtonId(rowItem.viewId, active)"
                   class="files-list-row-show-actions"
@@ -101,7 +112,7 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
-const RowActionsDropdown = () => import('./FilesLists/RowActionsDropdown.vue')
+import RowActionsDropdown from './FilesLists/RowActionsDropdown.vue'
 
 export default {
   name: 'FileList',

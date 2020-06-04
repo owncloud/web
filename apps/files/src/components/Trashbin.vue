@@ -25,7 +25,7 @@
             class="uk-text-nowrap uk-text-meta uk-width-small"
           >
             <sortable-column-header
-              class="uk-align-right uk-margin-right"
+              class="uk-align-right"
               :aria-label="$gettext('Sort files by deletion time')"
               :is-active="fileSortField === 'deleteTimestampMoment'"
               :is-desc="fileSortDirectionDesc"
@@ -36,6 +36,7 @@
               </translate>
             </sortable-column-header>
           </div>
+          <div class="oc-icon" />
         </template>
         <template #rowColumns="{ item }">
           <div class="uk-text-truncate uk-width-expand">

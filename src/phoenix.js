@@ -139,6 +139,10 @@ function loadApps () {
       })
     }
 
+    if(app.quickActions) {
+      store.commit('ADD_QUICK_ACTIONS', app.quickActions)
+    }
+
     if (app.store) {
       registerStoreModule(app)
     }

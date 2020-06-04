@@ -266,3 +266,10 @@ Then(
     return assert.ok(share.name.length > 0)
   }
 )
+
+When(
+  'the user creates a public link via quick action for resource {string} using the webUI',
+  function(resource) {
+    return client.page.FilesPageElement.filesList().useQuickAction(resource, 'public link')
+  }
+)
