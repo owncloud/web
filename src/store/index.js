@@ -11,6 +11,7 @@ import user from './user'
 import router from './router'
 import settings from './settings'
 import modal from './modal'
+import navigation from './navigation'
 
 Vue.use(Vuex)
 
@@ -27,9 +28,6 @@ const vuexPersistInSession = new VuexPersistence({
 const strict = process.env.NODE_ENV === 'development'
 
 export const Store = new Vuex.Store({
-  // state: {
-  //   someModulelessState: 0
-  // },
   plugins: [vuexPersistInSession.plugin],
   modules: {
     app,
@@ -38,7 +36,8 @@ export const Store = new Vuex.Store({
     config,
     router,
     settings,
-    modal
+    modal,
+    navigation
   },
   strict
 })

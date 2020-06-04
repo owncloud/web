@@ -91,7 +91,9 @@ export default {
       'activeMessages',
       'capabilities',
       'apps',
-      'getSettingsValueByIdentifier'
+      'getSettingsValueByIdentifier',
+      'getNavItems',
+      'getExtensionsWithNavItems'
     ]),
     $_applicationsList() {
       const list = []
@@ -100,10 +102,9 @@ export default {
       list.push(this.configuration.applications)
 
       // Get extensions which have at least one nav item
-      const navItems = this.$root.navItems
-      for (const extensionId in navItems) {
+      this.getExtensionsWithNavItems.forEach(extensionId => {
         list.push(this.apps[extensionId])
-      }
+      })
 
       return list.flat()
     },
@@ -128,9 +129,7 @@ export default {
         return []
       }
 
-      // FIXME: use store or other ways, not $root
-      const items = this.$root.navItems[this.currentExtension]
-
+      const items = this.getNavItems(this.currentExtension)
       if (!items) {
         return []
       }
