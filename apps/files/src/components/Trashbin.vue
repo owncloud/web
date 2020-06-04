@@ -158,7 +158,7 @@ export default {
 
     $_ocTrashbin_fileName(item) {
       if (item && item.originalLocation) {
-        const pathSplit = item.originalLocation.split('/')
+        const pathSplit = item.originalLocation.substr(1).split('/')
         if (pathSplit.length === 2) return `${pathSplit[pathSplit.length - 2]}/${item.basename}`
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
       }

@@ -1,0 +1,5 @@
+Change: remove the leading slash from the file names  
+
+We removed the leading slash to make the file listing consistent with the all files view.
+
+https://github.com/owncloud/phoenix/issues/3571
