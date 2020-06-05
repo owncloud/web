@@ -1,0 +1,19 @@
+---
+
+  # OpenID Connect client registry.
+  clients:
+    - id: phoenix
+      name: ownCloud web app
+      application_type: web
+      insecure: yes
+      trusted: yes
+      redirect_uris:
+        - http://host.docker.internal:9100/
+        - https://host.docker.internal:9200/
+        - http://host.docker.internal:9100/oidc-callback.html
+        - https://host.docker.internal:9200/oidc-callback.html
+      origins:
+        - http://host.docker.internal:9100
+        - https://host.docker.internal:9200
+  
+  authorities:

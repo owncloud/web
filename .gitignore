@@ -32,3 +32,5 @@ dist
 
 tests/reports
 tests/acceptance/filesForUpload
+tests/ocis
+tests/testing-app

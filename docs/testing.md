@@ -61,51 +61,26 @@ The feature files are located in the "tests/acceptance/features" subdirectories.
 see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
 
 ### with OCIS backend
+- [setup and build Phoenix]({{< ref "building.md" >}})
 
-- clone and build [ocis](https://github.com/owncloud/ocis)
-- clone the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
+#### the quick way (all automated)
+1. run `yarn run test-requirements:ocis` (`yarn run test-requirements:ocis:mac` for Mac users) to install, configure and run all ocis requirements
+2. run `yarn run acceptance-tests-ocis <feature-files-to-test>` to run the tests, the feature files are located in the "tests/acceptance/features" subdirectories.
+3. after the tests run `yarn run docker-kill` to stop all created docker containers
 
-- Run ldap server and redis server using docker
+#### the manual way (e.g. to run from an existing ocis location)
+1. clone and build [ocis](https://github.com/owncloud/ocis)
+2. run `yarn run testing-app` to get the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
+3. Run ldap server and redis server using docker
     ```sh
-    docker run --hostname ldap.my-company.com \
-    -e LDAP_TLS_VERIFY_CLIENT=never \
-    -e LDAP_DOMAIN=owncloud.com \
-    -e LDAP_ORGANISATION=ownCloud \
-    -e LDAP_ADMIN_PASSWORD=admin \
-    --name docker-slapd \
-    -p 127.0.0.1:389:389 \
-    -p 636:636 -d osixia/openldap
+    yarn run ldap-server
 
-    docker run -e REDIS_DATABASES=1 -p 6379:6379 -d webhippie/redis:latest
+    yarn run redis-server
     ```
+4. For Mac Users: create a new phoenix config.json file.
+      As starting point and example that should work when running every service on localhost use `tests/acceptance/ocis-mac-config-local.json`
 
-- create a new phoenix config.json file.
-
-  Here an example that should work when running every service on localhost
-  ```
-  {
-    "server": "https://localhost:9200",
-    "theme": "owncloud",
-    "version": "0.1.0",
-    "openIdConnect": {
-      "metadata_url": "https://localhost:9200/.well-known/openid-configuration",
-      "authority": "https://localhost:9200",
-      "client_id": "phoenix",
-      "response_type": "code",
-      "scope": "openid profile email"
-    },
-    "apps": [
-      "files",
-      "draw-io",
-      "pdf-viewer",
-      "markdown-editor",
-      "media-viewer"
-    ]
-  }
-  ```
-
-- Run the OCIS server with necessary configurations
-
+5. Run the OCIS server with the necessary configurations
     ```sh
     export REVA_LDAP_HOSTNAME='localhost'
     export REVA_LDAP_PORT=636
@@ -113,34 +88,30 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
     export REVA_LDAP_BIND_DN='cn=admin,dc=owncloud,dc=com'
     export REVA_LDAP_BASE_DN='dc=owncloud,dc=com'
     export REVA_STORAGE_OWNCLOUD_REDIS_ADDR='localhost:6379'
-    export PHOENIX_WEB_CONFIG='<path-to-config-file>/ocis-config.json'
     export PHOENIX_ASSET_PATH='<path-to-phoenix-clone>/dist'
     export LDAP_URI='ldap://localhost'
     export LDAP_BINDDN='cn=admin,dc=owncloud,dc=com'
     export LDAP_BINDPW='admin'
     export LDAP_BASEDN='dc=owncloud,dc=com'
-    
-    bin/ocis server
+    ```
+   for Mac users additionally:
+   ```sh
+    export PHOENIX_WEB_CONFIG='<path-to-config-file>/ocis-mac-config.json'
     ```
 
-- set the `SERVER_HOST` environment variable to point to the URL where ocis serves Phoenix, by default "https://localhost:9200"
-- set the `BACKEND_HOST` environment variable to point to the URL of the backend, by default "http://localhost:9140"
-- set the `RUN_ON_OCIS` environment variable to `true`
-- set the `OCIS_SKELETON_DIR` environment variable to the `data/webUISkeleton` folder inside the testing app
- 
-- [setup and build Phoenix]({{< ref "building.md" >}})
-- set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
-- set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
+    run the server:
 
-Run `yarn run acceptance-tests-ocis <feature-files-to-test>`.
-
-The feature files are located in the "tests/acceptance/features" subdirectories.
+    ```sh
+    bin/ocis server
+    ```
+6. Run `yarn run acceptance-tests-ocis <feature-files-to-test>`.
+   The feature files are located in the "tests/acceptance/features" subdirectories.
 
 see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
 
 ## Available settings to be set by environment variables
 
-These values can be set using the environment variables to match your local test environment.
+These values can be set using the environment variables to configure `yarn run acceptance-tests` and `yarn run acceptance-tests-ocis` to match your local test environment.
 
 | setting             | meaning                                                                | default               |
 |-------------------- | -----------------------------------------------------------------------| ----------------------|
@@ -160,7 +131,7 @@ These values can be set using the environment variables to match your local test
 | `LDAP_BASE_DN`       | bind dn for LDAP                                                            | cn=admin,dc=owncloud,dc=com |
 | `LDAP_ADMIN_PASSWORD`       | Password for ldap bind dn                                                            | cn=admin,dc=owncloud,dc=com |
 | `OCIS_SKELETON_DIR`       | Skeleton files directory for new users                                                           | - |
-| `OCIS_PHOENIX_CONFIG`       | Path for the phoenix web config file used by OCIS                                                            | - |
+| `PHOENIX_CONFIG`       | Path for the phoenix config file (usually in the dist folder)                       | - |
 
 ## Tipps
 
