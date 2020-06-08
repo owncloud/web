@@ -49,7 +49,8 @@ module.exports = {
      * @param {boolean} expectToSucceed
      */
     createFolder: async function(name, expectToSucceed = true) {
-      await this.waitForElementVisible('@newFileMenuButton', 500000)
+      await this.waitForElementVisible('@newFileMenuButtonAnyState')
+        .waitForElementEnabled(this.elements.newFileMenuButtonAnyState.selector)
         .click('@newFileMenuButton')
         .click('@newFolderButton')
         .waitForElementVisible('@dialog')
@@ -60,7 +61,7 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      await this.click('@dialogConfirmBtn')
+      await this.click('@dialogConfirmBtn').waitForAjaxCallsToStartAndFinish()
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
