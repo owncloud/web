@@ -18,7 +18,6 @@
           <translate translate-context="Name column in files table">Name</translate>
         </sortable-column-header>
       </div>
-      <div><!-- indicators column --></div>
       <div
         v-if="!$_isSharedWithMe"
         key="shared-with-header-cell"
@@ -56,12 +55,11 @@
       <div class="oc-icon" />
     </template>
     <template #rowColumns="{ item }">
-      <div class="uk-text-truncate uk-width-expand">
+      <div class="uk-width-expand">
         <file-item
           :key="item.path"
           :item="item"
           :dav-url="davUrl"
-          class="file-row-name"
           @click.native.stop="
             item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)
           "
@@ -73,7 +71,6 @@
           class="uk-margin-small-left"
         />
       </div>
-      <div><!-- indicators column --></div>
       <div
         v-if="!$_isSharedWithMe"
         key="shared-with-cell"

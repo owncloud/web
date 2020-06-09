@@ -1,0 +1,5 @@
+Change: Move status indicators under the resource name
+
+We've moved the sharing status indicators from an own column in the files list to a second row under the resource name.
+
+https://github.com/owncloud/phoenix/pull/3617

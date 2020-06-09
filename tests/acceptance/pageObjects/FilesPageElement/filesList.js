@@ -638,7 +638,7 @@ module.exports = {
       selector: '.file-row'
     },
     allFiles: {
-      selector: 'span.oc-file.file-row-name'
+      selector: 'div.oc-file.file-row-name'
     },
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',
@@ -656,33 +656,33 @@ module.exports = {
     },
     fileRowByName: {
       selector:
-        '//span[@class="oc-file-name"][text()=%s and not(../span[@class="oc-file-extension"])]/../../../../../div[@data-is-visible="true"]',
+        '//span[contains(@class, "oc-file-name") and text()=%s and not(../span[contains(@class, "oc-file-extension")])]/ancestor::div[@data-is-visible="true"]',
       locateStrategy: 'xpath'
     },
     fileRowByNameAndExtension: {
       selector:
-        '//span[span/text()=%s and span/text()="%s"]/../../../../div[@data-is-visible="true"]',
+        '//div[contains(@class, "file-row-name")][span/text()=%s and span/text()="%s"]/ancestor::div[@data-is-visible="true"]',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
-      selector: '//span[contains(@class, "file-row-name")]',
+      selector: '//div[contains(@class, "file-row-name")]',
       locateStrategy: 'xpath'
     },
     fileIconInFileRow: {
-      selector: '//span[contains(@class, "file-row-name")]//*[local-name() = "svg"]',
+      selector: '//div[contains(@class, "oc-file")]//*[local-name() = "svg"]',
       locateStrategy: 'xpath'
     },
     filePreviewInFileRow: {
-      selector: '//span[contains(@class, "file-row-name")]//img',
+      selector: '//div[contains(@class, "oc-file")]//img',
       locateStrategy: 'xpath'
     },
     allFilePreviewsLoading: {
-      selector: '//span[contains(@class, "file-row-name") and @data-preview-loaded="false"]',
+      selector: '//div[contains(@class, "oc-file") and @data-preview-loaded="false"]',
       locateStrategy: 'xpath'
     },
     filePreviewLoadedInFileRow: {
       selector:
-        '//span[contains(@class, "file-row-name") and (@data-preview-loaded="true" or not(@data-preview-loaded))]',
+        '//div[contains(@class, "oc-file") and (@data-preview-loaded="true" or not(@data-preview-loaded))]',
       locateStrategy: 'xpath'
     },
     collaboratorsInFileRow: {
