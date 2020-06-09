@@ -55,10 +55,6 @@ const appInfo = {
           return capabilities.files_sharing.api_enabled
         }
         return false
-      },
-      quickAccess: {
-        icon: 'group',
-        ariaLabel: $gettext('Collaborators')
       }
     },
     {

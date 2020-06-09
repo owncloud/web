@@ -69,6 +69,12 @@ module.exports = {
         .waitForElementVisible('@favoriteStarShining')
         .click('@sidebarToggleFavoriteButton')
         .waitForElementVisible('@favoriteStarDimm')
+    },
+    openCollaboratorsTab: function() {
+      return this.click('@sidebarCollaboratorsTab')
+    },
+    openLinksTab: function() {
+      return this.click('@publicLinksTab')
     }
   },
   elements: {
@@ -102,6 +108,10 @@ module.exports = {
     },
     favoriteStarShining: {
       selector: '.oc-star-shining'
+    },
+    publicLinksTab: {
+      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Links")]',
+      locateStrategy: 'xpath'
     }
   }
 }

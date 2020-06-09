@@ -12,26 +12,13 @@ module.exports = {
      * @return {Promise<*>}
      */
     openSharingDialog: async function(fileName) {
+      const appSidebar = client.page.FilesPageElement.appSideBar()
+
+      await appSidebar.closeSidebar(500)
       await this.waitForFileVisible(fileName)
-      return filesRow.openFileActionsMenu(fileName).openCollaboratorsDialog()
-    },
-    /**
-     * opens links dialog for given resource
-     * assumes fileActionsMenu to be opened, as the its moves to links tab from file-actions share option
-     *
-     * @return {*}
-     */
-    openLinksDialog: function() {
-      const api = this.api.page.FilesPageElement
-      const sidebarLinksTabXpath = api.appSideBar().elements.sidebarLinksTab.selector
-      api
-        .fileActionsMenu()
-        .openCollaboratorsDialog()
-        .useXpath()
-        .waitForElementVisible(sidebarLinksTabXpath)
-        .click(sidebarLinksTabXpath)
-        .useCss()
-      return api.publicLinksDialog()
+      await this.openSideBar(fileName)
+
+      return appSidebar.openCollaboratorsTab()
     },
     /**
      * @param {string} fileName
@@ -39,8 +26,9 @@ module.exports = {
      */
     openPublicLinkDialog: async function(fileName) {
       await this.waitForFileVisible(fileName)
-      await filesRow.openFileActionsMenu(fileName)
-      return this.openLinksDialog()
+      await this.openSideBar(fileName)
+
+      return this.api.page.FilesPageElement.appSideBar().openLinksTab()
     },
     /**
      * @param {string} resource

@@ -673,8 +673,9 @@ Then('it should not be possible to share file/folder {string} using the webUI', 
   const appSideBar = client.page.FilesPageElement.appSideBar()
   const filesList = client.page.FilesPageElement.filesList()
   // assumes current webUI state as no sidebar open for any resource
-  const state = await filesList.isSharingButtonPresent(resource)
-  assert.ok(!state, `Error: Sharing button for resource ${resource} is not in disabled state`)
+  // TODO: Bring back when implementing collaborators quick action
+  // const state = await filesList.isSharingButtonPresent(resource)
+  // assert.ok(!state, `Error: Sharing button for resource ${resource} is not in disabled state`)
   await filesList.openSideBar(resource)
   const sidebarLinkTabState = await appSideBar.isLinksTabPresentOnCurrentSidebar()
   assert.ok(!sidebarLinkTabState, `Error: Sidebar 'Links' tab for resource ${resource} is present`)
