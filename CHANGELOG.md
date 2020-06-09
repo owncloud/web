@@ -14,6 +14,7 @@ Summary
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
 * Enhancement - Use TUS settings from capabilities: [#177](https://github.com/owncloud/ocis-reva/issues/177)
 * Enhancement - Dynamically loaded nav items: [#3497](https://github.com/owncloud/phoenix/issues/3497)
+* Enhancement - Load and display quick actions: [#3573](https://github.com/owncloud/phoenix/pull/3573)
 
 Details
 -------
@@ -69,6 +70,14 @@ Details
 
    https://github.com/owncloud/phoenix/issues/3497
    https://github.com/owncloud/phoenix/pull/3570
+
+* Enhancement - Load and display quick actions: [#3573](https://github.com/owncloud/phoenix/pull/3573)
+
+   We've added an extension point into files apps for quick actions. By creating and exporting an
+   object called quickActions, developers can define an action which will be then displayed in
+   the files list.
+
+   https://github.com/owncloud/phoenix/pull/3573
 
 Changelog for ownCloud Phoenix [0.10.0] (2020-05-26)
 =======================================
