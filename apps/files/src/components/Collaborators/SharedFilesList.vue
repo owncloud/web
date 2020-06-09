@@ -18,7 +18,6 @@
           <translate translate-context="Name column in files table">Name</translate>
         </sortable-column-header>
       </div>
-      <div><!-- indicators column --></div>
       <div
         v-if="!$_isSharedWithMe"
         key="shared-with-header-cell"
@@ -73,7 +72,6 @@
           class="uk-margin-small-left"
         />
       </div>
-      <div><!-- indicators column --></div>
       <div
         v-if="!$_isSharedWithMe"
         key="shared-with-cell"

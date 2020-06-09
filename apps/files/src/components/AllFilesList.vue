@@ -18,7 +18,6 @@
           <translate translate-context="Name column in files table">Name</translate>
         </sortable-column-header>
       </div>
-      <div v-if="!$_isFavoritesList"><!-- indicators column --></div>
       <div
         :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
         class="uk-text-meta uk-width-small"
@@ -61,6 +60,7 @@
           :item="rowItem"
           :dav-url="davUrl"
           :show-path="$_isFavoritesList"
+          :indicators="indicatorArray(rowItem)"
           class="file-row-name"
           @click.native.stop="
             rowItem.type === 'folder'
@@ -74,9 +74,6 @@
           :uk-tooltip="disabledActionTooltip(rowItem)"
           class="uk-margin-small-left"
         />
-      </div>
-      <div v-if="!$_isFavoritesList" class="uk-flex uk-flex-middle uk-flex-right">
-        <Indicators :default-indicators="indicatorArray(rowItem)" :item="rowItem" />
       </div>
       <div
         class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
@@ -155,7 +152,6 @@
 </template>
 <script>
 import FileList from './FileList.vue'
-import Indicators from './FilesLists/Indicators.vue'
 import FileItem from './FileItem.vue'
 import NoContentMessage from './NoContentMessage.vue'
 import QuickActions from './FilesLists/QuickActions.vue'
@@ -172,7 +168,6 @@ export default {
   name: 'AllFilesList',
   components: {
     FileList,
-    Indicators,
     FileItem,
     NoContentMessage,
     SortableColumnHeader,
@@ -337,31 +332,24 @@ export default {
     },
 
     indicatorArray(item) {
-      const collaborators = {
-        id: 'files-sharing',
-        label: this.shareUserIconLabel(item),
-        visible: this.isUserShare(item),
-        icon: 'group',
-        handler: this.indicatorHandler
-      }
-      const links = {
-        id: 'file-link',
-        label: this.shareLinkIconLabel(item),
-        visible: this.isLinkShare(item),
-        icon: 'link',
-        handler: this.indicatorHandler
-      }
-      const indicators = []
+      const indicators = [
+        {
+          id: 'files-sharing',
+          label: this.shareUserIconLabel(item),
+          visible: this.isUserShare(item),
+          icon: 'group',
+          handler: this.indicatorHandler
+        },
+        {
+          id: 'file-link',
+          label: this.shareLinkIconLabel(item),
+          visible: this.isLinkShare(item),
+          icon: 'link',
+          handler: this.indicatorHandler
+        }
+      ]
 
-      if (collaborators.visible) {
-        indicators.push(collaborators)
-      }
-
-      if (links.visible) {
-        indicators.push(links)
-      }
-
-      return indicators
+      return indicators.filter(indicator => indicator.visible)
     },
 
     $_shareTypes(item) {

@@ -1,20 +1,51 @@
 <template>
-  <oc-file
-    :name="fileName"
-    :extension="item.extension"
-    :icon="previewIcon"
-    :icon-url="previewUrl"
+  <oc-grid
+    gutter="small"
+    class="oc-file uk-flex-inline uk-flex-middle"
     :filename="item.name"
     :data-preview-loaded="previewLoaded"
-  />
+  >
+    <oc-img
+      v-if="previewUrl"
+      key="file-preview"
+      class="files-list-file-preview"
+      :src="previewUrl"
+      alt=""
+    />
+    <oc-icon v-else key="file-icon" :name="previewIcon" size="medium" aria-hidden="true" />
+    <div>
+      <div>
+        <span class="uk-text-bold oc-cursor-pointer" role="button" v-text="fileName" /><span
+          v-if="item.extension"
+          class="uk-text-meta"
+          v-text="'.' + item.extension"
+        />
+      </div>
+      <Indicators
+        v-if="indicators.length > 0"
+        key="status-indicators"
+        :default-indicators="indicators"
+        :item="item"
+      />
+      <span v-else key="no-status-indicators" aria-hidden="true" v-text="'-'" />
+    </div>
+  </oc-grid>
 </template>
 <script>
 import queryString from 'query-string'
 import Mixins from '../mixins'
 
+import Indicators from './FilesLists/Indicators.vue'
+
 export default {
   name: 'FileItem',
+
+  components: {
+    Indicators
+  },
+
   mixins: [Mixins],
+
   props: {
     item: {
       type: Object,
@@ -34,6 +65,11 @@ export default {
     showPath: {
       type: Boolean,
       default: false
+    },
+    indicators: {
+      type: Array,
+      required: false,
+      default: () => []
     }
   },
   data: function() {
@@ -121,3 +157,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.files-list-file-preview {
+  width: 50px;
+}
+</style>
