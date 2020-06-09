@@ -4,7 +4,8 @@ const state = {
     loading: true,
     failed: false,
     data: []
-  }
+  },
+  quickActions: {}
 }
 
 const actions = {
@@ -86,6 +87,10 @@ const mutations = {
       return n.notification_id !== notification
     })
     state.notifications.data = data
+  },
+
+  ADD_QUICK_ACTIONS(state, quickActions) {
+    state.quickActions = Object.assign(state.quickActions, quickActions)
   }
 }
 

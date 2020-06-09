@@ -4,8 +4,8 @@
       <oc-notification-message
         v-for="item in $_ocMessages_limited"
         :key="item.id"
-        :title="item.title"
-        :message="item.desc"
+        :title="$gettext(item.title)"
+        :message="$gettext(item.desc)"
         :status="item.status"
         class="uk-width-large"
         @close="deleteMessage(item)"

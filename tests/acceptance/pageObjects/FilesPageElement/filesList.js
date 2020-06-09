@@ -609,6 +609,21 @@ module.exports = {
     replaceChar: function(string, targetChar, newChar) {
       const regex = new RegExp(targetChar, 'g')
       return string.replace(regex, newChar)
+    },
+
+    useQuickAction: async function(resource, action) {
+      action = action.replace(/\s/, '-')
+      const actionSelector = util.format(
+        this.api.page.FilesPageElement.filesRow().elements.quickAction.selector,
+        action
+      )
+      const resourceRowSelector = this.getFileRowSelectorByFileName(resource)
+
+      await this.waitForFileVisible(resource)
+
+      return this.useXpath()
+        .click(resourceRowSelector + actionSelector)
+        .useCss()
     }
   },
   elements: {

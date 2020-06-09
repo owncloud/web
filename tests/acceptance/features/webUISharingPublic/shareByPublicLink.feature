@@ -857,3 +857,19 @@ Feature: Share by public link
       | path | /simple-folder |
     And user "user1" logs in using the webUI
     Then a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
+
+  Scenario: User can create a public link via quick action
+    Given user "user1" has logged in using the webUI
+    When the user creates a public link via quick action for resource "simple-folder" using the webUI
+    Then user "user1" should have a share with these details:
+      | field       | value              |
+      | share_type  | public_link        |
+      | uid_owner   | user1              |
+      | permissions | read               |
+      | path        | /simple-folder     |
+      | name        | Quick action link  |
+    And the following success message should be displayed on the webUI
+      """
+      Public link created
+      Public link has been successfully created and copied into your clipboard.
+      """

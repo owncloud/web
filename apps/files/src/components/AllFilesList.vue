@@ -35,7 +35,7 @@
       </div>
       <div
         :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-        class="uk-text-nowrap uk-text-meta uk-width-small uk-margin-right"
+        class="uk-text-nowrap uk-text-meta uk-width-small"
       >
         <sortable-column-header
           :aria-label="$gettext('Sort files by updated time')"
@@ -45,7 +45,7 @@
           @click="toggleSort('mdateMoment')"
         >
           <translate
-            translate-context="Short column label in files able for the time at which a file was modified"
+            translate-context="Short column label in files table for the time at which a file was modified"
             >Updated</translate
           >
         </sortable-column-header>
@@ -90,6 +90,9 @@
       >
         {{ formDateFromNow(rowItem.mdate) }}
       </div>
+    </template>
+    <template #rowActions="{ item: rowItem }">
+      <quick-actions :actions="app.quickActions" :item="rowItem" />
     </template>
     <template #noContentMessage>
       <no-content-message v-if="!$_isFavoritesList" icon="folder">
@@ -155,11 +158,12 @@ import FileList from './FileList.vue'
 import Indicators from './FilesLists/Indicators.vue'
 import FileItem from './FileItem.vue'
 import NoContentMessage from './NoContentMessage.vue'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import QuickActions from './FilesLists/QuickActions.vue'
+import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
 
+import { mapGetters, mapActions, mapState } from 'vuex'
 import Mixins from '../mixins'
 import FileActions from '../fileactions'
-import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
 import intersection from 'lodash/intersection'
 import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
@@ -171,7 +175,8 @@ export default {
     Indicators,
     FileItem,
     NoContentMessage,
-    SortableColumnHeader
+    SortableColumnHeader,
+    QuickActions
   },
   mixins: [Mixins, FileActions],
   props: {
@@ -199,7 +204,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['route']),
+    ...mapState(['route', 'app']),
     ...mapGetters('Files', [
       'loadingFolder',
       'activeFiles',

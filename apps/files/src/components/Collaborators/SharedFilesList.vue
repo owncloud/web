@@ -42,7 +42,7 @@
         translate-context="Owner table column"
         v-text="$gettext('Owner')"
       />
-      <div class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-small uk-margin-right">
+      <div class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-small">
         <sortable-column-header
           :aria-label="$gettext('Sort files by share time')"
           :is-active="fileSortField == 'shareTimeMoment'"
@@ -53,6 +53,7 @@
           <translate translate-context="Share time column in files table">Share time</translate>
         </sortable-column-header>
       </div>
+      <div class="oc-icon" />
     </template>
     <template #rowColumns="{ item }">
       <div class="uk-text-truncate uk-width-expand">

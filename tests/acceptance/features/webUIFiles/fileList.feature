@@ -35,3 +35,6 @@ Feature: User can view files inside a folder
     When the user uploads file "new-data.zip" using the webUI
     Then the file "new-data.zip" should have a file type icon displayed on the webUI
 
+  Scenario: All files list displays public link quick action
+    When the user has browsed to the files page
+    Then quick action "public link" should be displayed on the webUI

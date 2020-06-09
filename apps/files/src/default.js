@@ -9,8 +9,9 @@ import FileLinkSidebar from './components/FileLinkSidebar.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './components/PublicLinks/PublicLink.vue'
 import FilesDrop from './components/PublicLinks/FilesDrop.vue'
-import translationsJson from '../l10n/translations.json'
 
+import translationsJson from '../l10n/translations.json'
+import quickActionsImport from './quickActions'
 const store = require('./store')
 
 // just a dummy function to trick gettext tools
@@ -217,11 +218,16 @@ const routes = [
   }
 ]
 
+// Prepare imported modules to be exported
+// If we do not define these constants, the export will be undefined
 const translations = translationsJson
+const quickActions = quickActionsImport
+
 export default define({
   appInfo,
   store,
   routes,
   navItems,
+  quickActions,
   translations
 })
