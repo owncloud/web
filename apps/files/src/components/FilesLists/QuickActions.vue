@@ -1,11 +1,12 @@
 <template>
   <div>
     <oc-button
-      v-for="action in actions"
+      v-for="action in filteredActions"
       :id="`files-quick-action-${action.id}`"
       :key="action.label"
       :aria-label="$gettext(action.label)"
       variation="raw"
+      class="uk-margin-xsmall-right"
       @click.native.stop="action.handler({ item, client: $client, store: $store })"
     >
       <oc-icon :name="action.icon" aria-hidden="true" size="small" class="uk-flex" />
@@ -14,6 +15,8 @@
 </template>
 
 <script>
+import filterObject from 'filter-obj'
+
 export default {
   name: 'QuickActions',
 
@@ -25,6 +28,14 @@ export default {
     item: {
       type: Object,
       required: true
+    }
+  },
+
+  computed: {
+    filteredActions() {
+      return filterObject(this.actions, (key, value) => {
+        return value.displayed(this.item, this.$store) === true
+      })
     }
   }
 }

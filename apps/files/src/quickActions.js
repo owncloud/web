@@ -39,11 +39,37 @@ function createPublicLink(ctx) {
   })
 }
 
+function openNewCollaboratorsPanel(ctx) {
+  ctx.store.dispatch('Files/setHighlightedFile', ctx.item)
+
+  // Workaround for displaying the new collaborators panel even when one is already opened
+  // Creating timeout takes care of the event loop
+  // TODO: Get rid of this after we use overlay instead of sidebar
+  setTimeout(() => {
+    ctx.store.commit('Files/SET_CURRENT_SIDEBAR_TAB', {
+      tab: 'files-sharing',
+      options: { collaboratorsCurrentPanel: 'newCollaborator' }
+    })
+  })
+}
+
+function canShare(item, store) {
+  return store.state.user.capabilities.files_sharing.api_enabled && item.canShare()
+}
+
 export default {
+  collaborators: {
+    id: 'collaborators',
+    label: $gettext('Add new collaborators'),
+    icon: 'group',
+    handler: openNewCollaboratorsPanel,
+    displayed: canShare
+  },
   publicLink: {
     id: 'public-link',
     label: $gettext('Create and copy public link'),
     icon: 'link',
-    handler: createPublicLink
+    handler: createPublicLink,
+    displayed: canShare
   }
 }

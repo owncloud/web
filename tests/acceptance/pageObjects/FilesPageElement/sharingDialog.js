@@ -146,6 +146,7 @@ module.exports = {
      * @param {string} permissions
      * @param {boolean} remote
      * @param {string} days
+     * @param {boolean} quickAction Asserts whether the quick actions should be used to open new collaborators panel
      *
      * @return void
      */
@@ -155,9 +156,13 @@ module.exports = {
       role,
       permissions,
       remote = false,
-      days
+      days,
+      quickAction = false
     ) {
-      await collaboratorDialog.clickCreateShare()
+      if (!quickAction) {
+        await collaboratorDialog.clickCreateShare()
+      }
+
       await this.selectCollaboratorForShare(sharee, shareWithGroup, remote)
       await this.selectRoleForNewCollaborator(role)
 

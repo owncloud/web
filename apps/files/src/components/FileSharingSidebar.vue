@@ -1,9 +1,9 @@
 <template>
   <div id="oc-files-sharing-sidebar" class="uk-position-relative">
     <div
-      v-show="visiblePanel === PANEL_SHOW"
+      v-show="currentPanel === PANEL_SHOW"
       :key="PANEL_SHOW"
-      :aria-hidden="visiblePanel !== PANEL_SHOW"
+      :aria-hidden="currentPanel !== PANEL_SHOW"
     >
       <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading collaborator list')" />
       <template v-else>
@@ -55,7 +55,7 @@
         </section>
       </template>
     </div>
-    <div v-if="visiblePanel === PANEL_NEW" :key="PANEL_NEW">
+    <div v-if="currentPanel === PANEL_NEW" :key="PANEL_NEW">
       <transition
         enter-active-class="uk-animation-slide-right uk-animation-fast"
         leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
@@ -70,7 +70,7 @@
         </div>
       </transition>
     </div>
-    <div v-if="visiblePanel === PANEL_EDIT" :key="PANEL_EDIT">
+    <div v-if="currentPanel === PANEL_EDIT" :key="PANEL_EDIT">
       <transition
         enter-active-class="uk-animation-slide-right uk-animation-fast"
         leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import Mixins from '../mixins/collaborators'
 import { textUtils } from '../helpers/textUtils'
 import { shareTypes, userShareTypes } from '../helpers/shareTypes'
@@ -118,7 +118,6 @@ export default {
   mixins: [Mixins],
   data() {
     return {
-      visiblePanel: PANEL_SHOW,
       currentShare: null,
       transitionGroupActive: false,
 
@@ -135,8 +134,19 @@ export default {
       'currentFileOutgoingSharesLoading',
       'sharesTreeLoading'
     ]),
-    ...mapState('Files', ['incomingShares', 'incomingSharesLoading', 'sharesTree']),
+    ...mapState('Files', [
+      'incomingShares',
+      'incomingSharesLoading',
+      'sharesTree',
+      'currentSidebarTab'
+    ]),
     ...mapState(['user']),
+
+    currentPanel() {
+      const panel = this.currentSidebarTab.options?.collaboratorsCurrentPanel
+
+      return panel || PANEL_SHOW
+    },
 
     $_transitionGroupEnter() {
       return this.transitionGroupActive ? 'uk-animation-slide-left-medium' : ''
@@ -302,17 +312,22 @@ export default {
     }
   },
   watch: {
-    highlightedFile(newItem, oldItem) {
-      if (oldItem !== newItem) {
-        this.transitionGroupActive = false
-        this.$_reloadShares()
-      }
+    // Do not reload shares if we are starting with different panel then show
+    highlightedFile: {
+      handler: function(newItem, oldItem) {
+        if (oldItem !== newItem && this.currentPanel === PANEL_SHOW) {
+          this.transitionGroupActive = false
+          this.$_reloadShares()
+        }
+      },
+      immediate: true
     }
   },
-  mounted() {
-    this.transitionGroupActive = false
-    this.$_reloadShares()
+
+  beforeDestroy() {
+    this.SET_CURRENT_SIDEBAR_TAB_OPTIONS({ collaboratorsCurrentPanel: PANEL_SHOW })
   },
+
   methods: {
     ...mapActions('Files', [
       'loadCurrentFileOutgoingShares',
@@ -322,6 +337,8 @@ export default {
       'loadIncomingShares',
       'incomingSharesClearState'
     ]),
+    ...mapMutations('Files', ['SET_CURRENT_SIDEBAR_TAB_OPTIONS']),
+
     $_isCollaboratorShare(collaborator) {
       return userShareTypes.includes(collaborator.shareType)
     },
@@ -352,11 +369,11 @@ export default {
     },
     $_ocCollaborators_addShare() {
       this.transitionGroupActive = true
-      this.visiblePanel = PANEL_NEW
+      this.SET_CURRENT_SIDEBAR_TAB_OPTIONS({ collaboratorsCurrentPanel: PANEL_NEW })
     },
     $_ocCollaborators_editShare(share) {
       this.currentShare = share
-      this.visiblePanel = PANEL_EDIT
+      this.SET_CURRENT_SIDEBAR_TAB_OPTIONS({ collaboratorsCurrentPanel: PANEL_EDIT })
     },
     $_ocCollaborators_deleteShare(share) {
       this.transitionGroupActive = true
@@ -366,7 +383,7 @@ export default {
       })
     },
     $_ocCollaborators_showList() {
-      this.visiblePanel = PANEL_SHOW
+      this.SET_CURRENT_SIDEBAR_TAB_OPTIONS({ collaboratorsCurrentPanel: PANEL_SHOW })
       this.currentShare = null
     },
     $_ocCollaborators_isUser(collaborator) {

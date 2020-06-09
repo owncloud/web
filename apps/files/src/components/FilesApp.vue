@@ -30,7 +30,6 @@
       </div>
       <file-details
         v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
-        ref="fileDetails"
         class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1"
         @reset="setHighlightedFile(null)"
       />
@@ -46,7 +45,7 @@ import FilesAppBar from './FilesAppBar.vue'
 import AllFilesList from './AllFilesList.vue'
 import TrashBin from './Trashbin.vue'
 import SharedFilesList from './Collaborators/SharedFilesList.vue'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import FileOpenActions from './FileOpenActions.vue'
 const UploadProgress = () => import('./UploadProgress.vue')
 
@@ -112,6 +111,7 @@ export default {
   methods: {
     ...mapActions('Files', ['dragOver', 'setHighlightedFile']),
     ...mapActions(['openFile', 'showMessage']),
+    ...mapMutations('Files', ['SET_CURRENT_SIDEBAR_TAB']),
 
     trace() {
       console.info('trace', arguments)
@@ -156,9 +156,8 @@ export default {
 
     openSideBar(file, sideBarName) {
       this.setHighlightedFile(file)
-      const self = this
-      this.$nextTick().then(() => {
-        self.$refs.fileDetails.showSidebar(sideBarName)
+      setTimeout(() => {
+        this.SET_CURRENT_SIDEBAR_TAB({ tab: sideBarName })
       })
     },
 

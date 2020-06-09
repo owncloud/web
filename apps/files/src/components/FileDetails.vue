@@ -39,8 +39,8 @@
           <oc-tab-item
             v-for="tab of fileSideBarsEnabled"
             :key="tab.name"
-            :active="tab.app == activeTab"
-            @click="activeTab = tab.app"
+            :active="tab.app === currentTab"
+            @click="setCurrentTab(tab.app)"
           >
             {{ tab.title || tab.component.title($gettext) }} {{ tab.name }}
           </oc-tab-item>
@@ -63,20 +63,16 @@
 
 <script>
 import Mixins from '../mixins'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'FileDetails',
   mixins: [Mixins],
-  data() {
-    return {
-      /** String name of the tab that is activated */
-      activeTab: null
-    }
-  },
   computed: {
     ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
+    ...mapState('Files', ['currentSidebarTab']),
+
     fileSideBarsEnabled() {
       return this.fileSideBars.filter(
         b => b.enabled === undefined || b.enabled(this.capabilities, this.highlightedFile)
@@ -87,29 +83,43 @@ export default {
 
       return this.fileSideBarsEnabled[0].app
     },
+
+    currentTab() {
+      return this.currentSidebarTab?.tab || this.defaultTab
+    },
+
     activeTabComponent() {
-      return this.fileSideBarsEnabled.find(sidebar => sidebar.app === this.activeTab)
+      return this.fileSideBarsEnabled.find(sidebar => sidebar.app === this.currentTab)
     }
   },
   watch: {
     // Switch back to default tab after selecting different file
     highlightedFile() {
-      this.activeTab = this.defaultTab
+      this.SET_CURRENT_SIDEBAR_TAB({ tab: this.defaultTab })
     }
   },
-  mounted() {
-    // Ensure default tab is not undefined
-    this.activeTab = this.defaultTab
+
+  created() {
+    this.SET_CURRENT_SIDEBAR_TAB({ tab: this.currentTab })
   },
+
+  beforeDestroy() {
+    this.SET_CURRENT_SIDEBAR_TAB(null)
+  },
+
   methods: {
     ...mapActions('Files', ['deleteFiles', 'markFavorite']),
     ...mapActions(['showMessage']),
+    ...mapMutations('Files', ['SET_CURRENT_SIDEBAR_TAB']),
+
     close() {
       this.$emit('reset')
     },
-    showSidebar(app) {
-      this.activeTab = app
+
+    setCurrentTab(app) {
+      this.SET_CURRENT_SIDEBAR_TAB({ tab: app })
     },
+
     toggleFileFavorite(file) {
       this.markFavorite({
         client: this.$client,

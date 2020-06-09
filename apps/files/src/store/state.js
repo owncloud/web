@@ -50,5 +50,10 @@ export default {
   highlightedFile: null,
   publicLinkPassword: null,
   uploaded: [],
-  actionsInProgress: []
+  actionsInProgress: [],
+
+  /**
+   * Sidebar
+   */
+  currentSidebarTab: null
 }

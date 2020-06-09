@@ -793,3 +793,16 @@ Feature: Sharing files and folders with internal users
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     When user "user1" logs in using the webUI
     Then the expiration information displayed on the WebUI of share "lorem.txt" shared with user "User Two" should be "Expires in 15 days" or "Expires in 14 days"
+
+  Scenario: share a file with another internal user via collaborators quick action
+    Given user "user1" has logged in using the webUI
+    And the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+    When the user shares resource "simple-folder" with user "User Two" using the quick action in the webUI
+    Then user "User Two" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
+    And user "user2" should have received a share with these details:
+      | field       | value                |
+      | uid_owner   | user1                |
+      | share_with  | user2                |
+      | file_target | /simple-folder (2)   |
+      | item_type   | folder               |
+      | permissions | read                 |
