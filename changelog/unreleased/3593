@@ -1,0 +1,8 @@
+Change: Removed vue-clipboard2 from the package.json file
+
+We've removed the vue-clipboard2 package as there is also the 
+copy-to-clipboard package which does work in vue templates as 
+well as in plain js files
+
+https://github.com/owncloud/phoenix/issues/3588
+https://github.com/owncloud/phoenix/pull/3593

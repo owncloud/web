@@ -63,8 +63,7 @@
         >
           <oc-icon
             v-if="!linksCopied[link.url]"
-            v-clipboard:copy="link.url"
-            v-clipboard:success="$_clipboardSuccessHandler"
+            @click="$_copyPublicLinkToClipboard()"
             name="copy_to_clipboard"
             size="small"
           />
@@ -101,6 +100,7 @@
 <script>
 import { basename, dirname } from 'path'
 import mixins from '../../mixins'
+import copyToClipboard from 'copy-to-clipboard'
 
 export default {
   name: 'PublicLinkListItem',
@@ -174,12 +174,13 @@ export default {
     }
   },
   methods: {
-    $_clipboardSuccessHandler(event) {
-      this.$emit('onCopy', event)
-    },
     $_removeLink() {
       this.removalInProgress = true
       this.$emit('onDelete', this.link)
+    },
+    $_copyPublicLinkToClipboard() {
+      copyToClipboard(this.link.url)
+      this.$emit('onCopy', { action: 'copy', text: this.link.url })
     }
   }
 }

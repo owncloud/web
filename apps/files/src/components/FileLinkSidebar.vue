@@ -18,8 +18,7 @@
               <oc-icon
                 v-if="!linksCopied[$_privateLinkOfHighlightedFile]"
                 id="files-sidebar-private-link-label"
-                v-clipboard:copy="$_privateLinkOfHighlightedFile"
-                v-clipboard:success="$_clipboardSuccessHandler"
+                @click="$_copyPrivateLinkToClipboard()"
                 name="copy_to_clipboard"
                 size="small"
               />
@@ -101,6 +100,7 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import moment from 'moment'
 import mixins from '../mixins'
+import copyToClipboard from 'copy-to-clipboard'
 import { shareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
 import { dirname } from 'path'
@@ -282,6 +282,10 @@ export default {
       this.transitionGroupActive = true
       this.$_resetData()
       this.visiblePanel = PANEL_EDIT
+    },
+    $_copyPrivateLinkToClipboard() {
+      copyToClipboard(this.$_privateLinkOfHighlightedFile)
+      this.$_clipboardSuccessHandler({ action: 'copy', text: this.$_privateLinkOfHighlightedFile })
     },
     $_clipboardSuccessHandler(event) {
       this.$set(this.linksCopied, event.text, true)
