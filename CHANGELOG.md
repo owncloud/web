@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix empty settings values: [#3602](https://github.com/owncloud/phoenix/pull/3602)
 * Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
 * Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
 * Change - Unite files list status indicators: [#3567](https://github.com/owncloud/phoenix/pull/3567)
@@ -18,6 +19,15 @@ Summary
 
 Details
 -------
+
+* Bugfix - Fix empty settings values: [#3602](https://github.com/owncloud/phoenix/pull/3602)
+
+   We've updated owncloud-sdk to version 1.0.0-638 which makes sure that an empty array gets
+   returned whenever there are no settings values for the authenticated user. Previously having
+   no settings values broke our detection of whether settings values finished loading.
+
+   https://github.com/owncloud/ocis-settings/issues/24
+   https://github.com/owncloud/phoenix/pull/3602
 
 * Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
 
