@@ -46,7 +46,7 @@ Feature: login users
       When the user tries to log in with username "invalid" and password "1234" using the webUI
       Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
 
-  @ocis-konnectd-issue-68
+  @ocis-konnectd-issue-68 @skipOnOCIS
   Scenario: try to login with valid username and invalid password
       Given these users have been created with default attributes:
         | username |
