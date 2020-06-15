@@ -117,7 +117,7 @@ export default {
     },
 
     logoImage() {
-      return `/themes/${this.configuration.theme.name}/assets/logo.png`
+      return `/themes/${this.configuration.theme.name}/assets/logo.svg`
     },
 
     productName() {
