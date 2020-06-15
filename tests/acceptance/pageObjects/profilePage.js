@@ -2,13 +2,14 @@ module.exports = {
   commands: {
     getUserProfileName: async function() {
       let userInfo
-      await this.waitForElementVisible('@profileInfoContainer')
-        .waitForElementVisible('@userProfileName')
-        .api.element('@userProfileName', result => {
+      await this.waitForElementVisible('@userProfileName').api.element(
+        '@userProfileName',
+        result => {
           this.api.elementIdText(result.value.ELEMENT, text => {
             userInfo = text.value
           })
-        })
+        }
+      )
       return userInfo
     },
     browseToManageAccount: function() {
@@ -16,16 +17,11 @@ module.exports = {
     }
   },
   elements: {
-    profileInfoContainer: {
-      selector: '#account-info-container'
-    },
     userProfileName: {
-      selector: '//div/h3[@class="uk-card-title"]',
-      locateStrategy: 'xpath'
+      selector: '.oc-topbar-personal-label'
     },
     manageAccount: {
-      selector: '//div//span[.="Manage your account"]',
-      locateStrategy: 'xpath'
+      selector: '#oc-topbar-account-manage'
     }
   }
 }
