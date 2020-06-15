@@ -1,0 +1,8 @@
+Bugfix: Fix empty settings values
+
+We've updated owncloud-sdk to version 1.0.0-638 which makes sure that an empty array gets returned
+whenever there are no settings values for the authenticated user. Previously having no settings
+values broke our detection of whether settings values finished loading.
+
+https://github.com/owncloud/phoenix/pull/3602
+https://github.com/owncloud/ocis-settings/issues/24
