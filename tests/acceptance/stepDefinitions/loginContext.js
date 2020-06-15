@@ -59,7 +59,7 @@ Then('the authentication page should be visible', () => {
   return loginPage.waitForElementPresent('@authenticateButton')
 })
 
-Then('the redirected url should contain {string}', function(urlContent) {
+Then('the user should be on page with the url containing {string}', function(urlContent) {
   return client.assert.urlEquals(client.launchUrl + urlContent)
 })
 
