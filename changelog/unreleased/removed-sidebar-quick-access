@@ -1,0 +1,7 @@
+Change: Remove sidebar quickAccess
+
+We have removed the sidebar quickAccess extension point.
+To create an quick access to the sidebar, we need to use the quickActions extension point.
+
+https://github.com/owncloud/product/issues/80
+https://github.com/owncloud/phoenix/pull/3586

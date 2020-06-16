@@ -66,25 +66,6 @@ export default {
           }
         }
       ]
-      // FIXME: we are assuming this.fileSideBars and others are available on object
-      for (const sideBar of this.fileSideBars) {
-        if (sideBar.enabled !== undefined && !sideBar.enabled(this.capabilities)) {
-          continue
-        }
-        if (sideBar.quickAccess) {
-          actions.push({
-            icon: sideBar.quickAccess.icon,
-            ariaLabel: item => {
-              return sideBar.quickAccess.ariaLabel
-            },
-            handler: this.openSideBar,
-            handlerData: sideBar.app,
-            isEnabled: function(item) {
-              return true
-            }
-          })
-        }
-      }
 
       return actions
     }
@@ -130,9 +111,6 @@ export default {
     // Files lists
     openFileActionBar(file) {
       this.$emit('FileAction', file)
-    },
-    openSideBar(file, sideBarName) {
-      this.$emit('sideBarOpen', file, sideBarName)
     },
     navigateTo(param) {
       if (this.searchTerm !== '' && this.$route.params.item === param) {

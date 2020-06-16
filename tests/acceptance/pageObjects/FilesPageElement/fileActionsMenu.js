@@ -10,7 +10,6 @@ module.exports = {
       favorite: 'favorite',
       unmarkFavorite: 'unmarkFavorite',
       restore: 'restore',
-      share: 'share',
       rename: 'rename',
       deleteImmediately: 'deleteImmediately'
     }),
@@ -105,38 +104,6 @@ module.exports = {
       return this.performFileAction(this.FileAction.unmarkFavorite)
     },
     /**
-     * opens sharing dialog for given resource
-     * assumes filesAction menu for the resource to be opened
-     * @return {*}
-     */
-    openCollaboratorsDialog: function() {
-      const api = this.api.page.FilesPageElement
-      api.appSideBar().closeSidebar(500)
-      this.useXpath()
-        .performFileAction(this.FileAction.share)
-        .waitForElementVisible('@sharingSideBar')
-        .useCss()
-      return api.sharingDialog()
-    },
-    /**
-     * checks whether sharing button of given file-row is present
-     *
-     * @returns {Promise<boolean>}
-     */
-    isSharingBtnPresent: async function() {
-      const shareButtonXpath = this.elements.shareButtonInFileRow.selector
-      let isPresent = true
-      await this.api.page.FilesPageElement.appSideBar().closeSidebar(100)
-      await this.api.elements(
-        this.elements.shareButtonInFileRow.locateStrategy,
-        shareButtonXpath,
-        result => {
-          isPresent = result.value.length > 0
-        }
-      )
-      return isPresent
-    },
-    /**
      * @return {Promise<module.exports.commands>}
      */
     restore: async function() {
@@ -196,10 +163,6 @@ module.exports = {
     },
     renameButtonInFileRow: {
       selector: '//button[@aria-label="Rename"]',
-      locateStrategy: 'xpath'
-    },
-    shareButtonInFileRow: {
-      selector: '//button[@aria-label="Collaborators"]',
       locateStrategy: 'xpath'
     },
     deleteImmediatelyButtonInFileRow: {
