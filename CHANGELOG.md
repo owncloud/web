@@ -11,6 +11,7 @@ Summary
 * Bugfix - Fix empty settings values: [#3602](https://github.com/owncloud/phoenix/pull/3602)
 * Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
 * Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
+* Change - Remove sidebar quickAccess: [#80](https://github.com/owncloud/product/issues/80)
 * Change - Unite files list status indicators: [#3567](https://github.com/owncloud/phoenix/pull/3567)
 * Change - Use correct logo: [#786](https://github.com/owncloud/owncloud-design-system/issues/786)
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
@@ -42,6 +43,14 @@ Details
 
    https://github.com/owncloud/phoenix/issues/2263
    https://github.com/owncloud/phoenix/pull/3378
+
+* Change - Remove sidebar quickAccess: [#80](https://github.com/owncloud/product/issues/80)
+
+   We have removed the sidebar quickAccess extension point. To create an quick access to the
+   sidebar, we need to use the quickActions extension point.
+
+   https://github.com/owncloud/product/issues/80
+   https://github.com/owncloud/phoenix/pull/3586
 
 * Change - Unite files list status indicators: [#3567](https://github.com/owncloud/phoenix/pull/3567)
 
