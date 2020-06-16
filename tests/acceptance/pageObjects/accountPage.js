@@ -46,15 +46,12 @@ module.exports = {
       return this.waitForElementVisible('@logoutButton').click('@logoutButton')
     },
     isPageVisible: async function() {
-      let isVisible = false
-      const handle = []
-      await this.api.windowHandles(function(result) {
-        handle.push(result.value[1])
-      })
-      await this.api.switchWindow(handle[0])
+      let isVisible = true
+
       await this.api.element('@accountDisplay', result => {
         isVisible = Object.keys(result.value).length > 0
       })
+
       return isVisible
     }
   },

@@ -1,0 +1,8 @@
+Change: Rework account dropdown
+
+We've removed user avatar, user email and version from the account dropdown.
+The log out button has been changed into a link.
+All links in account dropdown are now inside of a list.
+
+https://github.com/owncloud/product/issues/82
+https://github.com/owncloud/phoenix/pull/3605

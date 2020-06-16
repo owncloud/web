@@ -19,30 +19,29 @@
     </oc-button>
     <oc-drop
       ref="menu"
+      drop-id="account-info-container"
       toggle="#_userMenuButton"
       mode="click"
-      :options="{ pos: 'bottom-right' }"
-      class="uk-width-large"
+      close-on-click
+      :options="{ pos: 'bottom-right', delayHide: 0 }"
+      class="uk-width-auto"
     >
-      <div id="account-info-container" class="uk-card-body uk-flex uk-flex-middle uk-flex-column">
-        <avatar-image :userid="userId" :user-name="userDisplayName" :width="128" />
-        <h3 class="uk-card-title">{{ userDisplayName }}</h3>
-        <span v-if="userEmail">{{ userEmail }}</span>
-        <router-link to="/account" target="_blank"
-          ><translate>Manage your account</translate></router-link
-        >
-        <br />
-        <oc-button id="logoutMenuItem" type="a" @click="logout()"
-          ><translate>Log out</translate></oc-button
-        >
-      </div>
-      <div class="uk-card-footer uk-flex uk-flex-middle uk-flex-column">
-        <span
-          >Version: {{ appVersion.version }}-{{ appVersion.hash }} ({{
-            appVersion.buildDate
-          }})</span
-        >
-      </div>
+      <ul class="uk-list">
+        <li class="uk-text-nowrap">
+          <router-link id="oc-topbar-account-manage" v-translate to="/account"
+            >Manage your account</router-link
+          >
+        </li>
+        <li>
+          <router-link
+            id="oc-topbar-account-logout"
+            v-translate
+            to="/"
+            @click.native.prevent="logout"
+            >Log out</router-link
+          >
+        </li>
+      </ul>
     </oc-drop>
   </div>
 </template>

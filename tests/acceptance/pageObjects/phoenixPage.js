@@ -229,7 +229,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     logoutMenuItem: {
-      selector: '#logoutMenuItem'
+      selector: '#oc-topbar-account-logout'
     },
     messageCloseIcon: {
       selector: '.oc-alert-close-icon'
