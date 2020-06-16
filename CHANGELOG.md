@@ -12,6 +12,7 @@ Summary
 * Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
 * Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
 * Change - Remove sidebar quickAccess: [#80](https://github.com/owncloud/product/issues/80)
+* Change - Rework account dropdown: [#82](https://github.com/owncloud/product/issues/82)
 * Change - Unite files list status indicators: [#3567](https://github.com/owncloud/phoenix/pull/3567)
 * Change - Use correct logo: [#786](https://github.com/owncloud/owncloud-design-system/issues/786)
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
@@ -51,6 +52,14 @@ Details
 
    https://github.com/owncloud/product/issues/80
    https://github.com/owncloud/phoenix/pull/3586
+
+* Change - Rework account dropdown: [#82](https://github.com/owncloud/product/issues/82)
+
+   We've removed user avatar, user email and version from the account dropdown. The log out button
+   has been changed into a link. All links in account dropdown are now inside of a list.
+
+   https://github.com/owncloud/product/issues/82
+   https://github.com/owncloud/phoenix/pull/3605
 
 * Change - Unite files list status indicators: [#3567](https://github.com/owncloud/phoenix/pull/3567)
 
