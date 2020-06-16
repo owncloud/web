@@ -1,4 +1,4 @@
-@skip @skipOnOCIS @ocis-konnectd-issue-26
+@ocis-konnectd-issue-26
 Feature: login users
   As a user
   I want to be able to log into my account
@@ -8,6 +8,7 @@ Feature: login users
   I want only authorised users to log in
   So that unauthorised access is impossible
 
+  @skip @skipOnOCIS
   Scenario: admin login
     Given the user has browsed to the login page
     When the user clicks the authenticate button
@@ -25,16 +26,34 @@ Feature: login users
     When the user logs out of the webUI
     Then the authentication page should be visible
 
-  Scenario Outline: try to login with invalid credentials
+  Scenario: logging out redirects to the url with state attribute
     Given these users have been created with default attributes:
       | username |
       | user1    |
-    And the user has browsed to the login page
-    And the user has clicked the authenticate button
-    When the user tries to log in with username "<username>" and password "<password>" using the webUI
-    Then the warning 'Wrong password. Reset it?' should be displayed on the login page
-    Examples:
-      | username | password |
-      | user1    | invalid  |
-      | invalid  | 1234     |
+    And user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user logs out of the webUI
+    Then the user should be on page with the url containing "/#/login?state="
+    When user "user1" logs in using the webUI
+    Then the files table should be displayed
+
+  Scenario: try to login with invalid username
+      Given these users have been created with default attributes:
+        | username |
+        | user1    |
+      And the user has browsed to the login page
+      And the user has clicked the authenticate button
+      When the user tries to log in with username "invalid" and password "1234" using the webUI
+      Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
+
+  @ocis-konnectd-issue-68 @skipOnOCIS
+  Scenario: try to login with valid username and invalid password
+      Given these users have been created with default attributes:
+        | username |
+        | user1    |
+      And the user has browsed to the login page
+      And the user has clicked the authenticate button
+      When the user tries to log in with username "user1" and password "invalid" using the webUI
+      Then the files table should be displayed
+#      Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
 
