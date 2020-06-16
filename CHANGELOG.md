@@ -12,6 +12,7 @@ Summary
 * Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
 * Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
 * Change - Unite files list status indicators: [#3567](https://github.com/owncloud/phoenix/pull/3567)
+* Change - Use correct logo: [#786](https://github.com/owncloud/owncloud-design-system/issues/786)
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
 * Enhancement - Use TUS settings from capabilities: [#177](https://github.com/owncloud/ocis-reva/issues/177)
 * Enhancement - Dynamically loaded nav items: [#3497](https://github.com/owncloud/phoenix/issues/3497)
@@ -49,6 +50,14 @@ Details
    information can then be displayed in the related tab of the sidebar.
 
    https://github.com/owncloud/phoenix/pull/3567
+
+* Change - Use correct logo: [#786](https://github.com/owncloud/owncloud-design-system/issues/786)
+
+   We've changed the ownCloud logo which is used in the default theme. The previous logo had an
+   incorrect font-weight.
+
+   https://github.com/owncloud/owncloud-design-system/issues/786
+   https://github.com/owncloud/phoenix/pull/3604
 
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
 
