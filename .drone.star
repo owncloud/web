@@ -101,8 +101,8 @@ config = {
 				]
 			},
 			'extraEnvironment': {
-				'SERVER_HOST': 'http://phoenix:9100',
-				'BACKEND_HOST': 'http://reva:9140',
+				'SERVER_HOST': 'http://ocis:9100',
+				'BACKEND_HOST': 'http://ocis:9140',
 				'RUN_ON_OCIS': 'true',
 				'OCIS_SKELETON_DIR': '/var/www/owncloud/server/apps/testing/data/webUISkeleton',
 				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
@@ -419,17 +419,13 @@ def acceptance():
 										buildGlauth() +
 										buildKonnectd() +
 										buildOcisPhoenix() +
-										konnectdService(True) +
-										ocisPhoenixService(True) +
+										konnectdService() +
+										ocisPhoenixService() +
 										glauthService()+
 										fixPermissions()
 									) if not params['runningOnOCIS'] else (
-										buildKonnectd() +
-										buildOcisPhoenix() +
-										buildReva() +
-										konnectdService() +
-										revaService() +
-										ocisPhoenixService(False)
+										buildOCIS() +
+										ocisService()
 									)
 								) +
 								copyFilesForUpload() +
@@ -1068,17 +1064,17 @@ def buildKonnectd():
 		}],
 	}]
 
-def konnectdService(glauth = False):
+def konnectdService():
 	return[{
 		'name': 'konnectd',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'LDAP_BASEDN': 'dc=example,dc=com' if glauth else 'ou=TestUsers,dc=owncloud,dc=com',
-			'LDAP_BINDDN': 'cn=admin,ou=users,dc=example,dc=com' if glauth else 'cn=admin,dc=owncloud,dc=com',
-			'LDAP_URI': 'ldap://glauth:9125' if glauth else 'ldap://ldap:389',
-			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
+			'LDAP_BASEDN': 'dc=example,dc=com',
+			'LDAP_BINDDN': 'cn=admin,ou=users,dc=example,dc=com',
+			'LDAP_URI': 'ldap://glauth:9125',
+			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration-oc10.yml',
 			'KONNECTD_ISS': 'https://konnectd:9130',
 			'KONNECTD_TLS': 'true',
 			'LDAP_BINDPW': 'admin',
@@ -1093,6 +1089,75 @@ def konnectdService(glauth = False):
 		'commands': [
 			'cd /var/www/owncloud',
 			'./ocis-konnectd  --log-level debug server --signing-kid gen1-2020-02-27',
+		],
+		'volumes': [{
+			'name': 'gopath',
+			'path': '/srv/app',
+		}, {
+			'name': 'configs',
+			'path': '/srv/config'
+		}],
+	}]
+
+def buildOCIS():
+	return[{
+		'name': 'build-ocis',
+		'image': 'webhippie/golang:1.13',
+		'pull': 'always',
+		'commands': [
+			'mkdir -p /srv/app/src',
+			'cd $GOPATH/src',
+			'mkdir -p github.com/owncloud/',
+			'cd github.com/owncloud/',
+			'git clone http://github.com/owncloud/ocis',
+			'cd ocis',
+			'make build',
+			'cp bin/ocis /var/www/owncloud'
+		],
+		'volumes': [{
+			'name': 'gopath',
+			'path': '/srv/app',
+		}, {
+			'name': 'configs',
+			'path': '/srv/config'
+		}],
+	}]
+
+def ocisService():
+	return[{
+		'name': 'ocis',
+		'image': 'webhippie/golang:1.13',
+		'pull': 'always',
+		'detach': True,
+		'environment' : {
+			'REVA_LDAP_HOSTNAME': 'ldap',
+			'REVA_LDAP_PORT': 636,
+			'REVA_LDAP_BIND_PASSWORD': 'admin',
+			'REVA_LDAP_BIND_DN': 'cn=admin,dc=owncloud,dc=com',
+			'REVA_LDAP_BASE_DN': 'dc=owncloud,dc=com',
+			'REVA_LDAP_SCHEMA_UID': 'uid',
+			'REVA_LDAP_SCHEMA_MAIL': 'mail',
+			'REVA_LDAP_SCHEMA_DISPLAYNAME': 'displayName',
+			'REVA_STORAGE_HOME_DATA_TEMP_FOLDER': '/srv/app/tmp/',
+			'REVA_STORAGE_LOCAL_ROOT': '/srv/app/tmp/reva/root',
+			'REVA_STORAGE_OWNCLOUD_DATADIR': '/srv/app/tmp/reva/data',
+			'REVA_STORAGE_OC_DATA_TEMP_FOLDER': '/srv/app/tmp/',
+			'REVA_STORAGE_OWNCLOUD_REDIS_ADDR': 'redis:6379',
+			'REVA_OIDC_ISSUER': 'https://ocis:9200',
+			'REVA_STORAGE_OC_DATA_SERVER_URL': 'http://ocis:9164/data',
+			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
+			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
+			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
+			'KONNECTD_ISS': 'https://ocis:9200',
+			'KONNECTD_TLS': 'true',
+			'LDAP_URI': 'ldap://ldap',
+			'LDAP_BINDDN': 'cn=admin,dc=owncloud,dc=com',
+			'LDAP_BINDPW': 'admin',
+			'LDAP_BASEDN': 'dc=owncloud,dc=com',
+		},
+		'commands': [
+			'cd /var/www/owncloud',
+			'./ocis --log-level debug server'
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1127,14 +1192,15 @@ def buildOcisPhoenix():
 		}],
 	}]
 
-def ocisPhoenixService(glauth = False):
+# Ocis-phoenix service just for the oc10 tests
+def ocisPhoenixService():
 	return[{
 		'name': 'phoenix',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'PHOENIX_WEB_CONFIG': '/srv/config/drone/config.json' if glauth else '/srv/config/drone/ocis-config.json',
+			'PHOENIX_WEB_CONFIG': '/srv/config/drone/config.json',
 			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
 			'PHOENIX_OIDC_CLIENT_ID': 'phoenix'
 		},
@@ -1148,78 +1214,6 @@ def ocisPhoenixService(glauth = False):
 		}, {
 			'name': 'configs',
 			'path': '/srv/config'
-		}],
-	}]
-
-def buildReva():
-	return[{
-		'name': 'build-reva',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'commands': [
-			'mkdir -p /srv/app/src',
-			'cd $GOPATH/src',
-			'mkdir -p github.com/owncloud/',
-			'cd github.com/owncloud/',
-			'git clone http://github.com/owncloud/ocis-reva',
-			'cd ocis-reva',
-			'make build',
-			'cp bin/ocis-reva /var/www/owncloud'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def revaService():
-	return[{
-		'name': 'reva',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'detach': True,
-		'environment' : {
-			'REVA_STORAGE_HOME_DATA_TEMP_FOLDER': '/srv/app/tmp/',
-			'REVA_STORAGE_LOCAL_ROOT': '/srv/app/tmp/reva/root',
-			'REVA_STORAGE_OWNCLOUD_DATADIR': '/srv/app/tmp/reva/data',
-			'REVA_STORAGE_OC_DATA_TEMP_FOLDER': '/srv/app/tmp/',
-			'REVA_STORAGE_OC_DATA_URL': 'reva:9164',
-			'REVA_STORAGE_OC_DATA_SERVER_URL': 'http://reva:9164/data',
-			'REVA_OIDC_ISSUER': 'https://konnectd:9130',
-			'REVA_USERS_DRIVER': 'ldap',
-			'REVA_LDAP_HOSTNAME': 'ldap',
-			'REVA_STORAGE_HOME_EXPOSE_DATA_SERVER': '1',
-			'REVA_STORAGE_OC_EXPOSE_DATA_SERVER': '1',
-			'REVA_STORAGE_OWNCLOUD_REDIS_ADDR': 'redis:6379',
-			'REVA_LDAP_PORT': 636,
-			'REVA_LDAP_BIND_DN': 'cn=admin,dc=owncloud,dc=com',
-			'REVA_LDAP_BIND_PASSWORD': 'admin',
-			'REVA_LDAP_BASE_DN': 'dc=owncloud,dc=com',
-		},
-		'commands': [
-			'mkdir -p $REVA_STORAGE_HOME_DATA_TEMP_FOLDER',
-			'mkdir -p $REVA_STORAGE_LOCAL_ROOT',
-			'mkdir -p $REVA_STORAGE_OWNCLOUD_DATADIR',
-			'mkdir -p $REVA_STORAGE_OC_DATA_TEMP_FOLDER',
-			'cd /var/www/owncloud',
-			'./ocis-reva gateway &',
-			'./ocis-reva users &',
-			'./ocis-reva auth-basic &',
-			'./ocis-reva auth-bearer &',
-			'./ocis-reva sharing &',
-			'./ocis-reva storage-root &',
-			'./ocis-reva storage-home &',
-			'./ocis-reva storage-home-data &',
-			'./ocis-reva storage-oc &',
-			'./ocis-reva storage-oc-data &',
-			'./ocis-reva frontend',
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
 		}],
 	}]
 
@@ -1357,7 +1351,6 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 		'environment': environment,
 		'commands': [
 			'cd /var/www/owncloud/phoenix',
-			'timeout 60 bash -c \'while [[ "$(curl -s -o /dev/null -w \'\'%{http_code}\'\' http://phoenix:9100/oidc-callback.html)" != "200" ]]; do sleep 5; done\'',
 			'yarn run acceptance-tests-drone',
 		],
 		'volumes': [{
