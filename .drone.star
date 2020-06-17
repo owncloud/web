@@ -456,8 +456,7 @@ def acceptance():
 								'path': config['app']
 							},
 							'steps':
-								getOCISTestSteps(server, db) if params ['runningOnOCIS']
-								else getTestSteps(server, db, loglevel, params['federatedServerNeeded'], federatedServerVersion, federationDbSuffix) +
+								getOCISTestSteps(server, db) if params ['runningOnOCIS'] else getTestSteps(server, db, loglevel, params['federatedServerNeeded'], federatedServerVersion, federationDbSuffix) +
 								copyFilesForUpload() +
 								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
 								(
