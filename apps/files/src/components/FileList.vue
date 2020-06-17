@@ -40,7 +40,7 @@
           :key="fileData.length"
           class="uk-height-1-1"
           :items="fileData"
-          :item-size="70"
+          :item-size="77"
         >
           <div
             :data-is-visible="active"

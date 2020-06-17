@@ -350,6 +350,7 @@ module.exports = {
     /**
      *
      * @param {string} fileName
+     * @param {string} elementType
      * @returns {string}
      */
     getFileLinkSelectorByFileName: function(fileName, elementType) {
