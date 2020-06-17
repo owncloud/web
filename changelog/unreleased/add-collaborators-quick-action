@@ -1,0 +1,5 @@
+Enhancement: Add collaborators quick action
+
+We've added a new quick action which opens the new collaborators tab in the files list sidebar.
+
+https://github.com/owncloud/phoenix/pull/3573

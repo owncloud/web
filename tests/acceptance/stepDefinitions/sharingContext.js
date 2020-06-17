@@ -21,6 +21,8 @@ const { COLLABORATOR_PERMISSION_ARRAY, calculateDate } = require('../helpers/sha
  * @param {boolean} shareWithGroup
  * @param {string} role
  * @param {string} permissions
+ * @param {boolean} remote
+ * @param {boolean} quickAction Asserts whether the quick actions should be used to open new collaborators panel
  */
 const userSharesFileOrFolderWithUserOrGroup = async function(
   file,
@@ -28,16 +30,23 @@ const userSharesFileOrFolderWithUserOrGroup = async function(
   shareWithGroup,
   role,
   permissions = undefined,
-  remote = false
+  remote = false,
+  quickAction = false
 ) {
   const api = client.page.FilesPageElement
 
-  await api
-    .appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(file)
+  if (quickAction) {
+    await client.page.FilesPageElement.filesList().useQuickAction(file, 'collaborators')
+  } else {
+    await api
+      .appSideBar()
+      .closeSidebar(100)
+      .openSharingDialog(file)
+  }
 
-  return api.sharingDialog().shareWithUserOrGroup(sharee, shareWithGroup, role, permissions, remote)
+  return api
+    .sharingDialog()
+    .shareWithUserOrGroup(sharee, shareWithGroup, role, permissions, remote, null, quickAction)
 }
 
 /**
@@ -673,9 +682,8 @@ Then('it should not be possible to share file/folder {string} using the webUI', 
   const appSideBar = client.page.FilesPageElement.appSideBar()
   const filesList = client.page.FilesPageElement.filesList()
   // assumes current webUI state as no sidebar open for any resource
-  // TODO: Bring back when implementing collaborators quick action
-  // const state = await filesList.isSharingButtonPresent(resource)
-  // assert.ok(!state, `Error: Sharing button for resource ${resource} is not in disabled state`)
+  const state = await filesList.isSharingButtonPresent(resource)
+  assert.ok(!state, `Error: Sharing button for resource ${resource} is not in disabled state`)
   await filesList.openSideBar(resource)
   const sidebarLinkTabState = await appSideBar.isLinksTabPresentOnCurrentSidebar()
   assert.ok(!sidebarLinkTabState, `Error: Sidebar 'Links' tab for resource ${resource} is present`)
@@ -1339,3 +1347,18 @@ Then('it should not be possible to save the pending share on the webUI', async f
   const state = await client.page.FilesPageElement.sharingDialog().getDisabledAttributeOfSaveShareButton()
   assert.strictEqual('true', state, 'Expected: save share button to be disabled but got enabled')
 })
+
+When(
+  'the user shares resource {string} with user {string} using the quick action in the webUI',
+  function(resource, user) {
+    return userSharesFileOrFolderWithUserOrGroup(
+      resource,
+      user,
+      false,
+      'Viewer',
+      undefined,
+      false,
+      true
+    )
+  }
+)

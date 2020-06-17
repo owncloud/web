@@ -110,9 +110,22 @@ module.exports = {
      * @return {Promise<module.exports.commands>}
      */
     isSharingButtonPresent: async function(resource) {
-      await this.waitForFileVisible(resource)
-      await filesRow.openFileActionsMenu(resource).isSharingBtnPresent()
-      return this
+      const sharingBtnSelector = util.format(
+        filesRow.elements.quickAction.selector,
+        'collaborators'
+      )
+      const resourceRowSelector = this.getFileRowSelectorByFileName(resource)
+      let isPresent = true
+
+      await this.api.elements(
+        this.elements.shareButtonInFileRow.locateStrategy,
+        resourceRowSelector + sharingBtnSelector,
+        result => {
+          isPresent = result.value.length > 0
+        }
+      )
+
+      return isPresent
     },
     /**
      * @return {Promise<*>}
