@@ -255,10 +255,9 @@ module.exports = {
       return (
         this.waitForElementVisible('@dialog')
           .waitForAnimationToFinish()
-          // clicking file overwrite dialog overlay to remove file upload
-          // popup, as we upload the file directly using `setValue`. The overwrite
-          // dialog is too fast and does not give time to close the dropdown beforehand
-          .clickElementAt(this.elements.dialog.selector, 0, 0)
+          // clicking new resource dropdown to hide it, as we upload the file directly using `setValue`.
+          // The overwrite dialog is too fast and does not give time to close the dropdown beforehand
+          .clickElementAt(this.elements.newResourceDropdown.selector, 0, 0)
           .waitForElementNotVisible('@newFolderButton')
           .click('@dialogConfirmBtn')
           .waitForElementNotPresent('@dialog')
@@ -287,6 +286,9 @@ module.exports = {
     },
     deleteSelectedButton: {
       selector: '#delete-selected-btn'
+    },
+    newResourceDropdown: {
+      selector: '#new-file-menu-drop'
     },
     newFolderButton: {
       selector: '#new-folder-btn'

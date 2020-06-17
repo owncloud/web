@@ -10,7 +10,7 @@
         key="files-list-results-existence"
         gutter="small"
         flex
-        class="uk-padding-small"
+        class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-margin-xsmall-bottom"
       >
         <div>
           <oc-checkbox
