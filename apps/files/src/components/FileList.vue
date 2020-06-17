@@ -40,7 +40,7 @@
           :key="fileData.length"
           class="uk-height-1-1"
           :items="fileData"
-          :item-size="77"
+          :item-size="hasTwoRows ? 77 : 55"
         >
           <div
             :data-is-visible="active"
@@ -185,6 +185,10 @@ export default {
 
     item() {
       return this.$route.params.item
+    },
+
+    hasTwoRows() {
+      return this.$route.name === 'files-list' || this.$route.name === 'files-favorites'
     }
   },
   watch: {

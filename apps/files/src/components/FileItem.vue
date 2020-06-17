@@ -1,17 +1,21 @@
 <template>
-  <oc-grid
-    gutter="small"
-    class="oc-file uk-flex-inline uk-flex-middle"
-    :data-preview-loaded="previewLoaded"
-  >
+  <div class="oc-file uk-flex-inline uk-flex-middle" :data-preview-loaded="previewLoaded">
     <oc-img
       v-if="previewUrl"
       key="file-preview"
-      class="files-list-file-preview"
+      class="files-list-file-preview uk-margin-small-right"
+      :class="{ 'files-list-file-preview-small': !hasTwoRows }"
       :src="previewUrl"
       alt=""
     />
-    <oc-icon v-else key="file-icon" :name="previewIcon" size="medium" aria-hidden="true" />
+    <oc-icon
+      v-else
+      key="file-icon"
+      :name="previewIcon"
+      :size="hasTwoRows ? 'medium' : 'small'"
+      aria-hidden="true"
+      class="uk-margin-small-right"
+    />
     <div>
       <div class="file-row-name" :filename="item.name">
         <span
@@ -24,18 +28,19 @@
           v-text="'.' + item.extension"
         />
       </div>
-      <div class="uk-flex uk-flex-middle">
+      <div v-if="hasTwoRows" class="uk-flex uk-flex-middle">
         <translate class="uk-margin-small-right">State:</translate>
         <Indicators
           v-if="indicators.length > 0"
           key="status-indicators"
           :default-indicators="indicators"
           :item="item"
+          class="files-list-indicators"
         />
         <span v-else key="no-status-indicators" aria-hidden="true" v-text="'-'" />
       </div>
     </div>
-  </oc-grid>
+  </div>
 </template>
 <script>
 import queryString from 'query-string'
@@ -103,6 +108,10 @@ export default {
     },
     previewIcon() {
       return this.fileTypeIcon(this.item)
+    },
+
+    hasTwoRows() {
+      return this.$route.name === 'files-list' || this.$route.name === 'files-favorites'
     }
   },
   mounted() {
@@ -166,6 +175,20 @@ export default {
 
 <style scoped>
 .files-list-file-preview {
-  width: 50px;
+  width: 36px;
+}
+
+.files-list-file-preview-small {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+}
+
+.oc-file:hover .oc-file-name {
+  text-decoration: none;
+}
+
+.oc-file .oc-file-name:hover {
+  text-decoration: underline;
 }
 </style>
