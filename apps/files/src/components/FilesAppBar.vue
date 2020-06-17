@@ -30,8 +30,12 @@
       <div>
         <template v-if="$_ocFilesAppBar_showActions">
           <template v-if="canUpload && hasFreeSpace">
-            <oc-button id="new-file-menu-btn" key="new-file-menu-btn-enabled" variation="primary"
-              ><translate>+ New</translate></oc-button
+            <oc-button
+              id="new-file-menu-btn"
+              key="new-file-menu-btn-enabled"
+              variation="primary"
+              icon="add"
+              ><translate>New</translate></oc-button
             >
             <oc-drop
               drop-id="new-file-menu-drop"
