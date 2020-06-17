@@ -3,8 +3,11 @@
     <label class="oc-label">
       <translate>Role:</translate>
     </label>
-    <oc-button :id="`files-${mode}-role-button`" :class="`uk-width-1-1 files-${mode}-role-button`">
-      <role-item :role="selectedRole" class="uk-margin-small-bottom" />
+    <oc-button
+      :id="`files-${mode}-role-button`"
+      :class="`uk-width-1-1 files-${mode}-role-button uk-flex-left`"
+    >
+      <role-item :role="selectedRole" class="uk-margin-xsmall-top uk-margin-xsmall-bottom" />
     </oc-button>
     <oc-drop
       close-on-click
