@@ -2,7 +2,6 @@
   <oc-grid
     gutter="small"
     class="oc-file uk-flex-inline uk-flex-middle"
-    :filename="item.name"
     :data-preview-loaded="previewLoaded"
   >
     <oc-img
@@ -14,20 +13,27 @@
     />
     <oc-icon v-else key="file-icon" :name="previewIcon" size="medium" aria-hidden="true" />
     <div>
-      <div>
-        <span class="uk-text-bold oc-cursor-pointer" role="button" v-text="fileName" /><span
+      <div class="file-row-name" :filename="item.name">
+        <span
+          class="uk-text-bold oc-cursor-pointer oc-file-name uk-padding-remove-left"
+          role="button"
+          v-text="fileName"
+        /><span
           v-if="item.extension"
-          class="uk-text-meta"
+          class="uk-text-meta oc-file-extension"
           v-text="'.' + item.extension"
         />
       </div>
-      <Indicators
-        v-if="indicators.length > 0"
-        key="status-indicators"
-        :default-indicators="indicators"
-        :item="item"
-      />
-      <span v-else key="no-status-indicators" aria-hidden="true" v-text="'-'" />
+      <div class="uk-flex uk-flex-middle">
+        <translate class="uk-margin-small-right">State:</translate>
+        <Indicators
+          v-if="indicators.length > 0"
+          key="status-indicators"
+          :default-indicators="indicators"
+          :item="item"
+        />
+        <span v-else key="no-status-indicators" aria-hidden="true" v-text="'-'" />
+      </div>
     </div>
   </oc-grid>
 </template>

@@ -60,7 +60,6 @@
           :key="item.path"
           :item="item"
           :dav-url="davUrl"
-          class="file-row-name"
           @click.native.stop="
             item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)
           "

@@ -61,7 +61,6 @@
           :dav-url="davUrl"
           :show-path="$_isFavoritesList"
           :indicators="indicatorArray(rowItem)"
-          class="file-row-name"
           @click.native.stop="
             rowItem.type === 'folder'
               ? navigateTo(rowItem.path.substr(1))
