@@ -320,59 +320,6 @@ def changelog(ctx):
 
 	return pipelines
 
-def getTestSteps(server, db, logLevel, fedServer, federatedServerVersion, federationDbSuffix):
-	return (
-		installNPM() +
-		buildPhoenix() +
-		installCore(server, db) +
-		owncloudLog() +
-		setupServerAndApp(logLevel) +
-		(
-			installFederatedServer(federatedServerVersion, db, federationDbSuffix) +
-			setupFedServerAndApp(logLevel) +
-			fixPermissionsFederated() +
-			owncloudLogFederated() if fedServer else []
-		) +
-		setupGraphapiOIdC() +
-		buildGlauth() +
-		buildKonnectd() +
-		buildOcisPhoenix() +
-		glauthService() +
-		konnectdService(True) +
-		ocisPhoenixService(True) +
-		fixPermissions()
-	)
-
-def getOCISTestSteps(server, db):
-	return (
-		installNPM() +
-		buildPhoenix() +
-		installCore(server, db) +
-		buildKonnectd() +
-		buildReva() +
-		buildOcisPhoenix() +
-		revaService() +
-		konnectdService() +
-		ocisPhoenixService()
-	)
-
-def getOCISTestServices(alternateSuiteName, browser, db):
-	return (
-		browserService(alternateSuiteName, browser) +
-		databaseService(db) +
-		owncloudService() +
-		redisService() +
-		ldapService()
-	)
-
-def getTestServices(alternateSuiteName, browser, db, federated, federationDbSuffix):
-	steps = (
-		browserService(alternateSuiteName, browser) +
-		databaseService(db) +
-		owncloudService()
-	) + (owncloudFederatedService() + databaseServiceForFederation(db, federationDbSuffix) if federated else [])
-	return steps
-
 def acceptance():
 	pipelines = []
 
@@ -443,7 +390,6 @@ def acceptance():
 						name = '%s%s' % (suiteName, browserString)
 						maxLength = 50
 						nameLength = len(name)
-						loglevel = params['logLevel']
 						if nameLength > maxLength:
 							print("Error: generated stage name of length", nameLength, "is not supported. The maximum length is " + str(maxLength) + ".", name)
 							errorFound = True
@@ -456,18 +402,54 @@ def acceptance():
 								'path': config['app']
 							},
 							'steps':
-								getOCISTestSteps(server, db) if params ['runningOnOCIS']
-								else getTestSteps(server, db, loglevel, params['federatedServerNeeded'], federatedServerVersion, federationDbSuffix) +
+								installNPM() +
+								buildPhoenix() +
+								installCore(server, db) +
+								(
+									(
+										owncloudLog() +
+										setupServerAndApp(params['logLevel']) +
+										(
+											installFederatedServer(federatedServerVersion, db, federationDbSuffix) +
+											setupFedServerAndApp(params['logLevel']) +
+											fixPermissionsFederated() +
+											owncloudLogFederated() if params['federatedServerNeeded'] else []
+										) +
+										setupGraphapiOIdC() +
+										buildGlauth() +
+										buildKonnectd() +
+										buildOcisPhoenix() +
+										konnectdService(True) +
+										ocisPhoenixService(True) +
+										glauthService()+
+										fixPermissions()
+									) if not params['runningOnOCIS'] else (
+										buildKonnectd() +
+										buildOcisPhoenix() +
+										buildReva() +
+										konnectdService() +
+										revaService() +
+										ocisPhoenixService(False)
+									)
+								) +
 								copyFilesForUpload() +
 								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
 								(
 									uploadScreenshots() +
 									buildGithubComment(suiteName, alternateSuiteName) +
-									githubComment() if isLocalBrowser(browser) and params['screenShots'] else []
-								),
+									githubComment()
+								if isLocalBrowser(browser) and params['screenShots'] else []),
 							'services':
-								getOCISTestServices(alternateSuiteName, browser, db) if params['runningOnOCIS']
-								else getTestServices(alternateSuiteName, browser, db, params['federatedServerNeeded'], federationDbSuffix),
+								( redisService() if params['runningOnOCIS'] else []) +
+								browserService(alternateSuiteName, browser) +
+								databaseService(db) +
+								(
+									(
+										owncloudFederatedService() +
+										databaseServiceForFederation(db, federationDbSuffix) if params['federatedServerNeeded'] else []
+									) if not params['runningOnOCIS'] else ldapService()
+								) +
+								owncloudService(),
 							'depends_on': [],
 							'trigger': {
 								'ref': [
