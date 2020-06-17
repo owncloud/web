@@ -17,6 +17,7 @@ Summary
 * Change - Use correct logo: [#786](https://github.com/owncloud/owncloud-design-system/issues/786)
 * Enhancement - Send mtime with uploads: [#2969](https://github.com/owncloud/phoenix/issues/2969)
 * Enhancement - Use TUS settings from capabilities: [#177](https://github.com/owncloud/ocis-reva/issues/177)
+* Enhancement - Add collaborators quick action: [#3573](https://github.com/owncloud/phoenix/pull/3573)
 * Enhancement - Dynamically loaded nav items: [#3497](https://github.com/owncloud/phoenix/issues/3497)
 * Enhancement - Load and display quick actions: [#3573](https://github.com/owncloud/phoenix/pull/3573)
 
@@ -96,6 +97,12 @@ Details
 
    https://github.com/owncloud/ocis-reva/issues/177
    https://github.com/owncloud/phoenix/pull/3568
+
+* Enhancement - Add collaborators quick action: [#3573](https://github.com/owncloud/phoenix/pull/3573)
+
+   We've added a new quick action which opens the new collaborators tab in the files list sidebar.
+
+   https://github.com/owncloud/phoenix/pull/3573
 
 * Enhancement - Dynamically loaded nav items: [#3497](https://github.com/owncloud/phoenix/issues/3497)
 
