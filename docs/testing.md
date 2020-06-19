@@ -78,7 +78,7 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
     yarn run redis-server
     ```
 4. For Mac Users: create a new phoenix config.json file.
-      As starting point and example that should work when running every service on localhost use `tests/acceptance/ocis-mac-config-local.json`
+      As starting point and example that should work when running every service on localhost use `tests/acceptance/ocis-mac-config.json`
 
 5. Run the OCIS server with the necessary configurations
     ```sh
