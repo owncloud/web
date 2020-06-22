@@ -2,6 +2,7 @@ const path = require('path')
 const events = require('events')
 const archiver = require('archiver')
 const _ = require('lodash')
+const fs = require('fs')
 
 class UploadRemote extends events.EventEmitter {
   /**
@@ -11,7 +12,7 @@ class UploadRemote extends events.EventEmitter {
    * @param {string} filePath Local path to the file used for uploading
    * @param {function (string): void} [callback] - called when file gets uploaded with path to uploaded file
    */
-  command(filePath, callback) {
+  command(filePath, mtime, callback) {
     const buffers = []
     const zip = archiver('zip')
     /*
@@ -50,7 +51,14 @@ class UploadRemote extends events.EventEmitter {
       })
 
     const name = path.basename(filePath)
+    const mtimeInMs = new Date(mtime).getTime() / 1000
+    console.log(mtimeInMs)
+    console.log(mtime)
     zip.file(filePath, { name })
+    zip.append(fs.createReadStream(filePath), {
+      name: name,
+      date: mtime
+    })
     zip.finalize() // `finish` event fires after calling this
   }
 }

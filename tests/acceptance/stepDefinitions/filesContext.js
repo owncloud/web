@@ -11,7 +11,7 @@ const util = require('util')
 let deletedElements
 let timeOfLastDeleteOperation = Date.now()
 let timeOfLastUploadOperation = Date.now()
-const { download } = require('../helpers/webdavHelper')
+const { download, propfind } = require('../helpers/webdavHelper')
 
 Before(() => {
   deletedElements = []
@@ -218,6 +218,16 @@ When('the user uploads file {string} using the webUI', function(element) {
 When('the user uploads a created file {string} using the webUI', function(element) {
   const filePath = path.join(client.globals.filesForUpload, element)
   return client.uploadRemote(filePath, function(uploadPath) {
+    client.page.filesPage().uploadFile(uploadPath)
+  })
+})
+
+When('the user uploads a created file {string} with mtime {string} using the webUI', function(
+  element,
+  mtime
+) {
+  const filePath = path.join(client.globals.filesForUpload, element)
+  return client.uploadRemote(filePath, mtime, function(uploadPath) {
     client.page.filesPage().uploadFile(uploadPath)
   })
 })
@@ -1042,3 +1052,11 @@ Then('the file {string} should have a file type icon displayed on the webUI', as
 Then('quick action {string} should be displayed on the webUI', function(action) {
   return client.page.FilesPageElement.filesRow().isQuickActionVisible(action)
 })
+
+Then(
+  'the user propfind result on file {string} should contain last modified date at {string}',
+  async function(path, mtime) {
+    const response = await propfind(path, client.globals.currentUser, ['oc:getlastmodified'])
+    console.log(response)
+  }
+)

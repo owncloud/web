@@ -149,3 +149,11 @@ Feature: File Upload
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And as "user1" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+  Scenario: upload past created file to check mtime header
+    Given a file with the name "test.txt" and the mtime "Thu 08 Aug 2019 04:18:13 AM UTC" has been created locally
+    And the user has browsed to the files page
+    When the user uploads a created file "test.txt" with mtime "Thu 08 Aug 2019 04:18:13 AM" using the webUI
+    Then file "test.txt" should be listed on the webUI
+    And the user propfind result on file "test.txt" should contain last modified date at "Thu 08 Aug 2019 04:18:13 AM UTC"
+

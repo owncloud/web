@@ -84,6 +84,8 @@ const requestEndpoint = function(path, params, userId = 'admin', header = {}) {
   const headers = { ...createAuthHeader(userId), ...header }
   const options = { ...params, headers }
   const url = join(backendHelper.getCurrentBackendUrl(), 'remote.php/dav', path)
+  console.log(url)
+  console.log(options)
   return fetcher(url, options)
 }
 

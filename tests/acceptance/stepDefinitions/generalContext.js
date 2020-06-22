@@ -20,6 +20,20 @@ Given(
   }
 )
 
+Given('a file with the name {string} and the mtime {string} has been created locally', function(
+  name,
+  mtime
+) {
+  const fullPathOfLocalFile = client.globals.filesForUpload + name
+  const mtimeInMs = new Date(mtime).getTime() / 1000
+  console.log(mtimeInMs)
+  const fh = fs.openSync(fullPathOfLocalFile, 'w')
+  fs.utimesSync(fullPathOfLocalFile, mtimeInMs, mtimeInMs)
+  fs.closeSync(fh)
+
+  createdFiles.push(fullPathOfLocalFile)
+})
+
 const getConfigJsonContent = function(fullPathOfConfigFile) {
   const rawdata = fs.readFileSync(fullPathOfConfigFile)
   return JSON.parse(rawdata)
