@@ -51,13 +51,14 @@ class UploadRemote extends events.EventEmitter {
       })
 
     const name = path.basename(filePath)
-    const mtimeInMs = new Date(mtime).getTime() / 1000
+    const date = new Date()
+    const mtimeInMs = new Date(date.setMonth(date.getMonth() - 8))
     console.log(mtimeInMs)
-    console.log(mtime)
     zip.file(filePath, { name })
-    zip.append(fs.createReadStream(filePath), {
+    const source = fs.createReadStream(filePath)
+    zip.append(source, {
       name: name,
-      date: mtime
+      date: new Date()
     })
     zip.finalize() // `finish` event fires after calling this
   }
