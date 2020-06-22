@@ -16,102 +16,103 @@ config = {
 	'acceptance': {
 		'webUI': {
 			'suites': {
-				'webUICreateFilesFolders': 'createFilesFolders',
-				'webUIDeleteFilesFolders': 'deleteFilesFolders',
-				'webUIFavorites': 'Favorites',
-				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingAutocompletion': 'SharingAutocompletion',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
-				'webUIResharing': 'Resharing',
-				'webUISharingPublic': 'SharingPublic',
-				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
-				'webUITrashbin': 'Trashbin',
-				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
-				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
-				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-				'webUISharingNotifications': 'SharingNotifications',
+				# 'webUICreateFilesFolders': 'createFilesFolders',
+				# 'webUIDeleteFilesFolders': 'deleteFilesFolders',
+				# 'webUIFavorites': 'Favorites',
+				# 'webUIFiles': 'Files',
+				# 'webUILogin': 'Login',
+				# 'webUINotifications': 'Notifications',
+				# 'webUIPrivateLinks': 'PrivateLinks',
+				# 'webUIRenameFiles': 'RenameFiles',
+				# 'webUIRenameFolders': 'RenameFolders',
+				# 'webUIRestrictSharing': 'RestrictSharing',
+				# 'webUISharingAutocompletion': 'SharingAutocompletion',
+				# 'webUISharingInternalGroups': 'SharingInternalGroups',
+				# 'webUISharingInternalUsers': 'SharingInternalUsers',
+				# 'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
+				# 'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
+				# 'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
+				# 'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
+				# 'webUIResharing': 'Resharing',
+				# 'webUISharingPublic': 'SharingPublic',
+				# 'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
+				# 'webUITrashbin': 'Trashbin',
+				# 'webUIUpload': 'Upload',
+				# 'webUISharingAcceptShares': 'SharingAcceptShares',
+				# 'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
+				# 'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
+				# 'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
+				# 'webUISharingNotifications': 'SharingNotifications',
 				'webUIAccount': 'Account'
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
 				'PHOENIX_CONFIG': '/srv/config/drone/config.json'
-			}
+			},
+			'screenShots': True
 		},
-		'webUIFederation': {
-			'suites': {
-				'webUISharingExternal': 'SharingExternal',
-			},
-			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
-				'REMOTE_BACKEND_HOST': 'http://federated'
-			},
-			'federatedServerNeeded': True,
-			'federatedServerVersion': 'daily-master-qa'
-		},
-		'webUI-XGA': {
-			'suites': {
-				'all': 'XGAPortrait',
-			},
-			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
-				'SCREEN_RESOLUTION': '768x1024'
-			},
-			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
-		},
-		'webUI-iPhone': {
-			'suites': {
-				'all': 'iPhone',
-			},
-			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
-				'SCREEN_RESOLUTION': '375x812'
-			},
-			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and @skipOnOC10'
-		},
-		'webUI-ocis': {
-			'suites': {
-				'webUIOCIS1': [
-					'webUICreateFilesFolders',
-					'webUIDeleteFilesFolders',
-					'webUIFavorites',
-					'webUIFiles',
-					'webUILogin',
-					'webUINotifications',
-				],
-				'webUIOCIS2': [
-					'webUIPrivateLinks',
-					'webUIRenameFiles',
-					'webUIRenameFolders',
-					'webUITrashbin',
-					'webUIUpload',
-					'webUIAccount'
-				]
-			},
-			'extraEnvironment': {
-				'SERVER_HOST': 'http://ocis:9100',
-				'BACKEND_HOST': 'http://ocis:9140',
-				'RUN_ON_OCIS': 'true',
-				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
-				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
-				'LDAP_SERVER_URL': 'ldap://ldap',
-				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
-			},
-			'runningOnOCIS': True,
-			'filterTags': 'not @skip and not @skipOnOCIS',
-		}
+		# 'webUIFederation': {
+		# 	'suites': {
+		# 		'webUISharingExternal': 'SharingExternal',
+		# 	},
+		# 	'extraEnvironment': {
+		# 		'OPENID_LOGIN': 'true',
+		# 		'REMOTE_BACKEND_HOST': 'http://federated'
+		# 	},
+		# 	'federatedServerNeeded': True,
+		# 	'federatedServerVersion': 'daily-master-qa'
+		# },
+		# 'webUI-XGA': {
+		# 	'suites': {
+		# 		'all': 'XGAPortrait',
+		# 	},
+		# 	'extraEnvironment': {
+		# 		'OPENID_LOGIN': 'true',
+		# 		'SCREEN_RESOLUTION': '768x1024'
+		# 	},
+		# 	'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
+		# },
+		# 'webUI-iPhone': {
+		# 	'suites': {
+		# 		'all': 'iPhone',
+		# 	},
+		# 	'extraEnvironment': {
+		# 		'OPENID_LOGIN': 'true',
+		# 		'SCREEN_RESOLUTION': '375x812'
+		# 	},
+		# 	'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and @skipOnOC10'
+		# },
+		# 'webUI-ocis': {
+		# 	'suites': {
+		# 		'webUIOCIS1': [
+		# 			'webUICreateFilesFolders',
+		# 			'webUIDeleteFilesFolders',
+		# 			'webUIFavorites',
+		# 			'webUIFiles',
+		# 			'webUILogin',
+		# 			'webUINotifications',
+		# 		],
+		# 		'webUIOCIS2': [
+		# 			'webUIPrivateLinks',
+		# 			'webUIRenameFiles',
+		# 			'webUIRenameFolders',
+		# 			'webUITrashbin',
+		# 			'webUIUpload',
+		# 			'webUIAccount'
+		# 		]
+		# 	},
+		# 	'extraEnvironment': {
+		# 		'SERVER_HOST': 'http://ocis:9100',
+		# 		'BACKEND_HOST': 'http://ocis:9140',
+		# 		'RUN_ON_OCIS': 'true',
+		# 		'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+		# 		'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+		# 		'LDAP_SERVER_URL': 'ldap://ldap',
+		# 		'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+		# 	},
+		# 	'runningOnOCIS': True,
+		# 	'filterTags': 'not @skip and not @skipOnOCIS',
+		# }
 	},
 
 	'build': True
