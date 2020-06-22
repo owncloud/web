@@ -1020,6 +1020,7 @@ def buildGlauth():
 			'cd github.com/owncloud/',
 			'git clone http://github.com/owncloud/ocis-glauth',
 			'cd ocis-glauth',
+			'git checkout 44e252306af2dedd72ad00567bbfe9c03322ab20',
 			'make build',
 			'cp bin/ocis-glauth /var/www/owncloud'
 		],
