@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-file uk-flex-inline uk-flex-middle" :data-preview-loaded="previewLoaded">
+  <div class="oc-file uk-flex uk-flex-middle" :data-preview-loaded="previewLoaded">
     <oc-img
       v-if="previewUrl"
       key="file-preview"
@@ -16,8 +16,8 @@
       aria-hidden="true"
       class="uk-margin-small-right"
     />
-    <div>
-      <div class="file-row-name" :filename="item.name">
+    <div class="uk-width-expand">
+      <div class="file-row-name uk-text-truncate" :filename="item.name">
         <span
           class="uk-text-bold oc-cursor-pointer oc-file-name uk-padding-remove-left"
           role="button"

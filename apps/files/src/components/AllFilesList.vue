@@ -51,10 +51,7 @@
       </div>
     </template>
     <template #rowColumns="{ item: rowItem, index }">
-      <div
-        :ref="index === 0 ? 'firstRowNameColumn' : null"
-        class="uk-text-truncate uk-width-expand"
-      >
+      <div :ref="index === 0 ? 'firstRowNameColumn' : null" class="uk-width-expand">
         <file-item
           :key="rowItem.viewId"
           :item="rowItem"

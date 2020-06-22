@@ -55,7 +55,7 @@
       <div class="oc-icon" />
     </template>
     <template #rowColumns="{ item }">
-      <div class="uk-text-truncate uk-width-expand">
+      <div class="uk-width-expand">
         <file-item
           :key="item.path"
           :item="item"

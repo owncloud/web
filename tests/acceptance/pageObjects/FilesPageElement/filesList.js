@@ -661,11 +661,11 @@ module.exports = {
     },
     fileRowByNameAndExtension: {
       selector:
-        '//div[@class="file-row-name"][span/text()=%s and span/text()="%s"]/ancestor::div[@data-is-visible="true"]',
+        '//div[contains(@class, "file-row-name")][span/text()=%s and span/text()="%s"]/ancestor::div[@data-is-visible="true"]',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
-      selector: '//div[@class="file-row-name"]',
+      selector: '//div[contains(@class, "file-row-name")]',
       locateStrategy: 'xpath'
     },
     fileIconInFileRow: {
