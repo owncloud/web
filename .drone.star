@@ -104,7 +104,7 @@ config = {
 				'SERVER_HOST': 'http://ocis:9100',
 				'BACKEND_HOST': 'http://ocis:9140',
 				'RUN_ON_OCIS': 'true',
-				'OCIS_SKELETON_DIR': '/var/www/owncloud/server/apps/testing/data/webUISkeleton',
+				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
 				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
 				'LDAP_SERVER_URL': 'ldap://ldap',
 				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
@@ -404,9 +404,9 @@ def acceptance():
 							'steps':
 								installNPM() +
 								buildPhoenix() +
-								installCore(server, db) +
 								(
 									(
+										installCore(server, db) +
 										owncloudLog() +
 										setupServerAndApp(params['logLevel']) +
 										(
@@ -425,7 +425,8 @@ def acceptance():
 										fixPermissions()
 									) if not params['runningOnOCIS'] else (
 										buildOCIS() +
-										ocisService()
+										ocisService() +
+										getSkeletonFiles()
 									)
 								) +
 								copyFilesForUpload() +
@@ -438,14 +439,14 @@ def acceptance():
 							'services':
 								( redisService() if params['runningOnOCIS'] else []) +
 								browserService(alternateSuiteName, browser) +
-								databaseService(db) +
 								(
+									databaseService(db) +
 									(
 										owncloudFederatedService() +
 										databaseServiceForFederation(db, federationDbSuffix) if params['federatedServerNeeded'] else []
-									) if not params['runningOnOCIS'] else ldapService()
-								) +
-								owncloudService(),
+									) +
+									owncloudService() if not params['runningOnOCIS'] else ldapService()
+								),
 							'depends_on': [],
 							'trigger': {
 								'ref': [
@@ -965,6 +966,20 @@ def website(ctx):
 		},
 	}
   ]
+
+def getSkeletonFiles():
+	return [{
+		'name': 'setup-skeleton-files',
+		'image': 'owncloudci/php:7.3',
+		'pull': 'always',
+		'commands': [
+			'git clone https://github.com/owncloud/testing.git /srv/app/testing',
+		],
+		'volumes': [{
+			'name': 'gopath',
+			'path': '/srv/app',
+		}],
+	}]
 
 def setupGraphapiOIdC():
 	return [{
