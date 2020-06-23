@@ -61,7 +61,12 @@ The feature files are located in the "tests/acceptance/features" subdirectories.
 see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
 
 ### with OCIS backend
-- [setup and build Phoenix]({{< ref "building.md" >}})
+
+1. [build Phoenix]({{< ref "building.md" >}})
+2. create a new phoenix `config.json` file and copy it into the `dist` folder, even running phoenix in the default ocis environment does not need a `config.json` file, some tests rely on it being present.
+ As starting point and example that should work when running every service on localhost use
+   Linux: `config.json.sample-ocis`
+   Mac: `tests/acceptance/ocis-mac-config.json`
 
 #### the quick way (all automated)
 1. run `yarn run test-requirements:ocis` (`yarn run test-requirements:ocis:mac` for Mac users) to install, configure and run all ocis requirements
@@ -77,10 +82,8 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 
     yarn run redis-server
     ```
-4. For Mac Users: create a new phoenix config.json file.
-      As starting point and example that should work when running every service on localhost use `tests/acceptance/ocis-mac-config.json`
 
-5. Run the OCIS server with the necessary configurations
+4. Run the OCIS server with the necessary configurations
     ```sh
     export REVA_LDAP_HOSTNAME='localhost'
     export REVA_LDAP_PORT=636
@@ -104,7 +107,7 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
     ```sh
     bin/ocis server
     ```
-6. Run `yarn run acceptance-tests-ocis <feature-files-to-test>`.
+5. Run `yarn run acceptance-tests-ocis <feature-files-to-test>`.
    The feature files are located in the "tests/acceptance/features" subdirectories.
 
 see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
