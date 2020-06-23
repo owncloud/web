@@ -71,7 +71,7 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 #### the quick way (all automated)
 1. run `yarn run test-requirements:ocis` (`yarn run test-requirements:ocis:mac` for Mac users) to install, configure and run all ocis requirements
 2. run `yarn run acceptance-tests-ocis <feature-files-to-test>` to run the tests, the feature files are located in the "tests/acceptance/features" subdirectories.
-3. after the tests run `yarn run docker-kill` to stop all created docker containers
+3. after the tests run `yarn run killall` to stop all created docker containers, and the ocis services
 
 #### the manual way (e.g. to run from an existing ocis location)
 1. clone and build [ocis](https://github.com/owncloud/ocis)

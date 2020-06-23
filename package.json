@@ -30,6 +30,8 @@
     "selenium:mac": "docker run --rm -d -p ${SELENIUM_PORT:-4444}:4444 -p 5900:5900 -v /dev/shm:/dev/shm -v ${REMOTE_UPLOAD_DIR:-$PWD/tests/acceptance/filesForUpload}:${LOCAL_UPLOAD_DIR:-/uploads}:ro --name phoenix-tests-selenium selenium/standalone-chrome-debug",
     "ldap-server": "docker run --rm -d -p 127.0.0.1:389:389 -p 636:636 --hostname ldap.my-company.com -e LDAP_TLS_VERIFY_CLIENT=never -e LDAP_DOMAIN=owncloud.com -e LDAP_ORGANISATION=ownCloud -e LDAP_ADMIN_PASSWORD=admin --name phoenix-tests-slapd osixia/openldap",
     "redis-server": "docker run --rm -d -p 6379:6379 -e REDIS_DATABASES=1 --name phoenix-tests-redis webhippie/redis:latest",
+    "killall": "yarn run ocis-kill; yarn run docker-kill",
+    "ocis-kill": "killall ocis",
     "docker-kill": "docker kill phoenix-tests-selenium phoenix-tests-slapd phoenix-tests-redis",
     "testing-app": "if [ -d tests/testing-app ]; then (cd tests/testing-app && git pull && pwd); else git clone --depth 1 https://github.com/owncloud/testing.git tests/testing-app; fi;",
     "build-ocis": "if [ -d tests/ocis ]; then (cd tests/ocis && git reset --hard master && git pull); else git clone --depth 1 https://github.com/owncloud/ocis.git tests/ocis; fi; cd tests/ocis; make clean; make",
