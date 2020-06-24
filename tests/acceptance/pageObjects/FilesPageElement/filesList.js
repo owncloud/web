@@ -443,7 +443,7 @@ module.exports = {
           const virtualScrollWrapper = document.querySelector(scrollWrapperSelector)
           const tableHeaderPosition = document
             .querySelector(listHeaderSelector)
-            .getBoundingClientRect().top
+            .getBoundingClientRect().bottom
           let scrollDistance = virtualScrollWrapper.scrollTop
 
           function scrollUntilElementVisible() {
