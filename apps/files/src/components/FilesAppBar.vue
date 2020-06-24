@@ -10,7 +10,7 @@
       @progress="onFileProgress"
     />
     <oc-grid flex gutter="small">
-      <div class="uk-flex-1">
+      <div>
         <div class="uk-flex">
           <oc-breadcrumb
             v-if="showBreadcrumb"
