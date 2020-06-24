@@ -106,7 +106,7 @@ export default {
         if (file.type === 'folder') {
           return 'folder'
         }
-        const icon = fileTypeIconMappings[file.extension]
+        const icon = fileTypeIconMappings[file.extension.toLowerCase()]
         if (icon) return `${icon}`
       }
       return 'x-office-document'
