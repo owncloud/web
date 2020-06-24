@@ -350,6 +350,7 @@ def acceptance():
 		'federatedServerVersion': '',
 		'runningOnOCIS': False,
 		'screenShots': False,
+		'ocisBranch': 'master',
 		'ocisCommit': '',
 	}
 
@@ -431,7 +432,7 @@ def acceptance():
 										glauthService()+
 										fixPermissions()
 									) if not params['runningOnOCIS'] else (
-										buildOCIS(params['ocisCommit']) +
+										buildOCIS(params['ocisBranch'], params['ocisCommit']) +
 										ocisService() +
 										getSkeletonFiles()
 									)
@@ -1122,7 +1123,7 @@ def konnectdService():
 		}],
 	}]
 
-def buildOCIS(ocisCommit):
+def buildOCIS(ocisBranch, ocisCommit):
 	return[{
 		'name': 'build-ocis',
 		'image': 'webhippie/golang:1.13',
@@ -1132,7 +1133,7 @@ def buildOCIS(ocisCommit):
 			'cd $GOPATH/src',
 			'mkdir -p github.com/owncloud/',
 			'cd github.com/owncloud/',
-			'git clone http://github.com/owncloud/ocis',
+			'git clone -b %s --single-branch --no-tags https://github.com/owncloud/ocis' % (ocisBranch),
 			'cd ocis',
 		] + ([
 			'git checkout %s' % (ocisCommit)
