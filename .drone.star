@@ -114,6 +114,12 @@ config = {
 		}
 	},
 
+	'defaults': {
+		'acceptance': {
+			'ocisCommit': '284a9996dffa912cc1382e259b748c56ddc4aa0f',
+		}
+	},
+
 	'build': True
 }
 
