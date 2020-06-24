@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix file type icons for uppercase file extensions: [#3670](https://github.com/owncloud/phoenix/pull/3670)
 * Bugfix - Fix empty settings values: [#3602](https://github.com/owncloud/phoenix/pull/3602)
 * Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
 * Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
@@ -24,6 +25,10 @@ Summary
 
 Details
 -------
+
+* Bugfix - Fix file type icons for uppercase file extensions: [#3670](https://github.com/owncloud/phoenix/pull/3670)
+
+   https://github.com/owncloud/phoenix/pull/3670
 
 * Bugfix - Fix empty settings values: [#3602](https://github.com/owncloud/phoenix/pull/3602)
 
