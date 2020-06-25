@@ -108,9 +108,6 @@ After(function closeSessionForEnv() {
 })
 
 After(async function tryToReadBrowserConsoleOnFailure({ result }) {
-  if (client.globals.ocis) {
-    return
-  }
   if (result.status === 'failed') {
     const logs = await getAllLogsWithDateTime('SEVERE')
     if (logs.length > 0) {
