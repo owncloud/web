@@ -13,6 +13,7 @@ Summary
 * Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
 * Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
 * Change - Move create new button: [#3622](https://github.com/owncloud/phoenix/pull/3622)
+* Change - Move status indicators under the resource name: [#3617](https://github.com/owncloud/phoenix/pull/3617)
 * Change - Remove sidebar quickAccess: [#80](https://github.com/owncloud/product/issues/80)
 * Change - Rework account dropdown: [#82](https://github.com/owncloud/product/issues/82)
 * Change - Unite files list status indicators: [#3567](https://github.com/owncloud/phoenix/pull/3567)
@@ -57,6 +58,13 @@ Details
    We've moved the create new button in the files app bar to the left directly next to breadcrumbs.
 
    https://github.com/owncloud/phoenix/pull/3622
+
+* Change - Move status indicators under the resource name: [#3617](https://github.com/owncloud/phoenix/pull/3617)
+
+   We've moved the sharing status indicators from an own column in the files list to a second row
+   under the resource name.
+
+   https://github.com/owncloud/phoenix/pull/3617
 
 * Change - Remove sidebar quickAccess: [#80](https://github.com/owncloud/product/issues/80)
 
