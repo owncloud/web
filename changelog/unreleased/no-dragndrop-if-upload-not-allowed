@@ -1,0 +1,4 @@
+Change: No file drop if upload is not allowed or no space is left
+
+
+https://github.com/owncloud/phoenix/pull/3677
