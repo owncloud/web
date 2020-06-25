@@ -1,0 +1,6 @@
+Bugfix: Set expiration date only if it is supported
+
+We've stopped setting expiration date in collaborators panel if it is not supported.
+
+https://github.com/owncloud/phoenix/issues/3674
+https://github.com/owncloud/phoenix/pull/3679
