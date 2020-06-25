@@ -1,20 +1,62 @@
 <template>
-  <oc-file
-    :name="fileName"
-    :extension="item.extension"
-    :icon="previewIcon"
-    :icon-url="previewUrl"
-    :filename="item.name"
-    :data-preview-loaded="previewLoaded"
-  />
+  <div class="oc-file uk-flex uk-flex-middle" :data-preview-loaded="previewLoaded">
+    <oc-img
+      v-if="previewUrl"
+      key="file-preview"
+      class="files-list-file-preview uk-margin-small-right"
+      :class="{ 'files-list-file-preview-small': !hasTwoRows }"
+      :src="previewUrl"
+      alt=""
+    />
+    <oc-icon
+      v-else
+      key="file-icon"
+      :name="previewIcon"
+      :size="hasTwoRows ? 'medium' : 'small'"
+      aria-hidden="true"
+      class="uk-margin-small-right"
+    />
+    <div class="uk-width-expand">
+      <div class="file-row-name uk-text-truncate" :filename="item.name">
+        <span
+          class="uk-text-bold oc-cursor-pointer oc-file-name uk-padding-remove-left"
+          role="button"
+          v-text="fileName"
+        /><span
+          v-if="item.extension"
+          class="uk-text-meta oc-file-extension"
+          v-text="'.' + item.extension"
+        />
+      </div>
+      <div v-if="hasTwoRows" class="uk-flex uk-flex-middle">
+        <translate class="uk-margin-small-right">State:</translate>
+        <Indicators
+          v-if="indicators.length > 0"
+          key="status-indicators"
+          :default-indicators="indicators"
+          :item="item"
+          class="files-list-indicators"
+        />
+        <span v-else key="no-status-indicators" aria-hidden="true" v-text="'-'" />
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import queryString from 'query-string'
 import Mixins from '../mixins'
 
+import Indicators from './FilesLists/Indicators.vue'
+
 export default {
   name: 'FileItem',
+
+  components: {
+    Indicators
+  },
+
   mixins: [Mixins],
+
   props: {
     item: {
       type: Object,
@@ -34,6 +76,11 @@ export default {
     showPath: {
       type: Boolean,
       default: false
+    },
+    indicators: {
+      type: Array,
+      required: false,
+      default: () => []
     }
   },
   data: function() {
@@ -61,6 +108,10 @@ export default {
     },
     previewIcon() {
       return this.fileTypeIcon(this.item)
+    },
+
+    hasTwoRows() {
+      return this.$route.name === 'files-list' || this.$route.name === 'files-favorites'
     }
   },
   mounted() {
@@ -121,3 +172,23 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.files-list-file-preview {
+  width: 36px;
+}
+
+.files-list-file-preview-small {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+}
+
+.oc-file:hover .oc-file-name {
+  text-decoration: none;
+}
+
+.oc-file .oc-file-name:hover {
+  text-decoration: underline;
+}
+</style>

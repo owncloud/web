@@ -39,13 +39,8 @@
           <div class="oc-icon" />
         </template>
         <template #rowColumns="{ item }">
-          <div class="uk-text-truncate uk-width-expand">
-            <file-item
-              :key="item.viewId"
-              :item="item"
-              :name="$_ocTrashbin_fileName(item)"
-              class="file-row-name"
-            />
+          <div class="uk-width-expand">
+            <file-item :key="item.viewId" :item="item" :name="$_ocTrashbin_fileName(item)" />
           </div>
           <div
             class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
