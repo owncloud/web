@@ -104,7 +104,7 @@ export default {
   },
 
   beforeDestroy() {
-    this.SET_CURRENT_SIDEBAR_TAB(null)
+    this.SET_CURRENT_SIDEBAR_TAB({})
   },
 
   methods: {

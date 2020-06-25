@@ -8,7 +8,7 @@ function $gettext(msg) {
 
 function createPublicLink(ctx) {
   // FIXME: Translate name
-  const params = { name: 'Quick action link' }
+  const params = { name: 'Quick action link', permissions: 1 }
   const capabilities = ctx.store.state.user.capabilities
   const expirationDate = capabilities.files_sharing.public.expire_date
 
