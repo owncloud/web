@@ -1,0 +1,6 @@
+Bugfix: Set empty object when resetting current sidebar tab
+
+We've changed the argument from `null` to an empty object when resetting the current tab of the sidebar.
+
+https://github.com/owncloud/phoenix/issues/3676
+https://github.com/owncloud/phoenix/pull/3678

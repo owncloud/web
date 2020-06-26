@@ -1,0 +1,7 @@
+Bugfix: Set default permissions to public link quick action
+
+We've set a default permissions when creating a new public link via the quick actions.
+The permissions are set to `1`.
+
+https://github.com/owncloud/phoenix/issues/3675
+https://github.com/owncloud/phoenix/pull/3678
