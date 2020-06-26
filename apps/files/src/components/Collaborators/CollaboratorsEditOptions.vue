@@ -239,16 +239,18 @@ export default {
   },
 
   mounted() {
-    if (this.editingUser || this.editingGroup) {
-      // FIXME: Datepicker is not displaying correct timezone so for now we add it manually
-      // this.enteredExpirationDate = this.expirationDate ? moment(this.expirationDate).toISOString(true) : null
-      this.enteredExpirationDate = this.expirationDate
-        ? moment(this.expirationDate)
-            .add(moment().utcOffset(), 'm')
-            .toISOString()
-        : null
-    } else {
-      this.enteredExpirationDate = this.defaultExpirationDate
+    if (this.expirationSupported) {
+      if (this.editingUser || this.editingGroup) {
+        // FIXME: Datepicker is not displaying correct timezone so for now we add it manually
+        // this.enteredExpirationDate = this.expirationDate ? moment(this.expirationDate).toISOString(true) : null
+        this.enteredExpirationDate = this.expirationDate
+          ? moment(this.expirationDate)
+              .add(moment().utcOffset(), 'm')
+              .toISOString()
+          : null
+      } else {
+        this.enteredExpirationDate = this.defaultExpirationDate
+      }
     }
   },
 
