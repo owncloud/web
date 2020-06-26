@@ -10,6 +10,9 @@ Summary
 
 * Bugfix - Fix file type icons for uppercase file extensions: [#3670](https://github.com/owncloud/phoenix/pull/3670)
 * Bugfix - Fix empty settings values: [#3602](https://github.com/owncloud/phoenix/pull/3602)
+* Bugfix - Set default permissions to public link quick action: [#3675](https://github.com/owncloud/phoenix/issues/3675)
+* Bugfix - Set empty object when resetting current sidebar tab: [#3676](https://github.com/owncloud/phoenix/issues/3676)
+* Bugfix - Set expiration date only if it is supported: [#3674](https://github.com/owncloud/phoenix/issues/3674)
 * Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
 * Change - Bring new modal component: [#2263](https://github.com/owncloud/phoenix/issues/2263)
 * Change - Move create new button: [#3622](https://github.com/owncloud/phoenix/pull/3622)
@@ -39,6 +42,29 @@ Details
 
    https://github.com/owncloud/ocis-settings/issues/24
    https://github.com/owncloud/phoenix/pull/3602
+
+* Bugfix - Set default permissions to public link quick action: [#3675](https://github.com/owncloud/phoenix/issues/3675)
+
+   We've set a default permissions when creating a new public link via the quick actions. The
+   permissions are set to `1`.
+
+   https://github.com/owncloud/phoenix/issues/3675
+   https://github.com/owncloud/phoenix/pull/3678
+
+* Bugfix - Set empty object when resetting current sidebar tab: [#3676](https://github.com/owncloud/phoenix/issues/3676)
+
+   We've changed the argument from `null` to an empty object when resetting the current tab of the
+   sidebar.
+
+   https://github.com/owncloud/phoenix/issues/3676
+   https://github.com/owncloud/phoenix/pull/3678
+
+* Bugfix - Set expiration date only if it is supported: [#3674](https://github.com/owncloud/phoenix/issues/3674)
+
+   We've stopped setting expiration date in collaborators panel if it is not supported.
+
+   https://github.com/owncloud/phoenix/issues/3674
+   https://github.com/owncloud/phoenix/pull/3679
 
 * Bugfix - Add missing question mark to delete confirmation dialog in trashbin: [#3566](https://github.com/owncloud/phoenix/pull/3566)
 
