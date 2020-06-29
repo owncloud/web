@@ -17,19 +17,6 @@ export default {
     actions() {
       const actions = [
         {
-          icon: 'edit',
-          ariaLabel: () => {
-            return this.$gettext('Rename')
-          },
-          handler: this.$_fileActions_displayRenameDialog,
-          isEnabled: function(item, parent) {
-            if (parent && !parent.canRename()) {
-              return false
-            }
-            return item.canRename()
-          }
-        },
-        {
           icon: 'file_download',
           handler: this.downloadFile,
           ariaLabel: () => {
@@ -37,19 +24,6 @@ export default {
           },
           isEnabled: function(item) {
             return item.canDownload()
-          }
-        },
-        {
-          icon: 'delete',
-          ariaLabel: () => {
-            return this.$gettext('Delete')
-          },
-          handler: this.$_fileActions_deleteResource,
-          isEnabled: function(item, parent) {
-            if (parent && !parent.canBeDeleted()) {
-              return false
-            }
-            return item.canBeDeleted()
           }
         },
         {
@@ -63,6 +37,40 @@ export default {
           },
           isEnabled: () => {
             return this.isAuthenticated
+          }
+        },
+        {
+          icon: 'edit',
+          ariaLabel: () => {
+            return this.$gettext('Rename')
+          },
+          handler: this.$_fileActions_displayRenameDialog,
+          isEnabled: function(item, parent) {
+            if (parent && !parent.canRename()) {
+              return false
+            }
+            return item.canRename()
+          }
+        },
+        {
+          icon: 'move',
+          handler: () => {
+            this.$router.push({ name: 'move' })
+          },
+          ariaLabel: () => this.$gettext('Move'),
+          isEnabled: resource => resource.permissions.indexOf('N') > -1
+        },
+        {
+          icon: 'delete',
+          ariaLabel: () => {
+            return this.$gettext('Delete')
+          },
+          handler: this.$_fileActions_deleteResource,
+          isEnabled: function(item, parent) {
+            if (parent && !parent.canBeDeleted()) {
+              return false
+            }
+            return item.canBeDeleted()
           }
         }
       ]

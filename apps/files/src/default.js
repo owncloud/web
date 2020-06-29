@@ -214,7 +214,7 @@ const routes = [
     meta: { auth: false }
   },
   {
-    path: '/move/:list',
+    path: '/move',
     name: 'move',
     components: {
       app: LocationPickerMove
