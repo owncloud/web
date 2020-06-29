@@ -427,6 +427,12 @@ export default {
         const token = basePath.substr(0, tokenSplit)
         basePath = basePath.substr(tokenSplit + 1) || ''
         relativePath = pathUtil.join(basePath, relativePath)
+        const extraHeaders = {}
+        if (file.lastModifiedDate) {
+          extraHeaders['X-OC-Mtime'] = '' + file.lastModifiedDate.getTime() / 1000
+        } else if (file.lastModified) {
+          extraHeaders['X-OC-Mtime'] = '' + file.lastModified / 1000
+        }
         promise = this.uploadQueue.add(() =>
           this.$client.publicFiles.putFileContents(
             token,
@@ -434,6 +440,7 @@ export default {
             this.publicLinkPassword,
             file,
             {
+              headers: extraHeaders,
               onProgress: progress => {
                 this.$_ocUpload_onProgress(progress, file)
               },
