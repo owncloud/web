@@ -1,0 +1,6 @@
+Change: Use "Shared with" as a label for indicators
+
+Instead of "State" we've started using the "Shared with" as a label for the indicators in the files list.
+This is only intermediate solution because the indicators can be extended by other indicators which don't have to be related to sharing.
+
+https://github.com/owncloud/phoenix/pull/3688
