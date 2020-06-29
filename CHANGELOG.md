@@ -9,6 +9,8 @@ Summary
 -------
 
 * Bugfix - Public upload now keeps modified time: [#3686](https://github.com/owncloud/phoenix/pull/3686)
+* Bugfix - Do not expand the width of resource name over it's content: [#3685](https://github.com/owncloud/phoenix/issues/3685)
+* Change - Use "Shared with" as a label for indicators: [#3688](https://github.com/owncloud/phoenix/pull/3688)
 
 Details
 -------
@@ -19,6 +21,24 @@ Details
    the behavior with non-public file upload.
 
    https://github.com/owncloud/phoenix/pull/3686
+
+* Bugfix - Do not expand the width of resource name over it's content: [#3685](https://github.com/owncloud/phoenix/issues/3685)
+
+   The width of the resource name in the files list was expanded more than the actual width of it's
+   content. This caused that when clicked outside of the resource name, the action to navigate or
+   open the resource has been triggered instead of opening the sidebar. We've fixed the width that
+   it is now equal to the width of the content.
+
+   https://github.com/owncloud/phoenix/issues/3685
+   https://github.com/owncloud/phoenix/pull/3687
+
+* Change - Use "Shared with" as a label for indicators: [#3688](https://github.com/owncloud/phoenix/pull/3688)
+
+   Instead of "State" we've started using the "Shared with" as a label for the indicators in the
+   files list. This is only intermediate solution because the indicators can be extended by other
+   indicators which don't have to be related to sharing.
+
+   https://github.com/owncloud/phoenix/pull/3688
 
 Changelog for ownCloud Phoenix [0.11.0] (2020-06-26)
 =======================================
