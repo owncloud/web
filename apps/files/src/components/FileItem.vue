@@ -1,5 +1,8 @@
 <template>
-  <div class="oc-file uk-flex uk-flex-middle" :data-preview-loaded="previewLoaded">
+  <div
+    class="oc-file uk-flex-inline uk-flex-middle uk-width-auto"
+    :data-preview-loaded="previewLoaded"
+  >
     <oc-img
       v-if="previewUrl"
       key="file-preview"
