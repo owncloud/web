@@ -1,3 +1,25 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.11.0...master
+
+Summary
+-------
+
+* Bugfix - Public upload now keeps modified time: [#3686](https://github.com/owncloud/phoenix/pull/3686)
+
+Details
+-------
+
+* Bugfix - Public upload now keeps modified time: [#3686](https://github.com/owncloud/phoenix/pull/3686)
+
+   The public upload for public links now keeps the modification time of local files. This aligns
+   the behavior with non-public file upload.
+
+   https://github.com/owncloud/phoenix/pull/3686
+
 Changelog for ownCloud Phoenix [0.11.0] (2020-06-26)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.11.0 relevant to
