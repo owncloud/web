@@ -29,7 +29,7 @@
         />
       </div>
       <div v-if="hasTwoRows" class="uk-flex uk-flex-middle">
-        <translate class="uk-margin-small-right">State:</translate>
+        <translate class="uk-margin-small-right">Shared with:</translate>
         <Indicators
           v-if="indicators.length > 0"
           key="status-indicators"
