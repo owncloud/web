@@ -11,6 +11,7 @@ Summary
 * Bugfix - Public upload now keeps modified time: [#3686](https://github.com/owncloud/phoenix/pull/3686)
 * Bugfix - Do not expand the width of resource name over it's content: [#3685](https://github.com/owncloud/phoenix/issues/3685)
 * Change - Use "Shared with" as a label for indicators: [#3688](https://github.com/owncloud/phoenix/pull/3688)
+* Enhancement - Update owncloud-sdk to 1.0.0-663: [#3690](https://github.com/owncloud/phoenix/pull/3690)
 
 Details
 -------
@@ -39,6 +40,13 @@ Details
    indicators which don't have to be related to sharing.
 
    https://github.com/owncloud/phoenix/pull/3688
+
+* Enhancement - Update owncloud-sdk to 1.0.0-663: [#3690](https://github.com/owncloud/phoenix/pull/3690)
+
+   We've updated the owncloud-sdk to version 1.0.0-663. This version stops rejecting sharing
+   promises if the passed shareID is not an integer.
+
+   https://github.com/owncloud/phoenix/pull/3690
 
 Changelog for ownCloud Phoenix [0.11.0] (2020-06-26)
 =======================================
