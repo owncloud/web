@@ -9,6 +9,7 @@ import FileLinkSidebar from './components/FileLinkSidebar.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './components/PublicLinks/PublicLink.vue'
 import FilesDrop from './components/PublicLinks/FilesDrop.vue'
+import LocationPickerMove from './components/LocationPicker/Move.vue'
 
 import translationsJson from '../l10n/translations.json'
 import quickActionsImport from './quickActions'
@@ -211,6 +212,16 @@ const routes = [
       app: FilesDrop
     },
     meta: { auth: false }
+  },
+  {
+    path: '/move/:list',
+    name: 'move',
+    components: {
+      app: LocationPickerMove
+    },
+    meta: {
+      hasTopbar: false
+    }
   }
 ]
 
