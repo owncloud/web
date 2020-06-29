@@ -1,0 +1,6 @@
+Enhancement: Update owncloud-sdk to 1.0.0-663
+
+We've updated the owncloud-sdk to version 1.0.0-663.
+This version stops rejecting sharing promises if the passed shareID is not an integer.
+
+https://github.com/owncloud/phoenix/pull/3690
