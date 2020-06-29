@@ -79,7 +79,7 @@ config = {
 				'OPENID_LOGIN': 'true',
 				'SCREEN_RESOLUTION': '375x812'
 			},
-			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and @skipOnOC10'
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
 		},
 		'webUI-ocis': {
 			'suites': {
