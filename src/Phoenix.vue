@@ -17,11 +17,15 @@
             :class="sidebarClasses"
             :fixed="isSidebarFixed"
             @close="toggleAppNavigationVisibility"
-          />
+          >
+            <template v-if="sidebar.mainContentComponent" v-slot:mainContent>
+              <component :is="sidebar.mainContentComponent" />
+            </template>
+          </oc-sidebar>
         </transition>
         <div class="uk-width-expand">
           <top-bar
-            v-if="!publicPage()"
+            v-if="!publicPage() && !$route.meta.verbose"
             class="uk-width-expand"
             :applications-list="$_applicationsList"
             :active-notifications="activeNotifications"
@@ -84,7 +88,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['route', 'user', 'modal']),
+    ...mapState(['route', 'user', 'modal', 'sidebar']),
     ...mapGetters([
       'configuration',
       'activeNotifications',

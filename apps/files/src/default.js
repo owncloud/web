@@ -220,7 +220,7 @@ const routes = [
       app: LocationPickerMove
     },
     meta: {
-      hasTopbar: false
+      verbose: true
     }
   }
 ]

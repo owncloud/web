@@ -12,6 +12,7 @@ import router from './router'
 import settings from './settings'
 import modal from './modal'
 import navigation from './navigation'
+import sidebar from './sidebar'
 
 Vue.use(Vuex)
 
@@ -37,7 +38,8 @@ export const Store = new Vuex.Store({
     router,
     settings,
     modal,
-    navigation
+    navigation,
+    sidebar
   },
   strict
 })
