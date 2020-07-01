@@ -252,9 +252,5 @@ export default {
 
   SET_CURRENT_SIDEBAR_TAB_OPTIONS(state, options) {
     state.currentSidebarTab.options = options
-  },
-
-  SET_RESOURCES_SELECTION_FOR_MOVE(state, resources) {
-    state.selectedResourcesForMove = resources
   }
 }

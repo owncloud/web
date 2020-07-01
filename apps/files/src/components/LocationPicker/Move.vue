@@ -191,10 +191,6 @@ export default {
     this.SET_MAIN_CONTENT_COMPONENT(null)
   },
 
-  beforeDestroy() {
-    this.SET_MAIN_CONTENT_COMPONENT(null)
-  },
-
   methods: {
     ...mapMutations(['SET_MAIN_CONTENT_COMPONENT']),
     ...mapActions('Files', ['loadFolder']),
