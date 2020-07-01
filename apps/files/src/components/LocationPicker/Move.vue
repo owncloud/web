@@ -213,7 +213,14 @@ export default {
 
     moveResources() {
       this.resources.forEach(resource => {
-        this.$client.files.move(resource, this.target ?? '/')
+        console.log(resource)
+        var target = this.target ?? '/'
+        if (resource.lastIndexOf('/') >= 0) {
+          target += resource.substring(resource.lastIndexOf('/'))
+        } else {
+          target += resource
+        }
+        this.$client.files.move(resource, target)
       })
     }
   }
