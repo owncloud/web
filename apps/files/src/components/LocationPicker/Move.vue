@@ -1,10 +1,14 @@
 <template>
+<<<<<<< HEAD
   <oc-grid
     gutter="small"
     child-width="1-1"
     flex
     class="uk-height-1-1 uk-flex-column uk-padding-small uk-overflow-hidden"
   >
+=======
+  <oc-grid gutter="small" child-width="1-1" class="uk-padding-small">
+>>>>>>> Add navigation to folder
     <h1 class="files-move-selection-info uk-flex uk-text-lead">
       <translate
         :translate-n="resourcesCount"
