@@ -1,5 +1,10 @@
 <template>
-  <oc-grid gutter="small" child-width="1-1" class="uk-padding-small">
+  <oc-grid
+    gutter="small"
+    child-width="1-1"
+    flex
+    class="uk-height-1-1 uk-flex-column uk-padding-small uk-overflow-hidden"
+  >
     <h1 class="files-move-selection-info uk-flex uk-text-lead">
       <translate
         :translate-n="resourcesCount"
@@ -8,8 +13,14 @@
       >
       <oc-breadcrumb :items="breadcrumbs" class="uk-text-lead" />
     </h1>
+    <div>
+      <oc-button variation="primary" @click.native="moveResources">
+        <translate>Move here</translate>
+      </oc-button>
+    </div>
     <file-list
       id="files-move-files-list"
+      class="uk-flex-1"
       :file-data="activeFiles"
       :actions="[]"
       :is-action-enabled="() => false"
@@ -117,6 +128,10 @@ export default {
       return this.resources.length
     },
 
+    target() {
+      return JSON.parse(JSON.stringify(this.$route.query.target))
+    },
+
     basePath() {
       return this.$route.path
     },
@@ -126,7 +141,6 @@ export default {
     },
 
     breadcrumbs() {
-      const target = JSON.parse(JSON.stringify(this.$route.query.target))
       const breadcrumbs = [
         {
           index: 0,
@@ -135,8 +149,8 @@ export default {
         }
       ]
 
-      if (target) {
-        const items = target.split('/').filter(item => item !== '')
+      if (this.target) {
+        const items = this.target.split('/').filter(item => item !== '')
 
         for (let i = 0; i < items.length; i++) {
           const itemPath = encodeURIComponent(pathUtil.join.apply(null, items.slice(0, i + 1)))
@@ -176,7 +190,7 @@ export default {
 
     navigateToTarget(target) {
       if (typeof target === 'object') {
-        target = JSON.parse(JSON.stringify(this.$route.query.target))
+        target = this.target
       }
 
       this.loadFolder({
@@ -195,6 +209,12 @@ export default {
     selectFolder(folder) {
       this.navigateToTarget(folder)
       this.$router.push({ path: this.createPath(folder) })
+    },
+
+    moveResources() {
+      this.resources.forEach(resource => {
+        this.$client.files.move(resource, this.target ?? '/')
+      })
     }
   }
 }
