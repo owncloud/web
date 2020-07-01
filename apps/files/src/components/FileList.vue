@@ -12,7 +12,7 @@
         flex
         class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-margin-xsmall-bottom"
       >
-        <div>
+        <div v-if="checkboxEnabled">
           <oc-checkbox
             id="filelist-check-all"
             class="uk-margin-small-left"
@@ -57,7 +57,7 @@
               class="uk-padding-small oc-border-top"
               :class="_rowClasses(rowItem)"
             >
-              <div>
+              <div v-if="checkboxEnabled">
                 <oc-checkbox
                   class="uk-margin-small-left"
                   :value="selectedFiles.indexOf(rowItem) >= 0"
@@ -69,6 +69,7 @@
               </div>
               <slot name="rowColumns" :item="rowItem" :index="index" />
               <div
+                v-if="actions.length > 1 || $scopedSlots.rowActions"
                 class="uk-flex uk-flex-middle uk-flex-right"
                 :class="{ 'uk-width-small': $scopedSlots.rowActions }"
               >
@@ -133,7 +134,9 @@ export default {
       type: Boolean
     },
     checkboxEnabled: {
-      type: Boolean
+      type: Boolean,
+      required: false,
+      default: true
     },
     loading: {
       type: Boolean,

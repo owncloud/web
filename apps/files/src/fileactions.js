@@ -1,4 +1,4 @@
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import MixinDeleteResources from './mixins/deleteResources'
 
 export default {
@@ -54,7 +54,8 @@ export default {
         },
         {
           icon: 'move',
-          handler: () => {
+          handler: resource => {
+            this.SET_RESOURCES_SELECTION_FOR_MOVE([resource])
             this.$router.push({ name: 'move' })
           },
           ariaLabel: () => this.$gettext('Move'),
@@ -81,6 +82,7 @@ export default {
   methods: {
     ...mapActions('Files', ['renameFile', 'markFavorite']),
     ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
+    ...mapMutations('Files', ['SET_RESOURCES_SELECTION_FOR_MOVE']),
 
     actionInProgress(item) {
       return this.actionsInProgress.some(itemInProgress => itemInProgress.id === item.id)
