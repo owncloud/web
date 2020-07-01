@@ -312,7 +312,8 @@ module.exports = {
       selector: '#files-breadcrumb li:nth-of-type(2)'
     },
     resourceBreadcrumb: {
-      selector: '//div[@id="files-breadcrumb"]//a[contains(text(),"%s")]',
+      selector:
+        '//div[@id="files-breadcrumb"]//*[(self::a or self::span) and contains(text(),"%s")]',
       locateStrategy: 'xpath'
     },
     fileUploadButton: {
