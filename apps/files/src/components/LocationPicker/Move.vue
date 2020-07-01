@@ -116,7 +116,7 @@ export default {
     breadcrumbs() {
       const target = JSON.parse(JSON.stringify(this.$route.query.target))
       const basePath = this.$route.path
-      const resources = 'resource=' + this.resources.join('&resource=')
+      const resources = '?target&resource=' + this.resources.join('&resource=')
       const breadcrumbs = [
         {
           index: 0,
@@ -145,15 +145,15 @@ export default {
     }
   },
 
+  watch: {
+    $route: {
+      handler: 'navigateToTarget',
+      immediate: true
+    }
+  },
+
   created() {
     this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
-    this.loadFolder({
-      client: this.$client,
-      absolutePath: '/',
-      $gettext: this.$gettext,
-      routeName: this.$route.name,
-      loadSharesTree: true
-    })
   },
 
   beforeDestroy() {
@@ -162,7 +162,19 @@ export default {
 
   methods: {
     ...mapMutations(['SET_MAIN_CONTENT_COMPONENT']),
-    ...mapActions('Files', ['loadFolder'])
+    ...mapActions('Files', ['loadFolder']),
+
+    navigateToTarget() {
+      const target = JSON.parse(JSON.stringify(this.$route.query.target))
+
+      this.loadFolder({
+        client: this.$client,
+        absolutePath: target || '/',
+        $gettext: this.$gettext,
+        routeName: this.$route.name,
+        loadSharesTree: true
+      })
+    }
   }
 }
 </script>
