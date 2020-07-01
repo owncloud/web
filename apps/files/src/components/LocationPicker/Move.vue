@@ -138,11 +138,11 @@ export default {
       if (target) {
         const items = target.split('/').filter(item => item !== '')
 
-        for (let i = 1; i < items.length; i++) {
+        for (let i = 0; i < items.length; i++) {
           const itemPath = encodeURIComponent(pathUtil.join.apply(null, items.slice(0, i + 1)))
 
           breadcrumbs.push({
-            index: i,
+            index: i + 1,
             text: items[i],
             to: this.createPath(itemPath)
           })
