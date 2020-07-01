@@ -1,12 +1,12 @@
 <template>
   <oc-grid gutter="small" child-width="1-1" class="uk-padding-small">
-    <h1 class="files-move-selection-info">
+    <h1 class="files-move-selection-info uk-flex uk-text-lead">
       <translate
         :translate-n="resourcesCount"
         translate-plural="Selected %{ resourcesCount } resources to move into:"
         >Selected %{ resourcesCount } resource to move into:</translate
       >
-      <oc-breadcrumb :items="breadcrumbs" />
+      <oc-breadcrumb :items="breadcrumbs" class="uk-text-lead" />
     </h1>
     <file-list
       id="files-move-files-list"
@@ -61,7 +61,11 @@
       </template>
       <template #rowColumns="{ item: rowItem, index }">
         <div :ref="index === 0 ? 'firstRowNameColumn' : null" class="uk-width-expand">
-          <file-item :key="rowItem.viewId" :item="rowItem" />
+          <file-item
+            :key="rowItem.viewId"
+            :item="rowItem"
+            @click.native="selectFolder(rowItem.path)"
+          />
         </div>
         <div class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right">
           {{ rowItem.size | fileSize }}
@@ -113,15 +117,21 @@ export default {
       return this.resources.length
     },
 
+    basePath() {
+      return this.$route.path
+    },
+
+    resourcesQuery() {
+      return '&resource=' + this.resources.join('&resource=')
+    },
+
     breadcrumbs() {
       const target = JSON.parse(JSON.stringify(this.$route.query.target))
-      const basePath = this.$route.path
-      const resources = '?target&resource=' + this.resources.join('&resource=')
       const breadcrumbs = [
         {
           index: 0,
           text: this.$gettext('Home'),
-          to: basePath + '?' + resources
+          to: this.basePath + '?target' + this.resourcesQuery
         }
       ]
 
@@ -134,7 +144,7 @@ export default {
           breadcrumbs.push({
             index: i,
             text: items[i],
-            to: basePath + '?target=' + itemPath + '&' + resources
+            to: this.createPath(itemPath)
           })
         }
       }
@@ -164,8 +174,10 @@ export default {
     ...mapMutations(['SET_MAIN_CONTENT_COMPONENT']),
     ...mapActions('Files', ['loadFolder']),
 
-    navigateToTarget() {
-      const target = JSON.parse(JSON.stringify(this.$route.query.target))
+    navigateToTarget(target) {
+      if (typeof target === 'object') {
+        target = JSON.parse(JSON.stringify(this.$route.query.target))
+      }
 
       this.loadFolder({
         client: this.$client,
@@ -174,6 +186,15 @@ export default {
         routeName: this.$route.name,
         loadSharesTree: true
       })
+    },
+
+    createPath(target) {
+      return this.basePath + '?target=' + target + this.resourcesQuery
+    },
+
+    selectFolder(folder) {
+      this.navigateToTarget(folder)
+      this.$router.push({ path: this.createPath(folder) })
     }
   }
 }

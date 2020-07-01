@@ -60,7 +60,7 @@ export default {
 
             this.$router.push({
               name: 'move',
-              query: { target: parent, resource: [resource.path, resource.path] }
+              query: { target: parent, resource: resource.path }
             })
           },
           ariaLabel: () => this.$gettext('Move'),
