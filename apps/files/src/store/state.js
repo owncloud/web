@@ -55,10 +55,5 @@ export default {
   /**
    * Sidebar
    */
-  currentSidebarTab: null,
-
-  /**
-   * Move
-   */
-  selectedResourcesForMove: []
+  currentSidebarTab: null
 }

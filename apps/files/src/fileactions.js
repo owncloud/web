@@ -55,8 +55,13 @@ export default {
         {
           icon: 'move',
           handler: resource => {
-            this.SET_RESOURCES_SELECTION_FOR_MOVE([resource])
-            this.$router.push({ name: 'move' })
+            // Parent of the resource selected for move used as a default target location
+            const parent = resource.path.substring(0, resource.path.lastIndexOf('/'))
+
+            this.$router.push({
+              name: 'move',
+              query: { target: parent, resource: [resource.path, resource.path] }
+            })
           },
           ariaLabel: () => this.$gettext('Move'),
           isEnabled: resource => resource.permissions.indexOf('N') > -1

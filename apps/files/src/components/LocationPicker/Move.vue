@@ -6,7 +6,7 @@
         translate-plural="Selected %{ resourcesCount } resources to move into:"
         >Selected %{ resourcesCount } resource to move into:</translate
       >
-      <oc-breadcrumb :items="items" />
+      <oc-breadcrumb :items="breadcrumbs" />
     </h1>
     <file-list
       id="files-move-files-list"
@@ -76,6 +76,7 @@
 
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
+import pathUtil from 'path'
 import MixinsGeneral from '../../mixins'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
 import FileList from '../FileList.vue'
@@ -94,20 +95,53 @@ export default {
   mixins: [MixinsGeneral],
 
   computed: {
-    ...mapState('Files', ['selectedResourcesForMove']),
+    ...mapState('Files', ['selectedResourcesForMove', 'locationPickerTargetFolder']),
     ...mapGetters('Files', ['activeFiles', 'fileSortField', 'fileSortDirectionDesc']),
 
-    resourcesCount() {
-      return this.selectedResourcesForMove.length
+    resources() {
+      const resources = JSON.parse(JSON.stringify(this.$route.query.resource))
+
+      // In case there is only one resource, ensure that the return will still be an array
+      if (typeof resources === 'string') {
+        return [resources]
+      }
+
+      return resources
     },
 
-    items() {
-      return [
+    resourcesCount() {
+      return this.resources.length
+    },
+
+    breadcrumbs() {
+      const target = JSON.parse(JSON.stringify(this.$route.query.target))
+      const basePath = this.$route.path
+      const resources = 'resource=' + this.resources.join('&resource=')
+      const breadcrumbs = [
         {
           index: 0,
-          text: this.$gettext('Home')
+          text: this.$gettext('Home'),
+          to: basePath + '?' + resources
         }
       ]
+
+      if (target) {
+        const items = target.split('/').filter(item => item !== '')
+
+        for (let i = 1; i < items.length; i++) {
+          const itemPath = encodeURIComponent(pathUtil.join.apply(null, items.slice(0, i + 1)))
+
+          breadcrumbs.push({
+            index: i,
+            text: items[i],
+            to: basePath + '?target=' + itemPath + '&' + resources
+          })
+        }
+      }
+
+      delete breadcrumbs[breadcrumbs.length - 1].to
+
+      return breadcrumbs
     }
   },
 
