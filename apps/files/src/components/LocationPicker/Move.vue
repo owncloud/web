@@ -178,6 +178,17 @@ export default {
 
   created() {
     this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
+    this.loadFolder({
+      client: this.$client,
+      absolutePath: '/',
+      $gettext: this.$gettext,
+      routeName: this.$route.name,
+      loadSharesTree: true
+    })
+  },
+
+  beforeDestroy() {
+    this.SET_MAIN_CONTENT_COMPONENT(null)
   },
 
   beforeDestroy() {
