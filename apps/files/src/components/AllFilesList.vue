@@ -6,6 +6,7 @@
     :actions="actions"
     :compact-mode="_sidebarOpen"
     :is-action-enabled="isActionEnabled"
+    :has-two-rows="true"
   >
     <template #headerColumns>
       <div ref="headerNameColumn" class="uk-text-truncate uk-text-meta uk-width-expand">
@@ -58,6 +59,7 @@
           :dav-url="davUrl"
           :show-path="$_isFavoritesList"
           :indicators="indicatorArray(rowItem)"
+          :has-two-rows="true"
           @click.native.stop="
             rowItem.type === 'folder'
               ? navigateTo(rowItem.path.substr(1))

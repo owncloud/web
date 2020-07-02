@@ -158,6 +158,11 @@ export default {
       type: Boolean,
       required: false,
       default: true
+    },
+    hasTwoRows: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
@@ -188,10 +193,6 @@ export default {
 
     item() {
       return this.$route.params.item
-    },
-
-    hasTwoRows() {
-      return this.$route.name === 'files-list' || this.$route.name === 'files-favorites'
     }
   },
   watch: {

@@ -84,6 +84,11 @@ export default {
       type: Array,
       required: false,
       default: () => []
+    },
+    hasTwoRows: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data: function() {
@@ -111,10 +116,6 @@ export default {
     },
     previewIcon() {
       return this.fileTypeIcon(this.item)
-    },
-
-    hasTwoRows() {
-      return this.$route.name === 'files-list' || this.$route.name === 'files-favorites'
     }
   },
   mounted() {

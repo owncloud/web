@@ -25,6 +25,7 @@
       :is-action-enabled="() => false"
       :checkbox-enabled="false"
       :selectable-row="false"
+      :has-two-rows="true"
     >
       <template #headerColumns>
         <div ref="headerNameColumn" class="uk-text-truncate uk-text-meta uk-width-expand">
@@ -74,6 +75,7 @@
           <file-item
             :key="rowItem.viewId"
             :item="rowItem"
+            :has-two-rows="true"
             @click.native="selectFolder(rowItem.path)"
           />
         </div>
