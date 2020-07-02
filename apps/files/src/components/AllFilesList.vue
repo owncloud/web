@@ -56,7 +56,6 @@
         <file-item
           :key="rowItem.viewId"
           :item="rowItem"
-          :dav-url="davUrl"
           :show-path="$_isFavoritesList"
           :indicators="indicatorArray(rowItem)"
           :has-two-rows="true"
@@ -242,17 +241,6 @@ export default {
       })
 
       return Object.keys(shareTypes).map(shareType => parseInt(shareType, 10))
-    },
-
-    davUrl() {
-      let davUrl
-      // FIXME: use SDK once it switches to DAV v2
-      if (this.publicPage()) {
-        davUrl = ['..', 'dav', 'public-files'].join('/')
-      } else {
-        davUrl = ['..', 'dav', 'files', this.$store.getters.user.id].join('/')
-      }
-      return this.$client.files.getFileUrl(davUrl)
     },
 
     $_isFavoritesList() {

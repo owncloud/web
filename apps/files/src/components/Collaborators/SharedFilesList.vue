@@ -59,7 +59,6 @@
         <file-item
           :key="item.path"
           :item="item"
-          :dav-url="davUrl"
           @click.native.stop="
             item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)
           "
@@ -205,12 +204,6 @@ export default {
 
     $_isSharedWithMe() {
       return this.$route.name === 'files-shared-with-me'
-    },
-
-    davUrl() {
-      // FIXME: use SDK once it switches to DAV v2
-      const davUrl = ['..', 'dav', 'files', this.$store.getters.user.id].join('/')
-      return this.$client.files.getFileUrl(davUrl)
     }
   },
   watch: {
