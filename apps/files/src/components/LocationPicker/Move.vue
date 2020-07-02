@@ -14,6 +14,9 @@
       <oc-breadcrumb :items="breadcrumbs" class="uk-text-lead" />
     </h1>
     <div>
+      <oc-button @click.native="leaveLocationPicker">
+        <translate>Cancel</translate>
+      </oc-button>
       <oc-button variation="primary" @click.native="moveResources">
         <translate>Move here</translate>
       </oc-button>
@@ -212,6 +215,10 @@ export default {
       this.$router.push({ path: this.createPath(folder) })
     },
 
+    leaveLocationPicker() {
+      this.$router.push({ name: 'files-list' })
+    },
+
     moveResources() {
       this.resources.forEach(resource => {
         console.log(resource)
@@ -223,6 +230,8 @@ export default {
         }
         this.$client.files.move(resource, target)
       })
+
+      this.leaveLocationPicker()
     }
   }
 }
