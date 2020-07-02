@@ -11,7 +11,8 @@ export default {
       'activeFiles',
       'selectedFiles',
       'highlightedFile',
-      'flatFileList'
+      'flatFileList',
+      'currentFolder'
     ]),
     ...mapGetters(['capabilities', 'fileSideBars', 'isAuthenticated']),
     // Files lists
@@ -64,7 +65,15 @@ export default {
             })
           },
           ariaLabel: () => this.$gettext('Move'),
-          isEnabled: resource => resource.permissions.indexOf('N') > -1
+          isEnabled: resource => {
+            // TODO: Find a better way to prevent moving shared resources then by checking if the current folder is root
+            // TODO: Find a way to disable move action when shares are mounted in different folder then root
+            return (
+              resource.canBeDeleted() ||
+              (this.currentFolder.name !== '' &&
+                (resource.isReceivedShare() || resource.isMounted()))
+            )
+          }
         },
         {
           icon: 'delete',

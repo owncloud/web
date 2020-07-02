@@ -44,6 +44,7 @@
         >
           <div
             :data-is-visible="active"
+            :class="{ 'files-list-row-disabled': rowDisabled(rowItem) }"
             @click="
               selectRow(rowItem, $event)
               hideRowActionsDropdown()
@@ -163,6 +164,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    rowDisabled: {
+      type: Function,
+      required: false,
+      default: () => false
     }
   },
   data() {
@@ -261,7 +267,9 @@ export default {
       return 'file-row'
     },
     selectRow(item, event) {
-      if (!this.selectableRow) return
+      if (!this.selectableRow || this.rowDisabled(item)) {
+        return
+      }
 
       if (item.status && (item.status === 1 || item.status === 2)) return
 
@@ -324,3 +332,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.files-list-row-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+</style>

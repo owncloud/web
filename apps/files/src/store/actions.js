@@ -88,6 +88,9 @@ function _buildFile(file) {
     canShare: function() {
       return this.permissions.indexOf('R') >= 0
     },
+    canCreate: function() {
+      return this.permissions.indexOf('C') > -1
+    },
     isMounted: function() {
       return this.permissions.indexOf('M') >= 0
     },

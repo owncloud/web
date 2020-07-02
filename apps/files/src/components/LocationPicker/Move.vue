@@ -13,7 +13,7 @@
       <oc-button @click.native="leaveLocationPicker">
         <translate>Cancel</translate>
       </oc-button>
-      <oc-button variation="primary" @click.native="moveResources">
+      <oc-button variation="primary" :disabled="!canMove" @click.native="moveResources">
         <translate>Move here</translate>
       </oc-button>
     </div>
@@ -26,6 +26,7 @@
       :checkbox-enabled="false"
       :selectable-row="false"
       :has-two-rows="true"
+      :row-disabled="isRowDisabled"
     >
       <template #headerColumns>
         <div ref="headerNameColumn" class="uk-text-truncate uk-text-meta uk-width-expand">
@@ -112,7 +113,11 @@ export default {
   mixins: [MixinsGeneral],
 
   computed: {
-    ...mapState('Files', ['selectedResourcesForMove', 'locationPickerTargetFolder']),
+    ...mapState('Files', [
+      'selectedResourcesForMove',
+      'locationPickerTargetFolder',
+      'currentFolder'
+    ]),
     ...mapGetters('Files', ['activeFiles', 'fileSortField', 'fileSortDirectionDesc']),
 
     resources() {
@@ -168,6 +173,10 @@ export default {
       delete breadcrumbs[breadcrumbs.length - 1].to
 
       return breadcrumbs
+    },
+
+    canMove() {
+      return this.currentFolder?.canCreate()
     }
   },
 
@@ -209,6 +218,10 @@ export default {
     },
 
     selectFolder(folder) {
+      if (this.isRowDisabled(folder)) {
+        return
+      }
+
       this.navigateToTarget(folder)
       this.$router.push({ path: this.createPath(folder) })
     },
@@ -230,6 +243,10 @@ export default {
       })
 
       this.leaveLocationPicker()
+    },
+
+    isRowDisabled(resource) {
+      return resource.type !== 'folder' || !resource.canCreate()
     }
   }
 }
