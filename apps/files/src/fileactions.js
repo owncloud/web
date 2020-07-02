@@ -54,7 +54,7 @@ export default {
           }
         },
         {
-          icon: 'move',
+          icon: 'folder-move',
           handler: resource => {
             // Parent of the resource selected for move used as a default target location
             const parent = getResourcePath(resource.path)
