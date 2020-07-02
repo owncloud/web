@@ -1,11 +1,6 @@
 <template>
-  <oc-grid
-    gutter="small"
-    child-width="1-1"
-    flex
-    class="uk-height-1-1 uk-flex-column uk-padding-small uk-overflow-hidden"
-  >
-    <h1 class="files-move-selection-info uk-flex uk-text-lead">
+  <div class="uk-height-1-1 uk-flex uk-flex-column uk-padding-small uk-overflow-hidden">
+    <h1 class="files-move-selection-info uk-flex uk-text-lead uk-margin-bottom">
       <translate
         :translate-n="resourcesCount"
         translate-plural="Selected %{ resourcesCount } resources to move into:"
@@ -13,7 +8,7 @@
       >
       <oc-breadcrumb :items="breadcrumbs" class="uk-text-lead" />
     </h1>
-    <div>
+    <div class="uk-margin-bottom">
       <oc-button @click.native="leaveLocationPicker">
         <translate>Cancel</translate>
       </oc-button>
@@ -89,7 +84,7 @@
         </div>
       </template>
     </file-list>
-  </oc-grid>
+  </div>
 </template>
 
 <script>
