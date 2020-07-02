@@ -1,4 +1,5 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { getResourcePath } from './helpers/path'
 import MixinDeleteResources from './mixins/deleteResources'
 
 export default {
@@ -56,8 +57,7 @@ export default {
           icon: 'move',
           handler: resource => {
             // Parent of the resource selected for move used as a default target location
-            const parent = resource.path.substring(0, resource.path.lastIndexOf('/'))
-
+            const parent = getResourcePath(resource.path)
             this.$router.push({
               name: 'move',
               query: { target: parent, resource: resource.path }

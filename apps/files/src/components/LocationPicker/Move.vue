@@ -92,6 +92,7 @@
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 import pathUtil from 'path'
+import { getResourceName } from '../../helpers/resourceInfo'
 import MixinsGeneral from '../../mixins'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
 import FileList from '../FileList.vue'
