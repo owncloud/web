@@ -12,6 +12,15 @@ Feature: access breadcrumb
     When the user opens folder "simple-folder" using the webUI
     Then breadcrumb for folder "simple-folder" should be displayed on the webUI
 
+  Scenario: Breadcrumb navigation should not happen on last segment
+    Given the property "rootFolder" has been set to "" in phoenix config file
+    And user "user1" has created folder "simple-folder/subfolder"
+    And user "user1" has logged in using the webUI
+    When the user opens folder "simple-folder" using the webUI
+    And the user opens folder "subfolder" using the webUI
+    Then clickable breadcrumb for folder "simple-folder" should be displayed on the webUI
+    And non-clickable breadcrumb for folder "subfolder" should be displayed on the webUI
+
   @ocis-reva-issue-106
   Scenario: Change rootFolder to simple-folder and check for the displayed files
     Given the property "rootFolder" has been set to "simple-folder" in phoenix config file

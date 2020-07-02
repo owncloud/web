@@ -170,8 +170,20 @@ Then('there should be no breadcrumb displayed on the webUI', function() {
   return assertBreadCrumbIsNotDisplayed()
 })
 
+Then('non-clickable breadcrumb for folder {string} should be displayed on the webUI', function(
+  resource
+) {
+  return assertBreadcrumbIsDisplayedFor(resource, false, true)
+})
+
+Then('clickable breadcrumb for folder {string} should be displayed on the webUI', function(
+  resource
+) {
+  return assertBreadcrumbIsDisplayedFor(resource, true, false)
+})
+
 Then('breadcrumb for folder {string} should be displayed on the webUI', function(resource) {
-  return assertBreadcrumbIsDisplayedFor(resource)
+  return assertBreadcrumbIsDisplayedFor(resource, true, true)
 })
 
 /**
@@ -580,9 +592,11 @@ const assertBreadCrumbIsNotDisplayed = function() {
 /**
  *
  * @param {string} resource
+ * @param {boolean} clickable
+ * @param {boolean} nonClickable
  */
-const assertBreadcrumbIsDisplayedFor = function(resource) {
-  const breadcrumbElement = client.page.filesPage().elements.resourceBreadcrumb
+const assertBreadcrumbIsDisplayedFor = function(resource, clickable, nonClickable) {
+  const breadcrumbElement = client.page.filesPage().getBreadcrumbSelector(clickable, nonClickable)
   const resourceBreadcrumbXpath = util.format(breadcrumbElement.selector, resource)
   return client
     .useStrategy(breadcrumbElement)

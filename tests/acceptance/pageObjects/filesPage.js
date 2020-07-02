@@ -43,6 +43,25 @@ module.exports = {
         .useCss()
     },
     /**
+     * Gets the breadcrumb element selector for the provided combination of clickable
+     * and non-clickable breadcrumb segments.
+     * Note: the combination (false,false) is invalid.
+     *
+     * @param clickable Whether a clickable breadcrumb is wanted
+     * @param nonClickable Whether a non-clickable breadcrumb is wanted
+     * @returns {null|{locateStrategy: string, selector: string}}
+     */
+    getBreadcrumbSelector: function(clickable, nonClickable) {
+      if (clickable && nonClickable) {
+        return this.elements.resourceBreadcrumb
+      } else if (clickable) {
+        return this.elements.resourceBreadcrumbClickable
+      } else if (nonClickable) {
+        return this.elements.resourceBreadcrumbNonClickable
+      }
+      return null
+    },
+    /**
      * Create a folder with the given name
      *
      * @param {string} name to set or null to use default value from dialog
@@ -318,6 +337,10 @@ module.exports = {
     },
     resourceBreadcrumbClickable: {
       selector: '//div[@id="files-breadcrumb"]//a[contains(text(),"%s")]',
+      locateStrategy: 'xpath'
+    },
+    resourceBreadcrumbNonClickable: {
+      selector: '//div[@id="files-breadcrumb"]//span[contains(text(),"%s")]',
       locateStrategy: 'xpath'
     },
     fileUploadButton: {
