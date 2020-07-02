@@ -1,3 +1,28 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.11.1...master
+
+Summary
+-------
+
+* Bugfix - Remove anchor on last breadcrumb segment: [#3722](https://github.com/owncloud/phoenix/issues/3722)
+
+Details
+-------
+
+* Bugfix - Remove anchor on last breadcrumb segment: [#3722](https://github.com/owncloud/phoenix/issues/3722)
+
+   The last segment of the breadcrumb was clickable, while it's expected that nothing happens (as
+   it is the current path). We fixed that, the last breadcrumb element is not clickable anymore.
+
+   https://github.com/owncloud/phoenix/issues/3722
+   https://github.com/owncloud/phoenix/issues/2965
+   https://github.com/owncloud/phoenix/issues/1883
+   https://github.com/owncloud/phoenix/pull/3723
+
 Changelog for ownCloud Phoenix [0.11.1] (2020-06-29)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.11.1 relevant to
