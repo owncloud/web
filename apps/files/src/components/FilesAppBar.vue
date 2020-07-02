@@ -261,19 +261,16 @@ export default {
       }
 
       for (let i = startIndex; i < pathSplit.length; i++) {
-        let clickHandler = null
         let itemPath =
           baseUrl + encodeURIComponent(pathUtil.join.apply(null, pathSplit.slice(0, i + 1)))
         if (i === pathSplit.length - 1) {
           itemPath = null
-          clickHandler = () => this.$router.go()
         }
 
         breadcrumbs.push({
           index: i,
           text: pathSplit.slice(0, i + 1)[i],
-          to: itemPath,
-          onClick: clickHandler
+          to: itemPath
         })
       }
 

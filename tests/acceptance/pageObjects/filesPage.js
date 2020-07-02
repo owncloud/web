@@ -35,12 +35,31 @@ module.exports = {
      * @param {string} resource
      */
     navigateToBreadcrumb: function(resource) {
-      const breadcrumbElement = this.elements.resourceBreadcrumb
+      const breadcrumbElement = this.elements.resourceBreadcrumbClickable
       const resourceXpath = util.format(breadcrumbElement.selector, resource)
       return this.useStrategy(breadcrumbElement)
         .waitForElementVisible(resourceXpath)
         .click(resourceXpath)
         .useCss()
+    },
+    /**
+     * Gets the breadcrumb element selector for the provided combination of clickable
+     * and non-clickable breadcrumb segments.
+     * Note: the combination (false,false) is invalid.
+     *
+     * @param clickable Whether a clickable breadcrumb is wanted
+     * @param nonClickable Whether a non-clickable breadcrumb is wanted
+     * @returns {null|{locateStrategy: string, selector: string}}
+     */
+    getBreadcrumbSelector: function(clickable, nonClickable) {
+      if (clickable && nonClickable) {
+        return this.elements.resourceBreadcrumb
+      } else if (clickable) {
+        return this.elements.resourceBreadcrumbClickable
+      } else if (nonClickable) {
+        return this.elements.resourceBreadcrumbNonClickable
+      }
+      return null
     },
     /**
      * Create a folder with the given name
@@ -312,7 +331,16 @@ module.exports = {
       selector: '#files-breadcrumb li:nth-of-type(2)'
     },
     resourceBreadcrumb: {
+      selector:
+        '//div[@id="files-breadcrumb"]//*[(self::a or self::span) and contains(text(),"%s")]',
+      locateStrategy: 'xpath'
+    },
+    resourceBreadcrumbClickable: {
       selector: '//div[@id="files-breadcrumb"]//a[contains(text(),"%s")]',
+      locateStrategy: 'xpath'
+    },
+    resourceBreadcrumbNonClickable: {
+      selector: '//div[@id="files-breadcrumb"]//span[contains(text(),"%s")]',
       locateStrategy: 'xpath'
     },
     fileUploadButton: {
