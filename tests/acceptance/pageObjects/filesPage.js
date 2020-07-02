@@ -35,7 +35,7 @@ module.exports = {
      * @param {string} resource
      */
     navigateToBreadcrumb: function(resource) {
-      const breadcrumbElement = this.elements.resourceBreadcrumb
+      const breadcrumbElement = this.elements.resourceBreadcrumbClickable
       const resourceXpath = util.format(breadcrumbElement.selector, resource)
       return this.useStrategy(breadcrumbElement)
         .waitForElementVisible(resourceXpath)
@@ -314,6 +314,10 @@ module.exports = {
     resourceBreadcrumb: {
       selector:
         '//div[@id="files-breadcrumb"]//*[(self::a or self::span) and contains(text(),"%s")]',
+      locateStrategy: 'xpath'
+    },
+    resourceBreadcrumbClickable: {
+      selector: '//div[@id="files-breadcrumb"]//a[contains(text(),"%s")]',
       locateStrategy: 'xpath'
     },
     fileUploadButton: {
