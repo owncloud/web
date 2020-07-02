@@ -4,9 +4,10 @@
       <translate
         :translate-n="resourcesCount"
         translate-plural="Selected %{ resourcesCount } resources to move into:"
+        class="uk-margin-small-right"
         >Selected %{ resourcesCount } resource to move into:</translate
       >
-      <oc-breadcrumb :items="breadcrumbs" class="uk-text-lead" />
+      <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
     </h1>
     <div class="uk-margin-bottom">
       <oc-button @click.native="leaveLocationPicker">
