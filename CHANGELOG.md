@@ -1,9 +1,9 @@
-Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+Changelog for ownCloud Phoenix [0.11.2] (2020-07-03)
 =======================================
-The following sections list the changes in ownCloud phoenix unreleased relevant to
+The following sections list the changes in ownCloud phoenix 0.11.2 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/phoenix/compare/v0.11.1...master
+[0.11.2]: https://github.com/owncloud/phoenix/compare/v0.11.1...v0.11.2
 
 Summary
 -------
