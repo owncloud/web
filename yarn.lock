@@ -2917,9 +2917,9 @@ data-uri-to-buffer@1:
   resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-1.2.0.tgz#77163ea9c20d8641b4707e8f18abdf9a78f34835"
   integrity sha512-vKQ9DTQPN1FLYiiEEOQ6IBGFqvjCa5rSK3cWMy/Nespm5d/x3dGFT9UBZnkLxCwua/IXBi2TYnwTEpsOvhC4UQ==
 
-"davclient.js@git+https://github.com/owncloud/davclient.js.git":
+"davclient.js@https://github.com/owncloud/davclient.js.git":
   version "0.2.1"
-  resolved "git+https://github.com/owncloud/davclient.js.git#bf19f590451b3c0658913568053ec7f300f7dfc1"
+  resolved "https://github.com/owncloud/davclient.js.git#bf19f590451b3c0658913568053ec7f300f7dfc1"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -6874,10 +6874,10 @@ os-tmpdir@~1.0.1, os-tmpdir@~1.0.2:
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
 
-owncloud-design-system@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.7.0.tgz#794821f8e0e52b9b4ad29d214e21ad4c341f1d10"
-  integrity sha512-9psNu1xwUxAQ56nehoUeqjp3bhiQY812Aenh2AbVaTTY2LZaW+ctqmwhhhSIE8JXctpIWt+dP3agRmW1dbSbgQ==
+owncloud-design-system@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.8.0.tgz#9c51fb47f0a12382b0cffbf94b7985cbcd1c6d43"
+  integrity sha512-7rJ6EfcA5axqD6oHuar44Rd8zflPQFZ3wArppVeo1NW0aPwoVCOrmEVI6vl2YZKZbhAl4SI3XMD0IlobZ4IEmg==
   dependencies:
     luxon "^1.22.0"
     mini-css-extract-plugin "^0.9.0"
