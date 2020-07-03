@@ -24,8 +24,8 @@ module.exports = {
       await client.page.ocisLoginPage().login(userId, password)
     } else {
       await client.page.ownCloudLoginPage().login(userId, password)
-      await client.page.ownCloudAuthorizePage().authorize()
     }
+    await client.page.loginAuthorizePage().authorize()
     await client.page
       .phoenixPage()
       .waitForElementVisible('@appContainer')

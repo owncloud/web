@@ -1,3 +1,4 @@
+// This page object works for both the owncloud with oauth login and openid connect login
 module.exports = {
   url: function() {
     return this.api.launchUrl
