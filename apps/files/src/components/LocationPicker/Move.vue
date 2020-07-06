@@ -112,6 +112,10 @@ export default {
 
   mixins: [MixinsGeneral],
 
+  data: () => ({
+    originalLocation: ''
+  }),
+
   computed: {
     ...mapState('Files', [
       'selectedResourcesForMove',
@@ -189,6 +193,7 @@ export default {
 
   created() {
     this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
+    this.originalLocation = this.target
   },
 
   beforeDestroy() {
@@ -227,7 +232,7 @@ export default {
     },
 
     leaveLocationPicker() {
-      this.$router.push({ name: 'files-list' })
+      this.$router.push({ name: 'files-list', params: { item: this.originalLocation } })
     },
 
     async moveResources() {
