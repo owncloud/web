@@ -279,8 +279,10 @@ export default {
 
     hasFreeSpace() {
       return (
-        (this.quota && this.quota.free > 0) ||
-        (this.currentFolder && this.currentFolder.permissions.indexOf('M') >= 0) ||
+        (this.quota && this.quota.free) > 0 ||
+        (this.currentFolder &&
+          this.currentFolder.permissions &&
+          this.currentFolder.permissions.indexOf('M') >= 0) ||
         this.publicPage()
       )
     },
