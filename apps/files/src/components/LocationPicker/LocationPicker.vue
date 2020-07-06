@@ -83,6 +83,13 @@
           {{ formDateFromNow(rowItem.mdate) }}
         </div>
       </template>
+      <template #noContentMessage>
+        <no-content-message icon="folder">
+          <template #message
+            ><span v-translate>There are no resources in this folder.</span></template
+          >
+        </no-content-message>
+      </template>
     </file-list>
   </div>
 </template>
@@ -96,6 +103,7 @@ import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
 import FileList from '../FileList.vue'
 import FileItem from '../FileItem.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
+import NoContentMessage from '../NoContentMessage.vue'
 
 export default {
   name: 'LocationPicker',
@@ -103,7 +111,8 @@ export default {
   components: {
     FileList,
     FileItem,
-    SortableColumnHeader
+    SortableColumnHeader,
+    NoContentMessage
   },
 
   mixins: [MixinsGeneral],
