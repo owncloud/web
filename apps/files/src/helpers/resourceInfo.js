@@ -4,5 +4,9 @@
  * @return {String} Resource name
  */
 export function getResourceName(path) {
-  return path.substring(path.lastIndexOf('/'))
+  if (path.lastIndexOf('/') > -1) {
+    return path.substring(path.lastIndexOf('/'))
+  }
+
+  return path
 }

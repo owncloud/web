@@ -933,12 +933,15 @@ When('user {string} has renamed the following file', function(user, table) {
 })
 
 Then('the following file should be listed on the webUI', async function(table) {
-  const name = table
-    .hashes()
-    .map(data => data['name-parts'])
-    .join('')
-  const state = await client.page.FilesPageElement.filesList().isElementListed(name)
-  return assert.strictEqual(state, true, `Element ${name} is not present on the filesList!`)
+  const resources = table.hashes().map(data => data['name-parts'])
+
+  for (const resource of resources) {
+    const found = await client.page.FilesPageElement.filesList().isElementListed(resource)
+
+    assert.strictEqual(found, true, `Element ${resource} is not present on the filesList!`)
+  }
+
+  return true
 })
 
 Then('the following file should not be listed on the webUI', async function(table) {
@@ -1055,4 +1058,26 @@ Then('the file {string} should have a file type icon displayed on the webUI', as
 
 Then('quick action {string} should be displayed on the webUI', function(action) {
   return client.page.FilesPageElement.filesRow().isQuickActionVisible(action)
+})
+
+When('the user moves file/folder {string} into folder {string} using the webUI', function(
+  resource,
+  target
+) {
+  return client.page.FilesPageElement.filesList().moveResource(resource, target)
+})
+
+When('the user batch moves these files into folder {string} using the webUI', async function(
+  target,
+  resources
+) {
+  for (const item of resources.rows()) {
+    await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
+  }
+
+  return client.page.filesPage().moveMultipleResources(target)
+})
+
+Then('the moved elements should be listed on the webUI', function(resources) {
+  console.log(resources)
 })

@@ -9,7 +9,12 @@
       <oc-button @click.native="leaveLocationPicker">
         <translate>Cancel</translate>
       </oc-button>
-      <oc-button variation="primary" :disabled="!canConfirm" @click.native="confirmAction">
+      <oc-button
+        id="location-picker-btn-confirm"
+        variation="primary"
+        :disabled="!canConfirm"
+        @click.native="confirmAction"
+      >
         <span v-text="confirmBtnText" />
       </oc-button>
     </div>
@@ -157,7 +162,10 @@ export default {
     },
 
     resourcesQuery() {
-      return '&resource=' + this.resources.join('&resource=')
+      return (
+        '&resource=' +
+        this.resources.map(resource => encodeURIComponent(resource)).join('&resource=')
+      )
     },
 
     breadcrumbs() {
@@ -256,7 +264,12 @@ export default {
     },
 
     createPath(target) {
-      return this.basePath + `?action=${this.currentAction}&target=` + target + this.resourcesQuery
+      return (
+        this.basePath +
+        `?action=${this.currentAction}&target=` +
+        encodeURIComponent(target) +
+        this.resourcesQuery
+      )
     },
 
     selectFolder(folder) {
@@ -264,7 +277,6 @@ export default {
         return
       }
 
-      this.navigateToTarget(folder.path)
       this.$router.push({ path: this.createPath(folder.path) })
     },
 
@@ -278,8 +290,9 @@ export default {
       for (const resource of this.resources) {
         let target = this.target || '/'
 
-        resource.lastIndexOf('/') ? (target += getResourceName(resource)) : (target += resource)
-        await this.$client.files.move(resource, target).catch(error => errors.push(error))
+        await this.$client.files
+          .move(resource, (target += getResourceName(resource)))
+          .catch(error => errors.push(error))
       }
 
       if (errors.length === 1) {

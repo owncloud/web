@@ -127,7 +127,7 @@
             key="move-selected-btn"
             icon="folder-move"
             :disabled="!canMove"
-            @click="moveResources"
+            @click.native="moveResources"
           >
             <translate>Move selected</translate>
           </oc-button>
