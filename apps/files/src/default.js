@@ -9,7 +9,7 @@ import FileLinkSidebar from './components/FileLinkSidebar.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './components/PublicLinks/PublicLink.vue'
 import FilesDrop from './components/PublicLinks/FilesDrop.vue'
-import LocationPickerMove from './components/LocationPicker/Move.vue'
+import LocationPicker from './components/LocationPicker/LocationPicker.vue'
 
 import translationsJson from '../l10n/translations.json'
 import quickActionsImport from './quickActions'
@@ -214,10 +214,10 @@ const routes = [
     meta: { auth: false }
   },
   {
-    path: '/move',
-    name: 'move',
+    path: '/location-picker',
+    name: 'location-picker',
     components: {
-      app: LocationPickerMove
+      app: LocationPicker
     },
     meta: {
       verbose: true

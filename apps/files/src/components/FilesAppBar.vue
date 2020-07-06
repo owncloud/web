@@ -615,8 +615,9 @@ export default {
       const parent = getResourcePath(this.currentFolder.path)
 
       this.$router.push({
-        name: 'move',
+        name: 'location-picker',
         query: {
+          action: 'move',
           target: parent,
           resource: resources.map(resource => {
             return resource.path

@@ -1,12 +1,7 @@
 <template>
   <div class="uk-height-1-1 uk-flex uk-flex-column uk-padding-small uk-overflow-hidden">
-    <h1 class="files-move-selection-info uk-flex uk-text-lead uk-margin-bottom">
-      <translate
-        :translate-n="resourcesCount"
-        translate-plural="Selected %{ resourcesCount } resources to move into:"
-        class="uk-margin-small-right"
-        >Selected %{ resourcesCount } resource to move into:</translate
-      >
+    <h1 class="location-picker-selection-info uk-flex uk-text-lead uk-margin-bottom">
+      <span class="uk-margin-small-right" v-text="title" />
       <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
     </h1>
     <hr class="uk-margin-remove-top" />
@@ -14,12 +9,12 @@
       <oc-button @click.native="leaveLocationPicker">
         <translate>Cancel</translate>
       </oc-button>
-      <oc-button variation="primary" :disabled="!canMove" @click.native="moveResources">
-        <translate>Move here</translate>
+      <oc-button variation="primary" :disabled="!canConfirm" @click.native="confirmAction">
+        <span v-text="confirmBtnText" />
       </oc-button>
     </div>
     <file-list
-      id="files-move-files-list"
+      id="location-picker-files-list"
       class="uk-flex-1"
       :file-data="activeFiles"
       :actions="[]"
@@ -103,7 +98,7 @@ import FileItem from '../FileItem.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 
 export default {
-  name: 'LocationPickerMove',
+  name: 'LocationPicker',
 
   components: {
     FileList,
@@ -124,6 +119,10 @@ export default {
       'currentFolder'
     ]),
     ...mapGetters('Files', ['activeFiles', 'fileSortField', 'fileSortDirectionDesc']),
+
+    currentAction() {
+      return this.$route.query.action
+    },
 
     resources() {
       const resources = JSON.parse(JSON.stringify(this.$route.query.resource))
@@ -157,7 +156,7 @@ export default {
         {
           index: 0,
           text: this.$gettext('Home'),
-          to: this.basePath + '?target' + this.resourcesQuery
+          to: this.basePath + `?action=${this.currentAction}&target=` + this.resourcesQuery
         }
       ]
 
@@ -180,8 +179,32 @@ export default {
       return breadcrumbs
     },
 
-    canMove() {
+    canConfirm() {
       return this.currentFolder?.canCreate()
+    },
+
+    title() {
+      const count = this.resourcesCount
+
+      if (this.currentAction === 'move') {
+        const title = this.$ngettext(
+          'Selected %{ count } resource to move into:',
+          'Selected %{ count } resources to move into:',
+          count
+        )
+
+        return this.$gettextInterpolate(title, { count: count })
+      }
+
+      return null
+    },
+
+    confirmBtnText() {
+      if (this.currentAction === 'move') {
+        return this.$gettext('Move here')
+      }
+
+      return null
     }
   },
 
@@ -193,8 +216,11 @@ export default {
   },
 
   created() {
-    this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
     this.originalLocation = this.target
+
+    if (this.currentAction === 'move') {
+      this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
+    }
   },
 
   beforeDestroy() {
@@ -221,7 +247,7 @@ export default {
     },
 
     createPath(target) {
-      return this.basePath + '?target=' + target + this.resourcesQuery
+      return this.basePath + `?action=${this.currentAction}&target=` + target + this.resourcesQuery
     },
 
     selectFolder(folder) {
@@ -273,6 +299,12 @@ export default {
 
     isRowDisabled(resource) {
       return resource.type !== 'folder' || !resource.canCreate()
+    },
+
+    confirmAction() {
+      if (this.currentAction === 'move') {
+        return this.moveResources()
+      }
     }
   }
 }

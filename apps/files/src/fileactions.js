@@ -61,8 +61,8 @@ export default {
             // Parent of the resource selected for move used as a default target location
             const parent = getResourcePath(resource.path)
             this.$router.push({
-              name: 'move',
-              query: { target: parent, resource: resource.path }
+              name: 'location-picker',
+              query: { action: 'move', target: parent, resource: resource.path }
             })
           },
           ariaLabel: () => this.$gettext('Move'),
