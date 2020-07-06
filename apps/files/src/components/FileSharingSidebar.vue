@@ -143,9 +143,13 @@ export default {
     ...mapState(['user']),
 
     currentPanel() {
-      const panel = this.currentSidebarTab.options?.collaboratorsCurrentPanel
+      const tabOptions = this.currentSidebarTab.options
 
-      return panel || PANEL_SHOW
+      if (tabOptions && tabOptions.collaboratorsCurrentPanel) {
+        return tabOptions.collaboratorsCurrentPanel
+      }
+
+      return PANEL_SHOW
     },
 
     $_transitionGroupEnter() {
