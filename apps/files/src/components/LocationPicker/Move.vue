@@ -203,6 +203,7 @@ export default {
   methods: {
     ...mapMutations(['SET_MAIN_CONTENT_COMPONENT']),
     ...mapActions('Files', ['loadFolder']),
+    ...mapActions(['showMessage']),
 
     navigateToTarget(target) {
       if (typeof target === 'object') {
@@ -236,11 +237,34 @@ export default {
     },
 
     async moveResources() {
+      const errors = []
+
       for (const resource of this.resources) {
         let target = this.target || '/'
 
         resource.lastIndexOf('/') ? (target += getResourceName(resource)) : (target += resource)
-        await this.$client.files.move(resource, target)
+        await this.$client.files.move(resource, target).catch(error => errors.push(error))
+      }
+
+      if (errors.length === 1) {
+        this.showMessage({
+          title: this.$gettext('Move has failed'),
+          desc: errors[0].message,
+          status: 'danger'
+        })
+
+        return
+      }
+
+      if (errors.length > 1) {
+        this.showMessage({
+          title: this.$gettext('Move has failed'),
+          desc: this.$gettext('Multiple resources could not be moved'),
+          status: 'danger'
+        })
+        console.error('Move failed:', errors)
+
+        return
       }
 
       this.$router.push({ name: 'files-list', params: { item: this.target || '/' } })
