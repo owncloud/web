@@ -9,6 +9,7 @@
       >
       <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
     </h1>
+    <hr class="uk-margin-remove-top" />
     <div class="uk-margin-bottom">
       <oc-button @click.native="leaveLocationPicker">
         <translate>Cancel</translate>
