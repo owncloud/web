@@ -237,13 +237,13 @@ export default {
 
     async moveResources() {
       for (const resource of this.resources) {
-        let target = this.target ?? '/'
+        let target = this.target || '/'
 
         resource.lastIndexOf('/') ? (target += getResourceName(resource)) : (target += resource)
         await this.$client.files.move(resource, target)
       }
 
-      this.leaveLocationPicker()
+      this.$router.push({ name: 'files-list', params: { item: this.target || '/' } })
     },
 
     isRowDisabled(resource) {
