@@ -1,5 +1,6 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { getResourcePath } from './helpers/path'
+import { canBeMoved } from './helpers/permissions'
 import MixinDeleteResources from './mixins/deleteResources'
 
 export default {
@@ -65,15 +66,7 @@ export default {
             })
           },
           ariaLabel: () => this.$gettext('Move'),
-          isEnabled: resource => {
-            // TODO: Find a better way to prevent moving shared resources then by checking if the current folder is root
-            // TODO: Find a way to disable move action when shares are mounted in different folder then root
-            return (
-              resource.canBeDeleted() ||
-              (this.currentFolder.name !== '' &&
-                (resource.isReceivedShare() || resource.isMounted()))
-            )
-          }
+          isEnabled: resource => canBeMoved(resource, this.currentFolder.path)
         },
         {
           icon: 'delete',

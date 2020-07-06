@@ -41,5 +41,9 @@ export function getParentPaths(path, includeCurrent = false) {
  * @return {String} path without the resource name
  */
 export function getResourcePath(path) {
-  return path.substring(0, path.lastIndexOf('/'))
+  if (path.indexOf('/') > -1) {
+    return path.substring(0, path.lastIndexOf('/'))
+  }
+
+  return path
 }

@@ -77,7 +77,7 @@
             :key="rowItem.viewId"
             :item="rowItem"
             :has-two-rows="true"
-            @click.native="selectFolder(rowItem.path)"
+            @click.native="selectFolder(rowItem)"
           />
         </div>
         <div class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right">
@@ -222,25 +222,21 @@ export default {
         return
       }
 
-      this.navigateToTarget(folder)
-      this.$router.push({ path: this.createPath(folder) })
+      this.navigateToTarget(folder.path)
+      this.$router.push({ path: this.createPath(folder.path) })
     },
 
     leaveLocationPicker() {
       this.$router.push({ name: 'files-list' })
     },
 
-    moveResources() {
-      this.resources.forEach(resource => {
-        console.log(resource)
-        var target = this.target ?? '/'
-        if (resource.lastIndexOf('/') >= 0) {
-          target += resource.substring(resource.lastIndexOf('/'))
-        } else {
-          target += resource
-        }
-        this.$client.files.move(resource, target)
-      })
+    async moveResources() {
+      for (const resource of this.resources) {
+        let target = this.target ?? '/'
+
+        resource.lastIndexOf('/') ? (target += getResourceName(resource)) : (target += resource)
+        await this.$client.files.move(resource, target)
+      }
 
       this.leaveLocationPicker()
     },
