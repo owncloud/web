@@ -146,7 +146,6 @@ import Mixins from '../mixins'
 import FileActions from '../fileactions'
 import MixinDeleteResources from '../mixins/deleteResources'
 import pathUtil from 'path'
-import { getResourcePath } from '../helpers/path'
 import { canBeMoved } from '../helpers/permissions'
 
 export default {
@@ -612,7 +611,7 @@ export default {
 
     moveResources() {
       const resources = JSON.parse(JSON.stringify(this.selectedFiles))
-      const parent = getResourcePath(this.currentFolder.path)
+      const parent = pathUtil.dirname(this.currentFolder.path)
 
       this.$router.push({
         name: 'location-picker',

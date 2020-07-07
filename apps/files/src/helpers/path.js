@@ -34,16 +34,3 @@ export function getParentPaths(path, includeCurrent = false) {
 
   return paths
 }
-
-/**
- * Removes tha resource name and returns only the path
- * @param {String} path Full resource path containing the name of the resource
- * @return {String} path without the resource name
- */
-export function getResourcePath(path) {
-  if (path.indexOf('/') > -1) {
-    return path.substring(0, path.lastIndexOf('/'))
-  }
-
-  return path
-}

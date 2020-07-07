@@ -1,4 +1,4 @@
-Enhancement: Add move action
+Enhancement: Add ability to move files and folders into a different location
 
 We've added move action to the files list. It is possible now to move folders and files.
 The move is executed via a new page called location picker.

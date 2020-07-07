@@ -7,7 +7,7 @@
       >You can navigate into a folder by clicking on its name.</translate
     >
     <translate translate-comment="Location picker guide on how to navigate to previous folders."
-      >To navigate back, you can use the breadcrumbs.</translate
+      >To navigate back, you can click on the breadcrumbs.</translate
     >
     <translate translate-comment="Location picker guide on where the resources will be moved."
       >Resources will be moved into the folder where you are currently located.</translate

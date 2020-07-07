@@ -6,7 +6,7 @@
     </h1>
     <hr class="uk-margin-remove-top" />
     <div class="uk-margin-bottom">
-      <oc-button @click.native="leaveLocationPicker">
+      <oc-button @click.native="leaveLocationPicker(originalLocation)">
         <translate>Cancel</translate>
       </oc-button>
       <oc-button
@@ -37,7 +37,7 @@
             :is-desc="fileSortDirectionDesc"
             @click="toggleSort('name')"
           >
-            <translate translate-context="Name column in files table">Name</translate>
+            <translate translate-comment="Name column in location picker">Name</translate>
           </sortable-column-header>
         </div>
         <div
@@ -51,7 +51,7 @@
             class="uk-align-right"
             @click="toggleSort('size')"
           >
-            <translate translate-context="Size column in files table">Size</translate>
+            <translate translate-comment="Size column in location picker">Size</translate>
           </sortable-column-header>
         </div>
         <div
@@ -66,7 +66,7 @@
             @click="toggleSort('mdateMoment')"
           >
             <translate
-              translate-context="Short column label in files table for the time at which a file was modified"
+              translate-comment="Short column label in location picker for the time at which a file was modified"
               >Updated</translate
             >
           </sortable-column-header>
@@ -104,7 +104,6 @@
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 import pathUtil from 'path'
-import { getResourceName } from '../../helpers/resourceInfo'
 import MixinsGeneral from '../../mixins'
 import MixinsFilesListIndicators from '../../mixins/filesListIndicators'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
@@ -296,14 +295,14 @@ export default {
       this.$router.push({ path: this.createPath(folder.path) })
     },
 
-    leaveLocationPicker() {
+    leaveLocationPicker(target) {
       if (this.isPublicPage) {
-        this.$router.push({ name: 'public-link', params: { token: this.originalLocation } })
+        this.$router.push({ name: 'public-link', params: { token: target } })
 
         return
       }
 
-      this.$router.push({ name: 'files-list', params: { item: this.originalLocation } })
+      this.$router.push({ name: 'files-list', params: { item: target } })
     },
 
     async moveResources() {
@@ -312,9 +311,9 @@ export default {
 
       for (const resource of this.resources) {
         let target = this.target || '/'
-        const resourceName = getResourceName(resource)
+        const resourceName = pathUtil.basename(resource)
         const exists = this.activeFiles.some(item => {
-          return getResourceName(item.name) === resourceName
+          return pathUtil.basename(item.name) === resourceName
         })
 
         if (exists) {
@@ -351,13 +350,7 @@ export default {
         return
       }
 
-      if (this.isPublicPage) {
-        this.$router.push({ name: 'public-link', params: { token: this.target } })
-
-        return
-      }
-
-      this.$router.push({ name: 'files-list', params: { item: this.target || '/' } })
+      this.leaveLocationPicker(this.target || '/')
     },
 
     isRowDisabled(resource) {
