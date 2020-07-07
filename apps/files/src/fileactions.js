@@ -56,6 +56,25 @@ export default {
           }
         },
         {
+          icon: 'file_copy',
+          handler: resource => {
+            // Parent of the resource selected for copy used as a default target location
+            const parent = dirname(resource.path)
+            this.$router.push({
+              name: 'location-picker',
+              query: { action: 'copy', target: parent, resource: resource.path }
+            })
+          },
+          ariaLabel: () => this.$gettext('Copy'),
+          isEnabled: () => {
+            if (this.publicPage()) {
+              return this.currentFolder.canCreate()
+            }
+
+            return true
+          }
+        },
+        {
           icon: 'folder-move',
           handler: resource => {
             // Parent of the resource selected for move used as a default target location

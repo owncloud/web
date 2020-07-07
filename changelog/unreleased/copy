@@ -1,0 +1,7 @@
+Enhancement: Add ability to copy files and folders into a different location
+
+We've added copy action to the files list. The copy action is executed via a new page called location picker.
+
+https://github.com/owncloud/product/issues/102
+https://github.com/owncloud/product/issues/108
+https://github.com/owncloud/phoenix/pull/3749

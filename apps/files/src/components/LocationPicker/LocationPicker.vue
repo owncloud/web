@@ -112,6 +112,7 @@ import FileList from '../FileList.vue'
 import FileItem from '../FileItem.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 import NoContentMessage from '../NoContentMessage.vue'
+import CopySidebarMainContent from './CopySidebarMainContent.vue'
 
 export default {
   name: 'LocationPicker',
@@ -217,26 +218,33 @@ export default {
 
     title() {
       const count = this.resourcesCount
+      let title = ''
 
       if (this.currentAction === 'move') {
-        const title = this.$ngettext(
+        title = this.$ngettext(
           'Selected %{ count } resource to move into:',
           'Selected %{ count } resources to move into:',
           count
         )
-
-        return this.$gettextInterpolate(title, { count: count })
+      } else if (this.currentAction === 'copy') {
+        title = this.$ngettext(
+          'Selected %{ count } resource to copy into:',
+          'Selected %{ count } resources to copy into:',
+          count
+        )
       }
 
-      return null
+      return this.$gettextInterpolate(title, { count: count }, false)
     },
 
     confirmBtnText() {
       if (this.currentAction === 'move') {
         return this.$pgettext('Confirm action in the location picker for move', 'Move here')
+      } else if (this.currentAction === 'copy') {
+        return this.$pgettext('Confirm action in the location picker for copy', 'Copy here')
       }
 
-      return null
+      return this.$gettext('Confirm')
     }
   },
 
@@ -252,6 +260,8 @@ export default {
 
     if (this.currentAction === 'move') {
       this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
+    } else if (this.currentAction === 'copy') {
+      this.SET_MAIN_CONTENT_COMPONENT(CopySidebarMainContent)
     }
   },
 
@@ -306,10 +316,17 @@ export default {
       this.$router.push({ name: 'files-list', params: { item: target || '/' } })
     },
 
-    async moveResources() {
-      const errors = []
-      const promise = this.isPublicPage ? this.$client.publicFiles : this.$client.files
+    isRowDisabled(resource) {
+      const isBeingMoved = this.resources.some(item => item === resource.path)
 
+      return resource.type !== 'folder' || !resource.canCreate() || isBeingMoved
+    },
+
+    async confirmAction() {
+      const errors = []
+      let promise = null
+
+      // Execute move or copy
       for (const resource of this.resources) {
         let target = this.target || '/'
         const resourceName = basename(resource)
@@ -328,14 +345,39 @@ export default {
           continue
         }
 
-        await promise
-          .move(resource, (target += '/' + resourceName), this.publicLinkPassword)
-          .catch(error => errors.push(error))
+        if (this.currentAction === 'move') {
+          promise = this.isPublicPage
+            ? this.$client.publicFiles.move(
+                resource,
+                (target += '/' + resourceName),
+                this.publicLinkPassword
+              )
+            : this.$client.files.move(resource, (target += '/' + resourceName))
+        } else if (this.currentAction === 'copy') {
+          promise = this.isPublicPage
+            ? this.$client.publicFiles.copy(
+                resource,
+                (target += '/' + resourceName),
+                this.publicLinkPassword
+              )
+            : this.$client.files.copy(resource, (target += '/' + resourceName))
+        }
+
+        await promise.catch(error => {
+          error.resource = resourceName
+          errors.push(error)
+        })
       }
 
       // Display error message
       if (errors.length === 1) {
-        const title = this.$gettext('An error occurred while moving %{resource}')
+        let title = ''
+
+        if (this.currentAction === 'move') {
+          title = this.$gettext('An error occurred while moving %{resource}')
+        } else if (this.currentAction === 'copy') {
+          title = this.$gettext('An error occurred while copying %{resource}')
+        }
 
         this.showMessage({
           title: this.$gettextInterpolate(title, { resource: errors[0].resource }, true),
@@ -347,10 +389,19 @@ export default {
       }
 
       if (errors.length > 1) {
-        const desc = this.$gettext('%{count} resources could not be moved')
+        let title = ''
+        let desc = ''
+
+        if (this.currentAction === 'move') {
+          title = this.$gettext('An error occurred while moving several resources')
+          desc = this.$gettext('%{count} resources could not be moved')
+        } else if (this.currentAction === 'copy') {
+          title = this.$gettext('An error occurred while copying several resources')
+          desc = this.$gettext('%{count} resources could not be copied')
+        }
 
         this.showMessage({
-          title: this.$gettext('An error occurred while moving several resources'),
+          title,
           desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
           status: 'danger'
         })
@@ -360,18 +411,6 @@ export default {
       }
 
       this.leaveLocationPicker(this.target)
-    },
-
-    isRowDisabled(resource) {
-      const isBeingMoved = this.resources.some(item => item === resource.path)
-
-      return resource.type !== 'folder' || !resource.canCreate() || isBeingMoved
-    },
-
-    confirmAction() {
-      if (this.currentAction === 'move') {
-        return this.moveResources()
-      }
     }
   }
 }

@@ -634,7 +634,19 @@ module.exports = {
       await filesRow.openFileActionsMenu(resource).move()
 
       // Execute move
-      await client.page.locationPicker().move(target)
+      await client.page.locationPicker().selectFolderAndConfirm(target)
+
+      return this
+    },
+
+    copyResource: async function(resource, target) {
+      await this.waitForFileVisible(resource)
+
+      // Trigger copy
+      await filesRow.openFileActionsMenu(resource).copy()
+
+      // Execute copy
+      await client.page.locationPicker().selectFolderAndConfirm(target)
 
       return this
     }

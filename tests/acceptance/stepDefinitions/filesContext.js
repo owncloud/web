@@ -1100,6 +1100,20 @@ When(
   }
 )
 
-Then('the moved elements should be listed on the webUI', function(resources) {
-  console.log(resources)
+When('the user copies file/folder {string} into folder {string} using the webUI', function(
+  resource,
+  target
+) {
+  return client.page.FilesPageElement.filesList().copyResource(resource, target)
 })
+
+When(
+  'the user batch copies these files/folders into folder {string} using the webUI',
+  async function(target, resources) {
+    for (const item of resources.rows()) {
+      await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
+    }
+
+    return client.page.filesPage().copyMultipleResources(target)
+  }
+)
