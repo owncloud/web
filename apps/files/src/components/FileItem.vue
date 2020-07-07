@@ -38,6 +38,7 @@
           key="status-indicators"
           :default-indicators="indicators"
           :item="item"
+          :are-indicators-clickable="areIndicatorsClickable"
           class="files-list-indicators"
         />
         <span v-else key="no-status-indicators" aria-hidden="true" v-text="'-'" />
@@ -86,6 +87,11 @@ export default {
       default: false
     },
     displayPreview: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    areIndicatorsClickable: {
       type: Boolean,
       required: false,
       default: true

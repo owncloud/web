@@ -78,6 +78,8 @@
             :key="rowItem.viewId"
             :item="rowItem"
             :has-two-rows="true"
+            :indicators="indicatorArray(rowItem)"
+            :are-indicators-clickable="false"
             @click.native="selectFolder(rowItem)"
           />
         </div>
@@ -104,6 +106,7 @@ import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 import pathUtil from 'path'
 import { getResourceName } from '../../helpers/resourceInfo'
 import MixinsGeneral from '../../mixins'
+import MixinsFilesListIndicators from '../../mixins/filesListIndicators'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
 import FileList from '../FileList.vue'
 import FileItem from '../FileItem.vue'
@@ -120,7 +123,7 @@ export default {
     NoContentMessage
   },
 
-  mixins: [MixinsGeneral],
+  mixins: [MixinsGeneral, MixinsFilesListIndicators],
 
   data: () => ({
     originalLocation: ''
