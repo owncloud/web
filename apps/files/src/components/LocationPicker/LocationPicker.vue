@@ -1,8 +1,6 @@
 <template>
   <div class="uk-height-1-1 uk-flex uk-flex-column uk-padding-small uk-overflow-hidden">
-    <h1
-      class="location-picker-selection-info uk-overflow-auto uk-flex uk-text-lead uk-margin-bottom"
-    >
+    <h1 class="location-picker-selection-info uk-flex uk-text-lead uk-margin-bottom">
       <span class="uk-margin-small-right" v-text="title" />
       <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
     </h1>
@@ -22,7 +20,7 @@
     </div>
     <file-list
       id="location-picker-files-list"
-      class="uk-flex-1"
+      class="uk-flex-1 uk-overflow-auto"
       :file-data="activeFiles"
       :actions="[]"
       :is-action-enabled="() => false"
