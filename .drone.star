@@ -1393,14 +1393,13 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 def ldapService():
 	return[{
 		'name': 'ldap',
-		'image': 'osixia/openldap:1.3.0',
+		'image': 'osixia/openldap:1.4.0',
 		'pull': 'always',
 		'environment': {
 			'LDAP_DOMAIN': 'owncloud.com',
 			'LDAP_ORGANISATION': 'owncloud',
 			'LDAP_ADMIN_PASSWORD': 'admin',
 			'LDAP_TLS_VERIFY_CLIENT': 'never',
-			'HOSTNAME': 'ldap'
 		},
 	}]
 
