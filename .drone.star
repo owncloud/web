@@ -1400,7 +1400,6 @@ def ldapService():
 			'LDAP_ORGANISATION': 'owncloud',
 			'LDAP_ADMIN_PASSWORD': 'admin',
 			'LDAP_TLS_VERIFY_CLIENT': 'never',
-			'HOSTNAME': 'ldap'
 		},
 	}]
 
