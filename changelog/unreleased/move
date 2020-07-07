@@ -1,0 +1,7 @@
+Enhancement: Add move action
+
+We've added move action to the files list. It is possible now to move folders and files.
+The move is executed via a new page called location picker.
+
+https://github.com/owncloud/product/issues/101
+https://github.com/owncloud/phoenix/pull/3739
