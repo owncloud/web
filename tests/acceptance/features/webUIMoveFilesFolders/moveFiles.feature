@@ -31,22 +31,9 @@ Feature: move files
     And file "data.tar.gz" should not be listed on the webUI
     And file "strängé filename (duplicate #2 &).txt" should not be listed on the webUI
 
-
-  @skip @yetToImplement
-  Scenario: move a file into a folder where a file with the same name already exists
-    When the user moves file "data.zip" into folder "simple-folder" using the webUI
-    And the user moves file "data.zip" into folder "strängé नेपाली folder" using the webUI
-    Then notifications should be displayed on the webUI with the text
-      | Could not move "data.zip", target exists |
-      | Could not move "data.zip", target exists |
-    And file "data.zip" should be listed on the webUI
-
-  @skip @yetToImplement
   Scenario: move a file into a folder where a file with the same name already exists
     When the user moves file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
-    Then notifications should be displayed on the webUI with the text
-      | Could not move "strängé filename (duplicate #2 &).txt", target exists |
-    And file "strängé filename (duplicate #2 &).txt" should be listed on the webUI
+    Then the error message with header 'Move has failed' should be displayed on the webUI
 
   @smokeTest
   Scenario: Move multiple files at once

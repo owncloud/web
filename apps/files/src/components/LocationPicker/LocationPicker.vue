@@ -1,6 +1,8 @@
 <template>
   <div class="uk-height-1-1 uk-flex uk-flex-column uk-padding-small uk-overflow-hidden">
-    <h1 class="location-picker-selection-info uk-flex uk-text-lead uk-margin-bottom">
+    <h1
+      class="location-picker-selection-info uk-overflow-auto uk-flex uk-text-lead uk-margin-bottom"
+    >
       <span class="uk-margin-small-right" v-text="title" />
       <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
     </h1>
@@ -138,6 +140,7 @@ export default {
       'fileSortDirectionDesc',
       'publicLinkPassword'
     ]),
+    ...mapGetters(['user']),
 
     currentAction() {
       return this.$route.query.action
@@ -173,10 +176,14 @@ export default {
       )
     },
 
+    isPublicPage() {
+      return this.user.id === null || this.user.id === undefined
+    },
+
     breadcrumbs() {
       const breadcrumbs = []
 
-      if (!this.publicPage()) {
+      if (!this.isPublicPage) {
         breadcrumbs.push({
           index: 0,
           text: this.$gettext('Home'),
@@ -266,7 +273,8 @@ export default {
         absolutePath: target || '/',
         $gettext: this.$gettext,
         routeName: this.$route.name,
-        loadSharesTree: !this.publicPage()
+        loadSharesTree: !this.isPublicPage,
+        isPublicPage: this.isPublicPage
       })
     },
 
@@ -288,7 +296,7 @@ export default {
     },
 
     leaveLocationPicker() {
-      if (this.publicPage()) {
+      if (this.isPublicPage) {
         this.$router.push({ name: 'public-link', params: { token: this.originalLocation } })
 
         return
@@ -299,13 +307,25 @@ export default {
 
     async moveResources() {
       const errors = []
-      const promise = this.publicPage() ? this.$client.publicFiles : this.$client.files
+      const promise = this.isPublicPage ? this.$client.publicFiles : this.$client.files
 
       for (const resource of this.resources) {
         let target = this.target || '/'
+        const resourceName = getResourceName(resource)
+        const exists = this.activeFiles.some(item => {
+          return getResourceName(item.name) === resourceName
+        })
+
+        if (exists) {
+          const message = this.$gettext('Resource with name %{name} already exists')
+
+          errors.push({ message: this.$gettextInterpolate(message, { name: resourceName }, true) })
+
+          continue
+        }
 
         await promise
-          .move(resource, (target += getResourceName(resource)), this.publicLinkPassword)
+          .move(resource, (target += resourceName), this.publicLinkPassword)
           .catch(error => errors.push(error))
       }
 
@@ -330,7 +350,7 @@ export default {
         return
       }
 
-      if (this.publicPage()) {
+      if (this.isPublicPage) {
         this.$router.push({ name: 'public-link', params: { token: this.target } })
 
         return

@@ -5,7 +5,7 @@
  */
 export function getResourceName(path) {
   if (path.lastIndexOf('/') > -1) {
-    return path.substring(path.lastIndexOf('/'))
+    return path.substring(path.lastIndexOf('/') + 1)
   }
 
   return path

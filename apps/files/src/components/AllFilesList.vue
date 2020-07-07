@@ -280,7 +280,8 @@ export default {
         absolutePath: absolutePath,
         $gettext: this.$gettext,
         routeName: this.$route.name,
-        loadSharesTree: !this.publicPage()
+        loadSharesTree: !this.publicPage(),
+        publicPage: this.publicPage()
       })
         .then(() => {
           const scrollTo = this.$route.query.scrollTo

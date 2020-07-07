@@ -334,18 +334,20 @@ function _buildCollaboratorShare(s, file) {
 }
 
 export default {
-  loadFolder(context, { client, absolutePath, $gettext, routeName, loadSharesTree = false }) {
+  loadFolder(
+    context,
+    { client, absolutePath, $gettext, routeName, loadSharesTree = false, publicPage = false }
+  ) {
     context.commit('UPDATE_FOLDER_LOADING', true)
     context.commit('CLEAR_CURRENT_FILES_LIST')
 
     return new Promise((resolve, reject) => {
       let promise
       const favorite = routeName === 'files-favorites'
-      const publicFiles = routeName === 'public-files' || routeName === 'location-picker'
 
       if (favorite) {
         promise = client.files.getFavoriteFiles(context.getters.davProperties)
-      } else if (publicFiles) {
+      } else if (publicPage) {
         const password = context.getters.publicLinkPassword
         promise = client.publicFiles.list(absolutePath, password, context.getters.davProperties)
       } else {
