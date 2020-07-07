@@ -43,22 +43,22 @@ const actions = {
 const mutations = {
   CREATE_MODAL(state, modal) {
     state.displayed = true
-    state.variation = modal.variation ?? 'info'
+    state.variation = modal.variation || 'info'
     state.icon = modal.icon
     state.title = modal.title
     state.message = modal.message
-    state.cancelText = modal.cancelText ?? 'Cancel'
-    state.confirmText = modal.confirmText ?? 'Confirm'
-    state.confirmDisabled = modal.confirmDisabled ?? false
+    state.cancelText = modal.cancelText || 'Cancel'
+    state.confirmText = modal.confirmText || 'Confirm'
+    state.confirmDisabled = modal.confirmDisabled || false
     state.onCancel = modal.onCancel
     state.onConfirm = modal.onConfirm
-    state.hasInput = modal.hasInput ?? false
-    state.inputValue = modal.inputValue ?? null
-    state.inputPlaceholder = modal.inputPlaceholder ?? null
-    state.inputLabel = modal.inputLabel ?? null
-    state.inputError = modal.inputError ?? null
-    state.inputDisabled = modal.inputDisabled ?? false
-    state.onInput = modal.onInput ?? emptyReturn
+    state.hasInput = modal.hasInput || false
+    state.inputValue = modal.inputValue || null
+    state.inputPlaceholder = modal.inputPlaceholder || null
+    state.inputLabel = modal.inputLabel || null
+    state.inputError = modal.inputError || null
+    state.inputDisabled = modal.inputDisabled || false
+    state.onInput = modal.onInput || emptyReturn
   },
 
   HIDE_MODAL(state) {

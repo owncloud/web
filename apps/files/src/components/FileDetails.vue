@@ -85,7 +85,11 @@ export default {
     },
 
     currentTab() {
-      return this.currentSidebarTab?.tab || this.defaultTab
+      if (this.currentSidebarTab && this.currentSidebarTab.tab) {
+        return this.currentSidebarTab.tab
+      }
+
+      return this.defaultTab
     },
 
     activeTabComponent() {

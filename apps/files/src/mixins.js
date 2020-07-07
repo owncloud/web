@@ -193,7 +193,8 @@ export default {
 
     displayOverwriteDialog() {
       const translated = this.$gettext('File %{file} already exists')
-      const isVersioningEnabled = !this.publicPage() && this.capabilities.files?.versioning
+      const isVersioningEnabled =
+        !this.publicPage() && this.capabilities.files && this.capabilities.files.versioning
       // TODO: Handle properly case of multiple existing files
       const title =
         this.existingResources.length > 1
