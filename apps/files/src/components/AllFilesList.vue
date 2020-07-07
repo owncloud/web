@@ -203,8 +203,7 @@ export default {
       'activeFilesCount',
       'currentFolder',
       'fileSortField',
-      'fileSortDirectionDesc',
-      'sharesTree'
+      'fileSortDirectionDesc'
     ]),
     ...mapGetters(['configuration']),
 

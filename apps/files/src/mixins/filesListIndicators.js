@@ -1,9 +1,12 @@
+import { mapGetters } from 'vuex'
 import intersection from 'lodash/intersection'
 import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
 
 export default {
   computed: {
+    ...mapGetters('Files', ['sharesTree']),
+
     shareTypesIndirect() {
       const parentPath = this.currentFolder.path
       if (!parentPath) {
