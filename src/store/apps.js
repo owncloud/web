@@ -98,7 +98,7 @@ const mutations = {
           app: appInfo.id,
           icon: e.icon,
           newTab: e.newTab || false,
-          routeName: e.routeName || appInfo.id,
+          routeName: e.routeName,
           newFileMenu: e.newFileMenu || null
         }
         if (!state.extensions[e.extension]) {
