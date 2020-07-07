@@ -358,7 +358,9 @@ export default {
     },
 
     isRowDisabled(resource) {
-      return resource.type !== 'folder' || !resource.canCreate()
+      const isBeingMoved = this.resources.some(item => item === resource.path)
+
+      return resource.type !== 'folder' || !resource.canCreate() || isBeingMoved
     },
 
     confirmAction() {
