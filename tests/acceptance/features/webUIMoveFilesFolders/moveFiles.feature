@@ -75,14 +75,11 @@ Feature: move files
       | "question?"         | "folder-with-question?"          |
       | "&and#hash"         | "folder-with-&and#hash"          |
 
-  @skip @yetToImplement
   Scenario: move files on a public share
-    Given the user has created a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    And the public accesses the last created public link using the webUI
+    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    And the public uses the webUI to access the last public link created by user "user1"
     And the user moves file "data.zip" into folder "simple-empty-folder" using the webUI
-    Then file "data.zip" should not be listed on the webUI
-    When the user reloads the current page of the webUI
-    Then file "data.zip" should not be listed on the webUI
+    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
+    And file "data.zip" should be listed on the webUI
     And as "user1" file "simple-folder/simple-empty-folder/data.zip" should exist
     But as "user1" file "simple-folder/data.zip" should not exist

@@ -132,7 +132,12 @@ export default {
       'locationPickerTargetFolder',
       'currentFolder'
     ]),
-    ...mapGetters('Files', ['activeFiles', 'fileSortField', 'fileSortDirectionDesc']),
+    ...mapGetters('Files', [
+      'activeFiles',
+      'fileSortField',
+      'fileSortDirectionDesc',
+      'publicLinkPassword'
+    ]),
 
     currentAction() {
       return this.$route.query.action
@@ -169,13 +174,15 @@ export default {
     },
 
     breadcrumbs() {
-      const breadcrumbs = [
-        {
+      const breadcrumbs = []
+
+      if (!this.publicPage()) {
+        breadcrumbs.push({
           index: 0,
           text: this.$gettext('Home'),
           to: this.basePath + `?action=${this.currentAction}&target=` + this.resourcesQuery
-        }
-      ]
+        })
+      }
 
       if (this.target) {
         const items = this.target.split('/').filter(item => item !== '')
@@ -259,7 +266,7 @@ export default {
         absolutePath: target || '/',
         $gettext: this.$gettext,
         routeName: this.$route.name,
-        loadSharesTree: true
+        loadSharesTree: !this.publicPage()
       })
     },
 
@@ -281,17 +288,24 @@ export default {
     },
 
     leaveLocationPicker() {
+      if (this.publicPage()) {
+        this.$router.push({ name: 'public-link', params: { token: this.originalLocation } })
+
+        return
+      }
+
       this.$router.push({ name: 'files-list', params: { item: this.originalLocation } })
     },
 
     async moveResources() {
       const errors = []
+      const promise = this.publicPage() ? this.$client.publicFiles : this.$client.files
 
       for (const resource of this.resources) {
         let target = this.target || '/'
 
-        await this.$client.files
-          .move(resource, (target += getResourceName(resource)))
+        await promise
+          .move(resource, (target += getResourceName(resource)), this.publicLinkPassword)
           .catch(error => errors.push(error))
       }
 
@@ -312,6 +326,12 @@ export default {
           status: 'danger'
         })
         console.error('Move failed:', errors)
+
+        return
+      }
+
+      if (this.publicPage()) {
+        this.$router.push({ name: 'public-link', params: { token: this.target } })
 
         return
       }

@@ -341,7 +341,7 @@ export default {
     return new Promise((resolve, reject) => {
       let promise
       const favorite = routeName === 'files-favorites'
-      const publicFiles = routeName === 'public-files'
+      const publicFiles = routeName === 'public-files' || routeName === 'location-picker'
 
       if (favorite) {
         promise = client.files.getFavoriteFiles(context.getters.davProperties)

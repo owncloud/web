@@ -220,7 +220,8 @@ const routes = [
       app: LocationPicker
     },
     meta: {
-      verbose: true
+      verbose: true,
+      auth: false
     }
   }
 ]
