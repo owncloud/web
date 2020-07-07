@@ -8,10 +8,10 @@ Feature: move files
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @skip
   Scenario: An attempt to move a file into a sub-folder using rename is not allowed
-    When the user renames file "data.zip" to "simple-folder/data.zip" using the webUI
-    Then near file "data.zip" a tooltip with the text 'File name cannot contain "/".' should be displayed on the webUI
+    When the user tries to rename file "data.zip" to "simple-folder/data.zip" using the webUI
+    Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
+    And file "data.zip" should be listed on the webUI
 
   @smokeTest
   Scenario: move a file into a folder

@@ -1,9 +1,17 @@
 <template functional>
   <oc-grid gutter="small" child-width="1-1">
-    <translate>Navigate into the desired folder and move selected resources into it.</translate>
-    <translate>You can navigate into a folder by clicking on it’s name.</translate>
-    <translate>To navigate back, you can use the breadcrumbs.</translate>
-    <translate>Resources will be moved into the folder where you are currently located.</translate>
+    <translate translate-comment="Location picker guide on how to execute move."
+      >Navigate into the desired folder and move selected resources into it.</translate
+    >
+    <translate translate-comment="Location picker guide on how to navigate into a folder."
+      >You can navigate into a folder by clicking on its name.</translate
+    >
+    <translate translate-comment="Location picker guide on how to navigate to previous folders."
+      >To navigate back, you can use the breadcrumbs.</translate
+    >
+    <translate translate-comment="Location picker guide on where the resources will be moved."
+      >Resources will be moved into the folder where you are currently located.</translate
+    >
   </oc-grid>
 </template>
 

@@ -326,7 +326,7 @@ export default {
         }
 
         await promise
-          .move(resource, (target += resourceName), this.publicLinkPassword)
+          .move(resource, (target += '/' + resourceName), this.publicLinkPassword)
           .catch(error => errors.push(error))
       }
 
