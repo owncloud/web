@@ -249,7 +249,7 @@ export default {
         $gettext: this.$gettext,
         routeName: this.$route.name,
         loadSharesTree: !this.publicPage(),
-        publicPage: this.publicPage()
+        isPublicPage: this.publicPage()
       })
         .then(() => {
           const scrollTo = this.$route.query.scrollTo

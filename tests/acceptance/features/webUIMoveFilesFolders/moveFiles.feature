@@ -5,16 +5,18 @@ Feature: move files
 
   Background:
     Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
-    And the user has browsed to the files page
 
   Scenario: An attempt to move a file into a sub-folder using rename is not allowed
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
     When the user tries to rename file "data.zip" to "simple-folder/data.zip" using the webUI
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And file "data.zip" should be listed on the webUI
 
   @smokeTest
   Scenario: move a file into a folder
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
     When the user moves file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
@@ -32,11 +34,15 @@ Feature: move files
     And file "strängé filename (duplicate #2 &).txt" should not be listed on the webUI
 
   Scenario: move a file into a folder where a file with the same name already exists
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
     When the user moves file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
     Then the error message with header 'Move has failed' should be displayed on the webUI
 
   @smokeTest
   Scenario: Move multiple files at once
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
     When the user batch moves these files into folder "simple-empty-folder" using the webUI
       | name        |
       | data.zip    |
@@ -50,6 +56,8 @@ Feature: move files
       | testapp.zip |
 
   Scenario Outline: move a file into a folder (problematic characters)
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
     When the user renames file "lorem.txt" to <file_name> using the webUI
     And the user renames folder "simple-empty-folder" to <folder_name> using the webUI
     And the user moves file <file_name> into folder <folder_name> using the webUI

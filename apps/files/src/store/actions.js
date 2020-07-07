@@ -336,7 +336,7 @@ function _buildCollaboratorShare(s, file) {
 export default {
   loadFolder(
     context,
-    { client, absolutePath, $gettext, routeName, loadSharesTree = false, publicPage = false }
+    { client, absolutePath, $gettext, routeName, loadSharesTree = false, isPublicPage = false }
   ) {
     context.commit('UPDATE_FOLDER_LOADING', true)
     context.commit('CLEAR_CURRENT_FILES_LIST')
@@ -347,7 +347,7 @@ export default {
 
       if (favorite) {
         promise = client.files.getFavoriteFiles(context.getters.davProperties)
-      } else if (publicPage) {
+      } else if (isPublicPage) {
         const password = context.getters.publicLinkPassword
         promise = client.publicFiles.list(absolutePath, password, context.getters.davProperties)
       } else {
