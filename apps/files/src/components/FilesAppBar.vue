@@ -147,6 +147,7 @@ import FileActions from '../fileactions'
 import MixinDeleteResources from '../mixins/deleteResources'
 import pathUtil from 'path'
 import { canBeMoved } from '../helpers/permissions'
+import { cloneStateObject } from '../helpers/store'
 
 export default {
   components: {
@@ -610,7 +611,7 @@ export default {
     },
 
     moveResources() {
-      const resources = JSON.parse(JSON.stringify(this.selectedFiles))
+      const resources = cloneStateObject(this.selectedFiles)
       const parent = pathUtil.dirname(this.currentFolder.path)
 
       this.$router.push({

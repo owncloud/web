@@ -104,6 +104,7 @@
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 import { basename, join } from 'path'
+import { cloneStateObject } from '../../helpers/store'
 import MixinsGeneral from '../../mixins'
 import MixinsFilesListIndicators from '../../mixins/filesListIndicators'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
@@ -147,7 +148,7 @@ export default {
     },
 
     resources() {
-      const resources = JSON.parse(JSON.stringify(this.$route.query.resource))
+      const resources = cloneStateObject(this.$route.query.resource)
 
       // In case there is only one resource, ensure that the return will still be an array
       if (typeof resources === 'string') {
@@ -162,7 +163,7 @@ export default {
     },
 
     target() {
-      return JSON.parse(JSON.stringify(this.$route.query.target))
+      return cloneStateObject(this.$route.query.target)
     },
 
     basePath() {

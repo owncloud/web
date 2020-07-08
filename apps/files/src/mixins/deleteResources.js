@@ -1,4 +1,5 @@
 import { mapGetters, mapActions } from 'vuex'
+import { cloneStateObject } from '../helpers/store'
 const { default: PQueue } = require('p-queue')
 
 export default {
@@ -15,7 +16,7 @@ export default {
     },
 
     $_deleteResources_resources() {
-      return JSON.parse(JSON.stringify(this.selectedFiles))
+      return cloneStateObject(this.selectedFiles)
     },
 
     $_deleteResources_dialogTitle() {
