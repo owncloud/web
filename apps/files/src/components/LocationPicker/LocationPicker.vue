@@ -320,7 +320,10 @@ export default {
         if (exists) {
           const message = this.$gettext('Resource with name %{name} already exists')
 
-          errors.push({ message: this.$gettextInterpolate(message, { name: resourceName }, true) })
+          errors.push({
+            resource: resourceName,
+            message: this.$gettextInterpolate(message, { name: resourceName }, true)
+          })
 
           continue
         }

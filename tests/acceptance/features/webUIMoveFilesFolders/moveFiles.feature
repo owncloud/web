@@ -37,7 +37,7 @@ Feature: move files
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
     When the user moves file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
-    Then the error message with header 'Move has failed' should be displayed on the webUI
+    Then the error message with header 'An error occurred while moving strängé filename (duplicate #2 &).txt' should be displayed on the webUI
 
   @smokeTest
   Scenario: Move multiple files at once

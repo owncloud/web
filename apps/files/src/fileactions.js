@@ -1,5 +1,5 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import pathUtil from 'path'
+import { dirname } from 'path'
 import { canBeMoved } from './helpers/permissions'
 import MixinDeleteResources from './mixins/deleteResources'
 
@@ -59,7 +59,7 @@ export default {
           icon: 'folder-move',
           handler: resource => {
             // Parent of the resource selected for move used as a default target location
-            const parent = pathUtil.dirname(resource.path)
+            const parent = dirname(resource.path)
             this.$router.push({
               name: 'location-picker',
               query: { action: 'move', target: parent, resource: resource.path }

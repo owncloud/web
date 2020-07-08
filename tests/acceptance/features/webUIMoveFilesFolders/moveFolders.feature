@@ -29,7 +29,7 @@ Feature: move folders
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
     When the user moves folder "simple-empty-folder" into folder "simple-folder" using the webUI
-    Then the error message with header 'Move has failed' should be displayed on the webUI
+    Then the error message with header 'An error occurred while moving simple-empty-folder' should be displayed on the webUI
 
   @smokeTest
   Scenario: Move multiple folders at once
