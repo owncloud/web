@@ -8,10 +8,22 @@ ownCloud admins and users.
 Summary
 -------
 
+* Change - Don't fallback to appId in case the route of file action is not defined: [#69](https://github.com/owncloud/product/issues/69)
 * Change - No file drop if upload is not allowed or no space is left: [#3677](https://github.com/owncloud/phoenix/pull/3677)
 
 Details
 -------
+
+* Change - Don't fallback to appId in case the route of file action is not defined: [#69](https://github.com/owncloud/product/issues/69)
+
+   When opening a file in a editor or a viewer the path was falling back to an appId. This made it
+   impossible to navigate via the file actions into an app which doesn't have duplicate appId in
+   the route. We've stopped falling back to this value and in case that the route of the file action
+   is not defined, we use the root path of the app.
+
+   https://github.com/owncloud/product/issues/69
+   https://github.com/owncloud/ocis/issues/356
+   https://github.com/owncloud/phoenix/pull/3740
 
 * Change - No file drop if upload is not allowed or no space is left: [#3677](https://github.com/owncloud/phoenix/pull/3677)
 
