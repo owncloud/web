@@ -329,9 +329,12 @@ export default {
           .catch(error => errors.push(error))
       }
 
+      // Display error message
       if (errors.length === 1) {
+        const title = this.$gettext('An error occurred while moving %{resource}')
+
         this.showMessage({
-          title: this.$gettext('Move has failed'),
+          title: this.$gettextInterpolate(title, { resource: errors[0].resource }, true),
           desc: errors[0].message,
           status: 'danger'
         })
@@ -340,12 +343,14 @@ export default {
       }
 
       if (errors.length > 1) {
+        const desc = this.$gettext('%{count} resources could not be moved')
+
         this.showMessage({
-          title: this.$gettext('Move has failed'),
-          desc: this.$gettext('Multiple resources could not be moved'),
+          title: this.$gettext('An error occurred while moving several resources'),
+          desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
           status: 'danger'
         })
-        console.error('Move failed:', errors)
+        console.error('Move / copy failed:', errors)
 
         return
       }
