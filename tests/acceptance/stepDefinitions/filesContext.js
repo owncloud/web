@@ -595,15 +595,37 @@ const assertBreadCrumbIsNotDisplayed = function() {
  * @param {boolean} clickable
  * @param {boolean} nonClickable
  */
-const assertBreadcrumbIsDisplayedFor = function(resource, clickable, nonClickable) {
+const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonClickable) {
   const breadcrumbElement = client.page.filesPage().getBreadcrumbSelector(clickable, nonClickable)
   const resourceBreadcrumbXpath = util.format(breadcrumbElement.selector, resource)
-  return client
-    .useStrategy(breadcrumbElement)
-    .assert.visible(
-      resourceBreadcrumbXpath,
-      `Resource ${resourceBreadcrumbXpath} expected to be visible but is not visible .`
+  let isBreadcrumbVisible = false
+
+  // Check if the breadcrumb is visible
+  await client.element('xpath', resourceBreadcrumbXpath, result => {
+    if (result.status > -1) {
+      isBreadcrumbVisible = true
+    }
+  })
+
+  // Try to look for a mobile breadcrumbs in case it has not been found
+  if (!isBreadcrumbVisible) {
+    const mobileBreadcrumbMobileXpath = util.format(
+      client.page.filesPage().elements.breadcrumbMobile.selector,
+      resource
     )
+
+    await client.element('xpath', mobileBreadcrumbMobileXpath, result => {
+      if (result.status > -1) {
+        isBreadcrumbVisible = true
+      }
+    })
+  }
+
+  return client.assert.strictEqual(
+    isBreadcrumbVisible,
+    true,
+    `Resource ${resourceBreadcrumbXpath} expected to be visible but is not visible .`
+  )
 }
 
 /**

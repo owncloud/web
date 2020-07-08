@@ -339,6 +339,10 @@ module.exports = {
     breadcrumb: {
       selector: '#files-breadcrumb li:nth-of-type(2)'
     },
+    breadcrumbMobile: {
+      selector: '//span[@class="oc-breadcrumb-drop-label-text" and text()="%s"]',
+      locateStrategy: 'xpath'
+    },
     resourceBreadcrumb: {
       selector:
         '//div[@id="files-breadcrumb"]//*[(self::a or self::span) and contains(text(),"%s")]',
