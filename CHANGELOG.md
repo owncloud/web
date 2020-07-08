@@ -9,6 +9,7 @@ Summary
 -------
 
 * Change - Don't fallback to appId in case the route of file action is not defined: [#69](https://github.com/owncloud/product/issues/69)
+* Change - Do not display outline when the files list is focused: [#3747](https://github.com/owncloud/phoenix/issues/3747)
 * Change - No file drop if upload is not allowed or no space is left: [#3677](https://github.com/owncloud/phoenix/pull/3677)
 
 Details
@@ -24,6 +25,15 @@ Details
    https://github.com/owncloud/product/issues/69
    https://github.com/owncloud/ocis/issues/356
    https://github.com/owncloud/phoenix/pull/3740
+
+* Change - Do not display outline when the files list is focused: [#3747](https://github.com/owncloud/phoenix/issues/3747)
+
+   The files list was displaying outline when it received focus after a click. Since the focus is
+   meant only programatically, the outline was not supposed to be displayed.
+
+   https://github.com/owncloud/phoenix/issues/3747
+   https://github.com/owncloud/phoenix/issues/3551
+   https://github.com/owncloud/phoenix/pull/3752
 
 * Change - No file drop if upload is not allowed or no space is left: [#3677](https://github.com/owncloud/phoenix/pull/3677)
 
