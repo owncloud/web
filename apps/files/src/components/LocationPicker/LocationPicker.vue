@@ -103,7 +103,7 @@
 
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
-import pathUtil from 'path'
+import { basename, join } from 'path'
 import MixinsGeneral from '../../mixins'
 import MixinsFilesListIndicators from '../../mixins/filesListIndicators'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
@@ -195,7 +195,7 @@ export default {
         const items = this.target.split('/').filter(item => item !== '')
 
         for (let i = 0; i < items.length; i++) {
-          const itemPath = encodeURIComponent(pathUtil.join.apply(null, items.slice(0, i + 1)))
+          const itemPath = encodeURIComponent(join.apply(null, items.slice(0, i + 1)))
 
           breadcrumbs.push({
             index: i + 1,
@@ -232,7 +232,7 @@ export default {
 
     confirmBtnText() {
       if (this.currentAction === 'move') {
-        return this.$gettext('Move here')
+        return this.$pgettext('Confirm action in the location picker for move', 'Move here')
       }
 
       return null
@@ -281,7 +281,7 @@ export default {
     createPath(target) {
       return (
         this.basePath +
-        `?action=${this.currentAction}&target=` +
+        `?action=${encodeURIComponent(this.currentAction)}&target=` +
         encodeURIComponent(target) +
         this.resourcesQuery
       )
@@ -302,7 +302,7 @@ export default {
         return
       }
 
-      this.$router.push({ name: 'files-list', params: { item: target } })
+      this.$router.push({ name: 'files-list', params: { item: target || '/' } })
     },
 
     async moveResources() {
@@ -311,9 +311,9 @@ export default {
 
       for (const resource of this.resources) {
         let target = this.target || '/'
-        const resourceName = pathUtil.basename(resource)
+        const resourceName = basename(resource)
         const exists = this.activeFiles.some(item => {
-          return pathUtil.basename(item.name) === resourceName
+          return basename(item.name) === resourceName
         })
 
         if (exists) {
@@ -350,7 +350,7 @@ export default {
         return
       }
 
-      this.leaveLocationPicker(this.target || '/')
+      this.leaveLocationPicker(this.target)
     },
 
     isRowDisabled(resource) {

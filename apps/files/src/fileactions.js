@@ -65,7 +65,11 @@ export default {
               query: { action: 'move', target: parent, resource: resource.path }
             })
           },
-          ariaLabel: () => this.$gettext('Move'),
+          ariaLabel: () =>
+            this.$pgettext(
+              'Action in the files list row to initiate move of a single resource',
+              'Move'
+            ),
           isEnabled: resource => canBeMoved(resource, this.currentFolder.path)
         },
         {

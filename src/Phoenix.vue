@@ -8,7 +8,7 @@
       <div v-else key="core-content" class="uk-height-1-1 uk-flex uk-flex-row uk-flex-row">
         <transition :name="appNavigationAnimation">
           <oc-sidebar
-            v-if="isSidebarVisible && !publicPage()"
+            v-if="isSidebarVisible"
             v-touch:swipe.left="handleNavSwipe"
             class="oc-app-navigation"
             :logo-img="logoImage"
