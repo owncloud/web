@@ -1,14 +1,15 @@
 <template lang="html">
-  <div id="pdf-viewer">
+  <div id="pdf-viewer" class="uk-flex uk-flex-column">
     <pdf-viewer-app-bar />
-    <oc-progress v-if="loading" :max="100" indeterminate></oc-progress>
+    <oc-progress v-if="loading" :max="100" indeterminate />
     <pdf
       v-if="!loading"
       :page="currentPage"
       :src="content"
+      class="uk-overflow-auto uk-flex-1"
       @error="error"
       @num-pages="loadPages"
-    ></pdf>
+    />
   </div>
 </template>
 <script>
