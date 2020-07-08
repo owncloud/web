@@ -9,7 +9,7 @@
       <div
         ref="filesListWrapper"
         tabindex="-1"
-        class="uk-width-expand uk-overflow-auto uk-height-1-1"
+        class="uk-width-expand uk-overflow-auto uk-height-1-1 files-list-wrapper"
         :class="{ 'uk-visible@m': _sidebarOpen }"
         @dragover="$_ocApp_dragOver"
       >
@@ -171,3 +171,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.files-list-wrapper:focus {
+  outline: none;
+}
+</style>
