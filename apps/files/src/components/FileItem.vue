@@ -138,6 +138,8 @@ export default {
   mounted() {
     if (this.displayPreview) {
       this.loadPreview()
+    } else {
+      this.previewLoaded = 'disabled'
     }
   },
   methods: {

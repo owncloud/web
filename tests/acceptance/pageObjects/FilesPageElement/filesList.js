@@ -694,7 +694,7 @@ module.exports = {
     },
     filePreviewLoadedInFileRow: {
       selector:
-        '//div[contains(@class, "oc-file") and (@data-preview-loaded="true" or not(@data-preview-loaded))]',
+        '//div[contains(@class, "oc-file") and (@data-preview-loaded="true" or @data-preview-loaded="disabled")]',
       locateStrategy: 'xpath'
     },
     collaboratorsInFileRow: {
