@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix navigation to the root folder from location picker: [#3756](https://github.com/owncloud/phoenix/pull/3756)
 * Change - Don't fallback to appId in case the route of file action is not defined: [#69](https://github.com/owncloud/product/issues/69)
 * Change - Do not display outline when the files list is focused: [#3747](https://github.com/owncloud/phoenix/issues/3747)
 * Change - No file drop if upload is not allowed or no space is left: [#3677](https://github.com/owncloud/phoenix/pull/3677)
@@ -15,6 +16,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Fix navigation to the root folder from location picker: [#3756](https://github.com/owncloud/phoenix/pull/3756)
+
+   The target location in the location picker was appending a whitespace when trying to go to root
+   folder. This resulted in an error when trying to load such folder. We've removed the whitespace
+   to fix the navigation.
+
+   https://github.com/owncloud/phoenix/pull/3756
 
 * Change - Don't fallback to appId in case the route of file action is not defined: [#69](https://github.com/owncloud/product/issues/69)
 
