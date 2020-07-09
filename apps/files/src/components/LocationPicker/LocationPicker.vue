@@ -303,7 +303,7 @@ export default {
         return
       }
 
-      this.$router.push({ name: 'files-list', params: { item: target || '/ ' } })
+      this.$router.push({ name: 'files-list', params: { item: target || '/' } })
     },
 
     async moveResources() {
