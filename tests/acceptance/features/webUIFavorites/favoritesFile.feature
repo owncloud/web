@@ -99,3 +99,18 @@ Feature: Mark file as favorite
     And folder "simple-folder" should not be marked as favorite on the webUI
     And as "user1" file "lorem.txt" should not exist
     And as "user1" folder "simple-folder" should not exist
+
+    Scenario: Favourite files and folders with comma in the names
+      Given the user has created file "sample,1.txt"
+      And the user has created folder "Sample,Folder,With,Comma"
+      And the user has reloaded the current page of the webUI
+      When the user marks file "sample,1.txt" as favorite using the webUI
+      And the user marks folder "Sample,Folder,With,Comma" as favorite using the webUI
+      Then file "sample,1.txt" should be marked as favorite
+      And file "sample,1.txt" should be marked as favorite on the webUI
+      And folder "Sample,Folder,With,Comma" should be marked as favorite
+      And folder "Sample,Folder,With,Comma" should be marked as favorite on the webUI
+      When the user browses to the favorites page
+      Then there should be 2 files/folders listed on the webUI
+      And folder "Sample,Folder,With,Comma" should be listed on the webUI
+      And file "sample,1.txt" should be listed on the webUI
