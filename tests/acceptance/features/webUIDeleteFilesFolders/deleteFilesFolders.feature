@@ -10,16 +10,22 @@ Feature: deleting files and folders
 
   @smokeTest
   Scenario: Delete files & folders one by one and check its existence after page reload
+    Given the user has created file "sample,1.txt"
+    And the user has created folder "Sample,Folder,With,Comma"
     When the user deletes the following elements using the webUI
       | name                                  |
       | simple-folder                         |
       | lorem.txt                             |
       | strängé नेपाली folder                   |
       | strängé filename (duplicate #2 &).txt |
+      | sample,1.txt                          |
+      | Sample,Folder,With,Comma              |
     Then as "user1" folder "simple-folder" should not exist
     And as "user1" file "lorem.txt" should not exist
     And as "user1" folder "strängé नेपाली folder" should not exist
     And as "user1" file "strängé filename (duplicate #2 &).txt" should not exist
+    And as "user1" file "sample,1.txt" should not exist
+    And as "user1" folder "Sample,Folder,With,Comma" should not exist
     Then the deleted elements should not be listed on the webUI
     But folder "simple-empty-folder" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI

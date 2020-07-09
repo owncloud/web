@@ -18,13 +18,7 @@ Feature: create files
     Then the error message "lorem.txt already exists" should be displayed on the webUI dialog prompt
     And the create file button should be disabled
 
-  Scenario Outline: create file with name that contains commas
-    When the user creates a file with the name "<filename>" using the webUI
+  Scenario: create file with name that contains commas
+    When the user creates a file with the name "sample,1.txt" using the webUI
     And the user browses to the files page
-    Then file "<filename>" should be listed on the webUI
-    Examples:
-      | filename       |
-      | sample,txt     |
-      | sample,1.ab  |
-      | ,,,,,,,,,,.txt |
-
+    Then file "sample,1.txt" should be listed on the webUI
