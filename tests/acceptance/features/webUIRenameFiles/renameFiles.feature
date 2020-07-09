@@ -43,6 +43,8 @@ Feature: rename files
 
   # Merge with scenario above once the issue is resolved
   Scenario Outline: Rename a file that has special characters in its name
+    Given the user has created file "sämple,1.txt"
+    And the user has reloaded the current page of the webUI
     When the user renames file <from_name> to <to_name> using the webUI
     Then file <to_name> should be listed on the webUI
     When the user reloads the current page of the webUI
@@ -50,6 +52,7 @@ Feature: rename files
     Examples:
       | from_name                               | to_name                               |
       | "strängé filename (duplicate #2 &).txt" | "strängé filename (duplicate #3).txt" |
+      | "sämple,1.txt"                          | "file,with,commä,.txt"                |
 
   @smokeTest
   Scenario: Rename a file using special characters and check its existence after page reload
