@@ -11,7 +11,8 @@ module.exports = {
       unmarkFavorite: 'unmarkFavorite',
       restore: 'restore',
       rename: 'rename',
-      deleteImmediately: 'deleteImmediately'
+      deleteImmediately: 'deleteImmediately',
+      move: 'move'
     }),
 
     /**
@@ -131,6 +132,13 @@ module.exports = {
       await this.api.page.FilesPageElement.filesList().confirmDeletion()
 
       return this
+    },
+    /**
+     * Trigger the move of a resource via its file action
+     * @param {String} target Folder into which the resource should be moved
+     */
+    move: function(target) {
+      this.performFileAction(this.FileAction.move)
     }
   },
   elements: {
@@ -178,6 +186,10 @@ module.exports = {
     },
     dialogInput: {
       selector: '.oc-modal-body-input > input'
+    },
+    moveButtonInFileRow: {
+      selector: '//button[@aria-label="Move"]',
+      locateStrategy: 'xpath'
     }
   }
 }

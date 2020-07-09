@@ -625,6 +625,18 @@ module.exports = {
       return this.useXpath()
         .click(resourceRowSelector + actionSelector)
         .useCss()
+    },
+
+    moveResource: async function(resource, target) {
+      await this.waitForFileVisible(resource)
+
+      // Trigger move
+      await filesRow.openFileActionsMenu(resource).move()
+
+      // Execute move
+      await client.page.locationPicker().move(target)
+
+      return this
     }
   },
   elements: {
@@ -682,7 +694,7 @@ module.exports = {
     },
     filePreviewLoadedInFileRow: {
       selector:
-        '//div[contains(@class, "oc-file") and (@data-preview-loaded="true" or not(@data-preview-loaded))]',
+        '//div[contains(@class, "oc-file") and (@data-preview-loaded="true" or @data-preview-loaded="disabled")]',
       locateStrategy: 'xpath'
     },
     collaboratorsInFileRow: {

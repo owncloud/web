@@ -595,15 +595,37 @@ const assertBreadCrumbIsNotDisplayed = function() {
  * @param {boolean} clickable
  * @param {boolean} nonClickable
  */
-const assertBreadcrumbIsDisplayedFor = function(resource, clickable, nonClickable) {
+const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonClickable) {
   const breadcrumbElement = client.page.filesPage().getBreadcrumbSelector(clickable, nonClickable)
   const resourceBreadcrumbXpath = util.format(breadcrumbElement.selector, resource)
-  return client
-    .useStrategy(breadcrumbElement)
-    .assert.visible(
-      resourceBreadcrumbXpath,
-      `Resource ${resourceBreadcrumbXpath} expected to be visible but is not visible .`
+  let isBreadcrumbVisible = false
+
+  // Check if the breadcrumb is visible
+  await client.element('xpath', resourceBreadcrumbXpath, result => {
+    if (result.status > -1) {
+      isBreadcrumbVisible = true
+    }
+  })
+
+  // Try to look for a mobile breadcrumbs in case it has not been found
+  if (!isBreadcrumbVisible) {
+    const mobileBreadcrumbMobileXpath = util.format(
+      client.page.filesPage().elements.breadcrumbMobile.selector,
+      resource
     )
+
+    await client.element('xpath', mobileBreadcrumbMobileXpath, result => {
+      if (result.status > -1) {
+        isBreadcrumbVisible = true
+      }
+    })
+  }
+
+  return client.assert.strictEqual(
+    isBreadcrumbVisible,
+    true,
+    `Resource ${resourceBreadcrumbXpath} expected to be visible but is not visible .`
+  )
 }
 
 /**
@@ -933,12 +955,15 @@ When('user {string} has renamed the following file', function(user, table) {
 })
 
 Then('the following file should be listed on the webUI', async function(table) {
-  const name = table
-    .hashes()
-    .map(data => data['name-parts'])
-    .join('')
-  const state = await client.page.FilesPageElement.filesList().isElementListed(name)
-  return assert.strictEqual(state, true, `Element ${name} is not present on the filesList!`)
+  const resources = table.hashes().map(data => data['name-parts'])
+
+  for (const resource of resources) {
+    const found = await client.page.FilesPageElement.filesList().isElementListed(resource)
+
+    assert.strictEqual(found, true, `Element ${resource} is not present on the filesList!`)
+  }
+
+  return true
 })
 
 Then('the following file should not be listed on the webUI', async function(table) {
@@ -1055,4 +1080,26 @@ Then('the file {string} should have a file type icon displayed on the webUI', as
 
 Then('quick action {string} should be displayed on the webUI', function(action) {
   return client.page.FilesPageElement.filesRow().isQuickActionVisible(action)
+})
+
+When('the user moves file/folder {string} into folder {string} using the webUI', function(
+  resource,
+  target
+) {
+  return client.page.FilesPageElement.filesList().moveResource(resource, target)
+})
+
+When(
+  'the user batch moves these files/folders into folder {string} using the webUI',
+  async function(target, resources) {
+    for (const item of resources.rows()) {
+      await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
+    }
+
+    return client.page.filesPage().moveMultipleResources(target)
+  }
+)
+
+Then('the moved elements should be listed on the webUI', function(resources) {
+  console.log(resources)
 })

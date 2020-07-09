@@ -26,39 +26,20 @@ Feature: deleting files and folders
     And file "strängé नेपाली folder" should not be listed on the webUI
     But the deleted elements should not be listed on the webUI after a page reload
 
-  Scenario: Delete a file with problematic characters
-    Given user "user1" has renamed the following file
-      | from-name-parts | to-name-parts   |
-      | lorem.txt       | 'single'        |
-      |                 | "double" quotes |
-      |                 | question?       |
-      |                 | &and#hash       |
+  Scenario Outline: Delete a file with problematic characters
+    When the user renames file "lorem.txt" to <file_name> using the webUI
     And the user reloads the current page of the webUI
-    Then the following file should be listed on the webUI
-      | name-parts      |
-      | 'single'        |
-      | "double" quotes |
-      | question?       |
-      | &and#hash       |
-    And the user deletes the following file using the webUI
-      | name-parts      |
-      | 'single'        |
-      | "double" quotes |
-      | question?       |
-      | &and#hash       |
-    Then the following file should not be listed on the webUI
-      | name-parts      |
-      | 'single'        |
-      | "double" quotes |
-      | question?       |
-      | &and#hash       |
+    Then file <file_name> should be listed on the webUI
+    When the user deletes file <file_name> using the webUI
+    Then file <file_name> should not be listed on the webUI
     When the user reloads the current page of the webUI
-    Then the following file should not be listed on the webUI
-      | name-parts      |
-      | 'single'        |
-      | "double" quotes |
-      | question?       |
-      | &and#hash       |
+    Then file <file_name> should not be listed on the webUI
+    Examples:
+      | file_name           |
+      | "'single'"          |
+      | "\"double\" quotes" |
+      | "question?"         |
+      | "&and#hash"         |
 
   @smokeTest
   Scenario: Delete multiple files at once

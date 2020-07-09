@@ -1,4 +1,6 @@
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { dirname } from 'path'
+import { canBeMoved } from './helpers/permissions'
 import MixinDeleteResources from './mixins/deleteResources'
 
 export default {
@@ -10,25 +12,13 @@ export default {
       'activeFiles',
       'selectedFiles',
       'highlightedFile',
-      'flatFileList'
+      'flatFileList',
+      'currentFolder'
     ]),
     ...mapGetters(['capabilities', 'fileSideBars', 'isAuthenticated']),
     // Files lists
     actions() {
       const actions = [
-        {
-          icon: 'edit',
-          ariaLabel: () => {
-            return this.$gettext('Rename')
-          },
-          handler: this.$_fileActions_displayRenameDialog,
-          isEnabled: function(item, parent) {
-            if (parent && !parent.canRename()) {
-              return false
-            }
-            return item.canRename()
-          }
-        },
         {
           icon: 'file_download',
           handler: this.downloadFile,
@@ -37,19 +27,6 @@ export default {
           },
           isEnabled: function(item) {
             return item.canDownload()
-          }
-        },
-        {
-          icon: 'delete',
-          ariaLabel: () => {
-            return this.$gettext('Delete')
-          },
-          handler: this.$_fileActions_deleteResource,
-          isEnabled: function(item, parent) {
-            if (parent && !parent.canBeDeleted()) {
-              return false
-            }
-            return item.canBeDeleted()
           }
         },
         {
@@ -64,6 +41,49 @@ export default {
           isEnabled: () => {
             return this.isAuthenticated
           }
+        },
+        {
+          icon: 'edit',
+          ariaLabel: () => {
+            return this.$gettext('Rename')
+          },
+          handler: this.$_fileActions_displayRenameDialog,
+          isEnabled: function(item, parent) {
+            if (parent && !parent.canRename()) {
+              return false
+            }
+            return item.canRename()
+          }
+        },
+        {
+          icon: 'folder-move',
+          handler: resource => {
+            // Parent of the resource selected for move used as a default target location
+            const parent = dirname(resource.path)
+            this.$router.push({
+              name: 'location-picker',
+              query: { action: 'move', target: parent, resource: resource.path }
+            })
+          },
+          ariaLabel: () =>
+            this.$pgettext(
+              'Action in the files list row to initiate move of a single resource',
+              'Move'
+            ),
+          isEnabled: resource => canBeMoved(resource, this.currentFolder.path)
+        },
+        {
+          icon: 'delete',
+          ariaLabel: () => {
+            return this.$gettext('Delete')
+          },
+          handler: this.$_fileActions_deleteResource,
+          isEnabled: function(item, parent) {
+            if (parent && !parent.canBeDeleted()) {
+              return false
+            }
+            return item.canBeDeleted()
+          }
         }
       ]
 
@@ -73,6 +93,7 @@ export default {
   methods: {
     ...mapActions('Files', ['renameFile', 'markFavorite']),
     ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
+    ...mapMutations('Files', ['SET_RESOURCES_SELECTION_FOR_MOVE']),
 
     actionInProgress(item) {
       return this.actionsInProgress.some(itemInProgress => itemInProgress.id === item.id)

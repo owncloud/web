@@ -12,7 +12,7 @@
         flex
         class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-margin-xsmall-bottom"
       >
-        <div>
+        <div v-if="checkboxEnabled">
           <oc-checkbox
             id="filelist-check-all"
             class="uk-margin-small-left"
@@ -44,6 +44,7 @@
         >
           <div
             :data-is-visible="active"
+            :class="{ 'files-list-row-disabled': rowDisabled(rowItem) }"
             @click="
               selectRow(rowItem, $event)
               hideRowActionsDropdown()
@@ -57,7 +58,7 @@
               class="uk-padding-small oc-border-top"
               :class="_rowClasses(rowItem)"
             >
-              <div>
+              <div v-if="checkboxEnabled">
                 <oc-checkbox
                   class="uk-margin-small-left"
                   :value="selectedFiles.indexOf(rowItem) >= 0"
@@ -69,6 +70,7 @@
               </div>
               <slot name="rowColumns" :item="rowItem" :index="index" />
               <div
+                v-if="actions.length > 1 || $scopedSlots.rowActions"
                 class="uk-flex uk-flex-middle uk-flex-right"
                 :class="{ 'uk-width-small': $scopedSlots.rowActions }"
               >
@@ -133,7 +135,9 @@ export default {
       type: Boolean
     },
     checkboxEnabled: {
-      type: Boolean
+      type: Boolean,
+      required: false,
+      default: true
     },
     loading: {
       type: Boolean,
@@ -155,6 +159,16 @@ export default {
       type: Boolean,
       required: false,
       default: true
+    },
+    hasTwoRows: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    rowDisabled: {
+      type: Function,
+      required: false,
+      default: () => false
     }
   },
   data() {
@@ -185,10 +199,6 @@ export default {
 
     item() {
       return this.$route.params.item
-    },
-
-    hasTwoRows() {
-      return this.$route.name === 'files-list' || this.$route.name === 'files-favorites'
     }
   },
   watch: {
@@ -257,7 +267,9 @@ export default {
       return 'file-row'
     },
     selectRow(item, event) {
-      if (!this.selectableRow) return
+      if (!this.selectableRow || this.rowDisabled(item)) {
+        return
+      }
 
       if (item.status && (item.status === 1 || item.status === 2)) return
 
@@ -320,3 +332,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.files-list-row-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+</style>

@@ -1,0 +1,7 @@
+Enhancement: Add ability to move files and folders into a different location
+
+We've added move action to the files list which enables move of resources into different locations.
+The move operation is executed in a new page called Location picker.
+
+https://github.com/owncloud/product/issues/101
+https://github.com/owncloud/phoenix/pull/3739

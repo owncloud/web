@@ -5,92 +5,76 @@ Feature: move files
 
   Background:
     Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
-    And the user has browsed to the files page
 
-  @skip
   Scenario: An attempt to move a file into a sub-folder using rename is not allowed
-    When the user renames file "data.zip" to "simple-folder/data.zip" using the webUI
-    Then near file "data.zip" a tooltip with the text 'File name cannot contain "/".' should be displayed on the webUI
-
-  @smokeTest
-  @skip @yetToImplement
-  Scenario: move a file into a folder
-    When the user moves file "data.zip" into folder "simple-empty-folder" using the webUI
-    Then file "data.zip" should not be listed on the webUI
-    But file "data.zip" should be listed in folder "simple-empty-folder" on the webUI
-    When the user browses to the files page
-    And the user moves file "data.tar.gz" into folder "strängé नेपाली folder empty" using the webUI
-    Then file "data.tar.gz" should not be listed on the webUI
-    But file "data.tar.gz" should be listed in folder "strängé नेपाली folder empty" on the webUI
-    When the user browses to the files page
-    And the user moves file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder empty" using the webUI
-    Then file "strängé filename (duplicate #2 &).txt" should not be listed on the webUI
-    But file "strängé filename (duplicate #2 &).txt" should be listed in folder "strängé नेपाली folder empty" on the webUI
-
-  @skip @yetToImplement
-  Scenario: move a file into a folder where a file with the same name already exists
-    When the user moves file "data.zip" into folder "simple-folder" using the webUI
-    And the user moves file "data.zip" into folder "strängé नेपाली folder" using the webUI
-    Then notifications should be displayed on the webUI with the text
-      | Could not move "data.zip", target exists |
-      | Could not move "data.zip", target exists |
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user tries to rename file "data.zip" to "simple-folder/data.zip" using the webUI
+    Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
     And file "data.zip" should be listed on the webUI
 
-  @skip @yetToImplement
-  Scenario: move a file into a folder where a file with the same name already exists
-    When the user moves file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
-    Then notifications should be displayed on the webUI with the text
-      | Could not move "strängé filename (duplicate #2 &).txt", target exists |
+  @smokeTest
+  Scenario: move a file into a folder
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user moves file "data.zip" into folder "simple-empty-folder" using the webUI
+    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
+    And file "data.zip" should be listed on the webUI
+    When the user browses to the files page
+    And the user moves file "data.tar.gz" into folder "strängé नेपाली folder empty" using the webUI
+    Then breadcrumb for folder "strängé नेपाली folder empty" should be displayed on the webUI
+    And file "data.tar.gz" should be listed on the webUI
+    When the user browses to the files page
+    And the user moves file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder empty" using the webUI
+    Then breadcrumb for folder "strängé नेपाली folder empty" should be displayed on the webUI
     And file "strängé filename (duplicate #2 &).txt" should be listed on the webUI
+    When the user browses to the files page
+    Then file "data.zip" should not be listed on the webUI
+    And file "data.tar.gz" should not be listed on the webUI
+    And file "strängé filename (duplicate #2 &).txt" should not be listed on the webUI
+
+  Scenario: move a file into a folder where a file with the same name already exists
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user moves file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
+    Then the error message with header 'An error occurred while moving strängé filename (duplicate #2 &).txt' should be displayed on the webUI
 
   @smokeTest
-  @skip @yetToImplement
   Scenario: Move multiple files at once
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
     When the user batch moves these files into folder "simple-empty-folder" using the webUI
       | name        |
       | data.zip    |
       | lorem.txt   |
       | testapp.zip |
-    Then the moved elements should not be listed on the webUI
-    And the moved elements should not be listed on the webUI after a page reload
-    But the moved elements should be listed in folder "simple-empty-folder" on the webUI
+    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
+    And the following file should be listed on the webUI
+      | name-parts  |
+      | data.zip    |
+      | lorem.txt   |
+      | testapp.zip |
 
-  @skip @yetToImplement
-  Scenario: move a file into a folder (problematic characters)
-    When the user renames the following file using the webUI
-      | from-name-parts | to-name-parts   |
-      | lorem.txt       | 'single'        |
-      |                 | "double" quotes |
-      |                 | question?       |
-      |                 | &and#hash       |
-    And the user renames the following folder using the webUI
-      | from-name-parts     | to-name-parts       |
-      | simple-empty-folder | folder-with'single' |
-      |                     | "double" quotes     |
-      |                     | question?           |
-      |                     | &and#hash           |
-    And the user moves the following file using the webUI
-      | item-to-move-name-parts | destination-name-parts |
-      | 'single'                | folder-with'single'    |
-      | "double" quotes         | "double" quotes        |
-      | question?               | question?              |
-      | &and#hash               | &and#hash              |
-    Then the following item should be listed in the following folder on the webUI
-      | item-name-parts | folder-name-parts   |
-      | 'single'        | folder-with'single' |
-      | "double" quotes | "double" quotes     |
-      | question?       | question?           |
-      | &and#hash       | &and#hash           |
+  Scenario Outline: move a file into a folder (problematic characters)
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user renames file "lorem.txt" to <file_name> using the webUI
+    And the user renames folder "simple-empty-folder" to <folder_name> using the webUI
+    And the user moves file <file_name> into folder <folder_name> using the webUI
+    Then breadcrumb for folder <folder_name> should be displayed on the webUI
+    And file <file_name> should be listed on the webUI
+    Examples:
+      | file_name           | folder_name                      |
+      | "'single'"          | "folder-with-'single'"           |
+      # | "\"double\" quotes" | "folder-with\"double\" quotes" | FIXME: Needs a way to access breadcrumbs with double quotes issue-3734
+      | "question?"         | "folder-with-question?"          |
+      | "&and#hash"         | "folder-with-&and#hash"          |
 
-  @skip @yetToImplement
   Scenario: move files on a public share
-    Given the user has created a new public link for folder "simple-folder" using the webUI with
-      | permission | read-write |
-    And the public accesses the last created public link using the webUI
+    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    And the public uses the webUI to access the last public link created by user "user1"
     And the user moves file "data.zip" into folder "simple-empty-folder" using the webUI
-    Then file "data.zip" should not be listed on the webUI
-    When the user reloads the current page of the webUI
-    Then file "data.zip" should not be listed on the webUI
+    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
+    And file "data.zip" should be listed on the webUI
     And as "user1" file "simple-folder/simple-empty-folder/data.zip" should exist
     But as "user1" file "simple-folder/data.zip" should not exist

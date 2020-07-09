@@ -1,6 +1,7 @@
 const util = require('util')
 const navigationHelper = require('../helpers/navigationHelper')
 const { join, normalize } = require('../helpers/path')
+const { client } = require('nightwatch-api')
 
 module.exports = {
   url: function() {
@@ -294,6 +295,14 @@ module.exports = {
     },
     checkForButtonDisabled: function() {
       return this.waitForElementVisible('@dialogConfirmBtnDisabled')
+    },
+
+    moveMultipleResources: function(target) {
+      // Trigger move
+      this.click('@moveSelectedBtn')
+
+      // Execute move
+      return client.page.locationPicker().move(target)
     }
   },
   elements: {
@@ -329,6 +338,10 @@ module.exports = {
     },
     breadcrumb: {
       selector: '#files-breadcrumb li:nth-of-type(2)'
+    },
+    breadcrumbMobile: {
+      selector: '//span[@class="oc-breadcrumb-drop-label-text" and text()="%s"]',
+      locateStrategy: 'xpath'
     },
     resourceBreadcrumb: {
       selector:
@@ -403,6 +416,9 @@ module.exports = {
     },
     dialogInput: {
       selector: '.oc-modal-body-input > input'
+    },
+    moveSelectedBtn: {
+      selector: '#move-selected-btn'
     }
   }
 }

@@ -38,6 +38,7 @@
           key="status-indicators"
           :default-indicators="indicators"
           :item="item"
+          :are-indicators-clickable="areIndicatorsClickable"
           class="files-list-indicators"
         />
         <span v-else key="no-status-indicators" aria-hidden="true" v-text="'-'" />
@@ -71,11 +72,6 @@ export default {
       required: false,
       default: undefined
     },
-    davUrl: {
-      type: String,
-      required: false,
-      default: undefined
-    },
     showPath: {
       type: Boolean,
       default: false
@@ -84,6 +80,21 @@ export default {
       type: Array,
       required: false,
       default: () => []
+    },
+    hasTwoRows: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    displayPreview: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    areIndicatorsClickable: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   data: function() {
@@ -113,12 +124,23 @@ export default {
       return this.fileTypeIcon(this.item)
     },
 
-    hasTwoRows() {
-      return this.$route.name === 'files-list' || this.$route.name === 'files-favorites'
+    davUrl() {
+      let davUrl
+      // FIXME: use SDK once it switches to DAV v2
+      if (this.publicPage()) {
+        davUrl = ['..', 'dav', 'public-files'].join('/')
+      } else {
+        davUrl = ['..', 'dav', 'files', this.$store.getters.user.id].join('/')
+      }
+      return this.$client.files.getFileUrl(davUrl)
     }
   },
   mounted() {
-    this.loadPreview()
+    if (this.displayPreview) {
+      this.loadPreview()
+    } else {
+      this.previewLoaded = 'disabled'
+    }
   },
   methods: {
     loadPreview() {

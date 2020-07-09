@@ -110,16 +110,29 @@
           </oc-button>
         </template>
       </div>
-      <div v-if="displayBulkActions">
-        <oc-button
-          id="delete-selected-btn"
-          key="delete-selected-btn"
-          icon="delete"
-          @click="$_deleteResources_displayDialog()"
-        >
-          <translate>Delete selected</translate>
-        </oc-button>
-      </div>
+      <oc-grid v-if="displayBulkActions" gutter="small">
+        <div>
+          <oc-button
+            id="delete-selected-btn"
+            key="delete-selected-btn"
+            icon="delete"
+            @click="$_deleteResources_displayDialog()"
+          >
+            <translate>Delete selected</translate>
+          </oc-button>
+        </div>
+        <div>
+          <oc-button
+            id="move-selected-btn"
+            key="move-selected-btn"
+            icon="folder-move"
+            :disabled="!canMove"
+            @click.native="moveResources"
+          >
+            <translate>Move selected</translate>
+          </oc-button>
+        </div>
+      </oc-grid>
     </oc-grid>
   </div>
 </template>
@@ -133,6 +146,8 @@ import Mixins from '../mixins'
 import FileActions from '../fileactions'
 import MixinDeleteResources from '../mixins/deleteResources'
 import pathUtil from 'path'
+import { canBeMoved } from '../helpers/permissions'
+import { cloneStateObject } from '../helpers/store'
 
 export default {
   components: {
@@ -289,6 +304,14 @@ export default {
 
     displayBulkActions() {
       return this.$route.meta.hasBulkActions && this.selectedFiles.length > 0
+    },
+
+    canMove() {
+      const insufficientPermissions = this.selectedFiles.some(resource => {
+        return canBeMoved(resource, this.currentFolder.path) === false
+      })
+
+      return insufficientPermissions === false
     }
   },
   methods: {
@@ -585,6 +608,22 @@ export default {
       }
       this.resetFileSelection()
       this.setHighlightedFile(null)
+    },
+
+    moveResources() {
+      const resources = cloneStateObject(this.selectedFiles)
+      const parent = pathUtil.dirname(this.currentFolder.path)
+
+      this.$router.push({
+        name: 'location-picker',
+        query: {
+          action: 'move',
+          target: parent,
+          resource: resources.map(resource => {
+            return resource.path
+          })
+        }
+      })
     }
   }
 }

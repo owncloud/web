@@ -88,6 +88,9 @@ function _buildFile(file) {
     canShare: function() {
       return this.permissions.indexOf('R') >= 0
     },
+    canCreate: function() {
+      return this.permissions.indexOf('C') >= 0
+    },
     isMounted: function() {
       return this.permissions.indexOf('M') >= 0
     },
@@ -331,18 +334,20 @@ function _buildCollaboratorShare(s, file) {
 }
 
 export default {
-  loadFolder(context, { client, absolutePath, $gettext, routeName, loadSharesTree = false }) {
+  loadFolder(
+    context,
+    { client, absolutePath, $gettext, routeName, loadSharesTree = false, isPublicPage = false }
+  ) {
     context.commit('UPDATE_FOLDER_LOADING', true)
     context.commit('CLEAR_CURRENT_FILES_LIST')
 
     return new Promise((resolve, reject) => {
       let promise
       const favorite = routeName === 'files-favorites'
-      const publicFiles = routeName === 'public-files'
 
       if (favorite) {
         promise = client.files.getFavoriteFiles(context.getters.davProperties)
-      } else if (publicFiles) {
+      } else if (isPublicPage) {
         const password = context.getters.publicLinkPassword
         promise = client.publicFiles.list(absolutePath, password, context.getters.davProperties)
       } else {
