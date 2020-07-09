@@ -39,7 +39,9 @@ export default {
             return this.$gettext('Mark as favorite')
           },
           isEnabled: () => {
-            return this.isAuthenticated
+            return (
+              this.isAuthenticated && this.capabilities.files && this.capabilities.files.favorites
+            )
           }
         },
         {

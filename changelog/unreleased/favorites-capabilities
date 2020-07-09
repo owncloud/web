@@ -1,0 +1,6 @@
+Enhancement: Add favorites capabilities
+
+We've added a check of favorites capabilities to enable disabling of favorites list and favorite action.
+
+https://github.com/owncloud/ocis/issues/354
+https://github.com/owncloud/phoenix/pull/3754

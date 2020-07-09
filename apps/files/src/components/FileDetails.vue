@@ -20,7 +20,7 @@
         </div>
         <div v-if="$route.name !== 'files-shared-with-others'">
           <oc-star
-            v-if="!publicPage()"
+            v-if="!publicPage() && isFavoritesEnabled"
             id="files-sidebar-star-icon"
             class="uk-inline"
             :shining="highlightedFile.starred"
@@ -94,6 +94,10 @@ export default {
 
     activeTabComponent() {
       return this.fileSideBarsEnabled.find(sidebar => sidebar.app === this.currentTab)
+    },
+
+    isFavoritesEnabled() {
+      return this.capabilities.files && this.capabilities.files.favorites
     }
   },
   watch: {
