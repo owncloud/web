@@ -213,7 +213,7 @@ export default {
     },
 
     canConfirm() {
-      return this.currentFolder?.canCreate()
+      return this.currentFolder && this.currentFolder.canCreate()
     },
 
     title() {
