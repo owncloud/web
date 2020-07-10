@@ -49,10 +49,17 @@ const getters = {
    * @param state
    * @returns {function(*): *[]}
    */
-  getNavItems: state => extension => {
+  getNavItems: (state, rootState) => extension => {
     const staticNavItems = state.staticNavItems[extension] || []
     const dynamicNavItems = state.dynamicNavItems[extension] || []
-    return [...staticNavItems, ...dynamicNavItems]
+
+    return [...staticNavItems, ...dynamicNavItems].filter(navItem => {
+      if (!navItem.enabled) {
+        return true
+      }
+
+      return navItem.enabled(rootState.capabilities)
+    })
   },
   /**
    * Get all extension ids that have at least one navigation item.

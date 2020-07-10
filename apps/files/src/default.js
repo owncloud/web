@@ -85,6 +85,9 @@ const navItems = [
     iconMaterial: 'star',
     route: {
       name: 'files-favorites'
+    },
+    enabled(capabilities) {
+      return capabilities.files && capabilities.files.favorites
     }
   },
   {
