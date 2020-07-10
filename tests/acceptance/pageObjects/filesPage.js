@@ -302,7 +302,15 @@ module.exports = {
       this.click('@moveSelectedBtn')
 
       // Execute move
-      return client.page.locationPicker().move(target)
+      return client.page.locationPicker().selectFolderAndConfirm(target)
+    },
+
+    copyMultipleResources: function(target) {
+      // Trigger copy
+      this.click('@copySelectedBtn')
+
+      // Execute copy
+      return client.page.locationPicker().selectFolderAndConfirm(target)
     }
   },
   elements: {
@@ -419,6 +427,9 @@ module.exports = {
     },
     moveSelectedBtn: {
       selector: '#move-selected-btn'
+    },
+    copySelectedBtn: {
+      selector: '#copy-selected-btn'
     }
   }
 }

@@ -12,7 +12,8 @@ module.exports = {
       restore: 'restore',
       rename: 'rename',
       deleteImmediately: 'deleteImmediately',
-      move: 'move'
+      move: 'move',
+      copy: 'copy'
     }),
 
     /**
@@ -135,10 +136,15 @@ module.exports = {
     },
     /**
      * Trigger the move of a resource via its file action
-     * @param {String} target Folder into which the resource should be moved
      */
-    move: function(target) {
+    move: function() {
       this.performFileAction(this.FileAction.move)
+    },
+    /**
+     * Trigger the copy of a resource via its file action
+     */
+    copy: function() {
+      this.performFileAction(this.FileAction.copy)
     }
   },
   elements: {
@@ -189,6 +195,10 @@ module.exports = {
     },
     moveButtonInFileRow: {
       selector: '//button[@aria-label="Move"]',
+      locateStrategy: 'xpath'
+    },
+    copyButtonInFileRow: {
+      selector: '//button[@aria-label="Copy"]',
       locateStrategy: 'xpath'
     }
   }

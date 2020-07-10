@@ -2,7 +2,7 @@ const { client } = require('nightwatch-api')
 
 module.exports = {
   commands: {
-    move: async function(target) {
+    selectFolderAndConfirm: async function(target) {
       await client.page.FilesPageElement.filesList().navigateToFolder(target)
 
       return this.waitForElementVisible('@confirmBtn').click('@confirmBtn')

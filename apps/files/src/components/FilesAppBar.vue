@@ -127,9 +127,20 @@
             key="move-selected-btn"
             icon="folder-move"
             :disabled="!canMove"
-            @click.native="moveResources"
+            @click.native="triggerLocationPicker('move')"
           >
             <translate>Move selected</translate>
+          </oc-button>
+        </div>
+        <div>
+          <oc-button
+            id="copy-selected-btn"
+            key="copy-selected-btn"
+            icon="file_copy"
+            :disabled="!canCopy"
+            @click.native="triggerLocationPicker('copy')"
+          >
+            <translate>Copy selected</translate>
           </oc-button>
         </div>
       </oc-grid>
@@ -312,6 +323,14 @@ export default {
       })
 
       return insufficientPermissions === false
+    },
+
+    canCopy() {
+      if (this.publicPage()) {
+        return this.currentFolder.canCreate()
+      }
+
+      return true
     }
   },
   methods: {
@@ -610,14 +629,14 @@ export default {
       this.setHighlightedFile(null)
     },
 
-    moveResources() {
+    triggerLocationPicker(action) {
       const resources = cloneStateObject(this.selectedFiles)
       const parent = pathUtil.dirname(this.currentFolder.path)
 
       this.$router.push({
         name: 'location-picker',
         query: {
-          action: 'move',
+          action,
           target: parent,
           resource: resources.map(resource => {
             return resource.path
