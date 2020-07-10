@@ -41,13 +41,16 @@ Feature: rename folders
 
   # Merge with scenario above once the issue is resolved
   Scenario Outline: Rename a folder that has special characters in its name
+    Given the user has created file "Sample,Folder,With,Comma"
+    And the user has reloaded the current page of the webUI
     When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder <to_name> should be listed on the webUI
     Examples:
-      | from_name               | to_name                     |
-      | "strängé नेपाली folder"   | "strängé नेपाली folder-#?2"   |
+      | from_name                  | to_name                     |
+      | "strängé नेपाली folder"    | "strängé नेपाली folder-#?2" |
+      | "Sample,Folder,With,Comma" | "Simple,Folder,With,Commä"  |
 
   Scenario: Rename a folder using special characters and check its existence after page reload
     When the user renames folder "simple-folder" to "लोरेम।तयक्स्त $%&" using the webUI

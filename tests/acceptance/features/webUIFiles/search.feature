@@ -162,3 +162,11 @@ Feature: Search
     Then file "file-to-delete.txt" should not be listed on the webUI
     And as "user1" file "file-to-delete.txt" should not exist
     And as "user1" the file with original path "file-to-delete.txt" should exist in the trashbin
+
+    Scenario: Search for files/folders with comma in their name
+      Given user "user1" has uploaded file with content "A file with comma" to "file,with,comma.txt"
+      And user "user1" has created folder "C,O,M,M,A"
+      When the user reloads the current page of the webUI
+      And the user searches for "," using the webUI
+      Then file "file,with,comma.txt" should be listed on the webUI
+      And folder "C,O,M,M,A" should be listed on the webUI

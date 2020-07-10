@@ -149,3 +149,20 @@ Feature: File Upload
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And as "user1" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+
+   Scenario: upload a file with comma in the filename
+     When the user uploads file "file,with,comma,.txt" using the webUI
+     Then no message should be displayed on the webUI
+     And file "file,with,comma,.txt" should be listed on the webUI
+     And as "user1" the content of "file,with,comma,.txt" should be the same as the local "file,with,comma,.txt"
+
+  Scenario: simple upload of a folder, with comma in its name, that does not exist before
+    When the user uploads folder "Folder,With,Comma" using the webUI
+    Then no message should be displayed on the webUI
+    And folder "Folder,With,Comma" should be listed on the webUI
+    When the user browses to the folder "Folder,With,Comma" on the files page
+    Then the following resources should be listed on the webUI
+      | entry_name        |
+      | sunday,monday.txt |
+    And as "user1" folder "Folder,With,Comma" should exist
+    And as "user1" file "Folder,With,Comma/sunday,monday.txt" should exist

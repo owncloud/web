@@ -14,13 +14,14 @@ Feature: create folder
     When the user reloads the current page of the webUI
     Then folder <folder_name> should be listed on the webUI
     Examples:
-      | folder_name              |
-      | '"somequotes1"'          |
-      | "'somequotes2'"          |
-      | "\"quote\"d-folders'"    |
-      | "^#29][29@({"            |
-      | "+-{$(882)"              |
-      | "home"                   |
+      | folder_name                |
+      | '"somequotes1"'            |
+      | "'somequotes2'"            |
+      | "\"quote\"d-folders'"      |
+      | "^#29][29@({"              |
+      | "+-{$(882)"                |
+      | "home"                     |
+      | "Sample,Folder,With,Comma" |
 
   # Merge with the scenario above once the issue is resolved
   Scenario Outline: Create a folder using special characters
