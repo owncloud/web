@@ -12,6 +12,7 @@ Summary
 * Change - Don't fallback to appId in case the route of file action is not defined: [#69](https://github.com/owncloud/product/issues/69)
 * Change - Do not display outline when the files list is focused: [#3747](https://github.com/owncloud/phoenix/issues/3747)
 * Change - No file drop if upload is not allowed or no space is left: [#3677](https://github.com/owncloud/phoenix/pull/3677)
+* Enhancement - Add ability to copy files and folders into a different location: [#102](https://github.com/owncloud/product/issues/102)
 * Enhancement - Add favorites capabilities: [#354](https://github.com/owncloud/ocis/issues/354)
 * Enhancement - Add ability to move files and folders into a different location: [#101](https://github.com/owncloud/product/issues/101)
 
@@ -49,6 +50,15 @@ Details
 * Change - No file drop if upload is not allowed or no space is left: [#3677](https://github.com/owncloud/phoenix/pull/3677)
 
    https://github.com/owncloud/phoenix/pull/3677
+
+* Enhancement - Add ability to copy files and folders into a different location: [#102](https://github.com/owncloud/product/issues/102)
+
+   We've added copy action to the files list. The copy action is executed via a new page called
+   location picker.
+
+   https://github.com/owncloud/product/issues/102
+   https://github.com/owncloud/product/issues/108
+   https://github.com/owncloud/phoenix/pull/3749
 
 * Enhancement - Add favorites capabilities: [#354](https://github.com/owncloud/ocis/issues/354)
 
