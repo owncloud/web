@@ -7,6 +7,8 @@ Feature: files and folders exist in the trashbin after being deleted
   Background:
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
+    And the user has created file "sample,1.txt"
+    And the user has created folder "Folder,With,Comma"
     And the user has browsed to the files page
 
   @smokeTest @skipOnOCIS @ocis-reva-issue-111
@@ -27,11 +29,12 @@ Feature: files and folders exist in the trashbin after being deleted
   @skipOnOCIS @ocis-reva-issue-111
   Scenario: Delete a file with problematic characters and check it is in the trashbin
     Given the user has renamed the following files
-      | from-name-parts | to-name-parts   |
-      | lorem.txt       | 'single'        |
-      | lorem-big.txt   | "double" quotes |
-      | textfile0.txt   | question?       |
-      | testimage.png   | &and#hash       |
+      | from-name-parts   | to-name-parts   |
+      | lorem.txt         | 'single'        |
+      | lorem-big.txt     | "double" quotes |
+      | textfile0.txt     | question?       |
+      | testimage.png     | &and#hash       |
+      | sample,1.txt      | sämple,1.txt    |
     When the user reloads the current page of the webUI
     And the user deletes the following elements using the webUI
       | name-parts      |
@@ -39,6 +42,7 @@ Feature: files and folders exist in the trashbin after being deleted
       | "double" quotes |
       | question?       |
       | &and#hash       |
+      | sämple,1.txt    |
     And the user browses to the trashbin page
     Then these files should be listed on the webUI
       | files           |
@@ -46,18 +50,23 @@ Feature: files and folders exist in the trashbin after being deleted
       | "double" quotes |
       | question?       |
       | &and#hash       |
+      | sämple,1.txt    |
 
   @skipOnOCIS @ocis-reva-issue-111
   Scenario: Delete multiple files at once and check that they are all in the trashbin
     When the user batch deletes these files using the webUI
-      | name          |
-      | data.zip      |
-      | lorem.txt     |
-      | simple-folder |
+      | name              |
+      | data.zip          |
+      | lorem.txt         |
+      | simple-folder     |
+      | sample,1.txt      |
+      | Folder,With,Comma |
     And the user browses to the trashbin page
     Then as "user1" file "data.zip" should exist in the trashbin
     And as "user1" file "lorem.txt" should exist in the trashbin
+    And as "user1" file "sample,1.txt" should exist in the trashbin
     And as "user1" folder "simple-folder" should exist in the trashbin
+    And as "user1" folder "Folder,With,Comma" should exist in the trashbin
     And as "user1" the file with original path "simple-folder/lorem.txt" should exist in the trashbin
     And the deleted elements should be listed on the webUI
 

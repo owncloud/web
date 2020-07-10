@@ -162,7 +162,7 @@ Feature: File Upload
     And folder "Folder,With,Comma" should be listed on the webUI
     When the user browses to the folder "Folder,With,Comma" on the files page
     Then the following resources should be listed on the webUI
-      | entry_name |
+      | entry_name        |
       | sunday,monday.txt |
     And as "user1" folder "Folder,With,Comma" should exist
     And as "user1" file "Folder,With,Comma/sunday,monday.txt" should exist
