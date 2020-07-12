@@ -76,6 +76,18 @@
               >
                 <slot name="rowActions" :item="rowItem" />
                 <oc-button
+                  v-if="$_enabledActions(rowItem).length == 0"
+                  :id="actionsDropdownButtonId(rowItem.viewId, active)"
+                  class="files-list-row-show-actions"
+                  disabled
+                  :aria-label="$gettext('Show file actions')"
+                  variation="raw"
+                  :uk-tooltip="$_disabledActionTooltip()"
+                >
+                  <oc-icon name="more_vert" class="uk-text-middle" size="small" />
+                </oc-button>
+                <oc-button
+                  v-else
                   :id="actionsDropdownButtonId(rowItem.viewId, active)"
                   class="files-list-row-show-actions"
                   :disabled="$_actionInProgress(rowItem)"
@@ -249,16 +261,8 @@ export default {
       return this.actionsInProgress.some(itemInProgress => itemInProgress.id === item.id)
     },
 
-    $_disabledActionTooltip(item) {
-      if (this.$_actionInProgress(item)) {
-        if (item.type === 'folder') {
-          return this.$gettext('There is currently an action in progress for this folder')
-        }
-
-        return this.$gettext('There is currently an action in progress for this file')
-      }
-
-      return null
+    $_disabledActionTooltip() {
+      return this.$gettext('There are currently no actions available for this file')
     },
     _rowClasses(item) {
       if (this.highlightedFile && item.id === this.highlightedFile.id) {
