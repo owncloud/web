@@ -16,15 +16,15 @@ This repository contains the assets and these must be released first before bein
 
 ### Package Hierarchy
 
-- [ocis](https://githug.com/owncloud/ocis)
+- [ocis](https://github.com/owncloud/ocis)
     - [ocis-phoenix](https://github.com/owncloud/ocis-phoenix)
       - [ocis-pkg](https://github.com/owncloud/ocis-pkg)
       - [phoenix](https://github.com/owncloud/phoenix)
 
 #### Releasing Phoenix Frontend
 
-1. Create a branch `release-$version`. in <https://github.com/owncloud/phoenix>
-2. Create a Folder in `changelog` for the release version and date `mkdir $major.$minor.$patchVersion_YYYY-MM-DD`.
+1. Create a branch `release-$version` in <https://github.com/owncloud/phoenix>.
+2. Create a folder in `changelog` for the release version and date `mkdir $major.$minor.$patchVersion_YYYY-MM-DD`.
 3. Move all changelog items from the `changelog/unreleased/` folder to the `$major.$minor.$patchVersion_YYYY-MM-DD` folder.
 4. Commit your changes.
 5. After merging, wait for the CI to run on the merge commit.
