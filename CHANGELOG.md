@@ -1,3 +1,25 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.12.0...master
+
+Summary
+-------
+
+* Bugfix - Fix translations string: [#3766](https://github.com/owncloud/phoenix/pull/3766)
+
+Details
+-------
+
+* Bugfix - Fix translations string: [#3766](https://github.com/owncloud/phoenix/pull/3766)
+
+   Allow better translations of various strings.
+
+   https://github.com/owncloud/phoenix/pull/3766
+   https://github.com/owncloud/phoenix/pull/3769
+
 Changelog for ownCloud Phoenix [0.12.0] (2020-07-10)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.12.0 relevant to
