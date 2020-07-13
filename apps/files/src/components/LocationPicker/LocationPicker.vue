@@ -394,10 +394,18 @@ export default {
 
         if (this.currentAction === 'move') {
           title = this.$gettext('An error occurred while moving several resources')
-          desc = this.$gettext('%{count} resources could not be moved')
+          desc = this.$ngettext(
+            '%{count} resource could not be moved',
+            '%{count} resources could not be moved',
+            errors.length
+          )
         } else if (this.currentAction === 'copy') {
           title = this.$gettext('An error occurred while copying several resources')
-          desc = this.$gettext('%{count} resources could not be copied')
+          desc = this.$ngettext(
+            '%{count} resource could not be copied',
+            '%{count} resources could not be copied',
+            errors.length
+          )
         }
 
         this.showMessage({

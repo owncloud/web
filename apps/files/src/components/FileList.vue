@@ -174,7 +174,6 @@ export default {
   data() {
     return {
       labelSelectAllItems: this.$gettext('Select all items'),
-      labelSelectSingleItemText: this.$gettext('Select %{type} %{name}'),
       rowActions: [],
       rowActionsDisplayed: false,
       rowActionsItem: {}
@@ -219,9 +218,12 @@ export default {
     ]),
 
     labelSelectSingleItem(item) {
+      const labelSelectSingleFileText = this.$gettext('Select file %{name}')
+      const labelSelectSingleFolderText = this.$gettext('Select folder %{name}')
+
       return this.$gettextInterpolate(
-        this.labelSelectSingleItemText,
-        { name: item.name, type: item.type },
+        item.type === 'file' ? labelSelectSingleFileText : labelSelectSingleFolderText,
+        { name: item.name },
         true
       )
     },
