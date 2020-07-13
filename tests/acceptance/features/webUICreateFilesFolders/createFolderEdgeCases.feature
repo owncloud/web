@@ -22,15 +22,6 @@ Feature: create folder
       | "+-{$(882)"                |
       | "home"                     |
       | "Sample,Folder,With,Comma" |
-
-  # Merge with the scenario above once the issue is resolved
-  Scenario Outline: Create a folder using special characters
-    When the user creates a folder with the name <folder_name> using the webUI
-    Then folder <folder_name> should be listed on the webUI
-    When the user reloads the current page of the webUI
-    Then folder <folder_name> should be listed on the webUI
-    Examples:
-      | folder_name              |
       | 'सिमप्ले फोल्देर $%#?&@' |
 
   @issue-2467 @ocis-reva-issue-106
