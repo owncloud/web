@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Fix translations string: [#3766](https://github.com/owncloud/phoenix/pull/3766)
+* Enhancement - Add dev docs for releases: [#3186](https://github.com/owncloud/phoenix/pull/3186)
 
 Details
 -------
@@ -19,6 +20,13 @@ Details
 
    https://github.com/owncloud/phoenix/pull/3766
    https://github.com/owncloud/phoenix/pull/3769
+
+* Enhancement - Add dev docs for releases: [#3186](https://github.com/owncloud/phoenix/pull/3186)
+
+   We added documentation on the steps involved to release phoenix.
+
+   https://github.com/owncloud/phoenix/pull/3186
+   https://github.com/owncloud/phoenix/pull/3767
 
 Changelog for ownCloud Phoenix [0.12.0] (2020-07-10)
 =======================================
