@@ -19,27 +19,8 @@ Feature: rename folders
       | '"quotes1"'             |
       | "'quotes2'"             |
       | "home"                  |
-
-  # Merge with scenario above once the issue is resolved
-  Scenario Outline: Rename a folder
-    When the user renames folder "simple-folder" to <to_folder_name> using the webUI
-    Then folder <to_folder_name> should be listed on the webUI
-    When the user reloads the current page of the webUI
-    Then folder <to_folder_name> should be listed on the webUI
-    Examples:
-      | to_folder_name          |
       | 'सिमप्ले फोल्देर$%#?&@'      |
 
-  Scenario Outline: Rename a folder that has special characters in its name
-    When the user renames folder <from_name> to <to_name> using the webUI
-    Then folder <to_name> should be listed on the webUI
-    When the user reloads the current page of the webUI
-    Then folder <to_name> should be listed on the webUI
-    Examples:
-      | from_name               | to_name                     |
-      | "'single'quotes"        | "single-quotes"             |
-
-  # Merge with scenario above once the issue is resolved
   Scenario Outline: Rename a folder that has special characters in its name
     Given the user has created file "Sample,Folder,With,Comma"
     And the user has reloaded the current page of the webUI
@@ -49,6 +30,7 @@ Feature: rename folders
     Then folder <to_name> should be listed on the webUI
     Examples:
       | from_name                  | to_name                     |
+      | "'single'quotes"           | "single-quotes"             |
       | "strängé नेपाली folder"    | "strängé नेपाली folder-#?2" |
       | "Sample,Folder,With,Comma" | "Simple,Folder,With,Commä"  |
 

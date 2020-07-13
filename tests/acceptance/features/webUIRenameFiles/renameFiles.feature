@@ -20,28 +20,8 @@ Feature: rename files
       | '"quotes1"'            |
       | "\"quote\"d-folders'"  |
       | "'quotes2'"            |
-
-  # Merge with scenario above once the issue is resolved
-  @smokeTest
-  Scenario Outline: Rename a file
-    When the user renames file "lorem.txt" to <to_file_name> using the webUI
-    Then file <to_file_name> should be listed on the webUI
-    When the user reloads the current page of the webUI
-    Then file <to_file_name> should be listed on the webUI
-    Examples:
-      | to_file_name           |
       | "लोरेम।तयक्स्त? $%#&@" |
 
-  Scenario Outline: Rename a file that has special characters in its name
-    When the user renames file <from_name> to <to_name> using the webUI
-    Then file <to_name> should be listed on the webUI
-    When the user reloads the current page of the webUI
-    Then file <to_name> should be listed on the webUI
-    Examples:
-      | from_name                               | to_name                               |
-      | "'single'quotes.txt"                    | "single-quotes.txt"                   |
-
-  # Merge with scenario above once the issue is resolved
   Scenario Outline: Rename a file that has special characters in its name
     Given the user has created file "sämple,1.txt"
     And the user has reloaded the current page of the webUI
@@ -51,6 +31,7 @@ Feature: rename files
     Then file <to_name> should be listed on the webUI
     Examples:
       | from_name                               | to_name                               |
+      | "'single'quotes.txt"                    | "single-quotes.txt"                   |
       | "strängé filename (duplicate #2 &).txt" | "strängé filename (duplicate #3).txt" |
       | "sämple,1.txt"                          | "file,with,commä,.txt"                |
 
