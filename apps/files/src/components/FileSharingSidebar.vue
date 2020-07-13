@@ -297,8 +297,9 @@ export default {
       return this.highlightedFile.canShare()
     },
     noResharePermsMessage() {
-      const translated = this.$gettext("You don't have permission to share this %{type}.")
-      return this.$gettextInterpolate(translated, { type: this.highlightedFile.type }, false)
+      const translatedFile = this.$gettext("You don't have permission to share this file.")
+      const translatedFolder = this.$gettext("You don't have permission to share this folder.")
+      return this.highlightedFile.type === 'file' ? translatedFile : translatedFolder
     },
 
     currentUsersPermissions() {

@@ -25,14 +25,18 @@ export default {
       let title = null
 
       if (resources.length === 1) {
-        title = this.$_deleteResources_isInTrashbin
-          ? this.$gettext('Permanently delete %{type} %{name}')
-          : this.$gettext('Delete %{type} %{name}')
-
+        if (isFolder) {
+          title = this.$_deleteResources_isInTrashbin
+            ? this.$gettext('Permanently delete folder %{name}')
+            : this.$gettext('Delete folder %{name}')
+        } else {
+          title = this.$_deleteResources_isInTrashbin
+            ? this.$gettext('Permanently delete file %{name}')
+            : this.$gettext('Delete file %{name}')
+        }
         return this.$gettextInterpolate(
           title,
           {
-            type: isFolder ? this.$gettext('folder') : this.$gettext('file'),
             name: resources[0].name
           },
           true
@@ -40,8 +44,16 @@ export default {
       }
 
       title = this.$_deleteResources_isInTrashbin
-        ? this.$gettext('Permanently delete %{amount} selected resources?')
-        : this.$gettext('Delete %{amount} selected resources')
+        ? this.$ngettext(
+            'Permanently delete %{amount} selected resource?',
+            'Permanently delete %{amount} selected resources?',
+            resources.length
+          )
+        : this.$ngettext(
+            'Delete %{amount} selected resource?',
+            'Delete %{amount} selected resources?',
+            resources.length
+          )
 
       return this.$gettextInterpolate(title, { amount: resources.length }, false)
     },
@@ -49,20 +61,20 @@ export default {
     $_deleteResources_dialogMessage() {
       const resources = this.$_deleteResources_resources
       const isFolder = resources[0].type === 'folder'
-      let message = null
 
       if (resources.length === 1) {
-        message = this.$_deleteResources_isInTrashbin
+        if (isFolder) {
+          return this.$_deleteResources_isInTrashbin
+            ? this.$gettext(
+                'Are you sure you want to delete this folder? All it’s content will be permanently removed. This action cannot be undone.'
+              )
+            : this.$gettext('Are you sure you want to delete this folder?')
+        }
+        return this.$_deleteResources_isInTrashbin
           ? this.$gettext(
-              'Are you sure you want to delete this %{type}? All it’s content will be permanently removed. This action cannot be undone.'
+              'Are you sure you want to delete this file? All it’s content will be permanently removed. This action cannot be undone.'
             )
-          : this.$gettext('Are you sure you want to delete this %{type}?')
-
-        return this.$gettextInterpolate(
-          message,
-          { type: isFolder ? this.$gettext('folder') : this.$gettext('file') },
-          true
-        )
+          : this.$gettext('Are you sure you want to delete this file?')
       }
 
       return this.$_deleteResources_isInTrashbin
