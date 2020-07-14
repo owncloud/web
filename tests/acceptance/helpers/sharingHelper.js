@@ -156,10 +156,10 @@ module.exports = {
           'Could not get shares. Message: ' + sharesResult.ocs.meta.message
         )
         const shares = sharesResult.ocs.data
-        let lastFoundShareId = 0
+        let lastShareSTime = 0
         for (const share of shares) {
-          if (share.share_type === self.SHARE_TYPES.public_link && share.id >= lastFoundShareId) {
-            lastFoundShareId = share.id
+          if (share.share_type === self.SHARE_TYPES.public_link && share.stime > lastShareSTime) {
+            lastShareSTime = share.stime
             lastShareToken = share.token
             lastShare = share
           }
