@@ -1089,6 +1089,19 @@ When('the user moves file/folder {string} into folder {string} using the webUI',
   return client.page.FilesPageElement.filesList().moveResource(resource, target)
 })
 
+When('the user tries to move file/folder {string} into folder {string} using the webUI', function(
+  resource,
+  target
+) {
+  return client.page.FilesPageElement.filesList().attemptToMoveResource(resource, target)
+})
+
+Then('it should not be possible to copy/move into folder {string} using the webUI', function(
+  target
+) {
+  return client.page.FilesPageElement.filesList().navigationNotAllowed(target)
+})
+
 When(
   'the user batch moves these files/folders into folder {string} using the webUI',
   async function(target, resources) {
@@ -1105,6 +1118,13 @@ When('the user copies file/folder {string} into folder {string} using the webUI'
   target
 ) {
   return client.page.FilesPageElement.filesList().copyResource(resource, target)
+})
+
+When('the user tries to copy file/folder {string} into folder {string} using the webUI', function(
+  resource,
+  target
+) {
+  return client.page.FilesPageElement.filesList().attemptToCopyResource(resource, target)
 })
 
 When(

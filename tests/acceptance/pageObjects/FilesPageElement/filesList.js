@@ -157,6 +157,24 @@ module.exports = {
 
       return this
     },
+
+    /**
+     *
+     * @param {string} folder
+     */
+    navigateUptoFolder: async function(folder) {
+      await this.waitForFileVisible(folder)
+      await this.initAjaxCounters()
+
+      await this.useXpath().moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
+
+      // wait for previews to finish loading
+      await this.waitForOutstandingAjaxCalls()
+      await this.waitForAllThumbnailsLoaded()
+
+      return this
+    },
+
     /**
      * opens sidebar for given resource
      *
@@ -639,6 +657,37 @@ module.exports = {
       return this
     },
 
+    attemptToMoveResource: async function(resource, target) {
+      await this.waitForFileVisible(resource)
+
+      // Trigger move
+      await filesRow.openFileActionsMenu(resource).move()
+
+      // select folder
+      await client.page.locationPicker().selectFolder(target)
+
+      return this
+    },
+
+    navigationNotAllowed: async function(target) {
+      await this.waitForFileVisible(target)
+      await this.initAjaxCounters()
+
+      const element = util.format(this.elements.fileRowDisabled.selector, target)
+      const disabledRow = {
+        locateStrategy: this.elements.fileRowDisabled.locateStrategy,
+        selector: element
+      }
+      await this.useXpath()
+        .moveToElement(this.getFileRowSelectorByFileName(target), 0, 0)
+        .waitForElementVisible(disabledRow)
+
+      await this.waitForOutstandingAjaxCalls()
+      await this.waitForAllThumbnailsLoaded()
+
+      return this
+    },
+
     copyResource: async function(resource, target) {
       await this.waitForFileVisible(resource)
 
@@ -647,6 +696,18 @@ module.exports = {
 
       // Execute copy
       await client.page.locationPicker().selectFolderAndConfirm(target)
+
+      return this
+    },
+
+    attemptToCopyResource: async function(resource, target) {
+      await this.waitForFileVisible(resource)
+
+      // Trigger copy
+      await filesRow.openFileActionsMenu(resource).copy()
+
+      // Execute copy
+      await client.page.locationPicker().selectFolder(target)
 
       return this
     }
@@ -760,6 +821,11 @@ module.exports = {
     },
     dialogConfirmBtn: {
       selector: '.oc-modal-body-actions-confirm'
+    },
+    fileRowDisabled: {
+      selector:
+        '//span[contains(@class, "oc-file-name") and text()="%s" and not(../span[contains(@class, "oc-file-extension")])]/ancestor::div[@class="files-list-row-disabled" and @data-is-visible="true"]',
+      locateStrategy: 'xpath'
     }
   }
 }
