@@ -23,6 +23,7 @@ const state = {
       helpDeskLinkText: 'ownCloud Central'
     },
     logo: {
+      sidebar: '',
       favicon: ''
     },
     filesList: {
