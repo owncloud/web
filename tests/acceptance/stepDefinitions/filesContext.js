@@ -5,6 +5,7 @@ const { Given, When, Then, Before } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
 const _ = require('lodash')
 const loginHelper = require('../helpers/loginHelper')
+const xpathHelper = require('../helpers/xpath')
 const { move } = require('../helpers/webdavHelper')
 const path = require('../helpers/path')
 const util = require('util')
@@ -597,7 +598,10 @@ const assertBreadCrumbIsNotDisplayed = function() {
  */
 const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonClickable) {
   const breadcrumbElement = client.page.filesPage().getBreadcrumbSelector(clickable, nonClickable)
-  const resourceBreadcrumbXpath = util.format(breadcrumbElement.selector, resource)
+  const resourceBreadcrumbXpath = util.format(
+    breadcrumbElement.selector,
+    xpathHelper.buildXpathLiteral(resource)
+  )
   let isBreadcrumbVisible = false
 
   // Check if the breadcrumb is visible
@@ -611,7 +615,7 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
   if (!isBreadcrumbVisible) {
     const mobileBreadcrumbMobileXpath = util.format(
       client.page.filesPage().elements.breadcrumbMobile.selector,
-      resource
+      xpathHelper.buildXpathLiteral(resource)
     )
 
     await client.element('xpath', mobileBreadcrumbMobileXpath, result => {
