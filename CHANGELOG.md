@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fix translations string: [#3766](https://github.com/owncloud/phoenix/pull/3766)
 * Enhancement - Add dev docs for releases: [#3186](https://github.com/owncloud/phoenix/pull/3186)
+* Enhancement - Enable changing sidebar logo via theming: [#3782](https://github.com/owncloud/phoenix/issues/3782)
 
 Details
 -------
@@ -27,6 +28,13 @@ Details
 
    https://github.com/owncloud/phoenix/pull/3186
    https://github.com/owncloud/phoenix/pull/3767
+
+* Enhancement - Enable changing sidebar logo via theming: [#3782](https://github.com/owncloud/phoenix/issues/3782)
+
+   We've added a key into the theme which enables using different logo in the sidebar.
+
+   https://github.com/owncloud/phoenix/issues/3782
+   https://github.com/owncloud/phoenix/pull/3783
 
 Changelog for ownCloud Phoenix [0.12.0] (2020-07-10)
 =======================================
