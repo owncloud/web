@@ -59,3 +59,24 @@ Feature: move folders
       # | "\"double\" quotes" | "target-folder-with\"double\" quotes" | FIXME: Needs a way to access breadcrumbs with double quotes issue-3734
       | "question?"         | "target-folder-with-question?"          |
       | "&and#hash"         | "target-folder-with-&and#hash"          |
+
+  @skipOnOCIS @issue-ocis-reva-243
+  Scenario: move a folder into another folder with no change permission
+    Given user "user2" has been created with default attributes
+    And user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
+    And user "user1" has logged in using the webUI
+    When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
+    Then it should not be possible to move into folder "simple-folder (2)" using the webUI
+
+  Scenario: move a folder into the same folder
+    And user "user1" has logged in using the webUI
+    When the user tries to move folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
+    Then it should not be possible to move into folder "simple-empty-folder" using the webUI
+
+  Scenario: move a folder into another folder with same name
+    And user "user1" has logged in using the webUI
+    When the user moves folder "simple-empty-folder" into folder "folder with space/simple-empty-folder" using the webUI
+    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
+    And folder "simple-empty-folder" should be listed on the webUI
+    And as "user1" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist
+    And as "user1" folder "simple-empty-folder" should not exist

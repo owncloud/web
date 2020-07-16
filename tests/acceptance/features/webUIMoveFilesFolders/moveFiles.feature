@@ -78,3 +78,11 @@ Feature: move files
     And file "data.zip" should be listed on the webUI
     And as "user1" file "simple-folder/simple-empty-folder/data.zip" should exist
     But as "user1" file "simple-folder/data.zip" should not exist
+
+  @skipOnOCIS @issue-ocis-reva-243
+  Scenario: move a file into another folder with no change permission
+    Given user "user2" has been created with default attributes
+    And user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
+    And user "user1" has logged in using the webUI
+    When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
+    Then it should not be possible to move into folder "simple-folder (2)" using the webUI
