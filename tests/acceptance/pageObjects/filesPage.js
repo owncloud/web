@@ -1,5 +1,6 @@
 const util = require('util')
 const navigationHelper = require('../helpers/navigationHelper')
+const xpathHelper = require('../helpers/xpath')
 const { join, normalize } = require('../helpers/path')
 const { client } = require('nightwatch-api')
 
@@ -37,7 +38,10 @@ module.exports = {
      */
     navigateToBreadcrumb: function(resource) {
       const breadcrumbElement = this.elements.resourceBreadcrumbClickable
-      const resourceXpath = util.format(breadcrumbElement.selector, resource)
+      const resourceXpath = util.format(
+        breadcrumbElement.selector,
+        xpathHelper.buildXpathLiteral(resource)
+      )
       return this.useStrategy(breadcrumbElement)
         .waitForElementVisible(resourceXpath)
         .click(resourceXpath)
@@ -348,20 +352,19 @@ module.exports = {
       selector: '#files-breadcrumb li:nth-of-type(2)'
     },
     breadcrumbMobile: {
-      selector: '//span[@class="oc-breadcrumb-drop-label-text" and text()="%s"]',
+      selector: '//span[@class="oc-breadcrumb-drop-label-text" and text()=%s]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumb: {
-      selector:
-        '//div[@id="files-breadcrumb"]//*[(self::a or self::span) and contains(text(),"%s")]',
+      selector: '//div[@id="files-breadcrumb"]//*[(self::a or self::span) and contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumbClickable: {
-      selector: '//div[@id="files-breadcrumb"]//a[contains(text(),"%s")]',
+      selector: '//div[@id="files-breadcrumb"]//a[contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     resourceBreadcrumbNonClickable: {
-      selector: '//div[@id="files-breadcrumb"]//span[contains(text(),"%s")]',
+      selector: '//div[@id="files-breadcrumb"]//span[contains(text(),%s)]',
       locateStrategy: 'xpath'
     },
     fileUploadButton: {

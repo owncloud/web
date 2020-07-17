@@ -49,11 +49,11 @@ Feature: copy files and folders
     Then breadcrumb for folder <folder_name> should be displayed on the webUI
     And file <file_name> should be listed on the webUI
     Examples:
-      | file_name           | folder_name                      |
-      | "'single'"          | "folder-with-'single'"           |
-      # | "\"double\" quotes" | "folder-with\"double\" quotes" | FIXME: Needs a way to access breadcrumbs with double quotes issue-3734
-      | "question?"         | "folder-with-question?"          |
-      | "&and#hash"         | "folder-with-&and#hash"          |
+      | file_name           | folder_name                    |
+      | "'single'"          | "folder-with-'single'"         |
+      | "\"double\" quotes" | "folder-with\"double\" quotes" |
+      | "question?"         | "folder-with-question?"        |
+      | "&and#hash"         | "folder-with-&and#hash"        |
 
   @skipOnOCIS @issue-3755
   Scenario: copy files on a public share

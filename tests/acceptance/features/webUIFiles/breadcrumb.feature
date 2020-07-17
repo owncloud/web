@@ -49,3 +49,12 @@ Feature: access breadcrumb
     And the user reloads the current page of the webUI
     Then the error message with header "Loading folder failed…" should be displayed on the webUI
 #    Then no message should be displayed on the webUI
+
+  Scenario: breadcrumb for double quotes
+    Given user "user1" has created folder "\'single-double quotes\""
+    And user "user1" has created folder "\'single-double quotes\"/\"inner\" double quotes"
+    And user "user1" has logged in using the webUI
+    When the user opens folder "\'single-double quotes\"" using the webUI
+    And the user opens folder "\"inner\" double quotes" using the webUI
+    Then clickable breadcrumb for folder "\'single-double quotes\"" should be displayed on the webUI
+    And non-clickable breadcrumb for folder "\"inner\" double quotes" should be displayed on the webUI
