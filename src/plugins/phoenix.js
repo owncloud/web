@@ -22,6 +22,14 @@ export default {
         },
         // FIXME: optional publicContext parameter is a mess
         downloadFile(file, publicContext = null) {
+          if (publicContext === null) {
+            const url = this.$client.helpers._webdavUrl + file.path
+
+            return this.$client.signUrl(url).then(signedUrl => {
+              window.location = signedUrl
+            })
+          }
+
           this.addActionToProgress(file)
           const publicPage = publicContext !== null ? publicContext : this.publicPage()
           let headers = {}
