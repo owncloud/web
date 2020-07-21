@@ -26,7 +26,20 @@ export default {
             const url = this.$client.helpers._webdavUrl + file.path
 
             return this.$client.signUrl(url).then(signedUrl => {
-              window.location = signedUrl
+              fetch(signedUrl, {
+                method: 'HEAD',
+                headers: { Authorization: 'Bearer ' + this.getToken }
+              }).then(res => {
+                if (res.status === 200) {
+                  window.location = signedUrl
+                } else if (res.status === 404) {
+                  this.showMessage({
+                    title: this.$gettext('Download failed'),
+                    desc: this.$gettext('File could not be located'),
+                    status: 'danger'
+                  })
+                }
+              })
             })
           }
 
