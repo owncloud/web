@@ -126,24 +126,6 @@
           &ndash; {{ filesTotalSize | fileSize }}
         </template>
       </div>
-      <div
-        v-if="quotaVisible"
-        class="uk-visible@s uk-width-2-3 uk-width-1-2@xl uk-text-meta uk-flex"
-        :class="{ 'uk-visible@xl': _sidebarOpen }"
-      >
-        <span class="uk-margin-small-right">
-          <translate>Used space:</translate> {{ quota.used | fileSize }}
-          <template v-if="quota.definition !== 'default' && quota.definition !== 'none'">
-            <translate>of</translate> {{ quota.definition }}
-          </template>
-        </span>
-        <div
-          v-if="quota.definition !== 'default' && quota.definition !== 'none'"
-          class="uk-width-expand oc-align-self-center"
-        >
-          <oc-progress :value="parseInt(quota.relative)" :max="100" class="uk-margin-remove" />
-        </div>
-      </div>
     </template>
   </file-list>
 </template>
@@ -198,7 +180,6 @@ export default {
     ...mapGetters('Files', [
       'loadingFolder',
       'activeFiles',
-      'quota',
       'filesTotalSize',
       'activeFilesCount',
       'currentFolder',
@@ -213,10 +194,6 @@ export default {
 
     $_isFavoritesList() {
       return this.$route.name === 'files-favorites'
-    },
-
-    quotaVisible() {
-      return !this.publicPage() && this.currentFolder && !this.currentFolder.isMounted()
     }
   },
   watch: {

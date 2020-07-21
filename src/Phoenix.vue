@@ -21,6 +21,23 @@
             <template v-if="sidebar.mainContentComponent" v-slot:mainContent>
               <component :is="sidebar.mainContentComponent" />
             </template>
+            <template v-if="isQuotaVisible" v-slot:footer>
+              <div class="uk-text-center">
+                <oc-progress
+                  :value="parseInt(quota.relative)"
+                  :max="100"
+                  size="small"
+                  class="uk-margin-xsmall-bottom"
+                />
+                <translate
+                  class="oc-light"
+                  :translate-params="{ used: usedQuota, total: quota.definition }"
+                  translate-comment="Information about how much space has been used from users quota"
+                >
+                  %{used} of %{total} occupied
+                </translate>
+              </div>
+            </template>
           </oc-sidebar>
         </transition>
         <div class="uk-width-expand">
@@ -70,6 +87,7 @@
 <script>
 import 'inert-polyfill'
 import { mapGetters, mapState, mapActions } from 'vuex'
+import filesize from 'filesize'
 import TopBar from './components/Top-Bar.vue'
 import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
@@ -192,6 +210,30 @@ export default {
         bundleKey: 'profile',
         settingKey: 'language'
       })
+    },
+
+    isQuotaVisible() {
+      const state = this.$store.state.Files
+
+      if (state) {
+        return (
+          !this.publicPage() &&
+          state.currentFolder &&
+          !state.currentFolder.isMounted() &&
+          this.quota.definition !== 'default' &&
+          this.quota.definition !== 'none'
+        )
+      }
+
+      return false
+    },
+
+    quota() {
+      return this.$store.state.Files.quota
+    },
+
+    usedQuota() {
+      return this.getResourceSize(this.quota.used)
     }
   },
   watch: {
@@ -298,6 +340,23 @@ export default {
       }
 
       this.appNavigationVisible = false
+    },
+
+    getResourceSize(size) {
+      if (size < 0) {
+        return ''
+      }
+
+      if (isNaN(size)) {
+        return '?'
+      }
+
+      const mb = 1048576
+
+      // TODO: Pass current language as locale to display correct separator
+      return filesize(size, {
+        round: size < mb ? 0 : 1
+      })
     }
   }
 }
