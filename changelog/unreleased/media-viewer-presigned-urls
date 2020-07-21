@@ -1,0 +1,5 @@
+Change: Use pre-signed URLs in media viewer
+
+We've started using pre-signed URLs in media viewer to display images instead of fetching them.
+
+https://github.com/owncloud/phoenix/pull/3802

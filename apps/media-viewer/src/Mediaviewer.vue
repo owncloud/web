@@ -219,7 +219,8 @@ export default {
       }
 
       // Fetch image
-      this.mediaSource(this.thumbPath, 'url', this.headers)
+      this.$client
+        .signUrl(this.thumbPath)
         .then(imageUrl => {
           this.images.push({
             id: this.activeMediaFile.id,

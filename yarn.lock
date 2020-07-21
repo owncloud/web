@@ -2917,9 +2917,9 @@ data-uri-to-buffer@1:
   resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-1.2.0.tgz#77163ea9c20d8641b4707e8f18abdf9a78f34835"
   integrity sha512-vKQ9DTQPN1FLYiiEEOQ6IBGFqvjCa5rSK3cWMy/Nespm5d/x3dGFT9UBZnkLxCwua/IXBi2TYnwTEpsOvhC4UQ==
 
-"davclient.js@https://github.com/owncloud/davclient.js.git":
+"davclient.js@git+https://github.com/owncloud/davclient.js.git":
   version "0.2.1"
-  resolved "https://github.com/owncloud/davclient.js.git#bf19f590451b3c0658913568053ec7f300f7dfc1"
+  resolved "git+https://github.com/owncloud/davclient.js.git#bf19f590451b3c0658913568053ec7f300f7dfc1"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -6897,10 +6897,10 @@ owncloud-design-system@^1.8.0:
     webfontloader "^1.6.28"
     weekstart "^1.0.0"
 
-owncloud-sdk@^1.0.0-663:
-  version "1.0.0-663"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-663.tgz#bfdc42d805f5811d81092f9d57bd7e4a828a7a62"
-  integrity sha512-NyNEQZ4CagBI0WWoijeye2TuUdkmE1c896p/z8LbUX417hydj8uF6EET8oEkGEVbhaA+zJKt3/WJa1vR7l7N+A==
+owncloud-sdk@^1.0.0-717:
+  version "1.0.0-717"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-717.tgz#e709d4a976ea6a07fe2db1257c5742260fedb7bc"
+  integrity sha512-LRI3ue2076tFX5r/TEGd/xKFoxTdSPQ1E+sZn0bibvqt8S5ULUlABbOoPijVhE2NXfxIHfLpjxamYIhBUR+2BQ==
   dependencies:
     axios "^0.19.2"
     browser-request "^0.3.3"
@@ -6908,7 +6908,7 @@ owncloud-sdk@^1.0.0-663:
     promise "^8.0.3"
     request "^2.88.0"
     utf8 "^3.0.0"
-    uuid "^7.0.3"
+    uuid "^8.2.0"
     xhr "^2.5.0"
     xml-js "^1.6.11"
     xmldom "^0.3.0"
@@ -9560,10 +9560,15 @@ uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^7.0.2, uuid@^7.0.3:
+uuid@^7.0.2:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
   integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
+
+uuid@^8.2.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.2.0.tgz#cb10dd6b118e2dada7d0cd9730ba7417c93d920e"
+  integrity sha512-CYpGiFTUrmI6OBMkAdjSDM0k5h8SkkiTP4WAjQgDgNB1S3Ou9VBEvr6q0Kv2H1mMk7IWfxYGpMH5sd5AvcIV2Q==
 
 v8-compile-cache@2.0.3:
   version "2.0.3"
