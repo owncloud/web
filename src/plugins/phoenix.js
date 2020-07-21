@@ -31,7 +31,21 @@ export default {
                 headers: { Authorization: 'Bearer ' + this.getToken }
               }).then(res => {
                 if (res.status === 200) {
-                  window.location = signedUrl
+                  const a = document.createElement('a')
+                  a.style.display = 'none'
+                  document.body.appendChild(a)
+
+                  a.href = signedUrl
+
+                  console.log(file)
+                  // Use download attribute to set desired file name
+                  a.setAttribute('download', file.name)
+
+                  // Trigger the download by simulating click
+                  a.click()
+
+                  // Cleanup
+                  document.body.removeChild(a)
                 } else if (res.status === 404) {
                   this.showMessage({
                     title: this.$gettext('Download failed'),
