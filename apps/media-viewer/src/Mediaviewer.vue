@@ -1,19 +1,29 @@
 <template>
   <div id="mediaviewer" class="uk-position-relative">
-    <div class="uk-position-center uk-padding-small">
+    <div class="uk-text-center uk-padding-small">
       <transition
         name="custom-classes-transition"
         :enter-active-class="activeClass.enter"
         :leave-active-class="activeClass.leave"
       >
-        <img
-          v-show="!loading && activeMediaFileCached"
-          :src="image.url"
-          :alt="image.name"
-          :data-id="image.id"
-          style="max-width:90vw;max-height:90vh"
-          class="uk-box-shadow-medium"
-        />
+        <template v-show="!loading && activeMediaFileCached">
+          <video
+            v-if="image.isVideo"
+            key="media-video"
+            class="uk-box-shadow-medium media-viewer-player"
+            controls
+          >
+            <source :src="image.url" :type="`video/${image.ext}`" />
+          </video>
+          <img
+            v-else
+            key="media-image"
+            :src="image.url"
+            :alt="image.name"
+            :data-id="image.id"
+            class="uk-box-shadow-medium media-viewer-player"
+          />
+        </template>
       </transition>
     </div>
     <oc-spinner
@@ -100,7 +110,7 @@ export default {
 
     mediaFiles() {
       return this.activeFiles.filter(file => {
-        return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif)/)
+        return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif|mp4|webm|ogg)/)
       })
     },
     activeMediaFile() {
@@ -148,6 +158,10 @@ export default {
       }
 
       return this.$_loader_getDavFilePath(this.activeMediaFile.path, query)
+    },
+
+    videoExtensions() {
+      return ['mp4', 'webm', 'ogg']
     }
   },
 
@@ -219,13 +233,17 @@ export default {
       }
 
       // Fetch image
+      const url = this.$client.helpers._webdavUrl + this.activeMediaFile.path
+
       this.$client
-        .signUrl(this.thumbPath)
+        .signUrl(url)
         .then(imageUrl => {
           this.images.push({
             id: this.activeMediaFile.id,
             name: this.activeMediaFile.name,
-            url: imageUrl
+            url: imageUrl,
+            ext: this.activeMediaFile.extension,
+            isVideo: this.videoExtensions.includes(this.activeMediaFile.extension)
           })
           this.image = this.activeMediaFileCached
           this.loading = false
@@ -234,6 +252,7 @@ export default {
         .catch(e => {
           this.loading = false
           this.failed = true
+          console.error(e)
         })
     },
 
@@ -284,3 +303,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.media-viewer-player {
+  width: 100%;
+  max-width: 90vw;
+  height: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+}
+</style>
