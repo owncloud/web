@@ -15,9 +15,9 @@ module.exports = {
      * @returns {*}
      */
     navigateAndWaitTillLoaded: async function(folder = '') {
-      await navigationHelper.navigateAndWaitTillLoaded(
+      await navigationHelper.navigateAndWaitTillElementPresent(
         join(this.api.launchUrl, '#/files/list', folder),
-        this.page.FilesPageElement.filesList().elements.filesListProgressBar
+        this.elements.newFileButtonLoaded
       )
       // wait for thumbnails
       await this.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
@@ -350,6 +350,10 @@ module.exports = {
     },
     breadcrumb: {
       selector: '#files-breadcrumb li:nth-of-type(2)'
+    },
+    newFileButtonLoaded: {
+      selector: '//button[@id="new-file-menu-btn" and contains(@class, "uk-button-primary")]',
+      locateStrategy: 'xpath'
     },
     breadcrumbMobile: {
       selector: '//span[@class="oc-breadcrumb-drop-label-text" and text()=%s]',
