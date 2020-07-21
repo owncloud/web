@@ -37,15 +37,15 @@ const appInfo = {
     },
     {
       extension: 'mp4',
-      routeName: 'video'
+      routeName: 'image'
     },
     {
       extension: 'webn',
-      routeName: 'video'
+      routeName: 'image'
     },
     {
       extension: 'ogg',
-      routeName: 'video'
+      routeName: 'image'
     }
   ]
 }

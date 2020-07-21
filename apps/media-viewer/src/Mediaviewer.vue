@@ -236,7 +236,7 @@ export default {
       const url = this.$client.helpers._webdavUrl + this.activeMediaFile.path
 
       this.$client
-        .signUrl(url)
+        .signUrl(url, 7200)
         .then(imageUrl => {
           this.images.push({
             id: this.activeMediaFile.id,
