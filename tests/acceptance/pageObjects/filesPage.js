@@ -3,6 +3,7 @@ const navigationHelper = require('../helpers/navigationHelper')
 const xpathHelper = require('../helpers/xpath')
 const { join, normalize } = require('../helpers/path')
 const { client } = require('nightwatch-api')
+const { stat } = require('fs')
 
 module.exports = {
   url: function() {
@@ -315,6 +316,48 @@ module.exports = {
 
       // Execute copy
       return client.page.locationPicker().selectFolderAndConfirm(target)
+    },
+
+    /**
+     * Create a md file with the given name
+     *
+     * @param {string} name to set or null to use default value from dialog
+     * @param {boolean} expectToSucceed
+     */
+    createMdFile: async function(name, expectToSucceed = true) {
+      await this.waitForElementVisible('@newFileMenuButton')
+        .click('@newFileMenuButton')
+        .waitForElementVisible('@newMdFileButton')
+        .click('@newMdFileButton')
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish()
+
+      if (name !== null) {
+        await this.clearValueWithEvent('@dialogInput')
+        await this.setValue('@dialogInput', name)
+      }
+
+      await this.click('@dialogConfirmBtn')
+
+      if (expectToSucceed) {
+        await this.waitForElementNotPresent('@dialog')
+      }
+
+      return this
+    },
+    closeTextEditor: function() {
+      return this.waitForElementVisible('@editorCloseBtn').click('@editorCloseBtn')
+    },
+    isRootDirectory: async function() {
+      let status
+      await this.isVisible('@breadcrumb', result => {
+        if (result.value === true) {
+          status = !result.value
+        } else {
+          status = true
+        }
+      })
+      return status
     }
   },
   elements: {
@@ -335,6 +378,9 @@ module.exports = {
     },
     newFileButton: {
       selector: '#new-file-menu-drop .new-file-btn-txt'
+    },
+    newMdFileButton: {
+      selector: '#new-file-menu-drop .new-file-btn-md'
     },
     newFolderInput: {
       selector: '#new-folder-input'
@@ -437,6 +483,9 @@ module.exports = {
     },
     copySelectedBtn: {
       selector: '#copy-selected-btn'
+    },
+    editorCloseBtn: {
+      selector: '#markdown-editor-app-bar .uk-text-right .oc-button'
     }
   }
 }

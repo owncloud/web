@@ -1141,3 +1141,16 @@ When(
     return client.page.filesPage().copyMultipleResources(target)
   }
 )
+
+When('the user creates a md file with the name {string} using the webUI', function(fileName) {
+  return client.page.filesPage().createMdFile(fileName)
+})
+
+When('the user closes the text editor using the webUI', function() {
+  return client.page.filesPage().closeTextEditor()
+})
+
+Then('the user should be in the root directory on the webUI', async function() {
+  const isRootDirectory = await client.page.filesPage().isRootDirectory()
+  assert.ok(isRootDirectory, 'Not in the root directory')
+})
