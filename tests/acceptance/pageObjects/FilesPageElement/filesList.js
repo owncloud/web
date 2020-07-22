@@ -710,6 +710,14 @@ module.exports = {
       await client.page.locationPicker().selectFolder(target)
 
       return this
+    },
+    clickOnFileName: async function(fileName) {
+      await this.findItemInFilesList(fileName)
+      const file = await this.getFileLinkSelectorByFileName(fileName)
+      return this.useXpath()
+        .waitForElementVisible(file)
+        .click(file)
+        .useCss()
     }
   },
   elements: {
