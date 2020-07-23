@@ -4,11 +4,15 @@ export default {
   install(Vue) {
     Vue.mixin({
       computed: {
-        ...mapGetters(['getToken', 'isAuthenticated']),
+        ...mapGetters(['getToken', 'isAuthenticated', 'capabilities']),
         ...mapGetters('Files', ['publicLinkPassword']),
 
         currentExtension() {
           return this.$route.path.split('/')[1]
+        },
+
+        isDownloadUrlSigningEnabled() {
+          return this.capabilities.core && this.capabilities.core['support-url-signing']
         }
       },
       methods: {
@@ -21,59 +25,64 @@ export default {
           return !this.isAuthenticated || this.$route.meta.auth === false
         },
         // FIXME: optional publicContext parameter is a mess
-        downloadFile(file, publicContext = null) {
-          if (publicContext === null) {
-            const url = this.$client.helpers._webdavUrl + file.path
-            return fetch(url, {
-              method: 'HEAD',
-              headers: { Authorization: 'Bearer ' + this.getToken }
-            }).then(res => {
-              if (res.status === 200) {
-                this.$client.signUrl(url).then(signedUrl => {
-                  const a = document.createElement('a')
-                  a.style.display = 'none'
-                  document.body.appendChild(a)
-                  a.href = signedUrl
-
-                  // Use download attribute to set desired file name
-                  a.setAttribute('download', file.name)
-
-                  // Trigger the download by simulating click
-                  a.click()
-
-                  // Cleanup
-                  document.body.removeChild(a)
-                })
-              } else if (res.status === 404) {
-                this.showMessage({
-                  title: this.$gettext('Download failed'),
-                  desc: this.$gettext('File could not be located'),
-                  status: 'danger'
-                })
-              }
-            })
-          }
-
-          this.addActionToProgress(file)
+        async downloadFile(file, publicContext = null) {
           const publicPage = publicContext !== null ? publicContext : this.publicPage()
+
+          // construct the url and headers
+          let url = null
           let headers = {}
           if (publicPage) {
-            const url = this.$client.publicFiles.getFileUrl(file.path)
+            url = this.$client.publicFiles.getFileUrl(file.path)
             const password = this.publicLinkPassword
             if (password) {
               headers = {
                 Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64')
               }
             }
-
-            return this.downloadFileFromUrl(url, headers, file)
+          } else {
+            url = this.$client.helpers._webdavUrl + file.path
+            headers = { Authorization: 'Bearer ' + this.getToken }
           }
-          const url = this.$client.files.getFileUrl(file.path)
-          headers = { Authorization: 'Bearer ' + this.getToken }
 
-          return this.downloadFileFromUrl(url, headers, file)
+          // download with signing enabled
+          if (this.isDownloadUrlSigningEnabled) {
+            try {
+              const response = await fetch(url, {
+                method: 'HEAD',
+                headers
+              })
+              if (response.status === 200) {
+                const signedUrl = await this.$client.signUrl(url)
+                // create anchor dom element
+                const a = document.createElement('a')
+                a.style.display = 'none'
+                document.body.appendChild(a)
+                a.href = signedUrl
+                // use download attribute to set desired file name
+                a.setAttribute('download', file.name)
+                // trigger the download by simulating click
+                a.click()
+                // cleanup
+                document.body.removeChild(a)
+                return
+              }
+            } catch (ignored) {}
+            this.showMessage({
+              title: this.$gettext('Download failed'),
+              desc: this.$gettext('File could not be located'),
+              status: 'danger'
+            })
+            return
+          }
+
+          // download without url signing enabled
+          this.addActionToProgress(file)
+          if (publicPage) {
+            return this.downloadFileFromUrlAsBlob(url, headers, file)
+          }
+          return this.downloadFileFromUrlAsBlob(url, headers, file)
         },
-        downloadFileFromUrl(url, headers, file) {
+        downloadFileFromUrlAsBlob(url, headers, file) {
           const request = new XMLHttpRequest()
           request.open('GET', url)
           request.responseType = 'blob'
