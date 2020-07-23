@@ -3,7 +3,6 @@ const navigationHelper = require('../helpers/navigationHelper')
 const xpathHelper = require('../helpers/xpath')
 const { join, normalize } = require('../helpers/path')
 const { client } = require('nightwatch-api')
-const { stat } = require('fs')
 
 module.exports = {
   url: function() {
@@ -324,7 +323,7 @@ module.exports = {
      * @param {string} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
-    createMdFile: async function(name, expectToSucceed = true) {
+    createMarkdownFile: async function(name, expectToSucceed = true) {
       await this.waitForElementVisible('@newFileMenuButton')
         .click('@newFileMenuButton')
         .waitForElementVisible('@newMdFileButton')
@@ -337,7 +336,9 @@ module.exports = {
         await this.setValue('@dialogInput', name)
       }
 
-      await this.click('@dialogConfirmBtn')
+      await this.initAjaxCounters()
+        .click('@dialogConfirmBtn')
+        .waitForOutstandingAjaxCalls()
 
       if (expectToSucceed) {
         await this.waitForElementNotPresent('@dialog')
@@ -349,13 +350,9 @@ module.exports = {
       return this.waitForElementVisible('@editorCloseBtn').click('@editorCloseBtn')
     },
     isRootDirectory: async function() {
-      let status
+      let status = false
       await this.isVisible('@breadcrumb', result => {
-        if (result.value === true) {
-          status = !result.value
-        } else {
-          status = true
-        }
+        status = !(result.value === true)
       })
       return status
     }

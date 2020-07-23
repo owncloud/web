@@ -1142,8 +1142,8 @@ When(
   }
 )
 
-When('the user creates a md file with the name {string} using the webUI', function(fileName) {
-  return client.page.filesPage().createMdFile(fileName)
+When('the user creates a markdown file with the name {string} using the webUI', function(fileName) {
+  return client.page.filesPage().createMarkdownFile(fileName)
 })
 
 When('the user closes the text editor using the webUI', function() {
@@ -1151,6 +1151,6 @@ When('the user closes the text editor using the webUI', function() {
 })
 
 Then('the user should be in the root directory on the webUI', async function() {
-  const isRootDirectory = await client.page.filesPage().isRootDirectory()
-  assert.ok(isRootDirectory, 'Not in the root directory')
+  const isUserInRootDirectory = await client.page.filesPage().isRootDirectory()
+  assert.ok(isUserInRootDirectory, 'Expected user in the root directory but found elsewhere')
 })
