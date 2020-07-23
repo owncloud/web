@@ -24,20 +24,17 @@ export default {
         downloadFile(file, publicContext = null) {
           if (publicContext === null) {
             const url = this.$client.helpers._webdavUrl + file.path
-
-            return this.$client.signUrl(url).then(signedUrl => {
-              fetch(signedUrl, {
-                method: 'HEAD',
-                headers: { Authorization: 'Bearer ' + this.getToken }
-              }).then(res => {
-                if (res.status === 200) {
+            return fetch(url, {
+              method: 'HEAD',
+              headers: { Authorization: 'Bearer ' + this.getToken }
+            }).then(res => {
+              if (res.status === 200) {
+                this.$client.signUrl(url).then(signedUrl => {
                   const a = document.createElement('a')
                   a.style.display = 'none'
                   document.body.appendChild(a)
-
                   a.href = signedUrl
 
-                  console.log(file)
                   // Use download attribute to set desired file name
                   a.setAttribute('download', file.name)
 
@@ -46,14 +43,14 @@ export default {
 
                   // Cleanup
                   document.body.removeChild(a)
-                } else if (res.status === 404) {
-                  this.showMessage({
-                    title: this.$gettext('Download failed'),
-                    desc: this.$gettext('File could not be located'),
-                    status: 'danger'
-                  })
-                }
-              })
+                })
+              } else if (res.status === 404) {
+                this.showMessage({
+                  title: this.$gettext('Download failed'),
+                  desc: this.$gettext('File could not be located'),
+                  status: 'danger'
+                })
+              }
             })
           }
 
