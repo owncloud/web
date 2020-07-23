@@ -141,6 +141,36 @@ These values can be set using the environment variables to configure `yarn run a
 ### too many open files
 If tests were running fine and then suddenly start to fail your system might run into open file limits.
 In that case you will see messages in the OCIS log output that look like this:
+
 `2020-05-12 11:33:43.974552 I | http: Accept error: accept tcp [::]:9200: accept4: too many open files; retrying in 1s`
 
 In that case increase the open file limits, how to do that would be beyond the scope of this documentation.
+
+## Acceptance Tests in CI
+In the CI we run the UI tests using different backends on different repos. We use commit IDs to indicate the version of the backend or testrunner we want to use. These commit IDs should be regularly updated in the `.drone.star` file to keep the CI up to date.
+We run phoenix UI tests in following repos in the CI.
+
+### 1. phoenix Repo
+In the `owncloud/phoenix` repo, we run the tests using both oc10 backend as well as the OCIS backend.
+For the oc10 backend, we use `owncloudci/core` docker image which runs the latest `daily-master-qa` version of owncloud.
+
+For the OCIS backend, we use the Commit ID from `owncloud/ocis` repo to indicate which version of backend to use. This can be specified in the `.drone.star` file in the `config.defaults` section.
+```
+	'defaults': {
+		'acceptance': {
+			'ocisBranch': 'master',
+			'ocisCommit': '284a9996dffa912cc1382e259b748c56ddc4aa0f',
+		}
+	},
+```
+If the version you want to run is on a different branch from master, you also need to change the branch name.
+
+In order to check if new tests are compatible with OCIS, after changing the commit id and the branch name, we can create a draft PR in `owncloud/phoenix` which triggers the CI and we can see the result there.
+
+### 2. ocis Repo
+We follow the same approach in the `owncloud/ocis` repo too. In order to run the UI tests in CI we use commit IDs from phoenix which can be changed in the `.drone.star` file. 
+
+```
+acceptance(ctx, 'master', '604e8b5e083c835308f147e51a850df643374107')
+```
+This is the commit ID of phoenix indicating the version of testrunner we want to use. If the version is on a branch other than master, we will also need to change the branch name.
