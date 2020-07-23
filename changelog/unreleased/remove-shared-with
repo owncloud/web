@@ -1,0 +1,6 @@
+Change: Get rid of static "Shared with:" label
+
+We removed the static "Shared with:" text label in the indicator row of file items. From now on, if a file item has no indicators, it will fall back to the one-row layout (resource name vertically centered).
+
+https://github.com/owncloud/product/issues/123
+https://github.com/owncloud/phoenix/pull/3808
