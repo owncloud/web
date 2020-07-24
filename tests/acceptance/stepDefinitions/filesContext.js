@@ -98,6 +98,13 @@ Given('user {string} has uploaded file with content {string} to {string}', async
   await webdav.uploadFileWithContent(user, content, filename)
 })
 
+Given('user {string} has uploaded {string} to {string}', async function(user, type, filename) {
+  // const parts = path.parts(filename)
+  const ext = filename.substr(filename.lastIndexOf('.') + 1)
+  await waitBetweenFileUploadOperations()
+  await webdav.uploadMedia(user, filename, type, ext)
+})
+
 When('the user browses to display the {string} details of file {string}', async function(
   versions,
   filename

@@ -216,6 +216,13 @@ exports.uploadFileWithContent = function(user, content, filename) {
     )
 }
 
+exports.uploadMedia = function(user, filename, type, extension) {
+  const apiURL = `files/${user}/${filename}`
+  return httpHelper
+    .put(apiURL, user, { 'Content-Type': `${type}/${extension}` })
+    .then(res => httpHelper.checkStatus(res, 'Could not upload file' + filename))
+}
+
 exports.getFavouritedResources = function(user) {
   const body = `<oc:filter-files  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
                  <d:prop><d:resourcetype /></d:prop>
