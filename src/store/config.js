@@ -29,6 +29,9 @@ const state = {
     filesList: {
       hideDefaultStatusIndicators: false
     }
+  },
+  options: {
+    hideSearchBar: false
   }
 }
 
@@ -51,7 +54,13 @@ const mutations = {
     state.uploadChunkSize = config.uploadChunkSize === undefined ? Infinity : config.uploadChunkSize
     state.state = config.state === undefined ? 'working' : config.state
     state.applications = config.applications === undefined ? [] : config.applications
-    if (config.corrupted) state.corrupted = config.corrupted
+    if (config.options !== undefined) {
+      // Merge default options and provided options. Config options take precedence over defaults.
+      state.options = { ...state.options, ...config.options }
+    }
+    if (config.corrupted) {
+      state.corrupted = config.corrupted
+    }
   },
   LOAD_THEME(state, theme) {
     state.theme = theme

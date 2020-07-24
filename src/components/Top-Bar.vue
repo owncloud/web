@@ -14,7 +14,7 @@
           <oc-icon name="menu" class="uk-flex" aria-hidden="true" />
         </oc-button>
       </div>
-      <search-bar />
+      <search-bar v-if="!isSearchDisabled" />
     </oc-grid>
     <oc-grid
       v-if="!isPublicPage"
@@ -73,7 +73,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['apps']),
+    ...mapGetters(['apps', 'configuration']),
 
     isPublicPage() {
       return !this.userId
@@ -84,6 +84,10 @@ export default {
         return this.$gettext(this.apps[this.currentExtension].name)
       }
       return this.currentExtension
+    },
+
+    isSearchDisabled() {
+      return this.configuration.options.hideSearchBar === true
     }
   },
   methods: {
