@@ -12,6 +12,7 @@
             key="media-video"
             class="uk-box-shadow-medium media-viewer-player"
             controls
+            preload
           >
             <source :src="image.url" :type="`video/${image.ext}`" />
           </video>
@@ -106,7 +107,7 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['activeFiles']),
-    ...mapGetters(['getToken']),
+    ...mapGetters(['getToken', 'capabilities']),
 
     mediaFiles() {
       return this.activeFiles.filter(file => {
@@ -162,6 +163,10 @@ export default {
 
     videoExtensions() {
       return ['mp4', 'webm', 'ogg']
+    },
+
+    isUrlSigningEnabled() {
+      return this.capabilities.core && this.capabilities.core['support-url-signing']
     }
   },
 
@@ -219,8 +224,9 @@ export default {
     loadImage() {
       this.loading = true
 
-      // Don't bother loading if files i chached
-      if (this.activeMediaFileCached) {
+      // TODO: Implement caching also with signed URLs
+      // Don't bother loading if files are chached
+      if (!this.isUrlSigningEnabled && this.activeMediaFileCached) {
         setTimeout(
           () => {
             this.image = this.activeMediaFileCached
@@ -234,14 +240,16 @@ export default {
 
       // Fetch image
       const url = this.$client.helpers._webdavUrl + this.activeMediaFile.path
+      const promise = this.isUrlSigningEnabled
+        ? this.$client.signUrl(url, 7200)
+        : this.mediaSource(this.thumbPath, 'url', this.headers)
 
-      this.$client
-        .signUrl(url, 7200)
-        .then(imageUrl => {
+      promise
+        .then(mediaUrl => {
           this.images.push({
             id: this.activeMediaFile.id,
             name: this.activeMediaFile.name,
-            url: imageUrl,
+            url: mediaUrl,
             ext: this.activeMediaFile.extension,
             isVideo: this.videoExtensions.includes(this.activeMediaFile.extension)
           })
