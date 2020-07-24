@@ -1,3 +1,27 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.13.0...master
+
+Summary
+-------
+
+* Change - Get rid of static "Shared with:" label: [#123](https://github.com/owncloud/product/issues/123)
+
+Details
+-------
+
+* Change - Get rid of static "Shared with:" label: [#123](https://github.com/owncloud/product/issues/123)
+
+   We removed the static "Shared with:" text label in the indicator row of file items. From now on,
+   if a file item has no indicators, it will fall back to the one-row layout (resource name
+   vertically centered).
+
+   https://github.com/owncloud/product/issues/123
+   https://github.com/owncloud/phoenix/pull/3808
+
 Changelog for ownCloud Phoenix [0.13.0] (2020-07-17)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.13.0 relevant to
