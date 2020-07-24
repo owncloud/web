@@ -13,6 +13,7 @@ let deletedElements
 let timeOfLastDeleteOperation = Date.now()
 let timeOfLastUploadOperation = Date.now()
 const { download } = require('../helpers/webdavHelper')
+const fs = require('fs')
 
 Before(() => {
   deletedElements = []
@@ -98,11 +99,15 @@ Given('user {string} has uploaded file with content {string} to {string}', async
   await webdav.uploadFileWithContent(user, content, filename)
 })
 
-Given('user {string} has uploaded {string} to {string}', async function(user, type, filename) {
-  // const parts = path.parts(filename)
-  const ext = filename.substr(filename.lastIndexOf('.') + 1)
+Given('user {string} has uploaded file {string} to {string}', async function(
+  user,
+  source,
+  filename
+) {
   await waitBetweenFileUploadOperations()
-  await webdav.uploadMedia(user, filename, type, ext)
+  const filePath = path.join(client.globals.filesForUpload, source)
+  const content = fs.readFileSync(filePath)
+  await webdav.createFile(user, filename, content)
 })
 
 When('the user browses to display the {string} details of file {string}', async function(

@@ -14,26 +14,11 @@ module.exports = {
       return this.useXpath()
         .waitForElementVisible(image)
         .useCss()
-    },
-    downloadMediaImage: function() {
-      return this.waitForElementVisible('@download').click('@download')
-    },
-    closeCanvas: function() {
-      return this.waitForElementVisible('@closeButton').click('@closeButton')
     }
   },
   elements: {
     mediaviewer: {
       selector: '//span[.="Mediaviewer"]',
-      locateStrategy: 'xpath'
-    },
-    download: {
-      selector: '//span[.="Download"]',
-      locateStrategy: 'xpath'
-    },
-    closeButton: {
-      selector:
-        '//div[@class = "uk-offcanvas-bar"]/button/span[@class = "oc-icon oc-icon-small oc-icon-system"]',
       locateStrategy: 'xpath'
     },
     actionBar: {
