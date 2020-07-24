@@ -315,6 +315,42 @@ module.exports = {
 
       // Execute copy
       return client.page.locationPicker().selectFolderAndConfirm(target)
+    },
+
+    /**
+     * Create a md file with the given name
+     *
+     * @param {string} name to set or null to use default value from dialog
+     * @param {boolean} expectToSucceed
+     */
+    createMarkdownFile: async function(name, expectToSucceed = true) {
+      await this.waitForElementVisible('@newFileMenuButton')
+        .click('@newFileMenuButton')
+        .waitForElementVisible('@newMdFileButton')
+        .click('@newMdFileButton')
+        .waitForElementVisible('@dialog')
+        .waitForAnimationToFinish()
+
+      if (!name) {
+        await this.clearValueWithEvent('@dialogInput')
+        await this.setValue('@dialogInput', name)
+      }
+
+      await this.initAjaxCounters()
+        .click('@dialogConfirmBtn')
+        .waitForOutstandingAjaxCalls()
+
+      if (expectToSucceed) {
+        await this.waitForElementNotPresent('@dialog')
+      }
+
+      return this
+    },
+    closeTextEditor: function() {
+      return this.waitForElementVisible('@editorCloseBtn').click('@editorCloseBtn')
+    },
+    isRootDirectory: async function() {
+      return await this.assert.not.elementPresent('@breadcrumb')
     }
   },
   elements: {
@@ -335,6 +371,9 @@ module.exports = {
     },
     newFileButton: {
       selector: '#new-file-menu-drop .new-file-btn-txt'
+    },
+    newMdFileButton: {
+      selector: '#new-file-menu-drop .new-file-btn-md'
     },
     newFolderInput: {
       selector: '#new-folder-input'
@@ -437,6 +476,9 @@ module.exports = {
     },
     copySelectedBtn: {
       selector: '#copy-selected-btn'
+    },
+    editorCloseBtn: {
+      selector: '#markdown-editor-app-bar .uk-text-right .oc-button'
     }
   }
 }
