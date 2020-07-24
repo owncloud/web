@@ -1154,3 +1154,13 @@ Then('the user should be in the root directory on the webUI', async function() {
   const isUserInRootDirectory = await client.page.filesPage().isRootDirectory()
   assert.ok(!isUserInRootDirectory, 'Expected user in the root directory but found elsewhere')
 })
+
+Then('the search bar should not be visible in the webUI', async function() {
+  const isVisible = await client.page.filesPage().isSearchBarVisible()
+  assert.strictEqual(isVisible, false, 'Expected search bar to be invisible but is visible')
+})
+
+Then('the search bar should be visible in the webUI', async function() {
+  const isVisible = await client.page.filesPage().isSearchBarVisible()
+  assert.strictEqual(isVisible, true, 'Expected search bar to be visible but is not visible')
+})

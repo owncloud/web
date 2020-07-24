@@ -34,6 +34,43 @@ Given('the property {string} has been set to {string} in phoenix config file', f
   return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
 })
 
+function setconfig(key, subkey, value, configfile) {
+  const data = getConfigJsonContent(configfile)
+  if (!data[key]) {
+    data[key] = {}
+  }
+  data[key][subkey] = value
+  return fs.writeFileSync(configfile, JSON.stringify(data, null, 4))
+}
+
+Given('the property {string} of {string} has been set to true in phoenix config file', function(
+  subkey,
+  key
+) {
+  return setconfig(key, subkey, true, this.fullPathOfConfigFile)
+})
+
+Given('the property {string} of {string} has been set to false in phoenix config file', function(
+  subkey,
+  key
+) {
+  return setconfig(key, subkey, false, this.fullPathOfConfigFile)
+})
+
+When('the property {string} of {string} is changed to true in phoenix config file', function(
+  subkey,
+  key
+) {
+  return setconfig(key, subkey, true, this.fullPathOfConfigFile)
+})
+
+When('the property {string} of {string} is changed to false in phoenix config file', function(
+  subkey,
+  key
+) {
+  return setconfig(key, subkey, false, this.fullPathOfConfigFile)
+})
+
 Given('the property {string} has been deleted in phoenix config file', function(key) {
   const data = getConfigJsonContent(this.fullPathOfConfigFile)
   delete data[key]
@@ -233,9 +270,6 @@ Before(function() {
 })
 
 After(function() {
-  if (client.globals.ocis || client.globals.openid_login) {
-    return
-  }
   fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(initialConfigJsonSettings, null, 4))
 })
 
