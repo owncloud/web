@@ -351,9 +351,19 @@ module.exports = {
     },
     isRootDirectory: async function() {
       return await this.assert.not.elementPresent('@breadcrumb')
+    },
+    isSearchBarVisible: async function() {
+      let searchBar
+      await this.api.elements('@searchInput', result => {
+        searchBar = result.value
+      })
+      return searchBar.length > 0
     }
   },
   elements: {
+    searchInput: {
+      selector: '.oc-search-input input'
+    },
     newFileMenuButtonAnyState: {
       selector: '#new-file-menu-btn'
     },
