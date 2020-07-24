@@ -31,17 +31,14 @@
           v-text="'.' + item.extension"
         />
       </div>
-      <div v-if="hasTwoRows" class="uk-flex uk-flex-middle">
-        <translate class="uk-margin-small-right">Shared with:</translate>
+      <div v-if="hasTwoRows && hasIndicators" class="uk-flex uk-flex-middle">
         <Indicators
-          v-if="indicators.length > 0"
           key="status-indicators"
           :default-indicators="indicators"
           :item="item"
           :are-indicators-clickable="areIndicatorsClickable"
           class="files-list-indicators"
         />
-        <span v-else key="no-status-indicators" aria-hidden="true" v-text="'-'" />
       </div>
     </div>
   </div>
@@ -133,6 +130,10 @@ export default {
         davUrl = ['..', 'dav', 'files', this.$store.getters.user.id].join('/')
       }
       return this.$client.files.getFileUrl(davUrl)
+    },
+
+    hasIndicators() {
+      return this.indicators.length > 0
     }
   },
   mounted() {
