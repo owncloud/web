@@ -101,11 +101,7 @@ export default {
     },
     downloadVersion(file) {
       const version = this.currentVersionId(file)
-      const url = this.$client.fileVersions.getFileVersionUrl(this.currentFile.id, version)
-
-      return this.$client.signUrl(url).then(signedUrl => {
-        window.location = signedUrl
-      })
+      return this.downloadFile(this.currentFile, null, version)
     }
   }
 }

@@ -25,7 +25,7 @@ export default {
           return !this.isAuthenticated || this.$route.meta.auth === false
         },
         // FIXME: optional publicContext parameter is a mess
-        async downloadFile(file, publicContext = null) {
+        async downloadFile(file, publicContext = null, version = null) {
           const publicPage = publicContext !== null ? publicContext : this.publicPage()
 
           // construct the url and headers
@@ -40,7 +40,11 @@ export default {
               }
             }
           } else {
-            url = this.$client.helpers._webdavUrl + file.path
+            if (version === null) {
+              url = this.$client.helpers._webdavUrl + file.path
+            } else {
+              url = this.$client.fileVersions.getFileVersionUrl(file.id, version)
+            }
             headers = { Authorization: 'Bearer ' + this.getToken }
           }
 
@@ -66,7 +70,9 @@ export default {
                 document.body.removeChild(a)
                 return
               }
-            } catch (ignored) {}
+            } catch (e) {
+              console.log(e)
+            }
             this.showMessage({
               title: this.$gettext('Download failed'),
               desc: this.$gettext('File could not be located'),
