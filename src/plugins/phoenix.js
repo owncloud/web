@@ -11,7 +11,7 @@ export default {
           return this.$route.path.split('/')[1]
         },
 
-        isDownloadUrlSigningEnabled() {
+        isUrlSigningEnabled() {
           return this.capabilities.core && this.capabilities.core['support-url-signing']
         }
       },
@@ -45,7 +45,7 @@ export default {
           }
 
           // download with signing enabled
-          if (this.isDownloadUrlSigningEnabled) {
+          if (this.isUrlSigningEnabled) {
             try {
               const response = await fetch(url, {
                 method: 'HEAD',
@@ -77,12 +77,9 @@ export default {
 
           // download without url signing enabled
           this.addActionToProgress(file)
-          if (publicPage) {
-            return this.downloadFileFromUrlAsBlob(url, headers, file)
-          }
-          return this.downloadFileFromUrlAsBlob(url, headers, file)
+          return this.$_downloadFileAsBlob(url, headers, file)
         },
-        downloadFileFromUrlAsBlob(url, headers, file) {
+        $_downloadFileAsBlob(url, headers, file) {
           const request = new XMLHttpRequest()
           request.open('GET', url)
           request.responseType = 'blob'
