@@ -331,7 +331,7 @@ module.exports = {
         .waitForElementVisible('@dialog')
         .waitForAnimationToFinish()
 
-      if (name !== null) {
+      if (!name) {
         await this.clearValueWithEvent('@dialogInput')
         await this.setValue('@dialogInput', name)
       }
@@ -350,11 +350,7 @@ module.exports = {
       return this.waitForElementVisible('@editorCloseBtn').click('@editorCloseBtn')
     },
     isRootDirectory: async function() {
-      let status = false
-      await this.isVisible('@breadcrumb', result => {
-        status = !(result.value === true)
-      })
-      return status
+      return await this.assert.not.elementPresent('@breadcrumb')
     }
   },
   elements: {

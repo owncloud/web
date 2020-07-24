@@ -23,6 +23,7 @@ Feature: create files
     And the user browses to the files page
     Then file "sample,1.txt" should be listed on the webUI
 
+  @issue-2882
   Scenario: redirect to subfolder after closing the text editor
     Given the user has created folder "parent-folder"
     When the user reloads the current page of the webUI
