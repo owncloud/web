@@ -40,7 +40,7 @@ const appInfo = {
       routeName: 'media'
     },
     {
-      extension: 'webn',
+      extension: 'webm',
       routeName: 'media'
     },
     {
