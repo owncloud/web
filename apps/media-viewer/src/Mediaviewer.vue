@@ -241,7 +241,7 @@ export default {
       // Fetch image
       const url = this.$client.helpers._webdavUrl + this.activeMediaFile.path
       const promise = this.isUrlSigningEnabled
-        ? this.$client.signUrl(url, 7200)
+        ? this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
         : this.mediaSource(this.thumbPath, 'url', null)
 
       promise
