@@ -8,20 +8,20 @@
       >
         <template v-show="!loading && activeMediaFileCached">
           <video
-            v-if="image.isVideo"
+            v-if="medium.isVideo"
             key="media-video"
             class="uk-box-shadow-medium media-viewer-player"
             controls
             preload
           >
-            <source :src="image.url" :type="`video/${image.ext}`" />
+            <source :src="medium.url" :type="`video/${medium.ext}`" />
           </video>
           <img
             v-else
             key="media-image"
-            :src="image.url"
-            :alt="image.name"
-            :data-id="image.id"
+            :src="medium.url"
+            :alt="medium.name"
+            :data-id="medium.id"
             class="uk-box-shadow-medium media-viewer-player"
           />
         </template>
@@ -45,7 +45,7 @@
       <div
         class="uk-overlay uk-overlay-default uk-padding-small uk-text-center uk-text-meta uk-text-truncate"
       >
-        {{ image.name }}
+        {{ medium.name }}
       </div>
       <div class="uk-overlay uk-overlay-primary uk-light uk-padding-small">
         <div
@@ -74,7 +74,7 @@
             role="button"
             class="oc-cursor-pointer"
             name="file_download"
-            @click="downloadImage"
+            @click="downloadMedium"
           />
           <oc-icon role="button" class="oc-cursor-pointer" name="close" @click="closeApp" />
         </div>
@@ -97,8 +97,8 @@ export default {
       activeIndex: null,
       direction: 'rtl',
 
-      image: {},
-      images: [],
+      medium: {},
+      media: [],
 
       // Milliseconds
       animationDuration: 1000
@@ -118,7 +118,7 @@ export default {
       return this.mediaFiles[this.activeIndex]
     },
     activeMediaFileCached() {
-      const cached = this.images.find(i => i.id === this.activeMediaFile.id)
+      const cached = this.media.find(i => i.id === this.activeMediaFile.id)
       return cached !== undefined ? cached : false
     },
     activeClass() {
@@ -173,7 +173,7 @@ export default {
   watch: {
     activeIndex(o, n) {
       if (o !== n) {
-        this.loadImage()
+        this.loadMedium()
       }
     }
   },
@@ -194,8 +194,8 @@ export default {
 
     window.removeEventListener('popstate', this.handleLocalHistoryEvent)
 
-    this.images.forEach(image => {
-      window.URL.revokeObjectURL(image.url)
+    this.media.forEach(medium => {
+      window.URL.revokeObjectURL(medium.url)
     })
   },
 
@@ -221,7 +221,7 @@ export default {
       history.pushState({}, document.title, this.$router.resolve(this.$route).href)
     },
 
-    loadImage() {
+    loadMedium() {
       this.loading = true
 
       // TODO: Implement caching also with signed URLs
@@ -229,7 +229,7 @@ export default {
       if (!this.isUrlSigningEnabled && this.activeMediaFileCached) {
         setTimeout(
           () => {
-            this.image = this.activeMediaFileCached
+            this.medium = this.activeMediaFileCached
             this.loading = false
           },
           // Delay to animate
@@ -238,7 +238,7 @@ export default {
         return
       }
 
-      // Fetch image
+      // Fetch media
       const url = this.$client.helpers._webdavUrl + this.activeMediaFile.path
       const promise = this.isUrlSigningEnabled
         ? this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
@@ -246,14 +246,14 @@ export default {
 
       promise
         .then(mediaUrl => {
-          this.images.push({
+          this.media.push({
             id: this.activeMediaFile.id,
             name: this.activeMediaFile.name,
             url: mediaUrl,
             ext: this.activeMediaFile.extension,
             isVideo: this.videoExtensions.includes(this.activeMediaFile.extension)
           })
-          this.image = this.activeMediaFileCached
+          this.medium = this.activeMediaFileCached
           this.loading = false
           this.failed = false
         })
@@ -264,7 +264,7 @@ export default {
         })
     },
 
-    downloadImage() {
+    downloadMedium() {
       if (this.loading) {
         return
       }
