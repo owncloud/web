@@ -225,7 +225,7 @@ export default {
       this.loading = true
 
       // TODO: Implement caching also with signed URLs
-      // Don't bother loading if files are chached
+      // Don't bother loading if files are cached
       if (!this.isUrlSigningEnabled && this.activeMediaFileCached) {
         setTimeout(
           () => {
