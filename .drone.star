@@ -1013,7 +1013,7 @@ def setupGraphapiOIdC():
 			'php occ config:system:set cors.allowed-domains 0 --value="http://phoenix:9100"',
 			'php occ config:system:set memcache.local --value="\\\\OC\\\\Memcache\\\\APCu"',
 			'php occ config:system:set phoenix.baseUrl --value="http://phoenix:9100"',
-			'php occ config:system:set debug --value=true --type=bool',
+			'php occ config:system:set openid-connect insecure --value=true --type=bool',
 			'php occ config:list'
 		]
 	}]
