@@ -388,7 +388,7 @@ Feature: Share by public link
     And the public uses the webUI to access the last public link created by user "user1" with password "qwertyui"
     Then file "lorem.txt" should be listed on the webUI
 
-  @skipOnOCIS
+  @skipOnOCIS @skip @issue-3830
   Scenario: user edits the password of an already existing public link and tries to access with old password
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     And user "user1" has created a public link with following settings
