@@ -9,7 +9,9 @@ Summary
 -------
 
 * Change - Provide option for hiding the search bar: [#116](https://github.com/owncloud/product/issues/116)
+* Change - Use pre-signed URLs in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
 * Change - Get rid of static "Shared with:" label: [#123](https://github.com/owncloud/product/issues/123)
+* Enhancement - Enable playing videos in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
 
 Details
 -------
@@ -22,6 +24,13 @@ Details
    https://github.com/owncloud/product/issues/116
    https://github.com/owncloud/phoenix/pull/3817
 
+* Change - Use pre-signed URLs in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
+
+   We've started using pre-signed URLs if supported in media viewer to display images instead of
+   fetching them.
+
+   https://github.com/owncloud/phoenix/pull/3803
+
 * Change - Get rid of static "Shared with:" label: [#123](https://github.com/owncloud/product/issues/123)
 
    We removed the static "Shared with:" text label in the indicator row of file items. From now on,
@@ -30,6 +39,12 @@ Details
 
    https://github.com/owncloud/product/issues/123
    https://github.com/owncloud/phoenix/pull/3808
+
+* Enhancement - Enable playing videos in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
+
+   We've added a capability to the media viewer extension to play videos.
+
+   https://github.com/owncloud/phoenix/pull/3803
 
 Changelog for ownCloud Phoenix [0.13.0] (2020-07-17)
 =======================================
