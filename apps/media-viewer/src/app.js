@@ -9,7 +9,7 @@ const routes = [
     components: {
       app: Mediaviewer
     },
-    name: 'mediaviewer/image',
+    name: 'mediaviewer/media',
     meta: { auth: false }
   }
 ]
@@ -21,31 +21,31 @@ const appInfo = {
   extensions: [
     {
       extension: 'png',
-      routeName: 'image'
+      routeName: 'media'
     },
     {
       extension: 'jpg',
-      routeName: 'image'
+      routeName: 'media'
     },
     {
       extension: 'jpeg',
-      routeName: 'image'
+      routeName: 'media'
     },
     {
       extension: 'gif',
-      routeName: 'image'
+      routeName: 'media'
     },
     {
       extension: 'mp4',
-      routeName: 'image'
+      routeName: 'media'
     },
     {
       extension: 'webn',
-      routeName: 'image'
+      routeName: 'media'
     },
     {
       extension: 'ogg',
-      routeName: 'image'
+      routeName: 'media'
     }
   ]
 }
