@@ -34,6 +34,18 @@ const appInfo = {
     {
       extension: 'gif',
       routeName: 'image'
+    },
+    {
+      extension: 'mp4',
+      routeName: 'image'
+    },
+    {
+      extension: 'webn',
+      routeName: 'image'
+    },
+    {
+      extension: 'ogg',
+      routeName: 'image'
     }
   ]
 }

@@ -1,19 +1,30 @@
 <template>
   <div id="mediaviewer" class="uk-position-relative">
-    <div class="uk-position-center uk-padding-small">
+    <div class="uk-text-center uk-padding-small">
       <transition
         name="custom-classes-transition"
         :enter-active-class="activeClass.enter"
         :leave-active-class="activeClass.leave"
       >
-        <img
-          v-show="!loading && activeMediaFileCached"
-          :src="image.url"
-          :alt="image.name"
-          :data-id="image.id"
-          style="max-width:90vw;max-height:90vh"
-          class="uk-box-shadow-medium"
-        />
+        <template v-show="!loading && activeMediaFileCached">
+          <video
+            v-if="image.isVideo"
+            key="media-video"
+            class="uk-box-shadow-medium media-viewer-player"
+            controls
+            preload
+          >
+            <source :src="image.url" :type="`video/${image.ext}`" />
+          </video>
+          <img
+            v-else
+            key="media-image"
+            :src="image.url"
+            :alt="image.name"
+            :data-id="image.id"
+            class="uk-box-shadow-medium media-viewer-player"
+          />
+        </template>
       </transition>
     </div>
     <oc-spinner
@@ -96,11 +107,11 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['activeFiles']),
-    ...mapGetters(['getToken']),
+    ...mapGetters(['getToken', 'capabilities']),
 
     mediaFiles() {
       return this.activeFiles.filter(file => {
-        return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif)/)
+        return file.extension.toLowerCase().match(/(png|jpg|jpeg|gif|mp4|webm|ogg)/)
       })
     },
     activeMediaFile() {
@@ -148,6 +159,14 @@ export default {
       }
 
       return this.$_loader_getDavFilePath(this.activeMediaFile.path, query)
+    },
+
+    videoExtensions() {
+      return ['mp4', 'webm', 'ogg']
+    },
+
+    isUrlSigningEnabled() {
+      return this.capabilities.core && this.capabilities.core['support-url-signing']
     }
   },
 
@@ -205,8 +224,9 @@ export default {
     loadImage() {
       this.loading = true
 
-      // Don't bother loading if files i chached
-      if (this.activeMediaFileCached) {
+      // TODO: Implement caching also with signed URLs
+      // Don't bother loading if files are chached
+      if (!this.isUrlSigningEnabled && this.activeMediaFileCached) {
         setTimeout(
           () => {
             this.image = this.activeMediaFileCached
@@ -219,12 +239,19 @@ export default {
       }
 
       // Fetch image
-      this.mediaSource(this.thumbPath, 'url', this.headers)
-        .then(imageUrl => {
+      const url = this.$client.helpers._webdavUrl + this.activeMediaFile.path
+      const promise = this.isUrlSigningEnabled
+        ? this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
+        : this.mediaSource(this.thumbPath, 'url', null)
+
+      promise
+        .then(mediaUrl => {
           this.images.push({
             id: this.activeMediaFile.id,
             name: this.activeMediaFile.name,
-            url: imageUrl
+            url: mediaUrl,
+            ext: this.activeMediaFile.extension,
+            isVideo: this.videoExtensions.includes(this.activeMediaFile.extension)
           })
           this.image = this.activeMediaFileCached
           this.loading = false
@@ -233,6 +260,7 @@ export default {
         .catch(e => {
           this.loading = false
           this.failed = true
+          console.error(e)
         })
     },
 
@@ -283,3 +311,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.media-viewer-player {
+  width: 100%;
+  max-width: 90vw;
+  height: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+}
+</style>
