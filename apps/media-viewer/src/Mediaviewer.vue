@@ -18,7 +18,7 @@
           </video>
           <img
             v-else
-            key="media-image"
+            :key="`media-image-${medium.id}`"
             :src="medium.url"
             :alt="medium.name"
             :data-id="medium.id"
@@ -130,7 +130,7 @@ export default {
 
       return {
         enter: `uk-animation-slide-${direction[0]}-small`,
-        leave: `uk-animation-slide-${direction[1]}-medium uk-animation-reverse`
+        leave: `uk-animation-slide-${direction[1]}-small uk-animation-reverse`
       }
     },
     thumbDimensions() {
