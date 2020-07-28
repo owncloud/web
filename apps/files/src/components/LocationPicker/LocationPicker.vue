@@ -10,11 +10,11 @@
         <translate>Cancel</translate>
       </oc-button>
       <span v-if="!canConfirm" :uk-tooltip="sameLocationToolTip">
-        <oc-button disabled id="location-picker-btn-confirm">
+        <oc-button id="location-picker-btn-confirm" disabled>
           <span v-text="confirmBtnText" />
         </oc-button>
       </span>
-      <span v-else >
+      <span v-else>
         <oc-button
           id="location-picker-btn-confirm"
           variation="primary"
@@ -109,7 +109,7 @@
 
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
-import { basename, join } from 'path'
+import { basename, extname, join } from 'path'
 import { cloneStateObject } from '../../helpers/store'
 import MixinsGeneral from '../../mixins'
 import MixinsFilesListIndicators from '../../mixins/filesListIndicators'
@@ -119,8 +119,6 @@ import FileItem from '../FileItem.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 import NoContentMessage from '../NoContentMessage.vue'
 import CopySidebarMainContent from './CopySidebarMainContent.vue'
-import pathUtil from 'path'
-
 
 export default {
   name: 'LocationPicker',
@@ -224,7 +222,9 @@ export default {
       if (!this.currentFolder) {
         return false
       }
-      if (this.currentFolder.path === '/' + this.originalLocation) {
+      const originalLocation =
+        this.originalLocation[0] === '/' ? this.originalLocation : '/' + this.originalLocation
+      if (this.currentAction === 'move' && this.currentFolder.path === originalLocation) {
         return false
       }
       return this.currentFolder && this.currentFolder.canCreate()
@@ -354,23 +354,23 @@ export default {
       // Execute move or copy
       for (const resource of this.resources) {
         let target = this.target || '/'
-        const resourceName = basename(resource)
-        const exists = this.activeFiles.some(item => {
-          return basename(item.name) === resourceName
-        })
-
-        if (exists) {
-          const message = this.$gettext('Resource with name %{name} already exists')
-
-          errors.push({
-            resource: resourceName,
-            message: this.$gettextInterpolate(message, { name: resourceName }, true)
-          })
-
-          continue
-        }
+        let resourceName = basename(resource)
 
         if (this.currentAction === 'move') {
+          const exists = this.activeFiles.some(item => {
+            return basename(item.name) === resourceName
+          })
+
+          if (exists) {
+            const message = this.$gettext('Resource with name %{name} already exists')
+
+            errors.push({
+              resource: resourceName,
+              message: this.$gettextInterpolate(message, { name: resourceName }, true)
+            })
+
+            continue
+          }
           promise = this.isPublicPage
             ? this.$client.publicFiles.move(
                 resource,
@@ -379,6 +379,23 @@ export default {
               )
             : this.$client.files.move(resource, (target += '/' + resourceName))
         } else if (this.currentAction === 'copy') {
+          const exists = this.activeFiles.some(item => {
+            return basename(item.name) === resourceName
+          })
+
+          if (exists) {
+            const ext = extname(resourceName)
+            const base = basename(resourceName, ext)
+            for (let i = 1; ; i++) {
+              resourceName = base + ` (${i})` + ext
+              const exists = this.activeFiles.some(item => {
+                return basename(item.name) === resourceName
+              })
+              if (!exists) {
+                break
+              }
+            }
+          }
           promise = this.isPublicPage
             ? this.$client.publicFiles.copy(
                 resource,
