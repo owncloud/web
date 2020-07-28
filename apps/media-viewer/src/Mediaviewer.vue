@@ -9,7 +9,7 @@
         <template v-show="!loading && activeMediaFileCached">
           <video
             v-if="medium.isVideo"
-            key="media-video"
+            :key="`media-video-${medium.id}`"
             class="uk-box-shadow-medium media-viewer-player"
             controls
             preload
