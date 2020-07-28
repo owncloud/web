@@ -53,6 +53,7 @@ Details
    We've added a capability to the media viewer extension to play videos.
 
    https://github.com/owncloud/phoenix/pull/3803
+   https://github.com/owncloud/phoenix/pull/3833
 
 Changelog for ownCloud Phoenix [0.13.0] (2020-07-17)
 =======================================
