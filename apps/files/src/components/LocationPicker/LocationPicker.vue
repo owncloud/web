@@ -9,20 +9,15 @@
       <oc-button @click.native="leaveLocationPicker(originalLocation)">
         <translate>Cancel</translate>
       </oc-button>
-      <span v-if="!canConfirm" :uk-tooltip="sameLocationToolTip">
-        <oc-button id="location-picker-btn-confirm" disabled>
-          <span v-text="confirmBtnText" />
-        </oc-button>
-      </span>
-      <span v-else>
-        <oc-button
-          id="location-picker-btn-confirm"
-          variation="primary"
-          @click.native="confirmAction"
-        >
-          <span v-text="confirmBtnText" />
-        </oc-button>
-      </span>
+      <oc-button
+        id="location-picker-btn-confirm"
+        variation="primary"
+        :uk-tooltip="sameLocationToolTip"
+        :disabled="!canConfirm"
+        @click.native="confirmAction"
+      >
+        <span v-text="confirmBtnText" />
+      </oc-button>
     </div>
     <file-list
       id="location-picker-files-list"
