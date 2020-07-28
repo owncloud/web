@@ -32,7 +32,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     mediaImage: {
-      selector: '//div/img[@alt="%s"]',
+      selector: '//div[contains(@class,"uk-position-bottom-center")]/div[contains(text(),"%s")]',
       locateStrategy: 'xpath'
     }
   }
