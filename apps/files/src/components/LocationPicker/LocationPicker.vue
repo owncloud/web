@@ -9,14 +9,20 @@
       <oc-button @click.native="leaveLocationPicker(originalLocation)">
         <translate>Cancel</translate>
       </oc-button>
-      <oc-button
-        id="location-picker-btn-confirm"
-        variation="primary"
-        :disabled="!canConfirm"
-        @click.native="confirmAction"
-      >
-        <span v-text="confirmBtnText" />
-      </oc-button>
+      <span v-if="!canConfirm" :uk-tooltip="sameLocationToolTip">
+        <oc-button disabled id="location-picker-btn-confirm">
+          <span v-text="confirmBtnText" />
+        </oc-button>
+      </span>
+      <span v-else >
+        <oc-button
+          id="location-picker-btn-confirm"
+          variation="primary"
+          @click.native="confirmAction"
+        >
+          <span v-text="confirmBtnText" />
+        </oc-button>
+      </span>
     </div>
     <file-list
       id="location-picker-files-list"
@@ -113,6 +119,8 @@ import FileItem from '../FileItem.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 import NoContentMessage from '../NoContentMessage.vue'
 import CopySidebarMainContent from './CopySidebarMainContent.vue'
+import pathUtil from 'path'
+
 
 export default {
   name: 'LocationPicker',
@@ -213,6 +221,12 @@ export default {
     },
 
     canConfirm() {
+      if (!this.currentFolder) {
+        return false
+      }
+      if (this.currentFolder.path === '/' + this.originalLocation) {
+        return false
+      }
       return this.currentFolder && this.currentFolder.canCreate()
     },
 
@@ -245,6 +259,17 @@ export default {
       }
 
       return this.$gettext('Confirm')
+    },
+
+    sameLocationToolTip() {
+      if (!this.canConfirm) {
+        if (this.currentAction === 'move') {
+          return this.$gettext('You cannot move into the original location.')
+        } else if (this.currentAction === 'copy') {
+          return this.$gettext('You cannot copy into the original location.')
+        }
+      }
+      return null
     }
   },
 
