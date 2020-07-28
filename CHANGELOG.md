@@ -11,6 +11,7 @@ Summary
 * Change - Provide option for hiding the search bar: [#116](https://github.com/owncloud/product/issues/116)
 * Change - Use pre-signed URLs in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
 * Change - Get rid of static "Shared with:" label: [#123](https://github.com/owncloud/product/issues/123)
+* Change - Large file downloads support with URL signing: [#3797](https://github.com/owncloud/phoenix/pull/3797)
 * Enhancement - Enable playing videos in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
 
 Details
@@ -39,6 +40,13 @@ Details
 
    https://github.com/owncloud/product/issues/123
    https://github.com/owncloud/phoenix/pull/3808
+
+* Change - Large file downloads support with URL signing: [#3797](https://github.com/owncloud/phoenix/pull/3797)
+
+   When the backend supports URL signing we now download with a signed url instead of downloading
+   as BLOB.
+
+   https://github.com/owncloud/phoenix/pull/3797
 
 * Enhancement - Enable playing videos in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
 
