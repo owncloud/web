@@ -1,0 +1,7 @@
+Change: Move quota indication to the left sidebar
+
+We've moved the quota indication from the bottom of the files list to the footer of the left sidebar.
+We've added a warning variation to the quota indication in case the used space is >= 80%.
+
+https://github.com/owncloud/product/issues/121
+https://github.com/owncloud/phoenix/pull/3849

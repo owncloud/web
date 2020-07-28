@@ -113,7 +113,7 @@
     <template #footer>
       <div
         v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
-        class="uk-text-nowrap uk-text-meta"
+        class="uk-text-nowrap uk-text-meta uk-text-center uk-width-1-1"
       >
         <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
         <translate :translate-n="activeFilesCount.folders" translate-plural="folders"

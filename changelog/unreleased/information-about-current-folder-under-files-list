@@ -1,0 +1,7 @@
+Change: Move information about current folder below the files list
+
+We've moved the information about current folder directly below the files list.
+Previously this information was always displayed on the bottom of the screen.
+
+https://github.com/owncloud/product/issues/120
+https://github.com/owncloud/phoenix/pull/3849

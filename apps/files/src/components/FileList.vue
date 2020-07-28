@@ -10,7 +10,7 @@
         key="files-list-results-existence"
         gutter="small"
         flex
-        class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-margin-xsmall-bottom"
+        class="uk-padding-small uk-padding-remove-top oc-padding-xsmall-bottom oc-border-bottom"
       >
         <div v-if="checkboxEnabled">
           <oc-checkbox
@@ -33,7 +33,7 @@
           >
         </div>
       </oc-grid>
-      <div v-if="!loading" id="files-list-container" class="uk-flex-1 uk-overflow-auto">
+      <div v-if="!loading" id="files-list-container" class="uk-overflow-auto">
         <RecycleScroller
           v-if="fileData.length"
           v-slot="{ item: rowItem, index, active }"
@@ -55,7 +55,7 @@
               :ref="index === 0 ? 'firstRow' : null"
               gutter="small"
               flex
-              class="uk-padding-small oc-border-top"
+              class="uk-padding-small oc-border-bottom"
               :class="_rowClasses(rowItem)"
             >
               <div v-if="checkboxEnabled">
@@ -97,7 +97,7 @@
           <slot name="noContentMessage" />
         </div>
       </div>
-      <oc-grid v-if="!loading" gutter="large" class="uk-width-1-1 uk-padding-small">
+      <oc-grid v-if="!loading" gutter="large" class="uk-width-1-1 uk-padding-small uk-flex-1">
         <slot name="footer" />
       </oc-grid>
     </div>
@@ -339,5 +339,11 @@ export default {
 .files-list-row-disabled {
   opacity: 0.3;
   pointer-events: none;
+}
+
+/* TODO: Create as utility classes in ODS */
+/* Issue: https://github.com/owncloud/owncloud-design-system/issues/821 */
+.oc-padding-xsmall-bottom {
+  padding-bottom: 5px !important;
 }
 </style>

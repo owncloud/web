@@ -27,7 +27,6 @@
                   :value="parseInt(quota.relative)"
                   :max="100"
                   size="small"
-                  :variation="quotaProgressBarVariation"
                   class="uk-margin-xsmall-bottom"
                 />
                 <translate
@@ -35,7 +34,7 @@
                   :translate-params="{ used: usedQuota, total: quota.definition }"
                   translate-comment="Information about how much space has been used from users quota"
                 >
-                  %{used} of %{total} occupied
+                  %{used} of %{total}
                 </translate>
               </div>
             </template>
@@ -221,6 +220,7 @@ export default {
           !this.publicPage() &&
           state.currentFolder &&
           !state.currentFolder.isMounted() &&
+          this.quota &&
           this.quota.definition !== 'default' &&
           this.quota.definition !== 'none'
         )
@@ -235,10 +235,6 @@ export default {
 
     usedQuota() {
       return this.getResourceSize(this.quota.used)
-    },
-
-    quotaProgressBarVariation() {
-      return this.quota.relative >= 80 ? 'warning' : 'primary'
     }
   },
   watch: {
