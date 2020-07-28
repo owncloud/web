@@ -457,7 +457,7 @@ module.exports = {
       await this.initAjaxCounters()
       await this.waitForElementVisible('@virtualScrollWrapper')
       await this.api.executeAsync(
-        function({ itemName, scrollWrapperSelector, listHeaderSelector }, done) {
+        function({ itemName, scrollWrapperSelector, listHeaderSelector, listItemSelector }, done) {
           const virtualScrollWrapper = document.querySelector(scrollWrapperSelector)
           const tableHeaderPosition = document
             .querySelector(listHeaderSelector)
@@ -484,7 +484,9 @@ module.exports = {
               return
             }
 
-            scrollDistance += virtualScrollWrapper.clientHeight
+            const listItemHeight = document.querySelector(listItemSelector).clientHeight
+
+            scrollDistance += listItemHeight * 5
             virtualScrollWrapper.scrollTop = scrollDistance
             setTimeout(function() {
               scrollUntilElementVisible()
@@ -497,7 +499,8 @@ module.exports = {
           {
             itemName: itemName,
             scrollWrapperSelector: this.elements.virtualScrollWrapper.selector,
-            listHeaderSelector: this.elements.filesTableHeader.selector
+            listHeaderSelector: this.elements.filesTableHeader.selector,
+            listItemSelector: this.elements.filesListItem.selector
           }
         ]
       )
@@ -797,7 +800,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     restoreSelectedButton: {
-      selector: '//span[contains(text(),"Restore selected")]',
+      selector: '//span[contains(text(),"Restore")]',
       locateStrategy: 'xpath'
     },
     linkToPublicLinksTag: {
@@ -834,6 +837,9 @@ module.exports = {
       selector:
         '//span[contains(@class, "oc-file-name") and text()="%s" and not(../span[contains(@class, "oc-file-extension")])]/ancestor::div[@class="files-list-row-disabled" and @data-is-visible="true"]',
       locateStrategy: 'xpath'
+    },
+    filesListItem: {
+      selector: '.vue-recycle-scroller__item-view'
     }
   }
 }

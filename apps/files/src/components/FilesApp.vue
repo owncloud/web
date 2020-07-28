@@ -101,6 +101,7 @@ export default {
   watch: {
     $route() {
       this.setHighlightedFile(null)
+      this.resetFileSelection()
     }
   },
   created() {
@@ -114,7 +115,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['dragOver', 'setHighlightedFile']),
+    ...mapActions('Files', ['dragOver', 'setHighlightedFile', 'resetFileSelection']),
     ...mapActions(['openFile', 'showMessage']),
     ...mapMutations('Files', ['SET_CURRENT_SIDEBAR_TAB']),
     ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
