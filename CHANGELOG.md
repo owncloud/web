@@ -56,6 +56,7 @@ Details
    https://github.com/owncloud/phoenix/pull/3803
    https://github.com/owncloud/phoenix/pull/3833
    https://github.com/owncloud/phoenix/pull/3844
+   https://github.com/owncloud/phoenix/pull/3848
 
 Changelog for ownCloud Phoenix [0.13.0] (2020-07-17)
 =======================================
