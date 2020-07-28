@@ -147,7 +147,7 @@ export default {
           return 3840
       }
     },
-    thumbPath() {
+    thumbUrl() {
       const query = {
         x: this.thumbDimensions,
         y: this.thumbDimensions,
@@ -160,9 +160,20 @@ export default {
 
       return this.$_loader_getDavFilePath(this.activeMediaFile.path, query)
     },
+    rawMediaUrl() {
+      return this.$_loader_getDavFilePath(this.activeMediaFile.path)
+    },
 
     videoExtensions() {
       return ['mp4', 'webm', 'ogg']
+    },
+
+    isActiveMediaFileTypeVideo() {
+      return this.videoExtensions.includes(this.activeMediaFile.extension)
+    },
+
+    isActiveMediaFileTypeImage() {
+      return !this.isActiveMediaFileTypeVideo
     },
 
     isUrlSigningEnabled() {
@@ -224,9 +235,8 @@ export default {
     loadMedium() {
       this.loading = true
 
-      // TODO: Implement caching also with signed URLs
       // Don't bother loading if files are cached
-      if (!this.isUrlSigningEnabled && this.activeMediaFileCached) {
+      if (this.activeMediaFileCached) {
         setTimeout(
           () => {
             this.medium = this.activeMediaFileCached
@@ -239,10 +249,15 @@ export default {
       }
 
       // Fetch media
-      const url = this.$client.helpers._webdavUrl + this.activeMediaFile.path
-      const promise = this.isUrlSigningEnabled
-        ? this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
-        : this.mediaSource(this.thumbPath, 'url', null)
+      const url = this.isActiveMediaFileTypeImage ? this.thumbUrl : this.rawMediaUrl
+      // FIXME: at the moment the signing key is not cached, thus it will be loaded again on each request.
+      // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
+      let promise
+      if (this.isActiveMediaFileTypeImage || !this.isUrlSigningEnabled) {
+        promise = this.mediaSource(url, 'url', null)
+      } else {
+        promise = this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
+      }
 
       promise
         .then(mediaUrl => {
@@ -251,7 +266,8 @@ export default {
             name: this.activeMediaFile.name,
             url: mediaUrl,
             ext: this.activeMediaFile.extension,
-            isVideo: this.videoExtensions.includes(this.activeMediaFile.extension)
+            isVideo: this.isActiveMediaFileTypeVideo,
+            isImage: this.isActiveMediaFileTypeImage
           })
           this.medium = this.activeMediaFileCached
           this.loading = false
