@@ -27,6 +27,7 @@
                   :value="parseInt(quota.relative)"
                   :max="100"
                   size="small"
+                  :variation="quotaProgressBarVariation"
                   class="uk-margin-xsmall-bottom"
                 />
                 <translate
@@ -234,6 +235,10 @@ export default {
 
     usedQuota() {
       return this.getResourceSize(this.quota.used)
+    },
+
+    quotaProgressBarVariation() {
+      return this.quota.relative >= 80 ? 'warning' : 'primary'
     }
   },
   watch: {
