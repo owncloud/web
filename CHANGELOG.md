@@ -31,6 +31,7 @@ Details
    fetching them.
 
    https://github.com/owncloud/phoenix/pull/3803
+   https://github.com/owncloud/phoenix/pull/3844
 
 * Change - Get rid of static "Shared with:" label: [#123](https://github.com/owncloud/product/issues/123)
 
@@ -54,6 +55,7 @@ Details
 
    https://github.com/owncloud/phoenix/pull/3803
    https://github.com/owncloud/phoenix/pull/3833
+   https://github.com/owncloud/phoenix/pull/3844
 
 Changelog for ownCloud Phoenix [0.13.0] (2020-07-17)
 =======================================
