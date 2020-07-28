@@ -43,8 +43,8 @@
     <div v-else>
       <span v-translate>No Versions available for this file</span>
     </div>
-  </div></template
->
+  </div>
+</template>
 <script>
 import Mixins from '../mixins.js'
 import { mapGetters } from 'vuex'
@@ -101,13 +101,7 @@ export default {
     },
     downloadVersion(file) {
       const version = this.currentVersionId(file)
-      const url = this.$client.fileVersions.getFileVersionUrl(this.currentFile.id, version)
-
-      const headers = new Headers()
-      headers.append('Authorization', 'Bearer ' + this.getToken)
-      headers.append('X-Requested-With', 'XMLHttpRequest')
-
-      return this.downloadFileFromUrl(url, headers, file.name)
+      return this.downloadFile(this.currentFile, null, version)
     }
   }
 }

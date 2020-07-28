@@ -6897,10 +6897,10 @@ owncloud-design-system@^1.8.0:
     webfontloader "^1.6.28"
     weekstart "^1.0.0"
 
-owncloud-sdk@^1.0.0-717:
-  version "1.0.0-717"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-717.tgz#e709d4a976ea6a07fe2db1257c5742260fedb7bc"
-  integrity sha512-LRI3ue2076tFX5r/TEGd/xKFoxTdSPQ1E+sZn0bibvqt8S5ULUlABbOoPijVhE2NXfxIHfLpjxamYIhBUR+2BQ==
+owncloud-sdk@^1.0.0-728:
+  version "1.0.0-728"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-728.tgz#69f35830625e6a213e6e49a5eae5a925a688d4f0"
+  integrity sha512-XQQIlV15mCUd2k4d0/+QSS0PCHYtGLkvUA/BzO4P7TPhVh/RmnLLxTgL4XSPM2MTQCk0C0geXK3C6bqhdm5QWQ==
   dependencies:
     axios "^0.19.2"
     browser-request "^0.3.3"

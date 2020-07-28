@@ -4,11 +4,15 @@ export default {
   install(Vue) {
     Vue.mixin({
       computed: {
-        ...mapGetters(['getToken', 'isAuthenticated']),
+        ...mapGetters(['getToken', 'isAuthenticated', 'capabilities']),
         ...mapGetters('Files', ['publicLinkPassword']),
 
         currentExtension() {
           return this.$route.path.split('/')[1]
+        },
+
+        isUrlSigningEnabled() {
+          return this.capabilities.core && this.capabilities.core['support-url-signing']
         }
       },
       methods: {
@@ -21,27 +25,67 @@ export default {
           return !this.isAuthenticated || this.$route.meta.auth === false
         },
         // FIXME: optional publicContext parameter is a mess
-        downloadFile(file, publicContext = null) {
-          this.addActionToProgress(file)
+        async downloadFile(file, publicContext = null, version = null) {
           const publicPage = publicContext !== null ? publicContext : this.publicPage()
+
+          // construct the url and headers
+          let url = null
           let headers = {}
           if (publicPage) {
-            const url = this.$client.publicFiles.getFileUrl(file.path)
+            url = this.$client.publicFiles.getFileUrl(file.path)
             const password = this.publicLinkPassword
             if (password) {
               headers = {
                 Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64')
               }
             }
-
-            return this.downloadFileFromUrl(url, headers, file)
+          } else {
+            if (version === null) {
+              url = this.$client.helpers._webdavUrl + file.path
+            } else {
+              url = this.$client.fileVersions.getFileVersionUrl(file.id, version)
+            }
+            headers = { Authorization: 'Bearer ' + this.getToken }
           }
-          const url = this.$client.files.getFileUrl(file.path)
-          headers = { Authorization: 'Bearer ' + this.getToken }
 
-          return this.downloadFileFromUrl(url, headers, file)
+          // download with signing enabled
+          if (this.isUrlSigningEnabled) {
+            try {
+              const response = await fetch(url, {
+                method: 'HEAD',
+                headers
+              })
+              if (response.status === 200) {
+                const signedUrl = await this.$client.signUrl(url)
+                // create anchor dom element
+                const a = document.createElement('a')
+                a.style.display = 'none'
+                document.body.appendChild(a)
+                a.href = signedUrl
+                // use download attribute to set desired file name
+                a.setAttribute('download', file.name)
+                // trigger the download by simulating click
+                a.click()
+                // cleanup
+                document.body.removeChild(a)
+                return
+              }
+            } catch (e) {
+              console.log(e)
+            }
+            this.showMessage({
+              title: this.$gettext('Download failed'),
+              desc: this.$gettext('File could not be located'),
+              status: 'danger'
+            })
+            return
+          }
+
+          // download without url signing enabled
+          this.addActionToProgress(file)
+          return this.$_downloadFileAsBlob(url, headers, file)
         },
-        downloadFileFromUrl(url, headers, file) {
+        $_downloadFileAsBlob(url, headers, file) {
           const request = new XMLHttpRequest()
           request.open('GET', url)
           request.responseType = 'blob'

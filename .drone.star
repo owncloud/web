@@ -1010,10 +1010,10 @@ def setupGraphapiOIdC():
 			'php occ config:system:set openid-connect provider-url --value="https://konnectd:9130"',
 			'php occ config:system:set openid-connect loginButtonName --value=OpenId-Connect',
 			'php occ config:system:set openid-connect client-id --value=phoenix',
+			'php occ config:system:set openid-connect insecure --value=true --type=bool',
 			'php occ config:system:set cors.allowed-domains 0 --value="http://phoenix:9100"',
 			'php occ config:system:set memcache.local --value="\\\\OC\\\\Memcache\\\\APCu"',
 			'php occ config:system:set phoenix.baseUrl --value="http://phoenix:9100"',
-			'php occ config:system:set openid-connect insecure --value=true --type=bool',
 			'php occ config:list'
 		]
 	}]
