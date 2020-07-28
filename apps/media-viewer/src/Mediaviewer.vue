@@ -6,7 +6,7 @@
         :enter-active-class="activeClass.enter"
         :leave-active-class="activeClass.leave"
       >
-        <template v-show="!loading && activeMediaFileCached">
+        <div v-show="!loading && activeMediaFileCached">
           <video
             v-if="medium.isVideo"
             :key="`media-video-${medium.id}`"
@@ -24,7 +24,7 @@
             :data-id="medium.id"
             class="uk-box-shadow-medium media-viewer-player"
           />
-        </template>
+        </div>
       </transition>
     </div>
     <oc-spinner
@@ -130,7 +130,7 @@ export default {
 
       return {
         enter: `uk-animation-slide-${direction[0]}-small`,
-        leave: `uk-animation-slide-${direction[1]}-small uk-animation-reverse`
+        leave: `uk-animation-slide-${direction[1]} uk-animation-reverse`
       }
     },
     thumbDimensions() {
