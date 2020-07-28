@@ -86,14 +86,15 @@ export default {
       this.$data.$_internal_loader_folderLoading = false
     },
 
-    $_loader_getDavFilePath(filePath, query) {
+    $_loader_getDavFilePath(filePath, query = null) {
       let path = ['..', 'dav', 'public-files', filePath].join('/')
 
       if (!this.$_loader_publicContext) {
         path = ['..', 'dav', 'files', this.$store.getters.user.id, filePath].join('/')
       }
 
-      return this.$client.files.getFileUrl(path) + '?' + queryString.stringify(query)
+      const queryStr = !query ? '' : '?' + queryString.stringify(query)
+      return this.$client.files.getFileUrl(path) + queryStr
     },
 
     $_loader_headers() {
