@@ -118,7 +118,7 @@ config = {
 	'defaults': {
 		'acceptance': {
 			'ocisBranch': 'master',
-			'ocisCommit': '284a9996dffa912cc1382e259b748c56ddc4aa0f',
+			'ocisCommit': 'cef578008a6e04902325c7aef619dc816ff6b82b',
 		}
 	},
 
@@ -1174,6 +1174,8 @@ def ocisService():
 			'REVA_STORAGE_OWNCLOUD_REDIS_ADDR': 'redis:6379',
 			'REVA_OIDC_ISSUER': 'https://ocis:9200',
 			'REVA_STORAGE_OC_DATA_SERVER_URL': 'http://ocis:9164/data',
+			'REVA_STORAGE_HOME_EXPOSE_DATA_SERVER': 1,
+			'REVA_STORAGE_OC_EXPOSE_DATA_SERVER': 1,
 			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
 			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
