@@ -13,6 +13,7 @@ const _ = require('lodash')
 const path = require('../helpers/path')
 const util = require('util')
 const { COLLABORATOR_PERMISSION_ARRAY, calculateDate } = require('../helpers/sharingHelper')
+let timeOfLastShareOperation = Date.now()
 
 /**
  *
@@ -108,6 +109,23 @@ Given(
 )
 
 /**
+ * makes sure share operations are carried out maximum once a second to avoid same stime
+ */
+const waitBetweenShareOperations = async function() {
+  const timeSinceLastShare = Date.now() - timeOfLastShareOperation
+  if (timeSinceLastShare <= 1001) {
+    await client.pause(1001 - timeSinceLastShare)
+  }
+}
+
+/**
+ * update time in which the last share operation was carried out
+ */
+const updateTimeOfLastShareOperation = function() {
+  timeOfLastShareOperation = Date.now()
+}
+
+/**
  * creates a new share
  *
  * @param {string} elementToShare  path of file/folder being shared
@@ -120,7 +138,7 @@ Given(
  * @param {string} extraParams.password Password of the share (public links)
  * @param {string} extraParams.expireDate Expiry date of the share
  */
-const shareFileFolder = function(
+const shareFileFolder = async function(
   elementToShare,
   sharer,
   receiver = null,
@@ -129,6 +147,7 @@ const shareFileFolder = function(
   name = null,
   extraParams = {}
 ) {
+  await waitBetweenShareOperations()
   const params = new URLSearchParams()
   elementToShare = path.resolve(elementToShare)
   const permissions = sharingHelper.humanReadablePermissionsToBitmask(permissionString)
@@ -147,12 +166,13 @@ const shareFileFolder = function(
     }
   }
   const url = 'apps/files_sharing/api/v1/shares'
-  return httpHelper
+  await httpHelper
     .postOCS(url, sharer, params)
     .then(res => res.json())
     .then(function(json) {
       httpHelper.checkOCSStatus(json, 'Could not create share. Message: ' + json.ocs.meta.message)
     })
+  await updateTimeOfLastShareOperation()
 }
 /**
  * create any share using dataTable
