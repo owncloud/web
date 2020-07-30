@@ -4,7 +4,7 @@ import { rollbackConfigs, setConfigs, cacheConfigs } from './helpers/config'
 import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
 const codify = require('./helpers/codify')
 
-const ldap = require('./helpers/ldapHelper')
+// const ldap = require('./helpers/ldapHelper')
 
 const RUNNING_ON_CI = !!process.env.CI
 const RUNNING_ON_SAUCELABS = !!process.env.SAUCE_USERNAME
@@ -43,19 +43,19 @@ Before(function logSessionInfoOnSauceLabs() {
   }
 })
 
-Before(function createLdapClient() {
-  if (client.globals.ocis) {
-    return ldap.createClient().then(ldapClient => {
-      client.globals.ldapClient = ldapClient
-    })
-  }
-})
-
-After(function deleteLdapClient() {
-  if (client.globals.ocis && client.globals.ldapClient) {
-    return ldap.terminate(client.globals.ldapClient)
-  }
-})
+// Before(function createLdapClient() {
+//   if (client.globals.ocis) {
+//     return ldap.createClient().then(ldapClient => {
+//       client.globals.ldapClient = ldapClient
+//     })
+//   }
+// })
+//
+// After(function deleteLdapClient() {
+//   if (client.globals.ocis && client.globals.ldapClient) {
+//     return ldap.terminate(client.globals.ldapClient)
+//   }
+// })
 
 async function cacheAndSetConfigs(server) {
   if (client.globals.ocis) {

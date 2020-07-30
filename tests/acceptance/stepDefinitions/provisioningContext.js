@@ -1,12 +1,12 @@
 const { client } = require('nightwatch-api')
 const { Given, After } = require('cucumber')
-const fs = require('fs-extra')
+// const fs = require('fs-extra')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
 const userSettings = require('../helpers/userSettings')
 const codify = require('../helpers/codify')
-const { join } = require('../helpers/path')
+// const { join } = require('../helpers/path')
 
 const ldap = require('../helpers/ldapHelper')
 
@@ -14,14 +14,19 @@ function createDefaultUser(userId) {
   const password = userSettings.getPasswordForUser(userId)
   const displayname = userSettings.getDisplayNameOfDefaultUser(userId)
   const email = userSettings.getEmailAddressOfDefaultUser(userId)
-  if (client.globals.ocis) {
-    return ldap.createUser(client.globals.ldapClient, userId)
-  }
+  // if (client.globals.ocis) {
+  //   return ldap.createUser(client.globals.ldapClient, userId)
+  // }
   return createUser(userId, password, displayname, email)
 }
 
 function createUser(userId, password, displayName = false, email = false) {
   const body = new URLSearchParams()
+  if (client.globals.ocis) {
+    email = userId + '@example.com'
+    body.append('username', userId)
+    body.append('email', email)
+  }
   body.append('userid', userId)
   body.append('password', password)
   const promiseList = []
@@ -31,6 +36,9 @@ function createUser(userId, password, displayName = false, email = false) {
   return httpHelper
     .postOCS(url, 'admin', body)
     .then(() => {
+      if (client.globals.ocis) {
+        return
+      }
       if (displayName !== false) {
         promiseList.push(
           new Promise((resolve, reject) => {
@@ -49,10 +57,14 @@ function createUser(userId, password, displayName = false, email = false) {
       }
     })
     .then(() => {
+      if (client.globals.ocis) {
+        return
+      }
       if (email !== false) {
         promiseList.push(
           new Promise((resolve, reject) => {
             const body = new URLSearchParams()
+            console.log(body)
             body.append('key', 'email')
             body.append('value', email)
             const url = `cloud/users/${encodeURIComponent(userId)}`
@@ -202,30 +214,30 @@ After(async function() {
   const createdRemoteUsers = Object.keys(userSettings.getCreatedUsers('REMOTE'))
   const createdGroups = userSettings.getCreatedGroups()
 
-  if (client.globals.ocis) {
-    const dataDir = user => join(client.globals.ocis_data_dir, 'data', user)
-    const deleteUserPromises = createdUsers.map(user =>
-      ldap.deleteUser(client.globals.ldapClient, user).then(() => {
-        console.log('Deleted LDAP User: ', user)
-      })
-    )
-    const deleteUserDirectories = createdUsers.map(user => fs.remove(dataDir(user)))
-    const deleteGroupPromises = createdGroups.map(group =>
-      ldap.deleteGroup(client.globals.ldapClient, group).then(() => {
-        console.log('Deleted LDAP Group: ', group)
-      })
-    )
-    await Promise.all([
-      ...deleteUserPromises,
-      ...deleteGroupPromises,
-      ...deleteUserDirectories
-    ]).then(() => {
-      userSettings.resetCreatedUsers()
-      userSettings.resetCreatedGroups()
-    })
-  } else {
-    await Promise.all([...createdUsers.map(deleteUser), ...createdGroups.map(deleteGroup)])
-  }
+  // if (client.globals.ocis) {
+  //   const dataDir = user => join(client.globals.ocis_data_dir, 'data', user)
+  //   const deleteUserPromises = createdUsers.map(user =>
+  //     ldap.deleteUser(client.globals.ldapClient, user).then(() => {
+  //       console.log('Deleted LDAP User: ', user)
+  //     })
+  //   )
+  //   const deleteUserDirectories = createdUsers.map(user => fs.remove(dataDir(user)))
+  //   const deleteGroupPromises = createdGroups.map(group =>
+  //     ldap.deleteGroup(client.globals.ldapClient, group).then(() => {
+  //       console.log('Deleted LDAP Group: ', group)
+  //     })
+  //   )
+  //   await Promise.all([
+  //     ...deleteUserPromises,
+  //     ...deleteGroupPromises,
+  //     ...deleteUserDirectories
+  //   ]).then(() => {
+  //     userSettings.resetCreatedUsers()
+  //     userSettings.resetCreatedGroups()
+  //   })
+  // } else {
+  await Promise.all([...createdUsers.map(deleteUser), ...createdGroups.map(deleteGroup)])
+  // }
 
   if (client.globals.remote_backend_url) {
     return backendHelper.runOnRemoteBackend(() => Promise.all(createdRemoteUsers.map(deleteUser)))
