@@ -64,7 +64,6 @@ function createUser(userId, password, displayName = false, email = false) {
         promiseList.push(
           new Promise((resolve, reject) => {
             const body = new URLSearchParams()
-            console.log(body)
             body.append('key', 'email')
             body.append('value', email)
             const url = `cloud/users/${encodeURIComponent(userId)}`
