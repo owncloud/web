@@ -4,7 +4,7 @@ import { rollbackConfigs, setConfigs, cacheConfigs } from './helpers/config'
 import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
 const codify = require('./helpers/codify')
 
-// const ldap = require('./helpers/ldapHelper')
+const ldap = require('./helpers/ldapHelper')
 
 const RUNNING_ON_CI = !!process.env.CI
 const RUNNING_ON_SAUCELABS = !!process.env.SAUCE_USERNAME
@@ -43,22 +43,22 @@ Before(function logSessionInfoOnSauceLabs() {
   }
 })
 
-// Before(function createLdapClient() {
-//   if (client.globals.ocis) {
-//     return ldap.createClient().then(ldapClient => {
-//       client.globals.ldapClient = ldapClient
-//     })
-//   }
-// })
-//
-// After(function deleteLdapClient() {
-//   if (client.globals.ocis && client.globals.ldapClient) {
-//     return ldap.terminate(client.globals.ldapClient)
-//   }
-// })
+Before(function createLdapClient() {
+  if (client.globals.ldap) {
+    return ldap.createClient().then(ldapClient => {
+      client.globals.ldapClient = ldapClient
+    })
+  }
+})
+
+After(function deleteLdapClient() {
+  if (client.globals.ldap && client.globals.ldapClient) {
+    return ldap.terminate(client.globals.ldapClient)
+  }
+})
 
 async function cacheAndSetConfigs(server) {
-  if (client.globals.ocis) {
+  if (client.globals.ocis || client.globals.ldap) {
     return
   }
   await cacheConfigs(server)
@@ -66,14 +66,14 @@ async function cacheAndSetConfigs(server) {
 }
 
 Before(function cacheAndSetConfigsOnLocal() {
-  if (client.globals.ocis) {
+  if (client.globals.ocis || client.globals.ldap) {
     return
   }
   return cacheAndSetConfigs(client.globals.backend_url)
 })
 
 Before(function cacheAndSetConfigsOnRemoteIfExists() {
-  if (client.globals.ocis) {
+  if (client.globals.ocis || client.globals.ldap) {
     return
   }
   if (client.globals.remote_backend_url) {
@@ -84,7 +84,7 @@ Before(function cacheAndSetConfigsOnRemoteIfExists() {
 // After hooks are run in reverse order in which they are defined
 // https://github.com/cucumber/cucumber-js/blob/master/docs/support_files/hooks.md#hooks
 After(function rollbackConfigsOnRemoteIfExists() {
-  if (client.globals.ocis) {
+  if (client.globals.ocis || client.globals.ldap) {
     return
   }
   if (client.globals.remote_backend_url) {
@@ -93,7 +93,7 @@ After(function rollbackConfigsOnRemoteIfExists() {
 })
 
 After(function rollbackConfigsOnLocal() {
-  if (client.globals.ocis) {
+  if (client.globals.ocis || client.globals.ldap) {
     return
   }
   return rollbackConfigs(client.globals.backend_url)

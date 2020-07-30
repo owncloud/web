@@ -3,6 +3,7 @@ const path = require('path')
 const withHttp = url => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 
 const RUN_ON_OCIS = !!process.env.RUN_ON_OCIS
+const RUN_WITH_LDAP = !!process.env.RUN_WITH_LDAP
 const LOCAL_LAUNCH_URL = withHttp(
   process.env.SERVER_HOST || (RUN_ON_OCIS ? 'https://localhost:9200' : 'http://localhost:8300')
 )
@@ -24,13 +25,12 @@ const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
 const BROWSER_NAME = process.env.BROWSER_NAME
 const SAUCELABS_TUNNEL_NAME = process.env.SAUCELABS_TUNNEL_NAME
 const LOCAL_UPLOAD_DIR = process.env.LOCAL_UPLOAD_DIR || '/uploads'
-
 const OCIS_REVA_DATA_ROOT = process.env.OCIS_REVA_DATA_ROOT || '/var/tmp/reva'
 const LDAP_SERVER_URL = process.env.LDAP_SERVER_URL || 'ldap://127.0.0.1'
 const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
 const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
 const OCIS_SKELETON_DIR = process.env.OCIS_SKELETON_DIR || './tests/testing-app/data/webUISkeleton/'
-const OPENID_LOGIN = RUN_ON_OCIS || !!process.env.OPENID_LOGIN
+const OPENID_LOGIN = RUN_ON_OCIS || RUN_WITH_LDAP || !!process.env.OPENID_LOGIN
 const PHOENIX_CONFIG = process.env.PHOENIX_CONFIG || path.join(__dirname, 'dist/config.json')
 const SCREENSHOTS = !!process.env.SCREENSHOTS
 
@@ -51,6 +51,7 @@ module.exports = {
         backend_admin_password: BACKEND_ADMIN_PASSWORD,
         default_backend: 'LOCAL',
         ocis: RUN_ON_OCIS,
+        ldap: RUN_WITH_LDAP,
         openid_login: OPENID_LOGIN,
         ldap_url: LDAP_SERVER_URL,
         ocis_data_dir: OCIS_REVA_DATA_ROOT,
