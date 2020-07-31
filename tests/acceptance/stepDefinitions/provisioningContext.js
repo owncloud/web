@@ -23,7 +23,9 @@ function createDefaultUser(userId) {
 function createUser(userId, password, displayName = false, email = false) {
   const body = new URLSearchParams()
   if (client.globals.ocis) {
-    email = userId + '@example.com'
+    if (email === false) {
+      email = userId + '@example.com'
+    }
     body.append('username', userId)
     body.append('email', email)
   }
@@ -37,16 +39,14 @@ function createUser(userId, password, displayName = false, email = false) {
     .postOCS(url, 'admin', body)
     .then(() => {
       if (client.globals.ocis) {
-        if (client.globals.ocis) {
-          const skelDir = client.globals.ocis_skeleton_dir
-          if (skelDir) {
-            const dataDir = join(client.globals.ocis_data_dir, 'data', userId)
-            if (!fs.existsSync(dataDir)) {
-              fs.removeSync(dataDir)
-              fs.mkdirpSync(dataDir)
-            }
-            return fs.copy(skelDir, join(dataDir, 'files'))
+        const skelDir = client.globals.ocis_skeleton_dir
+        if (skelDir) {
+          const dataDir = join(client.globals.ocis_data_dir, 'data', userId)
+          if (!fs.existsSync(dataDir)) {
+            fs.removeSync(dataDir)
+            fs.mkdirpSync(dataDir)
           }
+          return fs.copy(skelDir, join(dataDir, 'files'))
         }
       }
       if (displayName !== false) {
