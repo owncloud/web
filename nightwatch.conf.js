@@ -2,6 +2,7 @@ const chromedriver = require('chromedriver')
 const path = require('path')
 const withHttp = url => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 
+const RUN_WITH_LDAP = !!process.env.RUN_WITH_LDAP
 const RUN_ON_OCIS = !!process.env.RUN_ON_OCIS
 const LOCAL_LAUNCH_URL = withHttp(
   process.env.SERVER_HOST || (RUN_ON_OCIS ? 'https://localhost:9200' : 'http://localhost:8300')
@@ -50,6 +51,7 @@ module.exports = {
         backend_admin_password: BACKEND_ADMIN_PASSWORD,
         default_backend: 'LOCAL',
         ocis: RUN_ON_OCIS,
+        ldap: RUN_WITH_LDAP,
         openid_login: OPENID_LOGIN,
         ldap_url: LDAP_SERVER_URL,
         ocis_data_dir: OCIS_REVA_DATA_ROOT,
