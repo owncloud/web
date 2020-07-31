@@ -66,7 +66,7 @@ async function cacheAndSetConfigs(server) {
 }
 
 Before(function cacheAndSetConfigsOnLocal() {
-  if (client.globals.ocis || client.globals.ldap) {
+  if (client.globals.ocis) {
     return
   }
   return cacheAndSetConfigs(client.globals.backend_url)
@@ -93,7 +93,7 @@ After(function rollbackConfigsOnRemoteIfExists() {
 })
 
 After(function rollbackConfigsOnLocal() {
-  if (client.globals.ocis || client.globals.ldap) {
+  if (client.globals.ocis) {
     return
   }
   return rollbackConfigs(client.globals.backend_url)

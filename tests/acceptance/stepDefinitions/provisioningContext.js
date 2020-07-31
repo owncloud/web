@@ -248,6 +248,12 @@ After(async function() {
     await Promise.all([...createdUsers.map(deleteUser), ...createdGroups.map(deleteGroup)])
   }
 
+  if (client.globals.ocis) {
+    const dataDir = user => join(client.globals.ocis_data_dir, 'data', user)
+    const deleteUserDirectories = createdUsers.map(user => fs.remove(dataDir(user)))
+    await Promise.all([...deleteUserDirectories])
+  }
+
   if (client.globals.remote_backend_url) {
     return backendHelper.runOnRemoteBackend(() => Promise.all(createdRemoteUsers.map(deleteUser)))
   }
