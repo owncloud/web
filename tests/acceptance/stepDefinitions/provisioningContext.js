@@ -37,7 +37,17 @@ function createUser(userId, password, displayName = false, email = false) {
     .postOCS(url, 'admin', body)
     .then(() => {
       if (client.globals.ocis) {
-        return
+        if (client.globals.ocis) {
+          const skelDir = client.globals.ocis_skeleton_dir
+          if (skelDir) {
+            const dataDir = join(client.globals.ocis_data_dir, 'data', userId)
+            if (!fs.existsSync(dataDir)) {
+              fs.removeSync(dataDir)
+              fs.mkdirpSync(dataDir)
+            }
+            return fs.copy(skelDir, join(dataDir, 'files'))
+          }
+        }
       }
       if (displayName !== false) {
         promiseList.push(
