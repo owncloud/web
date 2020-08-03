@@ -105,6 +105,7 @@ config = {
 				'SERVER_HOST': 'http://ocis:9100',
 				'BACKEND_HOST': 'http://ocis:9140',
 				'RUN_ON_OCIS': 'true',
+				'RUN_WITH_LDAP': 'true',
 				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
 				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
 				'LDAP_SERVER_URL': 'ldap://ldap',
