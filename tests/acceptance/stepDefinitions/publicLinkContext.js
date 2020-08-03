@@ -83,6 +83,13 @@ Then('user {string} should not have any public link', async function(sharer) {
   assert.strictEqual(resp.length, 0, 'User has shares. Response: ' + resp)
 })
 
+Then('user {string} should have some public shares', async function(sharer) {
+  const publicShares = await sharingHelper.getAllPublicLinkShares(sharer)
+  if (publicShares.length === 0) {
+    assert.fail('Shares not found')
+  }
+})
+
 Then('the fields of the last public link share response of user {string} should include', function(
   linkCreator,
   dataTable

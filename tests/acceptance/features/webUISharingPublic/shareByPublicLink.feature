@@ -58,14 +58,14 @@ Feature: Share by public link
       | simple-folder       | Public                |
     But file "data.zip" should not be listed on the webUI
 
-  @issue-276 @skipOnOCIS
+  @issue-276 @skipOnOCIS @issue-ocis-reva-398
   Scenario: Thumbnails are loaded for known file types in public link file list
     Given user "user1" has shared folder "simple-folder" with link with "read,create" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     And the user uploads file "new-lorem.txt" using the webUI
     Then the file "new-lorem.txt" should have a thumbnail displayed on the webUI
 
-  @issue-276 @skipOnOCIS
+  @issue-276 @skipOnOCIS @issue-ocis-reva-398
   Scenario: Thumbnails are not loaded for known file types in public link file list
     Given user "user1" has shared folder "simple-folder" with link with "read,create" permissions
     When the public uses the webUI to access the last public link created by user "user1"
@@ -78,7 +78,7 @@ Feature: Share by public link
     When the public tries to open the public link page of the last public link created by user "user1" with password "pass123"
     Then the user should be redirected to the files-drop page
 
-  @issue-2414 @skipOnOCIS
+  @issue-2414
   Scenario: opening public-link page of the files-drop link without password set should redirect to files-drop page
     Given user "user1" has shared folder "simple-folder" with link with "create" permissions
     When the public tries to open the public link page of the last public link created by user "user1"
@@ -118,19 +118,17 @@ Feature: Share by public link
     Then file "lorem.txt" should be listed on the webUI
     And the content of "lorem.txt" on the remote server should be the same as the local "lorem.txt"
 
-  @skipOnOCIS
   Scenario: public should be able to access a public link with correct password
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
 
-  @skipOnOCIS
   Scenario: public should not be able to access a public link with wrong password
     Given user "user1" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass12"
     Then the public should not get access to the publicly shared file
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-389
   Scenario: user shares a public link with folder longer than 64 chars and shorter link name
     Given user "user1" has renamed folder "simple-folder" to "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog"
     And user "user1" has logged in using the webUI
@@ -139,7 +137,7 @@ Feature: Share by public link
     And the public uses the webUI to access the last public link created by user "user1"
     Then file "lorem.txt" should be listed on the webUI
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "user1" has created a public link with following settings
@@ -163,7 +161,7 @@ Feature: Share by public link
       | read                | Editor      | shareapi_enforce_links_password_read_write_delete |
       | read, create        | Uploader    | shareapi_enforce_links_password_write_only        |
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "user1" has created a public link with following settings
@@ -188,7 +186,7 @@ Feature: Share by public link
       | read, update, create, delete | shareapi_enforce_links_password_read_write_delete |
       | create                       | shareapi_enforce_links_password_write_only        |
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario Outline: user changes the role of an existing public link role without entering share password while enforce password for the original role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "user1" has created a public link with following settings
@@ -213,7 +211,7 @@ Feature: Share by public link
       | read, update, create, delete | Uploader    | shareapi_enforce_links_password_read_write_delete | create                       |
       | create                       | Editor      | shareapi_enforce_links_password_write_only        | read, update, create, delete |
 
-  @yetToImplement @skipOnOCIS
+  @yetToImplement
   Scenario: public should be able to access the shared file through public link
     Given user "user1" has logged in using the webUI
     And user "user1" has created a public link with following settings
@@ -319,7 +317,7 @@ Feature: Share by public link
     But the email address "foo1234@bar.co" should not have received an email
     And the email address "foo5678@barr.co" should not have received an email
 
-  @yetToImplement @skipOnOCIS
+  @yetToImplement @skipOnOCIS @issue-ocis-reva-41
   Scenario: user edits a public link and does not save the changes
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And user "user1" has logged in using the webUI
@@ -333,7 +331,7 @@ Feature: Share by public link
     And the public uses the webUI to access the last public link created by user "user1" with password "qwertyui"
     Then the public should not get access to the publicly shared file
 
-  @skip @yetToImplement
+  @skip @yetToImplement @issue-ocis-reva-41
   Scenario: user shares a public link via email with a personal message
     Given parameter "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And the user has reloaded the current page of the webUI
@@ -350,7 +348,6 @@ Feature: Share by public link
       """
     And the email address "foo@bar.co" should have received an email containing the last shared public link
 
-  @skipOnOCIS
   Scenario: user edits a name of an already existing public link
     Given user "user1" has logged in using the webUI
     And user "user1" has created a public link with following settings
@@ -363,7 +360,7 @@ Feature: Share by public link
     And the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: user shares a file through public link and then it appears in a shared-with-others page
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
@@ -375,7 +372,6 @@ Feature: Share by public link
       | fileName            | expectedCollaborators |
       | simple-folder       | Public |
 
-  @skipOnOCIS
   Scenario: user edits the password of an already existing public link
     Given user "user1" has created a public link with following settings
       | path        | simple-folder                |
@@ -402,7 +398,7 @@ Feature: Share by public link
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then the public should not get access to the publicly shared file
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-292
   Scenario: user edits the permission of an already existing public link from read-write to read
     Given user "user1" has created a public link with following settings
       | path        | simple-folder                |
@@ -415,7 +411,7 @@ Feature: Share by public link
     Then file "lorem.txt" should be listed on the webUI
     And it should not be possible to delete file "lorem.txt" using the webUI
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-292
   Scenario: user edits the permission of an already existing public link from read to read-write
     Given user "user1" has created a public link with following settings
       | path        | simple-folder |
@@ -432,7 +428,6 @@ Feature: Share by public link
     Then the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
-  @skipOnOCIS
   Scenario: user changes the expiration date of an already existing public link using webUI
     Given user "user1" has created a public link with following settings
       | path       | lorem.txt        |
@@ -444,7 +439,6 @@ Feature: Share by public link
     Then the fields of the last public link share response of user "user1" should include
       | expireDate | 2038-07-21 |
 
-  @skipOnOCIS
   Scenario: user tries to change the expiration date of the public link to past date using webUI
     Given user "user1" has created a public link with following settings
       | path       | lorem.txt        |
@@ -455,7 +449,7 @@ Feature: Share by public link
     Then the fields of the last public link share response of user "user1" should include
       | expireDate | 2038-10-14 |
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario Outline: auto set expiration date on public link (with default amount of expiry days)
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And user "user1" has logged in using the webUI
@@ -473,7 +467,7 @@ Feature: Share by public link
       | lorem.txt       |
       | simple-folder   |
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario Outline: auto set expiration date on public link (with set amount expiry days)
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "42"
@@ -492,7 +486,7 @@ Feature: Share by public link
       | lorem.txt       |
       | simple-folder   |
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: expiry date is set to enforced max expiry date when creating a public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "7"
@@ -502,7 +496,7 @@ Feature: Share by public link
     Then the expiration date shown on the webUI should be "+7" days
     And user "user1" should not have created any shares
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: user cannot change the expiry date of an existing public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
@@ -521,7 +515,7 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +6          |
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: user cannot change the expiry date of an existing public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "16"
@@ -544,7 +538,7 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +16         |
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: user can set an expiry date when creating a public link to a date that is before the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
@@ -560,7 +554,7 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +7          |
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: user can change the expiry date of an existing public link to a date that is before the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
@@ -590,7 +584,7 @@ Feature: Share by public link
     Then file "lorem.txt" with path "" should be listed in the shared with others page on the webUI
     And file "lorem.txt" with path "/simple-folder" should be listed in the shared with others page on the webUI
 
-  @skipOnOCIS
+  @skipOnOCIS @issue-ocis-reva-389
   Scenario: user removes the public link of a file using webUI
     Given user "user1" has logged in using the webUI
     And user "user1" has created a public link with following settings
@@ -599,6 +593,17 @@ Feature: Share by public link
       | permissions | read        |
     When the user removes the public link named "Public-link" of file "lorem.txt" using the webUI
     Then user "user1" should not have any public link
+
+  @skipOnOC10 @issue-ocis-reva-389
+  # After this issue is fixed delete this scenario and use the one above
+  Scenario: user removes the public link of a file using webUI
+    Given user "user1" has logged in using the webUI
+    And user "user1" has created a public link with following settings
+      | path        | lorem.txt   |
+      | name        | Public-link |
+      | permissions | read        |
+    When the user removes the public link named "Public-link" of file "lorem.txt" using the webUI
+    Then user "user1" should have some public shares
 
   @skip @yetToImplement
   Scenario: user cancel removes operation for the public link of a file
@@ -710,7 +715,7 @@ Feature: Share by public link
 #      | links         |
 #      | collaborators |
 
-  @issue-2060 @skipOnOCIS
+  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
   Scenario: sharing indicator inside a shared folder
     Given user "user1" has created folder "/simple-folder/sub-folder"
     And user "user1" has uploaded file with content "test" to "/simple-folder/textfile.txt"
@@ -725,7 +730,7 @@ Feature: Share by public link
       | sub-folder   | link-indirect      |
       | textfile.txt | link-indirect      |
 
-  @issue-2060 @skipOnOCIS
+  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
   Scenario: sharing indicator for file uploaded inside a shared folder
     Given user "user1" has shared folder "simple-folder" with link with "read" permissions
     And user "user1" has logged in using the webUI
@@ -735,7 +740,7 @@ Feature: Share by public link
       | fileName      | expectedIndicators |
       | new-lorem.txt | link-indirect      |
 
-  @issue-2060
+  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
   Scenario: sharing indicator for folder created inside a shared folder
     Given user "user1" has shared folder "simple-folder" with link with "read" permissions
     And user "user1" has logged in using the webUI
@@ -745,7 +750,7 @@ Feature: Share by public link
       | fileName   | expectedIndicators |
       | sub-folder | link-indirect      |
 
-  @issue-2060 @skipOnOCIS
+  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
   Scenario: sharing indicators public link and collaborators inside a shared folder
     Given user "user2" has been created with default attributes
     And user "user1" has created folder "/simple-folder/sub-folder"
@@ -762,7 +767,7 @@ Feature: Share by public link
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
-  @issue-2060 @skipOnOCIS
+  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
   Scenario: sharing indicators public link from reshare
     Given user "user2" has been created with default attributes
     And user "user1" has created folder "/simple-folder/sub-folder"
@@ -779,7 +784,7 @@ Feature: Share by public link
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
-  @issue-2060 @skipOnOCIS
+  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
   Scenario: sharing indicators public link from child of reshare
     Given user "user2" has been created with default attributes
     And user "user1" has created folder "/simple-folder/sub-folder"
@@ -796,7 +801,7 @@ Feature: Share by public link
       | sub-folder   | link-direct,user-indirect   |
       | textfile.txt | user-indirect |
 
-  @issue-2060 @skipOnOCIS
+  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
   Scenario: no sharing indicator visible in file list from public link
     Given user "user2" has been created with default attributes
     And user "user3" has been created with default attributes
@@ -807,7 +812,7 @@ Feature: Share by public link
     Then the following resources should not have share indicators on the webUI
       | simple-empty-folder |
 
-  @issue-2939 @skipOnOCIS
+  @issue-2939 @skipOnOCIS @issue-ocis-reva-243
   Scenario: sharing indicator for link shares stays up to date
     Given user "user2" has been created with default attributes
     When user "user1" has logged in using the webUI
@@ -877,7 +882,7 @@ Feature: Share by public link
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "simple-folder" on the webUI
     And a link named "strängé लिंक नाम (#2 &).नेपाली" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "sub-folder" on the webUI
 
-  @issue-3040 @skipOnOCIS
+  @issue-3040 @issue-3841 @skipOnOCIS
   Scenario: sharing details of indirect link share in "favorites" file lists
     Given user "user1" has created a public link with following settings
       | path | /simple-folder |
@@ -894,14 +899,24 @@ Feature: Share by public link
     When the user browses to the favorites page using the webUI
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
 
-  @skipOnOCIS
+  @skipOnOC10 @issue-3841
+  # When this issue is fixed delete this scenario and use the one above
+  Scenario: sharing details of indirect link share in "favorites" file lists
+    Given user "user1" has created a public link with following settings
+      | path | /simple-folder |
+      | name | Public Link    |
+    And user "user1" has logged in using the webUI
+    When the user browses to the shared-with-others page
+    Then the folder should be empty on the webUI
+
+  @issue-ocis-reva-243 @skipOnOCIS
   Scenario: token is shown for links without a name
     When user "user1" has created a public link with following settings
       | path | /simple-folder |
     And user "user1" logs in using the webUI
     Then a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
 
-  @skipOnOCIS
+  @issue-ocis-reva-243 @skipOnOCIS
   Scenario: User can create a public link via quick action
     Given user "user1" has logged in using the webUI
     When the user creates a public link via quick action for resource "simple-folder" using the webUI
