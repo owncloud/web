@@ -3,7 +3,7 @@ const { When, Then } = require('cucumber')
 const offCanvasPage = client.page.FilesPageElement.offCanvasPage()
 const filesList = client.page.FilesPageElement.filesList()
 
-When('the user views the file {string} in the mediaviewer using the webUI', async function(
+When('the user/public views the file {string} in the mediaviewer using the webUI', async function(
   fileName
 ) {
   await filesList.clickOnFileName(fileName)
