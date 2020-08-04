@@ -57,6 +57,7 @@
             class="oc-cursor-pointer"
             size="medium"
             name="chevron_left"
+            aria-label="Previous"
             @click="prev"
           />
           <!-- @TODO: Bring back working uk-light -->
@@ -68,15 +69,23 @@
             class="oc-cursor-pointer"
             size="medium"
             name="chevron_right"
+            aria-label="Next"
             @click="next"
           />
           <oc-icon
             role="button"
             class="oc-cursor-pointer"
             name="file_download"
+            aria-label="Download"
             @click="downloadMedium"
           />
-          <oc-icon role="button" class="oc-cursor-pointer" name="close" @click="closeApp" />
+          <oc-icon
+            role="button"
+            class="oc-cursor-pointer"
+            name="close"
+            aria-label="Close"
+            @click="closeApp"
+          />
         </div>
       </div>
     </div>
