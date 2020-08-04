@@ -14,7 +14,7 @@ function createDefaultUser(userId) {
   const password = userSettings.getPasswordForUser(userId)
   const displayname = userSettings.getDisplayNameOfDefaultUser(userId)
   const email = userSettings.getEmailAddressOfDefaultUser(userId)
-  if (client.globals.ocis) {
+  if (client.globals.ldap) {
     return ldap.createUser(client.globals.ldapClient, userId)
   }
   return createUser(userId, password, displayname, email)
@@ -22,6 +22,13 @@ function createDefaultUser(userId) {
 
 function createUser(userId, password, displayName = false, email = false) {
   const body = new URLSearchParams()
+  if (client.globals.ocis) {
+    if (email === false) {
+      email = userId + '@example.com'
+    }
+    body.append('username', userId)
+    body.append('email', email)
+  }
   body.append('userid', userId)
   body.append('password', password)
   const promiseList = []
@@ -31,6 +38,17 @@ function createUser(userId, password, displayName = false, email = false) {
   return httpHelper
     .postOCS(url, 'admin', body)
     .then(() => {
+      if (client.globals.ocis) {
+        const skelDir = client.globals.ocis_skeleton_dir
+        if (skelDir) {
+          const dataDir = join(client.globals.ocis_data_dir, 'data', userId)
+          if (!fs.existsSync(dataDir)) {
+            fs.removeSync(dataDir)
+            fs.mkdirpSync(dataDir)
+          }
+          return fs.copy(skelDir, join(dataDir, 'files'))
+        }
+      }
       if (displayName !== false) {
         promiseList.push(
           new Promise((resolve, reject) => {
@@ -49,6 +67,9 @@ function createUser(userId, password, displayName = false, email = false) {
       }
     })
     .then(() => {
+      if (client.globals.ocis) {
+        return
+      }
       if (email !== false) {
         promiseList.push(
           new Promise((resolve, reject) => {
@@ -202,7 +223,7 @@ After(async function() {
   const createdRemoteUsers = Object.keys(userSettings.getCreatedUsers('REMOTE'))
   const createdGroups = userSettings.getCreatedGroups()
 
-  if (client.globals.ocis) {
+  if (client.globals.ldap) {
     const dataDir = user => join(client.globals.ocis_data_dir, 'data', user)
     const deleteUserPromises = createdUsers.map(user =>
       ldap.deleteUser(client.globals.ldapClient, user).then(() => {
@@ -225,6 +246,12 @@ After(async function() {
     })
   } else {
     await Promise.all([...createdUsers.map(deleteUser), ...createdGroups.map(deleteGroup)])
+  }
+
+  if (client.globals.ocis) {
+    const dataDir = user => join(client.globals.ocis_data_dir, 'data', user)
+    const deleteUserDirectories = createdUsers.map(user => fs.remove(dataDir(user)))
+    await Promise.all(deleteUserDirectories)
   }
 
   if (client.globals.remote_backend_url) {

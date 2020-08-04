@@ -44,7 +44,7 @@ Before(function logSessionInfoOnSauceLabs() {
 })
 
 Before(function createLdapClient() {
-  if (client.globals.ocis) {
+  if (client.globals.ldap) {
     return ldap.createClient().then(ldapClient => {
       client.globals.ldapClient = ldapClient
     })
@@ -52,7 +52,7 @@ Before(function createLdapClient() {
 })
 
 After(function deleteLdapClient() {
-  if (client.globals.ocis && client.globals.ldapClient) {
+  if (client.globals.ldap && client.globals.ldapClient) {
     return ldap.terminate(client.globals.ldapClient)
   }
 })
