@@ -1,0 +1,5 @@
+Change: Move docs about hugo usage to ocis
+
+Since our documentation about how to work with hugo (for documentation) is a cross-extension topic, we have moved it to our main ocis docs.
+
+https://github.com/owncloud/phoenix/pull/3828
