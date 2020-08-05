@@ -10,6 +10,7 @@ Summary
 
 * Change - Provide option for hiding the search bar: [#116](https://github.com/owncloud/product/issues/116)
 * Change - Use pre-signed URLs in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
+* Change - Move docs about hugo usage to ocis: [#3828](https://github.com/owncloud/phoenix/pull/3828)
 * Change - Get rid of static "Shared with:" label: [#123](https://github.com/owncloud/product/issues/123)
 * Change - Large file downloads support with URL signing: [#3797](https://github.com/owncloud/phoenix/pull/3797)
 * Enhancement - Enable playing videos in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
@@ -32,6 +33,13 @@ Details
 
    https://github.com/owncloud/phoenix/pull/3803
    https://github.com/owncloud/phoenix/pull/3844
+
+* Change - Move docs about hugo usage to ocis: [#3828](https://github.com/owncloud/phoenix/pull/3828)
+
+   Since our documentation about how to work with hugo (for documentation) is a cross-extension
+   topic, we have moved it to our main ocis docs.
+
+   https://github.com/owncloud/phoenix/pull/3828
 
 * Change - Get rid of static "Shared with:" label: [#123](https://github.com/owncloud/product/issues/123)
 
