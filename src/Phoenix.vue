@@ -24,7 +24,7 @@
             <template v-if="isQuotaVisible" v-slot:footer>
               <div class="uk-text-center">
                 <oc-progress
-                  :value="parseInt(quota.relative)"
+                  :value="quota.relative"
                   :max="100"
                   size="small"
                   class="uk-margin-xsmall-bottom"
