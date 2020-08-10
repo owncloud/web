@@ -4,6 +4,7 @@ import { getParentPaths } from '../helpers/path'
 import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
 import { shareTypes } from '../helpers/shareTypes'
 import path from 'path'
+import SidebarQuota from '../components/SidebarQuota.vue'
 const { default: PQueue } = require('p-queue')
 
 function _extName(fileName) {
@@ -399,7 +400,20 @@ export default {
         .finally(() => {
           context.commit('UPDATE_FOLDER_LOADING', false)
           client.users.getUser(context.rootGetters.user.id).then(res => {
-            context.commit('CHECK_QUOTA', res.quota)
+            const quota = res.quota
+
+            context.commit('CHECK_QUOTA', quota)
+
+            // Display quota in the sidebar
+            if (
+              !isPublicPage &&
+              !context.getters.currentFolder.isMounted() &&
+              quota.definition !== 'default' &&
+              quota.definition !== 'none'
+            ) {
+              context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', SidebarQuota, { root: true })
+            }
+
             resolve()
           })
         })

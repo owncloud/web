@@ -108,10 +108,16 @@ export default {
       this.delayForScreenreader(() => this.$refs.filesListWrapper.focus())
     })
   },
+
+  beforeDestroy() {
+    this.SET_SIDEBAR_FOOTER_CONTENT_COMPONENT(null)
+  },
+
   methods: {
     ...mapActions('Files', ['dragOver', 'setHighlightedFile']),
     ...mapActions(['openFile', 'showMessage']),
     ...mapMutations('Files', ['SET_CURRENT_SIDEBAR_TAB']),
+    ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
 
     trace() {
       console.info('trace', arguments)

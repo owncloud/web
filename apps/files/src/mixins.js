@@ -1,27 +1,14 @@
-import filesize from 'filesize'
 import pathUtil from 'path'
 import moment from 'moment'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
+import { getResourceSize } from './helpers/resources'
 const { default: PQueue } = require('p-queue')
 
 export default {
   filters: {
     fileSize(int) {
-      if (int < 0) {
-        return ''
-      }
-
-      if (isNaN(int)) {
-        return '?'
-      }
-
-      const mb = 1048576
-
-      // TODO: Pass current language as locale to display correct separator
-      return filesize(int, {
-        round: int < mb ? 0 : 1
-      })
+      return getResourceSize(int)
     },
 
     roundNumber(int) {
