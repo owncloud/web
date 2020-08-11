@@ -21,6 +21,9 @@
             <template v-if="sidebar.mainContentComponent" v-slot:mainContent>
               <component :is="sidebar.mainContentComponent" />
             </template>
+            <template v-if="sidebar.sidebarFooterContentComponent" v-slot:footer>
+              <component :is="sidebar.sidebarFooterContentComponent" />
+            </template>
           </oc-sidebar>
         </transition>
         <div class="uk-width-expand">

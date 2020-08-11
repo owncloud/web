@@ -46,7 +46,7 @@ export default {
   sharesTreeLoading: false,
 
   loadingFolder: false,
-  quota: {},
+  quota: null,
   highlightedFile: null,
   publicLinkPassword: null,
   uploaded: [],
