@@ -57,6 +57,7 @@
             class="oc-cursor-pointer"
             size="medium"
             name="chevron_left"
+            :aria-label="$gettext('Previous')"
             @click="prev"
           />
           <!-- @TODO: Bring back working uk-light -->
@@ -68,15 +69,23 @@
             class="oc-cursor-pointer"
             size="medium"
             name="chevron_right"
+            :aria-label="$gettext('Next')"
             @click="next"
           />
           <oc-icon
             role="button"
             class="oc-cursor-pointer"
             name="file_download"
+            :aria-label="$gettext('Download')"
             @click="downloadMedium"
           />
-          <oc-icon role="button" class="oc-cursor-pointer" name="close" @click="closeApp" />
+          <oc-icon
+            role="button"
+            class="oc-cursor-pointer"
+            name="close"
+            :aria-label="$gettext('Close')"
+            @click="closeApp"
+          />
         </div>
       </div>
     </div>
