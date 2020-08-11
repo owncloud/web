@@ -16,6 +16,10 @@
       <div class="uk-flex uk-flex-wrap">
         <div class="uk-width-1-2@s uk-margin-bottom">
           <div class="uk-text-meta"><translate>Username:</translate></div>
+          {{ user.username || user.id }}
+        </div>
+        <div v-if="user.username && user.id" class="uk-width-1-2@s uk-margin-bottom">
+          <div class="uk-text-meta"><translate>User ID:</translate></div>
           {{ user.id }}
         </div>
         <div class="uk-width-1-2@s uk-margin-bottom">
