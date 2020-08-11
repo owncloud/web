@@ -70,7 +70,7 @@
     "cucumber": ">=6.0.5",
     "cucumber-pretty": ">=6.0.0",
     "deepmerge": "^4.2.1",
-    "easygettext": "2.9.0",
+    "easygettext": "2.14.0",
     "eslint": "6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-config-standard": "^14.1.0",
