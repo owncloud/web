@@ -412,6 +412,8 @@ export default {
               quota.definition !== 'none'
             ) {
               context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', SidebarQuota, { root: true })
+            } else {
+              context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', null, { root: true })
             }
 
             resolve()
