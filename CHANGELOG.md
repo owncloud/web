@@ -9,7 +9,9 @@ Summary
 -------
 
 * Change - Provide option for hiding the search bar: [#116](https://github.com/owncloud/product/issues/116)
+* Change - Move information about current folder below the files list: [#120](https://github.com/owncloud/product/issues/120)
 * Change - Use pre-signed URLs in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
+* Change - Move quota indication to the left sidebar: [#121](https://github.com/owncloud/product/issues/121)
 * Change - Move docs about hugo usage to ocis: [#3828](https://github.com/owncloud/phoenix/pull/3828)
 * Change - Get rid of static "Shared with:" label: [#123](https://github.com/owncloud/product/issues/123)
 * Change - Large file downloads support with URL signing: [#3797](https://github.com/owncloud/phoenix/pull/3797)
@@ -26,6 +28,14 @@ Details
    https://github.com/owncloud/product/issues/116
    https://github.com/owncloud/phoenix/pull/3817
 
+* Change - Move information about current folder below the files list: [#120](https://github.com/owncloud/product/issues/120)
+
+   We've moved the information about current folder directly below the files list. Previously
+   this information was always displayed on the bottom of the screen.
+
+   https://github.com/owncloud/product/issues/120
+   https://github.com/owncloud/phoenix/pull/3849
+
 * Change - Use pre-signed URLs in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
 
    We've started using pre-signed URLs if supported in media viewer to display images instead of
@@ -33,6 +43,14 @@ Details
 
    https://github.com/owncloud/phoenix/pull/3803
    https://github.com/owncloud/phoenix/pull/3844
+
+* Change - Move quota indication to the left sidebar: [#121](https://github.com/owncloud/product/issues/121)
+
+   We've moved the quota indication from the bottom of the files list to the footer of the left
+   sidebar.
+
+   https://github.com/owncloud/product/issues/121
+   https://github.com/owncloud/phoenix/pull/3849
 
 * Change - Move docs about hugo usage to ocis: [#3828](https://github.com/owncloud/phoenix/pull/3828)
 
