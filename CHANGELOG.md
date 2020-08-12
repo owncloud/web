@@ -8,6 +8,8 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix display name when using oCIS as backend: [#3938](https://github.com/owncloud/phoenix/pull/3938)
+* Change - Differentiate between user-id and username: [#440](https://github.com/owncloud/ocis/issues/440)
 * Change - Provide option for hiding the search bar: [#116](https://github.com/owncloud/product/issues/116)
 * Change - Move information about current folder below the files list: [#120](https://github.com/owncloud/product/issues/120)
 * Change - Use pre-signed URLs in media viewer: [#3803](https://github.com/owncloud/phoenix/pull/3803)
@@ -19,6 +21,22 @@ Summary
 
 Details
 -------
+
+* Bugfix - Fix display name when using oCIS as backend: [#3938](https://github.com/owncloud/phoenix/pull/3938)
+
+   We've fixed the display name when running ocis-web with oCIS as backend. The display name is now
+   again displayed in the top bar and in the account page.
+
+   https://github.com/owncloud/phoenix/pull/3938
+
+* Change - Differentiate between user-id and username: [#440](https://github.com/owncloud/ocis/issues/440)
+
+   With oCIS user-id and username are not the same as is the case in ownCloud 10. We've started
+   differentiating between them to correctly display all information in the accounts page. If
+   the username is not available (oC10), we fall back to using user-id as the username.
+
+   https://github.com/owncloud/ocis/issues/440
+   https://github.com/owncloud/phoenix/pull/3938
 
 * Change - Provide option for hiding the search bar: [#116](https://github.com/owncloud/product/issues/116)
 
