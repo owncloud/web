@@ -32,7 +32,7 @@
             class="uk-width-expand"
             :applications-list="$_applicationsList"
             :active-notifications="activeNotifications"
-            :user-id="user.id"
+            :user-id="user.username || user.id"
             :user-display-name="user.displayname"
             @toggleAppNavigationVisibility="toggleAppNavigationVisibility"
           />

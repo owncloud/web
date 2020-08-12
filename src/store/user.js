@@ -77,7 +77,8 @@ const actions = {
                 context.commit('SET_CAPABILITIES', cap)
                 context.commit('SET_USER', {
                   id: res.id,
-                  displayname: res['display-name'],
+                  username: res.username,
+                  displayname: res.displayname || res['display-name'],
                   email: !Object.keys(res.email).length ? '' : res.email,
                   token,
                   isAuthenticated: true,
@@ -170,6 +171,7 @@ const mutations = {
   SET_USER(state, user) {
     state.displayname = user.displayname
     state.id = user.id
+    state.username = user.username
     state.email = user.email
     state.isAuthenticated = user.isAuthenticated
     state.token = user.token
