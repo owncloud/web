@@ -235,7 +235,7 @@ Given('the following files/folders/resources have been deleted by user {string}'
   return client
 })
 
-When('the user uploads file {string} using the webUI', function(element) {
+When('the user/public uploads file {string} using the webUI', function(element) {
   const uploadPath = path.join(client.globals.mountedUploadDir, element)
   return client.page.filesPage().uploadFile(uploadPath)
 })
@@ -308,6 +308,12 @@ When(
 Then('it should not be possible to create files using the webUI', function() {
   return client.page.filesPage().canCreateFiles(isDisabled => {
     client.assert.strictEqual(isDisabled, true, 'Create action must not be enabled')
+  })
+})
+
+Then('it should be possible to create files using the webUI', function() {
+  return client.page.filesPage().canCreateFiles(isDisabled => {
+    client.assert.strictEqual(isDisabled, false, 'Create action must be enabled')
   })
 })
 

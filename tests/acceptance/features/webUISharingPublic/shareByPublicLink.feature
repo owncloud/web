@@ -932,3 +932,31 @@ Feature: Share by public link
       Public link created
       Public link has been successfully created and copied into your clipboard.
       """
+
+  @skipOnOCIS @issue-product-130
+  Scenario: User can attempt to upload a file in public link
+    Given user "user1" has created a public link with following settings
+      | path        | lorem.txt   |
+      | name        | public link |
+      | permissions | read        |
+    When the public uses the webUI to access the last public link created by user "user1"
+    Then file "lorem.txt" should be listed on the webUI
+    And it should not be possible to create files using the webUI
+
+  @skipOnOC10 @issue-product-130
+  # When this issue is fixed delete this scenario and use the one above
+  Scenario: User can attempt to upload a file in public link
+    Given user "user1" has created a public link with following settings
+      | path        | lorem.txt   |
+      | name        | public link |
+      | permissions | read        |
+    When the public uses the webUI to access the last public link created by user "user1"
+    Then file "lorem.txt" should be listed on the webUI
+    And it should be possible to create files using the webUI
+#    And it should not be possible to create files using the webUI
+    When the public uploads file "textfile.txt" using the webUI
+    Then the following error message should be displayed on the webUI
+      """
+      File upload failed…
+      Unknown error
+      """
