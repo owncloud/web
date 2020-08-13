@@ -27,17 +27,17 @@ Feature: deleting files and folders
     And as "user1" file "strängé filename (duplicate #2 &).txt" should not exist
     And as "user1" file "sample,1.txt" should not exist
     And as "user1" folder "Sample,Folder,With,Comma" should not exist
-    Then the deleted elements should not be listed on the webUI
+    And no message should be displayed on the webUI
+    And the deleted elements should not be listed on the webUI
     But folder "simple-empty-folder" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI
     And file "strängé नेपाली folder" should not be listed on the webUI
     But the deleted elements should not be listed on the webUI after a page reload
 
   Scenario Outline: Delete a file with problematic characters
-    When the user renames file "lorem.txt" to <file_name> using the webUI
-    And the user reloads the current page of the webUI
-    Then file <file_name> should be listed on the webUI
-    When the user deletes file <file_name> using the webUI
+    Given user "user1" has created file <file_name>
+    When the user reloads the current page of the webUI
+    And the user deletes file <file_name> using the webUI
     Then file <file_name> should not be listed on the webUI
     When the user reloads the current page of the webUI
     Then file <file_name> should not be listed on the webUI
@@ -60,6 +60,7 @@ Feature: deleting files and folders
     And as "user1" folder "simple-folder" should not exist
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
+    And no message should be displayed on the webUI
 
   Scenario: Delete all files at once
     When the user marks all files for batch action using the webUI
@@ -70,6 +71,7 @@ Feature: deleting files and folders
     And as "user1" folder "simple-folder" should not exist
     And the folder should be empty on the webUI
     And the folder should be empty on the webUI after a page reload
+    And no message should be displayed on the webUI
 
   @ocis-reva-issue-106
   Scenario: Delete all except for a few files at once
@@ -87,6 +89,7 @@ Feature: deleting files and folders
     But as "user1" file "data.zip" should not exist
     And file "data.zip" should not be listed on the webUI
     And there should be 2 files/folders listed on the webUI
+    And no message should be displayed on the webUI
 
   @ocis-reva-issue-106
   Scenario: Delete an empty folder
@@ -97,11 +100,13 @@ Feature: deleting files and folders
     And folder "my-other-empty-folder" should be listed on the webUI
     But as "user1" folder "my-empty-folder" should not exist
     And folder "my-empty-folder" should not be listed on the webUI
+    And no message should be displayed on the webUI
 
   Scenario: Delete the last file in a folder
     When the user deletes file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then as "user1" file "zzzz-must-be-last-file-in-folder.txt" should not exist
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
+    And no message should be displayed on the webUI
 
   @skip @yetToImplement
   @public_link_share-feature-required
@@ -142,6 +147,7 @@ Feature: deleting files and folders
     And as "user1" folder "simple-folder/simple-empty-folder" should not exist
     And as "user1" file "simple-folder/strängé filename (duplicate #2 &).txt" should not exist
     And the deleted elements should not be listed on the webUI
+    And no message should be displayed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
   @skipOnOCIS @ocis-reva-issue-64
@@ -167,6 +173,7 @@ Feature: deleting files and folders
       | "double" quotes |
       | question?       |
       | &and#hash       |
+    And no message should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then the following file should not be listed on the webUI
       | name-parts      |
@@ -200,6 +207,7 @@ Feature: deleting files and folders
     And the user deletes file "lorem (2).txt" using the webUI
     Then as "user1" folder "simple-folder (2)" should not exist
     And as "user1" file "lorem (2).txt" should not exist
+    And no message should be displayed on the webUI
 
   @skipOnOCIS @ocis-reva-issue-64
   Scenario: Delete a file and folder in shared with others page
@@ -211,6 +219,7 @@ Feature: deleting files and folders
     And the user deletes file "lorem.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
+    And no message should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
@@ -236,6 +245,7 @@ Feature: deleting files and folders
     And as "user1" file "lorem.txt" should not exist
     And as "user1" folder "simple-folder" should not exist
     And the deleted elements should not be listed on the webUI
+    And no message should be displayed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
   @skipOnOCIS @ocis-reva-issue-39
