@@ -35,10 +35,9 @@ Feature: deleting files and folders
     But the deleted elements should not be listed on the webUI after a page reload
 
   Scenario Outline: Delete a file with problematic characters
-    When the user renames file "lorem.txt" to <file_name> using the webUI
-    And the user reloads the current page of the webUI
-    Then file <file_name> should be listed on the webUI
-    When the user deletes file <file_name> using the webUI
+    Given user "user1" has created file <file_name>
+    When the user reloads the current page of the webUI
+    And the user deletes file <file_name> using the webUI
     Then file <file_name> should not be listed on the webUI
     When the user reloads the current page of the webUI
     Then file <file_name> should not be listed on the webUI
