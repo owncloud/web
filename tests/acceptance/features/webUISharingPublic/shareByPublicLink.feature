@@ -584,7 +584,7 @@ Feature: Share by public link
     Then file "lorem.txt" with path "" should be listed in the shared with others page on the webUI
     And file "lorem.txt" with path "/simple-folder" should be listed in the shared with others page on the webUI
 
-  @skipOnOCIS @issue-ocis-reva-389
+  @issue-ocis-reva-389
   Scenario: user removes the public link of a file using webUI
     Given user "user1" has logged in using the webUI
     And user "user1" has created a public link with following settings
@@ -593,17 +593,6 @@ Feature: Share by public link
       | permissions | read        |
     When the user removes the public link named "Public-link" of file "lorem.txt" using the webUI
     Then user "user1" should not have any public link
-
-  @skipOnOC10 @issue-ocis-reva-389
-  # After this issue is fixed delete this scenario and use the one above
-  Scenario: user removes the public link of a file using webUI
-    Given user "user1" has logged in using the webUI
-    And user "user1" has created a public link with following settings
-      | path        | lorem.txt   |
-      | name        | Public-link |
-      | permissions | read        |
-    When the user removes the public link named "Public-link" of file "lorem.txt" using the webUI
-    Then user "user1" should have some public shares
 
   @skip @yetToImplement
   Scenario: user cancel removes operation for the public link of a file
@@ -882,7 +871,7 @@ Feature: Share by public link
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "simple-folder" on the webUI
     And a link named "strängé लिंक नाम (#2 &).नेपाली" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "sub-folder" on the webUI
 
-  @issue-3040 @issue-3841 @skipOnOCIS
+  @issue-3040 @issue-3841 @skipOnOCIS @issue-ocis-reva-372
   Scenario: sharing details of indirect link share in "favorites" file lists
     Given user "user1" has created a public link with following settings
       | path | /simple-folder |
@@ -898,16 +887,6 @@ Feature: Share by public link
     And a link named "Public Link Sub" should be listed with role "Viewer" in the public link list of resource "simple-empty-folder" on the webUI
     When the user browses to the favorites page using the webUI
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
-
-  @skipOnOC10 @issue-3841
-  # When this issue is fixed delete this scenario and use the one above
-  Scenario: sharing details of indirect link share in "favorites" file lists
-    Given user "user1" has created a public link with following settings
-      | path | /simple-folder |
-      | name | Public Link    |
-    And user "user1" has logged in using the webUI
-    When the user browses to the shared-with-others page
-    Then the folder should be empty on the webUI
 
   @issue-ocis-reva-243 @skipOnOCIS
   Scenario: token is shown for links without a name
