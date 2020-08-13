@@ -73,8 +73,8 @@ module.exports = {
      * @param {boolean} expectToSucceed
      * @return {*}
      */
-    rename: function(toName, expectToSucceed = true) {
-      this.initAjaxCounters()
+    rename: async function(toName, expectToSucceed = true) {
+      await this.initAjaxCounters()
         .useXpath()
         .performFileAction(this.FileAction.rename)
         .waitForElementVisible('@dialog')
@@ -86,7 +86,7 @@ module.exports = {
         .useCss()
 
       if (expectToSucceed) {
-        this.waitForElementNotPresent('@dialog')
+        await this.waitForElementNotPresent('@dialog')
       }
 
       return this
