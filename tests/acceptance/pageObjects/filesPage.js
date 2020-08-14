@@ -212,6 +212,7 @@ module.exports = {
         .waitForElementVisible('@dialog')
         .waitForAnimationToFinish()
         .click('@dialogConfirmBtn')
+        .waitForAjaxCallsToStartAndFinish()
         .waitForElementNotPresent('@dialog')
     },
     /**
