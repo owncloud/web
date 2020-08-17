@@ -1,4 +1,4 @@
-@mailhog @public_link_share-feature-required @ocis-reva-issue-64
+@mailhog @public_link_share-feature-required @ocis-reva-issue-64 @skipOnOCIS @ocis-issue-458
 Feature: Share by public link
   As a user
   I want to share files through a publicly accessible link
