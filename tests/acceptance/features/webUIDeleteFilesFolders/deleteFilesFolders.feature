@@ -73,7 +73,7 @@ Feature: deleting files and folders
     And the folder should be empty on the webUI after a page reload
     And no message should be displayed on the webUI
 
-  @ocis-reva-issue-106
+  @ocis-reva-issue-106 @skipOnOCIS @ocis-reve-issue-442
   Scenario: Delete all except for a few files at once
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
