@@ -623,6 +623,11 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
   let isBreadcrumbVisible = false
 
   // Check if the breadcrumb is visible
+  await client.waitForElementVisible({
+    selector: resourceBreadcrumbXpath,
+    locateStrategy: 'xpath',
+    abortOnFailure: false
+  })
   await client.element('xpath', resourceBreadcrumbXpath, result => {
     if (result.status > -1) {
       isBreadcrumbVisible = true
