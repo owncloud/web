@@ -1,3 +1,27 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.14.0...master
+
+Summary
+-------
+
+* Change - Adapt to new ocis-settings data model: [#3806](https://github.com/owncloud/phoenix/pull/3806)
+
+Details
+-------
+
+* Change - Adapt to new ocis-settings data model: [#3806](https://github.com/owncloud/phoenix/pull/3806)
+
+   Ocis-settings introduced UUIDs and less verbose endpoint and message type names. This PR
+   adjusts phoenix accordingly.
+
+   https://github.com/owncloud/phoenix/pull/3806
+   https://github.com/owncloud/owncloud-sdk/pull/520
+   https://github.com/owncloud/ocis-settings/pull/46
+
 Changelog for ownCloud Phoenix [0.14.0] (2020-08-17)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.14.0 relevant to
