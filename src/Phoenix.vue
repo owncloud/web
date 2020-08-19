@@ -98,7 +98,7 @@ export default {
       'activeMessages',
       'capabilities',
       'apps',
-      'getSettingsValueByIdentifier',
+      'getSettingsValue',
       'getNavItems',
       'getExtensionsWithNavItems'
     ]),
@@ -190,10 +190,10 @@ export default {
     },
 
     selectedLanguage() {
-      return this.getSettingsValueByIdentifier({
+      return this.getSettingsValue({
         extension: 'ocis-accounts',
-        bundleKey: 'profile',
-        settingKey: 'language'
+        bundle: 'profile',
+        setting: 'language'
       })
     }
   },

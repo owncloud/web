@@ -247,7 +247,7 @@ function requireError (err) {
 
     // Loads apps from external servers
     if (config.external_apps) {
-      config.external_apps.map(app => apps.push(app.path))
+      config.external_apps.forEach(app => apps.push(app.path))
     }
 
     // provide global config object

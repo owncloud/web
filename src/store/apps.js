@@ -50,7 +50,7 @@ const actions = {
    * @param {Object} config   Config from config.json which can overwrite local config from AppInfo
    */
   loadExternalAppConfig({ dispatch }, { app, config }) {
-    config.external_apps.map(extension => {
+    config.external_apps.forEach(extension => {
       // Check if app is loaded from external server
       // Extension id = id from external apps array
       // App id = id specified in AppInfo
@@ -162,15 +162,16 @@ const getters = {
       if (!ext) {
         return []
       }
-      ext.map(e => {
+      ext.forEach(e => {
         if (e.version === 3) {
           return e
         }
         // enhance App Chooser with App Name as label
         e.name = state.meta[e.app].name
         // if no icon for this filetype extension, choose the app icon
-        if (!e.icon) e.icon = state.meta[e.app].icon
-        return e
+        if (!e.icon) {
+          e.icon = state.meta[e.app].icon
+        }
       })
       return ext
     }
