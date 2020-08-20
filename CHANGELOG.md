@@ -1,3 +1,24 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.15.0...master
+
+Summary
+-------
+
+* Change - Add default external apps for ocis: [#3967](https://github.com/owncloud/phoenix/pull/3967)
+
+Details
+-------
+
+* Change - Add default external apps for ocis: [#3967](https://github.com/owncloud/phoenix/pull/3967)
+
+   We are enabling the settings-ui and accounts-ui by default now for ocis.
+
+   https://github.com/owncloud/phoenix/pull/3967
+
 Changelog for ownCloud Phoenix [0.15.0] (2020-08-19)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.15.0 relevant to
