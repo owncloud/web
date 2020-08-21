@@ -1,0 +1,6 @@
+Enhancement: Add info about number of selected items and their size
+
+We've added information about the number of selected items and their size above the files list next to batch actions.
+
+https://github.com/owncloud/product/issues/122
+https://github.com/owncloud/phoenix/pull/3850

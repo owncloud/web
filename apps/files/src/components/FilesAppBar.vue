@@ -9,9 +9,9 @@
       @error="onFileError"
       @progress="onFileProgress"
     />
-    <oc-grid flex gutter="small">
+    <div>
       <div>
-        <div class="uk-flex">
+        <div class="uk-flex uk-margin-small-bottom">
           <oc-breadcrumb
             v-if="showBreadcrumb"
             id="files-breadcrumb"
@@ -19,7 +19,7 @@
             home
           ></oc-breadcrumb>
         </div>
-        <span v-if="!showBreadcrumb" class="uk-flex uk-flex-middle">
+        <span v-if="!showBreadcrumb" class="uk-flex uk-flex-middle uk-margin-small-bottom">
           <oc-icon v-if="pageIcon" :name="pageIcon" class="uk-margin-small-right" />
           <h1 class="oc-page-title" v-text="pageTitle" />
         </span>
@@ -27,14 +27,16 @@
           <h1 class="oc-visually-hidden" v-text="pageTitle" />
         </span>
       </div>
-      <div>
+      <div class="uk-flex uk-flex-middle">
         <template v-if="$_ocFilesAppBar_showActions">
-          <template v-if="canUpload && hasFreeSpace">
+          <template v-if="areDefaultActionsVisible">
             <oc-button
               id="new-file-menu-btn"
               key="new-file-menu-btn-enabled"
               variation="primary"
               icon="add"
+              :uk-tooltip="_cannotCreateDialogText"
+              :disabled="isNewBtnDisabled"
               ><translate>New</translate></oc-button
             >
             <oc-drop
@@ -78,24 +80,43 @@
               </oc-nav>
             </oc-drop>
           </template>
-          <!-- FIXME: Unite new file menu btn -->
-          <oc-button
-            v-else
-            id="new-file-menu-btn"
-            key="new-file-menu-btn-disabled"
-            disabled
-            :uk-tooltip="_cannotCreateDialogText"
-            ><translate>+ New</translate></oc-button
-          >
         </template>
+        <div
+          v-if="selectedResourcesAmount > 0"
+          class="uk-margin-small-right uk-visible@l uk-flex uk-flex-middle"
+        >
+          <translate
+            v-if="selectedResourcesSize !== '?'"
+            key="multiple-select-info"
+            :translate-n="selectedResourcesAmount"
+            :translate-params="{ amount: selectedResourcesAmount, size: selectedResourcesSize }"
+            translate-plural="%{ amount } selected items - %{ size }"
+            translate-comment="Number of selected resources and their size displayed above the files list"
+            >%{ amount } selected item - %{ size }</translate
+          >
+          <translate
+            v-else
+            key="multiple-select-info-with-size"
+            :translate-n="selectedResourcesAmount"
+            :translate-params="{ amount: selectedResourcesAmount }"
+            translate-plural="%{ amount } selected items"
+            translate-comment="Number of selected resources displayed above the files list"
+            >%{ amount } selected item</translate
+          >
+          <span class="uk-margin-small-left uk-margin-small-right">|</span>
+          <oc-button variation="raw" @click="resetFileSelection"
+            ><translate>Clear selection</translate></oc-button
+          >
+        </div>
         <template v-if="$route.name === 'files-trashbin'">
           <oc-button
             v-if="selectedFiles.length > 0"
             key="restore-btn"
             icon="restore"
+            class="uk-margin-small-right"
             @click="$_ocTrashbin_restoreFiles()"
           >
-            <translate>Restore selected</translate>
+            <translate>Restore</translate>
           </oc-button>
           <oc-button
             id="delete-selected-btn"
@@ -109,42 +130,42 @@
             {{ $_ocAppBar_clearTrashbinButtonText }}
           </oc-button>
         </template>
+        <oc-grid v-if="displayBulkActions" gutter="small">
+          <div>
+            <oc-button
+              id="delete-selected-btn"
+              key="delete-selected-btn"
+              icon="delete"
+              @click="$_deleteResources_displayDialog()"
+            >
+              <translate>Delete</translate>
+            </oc-button>
+          </div>
+          <div>
+            <oc-button
+              id="move-selected-btn"
+              key="move-selected-btn"
+              icon="folder-move"
+              :disabled="!canMove"
+              @click.native="triggerLocationPicker('move')"
+            >
+              <translate>Move</translate>
+            </oc-button>
+          </div>
+          <div>
+            <oc-button
+              id="copy-selected-btn"
+              key="copy-selected-btn"
+              icon="file_copy"
+              :disabled="!canCopy"
+              @click.native="triggerLocationPicker('copy')"
+            >
+              <translate>Copy</translate>
+            </oc-button>
+          </div>
+        </oc-grid>
       </div>
-      <oc-grid v-if="displayBulkActions" gutter="small">
-        <div>
-          <oc-button
-            id="delete-selected-btn"
-            key="delete-selected-btn"
-            icon="delete"
-            @click="$_deleteResources_displayDialog()"
-          >
-            <translate>Delete selected</translate>
-          </oc-button>
-        </div>
-        <div>
-          <oc-button
-            id="move-selected-btn"
-            key="move-selected-btn"
-            icon="folder-move"
-            :disabled="!canMove"
-            @click.native="triggerLocationPicker('move')"
-          >
-            <translate>Move selected</translate>
-          </oc-button>
-        </div>
-        <div>
-          <oc-button
-            id="copy-selected-btn"
-            key="copy-selected-btn"
-            icon="file_copy"
-            :disabled="!canCopy"
-            @click.native="triggerLocationPicker('copy')"
-          >
-            <translate>Copy selected</translate>
-          </oc-button>
-        </div>
-      </oc-grid>
-    </oc-grid>
+    </div>
   </div>
 </template>
 
@@ -159,6 +180,7 @@ import MixinDeleteResources from '../mixins/deleteResources'
 import pathUtil from 'path'
 import { canBeMoved } from '../helpers/permissions'
 import { cloneStateObject } from '../helpers/store'
+import { getResourceSize } from '../helpers/resources'
 
 export default {
   components: {
@@ -231,7 +253,7 @@ export default {
     $_ocAppBar_clearTrashbinButtonText() {
       return this.selectedFiles.length < 1
         ? this.$gettext('Empty trash bin')
-        : this.$gettext('Delete selected')
+        : this.$gettext('Delete')
     },
 
     showBreadcrumb() {
@@ -332,6 +354,29 @@ export default {
       }
 
       return true
+    },
+
+    areDefaultActionsVisible() {
+      return this.selectedFiles.length < 1
+    },
+
+    isNewBtnDisabled() {
+      return !this.canUpload || !this.hasFreeSpace
+    },
+
+    selectedResourcesAmount() {
+      return this.selectedFiles.length
+    },
+
+    selectedResourcesSize() {
+      const resources = cloneStateObject(this.selectedFiles)
+      let size = 0
+
+      for (const resource of resources) {
+        size += parseInt(resource.size, 10)
+      }
+
+      return getResourceSize(size)
     }
   },
   methods: {

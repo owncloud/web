@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-39
+@skipOnOCIS @ocis-reva-issue-39 @skipOnIphoneResolution @ocis-web=issue-3968
 Feature: Mark file as favorite
 
   As a user
@@ -10,7 +10,7 @@ Feature: Mark file as favorite
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest
+  @smokeTes
   Scenario: mark files as favorites
     When the user marks file "data.tar.gz" as favorite using the webUI
     And the user marks file "data.zip" as favorite using the webUI
