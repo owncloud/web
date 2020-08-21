@@ -16,51 +16,11 @@ config = {
 	'acceptance': {
 		'webUI': {
 			'suites': {
-				'webUICreateFilesFolders': 'createFilesFolders',
-				'webUIDeleteFilesFolders': 'deleteFilesFolders',
-				'webUIFavorites': 'Favorites',
-				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingAutocompletion': 'SharingAutocompletion',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
-				'webUIResharing': 'Resharing',
-				'webUISharingPublic': 'SharingPublic',
-				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
-				'webUITrashbin': 'Trashbin',
-				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
-				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
-				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-				'webUISharingNotifications': 'SharingNotifications',
-				'webUIAccount': 'Account',
-				'webUIMoveFilesFolders': 'Move'
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
 				'PHOENIX_CONFIG': '/srv/config/drone/config.json'
 			}
-		},
-		'webUIFederation': {
-			'suites': {
-				'webUISharingExternal': 'SharingExternal',
-			},
-			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
-				'REMOTE_BACKEND_HOST': 'http://federated'
-			},
-			'federatedServerNeeded': True,
-			'federatedServerVersion': 'daily-master-qa'
 		},
 		'webUI-XGA': {
 			'suites': {
@@ -85,20 +45,8 @@ config = {
 		'webUI-ocis': {
 			'suites': {
 				'webUIOCIS1': [
-					'webUICreateFilesFolders',
-					'webUIDeleteFilesFolders',
-					'webUIFavorites',
-					'webUIFiles',
-					'webUILogin',
-					'webUINotifications',
 				],
 				'webUIOCIS2': [
-					'webUIPrivateLinks',
-					'webUIRenameFiles',
-					'webUIRenameFolders',
-					'webUITrashbin',
-					'webUIUpload',
-					'webUIAccount'
 				]
 			},
 			'extraEnvironment': {
