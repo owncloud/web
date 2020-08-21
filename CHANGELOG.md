@@ -9,6 +9,7 @@ Summary
 -------
 
 * Change - Add default external apps for ocis: [#3967](https://github.com/owncloud/phoenix/pull/3967)
+* Enhancement - Add info about number of selected items and their size: [#122](https://github.com/owncloud/product/issues/122)
 
 Details
 -------
@@ -18,6 +19,14 @@ Details
    We are enabling the settings-ui and accounts-ui by default now for ocis.
 
    https://github.com/owncloud/phoenix/pull/3967
+
+* Enhancement - Add info about number of selected items and their size: [#122](https://github.com/owncloud/product/issues/122)
+
+   We've added information about the number of selected items and their size above the files list
+   next to batch actions.
+
+   https://github.com/owncloud/product/issues/122
+   https://github.com/owncloud/phoenix/pull/3850
 
 Changelog for ownCloud Phoenix [0.15.0] (2020-08-19)
 =======================================
