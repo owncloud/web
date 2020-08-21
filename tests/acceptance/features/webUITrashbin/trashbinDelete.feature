@@ -1,4 +1,4 @@
-@files_trashbin-app-required @skipOnOCIS @issue-ocis-phoenix-118
+@files_trashbin-app-required @issue-ocis-phoenix-118
 Feature: files and folders can be deleted from the trashbin
   As a user
   I want to delete files and folders from the trashbin
@@ -33,11 +33,23 @@ Feature: files and folders can be deleted from the trashbin
     # And file "lorem-big.txt" should not be listed in the trashbin folder "simple-folder" on the webUI
     But file "lorem-big.txt" should be listed on the webUI
 
+  @skipOnOCIS
+  @issue-product-188
   Scenario: Delete folders and check that they are gone
     When the user deletes folder "simple-folder" using the webUI
     And the user deletes folder "Folder,With,Comma" using the webUI
     Then folder "simple-folder" should not be listed on the webUI
     And folder "Folder,With,Comma" should not be listed on the webUI
+
+  @skipOnOC10
+  @issue-product-188
+  # after the issue is fixed delete this scenario and use the one above
+  Scenario: Delete folders and check that they are gone
+    When the user deletes folder "simple-folder" using the webUI
+    Then the error message with header "Deletion of simple-folder failed" should be displayed on the webUI
+    And folder "simple-folder" should be listed on the webUI
+    When the user deletes folder "Folder,With,Comma" using the webUI
+    Then folder "Folder,With,Comma" should not be listed on the webUI
 
   Scenario: Select some files and delete from trashbin in a batch
     When the user batch deletes these files using the webUI
@@ -52,6 +64,8 @@ Feature: files and folders can be deleted from the trashbin
     And file "lorem.txt" should not be listed on the webUI
     And file "lorem-big.txt" should not be listed on the webUI
 
+  @skipOnOCIS
+  @issue-product-188
   Scenario: Select all except for some files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
@@ -64,10 +78,36 @@ Feature: files and folders can be deleted from the trashbin
     But file "data.zip" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
 
+  @skipOnOC10
+  @issue-product-188
+  # after the issue is fixed delete this scenario and use the one above
+  Scenario: Select all except for some files and delete from trashbin in a batch
+    When the user marks all files for batch action using the webUI
+    And the user unmarks these files for batch action using the webUI
+      | name          |
+      | lorem.txt     |
+      | lorem-big.txt |
+    And the user batch deletes the marked files using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And file "lorem-big.txt" should be listed on the webUI
+    But folder "simple-folder" should be listed on the webUI
+    And file "data.zip" should not be listed on the webUI
+
+  @skipOnOCIS
+  @issue-product-188
   Scenario: Select all files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
     Then the folder should be empty on the webUI
+
+  @skipOnOC10
+  @issue-product-188
+  # after the issue is fixed delete this scenario and use the one above
+  Scenario: Select all files and delete from trashbin in a batch
+    When the user marks all files for batch action using the webUI
+    And the user batch deletes the marked files using the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    But folder "simple-folder" should be listed on the webUI
 
   Scenario: Delete single file from deleted files list
     When the user deletes the file "lorem.txt" from the deleted files list
@@ -75,7 +115,18 @@ Feature: files and folders can be deleted from the trashbin
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
 
+  @skipOnOCIS
+  @issue-product-139
   Scenario: Clear trashbin
     When the user clears the trashbin
     Then the success message with header "Trash bin was successfully emptied" should be displayed on the webUI
     And the trashbin should be empty on the webUI
+
+  @skipOnOC10
+  @issue-product-139
+  # after the issue is fixed delete this scenario and use the one above
+  Scenario: Clear trashbin
+    When the user clears the trashbin
+    Then the error message with header "Trash bin couldn't be emptied" should be displayed on the webUI
+    And file "lorem.txt" should be listed on the webUI
+    And folder "simple-folder" should be listed on the webUI
