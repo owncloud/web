@@ -8,9 +8,9 @@ clients:
     insecure: yes
     trusted: yes
     redirect_uris:
-      - http://ocis:9100/oidc-callback.html
-      - http://ocis:9100/
+      - https://ocis:9200/oidc-callback.html
+      - https://ocis:9200/
     origins:
-      - http://ocis:9100
+      - https://ocis:9200
 
 authorities:
