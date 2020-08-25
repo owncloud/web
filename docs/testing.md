@@ -120,9 +120,6 @@ These values can be set using the environment variables to configure `yarn run a
 | `REMOTE_BACKEND_HOST` | ownCloud remote server URL                                               | http://localhost:8080 |
 | `RUN_ON_OCIS`       | Running the tests using the OCIS backend                                                            | false |
 | `OCIS_REVA_DATA_ROOT`       | Data directory of OCIS                                             | /var/tmp/reva |
-| `LDAP_SERVER_URL`       | LDAP server for openID provider                                                            | ldap://127.0.0.1 |
-| `LDAP_BASE_DN`       | bind dn for LDAP                                                            | cn=admin,dc=owncloud,dc=com |
-| `LDAP_ADMIN_PASSWORD`       | Password for ldap bind dn                                                            | cn=admin,dc=owncloud,dc=com |
 | `OCIS_SKELETON_DIR`       | Skeleton files directory for new users                                                           | - |
 | `PHOENIX_CONFIG`       | Path for the phoenix config file (usually in the dist folder)                       | - |
 
