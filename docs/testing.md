@@ -76,26 +76,16 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 #### the manual way (e.g. to run from an existing ocis location)
 1. clone and build [ocis](https://github.com/owncloud/ocis)
 2. run `yarn run testing-app` to get the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
-3. Run ldap server and redis server using docker
+3. Run redis server using docker
     ```sh
-    yarn run ldap-server
 
     yarn run redis-server
     ```
 
 4. Run the OCIS server with the necessary configurations
     ```sh
-    export REVA_LDAP_HOSTNAME='localhost'
-    export REVA_LDAP_PORT=636
-    export REVA_LDAP_BIND_PASSWORD='admin'
-    export REVA_LDAP_BIND_DN='cn=admin,dc=owncloud,dc=com'
-    export REVA_LDAP_BASE_DN='dc=owncloud,dc=com'
     export REVA_STORAGE_OWNCLOUD_REDIS_ADDR='localhost:6379'
     export PHOENIX_ASSET_PATH='<path-to-phoenix-clone>/dist'
-    export LDAP_URI='ldap://localhost'
-    export LDAP_BINDDN='cn=admin,dc=owncloud,dc=com'
-    export LDAP_BINDPW='admin'
-    export LDAP_BASEDN='dc=owncloud,dc=com'
     ```
    for Mac users additionally:
    ```sh
