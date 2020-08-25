@@ -76,26 +76,16 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 #### the manual way (e.g. to run from an existing ocis location)
 1. clone and build [ocis](https://github.com/owncloud/ocis)
 2. run `yarn run testing-app` to get the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
-3. Run ldap server and redis server using docker
+3. Run redis server using docker
     ```sh
-    yarn run ldap-server
 
     yarn run redis-server
     ```
 
 4. Run the OCIS server with the necessary configurations
     ```sh
-    export REVA_LDAP_HOSTNAME='localhost'
-    export REVA_LDAP_PORT=636
-    export REVA_LDAP_BIND_PASSWORD='admin'
-    export REVA_LDAP_BIND_DN='cn=admin,dc=owncloud,dc=com'
-    export REVA_LDAP_BASE_DN='dc=owncloud,dc=com'
     export REVA_STORAGE_OWNCLOUD_REDIS_ADDR='localhost:6379'
     export PHOENIX_ASSET_PATH='<path-to-phoenix-clone>/dist'
-    export LDAP_URI='ldap://localhost'
-    export LDAP_BINDDN='cn=admin,dc=owncloud,dc=com'
-    export LDAP_BINDPW='admin'
-    export LDAP_BASEDN='dc=owncloud,dc=com'
     ```
    for Mac users additionally:
    ```sh
@@ -130,9 +120,6 @@ These values can be set using the environment variables to configure `yarn run a
 | `REMOTE_BACKEND_HOST` | ownCloud remote server URL                                               | http://localhost:8080 |
 | `RUN_ON_OCIS`       | Running the tests using the OCIS backend                                                            | false |
 | `OCIS_REVA_DATA_ROOT`       | Data directory of OCIS                                             | /var/tmp/reva |
-| `LDAP_SERVER_URL`       | LDAP server for openID provider                                                            | ldap://127.0.0.1 |
-| `LDAP_BASE_DN`       | bind dn for LDAP                                                            | cn=admin,dc=owncloud,dc=com |
-| `LDAP_ADMIN_PASSWORD`       | Password for ldap bind dn                                                            | cn=admin,dc=owncloud,dc=com |
 | `OCIS_SKELETON_DIR`       | Skeleton files directory for new users                                                           | - |
 | `PHOENIX_CONFIG`       | Path for the phoenix config file (usually in the dist folder)                       | - |
 
