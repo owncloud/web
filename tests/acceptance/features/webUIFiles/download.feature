@@ -19,7 +19,7 @@ Feature: download files
     And as "user1" file "lorem.txt" should not exist
 
   Scenario: download file with comma in the filename
-    Given the user has created file "sample,1.txt"
+    Given user "user1" has created file "sample,1.txt"
     When the user browses to the files page
     And the user downloads file "sample,1.txt" using the webUI
     Then no message should be displayed on the webUI

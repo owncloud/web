@@ -119,7 +119,7 @@ Feature: File Upload
 
   @issue-3015 @skipOnOCIS @issue-ocis-reva-200
   Scenario: Upload a file with the same name as already existing folder
-    Given the user has created folder "new-lorem.txt"
+    Given user "user1" has created folder "new-lorem.txt"
     And the user has reloaded the current page of the webUI
     When the user uploads overwriting file "new-lorem.txt" using the webUI
     Then the following error message should be displayed on the webUI
@@ -135,7 +135,7 @@ Feature: File Upload
   # When this issue is fixed merge with the scenario above
   @issue-3015 @skipOnOC10 @skipOnOCIS @issue-ocis-reva-200
   Scenario: Upload a file with the same name as already existing folder
-    Given the user has created folder "new-lorem.txt"
+    Given user "user1" has created folder "new-lorem.txt"
     And the user has reloaded the current page of the webUI
     When the user uploads overwriting file "new-lorem.txt" using the webUI
     Then the following error message should be displayed on the webUI

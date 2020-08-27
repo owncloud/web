@@ -704,15 +704,21 @@ Then(
   }
 )
 
-Then('file/folder {string} should be marked as favorite', async function(path) {
-  let isFavorite = await webdav.getProperties(path, client.globals.currentUser, ['oc:favorite'])
+Then('as user {string} file/folder {string} should be marked as favorite', async function(
+  userId,
+  path
+) {
+  let isFavorite = await webdav.getProperties(path, userId, ['oc:favorite'])
   isFavorite = isFavorite['oc:favorite']
 
   return assert.strictEqual(isFavorite, '1', `${path} expected to be favorite but was not`)
 })
 
-Then('file/folder {string} should not be marked as favorite', async function(path) {
-  let isFavorite = await webdav.getProperties(path, client.globals.currentUser, ['oc:favorite'])
+Then('as user {string} file/folder {string} should not be marked as favorite', async function(
+  userId,
+  path
+) {
+  let isFavorite = await webdav.getProperties(path, userId, ['oc:favorite'])
   isFavorite = isFavorite['oc:favorite']
 
   return assert.strictEqual(isFavorite, '0', `not expected ${path} to be favorite but was`)
@@ -830,19 +836,16 @@ Then('the deleted elements should be listed on the webUI', function() {
   return assertDeletedElementsAreListed()
 })
 
-Given('the user has renamed the following files', function(table) {
+Given('user {string} has renamed the following files', function(userId, table) {
   return Promise.all(
     table.hashes().map(row => {
-      return webdav.move(client.globals.currentUser, row['from-name-parts'], row['to-name-parts'])
+      return webdav.move(userId, row['from-name-parts'], row['to-name-parts'])
     })
   )
 })
 
 Given('user {string} has renamed file/folder {string} to {string}', webdav.move)
 
-Given('the user has created folder {string}', function(fileName) {
-  return webdav.createFolder(client.globals.currentUser, fileName)
-})
 Given('user {string} has created folder {string}', webdav.createFolder)
 
 Then(
@@ -867,23 +870,19 @@ Then(
   }
 )
 
-Given('the user has created file {string}', function(fileName) {
-  return webdav.createFile(client.globals.currentUser, fileName, '')
-})
-
 Given('user {string} has created file {string}', function(userId, fileName) {
   return webdav.createFile(userId, fileName, '')
 })
 
-Given('the user has created the following folders', function(entryList) {
+Given('user {string} has created the following folders', function(userId, entryList) {
   entryList.rows().forEach(entry => {
-    webdav.createFolder(client.globals.currentUser, entry[0])
+    webdav.createFolder(userId, entry[0])
   })
   return client
 })
-Given('the user has created the following files', function(entryList) {
+Given('user {string} has created the following files', function(userId, entryList) {
   entryList.rows().forEach(entry => {
-    webdav.createFile(client.globals.currentUser, entry[0])
+    webdav.createFile(userId, entry[0])
   })
   return client
 })
@@ -902,16 +901,15 @@ When(
     return client
   }
 )
-Then('the clipboard content should match permalink of resource {string}', async function(
-  folderName
-) {
-  const folderData = await webdav.getProperties(folderName, client.globals.currentUser, [
-    'oc:privatelink'
-  ])
-  return client.getClipBoardContent(function(value) {
-    assert.strictEqual(folderData['oc:privatelink'], value)
-  })
-})
+Then(
+  'as user {string} the clipboard content should match permalink of resource {string}',
+  async function(userId, folderName) {
+    const folderData = await webdav.getProperties(folderName, userId, ['oc:privatelink'])
+    return client.getClipBoardContent(function(value) {
+      assert.strictEqual(folderData['oc:privatelink'], value)
+    })
+  }
+)
 
 Then('the app-sidebar for file/folder {string} should be visible on the webUI', resource => {
   return client.page

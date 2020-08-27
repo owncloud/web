@@ -120,7 +120,7 @@ Feature: Restore deleted files/folders
 
   @issue-1753
   Scenario: Restore a file from trashbin whose parent folder is renamed
-    Given the user has created file "simple-folder/file-to-delete-and-restore"
+    Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "user1"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
@@ -141,7 +141,7 @@ Feature: Restore deleted files/folders
     Given the following files have been deleted by user "user1"
       | name      |
       | lorem.txt |
-    And the user has created folder "lorem.txt"
+    And user "user1" has created folder "lorem.txt"
     And the following folders have been deleted by user "user1"
       | name      |
       | lorem.txt |
@@ -155,11 +155,11 @@ Feature: Restore deleted files/folders
     And folder "lorem.txt" should not be listed on the webUI
 
   Scenario: Delete and restore a folder that has the same name like a deleted file
-    Given the user has created file "lorem.txt"
+    Given user "user1" has created file "lorem.txt"
     And the following files have been deleted by user "user1"
       | name      |
       | lorem.txt |
-    And the user has created folder "lorem.txt"
+    And user "user1" has created folder "lorem.txt"
     And the following folders have been deleted by user "user1"
       | name      |
       | lorem.txt |

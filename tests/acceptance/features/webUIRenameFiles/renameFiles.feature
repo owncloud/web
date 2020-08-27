@@ -23,7 +23,7 @@ Feature: rename files
       | "लोरेम।तयक्स्त? $%#&@" |
 
   Scenario Outline: Rename a file that has special characters in its name
-    Given the user has created file "sämple,1.txt"
+    Given user "user1" has created file "sämple,1.txt"
     And the user has reloaded the current page of the webUI
     When the user renames file <from_name> to <to_name> using the webUI
     Then file <to_name> should be listed on the webUI

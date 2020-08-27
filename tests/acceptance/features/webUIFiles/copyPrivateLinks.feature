@@ -11,7 +11,7 @@ Feature: copy path as a permanent link
 
   Scenario Outline: Copy permalink to clipboard
     When the user copies the permalink of the resource <resource_name> using the webUI
-    Then the clipboard content should match permalink of resource <resource_name>
+    Then as user "user1" the clipboard content should match permalink of resource <resource_name>
     Examples:
       | resource_name   |
       | "lorem.txt"     |

@@ -25,7 +25,7 @@ Feature: create files
 
   @issue-2882
   Scenario: redirect to subfolder after closing the text editor
-    Given the user has created folder "parent-folder"
+    Given user "user1" has created folder "parent-folder"
     When the user reloads the current page of the webUI
     And the user opens folder "parent-folder" using the webUI
     Then there should be no resources listed on the webUI

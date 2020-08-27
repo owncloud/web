@@ -481,13 +481,6 @@ Given('user {string} has shared file/folder {string} with user {string}', functi
   return shareFileFolder(elementToShare, sharer, receiver)
 })
 
-Given('the user has shared file/folder {string} with user {string}', function(
-  elementToShare,
-  receiver
-) {
-  return shareFileFolder(elementToShare, client.globals.currentUser, receiver)
-})
-
 Given(
   'user {string} has shared file/folder {string} with user {string} with {string} permission/permissions',
   function(sharer, elementToShare, receiver, permissions) {

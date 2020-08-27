@@ -10,8 +10,8 @@ Feature: deleting files and folders
 
   @smokeTest
   Scenario: Delete files & folders one by one and check its existence after page reload
-    Given the user has created file "sample,1.txt"
-    And the user has created folder "Sample,Folder,With,Comma"
+    Given user "user1" has created file "sample,1.txt"
+    And user "user1" has created folder "Sample,Folder,With,Comma"
     And the user has reloaded the current page of the webUI
     When the user deletes the following elements using the webUI
       | name                                  |
