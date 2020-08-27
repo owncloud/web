@@ -88,7 +88,7 @@ Feature: deleting files and folders
     # Check just an example of a file that should not exist any more
     But as "user1" file "data.zip" should not exist
     And file "data.zip" should not be listed on the webUI
-    And there should be 2 files/folders listed on the webUI
+    And the count of files and folders shown on the webUI should be 2
     And no message should be displayed on the webUI
 
   @ocis-reva-issue-106
