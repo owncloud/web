@@ -102,13 +102,12 @@ config = {
 				]
 			},
 			'extraEnvironment': {
-				'SERVER_HOST': 'http://ocis:9100',
-				'BACKEND_HOST': 'http://ocis:9140',
+				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+				'SERVER_HOST': 'https://ocis:9200',
+				'BACKEND_HOST': 'https://ocis:9200',
 				'RUN_ON_OCIS': 'true',
-				'RUN_WITH_LDAP': 'true',
 				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
 				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
-				'LDAP_SERVER_URL': 'ldap://ldap',
 				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
 			},
 			'runningOnOCIS': True,
@@ -119,7 +118,7 @@ config = {
 	'defaults': {
 		'acceptance': {
 			'ocisBranch': 'master',
-			'ocisCommit': 'cef578008a6e04902325c7aef619dc816ff6b82b',
+			'ocisCommit': '1e3dbafbf19fceec248abd541c4a6a33906de579',
 		}
 	},
 
@@ -456,7 +455,7 @@ def acceptance():
 										owncloudFederatedService() +
 										databaseServiceForFederation(db, federationDbSuffix) if params['federatedServerNeeded'] else []
 									) +
-									owncloudService() if not params['runningOnOCIS'] else ldapService()
+									owncloudService()
 								),
 							'depends_on': [],
 							'trigger': {
@@ -1160,14 +1159,6 @@ def ocisService():
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'REVA_LDAP_HOSTNAME': 'ldap',
-			'REVA_LDAP_PORT': 636,
-			'REVA_LDAP_BIND_PASSWORD': 'admin',
-			'REVA_LDAP_BIND_DN': 'cn=admin,dc=owncloud,dc=com',
-			'REVA_LDAP_BASE_DN': 'dc=owncloud,dc=com',
-			'REVA_LDAP_SCHEMA_UID': 'uid',
-			'REVA_LDAP_SCHEMA_MAIL': 'mail',
-			'REVA_LDAP_SCHEMA_DISPLAYNAME': 'displayName',
 			'REVA_STORAGE_HOME_DATA_TEMP_FOLDER': '/srv/app/tmp/',
 			'REVA_STORAGE_LOCAL_ROOT': '/srv/app/tmp/reva/root',
 			'REVA_STORAGE_OWNCLOUD_DATADIR': '/srv/app/tmp/reva/data',
@@ -1175,17 +1166,15 @@ def ocisService():
 			'REVA_STORAGE_OWNCLOUD_REDIS_ADDR': 'redis:6379',
 			'REVA_OIDC_ISSUER': 'https://ocis:9200',
 			'REVA_STORAGE_OC_DATA_SERVER_URL': 'http://ocis:9164/data',
-			'REVA_STORAGE_HOME_EXPOSE_DATA_SERVER': 1,
-			'REVA_STORAGE_OC_EXPOSE_DATA_SERVER': 1,
+			'REVA_DATAGATEWAY_URL': 'https://ocis:9200/data',
 			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
 			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
 			'KONNECTD_ISS': 'https://ocis:9200',
 			'KONNECTD_TLS': 'true',
-			'LDAP_URI': 'ldap://ldap',
-			'LDAP_BINDDN': 'cn=admin,dc=owncloud,dc=com',
-			'LDAP_BINDPW': 'admin',
-			'LDAP_BASEDN': 'dc=owncloud,dc=com',
+			'PROXY_OIDC_ISSUER': 'https://ocis:9200',
+			'PROXY_OIDC_INSECURE': 'true',
+			'REVA_LDAP_IDP': 'https://ocis:9200',
 		},
 		'commands': [
 			'cd /var/www/owncloud',
@@ -1392,19 +1381,6 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 			'name': 'configs',
 			'path': '/srv/config'
 		}],
-	}]
-
-def ldapService():
-	return[{
-		'name': 'ldap',
-		'image': 'osixia/openldap',
-		'pull': 'always',
-		'environment': {
-			'LDAP_DOMAIN': 'owncloud.com',
-			'LDAP_ORGANISATION': 'owncloud',
-			'LDAP_ADMIN_PASSWORD': 'admin',
-			'LDAP_TLS_VERIFY_CLIENT': 'never',
-		},
 	}]
 
 def redisService():
