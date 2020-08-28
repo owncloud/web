@@ -44,26 +44,7 @@ Feature: File Upload
       | folder-to-upload-to     |
       | 0                     |
       | 'single'quotes        |
-
-    # Merge with the scenario above once the issue is resolved
-    @smokeTest
-    Scenario Outline: upload a new file into a sub folder
-      Given a file with the size of "3000" bytes and the name "0" has been created locally
-      When the user opens folder "<folder-to-upload-to>" using the webUI
-      And the user uploads a created file "0" using the webUI
-      Then file "0" should be listed on the webUI
-      And as "user1" the content of "<folder-to-upload-to>/0" should be the same as the local "0"
-      When the user uploads file "new-'single'quotes.txt" using the webUI
-      Then file "new-'single'quotes.txt" should be listed on the webUI
-      And as "user1" the content of "<folder-to-upload-to>/new-'single'quotes.txt" should be the same as the local "new-'single'quotes.txt"
-      When the user uploads file "new-strängé filename (duplicate #2 &).txt" using the webUI
-      Then file "new-strängé filename (duplicate #2 &).txt" should be listed on the webUI
-      And as "user1" the content of "<folder-to-upload-to>/new-strängé filename (duplicate #2 &).txt" should be the same as the local "new-strängé filename (duplicate #2 &).txt"
-      When the user uploads file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" using the webUI
-      Then file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be listed on the webUI
-      And as "user1" the content of "<folder-to-upload-to>/zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be the same as the local "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt"
-      Examples:
-        | strängé नेपाली folder |
+      | strängé नेपाली folder |
 
   @skip
   Scenario: overwrite an existing file
