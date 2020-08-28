@@ -16,11 +16,11 @@ Feature: Unmark file/folder as favorite
     And user "user1" has favorited element "lorem.txt"
     And the user has browsed to the files page
     When the user unmarks the favorited file "data.zip" using the webUI
-    Then file "data.zip" should not be marked as favorite
+    Then as user "user1" file "data.zip" should not be marked as favorite
     And file "data.zip" should not be marked as favorite on the webUI
-    But file "data.tar.gz" should be marked as favorite
+    But as user "user1" file "data.tar.gz" should be marked as favorite
     And file "data.tar.gz" should be marked as favorite on the webUI
-    And file "lorem.txt" should be marked as favorite
+    And as user "user1" file "lorem.txt" should be marked as favorite
     And file "lorem.txt" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then there should be 2 files/folders listed on the webUI
@@ -32,11 +32,11 @@ Feature: Unmark file/folder as favorite
     And user "user1" has favorited element "0"
     And the user has browsed to the files page
     When the user unmarks the favorited folder "simple-folder" using the webUI
-    Then folder "simple-folder" should not be marked as favorite
+    Then as user "user1" folder "simple-folder" should not be marked as favorite
     And folder "simple-folder" should not be marked as favorite on the webUI
-    But folder "simple-empty-folder" should be marked as favorite
+    But as user "user1" folder "simple-empty-folder" should be marked as favorite
     And folder "simple-empty-folder" should be marked as favorite on the webUI
-    And folder "0" should be marked as favorite
+    And as user "user1" folder "0" should be marked as favorite
     And folder "0" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then there should be 2 files/folders listed on the webUI
@@ -50,7 +50,7 @@ Feature: Unmark file/folder as favorite
     And the user has browsed to the favorites page
     When the user unmarks the favorited file "data.zip" using the webUI
     Then file "data.zip" should be listed on the webUI
-    And file "data.zip" should not be marked as favorite
+    And as user "user1" file "data.zip" should not be marked as favorite
     And file "data.zip" should not be marked as favorite on the webUI
     But file "data.tar.gz" should be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
@@ -62,7 +62,7 @@ Feature: Unmark file/folder as favorite
     And the user has browsed to the favorites page
     When the user unmarks the favorited folder "simple-folder" using the webUI
     Then folder "simple-folder" should be listed on the webUI
-    And folder "simple-folder" should not be marked as favorite
+    And as user "user1" folder "simple-folder" should not be marked as favorite
     And folder "simple-folder" should not be marked as favorite on the webUI
     But folder "0" should be listed on the webUI
     And folder "simple-empty-folder" should be listed on the webUI
@@ -74,9 +74,9 @@ Feature: Unmark file/folder as favorite
     When the user unmarks the favorited folder "simple-folder" using the webUI sidebar
     And the user unmarks the favorited file "data.zip" using the webUI sidebar
     Then folder "simple-folder" should not be marked as favorite on the webUI
-    And folder "simple-folder" should not be marked as favorite
+    And as user "user1" folder "simple-folder" should not be marked as favorite
     And file "data.zip" should not be marked as favorite on the webUI
-    And file "data.zip" should not be marked as favorite
+    And as user "user1" file "data.zip" should not be marked as favorite
 
   @issue-1720
   Scenario: Try to unfavorite file and folder that used to exist but does not anymore

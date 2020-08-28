@@ -7,8 +7,8 @@ Feature: files and folders exist in the trashbin after being deleted
   Background:
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
-    And the user has created file "sample,1.txt"
-    And the user has created folder "Folder,With,Comma"
+    And user "user1" has created file "sample,1.txt"
+    And user "user1" has created folder "Folder,With,Comma"
     And the user has browsed to the files page
 
   @smokeTest @skipOnOCIS @ocis-reva-issue-111
@@ -28,7 +28,7 @@ Feature: files and folders exist in the trashbin after being deleted
 
   @skipOnOCIS @ocis-reva-issue-111
   Scenario: Delete a file with problematic characters and check it is in the trashbin
-    Given the user has renamed the following files
+    Given user "user1" has renamed the following files
       | from-name-parts   | to-name-parts   |
       | lorem.txt         | 'single'        |
       | lorem-big.txt     | "double" quotes |
@@ -72,8 +72,8 @@ Feature: files and folders exist in the trashbin after being deleted
 
   @skipOnOCIS @issue-1725 @issue-1910 @ocis-reva-issue-111
   Scenario: Delete an empty folder and check it is in the trashbin
-    Given the user has created folder "my-empty-folder"
-    And the user has created folder "my-other-empty-folder"
+    Given user "user1" has created folder "my-empty-folder"
+    And user "user1" has created folder "my-other-empty-folder"
     When the user reloads the current page of the webUI
     And the user deletes folder "my-empty-folder" using the webUI
     Then as "user1" folder "my-empty-folder" should exist in the trashbin

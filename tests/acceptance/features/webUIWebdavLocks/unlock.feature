@@ -117,7 +117,7 @@ Feature: Unlock locked files and folders
       | username  |
       | receiver1 |
       | receiver2 |
-    And the user has created folder "/FOLDER_TO_SHARE"
+    And user "brand-new-user" has created folder "/FOLDER_TO_SHARE"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"
@@ -156,7 +156,7 @@ Feature: Unlock locked files and folders
       | username  |
       | receiver1 |
       | receiver2 |
-    And the user has created folder "/FOLDER_TO_SHARE"
+    And user "brand-new-user" has created folder "/FOLDER_TO_SHARE"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"
@@ -195,7 +195,7 @@ Feature: Unlock locked files and folders
       | username  |
       | receiver1 |
       | receiver2 |
-    And the user has created folder "/FOLDER_TO_SHARE"
+    And user "brand-new-user" has created folder "/FOLDER_TO_SHARE"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver1"
     And user "brand-new-user" has shared folder "/FOLDER_TO_SHARE" with user "receiver1"
     And user "brand-new-user" has shared file "/lorem.txt" with user "receiver2"

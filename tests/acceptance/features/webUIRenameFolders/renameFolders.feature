@@ -22,7 +22,7 @@ Feature: rename folders
       | 'सिमप्ले फोल्देर$%#?&@'      |
 
   Scenario Outline: Rename a folder that has special characters in its name
-    Given the user has created file "Sample,Folder,With,Comma"
+    Given user "user1" has created file "Sample,Folder,With,Comma"
     And the user has reloaded the current page of the webUI
     When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI

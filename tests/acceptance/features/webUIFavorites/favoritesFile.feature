@@ -14,9 +14,9 @@ Feature: Mark file as favorite
   Scenario: mark files as favorites
     When the user marks file "data.tar.gz" as favorite using the webUI
     And the user marks file "data.zip" as favorite using the webUI
-    Then file "data.tar.gz" should be marked as favorite
+    Then as user "user1" file "data.tar.gz" should be marked as favorite
     And file "data.tar.gz" should be marked as favorite on the webUI
-    And file "data.zip" should be marked as favorite
+    And as user "user1" file "data.zip" should be marked as favorite
     And file "data.zip" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then there should be 2 files/folders listed on the webUI
@@ -26,9 +26,9 @@ Feature: Mark file as favorite
   Scenario: mark folders as favorites
     When the user marks folder "simple-folder" as favorite using the webUI
     And the user marks folder "strängé नेपाली folder" as favorite using the webUI
-    Then folder "simple-folder" should be marked as favorite
+    Then as user "user1" folder "simple-folder" should be marked as favorite
     And folder "simple-folder" should be marked as favorite on the webUI
-    And folder "strängé नेपाली folder" should be marked as favorite
+    And as user "user1" folder "strängé नेपाली folder" should be marked as favorite
     And folder "strängé नेपाली folder" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then there should be 2 files/folders listed on the webUI
@@ -39,9 +39,9 @@ Feature: Mark file as favorite
     When the user marks folder "simple-folder" as favorite using the webUI sidebar
     And the user marks file "data.zip" as favorite using the webUI sidebar
     Then folder "simple-folder" should be marked as favorite on the webUI
-    And folder "simple-folder" should be marked as favorite
+    And as user "user1" folder "simple-folder" should be marked as favorite
     And file "data.zip" should be marked as favorite on the webUI
-    And file "data.zip" should be marked as favorite
+    And as user "user1" file "data.zip" should be marked as favorite
 
   Scenario: navigate to an empty favorites page
     When the user browses to the favorites page
@@ -101,14 +101,14 @@ Feature: Mark file as favorite
     And as "user1" folder "simple-folder" should not exist
 
     Scenario: Favourite files and folders with comma in the names
-      Given the user has created file "sample,1.txt"
-      And the user has created folder "Sample,Folder,With,Comma"
+      Given user "user1" has created file "sample,1.txt"
+      And user "user1" has created folder "Sample,Folder,With,Comma"
       And the user has reloaded the current page of the webUI
       When the user marks file "sample,1.txt" as favorite using the webUI
       And the user marks folder "Sample,Folder,With,Comma" as favorite using the webUI
-      Then file "sample,1.txt" should be marked as favorite
+      Then as user "user1" file "sample,1.txt" should be marked as favorite
       And file "sample,1.txt" should be marked as favorite on the webUI
-      And folder "Sample,Folder,With,Comma" should be marked as favorite
+      And as user "user1" folder "Sample,Folder,With,Comma" should be marked as favorite
       And folder "Sample,Folder,With,Comma" should be marked as favorite on the webUI
       When the user browses to the favorites page
       Then there should be 2 files/folders listed on the webUI
