@@ -67,22 +67,22 @@ module.exports = {
       email: 'sharee1@example.org'
     },
     // These users are available by default only in ocis backend when not using ldap
-    Einstein: {
+    '4c510ada-c86b-4815-8820-42cdf82c3d51': {
       displayname: 'Albert Einstein',
       password: 'relativity',
       email: 'einstein@example.org'
     },
-    Richard: {
+    '932b4540-8d16-481e-8ef4-588e4b6b151c': {
       displayname: 'Richard Feynman',
       password: 'superfluidity',
       email: 'richard@example.org'
     },
-    Marie: {
+    'f7fbf8c8-139b-4376-b307-cf0a8c2d0d9c': {
       displayname: 'Marie Curie',
       password: 'radioactivity',
       email: 'marie@example.org'
     },
-    Moss: {
+    '058bff95-6708-4fe5-91e4-9ea3d377588b': {
       displayname: 'Maurice Moss',
       password: 'vista',
       email: 'moss@example.org'
