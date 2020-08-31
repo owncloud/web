@@ -81,6 +81,11 @@ module.exports = {
       displayname: 'Marie Curie',
       password: 'radioactivity',
       email: 'marie@example.org'
+    },
+    Moss: {
+      displayname: 'Maurice Moss',
+      password: 'vista',
+      email: 'moss@example.org'
     }
   },
   createdUsers: {},
