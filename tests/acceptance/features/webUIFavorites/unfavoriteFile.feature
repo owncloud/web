@@ -23,7 +23,7 @@ Feature: Unmark file/folder as favorite
     And as user "user1" file "lorem.txt" should be marked as favorite
     And file "lorem.txt" should be marked as favorite on the webUI
     When the user browses to the favorites page
-    Then there should be 2 files/folders listed on the webUI
+    Then the count of files and folders shown on the webUI should be 2
     But file "data.zip" should not be listed on the webUI
 
   Scenario: unmark a folder as favorite from files page
@@ -39,7 +39,7 @@ Feature: Unmark file/folder as favorite
     And as user "user1" folder "0" should be marked as favorite
     And folder "0" should be marked as favorite on the webUI
     When the user browses to the favorites page
-    Then there should be 2 files/folders listed on the webUI
+    Then the count of files and folders shown on the webUI should be 2
     But folder "simple-folder" should not be listed on the webUI
 
   @smokeTest

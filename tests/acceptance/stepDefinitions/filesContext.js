@@ -744,7 +744,9 @@ Then('file/folder {string} should not be marked as favorite on the webUI', async
   return client
 })
 
-Then(/there should be (\d+) files\/folders listed on the webUI/, async function(noOfItems) {
+Then(/the count of files and folders shown on the webUI should be (\d+)/, async function(
+  noOfItems
+) {
   const itemsCount = await client.page.FilesPageElement.filesList().countFilesAndFolders()
   return client.assert.equal(itemsCount, noOfItems)
 })
