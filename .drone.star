@@ -118,7 +118,7 @@ config = {
 	'defaults': {
 		'acceptance': {
 			'ocisBranch': 'master',
-			'ocisCommit': '1e3dbafbf19fceec248abd541c4a6a33906de579',
+			'ocisCommit': '0c6478c9350f56ff6d7c402b5d9d60a68b0f6f75',
 		}
 	},
 
