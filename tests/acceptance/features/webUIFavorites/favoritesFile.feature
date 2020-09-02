@@ -10,7 +10,7 @@ Feature: Mark file as favorite
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTes
+  @smokeTest
   Scenario: mark files as favorites
     When the user marks file "data.tar.gz" as favorite using the webUI
     And the user marks file "data.zip" as favorite using the webUI
