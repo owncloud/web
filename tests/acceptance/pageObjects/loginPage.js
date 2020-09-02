@@ -14,6 +14,9 @@ module.exports = {
     {
       authenticate: function() {
         return this.waitForElementVisible('@authenticateButton').click('@authenticateButton')
+      },
+      waitForPage: function() {
+        return this.waitForElementVisible('@authenticateButton')
       }
     }
   ]
