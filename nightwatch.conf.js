@@ -8,7 +8,7 @@ const LOCAL_LAUNCH_URL = withHttp(
   process.env.SERVER_HOST || (RUN_ON_OCIS ? 'https://localhost:9200' : 'http://localhost:8300')
 )
 const LOCAL_BACKEND_URL = withHttp(
-  process.env.BACKEND_HOST || (RUN_ON_OCIS ? 'http://localhost:9140' : 'http://localhost:8080')
+  process.env.BACKEND_HOST || (RUN_ON_OCIS ? 'https://localhost:9200' : 'http://localhost:8080')
 )
 const REMOTE_BACKEND_URL = process.env.REMOTE_BACKEND_HOST
   ? withHttp(process.env.REMOTE_BACKEND_HOST || 'http://localhost:8080')
