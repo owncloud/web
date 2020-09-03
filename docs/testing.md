@@ -75,7 +75,7 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 
 #### the manual way (e.g. to run from an existing ocis location)
 1. clone and build [ocis](https://github.com/owncloud/ocis)
-2. run `yarn run testing-app` to get the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
+2. From inside the `phoenix` directory run `yarn run testing-app` to get the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
 3. Run redis server using docker
     ```sh
     yarn run redis-server
