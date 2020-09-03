@@ -78,7 +78,6 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 2. run `yarn run testing-app` to get the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
 3. Run redis server using docker
     ```sh
-
     yarn run redis-server
     ```
 
@@ -86,11 +85,9 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
     ```sh
     export REVA_STORAGE_OWNCLOUD_REDIS_ADDR='localhost:6379'
     export PHOENIX_ASSET_PATH='<path-to-phoenix-clone>/dist'
+    export PHOENIX_WEB_CONFIG='<path-to-phoenix-clone>/dist/config.json'
     ```
-   for Mac users additionally:
-   ```sh
-    export PHOENIX_WEB_CONFIG='<path-to-config-file>/ocis-mac-config.json'
-    ```
+    note: `PHOENIX_WEB_CONFIG` should point to the same config file you have created earlier.
 
     run the server:
 
