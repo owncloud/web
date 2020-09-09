@@ -8,7 +8,7 @@ Feature: deleting files and folders
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest
+  @smokeTest @ocisSmokeTest
   Scenario: Delete files & folders one by one and check its existence after page reload
     Given user "user1" has created file "sample,1.txt"
     And user "user1" has created folder "Sample,Folder,With,Comma"

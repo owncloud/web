@@ -8,6 +8,7 @@ Feature: create files
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
+  @ocisSmokeTest
   Scenario: create a new file
     When the user creates a file with the name "sample.txt" using the webUI
     And the user browses to the files page

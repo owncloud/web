@@ -26,6 +26,7 @@ Feature: login users
     When the user logs out of the webUI
     Then the authentication page should be visible
 
+  @ocisSmokeTest
   Scenario: logging out redirects to the url with state attribute
     Given these users have been created with default attributes:
       | username |
