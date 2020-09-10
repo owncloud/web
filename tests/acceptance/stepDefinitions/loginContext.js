@@ -97,3 +97,7 @@ Then('the accounts page should be visible in the webUI', async function() {
   const isPageVisible = await client.page.accountPage().isPageVisible()
   return assert.ok(isPageVisible)
 })
+
+Then('the user should be redirected to the login page', function() {
+  return client.page.loginPage().waitForPage()
+})

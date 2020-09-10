@@ -43,3 +43,7 @@ Feature: Access private link
 #      An error occurred while resolving the private link
 #      Any nice error message
 #      """
+
+  Scenario: Access the private link anonymously
+    When the user tries to navigate to the private link created by user "user1" for file "lorem.txt"
+    Then the user should be redirected to the login page
