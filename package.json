@@ -33,13 +33,13 @@
     "redis-server": "docker run --rm -d -p 6379:6379 -e REDIS_DATABASES=1 --name phoenix-tests-redis webhippie/redis:latest",
     "killall": "yarn run ocis-kill; yarn run docker-kill",
     "ocis-kill": "killall ocis",
-    "docker-kill": "docker kill phoenix-tests-selenium phoenix-tests-slapd phoenix-tests-redis",
+    "docker-kill": "docker kill phoenix-tests-selenium phoenix-tests-redis",
     "testing-app": "if [ -d tests/testing-app ]; then (cd tests/testing-app && git pull && pwd); else git clone --depth 1 https://github.com/owncloud/testing.git tests/testing-app; fi;",
     "build-ocis": "if [ -d tests/ocis ]; then (cd tests/ocis && git reset --hard master && git pull); else git clone --depth 1 https://github.com/owncloud/ocis.git tests/ocis; fi; cd tests/ocis; make clean; make",
-    "ocis": "yarn run build-ocis; REVA_LDAP_HOSTNAME='localhost' REVA_LDAP_PORT=636 REVA_LDAP_BIND_PASSWORD='admin' REVA_LDAP_BIND_DN='cn=admin,dc=owncloud,dc=com' REVA_LDAP_BASE_DN='dc=owncloud,dc=com' REVA_STORAGE_OWNCLOUD_REDIS_ADDR='localhost:6379' REVA_STORAGE_HOME_EXPOSE_DATA_SERVER=1 REVA_STORAGE_OC_EXPOSE_DATA_SERVER=1 PHOENIX_ASSET_PATH='./dist' LDAP_URI='ldap://localhost' LDAP_BINDDN='cn=admin,dc=owncloud,dc=com' LDAP_BINDPW='admin' LDAP_BASEDN='dc=owncloud,dc=com' tests/ocis/bin/ocis server &",
-    "ocis:mac": "yarn run build-ocis; REVA_LDAP_HOSTNAME='localhost' REVA_LDAP_PORT=636 REVA_LDAP_BIND_PASSWORD='admin' REVA_LDAP_BIND_DN='cn=admin,dc=owncloud,dc=com' REVA_LDAP_BASE_DN='dc=owncloud,dc=com' REVA_STORAGE_OWNCLOUD_REDIS_ADDR='localhost:6379' REVA_OIDC_ISSUER='https://host.docker.internal:9200' KONNECTD_IDENTIFIER_REGISTRATION_CONF='./tests/acceptance/mac-identifier-registration.yml' KONNECTD_ISS='https://host.docker.internal:9200' KONNECTD_TLS='true' PHOENIX_WEB_CONFIG='./tests/acceptance/ocis-mac-config.json' PHOENIX_ASSET_PATH='./dist' LDAP_URI='ldap://localhost' LDAP_BINDDN='cn=admin,dc=owncloud,dc=com' LDAP_BINDPW='admin' LDAP_BASEDN='dc=owncloud,dc=com' bin/ocis server &",
-    "test-requirements:ocis": "yarn run ldap-server; yarn run redis-server; yarn run selenium; yarn run testing-app; yarn run ocis",
-    "test-requirements:ocis:mac": "yarn run ldap-server; yarn run redis-server; yarn run selenium:mac; yarn run testing-app; yarn run ocis:mac"
+    "ocis": "yarn run build-ocis; REVA_STORAGE_OWNCLOUD_REDIS_ADDR='localhost:6379' REVA_STORAGE_HOME_EXPOSE_DATA_SERVER=1 REVA_STORAGE_OC_EXPOSE_DATA_SERVER=1 PHOENIX_ASSET_PATH='./dist' tests/ocis/bin/ocis server &",
+    "ocis:mac": "yarn run build-ocis; REVA_STORAGE_OWNCLOUD_REDIS_ADDR='localhost:6379' PROXY_OIDC_ISSUER='https://host.docker.internal:9200' KONNECTD_INSECURE='true' KONNECTD_IDENTIFIER_REGISTRATION_CONF='./tests/acceptance/mac-identifier-registration.yml' KONNECTD_ISS='https://host.docker.internal:9200' KONNECTD_TLS='true' PHOENIX_WEB_CONFIG='./tests/acceptance/ocis-mac-config.json' PHOENIX_ASSET_PATH='./dist' bin/ocis server &",
+    "test-requirements:ocis": "yarn run redis-server; yarn run selenium; yarn run testing-app; yarn run ocis",
+    "test-requirements:ocis:mac": "yarn run redis-server; yarn run selenium:mac; yarn run testing-app; yarn run ocis:mac"
   },
   "author": "Felix Heidecke",
   "license": "AGPL-3.0",
