@@ -15,7 +15,6 @@
   "apps": [
     "files",
     "draw-io",
-    "pdf-viewer",
     "markdown-editor",
     "media-viewer"
   ],
