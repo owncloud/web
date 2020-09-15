@@ -1,3 +1,27 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.16.0...master
+
+Summary
+-------
+
+* Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
+
+Details
+-------
+
+* Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
+
+   All visible occurrences of "collaborator" or "collaborators" have been replaced by "person"
+   or "people" respectively. Additionally, the action "Add Collaborator" was changed to
+   "Share".
+
+   https://github.com/owncloud/product/issues/231
+   https://github.com/owncloud/phoenix/pull/4070
+
 Changelog for ownCloud Phoenix [0.16.0] (2020-08-24)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.16.0 relevant to
