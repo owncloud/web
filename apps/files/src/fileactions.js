@@ -15,10 +15,20 @@ export default {
       'flatFileList',
       'currentFolder'
     ]),
-    ...mapGetters(['capabilities', 'fileSideBars', 'isAuthenticated']),
+    ...mapGetters(['capabilities', 'fileSideBars', 'isAuthenticated', 'getToken']),
     // Files lists
     actions() {
       const actions = [
+        {
+          icon: 'remove_red_eye',
+          handler: file => this.fetchFile(file.path, 'application/pdf'),
+          ariaLabel: () => {
+            return this.$gettext('Display PDF')
+          },
+          isEnabled: function(item) {
+            return item.extension === 'pdf'
+          }
+        },
         {
           icon: 'file_download',
           handler: this.downloadFile,
@@ -169,45 +179,6 @@ export default {
         }
       })
     },
-    openFileAction(action, filePath) {
-      if (action.version === 3) {
-        // TODO: replace more placeholder in the final version
-        const finalUrl = action.url
-          .replace('{PATH}', encodeURIComponent(filePath.path))
-          .replace('{FILEID}', encodeURIComponent(filePath.id))
-        const win = window.open(finalUrl, '_blank')
-        // in case popup is blocked win will be null
-        if (win) {
-          win.focus()
-        }
-        return
-      }
-      if (action.newTab) {
-        const path = this.$router.resolve({
-          name: action.routeName,
-          params: { filePath: filePath }
-        }).href
-        const url = window.location.origin + '/' + path
-        const target = `${action.routeName}-${filePath}`
-        const win = window.open(url, target)
-        // in case popup is blocked win will be null
-        if (win) {
-          win.focus()
-        }
-        return
-      }
-
-      const routeName = action.routeName ? action.app + '/' + action.routeName : action.app
-      const params = {
-        filePath,
-        contextRouteName: this.$route.name
-      }
-
-      this.$router.push({
-        name: routeName,
-        params
-      })
-    },
 
     $_fileActions_renameResource(resource, newName) {
       this.toggleModalConfirmButton()
@@ -309,6 +280,31 @@ export default {
       }
 
       this.createModal(modal)
+    },
+
+    openFile(blob, mimetype) {
+      // It is necessary to create a new blob object with mime-type explicitly set
+      // otherwise only Chrome works like it should
+      const newBlob = new Blob([blob], { type: mimetype })
+
+      // Open the file in new tab
+      const data = window.URL.createObjectURL(newBlob)
+      window.open(data, '_blank')
+    },
+
+    fetchFile(filePath, mimetype) {
+      const url = this.$client.helpers._webdavUrl + filePath
+      const headers = new Headers()
+
+      headers.append('Authorization', 'Bearer ' + this.getToken)
+      headers.append('X-Requested-With', 'XMLHttpRequest')
+
+      fetch(url, {
+        method: 'GET',
+        headers
+      })
+        .then(r => r.blob())
+        .then(blob => this.openFile(blob, mimetype))
     }
   }
 }
