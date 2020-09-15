@@ -27,9 +27,10 @@ export default {
             ariaLabel: () => {
               return `Open in ${editor.title[this.$language.current] || editor.title.en}`
             },
-            iconUrl: editor.icon,
+            icon: editor.icon,
             handler: item => this.openFileAction(editor, item.path),
-            isEnabled: item => item.extension === editor.extension
+            isEnabled: item => item.extension === editor.extension,
+            canBeDefault: true
           }
         }
 
@@ -39,10 +40,11 @@ export default {
           },
           icon: this.apps.meta[editor.app].icon,
           handler: item => this.openFileAction(editor, item.path),
-          isEnabled: item => item.extension === editor.extension
+          isEnabled: item => item.extension === editor.extension,
+          canBeDefault: true
         }
       })
-      const actions = [
+      const systemActions = [
         {
           icon: 'remove_red_eye',
           handler: file => this.fetchFile(file.path, 'application/pdf'),
@@ -51,7 +53,8 @@ export default {
           },
           isEnabled: function(item) {
             return item.extension === 'pdf'
-          }
+          },
+          canBeDefault: true
         },
         {
           icon: 'file_download',
@@ -61,7 +64,8 @@ export default {
           },
           isEnabled: function(item) {
             return item.canDownload()
-          }
+          },
+          canBeDefault: true
         },
         {
           icon: 'star',
@@ -142,7 +146,7 @@ export default {
         }
       ]
 
-      return fileEditorsActions.concat(actions)
+      return fileEditorsActions.concat(systemActions)
     }
   },
   methods: {

@@ -59,7 +59,11 @@
           :show-path="$_isFavoritesList"
           :indicators="indicatorArray(rowItem)"
           :has-two-rows="true"
-          @click.native.stop="rowItem.type === 'folder' && navigateTo(rowItem.path.substr(1))"
+          @click.native.stop="
+            rowItem.type === 'folder'
+              ? navigateTo(rowItem.path.substr(1))
+              : triggerDefaultFileAction(rowItem)
+          "
         />
         <oc-spinner
           v-if="actionInProgress(rowItem)"
