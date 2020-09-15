@@ -551,10 +551,10 @@ module.exports = {
               }
               this.api.elementIdAttribute(element.ELEMENT, 'aria-label', attr => {
                 switch (attr.value) {
-                  case 'Directly shared with collaborators':
+                  case 'Directly shared with people':
                     indicators.push('user-direct')
                     break
-                  case 'Shared with collaborators through one of the parent folders':
+                  case 'Shared with people through one of the parent folders':
                     indicators.push('user-indirect')
                     break
                   case 'Directly shared with links':
@@ -747,7 +747,7 @@ module.exports = {
       selector: '#files-list-container .files-list-no-content-message'
     },
     shareButtonInFileRow: {
-      selector: '//button[@aria-label="Collaborators"]',
+      selector: '//button[@aria-label="People"]',
       locateStrategy: 'xpath'
     },
     fileRowByName: {

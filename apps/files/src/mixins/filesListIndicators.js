@@ -97,8 +97,8 @@ export default {
 
     shareUserIconLabel(item) {
       return this.isDirectUserShare(item)
-        ? this.$gettext('Directly shared with collaborators')
-        : this.$gettext('Shared with collaborators through one of the parent folders')
+        ? this.$gettext('Directly shared with people')
+        : this.$gettext('Shared with people through one of the parent folders')
     },
 
     shareLinkIconLabel(item) {

@@ -703,7 +703,7 @@ Then('it should not be possible to share file/folder {string} using the webUI', 
   const sidebarCollaboratorsTabState = await appSideBar.isCollaboratorsTabPresentOnCurrentSidebar()
   assert.ok(
     !sidebarCollaboratorsTabState,
-    `Error: Sidebar 'Collaborators' tab for resource ${resource} is present`
+    `Error: Sidebar 'People' tab for resource ${resource} is present`
   )
 })
 

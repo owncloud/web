@@ -60,7 +60,7 @@ function canShare(item, store) {
 export default {
   collaborators: {
     id: 'collaborators',
-    label: $gettext('Add new collaborators'),
+    label: $gettext('Add new people'),
     icon: 'group',
     handler: openNewCollaboratorsPanel,
     displayed: canShare
