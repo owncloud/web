@@ -31,7 +31,7 @@
               :is-desc="fileSortDirectionDesc"
               @click="toggleSort('deleteTimestampMoment')"
             >
-              <translate translate-context="Deletion time column in trashbin files table">
+              <translate translate-context="Deletion time column in 'deleted files' table">
                 Deletion Time
               </translate>
             </sortable-column-header>
@@ -57,7 +57,7 @@
         <template #noContentMessage>
           <no-content-message icon="delete">
             <template #message>
-              <span v-translate>Your trash bin is empty.</span>
+              <span v-translate>You have no deleted files.</span>
             </template>
           </no-content-message>
         </template>
