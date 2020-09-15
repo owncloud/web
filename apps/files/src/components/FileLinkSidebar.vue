@@ -54,6 +54,7 @@
               id="files-file-link-add"
               icon="add"
               variation="primary"
+              :aria-label="$_addButtonAriaLabel"
               @click="$_addPublicLink"
               >{{ $_addButtonLabel }}</oc-button
             >
@@ -211,7 +212,10 @@ export default {
       }
     },
     $_addButtonLabel() {
-      return this.$gettext('Add public link')
+      return this.$gettext('Public link')
+    },
+    $_addButtonAriaLabel() {
+      return this.$gettext('Create new nublic link')
     },
     $_privateLinkCopyLabel() {
       return this.$gettext('Copy private link url')
