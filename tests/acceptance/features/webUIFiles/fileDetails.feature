@@ -17,15 +17,15 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "versions" details panel should be visible
-    When the user switches to "collaborators" tab in details panel using the webUI
-    Then the "collaborators" details panel should be visible
+    When the user switches to "people" tab in details panel using the webUI
+    Then the "people" details panel should be visible
 
   @files_versions-app-required
   Scenario: View different areas of the app-sidebar for a folder in files page
     When the user picks the row of folder "simple-folder" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    And the "collaborators" details panel should be visible
+    And the "people" details panel should be visible
     And no "links" tab should be available in the details panel
     And no "versions" tab should be available in the details panel
 
@@ -37,8 +37,8 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "versions" details panel should be visible
-    When the user switches to "collaborators" tab in details panel using the webUI
-    Then the "collaborators" details panel should be visible
+    When the user switches to "people" tab in details panel using the webUI
+    Then the "people" details panel should be visible
 
   @files_versions-app-required @skipOnOCIS @ocis-reva-issue-39
   Scenario: View different areas of the app-sidebar for a folder in favorites page
@@ -47,7 +47,7 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    And the "collaborators" details panel should be visible
+    And the "people" details panel should be visible
     And no "links" tab should be available in the details panel
     And no "versions" tab should be available in the details panel
 
@@ -74,8 +74,8 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    When the user switches to "collaborators" tab in details panel using the webUI
-    Then the "collaborators" details panel should be visible
+    When the user switches to "people" tab in details panel using the webUI
+    Then the "people" details panel should be visible
 #    When the user switches to "comments" tab in details panel using the webUI
 #    Then the "comments" details panel should be visible
     When the user switches to "links" tab in details panel using the webUI
@@ -89,8 +89,8 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    When the user switches to "collaborators" tab in details panel using the webUI
-    Then the "collaborators" details panel should be visible
+    When the user switches to "people" tab in details panel using the webUI
+    Then the "people" details panel should be visible
 #    When the user switches to "comments" tab in details panel using the webUI
 #    Then the "comments" details panel should be visible
     When the user switches to "links" tab in details panel using the webUI
@@ -105,8 +105,8 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder (2)" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    When the user switches to "collaborators" tab in details panel using the webUI
-    Then the "collaborators" details panel should be visible
+    When the user switches to "people" tab in details panel using the webUI
+    Then the "people" details panel should be visible
 #    When the user switches to "comments" tab in details panel using the webUI
 #    Then the "comments" details panel should be visible
     When the user switches to "links" tab in details panel using the webUI

@@ -69,7 +69,7 @@
         </oc-button>
         <oc-spinner
           v-else-if="$_loadingSpinnerVisible"
-          :aria-label="$gettext('Removing person…')"
+          :aria-label="$gettext('Removing person')"
           size="small"
         />
         <oc-icon v-else name="lock" class="uk-invisible"></oc-icon>

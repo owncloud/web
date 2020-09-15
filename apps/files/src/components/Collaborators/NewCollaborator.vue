@@ -1,6 +1,6 @@
 <template>
   <div class="files-collaborators-collaborator-add-dialog">
-    <label for="oc-sharing-autocomplete"><translate>New People:</translate></label>
+    <label for="oc-sharing-autocomplete"><translate>Add People:</translate></label>
     <oc-grid gutter="small">
       <oc-autocomplete
         id="oc-sharing-autocomplete"
