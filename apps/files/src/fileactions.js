@@ -1,7 +1,8 @@
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { dirname } from 'path'
 import { canBeMoved } from './helpers/permissions'
 import MixinDeleteResources from './mixins/deleteResources'
+import { cloneStateObject } from './helpers/store'
 
 export default {
   mixins: [MixinDeleteResources],
@@ -16,8 +17,31 @@ export default {
       'currentFolder'
     ]),
     ...mapGetters(['capabilities', 'fileSideBars', 'isAuthenticated', 'getToken']),
+    ...mapState(['apps']),
+
     // Files lists
     actions() {
+      const fileEditorsActions = cloneStateObject(this.apps.fileEditors).map(editor => {
+        if (editor.version === 3) {
+          return {
+            ariaLabel: () => {
+              return `Open in ${editor.title[this.$language.current] || editor.title.en}`
+            },
+            iconUrl: editor.icon,
+            handler: item => this.openFileAction(editor, item.path),
+            isEnabled: item => item.extension === editor.extension
+          }
+        }
+
+        return {
+          ariaLabel: () => {
+            return `Open in ${this.apps.meta[editor.app].name}`
+          },
+          icon: this.apps.meta[editor.app].icon,
+          handler: item => this.openFileAction(editor, item.path),
+          isEnabled: item => item.extension === editor.extension
+        }
+      })
       const actions = [
         {
           icon: 'remove_red_eye',
@@ -118,12 +142,18 @@ export default {
         }
       ]
 
-      return actions
+      return fileEditorsActions.concat(actions)
     }
   },
   methods: {
     ...mapActions('Files', ['renameFile', 'markFavorite']),
-    ...mapActions(['showMessage', 'createModal', 'hideModal', 'setModalInputErrorMessage']),
+    ...mapActions([
+      'showMessage',
+      'createModal',
+      'hideModal',
+      'setModalInputErrorMessage',
+      'openFile'
+    ]),
     ...mapMutations('Files', ['SET_RESOURCES_SELECTION_FOR_MOVE']),
 
     actionInProgress(item) {
@@ -160,10 +190,6 @@ export default {
       this.$_deleteResources_displayDialog(resource, true)
     },
 
-    // Files lists
-    openFileActionBar(file) {
-      this.$emit('FileAction', file)
-    },
     navigateTo(param) {
       if (this.searchTerm !== '' && this.$route.params.item === param) {
         this.resetSearch()
@@ -282,7 +308,7 @@ export default {
       this.createModal(modal)
     },
 
-    openFile(blob, mimetype) {
+    openBlobInNewTab(blob, mimetype) {
       // It is necessary to create a new blob object with mime-type explicitly set
       // otherwise only Chrome works like it should
       const newBlob = new Blob([blob], { type: mimetype })
@@ -304,7 +330,52 @@ export default {
         headers
       })
         .then(r => r.blob())
-        .then(blob => this.openFile(blob, mimetype))
+        .then(blob => this.openBlobInNewTab(blob, mimetype))
+    },
+
+    openFileAction(action, filePath) {
+      // TODO: Refactor in the store
+      this.openFile({
+        filePath: filePath
+      })
+
+      if (action.version === 3) {
+        // TODO: replace more placeholder in the final version
+        const finalUrl = action.url
+          .replace('{PATH}', encodeURIComponent(filePath.path))
+          .replace('{FILEID}', encodeURIComponent(filePath.id))
+        const win = window.open(finalUrl, '_blank')
+        // in case popup is blocked win will be null
+        if (win) {
+          win.focus()
+        }
+        return
+      }
+      if (action.newTab) {
+        const path = this.$router.resolve({
+          name: action.routeName,
+          params: { filePath: filePath }
+        }).href
+        const url = window.location.origin + '/' + path
+        const target = `${action.routeName}-${filePath}`
+        const win = window.open(url, target)
+        // in case popup is blocked win will be null
+        if (win) {
+          win.focus()
+        }
+        return
+      }
+
+      const routeName = action.routeName ? action.app + '/' + action.routeName : action.app
+      const params = {
+        filePath,
+        contextRouteName: this.$route.name
+      }
+
+      this.$router.push({
+        name: routeName,
+        params
+      })
     }
   }
 }
