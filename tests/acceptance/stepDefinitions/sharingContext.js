@@ -703,7 +703,7 @@ Then('it should not be possible to share file/folder {string} using the webUI', 
   const sidebarCollaboratorsTabState = await appSideBar.isCollaboratorsTabPresentOnCurrentSidebar()
   assert.ok(
     !sidebarCollaboratorsTabState,
-    `Error: Sidebar 'Collaborators' tab for resource ${resource} is present`
+    `Error: Sidebar 'People' tab for resource ${resource} is present`
   )
 })
 
@@ -954,7 +954,7 @@ Then(
   'the share {string} shared with user {string} should have no expiration information displayed on the WebUI',
   async function(item, user) {
     await client.page.FilesPageElement.filesList().clickRow(item)
-    await client.page.filesPage().selectTabInSidePanel('collaborators')
+    await client.page.filesPage().selectTabInSidePanel('people')
     const elementID = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
     )
@@ -970,7 +970,7 @@ Then(
   'the expiration information displayed on the WebUI of share {string} shared with user {string} should be {string} or {string}',
   async function(item, user, information1, information2) {
     await client.page.FilesPageElement.filesList().clickRow(item)
-    await client.page.filesPage().selectTabInSidePanel('collaborators')
+    await client.page.filesPage().selectTabInSidePanel('people')
     const actualInfo = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
     )

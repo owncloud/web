@@ -93,7 +93,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     sidebarCollaboratorsTab: {
-      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Collaborators")]',
+      selector: '//div[@class="sidebar-container"]//a[contains(text(),"People")]',
       locateStrategy: 'xpath'
     },
     sidebarVersionsTab: {

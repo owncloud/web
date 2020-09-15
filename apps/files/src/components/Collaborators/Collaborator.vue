@@ -69,7 +69,7 @@
         </oc-button>
         <oc-spinner
           v-else-if="$_loadingSpinnerVisible"
-          :aria-label="$gettext('Removing collaborator…')"
+          :aria-label="$gettext('Removing person')"
           size="small"
         />
         <oc-icon v-else name="lock" class="uk-invisible"></oc-icon>
@@ -112,7 +112,7 @@
             }}</span>
             <translate
               v-if="collaborator.collaborator.name === user.id"
-              translate-comment="Indicator for current user in collaborators list"
+              translate-comment="Indicator for current user in list of people"
               class="uk-text-meta files-collaborators-collaborator-additional-info"
             >
               (me)

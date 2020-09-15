@@ -22,8 +22,8 @@
         v-if="!$_isSharedWithMe"
         key="shared-with-header-cell"
         class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-medium uk-text-right"
-        translate-context="Collaborators table column"
-        v-text="$gettext('Collaborators')"
+        translate-context="'People' table column"
+        v-text="$gettext('People')"
       />
       <div
         v-else
@@ -231,9 +231,9 @@ export default {
     ]),
 
     /**
-     * Prepare the given collaboratoes list for display.
+     * Prepare the given peoples list for display.
      * Sorts first by share type (user, group, link, remote)
-     * and then by the collaborator's display name using natural
+     * and then by the people's display name using natural
      * sort. Public links entries are deduplicated into a single
      * one in order to only show "Public" once even when
      * there are multiple link shares.

@@ -698,11 +698,11 @@ Feature: Share by public link
       | name          |
       | versions      |
       | links         |
-      | collaborators |
+      | people        |
 #    Then the following tabs should not be visible in the details dialog
 #      | name          |
 #      | links         |
-#      | collaborators |
+#      | people        |
 
   @issue-2060 @skipOnOCIS @issue-ocis-reva-243
   Scenario: sharing indicator inside a shared folder

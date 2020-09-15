@@ -5,7 +5,7 @@
       :key="PANEL_SHOW"
       :aria-hidden="currentPanel !== PANEL_SHOW"
     >
-      <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading collaborator list')" />
+      <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
       <template v-else>
         <div v-if="$_ocCollaborators_canShare" class="uk-margin-small-top uk-margin-small-bottom">
           <oc-button
@@ -14,7 +14,7 @@
             class="files-collaborators-open-add-share-dialog-button"
             @click="$_ocCollaborators_addShare"
           >
-            <translate>Add Collaborators</translate>
+            <translate>Share</translate>
           </oc-button>
         </div>
         <p
@@ -107,7 +107,7 @@ const PANEL_NEW = 'newCollaborator'
 
 export default {
   title: $gettext => {
-    return $gettext('Collaborators')
+    return $gettext('People')
   },
   name: 'FileSharingSidebar',
   components: {

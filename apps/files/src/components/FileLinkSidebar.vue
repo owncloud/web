@@ -33,7 +33,7 @@
             </oc-button>
           </div>
           <div class="uk-text-meta">
-            <i><translate>Only invited collaborators can use this link.</translate></i>
+            <i><translate>Only invited people can use this link.</translate></i>
           </div>
           <hr />
         </section>
@@ -44,11 +44,10 @@
           <div class="uk-text-meta">
             <i
               ><translate
-                >Any external collaborator with the respective link can access this resource. No
-                sign-in required. Assign a password to avoid unintended document
-                exposure.</translate
-              ></i
-            >
+                >Any external person with the respective link can access this resource. No sign-in
+                required. Assign a password to avoid unintended document exposure.
+              </translate>
+            </i>
           </div>
           <div class="uk-margin-small-top uk-margin-small-bottom">
             <oc-button

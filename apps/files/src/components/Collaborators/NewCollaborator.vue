@@ -1,11 +1,11 @@
 <template>
   <div class="files-collaborators-collaborator-add-dialog">
-    <label for="oc-sharing-autocomplete"><translate>New Collaborators:</translate></label>
+    <label for="oc-sharing-autocomplete"><translate>Add People:</translate></label>
     <oc-grid gutter="small">
       <oc-autocomplete
         id="oc-sharing-autocomplete"
         ref="ocSharingAutocomplete"
-        :aria-label="$gettext('Select a collaborator to add')"
+        :aria-label="$gettext('Select a person to add')"
         :items="autocompleteResults"
         :items-loading="autocompleteInProgress"
         :placeholder="$_ocCollaborationStatus_autocompletePlaceholder"
@@ -24,7 +24,7 @@
     <oc-grid v-if="selectedCollaborators.length > 0" gutter="small">
       <div>
         <div>
-          <translate>Selected collaborators:</translate>
+          <translate>Selected people:</translate>
         </div>
         <oc-table middle class="uk-width-expand files-collaborators-collaborator-autocomplete-item">
           <oc-table-row
@@ -66,13 +66,11 @@
         </oc-button>
         <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
           <oc-spinner
-            :aria-label="$gettext('Adding Collaborators')"
+            :aria-label="$gettext('Adding People')"
             class="uk-position-small uk-position-center-left"
             size="xsmall"
           />
-          <span v-translate :aria-hidden="true" class="uk-margin-small-left"
-            >Adding Collaborators</span
-          >
+          <span v-translate :aria-hidden="true" class="uk-margin-small-left">Adding People</span>
         </oc-button>
         <oc-button
           v-else
@@ -82,7 +80,7 @@
           variation="primary"
           @click="$_ocCollaborators_newCollaboratorsAdd(selectedCollaborators)"
         >
-          <translate>Add Collaborators</translate>
+          <translate>Share</translate>
         </oc-button>
       </div>
     </oc-grid>
@@ -126,11 +124,11 @@ export default {
     ...mapGetters(['user']),
 
     $_ocCollaborationStatus_autocompletePlaceholder() {
-      return this.$gettext("Add new collaborator by name, email or federation ID's")
+      return this.$gettext("Add new person by name, email or federation ID's")
     },
 
     $_announcementWhenCollaboratorAdded() {
-      return this.$gettext('Collaborator was added')
+      return this.$gettext('Person was added')
     },
 
     $_isValid() {

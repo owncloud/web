@@ -238,7 +238,10 @@ module.exports = {
     },
     isPanelVisible: function(panelName, callback) {
       let selector = ''
-      if (panelName === 'collaborators') {
+      if (panelName === 'people') {
+        selector = this.elements.collaboratorsPanel
+      } else if (panelName === 'collaborators') {
+        // FIXME: rename once renamed in all tests
         selector = this.elements.collaboratorsPanel
       } else if (panelName === 'versions') {
         selector = this.elements.versionsPanel

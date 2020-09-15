@@ -1,0 +1,8 @@
+Change: Renamed collaborators to people
+
+All visible occurrences of "collaborator" or "collaborators" have been replaced by "person" or "people" respectively.
+Additionally, the action "Add Collaborator" was changed to "Share".
+
+https://github.com/owncloud/phoenix/pull/4070
+https://github.com/owncloud/product/issues/231
+
