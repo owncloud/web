@@ -9,6 +9,7 @@ Summary
 -------
 
 * Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
+* Change - Shortened button label for creating public links: [#4072](https://github.com/owncloud/phoenix/pull/4072)
 
 Details
 -------
@@ -21,6 +22,15 @@ Details
 
    https://github.com/owncloud/product/issues/231
    https://github.com/owncloud/phoenix/pull/4070
+
+* Change - Shortened button label for creating public links: [#4072](https://github.com/owncloud/phoenix/pull/4072)
+
+   The label of the button for creating public links in the links panel has been shortened to
+   "Public link" instead of "Add public link" since the plus sign already implies adding. An Aria
+   label has been added for clarification when using screen readers.
+
+   https://github.com/owncloud/phoenix/issues/231
+   https://github.com/owncloud/phoenix/pull/4072
 
 Changelog for ownCloud Phoenix [0.16.0] (2020-08-24)
 =======================================
