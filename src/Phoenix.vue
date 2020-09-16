@@ -14,6 +14,7 @@
             :logo-img="logoImage"
             :product-name="productName"
             :nav-items="navItems"
+            :hide-nav="sidebar.navigationHidden"
             :class="sidebarClasses"
             :fixed="isSidebarFixed"
             @close="toggleAppNavigationVisibility"

@@ -259,18 +259,21 @@ export default {
     this.originalLocation = this.target
 
     if (this.currentAction === 'move') {
+      this.SET_NAVIGATION_HIDDEN(true)
       this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
     } else if (this.currentAction === 'copy') {
+      this.SET_NAVIGATION_HIDDEN(true)
       this.SET_MAIN_CONTENT_COMPONENT(CopySidebarMainContent)
     }
   },
 
   beforeDestroy() {
+    this.SET_NAVIGATION_HIDDEN(false)
     this.SET_MAIN_CONTENT_COMPONENT(null)
   },
 
   methods: {
-    ...mapMutations(['SET_MAIN_CONTENT_COMPONENT']),
+    ...mapMutations(['SET_NAVIGATION_HIDDEN', 'SET_MAIN_CONTENT_COMPONENT']),
     ...mapActions('Files', ['loadFolder']),
     ...mapActions(['showMessage']),
 
