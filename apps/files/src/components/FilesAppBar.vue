@@ -251,9 +251,7 @@ export default {
     },
 
     $_ocAppBar_clearTrashbinButtonText() {
-      return this.selectedFiles.length < 1
-        ? this.$gettext('Empty trash bin')
-        : this.$gettext('Delete')
+      return this.selectedFiles.length < 1 ? this.$gettext('Empty') : this.$gettext('Delete')
     },
 
     showBreadcrumb() {
@@ -638,13 +636,13 @@ export default {
         .clearTrashBin()
         .then(() => {
           this.showMessage({
-            title: this.$gettext('Trash bin was successfully emptied')
+            title: this.$gettext('All deleted files were removed')
           })
           this.removeFilesFromTrashbin(this.activeFiles)
         })
         .catch(error => {
           this.showMessage({
-            title: this.$gettext("Trash bin couldn't be emptied"),
+            title: this.$gettext('Could not delete files'),
             desc: error.message,
             status: 'danger'
           })

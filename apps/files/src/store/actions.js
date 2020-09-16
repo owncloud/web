@@ -438,7 +438,7 @@ export default {
           context.dispatch(
             'showMessage',
             {
-              title: $gettext('Loading trash bin failed…'),
+              title: $gettext('Loading list of deleted files has failed…'),
               status: 'danger'
             },
             { root: true }
@@ -456,7 +456,7 @@ export default {
         context.dispatch(
           'showMessage',
           {
-            title: $gettext('Loading trash bin failed…'),
+            title: $gettext('Loading list of deleted files has failed…'),
             desc: e.message,
             status: 'danger'
           },

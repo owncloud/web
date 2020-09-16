@@ -1,0 +1,6 @@
+Change: Rename "trash bin" to "deleted files"
+
+We've renamed the "trash bin" to the more appropriate wording "deleted files".
+
+https://github.com/owncloud/phoenix/pull/4071
+https://github.com/owncloud/product/issues/231

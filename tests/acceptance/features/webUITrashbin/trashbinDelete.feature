@@ -119,7 +119,7 @@ Feature: files and folders can be deleted from the trashbin
   @issue-product-139
   Scenario: Clear trashbin
     When the user clears the trashbin
-    Then the success message with header "Trash bin was successfully emptied" should be displayed on the webUI
+    Then the success message with header "All deleted files were removed" should be displayed on the webUI
     And the trashbin should be empty on the webUI
 
   @skipOnOC10
@@ -127,6 +127,6 @@ Feature: files and folders can be deleted from the trashbin
   # after the issue is fixed delete this scenario and use the one above
   Scenario: Clear trashbin
     When the user clears the trashbin
-    Then the error message with header "Trash bin couldn't be emptied" should be displayed on the webUI
+    Then the error message with header "Could not delete files" should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
     And folder "simple-folder" should be listed on the webUI
