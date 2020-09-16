@@ -12,13 +12,13 @@
       <li v-for="action in actions" :key="action.ariaLabel(item)">
         <oc-button
           class="uk-width-1-1"
-          :icon="action.icon"
           :aria-Label="action.ariaLabel(item)"
-          @click.native.stop="
+          @click.stop="
             action.handler(item, action.handlerData)
             actionClicked()
           "
         >
+          <oc-icon :name="action.icon" aria-hidden="true" />
           {{ action.ariaLabel(item) }}
         </oc-button>
       </li>

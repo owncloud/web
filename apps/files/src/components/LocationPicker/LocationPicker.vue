@@ -6,14 +6,14 @@
     </h1>
     <hr class="uk-margin-remove-top" />
     <div class="uk-margin-bottom">
-      <oc-button @click.native="leaveLocationPicker(originalLocation)">
+      <oc-button @click="leaveLocationPicker(originalLocation)">
         <translate>Cancel</translate>
       </oc-button>
       <oc-button
         id="location-picker-btn-confirm"
         variation="primary"
         :disabled="!canConfirm"
-        @click.native="confirmAction"
+        @click="confirmAction"
       >
         <span v-text="confirmBtnText" />
       </oc-button>

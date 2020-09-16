@@ -28,7 +28,7 @@
         <oc-button
           variation="primary"
           class="oc-login-authorize-button"
-          @click.native="resolvePublicLink()"
+          @click="resolvePublicLink()"
         >
           <translate>Continue</translate>
         </oc-button>
