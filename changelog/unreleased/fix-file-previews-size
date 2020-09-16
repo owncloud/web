@@ -1,0 +1,7 @@
+Bugfix: Make file previews properly fit
+
+We've fixed the file preview to prevent overflowing vertically and also added CSS
+property to make sure the ratio is preserved
+
+https://github.com/owncloud/product/issues/232
+https://github.com/owncloud/phoenix/pull/4073

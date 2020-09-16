@@ -202,6 +202,8 @@ export default {
 <style scoped>
 .files-list-file-preview {
   width: 36px;
+  height: 36px;
+  object-fit: contain;
 }
 
 .files-list-file-preview-small {
