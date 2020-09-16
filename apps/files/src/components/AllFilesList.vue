@@ -62,7 +62,7 @@
           @click.native.stop="
             rowItem.type === 'folder'
               ? navigateTo(rowItem.path.substr(1))
-              : openFileActionBar(rowItem)
+              : triggerDefaultFileAction(rowItem)
           "
         />
         <oc-spinner

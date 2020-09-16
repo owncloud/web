@@ -60,7 +60,9 @@
           :key="item.path"
           :item="item"
           @click.native.stop="
-            item.type === 'folder' ? navigateTo(item.path.substr(1)) : openFileActionBar(item)
+            item.type === 'folder'
+              ? navigateTo(item.path.substr(1))
+              : triggerDefaultFileAction(item)
           "
         />
         <oc-spinner

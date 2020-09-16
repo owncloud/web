@@ -1,13 +1,15 @@
 const util = require('util')
+const { client } = require('nightwatch-api')
+const filesList = client.page.FilesPageElement.filesList()
+const filesRow = client.page.FilesPageElement.filesRow()
 
 module.exports = {
   commands: {
-    openMediaViewer: function() {
-      return this.useXpath()
-        .waitForElementVisible('@mediaviewer')
-        .click('@mediaviewer')
-        .waitForElementVisible('@actionBar')
-        .useCss()
+    openMediaViewer: async function(fileName) {
+      await filesList.waitForFileVisible(fileName)
+      await filesRow.openFileActionsMenu(fileName).mediaViewer()
+
+      return this
     },
     waitForMediaViewerLoaded: function(fileName) {
       const image = util.format(this.elements.mediaImage.selector, fileName)
@@ -64,10 +66,6 @@ module.exports = {
     }
   },
   elements: {
-    mediaviewer: {
-      selector: '//span[.="Mediaviewer"]',
-      locateStrategy: 'xpath'
-    },
     actionBar: {
       selector:
         '//div[@class = "uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around"]',

@@ -24,7 +24,6 @@
           v-else
           :file-data="activeFiles"
           :parent-folder="currentFolder"
-          @FileAction="openFileActionBar"
           @sideBarOpen="openSideBar"
         />
       </div>
@@ -34,7 +33,6 @@
         @reset="setHighlightedFile(null)"
       />
     </oc-grid>
-    <file-open-actions />
   </div>
 </template>
 <script>
@@ -46,7 +44,6 @@ import AllFilesList from './AllFilesList.vue'
 import TrashBin from './Trashbin.vue'
 import SharedFilesList from './Collaborators/SharedFilesList.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import FileOpenActions from './FileOpenActions.vue'
 const UploadProgress = () => import('./UploadProgress.vue')
 
 export default {
@@ -54,7 +51,6 @@ export default {
     FileDetails,
     AllFilesList,
     FilesAppBar,
-    FileOpenActions,
     TrashBin,
     SharedFilesList,
     UploadProgress
@@ -81,7 +77,6 @@ export default {
       'currentFolder',
       'inProgress'
     ]),
-    ...mapGetters(['extensions']),
 
     _sidebarOpen() {
       return this.highlightedFile !== null
@@ -116,49 +111,12 @@ export default {
 
   methods: {
     ...mapActions('Files', ['dragOver', 'setHighlightedFile', 'resetFileSelection']),
-    ...mapActions(['openFile', 'showMessage']),
+    ...mapActions(['showMessage']),
     ...mapMutations('Files', ['SET_CURRENT_SIDEBAR_TAB']),
     ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
 
     trace() {
       console.info('trace', arguments)
-    },
-
-    openFileActionBar(file) {
-      this.openFile({
-        filePath: file.path
-      })
-      let actions = this.extensions(file.extension.toLowerCase())
-      actions = actions.map(action => {
-        if (action.version === 3) {
-          return {
-            label: action.title[this.$language.current] || action.title.en,
-            iconUrl: action.icon,
-            onClick: () => {
-              this.openFileAction(action, file)
-            }
-          }
-        }
-        return {
-          label: action.name,
-          icon: action.icon,
-          onClick: () => {
-            this.openFileAction(action, file.path)
-          }
-        }
-      })
-      actions.push({
-        label: this.$gettext('Download'),
-        icon: 'file_download',
-        onClick: () => {
-          this.downloadFile(file)
-        }
-      })
-
-      this.$root.$emit('oc-file-actions:open', {
-        filename: file.name,
-        actions: actions
-      })
     },
 
     openSideBar(file, sideBarName) {

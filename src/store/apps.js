@@ -5,7 +5,7 @@ const state = {
     path: '',
     edit: false
   },
-  extensions: {},
+  fileEditors: [],
   newFileHandlers: [],
   fileSideBars: [],
   customFilesListIndicators: [],
@@ -76,6 +76,8 @@ const actions = {
 const mutations = {
   REGISTER_APP(state, appInfo) {
     if (appInfo.fileActions) {
+      // TODO: Investigate if removing this would break anything
+      // And decide if it's worth keeping
       appInfo.fileActions.forEach(a => {
         a.extensions.forEach(e => {
           const action = {
@@ -94,21 +96,19 @@ const mutations = {
     }
     if (appInfo.extensions) {
       appInfo.extensions.forEach(e => {
-        const link = {
+        const editor = {
           app: appInfo.id,
           icon: e.icon,
           newTab: e.newTab || false,
           routeName: e.routeName,
-          newFileMenu: e.newFileMenu || null
+          extension: e.extension
         }
-        if (!state.extensions[e.extension]) {
-          state.extensions[e.extension] = [link]
-        } else {
-          state.extensions[e.extension].push(link)
-        }
+
+        state.fileEditors.push(editor)
+
         if (e.newFileMenu) {
           e.newFileMenu.ext = e.extension
-          e.newFileMenu.action = link
+          e.newFileMenu.action = editor
           state.newFileHandlers.push(e.newFileMenu)
         }
       })
@@ -155,26 +155,6 @@ const getters = {
   },
   newFileHandlers: state => {
     return state.newFileHandlers
-  },
-  extensions: state => {
-    return fileExtension => {
-      const ext = state.extensions[fileExtension]
-      if (!ext) {
-        return []
-      }
-      ext.forEach(e => {
-        if (e.version === 3) {
-          return e
-        }
-        // enhance App Chooser with App Name as label
-        e.name = state.meta[e.app].name
-        // if no icon for this filetype extension, choose the app icon
-        if (!e.icon) {
-          e.icon = state.meta[e.app].icon
-        }
-      })
-      return ext
-    }
   },
   fileSideBars: state => {
     return state.fileSideBars
