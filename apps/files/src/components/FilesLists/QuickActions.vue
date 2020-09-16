@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="uk-flex">
     <oc-button
       v-for="action in filteredActions"
       :id="`files-quick-action-${action.id}`"
@@ -8,7 +8,7 @@
       :uk-tooltip="action.label"
       variation="raw"
       class="uk-margin-xsmall-right"
-      @click.native.stop="action.handler({ item, client: $client, store: $store })"
+      @click.stop="action.handler({ item, client: $client, store: $store })"
     >
       <oc-icon :name="action.icon" aria-hidden="true" size="small" class="uk-flex" />
     </oc-button>

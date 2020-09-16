@@ -4,12 +4,10 @@
     <div v-if="!loading" class="uk-width-3-4@m uk-container uk-padding">
       <div class="uk-flex uk-flex-between uk-flex-middle">
         <h1 id="account-page-title" v-translate class="oc-page-title">Account</h1>
-        <oc-button
-          class="account-logout-button"
-          icon="exit_to_app"
-          @click="$_oc_settingsAccount_logout"
-          ><translate>Log out</translate></oc-button
-        >
+        <oc-button class="account-logout-button" @click="$_oc_settingsAccount_logout">
+          <oc-icon name="exit_to_app" aria-hidden="true" />
+          <translate>Log out</translate>
+        </oc-button>
       </div>
       <hr />
       <div class="uk-text-bold uk-margin-bottom"><translate>Account Information</translate></div>

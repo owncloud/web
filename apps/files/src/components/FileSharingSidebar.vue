@@ -10,10 +10,10 @@
         <div v-if="$_ocCollaborators_canShare" class="uk-margin-small-top uk-margin-small-bottom">
           <oc-button
             variation="primary"
-            icon="add"
             class="files-collaborators-open-add-share-dialog-button"
             @click="$_ocCollaborators_addShare"
           >
+            <oc-icon name="add" aria-hidden="true" />
             <translate>Share</translate>
           </oc-button>
         </div>

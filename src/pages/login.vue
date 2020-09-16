@@ -18,7 +18,7 @@
           size="large"
           variation="primary"
           class="oc-login-authorize-button"
-          @click.native="login()"
+          @click="login()"
         >
           <translate>Login</translate>
         </oc-button>
