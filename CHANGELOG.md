@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Make file previews properly fit: [#232](https://github.com/owncloud/product/issues/232)
+* Bugfix - Adjust behavior of public link password field: [#4077](https://github.com/owncloud/phoenix/pull/4077)
 * Change - Rename "trash bin" to "deleted files": [#4071](https://github.com/owncloud/phoenix/pull/4071)
 * Change - Add default action to click on file name: [#234](https://github.com/owncloud/product/issues/234)
 * Change - Moved bottom actions menu into actions dropdown: [#234](https://github.com/owncloud/product/issues/234)
@@ -25,6 +26,15 @@ Details
 
    https://github.com/owncloud/product/issues/232
    https://github.com/owncloud/phoenix/pull/4073
+
+* Bugfix - Adjust behavior of public link password field: [#4077](https://github.com/owncloud/phoenix/pull/4077)
+
+   The UX of the public link password field has been improved. The field is focussed automatically
+   and the enter key submits the password. Also, in case of wrong password, an error message is now
+   displayed.
+
+   https://github.com/owncloud/product/issues/231
+   https://github.com/owncloud/phoenix/pull/4077
 
 * Change - Rename "trash bin" to "deleted files": [#4071](https://github.com/owncloud/phoenix/pull/4071)
 
