@@ -1,0 +1,8 @@
+Change: Adjustments to roles selection dropdown
+
+The role description text from the roles selection button has been removed, but is
+still visible when opening the dropdown.
+The dropdown now also has a chevron icon to make it clearer that it is a dropdown.
+
+https://github.com/owncloud/phoenix/pull/4080
+https://github.com/owncloud/product/issues/231

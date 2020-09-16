@@ -1,7 +1,7 @@
 <template>
   <div class="roles-select-role-item">
     <span class="uk-text-bold" v-text="role.label" />
-    <p class="uk-text-meta uk-margin-remove" v-text="role.description" />
+    <p v-if="showDescription" class="uk-text-meta uk-margin-remove" v-text="role.description" />
   </div>
 </template>
 
@@ -9,6 +9,10 @@
 export default {
   name: 'RoleItem',
   props: {
+    showDescription: {
+      type: Boolean,
+      default: true
+    },
     role: {
       type: Object,
       required: true
