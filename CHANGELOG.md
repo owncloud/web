@@ -10,6 +10,8 @@ Summary
 
 * Bugfix - Make file previews properly fit: [#232](https://github.com/owncloud/product/issues/232)
 * Change - Rename "trash bin" to "deleted files": [#4071](https://github.com/owncloud/phoenix/pull/4071)
+* Change - Add default action to click on file name: [#234](https://github.com/owncloud/product/issues/234)
+* Change - Moved bottom actions menu into actions dropdown: [#234](https://github.com/owncloud/product/issues/234)
 * Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
 * Change - Shortened button label for creating public links: [#4072](https://github.com/owncloud/phoenix/pull/4072)
 
@@ -30,6 +32,23 @@ Details
 
    https://github.com/owncloud/product/issues/231
    https://github.com/owncloud/phoenix/pull/4071
+
+* Change - Add default action to click on file name: [#234](https://github.com/owncloud/product/issues/234)
+
+   When clicking on the file name in the files list, a default action is triggered which opens the
+   first available file editor or viewer. If no file editor or viewer is available, the default
+   action falls back to download.
+
+   https://github.com/owncloud/product/issues/234
+   https://github.com/owncloud/phoenix/pull/4076
+
+* Change - Moved bottom actions menu into actions dropdown: [#234](https://github.com/owncloud/product/issues/234)
+
+   We've removed the bottom file actions menu and moved all actions into the actions dropdown in
+   the files list.
+
+   https://github.com/owncloud/product/issues/234
+   https://github.com/owncloud/phoenix/pull/4076
 
 * Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
 
