@@ -8,11 +8,28 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Make file previews properly fit: [#232](https://github.com/owncloud/product/issues/232)
+* Change - Rename "trash bin" to "deleted files": [#4071](https://github.com/owncloud/phoenix/pull/4071)
 * Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
 * Change - Shortened button label for creating public links: [#4072](https://github.com/owncloud/phoenix/pull/4072)
 
 Details
 -------
+
+* Bugfix - Make file previews properly fit: [#232](https://github.com/owncloud/product/issues/232)
+
+   We've fixed the file preview to prevent overflowing vertically and also added CSS property to
+   make sure the ratio is preserved
+
+   https://github.com/owncloud/product/issues/232
+   https://github.com/owncloud/phoenix/pull/4073
+
+* Change - Rename "trash bin" to "deleted files": [#4071](https://github.com/owncloud/phoenix/pull/4071)
+
+   We've renamed the "trash bin" to the more appropriate wording "deleted files".
+
+   https://github.com/owncloud/product/issues/231
+   https://github.com/owncloud/phoenix/pull/4071
 
 * Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
 
