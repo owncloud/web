@@ -14,24 +14,24 @@
         </h3>
         <span>{{ errorMessage }}</span>
       </div>
-      <div v-if="passwordRequired" class="oc-login-card-body">
-        <h2 class="oc-login-card-title">
-          <translate>This resource is password-protected.</translate>
-        </h2>
-
-        <oc-text-input
-          v-model="password"
-          type="password"
-          :placeholder="passwordPlaceholder"
-          class="uk-margin-small-bottom"
-        ></oc-text-input>
-        <oc-button
-          variation="primary"
-          class="oc-login-authorize-button"
-          @click.native="resolvePublicLink()"
-        >
-          <translate>Continue</translate>
-        </oc-button>
+      <div v-if="passwordRequired && !loading" class="oc-login-card-body">
+        <form @submit.prevent="resolvePublicLink">
+          <h2 class="oc-login-card-title">
+            <translate>This resource is password-protected.</translate>
+          </h2>
+          <oc-text-input
+            ref="passwordInput"
+            v-model="password"
+            :error-message="inputErrorMessage"
+            :label="passwordFieldLabel"
+            type="password"
+            :placeholder="passwordPlaceholder"
+            class="uk-margin-small-bottom"
+          ></oc-text-input>
+          <oc-button variation="primary" class="oc-login-authorize-button" :disabled="!password">
+            <translate>Continue</translate>
+          </oc-button>
+        </form>
       </div>
       <div class="oc-login-card-footer">
         <p>
@@ -52,13 +52,18 @@ export default {
     return {
       loading: true,
       errorMessage: null,
+      firstTime: true,
       passwordRequired: false,
-      password: null
+      password: null,
+      inputErrorMessage: null
     }
   },
   computed: {
     ...mapGetters(['configuration']),
     ...mapGetters('Files', ['davProperties']),
+    passwordFieldLabel() {
+      return this.$gettext('Enter password for public link')
+    },
     passwordPlaceholder() {
       return this.$gettext('Enter password')
     },
@@ -73,6 +78,7 @@ export default {
     ...mapActions('Files', ['setPublicLinkPassword']),
     resolvePublicLink() {
       this.loading = true
+      this.inputErrorMessage = null
       const properties = this.davProperties.concat([
         this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
         this.$client.publicFiles.PUBLIC_LINK_PERMISSION,
@@ -104,6 +110,16 @@ export default {
         .catch(error => {
           if (error.statusCode === 401) {
             this.passwordRequired = true
+            if (!this.firstTime) {
+              this.inputErrorMessage = this.$gettext('Incorrect password')
+            }
+            this.firstTime = false
+            // somehow needed here for the focus call to work correctly,
+            // otherwise the element is not rendered yet
+            this.loading = false
+            this.$nextTick(() => {
+              this.$refs.passwordInput.focus()
+            })
           } else {
             this.errorMessage = error
           }
