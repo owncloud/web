@@ -13,7 +13,8 @@ module.exports = {
       rename: 'rename',
       deleteImmediately: 'deleteImmediately',
       move: 'move',
-      copy: 'copy'
+      copy: 'copy',
+      mediaViewer: 'mediaViewer'
     }),
 
     /**
@@ -145,6 +146,12 @@ module.exports = {
      */
     copy: function() {
       this.performFileAction(this.FileAction.copy)
+    },
+    /**
+     * Open a resource in the media viewer via its file action
+     */
+    mediaViewer: function() {
+      this.performFileAction(this.FileAction.mediaViewer)
     }
   },
   elements: {
@@ -199,6 +206,10 @@ module.exports = {
     },
     copyButtonInFileRow: {
       selector: '//button[@aria-label="Copy"]',
+      locateStrategy: 'xpath'
+    },
+    mediaViewerButtonInFileRow: {
+      selector: '//button[@aria-label="Open in Mediaviewer"]',
       locateStrategy: 'xpath'
     }
   }

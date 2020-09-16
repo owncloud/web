@@ -44,7 +44,8 @@ config = {
 				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
 				'webUISharingNotifications': 'SharingNotifications',
 				'webUIAccount': 'Account',
-				'webUIMoveFilesFolders': 'Move'
+				'webUIMoveFilesFolders': 'Move',
+				'WebUIPreview': 'Preview'
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',

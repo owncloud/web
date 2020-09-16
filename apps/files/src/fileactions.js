@@ -2,7 +2,6 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { dirname } from 'path'
 import { canBeMoved } from './helpers/permissions'
 import MixinDeleteResources from './mixins/deleteResources'
-import { cloneStateObject } from './helpers/store'
 
 export default {
   mixins: [MixinDeleteResources],
@@ -21,7 +20,7 @@ export default {
 
     // Files lists
     actions() {
-      const fileEditorsActions = cloneStateObject(this.apps.fileEditors).map(editor => {
+      const fileEditorsActions = this.apps.fileEditors.map(editor => {
         if (editor.version === 3) {
           return {
             ariaLabel: () => {
