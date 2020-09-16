@@ -4,7 +4,8 @@
       id="oc-notification-bell"
       class="oc-cursor-pointer uk-flex uk-flex-middle"
       name="bell"
-      aria-label="Notifications"
+      :aria-label="notificationsLabel"
+      :uk-tooltip="notificationsLabel"
     />
     <oc-drop
       id="oc-notification-drop"
@@ -49,7 +50,11 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['activeNotifications', 'configuration'])
+    ...mapGetters(['activeNotifications', 'configuration']),
+
+    notificationsLabel() {
+      return this.$gettext('Notifications')
+    }
   },
   methods: {
     ...mapActions(['deleteNotification', 'showMessage']),

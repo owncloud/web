@@ -5,7 +5,8 @@
       ref="menubutton"
       variation="raw"
       class="oc-topbar-menu-burger"
-      :aria-label="$gettext('Application Switcher')"
+      :aria-label="applicationSwitcherLabel"
+      :uk-tooltip="applicationSwitcherLabel"
     >
       <oc-icon name="apps" aria-hidden="true" class="uk-flex" />
     </oc-button>
@@ -51,6 +52,10 @@ export default {
     }
   },
   computed: {
+    applicationSwitcherLabel() {
+      return this.$gettext('Application Switcher')
+    },
+
     $_applicationsList() {
       return this.applicationsList.map(item => {
         const lang = this.$language.current

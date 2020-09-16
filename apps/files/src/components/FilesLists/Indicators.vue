@@ -8,6 +8,7 @@
           class="file-row-share-indicator uk-text-middle"
           :class="{ 'uk-margin-xsmall-left': index > 0, 'uk-invisible': !indicator.visible }"
           :aria-label="indicator.label"
+          :uk-tooltip="indicator.label"
           variation="raw"
           @click.native.stop="indicator.handler(item, indicator.id)"
         >
@@ -19,6 +20,8 @@
           v-for="(indicator, index) in defaultIndicators"
           :key="index"
           :name="indicator.icon"
+          :aria-label="indicator.label"
+          :uk-tooltip="indicator.label"
           class="uk-text-middle"
           size="small"
           variation="system"
