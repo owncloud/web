@@ -5,6 +5,7 @@
         <oc-button
           v-if="$_deleteButtonVisible"
           :aria-label="$_deleteButtonLabel"
+          :uk-tooltip="$_deleteButtonLabel"
           variation="raw"
           class="oc-files-file-link-delete"
           @click="$_removeLink"
@@ -50,6 +51,7 @@
         <oc-button
           v-if="$_editButtonVisible"
           :aria-label="$_editButtonLabel"
+          :uk-tooltip="$_editButtonLabel"
           variation="raw"
           class="oc-files-file-link-edit"
           @click="$emit('onEdit', link)"
@@ -58,6 +60,7 @@
         </oc-button>
         <oc-button
           :aria-label="$_publicLinkCopyLabel"
+          :uk-tooltip="$_publicLinkCopyLabel"
           variation="raw"
           class="oc-files-file-link-copy-url"
         >

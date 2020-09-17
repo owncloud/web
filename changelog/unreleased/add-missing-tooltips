@@ -1,0 +1,10 @@
+Bugfix: Added missing tooltips
+
+We've added tooltips for the following:
+
+- top bar: notifications button and application switcher
+- file list: share indicators and quick actions
+- sharing in sidebar: action icons like edit, delete, copy
+
+https://github.com/owncloud/phoenix/pull/4081
+https://github.com/owncloud/product/issues/231

@@ -11,6 +11,7 @@
             :id="$_resharerToggleId"
             variation="raw"
             :aria-label="$gettext('Show resharer details')"
+            :uk-tooltip="$gettext('Show resharer details')"
           >
             <span class="uk-flex uk-flex-middle">
               <oc-icon name="repeat" class="uk-preserve-width oc-icon-xsmall" />
@@ -61,6 +62,7 @@
         <oc-button
           v-if="$_deleteButtonVisible"
           :aria-label="$gettext('Delete share')"
+          :uk-tooltip="$gettext('Delete share')"
           variation="raw"
           class="files-collaborators-collaborator-delete"
           @click="$_removeShare"
@@ -140,6 +142,7 @@
         <oc-button
           v-if="$_editButtonVisible"
           :aria-label="$gettext('Edit share')"
+          :uk-tooltip="$gettext('Edit share')"
           variation="raw"
           class="files-collaborators-collaborator-edit"
           @click="$emit('onEdit', collaborator)"
@@ -157,7 +160,12 @@
             :aria-label="$gettext('Navigate to parent')"
             class="files-collaborators-collaborator-follow-via uk-flex uk-flex-middle"
           >
-            <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
+            <oc-icon
+              name="exit_to_app"
+              size="small"
+              class="uk-preserve-width"
+              :uk-tooltip="$gettext('Navigate to parent')"
+            />
             <span
               class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-via-label"
               >{{ $_viaLabel }}</span

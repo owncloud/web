@@ -20,6 +20,7 @@
               <oc-button
                 variation="raw"
                 :aria-label="$gettext('Restore older version')"
+                :uk-tooltip="$gettext('Restore older version')"
                 @click="revertVersion(item)"
               >
                 <oc-icon name="restore" />
@@ -31,6 +32,7 @@
               <oc-button
                 variation="raw"
                 :aria-label="$gettext('Download older version')"
+                :uk-tooltip="$gettext('Download older version')"
                 @click="downloadVersion(item)"
               >
                 <oc-icon name="cloud_download" />

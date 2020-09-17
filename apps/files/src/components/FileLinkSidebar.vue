@@ -12,6 +12,7 @@
             <span v-translate>Private Link</span>
             <oc-button
               :aria-label="$_privateLinkCopyLabel"
+              :uk-tooltip="$_privateLinkCopyLabel"
               variation="raw"
               class="uk-margin-small-left"
             >
