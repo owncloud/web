@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Make file previews properly fit: [#232](https://github.com/owncloud/product/issues/232)
 * Bugfix - Adjust behavior of public link password field: [#4077](https://github.com/owncloud/phoenix/pull/4077)
+* Change - Adjustments to roles selection dropdown: [#4080](https://github.com/owncloud/phoenix/pull/4080)
 * Change - Rename "trash bin" to "deleted files": [#4071](https://github.com/owncloud/phoenix/pull/4071)
 * Change - Add default action to click on file name: [#234](https://github.com/owncloud/product/issues/234)
 * Change - Moved bottom actions menu into actions dropdown: [#234](https://github.com/owncloud/product/issues/234)
@@ -35,6 +36,15 @@ Details
 
    https://github.com/owncloud/product/issues/231
    https://github.com/owncloud/phoenix/pull/4077
+
+* Change - Adjustments to roles selection dropdown: [#4080](https://github.com/owncloud/phoenix/pull/4080)
+
+   The role description text from the roles selection button has been removed, but is still
+   visible when opening the dropdown. The dropdown now also has a chevron icon to make it clearer
+   that it is a dropdown.
+
+   https://github.com/owncloud/product/issues/231
+   https://github.com/owncloud/phoenix/pull/4080
 
 * Change - Rename "trash bin" to "deleted files": [#4071](https://github.com/owncloud/phoenix/pull/4071)
 
