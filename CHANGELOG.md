@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Added missing tooltips: [#4081](https://github.com/owncloud/phoenix/pull/4081)
 * Bugfix - Make file previews properly fit: [#232](https://github.com/owncloud/product/issues/232)
 * Bugfix - Adjust behavior of public link password field: [#4077](https://github.com/owncloud/phoenix/pull/4077)
 * Change - Adjustments to roles selection dropdown: [#4080](https://github.com/owncloud/phoenix/pull/4080)
@@ -19,6 +20,16 @@ Summary
 
 Details
 -------
+
+* Bugfix - Added missing tooltips: [#4081](https://github.com/owncloud/phoenix/pull/4081)
+
+   We've added tooltips for the following:
+
+   - top bar: notifications button and application switcher - file list: share indicators and
+   quick actions - sharing in sidebar: action icons like edit, delete, copy
+
+   https://github.com/owncloud/product/issues/231
+   https://github.com/owncloud/phoenix/pull/4081
 
 * Bugfix - Make file previews properly fit: [#232](https://github.com/owncloud/product/issues/232)
 
