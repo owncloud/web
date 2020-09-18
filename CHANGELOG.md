@@ -17,6 +17,7 @@ Summary
 * Change - Moved bottom actions menu into actions dropdown: [#234](https://github.com/owncloud/product/issues/234)
 * Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
 * Change - Shortened button label for creating public links: [#4072](https://github.com/owncloud/phoenix/pull/4072)
+* Enhancement - Remember public link password on page refresh: [#4083](https://github.com/owncloud/phoenix/pull/4083)
 
 Details
 -------
@@ -98,6 +99,15 @@ Details
 
    https://github.com/owncloud/phoenix/issues/231
    https://github.com/owncloud/phoenix/pull/4072
+
+* Enhancement - Remember public link password on page refresh: [#4083](https://github.com/owncloud/phoenix/pull/4083)
+
+   When refreshing the page in the file list of a public link share, the user doesn't need to enter
+   the password again. This only applies for the current page and the password is forgotten by the
+   browser again upon closing or switching to another site.
+
+   https://github.com/owncloud/product/issues/231
+   https://github.com/owncloud/phoenix/pull/4083
 
 Changelog for ownCloud Phoenix [0.16.0] (2020-08-24)
 =======================================
