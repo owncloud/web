@@ -5,14 +5,11 @@
     </label>
     <oc-button
       :id="`files-${mode}-role-button`"
-      :class="`uk-width-1-1 files-${mode}-role-button uk-flex-left`"
+      justify-content="space-between"
+      :class="`uk-width-1-1 files-${mode}-role-button`"
     >
-      <role-item
-        :show-description="false"
-        :role="selectedRole"
-        class="uk-margin-xsmall-top uk-margin-xsmall-bottom"
-      />
-      <oc-icon name="expand_more" size="small" class="uk-position-center-right" />
+      <role-item :show-description="false" :role="selectedRole" />
+      <oc-icon name="expand_more" size="small" />
     </oc-button>
     <oc-drop
       close-on-click
