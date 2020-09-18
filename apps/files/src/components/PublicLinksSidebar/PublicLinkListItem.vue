@@ -84,17 +84,22 @@
       <oc-table-cell shrink></oc-table-cell>
       <oc-table-cell colspan="2">
         <div class="uk-text-meta">
-          <router-link
+          <oc-button
+            type="router-link"
+            variation="raw"
+            justify-content="left"
+            gap-size="xsmall"
             :to="$_viaRouterParams"
             :aria-label="$gettext('Navigate to parent')"
-            class="oc-files-file-link-via uk-flex uk-flex-middle"
+            class="oc-files-file-link-via"
           >
-            <oc-icon name="exit_to_app" size="small" class="uk-preserve-width" />
+            <oc-icon name="exit_to_app" size="small" />
             <span
-              class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-file-links-link-via-label"
-              >{{ $_viaLabel }}</span
+              class="oc-file-name uk-padding-remove uk-text-truncate files-file-links-link-via-label"
             >
-          </router-link>
+              {{ $_viaLabel }}
+            </span>
+          </oc-button>
         </div>
       </oc-table-cell>
     </oc-table-row>
