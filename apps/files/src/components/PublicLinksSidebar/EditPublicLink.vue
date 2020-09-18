@@ -100,28 +100,18 @@
           <oc-button id="oc-files-file-link-cancel" :disabled="saving" @click="$_closeForm">
             <translate>Cancel</translate>
           </oc-button>
-          <button v-if="saving" class="uk-button uk-button-default uk-position-relative" disabled>
+        </div>
+        <div>
+          <oc-button v-if="saving" variation="primary" disabled>
             <template v-if="$_isNew">
-              <oc-spinner
-                :aria-label="$gettext('Creating Public Link')"
-                class="uk-position-small uk-position-center-left"
-                size="xsmall"
-              />
-              <span v-translate :aria-hidden="true" class="uk-margin-small-left"
-                >Creating Public Link</span
-              >
+              <oc-spinner :aria-label="$gettext('Creating Public Link')" size="xsmall" />
+              <span v-translate :aria-hidden="true">Creating</span>
             </template>
             <template v-else>
-              <oc-spinner
-                :aria-label="$gettext('Saving Public Link')"
-                class="uk-position-small uk-position-center-left"
-                size="xsmall"
-              />
-              <span v-translate :aria-hidden="true" class="uk-margin-small-left"
-                >Saving Public Link</span
-              >
+              <oc-spinner :aria-label="$gettext('Saving Public Link')" size="xsmall" />
+              <span v-translate :aria-hidden="true">Saving</span>
             </template>
-          </button>
+          </oc-button>
           <template v-else>
             <oc-button
               v-if="$_isNew"
@@ -130,7 +120,7 @@
               variation="primary"
               @click="$_addLink"
             >
-              <translate>Create Public Link</translate>
+              <translate>Create</translate>
             </oc-button>
             <oc-button
               v-else
@@ -139,7 +129,7 @@
               variation="primary"
               @click="$_updateLink"
             >
-              <translate>Save Public Link</translate>
+              <translate>Save</translate>
             </oc-button>
           </template>
         </div>

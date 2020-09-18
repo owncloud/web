@@ -39,13 +39,11 @@
         >
           <translate>Cancel</translate>
         </oc-button>
+      </div>
+      <div>
         <oc-button v-if="saving" key="edit-collaborator-saving-button" :disabled="true">
-          <oc-spinner
-            :aria-label="$gettext('Saving Share')"
-            class="uk-position-small uk-position-center-left"
-            size="xsmall"
-          />
-          <span v-translate :aria-hidden="true" class="uk-margin-small-left">Saving Share</span>
+          <oc-spinner :aria-label="$gettext('Saving Share')" size="xsmall" />
+          <span v-translate :aria-hidden="true">Saving Share</span>
         </oc-button>
         <oc-button
           v-else
