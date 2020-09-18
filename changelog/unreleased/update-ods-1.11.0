@@ -1,0 +1,12 @@
+Change: Update ODS to 1.11.0
+
+We updated owncloud design system (ODS) to 1.11.0. This brings some features and required some changes:
+- Buttons:
+    - require to be placed in a grid or with uk-flex for side by side positioning,
+    - don't have an icon property anymore,
+    - have a slot so that content of the button can be just anything
+    - placement of the content in the button can be modified with new props `justify-content` and `gap`
+- new icons, which are used in the sidebar and for quick actions
+- sidebar has a property for hiding the navigation. It doesn't have internal logic anymore for hiding the navigation automatically.
+
+https://github.com/owncloud/phoenix/pull/4086
