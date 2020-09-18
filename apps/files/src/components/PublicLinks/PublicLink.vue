@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     ...mapGetters(['configuration']),
-    ...mapGetters('Files', ['davProperties']),
+    ...mapGetters('Files', ['davProperties', 'publicLinkPassword']),
     passwordFieldLabel() {
       return this.$gettext('Enter password for public link')
     },
@@ -77,6 +77,7 @@ export default {
   methods: {
     ...mapActions('Files', ['setPublicLinkPassword']),
     resolvePublicLink() {
+      const password = this.password || this.publicLinkPassword
       this.loading = true
       this.inputErrorMessage = null
       const properties = this.davProperties.concat([
@@ -87,10 +88,10 @@ export default {
         this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
       ])
       this.$client.publicFiles
-        .list(this.$route.params.token, this.password, properties, '0')
+        .list(this.$route.params.token, password, properties, '0')
         .then(files => {
           this.passwordRequired = false
-          this.setPublicLinkPassword(this.password)
+          this.setPublicLinkPassword(password)
           if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
             this.$router.push({
               name: 'public-files-drop',

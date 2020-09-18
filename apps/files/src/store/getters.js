@@ -88,7 +88,21 @@ export default {
     return state.highlightedFile
   },
   publicLinkPassword: state => {
-    return state.publicLinkPassword
+    // we need to use the state for reactivity
+    if (state.publicLinkPassword) {
+      return state.publicLinkPassword
+    }
+
+    let password = sessionStorage.getItem('publicLinkInfo')
+    if (password) {
+      try {
+        password = atob(password)
+      } catch (e) {
+        sessionStorage.removeItem('publicLinkInfo')
+      }
+    }
+
+    return password
   },
   uploaded: state => state.uploaded,
   actionsInProgress: state => state.actionsInProgress
