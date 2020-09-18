@@ -6,17 +6,23 @@
     </h1>
     <hr class="uk-margin-remove-top" />
     <div class="uk-margin-bottom">
-      <oc-button @click="leaveLocationPicker(originalLocation)">
-        <translate>Cancel</translate>
-      </oc-button>
-      <oc-button
-        id="location-picker-btn-confirm"
-        variation="primary"
-        :disabled="!canConfirm"
-        @click="confirmAction"
-      >
-        <span v-text="confirmBtnText" />
-      </oc-button>
+      <oc-grid gutter="small">
+        <div>
+          <oc-button @click="leaveLocationPicker(originalLocation)">
+            <translate>Cancel</translate>
+          </oc-button>
+        </div>
+        <div>
+          <oc-button
+            id="location-picker-btn-confirm"
+            variation="primary"
+            :disabled="!canConfirm"
+            @click="confirmAction"
+          >
+            <span v-text="confirmBtnText" />
+          </oc-button>
+        </div>
+      </oc-grid>
     </div>
     <file-list
       id="location-picker-files-list"
