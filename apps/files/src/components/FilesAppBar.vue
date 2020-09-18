@@ -127,12 +127,13 @@
         <oc-grid v-if="displayBulkActions" gutter="small">
           <div>
             <oc-button
-              id="delete-selected-btn"
-              key="delete-selected-btn"
-              @click="$_deleteResources_displayDialog()"
+              id="copy-selected-btn"
+              key="copy-selected-btn"
+              :disabled="!canCopy"
+              @click="triggerLocationPicker('copy')"
             >
-              <oc-icon name="delete" aria-hidden="true" />
-              <translate>Delete</translate>
+              <oc-icon name="file_copy" aria-hidden="true" />
+              <translate>Copy</translate>
             </oc-button>
           </div>
           <div>
@@ -148,13 +149,12 @@
           </div>
           <div>
             <oc-button
-              id="copy-selected-btn"
-              key="copy-selected-btn"
-              :disabled="!canCopy"
-              @click="triggerLocationPicker('copy')"
+              id="delete-selected-btn"
+              key="delete-selected-btn"
+              @click="$_deleteResources_displayDialog()"
             >
-              <oc-icon name="file_copy" aria-hidden="true" />
-              <translate>Copy</translate>
+              <oc-icon name="delete" aria-hidden="true" />
+              <translate>Delete</translate>
             </oc-button>
           </div>
         </oc-grid>
