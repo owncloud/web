@@ -139,16 +139,18 @@
         </div>
       </oc-table-cell>
       <oc-table-cell shrink>
-        <oc-button
-          v-if="$_editButtonVisible"
-          :aria-label="$gettext('Edit share')"
-          :uk-tooltip="$gettext('Edit share')"
-          variation="raw"
-          class="files-collaborators-collaborator-edit"
-          @click="$emit('onEdit', collaborator)"
-        >
-          <oc-icon name="edit" />
-        </oc-button>
+        <div class="uk-flex uk-flex-nowrap uk-flex-middle">
+          <oc-button
+            v-if="$_editButtonVisible"
+            :aria-label="$gettext('Edit share')"
+            :uk-tooltip="$gettext('Edit share')"
+            variation="raw"
+            class="files-collaborators-collaborator-edit"
+            @click="$emit('onEdit', collaborator)"
+          >
+            <oc-icon name="edit" />
+          </oc-button>
+        </div>
       </oc-table-cell>
     </oc-table-row>
     <oc-table-row v-if="$_viaLabel" class="files-collaborators-collaborator-table-row-bottom">

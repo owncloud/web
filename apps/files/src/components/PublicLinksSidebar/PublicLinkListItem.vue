@@ -47,37 +47,39 @@
           </template>
         </span>
       </oc-table-cell>
-      <oc-table-cell shrink class="uk-text-nowrap">
-        <oc-button
-          v-if="$_editButtonVisible"
-          :aria-label="$_editButtonLabel"
-          :uk-tooltip="$_editButtonLabel"
-          variation="raw"
-          class="oc-files-file-link-edit"
-          @click="$emit('onEdit', link)"
-        >
-          <oc-icon name="edit" size="small" />
-        </oc-button>
-        <oc-button
-          :aria-label="$_publicLinkCopyLabel"
-          :uk-tooltip="$_publicLinkCopyLabel"
-          variation="raw"
-          class="oc-files-file-link-copy-url"
-        >
-          <oc-icon
-            v-if="!linksCopied[link.url]"
-            v-clipboard:copy="link.url"
-            v-clipboard:success="$_clipboardSuccessHandler"
-            name="copy_to_clipboard"
-            size="small"
-          />
-          <oc-icon
-            v-else
-            name="ready"
-            size="small"
-            class="oc-files-file-link-copied-url _clipboard-success-animation"
-          />
-        </oc-button>
+      <oc-table-cell shrink>
+        <div class="uk-flex uk-flex-nowrap uk-flex-middle">
+          <oc-button
+            v-if="$_editButtonVisible"
+            :aria-label="$_editButtonLabel"
+            :uk-tooltip="$_editButtonLabel"
+            variation="raw"
+            class="oc-files-file-link-edit"
+            @click="$emit('onEdit', link)"
+          >
+            <oc-icon name="edit" size="small" />
+          </oc-button>
+          <oc-button
+            :aria-label="$_publicLinkCopyLabel"
+            :uk-tooltip="$_publicLinkCopyLabel"
+            variation="raw"
+            class="oc-files-file-link-copy-url"
+          >
+            <oc-icon
+              v-if="!linksCopied[link.url]"
+              v-clipboard:copy="link.url"
+              v-clipboard:success="$_clipboardSuccessHandler"
+              name="copy_to_clipboard"
+              size="small"
+            />
+            <oc-icon
+              v-else
+              name="ready"
+              size="small"
+              class="oc-files-file-link-copied-url _clipboard-success-animation"
+            />
+          </oc-button>
+        </div>
       </oc-table-cell>
     </oc-table-row>
     <oc-table-row v-if="$_viaLabel" class="files-file-links-link-table-row-bottom">
