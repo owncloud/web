@@ -11,7 +11,7 @@
           :aria-label="$gettext('Open navigation menu')"
           @click="toggleAppNavigationVisibility"
         >
-          <oc-icon name="menu" class="uk-flex" aria-hidden="true" />
+          <oc-icon name="menu" aria-hidden="true" />
         </oc-button>
       </div>
       <search-bar v-if="!isSearchDisabled" />
