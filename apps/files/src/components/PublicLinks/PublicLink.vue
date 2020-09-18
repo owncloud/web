@@ -55,6 +55,7 @@ export default {
       firstTime: true,
       passwordRequired: false,
       password: null,
+      savedPassword: null,
       inputErrorMessage: null
     }
   },
@@ -72,11 +73,23 @@ export default {
     }
   },
   mounted() {
+    const publicLinkPassword = sessionStorage.getItem('publicLinkInfo')
+    if (publicLinkPassword) {
+      try {
+        this.savedPassword = atob(publicLinkPassword)
+      } catch (e) {
+        console.error('Error decoding saved password, ignoring', e)
+        // ignore
+        this.savedPassword = null
+      }
+    }
+
     this.resolvePublicLink()
   },
   methods: {
     ...mapActions('Files', ['setPublicLinkPassword']),
     resolvePublicLink() {
+      const password = this.savedPassword || this.password
       this.loading = true
       this.inputErrorMessage = null
       const properties = this.davProperties.concat([
@@ -87,10 +100,10 @@ export default {
         this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
       ])
       this.$client.publicFiles
-        .list(this.$route.params.token, this.password, properties, '0')
+        .list(this.$route.params.token, password, properties, '0')
         .then(files => {
           this.passwordRequired = false
-          this.setPublicLinkPassword(this.password)
+          this.setPublicLinkPassword(password)
           if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
             this.$router.push({
               name: 'public-files-drop',
@@ -108,6 +121,9 @@ export default {
           })
         })
         .catch(error => {
+          // only attempt once with saved password, it might have changed
+          // we don't want to populate the form with it!
+          this.savedPassword = null
           if (error.statusCode === 401) {
             this.passwordRequired = true
             if (!this.firstTime) {

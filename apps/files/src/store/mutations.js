@@ -227,6 +227,11 @@ export default {
   },
   SET_PUBLIC_LINK_PASSWORD(state, password) {
     state.publicLinkPassword = password
+    if (password) {
+      sessionStorage.setItem('publicLinkInfo', btoa(password))
+    } else {
+      sessionStorage.removeItem('publicLinkInfo')
+    }
   },
 
   ADD_ACTION_TO_PROGRESS(state, item) {
