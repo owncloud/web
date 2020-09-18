@@ -210,7 +210,6 @@ export default {
     ...mapActions('Files', [
       'loadFolder',
       'setHighlightedFile',
-      'setPublicLinkPassword',
       'resetFileSelection',
       'addFileSelection',
       'removeFileSelection',
