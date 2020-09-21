@@ -14,6 +14,7 @@ Summary
 * Change - Adjustments to roles selection dropdown: [#4080](https://github.com/owncloud/phoenix/pull/4080)
 * Change - Rename "trash bin" to "deleted files": [#4071](https://github.com/owncloud/phoenix/pull/4071)
 * Change - Add default action to click on file name: [#234](https://github.com/owncloud/product/issues/234)
+* Change - Improve external links in app switcher: [#4092](https://github.com/owncloud/phoenix/pull/4092)
 * Change - Moved bottom actions menu into actions dropdown: [#234](https://github.com/owncloud/product/issues/234)
 * Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
 * Change - Update ODS to 1.11.0: [#4086](https://github.com/owncloud/phoenix/pull/4086)
@@ -74,6 +75,14 @@ Details
 
    https://github.com/owncloud/product/issues/234
    https://github.com/owncloud/phoenix/pull/4076
+
+* Change - Improve external links in app switcher: [#4092](https://github.com/owncloud/phoenix/pull/4092)
+
+   We have added an option to set the link target in external application links (defaults to
+   `_blank`). The app switcher now shows all native extensions first and items based on
+   application links last.
+
+   https://github.com/owncloud/phoenix/pull/4092
 
 * Change - Moved bottom actions menu into actions dropdown: [#234](https://github.com/owncloud/product/issues/234)
 
