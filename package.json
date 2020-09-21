@@ -124,7 +124,7 @@
     "vue-template-compiler": "^2.6.10",
     "vue2-touch-events": "^2.2.1",
     "vuex": "^3.1.1",
-    "vuex-persist": "2.0.1",
+    "vuex-persist": "3.1.0",
     "vuex-router-sync": "^5.0.0",
     "webpack": "^4.36.1",
     "webpack-cli": "^3.3.8",
