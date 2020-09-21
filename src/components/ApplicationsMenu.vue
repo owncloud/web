@@ -21,7 +21,7 @@
     >
       <div class="uk-grid-small uk-text-center" uk-grid>
         <div v-for="(n, nid) in $_applicationsList" :key="nid" class="uk-width-1-3">
-          <a v-if="n.url" key="external-link" target="_blank" :href="n.url">
+          <a v-if="n.url" key="external-link" :target="n.target" :href="n.url">
             <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="large" />
             <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="large" />
             <div>{{ n.title }}</div>
@@ -85,6 +85,9 @@ export default {
 
         if (item.url) {
           app.url = item.url
+          app.target = ['_blank', '_self', '_parent', '_top'].includes(item.target)
+            ? item.target
+            : '_blank'
         } else if (item.path) {
           app.path = item.path
         } else {

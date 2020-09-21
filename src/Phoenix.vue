@@ -106,13 +106,13 @@ export default {
     $_applicationsList() {
       const list = []
 
-      // Get extensions manually added into config
-      list.push(this.configuration.applications)
-
       // Get extensions which have at least one nav item
       this.getExtensionsWithNavItems.forEach(extensionId => {
         list.push(this.apps[extensionId])
       })
+
+      // Get extensions manually added into config
+      list.push(this.configuration.applications)
 
       return list.flat()
     },
