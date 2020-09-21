@@ -85,7 +85,9 @@ export default {
 
         if (item.url) {
           app.url = item.url
-          app.target = item.target || '_blank'
+          app.target = ['_blank', '_self', '_parent', '_top'].includes(item.target)
+            ? item.target
+            : '_blank'
         } else if (item.path) {
           app.path = item.path
         } else {
