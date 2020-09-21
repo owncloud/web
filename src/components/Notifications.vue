@@ -26,6 +26,7 @@
               :key="index + '-' + actionIndex"
               size="small"
               :variation="action.primary ? 'primary' : 'default'"
+              class="uk-margin-small-left"
               @click.prevent="executeRequest(el.app, action.link, action.type, el.notification_id)"
               >{{ action.label }}</oc-button
             >

@@ -13,10 +13,11 @@
       id="files-open-search-btn"
       key="mobile-search-button"
       class="uk-hidden@m"
-      icon="search"
       :aria-label="displaySearchButtonLabel"
       @click="focusMobileSearchInput"
-    />
+    >
+      <oc-icon name="search" aria-hidden="true" />
+    </oc-button>
     <oc-drop
       drop-id="oc-topbar-search-mobile"
       toggle="#files-open-search-btn"

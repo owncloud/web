@@ -10,15 +10,8 @@
       @progress="onFileProgress"
     />
     <div>
-      <div>
-        <div class="uk-flex uk-margin-small-bottom">
-          <oc-breadcrumb
-            v-if="showBreadcrumb"
-            id="files-breadcrumb"
-            :items="breadcrumbs"
-            home
-          ></oc-breadcrumb>
-        </div>
+      <div class="uk-margin-small-bottom">
+        <oc-breadcrumb v-if="showBreadcrumb" id="files-breadcrumb" :items="breadcrumbs" home />
         <span v-if="!showBreadcrumb" class="uk-flex uk-flex-middle uk-margin-small-bottom">
           <oc-icon v-if="pageIcon" :name="pageIcon" class="uk-margin-small-right" />
           <h1 class="oc-page-title" v-text="pageTitle" />
@@ -34,11 +27,12 @@
               id="new-file-menu-btn"
               key="new-file-menu-btn-enabled"
               variation="primary"
-              icon="add"
               :uk-tooltip="_cannotCreateDialogText"
               :disabled="isNewBtnDisabled"
-              ><translate>New</translate></oc-button
             >
+              <oc-icon name="add" aria-hidden="true" />
+              <translate>New</translate>
+            </oc-button>
             <oc-drop
               drop-id="new-file-menu-drop"
               toggle="#new-file-menu-btn"
@@ -112,55 +106,55 @@
           <oc-button
             v-if="selectedFiles.length > 0"
             key="restore-btn"
-            icon="restore"
             class="uk-margin-small-right"
             @click="$_ocTrashbin_restoreFiles()"
           >
+            <oc-icon name="restore" aria-hidden="true" />
             <translate>Restore</translate>
           </oc-button>
           <oc-button
             id="delete-selected-btn"
             key="delete-btn"
-            icon="delete"
             :disabled="files.length === 0"
             @click="
               selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_deleteResources_displayDialog()
             "
           >
+            <oc-icon name="delete" aria-hidden="true" />
             {{ $_ocAppBar_clearTrashbinButtonText }}
           </oc-button>
         </template>
         <oc-grid v-if="displayBulkActions" gutter="small">
           <div>
             <oc-button
-              id="delete-selected-btn"
-              key="delete-selected-btn"
-              icon="delete"
-              @click="$_deleteResources_displayDialog()"
+              id="copy-selected-btn"
+              key="copy-selected-btn"
+              :disabled="!canCopy"
+              @click="triggerLocationPicker('copy')"
             >
-              <translate>Delete</translate>
+              <oc-icon name="file_copy" aria-hidden="true" />
+              <translate>Copy</translate>
             </oc-button>
           </div>
           <div>
             <oc-button
               id="move-selected-btn"
               key="move-selected-btn"
-              icon="folder-move"
               :disabled="!canMove"
-              @click.native="triggerLocationPicker('move')"
+              @click="triggerLocationPicker('move')"
             >
+              <oc-icon name="folder-move" aria-hidden="true" />
               <translate>Move</translate>
             </oc-button>
           </div>
           <div>
             <oc-button
-              id="copy-selected-btn"
-              key="copy-selected-btn"
-              icon="file_copy"
-              :disabled="!canCopy"
-              @click.native="triggerLocationPicker('copy')"
+              id="delete-selected-btn"
+              key="delete-selected-btn"
+              @click="$_deleteResources_displayDialog()"
             >
-              <translate>Copy</translate>
+              <oc-icon name="delete" aria-hidden="true" />
+              <translate>Delete</translate>
             </oc-button>
           </div>
         </oc-grid>

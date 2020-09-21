@@ -6,17 +6,23 @@
     </h1>
     <hr class="uk-margin-remove-top" />
     <div class="uk-margin-bottom">
-      <oc-button @click.native="leaveLocationPicker(originalLocation)">
-        <translate>Cancel</translate>
-      </oc-button>
-      <oc-button
-        id="location-picker-btn-confirm"
-        variation="primary"
-        :disabled="!canConfirm"
-        @click.native="confirmAction"
-      >
-        <span v-text="confirmBtnText" />
-      </oc-button>
+      <oc-grid gutter="small">
+        <div>
+          <oc-button @click="leaveLocationPicker(originalLocation)">
+            <translate>Cancel</translate>
+          </oc-button>
+        </div>
+        <div>
+          <oc-button
+            id="location-picker-btn-confirm"
+            variation="primary"
+            :disabled="!canConfirm"
+            @click="confirmAction"
+          >
+            <span v-text="confirmBtnText" />
+          </oc-button>
+        </div>
+      </oc-grid>
     </div>
     <file-list
       id="location-picker-files-list"
@@ -259,18 +265,21 @@ export default {
     this.originalLocation = this.target
 
     if (this.currentAction === 'move') {
+      this.SET_NAVIGATION_HIDDEN(true)
       this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
     } else if (this.currentAction === 'copy') {
+      this.SET_NAVIGATION_HIDDEN(true)
       this.SET_MAIN_CONTENT_COMPONENT(CopySidebarMainContent)
     }
   },
 
   beforeDestroy() {
+    this.SET_NAVIGATION_HIDDEN(false)
     this.SET_MAIN_CONTENT_COMPONENT(null)
   },
 
   methods: {
-    ...mapMutations(['SET_MAIN_CONTENT_COMPONENT']),
+    ...mapMutations(['SET_NAVIGATION_HIDDEN', 'SET_MAIN_CONTENT_COMPONENT']),
     ...mapActions('Files', ['loadFolder']),
     ...mapActions(['showMessage']),
 

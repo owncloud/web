@@ -8,7 +8,7 @@
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
         <section v-if="$_privateLinkOfHighlightedFile">
-          <div class="uk-text-bold">
+          <div class="uk-text-bold uk-flex">
             <span v-translate>Private Link</span>
             <oc-button
               :aria-label="$_privateLinkCopyLabel"
@@ -57,8 +57,10 @@
               variation="primary"
               :aria-label="$_addButtonAriaLabel"
               @click="$_addPublicLink"
-              >{{ $_addButtonLabel }}</oc-button
             >
+              <oc-icon name="add" />
+              {{ $_addButtonLabel }}
+            </oc-button>
           </div>
           <transition-group
             class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove"

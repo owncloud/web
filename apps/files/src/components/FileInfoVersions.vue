@@ -16,7 +16,7 @@
             </oc-table-cell>
           </oc-table-cell>
           <oc-table-cell shrink>
-            <div class="uk-button-group uk-margin-small-right">
+            <div class="uk-button-group">
               <oc-button
                 variation="raw"
                 :aria-label="$gettext('Restore older version')"
@@ -28,7 +28,7 @@
             </div>
           </oc-table-cell>
           <oc-table-cell shrink>
-            <div class="uk-button-group uk-margin-small-right">
+            <div class="uk-button-group">
               <oc-button
                 variation="raw"
                 :aria-label="$gettext('Download older version')"

@@ -92,7 +92,7 @@ const navItems = [
   },
   {
     name: $gettext('Shared with me'),
-    iconMaterial: 'group',
+    iconMaterial: 'shared-with-me',
     route: {
       name: 'files-shared-with-me',
       path: `/${appInfo.id}/shared-with-me`
@@ -100,7 +100,7 @@ const navItems = [
   },
   {
     name: $gettext('Shared with others'),
-    iconMaterial: 'group',
+    iconMaterial: 'shared-with-others',
     route: {
       name: 'files-shared-with-others',
       path: `/${appInfo.id}/shared-with-others`

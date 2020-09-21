@@ -10,16 +10,16 @@
           <oc-button
             :id="$_resharerToggleId"
             variation="raw"
+            justify-content="left"
+            gap-size="xsmall"
             :aria-label="$gettext('Show resharer details')"
             :uk-tooltip="$gettext('Show resharer details')"
           >
-            <span class="uk-flex uk-flex-middle">
-              <oc-icon name="repeat" class="uk-preserve-width oc-icon-xsmall" />
-              <span
-                class="uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-reshare-information"
-                >{{ $_reshareInformation }}</span
-              >
-            </span>
+            <oc-icon name="repeat" size="xsmall" class="uk-preserve-width" />
+            <span
+              class="uk-padding-remove uk-text-truncate files-collaborators-collaborator-reshare-information"
+              >{{ $_reshareInformation }}</span
+            >
           </oc-button>
           <oc-drop
             ref="menu"
@@ -139,26 +139,32 @@
         </div>
       </oc-table-cell>
       <oc-table-cell shrink>
-        <oc-button
-          v-if="$_editButtonVisible"
-          :aria-label="$gettext('Edit share')"
-          :uk-tooltip="$gettext('Edit share')"
-          variation="raw"
-          class="files-collaborators-collaborator-edit"
-          @click="$emit('onEdit', collaborator)"
-        >
-          <oc-icon name="edit" />
-        </oc-button>
+        <div class="uk-flex uk-flex-nowrap uk-flex-middle">
+          <oc-button
+            v-if="$_editButtonVisible"
+            :aria-label="$gettext('Edit share')"
+            :uk-tooltip="$gettext('Edit share')"
+            variation="raw"
+            class="files-collaborators-collaborator-edit"
+            @click="$emit('onEdit', collaborator)"
+          >
+            <oc-icon name="edit" />
+          </oc-button>
+        </div>
       </oc-table-cell>
     </oc-table-row>
     <oc-table-row v-if="$_viaLabel" class="files-collaborators-collaborator-table-row-bottom">
       <oc-table-cell shrink :colspan="firstColumn ? 2 : 1"></oc-table-cell>
       <oc-table-cell colspan="2">
         <div class="uk-text-meta">
-          <router-link
+          <oc-button
+            type="router-link"
+            variation="raw"
+            justify-content="left"
+            gap-size="xsmall"
             :to="$_viaRouterParams"
             :aria-label="$gettext('Navigate to parent')"
-            class="files-collaborators-collaborator-follow-via uk-flex uk-flex-middle"
+            class="files-collaborators-collaborator-follow-via"
           >
             <oc-icon
               name="exit_to_app"
@@ -167,10 +173,10 @@
               :uk-tooltip="$gettext('Navigate to parent')"
             />
             <span
-              class="oc-file-name uk-padding-remove uk-margin-xsmall-left uk-text-truncate files-collaborators-collaborator-via-label"
+              class="oc-file-name uk-padding-remove uk-text-truncate files-collaborators-collaborator-via-label"
               >{{ $_viaLabel }}</span
             >
-          </router-link>
+          </oc-button>
         </div>
       </oc-table-cell>
     </oc-table-row>
