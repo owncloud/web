@@ -114,23 +114,25 @@
           >
         </span>
       </div>
-      <div v-else :key="item.id + item.status" class="uk-text-nowrap">
-        <a
+      <div v-else :key="item.id + item.status" class="uk-text-nowrap uk-flex uk-flex-middle">
+        <oc-button
           v-if="item.status === 1 || item.status === 2"
-          v-translate
+          variation="raw"
           class="file-row-share-status-action uk-text-meta"
           @click="pendingShareAction(item, 'POST')"
-          >Accept</a
         >
-        <a
+          <translate>Accept</translate>
+        </oc-button>
+        <oc-button
           v-if="item.status === 1"
-          v-translate
+          variation="raw"
           class="file-row-share-status-action uk-text-meta uk-margin-left"
           @click="pendingShareAction(item, 'DELETE')"
-          >Decline</a
         >
+          <translate>Decline</translate>
+        </oc-button>
         <span
-          class="uk-text-small uk-margin-left file-row-share-status-text"
+          class="uk-text-small uk-margin-left file-row-share-status-text uk-text-baseline"
           v-text="shareStatus(item.status)"
         />
       </div>
