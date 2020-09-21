@@ -16,6 +16,7 @@ Summary
 * Change - Add default action to click on file name: [#234](https://github.com/owncloud/product/issues/234)
 * Change - Moved bottom actions menu into actions dropdown: [#234](https://github.com/owncloud/product/issues/234)
 * Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
+* Change - Update ODS to 1.11.0: [#4086](https://github.com/owncloud/phoenix/pull/4086)
 * Change - Shortened button label for creating public links: [#4072](https://github.com/owncloud/phoenix/pull/4072)
 * Enhancement - Remember public link password on page refresh: [#4083](https://github.com/owncloud/phoenix/pull/4083)
 
@@ -90,6 +91,18 @@ Details
 
    https://github.com/owncloud/product/issues/231
    https://github.com/owncloud/phoenix/pull/4070
+
+* Change - Update ODS to 1.11.0: [#4086](https://github.com/owncloud/phoenix/pull/4086)
+
+   We updated owncloud design system (ODS) to 1.11.0. This brings some features and required some
+   changes: - Buttons: - require to be placed in a grid or with uk-flex for side by side positioning,
+   - don't have an icon property anymore, - have a slot so that content of the button can be just
+   anything - placement of the content in the button can be modified with new props
+   `justify-content` and `gap` - new icons, which are used in the sidebar and for quick actions -
+   sidebar has a property for hiding the navigation. It doesn't have internal logic anymore for
+   hiding the navigation automatically.
+
+   https://github.com/owncloud/phoenix/pull/4086
 
 * Change - Shortened button label for creating public links: [#4072](https://github.com/owncloud/phoenix/pull/4072)
 
