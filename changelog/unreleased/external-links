@@ -1,0 +1,5 @@
+Change: Improve external links in app switcher
+
+We have added an option to set the link target in external application links (defaults to `_blank`). The app switcher now shows all native extensions first and items based on application links last.
+
+https://github.com/owncloud/phoenix/pull/4092
