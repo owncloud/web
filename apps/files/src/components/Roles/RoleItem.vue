@@ -1,6 +1,6 @@
 <template>
   <div class="roles-select-role-item">
-    <span class="uk-text-bold" v-text="role.label" />
+    <span class="oc-text-bold" v-text="role.label" />
     <p v-if="showDescription" class="uk-text-meta uk-margin-remove" v-text="role.description" />
   </div>
 </template>

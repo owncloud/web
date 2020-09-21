@@ -22,7 +22,7 @@
     <div class="uk-width-expand">
       <div class="file-row-name uk-text-truncate" :filename="item.name">
         <span
-          class="uk-text-bold oc-cursor-pointer oc-file-name uk-padding-remove-left"
+          class="oc-text-bold oc-cursor-pointer oc-file-name uk-padding-remove-left"
           role="button"
           v-text="fileName"
         /><span

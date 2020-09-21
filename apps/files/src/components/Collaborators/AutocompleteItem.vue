@@ -24,7 +24,7 @@
       />
     </template>
     <div class="files-collaborators-autocomplete-user-text">
-      <div class="uk-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
+      <div class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
       <div v-if="item.value.shareWithAdditionalInfo" v-text="item.value.shareWithAdditionalInfo" />
     </div>
   </div>

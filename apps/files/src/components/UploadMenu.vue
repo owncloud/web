@@ -5,7 +5,7 @@
         <oc-icon name="file_copy" class="uk-margin-small-right" />
         <div class="uk-width-expand">
           <div class="uk-flex">
-            <div class="uk-text-bold uk-width-expand uk-text-truncate">{{ item.name }}</div>
+            <div class="oc-text-bold uk-width-expand uk-text-truncate">{{ item.name }}</div>
             <div class="uk-width-auto uk-text-nowrap">{{ item.size | fileSize }}</div>
           </div>
           <div class="uk-margin-remove uk-position-relative uk-width-expand">

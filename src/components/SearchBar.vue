@@ -4,6 +4,7 @@
       ref="globalSearchBar"
       class="uk-width-large uk-visible@m"
       :label="searchLabel"
+      :placeholder="searchLabel"
       :loading="isLoadingSearchResults"
       :button-hidden="true"
       @search="search"

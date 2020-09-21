@@ -7,14 +7,17 @@
       variation="raw"
       :aria-label="$gettext('User Menu')"
     >
-      <oc-grid gutter="small" flex>
+      <oc-grid flex>
         <avatar-image
-          class="oc-topbar-personal-avatar"
-          :width="32"
+          class="oc-topbar-personal-avatar uk-flex-inline uk-flex-center uk-flex-middle uk-margin-xsmall-right"
+          :width="24"
           :userid="userId"
           :user-name="userDisplayName"
         />
-        <div class="oc-topbar-personal-label uk-text-primary" v-text="userDisplayName" />
+        <div
+          class="oc-topbar-personal-label uk-text-primary oc-text-bold"
+          v-text="userDisplayName"
+        />
       </oc-grid>
     </oc-button>
     <oc-drop

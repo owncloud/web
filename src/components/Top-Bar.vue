@@ -3,7 +3,7 @@
     id="oc-topbar"
     class="uk-flex uk-flex-middle uk-flex-wrap oc-border-bottom uk-padding-small"
   >
-    <oc-grid v-if="!publicPage()" gutter="large" flex>
+    <oc-grid v-if="!publicPage()" gutter="medium" flex>
       <div class="uk-hidden@l">
         <oc-button
           variation="raw"

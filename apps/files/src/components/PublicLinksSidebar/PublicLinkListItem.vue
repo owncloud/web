@@ -24,7 +24,7 @@
           :href="link.url"
           target="_blank"
           :uk-tooltip="$_tooltipTextLink"
-          class="uk-text-bold uk-text-truncate oc-files-file-link-url"
+          class="oc-text-bold uk-text-truncate oc-files-file-link-url"
           >{{ $_linkNameText }}</a
         >
         <br />

@@ -41,7 +41,7 @@
                     :user-name="resharer.displayName"
                   />
                   <div>
-                    <span class="files-collaborators-resharer-name uk-text-bold">{{
+                    <span class="files-collaborators-resharer-name oc-text-bold">{{
                       resharer.displayName
                     }}</span>
                     <span
@@ -109,7 +109,7 @@
       <oc-table-cell>
         <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
           <div class="oc-text">
-            <span class="files-collaborators-collaborator-name uk-text-bold">{{
+            <span class="files-collaborators-collaborator-name oc-text-bold">{{
               collaborator.collaborator.displayName
             }}</span>
             <translate

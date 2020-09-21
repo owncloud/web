@@ -68,7 +68,7 @@
             >
               <div v-if="checkboxEnabled">
                 <oc-checkbox
-                  class="uk-margin-small-left"
+                  class="uk-margin-small-left files-list-checkbox"
                   :value="selectedFiles.indexOf(rowItem) >= 0"
                   :label="labelSelectSingleItem(rowItem)"
                   :hide-label="true"
@@ -342,7 +342,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .files-list-row-disabled {
   opacity: 0.3;
   pointer-events: none;
@@ -352,5 +352,22 @@ export default {
 /* Issue: https://github.com/owncloud/owncloud-design-system/issues/821 */
 .oc-padding-xsmall-bottom {
   padding-bottom: 5px !important;
+}
+
+.files-list-checkbox > input {
+  width: 24px;
+  height: 24px;
+}
+
+#filelist-check-all > input {
+  width: 14px;
+  height: 14px;
+}
+
+.files-list-checkbox > input,
+#filelist-check-all > input {
+  border-radius: 3px;
+  background-color: rgba(78, 133, 200, 0.05);
+  border: 1px solid rgba(78, 133, 200, 0.25);
 }
 </style>

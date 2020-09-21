@@ -10,7 +10,7 @@
         </oc-button>
       </div>
       <hr />
-      <div class="uk-text-bold uk-margin-bottom"><translate>Account Information</translate></div>
+      <div class="oc-text-bold uk-margin-bottom"><translate>Account Information</translate></div>
       <div class="uk-flex uk-flex-wrap">
         <div class="uk-width-1-2@s uk-margin-bottom">
           <div class="uk-text-meta"><translate>Username:</translate></div>
