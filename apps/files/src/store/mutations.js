@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import _ from 'lodash'
+import pickBy from 'lodash/pickBy'
 
 /**
  * @param {Array.<Object>} shares array of shares
@@ -185,8 +185,8 @@ export default {
       if (pathToKeep.charAt(0) !== '/') {
         pathToKeep = '/' + pathToKeep
       }
-      state.sharesTree = _.pickBy(state.sharesTree, (shares, path) => {
-        return _.startsWith(pathToKeep, path + '/')
+      state.sharesTree = pickBy(state.sharesTree, (shares, path) => {
+        return pathToKeep.startsWith(path + '/')
       })
     } else {
       state.sharesTree = {}

@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+import debounce from 'lodash/debounce'
 import { mapActions, mapGetters } from 'vuex'
 import Mixins from '../../mixins/collaborators'
 import { roleToBitmask } from '../../helpers/collaborators'
@@ -139,7 +139,7 @@ export default {
       this.$refs.ocSharingAutocomplete.focus()
     })
 
-    this.$_onAutocompleteInput = _.debounce(this.$_onAutocompleteInput, 1000)
+    this.$_onAutocompleteInput = debounce(this.$_onAutocompleteInput, 1000)
   },
 
   methods: {
