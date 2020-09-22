@@ -33,7 +33,15 @@
           >
         </div>
       </oc-grid>
-      <div v-if="!loading" id="files-list-container" class="uk-overflow-auto">
+      <div v-if="loading" id="files-list-loading-message" class="uk-position-center">
+        <div class="uk-text-center">
+          <oc-spinner size="large" :aria-hidden="true" />
+          <div class="uk-text-muted uk-text-large">
+            <slot name="loadingMessage" />
+          </div>
+        </div>
+      </div>
+      <div v-else id="files-list-container" class="uk-overflow-auto">
         <RecycleScroller
           v-if="fileData.length"
           v-slot="{ item: rowItem, index, active }"

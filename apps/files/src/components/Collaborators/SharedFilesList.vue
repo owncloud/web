@@ -154,6 +154,9 @@
         v-text="formDateFromNow(item.shareTime)"
       />
     </template>
+    <template #loadingMessage>
+      <translate>Loading shared resources</translate>
+    </template>
     <template #noContentMessage>
       <no-content-message icon="group">
         <template #message>
