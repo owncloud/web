@@ -75,6 +75,7 @@ Details
 
    https://github.com/owncloud/product/issues/234
    https://github.com/owncloud/phoenix/pull/4076
+   https://github.com/owncloud/phoenix/pull/4097
 
 * Change - Improve external links in app switcher: [#4092](https://github.com/owncloud/phoenix/pull/4092)
 
