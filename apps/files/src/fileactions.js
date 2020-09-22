@@ -48,7 +48,7 @@ export default {
           icon: 'remove_red_eye',
           handler: file => this.fetchFile(file.path, 'application/pdf'),
           ariaLabel: () => {
-            return this.$gettext('Display PDF')
+            return this.$gettext('Open in browser')
           },
           isEnabled: function(item) {
             return item.extension === 'pdf'
