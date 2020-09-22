@@ -13,7 +13,6 @@
         :class="{ 'uk-visible@m': _sidebarOpen }"
         @dragover="$_ocApp_dragOver"
       >
-        <oc-loader v-if="loadingFolder" id="files-list-progress"></oc-loader>
         <trash-bin v-if="$route.name === 'files-trashbin'" :file-data="activeFiles" />
         <shared-files-list
           v-else-if="sharedList"
