@@ -16,7 +16,7 @@
           variation="raw"
           @click.stop="indicator.handler(item, indicator.id)"
         >
-          <oc-icon :name="indicator.icon" class="uk-text-middle" size="small" variation="system" />
+          <oc-icon :name="indicator.icon" class="uk-text-middle" size="small" variation="passive" />
         </oc-button>
       </template>
       <template v-else>

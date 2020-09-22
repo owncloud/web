@@ -1,10 +1,5 @@
 <template>
   <div id="files" class="uk-flex uk-flex-column">
-    <files-app-bar />
-    <upload-progress
-      v-show="$_uploadProgressVisible"
-      class="uk-padding-small uk-background-muted"
-    />
     <oc-grid class="uk-height-1-1 uk-flex-1 uk-overflow-auto">
       <div
         ref="filesListWrapper"
@@ -13,6 +8,8 @@
         :class="{ 'uk-visible@m': _sidebarOpen }"
         @dragover="$_ocApp_dragOver"
       >
+        <files-app-bar />
+        <upload-progress v-show="$_uploadProgressVisible" class="oc-p-s uk-background-muted" />
         <trash-bin v-if="$route.name === 'files-trashbin'" :file-data="activeFiles" />
         <shared-files-list
           v-else-if="sharedList"

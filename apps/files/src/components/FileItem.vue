@@ -18,6 +18,7 @@
       :size="hasTwoRows ? 'medium' : 'small'"
       aria-hidden="true"
       class="uk-margin-small-right"
+      variation="file-type"
     />
     <div class="uk-width-expand">
       <div class="file-row-name uk-text-truncate" :filename="item.name">
