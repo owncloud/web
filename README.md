@@ -10,3 +10,4 @@ Pushing a new design and frontend concept to ownCloud
 
 Please refer to the [documentation](https://owncloud.github.io/ocis/getting-started/) for setting up, building and running Phoenix.
 
+Trigger CI
