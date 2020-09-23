@@ -1,6 +1,6 @@
 import moment from 'moment'
 import uniqueId from 'lodash/uniqueId'
-import chain from 'lodash/chain'
+import _ from 'lodash'
 import { getParentPaths } from '../helpers/path'
 import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
 import { shareTypes } from '../helpers/shareTypes'
@@ -59,7 +59,7 @@ function _buildFile(file) {
     shareTypes: (function() {
       let shareTypes = file.fileInfo['{http://owncloud.org/ns}share-types']
       if (shareTypes) {
-        shareTypes = chain(shareTypes)
+        shareTypes = _.chain(shareTypes)
           .filter(
             xmlvalue =>
               xmlvalue.namespaceURI === 'http://owncloud.org/ns' &&
@@ -147,7 +147,7 @@ function _buildFileInTrashbin(file) {
 function _aggregateFileShares(data, incomingShares = false) {
   // borrowed from owncloud's apps/files_sharing/js/sharedfilelist.js#_makeFilesFromShares(data)
   var files = data
-  files = chain(files)
+  files = _.chain(files)
     // convert share data to file data
     .map(share => {
       var file = {
