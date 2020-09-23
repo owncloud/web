@@ -36,29 +36,32 @@ const createOCSRequestHeaders = function(userId) {
  * @throws Error
  * @returns {node-fetch.Response}
  */
-const checkStatus = function(response, message) {
+const checkStatus = function(response, message = '') {
   if (response.ok) {
     // response.status >= 200 && response.status < 300
     return response
   } else {
-    throw Error(message + ' Status:' + response.status + ' ' + response.statusText)
+    throw Error(
+      `HTTP Request Failed: ${message}, Status: ${response.status} ${response.statusCode}`
+    )
   }
 }
 
 /**
  *
- * @param {node-fetch.Response} response
+ * @param {Object} response the response body in json
  * @param {string} message
  *
  * @throws Error
- * @returns {node-fetch.Response}
+ * @returns {Object} the body of the response
  */
-const checkOCSStatus = function(response, message) {
+const checkOCSStatus = async function(response, message = '') {
   const statusCode = _.get(response, 'ocs.meta.statuscode')
+  const ocsMessage = _.get(response, 'ocs.meta.message')
   if (statusCode === 200) {
     return response
   } else {
-    throw Error(message + ' Status:' + statusCode)
+    throw Error(`OCS Request Failed: ${message}, Status: ${statusCode}, Message: ${ocsMessage}`)
   }
 }
 

@@ -37,6 +37,9 @@ function createUser(userId, password, displayName = false, email = false) {
   const url = 'cloud/users'
   return httpHelper
     .postOCS(url, 'admin', body)
+    .then(res => httpHelper.checkStatus(res, 'Failed while creating user'))
+    .then(res => res.json())
+    .then(res => httpHelper.checkOCSStatus(res, 'Failed while creating user'))
     .then(() => {
       if (client.globals.ocis) {
         const skelDir = client.globals.ocis_skeleton_dir

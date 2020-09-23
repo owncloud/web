@@ -21,6 +21,9 @@ Given(
 )
 
 const getConfigJsonContent = function(fullPathOfConfigFile) {
+  if (!fs.existsSync(fullPathOfConfigFile)) {
+    throw Error('Could not find configfile')
+  }
   const rawdata = fs.readFileSync(fullPathOfConfigFile)
   return JSON.parse(rawdata)
 }
@@ -265,12 +268,21 @@ After(async function(testCase) {
 })
 
 Before(function() {
-  this.fullPathOfConfigFile = client.globals.phoenix_config
-  initialConfigJsonSettings = getConfigJsonContent(client.globals.phoenix_config)
+  try {
+    this.fullPathOfConfigFile = client.globals.phoenix_config
+    initialConfigJsonSettings = getConfigJsonContent(client.globals.phoenix_config)
+  } catch (err) {
+    console.log(
+      '\x1b[33m%s\x1b[0m',
+      `\tCould not read config file.\n\tSet correct path of config file in PHOENIX_CONFIG env variable to fix this.\n\tSome tests may fail as a result.`
+    )
+  }
 })
 
 After(function() {
-  fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(initialConfigJsonSettings, null, 4))
+  if (initialConfigJsonSettings) {
+    fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(initialConfigJsonSettings, null, 4))
+  }
 })
 
 Given('the app {string} has been disabled', function(app) {
