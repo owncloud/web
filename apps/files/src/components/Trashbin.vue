@@ -54,6 +54,9 @@
             {{ formDateFromNow(item.deleteTimestamp) }}
           </div>
         </template>
+        <template #loadingMessage>
+          <translate>Loading deleted files</translate>
+        </template>
         <template #noContentMessage>
           <no-content-message icon="delete">
             <template #message>

@@ -88,6 +88,14 @@
     <template #rowActions="{ item: rowItem }">
       <quick-actions :actions="app.quickActions" :item="rowItem" />
     </template>
+    <template #loadingMessage>
+      <template v-if="!$_isFavoritesList">
+        <translate key="all-files-loading-folder">Loading folder</translate>
+      </template>
+      <template v-else>
+        <translate key="all-files-loading-favorites">Loading favorites</translate>
+      </template>
+    </template>
     <template #noContentMessage>
       <no-content-message v-if="!$_isFavoritesList" icon="folder">
         <template #message

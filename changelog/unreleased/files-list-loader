@@ -1,0 +1,5 @@
+Change: More descriptive loading state
+
+When browsing the different variations of the files list we removed the loader component at the top in favor of a spinner in the center of the viewport. The spinner has one line of text which describes what kind of data is being loaded.
+
+https://github.com/owncloud/phoenix/pull/4099
