@@ -15,6 +15,7 @@ Summary
 * Change - Rename "trash bin" to "deleted files": [#4071](https://github.com/owncloud/phoenix/pull/4071)
 * Change - Add default action to click on file name: [#234](https://github.com/owncloud/product/issues/234)
 * Change - Improve external links in app switcher: [#4092](https://github.com/owncloud/phoenix/pull/4092)
+* Change - More descriptive loading state: [#4099](https://github.com/owncloud/phoenix/pull/4099)
 * Change - Moved bottom actions menu into actions dropdown: [#234](https://github.com/owncloud/product/issues/234)
 * Change - Renamed collaborators to people: [#4070](https://github.com/owncloud/phoenix/pull/4070)
 * Change - Update ODS to 1.11.0: [#4086](https://github.com/owncloud/phoenix/pull/4086)
@@ -84,6 +85,14 @@ Details
    application links last.
 
    https://github.com/owncloud/phoenix/pull/4092
+
+* Change - More descriptive loading state: [#4099](https://github.com/owncloud/phoenix/pull/4099)
+
+   When browsing the different variations of the files list we removed the loader component at the
+   top in favor of a spinner in the center of the viewport. The spinner has one line of text which
+   describes what kind of data is being loaded.
+
+   https://github.com/owncloud/phoenix/pull/4099
 
 * Change - Moved bottom actions menu into actions dropdown: [#234](https://github.com/owncloud/product/issues/234)
 
