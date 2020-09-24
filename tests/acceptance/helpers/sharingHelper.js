@@ -76,6 +76,21 @@ module.exports = {
     }
     return dateString
   },
+  assertUserHasNoShares: function(user) {
+    const apiURL = 'apps/files_sharing/api/v1/shares?'
+    return httpHelper
+      .getOCS(apiURL, user)
+      .then(res => res.json())
+      .then(function(sharesResult) {
+        httpHelper.checkOCSStatus(
+          sharesResult,
+          'Could not get shares. Message: ' + sharesResult.ocs.meta.message
+        )
+        const shares = sharesResult.ocs.data
+        assert.equal(0, shares.length)
+        return this
+      })
+  },
   /**
    *
    * @param {string } user
