@@ -42,7 +42,7 @@ Feature: restrict Sharing
   Scenario: Do not restrict users to only share with groups they are member of
     Given the setting "shareapi_only_share_with_membership_groups" of app "core" has been set to "no"
     When the user shares folder "simple-folder" with group "grp2" as "Viewer" using the webUI
-    And user "user3" has accepted the share "simple-folder" offered by user "user2"
+    And user "user3" accepts the share "simple-folder" offered by user "user2" using the sharing API
     Then as "user3" folder "/Shares/simple-folder" should exist
 
   @smokeTest
