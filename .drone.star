@@ -36,6 +36,7 @@ config = {
 					'webUISharingAcceptSharesToRoot',
 					'webUIRestrictSharing',
 					'webUISharingNotifications',
+					'webUISharingNotificationsToRoot',
 				],
 				'webUIFavorites': 'Favorites',
 				'webUIFiles': 'Files',
