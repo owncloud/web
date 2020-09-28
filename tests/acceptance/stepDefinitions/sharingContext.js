@@ -1256,6 +1256,28 @@ When(
   }
 )
 
+Given('user {string} from server {string} has accepted the last pending share', function(
+  user,
+  server
+) {
+  if (server === backendHelper.BACKENDS.remote) {
+    return backendHelper.runOnRemoteBackend(() => sharingHelper.acceptLastPendingShare(user))
+  } else {
+    return sharingHelper.acceptLastPendingShare(user)
+  }
+})
+
+When(
+  'user {string} from server {string} accepts the last pending share using the sharing API',
+  function(user, server) {
+    if (server === backendHelper.BACKENDS.remote) {
+      return backendHelper.runOnRemoteBackend(() => sharingHelper.acceptLastPendingShare(user))
+    } else {
+      return sharingHelper.acceptLastPendingShare(user)
+    }
+  }
+)
+
 Then('the file {string} shared by {string} should not be in {string} state', async function(
   filename,
   sharer,
@@ -1398,3 +1420,18 @@ Given('the administrator has set the default folder for received shares to {stri
   }
   return runOcc([`config:system:set share_folder --value=${folder}`])
 })
+
+Given(
+  'the administrator has set the default folder for received shares to {string} on remote server',
+  function(folder) {
+    if (client.globals.ocis) {
+      if (folder === 'Shares') {
+        return
+      }
+      throw Error(`Cannot set ${folder} as default share received folder in OCIS`)
+    }
+    return backendHelper.runOnRemoteBackend(runOcc, [
+      [`config:system:set share_folder --value=${folder}`]
+    ])
+  }
+)
