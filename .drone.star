@@ -44,6 +44,7 @@ config = {
 				'webUISharingInternalGroups': 'SharingInternalGroups',
 				'webUISharingInternalGroupsToRoot': 'SharingInternalGroupsRoot',
 				'webUISharingInternalUsers': 'SharingInternalUsers',
+				'webUISharingInternalUsersToRoot': 'SharingInternalUsersRoot',
 				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
 				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
 				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
