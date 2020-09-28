@@ -547,6 +547,7 @@ def databaseServiceForFederation(db, suffix):
 		'image': db,
 		'pull': 'always',
 		'environment': {
+			'MYSQL_AIO': 0,
 			'MYSQL_USER': getDbUsername(db),
 			'MYSQL_PASSWORD': getDbPassword(db),
 			'MYSQL_DATABASE': getDbDatabase(db) + suffix,
@@ -562,6 +563,7 @@ def databaseService(db):
 			'image': db,
 			'pull': 'always',
 			'environment': {
+				'MYSQL_AIO': 0,
 				'MYSQL_USER': getDbUsername(db),
 				'MYSQL_PASSWORD': getDbPassword(db),
 				'MYSQL_DATABASE': getDbDatabase(db),
