@@ -28,6 +28,7 @@ config = {
 				'webUIRestrictSharing': 'RestrictSharing',
 				'webUISharingAutocompletion': 'SharingAutocompletion',
 				'webUISharingInternalGroups': 'SharingInternalGroups',
+				'webUISharingInternalGroupsToRoot': 'SharingInternalGroupsRoot',
 				'webUISharingInternalUsers': 'SharingInternalUsers',
 				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
 				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
