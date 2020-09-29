@@ -1,13 +1,11 @@
-@skipOnOCIS @ocis-reva-issue-64
+@skipOnOCIS
 Feature: Sharing files with internal groups with permissions
   As a user
   I want to set different permissions on shared files with groups
   So that I can control the access on those files by other users on the group
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes:
+    Given these users have been created with default attributes:
       | username |
       | user1    |
       | user2    |
@@ -32,8 +30,6 @@ Feature: Sharing files with internal groups with permissions
     | grp2         | group |
     And the user removes "grp1" as a collaborator from the share
     And the user shares with the selected collaborators
-    And user "user2" accepts the share "lorem.txt" offered by user "user1" using the sharing API
-    And user "user3" accepts the share "lorem.txt" offered by user "user1" using the sharing API
     Then custom permissions "<displayed-permissions>" should be set for user "grp2" for file "lorem.txt" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "User Three" for file "lorem.txt" on the webUI
     And group "grp2" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
@@ -42,25 +38,25 @@ Feature: Sharing files with internal groups with permissions
     | field       | value                |
     | uid_owner   | user1                |
     | share_with  | grp2                 |
-    | file_target | /Shares/lorem.txt       |
+    | file_target | /lorem (2).txt       |
     | item_type   | file                 |
     | permissions | <actual-permissions> |
     And user "user3" should have received a share with these details:
     | field       | value                |
     | uid_owner   | user1                |
     | share_with  | user3                |
-    | file_target | /Shares/lorem.txt       |
+    | file_target | /lorem (2).txt       |
     | item_type   | file                 |
     | permissions | <actual-permissions> |
     But group "grp1" should not be listed in the collaborators list on the webUI
-    And as "user1" file "/Shares/lorem.txt" should not exist
+    And as "user1" file "lorem (2).txt" should not exist
     Examples:
     | role                 | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |
-    | Viewer               | Viewer         | share             | share                 | read, share         |
-    | Viewer               | Viewer         | ,                 | ,                     | read                |
-    | Editor               | Editor         | share             | share                 | share, read, update |
-    | Editor               | Editor         | ,                 | ,                     | read, update        |
-    | Advanced permissions | Viewer         | ,                 | ,                     | read                |
-    | Advanced permissions | Viewer         | share             | share                 | read, share         |
-    | Advanced permissions | Editor         | update            | ,                     | read, update        |
+    # | Viewer               | Viewer         | share             | share                 | read, share         |
+    # | Viewer               | Viewer         | ,                 | ,                     | read                |
+    # | Editor               | Editor         | share             | share                 | share, read, update |
+    # | Editor               | Editor         | ,                 | ,                     | read, update        |
+    # | Advanced permissions | Viewer         | ,                 | ,                     | read                |
+    # | Advanced permissions | Viewer         | share             | share                 | read, share         |
+    # | Advanced permissions | Editor         | update            | ,                     | read, update        |
     | Advanced permissions | Editor         | share, update     | share                 | read, update, share |
