@@ -5,6 +5,8 @@ Feature: restrict Sharing
   So that users can only share files with specific users and groups
 
   Background:
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And the administrator has set the default folder for received shares to "Shares"
     Given these users have been created with default attributes:
       | username |
       | user1    |
@@ -40,7 +42,8 @@ Feature: restrict Sharing
   Scenario: Do not restrict users to only share with groups they are member of
     Given the setting "shareapi_only_share_with_membership_groups" of app "core" has been set to "no"
     When the user shares folder "simple-folder" with group "grp2" as "Viewer" using the webUI
-    Then as "user3" folder "simple-folder (2)" should exist
+    And user "user3" accepts the share "simple-folder" offered by user "user2" using the sharing API
+    Then as "user3" folder "/Shares/simple-folder" should exist
 
   @smokeTest
   Scenario: Forbid sharing with groups

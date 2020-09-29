@@ -5,7 +5,9 @@ Feature: Autocompletion of share-with names
   So that I can efficiently share my files with other users or groups
 
 Background:
-  Given these users have been created with default attributes but not initialized:
+  Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+  And the administrator has set the default folder for received shares to "Shares"
+  And these users have been created with default attributes but not initialized:
     | username    |
     | regularuser |
   And these users have been created but not initialized:

@@ -5,6 +5,8 @@ Feature: disable sharing
   So that users cannot share files
 
   Background:
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And the administrator has set the default folder for received shares to "Shares"
     Given user "user1" has been created with default attributes
 
   @smokeTest
@@ -26,15 +28,18 @@ Feature: disable sharing
   Scenario: Check file presence in shared-with-me page when sharing is disabled
     Given user "user2" has been created with default attributes
     And user "user2" has shared file "lorem.txt" with user "user1"
+    And user "user1" has accepted the share "lorem.txt" offered by user "user2"
     And user "user2" has shared folder "simple-folder" with user "user1"
+    And user "user1" has accepted the share "simple-folder" offered by user "user2"
     And the setting "shareapi_enabled" of app "core" has been set to "no"
     When user "user1" logs in using the webUI
-    Then file "lorem (2).txt" should be listed on the webUI
-    And folder "simple-folder (2)" should be listed on the webUI
+    When the user opens folder "Shares" using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And folder "simple-folder" should be listed on the webUI
 #    And the link for "shared-with-me" page should not be available in files page menu
     When the user browses to the shared-with-me page
-    Then file "lorem (2).txt" should not be listed on the webUI
-    And folder "simple-folder (2)" should not be listed on the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
 
   @issue-2459
   Scenario: Check file presence in shared-with-others page when Sharing is disabled
