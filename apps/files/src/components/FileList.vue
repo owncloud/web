@@ -12,7 +12,7 @@
         flex
         class="uk-padding-small uk-padding-remove-top oc-padding-xsmall-bottom oc-border-bottom"
       >
-        <div v-if="checkboxEnabled">
+        <div v-if="checkboxEnabled" id="files-list-header-checkbox" class="uk-flex uk-flex-center">
           <oc-checkbox
             id="filelist-check-all"
             class="uk-margin-small-left"
@@ -66,12 +66,17 @@
               class="uk-padding-small oc-border-bottom"
               :class="_rowClasses(rowItem)"
             >
-              <div v-if="checkboxEnabled">
+              <div
+                v-if="checkboxEnabled"
+                id="files-list-row-checkbox"
+                class="uk-flex uk-flex-center"
+              >
                 <oc-checkbox
                   class="uk-margin-small-left files-list-checkbox"
                   :value="selectedFiles.indexOf(rowItem) >= 0"
                   :label="labelSelectSingleItem(rowItem)"
                   :hide-label="true"
+                  size="big"
                   @click.stop
                   @change.native="toggleFileSelect(rowItem)"
                 />
@@ -214,6 +219,9 @@ export default {
       this.$_resizeHeader()
     }
   },
+  mounted() {
+    this.$_resizeHeader()
+  },
   methods: {
     ...mapActions('Files', [
       'loadFolder',
@@ -330,11 +338,20 @@ export default {
     },
 
     $_resizeHeader() {
-      this.$nextTick(() => {
+      setTimeout(() => {
         const headerRow = this.$refs.headerRow
         const firstRow = this.$refs.firstRow
+        const headerCheckbox = document.querySelector('#files-list-header-checkbox')
+        const firstRowCheckbox = document.querySelector('#files-list-row-checkbox')
+
+        console.log(headerCheckbox)
+
         if (headerRow && firstRow) {
           headerRow.$el.style.width = getComputedStyle(firstRow.$el).width
+        }
+
+        if (headerCheckbox && firstRowCheckbox) {
+          headerCheckbox.style.width = getComputedStyle(firstRowCheckbox).width
         }
       })
     }
@@ -348,26 +365,7 @@ export default {
   pointer-events: none;
 }
 
-/* TODO: Create as utility classes in ODS */
-/* Issue: https://github.com/owncloud/owncloud-design-system/issues/821 */
-.oc-padding-xsmall-bottom {
-  padding-bottom: 5px !important;
-}
-
-.files-list-checkbox > input {
-  width: 24px;
-  height: 24px;
-}
-
-#filelist-check-all > input {
-  width: 14px;
-  height: 14px;
-}
-
-.files-list-checkbox > input,
-#filelist-check-all > input {
-  border-radius: 3px;
-  background-color: rgba(78, 133, 200, 0.05);
-  border: 1px solid rgba(78, 133, 200, 0.25);
+#files-list-header-checkbox {
+  width: 34px;
 }
 </style>

@@ -2,7 +2,7 @@
   <oc-button
     variation="raw"
     :aria-label="ariaLabel"
-    class="uk-flex uk-flex-middle oc-sortable-column-header"
+    class="uk-flex uk-flex-middle oc-sortable-column-header uk-text-muted"
     :class="{ 'oc-sortable-column-header-desc': isDesc, 'oc-sortable-column-header-asc': !isDesc }"
     @click="$_onClick"
   >

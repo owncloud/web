@@ -1,10 +1,10 @@
 <template>
   <div id="files" class="uk-flex uk-flex-column">
-    <oc-grid class="uk-height-1-1 uk-flex-1 uk-overflow-auto">
+    <oc-grid class="uk-height-1-1 uk-flex-1">
       <div
         ref="filesListWrapper"
         tabindex="-1"
-        class="uk-width-expand uk-overflow-auto uk-height-1-1 files-list-wrapper"
+        class="uk-width-expand uk-height-1-1 files-list-wrapper"
         :class="{ 'uk-visible@m': _sidebarOpen }"
         @dragover="$_ocApp_dragOver"
       >

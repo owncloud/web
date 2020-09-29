@@ -23,7 +23,7 @@
         key="shared-with-header-cell"
         class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-medium uk-text-right"
         translate-context="'People' table column"
-        v-text="$gettext('People')"
+        v-text="$gettext('Shared with')"
       />
       <div
         v-else

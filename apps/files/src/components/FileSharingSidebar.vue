@@ -13,8 +13,7 @@
             class="files-collaborators-open-add-share-dialog-button"
             @click="$_ocCollaborators_addShare"
           >
-            <oc-icon name="add" aria-hidden="true" />
-            <translate>Share</translate>
+            <translate>Add people</translate>
           </oc-button>
         </div>
         <p
