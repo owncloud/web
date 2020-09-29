@@ -1081,6 +1081,10 @@ Then('user {string} should have received a share with these details:', function(
   })
 })
 
+Then('user {string} should not have received any shares', function(user) {
+  return sharingHelper.assertUserHasNoShares(user)
+})
+
 Given('user {string} has created a new public link for resource {string}', function(
   user,
   resource
@@ -1245,6 +1249,13 @@ Given('user {string} has accepted the share {string} offered by user {code}', fu
   return sharingHelper.acceptShare(filename, user, sharer)
 })
 
+When(
+  'user {string} accepts the share {string} offered by user {string} using the sharing API',
+  function(user, filename, sharer) {
+    return sharingHelper.acceptShare(filename, user, sharer)
+  }
+)
+
 Then('the file {string} shared by {string} should not be in {string} state', async function(
   filename,
   sharer,
@@ -1375,3 +1386,15 @@ When(
     )
   }
 )
+
+Given('the administrator has set the default folder for received shares to {string}', function(
+  folder
+) {
+  if (client.globals.ocis) {
+    if (folder === 'Shares') {
+      return
+    }
+    throw Error(`Cannot set ${folder} as default share received folder in OCIS`)
+  }
+  return runOcc([`config:system:set share_folder --value=${folder}`])
+})
