@@ -5,6 +5,7 @@ const sharingHelper = require('../helpers/sharingHelper')
 const assert = require('assert')
 const { SHARE_TYPES } = require('../helpers/sharingHelper')
 const path = require('../helpers/path')
+const loginHelper = require('../helpers/loginHelper')
 
 When(
   'the user (tries to )create/creates a new public link for file/folder/resource {string} using the webUI',
@@ -53,6 +54,33 @@ When(
   async function(linkCreator) {
     const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
     return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastShare.token)
+  }
+)
+
+When(
+  'the public (tries to )open/opens the public link page of the last public link created by user {string} on a new session',
+  async function(linkCreator) {
+    const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
+    await loginHelper.startNewSession()
+    return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastShare.token)
+  }
+)
+
+Then('the password input for the public link should appear in the webUI', function() {
+  return client.page.publicLinkPasswordPage().waitForVisible()
+})
+
+When('the user accesses the public link with password {string} using the webUI', function(
+  password
+) {
+  return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
+})
+
+When(
+  'user {string} changes the password of last public link  to {string} using the Sharing API',
+  async function(user, password) {
+    const lastShare = await sharingHelper.fetchLastPublicLinkShare(user)
+    await sharingHelper.updatePublicLinkPassword(user, lastShare.id, password)
   }
 )
 
