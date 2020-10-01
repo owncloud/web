@@ -405,7 +405,7 @@ module.exports = {
       selector: '#files-breadcrumb li:nth-of-type(2)'
     },
     newFileButtonLoaded: {
-      selector: '//button[@id="new-file-menu-btn" and contains(@class, "uk-button-primary")]',
+      selector: '//button[@id="new-file-menu-btn" and contains(@class, "oc-button-primary")]',
       locateStrategy: 'xpath'
     },
     breadcrumbMobile: {
