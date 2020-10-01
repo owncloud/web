@@ -239,6 +239,20 @@ module.exports = {
   getAllSharesSharedByUser: function(user) {
     return this.getAllShares(user)
   },
+  getAllPendingFederatedShares: function(user) {
+    const params = new URLSearchParams()
+    params.set('format', 'json')
+    const apiURL = `apps/files_sharing/api/v1/remote_shares/pending?${params.toString()}`
+    return httpHelper
+      .getOCS(apiURL, user)
+      .then(res => {
+        httpHelper.checkStatus(res, 'The response status is not the expected value')
+        return res.json()
+      })
+      .then(res => {
+        return res.ocs.data
+      })
+  },
 
   /**
    * Asynchronously declines the shares in pending state and meeting the conditions
@@ -308,6 +322,32 @@ module.exports = {
           httpHelper.checkOCSStatus(res, 'Could not perform the accept action')
         })
     }
+  },
+  /**
+   * Asynchronously accepts the shares in pending state and meeting the conditions
+   *
+   * @async
+   * @param {string} filename
+   * @param {string} user
+   * @param {string} sharer
+   */
+  acceptLastPendingShare: async function(user) {
+    const allShares = await this.getAllPendingFederatedShares(user)
+    if (!allShares.length) {
+      throw Error('No pending shares in server')
+    }
+    const share = allShares[allShares.length - 1]
+    const shareID = share.id
+    const apiURL = `apps/files_sharing/api/v1/remote_shares/pending/${shareID}`
+    return httpHelper
+      .postOCS(apiURL, user)
+      .then(res => {
+        return httpHelper.checkStatus(res, 'The response status is not the expected value')
+      })
+      .then(res => res.json())
+      .then(res => {
+        return httpHelper.checkOCSStatus(res, 'Could not perform the accept action')
+      })
   },
   /**
    * asserts expectedDetails with the last public link share of a user

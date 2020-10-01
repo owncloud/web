@@ -59,6 +59,7 @@ config = {
 		'webUIFederation': {
 			'suites': {
 				'webUISharingExternal': 'SharingExternal',
+				'webUISharingExternalToRoot': 'SharingExternalRoot',
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
