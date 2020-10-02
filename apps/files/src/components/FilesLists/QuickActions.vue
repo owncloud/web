@@ -10,7 +10,7 @@
       class="oc-mr-xs"
       @click.stop="action.handler({ item, client: $client, store: $store })"
     >
-      <oc-icon :name="action.icon" aria-hidden="true" size="small" class="uk-flex" />
+      <oc-icon :name="action.icon" aria-hidden="true" class="uk-flex" />
     </oc-button>
   </div>
 </template>

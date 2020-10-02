@@ -13,9 +13,9 @@
         key="avatar-group"
         class="oc-mr-s"
         name="group"
-        size="large"
+        size="xlarge"
       />
-      <oc-icon v-else key="avatar-generic-person" class="oc-mr-s" name="person" size="large" />
+      <oc-icon v-else key="avatar-generic-person" class="oc-mr-s" name="person" size="xlarge" />
     </template>
     <div class="files-collaborators-autocomplete-user-text">
       <div class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />

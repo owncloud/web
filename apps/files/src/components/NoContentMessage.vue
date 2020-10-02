@@ -1,6 +1,6 @@
 <template>
   <div class="uk-text-center">
-    <oc-icon :name="icon" type="div" size="xlarge" variation="system" />
+    <oc-icon :name="icon" type="div" size="xxlarge" variation="system" />
     <div class="uk-text-muted uk-text-large">
       <slot name="message" />
     </div>

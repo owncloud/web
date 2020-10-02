@@ -34,13 +34,13 @@
                   <oc-icon
                     v-if="file.status === 'done'"
                     name="ready"
-                    size="xsmall"
+                    size="small"
                     variation="success"
                   />
                   <oc-icon
                     v-if="file.status === 'error'"
                     name="info"
-                    size="xsmall"
+                    size="small"
                     variation="danger"
                   />
                   <oc-spinner

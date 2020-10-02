@@ -54,7 +54,7 @@
           variation="primary"
           @click="$_ocCollaborators_saveChanges"
         >
-          <translate>Save Share</translate>
+          <translate>Save</translate>
         </oc-button>
       </div>
     </oc-grid>

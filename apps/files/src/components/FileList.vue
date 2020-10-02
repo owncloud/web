@@ -96,7 +96,7 @@
                   variation="raw"
                   @click.stop="toggleRowActionsDropdown(rowItem)"
                 >
-                  <oc-icon name="more_vert" class="uk-text-middle" size="small" />
+                  <oc-icon name="more_vert" class="uk-text-middle" />
                 </oc-button>
               </div>
             </oc-grid>

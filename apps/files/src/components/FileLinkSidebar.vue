@@ -22,13 +22,11 @@
                 v-clipboard:copy="$_privateLinkOfHighlightedFile"
                 v-clipboard:success="$_clipboardSuccessHandler"
                 name="copy_to_clipboard"
-                size="small"
               />
               <oc-icon
                 v-else
                 id="files-sidebar-private-link-icon-copied"
                 name="ready"
-                size="small"
                 class="_clipboard-success-animation"
               />
             </oc-button>

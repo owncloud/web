@@ -15,7 +15,7 @@
             :aria-label="$gettext('Show resharer details')"
             :uk-tooltip="$gettext('Show resharer details')"
           >
-            <oc-icon name="repeat" size="xsmall" class="uk-preserve-width" />
+            <oc-icon name="repeat" size="small" class="uk-preserve-width" />
             <span
               class="oc-p-rm uk-text-truncate files-collaborators-collaborator-reshare-information"
               >{{ $_reshareInformation }}</span
@@ -70,7 +70,7 @@
           <oc-icon name="close" />
         </oc-button>
         <oc-spinner v-else-if="$_loadingSpinnerVisible" :aria-label="$gettext('Removing person')" />
-        <oc-icon v-else name="lock" class="uk-invisible"></oc-icon>
+        <oc-icon v-else name="lock" class="uk-invisible" />
       </oc-table-cell>
       <oc-table-cell shrink>
         <div key="collaborator-avatar-loaded">
@@ -88,7 +88,7 @@
               key="avatar-group"
               class="oc-mr-s files-collaborators-collaborator-indicator"
               name="group"
-              size="large"
+              size="xlarge"
               :aria-label="$gettext('Group')"
             />
             <oc-icon
@@ -96,7 +96,7 @@
               key="avatar-generic-person"
               class="oc-mr-s files-collaborators-collaborator-indicator"
               name="person"
-              size="large"
+              size="xlarge"
               :aria-label="$gettext('Remote user')"
             />
           </div>
@@ -164,7 +164,6 @@
           >
             <oc-icon
               name="exit_to_app"
-              size="small"
               class="uk-preserve-width"
               :uk-tooltip="$gettext('Navigate to parent')"
             />

@@ -94,7 +94,6 @@
             :key="'icon-' + share.id"
             :name="$_shareTypeIcon(share.shareType)"
             class="oc-mr-xs"
-            size="small"
             variation="active"
             aria-hidden="true"
           />

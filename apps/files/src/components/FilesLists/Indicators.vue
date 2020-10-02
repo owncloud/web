@@ -12,7 +12,7 @@
           variation="raw"
           @click.stop="indicator.handler(item, indicator.id)"
         >
-          <oc-icon :name="indicator.icon" class="uk-text-middle" size="small" variation="passive" />
+          <oc-icon :name="indicator.icon" class="uk-text-middle" variation="passive" />
         </oc-button>
       </template>
       <template v-else>
@@ -23,7 +23,6 @@
           :aria-label="indicator.label"
           :uk-tooltip="indicator.label"
           class="uk-text-middle"
-          size="small"
           variation="system"
         />
       </template>

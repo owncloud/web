@@ -37,7 +37,7 @@
       v-if="failed"
       name="review"
       variation="danger"
-      size="large"
+      size="xlarge"
       class="uk-position-center uk-z-index"
     />
 
@@ -55,7 +55,7 @@
           <oc-icon
             role="button"
             class="oc-cursor-pointer"
-            size="medium"
+            size="large"
             name="chevron_left"
             :aria-label="$gettext('Previous')"
             @click="prev"
@@ -67,7 +67,7 @@
           <oc-icon
             role="button"
             class="oc-cursor-pointer"
-            size="medium"
+            size="large"
             name="chevron_right"
             :aria-label="$gettext('Next')"
             @click="next"

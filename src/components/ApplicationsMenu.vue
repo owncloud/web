@@ -22,13 +22,13 @@
       <div class="uk-grid-small uk-text-center" uk-grid>
         <div v-for="(n, nid) in $_applicationsList" :key="nid" class="uk-width-1-3">
           <a v-if="n.url" key="external-link" :target="n.target" :href="n.url">
-            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="large" />
-            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="large" />
+            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="xlarge" />
+            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="xlarge" />
             <div>{{ n.title }}</div>
           </a>
           <router-link v-else key="internal-link" :to="n.path">
-            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="large" />
-            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="large" />
+            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="xlarge" />
+            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="xlarge" />
             <div v-text="n.title" />
           </router-link>
         </div>

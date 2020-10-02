@@ -19,11 +19,7 @@
       :aria-label="$gettext('Click row to toggle upload progress details')"
       @click.native="$_toggleExpanded"
     >
-      <oc-icon
-        class="uk-width-auto"
-        :name="expanded ? 'expand_less' : 'expand_more'"
-        size="small"
-      />
+      <oc-icon class="uk-width-auto" :name="expanded ? 'expand_less' : 'expand_more'" />
       <div class="uk-width-expand uk-text-truncate">
         <translate
           v-if="count === 1"

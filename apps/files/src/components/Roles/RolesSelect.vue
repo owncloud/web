@@ -9,7 +9,7 @@
       :class="`uk-width-1-1 files-${mode}-role-button`"
     >
       <role-item :show-description="false" :role="selectedRole" />
-      <oc-icon name="expand_more" size="small" />
+      <oc-icon name="expand_more" />
     </oc-button>
     <oc-drop
       close-on-click

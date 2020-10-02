@@ -32,7 +32,7 @@
           <template v-if="link.expiration">
             |
             <oc-icon
-              size="xsmall"
+              size="small"
               name="text-calendar"
               class="fix-icon-baseline"
               :aria-hidden="true"
@@ -41,7 +41,7 @@
           </template>
           <template v-if="link.password">
             |
-            <oc-icon size="xsmall" name="lock" class="fix-icon-baseline" :aria-hidden="true" />
+            <oc-icon size="small" name="lock" class="fix-icon-baseline" :aria-hidden="true" />
             <span v-translate>Password protected</span>
           </template>
         </span>
@@ -56,7 +56,7 @@
             class="oc-files-file-link-edit"
             @click="$emit('onEdit', link)"
           >
-            <oc-icon name="edit" size="small" />
+            <oc-icon name="edit" />
           </oc-button>
           <oc-button
             :aria-label="$_publicLinkCopyLabel"
@@ -69,12 +69,10 @@
               v-clipboard:copy="link.url"
               v-clipboard:success="$_clipboardSuccessHandler"
               name="copy_to_clipboard"
-              size="small"
             />
             <oc-icon
               v-else
               name="ready"
-              size="small"
               class="oc-files-file-link-copied-url _clipboard-success-animation"
             />
           </oc-button>
@@ -94,7 +92,7 @@
             :aria-label="$gettext('Navigate to parent')"
             class="oc-files-file-link-via"
           >
-            <oc-icon name="exit_to_app" size="small" />
+            <oc-icon name="exit_to_app" />
             <span class="oc-file-name oc-p-rm uk-text-truncate files-file-links-link-via-label">
               {{ $_viaLabel }}
             </span>
