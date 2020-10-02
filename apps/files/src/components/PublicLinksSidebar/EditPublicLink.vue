@@ -10,7 +10,7 @@
           {{ errors }}
         </oc-alert>
       </transition>
-      <div class="oc-m">
+      <div class="oc-mb">
         <label class="oc-label"><span v-translate>Name:</span></label>
         <input id="oc-files-file-link-name" v-model="name" class="uk-input" />
       </div>
@@ -22,7 +22,7 @@
           @roleSelected="$_selectRole"
         />
       </oc-grid>
-      <div class="oc-m uk-grid-small uk-flex uk-flex-middle" uk-grid>
+      <div class="oc-mb uk-grid-small uk-flex uk-flex-middle" uk-grid>
         <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
           <label class="oc-label" for="oc-files-file-link-expire-date">
             <span v-translate>Expiration date:</span>
@@ -81,13 +81,13 @@
             <h4 class="oc-mt-top uk-heading-divider">
                 Send mail notification
             </h4>
-            <div class="oc-m">
+            <div class="oc-mb">
                 <input type="text" class="uk-input" :placeholder="placeholder.mailTo" />
             </div>
-            <div class="oc-m">
+            <div class="oc-mb">
                 <textarea class="uk-textarea" :placeholder="placeholder.mailBody rows="4"></textarea>
             </div>
-            <div class="oc-m">
+            <div class="oc-mb">
                 <label><input type="checkbox" class="uk-checkbox oc-mr-s" v-translate>Send a copy to myself</label>
             </div>
         </template>
