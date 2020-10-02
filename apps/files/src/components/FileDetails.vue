@@ -18,11 +18,11 @@
             v-text="highlightedFile.name"
           />
         </div>
-        <div v-if="$route.name !== 'files-shared-with-others'">
+        <div v-if="$route.name !== 'files-shared-with-others'" class="uk-flex uk-flex-middle">
           <oc-star
             v-if="!publicPage() && isFavoritesEnabled"
             id="files-sidebar-star-icon"
-            class="uk-inline"
+            class="uk-inline oc-mr-xs"
             :shining="highlightedFile.starred"
             @click.native.stop="toggleFileFavorite(highlightedFile)"
           />
