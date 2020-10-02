@@ -374,8 +374,4 @@ export default {
   box-sizing: border-box;
   max-height: 77px;
 }
-
-* {
-  box-sizing: border-box;
-}
 </style>
