@@ -15,7 +15,7 @@
       v-else
       key="file-icon"
       :name="previewIcon"
-      :size="hasTwoRows ? 'medium' : 'small'"
+      :size="hasTwoRows ? 'large' : 'medium'"
       aria-hidden="true"
       class="uk-margin-small-right"
       variation="file-type"
@@ -23,7 +23,7 @@
     <div class="uk-width-expand">
       <div class="file-row-name uk-text-truncate" :filename="item.name">
         <span
-          class="oc-text-bold oc-cursor-pointer oc-file-name uk-padding-remove-left"
+          class="oc-text-bold oc-cursor-pointer oc-file-name oc-pl-rm"
           role="button"
           v-text="fileName"
         /><span

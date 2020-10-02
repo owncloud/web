@@ -1,6 +1,6 @@
 <template>
   <div id="mediaviewer" class="uk-position-relative">
-    <div class="uk-text-center uk-padding-small">
+    <div class="uk-text-center oc-p-s">
       <transition
         name="custom-classes-transition"
         :enter-active-class="activeClass.enter"
@@ -43,11 +43,11 @@
 
     <div class="uk-position-medium uk-position-bottom-center">
       <div
-        class="uk-overlay uk-overlay-default uk-padding-small uk-text-center uk-text-meta uk-text-truncate"
+        class="uk-overlay uk-overlay-default oc-p-s uk-text-center uk-text-meta uk-text-truncate"
       >
         {{ medium.name }}
       </div>
-      <div class="uk-overlay uk-overlay-primary uk-light uk-padding-small">
+      <div class="uk-overlay uk-overlay-primary uk-light oc-p-s">
         <div
           class="uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around"
           style="user-select:none;"

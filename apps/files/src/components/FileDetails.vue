@@ -2,7 +2,7 @@
   <oc-app-side-bar
     id="files-sidebar"
     :key="highlightedFile.id"
-    class="uk-padding-small uk-overflow-auto uk-height-1-1"
+    class="oc-p-s uk-overflow-auto uk-height-1-1"
     :disable-action="false"
     @close="close()"
   >

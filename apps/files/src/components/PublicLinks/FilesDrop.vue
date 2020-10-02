@@ -1,6 +1,6 @@
 <template>
   <div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
-    <div class="uk-padding uk-height-1-1">
+    <div class="oc-p uk-height-1-1">
       <div v-if="loading" key="loading-drop" class="uk-flex uk-flex-column uk-flex-middle">
         <h3 :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
         <oc-spinner size="medium" :aria-label="$_loadingPublicLinkTitle" />
@@ -26,11 +26,11 @@
           <oc-table class="uk-width-1-1 uk-width-xxlarge@m">
             <oc-table-group>
               <oc-table-row v-for="(file, key) in getUploadedFiles" :key="key">
-                <oc-table-cell class="uk-padding-remove-left" v-text="file.name" />
+                <oc-table-cell class="oc-pl-rm" v-text="file.name" />
                 <oc-table-cell shrink class="uk-text-nowrap uk-text-meta">{{
                   file.size | fileSize
                 }}</oc-table-cell>
-                <oc-table-cell shrink class="uk-padding-remove-right uk-preserve-width">
+                <oc-table-cell shrink class="oc-pr-rm uk-preserve-width">
                   <oc-icon
                     v-if="file.status === 'done'"
                     name="ready"

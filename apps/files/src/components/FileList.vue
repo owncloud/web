@@ -10,7 +10,7 @@
         key="files-list-results-existence"
         gutter="small"
         flex
-        class="uk-padding-small uk-padding-remove-top oc-padding-xsmall-bottom oc-border-bottom"
+        class="oc-p-s oc-pt-rm oc-pb-xs oc-border-b"
       >
         <div v-if="checkboxEnabled" id="files-list-header-checkbox" class="uk-flex uk-flex-center">
           <oc-checkbox
@@ -63,7 +63,7 @@
               :ref="index === 0 ? 'firstRow' : null"
               gutter="small"
               flex
-              class="uk-padding-small oc-border-bottom"
+              class="file-row oc-px-s oc-py oc-border-b"
               :class="_rowClasses(rowItem)"
             >
               <div
@@ -76,7 +76,7 @@
                   :value="selectedFiles.indexOf(rowItem) >= 0"
                   :label="labelSelectSingleItem(rowItem)"
                   :hide-label="true"
-                  size="big"
+                  size="large"
                   @click.stop
                   @change.native="toggleFileSelect(rowItem)"
                 />
@@ -110,7 +110,7 @@
           <slot name="noContentMessage" />
         </div>
       </div>
-      <oc-grid v-if="!loading" gutter="large" class="uk-width-1-1 uk-padding-small uk-flex-1">
+      <oc-grid v-if="!loading" gutter="large" class="uk-width-1-1 oc-p-s uk-flex-1">
         <slot name="footer" />
       </oc-grid>
     </div>
@@ -367,5 +367,10 @@ export default {
 
 #files-list-header-checkbox {
   width: 34px;
+}
+
+.file-row {
+  box-sizing: border-box;
+  max-height: 77px;
 }
 </style>

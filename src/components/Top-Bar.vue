@@ -1,8 +1,5 @@
 <template>
-  <header
-    id="oc-topbar"
-    class="uk-flex uk-flex-middle uk-flex-wrap oc-border-bottom uk-padding-small"
-  >
+  <header id="oc-topbar" class="uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
     <oc-grid v-if="!publicPage()" gutter="medium" flex>
       <div class="uk-hidden@l">
         <oc-button

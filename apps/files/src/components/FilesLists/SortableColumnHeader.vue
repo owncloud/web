@@ -12,7 +12,6 @@
         v-if="isActive"
         :name="$_indicatorIconName"
         class="uk-text-middle"
-        size="small"
         variation="passive"
       />
     </span>

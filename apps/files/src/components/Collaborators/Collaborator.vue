@@ -17,7 +17,7 @@
           >
             <oc-icon name="repeat" size="xsmall" class="uk-preserve-width" />
             <span
-              class="uk-padding-remove uk-text-truncate files-collaborators-collaborator-reshare-information"
+              class="oc-p-rm uk-text-truncate files-collaborators-collaborator-reshare-information"
               >{{ $_reshareInformation }}</span
             >
           </oc-button>
@@ -173,7 +173,7 @@
               :uk-tooltip="$gettext('Navigate to parent')"
             />
             <span
-              class="oc-file-name uk-padding-remove uk-text-truncate files-collaborators-collaborator-via-label"
+              class="oc-file-name oc-p-rm uk-text-truncate files-collaborators-collaborator-via-label"
               >{{ $_viaLabel }}</span
             >
           </oc-button>

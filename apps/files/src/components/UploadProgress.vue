@@ -1,5 +1,5 @@
 <template>
-  <div id="files-upload-progress" class="uk-clearfix uk-padding-remove-vertical">
+  <div id="files-upload-progress" class="uk-clearfix oc-p-rm-vertical">
     <div class="uk-margin-remove uk-position-relative uk-width-expand">
       <oc-progress
         ref="progressbar"

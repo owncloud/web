@@ -97,7 +97,7 @@
           >
             <oc-icon name="exit_to_app" size="small" />
             <span
-              class="oc-file-name uk-padding-remove uk-text-truncate files-file-links-link-via-label"
+              class="oc-file-name oc-p-rm uk-text-truncate files-file-links-link-via-label"
             >
               {{ $_viaLabel }}
             </span>

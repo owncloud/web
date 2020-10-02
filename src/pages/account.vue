@@ -1,7 +1,7 @@
 <template>
   <div>
     <oc-loader v-if="loading" />
-    <div v-if="!loading" class="uk-width-3-4@m uk-container uk-padding">
+    <div v-if="!loading" class="uk-width-3-4@m uk-container oc-p">
       <div class="uk-flex uk-flex-between uk-flex-middle">
         <h1 id="account-page-title" v-translate class="oc-page-title">Account</h1>
         <oc-button class="account-logout-button" @click="$_oc_settingsAccount_logout">

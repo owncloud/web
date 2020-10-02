@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-height-1-1 uk-flex uk-flex-column uk-padding-small uk-overflow-hidden">
+  <div class="uk-height-1-1 uk-flex uk-flex-column oc-p-s uk-overflow-hidden">
     <h1 class="location-picker-selection-info uk-flex uk-text-lead uk-margin-bottom">
       <span class="uk-margin-small-right" v-text="title" />
       <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
