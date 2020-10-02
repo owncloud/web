@@ -1,6 +1,6 @@
 <template>
   <!-- TODO: Take care of outside click overall and not just in files list -->
-  <div :id="id" class="uk-height-1-1 uk-position-relative" @click="hideRowActionsDropdown">
+  <div :id="id" class="uk-position-relative" @click="hideRowActionsDropdown">
     <div class="uk-flex uk-flex-column uk-height-1-1">
       <resize-observer @notify="$_resizeHeader" />
       <oc-grid
@@ -12,7 +12,7 @@
         flex
         class="oc-px-s oc-pt-rm oc-pb-xs oc-border-b"
       >
-        <div v-if="checkboxEnabled" id="files-list-header-checkbox" class="uk-flex uk-flex-center">
+        <div v-if="checkboxEnabled" id="files-list-header-checkbox" class="uk-text-center">
           <oc-checkbox
             id="filelist-check-all"
             class="oc-ml-s"
@@ -41,7 +41,7 @@
           </div>
         </div>
       </div>
-      <div v-else id="files-list-container" class="uk-overflow-auto">
+      <div v-else id="files-list-container" class="uk-overflow-auto uk-flex-1">
         <RecycleScroller
           v-if="fileData.length"
           v-slot="{ item: rowItem, index, active }"
@@ -110,9 +110,9 @@
           <slot name="noContentMessage" />
         </div>
       </div>
-      <oc-grid v-if="!loading" gutter="large" class="uk-width-1-1 oc-p-s uk-flex-1">
+      <div v-if="!loading" class="uk-width-1-1 uk-text-center oc-p-s">
         <slot name="footer" />
-      </oc-grid>
+      </div>
     </div>
     <row-actions-dropdown
       :displayed="rowActionsDisplayed"
@@ -374,5 +374,9 @@ export default {
 .file-row {
   box-sizing: border-box;
   max-height: 77px;
+}
+
+* {
+  box-sizing: border-box;
 }
 </style>
