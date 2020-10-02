@@ -72,7 +72,7 @@
                 class="uk-flex uk-flex-center"
               >
                 <oc-checkbox
-                  class="oc-ml-s files-list-checkbox"
+                  class="oc-ml-s"
                   :value="selectedFiles.indexOf(rowItem) >= 0"
                   :label="labelSelectSingleItem(rowItem)"
                   :hide-label="true"
