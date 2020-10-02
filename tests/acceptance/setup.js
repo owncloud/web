@@ -2,6 +2,8 @@ import { setDefaultTimeout, After, Before, defineParameterType } from 'cucumber'
 import { createSession, closeSession, client, startWebDriver, stopWebDriver } from 'nightwatch-api'
 import { rollbackConfigs, setConfigs, cacheConfigs } from './helpers/config'
 import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
+import { deleteUserAndGroupsAfterTest } from './stepDefinitions/provisioningContext.js'
+
 const codify = require('./helpers/codify')
 
 const ldap = require('./helpers/ldapHelper')
@@ -26,10 +28,12 @@ defineParameterType({
 })
 
 Before(function startDriverOnLocal() {
+  console.log('startDriverOnLocal')
   return RUNNING_ON_CI || startWebDriver({ env })
 })
 
 Before(function createSessionForEnv() {
+  console.log('createSessionForEnv')
   return createSession({ env })
 })
 
@@ -100,11 +104,17 @@ After(function rollbackConfigsOnLocal() {
 })
 
 After(function stopDriverIfOnLocal() {
+  console.log('stopDriverIfOnLocal')
   return RUNNING_ON_CI || stopWebDriver()
 })
 
-After(function closeSessionForEnv() {
-  return closeSession()
+After(async function closeSessionForEnv() {
+  // const promises = []
+
+  console.log('closeSessionForEnv')
+  await closeSession()
+  await deleteUserAndGroupsAfterTest()
+  return this
 })
 
 After(async function tryToReadBrowserConsoleOnFailure({ result }) {

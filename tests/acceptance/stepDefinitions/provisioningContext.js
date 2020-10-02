@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const { Given, After } = require('cucumber')
+const { Given } = require('cucumber')
 const fs = require('fs-extra')
 require('url-search-params-polyfill')
 const httpHelper = require('../helpers/httpHelper')
@@ -221,7 +221,8 @@ Given('user {string} has been added to group {string}', function(userId, groupId
   return addToGroup(userId, groupId)
 })
 
-After(async function() {
+export async function deleteUserAndGroupsAfterTest() {
+  console.log('delete users & groups')
   const createdUsers = Object.keys(userSettings.getCreatedUsers('LOCAL'))
   const createdRemoteUsers = Object.keys(userSettings.getCreatedUsers('REMOTE'))
   const createdGroups = userSettings.getCreatedGroups()
@@ -260,4 +261,4 @@ After(async function() {
   if (client.globals.remote_backend_url) {
     return backendHelper.runOnRemoteBackend(() => Promise.all(createdRemoteUsers.map(deleteUser)))
   }
-})
+}
