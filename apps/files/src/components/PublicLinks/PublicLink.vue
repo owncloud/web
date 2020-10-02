@@ -26,7 +26,7 @@
             :label="passwordFieldLabel"
             type="password"
             :placeholder="passwordPlaceholder"
-            class="uk-margin-small-bottom"
+            class="oc-mb-s"
           ></oc-text-input>
           <oc-button variation="primary" class="oc-login-authorize-button" :disabled="!password">
             <translate>Continue</translate>

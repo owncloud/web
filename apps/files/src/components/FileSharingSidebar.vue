@@ -7,7 +7,7 @@
     >
       <oc-loader v-if="sharesLoading" :aria-label="$gettext('Loading people list')" />
       <template v-else>
-        <div v-if="$_ocCollaborators_canShare" class="uk-margin-small-top uk-margin-small-bottom">
+        <div v-if="$_ocCollaborators_canShare" class="oc-mt-s oc-mb-s">
           <oc-button
             variation="primary"
             class="files-collaborators-open-add-share-dialog-button"
@@ -23,7 +23,7 @@
           v-text="noResharePermsMessage"
         />
         <section>
-          <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
+          <ul class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">
             <li v-if="$_ownerAsCollaborator" :key="$_ownerAsCollaborator.key">
               <collaborator :collaborator="$_ownerAsCollaborator" />
             </li>
@@ -31,12 +31,12 @@
               <collaborator :collaborator="$_currentUserAsCollaborator" />
             </li>
           </ul>
-          <hr v-if="collaborators.length > 0" class="uk-margin-small-top uk-margin-small-bottom" />
+          <hr v-if="collaborators.length > 0" class="oc-mt-s oc-mb-s" />
         </section>
         <section>
           <transition-group
             id="files-collaborators-list"
-            class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove"
+            class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
             :enter-active-class="$_transitionGroupEnter"
             :leave-active-class="$_transitionGroupLeave"
             name="custom-classes-transition"

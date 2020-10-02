@@ -49,12 +49,9 @@
         </oc-table>
       </div>
     </oc-grid>
-    <collaborators-edit-options
-      class="uk-margin-bottom"
-      @optionChange="collaboratorOptionChanged"
-    />
+    <collaborators-edit-options class="oc-mb" @optionChange="collaboratorOptionChanged" />
     <hr class="divider" />
-    <oc-grid gutter="small" class="uk-margin-bottom">
+    <oc-grid gutter="small" class="oc-mb">
       <div>
         <oc-button
           key="new-collaborator-cancel-button"

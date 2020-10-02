@@ -72,7 +72,7 @@
           v-if="actionInProgress(rowItem)"
           size="small"
           :uk-tooltip="disabledActionTooltip(rowItem)"
-          class="uk-margin-small-left"
+          class="oc-ml-s"
         />
       </div>
       <div

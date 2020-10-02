@@ -6,7 +6,7 @@
     <oc-img
       v-if="previewUrl"
       key="file-preview"
-      class="files-list-file-preview uk-margin-small-right"
+      class="files-list-file-preview oc-mr-s"
       :class="{ 'files-list-file-preview-small': !hasTwoRows }"
       :src="previewUrl"
       alt=""
@@ -17,7 +17,7 @@
       :name="previewIcon"
       :size="hasTwoRows ? 'large' : 'medium'"
       aria-hidden="true"
-      class="uk-margin-small-right"
+      class="oc-mr-s"
       variation="file-type"
     />
     <div class="uk-width-expand">

@@ -1,6 +1,6 @@
 <template>
   <div class="uk-text-center">
-    <oc-progress :value="quota.relative" :max="100" size="small" class="uk-margin-xsmall-bottom" />
+    <oc-progress :value="quota.relative" :max="100" size="small" class="oc-mb-xs" />
     <translate
       class="oc-light"
       :translate-params="{ used: usedQuota, total: quota.definition }"

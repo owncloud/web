@@ -1,12 +1,12 @@
 <template>
-  <div id="files-upload-progress" class="uk-clearfix oc-p-rm-vertical">
+  <div id="files-upload-progress" class="uk-clearfix oc-py-rm">
     <div class="uk-margin-remove uk-position-relative uk-width-expand">
       <oc-progress
         ref="progressbar"
         :aria-hidden="true"
         :max="100"
         :value="totalUploadProgress"
-        class="uk-width-expand uk-margin-remove"
+        class="uk-width-expand oc-m-rm"
       />
       <span :aria-hidden="true" class="uk-position-center oc-progress-text">
         {{ totalUploadProgress | roundNumber }} %
@@ -15,7 +15,7 @@
     </div>
     <oc-grid
       flex
-      class="uk-margin-small-top uk-margin-small-bottom uk-text-meta oc-cursor-pointer"
+      class="oc-mt-s oc-mb-s uk-text-meta oc-cursor-pointer"
       :aria-label="$gettext('Click row to toggle upload progress details')"
       @click.native="$_toggleExpanded"
     >

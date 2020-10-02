@@ -7,7 +7,7 @@
       :aria-label="action.label"
       :uk-tooltip="action.label"
       variation="raw"
-      class="uk-margin-xsmall-right"
+      class="oc-mr-xs"
       @click.stop="action.handler({ item, client: $client, store: $store })"
     >
       <oc-icon :name="action.icon" aria-hidden="true" size="small" class="uk-flex" />

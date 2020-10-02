@@ -55,7 +55,7 @@
         </div>
         <div v-if="errorMessage" class="uk-text-center">
           <translate tag="h3">An error occurred while loading the public link</translate>
-          <p class="uk-margin-remove" v-text="errorMessage" />
+          <p class="oc-m-rm" v-text="errorMessage" />
         </div>
       </div>
     </div>

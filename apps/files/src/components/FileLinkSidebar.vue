@@ -14,7 +14,7 @@
               :aria-label="$_privateLinkCopyLabel"
               :uk-tooltip="$_privateLinkCopyLabel"
               variation="raw"
-              class="uk-margin-small-left"
+              class="oc-ml-s"
             >
               <oc-icon
                 v-if="!linksCopied[$_privateLinkOfHighlightedFile]"
@@ -50,7 +50,7 @@
               </translate>
             </i>
           </div>
-          <div class="uk-margin-small-top uk-margin-small-bottom">
+          <div class="oc-mt-s oc-mb-s">
             <oc-button
               id="files-file-link-add"
               icon="add"
@@ -63,7 +63,7 @@
             </oc-button>
           </div>
           <transition-group
-            class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove"
+            class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
             :enter-active-class="$_transitionGroupEnter"
             :leave-active-class="$_transitionGroupLeave"
             name="custom-classes-transition"

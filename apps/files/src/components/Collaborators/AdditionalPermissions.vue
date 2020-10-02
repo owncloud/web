@@ -6,7 +6,7 @@
       :key="permission.name"
       v-model="permission.value"
       :label="permission.description"
-      class="uk-margin-xsmall-right files-collaborators-permission-checkbox"
+      class="oc-mr-xs files-collaborators-permission-checkbox"
       @change="permissionChecked"
     />
   </oc-grid>

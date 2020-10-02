@@ -1,16 +1,12 @@
 <template>
   <span>
-    <div
-      v-if="displayDefaultIndicators"
-      :class="{ 'uk-margin-xsmall-right': customIndicators }"
-      class="uk-flex"
-    >
+    <div v-if="displayDefaultIndicators" :class="{ 'oc-mr-xs': customIndicators }" class="uk-flex">
       <template v-if="areIndicatorsClickable">
         <oc-button
           v-for="(indicator, index) in defaultIndicators"
           :key="index"
           class="file-row-share-indicator uk-text-middle"
-          :class="{ 'uk-margin-xsmall-left': index > 0, 'uk-invisible': !indicator.visible }"
+          :class="{ 'oc-ml-xs': index > 0, 'uk-invisible': !indicator.visible }"
           :aria-label="indicator.label"
           :uk-tooltip="indicator.label"
           variation="raw"

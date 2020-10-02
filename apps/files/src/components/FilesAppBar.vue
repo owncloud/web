@@ -10,10 +10,10 @@
       @progress="onFileProgress"
     />
     <div>
-      <div class="uk-margin-small-bottom">
+      <div class="oc-mb-s">
         <oc-breadcrumb v-if="showBreadcrumb" id="files-breadcrumb" :items="breadcrumbs" home />
-        <span v-if="!showBreadcrumb" class="uk-flex uk-flex-middle uk-margin-small-bottom">
-          <oc-icon v-if="pageIcon" :name="pageIcon" class="uk-margin-small-right" />
+        <span v-if="!showBreadcrumb" class="uk-flex uk-flex-middle oc-mb-s">
+          <oc-icon v-if="pageIcon" :name="pageIcon" class="oc-mr-s" />
           <h1 class="oc-page-title" v-text="pageTitle" />
         </span>
         <span v-else-if="showBreadcrumb">
@@ -75,10 +75,7 @@
             </oc-drop>
           </template>
         </template>
-        <div
-          v-if="selectedResourcesAmount > 0"
-          class="uk-margin-small-right uk-visible@l uk-flex uk-flex-middle"
-        >
+        <div v-if="selectedResourcesAmount > 0" class="oc-mr-s uk-visible@l uk-flex uk-flex-middle">
           <translate
             v-if="selectedResourcesSize !== '?'"
             key="multiple-select-info"
@@ -97,7 +94,7 @@
             translate-comment="Number of selected resources displayed above the files list"
             >%{ amount } selected item</translate
           >
-          <span class="uk-margin-small-left uk-margin-small-right">|</span>
+          <span class="oc-ml-s oc-mr-s">|</span>
           <oc-button variation="raw" @click="resetFileSelection"
             ><translate>Clear selection</translate></oc-button
           >
@@ -106,7 +103,7 @@
           <oc-button
             v-if="selectedFiles.length > 0"
             key="restore-btn"
-            class="uk-margin-small-right"
+            class="oc-mr-s"
             @click="$_ocTrashbin_restoreFiles()"
           >
             <oc-icon name="restore" aria-hidden="true" />

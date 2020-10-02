@@ -27,15 +27,15 @@
             :toggle="'#' + $_resharerToggleId"
             mode="click"
             :options="{ pos: 'bottom-left', delayHide: 0 }"
-            class="uk-width-large uk-margin-small-top"
+            class="uk-width-large oc-mt-s"
             close-on-click
           >
             <translate tag="h4">Shared by:</translate>
-            <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
+            <ul class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">
               <li v-for="resharer in collaborator.resharers" :key="resharer.name">
                 <div class="uk-flex uk-flex-middle uk-flex-left">
                   <avatar-image
-                    class="uk-margin-small-right"
+                    class="oc-mr-s"
                     :width="48"
                     :userid="resharer.name"
                     :user-name="resharer.displayName"
@@ -80,7 +80,7 @@
         <div key="collaborator-avatar-loaded">
           <avatar-image
             v-if="isUser"
-            class="uk-margin-small-right files-collaborators-collaborator-indicator"
+            class="oc-mr-s files-collaborators-collaborator-indicator"
             :width="48"
             :userid="collaborator.collaborator.name"
             :user-name="collaborator.collaborator.displayName"
@@ -90,7 +90,7 @@
             <oc-icon
               v-if="collaborator.shareType === shareTypes.group"
               key="avatar-group"
-              class="uk-margin-small-right files-collaborators-collaborator-indicator"
+              class="oc-mr-s files-collaborators-collaborator-indicator"
               name="group"
               size="large"
               :aria-label="$gettext('Group')"
@@ -98,7 +98,7 @@
             <oc-icon
               v-else
               key="avatar-generic-person"
-              class="uk-margin-small-right files-collaborators-collaborator-indicator"
+              class="oc-mr-s files-collaborators-collaborator-indicator"
               name="person"
               size="large"
               :aria-label="$gettext('Remote user')"

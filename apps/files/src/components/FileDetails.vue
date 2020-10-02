@@ -14,7 +14,7 @@
         <div class="uk-flex uk-flex-middle">
           <span
             id="files-sidebar-item-name"
-            class="uk-margin-small-right oc-text-bold"
+            class="oc-mr-s oc-text-bold"
             v-text="highlightedFile.name"
           />
         </div>

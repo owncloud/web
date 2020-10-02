@@ -23,7 +23,7 @@
       drop-id="oc-topbar-search-mobile"
       toggle="#files-open-search-btn"
       mode="click"
-      class="uk-margin-remove"
+      class="oc-m-rm"
       :options="{ delayHide: '0' }"
     >
       <oc-search-bar

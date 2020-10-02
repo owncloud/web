@@ -4,8 +4,8 @@
       <span class="uk-margin-small-right" v-text="title" />
       <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
     </h1>
-    <hr class="uk-margin-remove-top" />
-    <div class="uk-margin-bottom">
+    <hr class="oc-mt-rm" />
+    <div class="oc-mb">
       <oc-grid gutter="small">
         <div>
           <oc-button @click="leaveLocationPicker(originalLocation)">

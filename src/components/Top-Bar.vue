@@ -17,7 +17,7 @@
       v-if="!isPublicPage"
       flex
       gutter="small"
-      class="uk-width-expand uk-flex-right uk-margin-remove-top"
+      class="uk-width-expand uk-flex-right oc-mt-rm"
     >
       <notifications v-if="activeNotifications.length" />
       <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />

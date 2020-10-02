@@ -9,7 +9,7 @@
     >
       <oc-grid flex>
         <avatar-image
-          class="oc-topbar-personal-avatar uk-flex-inline uk-flex-center uk-flex-middle uk-margin-xsmall-right"
+          class="oc-topbar-personal-avatar uk-flex-inline uk-flex-center uk-flex-middle oc-mr-xs"
           :width="24"
           :userid="userId"
           :user-name="userDisplayName"

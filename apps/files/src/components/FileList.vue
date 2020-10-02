@@ -15,7 +15,7 @@
         <div v-if="checkboxEnabled" id="files-list-header-checkbox" class="uk-flex uk-flex-center">
           <oc-checkbox
             id="filelist-check-all"
-            class="uk-margin-small-left"
+            class="oc-ml-s"
             :hide-label="true"
             :label="labelSelectAllItems"
             :value="selectedAll"
@@ -72,7 +72,7 @@
                 class="uk-flex uk-flex-center"
               >
                 <oc-checkbox
-                  class="uk-margin-small-left files-list-checkbox"
+                  class="oc-ml-s files-list-checkbox"
                   :value="selectedFiles.indexOf(rowItem) >= 0"
                   :label="labelSelectSingleItem(rowItem)"
                   :hide-label="true"
