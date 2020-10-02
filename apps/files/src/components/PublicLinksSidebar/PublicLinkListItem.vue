@@ -53,7 +53,7 @@
             :aria-label="$_editButtonLabel"
             :uk-tooltip="$_editButtonLabel"
             variation="raw"
-            class="oc-files-file-link-edit"
+            class="oc-files-file-link-edit oc-mr-xs"
             @click="$emit('onEdit', link)"
           >
             <oc-icon name="edit" />
