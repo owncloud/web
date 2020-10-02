@@ -16,16 +16,29 @@ config = {
 	'acceptance': {
 		'webUI': {
 			'suites': {
-				'webUICreateFilesFolders': 'createFilesFolders',
-				'webUIDeleteFilesFolders': 'deleteFilesFolders',
+				'webUIBasic': [
+					'webUILogin',
+					'webUINotifications',
+					'webUIPrivateLinks',
+					'webUIPreview',
+					'webUIAccount',
+				],
+				'webUICreateDelete': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+				],
+				'webUIRename': [
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+				],
+				'webUISharingBasic': [
+					'webUISharingAcceptShares',
+					'webUISharingAcceptSharesToRoot',
+					'webUIRestrictSharing',
+					'webUISharingNotifications',
+				],
 				'webUIFavorites': 'Favorites',
 				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUIRestrictSharing': 'RestrictSharing',
 				'webUISharingAutocompletion': 'SharingAutocompletion',
 				'webUISharingInternalGroups': 'SharingInternalGroups',
 				'webUISharingInternalGroupsToRoot': 'SharingInternalGroupsRoot',
@@ -41,15 +54,10 @@ config = {
 				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
 				'webUITrashbin': 'Trashbin',
 				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingAcceptSharesToRoot': 'SharingAcceptSharesRoot',
 				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
 				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
 				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-				'webUISharingNotifications': 'SharingNotifications',
-				'webUIAccount': 'Account',
 				'webUIMoveFilesFolders': 'Move',
-				'webUIPreview': 'Preview'
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
