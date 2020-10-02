@@ -47,7 +47,7 @@
           :key="fileData.length"
           class="uk-height-1-1"
           :items="fileData"
-          :item-size="hasTwoRows ? 77 : 55"
+          :item-size="_rowHeight"
         >
           <div
             :data-is-visible="active"
@@ -62,7 +62,7 @@
               :ref="index === 0 ? 'firstRow' : null"
               gutter="small"
               flex
-              class="file-row oc-px-s oc-py oc-border-b"
+              class="file-row oc-p-s oc-border-b"
               :class="_rowClasses(rowItem)"
             >
               <div
@@ -210,6 +210,10 @@ export default {
 
     item() {
       return this.$route.params.item
+    },
+
+    _rowHeight() {
+      return this.hasTwoRows ? 67 : 55
     }
   },
   watch: {
@@ -255,10 +259,7 @@ export default {
     },
 
     $_isActionEnabled(item, action) {
-      if (this.isActionEnabled && this.isActionEnabled(item, action)) {
-        return true
-      }
-      return false
+      return this.isActionEnabled && this.isActionEnabled(item, action)
     },
 
     $_actionInProgress(item) {
@@ -277,10 +278,14 @@ export default {
       return null
     },
     _rowClasses(item) {
-      if (this.highlightedFile && item.id === this.highlightedFile.id) {
-        return 'file-row oc-background-selected'
+      const classes = []
+      if (!this.hasTwoRows) {
+        classes.push('file-row-s')
       }
-      return 'file-row'
+      if (this.highlightedFile && item.id === this.highlightedFile.id) {
+        classes.push('oc-background-selected')
+      }
+      return classes
     },
     selectRow(item, event) {
       if (!this.selectableRow || this.rowDisabled(item)) {
@@ -372,6 +377,11 @@ export default {
 
 .file-row {
   box-sizing: border-box;
-  max-height: 77px;
+  min-height: 67px;
+  max-height: 67px;
+}
+.file-row-s {
+  min-height: 55px;
+  max-height: 55px;
 }
 </style>
