@@ -40,7 +40,7 @@
           </div>
         </div>
       </div>
-      <div v-else id="files-list-container" class="uk-overflow-auto uk-flex-1">
+      <div v-else id="files-list-container" class="uk-overflow-auto">
         <RecycleScroller
           v-if="fileData.length"
           v-slot="{ item: rowItem, index, active }"
