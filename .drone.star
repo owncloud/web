@@ -14,83 +14,9 @@ config = {
 	'yarnlint': True,
 
 	'acceptance': {
-		'webUI': {
+		'webUI-ocis0': {
 			'suites': {
-				'webUICreateFilesFolders': 'createFilesFolders',
-				'webUIDeleteFilesFolders': 'deleteFilesFolders',
-				'webUIFavorites': 'Favorites',
-				'webUIFiles': 'Files',
-				'webUILogin': 'Login',
-				'webUINotifications': 'Notifications',
-				'webUIPrivateLinks': 'PrivateLinks',
-				'webUIRenameFiles': 'RenameFiles',
-				'webUIRenameFolders': 'RenameFolders',
-				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingAutocompletion': 'SharingAutocompletion',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingInternalGroupsToRoot': 'SharingInternalGroupsRoot',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
-				'webUISharingPermissionToRoot': 'SharingPermissionToRoot',
-				'webUIResharing': 'Resharing',
-				'webUIResharingToRoot': 'ResharingToRoot',
-				'webUISharingPublic': 'SharingPublic',
-				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
-				'webUITrashbin': 'Trashbin',
-				'webUIUpload': 'Upload',
-				'webUISharingAcceptShares': 'SharingAcceptShares',
-				'webUISharingAcceptSharesToRoot': 'SharingAcceptSharesRoot',
-				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
-				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
-				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-				'webUISharingNotifications': 'SharingNotifications',
-				'webUIAccount': 'Account',
-				'webUIMoveFilesFolders': 'Move',
-				'webUIPreview': 'Preview'
-			},
-			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
-				'PHOENIX_CONFIG': '/srv/config/drone/config.json'
-			}
-		},
-		'webUIFederation': {
-			'suites': {
-				'webUISharingExternal': 'SharingExternal',
-				'webUISharingExternalToRoot': 'SharingExternalRoot',
-			},
-			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
-				'REMOTE_BACKEND_HOST': 'http://federated'
-			},
-			'federatedServerNeeded': True,
-			'federatedServerVersion': 'daily-master-qa'
-		},
-		'webUI-XGA': {
-			'suites': {
-				'all': 'XGAPortrait',
-			},
-			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
-				'SCREEN_RESOLUTION': '768x1024'
-			},
-			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
-		},
-		'webUI-iPhone': {
-			'suites': {
-				'all': 'iPhone',
-			},
-			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
-				'SCREEN_RESOLUTION': '375x812'
-			},
-			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
-		},
-		'webUI-ocis': {
-			'suites': {
-				'webUIOCIS1': [
+				'webUIOCIS1-0': [
 					'webUICreateFilesFolders',
 					'webUIDeleteFilesFolders',
 					'webUIFavorites',
@@ -98,7 +24,286 @@ config = {
 					'webUILogin',
 					'webUINotifications',
 				],
-				'webUIOCIS2': [
+				'webUIOCIS2-0': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				]
+			},
+			'extraEnvironment': {
+				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+				'SERVER_HOST': 'https://ocis:9200',
+				'BACKEND_HOST': 'https://ocis:9200',
+				'RUN_ON_OCIS': 'true',
+				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+			},
+			'runningOnOCIS': True,
+			'filterTags': 'not @skip and not @skipOnOCIS',
+		},
+		'webUI-ocis1': {
+			'suites': {
+				'webUIOCIS1-1': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2-1': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				]
+			},
+			'extraEnvironment': {
+				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+				'SERVER_HOST': 'https://ocis:9200',
+				'BACKEND_HOST': 'https://ocis:9200',
+				'RUN_ON_OCIS': 'true',
+				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+			},
+			'runningOnOCIS': True,
+			'filterTags': 'not @skip and not @skipOnOCIS',
+		},
+		'webUI-ocis2': {
+			'suites': {
+				'webUIOCIS1-2': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2-2': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				]
+			},
+			'extraEnvironment': {
+				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+				'SERVER_HOST': 'https://ocis:9200',
+				'BACKEND_HOST': 'https://ocis:9200',
+				'RUN_ON_OCIS': 'true',
+				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+			},
+			'runningOnOCIS': True,
+			'filterTags': 'not @skip and not @skipOnOCIS',
+		},
+		'webUI-ocis3': {
+			'suites': {
+				'webUIOCIS1-3': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2-3': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				]
+			},
+			'extraEnvironment': {
+				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+				'SERVER_HOST': 'https://ocis:9200',
+				'BACKEND_HOST': 'https://ocis:9200',
+				'RUN_ON_OCIS': 'true',
+				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+			},
+			'runningOnOCIS': True,
+			'filterTags': 'not @skip and not @skipOnOCIS',
+		},
+		'webUI-ocis4': {
+			'suites': {
+				'webUIOCIS1-4': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2-4': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				]
+			},
+			'extraEnvironment': {
+				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+				'SERVER_HOST': 'https://ocis:9200',
+				'BACKEND_HOST': 'https://ocis:9200',
+				'RUN_ON_OCIS': 'true',
+				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+			},
+			'runningOnOCIS': True,
+			'filterTags': 'not @skip and not @skipOnOCIS',
+		},
+		'webUI-ocis5': {
+			'suites': {
+				'webUIOCIS1-5': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2-5': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				]
+			},
+			'extraEnvironment': {
+				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+				'SERVER_HOST': 'https://ocis:9200',
+				'BACKEND_HOST': 'https://ocis:9200',
+				'RUN_ON_OCIS': 'true',
+				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+			},
+			'runningOnOCIS': True,
+			'filterTags': 'not @skip and not @skipOnOCIS',
+		},
+		'webUI-ocis6': {
+			'suites': {
+				'webUIOCIS1-6': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2-6': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				]
+			},
+			'extraEnvironment': {
+				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+				'SERVER_HOST': 'https://ocis:9200',
+				'BACKEND_HOST': 'https://ocis:9200',
+				'RUN_ON_OCIS': 'true',
+				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+			},
+			'runningOnOCIS': True,
+			'filterTags': 'not @skip and not @skipOnOCIS',
+		},
+		'webUI-ocis7': {
+			'suites': {
+				'webUIOCIS1-7': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2-7': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				]
+			},
+			'extraEnvironment': {
+				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+				'SERVER_HOST': 'https://ocis:9200',
+				'BACKEND_HOST': 'https://ocis:9200',
+				'RUN_ON_OCIS': 'true',
+				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+			},
+			'runningOnOCIS': True,
+			'filterTags': 'not @skip and not @skipOnOCIS',
+		},
+		'webUI-ocis8': {
+			'suites': {
+				'webUIOCIS1-8': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2-8': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				]
+			},
+			'extraEnvironment': {
+				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
+				'SERVER_HOST': 'https://ocis:9200',
+				'BACKEND_HOST': 'https://ocis:9200',
+				'RUN_ON_OCIS': 'true',
+				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/',
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+			},
+			'runningOnOCIS': True,
+			'filterTags': 'not @skip and not @skipOnOCIS',
+		},
+		'webUI-ocis9': {
+			'suites': {
+				'webUIOCIS1-9': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2-9': [
 					'webUIPrivateLinks',
 					'webUIRenameFiles',
 					'webUIRenameFolders',
