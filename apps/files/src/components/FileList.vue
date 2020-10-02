@@ -10,7 +10,7 @@
         key="files-list-results-existence"
         gutter="small"
         flex
-        class="oc-p-s oc-pt-rm oc-pb-xs oc-border-b"
+        class="oc-px-s oc-pt-rm oc-pb-xs oc-border-b"
       >
         <div v-if="checkboxEnabled" id="files-list-header-checkbox" class="uk-flex uk-flex-center">
           <oc-checkbox
@@ -344,8 +344,6 @@ export default {
         const headerCheckbox = document.querySelector('#files-list-header-checkbox')
         const firstRowCheckbox = document.querySelector('#files-list-row-checkbox')
 
-        console.log(headerCheckbox)
-
         if (headerRow && firstRow) {
           headerRow.$el.style.width = getComputedStyle(firstRow.$el).width
         }
@@ -360,6 +358,10 @@ export default {
 </script>
 
 <style>
+#files-table-header {
+  box-sizing: border-box;
+}
+
 .files-list-row-disabled {
   opacity: 0.3;
   pointer-events: none;
