@@ -49,7 +49,7 @@ config = {
 				'webUISharingNotifications': 'SharingNotifications',
 				'webUIAccount': 'Account',
 				'webUIMoveFilesFolders': 'Move',
-				'WebUIPreview': 'Preview'
+				'webUIPreview': 'Preview'
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
