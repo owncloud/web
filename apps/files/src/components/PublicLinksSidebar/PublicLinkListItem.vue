@@ -15,7 +15,6 @@
         <oc-spinner
           v-else-if="$_loadingSpinnerVisible"
           :aria-label="$gettext('Removing public link…')"
-          size="small"
         />
         <oc-icon v-else name="lock" class="uk-invisible" />
       </oc-table-cell>

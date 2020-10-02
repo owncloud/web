@@ -102,11 +102,11 @@
         <div>
           <oc-button v-if="saving" variation="primary" disabled>
             <template v-if="$_isNew">
-              <oc-spinner :aria-label="$gettext('Creating Public Link')" size="xsmall" />
+              <oc-spinner :aria-label="$gettext('Creating Public Link')" size="small" />
               <span v-translate :aria-hidden="true">Creating</span>
             </template>
             <template v-else>
-              <oc-spinner :aria-label="$gettext('Saving Public Link')" size="xsmall" />
+              <oc-spinner :aria-label="$gettext('Saving Public Link')" size="small" />
               <span v-translate :aria-hidden="true">Saving</span>
             </template>
           </oc-button>

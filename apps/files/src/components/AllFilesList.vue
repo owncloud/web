@@ -70,7 +70,6 @@
         />
         <oc-spinner
           v-if="actionInProgress(rowItem)"
-          size="small"
           :uk-tooltip="disabledActionTooltip(rowItem)"
           class="oc-ml-s"
         />

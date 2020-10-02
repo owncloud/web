@@ -6,7 +6,7 @@
       </h1>
       <div v-if="loading" class="oc-login-card-body">
         <h3 class="oc-login-card-title" :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
-        <oc-spinner :aria-label="$_loadingPublicLinkTitle"></oc-spinner>
+        <oc-spinner :aria-label="$_loadingPublicLinkTitle" />
       </div>
       <div v-if="errorMessage" class="oc-login-card-body">
         <h3 class="oc-login-card-title">

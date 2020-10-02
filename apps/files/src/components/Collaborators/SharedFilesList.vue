@@ -67,7 +67,6 @@
         />
         <oc-spinner
           v-if="actionInProgress(item)"
-          size="small"
           :uk-tooltip="disabledActionTooltip(item)"
           class="oc-ml-s"
         />

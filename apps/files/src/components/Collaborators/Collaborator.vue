@@ -69,11 +69,7 @@
         >
           <oc-icon name="close" />
         </oc-button>
-        <oc-spinner
-          v-else-if="$_loadingSpinnerVisible"
-          :aria-label="$gettext('Removing person')"
-          size="small"
-        />
+        <oc-spinner v-else-if="$_loadingSpinnerVisible" :aria-label="$gettext('Removing person')" />
         <oc-icon v-else name="lock" class="uk-invisible"></oc-icon>
       </oc-table-cell>
       <oc-table-cell shrink>

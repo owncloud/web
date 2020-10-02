@@ -31,7 +31,7 @@
       v-if="loading"
       :aria-label="this.$gettext('Loading media')"
       class="uk-position-center"
-      size="large"
+      size="xlarge"
     />
     <oc-icon
       v-if="failed"

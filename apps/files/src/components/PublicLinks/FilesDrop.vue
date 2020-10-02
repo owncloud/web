@@ -3,7 +3,7 @@
     <div class="oc-p uk-height-1-1">
       <div v-if="loading" key="loading-drop" class="uk-flex uk-flex-column uk-flex-middle">
         <h3 :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
-        <oc-spinner size="medium" :aria-label="$_loadingPublicLinkTitle" />
+        <oc-spinner :aria-label="$_loadingPublicLinkTitle" size="large" />
       </div>
       <div v-else key="loaded-drop" class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
         <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
@@ -45,7 +45,7 @@
                   />
                   <oc-spinner
                     v-if="file.status === 'uploading' || file.status === 'init'"
-                    size="xsmall"
+                    size="small"
                     :aria-label="$_ocUploadingFileMessage(file.name)"
                   />
                 </oc-table-cell>
