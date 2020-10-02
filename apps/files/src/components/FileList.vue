@@ -19,8 +19,7 @@
             :hide-label="true"
             :label="labelSelectAllItems"
             :value="selectedAll"
-            @click.stop
-            @change.native="toggleAll"
+            @input="toggleAll"
           />
         </div>
         <slot name="headerColumns" />
@@ -77,8 +76,8 @@
                   :label="labelSelectSingleItem(rowItem)"
                   :hide-label="true"
                   size="large"
-                  @click.stop
-                  @change.native="toggleFileSelect(rowItem)"
+                  @click.native.stop
+                  @input="toggleFileSelect(rowItem)"
                 />
               </div>
               <slot name="rowColumns" :item="rowItem" :index="index" />

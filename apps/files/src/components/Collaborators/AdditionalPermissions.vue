@@ -7,7 +7,7 @@
       v-model="permission.value"
       :label="permission.description"
       class="oc-mr-xs files-collaborators-permission-checkbox"
-      @change="permissionChecked"
+      @input="permissionChecked"
     />
   </oc-grid>
 </template>
