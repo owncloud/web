@@ -1,12 +1,13 @@
 <template>
   <div id="oc-notification">
-    <oc-icon
+    <oc-button
       id="oc-notification-bell"
-      class="oc-cursor-pointer uk-flex uk-flex-middle"
-      name="bell"
+      variation="raw"
       :aria-label="notificationsLabel"
       :uk-tooltip="notificationsLabel"
-    />
+    >
+      <oc-icon class="oc-cursor-pointer uk-flex uk-flex-middle" name="bell" aria-hidden="true" />
+    </oc-button>
     <oc-drop
       id="oc-notification-drop"
       toggle="#oc-notification-bell"
