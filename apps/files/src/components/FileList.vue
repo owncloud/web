@@ -73,6 +73,7 @@
                 <oc-checkbox
                   class="oc-ml-s"
                   :value="selectedFiles.indexOf(rowItem) >= 0"
+                  :option="rowItem"
                   :label="labelSelectSingleItem(rowItem)"
                   :hide-label="true"
                   size="large"
