@@ -216,7 +216,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     searchLoadingIndicator: {
-      selector: '#oc-topbar .oc-spinner-search'
+      selector: '#files-global-search-bar .oc-spinner'
     },
     userMenuButton: {
       selector: '#_userMenuButton'

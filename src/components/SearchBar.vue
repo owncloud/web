@@ -1,6 +1,7 @@
 <template>
   <div>
     <oc-search-bar
+      id="files-global-search-bar"
       ref="globalSearchBar"
       class="uk-width-large uk-visible@m"
       :label="searchLabel"
