@@ -1,13 +1,11 @@
-@app-required @notifications-app-required @skipOnOCIS @ocis-reva-issue-64
+@app-required @notifications-app-required @skipOnOCIS
 Feature: Sharing files and folders with internal groups
   As a user
   I want to share files and folders with groups
   So that those groups can access the files and folders
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And the administrator has set the default folder for received shares to "Shares"
-    And app "notifications" has been enabled
+    Given app "notifications" has been enabled
     And these users have been created with default attributes:
       | username |
       | user1    |
@@ -21,7 +19,8 @@ Feature: Sharing files and folders with internal groups
     And user "user2" has logged in using the webUI
 
   Scenario: notifications about new share is displayed
-    Given user "user3" has shared folder "/simple-folder" with group "grp1"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And user "user3" has shared folder "/simple-folder" with group "grp1"
     And user "user3" has shared folder "/data.zip" with group "grp1"
     When the user reloads the current page of the webUI
     Then the user should see the notification bell on the webUI
