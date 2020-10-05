@@ -1,3 +1,34 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.17.0...master
+
+Summary
+-------
+
+* Change - Change sharing wording: [#4120](https://github.com/owncloud/phoenix/pull/4120)
+* Enhancement - Update owncloud-design-system to v1.12.1: [#4120](https://github.com/owncloud/phoenix/pull/4120)
+
+Details
+-------
+
+* Change - Change sharing wording: [#4120](https://github.com/owncloud/phoenix/pull/4120)
+
+   Renamed "Share" action to "Add people" and header column in the shared with list from "People"
+   to "Shared with".
+
+   https://github.com/owncloud/phoenix/pull/4120
+
+* Enhancement - Update owncloud-design-system to v1.12.1: [#4120](https://github.com/owncloud/phoenix/pull/4120)
+
+   We've updated our design system to version 1.12.1. To see all new changes which this update
+   brings, please check the changelog below.
+
+   https://github.com/owncloud/phoenix/pull/4120
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v1.12.1
+
 Changelog for ownCloud Phoenix [0.17.0] (2020-09-25)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.17.0 relevant to
