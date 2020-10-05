@@ -1,13 +1,11 @@
-@skipOnOCIS @ocis-reva-issue-64
+@skipOnOCIS
 Feature: Sharing files and folders with internal users
   As a user
   I want to share files and folders with other users
   So that those users can access the files and folders
 
   Background:
-    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
-    And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes:
+    Given these users have been created with default attributes:
       | username |
       | user1    |
       | user2    |
@@ -16,38 +14,35 @@ Feature: Sharing files and folders with internal users
   @smokeTest
   Scenario Outline: share a file & folder with another internal user
     Given user "user2" has logged in using the webUI
+    And the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     When the user shares folder "simple-folder" with user "User One" as "<set-role>" using the webUI
-    And user "user1" accepts the share "simple-folder" offered by user "user2" using the sharing API
     And the user shares file "testimage.jpg" with user "User One" as "<set-role>" using the webUI
-    And user "user1" accepts the share "testimage.jpg" offered by user "user2" using the sharing API
     Then user "User One" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "User One" should be listed as "<expected-role>" in the collaborators list for file "testimage.jpg" on the webUI
     And user "user1" should have received a share with these details:
-      | field       | value                 |
-      | uid_owner   | user2                 |
-      | share_with  | user1                 |
-      | file_target | /Shares/simple-folder |
-      | item_type   | folder                |
-      | permissions | <permissions-folder>  |
+      | field       | value                |
+      | uid_owner   | user2                |
+      | share_with  | user1                |
+      | file_target | /simple-folder (2)   |
+      | item_type   | folder               |
+      | permissions | <permissions-folder> |
     And user "user1" should have received a share with these details:
-      | field       | value                 |
-      | uid_owner   | user2                 |
-      | share_with  | user1                 |
-      | file_target | /Shares/testimage.jpg |
-      | item_type   | file                  |
-      | permissions | <permissions-file>    |
-    When the user re-logs in as "user1" using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then these files should be listed on the webUI
-      | files         |
-      | simple-folder |
-      | testimage.jpg |
-    And these resources should be listed in the folder "/Shares%2Fsimple-folder" on the webUI
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /testimage (2).jpg |
+      | item_type   | file               |
+      | permissions | <permissions-file> |
+    And as "user1" these resources should be listed on the webUI
+      | entry_name        |
+      | simple-folder (2) |
+      | testimage (2).jpg |
+    And these resources should be listed in the folder "simple-folder (2)" on the webUI
       | entry_name |
       | lorem.txt  |
-    But these resources should not be listed in the folder "/Shares%2Fsimple-folder" on the webUI
-      | entry_name    |
-      | simple-folder |
+    But these resources should not be listed in the folder "simple-folder (2)" on the webUI
+      | entry_name        |
+      | simple-folder (2) |
     #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
     #    And file "testimage (2).jpg" should be marked as shared by "User Two" on the webUI
     Examples:
@@ -59,7 +54,6 @@ Feature: Sharing files and folders with internal users
   Scenario Outline: change the collaborators of a file & folder
     Given user "user2" has logged in using the webUI
     And user "user2" has shared folder "/simple-folder" with user "user1" with "<initial-permissions>" permissions
-    And user "user1" has accepted the share "simple-folder" offered by user "user2"
     When the user changes the collaborator role of "User One" for folder "simple-folder" to "<set-role>" using the webUI
     # check role without reloading the collaborators panel, see issue #1786
     Then user "User One" should be listed as "<expected-role>" in the collaborators list on the webUI
@@ -69,7 +63,7 @@ Feature: Sharing files and folders with internal users
       | field       | value                  |
       | uid_owner   | user2                  |
       | share_with  | user1                  |
-      | file_target | /Shares/simple-folder  |
+      | file_target | /simple-folder (2)     |
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
@@ -79,19 +73,16 @@ Feature: Sharing files and folders with internal users
       | read                | Advanced permissions | Viewer        | read                      |
       | all                 | Advanced permissions | Editor        | all                       |
 
-  @skip @issue-4102
   Scenario: share a file with another internal user who overwrites and unshares the file
     Given user "user2" has logged in using the webUI
     And user "user2" has renamed file "lorem.txt" to "new-lorem.txt"
     And user "user2" has shared file "new-lorem.txt" with user "user1" with "all" permissions
-    And user "user1" has accepted the share "new-lorem.txt" offered by user "user2"
     When the user re-logs in as "user1" using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then as "user1" the content of "Shares/new-lorem.txt" should not be the same as the local "new-lorem.txt"
+    Then as "user1" the content of "new-lorem.txt" should not be the same as the local "new-lorem.txt"
     # overwrite the received shared file
     When the user uploads overwriting file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
-    And as "user1" the content of "Shares/new-lorem.txt" should be the same as the local "new-lorem.txt"
+    And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
     # unshare the received shared file
     When the user deletes file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should not be listed on the webUI
@@ -102,18 +93,16 @@ Feature: Sharing files and folders with internal users
     Given user "user2" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with user "User One" as "Editor" using the webUI
-    And user "user1" accepts the share "new-simple-folder" offered by user "user2" using the sharing API
     And the user re-logs in as "user1" using the webUI
-    And the user browses to the folder "Shares" on the files page
     And the user opens folder "new-simple-folder" using the webUI
-    Then as "user1" the content of "Shares/new-simple-folder/lorem.txt" should not be the same as the local "lorem.txt"
+    Then as "user1" the content of "new-simple-folder/lorem.txt" should not be the same as the local "lorem.txt"
     # overwrite an existing file in the received share
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "user1" the content of "Shares/new-simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+    And as "user1" the content of "new-simple-folder/lorem.txt" should be the same as the local "lorem.txt"
     # upload a new file into the received share
     When the user uploads file "new-lorem.txt" using the webUI
-    Then as "user1" the content of "Shares/new-simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
+    Then as "user1" the content of "new-simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
     # delete a file in the received share
     When the user deletes file "data.zip" using the webUI
     Then file "data.zip" should not be listed on the webUI
@@ -126,15 +115,12 @@ Feature: Sharing files and folders with internal users
     And as "user2" the content of "new-simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
     But file "data.zip" should not be listed on the webUI
 
-  @skip @issue-4102
   Scenario: share a folder with another internal user who unshares the folder
     Given user "user2" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with user "User One" as "Editor" using the webUI
-    And user "user1" accepts the share "new-simple-folder" offered by user "user2" using the sharing API
     # unshare the received shared folder and check it is gone
     And the user re-logs in as "user1" using the webUI
-    And the user browses to the folder "Shares" on the files page
     Then folder "new-simple-folder" should be listed on the webUI
     And the user deletes folder "new-simple-folder" using the webUI
     Then folder "new-simple-folder" should not be listed on the webUI
@@ -143,39 +129,18 @@ Feature: Sharing files and folders with internal users
     Then folder "new-simple-folder" should be listed on the webUI
     And as "user2" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
 
-  @issue-4102
-  # Delete this scenario and use the one above after the issue is fixed
-  Scenario: share a folder with another internal user who unshares the folder
-    Given user "user2" has logged in using the webUI
-    When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
-    And the user shares folder "new-simple-folder" with user "User One" as "Editor" using the webUI
-    And user "user1" accepts the share "new-simple-folder" offered by user "user2" using the sharing API
-    # unshare the received shared folder and check it is gone
-    And the user re-logs in as "user1" using the webUI
-    And the user browses to the folder "Shares" on the files page
-    Then folder "new-simple-folder" should be listed on the webUI
-    And it should not be possible to delete file "new-simple-folder" using the webUI
-    # check that the folder is still visible for the share owner
-    When the user re-logs in as "user2" using the webUI
-    Then folder "new-simple-folder" should be listed on the webUI
-    And as "user2" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
-
   Scenario: share a folder with another internal user and prohibit deleting
     Given user "user2" has logged in using the webUI
-    And user "user2" has shared folder "simple-folder" with user "user1" with "create, read, share" permissions
-    And user "user1" has accepted the share "simple-folder" offered by user "user2"
-    When the user re-logs in as "user1" using the webUI
-    And the user opens folder "Shares" using the webUI
-    And the user opens folder "simple-folder" using the webUI
+    Given user "user2" has shared folder "simple-folder" with user "user1" with "create, read, share" permissions
+    And the user re-logs in as "user1" using the webUI
+    And the user opens folder "simple-folder (2)" using the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
   Scenario: share a folder with other user and then it should be listed on Shared with You for other user
     Given user "user2" has renamed folder "simple-folder" to "new-simple-folder"
     And user "user2" has renamed file "lorem.txt" to "ipsum.txt"
     And user "user2" has shared file "ipsum.txt" with user "user1"
-    And user "user1" has accepted the share "ipsum.txt" offered by user "user2"
     And user "user2" has shared folder "new-simple-folder" with user "user1"
-    And user "user1" has accepted the share "new-simple-folder" offered by user "user2"
     And user "user1" has logged in using the webUI
     When the user browses to the shared-with-me page
     Then file "ipsum.txt" should be listed on the webUI
@@ -185,16 +150,13 @@ Feature: Sharing files and folders with internal users
     Given user "user3" has been created with default attributes
     And user "user2" has logged in using the webUI
     And user "user2" has shared file "lorem.txt" with user "user1"
-    And user "user1" has accepted the share "lorem.txt" offered by user "user2"
     And user "user2" has shared folder "simple-folder" with user "user1"
-    And user "user1" has accepted the share "simple-folder" offered by user "user2"
     And user "user2" has shared folder "simple-folder" with user "user3"
-    And user "user3" has accepted the share "simple-folder" offered by user "user2"
     When the user browses to the shared-with-others page
     Then the following resources should have the following collaborators
-      | fileName      | expectedCollaborators |
-      | lorem.txt     | User One              |
-      | simple-folder | User One, User Three  |
+      | fileName            | expectedCollaborators |
+      | lorem.txt           | User One              |
+      | simple-folder       | User One, User Three  |
 
   @issue-2480 @yetToImplement
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
@@ -222,16 +184,14 @@ Feature: Sharing files and folders with internal users
       | user3    |
     And group "grp1" has been created
     And user "user1" has been added to group "grp1"
+    And the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     And user "user3" has shared file "testimage.jpg" with user "user1"
-    And user "user1" has accepted the share "testimage.jpg" offered by user "user3"
     And user "user3" has shared folder "simple-folder" with user "user1"
-    And user "user1" has accepted the share "simple-folder" offered by user "user3"
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     When user "user1" logs in using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then the user should not be able to share file "testimage.jpg" using the webUI
-    And the user should not be able to share folder "simple-folder" using the webUI
+    Then the user should not be able to share file "testimage (2).jpg" using the webUI
+    And the user should not be able to share folder "simple-folder (2)" using the webUI
 
   Scenario: member of a blacklisted from sharing group tries to re-share a file inside a folder received as a share
     Given these users have been created with default attributes:
@@ -242,12 +202,10 @@ Feature: Sharing files and folders with internal users
     And user "user3" has created folder "common"
     And user "user3" has moved file "testimage.jpg" to "common/testimage.jpg"
     And user "user3" has shared folder "common" with user "user1"
-    And user "user1" has accepted the share "common" offered by user "user3"
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     And user "user1" has logged in using the webUI
-    And the user has opened folder "Shares"
-    When the user opens folder "common" using the webUI
+    When the user browses to the folder "common" on the files page
     Then the user should not be able to share file "testimage.jpg" using the webUI
 
   Scenario: member of a blacklisted from sharing group tries to re-share a folder inside a folder received as a share
@@ -259,12 +217,10 @@ Feature: Sharing files and folders with internal users
     And user "user3" has created folder "common"
     And user "user3" has created folder "common/inside-common"
     And user "user3" has shared folder "common" with user "user1"
-    And user "user1" has accepted the share "common" offered by user "user3"
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     And user "user1" has logged in using the webUI
-    And the user has opened folder "Shares"
-    When the user opens folder "common" using the webUI
+    When the user browses to the folder "common" on the files page
     Then the user should not be able to share folder "inside-common" using the webUI
 
   Scenario: user tries to share a file or folder from a group which is blacklisted from sharing from files page
@@ -281,12 +237,11 @@ Feature: Sharing files and folders with internal users
     And user "user1" has been added to group "grp1"
     And user "user3" has been created with default attributes
     And user "user2" has shared file "/testimage.jpg" with user "user1"
-    And user "user1" has accepted the share "testimage.jpg" offered by user "user2"
     And the administrator has enabled exclude groups from sharing
     And the administrator has excluded group "grp1" from sharing
     And user "user1" has logged in using the webUI
     When the user browses to the shared-with-me page
-    And the user opens the share dialog for file "testimage.jpg" using the webUI
+    And the user opens the share dialog for file "testimage (2).jpg" using the webUI
     And the user opens the share creation dialog in the webUI
     And the user types "User Three" in the share-with-field
     Then "user" "User Three" should not be listed in the autocomplete list on the webUI
@@ -294,33 +249,30 @@ Feature: Sharing files and folders with internal users
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with user "user2"
-    And user "user2" has accepted the share "lorem.txt" offered by user "user1"
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "User Two" should be listed as "Editor" in the collaborators list on the webUI
-    And as "user2" file "Shares/lorem.txt" should exist
+    And as "user2" file "lorem (2).txt" should exist
     When the user deletes "User Two" as collaborator for the current file using the webUI
     Then user "User Two" should not be listed in the collaborators list on the webUI
     And file "lorem.txt" should not be listed in shared-with-others page on the webUI
-    And as "user2" file "Shares/lorem.txt" should not exist
+    And as "user2" file "lorem (2).txt" should not exist
 
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given user "user3" has been created with default attributes
     And user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with user "user2"
-    And user "user2" has accepted the share "lorem.txt" offered by user "user1"
     And user "user1" has shared file "lorem.txt" with user "user3"
-    And user "user3" has accepted the share "lorem.txt" offered by user "user1"
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "User Two" should be listed as "Editor" in the collaborators list on the webUI
     And user "User Three" should be listed as "Editor" in the collaborators list on the webUI
-    And as "user2" file "Shares/lorem.txt" should exist
-    And as "user3" file "Shares/lorem.txt" should exist
+    And as "user2" file "lorem (2).txt" should exist
+    And as "user3" file "lorem (2).txt" should exist
     When the user deletes "User Two" as collaborator for the current file using the webUI
     Then user "User Two" should not be listed in the collaborators list on the webUI
     And user "User Three" should be listed as "Editor" in the collaborators list on the webUI
     And file "lorem.txt" should be listed in shared-with-others page on the webUI
-    And as "user2" file "Shares/lorem.txt" should not exist
-    But as "user3" file "Shares/lorem.txt" should exist
+    And as "user2" file "lorem (2).txt" should not exist
+    But as "user3" file "lorem (2).txt" should exist
 
   Scenario: send share shows up on shared-with-others page
     Given user "user1" has shared folder "simple-folder" with user "user2"
@@ -331,41 +283,36 @@ Feature: Sharing files and folders with internal users
 
   Scenario: received share shows up on shared-with-me page
     Given user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
     And user "user2" has logged in using the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then folder "simple-folder" should be listed on the webUI
+    Then folder "simple-folder (2)" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI
 
   Scenario: clicking a folder on shared-with-me page jumps to the main file list inside the folder
     Given user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
     And user "user1" has created file "simple-folder/collaborate-on-this.txt"
     And user "user2" has logged in using the webUI
     When the user browses to the shared-with-me page using the webUI
-    And the user opens folder "simple-folder" using the webUI
+    And the user opens folder "simple-folder (2)" using the webUI
     Then file "collaborate-on-this.txt" should be listed on the webUI
 
   Scenario: deleting an entry on the shared-with-me page unshares from self
     Given user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
     And user "user2" has logged in using the webUI
     When the user browses to the shared-with-me page using the webUI
-    And the user deletes folder "simple-folder" using the webUI
-    And the user browses to the folder "Shares" on the files page
-    Then folder "simple-folder" should not be listed on the webUI
+    And the user deletes folder "simple-folder (2)" using the webUI
+    And the user browses to the files page
+    Then folder "simple-folder (2)" should not be listed on the webUI
 
   Scenario: deleting multiple entries on the shared-with-me page
     Given user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
     And user "user1" has shared file "lorem.txt" with user "user2"
-    And user "user2" has accepted the share "lorem.txt" offered by user "user1"
     And user "user2" has logged in using the webUI
     And the user browses to the shared-with-me page using the webUI
     When the user batch deletes these files using the webUI
-      | name          |
-      | simple-folder |
-      | lorem.txt     |
+      | name              |
+      | simple-folder (2) |
+      | lorem (2).txt     |
     Then the deleted elements should not be listed on the webUI
 
   Scenario: Try to share file and folder that used to exist but does not anymore
@@ -392,11 +339,10 @@ Feature: Sharing files and folders with internal users
     Given user "user1" has created folder "/simple-folder/simple-empty-folder/new-folder"
     And user "user1" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/lorem.txt"
     And user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
     When user "user1" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-direct        |
+      | fileName            | expectedIndicators |
+      | simple-folder       | user-direct        |
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
@@ -411,14 +357,12 @@ Feature: Sharing files and folders with internal users
   Scenario: sharing indicator of items inside a re-shared folder
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
-    And user "user2" has shared folder "Shares/simple-folder" with user "user3"
+    And user "user2" has shared folder "simple-folder (2)" with user "user3"
     When user "user2" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-direct        |
-    When the user opens folder "simple-folder" using the webUI
+      | fileName            | expectedIndicators |
+      | simple-folder (2)   | user-direct        |
+    When the user opens folder "simple-folder (2)" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
       | simple-empty-folder | user-indirect      |
@@ -428,14 +372,12 @@ Feature: Sharing files and folders with internal users
   Scenario: sharing indicator of items inside a re-shared subfolder
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
-    And user "user2" has shared folder "Shares/simple-folder/simple-empty-folder" with user "user3"
+    And user "user2" has shared folder "simple-folder (2)/simple-empty-folder" with user "user3"
     When user "user2" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-indirect      |
-    When the user opens folder "simple-folder" using the webUI
+      | fileName            | expectedIndicators |
+      | simple-folder (2)   | user-indirect      |
+    When the user opens folder "simple-folder (2)" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
       | simple-empty-folder | user-direct        |
@@ -444,13 +386,11 @@ Feature: Sharing files and folders with internal users
   @issue-2060
   Scenario: sharing indicator of items inside an incoming shared folder
     Given user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
     When user "user2" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | simple-folder | user-indirect      |
-    When the user opens folder "simple-folder" using the webUI
+      | fileName            | expectedIndicators |
+      | simple-folder (2)   | user-indirect      |
+    When the user opens folder "simple-folder (2)" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
       | simple-empty-folder | user-indirect      |
@@ -459,10 +399,9 @@ Feature: Sharing files and folders with internal users
   @issue-2060
   Scenario: no sharing indicator of items inside a not shared folder
     Given user "user1" has shared file "/textfile0.txt" with user "user2"
-    And user "user2" has accepted the share "textfile0.txt" offered by user "user1"
     When user "user2" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI
-      | simple-folder |
+      | simple-folder       |
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-empty-folder |
@@ -485,8 +424,8 @@ Feature: Sharing files and folders with internal users
     When the user opens folder "simple-empty-folder" using the webUI
     And the user creates a folder with the name "sub-folder" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName   | expectedIndicators |
-      | sub-folder | user-indirect      |
+      | fileName      | expectedIndicators |
+      | sub-folder    | user-indirect      |
 
   @issue-2939
   Scenario: sharing indicator for user shares stays up to date
@@ -543,15 +482,13 @@ Feature: Sharing files and folders with internal users
     Given user "user3" has been created with default attributes
     And user "user1" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
-    And user "user2" has shared folder "Shares/simple-folder" with user "user3"
+    And user "user2" has shared folder "simple-folder (2)" with user "user3"
     And user "user2" has logged in using the webUI
-    And the user has opened folder "Shares"
-    And the user has opened folder "simple-folder"
+    And the user opens folder "simple-folder (2)" using the webUI
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "User Three" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    Then user "User Three" should be listed as "Editor" via "simple-folder (2)" in the collaborators list on the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "User Three" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+    Then user "User Three" should be listed as "Editor" via "simple-folder (2)" in the collaborators list on the webUI
 
   @issue-2897
   Scenario: sharing details of items inside a shared folder shared with multiple users
@@ -569,22 +506,17 @@ Feature: Sharing files and folders with internal users
   @issue-2898
   Scenario: see resource owner in collaborators list for direct shares
     Given user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
     And user "user2" has logged in using the webUI
-    And the user has opened folder "Shares"
-    When the user opens the share dialog for folder "simple-folder" using the webUI
+    When the user opens the share dialog for folder "simple-folder (2)" using the webUI
     Then user "User One" should be listed as "Owner" in the collaborators list on the webUI
 
   @issue-2898
   Scenario: see resource owner in collaborators list for reshares
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
-    And user "user2" has shared folder "Shares/simple-folder" with user "user3"
-    And user "user3" has accepted the share "simple-folder" offered by user "user2"
+    And user "user2" has shared folder "simple-folder (2)" with user "user3"
     And user "user3" has logged in using the webUI
-    And the user has opened folder "Shares"
-    When the user opens the share dialog for folder "simple-folder" using the webUI
+    When the user opens the share dialog for folder "simple-folder (2)" using the webUI
     Then user "User One" should be listed as "Owner" reshared through "User Two" in the collaborators list on the webUI
     And the current collaborators list should have order "User One,User Three"
 
@@ -592,38 +524,33 @@ Feature: Sharing files and folders with internal users
   Scenario: see resource owner of parent shares in collaborators list
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
-    And user "user2" has shared folder "Shares/simple-folder" with user "user3"
-    And user "user3" has accepted the share "simple-folder" offered by user "user2"
+    And user "user2" has shared folder "simple-folder (2)" with user "user3"
     And user "user3" has logged in using the webUI
-    And the user has opened folder "Shares"
-    And the user has opened folder "simple-folder"
+    And the user opens folder "simple-folder (2)" using the webUI
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "User One" should be listed as "Owner" reshared through "User Two" via "simple-folder" in the collaborators list on the webUI
+    Then user "User One" should be listed as "Owner" reshared through "User Two" via "simple-folder (2)" in the collaborators list on the webUI
     And the current collaborators list should have order "User One,User Three"
 
-  @issue-3040 @issue-4113
+  @issue-3040
   Scenario: see resource owner of parent shares in "shared with others" and "favorites" list
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
-    And user "user2" has shared folder "Shares/simple-folder/simple-empty-folder" with user "user3"
-    And user "user2" has favorited element "Shares/simple-folder/simple-empty-folder"
+    And user "user2" has shared folder "simple-folder (2)/simple-empty-folder" with user "user3"
+    And user "user2" has favorited element "simple-folder (2)/simple-empty-folder"
     And user "user2" has logged in using the webUI
     When the user browses to the shared-with-others page
     And the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "User One" should be listed as "Owner" via "simple-folder" in the collaborators list on the webUI
+    Then user "User One" should be listed as "Owner" via "simple-folder (2)" in the collaborators list on the webUI
     When the user browses to the favorites page using the webUI
-    And the user opens the share dialog for folder "…/simple-folder/simple-empty-folder" using the webUI
-    Then user "User One" should be listed as "Owner" via "simple-folder" in the collaborators list on the webUI
+    And the user opens the share dialog for folder "simple-folder (2)/simple-empty-folder" using the webUI
+    Then user "User One" should be listed as "Owner" via "simple-folder (2)" in the collaborators list on the webUI
 
   @issue-2898
   Scenario: see resource owner for direct shares in "shared with me"
     Given user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
     And user "user2" has logged in using the webUI
     When the user browses to the shared-with-me page
-    And the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user opens the share dialog for folder "simple-folder (2)" using the webUI
     Then user "User One" should be listed as "Owner" in the collaborators list on the webUI
 
   Scenario Outline: collaborators list contains additional info when enabled
@@ -652,54 +579,45 @@ Feature: Sharing files and folders with internal users
 
   Scenario: collaborators list contains the current user when they are a receiver of the resource
     Given user "user1" has shared folder "simple-folder" with user "user2"
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
-    And user "user2" has logged in using the webUI
-    When the user opens folder "Shares" using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
+    When user "user2" has logged in using the webUI
+    And the user opens the share dialog for folder "simple-folder (2)" using the webUI
     Then user "User Two" should be listed with additional info "(me)" in the collaborators list on the webUI
 
   Scenario: current user should see the highest role in their entry in collaborators list
     Given group "grp1" has been created
     And user "user2" has been added to group "grp1"
     And user "user1" has shared folder "simple-folder" with user "user2" with "read" permission
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
     And user "user1" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
-    And user "user2" has accepted the share "simple-folder" offered by user "user1"
-    When user "user2" logs in using the webUI
-    And the user opens folder "Shares" using the webUI
+    When user "user2" has logged in using the webUI
     Then user "User Two" should be listed as "Editor" in the collaborators list for folder "simple-folder (2)" on the webUI
 
   Scenario: share a file with another internal user which should expire after 2 days
     Given user "user1" has logged in using the webUI
     When the user shares file "testimage.jpg" with user "User Two" which expires in "+2" days using the webUI
-    And user "user2" accepts the share "testimage.jpg" offered by user "user1" using the sharing API
-    Then user "user2" should have received a share with target "Shares/testimage.jpg" and expiration date in 2 days
+    Then user "user2" should have received a share with target "testimage (2).jpg" and expiration date in 2 days
 
   Scenario: share a file with another internal user with default expiration date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And default expiration date for users is set to 3 days
     And user "user1" has logged in using the webUI
     When the user shares file "testimage.jpg" with user "User Two" using the webUI
-    And user "user2" accepts the share "testimage.jpg" offered by user "user1" using the sharing API
-    Then user "user2" should have received a share with target "Shares/testimage.jpg" and expiration date in 3 days
+    Then user "user2" should have received a share with target "testimage (2).jpg" and expiration date in 3 days
 
   Scenario: change existing expiration date of an existing share with another internal user
     Given user "user1" has created a new share with following settings
-      | path       | lorem.txt |
-      | shareWith  | user2     |
-      | expireDate | +14       |
-    And user "user2" has accepted the share "lorem.txt" offered by user "user1"
+      | path       | lorem.txt  |
+      | shareWith  | user2      |
+      | expireDate | +14        |
     And user "user1" has logged in using the webUI
     When the user edits the collaborator expiry date of "User Two" of file "lorem.txt" to "+7" days using the webUI
-    Then user "user2" should have received a share with target "Shares/lorem.txt" and expiration date in 7 days
+    Then user "user2" should have received a share with target "lorem (2).txt" and expiration date in 7 days
     And user "user1" should have a share with these details:
-      | field       | value             |
-      | path        | /lorem.txt        |
-      | file_target | /Shares/lorem.txt |
-      | share_type  | user              |
-      | uid_owner   | user1             |
-      | share_with  | user2             |
-      | expiration  | +7                |
+      | field      | value      |
+      | path       | /lorem.txt |
+      | share_type | user       |
+      | uid_owner  | user1      |
+      | share_with | user2      |
+      | expiration | +7         |
 
   Scenario: share a resource with another internal user with expiration date within enforced maximum expiration date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
@@ -707,15 +625,13 @@ Feature: Sharing files and folders with internal users
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "5"
     And user "user1" has logged in using the webUI
     When the user shares file "lorem.txt" with user "User Two" which expires in "+4" days using the webUI
-    And user "user2" accepts the share "lorem.txt" offered by user "user1" using the sharing API
     Then user "user1" should have a share with these details:
-      | field       | value             |
-      | path        | /lorem.txt        |
-      | file_target | /Shares/lorem.txt |
-      | share_type  | user              |
-      | uid_owner   | user1             |
-      | share_with  | user2             |
-      | expiration  | +4                |
+      | field      | value      |
+      | path       | /lorem.txt |
+      | share_type | user       |
+      | uid_owner  | user1      |
+      | share_with | user2      |
+      | expiration | +4         |
 
   Scenario Outline: share a resource with another internal user with expiration date beyond enforced maximum expiration date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
@@ -776,21 +692,21 @@ Feature: Sharing files and folders with internal users
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "30"
     And user "user1" has created a new share with following settings
-      | path       | lorem.txt |
-      | shareWith  | user2     |
-      | expireDate | +30       |
+      | path             | lorem.txt |
+      | shareWith        | user2     |
+      | expireDate       | +30       |
     And user "user1" has logged in using the webUI
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "10"
     When the user tries to edit the collaborator "User Two" of file "lorem.txt" changing following
-      | expireDate | +15 |
+      | expireDate       | +15    |
     Then the user should see an error message on the collaborator share dialog saying "Cannot set expiration date more than 10 days in the future"
     And user "user1" should have a share with these details:
-      | field      | value      |
-      | path       | /lorem.txt |
-      | share_type | user       |
-      | uid_owner  | user1      |
-      | share_with | user2      |
-      | expiration | +30        |
+      | field       | value      |
+      | path        | /lorem.txt |
+      | share_type  | user       |
+      | uid_owner   | user1      |
+      | share_with  | user2      |
+      | expiration  | +30        |
 
   @issue-3174
   Scenario Outline: enforced expiry date for group affect user shares
@@ -880,49 +796,46 @@ Feature: Sharing files and folders with internal users
 
   Scenario: share a file with another internal user via collaborators quick action
     Given user "user1" has logged in using the webUI
+    And the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
     When the user shares resource "simple-folder" with user "User Two" using the quick action in the webUI
-    And user "user2" accepts the share "simple-folder" offered by user "user1" using the sharing API
     Then user "User Two" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And user "user2" should have received a share with these details:
-      | field       | value                 |
-      | uid_owner   | user1                 |
-      | share_with  | user2                 |
-      | file_target | /Shares/simple-folder |
-      | item_type   | folder                |
-      | permissions | read                  |
-
-  Scenario Outline: Share files/folders with special characters in their name
-    Given user "user2" has created folder "Sample,Folder,With,Comma"
-    And user "user2" has created file "sample,1.txt"
-    And user "user2" has logged in using the webUI
-    When the user shares folder "Sample,Folder,With,Comma" with user "User One" as "<set-role>" using the webUI
-    And user "user1" accepts the share "Sample,Folder,With,Comma" offered by user "user2" using the sharing API
-    And the user shares file "sample,1.txt" with user "User One" as "<set-role>" using the webUI
-    And user "user1" accepts the share "sample,1.txt" offered by user "user2" using the sharing API
-    Then user "User One" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
-    And user "User One" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
-    And user "user1" should have received a share with these details:
-      | field       | value                            |
-      | uid_owner   | user2                            |
-      | share_with  | user1                            |
-      | file_target | /Shares/Sample,Folder,With,Comma |
-      | item_type   | folder                           |
-      | permissions | <permissions-folder>             |
-    And user "user1" should have received a share with these details:
       | field       | value                |
-      | uid_owner   | user2                |
-      | share_with  | user1                |
-      | file_target | /Shares/sample,1.txt |
-      | item_type   | file                 |
-      | permissions | <permissions-file>   |
-    When the user re-logs in as "user1" using the webUI
-    And the user opens folder "Shares" using the webUI
-    Then these files should be listed on the webUI
-      | files                    |
-      | Sample,Folder,With,Comma |
-      | sample,1.txt             |
-    Examples:
-      | set-role             | expected-role | permissions-folder        | permissions-file |
-      | Viewer               | Viewer        | read                      | read             |
-      | Editor               | Editor        | read,update,create,delete | read,update      |
-      | Advanced permissions | Viewer        | read                      | read             |
+      | uid_owner   | user1                |
+      | share_with  | user2                |
+      | file_target | /simple-folder (2)   |
+      | item_type   | folder               |
+      | permissions | read                 |
+
+    Scenario Outline: Share files/folders with special characters in their name
+      Given user "user2" has created folder "Sample,Folder,With,Comma"
+      And user "user2" has created file "sample,1.txt"
+      And user "user2" has logged in using the webUI
+      And the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+      When the user shares folder "Sample,Folder,With,Comma" with user "User One" as "<set-role>" using the webUI
+      And the user shares file "sample,1.txt" with user "User One" as "<set-role>" using the webUI
+      Then user "User One" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
+      And user "User One" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
+      And user "user1" should have received a share with these details:
+        | field       | value                    |
+        | uid_owner   | user2                    |
+        | share_with  | user1                    |
+        | file_target | /Sample,Folder,With,Comma |
+        | item_type   | folder                   |
+        | permissions | <permissions-folder>     |
+      And user "user1" should have received a share with these details:
+        | field       | value              |
+        | uid_owner   | user2              |
+        | share_with  | user1              |
+        | file_target | /sample,1.txt      |
+        | item_type   | file               |
+        | permissions | <permissions-file> |
+      And as "user1" these resources should be listed on the webUI
+        | entry_name               |
+        | Sample,Folder,With,Comma |
+        | sample,1.txt             |
+      Examples:
+        | set-role             | expected-role | permissions-folder        | permissions-file |
+        | Viewer               | Viewer        | read                      | read             |
+        | Editor               | Editor        | read,update,create,delete | read,update      |
+        | Advanced permissions | Viewer        | read                      | read             |
