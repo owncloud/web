@@ -3,18 +3,21 @@
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
-      class="oc-topbar-personal uk-height-1-1"
+      class="oc-topbar-personal uk-height-1-1 oc-pr-xs"
       variation="raw"
       :aria-label="$gettext('User Menu')"
     >
-      <oc-grid gutter="small" flex>
+      <oc-grid flex>
         <avatar-image
-          class="oc-topbar-personal-avatar"
-          :width="32"
+          class="oc-topbar-personal-avatar uk-flex-inline uk-flex-center uk-flex-middle"
+          :width="24"
           :userid="userId"
           :user-name="userDisplayName"
         />
-        <div class="oc-topbar-personal-label uk-text-primary" v-text="userDisplayName" />
+        <div
+          class="oc-topbar-personal-label uk-text-primary oc-text-bold oc-ml-rm"
+          v-text="userDisplayName"
+        />
       </oc-grid>
     </oc-button>
     <oc-drop
@@ -105,9 +108,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-/* FIXME: https://github.com/owncloud/owncloud-design-system/issues/596 */
-.oc-topbar-personal-label {
-  margin-left: 0px !important;
-}
-</style>

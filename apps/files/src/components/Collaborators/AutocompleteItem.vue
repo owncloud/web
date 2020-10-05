@@ -2,7 +2,7 @@
   <div class="uk-flex uk-flex-middle" :class="collaboratorClass">
     <avatar-image
       v-if="isUser"
-      class="uk-margin-small-right"
+      class="oc-mr-s"
       :width="48"
       :userid="item.value.shareWith"
       :user-name="item.label"
@@ -11,20 +11,14 @@
       <oc-icon
         v-if="item.value.shareType === shareTypes.group"
         key="avatar-group"
-        class="uk-margin-small-right"
+        class="oc-mr-s"
         name="group"
-        size="large"
+        size="xlarge"
       />
-      <oc-icon
-        v-else
-        key="avatar-generic-person"
-        class="uk-margin-small-right"
-        name="person"
-        size="large"
-      />
+      <oc-icon v-else key="avatar-generic-person" class="oc-mr-s" name="person" size="xlarge" />
     </template>
     <div class="files-collaborators-autocomplete-user-text">
-      <div class="uk-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
+      <div class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
       <div v-if="item.value.shareWithAdditionalInfo" v-text="item.value.shareWithAdditionalInfo" />
     </div>
   </div>

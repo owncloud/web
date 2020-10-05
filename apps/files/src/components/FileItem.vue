@@ -6,7 +6,7 @@
     <oc-img
       v-if="previewUrl"
       key="file-preview"
-      class="files-list-file-preview uk-margin-small-right"
+      class="files-list-file-preview oc-mr-s"
       :class="{ 'files-list-file-preview-small': !hasTwoRows }"
       :src="previewUrl"
       alt=""
@@ -15,14 +15,15 @@
       v-else
       key="file-icon"
       :name="previewIcon"
-      :size="hasTwoRows ? 'medium' : 'small'"
+      :size="hasTwoRows ? 'large' : 'medium'"
       aria-hidden="true"
-      class="uk-margin-small-right"
+      class="oc-mr-s"
+      variation="file-type"
     />
     <div class="uk-width-expand">
       <div class="file-row-name uk-text-truncate" :filename="item.name">
         <span
-          class="uk-text-bold oc-cursor-pointer oc-file-name uk-padding-remove-left"
+          class="oc-text-bold oc-cursor-pointer oc-file-name oc-pl-rm"
           role="button"
           v-text="fileName"
         /><span

@@ -1,37 +1,38 @@
 <template>
-  <div id="files" class="uk-flex uk-flex-column">
-    <files-app-bar />
-    <upload-progress
-      v-show="$_uploadProgressVisible"
-      class="uk-padding-small uk-background-muted"
-    />
-    <oc-grid class="uk-height-1-1 uk-flex-1 uk-overflow-auto">
-      <div
-        ref="filesListWrapper"
-        tabindex="-1"
-        class="uk-width-expand uk-overflow-auto uk-height-1-1 files-list-wrapper"
-        :class="{ 'uk-visible@m': _sidebarOpen }"
-        @dragover="$_ocApp_dragOver"
-      >
-        <trash-bin v-if="$route.name === 'files-trashbin'" :file-data="activeFiles" />
-        <shared-files-list
-          v-else-if="sharedList"
-          :file-data="activeFiles"
-          @sideBarOpen="openSideBar"
-        />
-        <all-files-list
-          v-else
-          :file-data="activeFiles"
-          :parent-folder="currentFolder"
-          @sideBarOpen="openSideBar"
-        />
-      </div>
-      <file-details
-        v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
-        class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1"
-        @reset="setHighlightedFile(null)"
+  <div id="files" class="uk-flex">
+    <div
+      ref="filesListWrapper"
+      tabindex="-1"
+      class="uk-width-expand uk-height-1-1 uk-flex uk-flex-column files-list-wrapper uk-overflow-hidden"
+      :class="{ 'uk-visible@m': _sidebarOpen }"
+      @dragover="$_ocApp_dragOver"
+    >
+      <files-app-bar />
+      <upload-progress v-show="$_uploadProgressVisible" class="oc-p-s uk-background-muted" />
+      <trash-bin
+        v-if="$route.name === 'files-trashbin'"
+        class="uk-flex-1 uk-overflow-hidden"
+        :file-data="activeFiles"
       />
-    </oc-grid>
+      <shared-files-list
+        v-else-if="sharedList"
+        class="uk-flex-1 uk-overflow-hidden"
+        :file-data="activeFiles"
+        @sideBarOpen="openSideBar"
+      />
+      <all-files-list
+        v-else
+        class="uk-flex-1 uk-overflow-hidden"
+        :file-data="activeFiles"
+        :parent-folder="currentFolder"
+        @sideBarOpen="openSideBar"
+      />
+    </div>
+    <file-details
+      v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
+      class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1"
+      @reset="setHighlightedFile(null)"
+    />
   </div>
 </template>
 <script>

@@ -6,7 +6,7 @@
       </h1>
       <div v-if="loading" class="oc-login-card-body">
         <h3 class="oc-login-card-title" :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
-        <oc-spinner :aria-label="$_loadingPublicLinkTitle"></oc-spinner>
+        <oc-spinner :aria-label="$_loadingPublicLinkTitle" />
       </div>
       <div v-if="errorMessage" class="oc-login-card-body">
         <h3 class="oc-login-card-title">
@@ -26,7 +26,7 @@
             :label="passwordFieldLabel"
             type="password"
             :placeholder="passwordPlaceholder"
-            class="uk-margin-small-bottom"
+            class="oc-mb-s"
           ></oc-text-input>
           <oc-button variation="primary" class="oc-login-authorize-button" :disabled="!password">
             <translate>Continue</translate>

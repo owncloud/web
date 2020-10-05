@@ -23,7 +23,7 @@
         key="shared-with-header-cell"
         class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-medium uk-text-right"
         translate-context="'People' table column"
-        v-text="$gettext('People')"
+        v-text="$gettext('Shared with')"
       />
       <div
         v-else
@@ -55,7 +55,7 @@
       <div class="oc-icon" />
     </template>
     <template #rowColumns="{ item }">
-      <div class="uk-width-expand">
+      <div class="uk-width-expand uk-flex uk-flex-middle">
         <file-item
           :key="item.path"
           :item="item"
@@ -67,9 +67,8 @@
         />
         <oc-spinner
           v-if="actionInProgress(item)"
-          size="small"
           :uk-tooltip="disabledActionTooltip(item)"
-          class="uk-margin-small-left"
+          class="oc-ml-s"
         />
       </div>
       <div
@@ -80,12 +79,12 @@
         <span
           v-for="share in prepareCollaborators(item.shares)"
           :key="share.id"
-          class="uk-margin-small-right uk-flex uk-flex-middle"
+          class="oc-mr-s uk-flex uk-flex-middle"
         >
           <avatar-image
             v-if="share.shareType === shareTypes.user && share.collaborator"
             :key="'avatar-' + share.id"
-            class="uk-margin-xsmall-right"
+            class="oc-mr-xs"
             :width="24"
             :userid="share.collaborator.name"
             :user-name="share.collaborator.displayName"
@@ -94,8 +93,7 @@
             v-else
             :key="'icon-' + share.id"
             :name="$_shareTypeIcon(share.shareType)"
-            class="uk-margin-xsmall-right"
-            size="small"
+            class="oc-mr-xs"
             variation="active"
             aria-hidden="true"
           />
@@ -126,13 +124,13 @@
         <oc-button
           v-if="item.status === 1"
           variation="raw"
-          class="file-row-share-status-action uk-text-meta uk-margin-left"
+          class="file-row-share-status-action uk-text-meta oc-ml"
           @click="pendingShareAction(item, 'DELETE')"
         >
           <translate>Decline</translate>
         </oc-button>
         <span
-          class="uk-text-small uk-margin-left file-row-share-status-text uk-text-baseline"
+          class="uk-text-small oc-ml file-row-share-status-text uk-text-baseline"
           v-text="shareStatus(item.status)"
         />
       </div>
@@ -142,7 +140,7 @@
         class="uk-visible@s uk-text-meta uk-text-nowrap uk-text-truncate uk-width-small uk-flex uk-flex-middle file-row-collaborators uk-flex-right"
       >
         <avatar-image
-          class="uk-margin-xsmall-right"
+          class="oc-mr-xs"
           :width="24"
           :userid="item.shareOwner.username"
           :user-name="item.shareOwner.displayName"

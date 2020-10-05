@@ -52,7 +52,10 @@
       </div>
     </template>
     <template #rowColumns="{ item: rowItem, index }">
-      <div :ref="index === 0 ? 'firstRowNameColumn' : null" class="uk-width-expand">
+      <div
+        :ref="index === 0 ? 'firstRowNameColumn' : null"
+        class="uk-width-expand uk-flex uk-flex-middle"
+      >
         <file-item
           :key="rowItem.viewId"
           :item="rowItem"
@@ -67,9 +70,8 @@
         />
         <oc-spinner
           v-if="actionInProgress(rowItem)"
-          size="small"
           :uk-tooltip="disabledActionTooltip(rowItem)"
-          class="uk-margin-small-left"
+          class="oc-ml-s"
         />
       </div>
       <div

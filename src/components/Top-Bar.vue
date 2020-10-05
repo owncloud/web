@@ -1,9 +1,6 @@
 <template>
-  <header
-    id="oc-topbar"
-    class="uk-flex uk-flex-middle uk-flex-wrap oc-border-bottom uk-padding-small"
-  >
-    <oc-grid v-if="!publicPage()" gutter="large" flex>
+  <header id="oc-topbar" class="uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
+    <oc-grid v-if="!publicPage()" gutter="medium" flex>
       <div class="uk-hidden@l">
         <oc-button
           variation="raw"
@@ -20,7 +17,7 @@
       v-if="!isPublicPage"
       flex
       gutter="small"
-      class="uk-width-expand uk-flex-right uk-margin-remove-top"
+      class="uk-width-expand uk-flex-right oc-mt-rm"
     >
       <notifications v-if="activeNotifications.length" />
       <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />

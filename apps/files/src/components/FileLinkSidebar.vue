@@ -8,13 +8,13 @@
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
         <section v-if="$_privateLinkOfHighlightedFile">
-          <div class="uk-text-bold uk-flex">
+          <div class="oc-text-bold uk-flex">
             <span v-translate>Private Link</span>
             <oc-button
               :aria-label="$_privateLinkCopyLabel"
               :uk-tooltip="$_privateLinkCopyLabel"
               variation="raw"
-              class="uk-margin-small-left"
+              class="oc-ml-s"
             >
               <oc-icon
                 v-if="!linksCopied[$_privateLinkOfHighlightedFile]"
@@ -22,13 +22,11 @@
                 v-clipboard:copy="$_privateLinkOfHighlightedFile"
                 v-clipboard:success="$_clipboardSuccessHandler"
                 name="copy_to_clipboard"
-                size="small"
               />
               <oc-icon
                 v-else
                 id="files-sidebar-private-link-icon-copied"
                 name="ready"
-                size="small"
                 class="_clipboard-success-animation"
               />
             </oc-button>
@@ -39,7 +37,7 @@
           <hr />
         </section>
         <section>
-          <div class="uk-text-bold">
+          <div class="oc-text-bold">
             <translate>Public Links</translate>
           </div>
           <div class="uk-text-meta">
@@ -50,7 +48,7 @@
               </translate>
             </i>
           </div>
-          <div class="uk-margin-small-top uk-margin-small-bottom">
+          <div class="oc-mt-s oc-mb-s">
             <oc-button
               id="files-file-link-add"
               icon="add"
@@ -63,7 +61,7 @@
             </oc-button>
           </div>
           <transition-group
-            class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove"
+            class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm"
             :enter-active-class="$_transitionGroupEnter"
             :leave-active-class="$_transitionGroupLeave"
             name="custom-classes-transition"

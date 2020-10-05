@@ -1,6 +1,6 @@
 <template>
   <!-- TODO: Take care of outside click overall and not just in files list -->
-  <div :id="id" class="uk-height-1-1 uk-position-relative" @click="hideRowActionsDropdown">
+  <div :id="id" class="uk-position-relative" @click="hideRowActionsDropdown">
     <div class="uk-flex uk-flex-column uk-height-1-1">
       <resize-observer @notify="$_resizeHeader" />
       <oc-grid
@@ -10,17 +10,16 @@
         key="files-list-results-existence"
         gutter="small"
         flex
-        class="uk-padding-small uk-padding-remove-top oc-padding-xsmall-bottom oc-border-bottom"
+        class="oc-px-s oc-pt-rm oc-pb-xs oc-border-b"
       >
-        <div v-if="checkboxEnabled">
+        <div v-if="checkboxEnabled" id="files-list-header-checkbox" class="uk-text-center">
           <oc-checkbox
             id="filelist-check-all"
-            class="uk-margin-small-left"
+            class="oc-ml-s"
             :hide-label="true"
             :label="labelSelectAllItems"
             :value="selectedAll"
-            @click.stop
-            @change.native="toggleAll"
+            @input="toggleAll"
           />
         </div>
         <slot name="headerColumns" />
@@ -48,7 +47,7 @@
           :key="fileData.length"
           class="uk-height-1-1"
           :items="fileData"
-          :item-size="hasTwoRows ? 77 : 55"
+          :item-size="_rowHeight"
         >
           <div
             :data-is-visible="active"
@@ -63,17 +62,23 @@
               :ref="index === 0 ? 'firstRow' : null"
               gutter="small"
               flex
-              class="uk-padding-small oc-border-bottom"
+              class="file-row oc-p-s oc-border-b"
               :class="_rowClasses(rowItem)"
             >
-              <div v-if="checkboxEnabled">
+              <div
+                v-if="checkboxEnabled"
+                id="files-list-row-checkbox"
+                class="uk-flex uk-flex-center"
+              >
                 <oc-checkbox
-                  class="uk-margin-small-left"
+                  class="oc-ml-s"
                   :value="selectedFiles.indexOf(rowItem) >= 0"
+                  :option="rowItem"
                   :label="labelSelectSingleItem(rowItem)"
                   :hide-label="true"
-                  @click.stop
-                  @change.native="toggleFileSelect(rowItem)"
+                  size="large"
+                  @click.native.stop
+                  @input="toggleFileSelect(rowItem)"
                 />
               </div>
               <slot name="rowColumns" :item="rowItem" :index="index" />
@@ -91,7 +96,7 @@
                   variation="raw"
                   @click.stop="toggleRowActionsDropdown(rowItem)"
                 >
-                  <oc-icon name="more_vert" class="uk-text-middle" size="small" />
+                  <oc-icon name="more_vert" class="uk-text-middle" />
                 </oc-button>
               </div>
             </oc-grid>
@@ -105,9 +110,9 @@
           <slot name="noContentMessage" />
         </div>
       </div>
-      <oc-grid v-if="!loading" gutter="large" class="uk-width-1-1 uk-padding-small uk-flex-1">
+      <div v-if="!loading" class="uk-width-1-1 uk-text-center oc-p-s">
         <slot name="footer" />
-      </oc-grid>
+      </div>
     </div>
     <row-actions-dropdown
       :displayed="rowActionsDisplayed"
@@ -206,6 +211,10 @@ export default {
 
     item() {
       return this.$route.params.item
+    },
+
+    _rowHeight() {
+      return this.hasTwoRows ? 67 : 55
     }
   },
   watch: {
@@ -213,6 +222,9 @@ export default {
       // sidebar opens, recalculate header sizes
       this.$_resizeHeader()
     }
+  },
+  mounted() {
+    this.$_resizeHeader()
   },
   methods: {
     ...mapActions('Files', [
@@ -248,10 +260,7 @@ export default {
     },
 
     $_isActionEnabled(item, action) {
-      if (this.isActionEnabled && this.isActionEnabled(item, action)) {
-        return true
-      }
-      return false
+      return this.isActionEnabled && this.isActionEnabled(item, action)
     },
 
     $_actionInProgress(item) {
@@ -270,10 +279,14 @@ export default {
       return null
     },
     _rowClasses(item) {
-      if (this.highlightedFile && item.id === this.highlightedFile.id) {
-        return 'file-row oc-background-selected'
+      const classes = []
+      if (!this.hasTwoRows) {
+        classes.push('file-row-s')
       }
-      return 'file-row'
+      if (this.highlightedFile && item.id === this.highlightedFile.id) {
+        classes.push('oc-background-selected')
+      }
+      return classes
     },
     selectRow(item, event) {
       if (!this.selectableRow || this.rowDisabled(item)) {
@@ -330,11 +343,18 @@ export default {
     },
 
     $_resizeHeader() {
-      this.$nextTick(() => {
+      setTimeout(() => {
         const headerRow = this.$refs.headerRow
         const firstRow = this.$refs.firstRow
+        const headerCheckbox = document.querySelector('#files-list-header-checkbox')
+        const firstRowCheckbox = document.querySelector('#files-list-row-checkbox')
+
         if (headerRow && firstRow) {
           headerRow.$el.style.width = getComputedStyle(firstRow.$el).width
+        }
+
+        if (headerCheckbox && firstRowCheckbox) {
+          headerCheckbox.style.width = getComputedStyle(firstRowCheckbox).width
         }
       })
     }
@@ -342,15 +362,27 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+#files-table-header {
+  box-sizing: border-box;
+}
+
 .files-list-row-disabled {
   opacity: 0.3;
   pointer-events: none;
 }
 
-/* TODO: Create as utility classes in ODS */
-/* Issue: https://github.com/owncloud/owncloud-design-system/issues/821 */
-.oc-padding-xsmall-bottom {
-  padding-bottom: 5px !important;
+#files-list-header-checkbox {
+  width: 34px;
+}
+
+.file-row {
+  box-sizing: border-box;
+  min-height: 67px;
+  max-height: 67px;
+}
+.file-row-s {
+  min-height: 55px;
+  max-height: 55px;
 }
 </style>

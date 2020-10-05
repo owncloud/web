@@ -686,7 +686,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     permissionCheckbox: {
-      selector: '//label[@id="files-collaborators-permission-%s"]/input',
+      selector: '//input[@id="files-collaborators-permission-%s"]',
       locateStrategy: 'xpath'
     },
     collaboratorExpirationDateInput: {

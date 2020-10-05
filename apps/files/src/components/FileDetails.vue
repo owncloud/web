@@ -2,27 +2,27 @@
   <oc-app-side-bar
     id="files-sidebar"
     :key="highlightedFile.id"
-    class="uk-padding-small uk-overflow-auto uk-height-1-1"
+    class="oc-p-s uk-overflow-auto uk-height-1-1"
     :disable-action="false"
     @close="close()"
   >
     <template v-if="highlightedFile" slot="title">
       <div class="uk-inline">
-        <oc-icon :name="fileTypeIcon(highlightedFile)" size="large" />
+        <oc-icon :name="fileTypeIcon(highlightedFile)" size="xlarge" />
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
           <span
             id="files-sidebar-item-name"
-            class="uk-margin-small-right uk-text-bold"
+            class="oc-mr-s oc-text-bold"
             v-text="highlightedFile.name"
           />
         </div>
-        <div v-if="$route.name !== 'files-shared-with-others'">
+        <div v-if="$route.name !== 'files-shared-with-others'" class="uk-flex uk-flex-middle">
           <oc-star
             v-if="!publicPage() && isFavoritesEnabled"
             id="files-sidebar-star-icon"
-            class="uk-inline"
+            class="uk-inline oc-mr-xs"
             :shining="highlightedFile.starred"
             @click.native.stop="toggleFileFavorite(highlightedFile)"
           />

@@ -49,12 +49,9 @@
         </oc-table>
       </div>
     </oc-grid>
-    <collaborators-edit-options
-      class="uk-margin-bottom"
-      @optionChange="collaboratorOptionChanged"
-    />
+    <collaborators-edit-options class="oc-mb" @optionChange="collaboratorOptionChanged" />
     <hr class="divider" />
-    <oc-grid gutter="small" class="uk-margin-bottom">
+    <oc-grid gutter="small" class="oc-mb">
       <div>
         <oc-button
           key="new-collaborator-cancel-button"
@@ -67,7 +64,7 @@
       </div>
       <div>
         <oc-button v-if="saving" key="new-collaborator-saving-button" :disabled="true">
-          <oc-spinner :aria-label="$gettext('Adding People')" size="xsmall" />
+          <oc-spinner :aria-label="$gettext('Adding People')" size="small" />
           <span v-translate :aria-hidden="true">Adding People</span>
         </oc-button>
         <oc-button

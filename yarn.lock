@@ -6906,10 +6906,10 @@ os-tmpdir@~1.0.1, os-tmpdir@~1.0.2:
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
 
-owncloud-design-system@^1.9.0:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.11.1.tgz#8afa0117d2d7d86bec6fb0e3198c17c10328fa79"
-  integrity sha512-ULrf/LOkHhRaBX3VoprHRg69n51Gu8AaOiu1jzIAJzRxE40XM+kv8sXNBvjoxeiZZBX6WHVQCmXCyysKI5Yatg==
+owncloud-design-system@^1.12.1:
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-1.12.1.tgz#55534e3b1c36a4451ee81500864e0131d24a98c3"
+  integrity sha512-ivvgYStZsqueIfTIRKhUV2Je7AXBT6PvVz18fhpdlNIHwfZFgYGVAbmS+DNuG77bXqhd18fny+AeMkfWVsSZrw==
   dependencies:
     luxon "^1.22.0"
     mini-css-extract-plugin "^0.9.0"

@@ -10,7 +10,7 @@
           {{ errors }}
         </oc-alert>
       </transition>
-      <div class="uk-margin">
+      <div class="oc-mb">
         <label class="oc-label"><span v-translate>Name:</span></label>
         <input id="oc-files-file-link-name" v-model="name" class="uk-input" />
       </div>
@@ -22,7 +22,7 @@
           @roleSelected="$_selectRole"
         />
       </oc-grid>
-      <div class="uk-margin uk-grid-small uk-flex uk-flex-middle" uk-grid>
+      <div class="oc-mb uk-grid-small uk-flex uk-flex-middle" uk-grid>
         <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
           <label class="oc-label" for="oc-files-file-link-expire-date">
             <span v-translate>Expiration date:</span>
@@ -52,9 +52,7 @@
         <div class="uk-width-1-1 uk-width-3-5@m">
           <label class="oc-label" for="oc-files-file-link-password">
             <span v-translate>Password:</span
-            ><em v-if="$_passwordEnforced" class="uk-margin-small-left"
-              >(<span v-translate>required</span>)</em
-            >
+            ><em v-if="$_passwordEnforced" class="oc-ml-s">(<span v-translate>required</span>)</em>
           </label>
           <div class="uk-position-relative">
             <input
@@ -80,22 +78,22 @@
       <!-- @TODO: Enable Mail API to use the following
                   ++++++++++++++++++++++++++++++++++++
         <template v-if="$_sendMailEnabled">
-            <h4 class="uk-margin-medium-top uk-heading-divider">
+            <h4 class="oc-mt-top uk-heading-divider">
                 Send mail notification
             </h4>
-            <div class="uk-margin">
+            <div class="oc-mb">
                 <input type="text" class="uk-input" :placeholder="placeholder.mailTo" />
             </div>
-            <div class="uk-margin">
+            <div class="oc-mb">
                 <textarea class="uk-textarea" :placeholder="placeholder.mailBody rows="4"></textarea>
             </div>
-            <div class="uk-margin">
-                <label><input type="checkbox" class="uk-checkbox uk-margin-small-right" v-translate>Send a copy to myself</label>
+            <div class="oc-mb">
+                <label><input type="checkbox" class="uk-checkbox oc-mr-s" v-translate>Send a copy to myself</label>
             </div>
         </template>
         -->
       <hr class="divider" />
-      <oc-grid class="uk-margin-bottom" gutter="small">
+      <oc-grid class="oc-mb" gutter="small">
         <div>
           <oc-button id="oc-files-file-link-cancel" :disabled="saving" @click="$_closeForm">
             <translate>Cancel</translate>
@@ -104,11 +102,11 @@
         <div>
           <oc-button v-if="saving" variation="primary" disabled>
             <template v-if="$_isNew">
-              <oc-spinner :aria-label="$gettext('Creating Public Link')" size="xsmall" />
+              <oc-spinner :aria-label="$gettext('Creating Public Link')" size="small" />
               <span v-translate :aria-hidden="true">Creating</span>
             </template>
             <template v-else>
-              <oc-spinner :aria-label="$gettext('Saving Public Link')" size="xsmall" />
+              <oc-spinner :aria-label="$gettext('Saving Public Link')" size="small" />
               <span v-translate :aria-hidden="true">Saving</span>
             </template>
           </oc-button>

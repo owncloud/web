@@ -15,9 +15,9 @@
             :aria-label="$gettext('Show resharer details')"
             :uk-tooltip="$gettext('Show resharer details')"
           >
-            <oc-icon name="repeat" size="xsmall" class="uk-preserve-width" />
+            <oc-icon name="repeat" size="small" class="uk-preserve-width" />
             <span
-              class="uk-padding-remove uk-text-truncate files-collaborators-collaborator-reshare-information"
+              class="oc-p-rm uk-text-truncate files-collaborators-collaborator-reshare-information"
               >{{ $_reshareInformation }}</span
             >
           </oc-button>
@@ -27,21 +27,21 @@
             :toggle="'#' + $_resharerToggleId"
             mode="click"
             :options="{ pos: 'bottom-left', delayHide: 0 }"
-            class="uk-width-large uk-margin-small-top"
+            class="uk-width-large oc-mt-s"
             close-on-click
           >
             <translate tag="h4">Shared by:</translate>
-            <ul class="uk-list uk-list-divider uk-overflow-hidden uk-margin-remove">
+            <ul class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">
               <li v-for="resharer in collaborator.resharers" :key="resharer.name">
                 <div class="uk-flex uk-flex-middle uk-flex-left">
                   <avatar-image
-                    class="uk-margin-small-right"
+                    class="oc-mr-s"
                     :width="48"
                     :userid="resharer.name"
                     :user-name="resharer.displayName"
                   />
                   <div>
-                    <span class="files-collaborators-resharer-name uk-text-bold">{{
+                    <span class="files-collaborators-resharer-name oc-text-bold">{{
                       resharer.displayName
                     }}</span>
                     <span
@@ -69,18 +69,14 @@
         >
           <oc-icon name="close" />
         </oc-button>
-        <oc-spinner
-          v-else-if="$_loadingSpinnerVisible"
-          :aria-label="$gettext('Removing person')"
-          size="small"
-        />
-        <oc-icon v-else name="lock" class="uk-invisible"></oc-icon>
+        <oc-spinner v-else-if="$_loadingSpinnerVisible" :aria-label="$gettext('Removing person')" />
+        <oc-icon v-else name="lock" class="uk-invisible" />
       </oc-table-cell>
       <oc-table-cell shrink>
         <div key="collaborator-avatar-loaded">
           <avatar-image
             v-if="isUser"
-            class="uk-margin-small-right files-collaborators-collaborator-indicator"
+            class="oc-mr-s files-collaborators-collaborator-indicator"
             :width="48"
             :userid="collaborator.collaborator.name"
             :user-name="collaborator.collaborator.displayName"
@@ -90,17 +86,17 @@
             <oc-icon
               v-if="collaborator.shareType === shareTypes.group"
               key="avatar-group"
-              class="uk-margin-small-right files-collaborators-collaborator-indicator"
+              class="oc-mr-s files-collaborators-collaborator-indicator"
               name="group"
-              size="large"
+              size="xlarge"
               :aria-label="$gettext('Group')"
             />
             <oc-icon
               v-else
               key="avatar-generic-person"
-              class="uk-margin-small-right files-collaborators-collaborator-indicator"
+              class="oc-mr-s files-collaborators-collaborator-indicator"
               name="person"
-              size="large"
+              size="xlarge"
               :aria-label="$gettext('Remote user')"
             />
           </div>
@@ -109,7 +105,7 @@
       <oc-table-cell>
         <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
           <div class="oc-text">
-            <span class="files-collaborators-collaborator-name uk-text-bold">{{
+            <span class="files-collaborators-collaborator-name oc-text-bold">{{
               collaborator.collaborator.displayName
             }}</span>
             <translate
@@ -168,12 +164,11 @@
           >
             <oc-icon
               name="exit_to_app"
-              size="small"
               class="uk-preserve-width"
               :uk-tooltip="$gettext('Navigate to parent')"
             />
             <span
-              class="oc-file-name uk-padding-remove uk-text-truncate files-collaborators-collaborator-via-label"
+              class="oc-file-name oc-p-rm uk-text-truncate files-collaborators-collaborator-via-label"
               >{{ $_viaLabel }}</span
             >
           </oc-button>

@@ -18,7 +18,7 @@
             actionClicked()
           "
         >
-          <oc-icon :name="action.icon" aria-hidden="true" />
+          <oc-icon :name="action.icon" aria-hidden="true" size="medium" />
           {{ action.ariaLabel(item) }}
         </oc-button>
       </li>

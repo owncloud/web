@@ -1,9 +1,11 @@
 <template>
   <div>
     <oc-search-bar
+      id="files-global-search-bar"
       ref="globalSearchBar"
       class="uk-width-large uk-visible@m"
       :label="searchLabel"
+      :placeholder="searchLabel"
       :loading="isLoadingSearchResults"
       :button-hidden="true"
       @search="search"
@@ -22,7 +24,7 @@
       drop-id="oc-topbar-search-mobile"
       toggle="#files-open-search-btn"
       mode="click"
-      class="uk-margin-remove"
+      class="oc-m-rm"
       :options="{ delayHide: '0' }"
     >
       <oc-search-bar

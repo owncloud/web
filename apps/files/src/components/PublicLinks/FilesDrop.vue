@@ -1,9 +1,9 @@
 <template>
   <div id="files-drop-container" class="uk-height-1-1 uk-flex uk-flex-column uk-flex-between">
-    <div class="uk-padding uk-height-1-1">
+    <div class="oc-p uk-height-1-1">
       <div v-if="loading" key="loading-drop" class="uk-flex uk-flex-column uk-flex-middle">
         <h3 :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
-        <oc-spinner size="medium" :aria-label="$_loadingPublicLinkTitle" />
+        <oc-spinner :aria-label="$_loadingPublicLinkTitle" size="large" />
       </div>
       <div v-else key="loaded-drop" class="uk-flex uk-flex-column uk-flex-middle uk-height-1-1">
         <div class="uk-text-center uk-width-1-1 uk-width-xxlarge@m">
@@ -26,26 +26,26 @@
           <oc-table class="uk-width-1-1 uk-width-xxlarge@m">
             <oc-table-group>
               <oc-table-row v-for="(file, key) in getUploadedFiles" :key="key">
-                <oc-table-cell class="uk-padding-remove-left" v-text="file.name" />
+                <oc-table-cell class="oc-pl-rm" v-text="file.name" />
                 <oc-table-cell shrink class="uk-text-nowrap uk-text-meta">{{
                   file.size | fileSize
                 }}</oc-table-cell>
-                <oc-table-cell shrink class="uk-padding-remove-right uk-preserve-width">
+                <oc-table-cell shrink class="oc-pr-rm uk-preserve-width">
                   <oc-icon
                     v-if="file.status === 'done'"
                     name="ready"
-                    size="xsmall"
+                    size="small"
                     variation="success"
                   />
                   <oc-icon
                     v-if="file.status === 'error'"
                     name="info"
-                    size="xsmall"
+                    size="small"
                     variation="danger"
                   />
                   <oc-spinner
                     v-if="file.status === 'uploading' || file.status === 'init'"
-                    size="xsmall"
+                    size="small"
                     :aria-label="$_ocUploadingFileMessage(file.name)"
                   />
                 </oc-table-cell>
@@ -55,7 +55,7 @@
         </div>
         <div v-if="errorMessage" class="uk-text-center">
           <translate tag="h3">An error occurred while loading the public link</translate>
-          <p class="uk-margin-remove" v-text="errorMessage" />
+          <p class="oc-m-rm" v-text="errorMessage" />
         </div>
       </div>
     </div>

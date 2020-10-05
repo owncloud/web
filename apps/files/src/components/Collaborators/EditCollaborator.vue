@@ -15,9 +15,9 @@
     </transition>
     <div
       v-if="user.id !== collaborator.owner.name"
-      class="uk-text-meta uk-flex uk-flex-middle uk-margin-small-bottom"
+      class="uk-text-meta uk-flex uk-flex-middle oc-mb-s"
     >
-      <oc-icon name="repeat" class="uk-margin-small-right" /> {{ collaborator.owner.displayName }}
+      <oc-icon name="repeat" class="oc-mr-s" /> {{ collaborator.owner.displayName }}
     </div>
     <collaborator class="uk-width-expand" :collaborator="collaborator" :first-column="false" />
     <collaborators-edit-options
@@ -25,11 +25,11 @@
       :collaborators-permissions="$_originalPermissions"
       :expiration-date="originalExpirationDate"
       :existing-collaborator-type="collaboratorType"
-      class="uk-margin-bottom"
+      class="oc-mb"
       @optionChange="collaboratorOptionChanged"
     />
     <hr class="divider" />
-    <oc-grid gutter="small" class="uk-margin-bottom">
+    <oc-grid gutter="small" class="oc-mb">
       <div>
         <oc-button
           key="edit-collaborator-cancel-button"
@@ -42,7 +42,7 @@
       </div>
       <div>
         <oc-button v-if="saving" key="edit-collaborator-saving-button" :disabled="true">
-          <oc-spinner :aria-label="$gettext('Saving Share')" size="xsmall" />
+          <oc-spinner :aria-label="$gettext('Saving Share')" size="small" />
           <span v-translate :aria-hidden="true">Saving Share</span>
         </oc-button>
         <oc-button
@@ -54,7 +54,7 @@
           variation="primary"
           @click="$_ocCollaborators_saveChanges"
         >
-          <translate>Save Share</translate>
+          <translate>Save</translate>
         </oc-button>
       </div>
     </oc-grid>

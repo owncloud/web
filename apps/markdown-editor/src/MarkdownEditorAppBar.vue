@@ -5,7 +5,7 @@
         <oc-button :disabled="!isTouched" @click="saveContent">
           <oc-icon name="save" aria-hidden="true" />
         </oc-button>
-        <oc-spinner v-if="isLoading"></oc-spinner>
+        <oc-spinner v-if="isLoading" />
       </div>
       <div class="uk-width-expand uk-text-center">
         <span>{{ activeFile.path.substr(1) }}</span>
