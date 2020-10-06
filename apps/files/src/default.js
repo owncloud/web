@@ -87,7 +87,10 @@ const navItems = [
       name: 'files-favorites'
     },
     enabled(capabilities) {
-      return capabilities.files && capabilities.files.favorites
+      if (capabilities.files) {
+        return capabilities.files.favorites
+      }
+      return false
     }
   },
   {
@@ -110,7 +113,7 @@ const navItems = [
     name: $gettext('Deleted files'),
     iconMaterial: 'delete',
     enabled(capabilities) {
-      if (capabilities && capabilities.dav) {
+      if (capabilities.dav) {
         return capabilities.dav.trashbin === '1.0'
       }
       return false

@@ -47,39 +47,33 @@ const getters = {
    * Get all nav items that are associated with the given extension id.
    *
    * @param state
+   * @param getters
    * @returns {function(*): *[]}
    */
-  getNavItems: (state, rootState) => extension => {
+  getNavItemsByExtension: (state, getters) => extension => {
     const staticNavItems = state.staticNavItems[extension] || []
     const dynamicNavItems = state.dynamicNavItems[extension] || []
-
     return [...staticNavItems, ...dynamicNavItems].filter(navItem => {
       if (!navItem.enabled) {
+        // when `enabled` callback not provided: count as enabled.
         return true
       }
-
-      return navItem.enabled(rootState.capabilities)
+      try {
+        return navItem.enabled(getters.capabilities)
+      } catch (e) {
+        console.error('`enabled` callback on navItem ' + navItem.name + ' threw an error', e)
+        return false
+      }
     })
   },
-  /**
-   * Get all extension ids that have at least one navigation item.
-   *
-   * @param state
-   * @returns {*[]}
-   */
-  getExtensionsWithNavItems: state => {
+  getExtensionsWithNavItems: (state, getters) => {
     // get a unique list of extension ids by collecting the ids in a set and then spreading them into an array.
     const extensions = [
       ...new Set([...Object.keys(state.staticNavItems), ...Object.keys(state.dynamicNavItems)])
     ]
     // return only those extension ids that really have at least one nav item.
     // Context: NavItems can be removed, so the map key could still exist with an empty array of nav items.
-    return extensions.filter(extension => {
-      return (
-        (state.staticNavItems[extension] || []).length > 0 ||
-        (state.dynamicNavItems[extension] || []).length > 0
-      )
-    })
+    return extensions.filter(extension => getters.getNavItemsByExtension(extension).length > 0)
   }
 }
 

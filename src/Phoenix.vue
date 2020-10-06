@@ -13,7 +13,7 @@
             class="oc-app-navigation"
             :logo-img="logoImage"
             :product-name="productName"
-            :nav-items="navItems"
+            :nav-items="sidebarNavItems"
             :hide-nav="sidebar.navigationHidden"
             :class="sidebarClasses"
             :fixed="isSidebarFixed"
@@ -31,7 +31,7 @@
           <top-bar
             v-if="!publicPage() && !$route.meta.verbose"
             class="uk-width-expand"
-            :applications-list="$_applicationsList"
+            :applications-list="applicationsList"
             :active-notifications="activeNotifications"
             :user-id="user.username || user.id"
             :user-display-name="user.displayname"
@@ -100,21 +100,29 @@ export default {
       'capabilities',
       'apps',
       'getSettingsValue',
-      'getNavItems',
+      'getNavItemsByExtension',
       'getExtensionsWithNavItems'
     ]),
-    $_applicationsList() {
+    applicationsList() {
       const list = []
 
       // Get extensions which have at least one nav item
       this.getExtensionsWithNavItems.forEach(extensionId => {
-        list.push(this.apps[extensionId])
+        list.push({
+          ...this.apps[extensionId],
+          type: 'extension'
+        })
       })
 
       // Get extensions manually added into config
-      list.push(this.configuration.applications)
+      this.configuration.applications.forEach(application => {
+        list.push({
+          ...application,
+          type: 'link'
+        })
+      })
 
-      return list.flat()
+      return list
     },
 
     showHeader() {
@@ -132,12 +140,12 @@ export default {
       return this.configuration.theme.general.name
     },
 
-    navItems() {
+    sidebarNavItems() {
       if (this.publicPage()) {
         return []
       }
 
-      const items = this.getNavItems(this.currentExtension)
+      const items = this.getNavItemsByExtension(this.currentExtension)
       if (!items) {
         return []
       }
