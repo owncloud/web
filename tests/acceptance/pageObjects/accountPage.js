@@ -42,9 +42,6 @@ module.exports = {
       }
       return actualAccInfo
     },
-    logout: function() {
-      return this.waitForElementVisible('@logoutButton').click('@logoutButton')
-    },
     isPageVisible: async function() {
       let isVisible = true
 
@@ -62,9 +59,6 @@ module.exports = {
     accountInformationElements: {
       selector: '//div/span[.="Account Information"]/../../div[@class="uk-flex uk-flex-wrap"]/div',
       locateStrategy: 'xpath'
-    },
-    logoutButton: {
-      selector: '.account-logout-button'
     }
   }
 }
