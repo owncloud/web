@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="userId">
     <oc-button
       id="_userMenuButton"
       ref="menuButton"
@@ -31,18 +31,56 @@
     >
       <ul class="uk-list">
         <li class="uk-text-nowrap">
-          <router-link id="oc-topbar-account-manage" v-translate to="/account"
-            >Manage your account</router-link
+          <oc-button
+            id="oc-topbar-account-manage"
+            type="router-link"
+            :to="{ path: '/account' }"
+            variation="raw"
+            gap-size="xsmall"
+            justify-content="left"
           >
+            <oc-icon name="portrait" />
+            <translate>Profile</translate>
+          </oc-button>
+        </li>
+        <li v-for="(n, nid) in menuItems" :key="`user-menu-${nid}`">
+          <oc-button
+            v-if="n.url"
+            type="a"
+            variation="raw"
+            gap-size="xsmall"
+            justify-content="left"
+            :target="n.target"
+            :href="n.url"
+          >
+            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" />
+            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" />
+            <span>{{ n.title }}</span>
+          </oc-button>
+          <oc-button
+            v-else
+            type="router-link"
+            variation="raw"
+            gap-size="xsmall"
+            justify-content="left"
+            :to="{ path: n.path }"
+          >
+            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" />
+            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" />
+            <span v-text="n.title" />
+          </oc-button>
         </li>
         <li>
-          <router-link
+          <oc-button
             id="oc-topbar-account-logout"
-            v-translate
-            to="/"
-            @click.native.prevent="logout"
-            >Log out</router-link
+            variation="raw"
+            gap-size="xsmall"
+            justify-content="left"
+            @click="logout"
           >
+            <oc-icon name="exit_to_app" />
+            <translate>Log out</translate>
+          </oc-button>
         </li>
       </ul>
     </oc-drop>
@@ -51,8 +89,10 @@
 
 <script>
 import appVersionJson from '../../build/version.json'
+import NavigationMixin from '../mixins/navigationMixin'
 
 export default {
+  mixins: [NavigationMixin],
   props: {
     userId: {
       type: String,
@@ -66,11 +106,21 @@ export default {
       type: String,
       required: false,
       default: null
+    },
+    applicationsList: {
+      type: Array,
+      required: false,
+      default: () => []
     }
   },
   data() {
     return {
       appVersion: appVersionJson
+    }
+  },
+  computed: {
+    menuItems() {
+      return this.navigation_getMenuItems(['user'])
     }
   },
   watch: {
@@ -86,14 +136,6 @@ export default {
     logout() {
       this.visible = false
       this.$store.dispatch('logout')
-    },
-    openItem(url) {
-      if (url) {
-        const win = window.open(url, '_blank')
-        if (win) {
-          win.focus()
-        }
-      }
     },
     focusFirstLink() {
       /*

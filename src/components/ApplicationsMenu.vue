@@ -20,13 +20,13 @@
       close-on-click
     >
       <div class="uk-grid-small uk-text-center" uk-grid>
-        <div v-for="(n, nid) in $_applicationsList" :key="nid" class="uk-width-1-3">
-          <a v-if="n.url" key="external-link" :target="n.target" :href="n.url">
+        <div v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="uk-width-1-3">
+          <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
             <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="xlarge" />
             <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="xlarge" />
             <div>{{ n.title }}</div>
           </a>
-          <router-link v-else key="internal-link" :to="n.path">
+          <router-link v-else key="apps-menu-internal-link" :to="n.path">
             <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="xlarge" />
             <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="xlarge" />
             <div v-text="n.title" />
@@ -38,7 +38,10 @@
 </template>
 
 <script>
+import NavigationMixin from '../mixins/navigationMixin'
+
 export default {
+  mixins: [NavigationMixin],
   props: {
     visible: {
       type: Boolean,
@@ -48,54 +51,15 @@ export default {
     applicationsList: {
       type: Array,
       required: false,
-      default: () => null
+      default: () => []
     }
   },
   computed: {
+    menuItems() {
+      return this.navigation_getMenuItems([null, 'apps', 'appSwitcher'])
+    },
     applicationSwitcherLabel() {
       return this.$gettext('Application Switcher')
-    },
-
-    $_applicationsList() {
-      return this.applicationsList.map(item => {
-        const lang = this.$language.current
-        // TODO: move language resolution to a common function
-        // FIXME: need to handle logic for variants like en_US vs en_GB
-        let title = item.title ? item.title.en : item.name
-        let iconMaterial
-        let iconUrl
-        if (item.title && item.title[lang]) {
-          title = item.title[lang]
-        }
-
-        if (!item.icon) {
-          iconMaterial = 'deprecated' // broken icon
-        } else if (item.icon.indexOf('.') < 0) {
-          // not a file name or URL, treat as a material icon name instead
-          iconMaterial = item.icon
-        } else {
-          iconUrl = item.icon
-        }
-
-        const app = {
-          iconMaterial: iconMaterial,
-          iconUrl: iconUrl,
-          title: title
-        }
-
-        if (item.url) {
-          app.url = item.url
-          app.target = ['_blank', '_self', '_parent', '_top'].includes(item.target)
-            ? item.target
-            : '_blank'
-        } else if (item.path) {
-          app.path = item.path
-        } else {
-          app.path = `/${item.id}`
-        }
-
-        return app
-      })
     }
   },
   watch: {

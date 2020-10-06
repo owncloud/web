@@ -34,7 +34,7 @@
       </oc-grid>
       <div v-if="loading" id="files-list-loading-message" class="uk-position-center">
         <div class="uk-text-center">
-          <oc-spinner id="files-list-progress" size="large" :aria-hidden="true" />
+          <oc-spinner id="files-list-progress" size="large" :aria-hidden="true" aria-label="" />
           <div class="uk-text-muted uk-text-large">
             <slot name="loadingMessage" />
           </div>

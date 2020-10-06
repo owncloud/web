@@ -21,7 +21,11 @@
     >
       <notifications v-if="activeNotifications.length" />
       <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
-      <user-menu :user-id="userId" :user-display-name="userDisplayName" />
+      <user-menu
+        :user-id="userId"
+        :user-display-name="userDisplayName"
+        :applications-list="applicationsList"
+      />
     </oc-grid>
   </header>
 </template>
@@ -56,7 +60,7 @@ export default {
     applicationsList: {
       type: Array,
       required: false,
-      default: () => null
+      default: () => []
     },
     hasAppNavigation: {
       type: Boolean,

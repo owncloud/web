@@ -31,7 +31,3 @@ Then('the user should have following details displayed on the account informatio
     }
   }
 })
-
-When('the user logs out using the webUI', function() {
-  return client.page.accountPage().logout()
-})
