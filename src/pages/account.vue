@@ -4,9 +4,13 @@
     <div v-if="!loading" class="uk-width-3-4@m uk-container oc-p">
       <div class="uk-flex uk-flex-between uk-flex-middle">
         <h1 id="account-page-title" v-translate class="oc-page-title">Account</h1>
-        <oc-button class="account-logout-button" @click="$_oc_settingsAccount_logout">
-          <oc-icon name="exit_to_app" aria-hidden="true" />
-          <translate>Log out</translate>
+        <oc-button v-if="editUrl" variation="primary" type="a" :href="editUrl">
+          <oc-icon name="edit" aria-hidden="true" />
+          <translate>Edit</translate>
+        </oc-button>
+        <oc-button v-else-if="editRoute" variation="primary" type="router-link" :to="editRoute">
+          <oc-icon name="edit" aria-hidden="true" />
+          <translate>Edit</translate>
         </oc-button>
       </div>
       <hr />
@@ -47,7 +51,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Personal',
   data() {
@@ -57,21 +61,30 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension']),
+    editUrl() {
+      if (this.user.version.edition === 'reva') {
+        return null
+      }
+      return this.configuration.server.replace(/\/$/, '') + '/index.php/settings/personal'
+    },
+    editRoute() {
+      const navItems = this.getNavItemsByExtension('settings')
+      if (navItems.length > 0) {
+        return navItems[0].route || {}
+      }
+      return null
+    }
   },
   mounted() {
     this.$_oc_settingsAccount_getGroup()
   },
   methods: {
-    ...mapActions(['logout']),
     $_oc_settingsAccount_getGroup() {
       this.$client.users.getUserGroups(this.user.id).then(groups => {
         this.groups = groups
         this.loading = false
       })
-    },
-    $_oc_settingsAccount_logout() {
-      this.logout()
     }
   }
 }

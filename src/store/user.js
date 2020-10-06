@@ -10,7 +10,7 @@ const state = {
   email: null,
   isAuthenticated: false,
   capabilities: [],
-  version: [],
+  version: {},
   groups: []
 }
 
