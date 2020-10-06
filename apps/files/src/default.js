@@ -87,10 +87,7 @@ const navItems = [
       name: 'files-favorites'
     },
     enabled(capabilities) {
-      if (capabilities.files) {
-        return capabilities.files.favorites
-      }
-      return false
+      return capabilities.files && capabilities.files.favorites
     }
   },
   {
@@ -113,10 +110,7 @@ const navItems = [
     name: $gettext('Deleted files'),
     iconMaterial: 'delete',
     enabled(capabilities) {
-      if (capabilities.dav) {
-        return capabilities.dav.trashbin === '1.0'
-      }
-      return false
+      return capabilities.dav && capabilities.dav.trashbin === '1.0'
     },
     route: {
       name: 'files-trashbin'
