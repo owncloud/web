@@ -1,3 +1,26 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.18.0...master
+
+Summary
+-------
+
+* Change - Customizable menu association: [#4133](https://github.com/owncloud/phoenix/pull/4133)
+
+Details
+-------
+
+* Change - Customizable menu association: [#4133](https://github.com/owncloud/phoenix/pull/4133)
+
+   We now allow the redirect navItems and links into the user menu. This can be done by simply
+   assigning the `"menu": "user"` to the respective navItem. It works for both extensions and
+   external links (`applications` key in config.json).
+
+   https://github.com/owncloud/phoenix/pull/4133
+
 Changelog for ownCloud Phoenix [0.18.0] (2020-10-05)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.18.0 relevant to
