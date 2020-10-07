@@ -134,7 +134,7 @@ config = {
 	'defaults': {
 		'acceptance': {
 			'ocisBranch': 'master',
-			'ocisCommit': '7b8e9bc2981c0fd9917bc576a291ab5231c02685',
+			'ocisCommit': '84ca821fe4490fcce7390c3e59faac49215d9c56',
 		}
 	},
 
@@ -430,6 +430,7 @@ def acceptance():
 							'steps':
 								installNPM() +
 								buildPhoenix() +
+								cloneOCIS(params['ocisBranch']) +
 								(
 									(
 										installCore(server, db) +
@@ -450,7 +451,7 @@ def acceptance():
 										glauthService()+
 										fixPermissions()
 									) if not params['runningOnOCIS'] else (
-										buildOCIS(params['ocisBranch'], params['ocisCommit']) +
+										buildOCIS(params['ocisCommit']) +
 										ocisService() +
 										getSkeletonFiles()
 									)
@@ -1040,6 +1041,7 @@ def buildGlauth():
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'commands': [
+      # using ocis-glauth repo because latest glauth doesn't supports the bridge setup
 			'mkdir -p /srv/app/src',
 			'cd $GOPATH/src',
 			'mkdir -p github.com/owncloud/',
@@ -1088,14 +1090,10 @@ def buildKonnectd():
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'commands': [
-			'mkdir -p /srv/app/src',
-			'cd $GOPATH/src',
-			'mkdir -p github.com/owncloud/',
-			'cd github.com/owncloud/',
-			'git clone http://github.com/owncloud/ocis-konnectd',
-			'cd ocis-konnectd',
+			'cd $GOPATH/src/github.com/owncloud/ocis',
+			'cd konnectd',
 			'make build',
-			'cp bin/ocis-konnectd /var/www/owncloud'
+			'cp bin/konnectd /var/www/owncloud'
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1130,7 +1128,7 @@ def konnectdService():
 		},
 		'commands': [
 			'cd /var/www/owncloud',
-			'./ocis-konnectd  --log-level debug server --signing-kid gen1-2020-02-27',
+			'./konnectd  --log-level debug server --signing-kid gen1-2020-02-27',
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1141,9 +1139,9 @@ def konnectdService():
 		}],
 	}]
 
-def buildOCIS(ocisBranch, ocisCommit):
+def cloneOCIS(ocisBranch):
 	return[{
-		'name': 'build-ocis',
+		'name': 'clone-ocis',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'commands': [
@@ -1152,10 +1150,27 @@ def buildOCIS(ocisBranch, ocisCommit):
 			'mkdir -p github.com/owncloud/',
 			'cd github.com/owncloud/',
 			'git clone -b %s --single-branch --no-tags https://github.com/owncloud/ocis' % (ocisBranch),
-			'cd ocis',
+		],
+		'volumes': [{
+			'name': 'gopath',
+			'path': '/srv/app',
+		}, {
+			'name': 'configs',
+			'path': '/srv/config'
+		}],
+	}]
+
+def buildOCIS(ocisCommit):
+	return[{
+		'name': 'build-ocis',
+		'image': 'webhippie/golang:1.13',
+		'pull': 'always',
+		'commands': [
+			'cd $GOPATH/src/github.com/owncloud/ocis',
 		] + ([
 			'git checkout %s' % (ocisCommit)
 		] if ocisCommit != '' else []) + [
+			'cd ocis',
 			'make build',
 			'cp bin/ocis /var/www/owncloud'
 		],
@@ -1211,11 +1226,7 @@ def buildOcisPhoenix():
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'commands': [
-			'mkdir -p /srv/app/src',
-			'cd $GOPATH/src',
-			'mkdir -p github.com/owncloud/',
-			'cd github.com/owncloud/',
-			'git clone http://github.com/owncloud/ocis-phoenix.git',
+			'cd $GOPATH/src/github.com/owncloud/ocis',
 			'cd ocis-phoenix',
 			'make build',
 			'cp bin/ocis-phoenix /var/www/owncloud'
