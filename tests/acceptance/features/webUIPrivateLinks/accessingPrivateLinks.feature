@@ -46,4 +46,4 @@ Feature: Access private link
 
   Scenario: Access the private link anonymously
     When the user tries to navigate to the private link created by user "user1" for file "lorem.txt"
-    Then the user should be redirected to the login page
+    Then the user should be redirected to the IdP login page
