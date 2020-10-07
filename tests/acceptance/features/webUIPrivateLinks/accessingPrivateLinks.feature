@@ -15,7 +15,8 @@ Feature: Access private link
 
   @smokeTest
   Scenario: Access private link before authorisation
-    Given the user navigates to the private link created by user "user1" for file "lorem.txt"
+    When the user tries to navigate to the private link created by user "user1" for file "lorem.txt"
+    Then the user should be redirected to the IdP login page
     When user "user1" has logged in using the webUI
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
     And the "versions" details panel should be visible
