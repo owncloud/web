@@ -101,3 +101,11 @@ Then('the accounts page should be visible in the webUI', async function() {
 Then('the user should be redirected to the login page', function() {
   return client.page.loginPage().waitForPage()
 })
+
+Then('the user should be redirected to the IdP login page', function() {
+  if (client.globals.openid_login) {
+    return client.page.ocisLoginPage().waitForPage()
+  }
+
+  return client.page.ownCloudAuthorizePage().waitForPage()
+})

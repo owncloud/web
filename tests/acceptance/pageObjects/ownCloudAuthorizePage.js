@@ -29,6 +29,9 @@ module.exports = {
               }
             }
           )
+      },
+      waitForPage: function() {
+        return this.waitForElementVisible('@authorizeButton')
       }
     }
   ]

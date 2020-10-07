@@ -24,7 +24,7 @@ Feature: login users
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
     When the user logs out of the webUI
-    Then the authentication page should be visible
+    Then the user should be redirected to the IdP login page
 
   @ocisSmokeTest
   Scenario: logging out redirects to the url with state attribute
@@ -43,7 +43,6 @@ Feature: login users
         | username |
         | user1    |
       And the user has browsed to the login page
-      And the user has clicked the authenticate button
       When the user tries to log in with username "invalid" and password "1234" using the webUI
       Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
 
@@ -53,7 +52,6 @@ Feature: login users
         | username |
         | user1    |
       And the user has browsed to the login page
-      And the user has clicked the authenticate button
       When the user tries to log in with username "user1" and password "invalid" using the webUI
       Then the files table should be displayed
 #      Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
