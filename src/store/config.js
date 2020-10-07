@@ -28,6 +28,9 @@ const state = {
     },
     filesList: {
       hideDefaultStatusIndicators: false
+    },
+    loginPage: {
+      autoRedirect: true
     }
   },
   options: {
@@ -63,7 +66,7 @@ const mutations = {
     }
   },
   LOAD_THEME(state, theme) {
-    state.theme = theme
+    state.theme = { ...state.theme, ...theme }
   }
 }
 
