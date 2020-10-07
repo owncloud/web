@@ -34,7 +34,7 @@ Feature: login users
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
     When the user logs out of the webUI
-    Then the user should be on page with the url containing "/#/login?state="
+    Then the user should be on page with the url containing "state="
     When user "user1" logs in using the webUI
     Then the files table should be displayed
 

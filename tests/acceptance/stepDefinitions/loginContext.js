@@ -60,7 +60,7 @@ Then('the authentication page should be visible', () => {
 })
 
 Then('the user should be on page with the url containing {string}', function(urlContent) {
-  return client.assert.urlEquals(client.launchUrl + urlContent)
+  return client.assert.urlContains(urlContent)
 })
 
 // combined step
