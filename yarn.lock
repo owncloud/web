@@ -2332,15 +2332,16 @@ chrome-trace-event@^1.0.2:
   dependencies:
     tslib "^1.9.0"
 
-chromedriver@^80.0.1:
-  version "80.0.2"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-80.0.2.tgz#005b9bf19abebf678b5d5670a9f16605c437a154"
-  integrity sha512-MKrTzBtykWuIswRYgUw9dHXr96BShQYSy8NdLlo2LN1mZ17A9nxtz9v0h9z1zKWTVaxT7e0qvo41rSY5BL1i+Q==
+chromedriver@^86.0.0:
+  version "86.0.0"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-86.0.0.tgz#4b9504d5bbbcd4c6bd6d6fd1dd8247ab8cdeca67"
+  integrity sha512-byLJWhAfuYOmzRYPDf4asJgGDbI4gJGHa+i8dnQZGuv+6WW1nW1Fg+8zbBMOfLvGn7sKL41kVdmCEVpQHn9oyg==
   dependencies:
     "@testim/chrome-version" "^1.0.7"
     axios "^0.19.2"
     del "^5.1.0"
-    extract-zip "^2.0.0"
+    extract-zip "^2.0.1"
+    https-proxy-agent "^5.0.0"
     mkdirp "^1.0.4"
     tcp-port-used "^1.0.1"
 
@@ -4044,7 +4045,7 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-extract-zip@^2.0.0, extract-zip@^2.0.1:
+extract-zip@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/extract-zip/-/extract-zip-2.0.1.tgz#663dca56fe46df890d5f131ef4a06d22bb8ba13a"
   integrity sha512-GDhU9ntwuKyGXdZBUgTIe+vXnWj0fppUEtMDL0+idd5Sta8TGpHssn/eusA9mrPr9qNDym6SxAYZjNvCn/9RBg==
