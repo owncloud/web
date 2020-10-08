@@ -1,3 +1,25 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.19.0...master
+
+Summary
+-------
+
+* Change - Enable autoredirect to the IdP: [#4138](https://github.com/owncloud/phoenix/pull/4138)
+
+Details
+-------
+
+* Change - Enable autoredirect to the IdP: [#4138](https://github.com/owncloud/phoenix/pull/4138)
+
+   We've added a key into the theme to enable autoredirect to the IdP when entering ocis-web
+   instead of displaying the login page first. The default value is set to true.
+
+   https://github.com/owncloud/phoenix/pull/4138
+
 Changelog for ownCloud Phoenix [0.19.0] (2020-10-06)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.19.0 relevant to
