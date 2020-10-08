@@ -3,9 +3,15 @@ module.exports = {
     return this.api.launchUrl
   },
   elements: {
-    body: 'body',
+    body: {
+      selector: '#body-login'
+    },
     authorizeButton: {
       selector: 'button[type=submit]'
+    },
+    inputUsername: {
+      selector: '//input[@id="user"]',
+      locateStrategy: 'xpath'
     }
   },
   commands: [
@@ -29,6 +35,22 @@ module.exports = {
               }
             }
           )
+      },
+      waitForPage: async function() {
+        let isLoginPageVisible = false
+
+        await this.waitForElementVisible('@body')
+        await this.api.element('@inputUsername', result => {
+          if (result.status > -1) {
+            isLoginPageVisible = true
+          }
+        })
+
+        if (isLoginPageVisible) {
+          return this.assert.ok(isLoginPageVisible)
+        }
+
+        return this.api.expect.element(this.elements.authorizeButton.selector).to.be.visible
       }
     }
   ]

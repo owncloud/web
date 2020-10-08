@@ -1,0 +1,6 @@
+Change: Enable autoredirect to the IdP
+
+We've added a key into the theme to enable autoredirect to the IdP when entering ocis-web instead of displaying the login page first.
+The default value is set to true.
+
+https://github.com/owncloud/phoenix/pull/4138

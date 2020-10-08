@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-login" uk-height-viewport>
+  <div v-if="initialized" class="oc-login" uk-height-viewport>
     <div class="oc-login-card uk-position-center">
       <h1 v-translate class="oc-login-logo">
         ownCloud
@@ -38,7 +38,8 @@ export default {
   name: 'LoginPage',
   data() {
     return {
-      loading: false
+      loading: false,
+      initialized: false
     }
   },
   computed: {
@@ -48,6 +49,15 @@ export default {
       return this.configuration.theme.general.name
     }
   },
+
+  created() {
+    if (this.configuration.theme.loginPage.autoRedirect) {
+      this.login()
+    } else {
+      this.initialized = true
+    }
+  },
+
   methods: {
     ...mapActions(['login'])
   }

@@ -14,10 +14,7 @@ module.exports = {
    * @param {password} [password=null] - If not passed, default password for given `userId` will be used
    */
   loginAsUser: async function(userId, password = null) {
-    await client.page
-      .loginPage()
-      .navigate()
-      .authenticate()
+    await client.page.loginPage().navigate()
 
     password = password || userSettings.getPasswordForUser(userId)
     if (client.globals.openid_login) {

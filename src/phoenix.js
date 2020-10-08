@@ -87,7 +87,7 @@ const supportedLanguages = {
   gl: 'Galego'
 }
 
-function loadApps () {
+async function loadApps () {
   let plugins = []
   let translations = coreTranslations
 
@@ -168,6 +168,9 @@ function loadApps () {
     silent: true
   })
 
+  // inject custom theme config into vuex
+  await fetchTheme()
+
   const OC = new Vue({
     el: '#owncloud',
     data: {
@@ -181,13 +184,18 @@ function loadApps () {
 
   // externalize Vue - this is not the Vue instance but the class
   window.Vue = Vue
+}
 
-  // inject custom theme config into vuex
-  fetch(`themes/${config.theme}.json`)
-    .then(res => res.json())
-    .then(res => {
-      store.dispatch('loadTheme', { theme: res, name: config.theme })
-    })
+function fetchTheme() {
+  return new Promise((resolve, reject) => {
+    fetch(`themes/${config.theme}.json`)
+      .then(res => res.json())
+      .then(res => {
+        store.dispatch('loadTheme', { theme: res, name: config.theme })
+        resolve(true)
+      })
+      .catch(err => reject(err))
+  })
 }
 
 function registerStoreModule (app) {

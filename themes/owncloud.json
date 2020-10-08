@@ -9,5 +9,8 @@
   },
   "filesList": {
     "hideDefaultStatusIndicators": false
+  },
+  "loginPage": {
+    "autoRedirect": true
   }
 }
