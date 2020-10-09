@@ -227,7 +227,7 @@ After(async function() {
   const createdGroups = userSettings.getCreatedGroups()
 
   if (client.globals.ldap) {
-    const dataDir = user => join(client.globals.ocis_data_dir, 'data', user)
+    const dataDir = user => join(client.globals.ocis_data_dir, user)
     const deleteUserPromises = createdUsers.map(user =>
       ldap.deleteUser(client.globals.ldapClient, user).then(() => {
         console.log('Deleted LDAP User: ', user)

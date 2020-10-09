@@ -132,7 +132,7 @@ exports.createUser = async function(
         userHelper.addUserToCreatedUsersList(user, password, displayName, email)
         const skelDir = client.globals.ocis_skeleton_dir
         if (skelDir) {
-          const dataDir = join(client.globals.ocis_data_dir, 'data', user)
+          const dataDir = join(client.globals.ocis_data_dir, user)
           if (!fs.existsSync(dataDir)) {
             fs.removeSync(dataDir)
             fs.mkdirpSync(dataDir)
