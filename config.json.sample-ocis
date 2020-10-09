@@ -21,11 +21,11 @@
   "external_apps": [
     {
       "id": "accounts",
-      "path": "http://localhost:9200/accounts.js"
+      "path": "https://localhost:9200/accounts.js"
     },
     {
       "id": "settings",
-      "path": "http://localhost:9200/settings.js"
+      "path": "https://localhost:9200/settings.js"
     }
   ]
 }
