@@ -44,7 +44,7 @@ function createUser(userId, password, displayName = false, email = false) {
       if (client.globals.ocis) {
         const skelDir = client.globals.ocis_skeleton_dir
         if (skelDir) {
-          const dataDir = join(client.globals.ocis_data_dir, 'data', userId)
+          const dataDir = join(client.globals.ocis_data_dir, userId)
           if (!fs.existsSync(dataDir)) {
             fs.removeSync(dataDir)
             fs.mkdirpSync(dataDir)
@@ -252,7 +252,7 @@ After(async function() {
   }
 
   if (client.globals.ocis) {
-    const dataDir = user => join(client.globals.ocis_data_dir, 'data', user)
+    const dataDir = user => join(client.globals.ocis_data_dir, user)
     const deleteUserDirectories = createdUsers.map(user => fs.remove(dataDir(user)))
     await Promise.all(deleteUserDirectories)
   }
