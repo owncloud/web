@@ -473,6 +473,7 @@ def acceptance():
 										databaseServiceForFederation(db, federationDbSuffix) if params['federatedServerNeeded'] else []
 									) +
 									owncloudService()
+								if not params['runningOnOCIS'] else []
 								),
 							'depends_on': [],
 							'trigger': {
