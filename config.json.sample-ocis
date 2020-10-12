@@ -14,18 +14,16 @@
   },
   "apps": [
     "files",
-    "draw-io",
-    "markdown-editor",
     "media-viewer"
   ],
   "external_apps": [
     {
-      "id": "accounts",
-      "path": "https://localhost:9200/accounts.js"
-    },
-    {
       "id": "settings",
       "path": "https://localhost:9200/settings.js"
+    },
+    {
+      "id": "accounts",
+      "path": "https://localhost:9200/accounts.js"
     }
   ]
 }
