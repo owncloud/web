@@ -1,3 +1,25 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.20.0...master
+
+Summary
+-------
+
+* Change - Sensible default apps in example configs: [#4155](https://github.com/owncloud/phoenix/pull/4155)
+
+Details
+-------
+
+* Change - Sensible default apps in example configs: [#4155](https://github.com/owncloud/phoenix/pull/4155)
+
+   We adapted the example configs for oc10 and owncloud so that the files and media-viewer apps are
+   enabled by default.
+
+   https://github.com/owncloud/phoenix/pull/4155
+
 Changelog for ownCloud Phoenix [0.20.0] (2020-10-08)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.20.0 relevant to
