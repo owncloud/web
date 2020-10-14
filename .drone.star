@@ -433,8 +433,6 @@ def acceptance():
 										) +
 										setupGraphapiOIdC() +
 										buildGlauth() +
-										buildKonnectd() +
-										buildOcisPhoenix() +
 										konnectdService() +
 										ocisPhoenixService() +
 										glauthService()+
@@ -473,6 +471,9 @@ def acceptance():
 								'temp': {}
 							}, {
 								'name': 'configs',
+								'temp': {}
+							}, {
+								'name': 'dist',
 								'temp': {}
 							}, {
 								'name': 'gopath',
@@ -1064,30 +1065,10 @@ def glauthService():
 		}],
 	}]
 
-def buildKonnectd():
-	return[{
-		'name': 'build-konnectd',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'commands': [
-			'cd $GOPATH/src/github.com/owncloud/ocis',
-			'cd konnectd',
-			'make build',
-			'cp bin/konnectd /var/www/owncloud'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
 def konnectdService():
 	return[{
 		'name': 'konnectd',
-		'image': 'webhippie/golang:1.13',
+		'image': 'owncloud/ocis-konnectd',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
@@ -1106,10 +1087,6 @@ def konnectdService():
 			'LDAP_UUID_ATTRIBUTE_TYPE': 'text',
 			'LDAP_FILTER': "(objectClass=posixaccount)"
 		},
-		'commands': [
-			'cd /var/www/owncloud',
-			'./konnectd  --log-level debug server --signing-kid gen1-2020-02-27',
-		],
 		'volumes': [{
 			'name': 'gopath',
 			'path': '/srv/app',
@@ -1200,31 +1177,11 @@ def ocisService():
 		}],
 	}]
 
-def buildOcisPhoenix():
-	return[{
-		'name': 'build-ocis-phoenix',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'commands': [
-			'cd $GOPATH/src/github.com/owncloud/ocis',
-			'cd ocis-phoenix',
-			'make build',
-			'cp bin/ocis-phoenix /var/www/owncloud'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
 # Ocis-phoenix service just for the oc10 tests
 def ocisPhoenixService():
 	return[{
 		'name': 'phoenix',
-		'image': 'webhippie/golang:1.13',
+		'image': 'owncloud/ocis-phoenix',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
@@ -1232,13 +1189,12 @@ def ocisPhoenixService():
 			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
 			'PHOENIX_OIDC_CLIENT_ID': 'phoenix'
 		},
-		'commands': [
-			'cd /var/www/owncloud',
-			'./ocis-phoenix --log-level debug server',
-		],
 		'volumes': [{
 			'name': 'gopath',
 			'path': '/srv/app',
+		}, {
+			'name': 'dist',
+			'path': '/var/www/owncloud/phoenix/dist',
 		}, {
 			'name': 'configs',
 			'path': '/srv/config'
