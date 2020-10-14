@@ -188,6 +188,32 @@ module.exports = {
     return lastShare
   },
   /**
+   * Asynchronously fetches the last public link created by the given link creator
+   *
+   * @async
+   * @param {string} linkCreator link creator
+   * @param {string} shareID id of the public link share
+   * @param {string} password new password
+   * @return {Promise<Object>} last share token
+   */
+  updatePublicLinkPassword: function(linkCreator, shareID, password) {
+    const apiURL = `apps/files_sharing/api/v1/shares/${shareID}`
+    const body = new URLSearchParams()
+    body.append('password', password)
+    return httpHelper
+      .putOCS(apiURL, linkCreator, body)
+      .then(res => {
+        httpHelper.checkStatus(res, 'Could not update share.')
+        return res.json()
+      })
+      .then(res => {
+        httpHelper.checkOCSStatus(
+          res,
+          'Could not update share password. Message: ' + res.ocs.meta.message
+        )
+      })
+  },
+  /**
    * get a list of all public link shares shared by provided sharer
    *
    * @param sharer user whose all public links are to be fetched

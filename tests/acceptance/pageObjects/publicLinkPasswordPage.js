@@ -20,10 +20,21 @@ module.exports = {
     },
     loginCardDialogBox: {
       selector: '.oc-login-card-body'
+    },
+    publicLinkPasswordSection: {
+      selector:
+        '//div[@class="oc-login-card-body"]//h2[@class="oc-login-card-title"]/span[text()="This resource is password-protected."]',
+      locateStrategy: 'xpath'
     }
   },
   commands: [
     {
+      /**
+       * Wait for the password input section of public link page to appear
+       */
+      waitForVisible: async function() {
+        await this.waitForElementVisible('@publicLinkPasswordSection')
+      },
       /**
        *
        * @param {string} password

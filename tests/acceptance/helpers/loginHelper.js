@@ -34,9 +34,9 @@ module.exports = {
 
   /**
    *
-   * @param {string} userId
+   * Destroy and start a new browser session
    */
-  reLoginAsUser: async function(userId) {
+  startNewSession: async function() {
     let env = 'local'
     if (process.env.DRONE) {
       env = 'drone'
@@ -45,6 +45,14 @@ module.exports = {
     await stopWebDriver()
     await startWebDriver({ env })
     await createSession({ env })
+  },
+
+  /**
+   *
+   * @param {string} userId
+   */
+  reLoginAsUser: async function(userId) {
+    await this.startNewSession()
     return this.loginAsUser(userId)
   },
 
