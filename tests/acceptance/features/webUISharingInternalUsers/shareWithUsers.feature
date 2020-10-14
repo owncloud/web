@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-64
+@ocis-reva-issue-64
 Feature: Sharing files and folders with internal users
   As a user
   I want to share files and folders with other users
