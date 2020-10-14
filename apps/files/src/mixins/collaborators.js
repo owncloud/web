@@ -1,5 +1,6 @@
 import { mapGetters } from 'vuex'
 import roles from '../helpers/collaboratorRolesDefinition'
+import { shareTypes } from '../helpers/shareTypes'
 
 export default {
   computed: {
@@ -80,6 +81,21 @@ export default {
       this.selectedRole = role
       this.additionalPermissions = permissions
       this.expirationDate = expirationDate
+    },
+
+    collaboratorType(type) {
+      switch (type) {
+        case shareTypes.user:
+          return this.$gettext('User')
+        case shareTypes.group:
+          return this.$gettext('Group')
+        case shareTypes.guest:
+          return this.$gettext('Guest')
+        case shareTypes.remote:
+          return this.$gettext('Remote user')
+        default:
+          return this.$gettext('Unknown type')
+      }
     }
   }
 }

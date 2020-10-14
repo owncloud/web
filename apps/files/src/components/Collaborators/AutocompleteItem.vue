@@ -18,8 +18,13 @@
       <oc-icon v-else key="avatar-generic-person" class="oc-mr-s" name="person" size="xlarge" />
     </template>
     <div class="files-collaborators-autocomplete-user-text">
-      <div class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
-      <div v-if="item.value.shareWithAdditionalInfo" v-text="item.value.shareWithAdditionalInfo" />
+      <span class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
+      <span
+        v-if="item.value.shareWithAdditionalInfo"
+        class="uk-text-meta"
+        v-text="item.value.shareWithAdditionalInfo"
+      />
+      <div v-text="collaboratorType(item.value.shareType)" />
     </div>
   </div>
 </template>
@@ -42,7 +47,6 @@ export default {
 
   data() {
     return {
-      shareTypes,
       loading: false
     }
   },
