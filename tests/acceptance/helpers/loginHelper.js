@@ -45,6 +45,7 @@ module.exports = {
     await stopWebDriver()
     await startWebDriver({ env })
     await createSession({ env })
+    await client.windowMaximize()
   },
 
   /**
