@@ -394,12 +394,13 @@ export default {
           if (context.getters.searchTerm !== '') {
             context.dispatch('resetSearch')
           }
+          context.commit('UPDATE_FOLDER_LOADING', false)
         })
         .catch(error => {
+          context.commit('UPDATE_FOLDER_LOADING', false)
           reject(error)
         })
         .finally(() => {
-          context.commit('UPDATE_FOLDER_LOADING', false)
           client.users.getUser(context.rootGetters.user.id).then(res => {
             const quota = res.quota
 
@@ -452,6 +453,7 @@ export default {
         }
         context.dispatch('resetFileSelection')
         context.dispatch('setHighlightedFile', null)
+        context.commit('UPDATE_FOLDER_LOADING', false)
       })
       .catch(e => {
         context.dispatch(
@@ -463,8 +465,6 @@ export default {
           },
           { root: true }
         )
-      })
-      .finally(() => {
         context.commit('UPDATE_FOLDER_LOADING', false)
       })
   },
@@ -489,6 +489,7 @@ export default {
           const files = json.ocs.data
           const uniqueFiles = _aggregateFileShares(files, false)
           context.dispatch('buildFilesSharedFromMe', uniqueFiles)
+          context.commit('UPDATE_FOLDER_LOADING', false)
         })
       })
       .catch(e => {
@@ -501,8 +502,6 @@ export default {
           },
           { root: true }
         )
-      })
-      .finally(() => {
         context.commit('UPDATE_FOLDER_LOADING', false)
       })
   },
@@ -527,6 +526,7 @@ export default {
           const files = json.ocs.data
           const uniqueFiles = _aggregateFileShares(files, true)
           context.dispatch('buildFilesSharedFromMe', uniqueFiles)
+          context.commit('UPDATE_FOLDER_LOADING', false)
         })
       })
       .catch(e => {
@@ -539,8 +539,6 @@ export default {
           },
           { root: true }
         )
-      })
-      .finally(() => {
         context.commit('UPDATE_FOLDER_LOADING', false)
       })
   },
