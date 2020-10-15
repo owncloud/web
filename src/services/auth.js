@@ -94,8 +94,13 @@ export function initVueAuthenticate(config) {
       isAuthenticated() {
         return this.getToken() !== null
       },
-      logout() {
-        return mgr.signoutRedirect()
+      createSignoutRequest(idToken) {
+        return new Promise((resolve, reject) => {
+          mgr
+            .createSignoutRequest(idToken)
+            .then(signoutRequest => resolve(signoutRequest.url))
+            .catch(error => reject(error))
+        })
       },
       clearLoginState() {
         return mgr.removeUser()

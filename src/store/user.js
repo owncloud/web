@@ -26,25 +26,34 @@ const actions = {
     // clear oidc client state
     vueAuthInstance.clearLoginState()
   },
-  logout(context) {
-    const logoutFinalizer = () => {
-      context.dispatch('cleanUpLoginState')
-      context.dispatch('loadSettingsValues')
-      // force redirect to login page after logout
-      router.push({ name: 'login' })
+  async logout({ dispatch }) {
+    const logoutFinalizier = (forceRedirect = false) => {
+      // Remove signed in user
+      dispatch('cleanUpLoginState')
+      dispatch('loadSettingsValues')
+
+      // Force redirect to login
+      if (forceRedirect) {
+        router.push({ name: 'login' })
+      }
     }
-    // TODO: only call logout if we still have the id token
-    const u = vueAuthInstance.getStoredUserObject()
+    const u = await vueAuthInstance.getStoredUserObject()
+
     if (u && u.id_token) {
       vueAuthInstance
-        .logout()
-        .then(logoutFinalizer)
+        .createSignoutRequest({ id_token_hint: u.id_token })
+        .then(signoutRequestUrl => {
+          logoutFinalizier()
+
+          // Navigate to signout URL
+          window.open(signoutRequestUrl, '_self')
+        })
         .catch(error => {
           console.error(error)
-          logoutFinalizer()
         })
     } else {
-      logoutFinalizer()
+      // Oauth2 logout
+      logoutFinalizier(true)
     }
   },
   initAuth(context, payload = { autoRedirect: false }) {
