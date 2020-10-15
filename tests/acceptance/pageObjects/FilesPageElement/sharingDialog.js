@@ -2,6 +2,7 @@ const util = require('util')
 const _ = require('lodash')
 const { COLLABORATOR_PERMISSION_ARRAY, calculateDate } = require('../../helpers/sharingHelper')
 const { client } = require('nightwatch-api')
+const userSettings = require('../../helpers/userSettings')
 const collaboratorDialog = client.page.FilesPageElement.SharingDialog.collaboratorsDialog()
 const SHARE_TYPE_STRING = {
   user: 'user',
@@ -89,8 +90,12 @@ module.exports = {
       shareWithGroup = false,
       remoteShare = false
     ) {
-      let sharee = receiver
+      let sharee = client.globals.ocis
+        ? userSettings.getUsernameFromDisplayname(receiver)
+        : receiver
       if (remoteShare) sharee = util.format('%s@%s', receiver, this.api.globals.remote_backend_url)
+      const autocompleteUser = client.globals.ocis ? receiver : sharee
+
       // We need waitForElementPresent here.
       // waitForElementVisible would break even with 'abortOnFailure: false' if the element is not present
       await this.enterAutoComplete(sharee).waitForElementPresent(
@@ -113,7 +118,7 @@ module.exports = {
       receiverType = remoteShare === true ? SHARE_TYPE_STRING.federation : receiverType
 
       const collaboratorSelector = this.getCollaboratorInAutocompleteListSelector(
-        sharee,
+        autocompleteUser,
         receiverType
       )
 

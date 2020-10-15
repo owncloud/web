@@ -12,108 +12,108 @@ config = {
 	'yarnlint': True,
 
 	'acceptance': {
-		# 'webUI': {
-		# 	'suites': {
-		# 		'webUIBasic': [
-		# 			'webUILogin',
-		# 			'webUINotifications',
-		# 			'webUIPrivateLinks',
-		# 			'webUIPreview',
-		# 			'webUIAccount',
-		# 		],
-		# 		'webUICreateDelete': [
-		# 			'webUICreateFilesFolders',
-		# 			'webUIDeleteFilesFolders',
-		# 		],
-		# 		'webUIRename': [
-		# 			'webUIRenameFiles',
-		# 			'webUIRenameFolders',
-		# 		],
-		# 		'webUISharingBasic': [
-		# 			'webUISharingAcceptShares',
-		# 			'webUISharingAcceptSharesToRoot',
-		# 			'webUIRestrictSharing',
-		# 			'webUISharingNotifications',
-		# 			'webUISharingNotificationsToRoot',
-		# 		],
-		# 		'webUIFavorites': 'Favorites',
-		# 		'webUIFiles': 'Files',
-		# 		'webUISharingAutocompletion': 'SharingAutocompletion',
-		# 		'webUISharingInternalGroups': 'SharingInternalGroups',
-		# 		'webUISharingInternalGroupsToRoot': 'SharingInternalGroupsRoot',
-		# 		'webUISharingInternalUsers': 'SharingInternalUsers',
-		# 		'webUISharingInternalUsersToRoot': 'SharingInternalUsersRoot',
-		# 		'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-		# 		'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-		# 		'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-		# 		'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
-		# 		'webUISharingPermissionToRoot': 'SharingPermissionToRoot',
-		# 		'webUIResharing': 'Resharing',
-		# 		'webUIResharingToRoot': 'ResharingToRoot',
-		# 		'webUISharingPublic': 'SharingPublic',
-		# 		'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
-		# 		'webUITrashbin': 'Trashbin',
-		# 		'webUIUpload': 'Upload',
-		# 		'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
-		# 		'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
-		# 		'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-		# 		'webUIMoveFilesFolders': 'Move',
-		# 	},
-		# 	'extraEnvironment': {
-		# 		'OPENID_LOGIN': 'true',
-		# 		'PHOENIX_CONFIG': '/srv/config/drone/config.json'
-		# 	}
-		# },
-		# 'webUIFederation': {
-		# 	'suites': {
-		# 		'webUISharingExternal': 'SharingExternal',
-		# 		'webUISharingExternalToRoot': 'SharingExternalRoot',
-		# 	},
-		# 	'extraEnvironment': {
-		# 		'OPENID_LOGIN': 'true',
-		# 		'REMOTE_BACKEND_HOST': 'http://federated'
-		# 	},
-		# 	'federatedServerNeeded': True,
-		# 	'federatedServerVersion': 'daily-master-qa'
-		# },
-		# 'webUI-XGA': {
-		# 	'suites': {
-		# 		'all': 'XGAPortrait',
-		# 	},
-		# 	'extraEnvironment': {
-		# 		'OPENID_LOGIN': 'true',
-		# 		'SCREEN_RESOLUTION': '768x1024'
-		# 	},
-		# 	'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
-		# },
-		# 'webUI-iPhone': {
-		# 	'suites': {
-		# 		'all': 'iPhone',
-		# 	},
-		# 	'extraEnvironment': {
-		# 		'OPENID_LOGIN': 'true',
-		# 		'SCREEN_RESOLUTION': '375x812'
-		# 	},
-		# 	'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
-		# },
+		'webUI': {
+			'suites': {
+				'webUIBasic': [
+					'webUILogin',
+					'webUINotifications',
+					'webUIPrivateLinks',
+					'webUIPreview',
+					'webUIAccount',
+				],
+				'webUICreateDelete': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+				],
+				'webUIRename': [
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+				],
+				'webUISharingBasic': [
+					'webUISharingAcceptShares',
+					'webUISharingAcceptSharesToRoot',
+					'webUIRestrictSharing',
+					'webUISharingNotifications',
+					'webUISharingNotificationsToRoot',
+				],
+				'webUIFavorites': 'Favorites',
+				'webUIFiles': 'Files',
+				'webUISharingAutocompletion': 'SharingAutocompletion',
+				'webUISharingInternalGroups': 'SharingInternalGroups',
+				'webUISharingInternalGroupsToRoot': 'SharingInternalGroupsRoot',
+				'webUISharingInternalUsers': 'SharingInternalUsers',
+				'webUISharingInternalUsersToRoot': 'SharingInternalUsersRoot',
+				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
+				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
+				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
+				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
+				'webUISharingPermissionToRoot': 'SharingPermissionToRoot',
+				'webUIResharing': 'Resharing',
+				'webUIResharingToRoot': 'ResharingToRoot',
+				'webUISharingPublic': 'SharingPublic',
+				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
+				'webUITrashbin': 'Trashbin',
+				'webUIUpload': 'Upload',
+				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
+				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
+				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
+				'webUIMoveFilesFolders': 'Move',
+			},
+			'extraEnvironment': {
+				'OPENID_LOGIN': 'true',
+				'PHOENIX_CONFIG': '/srv/config/drone/config.json'
+			}
+		},
+		'webUIFederation': {
+			'suites': {
+				'webUISharingExternal': 'SharingExternal',
+				'webUISharingExternalToRoot': 'SharingExternalRoot',
+			},
+			'extraEnvironment': {
+				'OPENID_LOGIN': 'true',
+				'REMOTE_BACKEND_HOST': 'http://federated'
+			},
+			'federatedServerNeeded': True,
+			'federatedServerVersion': 'daily-master-qa'
+		},
+		'webUI-XGA': {
+			'suites': {
+				'all': 'XGAPortrait',
+			},
+			'extraEnvironment': {
+				'OPENID_LOGIN': 'true',
+				'SCREEN_RESOLUTION': '768x1024'
+			},
+			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
+		},
+		'webUI-iPhone': {
+			'suites': {
+				'all': 'iPhone',
+			},
+			'extraEnvironment': {
+				'OPENID_LOGIN': 'true',
+				'SCREEN_RESOLUTION': '375x812'
+			},
+			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
+		},
 		'webUI-ocis': {
 			'suites': {
-				# 'webUIOCIS1': [
-				# 	'webUICreateFilesFolders',
-				# 	'webUIDeleteFilesFolders',
-				# 	'webUIFavorites',
-				# 	'webUIFiles',
-				# 	'webUILogin',
-				# 	'webUINotifications',
-				# ],
-				# 'webUIOCIS2': [
-				# 	'webUIPrivateLinks',
-				# 	'webUIRenameFiles',
-				# 	'webUIRenameFolders',
-				# 	'webUITrashbin',
-				# 	'webUIUpload',
-				# 	'webUIAccount'
-				# ],
+				'webUIOCIS1': [
+					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
+					'webUIFavorites',
+					'webUIFiles',
+					'webUILogin',
+					'webUINotifications',
+				],
+				'webUIOCIS2': [
+					'webUIPrivateLinks',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUITrashbin',
+					'webUIUpload',
+					'webUIAccount'
+				],
 				'webUIOCIS3': [
 					'webUISharingInternalUsers',
 					'webUISharingPermissionsUsers',

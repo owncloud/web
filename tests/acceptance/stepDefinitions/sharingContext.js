@@ -1349,6 +1349,10 @@ When(
   }
 )
 
+When('the user opens the sharing sidebar for file/folder {string}', function(file) {
+  return client.page.FilesPageElement.filesList().openSideBar(file)
+})
+
 When('the user shares file/folder/resource {string} with user {string} using the webUI', function(
   resource,
   user

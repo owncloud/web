@@ -13,7 +13,7 @@ Feature: Sharing files and folders with internal users
       | user2    |
 
   @yetToImplement
-  @smokeTest
+  @smokeTest @skipOnOCIS @issue-product-203
   Scenario Outline: share a file & folder with another internal user
     Given user "user2" has logged in using the webUI
     When the user shares folder "simple-folder" with user "User One" as "<set-role>" using the webUI
@@ -55,7 +55,8 @@ Feature: Sharing files and folders with internal users
       | Viewer               | Viewer        | read                      | read             |
       | Editor               | Editor        | read,update,create,delete | read,update      |
       | Advanced permissions | Viewer        | read                      | read             |
-
+  
+  @skipOnOCIS @issue-product-203
   Scenario Outline: change the collaborators of a file & folder
     Given user "user2" has logged in using the webUI
     And user "user2" has shared folder "/simple-folder" with user "user1" with "<initial-permissions>" permissions
@@ -143,7 +144,7 @@ Feature: Sharing files and folders with internal users
     Then folder "new-simple-folder" should be listed on the webUI
     And as "user2" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
 
-  @issue-4102
+  @issue-4102 @skipOnOCIS @issue-product-270
   # Delete this scenario and use the one above after the issue is fixed
   Scenario: share a folder with another internal user who unshares the folder
     Given user "user2" has logged in using the webUI
@@ -160,6 +161,7 @@ Feature: Sharing files and folders with internal users
     Then folder "new-simple-folder" should be listed on the webUI
     And as "user2" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
 
+  @skipOnOCIS @issue-product-270
   Scenario: share a folder with another internal user and prohibit deleting
     Given user "user2" has logged in using the webUI
     And user "user2" has shared folder "simple-folder" with user "user1" with "create, read, share" permissions
@@ -169,6 +171,7 @@ Feature: Sharing files and folders with internal users
     And the user opens folder "simple-folder" using the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
+  @skipOnOCIS @issue-#4192
   Scenario: share a folder with other user and then it should be listed on Shared with You for other user
     Given user "user2" has renamed folder "simple-folder" to "new-simple-folder"
     And user "user2" has renamed file "lorem.txt" to "ipsum.txt"
@@ -216,6 +219,7 @@ Feature: Sharing files and folders with internal users
     And the administrator adds group "grp1" to the group sharing blacklist using the webUI
     Then user "user1" should not be able to share file "testimage.jpg" with user "user3" using the sharing API
 
+  @skipOnOCIS @issue-ocis-reva-34
   Scenario: member of a blacklisted from sharing group tries to re-share a file or folder received as a share
     Given these users have been created with default attributes:
       | username |
@@ -233,6 +237,7 @@ Feature: Sharing files and folders with internal users
     Then the user should not be able to share file "testimage.jpg" using the webUI
     And the user should not be able to share folder "simple-folder" using the webUI
 
+  @skipOnOCIS @issue-ocis-reva-34
   Scenario: member of a blacklisted from sharing group tries to re-share a file inside a folder received as a share
     Given these users have been created with default attributes:
       | username |
@@ -250,6 +255,7 @@ Feature: Sharing files and folders with internal users
     When the user opens folder "common" using the webUI
     Then the user should not be able to share file "testimage.jpg" using the webUI
 
+  @skipOnOCIS @issue-ocis-reva-34
   Scenario: member of a blacklisted from sharing group tries to re-share a folder inside a folder received as a share
     Given these users have been created with default attributes:
       | username |
@@ -267,6 +273,7 @@ Feature: Sharing files and folders with internal users
     When the user opens folder "common" using the webUI
     Then the user should not be able to share folder "inside-common" using the webUI
 
+  @skipOnOCIS @issue-ocis-reva-34
   Scenario: user tries to share a file or folder from a group which is blacklisted from sharing from files page
     Given group "grp1" has been created
     And user "user1" has been added to group "grp1"
@@ -276,6 +283,7 @@ Feature: Sharing files and folders with internal users
     Then the user should not be able to share file "testimage.jpg" using the webUI
     And the user should not be able to share folder "simple-folder" using the webUI
 
+  @skipOnOCIS @issue-ocis-reva-34
   Scenario: user tries to re-share a file from a group which is blacklisted from sharing using webUI from shared with you page
     Given group "grp1" has been created
     And user "user1" has been added to group "grp1"
@@ -291,6 +299,7 @@ Feature: Sharing files and folders with internal users
     And the user types "User Three" in the share-with-field
     Then "user" "User Three" should not be listed in the autocomplete list on the webUI
 
+  @skipOnOCIS @issue-4193
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with user "user2"
@@ -303,6 +312,7 @@ Feature: Sharing files and folders with internal users
     And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "user2" file "Shares/lorem.txt" should not exist
 
+  @skipOnOCIS @issue-4193
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given user "user3" has been created with default attributes
     And user "user1" has logged in using the webUI
@@ -337,6 +347,7 @@ Feature: Sharing files and folders with internal users
     Then folder "simple-folder" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI
 
+  @skipOnOCIS @issue-4170
   Scenario: clicking a folder on shared-with-me page jumps to the main file list inside the folder
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
@@ -387,13 +398,14 @@ Feature: Sharing files and folders with internal users
     And as "user1" file "lorem.txt" should not exist
     And as "user1" folder "simple-folder" should not exist
 
-  @issue-2060
+  @issue-4167
   Scenario: sharing indicator of items inside a shared folder two levels down
     Given user "user1" has created folder "/simple-folder/simple-empty-folder/new-folder"
     And user "user1" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/lorem.txt"
     And user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
     When user "user1" has logged in using the webUI
+    And the user opens the sharing sidebar for folder "simple-folder"
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | simple-folder | user-direct        |
@@ -407,7 +419,7 @@ Feature: Sharing files and folders with internal users
       | new-folder | user-indirect      |
       | lorem.txt  | user-indirect      |
 
-  @issue-2060
+  @issue-4167
   Scenario: sharing indicator of items inside a re-shared folder
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -415,6 +427,7 @@ Feature: Sharing files and folders with internal users
     And user "user2" has shared folder "Shares/simple-folder" with user "user3"
     When user "user2" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
+    And the user opens the sharing sidebar for folder "simple-folder"
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | simple-folder | user-direct        |
@@ -424,7 +437,7 @@ Feature: Sharing files and folders with internal users
       | simple-empty-folder | user-indirect      |
       | lorem.txt           | user-indirect      |
 
-  @issue-2060
+  @issue-4167 @skipOnOCIS @issue-4171
   Scenario: sharing indicator of items inside a re-shared subfolder
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -432,21 +445,25 @@ Feature: Sharing files and folders with internal users
     And user "user2" has shared folder "Shares/simple-folder/simple-empty-folder" with user "user3"
     When user "user2" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
+    And the user opens the sharing sidebar for folder "simple-folder"
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | simple-folder | user-indirect      |
     When the user opens folder "simple-folder" using the webUI
+    And the user opens the sharing sidebar for file "lorem.txt"
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
       | simple-empty-folder | user-direct        |
       | lorem.txt           | user-indirect      |
 
   @issue-2060
+  @issue-4167
   Scenario: sharing indicator of items inside an incoming shared folder
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
     When user "user2" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
+    And the user opens the sharing sidebar for folder "simple-folder"
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | simple-folder | user-indirect      |
@@ -456,7 +473,7 @@ Feature: Sharing files and folders with internal users
       | simple-empty-folder | user-indirect      |
       | lorem.txt           | user-indirect      |
 
-  @issue-2060
+  @issue-2060 @skipOnOCIS @issue-4172
   Scenario: no sharing indicator of items inside a not shared folder
     Given user "user1" has shared file "/textfile0.txt" with user "user2"
     And user "user2" has accepted the share "textfile0.txt" offered by user "user1"
@@ -488,7 +505,7 @@ Feature: Sharing files and folders with internal users
       | fileName   | expectedIndicators |
       | sub-folder | user-indirect      |
 
-  @issue-2939
+  @issue-2939 @skipOnOCIS @issue-4193
   Scenario: sharing indicator for user shares stays up to date
     Given user "user3" has been created with default attributes
     And user "user4" has been created with default attributes
@@ -526,7 +543,7 @@ Feature: Sharing files and folders with internal users
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
 
-  @issue-2897
+  @issue-2897 @skipOnOCIS @issue-4193
   Scenario: sharing details of items inside a shared folder
     Given user "user3" has been created with default attributes
     And user "user1" has uploaded file with content "test" to "/simple-folder/lorem.txt"
@@ -553,7 +570,7 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "User Three" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
 
-  @issue-2897
+  @issue-2897 @skipOnOCIS @issue-4193
   Scenario: sharing details of items inside a shared folder shared with multiple users
     Given user "user3" has been created with default attributes
     And user "user1" has created folder "/simple-folder/sub-folder"
@@ -588,7 +605,8 @@ Feature: Sharing files and folders with internal users
     Then user "User One" should be listed as "Owner" reshared through "User Two" in the collaborators list on the webUI
     And the current collaborators list should have order "User One,User Three"
 
-  @issue-2898
+  @issue-2898 
+  @skipOnOCIS @issue-4168
   Scenario: see resource owner of parent shares in collaborators list
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -603,6 +621,7 @@ Feature: Sharing files and folders with internal users
     And the current collaborators list should have order "User One,User Three"
 
   @issue-3040 @issue-4113
+  @skipOnOCIS @ocis-reva-issue-39 
   Scenario: see resource owner of parent shares in "shared with others" and "favorites" list
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -626,6 +645,7 @@ Feature: Sharing files and folders with internal users
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "User One" should be listed as "Owner" in the collaborators list on the webUI
 
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario Outline: collaborators list contains additional info when enabled
     Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>"
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -658,6 +678,7 @@ Feature: Sharing files and folders with internal users
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "User Two" should be listed with additional info "(me)" in the collaborators list on the webUI
 
+  @skipOnOCIS @issue-ocis-reva-34
   Scenario: current user should see the highest role in their entry in collaborators list
     Given group "grp1" has been created
     And user "user2" has been added to group "grp1"
@@ -669,12 +690,14 @@ Feature: Sharing files and folders with internal users
     And the user opens folder "Shares" using the webUI
     Then user "User Two" should be listed as "Editor" in the collaborators list for folder "simple-folder (2)" on the webUI
 
+  @skipOnOCIS @issue-4169
   Scenario: share a file with another internal user which should expire after 2 days
     Given user "user1" has logged in using the webUI
     When the user shares file "testimage.jpg" with user "User Two" which expires in "+2" days using the webUI
     And user "user2" accepts the share "testimage.jpg" offered by user "user1" using the sharing API
     Then user "user2" should have received a share with target "Shares/testimage.jpg" and expiration date in 2 days
 
+  @skipOnOCIS @issue-4169
   Scenario: share a file with another internal user with default expiration date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And default expiration date for users is set to 3 days
@@ -683,6 +706,7 @@ Feature: Sharing files and folders with internal users
     And user "user2" accepts the share "testimage.jpg" offered by user "user1" using the sharing API
     Then user "user2" should have received a share with target "Shares/testimage.jpg" and expiration date in 3 days
 
+  @skipOnOCIS @issue-4169
   Scenario: change existing expiration date of an existing share with another internal user
     Given user "user1" has created a new share with following settings
       | path       | lorem.txt |
@@ -701,6 +725,7 @@ Feature: Sharing files and folders with internal users
       | share_with  | user2             |
       | expiration  | +7                |
 
+  @skipOnOCIS @issue-4169
   Scenario: share a resource with another internal user with expiration date within enforced maximum expiration date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
@@ -717,6 +742,7 @@ Feature: Sharing files and folders with internal users
       | share_with  | user2             |
       | expiration  | +4                |
 
+  @skipOnOCIS @issue-4169
   Scenario Outline: share a resource with another internal user with expiration date beyond enforced maximum expiration date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
@@ -730,6 +756,7 @@ Feature: Sharing files and folders with internal users
       | lorem.txt       |
       | simple-folder   |
 
+  @skipOnOCIS @issue-4169
   Scenario Outline: edit a share with another internal user changing expiration date within enforced maximum expiration date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
@@ -747,6 +774,7 @@ Feature: Sharing files and folders with internal users
       | lorem.txt       |
       | simple-folder   |
 
+  @skipOnOCIS @issue-4169
   Scenario: user cannot concurrently update the role and date of a share after the system maximum expiry date has been reduced
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
@@ -771,6 +799,7 @@ Feature: Sharing files and folders with internal users
       | expiration  | +30        |
       | permissions | read       |
 
+  @skipOnOCIS @issue-4169
   Scenario: user cannot update the date of a share after the system maximum expiry date has been reduced
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
@@ -793,6 +822,7 @@ Feature: Sharing files and folders with internal users
       | expiration | +30        |
 
   @issue-3174
+  @skipOnOCIS @issue-4169
   Scenario Outline: enforced expiry date for group affect user shares
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
@@ -817,6 +847,7 @@ Feature: Sharing files and folders with internal users
       | simple-folder   |
 
   @issue-3174
+  @skipOnOCIS @issue-4169
   Scenario Outline: enforced expiry date for users affect group sharess
     Given group "grp1" has been created
     And user "user2" has been added to group "grp1"
@@ -842,6 +873,7 @@ Feature: Sharing files and folders with internal users
       | lorem.txt       |
       | simple-folder   |
 
+  @skipOnOCIS @issue-4169
   Scenario: change existing expiration date of an existing share to a date beyond the enforced maximum expiry date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "7"
@@ -857,6 +889,7 @@ Feature: Sharing files and folders with internal users
     And the expiration date shown on the webUI should be "+7" days
     And it should not be possible to save the pending share on the webUI
 
+  @skipOnOCIS @issue-4169
   Scenario: setting default expiration date and enforcing it does not change the expiration date of a previously created share
     Given user "user1" has created a new share with following settings
       | path      | lorem.txt |
@@ -867,6 +900,7 @@ Feature: Sharing files and folders with internal users
     When user "user1" logs in using the webUI
     Then the share "lorem.txt" shared with user "User Two" should have no expiration information displayed on the WebUI
 
+  @skipOnOCIS @issue-4169
   Scenario: setting default expiration date and enforcing it does not change the expiration date of a previously created share which is beyond the new maximum date(enforced)
     Given user "user1" has created a new share with following settings
       | path       | lorem.txt |
@@ -878,6 +912,7 @@ Feature: Sharing files and folders with internal users
     When user "user1" logs in using the webUI
     Then the expiration information displayed on the WebUI of share "lorem.txt" shared with user "User Two" should be "Expires in 15 days" or "Expires in 14 days"
 
+  @skipOnOCIS @issue-product-203
   Scenario: share a file with another internal user via collaborators quick action
     Given user "user1" has logged in using the webUI
     When the user shares resource "simple-folder" with user "User Two" using the quick action in the webUI
@@ -891,6 +926,7 @@ Feature: Sharing files and folders with internal users
       | item_type   | folder                |
       | permissions | read                  |
 
+  @skipOnOCIS @issue-product-203
   Scenario Outline: Share files/folders with special characters in their name
     Given user "user2" has created folder "Sample,Folder,With,Comma"
     And user "user2" has created file "sample,1.txt"

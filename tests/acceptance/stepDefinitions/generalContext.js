@@ -187,6 +187,9 @@ Given('the setting {string} of app {string} has been set to {string}', function(
   app,
   value
 ) {
+  if (client.globals.ocis) {
+    return
+  }
   return occHelper.runOcc(['config:app:set', app, setting, '--value=' + value])
 })
 

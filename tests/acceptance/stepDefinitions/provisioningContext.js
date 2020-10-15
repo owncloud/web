@@ -9,6 +9,7 @@ const codify = require('../helpers/codify')
 const { join } = require('../helpers/path')
 
 const ldap = require('../helpers/ldapHelper')
+const sharingHelper = require('../helpers/sharingHelper')
 
 function createDefaultUser(userId) {
   const password = userSettings.getPasswordForUser(userId)
@@ -31,6 +32,7 @@ function createUser(userId, password, displayName = false, email = false) {
   }
   body.append('userid', userId)
   body.append('password', password)
+  body.append('displayname', displayName)
   const promiseList = []
 
   userSettings.addUserToCreatedUsersList(userId, password, displayName, email)
@@ -226,6 +228,18 @@ After(async function() {
   const createdRemoteUsers = Object.keys(userSettings.getCreatedUsers('REMOTE'))
   const createdGroups = userSettings.getCreatedGroups()
 
+  if (client.globals.ocis) {
+    const deleteSharePromises = createdUsers.map(user => {
+      return sharingHelper.getAllSharesSharedByUser(user).then(shares => {
+        if (shares.length) {
+          return Promise.all(shares.map(share => sharingHelper.deleteShare(share.id, user)))
+        }
+      })
+    })
+    await Promise.all(deleteSharePromises).catch(err => {
+      console.log('Error while deleting: ', err)
+    })
+  }
   if (client.globals.ldap) {
     const dataDir = user => join(client.globals.ocis_data_dir, user)
     const deleteUserPromises = createdUsers.map(user =>

@@ -2,6 +2,7 @@ const httpHelper = require('./httpHelper')
 const { normalize } = require('./path')
 const codify = require('../helpers/codify')
 const assert = require('assert')
+const { client } = require('nightwatch-api')
 
 module.exports = {
   SHARE_TYPES: Object.freeze({
@@ -342,12 +343,46 @@ module.exports = {
         .postOCS(apiURL, user)
         .then(res => {
           res = httpHelper.checkStatus(res, 'The response status is not the expected value')
+          if (client.globals.ocis) return res.text()
           return res.json()
         })
         .then(res => {
+          if (client.globals.ocis) {
+            if (res !== '') {
+              throw new Error(`
+              This is a good error, seems like a bug in ocis has been fixed,
+              just fire up your text editor and remove this line,
+              dont forget to keep your fingers crossed in the meantime.
+              More on https://github.com/owncloud/product/issues/207
+            `)
+            }
+            return
+          }
           httpHelper.checkOCSStatus(res, 'Could not perform the accept action')
         })
     }
+  },
+
+  /**
+   * Asynchronously delete the share with given shareID
+   *
+   * @async
+   * @param {string} shareID
+   * @param {string} user
+   *
+   */
+  deleteShare: async function(shareID, user) {
+    const apiURL = `apps/files_sharing/api/v1/shares/${shareID}`
+    return httpHelper
+      .deleteOCS(apiURL, user)
+      .then(res => {
+        res = httpHelper.checkStatus(res, 'The response status is not the expected value')
+        console.log('deleted Share')
+        return res.json()
+      })
+      .then(res => {
+        return httpHelper.checkOCSStatus(res, `Could not delete the share with id ${shareID}`)
+      })
   },
   /**
    * Asynchronously accepts the shares in pending state and meeting the conditions

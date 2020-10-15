@@ -12,6 +12,7 @@ Feature: Sharing files and folders with internal users with different permission
       | user1    |
       | user2    |
 
+  @skipOnOCIS @issue-product-203
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -28,6 +29,7 @@ Feature: Sharing files and folders with internal users with different permission
       | permissions | read, share        |
 
   @issue-1853
+  @skipOnOCIS @issue-product-207
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, create, delete" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -44,6 +46,7 @@ Feature: Sharing files and folders with internal users with different permission
       | permissions | read, share, create, delete |
 
   @issue-1853
+  @skipOnOCIS @issue-product-207
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, create" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -59,6 +62,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder               |
       | permissions | read, update, delete |
 
+  @skipOnOCIS @issue-product-207
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, delete" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -74,6 +78,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder              |
       | permissions | read, create, share |
 
+  @skipOnOCIS @issue-product-203
   Scenario Outline: share a folder with another internal user assigning a role and the permissions
     Given user "user2" has logged in using the webUI
     When the user shares folder "simple-folder" with user "User One" as "<role>" with permissions "<extra-permissions>" using the webUI
@@ -95,6 +100,7 @@ Feature: Sharing files and folders with internal users with different permission
       | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
       | Advanced permissions | Editor                  | delete, share, create, update | share                 | read, share, delete, update, create |
 
+  @skipOnOCIS @issue-product-203
   Scenario Outline: Change permissions of the previously shared file
     Given user "user2" has shared file "lorem.txt" with user "user1" with "<initial-permissions>" permissions
     And user "user1" has accepted the share "lorem.txt" offered by user "user2"
@@ -114,6 +120,7 @@ Feature: Sharing files and folders with internal users with different permission
       | read, update        | read, share, update |
       | read                | read, share         |
 
+  @skipOnOCIS @issue-product-203
   Scenario: Delete all custom permissions of the previously shared file
     Given user "user2" has shared file "lorem.txt" with user "user1" with "read, share" permissions
     And user "user1" has accepted the share "lorem.txt" offered by user "user2"
@@ -129,6 +136,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | file           |
       | permissions | read           |
 
+  @skipOnOCIS @issue-product-203
   Scenario Outline: share a file with another internal user assigning a role and the permissions
     Given user "user2" has logged in using the webUI
     When the user shares file "lorem.txt" with user "User One" as "<role>" with permissions "<collaborators-permissions>" using the webUI
@@ -156,6 +164,7 @@ Feature: Sharing files and folders with internal users with different permission
     Then user "User One" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "User One" for folder "simple-folder" on the webUI
 
+  @skipOnOCIS @issue-product-207
   Scenario: Resource owner upgrades share permissions of a re-share
     Given user "user3" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
@@ -173,6 +182,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder               |
       | permissions | delete, read, update |
 
+  @skipOnOCIS @issue-product-207
   Scenario: User is not allowed to reshare sub-folder with more permissions
     Given user "user3" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
@@ -185,6 +195,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "user3" should not have received any shares
     And as "user3" folder "/Shares/simple-empty-folder" should not exist
 
+  @skipOnOCIS @issue-product-207
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
     Given user "user3" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete, update" permissions
@@ -197,7 +208,8 @@ Feature: Sharing files and folders with internal users with different permission
     Then the error message with header "Error while sharing." should be displayed on the webUI
     And user "user3" should not have received any shares
     And as "user3" folder "/Shares/simple-empty-folder" should not exist
-
+  
+  @skipOnOCIS @issue-product-203
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
     Given user "user3" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "all" permissions
