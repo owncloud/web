@@ -117,6 +117,9 @@ config = {
 				'webUIOCIS3': [
 					'webUISharingInternalUsers',
 					'webUISharingPermissionsUsers',
+					'webUIRestrictSharing',
+					'webUIResharing',
+					'webUISharingAcceptShares',
 				],
 			},
 			'extraEnvironment': {
