@@ -176,6 +176,19 @@ module.exports = {
       return userId
     }
   },
+
+  /**
+   * gets the username of a previously created user from displayName
+   *
+   * @param {string} displayName
+   */
+  getUsernameFromDisplayname: function(displayName) {
+    for (const userid in this.createdUsers) {
+      if (this.createdUsers[userid].displayname === displayName) {
+        return userid
+      }
+    }
+  },
   /**
    * gets the display name of the specified user from the default users list
    * returns null if the user is not in that list

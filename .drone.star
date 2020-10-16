@@ -113,7 +113,11 @@ config = {
 					'webUITrashbin',
 					'webUIUpload',
 					'webUIAccount'
-				]
+				],
+				'webUIOCIS3': [
+					'webUISharingInternalUsers',
+					'webUISharingPermissionsUsers',
+				],
 			},
 			'extraEnvironment': {
 				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
