@@ -29,7 +29,7 @@ Feature: Sharing files and folders with internal users with different permission
       | permissions | read, share        |
 
   @issue-1853
-  @skipOnOCIS @issue-product-207
+  @skipOnOCIS @issue-product-270
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, create, delete" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -46,7 +46,7 @@ Feature: Sharing files and folders with internal users with different permission
       | permissions | read, share, create, delete |
 
   @issue-1853
-  @skipOnOCIS @issue-product-207
+  @skipOnOCIS @issue-product-270
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, create" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -62,7 +62,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder               |
       | permissions | read, update, delete |
 
-  @skipOnOCIS @issue-product-207
+  @skipOnOCIS @issue-product-270
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, delete" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -164,7 +164,7 @@ Feature: Sharing files and folders with internal users with different permission
     Then user "User One" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "User One" for folder "simple-folder" on the webUI
 
-  @skipOnOCIS @issue-product-207
+  @skipOnOCIS @issue-product-270
   Scenario: Resource owner upgrades share permissions of a re-share
     Given user "user3" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
@@ -182,7 +182,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder               |
       | permissions | delete, read, update |
 
-  @skipOnOCIS @issue-product-207
+  @skipOnOCIS @issue-product-270
   Scenario: User is not allowed to reshare sub-folder with more permissions
     Given user "user3" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
@@ -195,7 +195,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "user3" should not have received any shares
     And as "user3" folder "/Shares/simple-empty-folder" should not exist
 
-  @skipOnOCIS @issue-product-207
+  @skipOnOCIS @issue-product-270
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
     Given user "user3" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete, update" permissions
