@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-64
+@skipOnOCIS @ocis-reva-issue-34 @ocis-reva-issue-194 @issue-product-203
 Feature: Sharing folders with internal groups with role as advanced permissions
   As a user
   I want to set different permissions on shared folders with groups
@@ -40,19 +40,19 @@ Feature: Sharing folders with internal groups with role as advanced permissions
     And group "grp2" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "User Three" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "user2" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | grp2                 |
-      | file_target | /Shares/simple-folder  |
-      | item_type   | folder               |
-      | permissions | <actual-permissions> |
+      | field       | value                 |
+      | uid_owner   | user1                 |
+      | share_with  | grp2                  |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <actual-permissions>  |
     And user "user3" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user3                |
-      | file_target | /Shares/simple-folder  |
-      | item_type   | folder               |
-      | permissions | <actual-permissions> |
+      | field       | value                 |
+      | uid_owner   | user1                 |
+      | share_with  | user3                 |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <actual-permissions>  |
     But group "grp1" should not be listed in the collaborators list on the webUI
     And as "user1" folder "/Shares/simple-folder" should not exist
     Examples:

@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-64
+@skipOnOCIS @issue-product-203
 Feature: Sharing files with multiple internal users with different permissions
   As a user
   I want to set different permissions on shared files with other users
@@ -40,14 +40,14 @@ Feature: Sharing files with multiple internal users with different permissions
       | field       | value                |
       | uid_owner   | user1                |
       | share_with  | user2                |
-      | file_target | /Shares/lorem.txt       |
+      | file_target | /Shares/lorem.txt    |
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     And user "user3" should have received a share with these details:
       | field       | value                |
       | uid_owner   | user1                |
       | share_with  | user3                |
-      | file_target | /Shares/lorem.txt       |
+      | file_target | /Shares/lorem.txt    |
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     But user "Regular User" should not be listed in the collaborators list on the webUI
