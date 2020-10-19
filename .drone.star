@@ -122,6 +122,14 @@ config = {
 					'webUISharingAcceptShares',
 					'webUISharingAutocompletion',
 				],
+				'webUIOCIS4': [
+					'webUISharingFilePermissionMultipleUsers',
+					'webUISharingFilePermissionsGroups',
+					'webUISharingFolderAdvancedPermissionMultipleUsers',
+					'webUISharingFolderAdvancedPermissionsGroups',
+					'webUISharingFolderPermissionMultipleUsers',
+					'webUISharingFolderPermissionsGroups',
+				],
 			},
 			'extraEnvironment': {
 				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
