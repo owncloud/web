@@ -178,7 +178,7 @@ Given('these users have been created with default attributes but not initialized
 ) {
   return Promise.all(
     dataTable.rows().map(userId => {
-      return deleteUser(userId).then(() => createDefaultUser(userId))
+      return deleteUser(userId.toString()).then(() => createDefaultUser(userId.toString()))
     })
   )
 })
