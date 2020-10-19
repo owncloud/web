@@ -120,6 +120,7 @@ config = {
 					'webUIRestrictSharing',
 					'webUIResharing',
 					'webUISharingAcceptShares',
+					'webUISharingAutocompletion',
 				],
 			},
 			'extraEnvironment': {
