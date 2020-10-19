@@ -55,7 +55,7 @@ Feature: Sharing files and folders with internal users
       | Viewer               | Viewer        | read                      | read             |
       | Editor               | Editor        | read,update,create,delete | read,update      |
       | Advanced permissions | Viewer        | read                      | read             |
-  
+
   @skipOnOCIS @issue-product-203
   Scenario Outline: change the collaborators of a file & folder
     Given user "user2" has logged in using the webUI
@@ -71,6 +71,31 @@ Feature: Sharing files and folders with internal users
       | uid_owner   | user2                  |
       | share_with  | user1                  |
       | file_target | /Shares/simple-folder  |
+      | item_type   | folder                 |
+      | permissions | <expected-permissions> |
+    Examples:
+      | initial-permissions | set-role             | expected-role | expected-permissions      |
+      | read,update,create  | Viewer               | Viewer        | read                      |
+      | read                | Editor               | Editor        | read,update,create,delete |
+      | read                | Advanced permissions | Viewer        | read                      |
+      | all                 | Advanced permissions | Editor        | all                       |
+
+  @skipOnOC10 @issue-product-203
+  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  Scenario Outline: change the collaborators of a file & folder
+    Given user "user2" has logged in using the webUI
+    And user "user2" has shared folder "/simple-folder" with user "user1" with "<initial-permissions>" permissions
+    And user "user1" has accepted the share "simple-folder" offered by user "user2"
+    When the user changes the collaborator role of "User One" for folder "simple-folder" to "<set-role>" using the webUI
+    # check role without reloading the collaborators panel, see issue #1786
+    Then user "User One" should be listed as "<expected-role>" in the collaborators list on the webUI
+    # check role after reopening the collaborators panel
+    And user "User One" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
+    And user "user1" should have received a share with these details:
+      | field       | value                  |
+      | uid_owner   | user2                  |
+      | share_with  | user1                  |
+      | file_target | /simple-folder         |
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
@@ -605,7 +630,7 @@ Feature: Sharing files and folders with internal users
     Then user "User One" should be listed as "Owner" reshared through "User Two" in the collaborators list on the webUI
     And the current collaborators list should have order "User One,User Three"
 
-  @issue-2898 
+  @issue-2898
   @skipOnOCIS @issue-4168
   Scenario: see resource owner of parent shares in collaborators list
     Given user "user3" has been created with default attributes
@@ -621,7 +646,7 @@ Feature: Sharing files and folders with internal users
     And the current collaborators list should have order "User One,User Three"
 
   @issue-3040 @issue-4113
-  @skipOnOCIS @ocis-reva-issue-39 
+  @skipOnOCIS @ocis-reva-issue-39
   Scenario: see resource owner of parent shares in "shared with others" and "favorites" list
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -951,6 +976,44 @@ Feature: Sharing files and folders with internal users
       | file_target | /Shares/sample,1.txt |
       | item_type   | file                 |
       | permissions | <permissions-file>   |
+    When the user re-logs in as "user1" using the webUI
+    And the user opens folder "Shares" using the webUI
+    Then these files should be listed on the webUI
+      | files                    |
+      | Sample,Folder,With,Comma |
+      | sample,1.txt             |
+    Examples:
+      | set-role             | expected-role | permissions-folder        | permissions-file |
+      | Viewer               | Viewer        | read                      | read             |
+      | Editor               | Editor        | read,update,create,delete | read,update      |
+      | Advanced permissions | Viewer        | read                      | read             |
+
+  @skipOnOC10 @issue-product-203
+  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  Scenario Outline: Share files/folders with special characters in their name
+    Given user "user2" has created folder "Sample,Folder,With,Comma"
+    And user "user2" has created file "sample,1.txt"
+    And user "user2" has logged in using the webUI
+    When the user shares folder "Sample,Folder,With,Comma" with user "User One" as "<set-role>" using the webUI
+    And user "user1" accepts the share "Sample,Folder,With,Comma" offered by user "user2" using the sharing API
+    And the user shares file "sample,1.txt" with user "User One" as "<set-role>" using the webUI
+    And user "user1" accepts the share "sample,1.txt" offered by user "user2" using the sharing API
+    Then user "User One" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
+    And user "User One" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
+    And user "user1" should have received a share with these details:
+      | field       | value                     |
+      | uid_owner   | user2                     |
+      | share_with  | user1                     |
+      | file_target | /Sample,Folder,With,Comma |
+      | item_type   | folder                    |
+      | permissions | <permissions-folder>      |
+    And user "user1" should have received a share with these details:
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /sample,1.txt      |
+      | item_type   | file               |
+      | permissions | <permissions-file> |
     When the user re-logs in as "user1" using the webUI
     And the user opens folder "Shares" using the webUI
     Then these files should be listed on the webUI
