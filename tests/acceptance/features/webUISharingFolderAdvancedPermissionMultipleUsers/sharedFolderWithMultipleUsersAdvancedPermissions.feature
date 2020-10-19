@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-64
+@skipOnOCIS @issue-product-203
 Feature: Sharing folders with multiple internal users using advanced permissions
   As a user
   I want to set advanced permissions on shared folders with other users
@@ -37,19 +37,19 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And user "User Two" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "User Three" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "user2" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user2                |
-      | file_target | /Shares/simple-folder   |
-      | item_type   | folder               |
-      | permissions | <actual-permissions> |
+      | field       | value                 |
+      | uid_owner   | user1                 |
+      | share_with  | user2                 |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <actual-permissions>  |
     And user "user3" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user3                |
-      | file_target | /Shares/simple-folder   |
-      | item_type   | folder               |
-      | permissions | <actual-permissions> |
+      | field       | value                 |
+      | uid_owner   | user1                 |
+      | share_with  | user3                 |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <actual-permissions>  |
     But user "Regular User" should not be listed in the collaborators list on the webUI
     And as "user0" folder "/Shares/simple-folder" should not exist
     And user "User Four" should not be listed in the collaborators list on the webUI
