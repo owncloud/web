@@ -130,6 +130,9 @@ config = {
 					'webUISharingFolderPermissionMultipleUsers',
 					'webUISharingFolderPermissionsGroups',
 				],
+				'webUIOCIS5': [
+					'webUISharingPermissionsUsers'
+				],
 			},
 			'extraEnvironment': {
 				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
