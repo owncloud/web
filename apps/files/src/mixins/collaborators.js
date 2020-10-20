@@ -27,10 +27,6 @@ export default {
         description: this.$gettext('Set detailed permissions'),
         permissions: ['read'],
         additionalPermissions: {
-          share: {
-            name: 'share',
-            description: this.$gettext('Allow sharing')
-          },
           update: {
             name: 'update',
             description: this.$gettext('Allow editing')
@@ -47,6 +43,13 @@ export default {
         permissions.delete = {
           name: 'delete',
           description: this.$gettext('Allow deleting')
+        }
+      }
+
+      if (this.user.version.edition !== 'reva') {
+        advancedRole.additionalPermissions.share = {
+          name: 'share',
+          description: this.$gettext('Allow sharing')
         }
       }
 
