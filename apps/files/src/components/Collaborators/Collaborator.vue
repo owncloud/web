@@ -217,6 +217,10 @@ export default {
   computed: {
     ...mapGetters(['user']),
 
+    shareTypes() {
+      return shareTypes
+    },
+
     $_resharerToggleId() {
       return 'collaborator-' + this.collaborator.collaborator.name + '-resharer-details-toggle'
     },
@@ -286,11 +290,11 @@ export default {
     },
 
     isUser() {
-      return this.collaborator.shareType === shareTypes.user
+      return this.collaborator.shareType === this.shareTypes.user
     },
 
     isRemoteUser() {
-      return this.collaborator.shareType === shareTypes.remote
+      return this.collaborator.shareType === this.shareTypes.remote
     },
 
     collaboratorListItemClass() {

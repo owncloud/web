@@ -52,12 +52,16 @@ export default {
   },
 
   computed: {
+    shareTypes() {
+      return shareTypes
+    },
+
     isUser() {
-      return this.item.value.shareType === shareTypes.user
+      return this.item.value.shareType === this.shareTypes.user
     },
 
     isRemoteUser() {
-      return this.item.value.shareType === shareTypes.remote
+      return this.item.value.shareType === this.shareTypes.remote
     },
 
     collaboratorClass() {
