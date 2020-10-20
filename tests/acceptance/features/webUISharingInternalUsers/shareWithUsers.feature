@@ -126,30 +126,29 @@ Feature: Sharing files and folders with internal users
 
   Scenario: share a folder with another internal user who uploads, overwrites and deletes files
     Given user "user2" has logged in using the webUI
-    When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
-    And the user shares folder "new-simple-folder" with user "User One" as "Editor" using the webUI
-    And user "user1" accepts the share "new-simple-folder" offered by user "user2" using the sharing API
+    When the user shares folder "simple-folder" with user "User One" as "Editor" using the webUI
+    And user "user1" accepts the share "simple-folder" offered by user "user2" using the sharing API
     And the user re-logs in as "user1" using the webUI
     And the user browses to the folder "Shares" on the files page
-    And the user opens folder "new-simple-folder" using the webUI
-    Then as "user1" the content of "Shares/new-simple-folder/lorem.txt" should not be the same as the local "lorem.txt"
+    And the user opens folder "simple-folder" using the webUI
+    Then as "user1" the content of "Shares/simple-folder/lorem.txt" should not be the same as the local "lorem.txt"
     # overwrite an existing file in the received share
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "user1" the content of "Shares/new-simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+    And as "user1" the content of "Shares/simple-folder/lorem.txt" should be the same as the local "lorem.txt"
     # upload a new file into the received share
     When the user uploads file "new-lorem.txt" using the webUI
-    Then as "user1" the content of "Shares/new-simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
+    Then as "user1" the content of "Shares/simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
     # delete a file in the received share
     When the user deletes file "data.zip" using the webUI
     Then file "data.zip" should not be listed on the webUI
     # check that the file actions by the sharee are visible for the share owner
     When the user re-logs in as "user2" using the webUI
-    And the user opens folder "new-simple-folder" using the webUI
+    And the user opens folder "simple-folder" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "user2" the content of "new-simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+    And as "user2" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
     And file "new-lorem.txt" should be listed on the webUI
-    And as "user2" the content of "new-simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
+    And as "user2" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
     But file "data.zip" should not be listed on the webUI
 
   @skip @issue-4102
