@@ -42,10 +42,10 @@ export function roleToBitmask(role, additionalPermissions = []) {
  * @param {boolean} isFolder Defines if the item is folder
  * @returns {object} Role mapped to the bitmask
  */
-export function bitmaskToRole(bitmask, isFolder) {
+export function bitmaskToRole(bitmask, isFolder, allowSharePerm) {
   // TODO: inject the result of "roles()" in the function header and have the caller of bitmaskToRole call roles() with appropriate arguments including translation
   // Not passing in translation as we don't need it
-  const currentRoles = roles({ isFolder: isFolder })
+  const currentRoles = roles({ isFolder: isFolder, allowSharePerm })
   bitmask = parseInt(bitmask, 10)
 
   for (const role in currentRoles) {

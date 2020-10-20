@@ -3,7 +3,7 @@ import roles from '../helpers/collaboratorRolesDefinition'
 
 export default {
   computed: {
-    ...mapGetters(['getToken']),
+    ...mapGetters(['getToken', 'user']),
     ...mapGetters('Files', ['highlightedFile']),
 
     ownerRole() {
@@ -29,7 +29,7 @@ export default {
         additionalPermissions: {
           share: {
             name: 'share',
-            description: this.$gettext('Allow re-Sharing')
+            description: this.$gettext('Allow sharing')
           },
           update: {
             name: 'update',
@@ -56,7 +56,11 @@ export default {
     roles() {
       const isFolder = this.highlightedFile.type === 'folder'
       const $gettext = this.$gettext
-      const collaboratorRoles = roles({ $gettext, isFolder: isFolder })
+      const collaboratorRoles = roles({
+        $gettext,
+        isFolder: isFolder,
+        allowSharePerm: this.user.version.edition !== 'reva'
+      })
       collaboratorRoles.advancedRole = this.advancedRole
 
       return collaboratorRoles

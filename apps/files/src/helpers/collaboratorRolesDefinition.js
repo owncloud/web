@@ -8,34 +8,29 @@ function returnOriginal(string) {
  * Returns object with collaborator roles
  * @param {boolean} isFolder  Defines if the item is folder
  * @param {function} $gettext  Function to translate neccessary strings
+ * @param {boolean} allowSharePerm Asserts whether share permission is allowed
  * @returns {object}  Collaborator roles
  */
-export default ({ isFolder = false, $gettext = returnOriginal }) => {
+export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = false }) => {
   if (isFolder) {
     return {
       viewer: {
         name: 'viewer',
         label: $gettext('Viewer'),
-        description: $gettext('Download and preview'),
-        permissions: ['read'],
-        additionalPermissions: {
-          share: {
-            name: 'share',
-            description: $gettext('Allow re-Sharing')
-          }
-        }
+        description: allowSharePerm
+          ? $gettext('Download, preview and share')
+          : $gettext('Download and preview'),
+        permissions: allowSharePerm ? ['read', 'share'] : ['read']
       },
       editor: {
         name: 'editor',
         label: $gettext('Editor'),
-        description: $gettext('Upload, edit, delete, download and preview'),
-        permissions: ['read', 'update', 'create', 'delete'],
-        additionalPermissions: {
-          share: {
-            name: 'share',
-            description: $gettext('Allow re-Sharing')
-          }
-        }
+        description: allowSharePerm
+          ? $gettext('Upload, edit, delete, download, preview and share')
+          : $gettext('Upload, edit, delete, download and preview'),
+        permissions: allowSharePerm
+          ? ['read', 'update', 'create', 'delete', 'share']
+          : ['read', 'update', 'create', 'delete']
       }
     }
   }
@@ -44,26 +39,18 @@ export default ({ isFolder = false, $gettext = returnOriginal }) => {
     viewer: {
       name: 'viewer',
       label: $gettext('Viewer'),
-      description: $gettext('Download and preview'),
-      permissions: ['read'],
-      additionalPermissions: {
-        share: {
-          name: 'share',
-          description: $gettext('Allow re-Sharing')
-        }
-      }
+      description: allowSharePerm
+        ? $gettext('Download, preview and share')
+        : $gettext('Download and preview'),
+      permissions: allowSharePerm ? ['read', 'share'] : ['read']
     },
     editor: {
       name: 'editor',
       label: $gettext('Editor'),
-      description: $gettext('Edit, download and preview'),
-      permissions: ['read', 'update'],
-      additionalPermissions: {
-        share: {
-          name: 'share',
-          description: $gettext('Allow re-Sharing')
-        }
-      }
+      description: allowSharePerm
+        ? $gettext('Edit, download, preview and share')
+        : $gettext('Edit, download and preview'),
+      permissions: allowSharePerm ? ['read', 'update', 'share'] : ['read', 'update']
     }
   }
 }

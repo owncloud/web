@@ -174,7 +174,7 @@ export default {
       let role = { name: '' }
 
       if (permissions > 0) {
-        role = bitmaskToRole(permissions, isFolder)
+        role = bitmaskToRole(permissions, isFolder, this.user.version.edition !== 'reva')
       } else {
         role.name = 'owner'
       }

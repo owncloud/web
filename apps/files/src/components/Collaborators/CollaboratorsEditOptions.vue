@@ -6,14 +6,16 @@
       :selected-role="role"
       @roleSelected="selectRole"
     />
-    <label v-if="$_ocCollaborators_hasAdditionalPermissions" class="oc-label">
-      <translate>Additional permissions:</translate>
-    </label>
-    <additional-permissions
-      :available-permissions="role.additionalPermissions"
-      :collaborators-permissions="collaboratorsPermissions"
-      @permissionChecked="checkAdditionalPermissions"
-    />
+    <template v-if="$_ocCollaborators_hasAdditionalPermissions">
+      <label v-if="selectedRole.name !== 'advnacedRole'" class="oc-label">
+        <translate>Additional permissions:</translate>
+      </label>
+      <additional-permissions
+        :available-permissions="role.additionalPermissions"
+        :collaborators-permissions="collaboratorsPermissions"
+        @permissionChecked="checkAdditionalPermissions"
+      />
+    </template>
     <div v-if="expirationSupported">
       <label for="files-collaborators-collaborator-expiration-input">
         <translate>Expiration date:</translate>
@@ -106,7 +108,7 @@ export default {
     },
 
     $_ocCollaborators_hasAdditionalPermissions() {
-      if (this.selectedRole && this.selectedRole.name !== 'advancedRole') {
+      if (this.selectedRole && this.selectedRole.additionalPermissions) {
         return Object.keys(this.selectedRole.additionalPermissions).length > 0
       }
       return false

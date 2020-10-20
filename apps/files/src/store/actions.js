@@ -144,7 +144,7 @@ function _buildFileInTrashbin(file) {
   }
 }
 
-function _aggregateFileShares(data, incomingShares = false) {
+function _aggregateFileShares(data, incomingShares = false, allowSharePerm) {
   // borrowed from owncloud's apps/files_sharing/js/sharedfilelist.js#_makeFilesFromShares(data)
   var files = data
   files = _.chain(files)
@@ -191,7 +191,7 @@ function _aggregateFileShares(data, incomingShares = false) {
         // remove extension from basename like _buildFile does
         file.basename = file.basename.substring(0, file.basename.length - file.extension.length - 1)
       }
-      file.share = _buildShare(share, file)
+      file.share = _buildShare(share, file, allowSharePerm)
 
       return file
     })
@@ -229,11 +229,11 @@ function _aggregateFileShares(data, incomingShares = false) {
   return files
 }
 
-function _buildShare(s, file, $gettext) {
+function _buildShare(s, file, $gettext, allowSharePerm) {
   if (parseInt(s.share_type, 10) === shareTypes.link) {
     return _buildLink(s, $gettext)
   }
-  return _buildCollaboratorShare(s, file)
+  return _buildCollaboratorShare(s, file, allowSharePerm)
 }
 
 function _buildLink(link, $gettext) {
@@ -284,7 +284,7 @@ function _fixAdditionalInfo(data) {
   return data
 }
 
-function _buildCollaboratorShare(s, file) {
+function _buildCollaboratorShare(s, file, allowSharePerm) {
   const share = {
     shareType: parseInt(s.share_type, 10),
     id: s.id
@@ -296,7 +296,7 @@ function _buildCollaboratorShare(s, file) {
     case shareTypes.remote:
     // fall through
     case shareTypes.group: // group share
-      share.role = bitmaskToRole(s.permissions, file.type === 'folder')
+      share.role = bitmaskToRole(s.permissions, file.type === 'folder', allowSharePerm)
       share.permissions = s.permissions
       // FIXME: SDK is returning empty object for additional info when empty
       share.collaborator = {
@@ -496,7 +496,11 @@ export default {
           }
 
           const files = json.ocs.data
-          const uniqueFiles = _aggregateFileShares(files, false)
+          const uniqueFiles = _aggregateFileShares(
+            files,
+            false,
+            context.rootGetters.user.version.edition !== 'reva'
+          )
           context.dispatch('buildFilesSharedFromMe', uniqueFiles)
           context.commit('UPDATE_FOLDER_LOADING', false)
         })
@@ -536,7 +540,11 @@ export default {
             return
           }
           const files = json.ocs.data
-          const uniqueFiles = _aggregateFileShares(files, true)
+          const uniqueFiles = _aggregateFileShares(
+            files,
+            true,
+            context.rootGetters.user.version.edition !== 'reva'
+          )
           context.dispatch('buildFilesSharedFromMe', uniqueFiles)
           context.commit('UPDATE_FOLDER_LOADING', false)
         })
@@ -726,7 +734,12 @@ export default {
         context.commit(
           'CURRENT_FILE_OUTGOING_SHARES_SET',
           data.map(element => {
-            return _buildShare(element.shareInfo, context.getters.highlightedFile, $gettext)
+            return _buildShare(
+              element.shareInfo,
+              context.getters.highlightedFile,
+              $gettext,
+              context.rootGetters.user.version.edition !== 'reva'
+            )
           })
         )
         context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
@@ -751,7 +764,11 @@ export default {
         context.commit(
           'INCOMING_SHARES_LOAD',
           data.map(element => {
-            return _buildCollaboratorShare(element.shareInfo, context.getters.highlightedFile)
+            return _buildCollaboratorShare(
+              element.shareInfo,
+              context.getters.highlightedFile,
+              context.rootGetters.user.version.edition !== 'reva'
+            )
           })
         )
         context.commit('INCOMING_SHARES_LOADING', false)
@@ -769,7 +786,10 @@ export default {
     context.commit('INCOMING_SHARES_LOAD', [])
     context.commit('INCOMING_SHARES_ERROR', null)
   },
-  changeShare({ commit, getters }, { client, share, role, permissions, expirationDate }) {
+  changeShare(
+    { commit, getters, rootGetters },
+    { client, share, role, permissions, expirationDate }
+  ) {
     const params = {
       permissions: permissions,
       expireDate: expirationDate
@@ -785,7 +805,11 @@ export default {
       client.shares
         .updateShare(share.id, params)
         .then(updatedShare => {
-          const share = _buildCollaboratorShare(updatedShare.shareInfo, getters.highlightedFile)
+          const share = _buildCollaboratorShare(
+            updatedShare.shareInfo,
+            getters.highlightedFile,
+            rootGetters.user.version.edition !== 'reva'
+          )
           commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', share)
           resolve(share)
         })
@@ -804,7 +828,11 @@ export default {
         .then(share => {
           context.commit(
             'CURRENT_FILE_OUTGOING_SHARES_ADD',
-            _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile)
+            _buildCollaboratorShare(
+              share.shareInfo,
+              context.getters.highlightedFile,
+              context.rootGetters.user.version.edition !== 'reva'
+            )
           )
           context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
         })
@@ -835,7 +863,11 @@ export default {
       .then(share => {
         context.commit(
           'CURRENT_FILE_OUTGOING_SHARES_ADD',
-          _buildCollaboratorShare(share.shareInfo, context.getters.highlightedFile)
+          _buildCollaboratorShare(
+            share.shareInfo,
+            context.getters.highlightedFile,
+            context.rootGetters.user.version.edition !== 'reva'
+          )
         )
         context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
       })
@@ -914,7 +946,12 @@ export default {
             .then(data => {
               data.forEach(element => {
                 sharesTree[queryPath].push({
-                  ..._buildShare(element.shareInfo, { type: 'folder' }, $gettext),
+                  ..._buildShare(
+                    element.shareInfo,
+                    { type: 'folder' },
+                    $gettext,
+                    context.rootGetters.user.version.edition !== 'reva'
+                  ),
                   outgoing: true,
                   indirect: true
                 })
@@ -935,7 +972,11 @@ export default {
             .then(data => {
               data.forEach(element => {
                 sharesTree[queryPath].push({
-                  ..._buildCollaboratorShare(element.shareInfo, { type: 'folder' }),
+                  ..._buildCollaboratorShare(
+                    element.shareInfo,
+                    { type: 'folder' },
+                    context.rootGetters.user.version.edition !== 'reva'
+                  ),
                   incoming: true,
                   indirect: true
                 })
@@ -970,7 +1011,12 @@ export default {
       client.shares
         .shareFileWithLink(path, params)
         .then(data => {
-          const link = _buildShare(data.shareInfo, null, $gettext)
+          const link = _buildShare(
+            data.shareInfo,
+            null,
+            $gettext,
+            context.rootGetters.user.version.edition !== 'reva'
+          )
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
           context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
           resolve(link)
@@ -985,7 +1031,12 @@ export default {
       client.shares
         .updateShare(id, params)
         .then(data => {
-          const link = _buildShare(data.shareInfo, null, $gettext)
+          const link = _buildShare(
+            data.shareInfo,
+            null,
+            $gettext,
+            context.rootGetters.user.version.edition !== 'reva'
+          )
           context.commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', link)
           resolve(link)
         })
