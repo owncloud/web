@@ -127,11 +127,14 @@ config = {
 					'webUISharingFilePermissionsGroups',
 					'webUISharingFolderAdvancedPermissionMultipleUsers',
 					'webUISharingFolderAdvancedPermissionsGroups',
-					'webUISharingFolderPermissionMultipleUsers',
-					'webUISharingFolderPermissionsGroups',
 				],
 				'webUIOCIS5': [
-					'webUISharingPermissionsUsers'
+					'webUISharingFolderPermissionMultipleUsers',
+					'webUISharingFolderPermissionsGroups',
+					'webUISharingPermissionsUsers',
+					'webUISharingExternal',
+					'webUISharingInternalGroups',
+					'webUISharingNotifications'
 				],
 			},
 			'extraEnvironment': {
