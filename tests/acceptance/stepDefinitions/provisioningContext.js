@@ -237,7 +237,7 @@ After(async function() {
       })
     })
     await Promise.all(deleteSharePromises).catch(err => {
-      console.log('Error while deleting: ', err)
+      console.log('Error while deleting shares after test: ', err)
     })
   }
   if (client.globals.ldap) {
