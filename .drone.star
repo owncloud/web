@@ -135,10 +135,15 @@ config = {
 					'webUISharingInternalGroups',
 					'webUISharingNotifications'
 				],
+				'webUIOCIS6': [
+					'webUISharingPublic',
+					'webUISharingPublicDifferentRoles',
+				],
 				'webUIOCISResharing': [
 					# for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
 					'webUIResharing',
-				]
+				],
+
 			},
 			'extraEnvironment': {
 				'NODE_TLS_REJECT_UNAUTHORIZED': '0',

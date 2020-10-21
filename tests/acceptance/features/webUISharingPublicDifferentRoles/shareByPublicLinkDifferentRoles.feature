@@ -1,4 +1,4 @@
-@mailhog @public_link_share-feature-required @skipOnOCIS @ocis-reva-issue-64
+@mailhog @public_link_share-feature-required
 Feature: Share by public link with different roles
   As a user
   I want to share files through a publicly accessible link with different roles
@@ -11,7 +11,7 @@ Feature: Share by public link with different roles
   Background:
     Given user "user1" has been created with default attributes
 
-  @smokeTest
+  @smokeTest @skipOnOCIS @issue-ocis-reva-383
   Scenario Outline: simple sharing by public link with different roles
     Given user "user1" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
@@ -32,6 +32,29 @@ Feature: Share by public link with different roles
       | Editor      | read, update, create, delete |
       | Contributor | read, create                 |
 
+
+  @skipOnOC10 @issue-ocis-reva-383
+  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  Scenario Outline: simple sharing by public link with different roles
+    Given user "user1" has logged in using the webUI
+    When the user creates a new public link for folder "simple-folder" using the webUI with
+      | role | <role> |
+    Then user "user1" should have a share with these details:
+      | field       | value          |
+      | share_type  | public_link    |
+      | uid_owner   | user1          |
+      | permissions | <permissions>  |
+      | path        | /simple-folder |
+    And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
+    When the public uses the webUI to access the last public link created by user "user1"
+    Then file "lorem.txt" should be listed on the webUI
+    Examples:
+      | role        | permissions                  |
+      | Viewer      | read                         |
+      | Editor      | read, update, create, delete |
+      | Contributor | read, create                 |
+
+  @skipOnOCIS @issue-ocis-reva-383
   Scenario: sharing by public link with "Uploader" role
     Given user "user1" has logged in using the webUI
     When the user creates a folder with the name "shared-folder" using the webUI
@@ -45,6 +68,23 @@ Feature: Share by public link with different roles
       | path        | /shared-folder |
       | name        | Public link    |
     And a link named "Public link" should be listed with role "Uploader" in the public link list of folder "shared-folder" on the webUI
+    When the public uses the webUI to access the last public link created by user "user1"
+    Then there should be no resources listed on the webUI
+
+  @skipOnOC10 @issue-ocis-reva-383
+  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  Scenario: sharing by public link with "Uploader" role
+    Given user "user1" has logged in using the webUI
+    When the user creates a folder with the name "shared-folder" using the webUI
+    And the user creates a new public link for folder "shared-folder" using the webUI with
+      | role | Uploader |
+    Then user "user1" should have a share with these details:
+      | field       | value          |
+      | share_type  | public_link    |
+      | uid_owner   | user1          |
+      | permissions | create         |
+      | path        | /shared-folder |
+    And a public link with the last created link share token as name should be listed for resource "shared-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "user1"
     Then there should be no resources listed on the webUI
 
@@ -71,10 +111,18 @@ Feature: Share by public link with different roles
       | zzzz-must-be-last-file-in-folder.txt  |
     Then the deleted elements should not be listed on the webUI
 
+  @skipOnOCIS @issue-ocis-270
   Scenario: creating a public link with "Viewer" role only makes it impossible to delete files via the link
     Given user "user1" has shared folder "simple-folder" with link with "read" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     Then it should not be possible to delete file "lorem.txt" using the webUI
+
+  @skipOnOC10 @issue-ocis-270
+  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  Scenario: creating a public link with "Viewer" role only makes it impossible to delete files via the link
+    Given user "user1" has shared folder "simple-folder" with link with "read" permissions
+    When the public uses the webUI to access the last public link created by user "user1"
+    Then it should be possible to delete file "lorem.txt" using the webUI
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a file
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
@@ -145,10 +193,18 @@ Feature: Share by public link with different roles
     And file "child.txt" should be listed in the folder "CHILD" on the webUI
     And as "user1" file "simple-folder/simple-empty-folder/PARENT/CHILD/child.txt" should exist
 
-  Scenario: creating a public link with "Viewer" role makes it possible to create files via the link even with password set
+  @skipOnOCIS @issue-ocis-723
+  Scenario: creating a public link with "Viewer" role makes it impossible to create files via the link even with password set
     Given user "user1" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then it should not be possible to create files using the webUI
+
+  @skipOnOC10 @issue-ocis-reva-383
+  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  Scenario: creating a public link with "Viewer" role makes it impossible to create files via the link even with password set
+    Given user "user1" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
+    Then it should be possible to create files using the webUI
 
   @issue-2414
   Scenario: creating a public link with "Uploader" role makes it possible to upload a file
@@ -185,7 +241,7 @@ Feature: Share by public link with different roles
     And as "user1" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
     And as "user1" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
 
-  @issue-2443 @yetToImplement
+  @issue-2443 @yetToImplement @skipOnOCIS
   Scenario: creating a public link with "Uploader" role makes it possible to upload a folder
     Given user "user1" has shared folder "simple-folder" with link with "create" permissions
     When the public uses the webUI to access the last public link created by user "user1"
@@ -195,6 +251,7 @@ Feature: Share by public link with different roles
     And as "user1" file "simple-folder/FOLDER" should exist
     And the content of file "simple-folder/FOLDER" for user "user1" should be ""
 
+  @skipOnOCIS @issue-ocis-723
   Scenario: creating a public link with "Uploader" role makes it possible to create files through files-drop page even with password set
     Given user "user1" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
@@ -203,6 +260,18 @@ Feature: Share by public link with different roles
       | 'single'quotes.txt |
     And as "user1" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
 
+  @skipOnOC10 @issue-ocis-723
+  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  Scenario: creating a public link with "Uploader" role makes it possible to create files through files-drop page even with password set
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
+    And the public uploads file "'single'quotes.txt" in files-drop page
+    Then the following resources should be listed on the webUI
+      | file-name          |
+      | 'single'quotes.txt |
+    And as "user1" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
+
+  @skipOnOCIS @issue-ocis-723
   Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page even with password set
     Given user "user1" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
@@ -214,6 +283,21 @@ Feature: Share by public link with different roles
     And as "user1" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
     And as "user1" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
 
+  @skipOnOC10 @issue-ocis-723
+  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page even with password set
+    Given user "user1" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
+    And the public uploads file "'single'quotes.txt" in files-drop page
+    And the public uploads file "new-lorem.txt" in files-drop page
+    Then the following resources should be listed on the webUI
+      | file-name          |
+      | 'single'quotes.txt |
+      | new-lorem.txt      |
+    And as "user1" the content of "simple-folder/'single'quotes.txt" should be the same as the local "'single'quotes.txt"
+    And as "user1" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
+
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: user tries to create a public link with Viewer role without entering share password while enforce password on read only public share is enforced
     Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes"
     And user "user1" has logged in using the webUI
@@ -221,6 +305,7 @@ Feature: Share by public link with different roles
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "user1" should not have created any shares
 
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: user tries to create a public link with Contributor role without entering share password while enforce password on read-write public share is enforced
     Given the setting "shareapi_enforce_links_password_read_write" of app "core" has been set to "yes"
     And user "user1" has logged in using the webUI
@@ -229,6 +314,7 @@ Feature: Share by public link with different roles
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "user1" should not have created any shares
 
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: user tries to create a public link with Editor Role without entering share password while enforce password on read-write public share is enforced
     Given the setting "shareapi_enforce_links_password_read_write_delete" of app "core" has been set to "yes"
     And user "user1" has logged in using the webUI
@@ -237,6 +323,7 @@ Feature: Share by public link with different roles
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "user1" should not have created any shares
 
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: user tries to create a public link with Uploader role without entering share password while enforce password on write only public share is enforced
     Given the setting "shareapi_enforce_links_password_write_only" of app "core" has been set to "yes"
     And user "user1" has logged in using the webUI
@@ -245,6 +332,7 @@ Feature: Share by public link with different roles
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "user1" should not have created any shares
 
+  @skipOnOCIS @issue-ocis-reva-41
   Scenario: user creates a public link with Contributor Role without entering share password while enforce password on read only public share is enforced
     Given the setting "shareapi_enforce_links_password_read_only" of app "core" has been set to "yes"
     And user "user1" has logged in using the webUI
