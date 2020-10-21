@@ -51,10 +51,10 @@ Feature: Sharing files and folders with internal users
     #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
     #    And file "testimage (2).jpg" should be marked as shared by "User Two" on the webUI
     Examples:
-      | set-role             | expected-role | permissions-folder        | permissions-file |
-      | Viewer               | Viewer        | read                      | read             |
-      | Editor               | Editor        | read,update,create,delete | read,update      |
-      | Advanced permissions | Viewer        | read                      | read             |
+      | set-role             | expected-role               | permissions-folder              | permissions-file  |
+      | Viewer               | Viewer                      | read,share                      | read, share       |
+      | Editor               | Editor                      | read,update,create,delete,share | read,update,share |
+      | Advanced permissions | Advanced permissions        | read                            | read              |
 
   @skipOnOCIS @issue-product-203
   Scenario Outline: change the collaborators of a file & folder
@@ -74,11 +74,11 @@ Feature: Sharing files and folders with internal users
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
-      | initial-permissions | set-role             | expected-role | expected-permissions      |
-      | read,update,create  | Viewer               | Viewer        | read                      |
-      | read                | Editor               | Editor        | read,update,create,delete |
-      | read                | Advanced permissions | Viewer        | read                      |
-      | all                 | Advanced permissions | Editor        | all                       |
+      | initial-permissions | set-role             | expected-role        | expected-permissions            |
+      | read,update,create  | Viewer               | Viewer               | read,share                      |
+      | read                | Editor               | Editor               | read,update,create,delete,share |
+      | read                | Advanced permissions | Advanced permissions | read                            |
+      | all                 | Advanced permissions | Editor               | all                             |
 
   @skipOnOC10 @issue-product-203
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -713,7 +713,7 @@ Feature: Sharing files and folders with internal users
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
     When user "user2" logs in using the webUI
     And the user opens folder "Shares" using the webUI
-    Then user "User Two" should be listed as "Editor" in the collaborators list for folder "simple-folder (2)" on the webUI
+    Then user "User Two" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
 
   @skipOnOCIS @issue-4169
   Scenario: share a file with another internal user which should expire after 2 days
@@ -949,7 +949,7 @@ Feature: Sharing files and folders with internal users
       | share_with  | user2                 |
       | file_target | /Shares/simple-folder |
       | item_type   | folder                |
-      | permissions | read                  |
+      | permissions | read,share            |
 
   @skipOnOCIS @issue-product-203
   Scenario Outline: Share files/folders with special characters in their name
@@ -983,10 +983,10 @@ Feature: Sharing files and folders with internal users
       | Sample,Folder,With,Comma |
       | sample,1.txt             |
     Examples:
-      | set-role             | expected-role | permissions-folder        | permissions-file |
-      | Viewer               | Viewer        | read                      | read             |
-      | Editor               | Editor        | read,update,create,delete | read,update      |
-      | Advanced permissions | Viewer        | read                      | read             |
+      | set-role             | expected-role        | permissions-folder              | permissions-file  |
+      | Viewer               | Viewer               | read,share                      | read,share        |
+      | Editor               | Editor               | read,update,create,delete,share | read,update,share |
+      | Advanced permissions | Advanced permissions | read                            | read              |
 
   @skipOnOC10 @issue-product-203
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there

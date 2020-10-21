@@ -27,11 +27,13 @@ export function roleToBitmask(role, additionalPermissions = []) {
 
   if (additionalPermissions) {
     for (const additionalPermission of additionalPermissions) {
-      if (role.additionalPermissions[additionalPermission]) {
+      if (role.additionalPermissions && role.additionalPermissions[additionalPermission]) {
         bitmask |= permissionsBitmask[additionalPermission]
       }
     }
   }
+
+  console.log(bitmask)
 
   return bitmask
 }

@@ -46,10 +46,10 @@ Feature: Sharing files and folders with internal users
     #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
     #    And file "testimage (2).jpg" should be marked as shared by "User Two" on the webUI
     Examples:
-      | set-role             | expected-role | permissions-folder        | permissions-file |
-      | Viewer               | Viewer        | read                      | read             |
-      | Editor               | Editor        | read,update,create,delete | read,update      |
-      | Advanced permissions | Viewer        | read                      | read             |
+      | set-role             | expected-role        | permissions-folder              | permissions-file       |
+      | Viewer               | Viewer               | read,share                      | read,share             |
+      | Editor               | Editor               | read,update,create,delete,share | read,update,share      |
+      | Advanced permissions | Advanced permissions | read                            | read                   |
 
   Scenario Outline: change the collaborators of a file & folder
     Given user "user2" has logged in using the webUI
@@ -67,11 +67,11 @@ Feature: Sharing files and folders with internal users
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
-      | initial-permissions | set-role             | expected-role | expected-permissions      |
-      | read,update,create  | Viewer               | Viewer        | read                      |
-      | read                | Editor               | Editor        | read,update,create,delete |
-      | read                | Advanced permissions | Viewer        | read                      |
-      | all                 | Advanced permissions | Editor        | all                       |
+      | initial-permissions | set-role             | expected-role        | expected-permissions            |
+      | read,update,create  | Viewer               | Viewer               | read,share                      |
+      | read                | Editor               | Editor               | read,update,create,delete,share |
+      | read                | Advanced permissions | Advanced permissions | read                            |
+      | all                 | Advanced permissions | Editor               | all                             |
 
   Scenario: share a file with another internal user who overwrites and unshares the file
     Given user "user2" has logged in using the webUI
@@ -805,7 +805,7 @@ Feature: Sharing files and folders with internal users
       | share_with  | user2                |
       | file_target | /simple-folder (2)   |
       | item_type   | folder               |
-      | permissions | read                 |
+      | permissions | read,share           |
 
     Scenario Outline: Share files/folders with special characters in their name
       Given user "user2" has created folder "Sample,Folder,With,Comma"
@@ -835,7 +835,7 @@ Feature: Sharing files and folders with internal users
         | Sample,Folder,With,Comma |
         | sample,1.txt             |
       Examples:
-        | set-role             | expected-role | permissions-folder        | permissions-file |
-        | Viewer               | Viewer        | read                      | read             |
-        | Editor               | Editor        | read,update,create,delete | read,update      |
-        | Advanced permissions | Viewer        | read                      | read             |
+        | set-role             | expected-role        | permissions-folder              | permissions-file       |
+        | Viewer               | Viewer               | read,share                      | read,share             |
+        | Editor               | Editor               | read,update,create,delete,share | read,update,share      |
+        | Advanced permissions | Advanced permissions | read                            | read                   |
