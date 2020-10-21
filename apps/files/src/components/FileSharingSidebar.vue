@@ -133,6 +133,7 @@ export default {
       'currentFileOutgoingSharesLoading',
       'sharesTreeLoading'
     ]),
+    ...mapGetters(['isOcis']),
     ...mapState('Files', [
       'incomingShares',
       'incomingSharesLoading',
@@ -174,7 +175,7 @@ export default {
       let role = { name: '' }
 
       if (permissions > 0) {
-        role = bitmaskToRole(permissions, isFolder, this.user.version.edition !== 'reva')
+        role = bitmaskToRole(permissions, isFolder, !this.isOcis)
       } else {
         role.name = 'owner'
       }

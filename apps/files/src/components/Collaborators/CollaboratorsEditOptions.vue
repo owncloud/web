@@ -7,7 +7,7 @@
       @roleSelected="selectRole"
     />
     <template v-if="$_ocCollaborators_hasAdditionalPermissions">
-      <label v-if="selectedRole.name !== 'advnacedRole'" class="oc-label">
+      <label v-if="selectedRole.name !== 'advancedRole'" class="oc-label">
         <translate>Additional permissions:</translate>
       </label>
       <additional-permissions
@@ -108,10 +108,7 @@ export default {
     },
 
     $_ocCollaborators_hasAdditionalPermissions() {
-      if (this.selectedRole && this.selectedRole.additionalPermissions) {
-        return Object.keys(this.selectedRole.additionalPermissions).length > 0
-      }
-      return false
+      return this.selectedRole && this.selectedRole.additionalPermissions
     },
 
     role() {

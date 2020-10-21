@@ -40,6 +40,7 @@ export function roleToBitmask(role, additionalPermissions = []) {
  * Maps bitmask to role
  * @param {number} bitmask Permissions which are to be mapped to role
  * @param {boolean} isFolder Defines if the item is folder
+ * @param {boolean} allowSharePerm Asserts if the share permission is allowed
  * @returns {object} Role mapped to the bitmask
  */
 export function bitmaskToRole(bitmask, isFolder, allowSharePerm) {

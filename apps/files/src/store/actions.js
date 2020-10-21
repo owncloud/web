@@ -496,11 +496,7 @@ export default {
           }
 
           const files = json.ocs.data
-          const uniqueFiles = _aggregateFileShares(
-            files,
-            false,
-            context.rootGetters.user.version.edition !== 'reva'
-          )
+          const uniqueFiles = _aggregateFileShares(files, false, !context.rootGetters.isOcis)
           context.dispatch('buildFilesSharedFromMe', uniqueFiles)
           context.commit('UPDATE_FOLDER_LOADING', false)
         })
@@ -540,11 +536,7 @@ export default {
             return
           }
           const files = json.ocs.data
-          const uniqueFiles = _aggregateFileShares(
-            files,
-            true,
-            context.rootGetters.user.version.edition !== 'reva'
-          )
+          const uniqueFiles = _aggregateFileShares(files, true, !context.rootGetters.isOcis)
           context.dispatch('buildFilesSharedFromMe', uniqueFiles)
           context.commit('UPDATE_FOLDER_LOADING', false)
         })
@@ -738,7 +730,7 @@ export default {
               element.shareInfo,
               context.getters.highlightedFile,
               $gettext,
-              context.rootGetters.user.version.edition !== 'reva'
+              !context.rootGetters.isOcis
             )
           })
         )
@@ -767,7 +759,7 @@ export default {
             return _buildCollaboratorShare(
               element.shareInfo,
               context.getters.highlightedFile,
-              context.rootGetters.user.version.edition !== 'reva'
+              !context.rootGetters.isOcis
             )
           })
         )
@@ -808,7 +800,7 @@ export default {
           const share = _buildCollaboratorShare(
             updatedShare.shareInfo,
             getters.highlightedFile,
-            rootGetters.user.version.edition !== 'reva'
+            !rootGetters.isOcis
           )
           commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', share)
           resolve(share)
@@ -831,7 +823,7 @@ export default {
             _buildCollaboratorShare(
               share.shareInfo,
               context.getters.highlightedFile,
-              context.rootGetters.user.version.edition !== 'reva'
+              !context.rootGetters.isOcis
             )
           )
           context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
@@ -866,7 +858,7 @@ export default {
           _buildCollaboratorShare(
             share.shareInfo,
             context.getters.highlightedFile,
-            context.rootGetters.user.version.edition !== 'reva'
+            !context.rootGetters.isOcis
           )
         )
         context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
@@ -950,7 +942,7 @@ export default {
                     element.shareInfo,
                     { type: 'folder' },
                     $gettext,
-                    context.rootGetters.user.version.edition !== 'reva'
+                    !context.rootGetters.isOcis
                   ),
                   outgoing: true,
                   indirect: true
@@ -975,7 +967,7 @@ export default {
                   ..._buildCollaboratorShare(
                     element.shareInfo,
                     { type: 'folder' },
-                    context.rootGetters.user.version.edition !== 'reva'
+                    !context.rootGetters.isOcis
                   ),
                   incoming: true,
                   indirect: true
@@ -1011,12 +1003,7 @@ export default {
       client.shares
         .shareFileWithLink(path, params)
         .then(data => {
-          const link = _buildShare(
-            data.shareInfo,
-            null,
-            $gettext,
-            context.rootGetters.user.version.edition !== 'reva'
-          )
+          const link = _buildShare(data.shareInfo, null, $gettext, !context.rootGetters.isOcis)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
           context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
           resolve(link)
@@ -1031,12 +1018,7 @@ export default {
       client.shares
         .updateShare(id, params)
         .then(data => {
-          const link = _buildShare(
-            data.shareInfo,
-            null,
-            $gettext,
-            context.rootGetters.user.version.edition !== 'reva'
-          )
+          const link = _buildShare(data.shareInfo, null, $gettext, !context.rootGetters.isOcis)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', link)
           resolve(link)
         })
