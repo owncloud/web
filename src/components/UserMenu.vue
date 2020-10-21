@@ -135,7 +135,10 @@ export default {
   methods: {
     logout() {
       this.visible = false
-      this.$store.dispatch('logout')
+      // Use timeout to leave enough time for the dropdown to be hidden
+      setTimeout(() => {
+        this.$store.dispatch('logout')
+      })
     },
     focusFirstLink() {
       /*
