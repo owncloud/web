@@ -409,14 +409,20 @@ Then('the last uploaded folder should be listed on the webUI', async function() 
   return client
 })
 
-Then('file {string} should not be listed on the webUI', async function(file) {
-  const state = await client.page.FilesPageElement.filesList().isElementListed(file, 'file')
-  return client.assert.ok(!state, `Error: Resource ${file} is listed on the filesList`)
+Then('file {string} should not be listed on the webUI', function(file) {
+  return client.page.FilesPageElement.filesList()
+    .isElementListed(file, 'file')
+    .then(state => {
+      return client.assert.ok(!state, `Error: File ${file} is listed on the filesList`)
+    })
 })
 
 Then('folder {string} should not be listed on the webUI', async folder => {
-  const state = await client.page.FilesPageElement.filesList().isElementListed(folder, 'folder')
-  return client.assert.ok(!state, `Error: Resource ${folder} is listed on the filesList`)
+  return client.page.FilesPageElement.filesList()
+    .isElementListed(folder, 'folder')
+    .then(state => {
+      return client.assert.ok(!state, `Error: Folder ${folder} is listed on the filesList`)
+    })
 })
 
 Then('the deleted elements should not be listed on the webUI', function() {
