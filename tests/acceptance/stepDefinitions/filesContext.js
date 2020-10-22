@@ -987,18 +987,6 @@ When('user {string} has renamed the following file', function(user, table) {
   return webdav.move(user, fromName, toName)
 })
 
-Then('the following file should be listed on the webUI', async function(table) {
-  const resources = table.hashes().map(data => data['name-parts'])
-
-  for (const resource of resources) {
-    const found = await client.page.FilesPageElement.filesList().isElementListed(resource)
-
-    assert.strictEqual(found, true, `Element ${resource} is not present on the filesList!`)
-  }
-
-  return true
-})
-
 Then('the following file should not be listed on the webUI', async function(table) {
   const name = table
     .hashes()

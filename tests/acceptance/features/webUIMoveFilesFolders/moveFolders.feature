@@ -41,8 +41,8 @@ Feature: move folders
       | strängé नेपाली folder |
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And the following folders should be listed on the webUI
-      | name-parts           |
-      | simple-folder        |
+      | folders               |
+      | simple-folder         |
       | strängé नेपाली folder |
 
   Scenario Outline: move a folder into another folder (problematic characters)

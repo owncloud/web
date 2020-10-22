@@ -76,7 +76,7 @@ Feature: rename folders
       | simple-empty-folder   | Test" 'me o'ut"            |
     And the user reloads the current page of the webUI
     Then these folders should be listed on the webUI
-      | files                      |
+      | folders                    |
       | '"First 'single" quotes" ' |
       | Test" 'me o'ut"            |
     When the user renames the following folder using the webUI
@@ -85,9 +85,9 @@ Feature: rename folders
       | Test" 'me o'ut"            | another normal folder |
     And the user reloads the current page of the webUI
     Then these folders should be listed on the webUI
-      | files                   |
-      | a normal folder         |
-      | another normal folder   |
+      | folders               |
+      | a normal folder       |
+      | another normal folder |
 
   # These are valid file names for ocis
   @skipOnOCIS
