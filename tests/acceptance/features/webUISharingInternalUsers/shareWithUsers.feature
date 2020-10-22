@@ -381,6 +381,7 @@ Feature: Sharing files and folders with internal users
     And the user opens folder "simple-folder" using the webUI
     Then file "collaborate-on-this.txt" should be listed on the webUI
 
+  @skipOnOCIS @issue-ocis-730
   Scenario: deleting an entry on the shared-with-me page unshares from self
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
