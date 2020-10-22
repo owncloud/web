@@ -118,7 +118,6 @@ config = {
 					'webUISharingInternalUsers',
 					'webUISharingPermissionsUsers',
 					'webUIRestrictSharing',
-					'webUIResharing',
 					'webUISharingAcceptShares',
 					'webUISharingAutocompletion',
 				],
@@ -136,6 +135,10 @@ config = {
 					'webUISharingInternalGroups',
 					'webUISharingNotifications'
 				],
+				'webUIOCISResharing': [
+					# for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
+					'webUIResharing',
+				]
 			},
 			'extraEnvironment': {
 				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
@@ -143,7 +146,7 @@ config = {
 				'BACKEND_HOST': 'https://ocis:9200',
 				'RUN_ON_OCIS': 'true',
 				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
-				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/reva/data/',
+				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/ocis/owncloud/data/',
 				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
 			},
 			'runningOnOCIS': True,
@@ -154,7 +157,7 @@ config = {
 	'defaults': {
 		'acceptance': {
 			'ocisBranch': 'master',
-			'ocisCommit': '84ca821fe4490fcce7390c3e59faac49215d9c56',
+			'ocisCommit': 'af3972065926293dff5bb9f42f9ab76e7860f4ed',
 		},
 	},
 
@@ -1192,25 +1195,32 @@ def ocisService():
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'STORAGE_STORAGE_HOME_DATA_TEMP_FOLDER': '/srv/app/tmp/',
-			'STORAGE_STORAGE_LOCAL_ROOT': '/srv/app/tmp/reva/root',
-			'STORAGE_STORAGE_OWNCLOUD_DATADIR': '/srv/app/tmp/reva/data',
-			'STORAGE_STORAGE_OC_DATA_TEMP_FOLDER': '/srv/app/tmp/',
+			'STORAGE_HOME_DRIVER': 'owncloud',
+			'STORAGE_USERS_DRIVER': 'owncloud',
+			'STORAGE_STORAGE_OCIS_ROOT': '/srv/app/tmp/ocis/storage/users',
+			'STORAGE_STORAGE_LOCAL_ROOT': '/srv/app/tmp/ocis/local/root',
+			'STORAGE_STORAGE_OWNCLOUD_DATADIR': '/srv/app/tmp/ocis/owncloud/data',
+			'STORAGE_METADATA_ROOT': '/srv/app/tmp/ocis/metadata',
 			'STORAGE_STORAGE_OWNCLOUD_REDIS_ADDR': 'redis:6379',
+			'STORAGE_LDAP_IDP': 'https://ocis:9200',
 			'STORAGE_OIDC_ISSUER': 'https://ocis:9200',
-			'STORAGE_STORAGE_OC_DATA_SERVER_URL': 'http://ocis:9164/data',
-			'STORAGE_DATAGATEWAY_URL': 'https://ocis:9200/data',
+			'PROXY_OIDC_ISSUER': 'https://ocis:9200',
+			'PROXY_OIDC_INSECURE': 'true',
+			'STORAGE_HOME_DATA_SERVER_URL': 'http://ocis:9155/data',
+			'STORAGE_DATAGATEWAY_PUBLIC_URL': 'https://ocis:9200/data',
+			'STORAGE_USERS_DATA_SERVER_URL': 'http://ocis:9158/data',
+			'STORAGE_FRONTEND_PUBLIC_URL': 'https://ocis:9200',
 			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
 			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
 			'KONNECTD_ISS': 'https://ocis:9200',
 			'KONNECTD_TLS': 'true',
-			'PROXY_OIDC_ISSUER': 'https://ocis:9200',
-			'PROXY_OIDC_INSECURE': 'true',
-			'STORAGE_LDAP_IDP': 'https://ocis:9200',
+			'ACCOUNTS_DATA_PATH': '/srv/app/tmp/ocis-accounts/',
 		},
 		'commands': [
 			'cd /var/www/owncloud',
+			'mkdir -p /srv/app/tmp/ocis/owncloud/data/',
+			'mkdir -p /srv/app/tmp/ocis/storage/users/',
 			'./ocis --log-level debug server'
 		],
 		'volumes': [{
