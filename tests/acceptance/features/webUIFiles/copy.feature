@@ -29,13 +29,13 @@ Feature: copy files and folders
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
     When the user batch copies these files into folder "simple-empty-folder" using the webUI
-      | name        |
+      | file_name   |
       | data.zip    |
       | lorem.txt   |
       | testapp.zip |
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
-    And the following file should be listed on the webUI
-      | name-parts  |
+    And the following files should be listed on the webUI
+      | file_name   |
       | data.zip    |
       | lorem.txt   |
       | testapp.zip |
