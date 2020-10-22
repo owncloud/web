@@ -73,19 +73,12 @@ Feature: accept/decline shares coming from internal users
     Then User-based auto accepting checkbox should not be displayed on the personal sharing settings page in the webUI
 
   Scenario: User receives files when auto accept share is disabled
-    Given user "user1" has shared file "lorem.txt" with user "user2"
+    Given user "user1" has uploaded file with content "test" to "toshare.txt"
+    And user "user1" has shared file "toshare.txt" with user "user2"
     When the user browses to the shared-with-me page using the webUI
-    Then file "lorem.txt" shared by "User One" should be in "Pending" state on the webUI
+    Then file "toshare.txt" shared by "User One" should be in "Pending" state on the webUI
     When the user browses to the files page
-    Then file "lorem.txt" should not be listed on the webUI
-    And folder "Shares" should not be listed on the webUI
-
-  Scenario: shared file is in pending state when the Automatically accept incoming shares is disabled
-    Given user "user1" has shared file "lorem.txt" with user "user2"
-    When the user browses to the shared-with-me page using the webUI
-    Then file "lorem.txt" shared by "User One" should be in "Pending" state on the webUI
-    When the user browses to the files page
-    Then file "lorem.txt" should not be listed on the webUI
+    Then file "toshare.txt" should not be listed on the webUI
     And folder "Shares" should not be listed on the webUI
 
   Scenario: receive shares with same name from different users
@@ -97,29 +90,33 @@ Feature: accept/decline shares coming from internal users
     And file "lorem.txt" shared by "User Three" should be in "Pending" state on the webUI
 
   Scenario: decline an offered (pending) share
-    Given user "user1" has shared file "lorem.txt" with user "user2"
-    And user "user1" has shared file "testimage.jpg" with user "user2"
+    Given user "user1" has uploaded file with content "test" to "toshare.txt"
+    And user "user1" has uploaded file with content "test" to "anotherfile.txt"
+    And user "user1" has shared file "toshare.txt" with user "user2"
+    And user "user1" has shared file "anotherfile.txt" with user "user2"
     And the user has browsed to the shared-with-me page
-    When the user declines share "lorem.txt" offered by user "User One" using the webUI
-    Then file "lorem.txt" shared by "User One" should be in "Declined" state on the webUI
-    And file "testimage.jpg" shared by "User One" should be in "Pending" state on the webUI
+    When the user declines share "toshare.txt" offered by user "User One" using the webUI
+    Then file "toshare.txt" shared by "User One" should be in "Declined" state on the webUI
+    And file "anotherfile.txt" shared by "User One" should be in "Pending" state on the webUI
     When the user browses to the files page
-    Then file "lorem.txt" should not be listed on the webUI
-    And file "testimage.jpg" should not be listed on the webUI
+    Then file "toshare.txt" should not be listed on the webUI
+    And file "anotherfile.txt" should not be listed on the webUI
 
   Scenario: accept an offered (pending) share
-    Given user "user1" has shared file "lorem.txt" with user "user2"
-    And user "user1" has shared file "testimage.jpg" with user "user2"
+    Given user "user1" has uploaded file with content "test" to "toshare.txt"
+    And user "user1" has uploaded file with content "test" to "anotherfile.txt"
+    And user "user1" has shared file "toshare.txt" with user "user2"
+    And user "user1" has shared file "anotherfile.txt" with user "user2"
     And the user has browsed to the shared-with-me page
-    When the user accepts share "lorem.txt" offered by user "User One" using the webUI
-    Then file "lorem.txt" shared by "User One" should be in "Accepted" state on the webUI
-    And file "testimage.jpg" shared by "User One" should be in "Pending" state on the webUI
-    And the file "lorem.txt" shared by "User One" should be in "Accepted" state on the webUI after a page reload
-    And the file "testimage.jpg" shared by "User One" should be in "Pending" state on the webUI after a page reload
+    When the user accepts share "toshare.txt" offered by user "User One" using the webUI
+    Then file "toshare.txt" shared by "User One" should be in "Accepted" state on the webUI
+    And file "anotherfile.txt" shared by "User One" should be in "Pending" state on the webUI
+    And the file "toshare.txt" shared by "User One" should be in "Accepted" state on the webUI after a page reload
+    And the file "anotherfile.txt" shared by "User One" should be in "Pending" state on the webUI after a page reload
     When the user browses to the files page
     And the user opens folder "Shares" using the webUI
-    Then file "lorem.txt" should be listed on the webUI
-    And file "testimage.jpg" should not be listed on the webUI
+    Then file "toshare.txt" should be listed on the webUI
+    And file "anotherfile.txt" should not be listed on the webUI
 
   @skipOnOCIS @ocis-product-276
   Scenario: accept a previously declined share
