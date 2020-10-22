@@ -265,8 +265,7 @@ module.exports = {
         })
         .useCss()
       // Wait for preview to be loaded
-      this.waitForThumbnailLoaded(fileName, elementType)
-      return this
+      return this.waitForThumbnailLoaded(fileName, elementType)
     },
     /**
      * Wait for all visible thumbnails to finish loading
@@ -385,14 +384,14 @@ module.exports = {
      * @returns {boolean}
      */
     isElementListed: async function(element, elementType = 'file') {
-      let isListed = true
-      await this.waitForElementVisible('@filesTable')
-        .useXpath()
-        .waitForElementNotPresent('@loadingIndicator')
-        .api.elements('xpath', this.getFileRowSelectorByFileName(element, elementType), result => {
-          isListed = result.value.length > 0
+      let isListed = false
+      await this.waitForFileVisible(element, elementType)
+        .then(function() {
+          isListed = true
         })
-        .useCss()
+        .catch(function() {
+          isListed = false
+        })
       return isListed
     },
     /**
