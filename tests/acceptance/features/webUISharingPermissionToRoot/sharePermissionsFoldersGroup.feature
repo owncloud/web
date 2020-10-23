@@ -60,4 +60,4 @@ Feature: Sharing folders with internal groups with different roles and permissio
     # | Advanced permissions | Viewer                  | ,                             | ,                     | read                         |
     # | Advanced permissions | Viewer                  | share                         | share                 | read, share                  |
     # | Advanced permissions | Editor                  | delete, update, create        | ,                     | read, delete, update, create |
-    | Advanced permissions | Editor                  | share, delete, update, create | share                 | all                          |
+    | Advanced permissions | Editor                  | share, delete, update, create | ,                     | all                          |

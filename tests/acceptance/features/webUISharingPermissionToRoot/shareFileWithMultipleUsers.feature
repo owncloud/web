@@ -59,4 +59,4 @@ Feature: Sharing files with multiple internal users with different permissions
       # | Advanced permissions | Viewer         | ,                 | ,                     | read                |
       # | Advanced permissions | Viewer         | share             | share                 | read, share         |
       # | Advanced permissions | Editor         | update            | ,                     | read, update        |
-      | Advanced permissions | Editor         | share, update     | share                 | read, update, share |
+      | Advanced permissions | Editor         | share, update     | ,                     | read, update, share |
