@@ -936,14 +936,31 @@ When('the user deletes the file {string} from the deleted files list', function(
   return client.page.FilesPageElement.filesList().deleteImmediately(element)
 })
 
+async function isPossibleToDeleteResourceOnWebUI(resource) {
+  return !(await client.page.FilesPageElement.filesList().isActionAttributeDisabled(
+    'delete',
+    resource
+  ))
+}
+
 Then('it should not be possible to delete file/folder {string} using the webUI', async function(
   resource
 ) {
-  const state = await client.page.FilesPageElement.filesList().isActionAttributeDisabled(
-    'delete',
-    resource
+  assert.strictEqual(
+    await isPossibleToDeleteResourceOnWebUI(resource),
+    false,
+    `expected delete function of ${resource} to be disabled but it is enabled`
   )
-  assert.ok(state, `expected property disabled of ${resource} to be 'true' but found ${state}`)
+})
+
+Then('it should be possible to delete file/folder {string} using the webUI', async function(
+  resource
+) {
+  assert.strictEqual(
+    await isPossibleToDeleteResourceOnWebUI(resource),
+    true,
+    `expected delete function of ${resource} to be enabled but it is disabled`
+  )
 })
 
 Then('it should not be possible to rename file/folder {string} using the webUI', async function(

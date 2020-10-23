@@ -135,10 +135,15 @@ config = {
 					'webUISharingInternalGroups',
 					'webUISharingNotifications'
 				],
+				'webUIOCIS6': [
+					'webUISharingPublic',
+					'webUISharingPublicDifferentRoles',
+				],
 				'webUIOCISResharing': [
 					# for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
 					'webUIResharing',
-				]
+				],
+
 			},
 			'extraEnvironment': {
 				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
@@ -157,7 +162,7 @@ config = {
 	'defaults': {
 		'acceptance': {
 			'ocisBranch': 'master',
-			'ocisCommit': 'af3972065926293dff5bb9f42f9ab76e7860f4ed',
+			'ocisCommit': '2255eed422c59c9ff7c65daf8952929607e2fffe',
 		},
 	},
 
