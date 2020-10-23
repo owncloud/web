@@ -55,12 +55,9 @@ Feature: Sharing files with internal groups with permissions
     But group "grp1" should not be listed in the collaborators list on the webUI
     And as "user1" file "/Shares/lorem.txt" should not exist
     Examples:
-    | role                 | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |
-    | Viewer               | Viewer         | share             | share                 | read, share         |
-    | Viewer               | Viewer         | ,                 | ,                     | read                |
-    | Editor               | Editor         | share             | share                 | share, read, update |
-    | Editor               | Editor         | ,                 | ,                     | read, update        |
-    | Advanced permissions | Viewer         | ,                 | ,                     | read                |
-    | Advanced permissions | Viewer         | share             | share                 | read, share         |
-    | Advanced permissions | Editor         | update            | ,                     | read, update        |
-    | Advanced permissions | Editor         | share, update     | share                 | read, update, share |
+    | role                 | displayed-role               | extra-permissions | displayed-permissions | actual-permissions  |
+    | Viewer               | Viewer                       | ,                 | ,                     | read, share         |
+    | Editor               | Editor                       | ,                 | ,                     | share, read, update |
+    | Advanced permissions | Advanced permissions         | ,                 | ,                     | read                |
+    | Advanced permissions | Viewer                       | share             | ,                     | read, share         |
+    | Advanced permissions | Editor                       | share, update     | ,                     | read, update, share |
