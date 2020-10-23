@@ -70,7 +70,7 @@ Feature: Sharing files and folders with internal users
       | initial-permissions | set-role             | expected-role        | expected-permissions            |
       | read,update,create  | Viewer               | Viewer               | read,share                      |
       | read                | Editor               | Editor               | read,update,create,delete,share |
-      | read                | Advanced permissions | Advanced permissions | read                            |
+      | read,share          | Advanced permissions | Viewer               | read,share                      |
       | all                 | Advanced permissions | Editor               | all                             |
 
   Scenario: share a file with another internal user who overwrites and unshares the file
@@ -589,7 +589,7 @@ Feature: Sharing files and folders with internal users
     And user "user1" has shared folder "simple-folder" with user "user2" with "read" permission
     And user "user1" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
     When user "user2" has logged in using the webUI
-    Then user "User Two" should be listed as "Editor" in the collaborators list for folder "simple-folder (2)" on the webUI
+    Then user "User Two" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
 
   Scenario: share a file with another internal user which should expire after 2 days
     Given user "user1" has logged in using the webUI
