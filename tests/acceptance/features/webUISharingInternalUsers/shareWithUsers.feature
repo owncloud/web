@@ -77,7 +77,7 @@ Feature: Sharing files and folders with internal users
       | initial-permissions | set-role             | expected-role        | expected-permissions            |
       | read,update,create  | Viewer               | Viewer               | read,share                      |
       | read                | Editor               | Editor               | read,update,create,delete,share |
-      | read                | Advanced permissions | Advanced permissions | read                            |
+      | read,share          | Advanced permissions | Viewer               | read,share                      |
       | all                 | Advanced permissions | Editor               | all                             |
 
   @skipOnOC10 @issue-product-203
