@@ -73,7 +73,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | uid_owner   | user1                      |
       | share_with  | user1@%remote_backend_url% |
       | item_type   | folder                     |
-      | permissions | read                       |
+      | permissions | read, share                |
     And as "user1" folder "Shares/simple-empty-folder" should exist on remote server
 
   @issue-3309
@@ -156,7 +156,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | uid_owner   | user1                      |
       | share_with  | user2                      |
       | item_type   | folder                     |
-      | permissions | read                       |
+      | permissions | read, share                |
 
   Scenario: test resharing a federated server to remote again
     Given user "user2" has been created with default attributes on remote server
@@ -171,7 +171,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | uid_owner   | user1                      |
       | share_with  | user2@%remote_backend_url% |
       | item_type   | folder                     |
-      | permissions | read                       |
+      | permissions | read, share                |
     And as "user2" folder "Shares/simple-folder" should exist on remote server
 
   Scenario: try resharing a folder with read-only permissions
