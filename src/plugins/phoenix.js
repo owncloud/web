@@ -76,7 +76,10 @@ export default {
             this.showMessage({
               title: this.$gettext('Download failed'),
               desc: this.$gettext('File could not be located'),
-              status: 'danger'
+              status: 'danger',
+              autoClose: {
+                enabled: true
+              }
             })
             return
           }
@@ -96,7 +99,10 @@ export default {
               this.showMessage({
                 title: this.$gettext('Download failed'),
                 desc: request.statusText,
-                status: 'danger'
+                status: 'danger',
+                autoClose: {
+                  enabled: true
+                }
               })
 
               // Remove item from progress queue in case the request failed

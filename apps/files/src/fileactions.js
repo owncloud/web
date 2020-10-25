@@ -184,7 +184,10 @@ export default {
         const title = this.$gettextInterpolate(translated, { file: file.name }, true)
         this.showMessage({
           title: title,
-          status: 'danger'
+          status: 'danger',
+          autoClose: {
+            enabled: true
+          }
         })
       })
     },
@@ -236,7 +239,10 @@ export default {
           )
           this.showMessage({
             title: title,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           })
         })
     },

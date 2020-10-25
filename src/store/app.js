@@ -12,8 +12,15 @@ const actions = {
   toggleSidebar(context, visible) {
     context.commit('TOGGLE_SIDEBAR', visible)
   },
-  showMessage(context, message) {
-    context.commit('ENQUEUE_MESSAGE', message)
+  showMessage({ commit }, message) {
+    commit('ENQUEUE_MESSAGE', message)
+
+    // auto close message if desired
+    if (message.autoClose && message.autoClose.enabled === true) {
+      setTimeout(() => {
+        commit('REMOVE_MESSAGE', message)
+      }, message.autoClose.timeout || 5000)
+    }
   },
   deleteMessage(context, mId) {
     context.commit('REMOVE_MESSAGE', mId)
@@ -64,10 +71,12 @@ const actions = {
 const mutations = {
   ENQUEUE_MESSAGE(state, message) {
     // set random id to improve iteration in v-for & lodash
-    if (!message.id)
+    if (!message.id) {
       message.id = Math.random()
         .toString(36)
         .slice(2, -1)
+    }
+
     state.messages.push(message)
   },
   REMOVE_MESSAGE(state, item) {

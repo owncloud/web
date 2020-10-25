@@ -142,7 +142,10 @@ export default {
           this.removeFilesFromTrashbin([file])
           const translated = this.$gettext('%{file} was restored successfully')
           this.showMessage({
-            title: this.$gettextInterpolate(translated, { file: file.name }, true)
+            title: this.$gettextInterpolate(translated, { file: file.name }, true),
+            autoClose: {
+              enabled: true
+            }
           })
         })
         .catch(error => {
@@ -150,7 +153,10 @@ export default {
           this.showMessage({
             title: this.$gettextInterpolate(translated, { file: file.name }, true),
             desc: error.message,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           })
         })
       this.resetFileSelection()

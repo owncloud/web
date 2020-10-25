@@ -29,7 +29,10 @@ function createPublicLink(ctx) {
           desc: $gettext(
             'Public link has been successfully created and copied into your clipboard.'
           ),
-          status: 'success'
+          status: 'success',
+          autoClose: {
+            enabled: true
+          }
         })
         resolve()
       })

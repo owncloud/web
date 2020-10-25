@@ -52,7 +52,10 @@ export default {
       this.showMessage({
         title: this.$gettext('PDF could not be loaded…'),
         desc: error,
-        status: 'danger'
+        status: 'danger',
+        autoClose: {
+          enabled: true
+        }
       })
     },
 

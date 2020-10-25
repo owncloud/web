@@ -20,7 +20,10 @@ const actions = {
       dispatch('showMessage', {
         title: 'Failed to load settings values.',
         desc: error.response.statusText,
-        status: 'danger'
+        status: 'danger',
+        autoClose: {
+          enabled: true
+        }
       })
     }
   }
