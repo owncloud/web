@@ -84,7 +84,10 @@ export default {
           this.showMessage({
             title: this.$gettext('Search failed'),
             desc: e.message,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           })
         })
         .finally(() => {

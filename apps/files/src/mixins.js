@@ -230,7 +230,10 @@ export default {
                 { folder: item.name },
                 true
               ),
-              status: 'danger'
+              status: 'danger',
+              autoClose: {
+                enabled: true
+              }
             })
 
             continue
@@ -301,7 +304,10 @@ export default {
         this.showMessage({
           title: this.$gettext('Upload failed'),
           desc: this.$gettext('Upload of a folder is not supported in Internet Explorer.'),
-          status: 'danger'
+          status: 'danger',
+          autoClose: {
+            enabled: true
+          }
         })
         return
       }
@@ -321,7 +327,10 @@ export default {
             { folder: directoryName },
             true
           ),
-          status: 'danger'
+          status: 'danger',
+          autoClose: {
+            enabled: true
+          }
         })
       } else {
         // Get folder structure

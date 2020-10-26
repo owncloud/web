@@ -397,7 +397,10 @@ export default {
         this.showMessage({
           title: this.$gettext('Loading folder failed…'),
           desc: error.message,
-          status: 'danger'
+          status: 'danger',
+          autoClose: {
+            enabled: true
+          }
         })
       })
     },
@@ -465,7 +468,10 @@ export default {
             this.showMessage({
               title: this.$gettext('Creating folder failed…'),
               desc: error,
-              status: 'danger'
+              status: 'danger',
+              autoClose: {
+                enabled: true
+              }
             })
           })
           .finally(() => {
@@ -537,7 +543,10 @@ export default {
           this.showMessage({
             title: this.$gettext('Creating file failed…'),
             desc: error,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           })
         })
       }
@@ -627,7 +636,10 @@ export default {
         .clearTrashBin()
         .then(() => {
           this.showMessage({
-            title: this.$gettext('All deleted files were removed')
+            title: this.$gettext('All deleted files were removed'),
+            autoClose: {
+              enabled: true
+            }
           })
           this.removeFilesFromTrashbin(this.activeFiles)
         })
@@ -635,7 +647,10 @@ export default {
           this.showMessage({
             title: this.$gettext('Could not delete files'),
             desc: error.message,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           })
         })
     },
@@ -647,7 +662,10 @@ export default {
           .then(() => {
             const translated = this.$gettext('%{file} was restored successfully')
             this.showMessage({
-              title: this.$gettextInterpolate(translated, { file: file.name }, true)
+              title: this.$gettextInterpolate(translated, { file: file.name }, true),
+              autoClose: {
+                enabled: true
+              }
             })
             this.removeFilesFromTrashbin([file])
           })
@@ -656,7 +674,10 @@ export default {
             this.showMessage({
               title: this.$gettextInterpolate(translated, { file: file.name }, true),
               desc: error.message,
-              status: 'danger'
+              status: 'danger',
+              autoClose: {
+                enabled: true
+              }
             })
           })
       }

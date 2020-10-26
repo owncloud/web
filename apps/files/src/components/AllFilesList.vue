@@ -264,7 +264,10 @@ export default {
           this.showMessage({
             title: this.$gettext('Loading folder failed…'),
             desc: error.message,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           })
         })
     },

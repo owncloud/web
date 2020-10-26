@@ -362,7 +362,10 @@ export default {
               'showMessage',
               {
                 title: $gettext('Loading folder failed…'),
-                status: 'danger'
+                status: 'danger',
+                autoClose: {
+                  enabled: true
+                }
               },
               { root: true }
             )
@@ -441,7 +444,10 @@ export default {
             'showMessage',
             {
               title: $gettext('Loading list of deleted files has failed…'),
-              status: 'danger'
+              status: 'danger',
+              autoClose: {
+                enabled: true
+              }
             },
             { root: true }
           )
@@ -461,7 +467,10 @@ export default {
           {
             title: $gettext('Loading list of deleted files has failed…'),
             desc: e.message,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           },
           { root: true }
         )
@@ -498,7 +507,10 @@ export default {
           {
             title: $gettext('Loading shared files failed…'),
             desc: e.message,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           },
           { root: true }
         )
@@ -535,7 +547,10 @@ export default {
           {
             title: $gettext('Loading shared files failed…'),
             desc: e.message,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           },
           { root: true }
         )
@@ -632,7 +647,10 @@ export default {
             'showMessage',
             {
               title: title,
-              status: 'danger'
+              status: 'danger',
+              autoClose: {
+                enabled: true
+              }
             },
             { root: true }
           )
@@ -685,7 +703,10 @@ export default {
             {
               title: this.$gettext('Error while searching.'),
               desc: error.message,
-              status: 'danger'
+              status: 'danger',
+              autoClose: {
+                enabled: true
+              }
             },
             { root: true }
           )
@@ -793,7 +814,10 @@ export default {
             {
               title: $gettext('Error while sharing.'),
               desc: e,
-              status: 'danger'
+              status: 'danger',
+              autoClose: {
+                enabled: true
+              }
             },
             { root: true }
           )
@@ -821,7 +845,10 @@ export default {
           {
             title: $gettext('Error while sharing.'),
             desc: e,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           },
           { root: true }
         )
@@ -998,7 +1025,10 @@ export default {
           {
             title: $gettext('Error while changing share state'),
             desc: e.message,
-            status: 'danger'
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
           },
           { root: true }
         )

@@ -391,7 +391,10 @@ export default {
         this.showMessage({
           title: this.$gettextInterpolate(title, { resource: errors[0].resource }, true),
           desc: errors[0].message,
-          status: 'danger'
+          status: 'danger',
+          autoClose: {
+            enabled: true
+          }
         })
 
         return
@@ -420,7 +423,10 @@ export default {
         this.showMessage({
           title,
           desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
-          status: 'danger'
+          status: 'danger',
+          autoClose: {
+            enabled: true
+          }
         })
         console.error('Move / copy failed:', errors)
 
