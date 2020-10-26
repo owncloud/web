@@ -61,9 +61,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension']),
+    ...mapGetters(['user', 'configuration', 'getNavItemsByExtension', 'isOcis']),
     editUrl() {
-      if (this.user.version.edition === 'reva') {
+      if (this.isOcis) {
         return null
       }
       return this.configuration.server.replace(/\/$/, '') + '/index.php/settings/personal'

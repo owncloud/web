@@ -59,4 +59,4 @@ Feature: Sharing folders with multiple internal users with different permissions
       # | Advanced permissions | Viewer                  | ,                             | ,                     | read                         |
       # | Advanced permissions | Viewer                  | share                         | share                 | read, share                  |
       # | Advanced permissions | Editor                  | delete, update, create        | ,                     | read, delete, update, create |
-      | Advanced permissions | Editor                  | share, delete, update, create | share                 | all                          |
+      | Advanced permissions | Editor                  | share, delete, update, create | ,                     | all                          |

@@ -51,10 +51,10 @@ Feature: Sharing files and folders with internal users
     #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
     #    And file "testimage (2).jpg" should be marked as shared by "User Two" on the webUI
     Examples:
-      | set-role             | expected-role | permissions-folder        | permissions-file |
-      | Viewer               | Viewer        | read                      | read             |
-      | Editor               | Editor        | read,update,create,delete | read,update      |
-      | Advanced permissions | Viewer        | read                      | read             |
+      | set-role             | expected-role               | permissions-folder              | permissions-file  |
+      | Viewer               | Viewer                      | read,share                      | read, share       |
+      | Editor               | Editor                      | read,update,create,delete,share | read,update,share |
+      | Advanced permissions | Advanced permissions        | read                            | read              |
 
   @skipOnOCIS @issue-product-203
   Scenario Outline: change the collaborators of a file & folder
@@ -74,11 +74,11 @@ Feature: Sharing files and folders with internal users
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
-      | initial-permissions | set-role             | expected-role | expected-permissions      |
-      | read,update,create  | Viewer               | Viewer        | read                      |
-      | read                | Editor               | Editor        | read,update,create,delete |
-      | read                | Advanced permissions | Viewer        | read                      |
-      | all                 | Advanced permissions | Editor        | all                       |
+      | initial-permissions | set-role             | expected-role        | expected-permissions            |
+      | read,update,create  | Viewer               | Viewer               | read,share                      |
+      | read                | Editor               | Editor               | read,update,create,delete,share |
+      | read,share          | Advanced permissions | Viewer               | read,share                      |
+      | all                 | Advanced permissions | Editor               | all                             |
 
   @skipOnOC10 @issue-product-203
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -99,11 +99,11 @@ Feature: Sharing files and folders with internal users
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
-      | initial-permissions | set-role             | expected-role | expected-permissions      |
-      | read,update,create  | Viewer               | Viewer        | read                      |
-      | read                | Editor               | Editor        | read,update,create,delete |
-      | read                | Advanced permissions | Viewer        | read                      |
-      | all                 | Advanced permissions | Editor        | all                       |
+      | initial-permissions       | set-role             | expected-role | expected-permissions      |
+      | read,update,create        | Viewer               | Viewer        | read                      |
+      | read                      | Editor               | Editor        | read,update,create,delete |
+      | read                      | Advanced permissions | Viewer        | read                      |
+      | read,update,create,delete | Advanced permissions | Editor        | read,update,create,delete |
 
   @skip @issue-4102
   Scenario: share a file with another internal user who overwrites and unshares the file
@@ -580,7 +580,8 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "User Two" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
 
-  @issue-2897
+  # Share permission is not available in oCIS webUI so when setting all permissions, it is displayed as "Advanced permissions" there
+  @skipOnOCIS @issue-2897
   Scenario: sharing details of items inside a re-shared folder
     Given user "user3" has been created with default attributes
     And user "user1" has uploaded file with content "test" to "/simple-folder/lorem.txt"
@@ -594,6 +595,21 @@ Feature: Sharing files and folders with internal users
     Then user "User Three" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "User Three" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+
+  @skipOnOC10 @issue-2897
+  Scenario: sharing details of items inside a re-shared folder
+    Given user "user3" has been created with default attributes
+    And user "user1" has uploaded file with content "test" to "/simple-folder/lorem.txt"
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user2" has accepted the share "simple-folder" offered by user "user1"
+    And user "user2" has shared folder "Shares/simple-folder" with user "user3"
+    And user "user2" has logged in using the webUI
+    And the user has opened folder "Shares"
+    And the user has opened folder "simple-folder"
+    When the user opens the share dialog for folder "simple-empty-folder" using the webUI
+    Then user "User Three" should be listed as "Advanced permissions" via "simple-folder" in the collaborators list on the webUI
+    When the user opens the share dialog for file "lorem.txt" using the webUI
+    Then user "User Three" should be listed as "Advanced permissions" via "simple-folder" in the collaborators list on the webUI
 
   @issue-2897 @skipOnOCIS @issue-4193
   Scenario: sharing details of items inside a shared folder shared with multiple users
@@ -713,7 +729,7 @@ Feature: Sharing files and folders with internal users
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
     When user "user2" logs in using the webUI
     And the user opens folder "Shares" using the webUI
-    Then user "User Two" should be listed as "Editor" in the collaborators list for folder "simple-folder (2)" on the webUI
+    Then user "User Two" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
 
   @skipOnOCIS @issue-4169
   Scenario: share a file with another internal user which should expire after 2 days
@@ -949,7 +965,7 @@ Feature: Sharing files and folders with internal users
       | share_with  | user2                 |
       | file_target | /Shares/simple-folder |
       | item_type   | folder                |
-      | permissions | read                  |
+      | permissions | read,share            |
 
   @skipOnOCIS @issue-product-203
   Scenario Outline: Share files/folders with special characters in their name
@@ -983,10 +999,10 @@ Feature: Sharing files and folders with internal users
       | Sample,Folder,With,Comma |
       | sample,1.txt             |
     Examples:
-      | set-role             | expected-role | permissions-folder        | permissions-file |
-      | Viewer               | Viewer        | read                      | read             |
-      | Editor               | Editor        | read,update,create,delete | read,update      |
-      | Advanced permissions | Viewer        | read                      | read             |
+      | set-role             | expected-role        | permissions-folder              | permissions-file  |
+      | Viewer               | Viewer               | read,share                      | read,share        |
+      | Editor               | Editor               | read,update,create,delete,share | read,update,share |
+      | Advanced permissions | Advanced permissions | read                            | read              |
 
   @skipOnOC10 @issue-product-203
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there

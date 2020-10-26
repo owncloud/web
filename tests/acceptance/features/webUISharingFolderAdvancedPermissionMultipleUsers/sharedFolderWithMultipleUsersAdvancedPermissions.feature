@@ -118,12 +118,6 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | Advanced permissions | Advanced permissions | delete                | delete                | read, delete                        |
       | Advanced permissions | Advanced permissions | update                | update                | read, update                        |
       | Advanced permissions | Advanced permissions | create                | create, update        | read, create, update                |
-      | Advanced permissions | Advanced permissions | share, delete         | share, delete         | read, share, delete                 |
-      | Advanced permissions | Advanced permissions | share, update         | share, update         | read, update, share                 |
-      | Advanced permissions | Advanced permissions | share, create         | share, create, update | read, share, create, update         |
       | Advanced permissions | Advanced permissions | delete, update        | delete, update        | read, delete, update                |
-      | Advanced permissions | Editor               | delete, create        |                       | read, delete, create, update        |
+      | Advanced permissions | Editor               | delete, create        | ,                     | read, delete, create, update        |
       | Advanced permissions | Advanced permissions | update, create        | update, create        | read, update, create                |
-      | Advanced permissions | Advanced permissions | share, delete, update | share, delete, update | read, share, delete, update         |
-      | Advanced permissions | Editor               | share, create, delete | share                 | read, share, delete, create, update |
-      | Advanced permissions | Advanced permissions | share, update, create | share, update, create | read, share, update, create         |

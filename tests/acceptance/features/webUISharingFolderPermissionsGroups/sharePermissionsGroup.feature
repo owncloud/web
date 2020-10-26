@@ -56,12 +56,10 @@ Feature: Sharing folders with internal groups with different roles and permissio
     But group "grp1" should not be listed in the collaborators list on the webUI
     And as "user1" folder "/Shares/simple-folder" should not exist
     Examples:
-    | role                 | displayed-role          | extra-permissions             | displayed-permissions | actual-permissions           |
-    | Viewer               | Viewer                  | share                         | share                 | read, share                  |
-    | Viewer               | Viewer                  | ,                             | ,                     | read                         |
-    | Editor               | Editor                  | share                         | share                 | all                          |
-    | Editor               | Editor                  | ,                             | ,                     | read, update, delete, create |
-    | Advanced permissions | Viewer                  | ,                             | ,                     | read                         |
-    | Advanced permissions | Viewer                  | share                         | share                 | read, share                  |
-    | Advanced permissions | Editor                  | delete, update, create        | ,                     | read, delete, update, create |
-    | Advanced permissions | Editor                  | share, delete, update, create | share                 | all                          |
+    | role                 | displayed-role       | extra-permissions             | displayed-permissions  | actual-permissions           |
+    | Viewer               | Viewer               | ,                             | ,                      | read, share                  |
+    | Editor               | Editor               | ,                             | ,                      | all                          |
+    | Advanced permissions | Advanced permissions | ,                             | ,                      | read                         |
+    | Advanced permissions | Viewer               | share                         | ,                      | read, share                  |
+    | Advanced permissions | Advanced permissions | delete, update, create        | delete, update, create | read, delete, update, create |
+    | Advanced permissions | Editor               | share, delete, update, create | ,                      | all                          |

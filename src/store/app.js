@@ -111,7 +111,8 @@ const getters = {
     return state.notifications.data.length && !state.notifications.failed
       ? state.notifications.data
       : false
-  }
+  },
+  isOcis: (state, getters, rootState) => rootState.user.version.edition === 'reva'
 }
 
 export default {

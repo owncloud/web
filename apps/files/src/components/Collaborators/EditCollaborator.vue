@@ -95,7 +95,7 @@ export default {
   },
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'isOcis']),
 
     collaboratorType() {
       const collaboratorShareType = this.collaborator.shareType
@@ -177,7 +177,7 @@ export default {
         client: this.$client,
         share: this.collaborator,
         // Map bitmask to role to get the correct role in case the advanced role was mapped to existing role
-        role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder'),
+        role: bitmaskToRole(bitmask, this.highlightedFile.type === 'folder', !this.isOcis),
         permissions: bitmask,
         expirationDate: this.expirationDate
       })

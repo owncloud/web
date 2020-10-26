@@ -16,7 +16,7 @@ Feature: Resharing shared files with different permissions
       And user "user1" has shared folder "simple-folder (2)" with user "user3" with "read" permissions
       And user "user2" has logged in using the webUI
       When the user opens the share dialog for folder "simple-folder" using the webUI
-      Then user "User Three" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
+      Then user "User Three" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
       And no custom permissions should be set for collaborator "User Three" for folder "simple-folder" on the webUI
 
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for resharer
@@ -24,7 +24,7 @@ Feature: Resharing shared files with different permissions
       And user "user1" has shared folder "simple-folder (2)" with user "user3" with "read" permissions
       And user "user1" has logged in using the webUI
       When the user opens the share dialog for folder "simple-folder (2)" using the webUI
-      Then user "User Three" should be listed as "Viewer" in the collaborators list for folder "simple-folder (2)" on the webUI
+      Then user "User Three" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
       And no custom permissions should be set for collaborator "User Three" for folder "simple-folder (2)" on the webUI
 
   Scenario: Reshare a folder without share permissions using API and check if the receiver can reshare
@@ -48,11 +48,11 @@ Feature: Resharing shared files with different permissions
     | permissions | <permissions>      |
     Examples:
     | role                 | displayed-role          | collaborators-permissions     | displayed-permissions | permissions                         |
-    | Viewer               | Viewer                  | share                         | share                 | read, share                         |
-    | Editor               | Editor                  | share                         | share                 | all                                 |
+    | Viewer               | Viewer                  | ,                             | ,                     | read, share                         |
+    | Editor               | Editor                  | ,                             | ,                     | all                                 |
     | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
     | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
-    | Advanced permissions | Editor                  | delete, share, create, update | share                 | read, share, delete, update, create |
+    | Advanced permissions | Editor                  | delete, share, create, update | ,                     | read, share, delete, update, create |
 
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "<permissions>" permissions
@@ -79,11 +79,11 @@ Feature: Resharing shared files with different permissions
     | permissions | <permissions>      |
     Examples:
     | role                 | displayed-role          | collaborators-permissions     | displayed-permissions | permissions                         |
-    | Viewer               | Viewer                  | share                         | share                 | read, share                         |
-    | Editor               | Editor                  | share                         | share                 | all                                 |
+    | Viewer               | Viewer                  | ,                             | ,                     | read, share                         |
+    | Editor               | Editor                  | ,                             | ,                     | all                                 |
     | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
     | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
-    | Advanced permissions | Editor                  | delete, share, create, update | share                 | read, share, delete, update, create |
+    | Advanced permissions | Editor                  | delete, share, create, update | ,                     | read, share, delete, update, create |
 
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
@@ -93,7 +93,6 @@ Feature: Resharing shared files with different permissions
     Then user "User Three" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "User Three" for folder "simple-folder" on the webUI
     And user "User One" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
-    And custom permissions "share" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
     | field       | value              |
     | uid_owner   | user2              |
@@ -107,7 +106,7 @@ Feature: Resharing shared files with different permissions
     | share_with  | user3              |
     | file_target | /simple-folder (2) |
     | item_type   | folder             |
-    | permissions | read               |
+    | permissions | read, share        |
 
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for the receiver
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
@@ -119,7 +118,7 @@ Feature: Resharing shared files with different permissions
     | share_with  | user3              |
     | file_target | /simple-folder (2) |
     | item_type   | folder             |
-    | permissions | read               |
+    | permissions | read, share        |
 
   Scenario Outline: share a file/folder without share permissions and check if another user can reshare
     Given user "user2" has shared folder "<shared-entry-name>" with user "user1" with "read" permissions

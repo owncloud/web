@@ -27,11 +27,13 @@ export function roleToBitmask(role, additionalPermissions = []) {
 
   if (additionalPermissions) {
     for (const additionalPermission of additionalPermissions) {
-      if (role.additionalPermissions[additionalPermission]) {
+      if (role.additionalPermissions && role.additionalPermissions[additionalPermission]) {
         bitmask |= permissionsBitmask[additionalPermission]
       }
     }
   }
+
+  console.log(bitmask)
 
   return bitmask
 }
@@ -40,12 +42,13 @@ export function roleToBitmask(role, additionalPermissions = []) {
  * Maps bitmask to role
  * @param {number} bitmask Permissions which are to be mapped to role
  * @param {boolean} isFolder Defines if the item is folder
+ * @param {boolean} allowSharePerm Asserts if the share permission is allowed
  * @returns {object} Role mapped to the bitmask
  */
-export function bitmaskToRole(bitmask, isFolder) {
+export function bitmaskToRole(bitmask, isFolder, allowSharePerm) {
   // TODO: inject the result of "roles()" in the function header and have the caller of bitmaskToRole call roles() with appropriate arguments including translation
   // Not passing in translation as we don't need it
-  const currentRoles = roles({ isFolder: isFolder })
+  const currentRoles = roles({ isFolder: isFolder, allowSharePerm })
   bitmask = parseInt(bitmask, 10)
 
   for (const role in currentRoles) {

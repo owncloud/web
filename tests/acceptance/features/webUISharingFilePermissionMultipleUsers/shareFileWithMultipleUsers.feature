@@ -55,15 +55,13 @@ Feature: Sharing files with multiple internal users with different permissions
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" file "/Shares/lorem.txt" should not exist
     Examples:
-      | role                 | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |
-      | Viewer               | Viewer         | share             | share                 | read, share         |
-      | Viewer               | Viewer         | ,                 | ,                     | read                |
-      | Editor               | Editor         | share             | share                 | share, read, update |
-      | Editor               | Editor         | ,                 | ,                     | read, update        |
-      | Advanced permissions | Viewer         | ,                 | ,                     | read                |
-      | Advanced permissions | Viewer         | share             | share                 | read, share         |
-      | Advanced permissions | Editor         | update            | ,                     | read, update        |
-      | Advanced permissions | Editor         | share, update     | share                 | read, update, share |
+      | role                 | displayed-role               | extra-permissions | displayed-permissions | actual-permissions         |
+      | Viewer               | Viewer                       | ,                 | ,                     | read, share                |
+      | Editor               | Editor                       | ,                 | ,                     | read, update, share        |
+      | Advanced permissions | Advanced permissions         | ,                 | ,                     | read                       |
+      | Advanced permissions | Viewer                       | share             | ,                     | read, share                |
+      | Advanced permissions | Advanced permissions         | update            | update                | read, update               |
+      | Advanced permissions | Editor                       | share, update     | ,                     | read, update, share        |
 
   @skipOnOC10 @issue-product-203
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -111,11 +109,7 @@ Feature: Sharing files with multiple internal users with different permissions
     And as "user4" file "/Shares/lorem.txt" should not exist
     Examples:
       | role                 | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |
-      | Viewer               | Viewer         | share             | share                 | read, share         |
       | Viewer               | Viewer         | ,                 | ,                     | read                |
-      | Editor               | Editor         | share             | share                 | share, read, update |
       | Editor               | Editor         | ,                 | ,                     | read, update        |
       | Advanced permissions | Viewer         | ,                 | ,                     | read                |
-      | Advanced permissions | Viewer         | share             | share                 | read, share         |
       | Advanced permissions | Editor         | update            | ,                     | read, update        |
-      | Advanced permissions | Editor         | share, update     | share                 | read, update, share |
