@@ -632,12 +632,12 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
   )
   let isBreadcrumbVisible = false
 
-  // Check if the breadcrumb is visible
+  // lets hope that the breadcrumbs would not take longer than the "NEW" button
   await client.waitForElementVisible({
-    selector: resourceBreadcrumbXpath,
-    locateStrategy: 'xpath',
+    selector: client.page.filesPage().elements.newFileMenuButtonAnyState.selector,
     abortOnFailure: false
   })
+
   await client.element('xpath', resourceBreadcrumbXpath, result => {
     if (result.status > -1) {
       isBreadcrumbVisible = true
