@@ -103,7 +103,7 @@ Feature: Sharing files and folders with internal users
       | read,update,create  | Viewer               | Viewer        | read                      |
       | read                | Editor               | Editor        | read,update,create,delete |
       | read                | Advanced permissions | Viewer        | read                      |
-      | all                 | Advanced permissions | Editor        | all                       |
+      | all                 | Advanced permissions | Editor        | read,update,create,delete |
 
   @skip @issue-4102
   Scenario: share a file with another internal user who overwrites and unshares the file
@@ -580,7 +580,8 @@ Feature: Sharing files and folders with internal users
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "User Two" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
 
-  @issue-2897
+  # Share permission is not available in oCIS webUI so when setting all permissions, it is displayed as "Advanced permissions" there
+  @skipOnOCIS @issue-2897
   Scenario: sharing details of items inside a re-shared folder
     Given user "user3" has been created with default attributes
     And user "user1" has uploaded file with content "test" to "/simple-folder/lorem.txt"
@@ -594,6 +595,21 @@ Feature: Sharing files and folders with internal users
     Then user "User Three" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
     Then user "User Three" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
+
+  @skipOnOC10 @issue-2897
+  Scenario: sharing details of items inside a re-shared folder
+    Given user "user3" has been created with default attributes
+    And user "user1" has uploaded file with content "test" to "/simple-folder/lorem.txt"
+    And user "user1" has shared folder "simple-folder" with user "user2"
+    And user "user2" has accepted the share "simple-folder" offered by user "user1"
+    And user "user2" has shared folder "Shares/simple-folder" with user "user3"
+    And user "user2" has logged in using the webUI
+    And the user has opened folder "Shares"
+    And the user has opened folder "simple-folder"
+    When the user opens the share dialog for folder "simple-empty-folder" using the webUI
+    Then user "User Three" should be listed as "Advanced permissions" via "simple-folder" in the collaborators list on the webUI
+    When the user opens the share dialog for file "lorem.txt" using the webUI
+    Then user "User Three" should be listed as "Advanced permissions" via "simple-folder" in the collaborators list on the webUI
 
   @issue-2897 @skipOnOCIS @issue-4193
   Scenario: sharing details of items inside a shared folder shared with multiple users

@@ -35,7 +35,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "user2" has logged in using the webUI
     Then custom permission "update" should be set for user "User One" for folder "simple-folder" on the webUI
     When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "create" using the webUI
-    Then custom permission "create" should be set for user "User One" for folder "simple-folder" on the webUI
+    Then custom permissions "create, update" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
       | field       | value                |
       | uid_owner   | user2                |
@@ -134,8 +134,8 @@ Feature: Sharing files and folders with internal users with different permission
     Examples:
       | role                 | displayed-role       | extra-permissions             | displayed-permissions | permissions                  |
       | Viewer               | Viewer               | ,                             | ,                     | read                         |
-      | Editor               | Editor               | ,                             | ,                     | all                          |
-      | Advanced permissions | Advanced permissions | create                        | create                | read                         |
+      | Editor               | Editor               | ,                             | ,                     | read, create, update, delete |
+      | Advanced permissions | Advanced permissions | create                        | create                | read, create                 |
       | Advanced permissions | Advanced permissions | update                        | update                | read, update                 |
       | Advanced permissions | Editor               | delete, create, update        | ,                     | read, delete, update, create |
 
@@ -346,12 +346,12 @@ Feature: Sharing files and folders with internal users with different permission
     And user "user1" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
     And the user browses to the folder "simple-folder" on the files page
-    And the user shares folder "simple-empty-folder" with user "User Three" as "Advanced permissions" with permissions "share, delete, create, update" using the webUI
+    And the user shares folder "simple-empty-folder" with user "User Three" as "Advanced permissions" with permissions "delete, create, update" using the webUI
     And user "user3" accepts the share "simple-empty-folder" offered by user "user1" using the sharing API
     Then user "user3" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user3                |
-      | file_target | /simple-empty-folder |
-      | item_type   | folder               |
-      | permissions | all                  |
+      | field       | value                        |
+      | uid_owner   | user1                        |
+      | share_with  | user3                        |
+      | file_target | /simple-empty-folder         |
+      | item_type   | folder                       |
+      | permissions | read, delete, create, update |

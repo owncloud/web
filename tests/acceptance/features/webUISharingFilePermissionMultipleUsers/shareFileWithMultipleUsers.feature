@@ -108,8 +108,8 @@ Feature: Sharing files with multiple internal users with different permissions
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" file "/Shares/lorem.txt" should not exist
     Examples:
-      | role                 | displayed-role       | extra-permissions | displayed-permissions | actual-permissions  |
-      | Viewer               | Viewer               | ,                 | ,                     | read                |
-      | Editor               | Editor               | ,                 | ,                     | read, update        |
-      | Advanced permissions | Viewer               | ,                 | ,                     | read                |
-      | Advanced permissions | Advanced permissions | update            | update                | read, update        |
+      | role                 | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |
+      | Viewer               | Viewer         | ,                 | ,                     | read                |
+      | Editor               | Editor         | ,                 | ,                     | read, update        |
+      | Advanced permissions | Viewer         | ,                 | ,                     | read                |
+      | Advanced permissions | Editor         | update            | ,                     | read, update        |
