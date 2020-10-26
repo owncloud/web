@@ -99,11 +99,11 @@ Feature: Sharing files and folders with internal users
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
-      | initial-permissions | set-role             | expected-role | expected-permissions      |
-      | read,update,create  | Viewer               | Viewer        | read                      |
-      | read                | Editor               | Editor        | read,update,create,delete |
-      | read                | Advanced permissions | Viewer        | read                      |
-      | read,update,create  | Advanced permissions | Editor        | read,update,create,delete |
+      | initial-permissions       | set-role             | expected-role | expected-permissions      |
+      | read,update,create        | Viewer               | Viewer        | read                      |
+      | read                      | Editor               | Editor        | read,update,create,delete |
+      | read                      | Advanced permissions | Viewer        | read                      |
+      | read,update,create,delete | Advanced permissions | Editor        | read,update,create,delete |
 
   @skip @issue-4102
   Scenario: share a file with another internal user who overwrites and unshares the file

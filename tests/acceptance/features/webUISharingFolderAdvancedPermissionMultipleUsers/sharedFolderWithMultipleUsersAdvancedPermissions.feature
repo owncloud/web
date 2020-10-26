@@ -119,5 +119,5 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | Advanced permissions | Advanced permissions | update                | update                | read, update                        |
       | Advanced permissions | Advanced permissions | create                | create, update        | read, create, update                |
       | Advanced permissions | Advanced permissions | delete, update        | delete, update        | read, delete, update                |
-      | Advanced permissions | Editor               | delete, create        | ,                     | read, delete, create                |
+      | Advanced permissions | Editor               | delete, create        | ,                     | read, delete, create, update        |
       | Advanced permissions | Advanced permissions | update, create        | update, create        | read, update, create                |
