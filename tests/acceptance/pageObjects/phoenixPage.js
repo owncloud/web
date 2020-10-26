@@ -50,7 +50,11 @@ module.exports = {
         .waitForElementVisible(menuItemSelector)
         .click(menuItemSelector)
         .api.page.FilesPageElement.filesList()
-        .waitForElementPresent({ selector: '@filesListProgressBar', abortOnFailure: false }) // don't fail if we are too late
+        .waitForElementPresent({
+          selector: '@filesListProgressBar',
+          abortOnFailure: false, // don't fail if we are too late
+          timeout: this.api.globals.waitForNegativeConditionTimeout
+        })
         .waitForElementNotPresent('@filesListProgressBar')
         .useCss()
 

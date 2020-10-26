@@ -16,7 +16,11 @@ module.exports = {
       throw new Error('Invalid type for loading indicator selector')
     }
     return client
-      .waitForElementPresent({ ...locator, abortOnFailure: false }) // don't fail if we are too late
+      .waitForElementPresent({
+        ...locator,
+        abortOnFailure: false, // don't fail if we are too late
+        timeout: client.globals.waitForNegativeConditionTimeout
+      })
       .waitForElementNotPresent(locator)
   },
 
@@ -34,6 +38,10 @@ module.exports = {
     } else {
       throw new Error('Invalid type for element selector')
     }
-    return client.waitForElementPresent({ ...locator, abortOnFailure: false }) // don't fail if we are too late
+    return client.waitForElementPresent({
+      ...locator,
+      abortOnFailure: false, // don't fail if we are too late
+      timeout: client.globals.waitForNegativeConditionTimeout
+    })
   }
 }
