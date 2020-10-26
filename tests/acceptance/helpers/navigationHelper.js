@@ -7,7 +7,6 @@ module.exports = {
    */
   navigateAndWaitTillLoaded: function(url, loadingIndicatorSelector) {
     client.url(url)
-    client.refresh() // IE11 needs an extra refresh because of the hash in the url
     const locator = {}
     if (typeof loadingIndicatorSelector === 'object') {
       locator.selector = loadingIndicatorSelector.selector
@@ -30,7 +29,6 @@ module.exports = {
    */
   navigateAndWaitTillElementPresent: function(url, ElementSelector) {
     client.url(url)
-    client.refresh() // IE11 needs an extra refresh because of the hash in the url
     const locator = {}
     if (typeof ElementSelector === 'object') {
       locator.selector = ElementSelector.selector
