@@ -135,7 +135,7 @@ Feature: Sharing files and folders with internal users with different permission
       | role                 | displayed-role       | extra-permissions             | displayed-permissions | permissions                  |
       | Viewer               | Viewer               | ,                             | ,                     | read                         |
       | Editor               | Editor               | ,                             | ,                     | read, create, update, delete |
-      | Advanced permissions | Advanced permissions | create                        | create                | read, create                 |
+      | Advanced permissions | Advanced permissions | create                        | create, update        | read, create, update         |
       | Advanced permissions | Advanced permissions | update                        | update                | read, update                 |
       | Advanced permissions | Editor               | delete, create, update        | ,                     | read, delete, update, create |
 

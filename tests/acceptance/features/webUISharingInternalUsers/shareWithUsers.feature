@@ -103,7 +103,7 @@ Feature: Sharing files and folders with internal users
       | read,update,create  | Viewer               | Viewer        | read                      |
       | read                | Editor               | Editor        | read,update,create,delete |
       | read                | Advanced permissions | Viewer        | read                      |
-      | all                 | Advanced permissions | Editor        | read,update,create,delete |
+      | read,update,create  | Advanced permissions | Editor        | read,update,create,delete |
 
   @skip @issue-4102
   Scenario: share a file with another internal user who overwrites and unshares the file

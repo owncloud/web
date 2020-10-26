@@ -117,7 +117,7 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | role                 | displayed-role       | extra-permissions     | displayed-permissions | actual-permissions                  |
       | Advanced permissions | Advanced permissions | delete                | delete                | read, delete                        |
       | Advanced permissions | Advanced permissions | update                | update                | read, update                        |
-      | Advanced permissions | Advanced permissions | create                | create                | read, create                        |
+      | Advanced permissions | Advanced permissions | create                | create, update        | read, create, update                |
       | Advanced permissions | Advanced permissions | delete, update        | delete, update        | read, delete, update                |
-      | Advanced permissions | Advanced permissions | delete, create        |                       | read, delete, create                |
+      | Advanced permissions | Editor               | delete, create        | ,                     | read, delete, create                |
       | Advanced permissions | Advanced permissions | update, create        | update, create        | read, update, create                |
