@@ -96,7 +96,7 @@ export default {
         const icon = fileTypeIconMappings[file.extension.toLowerCase()]
         if (icon) return `${icon}`
       }
-      return 'x-office-document'
+      return 'file'
     },
     label(string) {
       const cssClass = ['uk-label']
