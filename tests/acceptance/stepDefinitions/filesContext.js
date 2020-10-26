@@ -411,7 +411,7 @@ Then('the last uploaded folder should be listed on the webUI', async function() 
 
 Then('file {string} should not be listed on the webUI', function(file) {
   return client.page.FilesPageElement.filesList()
-    .isElementListed(file, 'file')
+    .isElementListed(file, 'file', client.globals.waitForNegativeConditionTimeout)
     .then(state => {
       return client.assert.ok(!state, `Error: File ${file} is listed on the filesList`)
     })
@@ -419,7 +419,7 @@ Then('file {string} should not be listed on the webUI', function(file) {
 
 Then('folder {string} should not be listed on the webUI', async folder => {
   return client.page.FilesPageElement.filesList()
-    .isElementListed(folder, 'folder')
+    .isElementListed(folder, 'folder', client.globals.waitForNegativeConditionTimeout)
     .then(state => {
       return client.assert.ok(!state, `Error: Folder ${folder} is listed on the filesList`)
     })
@@ -539,7 +539,11 @@ Then('the trashbin should be empty on the webUI', async function() {
 
 const theseResourcesShouldNotBeListed = async function(table) {
   for (const entry of table.rows()) {
-    const state = await client.page.FilesPageElement.filesList().isElementListed(entry[0])
+    const state = await client.page.FilesPageElement.filesList().isElementListed(
+      entry[0],
+      'file',
+      client.globals.waitForNegativeConditionTimeout
+    )
     assert.ok(!state, `Expected resource '${entry[0]}' to be 'not present' but found 'present'`)
   }
 }
@@ -802,7 +806,11 @@ const assertElementsAreListed = async function(elements) {
 
 const assertElementsAreNotListed = async function(elements) {
   for (const element of elements) {
-    const state = await client.page.FilesPageElement.filesList().isElementListed(element)
+    const state = await client.page.FilesPageElement.filesList().isElementListed(
+      element,
+      'file',
+      client.globals.waitForNegativeConditionTimeout
+    )
     assert.ok(!state, `Expected resource '${element}' to be 'not present' but found 'present'`)
   }
   return client
