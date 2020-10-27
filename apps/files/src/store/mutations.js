@@ -258,11 +258,7 @@ export default {
     state.files = []
   },
 
-  SET_CURRENT_SIDEBAR_TAB(state, { tab, options }) {
-    state.currentSidebarTab = { tab, options }
-  },
-
-  SET_CURRENT_SIDEBAR_TAB_OPTIONS(state, options) {
-    state.currentSidebarTab.options = options
+  SET_CURRENT_SHARING_SIDEBAR_TAB(state, panel) {
+    state.currentSharingSidebarPanel = panel
   }
 }

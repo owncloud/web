@@ -55,5 +55,5 @@ export default {
   /**
    * Sidebar
    */
-  currentSidebarTab: null
+  currentSharingSidebarPanel: null
 }
