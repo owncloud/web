@@ -20,8 +20,7 @@ Feature: Restore deleted files/folders
     Then file "sample,1.txt" should be listed on the webUI
     When the user restores file "data.zip" from the trashbin using the webUI
     When the user restores file "sample,1.txt" from the trashbin using the webUI
-    Then file "data.zip" should not be listed on the webUI
-    Then file "sample,1.txt" should not be listed on the webUI
+    Then there should be no resources listed on the webUI
     When the user browses to the files page
     Then file "data.zip" should be listed on the webUI
     Then file "sample,1.txt" should be listed on the webUI
@@ -34,8 +33,7 @@ Feature: Restore deleted files/folders
     And folder "Folder,With,Comma" should be listed on the webUI
     When the user restores folder "folder with space" from the trashbin using the webUI
     And the user restores folder "Folder,With,Comma" from the trashbin using the webUI
-    Then file "folder with space" should not be listed on the webUI
-    And file "Folder,With,Comma" should not be listed on the webUI
+    Then there should be no resources listed on the webUI
     When the user browses to the files page
     Then folder "folder with space" should be listed on the webUI
     And folder "Folder,With,Comma" should be listed on the webUI
