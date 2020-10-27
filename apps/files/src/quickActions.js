@@ -47,12 +47,9 @@ function openNewCollaboratorsPanel(ctx) {
 
   // Workaround for displaying the new collaborators panel even when one is already opened
   // Creating timeout takes care of the event loop
-  // TODO: Get rid of this after we use overlay instead of sidebar
   setTimeout(() => {
-    ctx.store.commit('Files/SET_CURRENT_SIDEBAR_TAB', {
-      tab: 'files-sharing',
-      options: { collaboratorsCurrentPanel: 'newCollaborator' }
-    })
+    ctx.store.commit('Files/SET_DEFAULT_OPENED_ACCORDION', 'files-sharing')
+    ctx.store.commit('Files/SET_CURRENT_SHARING_SIDEBAR_PANEL', 'newCollaborator')
   })
 }
 

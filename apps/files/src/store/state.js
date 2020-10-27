@@ -55,5 +55,6 @@ export default {
   /**
    * Sidebar
    */
-  currentSharingSidebarPanel: null
+  currentSharingSidebarPanel: null,
+  defaultOpenedAccordion: null
 }

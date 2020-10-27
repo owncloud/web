@@ -36,9 +36,10 @@
     <template slot="content">
       <oc-accordion class="oc-mt-m">
         <oc-accordion-item
-          v-for="accordion in fileSideBarsEnabled"
+          v-for="(accordion, index) in fileSideBarsEnabled"
           :key="accordion.app"
           :title="accordion.component.title($gettext)"
+          :expanded-by-default="isAccordionOpened(accordion.app, index)"
         >
           <component :is="accordion.component" />
         </oc-accordion-item>
@@ -49,7 +50,7 @@
 
 <script>
 import Mixins from '../mixins'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'FileDetails',
@@ -57,6 +58,7 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
+    ...mapState('Files', ['defaultOpenedAccordion']),
 
     fileSideBarsEnabled() {
       return this.fileSideBars.filter(
@@ -69,9 +71,14 @@ export default {
     }
   },
 
+  beforeDestroy() {
+    this.SET_DEFAULT_OPENED_ACCORDION(null)
+  },
+
   methods: {
     ...mapActions('Files', ['deleteFiles', 'markFavorite']),
     ...mapActions(['showMessage']),
+    ...mapMutations('Files', ['SET_DEFAULT_OPENED_ACCORDION']),
 
     close() {
       this.$emit('reset')
@@ -82,6 +89,14 @@ export default {
         client: this.$client,
         file: file
       })
+    },
+
+    isAccordionOpened(accordion, index) {
+      if (this.defaultOpenedAccordion) {
+        return this.defaultOpenedAccordion === accordion
+      }
+
+      return index === 0
     }
   }
 }

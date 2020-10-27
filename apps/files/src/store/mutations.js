@@ -258,7 +258,11 @@ export default {
     state.files = []
   },
 
-  SET_CURRENT_SHARING_SIDEBAR_TAB(state, panel) {
+  SET_CURRENT_SHARING_SIDEBAR_PANEL(state, panel) {
     state.currentSharingSidebarPanel = panel
+  },
+
+  SET_DEFAULT_OPENED_ACCORDION(state, accordion) {
+    state.defaultOpenedAccordion = accordion
   }
 }

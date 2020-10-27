@@ -304,7 +304,7 @@ export default {
   },
 
   beforeDestroy() {
-    this.SET_CURRENT_SHARING_SIDEBAR_TAB(PANEL_SHOW)
+    this.SET_CURRENT_SHARING_SIDEBAR_PANEL(PANEL_SHOW)
   },
 
   methods: {
@@ -316,7 +316,7 @@ export default {
       'loadIncomingShares',
       'incomingSharesClearState'
     ]),
-    ...mapMutations('Files', ['SET_CURRENT_SHARING_SIDEBAR_TAB']),
+    ...mapMutations('Files', ['SET_CURRENT_SHARING_SIDEBAR_PANEL']),
 
     $_isCollaboratorShare(collaborator) {
       return userShareTypes.includes(collaborator.shareType)
@@ -348,11 +348,11 @@ export default {
     },
     $_ocCollaborators_addShare() {
       this.transitionGroupActive = true
-      this.SET_CURRENT_SHARING_SIDEBAR_TAB(PANEL_NEW)
+      this.SET_CURRENT_SHARING_SIDEBAR_PANEL(PANEL_NEW)
     },
     $_ocCollaborators_editShare(share) {
       this.currentShare = share
-      this.SET_CURRENT_SHARING_SIDEBAR_TAB(PANEL_EDIT)
+      this.SET_CURRENT_SHARING_SIDEBAR_PANEL(PANEL_EDIT)
     },
     $_ocCollaborators_deleteShare(share) {
       this.transitionGroupActive = true
@@ -362,7 +362,7 @@ export default {
       })
     },
     $_ocCollaborators_showList() {
-      this.SET_CURRENT_SHARING_SIDEBAR_TAB(PANEL_SHOW)
+      this.SET_CURRENT_SHARING_SIDEBAR_PANEL(PANEL_SHOW)
       this.currentShare = null
     },
     $_ocCollaborators_isUser(collaborator) {
