@@ -112,7 +112,7 @@ export default {
   methods: {
     ...mapActions('Files', ['dragOver', 'setHighlightedFile', 'resetFileSelection']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['SET_CURRENT_SIDEBAR_TAB']),
+    ...mapMutations('Files', ['SET_DEFAULT_OPENED_ACCORDION']),
     ...mapMutations(['SET_SIDEBAR_FOOTER_CONTENT_COMPONENT']),
 
     trace() {
@@ -122,7 +122,7 @@ export default {
     openSideBar(file, sideBarName) {
       this.setHighlightedFile(file)
       setTimeout(() => {
-        this.SET_CURRENT_SIDEBAR_TAB({ tab: sideBarName })
+        this.SET_DEFAULT_OPENED_ACCORDION({ tab: sideBarName })
       })
     },
 
