@@ -33,8 +33,6 @@ export function roleToBitmask(role, additionalPermissions = []) {
     }
   }
 
-  console.log(bitmask)
-
   return bitmask
 }
 
