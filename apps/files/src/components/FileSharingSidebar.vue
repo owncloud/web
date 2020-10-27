@@ -54,37 +54,17 @@
         </section>
       </template>
     </div>
-    <div v-if="currentPanel === PANEL_NEW" :key="PANEL_NEW">
-      <transition
-        enter-active-class="uk-animation-slide-right uk-animation-fast"
-        leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
-        name="custom-classes-transition"
-      >
-        <div class="uk-position-cover oc-default-background">
-          <new-collaborator
-            v-if="$_ocCollaborators_canShare"
-            key="new-collaborator"
-            @close="$_ocCollaborators_showList"
-          />
-        </div>
-      </transition>
-    </div>
-    <div v-if="currentPanel === PANEL_EDIT" :key="PANEL_EDIT">
-      <transition
-        enter-active-class="uk-animation-slide-right uk-animation-fast"
-        leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
-        name="custom-classes-transition"
-      >
-        <div class="uk-position-cover oc-default-background">
-          <edit-collaborator
-            v-if="$_ocCollaborators_canShare"
-            key="edit-collaborator"
-            :collaborator="currentShare"
-            @close="$_ocCollaborators_showList"
-          />
-        </div>
-      </transition>
-    </div>
+    <new-collaborator
+      v-if="$_ocCollaborators_canShare && currentPanel === PANEL_NEW"
+      key="new-collaborator"
+      @close="$_ocCollaborators_showList"
+    />
+    <edit-collaborator
+      v-if="$_ocCollaborators_canShare && currentPanel === PANEL_EDIT"
+      key="edit-collaborator"
+      :collaborator="currentShare"
+      @close="$_ocCollaborators_showList"
+    />
   </div>
 </template>
 
@@ -434,10 +414,5 @@ export default {
 .oc-app-side-bar .oc-autocomplete-suggestion:hover .uk-text-meta,
 .oc-autocomplete-suggestion-selected .uk-text-meta {
   color: white;
-}
-
-/** needed to cover the container below when transitioning */
-.oc-app-side-bar .oc-default-background {
-  background-color: white;
 }
 </style>
