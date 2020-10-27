@@ -25,7 +25,7 @@ config = {
 					'webUICreateFilesFolders',
 				],
 				'webUIDelete': [
-					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
 				],
 				'webUIRename': [
 					'webUIRenameFiles',
@@ -48,7 +48,9 @@ config = {
 				'webUISharingInternalGroups': 'SharingInternalGroups',
 				'webUISharingInternalGroupsToRoot': 'SharingInternalGroupsRoot',
 				'webUISharingInternalUsers': 'SharingInternalUsers',
+				'webUISharingInternalUsersExpire': 'SharingInternalUsersExpire',
 				'webUISharingInternalUsersToRoot': 'SharingInternalUsersRoot',
+				'webUISharingInternalUsersExpireToRoot': 'SharingInternalUsersExpireToRoot',
 				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
 				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
 				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
@@ -57,8 +59,11 @@ config = {
 				'webUIResharing': 'Resharing',
 				'webUIResharingToRoot': 'ResharingToRoot',
 				'webUISharingPublic': 'SharingPublic',
+				'webUISharingPublicExpire': 'SharingPublicExpire',
 				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
 				'webUITrashbin': 'Trashbin',
+				'webUITrashbinFilesFolders': 'TrashbinFilesFolders',
+				'webUITrashbinRestore': 'TrashbinRestore',
 				'webUIUpload': 'Upload',
 				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
 				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
@@ -116,12 +121,10 @@ config = {
 					'webUIPrivateLinks',
 					'webUIRenameFiles',
 					'webUIRenameFolders',
-					'webUITrashbin',
 					'webUIUpload',
 					'webUIAccount'
 				],
 				'webUIOCIS3': [
-					'webUISharingInternalUsers',
 					'webUISharingPermissionsUsers',
 					'webUIRestrictSharing',
 					'webUISharingAcceptShares',
@@ -141,9 +144,21 @@ config = {
 					'webUISharingInternalGroups',
 					'webUISharingNotifications'
 				],
-				'webUIOCIS6': [
+				'webUIOCISSharingPublic': [
 					'webUISharingPublic',
 					'webUISharingPublicDifferentRoles',
+				],
+				'webUIOCISSharingPublicExpire': [
+					'webUISharingPublicExpire',
+				],
+				'webUIOCISTrashbin': [
+					'webUITrashbin',
+					'webUITrashbinRestore',
+					'webUITrashbinFilesFolders',
+				],
+				'webUIOCISSharingInternalUsers': [
+					'webUISharingInternalUsers',
+					'webUISharingInternalUsersExpire',
 				],
 				'webUIOCISResharing': [
 					# for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
