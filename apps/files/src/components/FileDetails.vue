@@ -2,7 +2,7 @@
   <oc-app-side-bar
     id="files-sidebar"
     :key="highlightedFile.id"
-    class="oc-p-s uk-overflow-auto uk-height-1-1"
+    class="oc-p-s uk-overflow-auto uk-height-1-1 oc-border-l"
     :disable-action="false"
     @close="close()"
   >
@@ -34,18 +34,7 @@
       </div>
     </template>
     <template slot="content">
-      <div>
-        <oc-tabs>
-          <oc-tab-item
-            v-for="tab of fileSideBarsEnabled"
-            :key="tab.name"
-            :active="tab.app === currentTab"
-            @click="setCurrentTab(tab.app)"
-          >
-            {{ tab.title || tab.component.title($gettext) }} {{ tab.name }}
-          </oc-tab-item>
-        </oc-tabs>
-        <component
+      <!-- <component
           :is="activeTabComponent.component"
           v-if="fileSideBars.length > 0 && activeTabComponent"
           :component-name="
@@ -55,8 +44,14 @@
             activeTabComponent.propsData ? activeTabComponent.propsData.componentUrl : ''
           "
           @reload="$emit('reload')"
-        ></component>
-      </div>
+        ></component> -->
+      <oc-accordion class="oc-mt-m">
+        <oc-accordion-item title="Actions" />
+        <oc-accordion-item title="People">
+          <component :is="activeTabComponent.component" />
+        </oc-accordion-item>
+        <oc-accordion-item title="Links" />
+      </oc-accordion>
     </template>
   </oc-app-side-bar>
 </template>
