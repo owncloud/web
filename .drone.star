@@ -21,9 +21,11 @@ config = {
 					'webUIPreview',
 					'webUIAccount',
 				],
-				'webUICreateDelete': [
+				'webUICreate': [
 					'webUICreateFilesFolders',
-					'webUIDeleteFilesFolders',
+				],
+				'webUIDelete': [
+					'webUICreateFilesFolders',
 				],
 				'webUIRename': [
 					'webUIRenameFiles',
@@ -32,7 +34,11 @@ config = {
 				'webUISharingBasic': [
 					'webUISharingAcceptShares',
 					'webUISharingAcceptSharesToRoot',
+				],
+				'webUIRestrictSharing': [
 					'webUIRestrictSharing',
+				],
+				'webUISharingNotifications': [
 					'webUISharingNotifications',
 					'webUISharingNotificationsToRoot',
 				],
