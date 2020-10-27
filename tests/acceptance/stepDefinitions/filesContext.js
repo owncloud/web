@@ -368,7 +368,16 @@ When('the user unmarks the favorited file/folder {string} using the webUI sideba
   return client
 })
 
-Then('there should be no files/folders/resources listed on the webUI', async function() {
+Then('there should be no files/folders/resources listed on the webUI', assertNoResourcesListed)
+Then(
+  'there should be no files/folders/resources listed on the webUI after a page reload',
+  async function() {
+    await client.refresh()
+    return assertNoResourcesListed()
+  }
+)
+
+async function assertNoResourcesListed() {
   let currentUrl = null
   await client.url(result => {
     currentUrl = result.value
@@ -382,11 +391,11 @@ Then('there should be no files/folders/resources listed on the webUI', async fun
 
   const allRowsResult = await client.page.FilesPageElement.filesList().allFileRows()
 
-  assert.ok(
+  return assert.ok(
     allRowsResult.value.length === 0,
     `No resources are listed, ${allRowsResult.length} found`
   )
-})
+}
 
 Then('file {string} should be listed on the webUI', function(folder) {
   return client.page.FilesPageElement.filesList().waitForFileVisible(folder, 'file')
@@ -525,16 +534,6 @@ When('the user picks the row of file/folder {string} in the webUI', function(ite
 
 When('the user switches to {string} tab in details panel using the webUI', function(tab) {
   return client.page.filesPage().selectTabInSidePanel(tab)
-})
-
-Then('the folder should be empty on the webUI', async function() {
-  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
-  return client.assert.equal(allFileRows.value.length, 0)
-})
-
-Then('the trashbin should be empty on the webUI', async function() {
-  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
-  return client.assert.strictEqual(allFileRows.value.length, 0)
 })
 
 const theseResourcesShouldNotBeListed = async function(table) {
@@ -759,12 +758,6 @@ Then(/the count of files and folders shown on the webUI should be (\d+)/, async 
 ) {
   const itemsCount = await client.page.FilesPageElement.filesList().countFilesAndFolders()
   return client.assert.equal(itemsCount, noOfItems)
-})
-
-Then('the folder should be empty on the webUI after a page reload', async function() {
-  await client.refresh()
-  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
-  return client.assert.equal(allFileRows.value.length, 0)
 })
 
 Then('the app-sidebar should be visible', function() {

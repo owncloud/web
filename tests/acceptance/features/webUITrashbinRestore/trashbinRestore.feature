@@ -107,9 +107,10 @@ Feature: Restore deleted files/folders
       | lorem-big.txt |
       | simple-folder |
     And the user has browsed to the trashbin page
-    And the user marks all files for batch action using the webUI
+    When the user marks all files for batch action using the webUI
     And the user batch restores the marked files using the webUI
-    Then the folder should be empty on the webUI after a page reload
+    Then there should be no resources listed on the webUI
+    And there should be no resources listed on the webUI after a page reload
     When the user browses to the files page
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI

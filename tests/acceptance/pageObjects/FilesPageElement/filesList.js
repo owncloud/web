@@ -423,6 +423,7 @@ module.exports = {
       let visible = false
       let elementId = null
       await this.waitForElementNotPresent('@filesListProgressBar')
+      await this.waitForElementVisible('@filesListNoContentMessage')
       await this.api.element('@filesListNoContentMessage', result => {
         if (result.status !== -1) {
           elementId = result.value.ELEMENT
