@@ -34,23 +34,14 @@
       </div>
     </template>
     <template slot="content">
-      <!-- <component
-          :is="activeTabComponent.component"
-          v-if="fileSideBars.length > 0 && activeTabComponent"
-          :component-name="
-            activeTabComponent.propsData ? activeTabComponent.propsData.componentName : ''
-          "
-          :component-url="
-            activeTabComponent.propsData ? activeTabComponent.propsData.componentUrl : ''
-          "
-          @reload="$emit('reload')"
-        ></component> -->
       <oc-accordion class="oc-mt-m">
-        <oc-accordion-item title="Actions" />
-        <oc-accordion-item title="People">
-          <component :is="activeTabComponent.component" />
+        <oc-accordion-item
+          v-for="accordion in fileSideBarsEnabled"
+          :key="accordion.app"
+          :title="accordion.component.title($gettext)"
+        >
+          <component :is="accordion.component" />
         </oc-accordion-item>
-        <oc-accordion-item title="Links" />
       </oc-accordion>
     </template>
   </oc-app-side-bar>
@@ -58,7 +49,7 @@
 
 <script>
 import Mixins from '../mixins'
-import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'FileDetails',
@@ -66,61 +57,24 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapState('Files', ['currentSidebarTab']),
 
     fileSideBarsEnabled() {
       return this.fileSideBars.filter(
         b => b.enabled === undefined || b.enabled(this.capabilities, this.highlightedFile)
       )
     },
-    defaultTab() {
-      if (this.fileSideBarsEnabled.length < 1) return null
-
-      return this.fileSideBarsEnabled[0].app
-    },
-
-    currentTab() {
-      if (this.currentSidebarTab && this.currentSidebarTab.tab) {
-        return this.currentSidebarTab.tab
-      }
-
-      return this.defaultTab
-    },
-
-    activeTabComponent() {
-      return this.fileSideBarsEnabled.find(sidebar => sidebar.app === this.currentTab)
-    },
 
     isFavoritesEnabled() {
       return this.capabilities.files && this.capabilities.files.favorites
     }
   },
-  watch: {
-    // Switch back to default tab after selecting different file
-    highlightedFile() {
-      this.SET_CURRENT_SIDEBAR_TAB({ tab: this.defaultTab })
-    }
-  },
-
-  created() {
-    this.SET_CURRENT_SIDEBAR_TAB({ tab: this.currentTab })
-  },
-
-  beforeDestroy() {
-    this.SET_CURRENT_SIDEBAR_TAB({})
-  },
 
   methods: {
     ...mapActions('Files', ['deleteFiles', 'markFavorite']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['SET_CURRENT_SIDEBAR_TAB']),
 
     close() {
       this.$emit('reset')
-    },
-
-    setCurrentTab(app) {
-      this.SET_CURRENT_SIDEBAR_TAB({ tab: app })
     },
 
     toggleFileFavorite(file) {
