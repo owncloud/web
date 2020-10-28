@@ -34,12 +34,16 @@
       </div>
     </template>
     <template slot="content">
-      <oc-accordion class="oc-mt-m">
+      <oc-accordion
+        class="oc-mt-m"
+        :expand-first="true"
+        :expanded-id="rightSidebarExpandedAccordion"
+      >
         <oc-accordion-item
-          v-for="(accordion, index) in fileSideBarsEnabled"
+          v-for="accordion in fileSideBarsEnabled"
+          :id="accordion.app"
           :key="accordion.app"
           :title="accordion.component.title($gettext)"
-          :expanded-by-default="isAccordionOpened(accordion.app, index)"
           :icon="accordion.icon"
         >
           <component :is="accordion.component" />
@@ -59,7 +63,7 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapState('Files', ['defaultOpenedAccordion']),
+    ...mapState('Files', ['rightSidebarExpandedAccordion']),
 
     fileSideBarsEnabled() {
       return this.fileSideBars.filter(
@@ -73,13 +77,13 @@ export default {
   },
 
   beforeDestroy() {
-    this.SET_DEFAULT_OPENED_ACCORDION(null)
+    this.SET_RIGHT_SIDEBAR_EXPANDED_ACCORDION(null)
   },
 
   methods: {
     ...mapActions('Files', ['deleteFiles', 'markFavorite']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['SET_DEFAULT_OPENED_ACCORDION']),
+    ...mapMutations('Files', ['SET_RIGHT_SIDEBAR_EXPANDED_ACCORDION']),
 
     close() {
       this.$emit('reset')
@@ -90,14 +94,6 @@ export default {
         client: this.$client,
         file: file
       })
-    },
-
-    isAccordionOpened(accordion, index) {
-      if (this.defaultOpenedAccordion) {
-        return this.defaultOpenedAccordion === accordion
-      }
-
-      return index === 0
     }
   }
 }

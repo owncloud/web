@@ -53,8 +53,8 @@ export default {
   actionsInProgress: [],
 
   /**
-   * Sidebar
+   * Right sidebar
    */
-  currentSharingSidebarPanel: null,
-  defaultOpenedAccordion: null
+  rightSidebarExpandedAccordion: null,
+  rightSidebarAccordionContext: null
 }

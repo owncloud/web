@@ -258,11 +258,11 @@ export default {
     state.files = []
   },
 
-  SET_CURRENT_SHARING_SIDEBAR_PANEL(state, panel) {
-    state.currentSharingSidebarPanel = panel
+  SET_RIGHT_SIDEBAR_EXPANDED_ACCORDION(state, accordion) {
+    state.rightSidebarExpandedAccordion = accordion
   },
 
-  SET_DEFAULT_OPENED_ACCORDION(state, accordion) {
-    state.defaultOpenedAccordion = accordion
+  SET_RIGHT_SIDEBAR_ACCORDION_CONTEXT(state, panel) {
+    state.rightSidebarAccordionContext = panel
   }
 }

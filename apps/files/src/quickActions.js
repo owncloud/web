@@ -48,8 +48,8 @@ function openNewCollaboratorsPanel(ctx) {
   // Workaround for displaying the new collaborators panel even when one is already opened
   // Creating timeout takes care of the event loop
   setTimeout(() => {
-    ctx.store.commit('Files/SET_DEFAULT_OPENED_ACCORDION', 'files-sharing')
-    ctx.store.commit('Files/SET_CURRENT_SHARING_SIDEBAR_PANEL', 'newCollaborator')
+    ctx.store.commit('Files/SET_RIGHT_SIDEBAR_EXPANDED_ACCORDION', 'files-sharing')
+    ctx.store.commit('Files/SET_RIGHT_SIDEBAR_ACCORDION_CONTEXT', 'newCollaborator')
   })
 }
 
