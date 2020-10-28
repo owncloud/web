@@ -1,6 +1,6 @@
 <template>
   <div id="files-upload-progress" class="uk-clearfix oc-py-rm">
-    <div class="uk-margin-remove uk-position-relative uk-width-expand">
+    <div class="oc-m-rm uk-position-relative uk-width-expand">
       <oc-progress
         ref="progressbar"
         :aria-hidden="true"
