@@ -51,13 +51,24 @@ module.exports = {
      *
      * @param {Object.<String,Object>} subSelectors Map of arbitrary attribute name to selector to query
      * inside the collaborator element, defaults to all when null
+     * @param filterDisplayName
+     * @param timeout
      * @returns {Promise.<string[]>} Array of users/groups in share list
      */
-    getCollaboratorsList: async function(subSelectors = null, filterDisplayName = null) {
+    getCollaboratorsList: async function(
+      subSelectors = null,
+      filterDisplayName = null,
+      timeout = null
+    ) {
       let results = []
       let informationSelector = {
         selector: '@collaboratorsInformation',
         abortOnFailure: false
+      }
+      if (timeout === null) {
+        timeout = this.api.globals.waitForConditionTimeout
+      } else {
+        timeout = parseInt(timeout, 10)
       }
       if (filterDisplayName !== null) {
         informationSelector = {
@@ -66,7 +77,8 @@ module.exports = {
             filterDisplayName
           ),
           locateStrategy: this.elements.collaboratorInformationByCollaboratorName.locateStrategy,
-          abortOnFailure: false
+          abortOnFailure: false,
+          timeout: timeout
         }
       }
 
@@ -84,8 +96,9 @@ module.exports = {
 
       let collaboratorsElementIds = null
       await this.initAjaxCounters()
-        .waitForElementPresent(informationSelector)
         .waitForOutstandingAjaxCalls()
+        .waitForAnimationToFinish()
+        .waitForElementPresent(informationSelector)
         .api.elements('css selector', this.elements.collaboratorsInformation, result => {
           collaboratorsElementIds = result.value.map(item => item[Object.keys(item)[0]])
         })

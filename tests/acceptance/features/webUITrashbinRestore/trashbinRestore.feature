@@ -20,8 +20,7 @@ Feature: Restore deleted files/folders
     Then file "sample,1.txt" should be listed on the webUI
     When the user restores file "data.zip" from the trashbin using the webUI
     When the user restores file "sample,1.txt" from the trashbin using the webUI
-    Then file "data.zip" should not be listed on the webUI
-    Then file "sample,1.txt" should not be listed on the webUI
+    Then there should be no resources listed on the webUI
     When the user browses to the files page
     Then file "data.zip" should be listed on the webUI
     Then file "sample,1.txt" should be listed on the webUI
@@ -34,8 +33,7 @@ Feature: Restore deleted files/folders
     And folder "Folder,With,Comma" should be listed on the webUI
     When the user restores folder "folder with space" from the trashbin using the webUI
     And the user restores folder "Folder,With,Comma" from the trashbin using the webUI
-    Then file "folder with space" should not be listed on the webUI
-    And file "Folder,With,Comma" should not be listed on the webUI
+    Then there should be no resources listed on the webUI
     When the user browses to the files page
     Then folder "folder with space" should be listed on the webUI
     And folder "Folder,With,Comma" should be listed on the webUI
@@ -101,6 +99,7 @@ Feature: Restore deleted files/folders
     But file "lorem.txt" should not be listed on the webUI
     And file "lorem-big.txt" should not be listed on the webUI
 
+  @skipOnOC10 @issue-core-38039
   Scenario: Select all trashbin files and restore them in a batch
     Given the following files have been deleted by user "user1"
       | name          |
@@ -109,9 +108,10 @@ Feature: Restore deleted files/folders
       | lorem-big.txt |
       | simple-folder |
     And the user has browsed to the trashbin page
-    And the user marks all files for batch action using the webUI
+    When the user marks all files for batch action using the webUI
     And the user batch restores the marked files using the webUI
-    Then the folder should be empty on the webUI after a page reload
+    Then there should be no resources listed on the webUI
+    And there should be no resources listed on the webUI after a page reload
     When the user browses to the files page
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem-big.txt" should be listed on the webUI

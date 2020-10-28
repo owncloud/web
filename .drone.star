@@ -21,8 +21,10 @@ config = {
 					'webUIPreview',
 					'webUIAccount',
 				],
-				'webUICreateDelete': [
+				'webUICreate': [
 					'webUICreateFilesFolders',
+				],
+				'webUIDelete': [
 					'webUIDeleteFilesFolders',
 				],
 				'webUIRename': [
@@ -32,7 +34,11 @@ config = {
 				'webUISharingBasic': [
 					'webUISharingAcceptShares',
 					'webUISharingAcceptSharesToRoot',
+				],
+				'webUIRestrictSharing': [
 					'webUIRestrictSharing',
+				],
+				'webUISharingNotifications': [
 					'webUISharingNotifications',
 					'webUISharingNotificationsToRoot',
 				],
@@ -42,7 +48,9 @@ config = {
 				'webUISharingInternalGroups': 'SharingInternalGroups',
 				'webUISharingInternalGroupsToRoot': 'SharingInternalGroupsRoot',
 				'webUISharingInternalUsers': 'SharingInternalUsers',
+				'webUISharingInternalUsersExpire': 'SharingInternalUsersExpire',
 				'webUISharingInternalUsersToRoot': 'SharingInternalUsersRoot',
+				'webUISharingInternalUsersExpireToRoot': 'SharingInternalUsersExpireToRoot',
 				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
 				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
 				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
@@ -51,8 +59,11 @@ config = {
 				'webUIResharing': 'Resharing',
 				'webUIResharingToRoot': 'ResharingToRoot',
 				'webUISharingPublic': 'SharingPublic',
+				'webUISharingPublicExpire': 'SharingPublicExpire',
 				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
 				'webUITrashbin': 'Trashbin',
+				'webUITrashbinFilesFolders': 'TrashbinFilesFolders',
+				'webUITrashbinRestore': 'TrashbinRestore',
 				'webUIUpload': 'Upload',
 				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
 				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
@@ -78,7 +89,51 @@ config = {
 		},
 		'webUI-XGA': {
 			'suites': {
-				'all': 'XGAPortrait',
+				'XGAPortrait1': [
+					'webUILogin',
+					'webUINotifications',
+					'webUIPrivateLinks',
+					'webUIPreview',
+					'webUIAccount',
+					'webUICreateFilesFolders',
+					'webUICreateFilesFolders',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUISharingAcceptShares',
+					'webUISharingAcceptSharesToRoot',
+					'webUIRestrictSharing',
+					'webUISharingNotifications',
+					'webUISharingNotificationsToRoot',
+					'webUIFavorites',
+					'webUIFiles',
+					],
+				'XGAPortrait2': [
+					'webUISharingAutocompletion',
+					'webUISharingInternalGroups',
+					'webUISharingInternalGroupsToRoot',
+					'webUISharingInternalUsers',
+					'webUISharingInternalUsersExpire',
+					'webUISharingInternalUsersToRoot',
+					'webUISharingInternalUsersExpireToRoot',
+					'webUISharingPermissionsUsers',
+					'webUISharingFilePermissionsGroups',
+					'webUISharingFolderPermissionsGroups',
+					'webUISharingFolderAdvancedPermissionsGroups',
+					'webUISharingPermissionToRoot',
+					'webUIResharing',
+					'webUIResharingToRoot',
+					'webUISharingPublic',
+					'webUISharingPublicExpire',
+					'webUISharingPublicDifferentRoles',
+					'webUITrashbin',
+					'webUITrashbinFilesFolders',
+					'webUITrashbinRestore',
+					'webUIUpload',
+					'webUISharingFilePermissionMultipleUsers',
+					'webUISharingFolderPermissionMultipleUsers',
+					'webUISharingFolderAdvancedPermissionMultipleUsers',
+					'webUIMoveFilesFolders',
+				]
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
@@ -88,7 +143,51 @@ config = {
 		},
 		'webUI-iPhone': {
 			'suites': {
-				'all': 'iPhone',
+				'iPhone1': [
+					'webUILogin',
+					'webUINotifications',
+					'webUIPrivateLinks',
+					'webUIPreview',
+					'webUIAccount',
+					'webUICreateFilesFolders',
+					'webUICreateFilesFolders',
+					'webUIRenameFiles',
+					'webUIRenameFolders',
+					'webUISharingAcceptShares',
+					'webUISharingAcceptSharesToRoot',
+					'webUIRestrictSharing',
+					'webUISharingNotifications',
+					'webUISharingNotificationsToRoot',
+					'webUIFavorites',
+					'webUIFiles',
+					],
+				'iPhone2': [
+					'webUISharingAutocompletion',
+					'webUISharingInternalGroups',
+					'webUISharingInternalGroupsToRoot',
+					'webUISharingInternalUsers',
+					'webUISharingInternalUsersExpire',
+					'webUISharingInternalUsersToRoot',
+					'webUISharingInternalUsersExpireToRoot',
+					'webUISharingPermissionsUsers',
+					'webUISharingFilePermissionsGroups',
+					'webUISharingFolderPermissionsGroups',
+					'webUISharingFolderAdvancedPermissionsGroups',
+					'webUISharingPermissionToRoot',
+					'webUIResharing',
+					'webUIResharingToRoot',
+					'webUISharingPublic',
+					'webUISharingPublicExpire',
+					'webUISharingPublicDifferentRoles',
+					'webUITrashbin',
+					'webUITrashbinFilesFolders',
+					'webUITrashbinRestore',
+					'webUIUpload',
+					'webUISharingFilePermissionMultipleUsers',
+					'webUISharingFolderPermissionMultipleUsers',
+					'webUISharingFolderAdvancedPermissionMultipleUsers',
+					'webUIMoveFilesFolders',
+				]
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
@@ -110,12 +209,10 @@ config = {
 					'webUIPrivateLinks',
 					'webUIRenameFiles',
 					'webUIRenameFolders',
-					'webUITrashbin',
 					'webUIUpload',
 					'webUIAccount'
 				],
 				'webUIOCIS3': [
-					'webUISharingInternalUsers',
 					'webUISharingPermissionsUsers',
 					'webUIRestrictSharing',
 					'webUISharingAcceptShares',
@@ -135,9 +232,21 @@ config = {
 					'webUISharingInternalGroups',
 					'webUISharingNotifications'
 				],
-				'webUIOCIS6': [
+				'webUIOCISSharingPublic': [
 					'webUISharingPublic',
 					'webUISharingPublicDifferentRoles',
+				],
+				'webUIOCISSharingPublicExpire': [
+					'webUISharingPublicExpire',
+				],
+				'webUIOCISTrashbin': [
+					'webUITrashbin',
+					'webUITrashbinRestore',
+					'webUITrashbinFilesFolders',
+				],
+				'webUIOCISSharingInternalUsers': [
+					'webUISharingInternalUsers',
+					'webUISharingInternalUsersExpire',
 				],
 				'webUIOCISResharing': [
 					# for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
