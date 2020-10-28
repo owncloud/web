@@ -20,18 +20,6 @@ function $gettext(msg) {
   return msg
 }
 const filesConfig = window.phoenixConfig.files || []
-const filesSidebars = filesConfig.sidebars || []
-const sidebarsFromConfig = filesSidebars.map(s => {
-  return {
-    app: s.tabTitle,
-    component: FileSidebarWebComponent,
-    title: s.tabTitle,
-    propsData: {
-      componentName: s.componentName,
-      componentUrl: s.componentUrl
-    }
-  }
-})
 
 const appInfo = {
   name: $gettext('Files'),
@@ -42,14 +30,8 @@ const appInfo = {
   fileActions: filesConfig.actions || [],
   fileSideBars: [
     {
-      app: 'files-version',
-      component: FileInfoVersions,
-      enabled(capabilities, highlightedFile) {
-        return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
-      }
-    },
-    {
       app: 'files-sharing',
+      icon: 'group',
       component: FileSharingSidebar,
       enabled(capabilities) {
         if (capabilities.files_sharing) {
@@ -60,6 +42,7 @@ const appInfo = {
     },
     {
       app: 'file-link',
+      icon: 'link',
       component: FileLinkSidebar,
       enabled(capabilities) {
         if (capabilities.files_sharing) {
@@ -68,7 +51,14 @@ const appInfo = {
         return false
       }
     },
-    ...sidebarsFromConfig
+    {
+      app: 'files-version',
+      icon: 'restore',
+      component: FileInfoVersions,
+      enabled(capabilities, highlightedFile) {
+        return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
+      }
+    }
   ]
 }
 const navItems = [

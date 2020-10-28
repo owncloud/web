@@ -40,6 +40,7 @@
           :key="accordion.app"
           :title="accordion.component.title($gettext)"
           :expanded-by-default="isAccordionOpened(accordion.app, index)"
+          :icon="accordion.icon"
         >
           <component :is="accordion.component" />
         </oc-accordion-item>
