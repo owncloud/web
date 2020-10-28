@@ -34,14 +34,10 @@
       </div>
     </template>
     <template slot="content">
-      <oc-accordion
-        class="oc-mt-m"
-        :expand-first="true"
-        :expanded-id="rightSidebarExpandedAccordion"
-      >
+      <oc-accordion class="oc-mt-m" :expand-first="true" :expanded-id="appSidebarExpandedAccordion">
         <oc-accordion-item
           v-for="accordion in fileSideBarsEnabled"
-          :id="accordion.app"
+          :id="buildAppSidebarId(accordion.app)"
           :key="accordion.app"
           :title="accordion.component.title($gettext)"
           :icon="accordion.icon"
@@ -63,7 +59,7 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapState('Files', ['rightSidebarExpandedAccordion']),
+    ...mapState('Files', ['appSidebarExpandedAccordion']),
 
     fileSideBarsEnabled() {
       return this.fileSideBars.filter(
@@ -73,17 +69,21 @@ export default {
 
     isFavoritesEnabled() {
       return this.capabilities.files && this.capabilities.files.favorites
+    },
+
+    expandedAccordionId() {
+      return this.buildAppSidebarId(this.appSidebarExpandedAccordion)
     }
   },
 
   beforeDestroy() {
-    this.SET_RIGHT_SIDEBAR_EXPANDED_ACCORDION(null)
+    this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(null)
   },
 
   methods: {
     ...mapActions('Files', ['deleteFiles', 'markFavorite']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['SET_RIGHT_SIDEBAR_EXPANDED_ACCORDION']),
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
 
     close() {
       this.$emit('reset')
@@ -94,6 +94,10 @@ export default {
         client: this.$client,
         file: file
       })
+    },
+
+    buildAppSidebarId(accordion) {
+      return `app-sidebar-${accordion}`
     }
   }
 }

@@ -55,6 +55,6 @@ export default {
   /**
    * Right sidebar
    */
-  rightSidebarExpandedAccordion: null,
-  rightSidebarAccordionContext: null
+  appSidebarExpandedAccordion: null,
+  appSidebarAccordionContext: null
 }

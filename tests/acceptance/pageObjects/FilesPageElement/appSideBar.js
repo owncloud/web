@@ -7,12 +7,6 @@ module.exports = {
         this.elements.sidebarThumbnail
       )
     },
-    /**
-     * @returns {*}
-     */
-    openVersionsTab: function() {
-      return this.waitForElementVisible('@sidebarVersionsTab').click('@sidebarVersionsTab')
-    },
     closeSidebar: function(timeout = null) {
       if (timeout === null) {
         timeout = this.api.globals.waitForConditionTimeout
@@ -73,8 +67,11 @@ module.exports = {
     openCollaboratorsTab: function() {
       return this.click('@sidebarCollaboratorsTab')
     },
+    openVersionsTab: function() {
+      return this.click('@sidebarVersionsTab')
+    },
     openLinksTab: function() {
-      return this.click('@publicLinksTab')
+      return this.click('@sidebarLinksTab')
     }
   },
   elements: {
@@ -88,17 +85,14 @@ module.exports = {
       selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
       locateStrategy: 'xpath'
     },
-    sidebarLinksTab: {
-      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Links")]',
-      locateStrategy: 'xpath'
-    },
     sidebarCollaboratorsTab: {
-      selector: '//div[@class="sidebar-container"]//a[contains(text(),"People")]',
-      locateStrategy: 'xpath'
+      selector: '#app-sidebar-files-sharing'
+    },
+    sidebarLinksTab: {
+      selector: '#app-sidebar-file-link'
     },
     sidebarVersionsTab: {
-      selector: '//div//a[normalize-space(.)="Versions"]',
-      locateStrategy: 'xpath'
+      selector: '#app-sidebar-files-version'
     },
     sidebarToggleFavoriteButton: {
       selector: '#files-sidebar-star-icon'
@@ -108,10 +102,6 @@ module.exports = {
     },
     favoriteStarShining: {
       selector: '.oc-star-shining'
-    },
-    publicLinksTab: {
-      selector: '//div[@class="sidebar-container"]//a[contains(text(),"Links")]',
-      locateStrategy: 'xpath'
     }
   }
 }
