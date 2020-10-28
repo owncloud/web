@@ -99,6 +99,7 @@ Feature: Restore deleted files/folders
     But file "lorem.txt" should not be listed on the webUI
     And file "lorem-big.txt" should not be listed on the webUI
 
+  @skipOnOC10 @issue-core-38039
   Scenario: Select all trashbin files and restore them in a batch
     Given the following files have been deleted by user "user1"
       | name          |
