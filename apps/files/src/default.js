@@ -52,7 +52,7 @@ const appInfo = {
     },
     {
       app: 'files-version',
-      icon: 'restore',
+      icon: 'file_version',
       component: FileInfoVersions,
       enabled(capabilities, highlightedFile) {
         return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
