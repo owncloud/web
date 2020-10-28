@@ -121,9 +121,7 @@ export default {
 
     openSideBar(file, sideBarName) {
       this.setHighlightedFile(file)
-      setTimeout(() => {
-        this.SET_DEFAULT_OPENED_ACCORDION({ tab: sideBarName })
-      })
+      this.SET_DEFAULT_OPENED_ACCORDION(sideBarName)
     },
 
     $_ocApp_dragOver() {
