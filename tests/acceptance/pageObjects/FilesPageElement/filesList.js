@@ -242,16 +242,24 @@ module.exports = {
      *
      * @param {string} fileName
      * @param {string} elementType
+     * @param timeout
      */
-    waitForFileVisible: async function(fileName, elementType = 'file') {
+    waitForFileVisible: async function(fileName, elementType = 'file', timeout = null) {
       const linkSelector = this.getFileLinkSelectorByFileName(fileName, elementType)
 
       await this.waitForElementPresent('@filesTableContainer')
       await this.filesListScrollToTop()
       // Find the item in files list if it's not in the view
       await this.findItemInFilesList(fileName)
+
+      // getAttribute does not have a timeout parameter, so we need to set the global timeout
+      const oldWaitForConditionTimeout = client.globals.waitForConditionTimeout
+      if (timeout !== null) {
+        client.globals.waitForConditionTimeout = parseInt(timeout, 10)
+      }
       await this.useXpath()
         .getAttribute(linkSelector, 'filename', function(result) {
+          client.globals.waitForConditionTimeout = oldWaitForConditionTimeout
           if (result.value.error) {
             this.assert.fail(result.value.error)
           }
@@ -381,11 +389,12 @@ module.exports = {
      *
      * @param {string} element Name of the file/folder/resource
      * @param {string} elementType
+     * @param timeout
      * @returns {boolean}
      */
-    isElementListed: async function(element, elementType = 'file') {
+    isElementListed: async function(element, elementType = 'file', timeout = null) {
       let isListed = false
-      await this.waitForFileVisible(element, elementType)
+      await this.waitForFileVisible(element, elementType, timeout)
         .then(function() {
           isListed = true
         })
@@ -414,6 +423,7 @@ module.exports = {
       let visible = false
       let elementId = null
       await this.waitForElementNotPresent('@filesListProgressBar')
+      await this.waitForElementVisible('@filesListNoContentMessage')
       await this.api.element('@filesListNoContentMessage', result => {
         if (result.status !== -1) {
           elementId = result.value.ELEMENT

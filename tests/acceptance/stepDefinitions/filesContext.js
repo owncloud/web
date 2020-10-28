@@ -368,7 +368,16 @@ When('the user unmarks the favorited file/folder {string} using the webUI sideba
   return client
 })
 
-Then('there should be no files/folders/resources listed on the webUI', async function() {
+Then('there should be no files/folders/resources listed on the webUI', assertNoResourcesListed)
+Then(
+  'there should be no files/folders/resources listed on the webUI after a page reload',
+  async function() {
+    await client.refresh()
+    return assertNoResourcesListed()
+  }
+)
+
+async function assertNoResourcesListed() {
   let currentUrl = null
   await client.url(result => {
     currentUrl = result.value
@@ -382,11 +391,11 @@ Then('there should be no files/folders/resources listed on the webUI', async fun
 
   const allRowsResult = await client.page.FilesPageElement.filesList().allFileRows()
 
-  assert.ok(
+  return assert.ok(
     allRowsResult.value.length === 0,
     `No resources are listed, ${allRowsResult.length} found`
   )
-})
+}
 
 Then('file {string} should be listed on the webUI', function(folder) {
   return client.page.FilesPageElement.filesList().waitForFileVisible(folder, 'file')
@@ -411,7 +420,7 @@ Then('the last uploaded folder should be listed on the webUI', async function() 
 
 Then('file {string} should not be listed on the webUI', function(file) {
   return client.page.FilesPageElement.filesList()
-    .isElementListed(file, 'file')
+    .isElementListed(file, 'file', client.globals.waitForNegativeConditionTimeout)
     .then(state => {
       return client.assert.ok(!state, `Error: File ${file} is listed on the filesList`)
     })
@@ -419,7 +428,7 @@ Then('file {string} should not be listed on the webUI', function(file) {
 
 Then('folder {string} should not be listed on the webUI', async folder => {
   return client.page.FilesPageElement.filesList()
-    .isElementListed(folder, 'folder')
+    .isElementListed(folder, 'folder', client.globals.waitForNegativeConditionTimeout)
     .then(state => {
       return client.assert.ok(!state, `Error: Folder ${folder} is listed on the filesList`)
     })
@@ -527,19 +536,13 @@ When('the user switches to {string} tab in details panel using the webUI', funct
   return client.page.filesPage().selectTabInSidePanel(tab)
 })
 
-Then('the folder should be empty on the webUI', async function() {
-  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
-  return client.assert.equal(allFileRows.value.length, 0)
-})
-
-Then('the trashbin should be empty on the webUI', async function() {
-  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
-  return client.assert.strictEqual(allFileRows.value.length, 0)
-})
-
 const theseResourcesShouldNotBeListed = async function(table) {
   for (const entry of table.rows()) {
-    const state = await client.page.FilesPageElement.filesList().isElementListed(entry[0])
+    const state = await client.page.FilesPageElement.filesList().isElementListed(
+      entry[0],
+      'file',
+      client.globals.waitForNegativeConditionTimeout
+    )
     assert.ok(!state, `Expected resource '${entry[0]}' to be 'not present' but found 'present'`)
   }
 }
@@ -628,12 +631,12 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
   )
   let isBreadcrumbVisible = false
 
-  // Check if the breadcrumb is visible
+  // lets hope that the breadcrumbs would not take longer than the "NEW" button
   await client.waitForElementVisible({
-    selector: resourceBreadcrumbXpath,
-    locateStrategy: 'xpath',
+    selector: client.page.filesPage().elements.newFileMenuButtonAnyState.selector,
     abortOnFailure: false
   })
+
   await client.element('xpath', resourceBreadcrumbXpath, result => {
     if (result.status > -1) {
       isBreadcrumbVisible = true
@@ -757,12 +760,6 @@ Then(/the count of files and folders shown on the webUI should be (\d+)/, async 
   return client.assert.equal(itemsCount, noOfItems)
 })
 
-Then('the folder should be empty on the webUI after a page reload', async function() {
-  await client.refresh()
-  const allFileRows = await client.page.FilesPageElement.filesList().allFileRows()
-  return client.assert.equal(allFileRows.value.length, 0)
-})
-
 Then('the app-sidebar should be visible', function() {
   return client.page.filesPage().isSidebarVisible(value => {
     assert.strictEqual(value, true, 'side-bar should be visible, but is not')
@@ -802,7 +799,11 @@ const assertElementsAreListed = async function(elements) {
 
 const assertElementsAreNotListed = async function(elements) {
   for (const element of elements) {
-    const state = await client.page.FilesPageElement.filesList().isElementListed(element)
+    const state = await client.page.FilesPageElement.filesList().isElementListed(
+      element,
+      'file',
+      client.globals.waitForNegativeConditionTimeout
+    )
     assert.ok(!state, `Expected resource '${element}' to be 'not present' but found 'present'`)
   }
   return client

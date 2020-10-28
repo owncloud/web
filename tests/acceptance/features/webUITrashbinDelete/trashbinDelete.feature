@@ -98,7 +98,7 @@ Feature: files and folders can be deleted from the trashbin
   Scenario: Select all files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
-    Then the folder should be empty on the webUI
+    Then there should be no resources listed on the webUI
 
   @skipOnOC10
   @issue-product-188
@@ -120,7 +120,7 @@ Feature: files and folders can be deleted from the trashbin
   Scenario: Clear trashbin
     When the user clears the trashbin
     Then the success message with header "All deleted files were removed" should be displayed on the webUI
-    And the trashbin should be empty on the webUI
+    And there should be no resources listed on the webUI
 
   @skipOnOC10
   @issue-product-139

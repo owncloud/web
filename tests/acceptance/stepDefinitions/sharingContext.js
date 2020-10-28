@@ -315,7 +315,8 @@ const assertCollaboratorslistDoesNotContain = function(type, name) {
       {
         displayName: collaboratorsDialog.elements.collaboratorInformationSubName
       },
-      name
+      name,
+      client.globals.waitForNegativeConditionTimeout
     )
     .then(shares => {
       const share = shares.find(share => {
