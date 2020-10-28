@@ -76,21 +76,23 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | permissions | read, share                |
     And as "user1" folder "Shares/simple-empty-folder" should exist on remote server
 
-  @issue-3309
+  @issue-3309 @issue-4247
   Scenario: share a folder with an remote user and prohibit deleting - remote server shares - local server receives
     Given user "user1" from remote server has shared "simple-folder" with user "user1" from local server with "read" permissions
     When the user reloads the current page of the webUI
     And the user accepts all shares displayed in the notifications on the webUI
-    And the user opens folder "Shares%2Fsimple-folder" directly on the webUI
     And the user reloads the current page of the webUI
+    And the user opens folder "Shares" using the webUI
+    And the user opens folder "simple-folder" using the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
   @issue-3309
   Scenario: overwrite a file in a received share - remote server shares - local server receives
     Given user "user1" from remote server has shared "simple-folder" with user "user1" from local server
     And user "user1" from server "LOCAL" has accepted the last pending share
-    When the user opens folder "Shares%2Fsimple-folder" directly on the webUI
     When the user reloads the current page of the webUI
+    And the user opens folder "Shares" using the webUI
+    And the user opens folder "simple-folder" using the webUI
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then as "user1" the content of "Shares/simple-folder/lorem.txt" should be the same as the local "lorem.txt"
 
@@ -98,8 +100,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: upload a new file in a received share - remote server shares - local server receives
     Given user "user1" from remote server has shared "simple-folder" with user "user1" from local server
     And user "user1" from server "LOCAL" has accepted the last pending share
-    When the user opens folder "Shares%2Fsimple-folder" directly on the webUI
-    And the user reloads the current page of the webUI
+    When the user reloads the current page of the webUI
+    And the user opens folder "Shares" using the webUI
+    And the user opens folder "simple-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then as "user1" file "simple-folder/new-lorem.txt" should exist on remote server
 
@@ -107,8 +110,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: rename a file in a received share - remote server shares - local server receives
     Given user "user1" from remote server has shared "simple-folder" with user "user1" from local server
     And user "user1" from server "LOCAL" has accepted the last pending share
-    When the user opens folder "Shares%2Fsimple-folder" directly on the webUI
-    And the user reloads the current page of the webUI
+    When the user reloads the current page of the webUI
+    And the user opens folder "Shares" using the webUI
+    And the user opens folder "simple-folder" using the webUI
     And the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
     Then as "user1" file "simple-folder/new-lorem.txt" should exist on remote server
     But as "user1" file "simple-folder/lorem.txt" should not exist on remote server
@@ -117,8 +121,9 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: delete a file in a received share - remote server shares - local server receives
     Given user "user1" from remote server has shared "simple-folder" with user "user1" from local server
     And user "user1" from server "LOCAL" has accepted the last pending share
-    When the user opens folder "Shares%2Fsimple-folder" directly on the webUI
-    And the user reloads the current page of the webUI
+    When the user reloads the current page of the webUI
+    And the user opens folder "Shares" using the webUI
+    And the user opens folder "simple-folder" using the webUI
     And the user deletes file "lorem.txt" using the webUI
     Then as "user1" file "simple-folder/lorem.txt" should not exist on remote server
 
