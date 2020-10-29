@@ -223,25 +223,30 @@ module.exports = {
     getXpathOfLinkToTabInSidePanel: function(tab) {
       return this.elements.sideBar.selector + util.format(this.elements.tabOfSideBar.selector, tab)
     },
-    selectTabInSidePanel: function(tab) {
-      return this.useXpath()
+    selectTabInSidePanel: async function(tab) {
+      await this.useXpath()
         .waitForElementVisible('@sideBar')
-        .click(this.getXpathOfLinkToTabInSidePanel(tab))
         .useCss()
+      const panelVisible = await this.isPanelVisible(tab)
+      if (panelVisible) {
+        return this
+      } else {
+        return this.useXpath()
+          .click(this.getXpathOfLinkToTabInSidePanel(tab))
+          .useCss()
+      }
     },
-    isSidebarVisible: function(callback) {
-      return this.useXpath()
-        .isVisible('@sideBar', result => {
-          callback(result.value)
-        })
-        .useCss()
+    isSidebarVisible: async function() {
+      let isVisible = false
+      await this.isVisible('xpath', this.elements.sideBar.selector, result => {
+        isVisible = result.status === 0
+      })
+      return isVisible
     },
-    isPanelVisible: function(panelName, callback) {
+    isPanelVisible: async function(panelName) {
       let selector = ''
-      if (panelName === 'people') {
-        selector = this.elements.collaboratorsPanel
-      } else if (panelName === 'collaborators') {
-        // FIXME: rename once renamed in all tests
+      if (panelName === 'people' || panelName === 'collaborators') {
+        // FIXME: `collaborators` is the old name. should be removed once renamed in all tests.
         selector = this.elements.collaboratorsPanel
       } else if (panelName === 'versions') {
         selector = this.elements.versionsPanel
@@ -250,9 +255,12 @@ module.exports = {
       } else {
         throw new Error('invalid panel')
       }
-      return this.isVisible(selector, result => {
-        callback(result.value)
+
+      let isVisible = false
+      await this.isVisible(selector, result => {
+        isVisible = result.status === 0
       })
+      return isVisible
     },
     getVisibleTabs: async function() {
       const tabs = []
@@ -458,14 +466,14 @@ module.exports = {
     tabOfSideBar: {
       // the translate bit is to make it case-insensitive
       selector:
-        "//a[contains(translate(.,'ABCDEFGHJIKLMNOPQRSTUVWXYZ','abcdefghjiklmnopqrstuvwxyz'),'%s')]",
+        "//button[contains(translate(.,'ABCDEFGHJIKLMNOPQRSTUVWXYZ','abcdefghjiklmnopqrstuvwxyz'),'%s')]",
       locateStrategy: 'xpath'
     },
     sidebarItemName: {
       selector: '#files-sidebar-item-name'
     },
     tabsInSideBar: {
-      selector: '//div[@class="sidebar-container"]//li/a',
+      selector: '//div[@class="sidebar-container"]//li/h3/button',
       locateStrategy: 'xpath'
     },
     dialog: {

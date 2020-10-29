@@ -53,7 +53,8 @@ export default {
   actionsInProgress: [],
 
   /**
-   * Sidebar
+   * Right sidebar
    */
-  currentSidebarTab: null
+  appSidebarExpandedAccordion: null,
+  appSidebarAccordionContext: null
 }

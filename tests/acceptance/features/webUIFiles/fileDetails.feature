@@ -137,3 +137,9 @@ Feature: User can open the details panel for any file or folder
     Then the "sharing" details panel should be visible
     When the user switches to "comments" tab in details panel using the webUI
     Then the "comments" details panel should be visible
+
+  Scenario: the sidebar is invisible after closing
+    When the user picks the row of file "lorem.txt" in the webUI
+    Then the app-sidebar should be visible
+    When the user closes the app-sidebar using the webUI
+    Then the app-sidebar should be invisible

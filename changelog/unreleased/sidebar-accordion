@@ -1,0 +1,5 @@
+Change: App sidebar accordion instead of tabs
+
+We replaced the tabs in the right app-sidebar with an accordion.
+
+https://github.com/owncloud/phoenix/pull/4249

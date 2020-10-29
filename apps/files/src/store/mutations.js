@@ -258,11 +258,11 @@ export default {
     state.files = []
   },
 
-  SET_CURRENT_SIDEBAR_TAB(state, { tab, options }) {
-    state.currentSidebarTab = { tab, options }
+  SET_APP_SIDEBAR_EXPANDED_ACCORDION(state, accordion) {
+    state.appSidebarExpandedAccordion = accordion
   },
 
-  SET_CURRENT_SIDEBAR_TAB_OPTIONS(state, options) {
-    state.currentSidebarTab.options = options
+  SET_APP_SIDEBAR_ACCORDION_CONTEXT(state, panel) {
+    state.appSidebarAccordionContext = panel
   }
 }

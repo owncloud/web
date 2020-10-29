@@ -2,7 +2,7 @@
   <oc-app-side-bar
     id="files-sidebar"
     :key="highlightedFile.id"
-    class="oc-p-s uk-overflow-auto uk-height-1-1"
+    class="oc-p-s uk-overflow-auto uk-height-1-1 oc-border-l"
     :disable-action="false"
     @close="close()"
   >
@@ -34,29 +34,17 @@
       </div>
     </template>
     <template slot="content">
-      <div>
-        <oc-tabs>
-          <oc-tab-item
-            v-for="tab of fileSideBarsEnabled"
-            :key="tab.name"
-            :active="tab.app === currentTab"
-            @click="setCurrentTab(tab.app)"
-          >
-            {{ tab.title || tab.component.title($gettext) }} {{ tab.name }}
-          </oc-tab-item>
-        </oc-tabs>
-        <component
-          :is="activeTabComponent.component"
-          v-if="fileSideBars.length > 0 && activeTabComponent"
-          :component-name="
-            activeTabComponent.propsData ? activeTabComponent.propsData.componentName : ''
-          "
-          :component-url="
-            activeTabComponent.propsData ? activeTabComponent.propsData.componentUrl : ''
-          "
-          @reload="$emit('reload')"
-        ></component>
-      </div>
+      <oc-accordion class="oc-mt-m" :expand-first="true" :expanded-id="expandedAccordionId">
+        <oc-accordion-item
+          v-for="accordion in fileSideBarsEnabled"
+          :id="buildAppSidebarId(accordion.app)"
+          :key="accordion.app"
+          :title="accordion.component.title($gettext)"
+          :icon="accordion.icon"
+        >
+          <component :is="accordion.component" />
+        </oc-accordion-item>
+      </oc-accordion>
     </template>
   </oc-app-side-bar>
 </template>
@@ -71,61 +59,34 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
-    ...mapState('Files', ['currentSidebarTab']),
+    ...mapState('Files', ['appSidebarExpandedAccordion']),
 
     fileSideBarsEnabled() {
       return this.fileSideBars.filter(
         b => b.enabled === undefined || b.enabled(this.capabilities, this.highlightedFile)
       )
     },
-    defaultTab() {
-      if (this.fileSideBarsEnabled.length < 1) return null
-
-      return this.fileSideBarsEnabled[0].app
-    },
-
-    currentTab() {
-      if (this.currentSidebarTab && this.currentSidebarTab.tab) {
-        return this.currentSidebarTab.tab
-      }
-
-      return this.defaultTab
-    },
-
-    activeTabComponent() {
-      return this.fileSideBarsEnabled.find(sidebar => sidebar.app === this.currentTab)
-    },
 
     isFavoritesEnabled() {
       return this.capabilities.files && this.capabilities.files.favorites
-    }
-  },
-  watch: {
-    // Switch back to default tab after selecting different file
-    highlightedFile() {
-      this.SET_CURRENT_SIDEBAR_TAB({ tab: this.defaultTab })
-    }
-  },
+    },
 
-  created() {
-    this.SET_CURRENT_SIDEBAR_TAB({ tab: this.currentTab })
+    expandedAccordionId() {
+      return this.buildAppSidebarId(this.appSidebarExpandedAccordion)
+    }
   },
 
   beforeDestroy() {
-    this.SET_CURRENT_SIDEBAR_TAB({})
+    this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(null)
   },
 
   methods: {
     ...mapActions('Files', ['deleteFiles', 'markFavorite']),
     ...mapActions(['showMessage']),
-    ...mapMutations('Files', ['SET_CURRENT_SIDEBAR_TAB']),
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
 
     close() {
       this.$emit('reset')
-    },
-
-    setCurrentTab(app) {
-      this.SET_CURRENT_SIDEBAR_TAB({ tab: app })
     },
 
     toggleFileFavorite(file) {
@@ -133,6 +94,13 @@ export default {
         client: this.$client,
         file: file
       })
+    },
+
+    buildAppSidebarId(accordion) {
+      if (accordion) {
+        return `app-sidebar-${accordion}`
+      }
+      return null
     }
   }
 }

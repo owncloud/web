@@ -54,37 +54,17 @@
         </section>
       </template>
     </div>
-    <div v-if="currentPanel === PANEL_NEW" :key="PANEL_NEW">
-      <transition
-        enter-active-class="uk-animation-slide-right uk-animation-fast"
-        leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
-        name="custom-classes-transition"
-      >
-        <div class="uk-position-cover oc-default-background">
-          <new-collaborator
-            v-if="$_ocCollaborators_canShare"
-            key="new-collaborator"
-            @close="$_ocCollaborators_showList"
-          />
-        </div>
-      </transition>
-    </div>
-    <div v-if="currentPanel === PANEL_EDIT" :key="PANEL_EDIT">
-      <transition
-        enter-active-class="uk-animation-slide-right uk-animation-fast"
-        leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
-        name="custom-classes-transition"
-      >
-        <div class="uk-position-cover oc-default-background">
-          <edit-collaborator
-            v-if="$_ocCollaborators_canShare"
-            key="edit-collaborator"
-            :collaborator="currentShare"
-            @close="$_ocCollaborators_showList"
-          />
-        </div>
-      </transition>
-    </div>
+    <new-collaborator
+      v-if="$_ocCollaborators_canShare && currentPanel === PANEL_NEW"
+      key="new-collaborator"
+      @close="$_ocCollaborators_showList"
+    />
+    <edit-collaborator
+      v-if="$_ocCollaborators_canShare && currentPanel === PANEL_EDIT"
+      key="edit-collaborator"
+      :collaborator="currentShare"
+      @close="$_ocCollaborators_showList"
+    />
   </div>
 </template>
 
@@ -138,18 +118,12 @@ export default {
       'incomingShares',
       'incomingSharesLoading',
       'sharesTree',
-      'currentSidebarTab'
+      'appSidebarAccordionContext'
     ]),
     ...mapState(['user']),
 
     currentPanel() {
-      const tabOptions = this.currentSidebarTab.options
-
-      if (tabOptions && tabOptions.collaboratorsCurrentPanel) {
-        return tabOptions.collaboratorsCurrentPanel
-      }
-
-      return PANEL_SHOW
+      return this.appSidebarAccordionContext || PANEL_SHOW
     },
 
     $_transitionGroupEnter() {
@@ -330,7 +304,7 @@ export default {
   },
 
   beforeDestroy() {
-    this.SET_CURRENT_SIDEBAR_TAB_OPTIONS({ collaboratorsCurrentPanel: PANEL_SHOW })
+    this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(null)
   },
 
   methods: {
@@ -342,7 +316,7 @@ export default {
       'loadIncomingShares',
       'incomingSharesClearState'
     ]),
-    ...mapMutations('Files', ['SET_CURRENT_SIDEBAR_TAB_OPTIONS']),
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
 
     $_isCollaboratorShare(collaborator) {
       return userShareTypes.includes(collaborator.shareType)
@@ -374,11 +348,11 @@ export default {
     },
     $_ocCollaborators_addShare() {
       this.transitionGroupActive = true
-      this.SET_CURRENT_SIDEBAR_TAB_OPTIONS({ collaboratorsCurrentPanel: PANEL_NEW })
+      this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_NEW)
     },
     $_ocCollaborators_editShare(share) {
       this.currentShare = share
-      this.SET_CURRENT_SIDEBAR_TAB_OPTIONS({ collaboratorsCurrentPanel: PANEL_EDIT })
+      this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_EDIT)
     },
     $_ocCollaborators_deleteShare(share) {
       this.transitionGroupActive = true
@@ -388,7 +362,7 @@ export default {
       })
     },
     $_ocCollaborators_showList() {
-      this.SET_CURRENT_SIDEBAR_TAB_OPTIONS({ collaboratorsCurrentPanel: PANEL_SHOW })
+      this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_SHOW)
       this.currentShare = null
     },
     $_ocCollaborators_isUser(collaborator) {
@@ -440,10 +414,5 @@ export default {
 .oc-app-side-bar .oc-autocomplete-suggestion:hover .uk-text-meta,
 .oc-autocomplete-suggestion-selected .uk-text-meta {
   color: white;
-}
-
-/** needed to cover the container below when transitioning */
-.oc-app-side-bar .oc-default-background {
-  background-color: white;
 }
 </style>

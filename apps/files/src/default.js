@@ -4,7 +4,6 @@ import 'regenerator-runtime/runtime'
 import FilesApp from './components/FilesApp.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
-import FileSidebarWebComponent from './components/FileSidebarWebComponent.vue'
 import FileLinkSidebar from './components/FileLinkSidebar.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './components/PublicLinks/PublicLink.vue'
@@ -20,18 +19,6 @@ function $gettext(msg) {
   return msg
 }
 const filesConfig = window.phoenixConfig.files || []
-const filesSidebars = filesConfig.sidebars || []
-const sidebarsFromConfig = filesSidebars.map(s => {
-  return {
-    app: s.tabTitle,
-    component: FileSidebarWebComponent,
-    title: s.tabTitle,
-    propsData: {
-      componentName: s.componentName,
-      componentUrl: s.componentUrl
-    }
-  }
-})
 
 const appInfo = {
   name: $gettext('Files'),
@@ -43,6 +30,7 @@ const appInfo = {
   fileSideBars: [
     {
       app: 'files-version',
+      icon: 'file_version',
       component: FileInfoVersions,
       enabled(capabilities, highlightedFile) {
         return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
@@ -50,6 +38,7 @@ const appInfo = {
     },
     {
       app: 'files-sharing',
+      icon: 'group',
       component: FileSharingSidebar,
       enabled(capabilities) {
         if (capabilities.files_sharing) {
@@ -60,6 +49,7 @@ const appInfo = {
     },
     {
       app: 'file-link',
+      icon: 'link',
       component: FileLinkSidebar,
       enabled(capabilities) {
         if (capabilities.files_sharing) {
@@ -67,8 +57,7 @@ const appInfo = {
         }
         return false
       }
-    },
-    ...sidebarsFromConfig
+    }
   ]
 }
 const navItems = [
