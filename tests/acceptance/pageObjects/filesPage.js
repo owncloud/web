@@ -458,7 +458,7 @@ module.exports = {
     tabOfSideBar: {
       // the translate bit is to make it case-insensitive
       selector:
-        "//a[contains(translate(.,'ABCDEFGHJIKLMNOPQRSTUVWXYZ','abcdefghjiklmnopqrstuvwxyz'),'%s')]",
+        "//button[contains(translate(.,'ABCDEFGHJIKLMNOPQRSTUVWXYZ','abcdefghjiklmnopqrstuvwxyz'),'%s')]",
       locateStrategy: 'xpath'
     },
     sidebarItemName: {
