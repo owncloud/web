@@ -162,6 +162,10 @@ Given('the user has opened the share dialog for file/folder {string}', function(
     .openSharingDialog(fileName)
 })
 
+When('the user closes the app-sidebar using the webUI', function() {
+  return client.page.FilesPageElement.appSideBar().closeSidebar(100)
+})
+
 When('the user browses to folder {string} using the breadcrumb on the webUI', resource =>
   client.page.filesPage().navigateToBreadcrumb(resource)
 )
@@ -771,6 +775,11 @@ Then('the app-sidebar should be visible', async function() {
   assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
 })
 
+Then('the app-sidebar should be invisible', async function() {
+  const visible = await client.page.filesPage().isSidebarVisible()
+  assert.strictEqual(visible, false, 'app-sidebar should be invisible, but is not')
+})
+
 Then('the {string} details panel should be visible', async function(panel) {
   const visible = await client.page.filesPage().isPanelVisible(panel)
   assert.strictEqual(visible, true, `'${panel}-panel' should be visible, but is not`)
@@ -929,7 +938,7 @@ Then('the app-sidebar for file/folder {string} should be visible on the webUI', 
 ) {
   const visible = await client.page.filesPage().isSidebarVisible()
   assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
-  return this.checkSidebarItem(resource)
+  return client.page.filesPage().checkSidebarItem(resource)
 })
 
 Then('the thumbnail should be visible in the app-sidebar', function() {

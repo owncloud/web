@@ -238,8 +238,8 @@ module.exports = {
     },
     isSidebarVisible: async function() {
       let isVisible = false
-      await this.api.elements('@sideBar', result => {
-        isVisible = result.value.length > 0
+      await this.isVisible('xpath', this.elements.sideBar.selector, result => {
+        isVisible = result.status === 0
       })
       return isVisible
     },
@@ -257,8 +257,8 @@ module.exports = {
       }
 
       let isVisible = false
-      await this.api.elements(selector, result => {
-        isVisible = result.value.length > 0
+      await this.isVisible(selector, result => {
+        isVisible = result.status === 0
       })
       return isVisible
     },
