@@ -334,20 +334,18 @@ module.exports = {
     },
     copyPrivateLink: function() {
       const appSideBarElements = this.api.page.FilesPageElement.appSideBar().elements
-      const sidebarLinksTabXpath = appSideBarElements.sidebarLinksTab.selector
+      const sidebarLinksTab = appSideBarElements.sidebarLinksTab.selector
       const sidebarCss = appSideBarElements.sideBar.selector
 
       return this.waitForElementVisible(sidebarCss)
-        .useXpath()
-        .waitForElementVisible(sidebarLinksTabXpath)
-        .click(sidebarLinksTabXpath)
+        .waitForElementVisible(sidebarLinksTab)
+        .click(sidebarLinksTab)
         .waitForElementVisible('@sidebarPrivateLinkLabel')
         .click('@sidebarPrivateLinkLabel')
         .waitForElementNotPresent('@sidebarPrivateLinkLabel')
         .waitForElementVisible('@sidebarPrivateLinkIconCopied')
         .waitForElementNotPresent('@sidebarPrivateLinkIconCopied')
         .waitForElementVisible('@sidebarPrivateLinkLabel')
-        .useCss()
     }
   },
   elements: {
