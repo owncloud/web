@@ -236,7 +236,7 @@ module.exports = {
           .useCss()
       }
     },
-    isSidebarVisible: async function(callback) {
+    isSidebarVisible: async function() {
       let isVisible = false
       await this.api.elements('@sideBar', result => {
         isVisible = result.value.length > 0

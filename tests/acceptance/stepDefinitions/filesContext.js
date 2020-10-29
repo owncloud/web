@@ -116,7 +116,10 @@ When('the user browses to display the {string} details of file {string}', async 
 ) {
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(filename)
-  api.appSideBar().openVersionsTab()
+  const visible = await api.filesList().isPanelVisible('versions')
+  if (!visible) {
+    api.appSideBar().openVersionsTab()
+  }
   return client
 })
 
@@ -454,7 +457,10 @@ Then('the versions list for resource {string} should contain {int} entry/entries
 ) {
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(resourceName)
-  api.appSideBar().openVersionsTab()
+  const visible = await api.filesList().isPanelVisible('versions')
+  if (!visible) {
+    api.appSideBar().openVersionsTab()
+  }
   const count = await api.versionsDialog().getVersionsCount()
 
   assert.strictEqual(expectedNumber, count)
