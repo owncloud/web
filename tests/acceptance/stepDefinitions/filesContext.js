@@ -116,7 +116,7 @@ When('the user browses to display the {string} details of file {string}', async 
 ) {
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(filename)
-  const visible = await api.filesList().isPanelVisible('versions')
+  const visible = await client.page.filesPage().isPanelVisible('versions')
   if (!visible) {
     api.appSideBar().openVersionsTab()
   }
@@ -768,7 +768,7 @@ Then(/the count of files and folders shown on the webUI should be (\d+)/, async 
 
 Then('the app-sidebar should be visible', async function() {
   const visible = await client.page.filesPage().isSidebarVisible()
-  assert.strictEqual(visible, true, 'side-bar should be visible, but is not')
+  assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
 })
 
 Then('the {string} details panel should be visible', async function(panel) {
@@ -928,7 +928,7 @@ Then('the app-sidebar for file/folder {string} should be visible on the webUI', 
   resource
 ) {
   const visible = await client.page.filesPage().isSidebarVisible()
-  assert.strictEqual(visible, true, 'sidebar should be visible, but is not')
+  assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
   return this.checkSidebarItem(resource)
 })
 
