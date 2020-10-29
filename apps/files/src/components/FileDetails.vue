@@ -34,7 +34,7 @@
       </div>
     </template>
     <template slot="content">
-      <oc-accordion class="oc-mt-m" :expand-first="true" :expanded-id="appSidebarExpandedAccordion">
+      <oc-accordion class="oc-mt-m" :expand-first="true" :expanded-id="expandedAccordionId">
         <oc-accordion-item
           v-for="accordion in fileSideBarsEnabled"
           :id="buildAppSidebarId(accordion.app)"
