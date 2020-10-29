@@ -457,7 +457,7 @@ Then('the versions list for resource {string} should contain {int} entry/entries
 ) {
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(resourceName)
-  const visible = await api.filesList().isPanelVisible('versions')
+  const visible = await client.page.filesPage().isPanelVisible('versions')
   if (!visible) {
     api.appSideBar().openVersionsTab()
   }

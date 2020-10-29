@@ -473,7 +473,7 @@ module.exports = {
       selector: '#files-sidebar-item-name'
     },
     tabsInSideBar: {
-      selector: '//div[@class="sidebar-container"]//li/a',
+      selector: '//div[@class="sidebar-container"]//li/h3/button',
       locateStrategy: 'xpath'
     },
     dialog: {
