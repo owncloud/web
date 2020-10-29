@@ -760,16 +760,14 @@ Then(/the count of files and folders shown on the webUI should be (\d+)/, async 
   return client.assert.equal(itemsCount, noOfItems)
 })
 
-Then('the app-sidebar should be visible', function() {
-  return client.page.filesPage().isSidebarVisible(value => {
-    assert.strictEqual(value, true, 'side-bar should be visible, but is not')
-  })
+Then('the app-sidebar should be visible', async function() {
+  const visible = await client.page.filesPage().isSidebarVisible()
+  assert.strictEqual(visible, true, 'side-bar should be visible, but is not')
 })
 
-Then('the {string} details panel should be visible', function(panel) {
-  return client.page.filesPage().isPanelVisible(panel, value => {
-    assert.strictEqual(value, true, `'${panel}-panel' should be visible, but is not`)
-  })
+Then('the {string} details panel should be visible', async function(panel) {
+  const visible = await client.page.filesPage().isPanelVisible(panel)
+  assert.strictEqual(visible, true, `'${panel}-panel' should be visible, but is not`)
 })
 
 Then('the following tabs should be visible in the details dialog', async function(table) {
@@ -920,13 +918,12 @@ Then(
   }
 )
 
-Then('the app-sidebar for file/folder {string} should be visible on the webUI', resource => {
-  return client.page
-    .filesPage()
-    .isSidebarVisible(value => {
-      assert.strictEqual(value, true, 'sidebar should be visible, but is not')
-    })
-    .checkSidebarItem(resource)
+Then('the app-sidebar for file/folder {string} should be visible on the webUI', async function(
+  resource
+) {
+  const visible = await client.page.filesPage().isSidebarVisible()
+  assert.strictEqual(visible, true, 'sidebar should be visible, but is not')
+  return this.checkSidebarItem(resource)
 })
 
 Then('the thumbnail should be visible in the app-sidebar', function() {

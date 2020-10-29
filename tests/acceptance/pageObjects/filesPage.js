@@ -223,25 +223,30 @@ module.exports = {
     getXpathOfLinkToTabInSidePanel: function(tab) {
       return this.elements.sideBar.selector + util.format(this.elements.tabOfSideBar.selector, tab)
     },
-    selectTabInSidePanel: function(tab) {
-      return this.useXpath()
+    selectTabInSidePanel: async function(tab) {
+      await this.useXpath()
         .waitForElementVisible('@sideBar')
-        .click(this.getXpathOfLinkToTabInSidePanel(tab))
         .useCss()
+      const panelVisible = await this.isPanelVisible(tab)
+      if (panelVisible) {
+        return this
+      } else {
+        return this.useXpath()
+          .click(this.getXpathOfLinkToTabInSidePanel(tab))
+          .useCss()
+      }
     },
-    isSidebarVisible: function(callback) {
-      return this.useXpath()
-        .isVisible('@sideBar', result => {
-          callback(result.value)
-        })
-        .useCss()
+    isSidebarVisible: async function(callback) {
+      let isVisible = false
+      await this.api.elements('@sideBar', result => {
+        isVisible = result.value.length > 0
+      })
+      return isVisible
     },
-    isPanelVisible: function(panelName, callback) {
+    isPanelVisible: async function(panelName) {
       let selector = ''
-      if (panelName === 'people') {
-        selector = this.elements.collaboratorsPanel
-      } else if (panelName === 'collaborators') {
-        // FIXME: rename once renamed in all tests
+      if (panelName === 'people' || panelName === 'collaborators') {
+        // FIXME: `collaborators` is the old name. should be removed once renamed in all tests.
         selector = this.elements.collaboratorsPanel
       } else if (panelName === 'versions') {
         selector = this.elements.versionsPanel
@@ -250,9 +255,12 @@ module.exports = {
       } else {
         throw new Error('invalid panel')
       }
-      return this.isVisible(selector, result => {
-        callback(result.value)
+
+      let isVisible = false
+      await this.api.elements(selector, result => {
+        isVisible = result.value.length > 0
       })
+      return isVisible
     },
     getVisibleTabs: async function() {
       const tabs = []
