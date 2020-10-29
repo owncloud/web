@@ -97,7 +97,10 @@ export default {
     },
 
     buildAppSidebarId(accordion) {
-      return `app-sidebar-${accordion}`
+      if (accordion) {
+        return `app-sidebar-${accordion}`
+      }
+      return null
     }
   }
 }
