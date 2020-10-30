@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <ul class="uk-list">
-      <li v-for="action in enabledActions" :key="action.ariaLabel(highlightedFile)">
-        <oc-button
-          :aria-Label="action.ariaLabel(highlightedFile)"
-          variation="raw"
-          @click.stop="action.handler(highlightedFile, action.handlerData)"
-        >
-          <oc-icon :name="action.icon" aria-hidden="true" size="medium" />
-          {{ action.ariaLabel(highlightedFile) }}
-        </oc-button>
-      </li>
-    </ul>
-  </div>
+  <ul class="uk-list oc-mt-s">
+    <li v-for="action in enabledActions" :key="action.ariaLabel(highlightedFile)" class="oc-py-xs">
+      <oc-button
+        :aria-Label="action.ariaLabel(highlightedFile)"
+        variation="raw"
+        @click.stop="action.handler(highlightedFile, action.handlerData)"
+      >
+        <oc-icon :name="action.icon" aria-hidden="true" size="medium" />
+        {{ action.ariaLabel(highlightedFile) }}
+      </oc-button>
+    </li>
+  </ul>
 </template>
 
 <script>
