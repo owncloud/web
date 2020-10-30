@@ -3,9 +3,8 @@
     id="files-list"
     :file-data="fileData"
     :loading="loadingFolder"
-    :actions="actions"
-    :is-action-enabled="isActionEnabled"
     :selectable-row="false"
+    :actions-enabled="true"
   >
     <template #headerColumns>
       <div class="uk-text-truncate uk-text-meta uk-width-expand">

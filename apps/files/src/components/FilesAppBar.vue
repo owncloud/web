@@ -166,7 +166,6 @@ import FolderUpload from './FolderUpload.vue'
 import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
-import FileActions from '../fileactions'
 import MixinDeleteResources from '../mixins/deleteResources'
 import pathUtil from 'path'
 import { canBeMoved } from '../helpers/permissions'
@@ -179,7 +178,7 @@ export default {
     FolderUpload,
     FileDrop
   },
-  mixins: [Mixins, FileActions, MixinDeleteResources],
+  mixins: [Mixins, MixinDeleteResources],
   data: () => ({
     newFileAction: null,
     path: '',

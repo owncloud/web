@@ -3,9 +3,8 @@
     id="files-list"
     :file-data="fileData"
     :loading="loadingFolder"
-    :actions="actions"
     :compact-mode="_sidebarOpen"
-    :is-action-enabled="isActionEnabled"
+    :actions-enabled="true"
   >
     <template #headerColumns>
       <div class="uk-text-truncate uk-text-meta uk-width-expand">
@@ -64,11 +63,6 @@
               ? navigateTo(item.path.substr(1))
               : triggerDefaultFileAction(item)
           "
-        />
-        <oc-spinner
-          v-if="actionInProgress(item)"
-          :uk-tooltip="disabledActionTooltip(item)"
-          class="oc-ml-s"
         />
       </div>
       <div
@@ -173,7 +167,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../../mixins'
-import FileActions from '../../fileactions'
 import FileList from '../FileList.vue'
 import FileItem from '../FileItem.vue'
 import NoContentMessage from '../NoContentMessage.vue'
@@ -189,7 +182,7 @@ export default {
     NoContentMessage,
     SortableColumnHeader
   },
-  mixins: [Mixins, FileActions],
+  mixins: [Mixins],
   props: {
     /**
      * Array of active files
@@ -297,10 +290,6 @@ export default {
         client: this.$client,
         $gettext: this.$gettext
       })
-    },
-
-    isActionEnabled(item, action) {
-      return action.isEnabled(item, null)
     },
 
     shareStatus(status) {
