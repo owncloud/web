@@ -201,7 +201,8 @@ export default {
       'renameFile',
       'markFavorite',
       'resetFileSelection',
-      'addFileSelection'
+      'addFileSelection',
+      'setHighlightedFile'
     ]),
     ...mapActions([
       'showMessage',
@@ -451,6 +452,7 @@ export default {
           })
         })
       this.resetFileSelection()
+      this.setHighlightedFile(null)
     },
 
     removeSingleResourceFromTrashbin(resource) {
