@@ -18,7 +18,7 @@
             v-text="highlightedFile.name"
           />
         </div>
-        <div v-if="$route.name !== 'files-shared-with-others'" class="uk-flex uk-flex-middle">
+        <div v-if="isFavoriteStarDisplayed" class="uk-flex uk-flex-middle">
           <oc-star
             v-if="!publicPage() && isFavoritesEnabled"
             id="files-sidebar-star-icon"
@@ -29,7 +29,7 @@
           <template v-if="highlightedFile.size > -1">
             {{ highlightedFile.size | fileSize }},
           </template>
-          {{ formDateFromNow(highlightedFile.mdate) }}
+          {{ modificationTime }}
         </div>
       </div>
     </template>
@@ -74,6 +74,10 @@ export default {
         }
       ]
 
+      if (this.isTrashbin) {
+        return accordions
+      }
+
       return accordions.concat(
         this.fileSideBars.filter(
           b => b.enabled === undefined || b.enabled(this.capabilities, this.highlightedFile)
@@ -87,6 +91,22 @@ export default {
 
     expandedAccordionId() {
       return this.buildAppSidebarId(this.appSidebarExpandedAccordion)
+    },
+
+    isFavoriteStarDisplayed() {
+      return this.$route.name !== 'files-shared-with-others' || this.isTrashbin
+    },
+
+    modificationTime() {
+      if (this.isTrashbin) {
+        return this.formDateFromNow(this.highlightedFile.deleteTimestamp)
+      }
+
+      return this.formDateFromNow(this.highlightedFile.mdate)
+    },
+
+    isTrashbin() {
+      return this.$route.name === 'files-trashbin'
     }
   },
 

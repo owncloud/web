@@ -172,11 +172,37 @@ export default {
     },
 
     enabledActions() {
+      if (this.$route.name === 'files-trashbin') {
+        return this.actionsTrashbin
+      }
+
       return this.actions.filter(action => action.isEnabled(this.highlightedFile))
+    },
+
+    actionsTrashbin() {
+      return [
+        {
+          icon: 'restore',
+          ariaLabel: () => this.$gettext('Restore'),
+          handler: this.restoreDeletedResource,
+          isEnabled: () => true
+        },
+        {
+          icon: 'delete',
+          ariaLabel: () => this.$gettext('Delete'),
+          handler: this.removeSingleResourceFromTrashbin,
+          isEnabled: () => true
+        }
+      ]
     }
   },
   methods: {
-    ...mapActions('Files', ['renameFile', 'markFavorite']),
+    ...mapActions('Files', [
+      'renameFile',
+      'markFavorite',
+      'resetFileSelection',
+      'addFileSelection'
+    ]),
     ...mapActions([
       'showMessage',
       'createModal',
@@ -396,6 +422,39 @@ export default {
         name: routeName,
         params
       })
+    },
+
+    restoreDeletedResource(resource) {
+      this.resetFileSelection()
+      this.addFileSelection(resource)
+      this.$client.fileTrash
+        .restore(resource.id, resource.originalLocation)
+        .then(() => {
+          this.removeFilesFromTrashbin([resource])
+          const translated = this.$gettext('%{file} was restored successfully')
+          this.showMessage({
+            title: this.$gettextInterpolate(translated, { file: resource.name }, true),
+            autoClose: {
+              enabled: true
+            }
+          })
+        })
+        .catch(error => {
+          const translated = this.$gettext('Restoration of %{file} failed')
+          this.showMessage({
+            title: this.$gettextInterpolate(translated, { file: resource.name }, true),
+            desc: error.message,
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
+          })
+        })
+      this.resetFileSelection()
+    },
+
+    removeSingleResourceFromTrashbin(resource) {
+      this.$_deleteResources_displayDialog(resource, true)
     }
   }
 }
