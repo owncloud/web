@@ -236,7 +236,7 @@ module.exports = {
     },
     collaboratorExpirationInfo: {
       selector:
-        '//div/span[.="%s"]/parent::div/following-sibling::span/span[contains(text(), "Expires")]',
+        '//span[.="%s"]//ancestor::div[contains(@class, "files-collaborators-collaborator-info")]//span[contains(text(), "Expires")]',
       locateStrategy: 'xpath'
     }
   }
