@@ -1,7 +1,7 @@
 <template>
   <div class="files-collaborators-collaborator-add-dialog">
-    <label for="oc-sharing-autocomplete"><translate>Add People:</translate></label>
-    <oc-grid gutter="small">
+    <label for="oc-sharing-autocomplete" class="oc-mb-s uk-display-block">
+      <translate>Add People:</translate>
       <oc-autocomplete
         id="oc-sharing-autocomplete"
         ref="ocSharingAutocomplete"
@@ -20,7 +20,7 @@
           <autocomplete-item :item="item" />
         </template>
       </oc-autocomplete>
-    </oc-grid>
+    </label>
     <oc-grid v-if="selectedCollaborators.length > 0" gutter="small">
       <div>
         <div>
