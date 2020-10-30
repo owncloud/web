@@ -3,10 +3,9 @@
     id="files-list"
     :file-data="fileData"
     :loading="loadingFolder"
-    :actions="actions"
     :compact-mode="_sidebarOpen"
-    :is-action-enabled="isActionEnabled"
     :has-two-rows="true"
+    :actions-enabled="true"
   >
     <template #headerColumns>
       <div ref="headerNameColumn" class="uk-text-truncate uk-text-meta uk-width-expand">
@@ -67,11 +66,6 @@
               ? navigateTo(rowItem.path.substr(1))
               : triggerDefaultFileAction(rowItem)
           "
-        />
-        <oc-spinner
-          v-if="actionInProgress(rowItem)"
-          :uk-tooltip="disabledActionTooltip(rowItem)"
-          class="oc-ml-s"
         />
       </div>
       <div
@@ -149,7 +143,6 @@ import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
 import { mapGetters, mapActions, mapState } from 'vuex'
 import Mixins from '../mixins'
 import MixinsFilesListIndicators from '../mixins/filesListIndicators'
-import FileActions from '../fileactions'
 
 export default {
   name: 'AllFilesList',
@@ -160,7 +153,7 @@ export default {
     SortableColumnHeader,
     QuickActions
   },
-  mixins: [Mixins, FileActions, MixinsFilesListIndicators],
+  mixins: [Mixins, MixinsFilesListIndicators],
   props: {
     fileData: {
       type: Array,
@@ -270,10 +263,6 @@ export default {
             }
           })
         })
-    },
-
-    isActionEnabled(item, action) {
-      return action.isEnabled(item, this.parentFolder)
     }
   }
 }

@@ -80,14 +80,13 @@
               </div>
               <slot name="rowColumns" :item="rowItem" :index="index" />
               <div
-                v-if="actions.length > 1 || $scopedSlots.rowActions"
+                v-if="actionsEnabled"
                 class="uk-flex uk-flex-middle uk-flex-right"
                 :class="{ 'uk-width-small': $scopedSlots.rowActions }"
               >
                 <slot name="rowActions" :item="rowItem" />
                 <oc-button
                   class="files-list-row-show-actions"
-                  :disabled="$_actionInProgress(rowItem)"
                   :aria-label="$gettext('Show resource actions')"
                   variation="raw"
                 >
@@ -142,17 +141,9 @@ export default {
       type: Boolean,
       default: false
     },
-    actions: {
-      type: Array,
-      required: true
-    },
     compactMode: {
       type: Boolean,
       default: false
-    },
-    isActionEnabled: {
-      type: Function,
-      required: true
     },
     selectableRow: {
       type: Boolean,
@@ -168,6 +159,11 @@ export default {
       type: Function,
       required: false,
       default: () => false
+    },
+    actionsEnabled: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {
@@ -231,30 +227,6 @@ export default {
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
       }
       return item.basename
-    },
-
-    $_enabledActions(item) {
-      return this.actions.filter(action => this.$_isActionEnabled(item, action))
-    },
-
-    $_isActionEnabled(item, action) {
-      return this.isActionEnabled && this.isActionEnabled(item, action)
-    },
-
-    $_actionInProgress(item) {
-      return this.actionsInProgress.some(itemInProgress => itemInProgress.id === item.id)
-    },
-
-    $_disabledActionTooltip(item) {
-      if (this.$_actionInProgress(item)) {
-        if (item.type === 'folder') {
-          return this.$gettext('There is currently an action in progress for this folder')
-        }
-
-        return this.$gettext('There is currently an action in progress for this file')
-      }
-
-      return null
     },
     _rowClasses(item) {
       const classes = []

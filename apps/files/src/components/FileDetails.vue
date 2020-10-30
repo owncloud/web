@@ -36,7 +36,7 @@
     <template slot="content">
       <oc-accordion class="oc-mt-m" :expand-first="true" :expanded-id="expandedAccordionId">
         <oc-accordion-item
-          v-for="accordion in fileSideBarsEnabled"
+          v-for="accordion in accordions"
           :id="buildAppSidebarId(accordion.app)"
           :key="accordion.app"
           :title="accordion.component.title($gettext)"
@@ -53,17 +53,31 @@
 import Mixins from '../mixins'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
+import ActionsAccordion from './Sidebar/ActionsAccordion.vue'
+
 export default {
   name: 'FileDetails',
+  components: {
+    ActionsAccordion
+  },
   mixins: [Mixins],
   computed: {
     ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
     ...mapState('Files', ['appSidebarExpandedAccordion']),
 
-    fileSideBarsEnabled() {
-      return this.fileSideBars.filter(
-        b => b.enabled === undefined || b.enabled(this.capabilities, this.highlightedFile)
+    accordions() {
+      const accordions = [
+        {
+          app: 'files-actions',
+          component: ActionsAccordion
+        }
+      ]
+
+      return accordions.concat(
+        this.fileSideBars.filter(
+          b => b.enabled === undefined || b.enabled(this.capabilities, this.highlightedFile)
+        )
       )
     },
 

@@ -37,7 +37,6 @@
 </template>
 <script>
 import Mixins from '../mixins'
-import FileActions from '../fileactions'
 import FileDetails from './FileDetails.vue'
 import FilesAppBar from './FilesAppBar.vue'
 import AllFilesList from './AllFilesList.vue'
@@ -55,7 +54,7 @@ export default {
     SharedFilesList,
     UploadProgress
   },
-  mixins: [Mixins, FileActions],
+  mixins: [Mixins],
   data() {
     return {
       createFolder: false,

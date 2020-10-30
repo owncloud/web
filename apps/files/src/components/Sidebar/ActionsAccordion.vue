@@ -1,11 +1,33 @@
+<template>
+  <div>
+    <ul class="uk-list">
+      <li v-for="action in enabledActions" :key="action.ariaLabel(highlightedFile)">
+        <oc-button
+          :aria-Label="action.ariaLabel(highlightedFile)"
+          variation="raw"
+          @click.stop="action.handler(highlightedFile, action.handlerData)"
+        >
+          <oc-icon :name="action.icon" aria-hidden="true" size="medium" />
+          {{ action.ariaLabel(highlightedFile) }}
+        </oc-button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { dirname } from 'path'
-import { canBeMoved } from './helpers/permissions'
-import MixinDeleteResources from './mixins/deleteResources'
+
+import { canBeMoved } from '../../helpers/permissions'
+import MixinDeleteResources from '../../mixins/deleteResources'
 
 export default {
+  name: 'ActionsAccordion',
+  title: $gettext => {
+    return $gettext('Actions')
+  },
   mixins: [MixinDeleteResources],
-
   computed: {
     ...mapGetters('Files', [
       'actionsInProgress',
@@ -16,6 +38,7 @@ export default {
       'currentFolder'
     ]),
     ...mapGetters(['capabilities', 'fileSideBars', 'isAuthenticated', 'getToken']),
+    ...mapGetters('Files', ['highlightedFile']),
     ...mapState(['apps']),
 
     // Files lists
@@ -146,6 +169,10 @@ export default {
       ]
 
       return fileEditorsActions.concat(systemActions)
+    },
+
+    enabledActions() {
+      return this.actions.filter(action => action.isEnabled(this.highlightedFile))
     }
   },
   methods: {
@@ -158,22 +185,6 @@ export default {
       'openFile'
     ]),
     ...mapMutations('Files', ['SET_RESOURCES_SELECTION_FOR_MOVE']),
-
-    actionInProgress(item) {
-      return this.actionsInProgress.some(itemInProgress => itemInProgress.id === item.id)
-    },
-
-    disabledActionTooltip(item) {
-      if (this.actionInProgress(item)) {
-        if (item.type === 'folder') {
-          return this.$gettext('There is currently an action in progress for this folder')
-        }
-
-        return this.$gettext('There is currently an action in progress for this file')
-      }
-
-      return null
-    },
 
     toggleFileFavorite(file) {
       this.markFavorite({
@@ -388,3 +399,4 @@ export default {
     }
   }
 }
+</script>
