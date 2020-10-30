@@ -1,6 +1,6 @@
 <template>
   <!-- TODO: Take care of outside click overall and not just in files list -->
-  <div :id="id" class="uk-position-relative" @click="hideRowActionsDropdown">
+  <div :id="id" class="uk-position-relative">
     <div class="uk-flex uk-flex-column uk-height-1-1">
       <resize-observer @notify="$_resizeHeader" />
       <oc-grid
@@ -17,7 +17,7 @@
             id="filelist-check-all"
             class="oc-ml-s"
             :hide-label="true"
-            :label="labelSelectAllItems"
+            :label="$gettext('Select all items')"
             :value="selectedAll"
             @input="toggleAll"
           />
@@ -52,10 +52,7 @@
           <div
             :data-is-visible="active"
             :class="{ 'files-list-row-disabled': rowDisabled(rowItem) }"
-            @click="
-              selectRow(rowItem, $event)
-              hideRowActionsDropdown()
-            "
+            @click="selectRow(rowItem, $event)"
           >
             <oc-grid
               :id="'file-row-' + rowItem.viewId"
@@ -89,12 +86,10 @@
               >
                 <slot name="rowActions" :item="rowItem" />
                 <oc-button
-                  :id="actionsDropdownButtonId(rowItem.viewId, active)"
                   class="files-list-row-show-actions"
                   :disabled="$_actionInProgress(rowItem)"
-                  :aria-label="$gettext('Show file actions')"
+                  :aria-label="$gettext('Show resource actions')"
                   variation="raw"
-                  @click.stop="toggleRowActionsDropdown(rowItem)"
                 >
                   <oc-icon name="more_vert" class="uk-text-middle" />
                 </oc-button>
@@ -114,12 +109,6 @@
         <slot name="footer" />
       </div>
     </div>
-    <row-actions-dropdown
-      :displayed="rowActionsDisplayed"
-      :item="rowActionsItem"
-      :actions="rowActions"
-      @actionClicked="hideRowActionsDropdown"
-    />
   </div>
 </template>
 <script>
@@ -127,13 +116,10 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
-import RowActionsDropdown from './FilesLists/RowActionsDropdown.vue'
-
 export default {
   name: 'FileList',
   components: {
-    RecycleScroller,
-    RowActionsDropdown
+    RecycleScroller
   },
   props: {
     id: {
@@ -182,14 +168,6 @@ export default {
       type: Function,
       required: false,
       default: () => false
-    }
-  },
-  data() {
-    return {
-      labelSelectAllItems: this.$gettext('Select all items'),
-      rowActions: [],
-      rowActionsDisplayed: false,
-      rowActionsItem: {}
     }
   },
   computed: {
@@ -315,31 +293,6 @@ export default {
           }
         }
       }
-    },
-
-    toggleRowActionsDropdown(item) {
-      if (item === this.rowActionsItem) {
-        this.hideRowActionsDropdown()
-        return
-      }
-
-      this.rowActionsDisplayed = true
-      this.rowActionsItem = item
-      this.rowActions = this.$_enabledActions(item)
-    },
-
-    hideRowActionsDropdown() {
-      this.rowActionsDisplayed = false
-      this.rowActionsItem = {}
-      this.rowActions = []
-    },
-
-    actionsDropdownButtonId(viewId, active) {
-      if (active) {
-        return `files-file-list-action-button-${viewId}-active`
-      }
-
-      return `files-file-list-action-button-${viewId}`
     },
 
     $_resizeHeader() {
