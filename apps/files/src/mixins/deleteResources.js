@@ -45,12 +45,12 @@ export default {
 
       title = this.$_deleteResources_isInTrashbin
         ? this.$ngettext(
-            'Permanently delete %{amount} selected resource?',
+            'Permanently delete selected resource?',
             'Permanently delete %{amount} selected resources?',
             resources.length
           )
         : this.$ngettext(
-            'Delete %{amount} selected resource?',
+            'Delete selected resource?',
             'Delete %{amount} selected resources?',
             resources.length
           )
