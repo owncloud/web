@@ -216,7 +216,7 @@ export default {
       return this.$gettext('Public link')
     },
     $_addButtonAriaLabel() {
-      return this.$gettext('Create new nublic link')
+      return this.$gettext('Create new public link')
     },
     $_privateLinkCopyLabel() {
       return this.$gettext('Copy private link url')
