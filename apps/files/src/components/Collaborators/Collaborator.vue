@@ -105,21 +105,27 @@
       <oc-table-cell>
         <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
           <div class="oc-text">
-            <span class="files-collaborators-collaborator-name oc-text-bold">{{
-              collaborator.collaborator.displayName
-            }}</span>
-            <translate
-              v-if="collaborator.collaborator.name === user.id"
-              translate-comment="Indicator for current user in list of people"
+            <span>
+              <span class="files-collaborators-collaborator-name oc-text-bold">{{
+                collaborator.collaborator.displayName
+              }}</span>
+              <translate
+                v-if="collaborator.collaborator.name === user.id"
+                translate-comment="Indicator for current user in list of people"
+                class="uk-text-meta files-collaborators-collaborator-additional-info"
+              >
+                (me)
+              </translate>
+            </span>
+            <span
+              v-if="collaborator.collaborator.additionalInfo"
               class="uk-text-meta files-collaborators-collaborator-additional-info"
-            >
-              (me)
-            </translate>
+              v-text="collaborator.collaborator.additionalInfo"
+            />
           </div>
-          <span
-            v-if="collaborator.collaborator.additionalInfo"
-            class="uk-text-meta files-collaborators-collaborator-additional-info"
-            v-text="collaborator.collaborator.additionalInfo"
+          <div
+            v-if="collaborator.collaborator.name !== user.id"
+            v-text="collaboratorType(collaborator.shareType)"
           />
           <span class="oc-text"
             ><span class="files-collaborators-collaborator-role">{{ originalRole.label }}</span
@@ -205,12 +211,15 @@ export default {
   },
   data: function() {
     return {
-      shareTypes,
       removalInProgress: false
     }
   },
   computed: {
     ...mapGetters(['user']),
+
+    shareTypes() {
+      return shareTypes
+    },
 
     $_resharerToggleId() {
       return 'collaborator-' + this.collaborator.collaborator.name + '-resharer-details-toggle'
@@ -281,11 +290,11 @@ export default {
     },
 
     isUser() {
-      return this.collaborator.shareType === shareTypes.user
+      return this.collaborator.shareType === this.shareTypes.user
     },
 
     isRemoteUser() {
-      return this.collaborator.shareType === shareTypes.remote
+      return this.collaborator.shareType === this.shareTypes.remote
     },
 
     collaboratorListItemClass() {

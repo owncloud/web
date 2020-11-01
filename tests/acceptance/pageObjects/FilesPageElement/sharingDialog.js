@@ -718,7 +718,7 @@ module.exports = {
     },
     collaboratorAutocompleteItemName: {
       selector:
-        '//div[contains(@class, "files-collaborators-autocomplete-username") and text()="%s"]',
+        '//div[contains(@class, "files-collaborators-autocomplete-user-text")]/span[contains(@class, "files-collaborators-autocomplete-username") and text()="%s"]',
       locateStrategy: 'xpath'
     },
     collaboratorsListItemInfo: {
