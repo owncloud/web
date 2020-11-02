@@ -4,6 +4,8 @@
       <oc-button
         :aria-Label="action.ariaLabel(highlightedFile)"
         variation="raw"
+        color="text"
+        class="oc-text-bold"
         @click.stop="action.handler(highlightedFile, action.handlerData)"
       >
         <oc-icon :name="action.icon" aria-hidden="true" size="medium" />
