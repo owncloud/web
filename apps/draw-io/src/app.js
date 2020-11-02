@@ -28,7 +28,14 @@ const appInfo = {
         menuTitle($gettext) {
           return $gettext('New draw.io document…')
         }
-      }
+      },
+      routes: [
+        'files-list',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'public-files'
+      ]
     }
   ]
 }
