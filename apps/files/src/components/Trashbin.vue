@@ -30,14 +30,6 @@
       <div class="oc-icon" />
     </template>
     <template #rowColumns="{ item }">
-      <div class="uk-width-expand uk-flex uk-flex-middle">
-        <file-item
-          :key="item.viewId"
-          :item="item"
-          :name="$_ocTrashbin_fileName(item)"
-          :display-preview="false"
-        />
-      </div>
       <div
         class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
         :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
@@ -106,15 +98,6 @@ export default {
         client: this.$client,
         $gettext: this.$gettext
       })
-    },
-
-    $_ocTrashbin_fileName(item) {
-      if (item && item.originalLocation) {
-        const pathSplit = item.originalLocation.split('/')
-        if (pathSplit.length === 2) return `${pathSplit[pathSplit.length - 2]}/${item.basename}`
-        if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
-      }
-      return item.basename
     }
   }
 }

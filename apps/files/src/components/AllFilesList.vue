@@ -50,24 +50,7 @@
         </sortable-column-header>
       </div>
     </template>
-    <template #rowColumns="{ item: rowItem, index }">
-      <div
-        :ref="index === 0 ? 'firstRowNameColumn' : null"
-        class="uk-width-expand uk-flex uk-flex-middle"
-      >
-        <file-item
-          :key="rowItem.viewId"
-          :item="rowItem"
-          :show-path="$_isFavoritesList"
-          :indicators="indicatorArray(rowItem)"
-          :has-two-rows="true"
-          @click.native.stop="
-            rowItem.type === 'folder'
-              ? navigateTo(rowItem.path.substr(1))
-              : triggerDefaultFileAction(rowItem)
-          "
-        />
-      </div>
+    <template #rowColumns="{ item: rowItem }">
       <div
         class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
         :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
@@ -135,25 +118,22 @@
 </template>
 <script>
 import FileList from './FileList.vue'
-import FileItem from './FileItem.vue'
 import NoContentMessage from './NoContentMessage.vue'
 import QuickActions from './FilesLists/QuickActions.vue'
 import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
 
 import { mapGetters, mapActions, mapState } from 'vuex'
 import Mixins from '../mixins'
-import MixinsFilesListIndicators from '../mixins/filesListIndicators'
 
 export default {
   name: 'AllFilesList',
   components: {
     FileList,
-    FileItem,
     NoContentMessage,
     SortableColumnHeader,
     QuickActions
   },
-  mixins: [Mixins, MixinsFilesListIndicators],
+  mixins: [Mixins],
   props: {
     fileData: {
       type: Array,

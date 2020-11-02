@@ -26,8 +26,8 @@ export default {
   methods: {
     ...mapActions('Files', ['resetSearch']),
 
-    $_navigate_trigger(folderPath) {
-      if (this.searchTerm !== '' && this.$route.params.item === folderPath) {
+    $_navigate_trigger(folder) {
+      if (this.searchTerm !== '' && this.$route.params.item === folder.path) {
         this.resetSearch()
       }
       let route = 'files-list'
@@ -37,7 +37,7 @@ export default {
       this.$router.push({
         name: route,
         params: {
-          item: folderPath
+          item: folder.path
         }
       })
     }

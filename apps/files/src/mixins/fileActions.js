@@ -59,19 +59,6 @@ export default {
       })
 
       return actions
-    },
-
-    $_fileActions_defaultActions() {
-      const actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
-
-      return actions.filter(action => {
-        return (
-          action.isEnabled({
-            resource: this.highlightedFile,
-            parent: this.currentFolder
-          }) && action.canBeDefault
-        )
-      })
     }
   },
 

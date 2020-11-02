@@ -54,17 +54,6 @@
       <div class="oc-icon" />
     </template>
     <template #rowColumns="{ item }">
-      <div class="uk-width-expand uk-flex uk-flex-middle">
-        <file-item
-          :key="item.path"
-          :item="item"
-          @click.native.stop="
-            item.type === 'folder'
-              ? navigateTo(item.path.substr(1))
-              : triggerDefaultFileAction(item)
-          "
-        />
-      </div>
       <div
         v-if="!$_isSharedWithMe"
         key="shared-with-cell"
