@@ -89,6 +89,7 @@
                   :indicators="resourceIndicators(rowItem)"
                   :has-two-rows="hasTwoRows"
                   :name="resourceName(rowItem)"
+                  :display-preview="displayPreview"
                   @click.native.stop="triggerDefaultResourceAction(rowItem)"
                 />
               </div>
@@ -185,6 +186,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    displayPreview: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   },
   computed: {
