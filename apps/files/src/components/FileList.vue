@@ -78,6 +78,20 @@
                   @input="toggleFileSelect(rowItem)"
                 />
               </div>
+              <div
+                :ref="index === 0 ? 'firstRowNameColumn' : null"
+                class="uk-width-expand uk-flex uk-flex-middle"
+              >
+                <file-item
+                  :key="rowItem.viewId"
+                  :item="rowItem"
+                  :show-path="showResourcePath"
+                  :indicators="resourceIndicators(rowItem)"
+                  :has-two-rows="hasTwoRows"
+                  :name="resourceName(rowItem)"
+                  @click.native.stop="triggerDefaultResourceAction(rowItem)"
+                />
+              </div>
               <slot name="rowColumns" :item="rowItem" :index="index" />
               <div
                 v-if="actionsEnabled"
@@ -115,11 +129,18 @@ import { mapGetters, mapActions, mapState } from 'vuex'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
+import MixinFilesListIndicators from '../mixins/filesListIndicators'
+import MixinFileActions from '../mixins/fileActions'
+
+import FileItem from './FileItem.vue'
+
 export default {
   name: 'FileList',
   components: {
-    RecycleScroller
+    RecycleScroller,
+    FileItem
   },
+  mixins: [MixinFilesListIndicators, MixinFileActions],
   props: {
     id: {
       type: String,
@@ -175,7 +196,8 @@ export default {
       'quota',
       'filesTotalSize',
       'activeFilesCount',
-      'actionsInProgress'
+      'actionsInProgress',
+      'currentFolder'
     ]),
     ...mapGetters(['configuration']),
 
@@ -189,6 +211,10 @@ export default {
 
     _rowHeight() {
       return this.hasTwoRows ? 67 : 55
+    },
+
+    showResourcePath() {
+      return this.$route.name === 'files-favorites' || this.$route.name === 'files-trashbin'
     }
   },
   watch: {
@@ -282,6 +308,51 @@ export default {
           headerCheckbox.style.width = getComputedStyle(firstRowCheckbox).width
         }
       })
+    },
+
+    resourceIndicators(resource) {
+      if (!this.currentFolder) {
+        return
+      }
+
+      if (this.$route.name === 'files-list' || this.$route.name === 'files-favorites') {
+        return this.indicatorArray(resource)
+      }
+    },
+
+    resourceName(resource) {
+      if (this.$route.name === 'files-trashbin') {
+        if (resource && resource.originalLocation) {
+          const pathSplit = resource.originalLocation.split('/')
+
+          if (pathSplit.length === 2) {
+            return `${pathSplit[pathSplit.length - 2]}/${resource.basename}`
+          }
+
+          if (pathSplit.length > 2) {
+            return `…/${pathSplit[pathSplit.length - 2]}/${resource.basename}`
+          }
+        }
+      }
+
+      if (resource) {
+        return resource.basename
+      }
+    },
+
+    triggerDefaultResourceAction(resource) {
+      let actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
+
+      actions = actions.filter(action => {
+        return (
+          action.isEnabled({
+            resource: resource,
+            parent: this.currentFolder
+          }) && action.canBeDefault
+        )
+      })
+
+      actions[0].handler(resource, actions[0].handlerData)
     }
   }
 }

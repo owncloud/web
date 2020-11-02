@@ -515,12 +515,6 @@ export default {
       if (input) {
         input.value = ''
       }
-    },
-
-    triggerDefaultFileAction(item) {
-      const actions = this.actions.filter(action => action.canBeDefault && action.isEnabled(item))
-
-      actions[0].handler(item, actions[0].handlerData)
     }
   }
 }

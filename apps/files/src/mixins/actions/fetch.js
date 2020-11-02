@@ -6,7 +6,7 @@ export default {
       return [
         {
           icon: 'remove_red_eye',
-          handler: file => this.fetchFile(file.path, 'application/pdf'),
+          handler: file => this.$_fetch_trigger(file.path, 'application/pdf'),
           ariaLabel: () => {
             return this.$gettext('Open in browser')
           },
@@ -35,7 +35,7 @@ export default {
         headers
       })
         .then(r => r.blob())
-        .then(blob => this.$_fetchFile_openBlobInNewTab(blob, mimetype))
+        .then(blob => this.$_fetch_openBlobInNewTab(blob, mimetype))
     },
 
     $_fetch_openBlobInNewTab(blob, mimetype) {
