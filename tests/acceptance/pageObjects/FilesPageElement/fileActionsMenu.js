@@ -24,10 +24,10 @@ module.exports = {
      * @returns {string}
      */
     getActionSelector: function(action) {
-      const actionsDropdownSelector = this.elements.itemActionsDropdown.selector
-      const actionSelector = this.elements[action + 'ButtonInFileRow'].selector
+      const actionsAccordionSelector = this.elements.actionsAccordion.selector
+      const actionSelector = this.elements[action + 'ButtonInAccordion'].selector
 
-      return `${actionsDropdownSelector}${actionSelector}`
+      return `${actionsAccordionSelector}${actionSelector}`
     },
     /**
      * perform one of the main file actions
@@ -158,31 +158,31 @@ module.exports = {
     sharingSideBar: {
       selector: '#oc-files-sharing-sidebar'
     },
-    itemActionsDropdown: {
-      selector: '//div[@id="files-list-row-actions-dropdown"]',
+    actionsAccordion: {
+      selector: '//li[@id="app-sidebar-files-actions"]',
       locateStrategy: 'xpath'
     },
-    deleteButtonInFileRow: {
+    deleteButtonInAccordion: {
       selector: '//button[@aria-label="Delete"]',
       locateStrategy: 'xpath'
     },
-    downloadButtonInFileRow: {
+    downloadButtonInAccordion: {
       selector: '//button[@aria-label="Download"]',
       locateStrategy: 'xpath'
     },
-    favoriteButtonInFileRow: {
+    favoriteButtonInAccordion: {
       selector: '//button[@aria-label="Mark as favorite"]',
       locateStrategy: 'xpath'
     },
-    unmarkFavoriteButtonInFileRow: {
+    unmarkFavoriteButtonInAccordion: {
       selector: '//button[@aria-label="Unmark as favorite"]',
       locateStrategy: 'xpath'
     },
-    restoreButtonInFileRow: {
+    restoreButtonInAccordion: {
       selector: '//button[@aria-label="Restore"]',
       locateStrategy: 'xpath'
     },
-    renameButtonInFileRow: {
+    renameButtonInAccordion: {
       selector: '//button[@aria-label="Rename"]',
       locateStrategy: 'xpath'
     },
@@ -200,15 +200,15 @@ module.exports = {
     dialogInput: {
       selector: '.oc-modal-body-input > input'
     },
-    moveButtonInFileRow: {
+    moveButtonInAccordion: {
       selector: '//button[@aria-label="Move"]',
       locateStrategy: 'xpath'
     },
-    copyButtonInFileRow: {
+    copyButtonInAccordion: {
       selector: '//button[@aria-label="Copy"]',
       locateStrategy: 'xpath'
     },
-    mediaViewerButtonInFileRow: {
+    mediaViewerButtonInAccordion: {
       selector: '//button[@aria-label="Open in Mediaviewer"]',
       locateStrategy: 'xpath'
     }
