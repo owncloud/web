@@ -1,5 +1,11 @@
 <template>
-  <file-list id="files-list" :file-data="fileData" :loading="loadingFolder" :actions-enabled="true">
+  <file-list
+    id="files-list"
+    :file-data="fileData"
+    :loading="loadingFolder"
+    :actions-enabled="true"
+    :display-preview="false"
+  >
     <template #headerColumns>
       <div class="uk-text-truncate uk-text-meta uk-width-expand">
         <sortable-column-header
