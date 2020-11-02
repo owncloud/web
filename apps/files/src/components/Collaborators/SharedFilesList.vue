@@ -157,7 +157,6 @@
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../../mixins'
 import FileList from '../FileList.vue'
-import FileItem from '../FileItem.vue'
 import NoContentMessage from '../NoContentMessage.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 import { shareTypes } from '../../helpers/shareTypes'
@@ -167,7 +166,6 @@ export default {
   name: 'SharedFilesList',
   components: {
     FileList,
-    FileItem,
     NoContentMessage,
     SortableColumnHeader
   },
