@@ -135,9 +135,9 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "user" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-  @skip @issue-4122
   Scenario: autocompletion of a pattern that matches regular existing groups but also a group with whom the item is already shared (folder)
-    Given user "regularuser" has logged in using the webUI
+    Given the administrator has set the minimum characters for sharing autocomplete to "2"
+    And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And user "regularuser" has shared folder "simple-folder" with group "finance1"
     And the user has opened the share dialog for folder "simple-folder"
@@ -147,9 +147,9 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-  @skip @issue-4122
   Scenario: autocompletion of a pattern that matches regular existing groups but also a group with whom the item is already shared (file)
-    Given user "regularuser" has logged in using the webUI
+    Given the administrator has set the minimum characters for sharing autocomplete to "2"
+    And user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
     And user "regularuser" has shared file "data.zip" with group "finance1"
     And the user has opened the share dialog for file "data.zip"
