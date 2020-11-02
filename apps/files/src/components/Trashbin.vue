@@ -59,7 +59,6 @@
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
 import FileList from './FileList.vue'
-import FileItem from './FileItem.vue'
 import NoContentMessage from './NoContentMessage.vue'
 import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
 
@@ -68,7 +67,6 @@ export default {
 
   components: {
     FileList,
-    FileItem,
     NoContentMessage,
     SortableColumnHeader
   },

@@ -371,7 +371,7 @@ module.exports = {
    * @param {string} user
    *
    */
-  deleteShare: async function(shareID, user) {
+  deleteShare: function(shareID, user) {
     const apiURL = `apps/files_sharing/api/v1/shares/${shareID}`
     return httpHelper
       .deleteOCS(apiURL, user)

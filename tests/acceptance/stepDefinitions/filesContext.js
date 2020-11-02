@@ -435,7 +435,7 @@ Then('file {string} should not be listed on the webUI', function(file) {
     })
 })
 
-Then('folder {string} should not be listed on the webUI', async folder => {
+Then('folder {string} should not be listed on the webUI', folder => {
   return client.page.FilesPageElement.filesList()
     .isElementListed(folder, 'folder', client.globals.waitForNegativeConditionTimeout)
     .then(state => {
