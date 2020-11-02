@@ -21,31 +21,80 @@ const appInfo = {
   extensions: [
     {
       extension: 'png',
-      routeName: 'media'
+      routeName: 'media',
+      routes: [
+        'files-list',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'public-files'
+      ]
     },
     {
       extension: 'jpg',
-      routeName: 'media'
+      routeName: 'media',
+      routes: [
+        'files-list',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'public-files'
+      ]
     },
     {
       extension: 'jpeg',
-      routeName: 'media'
+      routeName: 'media',
+      routes: [
+        'files-list',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'public-files'
+      ]
     },
     {
       extension: 'gif',
-      routeName: 'media'
+      routeName: 'media',
+      routes: [
+        'files-list',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'public-files'
+      ]
     },
     {
       extension: 'mp4',
-      routeName: 'media'
+      routeName: 'media',
+      routes: [
+        'files-list',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'public-files'
+      ]
     },
     {
       extension: 'webm',
-      routeName: 'media'
+      routeName: 'media',
+      routes: [
+        'files-list',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'public-files'
+      ]
     },
     {
       extension: 'ogg',
-      routeName: 'media'
+      routeName: 'media',
+      routes: [
+        'files-list',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'public-files'
+      ]
     }
   ]
 }

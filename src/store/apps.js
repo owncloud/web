@@ -75,25 +75,6 @@ const actions = {
 
 const mutations = {
   REGISTER_APP(state, appInfo) {
-    if (appInfo.fileActions) {
-      // TODO: Investigate if removing this would break anything
-      // And decide if it's worth keeping
-      appInfo.fileActions.forEach(a => {
-        a.extensions.forEach(e => {
-          const action = {
-            version: 3,
-            url: a.url,
-            icon: a.icon,
-            title: a.title
-          }
-          if (!state.extensions[e]) {
-            state.extensions[e] = [action]
-          } else {
-            state.extensions[e].push(action)
-          }
-        })
-      })
-    }
     if (appInfo.extensions) {
       appInfo.extensions.forEach(e => {
         const editor = {
