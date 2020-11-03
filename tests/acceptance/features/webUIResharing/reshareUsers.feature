@@ -1,5 +1,5 @@
 # Reshare permission is not available now in the oCIS webUI
-@skipOnOCIS
+#@skipOnOCIS
 Feature: Resharing shared files with different permissions
   As a user
   I want to reshare received files and folders with other users with different permissions
@@ -14,6 +14,7 @@ Feature: Resharing shared files with different permissions
       | user2    |
       | user3    |
 
+  @skipOnOCIS
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -24,6 +25,7 @@ Feature: Resharing shared files with different permissions
     Then user "User Three" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "User Three" for folder "simple-folder" on the webUI
 
+  @skipOnOCIS
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for resharer
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
