@@ -1,5 +1,5 @@
 <template>
-  <ul class="uk-list oc-mt-s">
+  <ul id="oc-files-actions-sidebar" class="uk-list oc-mt-s">
     <li v-for="action in actions" :key="action.ariaLabel(highlightedFile)" class="oc-py-xs">
       <oc-button
         :aria-Label="action.ariaLabel(highlightedFile)"

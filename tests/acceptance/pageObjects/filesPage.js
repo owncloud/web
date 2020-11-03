@@ -244,19 +244,10 @@ module.exports = {
       return isVisible
     },
     isPanelVisible: async function(panelName) {
-      let selector = ''
-      if (panelName === 'people' || panelName === 'collaborators') {
-        // FIXME: `collaborators` is the old name. should be removed once renamed in all tests.
-        selector = this.elements.collaboratorsPanel
-      } else if (panelName === 'versions') {
-        selector = this.elements.versionsPanel
-      } else if (panelName === 'links') {
-        selector = this.elements.linksPanel
-      } else {
-        throw new Error('invalid panel')
-      }
-
+      panelName = panelName === 'people' ? 'collaborators' : panelName
+      const selector = this.elements[panelName + 'Panel']
       let isVisible = false
+
       await this.isVisible(selector, result => {
         isVisible = result.status === 0
       })
@@ -452,6 +443,9 @@ module.exports = {
     },
     linksPanel: {
       selector: '#oc-files-file-link'
+    },
+    actionsPanel: {
+      selector: '#oc-files-actions-sidebar'
     },
     sideBar: {
       selector: '//div[@class="sidebar-container"]',

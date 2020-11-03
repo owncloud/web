@@ -16,7 +16,7 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of file "lorem.txt" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    And the "versions" details panel should be visible
+    And the "actions" details panel should be visible
     When the user switches to "people" tab in details panel using the webUI
     Then the "people" details panel should be visible
 
@@ -36,7 +36,7 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of file "lorem.txt" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    And the "versions" details panel should be visible
+    And the "actions" details panel should be visible
     When the user switches to "people" tab in details panel using the webUI
     Then the "people" details panel should be visible
 
