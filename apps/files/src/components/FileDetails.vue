@@ -34,7 +34,14 @@
       </div>
     </template>
     <template slot="content">
-      <oc-accordion class="oc-mt-m" :expand-first="true" :expanded-id="expandedAccordionId">
+      <oc-accordion
+        class="oc-mt-m"
+        :expand-first="true"
+        :expanded-id="expandedAccordionId"
+        mode="data"
+        @expand="expandAccordion"
+        @collapse="expandAccordion(null)"
+      >
         <oc-accordion-item
           v-for="accordion in accordions"
           :id="buildAppSidebarId(accordion.app)"
@@ -135,6 +142,12 @@ export default {
         return `app-sidebar-${accordion}`
       }
       return null
+    },
+
+    expandAccordion(accordion) {
+      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(
+        accordion ? accordion.replace('app-sidebar-', '') : null
+      )
     }
   }
 }

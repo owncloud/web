@@ -109,6 +109,7 @@
                   class="files-list-row-show-actions"
                   :aria-label="$gettext('Show resource actions')"
                   variation="raw"
+                  @click.stop="openActionsAccordion(rowItem)"
                 >
                   <oc-icon name="more_vert" class="uk-text-middle" />
                 </oc-button>
@@ -131,7 +132,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
@@ -256,6 +257,7 @@ export default {
       'removeFileSelection',
       'toggleFileSelection'
     ]),
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
 
     labelSelectSingleItem(item) {
       const labelSelectSingleFileText = this.$gettext('Select file %{name}')
@@ -374,6 +376,11 @@ export default {
       })
 
       actions[0].handler(resource, actions[0].handlerData)
+    },
+
+    openActionsAccordion(resource) {
+      this.setHighlightedFile(resource)
+      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('files-actions')
     }
   }
 }
