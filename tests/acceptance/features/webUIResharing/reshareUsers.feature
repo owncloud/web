@@ -1,5 +1,5 @@
 # Reshare permission is not available now in the oCIS webUI
-@skipOnOCIS
+#@skipOnOCIS
 Feature: Resharing shared files with different permissions
   As a user
   I want to reshare received files and folders with other users with different permissions
