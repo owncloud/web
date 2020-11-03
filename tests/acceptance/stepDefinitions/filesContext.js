@@ -313,14 +313,14 @@ When(
 )
 
 Then('it should not be possible to create files using the webUI', function() {
-  return client.page.filesPage().canCreateFiles(isDisabled => {
-    client.assert.strictEqual(isDisabled, true, 'Create action must not be enabled')
+  return client.page.filesPage().canCreateFiles(async isDisabled => {
+    await assert.strictEqual(isDisabled, true, 'Create action must not be enabled')
   })
 })
 
 Then('it should be possible to create files using the webUI', function() {
-  return client.page.filesPage().canCreateFiles(isDisabled => {
-    client.assert.strictEqual(isDisabled, false, 'Create action must be enabled')
+  return client.page.filesPage().canCreateFiles(async isDisabled => {
+    await assert.strictEqual(isDisabled, false, 'Create action must be enabled')
   })
 })
 
@@ -429,7 +429,10 @@ Then('file {string} should not be listed on the webUI', function(file) {
   return client.page.FilesPageElement.filesList()
     .isElementListed(file, 'file', client.globals.waitForNegativeConditionTimeout)
     .then(state => {
-      return client.assert.ok(!state, `Error: File ${file} is listed on the filesList`)
+      const message = state
+        ? `Error: File '${file}' is listed on the filesList`
+        : `File '${file}' is not listed on the filesList`
+      return client.assert.ok(!state, message)
     })
 })
 
@@ -437,7 +440,10 @@ Then('folder {string} should not be listed on the webUI', async folder => {
   return client.page.FilesPageElement.filesList()
     .isElementListed(folder, 'folder', client.globals.waitForNegativeConditionTimeout)
     .then(state => {
-      return client.assert.ok(!state, `Error: Folder ${folder} is listed on the filesList`)
+      const message = state
+        ? `Error: Folder '${folder}' is listed on the filesList`
+        : `Folder '${folder}' is not listed on the filesList`
+      return client.assert.ok(!state, message)
     })
 })
 

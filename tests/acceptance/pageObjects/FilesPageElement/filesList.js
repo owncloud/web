@@ -1,5 +1,6 @@
 const util = require('util')
 const path = require('path')
+const assert = require('assert')
 const xpathHelper = require('../../helpers/xpath')
 const { join } = require('../../helpers/path')
 const { client } = require('nightwatch-api')
@@ -267,11 +268,11 @@ module.exports = {
         .getAttribute(linkSelector, 'filename', function(result) {
           client.globals.waitForConditionTimeout = oldWaitForConditionTimeout
           if (result.value.error) {
-            this.assert.fail(result.value.error)
+            assert.fail(result.value.error)
           }
           // using basename because some file lists display the full path while the
           // file name attribute only contains the basename
-          this.assert.strictEqual(
+          assert.strictEqual(
             result.value,
             path.basename(fileName),
             'displayed file name not as expected'
@@ -347,7 +348,7 @@ module.exports = {
       return this.useXpath()
         .waitForElementVisible(rowSelector)
         .getAttribute(linkSelector, 'innerText', function(result) {
-          this.assert.strictEqual(result.value.trim(), path, 'displayed file name not as expected')
+          assert.strictEqual(result.value.trim(), path, 'displayed file name not as expected')
         })
         .useCss()
     },
