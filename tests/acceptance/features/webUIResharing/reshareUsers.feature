@@ -284,7 +284,6 @@ Feature: Resharing shared files with different permissions
     | simple-folder     |
     | lorem.txt         |
 
-  @skipOnOCIS @issue-product-203
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -305,27 +304,27 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | share, delete, read   |
 
-  @skipOnOC10 @issue-product-203 @issue-ocis-717
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
-    Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
-    And user "user1" has accepted the share "simple-folder" offered by user "user2"
-    And user "user1" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    When the user shares folder "simple-folder" with user "User Three" as "Advanced permissions" with permissions "share, delete" using the webUI
-    And user "user3" accepts the share "simple-folder" offered by user "user1" using the sharing API
-    And the user re-logs in as "user3" using the webUI
-    And the user opens folder "Shares" using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then the current collaborators list should have order "User Two,User Three"
-    And user "User Two" should be listed as "Owner" reshared through "User One" in the collaborators list on the webUI
-    And user "user3" should have received a share with these details:
-      | field       | value               |
-      | uid_owner   | user1               |
-      | share_with  | user3               |
-      | file_target | /simple-folder      |
-      | item_type   | folder              |
-      | permissions | share, delete, read |
+#  @skipOnOC10 @issue-product-203 @issue-ocis-717
+#  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+#  Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
+#    Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
+#    And user "user1" has accepted the share "simple-folder" offered by user "user2"
+#    And user "user1" has logged in using the webUI
+#    And the user opens folder "Shares" using the webUI
+#    When the user shares folder "simple-folder" with user "User Three" as "Advanced permissions" with permissions "share, delete" using the webUI
+#    And user "user3" accepts the share "simple-folder" offered by user "user1" using the sharing API
+#    And the user re-logs in as "user3" using the webUI
+#    And the user opens folder "Shares" using the webUI
+#    And the user opens the share dialog for folder "simple-folder" using the webUI
+#    Then the current collaborators list should have order "User Two,User Three"
+#    And user "User Two" should be listed as "Owner" reshared through "User One" in the collaborators list on the webUI
+#    And user "user3" should have received a share with these details:
+#      | field       | value                 |
+#      | uid_owner   | user1                 |
+#      | share_with  | user3                 |
+#      | file_target | /Shares/simple-folder |
+#      | item_type   | folder                |
+#      | permissions | share, delete, read   |
 
   @skipOnOCIS @issue-product-270
   @issue-product-203 @issue-4193
