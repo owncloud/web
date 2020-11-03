@@ -27,14 +27,6 @@ const appInfo = {
   extensions: [],
   fileSideBars: [
     {
-      app: 'files-version',
-      icon: 'file_version',
-      component: FileInfoVersions,
-      enabled(capabilities, highlightedFile) {
-        return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
-      }
-    },
-    {
       app: 'files-sharing',
       icon: 'group',
       component: FileSharingSidebar,
@@ -54,6 +46,14 @@ const appInfo = {
           return capabilities.files_sharing.public.enabled
         }
         return false
+      }
+    },
+    {
+      app: 'files-version',
+      icon: 'file_version',
+      component: FileInfoVersions,
+      enabled(capabilities, highlightedFile) {
+        return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
       }
     }
   ]
