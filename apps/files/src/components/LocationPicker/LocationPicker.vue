@@ -106,7 +106,6 @@ import MixinsGeneral from '../../mixins'
 import MixinsFilesListIndicators from '../../mixins/filesListIndicators'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
 import FileList from '../FileList.vue'
-import FileItem from '../FileItem.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 import NoContentMessage from '../NoContentMessage.vue'
 import CopySidebarMainContent from './CopySidebarMainContent.vue'
@@ -116,7 +115,6 @@ export default {
 
   components: {
     FileList,
-    FileItem,
     SortableColumnHeader,
     NoContentMessage
   },
