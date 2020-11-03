@@ -1,9 +1,11 @@
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 import { checkRoute } from '../../helpers/route'
 
 export default {
   computed: {
+    ...mapGetters('Files', ['activeFiles']),
+
     $_rename_items() {
       return [
         {
