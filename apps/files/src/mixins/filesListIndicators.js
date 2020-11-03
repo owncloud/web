@@ -1,4 +1,4 @@
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import intersection from 'lodash/intersection'
 import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
@@ -37,6 +37,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions('Files', ['setHighlightedFile']),
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
+
     indicatorArray(item) {
       const indicators = [
         {
@@ -107,8 +110,9 @@ export default {
         : this.$gettext('Shared with links through one of the parent folders')
     },
 
-    indicatorHandler(item, sideBarName) {
-      this.$_openSideBar(item, sideBarName)
+    indicatorHandler(resource, accordion) {
+      this.setHighlightedFile(resource)
+      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(accordion)
     }
   }
 }
