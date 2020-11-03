@@ -167,6 +167,7 @@ import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
 import MixinDeleteResources from '../mixins/deleteResources'
+import MixinFileActions from '../mixins/fileActions'
 import pathUtil from 'path'
 import { canBeMoved } from '../helpers/permissions'
 import { cloneStateObject } from '../helpers/store'
@@ -178,7 +179,7 @@ export default {
     FolderUpload,
     FileDrop
   },
-  mixins: [Mixins, MixinDeleteResources],
+  mixins: [Mixins, MixinDeleteResources, MixinFileActions],
   data: () => ({
     newFileAction: null,
     path: '',
@@ -526,17 +527,11 @@ export default {
         p.then(() => {
           this.$_ocFilesFolder_getFolder()
           this.fileFolderCreationLoading = false
-          if (this.newFileAction) {
-            // not cool - needs refactoring
-            this.$nextTick(() => {
-              this.openFile({
-                filePath: filePath
-              })
-              this.openFileAction(this.newFileAction, filePath)
-            })
-          }
-
           this.hideModal()
+
+          if (this.newFileAction) {
+            this.$_fileActions_openEditor(this.newFileAction, filePath)
+          }
         }).catch(error => {
           this.fileFolderCreationLoading = false
           this.showMessage({
