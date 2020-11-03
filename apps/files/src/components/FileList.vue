@@ -90,7 +90,12 @@
                   :has-two-rows="hasTwoRows"
                   :name="resourceName(rowItem)"
                   :display-preview="displayPreview"
-                  @click.native.stop="triggerDefaultResourceAction(rowItem)"
+                  :are-indicators-clickable="areIndicatorsClickable"
+                  @click.native.stop="
+                    resourceClickHandler
+                      ? resourceClickHandler(rowItem)
+                      : triggerDefaultResourceAction(rowItem)
+                  "
                 />
               </div>
               <slot name="rowColumns" :item="rowItem" :index="index" />
@@ -191,6 +196,16 @@ export default {
       type: Boolean,
       required: false,
       default: true
+    },
+    areIndicatorsClickable: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    resourceClickHandler: {
+      type: Function,
+      required: false,
+      default: null
     }
   },
   computed: {

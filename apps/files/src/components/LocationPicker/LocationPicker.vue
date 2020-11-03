@@ -34,6 +34,7 @@
       :selectable-row="false"
       :has-two-rows="true"
       :row-disabled="isRowDisabled"
+      :resource-click-handler="selectFolder"
     >
       <template #headerColumns>
         <div ref="headerNameColumn" class="uk-text-truncate uk-text-meta uk-width-expand">
@@ -78,17 +79,7 @@
           </sortable-column-header>
         </div>
       </template>
-      <template #rowColumns="{ item: rowItem, index }">
-        <div :ref="index === 0 ? 'firstRowNameColumn' : null" class="uk-width-expand">
-          <file-item
-            :key="rowItem.viewId"
-            :item="rowItem"
-            :has-two-rows="true"
-            :indicators="indicatorArray(rowItem)"
-            :are-indicators-clickable="false"
-            @click.native="selectFolder(rowItem)"
-          />
-        </div>
+      <template #rowColumns="{ item: rowItem }">
         <div class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right">
           {{ rowItem.size | fileSize }}
         </div>
