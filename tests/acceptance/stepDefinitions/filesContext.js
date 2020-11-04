@@ -116,10 +116,10 @@ When('the user browses to display the {string} details of file {string}', async 
 ) {
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(filename)
-  const visible = await client.page.filesPage().isPanelVisible('versions')
-  if (!visible) {
-    api.appSideBar().openVersionsTab()
-  }
+  await client.initAjaxCounters()
+  await api.appSideBar().openVersionsTab()
+  await client.waitForOutstandingAjaxCalls()
+
   return client
 })
 
