@@ -1602,10 +1602,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 		'environment': environment,
 		'commands': [
 			'cd /var/www/owncloud/phoenix',
-			'yarn run acceptance-tests-drone',
-			'pwd',
-			'ls -l',
-			'cat failed-scenarios.txt'
+			'./tests/acceptance/run.sh',
 		],
 		'volumes': [{
 			'name': 'gopath',
