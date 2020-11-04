@@ -18,7 +18,7 @@ Feature: Versions of a file
     And user "user0" has uploaded file with content "new lorem content" to "lorem.txt"
     When the user browses to display the "versions" details of file "lorem.txt"
     Then the content of file "lorem.txt" for user "user0" should be "new lorem content"
-    And the versions list should contain 2 entries
+    And the versions list should contain 3 entries
 
   Scenario: restoring file to old version changes the content of the file
     Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
