@@ -197,62 +197,61 @@ config = {
 		},
 		'webUI-ocis': {
 			'suites': {
-				'webUIOCIS1': [
-					'webUICreateFilesFolders',
-					'webUIDeleteFilesFolders',
-					'webUIFavorites',
-					'webUIFiles',
+				'webUIOCISBasic': [
 					'webUILogin',
 					'webUINotifications',
-				],
-				'webUIOCIS2': [
 					'webUIPrivateLinks',
+					'webUIPreview',
+					'webUIAccount',
+				],
+				'webUIOCISCreate': [
+					'webUICreateFilesFolders',
+				],
+				'webUIOCISDelete': [
+					'webUIDeleteFilesFolders',
+				],
+				'webUIOCISRename': [
 					'webUIRenameFiles',
 					'webUIRenameFolders',
-					'webUIUpload',
-					'webUIAccount'
 				],
-				'webUIOCIS3': [
-					'webUISharingPermissionsUsers',
-					'webUIRestrictSharing',
+				'webUIOCISSharingBasic': [
 					'webUISharingAcceptShares',
-					'webUISharingAutocompletion',
+					'webUISharingAcceptSharesToRoot',
 				],
-				'webUIOCIS4': [
-					'webUISharingFilePermissionMultipleUsers',
-					'webUISharingFilePermissionsGroups',
-					'webUISharingFolderAdvancedPermissionMultipleUsers',
-					'webUISharingFolderAdvancedPermissionsGroups',
+				'webUIOCISRestrictSharing': [
+					'webUIRestrictSharing',
 				],
-				'webUIOCIS5': [
-					'webUISharingFolderPermissionMultipleUsers',
-					'webUISharingFolderPermissionsGroups',
-					'webUISharingPermissionsUsers',
-					'webUISharingExternal',
-					'webUISharingInternalGroups',
-					'webUISharingNotifications'
+				'webUIOCISSharingNotifications': [
+					'webUISharingNotifications',
+					'webUISharingNotificationsToRoot',
 				],
-				'webUIOCISSharingPublic': [
-					'webUISharingPublic',
-					'webUISharingPublicDifferentRoles',
-				],
-				'webUIOCISSharingPublicExpire': [
-					'webUISharingPublicExpire',
-				],
-				'webUIOCISTrashbin': [
-					'webUITrashbin',
-					'webUITrashbinRestore',
-					'webUITrashbinFilesFolders',
-				],
-				'webUIOCISSharingInternalUsers': [
-					'webUISharingInternalUsers',
-					'webUISharingInternalUsersExpire',
-				],
-				'webUIOCISResharing': [
-					# for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
-					'webUIResharing',
-				],
-
+				'webUIFavorites': 'OCISFavorites',
+				'webUIFiles': 'OCISFiles',
+				'webUISharingAutocompletion': 'OCISSharingAutocompletion',
+				'webUISharingInternalGroups': 'OCISSharingInternalGroups',
+				'webUISharingInternalGroupsToRoot': 'OCISSharingInternalGroupsRoot',
+				'webUISharingInternalUsers': 'OCISSharingInternalUsers',
+				'webUISharingInternalUsersExpire': 'OCISSharingInternalUsersExpire',
+				'webUISharingInternalUsersToRoot': 'OCISSharingInternalUsersRoot',
+				'webUISharingInternalUsersExpireToRoot': 'OCISSharingInternalUsersExpireToRoot',
+				'webUISharingPermissionsUsers': 'OCISSharingPermissionsUsers',
+				'webUISharingFilePermissionsGroups': 'OCISSharingFilePermissionsGroups',
+				'webUISharingFolderPermissionsGroups': 'OCISSharingFolderPermissionsGroups',
+				'webUISharingFolderAdvancedPermissionsGroups': 'OCISSharingFolderAdvPermissionsGrp',
+				'webUISharingPermissionToRoot': 'OCISSharingPermissionToRoot',
+				'webUIResharing': 'OCISResharing', # for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
+				'webUIResharingToRoot': 'OCISResharingToRoot',
+				'webUISharingPublic': 'OCISSharingPublic',
+				'webUISharingPublicExpire': 'OCISSharingPublicExpire',
+				'webUISharingPublicDifferentRoles': 'OCISSharingPublicDifferentRoles',
+				'webUITrashbin': 'OCISTrashbin',
+				'webUITrashbinFilesFolders': 'OCISTrashbinFilesFolders',
+				'webUITrashbinRestore': 'OCISTrashbinRestore',
+				'webUIUpload': 'OCISUpload',
+				'webUISharingFilePermissionMultipleUsers': 'OCISSharingFilePermissionMultipleUsers',
+				'webUISharingFolderPermissionMultipleUsers': 'OCISSharingFolderPermissionMultipleUsers',
+				'webUISharingFolderAdvancedPermissionMultipleUsers': 'OCISSharingFolderAdvancedPermissionMU',
+				'webUIMoveFilesFolders': 'OCISMove',
 			},
 			'extraEnvironment': {
 				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
