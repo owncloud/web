@@ -99,7 +99,6 @@ Feature: rename files
     Then file "loremy.tad" should be listed on the webUI
 
   # these are valid file names for ocis
-  @skipOnOCIS
   Scenario Outline: Rename a file using forbidden characters
     When the user tries to rename file "data.zip" to "<filename>" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "<filename>"' should be displayed on the webUI
@@ -147,12 +146,11 @@ Feature: rename files
     And file 'data.zip' should be listed on the webUI
 
   # This is valid file name for ocis
-  @skipOnOCIS
   Scenario: Rename a file to .part
     When the user tries to rename file "data.zip" to "data.part" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "data.part"' should be displayed on the webUI
 
-  @skipOnOCIS @ocis-reva-issue-64
+  @ocis-reva-issue-64
   Scenario: rename a file on a public share
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
@@ -165,7 +163,7 @@ Feature: rename files
     And as "user1" file "simple-folder/a-renamed-file.txt" should exist
     And as "user1" file "simple-folder/lorem.txt" should not exist
 
-  @skipOnOCIS @ocis-reva-issue-64
+  @ocis-reva-issue-64
   Scenario: Rename a file and folder in shared with me page
     Given user "user2" has been created with default attributes
     And user "user2" has shared file "lorem.txt" with user "user1"
@@ -186,7 +184,7 @@ Feature: rename files
     And as "user2" file "lorem.txt" should exist
     And as "user2" folder "simple-folder" should exist
 
-  @skipOnOCIS @ocis-reva-issue-64
+  @ocis-reva-issue-64
   Scenario: Rename a file and folder in shared with others page
     Given user "user2" has been created with default attributes
     And user "user1" has shared file "lorem.txt" with user "user2"
@@ -207,7 +205,7 @@ Feature: rename files
     And as "user2" file "lorem.txt" should exist
     And as "user2" folder "simple-folder" should exist
 
-  @skipOnOCIS @ocis-reva-issue-39
+  @ocis-reva-issue-39
   Scenario: Rename a file and folder in favorites page
     Given user "user1" has favorited element "lorem.txt"
     And user "user1" has favorited element "simple-folder"

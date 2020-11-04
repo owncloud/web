@@ -1,0 +1,3 @@
+# this file contains the scenarios from phoenix tests that are currently expected to fail
+webUIDeleteFilesFolders/deleteFilesFolders.feature:262
+webUIRenameFolders/renameFolders.feature:116
