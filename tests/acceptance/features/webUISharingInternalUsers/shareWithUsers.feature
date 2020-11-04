@@ -151,7 +151,7 @@ Feature: Sharing files and folders with internal users
     And as "user2" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
     But file "data.zip" should not be listed on the webUI
 
-  @skip @issue-4102
+  @skipOnOCIS @issue-product-270
   Scenario: share a folder with another internal user who unshares the folder
     Given user "user2" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
@@ -163,23 +163,6 @@ Feature: Sharing files and folders with internal users
     Then folder "new-simple-folder" should be listed on the webUI
     And the user deletes folder "new-simple-folder" using the webUI
     Then folder "new-simple-folder" should not be listed on the webUI
-    # check that the folder is still visible for the share owner
-    When the user re-logs in as "user2" using the webUI
-    Then folder "new-simple-folder" should be listed on the webUI
-    And as "user2" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
-
-  @issue-4102 @skipOnOCIS @issue-product-270
-  # Delete this scenario and use the one above after the issue is fixed
-  Scenario: share a folder with another internal user who unshares the folder
-    Given user "user2" has logged in using the webUI
-    When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
-    And the user shares folder "new-simple-folder" with user "User One" as "Editor" using the webUI
-    And user "user1" accepts the share "new-simple-folder" offered by user "user2" using the sharing API
-    # unshare the received shared folder and check it is gone
-    And the user re-logs in as "user1" using the webUI
-    And the user browses to the folder "Shares" on the files page
-    Then folder "new-simple-folder" should be listed on the webUI
-    And it should not be possible to delete file "new-simple-folder" using the webUI
     # check that the folder is still visible for the share owner
     When the user re-logs in as "user2" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI
