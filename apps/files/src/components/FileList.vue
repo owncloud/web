@@ -88,7 +88,6 @@
                   :show-path="showResourcePath"
                   :indicators="resourceIndicators(rowItem)"
                   :has-two-rows="hasTwoRows"
-                  :name="resourceName(rowItem)"
                   :display-preview="displayPreview"
                   :are-indicators-clickable="areIndicatorsClickable"
                   @click.native.stop="
@@ -340,26 +339,6 @@ export default {
 
       if (this.$route.name === 'files-list' || this.$route.name === 'files-favorites') {
         return this.indicatorArray(resource)
-      }
-    },
-
-    resourceName(resource) {
-      if (this.$route.name === 'files-trashbin') {
-        if (resource && resource.originalLocation) {
-          const pathSplit = resource.originalLocation.split('/')
-
-          if (pathSplit.length === 2) {
-            return `${pathSplit[pathSplit.length - 2]}/${resource.basename}`
-          }
-
-          if (pathSplit.length > 2) {
-            return `…/${pathSplit[pathSplit.length - 2]}/${resource.basename}`
-          }
-        }
-      }
-
-      if (resource) {
-        return resource.basename
       }
     },
 

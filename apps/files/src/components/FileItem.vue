@@ -109,12 +109,19 @@ export default {
       if (this.name) {
         return this.name
       }
+
       if (this.showPath) {
-        const pathSplit = this.item.path.substr(1).split('/')
-        if (pathSplit.length === 2)
+        const pathSplit = this.item.path
+          ? this.item.path.substr(1).split('/')
+          : this.item.originalLocation.split('/')
+
+        if (pathSplit.length === 2) {
           return `${pathSplit[pathSplit.length - 2]}/${this.item.basename}`
-        if (pathSplit.length > 2)
+        }
+
+        if (pathSplit.length > 2) {
           return `…/${pathSplit[pathSplit.length - 2]}/${this.item.basename}`
+        }
       }
       return this.item.basename
     },
