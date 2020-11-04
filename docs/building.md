@@ -23,7 +23,7 @@ geekdocFilePath: building.md
 
 - Run `yarn clean-all` to remove node_modules and dist folder
 
-## Buildling the documentation
+## Building the documentation
 
 ### Setting up
 
