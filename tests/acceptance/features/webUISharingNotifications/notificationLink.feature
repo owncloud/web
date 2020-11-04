@@ -1,4 +1,4 @@
-@app-required @notifications-app-required @skipOnOCIS @ocis-reva-issue-14
+@app-required @notifications-app-required @ocis-reva-issue-14
 Feature: Display notifications when receiving a share and follow embedded links
   As a user
   I want to use the notification header as a link

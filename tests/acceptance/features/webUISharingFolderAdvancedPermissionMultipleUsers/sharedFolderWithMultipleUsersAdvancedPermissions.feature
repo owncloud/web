@@ -11,6 +11,7 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | user1    |
       | user2    |
 
+  @issue-product-203
   Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
     Given these users have been created with default attributes:
       | username |
@@ -60,7 +61,7 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | Advanced permissions | Advanced permissions | delete, update        | delete, update        | read, delete, update        |
       | Advanced permissions | Advanced permissions | update, create        | update, create        | read, update, create        |
 
-  @skipOnOCIS @issue-ocis-717
+  @issue-ocis-717
   #after fixing the issue merge this scenario into the one above
   Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
     Given these users have been created with default attributes:

@@ -12,7 +12,7 @@ Feature: Sharing files and folders with internal users
       | user1    |
       | user2    |
 
-  @issue-2939 @skipOnOCIS @issue-4193
+  @issue-2939 @issue-4193
   Scenario: sharing indicator for user shares stays up to date
     Given user "user3" has been created with default attributes
     And user "user4" has been created with default attributes
@@ -73,7 +73,7 @@ Feature: Sharing files and folders with internal users
       | new-folder | user-indirect      |
       | lorem.txt  | user-indirect      |
 
-  @issue-4167 @skipOnOCIS
+  @issue-4167
   Scenario: sharing indicator of items inside a re-shared folder
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -91,7 +91,7 @@ Feature: Sharing files and folders with internal users
       | simple-empty-folder | user-indirect      |
       | lorem.txt           | user-indirect      |
 
-  @issue-4167 @skipOnOCIS @issue-4171
+  @issue-4167 @issue-4171
   Scenario: sharing indicator of items inside a re-shared subfolder
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -112,7 +112,7 @@ Feature: Sharing files and folders with internal users
 
   @issue-2060
   @issue-4167
-  @ocis-issue-891 @skipOnOCIS
+  @ocis-issue-891
   Scenario: sharing indicator of items inside an incoming shared folder
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
@@ -128,7 +128,7 @@ Feature: Sharing files and folders with internal users
       | simple-empty-folder | user-indirect      |
       | lorem.txt           | user-indirect      |
 
-  @issue-2060 @skipOnOCIS @issue-4172
+  @issue-2060 @issue-4172
   Scenario: no sharing indicator of items inside a not shared folder
     Given user "user1" has shared file "/textfile0.txt" with user "user2"
     And user "user2" has accepted the share "textfile0.txt" offered by user "user1"

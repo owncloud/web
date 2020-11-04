@@ -31,7 +31,7 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
-  @files_versions-app-required @skipOnOCIS @ocis-reva-issue-39
+  @files_versions-app-required @ocis-reva-issue-39
   Scenario: View different areas of the app-sidebar for a file in favorites page
     Given user "user1" has favorited element "lorem.txt"
     And the user has browsed to the favorites page
@@ -42,7 +42,7 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
 
-  @files_versions-app-required @skipOnOCIS @ocis-reva-issue-39
+  @files_versions-app-required @ocis-reva-issue-39
   Scenario: View different areas of the app-sidebar for a folder in favorites page
     Given user "user1" has favorited element "simple-folder"
     And the user has browsed to the favorites page
@@ -70,7 +70,7 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "comments" accordion item in details panel using the webUI
     Then the "comments" details panel should be visible
 
-  @comments-app-required @skipOnOCIS @ocis-reva-issue-64
+  @comments-app-required @ocis-reva-issue-64
   Scenario: user shares a file and then the details dialog should work in a Shared with others page
     Given user "user1" has shared folder "simple-folder" with user "user2"
     When the user browses to the shared-with-others page
@@ -85,7 +85,7 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
-  @comments-app-required @skipOnOCIS @ocis-reva-issue-64
+  @comments-app-required @ocis-reva-issue-64
   Scenario: user shares a folder via link and then the details dialog should work in a Shared with others page
     Given user "user1" has created a new public link for resource "simple-folder"
     When the user browses to the shared-with-others page
@@ -100,7 +100,7 @@ Feature: User can open the details panel for any file or folder
     When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
-  @comments-app-required @skipOnOCIS @ocis-reva-issue-64
+  @comments-app-required @ocis-reva-issue-64
   Scenario: the recipient user should be able to view different areas of details panel in Shared with me page
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And the user re-logs in as "user2" using the webUI
