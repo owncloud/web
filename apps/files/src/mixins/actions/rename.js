@@ -14,14 +14,11 @@ export default {
             return this.$gettext('Rename')
           },
           handler: this.$_rename_trigger,
-          isEnabled: ({ resource, parent }) => {
+          isEnabled: ({ resource }) => {
             if (checkRoute(['files-trashbin'], this.$route.name)) {
               return false
             }
 
-            if (parent && !parent.canRename()) {
-              return false
-            }
             return resource.canRename()
           }
         }

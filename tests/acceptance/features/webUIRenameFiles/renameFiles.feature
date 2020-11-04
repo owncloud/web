@@ -208,12 +208,14 @@ Feature: rename files
     And as "user2" folder "simple-folder" should exist
 
   @skipOnOCIS @ocis-reva-issue-39
-  Scenario: User tries to rename a file and folder in favorites page
+  Scenario: Rename a file and folder in favorites page
     Given user "user1" has favorited element "lorem.txt"
     And user "user1" has favorited element "simple-folder"
     When the user browses to the favorites page
-    Then it should not be possible to rename folder "simple-folder" using the webUI
-    And it should not be possible to rename file "lorem.txt" using the webUI
+    And the user renames file "lorem.txt" to "renamed-file.txt" using the webUI
+    And the user renames folder "simple-folder" to "renamed-folder" using the webUI
+    Then file "renamed-file.txt" should be listed on the webUI
+    And folder "renamed-folder" should be listed on the webUI
 
   Scenario: User tries to rename a file that used to exist but does not anymore
     Given the user has browsed to the files page
