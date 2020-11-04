@@ -16,7 +16,7 @@ Feature: copy files and folders
     When the user browses to the files page
     And the user copies folder "simple-folder" into folder "strängé नेपाली folder empty" using the webUI
     Then breadcrumb for folder "strängé नेपाली folder empty" should be displayed on the webUI
-    And folder "simple-folder" should be listed on the webUI
+    And folder "wrong-folder-name" should be listed on the webUI
 
   Scenario: copy a file into a folder where a file with the same name already exists
     Given user "user1" has logged in using the webUI
