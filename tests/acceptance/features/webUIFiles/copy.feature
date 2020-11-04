@@ -92,4 +92,4 @@ Feature: copy files and folders
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And folder "simple-empty-folder" should be listed on the webUI
     And as "user1" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist
-    And as "user1" folder "simple-empty-folder" should exist
+    And as "user1" folder "wrong-folder-name" should exist
