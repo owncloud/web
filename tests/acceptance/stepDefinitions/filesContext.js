@@ -467,10 +467,9 @@ Then('the versions list for resource {string} should contain {int} entry/entries
 ) {
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(resourceName)
-  const visible = await client.page.filesPage().isPanelVisible('versions')
-  if (!visible) {
-    api.appSideBar().openVersionsTab()
-  }
+  await client.initAjaxCounters()
+  await api.appSideBar().openVersionsTab()
+  await client.waitForOutstandingAjaxCalls()
   const count = await api.versionsDialog().getVersionsCount()
 
   assert.strictEqual(expectedNumber, count)
