@@ -20,7 +20,8 @@
       <div
         v-if="!$_isSharedWithMe"
         key="shared-with-header-cell"
-        class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-medium uk-text-right"
+        class="uk-text-nowrap uk-text-meta uk-width-medium uk-text-right"
+        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
         translate-context="'People' table column"
         v-text="$gettext('Shared with')"
       />
@@ -36,11 +37,15 @@
       <div
         v-if="$route.name === 'files-shared-with-me'"
         key="shared-with-header-cell"
-        class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-small uk-text-right"
+        class="uk-text-nowrap uk-text-meta uk-width-small uk-text-right"
+        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
         translate-context="Owner table column"
         v-text="$gettext('Owner')"
       />
-      <div class="uk-visible@s uk-text-nowrap uk-text-meta uk-width-small">
+      <div
+        class="uk-text-nowrap uk-text-meta uk-width-small"
+        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
+      >
         <sortable-column-header
           :aria-label="$gettext('Sort files by share time')"
           :is-active="fileSortField == 'shareTimeMoment'"
@@ -57,7 +62,8 @@
       <div
         v-if="!$_isSharedWithMe"
         key="shared-with-cell"
-        class="uk-visible@s uk-text-meta uk-text-nowrap uk-text-truncate uk-width-medium uk-flex file-row-collaborators uk-flex-right"
+        class="uk-text-meta uk-text-nowrap uk-text-truncate uk-width-medium uk-flex file-row-collaborators uk-flex-right"
+        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
       >
         <span
           v-for="share in prepareCollaborators(item.shares)"
@@ -120,7 +126,8 @@
       <div
         v-if="$_isSharedWithMe"
         key="shared-from-cell"
-        class="uk-visible@s uk-text-meta uk-text-nowrap uk-text-truncate uk-width-small uk-flex uk-flex-middle file-row-collaborators uk-flex-right"
+        class="uk-text-meta uk-text-nowrap uk-text-truncate uk-width-small uk-flex uk-flex-middle file-row-collaborators uk-flex-right"
+        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
       >
         <avatar-image
           class="oc-mr-xs"
@@ -131,7 +138,8 @@
         <span class="file-row-owner-name" v-text="item.shareOwner.displayName" />
       </div>
       <div
-        class="uk-visible@s uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
+        class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
+        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
         v-text="formDateFromNow(item.shareTime)"
       />
     </template>
