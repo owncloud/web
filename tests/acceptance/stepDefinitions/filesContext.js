@@ -81,7 +81,6 @@ Then('the files table should be displayed', () => {
 
 Given('the user has browsed to the files page', async function() {
   await client.page.filesPage().navigateAndWaitTillLoaded()
-  await client.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
 })
 
 When('the user opens folder {string} directly on the webUI', async function(folder) {
