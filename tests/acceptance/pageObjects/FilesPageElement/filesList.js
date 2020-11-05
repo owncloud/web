@@ -255,6 +255,7 @@ module.exports = {
       const linkSelector = this.getFileLinkSelectorByFileName(fileName, elementType)
 
       await this.waitForElementPresent('@filesTableContainer')
+      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
       await this.filesListScrollToTop()
       // Find the item in files list if it's not in the view
       await this.findItemInFilesList(fileName)
