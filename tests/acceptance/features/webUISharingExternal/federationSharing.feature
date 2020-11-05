@@ -331,7 +331,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | simple-folder | user-direct        |
-    When the user deletes "user1" as remote collaborator for the current file using the webUI
+    When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user deletes "user1" as remote collaborator for the current file using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
 
