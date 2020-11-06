@@ -7,7 +7,7 @@ export default {
     $_navigate_items() {
       return [
         {
-          icon: 'folder',
+          icon: 'folder-open',
           handler: resource => this.$_navigate_trigger(resource),
           ariaLabel: () =>
             this.$pgettext('Action in the files list row to open a folder', 'Open folder'),
