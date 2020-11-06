@@ -1,0 +1,5 @@
+Bugfix: Make available file actions (more) aware of the page context
+
+The list of available file actions sometimes contained actions which should not be possible and sometimes was missing actions that should be possible. Most important examples are that copy/move should not be available on `shared with me` and `shared with others` pages (but they were) and that the set of file actions from the `All files` page should also be available for the favorites page (but were not).
+
+https://github.com/owncloud/phoenix/pull/4255
