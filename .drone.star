@@ -1310,8 +1310,6 @@ def ocisService():
 		'environment' : {
 			'STORAGE_HOME_DRIVER': 'owncloud',
 			'STORAGE_USERS_DRIVER': 'owncloud',
-			'STORAGE_HOME_DATA_DRIVER': 'owncloud',
-            'STORAGE_USERS_DATA_DRIVER': 'owncloud',
 			'STORAGE_STORAGE_OCIS_ROOT': '/srv/app/tmp/ocis/storage/users',
 			'STORAGE_STORAGE_LOCAL_ROOT': '/srv/app/tmp/ocis/local/root',
 			'STORAGE_STORAGE_OWNCLOUD_DATADIR': '/srv/app/tmp/ocis/owncloud/data',
