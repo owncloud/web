@@ -123,6 +123,13 @@ export default {
         })
         .then(resp => {
           this.currentETag = resp.ETag
+          this.$refs.drawIoEditor.contentWindow.postMessage(
+            JSON.stringify({
+              action: 'status',
+              modified: false
+            }),
+            '*'
+          )
         })
         .catch(error => {
           this.error(error)
