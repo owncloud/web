@@ -1,7 +1,7 @@
 {
     "name":       "<%= package.name %>",
     "buildDate":  <%= extras.timestamp %>,
-    "version":    "<%= package.version %>",
+    "version":    "<%= package.version || 'dev' %>",
     "numCommits": <%= extras.gitNumCommits %>,
     "hash":       "<%= extras.githash %>",
     "dirty":      <%= extras.dirty %>

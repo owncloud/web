@@ -32,3 +32,6 @@ dist
 tests/reports
 tests/ocis
 tests/testing-app
+
+/webpack.json
+/webpack-build-log.json
