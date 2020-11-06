@@ -1329,7 +1329,6 @@ def ocisService():
 			'KONNECTD_ISS': 'https://ocis:9200',
 			'KONNECTD_TLS': 'true',
 			'ACCOUNTS_DATA_PATH': '/srv/app/tmp/ocis-accounts/',
-			'PROXY_ENABLE_BASIC_AUTH': True
 		},
 		'commands': [
 			'cd /var/www/owncloud',
