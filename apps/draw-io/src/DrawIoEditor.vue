@@ -40,6 +40,7 @@ export default {
           case 'init':
             this.extension === 'vsdx' ? this.importVisio() : this.load()
             break
+          case 'autosave':
           case 'save':
             this.save(payload)
             break
@@ -71,7 +72,8 @@ export default {
           this.$refs.drawIoEditor.contentWindow.postMessage(
             JSON.stringify({
               action: 'load',
-              xml: resp.body
+              xml: resp.body,
+              autosave: 1
             }),
             '*'
           )
@@ -102,7 +104,8 @@ export default {
             this.$refs.drawIoEditor.contentWindow.postMessage(
               JSON.stringify({
                 action: 'load',
-                xml: reader.result
+                xml: reader.result,
+                autosave: 1
               }),
               '*'
             )
