@@ -26,7 +26,7 @@ export default {
         ui: 'minimal'
       })
 
-      return 'https://www.draw.io?' + query
+      return `https://embed.diagrams.net?${query}`
     }
   },
   created() {
