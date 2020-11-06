@@ -270,7 +270,7 @@ config = {
 	'defaults': {
 		'acceptance': {
 			'ocisBranch': 'master',
-			'ocisCommit': '2255eed422c59c9ff7c65daf8952929607e2fffe',
+			'ocisCommit': '7f1eef36d887b5955a178d9a1c82b8a9b0113675',
 		},
 	},
 
@@ -1310,11 +1310,11 @@ def ocisService():
 		'environment' : {
 			'STORAGE_HOME_DRIVER': 'owncloud',
 			'STORAGE_USERS_DRIVER': 'owncloud',
-			'STORAGE_STORAGE_OCIS_ROOT': '/srv/app/tmp/ocis/storage/users',
-			'STORAGE_STORAGE_LOCAL_ROOT': '/srv/app/tmp/ocis/local/root',
-			'STORAGE_STORAGE_OWNCLOUD_DATADIR': '/srv/app/tmp/ocis/owncloud/data',
+			'STORAGE_DRIVER_OCIS_ROOT': '/srv/app/tmp/ocis/storage/users',
+			'STORAGE_DRIVER_LOCAL_ROOT': '/srv/app/tmp/ocis/local/root',
+			'STORAGE_DRIVER_OWNCLOUD_DATADIR': '/srv/app/tmp/ocis/owncloud/data',
 			'STORAGE_METADATA_ROOT': '/srv/app/tmp/ocis/metadata',
-			'STORAGE_STORAGE_OWNCLOUD_REDIS_ADDR': 'redis:6379',
+			'STORAGE_DRIVER_OWNCLOUD_REDIS_ADDR': 'redis:6379',
 			'STORAGE_LDAP_IDP': 'https://ocis:9200',
 			'STORAGE_OIDC_ISSUER': 'https://ocis:9200',
 			'PROXY_OIDC_ISSUER': 'https://ocis:9200',
@@ -1329,6 +1329,7 @@ def ocisService():
 			'KONNECTD_ISS': 'https://ocis:9200',
 			'KONNECTD_TLS': 'true',
 			'ACCOUNTS_DATA_PATH': '/srv/app/tmp/ocis-accounts/',
+			'PROXY_ENABLE_BASIC_AUTH': True,
 		},
 		'commands': [
 			'cd /var/www/owncloud',
