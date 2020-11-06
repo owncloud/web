@@ -36,6 +36,11 @@ const appInfo = {
         'files-shared-with-me',
         'public-files'
       ]
+    },
+    {
+      extension: 'vsdx',
+      newTab: true,
+      routeName: 'draw-io-edit'
     }
   ]
 }

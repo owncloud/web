@@ -31,17 +31,21 @@ export default {
   },
   created() {
     this.filePath = this.$route.params.filePath
+    this.extension = this.filePath.split('.').pop()
 
     window.addEventListener('message', event => {
-      console.log(event)
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data)
-        if (payload.event === 'init') {
-          this.load()
-        } else if (payload.event === 'save') {
-          this.save(payload)
-        } else if (payload.event === 'exit') {
-          this.exit()
+        switch (payload.event) {
+          case 'init':
+            this.extension === 'vsdx' ? this.importVisio() : this.load()
+            break
+          case 'save':
+            this.save(payload)
+            break
+          case 'exit':
+            this.exit()
+            break
         }
       }
     })
@@ -71,6 +75,39 @@ export default {
             }),
             '*'
           )
+        })
+        .catch(error => {
+          this.error(error)
+        })
+    },
+    importVisio() {
+      const url = this.$client.files.getFileUrl(this.filePath)
+      const headers = new Headers({
+        Authorization: 'Bearer ' + this.getToken,
+        'X-Requested-With': 'XMLHttpRequest'
+      })
+      // Change the working file after the import
+      this.filePath += '.drawio'
+      fetch(url, { headers })
+        .then(resp => {
+          // Not setting `currentETag` on imports allows to create new files
+          // otherwise the ETag comparison fails with a 412 during the autosave/save event
+          // this.currentETag = resp.headers.get('etag')
+          return resp.arrayBuffer()
+        })
+        .then(arrayBuffer => {
+          var blob = new Blob([arrayBuffer], { type: 'application/vnd.visio' })
+          var reader = new FileReader()
+          reader.onloadend = () => {
+            this.$refs.drawIoEditor.contentWindow.postMessage(
+              JSON.stringify({
+                action: 'load',
+                xml: reader.result
+              }),
+              '*'
+            )
+          }
+          reader.readAsDataURL(blob)
         })
         .catch(error => {
           this.error(error)
