@@ -652,6 +652,8 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
     abortOnFailure: false
   })
 
+  await client.page.filesPage().checkBreadcrumbVisibility(resourceBreadcrumbXpath)
+
   await client.element('xpath', resourceBreadcrumbXpath, result => {
     if (result.status > -1) {
       isBreadcrumbVisible = true
