@@ -48,6 +48,7 @@ import DesignSystem from 'owncloud-design-system'
 import 'owncloud-design-system/dist/system/system.css'
 
 import Avatar from './components/Avatar.vue'
+import appVersionJson from '../build/version.json'
 
 import wgxpath from 'wicked-good-xpath'
 wgxpath.install()
@@ -241,12 +242,76 @@ function requireError (err) {
   }
 }
 
+async function get(url){
+  let data = await (await (fetch(url)
+    .then(res => {
+      return res.json()
+    })
+    .catch(err => {
+      console.log('Error: ', err)
+    })
+  ))
+  return data
+}
+
+async function post(url, data) {
+  let resp = await (await (fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then(res => {
+      return res.json()
+    })
+    .catch(err => {
+      console.log('Error: ', err)
+    })
+  ))
+  return resp
+}
+
+async function registerClient(openIdConfig) {
+  const clientData = sessionStorage.getItem('dynamicClientData')
+  if (clientData !== null) {
+    const client_secret_expires_at = clientData.client_secret_expires_at ?? 0;
+    if (client_secret_expires_at === 0 || Date.now() < client_secret_expires_at*1000) {
+      return JSON.parse(clientData)
+    }
+  }
+  sessionStorage.removeItem('dynamicClientData')
+
+  let baseUrl = window.location.href.split('#')[0]
+  if (baseUrl.endsWith('/index.html')) {
+    baseUrl = baseUrl.substr(0, baseUrl.length - 10)
+  }
+
+  const wellKnown = await get(`${openIdConfig.authority}/.well-known/openid-configuration`)
+  const resp = await post(wellKnown.registration_endpoint, {
+
+    "redirect_uris": [
+      baseUrl + 'oidc-callback.html'
+    ],
+    "client_name": `ownCloud Phoenix(${appVersionJson.version}) on ${baseUrl}`
+  })
+  sessionStorage.setItem('dynamicClientData', JSON.stringify(resp))
+  return resp
+}
+
+
 (async function () {
   try {
     config = await fetch('config.json').catch(() => {
       config.state = 'missing'
     })
     config = await config.json()
+    // if dynamic client registration is necessary - do this here now
+    if (config.openIdConnect.dynamic) {
+      const clientData = await registerClient(config.openIdConnect)
+      config.openIdConnect.client_id = clientData.client_id
+      config.openIdConnect.client_secret = clientData.client_secret
+    }
 
     // Loads apps from internal server
     apps = config.apps.map((app) => {
