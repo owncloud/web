@@ -89,7 +89,7 @@ Feature: File Upload
     And the versions list for resource "lorem.txt" should contain 1 entry
     But file "lorem (2).txt" should not be listed on the webUI
 
-  @smokeTest @skipOnOCIS @issue-ocis-reva-54
+  @smokeTest @issue-ocis-reva-54
   Scenario: overwrite an existing file when versioning is disabled
     Given the app "files_versions" has been disabled
     When the user uploads overwriting file "lorem.txt" using the webUI
@@ -142,7 +142,7 @@ Feature: File Upload
     And file "lorem (2).txt" should be listed on the webUI
     And the content of "lorem (2).txt" should be the same as the local "lorem.txt"
 
-  @skipOnOCIS @ocis-reva-issue-64
+  @ocis-reva-issue-64
   Scenario: upload overwriting a file into a public share
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"

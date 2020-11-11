@@ -33,7 +33,6 @@ Feature: files and folders can be deleted from the trashbin
     # And file "lorem-big.txt" should not be listed in the trashbin folder "simple-folder" on the webUI
     But file "lorem-big.txt" should be listed on the webUI
 
-  @skipOnOCIS
   @issue-product-188
   Scenario: Delete folders and check that they are gone
     When the user deletes folder "simple-folder" using the webUI
@@ -64,7 +63,6 @@ Feature: files and folders can be deleted from the trashbin
     And file "lorem.txt" should not be listed on the webUI
     And file "lorem-big.txt" should not be listed on the webUI
 
-  @skipOnOCIS
   @issue-product-188
   Scenario: Select all except for some files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
@@ -93,7 +91,6 @@ Feature: files and folders can be deleted from the trashbin
     But folder "simple-folder" should be listed on the webUI
     And file "data.zip" should not be listed on the webUI
 
-  @skipOnOCIS
   @issue-product-188
   Scenario: Select all files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
@@ -116,7 +113,6 @@ Feature: files and folders can be deleted from the trashbin
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
 
-  @skipOnOCIS
   @issue-product-139
   Scenario: Clear trashbin
     When the user clears the trashbin

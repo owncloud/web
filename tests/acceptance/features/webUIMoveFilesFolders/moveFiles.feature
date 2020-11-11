@@ -79,7 +79,7 @@ Feature: move files
     And as "user1" file "simple-folder/simple-empty-folder/data.zip" should exist
     But as "user1" file "simple-folder/data.zip" should not exist
 
-  @skipOnOCIS @issue-ocis-reva-243
+  @issue-ocis-reva-243
   Scenario: move a file into another folder with no change permission
     Given user "user2" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
