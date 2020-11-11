@@ -1,0 +1,7 @@
+# this file contains the scenarios from phoenix tests that are currently expected to fail
+
+# these scenarios fail in phoenix when the tests are changed somehow
+webUIFiles/copy.feature:10
+webUIFiles/copy.feature:89
+webUIFiles/versions.feature:14
+
