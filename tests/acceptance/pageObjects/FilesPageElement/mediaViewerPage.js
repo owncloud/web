@@ -34,6 +34,7 @@ module.exports = {
       const nextButtonXpath = this.elements.actionBar.selector + this.elements.nextButton.selector
       return this.useXpath()
         .waitForElementVisible(nextButtonXpath)
+        .waitForAnimationToFinish()
         .click(nextButtonXpath)
         .waitForAjaxCallsToStartAndFinish()
         .useCss()
