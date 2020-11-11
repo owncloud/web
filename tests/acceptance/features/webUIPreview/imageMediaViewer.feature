@@ -32,8 +32,7 @@ Feature: display image in media viewer on the webUI
     And the public views the file "testavatar.jpg" in the media viewer using the webUI
     Then the file "testavatar.jpg" should be displayed in the media viewer webUI
 
-#  @skipOnOCIS
-  Scenario Outline: navigate to next and previous videos with media viewer is possible
+  Scenario Outline: navigate to next and previous media resource with media viewer is possible
     Given user "user1" has uploaded file "<resource-one>" to "<resource-one>"
     And user "user1" has uploaded file "<resource-two>" to "<resource-two>"
     And user "user1" has logged in using the webUI
