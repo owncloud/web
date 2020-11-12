@@ -83,7 +83,7 @@ for SCENARIO in ${UNEXPECTED_PASSED_SCENARIOS}; do
   echo ${SCENARIO}
 done
 else
-  echo "There were no expected passed scenarios"
+  echo "There were no unexpected passed scenarios"
 fi
 
 if [ -n "${UNEXPECTED_FAILED_SCENARIOS}" ]; then
@@ -92,13 +92,32 @@ for SCENARIO in ${UNEXPECTED_FAILED_SCENARIOS}; do
   echo ${SCENARIO}
 done
 else
-  echo "There were no expected failed scenarios"
-
+  echo "There were no unexpected failed scenarios"
 fi
 
-cat failed-scenarios.txt
+if [ ${#UNEXPECTED_FAILED_SCENARIOS[@]} -gt 0 ]
+then
+	UNEXPECTED_FAILURE=true
+else
+	UNEXPECTED_FAILURE=false
+fi
+
+if [ ${#UNEXPECTED_PASSED_SCENARIOS[@]} -gt 0 ]
+then
+	UNEXPECTED_SUCCESS=true
+else
+	UNEXPECTED_SUCCESS=false
+fi
+
+if [ "${UNEXPECTED_FAILURE}" = false ] && [ "${UNEXPECTED_SUCCESS}" = false ]
+then
+	FINAL_EXIT_STATUS=0
+else
+	FINAL_EXIT_STATUS=1
+fi
+
 rm logfile.txt
 unset UNEXPECTED_FAILED_SCENARIOS
 unset  UNEXPECTED_PASSED_SCENARIOS
 
-exit $ACCEPTANCE_TESTS_EXIT_STATUS
+exit ${FINAL_EXIT_STATUS}
