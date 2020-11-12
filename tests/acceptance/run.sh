@@ -7,7 +7,7 @@ EXPECTED_FAILURES_FILE=tests/acceptance/expected-failures.txt
 declare -a UNEXPECTED_FAILED_SCENARIOS
 declare -a UNEXPECTED_PASSED_SCENARIOS
 
-yarn run acceptance-tests tests/acceptance/features/webUIFiles/copy.feature | tee -a 'logfile.txt'
+yarn run acceptance-tests-drone | tee -a 'logfile.txt'
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
 echo ${ACCEPTANCE_TESTS_EXIT_STATUS}
 if [ $ACCEPTANCE_TESTS_EXIT_STATUS -ne 0 ]; then
@@ -82,6 +82,8 @@ echo "The following scenarios passed unexpectedly: "
 for SCENARIO in ${UNEXPECTED_PASSED_SCENARIOS}; do
   echo ${SCENARIO}
 done
+else
+  echo "There were no expected passed scenarios"
 fi
 
 if [ -n "${UNEXPECTED_FAILED_SCENARIOS}" ]; then
@@ -89,8 +91,14 @@ echo "The following scenarios failed unexpectedly: "
 for SCENARIO in ${UNEXPECTED_FAILED_SCENARIOS}; do
   echo ${SCENARIO}
 done
+else
+  echo "There were no expected failed scenarios"
+
 fi
 
 cat failed-scenarios.txt
+rm logfile.txt
+unset UNEXPECTED_FAILED_SCENARIOS
+unset  UNEXPECTED_PASSED_SCENARIOS
 
 exit $ACCEPTANCE_TESTS_EXIT_STATUS
