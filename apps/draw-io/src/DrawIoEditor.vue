@@ -9,6 +9,7 @@ export default {
   name: 'DrawIoEditor',
   data: () => ({
     filePath: '',
+    fileExtension: '',
     currentETag: null
   }),
   computed: {
@@ -31,14 +32,14 @@ export default {
   },
   created() {
     this.filePath = this.$route.params.filePath
-    this.extension = this.filePath.split('.').pop()
+    this.fileExtension = this.filePath.split('.').pop()
 
     window.addEventListener('message', event => {
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data)
         switch (payload.event) {
           case 'init':
-            this.extension === 'vsdx' ? this.importVisio() : this.load()
+            this.fileExtension === 'vsdx' ? this.importVisio() : this.load()
             break
           case 'autosave':
           case 'save':
@@ -63,7 +64,6 @@ export default {
         }
       })
     },
-
     load() {
       this.$client.files
         .getFileContents(this.filePath, { resolveWithResponseObject: true })
@@ -89,7 +89,7 @@ export default {
         'X-Requested-With': 'XMLHttpRequest'
       })
       // Change the working file after the import
-      this.filePath += '.drawio'
+      this.filePath += `_${this.getTimestamp()}.drawio`
       fetch(url, { headers })
         .then(resp => {
           // Not setting `currentETag` on imports allows to create new files
@@ -137,6 +137,11 @@ export default {
     },
     exit() {
       window.close()
+    },
+    getTimestamp() {
+      const date = new Date()
+      return `${date.getFullYear()}${date.getMonth() +
+        1}${date.getDate()}T${date.getHours()}${date.getMinutes()}${date.getSeconds()}`
     }
   }
 }
@@ -154,6 +159,5 @@ export default {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  z-index: 999999;
 }
 </style>
