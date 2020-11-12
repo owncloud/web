@@ -70,6 +70,18 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
       continue
     fi
 
+    if [ -n "${TEST_PATHS}" ]; then
+      echo "------------------------------"
+      echo "${TEST_PATHS}"
+      echo "------------------------------"
+      # If the expected failure is not in the suite that is currently being run,
+      # then do not try and check that it failed.
+      REGEX_TO_MATCH="^${TEST_PATHS}/"
+      if ! [[ "${line}" =~ ${REGEX_TO_MATCH} ]]; then
+        continue
+      fi
+    fi
+
     if ! [[ " ${FAILED_SCENARIO_PATHS[@]} " == *"$line"* ]]; then
       echo "Error: Scenario $line was expected to fail but did not fail."
       UNEXPECTED_PASSED_SCENARIOS+="$line "
@@ -78,46 +90,43 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
 fi
 
 if [ -n "${UNEXPECTED_PASSED_SCENARIOS}" ]; then
-echo "The following scenarios passed unexpectedly: "
-for SCENARIO in ${UNEXPECTED_PASSED_SCENARIOS}; do
-  echo ${SCENARIO}
-done
+  echo "The following scenarios passed unexpectedly: "
+  for SCENARIO in ${UNEXPECTED_PASSED_SCENARIOS}; do
+    echo ${SCENARIO}
+  done
 else
   echo "There were no unexpected passed scenarios"
 fi
 
 if [ -n "${UNEXPECTED_FAILED_SCENARIOS}" ]; then
-echo "The following scenarios failed unexpectedly: "
-for SCENARIO in ${UNEXPECTED_FAILED_SCENARIOS}; do
-  echo ${SCENARIO}
-done
+  echo "The following scenarios failed unexpectedly: "
+  for SCENARIO in ${UNEXPECTED_FAILED_SCENARIOS}; do
+    echo ${SCENARIO}
+  done
 else
   echo "There were no unexpected failed scenarios"
 fi
 
-if [ ${#UNEXPECTED_FAILED_SCENARIOS[@]} -gt 0 ]
-then
-	UNEXPECTED_FAILURE=true
+if [ ${#UNEXPECTED_FAILED_SCENARIOS[@]} -gt 0 ]; then
+  UNEXPECTED_FAILURE=true
 else
-	UNEXPECTED_FAILURE=false
+  UNEXPECTED_FAILURE=false
 fi
 
-if [ ${#UNEXPECTED_PASSED_SCENARIOS[@]} -gt 0 ]
-then
-	UNEXPECTED_SUCCESS=true
+if [ ${#UNEXPECTED_PASSED_SCENARIOS[@]} -gt 0 ]; then
+  UNEXPECTED_SUCCESS=true
 else
-	UNEXPECTED_SUCCESS=false
+  UNEXPECTED_SUCCESS=false
 fi
 
-if [ "${UNEXPECTED_FAILURE}" = false ] && [ "${UNEXPECTED_SUCCESS}" = false ]
-then
-	FINAL_EXIT_STATUS=0
+if [ "${UNEXPECTED_FAILURE}" = false ] && [ "${UNEXPECTED_SUCCESS}" = false ]; then
+  FINAL_EXIT_STATUS=0
 else
-	FINAL_EXIT_STATUS=1
+  FINAL_EXIT_STATUS=1
 fi
 
 rm logfile.txt
 unset UNEXPECTED_FAILED_SCENARIOS
-unset  UNEXPECTED_PASSED_SCENARIOS
+unset UNEXPECTED_PASSED_SCENARIOS
 
 exit ${FINAL_EXIT_STATUS}
