@@ -55,7 +55,7 @@ export default {
     ...mapActions(['showMessage']),
     error(error) {
       this.showMessage({
-        title: this.$gettext('PDF could not be loaded…'),
+        title: this.$gettext('The diagram could not be loaded…'),
         desc: error,
         status: 'danger',
         autoClose: {
