@@ -13,12 +13,15 @@ echo ${ACCEPTANCE_TESTS_EXIT_STATUS}
 if [ $ACCEPTANCE_TESTS_EXIT_STATUS -ne 0 ]; then
   echo 'The acceptance test exited with error status '${ACCEPTANCE_TESTS_EXIT_STATUS}
 
-  failedScenario="$(grep -F ') Scenario:' logfile.txt)"
+  FAILED_SCENARIOS="$(grep -F ') Scenario:' logfile.txt)"
   FAILED_SCENARIO_PATHS=()
-  for element in ${failedScenario}; do
-    if [[ $element =~ "tests/acceptance/features/" ]]; then
-      element="${element#*'acceptance/features/'} "
-      FAILED_SCENARIO_PATHS+=${element}
+  for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
+    if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
+      SUITE_PATH=$(dirname ${FAILED_SCENARIO})
+      SUITE=$(basename ${SUITE_PATH})
+      SCENARIO=$(basename ${FAILED_SCENARIO})
+      SUITE_SCENARIO="${SUITE}/${SCENARIO}"
+      FAILED_SCENARIO_PATHS+="${SUITE_SCENARIO} "
     fi
   done
 fi
@@ -77,7 +80,11 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
       # If the expected failure is not in the suite that is currently being run,
       # then do not try and check that it failed.
       REGEX_TO_MATCH="^${TEST_PATHS}/"
+      echo "............................."
+      echo REGEX_TO_MATCH
+      echo "............................."
       if ! [[ "${line}" =~ ${REGEX_TO_MATCH} ]]; then
+        echo "here"
         continue
       fi
     fi
