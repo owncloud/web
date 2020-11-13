@@ -307,7 +307,7 @@ async function registerClient(openIdConfig) {
     })
     config = await config.json()
     // if dynamic client registration is necessary - do this here now
-    if (config.openIdConnect.dynamic) {
+    if (config.openIdConnect && config.openIdConnect.dynamic) {
       const clientData = await registerClient(config.openIdConnect)
       config.openIdConnect.client_id = clientData.client_id
       config.openIdConnect.client_secret = clientData.client_secret
