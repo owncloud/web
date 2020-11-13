@@ -57,7 +57,7 @@ Feature: deleting files and folders
       | simple-folder |
     Then as "user1" file "data.zip" should not exist
     And as "user1" file "lorem.txt" should not exist
-    And as "user1" folder "simple-folder" should not exist
+    And as "user1" folder "simple-folder" should exist
     And the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
     And no message should be displayed on the webUI

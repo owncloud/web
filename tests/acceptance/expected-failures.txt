@@ -2,6 +2,9 @@
 
 # these scenarios fail in phoenix when the tests are changed somehow
 webUIFiles/copy.feature:10
+webUIFiles/copy.feature:59
 webUIFiles/copy.feature:89
 webUIFiles/versions.feature:14
-
+webUIResharing/reshareUsers.feature:377
+webUIDeleteFilesFolders/deleteFilesFolders.feature:52
+webUISharingExternal/federationSharing.feature:59
