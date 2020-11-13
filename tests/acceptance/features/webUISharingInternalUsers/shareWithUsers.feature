@@ -427,7 +427,7 @@ Feature: Sharing files and folders with internal users
       | new-folder | user-indirect      |
       | lorem.txt  | user-indirect      |
 
-  @issue-4167
+  @issue-4167 @skipOnOCIS
   Scenario: sharing indicator of items inside a re-shared folder
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
