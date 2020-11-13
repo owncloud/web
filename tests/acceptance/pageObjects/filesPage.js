@@ -67,6 +67,21 @@ module.exports = {
       return null
     },
     /**
+     * Check if the breadcrumb element is visible or not
+     *
+     * @returns Promise
+     */
+    checkBreadcrumbVisibility: async function(resourceBreadcrumbXpath) {
+      await this.useXpath()
+        .waitForElementVisible({
+          selector: resourceBreadcrumbXpath,
+          abortOnFailure: false
+        })
+        .waitForAnimationToFinish()
+        .useCss()
+      return this
+    },
+    /**
      * Create a folder with the given name
      *
      * @param {string} name to set or null to use default value from dialog
@@ -404,7 +419,8 @@ module.exports = {
       selector: '#files-breadcrumb li:nth-of-type(2)'
     },
     newFileButtonLoaded: {
-      selector: '//button[@id="new-file-menu-btn" and contains(@class, "oc-button-primary")]',
+      selector:
+        '//button[@id="new-file-menu-btn" and contains(@class, "oc-button-primary") and not(@disabled)]',
       locateStrategy: 'xpath'
     },
     breadcrumbMobile: {

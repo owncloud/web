@@ -41,7 +41,7 @@ module.exports = {
     return client.waitForElementPresent({
       ...locator,
       abortOnFailure: false, // don't fail if we are too late
-      timeout: client.globals.waitForNegativeConditionTimeout
+      timeout: client.globals.waitForConditionTimeout
     })
   }
 }

@@ -1,0 +1,5 @@
+Enhancement: Added support for OpenID Connect Dynamic Client Registration 1.0
+
+ownCloud Phoenix can use the dynamic client registration protocol to exchange client id and client secret woth the IdP
+
+https://github.com/owncloud/phoenix/pull/4286

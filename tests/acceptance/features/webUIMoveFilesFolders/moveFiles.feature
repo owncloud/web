@@ -70,7 +70,6 @@ Feature: move files
       | "question?"         | "folder-with-question?"          |
       | "&and#hash"         | "folder-with-&and#hash"          |
 
-  @skipOnOCIS
   Scenario: move files on a public share
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     And the public uses the webUI to access the last public link created by user "user1"

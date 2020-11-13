@@ -81,7 +81,6 @@ Then('the files table should be displayed', () => {
 
 Given('the user has browsed to the files page', async function() {
   await client.page.filesPage().navigateAndWaitTillLoaded()
-  await client.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
 })
 
 When('the user opens folder {string} directly on the webUI', async function(folder) {
@@ -651,6 +650,8 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
     selector: client.page.filesPage().elements.newFileMenuButtonAnyState.selector,
     abortOnFailure: false
   })
+
+  await client.page.filesPage().checkBreadcrumbVisibility(resourceBreadcrumbXpath)
 
   await client.element('xpath', resourceBreadcrumbXpath, result => {
     if (result.status > -1) {
