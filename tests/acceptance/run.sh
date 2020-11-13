@@ -2,7 +2,6 @@
 
 echo 'run.sh: running acceptance-tests-drone'
 
-#TEST_LOG_FILE=$(mktemp)
 EXPECTED_FAILURES_FILE=tests/acceptance/expected-failures.txt
 declare -a UNEXPECTED_FAILED_SCENARIOS
 declare -a UNEXPECTED_PASSED_SCENARIOS
