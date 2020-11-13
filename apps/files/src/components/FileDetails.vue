@@ -49,7 +49,7 @@
           :title="accordion.component.title($gettext)"
           :icon="accordion.icon"
         >
-          <component :is="accordion.component" />
+          <component :is="accordion.component" class="oc-px" />
         </oc-accordion-item>
       </oc-accordion>
     </template>
@@ -77,7 +77,8 @@ export default {
       const accordions = [
         {
           app: 'files-actions',
-          component: ActionsAccordion
+          component: ActionsAccordion,
+          icon: 'slideshow'
         }
       ]
 
