@@ -74,14 +74,30 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
     fi
 
     if [ -n "${TEST_PATHS}" ]; then
-      echo "------------------------------"
+      echo "---------TEST_PATH---------------------"
       echo "${TEST_PATHS}"
       echo "------------------------------"
       # If the expected failure is not in the suite that is currently being run,
       # then do not try and check that it failed.
       REGEX_TO_MATCH="^${TEST_PATHS}/"
       echo "............................."
-      echo REGEX_TO_MATCH
+      echo ${REGEX_TO_MATCH}
+      echo "............................."
+      if ! [[ "${line}" =~ ${REGEX_TO_MATCH} ]]; then
+        echo "here"
+        continue
+      fi
+    fi
+
+     if [ -n "${TEST_CONTEXT}" ]; then
+      echo "---------TEST_CONTEXT---------------------"
+      echo "${TEST_CONTEXT}"
+      echo "------------------------------"
+      # If the expected failure is not in the suite that is currently being run,
+      # then do not try and check that it failed.
+      REGEX_TO_MATCH="^${TEST_CONTEXT}/"
+      echo "............................."
+      echo ${REGEX_TO_MATCH}
       echo "............................."
       if ! [[ "${line}" =~ ${REGEX_TO_MATCH} ]]; then
         echo "here"
