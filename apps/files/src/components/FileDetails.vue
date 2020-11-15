@@ -18,7 +18,7 @@
             v-text="highlightedFile.name"
           />
         </div>
-        <div v-if="isFavoriteStarDisplayed" class="uk-flex uk-flex-middle">
+        <div class="uk-flex uk-flex-middle">
           <oc-star
             v-if="!publicPage() && isFavoritesEnabled"
             id="files-sidebar-star-icon"
@@ -35,6 +35,8 @@
     </template>
     <template slot="content">
       <oc-accordion
+        v-if="isContentDisplayed"
+        key="sidebar-accordions"
         class="oc-mt-m"
         :expand-first="true"
         :expanded-id="expandedAccordionId"
@@ -52,6 +54,12 @@
           <component :is="accordion.component" class="oc-px" />
         </oc-accordion-item>
       </oc-accordion>
+      <p
+        v-else
+        key="sidebar-warning-message"
+        class="oc-mt"
+        v-text="sidebarAccordionsWarningMessage"
+      />
     </template>
   </oc-app-side-bar>
 </template>
@@ -94,15 +102,17 @@ export default {
     },
 
     isFavoritesEnabled() {
-      return this.capabilities.files && this.capabilities.files.favorites
+      return (
+        this.capabilities.files &&
+        this.capabilities.files.favorites &&
+        this.isContentDisplayed &&
+        !this.isSharedResourcesList &&
+        !this.isTrashbin
+      )
     },
 
     expandedAccordionId() {
       return this.buildAppSidebarId(this.appSidebarExpandedAccordion)
-    },
-
-    isFavoriteStarDisplayed() {
-      return this.$route.name !== 'files-shared-with-others' || this.isTrashbin
     },
 
     modificationTime() {
@@ -115,11 +125,52 @@ export default {
 
     isTrashbin() {
       return this.$route.name === 'files-trashbin'
+    },
+
+    isShareAccepted() {
+      return this.highlightedFile.status === 0
+    },
+
+    isContentDisplayed() {
+      if (this.$route.name === 'files-shared-with-me') {
+        return this.isShareAccepted
+      }
+
+      return true
+    },
+
+    sidebarAccordionsWarningMessage() {
+      if (!this.isShareAccepted) {
+        return this.$gettext('Please, accept this share first to display available actions')
+      }
+
+      return null
+    },
+
+    isSharedResourcesList() {
+      return (
+        this.$route.name === 'files-shared-with-others' ||
+        this.$route.name === 'files-shared-with-me'
+      )
+    }
+  },
+
+  watch: {
+    highlightedFile: function() {
+      if (this.expandedAccordionId === null) {
+        this.expandActionsAccordion()
+      }
     }
   },
 
   beforeDestroy() {
     this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(null)
+  },
+
+  mounted() {
+    if (this.expandedAccordionId === null) {
+      this.expandActionsAccordion()
+    }
   },
 
   methods: {
@@ -149,6 +200,10 @@ export default {
       this.SET_APP_SIDEBAR_EXPANDED_ACCORDION(
         accordion ? accordion.replace('app-sidebar-', '') : null
       )
+    },
+
+    expandActionsAccordion() {
+      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('files-actions')
     }
   }
 }

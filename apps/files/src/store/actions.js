@@ -185,7 +185,7 @@ function _aggregateFileShares(data, incomingShares = false, allowSharePerm) {
       file.canRename = () => true
       file.canShare = () => true
       file.isMounted = () => false
-      file.canDownload = () => file.item_type !== 'folder'
+      file.canDownload = () => file.type !== 'folder'
       file.extension = file.type !== 'folder' ? _extName(file.name) : ''
       if (file.extension) {
         // remove extension from basename like _buildFile does

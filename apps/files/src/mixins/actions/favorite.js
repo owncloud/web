@@ -16,12 +16,13 @@ export default {
             return this.$gettext('Mark as favorite')
           },
           isEnabled: () => {
-            if (checkRoute(['files-trashbin', 'public-files'], this.$route.name)) {
-              return false
-            }
+            const isRouteAllowed = checkRoute(['files-list', 'files-favorites'], this.$route.name)
 
             return (
-              this.isAuthenticated && this.capabilities.files && this.capabilities.files.favorites
+              this.isAuthenticated &&
+              this.capabilities.files &&
+              this.capabilities.files.favorites &&
+              isRouteAllowed
             )
           }
         }
