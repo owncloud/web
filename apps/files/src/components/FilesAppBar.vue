@@ -124,7 +124,7 @@
         <oc-grid v-if="displayBulkActions" gutter="small">
           <div>
             <oc-button
-              v-if="!canCopy"
+              v-if="canCopy"
               id="copy-selected-btn"
               key="copy-selected-btn"
               @click="triggerLocationPicker('copy')"
@@ -135,7 +135,7 @@
           </div>
           <div>
             <oc-button
-              v-if="!canMove"
+              v-if="canMove"
               id="move-selected-btn"
               key="move-selected-btn"
               @click="triggerLocationPicker('move')"
