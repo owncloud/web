@@ -4,6 +4,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import queryString from 'query-string'
+import moment from 'moment'
+import { basename } from 'path'
 
 export default {
   name: 'DrawIoEditor',
@@ -88,8 +90,21 @@ export default {
         Authorization: 'Bearer ' + this.getToken,
         'X-Requested-With': 'XMLHttpRequest'
       })
-      // Change the working file after the import
+      const getDescription = () =>
+        this.$gettextInterpolate(
+          'The diagram will open as a new .drawio file: %{file}',
+          { file: basename(this.filePath) },
+          true
+        )
+      // Change the working file after the import so the original file is not overwritten
       this.filePath += `_${this.getTimestamp()}.drawio`
+      this.showMessage({
+        title: this.$gettext('Diagram imported'),
+        desc: getDescription(),
+        autoClose: {
+          enabled: true
+        }
+      })
       fetch(url, { headers })
         .then(resp => {
           // Not setting `currentETag` on imports allows to create new files
@@ -139,9 +154,7 @@ export default {
       window.close()
     },
     getTimestamp() {
-      const date = new Date()
-      return `${date.getFullYear()}${date.getMonth() +
-        1}${date.getDate()}T${date.getHours()}${date.getMinutes()}${date.getSeconds()}`
+      return moment().format('YYYYMMDD[T]HHmmss')
     }
   }
 }
