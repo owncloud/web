@@ -1,0 +1,6 @@
+Change: File actions as accordion item in right sidebar
+
+We moved the menu items from `file actions` dropdown menu (the "three dots menu") as accordion item into the right sidebar and made it the default item to be opened when clicking the three dots.
+For the sake of consistency we now also made the right sidebar available for the `Deleted files` page, where we offer the actions accordion item with a `Restore` and `Delete` action.
+
+https://github.com/owncloud/phoenix/pull/4255

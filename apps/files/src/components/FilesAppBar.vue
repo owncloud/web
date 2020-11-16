@@ -124,9 +124,9 @@
         <oc-grid v-if="displayBulkActions" gutter="small">
           <div>
             <oc-button
+              v-if="canCopy"
               id="copy-selected-btn"
               key="copy-selected-btn"
-              :disabled="!canCopy"
               @click="triggerLocationPicker('copy')"
             >
               <oc-icon name="file_copy" aria-hidden="true" />
@@ -135,9 +135,9 @@
           </div>
           <div>
             <oc-button
+              v-if="canMove"
               id="move-selected-btn"
               key="move-selected-btn"
-              :disabled="!canMove"
               @click="triggerLocationPicker('move')"
             >
               <oc-icon name="folder-move" aria-hidden="true" />
@@ -166,12 +166,13 @@ import FolderUpload from './FolderUpload.vue'
 import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
-import FileActions from '../fileactions'
 import MixinDeleteResources from '../mixins/deleteResources'
+import MixinFileActions from '../mixins/fileActions'
 import pathUtil from 'path'
 import { canBeMoved } from '../helpers/permissions'
 import { cloneStateObject } from '../helpers/store'
 import { getResourceSize } from '../helpers/resources'
+import { checkRoute } from '../helpers/route'
 
 export default {
   components: {
@@ -179,7 +180,7 @@ export default {
     FolderUpload,
     FileDrop
   },
-  mixins: [Mixins, FileActions, MixinDeleteResources],
+  mixins: [Mixins, MixinDeleteResources, MixinFileActions],
   data: () => ({
     newFileAction: null,
     path: '',
@@ -330,6 +331,10 @@ export default {
     },
 
     canMove() {
+      if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
+        return false
+      }
+
       const insufficientPermissions = this.selectedFiles.some(resource => {
         return canBeMoved(resource, this.currentFolder.path) === false
       })
@@ -338,6 +343,10 @@ export default {
     },
 
     canCopy() {
+      if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
+        return false
+      }
+
       if (this.publicPage()) {
         return this.currentFolder.canCreate()
       }
@@ -527,17 +536,11 @@ export default {
         p.then(() => {
           this.$_ocFilesFolder_getFolder()
           this.fileFolderCreationLoading = false
-          if (this.newFileAction) {
-            // not cool - needs refactoring
-            this.$nextTick(() => {
-              this.openFile({
-                filePath: filePath
-              })
-              this.openFileAction(this.newFileAction, filePath)
-            })
-          }
-
           this.hideModal()
+
+          if (this.newFileAction) {
+            this.$_fileActions_openEditor(this.newFileAction, filePath)
+          }
         }).catch(error => {
           this.fileFolderCreationLoading = false
           this.showMessage({

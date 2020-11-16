@@ -11,7 +11,7 @@ Feature: Restore deleted files/folders
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest @ocisSmokeTest @skipOnIphoneResolution
+  @smokeTest @ocisSmokeTest
   Scenario: Restore files
     When the user deletes file "data.zip" using the webUI
     When the user deletes file "sample,1.txt" using the webUI

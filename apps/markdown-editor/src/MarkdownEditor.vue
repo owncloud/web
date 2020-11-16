@@ -22,6 +22,7 @@
         </oc-textarea>
       </div>
       <div class="uk-container uk-width-1-2">
+        <!-- eslint-disable-next-line vue/no-v-html -->
         <div v-html="renderedMarkdown"></div>
       </div>
     </div>

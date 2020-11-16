@@ -254,8 +254,10 @@ Feature: deleting files and folders
     Given user "user1" has favorited element "simple-folder"
     And user "user1" has favorited element "lorem.txt"
     When the user browses to the favorites page
-    Then it should not be possible to delete file "lorem.txt" using the webUI
-    And it should not be possible to delete folder "simple-folder" using the webUI
+    And the user deletes file "lorem.txt" using the webUI
+    And the user deletes folder "simple-folder" using the webUI
+    Then file "lorem.txt" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
 
   Scenario: Try to delete file and folder that used to exist but does not anymore
     Given the user has browsed to the files page

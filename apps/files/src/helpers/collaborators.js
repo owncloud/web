@@ -77,3 +77,15 @@ export function bitmaskToRole(bitmask, isFolder, allowSharePerm) {
     name: 'advancedRole'
   }
 }
+
+/**
+ * Checks whether a permission is found in given bitmask
+ * @param {number} bitmask Bitmask in which the permission should be found
+ * @param {string} permission Permission to be found
+ * @returns {boolean} Whether the permission has been found
+ */
+export function checkPermission(bitmask, permission) {
+  const permBit = permissionsBitmask[permission]
+
+  return (bitmask & permBit) === permBit
+}

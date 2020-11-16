@@ -34,6 +34,7 @@
       :selectable-row="false"
       :has-two-rows="true"
       :row-disabled="isRowDisabled"
+      :resource-click-handler="selectFolder"
     >
       <template #headerColumns>
         <div ref="headerNameColumn" class="uk-text-truncate uk-text-meta uk-width-expand">
@@ -78,17 +79,7 @@
           </sortable-column-header>
         </div>
       </template>
-      <template #rowColumns="{ item: rowItem, index }">
-        <div :ref="index === 0 ? 'firstRowNameColumn' : null" class="uk-width-expand">
-          <file-item
-            :key="rowItem.viewId"
-            :item="rowItem"
-            :has-two-rows="true"
-            :indicators="indicatorArray(rowItem)"
-            :are-indicators-clickable="false"
-            @click.native="selectFolder(rowItem)"
-          />
-        </div>
+      <template #rowColumns="{ item: rowItem }">
         <div class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right">
           {{ rowItem.size | fileSize }}
         </div>
@@ -115,7 +106,6 @@ import MixinsGeneral from '../../mixins'
 import MixinsFilesListIndicators from '../../mixins/filesListIndicators'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
 import FileList from '../FileList.vue'
-import FileItem from '../FileItem.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 import NoContentMessage from '../NoContentMessage.vue'
 import CopySidebarMainContent from './CopySidebarMainContent.vue'
@@ -125,7 +115,6 @@ export default {
 
   components: {
     FileList,
-    FileItem,
     SortableColumnHeader,
     NoContentMessage
   },

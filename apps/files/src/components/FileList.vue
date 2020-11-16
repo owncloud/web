@@ -1,6 +1,6 @@
 <template>
   <!-- TODO: Take care of outside click overall and not just in files list -->
-  <div :id="id" class="uk-position-relative" @click="hideRowActionsDropdown">
+  <div :id="id" class="uk-position-relative">
     <div class="uk-flex uk-flex-column uk-height-1-1">
       <resize-observer @notify="$_resizeHeader" />
       <oc-grid
@@ -17,7 +17,7 @@
             id="filelist-check-all"
             class="oc-ml-s"
             :hide-label="true"
-            :label="labelSelectAllItems"
+            :label="$gettext('Select all items')"
             :value="selectedAll"
             @input="toggleAll"
           />
@@ -52,10 +52,7 @@
           <div
             :data-is-visible="active"
             :class="{ 'files-list-row-disabled': rowDisabled(rowItem) }"
-            @click="
-              selectRow(rowItem, $event)
-              hideRowActionsDropdown()
-            "
+            @click="selectRow(rowItem, $event)"
           >
             <oc-grid
               :id="'file-row-' + rowItem.viewId"
@@ -81,20 +78,37 @@
                   @input="toggleFileSelect(rowItem)"
                 />
               </div>
+              <div
+                :ref="index === 0 ? 'firstRowNameColumn' : null"
+                class="uk-width-expand uk-flex uk-flex-middle"
+              >
+                <file-item
+                  :key="rowItem.viewId"
+                  :item="rowItem"
+                  :show-path="showResourcePath"
+                  :indicators="resourceIndicators(rowItem)"
+                  :has-two-rows="hasTwoRows"
+                  :display-preview="displayPreview"
+                  :are-indicators-clickable="areIndicatorsClickable"
+                  @click.native.stop="
+                    resourceClickHandler
+                      ? resourceClickHandler(rowItem)
+                      : triggerDefaultResourceAction(rowItem)
+                  "
+                />
+              </div>
               <slot name="rowColumns" :item="rowItem" :index="index" />
               <div
-                v-if="actions.length > 1 || $scopedSlots.rowActions"
+                v-if="actionsEnabled"
                 class="uk-flex uk-flex-middle uk-flex-right"
                 :class="{ 'uk-width-small': $scopedSlots.rowActions }"
               >
                 <slot name="rowActions" :item="rowItem" />
                 <oc-button
-                  :id="actionsDropdownButtonId(rowItem.viewId, active)"
                   class="files-list-row-show-actions"
-                  :disabled="$_actionInProgress(rowItem)"
-                  :aria-label="$gettext('Show file actions')"
+                  :aria-label="$gettext('Show resource actions')"
                   variation="raw"
-                  @click.stop="toggleRowActionsDropdown(rowItem)"
+                  @click.stop="openActionsAccordion(rowItem)"
                 >
                   <oc-icon name="more_vert" class="uk-text-middle" />
                 </oc-button>
@@ -114,27 +128,25 @@
         <slot name="footer" />
       </div>
     </div>
-    <row-actions-dropdown
-      :displayed="rowActionsDisplayed"
-      :item="rowActionsItem"
-      :actions="rowActions"
-      @actionClicked="hideRowActionsDropdown"
-    />
   </div>
 </template>
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
-import RowActionsDropdown from './FilesLists/RowActionsDropdown.vue'
+import MixinFilesListIndicators from '../mixins/filesListIndicators'
+import MixinFileActions from '../mixins/fileActions'
+
+import FileItem from './FileItem.vue'
 
 export default {
   name: 'FileList',
   components: {
     RecycleScroller,
-    RowActionsDropdown
+    FileItem
   },
+  mixins: [MixinFilesListIndicators, MixinFileActions],
   props: {
     id: {
       type: String,
@@ -156,17 +168,9 @@ export default {
       type: Boolean,
       default: false
     },
-    actions: {
-      type: Array,
-      required: true
-    },
     compactMode: {
       type: Boolean,
       default: false
-    },
-    isActionEnabled: {
-      type: Function,
-      required: true
     },
     selectableRow: {
       type: Boolean,
@@ -182,14 +186,26 @@ export default {
       type: Function,
       required: false,
       default: () => false
-    }
-  },
-  data() {
-    return {
-      labelSelectAllItems: this.$gettext('Select all items'),
-      rowActions: [],
-      rowActionsDisplayed: false,
-      rowActionsItem: {}
+    },
+    actionsEnabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    displayPreview: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    areIndicatorsClickable: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    resourceClickHandler: {
+      type: Function,
+      required: false,
+      default: null
     }
   },
   computed: {
@@ -201,7 +217,8 @@ export default {
       'quota',
       'filesTotalSize',
       'activeFilesCount',
-      'actionsInProgress'
+      'actionsInProgress',
+      'currentFolder'
     ]),
     ...mapGetters(['configuration']),
 
@@ -215,6 +232,10 @@ export default {
 
     _rowHeight() {
       return this.hasTwoRows ? 67 : 55
+    },
+
+    showResourcePath() {
+      return this.$route.name === 'files-favorites' || this.$route.name === 'files-trashbin'
     }
   },
   watch: {
@@ -235,6 +256,7 @@ export default {
       'removeFileSelection',
       'toggleFileSelection'
     ]),
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
 
     labelSelectSingleItem(item) {
       const labelSelectSingleFileText = this.$gettext('Select file %{name}')
@@ -253,30 +275,6 @@ export default {
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
       }
       return item.basename
-    },
-
-    $_enabledActions(item) {
-      return this.actions.filter(action => this.$_isActionEnabled(item, action))
-    },
-
-    $_isActionEnabled(item, action) {
-      return this.isActionEnabled && this.isActionEnabled(item, action)
-    },
-
-    $_actionInProgress(item) {
-      return this.actionsInProgress.some(itemInProgress => itemInProgress.id === item.id)
-    },
-
-    $_disabledActionTooltip(item) {
-      if (this.$_actionInProgress(item)) {
-        if (item.type === 'folder') {
-          return this.$gettext('There is currently an action in progress for this folder')
-        }
-
-        return this.$gettext('There is currently an action in progress for this file')
-      }
-
-      return null
     },
     _rowClasses(item) {
       const classes = []
@@ -317,31 +315,6 @@ export default {
       }
     },
 
-    toggleRowActionsDropdown(item) {
-      if (item === this.rowActionsItem) {
-        this.hideRowActionsDropdown()
-        return
-      }
-
-      this.rowActionsDisplayed = true
-      this.rowActionsItem = item
-      this.rowActions = this.$_enabledActions(item)
-    },
-
-    hideRowActionsDropdown() {
-      this.rowActionsDisplayed = false
-      this.rowActionsItem = {}
-      this.rowActions = []
-    },
-
-    actionsDropdownButtonId(viewId, active) {
-      if (active) {
-        return `files-file-list-action-button-${viewId}-active`
-      }
-
-      return `files-file-list-action-button-${viewId}`
-    },
-
     $_resizeHeader() {
       setTimeout(() => {
         const headerRow = this.$refs.headerRow
@@ -357,6 +330,36 @@ export default {
           headerCheckbox.style.width = getComputedStyle(firstRowCheckbox).width
         }
       })
+    },
+
+    resourceIndicators(resource) {
+      if (!this.currentFolder) {
+        return
+      }
+
+      if (this.$route.name === 'files-list' || this.$route.name === 'files-favorites') {
+        return this.indicatorArray(resource)
+      }
+    },
+
+    triggerDefaultResourceAction(resource) {
+      let actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
+
+      actions = actions.filter(action => {
+        return (
+          action.isEnabled({
+            resource: resource,
+            parent: this.currentFolder
+          }) && action.canBeDefault
+        )
+      })
+
+      actions[0].handler(resource, actions[0].handlerData)
+    },
+
+    openActionsAccordion(resource) {
+      this.setHighlightedFile(resource)
+      this.SET_APP_SIDEBAR_EXPANDED_ACCORDION('files-actions')
     }
   }
 }

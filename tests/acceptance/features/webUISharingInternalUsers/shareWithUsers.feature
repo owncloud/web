@@ -151,7 +151,7 @@ Feature: Sharing files and folders with internal users
     And as "user2" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
     But file "data.zip" should not be listed on the webUI
 
-  @skip @issue-4102
+  @skipOnOCIS @issue-product-270
   Scenario: share a folder with another internal user who unshares the folder
     Given user "user2" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
@@ -163,23 +163,6 @@ Feature: Sharing files and folders with internal users
     Then folder "new-simple-folder" should be listed on the webUI
     And the user deletes folder "new-simple-folder" using the webUI
     Then folder "new-simple-folder" should not be listed on the webUI
-    # check that the folder is still visible for the share owner
-    When the user re-logs in as "user2" using the webUI
-    Then folder "new-simple-folder" should be listed on the webUI
-    And as "user2" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
-
-  @issue-4102 @skipOnOCIS @issue-product-270
-  # Delete this scenario and use the one above after the issue is fixed
-  Scenario: share a folder with another internal user who unshares the folder
-    Given user "user2" has logged in using the webUI
-    When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
-    And the user shares folder "new-simple-folder" with user "User One" as "Editor" using the webUI
-    And user "user1" accepts the share "new-simple-folder" offered by user "user2" using the sharing API
-    # unshare the received shared folder and check it is gone
-    And the user re-logs in as "user1" using the webUI
-    And the user browses to the folder "Shares" on the files page
-    Then folder "new-simple-folder" should be listed on the webUI
-    And it should not be possible to delete file "new-simple-folder" using the webUI
     # check that the folder is still visible for the share owner
     When the user re-logs in as "user2" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI
@@ -319,9 +302,7 @@ Feature: Sharing files and folders with internal users
     And user "user1" has logged in using the webUI
     When the user browses to the shared-with-me page
     And the user opens the share dialog for file "testimage.jpg" using the webUI
-    And the user opens the share creation dialog in the webUI
-    And the user types "User Three" in the share-with-field
-    Then "user" "User Three" should not be listed in the autocomplete list on the webUI
+    Then the user should not be able to share file "testimage.jpg" using the webUI
 
   @skipOnOCIS @issue-4193
   Scenario: user shares the file/folder with another internal user and delete the share with user
@@ -430,7 +411,7 @@ Feature: Sharing files and folders with internal users
     And user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
     When user "user1" has logged in using the webUI
-    And the user opens the sharing sidebar for folder "simple-folder"
+    And the user opens the share dialog for folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | simple-folder | user-direct        |
@@ -444,7 +425,7 @@ Feature: Sharing files and folders with internal users
       | new-folder | user-indirect      |
       | lorem.txt  | user-indirect      |
 
-  @issue-4167
+  @issue-4167 @skipOnOCIS
   Scenario: sharing indicator of items inside a re-shared folder
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -552,7 +533,8 @@ Feature: Sharing files and folders with internal users
       | fileName      | expectedIndicators |
       | testimage.png | user-direct        |
     # removing the last collaborator reverts the indicator to user-indirect
-    When the user deletes "User Four" as collaborator for the current file using the webUI
+    When the user opens the share dialog for file "testimage.png" using the webUI
+    And the user deletes "User Four" as collaborator for the current file using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | testimage.png | user-indirect      |
@@ -564,7 +546,8 @@ Feature: Sharing files and folders with internal users
       | fileName      | expectedIndicators |
       | simple-folder | user-direct        |
     # deleting the last collaborator removes the indicator
-    When the user deletes "User Two" as collaborator for the current file using the webUI
+    When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user deletes "User Two" as collaborator for the current file using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
 

@@ -301,7 +301,8 @@ Feature: Sharing files and folders with internal groups
       | fileName      | expectedIndicators |
       | testimage.png | user-direct        |
     # removing the last collaborator reverts the indicator to user-indirect
-    When the user deletes "grp4" as collaborator for the current file using the webUI
+    When the user opens the share dialog for file "testimage.png" using the webUI
+    And the user deletes "grp4" as collaborator for the current file using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | testimage.png | user-indirect      |
@@ -313,7 +314,8 @@ Feature: Sharing files and folders with internal groups
       | fileName      | expectedIndicators |
       | simple-folder | user-direct        |
     # deleting the last collaborator removes the indicator
-    When the user deletes "grp2" as collaborator for the current file using the webUI
+    When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user deletes "grp2" as collaborator for the current file using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
 

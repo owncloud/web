@@ -242,9 +242,7 @@ Feature: Sharing files and folders with internal users
     And user "user1" has logged in using the webUI
     When the user browses to the shared-with-me page
     And the user opens the share dialog for file "testimage (2).jpg" using the webUI
-    And the user opens the share creation dialog in the webUI
-    And the user types "User Three" in the share-with-field
-    Then "user" "User Three" should not be listed in the autocomplete list on the webUI
+    Then the user should not be able to share file "testimage (2).jpg" using the webUI
 
   Scenario: user shares the file/folder with another internal user and delete the share with user
     Given user "user1" has logged in using the webUI
@@ -449,7 +447,8 @@ Feature: Sharing files and folders with internal users
       | fileName      | expectedIndicators |
       | testimage.png | user-direct        |
     # removing the last collaborator reverts the indicator to user-indirect
-    When the user deletes "User Four" as collaborator for the current file using the webUI
+    When the user opens the share dialog for file "testimage.png" using the webUI
+    And the user deletes "User Four" as collaborator for the current file using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | testimage.png | user-indirect      |
@@ -461,7 +460,8 @@ Feature: Sharing files and folders with internal users
       | fileName      | expectedIndicators |
       | simple-folder | user-direct        |
     # deleting the last collaborator removes the indicator
-    When the user deletes "User Two" as collaborator for the current file using the webUI
+    When the user opens the share dialog for folder "simple-folder" using the webUI
+    And the user deletes "User Two" as collaborator for the current file using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
 

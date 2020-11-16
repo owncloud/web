@@ -29,7 +29,7 @@
       />
     </div>
     <file-details
-      v-if="_sidebarOpen && $route.name !== 'files-trashbin'"
+      v-if="_sidebarOpen"
       class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1"
       @reset="setHighlightedFile(null)"
     />
@@ -37,7 +37,6 @@
 </template>
 <script>
 import Mixins from '../mixins'
-import FileActions from '../fileactions'
 import FileDetails from './FileDetails.vue'
 import FilesAppBar from './FilesAppBar.vue'
 import AllFilesList from './AllFilesList.vue'
@@ -55,7 +54,7 @@ export default {
     SharedFilesList,
     UploadProgress
   },
-  mixins: [Mixins, FileActions],
+  mixins: [Mixins],
   data() {
     return {
       createFolder: false,

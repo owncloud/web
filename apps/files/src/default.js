@@ -18,7 +18,6 @@ const store = require('./store')
 function $gettext(msg) {
   return msg
 }
-const filesConfig = window.phoenixConfig.files || []
 
 const appInfo = {
   name: $gettext('Files'),
@@ -26,16 +25,7 @@ const appInfo = {
   icon: 'folder',
   isFileEditor: false,
   extensions: [],
-  fileActions: filesConfig.actions || [],
   fileSideBars: [
-    {
-      app: 'files-version',
-      icon: 'file_version',
-      component: FileInfoVersions,
-      enabled(capabilities, highlightedFile) {
-        return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
-      }
-    },
     {
       app: 'files-sharing',
       icon: 'group',
@@ -56,6 +46,14 @@ const appInfo = {
           return capabilities.files_sharing.public.enabled
         }
         return false
+      }
+    },
+    {
+      app: 'files-version',
+      icon: 'file_version',
+      component: FileInfoVersions,
+      enabled(capabilities, highlightedFile) {
+        return !!capabilities.core && highlightedFile && highlightedFile.type !== 'folder'
       }
     }
   ]

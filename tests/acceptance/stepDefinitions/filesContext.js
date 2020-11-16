@@ -115,10 +115,10 @@ When('the user browses to display the {string} details of file {string}', async 
 ) {
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(filename)
-  const visible = await client.page.filesPage().isPanelVisible('versions')
-  if (!visible) {
-    api.appSideBar().openVersionsTab()
-  }
+  await client.initAjaxCounters()
+  await api.appSideBar().openVersionsTab()
+  await client.waitForOutstandingAjaxCalls()
+
   return client
 })
 
@@ -435,7 +435,7 @@ Then('file {string} should not be listed on the webUI', function(file) {
     })
 })
 
-Then('folder {string} should not be listed on the webUI', async folder => {
+Then('folder {string} should not be listed on the webUI', folder => {
   return client.page.FilesPageElement.filesList()
     .isElementListed(folder, 'folder', client.globals.waitForNegativeConditionTimeout)
     .then(state => {
@@ -466,10 +466,9 @@ Then('the versions list for resource {string} should contain {int} entry/entries
 ) {
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(resourceName)
-  const visible = await client.page.filesPage().isPanelVisible('versions')
-  if (!visible) {
-    api.appSideBar().openVersionsTab()
-  }
+  await client.initAjaxCounters()
+  await api.appSideBar().openVersionsTab()
+  await client.waitForOutstandingAjaxCalls()
   const count = await api.versionsDialog().getVersionsCount()
 
   assert.strictEqual(expectedNumber, count)

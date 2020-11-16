@@ -31,7 +31,14 @@ const appInfo = {
         menuTitle($gettext) {
           return $gettext('New plain text file…')
         }
-      }
+      },
+      routes: [
+        'files-list',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'public-files'
+      ]
     },
     {
       extension: 'md',
@@ -39,7 +46,14 @@ const appInfo = {
         menuTitle($gettext) {
           return $gettext('New mark-down file…')
         }
-      }
+      },
+      routes: [
+        'files-list',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'public-files'
+      ]
     }
   ]
 }
