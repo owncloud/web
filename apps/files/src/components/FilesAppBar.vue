@@ -533,13 +533,16 @@ export default {
         if (this.publicPage()) {
           p = this.$client.publicFiles.putFileContents(filePath, null, this.publicLinkPassword, '')
         }
-        p.then(() => {
+        p.then(async () => {
+          const file = await this.$client.files.fileInfo(filePath, this.davProperties)
+          const fileId = file.fileInfo['{http://owncloud.org/ns}fileid']
+
           this.$_ocFilesFolder_getFolder()
           this.fileFolderCreationLoading = false
           this.hideModal()
 
           if (this.newFileAction) {
-            this.$_fileActions_openEditor(this.newFileAction, filePath)
+            this.$_fileActions_openEditor(this.newFileAction, filePath, fileId)
           }
         }).catch(error => {
           this.fileFolderCreationLoading = false

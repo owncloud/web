@@ -28,6 +28,7 @@ export default {
   computed: {
     ...mapState(['apps']),
     ...mapGetters('Files', ['highlightedFile', 'currentFolder']),
+    ...mapGetters(['configuration']),
 
     $_fileActions_systemActions() {
       const systemActions = []
@@ -46,7 +47,7 @@ export default {
             return `Open in ${this.apps.meta[editor.app].name}`
           },
           icon: this.apps.meta[editor.app].icon,
-          handler: item => this.$_fileActions_openEditor(editor, item.path),
+          handler: item => this.$_fileActions_openEditor(editor, item.path, item.id),
           isEnabled: ({ resource }) => {
             if (editor.routes && checkRoute(editor.routes, this.$route.name)) {
               return false
@@ -65,7 +66,11 @@ export default {
   methods: {
     ...mapActions(['openFile']),
 
-    $_fileActions_openEditor(editor, filePath) {
+    $_fileActions_openEditor(editor, filePath, fileId) {
+      if (editor.handler) {
+        return editor.handler(this.configuration, filePath, fileId)
+      }
+
       // TODO: Refactor in the store
       this.openFile({
         filePath: filePath
