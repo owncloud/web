@@ -124,9 +124,9 @@
         <oc-grid v-if="displayBulkActions" gutter="small">
           <div>
             <oc-button
+              v-if="!canCopy"
               id="copy-selected-btn"
               key="copy-selected-btn"
-              :disabled="!canCopy"
               @click="triggerLocationPicker('copy')"
             >
               <oc-icon name="file_copy" aria-hidden="true" />
@@ -135,9 +135,9 @@
           </div>
           <div>
             <oc-button
+              v-if="!canMove"
               id="move-selected-btn"
               key="move-selected-btn"
-              :disabled="!canMove"
               @click="triggerLocationPicker('move')"
             >
               <oc-icon name="folder-move" aria-hidden="true" />
@@ -172,6 +172,7 @@ import pathUtil from 'path'
 import { canBeMoved } from '../helpers/permissions'
 import { cloneStateObject } from '../helpers/store'
 import { getResourceSize } from '../helpers/resources'
+import { checkRoute } from '../helpers/route'
 
 export default {
   components: {
@@ -330,6 +331,10 @@ export default {
     },
 
     canMove() {
+      if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
+        return false
+      }
+
       const insufficientPermissions = this.selectedFiles.some(resource => {
         return canBeMoved(resource, this.currentFolder.path) === false
       })
@@ -338,6 +343,10 @@ export default {
     },
 
     canCopy() {
+      if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
+        return false
+      }
+
       if (this.publicPage()) {
         return this.currentFolder.canCreate()
       }

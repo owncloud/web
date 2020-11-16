@@ -2,7 +2,7 @@ import moment from 'moment'
 import uniqueId from 'lodash/uniqueId'
 import _ from 'lodash'
 import { getParentPaths } from '../helpers/path'
-import { bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
+import { bitmaskToRole, permissionsBitmask, checkPermission } from '../helpers/collaborators'
 import { shareTypes } from '../helpers/shareTypes'
 import path from 'path'
 import SidebarQuota from '../components/SidebarQuota.vue'
@@ -183,7 +183,9 @@ function _aggregateFileShares(data, incomingShares = false, allowSharePerm) {
       file.canUpload = () => true
       file.canBeDeleted = () => true
       file.canRename = () => true
-      file.canShare = () => true
+      file.canShare = () => {
+        return checkPermission(share.permissions, 'share')
+      }
       file.isMounted = () => false
       file.canDownload = () => file.type !== 'folder'
       file.extension = file.type !== 'folder' ? _extName(file.name) : ''
