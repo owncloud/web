@@ -302,9 +302,7 @@ Feature: Sharing files and folders with internal users
     And user "user1" has logged in using the webUI
     When the user browses to the shared-with-me page
     And the user opens the share dialog for file "testimage.jpg" using the webUI
-    And the user opens the share creation dialog in the webUI
-    And the user types "User Three" in the share-with-field
-    Then "user" "User Three" should not be listed in the autocomplete list on the webUI
+    Then the user should not be able to share file "testimage.jpg" using the webUI
 
   @skipOnOCIS @issue-4193
   Scenario: user shares the file/folder with another internal user and delete the share with user
