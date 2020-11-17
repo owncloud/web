@@ -3,9 +3,9 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { basename } from 'path'
 import queryString from 'query-string'
 import moment from 'moment'
-import { basename } from 'path'
 
 export default {
   name: 'DrawIoEditor',
@@ -15,27 +15,32 @@ export default {
     currentETag: null
   }),
   computed: {
-    ...mapGetters(['getToken']),
+    ...mapGetters(['getToken', 'configuration']),
     loading() {
       return this.content === ''
+    },
+    config() {
+      const { url = 'https://embed.diagrams.net', theme = 'minimal', autosave = false } =
+        this.configuration.applications.find(app => app.title.en === 'draw-io') || {}
+      return { url, theme, autosave: autosave ? 1 : 0 }
     },
     iframeSource() {
       const query = queryString.stringify({
         embed: 1,
+        chrome: 1,
         picker: 0,
         stealth: 1,
         spin: 1,
         proto: 'json',
-        ui: 'minimal'
+        ui: this.config.theme
       })
 
-      return `https://embed.diagrams.net?${query}`
+      return `${this.config.url}?${query}`
     }
   },
   created() {
     this.filePath = this.$route.params.filePath
     this.fileExtension = this.filePath.split('.').pop()
-
     window.addEventListener('message', event => {
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data)
@@ -75,7 +80,7 @@ export default {
             JSON.stringify({
               action: 'load',
               xml: resp.body,
-              autosave: 1
+              autosave: this.config.autosave
             }),
             '*'
           )
@@ -120,7 +125,7 @@ export default {
               JSON.stringify({
                 action: 'load',
                 xml: reader.result,
-                autosave: 1
+                autosave: this.config.autosave
               }),
               '*'
             )
