@@ -275,7 +275,7 @@ async function post(url, data) {
 async function registerClient(openIdConfig) {
   const clientData = sessionStorage.getItem('dynamicClientData')
   if (clientData !== null) {
-    const client_secret_expires_at = clientData.client_secret_expires_at ?? 0;
+    const client_secret_expires_at = clientData.client_secret_expires_at || 0;
     if (client_secret_expires_at === 0 || Date.now() < client_secret_expires_at*1000) {
       return JSON.parse(clientData)
     }
