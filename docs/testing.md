@@ -70,7 +70,7 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 
 #### the quick way (all automated)
 1. run `yarn run test-requirements:ocis` (`yarn run test-requirements:ocis:mac` for Mac users) to install, configure and run all ocis requirements
-2. run `yarn run acceptance-tests-ocis <feature-files-to-test>` to run the tests. The feature files are located in the "tests/acceptance/features" subdirectories.
+2. run `yarn run acceptance-tests-ocis <feature-files-to-test>` to run the tests. The feature files are located in the "tests/acceptance/features" subdirectories. To separate ocis log output from the tests output, run the command in a separate console.
 3. after the tests finish, run `yarn run killall` to stop all created docker containers, and the ocis services
 
 #### the manual way (e.g. to run from an existing ocis location)
@@ -83,11 +83,14 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 
 4. Run the OCIS server with the necessary configurations
     ```sh
-    export REVA_STORAGE_OWNCLOUD_REDIS_ADDR='localhost:6379'
     export PHOENIX_ASSET_PATH='<path-to-phoenix-clone>/dist'
     export PHOENIX_WEB_CONFIG='<path-to-phoenix-clone>/dist/config.json'
+    export STORAGE_HOME_DRIVER=owncloud
+    export STORAGE_USERS_DRIVER=owncloud
+    export PROXY_ENABLE_BASIC_AUTH=true
     ```
     note: `PHOENIX_WEB_CONFIG` should point to the same config file you have created earlier.
+    note: currently it's not possible to run the UI tests with OCIS & OWNCLOUD storage-driver
 
     run the server:
 
