@@ -82,7 +82,8 @@ const mutations = {
           icon: e.icon,
           newTab: e.newTab || false,
           routeName: e.routeName,
-          extension: e.extension
+          extension: e.extension,
+          handler: e.handler
         }
 
         state.fileEditors.push(editor)
