@@ -974,9 +974,11 @@ def buildDockerImage():
 		'repo': 'owncloud/phoenix',
 		},
 		'when': {
-			'event': [
-				'push'
-			]
+			'ref': {
+				'exclude': [
+					'refs/pull/**',
+				],
+			},
 		},
 	}]
 
