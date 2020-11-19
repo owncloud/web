@@ -1,9 +1,11 @@
+const { client } = require('nightwatch-api')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('./backendHelper')
 const convert = require('xml-js')
 const _ = require('lodash/object')
 const { normalize, join, filename } = require('../helpers/path')
 const occHelper = require('../helpers/occHelper')
+let timeOfLastUploadOperation = Date.now()
 
 /**
  *
@@ -152,13 +154,26 @@ exports.createFolder = function(user, folderName) {
  * @param {string} fileName
  * @param {string} contents
  */
-exports.createFile = function(user, fileName, contents = '') {
+exports.createFile = async function(user, fileName, contents = '') {
   const davPath = exports.createDavPath(user, fileName)
+  /**
+   * makes sure upload operations are carried out maximum once a second to avoid version issues
+   * see https://github.com/owncloud/core/issues/23151
+   */
+  const timeSinceLastFileUpload = Date.now() - timeOfLastUploadOperation
+  if (timeSinceLastFileUpload <= 1001) {
+    await client.pause(1001 - timeSinceLastFileUpload)
+  }
+
   return httpHelper
     .put(davPath, user, contents)
-    .then(res =>
-      httpHelper.checkStatus(res, `Could not create the file "${fileName}" for user "${user}".`)
-    )
+    .then(function(res) {
+      timeOfLastUploadOperation = Date.now()
+      return httpHelper.checkStatus(
+        res,
+        `Could not create the file "${fileName}" for user "${user}".`
+      )
+    })
     .then(res => res.text())
 }
 

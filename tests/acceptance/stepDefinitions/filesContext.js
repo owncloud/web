@@ -11,7 +11,6 @@ const path = require('../helpers/path')
 const util = require('util')
 let deletedElements
 let timeOfLastDeleteOperation = Date.now()
-let timeOfLastUploadOperation = Date.now()
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
 
@@ -94,7 +93,6 @@ Given('user {string} has uploaded file with content {string} to {string}', async
   content,
   filename
 ) {
-  await waitBetweenFileUploadOperations()
   await webdav.createFile(user, filename, content)
 })
 
@@ -103,7 +101,6 @@ Given('user {string} has uploaded file {string} to {string}', async function(
   source,
   filename
 ) {
-  await waitBetweenFileUploadOperations()
   const filePath = path.join(client.globals.filesForUpload, source)
   const content = fs.readFileSync(filePath)
   await webdav.createFile(user, filename, content)
@@ -215,18 +212,6 @@ const waitBetweenDeleteOperations = async function() {
     await client.pause(1000 - timeSinceLastDelete + 1)
   }
   timeOfLastDeleteOperation = Date.now()
-}
-
-/**
- * makes sure upload operations are carried out maximum once a second to avoid version issues
- * see https://github.com/owncloud/core/issues/23151
- */
-const waitBetweenFileUploadOperations = async function() {
-  const timeSinceLastFileUpload = Date.now() - timeOfLastUploadOperation
-  if (timeSinceLastFileUpload <= 1001) {
-    await client.pause(1001 - timeSinceLastFileUpload)
-  }
-  timeOfLastUploadOperation = Date.now()
 }
 
 Given('the following files/folders/resources have been deleted by user {string}', async function(
