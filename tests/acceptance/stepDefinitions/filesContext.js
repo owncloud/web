@@ -10,7 +10,6 @@ const { move } = require('../helpers/webdavHelper')
 const path = require('../helpers/path')
 const util = require('util')
 let deletedElements
-let timeOfLastDeleteOperation = Date.now()
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
 
@@ -202,25 +201,12 @@ Then('breadcrumb for folder {string} should be displayed on the webUI', function
   return assertBreadcrumbIsDisplayedFor(resource, true, true)
 })
 
-/**
- * makes sure delete operations are carried out maximum once a second to avoid trashbin issues
- * see https://github.com/owncloud/core/issues/23151
- */
-const waitBetweenDeleteOperations = async function() {
-  const timeSinceLastDelete = Date.now() - timeOfLastDeleteOperation
-  if (timeSinceLastDelete <= 1000) {
-    await client.pause(1000 - timeSinceLastDelete + 1)
-  }
-  timeOfLastDeleteOperation = Date.now()
-}
-
 Given('the following files/folders/resources have been deleted by user {string}', async function(
   user,
   table
 ) {
   const filesToDelete = table.hashes()
   for (const entry of filesToDelete) {
-    await waitBetweenDeleteOperations()
     await webdav.delete(user, entry.name)
   }
   return client

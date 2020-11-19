@@ -6,6 +6,7 @@ const _ = require('lodash/object')
 const { normalize, join, filename } = require('../helpers/path')
 const occHelper = require('../helpers/occHelper')
 let timeOfLastUploadOperation = Date.now()
+let timeOfLastDeleteOperation = Date.now()
 
 /**
  *
@@ -36,11 +37,24 @@ exports.download = function(userId, file) {
  * @param {string} userId
  * @param {string} file
  */
-exports.delete = function(userId, file) {
+exports.delete = async function(userId, file) {
   const davPath = exports.createDavPath(userId, file)
+
+  /**
+   * makes sure delete operations are carried out maximum once a second to avoid trashbin issues
+   * see https://github.com/owncloud/core/issues/23151
+   */
+  const timeSinceLastDelete = Date.now() - timeOfLastDeleteOperation
+  if (timeSinceLastDelete < 1001) {
+    await client.pause(1001 - timeSinceLastDelete)
+  }
+
   return httpHelper
     .delete(davPath, userId)
-    .then(res => httpHelper.checkStatus(res, 'Could not delete file ' + file))
+    .then(function(res) {
+      timeOfLastDeleteOperation = Date.now()
+      return httpHelper.checkStatus(res, 'Could not delete file ' + file)
+    })
     .then(res => res.text())
 }
 
