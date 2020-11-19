@@ -118,6 +118,6 @@ After(async function tryToReadBrowserConsoleOnFailure({ result }) {
 
   // The tests give following warning
   // MaxListenersExceededWarning: Possible EventEmitter memory leak detected. 11 unhandledRejection listeners added
-  // this clears all remaing eventeListeners before proceeding to next test
+  // this clears all remaining eventListeners before proceeding to next test
   process.removeAllListeners()
 })
