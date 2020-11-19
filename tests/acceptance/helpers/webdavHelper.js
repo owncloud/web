@@ -1,9 +1,12 @@
+const { client } = require('nightwatch-api')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('./backendHelper')
 const convert = require('xml-js')
 const _ = require('lodash/object')
 const { normalize, join, filename } = require('../helpers/path')
 const occHelper = require('../helpers/occHelper')
+let timeOfLastUploadOperation = Date.now()
+let timeOfLastDeleteOperation = Date.now()
 
 /**
  *
@@ -34,11 +37,24 @@ exports.download = function(userId, file) {
  * @param {string} userId
  * @param {string} file
  */
-exports.delete = function(userId, file) {
+exports.delete = async function(userId, file) {
   const davPath = exports.createDavPath(userId, file)
+
+  /**
+   * makes sure delete operations are carried out maximum once a second to avoid trashbin issues
+   * see https://github.com/owncloud/core/issues/23151
+   */
+  const timeSinceLastDelete = Date.now() - timeOfLastDeleteOperation
+  if (timeSinceLastDelete < 1001) {
+    await client.pause(1001 - timeSinceLastDelete)
+  }
+
   return httpHelper
     .delete(davPath, userId)
-    .then(res => httpHelper.checkStatus(res, 'Could not delete file ' + file))
+    .then(function(res) {
+      timeOfLastDeleteOperation = Date.now()
+      return httpHelper.checkStatus(res, 'Could not delete file ' + file)
+    })
     .then(res => res.text())
 }
 
@@ -152,13 +168,26 @@ exports.createFolder = function(user, folderName) {
  * @param {string} fileName
  * @param {string} contents
  */
-exports.createFile = function(user, fileName, contents = '') {
+exports.createFile = async function(user, fileName, contents = '') {
   const davPath = exports.createDavPath(user, fileName)
+  /**
+   * makes sure upload operations are carried out maximum once a second to avoid version issues
+   * see https://github.com/owncloud/core/issues/23151
+   */
+  const timeSinceLastFileUpload = Date.now() - timeOfLastUploadOperation
+  if (timeSinceLastFileUpload <= 1001) {
+    await client.pause(1001 - timeSinceLastFileUpload)
+  }
+
   return httpHelper
     .put(davPath, user, contents)
-    .then(res =>
-      httpHelper.checkStatus(res, `Could not create the file "${fileName}" for user "${user}".`)
-    )
+    .then(function(res) {
+      timeOfLastUploadOperation = Date.now()
+      return httpHelper.checkStatus(
+        res,
+        `Could not create the file "${fileName}" for user "${user}".`
+      )
+    })
     .then(res => res.text())
 }
 
@@ -205,15 +234,6 @@ exports.getSkeletonFile = function(filename) {
     .then(body => {
       return decodeURIComponent(body.ocs.data[0].contentUrlEncoded)
     })
-}
-
-exports.uploadFileWithContent = function(user, content, filename) {
-  const apiURL = `files/${user}/${filename}`
-  return httpHelper
-    .put(apiURL, user, content, { 'Content-Type': 'text/plain' })
-    .then(res =>
-      httpHelper.checkStatus(res, 'Could not upload file' + filename + 'with content' + content)
-    )
 }
 
 exports.getFavouritedResources = function(user) {
