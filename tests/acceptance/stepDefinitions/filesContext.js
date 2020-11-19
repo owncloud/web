@@ -95,7 +95,7 @@ Given('user {string} has uploaded file with content {string} to {string}', async
   filename
 ) {
   await waitBetweenFileUploadOperations()
-  await webdav.uploadFileWithContent(user, content, filename)
+  await webdav.createFile(user, filename, content)
 })
 
 Given('user {string} has uploaded file {string} to {string}', async function(

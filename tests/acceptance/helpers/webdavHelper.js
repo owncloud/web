@@ -207,15 +207,6 @@ exports.getSkeletonFile = function(filename) {
     })
 }
 
-exports.uploadFileWithContent = function(user, content, filename) {
-  const apiURL = `files/${user}/${filename}`
-  return httpHelper
-    .put(apiURL, user, content, { 'Content-Type': 'text/plain' })
-    .then(res =>
-      httpHelper.checkStatus(res, 'Could not upload file' + filename + 'with content' + content)
-    )
-}
-
 exports.getFavouritedResources = function(user) {
   const body = `<oc:filter-files  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
                  <d:prop><d:resourcetype /></d:prop>
