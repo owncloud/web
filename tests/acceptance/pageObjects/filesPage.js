@@ -1,6 +1,7 @@
 const util = require('util')
 const navigationHelper = require('../helpers/navigationHelper')
 const xpathHelper = require('../helpers/xpath')
+const timeoutHelper = require('../helpers/timeoutHelper')
 const { join, normalize } = require('../helpers/path')
 const { client } = require('nightwatch-api')
 
@@ -256,11 +257,7 @@ module.exports = {
     },
     isSidebarVisible: async function(timeout = null) {
       let isVisible = false
-      if (timeout === null) {
-        timeout = this.api.globals.waitForConditionTimeout
-      } else {
-        timeout = parseInt(timeout, 10)
-      }
+      timeout = timeoutHelper.parseTimeout(timeout)
       await this.isVisible(
         {
           locateStrategy: this.elements.sideBar.locateStrategy,
@@ -277,11 +274,7 @@ module.exports = {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const selector = this.elements[panelName + 'Panel']
       let isVisible = false
-      if (timeout === null) {
-        timeout = this.api.globals.waitForConditionTimeout
-      } else {
-        timeout = parseInt(timeout, 10)
-      }
+      timeout = timeoutHelper.parseTimeout(timeout)
       await this.isVisible(
         { locateStrategy: 'css selector', selector: selector.selector, timeout: timeout },
         result => {

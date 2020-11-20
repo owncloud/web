@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-expressions */
+const timeoutHelper = require('../../helpers/timeoutHelper')
 
 module.exports = {
   commands: {
@@ -8,11 +9,7 @@ module.exports = {
       )
     },
     closeSidebar: function(timeout = null) {
-      if (timeout === null) {
-        timeout = this.api.globals.waitForConditionTimeout
-      } else {
-        timeout = parseInt(timeout, 10)
-      }
+      timeout = timeoutHelper.parseTimeout(timeout)
       try {
         this.click({
           selector: '@sidebarCloseBtn',
