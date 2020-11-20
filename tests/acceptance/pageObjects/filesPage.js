@@ -242,7 +242,10 @@ module.exports = {
       await this.useXpath()
         .waitForElementVisible('@sideBar')
         .useCss()
-      const panelVisible = await this.isPanelVisible(tab)
+      const panelVisible = await this.isPanelVisible(
+        tab,
+        this.api.globals.waitForNegativeConditionTimeout
+      )
       if (panelVisible) {
         return this
       } else {
@@ -251,21 +254,40 @@ module.exports = {
           .useCss()
       }
     },
-    isSidebarVisible: async function() {
+    isSidebarVisible: async function(timeout = null) {
       let isVisible = false
-      await this.isVisible('xpath', this.elements.sideBar.selector, result => {
-        isVisible = result.status === 0
-      })
+      if (timeout === null) {
+        timeout = this.api.globals.waitForConditionTimeout
+      } else {
+        timeout = parseInt(timeout, 10)
+      }
+      await this.isVisible(
+        {
+          locateStrategy: this.elements.sideBar.locateStrategy,
+          selector: this.elements.sideBar.selector,
+          timeout: timeout
+        },
+        result => {
+          isVisible = result.status === 0
+        }
+      )
       return isVisible
     },
-    isPanelVisible: async function(panelName) {
+    isPanelVisible: async function(panelName, timeout = null) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const selector = this.elements[panelName + 'Panel']
       let isVisible = false
-
-      await this.isVisible(selector, result => {
-        isVisible = result.status === 0
-      })
+      if (timeout === null) {
+        timeout = this.api.globals.waitForConditionTimeout
+      } else {
+        timeout = parseInt(timeout, 10)
+      }
+      await this.isVisible(
+        { locateStrategy: 'css selector', selector: selector.selector, timeout: timeout },
+        result => {
+          isVisible = result.status === 0
+        }
+      )
       return isVisible
     },
     getVisibleTabs: async function() {
