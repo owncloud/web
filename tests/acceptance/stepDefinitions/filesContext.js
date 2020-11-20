@@ -778,14 +778,6 @@ Then(
   }
 )
 
-Then('no {string} tab should be available in the details panel', function(tab) {
-  const tabSelector = client.page.FilesPageElement.appSideBar().getXpathOfLinkToAccordionItemInSidePanel()
-  return client.page
-    .filesPage()
-    .useXpath()
-    .waitForElementNotPresent(tabSelector)
-})
-
 const assertElementsAreListed = async function(elements) {
   for (const element of elements) {
     const state = await client.page.FilesPageElement.filesList().isElementListed(element)
