@@ -518,7 +518,7 @@ When('the user picks the row of file/folder {string} in the webUI', function(ite
 })
 
 When('the user switches to {string} tab in details panel using the webUI', function(tab) {
-  return client.page.filesPage().selectTabInSidePanel(tab)
+  return client.page.FilesPageElement.appSideBar().selectTab(tab)
 })
 
 const theseResourcesShouldNotBeListed = async function(table) {
@@ -760,12 +760,12 @@ Then('the app-sidebar should be invisible', async function() {
 })
 
 Then('the {string} details panel should be visible', async function(panel) {
-  const visible = await client.page.filesPage().isPanelVisible(panel)
+  const visible = await client.page.FilesPageElement.appSideBar().isPanelVisible(panel)
   assert.strictEqual(visible, true, `'${panel}-panel' should be visible, but is not`)
 })
 
 Then('the following tabs should be visible in the details dialog', async function(table) {
-  const visibleTabs = await client.page.filesPage().getVisibleTabs()
+  const visibleTabs = await client.page.FilesPageElement.appSideBar().getVisibleTabs()
   const expectedVisibleTabs = table.rows()
   const difference = _.difference(expectedVisibleTabs.flat(), visibleTabs)
   if (difference.length !== 0) {
@@ -774,7 +774,7 @@ Then('the following tabs should be visible in the details dialog', async functio
 })
 
 Then('no {string} tab should be available in the details panel', function(tab) {
-  const tabSelector = client.page.filesPage().getXpathOfLinkToTabInSidePanel()
+  const tabSelector = client.page.FilesPageElement.appSideBar().getXpathOfLinkToTabInSidePanel()
   return client.page
     .filesPage()
     .useXpath()

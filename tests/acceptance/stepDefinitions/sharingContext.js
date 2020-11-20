@@ -955,7 +955,7 @@ Then(
   'the share {string} shared with user {string} should have no expiration information displayed on the WebUI',
   async function(item, user) {
     await client.page.FilesPageElement.filesList().clickRow(item)
-    await client.page.filesPage().selectTabInSidePanel('people')
+    await client.page.FilesPageElement.appSideBar().selectTab('people')
     const elementID = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
     )
@@ -971,7 +971,7 @@ Then(
   'the expiration information displayed on the WebUI of share {string} shared with user {string} should be {string} or {string}',
   async function(item, user, information1, information2) {
     await client.page.FilesPageElement.filesList().clickRow(item)
-    await client.page.filesPage().selectTabInSidePanel('people')
+    await client.page.FilesPageElement.appSideBar().selectTab('people')
     const actualInfo = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
     )

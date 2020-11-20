@@ -333,11 +333,8 @@ module.exports = {
       return this.waitForElementVisible(copyBtnSelector).click(copyBtnSelector)
     },
     copyPrivateLink: function() {
-      const appSideBarElements = this.api.page.FilesPageElement.appSideBar().elements
-      const sidebarLinksTab = appSideBarElements.sidebarLinksTab.selector
-      const sidebarCss = appSideBarElements.sideBar.selector
-
-      return this.waitForElementVisible(sidebarCss)
+      const sidebarLinksTab = this.api.page.FilesPageElement.appSideBar().elements.sidebarLinksTab
+      return this.waitForElementVisible(this.api.page.filesPage().elements.sideBar)
         .waitForElementVisible(sidebarLinksTab)
         .click(sidebarLinksTab)
         .waitForElementVisible('@sidebarPrivateLinkLabel')

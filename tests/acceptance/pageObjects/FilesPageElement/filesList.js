@@ -18,7 +18,7 @@ module.exports = {
       await appSidebar.closeSidebar(500)
       await this.waitForFileVisible(fileName)
       await this.openSideBar(fileName)
-      return client.page.filesPage().selectTabInSidePanel('people')
+      return client.page.FilesPageElement.appSideBar().selectTab('people')
     },
     /**
      * @param {string} fileName
@@ -27,7 +27,7 @@ module.exports = {
     openPublicLinkDialog: async function(fileName) {
       await this.waitForFileVisible(fileName)
       await this.openSideBar(fileName)
-      return client.page.filesPage().selectTabInSidePanel('links')
+      return client.page.FilesPageElement.appSideBar().selectTab('links')
     },
     /**
      * @param {string} resource
