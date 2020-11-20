@@ -106,13 +106,13 @@ Given('user {string} has uploaded file {string} to {string}', async function(
 })
 
 When('the user browses to display the {string} details of file {string}', async function(
-  tab,
+  accordionItem,
   filename
 ) {
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(filename)
   await client.initAjaxCounters()
-  await api.appSideBar().selectTab(tab)
+  await api.appSideBar().selectAccordionItem(accordionItem)
   await client.waitForOutstandingAjaxCalls()
 
   return client
@@ -438,7 +438,7 @@ Then('the versions list for resource {string} should contain {int} entry/entries
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(resourceName)
   await client.initAjaxCounters()
-  await api.appSideBar().selectTab('versions')
+  await api.appSideBar().selectAccordionItem('versions')
   await client.waitForOutstandingAjaxCalls()
   const count = await api.versionsDialog().getVersionsCount()
 
@@ -517,8 +517,10 @@ When('the user picks the row of file/folder {string} in the webUI', function(ite
   return client.page.FilesPageElement.filesList().clickRow(item)
 })
 
-When('the user switches to {string} tab in details panel using the webUI', function(tab) {
-  return client.page.FilesPageElement.appSideBar().selectTab(tab)
+When('the user switches to {string} accordion item in details panel using the webUI', function(
+  item
+) {
+  return client.page.FilesPageElement.appSideBar().selectAccordionItem(item)
 })
 
 const theseResourcesShouldNotBeListed = async function(table) {
@@ -764,17 +766,20 @@ Then('the {string} details panel should be visible', async function(panel) {
   assert.strictEqual(visible, true, `'${panel}-panel' should be visible, but is not`)
 })
 
-Then('the following tabs should be visible in the details dialog', async function(table) {
-  const visibleTabs = await client.page.FilesPageElement.appSideBar().getVisibleTabs()
-  const expectedVisibleTabs = table.rows()
-  const difference = _.difference(expectedVisibleTabs.flat(), visibleTabs)
-  if (difference.length !== 0) {
-    throw new Error(`${difference} tabs was expected to be visible but not found.`)
+Then(
+  'the following accordion items should be visible in the details dialog on the webUI',
+  async function(table) {
+    const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleAccordionItems()
+    const expectedVisibleItems = table.rows()
+    const difference = _.difference(expectedVisibleItems.flat(), visibleItems)
+    if (difference.length !== 0) {
+      throw new Error(`${difference} accordion items was expected to be visible but not found.`)
+    }
   }
-})
+)
 
 Then('no {string} tab should be available in the details panel', function(tab) {
-  const tabSelector = client.page.FilesPageElement.appSideBar().getXpathOfLinkToTabInSidePanel()
+  const tabSelector = client.page.FilesPageElement.appSideBar().getXpathOfLinkToAccordionItemInSidePanel()
   return client.page
     .filesPage()
     .useXpath()

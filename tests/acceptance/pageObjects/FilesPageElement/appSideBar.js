@@ -21,43 +21,43 @@ module.exports = {
       }
       return this.api.page.FilesPageElement.filesList()
     },
-    selectTab: async function(tab) {
+    selectAccordionItem: async function(item) {
       await this.waitForElementVisible(this.api.page.filesPage().elements.sideBar)
       const panelVisible = await this.isPanelVisible(
-        tab,
+        item,
         this.api.globals.waitForNegativeConditionTimeout
       )
       if (panelVisible) {
         return this
       } else {
         return this.useXpath()
-          .click(this.getXpathOfLinkToTabInSidePanel(tab))
+          .click(this.getXpathOfLinkToAccordionItemInSidePanel(item))
           .useCss()
       }
     },
     /**
-     * return the complete xpath of the link to the specified tab in the side-bar
-     * @param tab
+     * return the complete xpath of the link to the specified accordion item in the side-bar
+     * @param item
      * @returns {string}
      */
-    getXpathOfLinkToTabInSidePanel: function(tab) {
+    getXpathOfLinkToAccordionItemInSidePanel: function(item) {
       return (
         this.api.page.filesPage().elements.sideBar.selector +
-        util.format(this.elements.tabOfSideBar.selector, tab)
+        util.format(this.elements.linkToOpenAccordionItem.selector, item)
       )
     },
-    getVisibleTabs: async function() {
-      const tabs = []
+    getVisibleAccordionItems: async function() {
+      const items = []
       let elements
-      await this.api.elements('@tabsInSideBar', function(result) {
+      await this.api.elements('@accordionItems', function(result) {
         elements = result.value
       })
       for (const { ELEMENT } of elements) {
         await this.api.elementIdText(ELEMENT, function(result) {
-          tabs.push(result.value.toLowerCase())
+          items.push(result.value.toLowerCase())
         })
       }
-      return tabs
+      return items
     },
     isPanelVisible: async function(panelName, timeout = null) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
@@ -73,16 +73,16 @@ module.exports = {
       return isVisible
     },
     /**
-     * checks if the given tabs are present on the files-page-sidebar
+     * checks if the item with the given selector is present on the files-page-sidebar
      *
-     * @param {object} tabSelector
+     * @param {object} selector
      * @returns {Promise<boolean>}
      */
-    isTabPresentOnCurrentSidebar: async function(tabSelector) {
+    isAccordionItemPresent: async function(selector) {
       let isPresent = true
       await this.useXpath()
         .waitForElementVisible(this.api.page.filesPage().elements.sideBar) // sidebar is expected to be opened and visible
-        .api.elements(tabSelector, result => {
+        .api.elements(selector, result => {
           isPresent = result.value.length > 0
         })
         .useCss()
@@ -91,14 +91,14 @@ module.exports = {
     /**
      * @returns {Promise<boolean>}
      */
-    isLinksTabPresentOnCurrentSidebar: function() {
-      return this.isTabPresentOnCurrentSidebar(this.elements.sidebarLinksTab)
+    isLinksAccordionItemPresent: function() {
+      return this.isAccordionItemPresent(this.elements.linksAccordionItem)
     },
     /**
      * @returns {Promise<boolean>}
      */
-    isCollaboratorsTabPresentOnCurrentSidebar: function() {
-      return this.isTabPresentOnCurrentSidebar(this.elements.sidebarCollaboratorsTab)
+    isCollaboratorsAccordionItemPresent: function() {
+      return this.isAccordionItemPresent(this.elements.collaboratorsAccordionItem)
     },
     markFavoriteSidebar: function() {
       return this.useXpath()
@@ -118,13 +118,13 @@ module.exports = {
     /**
      * path from inside the side-bar
      */
-    tabOfSideBar: {
+    linkToOpenAccordionItem: {
       // the translate bit is to make it case-insensitive
       selector:
         "//button[contains(translate(.,'ABCDEFGHJIKLMNOPQRSTUVWXYZ','abcdefghjiklmnopqrstuvwxyz'),'%s')]",
       locateStrategy: 'xpath'
     },
-    tabsInSideBar: {
+    accordionItems: {
       selector: '//div[@class="sidebar-container"]//li/h3/button',
       locateStrategy: 'xpath'
     },
@@ -135,10 +135,10 @@ module.exports = {
       selector: '//div[@class="sidebar-container"]//div[@class="action"]//button',
       locateStrategy: 'xpath'
     },
-    sidebarCollaboratorsTab: {
+    collaboratorsAccordionItem: {
       selector: '#app-sidebar-files-sharing'
     },
-    sidebarLinksTab: {
+    linksAccordionItem: {
       selector: '#app-sidebar-file-link'
     },
     sidebarToggleFavoriteButton: {
