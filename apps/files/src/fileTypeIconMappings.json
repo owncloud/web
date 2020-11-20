@@ -68,7 +68,7 @@
   "psd": "image",
   "py": "text-code",
   "rar": "package-x-generic",
-  "rss": "application-xml",
+  "rss": "file",
   "sh-lib": "text-code",
   "sh": "text-code",
   "swf": "file",
@@ -92,7 +92,7 @@
   "xlt": "x-office-spreadsheet",
   "xltm": "x-office-spreadsheet",
   "xltx": "x-office-spreadsheet",
-  "xml": "text-html",
+  "xml": "text-code",
   "yaml": "text-code",
   "yml": "text-code",
   "zip": "package-x-generic"
