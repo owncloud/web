@@ -1,4 +1,5 @@
 const util = require('util')
+const timeoutHelper = require('../../../helpers/timeoutHelper')
 
 module.exports = {
   commands: {
@@ -65,11 +66,7 @@ module.exports = {
         selector: '@collaboratorsInformation',
         abortOnFailure: false
       }
-      if (timeout === null) {
-        timeout = this.api.globals.waitForConditionTimeout
-      } else {
-        timeout = parseInt(timeout, 10)
-      }
+      timeout = timeoutHelper.parseTimeout(timeout)
       if (filterDisplayName !== null) {
         informationSelector = {
           selector: util.format(

@@ -17,7 +17,7 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "actions" details panel should be visible
-    When the user switches to "people" tab in details panel using the webUI
+    When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
 
   @files_versions-app-required
@@ -26,9 +26,9 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "actions" details panel should be visible
-    When the user switches to "people" tab in details panel using the webUI
+    When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "links" tab in details panel using the webUI
+    When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
   @files_versions-app-required @skipOnOCIS @ocis-reva-issue-39
@@ -39,7 +39,7 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "actions" details panel should be visible
-    When the user switches to "people" tab in details panel using the webUI
+    When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
 
   @files_versions-app-required @skipOnOCIS @ocis-reva-issue-39
@@ -50,9 +50,9 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
     And the "actions" details panel should be visible
-    When the user switches to "people" tab in details panel using the webUI
+    When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
-    When the user switches to "links" tab in details panel using the webUI
+    When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
   @skip @yetToImplement
@@ -65,9 +65,9 @@ Feature: User can open the details panel for any file or folder
     And the user clicks the details file action in the webUI
     Then the details dialog should be visible in the webUI
     And the thumbnail should be visible in the details panel
-    When the user switches to "sharing" tab in details panel using the webUI
+    When the user switches to "sharing" accordion item in details panel using the webUI
     Then the "sharing" details panel should be visible
-    When the user switches to "comments" tab in details panel using the webUI
+    When the user switches to "comments" accordion item in details panel using the webUI
     Then the "comments" details panel should be visible
 
   @comments-app-required @skipOnOCIS @ocis-reva-issue-64
@@ -78,11 +78,11 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    When the user switches to "people" tab in details panel using the webUI
+    When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
-#    When the user switches to "comments" tab in details panel using the webUI
+#    When the user switches to "comments" accordion item in details panel using the webUI
 #    Then the "comments" details panel should be visible
-    When the user switches to "links" tab in details panel using the webUI
+    When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
   @comments-app-required @skipOnOCIS @ocis-reva-issue-64
@@ -93,11 +93,11 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    When the user switches to "people" tab in details panel using the webUI
+    When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
-#    When the user switches to "comments" tab in details panel using the webUI
+#    When the user switches to "comments" accordion item in details panel using the webUI
 #    Then the "comments" details panel should be visible
-    When the user switches to "links" tab in details panel using the webUI
+    When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
   @comments-app-required @skipOnOCIS @ocis-reva-issue-64
@@ -109,11 +109,11 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of folder "simple-folder (2)" in the webUI
     Then the app-sidebar should be visible
     And the thumbnail should be visible in the app-sidebar
-    When the user switches to "people" tab in details panel using the webUI
+    When the user switches to "people" accordion item in details panel using the webUI
     Then the "people" details panel should be visible
-#    When the user switches to "comments" tab in details panel using the webUI
+#    When the user switches to "comments" accordion item in details panel using the webUI
 #    Then the "comments" details panel should be visible
-    When the user switches to "links" tab in details panel using the webUI
+    When the user switches to "links" accordion item in details panel using the webUI
     Then the "links" details panel should be visible
 
   @ocis-reva-issue-106
@@ -137,9 +137,9 @@ Feature: User can open the details panel for any file or folder
     And the user clicks the details file action in the webUI
     Then the details dialog should be visible in the webUI
     And the thumbnail should be visible in the details panel
-    When the user switches to "sharing" tab in details panel using the webUI
+    When the user switches to "sharing" accordion item in details panel using the webUI
     Then the "sharing" details panel should be visible
-    When the user switches to "comments" tab in details panel using the webUI
+    When the user switches to "comments" accordion item in details panel using the webUI
     Then the "comments" details panel should be visible
 
   Scenario: the sidebar is invisible after closing

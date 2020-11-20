@@ -548,7 +548,7 @@ Feature: Share by public link
       | role | Editor |
     And the public uses the webUI to access the last public link created by user "user1"
     And the user picks the row of file "lorem.txt" in the webUI
-    Then the following tabs should be visible in the details dialog
+    Then the following accordion items should be visible in the details dialog on the webUI
       | name          |
       | versions      |
       | links         |

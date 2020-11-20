@@ -699,12 +699,15 @@ Then('it should not be possible to share file/folder {string} using the webUI', 
   const state = await filesList.isSharingButtonPresent(resource)
   assert.ok(!state, `Error: Sharing button for resource ${resource} is not in disabled state`)
   await filesList.openSideBar(resource)
-  const sidebarLinkTabState = await appSideBar.isLinksTabPresentOnCurrentSidebar()
-  assert.ok(!sidebarLinkTabState, `Error: Sidebar 'Links' tab for resource ${resource} is present`)
-  const sidebarCollaboratorsTabState = await appSideBar.isCollaboratorsTabPresentOnCurrentSidebar()
+  const linkItemState = await appSideBar.isLinksAccordionItemPresent()
   assert.ok(
-    !sidebarCollaboratorsTabState,
-    `Error: Sidebar 'People' tab for resource ${resource} is present`
+    !linkItemState,
+    `Error: Sidebar 'Links' accordion item for resource ${resource} is present`
+  )
+  const collaboratorsItemState = await appSideBar.isCollaboratorsAccordionItemPresent()
+  assert.ok(
+    !collaboratorsItemState,
+    `Error: Sidebar 'People' accordion item for resource ${resource} is present`
   )
 })
 
@@ -955,7 +958,7 @@ Then(
   'the share {string} shared with user {string} should have no expiration information displayed on the WebUI',
   async function(item, user) {
     await client.page.FilesPageElement.filesList().clickRow(item)
-    await client.page.filesPage().selectTabInSidePanel('people')
+    await client.page.FilesPageElement.appSideBar().selectAccordionItem('people')
     const elementID = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
     )
@@ -971,7 +974,7 @@ Then(
   'the expiration information displayed on the WebUI of share {string} shared with user {string} should be {string} or {string}',
   async function(item, user, information1, information2) {
     await client.page.FilesPageElement.filesList().clickRow(item)
-    await client.page.filesPage().selectTabInSidePanel('people')
+    await client.page.FilesPageElement.appSideBar().selectAccordionItem('people')
     const actualInfo = await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorExpirationInfo(
       user
     )

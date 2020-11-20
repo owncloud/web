@@ -1,6 +1,7 @@
 const util = require('util')
 const navigationHelper = require('../helpers/navigationHelper')
 const xpathHelper = require('../helpers/xpath')
+const timeoutHelper = require('../helpers/timeoutHelper')
 const { join, normalize } = require('../helpers/path')
 const { client } = require('nightwatch-api')
 
@@ -230,37 +231,9 @@ module.exports = {
         .waitForAjaxCallsToStartAndFinish()
         .waitForElementNotPresent('@dialog')
     },
-    /**
-     * return the complete xpath of the link to the specified tab in the side-bad
-     * @param tab
-     * @returns {string}
-     */
-    getXpathOfLinkToTabInSidePanel: function(tab) {
-      return this.elements.sideBar.selector + util.format(this.elements.tabOfSideBar.selector, tab)
-    },
-    selectTabInSidePanel: async function(tab) {
-      await this.useXpath()
-        .waitForElementVisible('@sideBar')
-        .useCss()
-      const panelVisible = await this.isPanelVisible(
-        tab,
-        this.api.globals.waitForNegativeConditionTimeout
-      )
-      if (panelVisible) {
-        return this
-      } else {
-        return this.useXpath()
-          .click(this.getXpathOfLinkToTabInSidePanel(tab))
-          .useCss()
-      }
-    },
     isSidebarVisible: async function(timeout = null) {
       let isVisible = false
-      if (timeout === null) {
-        timeout = this.api.globals.waitForConditionTimeout
-      } else {
-        timeout = parseInt(timeout, 10)
-      }
+      timeout = timeoutHelper.parseTimeout(timeout)
       await this.isVisible(
         {
           locateStrategy: this.elements.sideBar.locateStrategy,
@@ -272,36 +245,6 @@ module.exports = {
         }
       )
       return isVisible
-    },
-    isPanelVisible: async function(panelName, timeout = null) {
-      panelName = panelName === 'people' ? 'collaborators' : panelName
-      const selector = this.elements[panelName + 'Panel']
-      let isVisible = false
-      if (timeout === null) {
-        timeout = this.api.globals.waitForConditionTimeout
-      } else {
-        timeout = parseInt(timeout, 10)
-      }
-      await this.isVisible(
-        { locateStrategy: 'css selector', selector: selector.selector, timeout: timeout },
-        result => {
-          isVisible = result.status === 0
-        }
-      )
-      return isVisible
-    },
-    getVisibleTabs: async function() {
-      const tabs = []
-      let elements
-      await this.api.elements('@tabsInSideBar', function(result) {
-        elements = result.value
-      })
-      for (const { ELEMENT } of elements) {
-        await this.api.elementIdText(ELEMENT, function(result) {
-          tabs.push(result.value.toLowerCase())
-        })
-      }
-      return tabs
     },
     copyPermalinkFromFilesAppBar: function() {
       return this.waitForElementVisible('@permalinkCopyButton').click('@permalinkCopyButton')
@@ -473,18 +416,6 @@ module.exports = {
     fileUploadProgress: {
       selector: '#files-upload-progress'
     },
-    versionsPanel: {
-      selector: '#oc-file-versions-sidebar'
-    },
-    collaboratorsPanel: {
-      selector: '#oc-files-sharing-sidebar'
-    },
-    linksPanel: {
-      selector: '#oc-files-file-link'
-    },
-    actionsPanel: {
-      selector: '#oc-files-actions-sidebar'
-    },
     sideBar: {
       selector: '//div[@class="sidebar-container"]',
       locateStrategy: 'xpath'
@@ -492,21 +423,8 @@ module.exports = {
     fileOverwriteConfirm: {
       selector: '#files-overwrite-confirm'
     },
-    /**
-     * path from inside the side-bar
-     */
-    tabOfSideBar: {
-      // the translate bit is to make it case-insensitive
-      selector:
-        "//button[contains(translate(.,'ABCDEFGHJIKLMNOPQRSTUVWXYZ','abcdefghjiklmnopqrstuvwxyz'),'%s')]",
-      locateStrategy: 'xpath'
-    },
     sidebarItemName: {
       selector: '#files-sidebar-item-name'
-    },
-    tabsInSideBar: {
-      selector: '//div[@class="sidebar-container"]//li/h3/button',
-      locateStrategy: 'xpath'
     },
     dialog: {
       selector: '.oc-modal'
