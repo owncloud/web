@@ -106,13 +106,13 @@ Given('user {string} has uploaded file {string} to {string}', async function(
 })
 
 When('the user browses to display the {string} details of file {string}', async function(
-  versions,
+  tab,
   filename
 ) {
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(filename)
   await client.initAjaxCounters()
-  await api.appSideBar().openVersionsTab()
+  await api.appSideBar().selectTab(tab)
   await client.waitForOutstandingAjaxCalls()
 
   return client
@@ -438,7 +438,7 @@ Then('the versions list for resource {string} should contain {int} entry/entries
   const api = client.page.FilesPageElement
   await api.filesList().clickRow(resourceName)
   await client.initAjaxCounters()
-  await api.appSideBar().openVersionsTab()
+  await api.appSideBar().selectTab('versions')
   await client.waitForOutstandingAjaxCalls()
   const count = await api.versionsDialog().getVersionsCount()
 

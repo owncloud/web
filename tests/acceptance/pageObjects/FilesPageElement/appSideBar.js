@@ -112,15 +112,6 @@ module.exports = {
         .waitForElementVisible('@favoriteStarShining')
         .click('@sidebarToggleFavoriteButton')
         .waitForElementVisible('@favoriteStarDimm')
-    },
-    openCollaboratorsTab: function() {
-      return this.click('@sidebarCollaboratorsTab')
-    },
-    openVersionsTab: function() {
-      return this.click('@sidebarVersionsTab')
-    },
-    openLinksTab: function() {
-      return this.click('@sidebarLinksTab')
     }
   },
   elements: {
@@ -149,9 +140,6 @@ module.exports = {
     },
     sidebarLinksTab: {
       selector: '#app-sidebar-file-link'
-    },
-    sidebarVersionsTab: {
-      selector: '#app-sidebar-files-version'
     },
     sidebarToggleFavoriteButton: {
       selector: '#files-sidebar-star-icon'
