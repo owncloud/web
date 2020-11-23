@@ -1,0 +1,5 @@
+Enhancement: Add custom icons in the new file menu
+
+We've added an option to display own icon in the new file menu.
+
+https://github.com/owncloud/phoenix/pull/4375
