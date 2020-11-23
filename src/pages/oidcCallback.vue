@@ -1,9 +1,11 @@
 <template>
-  <div class="oc-login" uk-height-viewport>
+  <div
+    class="oc-login"
+    :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
+    uk-height-viewport
+  >
     <div class="oc-login-card uk-position-center">
-      <h1 v-translate class="oc-login-logo">
-        ownCloud
-      </h1>
+      <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
       <div v-show="error" class="oc-login-card-body">
         <h3 class="oc-login-card-title">
           <translate>Authentication failed</translate>
@@ -38,9 +40,19 @@ export default {
       error: false
     }
   },
+
   computed: {
-    ...mapGetters(['configuration'])
+    ...mapGetters(['configuration']),
+
+    backgroundImg() {
+      return this.configuration.theme.loginPage.backgroundImg
+    },
+
+    logoImg() {
+      return this.configuration.theme.logo.login
+    }
   },
+
   mounted() {
     this.$nextTick(() => {
       if (this.$route.query.error) {

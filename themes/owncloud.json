@@ -5,12 +5,14 @@
   },
   "logo": {
     "sidebar": "themes/owncloud/assets/logo.svg",
-    "favicon": "themes/owncloud/favicon.jpg"
+    "favicon": "themes/owncloud/favicon.jpg",
+    "login": "themes/owncloud/assets/logo.svg"
   },
   "filesList": {
     "hideDefaultStatusIndicators": false
   },
   "loginPage": {
-    "autoRedirect": true
+    "autoRedirect": true,
+    "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
   }
 }
