@@ -1,0 +1,6 @@
+Enhancement: Theme redirect and access denied pages
+
+We've adjusted the theme on OIDC redirect and access denied pages to use correct logo and background.
+We've also added those two values into the theming capabilities.
+
+https://github.com/owncloud/phoenix/pull/4373

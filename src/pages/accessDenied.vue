@@ -1,9 +1,11 @@
 <template>
-  <div class="oc-login" uk-height-viewport>
+  <div
+    class="oc-login"
+    uk-height-viewport
+    :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
+  >
     <div class="oc-login-card uk-position-center">
-      <h1 v-translate class="oc-login-logo">
-        ownCloud
-      </h1>
+      <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
       <div class="oc-login-card-body uk-width-large">
         <h3 class="oc-login-card-title">
           <span v-translate>Login Error</span>
@@ -62,6 +64,14 @@ export default {
         return this.configuration.theme.general.helpDeskLinkText
       }
       return ''
+    },
+
+    logoImg() {
+      return this.configuration.theme.logo.login
+    },
+
+    backgroundImg() {
+      return this.configuration.theme.loginPage.backgroundImg
     }
   },
   methods: {

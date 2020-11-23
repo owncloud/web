@@ -24,13 +24,15 @@ const state = {
     },
     logo: {
       sidebar: '',
-      favicon: ''
+      favicon: '',
+      login: ''
     },
     filesList: {
       hideDefaultStatusIndicators: false
     },
     loginPage: {
-      autoRedirect: true
+      autoRedirect: true,
+      backgroundImg: ''
     }
   },
   options: {
