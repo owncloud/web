@@ -81,16 +81,13 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
       RUN_SUITE_SCENARIO=()
       for TEST_PATH in "${TEST_PATHS}"; do
         SUITE=$(basename ${TEST_PATH})
-        RUN_SUITE_SCENARIO+="${SUITE} "
-        done
-        REGEX_TO_MATCH="^${EXPECTED_FAILURE_SUITE}/"
-        echo "i am in test path"
-        echo ${RUN_SUITE_SCENARIO}
-        echo ".................."
-        echo REGEX_TO_MATCH
-        if ! [[ " ${RUN_SUITE_SCENARIO[@]} " == *"${REGEX_TO_MATCH}"* ]]; then
-          continue
-        fi
+        RUN_SUITE_SCENARIO+="^${SUITE}/ "
+      done
+      REGEX_TO_MATCH="^${EXPECTED_FAILURE_SUITE}/"
+
+      if ! [[ " ${RUN_SUITE_SCENARIO[@]} " == *"${REGEX_TO_MATCH} "* ]]; then
+        continue
+      fi
     fi
 
     if [ -n "${TEST_CONTEXT}" ]; then
@@ -99,15 +96,12 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
       RUN_SUITE_SCENARIO=()
       for CONTEXT in "${TEST_CONTEXT}"; do
         RUN_SUITE_SCENARIO+="^${CONTEXT}/ "
-        done
-        REGEX_TO_MATCH="^${EXPECTED_FAILURE_SUITE}/"
-        echo "i am in test context"
-        echo ${RUN_SUITE_SCENARIO}
-        echo "======================="
-        echo REGEX_TO_MATCH
-        if ! [[ " ${RUN_SUITE_SCENARIO[@]} " == *"${REGEX_TO_MATCH}"* ]]; then
-          continue
-        fi
+      done
+      REGEX_TO_MATCH="^${EXPECTED_FAILURE_SUITE}/"
+
+      if ! [[ " ${RUN_SUITE_SCENARIO[@]} " == *"${REGEX_TO_MATCH} "* ]]; then
+        continue
+      fi
     fi
 
     if ! [[ " ${FAILED_SCENARIO_PATHS[@]} " == *"$line"* ]]; then
