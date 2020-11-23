@@ -25,6 +25,8 @@ if [ $ACCEPTANCE_TESTS_EXIT_STATUS -ne 0 ]; then
   done
 fi
 
+echo ${FAILED_SCENARIO_PATHS}
+
 if [ $ACCEPTANCE_TESTS_EXIT_STATUS -eq 0 ]; then
   # Find the count of scenarios that passed
   SCENARIO_RESULTS_COLORED=$(grep -E '^[0-9]+[[:space:]]scenario(|s)[[:space:]]\(' logfile.txt)
@@ -82,6 +84,10 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
         RUN_SUITE_SCENARIO+="${SUITE} "
         done
         REGEX_TO_MATCH="^${EXPECTED_FAILURE_SUITE}/"
+        echo "i am in test path"
+        echo ${RUN_SUITE_SCENARIO}
+        echo ".................."
+        echo REGEX_TO_MATCH
         if ! [[ " ${RUN_SUITE_SCENARIO[@]} " == *"${REGEX_TO_MATCH}"* ]]; then
           continue
         fi
@@ -95,6 +101,10 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
         RUN_SUITE_SCENARIO+="^${CONTEXT}/ "
         done
         REGEX_TO_MATCH="^${EXPECTED_FAILURE_SUITE}/"
+        echo "i am in test context"
+        echo ${RUN_SUITE_SCENARIO}
+        echo "======================="
+        echo REGEX_TO_MATCH
         if ! [[ " ${RUN_SUITE_SCENARIO[@]} " == *"${REGEX_TO_MATCH}"* ]]; then
           continue
         fi
