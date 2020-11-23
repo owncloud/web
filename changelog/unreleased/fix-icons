@@ -1,0 +1,6 @@
+Bugfix: Icon mappings
+
+The file type icon mappings contained some mappings to non-existing icon files. We fixed those.
+
+https://github.com/owncloud/phoenix/pull/4357
+https://github.com/owncloud/ocis/issues/905
