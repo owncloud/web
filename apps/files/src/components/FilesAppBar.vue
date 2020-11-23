@@ -67,7 +67,7 @@
                   v-for="(newFileHandler, key) in newFileHandlers"
                   :key="key"
                   :class="'new-file-btn-' + newFileHandler.ext"
-                  icon="save"
+                  :icon="newFileHandler.icon || 'save'"
                   @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
                   >{{ newFileHandler.menuTitle($gettext) }}</oc-nav-item
                 >
