@@ -112,6 +112,7 @@ Feature: Sharing files and folders with internal users
 
   @issue-2060
   @issue-4167
+  @ocis-issue-891 @skipOnOCIS
   Scenario: sharing indicator of items inside an incoming shared folder
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"

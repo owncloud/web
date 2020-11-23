@@ -426,6 +426,7 @@ Feature: Sharing files and folders with internal users
     Then user "User One" should be listed as "Owner" via "simple-folder" in the collaborators list on the webUI
 
   @issue-2898
+  @ocis-issue-891 @skipOnOCIS
   Scenario: see resource owner for direct shares in "shared with me"
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
