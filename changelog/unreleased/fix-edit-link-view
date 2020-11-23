@@ -1,0 +1,5 @@
+Bugfix: Fix edit public link view
+
+We've fixed the issue that edit public link view in the sidebar was overlapping with the versions accordion.
+
+https://github.com/owncloud/phoenix/pull/4374

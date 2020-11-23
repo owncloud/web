@@ -91,7 +91,7 @@
         leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
         name="custom-classes-transition"
       >
-        <div class="uk-position-cover oc-default-background">
+        <div class="oc-default-background">
           <edit-public-link :params="params" @close="$_showList()" />
         </div>
       </transition>
