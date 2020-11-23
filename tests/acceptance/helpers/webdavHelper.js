@@ -5,8 +5,9 @@ const convert = require('xml-js')
 const _ = require('lodash/object')
 const { normalize, join, filename } = require('../helpers/path')
 const occHelper = require('../helpers/occHelper')
-let timeOfLastUploadOperation = Date.now()
-let timeOfLastDeleteOperation = Date.now()
+
+const uploadTimeStamps = {}
+const deleteTimestamps = {}
 
 /**
  *
@@ -40,19 +41,24 @@ exports.download = function(userId, file) {
 exports.delete = async function(userId, file) {
   const davPath = exports.createDavPath(userId, file)
 
+  const filename = file.split('/')[file.split('/').length - 1]
+
   /**
    * makes sure delete operations are carried out maximum once a second to avoid trashbin issues
    * see https://github.com/owncloud/core/issues/23151
    */
-  const timeSinceLastDelete = Date.now() - timeOfLastDeleteOperation
-  if (timeSinceLastDelete < 1001) {
-    await client.pause(1001 - timeSinceLastDelete)
+  if (deleteTimestamps[userId] && deleteTimestamps[userId][filename]) {
+    const timeSinceLastDelete = Date.now() - deleteTimestamps[userId][filename]
+    if (timeSinceLastDelete < 1001) {
+      await client.pause(1001 - timeSinceLastDelete)
+    }
   }
 
   return httpHelper
     .delete(davPath, userId)
     .then(function(res) {
-      timeOfLastDeleteOperation = Date.now()
+      deleteTimestamps[userId] = deleteTimestamps[userId] || {}
+      deleteTimestamps[userId][filename] = Date.now()
       return httpHelper.checkStatus(res, 'Could not delete file ' + file)
     })
     .then(res => res.text())
@@ -174,15 +180,19 @@ exports.createFile = async function(user, fileName, contents = '') {
    * makes sure upload operations are carried out maximum once a second to avoid version issues
    * see https://github.com/owncloud/core/issues/23151
    */
-  const timeSinceLastFileUpload = Date.now() - timeOfLastUploadOperation
-  if (timeSinceLastFileUpload <= 1001) {
-    await client.pause(1001 - timeSinceLastFileUpload)
+
+  if (uploadTimeStamps[user] && uploadTimeStamps[user][fileName]) {
+    const timeSinceLastFileUpload = Date.now() - uploadTimeStamps[user][fileName]
+    if (timeSinceLastFileUpload <= 1001) {
+      await client.pause(1001 - timeSinceLastFileUpload)
+    }
   }
 
   return httpHelper
     .put(davPath, user, contents)
     .then(function(res) {
-      timeOfLastUploadOperation = Date.now()
+      uploadTimeStamps[user] = uploadTimeStamps[user] || {}
+      uploadTimeStamps[user][fileName] = Date.now()
       return httpHelper.checkStatus(
         res,
         `Could not create the file "${fileName}" for user "${user}".`
