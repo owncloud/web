@@ -7,6 +7,8 @@ config = {
 
 	'branches': [
 		'master',
+		'release*',
+		'develop*'
 	],
 
 	'yarnlint': True,
@@ -299,14 +301,7 @@ config = {
 		'acceptance': {
 			'ocisBranch': 'master',
 			'ocisCommit': 'd1543f76a29c06ab2640c613a5429e401f23ce2a',
-		},
-	},
-
-	'trigger': {
-		'ref': [
-			'refs/tags/**',
-			'refs/pull/**',
-		]
+		}
 	},
 
 	'build': True
@@ -363,7 +358,11 @@ def yarnlint():
 			lintTest(),
 		'depends_on': [],
 		'trigger': {
-			'ref': list(config['trigger']['ref'])
+			'ref': [
+				'refs/heads/master',
+				'refs/tags/**',
+				'refs/pull/**',
+			]
 		}
 	}
 
@@ -397,7 +396,12 @@ def build(ctx):
 			buildRelease(ctx) +
 			buildDockerImage(),
 		'depends_on': [],
-		'trigger': config['trigger']
+		'trigger': {
+			'ref': [
+				'refs/heads/master',
+				'refs/tags/**',
+			]
+		}
 	}
 
 	pipelines.append(result)
@@ -492,7 +496,12 @@ def changelog(ctx):
 			},
 			],
 		'depends_on': [],
-		'trigger': config['trigger']
+		'trigger': {
+			'ref': [
+				'refs/heads/master',
+				'refs/pull/**',
+			],
+		},
 	}
 
 	pipelines.append(result)
@@ -632,7 +641,10 @@ def acceptance():
 								),
 							'depends_on': [],
 							'trigger': {
-								'ref': list(config['trigger']['ref'])
+								'ref': [
+									'refs/tags/**',
+									'refs/pull/**',
+								]
 							},
 							'volumes': [{
 								'name': 'uploads',
@@ -1138,7 +1150,12 @@ def website(ctx):
 			},
 		],
 		'depends_on': [],
-		'trigger': config['trigger'],
+		'trigger': {
+			'ref': [
+				'refs/heads/master',
+				'refs/pull/**',
+			],
+		},
 	}
   ]
 
