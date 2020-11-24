@@ -3,15 +3,236 @@ Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud phoenix unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/phoenix/compare/v0.20.0...master
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.26.0...master
 
 Summary
 -------
 
+* Change - Load extensions config: [#4380](https://github.com/owncloud/phoenix/pull/4380)
+
+Details
+-------
+
+* Change - Load extensions config: [#4380](https://github.com/owncloud/phoenix/pull/4380)
+
+   We've started loading the config of extensions which can now be defined as an object in the
+   `external_apps` in the config.json.
+
+   https://github.com/owncloud/phoenix/pull/4380
+
+Changelog for ownCloud Phoenix [0.26.0] (2020-11-23)
+=======================================
+The following sections list the changes in ownCloud phoenix 0.26.0 relevant to
+ownCloud admins and users.
+
+[0.26.0]: https://github.com/owncloud/phoenix/compare/v0.25.0...v0.26.0
+
+Summary
+-------
+
+* Bugfix - Fix edit public link view: [#4374](https://github.com/owncloud/phoenix/pull/4374)
+* Bugfix - Icon mappings: [#4357](https://github.com/owncloud/phoenix/pull/4357)
+* Enhancement - Use handler of file editors: [#4324](https://github.com/owncloud/phoenix/pull/4324)
+* Enhancement - Add custom icons in the new file menu: [#4375](https://github.com/owncloud/phoenix/pull/4375)
+* Enhancement - Theme redirect and access denied pages: [#4373](https://github.com/owncloud/phoenix/pull/4373)
+* Enhancement - Update ODS to 2.0.0: [#4373](https://github.com/owncloud/phoenix/pull/4373)
+
+Details
+-------
+
+* Bugfix - Fix edit public link view: [#4374](https://github.com/owncloud/phoenix/pull/4374)
+
+   We've fixed the issue that edit public link view in the sidebar was overlapping with the
+   versions accordion.
+
+   https://github.com/owncloud/phoenix/pull/4374
+
+* Bugfix - Icon mappings: [#4357](https://github.com/owncloud/phoenix/pull/4357)
+
+   The file type icon mappings contained some mappings to non-existing icon files. We fixed
+   those.
+
+   https://github.com/owncloud/ocis/issues/905
+   https://github.com/owncloud/phoenix/pull/4357
+
+* Enhancement - Use handler of file editors: [#4324](https://github.com/owncloud/phoenix/pull/4324)
+
+   In case the extension is a file editor which defines a custom handler, we are triggering that
+   handler instead of trying to open any assigned route.
+
+   https://github.com/owncloud/phoenix/pull/4324
+
+* Enhancement - Add custom icons in the new file menu: [#4375](https://github.com/owncloud/phoenix/pull/4375)
+
+   We've added an option to display own icon in the new file menu.
+
+   https://github.com/owncloud/phoenix/pull/4375
+
+* Enhancement - Theme redirect and access denied pages: [#4373](https://github.com/owncloud/phoenix/pull/4373)
+
+   We've adjusted the theme on OIDC redirect and access denied pages to use correct logo and
+   background. We've also added those two values into the theming capabilities.
+
+   https://github.com/owncloud/phoenix/pull/4373
+
+* Enhancement - Update ODS to 2.0.0: [#4373](https://github.com/owncloud/phoenix/pull/4373)
+
+   We've updated the ownCloud design system to version 2.0.0.
+
+   https://github.com/owncloud/phoenix/pull/4373
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v2.0.0
+
+Changelog for ownCloud Phoenix [0.25.0] (2020-11-16)
+=======================================
+The following sections list the changes in ownCloud phoenix 0.25.0 relevant to
+ownCloud admins and users.
+
+[0.25.0]: https://github.com/owncloud/phoenix/compare/v0.23.0...v0.25.0
+
+Summary
+-------
+
+* Bugfix - Make available file actions (more) aware of the page context: [#4255](https://github.com/owncloud/phoenix/pull/4255)
+* Bugfix - Fix loginAsUser: [#4297](https://github.com/owncloud/phoenix/pull/4297)
+* Change - File actions as accordion item in right sidebar: [#4255](https://github.com/owncloud/phoenix/pull/4255)
+* Enhancement - Added support for OpenID Connect Dynamic Client Registration 1.0: [#4286](https://github.com/owncloud/phoenix/pull/4286)
+
+Details
+-------
+
+* Bugfix - Make available file actions (more) aware of the page context: [#4255](https://github.com/owncloud/phoenix/pull/4255)
+
+   The list of available file actions sometimes contained actions which should not be possible
+   and sometimes was missing actions that should be possible. Most important examples are that
+   copy/move should not be available on `shared with me` and `shared with others` pages (but they
+   were) and that the set of file actions from the `All files` page should also be available for the
+   favorites page (but were not).
+
+   https://github.com/owncloud/phoenix/pull/4255
+
+* Bugfix - Fix loginAsUser: [#4297](https://github.com/owncloud/phoenix/pull/4297)
+
+   LoginAsUser wasn't waiting until the loading finished. Added an additional check
+
+   https://github.com/owncloud/phoenix/pull/4297
+
+* Change - File actions as accordion item in right sidebar: [#4255](https://github.com/owncloud/phoenix/pull/4255)
+
+   We moved the menu items from `file actions` dropdown menu (the "three dots menu") as accordion
+   item into the right sidebar and made it the default item to be opened when clicking the three
+   dots. For the sake of consistency we now also made the right sidebar available for the `Deleted
+   files` page, where we offer the actions accordion item with a `Restore` and `Delete` action.
+
+   https://github.com/owncloud/phoenix/pull/4255
+
+* Enhancement - Added support for OpenID Connect Dynamic Client Registration 1.0: [#4286](https://github.com/owncloud/phoenix/pull/4286)
+
+   OwnCloud Phoenix can use the dynamic client registration protocol to exchange client id and
+   client secret woth the IdP
+
+   https://github.com/owncloud/phoenix/pull/4286
+   https://github.com/owncloud/phoenix/pull/4306
+
+Changelog for ownCloud Phoenix [0.23.0] (2020-10-30)
+=======================================
+The following sections list the changes in ownCloud phoenix 0.23.0 relevant to
+ownCloud admins and users.
+
+[0.23.0]: https://github.com/owncloud/phoenix/compare/v0.22.0...v0.23.0
+
+Summary
+-------
+
+* Change - App sidebar accordion instead of tabs: [#4249](https://github.com/owncloud/phoenix/pull/4249)
+
+Details
+-------
+
+* Change - App sidebar accordion instead of tabs: [#4249](https://github.com/owncloud/phoenix/pull/4249)
+
+   We replaced the tabs in the right app-sidebar with an accordion.
+
+   https://github.com/owncloud/phoenix/pull/4249
+
+Changelog for ownCloud Phoenix [0.22.0] (2020-10-26)
+=======================================
+The following sections list the changes in ownCloud phoenix 0.22.0 relevant to
+ownCloud admins and users.
+
+[0.22.0]: https://github.com/owncloud/phoenix/compare/v0.21.0...v0.22.0
+
+Summary
+-------
+
+* Change - Set icon for unknown file types to "file": [#4237](https://github.com/owncloud/phoenix/pull/4237)
+* Change - Attach share permission to roles: [#4216](https://github.com/owncloud/phoenix/pull/4216)
+* Change - Update ODS to v1.12.2: [#4239](https://github.com/owncloud/phoenix/pull/4239)
+* Enhancement - Auto-close alerts: [#4236](https://github.com/owncloud/phoenix/pull/4236)
+
+Details
+-------
+
+* Change - Set icon for unknown file types to "file": [#4237](https://github.com/owncloud/phoenix/pull/4237)
+
+   We've changed the icon for unknown file types to "file".
+
+   https://github.com/owncloud/phoenix/pull/4237
+   https://owncloud.design/#/Design%20Tokens/Icon
+
+* Change - Attach share permission to roles: [#4216](https://github.com/owncloud/phoenix/pull/4216)
+
+   We've attached the share permission of collaborators to roles. There is no longer a share
+   additional permission.
+
+   https://github.com/owncloud/phoenix/pull/4216
+
+* Change - Update ODS to v1.12.2: [#4239](https://github.com/owncloud/phoenix/pull/4239)
+
+   We updated ODS to v1.12.2. Please refer to the changelog of ODS.
+
+   https://github.com/owncloud/phoenix/pull/4239
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v1.12.2
+
+* Enhancement - Auto-close alerts: [#4236](https://github.com/owncloud/phoenix/pull/4236)
+
+   We've added a property which enables alerts to be automatically closed. When enabling the
+   auto-close, it will get assigned timeout of 5 seconds. Default timeout can be overwritten
+   inside of the `autoClose` object.
+
+   https://github.com/owncloud/phoenix/pull/4236
+
+Changelog for ownCloud Phoenix [0.21.0] (2020-10-21)
+=======================================
+The following sections list the changes in ownCloud phoenix 0.21.0 relevant to
+ownCloud admins and users.
+
+[0.21.0]: https://github.com/owncloud/phoenix/compare/v0.20.0...v0.21.0
+
+Summary
+-------
+
+* Bugfix - OIDC logout: [#266](https://github.com/owncloud/product/issues/266)
+* Bugfix - Do not display "empty folder" message when there is any content: [#263](https://github.com/owncloud/product/issues/263)
 * Change - Sensible default apps in example configs: [#4155](https://github.com/owncloud/phoenix/pull/4155)
 
 Details
 -------
+
+* Bugfix - OIDC logout: [#266](https://github.com/owncloud/product/issues/266)
+
+   We've fixed the bug that the user sometimes got immediately logged back into the web UI after
+   clicking on logout.
+
+   https://github.com/owncloud/product/issues/266
+   https://github.com/owncloud/phoenix/pull/4211
+
+* Bugfix - Do not display "empty folder" message when there is any content: [#263](https://github.com/owncloud/product/issues/263)
+
+   We've fixed that when some of the file/share lists were being loaded, the "empty folder"
+   message sometimes briefly appeared even though the list wasn't empty.
+
+   https://github.com/owncloud/product/issues/263
+   https://github.com/owncloud/phoenix/pull/4162
 
 * Change - Sensible default apps in example configs: [#4155](https://github.com/owncloud/phoenix/pull/4155)
 
@@ -101,7 +322,7 @@ Changelog for ownCloud Phoenix [0.17.0] (2020-09-25)
 The following sections list the changes in ownCloud phoenix 0.17.0 relevant to
 ownCloud admins and users.
 
-[0.17.0]: https://github.com/owncloud/phoenix/compare/v0.16.0...v0.17.0
+[0.17.0]: https://github.com/owncloud/phoenix/compare/v0.24.0...v0.17.0
 
 Summary
 -------
@@ -238,6 +459,36 @@ Details
 
    https://github.com/owncloud/product/issues/231
    https://github.com/owncloud/phoenix/pull/4083
+
+Changelog for ownCloud Phoenix [0.24.0] (2020-09-06)
+=======================================
+The following sections list the changes in ownCloud phoenix 0.24.0 relevant to
+ownCloud admins and users.
+
+[0.24.0]: https://github.com/owncloud/phoenix/compare/v0.16.0...v0.24.0
+
+Summary
+-------
+
+* Bugfix - Fix browse to files page in the ui tests: [#4281](https://github.com/owncloud/phoenix/issues/4281)
+* Enhancement - Display collaborators type: [#4203](https://github.com/owncloud/phoenix/pull/4203)
+
+Details
+-------
+
+* Bugfix - Fix browse to files page in the ui tests: [#4281](https://github.com/owncloud/phoenix/issues/4281)
+
+   When the ui tests where executing the "the user has browsed to the files page" step then it
+   wouldn't wait until the files were loaded.
+
+   https://github.com/owncloud/phoenix/issues/4281
+
+* Enhancement - Display collaborators type: [#4203](https://github.com/owncloud/phoenix/pull/4203)
+
+   We've added a new line into the collaborators autocomplete and list in the sidebar to display
+   their type.
+
+   https://github.com/owncloud/phoenix/pull/4203
 
 Changelog for ownCloud Phoenix [0.16.0] (2020-08-24)
 =======================================
