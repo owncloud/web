@@ -68,7 +68,12 @@ export default {
 
     $_fileActions_openEditor(editor, filePath, fileId) {
       if (editor.handler) {
-        return editor.handler(this.configuration, filePath, fileId)
+        return editor.handler({
+          config: this.configuration,
+          extensionConfig: editor.config,
+          filePath,
+          fileId
+        })
       }
 
       // TODO: Refactor in the store
