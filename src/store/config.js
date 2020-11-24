@@ -36,6 +36,7 @@ const state = {
     }
   },
   options: {
+    defaultExtension: 'files',
     hideSearchBar: false
   }
 }

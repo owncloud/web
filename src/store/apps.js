@@ -111,6 +111,9 @@ const mutations = {
 }
 
 const getters = {
+  appIds: state => {
+    return Object.keys(state.meta)
+  },
   apps: state => {
     return state.meta
   },

@@ -32,7 +32,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import pluginHelper from '../mixins/pluginHelper.js'
 import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
@@ -45,7 +44,6 @@ export default {
     UserMenu,
     SearchBar
   },
-  mixins: [pluginHelper],
   props: {
     userId: {
       type: String,
