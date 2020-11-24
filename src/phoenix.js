@@ -298,11 +298,17 @@ async function registerClient(openIdConfig) {
 
 
 (async function () {
+  config = await fetch('config.json')
+
+  if (config.status === 404) {
+    router.push('missing-config')
+    missingConfig()
+    return
+  }
+
   try {
-    config = await fetch('config.json').catch(() => {
-      config.state = 'missing'
-    })
     config = await config.json()
+
     // if dynamic client registration is necessary - do this here now
     if (config.openIdConnect && config.openIdConnect.dynamic) {
       const clientData = await registerClient(config.openIdConnect)
@@ -317,12 +323,8 @@ async function registerClient(openIdConfig) {
 
     // Loads apps from external servers
     if (config.external_apps) {
-      config.external_apps.forEach(app => apps.push(app.path))
+      apps.push(...config.external_apps.map(app => app.path))
     }
-
-    // provide global config object
-    // TODO: frozen object would be great ...
-    window.phoenixConfig = config
 
     // requirejs.config({waitSeconds:200}) is not really working ... reason unknown
     // we are manipulating requirejs directly
@@ -330,7 +332,6 @@ async function registerClient(openIdConfig) {
 
     requirejs(apps, loadApps, requireError)
   } catch (err) {
-    router.push('missing-config')
-    missingConfig()
+    console.log(err)
   }
 })()
