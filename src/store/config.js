@@ -41,8 +41,20 @@ const state = {
 }
 
 const actions = {
-  loadConfig(context, config) {
-    context.commit('LOAD_CONFIG', config)
+  loadConfig({ commit }, config) {
+    commit('LOAD_CONFIG', config)
+
+    if (config.external_apps) {
+      config.external_apps.forEach(externalApp => {
+        if (externalApp.config !== undefined) {
+          commit(
+            'LOAD_EXTENSION_CONFIG',
+            { id: externalApp.id, config: externalApp.config },
+            { root: true }
+          )
+        }
+      })
+    }
   },
   loadTheme(context, { theme, name }) {
     theme.name = name

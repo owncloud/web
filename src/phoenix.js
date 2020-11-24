@@ -149,9 +149,6 @@ async function loadApps () {
     }
 
     store.dispatch('registerApp', app.appInfo)
-    if (config.external_apps) {
-      store.dispatch('loadExternalAppConfig', { app: app.appInfo, config })
-    }
   }
   router.addRoutes(routes.flat())
   sync(store, router)
