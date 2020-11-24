@@ -136,7 +136,7 @@ async function loadApp (path) {
       }
 
       if (app.store) {
-        registerStoreModule(app)
+        store.registerModule(app.appInfo.name, app.store.default || app.store)
       }
 
       await store.dispatch('registerApp', app.appInfo)
@@ -168,16 +168,10 @@ async function finalizeInit () {
   // basic init of ownCloud sdk
   Vue.prototype.$client.init({ baseUrl: config.server || window.location.origin })
 
-  Vue.use(GetTextPlugin, {
-    availableLanguages: supportedLanguages,
-    defaultLanguage: navigator.language.substring(0, 2),
-    translations: translations,
-    silent: true
-  })
-
   // inject custom theme config into vuex
   await fetchTheme()
 
+  loadTranslations()
   new Vue({
     el: '#owncloud',
     store,
@@ -200,25 +194,21 @@ function fetchTheme() {
   })
 }
 
-function registerStoreModule (app) {
-  if (app.store.default) {
-    return store.registerModule(app.appInfo.name, app.store.default)
-  }
-  return store.registerModule(app.appInfo.name, app.store)
-}
-
 function missingConfig () {
-  Vue.use(GetTextPlugin, {
-    availableLanguages: supportedLanguages,
-    defaultLanguage: navigator.language.substring(0, 2),
-    translations: coreTranslations,
-    silent: true
-  })
-
+  loadTranslations()
   new Vue({
     el: '#owncloud',
     store,
     render: h => h(missingConfigPage)
+  })
+}
+
+function loadTranslations () {
+  Vue.use(GetTextPlugin, {
+    availableLanguages: supportedLanguages,
+    defaultLanguage: navigator.language.substring(0, 2),
+    translations,
+    silent: true
   })
 }
 
