@@ -359,10 +359,9 @@ def yarnlint():
 		'depends_on': [],
 		'trigger': {
 			'ref': [
+				'refs/heads/master',
 				'refs/tags/**',
 				'refs/pull/**',
-				'refs/pull-requests/**',
-				'refs/merge-requests/**',
 			]
 		}
 	}
@@ -399,7 +398,6 @@ def build(ctx):
 		'depends_on': [],
 		'trigger': {
 			'ref': [
-				'refs/merge-requests/**',
 				'refs/heads/master',
 				'refs/tags/**',
 			]
@@ -646,8 +644,6 @@ def acceptance():
 								'ref': [
 									'refs/tags/**',
 									'refs/pull/**',
-									'refs/pull-requests/**',
-									'refs/merge-requests/**',
 								]
 							},
 							'volumes': [{
