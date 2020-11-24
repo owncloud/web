@@ -111,6 +111,36 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
   done <"$EXPECTED_FAILURES_FILE"
 fi
 
+for FAILED_SCENARIO_PATH in ${FAILED_SCENARIO_PATHS}; do
+
+  if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
+    grep -x ${FAILED_SCENARIO_PATH} ${EXPECTED_FAILURES_FILE} >/dev/null
+    if [ $? -eq 0 ]; then
+      echo "Notice: Scenario ${FAILED_SCENARIO_PATH} is expected to fail so do not rerun it."
+      continue
+    fi
+  fi
+
+  echo "Rerun failed scenario: ${FAILED_SCENARIO_PATH}"
+  yarn run acceptance-tests-drone tests/acceptance/features/${FAILED_SCENARIO_PATH} | tee -a 'logfile.txt'
+  BEHAT_EXIT_STATUS=${PIPESTATUS[0]}
+  if [ ${BEHAT_EXIT_STATUS} -eq 0 ]; then
+    # The scenario was not expected to fail but had failed and is present in the
+    # unexpected_failures list. We've checked the scenario with a re-run and
+    # it passed. So remove it from the unexpected_failures list.
+    for i in "${!UNEXPECTED_FAILED_SCENARIOS[@]}"; do
+      if [ "${UNEXPECTED_FAILED_SCENARIOS[i]}" == "${FAILED_SCENARIO_PATH}" ]; then
+        unset "UNEXPECTED_FAILED_SCENARIOS[i]"
+      fi
+    done
+  else
+    echo "test rerun failed with exit status: ${BEHAT_EXIT_STATUS}"
+    # The scenario is not expected to fail but is failing also after the rerun.
+    # Since it is already reported in the unexpected_failures list, there is no
+    # need to touch that again. Continue processing the next scenario to rerun.
+  fi
+done
+
 if [ -n "${UNEXPECTED_PASSED_SCENARIOS}" ]; then
   echo "The following scenarios passed unexpectedly: "
   for SCENARIO in ${UNEXPECTED_PASSED_SCENARIOS}; do
