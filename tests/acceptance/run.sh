@@ -25,8 +25,6 @@ if [ $ACCEPTANCE_TESTS_EXIT_STATUS -ne 0 ]; then
   done
 fi
 
-echo ${FAILED_SCENARIO_PATHS}
-
 if [ $ACCEPTANCE_TESTS_EXIT_STATUS -eq 0 ]; then
   # Find the count of scenarios that passed
   SCENARIO_RESULTS_COLORED=$(grep -E '^[0-9]+[[:space:]]scenario(|s)[[:space:]]\(' logfile.txt)
@@ -115,6 +113,7 @@ for FAILED_SCENARIO_PATH in ${FAILED_SCENARIO_PATHS}; do
 
   if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
     grep -x ${FAILED_SCENARIO_PATH} ${EXPECTED_FAILURES_FILE} >/dev/null
+
     if [ $? -eq 0 ]; then
       echo "Notice: Scenario ${FAILED_SCENARIO_PATH} is expected to fail so do not rerun it."
       continue
