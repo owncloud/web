@@ -1,5 +1,5 @@
 /* eslint-disable */
-import "regenerator-runtime/runtime"
+import 'regenerator-runtime/runtime'
 
 // --- Libraries and Plugins ---
 import Vue from 'vue'
@@ -7,12 +7,10 @@ import 'vue-resize/dist/vue-resize.css'
 import VueResize from 'vue-resize'
 
 // --- Components ---
-
 import Phoenix from './Phoenix.vue'
 import missingConfigPage from './pages/missingConfig.vue'
 
 // --- Adding global libraries ---
-
 import OwnCloud from 'owncloud-sdk'
 
 import { sync } from 'vuex-router-sync'
@@ -20,7 +18,6 @@ import store from './store'
 import router from './router'
 
 // --- Plugins ----
-
 import VueEvents from 'vue-events'
 import VueRouter from 'vue-router'
 import VueClipboard from 'vue-clipboard2'
@@ -29,18 +26,15 @@ import VueMeta from 'vue-meta'
 import Vue2TouchEvents from 'vue2-touch-events'
 
 // --- Gettext ----
-
 import GetTextPlugin from 'vue-gettext'
 import coreTranslations from '../l10n/translations.json'
 
 // --- Image source ----
-
 import MediaSource from './plugins/mediaSource.js'
 import PhoenixPlugin from './plugins/phoenix'
 import ChunkedUpload from './plugins/upload'
 
 // --- Drag Drop ----
-
 import { Drag, Drop } from 'vue-drag-drop'
 
 // Import the Design System
@@ -48,9 +42,9 @@ import DesignSystem from 'owncloud-design-system'
 import 'owncloud-design-system/dist/system/system.css'
 
 import Avatar from './components/Avatar.vue'
-import appVersionJson from '../build/version.json'
 
 import wgxpath from 'wicked-good-xpath'
+
 wgxpath.install()
 
 Vue.prototype.$client = new OwnCloud()
@@ -87,74 +81,87 @@ const supportedLanguages = {
   it: 'Italiano',
   gl: 'Galego'
 }
+let translations = coreTranslations
 
-async function loadApps () {
-  let plugins = []
-  let translations = coreTranslations
+async function loadApp (path) {
+  return new Promise((resolve, reject) => {
+    requirejs([path], async function() {
+      const app = arguments[0]
 
-  let routes = [{
-    path: '/',
-    redirect: to => arguments[0].navItems[0].route
-  }]
+      if (!app.appInfo) {
+        reject('Skipping without appInfo for app ' + path)
+      }
 
-  for (let app of Array.from(arguments)) {
-    if (!app.appInfo) {
-      console.error('Try to load app with missing appInfo…')
-    }
-    if (app.routes) {
-      // rewrite relative app routes by prefix'ing their corresponding appId
-      app.routes.forEach(r => (r.path = `/${encodeURI(app.appInfo.id)}${r.path}`))
+      if (app.routes) {
+        // rewrite relative app routes by prefix'ing their corresponding appId
+        app.routes.forEach(r => (r.path = `/${encodeURI(app.appInfo.id)}${r.path}`))
 
-      // adjust routes in nav items
+        // adjust routes in nav items
+        if (app.navItems) {
+          app.navItems.forEach(nav => {
+            const r = app.routes.find(function(element) {
+              return element.name === nav.route.name;
+            });
+            if (r) {
+              r.meta = r.meta || {}
+              r.meta.pageIcon = nav.iconMaterial
+              r.meta.pageTitle = nav.name
+              nav.route.path = nav.route.path || r.path
+            } else {
+              console.error(`Unknown route name ${nav.route.name}`)
+            }
+          })
+        }
+        router.addRoutes(app.routes)
+      }
+
       if (app.navItems) {
-        app.navItems.forEach(nav => {
-          const r = app.routes.find(function(element) {
-            return element.name === nav.route.name;
-          });
-          if (r) {
-            r.meta = r.meta || {}
-            r.meta.pageIcon = nav.iconMaterial
-            r.meta.pageTitle = nav.name
-            nav.route.path = nav.route.path || r.path
-          } else {
-            console.error(`Unknown route name ${nav.route.name}`)
+        store.commit('SET_NAV_ITEMS_FROM_CONFIG', {
+          extension: app.appInfo.id,
+          navItems: app.navItems
+        })
+      }
+      if (app.translations) {
+        Object.keys(supportedLanguages).forEach((lang) => {
+          if (translations[lang] && app.translations[lang]) {
+            Object.assign(translations[lang], app.translations[lang])
           }
         })
       }
-      routes.push(app.routes)
-    }
-    if (app.plugins) {
-      plugins.push(app.plugins)
-    }
-    if (app.navItems) {
-      store.commit('SET_NAV_ITEMS_FROM_CONFIG', {
-        extension: app.appInfo.id,
-        navItems: app.navItems
-      })
-    }
-    if (app.translations) {
-      Object.keys(supportedLanguages).forEach((lang) => {
-        if (translations[lang] && app.translations[lang]) {
-          Object.assign(translations[lang], app.translations[lang])
-        }
-      })
-    }
 
-    if(app.quickActions) {
-      store.commit('ADD_QUICK_ACTIONS', app.quickActions)
-    }
+      if (app.quickActions) {
+        store.commit('ADD_QUICK_ACTIONS', app.quickActions)
+      }
 
-    if (app.store) {
-      registerStoreModule(app)
-    }
+      if (app.store) {
+        registerStoreModule(app)
+      }
 
-    store.dispatch('registerApp', app.appInfo)
+      await store.dispatch('registerApp', app.appInfo)
+      resolve(true)
+    }, function(err) {
+      reject("failed to load app " + path)
+    })
+  })
+}
+
+async function finalizeInit () {
+  // set home route
+  const appIds = store.getters.appIds
+  let defaultExtensionId = store.getters.configuration.options.defaultExtension
+  if (!defaultExtensionId || appIds.indexOf(defaultExtensionId) < 0) {
+    defaultExtensionId = appIds[0]
   }
-  router.addRoutes(routes.flat())
+  router.addRoutes([{
+    path: '/',
+    redirect: () => store.getters.getNavItemsByExtension(defaultExtensionId)[0].route
+  }])
+
+  // sync router into store
   sync(store, router)
 
   // inject custom config into vuex
-  store.dispatch('loadConfig', config)
+  await store.dispatch('loadConfig', config)
 
   // basic init of ownCloud sdk
   Vue.prototype.$client.init({ baseUrl: config.server || window.location.origin })
@@ -169,12 +176,8 @@ async function loadApps () {
   // inject custom theme config into vuex
   await fetchTheme()
 
-  const OC = new Vue({
+  new Vue({
     el: '#owncloud',
-    data: {
-      config: config,
-      plugins: plugins.flat()
-    },
     store,
     router,
     render: h => h(Phoenix)
@@ -189,8 +192,7 @@ function fetchTheme() {
     fetch(`themes/${config.theme}.json`)
       .then(res => res.json())
       .then(res => {
-        store.dispatch('loadTheme', { theme: res, name: config.theme })
-        resolve(true)
+        store.dispatch('loadTheme', { theme: res, name: config.theme }).then(() => resolve(true))
       })
       .catch(err => reject(err))
   })
@@ -200,73 +202,50 @@ function registerStoreModule (app) {
   if (app.store.default) {
     return store.registerModule(app.appInfo.name, app.store.default)
   }
-
   return store.registerModule(app.appInfo.name, app.store)
 }
 
 function missingConfig () {
-  const translations = coreTranslations
-
   Vue.use(GetTextPlugin, {
     availableLanguages: supportedLanguages,
     defaultLanguage: navigator.language.substring(0, 2),
-    translations: translations,
+    translations: coreTranslations,
     silent: true
   })
 
-  const OC = new Vue({
+  new Vue({
     el: '#owncloud',
     store,
     render: h => h(missingConfigPage)
   })
 }
 
-function requireError (err) {
-  if (err) {
-    // display error to user
-    let missingApps = []
-    const failedId = err.requireModules && err.requireModules[0]
-    missingApps.push(failedId)
-    let index = apps.findIndex((a) => {
-      return failedId === a.substring(2)
-    })
-    apps.splice(index, 1)
-    config.state = 'corrupt'
-    config.corrupted = missingApps
-    requirejs(apps, loadApps, requireError)
-  } else {
-    throw err
-  }
-}
-
 async function get(url){
-  let data = await (await (fetch(url)
-    .then(res => {
-      return res.json()
-    })
-    .catch(err => {
-      console.log('Error: ', err)
-    })
+  return (await (fetch(url)
+      .then(res => {
+        return res.json()
+      })
+      .catch(err => {
+        console.log('Error: ', err)
+      })
   ))
-  return data
 }
 
 async function post(url, data) {
-  let resp = await (await (fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-    .then(res => {
-      return res.json()
+  return (await (fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     })
-    .catch(err => {
-      console.log('Error: ', err)
-    })
+      .then(res => {
+        return res.json()
+      })
+      .catch(err => {
+        console.log('Error: ', err)
+      })
   ))
-  return resp
 }
 
 async function registerClient(openIdConfig) {
@@ -286,7 +265,6 @@ async function registerClient(openIdConfig) {
 
   const wellKnown = await get(`${openIdConfig.authority}/.well-known/openid-configuration`)
   const resp = await post(wellKnown.registration_endpoint, {
-
     "redirect_uris": [
       baseUrl + 'oidc-callback.html'
     ],
@@ -316,12 +294,12 @@ async function registerClient(openIdConfig) {
       config.openIdConnect.client_secret = clientData.client_secret
     }
 
-    // Loads apps from internal server
+    // Collect internal app paths
     apps = config.apps.map((app) => {
       return `./apps/${app}/${app}.bundle.js`
     })
 
-    // Loads apps from external servers
+    // Collect external app paths
     if (config.external_apps) {
       apps.push(...config.external_apps.map(app => app.path))
     }
@@ -330,7 +308,16 @@ async function registerClient(openIdConfig) {
     // we are manipulating requirejs directly
     requirejs.s.contexts._.config.waitSeconds = 200
 
-    requirejs(apps, loadApps, requireError)
+    // Boot apps
+    for(const path of apps) {
+      // please note that we have to go through apps one by one for now, to not break e.g. translations loading (race conditions)
+      try {
+        await loadApp(path)
+      } catch(err) {}
+    }
+
+    // Finalize loading core and apps
+    await finalizeInit()
   } catch (err) {
     console.log(err)
   }
