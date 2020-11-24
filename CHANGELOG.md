@@ -8,10 +8,28 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Unavailable extensions causing route duplication: [#4382](https://github.com/owncloud/phoenix/pull/4382)
+* Change - Configurable default extension: [#4382](https://github.com/owncloud/phoenix/pull/4382)
 * Change - Load extensions config: [#4380](https://github.com/owncloud/phoenix/pull/4380)
 
 Details
 -------
+
+* Bugfix - Unavailable extensions causing route duplication: [#4382](https://github.com/owncloud/phoenix/pull/4382)
+
+   There was an error in the extension loading handlers which caused routes to be loaded multiple
+   times when extensions from the config.json were unavailable. We hardened the extension
+   loading handlers to just skip those extensions.
+
+   https://github.com/owncloud/phoenix/pull/4382
+
+* Change - Configurable default extension: [#4382](https://github.com/owncloud/phoenix/pull/4382)
+
+   We introduced a config option in the config.json file which allows to configure the default
+   extension for ownCloud Web. Any of the configured extension ids can be chosen as default
+   extension. If none is provided, we fall back to the files extension.
+
+   https://github.com/owncloud/phoenix/pull/4382
 
 * Change - Load extensions config: [#4380](https://github.com/owncloud/phoenix/pull/4380)
 
