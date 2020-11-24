@@ -87,7 +87,7 @@ Changelog for ownCloud Phoenix [0.25.0] (2020-11-16)
 The following sections list the changes in ownCloud phoenix 0.25.0 relevant to
 ownCloud admins and users.
 
-[0.25.0]: https://github.com/owncloud/phoenix/compare/v0.23.0...v0.25.0
+[0.25.0]: https://github.com/owncloud/phoenix/compare/v0.24.0...v0.25.0
 
 Summary
 -------
@@ -132,6 +132,36 @@ Details
 
    https://github.com/owncloud/phoenix/pull/4286
    https://github.com/owncloud/phoenix/pull/4306
+
+Changelog for ownCloud Phoenix [0.24.0] (2020-11-06)
+=======================================
+The following sections list the changes in ownCloud phoenix 0.24.0 relevant to
+ownCloud admins and users.
+
+[0.24.0]: https://github.com/owncloud/phoenix/compare/v0.23.0...v0.24.0
+
+Summary
+-------
+
+* Bugfix - Fix browse to files page in the ui tests: [#4281](https://github.com/owncloud/phoenix/issues/4281)
+* Enhancement - Display collaborators type: [#4203](https://github.com/owncloud/phoenix/pull/4203)
+
+Details
+-------
+
+* Bugfix - Fix browse to files page in the ui tests: [#4281](https://github.com/owncloud/phoenix/issues/4281)
+
+   When the ui tests where executing the "the user has browsed to the files page" step then it
+   wouldn't wait until the files were loaded.
+
+   https://github.com/owncloud/phoenix/issues/4281
+
+* Enhancement - Display collaborators type: [#4203](https://github.com/owncloud/phoenix/pull/4203)
+
+   We've added a new line into the collaborators autocomplete and list in the sidebar to display
+   their type.
+
+   https://github.com/owncloud/phoenix/pull/4203
 
 Changelog for ownCloud Phoenix [0.23.0] (2020-10-30)
 =======================================
@@ -322,7 +352,7 @@ Changelog for ownCloud Phoenix [0.17.0] (2020-09-25)
 The following sections list the changes in ownCloud phoenix 0.17.0 relevant to
 ownCloud admins and users.
 
-[0.17.0]: https://github.com/owncloud/phoenix/compare/v0.24.0...v0.17.0
+[0.17.0]: https://github.com/owncloud/phoenix/compare/v0.16.0...v0.17.0
 
 Summary
 -------
@@ -459,36 +489,6 @@ Details
 
    https://github.com/owncloud/product/issues/231
    https://github.com/owncloud/phoenix/pull/4083
-
-Changelog for ownCloud Phoenix [0.24.0] (2020-09-06)
-=======================================
-The following sections list the changes in ownCloud phoenix 0.24.0 relevant to
-ownCloud admins and users.
-
-[0.24.0]: https://github.com/owncloud/phoenix/compare/v0.16.0...v0.24.0
-
-Summary
--------
-
-* Bugfix - Fix browse to files page in the ui tests: [#4281](https://github.com/owncloud/phoenix/issues/4281)
-* Enhancement - Display collaborators type: [#4203](https://github.com/owncloud/phoenix/pull/4203)
-
-Details
--------
-
-* Bugfix - Fix browse to files page in the ui tests: [#4281](https://github.com/owncloud/phoenix/issues/4281)
-
-   When the ui tests where executing the "the user has browsed to the files page" step then it
-   wouldn't wait until the files were loaded.
-
-   https://github.com/owncloud/phoenix/issues/4281
-
-* Enhancement - Display collaborators type: [#4203](https://github.com/owncloud/phoenix/pull/4203)
-
-   We've added a new line into the collaborators autocomplete and list in the sidebar to display
-   their type.
-
-   https://github.com/owncloud/phoenix/pull/4203
 
 Changelog for ownCloud Phoenix [0.16.0] (2020-08-24)
 =======================================
