@@ -15,11 +15,11 @@
           name="input"
           full-width
           :value="currentContent"
+          :label="$gettext('Editor')"
           class="uk-height-1-1"
           :rows="20"
           @input="onType"
-        >
-        </oc-textarea>
+        />
       </div>
       <div class="uk-container uk-width-1-2">
         <!-- eslint-disable-next-line vue/no-v-html -->

@@ -5,7 +5,7 @@
         <oc-button :disabled="!isTouched" @click="saveContent">
           <oc-icon name="save" aria-hidden="true" />
         </oc-button>
-        <oc-spinner v-if="isLoading" />
+        <oc-spinner v-if="isLoading" :aria-label="$gettext('Loading editor content')" />
       </div>
       <div class="uk-width-expand uk-text-center">
         <span>{{ activeFilePath }}</span>
