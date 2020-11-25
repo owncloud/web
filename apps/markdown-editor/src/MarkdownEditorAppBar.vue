@@ -26,7 +26,7 @@ export default {
     ...mapGetters(['activeFile']),
     ...mapGetters('MarkdownEditor', ['isTouched', 'isLoading']),
     activeFilePath() {
-      return this.activeFile.path.replace(/^\/+/, '')
+      return this.activeFile.path.replace(/^(\/|\\)+/, '')
     }
   },
   methods: {
