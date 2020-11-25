@@ -8,7 +8,7 @@
         <oc-spinner v-if="isLoading" />
       </div>
       <div class="uk-width-expand uk-text-center">
-        <span>{{ activeFile.path.substr(1) }}</span>
+        <span>{{ activeFilePath }}</span>
       </div>
       <div class="uk-width-auto uk-text-right">
         <oc-button @click="closeApp">
@@ -24,7 +24,10 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters(['activeFile']),
-    ...mapGetters('MarkdownEditor', ['isTouched', 'isLoading'])
+    ...mapGetters('MarkdownEditor', ['isTouched', 'isLoading']),
+    activeFilePath() {
+      return this.activeFile.path.replace(/^\/+/, '')
+    }
   },
   methods: {
     ...mapActions('MarkdownEditor', ['saveFile']),
