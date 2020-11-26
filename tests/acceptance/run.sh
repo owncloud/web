@@ -2,9 +2,10 @@
 
 echo 'run.sh: running acceptance-tests-drone'
 
-#EXPECTED_FAILURES_FILE=tests/acceptance/expected-failures.txt
 declare -a UNEXPECTED_FAILED_SCENARIOS
 declare -a UNEXPECTED_PASSED_SCENARIOS
+SCENARIOS_THAT_PASSED = 0
+SCENARIOS_THAT_FAILED = 0
 
 yarn run acceptance-tests-drone | tee -a 'logfile.txt'
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}

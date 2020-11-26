@@ -8,7 +8,7 @@ Feature: login users
   I want only authorised users to log in
   So that unauthorised access is impossible
 
-  @skip @skipOnOCIS
+  @skip
   Scenario: admin login
     Given the user has browsed to the login page
     When the user clicks the authenticate button
@@ -46,7 +46,7 @@ Feature: login users
       When the user tries to log in with username "invalid" and password "1234" using the webUI
       Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
 
-  @ocis-konnectd-issue-68 @skipOnOCIS
+  @ocis-konnectd-issue-68
   Scenario: try to login with valid username and invalid password
       Given these users have been created with default attributes:
         | username |

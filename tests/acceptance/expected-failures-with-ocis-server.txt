@@ -1,5 +1,72 @@
 # this file contains the scenarios from phoenix tests that are currently expected to fail
 
+# webUIAccount
+webUIAccount/accountInformation.feature:10
+webUIAccount/accountInformation.feature:20
+webUIAccount/accountInformation.feature:34
+webUIAccount/userProfile.feature:10
+
+# webUIDeleteFilesFolders
 webUIDeleteFilesFolders/deleteFilesFolders.feature:202
-webUIDeleteFilesFolders/deleteFilesFolders.feature:234
-webUIDeleteFilesFolders/deleteFilesFolders.feature:235
+webUIDeleteFilesFolders/deleteFilesFolders.feature:253
+webUIDeleteFilesFolders/deleteFilesFolders.feature:262
+
+# webUIFavorites
+webUIFavorites/favoritesFile.feature:14
+webUIFavorites/favoritesFile.feature:26
+webUIFavorites/favoritesFile.feature:38
+webUIFavorites/favoritesFile.feature:46
+webUIFavorites/favoritesFile.feature:52
+webUIFavorites/favoritesFile.feature:58
+webUIFavorites/favoritesFile.feature:64
+webUIFavorites/favoritesFile.feature:68
+webUIFavorites/favoritesFile.feature:85
+webUIFavorites/favoritesFile.feature:103
+webUIFavorites/unfavoriteFile.feature:13
+webUIFavorites/unfavoriteFile.feature:29
+webUIFavorites/unfavoriteFile.feature:46
+webUIFavorites/unfavoriteFile.feature:58
+webUIFavorites/unfavoriteFile.feature:70
+webUIFavorites/unfavoriteFile.feature:82
+
+# webUIFiles
+webUIFiles/copy.feature:59
+webUIFiles/copy.feature:69
+webUIFiles/copy.feature:77
+webUIFiles/copyPrivateLinks.feature:12
+webUIFiles/fileDetails.feature:33
+webUIFiles/fileDetails.feature:44
+webUIFiles/fileDetails.feature:70
+webUIFiles/fileDetails.feature:85
+webUIFiles/fileDetails.feature:100
+webUIFiles/fileList.feature:22
+webUIFiles/fileList.feature:27
+webUIFiles/fileList.feature:34
+webUIFiles/versions.feature:33
+webUIFiles/versions.feature:45
+webUIFiles/versions.feature:56
+webUIFiles/versions.feature:71
+webUIFiles/search.feature:16
+webUIFiles/search.feature:27
+webUIFiles/search.feature:39
+webUIFiles/search.feature:53
+webUIFiles/search.feature:62
+webUIFiles/search.feature:76
+webUIFiles/search.feature:86
+webUIFiles/search.feature:92
+webUIFiles/search.feature:100
+webUIFiles/search.feature:106
+webUIFiles/search.feature:137
+webUIFiles/search.feature:149
+webUIFiles/search.feature:158
+webUIFiles/search.feature:166
+
+# webUILogin
+webUILogin/login.feature:12
+webUILogin/login.feature:50
+
+# webUIMoveFilesFolders
+webUIMoveFilesFolders/moveFiles.feature:73
+webUIMoveFilesFolders/moveFiles.feature:83
+webUIMoveFilesFolders/moveFolders.feature:64
+
