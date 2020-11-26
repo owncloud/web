@@ -1,17 +1,20 @@
 # this file contains the scenarios from phoenix tests that are currently expected to fail
 
-# webUIAccount
+# @ocis-reva-issue-107
 webUIAccount/accountInformation.feature:10
-webUIAccount/accountInformation.feature:20
-webUIAccount/accountInformation.feature:34
 webUIAccount/userProfile.feature:10
+#
 
-# webUIDeleteFilesFolders
-webUIDeleteFilesFolders/deleteFilesFolders.feature:202
+# @ocis-konnectd-issue-42
+webUIAccount/accountInformation.feature:20
+#
+
+# @ocis-reva-issue-107 @ocis-konnectd-issue-42
+webUIAccount/accountInformation.feature:34
+#
+
+# @ocis-reva-issue-39
 webUIDeleteFilesFolders/deleteFilesFolders.feature:253
-webUIDeleteFilesFolders/deleteFilesFolders.feature:262
-
-# webUIFavorites
 webUIFavorites/favoritesFile.feature:14
 webUIFavorites/favoritesFile.feature:26
 webUIFavorites/favoritesFile.feature:38
@@ -28,24 +31,47 @@ webUIFavorites/unfavoriteFile.feature:46
 webUIFavorites/unfavoriteFile.feature:58
 webUIFavorites/unfavoriteFile.feature:70
 webUIFavorites/unfavoriteFile.feature:82
-
-# webUIFiles
-webUIFiles/copy.feature:59
-webUIFiles/copy.feature:69
-webUIFiles/copy.feature:77
-webUIFiles/copyPrivateLinks.feature:12
 webUIFiles/fileDetails.feature:33
 webUIFiles/fileDetails.feature:44
+#
+
+# @ocis-reva-issue-64
+webUIDeleteFilesFolders/deleteFilesFolders.feature:202
 webUIFiles/fileDetails.feature:70
 webUIFiles/fileDetails.feature:85
 webUIFiles/fileDetails.feature:100
+webUIFiles/versions.feature:33
+webUIRenameFiles/renameFiles.feature:154
+webUIRenameFiles/renameFiles.feature:167
+webUIRenameFiles/renameFiles.feature:188
+webUIRenameFiles/renameFiles.feature:209
+#
+
+# @issue-ocis-reva-243
+webUIFiles/copy.feature:59
+webUIFiles/copy.feature:69
+webUIFiles/copy.feature:77
+webUIMoveFilesFolders/moveFiles.feature:73
+webUIMoveFilesFolders/moveFolders.feature:64
+#
+
+# @ocis-phoenix-issue-52
+webUIFiles/copyPrivateLinks.feature:12
+#
+
+# @issue-276 @issue-3264
 webUIFiles/fileList.feature:22
 webUIFiles/fileList.feature:27
 webUIFiles/fileList.feature:34
-webUIFiles/versions.feature:33
+#
+
+# @ocis-reva-issue-110
 webUIFiles/versions.feature:45
 webUIFiles/versions.feature:56
 webUIFiles/versions.feature:71
+#
+
+# @ocis-reva-issue-34
 webUIFiles/search.feature:16
 webUIFiles/search.feature:27
 webUIFiles/search.feature:39
@@ -60,13 +86,50 @@ webUIFiles/search.feature:137
 webUIFiles/search.feature:149
 webUIFiles/search.feature:158
 webUIFiles/search.feature:166
+#
 
-# webUILogin
-webUILogin/login.feature:12
+# @ocis-konnectd-issue-68
 webUILogin/login.feature:50
+#
 
-# webUIMoveFilesFolders
-webUIMoveFilesFolders/moveFiles.feature:73
-webUIMoveFilesFolders/moveFiles.feature:83
-webUIMoveFilesFolders/moveFolders.feature:64
+# @ocis-issue-130
+webUINotifications/displayNotificationsOnWebUI.feature:12
+webUINotifications/displayNotificationsOnWebUI.feature:16
+#
+
+# Image-Media-Viewer-Issue
+webUIPreview/imageMediaViewer.feature:26
+webUIPreview/imageMediaViewer.feature:34
+#
+
+# webUI-Private-Links
+webUIPrivateLinks/accessingPrivateLinks.feature:8
+webUIPrivateLinks/accessingPrivateLinks.feature:16
+webUIPrivateLinks/accessingPrivateLinks.feature:23
+webUIPrivateLinks/accessingPrivateLinks.feature:32
+webUIPrivateLinks/accessingPrivateLinks.feature:47
+#
+
+# renameFiles
+webUIRenameFiles/renameFiles.feature:102
+webUIRenameFiles/renameFiles.feature:149
+#
+
+# renameFolders
+webUIRenameFolders/renameFolders.feature:93
+webUIRenameFolders/renameFolders.feature:116
+#
+
+# Reshare is not available in ocis webUI
+webUIResharing/reshareUsers.feature:16
+webUIResharing/reshareUsers.feature:26
+webUIResharing/reshareUsers.feature:38
+webUIResharing/reshareUsers.feature:48
+webUIResharing/reshareUsers.feature:74
+webUIResharing/reshareUsers.feature:99
+webUIResharing/reshareUsers.feature:135
+webUIResharing/reshareUsers.feature:170
+webUIResharing/reshareUsers.feature:198
+webUIResharing/reshareUsers.feature:226
+webUIResharing/reshareUsers.feature:170
 

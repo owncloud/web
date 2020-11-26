@@ -274,4 +274,4 @@ Feature: deleting files and folders
     Then file "lorem.txt" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
     And as "user1" file "lorem.txt" should not exist
-    And as "user1" folder "simple-folder" should exist
+    And as "user1" folder "simple-folder" should not exist
