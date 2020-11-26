@@ -1,3 +1,27 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.27.0...master
+
+Summary
+-------
+
+* Bugfix - Don't break file/folder names in text editor: [#4391](https://github.com/owncloud/phoenix/pull/4391)
+
+Details
+-------
+
+* Bugfix - Don't break file/folder names in text editor: [#4391](https://github.com/owncloud/phoenix/pull/4391)
+
+   The label in the text editor that displays the path of the active file was removing the first
+   character instead of trimming leading slashes. This might have lead to situations where
+   actual characters were removed. We fixed this by only removing leading slahes instead of
+   blindly removing the first character.
+
+   https://github.com/owncloud/phoenix/pull/4391
+
 Changelog for ownCloud Phoenix [0.27.0] (2020-11-24)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.27.0 relevant to
