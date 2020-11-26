@@ -1,0 +1,5 @@
+# this file contains the scenarios from phoenix tests that are currently expected to fail
+
+webUIDeleteFilesFolders/deleteFilesFolders.feature:202
+webUIDeleteFilesFolders/deleteFilesFolders.feature:262
+

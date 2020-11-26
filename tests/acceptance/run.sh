@@ -2,7 +2,7 @@
 
 echo 'run.sh: running acceptance-tests-drone'
 
-EXPECTED_FAILURES_FILE=tests/acceptance/expected-failures.txt
+#EXPECTED_FAILURES_FILE=tests/acceptance/expected-failures.txt
 declare -a UNEXPECTED_FAILED_SCENARIOS
 declare -a UNEXPECTED_PASSED_SCENARIOS
 

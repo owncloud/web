@@ -82,7 +82,8 @@ config = {
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
-				'PHOENIX_CONFIG': '/srv/config/drone/config.json'
+				'PHOENIX_CONFIG': '/srv/config/drone/config.json',
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-oc10-server.txt'
 			}
 		},
 		'webUIFederation': {
@@ -92,7 +93,8 @@ config = {
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
-				'REMOTE_BACKEND_HOST': 'http://federated'
+				'REMOTE_BACKEND_HOST': 'http://federated',
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-ocis-server.txt'
 			},
 			'federatedServerNeeded': True,
 			'federatedServerVersion': 'daily-master-qa'
@@ -155,7 +157,8 @@ config = {
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
-				'SCREEN_RESOLUTION': '768x1024'
+				'SCREEN_RESOLUTION': '768x1024',
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-ocis-server.txt'
 			},
 			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
 		},
@@ -209,7 +212,8 @@ config = {
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
-				'SCREEN_RESOLUTION': '375x812'
+				'SCREEN_RESOLUTION': '375x812',
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-ocis-server.txt'
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
 		},
@@ -290,7 +294,8 @@ config = {
 				'RUN_ON_OCIS': 'true',
 				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
 				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/ocis/owncloud/data/',
-				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json',
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-ocis-server.txt'
 			},
 			'runningOnOCIS': True,
 			'filterTags': 'not @skip and not @skipOnOCIS',
@@ -1561,6 +1566,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 
 	environment['SERVER_HOST'] = 'http://phoenix:9100'
 	environment['BACKEND_HOST'] = 'http://owncloud'
+	environment['EXPECTED_FAILURES_FILE'] = '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-oc10-server.txt'
 
 	for env in extraEnvironment:
 		environment[env] = extraEnvironment[env]
