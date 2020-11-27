@@ -255,7 +255,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | read                  |
 
-  @skipOnOCIS @issue-product-270
+  @issue-product-270
   Scenario Outline: share a file/folder without share permissions and check if another user can reshare
     Given user "user2" has shared folder "<shared-entry-name>" with user "user1" with "read" permissions
     And user "user1" has accepted the share "<shared-entry-name>" offered by user "user2"
@@ -269,7 +269,7 @@ Feature: Resharing shared files with different permissions
     | simple-folder     |
     | lorem.txt         |
 
-  @skipOnOCIS @issue-product-270
+  @issue-product-270
   Scenario Outline: share a received file/folder without share permissions and check if another user can reshare
     Given user "user2" has shared folder "<shared-entry-name>" with user "user1" with "all" permissions
     And user "user1" has accepted the share "<shared-entry-name>" offered by user "user2"
@@ -283,7 +283,7 @@ Feature: Resharing shared files with different permissions
     | simple-folder     |
     | lorem.txt         |
 
-  @skipOnOCIS @issue-product-203
+  @issue-product-203
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -326,7 +326,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder              |
       | permissions | share, delete, read |
 
-  @skipOnOCIS @issue-product-270
+  @issue-product-270
   @issue-product-203 @issue-4193
   Scenario: User is allowed to reshare a file/folder with the lesser permissions, and check if it is listed for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
@@ -348,7 +348,7 @@ Feature: Resharing shared files with different permissions
     | item_type   | folder             |
     | permissions | delete, read       |
 
-  @skipOnOCIS @issue-product-270
+  @issue-product-270
   Scenario: User is not allowed to reshare a file/folder with the higher permissions
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -387,7 +387,7 @@ Feature: Resharing shared files with different permissions
     Then as "user3" folder "/Shares/simple-folder" should exist
     And as "user3" file "/Shares/lorem.txt" should exist
 
-  @skipOnOCIS @ocis-reva-issue-39
+  @ocis-reva-issue-39
   Scenario: Reshare a file and folder from favorites page
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
@@ -404,7 +404,6 @@ Feature: Resharing shared files with different permissions
     Then as "user3" folder "/Shares/simple-folder" should exist
     And as "user3" file "/Shares/lorem.txt" should exist
 
-
   Scenario: Resource owner sees resharer in collaborators list
     Given user "user3" has been created with default attributes
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -416,7 +415,7 @@ Feature: Resharing shared files with different permissions
     Then user "User Two" should be listed as "Editor" in the collaborators list on the webUI
     And user "User Three" should be listed as "Editor" reshared through "User Two" in the collaborators list on the webUI
 
-  @skipOnOCIS @ocis-reva-issue-34
+  @ocis-reva-issue-34
   Scenario: Share recipient sees resharer in collaborators list
     Given user "user3" has been created with default attributes
     And user "user4" has been created with default attributes
