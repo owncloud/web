@@ -186,8 +186,13 @@ webUISharingPermissionsUsers/sharePermissionsUsers.feature:16
 webUISharingPermissionsUsers/sharePermissionsUsers.feature:48
 webUISharingPermissionsUsers/sharePermissionsUsers.feature:64
 webUISharingPermissionsUsers/sharePermissionsUsers.feature:80
-webUISharingPermissionsUsers/sharePermissionsUsers.feature:96
-webUISharingPermissionsUsers/sharePermissionsUsers.feature:141
+webUISharingPermissionsUsers/sharePermissionsUsers.feature:111
+webUISharingPermissionsUsers/sharePermissionsUsers.feature:112
+webUISharingPermissionsUsers/sharePermissionsUsers.feature:113
+webUISharingPermissionsUsers/sharePermissionsUsers.feature:114
+webUISharingPermissionsUsers/sharePermissionsUsers.feature:115
+webUISharingPermissionsUsers/sharePermissionsUsers.feature:156
+webUISharingPermissionsUsers/sharePermissionsUsers.feature:157
 webUISharingPermissionsUsers/sharePermissionsUsers.feature:182
 webUISharingPermissionsUsers/sharePermissionsUsers.feature:230
 webUISharingPermissionsUsers/sharePermissionsUsers.feature:231
@@ -223,7 +228,6 @@ webUISharingPermissionToRoot/sharePermissionsUsers.feature:145
 webUISharingPermissionToRoot/sharePermissionsUsers.feature:160
 webUISharingPermissionToRoot/sharePermissionsUsers.feature:169
 webUISharingPermissionToRoot/sharePermissionsUsers.feature:179
-webUIUpload/upload.feature:146
 #
 
 # @issue-ocis-reva-243

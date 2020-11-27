@@ -26,6 +26,8 @@ if [ $ACCEPTANCE_TESTS_EXIT_STATUS -ne 0 ]; then
   done
 fi
 
+echo ${FAILED_SCENARIO_PATHS}
+
 if [ $ACCEPTANCE_TESTS_EXIT_STATUS -eq 0 ]; then
   # Find the count of scenarios that passed
   SCENARIO_RESULTS_COLORED=$(grep -E '^[0-9]+[[:space:]]scenario(|s)[[:space:]]\(' logfile.txt)
