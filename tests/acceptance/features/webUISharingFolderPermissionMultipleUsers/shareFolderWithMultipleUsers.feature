@@ -11,7 +11,7 @@ Feature: Sharing folders with multiple internal users with different permissions
       | user1    |
       | user2    |
 
-  @skipOnOCIS @issue-product-203
+  @issue-product-203
   Scenario Outline: share a folder with multiple users with different roles and permissions
     Given these users have been created with default attributes:
       | username |
