@@ -77,22 +77,12 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
     if [ -n "${TEST_PATHS}" ]; then
       # If the expected failure is not in the suite that is currently being run,
       # then do not try and check that it failed.
-      echo ${TEST_PATHS}
-      echo "///////////////////////////////"
       RUN_SUITE_SCENARIO=()
       for TEST_PATH in "${TEST_PATHS}"; do
-        echo ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"
-        echo ${TEST_PATH}
         SUITE=$(basename ${TEST_PATH})
         RUN_SUITE_SCENARIO+="^${SUITE}/ "
-        echo ".........................."
-        echo ${RUN_SUITE_SCENARIO}
-        echo "------------------------------"
       done
       REGEX_TO_MATCH="^${EXPECTED_FAILURE_SUITE}/"
-      echo "++++++++++++++++++++++++++++"
-      echo ${REGEX_TO_MATCH}
-      echo "============================"
 
       if ! [[ " ${RUN_SUITE_SCENARIO[@]} " == *"${REGEX_TO_MATCH} "* ]]; then
         continue
@@ -102,16 +92,11 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
     if [ -n "${TEST_CONTEXT}" ]; then
       # If the expected failure is not in the suite that is currently being run,
       # then do not try and check that it failed.
-      echo ${TEST_CONTEXT}
-      echo "(((((((((((((((((((((((((((((((((("
       RUN_SUITE_SCENARIO=()
       for CONTEXT in "${TEST_CONTEXT}"; do
         RUN_SUITE_SCENARIO+="^${CONTEXT}/ "
-        echo ${RUN_SUITE_SCENARIO}
-        echo ")))))))))))))))))))))))))))))))))))"
       done
       REGEX_TO_MATCH="^${EXPECTED_FAILURE_SUITE}/"
-      echo ${REGEX_TO_MATCH}
 
       if ! [[ " ${RUN_SUITE_SCENARIO[@]} " == *"${REGEX_TO_MATCH} "* ]]; then
         continue

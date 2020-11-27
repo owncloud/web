@@ -83,10 +83,13 @@ webUISharingInternalUsers/shareWithUsers.feature:363
 webUISharingInternalUsers/shareWithUsers.feature:398
 webUISharingInternalUsers/shareWithUsers.feature:412
 webUISharingInternalUsers/shareWithUsers.feature:427
-webUISharingInternalUsers/shareWithUsers.feature:436
+webUISharingInternalUsers/shareWithUsers.feature:444
+webUISharingInternalUsers/shareWithUsers.feature:445
 webUISharingInternalUsers/shareWithUsers.feature:469
 webUISharingInternalUsers/shareWithUsers.feature:481
-webUISharingInternalUsers/shareWithUsers.feature:495
+webUISharingInternalUsers/shareWithUsers.feature:527
+webUISharingInternalUsers/shareWithUsers.feature:528
+webUISharingInternalUsers/shareWithUsers.feature:529
 webUISharingInternalUsersExpire/shareWithUsersExpiringShares.feature:16
 webUISharingInternalUsersExpire/shareWithUsersExpiringShares.feature:23
 webUISharingInternalUsersExpire/shareWithUsersExpiringShares.feature:32
@@ -220,6 +223,7 @@ webUISharingPermissionToRoot/sharePermissionsUsers.feature:145
 webUISharingPermissionToRoot/sharePermissionsUsers.feature:160
 webUISharingPermissionToRoot/sharePermissionsUsers.feature:169
 webUISharingPermissionToRoot/sharePermissionsUsers.feature:179
+webUIUpload/upload.feature:146
 #
 
 # @issue-ocis-reva-243
@@ -431,6 +435,20 @@ webUISharingPublic/shareByPublicLink.feature:211
 webUISharingPublic/shareByPublicLink.feature:320
 webUISharingPublic/shareByPublicLink.feature:363
 webUISharingPublic/shareByPublicLink.feature:387
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:275
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:308
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:318
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:327
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:336
+webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:46
+webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:47
+webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:65
+webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:66
+webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:69
+webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:79
+webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:98
+webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:121
+webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:137
 #
 
 # @ocis-product-276
@@ -446,7 +464,12 @@ webUISharingAcceptShares/acceptShares.feature:196
 #
 
 # @issue-product-203
-webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:15
+webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:59
+webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:60
+webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:61
+webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:62
+webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:63
+webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:64
 webUISharingFolderAdvancedPermissionMultipleUsers/sharedFolderWithMultipleUsersAdvancedPermissions.feature:59
 webUISharingFolderAdvancedPermissionMultipleUsers/sharedFolderWithMultipleUsersAdvancedPermissions.feature:60
 webUISharingFolderAdvancedPermissionMultipleUsers/sharedFolderWithMultipleUsersAdvancedPermissions.feature:61
@@ -504,8 +527,10 @@ webUISharingInternalGroups/shareWithGroups.feature:225
 webUISharingInternalGroups/shareWithGroups.feature:238
 webUISharingInternalGroups/shareWithGroups.feature:247
 webUISharingInternalGroups/shareWithGroups.feature:267
-webUISharingInternalGroups/shareWithGroups.feature:284
-webUISharingInternalGroups/shareWithGroups.feature:297
+webUISharingInternalGroups/shareWithGroups.feature:294
+webUISharingInternalGroups/shareWithGroups.feature:295
+webUISharingInternalGroups/shareWithGroups.feature:316
+webUISharingInternalGroups/shareWithGroups.feature:317
 webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:47
 webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:70
 webUISharingInternalGroupsEdgeCases/shareWithGroupsEdgeCases.feature:93
@@ -567,6 +592,10 @@ webUISharingNotificationsToRoot/shareWithUsers.feature:49
 # @issue-ocis-reva-383
 webUISharingPublic/shareByPublicLink.feature:30
 webUISharingPublic/shareByPublicLink.feature:31
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:31
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:32
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:33
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:58
 #
 
 # @issue-ocis-reva-398
@@ -592,3 +621,49 @@ webUISharingPublic/shareByPublicLink.feature:728
 webUISharingPublic/shareByPublicLink.feature:769
 #
 
+# @issue-ocis-270
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:115
+#
+
+# @issue-ocis-723
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:197
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:255
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:275
+#
+
+# @issue-2443
+webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:245
+#
+
+# @issue-product-188
+webUITrashbinDelete/trashbinDelete.feature:37
+webUITrashbinDelete/trashbinDelete.feature:67
+webUITrashbinDelete/trashbinDelete.feature:95
+webUITrashbinDelete/trashbinDelete.feature:37
+#
+
+# @issue-product-139
+webUITrashbinDelete/trashbinDelete.feature:116
+#
+
+# @ocis-reva-issue-111
+webUITrashbinFilesFolders/trashbinFilesFolders.feature:17
+webUITrashbinFilesFolders/trashbinFilesFolders.feature:34
+webUITrashbinFilesFolders/trashbinFilesFolders.feature:86
+webUITrashbinFilesFolders/trashbinFilesFolders.feature:107
+webUITrashbinFilesFolders/trashbinFilesFolders.feature:123
+#
+
+# @ocis-reva-issue-112
+webUITrashbinRestore/trashbinRestore.feature:123
+#
+
+# @issue-ocis-reva-54
+webUIUpload/upload.feature:93
+#
+
+# @issue-ocis-reva-200
+webUIUpload/uploadEdgecases.feature:102
+webUIUpload/uploadEdgecases.feature:118
+webUIUpload/uploadFileGreaterThanQuotaSize.feature:12
+#
