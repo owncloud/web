@@ -4,6 +4,7 @@ echo 'run.sh: running acceptance-tests-drone'
 
 declare -a UNEXPECTED_FAILED_SCENARIOS
 declare -a UNEXPECTED_PASSED_SCENARIOS
+declare -a UNEXPECTED_NIGHTWATCH_EXIT_STATUSES
 SCENARIOS_THAT_PASSED=0
 SCENARIOS_THAT_FAILED=0
 
@@ -14,6 +15,9 @@ if [ $ACCEPTANCE_TESTS_EXIT_STATUS -ne 0 ]; then
   echo 'The acceptance test exited with error status '${ACCEPTANCE_TESTS_EXIT_STATUS}
 
   FAILED_SCENARIOS="$(grep -F ') Scenario:' logfile.txt)"
+
+  echo ${FAILED_SCENARIOS}
+  echo "----------------------------------"
   FAILED_SCENARIO_PATHS=()
   for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
     if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
@@ -110,6 +114,7 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
 		# Nightwatch had some problem and there were no failed scenarios reported
 		# So the problem is something else.
 		# Possibly there were missing step definitions. Or Nightwatch crashed badly, or...
+		echo "Unexpected failure or crash"
 		UNEXPECTED_NIGHTWATCH_EXIT_STATUSES+=("The running suite had nightwatch exit status ${ACCEPTANCE_TESTS_EXIT_STATUS}")
 	fi
 
@@ -182,10 +187,23 @@ else
   UNEXPECTED_SUCCESS=false
 fi
 
-if [ "${UNEXPECTED_FAILURE}" = false ] && [ "${UNEXPECTED_SUCCESS}" = false ]; then
+if [ ${#UNEXPECTED_NIGHTWATCH_EXIT_STATUSES[@]} -gt 0 ]
+then
+	UNEXPECTED_NIGHTWATCH_EXIT_STATUS=true
+else
+	UNEXPECTED_NIGHTWATCH_EXIT_STATUS=false
+fi
+
+if [ "${UNEXPECTED_FAILURE}" = false ] && [ "${UNEXPECTED_SUCCESS}" = false ] && [ "${UNEXPECTED_NIGHTWATCH_EXIT_STATUS}" = false ]; then
   FINAL_EXIT_STATUS=0
 else
   FINAL_EXIT_STATUS=1
+fi
+
+if [ "${UNEXPECTED_NIGHTWATCH_EXIT_STATUS}" = true ]
+then
+  tput setaf 3; echo "runsh: The following test runs exited with non-zero status:"
+  tput setaf 1; printf "%s\n" "${UNEXPECTED_NIGHTWATCH_EXIT_STATUSES[@]}"
 fi
 
 exit ${FINAL_EXIT_STATUS}
