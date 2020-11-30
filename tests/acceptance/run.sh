@@ -4,8 +4,8 @@ echo 'run.sh: running acceptance-tests-drone'
 
 declare -a UNEXPECTED_FAILED_SCENARIOS
 declare -a UNEXPECTED_PASSED_SCENARIOS
-SCENARIOS_THAT_PASSED = 0
-SCENARIOS_THAT_FAILED = 0
+SCENARIOS_THAT_PASSED=0
+SCENARIOS_THAT_FAILED=0
 
 yarn run acceptance-tests-drone | tee -a 'logfile.txt'
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
@@ -104,6 +104,15 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
         continue
       fi
     fi
+
+    if [ ${ACCEPTANCE_TESTS_EXIT_STATUS} -ne 0 ] && [ ${#FAILED_SCENARIO_PATHS[@]} -eq 0 ]
+	then
+		# Nightwatch had some problem and there were no failed scenarios reported
+		# So the problem is something else.
+		# Possibly there were missing step definitions. Or Nightwatch crashed badly, or...
+		UNEXPECTED_NIGHTWATCH_EXIT_STATUSES+=("The running suite had nightwatch exit status ${ACCEPTANCE_TESTS_EXIT_STATUS}")
+	fi
+
 
     if ! [[ " ${FAILED_SCENARIO_PATHS[@]} " == *"$line"* ]]; then
       echo "Error: Scenario $line was expected to fail but did not fail."
