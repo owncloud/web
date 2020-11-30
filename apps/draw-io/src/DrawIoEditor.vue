@@ -12,6 +12,7 @@ export default {
   data: () => ({
     filePath: '',
     fileExtension: '',
+    isReadOnly: null,
     currentETag: null
   }),
   computed: {
@@ -27,7 +28,7 @@ export default {
     iframeSource() {
       const query = queryString.stringify({
         embed: 1,
-        chrome: 1,
+        chrome: this.isReadOnly ? 0 : 1,
         picker: 0,
         stealth: 1,
         spin: 1,
@@ -41,6 +42,9 @@ export default {
   created() {
     this.filePath = this.$route.params.filePath
     this.fileExtension = this.filePath.split('.').pop()
+    this.$client.files.fileInfo(this.filePath, ['{http://owncloud.org/ns}permissions']).then(v => {
+      this.isReadOnly = v.fileInfo['{http://owncloud.org/ns}permissions'].indexOf('W') === -1
+    })
     window.addEventListener('message', event => {
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data)
