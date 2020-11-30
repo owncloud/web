@@ -118,7 +118,7 @@
 </template>
 <script>
 import FileList from './FileList.vue'
-import NoContentMessage from './NoContentMessage.vue'
+import NoContentMessage from './FilesLists/NoContentMessage.vue'
 import QuickActions from './FilesLists/QuickActions.vue'
 import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
 

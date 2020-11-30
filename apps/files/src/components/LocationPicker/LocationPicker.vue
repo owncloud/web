@@ -107,7 +107,7 @@ import MixinsFilesListIndicators from '../../mixins/filesListIndicators'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
 import FileList from '../FileList.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
-import NoContentMessage from '../NoContentMessage.vue'
+import NoContentMessage from '../FilesLists/NoContentMessage.vue'
 import CopySidebarMainContent from './CopySidebarMainContent.vue'
 
 export default {
