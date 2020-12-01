@@ -68,33 +68,29 @@
       <quick-actions :actions="app.quickActions" :item="rowItem" />
     </template>
     <template #loadingMessage>
-      <template v-if="!$_isFavoritesList">
-        <translate key="all-files-loading-folder">Loading folder</translate>
+      <template v-if="isFavoritesList">
+        <translate key="all-files-loading-favorites">Loading favorites</translate>
       </template>
       <template v-else>
-        <translate key="all-files-loading-favorites">Loading favorites</translate>
+        <translate key="all-files-loading-folder">Loading folder</translate>
       </template>
     </template>
     <template #noContentMessage>
-      <no-content-message v-if="!$_isFavoritesList" icon="folder">
-        <template #message
-          ><span v-translate>There are no resources in this folder.</span></template
-        >
-        <template #callToAction
-          ><span v-translate
-            >Drag files and folders here or use the "+ New" button to upload.</span
-          ></template
-        >
+      <no-content-message v-if="isFavoritesList" icon="star">
+        <template #message>
+          <span v-translate>There are no resources marked as favorite.</span>
+        </template>
+        <template #callToAction>
+          <span v-translate>You can mark some by clicking on the star icon in the file list.</span>
+        </template>
       </no-content-message>
-      <no-content-message v-else icon="star">
-        <template #message
-          ><span v-translate>There are no resources marked as favorite.</span></template
-        >
-        <template #callToAction
-          ><span v-translate
-            >You can mark some by clicking on the star icon in the file list.</span
-          ></template
-        >
+      <no-content-message v-else icon="folder">
+        <template #message>
+          <span v-translate>There are no resources in this folder.</span>
+        </template>
+        <template #callToAction>
+          <span v-translate>Drag files and folders here or use the "+ New" button to upload.</span>
+        </template>
       </no-content-message>
     </template>
     <template #footer>
@@ -138,19 +134,6 @@ export default {
     fileData: {
       type: Array,
       required: true
-    },
-    starsEnabled: {
-      type: Boolean
-    },
-    checkboxEnabled: {
-      type: Boolean
-    },
-    dateEnabled: {
-      type: Boolean
-    },
-    parentFolder: {
-      type: Object,
-      default: null
     }
   },
   data() {
@@ -165,7 +148,6 @@ export default {
       'activeFiles',
       'filesTotalSize',
       'activeFilesCount',
-      'currentFolder',
       'fileSortField',
       'fileSortDirectionDesc'
     ]),
@@ -175,37 +157,27 @@ export default {
       return this.$route.params.item
     },
 
-    $_isFavoritesList() {
+    isFavoritesList() {
       return this.$route.name === 'files-favorites'
     }
   },
   watch: {
     $route() {
-      this.$_ocFilesFolder_getFolder()
+      this.$_allFilesList_getFolder()
     }
   },
   beforeMount() {
-    this.$_ocFilesFolder_getFolder()
+    this.$_allFilesList_getFolder()
   },
   methods: {
-    ...mapActions('Files', ['loadFolder', 'markFavorite', 'setHighlightedFile']),
+    ...mapActions('Files', ['loadFolder', 'setHighlightedFile']),
 
-    $_openSideBar(item, sideBarName) {
-      this.$emit('sideBarOpen', item, sideBarName)
-    },
-
-    $_ocFilesFolder_getFolder() {
-      let absolutePath
-
-      if (this.configuration.rootFolder) {
-        absolutePath = !this.item ? this.configuration.rootFolder : this.item
-      } else {
-        absolutePath = !this.item ? this.configuration.rootFolder : this.item
-      }
+    $_allFilesList_getFolder() {
+      const absolutePath = this.item || this.configuration.rootFolder
 
       this.loadFolder({
         client: this.$client,
-        absolutePath: absolutePath,
+        absolutePath,
         $gettext: this.$gettext,
         routeName: this.$route.name,
         loadSharesTree: !this.publicPage(),
@@ -229,11 +201,16 @@ export default {
             this.$router.push({
               name: 'public-link',
               params: {
-                token: this.$route.params.item
+                token: this.item
               }
             })
             return
           }
+          // we don't show an error message for 404. This has a dedicated component instead.
+          if (error.statusCode === 404) {
+            return
+          }
+          // show message for unknown error
           this.showMessage({
             title: this.$gettext('Loading folder failed…'),
             desc: error.message,

@@ -380,7 +380,6 @@ export default {
   methods: {
     ...mapActions('Files', [
       'resetFileSelection',
-      'loadFiles',
       'addFiles',
       'updateFileProgress',
       'loadFolder',

@@ -12,7 +12,7 @@
         flex
         class="oc-px-s oc-pt-rm oc-pb-xs oc-border-b"
       >
-        <div v-if="checkboxEnabled" id="files-list-header-checkbox" class="uk-text-center">
+        <div id="files-list-header-checkbox" class="uk-text-center">
           <oc-checkbox
             id="filelist-check-all"
             class="oc-ml-s"
@@ -41,8 +41,22 @@
         </div>
       </div>
       <div v-else id="files-list-container" class="uk-overflow-auto">
+        <div
+          v-if="folderNotFound"
+          key="files-list-folder-not-found"
+          class="uk-position-center files-list-not-found-message"
+        >
+          <not-found-message />
+        </div>
+        <div
+          v-else-if="fileData.length === 0"
+          key="files-list-results-absence"
+          class="uk-position-center files-list-no-content-message"
+        >
+          <slot name="noContentMessage" />
+        </div>
         <RecycleScroller
-          v-if="fileData.length"
+          v-else
           v-slot="{ item: rowItem, index, active }"
           :key="fileData.length"
           class="uk-height-1-1"
@@ -62,14 +76,10 @@
               class="file-row oc-p-s oc-border-b"
               :class="_rowClasses(rowItem)"
             >
-              <div
-                v-if="checkboxEnabled"
-                id="files-list-row-checkbox"
-                class="uk-flex uk-flex-center"
-              >
+              <div id="files-list-row-checkbox" class="uk-flex uk-flex-center">
                 <oc-checkbox
                   class="oc-ml-s"
-                  :value="selectedFiles.indexOf(rowItem) >= 0"
+                  :value="isSelected(rowItem)"
                   :option="rowItem"
                   :label="labelSelectSingleItem(rowItem)"
                   :hide-label="true"
@@ -116,13 +126,6 @@
             </oc-grid>
           </div>
         </RecycleScroller>
-        <div
-          v-else
-          key="files-list-results-absence"
-          class="uk-position-center files-list-no-content-message"
-        >
-          <slot name="noContentMessage" />
-        </div>
       </div>
       <div v-if="!loading" class="uk-width-1-1 uk-text-center oc-p-s">
         <slot name="footer" />
@@ -137,16 +140,19 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 import MixinFilesListIndicators from '../mixins/filesListIndicators'
 import MixinFileActions from '../mixins/fileActions'
+import MixinRoutes from '../mixins/routes'
 
-import FileItem from './FileItem.vue'
+const FileItem = () => import('./FileItem.vue')
+const NotFoundMessage = () => import('./FilesLists/NotFoundMessage.vue')
 
 export default {
   name: 'FileList',
   components: {
+    NotFoundMessage,
     RecycleScroller,
     FileItem
   },
-  mixins: [MixinFilesListIndicators, MixinFileActions],
+  mixins: [MixinFilesListIndicators, MixinFileActions, MixinRoutes],
   props: {
     id: {
       type: String,
@@ -155,14 +161,6 @@ export default {
     fileData: {
       type: Array,
       required: true
-    },
-    starsEnabled: {
-      type: Boolean
-    },
-    checkboxEnabled: {
-      type: Boolean,
-      required: false,
-      default: true
     },
     loading: {
       type: Boolean,
@@ -213,10 +211,6 @@ export default {
     ...mapGetters('Files', [
       'selectedFiles',
       'highlightedFile',
-      'activeFiles',
-      'quota',
-      'filesTotalSize',
-      'activeFilesCount',
       'actionsInProgress',
       'currentFolder'
     ]),
@@ -235,7 +229,11 @@ export default {
     },
 
     showResourcePath() {
-      return this.$route.name === 'files-favorites' || this.$route.name === 'files-trashbin'
+      return this.isFavoritesRoute || this.isTrashbinRoute
+    },
+
+    folderNotFound() {
+      return this.currentFolder === null
     }
   },
   watch: {
@@ -249,14 +247,20 @@ export default {
   },
   methods: {
     ...mapActions('Files', [
-      'loadFolder',
       'setHighlightedFile',
       'resetFileSelection',
       'addFileSelection',
-      'removeFileSelection',
       'toggleFileSelection'
     ]),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
+
+    isSelected(item) {
+      return this.selectedFiles.indexOf(item) > -1
+    },
+
+    isHighlighted(item) {
+      return this.highlightedFile && item.id === this.highlightedFile.id
+    },
 
     labelSelectSingleItem(item) {
       const labelSelectSingleFileText = this.$gettext('Select file %{name}')
@@ -269,7 +273,7 @@ export default {
       )
     },
     $_ocFileName(item) {
-      if (this.$route.name === 'files-favorites') {
+      if (this.isFavoritesRoute) {
         const pathSplit = item.path.substr(1).split('/')
         if (pathSplit.length === 2) return `${pathSplit[pathSplit.length - 2]}/${item.basename}`
         if (pathSplit.length > 2) return `…/${pathSplit[pathSplit.length - 2]}/${item.basename}`
@@ -281,7 +285,7 @@ export default {
       if (!this.hasTwoRows) {
         classes.push('file-row-s')
       }
-      if (this.highlightedFile && item.id === this.highlightedFile.id) {
+      if (this.isHighlighted(item)) {
         classes.push('oc-background-selected')
       }
       return classes
@@ -303,7 +307,7 @@ export default {
     },
 
     toggleAll() {
-      if (this.selectedFiles.length && this.selectedFiles.length === this.fileData.length) {
+      if (this.selectedAll) {
         this.resetFileSelection()
       } else {
         const selectedFiles = this.fileData.slice()
@@ -337,7 +341,7 @@ export default {
         return
       }
 
-      if (this.$route.name === 'files-list' || this.$route.name === 'files-favorites') {
+      if (this.isListRoute || this.isFavoritesRoute) {
         return this.indicatorArray(resource)
       }
     },
