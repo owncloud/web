@@ -110,7 +110,7 @@
                 collaborator.collaborator.displayName
               }}</span>
               <translate
-                v-if="collaborator.collaborator.name === user.id"
+                v-if="isCurrentUser"
                 translate-comment="Indicator for current user in list of people"
                 class="uk-text-meta files-collaborators-collaborator-additional-info"
               >
@@ -123,21 +123,23 @@
               v-text="collaborator.collaborator.additionalInfo"
             />
           </div>
-          <div
-            v-if="collaborator.collaborator.name !== user.id"
-            v-text="collaboratorType(collaborator.shareType)"
-          />
-          <span class="oc-text"
-            ><span class="files-collaborators-collaborator-role">{{ originalRole.label }}</span
-            ><template v-if="collaborator.expires">
-              |
+          <oc-grid gutter="small">
+            <div v-if="!isCurrentUser">
+              <oc-tag v-text="collaboratorType(collaborator.shareType)" />
+            </div>
+            <div>
+              <oc-tag class="files-collaborators-collaborator-role" v-text="originalRole.label" />
+            </div>
+            <div v-if="collaborator.expires">
               <translate
                 class="files-collaborators-collaborator-expires"
                 :translate-params="{ expires: formDateFromNow(expirationDate) }"
-                >Expires %{expires}</translate
-              ></template
-            ></span
-          >
+                tag="oc-tag"
+              >
+                Expires %{expires}
+              </translate>
+            </div>
+          </oc-grid>
         </div>
       </oc-table-cell>
       <oc-table-cell shrink>
@@ -297,6 +299,10 @@ export default {
       return this.collaborator.shareType === this.shareTypes.remote
     },
 
+    isGroup() {
+      return this.collaborator.shareType === this.shareTypes.group
+    },
+
     collaboratorListItemClass() {
       const isUser = this.isUser || this.isRemoteUser
 
@@ -308,6 +314,10 @@ export default {
 
     expirationDate() {
       return moment(this.collaborator.expires).endOf('day')
+    },
+
+    isCurrentUser() {
+      return !this.isGroup && this.collaborator.collaborator.name === this.user.id
     }
   },
   methods: {
