@@ -93,14 +93,14 @@ Feature: Sharing folders with multiple internal users with different permissions
       | field       | value                |
       | uid_owner   | user1                |
       | share_with  | user2                |
-      | file_target | /simple-folder       |
+      | file_target | /Shares/simple-folder       |
       | item_type   | folder               |
       | permissions | <actual-permissions> |
     And user "user3" should have received a share with these details:
       | field       | value                |
       | uid_owner   | user1                |
       | share_with  | user3                |
-      | file_target | /simple-folder       |
+      | file_target | /Shares/simple-folder       |
       | item_type   | folder               |
       | permissions | <actual-permissions> |
     But user "Regular User" should not be listed in the collaborators list on the webUI
