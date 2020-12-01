@@ -159,23 +159,9 @@ for FAILED_SCENARIO_PATH in ${FAILED_SCENARIO_PATHS}; do
   fi
 done
 
-if [ -n "${UNEXPECTED_PASSED_SCENARIOS}" ]; then
-  echo "The following scenarios passed unexpectedly: "
-  for SCENARIO in ${UNEXPECTED_PASSED_SCENARIOS}; do
-    echo ${SCENARIO}
-  done
-else
-  echo "There were no unexpected passed scenarios"
-fi
+TOTAL_SCENARIOS=$((SCENARIOS_THAT_PASSED + SCENARIOS_THAT_FAILED))
 
-if [ -n "${UNEXPECTED_FAILED_SCENARIOS}" ]; then
-  echo "The following scenarios failed unexpectedly: "
-  for SCENARIO in ${UNEXPECTED_FAILED_SCENARIOS}; do
-    echo ${SCENARIO}
-  done
-else
-  echo "There were no unexpected failed scenarios"
-fi
+echo "runsh: Total ${TOTAL_SCENARIOS} scenarios (${SCENARIOS_THAT_PASSED} passed, ${SCENARIOS_THAT_FAILED} failed)"
 
 if [ ${#UNEXPECTED_FAILED_SCENARIOS[@]} -gt 0 ]; then
   UNEXPECTED_FAILURE=true
@@ -200,6 +186,27 @@ if [ "${UNEXPECTED_FAILURE}" = false ] && [ "${UNEXPECTED_SUCCESS}" = false ] &&
   FINAL_EXIT_STATUS=0
 else
   FINAL_EXIT_STATUS=1
+fi
+
+if [ -n "${EXPECTED_FAILURES_FILE}" ]
+then
+	echo "runsh: Exit code after checking expected failures: ${FINAL_EXIT_STATUS}"
+fi
+
+if [ "${UNEXPECTED_FAILURE}" = true ]
+then
+  tput setaf 3; echo "runsh: Total unexpected failed scenarios throughout the test run:"
+  tput setaf 1; printf "%s\n" "${UNEXPECTED_FAILED_SCENARIOS[@]}"
+else
+  tput setaf 2; echo "runsh: There were no unexpected failures."
+fi
+
+if [ "${UNEXPECTED_SUCCESS}" = true ]
+then
+  tput setaf 3; echo "runsh: Total unexpected passed scenarios throughout the test run:"
+  tput setaf 1; printf "%s\n" "${UNEXPECTED_PASSED_SCENARIOS[@]}"
+else
+  tput setaf 2; echo "runsh: There were no unexpected success."
 fi
 
 if [ "${UNEXPECTED_NIGHTWATCH_EXIT_STATUS}" = true ]
