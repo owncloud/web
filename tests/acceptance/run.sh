@@ -15,7 +15,9 @@ if [ $ACCEPTANCE_TESTS_EXIT_STATUS -ne 0 ]; then
   echo 'The acceptance test exited with error status '${ACCEPTANCE_TESTS_EXIT_STATUS}
 
   FAILED_SCENARIOS="$(grep -F ') Scenario:' logfile.txt)"
-
+  echo "////////////////////"
+  echo "$(<logfile.txt)"
+  echo "+++++++++++++++++++++++++++++++++++"
   echo ${FAILED_SCENARIOS}
   echo "----------------------------------"
   FAILED_SCENARIO_PATHS=()
