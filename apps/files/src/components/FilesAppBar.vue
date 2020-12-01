@@ -99,7 +99,7 @@
             ><translate>Clear selection</translate></oc-button
           >
         </div>
-        <template v-if="$route.name === 'files-trashbin'">
+        <template v-if="isTrashbinRoute">
           <oc-button
             v-if="selectedFiles.length > 0"
             key="restore-btn"
@@ -161,18 +161,20 @@
 </template>
 
 <script>
-import FileUpload from './FileUpload.vue'
-import FolderUpload from './FolderUpload.vue'
-import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
 import MixinDeleteResources from '../mixins/deleteResources'
 import MixinFileActions from '../mixins/fileActions'
+import MixinRoutes from '../mixins/routes'
 import pathUtil from 'path'
 import { canBeMoved } from '../helpers/permissions'
 import { cloneStateObject } from '../helpers/store'
 import { getResourceSize } from '../helpers/resources'
 import { checkRoute } from '../helpers/route'
+
+const FileUpload = () => import('./FileUpload.vue')
+const FolderUpload = () => import('./FolderUpload.vue')
+const FileDrop = () => import('./FileDrop.vue')
 
 export default {
   components: {
@@ -180,7 +182,7 @@ export default {
     FolderUpload,
     FileDrop
   },
-  mixins: [Mixins, MixinDeleteResources, MixinFileActions],
+  mixins: [Mixins, MixinDeleteResources, MixinFileActions, MixinRoutes],
   data: () => ({
     newFileAction: null,
     path: '',
@@ -247,7 +249,7 @@ export default {
     },
 
     showBreadcrumb() {
-      return this.$route.name === 'public-files' || this.$route.name === 'files-list'
+      return this.isPublicFilesRoute || this.isListRoute
     },
     pageIcon() {
       return this.$route.meta.pageIcon

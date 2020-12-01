@@ -68,7 +68,7 @@
       <quick-actions :actions="app.quickActions" :item="rowItem" />
     </template>
     <template #loadingMessage>
-      <template v-if="isFavoritesList">
+      <template v-if="isFavoritesRoute">
         <translate key="all-files-loading-favorites">Loading favorites</translate>
       </template>
       <template v-else>
@@ -76,7 +76,7 @@
       </template>
     </template>
     <template #noContentMessage>
-      <no-content-message v-if="isFavoritesList" icon="star">
+      <no-content-message v-if="isFavoritesRoute" icon="star">
         <template #message>
           <span v-translate>There are no resources marked as favorite.</span>
         </template>
@@ -113,13 +113,14 @@
   </file-list>
 </template>
 <script>
-import FileList from './FileList.vue'
-import NoContentMessage from './FilesLists/NoContentMessage.vue'
-import QuickActions from './FilesLists/QuickActions.vue'
-import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
-
 import { mapGetters, mapActions, mapState } from 'vuex'
 import Mixins from '../mixins'
+import MixinRoutes from '../mixins/routes'
+import FileList from './FileList.vue'
+
+const NoContentMessage = () => import('./FilesLists/NoContentMessage.vue')
+const QuickActions = () => import('./FilesLists/QuickActions.vue')
+const SortableColumnHeader = () => import('./FilesLists/SortableColumnHeader.vue')
 
 export default {
   name: 'AllFilesList',
@@ -129,7 +130,7 @@ export default {
     SortableColumnHeader,
     QuickActions
   },
-  mixins: [Mixins],
+  mixins: [Mixins, MixinRoutes],
   props: {
     fileData: {
       type: Array,
@@ -155,10 +156,6 @@ export default {
 
     item() {
       return this.$route.params.item
-    },
-
-    isFavoritesList() {
-      return this.$route.name === 'files-favorites'
     }
   },
   watch: {

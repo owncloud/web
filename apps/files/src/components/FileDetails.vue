@@ -66,6 +66,7 @@
 
 <script>
 import Mixins from '../mixins'
+import MixinRoutes from '../mixins/routes'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
 import ActionsAccordion from './Sidebar/ActionsAccordion.vue'
@@ -75,9 +76,9 @@ export default {
   components: {
     ActionsAccordion
   },
-  mixins: [Mixins],
+  mixins: [Mixins, MixinRoutes],
   computed: {
-    ...mapGetters(['getToken', 'fileSideBars', 'capabilities']),
+    ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
     ...mapState('Files', ['appSidebarExpandedAccordion']),
 
@@ -90,7 +91,7 @@ export default {
         }
       ]
 
-      if (this.isTrashbin) {
+      if (this.isTrashbinRoute) {
         return accordions
       }
 
@@ -106,8 +107,8 @@ export default {
         this.capabilities.files &&
         this.capabilities.files.favorites &&
         this.isContentDisplayed &&
-        !this.isSharedResourcesList &&
-        !this.isTrashbin
+        !this.isAnySharedWithRoute &&
+        !this.isTrashbinRoute
       )
     },
 
@@ -116,15 +117,11 @@ export default {
     },
 
     modificationTime() {
-      if (this.isTrashbin) {
+      if (this.isTrashbinRoute) {
         return this.formDateFromNow(this.highlightedFile.deleteTimestamp)
       }
 
       return this.formDateFromNow(this.highlightedFile.mdate)
-    },
-
-    isTrashbin() {
-      return this.$route.name === 'files-trashbin'
     },
 
     isShareAccepted() {
@@ -132,7 +129,7 @@ export default {
     },
 
     isContentDisplayed() {
-      if (this.$route.name === 'files-shared-with-me') {
+      if (this.isSharedWithMeRoute) {
         return this.isShareAccepted
       }
 
@@ -145,13 +142,6 @@ export default {
       }
 
       return null
-    },
-
-    isSharedResourcesList() {
-      return (
-        this.$route.name === 'files-shared-with-others' ||
-        this.$route.name === 'files-shared-with-me'
-      )
     }
   },
 
@@ -174,8 +164,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['deleteFiles', 'markFavorite']),
-    ...mapActions(['showMessage']),
+    ...mapActions('Files', ['markFavorite']),
     ...mapMutations('Files', ['SET_APP_SIDEBAR_EXPANDED_ACCORDION']),
 
     close() {

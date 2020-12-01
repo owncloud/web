@@ -10,12 +10,12 @@
       <files-app-bar />
       <upload-progress v-show="$_uploadProgressVisible" class="oc-p-s uk-background-muted" />
       <trash-bin
-        v-if="$route.name === 'files-trashbin'"
+        v-if="isTrashbinRoute"
         class="uk-flex-1 uk-overflow-hidden"
         :file-data="activeFiles"
       />
       <shared-files-list
-        v-else-if="sharedList"
+        v-else-if="isAnySharedWithRoute"
         class="uk-flex-1 uk-overflow-hidden"
         :file-data="activeFiles"
         @sideBarOpen="openSideBar"
@@ -37,12 +37,14 @@
 </template>
 <script>
 import Mixins from '../mixins'
-import FileDetails from './FileDetails.vue'
-import FilesAppBar from './FilesAppBar.vue'
-import AllFilesList from './AllFilesList.vue'
-import TrashBin from './Trashbin.vue'
-import SharedFilesList from './Collaborators/SharedFilesList.vue'
+import MixinRoutes from '../mixins/routes'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+
+const FileDetails = () => import('./FileDetails.vue')
+const FilesAppBar = () => import('./FilesAppBar.vue')
+const AllFilesList = () => import('./AllFilesList.vue')
+const TrashBin = () => import('./Trashbin.vue')
+const SharedFilesList = () => import('./Collaborators/SharedFilesList.vue')
 const UploadProgress = () => import('./UploadProgress.vue')
 
 export default {
@@ -54,7 +56,7 @@ export default {
     SharedFilesList,
     UploadProgress
   },
-  mixins: [Mixins],
+  mixins: [Mixins, MixinRoutes],
   data() {
     return {
       createFolder: false,
@@ -79,13 +81,6 @@ export default {
 
     _sidebarOpen() {
       return this.highlightedFile !== null
-    },
-
-    sharedList() {
-      return (
-        this.$route.name === 'files-shared-with-me' ||
-        this.$route.name === 'files-shared-with-others'
-      )
     },
 
     $_uploadProgressVisible() {
