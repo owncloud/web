@@ -35,3 +35,6 @@ tests/testing-app
 
 /webpack.json
 /webpack-build-log.json
+
+# SonarCloud scanner
+.scannerwork

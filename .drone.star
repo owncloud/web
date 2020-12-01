@@ -308,7 +308,15 @@ config = {
 }
 
 def main(ctx):
-	before = beforePipelines(ctx)
+	
+	before = beforePipelines()
+
+	coverageTests = coveragePipelines(ctx)
+	if (coverageTests == False):
+		print('Errors detected in coveragePipelines. Review messages above.')
+		return []
+
+	dependsOn(before, coverageTests)
 
 	stages = stagePipelines(ctx)
 	if (stages == False):
@@ -317,51 +325,148 @@ def main(ctx):
 
 	dependsOn(before, stages)
 
+	afterCoverageTests = afterCoveragePipelines(ctx)
+	dependsOn(coverageTests, afterCoverageTests)
+
 	after = afterPipelines(ctx)
-	dependsOn(stages, after)
+	dependsOn(afterCoverageTests + stages, after)
 
-	return before + stages + after
+	return before + coverageTests + afterCoverageTests + stages + after
 
-def beforePipelines(ctx):
-	return yarnlint() + changelog(ctx) + website(ctx)
+def beforePipelines():
+	return codestyle() + jscodestyle() + phpstan() + phan()
 
-def stagePipelines(ctx):
-	acceptancePipelines = acceptance()
-	if acceptancePipelines == False:
+def coveragePipelines(ctx):
+	# All pipelines that might have coverage or other test analysis reported
+	jsPipelines = javascript(ctx)
+	phpUnitPipelines = phpTests(ctx, 'phpunit')
+	phpIntegrationPipelines = phpTests(ctx, 'phpintegration')
+	if (jsPipelines == False) or (phpUnitPipelines == False) or (phpIntegrationPipelines == False):
 		return False
 
-	return acceptancePipelines
+	return jsPipelines + phpUnitPipelines + phpIntegrationPipelines
+
+def stagePipelines(ctx):
+	buildPipelines = build()
+	acceptancePipelines = acceptance(ctx)
+	if (buildPipelines == False) or (acceptancePipelines == False):
+		return False
+
+	return buildPipelines + acceptancePipelines
+
+def afterCoveragePipelines(ctx):
+	return [
+		sonarAnalysis(ctx)
+	]
 
 def afterPipelines(ctx):
-	return build(ctx) + notify()
+	return [
+		notify()
+	]
 
-def yarnlint():
+def codestyle():
 	pipelines = []
 
-	if 'yarnlint' not in config:
+	if 'codestyle' not in config:
 		return pipelines
 
-	if type(config['yarnlint']) == "bool":
-		if not config['yarnlint']:
+	default = {
+		'phpVersions': ['7.2'],
+	}
+
+	if 'defaults' in config:
+		if 'codestyle' in config['defaults']:
+			for item in config['defaults']['codestyle']:
+				default[item] = config['defaults']['codestyle'][item]
+
+	codestyleConfig = config['codestyle']
+
+	if type(codestyleConfig) == "bool":
+		if codestyleConfig:
+			# the config has 'codestyle' true, so specify an empty dict that will get the defaults
+			codestyleConfig = {}
+		else:
+			return pipelines
+
+	if len(codestyleConfig) == 0:
+		# 'codestyle' is an empty dict, so specify a single section that will get the defaults
+		codestyleConfig = {'doDefault': {}}
+
+	for category, matrix in codestyleConfig.items():
+		params = {}
+		for item in default:
+			params[item] = matrix[item] if item in matrix else default[item]
+
+		for phpVersion in params['phpVersions']:
+			name = 'coding-standard-php%s' % phpVersion
+
+			result = {
+				'kind': 'pipeline',
+				'type': 'docker',
+				'name': name,
+				'workspace' : {
+					'base': '/var/www/owncloud',
+					'path': 'server/apps/%s' % config['app']
+				},
+				'steps': [
+					{
+						'name': 'coding-standard',
+						'image': 'owncloudci/php:%s' % phpVersion,
+						'pull': 'always',
+						'commands': [
+							'make test-php-style'
+						]
+					}
+				],
+				'depends_on': [],
+				'trigger': {
+					'ref': [
+						'refs/pull/**',
+						'refs/tags/**'
+					]
+				}
+			}
+
+			for branch in config['branches']:
+				result['trigger']['ref'].append('refs/heads/%s' % branch)
+
+			pipelines.append(result)
+
+	return pipelines
+
+def jscodestyle():
+	pipelines = []
+
+	if 'jscodestyle' not in config:
+		return pipelines
+
+	if type(config['jscodestyle']) == "bool":
+		if not config['jscodestyle']:
 			return pipelines
 
 	result = {
 		'kind': 'pipeline',
 		'type': 'docker',
-		'name': 'lint-test',
+		'name': 'coding-standard-js',
 		'workspace' : {
 			'base': '/var/www/owncloud',
-			'path': config['app']
+			'path': 'server/apps/%s' % config['app']
 		},
-		'steps':
-			installNPM() +
-			lintTest(),
+		'steps': [
+			{
+				'name': 'coding-standard-js',
+				'image': 'owncloudci/php:7.2',
+				'pull': 'always',
+				'commands': [
+					'make test-js-style'
+				]
+			}
+		],
 		'depends_on': [],
 		'trigger': {
 			'ref': [
-				'refs/heads/master',
-				'refs/tags/**',
 				'refs/pull/**',
+				'refs/tags/**'
 			]
 		}
 	}
@@ -373,142 +478,519 @@ def yarnlint():
 
 	return pipelines
 
-def build(ctx):
+def phpstan():
+	pipelines = []
+
+	if 'phpstan' not in config:
+		return pipelines
+
+	default = {
+		'phpVersions': ['7.2'],
+		'logLevel': '2',
+		'extraApps': {},
+	}
+
+	if 'defaults' in config:
+		if 'phpstan' in config['defaults']:
+			for item in config['defaults']['phpstan']:
+				default[item] = config['defaults']['phpstan'][item]
+
+	phpstanConfig = config['phpstan']
+
+	if type(phpstanConfig) == "bool":
+		if phpstanConfig:
+			# the config has 'phpstan' true, so specify an empty dict that will get the defaults
+			phpstanConfig = {}
+		else:
+			return pipelines
+
+	if len(phpstanConfig) == 0:
+		# 'phpstan' is an empty dict, so specify a single section that will get the defaults
+		phpstanConfig = {'doDefault': {}}
+
+	for category, matrix in phpstanConfig.items():
+		params = {}
+		for item in default:
+			params[item] = matrix[item] if item in matrix else default[item]
+
+		for phpVersion in params['phpVersions']:
+			name = 'phpstan-php%s' % phpVersion
+
+			result = {
+				'kind': 'pipeline',
+				'type': 'docker',
+				'name': name,
+				'workspace' : {
+					'base': '/var/www/owncloud',
+					'path': 'server/apps/%s' % config['app']
+				},
+				'steps':
+					installCore('daily-master-qa', 'sqlite', False) +
+					installApp(phpVersion) +
+					installExtraApps(phpVersion, params['extraApps']) +
+					setupServerAndApp(phpVersion, params['logLevel']) +
+				[
+					{
+						'name': 'phpstan',
+						'image': 'owncloudci/php:%s' % phpVersion,
+						'pull': 'always',
+						'commands': [
+							'make test-php-phpstan'
+						]
+					}
+				],
+				'depends_on': [],
+				'trigger': {
+					'ref': [
+						'refs/pull/**',
+						'refs/tags/**'
+					]
+				}
+			}
+
+			for branch in config['branches']:
+				result['trigger']['ref'].append('refs/heads/%s' % branch)
+
+			pipelines.append(result)
+
+	return pipelines
+
+def phan():
+	pipelines = []
+
+	if 'phan' not in config:
+		return pipelines
+
+	default = {
+		'phpVersions': ['7.2', '7.3', '7.4'],
+	}
+
+	if 'defaults' in config:
+		if 'phan' in config['defaults']:
+			for item in config['defaults']['phan']:
+				default[item] = config['defaults']['phan'][item]
+
+	phanConfig = config['phan']
+
+	if type(phanConfig) == "bool":
+		if phanConfig:
+			# the config has 'phan' true, so specify an empty dict that will get the defaults
+			phanConfig = {}
+		else:
+			return pipelines
+
+	if len(phanConfig) == 0:
+		# 'phan' is an empty dict, so specify a single section that will get the defaults
+		phanConfig = {'doDefault': {}}
+
+	for category, matrix in phanConfig.items():
+		params = {}
+		for item in default:
+			params[item] = matrix[item] if item in matrix else default[item]
+
+		for phpVersion in params['phpVersions']:
+			name = 'phan-php%s' % phpVersion
+
+			result = {
+				'kind': 'pipeline',
+				'type': 'docker',
+				'name': name,
+				'workspace' : {
+					'base': '/var/www/owncloud',
+					'path': 'server/apps/%s' % config['app']
+				},
+				'steps':
+					installCore('daily-master-qa', 'sqlite', False) +
+				[
+					{
+						'name': 'phan',
+						'image': 'owncloudci/php:%s' % phpVersion,
+						'pull': 'always',
+						'commands': [
+							'make test-php-phan'
+						]
+					}
+				],
+				'depends_on': [],
+				'trigger': {
+					'ref': [
+						'refs/pull/**',
+						'refs/tags/**'
+					]
+				}
+			}
+
+			for branch in config['branches']:
+				result['trigger']['ref'].append('refs/heads/%s' % branch)
+
+			pipelines.append(result)
+
+	return pipelines
+
+def build():
 	pipelines = []
 
 	if 'build' not in config:
 		return pipelines
 
-	if type(config['build']) == "bool":
-		if not config['build']:
+	default = {
+		'phpVersions': ['7.2'],
+		'commands': [
+			'make dist'
+		],
+		'extraEnvironment': {},
+		'configureTarOnTag': False,
+	}
+
+	if 'defaults' in config:
+		if 'build' in config['defaults']:
+			for item in config['defaults']['build']:
+				default[item] = config['defaults']['build'][item]
+
+	matrix = config['build']
+
+	if type(matrix) == "bool":
+		if matrix:
+			# the config has 'build' true, so specify an empty dict that will get the defaults
+			matrix = {}
+		else:
 			return pipelines
+
+	params = {}
+	for item in default:
+		params[item] = matrix[item] if item in matrix else default[item]
+
+	for phpVersion in params['phpVersions']:
+		result = {
+			'kind': 'pipeline',
+			'type': 'docker',
+			'name': 'build',
+			'workspace' : {
+				'base': '/var/www/owncloud',
+				'path': 'server/apps/%s' % config['app']
+			},
+			'steps': [
+				{
+					'name': 'build',
+					'image': 'owncloudci/php:%s' % phpVersion,
+					'pull': 'always',
+					'environment': params['extraEnvironment'],
+					'commands': params['commands']
+				}
+			] + ([
+				{
+					'name': 'github_release',
+					'image': 'plugins/github-release',
+					'pull': 'always',
+					'settings': {
+						'checksum': 'sha256',
+						'file_exists': 'overwrite',
+						'files': 'build/dist/%s.tar.gz' % config['app'],
+						'prerelease': True,
+					},
+					'environment': {
+						'GITHUB_TOKEN': {
+							'from_secret': 'github_token'
+						},
+					},
+					'when': {
+						'event': [
+							'tag'
+						]
+					},
+				}
+			] if params['configureTarOnTag'] else []),
+			'depends_on': [],
+			'trigger': {
+				'ref': [
+					'refs/pull/**',
+					'refs/tags/**'
+				]
+			}
+		}
+
+		for branch in config['branches']:
+			result['trigger']['ref'].append('refs/heads/%s' % branch)
+
+		pipelines.append(result)
+
+	return pipelines
+
+def javascript(ctx):
+	pipelines = []
+
+	if 'javascript' not in config:
+		return pipelines
+
+	default = {
+		'coverage': False,
+		'logLevel': '2',
+		'extraSetup': [],
+		'extraServices': [],
+		'extraEnvironment': {},
+		'extraCommandsBeforeTestRun': [],
+		'extraTeardown': [],
+	}
+
+	if 'defaults' in config:
+		if 'javascript' in config['defaults']:
+			for item in config['defaults']['javascript']:
+				default[item] = config['defaults']['javascript'][item]
+
+	matrix = config['javascript']
+
+	if type(matrix) == "bool":
+		if matrix:
+			# the config has 'javascript' true, so specify an empty dict that will get the defaults
+			matrix = {}
+		else:
+			return pipelines
+
+	params = {}
+	for item in default:
+		params[item] = matrix[item] if item in matrix else default[item]
 
 	result = {
 		'kind': 'pipeline',
 		'type': 'docker',
-		'name': 'build',
+		'name': 'javascript-tests',
 		'workspace' : {
 			'base': '/var/www/owncloud',
-			'path': config['app']
+			'path': 'server/apps/%s' % config['app']
 		},
 		'steps':
-			installNPM() +
-			buildRelease(ctx) +
-			buildDockerImage(),
+			installCore('daily-master-qa', 'sqlite', False) +
+			installApp('7.2') +
+			setupServerAndApp('7.2', params['logLevel']) +
+			params['extraSetup'] +
+		[
+			{
+				'name': 'js-tests',
+				'image': 'owncloudci/php:7.2',
+				'pull': 'always',
+				'environment': params['extraEnvironment'],
+				'commands': params['extraCommandsBeforeTestRun'] + [
+					'make test-js'
+				]
+			}
+		] + params['extraTeardown'],
+		'services': params['extraServices'],
 		'depends_on': [],
 		'trigger': {
 			'ref': [
-				'refs/heads/master',
-				'refs/tags/**',
+				'refs/pull/**',
+				'refs/tags/**'
 			]
 		}
 	}
 
-	pipelines.append(result)
+	if params['coverage']:
+		result['steps'].append({
+			'name': 'coverage-cache',
+			'image': 'plugins/s3',
+			'pull': 'always',
+			'settings': {
+				'endpoint': {
+					'from_secret': 'cache_s3_endpoint'
+				},
+				'bucket': 'cache',
+				'source': './coverage/lcov.info',
+				'target': '%s/%s' % (ctx.repo.slug, ctx.build.commit + '-${DRONE_BUILD_NUMBER}'),
+				'path_style': True,
+				'strip_prefix': './coverage',
+				'access_key': {
+					'from_secret': 'cache_s3_access_key'
+				},
+				'secret_key': {
+					'from_secret': 'cache_s3_secret_key'
+				}
+			}
+		})
 
-	return pipelines
+	for branch in config['branches']:
+		result['trigger']['ref'].append('refs/heads/%s' % branch)
 
-def changelog(ctx):
+	return [result]
+
+def phpTests(ctx, testType):
 	pipelines = []
-	repo_slug = ctx.build.source_repo if ctx.build.source_repo else ctx.repo.slug
 
-	result = {
-		'kind': 'pipeline',
-		'type': 'docker',
-		'name': 'changelog',
-		'clone': {
-			'disable': True,
-		},
-		'steps': [
-			{
-				'name': 'clone',
-				'image': 'plugins/git-action:1',
-				'pull': 'always',
-				'settings': {
-					'actions': [
-						'clone',
-					],
-					'remote': 'https://github.com/%s' % (repo_slug),
-					'branch': ctx.build.source if ctx.build.event == 'pull_request' else 'master',
-					'path': '/drone/src',
-					'netrc_machine': 'github.com',
-					'netrc_username': {
-						'from_secret': 'github_username',
-					},
-					'netrc_password': {
-						'from_secret': 'github_token',
-					},
-				},
-			},
-			{
-				'name': 'generate',
-				'image': 'toolhippie/calens:latest',
-				'pull': 'always',
-				'commands': [
-					'calens >| CHANGELOG.md',
-				],
-			},
-			{
-				'name': 'diff',
-				'image': 'owncloud/alpine:latest',
-				'pull': 'always',
-				'commands': [
-					'git diff',
-				],
-			},
-			{
-				'name': 'output',
-				'image': 'toolhippie/calens:latest',
-				'pull': 'always',
-				'commands': [
-					'cat CHANGELOG.md',
-				],
-			},
-			{
-				'name': 'publish',
-				'image': 'plugins/git-action:1',
-				'pull': 'always',
-				'settings': {
-					'actions': [
-						'commit',
-						'push',
-					],
-					'message': 'Automated changelog update [skip ci]',
-					'branch': 'master',
-					'author_email': 'devops@owncloud.com',
-					'author_name': 'ownClouders',
-					'netrc_machine': 'github.com',
-					'netrc_username': {
-						'from_secret': 'github_username',
-					},
-					'netrc_password': {
-						'from_secret': 'github_token',
-					},
-				},
-				'when': {
-					'ref': {
-						'exclude': [
-							'refs/pull/**',
-							'refs/tags/**'
-						],
-					},
-				},
-			},
-			],
-		'depends_on': [],
-		'trigger': {
-			'ref': [
-				'refs/heads/master',
-				'refs/pull/**',
-			],
-		},
+	if testType not in config:
+		return pipelines
+
+	errorFound = False
+
+	default = {
+		'phpVersions': ['7.2', '7.3', '7.4'],
+		'databases': [
+			'sqlite', 'mariadb:10.2', 'mysql:5.5', 'mysql:5.7', 'postgres:9.4', 'oracle'
+		],
+		'coverage': True,
+		'includeKeyInMatrixName': False,
+		'logLevel': '2',
+		'cephS3': False,
+		'scalityS3': False,
+		'extraSetup': [],
+		'extraServices': [],
+		'extraEnvironment': {},
+		'extraCommandsBeforeTestRun': [],
+		'extraApps': {},
+		'extraTeardown': [],
 	}
 
-	pipelines.append(result)
+	if 'defaults' in config:
+		if testType in config['defaults']:
+			for item in config['defaults'][testType]:
+				default[item] = config['defaults'][testType][item]
+
+	phpTestConfig = config[testType]
+
+	if type(phpTestConfig) == "bool":
+		if phpTestConfig:
+			# the config has just True, so specify an empty dict that will get the defaults
+			phpTestConfig = {}
+		else:
+			return pipelines
+
+	if len(phpTestConfig) == 0:
+		# the PHP test config is an empty dict, so specify a single section that will get the defaults
+		phpTestConfig = {'doDefault': {}}
+
+	for category, matrix in phpTestConfig.items():
+		params = {}
+		for item in default:
+			params[item] = matrix[item] if item in matrix else default[item]
+
+		cephS3Params = params['cephS3']
+		if type(cephS3Params) == "bool":
+			cephS3Needed = cephS3Params
+			filesPrimaryS3NeededForCeph = cephS3Params
+		else:
+			cephS3Needed = True
+			filesPrimaryS3NeededForCeph = cephS3Params['filesPrimaryS3Needed'] if 'filesPrimaryS3Needed' in cephS3Params else True
+
+		scalityS3Params = params['scalityS3']
+		if type(scalityS3Params) == "bool":
+			scalityS3Needed = scalityS3Params
+			filesPrimaryS3NeededForScality = scalityS3Params
+		else:
+			scalityS3Needed = True
+			filesPrimaryS3NeededForScality = scalityS3Params['filesPrimaryS3Needed'] if 'filesPrimaryS3Needed' in scalityS3Params else True
+
+		if ((config['app'] != 'files_primary_s3') and (filesPrimaryS3NeededForCeph or filesPrimaryS3NeededForScality)):
+			# If we are not already 'files_primary_s3' and we need S3 storage, then install the 'files_primary_s3' app
+			extraAppsDict = {
+				'files_primary_s3': 'composer install'
+			}
+			for app, command in params['extraApps'].items():
+				extraAppsDict[app] = command
+			params['extraApps'] = extraAppsDict
+
+		for phpVersion in params['phpVersions']:
+
+			if testType == 'phpunit':
+				if params['coverage']:
+					command = 'make test-php-unit-dbg'
+				else:
+					command = 'make test-php-unit'
+			else:
+				if params['coverage']:
+					command = 'make test-php-integration-dbg'
+				else:
+					command = 'make test-php-integration'
+
+			for db in params['databases']:
+				keyString = '-' + category if params['includeKeyInMatrixName'] else ''
+				name = '%s%s-php%s-%s' % (testType, keyString, phpVersion, db.replace(":", ""))
+				maxLength = 50
+				nameLength = len(name)
+				if nameLength > maxLength:
+					print("Error: generated phpunit stage name of length", nameLength, "is not supported. The maximum length is " + str(maxLength) + ".", name)
+					errorFound = True
+
+				result = {
+					'kind': 'pipeline',
+					'type': 'docker',
+					'name': name,
+					'workspace' : {
+						'base': '/var/www/owncloud',
+						'path': 'server/apps/%s' % config['app']
+					},
+					'steps':
+						installCore('daily-master-qa', db, False) +
+						installApp(phpVersion) +
+						installExtraApps(phpVersion, params['extraApps']) +
+						setupServerAndApp(phpVersion, params['logLevel']) +
+						setupCeph(params['cephS3']) +
+						setupScality(params['scalityS3']) +
+						params['extraSetup'] +
+					[
+						{
+							'name': '%s-tests' % testType,
+							'image': 'owncloudci/php:%s' % phpVersion,
+							'pull': 'always',
+							'environment': params['extraEnvironment'],
+							'commands': params['extraCommandsBeforeTestRun'] + [
+								command
+							]
+						}
+					] + params['extraTeardown'],
+					'services':
+						databaseService(db) +
+						cephService(params['cephS3']) +
+						scalityService(params['scalityS3']) +
+						params['extraServices'],
+					'depends_on': [],
+					'trigger': {
+						'ref': [
+							'refs/pull/**',
+							'refs/tags/**'
+						]
+					}
+				}
+
+				if params['coverage']:
+					result['steps'].append({
+						'name': 'coverage-rename',
+						'image': 'owncloudci/php:%s' % phpVersion,
+						'pull': 'always',
+						'commands': [
+							'mv tests/output/clover.xml tests/output/clover-%s.xml' % (name)
+						]
+					})
+					result['steps'].append({
+						'name': 'coverage-cache-1',
+						'image': 'plugins/s3',
+						'pull': 'always',
+						'settings': {
+							'endpoint': {
+								'from_secret': 'cache_s3_endpoint'
+							},
+							'bucket': 'cache',
+							'source': 'tests/output/clover-%s.xml' % (name),
+							'target': '%s/%s' % (ctx.repo.slug, ctx.build.commit + '-${DRONE_BUILD_NUMBER}'),
+							'path_style': True,
+							'strip_prefix': 'tests/output',
+							'access_key': {
+								'from_secret': 'cache_s3_access_key'
+							},
+							'secret_key': {
+								'from_secret': 'cache_s3_secret_key'
+							}
+						}
+					})
+
+				for branch in config['branches']:
+					result['trigger']['ref'].append('refs/heads/%s' % branch)
+
+				pipelines.append(result)
+
+	if errorFound:
+		return False
 
 	return pipelines
 
-def acceptance():
+def acceptance(ctx):
 	pipelines = []
 
 	if 'acceptance' not in config:
@@ -521,28 +1003,38 @@ def acceptance():
 	errorFound = False
 
 	default = {
-		'servers': ['daily-master-qa'],
+		'servers': ['daily-master-qa', 'latest'],
 		'browsers': ['chrome'],
-		'databases': ['mysql:5.5'],
-		'extraEnvironment': {},
-		'cronOnly': False,
-		'filterTags': 'not @skip and not @skipOnOC10',
-		'logLevel': '2',
+		'phpVersions': ['7.2'],
+		'databases': ['mariadb:10.2'],
+		'esVersions': ['none'],
 		'federatedServerNeeded': False,
-		'federatedServerVersion': '',
-		'runningOnOCIS': False,
-		'screenShots': False,
-		'ocisBranch': 'master',
-		'ocisCommit': '',
+		'filterTags': '',
+		'logLevel': '2',
+		'emailNeeded': False,
+		'ldapNeeded': False,
+		'cephS3': False,
+		'scalityS3': False,
+		'ssl': False,
+		'xForwardedFor': False,
+		'extraSetup': [],
+		'extraServices': [],
+		'extraTeardown': [],
+		'extraEnvironment': {},
+		'extraCommandsBeforeTestRun': [],
+		'extraApps': {},
+		'useBundledApp': False,
+		'includeKeyInMatrixName': False,
+		'runAllSuites': False,
+		'runCoreTests': False,
+		'numberOfParts': 1,
+		'cron': '',
 	}
 
 	if 'defaults' in config:
 		if 'acceptance' in config['defaults']:
 			for item in config['defaults']['acceptance']:
 				default[item] = config['defaults']['acceptance'][item]
-
-	if (default['screenShots']):
-		default['extraEnvironment'].update({"SCREENSHOTS": "true"})
 
 	for category, matrix in config['acceptance'].items():
 		if type(matrix['suites']) == "list":
@@ -552,128 +1044,245 @@ def acceptance():
 		else:
 			suites = matrix['suites']
 
-		for key, value in suites.items():
-
-			if type(value) == "list":
-				suite = value
-				suiteName = key
-				alternateSuiteName = key
-			else:
-				suite = key
-				alternateSuiteName = value
-				suiteName = value
+		for suite, alternateSuiteName in suites.items():
+			isWebUI = suite.startswith('webUI')
+			isAPI = suite.startswith('api')
+			isCLI = suite.startswith('cli')
 
 			params = {}
 			for item in default:
 				params[item] = matrix[item] if item in matrix else default[item]
 
-			for server in params['servers']:
-				for browser in params['browsers']:
-					for db in params['databases']:
-						federatedServerVersion = params['federatedServerVersion']
-						federationDbSuffix = '-federated'
+			if isAPI or isCLI:
+				params['browsers'] = ['']
 
-						if params['federatedServerNeeded'] and getDbName(db) not in ['mariadb', 'mysql']:
-							errorFound = True
+			cephS3Params = params['cephS3']
+			if type(cephS3Params) == "bool":
+				cephS3Needed = cephS3Params
+				filesPrimaryS3NeededForCeph = cephS3Params
+			else:
+				cephS3Needed = True
+				filesPrimaryS3NeededForCeph = cephS3Params['filesPrimaryS3Needed'] if 'filesPrimaryS3Needed' in cephS3Params else True
 
-						browserString = '' if browser == '' else '-' + browser
-						name = '%s%s' % (suiteName, browserString)
-						maxLength = 50
-						nameLength = len(name)
-						if nameLength > maxLength:
-							print("Error: generated stage name of length", nameLength, "is not supported. The maximum length is " + str(maxLength) + ".", name)
-							errorFound = True
-						result = {
-							'kind': 'pipeline',
-							'type': 'docker',
-							'name': name,
-							'workspace' : {
-								'base': '/var/www/owncloud',
-								'path': config['app']
-							},
-							'steps':
-								installNPM() +
-								buildPhoenix() +
-								cloneOCIS(params['ocisBranch']) +
-								(
-									(
-										installCore(server, db) +
-										owncloudLog() +
-										setupServerAndApp(params['logLevel']) +
-										(
-											installFederatedServer(federatedServerVersion, db, federationDbSuffix) +
-											setupFedServerAndApp(params['logLevel']) +
-											fixPermissionsFederated() +
-											owncloudLogFederated() if params['federatedServerNeeded'] else []
-										) +
-										setupGraphapiOIdC() +
-										buildGlauth() +
-										buildKonnectd() +
-										buildOcisPhoenix() +
-										konnectdService() +
-										ocisPhoenixService() +
-										glauthService()+
-										fixPermissions()
-									) if not params['runningOnOCIS'] else (
-										buildOCIS(params['ocisCommit']) +
-										ocisService() +
-										getSkeletonFiles()
-									)
-								) +
-								copyFilesForUpload() +
-								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
-								(
-									uploadScreenshots() +
-									buildGithubComment(suiteName, alternateSuiteName) +
-									githubComment()
-								if isLocalBrowser(browser) and params['screenShots'] else []),
-							'services':
-								( redisService() if params['runningOnOCIS'] else []) +
-								browserService(alternateSuiteName, browser) +
-								(
-									databaseService(db) +
-									(
-										owncloudFederatedService() +
-										databaseServiceForFederation(db, federationDbSuffix) if params['federatedServerNeeded'] else []
-									) +
-									owncloudService()
-								if not params['runningOnOCIS'] else []
-								),
-							'depends_on': [],
-							'trigger': {
-								'ref': [
-									'refs/tags/**',
-									'refs/pull/**',
-								]
-							},
-							'volumes': [{
-								'name': 'uploads',
-								'temp': {}
-							}, {
-								'name': 'configs',
-								'temp': {}
-							}, {
-								'name': 'gopath',
-								'temp': {}
-							}]
-						}
+			scalityS3Params = params['scalityS3']
+			if type(scalityS3Params) == "bool":
+				scalityS3Needed = scalityS3Params
+				filesPrimaryS3NeededForScality = scalityS3Params
+			else:
+				scalityS3Needed = True
+				filesPrimaryS3NeededForScality = scalityS3Params['filesPrimaryS3Needed'] if 'filesPrimaryS3Needed' in scalityS3Params else True
 
-						for branch in config['branches']:
-							result['trigger']['ref'].append('refs/heads/%s' % branch)
+			if ((config['app'] != 'files_primary_s3') and (filesPrimaryS3NeededForCeph or filesPrimaryS3NeededForScality)):
+				# If we are not already 'files_primary_s3' and we need S3 object storage, then install the 'files_primary_s3' app
+				extraAppsDict = {
+					'files_primary_s3': 'composer install'
+				}
+				for app, command in params['extraApps'].items():
+					extraAppsDict[app] = command
+				params['extraApps'] = extraAppsDict
 
-						if (params['cronOnly']):
-							result['trigger']['event'] = ['cron']
+			for testConfig in buildTestConfig(params):
+				name = 'unknown'
+				if isWebUI or isAPI or isCLI:
+					esString = '-es' + testConfig['esVersion'] if testConfig['esVersion'] != 'none' else ''
+					browserString = '' if testConfig['browser'] == '' else '-' + testConfig['browser']
+					keyString = '-' + category if testConfig['includeKeyInMatrixName'] else ''
+					partString = '' if testConfig['numberOfParts'] == 1 else '-%d-%d' % (testConfig['numberOfParts'], testConfig['runPart'])
+					name = '%s%s%s-%s%s-%s-php%s%s' % (alternateSuiteName, keyString, partString, testConfig['server'].replace('daily-', '').replace('-qa', ''), browserString, testConfig['database'].replace(':', ''), testConfig['phpVersion'], esString)
+					maxLength = 50
+					nameLength = len(name)
+					if nameLength > maxLength:
+						print("Error: generated stage name of length", nameLength, "is not supported. The maximum length is " + str(maxLength) + ".", name)
+						errorFound = True
 
-						pipelines.append(result)
+				environment = {}
+				for env in testConfig['extraEnvironment']:
+					environment[env] = testConfig['extraEnvironment'][env]
+
+				environment['TEST_SERVER_URL'] = 'http://server'
+				environment['BEHAT_FILTER_TAGS'] = testConfig['filterTags']
+
+				if (testConfig['runAllSuites'] == False):
+					environment['BEHAT_SUITE'] = suite
+				else:
+					environment['DIVIDE_INTO_NUM_PARTS'] = testConfig['numberOfParts']
+					environment['RUN_PART'] = testConfig['runPart']
+
+				if isWebUI:
+					environment['SELENIUM_HOST'] = 'selenium'
+					environment['SELENIUM_PORT'] = '4444'
+					environment['BROWSER'] = testConfig['browser']
+					environment['PLATFORM'] = 'Linux'
+					if (testConfig['runCoreTests']):
+						makeParameter = 'test-acceptance-core-webui'
+					else:
+						makeParameter = 'test-acceptance-webui'
+
+				if isAPI:
+					if (testConfig['runCoreTests']):
+						makeParameter = 'test-acceptance-core-api'
+					else:
+						makeParameter = 'test-acceptance-api'
+
+				if isCLI:
+					if (testConfig['runCoreTests']):
+						makeParameter = 'test-acceptance-core-cli'
+					else:
+						makeParameter = 'test-acceptance-cli'
+
+				if testConfig['emailNeeded']:
+					environment['MAILHOG_HOST'] = 'email'
+
+				if testConfig['ldapNeeded']:
+					environment['TEST_WITH_LDAP'] = True
+
+				if (cephS3Needed or scalityS3Needed):
+					environment['OC_TEST_ON_OBJECTSTORE'] = '1'
+					if (testConfig['cephS3'] != False):
+						environment['S3_TYPE'] = 'ceph'
+					if (testConfig['scalityS3'] != False):
+						environment['S3_TYPE'] = 'scality'
+				federationDbSuffix = '-federated'
+
+				result = {
+					'kind': 'pipeline',
+					'type': 'docker',
+					'name': name,
+					'workspace' : {
+						'base': '/var/www/owncloud',
+						'path': 'testrunner/apps/%s' % config['app']
+					},
+					'steps':
+						installCore(testConfig['server'], testConfig['database'], testConfig['useBundledApp']) +
+						installTestrunner('7.4', testConfig['useBundledApp']) +
+						(installFederated(testConfig['server'], testConfig['phpVersion'], testConfig['logLevel'], testConfig['database'], federationDbSuffix) + owncloudLog('federated') if testConfig['federatedServerNeeded'] else []) +
+						installApp(testConfig['phpVersion']) +
+						installExtraApps(testConfig['phpVersion'], testConfig['extraApps']) +
+						setupServerAndApp(testConfig['phpVersion'], testConfig['logLevel']) +
+						owncloudLog('server') +
+						setupCeph(testConfig['cephS3']) +
+						setupScality(testConfig['scalityS3']) +
+						setupElasticSearch(testConfig['esVersion']) +
+						testConfig['extraSetup'] +
+						fixPermissions(testConfig['phpVersion'], testConfig['federatedServerNeeded']) +
+					[
+						({
+							'name': 'acceptance-tests',
+							'image': 'owncloudci/php:7.4',
+							'pull': 'always',
+							'environment': environment,
+							'commands': testConfig['extraCommandsBeforeTestRun'] + [
+								'touch /var/www/owncloud/saved-settings.sh',
+								'. /var/www/owncloud/saved-settings.sh',
+								'make %s' % makeParameter
+							]
+						}),
+					] + testConfig['extraTeardown'],
+					'services':
+						databaseService(testConfig['database']) +
+						browserService(testConfig['browser']) +
+						emailService(testConfig['emailNeeded']) +
+						ldapService(testConfig['ldapNeeded']) +
+						cephService(testConfig['cephS3']) +
+						scalityService(testConfig['scalityS3']) +
+						elasticSearchService(testConfig['esVersion']) +
+						testConfig['extraServices'] +
+						owncloudService(testConfig['server'], testConfig['phpVersion'], 'server', '/var/www/owncloud/server', testConfig['ssl'], testConfig['xForwardedFor']) +
+						((
+							owncloudService(testConfig['server'], testConfig['phpVersion'], 'federated', '/var/www/owncloud/federated', testConfig['ssl'], testConfig['xForwardedFor']) +
+							databaseServiceForFederation(testConfig['database'], federationDbSuffix)
+						) if testConfig['federatedServerNeeded'] else [] ),
+					'depends_on': [],
+					'trigger': {}
+				}
+
+				if (testConfig['cron'] == ''):
+					result['trigger']['ref'] = [
+						'refs/pull/**',
+						'refs/tags/**'
+					]
+				else:
+					result['trigger']['cron'] = testConfig['cron']
+
+				pipelines.append(result)
 
 	if errorFound:
 		return False
 
 	return pipelines
 
-def notify():
-	pipelines = []
+def sonarAnalysis(ctx, phpVersion = '7.4'):
+	result = {
+		'kind': 'pipeline',
+		'type': 'docker',
+		'name': 'sonar-analysis',
+		'workspace' : {
+			'base': '/var/www/owncloud',
+			'path': 'server/apps/%s' % config['app']
+		},
+		'steps':
+			cacheRestore() +
+			composerInstall(phpVersion) +
+			installCore('daily-master-qa', 'sqlite', False) +
+		[
+			{
+				'name': 'sync-from-cache',
+				'image': 'minio/mc',
+				'pull': 'always',
+				'environment': {
+					'MC_HOST_cache': {
+						'from_secret': 'cache_s3_connection_url'
+					},
+				},
+				'commands': [
+					'mkdir -p results',
+					'mc mirror cache/cache/%s/%s results/' % (ctx.repo.slug, ctx.build.commit + '-${DRONE_BUILD_NUMBER}'),
+				]
+			},
+			{
+				'name': 'list-coverage-results',
+				'image': 'owncloudci/php:%s' % phpVersion,
+				'pull': 'always',
+				'commands': [
+					'ls -l results',
+				]
+			},
+			{
+				'name': 'sonarcloud',
+				'image': 'sonarsource/sonar-scanner-cli',
+				'pull': 'always',
+				'environment': {
+					'SONAR_TOKEN': {
+						'from_secret': 'sonar_token'
+					},
+					'SONAR_PULL_REQUEST_BASE': 'master' if ctx.build.event == 'pull_request' else None,
+					'SONAR_PULL_REQUEST_BRANCH': ctx.build.source if ctx.build.event == 'pull_request' else None,
+					'SONAR_PULL_REQUEST_KEY': ctx.build.ref.replace("refs/pull/", "").split("/")[0] if ctx.build.event == 'pull_request' else None,
+					'SONAR_SCANNER_OPTS': '-Xdebug'
+				},
+				'when': {
+					'instance': [
+						'drone.owncloud.services',
+						'drone.owncloud.com'
+					],
+				}
+			}
+		],
+		'depends_on': [],
+		'trigger': {
+			'ref': [
+				'refs/pull/**',
+				'refs/tags/**'
+			]
+		}
+	}
 
+	for branch in config['branches']:
+		result['trigger']['ref'].append('refs/heads/%s' % branch)
+
+	return result
+
+def notify():
 	result = {
 		'kind': 'pipeline',
 		'type': 'docker',
@@ -709,29 +1318,7 @@ def notify():
 	for branch in config['branches']:
 		result['trigger']['ref'].append('refs/heads/%s' % branch)
 
-	pipelines.append(result)
-
-	return pipelines
-
-def databaseServiceForFederation(db, suffix):
-	dbName = getDbName(db)
-
-	# only support mariadb, for phoenix, it's not important to support others
-	if dbName not in ['mariadb', 'mysql']:
-		print('Not implemented federated database for', dbName)
-		return []
-
-	return [{
-		'name': dbName + suffix,
-		'image': db,
-		'pull': 'always',
-		'environment': {
-			'MYSQL_USER': getDbUsername(db),
-			'MYSQL_PASSWORD': getDbPassword(db),
-			'MYSQL_DATABASE': getDbDatabase(db) + suffix,
-			'MYSQL_ROOT_PASSWORD': getDbRootPassword()
-		}
-	}]
+	return result
 
 def databaseService(db):
 	dbName = getDbName(db)
@@ -763,7 +1350,7 @@ def databaseService(db):
 	if dbName == 'oracle':
 		return [{
 			'name': dbName,
-			'image': 'deepdiver/docker-oracle-xe-11g:latest',
+			'image': 'owncloudci/oracle-xe:latest',
 			'pull': 'always',
 			'environment': {
 				'ORACLE_USER': getDbUsername(db),
@@ -775,80 +1362,143 @@ def databaseService(db):
 
 	return []
 
-def browserService(alternateSuiteName, browser):
+def browserService(browser):
 	if browser == 'chrome':
 		return [{
 			'name': 'selenium',
-			'image': 'selenium/standalone-chrome-debug:3.141.59-20200326',
+			'image': 'selenium/standalone-chrome-debug:3.141.59-oxygen',
 			'pull': 'always',
-			'volumes': [{
-				'name': 'uploads',
-				'path': '/uploads'
-			}],
+			'environment': {
+				'JAVA_OPTS': '-Dselenium.LOGGER.level=WARNING'
+			}
 		}]
 
 	if browser == 'firefox':
 		return [{
 			'name': 'selenium',
-			'image': 'selenium/standalone-firefox-debug:3.141.59-xenon',
+			'image': 'selenium/standalone-firefox-debug:3.8.1',
 			'pull': 'always',
-			'volumes': [{
-				'name': 'uploads',
-				'path': '/uploads'
-			}],
-		}]
-
-	if not isLocalBrowser(browser):
-		return [{
-			'name': 'saucelabs',
-			'image': 'henrrich/docker-sauce-connect:latest',
-			'pull': 'if-not-exists',
 			'environment': {
-				'SAUCE_USERNAME': {
-					'from_secret': 'sauce_username'
-				},
-				'SAUCE_ACCESS_KEY': {
-					'from_secret': 'sauce_access_key'
-				},
-			},
-			'commands': [
-				'/usr/local/sauce-connect/bin/sc -i %s' % getSaucelabsTunnelName(alternateSuiteName, browser)
-			]
+				'JAVA_OPTS': '-Dselenium.LOGGER.level=WARNING',
+				'SE_OPTS': '-enablePassThrough false'
+			}
 		}]
 
 	return []
 
-def owncloudService():
+def emailService(emailNeeded):
+	if emailNeeded:
+		return [{
+			'name': 'email',
+			'image': 'mailhog/mailhog',
+			'pull': 'always',
+		}]
+
+	return []
+
+def ldapService(ldapNeeded):
+	if ldapNeeded:
+		return [{
+			'name': 'ldap',
+			'image': 'osixia/openldap',
+			'pull': 'always',
+			'environment': {
+				'LDAP_DOMAIN': 'owncloud.com',
+				'LDAP_ORGANISATION': 'owncloud',
+				'LDAP_ADMIN_PASSWORD': 'admin',
+				'LDAP_TLS_VERIFY_CLIENT': 'never',
+				'HOSTNAME': 'ldap',
+			}
+		}]
+
+	return []
+
+def elasticSearchService(esVersion):
+	if esVersion == "none":
+		return []
+
 	return [{
-		'name': 'owncloud',
-		'image': 'owncloudci/php:7.3',
+		'name': 'elasticsearch',
+		'image': 'webhippie/elasticsearch:%s' % esVersion,
 		'pull': 'always',
 		'environment': {
-			'APACHE_WEBROOT': '/var/www/owncloud/server/',
-		},
-		'command': [
-			'/usr/local/bin/apachectl',
-			'-e',
-			'debug',
-			'-D',
-			'FOREGROUND'
-		]
+			'ELASTICSEARCH_PLUGINS_INSTALL': 'ingest-attachment'
+		}
 	}]
 
-def owncloudFederatedService():
+def scalityService(serviceParams):
+	serviceEnvironment = {
+		'HOST_NAME': 'scality'
+	}
+
+	if type(serviceParams) == "bool":
+		if not serviceParams:
+			return []
+	else:
+		if 'extraEnvironment' in serviceParams:
+			for env in serviceParams['extraEnvironment']:
+				serviceEnvironment[env] = serviceParams['extraEnvironment'][env]
+
 	return [{
-		'name': 'federated',
-		'image': 'owncloudci/php:7.3',
+		'name': 'scality',
+		'image': 'owncloudci/scality-s3server',
 		'pull': 'always',
-		'environment': {
-			'APACHE_WEBROOT': '/var/www/owncloud/federated/',
-		},
-		'command': [
-			'/usr/local/bin/apachectl',
-			'-e',
-			'debug',
-			'-D',
-			'FOREGROUND'
+		'environment': serviceEnvironment
+	}]
+
+def cephService(serviceParams):
+	serviceEnvironment = {
+		'NETWORK_AUTO_DETECT': '4',
+		'RGW_NAME': 'ceph',
+		'CEPH_DEMO_UID': 'owncloud',
+		'CEPH_DEMO_ACCESS_KEY': 'owncloud123456',
+		'CEPH_DEMO_SECRET_KEY': 'secret123456',
+	}
+
+	if type(serviceParams) == "bool":
+		if not serviceParams:
+			return []
+	else:
+		if 'extraEnvironment' in serviceParams:
+			for env in serviceParams['extraEnvironment']:
+				serviceEnvironment[env] = serviceParams['extraEnvironment'][env]
+
+	return [{
+		'name': 'ceph',
+		'image': 'owncloudci/ceph:tag-build-master-jewel-ubuntu-16.04',
+		'pull': 'always',
+		'environment': serviceEnvironment
+	}]
+
+def owncloudService(version, phpVersion, name = 'server', path = '/var/www/owncloud/server', ssl = True, xForwardedFor = False):
+	if ssl:
+		environment = {
+			'APACHE_WEBROOT': path,
+			'APACHE_CONFIG_TEMPLATE': 'ssl',
+			'APACHE_SSL_CERT_CN': 'server',
+			'APACHE_SSL_CERT': '/var/www/owncloud/%s.crt' % name,
+			'APACHE_SSL_KEY': '/var/www/owncloud/%s.key' % name
+		}
+	else:
+		environment = {
+			'APACHE_WEBROOT': path
+		}
+
+	return [{
+		'name': name,
+		'image': 'owncloudci/php:%s' % phpVersion,
+		'pull': 'always',
+		'environment': environment,
+		'commands': ([
+			'a2enmod remoteip',
+			'cd /etc/apache2',
+			'echo "RemoteIPHeader X-Forwarded-For" >> apache2.conf',
+			# This replaces the first occurrence of "%h with "%a in apache2.conf file telling Apache to log the client
+			# IP as recorded by mod_remoteip (%a) rather than hostname (%h). For more info check this out:
+			# https://www.digitalocean.com/community/questions/get-client-public-ip-on-apache-server-used-behind-load-balancer
+			'sed -i \'0,/"%h/s//"%a/\' apache2.conf',
+		] if xForwardedFor else []) + [
+			'/usr/local/bin/apachectl -e debug -D FOREGROUND',
 		]
 	}]
 
@@ -858,16 +1508,18 @@ def getDbName(db):
 def getDbUsername(db):
 	name = getDbName(db)
 
+	# The Oracle image has the Db Username hardcoded
 	if name == 'oracle':
-		return 'system'
+		return 'autotest'
 
 	return 'owncloud'
 
 def getDbPassword(db):
 	name = getDbName(db)
 
+	# The Oracle image has the Db Password hardcoded
 	if name == 'oracle':
-		return 'oracle'
+		return 'owncloud'
 
 	return 'owncloud'
 
@@ -877,25 +1529,51 @@ def getDbRootPassword():
 def getDbDatabase(db):
 	name = getDbName(db)
 
+	# The Oracle image has the Db Name hardcoded
 	if name == 'oracle':
 		return 'XE'
 
 	return 'owncloud'
 
-def getSaucelabsTunnelName(alternateSuiteName, browser):
-	return '${DRONE_BUILD_NUMBER}-acceptance-%s-%s' % (alternateSuiteName, browser)
+def cacheRestore():
+	return [{
+		'name': 'cache-restore',
+		'image': 'plugins/s3-cache:1',
+		'pull': 'always',
+		'settings': {
+			'access_key': {
+				'from_secret': 'cache_s3_access_key'
+			},
+			'endpoint': {
+				'from_secret': 'cache_s3_endpoint'
+			},
+			'restore': True,
+			'secret_key': {
+				'from_secret': 'cache_s3_secret_key'
+			}
+		},
+		'when': {
+			'instance': [
+				'drone.owncloud.services',
+				'drone.owncloud.com'
+			],
+		}
+	}]
 
-def getSaucelabsBrowserName(browser):
-	if (browser == 'IE11'):
-		return 'internet explorer'
-	if (browser == 'Edge'):
-		return 'MicrosoftEdge'
-	return browser
+def composerInstall(phpVersion):
+	return [{
+		'name': 'composer-install',
+		'image': 'owncloudci/php:%s' % phpVersion,
+		'pull': 'always',
+		'environment': {
+			'COMPOSER_HOME': '/drone/src/.cache/composer'
+		},
+		'commands': [
+			'make vendor'
+		]
+	}]
 
-def isLocalBrowser(browser):
-	return ((browser == 'chrome') or (browser == 'firefox'))
-
-def installCore(version, db):
+def installCore(version, db, useBundledApp):
 	host = getDbName(db)
 	dbType = host
 
@@ -927,9 +1605,180 @@ def installCore(version, db):
 		}
 	}
 
+	if not useBundledApp:
+		stepDefinition['settings']['exclude'] = 'apps/%s' % config['app']
+
 	return [stepDefinition]
 
-def installFederatedServer(version, db, dbSuffix = '-federated'):
+def installTestrunner(phpVersion, useBundledApp):
+	return [{
+		'name': 'install-testrunner',
+		'image': 'owncloudci/php:%s' % phpVersion,
+		'pull': 'always',
+		'commands': [
+			'mkdir /tmp/testrunner',
+			'git clone -b master --depth=1 https://github.com/owncloud/core.git /tmp/testrunner',
+			'rsync -aIX /tmp/testrunner /var/www/owncloud',
+		] + ([
+			'cp -r /var/www/owncloud/testrunner/apps/%s /var/www/owncloud/server/apps/' % config['app']
+		] if not useBundledApp else [])
+	}]
+
+def installExtraApps(phpVersion, extraApps):
+	commandArray = []
+	for app, command in extraApps.items():
+		commandArray.append('git clone https://github.com/owncloud/%s.git /var/www/owncloud/testrunner/apps/%s' % (app, app))
+		commandArray.append('cp -r /var/www/owncloud/testrunner/apps/%s /var/www/owncloud/server/apps/' % app)
+		if (command != ''):
+			commandArray.append('cd /var/www/owncloud/server/apps/%s' % app)
+			commandArray.append(command)
+		commandArray.append('cd /var/www/owncloud/server')
+		commandArray.append('php occ a:l')
+		commandArray.append('php occ a:e %s' % app)
+		commandArray.append('php occ a:l')
+
+	if (commandArray == []):
+		return []
+
+	return [{
+		'name': 'install-extra-apps',
+		'image': 'owncloudci/php:%s' % phpVersion,
+		'pull': 'always',
+		'commands': commandArray
+	}]
+
+def installApp(phpVersion):
+	if 'appInstallCommand' not in config:
+		return []
+
+	return [{
+		'name': 'install-app-%s' % config['app'],
+		'image': 'owncloudci/php:%s' % phpVersion,
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/server/apps/%s' % config['app'],
+			config['appInstallCommand']
+		]
+	}]
+
+def setupServerAndApp(phpVersion, logLevel):
+	return [{
+		'name': 'setup-server-%s' % config['app'],
+		'image': 'owncloudci/php:%s' % phpVersion,
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/server',
+			'php occ a:l',
+			'php occ a:e %s' % config['app'],
+			'php occ a:e testing',
+			'php occ a:l',
+			'php occ config:system:set trusted_domains 1 --value=server',
+			'php occ log:manage --level %s' % logLevel,
+		]
+	}]
+
+def setupCeph(serviceParams):
+	if type(serviceParams) == "bool":
+		if serviceParams:
+			# specify an empty dict that will get the defaults
+			serviceParams = {}
+		else:
+			return []
+
+	createFirstBucket = serviceParams['createFirstBucket'] if 'createFirstBucket' in serviceParams else True
+	setupCommands = serviceParams['setupCommands'] if 'setupCommands' in serviceParams else [
+		'wait-for-it -t 600 ceph:80',
+		'cd /var/www/owncloud/server/apps/files_primary_s3',
+		'cp tests/drone/ceph.config.php /var/www/owncloud/server/config',
+		'cd /var/www/owncloud/server',
+	]
+
+	return [{
+		'name': 'setup-ceph',
+		'image': 'owncloudci/php:7.2',
+		'pull': 'always',
+		'commands': setupCommands + ([
+			'./apps/files_primary_s3/tests/drone/create-bucket.sh',
+		] if createFirstBucket else [])
+	}]
+
+def setupScality(serviceParams):
+	if type(serviceParams) == "bool":
+		if serviceParams:
+			# specify an empty dict that will get the defaults
+			serviceParams = {}
+		else:
+			return []
+
+	specialConfig = '.' + serviceParams['config'] if 'config' in serviceParams else ''
+	configFile = 'scality%s.config.php' % specialConfig
+	createFirstBucket = serviceParams['createFirstBucket'] if 'createFirstBucket' in serviceParams else True
+	createExtraBuckets = serviceParams['createExtraBuckets'] if 'createExtraBuckets' in serviceParams else False
+	setupCommands = serviceParams['setupCommands'] if 'setupCommands' in serviceParams else [
+		'wait-for-it -t 600 scality:8000',
+		'cd /var/www/owncloud/server/apps/files_primary_s3',
+		'cp tests/drone/%s /var/www/owncloud/server/config' % configFile,
+		'cd /var/www/owncloud/server'
+	]
+
+	return [{
+		'name': 'setup-scality',
+		'image': 'owncloudci/php:7.2',
+		'pull': 'always',
+		'commands': setupCommands + ([
+			'php occ s3:create-bucket owncloud --accept-warning'
+		] if createFirstBucket else []) + ([
+			'for I in $(seq 1 9); do php ./occ s3:create-bucket owncloud$I --accept-warning; done',
+		] if createExtraBuckets else [])
+	}]
+
+def setupElasticSearch(esVersion):
+	if esVersion == "none":
+		return []
+
+	return [{
+		'name': 'setup-es',
+		'image': 'owncloudci/php:7.2',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/server',
+			'php occ config:app:set search_elastic servers --value elasticsearch',
+			'wait-for-it -t 60 elasticsearch:9200',
+			'php occ search:index:reset --force'
+		]
+	}]
+
+def fixPermissions(phpVersion, federatedServerNeeded):
+	return [{
+		'name': 'fix-permissions',
+		'image': 'owncloudci/php:%s' % phpVersion,
+		'pull': 'always',
+		'commands': [
+			'chown -R www-data /var/www/owncloud/server',
+			'wait-for-it -t 600 server:80'
+		] + ([
+			'chown -R www-data /var/www/owncloud/federated',
+			'wait-for-it -t 600 federated:80'
+		] if federatedServerNeeded else [])
+	}]
+
+def owncloudLog(server):
+	return [{
+		'name': 'owncloud-log-%s' % server,
+		'image': 'owncloud/ubuntu:18.04',
+		'pull': 'always',
+		'detach': True,
+		'commands': [
+			'tail -f /var/www/owncloud/%s/data/owncloud.log' % server
+		]
+	}]
+
+def dependsOn(earlierStages, nextStages):
+	for earlierStage in earlierStages:
+		for nextStage in nextStages:
+			nextStage['depends_on'].append(earlierStage['name'])
+
+def installFederated(federatedServerVersion, phpVersion, logLevel, db, dbSuffix = '-federated'):
 	host = getDbName(db)
 	dbType = host
 
@@ -943,737 +1792,71 @@ def installFederatedServer(version, db, dbSuffix = '-federated'):
 		dbType = 'pgsql'
 	elif host == 'oracle':
 		dbType = 'oci'
-
-	stepDefinition = {
-		'name': 'install-federated',
-		'image': 'owncloudci/core',
-		'pull': 'always',
-		'settings': {
-			'version': version,
-			'core_path': '/var/www/owncloud/federated/',
-			'db_type': dbType,
-			'db_name': database,
-			'db_host': host + dbSuffix,
-			'db_username': username,
-			'db_password': password
-		}
-	}
-	return [stepDefinition]
-
-def installNPM():
-	return [{
-		'name': 'npm-install',
-		'image': 'owncloudci/nodejs:11',
-		'pull': 'always',
-		'commands': [
-			'yarn install --frozen-lockfile'
-		]
-	}]
-
-def lintTest():
-	return [{
-		'name': 'lint-test',
-		'image': 'owncloudci/nodejs:11',
-		'pull': 'always',
-		'commands': [
-			'yarn run lint'
-		]
-	}]
-
-def buildPhoenix():
-	return [{
-		'name': 'build-phoenix',
-		'image': 'owncloudci/nodejs:11',
-		'pull': 'always',
-		'commands': [
-			'yarn dist',
-			'cp tests/drone/config.json dist/config.json',
-			'mkdir -p /srv/config',
-			'cp -r /var/www/owncloud/phoenix/tests/drone /srv/config',
-			'ls -la /srv/config/drone'
-		],
-		'volumes': [{
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def buildDockerImage():
-	return [{
-		'name': 'docker',
-		'image': 'plugins/docker:18.09',
-		'pull': 'always',
-		'settings': {
-			'username': {
-			'from_secret': 'docker_username',
-		},
-		'password': {
-			'from_secret': 'docker_password',
-		},
-		'auto_tag': True,
-		'repo': 'owncloud/phoenix',
-		},
-		'when': {
-			'ref': {
-				'exclude': [
-					'refs/pull/**',
-				],
-			},
-		},
-	}]
-
-def buildRelease(ctx):
 	return [
 		{
-			'name': 'make',
-			'image': 'owncloudci/nodejs:11',
-			'pull': 'always',
-			'commands': [
-				'cd /var/www/owncloud/phoenix',
-				'make -f Makefile.release'
-			],
-		},
-		{
-			'name': 'changelog',
-			'image': 'toolhippie/calens:latest',
-			'pull': 'always',
-			'commands': [
-			'calens --version %s -o dist/CHANGELOG.md -t changelog/CHANGELOG-Release.tmpl' % ctx.build.ref.replace("refs/tags/v", "").split("-")[0],
-			],
-			'when': {
-				'ref': [
-					'refs/tags/**',
-				],
-			},
-		},
-		{
-			'name': 'publish',
-			'image': 'plugins/github-release:1',
+			'name': 'install-federated',
+			'image': 'owncloudci/core',
 			'pull': 'always',
 			'settings': {
-				'api_key': {
-					'from_secret': 'github_token',
-				},
-				'files': [
-					'release/*',
-				],
-				'checksum': [
-					'md5',
-					'sha256'
-				],
-				'title': ctx.build.ref.replace("refs/tags/v", ""),
-				'note': 'dist/CHANGELOG.md',
-				'overwrite': True,
+				'version': federatedServerVersion,
+				'core_path': '/var/www/owncloud/federated',
+				'db_type': 'mysql',
+				'db_name': database,
+				'db_host': host + dbSuffix,
+				'db_username': username,
+				'db_password': password
 			},
-			'when': {
-				'ref': [
-					'refs/tags/**',
-				],
-			}
+		},
+		{
+			'name': 'configure-federation',
+			'image': 'owncloudci/php:%s' % phpVersion,
+			'pull': 'always',
+			'commands': [
+				'echo "export TEST_SERVER_FED_URL=http://federated" > /var/www/owncloud/saved-settings.sh',
+				'cd /var/www/owncloud/federated',
+				'php occ a:l',
+				'php occ a:e testing',
+				'php occ a:l',
+				'php occ config:system:set trusted_domains 1 --value=federated',
+				'php occ log:manage --level %s' % logLevel,
+				'php occ config:list'
+			]
 		}
 	]
 
-def website(ctx):
-  return [
-	{
-		'kind': 'pipeline',
-		'type': 'docker',
-		'name': 'website',
-		'platform': {
-			'os': 'linux',
-			'arch': 'amd64',
-		},
-		'steps': [
-			{
-				'name': 'prepare',
-				'image': 'owncloudci/alpine:latest',
-				'commands': [
-				'	make docs-copy'
-				],
-			},
-			{
-				'name': 'test',
-				'image': 'webhippie/hugo:latest',
-				'commands': [
-					'cd hugo',
-				'	hugo',
-				],
-			},
-			{
-				'name': 'list',
-				'image': 'owncloudci/alpine:latest',
-				'commands': [
-					'tree hugo/public',
-				],
-			},
-			{
-				'name': 'publish',
-				'image': 'plugins/gh-pages:1',
-				'pull': 'always',
-				'settings': {
-					'username': {
-						'from_secret': 'github_username',
-					},
-					'password': {
-						'from_secret': 'github_token',
-					},
-					'pages_directory': 'docs/',
-					'target_branch': 'docs',
-				},
-				'when': {
-					'ref': {
-						'exclude': [
-						'refs/pull/**',
-						],
-					},
-				},
-			},
-			{
-				'name': 'downstream',
-				'image': 'plugins/downstream',
-				'settings': {
-					'server': 'https://cloud.drone.io/',
-					'token': {
-						'from_secret': 'drone_token_cloud',
-					},
-					'repositories': [
-						'owncloud/owncloud.github.io@source',
-						],
-					},
-				'when': {
-					'ref': {
-						'exclude': [
-						'refs/pull/**',
-						],
-					},
-				},
-			},
-		],
-		'depends_on': [],
-		'trigger': {
-			'ref': [
-				'refs/heads/master',
-				'refs/pull/**',
-			],
-		},
-	}
-  ]
+def databaseServiceForFederation(db, suffix):
+	dbName = getDbName(db)
 
-def getSkeletonFiles():
+	if dbName not in ['mariadb', 'mysql']:
+		print('Not implemented federated database for ', dbName)
+		return []
+
 	return [{
-		'name': 'setup-skeleton-files',
-		'image': 'owncloudci/php:7.3',
+		'name': dbName + suffix,
+		'image': db,
 		'pull': 'always',
-		'commands': [
-			'git clone https://github.com/owncloud/testing.git /srv/app/testing',
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}],
-	}]
-
-def setupGraphapiOIdC():
-	return [{
-		'name': 'setup-graphapi',
-		'image': 'owncloudci/php:7.3',
-		'pull': 'always',
-		'commands': [
-			'git clone -b master https://github.com/owncloud/graphapi.git /var/www/owncloud/server/apps/graphapi',
-			'cd /var/www/owncloud/server/apps/graphapi',
-			'make vendor',
-			'git clone -b master https://github.com/owncloud/openidconnect.git /var/www/owncloud/server/apps/openidconnect',
-			'cd /var/www/owncloud/server/apps/openidconnect',
-			'make vendor',
-			'cd /var/www/owncloud/server/',
-			'php occ a:e graphapi',
-			'php occ a:e openidconnect',
-			'php occ config:system:set trusted_domains 2 --value=phoenix',
-			'php occ config:system:set openid-connect provider-url --value="https://konnectd:9130"',
-			'php occ config:system:set openid-connect loginButtonName --value=OpenId-Connect',
-			'php occ config:system:set openid-connect client-id --value=phoenix',
-			'php occ config:system:set openid-connect insecure --value=true --type=bool',
-			'php occ config:system:set cors.allowed-domains 0 --value="http://phoenix:9100"',
-			'php occ config:system:set memcache.local --value="\\\\OC\\\\Memcache\\\\APCu"',
-			'php occ config:system:set phoenix.baseUrl --value="http://phoenix:9100"',
-			'php occ config:list'
-		]
-	}]
-
-def buildGlauth():
-	return[{
-		'name': 'build-glauth',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'commands': [
-      # using ocis-glauth repo because latest glauth doesn't supports the bridge setup
-			'mkdir -p /srv/app/src',
-			'cd $GOPATH/src',
-			'mkdir -p github.com/owncloud/',
-			'cd github.com/owncloud/',
-			'git clone http://github.com/owncloud/ocis-glauth',
-			'cd ocis-glauth',
-			'git checkout 44e252306af2dedd72ad00567bbfe9c03322ab20',
-			'make build',
-			'cp bin/ocis-glauth /var/www/owncloud'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def glauthService():
-	return[{
-		'name': 'glauth',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'detach': True,
-		'environment' : {
-			'GLAUTH_BACKEND_DATASTORE': 'owncloud',
-			'GLAUTH_BACKEND_BASEDN': 'dc=example,dc=com',
-		},
-		'commands': [
-			'cd /var/www/owncloud',
-			'./ocis-glauth --log-level debug server --backend-server http://owncloud/'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def buildKonnectd():
-	return[{
-		'name': 'build-konnectd',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'commands': [
-			'cd $GOPATH/src/github.com/owncloud/ocis',
-			'cd konnectd',
-			'make build',
-			'cp bin/konnectd /var/www/owncloud'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def konnectdService():
-	return[{
-		'name': 'konnectd',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'detach': True,
-		'environment' : {
-			'LDAP_BASEDN': 'dc=example,dc=com',
-			'LDAP_BINDDN': 'cn=admin,ou=users,dc=example,dc=com',
-			'LDAP_URI': 'ldap://glauth:9125',
-			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration-oc10.yml',
-			'KONNECTD_ISS': 'https://konnectd:9130',
-			'KONNECTD_TLS': 'true',
-			'LDAP_BINDPW': 'admin',
-			'LDAP_SCOPE': 'sub',
-			'LDAP_LOGIN_ATTRIBUTE': 'uid',
-			'LDAP_EMAIL_ATTRIBUTE': 'mail',
-			'LDAP_NAME_ATTRIBUTE': 'givenName',
-			'LDAP_UUID_ATTRIBUTE': 'uid',
-			'LDAP_UUID_ATTRIBUTE_TYPE': 'text',
-			'LDAP_FILTER': "(objectClass=posixaccount)"
-		},
-		'commands': [
-			'cd /var/www/owncloud',
-			'./konnectd  --log-level debug server --signing-kid gen1-2020-02-27',
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def cloneOCIS(ocisBranch):
-	return[{
-		'name': 'clone-ocis',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'commands': [
-			'mkdir -p /srv/app/src',
-			'cd $GOPATH/src',
-			'mkdir -p github.com/owncloud/',
-			'cd github.com/owncloud/',
-			'git clone -b %s --single-branch --no-tags https://github.com/owncloud/ocis' % (ocisBranch),
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def buildOCIS(ocisCommit):
-	return[{
-		'name': 'build-ocis',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'commands': [
-			'cd $GOPATH/src/github.com/owncloud/ocis',
-		] + ([
-			'git checkout %s' % (ocisCommit)
-		] if ocisCommit != '' else []) + [
-			'cd ocis',
-			'make build',
-			'cp bin/ocis /var/www/owncloud'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def ocisService():
-	return[{
-		'name': 'ocis',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'detach': True,
-		'environment' : {
-			'STORAGE_HOME_DRIVER': 'owncloud',
-			'STORAGE_USERS_DRIVER': 'owncloud',
-			'STORAGE_DRIVER_OCIS_ROOT': '/srv/app/tmp/ocis/storage/users',
-			'STORAGE_DRIVER_LOCAL_ROOT': '/srv/app/tmp/ocis/local/root',
-			'STORAGE_DRIVER_OWNCLOUD_DATADIR': '/srv/app/tmp/ocis/owncloud/data',
-			'STORAGE_METADATA_ROOT': '/srv/app/tmp/ocis/metadata',
-			'STORAGE_DRIVER_OWNCLOUD_REDIS_ADDR': 'redis:6379',
-			'STORAGE_LDAP_IDP': 'https://ocis:9200',
-			'STORAGE_OIDC_ISSUER': 'https://ocis:9200',
-			'PROXY_OIDC_ISSUER': 'https://ocis:9200',
-			'PROXY_OIDC_INSECURE': 'true',
-			'STORAGE_HOME_DATA_SERVER_URL': 'http://ocis:9155/data',
-			'STORAGE_DATAGATEWAY_PUBLIC_URL': 'https://ocis:9200/data',
-			'STORAGE_USERS_DATA_SERVER_URL': 'http://ocis:9158/data',
-			'STORAGE_FRONTEND_PUBLIC_URL': 'https://ocis:9200',
-			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
-			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
-			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
-			'KONNECTD_ISS': 'https://ocis:9200',
-			'KONNECTD_TLS': 'true',
-			'ACCOUNTS_DATA_PATH': '/srv/app/tmp/ocis-accounts/',
-			'PROXY_ENABLE_BASIC_AUTH': True,
-		},
-		'commands': [
-			'cd /var/www/owncloud',
-			'mkdir -p /srv/app/tmp/ocis/owncloud/data/',
-			'mkdir -p /srv/app/tmp/ocis/storage/users/',
-			'./ocis --log-level debug server'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def buildOcisPhoenix():
-	return[{
-		'name': 'build-ocis-phoenix',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'commands': [
-			'cd $GOPATH/src/github.com/owncloud/ocis',
-			'cd ocis-phoenix',
-			'make build',
-			'cp bin/ocis-phoenix /var/www/owncloud'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-# Ocis-phoenix service just for the oc10 tests
-def ocisPhoenixService():
-	return[{
-		'name': 'phoenix',
-		'image': 'webhippie/golang:1.13',
-		'pull': 'always',
-		'detach': True,
-		'environment' : {
-			'PHOENIX_WEB_CONFIG': '/srv/config/drone/config.json',
-			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
-			'PHOENIX_OIDC_CLIENT_ID': 'phoenix'
-		},
-		'commands': [
-			'cd /var/www/owncloud',
-			'./ocis-phoenix --log-level debug server',
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def setupServerAndApp(logLevel):
-	return [{
-		'name': 'setup-server-%s' % config['app'],
-		'image': 'owncloudci/php:7.3',
-		'pull': 'always',
-		'commands': [
-			'cd /var/www/owncloud/server/',
-			'php occ a:e testing',
-			'php occ config:system:set trusted_domains 1 --value=owncloud',
-			'php occ config:system:set cors.allowed-domains 0 --value=http://phoenix',
-			'php occ log:manage --level %s' % logLevel,
-			'php occ config:list',
-			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton',
-			'php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true',
-			'php occ config:system:set phoenix.baseUrl --value="http://phoenix"',
-			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool'
-		]
-	}]
-
-def setupFedServerAndApp(logLevel):
-	return [{
-		'name': 'setup-fed-server-%s' % config['app'],
-		'image': 'owncloudci/php:7.3',
-		'pull': 'always',
-		'commands': [
-			'cd /var/www/owncloud/federated/',
-			'php occ a:e testing',
-			'php occ config:system:set trusted_domains 2 --value=federated',
-			'php occ log:manage --level %s' % logLevel,
-			'php occ config:list',
-			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/federated/apps/testing/data/webUISkeleton',
-			'php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true',
-			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool'
-		]
-	}]
-
-def fixPermissions():
-	return [{
-		'name': 'fix-permissions',
-		'image': 'owncloudci/php:7.3',
-		'pull': 'always',
-		'commands': [
-			'cd /var/www/owncloud/server',
-			'chown www-data * -R'
-		]
-	}]
-
-def fixPermissionsFederated():
-	return [{
-		'name': 'fix-permissions-federated',
-		'image': 'owncloudci/php:7.3',
-		'pull': 'always',
-		'commands': [
-			'cd /var/www/owncloud/federated',
-			'chown www-data * -R'
-		]
-	}]
-
-def owncloudLog():
-	return [{
-		'name': 'owncloud-log',
-		'image': 'owncloud/ubuntu:16.04',
-		'pull': 'always',
-		'detach': True,
-		'commands': [
-			'tail -f /var/www/owncloud/server/data/owncloud.log'
-		]
-	}]
-
-def owncloudLogFederated():
-	return [{
-		'name': 'owncloud-federated-log',
-		'image': 'owncloud/ubuntu:16.04',
-		'pull': 'always',
-		'detach': True,
-		'commands': [
-			'tail -f /var/www/owncloud/federated/data/owncloud.log'
-		]
-	}]
-
-def copyFilesForUpload():
-	return [{
-		'name': 'copy-files-for-upload',
-		'pull': 'always',
-		'image': 'owncloudci/php:7.3',
-		'volumes': [{
-			'name': 'uploads',
-			'path': '/filesForUpload'
-		}],
-		'commands': [
-			'ls -la /filesForUpload',
-			'cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload',
-			'ls -la /filesForUpload'
-		]
-	}]
-
-def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser):
-	environment = {}
-	if (filterTags != ''):
-		environment['TEST_TAGS'] = filterTags
-	if isLocalBrowser(browser):
-		environment['LOCAL_UPLOAD_DIR'] = '/uploads'
-		if type(suite) == "list":
-			paths = ""
-			for path in suite:
-				paths = paths + "tests/acceptance/features/" + path + " "
-			environment['TEST_PATHS'] = paths
-		elif (suite != 'all'):
-			environment['TEST_CONTEXT'] = suite
-	else:
-		environment['TEST_CONTEXT'] = suite
-		environment['BROWSER_NAME'] = getSaucelabsBrowserName(browser)
-		environment['SELENIUM_PORT'] = '4445'
-		environment['SAUCELABS_TUNNEL_NAME'] = getSaucelabsTunnelName(alternateSuiteName, browser)
-		environment['SAUCE_USERNAME'] = {
-			'from_secret': 'sauce_username'
+		'environment': {
+			'MYSQL_USER': getDbUsername(db),
+			'MYSQL_PASSWORD': getDbPassword(db),
+			'MYSQL_DATABASE': getDbDatabase(db) + suffix,
+			'MYSQL_ROOT_PASSWORD': getDbRootPassword()
 		}
-		environment['SAUCE_ACCESS_KEY'] = {
-			'from_secret': 'sauce_access_key'
-		}
-
-	environment['SERVER_HOST'] = 'http://phoenix:9100'
-	environment['BACKEND_HOST'] = 'http://owncloud'
-
-	for env in extraEnvironment:
-		environment[env] = extraEnvironment[env]
-
-	return [{
-		'name': 'webui-acceptance-tests',
-		'image': 'owncloudci/nodejs:11',
-		'pull': 'always',
-		'environment': environment,
-		'commands': [
-			'cd /var/www/owncloud/phoenix',
-			'yarn run acceptance-tests-drone',
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		},{
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
 	}]
 
-def redisService():
-	return[{
-		'name': 'redis',
-		'image': 'webhippie/redis',
-		'pull': 'always',
-		'environment': {
-			'REDIS_DATABASES': 1
-		},
-	}]
-
-def uploadScreenshots():
-	return [{
-		'name': 'upload-screenshots',
-		'image': 'plugins/s3',
-		'pull': 'if-not-exists',
-		'settings': {
-			'acl': 'public-read',
-			'bucket': 'phoenix',
-			'endpoint': 'https://minio.owncloud.com/',
-			'path_style': True,
-			'source': '/var/www/owncloud/phoenix/tests/reports/screenshots/**/*',
-			'strip_prefix': '/var/www/owncloud/phoenix/tests/reports/screenshots',
-			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
-		},
-		'environment': {
-			'AWS_ACCESS_KEY_ID': {
-				'from_secret': 'aws_access_key_id'
-			},
-			'AWS_SECRET_ACCESS_KEY': {
-				'from_secret': 'aws_secret_access_key'
-			},
-		},
-		'when': {
-			'status': [
-				'failure'
-			],
-			'event': [
-				'pull_request'
-			]
-		},
-	}]
-
-def buildGithubComment(suite, alternateSuiteName):
-	return [{
-		'name': 'build-github-comment',
-		'image': 'owncloud/ubuntu:16.04',
-		'pull': 'always',
-		'commands': [
-			'cd /var/www/owncloud/phoenix/tests/reports/screenshots/',
-			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % alternateSuiteName,
-			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
-			'echo "\n</p></details>" >> comments.file',
-			'more comments.file',
-		],
-		'environment': {
-			'TEST_CONTEXT': suite,
-		},
-		'when': {
-			'status': [
-				'failure'
-			],
-			'event': [
-				'pull_request'
-			]
-		},
-	}]
-
-def githubComment():
-	return [{
-		'name': 'github-comment',
-		'image': 'jmccann/drone-github-comment:1',
-		'pull': 'if-not-exists',
-		'settings': {
-			'message_file': '/var/www/owncloud/phoenix/tests/reports/screenshots/comments.file',
-		},
-		'environment': {
-			'PLUGIN_API_KEY': {
-				'from_secret': 'plugin_api_key'
-			},
-		},
-		'when': {
-			'status': [
-				'failure'
-			],
-			'event': [
-				'pull_request'
-			]
-		},
-	}]
-
-def dependsOn(earlierStages, nextStages):
-	for earlierStage in earlierStages:
-		for nextStage in nextStages:
-			nextStage['depends_on'].append(earlierStage['name'])
+def buildTestConfig(params):
+	configs = []
+	for server in params['servers']:
+		for browser in params['browsers']:
+			for phpVersion in params['phpVersions']:
+				for db in params['databases']:
+					for esVersion in params['esVersions']:
+						for runPart in range(1, params['numberOfParts'] + 1):
+							config = dict(params)
+							config['server'] = server
+							config['browser'] = browser
+							config['phpVersion'] = phpVersion
+							config['database'] = db
+							config['esVersion'] = esVersion
+							config['runPart'] = runPart
+							configs.append(config)
+	return configs
