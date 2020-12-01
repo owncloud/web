@@ -2,7 +2,7 @@
 import 'regenerator-runtime/runtime'
 
 // --- Libraries and Plugins ---
-import Vue from 'vue'
+import Vue from './vue'
 import 'vue-resize/dist/vue-resize.css'
 import VueResize from 'vue-resize'
 
@@ -178,9 +178,6 @@ async function finalizeInit () {
     router,
     render: h => h(Phoenix)
   })
-
-  // externalize Vue - this is not the Vue instance but the class
-  window.Vue = Vue
 }
 
 function fetchTheme() {
