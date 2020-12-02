@@ -264,7 +264,7 @@ export default {
         {
           index: 0,
           text: this.$gettext('Home'),
-          to: '/files/list'
+          to: '/files/list/%2F'
         }
       ]
 

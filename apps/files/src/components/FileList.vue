@@ -233,7 +233,7 @@ export default {
     },
 
     folderNotFound() {
-      return this.currentFolder === null
+      return (this.isListRoute || this.isPublicFilesRoute) && this.currentFolder === null
     }
   },
   watch: {
@@ -337,7 +337,7 @@ export default {
     },
 
     resourceIndicators(resource) {
-      if (!this.currentFolder) {
+      if (this.folderNotFound) {
         return
       }
 

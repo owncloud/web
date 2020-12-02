@@ -114,6 +114,7 @@
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
+import isNil from 'lodash/isNil'
 import Mixins from '../mixins'
 import MixinRoutes from '../mixins/routes'
 import FileList from './FileList.vue'
@@ -152,7 +153,7 @@ export default {
       'fileSortField',
       'fileSortDirectionDesc'
     ]),
-    ...mapGetters(['configuration']),
+    ...mapGetters(['configuration', 'homeFolder']),
 
     item() {
       return this.$route.params.item
@@ -160,17 +161,30 @@ export default {
   },
   watch: {
     $route() {
+      this.$_allFilesList_goToHome()
       this.$_allFilesList_getFolder()
     }
   },
   beforeMount() {
+    this.$_allFilesList_goToHome()
     this.$_allFilesList_getFolder()
   },
   methods: {
     ...mapActions('Files', ['loadFolder', 'setHighlightedFile']),
 
+    $_allFilesList_goToHome() {
+      if (this.isListRoute && isNil(this.item)) {
+        this.$router.push({
+          name: 'files-list',
+          params: {
+            item: this.homeFolder
+          }
+        })
+      }
+    },
+
     $_allFilesList_getFolder() {
-      const absolutePath = this.item || this.configuration.rootFolder
+      const absolutePath = this.item
 
       this.loadFolder({
         client: this.$client,
