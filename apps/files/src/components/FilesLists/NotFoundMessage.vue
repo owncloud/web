@@ -5,7 +5,9 @@
       <translate>Resource not found</translate>
     </div>
     <div class="uk-text-muted">
-      <translate>We went looking everywhere, but were unable to find this resource.</translate>
+      <translate>
+        We went looking everywhere, but were unable to find the selected resource.
+      </translate>
     </div>
     <div class="oc-mt-s">
       <oc-button v-if="showHomeButton" type="router-link" variation="raw" :to="homeRoute">
