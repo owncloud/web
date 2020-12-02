@@ -136,7 +136,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import mixins from '../../mixins'
 import moment from 'moment'
 import filter from 'lodash/filter'
@@ -150,19 +150,14 @@ export default {
     RolesSelect
   },
   mixins: [mixins],
-  props: {
-    params: {
-      type: Object,
-      required: true
-    }
-  },
   data() {
     return {
       saving: false,
       password: null,
       errors: false,
-      ...this.params,
-
+      name: null,
+      hasPassword: false,
+      expireDate: null,
       placeholder: {
         expireDate: this.$gettext('Expiration date'),
         password: this.$gettext('Password'),
@@ -177,9 +172,10 @@ export default {
   computed: {
     ...mapGetters('Files', ['highlightedFile']),
     ...mapGetters(['getToken', 'capabilities']),
+    ...mapState('Files', ['publicLinkInEdit']),
 
     $_isNew() {
-      return !this.params.id
+      return !this.publicLinkInEdit.id
     },
 
     $_isFolder() {
@@ -191,15 +187,15 @@ export default {
     },
 
     $_hasChanges() {
-      const expireDateBefore = this.params.expireDate
-        ? moment(this.params.expireDate).format('DD-MM-YYYY')
+      const expireDateBefore = this.publicLinkInEdit.expireDate
+        ? moment(this.publicLinkInEdit.expireDate).format('DD-MM-YYYY')
         : null
       const expireDateNow = this.expireDate ? moment(this.expireDate).format('DD-MM-YYYY') : null
       return (
         expireDateNow !== expireDateBefore ||
-        this.name !== this.params.name ||
-        this.permissions !== this.params.permissions ||
-        (this.params.hasPassword
+        this.name !== this.publicLinkInEdit.name ||
+        this.permissions !== this.publicLinkInEdit.permissions ||
+        (this.publicLinkInEdit.hasPassword
           ? this.password !== null
           : this.password !== null && this.password.trim().length > 0)
       )
@@ -299,8 +295,15 @@ export default {
       return this.$gettext('Remove password')
     }
   },
+  created() {
+    this.name = this.publicLinkInEdit.name
+    this.hasPassword = this.publicLinkInEdit.hasPassword
+    this.expireDate = this.publicLinkInEdit.expireDate
+  },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink']),
+    ...mapMutations('Files', ['SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
+
     $_selectRole(role) {
       this.permissions = role.permissions
     },
@@ -349,7 +352,7 @@ export default {
       }
 
       this.updateLink({
-        id: this.params.id,
+        id: this.publicLinkInEdit.id,
         client: this.$client,
         $gettext: this.$gettext,
         params
@@ -366,7 +369,7 @@ export default {
     },
 
     $_closeForm() {
-      this.$emit('close')
+      this.SET_APP_SIDEBAR_ACCORDION_CONTEXT('showLinks')
     }
   }
 }
