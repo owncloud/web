@@ -1,0 +1,6 @@
+Change: Show dedicated 404 page for invalid resource references
+
+When visiting a public link or the `All files` files list with an invalid resource in the URL (e.g. because it was deleted in the meantime) we now show a dedicated page which explains
+the the resource could not be found and which offers a link to go back to the respective root (»All files« home location or the root of the public link).
+
+https://github.com/owncloud/phoenix/pull/4411
