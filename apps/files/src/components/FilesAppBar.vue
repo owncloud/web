@@ -165,6 +165,7 @@ import MixinDeleteResources from '../mixins/deleteResources'
 import MixinFileActions from '../mixins/fileActions'
 import MixinRoutes from '../mixins/routes'
 import pathUtil from 'path'
+import isEmpty from 'lodash/isEmpty'
 import { canBeMoved } from '../helpers/permissions'
 import { cloneStateObject } from '../helpers/store'
 import { getResourceSize } from '../helpers/resources'
@@ -213,10 +214,8 @@ export default {
     },
     currentPathSegments() {
       // remove potential leading and trailing slash from current path (so that the resulting array doesn't start with an empty string)
-      return this.currentPath
-        .replace(/^\/+/, '')
-        .replace(/\/+$/, '')
-        .split('/')
+      const s = this.currentPath.replace(/^\/+/, '').replace(/\/+$/, '')
+      return isEmpty(s) ? [] : s.split('/')
     },
     headers() {
       if (this.publicPage()) {
