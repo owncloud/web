@@ -2,7 +2,6 @@
   <div id="files-app-bar" class="oc-app-bar">
     <file-drop
       v-if="!isIE11() && canUpload && hasFreeSpace"
-      :root-path="item"
       :path="currentPath"
       :headers="headers"
       @success="onFileSuccess"
@@ -50,7 +49,6 @@
                 ></file-upload>
                 <folder-upload
                   v-if="!isIE11()"
-                  :root-path="item"
                   :path="currentPath"
                   :headers="headers"
                   @success="onFileSuccess"
@@ -210,15 +208,15 @@ export default {
       }
       return null
     },
-    item() {
-      return this.$route.params.item === undefined
-        ? this.configuration.rootFolder !== '/'
-          ? `${this.configuration.rootFolder}/`
-          : '/'
-        : this.$route.params.item + '/'
-    },
     currentPath() {
-      return this.item === '/' ? '' : this.item
+      return this.$route.params.item || ''
+    },
+    currentPathSegments() {
+      // remove potential leading and trailing slash from current path (so that the resulting array doesn't start with an empty string)
+      return this.currentPath
+        .replace(/^\/+/, '')
+        .replace(/\/+$/, '')
+        .split('/')
     },
     headers() {
       if (this.publicPage()) {
@@ -260,57 +258,32 @@ export default {
     },
 
     breadcrumbs() {
-      let breadcrumbs = [
-        {
-          index: 0,
-          text: this.$gettext('Home'),
-          to: '/files/list/%2F'
-        }
-      ]
-
-      if (!this.currentFolder) return breadcrumbs
-
-      const rootFolder = this.configuration.rootFolder
-      let baseUrl = '/files/list/'
-
-      const pathSplit = this.currentFolder.path
-        ? this.currentFolder.path.split('/').filter(val => {
-            if (rootFolder === '/') return val
-
-            return val !== rootFolder
-          })
-        : []
-
-      if (rootFolder && rootFolder !== '/') {
-        pathSplit.splice(0, 1)
-        baseUrl = `/files/list/${rootFolder}%2F`
-      }
-
-      let startIndex = 0
-
-      if (this.publicPage()) {
-        baseUrl = '/files/public-files/'
-        startIndex = 1
-        breadcrumbs = [
-          {
-            index: 0,
-            text: this.$gettext('Home'),
-            to: baseUrl + pathSplit[0]
-          }
-        ]
-      }
-
-      for (let i = startIndex; i < pathSplit.length; i++) {
-        let itemPath =
-          baseUrl + encodeURIComponent(pathUtil.join.apply(null, pathSplit.slice(0, i + 1)))
-        if (i === pathSplit.length - 1) {
-          itemPath = null
-        }
-
+      const pathSegments = this.currentPathSegments
+      const breadcrumbs = []
+      let baseUrl
+      const pathItems = []
+      if (this.isListRoute) {
+        baseUrl = '/files/list/'
+        pathItems.push('/') // as of now we need to add the url encoded root path `/`, otherwise we'll land in the configured homeFolder
         breadcrumbs.push({
-          index: i,
-          text: pathSplit.slice(0, i + 1)[i],
-          to: itemPath
+          text: this.$gettext('Home'),
+          to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+        })
+      } else {
+        baseUrl = '/files/public-files/'
+        pathItems.push(pathSegments.splice(0, 1)[0])
+        breadcrumbs.push({
+          text: this.$gettext('Home'),
+          to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+        })
+      }
+
+      for (let i = 0; i < pathSegments.length; i++) {
+        pathItems.push(pathSegments[i])
+        const to = baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+        breadcrumbs.push({
+          text: pathSegments[i],
+          to: i + 1 === pathSegments.length ? null : to
         })
       }
 
@@ -392,14 +365,9 @@ export default {
     $_ocFilesFolder_getFolder() {
       this.path = []
 
-      const absolutePath =
-        this.$route.params.item === '' || this.$route.params.item === undefined
-          ? this.configuration.rootFolder
-          : this.route.params.item
-
       this.loadFolder({
         client: this.$client,
-        absolutePath: absolutePath,
+        absolutePath: this.currentPath,
         $gettext: this.$gettext,
         routeName: this.$route.name
       }).catch(error => {
@@ -455,19 +423,12 @@ export default {
     addNewFolder(folderName) {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
-        const path =
-          this.item === ''
-            ? this.configuration.rootFolder
-              ? `${this.configuration.rootFolder}/`
-              : '/'
-            : `${this.item}/`
-        let p = this.$client.files.createFolder(path + folderName)
-        if (this.publicPage()) {
-          p = this.$client.publicFiles.createFolder(
-            path + folderName,
-            null,
-            this.publicLinkPassword
-          )
+        const path = pathUtil.join(this.currentPath, folderName)
+        let p
+        if (this.isListRoute) {
+          p = this.$client.files.createFolder(path)
+        } else {
+          p = this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
         }
 
         p.then(() => {
@@ -523,19 +484,17 @@ export default {
     addNewFile(fileName) {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
-        const path =
-          this.item === ''
-            ? this.configuration.rootFolder
-              ? `${this.configuration.rootFolder}/`
-              : '/'
-            : `${this.item}/`
-        const filePath = pathUtil.join(path, fileName)
-        let p = this.$client.files.putFileContents(filePath, '')
-        if (this.publicPage()) {
-          p = this.$client.publicFiles.putFileContents(filePath, null, this.publicLinkPassword, '')
+
+        const path = pathUtil.join(this.currentPath, fileName)
+        let p
+        if (this.isListRoute) {
+          p = this.$client.files.putFileContents(path, '')
+        } else {
+          p = this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
         }
+
         p.then(async () => {
-          const file = await this.$client.files.fileInfo(filePath, this.davProperties)
+          const file = await this.$client.files.fileInfo(path, this.davProperties)
           const fileId = file.fileInfo['{http://owncloud.org/ns}fileid']
 
           this.$_ocFilesFolder_getFolder()
@@ -543,7 +502,7 @@ export default {
           this.hideModal()
 
           if (this.newFileAction) {
-            this.$_fileActions_openEditor(this.newFileAction, filePath, fileId)
+            this.$_fileActions_openEditor(this.newFileAction, path, fileId)
           }
         }).catch(error => {
           this.fileFolderCreationLoading = false
@@ -593,35 +552,21 @@ export default {
         file = file.name
       }
       this.$nextTick().then(() => {
-        const path =
-          this.item === ''
-            ? this.configuration.rootFolder
-              ? `${this.configuration.rootFolder}/`
-              : '/'
-            : `${this.item}/`
-        const filePath = pathUtil.join(path, file)
-        if (this.publicPage()) {
-          this.$client.publicFiles
-            .list(filePath, this.publicLinkPassword, this.davProperties, '0')
-            .then(files => {
-              this.addFiles({
-                files: files
-              })
-            })
-            .catch(() => {
-              this.$_ocFilesFolder_getFolder()
-            })
-        } else {
+        const path = pathUtil.join(this.currentPath, file)
+        if (this.isListRoute) {
           this.$client.files
-            .fileInfo(filePath, this.davProperties)
+            .fileInfo(path, this.davProperties)
             .then(fileInfo => {
-              this.addFiles({
-                files: [fileInfo]
-              })
+              this.addFiles({ files: [fileInfo] })
             })
-            .catch(() => {
-              this.$_ocFilesFolder_getFolder()
+            .catch(() => this.$_ocFilesFolder_getFolder())
+        } else {
+          this.$client.publicFiles
+            .list(path, this.publicLinkPassword, this.davProperties, '0')
+            .then(files => {
+              this.addFiles({ files })
             })
+            .catch(() => this.$_ocFilesFolder_getFolder())
         }
       })
     },

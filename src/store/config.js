@@ -14,7 +14,6 @@ const state = {
   openIdConnect: {
     authority: ''
   },
-  rootFolder: '',
   theme: {
     name: 'owncloud',
     general: {
@@ -72,7 +71,6 @@ const mutations = {
     state.server = config.server
     state.auth = config.auth
     state.openIdConnect = config.openIdConnect
-    state.rootFolder = config.rootFolder === undefined ? '/' : config.rootFolder
     state.uploadChunkSize = config.uploadChunkSize === undefined ? Infinity : config.uploadChunkSize
     state.state = config.state === undefined ? 'working' : config.state
     state.applications = config.applications === undefined ? [] : config.applications

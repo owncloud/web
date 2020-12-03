@@ -6,34 +6,16 @@ Feature: access breadcrumb
   Background:
     Given user "user1" has been created with default attributes
 
-  Scenario: Check breadCrumb for folder one level below the root folder when rootFolder is set with no value
-    Given the property "rootFolder" has been set to "" in phoenix config file
-    And user "user1" has logged in using the webUI
-    When the user opens folder "simple-folder" using the webUI
-    Then breadcrumb for folder "simple-folder" should be displayed on the webUI
-
   Scenario: Breadcrumb navigation should not happen on last segment
-    Given the property "rootFolder" has been set to "" in phoenix config file
-    And user "user1" has created folder "simple-folder/subfolder"
+    Given user "user1" has created folder "simple-folder/subfolder"
     And user "user1" has logged in using the webUI
     When the user opens folder "simple-folder" using the webUI
     And the user opens folder "subfolder" using the webUI
     Then clickable breadcrumb for folder "simple-folder" should be displayed on the webUI
     And non-clickable breadcrumb for folder "subfolder" should be displayed on the webUI
 
-  @ocis-reva-issue-106
-  Scenario: Change rootFolder to simple-folder and check for the displayed files
-    Given the property "rootFolder" has been set to "simple-folder" in phoenix config file
-    And user "user1" has logged in using the webUI
-    When the user browses to the files page
-    Then folder "0" should not be listed on the webUI
-    But as "user1" folder "0" should exist
-    And file "lorem.txt" should be listed on the webUI
-
-  @issue-1883
   Scenario: Select breadcrumb inside folder with problematic name
-    Given the property "rootFolder" has been deleted in phoenix config file
-    And user "user1" has created folder "folder%2Fwith%2FSlashes"
+    Given user "user1" has created folder "folder%2Fwith%2FSlashes"
     And user "user1" has created folder "folder%2Fwith%2FSlashes/subfolder"
     And user "user1" has logged in using the webUI
     When the user opens folder "folder%2Fwith%2FSlashes" using the webUI
@@ -58,3 +40,8 @@ Feature: access breadcrumb
     And the user opens folder "\"inner\" double quotes" using the webUI
     Then clickable breadcrumb for folder "\'single-double quotes\"" should be displayed on the webUI
     And non-clickable breadcrumb for folder "\"inner\" double quotes" should be displayed on the webUI
+
+  Scenario: Check breadCrumb for home folder
+    Given the property "homeFolder" of "options" has been set to "/0" in phoenix config file
+    And user "user1" has logged in using the webUI
+    Then breadcrumb for folder "0" should be displayed on the webUI
