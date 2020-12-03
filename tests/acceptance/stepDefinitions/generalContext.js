@@ -43,7 +43,6 @@ function setconfig(key, subkey, value, configfile) {
     data[key] = {}
   }
   data[key][subkey] = value
-  console.log(data)
   return fs.writeFileSync(configfile, JSON.stringify(data, null, 4))
 }
 
