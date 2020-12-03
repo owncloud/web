@@ -374,6 +374,11 @@ async function assertNoResourcesListed() {
   )
 }
 
+Then('there should be a not found error page displayed on the webUI', async function() {
+  const notFoundMessageVisible = await client.page.FilesPageElement.filesList().isNotFoundMessageVisible()
+  assert.ok(notFoundMessageVisible, 'NotFound message must be visible')
+})
+
 Then('file {string} should be listed on the webUI', function(folder) {
   return client.page.FilesPageElement.filesList().waitForFileVisible(folder, 'file')
 })

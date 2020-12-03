@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-text-center">
+  <div id="files-list-not-found-message" class="uk-text-center">
     <oc-icon :url="iconPath" type="div" size="xxlarge" variation="system" />
     <div class="uk-text-muted uk-text-large">
       <translate>Resource not found</translate>
@@ -10,11 +10,18 @@
       </translate>
     </div>
     <div class="oc-mt-s">
-      <oc-button v-if="showHomeButton" type="router-link" variation="raw" :to="homeRoute">
+      <oc-button
+        v-if="showHomeButton"
+        id="files-list-not-found-button-go-home"
+        type="router-link"
+        variation="raw"
+        :to="homeRoute"
+      >
         <translate>Go to »All files«</translate>
       </oc-button>
       <oc-button
         v-if="showPublicLinkButton"
+        id="files-list-not-found-button-reload-link"
         type="router-link"
         variation="raw"
         :to="publicLinkRoute"

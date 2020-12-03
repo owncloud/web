@@ -439,6 +439,14 @@ module.exports = {
       }
       return visible
     },
+    isNotFoundMessageVisible: async function() {
+      await this.waitForElementNotPresent('@filesListProgressBar')
+      let isVisible = false
+      await this.api.element('@filesListNotFoundMessage', result => {
+        isVisible = Object.keys(result.value).length > 0
+      })
+      return isVisible
+    },
     countFilesAndFolders: async function() {
       let filesCount = 0
       let foldersCount = 0
@@ -754,6 +762,9 @@ module.exports = {
     },
     filesListNoContentMessage: {
       selector: '#files-list-container .files-list-no-content-message'
+    },
+    filesListNotFoundMessage: {
+      selector: '#files-list-container #files-list-not-found-message'
     },
     shareButtonInFileRow: {
       selector: '//button[@aria-label="People"]',
