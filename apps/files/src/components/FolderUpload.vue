@@ -21,6 +21,7 @@ import Mixins from '../mixins'
 export default {
   mixins: [Mixins],
   props: {
+    rootPath: { type: String, required: true },
     path: { type: String, required: true },
     headers: {
       type: Object,

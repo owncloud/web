@@ -2,6 +2,7 @@
   <div id="files-app-bar" class="oc-app-bar">
     <file-drop
       v-if="!isIE11() && canUpload && hasFreeSpace"
+      :root-path="currentPathOrRoot"
       :path="currentPath"
       :headers="headers"
       @success="onFileSuccess"
@@ -46,29 +47,32 @@
                   @success="onFileSuccess"
                   @error="onFileError"
                   @progress="onFileProgress"
-                ></file-upload>
+                />
                 <folder-upload
                   v-if="!isIE11()"
+                  :root-path="currentPathOrRoot"
                   :path="currentPath"
                   :headers="headers"
                   @success="onFileSuccess"
                   @error="onFileError"
                   @progress="onFileProgress"
-                ></folder-upload>
+                />
                 <oc-nav-item
                   id="new-folder-btn"
                   icon="create_new_folder"
                   @click="showCreateResourceModal"
-                  ><translate>New folder…</translate></oc-nav-item
                 >
+                  <translate>New folder…</translate>
+                </oc-nav-item>
                 <oc-nav-item
                   v-for="(newFileHandler, key) in newFileHandlers"
                   :key="key"
                   :class="'new-file-btn-' + newFileHandler.ext"
                   :icon="newFileHandler.icon || 'save'"
                   @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
-                  >{{ newFileHandler.menuTitle($gettext) }}</oc-nav-item
                 >
+                  {{ newFileHandler.menuTitle($gettext) }}
+                </oc-nav-item>
               </oc-nav>
             </oc-drop>
           </template>
@@ -211,6 +215,9 @@ export default {
     },
     currentPath() {
       return this.$route.params.item || ''
+    },
+    currentPathOrRoot() {
+      return this.currentPath === '' ? '/' : this.currentPath
     },
     currentPathSegments() {
       // remove potential leading and trailing slash from current path (so that the resulting array doesn't start with an empty string)
