@@ -40,7 +40,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value                |
       | uid_owner   | user2                |
       | share_with  | user1                |
-      | file_target | /simple-folder       |
+      | file_target | /Shares/simple-folder|
       | item_type   | folder               |
       | permissions | read, update, create |
 
@@ -128,7 +128,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value          |
       | uid_owner   | user2          |
       | share_with  | user1          |
-      | file_target | /simple-folder |
+      | file_target | /Shares/simple-folder |
       | item_type   | folder         |
       | permissions | <permissions>  |
     Examples:
@@ -245,7 +245,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value         |
       | uid_owner   | user2         |
       | share_with  | user1         |
-      | file_target | /lorem.txt    |
+      | file_target | /Shares/lorem.txt    |
       | item_type   | file          |
       | permissions | <permissions> |
     Examples:
@@ -352,6 +352,6 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value                        |
       | uid_owner   | user1                        |
       | share_with  | user3                        |
-      | file_target | /simple-empty-folder         |
+      | file_target | /Shares/simple-empty-folder         |
       | item_type   | folder                       |
       | permissions | read, delete, create, update |

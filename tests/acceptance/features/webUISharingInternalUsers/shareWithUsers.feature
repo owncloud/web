@@ -95,7 +95,7 @@ Feature: Sharing files and folders with internal users
       | field       | value                  |
       | uid_owner   | user2                  |
       | share_with  | user1                  |
-      | file_target | /simple-folder         |
+      | file_target | /Shares/simple-folder  |
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
@@ -284,6 +284,7 @@ Feature: Sharing files and folders with internal users
     And the user browses to the folder "Shares" on the files page
     Then folder "simple-folder" should not be listed on the webUI
 
+  @skipOnOCIS @issue-ocis-730
   Scenario: deleting multiple entries on the shared-with-me page
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
@@ -547,14 +548,14 @@ Feature: Sharing files and folders with internal users
       | field       | value                     |
       | uid_owner   | user2                     |
       | share_with  | user1                     |
-      | file_target | /Sample,Folder,With,Comma |
+      | file_target | /Shares/Sample,Folder,With,Comma |
       | item_type   | folder                    |
       | permissions | <permissions-folder>      |
     And user "user1" should have received a share with these details:
       | field       | value              |
       | uid_owner   | user2              |
       | share_with  | user1              |
-      | file_target | /sample,1.txt      |
+      | file_target | /Shares/sample,1.txt      |
       | item_type   | file               |
       | permissions | <permissions-file> |
     When the user re-logs in as "user1" using the webUI
