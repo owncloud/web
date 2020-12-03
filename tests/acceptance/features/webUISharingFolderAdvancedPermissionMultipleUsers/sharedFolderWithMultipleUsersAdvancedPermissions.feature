@@ -55,19 +55,19 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" folder "/Shares/simple-folder" should not exist
     Examples:
-      | role                 | displayed-role       | extra-permissions             | displayed-permissions | actual-permissions           |
-      | Advanced permissions | Advanced permissions | delete                        | delete                | read, delete                 |
-      | Advanced permissions | Advanced permissions | update                        | update                | read, update                 |
-      | Advanced permissions | Advanced permissions | create                        | create                | read, create                 |
-      | Advanced permissions | Advanced permissions | share, delete                 | share, delete         | read, share, delete          |
-      | Advanced permissions | Advanced permissions | share, update                 | share, update         | read, update, share          |
-      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create          |
-      | Advanced permissions | Advanced permissions | delete, update                | delete, update        | read, delete, update         |
-      | Advanced permissions | Advanced permissions | delete, create                | delete, create        | read, delete, create         |
-      | Advanced permissions | Advanced permissions | update, create                | update, create        | read, update, create         |
-      | Advanced permissions | Advanced permissions | share, delete, update         | share, delete, update | read, share, delete, update  |
-      | Advanced permissions | Advanced permissions | share, create, delete         | share, create, delete | read, share, delete, create  |
-      | Advanced permissions | Advanced permissions | share, update, create         | share, update, create | read, share, update, create  |
+      | role                 | displayed-role       | extra-permissions     | displayed-permissions | actual-permissions          |
+      | Advanced permissions | Advanced permissions | delete                | delete                | read, delete                |
+      | Advanced permissions | Advanced permissions | update                | update                | read, update                |
+      | Advanced permissions | Advanced permissions | create                | create                | read, create                |
+      | Advanced permissions | Advanced permissions | share, delete         | share, delete         | read, share, delete         |
+      | Advanced permissions | Advanced permissions | share, update         | share, update         | read, update, share         |
+      | Advanced permissions | Advanced permissions | share, create         | share, create         | read, share, create         |
+      | Advanced permissions | Advanced permissions | delete, update        | delete, update        | read, delete, update        |
+      | Advanced permissions | Advanced permissions | delete, create        | delete, create        | read, delete, create        |
+      | Advanced permissions | Advanced permissions | update, create        | update, create        | read, update, create        |
+      | Advanced permissions | Advanced permissions | share, delete, update | share, delete, update | read, share, delete, update |
+      | Advanced permissions | Advanced permissions | share, create, delete | share, create, delete | read, share, delete, create |
+      | Advanced permissions | Advanced permissions | share, update, create | share, update, create | read, share, update, create |
 
   @skipOnOC10 @issue-product-203 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -96,28 +96,28 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And user "User Two" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "User Three" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "user2" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user2                |
-      | file_target | /simple-folder       |
-      | item_type   | folder               |
-      | permissions | <actual-permissions> |
+      | field       | value                 |
+      | uid_owner   | user1                 |
+      | share_with  | user2                 |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <actual-permissions>  |
     And user "user3" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user3                |
-      | file_target | /simple-folder       |
-      | item_type   | folder               |
-      | permissions | <actual-permissions> |
+      | field       | value                 |
+      | uid_owner   | user1                 |
+      | share_with  | user3                 |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <actual-permissions>  |
     But user "Regular User" should not be listed in the collaborators list on the webUI
     And as "user0" folder "/Shares/simple-folder" should not exist
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" folder "/Shares/simple-folder" should not exist
     Examples:
-      | role                 | displayed-role       | extra-permissions     | displayed-permissions | actual-permissions                  |
-      | Advanced permissions | Advanced permissions | delete                | delete                | read, delete                        |
-      | Advanced permissions | Advanced permissions | update                | update                | read, update                        |
-      | Advanced permissions | Advanced permissions | create                | create, update        | read, create, update                |
-      | Advanced permissions | Advanced permissions | delete, update        | delete, update        | read, delete, update                |
-      | Advanced permissions | Editor               | delete, create        | ,                     | read, delete, create, update        |
-      | Advanced permissions | Advanced permissions | update, create        | update, create        | read, update, create                |
+      | role                 | displayed-role       | extra-permissions | displayed-permissions | actual-permissions           |
+      | Advanced permissions | Advanced permissions | delete            | delete                | read, delete                 |
+      | Advanced permissions | Advanced permissions | update            | update                | read, update                 |
+      | Advanced permissions | Advanced permissions | create            | create, update        | read, create, update         |
+      | Advanced permissions | Advanced permissions | delete, update    | delete, update        | read, delete, update         |
+      | Advanced permissions | Editor               | delete, create    | ,                     | read, delete, create, update |
+      | Advanced permissions | Advanced permissions | update, create    | update, create        | read, update, create         |
