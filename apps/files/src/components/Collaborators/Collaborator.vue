@@ -1,5 +1,5 @@
 <template>
-  <oc-table middle class="files-collaborators-collaborator">
+  <oc-table top class="files-collaborators-collaborator">
     <oc-table-row class="files-collaborators-collaborator-table-row-info">
       <oc-table-cell shrink>
         <div key="collaborator-avatar-loaded">
@@ -54,7 +54,10 @@
           </div>
           <oc-grid gutter="small">
             <div v-if="!isCurrentUser">
-              <oc-tag v-text="collaboratorType(collaborator.shareType)" />
+              <oc-tag>
+                <oc-icon :name="collaboratorTypeTagIcon" aria-hidden="true" />
+                {{ collaboratorType(collaborator.shareType) }}
+              </oc-tag>
             </div>
             <div v-if="$_reshareInformation">
               <oc-tag
@@ -140,7 +143,7 @@
               class="files-collaborators-collaborator-delete"
               @click="$_removeShare"
             >
-              <oc-icon name="close" />
+              <oc-icon name="delete" />
             </oc-button>
             <oc-spinner
               v-else-if="$_loadingSpinnerVisible"
@@ -312,6 +315,14 @@ export default {
 
     isCurrentUser() {
       return !this.isGroup && this.collaborator.collaborator.name === this.user.id
+    },
+
+    collaboratorTypeTagIcon() {
+      if (this.isGroup) {
+        return 'group'
+      }
+
+      return 'person'
     }
   },
   methods: {

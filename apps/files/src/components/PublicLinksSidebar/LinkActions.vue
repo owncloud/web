@@ -18,7 +18,7 @@
         class="oc-files-file-link-delete"
         @click="$_removeLink"
       >
-        <oc-icon name="close" aria-hidden="true" />
+        <oc-icon name="delete" aria-hidden="true" />
       </oc-button>
     </template>
   </div>

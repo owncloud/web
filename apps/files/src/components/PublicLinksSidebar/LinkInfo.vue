@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <div class="oc-mb-s">
-      <span class="oc-text-bold uk-text-truncate oc-files-file-link-name" v-text="linkName" />
-      <div class="uk-flex uk-flex-middle">
+  <div class="uk-width-expand">
+    <div class="oc-mb-s uk-width-1-1">
+      <div class="oc-text-bold uk-text-truncate oc-files-file-link-name" v-text="linkName" />
+      <div class="uk-flex uk-flex-middle uk-width-1-1">
         <a
           :href="link.url"
           target="_blank"

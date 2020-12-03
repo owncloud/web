@@ -1,7 +1,11 @@
 <template>
   <section>
-    <div class="oc-text-bold uk-flex">
-      <translate>Private Link</translate>
+    <translate tag="div" class="oc-text-bold">Private Link</translate>
+    <div class="uk-text-meta oc-mb-xs">
+      <translate tag="i">Only invited people can use this link.</translate>
+    </div>
+    <div class="uk-width-1-1 uk-flex uk-flex-middle">
+      <a :href="link" target="_blank" class="uk-text-truncate" v-text="link" />
       <oc-button :aria-label="copyLabel" :uk-tooltip="copyLabel" variation="raw" class="oc-ml-s">
         <oc-icon
           v-if="linkCopied"
@@ -19,9 +23,6 @@
           name="copy_to_clipboard"
         />
       </oc-button>
-    </div>
-    <div class="uk-text-meta">
-      <translate tag="i">Only invited people can use this link.</translate>
     </div>
     <hr />
   </section>

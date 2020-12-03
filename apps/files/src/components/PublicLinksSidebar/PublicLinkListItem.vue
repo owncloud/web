@@ -1,9 +1,12 @@
 <template>
   <div class="files-file-links-link">
-    <div class="files-file-links-link-table-row-info">
+    <oc-grid
+      gutter="small"
+      class="files-file-links-link-table-row-info uk-flex uk-flex-top uk-flex-between"
+    >
       <link-info :link="link" />
       <link-actions v-if="!link.indirect" :link="link" />
-    </div>
+    </oc-grid>
     <div v-if="$_viaLabel" class="files-file-links-link-table-row-bottom uk-text-meta">
       <oc-button
         type="router-link"
