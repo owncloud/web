@@ -46,6 +46,14 @@ function setconfig(key, subkey, value, configfile) {
   return fs.writeFileSync(configfile, JSON.stringify(data, null, 4))
 }
 
+Given('the property {string} of {string} has been set to {string} in phoenix config file', function(
+  subkey,
+  key,
+  value
+) {
+  return setconfig(key, subkey, value, this.fullPathOfConfigFile)
+})
+
 Given('the property {string} of {string} has been set to true in phoenix config file', function(
   subkey,
   key

@@ -2,7 +2,7 @@
   <div id="files-app-bar" class="oc-app-bar">
     <file-drop
       v-if="!isIE11() && canUpload && hasFreeSpace"
-      :root-path="item"
+      :root-path="currentPath"
       :path="currentPath"
       :headers="headers"
       @success="onFileSuccess"
@@ -47,30 +47,32 @@
                   @success="onFileSuccess"
                   @error="onFileError"
                   @progress="onFileProgress"
-                ></file-upload>
+                />
                 <folder-upload
                   v-if="!isIE11()"
-                  :root-path="item"
+                  :root-path="currentPath"
                   :path="currentPath"
                   :headers="headers"
                   @success="onFileSuccess"
                   @error="onFileError"
                   @progress="onFileProgress"
-                ></folder-upload>
+                />
                 <oc-nav-item
                   id="new-folder-btn"
                   icon="create_new_folder"
                   @click="showCreateResourceModal"
-                  ><translate>New folder…</translate></oc-nav-item
                 >
+                  <translate>New folder…</translate>
+                </oc-nav-item>
                 <oc-nav-item
                   v-for="(newFileHandler, key) in newFileHandlers"
                   :key="key"
                   :class="'new-file-btn-' + newFileHandler.ext"
                   :icon="newFileHandler.icon || 'save'"
                   @click="showCreateResourceModal(false, newFileHandler.ext, newFileHandler.action)"
-                  >{{ newFileHandler.menuTitle($gettext) }}</oc-nav-item
                 >
+                  {{ newFileHandler.menuTitle($gettext) }}
+                </oc-nav-item>
               </oc-nav>
             </oc-drop>
           </template>
@@ -99,7 +101,7 @@
             ><translate>Clear selection</translate></oc-button
           >
         </div>
-        <template v-if="$route.name === 'files-trashbin'">
+        <template v-if="isTrashbinRoute">
           <oc-button
             v-if="selectedFiles.length > 0"
             key="restore-btn"
@@ -161,18 +163,21 @@
 </template>
 
 <script>
-import FileUpload from './FileUpload.vue'
-import FolderUpload from './FolderUpload.vue'
-import FileDrop from './FileDrop.vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import Mixins from '../mixins'
 import MixinDeleteResources from '../mixins/deleteResources'
 import MixinFileActions from '../mixins/fileActions'
+import MixinRoutes from '../mixins/routes'
 import pathUtil from 'path'
+import isEmpty from 'lodash/isEmpty'
 import { canBeMoved } from '../helpers/permissions'
 import { cloneStateObject } from '../helpers/store'
 import { getResourceSize } from '../helpers/resources'
 import { checkRoute } from '../helpers/route'
+
+const FileUpload = () => import('./FileUpload.vue')
+const FolderUpload = () => import('./FolderUpload.vue')
+const FileDrop = () => import('./FileDrop.vue')
 
 export default {
   components: {
@@ -180,7 +185,7 @@ export default {
     FolderUpload,
     FileDrop
   },
-  mixins: [Mixins, MixinDeleteResources, MixinFileActions],
+  mixins: [Mixins, MixinDeleteResources, MixinFileActions, MixinRoutes],
   data: () => ({
     newFileAction: null,
     path: '',
@@ -208,15 +213,17 @@ export default {
       }
       return null
     },
-    item() {
-      return this.$route.params.item === undefined
-        ? this.configuration.rootFolder !== '/'
-          ? `${this.configuration.rootFolder}/`
-          : '/'
-        : this.$route.params.item + '/'
-    },
     currentPath() {
-      return this.item === '/' ? '' : this.item
+      const path = this.$route.params.item || ''
+      if (path.endsWith('/')) {
+        return path
+      }
+      return path + '/'
+    },
+    currentPathSegments() {
+      // remove potential leading and trailing slash from current path (so that the resulting array doesn't start with an empty string)
+      const s = this.currentPath.replace(/^\/+/, '').replace(/\/+$/, '')
+      return isEmpty(s) ? [] : s.split('/')
     },
     headers() {
       if (this.publicPage()) {
@@ -247,7 +254,7 @@ export default {
     },
 
     showBreadcrumb() {
-      return this.$route.name === 'public-files' || this.$route.name === 'files-list'
+      return this.isPublicFilesRoute || this.isListRoute
     },
     pageIcon() {
       return this.$route.meta.pageIcon
@@ -258,57 +265,32 @@ export default {
     },
 
     breadcrumbs() {
-      let breadcrumbs = [
-        {
-          index: 0,
-          text: this.$gettext('Home'),
-          to: '/files/list'
-        }
-      ]
-
-      if (!this.currentFolder) return breadcrumbs
-
-      const rootFolder = this.configuration.rootFolder
-      let baseUrl = '/files/list/'
-
-      const pathSplit = this.currentFolder.path
-        ? this.currentFolder.path.split('/').filter(val => {
-            if (rootFolder === '/') return val
-
-            return val !== rootFolder
-          })
-        : []
-
-      if (rootFolder && rootFolder !== '/') {
-        pathSplit.splice(0, 1)
-        baseUrl = `/files/list/${rootFolder}%2F`
-      }
-
-      let startIndex = 0
-
-      if (this.publicPage()) {
-        baseUrl = '/files/public-files/'
-        startIndex = 1
-        breadcrumbs = [
-          {
-            index: 0,
-            text: this.$gettext('Home'),
-            to: baseUrl + pathSplit[0]
-          }
-        ]
-      }
-
-      for (let i = startIndex; i < pathSplit.length; i++) {
-        let itemPath =
-          baseUrl + encodeURIComponent(pathUtil.join.apply(null, pathSplit.slice(0, i + 1)))
-        if (i === pathSplit.length - 1) {
-          itemPath = null
-        }
-
+      const pathSegments = this.currentPathSegments
+      const breadcrumbs = []
+      let baseUrl
+      const pathItems = []
+      if (this.isListRoute) {
+        baseUrl = '/files/list/'
+        pathItems.push('/') // as of now we need to add the url encoded root path `/`, otherwise we'll land in the configured homeFolder
         breadcrumbs.push({
-          index: i,
-          text: pathSplit.slice(0, i + 1)[i],
-          to: itemPath
+          text: this.$gettext('Home'),
+          to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+        })
+      } else {
+        baseUrl = '/files/public-files/'
+        pathItems.push(pathSegments.splice(0, 1)[0])
+        breadcrumbs.push({
+          text: this.$gettext('Home'),
+          to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+        })
+      }
+
+      for (let i = 0; i < pathSegments.length; i++) {
+        pathItems.push(pathSegments[i])
+        const to = baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
+        breadcrumbs.push({
+          text: pathSegments[i],
+          to: i + 1 === pathSegments.length ? null : to
         })
       }
 
@@ -380,7 +362,6 @@ export default {
   methods: {
     ...mapActions('Files', [
       'resetFileSelection',
-      'loadFiles',
       'addFiles',
       'updateFileProgress',
       'loadFolder',
@@ -391,14 +372,9 @@ export default {
     $_ocFilesFolder_getFolder() {
       this.path = []
 
-      const absolutePath =
-        this.$route.params.item === '' || this.$route.params.item === undefined
-          ? this.configuration.rootFolder
-          : this.route.params.item
-
       this.loadFolder({
         client: this.$client,
-        absolutePath: absolutePath,
+        absolutePath: this.currentPath,
         $gettext: this.$gettext,
         routeName: this.$route.name
       }).catch(error => {
@@ -454,19 +430,12 @@ export default {
     addNewFolder(folderName) {
       if (folderName !== '') {
         this.fileFolderCreationLoading = true
-        const path =
-          this.item === ''
-            ? this.configuration.rootFolder
-              ? `${this.configuration.rootFolder}/`
-              : '/'
-            : `${this.item}/`
-        let p = this.$client.files.createFolder(path + folderName)
-        if (this.publicPage()) {
-          p = this.$client.publicFiles.createFolder(
-            path + folderName,
-            null,
-            this.publicLinkPassword
-          )
+        const path = pathUtil.join(this.currentPath, folderName)
+        let p
+        if (this.isListRoute) {
+          p = this.$client.files.createFolder(path)
+        } else {
+          p = this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
         }
 
         p.then(() => {
@@ -522,19 +491,17 @@ export default {
     addNewFile(fileName) {
       if (fileName !== '') {
         this.fileFolderCreationLoading = true
-        const path =
-          this.item === ''
-            ? this.configuration.rootFolder
-              ? `${this.configuration.rootFolder}/`
-              : '/'
-            : `${this.item}/`
-        const filePath = pathUtil.join(path, fileName)
-        let p = this.$client.files.putFileContents(filePath, '')
-        if (this.publicPage()) {
-          p = this.$client.publicFiles.putFileContents(filePath, null, this.publicLinkPassword, '')
+
+        const path = pathUtil.join(this.currentPath, fileName)
+        let p
+        if (this.isListRoute) {
+          p = this.$client.files.putFileContents(path, '')
+        } else {
+          p = this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
         }
+
         p.then(async () => {
-          const file = await this.$client.files.fileInfo(filePath, this.davProperties)
+          const file = await this.$client.files.fileInfo(path, this.davProperties)
           const fileId = file.fileInfo['{http://owncloud.org/ns}fileid']
 
           this.$_ocFilesFolder_getFolder()
@@ -542,7 +509,7 @@ export default {
           this.hideModal()
 
           if (this.newFileAction) {
-            this.$_fileActions_openEditor(this.newFileAction, filePath, fileId)
+            this.$_fileActions_openEditor(this.newFileAction, path, fileId)
           }
         }).catch(error => {
           this.fileFolderCreationLoading = false
@@ -592,35 +559,21 @@ export default {
         file = file.name
       }
       this.$nextTick().then(() => {
-        const path =
-          this.item === ''
-            ? this.configuration.rootFolder
-              ? `${this.configuration.rootFolder}/`
-              : '/'
-            : `${this.item}/`
-        const filePath = pathUtil.join(path, file)
-        if (this.publicPage()) {
-          this.$client.publicFiles
-            .list(filePath, this.publicLinkPassword, this.davProperties, '0')
-            .then(files => {
-              this.addFiles({
-                files: files
-              })
-            })
-            .catch(() => {
-              this.$_ocFilesFolder_getFolder()
-            })
-        } else {
+        const path = pathUtil.join(this.currentPath, file)
+        if (this.isListRoute) {
           this.$client.files
-            .fileInfo(filePath, this.davProperties)
+            .fileInfo(path, this.davProperties)
             .then(fileInfo => {
-              this.addFiles({
-                files: [fileInfo]
-              })
+              this.addFiles({ files: [fileInfo] })
             })
-            .catch(() => {
-              this.$_ocFilesFolder_getFolder()
+            .catch(() => this.$_ocFilesFolder_getFolder())
+        } else {
+          this.$client.publicFiles
+            .list(path, this.publicLinkPassword, this.davProperties, '0')
+            .then(files => {
+              this.addFiles({ files })
             })
+            .catch(() => this.$_ocFilesFolder_getFolder())
         }
       })
     },

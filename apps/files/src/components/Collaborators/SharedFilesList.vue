@@ -10,7 +10,7 @@
       <div class="uk-text-truncate uk-text-meta uk-width-expand">
         <sortable-column-header
           :aria-label="$gettext('Sort files by name')"
-          :is-active="fileSortField == 'name'"
+          :is-active="fileSortField === 'name'"
           :is-desc="fileSortDirectionDesc"
           @click="toggleSort('name')"
         >
@@ -18,15 +18,7 @@
         </sortable-column-header>
       </div>
       <div
-        v-if="!$_isSharedWithMe"
-        key="shared-with-header-cell"
-        class="uk-text-nowrap uk-text-meta uk-width-medium uk-text-right"
-        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-        translate-context="'People' table column"
-        v-text="$gettext('Shared with')"
-      />
-      <div
-        v-else
+        v-if="isSharedWithMeRoute"
         v-translate
         shrink
         type="head"
@@ -35,7 +27,15 @@
         Status
       </div>
       <div
-        v-if="$route.name === 'files-shared-with-me'"
+        v-else
+        key="shared-with-header-cell"
+        class="uk-text-nowrap uk-text-meta uk-width-medium uk-text-right"
+        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
+        translate-context="'People' table column"
+        v-text="$gettext('Shared with')"
+      />
+      <div
+        v-if="isSharedWithMeRoute"
         key="shared-with-header-cell"
         class="uk-text-nowrap uk-text-meta uk-width-small uk-text-right"
         :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
@@ -48,7 +48,7 @@
       >
         <sortable-column-header
           :aria-label="$gettext('Sort files by share time')"
-          :is-active="fileSortField == 'shareTimeMoment'"
+          :is-active="fileSortField === 'shareTimeMoment'"
           :is-desc="fileSortDirectionDesc"
           class="uk-align-right"
           @click="toggleSort('shareTimeMoment')"
@@ -60,7 +60,33 @@
     </template>
     <template #rowColumns="{ item }">
       <div
-        v-if="!$_isSharedWithMe"
+        v-if="isSharedWithMeRoute"
+        :key="item.id + item.status"
+        class="uk-text-nowrap uk-flex uk-flex-middle"
+      >
+        <oc-button
+          v-if="item.status === 1 || item.status === 2"
+          variation="raw"
+          class="file-row-share-status-action uk-text-meta"
+          @click="pendingShareAction(item, 'POST')"
+        >
+          <translate>Accept</translate>
+        </oc-button>
+        <oc-button
+          v-if="item.status === 1"
+          variation="raw"
+          class="file-row-share-status-action uk-text-meta oc-ml"
+          @click="pendingShareAction(item, 'DELETE')"
+        >
+          <translate>Decline</translate>
+        </oc-button>
+        <span
+          class="uk-text-small oc-ml file-row-share-status-text uk-text-baseline"
+          v-text="shareStatus(item.status)"
+        />
+      </div>
+      <div
+        v-else
         key="shared-with-cell"
         class="uk-text-meta uk-text-nowrap uk-text-truncate uk-width-medium uk-flex file-row-collaborators uk-flex-right"
         :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
@@ -101,30 +127,8 @@
           >
         </span>
       </div>
-      <div v-else :key="item.id + item.status" class="uk-text-nowrap uk-flex uk-flex-middle">
-        <oc-button
-          v-if="item.status === 1 || item.status === 2"
-          variation="raw"
-          class="file-row-share-status-action uk-text-meta"
-          @click="pendingShareAction(item, 'POST')"
-        >
-          <translate>Accept</translate>
-        </oc-button>
-        <oc-button
-          v-if="item.status === 1"
-          variation="raw"
-          class="file-row-share-status-action uk-text-meta oc-ml"
-          @click="pendingShareAction(item, 'DELETE')"
-        >
-          <translate>Decline</translate>
-        </oc-button>
-        <span
-          class="uk-text-small oc-ml file-row-share-status-text uk-text-baseline"
-          v-text="shareStatus(item.status)"
-        />
-      </div>
       <div
-        v-if="$_isSharedWithMe"
+        v-if="isSharedWithMeRoute"
         key="shared-from-cell"
         class="uk-text-meta uk-text-nowrap uk-text-truncate uk-width-small uk-flex uk-flex-middle file-row-collaborators uk-flex-right"
         :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
@@ -149,12 +153,12 @@
     <template #noContentMessage>
       <no-content-message icon="group">
         <template #message>
-          <span v-if="$_isSharedWithMe" v-translate
-            >You are currently not collaborating on other people's resources.</span
-          >
-          <span v-else v-translate
-            >You are currently not collaborating on any of your resources with other people.</span
-          >
+          <span v-if="isSharedWithMeRoute" v-translate>
+            You are currently not collaborating on other people's resources.
+          </span>
+          <span v-else v-translate>
+            You are currently not collaborating on any of your resources with other people.
+          </span>
         </template>
       </no-content-message>
     </template>
@@ -163,12 +167,14 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Mixins from '../../mixins'
-import FileList from '../FileList.vue'
-import NoContentMessage from '../NoContentMessage.vue'
-import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
 import { shareTypes } from '../../helpers/shareTypes'
 import { textUtils } from '../../helpers/textUtils'
+import Mixins from '../../mixins'
+import MixinRoutes from '../../mixins/routes'
+import FileList from '../FileList.vue'
+
+const NoContentMessage = () => import('../FilesLists/NoContentMessage.vue')
+const SortableColumnHeader = () => import('../FilesLists/SortableColumnHeader.vue')
 
 export default {
   name: 'SharedFilesList',
@@ -177,7 +183,7 @@ export default {
     NoContentMessage,
     SortableColumnHeader
   },
-  mixins: [Mixins],
+  mixins: [Mixins, MixinRoutes],
   props: {
     /**
      * Array of active files
@@ -193,15 +199,11 @@ export default {
 
     shareTypes() {
       return shareTypes
-    },
-
-    $_isSharedWithMe() {
-      return this.$route.name === 'files-shared-with-me'
     }
   },
   watch: {
     $route() {
-      if (this.$route.name === 'files-shared-with-me') {
+      if (this.isSharedWithMeRoute) {
         this.$_ocSharedWithMe_getFiles()
       } else {
         this.$_ocSharedFromMe_getFiles()
@@ -209,19 +211,14 @@ export default {
     }
   },
   beforeMount() {
-    if (this.$route.name === 'files-shared-with-me') {
+    if (this.isSharedWithMeRoute) {
       this.$_ocSharedWithMe_getFiles()
     } else {
       this.$_ocSharedFromMe_getFiles()
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'loadFolderSharedFromMe',
-      'loadFolderSharedWithMe',
-      'setFilterTerm',
-      'pendingShare'
-    ]),
+    ...mapActions('Files', ['loadFolderSharedFromMe', 'loadFolderSharedWithMe', 'pendingShare']),
 
     /**
      * Prepare the given peoples list for display.

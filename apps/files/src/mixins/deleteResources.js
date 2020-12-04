@@ -1,5 +1,6 @@
 import { mapGetters, mapActions } from 'vuex'
 import { cloneStateObject } from '../helpers/store'
+import { checkRoute } from '../helpers/route'
 const { default: PQueue } = require('p-queue')
 
 export default {
@@ -12,7 +13,7 @@ export default {
     ...mapGetters('Files', ['selectedFiles']),
 
     $_deleteResources_isInTrashbin() {
-      return this.$route.name === 'files-trashbin'
+      return checkRoute(['files-trashbin'], this.$route.name)
     },
 
     $_deleteResources_resources() {

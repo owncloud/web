@@ -1,3 +1,5 @@
+import isEmpty from 'lodash/isEmpty'
+
 const state = {
   state: null,
   server: '',
@@ -12,7 +14,6 @@ const state = {
   openIdConnect: {
     authority: ''
   },
-  rootFolder: '',
   theme: {
     name: 'owncloud',
     general: {
@@ -25,7 +26,8 @@ const state = {
     logo: {
       sidebar: '',
       favicon: '',
-      login: ''
+      login: '',
+      notFound: ''
     },
     filesList: {
       hideDefaultStatusIndicators: false
@@ -37,7 +39,8 @@ const state = {
   },
   options: {
     defaultExtension: 'files',
-    hideSearchBar: false
+    hideSearchBar: false,
+    homeFolder: ''
   }
 }
 
@@ -68,7 +71,6 @@ const mutations = {
     state.server = config.server
     state.auth = config.auth
     state.openIdConnect = config.openIdConnect
-    state.rootFolder = config.rootFolder === undefined ? '/' : config.rootFolder
     state.uploadChunkSize = config.uploadChunkSize === undefined ? Infinity : config.uploadChunkSize
     state.state = config.state === undefined ? 'working' : config.state
     state.applications = config.applications === undefined ? [] : config.applications
@@ -88,6 +90,18 @@ const mutations = {
 const getters = {
   configuration: state => {
     return state
+  },
+  homeFolder: (state, rootGetters) => {
+    if (isEmpty(state.options.homeFolder)) {
+      return '/'
+    }
+    const parsed = parseHomeFolder(state.options.homeFolder, rootGetters.user)
+    if (parsed.indexOf('//') > -1) {
+      // if there are parts of the template that cannot be filled given the current user, we fall back to '/'
+      // because we assume that the path would be broken anyway.
+      return '/'
+    }
+    return parsed
   }
 }
 
@@ -96,4 +110,47 @@ export default {
   actions,
   mutations,
   getters
+}
+
+/**
+ * The given home folder is allowed to contain twig style variables for user specific parts of the folder.
+ * This function injects user specific data into it.
+ *
+ * Examples:
+ * `/home/{{.email}}/`
+ * `/home/{{substr 0 3 .Id}}/{{.Id}}/`
+ *
+ * @param tpl The home folder template.
+ * @param user The user object from the store.
+ * @returns string
+ */
+function parseHomeFolder(tpl, user) {
+  const regex = /{{(.*?)}}/g
+  const parts = tpl.match(regex)
+  if (parts) {
+    parts.forEach(part => {
+      // check if part is a substring of a user value
+      const substringRegex = /{{substr\s([0-9]+)\s([0-9]+)\s\.(.*)}}/
+      const substringMatches = part.match(substringRegex)
+      if (!isEmpty(substringMatches) && substringMatches.length >= 4) {
+        const start = parseInt(substringMatches[1], 10)
+        const length = parseInt(substringMatches[2], 10)
+        const userValue = getUserValue(substringMatches[3], user)
+        tpl = tpl.replace(part, userValue.substring(start, start + length))
+        return
+      }
+
+      // none of the supported types, so we fall back to plain user value
+      const plainRegex = /{{\.(.*)}}/
+      const plainMatches = part.match(plainRegex)
+      if (!isEmpty(plainMatches) && plainMatches.length >= 2) {
+        tpl = tpl.replace(part, getUserValue(plainMatches[1], user))
+      }
+    })
+  }
+  return tpl
+}
+
+function getUserValue(key, user) {
+  return user[key.toLowerCase()] || ''
 }
