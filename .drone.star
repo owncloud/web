@@ -1132,14 +1132,14 @@ def website(ctx):
 				'name': 'downstream',
 				'image': 'plugins/downstream',
 				'settings': {
-					'server': 'https://cloud.drone.io/',
+					'server': 'https://drone.owncloud.com/',
 					'token': {
-						'from_secret': 'drone_token_cloud',
+						'from_secret': 'drone_token',
 					},
 					'repositories': [
 						'owncloud/owncloud.github.io@source',
-						],
-					},
+					],
+				},
 				'when': {
 					'ref': {
 						'exclude': [
