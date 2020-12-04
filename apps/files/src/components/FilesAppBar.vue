@@ -2,7 +2,7 @@
   <div id="files-app-bar" class="oc-app-bar">
     <file-drop
       v-if="!isIE11() && canUpload && hasFreeSpace"
-      :root-path="currentPathOrRoot"
+      :root-path="currentPath"
       :path="currentPath"
       :headers="headers"
       @success="onFileSuccess"
@@ -50,7 +50,7 @@
                 />
                 <folder-upload
                   v-if="!isIE11()"
-                  :root-path="currentPathOrRoot"
+                  :root-path="currentPath"
                   :path="currentPath"
                   :headers="headers"
                   @success="onFileSuccess"
@@ -214,10 +214,11 @@ export default {
       return null
     },
     currentPath() {
-      return this.$route.params.item || ''
-    },
-    currentPathOrRoot() {
-      return this.currentPath === '' ? '/' : this.currentPath
+      const path = this.$route.params.item || ''
+      if (path.endsWith('/')) {
+        return path
+      }
+      return path + '/'
     },
     currentPathSegments() {
       // remove potential leading and trailing slash from current path (so that the resulting array doesn't start with an empty string)
