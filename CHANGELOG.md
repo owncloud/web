@@ -9,6 +9,8 @@ Summary
 -------
 
 * Bugfix - Don't break file/folder names in text editor: [#4391](https://github.com/owncloud/phoenix/pull/4391)
+* Change - Configurable home path: [#4411](https://github.com/owncloud/phoenix/pull/4411)
+* Change - Show dedicated 404 page for invalid resource references: [#4411](https://github.com/owncloud/phoenix/pull/4411)
 
 Details
 -------
@@ -21,6 +23,25 @@ Details
    blindly removing the first character.
 
    https://github.com/owncloud/phoenix/pull/4391
+
+* Change - Configurable home path: [#4411](https://github.com/owncloud/phoenix/pull/4411)
+
+   We introduced a config.json option `homeFolder` which let's you specify a default location
+   when opening the `All files` view. Please refer to the documentation for details.
+
+   https://github.com/owncloud/phoenix/pull/4411
+   https://owncloud.github.io/clients/web/getting-started/
+
+* Change - Show dedicated 404 page for invalid resource references: [#4411](https://github.com/owncloud/phoenix/pull/4411)
+
+   When visiting a public link or the `All files` page with an invalid resource in the URL (e.g.
+   because it was deleted in the meantime) we now show a dedicated page which explains that the
+   resource could not be found and offers a link to go back to the respective root (»All files«
+   home location or the root of the public link). The breadcrumbs have been made available on
+   invalid resources as well, so that those could be used for more precise navigation instead of
+   jumping back to the root.
+
+   https://github.com/owncloud/phoenix/pull/4411
 
 Changelog for ownCloud Phoenix [0.27.0] (2020-11-24)
 =======================================
