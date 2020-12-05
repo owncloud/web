@@ -190,7 +190,10 @@ const routes = [
     components: {
       app: FilesApp
     },
-    meta: { auth: false }
+    meta: {
+      auth: false,
+      hasBulkActions: true
+    }
   },
   {
     path: '/files-drop/:token',

@@ -54,7 +54,11 @@ function openNewCollaboratorsPanel(ctx) {
 }
 
 function canShare(item, store) {
-  return store.state.user.capabilities.files_sharing.api_enabled && item.canShare()
+  return (
+    store.state.user.capabilities.files_sharing &&
+    store.state.user.capabilities.files_sharing.api_enabled &&
+    item.canShare()
+  )
 }
 
 export default {

@@ -148,6 +148,7 @@
           </div>
           <div>
             <oc-button
+              v-if="canDelete"
               id="delete-selected-btn"
               key="delete-selected-btn"
               @click="$_deleteResources_displayDialog()"
@@ -336,6 +337,14 @@ export default {
       return true
     },
 
+    canDelete() {
+      if (this.isPublicFilesRoute) {
+        return this.currentFolder.canBeDeleted()
+      }
+
+      return true
+    },
+
     areDefaultActionsVisible() {
       return this.selectedFiles.length < 1
     },
@@ -370,15 +379,13 @@ export default {
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
 
     $_ocFilesFolder_getFolder() {
-      this.path = []
-
       this.loadFolder({
         client: this.$client,
         absolutePath: this.currentPath,
         $gettext: this.$gettext,
-        routeName: this.$route.name
+        routeName: this.$route.name,
+        isPublicPage: this.isPublicFilesRoute
       }).catch(error => {
-        // TODO: 401 public link handling necessary???
         this.showMessage({
           title: this.$gettext('Loading folder failed…'),
           desc: error.message,
@@ -501,7 +508,18 @@ export default {
         }
 
         p.then(async () => {
-          const file = await this.$client.files.fileInfo(path, this.davProperties)
+          let file
+          if (this.isListRoute) {
+            file = await this.$client.files.fileInfo(path, this.davProperties)
+          } else {
+            file = await this.$client.publicFiles.list(
+              path,
+              this.publicLinkPassword,
+              this.davProperties,
+              '0'
+            )
+            file = file[0]
+          }
           const fileId = file.fileInfo['{http://owncloud.org/ns}fileid']
 
           this.$_ocFilesFolder_getFolder()
