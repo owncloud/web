@@ -1,3 +1,31 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.28.0...master
+
+Summary
+-------
+
+* Bugfix - Public link glitches: [#1028](https://github.com/owncloud/ocis/issues/1028)
+
+Details
+-------
+
+* Bugfix - Public link glitches: [#1028](https://github.com/owncloud/ocis/issues/1028)
+
+   We fixed a couple of glitches with public links: - Creating a folder in a public link context was
+   showing an error message although the folder was created correctly. This was happening
+   because reloading the current folder didn't take the public link context into account. - For
+   public links with editor role the batch actions at the top of the files list were not showing. The
+   public links route didn't have a specific flag for showing the batch actions. - Quick actions
+   for sharing are not available in public link contexts by design. The check printed an error in
+   the javascript console though. We made this check silent now.
+
+   https://github.com/owncloud/ocis/issues/1028
+   https://github.com/owncloud/phoenix/pull/4425
+
 Changelog for ownCloud Phoenix [0.28.0] (2020-12-04)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.28.0 relevant to
