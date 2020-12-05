@@ -34,6 +34,9 @@ const actions = {
         action: 'api/v1/notifications'
       })
       .then(response => {
+        if (response.headers.get('Content-Length') === '0') {
+          return
+        }
         response.json().then(json => {
           if (response.ok) {
             context.commit('UPDATE_NOTIFICATIONS', json.ocs.data)
