@@ -107,7 +107,7 @@
             </div>
             <div>
               <oc-tag class="files-collaborators-collaborator-role">
-                <oc-icon name="key" aria-hidden="true" />
+                <oc-icon :name="roleTagIcon" aria-hidden="true" />
                 {{ originalRole.label }}
               </oc-tag>
             </div>
@@ -318,11 +318,19 @@ export default {
     },
 
     roleTagIcon() {
-      if (this.collaborator.role.name === 'viewer') {
-        return 'remove_red_eye'
-      }
+      switch (this.collaborator.role.name) {
+        case 'viewer':
+          return 'remove_red_eye'
 
-      return 'key'
+        case 'editor':
+          return 'edit'
+
+        case 'advancedRole':
+          return 'checklist'
+
+        default:
+          return 'key'
+      }
     }
   },
   methods: {

@@ -99,11 +99,22 @@ export default {
     },
 
     roleTagIcon() {
-      if (this.link.description === 'Viewer') {
-        return 'remove_red_eye'
-      }
+      switch (this.link.description) {
+        case 'Viewer':
+          return 'remove_red_eye'
 
-      return 'key'
+        case 'Contributor':
+          return 'edit'
+
+        case 'Editor':
+          return 'edit'
+
+        case 'Uploader':
+          return 'file_upload'
+
+        default:
+          return 'key'
+      }
     },
 
     viaLabel() {
