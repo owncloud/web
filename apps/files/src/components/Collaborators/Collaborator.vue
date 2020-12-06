@@ -323,6 +323,14 @@ export default {
       }
 
       return 'person'
+    },
+
+    roleTagIcon() {
+      if (this.collaborator.role.name === 'viewer') {
+        return 'remove_red_eye'
+      }
+
+      return 'key'
     }
   },
   methods: {

@@ -34,7 +34,7 @@
     <oc-grid gutter="small">
       <div>
         <oc-tag class="oc-files-file-link-role">
-          <oc-icon name="key" aria-hidden="true" />
+          <oc-icon :name="roleTagIcon" aria-hidden="true" />
           {{ link.description }}
         </oc-tag>
       </div>
@@ -84,6 +84,14 @@ export default {
       return this.linkCopied
         ? this.$gettext('Public link successfully copied')
         : this.$gettext('Copy public link url')
+    },
+
+    roleTagIcon() {
+      if (this.link.description === 'Viewer') {
+        return 'remove_red_eye'
+      }
+
+      return 'key'
     }
   },
 

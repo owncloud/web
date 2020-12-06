@@ -364,7 +364,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     publicLinkSubName: {
-      selector: '.oc-files-file-link-url'
+      selector: '.oc-files-file-link-name'
     },
     publicLinkSubRole: {
       selector: '.oc-files-file-link-role'
