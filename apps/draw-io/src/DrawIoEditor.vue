@@ -16,13 +16,13 @@ export default {
     currentETag: null
   }),
   computed: {
-    ...mapGetters(['getToken', 'configuration']),
+    ...mapGetters(['getToken']),
     loading() {
       return this.content === ''
     },
     config() {
       const { url = 'https://embed.diagrams.net', theme = 'minimal', autosave = false } =
-        this.configuration.applications.find(app => app.title.en === 'draw-io') || {}
+        this.$store.state.apps.fileEditors.find(editor => editor.app === 'draw-io').config || {}
       return { url, theme, autosave: autosave ? 1 : 0 }
     },
     iframeSource() {
