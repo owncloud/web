@@ -52,11 +52,23 @@
           <translate>Password protected</translate>
         </oc-tag>
       </div>
+      <div v-if="link.indirect">
+        <oc-tag
+          type="router-link"
+          class="oc-files-file-link-via"
+          :to="viaRouterParams"
+          :uk-tooltip="viaTooltip"
+        >
+          <oc-icon name="exit_to_app" aria-hidden="true" />
+          <span class="uk-text-truncate files-file-links-link-via-label" v-text="viaLabel" />
+        </oc-tag>
+      </div>
     </oc-grid>
   </div>
 </template>
 
 <script>
+import { basename, dirname } from 'path'
 import Mixins from '../../mixins'
 
 export default {
@@ -92,6 +104,34 @@ export default {
       }
 
       return 'key'
+    },
+
+    viaLabel() {
+      if (!this.link.indirect) {
+        return null
+      }
+
+      const translated = this.$gettext('Via %{folderName}')
+
+      return this.$gettextInterpolate(translated, { folderName: basename(this.link.path) }, true)
+    },
+
+    viaRouterParams() {
+      const viaPath = this.link.path
+
+      return {
+        name: 'files-list',
+        params: {
+          item: dirname(viaPath) || '/'
+        },
+        query: {
+          scrollTo: basename(viaPath)
+        }
+      }
+    },
+
+    viaTooltip() {
+      return this.$gettext('Navigate to the parent')
     }
   },
 

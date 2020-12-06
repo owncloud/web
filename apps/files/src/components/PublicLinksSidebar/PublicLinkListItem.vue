@@ -1,35 +1,14 @@
 <template>
-  <div class="files-file-links-link">
-    <oc-grid
-      gutter="small"
-      class="files-file-links-link-table-row-info uk-flex uk-flex-top uk-flex-between"
-    >
-      <link-info :link="link" />
-      <link-actions v-if="!link.indirect" :link="link" />
-    </oc-grid>
-    <div v-if="$_viaLabel" class="files-file-links-link-table-row-bottom uk-text-meta">
-      <oc-button
-        type="router-link"
-        variation="raw"
-        justify-content="left"
-        gap-size="xsmall"
-        :to="$_viaRouterParams"
-        :aria-label="$gettext('Navigate to parent')"
-        class="oc-files-file-link-via"
-      >
-        <oc-icon name="exit_to_app" aria-hidden="true" />
-        <span
-          class="oc-file-name oc-p-rm uk-text-truncate files-file-links-link-via-label"
-          v-text="$_viaLabel"
-        />
-      </oc-button>
-    </div>
-  </div>
+  <oc-grid
+    gutter="small"
+    class="files-file-links-link files-file-links-link-table-row-info uk-flex uk-flex-top uk-flex-between"
+  >
+    <link-info :link="link" />
+    <link-actions v-if="!link.indirect" :link="link" />
+  </oc-grid>
 </template>
 
 <script>
-import { basename, dirname } from 'path'
-
 import LinkInfo from './LinkInfo.vue'
 import LinkActions from './LinkActions.vue'
 
@@ -43,27 +22,6 @@ export default {
     link: {
       type: Object,
       required: true
-    }
-  },
-  computed: {
-    $_viaLabel() {
-      if (!this.link.indirect) {
-        return null
-      }
-      const translated = this.$gettext('Via %{folderName}')
-      return this.$gettextInterpolate(translated, { folderName: basename(this.link.path) }, true)
-    },
-    $_viaRouterParams() {
-      const viaPath = this.link.path
-      return {
-        name: 'files-list',
-        params: {
-          item: dirname(viaPath) || '/'
-        },
-        query: {
-          scrollTo: basename(viaPath)
-        }
-      }
     }
   }
 }

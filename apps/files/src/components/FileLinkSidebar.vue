@@ -68,6 +68,7 @@ import { shareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
 import { dirname } from 'path'
 import { textUtils } from '../helpers/textUtils'
+import { cloneStateObject } from '../helpers/store'
 
 import PrivateLinkItem from './PublicLinksSidebar/PrivateLinkItem.vue'
 const EditPublicLink = () => import('./PublicLinksSidebar/EditPublicLink.vue')
@@ -134,7 +135,7 @@ export default {
       parentPaths.pop()
 
       parentPaths.forEach(parentPath => {
-        const shares = this.sharesTree[parentPath]
+        const shares = cloneStateObject(this.sharesTree[parentPath])
         if (shares) {
           shares.forEach(share => {
             if (share.outgoing && share.shareType === shareTypes.link) {
