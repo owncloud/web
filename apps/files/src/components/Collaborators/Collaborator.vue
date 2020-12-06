@@ -119,6 +119,20 @@
                 </translate>
               </oc-tag>
             </div>
+            <div v-if="isIndirectShare">
+              <oc-tag
+                type="router-link"
+                class="files-collaborators-collaborator-follow-via"
+                :to="viaRouterParams"
+                :uk-tooltip="viaTooltip"
+              >
+                <oc-icon name="exit_to_app" aria-hidden="true" />
+                <span
+                  class="uk-text-truncate files-collaborators-collaborator-via-label"
+                  v-text="viaLabel"
+                />
+              </oc-tag>
+            </div>
           </oc-grid>
         </div>
       </oc-table-cell>
@@ -151,32 +165,6 @@
             />
             <oc-icon v-else name="lock" class="uk-invisible" />
           </div>
-        </div>
-      </oc-table-cell>
-    </oc-table-row>
-    <oc-table-row v-if="$_viaLabel" class="files-collaborators-collaborator-table-row-bottom">
-      <oc-table-cell shrink :colspan="firstColumn ? 2 : 1"></oc-table-cell>
-      <oc-table-cell colspan="2">
-        <div class="uk-text-meta">
-          <oc-button
-            type="router-link"
-            variation="raw"
-            justify-content="left"
-            gap-size="xsmall"
-            :to="$_viaRouterParams"
-            :aria-label="$gettext('Navigate to parent')"
-            class="files-collaborators-collaborator-follow-via"
-          >
-            <oc-icon
-              name="exit_to_app"
-              class="uk-preserve-width"
-              :uk-tooltip="$gettext('Navigate to parent')"
-            />
-            <span
-              class="oc-file-name oc-p-rm uk-text-truncate files-collaborators-collaborator-via-label"
-              >{{ $_viaLabel }}</span
-            >
-          </oc-button>
         </div>
       </oc-table-cell>
     </oc-table-row>
@@ -234,7 +222,7 @@ export default {
       return this.modifiable && !this.removalInProgress
     },
 
-    $_isIndirectShare() {
+    isIndirectShare() {
       // it is assumed that the "incoming" attribute only exists
       // on shares coming from this.collaborator.sTree which are all indirect
       // and not related to the current folder
@@ -248,8 +236,8 @@ export default {
       return this.collaborator.resharers.map(share => share.displayName).join(', ')
     },
 
-    $_viaLabel() {
-      if (!this.$_isIndirectShare) {
+    viaLabel() {
+      if (!this.isIndirectShare) {
         return null
       }
       const translated = this.$gettext('Via %{folderName}')
@@ -260,7 +248,7 @@ export default {
       )
     },
 
-    $_viaRouterParams() {
+    viaRouterParams() {
       const viaPath = this.collaborator.path
       return {
         name: 'files-list',
@@ -271,6 +259,10 @@ export default {
           scrollTo: basename(viaPath)
         }
       }
+    },
+
+    viaTooltip() {
+      return this.$gettext('Navigate to the parent')
     },
 
     originalRole() {
