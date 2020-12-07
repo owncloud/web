@@ -44,7 +44,7 @@ To display ownCloud Web in the app switcher and to redirect all private and publ
 ```
 
 ## Configure ownCloud Web
-There is a few config values which need to be set in order for ownCloud Web to work correctly. Navigate into `apps/phoenix` and adjust `config.json` according to the following example:
+There are a few config values which need to be set in order for ownCloud Web to work correctly. Navigate into `apps/phoenix` and adjust `config.json` according to the following example:
 
 ```json
 {
