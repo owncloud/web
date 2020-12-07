@@ -1,5 +1,13 @@
 <template>
-  <iframe id="drawio-editor" ref="drawIoEditor" :src="iframeSource"></iframe>
+  <div>
+    <oc-spinner
+      v-if="loading"
+      :aria-label="this.$gettext('Loading media')"
+      class="uk-position-center"
+      size="xlarge"
+    />
+    <iframe v-else id="drawio-editor" ref="drawIoEditor" :src="iframeSource" />
+  </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
@@ -10,6 +18,7 @@ import moment from 'moment'
 export default {
   name: 'DrawIoEditor',
   data: () => ({
+    loading: true,
     filePath: '',
     fileExtension: '',
     isReadOnly: null,
@@ -17,9 +26,6 @@ export default {
   }),
   computed: {
     ...mapGetters(['getToken']),
-    loading() {
-      return this.content === ''
-    },
     config() {
       const { url = 'https://embed.diagrams.net', theme = 'minimal', autosave = false } =
         this.$store.state.apps.fileEditors.find(editor => editor.app === 'draw-io').config || {}
@@ -42,9 +48,7 @@ export default {
   created() {
     this.filePath = this.$route.params.filePath
     this.fileExtension = this.filePath.split('.').pop()
-    this.$client.files.fileInfo(this.filePath, ['{http://owncloud.org/ns}permissions']).then(v => {
-      this.isReadOnly = v.fileInfo['{http://owncloud.org/ns}permissions'].indexOf('W') === -1
-    })
+    this.checkPermissions()
     window.addEventListener('message', event => {
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data)
@@ -74,6 +78,17 @@ export default {
           enabled: true
         }
       })
+    },
+    checkPermissions() {
+      this.$client.files
+        .fileInfo(this.filePath, ['{http://owncloud.org/ns}permissions'])
+        .then(v => {
+          this.isReadOnly = v.fileInfo['{http://owncloud.org/ns}permissions'].indexOf('W') === -1
+          this.loading = false
+        })
+        .catch(error => {
+          this.error(error)
+        })
     },
     load() {
       this.$client.files
