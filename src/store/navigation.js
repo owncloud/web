@@ -30,7 +30,7 @@ const mutations = {
    * @constructor
    */
   ADD_NAV_ITEM(state, { extension, navItem }) {
-    const dynamicNavItems = state.dynamicNavItems
+    const dynamicNavItems = { ...state.dynamicNavItems }
     dynamicNavItems[extension] = dynamicNavItems[extension] || []
     const index = dynamicNavItems[extension].findIndex(item => item.name === navItem.name)
     if (index >= 0) {
