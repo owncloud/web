@@ -1,0 +1,5 @@
+Enhancement: Add oc10 app build artifact
+
+We've added a build step to the release process which creates an ownCloud Web bundle which can be deployed as an app to ownCloud 10.
+
+https://github.com/owncloud/phoenix/pull/4427
