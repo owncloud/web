@@ -65,4 +65,4 @@ There is a few config values which need to be set in order for ownCloud Web to w
 ## Accessing ownCloud Web
 After following all the steps, you should see a new entry in the application switcher called `New Design` which points to the ownCloud web.
 
-![image](https://user-images.githubusercontent.com/25989331/101364294-b061f800-38a2-11eb-957e-6115fa7b797b.png)
+{{< figure src="/phoenix/static/application-switcher-oc10.jpg" >}}
