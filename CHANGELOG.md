@@ -9,6 +9,8 @@ Summary
 -------
 
 * Bugfix - Public link glitches: [#1028](https://github.com/owncloud/ocis/issues/1028)
+* Change - Use labels to display share info: [#4410](https://github.com/owncloud/phoenix/pull/4410)
+* Enhancement - Display full public and private links: [#4410](https://github.com/owncloud/phoenix/pull/4410)
 
 Details
 -------
@@ -25,6 +27,20 @@ Details
 
    https://github.com/owncloud/ocis/issues/1028
    https://github.com/owncloud/phoenix/pull/4425
+
+* Change - Use labels to display share info: [#4410](https://github.com/owncloud/phoenix/pull/4410)
+
+   We've changed the way of displaying share information for public links and people. Every
+   information is now displayed in its own label.
+
+   https://github.com/owncloud/phoenix/pull/4410
+
+* Enhancement - Display full public and private links: [#4410](https://github.com/owncloud/phoenix/pull/4410)
+
+   Below the names of public and private links we've added the respective full URL so that users can
+   copy it without the copy to clipboard button.
+
+   https://github.com/owncloud/phoenix/pull/4410
 
 Changelog for ownCloud Phoenix [0.28.0] (2020-12-04)
 =======================================
