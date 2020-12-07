@@ -963,7 +963,7 @@ def installFederatedServer(version, db, dbSuffix = '-federated'):
 def installNPM():
 	return [{
 		'name': 'npm-install',
-		'image': 'owncloudci/nodejs:11',
+		'image': 'webhippie/nodejs:latest',
 		'pull': 'always',
 		'commands': [
 			'yarn install --frozen-lockfile'
@@ -973,7 +973,7 @@ def installNPM():
 def lintTest():
 	return [{
 		'name': 'lint-test',
-		'image': 'owncloudci/nodejs:11',
+		'image': 'webhippie/nodejs:latest',
 		'pull': 'always',
 		'commands': [
 			'yarn run lint'
@@ -983,7 +983,7 @@ def lintTest():
 def buildPhoenix():
 	return [{
 		'name': 'build-phoenix',
-		'image': 'owncloudci/nodejs:11',
+		'image': 'webhippie/nodejs:latest',
 		'pull': 'always',
 		'commands': [
 			'yarn dist',
@@ -1026,7 +1026,7 @@ def buildRelease(ctx):
 	return [
 		{
 			'name': 'make',
-			'image': 'owncloudci/nodejs:11',
+			'image': 'webhippie/nodejs:latest',
 			'pull': 'always',
 			'commands': [
 				'cd /var/www/owncloud/phoenix',
@@ -1567,7 +1567,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 
 	return [{
 		'name': 'webui-acceptance-tests',
-		'image': 'owncloudci/nodejs:11',
+		'image': 'webhippie/nodejs:latest',
 		'pull': 'always',
 		'environment': environment,
 		'commands': [
