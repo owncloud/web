@@ -9,6 +9,19 @@ app_name=phoenix
 cur_dir=$(CURDIR)
 dist_dir=$(CURDIR)/dist
 
+occ=$(CURDIR)/../../occ
+private_key=$(HOME)/.owncloud/certificates/$(app_name).key
+certificate=$(HOME)/.owncloud/certificates/$(app_name).crt
+sign=$(occ) integrity:sign-app --privateKey="$(private_key)" --certificate="$(certificate)"
+sign_skip_msg="Skipping signing, either no key and certificate found in $(private_key) and $(certificate) or occ can not be found at $(occ)"
+ifneq (,$(wildcard $(private_key)))
+ifneq (,$(wildcard $(certificate)))
+ifneq (,$(wildcard $(occ)))
+	CAN_SIGN=true
+endif
+endif
+endif
+
 .DEFAULT_GOAL := build-release
 
 .PHONY: build-release
@@ -43,6 +56,29 @@ create-release-folder:
 	rm -rf $(CURDIR)/release
 	mkdir $(CURDIR)/release
 
-.PHONY: create-package
-create-package:
+.PHONY: create-packages
+craete-packages: package-plain package-ocx
+
+.PHONY: package-plain
+package-plain:
 	cd $(dist_dir) && tar -czf $(CURDIR)/release/$(app_name).tar.gz -C $(dist_dir) * .htaccess
+
+.PHONY: package-ocx
+package-ocx: sign ocx-app-config ocx-app-bundle
+
+.PHONY: sign
+sign:
+ifdef CAN_SIGN
+	$(sign) --path="$(dist_dir)"
+else
+	@echo $(sign_skip_msg)
+endif
+
+.PHONY: ocx-app-config
+ocx-app-config:
+	cp -R appinfo $(dist_dir)
+	cp -R img $(dist_dir)
+
+.PHONY: ocx-app-bundle
+ocx-app-bundle:
+tar -czf $(CURDIR)/release/$(app_name)-app.tar.gz --transform='s,dist,phoenix,' dist

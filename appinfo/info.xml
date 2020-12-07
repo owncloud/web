@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<info>
+	<id>oc-web</id>
+	<name>ownCloud Web</name>
+	<summary>Next generation user interface for ownCloud</summary>
+	<description>
+    Next generation user interface for ownCloud based on vue.js.
+    This is an early release with known limitations and missing features.
+
+    Please, report and findings in https://talk.owncloud.com/channel/infinitescale
+  </description>
+	<licence>AGPLv3</licence>
+	<author>ownCloud</author>
+	<version>1.0.0</version>
+	<category>tools</category>
+	<dependencies>
+		<owncloud min-version="10.6" max-version="10" />
+	</dependencies>
+	<navigation>
+		<static>index.html</static>
+		<order>100</order>
+		<name>ownCloud Web</name>
+	</navigation>
+	<screenshot>https://user-images.githubusercontent.com/1005065/37416039-20817b4c-27ad-11e8-9f14-cbe12936fd64.png</screenshot>
+</info>
