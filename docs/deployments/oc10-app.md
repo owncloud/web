@@ -37,7 +37,7 @@ cd ../ && occ apps:enable phoenix
 In the `Admin` of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name and redirection URL `https://<your-owncloud-server>/apps/phoenix/oidc-callback.html`.
 
 ## Configure ownCloud 10
-To display ownCloud Web in the app switcher and to redirect all private and public links to the new WebUI, add please following config into `config/config.php`:
+To display ownCloud Web in the app switcher and to redirect all private and public links to the new WebUI, add the following config into `config/config.php`:
 
 ```php
 'phoenix.baseUrl' => 'https://<your-owncloud-server>/apps/phoenix',
