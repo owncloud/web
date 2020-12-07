@@ -291,7 +291,7 @@ const assertCollaboratorslistContains = function(
         assert.strictEqual('Via ' + via, share.viaLabel)
       }
       if (resharedThrough !== null) {
-        assert.strictEqual(resharedThrough, share.resharer)
+        assert.strictEqual('Shared by ' + resharedThrough, share.resharer)
       }
       if (additionalInfo !== null) {
         assert.strictEqual(additionalInfo, share.additionalInfo)

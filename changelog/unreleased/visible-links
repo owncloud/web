@@ -1,0 +1,5 @@
+Enhancement: Display full public and private links
+
+Below the names of public and private links we've added the respective full URL so that users can copy it without the copy to clipboard button.
+
+https://github.com/owncloud/phoenix/pull/4410

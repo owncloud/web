@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import pickBy from 'lodash/pickBy'
+import moment from 'moment'
 
 /**
  * @param {Array.<Object>} shares array of shares
@@ -264,5 +265,35 @@ export default {
 
   SET_APP_SIDEBAR_ACCORDION_CONTEXT(state, panel) {
     state.appSidebarAccordionContext = panel
+  },
+
+  TRIGGER_PUBLIC_LINK_EDIT(state, link) {
+    // Adjust link for the edit
+    link = {
+      id: link.id,
+      name: link.name,
+      permissions: parseInt(link.permissions, 10),
+      hasPassword: link.password,
+      expireDate:
+        link.expiration !== null
+          ? moment(link.expiration)
+              .endOf('day')
+              .toISOString()
+          : null
+    }
+
+    state.publicLinkInEdit = link
+    state.appSidebarAccordionContext = 'editPublicLink'
+  },
+
+  TRIGGER_PUBLIC_LINK_CREATE(state, { name, expireDate }) {
+    state.publicLinkInEdit = {
+      id: null,
+      name,
+      permissions: 1,
+      hasPassword: false,
+      expireDate
+    }
+    state.appSidebarAccordionContext = 'editPublicLink'
   }
 }

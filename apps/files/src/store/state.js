@@ -56,5 +56,16 @@ export default {
    * Right sidebar
    */
   appSidebarExpandedAccordion: null,
-  appSidebarAccordionContext: null
+  appSidebarAccordionContext: null,
+
+  /**
+   * Public links
+   */
+  publicLinkInEdit: {
+    id: null,
+    name: '',
+    permissions: 1,
+    hasPassword: false,
+    expireDate: null
+  }
 }

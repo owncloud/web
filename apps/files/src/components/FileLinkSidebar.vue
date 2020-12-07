@@ -1,41 +1,13 @@
 <template>
   <div id="oc-files-file-link" class="uk-position-relative">
     <div
-      v-show="visiblePanel === PANEL_SHOW"
+      v-show="appSidebarAccordionContext === PANEL_SHOW"
       :key="PANEL_SHOW"
-      :aria-hidden="visiblePanel !== PANEL_SHOW"
+      :aria-hidden="appSidebarAccordionContext !== PANEL_SHOW"
     >
       <oc-loader v-if="linksLoading" :aria-label="$gettext('Loading list of file links')" />
       <template v-else>
-        <section v-if="$_privateLinkOfHighlightedFile">
-          <div class="oc-text-bold uk-flex">
-            <span v-translate>Private Link</span>
-            <oc-button
-              :aria-label="$_privateLinkCopyLabel"
-              :uk-tooltip="$_privateLinkCopyLabel"
-              variation="raw"
-              class="oc-ml-s"
-            >
-              <oc-icon
-                v-if="!linksCopied[$_privateLinkOfHighlightedFile]"
-                id="files-sidebar-private-link-label"
-                v-clipboard:copy="$_privateLinkOfHighlightedFile"
-                v-clipboard:success="$_clipboardSuccessHandler"
-                name="copy_to_clipboard"
-              />
-              <oc-icon
-                v-else
-                id="files-sidebar-private-link-icon-copied"
-                name="ready"
-                class="_clipboard-success-animation"
-              />
-            </oc-button>
-          </div>
-          <div class="uk-text-meta">
-            <i><translate>Only invited people can use this link.</translate></i>
-          </div>
-          <hr />
-        </section>
+        <private-link-item />
         <section>
           <div class="oc-text-bold">
             <translate>Public Links</translate>
@@ -54,7 +26,7 @@
               icon="add"
               variation="primary"
               :aria-label="$_addButtonAriaLabel"
-              @click="$_addPublicLink"
+              @click="addNewLink"
             >
               <oc-icon name="add" />
               {{ $_addButtonLabel }}
@@ -68,15 +40,7 @@
             tag="ul"
           >
             <li v-for="link in links" :key="link.key">
-              <public-link-list-item
-                :link="link"
-                :modifiable="!link.indirect"
-                :indirect="link.indirect"
-                :links-copied="linksCopied"
-                @onCopy="$_clipboardSuccessHandler"
-                @onDelete="$_removePublicLink"
-                @onEdit="$_editPublicLink"
-              />
+              <public-link-list-item :link="link" />
             </li>
           </transition-group>
         </section>
@@ -85,30 +49,30 @@
         </div>
       </template>
     </div>
-    <div v-if="visiblePanel === PANEL_EDIT" :key="PANEL_EDIT">
+    <div v-if="appSidebarAccordionContext === PANEL_EDIT" :key="PANEL_EDIT">
       <transition
         enter-active-class="uk-animation-slide-right uk-animation-fast"
         leave-active-class="uk-animation-slide-right uk-animation-reverse uk-animation-fast"
         name="custom-classes-transition"
       >
-        <div class="oc-default-background">
-          <edit-public-link :params="params" @close="$_showList()" />
-        </div>
+        <edit-public-link />
       </transition>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import moment from 'moment'
 import mixins from '../mixins'
 import { shareTypes } from '../helpers/shareTypes'
 import { getParentPaths } from '../helpers/path'
 import { dirname } from 'path'
 import { textUtils } from '../helpers/textUtils'
+import { cloneStateObject } from '../helpers/store'
 
-const EditPublicLink = _ => import('./PublicLinksSidebar/EditPublicLink.vue')
-const PublicLinkListItem = _ => import('./PublicLinksSidebar/PublicLinkListItem.vue')
+import PrivateLinkItem from './PublicLinksSidebar/PrivateLinkItem.vue'
+const EditPublicLink = () => import('./PublicLinksSidebar/EditPublicLink.vue')
+const PublicLinkListItem = () => import('./PublicLinksSidebar/PublicLinkListItem.vue')
 
 const PANEL_SHOW = 'showLinks'
 const PANEL_EDIT = 'editPublicLink'
@@ -116,7 +80,8 @@ const PANEL_EDIT = 'editPublicLink'
 export default {
   components: {
     EditPublicLink,
-    PublicLinkListItem
+    PublicLinkListItem,
+    PrivateLinkItem
   },
   mixins: [mixins],
   title: $gettext => {
@@ -124,22 +89,9 @@ export default {
   },
   data() {
     return {
-      visiblePanel: 'showLinks',
-      linksCopied: {},
-      transitionGroupActive: false,
-
       // panel types
       PANEL_SHOW: PANEL_SHOW,
-      PANEL_EDIT: PANEL_EDIT,
-
-      // group for easy payload
-      params: {
-        id: null,
-        name: '',
-        permissions: 1,
-        hasPassword: false,
-        expireDate: null
-      }
+      PANEL_EDIT: PANEL_EDIT
     }
   },
   computed: {
@@ -149,16 +101,14 @@ export default {
       'currentFileOutgoingSharesLoading',
       'sharesTreeLoading'
     ]),
-    ...mapGetters(['getToken', 'capabilities']),
-    ...mapState('Files', ['sharesTree']),
+    ...mapGetters(['getToken', 'capabilities', 'configuration']),
+    ...mapState('Files', ['sharesTree', 'appSidebarAccordionContext']),
 
     $_transitionGroupEnter() {
-      return this.transitionGroupActive ? 'uk-animation-slide-left-medium' : ''
+      return 'uk-animation-slide-left-medium'
     },
     $_transitionGroupLeave() {
-      return this.transitionGroupActive
-        ? 'uk-animation-slide-right-medium uk-animation-reverse'
-        : ''
+      return 'uk-animation-slide-right-medium uk-animation-reverse'
     },
 
     linksLoading() {
@@ -185,7 +135,7 @@ export default {
       parentPaths.pop()
 
       parentPaths.forEach(parentPath => {
-        const shares = this.sharesTree[parentPath]
+        const shares = cloneStateObject(this.sharesTree[parentPath])
         if (shares) {
           shares.forEach(share => {
             if (share.outgoing && share.shareType === shareTypes.link) {
@@ -218,83 +168,31 @@ export default {
     $_addButtonAriaLabel() {
       return this.$gettext('Create new public link')
     },
-    $_privateLinkCopyLabel() {
-      return this.$gettext('Copy private link url')
-    },
-    $_privateLinkOfHighlightedFile() {
-      if (!this.highlightedFile) {
-        return false
-      }
-      if (this.highlightedFile.isMounted()) {
-        const file = encodeURIComponent(this.highlightedFile.name)
-        return window.location.href.split('?')[0] + `?scrollTo=${file}`
-      }
-      return this.highlightedFile.privateLink
+    currentPanel() {
+      return this.appSidebarAccordionContext || PANEL_SHOW
     }
   },
   watch: {
     highlightedFile(newItem, oldItem) {
       if (oldItem !== newItem) {
-        this.transitionGroupActive = false
         this.$_reloadLinks()
       }
     }
   },
   mounted() {
-    this.transitionGroupActive = false
     this.$_reloadLinks()
   },
+
+  beforeDestroy() {
+    this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(null)
+  },
+
   methods: {
     ...mapActions('Files', ['loadSharesTree', 'loadCurrentFileOutgoingShares', 'removeLink']),
-    $_resetData() {
-      this.params = {
-        id: null,
-        name: this.capabilities.files_sharing.public.defaultPublicLinkShareName,
-        permissions: 1,
-        hasPassword: false,
-        expireDate: this.$_expirationDate.days
-          ? moment()
-              .add(this.$_expirationDate.days, 'days')
-              .endOf('day')
-              .toISOString()
-          : null
-      }
-    },
-    $_removePublicLink(link) {
-      this.transitionGroupActive = true
-      this.removeLink({
-        client: this.$client,
-        share: link
-      })
-    },
-    $_editPublicLink(link) {
-      this.params = {
-        id: link.id,
-        name: link.name,
-        permissions: parseInt(link.permissions),
-        hasPassword: link.password,
-        expireDate:
-          link.expiration !== null
-            ? moment(link.expiration)
-                .endOf('day')
-                .toISOString()
-            : null
-      }
-      this.visiblePanel = PANEL_EDIT
-    },
-    $_addPublicLink() {
-      this.transitionGroupActive = true
-      this.$_resetData()
-      this.visiblePanel = PANEL_EDIT
-    },
-    $_clipboardSuccessHandler(event) {
-      this.$set(this.linksCopied, event.text, true)
-      setTimeout(() => {
-        this.linksCopied[event.text] = false
-      }, 550)
-    },
+    ...mapMutations('Files', ['TRIGGER_PUBLIC_LINK_CREATE', 'SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
+
     $_showList() {
-      this.visiblePanel = PANEL_SHOW
+      this.SET_APP_SIDEBAR_ACCORDION_CONTEXT(PANEL_SHOW)
     },
     $_reloadLinks() {
       this.$_showList()
@@ -325,6 +223,18 @@ export default {
       }
 
       return l1Direct ? -1 : 1
+    },
+
+    addNewLink() {
+      this.TRIGGER_PUBLIC_LINK_CREATE({
+        name: this.capabilities.files_sharing.public.defaultPublicLinkShareName,
+        expireDate: this.$_expirationDate.days
+          ? moment()
+              .add(this.$_expirationDate.days, 'days')
+              .endOf('day')
+              .toISOString()
+          : null
+      })
     }
   }
 }

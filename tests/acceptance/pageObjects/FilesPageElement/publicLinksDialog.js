@@ -364,7 +364,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     publicLinkSubName: {
-      selector: '.oc-files-file-link-url'
+      selector: '.oc-files-file-link-name'
     },
     publicLinkSubRole: {
       selector: '.oc-files-file-link-role'
@@ -405,15 +405,18 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     publicLinkEditButton: {
-      selector: '//a[.="%s"]/../..//button[contains(@class, "oc-files-file-link-edit")]',
+      selector:
+        '//div[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-edit")]',
       locateStrategy: 'xpath'
     },
     publicLinkDeleteButton: {
-      selector: '//a[.="%s"]/../..//button[contains(@class, "oc-files-file-link-delete")]',
+      selector:
+        '//div[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-delete")]',
       locateStrategy: 'xpath'
     },
     publicLinkURLCopyButton: {
-      selector: '//a[.="%s"]/../..//button[contains(@class, "oc-files-file-link-copy-url")]',
+      selector:
+        '//div[contains(@class, "oc-files-file-link-name") and text()="%s"]/../../..//button[contains(@class, "oc-files-file-link-copy-url")]',
       locateStrategy: 'xpath'
     },
     publicLinkPasswordField: {
