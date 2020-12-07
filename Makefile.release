@@ -81,4 +81,4 @@ ocx-app-config:
 
 .PHONY: ocx-app-bundle
 ocx-app-bundle:
-tar -czf $(CURDIR)/release/$(app_name)-app.tar.gz --transform='s,dist,phoenix,' dist
+	tar -czf $(CURDIR)/release/$(app_name)-app.tar.gz --transform='s,dist,phoenix,' dist
