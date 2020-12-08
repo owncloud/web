@@ -1,0 +1,6 @@
+Bugfix: Copy dynamicNavItems state
+
+The dynamicNavItems state in ADD_NAV_ITEM mutation now gets copied instead of referenced to trigger a state change.
+
+https://github.com/owncloud/ocis/issues/1031
+https://github.com/owncloud/phoenix/pull/4430

@@ -12,7 +12,6 @@ module.exports = merge(common, {
     symlinks: false
   },
   devServer: {
-    writeToDisk: true,
     contentBase: path.resolve(__dirname),
     historyApiFallback: true,
     publicPath: '/',
