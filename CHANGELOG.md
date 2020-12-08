@@ -1,3 +1,24 @@
+Changelog for ownCloud Phoenix [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud phoenix unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/phoenix/compare/v0.29.0...master
+
+Summary
+-------
+
+* Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
+
+Details
+-------
+
+* Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
+
+   The status column of accepted shares was blank.
+
+   https://github.com/owncloud/ocis/issues/985
+
 Changelog for ownCloud Phoenix [0.29.0] (2020-12-07)
 =======================================
 The following sections list the changes in ownCloud phoenix 0.29.0 relevant to
