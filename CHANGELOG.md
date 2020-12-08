@@ -8,10 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Copy dynamicNavItems state: [#1031](https://github.com/owncloud/ocis/issues/1031)
 * Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 
 Details
 -------
+
+* Bugfix - Copy dynamicNavItems state: [#1031](https://github.com/owncloud/ocis/issues/1031)
+
+   The dynamicNavItems state in ADD_NAV_ITEM mutation now gets copied instead of referenced to
+   trigger a state change.
+
+   https://github.com/owncloud/ocis/issues/1031
+   https://github.com/owncloud/phoenix/pull/4430
 
 * Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 
