@@ -100,7 +100,7 @@ config = {
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
 				'REMOTE_BACKEND_HOST': 'http://federated',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-ocis-server.txt'
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-oc10-server.txt'
 			},
 			'federatedServerNeeded': True,
 			'federatedServerVersion': 'daily-master-qa'
@@ -172,7 +172,7 @@ config = {
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
 				'SCREEN_RESOLUTION': '768x1024',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-ocis-server.txt'
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-oc10-server.txt'
 			},
 			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
 		},
@@ -235,7 +235,7 @@ config = {
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
 				'SCREEN_RESOLUTION': '375x812',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-ocis-server.txt'
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/phoenix/tests/acceptance/expected-failures-with-oc10-server.txt'
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
 		},
