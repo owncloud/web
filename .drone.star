@@ -22,6 +22,14 @@ config = {
 					'webUINotifications',
 					'webUIPreview',
 					'webUIPrivateLinks',
+					# The following suites may have all scenarios currently skipped.
+					# The suites are listed here so that scenarios will run when
+					# they are enabled.
+					'webUIAdminSettings',
+					'webUIComments',
+					'webUITags',
+					'webUIWebdavLockProtection',
+					'webUIWebdavLocks',
 				],
 				'webUICreate': [
 					'webUICreateFilesFolders',
@@ -114,6 +122,14 @@ config = {
 					'webUISharingAcceptSharesToRoot',
 					'webUISharingNotifications',
 					'webUISharingNotificationsToRoot',
+					# The following suites may have all scenarios currently skipped.
+					# The suites are listed here so that scenarios will run when
+					# they are enabled.
+					'webUIAdminSettings',
+					'webUIComments',
+					'webUITags',
+					'webUIWebdavLockProtection',
+					'webUIWebdavLocks',
 				],
 				'XGAPortrait2': [
 					'webUIMoveFilesFolders',
@@ -176,6 +192,14 @@ config = {
 					'webUISharingAcceptSharesToRoot',
 					'webUISharingNotifications',
 					'webUISharingNotificationsToRoot',
+					# The following suites may have all scenarios currently skipped.
+					# The suites are listed here so that scenarios will run when
+					# they are enabled.
+					'webUIAdminSettings',
+					'webUIComments',
+					'webUITags',
+					'webUIWebdavLockProtection',
+					'webUIWebdavLocks',
 					],
 				'iPhone2': [
 					'webUIMoveFilesFolders',
@@ -219,6 +243,14 @@ config = {
 					'webUIPrivateLinks',
 					'webUIPreview',
 					'webUIAccount',
+					# The following suites may have all scenarios currently skipped.
+					# The suites are listed here so that scenarios will run when
+					# they are enabled.
+					'webUIAdminSettings',
+					'webUIComments',
+					'webUITags',
+					'webUIWebdavLockProtection',
+					'webUIWebdavLocks',
 				],
 				'webUIOCISCreate': [
 					'webUICreateFilesFolders',
