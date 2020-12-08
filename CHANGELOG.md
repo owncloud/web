@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Copy dynamicNavItems state: [#1031](https://github.com/owncloud/ocis/issues/1031)
 * Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
+* Enhancement - Add oc10 app build artifact: [#4427](https://github.com/owncloud/phoenix/pull/4427)
 
 Details
 -------
@@ -27,6 +28,13 @@ Details
    The status column of accepted shares was blank.
 
    https://github.com/owncloud/ocis/issues/985
+
+* Enhancement - Add oc10 app build artifact: [#4427](https://github.com/owncloud/phoenix/pull/4427)
+
+   We've added a build step to the release process which creates an ownCloud Web bundle which can be
+   deployed as an app to ownCloud 10.
+
+   https://github.com/owncloud/phoenix/pull/4427
 
 Changelog for ownCloud Phoenix [0.29.0] (2020-12-07)
 =======================================
