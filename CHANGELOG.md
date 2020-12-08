@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Copy dynamicNavItems state: [#1031](https://github.com/owncloud/ocis/issues/1031)
+* Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 * Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 * Enhancement - Add oc10 app build artifact: [#4427](https://github.com/owncloud/phoenix/pull/4427)
 
@@ -22,6 +23,12 @@ Details
 
    https://github.com/owncloud/ocis/issues/1031
    https://github.com/owncloud/phoenix/pull/4430
+
+* Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
+
+   Declined shares could be accepted retroactively but accepted shares could not be declined.
+
+   https://github.com/owncloud/ocis/issues/985
 
 * Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 
