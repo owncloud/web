@@ -73,7 +73,7 @@
           <translate>Accept</translate>
         </oc-button>
         <oc-button
-          v-if="item.status === 1"
+          v-if="item.status === 1 || item.status === 0"
           variation="raw"
           class="file-row-share-status-action uk-text-meta oc-ml"
           @click="pendingShareAction(item, 'DELETE')"
