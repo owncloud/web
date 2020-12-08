@@ -52,6 +52,7 @@ const mutations = {
           icon: e.icon,
           newTab: e.newTab || false,
           routeName: e.routeName,
+          routes: e.routes || [],
           extension: e.extension,
           handler: e.handler
         }

@@ -41,7 +41,7 @@ export default {
     },
 
     $_fileActions_editorActions() {
-      const actions = this.apps.fileEditors.map(editor => {
+      return this.apps.fileEditors.map(editor => {
         return {
           ariaLabel: () => {
             return `Open in ${this.apps.meta[editor.app].name}`
@@ -49,7 +49,7 @@ export default {
           icon: this.apps.meta[editor.app].icon,
           handler: item => this.$_fileActions_openEditor(editor, item.path, item.id),
           isEnabled: ({ resource }) => {
-            if (editor.routes && checkRoute(editor.routes, this.$route.name)) {
+            if (editor.routes && !checkRoute(editor.routes, this.$route.name)) {
               return false
             }
 
@@ -58,8 +58,6 @@ export default {
           canBeDefault: true
         }
       })
-
-      return actions
     }
   },
 
