@@ -2,166 +2,147 @@
 
 echo 'run.sh: running acceptance-tests-drone'
 
+# An array of the suites that were run. Each entry is a string like:
+# webUILogin
+# webUIPrivateLinks
+declare -a SUITES_IN_THIS_RUN
+
+# An array of the scenarios that failed. Each entry is a string like:
+# webUILogin/login.feature:50
+# webUIPrivateLinks/accessingPrivateLinks.feature:8
+declare -a FAILED_SCENARIO_PATHS
+
+# An array of the scenarios that failed, and were not in the expected failures file.
+# Each entry is a string like:
+# webUILogin/login.feature:50
+# webUIPrivateLinks/accessingPrivateLinks.feature:8
 declare -a UNEXPECTED_FAILED_SCENARIOS
+
+# An array of the scenarios that were in the expected failures file but did not fail
+# Each entry is a string like:
+# webUILogin/login.feature:50
+# webUIPrivateLinks/accessingPrivateLinks.feature:8
 declare -a UNEXPECTED_PASSED_SCENARIOS
+
 declare -a UNEXPECTED_NIGHTWATCH_EXIT_STATUSES
+
 SCENARIOS_THAT_PASSED=0
 SCENARIOS_THAT_FAILED=0
 
 yarn run acceptance-tests-drone | tee -a 'logfile.txt'
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
-echo ${ACCEPTANCE_TESTS_EXIT_STATUS}
+echo 'Debug: ACCEPTANCE_TESTS_EXIT_STATUS is '${ACCEPTANCE_TESTS_EXIT_STATUS}
 if [ $ACCEPTANCE_TESTS_EXIT_STATUS -ne 0 ]; then
-  echo 'The acceptance test exited with error status '${ACCEPTANCE_TESTS_EXIT_STATUS}
+  echo "The acceptance test exited with error status ${ACCEPTANCE_TESTS_EXIT_STATUS}"
 
   FAILED_SCENARIOS="$(grep -F ') Scenario:' logfile.txt)"
-  echo "////////////////////"
-  echo "$(<logfile.txt)"
-  echo "+++++++++++++++++++++++++++++++++++"
+  echo "+++++++++++++++++++++++++++++++++++ FAILED_SCENARIOS"
   echo ${FAILED_SCENARIOS}
   echo "----------------------------------"
-  FAILED_SCENARIO_PATHS=()
   for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
     if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
       SUITE_PATH=$(dirname ${FAILED_SCENARIO})
       SUITE=$(basename ${SUITE_PATH})
       SCENARIO=$(basename ${FAILED_SCENARIO})
       SUITE_SCENARIO="${SUITE}/${SCENARIO}"
-      FAILED_SCENARIO_PATHS+="${SUITE_SCENARIO} "
+      FAILED_SCENARIO_PATHS+=("${SUITE_SCENARIO}")
     fi
   done
-fi
 
-echo ${FAILED_SCENARIO_PATHS}
-
-if [ $ACCEPTANCE_TESTS_EXIT_STATUS -eq 0 ]; then
-  # Find the count of scenarios that passed
-  SCENARIO_RESULTS_COLORED=$(grep -E '^[0-9]+[[:space:]]scenario(|s)[[:space:]]\(' logfile.txt)
-  SCENARIO_RESULTS=$(echo "${SCENARIO_RESULTS_COLORED}" | sed "s/\x1b[^m]*m//g")
-  # They all passed, so just get the first number.
-  # The text looks like "1 scenario (1 passed)" or "123 scenarios (123 passed)"
-  [[ ${SCENARIO_RESULTS} =~ ([0-9]+) ]]
-  SCENARIOS_THAT_PASSED=$((SCENARIOS_THAT_PASSED + BASH_REMATCH[1]))
-elif [ $ACCEPTANCE_TESTS_EXIT_STATUS -ne 0 ]; then
-  echo 'The acceptance test run exited with error status '${ACCEPTANCE_TESTS_EXIT_STATUS}
-  # Find the count of scenarios that passed and failed
-  SCENARIO_RESULTS_COLORED=$(grep -E '^[0-9]+[[:space:]]scenario(|s)[[:space:]]\(' logfile.txt)
-  SCENARIO_RESULTS=$(echo "${SCENARIO_RESULTS_COLORED}" | sed "s/\x1b[^m]*m//g")
-  if [[ ${SCENARIO_RESULTS} =~ [0-9]+[^0-9]+([0-9]+)[^0-9]+([0-9]+)[^0-9]+ ]]; then
-    # Some passed and some failed, we got the second and third numbers.
-    # The text looked like "15 scenarios (6 passed, 9 failed)"
-    SCENARIOS_THAT_PASSED=$((SCENARIOS_THAT_PASSED + BASH_REMATCH[1]))
-    SCENARIOS_THAT_FAILED=$((SCENARIOS_THAT_FAILED + BASH_REMATCH[2]))
-  elif [[ ${SCENARIO_RESULTS} =~ [0-9]+[^0-9]+([0-9]+)[^0-9]+ ]]; then
-    # All failed, we got the second number.
-    # The text looked like "4 scenarios (4 failed)"
-    SCENARIOS_THAT_FAILED=$((SCENARIOS_THAT_FAILED + BASH_REMATCH[1]))
+  if [ ${#FAILED_SCENARIO_PATHS[@]} -eq 0 ]
+  then
+    # Nightwatch had some problem but there were no failed scenarios reported
+    # So the problem is something else.
+    # Possibly there were missing step definitions. Or Nightwatch crashed badly, or...
+    echo "Unexpected failure or crash"
+    UNEXPECTED_NIGHTWATCH_EXIT_STATUSES+=("The run had nightwatch exit status ${ACCEPTANCE_TESTS_EXIT_STATUS}")
   fi
 fi
 
-if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
-  echo "Checking expected failures"
+echo "+++++++++++++++++++++++++++++++++++ FAILED_SCENARIO_PATHS"
+echo "${FAILED_SCENARIO_PATHS[@]}"
+echo "----------------------------------"
 
-  #  printf "%s" "$(<$EXPECTED_FAILURES_FILE)"
-  #  echo "$(<$EXPECTED_FAILURES_FILE)"
+# Work out which suites were run.
+# TEST_PATHS = "tests/acceptance/features/webUILogin tests/acceptance/features/webUINotifications"
+# or
+# TEST_CONTEXT = "webUIFavorites"
+if [ -n "${TEST_PATHS}" ]; then
+  for TEST_PATH in ${TEST_PATHS}; do
+    SUITE=$(basename ${TEST_PATH})
+    SUITES_IN_THIS_RUN+=("${SUITE}")
+  done
+fi
+
+if [ -n "${TEST_CONTEXT}" ]; then
+  SUITES_IN_THIS_RUN+=("${TEST_CONTEXT}")
+fi
+
+echo "+++++++++++++++++++++++++++++++++++ SUITES_IN_THIS_RUN"
+echo "${SUITES_IN_THIS_RUN[@]}"
+echo "----------------------------------"
+
+if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
+  echo "Checking expected failures in ${EXPECTED_FAILURES_FILE}"
 
   # Check that every failed scenario is in the list of expected failures
-  for FAILED_SCENARIO_PATH in ${FAILED_SCENARIO_PATHS}; do
+  for FAILED_SCENARIO_PATH in "${FAILED_SCENARIO_PATHS[@]}"; do
     grep -x ${FAILED_SCENARIO_PATH} ${EXPECTED_FAILURES_FILE} >/dev/null
     if [ $? -ne 0 ]; then
       echo "Error: Scenario ${FAILED_SCENARIO_PATH} failed but was not expected to fail."
-      UNEXPECTED_FAILED_SCENARIOS+="${FAILED_SCENARIO_PATH} "
+      UNEXPECTED_FAILED_SCENARIOS+=("${FAILED_SCENARIO_PATH}")
     fi
   done
 
-  # Check that every scenario in the expected failures did fail
-  while IFS= read -r line; do
+  # Check that every relevant scenario in the expected failures file did fail
+  while IFS= read -r LINE; do
     # Ignore comment lines (starting with hash) or the empty lines
-    if [[ ("$line" =~ ^#) || (-z "$line") ]]; then
+    if [[ ("${LINE}" =~ ^#) || (-z "${LINE}") ]]; then
       continue
     fi
-    EXPECTED_FAILURE_SUITE=$(dirname "${line}")
 
-    if [ -n "${TEST_PATHS}" ]; then
-      # If the expected failure is not in the suite that is currently being run,
-      # then do not try and check that it failed.
-      RUN_SUITE_SCENARIO=()
-      for TEST_PATH in "${TEST_PATHS}"; do
-        SUITE=$(basename ${TEST_PATH})
-        RUN_SUITE_SCENARIO+="^${SUITE}/ "
-      done
-      REGEX_TO_MATCH="^${EXPECTED_FAILURE_SUITE}/"
+    # This should be a suite name (string) like "webUILogin"
+    EXPECTED_FAILURE_SUITE=$(dirname "${LINE}")
 
-      if ! [[ " ${RUN_SUITE_SCENARIO[@]} " == *"${REGEX_TO_MATCH} "* ]]; then
-        continue
+    for SUITE_IN_THIS_RUN in "${SUITES_IN_THIS_RUN[@]}"; do
+      if [ $SUITE_IN_THIS_RUN == $EXPECTED_FAILURE_SUITE ]
+      then
+        # This line in the expected failures file is for a suite that has been run.
+        # So we expect that the scenario in LINE has run and failed.
+        # Look for it in FAILED_SCENARIO_PATHS
+				echo "${FAILED_SCENARIO_PATHS[@]}" | grep ${LINE}$ > /dev/null
+				if [ $? -ne 0 ]
+				then
+					echo "Info: Scenario ${LINE} was expected to fail but did not fail."
+					UNEXPECTED_PASSED_SCENARIOS+=("${LINE}")
+				fi
       fi
-    fi
-
-    if [ -n "${TEST_CONTEXT}" ]; then
-      # If the expected failure is not in the suite that is currently being run,
-      # then do not try and check that it failed.
-      RUN_SUITE_SCENARIO=()
-      for CONTEXT in "${TEST_CONTEXT}"; do
-        RUN_SUITE_SCENARIO+="^${CONTEXT}/ "
-      done
-      REGEX_TO_MATCH="^${EXPECTED_FAILURE_SUITE}/"
-
-      if ! [[ " ${RUN_SUITE_SCENARIO[@]} " == *"${REGEX_TO_MATCH} "* ]]; then
-        continue
-      fi
-    fi
-
-    if [ ${ACCEPTANCE_TESTS_EXIT_STATUS} -ne 0 ] && [ ${#FAILED_SCENARIO_PATHS[@]} -eq 0 ]
-	then
-		# Nightwatch had some problem and there were no failed scenarios reported
-		# So the problem is something else.
-		# Possibly there were missing step definitions. Or Nightwatch crashed badly, or...
-		echo "Unexpected failure or crash"
-		UNEXPECTED_NIGHTWATCH_EXIT_STATUSES+=("The running suite had nightwatch exit status ${ACCEPTANCE_TESTS_EXIT_STATUS}")
-	fi
-
-
-    if ! [[ " ${FAILED_SCENARIO_PATHS[@]} " == *"$line"* ]]; then
-      echo "Error: Scenario $line was expected to fail but did not fail."
-      UNEXPECTED_PASSED_SCENARIOS+="$line "
-    fi
-  done <"$EXPECTED_FAILURES_FILE"
+    done
+  done < "${EXPECTED_FAILURES_FILE}"
 fi
 
-for FAILED_SCENARIO_PATH in ${FAILED_SCENARIO_PATHS}; do
-
-  if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
-    grep -x ${FAILED_SCENARIO_PATH} ${EXPECTED_FAILURES_FILE} >/dev/null
-
-    if [ $? -eq 0 ]; then
-      echo "Notice: Scenario ${FAILED_SCENARIO_PATH} is expected to fail so do not rerun it."
-      continue
-    fi
-  fi
-
-  echo "Rerun failed scenario: ${FAILED_SCENARIO_PATH}"
-  yarn run acceptance-tests-drone tests/acceptance/features/${FAILED_SCENARIO_PATH} | tee -a 'logfile.txt'
-  BEHAT_EXIT_STATUS=${PIPESTATUS[0]}
-  if [ ${BEHAT_EXIT_STATUS} -eq 0 ]; then
+# Rerun any UNEXPECTED_FAILED_SCENARIOS to see if they pass or fail on a 2nd attempt
+SCENARIOS_TO_RERUN=("${UNEXPECTED_FAILED_SCENARIOS[@]}")
+for SCENARIO_TO_RERUN in "${SCENARIOS_TO_RERUN[@]}"; do
+  echo "Rerun failed scenario: ${SCENARIO_TO_RERUN}"
+  yarn run acceptance-tests-drone tests/acceptance/features/${SCENARIO_TO_RERUN} | tee -a 'logfile.txt'
+  YARN_EXIT_STATUS=${PIPESTATUS[0]}
+  if [ ${YARN_EXIT_STATUS} -eq 0 ]; then
     # The scenario was not expected to fail but had failed and is present in the
     # unexpected_failures list. We've checked the scenario with a re-run and
     # it passed. So remove it from the unexpected_failures list.
     for i in "${!UNEXPECTED_FAILED_SCENARIOS[@]}"; do
-      if [ "${UNEXPECTED_FAILED_SCENARIOS[i]}" == "${FAILED_SCENARIO_PATH}" ]; then
+      if [ "${UNEXPECTED_FAILED_SCENARIOS[i]}" == "${SCENARIO_TO_RERUN}" ]; then
         unset "UNEXPECTED_FAILED_SCENARIOS[i]"
       fi
     done
   else
-    echo "test rerun failed with exit status: ${BEHAT_EXIT_STATUS}"
+    echo "test rerun failed with exit status: ${YARN_EXIT_STATUS}"
     # The scenario is not expected to fail but is failing also after the rerun.
     # Since it is already reported in the unexpected_failures list, there is no
     # need to touch that again. Continue processing the next scenario to rerun.
   fi
 done
-
-TOTAL_SCENARIOS=$((SCENARIOS_THAT_PASSED + SCENARIOS_THAT_FAILED))
-
-echo "runsh: Total ${TOTAL_SCENARIOS} scenarios (${SCENARIOS_THAT_PASSED} passed, ${SCENARIOS_THAT_FAILED} failed)"
 
 if [ ${#UNEXPECTED_FAILED_SCENARIOS[@]} -gt 0 ]; then
   UNEXPECTED_FAILURE=true
