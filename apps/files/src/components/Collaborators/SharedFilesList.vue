@@ -285,7 +285,7 @@ export default {
     },
 
     shareStatus(status) {
-      if (status === 0) return
+      if (status === 0) return this.$gettext('Accepted')
 
       if (status === 1) return this.$gettext('Pending')
 
