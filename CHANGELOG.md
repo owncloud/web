@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Enable route checks for file actions: [#986](https://github.com/owncloud/ocis/issues/986)
 * Bugfix - Copy dynamicNavItems state: [#1031](https://github.com/owncloud/ocis/issues/1031)
 * Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 * Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
@@ -15,6 +16,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Enable route checks for file actions: [#986](https://github.com/owncloud/ocis/issues/986)
+
+   The checks on which route an extension is enabled were not active (and inverted). We fixed this
+   so that editors only appear on configured routes now.
+
+   https://github.com/owncloud/ocis/issues/986
+   https://github.com/owncloud/phoenix/pull/4436
 
 * Bugfix - Copy dynamicNavItems state: [#1031](https://github.com/owncloud/ocis/issues/1031)
 
