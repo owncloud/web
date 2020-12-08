@@ -26,24 +26,21 @@ declare -a UNEXPECTED_PASSED_SCENARIOS
 
 declare -a UNEXPECTED_NIGHTWATCH_EXIT_STATUSES
 
-SCENARIOS_THAT_PASSED=0
-SCENARIOS_THAT_FAILED=0
-
 yarn run acceptance-tests-drone | tee -a 'logfile.txt'
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
-echo 'Debug: ACCEPTANCE_TESTS_EXIT_STATUS is '${ACCEPTANCE_TESTS_EXIT_STATUS}
-if [ $ACCEPTANCE_TESTS_EXIT_STATUS -ne 0 ]; then
+echo "Debug: ACCEPTANCE_TESTS_EXIT_STATUS is ${ACCEPTANCE_TESTS_EXIT_STATUS}"
+if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
   echo "The acceptance test exited with error status ${ACCEPTANCE_TESTS_EXIT_STATUS}"
 
   FAILED_SCENARIOS="$(grep -F ') Scenario:' logfile.txt)"
   echo "+++++++++++++++++++++++++++++++++++ FAILED_SCENARIOS"
-  echo ${FAILED_SCENARIOS}
+  echo "${FAILED_SCENARIOS}"
   echo "----------------------------------"
   for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
     if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
-      SUITE_PATH=$(dirname ${FAILED_SCENARIO})
-      SUITE=$(basename ${SUITE_PATH})
-      SCENARIO=$(basename ${FAILED_SCENARIO})
+      SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
+      SUITE=$(basename "${SUITE_PATH}")
+      SCENARIO=$(basename "${FAILED_SCENARIO}")
       SUITE_SCENARIO="${SUITE}/${SCENARIO}"
       FAILED_SCENARIO_PATHS+=("${SUITE_SCENARIO}")
     fi
@@ -69,7 +66,7 @@ echo "----------------------------------"
 # TEST_CONTEXT = "webUIFavorites"
 if [ -n "${TEST_PATHS}" ]; then
   for TEST_PATH in ${TEST_PATHS}; do
-    SUITE=$(basename ${TEST_PATH})
+    SUITE=$(basename "${TEST_PATH}")
     SUITES_IN_THIS_RUN+=("${SUITE}")
   done
 fi
@@ -87,7 +84,7 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
 
   # Check that every failed scenario is in the list of expected failures
   for FAILED_SCENARIO_PATH in "${FAILED_SCENARIO_PATHS[@]}"; do
-    grep -x ${FAILED_SCENARIO_PATH} ${EXPECTED_FAILURES_FILE} >/dev/null
+    grep -x "${FAILED_SCENARIO_PATH}" "${EXPECTED_FAILURES_FILE}" >/dev/null
     if [ $? -ne 0 ]; then
       echo "Error: Scenario ${FAILED_SCENARIO_PATH} failed but was not expected to fail."
       UNEXPECTED_FAILED_SCENARIOS+=("${FAILED_SCENARIO_PATH}")
@@ -105,12 +102,12 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
     EXPECTED_FAILURE_SUITE=$(dirname "${LINE}")
 
     for SUITE_IN_THIS_RUN in "${SUITES_IN_THIS_RUN[@]}"; do
-      if [ $SUITE_IN_THIS_RUN == $EXPECTED_FAILURE_SUITE ]
+      if [ "${SUITE_IN_THIS_RUN}" == "${EXPECTED_FAILURE_SUITE}" ]
       then
         # This line in the expected failures file is for a suite that has been run.
         # So we expect that the scenario in LINE has run and failed.
         # Look for it in FAILED_SCENARIO_PATHS
-				echo "${FAILED_SCENARIO_PATHS[@]}" | grep ${LINE}$ > /dev/null
+				echo "${FAILED_SCENARIO_PATHS[@]}" | grep "${LINE}$" > /dev/null
 				if [ $? -ne 0 ]
 				then
 					echo "Info: Scenario ${LINE} was expected to fail but did not fail."
@@ -127,7 +124,7 @@ for SCENARIO_TO_RERUN in "${SCENARIOS_TO_RERUN[@]}"; do
   echo "Rerun failed scenario: ${SCENARIO_TO_RERUN}"
   yarn run acceptance-tests-drone tests/acceptance/features/${SCENARIO_TO_RERUN} | tee -a 'logfile.txt'
   YARN_EXIT_STATUS=${PIPESTATUS[0]}
-  if [ ${YARN_EXIT_STATUS} -eq 0 ]; then
+  if [ "${YARN_EXIT_STATUS}" -eq 0 ]; then
     # The scenario was not expected to fail but had failed and is present in the
     # unexpected_failures list. We've checked the scenario with a re-run and
     # it passed. So remove it from the unexpected_failures list.
