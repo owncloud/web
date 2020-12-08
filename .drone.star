@@ -100,7 +100,7 @@ config = {
 				'XGAPortrait1': [
 					'webUIAccount',
 					'webUICreateFilesFolders',
-					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
 					'webUIFavorites',
 					'webUIFiles',
 					'webUILogin',
@@ -162,7 +162,7 @@ config = {
 				'iPhone1': [
 					'webUIAccount',
 					'webUICreateFilesFolders',
-					'webUICreateFilesFolders',
+					'webUIDeleteFilesFolders',
 					'webUIFavorites',
 					'webUIFiles',
 					'webUILogin',
