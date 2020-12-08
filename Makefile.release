@@ -49,7 +49,7 @@ copy-htaccess:
 	cp .htaccess $(dist_dir)
 
 .PHONY: package
-package: create-release-folder create-package
+package: create-release-folder create-packages
 
 .PHONY: create-release-folder
 create-release-folder:
@@ -57,7 +57,7 @@ create-release-folder:
 	mkdir $(CURDIR)/release
 
 .PHONY: create-packages
-craete-packages: package-plain package-ocx
+create-packages: package-plain package-ocx
 
 .PHONY: package-plain
 package-plain:
