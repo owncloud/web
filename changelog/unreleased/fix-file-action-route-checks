@@ -1,0 +1,6 @@
+Bugfix: Enable route checks for file actions
+
+The checks on which route an extension is enabled were not active (and inverted). We fixed this so that editors only appear on configured routes now.
+
+https://github.com/owncloud/ocis/issues/986
+https://github.com/owncloud/phoenix/pull/4436
