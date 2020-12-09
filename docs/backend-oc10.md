@@ -26,7 +26,7 @@ Add the following entries to config/config.php:
 
 - tell ownCloud where Web is located:
 ```
-'phoenix.baseUrl' => '<web-url>',
+'web.baseUrl' => '<web-url>',
 ```
 
 - add a CORS domain entry for Web in config.php:
