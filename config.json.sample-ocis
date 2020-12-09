@@ -24,6 +24,15 @@
     {
       "id": "accounts",
       "path": "https://localhost:9200/accounts.js"
+    },
+    {
+      "id": "draw-io",
+      "path": "apps/draw-io/dist/draw-io.bundle.js",
+      "config": {
+        "url": "https://embed.diagrams.net",
+        "autosave": false,
+        "theme": "minimal"
+      }
     }
   ]
 }
