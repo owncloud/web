@@ -9,7 +9,7 @@ geekdocFilePath: building.md
 
 {{< toc >}}
 
-## Building Web
+## Building ownCloud Web
 
 - Run `yarn install` to install core dependencies
 - Run `yarn install-all` to install dependencies of all apps and core

@@ -8,9 +8,9 @@ geekdocFilePath: releasing.md
 
 {{< toc >}}
 
-## Releasing Web
+## Releasing ownCloud Web
 
-The next generation Web Frontend is shipped as an ocis Extension. The `ocis-web` extension is also embedded in the single binary and part of the `ocis server` command.
+The ownCloud Web is shipped as an ocis Extension. The `ocis-web` extension is also embedded in the single binary and part of the `ocis server` command.
 
 This repository contains the assets and these must be released first before being bundled into `ocis-web`.
 
