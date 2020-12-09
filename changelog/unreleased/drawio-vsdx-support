@@ -1,0 +1,8 @@
+Enhancement: Add support for .vsdx files in the draw.io app
+
+Added the support to open .vsdx files (Microsoft Visio Files) directly
+from OwnCloud, instead of creating a new diagram to import the file from
+local storage.
+
+https://github.com/owncloud/phoenix/pull/4337
+https://github.com/owncloud/phoenix/issues/4327

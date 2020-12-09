@@ -29,5 +29,16 @@
       "icon": "info",
       "path": "/internal-app"
     }
+  ],
+  "external_apps": [
+    {
+      "id": "draw-io",
+      "path": "apps/draw-io/dist/draw-io.bundle.js",
+      "config": {
+        "url": "https://embed.diagrams.net",
+        "autosave": false,
+        "theme": "minimal"
+      }
+    }
   ]
 }

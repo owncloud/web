@@ -1,0 +1,8 @@
+Enhancement: Add custom configuration to the draw.io app
+
+Added mechanism to specify custom configuration instead of using a hardcoded
+one. The new settings include support for a custom draw.io server, enabling
+autosave and using a specific theme.
+
+https://github.com/owncloud/phoenix/pull/4337
+https://github.com/owncloud/phoenix/issues/4328

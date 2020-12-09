@@ -1,47 +1,68 @@
 <template>
-  <iframe id="drawio-editor" ref="drawIoEditor" :src="iframeSource"></iframe>
+  <div>
+    <oc-spinner
+      v-if="loading"
+      :aria-label="this.$gettext('Loading media')"
+      class="uk-position-center"
+      size="xlarge"
+    />
+    <iframe v-else id="drawio-editor" ref="drawIoEditor" :src="iframeSource" />
+  </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { basename } from 'path'
 import queryString from 'query-string'
+import moment from 'moment'
 
 export default {
   name: 'DrawIoEditor',
   data: () => ({
+    loading: true,
     filePath: '',
+    fileExtension: '',
+    isReadOnly: null,
     currentETag: null
   }),
   computed: {
     ...mapGetters(['getToken']),
-    loading() {
-      return this.content === ''
+    config() {
+      const { url = 'https://embed.diagrams.net', theme = 'minimal', autosave = false } =
+        this.$store.state.apps.fileEditors.find(editor => editor.app === 'draw-io').config || {}
+      return { url, theme, autosave: autosave ? 1 : 0 }
     },
     iframeSource() {
       const query = queryString.stringify({
         embed: 1,
+        chrome: this.isReadOnly ? 0 : 1,
         picker: 0,
         stealth: 1,
         spin: 1,
         proto: 'json',
-        ui: 'minimal'
+        ui: this.config.theme
       })
 
-      return 'https://www.draw.io?' + query
+      return `${this.config.url}?${query}`
     }
   },
   created() {
     this.filePath = this.$route.params.filePath
-
+    this.fileExtension = this.filePath.split('.').pop()
+    this.checkPermissions()
     window.addEventListener('message', event => {
-      console.log(event)
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data)
-        if (payload.event === 'init') {
-          this.load()
-        } else if (payload.event === 'save') {
-          this.save(payload)
-        } else if (payload.event === 'exit') {
-          this.exit()
+        switch (payload.event) {
+          case 'init':
+            this.fileExtension === 'vsdx' ? this.importVisio() : this.load()
+            break
+          case 'autosave':
+          case 'save':
+            this.save(payload)
+            break
+          case 'exit':
+            this.exit()
+            break
         }
       }
     })
@@ -50,7 +71,7 @@ export default {
     ...mapActions(['showMessage']),
     error(error) {
       this.showMessage({
-        title: this.$gettext('PDF could not be loaded…'),
+        title: this.$gettext('The diagram could not be loaded…'),
         desc: error,
         status: 'danger',
         autoClose: {
@@ -58,7 +79,17 @@ export default {
         }
       })
     },
-
+    checkPermissions() {
+      this.$client.files
+        .fileInfo(this.filePath, ['{http://owncloud.org/ns}permissions'])
+        .then(v => {
+          this.isReadOnly = v.fileInfo['{http://owncloud.org/ns}permissions'].indexOf('W') === -1
+          this.loading = false
+        })
+        .catch(error => {
+          this.error(error)
+        })
+    },
     load() {
       this.$client.files
         .getFileContents(this.filePath, { resolveWithResponseObject: true })
@@ -67,10 +98,58 @@ export default {
           this.$refs.drawIoEditor.contentWindow.postMessage(
             JSON.stringify({
               action: 'load',
-              xml: resp.body
+              xml: resp.body,
+              autosave: this.config.autosave
             }),
             '*'
           )
+        })
+        .catch(error => {
+          this.error(error)
+        })
+    },
+    importVisio() {
+      const url = this.$client.files.getFileUrl(this.filePath)
+      const headers = new Headers({
+        Authorization: 'Bearer ' + this.getToken,
+        'X-Requested-With': 'XMLHttpRequest'
+      })
+      const getDescription = () =>
+        this.$gettextInterpolate(
+          'The diagram will open as a new .drawio file: %{file}',
+          { file: basename(this.filePath) },
+          true
+        )
+      // Change the working file after the import so the original file is not overwritten
+      this.filePath += `_${this.getTimestamp()}.drawio`
+      this.showMessage({
+        title: this.$gettext('Diagram imported'),
+        desc: getDescription(),
+        autoClose: {
+          enabled: true
+        }
+      })
+      fetch(url, { headers })
+        .then(resp => {
+          // Not setting `currentETag` on imports allows to create new files
+          // otherwise the ETag comparison fails with a 412 during the autosave/save event
+          // this.currentETag = resp.headers.get('etag')
+          return resp.arrayBuffer()
+        })
+        .then(arrayBuffer => {
+          var blob = new Blob([arrayBuffer], { type: 'application/vnd.visio' })
+          var reader = new FileReader()
+          reader.onloadend = () => {
+            this.$refs.drawIoEditor.contentWindow.postMessage(
+              JSON.stringify({
+                action: 'load',
+                xml: reader.result,
+                autosave: this.config.autosave
+              }),
+              '*'
+            )
+          }
+          reader.readAsDataURL(blob)
         })
         .catch(error => {
           this.error(error)
@@ -83,6 +162,13 @@ export default {
         })
         .then(resp => {
           this.currentETag = resp.ETag
+          this.$refs.drawIoEditor.contentWindow.postMessage(
+            JSON.stringify({
+              action: 'status',
+              modified: false
+            }),
+            '*'
+          )
         })
         .catch(error => {
           this.error(error)
@@ -90,6 +176,9 @@ export default {
     },
     exit() {
       window.close()
+    },
+    getTimestamp() {
+      return moment().format('YYYYMMDD[T]HHmmss')
     }
   }
 }
@@ -107,6 +196,5 @@ export default {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  z-index: 999999;
 }
 </style>
