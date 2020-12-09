@@ -5,5 +5,5 @@ by introducing statically and dynamically loaded navItems. This way navItems can
 data, as soon as the extension becomes active. Please note that having at least one static navItem (coming
 from the appInfo object of an extension) is still a requirement for the extension appearing in the app switcher.
 
-https://github.com/owncloud/phoenix/issues/3497
-https://github.com/owncloud/phoenix/pull/3570
+https://github.com/owncloud/web/issues/3497
+https://github.com/owncloud/web/pull/3570

@@ -33,7 +33,7 @@ When(
 
 When('user {string} logs in using the webUI', username => loginHelper.loginAsUser(username))
 
-When('the user authorizes access to phoenix', () => {
+When('the user authorizes access to web', () => {
   return client.page.ownCloudAuthorizePage().authorize()
 })
 
@@ -77,11 +77,11 @@ When('the user re-logs in as {string} using the webUI', user => {
 })
 
 Then('the user profile should be visible in the webUI', function() {
-  return client.page.phoenixPage().waitForElementVisible('@userMenuButton')
+  return client.page.webPage().waitForElementVisible('@userMenuButton')
 })
 
 When('the user opens the user profile', function() {
-  return client.page.phoenixPage().browseToUserProfile()
+  return client.page.webPage().browseToUserProfile()
 })
 
 Then('username {string} should be visible in the webUI', async function(username) {

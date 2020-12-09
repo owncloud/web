@@ -3,4 +3,4 @@ Bugfix: OIDC logout
 We've fixed the bug that the user sometimes got immediately logged back into the web UI after clicking on logout.
 
 https://github.com/owncloud/product/issues/266
-https://github.com/owncloud/phoenix/pull/4211
+https://github.com/owncloud/web/pull/4211

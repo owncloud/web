@@ -4,7 +4,7 @@ import { basename, dirname } from 'path'
 
 // TODO: this file is a first attempt to separate file/folder loading logic out of the mediaviewer
 // Discussion how to progress from here can be found in this issue:
-// https://github.com/owncloud/phoenix/issues/3301
+// https://github.com/owncloud/web/issues/3301
 
 export default {
   computed: {

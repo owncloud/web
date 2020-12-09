@@ -3,4 +3,4 @@ Enhancement: add state to app urls
 Currently opened file can be added to app routes so reloading the page can be made to work
 For now it's only implemented in mediaviewer
 
-https://github.com/owncloud/phoenix/pull/3294
+https://github.com/owncloud/web/pull/3294

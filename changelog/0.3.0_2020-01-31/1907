@@ -5,7 +5,7 @@ sidebar. The order of the two sidebars has been reversed (collaborators first, f
 second). We added info messages to support a clear understanding of the purpose of both private
 and public links. Most notably the file links sidebar has no inline forms anymore.
 
-https://github.com/owncloud/phoenix/issues/1907
-https://github.com/owncloud/phoenix/issues/1307
-https://github.com/owncloud/phoenix/pull/2841
-https://github.com/owncloud/phoenix/pull/2917
+https://github.com/owncloud/web/issues/1907
+https://github.com/owncloud/web/issues/1307
+https://github.com/owncloud/web/pull/2841
+https://github.com/owncloud/web/pull/2917

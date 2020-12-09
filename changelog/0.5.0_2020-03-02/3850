@@ -7,4 +7,4 @@ icon, instead of having their own entry in the collaborators list.
 This makes the reshare situation more clear and removes the ambiguity
 about the formerly displayed "resharer" role which doesn't exist.
 
-https://github.com/owncloud/phoenix/issues/3850
+https://github.com/owncloud/web/issues/3850

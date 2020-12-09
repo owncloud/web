@@ -1,6 +1,6 @@
 Bugfix: Set server config to ocis proxy in example config file
 
 We fixed the ocis example config to point to the default oCIS Proxy address
-instead of the default Phoenix service address.
+instead of the default Web service address.
 
-https://github.com/owncloud/phoenix/pull/3454
+https://github.com/owncloud/web/pull/3454

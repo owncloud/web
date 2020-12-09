@@ -3,4 +3,4 @@ Bugfix: Fix navigation to the root folder from location picker
 The target location in the location picker was appending a whitespace when trying to go to root folder.
 This resulted in an error when trying to load such folder. We've removed the whitespace to fix the navigation.
 
-https://github.com/owncloud/phoenix/pull/3756
+https://github.com/owncloud/web/pull/3756

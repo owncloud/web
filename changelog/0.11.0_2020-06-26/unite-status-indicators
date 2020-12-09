@@ -4,4 +4,4 @@ We've merged direct and indirect status indicators in the files list.
 With this change, we focus on the important information of the indicator (e.g. resource is shared).
 Any additional information can then be displayed in the related tab of the sidebar.
 
-https://github.com/owncloud/phoenix/pull/3567
+https://github.com/owncloud/web/pull/3567

@@ -5,5 +5,5 @@ Also, error messages now appear with a small delay, so that those happening duri
 typing get ignored (e.g. trailing whitespace is not allowed in folder names and previously caused
 an error to show on every typed blank).
 
-https://github.com/owncloud/phoenix/issues/1906
-https://github.com/owncloud/phoenix/pull/3240
+https://github.com/owncloud/web/issues/1906
+https://github.com/owncloud/web/pull/3240

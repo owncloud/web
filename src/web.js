@@ -7,7 +7,7 @@ import 'vue-resize/dist/vue-resize.css'
 import VueResize from 'vue-resize'
 
 // --- Components ---
-import Phoenix from './Phoenix.vue'
+import App from './App.vue'
 import missingConfigPage from './pages/missingConfig.vue'
 
 // --- Adding global libraries ---
@@ -31,7 +31,7 @@ import coreTranslations from '../l10n/translations.json'
 
 // --- Image source ----
 import MediaSource from './plugins/mediaSource.js'
-import PhoenixPlugin from './plugins/phoenix'
+import WebPlugin from './plugins/web'
 import ChunkedUpload from './plugins/upload'
 
 // --- Drag Drop ----
@@ -57,7 +57,7 @@ Vue.use(DesignSystem)
 Vue.use(VueClipboard)
 Vue.use(VueScrollTo)
 Vue.use(MediaSource)
-Vue.use(PhoenixPlugin)
+Vue.use(WebPlugin)
 Vue.use(VueResize)
 Vue.use(VueMeta, {
   // optional pluginOptions
@@ -176,7 +176,7 @@ async function finalizeInit () {
     el: '#owncloud',
     store,
     router,
-    render: h => h(Phoenix)
+    render: h => h(App)
   })
 }
 

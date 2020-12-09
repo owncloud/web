@@ -1,7 +1,7 @@
 {
   "name": "markdown-editor",
   "version": "0.1.0",
-  "description": "ownCloud Phoenix MarkdownEditor Demo App",
+  "description": "ownCloud Web MarkdownEditor Demo App",
   "main": "js/demo.js",
   "scripts": {
     "watch": "webpack --progress --colors --watch --mode 'development'",

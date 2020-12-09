@@ -24,7 +24,7 @@ module.exports = {
       await client.page.ownCloudAuthorizePage().authorize()
     }
     await client.page
-      .phoenixPage()
+      .webPage()
       .waitForElementVisible('@appContainer')
       .then(() => {
         client.globals.currentUser = userId
@@ -60,8 +60,8 @@ module.exports = {
   },
 
   logout: function(userId) {
-    const phoenixPage = client.page.phoenixPage()
-    return phoenixPage
+    const webPage = client.page.webPage()
+    return webPage
       .navigate()
       .waitForElementVisible('@userMenuButton')
       .click('@userMenuButton')

@@ -3,4 +3,4 @@ Change: Move quota indication to the left sidebar
 We've moved the quota indication from the bottom of the files list to the footer of the left sidebar.
 
 https://github.com/owncloud/product/issues/121
-https://github.com/owncloud/phoenix/pull/3849
+https://github.com/owncloud/web/pull/3849

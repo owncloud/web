@@ -3,4 +3,4 @@ Change: Configurable default extension
 We introduced a config option in the config.json file which allows to configure the default extension for ownCloud Web.
 Any of the configured extension ids can be chosen as default extension. If none is provided, we fall back to the files extension.
 
-https://github.com/owncloud/phoenix/pull/4382
+https://github.com/owncloud/web/pull/4382

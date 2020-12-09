@@ -4,4 +4,4 @@ When visiting a public link or the `All files` page with an invalid resource in 
 that the resource could not be found and offers a link to go back to the respective root (»All files« home location or the root of the public link). The breadcrumbs have been made
 available on invalid resources as well, so that those could be used for more precise navigation instead of jumping back to the root.
 
-https://github.com/owncloud/phoenix/pull/4411
+https://github.com/owncloud/web/pull/4411

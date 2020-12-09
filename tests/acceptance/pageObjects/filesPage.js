@@ -159,7 +159,7 @@ module.exports = {
     },
     /**
      * This uploads a folder that is inside the selenium host,
-     * not from the server, phoenix or where the test runner is located.
+     * not from the server, web or where the test runner is located.
      * So, the folder needs to be already there on the machine where the browser is running.
      *
      * @typedef {import('../customCommands/uploadRemote')} UploadRemote
@@ -179,8 +179,8 @@ module.exports = {
       /tmp/<sessionId>/upload<uniqueId>file/<filename>.
 
       So, we are trying to upload the "/tmp/<sessionId>" (or, if the folderName is set, it's "/tmp/<sessionId>/<folderName>")
-      folder through phoenix, by setting value on folder input field to that folder, and hopefully,
-      phoenix gets the `onChange` event and uploads that folder.
+      folder through web, by setting value on folder input field to that folder, and hopefully,
+      web gets the `onChange` event and uploads that folder.
        */
       const sessionId = this.api.sessionId
       folderName = normalize(folderName)

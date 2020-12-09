@@ -2,5 +2,5 @@ Change: Configurable home path
 
 We introduced a config.json option `homeFolder` which let's you specify a default location when opening the `All files` view. Please refer to the documentation for details.
 
-https://github.com/owncloud/phoenix/pull/4411
+https://github.com/owncloud/web/pull/4411
 https://owncloud.github.io/clients/web/getting-started/

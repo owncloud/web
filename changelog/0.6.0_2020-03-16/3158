@@ -2,4 +2,4 @@ Bugfix: Use end of the day in expiration date
 
 We've changed the expiration date field in the collaborators list to the end of the day.
 
-https://github.com/owncloud/phoenix/pull/3158
+https://github.com/owncloud/web/pull/3158

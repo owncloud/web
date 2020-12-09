@@ -8,5 +8,5 @@ used for any data related operation.
 
 This fixes the file actions menu when using OCIS as backend.
 
-https://github.com/owncloud/phoenix/issues/3214
-https://github.com/owncloud/ocis-phoenix/issues/51
+https://github.com/owncloud/web/issues/3214
+https://github.com/owncloud/ocis-web/issues/51

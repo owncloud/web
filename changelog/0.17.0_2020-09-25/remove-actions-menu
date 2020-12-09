@@ -3,4 +3,4 @@ Change: Moved bottom actions menu into actions dropdown
 We've removed the bottom file actions menu and moved all actions into the actions dropdown in the files list.
 
 https://github.com/owncloud/product/issues/234
-https://github.com/owncloud/phoenix/pull/4076
+https://github.com/owncloud/web/pull/4076

@@ -59,7 +59,7 @@ module.exports = {
         ldap_base_dn: LDAP_BASE_DN,
         ocis_skeleton_dir: OCIS_SKELETON_DIR,
         ldap_password: LDAP_ADMIN_PASSWORD,
-        phoenix_config: PHOENIX_CONFIG
+        web_config: PHOENIX_CONFIG
       },
       selenium_host: SELENIUM_HOST,
       desiredCapabilities: {

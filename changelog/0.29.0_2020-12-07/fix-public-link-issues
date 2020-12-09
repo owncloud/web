@@ -7,4 +7,4 @@ take the public link context into account.
 - Quick actions for sharing are not available in public link contexts by design. The check printed an error in the javascript console though. We made this check silent now.
 
 https://github.com/owncloud/ocis/issues/1028
-https://github.com/owncloud/phoenix/pull/4425
+https://github.com/owncloud/web/pull/4425

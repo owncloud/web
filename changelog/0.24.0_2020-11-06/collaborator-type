@@ -2,4 +2,4 @@ Enhancement: Display collaborators type
 
 We've added a new line into the collaborators autocomplete and list in the sidebar to display their type.
 
-https://github.com/owncloud/phoenix/pull/4203
+https://github.com/owncloud/web/pull/4203

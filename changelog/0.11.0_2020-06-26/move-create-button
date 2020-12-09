@@ -2,4 +2,4 @@ Change: Move create new button
 
 We've moved the create new button in the files app bar to the left directly next to breadcrumbs.
 
-https://github.com/owncloud/phoenix/pull/3622
+https://github.com/owncloud/web/pull/3622

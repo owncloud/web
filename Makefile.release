@@ -5,7 +5,7 @@ ifndef YARN
     $(error yarn is not available on your system, please install npm)
 endif
 
-app_name=phoenix
+app_name=web
 cur_dir=$(CURDIR)
 dist_dir=$(CURDIR)/dist
 
@@ -29,19 +29,19 @@ build-release: build package
 
 
 .PHONY: build
-build: build-phoenix copy-configs
+build: build-web copy-configs
 
-.PHONY: build-phoenix
-build-phoenix:
+.PHONY: build-web
+build-web:
 	rm -rf $(dist_dir)
 	$(YARN) install
 	$(YARN) dist
 
 .PHONY: copy-configs
-copy-configs: copy-phoenix-config copy-htaccess
+copy-configs: copy-web-config copy-htaccess
 
-.PHONY: copy-phoenix-config
-copy-phoenix-config:
+.PHONY: copy-web-config
+copy-web-config:
 	cp config.json.dist $(dist_dir)/config.json
 
 .Phony: copy-htaccess
@@ -81,4 +81,4 @@ ocx-app-config:
 
 .PHONY: ocx-app-bundle
 ocx-app-bundle:
-	tar -czf $(CURDIR)/release/$(app_name)-app.tar.gz --transform='s,dist,phoenix,' dist
+	tar -czf $(CURDIR)/release/$(app_name)-app.tar.gz --transform='s,dist,web,' dist
