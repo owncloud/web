@@ -163,6 +163,7 @@ export default {
       })
 
       return items.map(item => {
+        item = {...item}
         item.name = this.$gettext(item.name)
         item.active = this.$route.name === item.route.name
 
