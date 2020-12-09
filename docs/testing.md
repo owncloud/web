@@ -83,13 +83,13 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 
 4. Run the OCIS server with the necessary configurations
     ```sh
-    export PHOENIX_ASSET_PATH='<path-to-web-clone>/dist'
-    export PHOENIX_WEB_CONFIG='<path-to-web-clone>/dist/config.json'
+    export WEB_ASSET_PATH='<path-to-web-clone>/dist'
+    export WEB_WEB_CONFIG='<path-to-web-clone>/dist/config.json'
     export STORAGE_HOME_DRIVER=owncloud
     export STORAGE_USERS_DRIVER=owncloud
     export PROXY_ENABLE_BASIC_AUTH=true
     ```
-    note: `PHOENIX_WEB_CONFIG` should point to the same config file you have created earlier.
+    note: `WEB_WEB_CONFIG` should point to the same config file you have created earlier.
     note: currently it's not possible to run the UI tests with OCIS & OWNCLOUD storage-driver
 
     run the server:
@@ -121,7 +121,7 @@ These values can be set using the environment variables to configure `yarn run a
 | `RUN_ON_OCIS`       | Running the tests using the OCIS backend                                                            | false |
 | `OCIS_REVA_DATA_ROOT`       | Data directory of OCIS                                             | /var/tmp/reva |
 | `OCIS_SKELETON_DIR`       | Skeleton files directory for new users                                                           | - |
-| `PHOENIX_CONFIG`       | Path for the web config file (usually in the dist folder)                       | - |
+| `WEB_CONFIG`       | Path for the web config file (usually in the dist folder)                       | - |
 
 ## Tips
 
