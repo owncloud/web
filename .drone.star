@@ -1225,7 +1225,7 @@ def setupGraphapiOIdC():
 			'php occ config:system:set openid-connect insecure --value=true --type=bool',
 			'php occ config:system:set cors.allowed-domains 0 --value="http://web:9100"',
 			'php occ config:system:set memcache.local --value="\\\\OC\\\\Memcache\\\\APCu"',
-			'php occ config:system:set phoenix.baseUrl --value="http://web:9100"',
+			'php occ config:system:set web.baseUrl --value="http://web:9100"',
 			'php occ config:list'
 		]
 	}]
@@ -1482,7 +1482,7 @@ def setupServerAndApp(logLevel):
 			'php occ config:list',
 			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton',
 			'php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true',
-			'php occ config:system:set phoenix.baseUrl --value="http://web"',
+			'php occ config:system:set web.baseUrl --value="http://web"',
 			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool'
 		]
 	}]
