@@ -3,4 +3,4 @@ Bugfix: Unavailable extensions causing route duplication
 There was an error in the extension loading handlers which caused routes to be loaded multiple times when extensions from the config.json were unavailable.
 We hardened the extension loading handlers to just skip those extensions.
 
-https://github.com/owncloud/phoenix/pull/4382
+https://github.com/owncloud/web/pull/4382

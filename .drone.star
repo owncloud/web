@@ -1,5 +1,5 @@
 config = {
-	'app': 'phoenix',
+	'app': 'web',
 	'rocketchat': {
 		'channel': 'builds',
 		'from_secret': 'private_rocketchat'
@@ -623,7 +623,7 @@ def acceptance():
 							},
 							'steps':
 								installNPM() +
-								buildPhoenix() +
+								buildWeb() +
 								cloneOCIS(params['ocisBranch']) +
 								(
 									(
@@ -639,9 +639,9 @@ def acceptance():
 										setupGraphapiOIdC() +
 										buildGlauth() +
 										buildKonnectd() +
-										buildOcisPhoenix() +
+										buildOcisWeb() +
 										konnectdService() +
-										ocisPhoenixService() +
+										ocisWebService() +
 										glauthService()+
 										fixPermissions()
 									) if not params['runningOnOCIS'] else (
@@ -746,7 +746,7 @@ def notify():
 def databaseServiceForFederation(db, suffix):
 	dbName = getDbName(db)
 
-	# only support mariadb, for phoenix, it's not important to support others
+	# only support mariadb, for web, it's not important to support others
 	if dbName not in ['mariadb', 'mysql']:
 		print('Not implemented federated database for', dbName)
 		return []
@@ -1010,16 +1010,16 @@ def lintTest():
 		]
 	}]
 
-def buildPhoenix():
+def buildWeb():
 	return [{
-		'name': 'build-phoenix',
+		'name': 'build-web',
 		'image': 'webhippie/nodejs:latest',
 		'pull': 'always',
 		'commands': [
 			'yarn dist',
 			'cp tests/drone/config.json dist/config.json',
 			'mkdir -p /srv/config',
-			'cp -r /var/www/owncloud/phoenix/tests/drone /srv/config',
+			'cp -r /var/www/owncloud/web/tests/drone /srv/config',
 			'ls -la /srv/config/drone'
 		],
 		'volumes': [{
@@ -1041,7 +1041,7 @@ def buildDockerImage():
 			'from_secret': 'docker_password',
 		},
 		'auto_tag': True,
-		'repo': 'owncloud/phoenix',
+		'repo': 'owncloud/web',
 		},
 		'when': {
 			'ref': {
@@ -1059,7 +1059,7 @@ def buildRelease(ctx):
 			'image': 'webhippie/nodejs:latest',
 			'pull': 'always',
 			'commands': [
-				'cd /var/www/owncloud/phoenix',
+				'cd /var/www/owncloud/web',
 				'make -f Makefile.release'
 			],
 		},
@@ -1218,14 +1218,14 @@ def setupGraphapiOIdC():
 			'cd /var/www/owncloud/server/',
 			'php occ a:e graphapi',
 			'php occ a:e openidconnect',
-			'php occ config:system:set trusted_domains 2 --value=phoenix',
+			'php occ config:system:set trusted_domains 2 --value=web',
 			'php occ config:system:set openid-connect provider-url --value="https://konnectd:9130"',
 			'php occ config:system:set openid-connect loginButtonName --value=OpenId-Connect',
-			'php occ config:system:set openid-connect client-id --value=phoenix',
+			'php occ config:system:set openid-connect client-id --value=web',
 			'php occ config:system:set openid-connect insecure --value=true --type=bool',
-			'php occ config:system:set cors.allowed-domains 0 --value="http://phoenix:9100"',
+			'php occ config:system:set cors.allowed-domains 0 --value="http://web:9100"',
 			'php occ config:system:set memcache.local --value="\\\\OC\\\\Memcache\\\\APCu"',
-			'php occ config:system:set phoenix.baseUrl --value="http://phoenix:9100"',
+			'php occ config:system:set web.baseUrl --value="http://web:9100"',
 			'php occ config:list'
 		]
 	}]
@@ -1401,7 +1401,7 @@ def ocisService():
 			'STORAGE_USERS_DATA_SERVER_URL': 'http://ocis:9158/data',
 			'STORAGE_FRONTEND_PUBLIC_URL': 'https://ocis:9200',
 			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
-			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
+			'PHOENIX_ASSET_PATH': '/var/www/owncloud/web/dist',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
 			'KONNECTD_ISS': 'https://ocis:9200',
 			'KONNECTD_TLS': 'true',
@@ -1423,16 +1423,16 @@ def ocisService():
 		}],
 	}]
 
-def buildOcisPhoenix():
+def buildOcisWeb():
 	return[{
-		'name': 'build-ocis-phoenix',
+		'name': 'build-ocis-web',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'commands': [
 			'cd $GOPATH/src/github.com/owncloud/ocis',
-			'cd ocis-phoenix',
+			'cd ocis-web',
 			'make build',
-			'cp bin/ocis-phoenix /var/www/owncloud'
+			'cp bin/ocis-web /var/www/owncloud'
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1443,21 +1443,21 @@ def buildOcisPhoenix():
 		}],
 	}]
 
-# Ocis-phoenix service just for the oc10 tests
-def ocisPhoenixService():
+# Ocis-web service just for the oc10 tests
+def ocisWebService():
 	return[{
-		'name': 'phoenix',
+		'name': 'web',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
 			'PHOENIX_WEB_CONFIG': '/srv/config/drone/config.json',
-			'PHOENIX_ASSET_PATH': '/var/www/owncloud/phoenix/dist',
-			'PHOENIX_OIDC_CLIENT_ID': 'phoenix'
+			'PHOENIX_ASSET_PATH': '/var/www/owncloud/web/dist',
+			'PHOENIX_OIDC_CLIENT_ID': 'web'
 		},
 		'commands': [
 			'cd /var/www/owncloud',
-			'./ocis-phoenix --log-level debug server',
+			'./ocis-web --log-level debug server',
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1477,12 +1477,12 @@ def setupServerAndApp(logLevel):
 			'cd /var/www/owncloud/server/',
 			'php occ a:e testing',
 			'php occ config:system:set trusted_domains 1 --value=owncloud',
-			'php occ config:system:set cors.allowed-domains 0 --value=http://phoenix',
+			'php occ config:system:set cors.allowed-domains 0 --value=http://web',
 			'php occ log:manage --level %s' % logLevel,
 			'php occ config:list',
 			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton',
 			'php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true',
-			'php occ config:system:set phoenix.baseUrl --value="http://phoenix"',
+			'php occ config:system:set web.baseUrl --value="http://web"',
 			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool'
 		]
 	}]
@@ -1559,7 +1559,7 @@ def copyFilesForUpload():
 		}],
 		'commands': [
 			'ls -la /filesForUpload',
-			'cp -a /var/www/owncloud/phoenix/tests/acceptance/filesForUpload/. /filesForUpload',
+			'cp -a /var/www/owncloud/web/tests/acceptance/filesForUpload/. /filesForUpload',
 			'ls -la /filesForUpload'
 		]
 	}]
@@ -1589,7 +1589,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 			'from_secret': 'sauce_access_key'
 		}
 
-	environment['SERVER_HOST'] = 'http://phoenix:9100'
+	environment['SERVER_HOST'] = 'http://web:9100'
 	environment['BACKEND_HOST'] = 'http://owncloud'
 
 	for env in extraEnvironment:
@@ -1601,7 +1601,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 		'pull': 'always',
 		'environment': environment,
 		'commands': [
-			'cd /var/www/owncloud/phoenix',
+			'cd /var/www/owncloud/web',
 			'yarn run acceptance-tests-drone',
 		],
 		'volumes': [{
@@ -1630,11 +1630,11 @@ def uploadScreenshots():
 		'pull': 'if-not-exists',
 		'settings': {
 			'acl': 'public-read',
-			'bucket': 'phoenix',
+			'bucket': 'web',
 			'endpoint': 'https://minio.owncloud.com/',
 			'path_style': True,
-			'source': '/var/www/owncloud/phoenix/tests/reports/screenshots/**/*',
-			'strip_prefix': '/var/www/owncloud/phoenix/tests/reports/screenshots',
+			'source': '/var/www/owncloud/web/tests/reports/screenshots/**/*',
+			'strip_prefix': '/var/www/owncloud/web/tests/reports/screenshots',
 			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
 		},
 		'environment': {
@@ -1661,9 +1661,9 @@ def buildGithubComment(suite, alternateSuiteName):
 		'image': 'owncloud/ubuntu:16.04',
 		'pull': 'always',
 		'commands': [
-			'cd /var/www/owncloud/phoenix/tests/reports/screenshots/',
+			'cd /var/www/owncloud/web/tests/reports/screenshots/',
 			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % alternateSuiteName,
-			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
+			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/web/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
 			'echo "\n</p></details>" >> comments.file',
 			'more comments.file',
 		],
@@ -1686,7 +1686,7 @@ def githubComment():
 		'image': 'jmccann/drone-github-comment:1',
 		'pull': 'if-not-exists',
 		'settings': {
-			'message_file': '/var/www/owncloud/phoenix/tests/reports/screenshots/comments.file',
+			'message_file': '/var/www/owncloud/web/tests/reports/screenshots/comments.file',
 		},
 		'environment': {
 			'PLUGIN_API_KEY': {

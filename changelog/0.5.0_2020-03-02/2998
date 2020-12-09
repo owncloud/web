@@ -4,5 +4,5 @@ Fixed properly alignment of header columns with the body of the files
 table which stays even after resizing.
 Removed the column label for the actions column as it looks nicer.
 
-https://github.com/owncloud/phoenix/issues/2998
-https://github.com/owncloud/phoenix/pull/2999
+https://github.com/owncloud/web/issues/2998
+https://github.com/owncloud/web/pull/2999

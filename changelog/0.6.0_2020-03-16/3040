@@ -5,5 +5,5 @@ the collaborators list and link list are now showing the same entries like
 in the "All files" list, which includes indirect shares (via) that were
 previously missing.
 
-https://github.com/owncloud/phoenix/issues/3040
-https://github.com/owncloud/phoenix/pull/3135
+https://github.com/owncloud/web/issues/3040
+https://github.com/owncloud/web/pull/3135

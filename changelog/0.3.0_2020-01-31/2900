@@ -4,4 +4,4 @@ Users and groups were shown as two separate lists (users, then groups) in the co
 This separation is now removed, i.e. there is only one list with all collaborators, sorted by display name
 (lower case, ascending). On equal names groups are shown first.
 
-https://github.com/owncloud/phoenix/issues/2900
+https://github.com/owncloud/web/issues/2900

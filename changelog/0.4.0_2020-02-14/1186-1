@@ -7,4 +7,4 @@ Applied several UI/UX improvements to the collaborator forms (adding and editing
 - Removed separators from the forms that were cluttering the view.
 - Moved role description on role selection (links and collaborators) into the form element. Not shown below the form element anymore.
 
-https://github.com/owncloud/phoenix/issues/1186
+https://github.com/owncloud/web/issues/1186

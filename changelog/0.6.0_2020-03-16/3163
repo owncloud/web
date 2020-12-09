@@ -2,5 +2,5 @@ Change: Align columns in file lists to the right
 
 We've aligned columns in all file lists to the right so it is easier for the user to compare them.
 
-https://github.com/owncloud/phoenix/issues/3036
-https://github.com/owncloud/phoenix/pull/3163
+https://github.com/owncloud/web/issues/3036
+https://github.com/owncloud/web/pull/3163

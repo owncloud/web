@@ -2,4 +2,4 @@ Change: Load extensions config
 
 We've started loading the config of extensions which can now be defined as an object in the `external_apps` in the config.json.
 
-https://github.com/owncloud/phoenix/pull/4380
+https://github.com/owncloud/web/pull/4380

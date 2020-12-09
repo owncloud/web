@@ -21,24 +21,26 @@ if (fs.existsSync('config.json')) {
   config = require('./tests/drone/config.json')
 }
 
-config.apps
-  .forEach(function (mod) {
-    if (fs.existsSync(path.resolve(appFolder, mod))) {
-      var modPath = {
-        from: path.resolve('apps', mod, 'dist'),
-        to: path.resolve(__dirname, 'dist', 'apps', mod)
-      }
-      apps.push(modPath)
+config.apps.forEach(function(mod) {
+  if (fs.existsSync(path.resolve(appFolder, mod))) {
+    var modPath = {
+      from: path.resolve('apps', mod, 'dist'),
+      to: path.resolve(__dirname, 'dist', 'apps', mod)
     }
-  })
+    apps.push(modPath)
+  }
+})
 
-const sourceFiles = [{
-  from: path.resolve(__dirname, 'themes/**'),
-  to: path.resolve(__dirname, 'dist')
-}, {
-  from: path.resolve(__dirname, 'node_modules', 'requirejs', 'require.js'),
-  to: path.resolve(__dirname, 'dist', 'node_modules', 'requirejs')
-}]
+const sourceFiles = [
+  {
+    from: path.resolve(__dirname, 'themes/**'),
+    to: path.resolve(__dirname, 'dist')
+  },
+  {
+    from: path.resolve(__dirname, 'node_modules', 'requirejs', 'require.js'),
+    to: path.resolve(__dirname, 'dist', 'node_modules', 'requirejs')
+  }
+]
 for (const file of sourceFiles) {
   apps.push(file)
 }
@@ -54,7 +56,8 @@ module.exports = {
         timestamp: Date.now(),
         dirty: gitDirty
       }
-    }), new WebpackCopyPlugin(apps),
+    }),
+    new WebpackCopyPlugin(apps),
     new HtmlWebpackPlugin({
       template: 'index.html'
     }),
@@ -67,10 +70,7 @@ module.exports = {
     })
   ],
   entry: {
-    core: [
-      'whatwg-fetch',
-      './src/phoenix.js'
-    ]
+    core: ['whatwg-fetch', './src/web.js']
   },
   output: {
     filename: 'core/[name].bundle.js',
@@ -104,32 +104,37 @@ module.exports = {
       },
       {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        include: [/node_modules\/material-design-icons-iconfont\/dist/, /static\/fonts\/ocft\/font/],
-        use: [{
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            publicPath: '../fonts',
-            outputPath: 'fonts'
+        include: [
+          /node_modules\/material-design-icons-iconfont\/dist/,
+          /static\/fonts\/ocft\/font/
+        ],
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              publicPath: '../fonts',
+              outputPath: 'fonts'
+            }
           }
-        }]
-      }, {
+        ]
+      },
+      {
         enforce: 'pre',
         test: /\.(js|vue)$/,
         exclude: /node_modules/,
         loader: 'eslint-loader'
-      }, {
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader',
         exclude: [/node_modules/]
-      }, {
+      },
+      {
         test: /\.(sa|sc|c)ss$/,
         include: [/node_modules/, /src/, /static/],
-        use: [
-          'style-loader',
-          MiniCssExtractPlugin.loader,
-          'css-loader'
-        ]
-      }]
+        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader']
+      }
+    ]
   }
 }

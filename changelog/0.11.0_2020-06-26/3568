@@ -8,4 +8,4 @@ the upload will now use a POST request for uploads with that header set
 instead of PATCH.
 
 https://github.com/owncloud/ocis-reva/issues/177
-https://github.com/owncloud/phoenix/pull/3568
+https://github.com/owncloud/web/pull/3568

@@ -2,4 +2,4 @@ Bugfix: Fix loginAsUser
 
 loginAsUser wasn't waiting until the loading finished. Added an additional check
 
-https://github.com/owncloud/phoenix/pull/4297
+https://github.com/owncloud/web/pull/4297

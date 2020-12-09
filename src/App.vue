@@ -1,7 +1,7 @@
 <template>
   <div class="uk-height-1-1">
     <skip-to target="main">Skip to main</skip-to>
-    <div id="Phoenix" class="uk-height-1-1">
+    <div id="Web" class="uk-height-1-1">
       <div
         v-if="user.isAuthenticated && !user.userReady"
         class="loading-overlay"

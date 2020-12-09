@@ -4,5 +4,5 @@ When clicking on the file name in the files list, a default action is triggered 
 If no file editor or viewer is available, the default action falls back to download.
 
 https://github.com/owncloud/product/issues/234
-https://github.com/owncloud/phoenix/pull/4076
-https://github.com/owncloud/phoenix/pull/4097
+https://github.com/owncloud/web/pull/4076
+https://github.com/owncloud/web/pull/4097

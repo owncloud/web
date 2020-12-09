@@ -2,5 +2,5 @@ Enhancement: Enable changing sidebar logo via theming
 
 We've added a key into the theme which enables using different logo in the sidebar.
 
-https://github.com/owncloud/phoenix/issues/3782
-https://github.com/owncloud/phoenix/pull/3783
+https://github.com/owncloud/web/issues/3782
+https://github.com/owncloud/web/pull/3783

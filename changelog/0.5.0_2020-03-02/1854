@@ -2,4 +2,4 @@ Enhancement: Added ability to click file list columns for sorting
 
 The sorting mode of the file list can now be changed by clicking on the column headers.
 
-https://github.com/owncloud/phoenix/issues/1854
+https://github.com/owncloud/web/issues/1854

@@ -9,4 +9,4 @@ We updated owncloud design system (ODS) to 1.11.0. This brings some features and
 - new icons, which are used in the sidebar and for quick actions
 - sidebar has a property for hiding the navigation. It doesn't have internal logic anymore for hiding the navigation automatically.
 
-https://github.com/owncloud/phoenix/pull/4086
+https://github.com/owncloud/web/pull/4086

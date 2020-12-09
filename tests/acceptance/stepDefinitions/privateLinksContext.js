@@ -27,8 +27,8 @@ When(
     const item = await webdav.getProperties(resource, user, ['oc:privatelink'])
     return client
       .url(item['oc:privatelink'])
-      .page.phoenixPage()
-      .waitForElementVisible('@phoenixContainer')
+      .page.webPage()
+      .waitForElementVisible('@webContainer')
   }
 )
 

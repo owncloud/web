@@ -46,7 +46,7 @@ export async function registerClient(openIdConfig) {
   const wellKnown = await get(`${openIdConfig.authority}/.well-known/openid-configuration`)
   const resp = await post(wellKnown.registration_endpoint, {
     redirect_uris: [baseUrl + 'oidc-callback.html'],
-    client_name: `ownCloud Phoenix(${appVersionJson.version}) on ${baseUrl}`
+    client_name: `ownCloud Web(${appVersionJson.version}) on ${baseUrl}`
   })
   sessionStorage.setItem('dynamicClientData', JSON.stringify(resp))
   return resp

@@ -2,4 +2,4 @@ Change: Attach share permission to roles
 
 We've attached the share permission of collaborators to roles. There is no longer a share additional permission.
 
-https://github.com/owncloud/phoenix/pull/4216
+https://github.com/owncloud/web/pull/4216

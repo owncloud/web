@@ -1,7 +1,7 @@
-Change: Make settings available in phoenix
+Change: Make settings available in web
 
 We upgraded to a new owncloud-sdk version which provides loading settings from the
-settings service, if available. The settings values are available throughout phoenix
+settings service, if available. The settings values are available throughout web
 and all extensions.
 
-https://github.com/owncloud/phoenix/pull/3484
+https://github.com/owncloud/web/pull/3484

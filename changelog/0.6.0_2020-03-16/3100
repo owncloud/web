@@ -9,4 +9,4 @@ correct value.
 The shared file lists are now more responsive, the collaborators/owner
 and share time columns are now hidden on small screens.
 
-https://github.com/owncloud/phoenix/pull/3100
+https://github.com/owncloud/web/pull/3100

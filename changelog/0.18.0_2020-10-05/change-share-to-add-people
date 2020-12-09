@@ -2,4 +2,4 @@ Change: Change sharing wording
 
 Renamed "Share" action to "Add people" and header column in the shared with list from "People" to "Shared with".
 
-https://github.com/owncloud/phoenix/pull/4120
+https://github.com/owncloud/web/pull/4120

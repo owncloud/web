@@ -17,7 +17,7 @@ import sidebar from './sidebar'
 Vue.use(Vuex)
 
 const vuexPersistInSession = new VuexPersistence({
-  key: 'phoenixStateInSessionStorage',
+  key: 'webStateInSessionStorage',
   // Browser tab independent storage which gets deleted after the tab is closed
   storage: window.sessionStorage,
   reducer: state => {

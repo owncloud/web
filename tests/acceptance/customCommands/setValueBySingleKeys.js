@@ -1,7 +1,7 @@
 /**
  * setValue by sending the keys one, by one
  * running federation tests on chrome browser has a problem with sendKeys and drops incomplete string when sending a
- * whole string to the phoenix modal dialogs
+ * whole string to the web modal dialogs
  *
  * @export
  * @param {string} selector

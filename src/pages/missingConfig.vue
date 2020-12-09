@@ -1,5 +1,5 @@
 <template>
-  <div id="Phoenix" class="uk-height-1-1">
+  <div id="Web" class="uk-height-1-1">
     <div class="oc-login" uk-height-viewport>
       <div class="oc-login-card uk-position-center">
         <h1 v-translate class="oc-login-logo">
@@ -15,9 +15,9 @@
         </div>
         <div class="oc-login-card-footer">
           <p>
-            <!-- Until we have documentation for Phoenix let's point this link to Phoenix repo -->
+            <!-- Until we have documentation for Web let's point this link to Web repo -->
             <translate>For help visit our</translate>
-            <translate tag="a" href="https://github.com/owncloud/phoenix" target="_blank"
+            <translate tag="a" href="https://github.com/owncloud/web" target="_blank"
               >documentation</translate
             >.
           </p>

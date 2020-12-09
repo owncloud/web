@@ -25,7 +25,7 @@ module.exports = {
      * @return {Promise<boolean>}
      */
     waitForPage: function() {
-      const menuButton = this.page.phoenixPage().elements.menuButton
+      const menuButton = this.page.webPage().elements.menuButton
       return this.api
         .waitForElementPresent(this.elements.filesListContainer.selector)
         .useStrategy(menuButton)

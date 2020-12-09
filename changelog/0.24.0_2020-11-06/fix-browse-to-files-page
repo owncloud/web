@@ -2,5 +2,5 @@ Bugfix: Fix browse to files page in the ui tests
 
 When the ui tests where executing the "the user has browsed to the files page" step then it wouldn't wait until the files were loaded.
 
-https://github.com/owncloud/phoenix/issues/4281
+https://github.com/owncloud/web/issues/4281
 

@@ -6,5 +6,5 @@ also includes group shares and link shares.
 
 Improved the look of the collaborators by adding avatars and icons there for the shares in the collaborators and owner columns.
 
-https://github.com/owncloud/phoenix/issues/2924
-https://github.com/owncloud/phoenix/pull/3049
+https://github.com/owncloud/web/issues/2924
+https://github.com/owncloud/web/pull/3049

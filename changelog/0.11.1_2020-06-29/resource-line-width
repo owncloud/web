@@ -4,5 +4,5 @@ The width of the resource name in the files list was expanded more than the actu
 This caused that when clicked outside of the resource name, the action to navigate or open the resource has been triggered instead of opening the sidebar.
 We've fixed the width that it is now equal to the width of the content.
 
-https://github.com/owncloud/phoenix/issues/3685
-https://github.com/owncloud/phoenix/pull/3687
+https://github.com/owncloud/web/issues/3685
+https://github.com/owncloud/web/pull/3687

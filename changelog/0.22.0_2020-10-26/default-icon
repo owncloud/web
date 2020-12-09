@@ -3,4 +3,4 @@ Change: Set icon for unknown file types to "file"
 We've changed the icon for unknown file types to "file".
 
 https://owncloud.design/#/Design%20Tokens/Icon
-https://github.com/owncloud/phoenix/pull/4237
+https://github.com/owncloud/web/pull/4237
