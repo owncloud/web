@@ -88,7 +88,7 @@ config = {
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
-				'PHOENIX_CONFIG': '/srv/config/drone/config.json'
+				'WEB_CONFIG': '/srv/config/drone/config.json'
 			}
 		},
 		'webUIFederation': {
@@ -320,7 +320,7 @@ config = {
 				'RUN_ON_OCIS': 'true',
 				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
 				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/ocis/owncloud/data/',
-				'PHOENIX_CONFIG': '/srv/config/drone/ocis-config.json'
+				'WEB_CONFIG': '/srv/config/drone/ocis-config.json'
 			},
 			'runningOnOCIS': True,
 			'filterTags': 'not @skip and not @skipOnOCIS',
@@ -1225,7 +1225,7 @@ def setupGraphapiOIdC():
 			'php occ config:system:set openid-connect insecure --value=true --type=bool',
 			'php occ config:system:set cors.allowed-domains 0 --value="http://web:9100"',
 			'php occ config:system:set memcache.local --value="\\\\OC\\\\Memcache\\\\APCu"',
-			'php occ config:system:set web.baseUrl --value="http://web:9100"',
+			'php occ config:system:set phoenix.baseUrl --value="http://web:9100"',
 			'php occ config:list'
 		]
 	}]
@@ -1400,8 +1400,8 @@ def ocisService():
 			'STORAGE_DATAGATEWAY_PUBLIC_URL': 'https://ocis:9200/data',
 			'STORAGE_USERS_DATA_SERVER_URL': 'http://ocis:9158/data',
 			'STORAGE_FRONTEND_PUBLIC_URL': 'https://ocis:9200',
-			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
-			'PHOENIX_ASSET_PATH': '/var/www/owncloud/web/dist',
+			'WEB_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
+			'WEB_ASSET_PATH': '/var/www/owncloud/web/dist',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
 			'KONNECTD_ISS': 'https://ocis:9200',
 			'KONNECTD_TLS': 'true',
@@ -1451,9 +1451,9 @@ def ocisWebService():
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'PHOENIX_WEB_CONFIG': '/srv/config/drone/config.json',
-			'PHOENIX_ASSET_PATH': '/var/www/owncloud/web/dist',
-			'PHOENIX_OIDC_CLIENT_ID': 'web'
+			'WEB_WEB_CONFIG': '/srv/config/drone/config.json',
+			'WEB_ASSET_PATH': '/var/www/owncloud/web/dist',
+			'WEB_OIDC_CLIENT_ID': 'web'
 		},
 		'commands': [
 			'cd /var/www/owncloud',
@@ -1482,7 +1482,7 @@ def setupServerAndApp(logLevel):
 			'php occ config:list',
 			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton',
 			'php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true',
-			'php occ config:system:set web.baseUrl --value="http://web"',
+			'php occ config:system:set phoenix.baseUrl --value="http://web"',
 			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool'
 		]
 	}]

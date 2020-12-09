@@ -40,7 +40,7 @@ In the `Admin` of ownCloud 10, head into `User Authentication` and add a new cli
 To display ownCloud Web in the app switcher and to redirect all private and public links to the new WebUI, add the following config into `config/config.php`:
 
 ```php
-'web.baseUrl' => 'https://<your-owncloud-server>/apps/web',
+'phoenix.baseUrl' => 'https://<your-owncloud-server>/apps/web',
 ```
 
 ## Configure ownCloud Web
