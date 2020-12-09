@@ -13,6 +13,8 @@ Summary
 * Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 * Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 * Enhancement - Add oc10 app build artifact: [#4427](https://github.com/owncloud/phoenix/pull/4427)
+* Enhancement - Add custom configuration to the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
+* Enhancement - Add support for .vsdx files in the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
 
 Details
 -------
@@ -51,6 +53,23 @@ Details
    deployed as an app to ownCloud 10.
 
    https://github.com/owncloud/phoenix/pull/4427
+
+* Enhancement - Add custom configuration to the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
+
+   Added mechanism to specify custom configuration instead of using a hardcoded one. The new
+   settings include support for a custom draw.io server, enabling autosave and using a specific
+   theme.
+
+   https://github.com/owncloud/phoenix/issues/4328
+   https://github.com/owncloud/phoenix/pull/4337
+
+* Enhancement - Add support for .vsdx files in the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
+
+   Added the support to open .vsdx files (Microsoft Visio Files) directly from OwnCloud, instead
+   of creating a new diagram to import the file from local storage.
+
+   https://github.com/owncloud/phoenix/issues/4327
+   https://github.com/owncloud/phoenix/pull/4337
 
 Changelog for ownCloud Phoenix [0.29.0] (2020-12-07)
 =======================================
