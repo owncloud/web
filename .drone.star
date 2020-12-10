@@ -1430,9 +1430,9 @@ def buildOcisWeb():
 		'pull': 'always',
 		'commands': [
 			'cd $GOPATH/src/github.com/owncloud/ocis',
-			'cd web',
+			'cd ocis-phoenix',
 			'make build',
-			'cp bin/web /var/www/owncloud/ocis-web'
+			'cp bin/ocis-phoenix /var/www/owncloud'
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1451,13 +1451,13 @@ def ocisWebService():
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'WEB_UI_CONFIG': '/srv/config/drone/config.json',
-			'WEB_ASSET_PATH': '/var/www/owncloud/web/dist',
-			'WEB_OIDC_CLIENT_ID': 'web'
+			'PHOENIX_WEB_CONFIG': '/srv/config/drone/config.json',
+			'PHOENIX_ASSET_PATH': '/var/www/owncloud/web/dist',
+			'PHOENIX_OIDC_CLIENT_ID': 'web'
 		},
 		'commands': [
 			'cd /var/www/owncloud',
-			'./ocis-web --log-level debug server',
+			'./ocis-phoenix --log-level debug server',
 		],
 		'volumes': [{
 			'name': 'gopath',
