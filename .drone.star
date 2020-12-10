@@ -1430,7 +1430,7 @@ def buildOcisWeb():
 		'pull': 'always',
 		'commands': [
 			'cd $GOPATH/src/github.com/owncloud/ocis',
-			'cd ocis-web',
+			'cd web',
 			'make build',
 			'cp bin/ocis-web /var/www/owncloud'
 		],
