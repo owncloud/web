@@ -1,8 +1,8 @@
-Bugfix: copy objects
+Bugfix: fix navigation rendering
 
-in some cases objects needs to be copied before mutating them:
 -  ADD_NAV_ITEM mutation now gets copied instead of referenced to trigger a state change.
 -  applicationsList navItem item needs a copy instead of mutating the base item
+-  check for route.path instead of route name in ADD_NAV_ITEM which can change over time
 
 https://github.com/owncloud/ocis/issues/1031
 https://github.com/owncloud/phoenix/pull/4430

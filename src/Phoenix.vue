@@ -2,7 +2,17 @@
   <div class="uk-height-1-1">
     <skip-to target="main">Skip to main</skip-to>
     <div id="Phoenix" class="uk-height-1-1">
-      <template v-if="!showHeader">
+      <div
+        v-if="user.isAuthenticated && !user.userReady"
+        class="loading-overlay"
+        :style="{
+          backgroundImage: 'url(' + configuration.theme.loginPage.backgroundImg + ')'
+        }"
+        uk-height-viewport
+      >
+        <oc-spinner size="xxxlarge" :aria-label="$gettext('Loading')" class="uk-position-center" />
+      </div>
+      <template v-else-if="!showHeader">
         <router-view name="fullscreen" />
       </template>
       <div v-else key="core-content" class="uk-height-1-1 uk-flex uk-flex-row uk-flex-row">
@@ -124,7 +134,6 @@ export default {
 
       return list
     },
-
     showHeader() {
       return this.$route.meta.hideHeadbar !== true
     },
@@ -162,13 +171,11 @@ export default {
         return item.enabled(this.capabilities)
       })
 
-      return items.map(item => {
-        item = { ...item }
-        item.name = this.$gettext(item.name)
-        item.active = this.$route.name === item.route.name
-
-        return item
-      })
+      return items.map(item => ({
+        ...item,
+        name: this.$gettext(item.name),
+        active: this.$route.name === item.route.name
+      }))
     },
 
     sidebarClasses() {
@@ -319,5 +326,20 @@ export default {
 body {
   height: 100vh;
   overflow: hidden;
+}
+
+.loading-overlay {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.loading-overlay .oc-spinner {
+  color: #0a264e;
+}
+
+.loading-overlay .oc-spinner:after {
+  border: 20px solid;
+  border-bottom: 20px solid transparent;
 }
 </style>

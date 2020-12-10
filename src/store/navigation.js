@@ -32,7 +32,9 @@ const mutations = {
   ADD_NAV_ITEM(state, { extension, navItem }) {
     const dynamicNavItems = { ...state.dynamicNavItems }
     dynamicNavItems[extension] = dynamicNavItems[extension] || []
-    const index = dynamicNavItems[extension].findIndex(item => item.name === navItem.name)
+    const index = dynamicNavItems[extension].findIndex(
+      item => item.route.path === navItem.route.path
+    )
     if (index >= 0) {
       dynamicNavItems[extension][index] = navItem
     } else {
