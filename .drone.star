@@ -1432,7 +1432,7 @@ def buildOcisWeb():
 			'cd $GOPATH/src/github.com/owncloud/ocis',
 			'cd web',
 			'make build',
-			'cp bin/ocis-web /var/www/owncloud'
+			'cp bin/web /var/www/owncloud/ocis-web'
 		],
 		'volumes': [{
 			'name': 'gopath',
