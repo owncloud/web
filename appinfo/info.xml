@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <info>
-	<id>oc-web</id>
+	<id>web</id>
 	<name>ownCloud Web</name>
 	<summary>Next generation user interface for ownCloud</summary>
 	<description>
