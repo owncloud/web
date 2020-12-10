@@ -107,12 +107,16 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
         # This line in the expected failures file is for a suite that has been run.
         # So we expect that the scenario in LINE has run and failed.
         # Look for it in FAILED_SCENARIO_PATHS
-				echo "${FAILED_SCENARIO_PATHS[@]}" | grep "${LINE}$" > /dev/null
-				if [ $? -ne 0 ]
-				then
-					echo "Info: Scenario ${LINE} was expected to fail but did not fail."
-					UNEXPECTED_PASSED_SCENARIOS+=("${LINE}")
-				fi
+        # The string that is echoed is space-separated. A space is added at the end also.
+        # Then we look for the line from the expected failures file followed by a space.
+        # That ensures that when looking for a specific line number like xyz.feature:12
+        # we do not accidentally match xyz.feature:12 that is in xyz.feature:123
+        echo "${FAILED_SCENARIO_PATHS[@]} " | grep "${LINE} " > /dev/null
+        if [ $? -ne 0 ]
+        then
+          echo "Info: Scenario ${LINE} was expected to fail but did not fail."
+          UNEXPECTED_PASSED_SCENARIOS+=("${LINE}")
+        fi
       fi
     done
   done < "${EXPECTED_FAILURES_FILE}"
@@ -155,9 +159,9 @@ fi
 
 if [ ${#UNEXPECTED_NIGHTWATCH_EXIT_STATUSES[@]} -gt 0 ]
 then
-	UNEXPECTED_NIGHTWATCH_EXIT_STATUS=true
+  UNEXPECTED_NIGHTWATCH_EXIT_STATUS=true
 else
-	UNEXPECTED_NIGHTWATCH_EXIT_STATUS=false
+  UNEXPECTED_NIGHTWATCH_EXIT_STATUS=false
 fi
 
 if [ "${UNEXPECTED_FAILURE}" = false ] && [ "${UNEXPECTED_SUCCESS}" = false ] && [ "${UNEXPECTED_NIGHTWATCH_EXIT_STATUS}" = false ]; then
@@ -168,7 +172,7 @@ fi
 
 if [ -n "${EXPECTED_FAILURES_FILE}" ]
 then
-	echo "runsh: Exit code after checking expected failures: ${FINAL_EXIT_STATUS}"
+  echo "runsh: Exit code after checking expected failures: ${FINAL_EXIT_STATUS}"
 fi
 
 if [ "${UNEXPECTED_FAILURE}" = true ]
