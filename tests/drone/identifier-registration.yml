@@ -2,7 +2,7 @@
 
 # OpenID Connect client registry.
 clients:
-  - id: web
+  - id: phoenix
     name: OCIS
     application_type: web
     insecure: yes
