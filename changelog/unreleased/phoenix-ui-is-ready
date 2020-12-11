@@ -1,0 +1,9 @@
+Enhancement: wait for all required data
+
+Before this we rendered the ui no matter if every required data already is loaded or not.
+For example the current users language from the ocis settings service.
+One potential problem was the flickering in the ui or that the default language was shown before it switches to the settings language of current user.
+Instead we now show a loading screen and wait for everything that is required before rendering anything else.
+
+https://github.com/owncloud/ocis/issues/884
+https://github.com/owncloud/ocis/issues/1043

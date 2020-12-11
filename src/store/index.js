@@ -20,10 +20,13 @@ const vuexPersistInSession = new VuexPersistence({
   key: 'phoenixStateInSessionStorage',
   // Browser tab independent storage which gets deleted after the tab is closed
   storage: window.sessionStorage,
-  filter: mutation =>
-    ['SAVE_URL_BEFORE_LOGIN', 'SET_USER', 'SET_TOKEN', 'SET_CAPABILITIES'].indexOf(mutation.type) >
-    -1,
-  modules: ['router', 'user']
+  reducer: state => {
+    const { userReady, ...user } = state.user
+    return {
+      user,
+      router: state.router
+    }
+  }
 })
 
 const strict = process.env.NODE_ENV === 'development'

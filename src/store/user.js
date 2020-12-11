@@ -11,7 +11,8 @@ const state = {
   isAuthenticated: false,
   capabilities: [],
   version: {},
-  groups: []
+  groups: [],
+  userReady: false
 }
 
 const actions = {
@@ -23,6 +24,9 @@ const actions = {
     context.commit('SET_USER', state)
     // reset capabilities to default state
     context.commit('SET_CAPABILITIES', { capabilities: null, version: null })
+    // set userReady to false
+    context.commit('SET_USER_READY', false)
+
     // clear oidc client state
     vueAuthInstance.clearLoginState()
   },
@@ -56,8 +60,8 @@ const actions = {
       logoutFinalizier(true)
     }
   },
-  initAuth(context, payload = { autoRedirect: false }) {
-    function init(client, token, doLogin = true) {
+  async initAuth(context, payload = { autoRedirect: false }) {
+    const init = async (client, token, doLogin = true) => {
       const instance = context.rootState.config.server || window.location.origin
       const options = {
         baseUrl: instance,
@@ -78,39 +82,40 @@ const actions = {
 
       client.init(options)
       if (doLogin) {
-        return client
-          .login()
-          .then(res => {
-            return client.getCapabilities().then(cap => {
-              client.users.getUserGroups(res.id).then(groups => {
-                context.commit('SET_CAPABILITIES', cap)
-                context.commit('SET_USER', {
-                  id: res.id,
-                  username: res.username,
-                  displayname: res.displayname || res['display-name'],
-                  email: !Object.keys(res.email).length ? '' : res.email,
-                  token,
-                  isAuthenticated: true,
-                  groups: groups
-                })
-                context.dispatch('loadSettingsValues')
+        let login
+        try {
+          login = await client.login()
+        } catch (e) {
+          console.warn('Seems that your token is invalid. Error:', e)
+          context.dispatch('cleanUpLoginState')
+          router.push({ name: 'accessDenied' })
+          return
+        }
 
-                if (payload.autoRedirect) {
-                  router.push({ path: '/' })
-                }
-              })
-            })
-          })
-          .catch(e => {
-            console.warn('Seems that your token is invalid. Error:', e)
-            context.dispatch('cleanUpLoginState')
-            router.push({ name: 'accessDenied' })
-          })
+        const capabilities = await client.getCapabilities()
+        context.commit('SET_CAPABILITIES', capabilities)
+
+        const userGroups = await client.users.getUserGroups(login.id)
+        context.commit('SET_USER', {
+          id: login.id,
+          username: login.username,
+          displayname: login.displayname || login['display-name'],
+          email: !Object.keys(login.email).length ? '' : login.email,
+          token,
+          isAuthenticated: true,
+          groups: userGroups
+        })
+
+        await context.dispatch('loadSettingsValues')
+        context.commit('SET_USER_READY', true)
+
+        if (payload.autoRedirect) {
+          router.push({ path: '/' })
+        }
       } else {
         context.commit('UPDATE_TOKEN', token)
       }
     }
-
     // if called from login, use available vue-authenticate instance; else re-init
     if (!vueAuthInstance) {
       vueAuthInstance = initVueAuthenticate(context.rootState.config)
@@ -142,7 +147,7 @@ const actions = {
     }
     const token = vueAuthInstance.getToken()
     if (token) {
-      init(this._vm.$client, token)
+      await init(this._vm.$client, token)
     }
   },
   login(context, payload = { provider: 'oauth2' }) {
@@ -192,6 +197,9 @@ const mutations = {
   },
   UPDATE_TOKEN(state, token) {
     state.token = token
+  },
+  SET_USER_READY(state, ready) {
+    state.userReady = ready
   }
 }
 
