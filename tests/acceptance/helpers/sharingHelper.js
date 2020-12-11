@@ -424,13 +424,13 @@ module.exports = {
     if (lastShare.share_type === this.SHARE_TYPES.public_link) {
       const regDate = lastShare.expiration.split(' ')[0]
       if (expectedDetails.token) {
-        assert.strictEqual(lastShare.token, expectedDetails.token, 'Token Missmatch' + lastShare)
+        assert.strictEqual(lastShare.token, expectedDetails.token, 'Token Mismatch' + lastShare)
       }
       if (expectedDetails.expireDate) {
         assert.strictEqual(
           regDate,
           expectedDetails.expireDate,
-          'Expiry Date Missmatch: ' + lastShare
+          'Expiry Date Mismatch: ' + lastShare
         )
       }
     } else {

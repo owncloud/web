@@ -152,7 +152,7 @@ export default {
 
         /**
          * Checks whether the browser is Internet Explorer 11
-         * @return {boolean} true if the browser is Internet Expoler 11
+         * @return {boolean} true if the browser is Internet Explorer 11
          */
         isIE11() {
           return !!window.MSInputMethodContext && !!document.documentMode

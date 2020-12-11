@@ -10,7 +10,7 @@ const parts = _.pipe(
 const relativeTo = function(basePath, childPath) {
   basePath = normalize(basePath)
   childPath = normalize(childPath)
-  assert.ok(childPath.startsWith(basePath), `${childPath} doesnot contain ${basePath}`)
+  assert.ok(childPath.startsWith(basePath), `${childPath} does not contain ${basePath}`)
   const basePathLength = basePath.length
   return childPath.slice(basePathLength)
 }
