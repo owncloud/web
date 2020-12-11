@@ -34,6 +34,7 @@ const actions = {
     const logoutFinalizier = (forceRedirect = false) => {
       // Remove signed in user
       dispatch('cleanUpLoginState')
+      dispatch('hideModal')
       dispatch('loadSettingsValues')
 
       // Force redirect to login
