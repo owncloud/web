@@ -5,6 +5,6 @@ the shares panel will now show these outgoing shares with a link to jump to the 
 resource.
 This applies to both indirect collaborators shares and also to indirect public link shares.
 
-https://github.com/owncloud/phoenix/issues/2897
-https://github.com/owncloud/phoenix/pull/2929
-https://github.com/owncloud/phoenix/pull/2932
+https://github.com/owncloud/web/issues/2897
+https://github.com/owncloud/web/pull/2929
+https://github.com/owncloud/web/pull/2932

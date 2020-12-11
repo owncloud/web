@@ -6,5 +6,5 @@ display name using natural sort.
 Additionally, if there is more than one public link for the resource, the text "Public"
 only appears once in the collaborators column.
 
-https://github.com/owncloud/phoenix/issues/3137
-https://github.com/owncloud/phoenix/pull/3171
+https://github.com/owncloud/web/issues/3137
+https://github.com/owncloud/web/pull/3171

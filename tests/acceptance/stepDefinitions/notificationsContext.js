@@ -16,15 +16,15 @@ When('user {string} is sent a notification', function(user) {
 })
 
 When('the user marks the notification as read', function() {
-  return client.page.phoenixPage().markNotificationAsRead()
+  return client.page.webPage().markNotificationAsRead()
 })
 
 When('the user accepts all shares displayed in the notifications on the webUI', function() {
-  return client.page.phoenixPage().acceptAllSharesInNotification()
+  return client.page.webPage().acceptAllSharesInNotification()
 })
 
 When('the user declines all shares displayed in the notifications on the webUI', function() {
-  return client.page.phoenixPage().declineAllSharesInNotification()
+  return client.page.webPage().declineAllSharesInNotification()
 })
 
 Given('app {string} has been {}', async function(app, action) {
@@ -51,16 +51,16 @@ Given('app {string} has been {}', async function(app, action) {
 })
 
 Then('the user should see the notification bell on the webUI', function() {
-  return client.page.phoenixPage().waitForElementVisible('@notificationBell')
+  return client.page.webPage().waitForElementVisible('@notificationBell')
 })
 
 Then('the user should see the notification bell on the webUI after a page reload', function() {
   client.refresh()
-  return client.page.phoenixPage().waitForElementVisible('@notificationBell')
+  return client.page.webPage().waitForElementVisible('@notificationBell')
 })
 
 Then('the notification bell should disappear on the webUI', function() {
-  return client.page.phoenixPage().waitForElementNotPresent('@notificationBell')
+  return client.page.webPage().waitForElementNotPresent('@notificationBell')
 })
 
 Then('the user should see {int} notifications on the webUI with these details', async function(
@@ -69,7 +69,7 @@ Then('the user should see {int} notifications on the webUI with these details', 
 ) {
   codify.replaceInlineTable(dataTable)
   const expectedNotifications = dataTable.hashes()
-  const notifications = await client.page.phoenixPage().getNotifications()
+  const notifications = await client.page.webPage().getNotifications()
   assert.strictEqual(notifications.length, numberOfNotifications, 'Notification count miss-match!')
   for (const element of expectedNotifications) {
     const isPresent = notifications.includes(element.title)
@@ -81,6 +81,6 @@ Then('the user should see {int} notifications on the webUI with these details', 
 })
 
 Then('the user should have no notifications', async function() {
-  const status = await client.page.phoenixPage().isNotificationBellVisible()
+  const status = await client.page.webPage().isNotificationBellVisible()
   assert.ok(!status, 'Expected: notification bell to be absent but found: visible')
 })

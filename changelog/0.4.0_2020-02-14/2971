@@ -5,4 +5,4 @@ Removed the confusing filter button in the files list header, so the following a
 - filter text box as it is is redundant as one can already use the global search box
 - ability to hide dot files, we'll look into providing this again in the future with an improved UI
 
-https://github.com/owncloud/phoenix/issues/2971
+https://github.com/owncloud/web/issues/2971

@@ -11,7 +11,7 @@ If you have questions about how to install or use ownCloud, please direct these 
   - Go to one of the repositories, click "issues" and type any word in the top search/command bar.
   - You can also filter by appending e. g. "state:open" to the search string.
   - More info on [search syntax within github](https://help.github.com/articles/searching-issues)
-* This repository ([phoenix](https://github.com/owncloud/phoenix/issues)) is *only* for issues within the ownCloud Phoenix code.
+* This repository ([web](https://github.com/owncloud/web/issues)) is *only* for issues within the Web code.
 * __SECURITY__: Report any potential security bug to us via [our HackerOne page](https://hackerone.com/owncloud) or security@owncloud.com following our [security policy](https://owncloud.org/security/) instead of filing an issue in our bug tracker
 * The issues in other components should be reported in their respective repositories: 
   - [Server core](https://github.com/owncloud/core/issues)
@@ -25,9 +25,9 @@ If you have questions about how to install or use ownCloud, please direct these 
 
 Help us to maximize the effort we can spend fixing issues and adding new features, by not reporting duplicate issues.
 
-[template]: https://raw.github.com/owncloud/phoenix/master/.github/issue_template.md
+[template]: https://raw.github.com/owncloud/web/master/.github/issue_template.md
 [forum]: https://central.owncloud.org/
-[rocketchat]: https://talk.owncloud.com/channel/phoenix
+[rocketchat]: https://talk.owncloud.com/channel/web
 
 ## Contributing to Source Code
 

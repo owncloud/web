@@ -31,7 +31,7 @@ const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
 const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
 const OCIS_SKELETON_DIR = process.env.OCIS_SKELETON_DIR || './tests/testing-app/data/webUISkeleton/'
 const OPENID_LOGIN = RUN_ON_OCIS || !!process.env.OPENID_LOGIN
-const PHOENIX_CONFIG = process.env.PHOENIX_CONFIG || path.join(__dirname, 'dist/config.json')
+const WEB_UI_CONFIG = process.env.WEB_UI_CONFIG || path.join(__dirname, 'dist/config.json')
 const SCREENSHOTS = !!process.env.SCREENSHOTS
 
 module.exports = {
@@ -59,7 +59,7 @@ module.exports = {
         ldap_base_dn: LDAP_BASE_DN,
         ocis_skeleton_dir: OCIS_SKELETON_DIR,
         ldap_password: LDAP_ADMIN_PASSWORD,
-        phoenix_config: PHOENIX_CONFIG
+        webUIConfig: WEB_UI_CONFIG
       },
       selenium_host: SELENIUM_HOST,
       desiredCapabilities: {

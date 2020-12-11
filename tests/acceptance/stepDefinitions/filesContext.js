@@ -42,7 +42,7 @@ Given('the user has browsed to the shared-with-others page', function() {
 })
 
 When('the user browses to the shared-with-me page using the webUI', function() {
-  return client.page.phoenixPage().navigateToUsingMenu('Shared with me')
+  return client.page.webPage().navigateToUsingMenu('Shared with me')
 })
 
 When('the user browses to the shared-with-others page', function() {
@@ -50,7 +50,7 @@ When('the user browses to the shared-with-others page', function() {
 })
 
 When('the user browses to the shared-with-others page using the webUI', function() {
-  return client.page.phoenixPage().navigateToUsingMenu('Shared with others')
+  return client.page.webPage().navigateToUsingMenu('Shared with others')
 })
 
 Given('the user has browsed to the trashbin page', function() {
@@ -62,15 +62,15 @@ When('the user browses to the trashbin page', function() {
 })
 
 Given('the user has browsed to the favorites page using the webUI', function() {
-  return client.page.phoenixPage().navigateToUsingMenu('Favorites')
+  return client.page.webPage().navigateToUsingMenu('Favorites')
 })
 
 When('the user browses to the favorites page using the webUI', function() {
-  return client.page.phoenixPage().navigateToUsingMenu('Favorites')
+  return client.page.webPage().navigateToUsingMenu('Favorites')
 })
 
 When('the user browses to the files page using the webUI', function() {
-  return client.page.phoenixPage().navigateToUsingMenu('All files')
+  return client.page.webPage().navigateToUsingMenu('All files')
 })
 
 Then('the files table should be displayed', () => {
@@ -1035,8 +1035,8 @@ Then('file/folder {string} shared by {string} should not be listed in the webUI'
 })
 
 Then('the page should be empty', async function() {
-  const isVisible = await client.page.phoenixPage().isPageVisible()
-  assert.ok(!isVisible, 'The phoenix page should be empty but is not')
+  const isVisible = await client.page.webPage().isPageVisible()
+  assert.ok(!isVisible, 'The web page should be empty but is not')
 })
 
 When('the user downloads file/folder {string} using the webUI', function(file) {

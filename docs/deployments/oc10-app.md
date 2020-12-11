@@ -2,7 +2,7 @@
 title: "Deploy as an app in ownCloud 10"
 date: 2018-05-02T00:00:00+00:00
 weight: 1
-geekdocRepo: https://github.com/owncloud/phoenix
+geekdocRepo: https://github.com/owncloud/web
 geekdocEditPath: edit/master/docs/deployments
 geekdocFilePath: oc10-app.md
 ---
@@ -16,7 +16,7 @@ One of the build artifacts of the ownCloud Web is a ownCloud 10 app bundle.
 - Installed [oauth2 app](https://marketplace.owncloud.com/apps/oauth2)
 
 ## Deploying ownCloud Web
-To download the ownCloud Web, go to https://github.com/owncloud/phoenix/releases and pick your desired version. In the release, you will find a file called `phoenix-app.tar.gz`.
+To download the ownCloud Web, go to https://github.com/owncloud/web/releases and pick your desired version. In the release, you will find a file called `web-app.tar.gz`.
 Download this file and move it into the `apps` folder in your ownCloud 10 server.
 
 {{< hint info >}}
@@ -25,26 +25,26 @@ The app bundle is provided only from version 1.0.0
 
 To unpack the app, run the following command: 
 ```bash
-tar -xzf phoenix.tar.gz && rm -Rf phoenix-app.tar.gz
+tar -xzf web.tar.gz && rm -Rf web-app.tar.gz
 ```
 
 Next step is to enable the app:
 ```bash
-cd ../ && occ apps:enable phoenix
+cd ../ && occ apps:enable web
 ```
 
 ## Configure oauth2
-In the `Admin` of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name and redirection URL `https://<your-owncloud-server>/apps/phoenix/oidc-callback.html`.
+In the `Admin` of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name and redirection URL `https://<your-owncloud-server>/apps/web/oidc-callback.html`.
 
 ## Configure ownCloud 10
 To display ownCloud Web in the app switcher and to redirect all private and public links to the new WebUI, add the following config into `config/config.php`:
 
 ```php
-'phoenix.baseUrl' => 'https://<your-owncloud-server>/apps/phoenix',
+'web.baseUrl' => 'https://<your-owncloud-server>/apps/web',
 ```
 
 ## Configure ownCloud Web
-There are a few config values which need to be set in order for ownCloud Web to work correctly. Navigate into `apps/phoenix` and adjust `config.json` according to the following example:
+There are a few config values which need to be set in order for ownCloud Web to work correctly. Navigate into `apps/web` and adjust `config.json` according to the following example:
 
 ```json
 {
@@ -65,4 +65,4 @@ There are a few config values which need to be set in order for ownCloud Web to 
 ## Accessing ownCloud Web
 After following all the steps, you should see a new entry in the application switcher called `New Design` which points to the ownCloud web.
 
-{{< figure src="/phoenix/static/application-switcher-oc10.jpg" >}}
+{{< figure src="/web/static/application-switcher-oc10.jpg" >}}

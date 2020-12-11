@@ -3,4 +3,4 @@ Bugfix: Fix display name when using oCIS as backend
 We've fixed the display name when running ocis-web with oCIS as backend.
 The display name is now again displayed in the top bar and in the account page.
 
-https://github.com/owncloud/phoenix/pull/3938
+https://github.com/owncloud/web/pull/3938

@@ -1,4 +1,4 @@
-@files_trashbin-app-required @issue-ocis-phoenix-118
+@files_trashbin-app-required @issue-ocis-web-118
 Feature: files and folders can be deleted from the trashbin
   As a user
   I want to delete files and folders from the trashbin
@@ -24,7 +24,7 @@ Feature: files and folders can be deleted from the trashbin
   Scenario: Delete files and check that they are gone
     When the user deletes file "lorem.txt" using the webUI
     And the user deletes file "sample,1.txt" using the webUI
-    # phoenix does not yet support navigating into deleted folders
+    # web does not yet support navigating into deleted folders
     # And the user opens folder "simple-folder" using the webUI
     # And the user deletes file "lorem-big.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI

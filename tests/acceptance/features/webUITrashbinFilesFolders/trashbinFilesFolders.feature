@@ -118,7 +118,7 @@ Feature: files and folders exist in the trashbin after being deleted
     When the user browses to the trashbin page
     Then folder "my-empty-folder" should be listed on the webUI
     But folder "my-other-empty-folder" should not be listed on the webUI
-    # Uncomment after https://github.com/owncloud/phoenix/issues/1725 is solved
+    # Uncomment after https://github.com/owncloud/web/issues/1725 is solved
     #When the user opens folder "my-empty-folder" using the webUI
     #Then there should be no resources listed on the webUI
 

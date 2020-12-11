@@ -6,7 +6,7 @@ all_apps=$(addprefix app-,$(apps))
 core_bundle=dist/core/core.bundle.js
 DIST := dist
 HUGO := hugo
-NAME := phoenix
+NAME := web
 
 all: build
 

@@ -5,4 +5,4 @@ We've started differentiating between them to correctly display all information 
 If the username is not available (oC10), we fall back to using user-id as the username.
 
 https://github.com/owncloud/ocis/issues/440
-https://github.com/owncloud/phoenix/pull/3938
+https://github.com/owncloud/web/pull/3938

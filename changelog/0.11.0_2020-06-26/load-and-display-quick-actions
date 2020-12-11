@@ -3,4 +3,4 @@ Enhancement: Load and display quick actions
 We've added an extension point into files apps for quick actions.
 By creating and exporting an object called quickActions, developers can define an action which will be then displayed in the files list.
 
-https://github.com/owncloud/phoenix/pull/3573
+https://github.com/owncloud/web/pull/3573

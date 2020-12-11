@@ -1,6 +1,6 @@
 Enhancement: Add dev docs for releases
 
-We added documentation on the steps involved to release phoenix.
+We added documentation on the steps involved to release web.
 
-https://github.com/owncloud/phoenix/pull/3186
-https://github.com/owncloud/phoenix/pull/3767
+https://github.com/owncloud/web/pull/3186
+https://github.com/owncloud/web/pull/3767

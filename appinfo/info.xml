@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <info>
-	<id>oc-web</id>
+	<id>web</id>
 	<name>ownCloud Web</name>
 	<summary>Next generation user interface for ownCloud</summary>
 	<description>
     Next generation user interface for ownCloud based on vue.js.
     This is an early release with known limitations and missing features.
 
-    Please, report any findings in https://github.com/owncloud/phoenix/issues
+    Please, report any findings in https://github.com/owncloud/web/issues
   </description>
 	<licence>AGPLv3</licence>
 	<author>ownCloud</author>

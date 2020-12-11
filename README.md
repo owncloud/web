@@ -1,4 +1,4 @@
-# ownCloud-Phoenix
+# ownCloud Web
 
 Pushing a new design and frontend concept to ownCloud
 
@@ -8,5 +8,5 @@ Pushing a new design and frontend concept to ownCloud
 
 ## Documentation
 
-Please refer to the [documentation](https://owncloud.github.io/clients/web/getting-started/) for setting up, building and running Phoenix.
+Please refer to the [documentation](https://owncloud.github.io/clients/web/getting-started/) for setting up, building and running Web.
 

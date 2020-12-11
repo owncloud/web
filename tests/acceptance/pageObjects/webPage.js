@@ -143,15 +143,15 @@ module.exports = {
     },
 
     /**
-     * Checks if the phoenix page contains any elements on the phoenix container
+     * Checks if the web page contains any elements on the web container
      *
      * @returns {boolean}
      */
     isPageVisible: async function() {
       let isVisible = true
       await this.api.elements(
-        this.elements.phoenixContainer.locateStrategy,
-        this.elements.phoenixContainer.selector,
+        this.elements.webContainer.locateStrategy,
+        this.elements.webContainer.selector,
         function(result) {
           isVisible = result.value.length > 0
         }
@@ -238,8 +238,8 @@ module.exports = {
     messageCloseIcon: {
       selector: '.oc-alert-close-icon'
     },
-    phoenixContainer: {
-      selector: '#Phoenix'
+    webContainer: {
+      selector: '#Web'
     },
     appContainer: {
       selector: '#oc-app-container'

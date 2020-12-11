@@ -28,10 +28,7 @@ const getConfigJsonContent = function(fullPathOfConfigFile) {
   return JSON.parse(rawdata)
 }
 
-Given('the property {string} has been set to {string} in phoenix config file', function(
-  key,
-  value
-) {
+Given('the property {string} has been set to {string} in web config file', function(key, value) {
   const data = getConfigJsonContent(this.fullPathOfConfigFile)
   data[key] = value
   return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
@@ -46,7 +43,7 @@ function setconfig(key, subkey, value, configfile) {
   return fs.writeFileSync(configfile, JSON.stringify(data, null, 4))
 }
 
-Given('the property {string} of {string} has been set to {string} in phoenix config file', function(
+Given('the property {string} of {string} has been set to {string} in web config file', function(
   subkey,
   key,
   value
@@ -54,35 +51,35 @@ Given('the property {string} of {string} has been set to {string} in phoenix con
   return setconfig(key, subkey, value, this.fullPathOfConfigFile)
 })
 
-Given('the property {string} of {string} has been set to true in phoenix config file', function(
+Given('the property {string} of {string} has been set to true in web config file', function(
   subkey,
   key
 ) {
   return setconfig(key, subkey, true, this.fullPathOfConfigFile)
 })
 
-Given('the property {string} of {string} has been set to false in phoenix config file', function(
+Given('the property {string} of {string} has been set to false in web config file', function(
   subkey,
   key
 ) {
   return setconfig(key, subkey, false, this.fullPathOfConfigFile)
 })
 
-When('the property {string} of {string} is changed to true in phoenix config file', function(
+When('the property {string} of {string} is changed to true in web config file', function(
   subkey,
   key
 ) {
   return setconfig(key, subkey, true, this.fullPathOfConfigFile)
 })
 
-When('the property {string} of {string} is changed to false in phoenix config file', function(
+When('the property {string} of {string} is changed to false in web config file', function(
   subkey,
   key
 ) {
   return setconfig(key, subkey, false, this.fullPathOfConfigFile)
 })
 
-Given('the property {string} has been deleted in phoenix config file', function(key) {
+Given('the property {string} has been deleted in web config file', function(key) {
   const data = getConfigJsonContent(this.fullPathOfConfigFile)
   delete data[key]
   return fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(data, null, 4))
@@ -92,7 +89,7 @@ Then('the success/error message with header {string} should be displayed on the 
   message
 ) {
   return client.page
-    .phoenixPage()
+    .webPage()
     .waitForElementVisible('@message')
     .expect.element('@message')
     .text.to.equal(message)
@@ -100,7 +97,7 @@ Then('the success/error message with header {string} should be displayed on the 
 
 Then('the following success/error message should be displayed on the webUI', function(message) {
   return client.page
-    .phoenixPage()
+    .webPage()
     .waitForElementVisible('@messages')
     .expect.element('@messages')
     .text.to.equal(message)
@@ -110,7 +107,7 @@ Then('the error message {string} should be displayed on the webUI dialog prompt'
   message
 ) {
   return client.page
-    .phoenixPage()
+    .webPage()
     .waitForElementVisible('@ocDialogPromptAlert')
     .expect.element('@ocDialogPromptAlert')
     .text.to.equal(message)
@@ -125,11 +122,11 @@ Then('the user should see the following error message on the login card dialog',
 })
 
 When('the user clears all error message from the webUI', function() {
-  return client.page.phoenixPage().clearAllErrorMessages()
+  return client.page.webPage().clearAllErrorMessages()
 })
 
 Then('no message should be displayed on the webUI', function() {
-  return client.page.phoenixPage().expect.element('@message').to.not.be.present
+  return client.page.webPage().expect.element('@message').to.not.be.present
 })
 
 Then('as {string} the content of {string} should be the same as the local {string}', function(
@@ -280,12 +277,12 @@ After(async function(testCase) {
 
 Before(function() {
   try {
-    this.fullPathOfConfigFile = client.globals.phoenix_config
-    initialConfigJsonSettings = getConfigJsonContent(client.globals.phoenix_config)
+    this.fullPathOfConfigFile = client.globals.webUIConfig
+    initialConfigJsonSettings = getConfigJsonContent(client.globals.webUIConfig)
   } catch (err) {
     console.log(
       '\x1b[33m%s\x1b[0m',
-      `\tCould not read config file.\n\tSet correct path of config file in PHOENIX_CONFIG env variable to fix this.\n\tSome tests may fail as a result.`
+      `\tCould not read config file.\n\tSet correct path of config file in WEB_UI_CONFIG env variable to fix this.\n\tSome tests may fail as a result.`
     )
   }
 })

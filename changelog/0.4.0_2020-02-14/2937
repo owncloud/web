@@ -5,5 +5,5 @@ The UI is supposed to show a visual transition of a new list item into the list 
 This is fixed now by not triggering the loading state on add and remove actions anymore. A loading state is only meant to appear when the user
 navigates to the shares of another file/folder.
 
-https://github.com/owncloud/phoenix/issues/2937
-https://github.com/owncloud/phoenix/pull/2952
+https://github.com/owncloud/web/issues/2937
+https://github.com/owncloud/web/pull/2952

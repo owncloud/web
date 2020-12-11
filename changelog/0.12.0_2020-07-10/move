@@ -4,4 +4,4 @@ We've added move action to the files list which enables move of resources into d
 The move operation is executed in a new page called Location picker.
 
 https://github.com/owncloud/product/issues/101
-https://github.com/owncloud/phoenix/pull/3739
+https://github.com/owncloud/web/pull/3739

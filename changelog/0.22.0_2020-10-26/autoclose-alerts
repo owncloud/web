@@ -4,4 +4,4 @@ We've added a property which enables alerts to be automatically closed.
 When enabling the auto-close, it will get assigned timeout of 5 seconds.
 Default timeout can be overwritten inside of the `autoClose` object.
 
-https://github.com/owncloud/phoenix/pull/4236
+https://github.com/owncloud/web/pull/4236

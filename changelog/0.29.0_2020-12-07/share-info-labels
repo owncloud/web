@@ -2,4 +2,4 @@ Change: Use labels to display share info
 
 We've changed the way of displaying share information for public links and people. Every information is now displayed in its own label.
 
-https://github.com/owncloud/phoenix/pull/4410
+https://github.com/owncloud/web/pull/4410

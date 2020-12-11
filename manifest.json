@@ -1,6 +1,6 @@
 {
-	"name": "Phoenix | ownCloud",
-	"short_name": "Phoenix",
+	"name": "Web | ownCloud",
+	"short_name": "Web",
 	"icons": [{
 		"src": "/img/app.png",
 		"sizes": "512x512",

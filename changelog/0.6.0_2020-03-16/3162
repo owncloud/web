@@ -1,6 +1,6 @@
-Change: Stop support for deployment of Phoenix as an ownCloud app
+Change: Stop support for deployment of Web as an ownCloud app
 
-We've stopped supporting deployment of Phoenix as an ownCloud app.
-In the release is no longer available Phoenix ownCloud 10 app package.
+We've stopped supporting deployment of Web as an ownCloud app.
+In the release is no longer available Web ownCloud 10 app package.
 
-https://github.com/owncloud/phoenix/pull/3162
+https://github.com/owncloud/web/pull/3162

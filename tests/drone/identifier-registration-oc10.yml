@@ -8,9 +8,9 @@ clients:
     insecure: yes
     trusted: yes
     redirect_uris:
-      - http://phoenix:9100/oidc-callback.html
-      - http://phoenix:9100/
+      - http://web:9100/oidc-callback.html
+      - http://web:9100/
     origins:
-      - http://phoenix:9100
+      - http://web:9100
 
 authorities:

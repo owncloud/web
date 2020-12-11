@@ -3,4 +3,4 @@ Bugfix: Do not display "empty folder" message when there is any content
 We've fixed that when some of the file/share lists were being loaded, the "empty folder" message sometimes briefly appeared even though the list wasn't empty.
 
 https://github.com/owncloud/product/issues/263
-https://github.com/owncloud/phoenix/pull/4162
+https://github.com/owncloud/web/pull/4162

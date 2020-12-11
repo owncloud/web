@@ -2,4 +2,4 @@ Enhancement: Use handler of file editors
 
 In case the extension is a file editor which defines a custom handler, we are triggering that handler instead of trying to open any assigned route.
 
-https://github.com/owncloud/phoenix/pull/4324
+https://github.com/owncloud/web/pull/4324
