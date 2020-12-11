@@ -1400,7 +1400,7 @@ def ocisService():
 			'STORAGE_DATAGATEWAY_PUBLIC_URL': 'https://ocis:9200/data',
 			'STORAGE_USERS_DATA_SERVER_URL': 'http://ocis:9158/data',
 			'STORAGE_FRONTEND_PUBLIC_URL': 'https://ocis:9200',
-			'PHOENIX_WEB_UI_CONFIG': '/srv/config/drone/ocis-config.json',
+			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
 			'PHOENIX_ASSET_PATH': '/var/www/owncloud/web/dist',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
 			'KONNECTD_ISS': 'https://ocis:9200',
@@ -1451,7 +1451,7 @@ def ocisWebService():
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'PHOENIX_WEB_UI_CONFIG': '/srv/config/drone/config.json',
+			'PHOENIX_WEB_CONFIG': '/srv/config/drone/config.json',
 			'PHOENIX_ASSET_PATH': '/var/www/owncloud/web/dist',
 			'PHOENIX_OIDC_CLIENT_ID': 'phoenix'
 		},
