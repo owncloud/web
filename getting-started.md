@@ -2,7 +2,7 @@
 title: "Getting Started"
 date: 2018-05-02T00:00:00+00:00
 weight: 10
-geekdocRepo: https://github.com/owncloud/phoenix
+geekdocRepo: https://github.com/owncloud/web
 geekdocEditPath: edit/master/docs
 geekdocFilePath: getting-started.md
 ---
@@ -21,12 +21,12 @@ TBD
 
 ### Source code
 
-The source code is hosted at https://github.com/owncloud/phoenix
-Please refer to the [build documentation for Phoenix]({{< ref "building.md" >}}).
+The source code is hosted at https://github.com/owncloud/web
+Please refer to the [build documentation for Web]({{< ref "building.md" >}}).
 
 ## Configuration
 
-Depending on the backend you are using, there are sample config files provided in the [ownCloud Web](https://github.com/owncloud/phoenix) git repository.
+Depending on the backend you are using, there are sample config files provided in the [ownCloud Web](https://github.com/owncloud/web) git repository.
 Please refer to the configuration details below.
 
 #### Options
@@ -38,7 +38,7 @@ substring of a value of the authenticated user. Examples are `/Shares`, `/{{.Id}
 
 ## Setting up backend and running
 
-Phoenix can run against either [ownCloud 10](https://github.com/owncloud/core/) as backend or [OCIS](https://github.com/owncloud/ocis).
+Web can run against either [ownCloud 10](https://github.com/owncloud/core/) as backend or [OCIS](https://github.com/owncloud/ocis).
 Depending which one you chose, please check the matching section:
 
 - [Setting up with ownCloud as backend]({{< ref "backend-oc10.md" >}})
@@ -46,6 +46,6 @@ Depending which one you chose, please check the matching section:
 
 ## Running
 
-- [Running with ownCloud as backend]({{< ref "backend-oc10.md#running-phoenix" >}})
-- [Running with OCIS as backend]({{< ref "backend-ocis.md#running-phoenix" >}})
+- [Running with ownCloud as backend]({{< ref "backend-oc10.md#running-web" >}})
+- [Running with OCIS as backend]({{< ref "backend-ocis.md#running-web" >}})
 

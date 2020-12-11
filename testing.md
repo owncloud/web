@@ -2,7 +2,7 @@
 title: "Running acceptance tests"
 date: 2020-04-15T00:00:00+00:00
 weight: 60
-geekdocRepo: https://github.com/owncloud/phoenix
+geekdocRepo: https://github.com/owncloud/web
 geekdocEditPath: edit/master/docs
 geekdocFilePath: testing.md
 ---
@@ -26,12 +26,12 @@ There are multiple ways to run Selenium:
 
 ### Setup using Docker Desktop for Mac
 
-In order to run acceptance tests with selenium running in Docker Desktop for Mac while having ownCloud Server and Phoenix running as services
+In order to run acceptance tests with selenium running in Docker Desktop for Mac while having ownCloud Server and Web running as services
 on the host machine, `localhost` will not work as URL. Use the Docker host ip `172.17.0.1` or its alias `host.docker.internal` instead.
-This requires adjusting all relevant config files to use `host.docker.internal` instead of `localhost` (config.json in Phoenix and
-config/config.php in oC10) and changing the phoenix OIDC-callback url. Set the `SERVER_HOST` and `BACKEND_HOST` environment variables
+This requires adjusting all relevant config files to use `host.docker.internal` instead of `localhost` (config.json in Web and
+config/config.php in oC10) and changing the web OIDC-callback url. Set the `SERVER_HOST` and `BACKEND_HOST` environment variables
 accordingly. In order to use the same url for development on the host machine, define it as an alias to `127.0.0.1` in `/etc/hosts`.
-After all these changes Phoenix will be accessible at `http://host.docker.internal:8300` for both development and acceptance tests.
+After all these changes Web will be accessible at `http://host.docker.internal:8300` for both development and acceptance tests.
 
 ### Setup using standalone Selenium server
 
@@ -43,9 +43,9 @@ When running a standalone Selenium server, make sure to set the environment vari
 
 - setup the [ownCloud 10 backend]({{< ref "backend-oc10.md" >}})
 - clone and install the [testing app](http://github.com/owncloud/testing) into ownCloud
-- [build Phoenix]({{< ref "building.md" >}})
-- [start the Phoenix server]({{< ref "backend-oc10.md#running-phoenix" >}})
-- set `SERVER_HOST` to point at the URL where the Phoenix web pages are served, for example "http://localhost:8300"
+- [build Web]({{< ref "building.md" >}})
+- [start the Web server]({{< ref "backend-oc10.md#running-web" >}})
+- set `SERVER_HOST` to point at the URL where the Web web pages are served, for example "http://localhost:8300"
 - set `BACKEND_HOST` to point to the URL of the backend, for example "http://localhost/owncloud/"
 - to be able to run federation tests, additional setup is needed:
    1. Install and setup a second ownCloud server-instance that is accessible by a different URL. That second server-instance must have its own database and data directory.
@@ -62,8 +62,8 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 
 ### with OCIS backend
 
-1. [build Phoenix]({{< ref "building.md" >}})
-2. create a new phoenix `config.json` file and copy it into the `dist` folder, even though running phoenix in the default ocis environment does not need a `config.json` file, some tests rely on it being present.
+1. [build Web]({{< ref "building.md" >}})
+2. create a new web `config.json` file and copy it into the `dist` folder, even though running web in the default ocis environment does not need a `config.json` file, some tests rely on it being present.
  As a starting point and example that should work when running every service on localhost use
    Linux: `config.json.sample-ocis`
    Mac: `tests/acceptance/ocis-mac-config.json`
@@ -75,7 +75,7 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 
 #### the manual way (e.g. to run from an existing ocis location)
 1. clone and build [ocis](https://github.com/owncloud/ocis)
-2. From inside the `phoenix` directory run `yarn run testing-app` to get the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
+2. From inside the `web` directory run `yarn run testing-app` to get the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
 3. Run redis server using docker
     ```sh
     yarn run redis-server
@@ -83,13 +83,13 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 
 4. Run the OCIS server with the necessary configurations
     ```sh
-    export PHOENIX_ASSET_PATH='<path-to-phoenix-clone>/dist'
-    export PHOENIX_WEB_CONFIG='<path-to-phoenix-clone>/dist/config.json'
+    export WEB_ASSET_PATH='<path-to-web-clone>/dist'
+    export WEB_UI_CONFIG='<path-to-web-clone>/dist/config.json'
     export STORAGE_HOME_DRIVER=owncloud
     export STORAGE_USERS_DRIVER=owncloud
     export PROXY_ENABLE_BASIC_AUTH=true
     ```
-    note: `PHOENIX_WEB_CONFIG` should point to the same config file you have created earlier.
+    note: `WEB_UI_CONFIG` should point to the same config file you have created earlier.
     note: currently it's not possible to run the UI tests with OCIS & OWNCLOUD storage-driver
 
     run the server:
@@ -108,7 +108,7 @@ These values can be set using the environment variables to configure `yarn run a
 
 | setting             | meaning                                                                | default               |
 |-------------------- | -----------------------------------------------------------------------| ----------------------|
-| `SERVER_HOST`       | phoenix URL                                                            | http://localhost:8300 |
+| `SERVER_HOST`       | web URL                                                            | http://localhost:8300 |
 | `BACKEND_HOST`      | ownCloud server URL (or reva service url for running with OCIS)                                                    | http://localhost:8080 |
 | `BACKEND_USERNAME`  | ownCloud administrator username                                        | admin                 |
 | `BACKEND_PASSWORD`  | ownCloud administrator password                                        | admin                 |
@@ -121,7 +121,7 @@ These values can be set using the environment variables to configure `yarn run a
 | `RUN_ON_OCIS`       | Running the tests using the OCIS backend                                                            | false |
 | `OCIS_REVA_DATA_ROOT`       | Data directory of OCIS                                             | /var/tmp/reva |
 | `OCIS_SKELETON_DIR`       | Skeleton files directory for new users                                                           | - |
-| `PHOENIX_CONFIG`       | Path for the phoenix config file (usually in the dist folder)                       | - |
+| `WEB_UI_CONFIG`       | Path for the web config file (usually in the dist folder)                       | - |
 
 ## Tips
 
@@ -135,10 +135,10 @@ In that case increase the open file limits, how to do that would be beyond the s
 
 ## Acceptance Tests in CI
 In the CI we run the UI tests using different backends on different repos. We use commit IDs to indicate the version of the backend or testrunner we want to use. These commit IDs should be regularly updated in the `.drone.star` file to keep the CI up to date.
-We run phoenix UI tests in the following repos in the CI.
+We run web UI tests in the following repos in the CI.
 
-### 1. phoenix Repo
-In the `owncloud/phoenix` repo, we run the tests using both the oc10 backend and the OCIS backend.
+### 1. web Repo
+In the `owncloud/web` repo, we run the tests using both the oc10 backend and the OCIS backend.
 For the oc10 backend, we use the `owncloudci/core` docker image which runs the latest `daily-master-qa` version of owncloud.
 
 For the OCIS backend, we use the Commit ID from the `owncloud/ocis` repo to indicate which version of backend to use. This can be specified in the `.drone.star` file in the `config.defaults` section.
@@ -152,16 +152,16 @@ For the OCIS backend, we use the Commit ID from the `owncloud/ocis` repo to indi
 ```
 If the version you want to run is on a different branch from master, you also need to change the branch name.
 
-In order to check if new tests are compatible with OCIS, after changing the commit id and the branch name, we can create a draft PR in `owncloud/phoenix` which triggers the CI, and we can see the result there.
+In order to check if new tests are compatible with OCIS, after changing the commit id and the branch name, we can create a draft PR in `owncloud/web` which triggers the CI, and we can see the result there.
 
 ### 2. ocis Repo
-We follow the same approach in the `owncloud/ocis` repo too. In order to run the UI tests in CI we use commit IDs from phoenix which can be changed in the `.drone.star` file. 
+We follow the same approach in the `owncloud/ocis` repo too. In order to run the UI tests in CI we use commit IDs from web which can be changed in the `.drone.star` file. 
 
 ```
   'uiTests': {
-    'phoenixBranch': 'master',
-    'phoenixCommit': '492e6a663efad67f770ba4ac405c4d9983d00cd3',
+    'webBranch': 'master',
+    'webCommit': '492e6a663efad67f770ba4ac405c4d9983d00cd3',
 ...
   }
 ```
-This is the commit ID of phoenix indicating the version of testrunner we want to use. If the version is on a branch other than master, we will also need to change the branch name.
+This is the commit ID of web indicating the version of testrunner we want to use. If the version is on a branch other than master, we will also need to change the branch name.
