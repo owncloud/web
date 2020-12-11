@@ -89,4 +89,4 @@ const appInfo = {
 
 #### Known issues:
 
-Passing resource as a prop into the dynamic component causes Vuex mutation error. To avoid this, access resource direcly via parent component - `this.$parent.item`
+Passing resource as a prop into the dynamic component causes Vuex mutation error. To avoid this, access resource directly via parent component - `this.$parent.item`

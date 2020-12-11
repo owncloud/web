@@ -489,7 +489,7 @@ module.exports = {
               // Add position from top to list container height to properly decide if the item is visible
               const visiblePosition = virtualScrollWrapper.clientHeight + tableHeaderPosition
 
-              // Check if the item is inside the view after it's renredered
+              // Check if the item is inside the view after it's rendered
               if (position.top > -1 && position.top <= visiblePosition) {
                 done()
                 return

@@ -594,7 +594,7 @@ Then(
  */
 const theseResourcesShouldBeListed = async function(entryList) {
   if (entryList.rows().length <= 0) {
-    throw Error('Gerkin entry list is empty. Missing heading?')
+    throw Error('Gherkin entry list is empty. Missing heading?')
   }
 
   for (const item of entryList.rows()) {

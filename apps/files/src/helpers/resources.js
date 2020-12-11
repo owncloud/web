@@ -2,7 +2,7 @@ import filesize from 'filesize'
 
 /**
  * Returns formatted size of given resource
- * @param {Number} size Unformated size of the resource
+ * @param {Number} size Unformatted size of the resource
  * @returns {String} formatted size
  */
 export function getResourceSize(size) {
