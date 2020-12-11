@@ -10,7 +10,7 @@
         }"
         uk-height-viewport
       >
-        <oc-spinner size="xxxlarge" :aria-label="$gettext('Loading')" class="uk-position-center" />
+        <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" class="uk-position-center" />
       </div>
       <template v-else-if="!showHeader">
         <router-view name="fullscreen" />
@@ -339,7 +339,7 @@ body {
 }
 
 .loading-overlay .oc-spinner:after {
-  border: 20px solid;
-  border-bottom: 20px solid transparent;
+  border: 10px solid;
+  border-bottom: 10px solid transparent;
 }
 </style>
