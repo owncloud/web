@@ -9,12 +9,13 @@ Summary
 -------
 
 * Bugfix - Enable route checks for file actions: [#986](https://github.com/owncloud/ocis/issues/986)
-* Bugfix - Copy dynamicNavItems state: [#1031](https://github.com/owncloud/ocis/issues/1031)
+* Bugfix - Fix navigation rendering: [#1031](https://github.com/owncloud/ocis/issues/1031)
 * Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 * Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 * Enhancement - Add oc10 app build artifact: [#4427](https://github.com/owncloud/phoenix/pull/4427)
 * Enhancement - Add custom configuration to the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
 * Enhancement - Add support for .vsdx files in the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
+* Enhancement - Wait for all required data: [#884](https://github.com/owncloud/ocis/issues/884)
 
 Details
 -------
@@ -27,12 +28,14 @@ Details
    https://github.com/owncloud/ocis/issues/986
    https://github.com/owncloud/phoenix/pull/4436
 
-* Bugfix - Copy dynamicNavItems state: [#1031](https://github.com/owncloud/ocis/issues/1031)
+* Bugfix - Fix navigation rendering: [#1031](https://github.com/owncloud/ocis/issues/1031)
 
-   The dynamicNavItems state in ADD_NAV_ITEM mutation now gets copied instead of referenced to
-   trigger a state change.
+   - ADD_NAV_ITEM mutation now gets copied instead of referenced to trigger a state change. -
+   applicationsList navItem item needs a copy instead of mutating the base item - check for
+   route.path instead of route name in ADD_NAV_ITEM which can change over time
 
    https://github.com/owncloud/ocis/issues/1031
+   https://github.com/owncloud/ocis/issues/1043
    https://github.com/owncloud/phoenix/pull/4430
 
 * Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
@@ -70,6 +73,17 @@ Details
 
    https://github.com/owncloud/phoenix/issues/4327
    https://github.com/owncloud/phoenix/pull/4337
+
+* Enhancement - Wait for all required data: [#884](https://github.com/owncloud/ocis/issues/884)
+
+   Before this we rendered the ui no matter if every required data already is loaded or not. For
+   example the current users language from the ocis settings service. One potential problem was
+   the flickering in the ui or that the default language was shown before it switches to the
+   settings language of current user. Instead we now show a loading screen and wait for everything
+   that is required before rendering anything else.
+
+   https://github.com/owncloud/ocis/issues/884
+   https://github.com/owncloud/ocis/issues/1043
 
 Changelog for ownCloud Phoenix [0.29.0] (2020-12-07)
 =======================================
