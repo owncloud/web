@@ -5,6 +5,7 @@ weight: 55
 geekdocRepo: https://github.com/owncloud/phoenix
 geekdocEditPath: edit/master/docs/deployments
 geekdocFilePath: _index.md
+geekdocCollapseSection: true
 ---
 
 Showcases of different scenarios of deploying ownCloud Web.

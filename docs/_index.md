@@ -5,6 +5,7 @@ weight: -15
 geekdocRepo: https://github.com/owncloud/phoenix
 geekdocEditPath: edit/master/docs
 geekdocFilePath: _index.md
+geekdocCollapseSection: true
 ---
 
 This is the next generation ownCloud frontend.
