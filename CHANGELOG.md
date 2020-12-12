@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v1.0.0...master
+
+Summary
+-------
+
+* Bugfix - Hide modals on logout: [#1064](https://github.com/owncloud/ocis/issues/1064)
+
+Details
+-------
+
+* Bugfix - Hide modals on logout: [#1064](https://github.com/owncloud/ocis/issues/1064)
+
+   Hide shown modal if user gets logged out while it's visible
+
+   https://github.com/owncloud/ocis/issues/1064
+   https://github.com/owncloud/web/pull/4472
+
 Changelog for ownCloud Web [1.0.0] (2020-12-11)
 =======================================
 The following sections list the changes in ownCloud web 1.0.0 relevant to
