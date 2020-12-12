@@ -31,9 +31,10 @@ const actions = {
     vueAuthInstance.clearLoginState()
   },
   async logout({ dispatch }) {
-    const logoutFinalizier = (forceRedirect = false) => {
+    const logoutFinalizer = (forceRedirect = false) => {
       // Remove signed in user
       dispatch('cleanUpLoginState')
+      dispatch('hideModal')
       dispatch('loadSettingsValues')
 
       // Force redirect to login
@@ -47,7 +48,7 @@ const actions = {
       vueAuthInstance
         .createSignoutRequest({ id_token_hint: u.id_token })
         .then(signoutRequestUrl => {
-          logoutFinalizier()
+          logoutFinalizer()
 
           // Navigate to signout URL
           window.open(signoutRequestUrl, '_self')
@@ -57,7 +58,7 @@ const actions = {
         })
     } else {
       // Oauth2 logout
-      logoutFinalizier(true)
+      logoutFinalizer(true)
     }
   },
   async initAuth(context, payload = { autoRedirect: false }) {

@@ -1,0 +1,6 @@
+Bugfix: Hide modals on logout
+
+Hide shown modal if user gets logged out while it's visible
+
+https://github.com/owncloud/ocis/issues/1064
+https://github.com/owncloud/web/pull/4472
