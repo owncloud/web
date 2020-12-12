@@ -30,9 +30,21 @@ core: dist/core/core.bundle.js
 
 .PHONY: clean-core
 clean-core:
-	rm -rf $(DIST) $(HUGO)
+	rm -rf $(DIST) $(HUGO) $(CURDIR)/release $(CURDIR)/build/dist
 	rm -rf node_modules
 
+#
+# Release
+# make this app compatible with the ownCloud
+# default build tools
+#
+.PHONY: dist
+dist:
+	make -f Makefile.release
+	mkdir -p $(CURDIR)/build/dist
+	cp $(CURDIR)/release/web-app.tar.gz $(CURDIR)/build/dist/
+
+#
 #
 # Apps
 #
