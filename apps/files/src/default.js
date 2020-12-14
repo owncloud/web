@@ -107,21 +107,20 @@ const navItems = [
 
 const routes = [
   {
-    path: '',
-    redirect: `/${appInfo.id}/list/`,
+    path: '/list',
     components: {
       app: FilesApp
     }
   },
   {
-    path: '/list/:item(.*)',
+    path: '/list/:item+',
     components: {
       app: FilesApp
     },
     name: 'files-list',
     meta: {
       hasBulkActions: true
-    },
+    }
   },
   {
     path: '/favorites',

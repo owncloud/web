@@ -45,13 +45,13 @@ export default {
         })
         throw new Error('public-files')
       }
-
       // load files
       if (this.$store.getters.activeFile.path === '') {
+        const absolutePath = filePath.substring(0, filePath.lastIndexOf('/'))
 
         return this.loadFolder({
           client: this.$client,
-          absolutePath: filePath,
+          absolutePath: absolutePath,
           $gettext: this.$gettext,
           routeName: contextRouteName,
           loadSharesTree: !this.publicPage()

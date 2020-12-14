@@ -88,21 +88,20 @@ router.beforeEach(function(to, from, next) {
   }
 })
 
-/* TODO: upgrade to vue next router */
-/* monkey patch like back in the good old ROR times ;) */
-/* it works across all modules and extensions because router is treated as singleton by vue itself */
-/* as alternative we can use arrays for paths for (https://github.com/pillarjs/path-to-regexp) but this needs to many changes in most places */
 router.match = (oc => {
   return (raw, current, redirectFrom) => {
     const oo = oc(raw, current, redirectFrom)
-    const no = {
-      ...oo,
-      fullPath: [{ f: /%2F/g, t: '/' }, { f: /\/\//g, t: '/' }].reduce(
+    const cleaner = s =>
+      [{ f: /%2F/g, t: '/' }, { f: /\/\//g, t: '/' }].reduce(
         (acc, r) => acc.replaceAll(r.f, r.t),
-        oo.fullPath || ''
+        s || ''
       )
-    }
-    return Object.freeze(no)
+
+    return Object.freeze({
+      ...oo,
+      path: cleaner(oo.fullPath),
+      fullPath: cleaner(oo.fullPath)
+    })
   }
 })(router.match.bind(router))
 
