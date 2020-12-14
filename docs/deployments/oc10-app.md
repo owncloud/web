@@ -25,7 +25,7 @@ The app bundle is provided only from version 1.0.0
 
 To unpack the app, run the following command: 
 ```bash
-tar -xzf web.tar.gz && rm -Rf web-app.tar.gz
+tar -xzf web-app.tar.gz && rm -Rf web-app.tar.gz
 ```
 
 Next step is to enable the app:
