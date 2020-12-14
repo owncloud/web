@@ -34,11 +34,6 @@ To display ownCloud Web in the app switcher and to redirect all private and publ
 ```php
 'web.baseUrl' => 'https://<your-owncloud-server>/apps-external/web',
 ```
-
-{{< hint danger >}}
-It is important that the `baseUrl` doesn't end with trailing slash.
-{{< /hint >}}
-
 ## Configure ownCloud Web
 There are a few config values which need to be set in order for ownCloud Web to work correctly. Navigate into `apps-external/web` and adjust `config.json` according to the following example:
 
