@@ -30,12 +30,8 @@ export default {
       if (this.searchTerm !== '' && this.$route.params.item === folder.path) {
         this.resetSearch()
       }
-      let route = 'files-list'
-      if (this.publicPage()) {
-        route = 'public-files'
-      }
       this.$router.push({
-        name: route,
+        name: this.publicPage() ? 'public-files' : 'files-list',
         params: {
           item: folder.path
         }

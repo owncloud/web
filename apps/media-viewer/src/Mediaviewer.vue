@@ -222,7 +222,7 @@ export default {
   methods: {
     setCurrentFile(filePath) {
       for (let i = 0; i < this.mediaFiles.length; i++) {
-        if (this.mediaFiles[i].path === filePath) {
+        if (this.mediaFiles[i].path === '/' + filePath) {
           this.activeIndex = i
           break
         }
@@ -243,7 +243,6 @@ export default {
 
     loadMedium() {
       this.loading = true
-
       // Don't bother loading if files are cached
       if (this.activeMediaFileCached) {
         setTimeout(

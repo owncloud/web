@@ -114,14 +114,14 @@ const routes = [
     }
   },
   {
-    path: '/list/:item?',
+    path: '/list/:item(.*)',
     components: {
       app: FilesApp
     },
     name: 'files-list',
     meta: {
       hasBulkActions: true
-    }
+    },
   },
   {
     path: '/favorites',

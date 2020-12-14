@@ -5,7 +5,7 @@ import Mediaviewer from './Mediaviewer.vue'
 
 const routes = [
   {
-    path: '/:contextRouteName/:filePath',
+    path: '/:contextRouteName/:filePath(.*)',
     components: {
       app: Mediaviewer
     },

@@ -383,7 +383,7 @@ export default {
             } else {
               context.dispatch('loadFiles', {
                 currentFolder: res[0],
-                files: res.splice(1)
+                files: res.length > 1 ? res.splice(1) : res
               })
               if (loadSharesTree) {
                 context.dispatch('loadSharesTree', {

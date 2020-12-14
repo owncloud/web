@@ -33,7 +33,7 @@ export default {
     $_loader_loadFolder(contextRouteName, filePath) {
       // FIXME: handle public-files with passwords and everything, until then we redirect to the main public link page
       if (this.$store.getters.activeFile.path === '' && contextRouteName === 'public-files') {
-        const path = this.$route.params.filePath.substring(1)
+        const path = this.$route.params.filePath
         const token = path.substr(0, path.indexOf('/'))
         this.$nextTick(() => {
           this.$router.push({
@@ -48,11 +48,10 @@ export default {
 
       // load files
       if (this.$store.getters.activeFile.path === '') {
-        const absolutePath = filePath.substring(1, filePath.lastIndexOf('/'))
 
         return this.loadFolder({
           client: this.$client,
-          absolutePath: absolutePath,
+          absolutePath: filePath,
           $gettext: this.$gettext,
           routeName: contextRouteName,
           loadSharesTree: !this.publicPage()
