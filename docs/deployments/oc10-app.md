@@ -10,10 +10,10 @@ geekdocFilePath: oc10-app.md
 {{< toc >}}
 
 The ownCloud Web is being deployed as an app to [ownCloud marketplace](https://market.owncloud.com) to enable easy early integration into existing ownCloud 10 instances.
-After completing this setup, ownCloud Web will be available on `https://<your-owncloud-server>/apps/web`.
+After completing this setup, ownCloud Web will be available on `https://<your-owncloud-server>/apps-external/web`.
 
 {{< hint info >}}
-Depending on your setup, it might be required to use `apps-custom` instead of `apps` in the URL. Keep this in mind when setting all mandatory URL addresses.
+Depending on your setup, the name of `apps-external` folder can vary. It is important to use the corrent name in all of mentioned URLs.
 {{< /hint >}}
 
 ## Prerequisites
@@ -24,7 +24,7 @@ Depending on your setup, it might be required to use `apps-custom` instead of `a
 Download [ownCloud Web app](https://marketplace.owncloud.com/apps/web) from the marketplace and enable it.
 
 ## Configure oauth2
-In the `Admin` of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name and redirection URL `https://<your-owncloud-server>/apps/web/oidc-callback.html`.
+In the `Admin` of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name and redirection URL `https://<your-owncloud-server>/apps-external/web/oidc-callback.html`.
 
 {{< figure src="clients/web/static/oauth2.jpg" alt="Example OAuth2 entry" >}}
 
@@ -32,15 +32,15 @@ In the `Admin` of ownCloud 10, head into `User Authentication` and add a new cli
 To display ownCloud Web in the app switcher and to redirect all private and public links to the new WebUI, add the following config into `config/config.php`:
 
 ```php
-'web.baseUrl' => 'https://<your-owncloud-server>/apps/web',
+'web.baseUrl' => 'https://<your-owncloud-server>/apps-external/web',
 ```
 
 {{< hint danger >}}
-It is mandatory to not include a trailing slash in the `baseUrl`.
+It is important that the `baseUrl` doesn't end with trailing slash.
 {{< /hint >}}
 
 ## Configure ownCloud Web
-There are a few config values which need to be set in order for ownCloud Web to work correctly. Navigate into `apps/web` and adjust `config.json` according to the following example:
+There are a few config values which need to be set in order for ownCloud Web to work correctly. Navigate into `apps-external/web` and adjust `config.json` according to the following example:
 
 ```json
 {
