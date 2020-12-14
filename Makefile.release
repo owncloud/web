@@ -64,7 +64,7 @@ package-plain:
 	cd $(dist_dir) && tar -czf $(CURDIR)/release/$(app_name).tar.gz -C $(dist_dir) * .htaccess
 
 .PHONY: package-ocx
-package-ocx: sign ocx-app-config ocx-app-bundle
+package-ocx: ocx-app-config sign ocx-app-bundle
 
 .PHONY: sign
 sign:
