@@ -328,6 +328,10 @@ body {
   overflow: hidden;
 }
 
+#main {
+  position: relative;
+}
+
 .loading-overlay {
   background-size: cover;
   background-repeat: no-repeat;
