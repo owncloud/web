@@ -13,7 +13,7 @@ The ownCloud Web is being deployed as an app to [ownCloud marketplace](https://m
 After completing this setup, ownCloud Web will be available on `https://<your-owncloud-server>/apps-external/web`.
 
 {{< hint info >}}
-Depending on your setup, the name of `apps-external` folder can vary. It is important to use the corrent name in all of mentioned URLs.
+Depending on your setup, the name of `apps-external` folder can vary. It is important to use the correct name in all of the mentioned URLs.
 {{< /hint >}}
 
 ## Prerequisites
