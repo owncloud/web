@@ -9,32 +9,24 @@ geekdocFilePath: oc10-app.md
 
 {{< toc >}}
 
-One of the build artifacts of the ownCloud Web is a ownCloud 10 app bundle.
+The ownCloud Web is being deployed as an app to [ownCloud marketplace](https://market.owncloud.com) to enable easy early integration into existing ownCloud 10 instances.
+After completing this setup, ownCloud Web will be available on `https://<your-owncloud-server>/apps/web`.
+
+{{< hint info >}}
+Depending on your setup, it might be required to use `apps-custom` instead of `apps` in the URL. Keep this in mind when setting all mandatory URL addresses.
+{{< /hint >}}
 
 ## Prerequisites
 - Running [ownCloud 10 server](https://owncloud.com/download-server/) with version 10.6
 - Installed [oauth2 app](https://marketplace.owncloud.com/apps/oauth2)
 
 ## Deploying ownCloud Web
-To download the ownCloud Web, go to https://github.com/owncloud/web/releases and pick your desired version. In the release, you will find a file called `web-app.tar.gz`.
-Download this file and move it into the `apps` folder in your ownCloud 10 server.
-
-{{< hint info >}}
-The app bundle is provided only from version 1.0.0
-{{< /hint >}}
-
-To unpack the app, run the following command: 
-```bash
-tar -xzf web.tar.gz && rm -Rf web-app.tar.gz
-```
-
-Next step is to enable the app:
-```bash
-cd ../ && occ apps:enable web
-```
+Download [ownCloud Web app](https://marketplace.owncloud.com/apps/web) from the marketplace and enable it.
 
 ## Configure oauth2
 In the `Admin` of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name and redirection URL `https://<your-owncloud-server>/apps/web/oidc-callback.html`.
+
+{{< figure src="clients/web/static/oauth2.jpg" alt="Example OAuth2 entry" >}}
 
 ## Configure ownCloud 10
 To display ownCloud Web in the app switcher and to redirect all private and public links to the new WebUI, add the following config into `config/config.php`:
@@ -42,6 +34,10 @@ To display ownCloud Web in the app switcher and to redirect all private and publ
 ```php
 'web.baseUrl' => 'https://<your-owncloud-server>/apps/web',
 ```
+
+{{< hint danger >}}
+It is mandatory to not include a trailing slash in the `baseUrl`.
+{{< /hint >}}
 
 ## Configure ownCloud Web
 There are a few config values which need to be set in order for ownCloud Web to work correctly. Navigate into `apps/web` and adjust `config.json` according to the following example:
@@ -58,11 +54,32 @@ There are a few config values which need to be set in order for ownCloud Web to 
   "apps" : [ // List of extensions to be loaded
     "files"
   ],
-  "applications" : [] // Apps to be displayed in the application switcher
+  "applications" : [ // Apps to be displayed in the application switcher or in the user menu
+    {
+      "title": { // Item in apps switcher pointing to the old ownCloud UI
+        "en": "Classic Design",
+        "de": "Dateien",
+        "fr": "Fichiers",
+        "zh_CN": "文件"
+      },
+      "icon": "switch_ui",
+      "url": "http://<your-owncloud-server>/index.php/apps/files"
+    },
+    { // Item in user menu pointing to user settings in the old ownCloud UI
+      "icon": "application",
+      "menu": "user",
+      "target": "_self",
+      "title": {
+        "de": "Einstellungen",
+        "en": "Settings"
+      },
+      "url": "https://<your-owncloud-server>/index.php/settings/personal"
+    }
+  ]
 }
 ```
 
 ## Accessing ownCloud Web
 After following all the steps, you should see a new entry in the application switcher called `New Design` which points to the ownCloud web.
 
-{{< figure src="/web/static/application-switcher-oc10.jpg" >}}
+{{< figure src="/clients/web/static/application-switcher-oc10.jpg" alt="ownCloud 10 application switcher" >}}
