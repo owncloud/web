@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Hide modals on logout: [#1064](https://github.com/owncloud/ocis/issues/1064)
+* Enhancement - Update ODS to 2.0.3: [#4488](https://github.com/owncloud/web/pull/4488)
 
 Details
 -------
@@ -19,6 +20,13 @@ Details
 
    https://github.com/owncloud/ocis/issues/1064
    https://github.com/owncloud/web/pull/4472
+
+* Enhancement - Update ODS to 2.0.3: [#4488](https://github.com/owncloud/web/pull/4488)
+
+   We've updated the ownCloud design system to version 2.0.3.
+
+   https://github.com/owncloud/web/pull/4488
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v2.0.3
 
 Changelog for ownCloud Web [1.0.0] (2020-12-11)
 =======================================
