@@ -1,3 +1,27 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v1.0.0...master
+
+Summary
+-------
+
+* Enhancement - Position of main dom node: [#1052](https://github.com/owncloud/ocis/issues/1052)
+
+Details
+-------
+
+* Enhancement - Position of main dom node: [#1052](https://github.com/owncloud/ocis/issues/1052)
+
+   Div#main is now positioned relative, this way child apps are able to orientate their
+   containers absolute to it.
+
+   https://github.com/owncloud/ocis/issues/1052
+   https://github.com/owncloud/web/pull/4489
+   https://github.com/owncloud/owncloud-design-system/pull/1002
+
 Changelog for ownCloud Web [1.0.0] (2020-12-14)
 =======================================
 The following sections list the changes in ownCloud web 1.0.0 relevant to
