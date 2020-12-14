@@ -1,34 +1,4 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
-=======================================
-The following sections list the changes in ownCloud web unreleased relevant to
-ownCloud admins and users.
-
-[unreleased]: https://github.com/owncloud/web/compare/v1.0.0...master
-
-Summary
--------
-
-* Bugfix - Hide modals on logout: [#1064](https://github.com/owncloud/ocis/issues/1064)
-* Enhancement - Update ODS to 2.0.3: [#4488](https://github.com/owncloud/web/pull/4488)
-
-Details
--------
-
-* Bugfix - Hide modals on logout: [#1064](https://github.com/owncloud/ocis/issues/1064)
-
-   Hide shown modal if user gets logged out while it's visible
-
-   https://github.com/owncloud/ocis/issues/1064
-   https://github.com/owncloud/web/pull/4472
-
-* Enhancement - Update ODS to 2.0.3: [#4488](https://github.com/owncloud/web/pull/4488)
-
-   We've updated the ownCloud design system to version 2.0.3.
-
-   https://github.com/owncloud/web/pull/4488
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v2.0.3
-
-Changelog for ownCloud Web [1.0.0] (2020-12-11)
+Changelog for ownCloud Web [1.0.0] (2020-12-14)
 =======================================
 The following sections list the changes in ownCloud web 1.0.0 relevant to
 ownCloud admins and users.
@@ -40,12 +10,14 @@ Summary
 
 * Bugfix - Enable route checks for file actions: [#986](https://github.com/owncloud/ocis/issues/986)
 * Bugfix - Fix navigation rendering: [#1031](https://github.com/owncloud/ocis/issues/1031)
+* Bugfix - Hide modals on logout: [#1064](https://github.com/owncloud/ocis/issues/1064)
 * Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 * Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 * Enhancement - Add oc10 app build artifact: [#4427](https://github.com/owncloud/web/pull/4427)
 * Enhancement - Add custom configuration to the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
 * Enhancement - Add support for .vsdx files in the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
 * Enhancement - Wait for all required data: [#884](https://github.com/owncloud/ocis/issues/884)
+* Enhancement - Update ODS to 2.0.3: [#4488](https://github.com/owncloud/web/pull/4488)
 
 Details
 -------
@@ -67,6 +39,13 @@ Details
    https://github.com/owncloud/ocis/issues/1031
    https://github.com/owncloud/ocis/issues/1043
    https://github.com/owncloud/phoenix/pull/4430
+
+* Bugfix - Hide modals on logout: [#1064](https://github.com/owncloud/ocis/issues/1064)
+
+   Hide shown modal if user gets logged out while it's visible
+
+   https://github.com/owncloud/ocis/issues/1064
+   https://github.com/owncloud/web/pull/4472
 
 * Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
 
@@ -114,6 +93,13 @@ Details
 
    https://github.com/owncloud/ocis/issues/884
    https://github.com/owncloud/ocis/issues/1043
+
+* Enhancement - Update ODS to 2.0.3: [#4488](https://github.com/owncloud/web/pull/4488)
+
+   We've updated the ownCloud design system to version 2.0.3.
+
+   https://github.com/owncloud/web/pull/4488
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v2.0.3
 
 Changelog for ownCloud Web [0.29.0] (2020-12-07)
 =======================================
