@@ -330,7 +330,7 @@ config = {
 	'defaults': {
 		'acceptance': {
 			'ocisBranch': 'master',
-			'ocisCommit': '76fefa325594c3d58560ca06e0e5311298104832',
+			'ocisCommit': 'ee7b3213b39ec8e76b4a176ed85cbf2588009554',
 		}
 	},
 
@@ -1400,8 +1400,8 @@ def ocisService():
 			'STORAGE_DATAGATEWAY_PUBLIC_URL': 'https://ocis:9200/data',
 			'STORAGE_USERS_DATA_SERVER_URL': 'http://ocis:9158/data',
 			'STORAGE_FRONTEND_PUBLIC_URL': 'https://ocis:9200',
-			'PHOENIX_WEB_CONFIG': '/srv/config/drone/ocis-config.json',
-			'PHOENIX_ASSET_PATH': '/var/www/owncloud/web/dist',
+			'WEB_UI_CONFIG': '/srv/config/drone/ocis-config.json',
+			'WEB_ASSET_PATH': '/var/www/owncloud/web/dist',
 			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
 			'KONNECTD_ISS': 'https://ocis:9200',
 			'KONNECTD_TLS': 'true',
@@ -1430,9 +1430,9 @@ def buildOcisWeb():
 		'pull': 'always',
 		'commands': [
 			'cd $GOPATH/src/github.com/owncloud/ocis',
-			'cd ocis-phoenix',
+			'cd web',
 			'make build',
-			'cp bin/ocis-phoenix /var/www/owncloud'
+			'cp bin/web /var/www/owncloud/ocis-web'
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1451,13 +1451,13 @@ def ocisWebService():
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'PHOENIX_WEB_CONFIG': '/srv/config/drone/config.json',
-			'PHOENIX_ASSET_PATH': '/var/www/owncloud/web/dist',
-			'PHOENIX_OIDC_CLIENT_ID': 'phoenix'
+			'WEB_UI_CONFIG': '/srv/config/drone/config.json',
+			'WEB_ASSET_PATH': '/var/www/owncloud/web/dist',
+			'WEB_OIDC_CLIENT_ID': 'phoenix'
 		},
 		'commands': [
 			'cd /var/www/owncloud',
-			'./ocis-phoenix --log-level debug server',
+			'./ocis-web --log-level debug server',
 		],
 		'volumes': [{
 			'name': 'gopath',
