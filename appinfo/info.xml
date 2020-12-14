@@ -1,20 +1,28 @@
 <?xml version="1.0"?>
 <info>
 	<id>web</id>
-	<name>ownCloud Web</name>
-	<summary>Next generation user interface for ownCloud</summary>
+	<name>Web</name>
+	<summary>User interface for ownCloud</summary>
 	<description>
-    Next generation user interface for ownCloud based on vue.js.
-    This is an early release with known limitations and missing features.
+This extension equips ownCloud Server with the ownCloud Web user interface. It aims to provide the most simple way to deploy ownCloud Web in addition to the classic ownCloud web interface to make it available to users.
 
-    Please, report any findings in https://github.com/owncloud/web/issues
-  </description>
-	<licence>AGPLv3</licence>
+ownCloud Web is a single page, standalone frontend based on modern web technologies. It brings new features as well as improved user flows and can be deployed independent of the backend server. As the successsor of the classic ownCloud frontend, it is compatible with both, the classic ownCloud Server and ownCloud Infinite Scale. When used with the classic ownCloud Server, ownCloud Web is made available to users via an additional item "New Design" in the application switcher. Similarly ownCloud Web comes with an item in the application switcher that allows users to get back to the "Classic Design".
+
+To get started, some further configuration is necessary. Find more information on the deployment with this extension in the [documentation](https://owncloud.github.io/clients/web/deployments/oc10-app).
+For feedback and bug reports, please use the [public issue tracker](https://github.com/owncloud/web/issues).
+	</description>
+	<licence>AGPL</licence>
 	<author>ownCloud</author>
 	<version>1.0.0</version>
 	<category>tools</category>
+	<website>https://github.com/owncloud/web</website>
+	<bugs>https://github.com/owncloud/web/issues</bugs>
+	<repository type="git">http://github.com/owncloud/web.git</repository>
+	<documentation>
+		<admin>https://owncloud.github.io/clients/web/deployments/oc10-app</admin>
+	</documentation>
 	<dependencies>
 		<owncloud min-version="10.6" max-version="10" />
 	</dependencies>
-	<screenshot>https://user-images.githubusercontent.com/25989331/101360859-80185a80-389e-11eb-9b96-185aee559d3f.png</screenshot>
+	<screenshot>FILL ME IN</screenshot>
 </info>
