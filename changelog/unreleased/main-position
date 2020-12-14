@@ -1,0 +1,7 @@
+Enhancement: Position of main dom node
+
+div#main is now positioned relative, this way child apps are able to orientate their containers absolute to it.
+
+https://github.com/owncloud/ocis/issues/1052
+https://github.com/owncloud/web/pull/4489
+https://github.com/owncloud/owncloud-design-system/pull/1002
