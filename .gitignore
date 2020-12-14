@@ -6,7 +6,6 @@ release/*
 apps/*
 !apps/draw-io
 !apps/files
-!apps/markdown-editor
 !apps/media-viewer
 
 build/version.json

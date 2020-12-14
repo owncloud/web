@@ -1170,10 +1170,6 @@ When(
   }
 )
 
-When('the user creates a markdown file with the name {string} using the webUI', function(fileName) {
-  return client.page.filesPage().createMarkdownFile(fileName)
-})
-
 When('the user closes the text editor using the webUI', function() {
   return client.page.filesPage().closeTextEditor()
 })

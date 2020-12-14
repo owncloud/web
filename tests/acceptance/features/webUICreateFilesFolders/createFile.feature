@@ -23,14 +23,3 @@ Feature: create files
     When the user creates a file with the name "sample,1.txt" using the webUI
     And the user browses to the files page
     Then file "sample,1.txt" should be listed on the webUI
-
-  @issue-2882
-  Scenario: redirect to subfolder after closing the text editor
-    Given user "user1" has created folder "parent-folder"
-    When the user reloads the current page of the webUI
-    And the user opens folder "parent-folder" using the webUI
-    Then there should be no resources listed on the webUI
-    When the user creates a markdown file with the name "sample.md" using the webUI
-    And the user closes the text editor using the webUI
-    Then the user should be in the root directory on the webUI
-    # Then breadcrumb for folder "parent-folder" should be displayed on the webUI

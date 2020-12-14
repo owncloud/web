@@ -1,0 +1,7 @@
+Change: Remove markdown editor
+
+We've removed the markdown editor extension from the code of ownCloud Web.
+The extension is living in a separate repository.
+
+https://github.com/owncloud/web/pull/4539
+https://github.com/owncloud/ocis-markdown-editor
