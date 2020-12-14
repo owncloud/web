@@ -340,7 +340,14 @@ function _buildCollaboratorShare(s, file, allowSharePerm) {
 export default {
   loadFolder(
     context,
-    { client, absolutePath = '/', $gettext, routeName, loadSharesTree = false, isPublicPage = false }
+    {
+      client,
+      absolutePath = '/',
+      $gettext,
+      routeName,
+      loadSharesTree = false,
+      isPublicPage = false
+    }
   ) {
     context.commit('UPDATE_FOLDER_LOADING', true)
     context.commit('CLEAR_CURRENT_FILES_LIST')

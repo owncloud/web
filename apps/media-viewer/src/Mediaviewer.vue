@@ -2,89 +2,89 @@
   <div id="mediaviewer" class="uk-position-relative">
     <div class="uk-text-center oc-p-s">
       <transition
-          name="custom-classes-transition"
-          :enter-active-class="activeClass.enter"
-          :leave-active-class="activeClass.leave"
+        name="custom-classes-transition"
+        :enter-active-class="activeClass.enter"
+        :leave-active-class="activeClass.leave"
       >
         <div v-show="!loading && activeMediaFileCached">
           <video
-              v-if="medium.isVideo"
-              :key="`media-video-${medium.id}`"
-              class="uk-box-shadow-medium media-viewer-player"
-              controls
-              preload
+            v-if="medium.isVideo"
+            :key="`media-video-${medium.id}`"
+            class="uk-box-shadow-medium media-viewer-player"
+            controls
+            preload
           >
             <source :src="medium.url" :type="`video/${medium.ext}`" />
           </video>
           <img
-              v-else
-              :key="`media-image-${medium.id}`"
-              :src="medium.url"
-              :alt="medium.name"
-              :data-id="medium.id"
-              class="uk-box-shadow-medium media-viewer-player"
+            v-else
+            :key="`media-image-${medium.id}`"
+            :src="medium.url"
+            :alt="medium.name"
+            :data-id="medium.id"
+            class="uk-box-shadow-medium media-viewer-player"
           />
         </div>
       </transition>
     </div>
     <oc-spinner
-        v-if="loading"
-        :aria-label="this.$gettext('Loading media')"
-        class="uk-position-center"
-        size="xlarge"
+      v-if="loading"
+      :aria-label="this.$gettext('Loading media')"
+      class="uk-position-center"
+      size="xlarge"
     />
     <oc-icon
-        v-if="failed"
-        name="review"
-        variation="danger"
-        size="xlarge"
-        class="uk-position-center uk-z-index"
+      v-if="failed"
+      name="review"
+      variation="danger"
+      size="xlarge"
+      class="uk-position-center uk-z-index"
     />
 
     <div class="uk-position-medium uk-position-bottom-center">
       <div
-          class="uk-overlay uk-overlay-default oc-p-s uk-text-center uk-text-meta uk-text-truncate"
+        class="uk-overlay uk-overlay-default oc-p-s uk-text-center uk-text-meta uk-text-truncate"
       >
         {{ medium.name }}
       </div>
       <div class="uk-overlay uk-overlay-primary uk-light oc-p-s">
         <div
-            class="uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around"
-            style="user-select:none;"
+          class="uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around"
+          style="user-select:none;"
         >
           <oc-icon
-              role="button"
-              class="oc-cursor-pointer"
-              size="large"
-              name="chevron_left"
-              :aria-label="$gettext('Previous')"
-              @click="prev"
+            role="button"
+            class="oc-cursor-pointer"
+            size="large"
+            name="chevron_left"
+            :aria-label="$gettext('Previous')"
+            @click="prev"
           />
           <!-- @TODO: Bring back working uk-light -->
           <span v-if="!$_loader_folderLoading" class="uk-text-small" style="color:#fff">
             {{ activeIndex + 1 }} <span v-translate>of</span> {{ mediaFiles.length }}
           </span>
           <oc-icon
-              role="button"
-              class="oc-cursor-pointer"
-              size="large"
-              name="chevron_right"
-              :aria-label="$gettext('Next')"
-              @click="next"
+            role="button"
+            class="oc-cursor-pointer"
+            size="large"
+            name="chevron_right"
+            :aria-label="$gettext('Next')"
+            @click="next"
           />
           <oc-icon
-              role="button"
-              class="oc-cursor-pointer"
-              name="file_download"
-              :aria-label="$gettext('Download')"
-              @click="downloadMedium"
+            role="button"
+            class="oc-cursor-pointer"
+            name="file_download"
+            :aria-label="$gettext('Download')"
+            @click="downloadMedium"
           />
           <oc-icon
-              role="button"
-              class="oc-cursor-pointer"
-              name="close"
-              :aria-label="$gettext('Close')"
-              @click="closeApp"
+            role="button"
+            class="oc-cursor-pointer"
+            name="close"
+            :aria-label="$gettext('Close')"
+            @click="closeApp"
           />
         </div>
       </div>
@@ -222,7 +222,16 @@ export default {
   methods: {
     setCurrentFile(filePath) {
       for (let i = 0; i < this.mediaFiles.length; i++) {
-        if (this.mediaFiles[i].path.split('/').filter(Boolean).join('/') === filePath.split('/').filter(Boolean).join('/')) {
+        if (
+          this.mediaFiles[i].path
+            .split('/')
+            .filter(Boolean)
+            .join('/') ===
+          filePath
+            .split('/')
+            .filter(Boolean)
+            .join('/')
+        ) {
           this.activeIndex = i
           break
         }
@@ -247,12 +256,12 @@ export default {
       // Don't bother loading if files are cached
       if (this.activeMediaFileCached) {
         setTimeout(
-            () => {
-              this.medium = this.activeMediaFileCached
-              this.loading = false
-            },
-            // Delay to animate
-            this.animationDuration / 2
+          () => {
+            this.medium = this.activeMediaFileCached
+            this.loading = false
+          },
+          // Delay to animate
+          this.animationDuration / 2
         )
         return
       }
@@ -269,24 +278,24 @@ export default {
       }
 
       promise
-          .then(mediaUrl => {
-            this.media.push({
-              id: this.activeMediaFile.id,
-              name: this.activeMediaFile.name,
-              url: mediaUrl,
-              ext: this.activeMediaFile.extension,
-              isVideo: this.isActiveMediaFileTypeVideo,
-              isImage: this.isActiveMediaFileTypeImage
-            })
-            this.medium = this.activeMediaFileCached
-            this.loading = false
-            this.failed = false
+        .then(mediaUrl => {
+          this.media.push({
+            id: this.activeMediaFile.id,
+            name: this.activeMediaFile.name,
+            url: mediaUrl,
+            ext: this.activeMediaFile.extension,
+            isVideo: this.isActiveMediaFileTypeVideo,
+            isImage: this.isActiveMediaFileTypeImage
           })
-          .catch(e => {
-            this.loading = false
-            this.failed = true
-            console.error(e)
-          })
+          this.medium = this.activeMediaFileCached
+          this.loading = false
+          this.failed = false
+        })
+        .catch(e => {
+          this.loading = false
+          this.failed = true
+          console.error(e)
+        })
     },
 
     downloadMedium() {
@@ -329,8 +338,8 @@ export default {
     },
     closeApp() {
       this.$_loader_navigateToContextRoute(
-          this.$route.params.contextRouteName,
-          this.$route.params.filePath
+        this.$route.params.contextRouteName,
+        this.$route.params.filePath
       )
     }
   }
