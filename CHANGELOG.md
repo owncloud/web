@@ -8,11 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Do not use origin location to open editors: [#4500](https://github.com/owncloud/web/pull/4500)
 * Enhancement - Extend default apps: [#4493](https://github.com/owncloud/web/pull/4493)
 * Enhancement - Position of main dom node: [#1052](https://github.com/owncloud/ocis/issues/1052)
 
 Details
 -------
+
+* Bugfix - Do not use origin location to open editors: [#4500](https://github.com/owncloud/web/pull/4500)
+
+   When opening the editors view in a new tab, we were using the origin of location. This would break
+   in case we have Web deployed to a different path than root e.g. `http://owncloud/apps/web`.
+
+   https://github.com/owncloud/web/pull/4500
 
 * Enhancement - Extend default apps: [#4493](https://github.com/owncloud/web/pull/4493)
 
