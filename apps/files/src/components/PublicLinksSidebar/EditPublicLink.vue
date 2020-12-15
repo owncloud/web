@@ -158,6 +158,7 @@ export default {
       name: null,
       hasPassword: false,
       expireDate: null,
+      permissions: 1,
       placeholder: {
         expireDate: this.$gettext('Expiration date'),
         password: this.$gettext('Password'),
