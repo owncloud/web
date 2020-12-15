@@ -1,16 +1,26 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [1.0.0] (2020-12-15)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 1.0.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v1.0.0...master
+[1.0.0]: https://github.com/owncloud/web/compare/v0.29.0...v1.0.0
 
 Summary
 -------
 
 * Bugfix - Do not use origin location to open editors: [#4500](https://github.com/owncloud/web/pull/4500)
+* Bugfix - Enable route checks for file actions: [#986](https://github.com/owncloud/ocis/issues/986)
+* Bugfix - Fix navigation rendering: [#1031](https://github.com/owncloud/ocis/issues/1031)
+* Bugfix - Hide modals on logout: [#1064](https://github.com/owncloud/ocis/issues/1064)
+* Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
+* Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
+* Enhancement - Add oc10 app build artifact: [#4427](https://github.com/owncloud/web/pull/4427)
 * Enhancement - Extend default apps: [#4493](https://github.com/owncloud/web/pull/4493)
+* Enhancement - Add custom configuration to the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
+* Enhancement - Add support for .vsdx files in the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
 * Enhancement - Position of main dom node: [#1052](https://github.com/owncloud/ocis/issues/1052)
+* Enhancement - Wait for all required data: [#884](https://github.com/owncloud/ocis/issues/884)
+* Enhancement - Update ODS to 2.0.3: [#4488](https://github.com/owncloud/web/pull/4488)
 * Enhancement - Update ODS to 2.0.4: [#45001](https://github.com/owncloud/web/pull/45001)
 
 Details
@@ -22,54 +32,6 @@ Details
    in case we have Web deployed to a different path than root e.g. `http://owncloud/apps/web`.
 
    https://github.com/owncloud/web/pull/4500
-
-* Enhancement - Extend default apps: [#4493](https://github.com/owncloud/web/pull/4493)
-
-   When release tarballs are created, we are copying the config.json.dist into them as a default
-   config. In that file were so far only "files" app enabled. This adds also "media viewer" and
-   "draw-io" into apps enabled by default.
-
-   https://github.com/owncloud/web/pull/4493
-
-* Enhancement - Position of main dom node: [#1052](https://github.com/owncloud/ocis/issues/1052)
-
-   Div#main is now positioned relative, this way child apps are able to orientate their
-   containers absolute to it.
-
-   https://github.com/owncloud/ocis/issues/1052
-   https://github.com/owncloud/web/pull/4489
-   https://github.com/owncloud/owncloud-design-system/pull/1002
-
-* Enhancement - Update ODS to 2.0.4: [#45001](https://github.com/owncloud/web/pull/45001)
-
-   We've updated the ownCloud design system to version 2.0.4.
-
-   https://github.com/owncloud/web/pull/45001
-   https://github.com/owncloud/owncloud-design-system/releases/tag/v2.0.4
-
-Changelog for ownCloud Web [1.0.0] (2020-12-14)
-=======================================
-The following sections list the changes in ownCloud web 1.0.0 relevant to
-ownCloud admins and users.
-
-[1.0.0]: https://github.com/owncloud/web/compare/v0.29.0...v1.0.0
-
-Summary
--------
-
-* Bugfix - Enable route checks for file actions: [#986](https://github.com/owncloud/ocis/issues/986)
-* Bugfix - Fix navigation rendering: [#1031](https://github.com/owncloud/ocis/issues/1031)
-* Bugfix - Hide modals on logout: [#1064](https://github.com/owncloud/ocis/issues/1064)
-* Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
-* Enhancement - Show status of accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
-* Enhancement - Add oc10 app build artifact: [#4427](https://github.com/owncloud/web/pull/4427)
-* Enhancement - Add custom configuration to the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
-* Enhancement - Add support for .vsdx files in the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
-* Enhancement - Wait for all required data: [#884](https://github.com/owncloud/ocis/issues/884)
-* Enhancement - Update ODS to 2.0.3: [#4488](https://github.com/owncloud/web/pull/4488)
-
-Details
--------
 
 * Bugfix - Enable route checks for file actions: [#986](https://github.com/owncloud/ocis/issues/986)
 
@@ -115,6 +77,14 @@ Details
 
    https://github.com/owncloud/web/pull/4427
 
+* Enhancement - Extend default apps: [#4493](https://github.com/owncloud/web/pull/4493)
+
+   When release tarballs are created, we are copying the config.json.dist into them as a default
+   config. In that file were so far only "files" app enabled. This adds also "media viewer" and
+   "draw-io" into apps enabled by default.
+
+   https://github.com/owncloud/web/pull/4493
+
 * Enhancement - Add custom configuration to the draw.io app: [#4337](https://github.com/owncloud/phoenix/pull/4337)
 
    Added mechanism to specify custom configuration instead of using a hardcoded one. The new
@@ -131,6 +101,15 @@ Details
 
    https://github.com/owncloud/phoenix/issues/4327
    https://github.com/owncloud/phoenix/pull/4337
+
+* Enhancement - Position of main dom node: [#1052](https://github.com/owncloud/ocis/issues/1052)
+
+   Div#main is now positioned relative, this way child apps are able to orientate their
+   containers absolute to it.
+
+   https://github.com/owncloud/ocis/issues/1052
+   https://github.com/owncloud/web/pull/4489
+   https://github.com/owncloud/owncloud-design-system/pull/1002
 
 * Enhancement - Wait for all required data: [#884](https://github.com/owncloud/ocis/issues/884)
 
@@ -149,6 +128,13 @@ Details
 
    https://github.com/owncloud/web/pull/4488
    https://github.com/owncloud/owncloud-design-system/releases/tag/v2.0.3
+
+* Enhancement - Update ODS to 2.0.4: [#45001](https://github.com/owncloud/web/pull/45001)
+
+   We've updated the ownCloud design system to version 2.0.4.
+
+   https://github.com/owncloud/web/pull/45001
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v2.0.4
 
 Changelog for ownCloud Web [0.29.0] (2020-12-07)
 =======================================
