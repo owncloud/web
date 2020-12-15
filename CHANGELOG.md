@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Do not use origin location to open editors: [#4500](https://github.com/owncloud/web/pull/4500)
 * Bugfix - Enable route checks for file actions: [#986](https://github.com/owncloud/ocis/issues/986)
+* Bugfix - Fix role selection for public links: [#4504](https://github.com/owncloud/web/pull/4504)
 * Bugfix - Fix navigation rendering: [#1031](https://github.com/owncloud/ocis/issues/1031)
 * Bugfix - Hide modals on logout: [#1064](https://github.com/owncloud/ocis/issues/1064)
 * Enhancement - Add the option to decline accepted shares: [#985](https://github.com/owncloud/ocis/issues/985)
@@ -40,6 +41,13 @@ Details
 
    https://github.com/owncloud/ocis/issues/986
    https://github.com/owncloud/web/pull/4436
+
+* Bugfix - Fix role selection for public links: [#4504](https://github.com/owncloud/web/pull/4504)
+
+   The dropdown for the role selection in public links was not working anymore - the model didn't
+   react to selections. Fixed it by bringing back a field that was accidentally removed.
+
+   https://github.com/owncloud/web/pull/4504
 
 * Bugfix - Fix navigation rendering: [#1031](https://github.com/owncloud/ocis/issues/1031)
 
