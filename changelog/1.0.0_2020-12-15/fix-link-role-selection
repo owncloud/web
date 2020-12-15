@@ -1,0 +1,5 @@
+Bugfix: Fix role selection for public links
+
+The dropdown for the role selection in public links was not working anymore - the model didn't react to selections. Fixed it by bringing back a field that was accidentally removed.
+
+https://github.com/owncloud/web/pull/4504
