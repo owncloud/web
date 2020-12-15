@@ -1453,7 +1453,6 @@ def ocisWebService():
 		'environment' : {
 			'WEB_UI_CONFIG': '/srv/config/drone/config.json',
 			'WEB_ASSET_PATH': '/var/www/owncloud/web/dist',
-			'WEB_OIDC_CLIENT_ID': 'phoenix'
 		},
 		'commands': [
 			'cd /var/www/owncloud',
