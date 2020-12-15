@@ -17,7 +17,7 @@ For feedback and bug reports, please use the [public issue tracker](https://gith
 	<category>tools</category>
 	<website>https://github.com/owncloud/web</website>
 	<bugs>https://github.com/owncloud/web/issues</bugs>
-	<repository type="git">http://github.com/owncloud/web.git</repository>
+	<repository type="git">https://github.com/owncloud/web.git</repository>
 	<documentation>
 		<admin>https://owncloud.github.io/clients/web/deployments/oc10-app</admin>
 	</documentation>
