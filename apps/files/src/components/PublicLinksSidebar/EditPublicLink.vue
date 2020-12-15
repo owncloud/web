@@ -300,6 +300,7 @@ export default {
     this.name = this.publicLinkInEdit.name
     this.hasPassword = this.publicLinkInEdit.hasPassword
     this.expireDate = this.publicLinkInEdit.expireDate
+    this.permissions = this.publicLinkInEdit.permissions
   },
   methods: {
     ...mapActions('Files', ['addLink', 'updateLink']),
