@@ -11,6 +11,7 @@ Summary
 * Bugfix - Do not use origin location to open editors: [#4500](https://github.com/owncloud/web/pull/4500)
 * Enhancement - Extend default apps: [#4493](https://github.com/owncloud/web/pull/4493)
 * Enhancement - Position of main dom node: [#1052](https://github.com/owncloud/ocis/issues/1052)
+* Enhancement - Update ODS to 2.0.4: [#45001](https://github.com/owncloud/web/pull/45001)
 
 Details
 -------
@@ -38,6 +39,13 @@ Details
    https://github.com/owncloud/ocis/issues/1052
    https://github.com/owncloud/web/pull/4489
    https://github.com/owncloud/owncloud-design-system/pull/1002
+
+* Enhancement - Update ODS to 2.0.4: [#45001](https://github.com/owncloud/web/pull/45001)
+
+   We've updated the ownCloud design system to version 2.0.4.
+
+   https://github.com/owncloud/web/pull/45001
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v2.0.4
 
 Changelog for ownCloud Web [1.0.0] (2020-12-14)
 =======================================
