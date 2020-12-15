@@ -1,0 +1,5 @@
+Bugfix: Do not use origin location to open editors
+
+When opening the editors view in a new tab, we were using the origin of location. This would break in case we have Web deployed to a different path than root e.g. `http://owncloud/apps/web`.
+
+https://github.com/owncloud/web/pull/4500
