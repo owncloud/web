@@ -21,7 +21,7 @@ const appInfo = {
   extensions: [
     {
       extension: 'png',
-      routeName: 'media',
+      routeName: 'mediaviewer/media',
       routes: [
         'files-list',
         'files-favorites',
@@ -32,7 +32,7 @@ const appInfo = {
     },
     {
       extension: 'jpg',
-      routeName: 'media',
+      routeName: 'mediaviewer/media',
       routes: [
         'files-list',
         'files-favorites',
@@ -43,7 +43,7 @@ const appInfo = {
     },
     {
       extension: 'jpeg',
-      routeName: 'media',
+      routeName: 'mediaviewer/media',
       routes: [
         'files-list',
         'files-favorites',
@@ -54,7 +54,7 @@ const appInfo = {
     },
     {
       extension: 'gif',
-      routeName: 'media',
+      routeName: 'mediaviewer/media',
       routes: [
         'files-list',
         'files-favorites',
@@ -65,7 +65,7 @@ const appInfo = {
     },
     {
       extension: 'mp4',
-      routeName: 'media',
+      routeName: 'mediaviewer/media',
       routes: [
         'files-list',
         'files-favorites',
@@ -76,7 +76,7 @@ const appInfo = {
     },
     {
       extension: 'webm',
-      routeName: 'media',
+      routeName: 'mediaviewer/media',
       routes: [
         'files-list',
         'files-favorites',
@@ -87,7 +87,7 @@ const appInfo = {
     },
     {
       extension: 'ogg',
-      routeName: 'media',
+      routeName: 'mediaviewer/media',
       routes: [
         'files-list',
         'files-favorites',
