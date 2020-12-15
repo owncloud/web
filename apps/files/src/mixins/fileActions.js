@@ -84,9 +84,8 @@ export default {
           name: editor.routeName,
           params: { filePath: filePath }
         }).href
-        const url = window.location.origin + '/' + path
         const target = `${editor.routeName}-${filePath}`
-        const win = window.open(url, target)
+        const win = window.open(path, target)
         // in case popup is blocked win will be null
         if (win) {
           win.focus()
@@ -94,7 +93,7 @@ export default {
         return
       }
 
-      const routeName = editor.routeName ? editor.app + '/' + editor.routeName : editor.app
+      const routeName = editor.routeName || editor.app
       const params = {
         filePath,
         contextRouteName: this.$route.name
