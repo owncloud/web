@@ -8,10 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Extend default apps: [#4493](https://github.com/owncloud/web/pull/4493)
 * Enhancement - Position of main dom node: [#1052](https://github.com/owncloud/ocis/issues/1052)
 
 Details
 -------
+
+* Enhancement - Extend default apps: [#4493](https://github.com/owncloud/web/pull/4493)
+
+   When release tarballs are created, we are copying the config.json.dist into them as a default
+   config. In that file were so far only "files" app enabled. This adds also "media viewer" and
+   "draw-io" into apps enabled by default.
+
+   https://github.com/owncloud/web/pull/4493
 
 * Enhancement - Position of main dom node: [#1052](https://github.com/owncloud/ocis/issues/1052)
 
