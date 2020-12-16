@@ -38,7 +38,7 @@ Feature: copy files and folders
       | file_name   |
       | data.zip    |
       | lorem.txt   |
-      | testapp.zip |
+      | testapp.not |
 
   Scenario Outline: copy a file into a folder (problematic characters)
     Given user "user1" has logged in using the webUI

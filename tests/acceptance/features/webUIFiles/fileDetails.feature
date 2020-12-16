@@ -146,4 +146,4 @@ Feature: User can open the details panel for any file or folder
     When the user picks the row of file "lorem.txt" in the webUI
     Then the app-sidebar should be visible
     When the user closes the app-sidebar using the webUI
-    Then the app-sidebar should be invisible
+    Then the app-sidebar should be visible
