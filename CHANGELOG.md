@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v1.0.0...master
+
+Summary
+-------
+
+* Change - Allow to disable previews in file lists: [#4513](https://github.com/owncloud/web/pull/4513)
+
+Details
+-------
+
+* Change - Allow to disable previews in file lists: [#4513](https://github.com/owncloud/web/pull/4513)
+
+   We introduced a new config option to disable previews. To do so, set `"disablePreviews": true`
+   to the config.json file.
+
+   https://github.com/owncloud/web/pull/4513
+
 Changelog for ownCloud Web [1.0.0] (2020-12-15)
 =======================================
 The following sections list the changes in ownCloud web 1.0.0 relevant to
