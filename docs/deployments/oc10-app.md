@@ -23,10 +23,15 @@ Depending on your setup, the name of `apps-external` folder can vary. It is impo
 ## Deploying ownCloud Web
 Download [ownCloud Web app](https://marketplace.owncloud.com/apps/web) from the marketplace and enable it.
 
+```bash
+% occ market:install web
+% occ app:enable web
+```
+
 ## Configure oauth2
 In the `Admin` of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name and redirection URL `https://<your-owncloud-server>/apps-external/web/oidc-callback.html`.
 
-{{< figure src="/clients/web/static/oauth2.jpg" alt="Example OAuth2 entry" >}}
+{{< figure src="/clients/web/static/oauth2.png" alt="Example OAuth2 entry" >}}
 
 ## Configure ownCloud 10
 To display ownCloud Web in the app switcher and to redirect all private and public links to the new WebUI, add the following config into `config/config.php`:
@@ -39,7 +44,7 @@ There are a few config values which need to be set in order for ownCloud Web to 
 
 ```json
 {
-  "server" : "https://<your-owncloud-server>", // ownCloud 10 server address
+  "server" : "https://<your-owncloud-server>/", // ownCloud 10 server address
   "theme": "owncloud", // Theme to be used in ownCloud Web pointing to a json file inside of `themes` folder
   "auth": {
     "clientId": "<client-id-from-oauth2>", // Client ID received when adding ownCloud Web in the `User Authentication` section in `Admin`
@@ -73,6 +78,10 @@ There are a few config values which need to be set in order for ownCloud Web to 
   ]
 }
 ```
+
+{{< hint info >}}
+Please note that the `server` url needs to have a trailing slash.
+{{< /hint >}}
 
 ## Accessing ownCloud Web
 After following all the steps, you should see a new entry in the application switcher called `New Design` which points to the ownCloud web.
