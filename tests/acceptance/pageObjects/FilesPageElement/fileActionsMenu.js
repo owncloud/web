@@ -11,7 +11,6 @@ module.exports = {
       unmarkFavorite: 'unmarkFavorite',
       restore: 'restore',
       rename: 'rename',
-      deleteImmediately: 'deleteImmediately',
       move: 'move',
       copy: 'copy',
       mediaViewer: 'mediaViewer'
@@ -130,7 +129,7 @@ module.exports = {
      * @return {Promise<module.exports.commands>}
      */
     deleteResourceImmediately: async function() {
-      this.performFileAction(this.FileAction.deleteImmediately)
+      this.performFileAction(this.FileAction.delete)
       await this.api.page.FilesPageElement.filesList().confirmDeletion()
 
       return this
@@ -184,10 +183,6 @@ module.exports = {
     },
     renameButtonInAccordion: {
       selector: '//button[@aria-label="Rename"]',
-      locateStrategy: 'xpath'
-    },
-    deleteImmediatelyButtonInAccordion: {
-      selector: '//button[@aria-label="Delete"]',
       locateStrategy: 'xpath'
     },
     // TODO: Merge with selectors in filesPage
