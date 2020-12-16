@@ -117,29 +117,6 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
   done < "${EXPECTED_FAILURES_FILE}"
 fi
 
-# Rerun any UNEXPECTED_FAILED_SCENARIOS to see if they pass or fail on a 2nd attempt
-SCENARIOS_TO_RERUN=("${UNEXPECTED_FAILED_SCENARIOS[@]}")
-for SCENARIO_TO_RERUN in "${SCENARIOS_TO_RERUN[@]}"; do
-  echo "Rerun failed scenario: ${SCENARIO_TO_RERUN}"
-  yarn run acceptance-tests-drone tests/acceptance/features/${SCENARIO_TO_RERUN} | tee -a 'logfile.txt'
-  YARN_EXIT_STATUS=${PIPESTATUS[0]}
-  if [ "${YARN_EXIT_STATUS}" -eq 0 ]; then
-    # The scenario was not expected to fail but had failed and is present in the
-    # unexpected_failures list. We've checked the scenario with a re-run and
-    # it passed. So remove it from the unexpected_failures list.
-    for i in "${!UNEXPECTED_FAILED_SCENARIOS[@]}"; do
-      if [ "${UNEXPECTED_FAILED_SCENARIOS[i]}" == "${SCENARIO_TO_RERUN}" ]; then
-        unset "UNEXPECTED_FAILED_SCENARIOS[i]"
-      fi
-    done
-  else
-    echo "test rerun failed with exit status: ${YARN_EXIT_STATUS}"
-    # The scenario is not expected to fail but is failing also after the rerun.
-    # Since it is already reported in the unexpected_failures list, there is no
-    # need to touch that again. Continue processing the next scenario to rerun.
-  fi
-done
-
 if [ ${#UNEXPECTED_FAILED_SCENARIOS[@]} -gt 0 ]; then
   UNEXPECTED_FAILURE=true
 else
