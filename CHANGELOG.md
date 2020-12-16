@@ -20,7 +20,7 @@ Details
 
    https://github.com/owncloud/web/pull/4513
 
-Changelog for ownCloud Web [1.0.0] (2020-12-15)
+Changelog for ownCloud Web [1.0.0] (2020-12-16)
 =======================================
 The following sections list the changes in ownCloud web 1.0.0 relevant to
 ownCloud admins and users.
