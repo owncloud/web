@@ -40,7 +40,8 @@ const state = {
   options: {
     defaultExtension: 'files',
     hideSearchBar: false,
-    homeFolder: ''
+    homeFolder: '',
+    disablePreviews: false
   }
 }
 

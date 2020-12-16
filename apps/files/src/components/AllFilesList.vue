@@ -6,6 +6,7 @@
     :compact-mode="_sidebarOpen"
     :has-two-rows="true"
     :actions-enabled="true"
+    :display-preview="!configuration.options.disablePreviews"
   >
     <template #headerColumns>
       <div ref="headerNameColumn" class="uk-text-truncate uk-text-meta uk-width-expand">
