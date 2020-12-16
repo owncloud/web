@@ -1,0 +1,5 @@
+Change: Allow to disable previews in file lists
+
+We introduced a new config option to disable previews. To do so, set `"disablePreviews": true` to the config.json file.
+
+https://github.com/owncloud/web/pull/4513
