@@ -109,7 +109,7 @@ Feature: files and folders can be deleted from the trashbin
     Then file "lorem.txt" should not be listed on the webUI
     But folder "simple-folder" should be listed on the webUI
 
-  @skip @issue-4437
+  @issue-4437
   Scenario: Delete single file from deleted files list
     When the user deletes the file "lorem.txt" from the deleted files list
     Then file "lorem.txt" should not be listed on the webUI
