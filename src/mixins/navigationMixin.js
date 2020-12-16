@@ -7,7 +7,7 @@ export default {
   methods: {
     /**
      * Returns well formed menuItem objects by a list of extensions.
-     * The following properties must be accessible in the wrappping code:
+     * The following properties must be accessible in the wrapping code:
      * - applicationsList
      * - $language
      *

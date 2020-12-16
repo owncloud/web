@@ -7,7 +7,7 @@ function returnOriginal(string) {
 /**
  * Returns object with collaborator roles
  * @param {boolean} isFolder  Defines if the item is folder
- * @param {function} $gettext  Function to translate neccessary strings
+ * @param {function} $gettext  Function to translate necessary strings
  * @param {boolean} allowSharePerm Asserts whether share permission is allowed
  * @returns {object}  Collaborator roles
  */

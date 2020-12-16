@@ -95,7 +95,7 @@ async function loadApp (path) {
       }
 
       if (app.routes) {
-        // rewrite relative app routes by prefix'ing their corresponding appId
+        // rewrite relative app routes by prefixing their corresponding appId
         app.routes.forEach(r => (r.path = `/${encodeURI(app.appInfo.id)}${r.path}`))
 
         // adjust routes in nav items
