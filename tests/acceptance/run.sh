@@ -24,18 +24,14 @@ declare -a UNEXPECTED_FAILED_SCENARIOS
 # webUIPrivateLinks/accessingPrivateLinks.feature:8
 declare -a UNEXPECTED_PASSED_SCENARIOS
 
-declare -a UNEXPECTED_NIGHTWATCH_EXIT_STATUSES
+UNEXPECTED_NIGHTWATCH_CRASH=false
 
 yarn run acceptance-tests-drone | tee -a 'logfile.txt'
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
-echo "Debug: ACCEPTANCE_TESTS_EXIT_STATUS is ${ACCEPTANCE_TESTS_EXIT_STATUS}"
 if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
-  echo "The acceptance test exited with error status ${ACCEPTANCE_TESTS_EXIT_STATUS}"
+  echo "The acceptance tests exited with error status ${ACCEPTANCE_TESTS_EXIT_STATUS}"
 
   FAILED_SCENARIOS="$(grep -F ') Scenario:' logfile.txt)"
-  echo "+++++++++++++++++++++++++++++++++++ FAILED_SCENARIOS"
-  echo "${FAILED_SCENARIOS}"
-  echo "----------------------------------"
   for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
     if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
       SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
@@ -51,14 +47,17 @@ if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
     # Nightwatch had some problem but there were no failed scenarios reported
     # So the problem is something else.
     # Possibly there were missing step definitions. Or Nightwatch crashed badly, or...
-    echo "Unexpected failure or crash"
-    UNEXPECTED_NIGHTWATCH_EXIT_STATUSES+=("The run had nightwatch exit status ${ACCEPTANCE_TESTS_EXIT_STATUS}")
+    UNEXPECTED_NIGHTWATCH_CRASH=true
   fi
 fi
 
-echo "+++++++++++++++++++++++++++++++++++ FAILED_SCENARIO_PATHS"
-echo "${FAILED_SCENARIO_PATHS[@]}"
-echo "----------------------------------"
+if [ ${#FAILED_SCENARIO_PATHS[@]} -ne 0 ]
+then
+  echo "The following scenarios failed:"
+  echo "-------------------------------"
+  echo "${FAILED_SCENARIO_PATHS[@]}"
+  echo "-------------------------------"
+fi
 
 # Work out which suites were run.
 # TEST_PATHS = "tests/acceptance/features/webUILogin tests/acceptance/features/webUINotifications"
@@ -74,10 +73,6 @@ fi
 if [ -n "${TEST_CONTEXT}" ]; then
   SUITES_IN_THIS_RUN+=("${TEST_CONTEXT}")
 fi
-
-echo "+++++++++++++++++++++++++++++++++++ SUITES_IN_THIS_RUN"
-echo "${SUITES_IN_THIS_RUN[@]}"
-echo "----------------------------------"
 
 if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
   echo "Checking expected failures in ${EXPECTED_FAILURES_FILE}"
@@ -157,23 +152,13 @@ else
   UNEXPECTED_SUCCESS=false
 fi
 
-if [ ${#UNEXPECTED_NIGHTWATCH_EXIT_STATUSES[@]} -gt 0 ]
-then
-  UNEXPECTED_NIGHTWATCH_EXIT_STATUS=true
-else
-  UNEXPECTED_NIGHTWATCH_EXIT_STATUS=false
-fi
-
-if [ "${UNEXPECTED_FAILURE}" = false ] && [ "${UNEXPECTED_SUCCESS}" = false ] && [ "${UNEXPECTED_NIGHTWATCH_EXIT_STATUS}" = false ]; then
+if [ "${UNEXPECTED_FAILURE}" = false ] && [ "${UNEXPECTED_SUCCESS}" = false ] && [ "${UNEXPECTED_NIGHTWATCH_CRASH}" = false ]; then
   FINAL_EXIT_STATUS=0
 else
   FINAL_EXIT_STATUS=1
 fi
 
-if [ -n "${EXPECTED_FAILURES_FILE}" ]
-then
-  echo "runsh: Exit code after checking expected failures: ${FINAL_EXIT_STATUS}"
-fi
+echo "runsh: Exit code: ${FINAL_EXIT_STATUS}"
 
 if [ "${UNEXPECTED_FAILURE}" = true ]
 then
@@ -191,10 +176,9 @@ else
   tput setaf 2; echo "runsh: There were no unexpected success."
 fi
 
-if [ "${UNEXPECTED_NIGHTWATCH_EXIT_STATUS}" = true ]
+if [ "${UNEXPECTED_NIGHTWATCH_CRASH}" = true ]
 then
-  tput setaf 3; echo "runsh: The following test runs exited with non-zero status:"
-  tput setaf 1; printf "%s\n" "${UNEXPECTED_NIGHTWATCH_EXIT_STATUSES[@]}"
+  tput setaf 3; echo "Unexpected failure or crash of the nightwatch test run"
 fi
 
 exit ${FINAL_EXIT_STATUS}
