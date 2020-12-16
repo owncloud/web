@@ -186,7 +186,7 @@ module.exports = {
       selector: '//button[@aria-label="Rename"]',
       locateStrategy: 'xpath'
     },
-    deleteImmediatelyButtonInFileRow: {
+    deleteImmediatelyButtonInAccordion: {
       selector: '//button[@aria-label="Delete"]',
       locateStrategy: 'xpath'
     },
