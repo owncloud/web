@@ -1,0 +1,17 @@
+# this file contains the scenarios from phoenix tests that are currently expected to fail on OCIS
+# these are temporary lines to test what happens when we get an unexpected success
+webUISharingAcceptSharesToRoot/acceptShares.feature:206
+webUISharingAcceptSharesToRoot/acceptShares.feature:214
+webUISharingAcceptSharesToRoot/acceptShares.feature:222
+# these are scenarios that are expected to fail
+webUISharingFolderPermissionsGroups/sharePermissionsGroup.feature:60
+webUISharingFolderPermissionsGroups/sharePermissionsGroup.feature:61
+webUISharingFolderPermissionsGroups/sharePermissionsGroup.feature:62
+webUISharingFolderPermissionsGroups/sharePermissionsGroup.feature:63
+webUISharingFolderPermissionsGroups/sharePermissionsGroup.feature:64
+webUISharingFolderPermissionsGroups/sharePermissionsGroup.feature:65
+# this is a scenario that has been temporarily and purposely made to fail
+webUIFiles/copy.feature:28
+# this scenario has been purposely made to fail, but is commented out here
+# so it should be reported as an unexpected failure
+# webUIRenameFiles/renameFiles.feature:39

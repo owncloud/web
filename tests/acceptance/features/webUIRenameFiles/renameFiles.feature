@@ -51,7 +51,7 @@ Feature: rename files
     Then file "hash#And&QuestionMark?At@Filename.txt" should be listed on the webUI
     When the user renames file 'zzzz-must-be-last-file-in-folder.txt' to "aaaaaa.txt" using the webUI
     And the user reloads the current page of the webUI
-    Then file "aaaaaa.txt" should be listed on the webUI
+    Then file "not-there.txt" should be listed on the webUI
 
   @issue-964
   Scenario: Rename a file using spaces at front and/or back of file name and type

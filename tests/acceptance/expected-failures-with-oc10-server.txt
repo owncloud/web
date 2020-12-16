@@ -1,0 +1,9 @@
+# this file contains the scenarios from web tests that are currently expected to fail on oC10
+# these are 2 temporary lines to test what happens when we get an unexpected success
+webUIDeleteFilesFolders/deleteFilesFolders.feature:262
+webUIRenameFolders/renameFolders.feature:116
+# this is a scenario that has been temporarily and purposely made to fail
+webUIFiles/copy.feature:28
+# this scenario has been purposely made to fail, but is commented out here
+# so it should be reported as an unexpected failure
+# webUIRenameFiles/renameFiles.feature:39
