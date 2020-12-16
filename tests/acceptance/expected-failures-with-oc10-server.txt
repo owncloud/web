@@ -1,3 +1,5 @@
 # this file contains the scenarios from web tests that are currently expected to fail on oC10
+webUIFiles/copy.feature:28
+webUIFiles/fileDetails.feature:145
 # this is a dummy expected failure for testing
 webUIFiles/download.feature:11
