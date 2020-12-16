@@ -1,0 +1,1 @@
+# this file contains the scenarios from phoenix tests that are currently expected to fail on OCIS with owncloud storage
