@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-web-issue-52
+@ocis-web-issue-52
 Feature: copy path as a permanent link
   As a user
   I want to copy the permanent link of a resource

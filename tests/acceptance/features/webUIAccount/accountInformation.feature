@@ -6,7 +6,7 @@ Feature: View account information
   Background:
     Given user "user1" has been created with default attributes
 
-  @skipOnOCIS @ocis-reva-issue-107
+  @ocis-reva-issue-107
   Scenario: view account information when the user has been created without groups membership
     Given user "user1" has logged in using the webUI
     When the user browses to the account page
@@ -16,7 +16,7 @@ Feature: View account information
       | Email             | user1@example.org             |
       | Groups membership | You are not part of any group |
 
-  @skipOnOCIS @ocis-konnectd-issue-42
+  @ocis-konnectd-issue-42
   Scenario: view account information when the user has been added to a group
     Given these groups have been created:
       | groupname |
@@ -30,7 +30,7 @@ Feature: View account information
       | Email             | user1@example.org |
       | Groups membership | Group1            |
 
-  @skipOnOCIS @ocis-reva-issue-107 @ocis-konnectd-issue-42
+  @ocis-reva-issue-107 @ocis-konnectd-issue-42
   Scenario: view account information when the user has been added to multiple groups
     Given these groups have been created:
       | groupname |

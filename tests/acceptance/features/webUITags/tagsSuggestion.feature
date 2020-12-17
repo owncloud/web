@@ -1,4 +1,4 @@
-@webUI @insulated @disablePreviews @systemtags-app-required @skipOnOCIS @issue-ocis-reva-51
+@webUI @insulated @disablePreviews @systemtags-app-required @issue-ocis-reva-51
 Feature: Suggestion for matching tag names
   As a user
   I want to get suggestions for adding tags from already existing tags

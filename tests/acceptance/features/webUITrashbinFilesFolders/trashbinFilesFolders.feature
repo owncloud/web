@@ -84,7 +84,6 @@ Feature: files and folders exist in the trashbin after being deleted
     And file "question?" should not be listed on the webUI
 
   @skipOnOCIS
-  @ocis-reva-issue-111
   @issue-product-186
   Scenario: Delete multiple files at once and check that they are all in the trashbin
     When the user batch deletes these files using the webUI
@@ -106,7 +105,6 @@ Feature: files and folders exist in the trashbin after being deleted
   @skipOnOCIS
   @issue-1725
   @issue-1910
-  @ocis-reva-issue-111
   @issue-product-186
   Scenario: Delete an empty folder and check it is in the trashbin
     Given user "user1" has created folder "my-empty-folder"
@@ -123,7 +121,6 @@ Feature: files and folders exist in the trashbin after being deleted
     #Then there should be no resources listed on the webUI
 
   @skipOnOCIS
-  @ocis-reva-issue-111
   @issue-product-186
   Scenario: Delete multiple file with same filename and check they are in the trashbin
     When the user deletes the following elements using the webUI

@@ -11,7 +11,7 @@ Feature: Sharing files with multiple internal users with different permissions
       | user1    |
       | user2    |
 
-  @skipOnOCIS @issue-ocis-717
+  @issue-ocis-717
   Scenario Outline: share a file with multiple users with different roles and permissions
     Given these users have been created with default attributes:
       | username |

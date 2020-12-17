@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-64
+@notToImplementOnOCIS
 Feature: accept/decline shares coming from internal users
   As a user
   I want to have control of which received shares I accept

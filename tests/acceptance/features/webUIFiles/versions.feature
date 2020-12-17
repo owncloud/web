@@ -29,7 +29,7 @@ Feature: Versions of a file
     And the user restores the file to last version using the webUI
     Then the content of file "lorem-file.txt" for user "user0" should be "lorem content"
 
-  @skipOnOCIS @ocis-reva-issue-64
+  @ocis-reva-issue-64
   Scenario: sharee can see the versions of a file
     Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
     And user "user0" has uploaded file with content "lorem" to "lorem-file.txt"
@@ -40,7 +40,7 @@ Feature: Versions of a file
     Then the content of file "lorem-file.txt" for user "user1" should be "new lorem content"
     And the versions list should contain 2 entries
 
-  @skipOnOCIS @ocis-reva-issue-110
+  @ocis-reva-issue-110
   @skipOnStorage:ceph @files_primary_s3-issue-1
   Scenario: file versions cannot be seen in the webUI after deleting versions
     Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
@@ -51,7 +51,7 @@ Feature: Versions of a file
     When the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 0 entries
 
-  @skipOnOCIS @ocis-reva-issue-110
+  @ocis-reva-issue-110
   @skipOnStorage:ceph @files_primary_s3-issue-155
   Scenario: file versions cannot be seen in the webUI only for user whose versions is deleted
     Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
@@ -66,7 +66,7 @@ Feature: Versions of a file
     And the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 1 entries
 
-  @skipOnOCIS @ocis-reva-issue-110
+  @ocis-reva-issue-110
   @skipOnStorage:ceph @files_primary_s3-issue-155
   Scenario: file versions cannot be seen in the webUI for all users after deleting versions for all users
     Given user "user0" has uploaded file with content "lorem content" to "/lorem-file.txt"

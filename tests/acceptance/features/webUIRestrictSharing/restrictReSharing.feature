@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-34
+@ocis-reva-issue-34
 Feature: restrict resharing
   As an admin
   I want to be able to forbid the sharing of a received share globally

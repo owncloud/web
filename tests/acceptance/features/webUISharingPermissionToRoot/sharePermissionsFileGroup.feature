@@ -1,4 +1,4 @@
-@skipOnOCIS
+@notToImplementOnOCIS
 Feature: Sharing files with internal groups with permissions
   As a user
   I want to set different permissions on shared files with groups

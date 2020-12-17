@@ -90,7 +90,6 @@ Feature: rename folders
       | another normal folder |
 
   # These are valid file names for ocis
-  @skipOnOCIS
   Scenario Outline: Rename a folder using forbidden characters
     When the user tries to rename folder <from_name> to <to_name> using the webUI
     Then the error message with header '<alert_message>' should be displayed on the webUI
@@ -114,7 +113,6 @@ Feature: rename folders
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
 
   # This is valid file name for ocis
-  @skipOnOCIS
   Scenario: Rename a folder to .part
     When the user tries to rename folder "simple-folder" to "simple.part" using the webUI
     Then the error message with header 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
