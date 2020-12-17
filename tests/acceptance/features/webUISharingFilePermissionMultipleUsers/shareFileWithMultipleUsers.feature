@@ -11,7 +11,7 @@ Feature: Sharing files with multiple internal users with different permissions
       | user1    |
       | user2    |
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS @issue-ocis-717
   Scenario Outline: share a file with multiple users with different roles and permissions
     Given these users have been created with default attributes:
       | username |
@@ -63,7 +63,7 @@ Feature: Sharing files with multiple internal users with different permissions
       | Advanced permissions | Advanced permissions         | update            | update                | read, update               |
       | Advanced permissions | Editor                       | share, update     | ,                     | read, update, share        |
 
-  @skipOnOC10 @issue-product-203
+  @skipOnOC10 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: share a file with multiple users with different roles and permissions
     Given these users have been created with default attributes:

@@ -12,7 +12,7 @@ Feature: Sharing files and folders with internal users with different permission
       | user1    |
       | user2    |
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS @issue-ocis-717
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -27,7 +27,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                |
       | permissions | read, share           |
 
-  @skipOnOC10 @issue-product-203 @issue-ocis-717
+  @skipOnOC10 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario: Change permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, update" permissions
@@ -94,7 +94,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder              |
       | permissions | read, create, share |
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS @issue-ocis-717
   Scenario Outline: share a folder with another internal user assigning a role and the permissions
     Given user "user2" has logged in using the webUI
     When the user shares folder "simple-folder" with user "User One" as "<role>" with permissions "<extra-permissions>" using the webUI
@@ -116,7 +116,7 @@ Feature: Sharing files and folders with internal users with different permission
       | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
       | Advanced permissions | Editor                  | delete, share, create, update | ,                     | read, share, delete, update, create |
 
-  @skipOnOC10 @issue-product-203
+  @skipOnOC10 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: share a folder with another internal user assigning a role and the permissions
     Given user "user2" has logged in using the webUI
@@ -139,7 +139,7 @@ Feature: Sharing files and folders with internal users with different permission
       | Advanced permissions | Advanced permissions | update                        | update                | read, update                 |
       | Advanced permissions | Editor               | delete, create, update        | ,                     | read, delete, update, create |
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS @issue-ocis-717
   Scenario Outline: Change permissions of the previously shared file
     Given user "user2" has shared file "lorem.txt" with user "user1" with "<initial-permissions>" permissions
     And user "user1" has accepted the share "lorem.txt" offered by user "user2"
@@ -159,7 +159,7 @@ Feature: Sharing files and folders with internal users with different permission
       | read                | read, share         | ,                     |
 
   #  As the reshare permission has been hidden in oCIS there's no use for this scenario at the moment
-  # @skipOnOC10 @issue-product-203
+  # @skipOnOC10 @issue-ocis-717
   # #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   # Scenario Outline: Change permissions of the previously shared file
   #   Given user "user2" has shared file "lorem.txt" with user "user1" with "<initial-permissions>" permissions
@@ -180,7 +180,7 @@ Feature: Sharing files and folders with internal users with different permission
   #     | read, update        | read, share, update |
   #     | read                | read, share         |
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS @issue-ocis-717
   Scenario: Delete all custom permissions of the previously shared folder
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, update" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -196,7 +196,7 @@ Feature: Sharing files and folders with internal users with different permission
       | permissions | read                  |
 
   #  As the reshare permission has been hidden in oCIS there's no use for this scenario at the moment
-  # @skipOnOC10 @issue-product-203
+  # @skipOnOC10 @issue-ocis-717
   # #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   # Scenario: Delete all custom permissions of the previously shared file
   #   Given user "user2" has shared file "lorem.txt" with user "user1" with "read, share" permissions
@@ -213,7 +213,7 @@ Feature: Sharing files and folders with internal users with different permission
   #     | item_type   | file       |
   #     | permissions | read       |
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS @issue-ocis-717
   Scenario Outline: share a file with another internal user assigning a role and the permissions
     Given user "user2" has logged in using the webUI
     When the user shares file "lorem.txt" with user "User One" as "<role>" with permissions "<collaborators-permissions>" using the webUI
@@ -233,7 +233,7 @@ Feature: Sharing files and folders with internal users with different permission
       | Editor               | Editor         | ,                         | ,                     | read, share, update |
       | Advanced permissions | Editor         | share, update             | ,                     | read, share, update |
 
-  @skipOnOC10 @issue-product-203
+  @skipOnOC10 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: share a file with another internal user assigning a role and the permissions
     Given user "user2" has logged in using the webUI
@@ -317,7 +317,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "user3" should not have received any shares
     And as "user3" folder "/Shares/simple-empty-folder" should not exist
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS @issue-ocis-717
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
     Given user "user3" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "all" permissions
@@ -336,7 +336,7 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                      |
       | permissions | all                         |
 
-  @skipOnOC10 @issue-product-203 @issue-ocis-reva-372
+  @skipOnOC10 @issue-ocis-reva-372 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
     Given user "user3" has been created with default attributes

@@ -13,7 +13,7 @@ Feature: Sharing files and folders with internal users
       | user2    |
 
   @yetToImplement
-  @smokeTest @skipOnOCIS @issue-product-203
+  @smokeTest @skipOnOCIS @issue-ocis-717
   Scenario Outline: share a file & folder with another internal user
     Given user "user2" has logged in using the webUI
     When the user shares folder "simple-folder" with user "User One" as "<set-role>" using the webUI
@@ -56,7 +56,7 @@ Feature: Sharing files and folders with internal users
       | Editor               | Editor                      | read,update,create,delete,share | read,update,share |
       | Advanced permissions | Advanced permissions        | read                            | read              |
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS @issue-ocis-717
   Scenario Outline: change the collaborators of a file & folder
     Given user "user2" has logged in using the webUI
     And user "user2" has shared folder "/simple-folder" with user "user1" with "<initial-permissions>" permissions
@@ -80,7 +80,7 @@ Feature: Sharing files and folders with internal users
       | read,share          | Advanced permissions | Viewer               | read,share                      |
       | all                 | Advanced permissions | Editor               | all                             |
 
-  @skipOnOC10 @issue-product-203
+  @skipOnOC10 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: change the collaborators of a file & folder
     Given user "user2" has logged in using the webUI
@@ -481,7 +481,7 @@ Feature: Sharing files and folders with internal users
     And the user opens folder "Shares" using the webUI
     Then user "User Two" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS
   Scenario: share a file with another internal user via collaborators quick action
     Given user "user1" has logged in using the webUI
     When the user shares resource "simple-folder" with user "User Two" using the quick action in the webUI
@@ -495,7 +495,7 @@ Feature: Sharing files and folders with internal users
       | item_type   | folder                |
       | permissions | read,share            |
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS
   Scenario Outline: Share files/folders with special characters in their name
     Given user "user2" has created folder "Sample,Folder,With,Comma"
     And user "user2" has created file "sample,1.txt"
@@ -532,7 +532,7 @@ Feature: Sharing files and folders with internal users
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
       | Advanced permissions | Advanced permissions | read                            | read              |
 
-  @skipOnOC10 @issue-product-203
+  @skipOnOC10
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: Share files/folders with special characters in their name
     Given user "user2" has created folder "Sample,Folder,With,Comma"
