@@ -23,7 +23,7 @@ Feature: display image in media viewer on the webUI
     And the public views the file "test_video.mp4" in the media viewer using the webUI
     Then the file "test_video.mp4" should be displayed in the media viewer webUI
 
-  @skipOnOCIS @issue-4295
+  @issue-4295
   Scenario: image preview in public share
     Given user "user1" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
     And user "user1" has created a public link with following settings

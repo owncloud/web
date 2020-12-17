@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-41
+@ocis-reva-issue-41
 Feature: disable sharing
   As an admin
   I want to be able to disable the sharing function

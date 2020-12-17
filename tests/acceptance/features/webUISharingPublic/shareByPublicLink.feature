@@ -11,7 +11,7 @@ Feature: Share by public link
   Background:
     Given user "user1" has been created with default attributes
 
-  @smokeTest @issue-ocis-reva-383 @skipOnOCIS
+  @smokeTest @issue-ocis-reva-383
   Scenario Outline: simple sharing by public link
     Given user "user1" has logged in using the webUI
     When the user creates a new public link for resource "<shared-resource>" using the webUI
@@ -58,21 +58,21 @@ Feature: Share by public link
       | simple-folder       | Public                |
     But file "data.zip" should not be listed on the webUI
 
-  @issue-276 @skipOnOCIS @issue-ocis-reva-398
+  @issue-276 @issue-ocis-reva-398
   Scenario: Thumbnails are loaded for known file types in public link file list
     Given user "user1" has shared folder "simple-folder" with link with "read,create" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     And the user uploads file "new-lorem.txt" using the webUI
     Then the file "new-lorem.txt" should have a thumbnail displayed on the webUI
 
-  @issue-276 @skipOnOCIS @issue-ocis-reva-398
+  @issue-276 @issue-ocis-reva-398
   Scenario: Thumbnails are not loaded for known file types in public link file list
     Given user "user1" has shared folder "simple-folder" with link with "read,create" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     And the user uploads file "new-data.zip" using the webUI
     Then the file "new-data.zip" should have a file type icon displayed on the webUI
 
-  @skipOnOCIS
+
   Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page
     Given user "user1" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
     When the public tries to open the public link page of the last public link created by user "user1" with password "pass123"
@@ -128,7 +128,7 @@ Feature: Share by public link
     When the public uses the webUI to access the last public link created by user "user1" with password "pass12"
     Then the public should not get access to the publicly shared file
 
-  @skipOnOCIS @issue-ocis-reva-389
+  @issue-ocis-reva-389
   Scenario: user shares a public link with folder longer than 64 chars and shorter link name
     Given user "user1" has renamed folder "simple-folder" to "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog"
     And user "user1" has logged in using the webUI
@@ -137,7 +137,7 @@ Feature: Share by public link
     And the public uses the webUI to access the last public link created by user "user1"
     Then file "lorem.txt" should be listed on the webUI
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario Outline: user tries to change the role of an existing public link role without entering share password while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "user1" has created a public link with following settings
@@ -161,7 +161,7 @@ Feature: Share by public link
       | read                | Editor      | shareapi_enforce_links_password_read_write_delete |
       | read, create        | Uploader    | shareapi_enforce_links_password_write_only        |
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario Outline: user tries to delete the password of an existing public link role while enforce password for that role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "user1" has created a public link with following settings
@@ -186,7 +186,7 @@ Feature: Share by public link
       | read, update, create, delete | shareapi_enforce_links_password_read_write_delete |
       | create                       | shareapi_enforce_links_password_write_only        |
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario Outline: user changes the role of an existing public link role without entering share password while enforce password for the original role is enforced
     Given the setting "<setting-name>" of app "core" has been set to "yes"
     And user "user1" has created a public link with following settings
@@ -317,7 +317,7 @@ Feature: Share by public link
     But the email address "foo1234@bar.co" should not have received an email
     And the email address "foo5678@barr.co" should not have received an email
 
-  @yetToImplement @skipOnOCIS @issue-ocis-reva-41
+  @yetToImplement @issue-ocis-reva-41
   Scenario: user edits a public link and does not save the changes
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And user "user1" has logged in using the webUI
@@ -360,7 +360,7 @@ Feature: Share by public link
     And the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario: user shares a file through public link and then it appears in a shared-with-others page
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
@@ -384,7 +384,7 @@ Feature: Share by public link
     And the public uses the webUI to access the last public link created by user "user1" with password "qwertyui"
     Then file "lorem.txt" should be listed on the webUI
 
-  @skipOnOCIS @issue-3830
+  @issue-3830
   Scenario: user edits the password of an already existing public link and tries to access with old password
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     And user "user1" has created a public link with following settings
@@ -398,7 +398,7 @@ Feature: Share by public link
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then the public should not get access to the publicly shared file
 
-  @skipOnOCIS @issue-ocis-reva-292
+  @issue-ocis-reva-292
   Scenario: user edits the permission of an already existing public link from read-write to read
     Given user "user1" has created a public link with following settings
       | path        | simple-folder                |
@@ -411,7 +411,7 @@ Feature: Share by public link
     Then file "lorem.txt" should be listed on the webUI
     And it should not be possible to delete file "lorem.txt" using the webUI
 
-  @skipOnOCIS @issue-ocis-reva-292
+  @issue-ocis-reva-292
   Scenario: user edits the permission of an already existing public link from read to read-write
     Given user "user1" has created a public link with following settings
       | path        | simple-folder |
@@ -558,7 +558,7 @@ Feature: Share by public link
 #      | links         |
 #      | people        |
 
-  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
+  @issue-2060 @issue-ocis-reva-243
   Scenario: sharing indicator inside a shared folder
     Given user "user1" has created folder "/simple-folder/sub-folder"
     And user "user1" has uploaded file with content "test" to "/simple-folder/textfile.txt"
@@ -573,7 +573,7 @@ Feature: Share by public link
       | sub-folder   | link-indirect      |
       | textfile.txt | link-indirect      |
 
-  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
+  @issue-2060 @issue-ocis-reva-243
   Scenario: sharing indicator for file uploaded inside a shared folder
     Given user "user1" has shared folder "simple-folder" with link with "read" permissions
     And user "user1" has logged in using the webUI
@@ -583,7 +583,7 @@ Feature: Share by public link
       | fileName      | expectedIndicators |
       | new-lorem.txt | link-indirect      |
 
-  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
+  @issue-2060 @issue-ocis-reva-243
   Scenario: sharing indicator for folder created inside a shared folder
     Given user "user1" has shared folder "simple-folder" with link with "read" permissions
     And user "user1" has logged in using the webUI
@@ -593,7 +593,7 @@ Feature: Share by public link
       | fileName   | expectedIndicators |
       | sub-folder | link-indirect      |
 
-  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
+  @issue-2060 @issue-ocis-reva-243
   Scenario: sharing indicators public link and collaborators inside a shared folder
     Given user "user2" has been created with default attributes
     And user "user1" has created folder "/simple-folder/sub-folder"
@@ -610,7 +610,7 @@ Feature: Share by public link
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
-  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
+  @issue-2060 @issue-ocis-reva-243
   Scenario: sharing indicators public link from reshare
     Given user "user2" has been created with default attributes
     And user "user1" has created folder "/simple-folder/sub-folder"
@@ -627,7 +627,7 @@ Feature: Share by public link
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
-  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
+  @issue-2060 @issue-ocis-reva-243
   Scenario: sharing indicators public link from child of reshare
     Given user "user2" has been created with default attributes
     And user "user1" has created folder "/simple-folder/sub-folder"
@@ -644,7 +644,7 @@ Feature: Share by public link
       | sub-folder   | link-direct,user-indirect   |
       | textfile.txt | user-indirect |
 
-  @issue-2060 @skipOnOCIS @issue-ocis-reva-243
+  @issue-2060 @issue-ocis-reva-243
   Scenario: no sharing indicator visible in file list from public link
     Given user "user2" has been created with default attributes
     And user "user3" has been created with default attributes
@@ -655,7 +655,7 @@ Feature: Share by public link
     Then the following resources should not have share indicators on the webUI
       | simple-empty-folder |
 
-  @issue-2939 @skipOnOCIS @issue-ocis-reva-243
+  @issue-2939 @issue-ocis-reva-243
   Scenario: sharing indicator for link shares stays up to date
     Given user "user2" has been created with default attributes
     When user "user1" has logged in using the webUI
@@ -725,7 +725,7 @@ Feature: Share by public link
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "simple-folder" on the webUI
     And a link named "strängé लिंक नाम (#2 &).नेपाली" should be listed with role "Viewer" in the public link list of resource "textfile.txt" via "sub-folder" on the webUI
 
-  @issue-3040 @issue-3841 @skipOnOCIS @issue-ocis-reva-372
+  @issue-3040 @issue-3841 @issue-ocis-reva-372
   Scenario: sharing details of indirect link share in "favorites" file lists
     Given user "user1" has created a public link with following settings
       | path | /simple-folder |
@@ -742,14 +742,14 @@ Feature: Share by public link
     When the user browses to the favorites page using the webUI
     Then a link named "Public Link" should be listed with role "Viewer" in the public link list of resource "simple-folder/simple-empty-folder" via "simple-folder" on the webUI
 
-  @issue-ocis-reva-243 @skipOnOCIS
+  @issue-ocis-reva-243
   Scenario: token is shown for links without a name
     When user "user1" has created a public link with following settings
       | path | /simple-folder |
     And user "user1" logs in using the webUI
     Then a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
 
-  @issue-ocis-reva-243 @skipOnOCIS
+  @issue-ocis-reva-243
   Scenario: User can create a public link via quick action
     Given user "user1" has logged in using the webUI
     When the user creates a public link via quick action for resource "simple-folder" using the webUI
@@ -766,7 +766,7 @@ Feature: Share by public link
       Public link has been successfully created and copied into your clipboard.
       """
 
-  @skipOnOCIS @issue-product-130
+  @issue-product-130
   Scenario: User can attempt to upload a file in public link
     Given user "user1" has created a public link with following settings
       | path        | lorem.txt   |

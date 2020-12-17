@@ -119,7 +119,6 @@ Feature: Restore deleted files/folders
     And folder "simple-folder" should be listed on the webUI
 
   @issue-1753
-  @skipOnOCIS
   @issue-product-186
   Scenario: Restore a file from trashbin whose parent folder is renamed
     Given user "user1" has created file "simple-folder/file-to-delete-and-restore"

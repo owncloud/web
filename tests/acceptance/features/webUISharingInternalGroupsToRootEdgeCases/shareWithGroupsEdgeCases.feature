@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-34 @ocis-reva-issue-194
+@notToImplementOnOCIS
 Feature: Sharing files and folders with internal groups
   As a user
   I want to share files and folders with groups

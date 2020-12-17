@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-39 @skipOnIphoneResolution @ocis-web-issue-3968
+@ocis-reva-issue-39 @skipOnIphoneResolution @ocis-web-issue-3968
 Feature: Unmark file/folder as favorite
 
   As a user

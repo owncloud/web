@@ -1,4 +1,4 @@
-@skipOnOCIS
+@notToImplementOnOCIS
 Feature: Sharing folders with internal groups with role as advanced permissions
   As a user
   I want to set different permissions on shared folders with groups

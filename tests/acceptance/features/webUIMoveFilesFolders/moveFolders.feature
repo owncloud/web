@@ -60,7 +60,7 @@ Feature: move folders
       | "question?"         | "target-folder-with-question?"          |
       | "&and#hash"         | "target-folder-with-&and#hash"          |
 
-  @skipOnOCIS @issue-ocis-reva-243
+  @issue-ocis-reva-243
   Scenario: move a folder into another folder with no change permission
     Given user "user2" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions

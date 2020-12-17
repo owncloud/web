@@ -1,4 +1,4 @@
-@app-required @notifications-app-required @skipOnOCIS
+@app-required @notifications-app-required @notToImplementOnOCIS
 Feature: Sharing files and folders with internal groups
   As a user
   I want to share files and folders with groups

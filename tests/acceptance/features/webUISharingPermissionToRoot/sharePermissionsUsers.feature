@@ -1,4 +1,4 @@
-@skipOnOCIS
+@notToImplementOnOCIS
 Feature: Sharing files and folders with internal users with different permissions
   As a user
   I want to set different permissions on shared files and folders with other users

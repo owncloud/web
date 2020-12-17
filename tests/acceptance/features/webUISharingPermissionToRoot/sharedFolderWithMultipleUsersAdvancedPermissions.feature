@@ -1,4 +1,4 @@
-@skipOnOCIS
+@notToImplementOnOCIS
 Feature: Sharing folders with multiple internal users using advanced permissions
   As a user
   I want to set advanced permissions on shared folders with other users

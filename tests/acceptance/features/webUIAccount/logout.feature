@@ -1,4 +1,4 @@
-@skip @skipOnOCIS @ocis-konnectd-issue-14
+@skip @ocis-konnectd-issue-14
 Feature: Logout users
   As a user
   I want to be able to logout of my account
