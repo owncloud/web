@@ -210,9 +210,20 @@ function loadTranslations () {
 }
 
 (async function () {
-  config = await fetch('config.json')
+  let config
+  try {
+    config = await fetch('config.json')
+  } catch(e) {
+    // if the config.json is missing, try like we're in an app
+    const oc10AppUrl = window.location.href.substring(0, window.location.href.indexOf('/#') + 1)
+    const url = oc10AppUrl + 'config'
+    try {
+      config = await fetch(url)
+    } catch(e) {
+    }
+  }
 
-  if (config.status === 404) {
+  if (!config || config.status === 404) {
     router.push('missing-config')
     missingConfig()
     return
