@@ -23,7 +23,7 @@ namespace OCA\Web\Controller;
 
 use OC\AppFramework\Http;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\ILogger;
 use OCP\IRequest;
 
@@ -57,17 +57,17 @@ class ConfigController extends Controller {
      * @PublicPage
      * @NoCSRFRequired
      *
-     * @return DataResponse
+     * @return JSONResponse
      */
-    public function getConfig(): DataResponse {
+    public function getConfig(): JSONResponse {
         try {
             $configFile = \OC::$SERVERROOT . '/config/config.json';
-            $configJSON = file_get_contents($configFile);
-            $decoded = \json_decode($configJSON, true);
-            return new DataResponse($decoded);
+            $configContent = \file_get_contents($configFile);
+            $configJSON = \json_decode($configContent, true);
+            return new JSONResponse($configJSON);
         } catch(\Exception $e) {
             $this->logger->logException($e, ['app' => 'web']);
-            return new DataResponse(["message" => $e->getMessage()], Http::STATUS_NOT_FOUND);
+            return new JSONResponse(["message" => $e->getMessage()], Http::STATUS_NOT_FOUND);
         }
     }
 }

@@ -19,14 +19,8 @@
  *
  */
 
-namespace OCA\Web;
-
-$application = new Application();
-$application->registerRoutes(
-	$this,
-	[
-		'routes' => [
-			['name' => 'Config#getConfig', 'url' => '/config']
-		]
-	]
-);
+return [
+    'routes' => [
+        ['name' => 'Config#getConfig', 'url' => '/config', 'verb' => 'GET']
+    ]
+];

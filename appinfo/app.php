@@ -19,6 +19,4 @@
  *
  */
 
-use OCA\Web\Application;
-
 $app = new OCA\Web\Application();

@@ -214,11 +214,10 @@ function loadTranslations () {
   try {
     config = await fetch('config.json')
   } catch(e) {
-    // if the config.json is missing, try like we're in an app
+    // if the config.json is missing, try like we're in an oc10 app
     const oc10AppUrl = window.location.href.substring(0, window.location.href.indexOf('/#') + 1)
-    const url = oc10AppUrl + 'config'
     try {
-      config = await fetch(url)
+      config = await fetch(oc10AppUrl + 'config')
     } catch(e) {
     }
   }
