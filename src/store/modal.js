@@ -13,7 +13,7 @@ const state = {
   hasInput: false,
   inputDisabled: false,
   inputValue: '',
-  inputPlacehodler: '',
+  inputPlaceholder: '',
   inputLabel: '',
   inputError: '',
   // Events
