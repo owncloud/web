@@ -1,0 +1,5 @@
+Bugfix: Allow server URL without trailing slash
+
+The server URL in the config was leading to issues resolving resources when it had no trailing slash. We are now checking if the trailing slash is missing and add it upon applying the config if needed.
+
+https://github.com/owncloud/web/pull/4536
