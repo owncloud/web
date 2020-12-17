@@ -215,7 +215,10 @@ function loadTranslations () {
     config = await fetch('config.json')
   } catch(e) {
     // if the config.json is missing, try like we're in an oc10 app
-    const oc10AppUrl = window.location.href.substring(0, window.location.href.indexOf('/#') + 1)
+    let oc10AppUrl = window.location.href.substring(0, window.location.href.indexOf('/#') + 1)
+    if (!oc10AppUrl.includes('index.php')) {
+      oc10AppUrl = oc10AppUrl.replace('/app', '/index.php/app')
+    }
     try {
       config = await fetch(oc10AppUrl + 'config')
     } catch(e) {
