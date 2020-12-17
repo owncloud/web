@@ -21,4 +21,4 @@
 
 use OCA\Web\Application;
 
-$app = new Application();
+$app = new OCA\Web\Application();
