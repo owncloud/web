@@ -63,10 +63,11 @@ class ConfigController extends Controller {
         try {
             $configFile = \OC::$SERVERROOT . '/config/config.json';
             $configJSON = file_get_contents($configFile);
-            return new DataResponse($configJSON);
+            $decoded = \json_decode($configJSON, true);
+            return new DataResponse($decoded);
         } catch(\Exception $e) {
             $this->logger->logException($e, ['app' => 'web']);
-            return new DataResponse([$e->getMessage()], Http::STATUS_NOT_FOUND);
+            return new DataResponse(["message" => $e->getMessage()], Http::STATUS_NOT_FOUND);
         }
     }
 }
