@@ -8,10 +8,19 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Allow server URL without trailing slash: [#4536](https://github.com/owncloud/web/pull/4536)
 * Change - Allow to disable previews in file lists: [#4513](https://github.com/owncloud/web/pull/4513)
 
 Details
 -------
+
+* Bugfix - Allow server URL without trailing slash: [#4536](https://github.com/owncloud/web/pull/4536)
+
+   The server URL in the config was leading to issues resolving resources when it had no trailing
+   slash. We are now checking if the trailing slash is missing and add it upon applying the config if
+   needed.
+
+   https://github.com/owncloud/web/pull/4536
 
 * Change - Allow to disable previews in file lists: [#4513](https://github.com/owncloud/web/pull/4513)
 
