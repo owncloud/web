@@ -2,24 +2,24 @@
 
 echo 'run.sh: running acceptance-tests-drone'
 
-# An array of the suites that were run. Each entry is a string like:
+# An array of the suites that were run. Each value is a string like:
 # webUILogin
 # webUIPrivateLinks
 declare -a SUITES_IN_THIS_RUN
 
-# An array of the scenarios that failed. Each entry is a string like:
+# An array of the unique scenarios that failed. Each key is a string like:
 # webUILogin/login.feature:50
 # webUIPrivateLinks/accessingPrivateLinks.feature:8
-declare -a FAILED_SCENARIO_PATHS
+declare -A FAILED_SCENARIO_PATHS
 
 # An array of the scenarios that failed, and were not in the expected failures file.
-# Each entry is a string like:
+# Each value is a string like:
 # webUILogin/login.feature:50
 # webUIPrivateLinks/accessingPrivateLinks.feature:8
 declare -a UNEXPECTED_FAILED_SCENARIOS
 
 # An array of the scenarios that were in the expected failures file but did not fail
-# Each entry is a string like:
+# Each value is a string like:
 # webUILogin/login.feature:50
 # webUIPrivateLinks/accessingPrivateLinks.feature:8
 declare -a UNEXPECTED_PASSED_SCENARIOS
@@ -38,7 +38,9 @@ if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
       SUITE=$(basename "${SUITE_PATH}")
       SCENARIO=$(basename "${FAILED_SCENARIO}")
       SUITE_SCENARIO="${SUITE}/${SCENARIO}"
-      FAILED_SCENARIO_PATHS+=("${SUITE_SCENARIO}")
+      # Use the SUITE_SCENARIO as the array key, so that if a SUITE_SCENARIO
+      # occurs twice in the loop, it ends up in the array just once.
+      FAILED_SCENARIO_PATHS+=(["${SUITE_SCENARIO}"]="failed")
     fi
   done
 
@@ -55,7 +57,7 @@ if [ ${#FAILED_SCENARIO_PATHS[@]} -ne 0 ]
 then
   echo "The following scenarios failed:"
   echo "-------------------------------"
-  echo "${FAILED_SCENARIO_PATHS[@]}"
+  for KEY in "${!FAILED_SCENARIO_PATHS[@]}"; do echo "$KEY"; done
   echo "-------------------------------"
 fi
 
@@ -78,7 +80,8 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
   echo "Checking expected failures in ${EXPECTED_FAILURES_FILE}"
 
   # Check that every failed scenario is in the list of expected failures
-  for FAILED_SCENARIO_PATH in "${FAILED_SCENARIO_PATHS[@]}"; do
+  # Loop through the keys of the FAILED_SCENARIO_PATHS array (! does that)
+  for FAILED_SCENARIO_PATH in "${!FAILED_SCENARIO_PATHS[@]}"; do
     grep -x "${FAILED_SCENARIO_PATH}" "${EXPECTED_FAILURES_FILE}" >/dev/null
     if [ $? -ne 0 ]; then
       echo "Error: Scenario ${FAILED_SCENARIO_PATH} failed but was not expected to fail."
@@ -101,12 +104,12 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
       then
         # This line in the expected failures file is for a suite that has been run.
         # So we expect that the scenario in LINE has run and failed.
-        # Look for it in FAILED_SCENARIO_PATHS
+        # Look for it in keys of the FAILED_SCENARIO_PATHS array (! does that)
         # The string that is echoed is space-separated. A space is added at the end also.
         # Then we look for the line from the expected failures file followed by a space.
         # That ensures that when looking for a specific line number like xyz.feature:12
         # we do not accidentally match xyz.feature:12 that is in xyz.feature:123
-        echo "${FAILED_SCENARIO_PATHS[@]} " | grep "${LINE} " > /dev/null
+        echo "${!FAILED_SCENARIO_PATHS[@]} " | grep "${LINE} " > /dev/null
         if [ $? -ne 0 ]
         then
           echo "Info: Scenario ${LINE} was expected to fail but did not fail."
