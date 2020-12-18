@@ -42,7 +42,7 @@ copy-configs: copy-web-config copy-htaccess
 
 .PHONY: copy-web-config
 copy-web-config:
-	cp config.json.dist $(dist_dir)/config.json
+	cp config.json.dist $(dist_dir)/config.json.dist
 
 .Phony: copy-htaccess
 copy-htaccess:
