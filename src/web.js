@@ -210,15 +210,13 @@ function loadTranslations () {
 }
 
 (async function () {
-  // try to load config.json from the cwd
+  // try to load config.json
   let config = await fetch('config.json')
-  // if the config.json is missing, try like we're in an oc10 app
+  // if the config.json is missing, try to find the oc10 app config endpoint
   if (config.status === 404) {
-    let oc10AppUrl = window.location.href.substring(0, window.location.href.indexOf('/web/') + "/web/".length)
-    if (!oc10AppUrl.includes('index.php')) {
-      oc10AppUrl = oc10AppUrl.replace('/app', '/index.php/app')
-    }
-    config = await fetch(oc10AppUrl + 'config')
+    const baseUrl = window.location.href.substring(0, window.location.href.indexOf('/apps'))
+    const configUrl = baseUrl + (!baseUrl.includes('index.php') ? '/index.php/' : '/') + 'apps/web/config'
+    config = await fetch(configUrl)
   }
   if (config.status !== 200) {
     router.push('missing-config')
