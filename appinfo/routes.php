@@ -19,8 +19,14 @@
  *
  */
 
-return [
-    'routes' => [
-        ['name' => 'Config#getConfig', 'url' => '/config', 'verb' => 'GET']
+use OCA\Web\Application;
+
+$app = new Application();
+$app->registerRoutes(
+    $this,
+    [
+        'routes' => [
+            ['name' => 'Config#getConfig', 'url' => '/config', 'verb' => 'GET']
+        ]
     ]
-];
+);
