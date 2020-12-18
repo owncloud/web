@@ -24,7 +24,7 @@ Depending on your setup, the name of `apps-external` folder can vary. It is impo
 Download [ownCloud Web app](https://marketplace.owncloud.com/apps/web) from the marketplace and enable it.
 
 ## Configure oauth2
-In the `Admin` of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name and redirection URL `https://<your-owncloud-server>/apps-external/web/oidc-callback.html`.
+Within the `Admin` page of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name (e.g. `ownCloud Web`) and redirection URL `https://<your-owncloud-server>/apps-external/web/oidc-callback.html`.
 
 {{< figure src="/clients/web/static/oauth2.jpg" alt="Example OAuth2 entry" >}}
 
@@ -35,7 +35,7 @@ To display ownCloud Web in the app switcher and to redirect all private and publ
 'web.baseUrl' => 'https://<your-owncloud-server>/apps-external/web',
 ```
 ## Configure ownCloud Web
-There are a few config values which need to be set in order for ownCloud Web to work correctly. Navigate into `apps-external/web` and adjust `config.json` according to the following example:
+There are a few config values which need to be set in order for ownCloud Web to work correctly. Please copy `apps-external/web/config.json.dist` into `config/config.json` and adjust it according to the following example:
 
 ```json
 {
@@ -73,6 +73,10 @@ There are a few config values which need to be set in order for ownCloud Web to 
   ]
 }
 ```
+
+{{< hint info >}}
+It is important that you don't edit or place the `config.json` within the app folder. If you do, the integrity check of the app will fail and raise warnings.
+{{< /hint >}}
 
 ## Accessing ownCloud Web
 After following all the steps, you should see a new entry in the application switcher called `New Design` which points to the ownCloud web.
