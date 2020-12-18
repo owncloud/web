@@ -1,3 +1,4 @@
+@issue-ocis-717
 Feature: Sharing folders with multiple internal users with different permissions
   As a user
   I want to set different permissions on shared folders with other users
@@ -11,7 +12,7 @@ Feature: Sharing folders with multiple internal users with different permissions
       | user1    |
       | user2    |
 
-  @skipOnOCIS @issue-product-203
+  @skipOnOCIS
   Scenario Outline: share a folder with multiple users with different roles and permissions
     Given these users have been created with default attributes:
       | username |
@@ -63,7 +64,7 @@ Feature: Sharing folders with multiple internal users with different permissions
       | Advanced permissions | Advanced permissions    | delete, update, create        | delete, update, create | read, delete, update, create |
       | Advanced permissions | Editor                  | share, delete, update, create | ,                      | all                          |
 
-  @skipOnOC10 @issue-product-203
+  @skipOnOC10
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: share a folder with multiple users with different roles and permissions
     Given these users have been created with default attributes:
