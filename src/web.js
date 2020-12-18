@@ -211,7 +211,7 @@ function loadTranslations () {
 
 (async function () {
   // try to load config.json
-  let config = await fetch('config.json')
+  config = await fetch('config.json')
   // if the config.json is missing, try to find the oc10 app config endpoint
   if (config.status === 404) {
     const baseUrl = window.location.href.substring(0, window.location.href.indexOf('/apps'))
