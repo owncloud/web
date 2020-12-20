@@ -1128,6 +1128,12 @@ When('the user tries to move file/folder {string} into folder {string} using the
   return client.page.FilesPageElement.filesList().attemptToMoveResource(resource, target)
 })
 
+When('the user cancels an attempt to move file/folder {string} using the webUI', function(
+  resource
+) {
+  return client.page.FilesPageElement.filesList().cancelMoveResource(resource)
+})
+
 Then('it should not be possible to copy/move into folder {string} using the webUI', function(
   target
 ) {

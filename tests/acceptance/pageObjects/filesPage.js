@@ -451,6 +451,10 @@ module.exports = {
     },
     editorCloseBtn: {
       selector: '#markdown-editor-app-bar .uk-text-right .oc-button'
+    },
+    cancelMoveBtn: {
+      selector: '//button[.="Cancel"]',
+      locateStrategy: 'xpath'
     }
   }
 }

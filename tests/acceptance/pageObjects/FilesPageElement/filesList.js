@@ -689,6 +689,21 @@ module.exports = {
       return this
     },
 
+    cancelMoveResource: async function(resource) {
+      await this.waitForFileVisible(resource)
+
+      // Trigger move
+      await filesRow.openFileActionsMenu(resource).move()
+
+      // cancel move
+      await this.useXpath()
+        .waitForElementVisible(client.page.filesPage().elements.cancelMoveBtn.selector)
+        .click(this.page.filesPage().elements.cancelMoveBtn.selector)
+        .useCss()
+
+      return this
+    },
+
     navigationNotAllowed: async function(target) {
       await this.waitForFileVisible(target)
       await this.initAjaxCounters()
