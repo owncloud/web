@@ -90,3 +90,9 @@ Feature: move files
     And user "user1" has logged in using the webUI
     When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to move into folder "simple-folder (2)" using the webUI
+
+  Scenario: cancel the moving a file
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user cancels an attempt to move file "data.zip" using the webUI
+    Then file "data.zip" should be listed on the webUI

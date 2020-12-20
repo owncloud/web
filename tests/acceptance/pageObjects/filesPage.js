@@ -457,8 +457,8 @@ module.exports = {
     editorCloseBtn: {
       selector: '#markdown-editor-app-bar .uk-text-right .oc-button'
     },
-    clearSelectionBtn: {
-      selector: '//span[contains(text(),"Clear selection")]',
+    cancelMoveBtn: {
+      selector: '//button[.="Cancel"]',
       locateStrategy: 'xpath'
     }
   }
