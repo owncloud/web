@@ -194,6 +194,11 @@ module.exports = {
         '//*[contains(@class, "uk-notification-message")]/div/div[contains(@class, "oc-notification-message-title")]',
       locateStrategy: 'xpath'
     },
+    messageSubHeader: {
+      selector:
+        '//*[contains(@class, "uk-notification-message")]/div/div[contains(@class, "uk-text-meta")]',
+      locateStrategy: 'xpath'
+    },
     messages: {
       selector: '//*[contains(@class, "uk-notification-message")]',
       locateStrategy: 'xpath'
