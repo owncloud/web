@@ -129,7 +129,11 @@ Feature: Restore deleted files/folders
     And user "user1" has renamed folder "simple-folder" to "simple-folder-renamed"
     When the user browses to the trashbin page
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
-    Then the error message with header "Restoration of file-to-delete-and-restore failed" and subheader "The destination node is not found" should be displayed on the webUI
+    Then the following error message should be displayed on the webUI
+     """
+      Restoration of file-to-delete-and-restore failed
+      The destination node is not found
+      """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin
@@ -148,7 +152,11 @@ Feature: Restore deleted files/folders
     And user "user1" has renamed folder "simple-folder" to "simple-folder-renamed"
     When the user browses to the trashbin page
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
-    Then the error message with header "Restoration of file-to-delete-and-restore failed" and subheader "Unknown error" should be displayed on the webUI
+    Then the following error message should be displayed on the webUI
+     """
+      Restoration of file-to-delete-and-restore failed
+      Unknown error
+      """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should not exist

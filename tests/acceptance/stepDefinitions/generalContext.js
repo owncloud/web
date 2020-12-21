@@ -20,14 +20,6 @@ Given(
   }
 )
 
-const assertErrorMessageWithHeader = function(message) {
-  return client.page
-    .webPage()
-    .waitForElementVisible('@message')
-    .expect.element('@message')
-    .text.to.equal(message)
-}
-
 const getConfigJsonContent = function(fullPathOfConfigFile) {
   if (!fs.existsSync(fullPathOfConfigFile)) {
     throw Error('Could not find configfile')
@@ -96,20 +88,12 @@ Given('the property {string} has been deleted in web config file', function(key)
 Then('the success/error message with header {string} should be displayed on the webUI', function(
   message
 ) {
-  return assertErrorMessageWithHeader(message)
+  return client.page
+    .webPage()
+    .waitForElementVisible('@message')
+    .expect.element('@message')
+    .text.to.equal(message)
 })
-
-Then(
-  'the success/error message with header {string} and subheader {string} should be displayed on the webUI',
-  async function(headerMessage, subheaderMessage) {
-    await assertErrorMessageWithHeader(headerMessage)
-    return client.page
-      .webPage()
-      .waitForElementVisible('@messageSubHeader')
-      .expect.element('@messageSubHeader')
-      .text.to.equal(subheaderMessage)
-  }
-)
 
 Then('the following success/error message should be displayed on the webUI', function(message) {
   return client.page
