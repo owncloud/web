@@ -448,3 +448,49 @@ Feature: Sharing files and folders with internal users
       | Viewer               | Viewer               | read,share                      | read,share        |
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
       | Advanced permissions | Advanced permissions | read                            | read              |
+
+    Scenario Outline: Share files/folders with special characters in their name
+      Given user "user2" has created folder "Sample,Folder,With,Comma"
+      And user "user2" has created file "sample,1.txt"
+      And user "user2" has logged in using the webUI
+      And the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+      When the user shares folder "Sample,Folder,With,Comma" with user "User One" as "<set-role>" using the webUI
+      And the user shares file "sample,1.txt" with user "User One" as "<set-role>" using the webUI
+      Then user "User One" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
+      And user "User One" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
+      And user "user1" should have received a share with these details:
+        | field       | value                    |
+        | uid_owner   | user2                    |
+        | share_with  | user1                    |
+        | file_target | /Sample,Folder,With,Comma |
+        | item_type   | folder                   |
+        | permissions | <permissions-folder>     |
+      And user "user1" should have received a share with these details:
+        | field       | value              |
+        | uid_owner   | user2              |
+        | share_with  | user1              |
+        | file_target | /sample,1.txt      |
+        | item_type   | file               |
+        | permissions | <permissions-file> |
+      And as "user1" these resources should be listed on the webUI
+        | entry_name               |
+        | Sample,Folder,With,Comma |
+        | sample,1.txt             |
+      Examples:
+        | set-role             | expected-role        | permissions-folder              | permissions-file       |
+        | Viewer               | Viewer               | read,share                      | read,share             |
+        | Editor               | Editor               | read,update,create,delete,share | read,update,share      |
+        | Advanced permissions | Advanced permissions | read                            | read                   |
+
+  Scenario: file list view image preview in file share
+    Given user "user1" has uploaded file "testavatar.jpg" to "testavatar.jpg"
+    And user "user1" has shared file "testavatar.jpg" with user "user2"
+    When user "user2" logs in using the webUI
+    Then the preview image of file "testavatar.jpg" should be displayed in the file list view on the webUI
+
+  Scenario: file list view image preview in file share when previews is disabled
+    Given the property "disablePreviews" of "options" has been set to true in web config file
+    And user "user1" has uploaded file "testavatar.jpg" to "testavatar.jpg"
+    And user "user1" has shared file "testavatar.jpg" with user "user2"
+    When user "user2" logs in using the webUI
+    Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI

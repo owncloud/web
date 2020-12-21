@@ -1212,3 +1212,31 @@ Then('the search bar should be visible in the webUI', async function() {
   const isVisible = await client.page.filesPage().isSearchBarVisible()
   assert.strictEqual(isVisible, true, 'Expected search bar to be visible but is not visible')
 })
+
+Then(
+  'the preview image of file {string} should not be displayed in the file list view on the webUI',
+  async function(fileName) {
+    const isPreviewDisplayed = await client.page.FilesPageElement.filesList().isPreviewImageDisplayed(
+      fileName
+    )
+    assert.strictEqual(
+      isPreviewDisplayed,
+      false,
+      'Expected preview image to be not displayed but is displayed'
+    )
+  }
+)
+
+Then(
+  'the preview image of file {string} should be displayed in the file list view on the webUI',
+  async function(fileName) {
+    const isPreviewDisplayed = await client.page.FilesPageElement.filesList().isPreviewImageDisplayed(
+      fileName
+    )
+    assert.strictEqual(
+      isPreviewDisplayed,
+      true,
+      'Expected preview image to be displayed but is not displayed'
+    )
+  }
+)

@@ -573,3 +573,20 @@ Feature: Sharing files and folders with internal users
       | Viewer               | Viewer        | read                      | read             |
       | Editor               | Editor        | read,update,create,delete | read,update      |
       | Advanced permissions | Viewer        | read                      | read             |
+
+  Scenario: file list view image preview in file share
+    Given user "user1" has uploaded file "testavatar.jpg" to "testavatar.jpg"
+    And user "user1" has shared file "testavatar.jpg" with user "user2"
+    And user "user2" has accepted the share "testavatar.jpg" offered by user "user1"
+    And user "user2" has logged in using the webUI
+    When the user opens folder "Shares" using the webUI
+    Then the preview image of file "testavatar.jpg" should be displayed in the file list view on the webUI
+
+  Scenario: file list view image preview in file share when previews is disabled
+    Given the property "disablePreviews" of "options" has been set to true in web config file
+    And user "user1" has uploaded file "testavatar.jpg" to "testavatar.jpg"
+    And user "user1" has shared file "testavatar.jpg" with user "user2"
+    And user "user2" has accepted the share "testavatar.jpg" offered by user "user1"
+    And user "user2" has logged in using the webUI
+    When the user opens folder "Shares" using the webUI
+    Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
