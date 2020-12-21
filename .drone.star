@@ -1024,6 +1024,11 @@ def buildWeb():
 			'yarn dist',
 			'cp tests/drone/config.json dist/config.json',
 			'mkdir -p /srv/config',
+			'pwd',
+			'ls -la /var/www/owncloud',
+			'ls -la /var/www/owncloud/web',
+			'ls -la /var/www/owncloud/web/tests',
+			'ls -la /var/www/owncloud/web/tests/drone',
 			'cp -r /var/www/owncloud/web/tests/drone /srv/config',
 			'ls -la /srv/config/drone'
 		],
