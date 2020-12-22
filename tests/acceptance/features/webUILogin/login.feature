@@ -56,3 +56,14 @@ Feature: login users
       Then the files table should be displayed
 #      Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
 
+  Scenario: the user session of a deleted user is cleared properly
+    Given these users have been created with default attributes:
+      | username |
+      | user1    |
+    And user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    And user "user1" has been deleted
+    When the user reloads the current page of the webUI
+    Then the user should be redirected to the login error page
+    When the user exits the login error page
+    Then the user should be redirected to the login page
