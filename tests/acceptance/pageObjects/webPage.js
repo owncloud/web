@@ -186,19 +186,6 @@ module.exports = {
     },
     browseToUserProfile: function() {
       return this.click('@userMenuButton')
-    },
-    getMessages: async function() {
-      let element = ''
-      let msg
-      await this.waitForElementVisible('@messages')
-      await this.api.element('@messages', result => {
-        element = result.value.ELEMENT
-      })
-      await this.api.elementIdText(element, function(result) {
-        msg = result.value
-        console.log(result.value)
-      })
-      return msg
     }
   },
   elements: {

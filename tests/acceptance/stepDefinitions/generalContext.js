@@ -3,7 +3,6 @@ const { After, Before, Given, Then, When } = require('cucumber')
 const webdavHelper = require('../helpers/webdavHelper')
 const httpHelper = require('../helpers/httpHelper')
 const backendHelper = require('../helpers/backendHelper')
-const assert = require('assert')
 const fs = require('fs')
 const occHelper = require('../helpers/occHelper')
 
@@ -96,19 +95,13 @@ Then('the success/error message with header {string} should be displayed on the 
     .text.to.equal(message)
 })
 
-Then('the following success/error message should be displayed on the webUI', async function(
-  message
-) {
-  const displayedMessage = await client.page.webPage().getMessages()
-  console.log(displayedMessage)
-  assert.strictEqual(displayedMessage, message)
-  // .waitForElementVisible('@messages')
-  // .getText('xpath', '@messages', function (result) {
-  //   console.log(result)
+Then('the following success/error message should be displayed on the webUI', function(message) {
+  return client.page
+    .webPage()
+    .waitForElementVisible('@messages')
+    .expect.element('@messages')
+    .text.to.equal(message)
 })
-// .expect.element('@messages')
-// .text.to.equal(message)
-// })
 
 Then('the error message {string} should be displayed on the webUI dialog prompt', function(
   message
