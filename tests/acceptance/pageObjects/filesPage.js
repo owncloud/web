@@ -157,6 +157,30 @@ module.exports = {
         .waitForElementNotVisible('@fileUploadProgress')
         .click('@newFileMenuButton')
     },
+
+    /**
+     *
+     * @param {string} filePath
+     */
+    uploadFileWithoutWait: function(filePath) {
+      return this.selectFileForUpload(filePath).waitForElementVisible(
+        '@fileUploadProgress',
+        this.api.globals.waitForConditionTimeout,
+        this.api.globals.waitForConditionPollInterval,
+        false
+      )
+    },
+    /**
+     *
+     */
+    waitForExisitingFileUploadsToResolve: function() {
+      return this.waitForElementNotVisible(
+        '@fileUploadProgress',
+        this.api.globals.waitForConditionTimeoutLong,
+        this.api.globals.waitForConditionPollInterval,
+        false
+      )
+    },
     /**
      * This uploads a folder that is inside the selenium host,
      * not from the server, web or where the test runner is located.

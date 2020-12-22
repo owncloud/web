@@ -131,3 +131,37 @@ Feature: File Upload
     #   """
     #   (Any nice error message)
     #   """
+
+  @skipOnOC10
+  Scenario Outline: Overwrite a file when upload is in progress
+    Given a file with the size of "<original_size>" bytes and the name "0" has been created locally
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads file "0" using the webUI and overwrites the file when upload is in progress with "<overwrite_size>" bytes
+    Then a error message should be displayed on the webUI containing following text
+      """
+      File upload failed…
+      tus: failed to upload chunk at offset
+      """
+    And file "0" should not be listed on the webUI
+    And as "user1" file "simple-folder/0" should not exist
+    Examples:
+      | original_size | overwrite_size |
+      | 300000000     | 10             |
+      | 300000000     | 310000000      |
+
+  @skipOnOCIS
+  Scenario Outline: Overwrite a file when upload is in progress
+    Given a file with the size of "<original_size>" bytes and the name "0" has been created locally
+    When the user opens folder "simple-folder" using the webUI
+    And the user uploads file "0" using the webUI and overwrites the file when upload is in progress with "<overwrite_size>" bytes
+    Then the following error message should be displayed on the webUI
+      """
+      File upload failed…
+      Unknown error
+      """
+    And file "0" should not be listed on the webUI
+    And as "user1" file "simple-folder/0" should not exist
+    Examples:
+      | original_size | overwrite_size |
+      | 300000000     | 10             |
+      | 300000000     | 310000000      |

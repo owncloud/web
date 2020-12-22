@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 const { client } = require('nightwatch-api')
 const assert = require('assert')
-const { Given, When, Then, Before } = require('cucumber')
+const { Given, When, Then, Before, After } = require('cucumber')
 const webdav = require('../helpers/webdavHelper')
 const _ = require('lodash')
 const loginHelper = require('../helpers/loginHelper')
@@ -12,6 +12,9 @@ const util = require('util')
 let deletedElements
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
+const httpHelper = require('../helpers/httpHelper')
+
+let createdFiles = []
 
 Before(() => {
   deletedElements = []
@@ -221,9 +224,13 @@ When('the user/public uploads file {string} using the webUI', function(element) 
 
 When('the user uploads a created file {string} using the webUI', function(element) {
   const filePath = path.join(client.globals.filesForUpload, element)
-  return client.uploadRemote(filePath, function(uploadPath) {
-    client.page.filesPage().uploadFile(uploadPath)
-  })
+  if (client.globals.remote_selenium) {
+    return client.uploadRemote(filePath, function(uploadPath) {
+      client.page.filesPage().uploadFile(uploadPath)
+    })
+  } else {
+    client.page.filesPage().uploadFile(filePath)
+  }
 })
 
 When('the public uploads file {string} in files-drop page', function(element) {
@@ -1240,3 +1247,69 @@ Then(
     )
   }
 )
+const writeFile = function(size, filename, writeChar = 'A') {
+  const fullPathOfLocalFile = client.globals.filesForUpload + filename
+  const fh = fs.openSync(fullPathOfLocalFile, 'w')
+  fs.writeSync(fh, writeChar, 0)
+  fs.writeSync(fh, writeChar, Math.max(0, size - 1))
+  fs.closeSync(fh)
+  if (!createdFiles.includes(fullPathOfLocalFile)) {
+    createdFiles.push(fullPathOfLocalFile)
+  }
+}
+
+Given(
+  'a file with the size of {string} bytes and the name {string} has been created locally',
+  function(filename, size) {
+    return writeFile(filename, size, 'A')
+  }
+)
+
+When(
+  'the user uploads file {string} using the webUI and overwrites the file when upload is in progress with {string} bytes',
+  async function(filename, size) {
+    const filePath = path.join(client.globals.mountedUploadDir, filename)
+    await client.page.filesPage().uploadFileWithoutWait(filePath)
+    writeFile(size, filename, 'B')
+    await client.page.filesPage().waitForExisitingFileUploadsToResolve()
+  }
+)
+
+Before(function(testCase) {
+  createdFiles = []
+  if (
+    typeof process.env.SCREEN_RESOLUTION !== 'undefined' &&
+    process.env.SCREEN_RESOLUTION.trim() !== ''
+  ) {
+    const resolution = process.env.SCREEN_RESOLUTION.split('x')
+    resolution[0] = parseInt(resolution[0])
+    resolution[1] = parseInt(resolution[1])
+    if (resolution[0] > 1 && resolution[1] > 1) {
+      client.resizeWindow(resolution[0], resolution[1])
+      console.log(
+        '\nINFO: setting screen resolution to ' + resolution[0] + 'x' + resolution[1] + '\n'
+      )
+    } else {
+      console.warn('\nWARNING: invalid resolution given, running tests in full resolution!\n')
+      client.maximizeWindow()
+    }
+  } else {
+    client.maximizeWindow()
+  }
+  console.log('  ' + testCase.sourceLocation.uri + ':' + testCase.sourceLocation.line + '\n')
+})
+
+After(async function(testCase) {
+  if (client.globals.ocis) {
+    return
+  }
+  console.log('\n  Result: ' + testCase.result.status + '\n')
+
+  createdFiles.forEach(fileName => fs.unlinkSync(fileName))
+
+  // clear file locks
+  const body = new URLSearchParams()
+  body.append('global', 'true')
+  const url = 'apps/testing/api/v1/lockprovisioning'
+  await httpHelper.deleteOCS(url, 'admin', body)
+})

@@ -25,7 +25,7 @@ const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
 const BROWSER_NAME = process.env.BROWSER_NAME
 const SAUCELABS_TUNNEL_NAME = process.env.SAUCELABS_TUNNEL_NAME
 const LOCAL_UPLOAD_DIR = process.env.LOCAL_UPLOAD_DIR || '/uploads'
-const OCIS_REVA_DATA_ROOT = process.env.OCIS_REVA_DATA_ROOT || '/var/tmp/ocis/owncloud'
+const OCIS_REVA_DATA_ROOT = process.env.OCIS_REVA_DATA_ROOT || '/var/tmp/ocis/storage/owncloud'
 const LDAP_SERVER_URL = process.env.LDAP_SERVER_URL || 'ldap://127.0.0.1'
 const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
 const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
@@ -33,6 +33,7 @@ const OCIS_SKELETON_DIR = process.env.OCIS_SKELETON_DIR || './tests/testing-app/
 const OPENID_LOGIN = RUN_ON_OCIS || !!process.env.OPENID_LOGIN
 const WEB_UI_CONFIG = process.env.WEB_UI_CONFIG || path.join(__dirname, 'dist/config.json')
 const SCREENSHOTS = !!process.env.SCREENSHOTS
+const REMOTE_SELENIUM = process.env.REMOTE_SELENIUM
 
 module.exports = {
   page_objects_path: './tests/acceptance/pageObjects',
@@ -42,6 +43,7 @@ module.exports = {
       launch_url: LOCAL_LAUNCH_URL,
       globals: {
         waitForConditionTimeout: 20000,
+        waitForConditionTimeoutLong: 60000,
         waitForNegativeConditionTimeout: 1000,
         waitForConditionPollInterval: 10,
         filesForUpload: REMOTE_UPLOAD_DIR,
@@ -59,7 +61,8 @@ module.exports = {
         ldap_base_dn: LDAP_BASE_DN,
         ocis_skeleton_dir: OCIS_SKELETON_DIR,
         ldap_password: LDAP_ADMIN_PASSWORD,
-        webUIConfig: WEB_UI_CONFIG
+        webUIConfig: WEB_UI_CONFIG,
+        remote_selenium: REMOTE_SELENIUM
       },
       selenium_host: SELENIUM_HOST,
       desiredCapabilities: {

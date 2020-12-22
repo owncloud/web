@@ -8,18 +8,6 @@ const fs = require('fs')
 const occHelper = require('../helpers/occHelper')
 
 let initialConfigJsonSettings
-let createdFiles = []
-
-Given(
-  'a file with the size of {string} bytes and the name {string} has been created locally',
-  function(size, name) {
-    const fullPathOfLocalFile = client.globals.filesForUpload + name
-    const fh = fs.openSync(fullPathOfLocalFile, 'w')
-    fs.writeSync(fh, 'A', Math.max(0, size - 1))
-    fs.closeSync(fh)
-    createdFiles.push(fullPathOfLocalFile)
-  }
-)
 
 const getConfigJsonContent = function(fullPathOfConfigFile) {
   if (!fs.existsSync(fullPathOfConfigFile)) {
@@ -101,6 +89,16 @@ Then('the following success/error message should be displayed on the webUI', asy
 ) {
   const displayedMessage = await client.page.webPage().getDisplayedMessage()
   assert.strictEqual(displayedMessage, message)
+})
+
+Then('a error message should be displayed on the webUI containing following text', function(
+  message
+) {
+  return client.page
+    .webPage()
+    .waitForElementVisible('@messages')
+    .expect.element('@messages')
+    .text.to.contain(message)
 })
 
 Then('the error message {string} should be displayed on the webUI dialog prompt', function(
@@ -243,45 +241,6 @@ Given('server {code} has been added as trusted server', function(server) {
 
 Given('server {code} has been added as trusted server on remote server', function(url) {
   return backendHelper.runOnRemoteBackend(setTrustedServer, url)
-})
-
-Before(function(testCase) {
-  createdFiles = []
-  if (
-    typeof process.env.SCREEN_RESOLUTION !== 'undefined' &&
-    process.env.SCREEN_RESOLUTION.trim() !== ''
-  ) {
-    const resolution = process.env.SCREEN_RESOLUTION.split('x')
-    resolution[0] = parseInt(resolution[0])
-    resolution[1] = parseInt(resolution[1])
-    if (resolution[0] > 1 && resolution[1] > 1) {
-      client.resizeWindow(resolution[0], resolution[1])
-      console.log(
-        '\nINFO: setting screen resolution to ' + resolution[0] + 'x' + resolution[1] + '\n'
-      )
-    } else {
-      console.warn('\nWARNING: invalid resolution given, running tests in full resolution!\n')
-      client.maximizeWindow()
-    }
-  } else {
-    client.maximizeWindow()
-  }
-  console.log('  ' + testCase.sourceLocation.uri + ':' + testCase.sourceLocation.line + '\n')
-})
-
-After(async function(testCase) {
-  if (client.globals.ocis) {
-    return
-  }
-  console.log('\n  Result: ' + testCase.result.status + '\n')
-
-  createdFiles.forEach(fileName => fs.unlinkSync(fileName))
-
-  // clear file locks
-  const body = new URLSearchParams()
-  body.append('global', 'true')
-  const url = 'apps/testing/api/v1/lockprovisioning'
-  await httpHelper.deleteOCS(url, 'admin', body)
 })
 
 Before(function() {
