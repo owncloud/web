@@ -171,8 +171,7 @@ config = {
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
-				'SCREEN_RESOLUTION': '768x1024',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.txt'
+				'SCREEN_RESOLUTION': '768x1024'
 			},
 			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
 		},
@@ -234,8 +233,7 @@ config = {
 			},
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
-				'SCREEN_RESOLUTION': '375x812',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.txt'
+				'SCREEN_RESOLUTION': '375x812'
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
 		},
