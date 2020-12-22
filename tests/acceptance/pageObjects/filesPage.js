@@ -341,6 +341,12 @@ module.exports = {
         searchBar = result.value
       })
       return searchBar.length > 0
+    },
+    clearSelection: async function() {
+      await this.useXpath()
+        .waitForElementVisible('@clearSelectionBtn')
+        .click('@clearSelectionBtn')
+        .waitForElementNotPresent('@clearSelectionBtn')
     }
   },
   elements: {
@@ -451,6 +457,10 @@ module.exports = {
     },
     editorCloseBtn: {
       selector: '#markdown-editor-app-bar .uk-text-right .oc-button'
+    },
+    clearSelectionBtn: {
+      selector: '//span[contains(text(),"Clear selection")]',
+      locateStrategy: 'xpath'
     }
   }
 }

@@ -231,10 +231,27 @@ module.exports = {
 
       const fileCheckbox =
         this.getFileRowSelectorByFileName(path) + this.elements.checkboxInFileRow.selector
-
       await this.toggleCheckbox(enableOrDisable, fileCheckbox, 'xpath')
 
       return this
+    },
+    /**
+     *
+     * @param {string} path
+     * @return {Promise<boolean>}
+     */
+    isResourceSelected: async function(path) {
+      await this.waitForFileVisible(path)
+      const fileCheckbox =
+        this.getFileRowSelectorByFileName(path) + this.elements.checkboxInFileRow.selector
+      let selectionStatus = ''
+      await this.api.element('xpath', fileCheckbox, result => {
+        if (!result.value.ELEMENT) {
+          throw new Error('Web element identifier not found for ' + fileCheckbox)
+        }
+        this.api.elementIdSelected(result.value.ELEMENT, result => (selectionStatus = result.value))
+      })
+      return selectionStatus
     },
     /**
      * Wait for A filerow with given filename to be visible

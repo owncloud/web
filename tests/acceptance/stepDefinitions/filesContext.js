@@ -122,7 +122,9 @@ Given('user {string} has moved file/folder {string} to {string}', function(user,
   return move(user, fromName, toName)
 })
 
-When('the user creates a folder with the name {string} using the webUI', function(folderName) {
+When('the user/public creates a folder with the name {string} using the webUI', function(
+  folderName
+) {
   return client.page.filesPage().createFolder(folderName)
 })
 
@@ -471,7 +473,7 @@ When('the user restores the file to last version using the webUI', function() {
   return client.page.FilesPageElement.versionsDialog().restoreToPreviousVersion()
 })
 
-When('the user reloads the current page of the webUI', function() {
+When('the user/public reloads the current page of the webUI', function() {
   return client.refresh()
 })
 
@@ -483,7 +485,7 @@ When('the user marks all files for batch action using the webUI', function() {
   return client.page.FilesPageElement.filesList().checkAllFiles()
 })
 
-When('the user batch deletes the marked files using the webUI', function() {
+When('the user/public batch deletes the marked files using the webUI', function() {
   return client.page.filesPage().deleteAllCheckedFiles()
 })
 
@@ -504,10 +506,30 @@ When('the user unmarks these files for batch action using the webUI', async func
   }
 })
 
-When('the user marks these files for batch action using the webUI', async function(fileOrFolders) {
+When('the user/public marks these files for batch action using the webUI', async function(
+  fileOrFolders
+) {
   for (const item of fileOrFolders.rows()) {
     await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
   }
+})
+
+Then('these files should be selected on the webUI', async function(fileOrFolders) {
+  for (const item of fileOrFolders.rows()) {
+    const status = await client.page.FilesPageElement.filesList().isResourceSelected(item[0])
+    assert.strictEqual(true, status, item + ' is expected to be selected but is not selected')
+  }
+})
+
+Then('these files should not be selected on the webUI', async function(fileOrFolders) {
+  for (const item of fileOrFolders.rows()) {
+    const status = await client.page.FilesPageElement.filesList().isResourceSelected(item[0])
+    assert.strictEqual(false, status, item + ' is expected not to be selected but is selected')
+  }
+})
+
+When('the user/public clears the selection of files', function() {
+  return client.page.filesPage().clearSelection()
 })
 
 When('the user clears the trashbin', function() {

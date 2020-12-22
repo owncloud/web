@@ -793,3 +793,67 @@ Feature: Share by public link
       File upload failed…
       Unknown error
       """
+
+  Scenario: public creates a folder in the public link
+    Given user "user1" has created a public link with following settings
+      | path        | /simple-folder |
+      | name        | public link    |
+      | permissions | read, create   |
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the public creates a folder with the name "public-created-folder" using the webUI
+    Then folder "public-created-folder" should be listed on the webUI
+    When the public reloads the current page of the webUI
+    Then folder "public-created-folder" should be listed on the webUI
+    And as "user1" folder "/simple-folder/public-created-folder" should exist
+
+  Scenario: public batch deletes resources in the public link
+    Given user "user1" has created a public link with following settings
+      | path        | /simple-folder |
+      | name        | public link    |
+      | permissions | read, create, delete, update |
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the public marks these files for batch action using the webUI
+      | name                |
+      | lorem.txt           |
+      | simple-empty-folder |
+      | data.zip            |
+    And the public batch deletes the marked files using the webUI
+    Then file "data.zip" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
+    And file "lorem.txt" should not be listed on the webUI
+    And as "user1" folder "/simple-folder/simple-empty-folder" should not exist
+    And as "user1" file "/simple-folder/lorem.txt" should not exist
+    And as "user1" file "/simple-folder/data.zip" should not exist
+
+  Scenario: files are not selected initially in the public share
+    Given user "user1" has created a public link with following settings
+      | path        | /simple-folder |
+      | name        | public link    |
+    When the public uses the webUI to access the last public link created by user "user1"
+    Then these files should not be selected on the webUI
+      | name                |
+      | lorem.txt           |
+      | simple-empty-folder |
+      | data.zip            |
+
+  Scenario: public selects files and clear the selection in the public share
+    Given user "user1" has created a public link with following settings
+      | path        | /simple-folder |
+      | name        | public link    |
+    When the public uses the webUI to access the last public link created by user "user1"
+    And the public marks these files for batch action using the webUI
+      | name                |
+      | lorem.txt           |
+      | simple-empty-folder |
+      | data.zip            |
+    Then these files should be selected on the webUI
+      | name                |
+      | lorem.txt           |
+      | simple-empty-folder |
+      | data.zip            |
+    When the public clears the selection of files
+    Then these files should not be selected on the webUI
+      | name                |
+      | lorem.txt           |
+      | simple-empty-folder |
+      | data.zip            |
