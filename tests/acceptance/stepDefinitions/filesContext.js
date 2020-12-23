@@ -1241,7 +1241,9 @@ Then(
   }
 )
 
-Given('the app-sidebar for file/folder {string} is visible on the webUI', async function(resource) {
+Given('the app-sidebar for file/folder {string} has been visible on the webUI', async function(
+  resource
+) {
   await client.page.FilesPageElement.filesList().clickRow(resource)
 
   const visible = await client.page.filesPage().isSidebarVisible()
@@ -1249,27 +1251,24 @@ Given('the app-sidebar for file/folder {string} is visible on the webUI', async 
   return client.page.filesPage().checkSidebarItem(resource)
 })
 
-Then('the following items should be visible in the actions menu on the webUI', async function(
-  table
-) {
-  const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleActionsMenuItems()
-  const expectedVisibleItems = table.rows()
-  const difference = _.difference(expectedVisibleItems.flat(), visibleItems)
-  if (difference.length !== 0) {
-    throw new Error(`${difference}  actions menu item(s) was expected to be visible but not found.`)
+Then(
+  'only the following items with default items should be visible in the actions menu on the webUI',
+  async function(table) {
+    const visibleItems = await client.page.FilesPageElement.appSideBar().getActionsMenuItemsExceptDefaults()
+
+    const tableItems = table.rows()
+    const expectedVisibleItems = []
+    tableItems.forEach(element => {
+      element instanceof Array
+        ? expectedVisibleItems.push(element[0])
+        : expectedVisibleItems.push(element)
+    })
+
+    const isPresent = _.isEqual(_.sortBy(expectedVisibleItems), _.sortBy(visibleItems))
+    assert.strictEqual(
+      isPresent,
+      true,
+      `only '${expectedVisibleItems}' actions menu item(s) was expected to be visible but also found '${visibleItems}'.`
+    )
   }
-})
-
-Then('the following items should not be visible in the actions menu on the webUI', async function(
-  table
-) {
-  const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleActionsMenuItems()
-  const expectedVisibleItems = table.rows()
-
-  expectedVisibleItems.forEach(item => {
-    const index = _.indexOf(visibleItems, item.toString().trim())
-    if (index !== -1) {
-      throw new Error(`${item} actions menu item was expected not to be visible but found.`)
-    }
-  })
-})
+)

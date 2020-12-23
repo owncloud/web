@@ -146,3 +146,9 @@ Feature: User can open the details panel for any file or folder
     Then the app-sidebar should be visible
     When the user closes the app-sidebar using the webUI
     Then the app-sidebar should be invisible
+
+  @issue-4244
+  Scenario: the sidebar is invisible after opening the selected folder
+    Given the app-sidebar for file "simple-folder" has been visible on the webUI
+    When the user opens folder "simple-folder" using the webUI
+    Then the app-sidebar should be invisible
