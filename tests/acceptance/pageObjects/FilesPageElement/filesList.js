@@ -723,16 +723,13 @@ module.exports = {
       return this
     },
 
-    cancelMoveResource: async function(resource) {
-      await this.waitForFileVisible(resource)
+    cancelResourceMoveOrCopyProgress: async function(target) {
+      await this.waitForFileVisible(target)
 
-      // Trigger move
-      await filesRow.openFileActionsMenu(resource).move()
-
-      // cancel move
+      // cancel copy or move
       await this.useXpath()
-        .waitForElementVisible(client.page.filesPage().elements.cancelMoveBtn.selector)
-        .click(this.page.filesPage().elements.cancelMoveBtn.selector)
+        .waitForElementVisible(client.page.filesPage().elements.cancelMoveCopyBtn.selector)
+        .click(this.page.filesPage().elements.cancelMoveCopyBtn.selector)
         .useCss()
 
       return this
