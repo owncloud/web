@@ -171,6 +171,7 @@ Feature: Restore deleted files/folders
     And the following files have been deleted by user "user1"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
+      | simple-folder                            |
     When the user browses to the trashbin page
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
@@ -192,6 +193,7 @@ Feature: Restore deleted files/folders
     And the following files have been deleted by user "user1"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
+      | simple-folder                            |
     When the user browses to the trashbin page
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
