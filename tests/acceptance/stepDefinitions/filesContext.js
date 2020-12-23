@@ -1240,3 +1240,36 @@ Then(
     )
   }
 )
+
+Given('the app-sidebar for file/folder {string} is visible on the webUI', async function(resource) {
+  await client.page.FilesPageElement.filesList().clickRow(resource)
+
+  const visible = await client.page.filesPage().isSidebarVisible()
+  assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
+  return client.page.filesPage().checkSidebarItem(resource)
+})
+
+Then('the following items should be visible in the actions menu on the webUI', async function(
+  table
+) {
+  const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleActionsMenuItems()
+  const expectedVisibleItems = table.rows()
+  const difference = _.difference(expectedVisibleItems.flat(), visibleItems)
+  if (difference.length !== 0) {
+    throw new Error(`${difference}  actions menu item(s) was expected to be visible but not found.`)
+  }
+})
+
+Then('the following items should not be visible in the actions menu on the webUI', async function(
+  table
+) {
+  const visibleItems = await client.page.FilesPageElement.appSideBar().getVisibleActionsMenuItems()
+  const expectedVisibleItems = table.rows()
+
+  expectedVisibleItems.forEach(item => {
+    const index = _.indexOf(visibleItems, item.toString().trim())
+    if (index !== -1) {
+      throw new Error(`${item} actions menu item was expected not to be visible but found.`)
+    }
+  })
+})

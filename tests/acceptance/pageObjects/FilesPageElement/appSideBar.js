@@ -59,6 +59,19 @@ module.exports = {
       }
       return items
     },
+    getVisibleActionsMenuItems: async function() {
+      const items = []
+      let elements
+      await this.api.elements('@actionPanelItems', function(result) {
+        elements = result.value
+      })
+      for (const { ELEMENT } of elements) {
+        await this.api.elementIdText(ELEMENT, function(result) {
+          items.push(result.value.toLowerCase())
+        })
+      }
+      return items
+    },
     isPanelVisible: async function(panelName, timeout = null) {
       panelName = panelName === 'people' ? 'collaborators' : panelName
       const selector = this.elements[panelName + 'Panel']
@@ -161,6 +174,10 @@ module.exports = {
     },
     actionsPanel: {
       selector: '#oc-files-actions-sidebar'
+    },
+    actionPanelItems: {
+      selector: '//div[@class="oc-accordion-content"]//li/button',
+      locateStrategy: 'xpath'
     }
   }
 }
