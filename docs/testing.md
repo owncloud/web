@@ -141,27 +141,22 @@ We run web UI tests in the following repos in the CI.
 In the `owncloud/web` repo, we run the tests using both the oc10 backend and the OCIS backend.
 For the oc10 backend, we use the `owncloudci/core` docker image which runs the latest `daily-master-qa` version of owncloud.
 
-For the OCIS backend, we use the Commit ID from the `owncloud/ocis` repo to indicate which version of backend to use. This can be specified in the `.drone.star` file in the `config.defaults` section.
+For the OCIS backend, we use the Commit ID from the `owncloud/ocis` repo to indicate which version of backend to use. This can be specified in the `.drone.env` file.
 ```
-	'defaults': {
-		'acceptance': {
-			'ocisBranch': 'master',
-			'ocisCommit': '284a9996dffa912cc1382e259b748c56ddc4aa0f',
-		}
-	},
+  # The version of OCIS to use in pipelines that test against OCIS
+  OCIS_COMMITID=352034d9eba8be8c4bc4b80421f3c0093e7d472c
+  OCIS_BRANCH=master
 ```
 If the version you want to run is on a different branch from master, you also need to change the branch name.
 
 In order to check if new tests are compatible with OCIS, after changing the commit id and the branch name, we can create a draft PR in `owncloud/web` which triggers the CI, and we can see the result there.
 
 ### 2. ocis Repo
-We follow the same approach in the `owncloud/ocis` repo too. In order to run the UI tests in CI we use commit IDs from web which can be changed in the `.drone.star` file. 
+We follow the same approach in the `owncloud/ocis` repo too. In order to run the UI tests in CI we use commit IDs from web which can be changed in the `.drone.env` file. 
 
 ```
-  'uiTests': {
-    'webBranch': 'master',
-    'webCommit': '492e6a663efad67f770ba4ac405c4d9983d00cd3',
-...
-  }
+  # The test runner source for UI tests
+  WEB_COMMITID=3cab4e32bca513f14f59127a0387b44a409763a3
+  WEB_BRANCH=master
 ```
 This is the commit ID of web indicating the version of testrunner we want to use. If the version is on a branch other than master, we will also need to change the branch name.
