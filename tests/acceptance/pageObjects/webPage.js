@@ -186,17 +186,24 @@ module.exports = {
     },
     browseToUserProfile: function() {
       return this.click('@userMenuButton')
+    },
+    getDisplayedMessage: async function() {
+      let element = ''
+      let displayedmessage
+      await this.waitForElementVisible('@messages')
+      await this.api.element('@messages', result => {
+        element = result.value.ELEMENT
+      })
+      await this.api.elementIdText(element, function(result) {
+        displayedmessage = result.value
+      })
+      return displayedmessage
     }
   },
   elements: {
     message: {
       selector:
         '//*[contains(@class, "uk-notification-message")]/div/div[contains(@class, "oc-notification-message-title")]',
-      locateStrategy: 'xpath'
-    },
-    messageSubHeader: {
-      selector:
-        '//*[contains(@class, "uk-notification-message")]/div/div[contains(@class, "uk-text-meta")]',
       locateStrategy: 'xpath'
     },
     messages: {
