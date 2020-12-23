@@ -332,13 +332,6 @@ config = {
 		}
 	},
 
-	'defaults': {
-		'acceptance': {
-			'ocisBranch': 'master',
-			'ocisCommit': '352034d9eba8be8c4bc4b80421f3c0093e7d472c',
-		}
-	},
-
 	'build': True
 }
 
@@ -567,8 +560,6 @@ def acceptance():
 		'federatedServerVersion': '',
 		'runningOnOCIS': False,
 		'screenShots': False,
-		'ocisBranch': 'master',
-		'ocisCommit': '',
 	}
 
 	if 'defaults' in config:
@@ -629,7 +620,7 @@ def acceptance():
 							'steps':
 								installNPM() +
 								buildWeb() +
-								cloneOCIS(params['ocisBranch']) +
+								cloneOCIS() +
 								(
 									(
 										installCore(server, db) +
@@ -650,7 +641,7 @@ def acceptance():
 										glauthService()+
 										fixPermissions()
 									) if not params['runningOnOCIS'] else (
-										buildOCIS(params['ocisCommit']) +
+										buildOCIS() +
 										ocisService() +
 										getSkeletonFiles()
 									)
@@ -1339,17 +1330,18 @@ def konnectdService():
 		}],
 	}]
 
-def cloneOCIS(ocisBranch):
+def cloneOCIS():
 	return[{
 		'name': 'clone-ocis',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'commands': [
+			'source .drone.env',
 			'mkdir -p /srv/app/src',
 			'cd $GOPATH/src',
 			'mkdir -p github.com/owncloud/',
 			'cd github.com/owncloud/',
-			'git clone -b %s --single-branch --no-tags https://github.com/owncloud/ocis' % (ocisBranch),
+			'git clone -b $OCIS_BRANCH --single-branch --no-tags https://github.com/owncloud/ocis',
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1360,16 +1352,15 @@ def cloneOCIS(ocisBranch):
 		}],
 	}]
 
-def buildOCIS(ocisCommit):
+def buildOCIS():
 	return[{
 		'name': 'build-ocis',
 		'image': 'webhippie/golang:1.13',
 		'pull': 'always',
 		'commands': [
+			'source .drone.env',
 			'cd $GOPATH/src/github.com/owncloud/ocis',
-		] + ([
-			'git checkout %s' % (ocisCommit)
-		] if ocisCommit != '' else []) + [
+			'git checkout $OCIS_COMMITID',
 			'cd ocis',
 			'make build',
 			'cp bin/ocis /var/www/owncloud'
