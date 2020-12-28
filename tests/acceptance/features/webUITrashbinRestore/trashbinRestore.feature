@@ -128,15 +128,83 @@ Feature: Restore deleted files/folders
       | simple-folder/file-to-delete-and-restore |
     And user "user1" has renamed folder "simple-folder" to "simple-folder-renamed"
     When the user browses to the trashbin page
-    #And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
-    Then the error message with header "Restoration of file-to-delete-and-restore failed" should be displayed on the webUI
+    Then the following error message should be displayed on the webUI
+     """
+     Restoration of file-to-delete-and-restore failed
+     The destination node is not found
+     """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
     #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
     And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin
     And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
     #And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should exist
     And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
+
+  @skipOnOC10
+  @issue-product-186
+  @issue-ocis-1057
+  Scenario: Restore a file from trashbin whose parent folder is renamed
+    Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
+    And the following files have been deleted by user "user1"
+      | name                                     |
+      | simple-folder/file-to-delete-and-restore |
+    And user "user1" has renamed folder "simple-folder" to "simple-folder-renamed"
+    When the user browses to the trashbin page
+    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
+    Then the following error message should be displayed on the webUI
+      """
+      Restoration of file-to-delete-and-restore failed
+      Unknown error
+      """
+    #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
+    #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
+    And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
+    #And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should exist
+    And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
+
+  @issue-1753
+  @skipOnOCIS
+  @issue-product-186
+  Scenario: Restore a file from trashbin without restoring the parent folder
+    Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
+    And the following files have been deleted by user "user1"
+      | name                                     |
+      | simple-folder/file-to-delete-and-restore |
+      | simple-folder                            |
+    When the user browses to the trashbin page
+    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
+    Then the following error message should be displayed on the webUI
+     """
+     Restoration of file-to-delete-and-restore failed
+     The destination node is not found
+     """
+    #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
+    #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
+    And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin
+    And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
+    #And as "user1" file "simple-folder/file-to-delete-and-restore" should exist
+
+  @skipOnOC10
+  @issue-product-186
+  @issue-ocis-1057
+  Scenario: Restore a file from trashbin without restoring the parent folder
+    Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
+    And the following files have been deleted by user "user1"
+      | name                                     |
+      | simple-folder/file-to-delete-and-restore |
+      | simple-folder                            |
+    When the user browses to the trashbin page
+    And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
+    Then the following error message should be displayed on the webUI
+      """
+      Restoration of file-to-delete-and-restore failed
+      Unknown error
+      """
+    #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
+    #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
+    And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
+    #And as "user1" file "simple-folder/file-to-delete-and-restore" should exist
 
   @issue-1723
   Scenario: Delete and restore a file that has the same name like a deleted folder

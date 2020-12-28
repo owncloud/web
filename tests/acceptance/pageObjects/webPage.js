@@ -186,6 +186,18 @@ module.exports = {
     },
     browseToUserProfile: function() {
       return this.click('@userMenuButton')
+    },
+    getDisplayedMessage: async function() {
+      let element = ''
+      let displayedmessage
+      await this.waitForElementVisible('@messages')
+      await this.api.element('@messages', result => {
+        element = result.value.ELEMENT
+      })
+      await this.api.elementIdText(element, function(result) {
+        displayedmessage = result.value
+      })
+      return displayedmessage
     }
   },
   elements: {
