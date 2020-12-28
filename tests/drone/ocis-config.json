@@ -12,7 +12,12 @@
   "apps": [
     "files",
     "draw-io",
-    "markdown-editor",
     "media-viewer"
+  ],
+  "external_apps": [
+    {
+      "id": "markdown-editor",
+      "path": "http://ocis:9206/markdown-editor.js"
+    }
   ]
 }

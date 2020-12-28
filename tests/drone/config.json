@@ -12,7 +12,12 @@
   "apps": [
     "files",
     "draw-io",
-    "markdown-editor",
     "media-viewer"
+  ],
+  "external_apps": [
+    {
+      "id": "markdown-editor",
+      "path": "http://owncloud:9206/markdown-editor.js"
+    }
   ]
 }

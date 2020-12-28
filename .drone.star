@@ -647,6 +647,8 @@ def acceptance():
 									)
 								) +
 								copyFilesForUpload() +
+								buildMarkdownEditor() +
+								markdownEditorService() +
 								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
 								(
 									uploadScreenshots() +
@@ -1696,6 +1698,43 @@ def githubComment():
 				'pull_request'
 			]
 		},
+	}]
+
+def buildMarkdownEditor():
+	return[{
+		'name': 'build-markdown-editor',
+		'image': 'webhippie/golang:1.13',
+		'pull': 'always',
+		'commands': [
+			'mkdir -p /srv/app/src',
+			'cd $GOPATH/src',
+			'mkdir -p github.com/owncloud/',
+			'cd github.com/owncloud/',
+			'git clone https://github.com/owncloud/ocis-markdown-editor.git',
+			'cd ocis-markdown-editor',
+			'make build',
+			'cp bin/ocis-markdown-editor /var/www/owncloud/markdown-editor'
+		],
+		'volumes': [{
+			'name': 'gopath',
+			'path': '/srv/app',
+		}],
+	}]
+
+def markdownEditorService():
+	return[{
+		'name': 'markdown-editor',
+		'image': 'webhippie/golang:1.13',
+		'pull': 'always',
+		'detach': True,
+		'commands': [
+			'cd /var/www/owncloud',
+			'./markdown-editor --log-level debug server',
+		],
+		'volumes': [{
+			'name': 'gopath',
+			'path': '/srv/app',
+		}],
 	}]
 
 def dependsOn(earlierStages, nextStages):
