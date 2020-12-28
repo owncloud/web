@@ -12,7 +12,7 @@ Feature: Sharing files and folders with internal users
       | user1    |
       | user2    |
 
-  @issue-2939 @skipOnOCIS @issue-4193
+  @skipOnOCIS @issue-4193 @issue-4310
   Scenario: sharing indicator for user shares stays up to date
     Given user "user3" has been created with default attributes
     And user "user4" has been created with default attributes
