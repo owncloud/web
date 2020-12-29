@@ -1586,6 +1586,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 
 	environment['SERVER_HOST'] = 'http://web:9100'
 	environment['BACKEND_HOST'] = 'http://owncloud'
+	environment['REMOTE_UPLOAD_DIR'] = '/uploads/'
 
 	for env in extraEnvironment:
 		environment[env] = extraEnvironment[env]
@@ -1607,7 +1608,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 			'path': '/srv/config'
 		},{
 			'name': 'uploads',
-			'path': '/var/www/owncloud/web/tests/acceptance/filesForUpload'
+			'path': '/uploads'
 		}],
 	}]
 
