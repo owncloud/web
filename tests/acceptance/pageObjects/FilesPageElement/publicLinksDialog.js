@@ -36,12 +36,19 @@ module.exports = {
         .startCase()
         .replace(/\s/g, '')
         .value()
+      const selectedRoleDropdown = util.format(
+        this.elements.publicLinkRoleSelectionDropdown.selector,
+        role
+      )
       return this.waitForElementPresent('@selectRoleButton')
         .click('@selectRoleButton')
         .waitForElementVisible('@rolesDropdown')
         .waitForElementVisible(`@role${role}`)
         .click(`@role${role}`)
         .waitForElementNotVisible('@rolesDropdown')
+        .useXpath()
+        .waitForElementVisible(selectedRoleDropdown)
+        .useCss()
     },
     /**
      * sets name of the public link share on webUI
@@ -437,6 +444,10 @@ module.exports = {
     },
     sidebarPrivateLinkIconCopied: {
       selector: '#files-sidebar-private-link-icon-copied'
+    },
+    publicLinkRoleSelectionDropdown: {
+      selector: '//button[contains(@class, "files-file-link-role-button")]//span[.="%s"]',
+      locateStrategy: 'xpath'
     }
   }
 }

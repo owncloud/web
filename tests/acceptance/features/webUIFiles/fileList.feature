@@ -8,7 +8,7 @@ Feature: User can view files inside a folder
     And user "user1" has logged in using the webUI
 
   Scenario: Resources are listed
-    When the user has browsed to the files page
+    When the user browses to the files page
     Then folder "simple-folder" should be listed on the webUI
     And file "textfile0.txt" should be listed on the webUI
 
@@ -26,7 +26,7 @@ Feature: User can view files inside a folder
   @issue-276 @skipOnOCIS @issue-3264
   Scenario: Thumbnails are loaded for paths containing special characters
     Given user "user1" has renamed folder "simple-folder" to "strängé folder name (duplicate #2 &)"
-    When the user has browsed to the files page
+    When the user browses to the files page
     And the user opens folder "strängé folder name (duplicate #2 &)" directly on the webUI
     Then the file "strängé filename (duplicate #2 &).txt" should have a thumbnail displayed on the webUI
 
@@ -36,5 +36,38 @@ Feature: User can view files inside a folder
     Then the file "new-data.zip" should have a file type icon displayed on the webUI
 
   Scenario: All files list displays public link quick action
-    When the user has browsed to the files page
+    When the user browses to the files page
     Then quick action "public link" should be displayed on the webUI
+
+  Scenario: files are not selected when the user logs in
+    When the user browses to the files page
+    Then these files should not be selected on the webUI
+      | name                |
+      | lorem.txt           |
+      | simple-empty-folder |
+      | data.zip            |
+
+  Scenario: select files
+    When the user marks these files for batch action using the webUI
+      | name                |
+      | lorem.txt           |
+      | simple-empty-folder |
+      | data.zip            |
+    Then these files should be selected on the webUI
+      | name                |
+      | lorem.txt           |
+      | simple-empty-folder |
+      | data.zip            |
+
+  Scenario: select files and clear the selection
+    When the user marks these files for batch action using the webUI
+      | name                |
+      | lorem.txt           |
+      | simple-empty-folder |
+      | data.zip            |
+    And the user clears the selection of files
+    Then these files should not be selected on the webUI
+      | name                |
+      | lorem.txt           |
+      | simple-empty-folder |
+      | data.zip            |
