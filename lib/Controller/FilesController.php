@@ -95,12 +95,17 @@ class FilesController extends Controller {
 		$response = new DataDisplayResponse(\file_get_contents($absolutePath), Http::STATUS_OK, [
 			'Content-Type' => $this->getMimeType($absolutePath),
 			'Content-Length' => \filesize($absolutePath),
+			'Cache-Control' => 'max-age=0, no-cache, no-store, must-revalidate',
+			'Pragma' => 'no-cache',
+			'Expires' => 'Wed, 11 Jan 1984 05:00:00 GMT',
+			'X-Frame-Options' => 'DENY'
 		]);
 		if (\strpos($path, "oidc-callback.html") === 0 || \strpos($path, "oidc-silent-redirect.html") === 0) {
 			$csp = new ContentSecurityPolicy();
 			$csp->allowInlineScript(true);
 			$response->setContentSecurityPolicy($csp);
 		}
+
 		return $response;
 	}
 

@@ -54,8 +54,8 @@ class ConfigController extends Controller {
     /**
      * Loads the config json file for ownCloud Web
      *
-     * @NoAdminRequired
-     * @NoCSRFRequired
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
      *
      * @return JSONResponse
      */
@@ -64,7 +64,12 @@ class ConfigController extends Controller {
             $configFile = \OC::$SERVERROOT . '/config/config.json';
             $configContent = \file_get_contents($configFile);
             $configAssoc = \json_decode($configContent, true);
-            return new JSONResponse($configAssoc);
+            $response = new JSONResponse($configAssoc);
+			$response->addHeader('Cache-Control', 'max-age=0, no-cache, no-store, must-revalidate');
+			$response->addHeader('Pragma', 'no-cache');
+			$response->addHeader('Expires', 'Wed, 11 Jan 1984 05:00:00 GMT');
+			$response->addHeader('X-Frame-Options', 'DENY');
+			return $response;
         } catch(\Exception $e) {
             $this->logger->logException($e, ['app' => 'web']);
             return new JSONResponse(["message" => $e->getMessage()], Http::STATUS_NOT_FOUND);
