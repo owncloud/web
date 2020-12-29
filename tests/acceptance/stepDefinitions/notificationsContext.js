@@ -33,6 +33,11 @@ Given('app {string} has been {}', async function(app, action) {
     "only supported either 'enabled' or 'disabled'. Passed: " + action
   )
 
+  if (client.globals.ocis) {
+    // TODO: decide if we fail on OCIS when a scenario even tries to use this given step
+    return
+  }
+
   const errorMessage = util.format(
     'Failed while trying to %s the app',
     action === 'enabled' ? 'enable' : 'disable'
