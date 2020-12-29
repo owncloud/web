@@ -160,7 +160,7 @@ webUIRestrictSharing/restrictSharing.feature:34
 webUIRestrictSharing/restrictSharing.feature:42
 webUIRestrictSharing/restrictSharing.feature:49
 webUISharingAcceptShares/acceptShares.feature:16
-webUISharingAcceptShares/acceptShares.feature:211
+webUISharingAcceptShares/acceptShares.feature:209
 webUISharingAutocompletion/shareAutocompletion.feature:33
 webUISharingAutocompletion/shareAutocompletion.feature:44
 webUISharingAutocompletion/shareAutocompletion.feature:54
@@ -285,13 +285,13 @@ webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:121
 webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:137
 #
 # @ocis-product-276
-webUISharingAcceptShares/acceptShares.feature:122
+webUISharingAcceptShares/acceptShares.feature:120
 #
 # @ocis-issue-714
-webUISharingAcceptShares/acceptShares.feature:182
+webUISharingAcceptShares/acceptShares.feature:180
 #
 # @ocis-issue-713
-webUISharingAcceptShares/acceptShares.feature:196
+webUISharingAcceptShares/acceptShares.feature:194
 #
 # @issue-product-203
 webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:59
