@@ -155,6 +155,10 @@ Given('user {string} has been created with default attributes', async function(u
   await initUser(userId)
 })
 
+Given('user {string} has been deleted', function(userId) {
+  return deleteUser(userId)
+})
+
 Given('user {string} has been created with default attributes on remote server', function(userId) {
   return backendHelper.runOnRemoteBackend(async function() {
     await deleteUser()

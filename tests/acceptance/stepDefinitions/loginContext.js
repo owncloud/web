@@ -109,3 +109,11 @@ Then('the user should be redirected to the IdP login page', function() {
 
   return client.page.ownCloudAuthorizePage().waitForPage()
 })
+
+Then('the user should be redirected to the login error page', function() {
+  return client.page.loginErrorPage().waitTillLoaded()
+})
+
+When('the user exits the login error page', function() {
+  return client.page.loginErrorPage().exit()
+})
