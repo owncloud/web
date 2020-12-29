@@ -212,15 +212,16 @@ module.exports = {
      *
      * @param {Function} callback callback with result
      */
-    canCreateFiles: function(callback) {
-      return this.waitForElementVisible('@newFileMenuButtonAnyState').getAttribute(
+    canCreateFiles: async function(callback) {
+      let canCreate = false
+      await this.waitForElementVisible('@newFileMenuButtonAnyState').getAttribute(
         '@newFileMenuButtonAnyState',
         'disabled',
         result => {
-          const isDisabled = result.value === 'true'
-          callback(isDisabled)
+          canCreate = result.value === 'true'
         }
       )
+      return canCreate
     },
     deleteAllCheckedFiles: function() {
       return this.waitForElementVisible('@deleteSelectedButton')

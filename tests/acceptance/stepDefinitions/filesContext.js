@@ -284,16 +284,14 @@ When(
   }
 )
 
-Then('it should not be possible to create files using the webUI', function() {
-  return client.page.filesPage().canCreateFiles(async isDisabled => {
-    await assert.strictEqual(isDisabled, true, 'Create action must not be enabled')
-  })
+Then('it should not be possible to create files using the webUI', async function() {
+  const canCreate = await client.page.filesPage().canCreateFiles()
+  await assert.strictEqual(canCreate, true, 'Create action must not be enabled')
 })
 
-Then('it should be possible to create files using the webUI', function() {
-  return client.page.filesPage().canCreateFiles(async isDisabled => {
-    await assert.strictEqual(isDisabled, false, 'Create action must be enabled')
-  })
+Then('it should be possible to create files using the webUI', async function() {
+  const canCreate = client.page.filesPage().canCreateFiles()
+  await assert.strictEqual(canCreate, false, 'Create action must be enabled')
 })
 
 When('the user renames file/folder {string} to {string} using the webUI', function(
