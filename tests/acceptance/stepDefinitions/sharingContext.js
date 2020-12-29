@@ -108,6 +108,20 @@ Given(
   }
 )
 
+When(
+  'user {string} from remote server shares {string} with user {string} from local server',
+  function(sharer, file, receiver) {
+    receiver = util.format('%s@%s', receiver, client.globals.backend_url)
+    return backendHelper.runOnRemoteBackend(
+      shareFileFolder,
+      file,
+      sharer,
+      receiver,
+      SHARE_TYPES.federated_cloud_share
+    )
+  }
+)
+
 /**
  * makes sure share operations are carried out maximum once a second to avoid same stime
  */

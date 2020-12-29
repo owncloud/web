@@ -380,3 +380,11 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Then folder "simple-folder" should not be listed on the webUI
     # uncomment below line after the issue has been fixed
     # Then folder "simple-folder" should be listed on the webUI
+
+  @issue-4247
+  Scenario: shares folder appears only after reloading the page
+    When user "user1" from remote server shares "simple-folder" with user "user1" from local server
+    And user "user1" from server "LOCAL" accepts the last pending share using the sharing API
+    Then folder "Shares" should not be listed on the webUI
+    When the user reloads the current page of the webUI
+    Then folder "Shares" should be listed on the webUI
