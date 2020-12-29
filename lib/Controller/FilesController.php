@@ -58,7 +58,7 @@ class FilesController extends Controller {
 	/**
 	 * Tries to load a file by the given $path.
 	 *
-	 * @NoAdminRequired
+	 * @PublicPage
 	 * @NoCSRFRequired
 	 *
 	 * @param $path string

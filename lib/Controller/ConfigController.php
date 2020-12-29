@@ -54,7 +54,7 @@ class ConfigController extends Controller {
     /**
      * Loads the config json file for ownCloud Web
      *
-	 * @NoAdminRequired
+	 * @PublicPage
 	 * @NoCSRFRequired
      *
      * @return JSONResponse
