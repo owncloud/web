@@ -212,12 +212,6 @@ function loadTranslations () {
 (async function () {
   // try to load config.json
   config = await fetch('config.json')
-  // if the config.json is missing, try to find the oc10 app config endpoint
-  if (config.status === 404) {
-    const baseUrl = window.location.href.substring(0, window.location.href.indexOf('/apps'))
-    const configUrl = baseUrl + (!baseUrl.includes('index.php') ? '/index.php/' : '/') + 'apps/web/config'
-    config = await fetch(configUrl)
-  }
   if (config.status !== 200) {
     router.push('missing-config')
     missingConfig()

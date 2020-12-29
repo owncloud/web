@@ -26,7 +26,14 @@ $app->registerRoutes(
     $this,
     [
         'routes' => [
-            ['name' => 'Config#getConfig', 'url' => '/config', 'verb' => 'GET']
+			['name' => 'Config#getConfig', 'url' => '/config.json', 'verb' => 'GET'],
+            [
+            	'name' => 'Files#getFile',
+				'url' => '/{path}',
+				'verb' => 'GET',
+				'requirements' => ['path' => '.+'],
+				'defaults' => ['path' => 'index.html']
+			]
         ]
     ]
 );
