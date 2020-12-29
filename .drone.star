@@ -317,6 +317,7 @@ config = {
 				'webUISharingFolderPermissionMultipleUsers': 'OCISSharingFolderPermissionMultipleUsers',
 				'webUISharingFolderAdvancedPermissionMultipleUsers': 'OCISSharingFolderAdvancedPermissionMU',
 				'webUIMoveFilesFolders': 'OCISMove',
+				'webUIUserJourney' : 'OCISJourney'
 			},
 			'extraEnvironment': {
 				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
