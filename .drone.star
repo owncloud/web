@@ -646,7 +646,7 @@ def acceptance():
 										getSkeletonFiles()
 									)
 								) +
-								# copyFilesForUpload() +
+								copyFilesForUpload() +
 								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
 								(
 									uploadScreenshots() +

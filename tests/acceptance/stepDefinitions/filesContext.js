@@ -13,6 +13,13 @@ let deletedElements
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
 const httpHelper = require('../helpers/httpHelper')
+const {
+  getLastUploadedFolder,
+  setLastUploadedFolder,
+  getCreatedFolders,
+  addCreatedFolder,
+  newFileName
+} = require('../helpers/filesHelper')
 
 let createdFiles = []
 
@@ -283,11 +290,25 @@ When(
       )
     }
 
-    for (const file of files) {
-      const filePath = path.join(client.globals.filesForUpload, file)
-      await client.uploadRemote(filePath)
+    if (client.globals.remote_selenium) {
+      for (const file of files) {
+        const filePath = path.join(client.globals.filesForUpload, file)
+        await client.uploadRemote(filePath)
+      }
+      return client.page.filesPage().uploadSessionFolder()
+    } else {
+      const folderName = newFileName(5)
+      const folderPath = path.join(client.globals.filesForUpload, folderName)
+      fs.mkdirSync(folderPath)
+      for (const file of files) {
+        const filePath = path.join(client.globals.filesForUpload, file)
+        fs.copyFileSync(filePath, path.join(folderPath, file))
+      }
+      const localUploadPath = path.join(client.globals.mountedUploadDir, folderName)
+      await client.page.filesPage().uploadFolder(localUploadPath)
+      setLastUploadedFolder(folderName)
+      addCreatedFolder(folderName)
     }
-    return client.page.filesPage().uploadSessionFolder()
   }
 )
 
@@ -401,7 +422,7 @@ Then('file/folder with path {string} should be listed in the favorites page on t
 })
 
 Then('the last uploaded folder should be listed on the webUI', async function() {
-  const folder = client.sessionId
+  const folder = getLastUploadedFolder(client)
   await client.page.FilesPageElement.filesList().waitForFileVisible(folder)
 
   return client
@@ -1312,4 +1333,11 @@ After(async function(testCase) {
   body.append('global', 'true')
   const url = 'apps/testing/api/v1/lockprovisioning'
   await httpHelper.deleteOCS(url, 'admin', body)
+})
+
+After(function() {
+  getCreatedFolders().map(folder => {
+    const folderPath = path.join(client.globals.filesForUpload, folder)
+    fs.rmdirSync(folderPath, { recursive: true })
+  })
 })

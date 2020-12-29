@@ -8,6 +8,7 @@ const { xml2js } = require('xml-js')
 const _ = require('lodash')
 const assert = require('assert')
 const path = require('../helpers/path')
+const { getLastUploadedFolder } = require('../helpers/filesHelper')
 
 /**
  * Check if file exists using webdav requests
@@ -60,7 +61,8 @@ Then('as {string} file/folder {string} should exist inside folder {string}', fun
 })
 
 Then('as {string} the last uploaded folder should exist', function(userId) {
-  return fileShouldExist(userId, client.sessionId)
+  const folderName = getLastUploadedFolder(client)
+  return fileShouldExist(userId, folderName)
 })
 
 Then(
@@ -68,9 +70,9 @@ Then(
   async function(user, files) {
     files = files.raw().map(item => item[0])
 
-    const sessionId = client.sessionId
+    const folderName = getLastUploadedFolder(client)
     const response = await webdavHelper.propfind(
-      `/files/${user}/${sessionId}`,
+      `/files/${user}/${folderName}`,
       user,
       [],
       'infinity'
@@ -84,7 +86,12 @@ Then(
 
     const uploadedFilesHref = elements.map(elem => _.get(elem, 'd:href._text')).filter(item => item)
 
-    const regexToExtractBaseName = RegExp(`/${sessionId}/upload[0-9]+file/(.*)`)
+    let regexToExtractBaseName = ''
+    if (client.remote_selenium) {
+      regexToExtractBaseName = RegExp(`/${client.SessionId}/upload[0-9]+file/(.*)`)
+    } else {
+      regexToExtractBaseName = RegExp(`/${folderName}/(.*)`)
+    }
     const uploadedFilesWithBaseName = uploadedFilesHref
       // unmatched items return null, else is array
       .map(file => _.nth(file.match(regexToExtractBaseName), 1))
