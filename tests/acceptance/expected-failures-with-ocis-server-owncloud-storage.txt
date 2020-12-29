@@ -1,1 +1,7 @@
 # this file contains the scenarios from phoenix tests that are currently expected to fail on OCIS with owncloud storage
+
+#
+# https://github.com/owncloud/ocisissues/1106 media viewer does not support mp3 files
+#
+webUIPreview/imageMediaViewer.feature:70
+webUIPreview/imageMediaViewer.feature:76

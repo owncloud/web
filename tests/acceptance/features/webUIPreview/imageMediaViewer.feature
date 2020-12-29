@@ -66,3 +66,15 @@ Feature: display image in media viewer on the webUI
     And user "user1" has logged in using the webUI
     When the user views the file "testavatar.jpg" in the media viewer by clicking on the file name using the webUI
     Then the file "testavatar.jpg" should be displayed in the media viewer webUI
+
+  Scenario: preview of mp3 file with media viewer by clicking on the file name
+    Given user "user1" has uploaded file "testimage.mp3" to "testimage.mp3"
+    And user "user1" has logged in using the webUI
+    When the user views the file "testimage.mp3" in the media viewer by clicking on the file name using the webUI
+    Then the file "testimage.mp3" should be displayed in the media viewer webUI
+
+  Scenario: preview of mp3 file with media viewer is possible
+    Given user "user1" has uploaded file "testimage.mp3" to "testimage.mp3"
+    And user "user1" has logged in using the webUI
+    When the user views the file "testimage.mp3" in the media viewer using the webUI
+    Then the file "testimage.mp3" should be displayed in the media viewer webUI
