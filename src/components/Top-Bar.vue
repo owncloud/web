@@ -13,12 +13,7 @@
       </div>
       <search-bar v-if="!isSearchDisabled" />
     </oc-grid>
-    <oc-grid
-      v-if="!isPublicPage"
-      flex
-      gutter="small"
-      class="uk-width-expand uk-flex-right oc-mt-rm"
-    >
+    <oc-grid v-if="!isPublicPage" flex gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
       <notifications v-if="activeNotifications.length" />
       <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
       <user-menu
