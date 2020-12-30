@@ -132,7 +132,7 @@ Feature: File Upload
     #   (Any nice error message)
     #   """
 
-  @skipOnOC10
+  @skipOnOC10 @thisOne
   Scenario Outline: Overwrite a file when upload is in progress
     Given a file with the size of "<original_size>" bytes and the name "0" has been created locally
     When the user opens folder "simple-folder" using the webUI
@@ -149,7 +149,7 @@ Feature: File Upload
       | 300000000     | 10             |
       | 300000000     | 310000000      |
 
-  @skipOnOCIS
+  @skipOnOCIS @thisOne
   Scenario Outline: Overwrite a file when upload is in progress
     Given a file with the size of "<original_size>" bytes and the name "0" has been created locally
     When the user opens folder "simple-folder" using the webUI

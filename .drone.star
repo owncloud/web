@@ -90,7 +90,8 @@ config = {
 				'OPENID_LOGIN': 'true',
 				'WEB_UI_CONFIG': '/srv/config/drone/config.json',
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.txt'
-			}
+			},
+			'filterTags': '@thisOne',
 		},
 		# 'webUIFederation': {
 		# 	'suites': {
@@ -328,7 +329,7 @@ config = {
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-ocis-server-owncloud-storage.txt'
 			},
 			'runningOnOCIS': True,
-			'filterTags': 'not @skip and not @skipOnOCIS and not @notToImplementOnOCIS',
+			'filterTags': 'not @skip and not @skipOnOCIS and not @notToImplementOnOCIS and @thisOne',
 		}
 	},
 
@@ -559,7 +560,7 @@ def acceptance():
 		'federatedServerNeeded': False,
 		'federatedServerVersion': '',
 		'runningOnOCIS': False,
-		'screenShots': False,
+		'screenShots': True,
 	}
 
 	if 'defaults' in config:
