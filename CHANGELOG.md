@@ -8,11 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fully clickable sidebar toggle button: [#4130](https://github.com/owncloud/web/issues/4130)
 * Bugfix - Allow server URL without trailing slash: [#4536](https://github.com/owncloud/web/pull/4536)
 * Change - Allow to disable previews in file lists: [#4513](https://github.com/owncloud/web/pull/4513)
 
 Details
 -------
+
+* Bugfix - Fully clickable sidebar toggle button: [#4130](https://github.com/owncloud/web/issues/4130)
+
+   The button for hiding/showing the left sidebar (burger menu) was not fully clickable. We fixed
+   this by removing a negative margin that pulled the rest of the topbar over the button.
+
+   https://github.com/owncloud/web/issues/4130
+   https://github.com/owncloud/web/pull/4572
 
 * Bugfix - Allow server URL without trailing slash: [#4536](https://github.com/owncloud/web/pull/4536)
 
