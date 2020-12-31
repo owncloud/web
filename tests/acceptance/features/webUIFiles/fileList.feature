@@ -7,11 +7,11 @@ Feature: User can view files inside a folder
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
-
   Scenario: Resources are listed
     When the user browses to the files page
     Then folder "simple-folder" should be listed on the webUI
     And file "textfile0.txt" should be listed on the webUI
+    And the top bar should match the default baseline
 
   @issue-1910
   Scenario: Empty folders display no resources in the list
@@ -40,7 +40,7 @@ Feature: User can view files inside a folder
   Scenario: All files list displays public link quick action
     When the user browses to the files page
     Then quick action "public link" should be displayed on the webUI
-
+    And the sidebar should match the default baseline
 
   Scenario: files are not selected when the user logs in
     When the user browses to the files page
