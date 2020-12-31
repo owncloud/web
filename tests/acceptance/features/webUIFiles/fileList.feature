@@ -7,6 +7,7 @@ Feature: User can view files inside a folder
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
+
   Scenario: Resources are listed
     When the user browses to the files page
     Then folder "simple-folder" should be listed on the webUI
@@ -35,9 +36,11 @@ Feature: User can view files inside a folder
     When the user uploads file "new-data.zip" using the webUI
     Then the file "new-data.zip" should have a file type icon displayed on the webUI
 
+
   Scenario: All files list displays public link quick action
     When the user browses to the files page
     Then quick action "public link" should be displayed on the webUI
+
 
   Scenario: files are not selected when the user logs in
     When the user browses to the files page
@@ -46,6 +49,7 @@ Feature: User can view files inside a folder
       | lorem.txt           |
       | simple-empty-folder |
       | data.zip            |
+
 
   Scenario: select files
     When the user marks these files for batch action using the webUI
@@ -58,6 +62,7 @@ Feature: User can view files inside a folder
       | lorem.txt           |
       | simple-empty-folder |
       | data.zip            |
+
 
   Scenario: select files and clear the selection
     When the user marks these files for batch action using the webUI

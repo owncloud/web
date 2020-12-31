@@ -13,6 +13,7 @@ Feature: view profile
     When the user opens the user profile
     Then username "User One" should be visible in the webUI
 
+
   Scenario: browse to account page to manage user account
     Given user "user1" has logged in using the webUI
     When the user opens the user profile

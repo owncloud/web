@@ -12,8 +12,7 @@ Feature: Display notifications when receiving a share and follow embedded links
       | user2    |
     And user "user2" has logged in using the webUI
 
-  @smokeTest
-  @skip @yetToImplement
+  @smokeTest @skip @yetToImplement
   Scenario: notification link redirection in case a share is pending
     Given the setting "Automatically accept new incoming local user shares" in the section "Sharing" has been disabled
     And user "user1" has shared folder "/simple-folder" with user "user2"

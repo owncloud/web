@@ -18,6 +18,7 @@ Feature: copy files and folders
     Then breadcrumb for folder "strängé नेपाली folder empty" should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
 
+
   Scenario: copy a file into a folder where a file with the same name already exists
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
@@ -39,6 +40,7 @@ Feature: copy files and folders
       | data.zip    |
       | lorem.txt   |
       | testapp.zip |
+
 
   Scenario Outline: copy a file into a folder (problematic characters)
     Given user "user1" has logged in using the webUI
@@ -81,10 +83,12 @@ Feature: copy files and folders
     When the user tries to copy folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
 
+
   Scenario: copy a folder into the same folder
     And user "user1" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then it should not be possible to copy into folder "simple-empty-folder" using the webUI
+
 
   Scenario: copy a folder into another folder with same name
     And user "user1" has logged in using the webUI

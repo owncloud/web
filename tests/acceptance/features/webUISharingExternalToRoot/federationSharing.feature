@@ -16,6 +16,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
+
   Scenario: test the single steps of sharing a folder to a remote server
     When the user shares folder "simple-folder" with remote user "user1" as "Editor" using the webUI
     And the user shares folder "simple-empty-folder" with remote user "user1" as "Editor" using the webUI
@@ -50,6 +51,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     #    And folder "simple-folder (2)" should be listed on the webUI
     #    And folder "simple-empty-folder (2)" should be listed on the webUI
 
+
   Scenario: declining a federation share on the webUI
     Given user "user1" from remote server has shared "/lorem.txt" with user "user1" from local server
     And the user has reloaded the current page of the webUI
@@ -70,6 +72,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user browses to the shared-with-me page
     And the user reloads the current page of the webUI
     Then folder "simple-folder" should not be listed on the webUI
+
 
   Scenario: share a folder with an remote user with "Viewer" role
     When the user shares folder "simple-empty-folder" with remote user "user1" as "Viewer" using the webUI
@@ -127,6 +130,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user deletes file "lorem.txt" using the webUI
     Then as "user1" file "simple-folder/lorem.txt" should not exist on remote server
 
+
   Scenario: unshare a federation share
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "user1" from remote server has shared "lorem.txt" with user "user1" from local server
@@ -145,6 +149,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Then file "lorem (2).txt" should not be listed on the webUI
     And file "lorem (2).txt" should not be listed in the files page on the webUI
 
+
   Scenario: test resharing folder with "Viewer" role
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "user2" has been created with default attributes
@@ -158,6 +163,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | share_with  | user2                      |
       | item_type   | folder                     |
       | permissions | read, share                |
+
 
   Scenario: test resharing a federated server to remote again
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
@@ -173,17 +179,20 @@ Feature: Federation Sharing - sharing with users on other cloud storages
       | permissions | read, share                |
     And as "user2" folder "simple-folder (2)" should exist on remote server
 
+
   Scenario: try resharing a folder with read-only permissions
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "user1" from remote server has shared "simple-folder" with user "user1" from local server with "read" permissions
     When the user reloads the current page of the webUI
     Then the user should not be able to share folder "simple-folder (2)" using the webUI
 
+
   Scenario: test sharing long file names with federation share
     When user "user1" has uploaded file with content "secret" to "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt"
     And the user has reloaded the current page of the webUI
     When the user shares file "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" with remote user "user1" as "Viewer" using the webUI
     Then as "user1" file "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" should exist on remote server
+
 
   Scenario: sharee should be able to access the files/folders inside other folder
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
@@ -204,6 +213,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And as "user1" the content of "'single'quotes (2)/lorem.txt" should be the same as the original "'single'quotes/lorem.txt"
     And as "user1" the content of "'single'quotes (2)/simple-empty-folder/for-git-commit" should be the same as the original "'single'quotes/simple-empty-folder/for-git-commit"
 
+
   Scenario: uploading a file inside a folder of a folder
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
     And user "user1" from remote server has shared "simple-folder" with user "user1" from local server
@@ -212,6 +222,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Then file "new-lorem.txt" should be listed on the webUI
     And as "user1" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist on remote server
     And as "user1" file "simple-folder (2)/simple-empty-folder/new-lorem.txt" should exist
+
 
   Scenario: rename a file in a folder inside a shared folder
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"
@@ -224,6 +235,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     But file "not-for-git-commit" should be listed on the webUI
     And as "user1" file "'single'quotes (2)/simple-empty-folder/not-for-git-commit" should exist
     And as "user1" file "'single'quotes/simple-empty-folder/not-for-git-commit" should exist on remote server
+
 
   Scenario: delete a file in a folder inside a shared folder
     Given the setting "auto_accept_trusted" of app "federatedfilesharing" has been set to "yes"

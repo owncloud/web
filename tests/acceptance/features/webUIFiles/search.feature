@@ -11,8 +11,7 @@ Feature: Search
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest
-  @issue-980
+  @smokeTest @issue-980
   Scenario: Simple search
     When the user searches for "lorem" using the webUI
     Then file "lorem.txt" should be listed on the webUI
@@ -48,8 +47,7 @@ Feature: Search
     #And file "lorem-big.txt" with path "/strängé नेपाली folder" should be listed in the search results in the other folders section on the webUI
     #But file "lorem.txt" with path "/simple-folder" should not be listed in the search results in the other folders section on the webUI
 
-  @systemtags-app-required
-  @skip @yetToImplement
+  @systemtags-app-required @skip @yetToImplement
   Scenario: search for a file using a tag
     Given user "user1" has created a "normal" tag with name "ipsum"
     And user "user1" has added tag "ipsum" to file "/lorem.txt"
@@ -57,8 +55,7 @@ Feature: Search
     And the user searches for tag "ipsum" using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
-  @systemtags-app-required
-  @skip @yetToImplement
+  @systemtags-app-required @skip @yetToImplement
   Scenario: search for a file with multiple tags
     Given user "user1" has created a "normal" tag with name "lorem"
     And user "user1" has created a "normal" tag with name "ipsum"
@@ -71,8 +68,7 @@ Feature: Search
     Then file "lorem.txt" should be listed on the webUI
     And file "testimage.jpg" should not be listed on the webUI
 
-  @systemtags-app-required
-  @skip @yetToImplement
+  @systemtags-app-required @skip @yetToImplement
   Scenario: search for a file with tags
     Given user "user1" has created a "normal" tag with name "lorem"
     And user "user1" has added tag "lorem" to file "/lorem.txt"
@@ -83,11 +79,13 @@ Feature: Search
     And file "lorem.txt" with path "" should be listed in the tags page on the webUI
     And file "lorem.txt" with path "/simple-folder" should be listed in the tags page on the webUI
 
+
   Scenario: Search for a shared file
     Given user "user0" has shared file "/lorem.txt" with user "user1"
     When the user reloads the current page of the webUI
     And the user searches for "lorem" using the webUI
     Then file "lorem (2).txt" should be listed on the webUI
+
 
   Scenario: Search for a re-shared file
     Given user "user2" has been created with default attributes
@@ -97,11 +95,13 @@ Feature: Search
     And the user searches for "lorem" using the webUI
     Then file "lorem (2).txt" should be listed on the webUI
 
+
   Scenario: Search for a shared folder
     Given user "user0" has shared folder "simple-folder" with user "user1"
     When the user reloads the current page of the webUI
     And the user searches for "simple" using the webUI
     Then folder "simple-folder (2)" should be listed on the webUI
+
 
   Scenario: Search for a file after name is changed
     When the user renames file "lorem.txt" to "torem.txt" using the webUI
@@ -155,6 +155,7 @@ Feature: Search
     Then folder "favorite folder" should be listed on the webUI
     And folder "not favorite folder" should be listed on the webUI
 
+
   Scenario: Delete file from search list
     Given user "user1" has uploaded file with content "uploaded content" to "file-to-delete.txt"
     When the user searches for "file-to" using the webUI
@@ -163,10 +164,11 @@ Feature: Search
     And as "user1" file "file-to-delete.txt" should not exist
     And as "user1" the file with original path "file-to-delete.txt" should exist in the trashbin
 
-    Scenario: Search for files/folders with comma in their name
-      Given user "user1" has uploaded file with content "A file with comma" to "file,with,comma.txt"
-      And user "user1" has created folder "C,O,M,M,A"
-      When the user reloads the current page of the webUI
-      And the user searches for "," using the webUI
-      Then file "file,with,comma.txt" should be listed on the webUI
-      And folder "C,O,M,M,A" should be listed on the webUI
+
+  Scenario: Search for files/folders with comma in their name
+    Given user "user1" has uploaded file with content "A file with comma" to "file,with,comma.txt"
+    And user "user1" has created folder "C,O,M,M,A"
+    When the user reloads the current page of the webUI
+    And the user searches for "," using the webUI
+    Then file "file,with,comma.txt" should be listed on the webUI
+    And folder "C,O,M,M,A" should be listed on the webUI

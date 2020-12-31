@@ -20,6 +20,7 @@ Feature: Access private link
     Then the app-sidebar for file "lorem.txt" should be visible on the webUI
     And the "actions" details panel should be visible
 
+
   Scenario: Access private link as a collaborator
     Given user "user2" has been created with default attributes
     And user "user1" has shared file "lorem.txt" with user "user2" with "read" permissions
@@ -43,6 +44,7 @@ Feature: Access private link
 #      An error occurred while resolving the private link
 #      Any nice error message
 #      """
+
 
   Scenario: Access the private link anonymously
     When the user tries to navigate to the private link created by user "user1" for file "lorem.txt"

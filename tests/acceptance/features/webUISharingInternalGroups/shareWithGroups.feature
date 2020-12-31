@@ -19,6 +19,7 @@ Feature: Sharing files and folders with internal groups
     And user "user1" has been added to group "grp1"
     And user "user2" has been added to group "grp1"
 
+
   Scenario: share a folder with multiple collaborators and check collaborator list order
     Given user "user3" has logged in using the webUI
     When the user shares folder "simple-folder" with group "grp11" as "Viewer" using the webUI
@@ -26,6 +27,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with user "User One" as "Viewer" using the webUI
     Then the current collaborators list should have order "User Three,User One,User Two,grp1,grp11"
+
 
   Scenario Outline: share a file & folder with another internal user
     Given user "user3" has logged in using the webUI
@@ -91,6 +93,7 @@ Feature: Sharing files and folders with internal groups
     And as "user2" the content of "/Shares/new-lorem.txt" should be the same as the local "new-lorem.txt"
     # check that the original file owner can still see the file
     And as "user3" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
+
 
   Scenario: share a folder with an internal group and a member uploads, overwrites and deletes files
     Given user "user3" has logged in using the webUI
@@ -166,6 +169,7 @@ Feature: Sharing files and folders with internal groups
     When the administrator excludes group "system-group" from receiving shares using the webUI
     Then user "user1" should not be able to share folder "simple-folder" with group "system-group" using the sharing API
 
+
   Scenario: user shares the file/folder with a group and delete the share with group
     Given user "user1" has logged in using the webUI
     And user "user1" has shared file "lorem.txt" with group "grp1"
@@ -177,6 +181,7 @@ Feature: Sharing files and folders with internal groups
     And file "lorem.txt" should not be listed in shared-with-others page on the webUI
     And as "user2" file "/Shares/lorem.txt" should not exist
     And as "user2" file "lorem (2).txt" should not exist
+
 
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given group "grp2" has been created
@@ -195,6 +200,7 @@ Feature: Sharing files and folders with internal groups
     And file "lorem.txt" should be listed in shared-with-others page on the webUI
     And as "user2" file "/Shares/lorem.txt" should not exist
     But as "user3" file "/Shares/lorem.txt" should exist
+
 
   Scenario: Auto-completion for a group that is excluded from receiving shares
     Given group "system-group" has been created
@@ -235,6 +241,7 @@ Feature: Sharing files and folders with internal groups
     Then user "User One" should be listed as "Owner" reshared through "User Two" via "simple-folder" in the collaborators list on the webUI
     And the current collaborators list should have order "User One,User Three"
 
+
   Scenario: share a folder with other group and then it should be listed on Shared with Others page
     Given user "user1" has logged in using the webUI
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -243,6 +250,7 @@ Feature: Sharing files and folders with internal groups
     Then the following resources should have the following collaborators
       | fileName            | expectedCollaborators |
       | simple-folder       | User Two, grp1        |
+
 
   Scenario: change existing expiration date of an existing share with another internal group
     Given user "user3" has created a new share with following settings
@@ -264,6 +272,7 @@ Feature: Sharing files and folders with internal groups
       | share_with | grp1       |
       | expiration | +7         |
 
+
   Scenario: share a resource with another internal group with default expiration date
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "42"
@@ -281,6 +290,7 @@ Feature: Sharing files and folders with internal groups
     And user "user1" should have received a share with target "Shares/lorem.txt" and expiration date in 42 days
     And user "user2" should have received a share with target "Shares/lorem.txt" and expiration date in 42 days
 
+
   Scenario Outline: share a resource with another internal group with expiration date beyond maximum enforced expiration date
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
@@ -293,6 +303,7 @@ Feature: Sharing files and folders with internal groups
       | shared-resource |
       | lorem.txt       |
       | simple-folder   |
+
 
   Scenario Outline: share a resource with another internal group with expiration date within maximum enforced expiration date
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"

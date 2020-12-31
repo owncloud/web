@@ -18,6 +18,7 @@ Feature: Sharing files with internal groups with permissions
     And user "user1" has been added to group "grp1"
     And user "user2" has been added to group "grp1"
 
+
   Scenario Outline: share a file with multiple users with different roles and permissions
     Given user "user0" has been created with default attributes
     And group "grp2" has been created

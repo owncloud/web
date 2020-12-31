@@ -34,6 +34,7 @@ Feature: deleting files and folders
     And file "strängé नेपाली folder" should not be listed on the webUI
     But the deleted elements should not be listed on the webUI after a page reload
 
+
   Scenario Outline: Delete a file with problematic characters
     Given user "user1" has created file <file_name>
     When the user reloads the current page of the webUI
@@ -103,14 +104,14 @@ Feature: deleting files and folders
     And folder "my-empty-folder" should not be listed on the webUI
     And no message should be displayed on the webUI
 
+
   Scenario: Delete the last file in a folder
     When the user deletes file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then as "user1" file "zzzz-must-be-last-file-in-folder.txt" should not exist
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
     And no message should be displayed on the webUI
 
-  @skip @yetToImplement
-  @public_link_share-feature-required
+  @skip @yetToImplement @public_link_share-feature-required
   Scenario: delete files from shared by link page
     Given the user has created a new public link for file "lorem.txt" using the webUI
     And the user has browsed to the shared-by-link page
@@ -121,8 +122,7 @@ Feature: deleting files and folders
     When the user browses to the files page
     Then file "lorem.txt" should not be listed on the webUI
 
-  @skip @yetToImplement
-  @systemtags-app-required
+  @skip @yetToImplement @systemtags-app-required
   Scenario: delete files from tags page
     Given user "user1" has created a "normal" tag with name "lorem"
     And user "user1" has added tag "lorem" to file "/lorem.txt"
@@ -258,6 +258,7 @@ Feature: deleting files and folders
     And the user deletes folder "simple-folder" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
+
 
   Scenario: Try to delete file and folder that used to exist but does not anymore
     Given the user has browsed to the files page

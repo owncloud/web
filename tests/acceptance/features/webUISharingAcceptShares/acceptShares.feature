@@ -12,7 +12,7 @@ Feature: accept/decline shares coming from internal users
       | user2    |
     And user "user2" has logged in using the webUI
 
-@ocis-reva-issue-34
+  @ocis-reva-issue-34
   Scenario: reject a share that you received as user and as group member
     Given these groups have been created:
       | groupname |
@@ -70,6 +70,7 @@ Feature: accept/decline shares coming from internal users
     And the user has browsed to the personal sharing settings page
     Then User-based auto accepting checkbox should not be displayed on the personal sharing settings page in the webUI
 
+
   Scenario: User receives files when auto accept share is disabled
     Given user "user1" has uploaded file with content "test" to "toshare.txt"
     And user "user1" has shared file "toshare.txt" with user "user2"
@@ -79,6 +80,7 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" should not be listed on the webUI
     And folder "Shares" should not be listed on the webUI
 
+
   Scenario: receive shares with same name from different users
     Given user "user3" has been created with default attributes
     And user "user3" has shared file "lorem.txt" with user "user2"
@@ -86,6 +88,7 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the shared-with-me page using the webUI
     Then file "lorem.txt" shared by "User One" should be in "Pending" state on the webUI
     And file "lorem.txt" shared by "User Three" should be in "Pending" state on the webUI
+
 
   Scenario: decline an offered (pending) share
     Given user "user1" has uploaded file with content "test" to "toshare.txt"
@@ -99,6 +102,7 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the files page
     Then file "toshare.txt" should not be listed on the webUI
     And file "anotherfile.txt" should not be listed on the webUI
+
 
   Scenario: accept an offered (pending) share
     Given user "user1" has uploaded file with content "test" to "toshare.txt"

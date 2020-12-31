@@ -49,6 +49,7 @@ Feature: Share by public link
       | simple-folder   |
       | lorem.txt       |
 
+
   Scenario: public link share shows up on shared-with-others page
     Given user "user1" has logged in using the webUI
     And user "user1" has shared folder "simple-folder" with link with "read" permissions
@@ -118,10 +119,12 @@ Feature: Share by public link
     Then file "lorem.txt" should be listed on the webUI
     And the content of "lorem.txt" on the remote server should be the same as the local "lorem.txt"
 
+
   Scenario: public should be able to access a public link with correct password
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
+
 
   Scenario: public should not be able to access a public link with wrong password
     Given user "user1" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
@@ -348,6 +351,7 @@ Feature: Share by public link
       """
     And the email address "foo@bar.co" should have received an email containing the last shared public link
 
+
   Scenario: user edits a name of an already existing public link
     Given user "user1" has logged in using the webUI
     And user "user1" has created a public link with following settings
@@ -371,6 +375,7 @@ Feature: Share by public link
     And the following resources should have the following collaborators
       | fileName            | expectedCollaborators |
       | simple-folder       | Public |
+
 
   Scenario: user edits the password of an already existing public link
     Given user "user1" has created a public link with following settings
@@ -455,6 +460,7 @@ Feature: Share by public link
     And the public accesses the last created public link using the webUI
     Then the content of the file shared by the last public link should be the same as "lorem.txt"
 
+
   Scenario: user creates a multiple public link of a file and delete the first link
     Given user "user1" has created a public link with following settings
       | path       | lorem.txt        |
@@ -471,6 +477,7 @@ Feature: Share by public link
     And a link named "second-name" should be listed with role "Viewer" in the public link list of file "lorem.txt" on the webUI
     And a link named "third-name" should be listed with role "Viewer" in the public link list of folder "lorem.txt" on the webUI
 
+
   Scenario: user creates a multiple public link of a file and delete the second link
     Given user "user1" has created a public link with following settings
       | path       | lorem.txt        |
@@ -486,6 +493,7 @@ Feature: Share by public link
     Then public link named "second-name" should not be listed on the public links list on the webUI
     And a link named "first-name" should be listed with role "Viewer" in the public link list of file "lorem.txt" on the webUI
     And a link named "third-name" should be listed with role "Viewer" in the public link list of folder "lorem.txt" on the webUI
+
 
   Scenario: user creates a multiple public link of a file and delete the third link
     Given user "user1" has created a public link with following settings
@@ -519,6 +527,7 @@ Feature: Share by public link
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem (2).txt" should be listed on the webUI
 
+
   Scenario: user browses to public link share using copy link button
     Given user "user1" has created a public link with following settings
       | path        | simple-folder  |
@@ -528,6 +537,7 @@ Feature: Share by public link
     When the user copies the url of public link named "Public-link" of folder "simple-folder" using the webUI
     And the user navigates to the copied public link using the webUI
     Then file "lorem.txt" should be listed on the webUI
+
 
   Scenario Outline: user creates multiple public links with same name for the same file/folder
     Given user "user1" has logged in using the webUI
@@ -794,6 +804,7 @@ Feature: Share by public link
       Unknown error
       """
 
+
   Scenario: public creates a folder in the public link
     Given user "user1" has created a public link with following settings
       | path        | /simple-folder |
@@ -805,6 +816,7 @@ Feature: Share by public link
     When the public reloads the current page of the webUI
     Then folder "public-created-folder" should be listed on the webUI
     And as "user1" folder "/simple-folder/public-created-folder" should exist
+
 
   Scenario: public batch deletes resources in the public link
     Given user "user1" has created a public link with following settings
@@ -825,6 +837,7 @@ Feature: Share by public link
     And as "user1" file "/simple-folder/lorem.txt" should not exist
     And as "user1" file "/simple-folder/data.zip" should not exist
 
+
   Scenario: files are not selected initially in the public share
     Given user "user1" has created a public link with following settings
       | path        | /simple-folder |
@@ -835,6 +848,7 @@ Feature: Share by public link
       | lorem.txt           |
       | simple-empty-folder |
       | data.zip            |
+
 
   Scenario: public selects files and clear the selection in the public share
     Given user "user1" has created a public link with following settings

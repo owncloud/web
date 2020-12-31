@@ -26,6 +26,7 @@ Feature: Unmark file/folder as favorite
     Then the count of files and folders shown on the webUI should be 2
     But file "data.zip" should not be listed on the webUI
 
+
   Scenario: unmark a folder as favorite from files page
     Given user "user1" has favorited element "simple-folder"
     And user "user1" has favorited element "simple-empty-folder"
@@ -55,6 +56,7 @@ Feature: Unmark file/folder as favorite
     But file "data.tar.gz" should be listed on the webUI
     And file "lorem.txt" should be listed on the webUI
 
+
   Scenario: unmark a folder as favorite from favorite page
     Given user "user1" has favorited element "simple-folder"
     And user "user1" has favorited element "simple-empty-folder"
@@ -66,6 +68,7 @@ Feature: Unmark file/folder as favorite
     And folder "simple-folder" should not be marked as favorite on the webUI
     But folder "0" should be listed on the webUI
     And folder "simple-empty-folder" should be listed on the webUI
+
 
   Scenario: unmark files/folders as favorites using the sidebar
     Given user "user1" has favorited element "data.zip"

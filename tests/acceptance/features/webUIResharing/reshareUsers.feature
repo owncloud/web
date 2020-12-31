@@ -13,6 +13,7 @@ Feature: Resharing shared files with different permissions
       | user2    |
       | user3    |
 
+
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -22,6 +23,7 @@ Feature: Resharing shared files with different permissions
     When the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "User Three" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "User Three" for folder "simple-folder" on the webUI
+
 
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for resharer
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
@@ -358,6 +360,7 @@ Feature: Resharing shared files with different permissions
     And as "user3" folder "Shares/simple-folder" should not exist
     And user "user3" should not have received any shares
 
+
   Scenario: Reshare a file and folder from shared with me page
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
@@ -371,6 +374,7 @@ Feature: Resharing shared files with different permissions
     And user "user3" accepts the share "lorem.txt" offered by user "user2" using the sharing API
     Then as "user3" folder "/Shares/simple-folder" should exist
     And as "user3" file "/Shares/lorem.txt" should exist
+
 
   Scenario: Reshare a file and folder from shared with others page
     Given user "user1" has shared folder "simple-folder" with user "user2"

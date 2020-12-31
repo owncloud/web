@@ -19,8 +19,7 @@ Feature: restrict resharing
     And user "user1" has been added to group "grp1"
     And user "user2" has been added to group "grp1"
 
-  @smokeTest
-  @issue-2447
+  @smokeTest @issue-2447
   Scenario: disable resharing and check if the received resource can be reshared
     Given the setting "shareapi_allow_resharing" of app "core" has been set to "no"
     And user "user2" has shared folder "simple-folder" with user "user1"

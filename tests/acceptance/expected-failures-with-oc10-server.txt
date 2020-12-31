@@ -3,8 +3,8 @@
 #
 # https://github.com/owncloud/ocisissues/1106 media viewer does not support mp3 files
 #
-webUIPreview/imageMediaViewer.feature:70
-webUIPreview/imageMediaViewer.feature:76
+webUIPreview/imageMediaViewer.feature:78
+webUIPreview/imageMediaViewer.feature:85
 
 # https://github.com/owncloud/web/issues/4564 authentication dialog appears when user is deleted
-webUILogin/login.feature:59
+webUILogin/login.feature:62

@@ -10,6 +10,7 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | user1    |
       | user2    |
 
+
   Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
     Given these users have been created with default attributes:
       | username |

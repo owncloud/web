@@ -11,6 +11,7 @@ Feature: File Upload
     And user "user1" has logged in using the webUI
     And the user browses to the files page
 
+
   Scenario: simple upload of a file that does not exist before
     When the user uploads file "new-'single'quotes.txt" using the webUI
     Then file "new-'single'quotes.txt" should be listed on the webUI
@@ -80,6 +81,7 @@ Feature: File Upload
     And file "zzzz-must-be-last-file-in-folder (2).txt" should be listed on the webUI
     And the content of "zzzz-must-be-last-file-in-folder (2).txt" should be the same as the local "zzzz-must-be-last-file-in-folder.txt"
 
+
   Scenario Outline: upload a big file using difficult names (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name <file-name> has been created locally
     When the user uploads a created file <file-name> using the webUI
@@ -89,6 +91,7 @@ Feature: File Upload
       | file-name |
       | "&#"      |
       | "TIÄFÜ"   |
+
 
   # upload into "simple-folder" because there is already a folder called "0" in the root
   Scenario: Upload a big file called "0" (when chunking in implemented that upload should be chunked)

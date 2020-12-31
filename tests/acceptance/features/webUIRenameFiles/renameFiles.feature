@@ -22,6 +22,7 @@ Feature: rename files
       | "'quotes2'"            |
       | "लोरेम।तयक्स्त? $%#&@" |
 
+
   Scenario Outline: Rename a file that has special characters in its name
     Given user "user1" has created file "sämple,1.txt"
     And the user has reloaded the current page of the webUI
@@ -68,6 +69,7 @@ Feature: rename files
     And the user reloads the current page of the webUI
     Then file "  multiple   space    all     over   .  dat" should be listed on the webUI
 
+
   Scenario: Rename a file using spaces at end is prohibited
     When the user tries to rename file "lorem.txt" to "space at end " using the webUI
     Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
@@ -79,6 +81,7 @@ Feature: rename files
     And the user reloads the current page of the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "  multiple   space    all     over   .  dat  " should not be listed on the webUI
+
 
   Scenario: Rename a file using both double and single quotes
     When the user renames the following file using the webUI
@@ -98,6 +101,7 @@ Feature: rename files
     Then file "loremz.dat" should be listed on the webUI
     Then file "loremy.tad" should be listed on the webUI
 
+
   # these are valid file names for ocis
   Scenario Outline: Rename a file using forbidden characters
     When the user tries to rename file "data.zip" to "<filename>" using the webUI
@@ -110,6 +114,7 @@ Feature: rename files
       | \\.txt    |
       | .htaccess |
 
+
   Scenario Outline: Rename a file/folder using forward slash in its name
     When the user tries to rename file "<from_file_name>" to "<to_file_name>" using the webUI
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
@@ -120,30 +125,36 @@ Feature: rename files
       | lorem.txt      | lorem/txt                         |
       | simple-folder  | simple-empty-folder/simple-folder |
 
+
   Scenario: Rename the last file in a folder
     When the user renames file "zzzz-must-be-last-file-in-folder.txt" to "a-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "a-file.txt" should be listed on the webUI
+
 
   Scenario: Rename a file to become the last file in a folder
     When the user renames file "lorem.txt" to "zzzz-z-this-is-now-the-last-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "zzzz-z-this-is-now-the-last-file.txt" should be listed on the webUI
 
+
   Scenario: Rename a file putting a name of a file which already exists
     When the user tries to rename file "data.zip" to "lorem.txt" using the webUI
     Then the error message 'The name "lorem.txt" is already taken' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
+
 
   Scenario: Rename a file to ..
     When the user tries to rename file "data.zip" to ".." using the webUI
     Then the error message 'The name cannot be equal to ".."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
 
+
   Scenario: Rename a file to .
     When the user tries to rename file "data.zip" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
+
 
   # This is valid file name for ocis
   Scenario: Rename a file to .part
@@ -214,6 +225,7 @@ Feature: rename files
     And the user renames folder "simple-folder" to "renamed-folder" using the webUI
     Then file "renamed-file.txt" should be listed on the webUI
     And folder "renamed-folder" should be listed on the webUI
+
 
   Scenario: User tries to rename a file that used to exist but does not anymore
     Given the user has browsed to the files page

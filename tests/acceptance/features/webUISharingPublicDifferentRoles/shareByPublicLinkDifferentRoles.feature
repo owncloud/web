@@ -32,7 +32,6 @@ Feature: Share by public link with different roles
       | Editor      | read, update, create, delete |
       | Contributor | read, create                 |
 
-
   @skipOnOC10 @issue-ocis-reva-383
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: simple sharing by public link with different roles
@@ -88,6 +87,7 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "user1"
     Then there should be no resources listed on the webUI
 
+
   Scenario: creating a public link with "Editor" role makes it possible to delete files via the link
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
@@ -124,12 +124,14 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "user1"
     Then it should be possible to delete file "lorem.txt" using the webUI
 
+
   Scenario: creating a public link with "Editor" role makes it possible to upload a file
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
     And as "user1" file "simple-folder/new-lorem.txt" should exist
+
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a file inside a subdirectory with password set
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
@@ -139,6 +141,7 @@ Feature: Share by public link with different roles
     Then file "new-lorem.txt" should be listed on the webUI
     And as "user1" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist
 
+
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
@@ -147,6 +150,7 @@ Feature: Share by public link with different roles
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
     And file "child.txt" should be listed in the folder "CHILD" on the webUI
     And as "user1" file "simple-folder/PARENT/CHILD/child.txt" should exist
+
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder inside a subdirectory
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
@@ -158,12 +162,14 @@ Feature: Share by public link with different roles
     And file "child.txt" should be listed in the folder "CHILD" on the webUI
     And as "user1" file "simple-folder/simple-empty-folder/PARENT/CHILD/child.txt" should exist
 
+
   Scenario: creating a public link with "Editor" role makes it possible to upload files via the link even with password set
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
     And as "user1" file "simple-folder/new-lorem.txt" should exist
+
 
   Scenario: creating a public link with "Editor" role makes it possible to upload files inside a subdirectory
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
@@ -174,6 +180,7 @@ Feature: Share by public link with different roles
     And file "child.txt" should be listed in the folder "CHILD" on the webUI
     And as "user1" file "simple-folder/PARENT/CHILD/child.txt" should exist
 
+
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder even with password set
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
@@ -182,6 +189,7 @@ Feature: Share by public link with different roles
     And folder "CHILD" should be listed in the folder "PARENT" on the webUI
     And file "child.txt" should be listed in the folder "CHILD" on the webUI
     And as "user1" file "simple-folder/PARENT/CHILD/child.txt" should exist
+
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder inside a sub-directory even with password set
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
@@ -222,6 +230,7 @@ Feature: Share by public link with different roles
     And the user uploads folder "PARENT" using the webUI
     Then as "user1" file "simple-folder/PARENT/CHILD/child.txt" should exist
 
+
   Scenario: creating a public link with "Uploader" role makes it possible to upload a file through files-drop page
     Given user "user1" has shared folder "simple-folder" with link with "create" permissions
     When the public uses the webUI to access the last public link created by user "user1"
@@ -229,6 +238,7 @@ Feature: Share by public link with different roles
     Then the following files should be listed on the files-drop page:
       | new-lorem.txt |
     And as "user1" file "simple-folder/new-lorem.txt" should exist
+
 
   Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page
     Given user "user1" has shared folder "simple-folder" with link with "create" permissions

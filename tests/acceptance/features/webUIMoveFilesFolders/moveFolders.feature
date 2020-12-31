@@ -6,6 +6,7 @@ Feature: move folders
   Background:
     Given user "user1" has been created with default attributes
 
+
   Scenario: An attempt to move a folder into a sub-folder using rename is not allowed
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
@@ -24,6 +25,7 @@ Feature: move folders
     And the user moves folder "strängé नेपाली folder" into folder "strängé नेपाली folder empty" using the webUI
     Then breadcrumb for folder "strängé नेपाली folder empty" should be displayed on the webUI
     And folder "strängé नेपाली folder" should be listed on the webUI
+
 
   Scenario: move a folder into another folder where a folder with the same name already exists
     Given user "user1" has logged in using the webUI
@@ -44,6 +46,7 @@ Feature: move folders
       | folders               |
       | simple-folder         |
       | strängé नेपाली folder |
+
 
   Scenario Outline: move a folder into another folder (problematic characters)
     Given user "user1" has logged in using the webUI
@@ -68,10 +71,12 @@ Feature: move folders
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to move into folder "simple-folder (2)" using the webUI
 
+
   Scenario: move a folder into the same folder
     And user "user1" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then it should not be possible to move into folder "simple-empty-folder" using the webUI
+
 
   Scenario: move a folder into another folder with same name
     And user "user1" has logged in using the webUI

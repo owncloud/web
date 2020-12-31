@@ -19,8 +19,7 @@ Feature: files and folders can be deleted from the trashbin
       | Folder,With,Comma |
     And the user has browsed to the trashbin page
 
-  @smokeTest
-  @yetToImplement
+  @smokeTest @yetToImplement
   Scenario: Delete files and check that they are gone
     When the user deletes file "lorem.txt" using the webUI
     And the user deletes file "sample,1.txt" using the webUI
@@ -40,8 +39,7 @@ Feature: files and folders can be deleted from the trashbin
     Then folder "simple-folder" should not be listed on the webUI
     And folder "Folder,With,Comma" should not be listed on the webUI
 
-  @skipOnOC10
-  @issue-product-188
+  @skipOnOC10 @issue-product-188
   # after the issue is fixed delete this scenario and use the one above
   Scenario: Delete folders and check that they are gone
     When the user deletes folder "simple-folder" using the webUI
@@ -49,6 +47,7 @@ Feature: files and folders can be deleted from the trashbin
     And folder "simple-folder" should be listed on the webUI
     When the user deletes folder "Folder,With,Comma" using the webUI
     Then folder "Folder,With,Comma" should not be listed on the webUI
+
 
   Scenario: Select some files and delete from trashbin in a batch
     When the user batch deletes these files using the webUI
@@ -76,8 +75,7 @@ Feature: files and folders can be deleted from the trashbin
     But file "data.zip" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
 
-  @skipOnOC10
-  @issue-product-188
+  @skipOnOC10 @issue-product-188
   # after the issue is fixed delete this scenario and use the one above
   Scenario: Select all except for some files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
@@ -97,8 +95,7 @@ Feature: files and folders can be deleted from the trashbin
     And the user batch deletes the marked files using the webUI
     Then there should be no resources listed on the webUI
 
-  @skipOnOC10
-  @issue-product-188
+  @skipOnOC10 @issue-product-188
   # after the issue is fixed delete this scenario and use the one above
   Scenario: Select all files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
@@ -119,8 +116,7 @@ Feature: files and folders can be deleted from the trashbin
     Then the success message with header "All deleted files were removed" should be displayed on the webUI
     And there should be no resources listed on the webUI
 
-  @skipOnOC10
-  @issue-product-139
+  @skipOnOC10 @issue-product-139
   # after the issue is fixed delete this scenario and use the one above
   Scenario: Clear trashbin
     When the user clears the trashbin

@@ -20,6 +20,7 @@ Background:
     | finance2      |
   And the setting "outgoing_server2server_share_enabled" of app "files_sharing" has been set to "no"
 
+
 Scenario Outline: autocompletion of user having special characters in their usernames
   Given these users have been created but not initialized:
     | username   | password  | displayname     | email             |
@@ -37,6 +38,7 @@ Scenario Outline: autocompletion of user having special characters in their user
     | ocusr-_. | oc     |
     | _ocusr@  | _u     |
 
+
 Scenario Outline: autocompletion of user having special characters in their displaynames
   Given these users have been created but not initialized:
     | username   | password  | displayname     | email             |
@@ -52,6 +54,7 @@ Scenario Outline: autocompletion of user having special characters in their disp
     | -_.ocusr    | -_     |
     | ocusr-_.    | oc     |
     | _ocusr@     | _u     |
+
 
 Scenario Outline: autocompletion of groups having special characters in their names
   Given these groups have been created:

@@ -12,8 +12,7 @@ Feature: Sharing files and folders with internal users
       | user1    |
       | user2    |
 
-  @yetToImplement
-  @smokeTest @issue-ocis-717
+  @yetToImplement @smokeTest @issue-ocis-717
   Scenario Outline: share a file & folder with another internal user
     Given user "user2" has logged in using the webUI
     When the user shares folder "simple-folder" with user "User One" as "<set-role>" using the webUI
@@ -124,6 +123,7 @@ Feature: Sharing files and folders with internal users
     # check that the original file owner can still see the file
     And as "user2" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
+
   Scenario: share a folder with another internal user who uploads, overwrites and deletes files
     Given user "user2" has logged in using the webUI
     When the user shares folder "simple-folder" with user "User One" as "Editor" using the webUI
@@ -191,6 +191,7 @@ Feature: Sharing files and folders with internal users
     Then file "ipsum.txt" should be listed on the webUI
     And folder "new-simple-folder" should be listed on the webUI
 
+
   Scenario: share a folder with other user and then it should be listed on Shared with Others page
     Given user "user3" has been created with default attributes
     And user "user2" has logged in using the webUI
@@ -249,12 +250,14 @@ Feature: Sharing files and folders with internal users
     And as "user2" file "Shares/lorem.txt" should not exist
     But as "user3" file "Shares/lorem.txt" should exist
 
+
   Scenario: send share shows up on shared-with-others page
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user1" has logged in using the webUI
     When the user browses to the shared-with-others page using the webUI
     Then folder "simple-folder" should be listed on the webUI
     But file "data.zip" should not be listed on the webUI
+
 
   Scenario: received share shows up on shared-with-me page
     Given user "user1" has shared folder "simple-folder" with user "user2"
@@ -297,6 +300,7 @@ Feature: Sharing files and folders with internal users
       | simple-folder |
       | lorem.txt     |
     Then the deleted elements should not be listed on the webUI
+
 
   Scenario: Try to share file and folder that used to exist but does not anymore
     Given user "user1" has logged in using the webUI
@@ -445,6 +449,7 @@ Feature: Sharing files and folders with internal users
       | id                    | user2                  |
       | email                 | user2@example.org      |
 
+
   Scenario: collaborators list does not contain additional info when disabled
     Given the setting "user_additional_info_field" of app "core" has been set to ""
     And user "user1" has shared folder "simple-folder" with user "user2"
@@ -452,11 +457,13 @@ Feature: Sharing files and folders with internal users
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "User Two" should be listed without additional info in the collaborators list on the webUI
 
+
   Scenario: collaborators list contains the current user when they are an owner
     Given user "user1" has shared folder "simple-folder" with user "user2"
     When user "user1" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "User One" should be listed with additional info "(me)" in the collaborators list on the webUI
+
 
   Scenario: collaborators list contains the current user when they are a receiver of the resource
     Given user "user1" has shared folder "simple-folder" with user "user2"

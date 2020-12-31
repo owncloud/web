@@ -6,12 +6,14 @@ Feature: Session storage for public link
     Background:
         Given user "user1" has been created with default attributes
 
+
     Scenario: Public accesses the public link files page and refreshes the page
         Given user "user1" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
         When the public tries to open the public link page of the last public link created by user "user1" with password "pass123"
         Then file "lorem.txt" should be listed on the webUI
         When the user reloads the current page of the webUI
         Then file "lorem.txt" should be listed on the webUI
+
 
     Scenario Outline: Public accesses the public link files page on a new session after visiting once
         Given user "user1" has shared folder "<share-path>" with link with "read" permissions and password "pass123"
@@ -24,6 +26,7 @@ Feature: Session storage for public link
             | share-path    |
             | simple-folder |
             | lorem.txt     |
+
 
     Scenario Outline: Public link author changes the password when the public is in public link files page session
         Given user "user1" has shared folder "<share-path>" with link with "read" permissions and password "pass123"

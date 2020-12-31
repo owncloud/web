@@ -7,6 +7,7 @@ Feature: Share by public link
   Background:
     Given user "user1" has been created with default attributes
 
+
   Scenario: user changes the expiration date of an already existing public link using webUI
     Given user "user1" has created a public link with following settings
       | path       | lorem.txt        |
@@ -17,6 +18,7 @@ Feature: Share by public link
       | expireDate  | 2038 July 21  |
     Then the fields of the last public link share response of user "user1" should include
       | expireDate | 2038-07-21 |
+
 
   Scenario: user tries to change the expiration date of the public link to past date using webUI
     Given user "user1" has created a public link with following settings

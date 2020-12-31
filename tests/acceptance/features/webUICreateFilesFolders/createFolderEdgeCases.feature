@@ -8,6 +8,7 @@ Feature: create folder
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
+
   Scenario Outline: Create a folder using special characters
     When the user creates a folder with the name <folder_name> using the webUI
     Then folder <folder_name> should be listed on the webUI

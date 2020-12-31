@@ -20,6 +20,7 @@ Feature: Sharing files and folders with internal groups
     And user "user2" has been added to group "grp1"
     And user "user2" has logged in using the webUI
 
+
   Scenario: notifications about new share is displayed
     Given user "user3" has shared folder "/simple-folder" with group "grp1"
     And user "user3" has shared folder "/data.zip" with group "grp1"

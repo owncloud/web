@@ -25,6 +25,7 @@ Feature: Restore deleted files/folders
     Then file "data.zip" should be listed on the webUI
     Then file "sample,1.txt" should be listed on the webUI
 
+
   Scenario: Restore folder
     When the user deletes folder "folder with space" using the webUI
     And the user deletes folder "Folder,With,Comma" using the webUI
@@ -118,8 +119,7 @@ Feature: Restore deleted files/folders
     And file "data.zip" should be listed on the webUI
     And folder "simple-folder" should be listed on the webUI
 
-  @issue-1753
-  @issue-product-186
+  @issue-1753 @issue-product-186
   Scenario: Restore a file from trashbin whose parent folder is renamed
     Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "user1"
@@ -140,9 +140,7 @@ Feature: Restore deleted files/folders
     #And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should exist
     And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
 
-  @skipOnOC10
-  @issue-product-186
-  @issue-ocis-1057
+  @skipOnOC10 @issue-product-186 @issue-ocis-1057
   Scenario: Restore a file from trashbin whose parent folder is renamed
     Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "user1"
@@ -162,9 +160,7 @@ Feature: Restore deleted files/folders
     #And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should exist
     And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
 
-  @issue-1753
-  @skipOnOCIS
-  @issue-product-186
+  @issue-1753 @skipOnOCIS @issue-product-186
   Scenario: Restore a file from trashbin without restoring the parent folder
     Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "user1"
@@ -184,9 +180,7 @@ Feature: Restore deleted files/folders
     And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
     #And as "user1" file "simple-folder/file-to-delete-and-restore" should exist
 
-  @skipOnOC10
-  @issue-product-186
-  @issue-ocis-1057
+  @skipOnOC10 @issue-product-186 @issue-ocis-1057
   Scenario: Restore a file from trashbin without restoring the parent folder
     Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "user1"
@@ -222,6 +216,7 @@ Feature: Restore deleted files/folders
     When the user browses to the files page using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And folder "lorem.txt" should not be listed on the webUI
+
 
   Scenario: Delete and restore a folder that has the same name like a deleted file
     Given user "user1" has created file "lorem.txt"
