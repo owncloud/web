@@ -138,8 +138,8 @@ Feature: Search
     Given user "user1" has created folder "deleted folder"
     And user "user1" has created folder "not deleted folder"
     And the following files have been deleted by user "user1"
-      | name               |
-      | deleted folder     |
+      | name           |
+      | deleted folder |
     When the user browses to the trashbin page
     And the user searches for "folder" using the webUI
     Then folder "not deleted folder" should be listed on the webUI

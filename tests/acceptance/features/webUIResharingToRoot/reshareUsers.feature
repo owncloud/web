@@ -44,19 +44,19 @@ Feature: Resharing shared files with different permissions
     Then user "User Three" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder (2)" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "User Three" for folder "simple-folder (2)" on the webUI
     And user "user3" should have received a share with these details:
-    | field       | value              |
-    | uid_owner   | user1              |
-    | share_with  | user3              |
-    | file_target | /simple-folder (2) |
-    | item_type   | folder             |
-    | permissions | <permissions>      |
+      | field       | value              |
+      | uid_owner   | user1              |
+      | share_with  | user3              |
+      | file_target | /simple-folder (2) |
+      | item_type   | folder             |
+      | permissions | <permissions>      |
     Examples:
-    | role                 | displayed-role          | collaborators-permissions     | displayed-permissions | permissions                         |
-    | Viewer               | Viewer                  | ,                             | ,                     | read, share                         |
-    | Editor               | Editor                  | ,                             | ,                     | all                                 |
-    | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
-    | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
-    | Advanced permissions | Editor                  | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
+      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
+      | Editor               | Editor               | ,                             | ,                     | all                                 |
+      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
+      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
+      | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
 
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
@@ -69,26 +69,26 @@ Feature: Resharing shared files with different permissions
     And user "User One" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user3" should have received a share with these details:
-    | field       | value              |
-    | uid_owner   | user1              |
-    | share_with  | user3              |
-    | file_target | /simple-folder (2) |
-    | item_type   | folder             |
-    | permissions | <permissions>      |
+      | field       | value              |
+      | uid_owner   | user1              |
+      | share_with  | user3              |
+      | file_target | /simple-folder (2) |
+      | item_type   | folder             |
+      | permissions | <permissions>      |
     And user "user1" should have received a share with these details:
-    | field       | value              |
-    | uid_owner   | user2              |
-    | share_with  | user1              |
-    | file_target | /simple-folder (2) |
-    | item_type   | folder             |
-    | permissions | <permissions>      |
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /simple-folder (2) |
+      | item_type   | folder             |
+      | permissions | <permissions>      |
     Examples:
-    | role                 | displayed-role          | collaborators-permissions     | displayed-permissions | permissions                         |
-    | Viewer               | Viewer                  | ,                             | ,                     | read, share                         |
-    | Editor               | Editor                  | ,                             | ,                     | all                                 |
-    | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
-    | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
-    | Advanced permissions | Editor                  | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
+      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
+      | Editor               | Editor               | ,                             | ,                     | all                                 |
+      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
+      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
+      | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
 
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer
@@ -100,19 +100,19 @@ Feature: Resharing shared files with different permissions
     And no custom permissions should be set for collaborator "User Three" for folder "simple-folder" on the webUI
     And user "User One" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
-    | field       | value              |
-    | uid_owner   | user2              |
-    | share_with  | user1              |
-    | file_target | /simple-folder (2) |
-    | item_type   | folder             |
-    | permissions | read, share        |
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /simple-folder (2) |
+      | item_type   | folder             |
+      | permissions | read, share        |
     And user "user3" should have received a share with these details:
-    | field       | value              |
-    | uid_owner   | user1              |
-    | share_with  | user3              |
-    | file_target | /simple-folder (2) |
-    | item_type   | folder             |
-    | permissions | read, share        |
+      | field       | value              |
+      | uid_owner   | user1              |
+      | share_with  | user3              |
+      | file_target | /simple-folder (2) |
+      | item_type   | folder             |
+      | permissions | read, share        |
 
 
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for the receiver
@@ -120,12 +120,12 @@ Feature: Resharing shared files with different permissions
     And user "user1" has logged in using the webUI
     When the user shares folder "simple-folder (2)" with user "User Three" as "Viewer" with permissions "," using the webUI
     And user "user3" should have received a share with these details:
-    | field       | value              |
-    | uid_owner   | user1              |
-    | share_with  | user3              |
-    | file_target | /simple-folder (2) |
-    | item_type   | folder             |
-    | permissions | read, share        |
+      | field       | value              |
+      | uid_owner   | user1              |
+      | share_with  | user3              |
+      | file_target | /simple-folder (2) |
+      | item_type   | folder             |
+      | permissions | read, share        |
 
 
   Scenario Outline: share a file/folder without share permissions and check if another user can reshare
@@ -133,11 +133,11 @@ Feature: Resharing shared files with different permissions
     When user "user1" logs in using the webUI
     Then the user should not be able to share resource "<received-entry-name>" using the webUI
     Examples:
-    | shared-entry-name | received-entry-name |
-    | simple-folder     | simple-folder (2)   |
-    | lorem.txt         | lorem (2).txt       |
-    | simple-folder     | simple-folder (2)   |
-    | lorem.txt         | lorem (2).txt       |
+      | shared-entry-name | received-entry-name |
+      | simple-folder     | simple-folder (2)   |
+      | lorem.txt         | lorem (2).txt       |
+      | simple-folder     | simple-folder (2)   |
+      | lorem.txt         | lorem (2).txt       |
 
 
   Scenario Outline: share a received file/folder without share permissions and check if another user can reshare
@@ -146,9 +146,9 @@ Feature: Resharing shared files with different permissions
     When user "user3" logs in using the webUI
     Then the user should not be able to share resource "<received-entry-name>" using the webUI
     Examples:
-    | shared-entry-name | received-entry-name |
-    | simple-folder     | simple-folder (2)   |
-    | lorem.txt         | lorem (2).txt       |
+      | shared-entry-name | received-entry-name |
+      | simple-folder     | simple-folder (2)   |
+      | lorem.txt         | lorem (2).txt       |
 
 
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
@@ -160,12 +160,12 @@ Feature: Resharing shared files with different permissions
     Then the current collaborators list should have order "User Two,User Three"
     And user "User Two" should be listed as "Owner" reshared through "User One" in the collaborators list on the webUI
     And user "user3" should have received a share with these details:
-    | field       | value               |
-    | uid_owner   | user1               |
-    | share_with  | user3               |
-    | file_target | /simple-folder (2)  |
-    | item_type   | folder              |
-    | permissions | share, delete, read |
+      | field       | value               |
+      | uid_owner   | user1               |
+      | share_with  | user3               |
+      | file_target | /simple-folder (2)  |
+      | item_type   | folder              |
+      | permissions | share, delete, read |
 
 
   Scenario: User is allowed to reshare a file/folder with the lesser permissions, and check if it is listed for original owner
@@ -178,12 +178,12 @@ Feature: Resharing shared files with different permissions
     And user "User Three" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "delete" should be set for user "User Three" for folder "simple-folder" on the webUI
     And user "user3" should have received a share with these details:
-    | field       | value              |
-    | uid_owner   | user1              |
-    | share_with  | user3              |
-    | file_target | /simple-folder (2) |
-    | item_type   | folder             |
-    | permissions | delete, read       |
+      | field       | value              |
+      | uid_owner   | user1              |
+      | share_with  | user3              |
+      | file_target | /simple-folder (2) |
+      | item_type   | folder             |
+      | permissions | delete, read       |
 
 
   Scenario: User is not allowed to reshare a file/folder with the higher permissions

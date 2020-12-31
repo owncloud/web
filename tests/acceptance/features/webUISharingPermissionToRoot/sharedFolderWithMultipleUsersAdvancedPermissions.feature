@@ -52,7 +52,7 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" folder "simple-folder (2)" should not exist
     Examples:
-      | role                 | displayed-role       | extra-permissions             | displayed-permissions | actual-permissions           |
+      | role                 | displayed-role       | extra-permissions     | displayed-permissions | actual-permissions          |
       # | Advanced permissions | Advanced permissions | delete                        | delete                | read, delete                 |
       # | Advanced permissions | Advanced permissions | update                        | update                | read, update                 |
       # | Advanced permissions | Advanced permissions | create                        | create                | read, create                 |
@@ -64,4 +64,4 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       # | Advanced permissions | Advanced permissions | update, create                | update, create        | read, update, create         |
       # | Advanced permissions | Advanced permissions | share, delete, update         | share, delete, update | read, share, delete, update  |
       # | Advanced permissions | Advanced permissions | share, create, delete         | share, create, delete | read, share, delete, create  |
-      | Advanced permissions | Advanced permissions | share, update, create         | share, update, create | read, share, update, create  |
+      | Advanced permissions | Advanced permissions | share, update, create | share, update, create | read, share, update, create |

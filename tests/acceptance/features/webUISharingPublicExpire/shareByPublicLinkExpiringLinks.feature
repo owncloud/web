@@ -10,21 +10,21 @@ Feature: Share by public link
 
   Scenario: user changes the expiration date of an already existing public link using webUI
     Given user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | Public link      |
-      | expireDate | 2038-10-14       |
+      | path       | lorem.txt   |
+      | name       | Public link |
+      | expireDate | 2038-10-14  |
     And user "user1" has logged in using the webUI
     When the user edits the public link named "Public link" of file "lorem.txt" changing following
-      | expireDate  | 2038 July 21  |
+      | expireDate | 2038 July 21 |
     Then the fields of the last public link share response of user "user1" should include
       | expireDate | 2038-07-21 |
 
 
   Scenario: user tries to change the expiration date of the public link to past date using webUI
     Given user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | Public link      |
-      | expireDate | 2038-10-14       |
+      | path       | lorem.txt   |
+      | name       | Public link |
+      | expireDate | 2038-10-14  |
     And user "user1" has logged in using the webUI
     When the user tries to edit expiration of the public link named "Public link" of file "lorem.txt" to past date "2019 October 10"
     Then the fields of the last public link share response of user "user1" should include
@@ -104,7 +104,7 @@ Feature: Share by public link
     And user "user1" has created a public link with following settings
       | path       | lorem.txt   |
       | name       | Public link |
-      | expireDate | +16          |
+      | expireDate | +16         |
     And user "user1" has logged in using the webUI
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "7"
     When the user edits the public link named "Public link" of file "lorem.txt" changing following

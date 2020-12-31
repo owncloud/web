@@ -42,7 +42,7 @@ Feature: File Upload
     Then file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be listed on the webUI
     And as "user1" the content of "<folder-to-upload-to>/zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be the same as the local "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt"
     Examples:
-      | folder-to-upload-to     |
+      | folder-to-upload-to   |
       | 0                     |
       | 'single'quotes        |
       | strängé नेपाली folder |

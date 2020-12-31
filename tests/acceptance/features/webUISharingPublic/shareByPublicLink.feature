@@ -55,8 +55,8 @@ Feature: Share by public link
     And user "user1" has shared folder "simple-folder" with link with "read" permissions
     When the user browses to the shared-with-others page using the webUI
     Then the following resources should have the following collaborators
-      | fileName            | expectedCollaborators |
-      | simple-folder       | Public                |
+      | fileName      | expectedCollaborators |
+      | simple-folder | Public                |
     But file "data.zip" should not be listed on the webUI
 
   @issue-276 @issue-ocis-reva-398
@@ -174,7 +174,7 @@ Feature: Share by public link
       | password    | 123                   |
     And user "user1" has logged in using the webUI
     When the user edits the public link named "Public-link" of folder "simple-folder" changing following
-      | password | |
+      | password |  |
     Then the user should see an error message on the public link share dialog saying "Passwords are enforced for link shares"
     And user "user1" should have a share with these details:
       | field       | value                 |
@@ -218,8 +218,8 @@ Feature: Share by public link
   Scenario: public should be able to access the shared file through public link
     Given user "user1" has logged in using the webUI
     And user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | Public link      |
+      | path | lorem.txt   |
+      | name | Public link |
     When the public uses the webUI to access the last public link created by user "user1"
     Then file "lorem.txt" should be listed on the webUI
 #    Then the text preview of the public link should contain "Lorem ipsum dolor sit amet, consectetur"
@@ -325,12 +325,12 @@ Feature: Share by public link
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And user "user1" has logged in using the webUI
     And user "user1" has created a public link with following settings
-      | path      | simple-folder    |
-      | name      | test_public_link |
-      | password  | pass123          |
+      | path     | simple-folder    |
+      | name     | test_public_link |
+      | password | pass123          |
 #      | email     | foo1234@bar.co   |
     When the user edits the public link named "test_public_link" of folder "simple-folder" changing following but not saving
-      | password |  qwertyui  |
+      | password | qwertyui |
     And the public uses the webUI to access the last public link created by user "user1" with password "qwertyui"
     Then the public should not get access to the publicly shared file
 
@@ -360,7 +360,7 @@ Feature: Share by public link
       | permissions | read          |
       | password    | pass123       |
     When the user edits the public link named "Public-link" of folder "simple-folder" changing following
-    | name  | simple-folder Share |
+      | name | simple-folder Share |
     And the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
 
@@ -373,8 +373,8 @@ Feature: Share by public link
     When the user browses to the shared-with-others page
     Then folder "simple-folder" should be listed on the webUI
     And the following resources should have the following collaborators
-      | fileName            | expectedCollaborators |
-      | simple-folder       | Public |
+      | fileName      | expectedCollaborators |
+      | simple-folder | Public                |
 
 
   Scenario: user edits the password of an already existing public link
@@ -385,7 +385,7 @@ Feature: Share by public link
       | password    | pass123                      |
     And user "user1" has logged in using the webUI
     When the user edits the public link named "Public-link" of folder "simple-folder" changing following
-      | password |  qwertyui  |
+      | password | qwertyui |
     And the public uses the webUI to access the last public link created by user "user1" with password "qwertyui"
     Then file "lorem.txt" should be listed on the webUI
 
@@ -399,7 +399,7 @@ Feature: Share by public link
       | password    | pass123                      |
     And user "user1" has logged in using the webUI
     And the user edits the public link named "Public-link" of folder "simple-folder" changing following
-      | password |  qwertyui  |
+      | password | qwertyui |
     When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
     Then the public should not get access to the publicly shared file
 
@@ -411,7 +411,7 @@ Feature: Share by public link
       | permissions | read, update, create, delete |
     And user "user1" has logged in using the webUI
     When the user edits the public link named "Public-link" of folder "simple-folder" changing following
-      | role  | Viewer  |
+      | role | Viewer |
     And the public uses the webUI to access the last public link created by user "user1"
     Then file "lorem.txt" should be listed on the webUI
     And it should not be possible to delete file "lorem.txt" using the webUI
@@ -463,14 +463,14 @@ Feature: Share by public link
 
   Scenario: user creates a multiple public link of a file and delete the first link
     Given user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | first-name       |
+      | path | lorem.txt  |
+      | name | first-name |
     And user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | second-name      |
+      | path | lorem.txt   |
+      | name | second-name |
     And user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | third-name       |
+      | path | lorem.txt  |
+      | name | third-name |
     And user "user1" has logged in using the webUI
     When the user removes the public link named "first-name" of file "lorem.txt" using the webUI
     Then public link named "first-name" should not be listed on the public links list on the webUI
@@ -480,14 +480,14 @@ Feature: Share by public link
 
   Scenario: user creates a multiple public link of a file and delete the second link
     Given user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | first-name       |
+      | path | lorem.txt  |
+      | name | first-name |
     And user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | second-name      |
+      | path | lorem.txt   |
+      | name | second-name |
     And user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | third-name       |
+      | path | lorem.txt  |
+      | name | third-name |
     And user "user1" has logged in using the webUI
     When the user removes the public link named "second-name" of file "lorem.txt" using the webUI
     Then public link named "second-name" should not be listed on the public links list on the webUI
@@ -497,14 +497,14 @@ Feature: Share by public link
 
   Scenario: user creates a multiple public link of a file and delete the third link
     Given user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | first-name       |
+      | path | lorem.txt  |
+      | name | first-name |
     And user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | second-name      |
+      | path | lorem.txt   |
+      | name | second-name |
     And user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | third-name       |
+      | path | lorem.txt  |
+      | name | third-name |
     And user "user1" has logged in using the webUI
     When the user removes the public link named "third-name" of file "lorem.txt" using the webUI
     Then public link named "third-name" should not be listed on the public links list on the webUI
@@ -530,9 +530,9 @@ Feature: Share by public link
 
   Scenario: user browses to public link share using copy link button
     Given user "user1" has created a public link with following settings
-      | path        | simple-folder  |
-      | name        | Public-link    |
-      | permissions | read           |
+      | path        | simple-folder |
+      | name        | Public-link   |
+      | permissions | read          |
     And user "user1" has logged in using the webUI
     When the user copies the url of public link named "Public-link" of folder "simple-folder" using the webUI
     And the user navigates to the copied public link using the webUI
@@ -559,10 +559,10 @@ Feature: Share by public link
     And the public uses the webUI to access the last public link created by user "user1"
     And the user picks the row of file "lorem.txt" in the webUI
     Then the following accordion items should be visible in the details dialog on the webUI
-      | name          |
-      | versions      |
-      | links         |
-      | people        |
+      | name     |
+      | versions |
+      | links    |
+      | people   |
 #    Then the following tabs should not be visible in the details dialog
 #      | name          |
 #      | links         |
@@ -616,7 +616,7 @@ Feature: Share by public link
       | simple-folder | link-direct,user-direct |
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName     | expectedIndicators |
+      | fileName     | expectedIndicators          |
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
@@ -633,7 +633,7 @@ Feature: Share by public link
       | simple-folder (2) | link-direct,user-indirect |
     When the user opens folder "simple-folder (2)" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName     | expectedIndicators |
+      | fileName     | expectedIndicators          |
       | sub-folder   | link-indirect,user-indirect |
       | textfile.txt | link-indirect,user-indirect |
 
@@ -650,9 +650,9 @@ Feature: Share by public link
       | simple-folder (2) | user-indirect      |
     When the user opens folder "simple-folder (2)" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName     | expectedIndicators          |
-      | sub-folder   | link-direct,user-indirect   |
-      | textfile.txt | user-indirect |
+      | fileName     | expectedIndicators        |
+      | sub-folder   | link-direct,user-indirect |
+      | textfile.txt | user-indirect             |
 
   @issue-2060 @issue-ocis-reva-243
   Scenario: no sharing indicator visible in file list from public link
@@ -673,7 +673,7 @@ Feature: Share by public link
       | simple-folder |
     When the user shares folder "simple-folder" with user "User Two" as "Viewer" using the webUI
     And the user creates a new public link for resource "simple-folder" using the webUI with
-      | field | value  |
+      | field | value |
       | name  | first |
     And the user creates a new public link for resource "simple-folder" using the webUI with
       | field | value  |
@@ -686,7 +686,7 @@ Feature: Share by public link
       | fileName      | expectedIndicators          |
       | testimage.png | user-indirect,link-indirect |
     When the user creates a new public link for resource "testimage.png" using the webUI with
-      | field | value  |
+      | field | value |
       | name  | third |
     # the indicator changes from link-indirect to link-direct to show the direct share
     Then the following resources should have share indicators on the webUI
@@ -764,12 +764,12 @@ Feature: Share by public link
     Given user "user1" has logged in using the webUI
     When the user creates a public link via quick action for resource "simple-folder" using the webUI
     Then user "user1" should have a share with these details:
-      | field       | value              |
-      | share_type  | public_link        |
-      | uid_owner   | user1              |
-      | permissions | read               |
-      | path        | /simple-folder     |
-      | name        | Quick action link  |
+      | field       | value             |
+      | share_type  | public_link       |
+      | uid_owner   | user1             |
+      | permissions | read              |
+      | path        | /simple-folder    |
+      | name        | Quick action link |
     And the following success message should be displayed on the webUI
       """
       Public link created
@@ -820,8 +820,8 @@ Feature: Share by public link
 
   Scenario: public batch deletes resources in the public link
     Given user "user1" has created a public link with following settings
-      | path        | /simple-folder |
-      | name        | public link    |
+      | path        | /simple-folder               |
+      | name        | public link                  |
       | permissions | read, create, delete, update |
     When the public uses the webUI to access the last public link created by user "user1"
     And the public marks these files for batch action using the webUI
@@ -840,8 +840,8 @@ Feature: Share by public link
 
   Scenario: files are not selected initially in the public share
     Given user "user1" has created a public link with following settings
-      | path        | /simple-folder |
-      | name        | public link    |
+      | path | /simple-folder |
+      | name | public link    |
     When the public uses the webUI to access the last public link created by user "user1"
     Then these files should not be selected on the webUI
       | name                |
@@ -852,8 +852,8 @@ Feature: Share by public link
 
   Scenario: public selects files and clear the selection in the public share
     Given user "user1" has created a public link with following settings
-      | path        | /simple-folder |
-      | name        | public link    |
+      | path | /simple-folder |
+      | name | public link    |
     When the public uses the webUI to access the last public link created by user "user1"
     And the public marks these files for batch action using the webUI
       | name                |

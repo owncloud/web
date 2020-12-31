@@ -17,7 +17,7 @@ Feature: files and folders exist in the trashbin after being deleted
       | name                                  |
       | simple-folder                         |
       | lorem.txt                             |
-      | strängé नेपाली folder                   |
+      | strängé नेपाली folder                 |
       | strängé filename (duplicate #2 &).txt |
     And the user browses to the trashbin page
     Then as "user1" folder "simple-folder" should exist in the trashbin
@@ -29,12 +29,12 @@ Feature: files and folders exist in the trashbin after being deleted
   @ocis-reva-issue-111 @skipOnOCIS @issue-product-183 @issue-product-186
   Scenario: Delete a file with problematic characters and check it is in the trashbin
     Given user "user1" has renamed the following files
-      | from-name-parts   | to-name-parts   |
-      | lorem.txt         | 'single'        |
-      | lorem-big.txt     | "double" quotes |
-      | textfile0.txt     | question?       |
-      | testimage.png     | &and#hash       |
-      | sample,1.txt      | sämple,1.txt    |
+      | from-name-parts | to-name-parts   |
+      | lorem.txt       | 'single'        |
+      | lorem-big.txt   | "double" quotes |
+      | textfile0.txt   | question?       |
+      | testimage.png   | &and#hash       |
+      | sample,1.txt    | sämple,1.txt    |
     When the user reloads the current page of the webUI
     And the user deletes the following elements using the webUI
       | name-parts      |
@@ -56,11 +56,11 @@ Feature: files and folders exist in the trashbin after being deleted
   # after the issue is fixed delete this scenario and use the one above
   Scenario: Delete a file with problematic characters and check it is in the trashbin
     Given user "user1" has renamed the following files
-      | from-name-parts   | to-name-parts   |
-      | lorem-big.txt     | "double" quotes |
-      | textfile0.txt     | question?       |
-      | testimage.png     | &and#hash       |
-      | sample,1.txt      | sämple,1.txt    |
+      | from-name-parts | to-name-parts   |
+      | lorem-big.txt   | "double" quotes |
+      | textfile0.txt   | question?       |
+      | testimage.png   | &and#hash       |
+      | sample,1.txt    | sämple,1.txt    |
     When the user reloads the current page of the webUI
     And the user deletes the following elements using the webUI
       | name-parts      |

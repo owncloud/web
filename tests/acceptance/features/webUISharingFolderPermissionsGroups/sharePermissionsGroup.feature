@@ -26,10 +26,10 @@ Feature: Sharing folders with internal groups with different roles and permissio
     When the user opens the share dialog for folder "simple-folder" using the webUI
     And the user opens the share creation dialog in the webUI
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
-    | collaborator | type  |
-    | grp1         | group |
-    | User Three   | user  |
-    | grp2         | group |
+      | collaborator | type  |
+      | grp1         | group |
+      | User Three   | user  |
+      | grp2         | group |
     And the user removes "grp1" as a collaborator from the share
     And the user removes "User One" as a collaborator from the share
     And the user shares with the selected collaborators
@@ -56,10 +56,10 @@ Feature: Sharing folders with internal groups with different roles and permissio
     But group "grp1" should not be listed in the collaborators list on the webUI
     And as "user1" folder "/Shares/simple-folder" should not exist
     Examples:
-    | role                 | displayed-role       | extra-permissions             | displayed-permissions  | actual-permissions           |
-    | Viewer               | Viewer               | ,                             | ,                      | read, share                  |
-    | Editor               | Editor               | ,                             | ,                      | all                          |
-    | Advanced permissions | Advanced permissions | ,                             | ,                      | read                         |
-    | Advanced permissions | Viewer               | share                         | ,                      | read, share                  |
-    | Advanced permissions | Advanced permissions | delete, update, create        | delete, update, create | read, delete, update, create |
-    | Advanced permissions | Editor               | share, delete, update, create | ,                      | all                          |
+      | role                 | displayed-role       | extra-permissions             | displayed-permissions  | actual-permissions           |
+      | Viewer               | Viewer               | ,                             | ,                      | read, share                  |
+      | Editor               | Editor               | ,                             | ,                      | all                          |
+      | Advanced permissions | Advanced permissions | ,                             | ,                      | read                         |
+      | Advanced permissions | Viewer               | share                         | ,                      | read, share                  |
+      | Advanced permissions | Advanced permissions | delete, update, create        | delete, update, create | read, delete, update, create |
+      | Advanced permissions | Editor               | share, delete, update, create | ,                      | all                          |

@@ -61,10 +61,10 @@ Feature: Sharing files and folders with internal groups
     Then folder "simple-folder (2)" should be marked as shared by "User Three" on the webUI
     And file "testimage (2).jpg" should be marked as shared by "User Three" on the webUI
     Examples:
-      | set-role             | expected-role        | permissions-folder              | permissions-file       |
-      | Viewer               | Viewer               | read,share                      | read,share             |
-      | Editor               | Editor               | read,update,create,delete,share | read,update,share      |
-      | Advanced permissions | Advanced permissions | read                            | read                   |
+      | set-role             | expected-role        | permissions-folder              | permissions-file  |
+      | Viewer               | Viewer               | read,share                      | read,share        |
+      | Editor               | Editor               | read,update,create,delete,share | read,update,share |
+      | Advanced permissions | Advanced permissions | read                            | read              |
 
 
   Scenario: share a file with an internal group a member overwrites and unshares the file
@@ -223,16 +223,16 @@ Feature: Sharing files and folders with internal groups
     And user "user1" has shared folder "simple-folder" with group "grp1"
     When the user browses to the shared-with-others page
     Then the following resources should have the following collaborators
-      | fileName            | expectedCollaborators |
-      | simple-folder       | User Two, grp1        |
+      | fileName      | expectedCollaborators |
+      | simple-folder | User Two, grp1        |
 
 
   Scenario: change existing expiration date of an existing share with another internal group
     Given user "user3" has created a new share with following settings
-      | path            | lorem.txt  |
-      | shareTypeString | group      |
-      | shareWith       | grp1       |
-      | expireDate      | +14        |
+      | path            | lorem.txt |
+      | shareTypeString | group     |
+      | shareWith       | grp1      |
+      | expireDate      | +14       |
     And user "user3" has logged in using the webUI
     When the user edits the collaborator expiry date of "grp1" of file "lorem.txt" to "+7" days using the webUI
     Then user "user1" should have received a share with target "lorem (2).txt" and expiration date in 7 days
@@ -252,12 +252,12 @@ Feature: Sharing files and folders with internal groups
     And user "user3" has logged in using the webUI
     When the user shares folder "lorem.txt" with group "grp1" as "Viewer" using the webUI
     Then user "user3" should have a share with these details:
-      | field      | value              |
-      | path       | /lorem.txt         |
-      | share_type | group              |
-      | uid_owner  | user3              |
-      | share_with | grp1               |
-      | expiration | +42                |
+      | field      | value      |
+      | path       | /lorem.txt |
+      | share_type | group      |
+      | uid_owner  | user3      |
+      | share_with | grp1       |
+      | expiration | +42        |
     And user "user1" should have received a share with target "lorem (2).txt" and expiration date in 42 days
     And user "user2" should have received a share with target "lorem (2).txt" and expiration date in 42 days
 

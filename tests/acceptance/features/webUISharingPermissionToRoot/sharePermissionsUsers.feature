@@ -84,12 +84,12 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder             |
       | permissions | <permissions>      |
     Examples:
-      | role                 | displayed-role          | extra-permissions             | displayed-permissions | permissions                         |
-      | Viewer               | Viewer                  | ,                             | ,                     | read, share                         |
-      | Editor               | Editor                  | ,                             | ,                     | all                                 |
-      | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
-      | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
-      | Advanced permissions | Editor                  | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | role                 | displayed-role       | extra-permissions             | displayed-permissions | permissions                         |
+      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
+      | Editor               | Editor               | ,                             | ,                     | all                                 |
+      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
+      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
+      | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
 
   Scenario Outline: Change permissions of the previously shared file
@@ -105,9 +105,9 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | file           |
       | permissions | <permissions>  |
     Examples:
-      | initial-permissions | permissions         | set-permissions |
-      | read, update        | read, share         | update          |
-      | read                | read, share         | ,               |
+      | initial-permissions | permissions | set-permissions |
+      | read, update        | read, share | update          |
+      | read                | read, share | ,               |
 
 
   Scenario: Delete all custom permissions of the previously shared folder

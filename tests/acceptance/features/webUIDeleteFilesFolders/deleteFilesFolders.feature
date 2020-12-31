@@ -17,7 +17,7 @@ Feature: deleting files and folders
       | name                                  |
       | simple-folder                         |
       | lorem.txt                             |
-      | strängé नेपाली folder                   |
+      | strängé नेपाली folder                 |
       | strängé filename (duplicate #2 &).txt |
       | sample,1.txt                          |
       | Sample,Folder,With,Comma              |
@@ -154,12 +154,12 @@ Feature: deleting files and folders
   @ocis-reva-issue-64
   Scenario: delete a file on a public share with problematic characters
     Given user "user1" has renamed the following file
-      | from-name-parts          | to-name-parts   |
-      | lorem.txt                | simple-folder/  |
-      |                          | 'single'        |
-      |                          | "double" quotes |
-      |                          | question?       |
-      |                          | &and#hash       |
+      | from-name-parts | to-name-parts   |
+      | lorem.txt       | simple-folder/  |
+      |                 | 'single'        |
+      |                 | "double" quotes |
+      |                 | question?       |
+      |                 | &and#hash       |
     And user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
     And the user deletes the following file using the webUI

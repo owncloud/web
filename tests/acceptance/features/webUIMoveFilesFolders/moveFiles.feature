@@ -67,11 +67,11 @@ Feature: move files
     Then breadcrumb for folder <folder_name> should be displayed on the webUI
     And file <file_name> should be listed on the webUI
     Examples:
-      | file_name           | folder_name                      |
-      | "'single'"          | "folder-with-'single'"           |
+      | file_name   | folder_name             |
+      | "'single'"  | "folder-with-'single'"  |
       # | "\"double\" quotes" | "folder-with\"double\" quotes" | FIXME: Needs a way to access breadcrumbs with double quotes issue-3734
-      | "question?"         | "folder-with-question?"          |
-      | "&and#hash"         | "folder-with-&and#hash"          |
+      | "question?" | "folder-with-question?" |
+      | "&and#hash" | "folder-with-&and#hash" |
 
 
   Scenario: move files on a public share

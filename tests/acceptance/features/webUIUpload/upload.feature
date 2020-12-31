@@ -24,8 +24,8 @@ Feature: File Upload
     And the last uploaded folder should be listed on the webUI
     And as "user1" the last uploaded folder should exist
     And as "user1" the last uploaded folder should contain the following files inside the sub-folders:
-      | new-lorem.txt                |
-      | lorem.txt                    |
+      | new-lorem.txt |
+      | lorem.txt     |
 
   @smokeTest @ocisSmokeTest
   Scenario: simple upload of a folder that does not exist before
@@ -151,11 +151,11 @@ Feature: File Upload
     And as "user1" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
 
 
- Scenario: upload a file with comma in the filename
-   When the user uploads file "file,with,comma,.txt" using the webUI
-   Then no message should be displayed on the webUI
-   And file "file,with,comma,.txt" should be listed on the webUI
-   And as "user1" the content of "file,with,comma,.txt" should be the same as the local "file,with,comma,.txt"
+  Scenario: upload a file with comma in the filename
+    When the user uploads file "file,with,comma,.txt" using the webUI
+    Then no message should be displayed on the webUI
+    And file "file,with,comma,.txt" should be listed on the webUI
+    And as "user1" the content of "file,with,comma,.txt" should be the same as the local "file,with,comma,.txt"
 
 
   Scenario: simple upload of a folder, with comma in its name, that does not exist before

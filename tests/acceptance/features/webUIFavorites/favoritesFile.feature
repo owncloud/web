@@ -107,17 +107,17 @@ Feature: Mark file as favorite
     And as "user1" folder "simple-folder" should not exist
 
 
-    Scenario: Favourite files and folders with comma in the names
-      Given user "user1" has created file "sample,1.txt"
-      And user "user1" has created folder "Sample,Folder,With,Comma"
-      And the user has reloaded the current page of the webUI
-      When the user marks file "sample,1.txt" as favorite using the webUI
-      And the user marks folder "Sample,Folder,With,Comma" as favorite using the webUI
-      Then as user "user1" file "sample,1.txt" should be marked as favorite
-      And file "sample,1.txt" should be marked as favorite on the webUI
-      And as user "user1" folder "Sample,Folder,With,Comma" should be marked as favorite
-      And folder "Sample,Folder,With,Comma" should be marked as favorite on the webUI
-      When the user browses to the favorites page
-      Then the count of files and folders shown on the webUI should be 2
-      And folder "Sample,Folder,With,Comma" should be listed on the webUI
-      And file "sample,1.txt" should be listed on the webUI
+  Scenario: Favourite files and folders with comma in the names
+    Given user "user1" has created file "sample,1.txt"
+    And user "user1" has created folder "Sample,Folder,With,Comma"
+    And the user has reloaded the current page of the webUI
+    When the user marks file "sample,1.txt" as favorite using the webUI
+    And the user marks folder "Sample,Folder,With,Comma" as favorite using the webUI
+    Then as user "user1" file "sample,1.txt" should be marked as favorite
+    And file "sample,1.txt" should be marked as favorite on the webUI
+    And as user "user1" folder "Sample,Folder,With,Comma" should be marked as favorite
+    And folder "Sample,Folder,With,Comma" should be marked as favorite on the webUI
+    When the user browses to the favorites page
+    Then the count of files and folders shown on the webUI should be 2
+    And folder "Sample,Folder,With,Comma" should be listed on the webUI
+    And file "sample,1.txt" should be listed on the webUI

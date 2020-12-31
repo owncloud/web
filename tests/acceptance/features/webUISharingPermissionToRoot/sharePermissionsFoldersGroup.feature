@@ -24,10 +24,10 @@ Feature: Sharing folders with internal groups with different roles and permissio
     When the user opens the share dialog for folder "simple-folder" using the webUI
     And the user opens the share creation dialog in the webUI
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
-    | collaborator | type  |
-    | grp1         | group |
-    | User Three   | user  |
-    | grp2         | group |
+      | collaborator | type  |
+      | grp1         | group |
+      | User Three   | user  |
+      | grp2         | group |
     And the user removes "grp1" as a collaborator from the share
     And the user removes "User One" as a collaborator from the share
     And the user shares with the selected collaborators
@@ -36,23 +36,23 @@ Feature: Sharing folders with internal groups with different roles and permissio
     And group "grp2" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "User Three" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "user2" should have received a share with these details:
-    | field       | value                |
-    | uid_owner   | user1                |
-    | share_with  | grp2                 |
-    | file_target | /simple-folder (2)   |
-    | item_type   | folder               |
-    | permissions | <actual-permissions> |
+      | field       | value                |
+      | uid_owner   | user1                |
+      | share_with  | grp2                 |
+      | file_target | /simple-folder (2)   |
+      | item_type   | folder               |
+      | permissions | <actual-permissions> |
     And user "user3" should have received a share with these details:
-    | field       | value                |
-    | uid_owner   | user1                |
-    | share_with  | user3                |
-    | file_target | /simple-folder (2)   |
-    | item_type   | folder               |
-    | permissions | <actual-permissions> |
+      | field       | value                |
+      | uid_owner   | user1                |
+      | share_with  | user3                |
+      | file_target | /simple-folder (2)   |
+      | item_type   | folder               |
+      | permissions | <actual-permissions> |
     But group "grp1" should not be listed in the collaborators list on the webUI
     And as "user1" folder "simple-folder (2)" should not exist
     Examples:
-    | role                 | displayed-role          | extra-permissions             | displayed-permissions | actual-permissions           |
+      | role                 | displayed-role | extra-permissions             | displayed-permissions | actual-permissions |
     # | Viewer               | Viewer                  | share                         | share                 | read, share                  |
     # | Viewer               | Viewer                  | ,                             | ,                     | read                         |
     # | Editor               | Editor                  | share                         | share                 | all                          |
@@ -60,4 +60,4 @@ Feature: Sharing folders with internal groups with different roles and permissio
     # | Advanced permissions | Viewer                  | ,                             | ,                     | read                         |
     # | Advanced permissions | Viewer                  | share                         | share                 | read, share                  |
     # | Advanced permissions | Editor                  | delete, update, create        | ,                     | read, delete, update, create |
-    | Advanced permissions | Editor                  | share, delete, update, create | ,                     | all                          |
+      | Advanced permissions | Editor         | share, delete, update, create | ,                     | all                |

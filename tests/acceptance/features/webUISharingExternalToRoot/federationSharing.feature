@@ -158,11 +158,11 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user shares folder "simple-folder (2)" with user "User Two" as "Viewer" using the webUI
     Then as "user2" folder "simple-folder (2)/lorem.txt" should exist
     And user "user2" should have received a share with these details:
-      | field       | value                      |
-      | uid_owner   | user1                      |
-      | share_with  | user2                      |
-      | item_type   | folder                     |
-      | permissions | read, share                |
+      | field       | value       |
+      | uid_owner   | user1       |
+      | share_with  | user2       |
+      | item_type   | folder      |
+      | permissions | read, share |
 
 
   Scenario: test resharing a federated server to remote again
@@ -200,14 +200,14 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user has reloaded the current page of the webUI
     When the user opens folder "'single'quotes (2)" using the webUI
     Then as "user1" these resources should be listed on the webUI
-     | entry_name          |
-     | simple-empty-folder |
-     | for-git-commit      |
-     | lorem.txt           |
+      | entry_name          |
+      | simple-empty-folder |
+      | for-git-commit      |
+      | lorem.txt           |
     When the user opens folder "simple-empty-folder" using the webUI
     Then as "user1" these resources should be listed on the webUI
-     | entry_name     |
-     | for-git-commit |
+      | entry_name     |
+      | for-git-commit |
     When the user downloads file "for-git-commit" using the webUI
     Then no message should be displayed on the webUI
     And as "user1" the content of "'single'quotes (2)/lorem.txt" should be the same as the original "'single'quotes/lorem.txt"
@@ -253,8 +253,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user shares folder "simple-folder" with remote user "user1" as "Editor" using the webUI
     When the user opens folder "/" directly on the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-folder       | user-direct        |
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
@@ -276,8 +276,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user shares folder "simple-empty-folder" with remote user "user1" as "Editor" using the webUI
     When the user opens folder "/" directly on the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-folder (2)   | user-direct        |
+      | fileName          | expectedIndicators |
+      | simple-folder (2) | user-direct        |
     When the user opens folder "simple-folder (2)" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
@@ -293,8 +293,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user shares folder "simple-empty-folder" with remote user "user1" as "Editor" using the webUI
     When the user opens folder "/" directly on the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-folder (2)   | user-indirect      |
+      | fileName          | expectedIndicators |
+      | simple-folder (2) | user-indirect      |
     When the user opens folder "simple-folder (2)" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
@@ -316,8 +316,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     When the user opens folder "simple-empty-folder" using the webUI
     And the user creates a folder with the name "sub-folder" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | sub-folder    | user-indirect      |
+      | fileName   | expectedIndicators |
+      | sub-folder | user-indirect      |
 
   @issue-2939
   Scenario: sharing indicator for federated shares stays up to date

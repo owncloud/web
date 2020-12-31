@@ -40,28 +40,28 @@ Feature: Sharing files and folders with internal groups
     Then group "grp1" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
     And group "grp1" should be listed as "<expected-role>" in the collaborators list for file "testimage.jpg" on the webUI
     And user "user1" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user3                |
-      | share_with  | grp1                 |
-      | file_target | /Shares/simple-folder  |
-      | item_type   | folder               |
-      | permissions | <permissions-folder> |
+      | field       | value                 |
+      | uid_owner   | user3                 |
+      | share_with  | grp1                  |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <permissions-folder>  |
     And user "user2" should have received a share with these details:
-      | field       | value              |
-      | uid_owner   | user3              |
-      | share_with  | grp1               |
+      | field       | value                 |
+      | uid_owner   | user3                 |
+      | share_with  | grp1                  |
       | file_target | /Shares/testimage.jpg |
-      | item_type   | file               |
-      | permissions | <permissions-file> |
+      | item_type   | file                  |
+      | permissions | <permissions-file>    |
     And as "user1" these resources should be listed in the folder "Shares" on the webUI
-      | entry_name        |
+      | entry_name    |
       | simple-folder |
       | testimage.jpg |
     And these resources should be listed in the folder "/Shares%2Fsimple-folder" on the webUI
       | entry_name |
       | lorem.txt  |
     But these resources should not be listed in the folder "/Shares%2Fsimple-folder" on the webUI
-      | entry_name        |
+      | entry_name    |
       | simple-folder |
     When the user browses to the shared-with-me page using the webUI
     Then folder "simple-folder" should be marked as shared by "User Three" on the webUI
@@ -248,16 +248,16 @@ Feature: Sharing files and folders with internal groups
     And user "user1" has shared folder "simple-folder" with group "grp1"
     When the user browses to the shared-with-others page
     Then the following resources should have the following collaborators
-      | fileName            | expectedCollaborators |
-      | simple-folder       | User Two, grp1        |
+      | fileName      | expectedCollaborators |
+      | simple-folder | User Two, grp1        |
 
 
   Scenario: change existing expiration date of an existing share with another internal group
     Given user "user3" has created a new share with following settings
-      | path            | lorem.txt  |
-      | shareTypeString | group      |
-      | shareWith       | grp1       |
-      | expireDate      | +14        |
+      | path            | lorem.txt |
+      | shareTypeString | group     |
+      | shareWith       | grp1      |
+      | expireDate      | +14       |
     And user "user1" has accepted the share "lorem.txt" offered by user "user3"
     And user "user2" has accepted the share "lorem.txt" offered by user "user3"
     And user "user3" has logged in using the webUI
@@ -281,12 +281,12 @@ Feature: Sharing files and folders with internal groups
     And user "user1" accepts the share "lorem.txt" offered by user "user3" using the sharing API
     And user "user2" accepts the share "lorem.txt" offered by user "user3" using the sharing API
     Then user "user3" should have a share with these details:
-      | field      | value              |
-      | path       | /lorem.txt         |
-      | share_type | group              |
-      | uid_owner  | user3              |
-      | share_with | grp1               |
-      | expiration | +42                |
+      | field      | value      |
+      | path       | /lorem.txt |
+      | share_type | group      |
+      | uid_owner  | user3      |
+      | share_with | grp1       |
+      | expiration | +42        |
     And user "user1" should have received a share with target "Shares/lorem.txt" and expiration date in 42 days
     And user "user2" should have received a share with target "Shares/lorem.txt" and expiration date in 42 days
 
@@ -323,6 +323,6 @@ Feature: Sharing files and folders with internal groups
     And user "user1" should have received a share with target "<target-resource>" and expiration date in 4 days
     And user "user2" should have received a share with target "<target-resource>" and expiration date in 4 days
     Examples:
-      | shared-resource | target-resource   |
+      | shared-resource | target-resource      |
       | lorem.txt       | Shares/lorem.txt     |
       | simple-folder   | Shares/simple-folder |

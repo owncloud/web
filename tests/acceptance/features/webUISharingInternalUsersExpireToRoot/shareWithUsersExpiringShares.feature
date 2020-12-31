@@ -27,9 +27,9 @@ Feature: Sharing files and folders with internal users with expiry date
 
   Scenario: change existing expiration date of an existing share with another internal user
     Given user "user1" has created a new share with following settings
-      | path       | lorem.txt  |
-      | shareWith  | user2      |
-      | expireDate | +14        |
+      | path       | lorem.txt |
+      | shareWith  | user2     |
+      | expireDate | +14       |
     And user "user1" has logged in using the webUI
     When the user edits the collaborator expiry date of "User Two" of file "lorem.txt" to "+7" days using the webUI
     Then user "user2" should have received a share with target "lorem (2).txt" and expiration date in 7 days
@@ -119,21 +119,21 @@ Feature: Sharing files and folders with internal users with expiry date
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "30"
     And user "user1" has created a new share with following settings
-      | path             | lorem.txt |
-      | shareWith        | user2     |
-      | expireDate       | +30       |
+      | path       | lorem.txt |
+      | shareWith  | user2     |
+      | expireDate | +30       |
     And user "user1" has logged in using the webUI
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "10"
     When the user tries to edit the collaborator "User Two" of file "lorem.txt" changing following
-      | expireDate       | +15    |
+      | expireDate | +15 |
     Then the user should see an error message on the collaborator share dialog saying "Cannot set expiration date more than 10 days in the future"
     And user "user1" should have a share with these details:
-      | field       | value      |
-      | path        | /lorem.txt |
-      | share_type  | user       |
-      | uid_owner   | user1      |
-      | share_with  | user2      |
-      | expiration  | +30        |
+      | field      | value      |
+      | path       | /lorem.txt |
+      | share_type | user       |
+      | uid_owner  | user1      |
+      | share_with | user2      |
+      | expiration | +30        |
 
   @issue-3174
   Scenario Outline: enforced expiry date for group affect user shares

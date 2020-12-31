@@ -37,12 +37,12 @@ Feature: Sharing files and folders with internal users with different permission
     When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "create" using the webUI
     Then custom permissions "create, update" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user2                |
-      | share_with  | user1                |
-      | file_target | /Shares/simple-folder|
-      | item_type   | folder               |
-      | permissions | read, update, create |
+      | field       | value                 |
+      | uid_owner   | user2                 |
+      | share_with  | user1                 |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | read, update, create  |
 
   @issue-1853 @issue-product-270
   Scenario: Change permissions of the previously shared folder
@@ -69,12 +69,12 @@ Feature: Sharing files and folders with internal users with different permission
     When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "delete, update" using the webUI
     Then custom permission "delete, update" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user2                |
-      | share_with  | user1                |
+      | field       | value                 |
+      | uid_owner   | user2                 |
+      | share_with  | user1                 |
       | file_target | /Shares/simple-folder |
-      | item_type   | folder               |
-      | permissions | read, update, delete |
+      | item_type   | folder                |
+      | permissions | read, update, delete  |
 
   @issue-product-270
   Scenario: Change permissions of the previously shared folder
@@ -85,12 +85,12 @@ Feature: Sharing files and folders with internal users with different permission
     When the user sets custom permission for current role of collaborator "User One" for folder "simple-folder" to "create, share" using the webUI
     Then custom permission "create, share" should be set for user "User One" for folder "simple-folder" on the webUI
     And user "user1" should have received a share with these details:
-      | field       | value               |
-      | uid_owner   | user2               |
-      | share_with  | user1               |
+      | field       | value                 |
+      | uid_owner   | user2                 |
+      | share_with  | user1                 |
       | file_target | /Shares/simple-folder |
-      | item_type   | folder              |
-      | permissions | read, create, share |
+      | item_type   | folder                |
+      | permissions | read, create, share   |
 
   @issue-ocis-717
   Scenario Outline: share a folder with another internal user assigning a role and the permissions
@@ -107,12 +107,12 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | folder                |
       | permissions | <permissions>         |
     Examples:
-      | role                 | displayed-role          | extra-permissions             | displayed-permissions | permissions                         |
-      | Viewer               | Viewer                  | ,                             | ,                     | read, share                         |
-      | Editor               | Editor                  | ,                             | ,                     | all                                 |
-      | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
-      | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
-      | Advanced permissions | Editor                  | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | role                 | displayed-role       | extra-permissions             | displayed-permissions | permissions                         |
+      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
+      | Editor               | Editor               | ,                             | ,                     | all                                 |
+      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
+      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
+      | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
   @skipOnOC10 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -123,19 +123,19 @@ Feature: Sharing files and folders with internal users with different permission
     Then user "User One" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "User One" for folder "simple-folder" on the webUI
     Then user "user1" should have received a share with these details:
-      | field       | value          |
-      | uid_owner   | user2          |
-      | share_with  | user1          |
+      | field       | value                 |
+      | uid_owner   | user2                 |
+      | share_with  | user1                 |
       | file_target | /Shares/simple-folder |
-      | item_type   | folder         |
-      | permissions | <permissions>  |
+      | item_type   | folder                |
+      | permissions | <permissions>         |
     Examples:
-      | role                 | displayed-role       | extra-permissions             | displayed-permissions | permissions                  |
-      | Viewer               | Viewer               | ,                             | ,                     | read                         |
-      | Editor               | Editor               | ,                             | ,                     | read, create, update, delete |
-      | Advanced permissions | Advanced permissions | create                        | create, update        | read, create, update         |
-      | Advanced permissions | Advanced permissions | update                        | update                | read, update                 |
-      | Advanced permissions | Editor               | delete, create, update        | ,                     | read, delete, update, create |
+      | role                 | displayed-role       | extra-permissions      | displayed-permissions | permissions                  |
+      | Viewer               | Viewer               | ,                      | ,                     | read                         |
+      | Editor               | Editor               | ,                      | ,                     | read, create, update, delete |
+      | Advanced permissions | Advanced permissions | create                 | create, update        | read, create, update         |
+      | Advanced permissions | Advanced permissions | update                 | update                | read, update                 |
+      | Advanced permissions | Editor               | delete, create, update | ,                     | read, delete, update, create |
 
   @issue-ocis-717
   Scenario Outline: Change permissions of the previously shared file
@@ -152,9 +152,9 @@ Feature: Sharing files and folders with internal users with different permission
       | item_type   | file              |
       | permissions | <permissions>     |
     Examples:
-      | initial-permissions | permissions         | displayed-permissions |
-      | read, update        | read, share         | update                |
-      | read                | read, share         | ,                     |
+      | initial-permissions | permissions | displayed-permissions |
+      | read, update        | read, share | update                |
+      | read                | read, share | ,                     |
 
   #  As the reshare permission has been hidden in oCIS there's no use for this scenario at the moment
   # @skipOnOC10 @issue-ocis-717
@@ -240,12 +240,12 @@ Feature: Sharing files and folders with internal users with different permission
     Then user "User One" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "User One" for file "lorem.txt" on the webUI
     Then user "user1" should have received a share with these details:
-      | field       | value         |
-      | uid_owner   | user2         |
-      | share_with  | user1         |
-      | file_target | /Shares/lorem.txt    |
-      | item_type   | file          |
-      | permissions | <permissions> |
+      | field       | value             |
+      | uid_owner   | user2             |
+      | share_with  | user1             |
+      | file_target | /Shares/lorem.txt |
+      | item_type   | file              |
+      | permissions | <permissions>     |
     Examples:
       | role                 | displayed-role | collaborators-permissions | displayed-permissions | permissions  |
       | Viewer               | Viewer         | ,                         | ,                     | read         |
@@ -281,12 +281,12 @@ Feature: Sharing files and folders with internal users with different permission
     When the user sets custom permission for current role of collaborator "User Three" for folder "simple-folder" to "delete, update" using the webUI
     Then custom permissions "delete, update" should be set for user "User Three" for folder "simple-folder" on the webUI
     And user "user3" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user3                |
+      | field       | value                 |
+      | uid_owner   | user1                 |
+      | share_with  | user3                 |
       | file_target | /Shares/simple-folder |
-      | item_type   | folder               |
-      | permissions | delete, read, update |
+      | item_type   | folder                |
+      | permissions | delete, read, update  |
 
   @issue-product-270
   Scenario: User is not allowed to reshare sub-folder with more permissions
@@ -350,6 +350,6 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value                        |
       | uid_owner   | user1                        |
       | share_with  | user3                        |
-      | file_target | /Shares/simple-empty-folder         |
+      | file_target | /Shares/simple-empty-folder  |
       | item_type   | folder                       |
       | permissions | read, delete, create, update |

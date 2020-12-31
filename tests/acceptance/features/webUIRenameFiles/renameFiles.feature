@@ -85,18 +85,18 @@ Feature: rename files
 
   Scenario: Rename a file using both double and single quotes
     When the user renames the following file using the webUI
-      | fromName          | toName                         |
-      | lorem.txt         | '"First 'single" quotes" '.txt |
-      | lorem-big.txt     | Test" 'me o'ut".txt            |
+      | fromName      | toName                         |
+      | lorem.txt     | '"First 'single" quotes" '.txt |
+      | lorem-big.txt | Test" 'me o'ut".txt            |
     And the user reloads the current page of the webUI
     Then these files should be listed on the webUI
       | files                          |
       | '"First 'single" quotes" '.txt |
       | Test" 'me o'ut".txt            |
     When the user renames the following file using the webUI
-      | fromName                       | toName        |
-      | '"First 'single" quotes" '.txt | loremz.dat    |
-      | Test" 'me o'ut".txt            | loremy.tad    |
+      | fromName                       | toName     |
+      | '"First 'single" quotes" '.txt | loremz.dat |
+      | Test" 'me o'ut".txt            | loremy.tad |
     And the user reloads the current page of the webUI
     Then file "loremz.dat" should be listed on the webUI
     Then file "loremy.tad" should be listed on the webUI
@@ -230,8 +230,8 @@ Feature: rename files
   Scenario: User tries to rename a file that used to exist but does not anymore
     Given the user has browsed to the files page
     And the following files have been deleted by user "user1"
-      | name          |
-      | lorem.txt     |
+      | name      |
+      | lorem.txt |
     When the user tries to rename file "lorem.txt" to "new-lorem.txt" using the webUI
     Then the error message with header 'Error while renaming "lorem.txt" to "new-lorem.txt"' should be displayed on the webUI
     When the user reloads the current page of the webUI

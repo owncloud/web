@@ -64,12 +64,12 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | <permissions>         |
     Examples:
-    | role                 | displayed-role          | collaborators-permissions     | displayed-permissions | permissions                         |
-    | Viewer               | Viewer                  | ,                             | ,                     | read, share                         |
-    | Editor               | Editor                  | ,                             | ,                     | all                                 |
-    | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
-    | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
-    | Advanced permissions | Editor                  | delete, share, create, update |                       | read, share, delete, update, create |
+      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
+      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
+      | Editor               | Editor               | ,                             | ,                     | all                                 |
+      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
+      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
+      | Advanced permissions | Editor               | delete, share, create, update |                       | read, share, delete, update, create |
 
   @skipOnOC10
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -125,12 +125,12 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | <permissions>         |
     Examples:
-    | role                 | displayed-role          | collaborators-permissions     | displayed-permissions | permissions                         |
-    | Viewer               | Viewer                  | ,                             | ,                     | read, share                         |
-    | Editor               | Editor                  | ,                             | ,                     | all                                 |
-    | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
-    | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
-    | Advanced permissions | Editor                  | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
+      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
+      | Editor               | Editor               | ,                             | ,                     | all                                 |
+      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
+      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
+      | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
   @skipOnOC10 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -265,11 +265,11 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "<shared-entry-name>" using the webUI
     Examples:
-    | shared-entry-name |
-    | simple-folder     |
-    | lorem.txt         |
-    | simple-folder     |
-    | lorem.txt         |
+      | shared-entry-name |
+      | simple-folder     |
+      | lorem.txt         |
+      | simple-folder     |
+      | lorem.txt         |
 
   @issue-product-270
   Scenario Outline: share a received file/folder without share permissions and check if another user can reshare
@@ -281,9 +281,9 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "<shared-entry-name>" using the webUI
     Examples:
-    | shared-entry-name |
-    | simple-folder     |
-    | lorem.txt         |
+      | shared-entry-name |
+      | simple-folder     |
+      | lorem.txt         |
 
 
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver

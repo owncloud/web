@@ -45,10 +45,10 @@ Feature: Sharing files and folders with internal users
     #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
     #    And file "testimage (2).jpg" should be marked as shared by "User Two" on the webUI
     Examples:
-      | set-role             | expected-role        | permissions-folder              | permissions-file       |
-      | Viewer               | Viewer               | read,share                      | read,share             |
-      | Editor               | Editor               | read,update,create,delete,share | read,update,share      |
-      | Advanced permissions | Advanced permissions | read                            | read                   |
+      | set-role             | expected-role        | permissions-folder              | permissions-file  |
+      | Viewer               | Viewer               | read,share                      | read,share        |
+      | Editor               | Editor               | read,update,create,delete,share | read,update,share |
+      | Advanced permissions | Advanced permissions | read                            | read              |
 
 
   Scenario Outline: change the collaborators of a file & folder
@@ -67,11 +67,11 @@ Feature: Sharing files and folders with internal users
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
-      | initial-permissions | set-role             | expected-role        | expected-permissions            |
-      | read,update,create  | Viewer               | Viewer               | read,share                      |
-      | read                | Editor               | Editor               | read,update,create,delete,share |
-      | read,share          | Advanced permissions | Viewer               | read,share                      |
-      | all                 | Advanced permissions | Editor               | all                             |
+      | initial-permissions | set-role             | expected-role | expected-permissions            |
+      | read,update,create  | Viewer               | Viewer        | read,share                      |
+      | read                | Editor               | Editor        | read,update,create,delete,share |
+      | read,share          | Advanced permissions | Viewer        | read,share                      |
+      | all                 | Advanced permissions | Editor        | all                             |
 
 
   Scenario: share a file with another internal user who overwrites and unshares the file
@@ -160,9 +160,9 @@ Feature: Sharing files and folders with internal users
     And user "user2" has shared folder "simple-folder" with user "user3"
     When the user browses to the shared-with-others page
     Then the following resources should have the following collaborators
-      | fileName            | expectedCollaborators |
-      | lorem.txt           | User One              |
-      | simple-folder       | User One, User Three  |
+      | fileName      | expectedCollaborators |
+      | lorem.txt     | User One              |
+      | simple-folder | User One, User Three  |
 
   @issue-2480 @yetToImplement
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
@@ -408,43 +408,43 @@ Feature: Sharing files and folders with internal users
     When the user shares resource "simple-folder" with user "User Two" using the quick action in the webUI
     Then user "User Two" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And user "user2" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user2                |
-      | file_target | /simple-folder (2)   |
-      | item_type   | folder               |
-      | permissions | read,share           |
+      | field       | value              |
+      | uid_owner   | user1              |
+      | share_with  | user2              |
+      | file_target | /simple-folder (2) |
+      | item_type   | folder             |
+      | permissions | read,share         |
 
 
-    Scenario Outline: Share files/folders with special characters in their name
-      Given user "user2" has created folder "Sample,Folder,With,Comma"
-      And user "user2" has created file "sample,1.txt"
-      And user "user2" has logged in using the webUI
-      And the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
-      When the user shares folder "Sample,Folder,With,Comma" with user "User One" as "<set-role>" using the webUI
-      And the user shares file "sample,1.txt" with user "User One" as "<set-role>" using the webUI
-      Then user "User One" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
-      And user "User One" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
-      And user "user1" should have received a share with these details:
-        | field       | value                    |
-        | uid_owner   | user2                    |
-        | share_with  | user1                    |
-        | file_target | /Sample,Folder,With,Comma |
-        | item_type   | folder                   |
-        | permissions | <permissions-folder>     |
-      And user "user1" should have received a share with these details:
-        | field       | value              |
-        | uid_owner   | user2              |
-        | share_with  | user1              |
-        | file_target | /sample,1.txt      |
-        | item_type   | file               |
-        | permissions | <permissions-file> |
-      And as "user1" these resources should be listed on the webUI
-        | entry_name               |
-        | Sample,Folder,With,Comma |
-        | sample,1.txt             |
-      Examples:
-        | set-role             | expected-role        | permissions-folder              | permissions-file       |
-        | Viewer               | Viewer               | read,share                      | read,share             |
-        | Editor               | Editor               | read,update,create,delete,share | read,update,share      |
-        | Advanced permissions | Advanced permissions | read                            | read                   |
+  Scenario Outline: Share files/folders with special characters in their name
+    Given user "user2" has created folder "Sample,Folder,With,Comma"
+    And user "user2" has created file "sample,1.txt"
+    And user "user2" has logged in using the webUI
+    And the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+    When the user shares folder "Sample,Folder,With,Comma" with user "User One" as "<set-role>" using the webUI
+    And the user shares file "sample,1.txt" with user "User One" as "<set-role>" using the webUI
+    Then user "User One" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
+    And user "User One" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
+    And user "user1" should have received a share with these details:
+      | field       | value                     |
+      | uid_owner   | user2                     |
+      | share_with  | user1                     |
+      | file_target | /Sample,Folder,With,Comma |
+      | item_type   | folder                    |
+      | permissions | <permissions-folder>      |
+    And user "user1" should have received a share with these details:
+      | field       | value              |
+      | uid_owner   | user2              |
+      | share_with  | user1              |
+      | file_target | /sample,1.txt      |
+      | item_type   | file               |
+      | permissions | <permissions-file> |
+    And as "user1" these resources should be listed on the webUI
+      | entry_name               |
+      | Sample,Folder,With,Comma |
+      | sample,1.txt             |
+    Examples:
+      | set-role             | expected-role        | permissions-folder              | permissions-file  |
+      | Viewer               | Viewer               | read,share                      | read,share        |
+      | Editor               | Editor               | read,update,create,delete,share | read,update,share |
+      | Advanced permissions | Advanced permissions | read                            | read              |

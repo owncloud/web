@@ -50,10 +50,10 @@ Feature: Sharing files and folders with internal users
     #    And folder "simple-folder (2)" should be marked as shared by "User Two" on the webUI
     #    And file "testimage (2).jpg" should be marked as shared by "User Two" on the webUI
     Examples:
-      | set-role             | expected-role               | permissions-folder              | permissions-file  |
-      | Viewer               | Viewer                      | read,share                      | read, share       |
-      | Editor               | Editor                      | read,update,create,delete,share | read,update,share |
-      | Advanced permissions | Advanced permissions        | read                            | read              |
+      | set-role             | expected-role        | permissions-folder              | permissions-file  |
+      | Viewer               | Viewer               | read,share                      | read, share       |
+      | Editor               | Editor               | read,update,create,delete,share | read,update,share |
+      | Advanced permissions | Advanced permissions | read                            | read              |
 
   @issue-ocis-717
   Scenario Outline: change the collaborators of a file & folder
@@ -73,11 +73,11 @@ Feature: Sharing files and folders with internal users
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
-      | initial-permissions | set-role             | expected-role        | expected-permissions            |
-      | read,update,create  | Viewer               | Viewer               | read,share                      |
-      | read                | Editor               | Editor               | read,update,create,delete,share |
-      | read,share          | Advanced permissions | Viewer               | read,share                      |
-      | all                 | Advanced permissions | Editor               | all                             |
+      | initial-permissions | set-role             | expected-role | expected-permissions            |
+      | read,update,create  | Viewer               | Viewer        | read,share                      |
+      | read                | Editor               | Editor        | read,update,create,delete,share |
+      | read,share          | Advanced permissions | Viewer        | read,share                      |
+      | all                 | Advanced permissions | Editor        | all                             |
 
   @skipOnOC10 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -549,19 +549,19 @@ Feature: Sharing files and folders with internal users
     Then user "User One" should be listed as "<expected-role>" in the collaborators list for folder "Sample,Folder,With,Comma" on the webUI
     And user "User One" should be listed as "<expected-role>" in the collaborators list for file "sample,1.txt" on the webUI
     And user "user1" should have received a share with these details:
-      | field       | value                     |
-      | uid_owner   | user2                     |
-      | share_with  | user1                     |
+      | field       | value                            |
+      | uid_owner   | user2                            |
+      | share_with  | user1                            |
       | file_target | /Shares/Sample,Folder,With,Comma |
-      | item_type   | folder                    |
-      | permissions | <permissions-folder>      |
+      | item_type   | folder                           |
+      | permissions | <permissions-folder>             |
     And user "user1" should have received a share with these details:
-      | field       | value              |
-      | uid_owner   | user2              |
-      | share_with  | user1              |
-      | file_target | /Shares/sample,1.txt      |
-      | item_type   | file               |
-      | permissions | <permissions-file> |
+      | field       | value                |
+      | uid_owner   | user2                |
+      | share_with  | user1                |
+      | file_target | /Shares/sample,1.txt |
+      | item_type   | file                 |
+      | permissions | <permissions-file>   |
     When the user re-logs in as "user1" using the webUI
     And the user opens folder "Shares" using the webUI
     Then these files should be listed on the webUI

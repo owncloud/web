@@ -20,7 +20,7 @@ Feature: rename folders
       | '"quotes1"'             |
       | "'quotes2'"             |
       | "home"                  |
-      | 'सिमप्ले फोल्देर$%#?&@'      |
+      | 'सिमप्ले फोल्देर$%#?&@' |
 
 
   Scenario Outline: Rename a folder that has special characters in its name
@@ -75,9 +75,9 @@ Feature: rename folders
 
   Scenario: Rename a folder using both double and single quotes
     When the user renames the following folder using the webUI
-      | fromName              | toName                     |
-      | simple-folder         | '"First 'single" quotes" ' |
-      | simple-empty-folder   | Test" 'me o'ut"            |
+      | fromName            | toName                     |
+      | simple-folder       | '"First 'single" quotes" ' |
+      | simple-empty-folder | Test" 'me o'ut"            |
     And the user reloads the current page of the webUI
     Then these folders should be listed on the webUI
       | folders                    |

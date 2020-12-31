@@ -160,7 +160,7 @@ Feature: accept/decline shares coming from internal users
     When the user batch deletes these files using the webUI
       | name          |
       | data.zip      |
-      | lorem.txt |
+      | lorem.txt     |
       | simple-folder |
     Then file "data.zip" should not be listed on the webUI
     And file "lorem.txt" should not be listed on the webUI
@@ -185,7 +185,7 @@ Feature: accept/decline shares coming from internal users
     Given user "user1" has shared file "lorem.txt" with user "user2"
     And user "user2" has accepted the share "lorem.txt" offered by user "user1"
     And the following files have been deleted by user "user2"
-      | name          |
+      | name             |
       | Shares/lorem.txt |
     And the user has browsed to the shared-with-me page
     When the user accepts share "lorem.txt" offered by user "User One" using the webUI

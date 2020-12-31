@@ -15,9 +15,9 @@ Feature: Renaming files inside a folder with problematic name
     When the user reloads the current page of the webUI
     Then file "???.txt" should be listed on the webUI
     Examples:
-      | folder                  |
-      | "0"                     |
-      | "'single'quotes"        |
+      | folder           |
+      | "0"              |
+      | "'single'quotes" |
 
 
   Scenario Outline: Rename the existing file inside a problematic folder

@@ -11,8 +11,8 @@ Feature: download files
 
   Scenario: Try to download file and folder that used to exist but does not anymore
     Given the following files have been deleted by user "user1"
-      | name          |
-      | lorem.txt     |
+      | name      |
+      | lorem.txt |
     When the user downloads file "lorem.txt" using the webUI
     Then the error message with header 'Download failed' should be displayed on the webUI
     When the user reloads the current page of the webUI

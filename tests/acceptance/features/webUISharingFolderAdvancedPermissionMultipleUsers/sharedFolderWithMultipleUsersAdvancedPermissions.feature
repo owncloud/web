@@ -55,11 +55,11 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" folder "/Shares/simple-folder" should not exist
     Examples:
-      | role                 | displayed-role       | extra-permissions     | displayed-permissions | actual-permissions          |
-      | Advanced permissions | Advanced permissions | delete                | delete                | read, delete                |
-      | Advanced permissions | Advanced permissions | update                | update                | read, update                |
-      | Advanced permissions | Advanced permissions | delete, update        | delete, update        | read, delete, update        |
-      | Advanced permissions | Advanced permissions | update, create        | update, create        | read, update, create        |
+      | role                 | displayed-role       | extra-permissions | displayed-permissions | actual-permissions   |
+      | Advanced permissions | Advanced permissions | delete            | delete                | read, delete         |
+      | Advanced permissions | Advanced permissions | update            | update                | read, update         |
+      | Advanced permissions | Advanced permissions | delete, update    | delete, update        | read, delete, update |
+      | Advanced permissions | Advanced permissions | update, create    | update, create        | read, update, create |
 
   @issue-ocis-717
   #after fixing the issue merge this scenario into the one above

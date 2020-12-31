@@ -23,7 +23,7 @@ Feature: create folder
       | "+-{$(882)"                |
       | "home"                     |
       | "Sample,Folder,With,Comma" |
-      | 'सिमप्ले फोल्देर $%#?&@' |
+      | 'सिमप्ले फोल्देर $%#?&@'   |
 
   @issue-2467 @ocis-reva-issue-106
   Scenario Outline: Create a sub-folder inside a folder with problematic name

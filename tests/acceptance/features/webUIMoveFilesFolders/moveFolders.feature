@@ -38,8 +38,8 @@ Feature: move folders
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
     When the user batch moves these folders into folder "simple-empty-folder" using the webUI
-      | name                 |
-      | simple-folder        |
+      | name                  |
+      | simple-folder         |
       | strängé नेपाली folder |
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And the following folders should be listed on the webUI
@@ -57,11 +57,11 @@ Feature: move folders
     Then breadcrumb for folder <target_name> should be displayed on the webUI
     And file <folder_name> should be listed on the webUI
     Examples:
-      | folder_name         | target_name                      |
-      | "'single'"          | "target-folder-with-'single'"           |
+      | folder_name | target_name                    |
+      | "'single'"  | "target-folder-with-'single'"  |
       # | "\"double\" quotes" | "target-folder-with\"double\" quotes" | FIXME: Needs a way to access breadcrumbs with double quotes issue-3734
-      | "question?"         | "target-folder-with-question?"          |
-      | "&and#hash"         | "target-folder-with-&and#hash"          |
+      | "question?" | "target-folder-with-question?" |
+      | "&and#hash" | "target-folder-with-&and#hash" |
 
   @issue-ocis-reva-243
   Scenario: move a folder into another folder with no change permission
