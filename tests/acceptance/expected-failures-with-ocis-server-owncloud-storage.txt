@@ -1,4 +1,4 @@
-# this file contains the scenarios from phoenix tests that are currently expected to fail on OCIS with owncloud storage
+# this file contains the scenarios from web tests that are currently expected to fail on OCIS with owncloud storage
 #
 # https://github.com/owncloud/ocisissues/1106 media viewer does not support mp3 files
 webUIPreview/imageMediaViewer.feature:78
@@ -8,16 +8,17 @@ webUIPreview/imageMediaViewer.feature:85
 # https://github.com/owncloud/ocis/issues/1129 login error page loops when logged in user is deleted
 webUILogin/login.feature:62
 #
-# @ocis-reva-issue-107
+# https://github.com/owncloud/ocis-reva/issues/107 User request using token and basic authentication gives different display names
 webUIAccount/accountInformation.feature:10
 #
-# @ocis-konnectd-issue-42
+# https://github.com/owncloud/ocis-konnectd/issues/42 LDAP Groups not working with konnectd
 webUIAccount/accountInformation.feature:20
 #
-# @ocis-reva-issue-107 @ocis-konnectd-issue-42
+# https://github.com/owncloud/ocis-reva/issues/107 User request using token and basic authentication gives different display names
+# https://github.com/owncloud/ocis-konnectd/issues/42 LDAP Groups not working with konnectd
 webUIAccount/accountInformation.feature:34
 #
-# @ocis-reva-issue-39
+# https://github.com/owncloud/ocis-reva/issues/39 REPORT request not implemented
 webUIDeleteFilesFolders/deleteFilesFolders.feature:253
 webUIFavorites/favoritesFile.feature:14
 webUIFavorites/favoritesFile.feature:27
@@ -37,7 +38,7 @@ webUIFavorites/unfavoriteFile.feature:85
 webUIFiles/fileDetails.feature:35
 webUIFiles/fileDetails.feature:46
 #
-# @ocis-reva-issue-64
+# https://github.com/owncloud/ocis-reva/issues/243 Sharing seems to work but does not work
 webUIDeleteFilesFolders/deleteFilesFolders.feature:202
 webUIFiles/fileDetails.feature:88
 webUIFiles/fileDetails.feature:103
@@ -109,7 +110,7 @@ webUISharingPermissionsUsers/sharePermissionsUsers.feature:292
 webUISharingPermissionsUsers/sharePermissionsUsers.feature:305
 webUISharingPermissionsUsers/sharePermissionsUsers.feature:319
 #
-# @issue-ocis-reva-243
+# https://github.com/owncloud/ocis-reva/issues/243 Sharing seems to work but does not work
 webUIFiles/copy.feature:71
 webUIFiles/copy.feature:79
 webUIMoveFilesFolders/moveFiles.feature:87
@@ -120,20 +121,20 @@ webUISharingPublic/shareByPublicLink.feature:624
 webUISharingPublic/shareByPublicLink.feature:641
 webUISharingPublic/shareByPublicLink.feature:658
 #
-# @ocis-phoenix-issue-52
+# https://github.com/owncloud/ocis-phoenix/issues/52 Copy private link option not available
 webUIFiles/copyPrivateLinks.feature:18
 webUIFiles/copyPrivateLinks.feature:19
 #
-# @issue-276 @issue-3264
+# https://github.com/owncloud/web/issues/276 Display previews
 webUIFiles/fileList.feature:23
 webUIFiles/fileList.feature:28
 #
-# @ocis-reva-issue-110
+# https://github.com/owncloud/ocis-reva/issues/110 Versions Cleanup not available
 webUIFiles/versions.feature:45
 webUIFiles/versions.feature:56
 webUIFiles/versions.feature:71
 #
-# @ocis-reva-issue-34
+# https://github.com/owncloud/ocis-reva/issues/34 groups endpoint does not exist
 webUIFiles/search.feature:15
 webUIFiles/search.feature:26
 webUIFiles/search.feature:38
@@ -180,7 +181,7 @@ webUISharingInternalUsersBlacklisted/shareWithUsers.feature:62
 webUISharingInternalUsersBlacklisted/shareWithUsers.feature:80
 webUISharingInternalUsersBlacklisted/shareWithUsers.feature:90
 #
-# @ocis-konnectd-issue-68
+# https://github.com/owncloud/ocis-konnectd/issues/68 Can login with invalid password while logging in with openidconnect in oc10
 webUILogin/login.feature:52
 #
 # Image-Media-Viewer-Issue
@@ -246,7 +247,7 @@ webUIResharing/reshareUsers.feature:394
 webUIResharing/reshareUsers.feature:411
 webUIResharing/reshareUsers.feature:423
 #
-# @ocis-reva-issue-41
+# https://github.com/owncloud/ocis-reva/issues/41 various sharing settings cannot be set
 webUIRestrictSharing/disableSharing.feature:13
 webUIRestrictSharing/disableSharing.feature:19
 webUIRestrictSharing/disableSharing.feature:29
@@ -269,16 +270,16 @@ webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:100
 webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:123
 webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:139
 #
-# @ocis-product-276
+# https://github.com/owncloud/product/issues/276 [OCIS] declining a received share gives 500 error even if the share is declined.
 webUISharingAcceptShares/acceptShares.feature:124
 #
-# @ocis-issue-714
+# https://github.com/owncloud/ocis/issues/714 Cannot delete a received share
 webUISharingAcceptShares/acceptShares.feature:184
 #
-# @ocis-issue-713
+# https://github.com/owncloud/ocis/issues/713 Accepting different shares with same filename from different users overwrites one file
 webUISharingAcceptShares/acceptShares.feature:198
 #
-# @issue-product-203
+# https://github.com/owncloud/product/issues/203 file_target in share response
 webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:59
 webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:60
 webUISharingFilePermissionMultipleUsers/shareFileWithMultipleUsers.feature:61
@@ -300,7 +301,7 @@ webUISharingFolderPermissionMultipleUsers/shareFolderWithMultipleUsers.feature:6
 webUISharingFolderPermissionMultipleUsers/shareFolderWithMultipleUsers.feature:64
 webUISharingFolderPermissionMultipleUsers/shareFolderWithMultipleUsers.feature:65
 #
-# @ocis-reva-issue-34 @ocis-reva-issue-194
+# https://github.com/owncloud/ocis-reva/issues/194 Group shares support
 webUISharingFilePermissionsGroups/sharePermissionsGroup.feature:60
 webUISharingFilePermissionsGroups/sharePermissionsGroup.feature:61
 webUISharingFilePermissionsGroups/sharePermissionsGroup.feature:62
@@ -354,68 +355,67 @@ webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature:102
 webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature:112
 webUISharingInternalGroupsSharingIndicator/shareWithGroups.feature:122
 #
-# @ocis-reva-issue-14
+# https://github.com/owncloud/ocis-reva/issues/14 renaming a resource does not work
 webUISharingNotifications/shareWithGroups.feature:24
 webUISharingNotifications/shareWithUsers.feature:17
 webUISharingNotifications/shareWithUsers.feature:28
 webUISharingNotifications/shareWithUsers.feature:36
 webUISharingNotifications/shareWithUsers.feature:49
 #
-# @issue-ocis-reva-383
+# https://github.com/owncloud/ocis-reva/issues/383 name of public link is empty and not "Public link" when not specified in the create request
 webUISharingPublic/shareByPublicLink.feature:30
 webUISharingPublic/shareByPublicLink.feature:31
 #
-# @issue-ocis-reva-398
+# https://github.com/owncloud/ocis-reva/issues/398 Cannot upload files to the ownCloud storage
 webUISharingPublic/shareByPublicLink.feature:63
 webUISharingPublic/shareByPublicLink.feature:77
 #
-# @issue-ocis-reva-389
+# https://github.com/owncloud/ocis-reva/issues/389 public share are not deleted when user is deleted
 webUISharingPublic/shareByPublicLink.feature:135
 #
-# @issue-ocis-reva-292
+# https://github.com/owncloud/ocis-reva/issues/292 Public link enforce permissions
 webUISharingPublic/shareByPublicLink.feature:407
 #
-# @issue-ocis-reva-372
+# https://github.com/owncloud/ocis-reva/issues/372 Listing shares via ocs API does not show path for parent folders
 webUISharingPublic/shareByPublicLink.feature:739
 #
-# @issue-product-130
+# https://github.com/owncloud/product/issues/130 Public link on a file has a '+ New' button
 webUISharingPublic/shareByPublicLink.feature:780
 #
-# @issue-ocis-reva-383
+# https://github.com/owncloud/ocis-reva/issues/383 name of public link is empty and not "Public link" when not specified in the create request
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:31
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:32
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:33
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:57
 #
-# @issue-ocis-270
+# https://github.com/owncloud/product/issues/125 phoenix sometimes asks for basic auth after successful oidc login
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:115
 #
-# @issue-ocis-723
+# https://github.com/owncloud/ocis/issues/723 upload-only public link does not refer to files-drop page, nor are the permissions enforced
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:205
-#
-# @issue-ocis-723
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:265
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:285
 #
-# @issue-ocis-reva-41
+# https://github.com/owncloud/ocis-reva/issues/41 various sharing settings cannot be set
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:311
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:319
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:328
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:337
 webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:346
 #
-# @issue-product-188
+# https://github.com/owncloud/product/issues/188 Deletion of a recursive folder from trashbin is not possible
 webUITrashbinDelete/trashbinDelete.feature:36
 webUITrashbinDelete/trashbinDelete.feature:66
 webUITrashbinDelete/trashbinDelete.feature:93
 #
-# @issue-product-139
+# https://github.com/owncloud/product/issues/139 Trashbin fails with unknown error when restoring
 webUITrashbinDelete/trashbinDelete.feature:114
 #
-# @issue-product-186 @issue-1753
+# https://github.com/owncloud/product/issues/186 Propfind response to trashbin endpoint is different in ocis
+# https://github.com/owncloud/web/issues/1753 restoring a file from "Deleted files" (trashbin) is not possible if the original folder does not exist any-more
 webUITrashbinRestore/trashbinRestore.feature:123
 #
-# @issue-ocis-reva-200
+# https://github.com/owncloud/ocis-reva/issues/200 Conflict / overwrite issues with TUS
 webUIUpload/uploadEdgecases.feature:105
 webUIUpload/uploadEdgecases.feature:121
 webUIUpload/uploadFileGreaterThanQuotaSize.feature:12

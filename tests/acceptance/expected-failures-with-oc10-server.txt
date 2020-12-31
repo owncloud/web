@@ -1,10 +1,8 @@
 # this file contains the scenarios from web tests that are currently expected to fail on oC10
-
 #
 # https://github.com/owncloud/ocisissues/1106 media viewer does not support mp3 files
-#
 webUIPreview/imageMediaViewer.feature:78
 webUIPreview/imageMediaViewer.feature:85
-
+#
 # https://github.com/owncloud/web/issues/4564 authentication dialog appears when user is deleted
 webUILogin/login.feature:62
