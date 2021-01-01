@@ -1,4 +1,4 @@
-import { join } from '../helpers/path'
+const { join } = require('../helpers/path')
 
 module.exports = {
   url: function() {
