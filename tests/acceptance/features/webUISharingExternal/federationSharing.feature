@@ -370,3 +370,13 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And the user opens the share dialog for file "textfile.txt" using the webUI
     Then remote user "user1" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
     And user "User Two" should be listed as "Editor" via "sub-folder" in the collaborators list on the webUI
+
+  @issue-4246
+  Scenario: accepting folder shared by remote user is listed in shared-with-me page
+    Given user "user1" from remote server has shared "/simple-folder" with user "user1" from local server
+    And user "user1" from server "LOCAL" has accepted the last pending share
+    When the user browses to the shared-with-me page using the webUI
+    # delete below line after the issue has been fixed
+    Then folder "simple-folder" should not be listed on the webUI
+    # uncomment below line after the issue has been fixed
+    # Then folder "simple-folder" should be listed on the webUI
