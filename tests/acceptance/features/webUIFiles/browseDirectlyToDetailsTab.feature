@@ -8,8 +8,7 @@ Feature: browse directly to details tab
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
-  @smokeTest
-  @skip @yetToImplement
+  @smokeTest @skip @yetToImplement
   Scenario Outline: Browse directly to the sharing details of a file
     When the user browses directly to display the "sharing" details of file "lorem.txt" in folder "<folder>"
     Then the thumbnail should be visible in the details panel
@@ -20,8 +19,7 @@ Feature: browse directly to details tab
       | /             |
       | simple-folder |
 
-  @comments-app-required
-  @skip @yetToImplement
+  @comments-app-required @skip @yetToImplement
   Scenario Outline: Browse directly to the comments details of a file
     When the user browses directly to display the "comments" details of file "lorem.txt" in folder "<folder>"
     Then the thumbnail should be visible in the details panel
@@ -31,8 +29,7 @@ Feature: browse directly to details tab
       | /             |
       | simple-folder |
 
-  @files_versions-app-required
-  @skip @yetToImplement
+  @files_versions-app-required @skip @yetToImplement
   Scenario Outline: Browse directly to the versions details of a file
     When the user browses directly to display the "versions" details of file "lorem.txt" in folder "<folder>"
     Then the thumbnail should be visible in the details panel

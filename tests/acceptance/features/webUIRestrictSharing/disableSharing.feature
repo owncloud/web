@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-41
+@ocis-reva-issue-41
 Feature: disable sharing
   As an admin
   I want to be able to disable the sharing function
@@ -14,6 +14,7 @@ Feature: disable sharing
     Given the setting "shareapi_enabled" of app "core" has been set to "no"
     When user "user1" logs in using the webUI
     Then it should not be possible to share folder "simple-folder" using the webUI
+
 
   Scenario: Users tries to share from favorites page when sharing is disabled
     Given the setting "shareapi_enabled" of app "core" has been set to "no"

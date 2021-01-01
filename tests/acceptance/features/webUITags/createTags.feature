@@ -1,4 +1,4 @@
-@systemtags-app-required @skipOnOCIS @issue-ocis-reva-51
+@systemtags-app-required @issue-ocis-reva-51
 Feature: Creation of tags for the files and folders
   As a user
   I want to create tags for the files/folders

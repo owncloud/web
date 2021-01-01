@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-web-issue-52
+@ocis-web-issue-52
 Feature: copy path as a permanent link
   As a user
   I want to copy the permanent link of a resource
@@ -8,6 +8,7 @@ Feature: copy path as a permanent link
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
+
 
   Scenario Outline: Copy permalink to clipboard
     When the user copies the permalink of the resource <resource_name> using the webUI

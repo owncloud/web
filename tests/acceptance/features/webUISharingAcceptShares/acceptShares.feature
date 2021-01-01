@@ -12,7 +12,7 @@ Feature: accept/decline shares coming from internal users
       | user2    |
     And user "user2" has logged in using the webUI
 
-@skipOnOCIS @ocis-reva-issue-34
+  @ocis-reva-issue-34
   Scenario: reject a share that you received as user and as group member
     Given these groups have been created:
       | groupname |
@@ -26,8 +26,7 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the files page
     Then folder "/Shares" should not be listed on the webUI
 
-  @issue-2512 @skip @issue-4102
-  @skipOnOCIS @ocis-reva-issue-34
+  @issue-2512 @skip @issue-4102 @ocis-reva-issue-34
   Scenario: reshare a share that you received to a group that you are member of
     Given these groups have been created:
       | groupname |
@@ -44,8 +43,7 @@ Feature: accept/decline shares coming from internal users
     And folder "simple-folder" shared by "User Two" should not be listed in the webUI
     And folder "simple-folder" should not be listed on the webUI
 
-  @smokeTest @skip @issue-4102
-  @skipOnOCIS @ocis-reva-issue-34
+  @smokeTest @skip @issue-4102 @ocis-reva-issue-34
   Scenario: unshare an accepted share on the "All files" page
     Given these groups have been created:
       | groupname |
@@ -72,6 +70,7 @@ Feature: accept/decline shares coming from internal users
     And the user has browsed to the personal sharing settings page
     Then User-based auto accepting checkbox should not be displayed on the personal sharing settings page in the webUI
 
+
   Scenario: User receives files when auto accept share is disabled
     Given user "user1" has uploaded file with content "test" to "toshare.txt"
     And user "user1" has shared file "toshare.txt" with user "user2"
@@ -81,6 +80,7 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" should not be listed on the webUI
     And folder "Shares" should not be listed on the webUI
 
+
   Scenario: receive shares with same name from different users
     Given user "user3" has been created with default attributes
     And user "user3" has shared file "lorem.txt" with user "user2"
@@ -88,6 +88,7 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the shared-with-me page using the webUI
     Then file "lorem.txt" shared by "User One" should be in "Pending" state on the webUI
     And file "lorem.txt" shared by "User Three" should be in "Pending" state on the webUI
+
 
   Scenario: decline an offered (pending) share
     Given user "user1" has uploaded file with content "test" to "toshare.txt"
@@ -101,6 +102,7 @@ Feature: accept/decline shares coming from internal users
     When the user browses to the files page
     Then file "toshare.txt" should not be listed on the webUI
     And file "anotherfile.txt" should not be listed on the webUI
+
 
   Scenario: accept an offered (pending) share
     Given user "user1" has uploaded file with content "test" to "toshare.txt"
@@ -118,7 +120,7 @@ Feature: accept/decline shares coming from internal users
     Then file "toshare.txt" should be listed on the webUI
     And file "anotherfile.txt" should not be listed on the webUI
 
-  @skipOnOCIS @ocis-product-276
+  @ocis-product-276
   Scenario: accept a previously declined share
     Given user "user1" has shared file "lorem.txt" with user "user2"
     And user "user1" has shared file "testimage.jpg" with user "user2"
@@ -158,7 +160,7 @@ Feature: accept/decline shares coming from internal users
     When the user batch deletes these files using the webUI
       | name          |
       | data.zip      |
-      | lorem.txt |
+      | lorem.txt     |
       | simple-folder |
     Then file "data.zip" should not be listed on the webUI
     And file "lorem.txt" should not be listed on the webUI
@@ -178,12 +180,12 @@ Feature: accept/decline shares coming from internal users
     And the user browses to the shared-with-me page
     Then file "lorem.txt" shared by "User One" should be in "Declined" state on the webUI
 
-  @skipOnOCIS @ocis-issue-714
+  @ocis-issue-714
   Scenario: the deleted shared file is restored back to all files list when accepted from the shared with me file list
     Given user "user1" has shared file "lorem.txt" with user "user2"
     And user "user2" has accepted the share "lorem.txt" offered by user "user1"
     And the following files have been deleted by user "user2"
-      | name          |
+      | name             |
       | Shares/lorem.txt |
     And the user has browsed to the shared-with-me page
     When the user accepts share "lorem.txt" offered by user "User One" using the webUI
@@ -192,7 +194,7 @@ Feature: accept/decline shares coming from internal users
     And the user opens folder "Shares" using the webUI
     Then file "lorem.txt" should be listed on the webUI
 
-  @skipOnOCIS @ocis-issue-713
+  @ocis-issue-713
   Scenario: receive shares with same name from different users, accept one by one
     Given user "user3" has been created with default attributes
     And user "user3" has created folder "/simple-folder/from_user3"
@@ -207,7 +209,7 @@ Feature: accept/decline shares coming from internal users
     And as "user2" file "from_user1" should exist inside folder "/Shares/simple-folder"
     And as "user2" file "from_user3" should exist inside folder "/Shares/simple-folder (2)"
 
-  @skipOnOCIS @ocis-reva-issue-34
+  @ocis-reva-issue-34
   Scenario: accept a share that you received as user and as group member
     Given these groups have been created:
       | groupname |

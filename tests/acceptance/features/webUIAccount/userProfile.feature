@@ -6,12 +6,13 @@ Feature: view profile
   Background:
     Given user "user1" has been created with default attributes
 
-  @skipOnOCIS @ocis-reva-issue-107
+  @ocis-reva-issue-107
   Scenario: view user profile for the logged in user
     When user "user1" logs in using the webUI
     Then the user profile should be visible in the webUI
     When the user opens the user profile
     Then username "User One" should be visible in the webUI
+
 
   Scenario: browse to account page to manage user account
     Given user "user1" has logged in using the webUI

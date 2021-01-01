@@ -8,7 +8,7 @@ Feature: login users
   I want only authorised users to log in
   So that unauthorised access is impossible
 
-  @skip @skipOnOCIS
+  @skip
   Scenario: admin login
     Given the user has browsed to the login page
     When the user clicks the authenticate button
@@ -16,6 +16,7 @@ Feature: login users
     And the user authorizes access to web
     Then the files table should be displayed
     And the files table should not be empty
+
 
   Scenario: logging out
     Given these users have been created with default attributes:
@@ -38,23 +39,25 @@ Feature: login users
     When user "user1" logs in using the webUI
     Then the files table should be displayed
 
-  Scenario: try to login with invalid username
-      Given these users have been created with default attributes:
-        | username |
-        | user1    |
-      And the user has browsed to the login page
-      When the user tries to log in with username "invalid" and password "1234" using the webUI
-      Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
 
-  @ocis-konnectd-issue-68 @skipOnOCIS
+  Scenario: try to login with invalid username
+    Given these users have been created with default attributes:
+      | username |
+      | user1    |
+    And the user has browsed to the login page
+    When the user tries to log in with username "invalid" and password "1234" using the webUI
+    Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
+
+  @ocis-konnectd-issue-68
   Scenario: try to login with valid username and invalid password
-      Given these users have been created with default attributes:
-        | username |
-        | user1    |
-      And the user has browsed to the login page
-      When the user tries to log in with username "user1" and password "invalid" using the webUI
-      Then the files table should be displayed
+    Given these users have been created with default attributes:
+      | username |
+      | user1    |
+    And the user has browsed to the login page
+    When the user tries to log in with username "user1" and password "invalid" using the webUI
+    Then the files table should be displayed
 #      Then the warning 'Logon failed. Please verify your credentials and try again.' should be displayed on the login page
+
 
   Scenario: the user session of a deleted user is cleared properly
     Given these users have been created with default attributes:

@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-39 @skipOnIphoneResolution @ocis-web-issue-3968
+@ocis-reva-issue-39 @skipOnIphoneResolution @ocis-web-issue-3968
 Feature: Mark file as favorite
 
   As a user
@@ -23,6 +23,7 @@ Feature: Mark file as favorite
     And file "data.zip" should be listed on the webUI
     And file "data.tar.gz" should be listed on the webUI
 
+
   Scenario: mark folders as favorites
     When the user marks folder "simple-folder" as favorite using the webUI
     And the user marks folder "strängé नेपाली folder" as favorite using the webUI
@@ -35,6 +36,7 @@ Feature: Mark file as favorite
     And folder "simple-folder" should be listed on the webUI
     And folder "strängé नेपाली folder" should be listed on the webUI
 
+
   Scenario: mark files/folders as favorites using the sidebar
     When the user marks folder "simple-folder" as favorite using the webUI sidebar
     And the user marks file "data.zip" as favorite using the webUI sidebar
@@ -43,17 +45,20 @@ Feature: Mark file as favorite
     And file "data.zip" should be marked as favorite on the webUI
     And as user "user1" file "data.zip" should be marked as favorite
 
+
   Scenario: navigate to an empty favorites page
     When the user browses to the favorites page
     Then the files table should be displayed
     And no message should be displayed on the webUI
     And there should be no resources listed on the webUI
 
+
   Scenario: navigate to the favorites page using the menu
     Given user "user1" has favorited element "data.zip"
     When the user browses to the favorites page using the webUI
     Then the count of files and folders shown on the webUI should be 1
     And file "data.zip" should be listed on the webUI
+
 
   Scenario: navigate to the favorites page and back to files page using the menu
     Given the user has browsed to the favorites page using the webUI
@@ -64,6 +69,7 @@ Feature: Mark file as favorite
   Scenario: favorites list appears empty when no favorites are defined
     When the user has browsed to the favorites page using the webUI
     Then there should be no resources listed on the webUI
+
 
   Scenario: mark files with same name and different path as favorites and list them in favourites page
     When the user marks file "lorem.txt" as favorite using the webUI
@@ -100,17 +106,18 @@ Feature: Mark file as favorite
     And as "user1" file "lorem.txt" should not exist
     And as "user1" folder "simple-folder" should not exist
 
-    Scenario: Favourite files and folders with comma in the names
-      Given user "user1" has created file "sample,1.txt"
-      And user "user1" has created folder "Sample,Folder,With,Comma"
-      And the user has reloaded the current page of the webUI
-      When the user marks file "sample,1.txt" as favorite using the webUI
-      And the user marks folder "Sample,Folder,With,Comma" as favorite using the webUI
-      Then as user "user1" file "sample,1.txt" should be marked as favorite
-      And file "sample,1.txt" should be marked as favorite on the webUI
-      And as user "user1" folder "Sample,Folder,With,Comma" should be marked as favorite
-      And folder "Sample,Folder,With,Comma" should be marked as favorite on the webUI
-      When the user browses to the favorites page
-      Then the count of files and folders shown on the webUI should be 2
-      And folder "Sample,Folder,With,Comma" should be listed on the webUI
-      And file "sample,1.txt" should be listed on the webUI
+
+  Scenario: Favourite files and folders with comma in the names
+    Given user "user1" has created file "sample,1.txt"
+    And user "user1" has created folder "Sample,Folder,With,Comma"
+    And the user has reloaded the current page of the webUI
+    When the user marks file "sample,1.txt" as favorite using the webUI
+    And the user marks folder "Sample,Folder,With,Comma" as favorite using the webUI
+    Then as user "user1" file "sample,1.txt" should be marked as favorite
+    And file "sample,1.txt" should be marked as favorite on the webUI
+    And as user "user1" folder "Sample,Folder,With,Comma" should be marked as favorite
+    And folder "Sample,Folder,With,Comma" should be marked as favorite on the webUI
+    When the user browses to the favorites page
+    Then the count of files and folders shown on the webUI should be 2
+    And folder "Sample,Folder,With,Comma" should be listed on the webUI
+    And file "sample,1.txt" should be listed on the webUI

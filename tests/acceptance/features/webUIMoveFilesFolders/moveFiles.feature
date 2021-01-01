@@ -6,6 +6,7 @@ Feature: move files
   Background:
     Given user "user1" has been created with default attributes
 
+
   Scenario: An attempt to move a file into a sub-folder using rename is not allowed
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
@@ -33,6 +34,7 @@ Feature: move files
     And file "data.tar.gz" should not be listed on the webUI
     And file "strängé filename (duplicate #2 &).txt" should not be listed on the webUI
 
+
   Scenario: move a file into a folder where a file with the same name already exists
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
@@ -55,6 +57,7 @@ Feature: move files
       | lorem.txt   |
       | testapp.zip |
 
+
   Scenario Outline: move a file into a folder (problematic characters)
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
@@ -64,11 +67,12 @@ Feature: move files
     Then breadcrumb for folder <folder_name> should be displayed on the webUI
     And file <file_name> should be listed on the webUI
     Examples:
-      | file_name           | folder_name                      |
-      | "'single'"          | "folder-with-'single'"           |
+      | file_name   | folder_name             |
+      | "'single'"  | "folder-with-'single'"  |
       # | "\"double\" quotes" | "folder-with\"double\" quotes" | FIXME: Needs a way to access breadcrumbs with double quotes issue-3734
-      | "question?"         | "folder-with-question?"          |
-      | "&and#hash"         | "folder-with-&and#hash"          |
+      | "question?" | "folder-with-question?" |
+      | "&and#hash" | "folder-with-&and#hash" |
+
 
   Scenario: move files on a public share
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
@@ -79,7 +83,7 @@ Feature: move files
     And as "user1" file "simple-folder/simple-empty-folder/data.zip" should exist
     But as "user1" file "simple-folder/data.zip" should not exist
 
-  @skipOnOCIS @issue-ocis-reva-243
+  @issue-ocis-reva-243
   Scenario: move a file into another folder with no change permission
     Given user "user2" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions

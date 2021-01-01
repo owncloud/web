@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-34
+@ocis-reva-issue-34
 Feature: restrict Sharing
   As an admin
   I want to be able to restrict the sharing function
@@ -38,6 +38,7 @@ Feature: restrict Sharing
     And the user types "grp" in the share-with-field
     Then "group" "grp2" should not be listed in the autocomplete list on the webUI
     But "group" "grp1" should be listed in the autocomplete list on the webUI
+
 
   Scenario: Do not restrict users to only share with groups they are member of
     Given the setting "shareapi_only_share_with_membership_groups" of app "core" has been set to "no"

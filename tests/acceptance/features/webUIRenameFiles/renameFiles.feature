@@ -22,6 +22,7 @@ Feature: rename files
       | "'quotes2'"            |
       | "लोरेम।तयक्स्त? $%#&@" |
 
+
   Scenario Outline: Rename a file that has special characters in its name
     Given user "user1" has created file "sämple,1.txt"
     And the user has reloaded the current page of the webUI
@@ -68,6 +69,7 @@ Feature: rename files
     And the user reloads the current page of the webUI
     Then file "  multiple   space    all     over   .  dat" should be listed on the webUI
 
+
   Scenario: Rename a file using spaces at end is prohibited
     When the user tries to rename file "lorem.txt" to "space at end " using the webUI
     Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
@@ -80,26 +82,27 @@ Feature: rename files
     Then file "lorem.txt" should be listed on the webUI
     And file "  multiple   space    all     over   .  dat  " should not be listed on the webUI
 
+
   Scenario: Rename a file using both double and single quotes
     When the user renames the following file using the webUI
-      | fromName          | toName                         |
-      | lorem.txt         | '"First 'single" quotes" '.txt |
-      | lorem-big.txt     | Test" 'me o'ut".txt            |
+      | fromName      | toName                         |
+      | lorem.txt     | '"First 'single" quotes" '.txt |
+      | lorem-big.txt | Test" 'me o'ut".txt            |
     And the user reloads the current page of the webUI
     Then these files should be listed on the webUI
       | files                          |
       | '"First 'single" quotes" '.txt |
       | Test" 'me o'ut".txt            |
     When the user renames the following file using the webUI
-      | fromName                       | toName        |
-      | '"First 'single" quotes" '.txt | loremz.dat    |
-      | Test" 'me o'ut".txt            | loremy.tad    |
+      | fromName                       | toName     |
+      | '"First 'single" quotes" '.txt | loremz.dat |
+      | Test" 'me o'ut".txt            | loremy.tad |
     And the user reloads the current page of the webUI
     Then file "loremz.dat" should be listed on the webUI
     Then file "loremy.tad" should be listed on the webUI
 
+
   # these are valid file names for ocis
-  @skipOnOCIS
   Scenario Outline: Rename a file using forbidden characters
     When the user tries to rename file "data.zip" to "<filename>" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "<filename>"' should be displayed on the webUI
@@ -111,6 +114,7 @@ Feature: rename files
       | \\.txt    |
       | .htaccess |
 
+
   Scenario Outline: Rename a file/folder using forward slash in its name
     When the user tries to rename file "<from_file_name>" to "<to_file_name>" using the webUI
     Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
@@ -121,38 +125,43 @@ Feature: rename files
       | lorem.txt      | lorem/txt                         |
       | simple-folder  | simple-empty-folder/simple-folder |
 
+
   Scenario: Rename the last file in a folder
     When the user renames file "zzzz-must-be-last-file-in-folder.txt" to "a-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "a-file.txt" should be listed on the webUI
+
 
   Scenario: Rename a file to become the last file in a folder
     When the user renames file "lorem.txt" to "zzzz-z-this-is-now-the-last-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "zzzz-z-this-is-now-the-last-file.txt" should be listed on the webUI
 
+
   Scenario: Rename a file putting a name of a file which already exists
     When the user tries to rename file "data.zip" to "lorem.txt" using the webUI
     Then the error message 'The name "lorem.txt" is already taken' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
+
 
   Scenario: Rename a file to ..
     When the user tries to rename file "data.zip" to ".." using the webUI
     Then the error message 'The name cannot be equal to ".."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
 
+
   Scenario: Rename a file to .
     When the user tries to rename file "data.zip" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
 
+
   # This is valid file name for ocis
-  @skipOnOCIS
   Scenario: Rename a file to .part
     When the user tries to rename file "data.zip" to "data.part" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "data.part"' should be displayed on the webUI
 
-  @skipOnOCIS @ocis-reva-issue-64
+  @ocis-reva-issue-64
   Scenario: rename a file on a public share
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "user1"
@@ -165,7 +174,7 @@ Feature: rename files
     And as "user1" file "simple-folder/a-renamed-file.txt" should exist
     And as "user1" file "simple-folder/lorem.txt" should not exist
 
-  @skipOnOCIS @ocis-reva-issue-64
+  @ocis-reva-issue-64
   Scenario: Rename a file and folder in shared with me page
     Given user "user2" has been created with default attributes
     And user "user2" has shared file "lorem.txt" with user "user1"
@@ -186,7 +195,7 @@ Feature: rename files
     And as "user2" file "lorem.txt" should exist
     And as "user2" folder "simple-folder" should exist
 
-  @skipOnOCIS @ocis-reva-issue-64
+  @ocis-reva-issue-64
   Scenario: Rename a file and folder in shared with others page
     Given user "user2" has been created with default attributes
     And user "user1" has shared file "lorem.txt" with user "user2"
@@ -207,7 +216,7 @@ Feature: rename files
     And as "user2" file "lorem.txt" should exist
     And as "user2" folder "simple-folder" should exist
 
-  @skipOnOCIS @ocis-reva-issue-39
+  @ocis-reva-issue-39
   Scenario: Rename a file and folder in favorites page
     Given user "user1" has favorited element "lorem.txt"
     And user "user1" has favorited element "simple-folder"
@@ -217,11 +226,12 @@ Feature: rename files
     Then file "renamed-file.txt" should be listed on the webUI
     And folder "renamed-folder" should be listed on the webUI
 
+
   Scenario: User tries to rename a file that used to exist but does not anymore
     Given the user has browsed to the files page
     And the following files have been deleted by user "user1"
-      | name          |
-      | lorem.txt     |
+      | name      |
+      | lorem.txt |
     When the user tries to rename file "lorem.txt" to "new-lorem.txt" using the webUI
     Then the error message with header 'Error while renaming "lorem.txt" to "new-lorem.txt"' should be displayed on the webUI
     When the user reloads the current page of the webUI

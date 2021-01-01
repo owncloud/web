@@ -9,20 +9,20 @@ Feature: Sort files/folders
     And user "user1" has logged in using the webUI
     And user "user1" has created folder "test_sort"
     And user "user1" has created the following folders
-      | entry_name       |
-      | test_sort/a      |
+      | entry_name     |
+      | test_sort/a    |
       | test_sort/a 文件 |
-      | test_sort/10     |
-      | test_sort/1      |
-      | test_sort/2      |
-      | test_sort/z      |
+      | test_sort/10   |
+      | test_sort/1    |
+      | test_sort/2    |
+      | test_sort/z    |
     And user "user1" has created the following files
       | entry_name                |
       | test_sort/a.txt           |
       | test_sort/a space.txt     |
       | test_sort/a space (2).txt |
-      | test_sort/a space 文件    |
-      | test_sort/a space 文件夹  |
+      | test_sort/a space 文件      |
+      | test_sort/a space 文件夹     |
       | test_sort/b1.txt          |
       | test_sort/b2.txt          |
       | test_sort/b10.txt         |
@@ -33,7 +33,7 @@ Feature: Sort files/folders
     Then these resources should be listed in the folder "test_sort" on the webUI
       | entry_name      |
       | a               |
-      | a 文件          |
+      | a 文件            |
       | 1               |
       | 2               |
       | 10              |
@@ -41,8 +41,8 @@ Feature: Sort files/folders
       | a.txt           |
       | a space.txt     |
       | a space (2).txt |
-      | a space 文件    |
-      | a space 文件夹  |
+      | a space 文件      |
+      | a space 文件夹     |
       | b1.txt          |
       | b2.txt          |
       | b10.txt         |
@@ -57,8 +57,8 @@ Feature: Sort files/folders
       | b10.txt         |
       | b2.txt          |
       | b1.txt          |
-      | a space 文件夹  |
-      | a space 文件    |
+      | a space 文件夹     |
+      | a space 文件      |
       | a space (2).txt |
       | a space.txt     |
       | a.txt           |
@@ -66,7 +66,7 @@ Feature: Sort files/folders
       | 10              |
       | 2               |
       | 1               |
-      | a 文件          |
+      | a 文件            |
       | a               |
 
   Scenario: Resources can be sorted by updated time
@@ -75,7 +75,7 @@ Feature: Sort files/folders
     Then these resources should be listed in the folder "test_sort" on the webUI
       | entry_name |
       | a          |
-      | a 文件     |
+      | a 文件       |
       | 10         |
       | 1          |
       | 2          |

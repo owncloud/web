@@ -7,6 +7,7 @@ Feature: User can view files inside a folder
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
+
   Scenario: Resources are listed
     When the user browses to the files page
     Then folder "simple-folder" should be listed on the webUI
@@ -18,26 +19,28 @@ Feature: User can view files inside a folder
     And the user opens folder "empty-thing" directly on the webUI
     Then there should be no resources listed on the webUI
 
-  @issue-276 @skipOnOCIS @issue-3264
+  @issue-276 @issue-3264
   Scenario: Thumbnails are loaded for known file types
     When the user uploads file "new-lorem.txt" using the webUI
     Then the file "new-lorem.txt" should have a thumbnail displayed on the webUI
 
-  @issue-276 @skipOnOCIS @issue-3264
+  @issue-276 @issue-3264
   Scenario: Thumbnails are loaded for paths containing special characters
     Given user "user1" has renamed folder "simple-folder" to "strängé folder name (duplicate #2 &)"
     When the user browses to the files page
     And the user opens folder "strängé folder name (duplicate #2 &)" directly on the webUI
     Then the file "strängé filename (duplicate #2 &).txt" should have a thumbnail displayed on the webUI
 
-  @issue-276 @skipOnOCIS @issue-3264
+  @issue-276 @issue-3264
   Scenario: Thumbnails are not loaded for known file types
     When the user uploads file "new-data.zip" using the webUI
     Then the file "new-data.zip" should have a file type icon displayed on the webUI
 
+
   Scenario: All files list displays public link quick action
     When the user browses to the files page
     Then quick action "public link" should be displayed on the webUI
+
 
   Scenario: files are not selected when the user logs in
     When the user browses to the files page
@@ -46,6 +49,7 @@ Feature: User can view files inside a folder
       | lorem.txt           |
       | simple-empty-folder |
       | data.zip            |
+
 
   Scenario: select files
     When the user marks these files for batch action using the webUI
@@ -58,6 +62,7 @@ Feature: User can view files inside a folder
       | lorem.txt           |
       | simple-empty-folder |
       | data.zip            |
+
 
   Scenario: select files and clear the selection
     When the user marks these files for batch action using the webUI

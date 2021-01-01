@@ -1,5 +1,4 @@
 # Reshare permission is not available now in the oCIS webUI
-@skipOnOCIS
 Feature: Resharing shared files with different permissions
   As a user
   I want to reshare received files and folders with other users with different permissions
@@ -14,6 +13,7 @@ Feature: Resharing shared files with different permissions
       | user2    |
       | user3    |
 
+
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -23,6 +23,7 @@ Feature: Resharing shared files with different permissions
     When the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "User Three" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "User Three" for folder "simple-folder" on the webUI
+
 
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for resharer
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
@@ -35,7 +36,7 @@ Feature: Resharing shared files with different permissions
     Then user "User Three" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "User Three" for folder "simple-folder" on the webUI
 
-  @skipOnOCIS @issue-product-270
+  @issue-product-270
   Scenario: Reshare a folder without share permissions using API and check if the receiver can reshare
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -45,7 +46,7 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share folder "simple-folder" using the webUI
 
-  @skipOnOCIS
+
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for resharer
     Given user "user2" has shared folder "simple-folder" with user "user1" with "<permissions>" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -63,12 +64,12 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | <permissions>         |
     Examples:
-    | role                 | displayed-role          | collaborators-permissions     | displayed-permissions | permissions                         |
-    | Viewer               | Viewer                  | ,                             | ,                     | read, share                         |
-    | Editor               | Editor                  | ,                             | ,                     | all                                 |
-    | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
-    | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
-    | Advanced permissions | Editor                  | delete, share, create, update |                       | read, share, delete, update, create |
+      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
+      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
+      | Editor               | Editor               | ,                             | ,                     | all                                 |
+      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
+      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
+      | Advanced permissions | Editor               | delete, share, create, update |                       | read, share, delete, update, create |
 
   @skipOnOC10
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -96,7 +97,7 @@ Feature: Resharing shared files with different permissions
       | Advanced permissions | Advanced permissions | update                    | update                | read, update                 |
       | Advanced permissions | Editor               | delete, create, update    |                       | read, delete, update, create |
 
-  @skipOnOCIS @issue-4193
+  @issue-4193
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "<permissions>" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -124,12 +125,12 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | <permissions>         |
     Examples:
-    | role                 | displayed-role          | collaborators-permissions     | displayed-permissions | permissions                         |
-    | Viewer               | Viewer                  | ,                             | ,                     | read, share                         |
-    | Editor               | Editor                  | ,                             | ,                     | all                                 |
-    | Advanced permissions | Advanced permissions    | share, create                 | share, create         | read, share, create                 |
-    | Advanced permissions | Advanced permissions    | update, share                 | share, update         | read, update, share                 |
-    | Advanced permissions | Editor                  | delete, share, create, update | ,                     | read, share, delete, update, create |
+      | role                 | displayed-role       | collaborators-permissions     | displayed-permissions | permissions                         |
+      | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
+      | Editor               | Editor               | ,                             | ,                     | all                                 |
+      | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
+      | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
+      | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
 
   @skipOnOC10 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -167,7 +168,7 @@ Feature: Resharing shared files with different permissions
       | Advanced permissions | Advanced permissions | update                    | update                | read, update                 |
       | Advanced permissions | Editor               | delete, create, update    | ,                     | read, delete, update, create |
 
-  @skipOnOCIS @issue-4193
+  @issue-4193
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -223,7 +224,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | read                  |
 
-  @skipOnOCIS @issue-4193
+  @issue-4193
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for the receiver
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -256,7 +257,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | read                  |
 
-  @skipOnOCIS @issue-product-270
+  @issue-product-270
   Scenario Outline: share a file/folder without share permissions and check if another user can reshare
     Given user "user2" has shared folder "<shared-entry-name>" with user "user1" with "read" permissions
     And user "user1" has accepted the share "<shared-entry-name>" offered by user "user2"
@@ -264,13 +265,13 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "<shared-entry-name>" using the webUI
     Examples:
-    | shared-entry-name |
-    | simple-folder     |
-    | lorem.txt         |
-    | simple-folder     |
-    | lorem.txt         |
+      | shared-entry-name |
+      | simple-folder     |
+      | lorem.txt         |
+      | simple-folder     |
+      | lorem.txt         |
 
-  @skipOnOCIS @issue-product-270
+  @issue-product-270
   Scenario Outline: share a received file/folder without share permissions and check if another user can reshare
     Given user "user2" has shared folder "<shared-entry-name>" with user "user1" with "all" permissions
     And user "user1" has accepted the share "<shared-entry-name>" offered by user "user2"
@@ -280,11 +281,11 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share resource "<shared-entry-name>" using the webUI
     Examples:
-    | shared-entry-name |
-    | simple-folder     |
-    | lorem.txt         |
+      | shared-entry-name |
+      | simple-folder     |
+      | lorem.txt         |
 
-  @skipOnOCIS
+
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -327,8 +328,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | share, delete, read   |
 
-  @skipOnOCIS @issue-product-270
-  @issue-4193
+  @issue-product-270 @issue-4193
   Scenario: User is allowed to reshare a file/folder with the lesser permissions, and check if it is listed for original owner
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -349,7 +349,7 @@ Feature: Resharing shared files with different permissions
       | item_type   | folder                |
       | permissions | delete, read          |
 
-  @skipOnOCIS @issue-product-270
+  @issue-product-270
   Scenario: User is not allowed to reshare a file/folder with the higher permissions
     Given user "user2" has shared folder "simple-folder" with user "user1" with "read, share, delete" permissions
     And user "user1" has accepted the share "simple-folder" offered by user "user2"
@@ -359,6 +359,7 @@ Feature: Resharing shared files with different permissions
     Then the error message with header "Error while sharing." should be displayed on the webUI
     And as "user3" folder "Shares/simple-folder" should not exist
     And user "user3" should not have received any shares
+
 
   Scenario: Reshare a file and folder from shared with me page
     Given user "user1" has shared folder "simple-folder" with user "user2"
@@ -374,6 +375,7 @@ Feature: Resharing shared files with different permissions
     Then as "user3" folder "/Shares/simple-folder" should exist
     And as "user3" file "/Shares/lorem.txt" should exist
 
+
   Scenario: Reshare a file and folder from shared with others page
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
@@ -388,7 +390,7 @@ Feature: Resharing shared files with different permissions
     Then as "user3" folder "/Shares/simple-folder" should exist
     And as "user3" file "/Shares/lorem.txt" should exist
 
-  @skipOnOCIS @ocis-reva-issue-39
+  @ocis-reva-issue-39
   Scenario: Reshare a file and folder from favorites page
     Given user "user1" has shared folder "simple-folder" with user "user2"
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
@@ -417,7 +419,7 @@ Feature: Resharing shared files with different permissions
     Then user "User Two" should be listed as "Editor" in the collaborators list on the webUI
     And user "User Three" should be listed as "Editor" reshared through "User Two" in the collaborators list on the webUI
 
-  @skipOnOCIS @ocis-reva-issue-34
+  @ocis-reva-issue-34
   Scenario: Share recipient sees resharer in collaborators list
     Given user "user3" has been created with default attributes
     And user "user4" has been created with default attributes

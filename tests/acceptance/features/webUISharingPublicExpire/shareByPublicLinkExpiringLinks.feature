@@ -7,28 +7,30 @@ Feature: Share by public link
   Background:
     Given user "user1" has been created with default attributes
 
+
   Scenario: user changes the expiration date of an already existing public link using webUI
     Given user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | Public link      |
-      | expireDate | 2038-10-14       |
+      | path       | lorem.txt   |
+      | name       | Public link |
+      | expireDate | 2038-10-14  |
     And user "user1" has logged in using the webUI
     When the user edits the public link named "Public link" of file "lorem.txt" changing following
-      | expireDate  | 2038 July 21  |
+      | expireDate | 2038 July 21 |
     Then the fields of the last public link share response of user "user1" should include
       | expireDate | 2038-07-21 |
 
+
   Scenario: user tries to change the expiration date of the public link to past date using webUI
     Given user "user1" has created a public link with following settings
-      | path       | lorem.txt        |
-      | name       | Public link      |
-      | expireDate | 2038-10-14       |
+      | path       | lorem.txt   |
+      | name       | Public link |
+      | expireDate | 2038-10-14  |
     And user "user1" has logged in using the webUI
     When the user tries to edit expiration of the public link named "Public link" of file "lorem.txt" to past date "2019 October 10"
     Then the fields of the last public link share response of user "user1" should include
       | expireDate | 2038-10-14 |
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario Outline: auto set expiration date on public link (with default amount of expiry days)
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And user "user1" has logged in using the webUI
@@ -46,7 +48,7 @@ Feature: Share by public link
       | lorem.txt       |
       | simple-folder   |
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario Outline: auto set expiration date on public link (with set amount expiry days)
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "42"
@@ -65,7 +67,7 @@ Feature: Share by public link
       | lorem.txt       |
       | simple-folder   |
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario: expiry date is set to enforced max expiry date when creating a public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "7"
@@ -75,7 +77,7 @@ Feature: Share by public link
     Then the expiration date shown on the webUI should be "+7" days
     And user "user1" should not have created any shares
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario: user cannot change the expiry date of an existing public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
@@ -94,7 +96,7 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +6          |
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario: user cannot change the expiry date of an existing public link to a date that is past the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "16"
@@ -102,7 +104,7 @@ Feature: Share by public link
     And user "user1" has created a public link with following settings
       | path       | lorem.txt   |
       | name       | Public link |
-      | expireDate | +16          |
+      | expireDate | +16         |
     And user "user1" has logged in using the webUI
     And the setting "shareapi_expire_after_n_days" of app "core" has been set to "7"
     When the user edits the public link named "Public link" of file "lorem.txt" changing following
@@ -117,7 +119,7 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +16         |
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario: user can set an expiry date when creating a public link to a date that is before the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"
@@ -133,7 +135,7 @@ Feature: Share by public link
       | name        | Public link |
       | expiration  | +7          |
 
-  @skipOnOCIS @issue-ocis-reva-41
+  @issue-ocis-reva-41
   Scenario: user can change the expiry date of an existing public link to a date that is before the enforced max expiry date
     Given the setting "shareapi_default_expire_date" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date" of app "core" has been set to "yes"

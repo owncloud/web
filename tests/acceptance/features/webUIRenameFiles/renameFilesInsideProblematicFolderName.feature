@@ -7,6 +7,7 @@ Feature: Renaming files inside a folder with problematic name
     Given user "user1" has been created with default attributes
     And user "user1" has logged in using the webUI
 
+
   Scenario Outline: Rename the existing file inside a problematic folder
     When the user opens folder <folder> using the webUI
     And the user renames file "lorem.txt" to "???.txt" using the webUI
@@ -14,9 +15,10 @@ Feature: Renaming files inside a folder with problematic name
     When the user reloads the current page of the webUI
     Then file "???.txt" should be listed on the webUI
     Examples:
-      | folder                  |
-      | "0"                     |
-      | "'single'quotes"        |
+      | folder           |
+      | "0"              |
+      | "'single'quotes" |
+
 
   Scenario Outline: Rename the existing file inside a problematic folder
     When the user opens folder <folder> using the webUI

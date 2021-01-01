@@ -11,7 +11,7 @@ Feature: Sharing files with multiple internal users with different permissions
       | user1    |
       | user2    |
 
-  @skipOnOCIS @issue-ocis-717
+  @issue-ocis-717
   Scenario Outline: share a file with multiple users with different roles and permissions
     Given these users have been created with default attributes:
       | username |
@@ -55,13 +55,13 @@ Feature: Sharing files with multiple internal users with different permissions
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" file "/Shares/lorem.txt" should not exist
     Examples:
-      | role                 | displayed-role               | extra-permissions | displayed-permissions | actual-permissions         |
-      | Viewer               | Viewer                       | ,                 | ,                     | read, share                |
-      | Editor               | Editor                       | ,                 | ,                     | read, update, share        |
-      | Advanced permissions | Advanced permissions         | ,                 | ,                     | read                       |
-      | Advanced permissions | Viewer                       | share             | ,                     | read, share                |
-      | Advanced permissions | Advanced permissions         | update            | update                | read, update               |
-      | Advanced permissions | Editor                       | share, update     | ,                     | read, update, share        |
+      | role                 | displayed-role       | extra-permissions | displayed-permissions | actual-permissions  |
+      | Viewer               | Viewer               | ,                 | ,                     | read, share         |
+      | Editor               | Editor               | ,                 | ,                     | read, update, share |
+      | Advanced permissions | Advanced permissions | ,                 | ,                     | read                |
+      | Advanced permissions | Viewer               | share             | ,                     | read, share         |
+      | Advanced permissions | Advanced permissions | update            | update                | read, update        |
+      | Advanced permissions | Editor               | share, update     | ,                     | read, update, share |
 
   @skipOnOC10 @issue-ocis-717
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -108,8 +108,8 @@ Feature: Sharing files with multiple internal users with different permissions
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" file "/Shares/lorem.txt" should not exist
     Examples:
-      | role                 | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |
-      | Viewer               | Viewer         | ,                 | ,                     | read                |
-      | Editor               | Editor         | ,                 | ,                     | read, update        |
-      | Advanced permissions | Viewer         | ,                 | ,                     | read                |
-      | Advanced permissions | Editor         | update            | ,                     | read, update        |
+      | role                 | displayed-role | extra-permissions | displayed-permissions | actual-permissions |
+      | Viewer               | Viewer         | ,                 | ,                     | read               |
+      | Editor               | Editor         | ,                 | ,                     | read, update       |
+      | Advanced permissions | Viewer         | ,                 | ,                     | read               |
+      | Advanced permissions | Editor         | update            | ,                     | read, update       |

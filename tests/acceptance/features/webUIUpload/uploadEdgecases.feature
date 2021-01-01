@@ -11,6 +11,7 @@ Feature: File Upload
     And user "user1" has logged in using the webUI
     And the user browses to the files page
 
+
   Scenario: simple upload of a file that does not exist before
     When the user uploads file "new-'single'quotes.txt" using the webUI
     Then file "new-'single'quotes.txt" should be listed on the webUI
@@ -41,7 +42,7 @@ Feature: File Upload
     Then file "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be listed on the webUI
     And as "user1" the content of "<folder-to-upload-to>/zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt" should be the same as the local "zzzz-zzzz-will-be-at-the-end-of-the-folder-when-uploaded.txt"
     Examples:
-      | folder-to-upload-to     |
+      | folder-to-upload-to   |
       | 0                     |
       | 'single'quotes        |
       | strängé नेपाली folder |
@@ -80,6 +81,7 @@ Feature: File Upload
     And file "zzzz-must-be-last-file-in-folder (2).txt" should be listed on the webUI
     And the content of "zzzz-must-be-last-file-in-folder (2).txt" should be the same as the local "zzzz-must-be-last-file-in-folder.txt"
 
+
   Scenario Outline: upload a big file using difficult names (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name <file-name> has been created locally
     When the user uploads a created file <file-name> using the webUI
@@ -90,6 +92,7 @@ Feature: File Upload
       | "&#"      |
       | "TIÄFÜ"   |
 
+
   # upload into "simple-folder" because there is already a folder called "0" in the root
   Scenario: Upload a big file called "0" (when chunking in implemented that upload should be chunked)
     Given a file with the size of "30000000" bytes and the name "0" has been created locally
@@ -98,7 +101,7 @@ Feature: File Upload
     Then file "0" should be listed on the webUI
     And as "user1" the content of "simple-folder/0" should be the same as the local "0"
 
-  @issue-3015 @skipOnOCIS @issue-ocis-reva-200
+  @issue-3015 @issue-ocis-reva-200
   Scenario: Upload a file with the same name as already existing folder
     Given user "user1" has created folder "new-lorem.txt"
     And the user has reloaded the current page of the webUI
@@ -114,7 +117,7 @@ Feature: File Upload
     #   """
 
   # When this issue is fixed merge with the scenario above
-  @issue-3015 @skipOnOC10 @skipOnOCIS @issue-ocis-reva-200
+  @issue-3015 @skipOnOC10 @issue-ocis-reva-200
   Scenario: Upload a file with the same name as already existing folder
     Given user "user1" has created folder "new-lorem.txt"
     And the user has reloaded the current page of the webUI

@@ -6,6 +6,7 @@ Feature: move folders
   Background:
     Given user "user1" has been created with default attributes
 
+
   Scenario: An attempt to move a folder into a sub-folder using rename is not allowed
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
@@ -25,6 +26,7 @@ Feature: move folders
     Then breadcrumb for folder "strängé नेपाली folder empty" should be displayed on the webUI
     And folder "strängé नेपाली folder" should be listed on the webUI
 
+
   Scenario: move a folder into another folder where a folder with the same name already exists
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
@@ -36,14 +38,15 @@ Feature: move folders
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
     When the user batch moves these folders into folder "simple-empty-folder" using the webUI
-      | name                 |
-      | simple-folder        |
+      | name                  |
+      | simple-folder         |
       | strängé नेपाली folder |
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And the following folders should be listed on the webUI
       | folders               |
       | simple-folder         |
       | strängé नेपाली folder |
+
 
   Scenario Outline: move a folder into another folder (problematic characters)
     Given user "user1" has logged in using the webUI
@@ -54,13 +57,13 @@ Feature: move folders
     Then breadcrumb for folder <target_name> should be displayed on the webUI
     And file <folder_name> should be listed on the webUI
     Examples:
-      | folder_name         | target_name                      |
-      | "'single'"          | "target-folder-with-'single'"           |
+      | folder_name | target_name                    |
+      | "'single'"  | "target-folder-with-'single'"  |
       # | "\"double\" quotes" | "target-folder-with\"double\" quotes" | FIXME: Needs a way to access breadcrumbs with double quotes issue-3734
-      | "question?"         | "target-folder-with-question?"          |
-      | "&and#hash"         | "target-folder-with-&and#hash"          |
+      | "question?" | "target-folder-with-question?" |
+      | "&and#hash" | "target-folder-with-&and#hash" |
 
-  @skipOnOCIS @issue-ocis-reva-243
+  @issue-ocis-reva-243
   Scenario: move a folder into another folder with no change permission
     Given user "user2" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
@@ -68,10 +71,12 @@ Feature: move folders
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to move into folder "simple-folder (2)" using the webUI
 
+
   Scenario: move a folder into the same folder
     And user "user1" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then it should not be possible to move into folder "simple-empty-folder" using the webUI
+
 
   Scenario: move a folder into another folder with same name
     And user "user1" has logged in using the webUI

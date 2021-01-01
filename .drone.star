@@ -326,7 +326,7 @@ config = {
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-ocis-server-owncloud-storage.txt'
 			},
 			'runningOnOCIS': True,
-			'filterTags': 'not @skip and not @skipOnOCIS',
+			'filterTags': 'not @skip and not @skipOnOCIS and not @notToImplementOnOCIS',
 		}
 	},
 

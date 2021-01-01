@@ -12,7 +12,7 @@ Feature: Sharing folders with multiple internal users with different permissions
       | user1    |
       | user2    |
 
-  @skipOnOCIS
+
   Scenario Outline: share a folder with multiple users with different roles and permissions
     Given these users have been created with default attributes:
       | username |
@@ -56,13 +56,13 @@ Feature: Sharing folders with multiple internal users with different permissions
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" folder "simple-folder (2)" should not exist
     Examples:
-      | role                 | displayed-role          | extra-permissions             | displayed-permissions  | actual-permissions           |
-      | Viewer               | Viewer                  | ,                             | ,                      | read, share                  |
-      | Editor               | Editor                  | ,                             | ,                      | all                          |
-      | Advanced permissions | Advanced permissions    | ,                             | ,                      | read                         |
-      | Advanced permissions | Viewer                  | share                         | ,                      | read, share                  |
-      | Advanced permissions | Advanced permissions    | delete, update, create        | delete, update, create | read, delete, update, create |
-      | Advanced permissions | Editor                  | share, delete, update, create | ,                      | all                          |
+      | role                 | displayed-role       | extra-permissions             | displayed-permissions  | actual-permissions           |
+      | Viewer               | Viewer               | ,                             | ,                      | read, share                  |
+      | Editor               | Editor               | ,                             | ,                      | all                          |
+      | Advanced permissions | Advanced permissions | ,                             | ,                      | read                         |
+      | Advanced permissions | Viewer               | share                         | ,                      | read, share                  |
+      | Advanced permissions | Advanced permissions | delete, update, create        | delete, update, create | read, delete, update, create |
+      | Advanced permissions | Editor               | share, delete, update, create | ,                      | all                          |
 
   @skipOnOC10
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
@@ -91,30 +91,30 @@ Feature: Sharing folders with multiple internal users with different permissions
     And user "User Two" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "User Three" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "user2" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user2                |
-      | file_target | /Shares/simple-folder       |
-      | item_type   | folder               |
-      | permissions | <actual-permissions> |
+      | field       | value                 |
+      | uid_owner   | user1                 |
+      | share_with  | user2                 |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <actual-permissions>  |
     And user "user3" should have received a share with these details:
-      | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user3                |
-      | file_target | /Shares/simple-folder       |
-      | item_type   | folder               |
-      | permissions | <actual-permissions> |
+      | field       | value                 |
+      | uid_owner   | user1                 |
+      | share_with  | user3                 |
+      | file_target | /Shares/simple-folder |
+      | item_type   | folder                |
+      | permissions | <actual-permissions>  |
     But user "Regular User" should not be listed in the collaborators list on the webUI
     And as "user0" folder "simple-folder (2)" should not exist
     And user "User Four" should not be listed in the collaborators list on the webUI
     And as "user4" folder "simple-folder (2)" should not exist
     Examples:
-      | role                 | displayed-role          | extra-permissions             | displayed-permissions | actual-permissions           |
+      | role                 | displayed-role | extra-permissions      | displayed-permissions | actual-permissions           |
       # | Viewer               | Viewer                  | share                         | share                 | read, share                  |
-      | Viewer               | Viewer                  | ,                             | ,                     | read                         |
+      | Viewer               | Viewer         | ,                      | ,                     | read                         |
       # | Editor               | Editor                  | share                         | share                 | all                          |
-      | Editor               | Editor                  | ,                             | ,                     | read, update, delete, create |
-      | Advanced permissions | Viewer                  | ,                             | ,                     | read                         |
+      | Editor               | Editor         | ,                      | ,                     | read, update, delete, create |
+      | Advanced permissions | Viewer         | ,                      | ,                     | read                         |
       # | Advanced permissions | Viewer                  | share                         | share                 | read, share                  |
-      | Advanced permissions | Editor                  | delete, update, create        | ,                     | read, delete, update, create |
+      | Advanced permissions | Editor         | delete, update, create | ,                     | read, delete, update, create |
       # | Advanced permissions | Editor                  | share, delete, update, create | share                 | all                          |

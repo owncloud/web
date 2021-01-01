@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-34 @ocis-reva-issue-194
+@notToImplementOnOCIS
 Feature: Sharing files and folders with internal groups
   As a user
   I want to share files and folders with groups
@@ -34,6 +34,7 @@ Feature: Sharing files and folders with internal groups
       | ?\?@#%@,; |
       | नेपाली    |
 
+
   Scenario: Share file with a user and a group with same name
     Given these users have been created with default attributes:
       | username |
@@ -54,6 +55,7 @@ Feature: Sharing files and folders with internal groups
     Then "group" "user1" should not be listed in the autocomplete list on the webUI
     And the content of file "randomfile.txt" for user "user1" should be "user3 file"
     And the content of file "randomfile.txt" for user "user2" should be "user3 file"
+
 
   Scenario: Share file with a group and a user with same name
     Given these users have been created with default attributes:

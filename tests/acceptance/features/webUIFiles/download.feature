@@ -8,15 +8,17 @@ Feature: download files
     And user "user1" has logged in using the webUI
     And the user has browsed to the files page
 
+
   Scenario: Try to download file and folder that used to exist but does not anymore
     Given the following files have been deleted by user "user1"
-      | name          |
-      | lorem.txt     |
+      | name      |
+      | lorem.txt |
     When the user downloads file "lorem.txt" using the webUI
     Then the error message with header 'Download failed' should be displayed on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And as "user1" file "lorem.txt" should not exist
+
 
   Scenario: download file with comma in the filename
     Given user "user1" has created file "sample,1.txt"

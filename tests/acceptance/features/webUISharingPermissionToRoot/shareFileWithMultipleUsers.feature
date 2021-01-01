@@ -1,4 +1,4 @@
-@skipOnOCIS
+@notToImplementOnOCIS
 Feature: Sharing files with multiple internal users with different permissions
   As a user
   I want to set different permissions on shared files with other users
@@ -9,6 +9,7 @@ Feature: Sharing files with multiple internal users with different permissions
       | username |
       | user1    |
       | user2    |
+
 
   Scenario Outline: share a file with multiple users with different roles and permissions
     Given these users have been created with default attributes:

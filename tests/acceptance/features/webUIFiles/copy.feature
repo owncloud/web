@@ -18,6 +18,7 @@ Feature: copy files and folders
     Then breadcrumb for folder "strängé नेपाली folder empty" should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
 
+
   Scenario: copy a file into a folder where a file with the same name already exists
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
@@ -40,6 +41,7 @@ Feature: copy files and folders
       | lorem.txt   |
       | testapp.zip |
 
+
   Scenario Outline: copy a file into a folder (problematic characters)
     Given user "user1" has logged in using the webUI
     And the user has browsed to the files page
@@ -55,7 +57,7 @@ Feature: copy files and folders
       | "question?"         | "folder-with-question?"        |
       | "&and#hash"         | "folder-with-&and#hash"        |
 
-  @skipOnOCIS @issue-3755
+  @issue-3755
   Scenario: copy files on a public share
     Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     And the public uses the webUI to access the last public link created by user "user1"
@@ -65,7 +67,7 @@ Feature: copy files and folders
     And as "user1" file "simple-folder/simple-empty-folder/data.zip" should exist
     And as "user1" file "simple-folder/data.zip" should exist
 
-  @skipOnOCIS @issue-ocis-reva-243
+  @issue-ocis-reva-243
   Scenario: copy a file into another folder with no change permission
     Given user "user2" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
@@ -73,7 +75,7 @@ Feature: copy files and folders
     When the user tries to copy file "lorem.txt" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
 
-  @skipOnOCIS @issue-ocis-reva-243
+  @issue-ocis-reva-243
   Scenario: copy a folder into another folder with no change permission
     Given user "user2" has been created with default attributes
     And user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
@@ -81,10 +83,12 @@ Feature: copy files and folders
     When the user tries to copy folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
 
+
   Scenario: copy a folder into the same folder
     And user "user1" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then it should not be possible to copy into folder "simple-empty-folder" using the webUI
+
 
   Scenario: copy a folder into another folder with same name
     And user "user1" has logged in using the webUI

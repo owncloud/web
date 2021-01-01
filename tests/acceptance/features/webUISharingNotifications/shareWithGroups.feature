@@ -1,4 +1,4 @@
-@app-required @notifications-app-required @skipOnOCIS @ocis-reva-issue-14
+@app-required @notifications-app-required @ocis-reva-issue-14
 Feature: Sharing files and folders with internal groups
   As a user
   I want to share files and folders with groups
@@ -19,6 +19,7 @@ Feature: Sharing files and folders with internal groups
     And user "user1" has been added to group "grp1"
     And user "user2" has been added to group "grp1"
     And user "user2" has logged in using the webUI
+
 
   Scenario: notifications about new share is displayed
     Given user "user3" has shared folder "/simple-folder" with group "grp1"

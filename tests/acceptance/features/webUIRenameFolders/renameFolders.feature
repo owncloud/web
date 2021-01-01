@@ -20,7 +20,8 @@ Feature: rename folders
       | '"quotes1"'             |
       | "'quotes2'"             |
       | "home"                  |
-      | 'सिमप्ले फोल्देर$%#?&@'      |
+      | 'सिमप्ले फोल्देर$%#?&@' |
+
 
   Scenario Outline: Rename a folder that has special characters in its name
     Given user "user1" has created file "Sample,Folder,With,Comma"
@@ -34,6 +35,7 @@ Feature: rename folders
       | "'single'quotes"           | "single-quotes"             |
       | "strängé नेपाली folder"    | "strängé नेपाली folder-#?2" |
       | "Sample,Folder,With,Comma" | "Simple,Folder,With,Commä"  |
+
 
   Scenario: Rename a folder using special characters and check its existence after page reload
     When the user renames folder "simple-folder" to "लोरेम।तयक्स्त $%&" using the webUI
@@ -58,6 +60,7 @@ Feature: rename folders
     And the user reloads the current page of the webUI
     Then folder "  multiple   spaces    all     over" should be listed on the webUI
 
+
   Scenario: Rename a file using spaces at end is prohibited
     When the user tries to rename folder "simple-folder" to "space at end " using the webUI
     Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
@@ -69,11 +72,12 @@ Feature: rename folders
     Then folder "simple-folder" should be listed on the webUI
     And folder "  multiple   space    all     over   " should not be listed on the webUI
 
+
   Scenario: Rename a folder using both double and single quotes
     When the user renames the following folder using the webUI
-      | fromName              | toName                     |
-      | simple-folder         | '"First 'single" quotes" ' |
-      | simple-empty-folder   | Test" 'me o'ut"            |
+      | fromName            | toName                     |
+      | simple-folder       | '"First 'single" quotes" ' |
+      | simple-empty-folder | Test" 'me o'ut"            |
     And the user reloads the current page of the webUI
     Then these folders should be listed on the webUI
       | folders                    |
@@ -89,8 +93,8 @@ Feature: rename folders
       | a normal folder       |
       | another normal folder |
 
+
   # These are valid file names for ocis
-  @skipOnOCIS
   Scenario Outline: Rename a folder using forbidden characters
     When the user tries to rename folder <from_name> to <to_name> using the webUI
     Then the error message with header '<alert_message>' should be displayed on the webUI
@@ -101,23 +105,27 @@ Feature: rename folders
       | "simple-folder" | "\\simple-folder" | Error while renaming "simple-folder" to "\\simple-folder" |
       | "simple-folder" | ".htaccess"       | Error while renaming "simple-folder" to ".htaccess"       |
 
+
   Scenario: Rename a folder putting a name of a file which already exists
     When the user tries to rename folder "simple-folder" to "lorem.txt" using the webUI
     Then the error message 'The name "lorem.txt" is already taken' should be displayed on the webUI dialog prompt
+
 
   Scenario: Rename a folder to ..
     When the user tries to rename folder "simple-folder" to ".." using the webUI
     Then the error message 'The name cannot be equal to ".."' should be displayed on the webUI dialog prompt
 
+
   Scenario: Rename a folder to .
     When the user tries to rename folder "simple-folder" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
 
+
   # This is valid file name for ocis
-  @skipOnOCIS
   Scenario: Rename a folder to .part
     When the user tries to rename folder "simple-folder" to "simple.part" using the webUI
     Then the error message with header 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
+
 
   Scenario: User tries to rename a folder that used to exist but does not anymore
     Given the user has browsed to the files page

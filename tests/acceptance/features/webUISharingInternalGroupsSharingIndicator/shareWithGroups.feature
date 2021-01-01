@@ -1,4 +1,4 @@
-@skipOnOCIS @ocis-reva-issue-34 @ocis-reva-issue-194
+@ocis-reva-issue-34 @ocis-reva-issue-194
 Feature: Sharing files and folders with internal groups
   As a user
   I want to share files and folders with groups
@@ -27,8 +27,8 @@ Feature: Sharing files and folders with internal groups
     And user "user2" has accepted the share "simple-folder" offered by user "user1"
     When user "user1" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-folder       | user-direct        |
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
@@ -36,8 +36,8 @@ Feature: Sharing files and folders with internal groups
       | lorem.txt           | user-indirect      |
     When the user opens folder "simple-empty-folder" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | inside.txt          | user-indirect      |
+      | fileName   | expectedIndicators |
+      | inside.txt | user-indirect      |
 
   @issue-2060
   Scenario: sharing indicator of items inside a re-shared folder
@@ -47,8 +47,8 @@ Feature: Sharing files and folders with internal groups
     When user "user2" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-folder   | user-direct        |
+      | fileName      | expectedIndicators |
+      | simple-folder | user-direct        |
     And the user opens folder "simple-folder" using the webUI
     And the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
@@ -63,8 +63,8 @@ Feature: Sharing files and folders with internal groups
     When user "user2" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-folder   | user-indirect      |
+      | fileName      | expectedIndicators |
+      | simple-folder | user-indirect      |
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
@@ -78,8 +78,8 @@ Feature: Sharing files and folders with internal groups
     When user "user2" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName            | expectedIndicators |
-      | simple-folder   | user-indirect      |
+      | fileName      | expectedIndicators |
+      | simple-folder | user-indirect      |
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
@@ -92,7 +92,7 @@ Feature: Sharing files and folders with internal groups
     And user "user2" has accepted the share "textfile0.txt" offered by user "user1"
     When user "user2" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI
-      | simple-folder       |
+      | simple-folder |
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-empty-folder |
@@ -115,8 +115,8 @@ Feature: Sharing files and folders with internal groups
     When the user opens folder "simple-empty-folder" using the webUI
     And the user creates a folder with the name "sub-folder" using the webUI
     Then the following resources should have share indicators on the webUI
-      | fileName      | expectedIndicators |
-      | sub-folder    | user-indirect      |
+      | fileName   | expectedIndicators |
+      | sub-folder | user-indirect      |
 
   @issue-2939
   Scenario: sharing indicator for group shares stays up to date
