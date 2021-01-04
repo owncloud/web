@@ -3,13 +3,16 @@ Feature: display image in media viewer on the webUI
   Background:
     Given user "user1" has been created with default attributes
 
-
-  Scenario: preview of image with media viewer is possible
-    Given user "user1" has uploaded file "testavatar.jpg" to "testavatar.jpg"
+Scenario Outline: preview of image files with media viewer is possible
+    Given user "user1" has uploaded file "<image-file>" to "<image-file>"
     And user "user1" has logged in using the webUI
-    When the user views the file "testavatar.jpg" in the media viewer using the webUI
-    Then the file "testavatar.jpg" should be displayed in the media viewer webUI
-
+    When the user views the file "<image-file>" in the media viewer using the webUI
+    Then the file "<image-file>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      |
+      | testavatar.jpg  |
+      | testavatar.png  |
+      | testavatar.jpeg |
 
   Scenario: preview of video with media viewer is possible
     Given user "user1" has uploaded file "test_video.mp4" to "test_video.mp4"
