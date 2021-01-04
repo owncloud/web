@@ -354,9 +354,9 @@ def beforePipelines(ctx):
 def stagePipelines(ctx):
 	acceptancePipelines = acceptance()
 	if acceptancePipelines == False:
-		return False
+		return unitTests()
 
-	return acceptancePipelines
+	return unitTests() + acceptancePipelines
 
 def afterPipelines(ctx):
 	return build(ctx) + notify()
@@ -533,6 +533,35 @@ def changelog(ctx):
 	pipelines.append(result)
 
 	return pipelines
+
+def unitTests():
+	return [{
+		'kind': 'pipeline',
+		'type': 'docker',
+		'name': 'unit-tests',
+		'workspace' : {
+			'base': '/var/www/owncloud',
+			'path': config['app']
+		},
+		'steps':
+			installNPM() +
+			buildWeb() +
+			[{
+				'name': 'tests',
+				'image': 'owncloudci/nodejs:12',
+				'pull': 'always',
+				'commands': [
+					'yarn test:unit',
+				],
+			}],
+		'depends_on': [],
+		'trigger': {
+			'ref': [
+				'refs/heads/master',
+				'refs/pull/**',
+			],
+		},
+	}]
 
 def acceptance():
 	pipelines = []

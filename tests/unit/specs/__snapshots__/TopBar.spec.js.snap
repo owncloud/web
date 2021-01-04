@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Top Bar component Displays applications menu 1`] = `
+<header id="oc-topbar" class="uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
+  <oc-grid-stub gutter="medium" flex="">
+    <div class="uk-hidden@l">
+      <oc-button-stub variation="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
+        <oc-icon-stub name="menu" aria-hidden="true"></oc-icon-stub>
+      </oc-button-stub>
+    </div>
+    <!---->
+  </oc-grid-stub>
+  <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <!---->
+    <applications-menu-stub applicationslist="testApp"></applications-menu-stub>
+    <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist="testApp"></user-menu-stub>
+  </oc-grid-stub>
+</header>
+`;
+
+exports[`Top Bar component Displays search bar if enabled 1`] = `
+<header id="oc-topbar" class="uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
+  <oc-grid-stub gutter="medium" flex="">
+    <div class="uk-hidden@l">
+      <oc-button-stub variation="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
+        <oc-icon-stub name="menu" aria-hidden="true"></oc-icon-stub>
+      </oc-button-stub>
+    </div>
+    <search-bar-stub></search-bar-stub>
+  </oc-grid-stub>
+  <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <!---->
+    <!---->
+    <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist=""></user-menu-stub>
+  </oc-grid-stub>
+</header>
+`;
