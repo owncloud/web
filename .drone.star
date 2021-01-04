@@ -1630,7 +1630,7 @@ def uploadScreenshots():
 		'pull': 'if-not-exists',
 		'settings': {
 			'acl': 'public-read',
-			'bucket': 'web',
+			'bucket': 'phoenix',
 			'endpoint': 'https://minio.owncloud.com/',
 			'path_style': True,
 			'source': '/var/www/owncloud/web/tests/reports/screenshots/**/*',
@@ -1661,7 +1661,7 @@ def buildGithubComment(suite, alternateSuiteName):
 		'commands': [
 			'cd /var/www/owncloud/web/tests/reports/screenshots/',
 			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % alternateSuiteName,
-			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/web/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
+			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
 			'echo "\n</p></details>" >> comments.file',
 			'more comments.file',
 		],
