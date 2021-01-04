@@ -24,6 +24,23 @@ module.exports = {
      * @param {string} fileName
      * @return {Promise<*>}
      */
+    isPreviewImageDisplayed: async function(fileName) {
+      await this.waitForFileVisible(fileName)
+      const element = util.format(this.elements.previewImage.selector, fileName)
+      let previewStatus = ''
+      await this.useXpath()
+        .waitForElementVisible(element)
+        .getAttribute(
+          { selector: element, locateStrategy: this.elements.previewImage.locateStrategy },
+          'data-preview-loaded',
+          result => (previewStatus = result.value === 'true')
+        )
+      return previewStatus
+    },
+    /**
+     * @param {string} fileName
+     * @return {Promise<*>}
+     */
     openPublicLinkDialog: async function(fileName) {
       await this.waitForFileVisible(fileName)
       await this.openSideBar(fileName)
@@ -877,6 +894,10 @@ module.exports = {
     },
     filesListItem: {
       selector: '.vue-recycle-scroller__item-view'
+    },
+    previewImage: {
+      selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-file")]',
+      locateStrategy: 'xpath'
     }
   }
 }
