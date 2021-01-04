@@ -1636,14 +1636,12 @@ def uploadScreenshots():
 			'source': '/var/www/owncloud/web/tests/reports/screenshots/**/*',
 			'strip_prefix': '/var/www/owncloud/web/tests/reports/screenshots',
 			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
-		},
-		'environment': {
-			'AWS_ACCESS_KEY_ID': {
+			'access_key': {
 				'from_secret': 'aws_access_key_id'
 			},
-			'AWS_SECRET_ACCESS_KEY': {
+			'secret_key': {
 				'from_secret': 'aws_secret_access_key'
-			},
+			}
 		},
 		'when': {
 			'status': [
