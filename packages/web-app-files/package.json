@@ -1,0 +1,23 @@
+{
+  "name": "files",
+  "version": "0.1.0",
+  "description": "This is the funky frontend app",
+  "homepage": "https://github.com/owncloud/web",
+  "license": "AGPL-3.0",
+  "author": "Felix Heidecke",
+  "main": "js/files.bundle.js",
+  "devDependencies": {
+    "copy-to-clipboard": "^3.3.1",
+    "filesize": "^6.1.0",
+    "filter-obj": "^2.0.1",
+    "lodash": "^4.17.15",
+    "lodash-es": "^4.17.20",
+    "moment": "^2.24.0",
+    "p-queue": "^6.6.2",
+    "query-string": "^6.8.3",
+    "vue": "^2.6.10",
+    "vue-virtual-scroller": "^1.0.0-rc.2",
+    "vue2-dropzone": "^3.6.0",
+    "vuex": "^3.1.1"
+  }
+}

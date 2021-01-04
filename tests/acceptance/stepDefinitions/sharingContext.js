@@ -1191,9 +1191,9 @@ Then('the expiration date for {string} should be disabled on the WebUI', async f
 })
 
 Then('the current collaborators list should have order {string}', async function(expectedNames) {
-  const actualNames = (await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorsListNames()).join(
-    ','
-  )
+  const actualNames = (
+    await client.page.FilesPageElement.SharingDialog.collaboratorsDialog().getCollaboratorsListNames()
+  ).join(',')
   assert.strictEqual(
     actualNames,
     expectedNames,

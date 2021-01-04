@@ -1,0 +1,12 @@
+{
+  "name": "markdown-editor",
+  "version": "0.1.0",
+  "description": "ownCloud Web MarkdownEditor Demo App",
+  "license": "AGPL-3.0",
+  "author": "serv3r.de DevTeam <ownCloud@serv3r.de>",
+  "main": "js/demo.js",
+  "devDependencies": {
+    "marked": "^0.8.0",
+    "vuex": "^3.1.1"
+  }
+}

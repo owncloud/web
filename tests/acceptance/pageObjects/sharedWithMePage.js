@@ -38,9 +38,7 @@ module.exports = {
             status = result.value === '' ? 'Accepted' : result.value
           } else {
             throw new Error(
-              `Expected: share status of the resource but found unexpected response: ${
-                result.value.error
-              }`
+              `Expected: share status of the resource but found unexpected response: ${result.value.error}`
             )
           }
         })
