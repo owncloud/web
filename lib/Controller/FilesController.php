@@ -83,12 +83,16 @@ class FilesController extends Controller {
 			return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
 		}
 
-		// check if path resolves to a file
+		// check if path resolves to an actual file
 		if (\is_dir($path)) {
 			return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
 		}
-		$absolutePath = \dirname(__FILE__, 3) . '/' . $path;
-		if (!($realPath = \realpath($absolutePath))) {
+		$basePath = \dirname(__DIR__,2);
+		$absolutePath = \realpath( $basePath . '/' . $path);
+		if ($absolutePath === false) {
+			return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
+		}
+		if (\strpos($absolutePath, $basePath) !== 0) {
 			return new DataResponse(['error' => 'resource not found'], Http::STATUS_NOT_FOUND);
 		}
 
