@@ -43,7 +43,7 @@ module.exports = {
       launch_url: LOCAL_LAUNCH_URL,
       globals: {
         waitForConditionTimeout: 20000,
-        waitForConditionTimeoutLong: 240000,
+        waitForConditionTimeoutLong: 40000,
         waitForNegativeConditionTimeout: 1000,
         waitForConditionPollInterval: 10,
         filesForUpload: REMOTE_UPLOAD_DIR,

@@ -6,6 +6,3 @@ webUIPreview/imageMediaViewer.feature:85
 #
 # https://github.com/owncloud/web/issues/4564 authentication dialog appears when user is deleted
 webUILogin/login.feature:59
-
-
-webUIUpload/uploadEdgecases.feature:164

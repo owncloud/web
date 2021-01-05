@@ -1282,7 +1282,7 @@ const writeFile = function(size, filename, writeChar = 'A') {
 Given(
   'a file with the size of {string} bytes and the name {string} has been created locally',
   function(filename, size) {
-    return writeFile(filename, size, 'A')
+    return writeFile(filename, size)
   }
 )
 
@@ -1291,6 +1291,8 @@ When(
   async function(filename, size) {
     const filePath = path.join(client.globals.mountedUploadDir, filename)
     await client.page.filesPage().uploadFileWithoutWait(filePath)
+    // wait so that the upload operation is in progress
+    await client.pause(500)
     writeFile(size, filename, 'B')
     await client.page.filesPage().waitForExisitingFileUploadsToResolve()
   }

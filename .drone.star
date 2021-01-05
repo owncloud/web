@@ -91,7 +91,7 @@ config = {
 				'WEB_UI_CONFIG': '/srv/config/drone/config.json',
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.txt'
 			},
-			'filterTags': '@thisOne',
+			'filterTags': 'not @skipOnOC10 and @thisOne',
 		},
 		# 'webUIFederation': {
 		# 	'suites': {
