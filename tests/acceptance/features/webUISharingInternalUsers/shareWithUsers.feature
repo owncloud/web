@@ -591,6 +591,7 @@ Feature: Sharing files and folders with internal users
     When the user opens folder "Shares" using the webUI
     Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
 
+  @issue-4192
   Scenario: sharing file after renaming it is possible
     Given user "user1" has logged in using the webUI
     And user "user1" has uploaded file with content "test" to "lorem.txt"
