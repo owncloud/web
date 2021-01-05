@@ -11,6 +11,7 @@ Summary
 * Bugfix - Fully clickable sidebar toggle button: [#4130](https://github.com/owncloud/web/issues/4130)
 * Bugfix - Allow server URL without trailing slash: [#4536](https://github.com/owncloud/web/pull/4536)
 * Change - Allow to disable previews in file lists: [#4513](https://github.com/owncloud/web/pull/4513)
+* Change - Add controllers for oc10 app deployment: [#4537](https://github.com/owncloud/web/pull/4537)
 
 Details
 -------
@@ -37,6 +38,15 @@ Details
    to the config.json file.
 
    https://github.com/owncloud/web/pull/4513
+
+* Change - Add controllers for oc10 app deployment: [#4537](https://github.com/owncloud/web/pull/4537)
+
+   We added a config endpoint for when ownCloud Web is deployed as ownCloud 10 app. The config.json
+   file must not be placed in the apps folder because it would cause the app integrity check to fail.
+   In addition to the config endpoint we added a wildcard endpoint for serving static assets (js
+   bundles, css, etc) of the ownCloud Web javascript application by their paths.
+
+   https://github.com/owncloud/web/pull/4537
 
 Changelog for ownCloud Web [1.0.0] (2020-12-16)
 =======================================
