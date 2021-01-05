@@ -235,3 +235,22 @@ Feature: Restore deleted files/folders
     When the user browses to the files page using the webUI
     Then folder "lorem.txt" should be listed on the webUI
     And file "lorem.txt" should not be listed on the webUI
+
+  @issue-ocis-1124
+  Scenario: delete and restore a file inside a received shared folder
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
+    And the administrator has set the default folder for received shares to "Shares"
+    And user "user3" has been created with default attributes
+    And user "user3" has created folder "folder-to-share"
+    And user "user3" has uploaded file with content "does-not-matter" to "folder-to-share/fileToShare.txt"
+    And user "user3" has shared folder "folder-to-share" with user "user1"
+    And user "user1" has accepted the share "folder-to-share" offered by user "user3"
+    And the user has reloaded the current page of the webUI
+    When the user opens folder "Shares" using the webUI
+    And the user opens folder "folder-to-share" using the webUI
+    And the user deletes file "fileToShare.txt" using the webUI
+    When the user browses to the trashbin page
+    Then as "user1" file "fileToShare.txt" should exist in the trashbin
+    When the user restores file "…/folder-to-share/fileToShare.txt" from the trashbin using the webUI
+    Then the success message with header "fileToShare.txt was restored successfully" should be displayed on the webUI
+    And as "user1" file "/Shares/folder-to-share/fileToShare.txt" should exist
