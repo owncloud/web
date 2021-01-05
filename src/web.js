@@ -210,9 +210,9 @@ function loadTranslations () {
 }
 
 (async function () {
+  // try to load config.json
   config = await fetch('config.json')
-
-  if (config.status === 404) {
+  if (config.status !== 200) {
     router.push('missing-config')
     missingConfig()
     return

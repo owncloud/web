@@ -42,11 +42,11 @@ copy-configs: copy-web-config copy-htaccess
 
 .PHONY: copy-web-config
 copy-web-config:
-	cp config.json.dist $(dist_dir)/config.json
+	cp config.json.dist $(dist_dir)/
 
 .Phony: copy-htaccess
 copy-htaccess:
-	cp .htaccess $(dist_dir)
+	cp .htaccess $(dist_dir)/
 
 .PHONY: package
 package: create-release-folder create-packages
@@ -78,6 +78,8 @@ endif
 ocx-app-config:
 	cp -R appinfo $(dist_dir)
 	cp -R img $(dist_dir)
+	cp -R lib $(dist_dir)
+	rm $(dist_dir)/.htaccess # .htaccess is not needed/read in ocx app deployment scenarios
 
 .PHONY: ocx-app-bundle
 ocx-app-bundle:
