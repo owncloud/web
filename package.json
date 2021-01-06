@@ -58,7 +58,7 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/register": "^7.6.0",
     "@vue/test-utils": "^1.1.2",
-    "archiver": "^3.0.0",
+    "archiver": "^5.1.0",
     "axe-cli": "^3.1.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.2",
