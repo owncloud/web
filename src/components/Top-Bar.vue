@@ -1,6 +1,6 @@
 <template>
   <header id="oc-topbar" class="uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
-    <oc-grid v-if="!publicPage()" gutter="medium" flex>
+    <oc-grid gutter="medium" flex>
       <div class="uk-hidden@l">
         <oc-button
           variation="raw"
@@ -13,7 +13,7 @@
       </div>
       <search-bar v-if="!isSearchDisabled" />
     </oc-grid>
-    <oc-grid v-if="!isPublicPage" flex gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <oc-grid flex gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
       <notifications v-if="activeNotifications.length" />
       <applications-menu v-if="applicationsList.length > 0" :applications-list="applicationsList" />
       <user-menu
@@ -43,12 +43,12 @@ export default {
     userId: {
       type: String,
       required: false,
-      default: null
+      default: ''
     },
     userDisplayName: {
       type: String,
       required: false,
-      default: null
+      default: ''
     },
     applicationsList: {
       type: Array,
@@ -67,18 +67,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['apps', 'configuration']),
-
-    isPublicPage() {
-      return !this.userId
-    },
-
-    currentExtensionName() {
-      if (this.apps[this.currentExtension]) {
-        return this.$gettext(this.apps[this.currentExtension].name)
-      }
-      return this.currentExtension
-    },
+    ...mapGetters(['configuration']),
 
     isSearchDisabled() {
       return this.configuration.options.hideSearchBar === true

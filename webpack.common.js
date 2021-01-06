@@ -76,6 +76,11 @@ module.exports = {
     filename: 'core/[name].bundle.js',
     chunkFilename: 'core/[name].[id].bundle.js'
   },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
+  },
   module: {
     rules: [
       {
