@@ -1240,3 +1240,35 @@ Then(
     )
   }
 )
+
+Given('the app-sidebar for file/folder {string} has been visible on the webUI', async function(
+  resource
+) {
+  await client.page.FilesPageElement.filesList().clickRow(resource)
+
+  const visible = await client.page.filesPage().isSidebarVisible()
+  assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
+  return client.page.filesPage().checkSidebarItem(resource)
+})
+
+Then(
+  'only the following items with default items should be visible in the actions menu on the webUI',
+  async function(table) {
+    const visibleItems = await client.page.FilesPageElement.appSideBar().getActionsMenuItemsExceptDefaults()
+
+    const tableItems = table.rows()
+    const expectedVisibleItems = []
+    tableItems.forEach(element => {
+      element instanceof Array
+        ? expectedVisibleItems.push(element[0])
+        : expectedVisibleItems.push(element)
+    })
+
+    const isPresent = _.isEqual(_.sortBy(expectedVisibleItems), _.sortBy(visibleItems))
+    assert.strictEqual(
+      isPresent,
+      true,
+      `only '${expectedVisibleItems}' actions menu item(s) was expected to be visible but also found '${visibleItems}'.`
+    )
+  }
+)

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-expressions */
 const util = require('util')
+const _ = require('lodash')
 const timeoutHelper = require('../../helpers/timeoutHelper')
 
 module.exports = {
@@ -55,6 +56,40 @@ module.exports = {
       for (const { ELEMENT } of elements) {
         await this.api.elementIdText(ELEMENT, function(result) {
           items.push(result.value.toLowerCase())
+        })
+      }
+      return items
+    },
+    getVisibleActionsMenuItems: async function() {
+      const items = []
+      let elements
+      await this.api.elements('@actionPanelItems', function(result) {
+        elements = result.value
+      })
+      for (const { ELEMENT } of elements) {
+        await this.api.elementIdText(ELEMENT, function(result) {
+          items.push(result.value.toLowerCase())
+        })
+      }
+      return items
+    },
+    getActionsMenuItemsExceptDefaults: async function() {
+      const defaultItems = ['mark as favorite', 'copy', 'move', 'rename', 'delete']
+      const items = []
+      let elements
+      await this.api.elements('@actionPanelItems', function(result) {
+        elements = result.value
+      })
+      for (const { ELEMENT } of elements) {
+        await this.api.elementIdText(ELEMENT, function(result) {
+          let notDefault = true
+          for (const item of defaultItems) {
+            if (_.isEqual(item, result.value.toLowerCase())) {
+              notDefault = false
+              break
+            }
+          }
+          notDefault ? items.push(result.value.toLowerCase()) : null
         })
       }
       return items
@@ -161,6 +196,10 @@ module.exports = {
     },
     actionsPanel: {
       selector: '#oc-files-actions-sidebar'
+    },
+    actionPanelItems: {
+      selector: '//div[@class="oc-accordion-content"]//li/button',
+      locateStrategy: 'xpath'
     }
   }
 }
