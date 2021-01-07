@@ -1,0 +1,5 @@
+Change: Rename confirmation of copy action
+
+We've changed the label of the confirmation button in copy view. Instead of "Copy here", we used "Paste here".
+
+https://github.com/owncloud/web/pull/4590
