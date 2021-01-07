@@ -123,7 +123,7 @@ exports.propfind = function(path, userId, properties, folderDepth = '1') {
  * @param {string} user
  */
 exports.getTrashBinElements = function(user, depth = 2) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     exports
       .propfind(
         `/trash-bin/${user}`,
@@ -140,18 +140,25 @@ exports.getTrashBinElements = function(user, depth = 2) {
         const trashData = convert.xml2js(str, { compact: true })['d:multistatus']['d:response']
         const trashItems = []
         trashData.map(trash => {
-          trashItems.push({
-            href: trash['d:href']._text,
-            originalFilename: trash['d:propstat']['d:prop']['oc:trashbin-original-filename']._text,
-            originalLocation: trash['d:propstat']['d:prop']['oc:trashbin-original-location']._text,
-            deleteTimestamp: trash['d:propstat']['d:prop']['oc:trashbin-delete-timestamp']._text,
-            lastModified: trash['d:propstat']['d:prop']['d:getlastmodified']._text
-          })
+          if (trash['d:propstat']['d:prop'] === undefined) {
+            reject(new Error('trashbin data not defined'))
+          } else {
+            trashItems.push({
+              href: trash['d:href']._text,
+              originalFilename:
+                trash['d:propstat']['d:prop']['oc:trashbin-original-filename']._text,
+              originalLocation:
+                trash['d:propstat']['d:prop']['oc:trashbin-original-location']._text,
+              deleteTimestamp: trash['d:propstat']['d:prop']['oc:trashbin-delete-timestamp']._text,
+              lastModified: trash['d:propstat']['d:prop']['d:getlastmodified']._text
+            })
+          }
         })
         resolve(trashItems)
       })
   })
 }
+
 /**
  * Create a folder using webDAV api.
  *
