@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Fully clickable sidebar toggle button: [#4130](https://github.com/owncloud/web/issues/4130)
 * Bugfix - Allow server URL without trailing slash: [#4536](https://github.com/owncloud/web/pull/4536)
+* Change - Rename confirmation of copy action: [#4590](https://github.com/owncloud/web/pull/4590)
 * Change - Allow to disable previews in file lists: [#4513](https://github.com/owncloud/web/pull/4513)
 * Change - Add controllers for oc10 app deployment: [#4537](https://github.com/owncloud/web/pull/4537)
 
@@ -31,6 +32,13 @@ Details
    needed.
 
    https://github.com/owncloud/web/pull/4536
+
+* Change - Rename confirmation of copy action: [#4590](https://github.com/owncloud/web/pull/4590)
+
+   We've changed the label of the confirmation button in copy view. Instead of "Copy here", we used
+   "Paste here".
+
+   https://github.com/owncloud/web/pull/4590
 
 * Change - Allow to disable previews in file lists: [#4513](https://github.com/owncloud/web/pull/4513)
 
