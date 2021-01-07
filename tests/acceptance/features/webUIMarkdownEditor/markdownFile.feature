@@ -1,0 +1,77 @@
+Feature: create markdown files
+  As a user
+  I want to create markdown files
+  So that I can organize my text data in formatted form
+
+  Background:
+    Given user "user1" has been created with default attributes
+    And user "user1" has uploaded file with content "simple markdown file" to "simple.md"
+    And user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+
+  Scenario: create a new markdown file in the root directory
+    When the user creates a markdown file with the name "simple_new.md" using the webUI
+    Then the file "simple_new.md" should be displayed in the markdown editor webUI
+    When the user closes the markdown editor using the webUI
+    Then file "simple_new.md" should be listed on the webUI
+
+  Scenario: update a markdown file with new content
+    Given the user has opened file "simple.md" in the markdown editor webUI
+    When the user inputs the content "updated content" in the markdown editor webUI
+    And the user saves the file in the markdown editor webUI
+    And the user closes the markdown editor using the webUI
+    And the user opens file "simple.md" in the markdown editor webUI
+    Then the file "simple.md" should be displayed in the markdown editor webUI
+    Then the file should have content "updated content" in the markdown editor webUI
+
+  Scenario: append new content in a markdown file
+    Given the user has opened file "simple.md" in the markdown editor webUI
+    When the user appends the content " new content added" in the markdown editor webUI
+    And the user saves the file in the markdown editor webUI
+    And the user closes the markdown editor using the webUI
+    And the user opens file "simple.md" in the markdown editor webUI
+    Then the file "simple.md" should be displayed in the markdown editor webUI
+    Then the file should have content "simple markdown file new content added" in the markdown editor webUI
+
+  Scenario: close the markdown editor without saving the updated content
+    Given the user has opened file "simple.md" in the markdown editor webUI
+    When the user inputs the content "updated content" in the markdown editor webUI
+    And the user closes the markdown editor using the webUI
+    And the user opens file "simple.md" in the markdown editor webUI
+    Then the file "simple.md" should be displayed in the markdown editor webUI
+    Then the file should have content "simple markdown file" in the markdown editor webUI
+    Then the file should not have content "updated content" in the markdown editor webUI
+
+  Scenario: preview content of the file
+    When the user opens file "simple.md" in the markdown editor webUI
+    Then the file "simple.md" should be displayed in the markdown editor webUI
+    And the preview panel should have the content "simple markdown file" in the WebUI
+
+  Scenario: preview content of the file while editing
+    Given the user has opened file "simple.md" in the markdown editor webUI
+    When the user inputs the content "updating the file with new content" in the markdown editor webUI
+    And the preview panel should have the content "updating the file with new content" in the WebUI
+
+  Scenario: open text file in markdown editor
+    When the user opens file "lorem.txt" in the markdown editor webUI
+    Then the file "lorem.txt" should be displayed in the markdown editor webUI
+
+  Scenario Outline: preview of files with markdown editor by clicking the action menu option
+    When the user opens file "<file>" in the markdown editor using the action menu option in the webUI
+    Then the file "<file>" should be displayed in the markdown editor webUI
+    Examples:
+      | file          |
+      | simple.md     |
+      | lorem.txt     |
+
+  Scenario Outline: Previewing text writen in markdown format
+    Given the user has opened file "simple.md" in the markdown editor webUI
+    When the user inputs the content "<content>" in the markdown editor webUI
+    Then the preview panel should have "<tagname>" element with text "<innertext>"
+    Examples:
+      | content         | innertext | tagname     |
+      | `code`          | code      | p > code    |
+      | # heading       | heading   | h1          |
+      | ###### heading  | heading   | h6          |
+      | - list1         | list1     | ul > li     |
+      | [link]()        | link      | p > a       |
