@@ -236,7 +236,7 @@ export default {
       if (this.currentAction === 'move') {
         return this.$pgettext('Confirm action in the location picker for move', 'Move here')
       } else if (this.currentAction === 'copy') {
-        return this.$pgettext('Confirm action in the location picker for copy', 'Copy here')
+        return this.$pgettext('Confirm action in the location picker for copy', 'Paste here')
       }
 
       return this.$gettext('Confirm')
