@@ -1,7 +1,7 @@
 <template>
-  <oc-table top class="files-collaborators-collaborator">
-    <oc-table-row class="files-collaborators-collaborator-table-row-info">
-      <oc-table-cell shrink>
+  <oc-table-simple top class="files-collaborators-collaborator">
+    <oc-tr class="files-collaborators-collaborator-table-row-info">
+      <oc-td width="shrink">
         <div key="collaborator-avatar-loaded">
           <avatar-image
             v-if="isUser"
@@ -30,14 +30,14 @@
             />
           </div>
         </div>
-      </oc-table-cell>
-      <oc-table-cell>
+      </oc-td>
+      <oc-td>
         <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
           <div class="oc-text oc-mb-xs">
             <span>
-              <span class="files-collaborators-collaborator-name oc-text-bold">{{
-                collaborator.collaborator.displayName
-              }}</span>
+              <span class="files-collaborators-collaborator-name oc-text-bold">
+                {{ collaborator.collaborator.displayName }}
+              </span>
               <translate
                 v-if="isCurrentUser"
                 translate-comment="Indicator for current user in list of people"
@@ -135,8 +135,8 @@
             </div>
           </oc-grid>
         </div>
-      </oc-table-cell>
-      <oc-table-cell shrink>
+      </oc-td>
+      <oc-td width="shrink">
         <div class="uk-flex uk-flex-nowrap uk-flex-middle">
           <oc-button
             v-if="$_editButtonVisible"
@@ -166,9 +166,9 @@
             <oc-icon v-else name="lock" class="uk-invisible" />
           </div>
         </div>
-      </oc-table-cell>
-    </oc-table-row>
-  </oc-table>
+      </oc-td>
+    </oc-tr>
+  </oc-table-simple>
 </template>
 
 <script>

@@ -23,14 +23,14 @@
           <div id="previews" hidden />
         </div>
         <div v-if="getUploadedFiles" class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1">
-          <oc-table class="uk-width-1-1 uk-width-xxlarge@m">
-            <oc-table-group>
-              <oc-table-row v-for="(file, key) in getUploadedFiles" :key="key">
-                <oc-table-cell class="oc-pl-rm" v-text="file.name" />
-                <oc-table-cell shrink class="uk-text-nowrap uk-text-meta">{{
-                  file.size | fileSize
-                }}</oc-table-cell>
-                <oc-table-cell shrink class="oc-pr-rm uk-preserve-width">
+          <oc-table-simple class="uk-width-1-1 uk-width-xxlarge@m">
+            <oc-tbody>
+              <oc-tr v-for="(file, key) in getUploadedFiles" :key="key">
+                <oc-td class="oc-pl-rm" v-text="file.name" />
+                <oc-td width="shrink" class="uk-text-nowrap uk-text-meta">
+                  {{ file.size | fileSize }}
+                </oc-td>
+                <oc-td width="shrink" class="oc-pr-rm uk-preserve-width">
                   <oc-icon
                     v-if="file.status === 'done'"
                     name="ready"
@@ -48,10 +48,10 @@
                     size="small"
                     :aria-label="$_ocUploadingFileMessage(file.name)"
                   />
-                </oc-table-cell>
-              </oc-table-row>
-            </oc-table-group>
-          </oc-table>
+                </oc-td>
+              </oc-tr>
+            </oc-tbody>
+          </oc-table-simple>
         </div>
         <div v-if="errorMessage" class="uk-text-center">
           <translate tag="h3">An error occurred while loading the public link</translate>
