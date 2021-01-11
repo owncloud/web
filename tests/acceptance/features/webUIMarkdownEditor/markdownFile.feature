@@ -13,34 +13,29 @@ Feature: create markdown files
     When the user creates a markdown file with the name "simple_new.md" using the webUI
     Then the file "simple_new.md" should be displayed in the markdown editor webUI
     When the user closes the markdown editor using the webUI
-    Then file "simple_new.md" should be listed on the webUI
+    Then as "user1" file "simple_new.md" should exist
+    And file "simple_new.md" should be listed on the webUI
 
   Scenario: update a markdown file with new content
     Given the user has opened file "simple.md" in the markdown editor webUI
     When the user inputs the content "updated content" in the markdown editor webUI
     And the user saves the file in the markdown editor webUI
     And the user closes the markdown editor using the webUI
-    And the user opens file "simple.md" in the markdown editor webUI
-    Then the file "simple.md" should be displayed in the markdown editor webUI
-    Then the file should have content "updated content" in the markdown editor webUI
+    Then as "user1" the file "simple.md" should have the content "updated content"
 
   Scenario: append new content in a markdown file
     Given the user has opened file "simple.md" in the markdown editor webUI
     When the user appends the content " new content added" in the markdown editor webUI
     And the user saves the file in the markdown editor webUI
     And the user closes the markdown editor using the webUI
-    And the user opens file "simple.md" in the markdown editor webUI
-    Then the file "simple.md" should be displayed in the markdown editor webUI
-    Then the file should have content "simple markdown file new content added" in the markdown editor webUI
+    Then as "user1" the file "simple.md" should have the content "simple markdown file new content added"
 
   Scenario: close the markdown editor without saving the updated content
     Given the user has opened file "simple.md" in the markdown editor webUI
     When the user inputs the content "updated content" in the markdown editor webUI
     And the user closes the markdown editor using the webUI
-    And the user opens file "simple.md" in the markdown editor webUI
-    Then the file "simple.md" should be displayed in the markdown editor webUI
-    Then the file should have content "simple markdown file" in the markdown editor webUI
-    Then the file should not have content "updated content" in the markdown editor webUI
+    Then as "user1" the file "simple.md" should not have the content "updated content"
+    And as "user1" the file "simple.md" should have the content "simple markdown file"
 
   Scenario: preview content of the file
     When the user opens file "simple.md" in the markdown editor webUI
@@ -50,7 +45,7 @@ Feature: create markdown files
   Scenario: preview content of the file while editing
     Given the user has opened file "simple.md" in the markdown editor webUI
     When the user inputs the content "updating the file with new content" in the markdown editor webUI
-    And the preview panel should have the content "updating the file with new content" in the WebUI
+    Then the preview panel should have the content "updating the file with new content" in the WebUI
 
   Scenario: open text file in markdown editor
     When the user opens file "lorem.txt" in the markdown editor webUI
