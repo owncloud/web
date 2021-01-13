@@ -34,7 +34,6 @@ Feature: create markdown files
     Given the user has opened file "simple.md" in the markdown editor webUI
     When the user inputs the content "updated content" in the markdown editor webUI
     And the user closes the markdown editor using the webUI
-    Then as "user1" the file "simple.md" should not have the content "updated content"
     And as "user1" the file "simple.md" should have the content "simple markdown file"
 
   Scenario: preview content of the file

@@ -50,6 +50,7 @@ config = {
 					'webUISharingNotificationsToRoot',
 				],
 				'webUIFavorites': 'Favorites',
+				'webUIMarkdownEditor': 'MarkdownEditor',
 				'webUIFiles': 'Files',
 				'webUIMoveFilesFolders': 'Move',
 				'webUIResharing': 'Resharing',
@@ -276,6 +277,7 @@ config = {
 					'webUISharingNotificationsToRoot',
 				],
 				'webUIFavorites': 'OCISFavorites',
+				'webUIMarkdownEditor': 'OCISMarkdownEditor',
 				'webUIFiles': 'OCISFiles',
 				'webUISharingAutocompletion': 'OCISSharingAutocompletion',
 				'OCISSharingInternalGroups': [
