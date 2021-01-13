@@ -301,6 +301,10 @@ When('the user renames file/folder {string} to {string} using the webUI', functi
   return client.page.FilesPageElement.filesList().renameFile(fromName, toName)
 })
 
+Given('the user has renamed file/folder {string} to {string}', function(fromName, toName) {
+  return client.page.FilesPageElement.filesList().renameFile(fromName, toName)
+})
+
 When('the user tries to rename file/folder {string} to {string} using the webUI', function(
   fromName,
   toName

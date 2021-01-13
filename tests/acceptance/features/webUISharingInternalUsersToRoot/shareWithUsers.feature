@@ -494,3 +494,10 @@ Feature: Sharing files and folders with internal users
     And user "user1" has shared file "testavatar.jpg" with user "user2"
     When user "user2" logs in using the webUI
     Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
+
+  Scenario: sharing file after renaming it is possible
+    Given user "user1" has logged in using the webUI
+    And user "user1" has uploaded file with content "test" to "lorem.txt"
+    And the user has renamed file "lorem.txt" to "new-lorem.txt"
+    When the user shares resource "new-lorem.txt" with user "User Two" using the quick action in the webUI
+    Then user "User Two" should be listed as "Viewer" in the collaborators list for file "new-lorem.txt" on the webUI
