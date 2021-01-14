@@ -19,6 +19,34 @@ function fileExists(userId, element) {
   const davPath = webdavHelper.createDavPath(userId, element)
   return httpHelper.propfind(davPath, userId)
 }
+/**
+ * request a single file
+ * @param {string} userId - username
+ * @param {string} element - path
+ * @returns {Promise<Response|Error>}
+ */
+function getFile(userId, element) {
+  const davPath = webdavHelper.createDavPath(userId, element)
+  return httpHelper.get(davPath, userId)
+}
+
+const fileShouldHaveContent = async function(userId, file, content) {
+  const textContent = await getFile(userId, file).then(res => res.text())
+  return assert.strictEqual(
+    textContent,
+    content,
+    `File should have content "${content}", but found "${textContent}"`
+  )
+}
+
+const fileShouldNotHaveContent = async function(userId, file, content) {
+  const textContent = await getFile(userId, file).then(res => res.text())
+  return assert.notStrictEqual(
+    textContent,
+    content,
+    `File should not have content "${content}", but found`
+  )
+}
 
 const fileShouldExist = function(userId, element) {
   return fileExists(userId, element).then(function(res) {
@@ -149,3 +177,19 @@ Then(
     })
   }
 )
+
+Then('as {string} the file {string} should have the content {string}', function(
+  user,
+  file,
+  content
+) {
+  return fileShouldHaveContent(user, file, content)
+})
+
+Then('as {string} the file {string} should not have the content {string}', function(
+  user,
+  file,
+  content
+) {
+  return fileShouldNotHaveContent(user, file, content)
+})

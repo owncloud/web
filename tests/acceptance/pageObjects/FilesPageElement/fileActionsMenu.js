@@ -13,7 +13,8 @@ module.exports = {
       rename: 'rename',
       move: 'move',
       copy: 'copy',
-      mediaViewer: 'mediaViewer'
+      mediaViewer: 'mediaViewer',
+      markdownEditor: 'markdownEditor'
     }),
 
     /**
@@ -151,6 +152,12 @@ module.exports = {
      */
     mediaViewer: function() {
       this.performFileAction(this.FileAction.mediaViewer)
+    },
+    /**
+     * Open a resource in the markdown editor via its file action
+     */
+    markdownEditor: function() {
+      this.performFileAction(this.FileAction.markdownEditor)
     }
   },
   elements: {
@@ -205,6 +212,10 @@ module.exports = {
     },
     mediaViewerButtonInAccordion: {
       selector: '//button[@aria-label="Open in Mediaviewer"]',
+      locateStrategy: 'xpath'
+    },
+    markdownEditorButtonInAccordion: {
+      selector: '//button[@aria-label="Open in MarkdownEditor"]',
       locateStrategy: 'xpath'
     }
   }

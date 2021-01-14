@@ -313,7 +313,7 @@ module.exports = {
         .waitForElementVisible('@dialog')
         .waitForAnimationToFinish()
 
-      if (!name) {
+      if (name !== null) {
         await this.clearValueWithEvent('@dialogInput')
         await this.setValue('@dialogInput', name)
       }
