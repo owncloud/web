@@ -25,7 +25,7 @@ const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
 const BROWSER_NAME = process.env.BROWSER_NAME
 const SAUCELABS_TUNNEL_NAME = process.env.SAUCELABS_TUNNEL_NAME
 const LOCAL_UPLOAD_DIR = process.env.LOCAL_UPLOAD_DIR || '/uploads'
-const OCIS_REVA_DATA_ROOT = process.env.OCIS_REVA_DATA_ROOT || '/var/tmp/ocis/owncloud'
+const OCIS_REVA_DATA_ROOT = process.env.OCIS_REVA_DATA_ROOT || '/var/tmp/ocis/storage/owncloud'
 const LDAP_SERVER_URL = process.env.LDAP_SERVER_URL || 'ldap://127.0.0.1'
 const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
 const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
@@ -41,7 +41,7 @@ function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
   return path.join(process.cwd(), basePath, imagePath)
 }
 
-module.exports = {
+const config = {
   page_objects_path: './tests/acceptance/pageObjects',
   custom_commands_path: [
     './tests/acceptance/customCommands',
@@ -80,7 +80,7 @@ module.exports = {
           baseline_suffix: '',
           diff_screenshots_path: 'tests/vrt/diff',
           diff_suffix: '',
-          threshold: 0.025,
+          threshold: 0.005,
           prompt: false,
           always_save_diff_screenshot: UPDATE_VRT_SCREENSHOTS
         }
@@ -138,3 +138,9 @@ module.exports = {
     }
   }
 }
+
+if (VISUAL_TEST) {
+  process.env.SCREEN_RESOLUTION = '1280x1024'
+}
+
+module.exports = config
