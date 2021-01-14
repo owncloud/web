@@ -90,7 +90,7 @@ config = {
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
 				'WEB_UI_CONFIG': '/srv/config/drone/config.json',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.txt'
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.md'
 			}
 		},
 		'webUIFederation': {
@@ -101,7 +101,7 @@ config = {
 			'extraEnvironment': {
 				'OPENID_LOGIN': 'true',
 				'REMOTE_BACKEND_HOST': 'http://federated',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.txt'
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.md'
 			},
 			'federatedServerNeeded': True,
 			'federatedServerVersion': 'daily-master-qa'
@@ -325,7 +325,7 @@ config = {
 				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
 				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/ocis/owncloud/data/',
 				'WEB_UI_CONFIG': '/srv/config/drone/ocis-config.json',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-ocis-server-owncloud-storage.txt'
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-ocis-server-owncloud-storage.md'
 			},
 			'runningOnOCIS': True,
 			'filterTags': 'not @skip and not @skipOnOCIS and not @notToImplementOnOCIS',
