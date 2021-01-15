@@ -596,6 +596,18 @@ Then(
   }
 )
 
+Then(
+  'file/folder/resource {string} should not be listed in the folder {string} on the webUI',
+  async function(file, target) {
+    await client.page.filesPage().navigateAndWaitTillLoaded(target)
+    return client.page.FilesPageElement.filesList()
+      .isElementListed(file, 'file', client.globals.waitForNegativeConditionTimeout)
+      .then(state => {
+        return client.assert.ok(!state, `Error: Folder '${file}' is listed on the '${target}'`)
+      })
+  }
+)
+
 /**
  * currently this only works with the files page, on other pages the user cannot navigate into subfolders
  *
@@ -1152,6 +1164,13 @@ When('the user tries to move file/folder {string} into folder {string} using the
   return client.page.FilesPageElement.filesList().attemptToMoveResource(resource, target)
 })
 
+When(
+  'the user cancels the attempt to move/copy file/folder into folder {string} using the webUI',
+  function(target) {
+    return client.page.FilesPageElement.filesList().cancelResourceMoveOrCopyProgress(target)
+  }
+)
+
 Then('it should not be possible to copy/move into folder {string} using the webUI', function(
   target
 ) {
@@ -1166,6 +1185,17 @@ When(
     }
 
     return client.page.filesPage().moveMultipleResources(target)
+  }
+)
+
+When(
+  'the user tries to batch move these files/folders into folder {string} using the webUI',
+  async function(target, resources) {
+    for (const item of resources.rows()) {
+      await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
+    }
+
+    return client.page.filesPage().attemptToMoveMultipleResources(target)
   }
 )
 
@@ -1191,6 +1221,17 @@ When(
     }
 
     return client.page.filesPage().copyMultipleResources(target)
+  }
+)
+
+When(
+  'the user tries to batch copy these files/folders into folder {string} using the webUI',
+  async function(target, resources) {
+    for (const item of resources.rows()) {
+      await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
+    }
+
+    return client.page.filesPage().attemptToCopyMultipleResources(target)
   }
 )
 

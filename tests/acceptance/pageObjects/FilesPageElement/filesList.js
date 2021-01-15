@@ -723,6 +723,18 @@ module.exports = {
       return this
     },
 
+    cancelResourceMoveOrCopyProgress: async function(target) {
+      await this.waitForFileVisible(target)
+
+      // cancel copy or move
+      await this.useXpath()
+        .waitForElementVisible(client.page.filesPage().elements.cancelMoveCopyBtn.selector)
+        .click(this.page.filesPage().elements.cancelMoveCopyBtn.selector)
+        .useCss()
+
+      return this
+    },
+
     navigationNotAllowed: async function(target) {
       await this.waitForFileVisible(target)
       await this.initAjaxCounters()

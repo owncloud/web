@@ -90,3 +90,31 @@ Feature: move files
     And user "user1" has logged in using the webUI
     When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to move into folder "simple-folder (2)" using the webUI
+
+  Scenario: cancel moving a file
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user tries to move file "data.zip" into folder "simple-empty-folder" using the webUI
+    And the user cancels the attempt to move file into folder "simple-empty-folder" using the webUI
+    Then file "data.zip" should be listed on the webUI
+    But  file "data.zip" should not be listed in the folder "simple-empty-folder" on the webUI
+
+  Scenario: cancel moving of multiple files at once
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user tries to batch move these files into folder "simple-empty-folder" using the webUI
+      | file_name   |
+      | data.zip    |
+      | lorem.txt   |
+      | testapp.zip |
+    And the user cancels the attempt to move file into folder "simple-empty-folder" using the webUI
+    Then the following files should be listed on the webUI
+      | file_name   |
+      | data.zip    |
+      | lorem.txt   |
+      | testapp.zip |
+    But these resources should not be listed in the folder "simple-empty-folder" on the webUI
+      | file_name   |
+      | data.zip    |
+      | lorem.txt   |
+      | testapp.zip |

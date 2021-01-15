@@ -97,3 +97,31 @@ Feature: copy files and folders
     And folder "simple-empty-folder" should be listed on the webUI
     And as "user1" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist
     And as "user1" folder "simple-empty-folder" should exist
+
+  Scenario: cancel copying a file
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user tries to copy folder "data.zip" into folder "simple-empty-folder" using the webUI
+    And the user cancels the attempt to copy file into folder "simple-empty-folder" using the webUI
+    Then file "data.zip" should be listed on the webUI
+    But  file "data.zip" should not be listed in the folder "simple-empty-folder" on the webUI
+
+  Scenario: cancel copying of multiple files at once
+    Given user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    When the user tries to batch copy these files into folder "simple-empty-folder" using the webUI
+      | file_name   |
+      | data.zip    |
+      | lorem.txt   |
+      | testapp.zip |
+    And the user cancels the attempt to copy file into folder "simple-empty-folder" using the webUI
+    Then the following files should be listed on the webUI
+      | file_name   |
+      | data.zip    |
+      | lorem.txt   |
+      | testapp.zip |
+    But these resources should not be listed in the folder "simple-empty-folder" on the webUI
+      | file_name   |
+      | data.zip    |
+      | lorem.txt   |
+      | testapp.zip |
