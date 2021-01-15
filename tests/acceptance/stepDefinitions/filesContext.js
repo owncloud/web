@@ -603,10 +603,7 @@ Then(
     return client.page.FilesPageElement.filesList()
       .isElementListed(file, 'file', client.globals.waitForNegativeConditionTimeout)
       .then(state => {
-        const message = state
-          ? `Error: Folder '${file}' is listed on the '${target}'`
-          : `File '${file}' is not listed on the '${target}'`
-        return client.assert.ok(!state, message)
+        return client.assert.ok(!state, `Error: Folder '${file}' is listed on the '${target}'`)
       })
   }
 )
