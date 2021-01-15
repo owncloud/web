@@ -96,7 +96,10 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
       continue
     fi
 
-    if [[ "${LINE}" =~ -\ \[(.*?)] ]]; then
+    # Match lines that have [someSuite/someName.feature:n] - the part inside the
+    # brackets is the suite, feature and line number of the expected failure.
+    # Else ignore the line.
+    if [[ "${LINE}" =~ \[(\S+\/\S+\.feature:\d+)] ]]; then
       LINE="${BASH_REMATCH[1]}"
     else
       continue
