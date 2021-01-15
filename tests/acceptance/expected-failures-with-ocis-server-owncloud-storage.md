@@ -1,5 +1,7 @@
 ## Scenarios from web tests that are expected to fail on OCIS with owncloud storage
 
+This is where we can put some free text that documents this file.
+It should make no difference to the processing in CI.
 
 ### [Media Viewer does not support mp3 files](https://github.com/owncloud/ocisissues/1106)
 - [webUIPreview/imageMediaViewer.feature:81](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L81)
@@ -11,6 +13,7 @@
 
 ### [User request using token and basic authentication gives different display names](https://github.com/owncloud/ocis-reva/issues/107)
 - [webUIAccount/accountInformation.feature:10](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L10)
+- [webUIAccount/accountInformation.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L10)
 
 ### [LDAP Groups not working with konnectd](https://github.com/owncloud/ocis-konnectd/issues/42)
 - [webUIAccount/accountInformation.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L20)
@@ -20,6 +23,9 @@
 - [webUIAccount/accountInformation.feature:34](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L34)
 
 ### [REPORT request not implemented](https://github.com/owncloud/ocis-reva/issues/39)
+
+If we want, we can write free text in the middle of the file, like this.
+
 - [webUIDeleteFilesFolders/deleteFilesFolders.feature:253](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L253)
 - [webUIFavorites/favoritesFile.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L14)
 - [webUIFavorites/favoritesFile.feature:27](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L27)
@@ -37,7 +43,6 @@
 - [webUIFavorites/unfavoriteFile.feature:73](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L73)
 - [webUIFavorites/unfavoriteFile.feature:85](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/unfavoriteFile.feature#L85)
 - [webUIFiles/fileDetails.feature:35](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/fileDetails.feature#L35)
-- [webUIFiles/fileDetails.feature:46](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/fileDetails.feature#L46)
 
 ### [Sharing seems to work but does not work](https://github.com/owncloud/ocis-reva/issues/243)
 - [webUIDeleteFilesFolders/deleteFilesFolders.feature:202](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L202)
