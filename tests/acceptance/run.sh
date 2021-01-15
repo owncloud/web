@@ -82,7 +82,7 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
   # Check that every failed scenario is in the list of expected failures
   # Loop through the keys of the FAILED_SCENARIO_PATHS array (! does that)
   for FAILED_SCENARIO_PATH in "${!FAILED_SCENARIO_PATHS[@]}"; do
-    grep -x "${FAILED_SCENARIO_PATH}" "${EXPECTED_FAILURES_FILE}" >/dev/null
+    grep "\[${FAILED_SCENARIO_PATH}\]" "${EXPECTED_FAILURES_FILE}" >/dev/null
     if [ $? -ne 0 ]; then
       echo "Error: Scenario ${FAILED_SCENARIO_PATH} failed but was not expected to fail."
       UNEXPECTED_FAILED_SCENARIOS+=("${FAILED_SCENARIO_PATH}")
@@ -96,6 +96,11 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
       continue
     fi
 
+    if [[ "${LINE}" =~ -\ \[(.*?)] ]]; then
+      LINE="${BASH_REMATCH[1]}"
+    else
+      continue
+    fi
     # This should be a suite name (string) like "webUILogin"
     EXPECTED_FAILURE_SUITE=$(dirname "${LINE}")
 
