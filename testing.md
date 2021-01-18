@@ -100,6 +100,27 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 5. Run `yarn run acceptance-tests-ocis <feature-files-to-test>`.
    The feature files are located in the "tests/acceptance/features" subdirectories.
 
+### Visual Regression Testing
+The test suite consists of snapshots of UI components which can be compared for visual regression testing when running the acceptance tests. These comparisions are done in the existing scenarios. You can check the existing snapshots of the components in the directory `/tests/vrt/baseline`.
+
+#### Running the visual regression tests
+When you run the acceptance tests as usual, all the visual regression comparisons are skipped. To run the acceptance test suite with the visual comparison enabled you need to set the env variable, `VISUAL_TEST` to `true`
+
+eg.
+```
+VISUAL_TEST=true SERVER_HOST=http://<server_host> BAKEND_HOST=http://<backend_host> yarn run acceptance-tests <feature-file-to-test>
+```
+
+#### Updating the snapshots
+If there is some change in the components and you want to update the snapshots of the components you can run the tests with `UPDATE_VRT_SCREENSHOTS` set to `true`. When this env variable is set, the testrunner will ignore if the visual comparision fails and updates the baseline images with the latest images if the comparision fails.
+
+eg.
+```
+VISUAL_TEST=true UPDATE_VRT_SCREENSHOTS=true SERVER_HOST=http://<server_host> BAKEND_HOST=http://<backend_host> yarn run acceptance-tests <feature-file-to-test>
+```
+
+**note** Visual regression testing may not be completely reliable every time as small changes such as window size and screen resolutin may affect the result. For better results it is recommended that you run the tests using the `selenium/standalone-chrome-debug` image of selenium and window size of `1280x1024`
+
 see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
 
 ## Available settings to be set by environment variables
@@ -122,6 +143,8 @@ These values can be set using the environment variables to configure `yarn run a
 | `OCIS_REVA_DATA_ROOT`       | Data directory of OCIS                                             | /var/tmp/reva |
 | `OCIS_SKELETON_DIR`       | Skeleton files directory for new users                                                           | - |
 | `WEB_UI_CONFIG`       | Path for the web config file (usually in the dist folder)                       | - |
+| `VISUAL_TEST`       | Run the visual regression comparision while running the acceptance tests                       | - |
+| `UPDATE_VRT_SCREENSHOTS`       | Update the baseline snapshots with the latest images for visual regression tests                       | - |
 
 ## Tips
 
