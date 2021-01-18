@@ -93,7 +93,6 @@ Feature: rename folders
       | a normal folder       |
       | another normal folder |
 
-
   @notToImplementOnOCIS
   # These are valid file names for ocis
   Scenario Outline: Rename a folder using forbidden characters
@@ -130,7 +129,6 @@ Feature: rename folders
   Scenario: Rename a folder to .
     When the user tries to rename folder "simple-folder" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
-
 
   @notToImplementOnOCIS
   # This is valid file name for ocis

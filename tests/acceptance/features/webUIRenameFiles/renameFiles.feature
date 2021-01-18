@@ -101,7 +101,6 @@ Feature: rename files
     Then file "loremz.dat" should be listed on the webUI
     Then file "loremy.tad" should be listed on the webUI
 
-
   @notToImplementOnOCIS
   # these are valid file names for ocis
   Scenario Outline: Rename a file using forbidden characters
@@ -165,7 +164,6 @@ Feature: rename files
     When the user tries to rename file "data.zip" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
-
 
   @notToImplementOnOCIS
   # This is valid file name for ocis
