@@ -93,7 +93,7 @@ Feature: rename folders
       | a normal folder       |
       | another normal folder |
 
-
+  @notToImplementOnOCIS
   # These are valid file names for ocis
   Scenario Outline: Rename a folder using forbidden characters
     When the user tries to rename folder <from_name> to <to_name> using the webUI
@@ -104,6 +104,16 @@ Feature: rename folders
       | "simple-folder" | "simple\folder"   | Error while renaming "simple-folder" to "simple\folder"   |
       | "simple-folder" | "\\simple-folder" | Error while renaming "simple-folder" to "\\simple-folder" |
       | "simple-folder" | ".htaccess"       | Error while renaming "simple-folder" to ".htaccess"       |
+
+  @skipOnOC10
+  Scenario Outline: Rename a folder using forbidden characters
+    When the user tries to rename folder <from_name> to <to_name> using the webUI
+    Then folder <to_name> should be listed on the webUI
+    Examples:
+      | from_name       | to_name           |
+      | "simple-folder" | "simple\folder"   |
+      | "simple-folder" | "\\simple-folder" |
+      | "simple-folder" | ".htaccess"       |
 
 
   Scenario: Rename a folder putting a name of a file which already exists
@@ -120,12 +130,16 @@ Feature: rename folders
     When the user tries to rename folder "simple-folder" to "." using the webUI
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
 
-
+  @notToImplementOnOCIS
   # This is valid file name for ocis
   Scenario: Rename a folder to .part
     When the user tries to rename folder "simple-folder" to "simple.part" using the webUI
     Then the error message with header 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
 
+  @skipOnOC10
+  Scenario: Rename a folder to .part
+    When the user tries to rename folder "simple-folder" to "simple.part" using the webUI
+    Then folder "simple.part" should be listed on the webUI
 
   Scenario: User tries to rename a folder that used to exist but does not anymore
     Given the user has browsed to the files page

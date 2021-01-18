@@ -101,7 +101,7 @@ Feature: rename files
     Then file "loremz.dat" should be listed on the webUI
     Then file "loremy.tad" should be listed on the webUI
 
-
+  @notToImplementOnOCIS
   # these are valid file names for ocis
   Scenario Outline: Rename a file using forbidden characters
     When the user tries to rename file "data.zip" to "<filename>" using the webUI
@@ -114,6 +114,16 @@ Feature: rename files
       | \\.txt    |
       | .htaccess |
 
+  @skipOnOC10
+  Scenario Outline: Rename a file using forbidden characters
+    When the user tries to rename file "data.zip" to "<filename>" using the webUI
+    Then file "data.zip" should not be listed on the webUI
+    And file "<filename>" should be listed on the webUI
+    Examples:
+      | filename  |
+      | lorem\txt |
+      | \\.txt    |
+      | .htaccess |
 
   Scenario Outline: Rename a file/folder using forward slash in its name
     When the user tries to rename file "<from_file_name>" to "<to_file_name>" using the webUI
@@ -155,11 +165,16 @@ Feature: rename files
     Then the error message 'The name cannot be equal to "."' should be displayed on the webUI dialog prompt
     And file 'data.zip' should be listed on the webUI
 
-
+  @notToImplementOnOCIS
   # This is valid file name for ocis
   Scenario: Rename a file to .part
     When the user tries to rename file "data.zip" to "data.part" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "data.part"' should be displayed on the webUI
+
+  @skipOnOC10
+  Scenario: Rename a file to .part
+    When the user tries to rename file "data.zip" to "data.part" using the webUI
+    Then file 'data.part' should be listed on the webUI
 
   @ocis-reva-issue-64
   Scenario: rename a file on a public share
