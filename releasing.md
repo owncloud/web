@@ -26,11 +26,12 @@ This repository contains the assets and these must be released first before bein
 1. Create a branch `release-$version` in <https://github.com/owncloud/web>.
 2. Create a folder in `changelog` for the release version and date `mkdir $major.$minor.$patchVersion_YYYY-MM-DD`.
 3. Move all changelog items from the `changelog/unreleased/` folder to the `$major.$minor.$patchVersion_YYYY-MM-DD` folder.
-4. Commit your changes.
-5. After merging, wait for the CI to run on the merge commit.
-6. Go to the [Releases section](https://github.com/owncloud/web/releases) and click "Draft a new Release".
-7. Use `v$major.$minor.$patch` as a tag (the `v` prefix is important) and publish it.
-8. The tag and the Release artifacts will be created automatically.
+4. Update the version in `appinfo/info.xml`
+5. Commit your changes.
+6. After merging, wait for the CI to run on the merge commit.
+7. Go to the [Releases section](https://github.com/owncloud/web/releases) and click "Draft a new Release".
+8. Use `v$major.$minor.$patch` as a tag (the `v` prefix is important) and publish it.
+9. The tag and the Release artifacts will be created automatically.
 
 #### Next steps
 
