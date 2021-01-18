@@ -25,7 +25,7 @@ const SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY
 const BROWSER_NAME = process.env.BROWSER_NAME
 const SAUCELABS_TUNNEL_NAME = process.env.SAUCELABS_TUNNEL_NAME
 const LOCAL_UPLOAD_DIR = process.env.LOCAL_UPLOAD_DIR || '/uploads'
-const OCIS_REVA_DATA_ROOT = process.env.OCIS_REVA_DATA_ROOT || '/var/tmp/ocis/owncloud'
+const OCIS_REVA_DATA_ROOT = process.env.OCIS_REVA_DATA_ROOT || '/var/tmp/ocis/storage/owncloud'
 const LDAP_SERVER_URL = process.env.LDAP_SERVER_URL || 'ldap://127.0.0.1'
 const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
 const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
@@ -34,9 +34,20 @@ const OPENID_LOGIN = RUN_ON_OCIS || !!process.env.OPENID_LOGIN
 const WEB_UI_CONFIG = process.env.WEB_UI_CONFIG || path.join(__dirname, 'dist/config.json')
 const SCREENSHOTS = !!process.env.SCREENSHOTS
 
-module.exports = {
+const VISUAL_TEST = !!process.env.VISUAL_TEST
+const UPDATE_VRT_SCREENSHOTS = !!process.env.UPDATE_VRT_SCREENSHOTS
+
+function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
+  return path.join(process.cwd(), basePath, imagePath)
+}
+
+const config = {
   page_objects_path: './tests/acceptance/pageObjects',
-  custom_commands_path: './tests/acceptance/customCommands',
+  custom_commands_path: [
+    './tests/acceptance/customCommands',
+    'node_modules/nightwatch-vrt/commands'
+  ],
+  custom_assertions_path: ['node_modules/nightwatch-vrt/assertions'],
   test_settings: {
     default: {
       launch_url: LOCAL_LAUNCH_URL,
@@ -59,7 +70,20 @@ module.exports = {
         ldap_base_dn: LDAP_BASE_DN,
         ocis_skeleton_dir: OCIS_SKELETON_DIR,
         ldap_password: LDAP_ADMIN_PASSWORD,
-        webUIConfig: WEB_UI_CONFIG
+        webUIConfig: WEB_UI_CONFIG,
+        visual_test: VISUAL_TEST,
+        visual_regression_settings: {
+          generate_screenshot_path: generateScreenshotFilePath,
+          latest_screenshots_path: 'tests/vrt/latest',
+          latest_suffix: '',
+          baseline_screenshots_path: 'tests/vrt/baseline',
+          baseline_suffix: '',
+          diff_screenshots_path: 'tests/vrt/diff',
+          diff_suffix: '',
+          threshold: 0.005,
+          prompt: false,
+          always_save_diff_screenshot: UPDATE_VRT_SCREENSHOTS
+        }
       },
       selenium_host: SELENIUM_HOST,
       desiredCapabilities: {
@@ -114,3 +138,9 @@ module.exports = {
     }
   }
 }
+
+if (VISUAL_TEST) {
+  process.env.SCREEN_RESOLUTION = '1280x1024'
+}
+
+module.exports = config

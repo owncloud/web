@@ -91,7 +91,8 @@ config = {
 				'OPENID_LOGIN': 'true',
 				'WEB_UI_CONFIG': '/srv/config/drone/config.json',
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.md'
-			}
+			},
+			'visualTesting': True,
 		},
 		'webUIFederation': {
 			'suites': {
@@ -328,6 +329,7 @@ config = {
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-ocis-server-owncloud-storage.md'
 			},
 			'runningOnOCIS': True,
+			'visualTesting': True,
 			'filterTags': 'not @skip and not @skipOnOCIS and not @notToImplementOnOCIS',
 		}
 	},
@@ -354,7 +356,7 @@ def beforePipelines(ctx):
 	return yarnlint() + changelog(ctx) + website(ctx)
 
 def stagePipelines(ctx):
-	acceptancePipelines = acceptance()
+	acceptancePipelines = acceptance(ctx)
 	if acceptancePipelines == False:
 		return unitTests()
 
@@ -565,7 +567,7 @@ def unitTests():
 		},
 	}]
 
-def acceptance():
+def acceptance(ctx):
 	pipelines = []
 
 	if 'acceptance' not in config:
@@ -589,6 +591,7 @@ def acceptance():
 		'federatedServerVersion': '',
 		'runningOnOCIS': False,
 		'screenShots': False,
+		'visualTesting': False,
 	}
 
 	if 'defaults' in config:
@@ -676,12 +679,19 @@ def acceptance():
 									)
 								) +
 								copyFilesForUpload() +
-								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser) +
+								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser, params['visualTesting']) +
+								(
+									listScreenShots() +
+									uploadVisualDiff() +
+									uploadVisualScreenShots() +
+									buildGithubCommentVisualDiff(ctx, suiteName, alternateSuiteName, params['runningOnOCIS'])
+								 if params['visualTesting'] else []) +
 								(
 									uploadScreenshots() +
-									buildGithubComment(suiteName, alternateSuiteName) +
+									buildGithubComment(ctx, suiteName, alternateSuiteName) +
 									githubComment()
-								if isLocalBrowser(browser) and params['screenShots'] else []),
+								if isLocalBrowser(browser) and params['screenShots'] else []) +
+								(githubComment() if (params['visualTesting'] or (isLocalBrowser(browser) and params['screenShots'])) else []),
 							'services':
 								( redisService() if params['runningOnOCIS'] else []) +
 								browserService(alternateSuiteName, browser) +
@@ -1583,7 +1593,7 @@ def copyFilesForUpload():
 		]
 	}]
 
-def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser):
+def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting):
 	environment = {}
 	if (filterTags != ''):
 		environment['TEST_TAGS'] = filterTags
@@ -1607,6 +1617,9 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 		environment['SAUCE_ACCESS_KEY'] = {
 			'from_secret': 'sauce_access_key'
 		}
+
+	if (visualTesting):
+		environment['VISUAL_TEST'] = 'true'
 
 	environment['SERVER_HOST'] = 'http://web:9100'
 	environment['BACKEND_HOST'] = 'http://owncloud'
@@ -1674,6 +1687,117 @@ def uploadScreenshots():
 		},
 	}]
 
+def listScreenShots():
+	return [{
+		'name': 'list screenshots-visual',
+		'image': 'owncloudci/nodejs:12',
+		'pull': 'always',
+		'commands': [
+			'ls -laR /var/www/owncloud/web/tests/vrt',
+		],
+		'when': {
+			'status': [
+				'failure'
+			],
+		}
+	}]
+
+def uploadVisualDiff():
+	return [{
+		'name': 'upload-diff-screenshots',
+		'image': 'plugins/s3',
+		'pull': 'if-not-exists',
+		'settings': {
+			'acl': 'public-read',
+			'bucket': 'phoenix',
+			'endpoint': 'https://minio.owncloud.com/',
+			'path_style': True,
+			'source': '/var/www/owncloud/web/tests/vrt/diff/**/*',
+			'strip_prefix': '/var/www/owncloud/web/tests/vrt',
+			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
+			'access_key': {
+				'from_secret': 'AWS_ACCESS_KEY_ID'
+			},
+			'secret_key': {
+				'from_secret': 'AWS_SECRET_ACCESS_KEY'
+			}
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
+	}]
+
+def uploadVisualScreenShots():
+	return [{
+		'name': 'upload-latest-screenshots',
+		'image': 'plugins/s3',
+		'pull': 'if-not-exists',
+		'settings': {
+			'acl': 'public-read',
+			'bucket': 'phoenix',
+			'endpoint': 'https://minio.owncloud.com/',
+			'path_style': True,
+			'source': '/var/www/owncloud/web/tests/vrt/latest/**/*',
+			'strip_prefix': '/var/www/owncloud/web/tests/vrt',
+			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
+			'access_key': {
+				'from_secret': 'AWS_ACCESS_KEY_ID'
+			},
+			'secret_key': {
+				'from_secret': 'AWS_SECRET_ACCESS_KEY'
+			}
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
+	}]
+
+def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
+	backend = 'ocis' if runningOnOCIS else 'oc10'
+	branch = ctx.build.source if ctx.build.event == 'pull_request' else 'master'
+	return [{
+		'name': 'build-github-comment-vrt',
+		'image': 'owncloud/ubuntu:16.04',
+		'pull': 'always',
+		'commands': [
+			'cd /var/www/owncloud/web/tests/vrt/diff',
+			'cd %s' % backend,
+			'ls -la',
+			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
+			'echo "Diff Image: </br>" >> /var/www/owncloud/web/comments.file',
+			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/diff/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % backend,
+			'cd ../../latest',
+			'cd %s' % backend,
+			'echo "Actual Image: </br>" >> /var/www/owncloud/web/comments.file',
+			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/latest/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % backend,
+			'echo "Comparing Against: </br>" >> /var/www/owncloud/web/comments.file',
+			'for f in *.png; do echo \'!\'"[$f](https://raw.githubusercontent.com/owncloud/web/%s/tests/vrt/baseline/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % (branch, backend),
+			'echo "\n</p></details>" >> /var/www/owncloud/web/comments.file',
+			'more /var/www/owncloud/web/comments.file',
+		],
+		'environment': {
+			'TEST_CONTEXT': suite,
+		},
+		'when': {
+			'status': [
+				'failure'
+			],
+			'event': [
+				'pull_request'
+			]
+		},
+	}]
+
 def buildGithubComment(suite, alternateSuiteName):
 	return [{
 		'name': 'build-github-comment',
@@ -1682,7 +1806,7 @@ def buildGithubComment(suite, alternateSuiteName):
 		'commands': [
 			'cd /var/www/owncloud/web/tests/reports/screenshots/',
 			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % alternateSuiteName,
-			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/web/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
+			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
 			'echo "\n</p></details>" >> comments.file',
 			'more comments.file',
 		],
@@ -1705,7 +1829,7 @@ def githubComment():
 		'image': 'jmccann/drone-github-comment:1',
 		'pull': 'if-not-exists',
 		'settings': {
-			'message_file': '/var/www/owncloud/web/tests/reports/screenshots/comments.file',
+			'message_file': '/var/www/owncloud/web/comments.file',
 		},
 		'environment': {
 			'PLUGIN_API_KEY': {

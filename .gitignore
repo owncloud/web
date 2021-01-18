@@ -37,3 +37,7 @@ tests/testing-app
 /webpack-build-log.json
 
 /coverage
+
+# visual regression testing artifacts
+/tests/vrt/diff
+/tests/vrt/latest
