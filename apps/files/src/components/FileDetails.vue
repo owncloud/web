@@ -202,7 +202,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .oc-star {
   &-shining svg {
     fill: #ffba0a;

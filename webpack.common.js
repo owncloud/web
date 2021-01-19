@@ -133,12 +133,23 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        exclude: [/node_modules/]
+        exclude: [/node_modules/],
+        options: {
+          loaders: {
+            scss: 'vue-style-loader!style-loader!css-loader!sass-loader'
+          }
+        }
       },
       {
         test: /\.(sa|sc|c)ss$/,
         include: [/node_modules/, /src/, /static/],
-        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader']
+        use: [
+          'vue-style-loader',
+          'style-loader',
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ]
       }
     ]
   }
