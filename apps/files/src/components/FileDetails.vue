@@ -19,11 +19,11 @@
           />
         </div>
         <div class="uk-flex uk-flex-middle">
-          <oc-star
+          <oc-icon
             v-if="!publicPage() && isFavoritesEnabled"
             id="files-sidebar-star-icon"
-            class="uk-inline oc-mr-xs"
-            :shining="highlightedFile.starred"
+            :class="['uk-inline', 'oc-mr-xs', favoriteIconClass]"
+            name="star"
             @click.native.stop="toggleFileFavorite(highlightedFile)"
           />
           <template v-if="highlightedFile.size > -1">
@@ -142,6 +142,10 @@ export default {
       }
 
       return null
+    },
+
+    favoriteIconClass() {
+      return this.highlightedFile.starred ? 'oc-star-shining' : 'oc-star-dimm'
     }
   },
 
@@ -197,3 +201,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.oc-star {
+  &-shining svg {
+    fill: #ffba0a;
+  }
+
+  &-dimm svg {
+    fill: rgba(4, 30, 66, 0.5);
+  }
+}
+</style>
