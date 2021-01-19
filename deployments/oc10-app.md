@@ -9,15 +9,19 @@ geekdocFilePath: oc10-app.md
 
 {{< toc >}}
 
-The ownCloud Web is being deployed as an app to [ownCloud marketplace](https://market.owncloud.com) to enable easy early integration into existing ownCloud 10 instances.
+The ownCloud Web is being deployed as an app to [ownCloud marketplace](https://marketplace.owncloud.com/) to enable easy early integration into existing ownCloud 10 instances.
 After completing this setup, ownCloud Web will be available on `https://<your-owncloud-server>/index.php/apps/web`.
 
 ## Prerequisites
 - Running [ownCloud 10 server](https://owncloud.com/download-server/) with version 10.6
 - Installed [oauth2 app](https://marketplace.owncloud.com/apps/oauth2)
+- Command line access to your server
 
 ## Deploying ownCloud Web
-Download [ownCloud Web app](https://marketplace.owncloud.com/apps/web) from the marketplace and enable it.
+Download the [ownCloud Web app](https://marketplace.owncloud.com/apps/web) from the marketplace and enable it:
+```console
+occ market:install web
+```
 
 ## Configure oauth2
 Within the `Admin` page of ownCloud 10, head into `User Authentication` and add a new client with arbitrary name (e.g. `ownCloud Web`) and redirection URL `https://<your-owncloud-server>/index.php/apps/web/oidc-callback.html`.
@@ -31,7 +35,7 @@ To display ownCloud Web in the app switcher and to redirect all private and publ
 'web.baseUrl' => 'https://<your-owncloud-server>/index.php/apps/web',
 ```
 ## Configure ownCloud Web
-There are a few config values which need to be set in order for ownCloud Web to work correctly. Please copy `config.json.dist` from the web app directory into `config/config.json` and adjust it according to the following example:
+There are a few config values which need to be set in order for ownCloud Web to work correctly. Please copy the example config below into `config/config.json` and adjust it for your environment:
 
 ```json
 {
