@@ -21,7 +21,6 @@ After completing this setup, ownCloud Web will be available on `https://<your-ow
 Download the [ownCloud Web app](https://marketplace.owncloud.com/apps/web) from the marketplace and enable it:
 ```console
 occ market:install web
-occ app:enable web
 ```
 
 ## Configure oauth2
