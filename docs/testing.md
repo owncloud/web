@@ -41,14 +41,14 @@ When running a standalone Selenium server, make sure to set the environment vari
 
 ### with ownCloud 10 backend
 
-- setup the [ownCloud 10 backend]({{< ref "backend-oc10.md" >}})
+- set up the [ownCloud 10 backend]({{< ref "backend-oc10.md" >}})
 - clone and install the [testing app](http://github.com/owncloud/testing) into ownCloud
 - [build Web]({{< ref "building.md" >}})
 - [start the Web server]({{< ref "backend-oc10.md#running-web" >}})
 - set `SERVER_HOST` to point at the URL where the Web web pages are served, for example "http://localhost:8300"
 - set `BACKEND_HOST` to point to the URL of the backend, for example "http://localhost/owncloud/"
 - to be able to run federation tests, additional setup is needed:
-   1. Install and setup a second ownCloud server-instance that is accessible by a different URL. That second server-instance must have its own database and data directory.
+   1. Install and set up a second ownCloud server-instance that is accessible by a different URL. That second server-instance must have its own database and data directory.
    2. clone and install the testing app into the second ownCloud server-instance from http://github.com/owncloud/testing .
    3. when running the acceptance tests use `REMOTE_BACKEND_HOST` environment variable to define its address, for example, `REMOTE_BACKEND_HOST=http://<ip_address_of_second_ownCloud_server-instance> yarn run acceptance-tests <feature-files-to-test>` .
 -set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
@@ -101,25 +101,25 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
    The feature files are located in the "tests/acceptance/features" subdirectories.
 
 ### Visual Regression Testing
-The test suite consists of snapshots of UI components which can be compared for visual regression testing when running the acceptance tests. These comparisions are done in the existing scenarios. You can check the existing snapshots of the components in the directory `/tests/vrt/baseline`.
+The test suite consists of snapshots of UI components which can be compared for visual regression testing when running the acceptance tests. These comparisons are done in the existing scenarios. You can check the existing snapshots of the components in the directory `/tests/vrt/baseline`.
 
 #### Running the visual regression tests
 When you run the acceptance tests as usual, all the visual regression comparisons are skipped. To run the acceptance test suite with the visual comparison enabled you need to set the env variable, `VISUAL_TEST` to `true`
 
 eg.
 ```
-VISUAL_TEST=true SERVER_HOST=http://<server_host> BAKEND_HOST=http://<backend_host> yarn run acceptance-tests <feature-file-to-test>
+VISUAL_TEST=true SERVER_HOST=http://<server_host> BACKEND_HOST=http://<backend_host> yarn run acceptance-tests <feature-file-to-test>
 ```
 
 #### Updating the snapshots
-If there is some change in the components and you want to update the snapshots of the components you can run the tests with `UPDATE_VRT_SCREENSHOTS` set to `true`. When this env variable is set, the testrunner will ignore if the visual comparision fails and updates the baseline images with the latest images if the comparision fails.
+If there is some change in the components, and you want to update the snapshots of the components you can run the tests with `UPDATE_VRT_SCREENSHOTS` set to `true`. When this env variable is set, the testrunner will ignore if the visual comparison fails and updates the baseline images with the latest images if the comparison fails.
 
 eg.
 ```
-VISUAL_TEST=true UPDATE_VRT_SCREENSHOTS=true SERVER_HOST=http://<server_host> BAKEND_HOST=http://<backend_host> yarn run acceptance-tests <feature-file-to-test>
+VISUAL_TEST=true UPDATE_VRT_SCREENSHOTS=true SERVER_HOST=http://<server_host> BACKEND_HOST=http://<backend_host> yarn run acceptance-tests <feature-file-to-test>
 ```
 
-**note** Visual regression testing may not be completely reliable every time as small changes such as window size and screen resolutin may affect the result. For better results it is recommended that you run the tests using the `selenium/standalone-chrome-debug` image of selenium and window size of `1280x1024`
+**note** Visual regression testing may not be completely reliable every time as small changes such as window size and screen resolution may affect the result. For better results it is recommended that you run the tests using the `selenium/standalone-chrome-debug` image of selenium and window size of `1280x1024`
 
 see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
 
@@ -143,7 +143,7 @@ These values can be set using the environment variables to configure `yarn run a
 | `OCIS_REVA_DATA_ROOT`       | Data directory of OCIS                                             | /var/tmp/reva |
 | `OCIS_SKELETON_DIR`       | Skeleton files directory for new users                                                           | - |
 | `WEB_UI_CONFIG`       | Path for the web config file (usually in the dist folder)                       | - |
-| `VISUAL_TEST`       | Run the visual regression comparision while running the acceptance tests                       | - |
+| `VISUAL_TEST`       | Run the visual regression comparison while running the acceptance tests                       | - |
 | `UPDATE_VRT_SCREENSHOTS`       | Update the baseline snapshots with the latest images for visual regression tests                       | - |
 
 ## Tips
