@@ -4,8 +4,8 @@ Feature: User can view files inside a folder
   So that I can work with files and folders inside it
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "user2" has been created with default attributes
+    And user "user2" has logged in using the webUI
 
   Scenario: Resources are listed
     When the user browses to the files page
@@ -26,7 +26,7 @@ Feature: User can view files inside a folder
 
   @issue-276 @issue-3264
   Scenario: Thumbnails are loaded for paths containing special characters
-    Given user "user1" has renamed folder "simple-folder" to "strängé folder name (duplicate #2 &)"
+    Given user "user2" has renamed folder "simple-folder" to "strängé folder name (duplicate #2 &)"
     When the user browses to the files page
     And the user opens folder "strängé folder name (duplicate #2 &)" directly on the webUI
     Then the file "strängé filename (duplicate #2 &).txt" should have a thumbnail displayed on the webUI
