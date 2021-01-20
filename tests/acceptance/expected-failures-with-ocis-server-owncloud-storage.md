@@ -18,7 +18,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [User request using token and basic authentication gives different display names](https://github.com/owncloud/ocis-reva/issues/107)
 -   [webUIAccount/accountInformation.feature:10](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L10)
--   [webUIAccount/accountInformation.feature:42](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L10)
 -   [webUIAccount/accountInformation.feature:34](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L34)
 
 ### [LDAP Groups not working with konnectd](https://github.com/owncloud/ocis-konnectd/issues/42)
@@ -204,7 +203,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIRenameFiles/renameFiles.feature:124](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L124)
 -   [webUIRenameFiles/renameFiles.feature:125](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L125)
 -   [webUIRenameFiles/renameFiles.feature:126](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L126)
--   [webUIRenameFiles/renameFiles.feature:175](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L175)
 
 ### [renameFolders](https://github.com/owncloud/ocis/issues/1216)
 -   [webUIRenameFolders/renameFolders.feature:114](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFolders/renameFolders.feature#L114)
