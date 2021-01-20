@@ -55,8 +55,9 @@ Feature: Share by public link with different roles
 
   @issue-ocis-reva-383
   Scenario: sharing by public link with "Uploader" role
-    Given user "user1" has logged in using the webUI
-    When the user creates a folder with the name "shared-folder" using the webUI
+    Given user "user1" has created folder "shared-folder"
+    And user "user1" has created file "shared-folder/fileInside"
+    And user "user1" has logged in using the webUI
     And the user creates a new public link for folder "shared-folder" using the webUI with
       | role | Uploader |
     Then user "user1" should have a share with these details:
