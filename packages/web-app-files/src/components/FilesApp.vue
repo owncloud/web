@@ -7,7 +7,7 @@
       :class="{ 'uk-visible@m': _sidebarOpen }"
       @dragover="$_ocApp_dragOver"
     >
-      <files-app-bar />
+      <app-bar />
       <upload-progress v-show="$_uploadProgressVisible" class="oc-p-s uk-background-muted" />
       <trash-bin
         v-if="isTrashbinRoute"
@@ -28,7 +28,7 @@
         @sideBarOpen="openSideBar"
       />
     </div>
-    <file-details
+    <sidebar
       v-if="_sidebarOpen"
       class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl uk-height-1-1"
       @reset="setHighlightedFile(null)"
@@ -39,8 +39,8 @@
 import Mixins from '../mixins'
 import MixinRoutes from '../mixins/routes'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import FileDetails from './FileDetails.vue'
-import FilesAppBar from './FilesAppBar.vue'
+import Sidebar from './Sidebar.vue'
+import AppBar from './AppBar.vue'
 import AllFilesList from './AllFilesList.vue'
 import TrashBin from './Trashbin.vue'
 import SharedFilesList from './Collaborators/SharedFilesList.vue'
@@ -48,9 +48,9 @@ import UploadProgress from './UploadProgress.vue'
 
 export default {
   components: {
-    FileDetails,
+    Sidebar,
     AllFilesList,
-    FilesAppBar,
+    AppBar,
     TrashBin,
     SharedFilesList,
     UploadProgress

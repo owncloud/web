@@ -1,5 +1,5 @@
 <template>
-  <div id="files-app-bar" class="oc-app-bar">
+  <div id="files-app-bar" class="oc-m-s">
     <file-drop
       v-if="!isIE11() && canUpload && hasFreeSpace"
       :root-path="currentPath"

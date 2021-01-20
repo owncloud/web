@@ -5,10 +5,10 @@ import { getParentPaths } from '../helpers/path'
 
 export default {
   computed: {
-    ...mapGetters('Files', ['sharesTree']),
+    ...mapGetters('Files', ['sharesTree', 'currentFolder']),
 
     shareTypesIndirect() {
-      const parentPath = this.currentFolder.path
+      const parentPath = this.currentFolder?.path
       if (!parentPath) {
         return []
       }

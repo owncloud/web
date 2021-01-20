@@ -1,21 +1,20 @@
 <template>
-  <div class="uk-height-1-1">
+  <div>
     <skip-to target="main">Skip to main</skip-to>
-    <div id="Web" class="uk-height-1-1">
+    <div id="Web">
       <div
         v-if="user.isAuthenticated && !user.userReady"
         class="loading-overlay"
         :style="{
           backgroundImage: 'url(' + configuration.theme.loginPage.backgroundImg + ')'
         }"
-        uk-height-viewport
       >
         <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" class="uk-position-center" />
       </div>
       <template v-else-if="!showHeader">
         <router-view name="fullscreen" />
       </template>
-      <div v-else key="core-content" class="uk-height-1-1 uk-flex uk-flex-row uk-flex-row">
+      <div v-else key="core-content">
         <transition :name="appNavigationAnimation">
           <oc-sidebar
             v-if="isSidebarVisible"
@@ -49,7 +48,7 @@
           />
           <main id="main">
             <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-            <router-view id="oc-app-container" name="app" class="uk-height-1-1" />
+            <router-view id="oc-app-container" name="app" />
           </main>
         </div>
       </div>
@@ -350,18 +349,40 @@ export default {
 </script>
 <style>
 body {
-  height: 100vh;
-  overflow: hidden;
+  padding-left: 300px;
+  padding-top: 60px;
+}
+
+#oc-topbar {
+  position: fixed;
+  left: 300px;
+  top: 0;
+  width: calc(100% - 300px);
+  height: 60px;
+  z-index: 2;
+  background-color: white;
 }
 
 #main {
   position: relative;
 }
 
+.oc-app-navigation {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2;
+}
+
 .loading-overlay {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .loading-overlay .oc-spinner {
@@ -371,5 +392,9 @@ body {
 .loading-overlay .oc-spinner:after {
   border: 10px solid;
   border-bottom: 10px solid transparent;
+}
+
+.oc-table-sticky .oc-table-header-cell {
+  top: 60px !important;
 }
 </style>

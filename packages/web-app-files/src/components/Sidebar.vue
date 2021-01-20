@@ -2,13 +2,13 @@
   <oc-app-side-bar
     id="files-sidebar"
     :key="highlightedFile.id"
-    class="oc-p-s uk-overflow-auto uk-height-1-1 oc-border-l"
+    class="oc-p-s uk-overflow-auto oc-border-l"
     :disable-action="false"
     @close="close()"
   >
     <template v-if="highlightedFile" slot="title">
       <div class="uk-inline">
-        <oc-icon :name="fileTypeIcon(highlightedFile)" size="xlarge" />
+        <oc-icon :name="resourceIcon" size="xlarge" />
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
@@ -68,11 +68,11 @@
 import Mixins from '../mixins'
 import MixinRoutes from '../mixins/routes'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import { getFileExtension, getFileIcon } from '../helpers/resources'
 
 import ActionsAccordion from './Sidebar/ActionsAccordion.vue'
 
 export default {
-  name: 'FileDetails',
   components: {
     ActionsAccordion
   },
