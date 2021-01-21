@@ -80,7 +80,7 @@ const config = {
           baseline_suffix: '',
           diff_screenshots_path: 'tests/vrt/diff',
           diff_suffix: '',
-          threshold: 0.005,
+          threshold: 0.002,
           prompt: false,
           always_save_diff_screenshot: UPDATE_VRT_SCREENSHOTS
         }
