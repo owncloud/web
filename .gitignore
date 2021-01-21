@@ -41,3 +41,6 @@ tests/testing-app
 # visual regression testing artifacts
 /tests/vrt/diff
 /tests/vrt/latest
+
+# drone CI is in .drone.star, do not let someone accidentally commit a local .drone.yml
+.drone.yml
