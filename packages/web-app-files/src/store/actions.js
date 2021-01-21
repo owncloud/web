@@ -1087,8 +1087,8 @@ export default {
     commit('CLEAR_RESOURCES_TO_DELETE_LIST')
   },
 
-  loadIndicators({ dispatch, commit }, { client, currentFolder }) {
-    dispatch('loadSharesTree', { client, path: currentFolder })
+  async loadIndicators({ dispatch, commit }, { client, currentFolder }) {
+    await dispatch('loadSharesTree', { client, path: currentFolder })
     commit('LOAD_INDICATORS')
   }
 }
