@@ -103,7 +103,6 @@ import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 import { basename, join } from 'path'
 import { cloneStateObject } from '../../helpers/store'
 import MixinsGeneral from '../../mixins'
-import MixinsFilesListIndicators from '../../mixins/filesListIndicators'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
 import FileList from '../FileList.vue'
 import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
@@ -119,7 +118,7 @@ export default {
     NoContentMessage
   },
 
-  mixins: [MixinsGeneral, MixinsFilesListIndicators],
+  mixins: [MixinsGeneral],
 
   data: () => ({
     originalLocation: ''

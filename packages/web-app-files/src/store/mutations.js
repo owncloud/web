@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import pickBy from 'lodash-es/pickBy'
 import moment from 'moment'
+import { attatchIndicators } from '../helpers/resources'
 
 /**
  * @param {Array.<Object>} shares array of shares
@@ -298,5 +299,9 @@ export default {
       expireDate
     }
     state.appSidebarAccordionContext = 'editPublicLink'
+  },
+
+  LOAD_INDICATORS(state) {
+    state.files.forEach(resource => attatchIndicators(resource, state.sharesTree))
   }
 }

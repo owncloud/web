@@ -19,10 +19,11 @@ const isDirectUserShare = resource => {
   return intersection(userShareTypes, $shareTypes(resource)).length > 0
 }
 
-const isIndirectUserShare = resource => {
+const isIndirectUserShare = (resource, sharesTree) => {
+  console.log(shareTypesIndirect(resource.path, sharesTree))
   return (
     resource.isReceivedShare() ||
-    intersection(userShareTypes, shareTypesIndirect(resource.path)).length > 0
+    intersection(userShareTypes, shareTypesIndirect(resource.path, sharesTree)).length > 0
   )
 }
 
@@ -30,16 +31,16 @@ const isDirectLinkShare = resource => {
   return $shareTypes(resource).indexOf(shareTypes.link) >= 0
 }
 
-const isIndirectLinkShare = resource => {
-  return shareTypesIndirect(resource.path).indexOf(shareTypes.link) >= 0
+const isIndirectLinkShare = (resource, sharesTree) => {
+  return shareTypesIndirect(resource.path, sharesTree).indexOf(shareTypes.link) >= 0
 }
 
-const isUserShare = resource => {
-  return isDirectUserShare(resource) || isIndirectUserShare(resource)
+const isUserShare = (resource, sharesTree) => {
+  return isDirectUserShare(resource) || isIndirectUserShare(resource, sharesTree)
 }
 
-const isLinkShare = resource => {
-  return isDirectLinkShare(resource) || isIndirectLinkShare(resource)
+const isLinkShare = (resource, sharesTree) => {
+  return isDirectLinkShare(resource) || isIndirectLinkShare(resource, sharesTree)
 }
 
 const shareUserIconLabel = resource => {
@@ -54,19 +55,19 @@ const shareLinkIconLabel = resource => {
     : $gettext('Shared with links through one of the parent folders')
 }
 
-const shareTypesIndirect = path => {
-  const parentPath = getParentPaths(path)
+const shareTypesIndirect = (path, sharesTree) => {
+  const parentPaths = getParentPaths(path, true)
 
-  if (parentPath.length === 0) {
+  if (parentPaths.length === 0) {
     return []
   }
 
   // remove root entry
-  parentPath.pop()
+  parentPaths.pop()
 
   const shareTypes = {}
 
-  parentPath.forEach(parentPath => {
+  parentPaths.forEach(parentPath => {
     // TODO: optimize for performance by skipping once we got all known types
     const shares = sharesTree[parentPath]
 
@@ -82,19 +83,20 @@ const shareTypesIndirect = path => {
   return Object.keys(shareTypes).map(shareType => parseInt(shareType, 10))
 }
 
-export const getIndicators = resource => {
+// TODO: Think of a different way how to access sharesTree
+export const getIndicators = (resource, sharesTree) => {
   const indicators = [
     {
       id: 'files-sharing',
-      label: shareUserIconLabel(resource),
-      visible: isUserShare(resource),
+      label: shareUserIconLabel(resource, sharesTree),
+      visible: isUserShare(resource, sharesTree),
       icon: 'group',
       handler: () => {}
     },
     {
       id: 'file-link',
-      label: shareLinkIconLabel(resource),
-      visible: isLinkShare(resource),
+      label: shareLinkIconLabel(resource, sharesTree),
+      visible: isLinkShare(resource, sharesTree),
       icon: 'link',
       handler: () => {}
     }

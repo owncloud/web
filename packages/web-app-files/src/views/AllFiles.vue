@@ -43,7 +43,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadFiles']),
+    ...mapActions('Files', ['setHighlightedFile', 'loadFiles', 'loadIndicators']),
 
     async loadResources() {
       const resources = await this.$client.files.list(
@@ -53,6 +53,7 @@ export default {
       )
 
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
+      this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item })
     },
 
     highlightResource(resource) {

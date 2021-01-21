@@ -105,10 +105,9 @@ export function buildResource(resource) {
     }
   }
 
-  // Do not build indicators for root folder
-  if (builtResource.path) {
-    builtResource.indicators = getIndicators(builtResource)
-  }
-
   return builtResource
+}
+
+export function attatchIndicators(resource, sharesTree) {
+  return (resource.indicators = getIndicators(resource, sharesTree))
 }

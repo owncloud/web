@@ -11,4 +11,8 @@ const config = {
 translate.initTranslations(translations, config)
 
 // easygettext aliases
-export const { gettext: $gettext, ngettext: $ngettext } = translate
+export const {
+  gettext: $gettext,
+  ngettext: $ngettext,
+  gettextInterpolate: $gettextInterpolate
+} = translate

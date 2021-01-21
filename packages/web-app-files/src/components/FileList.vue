@@ -137,7 +137,6 @@
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import MixinFilesListIndicators from '../mixins/filesListIndicators'
 import MixinFileActions from '../mixins/fileActions'
 import MixinRoutes from '../mixins/routes'
 import FileItem from './FileItem.vue'
@@ -150,7 +149,7 @@ export default {
     RecycleScroller,
     FileItem
   },
-  mixins: [MixinFilesListIndicators, MixinFileActions, MixinRoutes],
+  mixins: [MixinFileActions, MixinRoutes],
   props: {
     id: {
       type: String,
