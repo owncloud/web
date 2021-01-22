@@ -136,7 +136,7 @@
           </oc-grid>
         </div>
       </oc-td>
-      <oc-td width="shrink">
+      <oc-td width="shrink" align-v="top">
         <div class="uk-flex uk-flex-nowrap uk-flex-middle">
           <oc-button
             v-if="$_editButtonVisible"
