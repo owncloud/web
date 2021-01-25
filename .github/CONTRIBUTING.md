@@ -42,7 +42,7 @@ It is a must have that changed and added code segments are unit tested.
 In some areas unit testing is hard (aka almost impossible) as of today - in these areas refactoring WHILE fixing a bug is encouraged to enable unit testing.
 
 [agreement]: https://owncloud.org/about/contributor-agreement/
-[devmanual]: https://owncloud.org/dev
+[devmanual]: https://owncloud.com/docs-guides/
 
 ## Translations
 Please submit translations via [Transifex][transifex].
