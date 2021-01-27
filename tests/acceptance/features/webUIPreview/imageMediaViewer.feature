@@ -118,3 +118,39 @@ Scenario Outline: preview of image files with media viewer is possible
       | path | simple-empty-folder |
     When the public uses the webUI to access the last public link created by user "user1"
     Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
+
+  @issue-ocis-1490
+  Scenario: preview of image in file list view for .jpeg format file
+    Given user "user1" has uploaded file "testavatar.jpeg" to "testavatar.jpeg"
+    And user "user1" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "testavatar.jpeg" should be displayed in the file list view on the webUI
+    When the user views the file "testavatar.jpeg" in the media viewer using the webUI
+    Then the file "testavatar.jpeg" should be displayed in the media viewer webUI
+
+
+  Scenario: preview of image in file list view for .ogg format file
+    Given user "user1" has uploaded file "sampleOgg.ogg" to "sampleOgg.ogg"
+    And user "user1" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "sampleOgg.ogg" should be displayed in the file list view on the webUI
+    When the user views the file "sampleOgg.ogg" in the media viewer using the webUI
+    Then the file "sampleOgg.ogg" should be displayed in the media viewer webUI
+
+  @issue-ocis-1490
+  Scenario: preview of image in file list view for .gif format file
+    Given user "user1" has uploaded file "sampleGif.gif" to "sampleGif.gif"
+    And user "user1" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "sampleGif.gif" should be displayed in the file list view on the webUI
+    When the user views the file "sampleGif.gif" in the media viewer using the webUI
+    Then the file "sampleGif.gif" should be displayed in the media viewer webUI
+
+
+  Scenario: preview of image in file list view for .webm format file
+    Given user "user1" has uploaded file "sampleWebm.webm" to "sampleWebm.webm"
+    And user "user1" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "sampleWebm.webm" should be displayed in the file list view on the webUI
+    When the user views the file "sampleWebm.webm" in the media viewer using the webUI
+    Then the file "sampleWebm.webm" should be displayed in the media viewer webUI

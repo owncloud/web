@@ -12,6 +12,11 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIPreview/imageMediaViewer.feature:81](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L81)
 -   [webUIPreview/imageMediaViewer.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L88)
 
+
+### [Media Viewer preview not visible for files with .jpeg and .gif formats](https://github.com/owncloud/ocis/issues/1490)
+-   [webUIPreview/imageMediaViewer.feature:123](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L123)
+-   [webUIPreview/imageMediaViewer.feature:141](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L141)
+
 ### [authentication dialog appears when user is deleted](https://github.com/owncloud/web/issues/4564)
 ### [login error page loops when logged in user is deleted](https://github.com/owncloud/ocis/issues/1129)
 -   [webUILogin/login.feature:62](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/login.feature#L62)
