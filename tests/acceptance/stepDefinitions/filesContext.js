@@ -1259,30 +1259,19 @@ Then('the search bar should be visible in the webUI', async function() {
 })
 
 Then(
-  'the preview image of file {string} should not be displayed in the file list view on the webUI',
-  async function(fileName) {
+  /^the preview image of file "([^"]*)" (should|should not) be displayed in the file list view on the webUI$/,
+  async function(fileName, shouldOrShouldnot) {
+    let expected = true
+    let message = 'Expected preview image to be displayed but is not displayed'
     const isPreviewDisplayed = await client.page.FilesPageElement.filesList().isPreviewImageDisplayed(
-      fileName
+      fileName,
+      shouldOrShouldnot
     )
-    assert.strictEqual(
-      isPreviewDisplayed,
-      false,
-      'Expected preview image to be not displayed but is displayed'
-    )
-  }
-)
-
-Then(
-  'the preview image of file {string} should be displayed in the file list view on the webUI',
-  async function(fileName) {
-    const isPreviewDisplayed = await client.page.FilesPageElement.filesList().isPreviewImageDisplayed(
-      fileName
-    )
-    assert.strictEqual(
-      isPreviewDisplayed,
-      true,
-      'Expected preview image to be displayed but is not displayed'
-    )
+    if (shouldOrShouldnot === 'should not') {
+      expected = false
+      message = 'Expected preview image to be not displayed but is displayed'
+    }
+    assert.strictEqual(isPreviewDisplayed, expected, message)
   }
 )
 

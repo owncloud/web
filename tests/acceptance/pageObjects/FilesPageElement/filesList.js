@@ -24,17 +24,20 @@ module.exports = {
      * @param {string} fileName
      * @return {Promise<*>}
      */
-    isPreviewImageDisplayed: async function(fileName) {
+    isPreviewImageDisplayed: async function(fileName, shouldOrShouldnot) {
       await this.waitForFileVisible(fileName)
-      const element = util.format(this.elements.previewImage.selector, fileName)
+      const element = util.format(this.elements.previewImageParentDiv.selector, fileName)
+      const imageSelector = util.format(this.elements.previewImage.selector, fileName)
       let previewStatus = ''
-      await this.useXpath()
-        .waitForElementVisible(element)
-        .getAttribute(
-          { selector: element, locateStrategy: this.elements.previewImage.locateStrategy },
-          'data-preview-loaded',
-          result => (previewStatus = result.value === 'true')
-        )
+      await this.useXpath().waitForElementVisible(element)
+      if (shouldOrShouldnot === 'should') {
+        await this.useXpath().waitForElementVisible(imageSelector)
+      }
+      await this.getAttribute(
+        { selector: element, locateStrategy: this.elements.previewImageParentDiv.locateStrategy },
+        'data-preview-loaded',
+        result => (previewStatus = result.value === 'true')
+      )
       return previewStatus
     },
     /**
@@ -907,8 +910,12 @@ module.exports = {
     filesListItem: {
       selector: '.vue-recycle-scroller__item-view'
     },
-    previewImage: {
+    previewImageParentDiv: {
       selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-file")]',
+      locateStrategy: 'xpath'
+    },
+    previewImage: {
+      selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-file")]/img',
       locateStrategy: 'xpath'
     }
   }
