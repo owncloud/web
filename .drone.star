@@ -667,9 +667,9 @@ def acceptance(ctx):
 										) +
 										setupGraphapiOIdC() +
 										buildGlauth() +
-										buildKonnectd() +
+										buildIdP() +
 										buildOcisWeb() +
-										konnectdService() +
+										idpService() +
 										ocisWebService() +
 										glauthService()+
 										fixPermissions()
@@ -1255,7 +1255,7 @@ def setupGraphapiOIdC():
 			'php occ a:e graphapi',
 			'php occ a:e openidconnect',
 			'php occ config:system:set trusted_domains 2 --value=web',
-			'php occ config:system:set openid-connect provider-url --value="https://konnectd:9130"',
+			'php occ config:system:set openid-connect provider-url --value="https://idp:9130"',
 			'php occ config:system:set openid-connect loginButtonName --value=OpenId-Connect',
 			'php occ config:system:set openid-connect client-id --value=web',
 			'php occ config:system:set openid-connect insecure --value=true --type=bool',
@@ -1269,7 +1269,7 @@ def setupGraphapiOIdC():
 def buildGlauth():
 	return[{
 		'name': 'build-glauth',
-		'image': 'webhippie/golang:1.13',
+		'image': 'webhippie/golang:1.15',
 		'pull': 'always',
 		'commands': [
       # using ocis-glauth repo because latest glauth doesn't supports the bridge setup
@@ -1295,7 +1295,7 @@ def buildGlauth():
 def glauthService():
 	return[{
 		'name': 'glauth',
-		'image': 'webhippie/golang:1.13',
+		'image': 'webhippie/golang:1.15',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
@@ -1315,16 +1315,16 @@ def glauthService():
 		}],
 	}]
 
-def buildKonnectd():
+def buildIdP():
 	return[{
-		'name': 'build-konnectd',
-		'image': 'webhippie/golang:1.13',
+		'name': 'build-idp',
+		'image': 'webhippie/golang:1.15',
 		'pull': 'always',
 		'commands': [
 			'cd $GOPATH/src/github.com/owncloud/ocis',
-			'cd konnectd',
+			'cd idp',
 			'make build',
-			'cp bin/konnectd /var/www/owncloud'
+			'cp bin/idp /var/www/owncloud'
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1335,19 +1335,19 @@ def buildKonnectd():
 		}],
 	}]
 
-def konnectdService():
+def idpService():
 	return[{
-		'name': 'konnectd',
-		'image': 'webhippie/golang:1.13',
+		'name': 'idp',
+		'image': 'webhippie/golang:1.15',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
 			'LDAP_BASEDN': 'dc=example,dc=com',
 			'LDAP_BINDDN': 'cn=admin,ou=users,dc=example,dc=com',
 			'LDAP_URI': 'ldap://glauth:9125',
-			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration-oc10.yml',
-			'KONNECTD_ISS': 'https://konnectd:9130',
-			'KONNECTD_TLS': 'true',
+			'IDP_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration-oc10.yml',
+			'IDP_ISS': 'https://idp:9130',
+			'IDP_TLS': 'true',
 			'LDAP_BINDPW': 'admin',
 			'LDAP_SCOPE': 'sub',
 			'LDAP_LOGIN_ATTRIBUTE': 'uid',
@@ -1359,7 +1359,7 @@ def konnectdService():
 		},
 		'commands': [
 			'cd /var/www/owncloud',
-			'./konnectd  --log-level debug server --signing-kid gen1-2020-02-27',
+			'./idp  --log-level debug server --signing-kid gen1-2020-02-27',
 		],
 		'volumes': [{
 			'name': 'gopath',
@@ -1373,7 +1373,7 @@ def konnectdService():
 def cloneOCIS():
 	return[{
 		'name': 'clone-ocis',
-		'image': 'webhippie/golang:1.13',
+		'image': 'webhippie/golang:1.15',
 		'pull': 'always',
 		'commands': [
 			'source .drone.env',
@@ -1395,7 +1395,7 @@ def cloneOCIS():
 def buildOCIS():
 	return[{
 		'name': 'build-ocis',
-		'image': 'webhippie/golang:1.13',
+		'image': 'webhippie/golang:1.15',
 		'pull': 'always',
 		'commands': [
 			'source .drone.env',
@@ -1417,7 +1417,7 @@ def buildOCIS():
 def ocisService():
 	return[{
 		'name': 'ocis',
-		'image': 'webhippie/golang:1.13',
+		'image': 'webhippie/golang:1.15',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
@@ -1434,8 +1434,8 @@ def ocisService():
 			'STORAGE_USERS_DATA_SERVER_URL': 'http://ocis:9158/data',
 			'WEB_UI_CONFIG': '/srv/config/drone/ocis-config.json',
 			'WEB_ASSET_PATH': '/var/www/owncloud/web/dist',
-			'KONNECTD_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
-			'KONNECTD_TLS': 'true',
+			'IDP_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
+			'IDP_TLS': 'true',
 			'ACCOUNTS_DATA_PATH': '/srv/app/tmp/ocis-accounts/',
 			'PROXY_ENABLE_BASIC_AUTH': True,
 		},
@@ -1457,7 +1457,7 @@ def ocisService():
 def buildOcisWeb():
 	return[{
 		'name': 'build-ocis-web',
-		'image': 'webhippie/golang:1.13',
+		'image': 'webhippie/golang:1.15',
 		'pull': 'always',
 		'commands': [
 			'cd $GOPATH/src/github.com/owncloud/ocis',
@@ -1478,7 +1478,7 @@ def buildOcisWeb():
 def ocisWebService():
 	return[{
 		'name': 'web',
-		'image': 'webhippie/golang:1.13',
+		'image': 'webhippie/golang:1.15',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {

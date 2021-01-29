@@ -3,8 +3,8 @@
   "theme": "owncloud",
   "version": "0.1.0",
   "openIdConnect": {
-    "metadata_url": "https://konnectd:9130/.well-known/openid-configuration",
-    "authority": "https://konnectd:9130",
+    "metadata_url": "https://idp:9130/.well-known/openid-configuration",
+    "authority": "https://idp:9130",
     "client_id": "web",
     "response_type": "code",
     "scope": "openid profile email"
