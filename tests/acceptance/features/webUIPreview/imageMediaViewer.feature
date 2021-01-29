@@ -158,3 +158,17 @@ Scenario Outline: preview of image files with media viewer is possible
     Then the preview image of file "sampleWebm.webm" should be displayed in the file list view on the webUI
     When the user views the file "sampleWebm.webm" in the media viewer using the webUI
     Then the file "sampleWebm.webm" should be displayed in the media viewer webUI
+
+
+  Scenario Outline: preview of image files with extensions in UpperCase with media viewer
+    Given user "user1" has uploaded file "<image-file>" to "<to-file-name>"
+    And user "user1" has logged in using the webUI
+    When the user browses to the files page
+    Then the preview image of file "<to-file-name>" should be displayed in the file list view on the webUI
+    When the user views the file "<to-file-name>" in the media viewer by clicking on the file name using the webUI
+    Then the file "<to-file-name>" should be displayed in the media viewer webUI
+    Examples:
+      | image-file      | to-file-name    |
+      | testavatar.jpg  | testavatar.JPG  |
+      | testavatar.png  | testavatar.PNG  |
+      | testavatar.jpeg | testavatar.JPEG |

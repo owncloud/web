@@ -48,6 +48,5 @@ When(
   'the user views the file {string} in the media viewer by clicking on the file name using the webUI',
   async function(fileName) {
     await filesList.clickOnFileName(fileName)
-    return mediaViewerPage.waitForMediaViewerLoaded(fileName)
   }
 )
