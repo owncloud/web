@@ -887,7 +887,7 @@ def browserService(alternateSuiteName, browser):
 def owncloudService():
 	return [{
 		'name': 'owncloud',
-		'image': 'owncloudci/php:7.3',
+		'image': 'owncloudci/php:7.4',
 		'pull': 'always',
 		'environment': {
 			'APACHE_WEBROOT': '/var/www/owncloud/server/',
@@ -904,7 +904,7 @@ def owncloudService():
 def owncloudFederatedService():
 	return [{
 		'name': 'federated',
-		'image': 'owncloudci/php:7.3',
+		'image': 'owncloudci/php:7.4',
 		'pull': 'always',
 		'environment': {
 			'APACHE_WEBROOT': '/var/www/owncloud/federated/',
@@ -1228,7 +1228,7 @@ def website(ctx):
 def getSkeletonFiles():
 	return [{
 		'name': 'setup-skeleton-files',
-		'image': 'owncloudci/php:7.3',
+		'image': 'owncloudci/php:7.4',
 		'pull': 'always',
 		'commands': [
 			'git clone https://github.com/owncloud/testing.git /srv/app/testing',
@@ -1242,7 +1242,7 @@ def getSkeletonFiles():
 def setupGraphapiOIdC():
 	return [{
 		'name': 'setup-graphapi',
-		'image': 'owncloudci/php:7.3',
+		'image': 'owncloudci/php:7.4',
 		'pull': 'always',
 		'commands': [
 			'git clone -b master https://github.com/owncloud/graphapi.git /var/www/owncloud/server/apps/graphapi',
@@ -1501,7 +1501,7 @@ def ocisWebService():
 def setupServerAndApp(logLevel):
 	return [{
 		'name': 'setup-server-%s' % config['app'],
-		'image': 'owncloudci/php:7.3',
+		'image': 'owncloudci/php:7.4',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/server/',
@@ -1520,7 +1520,7 @@ def setupServerAndApp(logLevel):
 def setupFedServerAndApp(logLevel):
 	return [{
 		'name': 'setup-fed-server-%s' % config['app'],
-		'image': 'owncloudci/php:7.3',
+		'image': 'owncloudci/php:7.4',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/federated/',
@@ -1537,7 +1537,7 @@ def setupFedServerAndApp(logLevel):
 def fixPermissions():
 	return [{
 		'name': 'fix-permissions',
-		'image': 'owncloudci/php:7.3',
+		'image': 'owncloudci/php:7.4',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/server',
@@ -1548,7 +1548,7 @@ def fixPermissions():
 def fixPermissionsFederated():
 	return [{
 		'name': 'fix-permissions-federated',
-		'image': 'owncloudci/php:7.3',
+		'image': 'owncloudci/php:7.4',
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/federated',
@@ -1582,7 +1582,7 @@ def copyFilesForUpload():
 	return [{
 		'name': 'copy-files-for-upload',
 		'pull': 'always',
-		'image': 'owncloudci/php:7.3',
+		'image': 'owncloudci/php:7.4',
 		'volumes': [{
 			'name': 'uploads',
 			'path': '/filesForUpload'
