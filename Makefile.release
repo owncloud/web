@@ -76,10 +76,8 @@ endif
 
 .PHONY: ocx-app-config
 ocx-app-config:
-	cp -R appinfo $(dist_dir)
-	cp -R img $(dist_dir)
-	cp -R lib $(dist_dir)
-	rm $(dist_dir)/.htaccess # .htaccess is not needed/read in ocx app deployment scenarios
+	cp -R packages/web-integration-oc10/appinfo $(dist_dir)
+	cp -R packages/web-integration-oc10/lib $(dist_dir)
 
 .PHONY: ocx-app-bundle
 ocx-app-bundle:

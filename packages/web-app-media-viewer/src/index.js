@@ -1,12 +1,12 @@
 import translationsJson from '../l10n/translations'
 
-import Mediaviewer from './Mediaviewer.vue'
+import App from './App.vue'
 
 const routes = [
   {
     path: '/:contextRouteName/:filePath',
     components: {
-      app: Mediaviewer
+      app: App
     },
     name: 'mediaviewer/media',
     meta: { auth: false }

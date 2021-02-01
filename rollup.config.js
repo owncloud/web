@@ -20,6 +20,7 @@ import { minify } from 'html-minifier'
 import progress from 'rollup-plugin-progress'
 import alias from '@rollup/plugin-alias'
 import postcss from 'rollup-plugin-postcss'
+import serve from 'rollup-plugin-serve'
 
 const env = {
   production: !process.env.ROLLUP_WATCH,
@@ -30,9 +31,17 @@ const env = {
   get minify() {
     return {
       enabled:
-        typeof process.env.WITH_MINIFY === 'undefined'
-          ? this.production
-          : process.env.WITH_MINIFY === 'true'
+          typeof process.env.WITH_MINIFY === 'undefined'
+              ? this.production
+              : process.env.WITH_MINIFY === 'true'
+    }
+  },
+  get server() {
+    return {
+      enabled:
+          typeof process.env.WITH_SERVER === 'undefined'
+              ? this.development
+              : process.env.WITH_SERVER === 'true'
     }
   },
   get gzip() {
@@ -75,7 +84,6 @@ const conf = {
     { src: './packages/web-container/themes' },
     { src: './packages/web-container/oidc-callback.html' },
     { src: './packages/web-container/oidc-silent-redirect.html' },
-    { src: './packages/web-container/.htaccess' },
     { src: './packages/web-container/manifest.json' }
   ],
   html: {
@@ -92,6 +100,7 @@ const conf = {
   },
   ocis: env.ocis,
   minify: env.minify,
+  server: env.server,
   gzip: env.gzip,
   reports: env.reports,
   sourcemap: env.sourcemap
@@ -273,6 +282,11 @@ export default {
     }),
     progress(),
     env.minify.enabled && terser(),
+    env.server.enabled && serve({
+      contentBase: [conf.out],
+      //port: 8300, // toDo -> ocis port
+      port: 9100, // toDo -> ocis port
+    }),
     conf.reports.enabled &&
       visualizer({
         sourcemap: conf.sourcemap.enabled,

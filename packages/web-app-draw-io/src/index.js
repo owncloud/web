@@ -1,12 +1,12 @@
 import translationsJson from '../l10n/translations'
-import DrawIoEditor from './DrawIoEditor.vue'
+import App from './App.vue'
 
 const routes = [
   {
     name: 'draw-io-edit',
     path: '/edit/:filePath',
     components: {
-      fullscreen: DrawIoEditor
+      fullscreen: App
     },
     meta: { hideHeadbar: true }
   }

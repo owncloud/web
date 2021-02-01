@@ -1,9 +1,8 @@
 {
   "name": "draw-io",
-  "version": "1.0.0",
-  "description": "draw.io integration",
   "license": "AGPL-3.0",
-  "author": "Thomas Müller",
+  "version": "1.0.0",
+  "description": "ownCloud web draw.io integration",
   "devDependencies": {
     "moment": "^2.24.0",
     "query-string": "^6.8.3",

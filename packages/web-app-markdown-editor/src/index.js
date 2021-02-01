@@ -1,6 +1,6 @@
 // --- Components --------------------------------------------------------------
 
-import MarkdownEditor from './MarkdownEditor.vue'
+import App from './App.vue'
 import t from '../l10n/translations'
 
 // --- Routing -----------------------------------------------------------------
@@ -11,7 +11,7 @@ const routes = [
   {
     path: '',
     components: {
-      app: MarkdownEditor
+      app: App
     },
     name: 'markdown-editor'
   }

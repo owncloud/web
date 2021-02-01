@@ -1,10 +1,8 @@
 {
-  "name": "media-viewer",
+  "name": "ocis-media-viewer",
   "version": "1.0.0",
-  "description": "View images and videos in web",
+  "description": "ownCloud web media-viewer",
   "license": "AGPL-3.0",
-  "author": "Felix Heidecke",
-  "main": "index.js",
   "devDependencies": {
     "query-string": "^6.8.3",
     "vuex": "3.1.3"
