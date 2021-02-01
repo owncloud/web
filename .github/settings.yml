@@ -15,12 +15,12 @@ labels:
     oldname: extensions framework
     color: "#ccf4ff"
   - name: feature:files
-    color: d4c5f9
+    color: "#d4c5f9"
   - name: feature:markdown-editor
-    color: d4c5f9
+    color: "#d4c5f9"
   - name: feature:pdf-viewer
-    color: d4c5f9
+    color: "#d4c5f9"
   - name: feature:collaborators
-    color: d4c5f9
+    color: "#d4c5f9"
   - name: feature:media-viewer
-    color: d4c5f9
+    color: "#d4c5f9"
