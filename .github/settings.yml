@@ -3,7 +3,7 @@ _extends: gh-labels
 
 repository:
   name: web
-  description: :dragon_face: Next generation frontend for ownCloud X and Infinite Scale
+  description: ':dragon_face: Next generation frontend for ownCloud X and Infinite Scale'
   homepage: https://owncloud.github.io/clients/web/
   has_wiki: false
 
