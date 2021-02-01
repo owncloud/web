@@ -3,37 +3,16 @@ repository:
   description: :dragon_face: Next generation frontend for ownCloud X and Infinite Scale
   homepage: https://owncloud.github.io/clients/web/
   has_wiki: false
+
+_extends: gh-labels
+
 labels:
-  - name: 1 - To develop
-    color: ededed
-  - name: 2 - Developing
-    color: ededed
-  - name: 3 - To Review
-    color: ededed
-  - name: 4 - To release
-    color: ededed
-  - name: Acceptance tests
-    color: ededed
-  - name: Drone
-    color: 6474c1
-  - name: 'Effort: 0.5d'
-    color: c2e0c6
-  - name: 'Effort: 1d'
-    color: c2e0c6
-  - name: 'Effort: 1w'
-    color: c2e0c6
-  - name: 'Effort: 2d'
-    color: c2e0c6
-  - name: 'Effort: 2w'
-    color: c2e0c6
-  - name: 'Effort: 4d'
-    color: c2e0c6
-  - name: 'Effort: trivial'
-    color: c2e0c6
-  - name: Hacktoberfest
-    color: fbca04
-  - name: Hardening
-    color: ededed
+  - name: Topic:Accessibility
+    oldname: Accessibility
+    color: "#ccf4ff"
+  - name: Topic:Extensions-framework
+    oldname: extensions framework
+    color: "#ccf4ff"
   - name: PM prio 1
     color: fbca04
   - name: PM prio 2
@@ -94,15 +73,15 @@ labels:
     color: fbca04
   - name: documentation
     color: BFDADC
-  - name: enhancement
-    color: 02e10c
-  - name: enhancement-PM
-    color: FF9900
   - name: feature:files
     color: d4c5f9
   - name: feature:markdown-editor
     color: d4c5f9
   - name: feature:pdf-viewer
+    color: d4c5f9
+  - name: feature:collaborators
+    color: d4c5f9
+  - name: feature:media-viewer
     color: d4c5f9
   - name: in progress
     color: ededed
