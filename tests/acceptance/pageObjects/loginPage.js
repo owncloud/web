@@ -7,7 +7,8 @@ module.exports = {
   elements: {
     body: 'body',
     authenticateButton: {
-      selector: '#authenticate'
+      selector: '//div/button/span[@class="MuiButton-label"]',
+      locateStrategy: 'xpath'
     }
   },
   commands: [

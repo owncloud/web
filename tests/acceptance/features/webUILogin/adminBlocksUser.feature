@@ -11,4 +11,6 @@ Feature: view profile
     And the user has browsed to the files page
     And user "user1" has been blocked by admin
     When the user reloads the current page of the webUI
+    Then the user should be redirected to the login error page
+    When the user exits the login error page
     Then the user should be redirected to the login page
