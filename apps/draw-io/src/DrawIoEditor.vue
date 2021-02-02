@@ -13,7 +13,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { basename } from 'path'
 import queryString from 'query-string'
-import moment from 'moment'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'DrawIoEditor',
@@ -178,7 +178,7 @@ export default {
       window.close()
     },
     getTimestamp() {
-      return moment().format('YYYYMMDD[T]HHmmss')
+      return DateTime.local().toFormat('YYYYMMDD[T]HHmmss')
     }
   }
 }

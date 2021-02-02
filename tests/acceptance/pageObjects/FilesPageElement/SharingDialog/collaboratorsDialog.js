@@ -179,7 +179,7 @@ module.exports = {
   elements: {
     collaboratorInformationByCollaboratorName: {
       selector:
-        '//*[contains(@class, "files-collaborators-collaborator-name") and .="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
+        '//*[contains(@class, "files-collaborators-collaborator-name") and normalize-space()="%s"]/ancestor::*[contains(concat(" ", @class, " "), " files-collaborators-collaborator ")]',
       locateStrategy: 'xpath'
     },
     deleteShareButton: {
@@ -233,7 +233,7 @@ module.exports = {
     },
     collaboratorExpirationInfo: {
       selector:
-        '//span[.="%s"]//ancestor::div[contains(@class, "files-collaborators-collaborator-info")]//span[contains(text(), "Expires")]',
+        '//span[normalize-space()="%s"]//ancestor::div[contains(@class, "files-collaborators-collaborator-info")]//span[contains(text(), "Expires")]',
       locateStrategy: 'xpath'
     }
   }

@@ -5,9 +5,7 @@ const path = require('path')
 require('intersection-observer')
 
 module.exports = {
-  plugins: [
-    new VueLoaderPlugin()
-  ],
+  plugins: [new VueLoaderPlugin()],
   entry: {
     files: './src/default.js'
   },
@@ -22,19 +20,14 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [
-          path.resolve('src')
-        ],
+        include: [path.resolve('src')],
         options: {
           rootMode: 'upward'
         }
       },
       {
         test: /\.jsx?$/,
-        include: [
-          /node_modules\/vue2-dropzone\/.*/,
-          /node_modules\/p-.+/
-        ],
+        include: [/node_modules\/vue2-dropzone\/.*/, /node_modules\/p-.+/],
         use: {
           loader: 'babel-loader',
           options: {
@@ -54,13 +47,18 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        exclude: [/node_modules/]
-      }, {
-        test: /\.css$/,
-        use: [
-          'vue-style-loader',
-          'css-loader'
-        ]
-      }]
+        exclude: [/node_modules/],
+        options: {
+          loaders: {
+            scss: 'vue-style-loader!css-loader!sass-loader'
+          }
+        }
+      },
+      {
+        test: /\.(sa|sc|c)ss$/,
+        include: [/node_modules/, /src/, /static/],
+        use: ['vue-style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
   }
 }

@@ -26,12 +26,12 @@
         <div>
           <translate>Selected people:</translate>
         </div>
-        <oc-table middle class="uk-width-expand files-collaborators-collaborator-autocomplete-item">
-          <oc-table-row
+        <oc-table-simple class="uk-width-expand files-collaborators-collaborator-autocomplete-item">
+          <oc-tr
             v-for="collaborator in selectedCollaborators"
             :key="collaborator.value.shareWith + '-' + collaborator.value.shareType"
           >
-            <oc-table-cell shrink>
+            <oc-td width="shrink">
               <oc-button
                 :aria-label="$gettext('Delete share')"
                 variation="raw"
@@ -41,12 +41,12 @@
               >
                 <oc-icon name="close" />
               </oc-button>
-            </oc-table-cell>
-            <oc-table-cell>
+            </oc-td>
+            <oc-td>
               <autocomplete-item :item="collaborator" />
-            </oc-table-cell>
-          </oc-table-row>
-        </oc-table>
+            </oc-td>
+          </oc-tr>
+        </oc-table-simple>
       </div>
     </oc-grid>
     <collaborators-edit-options class="oc-mb" @optionChange="collaboratorOptionChanged" />

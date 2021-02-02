@@ -1,21 +1,19 @@
 <template>
   <div id="oc-file-versions-sidebar">
     <oc-loader v-if="loading" />
-    <oc-table v-if="!loading && hasVersion" middle divider>
-      <oc-table-group>
-        <oc-table-row v-for="(item, index) in versions" :key="index" class="file-row">
-          <oc-table-cell shrink>
+    <oc-table-simple v-if="!loading && hasVersion">
+      <oc-tbody>
+        <oc-tr v-for="(item, index) in versions" :key="index" class="file-row">
+          <oc-td width="shrink">
             <oc-icon :name="fileTypeIcon(highlightedFile)" />
-          </oc-table-cell>
-          <oc-table-cell>
-            <oc-table-cell class="uk-text-meta uk-text-nowrap">
-              {{ formDateFromNow(item.fileInfo['{DAV:}getlastmodified']) }}
-            </oc-table-cell>
-            <oc-table-cell class="uk-text-meta uk-text-nowrap">
-              {{ item.fileInfo['{DAV:}getcontentlength'] | fileSize }}
-            </oc-table-cell>
-          </oc-table-cell>
-          <oc-table-cell shrink>
+          </oc-td>
+          <oc-td width="shrink" class="uk-text-meta uk-text-nowrap">
+            {{ formDateFromNow(item.fileInfo['{DAV:}getlastmodified']) }}
+          </oc-td>
+          <oc-td width="expand" class="uk-text-meta uk-text-nowrap">
+            {{ item.fileInfo['{DAV:}getcontentlength'] | fileSize }}
+          </oc-td>
+          <oc-td width="shrink">
             <div class="uk-button-group">
               <oc-button
                 variation="raw"
@@ -26,8 +24,8 @@
                 <oc-icon name="restore" />
               </oc-button>
             </div>
-          </oc-table-cell>
-          <oc-table-cell shrink>
+          </oc-td>
+          <oc-td width="shrink">
             <div class="uk-button-group">
               <oc-button
                 variation="raw"
@@ -38,10 +36,10 @@
                 <oc-icon name="cloud_download" />
               </oc-button>
             </div>
-          </oc-table-cell>
-        </oc-table-row>
-      </oc-table-group>
-    </oc-table>
+          </oc-td>
+        </oc-tr>
+      </oc-tbody>
+    </oc-table-simple>
     <div v-else>
       <span v-translate>No Versions available for this file</span>
     </div>
