@@ -21,5 +21,5 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIPreview/imageMediaViewer.feature:136](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L136)
 -   [webUIPreview/imageMediaViewer.feature:154](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L154)
 
-### [WebUI Login](https://github.com/owncloud/web/issues/4564)
+### [WebUI Login](https://github.com/owncloud/web/issues/4677)
 -   [webUILogin/login.feature:62](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/login.feature#L62)
