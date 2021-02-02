@@ -70,3 +70,16 @@ Feature: login users
     Then the user should be redirected to the login error page
     When the user exits the login error page
     Then the user should be redirected to the login page
+
+  Scenario: the user session of a deleted user should not be valid for newly created user of same name
+    Given these users have been created with default attributes:
+      | username |
+      | user1    |
+    And user "user1" has logged in using the webUI
+    And the user has browsed to the files page
+    And user "user1" has been deleted
+    And the user has reloaded the current page of the webUI
+    And the user has been redirected to the login error page
+    And user "user1" has been created with default attributes
+    When the user exits the login error page
+    Then the user should be redirected to the login page
