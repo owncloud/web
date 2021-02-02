@@ -845,7 +845,7 @@ def browserService(alternateSuiteName, browser):
 	if browser == 'chrome':
 		return [{
 			'name': 'selenium',
-			'image': 'selenium/standalone-chrome-debug:3.141.59-20200326',
+			'image': 'selenium/standalone-chrome-debug:3.141.59',
 			'pull': 'always',
 			'volumes': [{
 				'name': 'uploads',
@@ -856,7 +856,7 @@ def browserService(alternateSuiteName, browser):
 	if browser == 'firefox':
 		return [{
 			'name': 'selenium',
-			'image': 'selenium/standalone-firefox-debug:3.141.59-xenon',
+			'image': 'selenium/standalone-firefox-debug:3.141.59',
 			'pull': 'always',
 			'volumes': [{
 				'name': 'uploads',
