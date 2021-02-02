@@ -1,3 +1,27 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v1.0.1...master
+
+Summary
+-------
+
+* Change - Update ODS to 2.1.2: [#4594](https://github.com/owncloud/web/pull/4594)
+
+Details
+-------
+
+* Change - Update ODS to 2.1.2: [#4594](https://github.com/owncloud/web/pull/4594)
+
+   We updated the ownCloud Design System to 2.1.2. See the linked releases for details.
+
+   https://github.com/owncloud/web/pull/4594
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v2.1.0
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v2.1.1
+   https://github.com/owncloud/owncloud-design-system/releases/tag/v2.1.2
+
 Changelog for ownCloud Web [1.0.1] (2021-01-08)
 =======================================
 The following sections list the changes in ownCloud web 1.0.1 relevant to
