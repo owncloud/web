@@ -4,6 +4,7 @@
     "requirejs",
     "nightwatch-vrt",
     "@babel/polyfill",
-    "@babel/register"
+    "@babel/register",
+    "babel-eslint"
   ]
 }

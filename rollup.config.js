@@ -31,17 +31,17 @@ const env = {
   get minify() {
     return {
       enabled:
-          typeof process.env.WITH_MINIFY === 'undefined'
-              ? this.production
-              : process.env.WITH_MINIFY === 'true'
+        typeof process.env.WITH_MINIFY === 'undefined'
+          ? this.production
+          : process.env.WITH_MINIFY === 'true'
     }
   },
   get server() {
     return {
       enabled:
-          typeof process.env.WITH_SERVER === 'undefined'
-              ? this.development
-              : process.env.WITH_SERVER === 'true'
+        typeof process.env.WITH_SERVER === 'undefined'
+          ? this.development
+          : process.env.WITH_SERVER === 'true'
     }
   },
   get gzip() {
@@ -282,11 +282,11 @@ export default {
     }),
     progress(),
     env.minify.enabled && terser(),
-    env.server.enabled && serve({
-      contentBase: [conf.out],
-      //port: 8300, // toDo -> ocis port
-      port: 9100, // toDo -> ocis port
-    }),
+    env.server.enabled &&
+      serve({
+        contentBase: [conf.out],
+        port: process.env.PORT || 8300
+      }),
     conf.reports.enabled &&
       visualizer({
         sourcemap: conf.sourcemap.enabled,

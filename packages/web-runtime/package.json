@@ -6,7 +6,7 @@
   "devDependencies": {
     "inert-polyfill": "^0.2.5",
     "lodash-es": "^4.17.20",
-    "oidc-client": "^1.9.1",
+    "oidc-client": "1.10.1",
     "owncloud-design-system": "^2.0.4",
     "owncloud-sdk": "^1.0.0-740",
     "p-queue": "^6.1.1",
