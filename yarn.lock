@@ -2473,7 +2473,7 @@ chardet@^0.7.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
 
-"chokidar@>=2.0.0 <4.0.0":
+"chokidar@>=2.0.0 <4.0.0", chokidar@^3.4.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.1.tgz#ee9ce7bbebd2b79f49f304799d5468e31e14e68a"
   integrity sha512-9+s+Od+W0VJJzawDma/gvBNQqkTiqYTWLuZoyAsivsI4AaWTCzHG06/TMjsf1cYe9Cb97UCEhjz7HvnPk2p/tw==
@@ -8947,12 +8947,13 @@ rollup-plugin-babel@^4.4.0:
     "@babel/helper-module-imports" "^7.0.0"
     rollup-pluginutils "^2.8.1"
 
-rollup-plugin-copy@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-copy/-/rollup-plugin-copy-3.3.0.tgz#5ba230047f86b9f703a29288f242948a5580e7b9"
-  integrity sha512-euDjCUSBXZa06nqnwCNADbkAcYDfzwowfZQkto9K/TFhiH+QG7I4PUsEMwM9tDgomGWJc//z7KLW8t+tZwxADA==
+rollup-plugin-copy-watch@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-copy-watch/-/rollup-plugin-copy-watch-0.0.1.tgz#c742d6c1836ee1f9868466800c7910e59349d0d5"
+  integrity sha512-TjlXZsmsdLWd4Jx1M6qUQqLgRxJlTpmHchPTN6s4d58ubYAa7DlbMrqGz5In1Xg/iN7p19YNpcGGKWu0ImHpVg==
   dependencies:
     "@types/fs-extra" "^8.0.1"
+    chokidar "^3.4.0"
     colorette "^1.1.0"
     fs-extra "^8.1.0"
     globby "10.0.1"

@@ -5,7 +5,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import babel from 'rollup-plugin-babel'
 import builtins from '@erquhart/rollup-plugin-node-builtins'
 import globals from 'rollup-plugin-node-globals'
-import copy from 'rollup-plugin-copy'
+import copy from 'rollup-plugin-copy-watch'
 import modify from 'rollup-plugin-modify'
 import { terser } from 'rollup-plugin-terser'
 import visualizer from 'rollup-plugin-visualizer'
@@ -173,7 +173,7 @@ export default {
     builtins(),
     json(),
     copy({
-      copyOnce: true,
+      watch: './config',
       targets: [
         ...conf.copy.map(c => {
           return {
@@ -185,9 +185,8 @@ export default {
         ...(env.development
           ? [
               {
-                src: `./config/config.json.sample-${conf.ocis ? 'ocis' : 'oc10'}`,
-                dest: conf.out,
-                rename: 'config.json'
+                src: `./config/config.json`,
+                dest: conf.out
               }
             ]
           : []),
@@ -285,7 +284,7 @@ export default {
     env.server.enabled &&
       serve({
         contentBase: [conf.out],
-        port: process.env.PORT || 8300
+        port: process.env.PORT || 9100
       }),
     conf.reports.enabled &&
       visualizer({
