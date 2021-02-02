@@ -26,8 +26,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Media viewer previews are not visible in public share](https://github.com/owncloud/ocis/issues/1370)
 -   [webUIPreview/imageMediaViewer.feature:110](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L110)
 
-### [authentication dialog appears when user is deleted](https://github.com/owncloud/web/issues/4564)
-### [login error page loops when logged in user is deleted](https://github.com/owncloud/ocis/issues/1129)
+### [Exit page re-appears in loop when logged in user is deleted](https://github.com/owncloud/web/issues/4677)
 -   [webUILogin/login.feature:62](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/login.feature#L62)
 
 ### [User request using token and basic authentication gives different display names](https://github.com/owncloud/ocis/issues/1312)
