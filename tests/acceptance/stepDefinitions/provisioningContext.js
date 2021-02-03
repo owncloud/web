@@ -149,6 +149,11 @@ function addToGroup(userId, groupId) {
   return httpHelper.postOCS(url, 'admin', body)
 }
 
+function blockUser(userId) {
+  const apiURL = `cloud/users/${userId}/disable`
+  return httpHelper.putOCS(apiURL, 'admin')
+}
+
 Given('user {string} has been created with default attributes', async function(userId) {
   await deleteUser(userId)
   await createDefaultUser(userId)
@@ -157,6 +162,10 @@ Given('user {string} has been created with default attributes', async function(u
 
 Given('user {string} has been deleted', function(userId) {
   return deleteUser(userId)
+})
+
+Given('user {string} has been blocked by admin', function(userId) {
+  return blockUser(userId)
 })
 
 Given('user {string} has been created with default attributes on remote server', function(userId) {
