@@ -173,7 +173,7 @@ export default {
     builtins(),
     json(),
     copy({
-      watch: './config',
+      watch: env.server.enabled && './config',
       targets: [
         ...conf.copy.map(c => {
           return {

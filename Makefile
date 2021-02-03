@@ -1,18 +1,23 @@
-DIST := dist
-HUGO := hugo
-NAME := web
-
-all: build
+NAME := ${CURDIR}/web
+DIST := ${CURDIR}/dist
+HUGO := ${CURDIR}/hugo
+RELEASE := ${CURDIR}/release
+NODE_MODULES := ${CURDIR}/node_modules
 
 .PHONY: clean
 clean:
-	rm -rF ${DIST} ${HUGO} ./release ./node_modules
+	rm -rf ${DIST} ${HUGO} ${RELEASE} ${NODE_MODULES}
 
-.PHONY: dist
-dist:
+.PHONY: release
+release: clean
 	make -f Makefile.release
-	mkdir -p $(CURDIR)/build/dist
-	cp $(CURDIR)/release/web-app.tar.gz $(CURDIR)/build/dist/
+
+.PHOny: l10n
+l10n:
+	make -f Makefile.l10n
+
+.PHONY: docs
+docs: docs-copy docs-build
 
 .PHONY: docs-copy
 docs-copy:
@@ -29,9 +34,6 @@ docs-copy:
 .PHONY: docs-build
 docs-build:
 	cd $(HUGO); hugo
-
-.PHONY: docs
-docs: docs-copy docs-build
 
 .PHONY: l10n-push
 l10n-push:
