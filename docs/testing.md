@@ -20,8 +20,8 @@ There are multiple ways to run Selenium:
 ### Setup using Docker
 
 - Set the environment variables `SELENIUM_HOST` as `localhost` and `SERVER_HOST` in the format `http://<ip_addr>:9100`.
-- Run `docker run --rm -d --network=\"host\" -v /dev/shm:/dev/shm -v ${REMOTE_UPLOAD_DIR:-$PWD/tests/acceptance/filesForUpload}:${LOCAL_UPLOAD_DIR:-/uploads}:ro --name web-tests-selenium selenium/standalone-chrome-debug` (available only on Linux)
-- If you are a Mac user, you can run `docker run --rm -d -p ${SELENIUM_PORT:-4444}:4444 -p 5900:5900 -v /dev/shm:/dev/shm -v ${REMOTE_UPLOAD_DIR:-$PWD/tests/acceptance/filesForUpload}:${LOCAL_UPLOAD_DIR:-/uploads}:ro --name web-tests-selenium selenium/standalone-chrome-debug`
+- If you are a Mac user, run `docker run --rm -d --network=\"host\" -v /dev/shm:/dev/shm -v ${REMOTE_UPLOAD_DIR:-$PWD/tests/acceptance/filesForUpload}:${LOCAL_UPLOAD_DIR:-/uploads}:ro --name web-tests-selenium selenium/standalone-chrome-debug`
+- If you are a Mac user, run `docker run --rm -d -p ${SELENIUM_PORT:-4444}:4444 -p 5900:5900 -v /dev/shm:/dev/shm -v ${REMOTE_UPLOAD_DIR:-$PWD/tests/acceptance/filesForUpload}:${LOCAL_UPLOAD_DIR:-/uploads}:ro --name web-tests-selenium selenium/standalone-chrome-debug`
   - This command creates a docker container which uses port forwarding instead of host networking [which is not supported on Mac](https://docs.docker.com/network/host/)
 
 ### Setup using Docker Desktop for Mac
@@ -40,16 +40,18 @@ When running a standalone Selenium server, make sure to set the environment vari
 ## Setup backend
 ### ownCloud 10
 
-- set up the [ownCloud 10 backend]({{< ref "backend-oc10.md" >}}
+- set up the [ownCloud 10 backend]({{< ref "backend-oc10.md" >}})
 - clone and install the [testing app](http://github.com/owncloud/testing) into ownCloud
 ### oCIS
 
-- set up the [oCIS backend]({{< ref "backend-ocis.md" >}}
+- set up the [oCIS backend]({{< ref "backend-ocis.md" >}})
+  - if you are a Mac user, you need to start the server with additional environment variables: `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='<web-path>/tests/acceptance/mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true'` (`<web-path>` needs to be replaced with the your local clone of ownCloud Web)
 
 ## Setup ownCloud Web
 
 - [build Web]({{< ref "building.md" >}})
 - [start the Web server]({{< ref "backend-oc10.md#running-web" >}})
+- if you are running web against the oCIS backend, clone the testing app `git clone git@github.com:owncloud/testing.git tests/testing-app`
 ## Run tests
 
 - set `SERVER_HOST` to point at the URL where the Web web pages are served, for example "http://localhost:9100"
@@ -71,6 +73,7 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 ### with oCIS backend
 
 - run `yarn test:acceptance:ocis <feature-files-to-test>`
+- If you are a mac user, run `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='./tests/acceptance/mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true' yarn test:acceptance:ocis <feature-files-to-test>`
 
 ### Visual Regression Testing
 The test suite consists of snapshots of UI components which can be compared for visual regression testing when running the acceptance tests. These comparisons are done in the existing scenarios. You can check the existing snapshots of the components in the directory `/tests/vrt/baseline`.

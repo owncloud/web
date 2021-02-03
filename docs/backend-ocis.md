@@ -11,8 +11,8 @@ geekdocFilePath: backend-ocis.md
 
 ## Setting up OCIS services
 
-- Setup OCIS by cloning the [ocis repository](https://github.com/owncloud/ocis) and following the setup instructions there.
-- Do not start the whole server but run `./bin/ocis --log-level debug $EXTENSION` for all the existing extensions **except the web service**. A list of extensions can be found by running `./bin/ocis` without arguments and looking at the "Extensions" section.
+- Setup OCIS by following the [setup instructions](https://owncloud.github.io/ocis/getting-started/).
+- Kill the oCIS Web service `./ocis kill web`
 
 ## Setting up Web
 
