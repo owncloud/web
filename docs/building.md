@@ -11,17 +11,12 @@ geekdocFilePath: building.md
 
 ## Building ownCloud Web
 
-- Run `yarn install` to install core dependencies
-- Run `yarn install-all` to install dependencies of all apps and core
-- Run `yarn dist` to build Web and all apps included in the `apps` folder
+- Run `yarn install` to install dependencies
+- Run `yarn build` to build Web and all apps included in the `packages` folder
 
 ## Updating dependencies
 
-- Run `yarn upgrade-all` to update core and app dependencies
-
-## Cleaning up the workspace
-
-- Run `yarn clean-all` to remove node_modules and dist folder
+- Run `yarn upgrade` to update dependencies
 
 ## Building the documentation
 

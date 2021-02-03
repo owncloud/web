@@ -1,4 +1,4 @@
-NAME := ${CURDIR}/web
+NAME := web
 DIST := ${CURDIR}/dist
 HUGO := ${CURDIR}/hugo
 RELEASE := ${CURDIR}/release

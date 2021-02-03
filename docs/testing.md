@@ -9,7 +9,7 @@ geekdocFilePath: testing.md
 
 {{< toc >}}
 
-## Setting up Selenium
+## Setup Selenium
 
 There are multiple ways to run Selenium:
 
@@ -20,8 +20,8 @@ There are multiple ways to run Selenium:
 ### Setup using Docker
 
 - Set the environment variables `SELENIUM_HOST` as `localhost` and `SERVER_HOST` in the format `http://<ip_addr>:9100`.
-- Run `yarn run selenium` (available only on Linux)
-- If you are a Mac user, you can run `yarn run selenium:mac`
+- Run `docker run --rm -d --network=\"host\" -v /dev/shm:/dev/shm -v ${REMOTE_UPLOAD_DIR:-$PWD/tests/acceptance/filesForUpload}:${LOCAL_UPLOAD_DIR:-/uploads}:ro --name web-tests-selenium selenium/standalone-chrome-debug` (available only on Linux)
+- If you are a Mac user, you can run `docker run --rm -d -p ${SELENIUM_PORT:-4444}:4444 -p 5900:5900 -v /dev/shm:/dev/shm -v ${REMOTE_UPLOAD_DIR:-$PWD/tests/acceptance/filesForUpload}:${LOCAL_UPLOAD_DIR:-/uploads}:ro --name web-tests-selenium selenium/standalone-chrome-debug`
   - This command creates a docker container which uses port forwarding instead of host networking [which is not supported on Mac](https://docs.docker.com/network/host/)
 
 ### Setup using Docker Desktop for Mac
@@ -37,68 +37,40 @@ After all these changes Web will be accessible at `http://host.docker.internal:8
 
 When running a standalone Selenium server, make sure to set the environment variable `SELENIUM_HOST`, `SELENIUM_PORT` and `LOCAL_UPLOAD_DIR` accordingly.
 
-## Run tests
+## Setup backend
+### ownCloud 10
 
-### with ownCloud 10 backend
-
-- set up the [ownCloud 10 backend]({{< ref "backend-oc10.md" >}})
+- set up the [ownCloud 10 backend]({{< ref "backend-oc10.md" >}}
 - clone and install the [testing app](http://github.com/owncloud/testing) into ownCloud
+### oCIS
+
+- set up the [oCIS backend]({{< ref "backend-ocis.md" >}}
+
+## Setup ownCloud Web
+
 - [build Web]({{< ref "building.md" >}})
 - [start the Web server]({{< ref "backend-oc10.md#running-web" >}})
-- set `SERVER_HOST` to point at the URL where the Web web pages are served, for example "http://localhost:8300"
+## Run tests
+
+- set `SERVER_HOST` to point at the URL where the Web web pages are served, for example "http://localhost:9100"
 - set `BACKEND_HOST` to point to the URL of the backend, for example "http://localhost/owncloud/"
 - to be able to run federation tests, additional setup is needed:
    1. Install and set up a second ownCloud server-instance that is accessible by a different URL. That second server-instance must have its own database and data directory.
    2. clone and install the testing app into the second ownCloud server-instance from http://github.com/owncloud/testing .
-   3. when running the acceptance tests use `REMOTE_BACKEND_HOST` environment variable to define its address, for example, `REMOTE_BACKEND_HOST=http://<ip_address_of_second_ownCloud_server-instance> yarn run acceptance-tests <feature-files-to-test>` .
+   3. when running the acceptance tests use `REMOTE_BACKEND_HOST` environment variable to define its address, for example, `REMOTE_BACKEND_HOST=http://<ip_address_of_second_ownCloud_server-instance> yarn test:acceptance:oc10 <feature-files-to-test>` .
 -set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
 -set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
-
-Run `yarn run acceptance-tests <feature-files-to-test>`.
 
 The feature files are located in the "tests/acceptance/features" subdirectories.
 
 see [available settings](#available-settings-to-be-set-by-environment-variables) for further setup if needed
 
-### with OCIS backend
+### with oC10 backend
 
-1. [build Web]({{< ref "building.md" >}})
-2. create a new web `config.json` file and copy it into the `dist` folder, even though running web in the default ocis environment does not need a `config.json` file, some tests rely on it being present.
- As a starting point and example that should work when running every service on localhost use
-   Linux: `config.json.sample-ocis`
-   Mac: `tests/acceptance/ocis-mac-config.json`
+- run `yarn test:acceptance:oc10 <feature-files-to-test>`
+### with oCIS backend
 
-#### the quick way (all automated)
-1. run `yarn run test-requirements:ocis` (`yarn run test-requirements:ocis:mac` for Mac users) to install, configure and run all ocis requirements
-2. run `yarn run acceptance-tests-ocis <feature-files-to-test>` to run the tests. The feature files are located in the "tests/acceptance/features" subdirectories. To separate ocis log output from the tests output, run the command in a separate console.
-3. after the tests finish, run `yarn run killall` to stop all created docker containers, and the ocis services
-
-#### the manual way (e.g. to run from an existing ocis location)
-1. clone and build [ocis](https://github.com/owncloud/ocis)
-2. From inside the `web` directory run `yarn run testing-app` to get the [testing-app](https://github.com/owncloud/testing), it's needed to have the skeleton folder for the tests
-3. Run redis server using docker
-    ```sh
-    yarn run redis-server
-    ```
-
-4. Run the OCIS server with the necessary configurations
-    ```sh
-    export WEB_ASSET_PATH='<path-to-web-clone>/dist'
-    export WEB_UI_CONFIG='<path-to-web-clone>/dist/config.json'
-    export STORAGE_HOME_DRIVER=owncloud
-    export STORAGE_USERS_DRIVER=owncloud
-    export PROXY_ENABLE_BASIC_AUTH=true
-    ```
-    note: `WEB_UI_CONFIG` should point to the same config file you have created earlier.
-    note: currently it's not possible to run the UI tests with OCIS & OWNCLOUD storage-driver
-
-    run the server:
-
-    ```sh
-    bin/ocis server
-    ```
-5. Run `yarn run acceptance-tests-ocis <feature-files-to-test>`.
-   The feature files are located in the "tests/acceptance/features" subdirectories.
+- run `yarn test:acceptance:ocis <feature-files-to-test>`
 
 ### Visual Regression Testing
 The test suite consists of snapshots of UI components which can be compared for visual regression testing when running the acceptance tests. These comparisons are done in the existing scenarios. You can check the existing snapshots of the components in the directory `/tests/vrt/baseline`.
@@ -108,7 +80,7 @@ When you run the acceptance tests as usual, all the visual regression comparison
 
 eg.
 ```
-VISUAL_TEST=true SERVER_HOST=http://<server_host> BACKEND_HOST=http://<backend_host> yarn run acceptance-tests <feature-file-to-test>
+VISUAL_TEST=true SERVER_HOST=http://<server_host> BACKEND_HOST=http://<backend_host> yarn test:acceptance:oc10 <feature-file-to-test>
 ```
 
 #### Updating the snapshots
@@ -116,7 +88,7 @@ If there is some change in the components, and you want to update the snapshots 
 
 eg.
 ```
-VISUAL_TEST=true UPDATE_VRT_SCREENSHOTS=true SERVER_HOST=http://<server_host> BACKEND_HOST=http://<backend_host> yarn run acceptance-tests <feature-file-to-test>
+VISUAL_TEST=true UPDATE_VRT_SCREENSHOTS=true SERVER_HOST=http://<server_host> BACKEND_HOST=http://<backend_host> yarn test:acceptance:oc10 <feature-file-to-test>
 ```
 
 **note** Visual regression testing may not be completely reliable every time as small changes such as window size and screen resolution may affect the result. For better results it is recommended that you run the tests using the `selenium/standalone-chrome-debug` image of selenium and window size of `1280x1024`
@@ -125,11 +97,11 @@ see [available settings](#available-settings-to-be-set-by-environment-variables)
 
 ## Available settings to be set by environment variables
 
-These values can be set using the environment variables to configure `yarn run acceptance-tests` and `yarn run acceptance-tests-ocis` to match your local test environment.
+These values can be set using the environment variables to configure `yarn test:acceptance:oc10` and `yarn test:acceptance:ocis` to match your local test environment.
 
 | setting             | meaning                                                                | default               |
 |-------------------- | -----------------------------------------------------------------------| ----------------------|
-| `SERVER_HOST`       | web URL                                                            | http://localhost:8300 |
+| `SERVER_HOST`       | web URL                                                            | http://localhost:9100 |
 | `BACKEND_HOST`      | ownCloud server URL (or reva service url for running with OCIS)                                                    | http://localhost:8080 |
 | `BACKEND_USERNAME`  | ownCloud administrator username                                        | admin                 |
 | `BACKEND_PASSWORD`  | ownCloud administrator password                                        | admin                 |
