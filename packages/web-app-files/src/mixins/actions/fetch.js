@@ -1,17 +1,20 @@
-import { checkRoute } from '../../helpers/route'
+import MixinRoutes from '../routes'
+import { mapGetters } from 'vuex'
 
 export default {
+  mixins: [MixinRoutes],
   computed: {
+    ...mapGetters(['configuration']),
     $_fetch_items() {
       return [
         {
           icon: 'remove_red_eye',
-          handler: file => this.$_fetch_trigger(file.path, 'application/pdf'),
+          handler: file => this.$_fetch_trigger(file, 'application/pdf', this.isPublicFilesRoute),
           ariaLabel: () => {
             return this.$gettext('Open in browser')
           },
           isEnabled: ({ resource }) => {
-            if (checkRoute(['files-trashbin'], this.$route.name)) {
+            if (this.isTrashbinRoute) {
               return false
             }
 
@@ -23,8 +26,14 @@ export default {
     }
   },
   methods: {
-    $_fetch_trigger(filePath, mimetype) {
-      const url = this.$client.helpers._webdavUrl + filePath
+    $_fetch_trigger(file, mimetype, isPublicFile) {
+      if (isPublicFile) {
+        const url = file.downloadURL
+        window.open(url, '_blank')
+        return
+      }
+
+      const url = this.$client.helpers._webdavUrl + file.path
       const headers = new Headers()
 
       headers.append('Authorization', 'Bearer ' + this.getToken)

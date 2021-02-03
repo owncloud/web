@@ -9,6 +9,7 @@ import { basename, dirname } from 'path'
 export default {
   computed: {
     ...mapGetters('Files', ['publicLinkPassword']),
+    ...mapGetters(['configuration']),
     $_loader_publicContext() {
       // TODO: Can we rely on not being "authenticated" while viewing a public link?
       // Currently it works. We cannot use publicPage() because that will still return
@@ -89,15 +90,28 @@ export default {
       this.$data.$_internal_loader_folderLoading = false
     },
 
-    $_loader_getDavFilePath(filePath, query = null) {
-      let path = ['..', 'dav', 'public-files', filePath].join('/')
-
+    $_loader_getDavFilePath(mediaFile, query = null) {
+      const queryStr = !query ? '' : queryString.stringify(query)
       if (!this.$_loader_publicContext) {
-        path = ['..', 'dav', 'files', this.$store.getters.user.id, filePath].join('/')
+        const path = ['..', 'dav', 'files', this.$store.getters.user.id, mediaFile.path].join('/')
+        return [this.$client.files.getFileUrl(path), queryStr].filter(Boolean).join('?')
       }
 
-      const queryStr = !query ? '' : '?' + queryString.stringify(query)
-      return this.$client.files.getFileUrl(path) + queryStr
+      // If the mediaFile does not contain the downloadURL we fallback to the normal
+      // public files path.
+      if (!mediaFile.downloadURL) {
+        const path = ['..', 'dav', 'public-files', mediaFile.path].join('/')
+        return [this.$client.files.getFileUrl(path), queryStr].filter(Boolean).join('?')
+      }
+
+      // In a public context, i.e. public shares, the downloadURL contains a pre-signed url to
+      // download the file.
+      const [url, signedQuery] = mediaFile.downloadURL.split('?')
+
+      // Since the pre-signed url contains query parameters and the caller of this method
+      // can also provide query parameters we have to combine them.
+      const combinedQuery = [queryStr, encodeURIComponent(signedQuery)].filter(Boolean).join('&')
+      return [url, combinedQuery].filter(Boolean).join('?')
     },
 
     $_loader_headers() {

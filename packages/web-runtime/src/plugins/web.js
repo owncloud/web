@@ -6,6 +6,7 @@ export default {
       computed: {
         ...mapGetters(['getToken', 'isAuthenticated', 'capabilities']),
         ...mapGetters('Files', ['publicLinkPassword']),
+        ...mapGetters(['configuration']),
 
         currentExtension() {
           return this.$route.path.split('/')[1]
@@ -32,7 +33,7 @@ export default {
           let url = null
           let headers = {}
           if (publicPage) {
-            url = this.$client.publicFiles.getFileUrl(file.path)
+            url = file.downloadURL
             const password = this.publicLinkPassword
             if (password) {
               headers = {
@@ -49,7 +50,7 @@ export default {
           }
 
           // download with signing enabled
-          if (this.isUrlSigningEnabled) {
+          if (!publicPage && this.isUrlSigningEnabled) {
             try {
               const response = await fetch(url, {
                 method: 'HEAD',
@@ -57,17 +58,7 @@ export default {
               })
               if (response.status === 200) {
                 const signedUrl = await this.$client.signUrl(url)
-                // create anchor dom element
-                const a = document.createElement('a')
-                a.style.display = 'none'
-                document.body.appendChild(a)
-                a.href = signedUrl
-                // use download attribute to set desired file name
-                a.setAttribute('download', file.name)
-                // trigger the download by simulating click
-                a.click()
-                // cleanup
-                document.body.removeChild(a)
+                this.triggerDownload(signedUrl, file.name)
                 return
               }
             } catch (e) {
@@ -84,70 +75,7 @@ export default {
             return
           }
 
-          // download without url signing enabled
-          this.addActionToProgress(file)
-          return this.$_downloadFileAsBlob(url, headers, file)
-        },
-        $_downloadFileAsBlob(url, headers, file) {
-          const request = new XMLHttpRequest()
-          request.open('GET', url)
-          request.responseType = 'blob'
-          Object.keys(headers).forEach(p => request.setRequestHeader(p, headers[p]))
-
-          request.addEventListener('readystatechange', () => {
-            if (request.readyState === 2 && request.status !== 200) {
-              this.showMessage({
-                title: this.$gettext('Download failed'),
-                desc: request.statusText,
-                status: 'danger',
-                autoClose: {
-                  enabled: true
-                }
-              })
-
-              // Remove item from progress queue in case the request failed
-              this.removeActionFromProgress(file)
-            } else if (request.readyState === 4 && request.status === 200) {
-              // Download has finished
-              if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                // for IE
-                window.navigator.msSaveOrOpenBlob(request.response, file.name)
-              } else {
-                // for Non-IE (chrome, firefox etc.)
-                const objectUrl = window.URL.createObjectURL(request.response)
-
-                const anchor = document.createElement('a')
-                anchor.href = objectUrl
-                anchor.download = file.name
-                anchor.style.display = 'none'
-                document.body.appendChild(anchor)
-                anchor.click()
-                document.body.removeChild(anchor)
-                window.URL.revokeObjectURL(objectUrl)
-
-                // TODO: Bring back when progress bar for download is figured out
-                // Items with small size can be fetched too fast for progress listener
-                // This ensures that they'll be removed from progress queue
-                // this.updateFileProgress({
-                //   fileName: file.name,
-                //   progress: 100
-                // })
-              }
-
-              this.removeActionFromProgress(file)
-            }
-          })
-
-          // TODO: Bring back when progress bar for download is figured out
-          // request.addEventListener('progress', e => {
-          //   const progress = (e.loaded / e.total) * 100
-          //   this.updateFileProgress({
-          //     fileName: file.name,
-          //     progress
-          //   })
-          // })
-
-          request.send()
+          this.triggerDownload(url, file.name)
         },
 
         /**
@@ -169,6 +97,18 @@ export default {
           }
           var parts = path.split('/').map(part => encodeURIComponent(part))
           return parts.join('/')
+        },
+        triggerDownload(url, name) {
+          const a = document.createElement('a')
+          a.style.display = 'none'
+          document.body.appendChild(a)
+          a.href = url
+          // use download attribute to set desired file name
+          a.setAttribute('download', name)
+          // trigger the download by simulating click
+          a.click()
+          // cleanup
+          document.body.removeChild(a)
         }
       }
     })
