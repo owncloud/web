@@ -76,7 +76,6 @@ Feature: login users
       | username |
       | user1    |
     And user "user1" has logged in using the webUI
-    And the user has browsed to the files page
     And user "user1" has been deleted
     And user "user1" has been created with default attributes
     When the user reloads the current page of the webUI
