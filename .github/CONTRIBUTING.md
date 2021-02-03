@@ -38,7 +38,7 @@ Before we're able to merge your code, you need to sign our [Contributor Agreemen
 
 Please read the [Developer Documentation][devmanual] to learn how to use our extension system or how to run tests for your features.
 
-In order to constantly increase the quality of our software we can no longer accept pull request which submit un-tested code.
+In order to constantly increase the quality of our software we can no longer accept pull requests which submit un-tested code.
 We have the goal that code segments are unit tested. Please try to help us with that goal. In some areas unit testing is hard 
 (aka almost impossible) as of today - in these areas refactoring WHILE fixing a bug is encouraged to enable unit testing.
 
