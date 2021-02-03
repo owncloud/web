@@ -26,7 +26,7 @@ declare -a UNEXPECTED_PASSED_SCENARIOS
 
 UNEXPECTED_NIGHTWATCH_CRASH=false
 
-yarn run acceptance-tests-drone | tee -a 'logfile.txt'
+yarn test:acceptance:drone | tee -a 'logfile.txt'
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
 if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
   echo "The acceptance tests exited with error status ${ACCEPTANCE_TESTS_EXIT_STATUS}"

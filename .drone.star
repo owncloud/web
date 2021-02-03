@@ -1052,7 +1052,7 @@ def buildWeb():
 		'image': 'owncloudci/nodejs:12',
 		'pull': 'always',
 		'commands': [
-			'yarn dist',
+			'yarn build',
 			'cp tests/drone/config.json dist/config.json',
 			'mkdir -p /srv/config',
 			'cp -r /var/www/owncloud/web/tests/drone /srv/config',
