@@ -13,7 +13,6 @@ const deleteTimestamps = {}
  *
  * @param {string} userId
  * @param {string} element
- * @param {string} server - (REMOTE/LOCAL) server to use for dav path
  */
 exports.createDavPath = function(userId, element) {
   const replaceEncoded = encodeURIComponent(element).replace(/%2F/g, '/')
