@@ -435,3 +435,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [Browser session deleted user should not be valid for newly created user of same name](https://github.com/owncloud/ocis/issues/904)
 -   [webUILogin/login.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/login.feature#L74)
+
+### [Moving files in a shared folder causes errors but succeeds](https://github.com/owncloud/ocis/issues/873)
+-   [webUIMoveFilesFolders/moveFiles.feature:122](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature:122#L122)
