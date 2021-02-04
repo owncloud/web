@@ -11,10 +11,10 @@ geekdocFilePath: backend-oc10.md
 
 ## Prerequisites
 
-Decide on which host and port Web will be served, for example `https://web-host:8300/web-path/`.
+Decide on which host and port Web will be served, for example `https://web-host:9100/web-path/`.
 In this document, we will refer to the following:
-- `<web-url>` as the full URL, for example `https://web-host:8300/web-path/`
-- `<web-domain>` as the protocol, domain and port, for example: `https://web-host:8300`
+- `<web-url>` as the full URL, for example `https://web-host:9100/web-path/`
+- `<web-domain>` as the protocol, domain and port, for example: `https://web-host:9100`
 
 ## Setting up the ownCloud Server
 

@@ -69,7 +69,7 @@ const actions = {
 
 const mutations = {
   LOAD_CONFIG(state, config) {
-    state.server = config.server
+    state.server = config.server.replace(/\/$/, '')
     state.auth = config.auth
     state.openIdConnect = config.openIdConnect
     state.uploadChunkSize = config.uploadChunkSize === undefined ? Infinity : config.uploadChunkSize

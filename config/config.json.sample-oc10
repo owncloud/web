@@ -1,39 +1,20 @@
 {
-  "server" : "https://demo.owncloud.com",
+  "server" : "http://localhost:8080",
   "theme": "owncloud",
   "version": "0.1.0",
   "auth": {
     "clientId": "",
-    "url": "https://demo.owncloud.com/index.php/apps/oauth2/api/v1/token",
-    "authUrl": "https://demo.owncloud.com/index.php/apps/oauth2/authorize"
+    "url": "http://localhost:8080/index.php/apps/oauth2/api/v1/token",
+    "authUrl": "http://localhost:8080/index.php/apps/oauth2/authorize"
   },
   "apps": [
     "files",
     "media-viewer"
   ],
-  "applications": [
-    {
-      "title": {
-        "en": "Files",
-        "de": "Dateien",
-        "fr": "Fichiers",
-        "zh_CN": "文件"
-        },
-      "icon": "folder",
-      "url": "http://demo.owncloud.com/index.html#/files/list"
-    },
-    {
-      "title": {
-        "en": "App living inside of Web core SPA"
-      },
-      "icon": "info",
-      "path": "/internal-app"
-    }
-  ],
   "external_apps": [
     {
       "id": "draw-io",
-      "path": "apps/draw-io/dist/draw-io.bundle.js",
+      "path": "web-app-draw-io",
       "config": {
         "url": "https://embed.diagrams.net",
         "autosave": false,

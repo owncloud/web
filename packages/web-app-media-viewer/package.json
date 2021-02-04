@@ -1,6 +1,6 @@
 {
   "name": "ocis-media-viewer",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "ownCloud web media-viewer",
   "license": "AGPL-3.0",
   "devDependencies": {

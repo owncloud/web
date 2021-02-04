@@ -1,6 +1,6 @@
 {
   "name": "markdown-editor",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "ownCloud web markdown-editor",
   "license": "AGPL-3.0",
   "devDependencies": {

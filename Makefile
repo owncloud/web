@@ -12,10 +12,6 @@ clean:
 release: clean
 	make -f Makefile.release
 
-.PHOny: l10n
-l10n:
-	make -f Makefile.l10n
-
 .PHONY: docs
 docs: docs-copy docs-build
 
@@ -37,10 +33,10 @@ docs-build:
 
 .PHONY: l10n-push
 l10n-push:
-	cd l10n && tx -d push -s --no-interactive
-	cd apps/files/l10n && tx -d push -s --no-interactive
-	cd apps/markdown-editor/l10n && tx -d push -s --no-interactive
-	cd apps/media-viewer/l10n && tx -d push -s --no-interactive
+	cd packages/web-runtime/l10n &&  tx -d push -s --no-interactive
+	cd packages/web-app-files/l10n &&  tx -d push -s --no-interactive
+	cd packages/web-app-draw-io/l10n &&  tx -d push -s --no-interactive
+	cd packages/web-app-media-viewer/l10n &&  tx -d push -s --no-interactive
 
 .PHONY: l10n-pull
 l10n-pull:

@@ -31,7 +31,7 @@ on the host machine, `localhost` will not work as URL. Use the Docker host ip `1
 This requires adjusting all relevant config files to use `host.docker.internal` instead of `localhost` (config.json in Web and
 config/config.php in oC10) and changing the web OIDC-callback url. Set the `SERVER_HOST` and `BACKEND_HOST` environment variables
 accordingly. In order to use the same url for development on the host machine, define it as an alias to `127.0.0.1` in `/etc/hosts`.
-After all these changes Web will be accessible at `http://host.docker.internal:8300` for both development and acceptance tests.
+After all these changes Web will be accessible at `http://host.docker.internal:9100` for both development and acceptance tests.
 
 ### Setup using standalone Selenium server
 

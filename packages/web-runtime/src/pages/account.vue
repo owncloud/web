@@ -63,7 +63,7 @@ export default {
       if (this.isOcis) {
         return null
       }
-      return this.configuration.server.replace(/\/$/, '') + '/index.php/settings/personal'
+      return [this.configuration.server, 'index.php', 'settings', 'personal'].join('/')
     },
     editRoute() {
       const navItems = this.getNavItemsByExtension('settings')

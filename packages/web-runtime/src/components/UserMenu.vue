@@ -88,7 +88,6 @@
 </template>
 
 <script>
-import { version } from '../../package.json'
 import NavigationMixin from '../mixins/navigationMixin'
 
 export default {
@@ -111,11 +110,6 @@ export default {
       type: Array,
       required: false,
       default: () => []
-    }
-  },
-  data() {
-    return {
-      appVersion: version
     }
   },
   computed: {

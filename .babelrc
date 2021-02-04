@@ -3,8 +3,11 @@
     [
       "@babel/preset-env",
       {
-        "targets": {
-          "node": "current"
+        "useBuiltIns": "usage",
+        "shippedProposals": true,
+        "corejs": {
+          "version": 3,
+          "proposals": true
         }
       }
     ]

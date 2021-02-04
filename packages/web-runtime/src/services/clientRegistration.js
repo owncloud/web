@@ -1,5 +1,3 @@
-import { version } from '../../package.json'
-
 async function get(url) {
   return await fetch(url)
     .then(res => {
@@ -46,7 +44,7 @@ export async function registerClient(openIdConfig) {
   const wellKnown = await get(`${openIdConfig.authority}/.well-known/openid-configuration`)
   const resp = await post(wellKnown.registration_endpoint, {
     redirect_uris: [baseUrl + 'oidc-callback.html'],
-    client_name: `ownCloud Web(${version}) on ${baseUrl}`
+    client_name: `ownCloud Web on ${baseUrl}`
   })
   sessionStorage.setItem('dynamicClientData', JSON.stringify(resp))
   return resp

@@ -5,7 +5,7 @@ const withHttp = url => (/^https?:\/\//i.test(url) ? url : `http://${url}`)
 const RUN_WITH_LDAP = !!process.env.RUN_WITH_LDAP
 const RUN_ON_OCIS = !!process.env.RUN_ON_OCIS
 const LOCAL_LAUNCH_URL = withHttp(
-  process.env.SERVER_HOST || (RUN_ON_OCIS ? 'https://localhost:9200' : 'http://localhost:8300')
+  process.env.SERVER_HOST || (RUN_ON_OCIS ? 'https://localhost:9200' : 'http://localhost:9100')
 )
 const LOCAL_BACKEND_URL = withHttp(
   process.env.BACKEND_HOST || (RUN_ON_OCIS ? 'https://localhost:9200' : 'http://localhost:8080')

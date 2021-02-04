@@ -27,7 +27,7 @@
     },
     {
       "id": "draw-io",
-      "path": "apps/draw-io/dist/draw-io.bundle.js",
+      "path": "web-app-draw-io",
       "config": {
         "url": "https://embed.diagrams.net",
         "autosave": false,
