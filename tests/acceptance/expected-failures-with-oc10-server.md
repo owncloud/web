@@ -23,3 +23,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [WebUI Login](https://github.com/owncloud/web/issues/4677)
 -   [webUILogin/login.feature:62](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/login.feature#L62)
+
+### [Browser session deleted user should not be valid for newly created user of same name](https://github.com/owncloud/ocis/issues/904)
+-   [webUILogin/login.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/login.feature#L74)

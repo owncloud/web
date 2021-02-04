@@ -430,6 +430,8 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [renamed file cannot be shared](https://github.com/owncloud/web/issues/4192)
 -   [webUISharingInternalUsers/shareWithUsers.feature:595](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L595)
 
-
 ### [Blocked user is not logged out](https://github.com/owncloud/ocis/issues/902)
 -   [webUILogin/adminBlocksUser.feature:6](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L6)
+
+### [Browser session deleted user should not be valid for newly created user of same name](https://github.com/owncloud/ocis/issues/904)
+-   [webUILogin/login.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/login.feature#L74)
