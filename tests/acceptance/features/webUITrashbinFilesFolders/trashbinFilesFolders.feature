@@ -52,30 +52,6 @@ Feature: files and folders exist in the trashbin after being deleted
       | &and#hash       |
       | sämple,1.txt    |
 
-  @skipOnOC10 @issue-product-183
-  # after the issue is fixed delete this scenario and use the one above
-  Scenario: Delete a file with problematic characters and check it is in the trashbin
-    Given user "user1" has renamed the following files
-      | from-name-parts | to-name-parts   |
-      | lorem-big.txt   | "double" quotes |
-      | textfile0.txt   | question?       |
-      | testimage.png   | &and#hash       |
-      | sample,1.txt    | sämple,1.txt    |
-    When the user reloads the current page of the webUI
-    And the user deletes the following elements using the webUI
-      | name-parts      |
-      | "double" quotes |
-      | question?       |
-      | &and#hash       |
-      | sämple,1.txt    |
-    And the user browses to the trashbin page
-    Then these files should be listed on the webUI
-      | files           |
-      | "double" quotes |
-    And file "&and#hash" should not be listed on the webUI
-    And file "sämple,1.txt" should not be listed on the webUI
-    And file "question?" should not be listed on the webUI
-
   @skipOnOCIS @issue-product-186
   Scenario: Delete multiple files at once and check that they are all in the trashbin
     When the user batch deletes these files using the webUI
