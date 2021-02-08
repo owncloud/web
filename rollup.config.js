@@ -6,7 +6,7 @@ import babel from 'rollup-plugin-babel'
 import builtins from '@erquhart/rollup-plugin-node-builtins'
 import copy from 'rollup-plugin-copy-watch'
 import modify from 'rollup-plugin-modify'
-import {terser} from 'rollup-plugin-terser'
+import { terser } from 'rollup-plugin-terser'
 import visualizer from 'rollup-plugin-visualizer'
 import * as path from 'path'
 import del from 'rollup-plugin-delete'
@@ -23,177 +23,174 @@ import globals from 'rollup-plugin-node-globals'
 const production = !process.env.ROLLUP_WATCH
 
 const plugins = [
-    del({
-        runOnce: true,
-        targets: path.join('dist', '*'),
-        dot: true
-    }),
-    postcss({
-        extract: path.join('css', 'web.css'),
-        minimize: production
-    }),
-    vue({
-        css: false
-    }),
-    builtins(),
-    resolve({
-        include: 'node_modules/**',
-        browser: true,
-        preferBuiltins: false
-    }),
-    commonjs({
-        include: 'node_modules/**',
-    }),
-    babel({
-        exclude: 'node_modules/**'
-    }),
-    modify({
-        'process.env.NODE_ENV': JSON.stringify('production'),
-        // todo: remove after pending PR is merged
-        // fix for 'assignment to undeclared variable dav' in davclient.js/lib/client.js 6:0
-        "if (typeof dav === 'undefined') { dav = {}; }": 'var dav = dav || {}',
-        // todo: add something like crypto-browserify as a crypto replacement which is node only
-        // crypto is not available, even if it's build with polyfill in src repo.
-        // this is used in the owncloud-sdk createHashedKey function.
-        'n.pbkdf2Sync(e,r,s,i.HASH_LENGTH,t).toString(i.DIGEST_VALUE)': 1,
-        // todo: owncloud-sdk _makeOCSrequest has no catch
-        // this is required if a network error for example 'blocked by CORS' happened
-        'l(o.instance+p,{method:e,body:d.body,headers:h})': 'l(o.instance+p,{method:e,body:d.body,headers:h}).catch(function(e){return r(e)})',
-    }),
-    globals(),
-    json(),
-    copy({
-        watch: !production && './config',
-        targets: [
-            {src: './packages/web-container/img', dest: 'dist'},
-            {src: './packages/web-container/themes', dest: 'dist'},
-            {src: './packages/web-container/oidc-callback.html', dest: 'dist'},
-            {src: './packages/web-container/oidc-silent-redirect.html', dest: 'dist'},
-            {src: './packages/web-container/manifest.json', dest: 'dist'},
-            {src: `./config/${production ? 'config.dist.json' : 'config.json'}`, dest: 'dist'},
-            {src: 'node_modules/requirejs/require.js', dest: 'dist/js'}
-        ]
-    }),
-    html({
-        title: 'ownCloud',
-        attributes: {
-            html: {lang: 'en'},
-            link: [],
-            script: []
-        },
-        meta: [
-            {
-                charset: 'utf-8'
+  del({
+    runOnce: true,
+    targets: path.join('dist', '*'),
+    dot: true
+  }),
+  postcss({
+    extract: path.join('css', 'web.css'),
+    minimize: production
+  }),
+  vue({
+    css: false
+  }),
+  builtins({ crypto: true }),
+  resolve({
+    include: 'node_modules/**',
+    browser: true,
+    preferBuiltins: false
+  }),
+  commonjs({
+    include: 'node_modules/**'
+  }),
+  babel({
+    exclude: 'node_modules/**'
+  }),
+  modify({
+    'process.env.NODE_ENV': JSON.stringify('production'),
+    // todo: remove after pending PR is merged
+    // fix for 'assignment to undeclared variable dav' in davclient.js/lib/client.js 6:0
+    "if (typeof dav === 'undefined') { dav = {}; }": 'var dav = dav || {}',
+    // todo: owncloud-sdk _makeOCSrequest has no catch
+    // this is required if a network error for example 'blocked by CORS' happened
+    'l(o.instance+p,{method:e,body:d.body,headers:h})':
+      'l(o.instance+p,{method:e,body:d.body,headers:h}).catch(function(e){return r(e)})'
+  }),
+  globals(),
+  json(),
+  copy({
+    watch: !production && './config',
+    targets: [
+      { src: './packages/web-container/img', dest: 'dist' },
+      { src: './packages/web-container/themes', dest: 'dist' },
+      { src: './packages/web-container/oidc-callback.html', dest: 'dist' },
+      { src: './packages/web-container/oidc-silent-redirect.html', dest: 'dist' },
+      { src: './packages/web-container/manifest.json', dest: 'dist' },
+      { src: `./config/${production ? 'config.dist.json' : 'config.json'}`, dest: 'dist' },
+      { src: 'node_modules/requirejs/require.js', dest: 'dist/js' }
+    ]
+  }),
+  html({
+    title: 'ownCloud',
+    attributes: {
+      html: { lang: 'en' },
+      link: [],
+      script: []
+    },
+    meta: [
+      {
+        charset: 'utf-8'
+      },
+      {
+        name: 'viewport',
+        content: 'initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'
+      },
+      {
+        name: 'theme-color',
+        content: '#375f7E'
+      },
+      {
+        'http-equiv': 'x-ua-compatible',
+        content: 'IE=11'
+      }
+    ],
+    template: ({ attributes, files, meta, publicPath, title }) => {
+      return new Promise((resolve, reject) => {
+        ejs.renderFile(
+          './packages/web-container/index.html.ejs',
+          {
+            helpers: {
+              makeHtmlAttributes: html.makeHtmlAttributes
             },
-            {
-                name: 'viewport',
-                content: 'initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'
-            },
-            {
-                name: 'theme-color',
-                content: '#375f7E'
-            },
-            {
-                'http-equiv': 'x-ua-compatible',
-                content: 'IE=11'
-            }
-        ],
-        template: ({attributes, files, meta, publicPath, title}) => {
-            return new Promise((resolve, reject) => {
-                ejs.renderFile(
-                    './packages/web-container/index.html.ejs',
-                    {
-                        helpers: {
-                            makeHtmlAttributes: html.makeHtmlAttributes
-                        },
-                        data: {
-                            attributes,
-                            meta,
-                            publicPath,
-                            title,
-                            files,
-                            bundle: Object.keys(files).reduce((acc, c) => {
-                                if (!Object.hasOwnProperty.call(acc, c)) {
-                                    acc[c] = {}
-                                }
-                                files[c].forEach(f => {
-                                    const fp = path.parse(f.fileName)
-                                    acc[c][
-                                        production ? fp.name.substr(0, fp.name.lastIndexOf('-')) || fp.name : fp.name
-                                        ] = c === 'js' ? fp.name : f.fileName
-                                })
+            data: {
+              attributes,
+              meta,
+              publicPath,
+              title,
+              files,
+              bundle: Object.keys(files).reduce((acc, c) => {
+                if (!Object.hasOwnProperty.call(acc, c)) {
+                  acc[c] = {}
+                }
+                files[c].forEach(f => {
+                  const fp = path.parse(f.fileName)
+                  acc[c][
+                    production ? fp.name.substr(0, fp.name.lastIndexOf('-')) || fp.name : fp.name
+                  ] = c === 'js' ? fp.name : f.fileName
+                })
 
-                                return acc
-                            }, {}),
-                            roots: {
-                                css: 'css',
-                                js: 'js'
-                            }
-                        }
-                    },
-                    {},
-                    (err, html) => {
-                        if (err) {
-                            reject(err)
-                        } else {
-                            resolve(html)
-                        }
-                    }
-                )
-            })
-        }
-    }),
-    progress()
+                return acc
+              }, {}),
+              roots: {
+                css: 'css',
+                js: 'js'
+              }
+            }
+          },
+          {},
+          (err, html) => {
+            if (err) {
+              reject(err)
+            } else {
+              resolve(html)
+            }
+          }
+        )
+      })
+    }
+  }),
+  progress()
 ]
 
 if (production) {
-    plugins.push(terser())
+  plugins.push(terser())
 }
 
 if (process.env.SERVER === 'true') {
-    plugins.push(
-        serve({
-            contentBase: ['dist'],
-            port: process.env.PORT || 9100
-        })
-    )
+  plugins.push(
+    serve({
+      contentBase: ['dist'],
+      port: process.env.PORT || 9100
+    })
+  )
 }
 
 if (process.env.REPORT === 'true') {
-    plugins.push(
-        visualizer({
-            filename: path.join('dist', 'report.html')
-        })
-    )
+  plugins.push(
+    visualizer({
+      filename: path.join('dist', 'report.html')
+    })
+  )
 }
 
 if (production) {
-    plugins.push(gzip())
+  plugins.push(gzip())
 }
 
 export default {
-    input: fs.readdirSync('packages').reduce((acc, i) => {
-        const p = path.join('packages', i, 'src', 'index.js')
-        if (fs.existsSync(p)) {
-            acc[i] = p
-        }
-        return acc
-    }, {}),
-    output: {
-        dir: 'dist',
-        format: 'amd',
-        chunkFileNames: path.join('js', '_chunks', production ? '[name]-[hash].js' : '[name].js'),
-        entryFileNames: path.join('js', production ? '[name]-[hash].js' : '[name].js')
-    },
-    manualChunks: id => {
-        if (id.includes('node_modules')) {
-            return 'vendor'
-        }
-    },
-    onwarn: warning => {
-        if (warning.code !== 'CIRCULAR_DEPENDENCY') {
-            console.error(`(!) ${warning.message}`)
-        }
-    },
-    plugins
+  input: fs.readdirSync('packages').reduce((acc, i) => {
+    const p = path.join('packages', i, 'src', 'index.js')
+    if (fs.existsSync(p)) {
+      acc[i] = p
+    }
+    return acc
+  }, {}),
+  output: {
+    dir: 'dist',
+    format: 'amd',
+    chunkFileNames: path.join('js', '_chunks', production ? '[name]-[hash].js' : '[name].js'),
+    entryFileNames: path.join('js', production ? '[name]-[hash].js' : '[name].js')
+  },
+  manualChunks: id => {
+    if (id.includes('node_modules')) {
+      return 'vendor'
+    }
+  },
+  onwarn: warning => {
+    if (warning.code !== 'CIRCULAR_DEPENDENCY') {
+      console.error(`(!) ${warning.message}`)
+    }
+  },
+  plugins
 }
