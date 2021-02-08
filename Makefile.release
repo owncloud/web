@@ -27,26 +27,17 @@ endif
 .PHONY: build-release
 build-release: build package
 
-
 .PHONY: build
-build: build-web copy-configs
+build: build-web copy-config
 
 .PHONY: build-web
 build-web:
-	rm -rf $(dist_dir)
 	$(YARN) install
-	$(YARN) dist
+	$(YARN) build
 
-.PHONY: copy-configs
-copy-configs: copy-web-config copy-htaccess
-
-.PHONY: copy-web-config
-copy-web-config:
-	cp config.json.dist $(dist_dir)/
-
-.Phony: copy-htaccess
-copy-htaccess:
-	cp .htaccess $(dist_dir)/
+.PHONY: copy-config
+copy-config:
+	cp config/config.json.dist $(dist_dir)/
 
 .PHONY: package
 package: create-release-folder create-packages
@@ -61,7 +52,7 @@ create-packages: package-plain package-ocx
 
 .PHONY: package-plain
 package-plain:
-	cd $(dist_dir) && tar -czf $(CURDIR)/release/$(app_name).tar.gz -C $(dist_dir) * .htaccess
+	cd $(dist_dir) && tar -czf $(CURDIR)/release/$(app_name).tar.gz -C $(dist_dir) *
 
 .PHONY: package-ocx
 package-ocx: ocx-app-config sign ocx-app-bundle
@@ -76,10 +67,8 @@ endif
 
 .PHONY: ocx-app-config
 ocx-app-config:
-	cp -R appinfo $(dist_dir)
-	cp -R img $(dist_dir)
-	cp -R lib $(dist_dir)
-	rm $(dist_dir)/.htaccess # .htaccess is not needed/read in ocx app deployment scenarios
+	cp -R packages/web-integration-oc10/appinfo $(dist_dir)
+	cp -R packages/web-integration-oc10/lib $(dist_dir)
 
 .PHONY: ocx-app-bundle
 ocx-app-bundle:

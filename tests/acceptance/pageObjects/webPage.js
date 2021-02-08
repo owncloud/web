@@ -18,10 +18,9 @@ module.exports = {
               .waitForElementVisible('@searchInputFieldLowResolution')
               .setValue('@searchInputFieldLowResolution', [searchTerm, this.api.Keys.ENTER])
           } else {
-            this.waitForElementVisible('@searchInputFieldHighResolution').setValue(
-              '@searchInputFieldHighResolution',
-              [searchTerm, this.api.Keys.ENTER]
-            )
+            this.waitForElementVisible(
+              '@searchInputFieldHighResolution'
+            ).setValue('@searchInputFieldHighResolution', [searchTerm, this.api.Keys.ENTER])
           }
         })
         .waitForElementNotVisible('@searchLoadingIndicator')

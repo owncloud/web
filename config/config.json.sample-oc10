@@ -1,0 +1,25 @@
+{
+  "server" : "http://localhost:8080",
+  "theme": "owncloud",
+  "version": "0.1.0",
+  "auth": {
+    "clientId": "",
+    "url": "http://localhost:8080/index.php/apps/oauth2/api/v1/token",
+    "authUrl": "http://localhost:8080/index.php/apps/oauth2/authorize"
+  },
+  "apps": [
+    "files",
+    "media-viewer"
+  ],
+  "external_apps": [
+    {
+      "id": "draw-io",
+      "path": "web-app-draw-io",
+      "config": {
+        "url": "https://embed.diagrams.net",
+        "autosave": false,
+        "theme": "minimal"
+      }
+    }
+  ]
+}

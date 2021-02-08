@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html<%- helpers.makeHtmlAttributes(data.attributes.html) %>>
+<head>
+    <% data.meta.forEach((m) => { %>
+        <meta<%- helpers.makeHtmlAttributes(m) %>>
+    <% }); %>
+    <title><%= data.title %></title>
+    <link rel="manifest" href="manifest.json">
+    <% Object.keys(data.bundle.css).forEach((s) => { %>
+        <link href="<%- data.bundle.css[s] %>" rel="stylesheet">
+    <% }); %>
+    <script src="js/require.js"></script>
+    <noscript>
+        <style>#enable-js-banner {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                padding: 0.5rem;
+                background-color: #467391;
+            }
+
+            #banner-content {
+                color: white;
+            }</style>
+    </noscript>
+</head>
+<body>
+<main id="owncloud"></main>
+<noscript>
+    <div id="enable-js-banner"><span id="banner-content"><h3>Please enable JavaScript</h3></span></div>
+</noscript>
+<script type="text/javascript">
+  requirejs.config({
+    baseUrl: <%- JSON.stringify(data.roots.js) %>,
+    paths: <%- JSON.stringify(data.bundle.js) %>
+  })
+
+  requirejs(['web-runtime'], function (runtime) {
+    runtime.exec()
+  })</script>
+</body>
+</html>

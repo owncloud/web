@@ -1,0 +1,10 @@
+{
+  "ignores": [
+    "cucumber-pretty",
+    "requirejs",
+    "nightwatch-vrt",
+    "@babel/polyfill",
+    "@babel/register",
+    "babel-eslint"
+  ]
+}

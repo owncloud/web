@@ -1,0 +1,10 @@
+{
+  "name": "ocis-media-viewer",
+  "version": "0.0.0",
+  "description": "ownCloud web media-viewer",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "query-string": "^6.8.3",
+    "vuex": "3.1.3"
+  }
+}

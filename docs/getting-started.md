@@ -15,10 +15,6 @@ geekdocFilePath: getting-started.md
 
 TBD
 
-### Binaries
-
-TBD
-
 ### Source code
 
 The source code is hosted at https://github.com/owncloud/web

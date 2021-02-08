@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 import Stubs from '../config/stubs'
 
-import TopBar from '@/components/Top-Bar.vue'
+import TopBar from 'web-runtime/src/components/Top-Bar.vue'
 
 const localVue = createLocalVue()
 const search = enabled => ({

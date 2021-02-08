@@ -1,5 +1,5 @@
 const { client } = require('nightwatch-api')
-const ldap = require('ldap')
+const ldap = require('ldapjs')
 const { join } = require('./path')
 const fs = require('fs-extra')
 
