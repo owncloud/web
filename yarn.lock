@@ -3232,9 +3232,10 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-"davclient.js@https://github.com/owncloud/davclient.js.git":
+"davclient.js@git+https://github.com/owncloud/davclient.js.git":
   version "0.2.1"
-  resolved "https://github.com/owncloud/davclient.js.git#bf19f590451b3c0658913568053ec7f300f7dfc1"
+  uid bf19f590451b3c0658913568053ec7f300f7dfc1
+  resolved "git+https://github.com/owncloud/davclient.js.git#bf19f590451b3c0658913568053ec7f300f7dfc1"
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -7420,14 +7421,14 @@ owncloud-design-system@2.1.2:
     webfontloader "^1.6.28"
     weekstart "^1.0.0"
 
-owncloud-sdk@^1.0.0-740:
-  version "1.0.0-1587"
-  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-1587.tgz#19db1e1b5c2e00aa45547acbe674cc5eb1c07348"
-  integrity sha512-5XCVXXYoamLAlCcVSvfG4I8cAXdqhOJ0cp6htGoYW90cSA1a+kFgmz33Nqe1IbU2UYZzLhJlFFFCqdE/3UxYbg==
+owncloud-sdk@^1.0.0-1602:
+  version "1.0.0-1602"
+  resolved "https://registry.yarnpkg.com/owncloud-sdk/-/owncloud-sdk-1.0.0-1602.tgz#a6db36ddab5ef5d2582feb98d3ee27880b23d7db"
+  integrity sha512-nCD7L03rE+HHlU8i6eb/ObmypVrxny6HPBQizOlJYJrYQViWS5zEdLbHQ3Ivbjg1TTVnbvznLnEhxJcbZM9E8A==
   dependencies:
     axios "^0.19.2"
     cross-fetch "^3.0.6"
-    davclient.js "https://github.com/owncloud/davclient.js.git"
+    davclient.js "git+https://github.com/owncloud/davclient.js.git"
     promise "^8.0.3"
     request "^2.88.0"
     utf8 "^3.0.0"

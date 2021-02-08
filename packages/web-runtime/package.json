@@ -8,7 +8,7 @@
     "lodash-es": "^4.17.20",
     "oidc-client": "1.10.1",
     "owncloud-design-system": "2.1.2",
-    "owncloud-sdk": "^1.0.0-740",
+    "owncloud-sdk": "^1.0.0-1602",
     "p-queue": "^6.1.1",
     "tus-js-client": "^1.8.0",
     "vue": "^2.6.10",
