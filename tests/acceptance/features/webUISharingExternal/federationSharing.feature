@@ -225,7 +225,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: uploading a file inside a folder of a folder
     Given user "user1" from remote server has shared "simple-folder" with user "user1" from local server
     And user "user1" from server "LOCAL" has accepted the last pending share
-    When the user opens folder "Shares%2Fsimple-folder/simple-empty-folder" directly on the webUI
+    When the user opens folder "Shares/simple-folder/simple-empty-folder" directly on the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then file "new-lorem.txt" should be listed on the webUI
     And as "user1" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist on remote server
@@ -235,7 +235,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: rename a file in a folder inside a shared folder
     Given user "user1" from remote server has shared "'single'quotes" with user "user1" from local server
     And user "user1" from server "LOCAL" has accepted the last pending share
-    When the user opens folder "Shares%2F'single'quotes/simple-empty-folder" directly on the webUI
+    When the user opens folder "Shares/'single'quotes/simple-empty-folder" directly on the webUI
     And the user renames file "for-git-commit" to "not-for-git-commit" using the webUI
     Then file "for-git-commit" should not be listed on the webUI
     And as "user1" file "Shares/'single'quotes/simple-empty-folder/for-git-commit" should not exist
