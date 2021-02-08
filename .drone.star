@@ -93,7 +93,6 @@ config = {
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.md'
 			},
 			'visualTesting': True,
-			'screenShots': True
 		},
 		'webUIFederation': {
 			'suites': {
