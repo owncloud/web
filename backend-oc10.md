@@ -11,10 +11,10 @@ geekdocFilePath: backend-oc10.md
 
 ## Prerequisites
 
-Decide on which host and port Web will be served, for example `https://web-host:8300/web-path/`.
+Decide on which host and port Web will be served, for example `https://web-host:9100/web-path/`.
 In this document, we will refer to the following:
-- `<web-url>` as the full URL, for example `https://web-host:8300/web-path/`
-- `<web-domain>` as the protocol, domain and port, for example: `https://web-host:8300`
+- `<web-url>` as the full URL, for example `https://web-host:9100/web-path/`
+- `<web-domain>` as the protocol, domain and port, for example: `https://web-host:9100`
 
 ## Setting up the ownCloud Server
 
@@ -57,7 +57,7 @@ Login as administrator in the ownCloud Server web interface and go to the "User 
 
 ### Setting up Web
 
-In the local Web checkout, copy the `config.json.sample-oc10` file to `config.json` and adjust it accordingly:
+In the local Web checkout, copy the `config/config.json.sample-oc10` file to `config/config.json` and adjust it accordingly:
 
 - Set the "server" key to the URL of the ownCloud server including path. If the URL contains a path, please also add a **trailing slash** there.
 - Set the "clientId" key to the **client identifier** as copied from the "User Authentication" section before.
@@ -67,8 +67,8 @@ In the local Web checkout, copy the `config.json.sample-oc10` file to `config.js
 ## Running Web
 
 - if running from source, make sure to [build Web]({{< ref "building.md" >}}) first
-- run by launching a webpack dev server `yarn watch-all`
-- when working on the Web code, webpack will recompile the code automatically
+- run by launching a rollup dev server `yarn serve`
+- when working on the Web code, rollup will recompile the code automatically
 
 ## Running acceptance tests
 
