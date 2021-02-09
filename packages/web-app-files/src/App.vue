@@ -36,15 +36,15 @@
   </div>
 </template>
 <script>
-import Mixins from '../mixins'
-import MixinRoutes from '../mixins/routes'
+import Mixins from './mixins'
+import MixinRoutes from './mixins/routes'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import Sidebar from './Sidebar.vue'
-import AppBar from './AppBar.vue'
-import AllFilesList from './AllFilesList.vue'
-import TrashBin from './Trashbin.vue'
-import SharedFilesList from './Collaborators/SharedFilesList.vue'
-import UploadProgress from './UploadProgress.vue'
+import Sidebar from './components//Sidebar.vue'
+import AppBar from './components/AppBar.vue'
+import AllFilesList from './components/AllFilesList.vue'
+import TrashBin from './components/Trashbin.vue'
+import SharedFilesList from './components/Collaborators/SharedFilesList.vue'
+import UploadProgress from './components/UploadProgress.vue'
 
 export default {
   components: {

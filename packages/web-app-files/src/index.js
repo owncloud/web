@@ -1,4 +1,4 @@
-import FilesApp from './components/FilesApp.vue'
+import App from './App.vue'
 import AllFiles from './views/AllFiles.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
@@ -124,7 +124,7 @@ const routes = [
   {
     path: '/favorites',
     components: {
-      app: FilesApp
+      app: App
     },
     name: 'files-favorites',
     meta: {
@@ -135,7 +135,7 @@ const routes = [
   {
     path: '/shared-with-me',
     components: {
-      app: FilesApp
+      app: App
     },
     name: 'files-shared-with-me',
     meta: {
@@ -146,7 +146,7 @@ const routes = [
   {
     path: '/shared-with-others',
     components: {
-      app: FilesApp
+      app: App
     },
     name: 'files-shared-with-others',
     meta: {
@@ -157,7 +157,7 @@ const routes = [
   {
     path: '/trash-bin',
     components: {
-      app: FilesApp
+      app: App
     },
     name: 'files-trashbin',
     meta: {
@@ -186,7 +186,7 @@ const routes = [
     path: '/public-files/:item',
     name: 'public-files',
     components: {
-      app: FilesApp
+      app: App
     },
     meta: {
       auth: false,
