@@ -1,7 +1,7 @@
 <template>
   <div>
     <oc-table-files
-      :class="isSidebarOpen ? 'files-table-squashed' : 'files-table'"
+      class="files-table"
       :resources="activeFiles"
       :target-route="$route.name"
       :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -58,14 +58,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.files-table {
-  width: 100%;
-}
-
-.files-app-bar-squashed,
-.files-table-squashed {
-  width: calc(100% - 400px);
-}
-</style>

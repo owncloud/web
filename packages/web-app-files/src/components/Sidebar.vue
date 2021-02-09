@@ -1,8 +1,7 @@
 <template>
   <oc-app-side-bar
-    id="files-sidebar"
     :key="highlightedFile.id"
-    class="oc-p-s uk-overflow-auto oc-border-l"
+    class="files-sidebar oc-p-s oc-border-l"
     :disable-action="false"
     @close="close()"
   >
@@ -68,7 +67,6 @@
 import Mixins from '../mixins'
 import MixinRoutes from '../mixins/routes'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
-import { getFileExtension, getFileIcon } from '../helpers/resources'
 
 import ActionsAccordion from './Sidebar/ActionsAccordion.vue'
 
@@ -203,6 +201,15 @@ export default {
 </script>
 
 <style lang="scss">
+.files-sidebar {
+  position: sticky;
+  top: 60px;
+  right: 0;
+  height: 100%;
+  background-color: white;
+  z-index: 1;
+}
+
 .oc-star {
   &-shining svg {
     fill: #ffba0a;
