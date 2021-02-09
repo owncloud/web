@@ -20,7 +20,6 @@ const isDirectUserShare = resource => {
 }
 
 const isIndirectUserShare = (resource, sharesTree) => {
-  console.log(shareTypesIndirect(resource.path, sharesTree))
   return (
     resource.isReceivedShare() ||
     intersection(userShareTypes, shareTypesIndirect(resource.path, sharesTree)).length > 0

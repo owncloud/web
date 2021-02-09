@@ -15,7 +15,6 @@
         <span v-if="!showBreadcrumb" class="uk-flex uk-flex-middle oc-mb-s">
           <oc-icon v-if="pageIcon" :name="pageIcon" class="oc-mr-s" />
           <h1 class="oc-page-title" v-text="pageTitle" />
-          TODO: Fix breadcrumb
         </span>
         <span v-else-if="showBreadcrumb">
           <h1 class="oc-visually-hidden" v-text="pageTitle" />
