@@ -119,7 +119,7 @@ const routes = [
     children: [
       {
         name: 'all-files',
-        path: ':item?',
+        path: 'folder/:item?',
         component: AllFiles
       },
       {
