@@ -1,5 +1,5 @@
 <template>
-  <div id="files-app-bar" class="oc-m-s">
+  <div class="files-app-bar oc-p-s">
     <file-drop
       v-if="!isIE11() && canUpload && hasFreeSpace"
       :root-path="currentPath"
@@ -15,6 +15,7 @@
         <span v-if="!showBreadcrumb" class="uk-flex uk-flex-middle oc-mb-s">
           <oc-icon v-if="pageIcon" :name="pageIcon" class="oc-mr-s" />
           <h1 class="oc-page-title" v-text="pageTitle" />
+          TODO: Fix breadcrumb
         </span>
         <span v-else-if="showBreadcrumb">
           <h1 class="oc-visually-hidden" v-text="pageTitle" />
@@ -679,3 +680,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.files-app-bar {
+  background-color: white;
+  box-sizing: border-box;
+  z-index: 1;
+}
+</style>

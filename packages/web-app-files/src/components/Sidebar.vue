@@ -202,10 +202,6 @@ export default {
 
 <style lang="scss">
 .files-sidebar {
-  position: sticky;
-  top: 60px;
-  right: 0;
-  height: 100%;
   background-color: white;
   z-index: 1;
 }

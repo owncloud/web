@@ -1,5 +1,5 @@
 <template>
-  <div id="files" class="uk-flex">
+  <div id="files" class="uk-flex uk-flex-stretch">
     <div
       ref="filesListWrapper"
       tabindex="-1"
@@ -7,7 +7,7 @@
       :class="{ 'uk-visible@m': _sidebarOpen }"
       @dragover="$_ocApp_dragOver"
     >
-      <app-bar />
+      <app-bar id="files-app-bar" />
       <upload-progress v-show="$_uploadProgressVisible" class="oc-p-s uk-background-muted" />
       <router-view id="files-view" />
     </div>
@@ -109,5 +109,18 @@ export default {
 <style scoped>
 .files-list-wrapper:focus {
   outline: none;
+}
+
+#files-sidebar {
+  position: sticky;
+  top: 60px;
+  max-height: 100vh;
+}
+
+#files-app-bar {
+  position: sticky;
+  top: 60px;
+  height: 90px;
+  z-index: 1;
 }
 </style>

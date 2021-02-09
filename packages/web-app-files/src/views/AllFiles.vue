@@ -1,7 +1,7 @@
 <template>
   <div>
     <oc-table-files
-      class="files-table"
+      id="files-table"
       :resources="activeFiles"
       :target-route="$route.name"
       :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -58,3 +58,9 @@ export default {
   }
 }
 </script>
+
+<style>
+#files-table .oc-table-header-cell {
+  top: 150px;
+}
+</style>
