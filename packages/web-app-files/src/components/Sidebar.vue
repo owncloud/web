@@ -7,7 +7,7 @@
   >
     <template v-if="highlightedFile" slot="title">
       <div class="uk-inline">
-        <oc-icon :name="resourceIcon" size="xlarge" />
+        <oc-icon :name="highlightedFile.icon" size="xlarge" />
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
