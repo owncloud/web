@@ -1,5 +1,9 @@
 import App from './App.vue'
 import AllFiles from './views/AllFiles.vue'
+import Favorites from './views/Favorites.vue'
+import SharedWithMe from './views/SharedWithMe.vue'
+import SharedWithOthers from './views/SharedWithOthers.vue'
+import Trashbin from './views/Trashbin.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import FileLinkSidebar from './components/FileLinkSidebar.vue'
@@ -61,7 +65,6 @@ const navItems = [
     name: $gettext('All files'),
     iconMaterial: appInfo.icon,
     route: {
-      name: 'files-list',
       path: `/${appInfo.id}/list`
     }
   },
@@ -69,7 +72,7 @@ const navItems = [
     name: $gettext('Favorites'),
     iconMaterial: 'star',
     route: {
-      name: 'files-favorites'
+      path: `/${appInfo.id}/list/favorites`
     },
     enabled(capabilities) {
       return capabilities.files && capabilities.files.favorites
@@ -79,16 +82,14 @@ const navItems = [
     name: $gettext('Shared with me'),
     iconMaterial: 'shared-with-me',
     route: {
-      name: 'files-shared-with-me',
-      path: `/${appInfo.id}/shared-with-me`
+      path: `/${appInfo.id}/list/shared-with-me`
     }
   },
   {
     name: $gettext('Shared with others'),
     iconMaterial: 'shared-with-others',
     route: {
-      name: 'files-shared-with-others',
-      path: `/${appInfo.id}/shared-with-others`
+      path: `/${appInfo.id}/list/shared-with-others`
     }
   },
   {
@@ -98,7 +99,7 @@ const navItems = [
       return capabilities.dav && capabilities.dav.trashbin === '1.0'
     },
     route: {
-      name: 'files-trashbin'
+      path: `/${appInfo.id}/list/trashbin`
     }
   }
 ]
@@ -106,65 +107,58 @@ const navItems = [
 const routes = [
   {
     path: '',
-    redirect: `/${appInfo.id}/list/`,
-    components: {
-      app: AllFiles
-    }
+    redirect: '/files/list'
   },
   {
-    path: '/list/:item?',
-    components: {
-      app: AllFiles
-    },
-    name: 'files-list',
-    meta: {
-      hasBulkActions: true
-    }
-  },
-  {
-    path: '/favorites',
+    name: 'list',
+    path: '/list',
+    redirect: ':item?',
     components: {
       app: App
     },
-    name: 'files-favorites',
-    meta: {
-      hideFilelistActions: true,
-      hasBulkActions: true
-    }
-  },
-  {
-    path: '/shared-with-me',
-    components: {
-      app: App
-    },
-    name: 'files-shared-with-me',
-    meta: {
-      hideFilelistActions: true,
-      hasBulkActions: true
-    }
-  },
-  {
-    path: '/shared-with-others',
-    components: {
-      app: App
-    },
-    name: 'files-shared-with-others',
-    meta: {
-      hideFilelistActions: true,
-      hasBulkActions: true
-    }
-  },
-  {
-    path: '/trash-bin',
-    components: {
-      app: App
-    },
-    name: 'files-trashbin',
-    meta: {
-      hideFilelistActions: true,
-      // FIXME: should have a generic bulk actions way as it currently handles this separately
-      hasBulkActions: false
-    }
+    children: [
+      {
+        name: 'all-files',
+        path: ':item?',
+        component: AllFiles
+      },
+      {
+        path: 'favorites',
+        component: Favorites,
+        meta: {
+          hideFilelistActions: true,
+          hasBulkActions: true
+        }
+      },
+      {
+        path: 'shared-with-me',
+        component: SharedWithMe,
+        name: 'files-shared-with-me',
+        meta: {
+          hideFilelistActions: true,
+          hasBulkActions: true
+        }
+      },
+      {
+        path: 'shared-with-others',
+        component: SharedWithOthers,
+        name: 'files-shared-with-others',
+        meta: {
+          hideFilelistActions: true,
+          hasBulkActions: true
+        }
+      },
+      {
+        path: '/trash-bin',
+        component: Trashbin,
+        name: 'files-trashbin',
+        meta: {
+          hideFilelistActions: true,
+          // FIXME: should have a generic bulk actions way as it currently handles this separately
+          hasBulkActions: false
+        }
+      }
+    ]
   },
   {
     path: '/private-link/:fileId',

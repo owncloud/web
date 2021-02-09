@@ -58,17 +58,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Mixins from '../mixins'
-import FileList from './FileList.vue'
-import NoContentMessage from './FilesLists/NoContentMessage.vue'
-import SortableColumnHeader from './FilesLists/SortableColumnHeader.vue'
+import NoContentMessage from '../components/FilesLists/NoContentMessage.vue'
 
 export default {
   name: 'Trashbin',
 
   components: {
-    FileList,
-    NoContentMessage,
-    SortableColumnHeader
+    NoContentMessage
   },
 
   mixins: [Mixins],

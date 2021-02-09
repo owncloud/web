@@ -1,17 +1,16 @@
 <template>
-  <div>
-    <oc-table-files
-      :class="isSidebarOpen ? 'files-table-squashed' : 'files-table'"
-      :resources="activeFiles"
-      :target-route="$route.name"
-      :highlighted="highlightedFile ? highlightedFile.id : null"
-      @showDetails="highlightResource"
-    >
-      <template v-slot:quickActions="props">
-        <quick-actions :item="props.resource" :actions="app.quickActions" />
-      </template>
-    </oc-table-files>
-  </div>
+  <!-- <oc-table-files
+    :class="isSidebarOpen ? 'files-table-squashed' : 'files-table'"
+    :resources="activeFiles"
+    :target-route="$route.name"
+    :highlighted="highlightedFile ? highlightedFile.id : null"
+    @showDetails="highlightResource"
+  >
+    <template v-slot:quickActions="props">
+      <quick-actions :item="props.resource" :actions="app.quickActions" />
+    </template>
+  </oc-table-files> -->
+  <div>Hello world</div>
 </template>
 
 <script>

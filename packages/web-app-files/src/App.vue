@@ -3,30 +3,13 @@
     <div
       ref="filesListWrapper"
       tabindex="-1"
-      class="uk-width-expand uk-height-1-1 uk-flex uk-flex-column files-list-wrapper uk-overflow-hidden"
+      class="files-list-wrapper uk-width-expand"
       :class="{ 'uk-visible@m': _sidebarOpen }"
       @dragover="$_ocApp_dragOver"
     >
       <app-bar />
       <upload-progress v-show="$_uploadProgressVisible" class="oc-p-s uk-background-muted" />
-      <trash-bin
-        v-if="isTrashbinRoute"
-        class="uk-flex-1 uk-overflow-hidden"
-        :file-data="activeFiles"
-      />
-      <shared-files-list
-        v-else-if="isAnySharedWithRoute"
-        class="uk-flex-1 uk-overflow-hidden"
-        :file-data="activeFiles"
-        @sideBarOpen="openSideBar"
-      />
-      <all-files-list
-        v-else
-        class="uk-flex-1 uk-overflow-hidden"
-        :file-data="activeFiles"
-        :parent-folder="currentFolder"
-        @sideBarOpen="openSideBar"
-      />
+      <router-view id="files-view" />
     </div>
     <sidebar
       v-if="_sidebarOpen"
@@ -41,18 +24,12 @@ import MixinRoutes from './mixins/routes'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import Sidebar from './components//Sidebar.vue'
 import AppBar from './components/AppBar.vue'
-import AllFilesList from './components/AllFilesList.vue'
-import TrashBin from './components/Trashbin.vue'
-import SharedFilesList from './components/Collaborators/SharedFilesList.vue'
 import UploadProgress from './components/UploadProgress.vue'
 
 export default {
   components: {
     Sidebar,
-    AllFilesList,
     AppBar,
-    TrashBin,
-    SharedFilesList,
     UploadProgress
   },
   mixins: [Mixins, MixinRoutes],

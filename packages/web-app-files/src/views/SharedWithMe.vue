@@ -167,20 +167,16 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { shareTypes } from '../../helpers/shareTypes'
-import { textUtils } from '../../helpers/textUtils'
-import Mixins from '../../mixins'
-import MixinRoutes from '../../mixins/routes'
-import FileList from '../FileList.vue'
-import NoContentMessage from '../FilesLists/NoContentMessage.vue'
-import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
+import { shareTypes } from '../helpers/shareTypes'
+import { textUtils } from '../helpers/textUtils'
+import Mixins from '../mixins'
+import MixinRoutes from '../mixins/routes'
+import NoContentMessage from '../components/FilesLists/NoContentMessage.vue'
 
 export default {
   name: 'SharedFilesList',
   components: {
-    FileList,
-    NoContentMessage,
-    SortableColumnHeader
+    NoContentMessage
   },
   mixins: [Mixins, MixinRoutes],
   props: {
