@@ -354,7 +354,7 @@ def main(ctx):
 	return before + stages + after
 
 def beforePipelines(ctx):
-	return yarnlint() + changelog(ctx) + website(ctx)
+	return buildOCIS() + yarnlint() + changelog(ctx) + website(ctx)
 
 def stagePipelines(ctx):
 	acceptancePipelines = acceptance(ctx)
@@ -674,7 +674,7 @@ def acceptance(ctx):
 										glauthService()+
 										fixPermissions()
 									) if not params['runningOnOCIS'] else (
-										buildOCIS() +
+										restoreBuildArtifactCache(ctx, 'ocis-binary-amd64', 'ocis/bin/ocis') +
 										ocisService() +
 										getSkeletonFiles()
 									)
@@ -1393,26 +1393,43 @@ def cloneOCIS():
 	}]
 
 def buildOCIS():
-	return[{
+	return {
 		'name': 'build-ocis',
 		'image': 'webhippie/golang:1.15',
 		'pull': 'always',
-		'commands': [
-			'source .drone.env',
-			'cd $GOPATH/src/github.com/owncloud/ocis',
-			'git checkout $OCIS_COMMITID',
-			'cd ocis',
-			'make build',
-			'cp bin/ocis /var/www/owncloud'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
+		'platform': {
+		    'os': 'linux',
+		    'arch': 'amd64',
+		},
+		'steps':
+              makeGenerate('ocis') +
+              build() +
+              rebuildBuildArtifactCache(ctx, 'ocis-binary-amd64', 'ocis/bin/ocis'),
+        'trigger': {
+              'ref': [
+                'refs/heads/master',
+                'refs/tags/v*',
+                'refs/pull/**',
+              ],
+        },
+        'volumes': [{
+                      'name': 'gopath',
+                      'temp': {},
+                      }],
+	}
+
+def makeGenerate(module):
+  return [
+    {
+      'name': 'generate',
+      'image': 'webhippie/golang:1.15',
+      'pull': 'always',
+      'commands': [
+        'make -C %s generate' % (module),
+      ],
+      'volumes': [stepVolumeGoWebhippie,],
+    }
+  ]
 
 def ocisService():
 	return[{
@@ -1851,3 +1868,95 @@ def dependsOn(earlierStages, nextStages):
 	for earlierStage in earlierStages:
 		for nextStage in nextStages:
 			nextStage['depends_on'].append(earlierStage['name'])
+
+def genericCache(name, action, mounts, cache_key):
+  rebuild = 'false'
+  restore = 'false'
+  if action == 'rebuild':
+    rebuild = 'true'
+    action = 'rebuild'
+  else:
+    restore = 'true'
+    action = 'restore'
+
+  step = {
+      'name': '%s_%s' %(action, name),
+      'image': 'meltwater/drone-cache:v1',
+      'pull': 'always',
+      'environment': {
+        'AWS_ACCESS_KEY_ID': {
+          'from_secret': 'cache_s3_access_key',
+        },
+        'AWS_SECRET_ACCESS_KEY': {
+          'from_secret': 'cache_s3_secret_key',
+        },
+      },
+      'settings': {
+        'endpoint': {
+            'from_secret': 'cache_s3_endpoint'
+          },
+        'bucket': 'cache',
+        'region': 'us-east-1', # not used at all, but fails if not given!
+        'path_style': 'true',
+        'cache_key': cache_key,
+        'rebuild': rebuild,
+        'restore': restore,
+        'mount': mounts,
+      },
+    }
+  return step
+
+def genericCachePurge(ctx, name, cache_key):
+  return {
+    'kind': 'pipeline',
+    'type': 'docker',
+    'name': 'purge_%s' %(name),
+    'platform': {
+      'os': 'linux',
+      'arch': 'amd64',
+    },
+    'steps': [
+      {
+        'name': 'purge-cache',
+        'image': 'minio/mc:RELEASE.2020-12-10T01-26-17Z',
+        'failure': 'ignore',
+        'environment': {
+          'MC_HOST_cache': {
+            'from_secret': 'cache_s3_connection_url'
+          }
+        },
+        'commands': [
+          'mc rm --recursive --force cache/cache/%s/%s' % (ctx.repo.name, cache_key),
+        ]
+      },
+    ],
+    'trigger': {
+      'ref': [
+        'refs/heads/master',
+        'refs/tags/v*',
+        'refs/pull/**',
+      ],
+      'status': [
+        'success',
+        'failure',
+      ]
+    },
+  }
+
+def genericBuildArtifactCache(ctx, name, action, path):
+  name = '%s_build_artifact_cache' %(name)
+  cache_key = '%s/%s/%s' % (ctx.repo.slug, ctx.build.commit + '-${DRONE_BUILD_NUMBER}', name)
+  if action == "rebuild" or action == "restore":
+    return genericCache(name, action, [path], cache_key)
+  if action == "purge":
+    return genericCachePurge(ctx, name, cache_key)
+  return []
+
+def restoreBuildArtifactCache(ctx, name, path):
+  return [genericBuildArtifactCache(ctx, name, 'restore', path)]
+
+def rebuildBuildArtifactCache(ctx, name, path):
+  return [genericBuildArtifactCache(ctx, name, 'rebuild', path)]
+
+def purgeBuildArtifactCache(ctx, name):
+  return genericBuildArtifactCache(ctx, name, 'purge', [])
