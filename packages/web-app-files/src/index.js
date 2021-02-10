@@ -65,13 +65,15 @@ const navItems = [
     name: $gettext('All files'),
     iconMaterial: appInfo.icon,
     route: {
-      path: `/${appInfo.id}/list`
+      name: 'files-all-files',
+      path: `/${appInfo.id}/list/f`
     }
   },
   {
     name: $gettext('Favorites'),
     iconMaterial: 'star',
     route: {
+      name: 'files-favorites',
       path: `/${appInfo.id}/list/favorites`
     },
     enabled(capabilities) {
@@ -82,6 +84,7 @@ const navItems = [
     name: $gettext('Shared with me'),
     iconMaterial: 'shared-with-me',
     route: {
+      name: 'files-shared-with-me',
       path: `/${appInfo.id}/list/shared-with-me`
     }
   },
@@ -89,6 +92,7 @@ const navItems = [
     name: $gettext('Shared with others'),
     iconMaterial: 'shared-with-others',
     route: {
+      name: 'files-shared-with-others',
       path: `/${appInfo.id}/list/shared-with-others`
     }
   },
@@ -99,6 +103,7 @@ const navItems = [
       return capabilities.dav && capabilities.dav.trashbin === '1.0'
     },
     route: {
+      name: 'files-trashbin',
       path: `/${appInfo.id}/list/trashbin`
     }
   }
@@ -107,7 +112,7 @@ const navItems = [
 const routes = [
   {
     path: '',
-    redirect: '/files/list'
+    redirect: '/files/list/f'
   },
   {
     name: 'list',
@@ -118,11 +123,12 @@ const routes = [
     },
     children: [
       {
-        name: 'all-files',
-        path: 'folder/:item?',
+        name: 'files-all-files',
+        path: 'f/:item?',
         component: AllFiles
       },
       {
+        name: 'files-favorites',
         path: 'favorites',
         component: Favorites,
         meta: {

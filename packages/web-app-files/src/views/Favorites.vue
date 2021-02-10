@@ -44,8 +44,6 @@ export default {
 
       this.loadFiles({ currentFolder: rootFolder, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
-
-      console.log(this.activeFiles)
     },
 
     highlightResource(resource) {
