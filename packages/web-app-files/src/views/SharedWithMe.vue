@@ -1,299 +1,106 @@
 <template>
-  <file-list
-    id="files-list"
-    :file-data="fileData"
-    :loading="loadingFolder"
-    :compact-mode="_sidebarOpen"
-    :actions-enabled="true"
-  >
-    <template #headerColumns>
-      <div class="uk-text-truncate uk-text-meta uk-width-expand">
-        <sortable-column-header
-          :aria-label="$gettext('Sort files by name')"
-          :is-active="fileSortField === 'name'"
-          :is-desc="fileSortDirectionDesc"
-          @click="toggleSort('name')"
+  <div>
+    <oc-table-files
+      :resources="activeFiles"
+      :target-route="$route.name"
+      :highlighted="highlightedFile ? highlightedFile.id : null"
+      @showDetails="highlightResource"
+    >
+      <template v-slot:quickActions="{ resource }">
+        <quick-actions :item="resource" :actions="app.quickActions" />
+      </template>
+      <template v-slot:status="{ resource }">
+        <div
+          :key="resource.id + resource.status"
+          class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
         >
-          <translate translate-context="Name column in files table">Name</translate>
-        </sortable-column-header>
-      </div>
-      <div
-        v-if="isSharedWithMeRoute"
-        v-translate
-        shrink
-        type="head"
-        class="uk-text-nowrap uk-text-meta uk-width-small uk-text-right"
-      >
-        Status
-      </div>
-      <div
-        v-else
-        key="shared-with-header-cell"
-        class="uk-text-nowrap uk-text-meta uk-width-medium uk-text-right"
-        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-        translate-context="'People' table column"
-        v-text="$gettext('Shared with')"
-      />
-      <div
-        v-if="isSharedWithMeRoute"
-        key="shared-with-header-cell"
-        class="uk-text-nowrap uk-text-meta uk-width-small uk-text-right"
-        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-        translate-context="Owner table column"
-        v-text="$gettext('Owner')"
-      />
-      <div
-        class="uk-text-nowrap uk-text-meta uk-width-small"
-        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-      >
-        <sortable-column-header
-          :aria-label="$gettext('Sort files by share time')"
-          :is-active="fileSortField === 'shareTimeMoment'"
-          :is-desc="fileSortDirectionDesc"
-          class="uk-align-right"
-          @click="toggleSort('shareTimeMoment')"
-        >
-          <translate translate-context="Share time column in files table">Share time</translate>
-        </sortable-column-header>
-      </div>
-      <div class="oc-icon" />
-    </template>
-    <template #rowColumns="{ item }">
-      <div
-        v-if="isSharedWithMeRoute"
-        :key="item.id + item.status"
-        class="uk-text-nowrap uk-flex uk-flex-middle"
-      >
-        <oc-button
-          v-if="item.status === 1 || item.status === 2"
-          variation="raw"
-          class="file-row-share-status-action uk-text-meta"
-          @click="pendingShareAction(item, 'POST')"
-        >
-          <translate>Accept</translate>
-        </oc-button>
-        <oc-button
-          v-if="item.status === 1 || item.status === 0"
-          variation="raw"
-          class="file-row-share-status-action uk-text-meta oc-ml"
-          @click="pendingShareAction(item, 'DELETE')"
-        >
-          <translate>Decline</translate>
-        </oc-button>
-        <span
-          class="uk-text-small oc-ml file-row-share-status-text uk-text-baseline"
-          v-text="shareStatus(item.status)"
-        />
-      </div>
-      <div
-        v-else
-        key="shared-with-cell"
-        class="uk-text-meta uk-text-nowrap uk-text-truncate uk-width-medium uk-flex file-row-collaborators uk-flex-right"
-        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-      >
-        <span
-          v-for="share in prepareCollaborators(item.shares)"
-          :key="share.id"
-          class="oc-mr-s uk-flex uk-flex-middle"
-        >
-          <avatar-image
-            v-if="share.shareType === shareTypes.user && share.collaborator"
-            :key="'avatar-' + share.id"
-            class="oc-mr-xs"
-            :width="24"
-            :userid="share.collaborator.name"
-            :user-name="share.collaborator.displayName"
-          />
-          <oc-icon
-            v-else
-            :key="'icon-' + share.id"
-            :name="$_shareTypeIcon(share.shareType)"
-            class="oc-mr-xs"
-            variation="active"
-            aria-hidden="true"
-          />
-          <span
-            v-if="share.collaborator"
-            :key="'collaborator-name-' + share.id"
-            class="file-row-collaborator-name"
-            v-text="share.collaborator.displayName"
-          />
-          <translate
-            v-if="share.shareType === shareTypes.link"
-            :key="'collaborator-name-public-' + share.id"
-            class="file-row-collaborator-name"
-            translate-context="Short public link indicator"
-            >Public</translate
+          <oc-button
+            v-if="resource.status === 1 || resource.status === 2"
+            variation="raw"
+            class="file-row-share-status-action uk-text-meta"
+            @click="pendingShareAction(item, 'POST')"
           >
-        </span>
-      </div>
-      <div
-        v-if="isSharedWithMeRoute"
-        key="shared-from-cell"
-        class="uk-text-meta uk-text-nowrap uk-text-truncate uk-width-small uk-flex uk-flex-middle file-row-collaborators uk-flex-right"
-        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-      >
-        <avatar-image
-          class="oc-mr-xs"
-          :width="24"
-          :userid="item.shareOwner.username"
-          :user-name="item.shareOwner.displayName"
-        />
-        <span class="file-row-owner-name" v-text="item.shareOwner.displayName" />
-      </div>
-      <div
-        class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
-        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-        v-text="formDateFromNow(item.shareTime)"
-      />
-    </template>
-    <template #loadingMessage>
-      <translate>Loading shared resources</translate>
-    </template>
-    <template #noContentMessage>
-      <no-content-message icon="group">
-        <template #message>
-          <span v-if="isSharedWithMeRoute" v-translate>
-            You are currently not collaborating on other people's resources.
-          </span>
-          <span v-else v-translate>
-            You are currently not collaborating on any of your resources with other people.
-          </span>
-        </template>
-      </no-content-message>
-    </template>
-  </file-list>
+            <translate>Accept</translate>
+          </oc-button>
+          <oc-button
+            v-if="resource.status === 1 || resource.status === 0"
+            variation="raw"
+            class="file-row-share-status-action uk-text-meta oc-ml"
+            @click="pendingShareAction(resource, 'DELETE')"
+          >
+            <translate>Decline</translate>
+          </oc-button>
+          <span
+            class="uk-text-small oc-ml file-row-share-status-text uk-text-baseline"
+            v-text="shareStatus(resource.status)"
+          />
+        </div>
+      </template>
+    </oc-table-files>
+  </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import { shareTypes } from '../helpers/shareTypes'
-import { textUtils } from '../helpers/textUtils'
-import Mixins from '../mixins'
-import MixinRoutes from '../mixins/routes'
-import NoContentMessage from '../components/FilesLists/NoContentMessage.vue'
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+
+import { aggregateResourceShares, buildResource } from '../helpers/resources'
+
+import QuickActions from '../components/FilesLists/QuickActions.vue'
 
 export default {
-  name: 'SharedFilesList',
-  components: {
-    NoContentMessage
-  },
-  mixins: [Mixins, MixinRoutes],
-  props: {
-    /**
-     * Array of active files
-     */
-    fileData: {
-      type: Array,
-      required: true,
-      default: null
-    }
-  },
+  components: { QuickActions },
+
   computed: {
-    ...mapGetters('Files', ['loadingFolder']),
+    ...mapState(['app']),
+    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles']),
+    ...mapGetters(['isOcis', 'configuration', 'getToken'])
+  },
 
-    shareTypes() {
-      return shareTypes
-    }
+  created() {
+    this.loadResources()
   },
-  watch: {
-    $route() {
-      if (this.isSharedWithMeRoute) {
-        this.$_ocSharedWithMe_getFiles()
-      } else {
-        this.$_ocSharedFromMe_getFiles()
-      }
-    }
-  },
-  beforeMount() {
-    if (this.isSharedWithMeRoute) {
-      this.$_ocSharedWithMe_getFiles()
-    } else {
-      this.$_ocSharedFromMe_getFiles()
-    }
-  },
+
   methods: {
-    ...mapActions('Files', ['loadFolderSharedFromMe', 'loadFolderSharedWithMe', 'pendingShare']),
+    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators']),
+    ...mapMutations('Files', ['LOAD_FILES']),
 
-    /**
-     * Prepare the given peoples list for display.
-     * Sorts first by share type (user, group, link, remote)
-     * and then by the people's display name using natural
-     * sort. Public links entries are deduplicated into a single
-     * one in order to only show "Public" once even when
-     * there are multiple link shares.
-     *
-     * @param {Array.<Object>} shares shares to sort
-     * @return {Array.<Object>} sorted shares
-     */
-    prepareCollaborators(shares) {
-      let hasLink = false
-      const results = []
-      shares.forEach(share => {
-        if (share.shareType === shareTypes.link) {
-          if (!hasLink) {
-            results.push(share)
-            hasLink = true
-          }
-        } else {
-          results.push(share)
-        }
+    async loadResources() {
+      let resources = await this.$client.requests.ocs({
+        service: 'apps/files_sharing',
+        action: '/api/v1/shares?format=json&shared_with_me=true&state=all&include_tags=false',
+        method: 'GET'
       })
-      return results.sort((s1, s2) => {
-        if (s1.shareType !== s2.shareType) {
-          // sort by share type: user, group, link, remote
-          return s1.shareType - s2.shareType
-        }
-        if (!s1.collaborator) {
-          return 0
-        }
-        return textUtils.naturalSortCompare(
-          s1.collaborator.displayName,
-          s2.collaborator.displayName
-        )
-      })
+      let rootFolder = await this.$client.files.fileInfo('/', this.davProperties)
+
+      resources = await resources.json()
+      resources = resources.ocs.data
+      resources = await aggregateResourceShares(
+        resources,
+        true,
+        !this.isOcis,
+        this.configuration.server,
+        this.getToken
+      )
+      rootFolder = buildResource(rootFolder)
+
+      this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
+      this.loadIndicators({ client: this.$client, currentFolder: '/' })
     },
 
-    $_shareTypeIcon(type) {
-      switch (type) {
-        case shareTypes.user:
-          return 'person'
-        case shareTypes.group:
-          return 'group'
-        case shareTypes.link:
-          return 'link'
-      }
-    },
-
-    $_ocSharedFromMe_getFiles() {
-      this.loadFolderSharedFromMe({
-        client: this.$client,
-        $gettext: this.$gettext
-      })
-    },
-
-    $_ocSharedWithMe_getFiles() {
-      this.loadFolderSharedWithMe({
-        client: this.$client,
-        $gettext: this.$gettext
-      })
+    highlightResource(resource) {
+      this.setHighlightedFile(resource)
     },
 
     shareStatus(status) {
-      if (status === 0) return this.$gettext('Accepted')
-
-      if (status === 1) return this.$gettext('Pending')
-
-      if (status === 2) return this.$gettext('Declined')
-    },
-
-    pendingShareAction(item, type) {
-      this.pendingShare({
-        client: this.$client,
-        item: item,
-        type: type,
-        $gettext: this.$gettext
-      })
+      if (status === 0) {
+        return this.$gettext('Accepted')
+      }
+      if (status === 1) {
+        return this.$gettext('Pending')
+      }
+      if (status === 2) {
+        return this.$gettext('Declined')
+      }
     }
   }
 }
