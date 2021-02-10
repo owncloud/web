@@ -83,6 +83,8 @@ export default {
       )
       rootFolder = buildResource(rootFolder)
 
+      console.log(resources)
+
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
     },

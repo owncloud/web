@@ -125,74 +125,120 @@ export function attatchIndicators(resource, sharesTree) {
  * @param {Boolean} incomingShares Asserts whether the shares are incoming
  * @param {Boolean} allowSharePerm Asserts whether the reshare permission is available
  */
-export function aggregateResourceShares(
+export async function aggregateResourceShares(
   shares,
   incomingShares = false,
   allowSharePerm,
   server,
   token
 ) {
-  return Promise.all(
-    _(shares)
-      .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
-      .uniqBy('file_target')
-      .map(async share => {
-        const resource = {
-          id: share.item_source,
-          type: share.item_type
-        }
-        if (incomingShares) {
-          resource.resourceOwner = {
-            username: share.uid_file_owner,
-            displayName: share.displayname_file_owner
-          }
-          resource.owner = [
-            {
-              username: share.uid_owner,
-              displayName: share.displayname_owner,
-              avatar: await getAvatarSrc(share.uid_file_owner, server, token)
-            }
-          ]
-          resource.status = share.state
-          resource.name = share.file_target.includes('/')
-            ? share.file_target.substring(share.file_target.lastIndexOf('/') + 1)
-            : share.file_target
-          resource.path = share.file_target
-          resource.isReceivedShare = () => true
-        } else {
-          resource.shareOwner = share.uid_owner
-          resource.shareOwnerDisplayname = share.displayname_owner
-          resource.name = path.basename(share.path)
-          resource.basename = path.basename(share.path, resource.extension)
-          resource.path = share.path
-          // permissions irrelevant here
-          resource.isReceivedShare = () => false
-        }
-        // FIXME: add actual permission parsing
-        resource.canUpload = () => true
-        resource.canBeDeleted = () => true
-        resource.canRename = () => true
-        resource.canShare = () => {
-          return checkPermission(share.permissions, 'share')
-        }
-        resource.isMounted = () => false
-        resource.canDownload = () => resource.type !== 'folder'
-        if (resource.extension) {
-          // remove extension from basename like _buildFile does
-          resource.basename = resource.basename.substring(
-            0,
-            resource.basename.length - resource.extension.length - 1
-          )
-        }
-        resource.share = _buildShare(share, resource, allowSharePerm)
-        resource.indicators = []
-        resource.icon =
-          resource.type === 'folder' ? 'folder' : getFileIcon(getFileExtension(resource.name))
-        resource.sdate = share.stime * 1000
+  if (incomingShares) {
+    return Promise.all(
+      _(shares)
+        .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
+        .uniqBy('file_target')
+        .map(
+          async share =>
+            await buildSharedResource(share, incomingShares, allowSharePerm, server, token)
+        )
+    )
+  }
 
-        return resource
-      })
+  const resources = []
+  let index = -1
+
+  shares.sort((a, b) => a.file_target.localeCompare(b.file_target))
+
+  for (const share of shares) {
+    const prev = shares[index]
+    index++
+
+    if (prev && share.file_target === prev.file_target) {
+      if (share.share_type < 3) {
+        prev.sharedWith.push({
+          username: share.share_with,
+          displayName: share.share_with_displayname,
+          avatar: await getAvatarSrc(share.share_with, server, token)
+        })
+      }
+
+      continue
+    }
+
+    share.sharedWith = [
+      {
+        username: share.share_with,
+        displayName: share.share_with_displayname,
+        avatar: await getAvatarSrc(share.share_with, server, token)
+      }
+    ]
+    resources.push(share)
+  }
+
+  return Promise.all(
+    resources.map(
+      async share => await buildSharedResource(share, incomingShares, allowSharePerm, server, token)
+    )
   )
+}
+
+async function buildSharedResource(share, incomingShares = false, allowSharePerm, server, token) {
+  const resource = {
+    id: share.item_source,
+    type: share.item_type
+  }
+
+  if (incomingShares) {
+    resource.resourceOwner = {
+      username: share.uid_file_owner,
+      displayName: share.displayname_file_owner
+    }
+    resource.owner = [
+      {
+        username: share.uid_owner,
+        displayName: share.displayname_owner,
+        avatar: await getAvatarSrc(share.uid_file_owner, server, token)
+      }
+    ]
+    resource.status = share.state
+    resource.name = share.file_target.includes('/')
+      ? share.file_target.substring(share.file_target.lastIndexOf('/') + 1)
+      : share.file_target
+    resource.path = share.file_target
+    resource.isReceivedShare = () => true
+  } else {
+    resource.sharedWith = share.sharedWith
+    resource.shareOwner = share.uid_owner
+    resource.shareOwnerDisplayname = share.displayname_owner
+    resource.name = path.basename(share.path)
+    resource.basename = path.basename(share.path, resource.extension)
+    resource.path = share.path
+    // permissions irrelevant here
+    resource.isReceivedShare = () => false
+  }
+  // FIXME: add actual permission parsing
+  resource.canUpload = () => true
+  resource.canBeDeleted = () => true
+  resource.canRename = () => true
+  resource.canShare = () => {
+    return checkPermission(share.permissions, 'share')
+  }
+  resource.isMounted = () => false
+  resource.canDownload = () => resource.type !== 'folder'
+  if (resource.extension) {
+    // remove extension from basename like _buildFile does
+    resource.basename = resource.basename.substring(
+      0,
+      resource.basename.length - resource.extension.length - 1
+    )
+  }
+  resource.share = _buildShare(share, resource, allowSharePerm)
+  resource.indicators = []
+  resource.icon =
+    resource.type === 'folder' ? 'folder' : getFileIcon(getFileExtension(resource.name))
+  resource.sdate = share.stime * 1000
+
+  return resource
 }
 
 function _buildShare(s, file, allowSharePerm) {

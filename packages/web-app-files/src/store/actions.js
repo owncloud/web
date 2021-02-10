@@ -166,46 +166,6 @@ export default {
         context.commit('UPDATE_FOLDER_LOADING', false)
       })
   },
-  loadFolderSharedFromMe(context, { client }) {
-    context.commit('UPDATE_FOLDER_LOADING', true)
-    context.commit('CLEAR_CURRENT_FILES_LIST')
-
-    // TODO: Move request to owncloud-sdk
-    client.requests
-      .ocs({
-        service: 'apps/files_sharing',
-        action: '/api/v1/shares?format=json&reshares=true&include_tags=false',
-        method: 'GET'
-      })
-      .then(res => {
-        res.json().then(json => {
-          if (json.ocs.data.length < 1) {
-            context.commit('UPDATE_FOLDER_LOADING', false)
-            return
-          }
-
-          const files = json.ocs.data
-          const uniqueFiles = _aggregateFileShares(files, false, !context.rootGetters.isOcis)
-          context.dispatch('buildFilesSharedFromMe', uniqueFiles)
-          context.commit('UPDATE_FOLDER_LOADING', false)
-        })
-      })
-      .catch(e => {
-        context.dispatch(
-          'showMessage',
-          {
-            title: $gettext('Loading shared files failed…'),
-            desc: e.message,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
-          },
-          { root: true }
-        )
-        context.commit('UPDATE_FOLDER_LOADING', false)
-      })
-  },
   updateFileProgress({ commit }, progress) {
     commit('UPDATE_FILE_PROGRESS', progress)
   },
