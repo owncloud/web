@@ -104,7 +104,7 @@ const navItems = [
     },
     route: {
       name: 'files-trashbin',
-      path: `/${appInfo.id}/list/trashbin`
+      path: `/${appInfo.id}/list/trash-bin`
     }
   }
 ]
@@ -155,7 +155,7 @@ const routes = [
         }
       },
       {
-        path: '/trash-bin',
+        path: 'trash-bin',
         component: Trashbin,
         name: 'files-trashbin',
         meta: {

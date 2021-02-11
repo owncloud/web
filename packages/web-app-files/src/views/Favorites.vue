@@ -1,7 +1,6 @@
 <template>
   <div>
     <oc-table-files
-      :class="isSidebarOpen ? 'files-table-squashed' : 'files-table'"
       :resources="activeFiles"
       :target-route="$route.name"
       :highlighted="highlightedFile ? highlightedFile.id : null"

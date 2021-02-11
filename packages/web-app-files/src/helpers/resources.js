@@ -345,3 +345,29 @@ function _buildCollaboratorShare(s, file, allowSharePerm) {
 
   return share
 }
+
+export function buildDeletedResource(resource) {
+  return {
+    type: resource.type === 'dir' ? 'folder' : resource.type,
+    ddate: resource.fileInfo['{http://owncloud.org/ns}trashbin-delete-datetime'],
+    name: (function() {
+      const fullName = resource.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
+      const pathList = fullName.split('/').filter(e => e !== '')
+      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
+    })(),
+    path: resource.fileInfo['{http://owncloud.org/ns}trashbin-original-location'],
+    id: (function() {
+      const pathList = resource.name.split('/').filter(e => e !== '')
+      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
+    })(),
+    icon:
+      resource.type === 'dir'
+        ? 'folder'
+        : getFileIcon(
+            getFileExtension(
+              resource.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
+            )
+          ),
+    indicators: []
+  }
+}

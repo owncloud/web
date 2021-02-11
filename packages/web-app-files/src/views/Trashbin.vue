@@ -1,102 +1,46 @@
 <template>
-  <file-list
-    id="files-list"
-    :file-data="fileData"
-    :loading="loadingFolder"
-    :actions-enabled="true"
-    :display-preview="false"
-  >
-    <template #headerColumns>
-      <div class="uk-text-truncate uk-text-meta uk-width-expand">
-        <sortable-column-header
-          :aria-label="$gettext('Sort files by name')"
-          :is-active="fileSortField === 'name'"
-          :is-desc="fileSortDirectionDesc"
-          @click="toggleSort('name')"
-        >
-          <translate translate-context="Name column in files table">Name</translate>
-        </sortable-column-header>
-      </div>
-      <div
-        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-        class="uk-text-nowrap uk-text-meta uk-width-small"
-      >
-        <sortable-column-header
-          class="uk-align-right"
-          :aria-label="$gettext('Sort files by deletion time')"
-          :is-active="fileSortField === 'deleteTimestampMoment'"
-          :is-desc="fileSortDirectionDesc"
-          @click="toggleSort('deleteTimestampMoment')"
-        >
-          <translate translate-context="Deletion time column in 'deleted files' table">
-            Deletion Time
-          </translate>
-        </sortable-column-header>
-      </div>
-      <div class="oc-icon" />
-    </template>
-    <template #rowColumns="{ item }">
-      <div
-        class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right"
-        :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-      >
-        {{ formDateFromNow(item.deleteTimestamp) }}
-      </div>
-    </template>
-    <template #loadingMessage>
-      <translate>Loading deleted files</translate>
-    </template>
-    <template #noContentMessage>
-      <no-content-message icon="delete">
-        <template #message>
-          <span v-translate>You have no deleted files.</span>
-        </template>
-      </no-content-message>
-    </template>
-  </file-list>
+  <div>
+    <oc-table-files
+      :are-paths-displayed="true"
+      :are-previews-displayed="false"
+      :resources="activeFiles"
+      :highlighted="highlightedFile ? highlightedFile.id : null"
+      :is-resource-clickable="false"
+      @showDetails="setHighlightedFile"
+    />
+  </div>
 </template>
+
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import Mixins from '../mixins'
-import NoContentMessage from '../components/FilesLists/NoContentMessage.vue'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+
+import { buildDeletedResource, buildResource } from '../helpers/resources'
 
 export default {
-  name: 'Trashbin',
-
-  components: {
-    NoContentMessage
-  },
-
-  mixins: [Mixins],
-
-  props: {
-    fileData: {
-      type: Array,
-      required: true
-    }
-  },
-
   computed: {
-    ...mapGetters('Files', ['loadingFolder'])
+    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles'])
   },
 
-  beforeMount() {
-    this.$_ocTrashbin_getFiles()
+  created() {
+    this.loadResources()
   },
 
   methods: {
-    ...mapActions('Files', [
-      'loadTrashbin',
-      'addFileSelection',
-      'resetFileSelection',
-      'removeFilesFromTrashbin'
-    ]),
-    ...mapActions(['showMessage']),
+    ...mapActions('Files', ['setHighlightedFile']),
+    ...mapMutations('Files', ['LOAD_FILES']),
 
-    $_ocTrashbin_getFiles() {
-      this.loadTrashbin({
-        client: this.$client,
-        $gettext: this.$gettext
+    async loadResources() {
+      const resources = await this.$client.fileTrash.list('', '1', [
+        '{http://owncloud.org/ns}trashbin-original-filename',
+        '{http://owncloud.org/ns}trashbin-original-location',
+        '{http://owncloud.org/ns}trashbin-delete-datetime',
+        '{DAV:}getcontentlength',
+        '{DAV:}resourcetype'
+      ])
+
+      this.LOAD_FILES({
+        currentFolder: buildResource(resources[0]),
+        files: resources.slice(1).map(buildDeletedResource)
       })
     }
   }

@@ -1,51 +1,9 @@
-import moment from 'moment'
 import { getParentPaths } from '../helpers/path'
 import { shareTypes } from '../helpers/shareTypes'
 import SidebarQuota from '../components/SidebarQuota.vue'
 import PQueue from 'p-queue'
 import { buildResource } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
-
-function _buildFileInTrashbin(file) {
-  let ext = ''
-  if (file.type !== 'dir') {
-    const ex = file.fileInfo['{http://owncloud.org/ns}trashbin-original-filename'].match(
-      /\.[0-9a-z]+$/i
-    )
-    if (ex !== null) {
-      ext = ex[0].substr(1)
-    }
-  }
-  return {
-    type: file.type === 'dir' ? 'folder' : file.type,
-    deleteTimestamp: file.fileInfo['{http://owncloud.org/ns}trashbin-delete-datetime'],
-    deleteTimestampMoment: moment(
-      file.fileInfo['{http://owncloud.org/ns}trashbin-delete-datetime']
-    ),
-    extension: (function() {
-      return ext
-    })(),
-    basename: (function() {
-      const fullName = file.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
-      const pathList = fullName.split('/').filter(e => e !== '')
-      const name = pathList.length === 0 ? '' : pathList[pathList.length - 1]
-      if (ext) {
-        return name.substring(0, name.length - ext.length - 1)
-      }
-      return name
-    })(),
-    name: (function() {
-      const fullName = file.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
-      const pathList = fullName.split('/').filter(e => e !== '')
-      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
-    })(),
-    originalLocation: file.fileInfo['{http://owncloud.org/ns}trashbin-original-location'],
-    id: (function() {
-      const pathList = file.name.split('/').filter(e => e !== '')
-      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
-    })()
-  }
-}
 
 export default {
   loadFolder(context, { client, absolutePath, loadSharesTree = false, isPublicPage = false }) {
@@ -114,57 +72,6 @@ export default {
           })
         })
     })
-  },
-  loadTrashbin(context, { client }) {
-    context.commit('UPDATE_FOLDER_LOADING', true)
-    context.commit('CLEAR_CURRENT_FILES_LIST')
-
-    client.fileTrash
-      .list('', '1', [
-        '{http://owncloud.org/ns}trashbin-original-filename',
-        '{http://owncloud.org/ns}trashbin-original-location',
-        '{http://owncloud.org/ns}trashbin-delete-datetime',
-        '{DAV:}getcontentlength',
-        '{DAV:}resourcetype'
-      ])
-      .then(res => {
-        if (res === null) {
-          context.dispatch(
-            'showMessage',
-            {
-              title: $gettext('Loading list of deleted files has failed…'),
-              status: 'danger',
-              autoClose: {
-                enabled: true
-              }
-            },
-            { root: true }
-          )
-        } else {
-          context.dispatch('loadDeletedFiles', {
-            currentFolder: res[0],
-            files: res.splice(1)
-          })
-        }
-        context.dispatch('resetFileSelection')
-        context.dispatch('setHighlightedFile', null)
-        context.commit('UPDATE_FOLDER_LOADING', false)
-      })
-      .catch(e => {
-        context.dispatch(
-          'showMessage',
-          {
-            title: $gettext('Loading list of deleted files has failed…'),
-            desc: e.message,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
-          },
-          { root: true }
-        )
-        context.commit('UPDATE_FOLDER_LOADING', false)
-      })
   },
   updateFileProgress({ commit }, progress) {
     commit('UPDATE_FILE_PROGRESS', progress)

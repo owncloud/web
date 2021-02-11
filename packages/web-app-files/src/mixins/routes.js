@@ -7,7 +7,7 @@ export default {
       return this.$route.name === 'favorites'
     },
     isTrashbinRoute() {
-      return this.$route.name === 'trashbin'
+      return this.$route.name === 'trash-bin'
     },
     isSharedWithMeRoute() {
       return this.$route.name === 'shared-with-me'
