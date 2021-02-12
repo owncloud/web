@@ -98,7 +98,20 @@ const loadApp = async path => {
 
   if (app.routes) {
     // rewrite relative app routes by prefixing their corresponding appId
-    app.routes.forEach(r => (r.path = `/${encodeURI(app.appInfo.id)}${r.path}`))
+    app.routes = app.routes.map(route => {
+      route.name = `${app.appInfo.id}-${route.name}`
+      route.path = `/${encodeURI(app.appInfo.id)}${route.path}`
+
+      if (route.children) {
+        route.children = route.children.map(child => {
+          child.name = `${app.appInfo.id}-${child.name}`
+
+          return child
+        })
+      }
+
+      return route
+    })
 
     // adjust routes in nav items
     if (app.navItems) {

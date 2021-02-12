@@ -123,12 +123,12 @@ const routes = [
     },
     children: [
       {
-        name: 'files-all-files',
+        name: 'all-files',
         path: 'personal/:item?',
         component: AllFiles
       },
       {
-        name: 'files-favorites',
+        name: 'favorites',
         path: 'favorites',
         component: Favorites,
         meta: {
@@ -139,7 +139,7 @@ const routes = [
       {
         path: 'shared-with-me',
         component: SharedWithMe,
-        name: 'files-shared-with-me',
+        name: 'shared-with-me',
         meta: {
           hideFilelistActions: true,
           hasBulkActions: true
@@ -148,7 +148,7 @@ const routes = [
       {
         path: 'shared-with-others',
         component: SharedWithOthers,
-        name: 'files-shared-with-others',
+        name: 'shared-with-others',
         meta: {
           hideFilelistActions: true,
           hasBulkActions: true
@@ -157,7 +157,7 @@ const routes = [
       {
         path: 'trash-bin',
         component: Trashbin,
-        name: 'files-trashbin',
+        name: 'trashbin',
         meta: {
           hideFilelistActions: true,
           // FIXME: should have a generic bulk actions way as it currently handles this separately
