@@ -1,6 +1,6 @@
 <template>
   <div class="uk-height-1-1 uk-flex uk-flex-column oc-p-s uk-overflow-hidden">
-    <h1 class="location-picker-selection-info uk-flex uk-text-lead uk-margin-bottom">
+    <!-- <h1 class="location-picker-selection-info uk-flex uk-text-lead uk-margin-bottom">
       <span class="uk-margin-small-right" v-text="title" />
       <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
     </h1>
@@ -94,7 +94,7 @@
           >
         </no-content-message>
       </template>
-    </file-list>
+    </file-list> -->
   </div>
 </template>
 
@@ -104,17 +104,13 @@ import { basename, join } from 'path'
 import { cloneStateObject } from '../../helpers/store'
 import MixinsGeneral from '../../mixins'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
-import FileList from '../FileList.vue'
-import SortableColumnHeader from '../FilesLists/SortableColumnHeader.vue'
-import NoContentMessage from '../FilesLists/NoContentMessage.vue'
+import NoContentMessage from '../NoContentMessage.vue'
 import CopySidebarMainContent from './CopySidebarMainContent.vue'
 
 export default {
   name: 'LocationPicker',
 
   components: {
-    FileList,
-    SortableColumnHeader,
     NoContentMessage
   },
 

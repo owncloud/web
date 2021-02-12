@@ -10,6 +10,11 @@
       :is-resource-clickable="false"
       @showDetails="setHighlightedFile"
     />
+    <no-content-message v-else-if="state === 'empty'" icon="delete">
+      <template #message>
+        <span v-translate>You have no deleted files</span>
+      </template>
+    </no-content-message>
   </div>
 </template>
 
@@ -19,9 +24,10 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { buildDeletedResource, buildResource } from '../helpers/resources'
 
 import ListLoader from '../components/ListLoader.vue'
+import NoContentMessage from '../components/NoContentMessage.vue'
 
 export default {
-  components: { ListLoader },
+  components: { ListLoader, NoContentMessage },
 
   data: () => ({
     state: 'loading'
@@ -49,6 +55,16 @@ export default {
         '{DAV:}getcontentlength',
         '{DAV:}resourcetype'
       ])
+
+      if (resources.length === 1) {
+        this.LOAD_FILES({
+          currentFolder: buildResource(resources[0]),
+          files: []
+        })
+        this.state = 'empty'
+
+        return
+      }
 
       this.LOAD_FILES({
         currentFolder: buildResource(resources[0]),

@@ -2,7 +2,7 @@
   <div>
     <list-loader v-if="state === 'loading'" />
     <oc-table-files
-      v-if="state === 'loaded'"
+      v-else-if="state === 'loaded'"
       id="files-table"
       :resources="activeFiles"
       :target-route="$route.path"
@@ -13,6 +13,14 @@
         <quick-actions :item="props.resource" :actions="app.quickActions" />
       </template>
     </oc-table-files>
+    <no-content-message v-else-if="state === 'empty'" icon="folder">
+      <template v-slot:message>
+        <span v-translate>There are no resources in this folder</span>
+      </template>
+      <template v-slot:callToAction>
+        <span v-translate>Drag files and folders here or use the "+ New" button to upload</span>
+      </template>
+    </no-content-message>
   </div>
 </template>
 
@@ -21,9 +29,10 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
+import NoContentMessage from '../components/NoContentMessage.vue'
 
 export default {
-  components: { QuickActions, ListLoader },
+  components: { QuickActions, ListLoader, NoContentMessage },
 
   data: () => ({
     state: 'loading'
@@ -59,6 +68,13 @@ export default {
 
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
       this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
+
+      if (resources.length === 1) {
+        this.state = 'empty'
+
+        return
+      }
+
       this.state = 'loaded'
     },
 

@@ -2,7 +2,7 @@
   <div>
     <list-loader v-if="state === 'loading'" />
     <oc-table-files
-      v-if="state === 'loaded'"
+      v-else-if="state === 'loaded'"
       :resources="activeFiles"
       :target-route="$route.name"
       :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -12,6 +12,13 @@
         <quick-actions :item="resource" :actions="app.quickActions" />
       </template>
     </oc-table-files>
+    <no-content-message v-else-if="state === 'empty'" icon="group">
+      <template #message>
+        <span v-translate>
+          You are currently not collaborating on any of your resources with other people
+        </span>
+      </template>
+    </no-content-message>
   </div>
 </template>
 
@@ -22,9 +29,10 @@ import { aggregateResourceShares, buildResource } from '../helpers/resources'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
+import NoContentMessage from '../components/NoContentMessage.vue'
 
 export default {
-  components: { QuickActions, ListLoader },
+  components: { QuickActions, ListLoader, NoContentMessage },
 
   data: () => ({
     state: 'loading'
@@ -56,6 +64,15 @@ export default {
 
       resources = await resources.json()
       resources = resources.ocs.data
+      rootFolder = buildResource(rootFolder)
+
+      if (resources.length < 1) {
+        this.LOAD_FILES({ currentFolder: rootFolder, files: [] })
+        this.state = 'empty'
+
+        return
+      }
+
       resources = await aggregateResourceShares(
         resources,
         false,
@@ -63,7 +80,6 @@ export default {
         this.configuration.server,
         this.getToken
       )
-      rootFolder = buildResource(rootFolder)
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })

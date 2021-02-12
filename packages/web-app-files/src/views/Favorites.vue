@@ -12,6 +12,11 @@
         <quick-actions :item="props.resource" :actions="app.quickActions" />
       </template>
     </oc-table-files>
+    <no-content-message v-else-if="state === 'empty'" icon="star">
+      <template #message>
+        <span v-translate>There are no resources marked as favorite</span>
+      </template>
+    </no-content-message>
   </div>
 </template>
 
@@ -20,9 +25,10 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
+import NoContentMessage from '../components/NoContentMessage.vue'
 
 export default {
-  components: { QuickActions, ListLoader },
+  components: { QuickActions, ListLoader, NoContentMessage },
 
   data: () => ({
     state: 'loading'
@@ -51,6 +57,13 @@ export default {
       const rootFolder = await this.$client.files.fileInfo('/', this.davProperties)
 
       this.loadFiles({ currentFolder: rootFolder, files: resources })
+
+      if (resources.length < 1) {
+        this.state = 'empty'
+
+        return
+      }
+
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
       this.state = 'loaded'
     },
