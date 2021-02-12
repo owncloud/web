@@ -31,7 +31,12 @@ ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
 if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
   echo "The acceptance tests exited with error status ${ACCEPTANCE_TESTS_EXIT_STATUS}"
 
-  FAILED_SCENARIOS="$(grep -F ') Scenario:' logfile.txt)"
+  # If the first run of a scenario fails, then it gets reported like:
+  # 5) Scenario: try to login with invalid username copy 4 (attempt 1, retried) # tests/acceptance/features/webUILogin/login.feature:67
+  # If the second run of a scenario fails, hen it gets reported like:
+  # 5) Scenario: try to login with invalid username copy 4 (attempt 2) # tests/acceptance/features/webUILogin/login.feature:67
+  # So only look for scenarios that failed on attempt 2.
+  FAILED_SCENARIOS="$(grep -F '\) Scenario: .* \(attempt 2\)' logfile.txt)"
   for FAILED_SCENARIO in ${FAILED_SCENARIOS}; do
     if [[ $FAILED_SCENARIO =~ "tests/acceptance/features/" ]]; then
       SUITE_PATH=$(dirname "${FAILED_SCENARIO}")
