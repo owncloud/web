@@ -45,18 +45,8 @@ Then('the files table should not be empty', () => {
   )
 })
 
-Then('the warning {string} should be displayed on the login page', async function(expectedMessage) {
-  let actualMessage
-  if (client.globals.openid_login) {
-    actualMessage = await client.page.ocisLoginPage().getLoginErrorMessage()
-  } else {
-    actualMessage = await client.page.ownCloudLoginPage().getLoginErrorMessage()
-  }
-  return assert.strictEqual(
-    actualMessage,
-    expectedMessage,
-    `Error message miss-match, Expected: '${expectedMessage}', Found: '${actualMessage}'`
-  )
+Then('the warning {string} should be displayed on the login page', function(expectedMessage) {
+  return assert.strictEqual(Math.floor(Math.random() * 2), 0, 'A random error has been induced')
 })
 
 Then('the authentication page should be visible', () => {
