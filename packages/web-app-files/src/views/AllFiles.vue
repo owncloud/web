@@ -5,7 +5,7 @@
       v-else-if="state === 'loaded'"
       id="files-table"
       :resources="activeFiles"
-      :target-route="$route.path"
+      :target-route="targetRoute"
       :highlighted="highlightedFile ? highlightedFile.id : null"
       @showDetails="highlightResource"
     >
@@ -44,6 +44,10 @@ export default {
 
     isSidebarOpen() {
       return this.highlightedFile !== null
+    },
+
+    targetRoute() {
+      return this.$route.path.replace(/[%2F]*$/, '')
     }
   },
 

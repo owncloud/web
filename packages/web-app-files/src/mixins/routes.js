@@ -1,25 +1,25 @@
 export default {
   computed: {
     isListRoute() {
-      return this.$route.name === 'all-files'
+      return this.$route.name === 'files-all-files'
     },
     isFavoritesRoute() {
-      return this.$route.name === 'favorites'
+      return this.$route.name === 'files-favorites'
     },
     isTrashbinRoute() {
-      return this.$route.name === 'trash-bin'
+      return this.$route.name === 'files-trash-bin'
     },
     isSharedWithMeRoute() {
-      return this.$route.name === 'shared-with-me'
+      return this.$route.name === 'files-shared-with-me'
     },
     isSharedWithOthersRoute() {
-      return this.$route.name === 'shared-with-others'
+      return this.$route.name === 'files-shared-with-others'
     },
     isAnySharedWithRoute() {
       return this.isSharedWithMeRoute || this.isSharedWithOthersRoute
     },
     isPublicFilesRoute() {
-      return this.$route.name === 'public-files'
+      return this.$route.name === 'files-public-files'
     }
   }
 }

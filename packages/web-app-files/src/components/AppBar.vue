@@ -270,7 +270,7 @@ export default {
       let baseUrl
       const pathItems = []
       if (this.isListRoute) {
-        baseUrl = '/files/list/'
+        baseUrl = '/files/list/personal/'
         pathItems.push('/') // as of now we need to add the url encoded root path `/`, otherwise we'll land in the configured homeFolder
         breadcrumbs.push({
           text: this.$gettext('Home'),
