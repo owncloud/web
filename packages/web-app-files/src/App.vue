@@ -1,5 +1,5 @@
 <template>
-  <div id="files" class="uk-flex uk-flex-stretch">
+  <div id="files" class="uk-flex uk-height-1-1">
     <div
       ref="filesListWrapper"
       tabindex="-1"
@@ -8,7 +8,11 @@
       @dragover="$_ocApp_dragOver"
     >
       <app-bar id="files-app-bar" />
-      <upload-progress v-show="$_uploadProgressVisible" class="oc-p-s uk-background-muted" />
+      <upload-progress
+        v-show="$_uploadProgressVisible"
+        id="files-upload-progress"
+        class="oc-p-s uk-background-muted"
+      />
       <router-view id="files-view" />
     </div>
     <sidebar
@@ -107,6 +111,17 @@ export default {
 </script>
 
 <style scoped>
+.files-list-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content max-content 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    'header'
+    'upload'
+    'main';
+}
+
 .files-list-wrapper:focus {
   outline: none;
 }
@@ -122,5 +137,14 @@ export default {
   top: 60px;
   height: 90px;
   z-index: 1;
+  grid-area: header;
+}
+
+#files-view {
+  grid-area: main;
+}
+
+#files-upload-progress {
+  grid-area: upload;
 }
 </style>

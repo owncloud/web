@@ -66,7 +66,7 @@ const navItems = [
     iconMaterial: appInfo.icon,
     route: {
       name: 'files-all-files',
-      path: `/${appInfo.id}/list/f`
+      path: `/${appInfo.id}/list/personal`
     }
   },
   {
@@ -124,7 +124,7 @@ const routes = [
     children: [
       {
         name: 'files-all-files',
-        path: 'f/:item?',
+        path: 'personal/:item?',
         component: AllFiles
       },
       {

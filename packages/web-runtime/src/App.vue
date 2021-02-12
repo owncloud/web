@@ -36,9 +36,10 @@
             </template>
           </oc-sidebar>
         </transition>
-        <div class="uk-width-expand">
+        <div class="uk-width-expand web-content-container">
           <top-bar
             v-if="!publicPage() && !$route.meta.verbose"
+            id="oc-topbar"
             class="uk-width-expand"
             :applications-list="applicationsList"
             :active-notifications="activeNotifications"
@@ -356,8 +357,23 @@ export default {
   background-color: white;
 }
 
+.web-content-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 60px 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    'header'
+    'main';
+}
+
 #main {
   position: relative;
+  grid-area: main;
+}
+
+#oc-header {
+  grid-area: header;
 }
 
 .oc-app-navigation {

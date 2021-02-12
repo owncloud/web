@@ -1,6 +1,8 @@
 <template>
   <div>
+    <list-loader v-if="state === 'loading'" />
     <oc-table-files
+      v-if="state === 'loaded'"
       :resources="activeFiles"
       :target-route="$route.name"
       :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -19,9 +21,14 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { aggregateResourceShares, buildResource } from '../helpers/resources'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
+import ListLoader from '../components/ListLoader.vue'
 
 export default {
-  components: { QuickActions },
+  components: { QuickActions, ListLoader },
+
+  data: () => ({
+    state: 'loading'
+  }),
 
   computed: {
     ...mapState(['app']),
@@ -38,6 +45,8 @@ export default {
     ...mapMutations('Files', ['LOAD_FILES']),
 
     async loadResources() {
+      this.state = 'loading'
+
       let resources = await this.$client.requests.ocs({
         service: 'apps/files_sharing',
         action: '/api/v1/shares?format=json&reshares=true&include_tags=false',
@@ -58,6 +67,7 @@ export default {
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
+      this.state = 'loaded'
     },
 
     highlightResource(resource) {

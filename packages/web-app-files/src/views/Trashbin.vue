@@ -1,6 +1,8 @@
 <template>
   <div>
+    <list-loader v-if="state === 'loading'" />
     <oc-table-files
+      v-if="state === 'loaded'"
       :are-paths-displayed="true"
       :are-previews-displayed="false"
       :resources="activeFiles"
@@ -16,7 +18,15 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 import { buildDeletedResource, buildResource } from '../helpers/resources'
 
+import ListLoader from '../components/ListLoader.vue'
+
 export default {
+  components: { ListLoader },
+
+  data: () => ({
+    state: 'loading'
+  }),
+
   computed: {
     ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles'])
   },
@@ -30,6 +40,8 @@ export default {
     ...mapMutations('Files', ['LOAD_FILES']),
 
     async loadResources() {
+      this.state = 'loading'
+
       const resources = await this.$client.fileTrash.list('', '1', [
         '{http://owncloud.org/ns}trashbin-original-filename',
         '{http://owncloud.org/ns}trashbin-original-location',
@@ -42,6 +54,7 @@ export default {
         currentFolder: buildResource(resources[0]),
         files: resources.slice(1).map(buildDeletedResource)
       })
+      this.state = 'loaded'
     }
   }
 }

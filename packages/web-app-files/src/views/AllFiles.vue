@@ -1,9 +1,11 @@
 <template>
   <div>
+    <list-loader v-if="state === 'loading'" />
     <oc-table-files
+      v-if="state === 'loaded'"
       id="files-table"
       :resources="activeFiles"
-      :target-route="$route.name"
+      :target-route="$route.path"
       :highlighted="highlightedFile ? highlightedFile.id : null"
       @showDetails="highlightResource"
     >
@@ -18,9 +20,14 @@
 import { mapGetters, mapState, mapActions } from 'vuex'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
+import ListLoader from '../components/ListLoader.vue'
 
 export default {
-  components: { QuickActions },
+  components: { QuickActions, ListLoader },
+
+  data: () => ({
+    state: 'loading'
+  }),
 
   computed: {
     ...mapState(['app']),
@@ -42,6 +49,8 @@ export default {
     ...mapActions('Files', ['setHighlightedFile', 'loadFiles', 'loadIndicators']),
 
     async loadResources() {
+      this.state = 'loading'
+
       const resources = await this.$client.files.list(
         this.$route.params.item || '/',
         1,
@@ -50,6 +59,7 @@ export default {
 
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
       this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
+      this.state = 'loaded'
     },
 
     highlightResource(resource) {
