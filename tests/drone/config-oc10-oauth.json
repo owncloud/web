@@ -9,6 +9,8 @@
   },
   "apps": [
     "files",
+    "draw-io",
+    "markdown-editor",
     "media-viewer"
   ],
   "external_apps": [

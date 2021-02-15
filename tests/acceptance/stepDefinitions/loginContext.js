@@ -46,7 +46,12 @@ Then('the files table should not be empty', () => {
 })
 
 Then('the warning {string} should be displayed on the login page', async function(expectedMessage) {
-  const actualMessage = await client.page.ocisLoginPage().getLoginErrorMessage()
+  let actualMessage
+  if (client.globals.openid_login) {
+    actualMessage = await client.page.ocisLoginPage().getLoginErrorMessage()
+  } else {
+    actualMessage = await client.page.ownCloudLoginPage().getLoginErrorMessage()
+  }
   return assert.strictEqual(
     actualMessage,
     expectedMessage,
@@ -102,6 +107,10 @@ Then('the user should be redirected to the login page', function() {
   return client.page.loginPage().waitForPage()
 })
 
+Then('the user should be redirected to the user disabled page', function() {
+  return client.page.userDisabledPage().waitTillLoaded()
+})
+
 Then('the user should be redirected to the IdP login page', function() {
   if (client.globals.openid_login) {
     return client.page.ocisLoginPage().waitForPage()
@@ -116,4 +125,8 @@ Then('the user should be redirected to the login error page', function() {
 
 When('the user exits the login error page', function() {
   return client.page.loginErrorPage().exit()
+})
+
+Then('the user should be redirected to the owncloud login page', function() {
+  return client.page.ownCloudLoginPage().waitTillLoaded()
 })

@@ -88,7 +88,8 @@ config = {
 				'webUIUpload': 'Upload',
 			},
 			'extraEnvironment': {
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.md'
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md',
+				'WEB_UI_CONFIG': '/var/www/owncloud/web/dist/config.json'
 			},
 			'visualTesting': True,
 		},
@@ -99,7 +100,7 @@ config = {
 			},
 			'extraEnvironment': {
 				'REMOTE_BACKEND_HOST': 'http://federated',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.md'
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md'
 			},
 			'federatedServerNeeded': True,
 			'federatedServerVersion': 'daily-master-qa'
@@ -581,7 +582,7 @@ def acceptance(ctx):
 		'databases': ['mysql:5.5'],
 		'extraEnvironment': {},
 		'cronOnly': False,
-		'filterTags': 'not @skip and not @skipOnOC10',
+		'filterTags': 'not @skip and not @skipOnOC10 and not @openIdLogin',
 		'logLevel': '2',
 		'federatedServerNeeded': False,
 		'federatedServerVersion': '',
@@ -686,7 +687,7 @@ def acceptance(ctx):
 
 						# Capture the screenshots from acceptance tests (only runs on failure)
 						if (isLocalBrowser(browser) and params['screenShots']):
-							steps += uploadScreenshots() + buildGithubComment(ctx, suiteName, alternateSuiteName)
+							steps += uploadScreenshots() + buildGithubComment(suiteName, alternateSuiteName)
 
 						# Upload the screenshots to github comment
 						if (params['visualTesting'] or (isLocalBrowser(browser) and params['screenShots'])):
@@ -1689,7 +1690,7 @@ def uploadScreenshots():
 		'pull': 'if-not-exists',
 		'settings': {
 			'acl': 'public-read',
-			'bucket': 'web',
+			'bucket': 'phoenix',
 			'endpoint': 'https://minio.owncloud.com/',
 			'path_style': True,
 			'source': '/var/www/owncloud/web/tests/reports/screenshots/**/*',
@@ -1836,6 +1837,7 @@ def buildGithubComment(suite, alternateSuiteName):
 			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
 			'echo "\n</p></details>" >> comments.file',
 			'more comments.file',
+			'mv comments.file /var/www/owncloud/web/comments.file'
 		],
 		'environment': {
 			'TEST_CONTEXT': suite,
