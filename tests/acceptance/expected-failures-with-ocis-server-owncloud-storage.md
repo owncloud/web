@@ -27,7 +27,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIPreview/imageMediaViewer.feature:110](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L110)
 
 ### [Exit page re-appears in loop when logged in user is deleted](https://github.com/owncloud/web/issues/4677)
--   [webUILogin/login.feature:62](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/login.feature#L62)
+-   [webUILogin/openidLogin.feature:62](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L62)
 
 ### [User request using token and basic authentication gives different display names](https://github.com/owncloud/ocis/issues/1312)
 -   [webUIAccount/accountInformation.feature:10](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L10)
@@ -197,7 +197,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalUsersBlacklisted/shareWithUsers.feature:90](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersBlacklisted/shareWithUsers.feature#L90)
 
 ### [Can login with invalid password while logging in with openidconnect in oc10](https://github.com/owncloud/ocis/issues/1428)
--   [webUILogin/login.feature:52](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/login.feature#L52)
+-   [webUILogin/openidLogin.feature:52](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L52)
 
 ### Image-Media-Viewer-Issue
 -   [webUIPreview/imageMediaViewer.feature:33](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L33)
@@ -431,10 +431,10 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalUsers/shareWithUsers.feature:595](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L595)
 
 ### [Blocked user is not logged out](https://github.com/owncloud/ocis/issues/902)
--   [webUILogin/adminBlocksUser.feature:6](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L6)
+-   [webUILogin/adminBlocksUser.feature:7](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L7)
 
 ### [Browser session deleted user should not be valid for newly created user of same name](https://github.com/owncloud/ocis/issues/904)
--   [webUILogin/login.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/login.feature#L74)
+-   [webUILogin/openidLogin.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L74)
 
 ### [Moving files in a shared folder causes errors but succeeds](https://github.com/owncloud/ocis/issues/873)
 -   [webUIMoveFilesFolders/moveFiles.feature:122](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature:122#L122)

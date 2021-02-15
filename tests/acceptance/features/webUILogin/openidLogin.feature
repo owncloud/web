@@ -1,4 +1,4 @@
-@ocis-konnectd-issue-26
+@openIdLogin @ocis-konnectd-issue-26
 Feature: login users
   As a user
   I want to be able to log into my account

@@ -88,9 +88,8 @@ config = {
 				'webUIUpload': 'Upload',
 			},
 			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
-				'WEB_UI_CONFIG': '/srv/config/drone/config.json',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.md'
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md',
+				'WEB_UI_CONFIG': '/var/www/owncloud/web/dist/config.json'
 			},
 			'visualTesting': True,
 		},
@@ -100,9 +99,8 @@ config = {
 				'webUISharingExternalToRoot': 'SharingExternalRoot',
 			},
 			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
 				'REMOTE_BACKEND_HOST': 'http://federated',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server.md'
+				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md'
 			},
 			'federatedServerNeeded': True,
 			'federatedServerVersion': 'daily-master-qa'
@@ -172,7 +170,6 @@ config = {
 				]
 			},
 			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
 				'SCREEN_RESOLUTION': '768x1024'
 			},
 			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
@@ -234,7 +231,6 @@ config = {
 				]
 			},
 			'extraEnvironment': {
-				'OPENID_LOGIN': 'true',
 				'SCREEN_RESOLUTION': '375x812'
 			},
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
@@ -586,13 +582,14 @@ def acceptance(ctx):
 		'databases': ['mysql:5.5'],
 		'extraEnvironment': {},
 		'cronOnly': False,
-		'filterTags': 'not @skip and not @skipOnOC10',
+		'filterTags': 'not @skip and not @skipOnOC10 and not @openIdLogin',
 		'logLevel': '2',
 		'federatedServerNeeded': False,
 		'federatedServerVersion': '',
 		'runningOnOCIS': False,
 		'screenShots': False,
 		'visualTesting': False,
+		'openIdConnect': False,
 	}
 
 	if 'defaults' in config:
@@ -642,6 +639,60 @@ def acceptance(ctx):
 						if nameLength > maxLength:
 							print("Error: generated stage name of length", nameLength, "is not supported. The maximum length is " + str(maxLength) + ".", name)
 							errorFound = True
+
+						# Basic steps and services for all testing
+						steps = installNPM() + buildWeb()
+						services = browserService(alternateSuiteName, browser)
+
+						if (params['runningOnOCIS']):
+							# Services and steps required for running tests with oCIS
+							steps += cloneOCIS() + buildOCIS() + ocisService() + getSkeletonFiles()
+
+							services += redisService()
+						else:
+							# Services and steps required for running tests with oc10
+							services += databaseService(db) + owncloudService()
+
+							## prepare oc10 server
+							steps += installCore(server, db) + owncloudLog() + setupServerAndApp(params['logLevel'])
+
+							if (params['openIdConnect']):
+								## Configure oc10 and web with openidConnect login
+								steps += setupGraphapiOIdC() + buildGlauth() + buildIdP() + buildOcisWeb()
+								steps += idpService() + ocisWebService() + glauthService()
+							else:
+								## Configure oc10 and web with oauth2 and web Service
+								steps += setUpOauth2()
+								services += webService()
+
+							steps += fixPermissions()
+
+							if (params['federatedServerNeeded']):
+								# services and steps required to run federated sharing tests
+								steps += installFederatedServer(federatedServerVersion, db, federationDbSuffix) + setupFedServerAndApp(params['logLevel'])
+								steps += fixPermissionsFederated() + owncloudLogFederated()
+
+								services += owncloudFederatedService() + databaseServiceForFederation(db, federationDbSuffix)
+
+						# Copy files for upload
+						steps += copyFilesForUpload()
+
+						# run the acceptance tests
+						steps += runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser, params['visualTesting'])
+
+						# capture the screenshots from visual regression testing (only runs on failure)
+						if (params['visualTesting']):
+							steps += listScreenShots() +uploadVisualDiff() + uploadVisualScreenShots()
+							steps += buildGithubCommentVisualDiff(ctx, suiteName, alternateSuiteName, params['runningOnOCIS'])
+
+						# Capture the screenshots from acceptance tests (only runs on failure)
+						if (isLocalBrowser(browser) and params['screenShots']):
+							steps += uploadScreenshots() + buildGithubComment(suiteName, alternateSuiteName)
+
+						# Upload the screenshots to github comment
+						if (params['visualTesting'] or (isLocalBrowser(browser) and params['screenShots'])):
+							steps += githubComment()
+
 						result = {
 							'kind': 'pipeline',
 							'type': 'docker',
@@ -650,61 +701,8 @@ def acceptance(ctx):
 								'base': '/var/www/owncloud',
 								'path': config['app']
 							},
-							'steps':
-								installNPM() +
-								buildWeb() +
-								cloneOCIS() +
-								(
-									(
-										installCore(server, db) +
-										owncloudLog() +
-										setupServerAndApp(params['logLevel']) +
-										(
-											installFederatedServer(federatedServerVersion, db, federationDbSuffix) +
-											setupFedServerAndApp(params['logLevel']) +
-											fixPermissionsFederated() +
-											owncloudLogFederated() if params['federatedServerNeeded'] else []
-										) +
-										setupGraphapiOIdC() +
-										buildGlauth() +
-										buildIdP() +
-										buildOcisWeb() +
-										idpService() +
-										ocisWebService() +
-										glauthService()+
-										fixPermissions()
-									) if not params['runningOnOCIS'] else (
-										buildOCIS() +
-										ocisService() +
-										getSkeletonFiles()
-									)
-								) +
-								copyFilesForUpload() +
-								runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser, params['visualTesting']) +
-								(
-									listScreenShots() +
-									uploadVisualDiff() +
-									uploadVisualScreenShots() +
-									buildGithubCommentVisualDiff(ctx, suiteName, alternateSuiteName, params['runningOnOCIS'])
-								 if params['visualTesting'] else []) +
-								(
-									uploadScreenshots() +
-									buildGithubComment(ctx, suiteName, alternateSuiteName) +
-									githubComment()
-								if isLocalBrowser(browser) and params['screenShots'] else []) +
-								(githubComment() if (params['visualTesting'] or (isLocalBrowser(browser) and params['screenShots'])) else []),
-							'services':
-								( redisService() if params['runningOnOCIS'] else []) +
-								browserService(alternateSuiteName, browser) +
-								(
-									databaseService(db) +
-									(
-										owncloudFederatedService() +
-										databaseServiceForFederation(db, federationDbSuffix) if params['federatedServerNeeded'] else []
-									) +
-									owncloudService()
-								if not params['runningOnOCIS'] else []
-								),
+							'steps': steps,
+							'services': services,
 							'depends_on': [],
 							'trigger': {
 								'ref': [
@@ -1053,7 +1051,7 @@ def buildWeb():
 		'pull': 'always',
 		'commands': [
 			'yarn build',
-			'cp tests/drone/config.json dist/config.json',
+			'cp tests/drone/config-oc10-oauth.json dist/config.json',
 			'mkdir -p /srv/config',
 			'cp -r /var/www/owncloud/web/tests/drone /srv/config',
 			'ls -la /srv/config/drone'
@@ -1239,6 +1237,35 @@ def getSkeletonFiles():
 		}],
 	}]
 
+def webService():
+	return [{
+		'name': 'web',
+		'image': 'owncloudci/php:7.4',
+		'pull': 'always',
+		'environment': {
+			'APACHE_WEBROOT': '/var/www/owncloud/web/dist',
+		},
+		'commands': [
+			'mkdir dist',
+			'/usr/local/bin/apachectl -e debug -D FOREGROUND',
+		]
+	}]
+
+def setUpOauth2():
+	return [{
+		'name': 'setup-oauth2',
+		'image': 'owncloudci/php:7.4',
+		'pull': 'always',
+		'commands': [
+			'git clone -b master https://github.com/owncloud/oauth2.git /var/www/owncloud/server/apps/oauth2',
+			'cd /var/www/owncloud/server/apps/oauth2',
+			'make vendor',
+			'cd /var/www/owncloud/server/',
+			'php occ a:e oauth2',
+			'php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://web/oidc-callback.html',
+		]
+	}]
+
 def setupGraphapiOIdC():
 	return [{
 		'name': 'setup-graphapi',
@@ -1259,9 +1286,9 @@ def setupGraphapiOIdC():
 			'php occ config:system:set openid-connect loginButtonName --value=OpenId-Connect',
 			'php occ config:system:set openid-connect client-id --value=web',
 			'php occ config:system:set openid-connect insecure --value=true --type=bool',
-			'php occ config:system:set cors.allowed-domains 0 --value="http://web:9100"',
+			'php occ config:system:set cors.allowed-domains 0 --value="http://web"',
 			'php occ config:system:set memcache.local --value="\\\\OC\\\\Memcache\\\\APCu"',
-			'php occ config:system:set web.baseUrl --value="http://web:9100"',
+			'php occ config:system:set web.baseUrl --value="http://web"',
 			'php occ config:list'
 		]
 	}]
@@ -1482,7 +1509,7 @@ def ocisWebService():
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
-			'WEB_UI_CONFIG': '/srv/config/drone/config.json',
+			'WEB_UI_CONFIG': '/srv/config/drone/config-oc10-openid.json',
 			'WEB_ASSET_PATH': '/var/www/owncloud/web/dist',
 		},
 		'commands': [
@@ -1622,7 +1649,7 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 	if (visualTesting):
 		environment['VISUAL_TEST'] = 'true'
 
-	environment['SERVER_HOST'] = 'http://web:9100'
+	environment['SERVER_HOST'] = 'http://web'
 	environment['BACKEND_HOST'] = 'http://owncloud'
 
 	for env in extraEnvironment:
@@ -1663,7 +1690,7 @@ def uploadScreenshots():
 		'pull': 'if-not-exists',
 		'settings': {
 			'acl': 'public-read',
-			'bucket': 'web',
+			'bucket': 'phoenix',
 			'endpoint': 'https://minio.owncloud.com/',
 			'path_style': True,
 			'source': '/var/www/owncloud/web/tests/reports/screenshots/**/*',
@@ -1810,6 +1837,7 @@ def buildGithubComment(suite, alternateSuiteName):
 			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
 			'echo "\n</p></details>" >> comments.file',
 			'more comments.file',
+			'mv comments.file /var/www/owncloud/web/comments.file'
 		],
 		'environment': {
 			'TEST_CONTEXT': suite,
