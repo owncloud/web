@@ -164,17 +164,19 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
+import pathUtil from 'path'
+import isEmpty from 'lodash-es/isEmpty'
+
 import Mixins from '../mixins'
 import MixinDeleteResources from '../mixins/deleteResources'
 import MixinFileActions from '../mixins/fileActions'
 import MixinRoutes from '../mixins/routes'
-import pathUtil from 'path'
-import isEmpty from 'lodash-es/isEmpty'
 import { canBeMoved } from '../helpers/permissions'
 import { cloneStateObject } from '../helpers/store'
-import { getResourceSize } from '../helpers/resources'
+import { getResourceSize, buildResource } from '../helpers/resources'
 import { checkRoute } from '../helpers/route'
+
 import FileUpload from './FileUpload.vue'
 import FolderUpload from './FolderUpload.vue'
 import FileDrop from './FileDrop.vue'
@@ -372,29 +374,10 @@ export default {
       'resetFileSelection',
       'addFiles',
       'updateFileProgress',
-      'loadFolder',
       'removeFilesFromTrashbin'
     ]),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
-
-    $_ocFilesFolder_getFolder() {
-      this.loadFolder({
-        client: this.$client,
-        absolutePath: this.currentPath,
-        $gettext: this.$gettext,
-        routeName: this.$route.name,
-        isPublicPage: this.isPublicFilesRoute
-      }).catch(error => {
-        this.showMessage({
-          title: this.$gettext('Loading folder failed…'),
-          desc: error.message,
-          status: 'danger',
-          autoClose: {
-            enabled: true
-          }
-        })
-      })
-    },
+    ...mapMutations('Files', ['PUSH_NEW_RESOURCE']),
 
     showCreateResourceModal(isFolder = true, ext = 'txt', openAction = null) {
       const defaultName = isFolder
@@ -433,35 +416,38 @@ export default {
       this.createModal(modal)
     },
 
-    addNewFolder(folderName) {
-      if (folderName !== '') {
-        this.fileFolderCreationLoading = true
-        const path = pathUtil.join(this.currentPath, folderName)
-        let p
-        if (this.isListRoute) {
-          p = this.$client.files.createFolder(path)
-        } else {
-          p = this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
-        }
-
-        p.then(() => {
-          this.$_ocFilesFolder_getFolder()
-          this.hideModal()
-        })
-          .catch(error => {
-            this.showMessage({
-              title: this.$gettext('Creating folder failed…'),
-              desc: error,
-              status: 'danger',
-              autoClose: {
-                enabled: true
-              }
-            })
-          })
-          .finally(() => {
-            this.fileFolderCreationLoading = false
-          })
+    async addNewFolder(folderName) {
+      if (folderName === '') {
+        return
       }
+
+      this.fileFolderCreationLoading = true
+
+      try {
+        const path = pathUtil.join(this.currentPath, folderName)
+
+        this.isListRoute
+          ? await this.$client.files.createFolder(path)
+          : await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
+
+        let resource = await this.$client.files.fileInfo(path, this.davProperties)
+        resource = buildResource(resource)
+
+        this.PUSH_NEW_RESOURCE(resource)
+        this.hideModal()
+        this.$scrollTo(`oc-tbody-tr-${resource.id}`)
+      } catch (error) {
+        this.showMessage({
+          title: this.$gettext('Creating folder failed…'),
+          desc: error,
+          status: 'danger',
+          autoClose: {
+            enabled: true
+          }
+        })
+      }
+
+      this.fileFolderCreationLoading = false
     },
     checkNewFolderName(folderName) {
       if (folderName === '') {

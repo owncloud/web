@@ -303,5 +303,9 @@ export default {
 
   LOAD_INDICATORS(state) {
     state.files.forEach(resource => attatchIndicators(resource, state.sharesTree))
+  },
+
+  PUSH_NEW_RESOURCE(state, resource) {
+    state.files.push(resource)
   }
 }

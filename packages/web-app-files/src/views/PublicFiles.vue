@@ -49,8 +49,6 @@ export default {
         this.davProperties
       )
 
-      console.log(resources)
-
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
 
       if (resources.length === 1) {
