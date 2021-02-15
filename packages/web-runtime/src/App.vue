@@ -49,7 +49,7 @@
           />
           <main id="main">
             <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-            <router-view id="oc-app-container" name="app" />
+            <router-view class="oc-app-container" name="app" />
           </main>
         </div>
       </div>

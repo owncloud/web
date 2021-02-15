@@ -11,6 +11,7 @@ import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './components/PublicLinks/PublicLink.vue'
 import FilesDrop from './components/PublicLinks/FilesDrop.vue'
 import LocationPicker from './components/LocationPicker/LocationPicker.vue'
+import PublicFiles from './views/PublicFiles.vue'
 
 import translationsJson from '../l10n/translations.json'
 import quickActionsImport from './quickActions'
@@ -167,39 +168,39 @@ const routes = [
     ]
   },
   {
+    name: 'public',
+    path: '/public',
+    components: {
+      app: App
+    },
+    meta: {
+      auth: false
+    },
+    children: [
+      {
+        name: 'public-link',
+        path: 'public-link/:resourceId',
+        component: PublicLink
+      },
+      {
+        name: 'public-files',
+        path: 'list/:item',
+        component: PublicFiles
+      },
+      {
+        name: 'public-files-drop',
+        path: 'files-drop/:token',
+        component: FilesDrop
+      }
+    ]
+  },
+  {
     path: '/private-link/:fileId',
     name: 'private-link',
     components: {
       fullscreen: PrivateLink
     },
     meta: { hideHeadbar: true }
-  },
-  {
-    path: '/public-link/:token',
-    name: 'public-link',
-    components: {
-      fullscreen: PublicLink
-    },
-    meta: { auth: false, hideHeadbar: true }
-  },
-  {
-    path: '/public-files/:item',
-    name: 'public-files',
-    components: {
-      app: App
-    },
-    meta: {
-      auth: false,
-      hasBulkActions: true
-    }
-  },
-  {
-    path: '/files-drop/:token',
-    name: 'public-files-drop',
-    components: {
-      app: FilesDrop
-    },
-    meta: { auth: false }
   },
   {
     path: '/location-picker',

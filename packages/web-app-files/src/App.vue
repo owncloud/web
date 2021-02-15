@@ -1,5 +1,5 @@
 <template>
-  <div id="files" class="uk-flex uk-height-1-1">
+  <div id="files">
     <div
       ref="filesListWrapper"
       tabindex="-1"
