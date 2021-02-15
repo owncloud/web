@@ -8,7 +8,7 @@ import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import FileLinkSidebar from './components/FileLinkSidebar.vue'
 import PrivateLink from './components/PrivateLink.vue'
-import PublicLink from './components/PublicLinks/PublicLink.vue'
+import PublicLink from './views/PublicLink.vue'
 import FilesDrop from './components/PublicLinks/FilesDrop.vue'
 import LocationPicker from './components/LocationPicker/LocationPicker.vue'
 import PublicFiles from './views/PublicFiles.vue'
@@ -178,21 +178,24 @@ const routes = [
     },
     children: [
       {
-        name: 'public-link',
-        path: 'public-link/:resourceId',
-        component: PublicLink
-      },
-      {
-        name: 'public-files',
+        name: 'public-list',
         path: 'list/:item',
         component: PublicFiles
       },
       {
-        name: 'public-files-drop',
+        name: 'public-drop',
         path: 'files-drop/:token',
         component: FilesDrop
       }
     ]
+  },
+  {
+    path: '/public-link/:token',
+    name: 'public-link',
+    components: {
+      fullscreen: PublicLink
+    },
+    meta: { auth: false, hideHeadbar: true }
   },
   {
     path: '/private-link/:fileId',

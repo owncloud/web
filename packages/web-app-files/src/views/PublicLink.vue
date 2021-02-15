@@ -1,9 +1,11 @@
 <template>
-  <div class="oc-login" uk-height-viewport>
+  <div
+    class="oc-login"
+    uk-height-viewport
+    :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
+  >
     <div class="oc-login-card uk-position-center">
-      <h1 v-translate class="oc-login-logo">
-        ownCloud
-      </h1>
+      <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
       <div v-if="loading" class="oc-login-card-body">
         <h3 class="oc-login-card-title" :aria-hidden="true">{{ $_loadingPublicLinkTitle }}</h3>
         <oc-spinner :aria-label="$_loadingPublicLinkTitle" />
@@ -44,7 +46,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import Mixins from '../../mixins.js'
+import Mixins from '../mixins'
 
 export default {
   mixins: [Mixins],
@@ -69,6 +71,14 @@ export default {
     },
     $_loadingPublicLinkTitle() {
       return this.$gettext('Loading public link…')
+    },
+
+    backgroundImg() {
+      return this.configuration.theme.loginPage.backgroundImg
+    },
+
+    logoImg() {
+      return this.configuration.theme.logo.login
     }
   },
   mounted() {
@@ -94,15 +104,16 @@ export default {
           this.setPublicLinkPassword(password)
           if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
             this.$router.push({
-              name: 'public-files-drop',
+              name: 'files-public-drop',
               params: {
                 item: this.$route.params.token
               }
             })
+
             return
           }
           this.$router.push({
-            name: 'public-files',
+            name: 'public-list',
             params: {
               item: this.$route.params.token
             }
