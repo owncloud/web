@@ -1,5 +1,5 @@
 <template>
-  <div id="files">
+  <div id="files" class="uk-flex uk-height-1-1">
     <div
       ref="filesListWrapper"
       tabindex="-1"
@@ -110,7 +110,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .files-list-wrapper {
   display: grid;
   grid-template-columns: 1fr;
@@ -120,10 +120,10 @@ export default {
     'header'
     'upload'
     'main';
-}
 
-.files-list-wrapper:focus {
-  outline: none;
+  &:focus {
+    outline: none;
+  }
 }
 
 #files-sidebar {
