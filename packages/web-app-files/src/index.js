@@ -113,7 +113,7 @@ const navItems = [
 const routes = [
   {
     path: '',
-    redirect: '/files/list/f'
+    redirect: '/files/list/personal'
   },
   {
     name: 'list',

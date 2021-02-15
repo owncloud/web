@@ -449,6 +449,7 @@ export default {
 
       this.fileFolderCreationLoading = false
     },
+
     checkNewFolderName(folderName) {
       if (folderName === '') {
         return this.$gettext('Folder name cannot be empty')
@@ -480,53 +481,55 @@ export default {
       return null
     },
 
-    addNewFile(fileName) {
-      if (fileName !== '') {
-        this.fileFolderCreationLoading = true
+    async addNewFile(fileName) {
+      if (fileName === '') {
+        return
+      }
 
+      this.fileFolderCreationLoading = true
+
+      try {
         const path = pathUtil.join(this.currentPath, fileName)
-        let p
-        if (this.isListRoute) {
-          p = this.$client.files.putFileContents(path, '')
-        } else {
-          p = this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
-        }
+        this.isListRoute
+          ? await this.$client.files.putFileContents(path, '')
+          : await this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
 
-        p.then(async () => {
-          let file
-          if (this.isListRoute) {
-            file = await this.$client.files.fileInfo(path, this.davProperties)
-          } else {
-            file = await this.$client.publicFiles.list(
+        let resource = this.isListRoute
+          ? await this.$client.files.fileInfo(path, this.davProperties)
+          : await this.$client.publicFiles.getFileInfo(
               path,
               this.publicLinkPassword,
-              this.davProperties,
-              '0'
+              this.davProperties
             )
-            file = file[0]
-          }
-          const fileId = file.fileInfo['{http://owncloud.org/ns}fileid']
 
-          this.$_ocFilesFolder_getFolder()
-          this.fileFolderCreationLoading = false
+        if (this.newFileAction) {
+          const fileId = resource.fileInfo['{http://owncloud.org/ns}fileid']
+
+          this.$_fileActions_openEditor(this.newFileAction, path, fileId)
           this.hideModal()
 
-          if (this.newFileAction) {
-            this.$_fileActions_openEditor(this.newFileAction, path, fileId)
+          return
+        }
+
+        resource = buildResource(resource)
+
+        this.PUSH_NEW_RESOURCE(resource)
+        this.hideModal()
+        this.$scrollTo(`oc-tbody-tr-${resource.id}`)
+      } catch (error) {
+        this.showMessage({
+          title: this.$gettext('Creating file failed…'),
+          desc: error,
+          status: 'danger',
+          autoClose: {
+            enabled: true
           }
-        }).catch(error => {
-          this.fileFolderCreationLoading = false
-          this.showMessage({
-            title: this.$gettext('Creating file failed…'),
-            desc: error,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
-          })
         })
       }
+
+      this.fileFolderCreationLoading = false
     },
+
     checkNewFileName(fileName) {
       if (fileName === '') {
         return this.$gettext('File name cannot be empty')

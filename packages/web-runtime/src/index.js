@@ -99,7 +99,7 @@ const loadApp = async path => {
   if (app.routes) {
     // rewrite relative app routes by prefixing their corresponding appId
     app.routes = app.routes.map(route => {
-      route.name = `${app.appInfo.id}-${route.name}`
+      route.name = app.appInfo.id === route.name ? route.name : `${app.appInfo.id}-${route.name}`
       route.path = `/${encodeURI(app.appInfo.id)}${route.path}`
 
       if (route.children) {
