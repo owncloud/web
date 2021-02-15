@@ -1,78 +1,10 @@
 import { getParentPaths } from '../helpers/path'
 import { shareTypes } from '../helpers/shareTypes'
-import SidebarQuota from '../components/SidebarQuota.vue'
 import PQueue from 'p-queue'
 import { buildResource } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
 
 export default {
-  loadFolder(context, { client, absolutePath, loadSharesTree = false, isPublicPage = false }) {
-    context.commit('UPDATE_FOLDER_LOADING', true)
-    context.commit('CLEAR_CURRENT_FILES_LIST')
-
-    return new Promise((resolve, reject) => {
-      const password = context.getters.publicLinkPassword
-      client.publicFiles
-        .list(absolutePath, password, context.getters.davProperties)
-        .then(res => {
-          if (res === null) {
-            context.dispatch(
-              'showMessage',
-              {
-                title: $gettext('Loading folder failed…'),
-                status: 'danger',
-                autoClose: {
-                  enabled: true
-                }
-              },
-              { root: true }
-            )
-          } else {
-            context.dispatch('loadFiles', {
-              currentFolder: res[0],
-              files: res.splice(1)
-            })
-            if (loadSharesTree) {
-              context.dispatch('loadSharesTree', {
-                client,
-                path: absolutePath
-              })
-            }
-          }
-          context.dispatch('resetFileSelection')
-          context.dispatch('setHighlightedFile', null)
-          if (context.getters.searchTerm !== '') {
-            context.dispatch('resetSearch')
-          }
-          context.commit('UPDATE_FOLDER_LOADING', false)
-        })
-        .catch(error => {
-          context.commit('UPDATE_FOLDER_LOADING', false)
-          reject(error)
-        })
-        .finally(() => {
-          client.users.getUser(context.rootGetters.user.id).then(res => {
-            const quota = res.quota
-
-            context.commit('CHECK_QUOTA', quota)
-
-            // Display quota in the sidebar
-            if (
-              !isPublicPage &&
-              !context.getters.currentFolder.isMounted() &&
-              quota.definition !== 'default' &&
-              quota.definition !== 'none'
-            ) {
-              context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', SidebarQuota, { root: true })
-            } else {
-              context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', null, { root: true })
-            }
-
-            resolve()
-          })
-        })
-    })
-  },
   updateFileProgress({ commit }, progress) {
     commit('UPDATE_FILE_PROGRESS', progress)
   },
@@ -89,15 +21,6 @@ export default {
       currentFolder = buildResource(currentFolder)
     }
     files = files.map(buildResource)
-    context.commit('LOAD_FILES', { currentFolder, files })
-  },
-  loadDeletedFiles(context, { currentFolder, files }) {
-    currentFolder = _buildFile(currentFolder)
-    files = files.map(_buildFileInTrashbin)
-    context.commit('LOAD_FILES', { currentFolder, files })
-  },
-  buildFilesSharedFromMe(context, files) {
-    const currentFolder = files[0]
     context.commit('LOAD_FILES', { currentFolder, files })
   },
   setFilesSort(context, { field, directionIsDesc }) {

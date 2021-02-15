@@ -113,7 +113,7 @@ export default {
             return
           }
           this.$router.push({
-            name: 'public-list',
+            name: 'files-public-list',
             params: {
               item: this.$route.params.token
             }
