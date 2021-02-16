@@ -159,11 +159,10 @@ export default {
         .getRecipients(value, 'folder')
         .then(recipients => {
           this.autocompleteInProgress = false
-          let users = recipients.exact.users.concat(recipients.users)
+          const users = recipients.exact.users
+            .concat(recipients.users)
+            .filter(user => user.value.shareWith !== this.user.id)
           const groups = recipients.exact.groups.concat(recipients.groups)
-          users = users.filter(user => {
-            return user.value.shareWith !== this.user.id
-          })
           const remotes = recipients.exact.remotes.concat(recipients.remotes)
 
           this.autocompleteResults = users.concat(groups, remotes).filter(collaborator => {
@@ -202,7 +201,10 @@ export default {
       }
       return (
         item.label.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1 ||
-        item.value.shareWith.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1
+        item.value.shareWith.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1 ||
+        (item.value.shareWithAdditionalInfo || '')
+          .toLocaleLowerCase()
+          .indexOf(queryText.toLocaleLowerCase()) > -1
       )
     },
     $_ocCollaborators_newCollaboratorsCancel() {
