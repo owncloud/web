@@ -232,7 +232,7 @@ async function buildSharedResource(share, incomingShares = false, allowSharePerm
       resource.basename.length - resource.extension.length - 1
     )
   }
-  resource.share = _buildShare(share, resource, allowSharePerm)
+  resource.share = buildShare(share, resource, allowSharePerm)
   resource.indicators = []
   resource.icon =
     resource.type === 'folder' ? 'folder' : getFileIcon(getFileExtension(resource.name))
@@ -241,11 +241,11 @@ async function buildSharedResource(share, incomingShares = false, allowSharePerm
   return resource
 }
 
-function _buildShare(s, file, allowSharePerm) {
+export function buildShare(s, file, allowSharePerm) {
   if (parseInt(s.share_type, 10) === shareTypes.link) {
     return _buildLink(s)
   }
-  return _buildCollaboratorShare(s, file, allowSharePerm)
+  return buildCollaboratorShare(s, file, allowSharePerm)
 }
 
 function _buildLink(link) {
@@ -296,7 +296,7 @@ function _fixAdditionalInfo(data) {
   return data
 }
 
-function _buildCollaboratorShare(s, file, allowSharePerm) {
+export function buildCollaboratorShare(s, file, allowSharePerm) {
   const share = {
     shareType: parseInt(s.share_type, 10),
     id: s.id

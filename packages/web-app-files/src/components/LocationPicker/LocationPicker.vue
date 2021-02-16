@@ -104,15 +104,15 @@ import { basename, join } from 'path'
 import { cloneStateObject } from '../../helpers/store'
 import MixinsGeneral from '../../mixins'
 import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
-import NoContentMessage from '../NoContentMessage.vue'
+// import NoContentMessage from '../NoContentMessage.vue'
 import CopySidebarMainContent from './CopySidebarMainContent.vue'
 
 export default {
   name: 'LocationPicker',
 
-  components: {
-    NoContentMessage
-  },
+  // components: {
+  //   NoContentMessage
+  // },
 
   mixins: [MixinsGeneral],
 

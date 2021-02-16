@@ -1,7 +1,7 @@
 import { getParentPaths } from '../helpers/path'
 import { shareTypes } from '../helpers/shareTypes'
 import PQueue from 'p-queue'
-import { buildResource } from '../helpers/resources'
+import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
 
 export default {
@@ -58,7 +58,7 @@ export default {
   addFiles(context, payload) {
     const files = payload.files
     for (const file of files) {
-      context.commit('ADD_FILE', _buildFile(file))
+      context.commit('ADD_FILE', buildResource(file))
     }
   },
   deleteFiles(context, { files, client, publicPage }) {
@@ -130,7 +130,7 @@ export default {
         .search(searchTerm, null, context.state.davProperties)
         .then(filesSearched => {
           filesSearched = filesSearched.map(f => {
-            return _buildFile(f)
+            return buildResource(f)
           })
           context.commit('LOAD_FILES_SEARCHED', filesSearched)
           resolve(filesSearched)
@@ -165,7 +165,7 @@ export default {
         context.commit(
           'CURRENT_FILE_OUTGOING_SHARES_SET',
           data.map(element => {
-            return _buildShare(
+            return buildShare(
               element.shareInfo,
               context.getters.highlightedFile,
               !context.rootGetters.isOcis
@@ -194,7 +194,7 @@ export default {
         context.commit(
           'INCOMING_SHARES_LOAD',
           data.map(element => {
-            return _buildCollaboratorShare(
+            return buildCollaboratorShare(
               element.shareInfo,
               context.getters.highlightedFile,
               !context.rootGetters.isOcis
@@ -235,7 +235,7 @@ export default {
       client.shares
         .updateShare(share.id, params)
         .then(updatedShare => {
-          const share = _buildCollaboratorShare(
+          const share = buildCollaboratorShare(
             updatedShare.shareInfo,
             getters.highlightedFile,
             !rootGetters.isOcis
@@ -258,7 +258,7 @@ export default {
         .then(share => {
           context.commit(
             'CURRENT_FILE_OUTGOING_SHARES_ADD',
-            _buildCollaboratorShare(
+            buildCollaboratorShare(
               share.shareInfo,
               context.getters.highlightedFile,
               !context.rootGetters.isOcis
@@ -293,7 +293,7 @@ export default {
       .then(share => {
         context.commit(
           'CURRENT_FILE_OUTGOING_SHARES_ADD',
-          _buildCollaboratorShare(
+          buildCollaboratorShare(
             share.shareInfo,
             context.getters.highlightedFile,
             !context.rootGetters.isOcis
@@ -376,11 +376,7 @@ export default {
             .then(data => {
               data.forEach(element => {
                 sharesTree[queryPath].push({
-                  ..._buildShare(
-                    element.shareInfo,
-                    { type: 'folder' },
-                    !context.rootGetters.isOcis
-                  ),
+                  ...buildShare(element.shareInfo, { type: 'folder' }, !context.rootGetters.isOcis),
                   outgoing: true,
                   indirect: true
                 })
@@ -401,7 +397,7 @@ export default {
             .then(data => {
               data.forEach(element => {
                 sharesTree[queryPath].push({
-                  ..._buildCollaboratorShare(
+                  ...buildCollaboratorShare(
                     element.shareInfo,
                     { type: 'folder' },
                     !context.rootGetters.isOcis
@@ -440,7 +436,7 @@ export default {
       client.shares
         .shareFileWithLink(path, params)
         .then(data => {
-          const link = _buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
+          const link = buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
           context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
           resolve(link)
@@ -455,7 +451,7 @@ export default {
       client.shares
         .updateShare(id, params)
         .then(data => {
-          const link = _buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
+          const link = buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_UPDATE', link)
           resolve(link)
         })
