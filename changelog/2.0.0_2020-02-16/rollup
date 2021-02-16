@@ -1,0 +1,5 @@
+Change: Switch from webpack to rollup
+
+We replaced the bundler that we used so far (webpack) with rollup and reorganized the project structure. This hopefully makes the project structure easier to understand and thus help with onboarding. Another improvement is that the overall bundle size is much smaller now.
+
+https://github.com/owncloud/web/pull/4584
