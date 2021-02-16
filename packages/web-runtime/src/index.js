@@ -5,7 +5,7 @@ import VueResize from 'vue-resize'
 
 // --- Components ---
 import App from './App.vue'
-import missingConfigPage from './pages/missingConfig.vue'
+import missingOrInvalidConfigPage from './pages/missingOrInvalidConfig.vue'
 
 // --- Adding global libraries ---
 import OwnCloud from 'owncloud-sdk'
@@ -43,6 +43,8 @@ import Avatar from './components/Avatar.vue'
 import wgxpath from 'wicked-good-xpath'
 
 import { registerClient } from './services/clientRegistration'
+
+import { loadConfig } from './configHelper'
 
 wgxpath.install()
 
@@ -187,13 +189,13 @@ const fetchTheme = async () => {
   await store.dispatch('loadTheme', { theme, name: config.theme })
 }
 
-const missingConfig = () => {
+const missingOrInvalidConfig = () => {
   loadTranslations()
   // eslint-disable-next-line no-new
   new Vue({
     el: '#owncloud',
     store,
-    render: h => h(missingConfigPage)
+    render: h => h(missingOrInvalidConfigPage)
   })
 }
 
@@ -207,15 +209,16 @@ const loadTranslations = () => {
 }
 
 export const exec = async () => {
-  config = await fetch('config.json')
-  if (config.status !== 200) {
+  try {
+    config = await loadConfig()
+  } catch (err) {
+    console.log(err)
     router.push('missing-config')
-    missingConfig()
+    missingOrInvalidConfig(err)
     return
   }
 
   try {
-    config = await config.json()
     // if dynamic client registration is necessary - do this here now
     if (config.openIdConnect && config.openIdConnect.dynamic) {
       const clientData = await registerClient(config.openIdConnect)
