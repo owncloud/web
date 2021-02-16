@@ -7,10 +7,11 @@
         </h1>
         <div class="oc-login-card-body">
           <h3 class="oc-login-card-title">
-            <span v-translate>Missing config</span>
+            <span v-translate>Missing or invalid config</span>
           </h3>
           <p v-translate>
-            Please check if file config.json exists.
+            Please check if the file config.json exists and is correct.<br />
+            Check the console for more information.
           </p>
         </div>
         <div class="oc-login-card-footer">

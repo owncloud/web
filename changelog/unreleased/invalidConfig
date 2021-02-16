@@ -1,0 +1,6 @@
+Bugfix: Fix showing white page with no message if the config could not be parsed
+
+When the config file could not be parsed because of some mistake in the JSON, an empty page without any error message would be shown to the user. We've fixed that behavior and showing now an error page and details of the error in the console.
+
+https://github.com/owncloud/web/issues/4636
+https://github.com/owncloud/web/pull/4749
