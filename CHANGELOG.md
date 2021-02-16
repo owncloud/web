@@ -1,3 +1,27 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v1.0.1...master
+
+Summary
+-------
+
+* Bugfix - Fix showing white page with no message if the config could not be parsed: [#4636](https://github.com/owncloud/web/issues/4636)
+
+Details
+-------
+
+* Bugfix - Fix showing white page with no message if the config could not be parsed: [#4636](https://github.com/owncloud/web/issues/4636)
+
+   When the config file could not be parsed because of some mistake in the JSON, an empty page
+   without any error message would be shown to the user. We've fixed that behavior and showing now
+   an error page and details of the error in the console.
+
+   https://github.com/owncloud/web/issues/4636
+   https://github.com/owncloud/web/pull/4749
+
 Changelog for ownCloud Web [1.0.1] (2021-01-08)
 =======================================
 The following sections list the changes in ownCloud web 1.0.1 relevant to
