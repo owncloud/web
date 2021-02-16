@@ -307,5 +307,9 @@ export default {
 
   PUSH_NEW_RESOURCE(state, resource) {
     state.files.push(resource)
+  },
+
+  SELECT_RESOURCES(state, resources) {
+    state.selected = resources
   }
 }
