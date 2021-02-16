@@ -1,10 +1,11 @@
 # On OSX the PATH variable isn't exported unless "SHELL" is also set, see: http://stackoverflow.com/a/25506676
 SHELL = /bin/bash
-NODE_BINDIR = ../node_modules/.bin
+NODE_MODULES = ../../../node_modules
+NODE_BINDIR = $(NODE_MODULES)/.bin
 export PATH := $(NODE_BINDIR):$(PATH)
 
 # Where to find apps (it can be multiple paths).
-APPS =  ../../packages/web-app-files ../../packages/web-app-markdown-editor ../../packages/web-app-media-viewer
+APPS = $(shell find ../.. -maxdepth 1 -name 'web-app-*')
 
 # Where to find core folder
 CORE = ..
@@ -19,24 +20,20 @@ OUTPUT_DIR = .
 TEMPLATE_FILE = ./template.pot
 
 # Available locales for the app.
-
 LOCALES = de fr es it cs gl
 
 # Name of the generated .po files for each available locale.
 LOCALE_FILES ?= $(foreach app,$(APPS),$(patsubst %,$(app)/l10n/locale/%/LC_MESSAGES/app.po,$(LOCALES))) $(patsubst %,./locale/%/LC_MESSAGES/app.po,$(LOCALES))
 
-# Makefile Targets
-.PHONY: clean extract translations
-
+.PHONY: clean
 clean:
 	rm -f $(foreach app,$(APPS),$(app)/l10n/template.pot);
 	rm -f $(TEMPLATE_FILE);
 	rm -rf $(foreach app,$(APPS),$(app)/l10n/locale);
 	rm -rf locale;
 
+.PHONY: extract
 extract: $(TEMPLATE_FILE)
-
-translations: $(OUTPUT_DIR)/translations.json
 
 # Create a main .pot template, then generate .po files for each available language.
 # Thanks to Systematic: https://github.com/Polyconseil/systematic/blob/866d5a/mk/main.mk#L167-L183
@@ -51,9 +48,12 @@ $(TEMPLATE_FILE):
 			export OUT_DIR=$$app/l10n; \
 		fi; \
 		mkdir -p $$OUT_DIR; \
-		export GETTEXT_APP_SOURCES=`find $$app/src -name '*.vue' -o -name '*.js'`;\
-		node ../node_modules/easygettext/src/extract-cli.js --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
+		export GETTEXT_APP_SOURCES=`find $$app/src -name '*.vue' -o -name '*.js'`; \
+		node $(NODE_MODULES)/easygettext/src/extract-cli.js --attribute v-translate --output $$OUT_DIR/template.pot $$GETTEXT_APP_SOURCES; \
 	done;
+
+.PHONY: translations
+translations: $(OUTPUT_DIR)/translations.json
 
 # Generate translations.json file from all available apps .pot templates.
 $(OUTPUT_DIR)/translations.json:
@@ -66,4 +66,30 @@ $(OUTPUT_DIR)/translations.json:
 		fi; \
 		mkdir -p $$OUT_DIR; \
 		gettext-compile --output $$OUT_DIR/translations.json $(patsubst %,$$OUT_DIR/locale/%/LC_MESSAGES/app.po,$(LOCALES)); \
+	done; \
+
+.PHONY: push
+push:
+	@for app in $(INPUT_FILES); \
+	do \
+		if [ $$app = '../src' ]; then \
+			export OUT_DIR=.; \
+		else \
+			export OUT_DIR=$$app/l10n; \
+		fi; \
+		cd $$OUTTDIR; \
+		tx -d push -s --no-interactive; \
+	done; \
+
+.PHONY: pull
+pull:
+	@for app in $(INPUT_FILES); \
+	do \
+		if [ $$app = '../src' ]; then \
+			export OUT_DIR=.; \
+		else \
+			export OUT_DIR=$$app/l10n; \
+		fi; \
+		cd $$OUTTDIR; \
+		tx -d pull -a; \
 	done; \

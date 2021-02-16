@@ -33,26 +33,20 @@ docs-build:
 
 .PHONY: l10n-push
 l10n-push:
-	cd packages/web-runtime/l10n &&  tx -d push -s --no-interactive
-	cd packages/web-app-files/l10n &&  tx -d push -s --no-interactive
-	cd packages/web-app-draw-io/l10n &&  tx -d push -s --no-interactive
-	cd packages/web-app-media-viewer/l10n &&  tx -d push -s --no-interactive
+	make -C packages/web-runtime/l10n push
 
 .PHONY: l10n-pull
 l10n-pull:
-	cd packages/web-runtime/l10n && tx -d pull -a
-	cd packages/web-app-files/l10n && tx -d pull -a
-	cd packages/web-app-draw-io/l10n && tx -d pull -a
-	cd packages/web-app-media-viewer/l10n && tx -d pull -a
+	make -C packages/web-runtime/l10n pull
 
 .PHONY: l10n-clean
 l10n-clean:
-	cd packages/web-runtime/l10n && make clean
+	make -C packages/web-runtime/l10n clean
 
 .PHONY: l10n-read
 l10n-read: node_modules
-	cd packages/web-runtime/l10n && rm -rf template.pot && make extract
+	make -C packages/web-runtime/l10n extract
 
 .PHONY: l10n-write
 l10n-write: node_modules
-	cd packages/web-runtime/l10n && rm -rf translations.json && make translations
+	make -C packages/web-runtime/l10n translations

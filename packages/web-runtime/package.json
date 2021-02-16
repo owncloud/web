@@ -4,6 +4,7 @@
   "description": "ownCloud web runtime",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "easygettext": "^2.16.1",
     "inert-polyfill": "^0.2.5",
     "lodash-es": "^4.17.20",
     "oidc-client": "1.10.1",
