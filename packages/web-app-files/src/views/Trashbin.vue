@@ -8,6 +8,7 @@
       :resources="activeFiles"
       :highlighted="highlightedFile ? highlightedFile.id : null"
       :is-resource-clickable="false"
+      :header-position="132"
       @showDetails="setHighlightedFile"
     />
     <no-content-message v-else-if="state === 'empty'" icon="delete">

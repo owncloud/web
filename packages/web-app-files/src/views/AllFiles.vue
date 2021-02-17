@@ -8,6 +8,7 @@
       :resources="activeFiles"
       :target-route="targetRoute"
       :highlighted="highlightedFile ? highlightedFile.id : null"
+      :header-position="150"
       @showDetails="highlightResource"
     >
       <template v-slot:quickActions="props">
@@ -99,9 +100,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#files-table .oc-table-header-cell {
-  top: 150px;
-}
-</style>

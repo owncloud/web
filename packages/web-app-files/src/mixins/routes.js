@@ -7,7 +7,7 @@ export default {
       return this.$route.name === 'files-favorites'
     },
     isTrashbinRoute() {
-      return this.$route.name === 'files-trash-bin'
+      return this.$route.name === 'files-trashbin'
     },
     isSharedWithMeRoute() {
       return this.$route.name === 'files-shared-with-me'
