@@ -3,6 +3,7 @@
     <list-loader v-if="state === 'loading'" />
     <oc-table-files
       v-if="state === 'loaded'"
+      id="files-favorites-table"
       :resources="activeFiles"
       :target-route="$route.name"
       :highlighted="highlightedFile ? highlightedFile.id : null"

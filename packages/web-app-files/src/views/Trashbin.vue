@@ -3,6 +3,7 @@
     <list-loader v-if="state === 'loading'" />
     <oc-table-files
       v-if="state === 'loaded'"
+      id="files-trashbin-table"
       :are-paths-displayed="true"
       :are-previews-displayed="false"
       :resources="activeFiles"
