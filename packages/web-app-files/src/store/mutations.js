@@ -114,24 +114,17 @@ export default {
     state.files[fileIndex].shareTypes = computeShareTypes(state.currentFileOutgoingShares)
   },
   RENAME_FILE(state, { file, newValue, newPath }) {
-    const fileIndex = state.files.findIndex(f => {
+    const resources = [...state.files]
+    const fileIndex = resources.findIndex(f => {
       return f.id === file.id
     })
-    let ext = ''
-    const name = newValue
-    let baseName = newValue
-    if (file.type !== 'dir') {
-      const ex = name.match(/\.[0-9a-z]+$/i)
-      if (ex !== null) {
-        ext = ex[0].substr(1)
-        baseName = name.substring(0, name.length - ext.length - 1)
-      }
-    }
 
-    state.files[fileIndex].name = name
-    state.files[fileIndex].basename = baseName
-    state.files[fileIndex].extension = ext
-    state.files[fileIndex].path = '/' + newPath + newValue
+    resources[fileIndex].id = 'test'
+    resources[fileIndex].name = newValue
+    resources[fileIndex].path = '/' + newPath + newValue
+
+    state.files = resources
+    console.log(state.files)
   },
   DRAG_OVER(state, value) {
     state.dropzone = value

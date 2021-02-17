@@ -10,16 +10,13 @@
       @progress="onFileProgress"
     />
     <div>
-      <div class="oc-mb-s">
-        <oc-breadcrumb v-if="showBreadcrumb" id="files-breadcrumb" :items="breadcrumbs" home />
-        <span v-if="!showBreadcrumb" class="uk-flex uk-flex-middle oc-mb-s">
-          <oc-icon v-if="pageIcon" :name="pageIcon" class="oc-mr-s" />
-          <h1 class="oc-page-title" v-text="pageTitle" />
-        </span>
-        <span v-else-if="showBreadcrumb">
-          <h1 class="oc-visually-hidden" v-text="pageTitle" />
-        </span>
-      </div>
+      <oc-breadcrumb
+        v-if="showBreadcrumb"
+        id="files-breadcrumb"
+        class="oc-mb-s"
+        :items="breadcrumbs"
+        home
+      />
       <div class="uk-flex uk-flex-middle">
         <template v-if="$_ocFilesAppBar_showActions">
           <template v-if="areDefaultActionsVisible">

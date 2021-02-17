@@ -7,7 +7,7 @@
       :are-previews-displayed="false"
       :resources="activeFiles"
       :highlighted="highlightedFile ? highlightedFile.id : null"
-      :is-resource-clickable="false"
+      :are-resources-clickable="false"
       :header-position="132"
       @showDetails="setHighlightedFile"
     />

@@ -113,22 +113,6 @@ const loadApp = async path => {
       return route
     })
 
-    // adjust routes in nav items
-    if (app.navItems) {
-      app.navItems.forEach(nav => {
-        const r = app.routes.find(function(element) {
-          return element.name === nav.route.name
-        })
-        if (r) {
-          r.meta = r.meta || {}
-          r.meta.pageIcon = nav.iconMaterial
-          r.meta.pageTitle = nav.name
-          nav.route.path = nav.route.path || r.path
-        } else {
-          console.error(`Unknown route name ${nav.route.name}`)
-        }
-      })
-    }
     router.addRoutes(app.routes)
   }
 

@@ -16,7 +16,10 @@ export default {
             return this.$gettext('Mark as favorite')
           },
           isEnabled: () => {
-            const isRouteAllowed = checkRoute(['files-list', 'files-favorites'], this.$route.name)
+            const isRouteAllowed = checkRoute(
+              ['files-all-files', 'files-favorites'],
+              this.$route.name
+            )
 
             return (
               this.isAuthenticated &&
