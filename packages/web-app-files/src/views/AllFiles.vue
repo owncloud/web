@@ -57,7 +57,6 @@ export default {
       },
       set(resources) {
         this.SELECT_RESOURCES(resources)
-        console.log(this.selected)
       }
     }
   },

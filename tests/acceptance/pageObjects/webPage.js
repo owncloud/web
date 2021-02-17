@@ -253,7 +253,7 @@ module.exports = {
       selector: '#Web'
     },
     appContainer: {
-      selector: '#oc-app-container'
+      selector: '.oc-app-container'
     },
     notificationElement: {
       selector: '//div[@id="oc-notification"]//h5',
