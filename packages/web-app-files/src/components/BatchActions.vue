@@ -13,7 +13,7 @@
       <oc-button
         id="delete-selected-btn"
         key="delete-btn"
-        @click="selectedFiles.length < 1 ? emptyTrashbin : $_deleteResources_displayDialog"
+        @click="selectedFiles.length < 1 ? emptyTrashbin() : $_deleteResources_displayDialog()"
       >
         <oc-icon name="delete" aria-hidden="true" />
         {{ clearTrashbinButtonText }}
