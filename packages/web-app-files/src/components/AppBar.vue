@@ -92,9 +92,7 @@ import isEmpty from 'lodash-es/isEmpty'
 import Mixins from '../mixins'
 import MixinFileActions from '../mixins/fileActions'
 import MixinRoutes from '../mixins/routes'
-import { canBeMoved } from '../helpers/permissions'
 import { buildResource } from '../helpers/resources'
-import { checkRoute } from '../helpers/route'
 
 import FileUpload from './FileUpload.vue'
 import FolderUpload from './FolderUpload.vue'
@@ -227,42 +225,6 @@ export default {
           this.currentFolder.permissions.indexOf('M') >= 0) ||
         this.publicPage()
       )
-    },
-
-    displayBulkActions() {
-      return this.$route.meta.hasBulkActions && this.selectedFiles.length > 0
-    },
-
-    canMove() {
-      if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
-        return false
-      }
-
-      const insufficientPermissions = this.selectedFiles.some(resource => {
-        return canBeMoved(resource, this.currentFolder.path) === false
-      })
-
-      return insufficientPermissions === false
-    },
-
-    canCopy() {
-      if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
-        return false
-      }
-
-      if (this.publicPage()) {
-        return this.currentFolder.canCreate()
-      }
-
-      return true
-    },
-
-    canDelete() {
-      if (this.isPublicFilesRoute) {
-        return this.currentFolder.canBeDeleted()
-      }
-
-      return true
     },
 
     areDefaultActionsVisible() {

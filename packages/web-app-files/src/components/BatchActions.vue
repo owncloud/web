@@ -64,6 +64,8 @@ import pathUtil from 'path'
 import Routes from '../mixins/routes'
 import DeleteResources from '../mixins/deleteResources'
 import { cloneStateObject } from '../helpers/store'
+import { canBeMoved } from '../helpers/permissions'
+import { checkRoute } from '../helpers/route'
 
 export default {
   mixins: [Routes, DeleteResources],
@@ -78,6 +80,42 @@ export default {
 
     clearTrashbinButtonText() {
       return this.selectedFiles.length < 1 ? this.$gettext('Empty') : this.$gettext('Delete')
+    },
+
+    canMove() {
+      if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
+        return false
+      }
+
+      const insufficientPermissions = this.selectedFiles.some(resource => {
+        return canBeMoved(resource, this.currentFolder.path) === false
+      })
+
+      return insufficientPermissions === false
+    },
+
+    canCopy() {
+      if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
+        return false
+      }
+
+      if (this.publicPage()) {
+        return this.currentFolder.canCreate()
+      }
+
+      return true
+    },
+
+    canDelete() {
+      if (this.isPublicFilesRoute) {
+        return this.currentFolder.canBeDeleted()
+      }
+
+      return true
+    },
+
+    displayBulkActions() {
+      return this.$route.meta.hasBulkActions && this.selectedFiles.length > 0
     }
   },
 
