@@ -17,7 +17,7 @@ export default {
           },
           isEnabled: () => {
             const isRouteAllowed = checkRoute(
-              ['files-all-files', 'files-favorites'],
+              ['files-personal', 'files-favorites'],
               this.$route.name
             )
 

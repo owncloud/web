@@ -1,5 +1,5 @@
 import App from './App.vue'
-import AllFiles from './views/AllFiles.vue'
+import Personal from './views/Personal.vue'
 import Favorites from './views/Favorites.vue'
 import SharedWithMe from './views/SharedWithMe.vue'
 import SharedWithOthers from './views/SharedWithOthers.vue'
@@ -66,7 +66,7 @@ const navItems = [
     name: $gettext('All files'),
     iconMaterial: appInfo.icon,
     route: {
-      name: 'files-all-files',
+      name: 'files-personal',
       path: `/${appInfo.id}/list/personal`
     }
   },
@@ -124,9 +124,9 @@ const routes = [
     },
     children: [
       {
-        name: 'all-files',
+        name: 'personal',
         path: 'personal/:item?',
-        component: AllFiles
+        component: Personal
       },
       {
         name: 'favorites',

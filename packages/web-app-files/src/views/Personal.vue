@@ -3,7 +3,7 @@
     <list-loader v-if="state === 'loading'" />
     <oc-table-files
       v-else-if="state === 'loaded'"
-      id="files-table"
+      id="files-personal-table"
       v-model="selected"
       :resources="activeFiles"
       :target-route="targetRoute"

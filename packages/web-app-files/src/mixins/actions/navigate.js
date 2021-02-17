@@ -30,7 +30,7 @@ export default {
       if (this.searchTerm !== '' && this.$route.params.item === folder.path) {
         this.resetSearch()
       }
-      let route = 'files-all-files'
+      let route = 'files-personal'
       if (this.publicPage()) {
         route = 'files-public-list'
       }

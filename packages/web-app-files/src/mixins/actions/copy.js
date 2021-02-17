@@ -13,7 +13,7 @@ export default {
           isEnabled: () => {
             if (
               !checkRoute(
-                ['files-all-files', 'files-public-list', 'files-favorites'],
+                ['files-personal', 'files-public-list', 'files-favorites'],
                 this.$route.name
               )
             ) {

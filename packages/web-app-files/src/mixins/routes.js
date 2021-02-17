@@ -1,7 +1,7 @@
 export default {
   computed: {
     isListRoute() {
-      return this.$route.name === 'files-all-files'
+      return this.$route.name === 'files-personal'
     },
     isFavoritesRoute() {
       return this.$route.name === 'files-favorites'

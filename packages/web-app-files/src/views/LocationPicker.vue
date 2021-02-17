@@ -258,7 +258,7 @@ export default {
         return
       }
 
-      this.$router.push({ name: 'files-all-files', params: { item: target || '/' } })
+      this.$router.push({ name: 'files-personal', params: { item: target || '/' } })
     },
 
     isRowDisabled(resource) {
