@@ -188,7 +188,9 @@ export default {
     disabledResources() {
       const resources = cloneStateObject(this.activeFiles)
 
-      return resources.filter(resource => resource.type !== 'folder').map(resource => resource.id)
+      return resources
+        .filter(resource => resource.type !== 'folder' || this.resources.includes(resource.path))
+        .map(resource => resource.id)
     },
 
     targetPath() {
