@@ -1,0 +1,6 @@
+Bugfix: Allow search in additional share info
+
+We fixed that searching for a potential sharee didn't look at the additional share info.
+
+https://github.com/owncloud/ocis/issues/1656
+https://github.com/owncloud/web/pull/4753
