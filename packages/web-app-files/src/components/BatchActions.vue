@@ -71,12 +71,7 @@ export default {
   mixins: [Routes, DeleteResources],
 
   computed: {
-    ...mapGetters('Files', [
-      'selectedFiles',
-      'resetFileSelection',
-      'setHighlightedFile',
-      'currentFolder'
-    ]),
+    ...mapGetters('Files', ['selectedFiles', 'currentFolder']),
 
     clearTrashbinButtonText() {
       return this.selectedFiles.length < 1 ? this.$gettext('Empty') : this.$gettext('Delete')
@@ -120,7 +115,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['removeFilesFromTrashbin']),
+    ...mapActions('Files', ['removeFilesFromTrashbin', 'resetFileSelection', 'setHighlightedFile']),
     ...mapActions(['showMessage']),
 
     restoreFiles(resources = this.selectedFiles) {
