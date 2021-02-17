@@ -77,30 +77,7 @@
             </oc-drop>
           </template>
         </template>
-        <div v-if="selectedResourcesAmount > 0" class="oc-mr-s uk-visible@l uk-flex uk-flex-middle">
-          <translate
-            v-if="selectedResourcesSize !== '?'"
-            key="multiple-select-info"
-            :translate-n="selectedResourcesAmount"
-            :translate-params="{ amount: selectedResourcesAmount, size: selectedResourcesSize }"
-            translate-plural="%{ amount } selected items - %{ size }"
-            translate-comment="Number of selected resources and their size displayed above the files list"
-            >%{ amount } selected item - %{ size }
-          </translate>
-          <translate
-            v-else
-            key="multiple-select-info-with-size"
-            :translate-n="selectedResourcesAmount"
-            :translate-params="{ amount: selectedResourcesAmount }"
-            translate-plural="%{ amount } selected items"
-            translate-comment="Number of selected resources displayed above the files list"
-            >%{ amount } selected item
-          </translate>
-          <span class="oc-ml-s oc-mr-s">|</span>
-          <oc-button variation="raw" @click="resetFileSelection">
-            <translate>Clear selection</translate>
-          </oc-button>
-        </div>
+        <info-selected-resources v-if="selectedFiles.length > 0" class="oc-mr-s uk-visible@l" />
         <batch-actions />
       </div>
     </div>
@@ -113,27 +90,27 @@ import pathUtil from 'path'
 import isEmpty from 'lodash-es/isEmpty'
 
 import Mixins from '../mixins'
-import MixinDeleteResources from '../mixins/deleteResources'
 import MixinFileActions from '../mixins/fileActions'
 import MixinRoutes from '../mixins/routes'
 import { canBeMoved } from '../helpers/permissions'
-import { cloneStateObject } from '../helpers/store'
-import { getResourceSize, buildResource } from '../helpers/resources'
+import { buildResource } from '../helpers/resources'
 import { checkRoute } from '../helpers/route'
 
 import FileUpload from './FileUpload.vue'
 import FolderUpload from './FolderUpload.vue'
 import FileDrop from './FileDrop.vue'
 import BatchActions from './BatchActions.vue'
+import InfoSelectedResources from './InfoSelectedResources.vue'
 
 export default {
   components: {
     FileUpload,
     FolderUpload,
     FileDrop,
-    BatchActions
+    BatchActions,
+    InfoSelectedResources
   },
-  mixins: [Mixins, MixinDeleteResources, MixinFileActions, MixinRoutes],
+  mixins: [Mixins, MixinFileActions, MixinRoutes],
   data: () => ({
     newFileAction: null,
     path: '',
@@ -294,30 +271,10 @@ export default {
 
     isNewBtnDisabled() {
       return !this.canUpload || !this.hasFreeSpace
-    },
-
-    selectedResourcesAmount() {
-      return this.selectedFiles.length
-    },
-
-    selectedResourcesSize() {
-      const resources = cloneStateObject(this.selectedFiles)
-      let size = 0
-
-      for (const resource of resources) {
-        size += parseInt(resource.size, 10)
-      }
-
-      return getResourceSize(size)
     }
   },
   methods: {
-    ...mapActions('Files', [
-      'resetFileSelection',
-      'addFiles',
-      'updateFileProgress',
-      'removeFilesFromTrashbin'
-    ]),
+    ...mapActions('Files', ['addFiles', 'updateFileProgress', 'removeFilesFromTrashbin']),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['PUSH_NEW_RESOURCE']),
 
