@@ -5,7 +5,7 @@
         v-if="selectedFiles.length > 0"
         key="restore-btn"
         class="oc-mr-s"
-        @click="$_ocTrashbin_restoreFiles()"
+        @click="restoreFiles()"
       >
         <oc-icon name="restore" aria-hidden="true" />
         <translate>Restore</translate>
@@ -13,7 +13,7 @@
       <oc-button
         id="delete-selected-btn"
         key="delete-btn"
-        @click="selectedFiles.length < 1 ? $_ocTrashbin_empty() : $_deleteResources_displayDialog()"
+        @click="selectedFiles.length < 1 ? emptyTrashbin : $_deleteResources_displayDialog"
       >
         <oc-icon name="delete" aria-hidden="true" />
         {{ clearTrashbinButtonText }}
@@ -47,7 +47,7 @@
           v-if="canDelete"
           id="delete-selected-btn"
           key="delete-selected-btn"
-          @click="$_deleteResources_displayDialog()"
+          @click="$_deleteResources_displayDialog"
         >
           <oc-icon name="delete" aria-hidden="true" />
           <translate>Delete</translate>
@@ -58,18 +58,101 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import pathUtil from 'path'
 
 import Routes from '../mixins/routes'
+import DeleteResources from '../mixins/deleteResources'
+import { cloneStateObject } from '../helpers/store'
 
 export default {
-  mixins: [Routes],
+  mixins: [Routes, DeleteResources],
 
   computed: {
-    ...mapGetters('Files', ['selectedFiles']),
+    ...mapGetters('Files', [
+      'selectedFiles',
+      'resetFileSelection',
+      'setHighlightedFile',
+      'currentFolder'
+    ]),
 
     clearTrashbinButtonText() {
       return this.selectedFiles.length < 1 ? this.$gettext('Empty') : this.$gettext('Delete')
+    }
+  },
+
+  methods: {
+    ...mapActions('Files', ['removeFilesFromTrashbin']),
+    ...mapActions(['showMessage']),
+
+    restoreFiles(resources = this.selectedFiles) {
+      for (const resource of resources) {
+        this.$client.fileTrash
+          .restore(resource.id, resource.originalLocation)
+          .then(() => {
+            const translated = this.$gettext('%{resource} was restored successfully')
+            this.showMessage({
+              title: this.$gettextInterpolate(translated, { resource: resource.name }, true),
+              autoClose: {
+                enabled: true
+              }
+            })
+            this.removeFilesFromTrashbin([resource])
+          })
+          .catch(error => {
+            const translated = this.$gettext('Restoration of %{resource} failed')
+            this.showMessage({
+              title: this.$gettextInterpolate(translated, { resource: resource.name }, true),
+              desc: error.message,
+              status: 'danger',
+              autoClose: {
+                enabled: true
+              }
+            })
+          })
+      }
+      this.resetFileSelection()
+      this.setHighlightedFile(null)
+    },
+
+    emptyTrashbin() {
+      this.$client.fileTrash
+        .clearTrashBin()
+        .then(() => {
+          this.showMessage({
+            title: this.$gettext('All deleted files were removed'),
+            autoClose: {
+              enabled: true
+            }
+          })
+          this.removeFilesFromTrashbin(this.activeFiles)
+        })
+        .catch(error => {
+          this.showMessage({
+            title: this.$gettext('Could not delete files'),
+            desc: error.message,
+            status: 'danger',
+            autoClose: {
+              enabled: true
+            }
+          })
+        })
+    },
+
+    triggerLocationPicker(action) {
+      const resources = cloneStateObject(this.selectedFiles)
+      const parent = pathUtil.dirname(this.currentFolder.path)
+
+      this.$router.push({
+        name: 'location-picker',
+        query: {
+          action,
+          target: parent,
+          resource: resources.map(resource => {
+            return resource.path
+          })
+        }
+      })
     }
   }
 }
