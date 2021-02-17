@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Fix showing white page with no message if the config could not be parsed: [#4636](https://github.com/owncloud/web/issues/4636)
+* Bugfix - Allow search in additional share info: [#1656](https://github.com/owncloud/ocis/issues/1656)
 
 Details
 -------
@@ -21,6 +22,13 @@ Details
 
    https://github.com/owncloud/web/issues/4636
    https://github.com/owncloud/web/pull/4749
+
+* Bugfix - Allow search in additional share info: [#1656](https://github.com/owncloud/ocis/issues/1656)
+
+   We fixed that searching for a potential sharee didn't look at the additional share info.
+
+   https://github.com/owncloud/ocis/issues/1656
+   https://github.com/owncloud/web/pull/4753
 
 Changelog for ownCloud Web [2.0.0] (2021-02-16)
 =======================================
