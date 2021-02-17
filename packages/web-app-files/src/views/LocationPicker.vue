@@ -1,6 +1,6 @@
 <template>
   <div class="uk-height-1-1 uk-flex uk-flex-column oc-p-s uk-overflow-hidden">
-    <!-- <h1 class="location-picker-selection-info uk-flex uk-text-lead uk-margin-bottom">
+    <h1 class="location-picker-selection-info uk-flex uk-text-lead uk-margin-bottom">
       <span class="uk-margin-small-right" v-text="title" />
       <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
     </h1>
@@ -24,100 +24,47 @@
         </div>
       </oc-grid>
     </div>
-    <file-list
-      id="location-picker-files-list"
-      class="uk-flex-1 uk-overflow-auto"
-      :file-data="activeFiles"
-      :actions="[]"
-      :is-action-enabled="() => false"
-      :checkbox-enabled="false"
-      :selectable-row="false"
-      :has-two-rows="true"
-      :row-disabled="isRowDisabled"
-      :resource-click-handler="selectFolder"
-    >
-      <template #headerColumns>
-        <div ref="headerNameColumn" class="uk-text-truncate uk-text-meta uk-width-expand">
-          <sortable-column-header
-            :aria-label="$gettext('Sort files by name')"
-            :is-active="fileSortField === 'name'"
-            :is-desc="fileSortDirectionDesc"
-            @click="toggleSort('name')"
-          >
-            <translate translate-comment="Name column in location picker">Name</translate>
-          </sortable-column-header>
-        </div>
-        <div
-          :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-          class="uk-text-meta uk-width-small"
+    <div>
+      <list-loader v-if="state === 'loading'" />
+      <oc-table-files
+        v-else-if="state === 'loaded'"
+        id="location-picker-files-list"
+        :resources="activeFiles"
+        :has-actions="false"
+        :is-selectable="false"
+        :disabled="disabledResources"
+        :target-route="targetPath"
+      />
+      <no-content-message v-else-if="state === 'empty'" icon="folder">
+        <template #message
+          ><span v-translate>There are no resources in this folder.</span></template
         >
-          <sortable-column-header
-            :aria-label="$gettext('Sort files by size')"
-            :is-active="fileSortField === 'size'"
-            :is-desc="fileSortDirectionDesc"
-            class="uk-align-right"
-            @click="toggleSort('size')"
-          >
-            <translate translate-comment="Size column in location picker">Size</translate>
-          </sortable-column-header>
-        </div>
-        <div
-          :class="{ 'uk-visible@s': !_sidebarOpen, 'uk-hidden': _sidebarOpen }"
-          class="uk-text-nowrap uk-text-meta uk-width-small"
-        >
-          <sortable-column-header
-            :aria-label="$gettext('Sort files by updated time')"
-            :is-active="fileSortField === 'mdateMoment'"
-            :is-desc="fileSortDirectionDesc"
-            class="uk-align-right"
-            @click="toggleSort('mdateMoment')"
-          >
-            <translate
-              translate-comment="Short column label in location picker for the time at which a file was modified"
-              >Updated</translate
-            >
-          </sortable-column-header>
-        </div>
-      </template>
-      <template #rowColumns="{ item: rowItem }">
-        <div class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right">
-          {{ rowItem.size | fileSize }}
-        </div>
-        <div class="uk-text-meta uk-text-nowrap uk-width-small uk-text-right">
-          {{ formDateFromNow(rowItem.mdate) }}
-        </div>
-      </template>
-      <template #noContentMessage>
-        <no-content-message icon="folder">
-          <template #message
-            ><span v-translate>There are no resources in this folder.</span></template
-          >
-        </no-content-message>
-      </template>
-    </file-list> -->
+      </no-content-message>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 import { basename, join } from 'path'
-import { cloneStateObject } from '../../helpers/store'
-import MixinsGeneral from '../../mixins'
-import MoveSidebarMainContent from './MoveSidebarMainContent.vue'
-// import NoContentMessage from '../NoContentMessage.vue'
-import CopySidebarMainContent from './CopySidebarMainContent.vue'
+
+import { cloneStateObject } from '../helpers/store'
+import MixinsGeneral from '../mixins'
+
+import MoveSidebarMainContent from '../components/LocationPicker/MoveSidebarMainContent.vue'
+import NoContentMessage from '../components/NoContentMessage.vue'
+import CopySidebarMainContent from '../components/LocationPicker/CopySidebarMainContent.vue'
 
 export default {
-  name: 'LocationPicker',
-
-  // components: {
-  //   NoContentMessage
-  // },
+  components: {
+    NoContentMessage
+  },
 
   mixins: [MixinsGeneral],
 
   data: () => ({
-    originalLocation: ''
+    originalLocation: '',
+    state: 'loading'
   }),
 
   computed: {
@@ -130,7 +77,8 @@ export default {
       'activeFiles',
       'fileSortField',
       'fileSortDirectionDesc',
-      'publicLinkPassword'
+      'publicLinkPassword',
+      'davProperties'
     ]),
     ...mapGetters(['user']),
 
@@ -235,6 +183,19 @@ export default {
       }
 
       return this.$gettext('Confirm')
+    },
+
+    disabledResources() {
+      const resources = cloneStateObject(this.activeFiles)
+
+      return resources.filter(resource => resource.type !== 'folder').map(resource => resource.id)
+    },
+
+    targetPath() {
+      return (
+        this.basePath +
+        `?action=${encodeURIComponent(this.currentAction)}${this.resourcesQuery}&target=`
+      )
     }
   },
 
@@ -264,49 +225,38 @@ export default {
 
   methods: {
     ...mapMutations(['SET_NAVIGATION_HIDDEN', 'SET_MAIN_CONTENT_COMPONENT']),
-    ...mapActions('Files', ['loadFolder']),
+    ...mapActions('Files', ['loadFiles', 'loadIndicators']),
     ...mapActions(['showMessage']),
 
-    navigateToTarget(target) {
+    async navigateToTarget(target) {
+      this.state = 'loading'
+
       if (typeof target === 'object') {
         target = this.target
       }
 
-      this.loadFolder({
-        client: this.$client,
-        absolutePath: target || '/',
-        $gettext: this.$gettext,
-        routeName: this.$route.name,
-        loadSharesTree: !this.isPublicPage,
-        isPublicPage: this.isPublicPage
-      })
-    },
+      const resources = await this.$client.files.list(target, 1, this.davProperties)
 
-    createPath(target) {
-      return (
-        this.basePath +
-        `?action=${encodeURIComponent(this.currentAction)}&target=` +
-        encodeURIComponent(target) +
-        this.resourcesQuery
-      )
-    },
+      this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
+      this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
 
-    selectFolder(folder) {
-      if (this.isRowDisabled(folder)) {
+      if (resources.length === 1) {
+        this.state = 'empty'
+
         return
       }
 
-      this.$router.push({ path: this.createPath(folder.path) })
+      this.state = 'loaded'
     },
 
     leaveLocationPicker(target) {
       if (this.isPublicPage) {
-        this.$router.push({ name: 'public-link', params: { token: target } })
+        this.$router.push({ name: 'files-public-list', params: { token: target } })
 
         return
       }
 
-      this.$router.push({ name: 'files-list', params: { item: target || '/' } })
+      this.$router.push({ name: 'files-all-files', params: { item: target || '/' } })
     },
 
     isRowDisabled(resource) {
@@ -418,6 +368,15 @@ export default {
       }
 
       this.leaveLocationPicker(this.target)
+    },
+
+    createPath(target) {
+      return (
+        this.basePath +
+        `?action=${encodeURIComponent(this.currentAction)}&target=` +
+        encodeURIComponent(target) +
+        this.resourcesQuery
+      )
     }
   }
 }

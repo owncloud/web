@@ -10,7 +10,7 @@ import FileLinkSidebar from './components/FileLinkSidebar.vue'
 import PrivateLink from './components/PrivateLink.vue'
 import PublicLink from './views/PublicLink.vue'
 import FilesDrop from './components/PublicLinks/FilesDrop.vue'
-import LocationPicker from './components/LocationPicker/LocationPicker.vue'
+import LocationPicker from './views/LocationPicker.vue'
 import PublicFiles from './views/PublicFiles.vue'
 
 import translationsJson from '../l10n/translations.json'
