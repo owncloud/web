@@ -126,7 +126,10 @@ const routes = [
       {
         name: 'personal',
         path: 'personal/:item?',
-        component: Personal
+        component: Personal,
+        meta: {
+          hasBulkActions: true
+        }
       },
       {
         name: 'favorites',

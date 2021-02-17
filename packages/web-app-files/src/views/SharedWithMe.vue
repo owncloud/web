@@ -4,6 +4,7 @@
     <oc-table-files
       v-else-if="state === 'loaded'"
       id="files-shared-with-me-table"
+      v-model="selected"
       :resources="activeFiles"
       :target-route="$route.name"
       :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -68,8 +69,17 @@ export default {
 
   computed: {
     ...mapState(['app']),
-    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles']),
-    ...mapGetters(['isOcis', 'configuration', 'getToken'])
+    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles', 'selectedFiles']),
+    ...mapGetters(['isOcis', 'configuration', 'getToken']),
+
+    selected: {
+      get() {
+        return this.selectedFiles
+      },
+      set(resources) {
+        this.SELECT_RESOURCES(resources)
+      }
+    }
   },
 
   created() {
@@ -78,7 +88,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadIndicators']),
-    ...mapMutations('Files', ['LOAD_FILES']),
+    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES']),
 
     async loadResources() {
       this.state = 'loading'

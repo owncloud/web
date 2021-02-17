@@ -47,7 +47,7 @@ export default {
 
     homeRoute() {
       return {
-        name: 'files-list',
+        name: 'files-personal',
         params: {
           item: this.homeFolder
         }

@@ -4,6 +4,7 @@
     <oc-table-files
       v-if="state === 'loaded'"
       id="files-favorites-table"
+      v-model="selected"
       :resources="activeFiles"
       :target-route="$route.name"
       :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -22,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
@@ -37,10 +38,19 @@ export default {
 
   computed: {
     ...mapState(['app']),
-    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles']),
+    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles', 'selectedFiles']),
 
     isSidebarOpen() {
       return this.highlightedFile !== null
+    },
+
+    selected: {
+      get() {
+        return this.selectedFiles
+      },
+      set(resources) {
+        this.SELECT_RESOURCES(resources)
+      }
     }
   },
 
@@ -50,6 +60,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadFiles', 'loadIndicators']),
+    ...mapMutations('Files', ['SELECT_RESOURCES']),
 
     async loadResources() {
       this.state = 'loading'

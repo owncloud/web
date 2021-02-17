@@ -251,7 +251,7 @@ export default {
     viaRouterParams() {
       const viaPath = this.collaborator.path
       return {
-        name: 'files-list',
+        name: 'files-personal',
         params: {
           item: dirname(viaPath) || '/'
         },

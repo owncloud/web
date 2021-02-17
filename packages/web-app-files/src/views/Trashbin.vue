@@ -4,6 +4,7 @@
     <oc-table-files
       v-if="state === 'loaded'"
       id="files-trashbin-table"
+      v-model="selected"
       :are-paths-displayed="true"
       :are-previews-displayed="false"
       :resources="activeFiles"
@@ -36,7 +37,16 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles'])
+    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles', 'selectedFiles']),
+
+    selected: {
+      get() {
+        return this.selectedFiles
+      },
+      set(resources) {
+        this.SELECT_RESOURCES(resources)
+      }
+    }
   },
 
   created() {
@@ -45,7 +55,7 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile']),
-    ...mapMutations('Files', ['LOAD_FILES']),
+    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES']),
 
     async loadResources() {
       this.state = 'loading'

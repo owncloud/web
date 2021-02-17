@@ -83,7 +83,7 @@ export default {
     },
 
     canMove() {
-      if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
+      if (!checkRoute(['files-personal', 'public-files', 'files-favorites'], this.$route.name)) {
         return false
       }
 
@@ -95,7 +95,7 @@ export default {
     },
 
     canCopy() {
-      if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
+      if (!checkRoute(['files-personal', 'public-files', 'files-favorites'], this.$route.name)) {
         return false
       }
 
