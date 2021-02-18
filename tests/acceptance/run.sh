@@ -148,7 +148,7 @@ else
   UNEXPECTED_SUCCESS=false
 fi
 
-if [ "${UNEXPECTED_FAILURE}" != false ] || [ "${UNEXPECTED_SUCCESS}" != false ] || [ "${UNEXPECTED_NIGHTWATCH_CRASH}" = false ] || [ ${FINAL_EXIT_STATUS} -ne 0 ]; then
+if [ "${UNEXPECTED_FAILURE}" = true ] || [ "${UNEXPECTED_SUCCESS}" = true ] || [ "${UNEXPECTED_NIGHTWATCH_CRASH}" = true ] || [ ${FINAL_EXIT_STATUS} -ne 0 ]; then
   FINAL_EXIT_STATUS=1
 fi
 
