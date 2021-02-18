@@ -53,11 +53,11 @@ export default {
       },
       set(resources) {
         this.SELECT_RESOURCES(resources)
-      },
-
-      isEmpty() {
-        return this.activeFiles.length < 1
       }
+    },
+
+    isEmpty() {
+      return this.activeFiles.length < 1
     }
   },
 
