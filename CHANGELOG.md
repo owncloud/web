@@ -3,7 +3,7 @@ Changelog for ownCloud Web [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud web unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v2.0.0...master
+[unreleased]: https://github.com/owncloud/web/compare/v2.0.1...master
 
 Summary
 -------
@@ -29,6 +29,29 @@ Details
 
    https://github.com/owncloud/ocis/issues/1656
    https://github.com/owncloud/web/pull/4753
+
+Changelog for ownCloud Web [2.0.1] (2021-02-18)
+=======================================
+The following sections list the changes in ownCloud web 2.0.1 relevant to
+ownCloud admins and users.
+
+[2.0.1]: https://github.com/owncloud/web/compare/v2.0.0...v2.0.1
+
+Summary
+-------
+
+* Bugfix - Fix oc10 deployment after switch to rollup: [#4757](https://github.com/owncloud/web/pull/4757)
+
+Details
+-------
+
+* Bugfix - Fix oc10 deployment after switch to rollup: [#4757](https://github.com/owncloud/web/pull/4757)
+
+   Our first release of the oc10 app after the switch to rollup as bundler had a bug as it didn't
+   reflect the new folder structure of the app in the allowed folders. This has been fixed by
+   updating the allowed folders.
+
+   https://github.com/owncloud/web/pull/4757
 
 Changelog for ownCloud Web [2.0.0] (2021-02-16)
 =======================================
