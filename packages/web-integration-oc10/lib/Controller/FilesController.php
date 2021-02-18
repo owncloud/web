@@ -71,7 +71,7 @@ class FilesController extends Controller {
 		}
 
 		// check if path permitted
-		$permittedPaths = ["apps", "core", "css", "img", "node_modules", "themes", "index.html", "oidc-callback.html", "oidc-silent-redirect.html"];
+		$permittedPaths = ["css", "img", "js", "themes", "index.html", "oidc-callback.html", "oidc-silent-redirect.html"];
 		$found = false;
 		foreach ($permittedPaths as $p) {
 			if (\strpos($path, $p) === 0) {
@@ -104,7 +104,7 @@ class FilesController extends Controller {
 			'Expires' => 'Wed, 11 Jan 1984 05:00:00 GMT',
 			'X-Frame-Options' => 'DENY'
 		]);
-		if (\strpos($path, "oidc-callback.html") === 0 || \strpos($path, "oidc-silent-redirect.html") === 0) {
+		if (\strpos($path, "index.html") === 0 || \strpos($path, "oidc-callback.html") === 0 || \strpos($path, "oidc-silent-redirect.html") === 0) {
 			$csp = new ContentSecurityPolicy();
 			$csp->allowInlineScript(true);
 			$response->setContentSecurityPolicy($csp);
