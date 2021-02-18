@@ -25,21 +25,23 @@
       </oc-grid>
     </div>
     <div>
-      <list-loader v-if="state === 'loading'" />
-      <oc-table-files
-        v-if="state === 'loaded'"
-        id="location-picker-files-list"
-        :resources="activeFiles"
-        :has-actions="false"
-        :is-selectable="false"
-        :disabled="disabledResources"
-        :target-route="targetPath"
-      />
-      <no-content-message v-if="isEmpty" icon="folder">
-        <template #message
-          ><span v-translate>There are no resources in this folder.</span></template
-        >
-      </no-content-message>
+      <list-loader v-if="loading" />
+      <template v-else>
+        <no-content-message v-if="isEmpty" icon="folder">
+          <template #message>
+            <span v-translate>There are no resources in this folder.</span>
+          </template>
+        </no-content-message>
+        <oc-table-files
+          v-else
+          id="location-picker-files-list"
+          :resources="activeFiles"
+          :has-actions="false"
+          :is-selectable="false"
+          :disabled="disabledResources"
+          :target-route="targetPath"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -64,7 +66,7 @@ export default {
 
   data: () => ({
     originalLocation: '',
-    state: 'loading'
+    loading: true
   }),
 
   computed: {
@@ -201,7 +203,7 @@ export default {
     },
 
     isEmpty() {
-      return this.state === 'empty' || this.activeFiles.length < 1
+      return this.activeFiles.length < 1
     }
   },
 
@@ -235,7 +237,7 @@ export default {
     ...mapActions(['showMessage']),
 
     async navigateToTarget(target) {
-      this.state = 'loading'
+      this.loading = true
 
       if (typeof target === 'object') {
         target = this.target
@@ -245,14 +247,7 @@ export default {
 
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
       this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
-
-      if (resources.length === 1) {
-        this.state = 'empty'
-
-        return
-      }
-
-      this.state = 'loaded'
+      this.loading = false
     },
 
     leaveLocationPicker(target) {

@@ -1,28 +1,30 @@
 <template>
   <div>
-    <list-loader v-if="state === 'loading'" />
-    <oc-table-files
-      v-if="state === 'loaded'"
-      id="files-personal-table"
-      v-model="selected"
-      :resources="activeFiles"
-      :target-route="targetRoute"
-      :highlighted="highlightedFile ? highlightedFile.id : null"
-      :header-position="150"
-      @showDetails="highlightResource"
-    >
-      <template v-slot:quickActions="props">
-        <quick-actions :item="props.resource" :actions="app.quickActions" />
-      </template>
-    </oc-table-files>
-    <no-content-message v-if="isEmpty" icon="folder">
-      <template v-slot:message>
-        <span v-translate>There are no resources in this folder</span>
-      </template>
-      <template v-slot:callToAction>
-        <span v-translate>Drag files and folders here or use the "+ New" button to upload</span>
-      </template>
-    </no-content-message>
+    <list-loader v-if="loading" />
+    <template v-else>
+      <no-content-message v-if="isEmpty" icon="folder">
+        <template v-slot:message>
+          <span v-translate>There are no resources in this folder</span>
+        </template>
+        <template v-slot:callToAction>
+          <span v-translate>Drag files and folders here or use the "+ New" button to upload</span>
+        </template>
+      </no-content-message>
+      <oc-table-files
+        v-else
+        id="files-personal-table"
+        v-model="selected"
+        :resources="activeFiles"
+        :target-route="targetRoute"
+        :highlighted="highlightedFile ? highlightedFile.id : null"
+        :header-position="150"
+        @showDetails="highlightResource"
+      >
+        <template v-slot:quickActions="props">
+          <quick-actions :item="props.resource" :actions="app.quickActions" />
+        </template>
+      </oc-table-files>
+    </template>
   </div>
 </template>
 
@@ -37,7 +39,7 @@ export default {
   components: { QuickActions, ListLoader, NoContentMessage },
 
   data: () => ({
-    state: 'loading'
+    loading: true
   }),
 
   computed: {
@@ -53,7 +55,7 @@ export default {
     },
 
     isEmpty() {
-      return this.state === 'empty' || this.activeFiles.length < 1
+      return this.activeFiles.length < 1
     },
 
     selected: {
@@ -78,7 +80,7 @@ export default {
     ...mapMutations('Files', ['SELECT_RESOURCES']),
 
     async loadResources() {
-      this.state = 'loading'
+      this.loading = true
 
       const resources = await this.$client.files.list(
         this.$route.params.item || '/',
@@ -88,14 +90,7 @@ export default {
 
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
       this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
-
-      if (resources.length === 1) {
-        this.state = 'empty'
-
-        return
-      }
-
-      this.state = 'loaded'
+      this.loading = false
     },
 
     highlightResource(resource) {

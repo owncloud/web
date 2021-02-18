@@ -1,23 +1,25 @@
 <template>
   <div>
-    <list-loader v-if="state === 'loading'" />
-    <oc-table-files
-      v-if="state === 'loaded'"
-      id="files-trashbin-table"
-      v-model="selected"
-      :are-paths-displayed="true"
-      :are-previews-displayed="false"
-      :resources="activeFiles"
-      :highlighted="highlightedFile ? highlightedFile.id : null"
-      :are-resources-clickable="false"
-      :header-position="132"
-      @showDetails="setHighlightedFile"
-    />
-    <no-content-message v-if="isEmpty" icon="delete">
-      <template #message>
-        <span v-translate>You have no deleted files</span>
-      </template>
-    </no-content-message>
+    <list-loader v-if="loading" />
+    <template v-else>
+      <no-content-message v-if="isEmpty" icon="delete">
+        <template #message>
+          <span v-translate>You have no deleted files</span>
+        </template>
+      </no-content-message>
+      <oc-table-files
+        v-else
+        id="files-trashbin-table"
+        v-model="selected"
+        :are-paths-displayed="true"
+        :are-previews-displayed="false"
+        :resources="activeFiles"
+        :highlighted="highlightedFile ? highlightedFile.id : null"
+        :are-resources-clickable="false"
+        :header-position="132"
+        @showDetails="setHighlightedFile"
+      />
+    </template>
   </div>
 </template>
 
@@ -33,7 +35,7 @@ export default {
   components: { ListLoader, NoContentMessage },
 
   data: () => ({
-    state: 'loading'
+    loading: true
   }),
 
   computed: {
@@ -48,7 +50,7 @@ export default {
       },
 
       isEmpty() {
-        return this.state === 'empty' || this.activeFiles.length < 1
+        return this.activeFiles.length < 1
       }
     }
   },
@@ -62,7 +64,7 @@ export default {
     ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES']),
 
     async loadResources() {
-      this.state = 'loading'
+      this.loading = true
 
       const resources = await this.$client.fileTrash.list('', '1', [
         '{http://owncloud.org/ns}trashbin-original-filename',
@@ -72,21 +74,11 @@ export default {
         '{DAV:}resourcetype'
       ])
 
-      if (resources.length === 1) {
-        this.LOAD_FILES({
-          currentFolder: buildResource(resources[0]),
-          files: []
-        })
-        this.state = 'empty'
-
-        return
-      }
-
       this.LOAD_FILES({
         currentFolder: buildResource(resources[0]),
         files: resources.slice(1).map(buildDeletedResource)
       })
-      this.state = 'loaded'
+      this.loading = false
     }
   }
 }

@@ -1,26 +1,28 @@
 <template>
   <div>
-    <list-loader v-if="state === 'loading'" />
-    <oc-table-files
-      v-if="state === 'loaded'"
-      id="files-shared-with-others-table"
-      v-model="selected"
-      :resources="activeFiles"
-      :target-route="$route.name"
-      :highlighted="highlightedFile ? highlightedFile.id : null"
-      @showDetails="highlightResource"
-    >
-      <template v-slot:quickActions="{ resource }">
-        <quick-actions :item="resource" :actions="app.quickActions" />
-      </template>
-    </oc-table-files>
-    <no-content-message v-if="isEmpty" icon="group">
-      <template #message>
-        <span v-translate>
-          You are currently not collaborating on any of your resources with other people
-        </span>
-      </template>
-    </no-content-message>
+    <list-loader v-if="loading" />
+    <template v-else>
+      <no-content-message v-if="isEmpty" icon="group">
+        <template #message>
+          <span v-translate>
+            You are currently not collaborating on any of your resources with other people
+          </span>
+        </template>
+      </no-content-message>
+      <oc-table-files
+        v-else
+        id="files-shared-with-others-table"
+        v-model="selected"
+        :resources="activeFiles"
+        :target-route="$route.name"
+        :highlighted="highlightedFile ? highlightedFile.id : null"
+        @showDetails="highlightResource"
+      >
+        <template v-slot:quickActions="{ resource }">
+          <quick-actions :item="resource" :actions="app.quickActions" />
+        </template>
+      </oc-table-files>
+    </template>
   </div>
 </template>
 
@@ -37,7 +39,7 @@ export default {
   components: { QuickActions, ListLoader, NoContentMessage },
 
   data: () => ({
-    state: 'loading'
+    loading: true
   }),
 
   computed: {
@@ -54,7 +56,7 @@ export default {
       },
 
       isEmpty() {
-        return this.state === 'empty' || this.activeFiles.length < 1
+        return this.activeFiles.length < 1
       }
     }
   },
@@ -68,7 +70,7 @@ export default {
     ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES']),
 
     async loadResources() {
-      this.state = 'loading'
+      this.loading = true
 
       let resources = await this.$client.requests.ocs({
         service: 'apps/files_sharing',
@@ -83,7 +85,7 @@ export default {
 
       if (resources.length < 1) {
         this.LOAD_FILES({ currentFolder: rootFolder, files: [] })
-        this.state = 'empty'
+        this.loading = false
 
         return
       }
@@ -98,7 +100,7 @@ export default {
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
-      this.state = 'loaded'
+      this.loading = false
     },
 
     highlightResource(resource) {

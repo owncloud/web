@@ -1,53 +1,55 @@
 <template>
   <div>
-    <list-loader v-if="state === 'loading'" />
-    <oc-table-files
-      v-if="state === 'loaded'"
-      id="files-shared-with-me-table"
-      v-model="selected"
-      :resources="activeFiles"
-      :target-route="$route.name"
-      :highlighted="highlightedFile ? highlightedFile.id : null"
-      @showDetails="highlightResource"
-    >
-      <template v-slot:quickActions="{ resource }">
-        <quick-actions :item="resource" :actions="app.quickActions" />
-      </template>
-      <template v-slot:status="{ resource }">
-        <div
-          :key="resource.id + resource.status"
-          class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
-        >
-          <oc-button
-            v-if="resource.status === 1 || resource.status === 2"
-            variation="raw"
-            class="file-row-share-status-action uk-text-meta"
-            @click="pendingShareAction(item, 'POST')"
+    <list-loader v-if="loading" />
+    <template v-else>
+      <no-content-message v-if="isEmpty" icon="group">
+        <template #message>
+          <span v-translate>
+            You are currently not collaborating on other people's resources
+          </span>
+        </template>
+      </no-content-message>
+      <oc-table-files
+        v-else
+        id="files-shared-with-me-table"
+        v-model="selected"
+        :resources="activeFiles"
+        :target-route="$route.name"
+        :highlighted="highlightedFile ? highlightedFile.id : null"
+        @showDetails="highlightResource"
+      >
+        <template v-slot:quickActions="{ resource }">
+          <quick-actions :item="resource" :actions="app.quickActions" />
+        </template>
+        <template v-slot:status="{ resource }">
+          <div
+            :key="resource.id + resource.status"
+            class="uk-text-nowrap uk-flex uk-flex-middle uk-flex-right"
           >
-            <translate>Accept</translate>
-          </oc-button>
-          <oc-button
-            v-if="resource.status === 1 || resource.status === 0"
-            variation="raw"
-            class="file-row-share-status-action uk-text-meta oc-ml"
-            @click="pendingShareAction(resource, 'DELETE')"
-          >
-            <translate>Decline</translate>
-          </oc-button>
-          <span
-            class="uk-text-small oc-ml file-row-share-status-text uk-text-baseline"
-            v-text="shareStatus(resource.status)"
-          />
-        </div>
-      </template>
-    </oc-table-files>
-    <no-content-message v-if="isEmpty" icon="group">
-      <template #message>
-        <span v-translate>
-          You are currently not collaborating on other people's resources
-        </span>
-      </template>
-    </no-content-message>
+            <oc-button
+              v-if="resource.status === 1 || resource.status === 2"
+              variation="raw"
+              class="file-row-share-status-action uk-text-meta"
+              @click="pendingShareAction(item, 'POST')"
+            >
+              <translate>Accept</translate>
+            </oc-button>
+            <oc-button
+              v-if="resource.status === 1 || resource.status === 0"
+              variation="raw"
+              class="file-row-share-status-action uk-text-meta oc-ml"
+              @click="pendingShareAction(resource, 'DELETE')"
+            >
+              <translate>Decline</translate>
+            </oc-button>
+            <span
+              class="uk-text-small oc-ml file-row-share-status-text uk-text-baseline"
+              v-text="shareStatus(resource.status)"
+            />
+          </div>
+        </template>
+      </oc-table-files>
+    </template>
   </div>
 </template>
 
@@ -64,7 +66,7 @@ export default {
   components: { QuickActions, ListLoader, NoContentMessage },
 
   data: () => ({
-    state: 'loading'
+    loading: true
   }),
 
   computed: {
@@ -82,7 +84,7 @@ export default {
     },
 
     isEmpty() {
-      return this.state === 'empty' || this.activeFiles.length < 1
+      return this.activeFiles.length < 1
     }
   },
 
@@ -95,7 +97,7 @@ export default {
     ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES']),
 
     async loadResources() {
-      this.state = 'loading'
+      this.loading = true
 
       let resources = await this.$client.requests.ocs({
         service: 'apps/files_sharing',
@@ -110,7 +112,7 @@ export default {
 
       if (resources.length < 1) {
         this.LOAD_FILES({ currentFolder: rootFolder, files: [] })
-        this.state = 'empty'
+        this.loading = false
 
         return
       }
@@ -125,7 +127,7 @@ export default {
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
-      this.state = 'loaded'
+      this.loading = false
     },
 
     highlightResource(resource) {
