@@ -13,6 +13,8 @@
         v-else
         id="files-shared-with-me-table"
         v-model="selected"
+        class="files-table"
+        :class="{ 'files-table-squashed': isSidebarOpen }"
         :resources="activeFiles"
         :target-route="$route.name"
         :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -85,6 +87,10 @@ export default {
 
     isEmpty() {
       return this.activeFiles.length < 1
+    },
+
+    isSidebarOpen() {
+      return this.highlightedFile !== null
     }
   },
 

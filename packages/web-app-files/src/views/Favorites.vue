@@ -11,6 +11,8 @@
         v-else
         id="files-favorites-table"
         v-model="selected"
+        class="files-table"
+        :class="{ 'files-table-squashed': isSidebarOpen }"
         :resources="activeFiles"
         :target-route="$route.name"
         :highlighted="highlightedFile ? highlightedFile.id : null"

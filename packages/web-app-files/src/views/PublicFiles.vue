@@ -10,7 +10,13 @@
           <span v-translate>Drag files and folders here or use the "+ New" button to upload</span>
         </template>
       </no-content-message>
-      <oc-table-files v-else :resources="activeFiles" />
+      <oc-table-files
+        v-else
+        :resources="activeFiles"
+        class="files-table"
+        :class="{ 'files-table-squashed': isSidebarOpen }"
+        @showDetails="setHighlightedFile"
+      />
     </template>
   </div>
 </template>
@@ -32,10 +38,20 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('Files', ['publicLinkPassword', 'activeFiles', 'davProperties', 'currentFolder']),
+    ...mapGetters('Files', [
+      'publicLinkPassword',
+      'activeFiles',
+      'davProperties',
+      'currentFolder',
+      'highlightedFile'
+    ]),
 
     isEmpty() {
       return this.activeFiles.length < 1
+    },
+
+    isSidebarOpen() {
+      return this.highlightedFile !== null
     }
   },
 

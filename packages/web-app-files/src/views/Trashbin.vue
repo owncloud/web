@@ -11,6 +11,8 @@
         v-else
         id="files-trashbin-table"
         v-model="selected"
+        class="files-table"
+        :class="{ 'files-table-squashed': isSidebarOpen }"
         :are-paths-displayed="true"
         :are-previews-displayed="false"
         :resources="activeFiles"
@@ -47,11 +49,15 @@ export default {
       },
       set(resources) {
         this.SELECT_RESOURCES(resources)
-      },
-
-      isEmpty() {
-        return this.activeFiles.length < 1
       }
+    },
+
+    isEmpty() {
+      return this.activeFiles.length < 1
+    },
+
+    isSidebarOpen() {
+      return this.highlightedFile !== null
     }
   },
 

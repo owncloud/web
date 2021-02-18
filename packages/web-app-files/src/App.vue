@@ -148,3 +148,61 @@ export default {
   grid-area: upload;
 }
 </style>
+
+<style lang="scss">
+// Hide files table columns
+.files-table {
+  .oc-table-header-cell-mdate,
+  .oc-table-data-cell-mdate,
+  .oc-table-header-cell-sdate,
+  .oc-table-data-cell-sdate,
+  .oc-table-header-cell-ddate,
+  .oc-table-data-cell-ddate,
+  .oc-table-header-cell-size,
+  .oc-table-data-cell-size,
+  .oc-table-header-cell-sharedWith,
+  .oc-table-data-cell-sharedWith,
+  .oc-table-header-cell-owner,
+  .oc-table-data-cell-owner,
+  .oc-table-header-cell-status,
+  .oc-table-data-cell-status {
+    display: none;
+
+    @media only screen and (min-width: 640px) {
+      display: table-cell;
+    }
+  }
+
+  .oc-table-header-cell-owner,
+  .oc-table-data-cell-owner {
+    display: none;
+
+    @media only screen and (min-width: 960px) {
+      display: table-cell;
+    }
+  }
+
+  &-squashed {
+    .oc-table-header-cell-mdate,
+    .oc-table-data-cell-mdate,
+    .oc-table-header-cell-sdate,
+    .oc-table-data-cell-sdate,
+    .oc-table-header-cell-ddate,
+    .oc-table-data-cell-ddate,
+    .oc-table-header-cell-size,
+    .oc-table-data-cell-size,
+    .oc-table-header-cell-sharedWith,
+    .oc-table-data-cell-sharedWith,
+    .oc-table-header-cell-owner,
+    .oc-table-data-cell-owner,
+    .oc-table-header-cell-status,
+    .oc-table-data-cell-status {
+      display: none;
+
+      @media only screen and (min-width: 1600px) {
+        display: table-cell;
+      }
+    }
+  }
+}
+</style>
