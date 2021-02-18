@@ -1,0 +1,5 @@
+Bugfix: Fix oc10 deployment after switch to rollup
+
+Our first release of the oc10 app after the switch to rollup as bundler had a bug as it didn't reflect the new folder structure of the app in the allowed folders. This has been fixed by updating the allowed folders.
+
+https://github.com/owncloud/web/pull/4757
