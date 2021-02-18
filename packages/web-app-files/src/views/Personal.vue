@@ -2,7 +2,7 @@
   <div>
     <list-loader v-if="loading" />
     <template v-else>
-      <no-content-message v-if="isEmpty" icon="folder">
+      <no-content-message v-if="isEmpty" id="files-personal-empty" icon="folder">
         <template v-slot:message>
           <span v-translate>There are no resources in this folder</span>
         </template>

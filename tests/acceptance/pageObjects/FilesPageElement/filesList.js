@@ -791,7 +791,7 @@ module.exports = {
   },
   elements: {
     filesTable: {
-      selector: '#files-list, #shared-with-list'
+      selector: '#files-personal-table'
     },
     filesTableContainer: {
       selector: '#files-list-container'

@@ -2,7 +2,7 @@
   <div>
     <list-loader v-if="loading" />
     <template v-else>
-      <no-content-message v-if="isEmpty" icon="delete">
+      <no-content-message v-if="isEmpty" id="files-trashbin-empty" icon="delete">
         <template #message>
           <span v-translate>You have no deleted files</span>
         </template>

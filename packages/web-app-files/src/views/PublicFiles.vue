@@ -2,7 +2,7 @@
   <div>
     <list-loader v-if="loading" />
     <template v-else>
-      <no-content-message v-if="isEmpty" icon="folder">
+      <no-content-message v-if="isEmpty" id="files-public-files-empty" icon="folder">
         <template v-slot:message>
           <span v-translate>There are no resources in this folder</span>
         </template>
@@ -12,6 +12,7 @@
       </no-content-message>
       <oc-table-files
         v-else
+        id="files-public-files-table"
         :resources="activeFiles"
         :header-position="headerPosition"
         class="files-table"

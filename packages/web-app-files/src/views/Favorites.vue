@@ -2,7 +2,7 @@
   <div>
     <list-loader v-if="loading" />
     <template v-else>
-      <no-content-message v-if="isEmpty" icon="star">
+      <no-content-message v-if="isEmpty" id="files-favorites-empty" icon="star">
         <template #message>
           <span v-translate>There are no resources marked as favorite</span>
         </template>
