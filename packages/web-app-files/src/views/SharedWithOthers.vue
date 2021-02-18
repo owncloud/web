@@ -47,7 +47,13 @@ export default {
 
   computed: {
     ...mapState(['app']),
-    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles', 'selectedFiles']),
+    ...mapGetters('Files', [
+      'davProperties',
+      'highlightedFile',
+      'activeFiles',
+      'selectedFiles',
+      'inProgress'
+    ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken']),
 
     selected: {

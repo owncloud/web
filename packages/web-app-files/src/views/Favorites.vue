@@ -43,7 +43,13 @@ export default {
 
   computed: {
     ...mapState(['app']),
-    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles', 'selectedFiles']),
+    ...mapGetters('Files', [
+      'davProperties',
+      'highlightedFile',
+      'activeFiles',
+      'selectedFiles',
+      'inProgress'
+    ]),
 
     isSidebarOpen() {
       return this.highlightedFile !== null

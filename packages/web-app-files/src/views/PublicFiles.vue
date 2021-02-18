@@ -44,7 +44,8 @@ export default {
       'activeFiles',
       'davProperties',
       'currentFolder',
-      'highlightedFile'
+      'highlightedFile',
+      'inProgress'
     ]),
 
     isEmpty() {
