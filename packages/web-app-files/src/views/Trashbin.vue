@@ -13,7 +13,7 @@
       :header-position="132"
       @showDetails="setHighlightedFile"
     />
-    <no-content-message v-else-if="state === 'empty'" icon="delete">
+    <no-content-message v-if="isEmpty" icon="delete">
       <template #message>
         <span v-translate>You have no deleted files</span>
       </template>
@@ -45,6 +45,10 @@ export default {
       },
       set(resources) {
         this.SELECT_RESOURCES(resources)
+      },
+
+      isEmpty() {
+        return this.state === 'empty' || this.activeFiles.length < 1
       }
     }
   },

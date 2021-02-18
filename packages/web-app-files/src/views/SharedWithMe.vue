@@ -2,7 +2,7 @@
   <div>
     <list-loader v-if="state === 'loading'" />
     <oc-table-files
-      v-else-if="state === 'loaded'"
+      v-if="state === 'loaded'"
       id="files-shared-with-me-table"
       v-model="selected"
       :resources="activeFiles"
@@ -41,7 +41,7 @@
         </div>
       </template>
     </oc-table-files>
-    <no-content-message v-else-if="state === 'empty'" icon="group">
+    <no-content-message v-if="isEmpty" icon="group">
       <template #message>
         <span v-translate>
           You are currently not collaborating on other people's resources
@@ -79,6 +79,10 @@ export default {
       set(resources) {
         this.SELECT_RESOURCES(resources)
       }
+    },
+
+    isEmpty() {
+      return this.state === 'empty' || this.activeFiles.length < 1
     }
   },
 

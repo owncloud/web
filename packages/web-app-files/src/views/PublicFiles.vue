@@ -1,8 +1,8 @@
 <template>
   <div>
     <list-loader v-if="state === 'loading'" />
-    <oc-table-files v-else-if="state === 'loaded'" :resources="activeFiles" />
-    <no-content-message v-else-if="state === 'empty'" icon="folder">
+    <oc-table-files v-if="state === 'loaded'" :resources="activeFiles" />
+    <no-content-message v-if="isEmpty" icon="folder">
       <template v-slot:message>
         <span v-translate>There are no resources in this folder</span>
       </template>
@@ -30,7 +30,11 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('Files', ['publicLinkPassword', 'activeFiles', 'davProperties', 'currentFolder'])
+    ...mapGetters('Files', ['publicLinkPassword', 'activeFiles', 'davProperties', 'currentFolder']),
+
+    isEmpty() {
+      return this.state === 'empty' || this.activeFiles.length < 1
+    }
   },
 
   created() {

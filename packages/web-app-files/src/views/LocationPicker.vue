@@ -27,7 +27,7 @@
     <div>
       <list-loader v-if="state === 'loading'" />
       <oc-table-files
-        v-else-if="state === 'loaded'"
+        v-if="state === 'loaded'"
         id="location-picker-files-list"
         :resources="activeFiles"
         :has-actions="false"
@@ -35,7 +35,7 @@
         :disabled="disabledResources"
         :target-route="targetPath"
       />
-      <no-content-message v-else-if="state === 'empty'" icon="folder">
+      <no-content-message v-if="isEmpty" icon="folder">
         <template #message
           ><span v-translate>There are no resources in this folder.</span></template
         >
@@ -198,6 +198,10 @@ export default {
         this.basePath +
         `?action=${encodeURIComponent(this.currentAction)}${this.resourcesQuery}&target=`
       )
+    },
+
+    isEmpty() {
+      return this.state === 'empty' || this.activeFiles.length < 1
     }
   },
 

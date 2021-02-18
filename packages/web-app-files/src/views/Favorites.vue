@@ -14,7 +14,7 @@
         <quick-actions :item="props.resource" :actions="app.quickActions" />
       </template>
     </oc-table-files>
-    <no-content-message v-else-if="state === 'empty'" icon="star">
+    <no-content-message v-if="isEmpty" icon="star">
       <template #message>
         <span v-translate>There are no resources marked as favorite</span>
       </template>
@@ -51,6 +51,10 @@ export default {
       set(resources) {
         this.SELECT_RESOURCES(resources)
       }
+    },
+
+    isEmpty() {
+      return this.state === 'empty' || this.activeFiles.length < 1
     }
   },
 

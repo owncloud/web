@@ -2,7 +2,7 @@
   <div>
     <list-loader v-if="state === 'loading'" />
     <oc-table-files
-      v-else-if="state === 'loaded'"
+      v-if="state === 'loaded'"
       id="files-personal-table"
       v-model="selected"
       :resources="activeFiles"
@@ -15,7 +15,7 @@
         <quick-actions :item="props.resource" :actions="app.quickActions" />
       </template>
     </oc-table-files>
-    <no-content-message v-else-if="state === 'empty'" icon="folder">
+    <no-content-message v-if="isEmpty" icon="folder">
       <template v-slot:message>
         <span v-translate>There are no resources in this folder</span>
       </template>
@@ -28,8 +28,6 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-
-import { cloneStateObject } from '../helpers/store'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
@@ -52,6 +50,10 @@ export default {
 
     targetRoute() {
       return this.$route.path.replace(/[%2F]*$/, '')
+    },
+
+    isEmpty() {
+      return this.state === 'empty' || this.activeFiles.length < 1
     },
 
     selected: {
