@@ -283,7 +283,6 @@ module.exports = {
     waitForFileVisible: async function(fileName, elementType = 'file', timeout = null) {
       const linkSelector = this.getFileLinkSelectorByFileName(fileName, elementType)
 
-      await this.waitForElementPresent('@filesTableContainer')
       await client.page.FilesPageElement.appSideBar().closeSidebar(500)
       await this.filesListScrollToTop()
       // Find the item in files list if it's not in the view
@@ -445,7 +444,7 @@ module.exports = {
      */
     allFileRows: async function() {
       let returnResult = null
-      await this.waitForElementNotPresent('@filesListProgressBar')
+      await this.waitForElementVisible('@filesTable')
       await this.api.elements('css selector', this.elements.fileRows, function(result) {
         returnResult = result
       })
@@ -459,7 +458,6 @@ module.exports = {
     isNoContentMessageVisible: async function() {
       let visible = false
       let elementId = null
-      await this.waitForElementNotPresent('@filesListProgressBar')
       await this.waitForElementVisible('@filesListNoContentMessage')
       await this.api.element('@filesListNoContentMessage', result => {
         if (result.status !== -1) {
@@ -793,14 +791,8 @@ module.exports = {
     filesTable: {
       selector: '#files-personal-table'
     },
-    filesTableContainer: {
-      selector: '#files-list-container'
-    },
     fileRows: {
-      selector: '.file-row'
-    },
-    allFiles: {
-      selector: 'div.oc-file.file-row-name'
+      selector: '#files-personal-table.oc-tbody-tr'
     },
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',
@@ -810,10 +802,10 @@ module.exports = {
       selector: '#files-list-progress'
     },
     filesListNoContentMessage: {
-      selector: '#files-list-container .files-list-no-content-message'
+      selector: '#files-personal-empty'
     },
     filesListNotFoundMessage: {
-      selector: '#files-list-container #files-list-not-found-message'
+      selector: '#files-personal-not-found'
     },
     shareButtonInFileRow: {
       selector: '//button[@aria-label="People"]',
@@ -821,33 +813,33 @@ module.exports = {
     },
     fileRowByName: {
       selector:
-        '//span[contains(@class, "oc-file-name") and text()=%s and not(../span[contains(@class, "oc-file-extension")])]/ancestor::div[@data-is-visible="true"]',
+        '//span[contains(@class, "oc-resource-name") and text()=%s and not(../span[contains(@class, "oc-resource-extension")])]/ancestor::div[@data-is-visible="true"]',
       locateStrategy: 'xpath'
     },
     fileRowByNameAndExtension: {
       selector:
-        '//div[contains(@class, "file-row-name")][span/text()=%s and span/text()="%s"]/ancestor::div[@data-is-visible="true"]',
+        '//div[contains(@class, "oc-resource-name")][span/text()=%s and span/text()="%s"]/ancestor::div[@data-is-visible="true"]',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
-      selector: '//div[contains(@class, "file-row-name")]',
+      selector: '//div[contains(@class, "oc-resource-name")]',
       locateStrategy: 'xpath'
     },
     fileIconInFileRow: {
-      selector: '//div[contains(@class, "oc-file")]//*[local-name() = "svg"]',
+      selector: '//div[contains(@class, "oc-resource")]//*[local-name() = "svg"]',
       locateStrategy: 'xpath'
     },
     filePreviewInFileRow: {
-      selector: '//div[contains(@class, "oc-file")]//img',
+      selector: '//div[contains(@class, "oc-resource")]//img',
       locateStrategy: 'xpath'
     },
     allFilePreviewsLoading: {
-      selector: '//div[contains(@class, "oc-file") and @data-preview-loaded="false"]',
+      selector: '//div[contains(@class, "oc-resource") and @data-preview-loaded="false"]',
       locateStrategy: 'xpath'
     },
     filePreviewLoadedInFileRow: {
       selector:
-        '//div[contains(@class, "oc-file") and (@data-preview-loaded="true" or @data-preview-loaded="disabled")]',
+        '//div[contains(@class, "oc-resource") and (@data-preview-loaded="true" or @data-preview-loaded="disabled")]',
       locateStrategy: 'xpath'
     },
     collaboratorsInFileRow: {
@@ -862,7 +854,7 @@ module.exports = {
       selector: '#oc-files-file-link'
     },
     checkBoxAllFiles: {
-      selector: '#filelist-check-all'
+      selector: '#oc-table-files-select-all'
     },
     checkboxInFileRow: {
       selector: '//input[@type="checkbox"]',
@@ -889,7 +881,7 @@ module.exports = {
       selector: '.vue-recycle-scroller'
     },
     filesTableHeader: {
-      selector: '#files-table-header'
+      selector: '#files-personal-table.oc-thead'
     },
     filesTableHeaderColumn: {
       selector: '//*[contains(@class, "oc-sortable-column-header")]//*[text()=%s]/ancestor::button',
@@ -904,18 +896,18 @@ module.exports = {
     },
     fileRowDisabled: {
       selector:
-        '//span[contains(@class, "oc-file-name") and text()="%s" and not(../span[contains(@class, "oc-file-extension")])]/ancestor::div[@class="files-list-row-disabled" and @data-is-visible="true"]',
+        '//span[contains(@class, "oc-file-name") and text()="%s" and not(../span[contains(@class, "oc-resource-extension")])]/ancestor::div[@class="files-list-row-disabled" and @data-is-visible="true"]',
       locateStrategy: 'xpath'
     },
     filesListItem: {
-      selector: '.vue-recycle-scroller__item-view'
+      selector: '#files-personal-table.oc-tbody-tr'
     },
     previewImageParentDiv: {
-      selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-file")]',
+      selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-resource")]',
       locateStrategy: 'xpath'
     },
     previewImage: {
-      selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-file")]/img',
+      selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-resource")]/img',
       locateStrategy: 'xpath'
     }
   }
