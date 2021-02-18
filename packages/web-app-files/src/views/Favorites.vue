@@ -16,6 +16,7 @@
         :resources="activeFiles"
         :target-route="$route.name"
         :highlighted="highlightedFile ? highlightedFile.id : null"
+        :header-position="headerPosition"
         @showDetails="setHighlightedFile"
       >
         <template v-slot:quickActions="props">
@@ -59,6 +60,10 @@ export default {
 
     isEmpty() {
       return this.activeFiles.length < 1
+    },
+
+    headerPosition() {
+      return this.selectedFiles.length > 0 ? 112 : 60
     }
   },
 

@@ -18,7 +18,7 @@
         :resources="activeFiles"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :are-resources-clickable="false"
-        :header-position="132"
+        :header-position="112"
         @showDetails="setHighlightedFile"
       />
     </template>

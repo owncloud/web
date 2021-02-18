@@ -1,5 +1,5 @@
 <template>
-  <header class="uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
+  <header class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
     <oc-grid gutter="medium" flex>
       <div class="uk-hidden@l">
         <oc-button
@@ -84,5 +84,9 @@ export default {
 <style scoped>
 .topbar-current-extension-title {
   color: white;
+}
+
+.oc-topbar {
+  height: 60px;
 }
 </style>

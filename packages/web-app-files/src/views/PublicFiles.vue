@@ -13,6 +13,7 @@
       <oc-table-files
         v-else
         :resources="activeFiles"
+        :header-position="headerPosition"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         @showDetails="setHighlightedFile"
@@ -52,6 +53,14 @@ export default {
 
     isSidebarOpen() {
       return this.highlightedFile !== null
+    },
+
+    headerPosition() {
+      if (!this.publicPage() && !this.$route.meta.verbose) {
+        return 150
+      }
+
+      return 60
     }
   },
 

@@ -7,7 +7,10 @@
       :class="{ 'uk-visible@m': _sidebarOpen }"
       @dragover="$_ocApp_dragOver"
     >
-      <app-bar id="files-app-bar" />
+      <app-bar
+        id="files-app-bar"
+        :style="{ top: !publicPage() && !$route.meta.verbose ? '60px' : '0' }"
+      />
       <upload-progress
         v-show="$_uploadProgressVisible"
         id="files-upload-progress"
@@ -134,8 +137,7 @@ export default {
 
 #files-app-bar {
   position: sticky;
-  top: 60px;
-  min-height: 40px;
+  height: auto;
   z-index: 1;
   grid-area: header;
 }

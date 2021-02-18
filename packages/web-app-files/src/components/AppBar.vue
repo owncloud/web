@@ -1,5 +1,5 @@
 <template>
-  <div class="files-app-bar oc-p-s">
+  <div class="files-app-bar">
     <file-drop
       v-if="!isIE11() && canUpload && hasFreeSpace"
       :root-path="currentPath"
@@ -13,12 +13,15 @@
       <oc-breadcrumb
         v-if="showBreadcrumb"
         id="files-breadcrumb"
-        class="oc-mb-s"
+        class="oc-p-s"
         :items="breadcrumbs"
         home
       />
-      <div class="uk-flex uk-flex-middle">
-        <template v-if="$_ocFilesAppBar_showActions">
+      <div
+        v-if="showActions || selectedFiles.length > 0 || isTrashbinRoute"
+        class="uk-flex uk-flex-middle oc-p-s"
+      >
+        <template v-if="showActions">
           <template v-if="areDefaultActionsVisible">
             <oc-button
               id="new-file-menu-btn"
@@ -165,7 +168,7 @@ export default {
       }
       return this.currentFolder.canUpload()
     },
-    $_ocFilesAppBar_showActions() {
+    showActions() {
       return this.$route.meta.hideFilelistActions !== true
     },
 

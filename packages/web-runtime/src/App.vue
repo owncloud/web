@@ -360,7 +360,7 @@ export default {
 .web-content-container {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 60px 1fr;
+  grid-template-rows: max-content 1fr;
   gap: 0px 0px;
   grid-template-areas:
     'header'

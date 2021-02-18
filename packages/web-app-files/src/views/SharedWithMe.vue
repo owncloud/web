@@ -18,6 +18,7 @@
         :resources="activeFiles"
         :target-route="$route.name"
         :highlighted="highlightedFile ? highlightedFile.id : null"
+        :header-position="headerPosition"
         @showDetails="highlightResource"
       >
         <template v-slot:quickActions="{ resource }">
@@ -91,6 +92,10 @@ export default {
 
     isSidebarOpen() {
       return this.highlightedFile !== null
+    },
+
+    headerPosition() {
+      return this.selectedFiles.length > 0 ? 112 : 60
     }
   },
 
