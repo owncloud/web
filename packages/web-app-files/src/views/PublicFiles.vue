@@ -55,12 +55,16 @@ export default {
       return this.highlightedFile !== null
     },
 
+    uploadProgressVisible() {
+      return this.inProgress.length > 0
+    },
+
     headerPosition() {
       if (!this.publicPage() && !this.$route.meta.verbose) {
         return 150
       }
 
-      return 60
+      return this.uploadProgressVisible ? 140 : 60
     }
   },
 

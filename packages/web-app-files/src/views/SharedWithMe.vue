@@ -94,8 +94,16 @@ export default {
       return this.highlightedFile !== null
     },
 
+    uploadProgressVisible() {
+      return this.inProgress.length > 0
+    },
+
     headerPosition() {
-      return this.selectedFiles.length > 0 ? 112 : 60
+      if (this.uploadProgressVisible) {
+        return 190
+      }
+
+      return this.selectedFiles.length > 0 ? 110 : 60
     }
   },
 

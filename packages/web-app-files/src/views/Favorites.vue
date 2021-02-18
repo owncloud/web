@@ -63,7 +63,15 @@ export default {
     },
 
     headerPosition() {
-      return this.selectedFiles.length > 0 ? 112 : 60
+      if (this.uploadProgressVisible) {
+        return 190
+      }
+
+      return this.selectedFiles.length > 0 ? 110 : 60
+    },
+
+    uploadProgressVisible() {
+      return this.inProgress.length > 0
     }
   },
 

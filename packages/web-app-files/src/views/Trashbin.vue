@@ -18,7 +18,7 @@
         :resources="activeFiles"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :are-resources-clickable="false"
-        :header-position="112"
+        :header-position="headerPosition"
         @showDetails="setHighlightedFile"
       />
     </template>
@@ -41,7 +41,13 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('Files', ['davProperties', 'highlightedFile', 'activeFiles', 'selectedFiles']),
+    ...mapGetters('Files', [
+      'davProperties',
+      'highlightedFile',
+      'activeFiles',
+      'selectedFiles',
+      'inProgress'
+    ]),
 
     selected: {
       get() {
@@ -58,6 +64,14 @@ export default {
 
     isSidebarOpen() {
       return this.highlightedFile !== null
+    },
+
+    uploadProgressVisible() {
+      return this.inProgress.length > 0
+    },
+
+    headerPosition() {
+      return this.uploadProgressVisible ? 190 : 110
     }
   },
 

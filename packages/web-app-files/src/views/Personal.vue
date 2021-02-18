@@ -19,7 +19,7 @@
         :resources="activeFiles"
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
-        :header-position="150"
+        :header-position="headerPosition"
         @showDetails="highlightResource"
       >
         <template v-slot:quickActions="props">
@@ -58,6 +58,14 @@ export default {
 
     isEmpty() {
       return this.activeFiles.length < 1
+    },
+
+    uploadProgressVisible() {
+      return this.inProgress.length > 0
+    },
+
+    headerPosition() {
+      return this.uploadProgressVisible ? 230 : 150
     },
 
     selected: {
