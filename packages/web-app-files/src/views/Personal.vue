@@ -29,6 +29,8 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
+import { cloneStateObject } from '../helpers/store'
+
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'

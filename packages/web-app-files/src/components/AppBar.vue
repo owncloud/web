@@ -293,7 +293,10 @@ export default {
 
         this.PUSH_NEW_RESOURCE(resource)
         this.hideModal()
-        this.$scrollTo(`.oc-tbody-tr-${resource.id}`)
+        setTimeout(() => {
+          this.setHighlightedFile(resource)
+          this.$scrollTo(`.oc-tbody-tr-${resource.id}`)
+        })
       } catch (error) {
         this.showMessage({
           title: this.$gettext('Creating folder failed…'),
@@ -373,7 +376,10 @@ export default {
 
         this.PUSH_NEW_RESOURCE(resource)
         this.hideModal()
-        this.$scrollTo(`.oc-tbody-tr-${resource.id}`)
+        setTimeout(() => {
+          this.setHighlightedFile(resource)
+          this.$scrollTo(`.oc-tbody-tr-${resource.id}`)
+        })
       } catch (error) {
         this.showMessage({
           title: this.$gettext('Creating file failed…'),
