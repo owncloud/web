@@ -25,6 +25,7 @@ declare -a UNEXPECTED_FAILED_SCENARIOS
 declare -a UNEXPECTED_PASSED_SCENARIOS
 
 UNEXPECTED_NIGHTWATCH_CRASH=false
+FINAL_EXIT_STATUS=0
 
 yarn test:acceptance:drone | tee -a 'logfile.txt'
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
@@ -131,6 +132,8 @@ if [ -n "${EXPECTED_FAILURES_FILE}" ]; then
       fi
     done
   done < "${EXPECTED_FAILURES_FILE}"
+elif [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
+  FINAL_EXIT_STATUS=1
 fi
 
 if [ ${#UNEXPECTED_FAILED_SCENARIOS[@]} -gt 0 ]; then
@@ -145,9 +148,7 @@ else
   UNEXPECTED_SUCCESS=false
 fi
 
-if [ "${UNEXPECTED_FAILURE}" = false ] && [ "${UNEXPECTED_SUCCESS}" = false ] && [ "${UNEXPECTED_NIGHTWATCH_CRASH}" = false ]; then
-  FINAL_EXIT_STATUS=0
-else
+if [ "${UNEXPECTED_FAILURE}" != false ] || [ "${UNEXPECTED_SUCCESS}" != false ] || [ "${UNEXPECTED_NIGHTWATCH_CRASH}" = false ] || [ ${FINAL_EXIT_STATUS} -ne 0 ]; then
   FINAL_EXIT_STATUS=1
 fi
 
