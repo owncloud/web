@@ -64,3 +64,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+#oc-dropzone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 3;
+
+  // TODO: Remove vue-dropzone
+  .dz-message,
+  .oc-dropzone {
+    height: 100%;
+  }
+}
+</style>
