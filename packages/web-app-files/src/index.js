@@ -183,7 +183,10 @@ const routes = [
       {
         name: 'public-list',
         path: 'list/:item',
-        component: PublicFiles
+        component: PublicFiles,
+        meta: {
+          auth: false
+        }
       },
       {
         name: 'public-drop',
