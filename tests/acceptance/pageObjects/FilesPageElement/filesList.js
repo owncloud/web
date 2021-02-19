@@ -792,7 +792,7 @@ module.exports = {
       selector: '#files-personal-table'
     },
     fileRows: {
-      selector: '#files-personal-table.oc-tbody-tr'
+      selector: '#files-personal-table .oc-tbody-tr'
     },
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',
