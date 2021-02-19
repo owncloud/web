@@ -111,7 +111,7 @@ const actions = {
         context.commit('SET_USER_READY', true)
 
         if (payload.autoRedirect) {
-          router.push({ path: '/' })
+          router.push({ path: '/' }).catch(() => {})
         }
       } else {
         context.commit('UPDATE_TOKEN', token)
