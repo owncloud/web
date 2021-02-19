@@ -154,7 +154,7 @@ export async function aggregateResourceShares(
     index++
 
     if (prev && share.file_target === prev.file_target) {
-      if (share.share_type < 3) {
+      if (share.share_type < shareTypes.link) {
         prev.sharedWith.push({
           username: share.share_with,
           displayName: share.share_with_displayname,
@@ -162,16 +162,35 @@ export async function aggregateResourceShares(
         })
       }
 
+      if (share.share_type === shareTypes.link) {
+        prev.sharedWith.push({
+          name: share.name,
+          link: true
+        })
+      }
+
       continue
     }
 
-    share.sharedWith = [
-      {
-        username: share.share_with,
-        displayName: share.share_with_displayname,
-        avatar: await getAvatarSrc(share.share_with, server, token)
-      }
-    ]
+    if (share.share_type < shareTypes.link) {
+      share.sharedWith = [
+        {
+          username: share.share_with,
+          displayName: share.share_with_displayname,
+          avatar: await getAvatarSrc(share.share_with, server, token)
+        }
+      ]
+    }
+
+    if (share.share_type === shareTypes.link) {
+      share.sharedWith = [
+        {
+          name: share.name,
+          link: true
+        }
+      ]
+    }
+
     resources.push(share)
   }
 
