@@ -1,3 +1,30 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v2.0.1...master
+
+Summary
+-------
+
+* Change - Suppress redirect error during authorization: [#4759](https://github.com/owncloud/web/pull/4759)
+
+Details
+-------
+
+* Change - Suppress redirect error during authorization: [#4759](https://github.com/owncloud/web/pull/4759)
+
+   We've suppressed the error appearing in the console which warned about redirect happening
+   after the oidc callback page. This error is being shown because after the oidc callback has
+   successfully processed the authorization request we are redirecting to the `/` path which
+   immediately does another redirect to the extension set as default one. In the context of Vue
+   router, this is considered an error even though for us it is a valid use case. The error is only
+   informative thus no issue is going to surface if we suppress it. This way we are getting closer to
+   a clean console without errors.
+
+   https://github.com/owncloud/web/pull/4759
+
 Changelog for ownCloud Web [2.0.1] (2021-02-18)
 =======================================
 The following sections list the changes in ownCloud web 2.0.1 relevant to
