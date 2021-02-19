@@ -2,7 +2,8 @@
   <div>
     <list-loader v-if="loading" />
     <template v-else>
-      <no-content-message v-if="isEmpty" id="files-personal-empty" icon="folder">
+      <not-found-message v-if="folderNotFound" class="uk-height-1-1" />
+      <no-content-message v-else-if="isEmpty" id="files-personal-empty" icon="folder">
         <template v-slot:message>
           <span v-translate>There are no resources in this folder</span>
         </template>
@@ -36,9 +37,10 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
+import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 
 export default {
-  components: { QuickActions, ListLoader, NoContentMessage },
+  components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage },
 
   data: () => ({
     loading: true
@@ -51,7 +53,8 @@ export default {
       'highlightedFile',
       'activeFiles',
       'selectedFiles',
-      'inProgress'
+      'inProgress',
+      'currentFolder'
     ]),
 
     isSidebarOpen() {
@@ -81,6 +84,10 @@ export default {
       set(resources) {
         this.SELECT_RESOURCES(resources)
       }
+    },
+
+    folderNotFound() {
+      return this.currentFolder === null
     }
   },
 
@@ -93,19 +100,25 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadFiles', 'loadIndicators']),
-    ...mapMutations('Files', ['SELECT_RESOURCES']),
+    ...mapMutations('Files', ['SELECT_RESOURCES', 'SET_CURRENT_FOLDER']),
 
     async loadResources() {
       this.loading = true
 
-      const resources = await this.$client.files.list(
-        this.$route.params.item || '/',
-        1,
-        this.davProperties
-      )
+      try {
+        const resources = await this.$client.files.list(
+          this.$route.params.item || '/',
+          1,
+          this.davProperties
+        )
 
-      this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
-      this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
+        this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
+        this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
+      } catch (error) {
+        this.SET_CURRENT_FOLDER(null)
+        console.error(error)
+      }
+
       this.loading = false
     },
 

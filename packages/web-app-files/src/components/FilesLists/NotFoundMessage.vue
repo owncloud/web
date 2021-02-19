@@ -1,5 +1,8 @@
 <template>
-  <div id="files-list-not-found-message" class="uk-text-center">
+  <div
+    id="files-list-not-found-message"
+    class="uk-text-center uk-flex-middle uk-flex uk-flex-center uk-flex-column"
+  >
     <oc-icon :url="iconPath" type="div" size="xxlarge" variation="system" />
     <div class="uk-text-muted uk-text-large">
       <translate>Resource not found</translate>

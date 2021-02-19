@@ -2,7 +2,8 @@
   <div>
     <list-loader v-if="loading" />
     <template v-else>
-      <no-content-message v-if="isEmpty" id="files-public-files-empty" icon="folder">
+      <not-found-message v-if="folderNotFound" class="uk-height-1-1" />
+      <no-content-message v-else-if="isEmpty" id="files-public-files-empty" icon="folder">
         <template v-slot:message>
           <span v-translate>There are no resources in this folder</span>
         </template>
@@ -15,6 +16,7 @@
         id="files-public-files-table"
         :resources="activeFiles"
         :header-position="headerPosition"
+        target-route="/public/list"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         @showDetails="setHighlightedFile"
@@ -24,15 +26,17 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
+import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 
 export default {
   components: {
     ListLoader,
-    NoContentMessage
+    NoContentMessage,
+    NotFoundMessage
   },
 
   data: () => ({
@@ -67,6 +71,10 @@ export default {
       }
 
       return this.uploadProgressVisible ? 140 : 60
+    },
+
+    folderNotFound() {
+      return this.currentFolder === null
     }
   },
 
@@ -76,17 +84,24 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadFiles', 'loadIndicators']),
+    ...mapMutations('Files', ['SET_CURRENT_FOLDER']),
 
     async loadResources() {
       this.loading = true
 
-      const resources = await this.$client.publicFiles.list(
-        this.$route.params.item,
-        this.publicLinkPassword,
-        this.davProperties
-      )
+      try {
+        const resources = await this.$client.publicFiles.list(
+          this.$route.params.item,
+          this.publicLinkPassword,
+          this.davProperties
+        )
 
-      this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
+        this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
+      } catch (error) {
+        this.SET_CURRENT_FOLDER(null)
+        console.error(error)
+      }
+
       this.loading = false
     }
   }
