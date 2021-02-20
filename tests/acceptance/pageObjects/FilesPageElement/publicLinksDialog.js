@@ -342,7 +342,7 @@ module.exports = {
     copyPrivateLink: function() {
       const linksAccordionItem = this.api.page.FilesPageElement.appSideBar().elements
         .linksAccordionItem
-      return this.waitForElementVisible(this.api.page.filesPage().elements.sideBar)
+      return this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
         .waitForElementVisible(linksAccordionItem)
         .click(linksAccordionItem)
         .waitForElementVisible('@sidebarPrivateLinkLabel')

@@ -7,7 +7,7 @@ module.exports = {
   commands: {
     isThumbnailVisible: function() {
       return this.waitForElementVisible(
-        this.api.page.filesPage().elements.sideBar
+        this.api.page.personalPage().elements.sideBar
       ).waitForElementVisible(this.elements.sidebarThumbnail)
     },
     closeSidebar: function(timeout = null) {
@@ -23,7 +23,7 @@ module.exports = {
       return this.api.page.FilesPageElement.filesList()
     },
     selectAccordionItem: async function(item) {
-      await this.waitForElementVisible(this.api.page.filesPage().elements.sideBar)
+      await this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
       const panelVisible = await this.isPanelVisible(
         item,
         this.api.globals.waitForNegativeConditionTimeout
@@ -43,7 +43,7 @@ module.exports = {
      */
     getXpathOfLinkToAccordionItemInSidePanel: function(item) {
       return (
-        this.api.page.filesPage().elements.sideBar.selector +
+        this.api.page.personalPage().elements.sideBar.selector +
         util.format(this.elements.linkToOpenAccordionItem.selector, item)
       )
     },
@@ -116,7 +116,7 @@ module.exports = {
     isAccordionItemPresent: async function(selector) {
       let isPresent = true
       await this.useXpath()
-        .waitForElementVisible(this.api.page.filesPage().elements.sideBar) // sidebar is expected to be opened and visible
+        .waitForElementVisible(this.api.page.personalPage().elements.sideBar) // sidebar is expected to be opened and visible
         .api.elements(selector, result => {
           isPresent = result.value.length > 0
         })
@@ -137,13 +137,13 @@ module.exports = {
     },
     markFavoriteSidebar: function() {
       return this.useXpath()
-        .waitForElementVisible(this.api.page.filesPage().elements.sideBar)
+        .waitForElementVisible(this.api.page.personalPage().elements.sideBar)
         .waitForElementVisible('@favoriteStarDimm')
         .click('@sidebarToggleFavoriteButton')
         .waitForElementVisible('@favoriteStarShining')
     },
     unmarkFavoriteSidebar: function() {
-      return this.waitForElementVisible(this.api.page.filesPage().elements.sideBar)
+      return this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
         .waitForElementVisible('@favoriteStarShining')
         .click('@sidebarToggleFavoriteButton')
         .waitForElementVisible('@favoriteStarDimm')

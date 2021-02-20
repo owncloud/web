@@ -192,7 +192,7 @@ module.exports = {
       selector: '//button[@aria-label="Rename"]',
       locateStrategy: 'xpath'
     },
-    // TODO: Merge with selectors in filesPage
+    // TODO: Merge with selectors in personalPage
     dialog: {
       selector: '.oc-modal'
     },

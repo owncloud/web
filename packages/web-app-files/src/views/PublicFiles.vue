@@ -2,8 +2,13 @@
   <div>
     <list-loader v-if="loading" />
     <template v-else>
-      <not-found-message v-if="folderNotFound" class="uk-height-1-1" />
-      <no-content-message v-else-if="isEmpty" id="files-public-files-empty" icon="folder">
+      <not-found-message v-if="folderNotFound" class="files-not-found uk-height-1-1" />
+      <no-content-message
+        v-else-if="isEmpty"
+        id="files-public-files-empty"
+        class="files-empty"
+        icon="folder"
+      >
         <template v-slot:message>
           <span v-translate>There are no resources in this folder</span>
         </template>

@@ -2,7 +2,12 @@
   <div>
     <list-loader v-if="loading" />
     <template v-else>
-      <no-content-message v-if="isEmpty" id="files-shared-with-me-empty" icon="group">
+      <no-content-message
+        v-if="isEmpty"
+        id="files-shared-with-me-empty"
+        class="files-empty"
+        icon="group"
+      >
         <template #message>
           <span v-translate>
             You are currently not collaborating on other people's resources

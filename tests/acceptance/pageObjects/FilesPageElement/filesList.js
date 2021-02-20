@@ -22,15 +22,16 @@ module.exports = {
     },
     /**
      * @param {string} fileName
+     * @param {boolean} expected Asserts if we expect the preview image to be shown
      * @return {Promise<*>}
      */
-    isPreviewImageDisplayed: async function(fileName, shouldOrShouldnot) {
+    isPreviewImageDisplayed: async function(fileName, expected) {
       await this.waitForFileVisible(fileName)
       const element = util.format(this.elements.previewImageParentDiv.selector, fileName)
       const imageSelector = util.format(this.elements.previewImage.selector, fileName)
       let previewStatus = ''
       await this.useXpath().waitForElementVisible(element)
-      if (shouldOrShouldnot === 'should') {
+      if (expected) {
         await this.useXpath().waitForElementVisible(imageSelector)
       }
       await this.getAttribute(
@@ -445,7 +446,7 @@ module.exports = {
     allFileRows: async function() {
       let returnResult = null
       await this.waitForElementVisible('@filesTable')
-      await this.api.elements('css selector', this.elements.fileRows, function(result) {
+      await this.api.elements('css selector', this.elements.fileRow, function(result) {
         returnResult = result
       })
       return returnResult
@@ -507,14 +508,17 @@ module.exports = {
       }
 
       await this.initAjaxCounters()
-      await this.waitForElementVisible('@virtualScrollWrapper')
+      await this.waitForElementVisible('@fileRow')
       await this.api.executeAsync(
-        function({ itemName, scrollWrapperSelector, listHeaderSelector, listItemSelector }, done) {
-          const virtualScrollWrapper = document.querySelector(scrollWrapperSelector)
+        function(
+          { itemName, scrollContainerSelector, listHeaderSelector, listItemSelector },
+          done
+        ) {
+          const scrollContainer = document.querySelector(scrollContainerSelector)
           const tableHeaderPosition = document
             .querySelector(listHeaderSelector)
             .getBoundingClientRect().bottom
-          let scrollDistance = virtualScrollWrapper.scrollTop
+          let scrollDistance = scrollContainer.scrollTop
 
           function scrollUntilElementVisible() {
             const item = document.querySelector(`[filename="${itemName}"]`)
@@ -522,7 +526,7 @@ module.exports = {
             if (item) {
               const position = item.getBoundingClientRect()
               // Add position from top to list container height to properly decide if the item is visible
-              const visiblePosition = virtualScrollWrapper.clientHeight + tableHeaderPosition
+              const visiblePosition = scrollContainer.clientHeight + tableHeaderPosition
 
               // Check if the item is inside the view after it's rendered
               if (position.top > -1 && position.top <= visiblePosition) {
@@ -531,7 +535,7 @@ module.exports = {
               }
             }
 
-            if (virtualScrollWrapper.scrollHeight <= scrollDistance) {
+            if (scrollContainer.scrollHeight <= scrollDistance) {
               done()
               return
             }
@@ -539,7 +543,7 @@ module.exports = {
             const listItemHeight = document.querySelector(listItemSelector).clientHeight
 
             scrollDistance += listItemHeight * 5
-            virtualScrollWrapper.scrollTop = scrollDistance
+            scrollContainer.scrollTop = scrollDistance
             setTimeout(function() {
               scrollUntilElementVisible()
             }, 500)
@@ -550,9 +554,9 @@ module.exports = {
         [
           {
             itemName: itemName,
-            scrollWrapperSelector: this.elements.virtualScrollWrapper.selector,
+            scrollContainerSelector: this.elements.filesContainer.selector,
             listHeaderSelector: this.elements.filesTableHeader.selector,
-            listItemSelector: this.elements.filesListItem.selector
+            listItemSelector: this.elements.fileRow.selector
           }
         ]
       )
@@ -568,7 +572,7 @@ module.exports = {
      * Scroll the files list to the beginning
      */
     filesListScrollToTop: async function() {
-      await this.waitForElementVisible('@virtualScrollWrapper')
+      await this.waitForElementVisible('@filesTable')
       await this.api.executeAsync(
         function(scrollerContainerSelector, done) {
           const filesListScroll = document.querySelector(scrollerContainerSelector)
@@ -578,7 +582,7 @@ module.exports = {
 
           done()
         },
-        [this.elements.virtualScrollWrapper.selector]
+        [this.elements.filesContainer.selector]
       )
 
       return this
@@ -729,8 +733,8 @@ module.exports = {
 
       // cancel copy or move
       await this.useXpath()
-        .waitForElementVisible(client.page.filesPage().elements.cancelMoveCopyBtn.selector)
-        .click(this.page.filesPage().elements.cancelMoveCopyBtn.selector)
+        .waitForElementVisible(client.page.personalPage().elements.cancelMoveCopyBtn.selector)
+        .click(this.page.personalPage().elements.cancelMoveCopyBtn.selector)
         .useCss()
 
       return this
@@ -788,11 +792,11 @@ module.exports = {
     }
   },
   elements: {
-    filesTable: {
-      selector: '#files-personal-table'
+    filesContainer: {
+      selector: '.files-list-wrapper'
     },
-    fileRows: {
-      selector: '#files-personal-table .oc-tbody-tr'
+    filesTable: {
+      selector: '.files-table'
     },
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',
@@ -802,14 +806,17 @@ module.exports = {
       selector: '#files-list-progress'
     },
     filesListNoContentMessage: {
-      selector: '#files-personal-empty'
+      selector: '.files-empty'
     },
     filesListNotFoundMessage: {
-      selector: '#files-personal-not-found'
+      selector: '.files-not-found'
     },
     shareButtonInFileRow: {
       selector: '//button[@aria-label="People"]',
       locateStrategy: 'xpath'
+    },
+    fileRow: {
+      selector: '.files-table .oc-tbody-tr'
     },
     fileRowByName: {
       selector:
@@ -877,17 +884,14 @@ module.exports = {
     filesCount: {
       selector: '#files-list-count-files'
     },
-    virtualScrollWrapper: {
-      selector: '.vue-recycle-scroller'
-    },
     filesTableHeader: {
-      selector: '#files-personal-table.oc-thead'
+      selector: '.files-table .oc-thead'
     },
     filesTableHeaderColumn: {
       selector: '//*[contains(@class, "oc-sortable-column-header")]//*[text()=%s]/ancestor::button',
       locateStrategy: 'xpath'
     },
-    // TODO: Merge with selectors in filesPage
+    // TODO: Merge with selectors in personalPage
     dialog: {
       selector: '.oc-modal'
     },
@@ -898,9 +902,6 @@ module.exports = {
       selector:
         '//span[contains(@class, "oc-file-name") and text()="%s" and not(../span[contains(@class, "oc-resource-extension")])]/ancestor::div[@class="files-list-row-disabled" and @data-is-visible="true"]',
       locateStrategy: 'xpath'
-    },
-    filesListItem: {
-      selector: '#files-personal-table.oc-tbody-tr'
     },
     previewImageParentDiv: {
       selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-resource")]',
