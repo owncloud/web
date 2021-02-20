@@ -112,13 +112,13 @@ const navItems = [
 
 const routes = [
   {
-    path: '',
-    redirect: '/files/list/personal'
+    path: '/',
+    redirect: { name: 'files-personal' }
   },
   {
     name: 'list',
     path: '/list',
-    redirect: ':item?',
+    redirect: { name: 'files-personal' },
     components: {
       app: App
     },
