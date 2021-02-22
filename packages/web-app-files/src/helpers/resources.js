@@ -10,6 +10,8 @@ import { shareTypes } from '../helpers/shareTypes'
 import { $gettext } from '../gettext'
 import { getAvatarSrc } from './user'
 
+export const imgExtensions = ['png', 'jpg', 'jpeg']
+
 /**
  * Returns formatted size of given resource
  * @param {Number} size Unformatted size of the resource

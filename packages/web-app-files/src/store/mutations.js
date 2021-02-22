@@ -304,5 +304,15 @@ export default {
 
   SELECT_RESOURCES(state, resources) {
     state.selected = resources
+  },
+
+  LOAD_PREVIEWS(state, resources) {
+    resources.forEach(resource => {
+      const index = state.files.findIndex(r => r.id === resource.id)
+
+      if (index > -1) {
+        state.files.splice(index, 1, resource)
+      }
+    })
   }
 }

@@ -1,7 +1,15 @@
+import PQueue from 'p-queue'
+import queryString from 'query-string'
+
 import { getParentPaths } from '../helpers/path'
 import { shareTypes } from '../helpers/shareTypes'
-import PQueue from 'p-queue'
-import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
+import {
+  buildResource,
+  buildShare,
+  buildCollaboratorShare,
+  imgExtensions,
+  getFileExtension
+} from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
 
 export default {
@@ -519,5 +527,43 @@ export default {
   async loadIndicators({ dispatch, commit }, { client, currentFolder }) {
     await dispatch('loadSharesTree', { client, path: currentFolder })
     commit('LOAD_INDICATORS')
+  },
+
+  async loadPreviews({ commit, rootGetters }, { resources, isPublic, mediaSource, headers }) {
+    let davUrl = rootGetters.configuration.server
+
+    davUrl += isPublic
+      ? 'remote.php/dav/public-files'
+      : 'remote.php/dav/files/' + rootGetters.user.id
+
+    const query = {
+      x: 36,
+      y: 36,
+      scalingup: 0,
+      preview: 1,
+      a: 1
+    }
+
+    for (const resource of resources) {
+      const extension = getFileExtension(resource.name)
+
+      if (imgExtensions.includes(extension)) {
+        const etag = resource.etag
+
+        if (etag) {
+          query.c = etag.substr(1, etag.length - 2)
+        }
+
+        const previewUrl = davUrl + resource.path + '?' + queryString.stringify(query)
+
+        try {
+          resource.preview = await mediaSource(previewUrl, 'url', headers)
+        } catch (error) {
+          console.error(error)
+        }
+      }
+    }
+
+    commit('LOAD_PREVIEWS', resources)
   }
 }

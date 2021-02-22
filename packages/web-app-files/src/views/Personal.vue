@@ -28,8 +28,8 @@
         :header-position="headerPosition"
         @showDetails="highlightResource"
       >
-        <template v-slot:quickActions="props">
-          <quick-actions :item="props.resource" :actions="app.quickActions" />
+        <template v-slot:quickActions="{ resource }">
+          <quick-actions :class="resource.preview" :item="resource" :actions="app.quickActions" />
         </template>
       </oc-table-files>
     </template>
@@ -39,6 +39,9 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
+import Mixins from '../mixins'
+import { buildResource } from '../helpers/resources'
+
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -46,6 +49,8 @@ import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage },
+
+  mixins: [Mixins],
 
   data: () => ({
     loading: true
@@ -100,21 +105,28 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadFiles', 'loadIndicators']),
-    ...mapMutations('Files', ['SELECT_RESOURCES', 'SET_CURRENT_FOLDER']),
+    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
+    ...mapMutations('Files', ['SELECT_RESOURCES', 'SET_CURRENT_FOLDER', 'LOAD_FILES']),
 
     async loadResources() {
       this.loading = true
 
       try {
-        const resources = await this.$client.files.list(
+        let resources = await this.$client.files.list(
           this.$route.params.item || '/',
           1,
           this.davProperties
         )
 
-        this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
+        resources = resources.map(buildResource)
+        this.LOAD_FILES({ currentFolder: resources[0], files: resources.slice(1) })
         this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
+        await this.loadPreviews({
+          resources,
+          isPublic: this.publicPage(),
+          mediaSource: this.mediaSource,
+          headers: this.requestHeaders
+        })
       } catch (error) {
         this.SET_CURRENT_FOLDER(null)
         console.error(error)
