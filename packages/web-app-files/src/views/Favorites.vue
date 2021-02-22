@@ -30,12 +30,17 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
+import { buildResource } from '../helpers/resources'
+import Mixins from '../mixins'
+
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
 
 export default {
   components: { QuickActions, ListLoader, NoContentMessage },
+
+  mixins: [Mixins],
 
   data: () => ({
     loading: true
@@ -86,17 +91,24 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadFiles', 'loadIndicators']),
-    ...mapMutations('Files', ['SELECT_RESOURCES']),
+    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
+    ...mapMutations('Files', ['SELECT_RESOURCES', 'LOAD_FILES']),
 
     async loadResources() {
       this.loading = true
 
-      const resources = await this.$client.files.getFavoriteFiles(this.davProperties)
+      let resources = await this.$client.files.getFavoriteFiles(this.davProperties)
       const rootFolder = await this.$client.files.fileInfo('/', this.davProperties)
 
-      this.loadFiles({ currentFolder: rootFolder, files: resources })
+      resources = resources.map(buildResource)
+      this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
+      await this.loadPreviews({
+        resources,
+        isPublic: this.publicPage(),
+        mediaSource: this.mediaSource,
+        headers: this.requestHeaders
+      })
       this.loading = false
     }
   }
