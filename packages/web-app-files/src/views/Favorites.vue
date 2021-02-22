@@ -14,7 +14,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         :resources="activeFiles"
-        :target-route="$route.name"
+        :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
         @showDetails="setHighlightedFile"
@@ -58,6 +58,10 @@ export default {
 
     isSidebarOpen() {
       return this.highlightedFile !== null
+    },
+
+    targetRoute() {
+      return { name: 'files-personal' }
     },
 
     selected: {

@@ -21,7 +21,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         :resources="activeFiles"
-        :target-route="$route.name"
+        :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
         @showDetails="highlightResource"
@@ -115,6 +115,10 @@ export default {
       }
 
       return this.selectedFiles.length > 0 ? 110 : 60
+    },
+
+    targetRoute() {
+      return { name: 'files-personal' }
     }
   },
 
