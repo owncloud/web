@@ -100,7 +100,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators']),
+    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
     ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES']),
 
     async loadResources() {
@@ -134,6 +134,12 @@ export default {
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
+      await this.loadPreviews({
+        resources,
+        isPublic: this.publicPage(),
+        mediaSource: this.mediaSource,
+        headers: this.requestHeaders
+      })
       this.loading = false
     },
 
