@@ -179,10 +179,10 @@ export default {
       this.$router.push({
         name: 'files-location-picker',
         params: {
-          item: parent
+          item: parent,
+          action
         },
         query: {
-          action,
           resource: resources.map(resource => {
             return resource.path
           })
