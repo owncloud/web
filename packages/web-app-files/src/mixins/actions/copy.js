@@ -36,7 +36,11 @@ export default {
       const parent = dirname(resource.path)
       this.$router.push({
         name: 'files-location-picker',
-        query: { action: 'copy', target: parent, resource: resource.path }
+        params: {
+          action: 'copy',
+          item: parent
+        },
+        query: { resource: resource.path }
       })
     }
   }

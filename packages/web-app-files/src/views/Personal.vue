@@ -23,7 +23,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         :resources="activeFiles"
-        :target-route="targetRoute"
+        :target-route="$route.name"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
         @showDetails="highlightResource"
@@ -64,10 +64,6 @@ export default {
 
     isSidebarOpen() {
       return this.highlightedFile !== null
-    },
-
-    targetRoute() {
-      return this.$route.path.replace(/[%2F]*$/, '')
     },
 
     isEmpty() {

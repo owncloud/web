@@ -177,10 +177,12 @@ export default {
       const parent = pathUtil.dirname(this.currentFolder.path)
 
       this.$router.push({
-        name: 'location-picker',
+        name: 'files-location-picker',
+        params: {
+          item: parent
+        },
         query: {
           action,
-          target: parent,
           resource: resources.map(resource => {
             return resource.path
           })

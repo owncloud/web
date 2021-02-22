@@ -212,7 +212,7 @@ const routes = [
     meta: { hideHeadbar: true }
   },
   {
-    path: '/location-picker',
+    path: '/location-picker/:action/:item?',
     name: 'location-picker',
     components: {
       app: LocationPicker

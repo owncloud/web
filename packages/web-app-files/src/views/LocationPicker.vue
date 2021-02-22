@@ -39,7 +39,7 @@
           :has-actions="false"
           :is-selectable="false"
           :disabled="disabledResources"
-          :target-route="targetPath"
+          :target-route="targetRoute"
         />
       </template>
     </div>
@@ -85,7 +85,7 @@ export default {
     ...mapGetters(['user']),
 
     currentAction() {
-      return this.$route.query.action
+      return this.$route.params.action
     },
 
     resources() {
@@ -104,18 +104,11 @@ export default {
     },
 
     target() {
-      return cloneStateObject(this.$route.query.target)
+      return this.$route.params.item
     },
 
     basePath() {
       return this.$route.path
-    },
-
-    resourcesQuery() {
-      return (
-        '&resource=' +
-        this.resources.map(resource => encodeURIComponent(resource)).join('&resource=')
-      )
     },
 
     isPublicPage() {
@@ -195,15 +188,20 @@ export default {
         .map(resource => resource.id)
     },
 
-    targetPath() {
-      return (
-        this.basePath +
-        `?action=${encodeURIComponent(this.currentAction)}${this.resourcesQuery}&target=`
-      )
-    },
-
     isEmpty() {
       return this.activeFiles.length < 1
+    },
+
+    targetRoute() {
+      return {
+        name: this.$route.name,
+        query: {
+          resource: this.resources
+        },
+        params: {
+          action: this.currentAction
+        }
+      }
     }
   },
 
@@ -371,12 +369,9 @@ export default {
       this.leaveLocationPicker(this.target)
     },
 
-    createPath(target) {
+    createPath() {
       return (
-        this.basePath +
-        `?action=${encodeURIComponent(this.currentAction)}&target=` +
-        encodeURIComponent(target) +
-        this.resourcesQuery
+        this.basePath + `?action=${encodeURIComponent(this.currentAction)}` + this.resourcesQuery
       )
     }
   }
