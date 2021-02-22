@@ -652,7 +652,9 @@ const assertBreadCrumbIsNotDisplayed = function() {
  * @param {boolean} nonClickable
  */
 const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonClickable) {
-  const breadcrumbElement = client.page.personalPage().getBreadcrumbSelector(clickable, nonClickable)
+  const breadcrumbElement = client.page
+    .personalPage()
+    .getBreadcrumbSelector(clickable, nonClickable)
   const resourceBreadcrumbXpath = util.format(
     breadcrumbElement.selector,
     xpathHelper.buildXpathLiteral(resource)
