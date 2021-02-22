@@ -30,7 +30,7 @@ module.exports = {
         client.globals.currentUser = userId
       })
 
-    await client.page.filesPage().waitForElementPresent('@newFileButtonLoaded')
+    await client.page.personalPage().waitForElementPresent('@newFileButtonLoaded')
     await client.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
   },
 
