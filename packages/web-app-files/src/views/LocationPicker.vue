@@ -107,10 +107,6 @@ export default {
       return this.$route.params.item
     },
 
-    basePath() {
-      return this.$route.path
-    },
-
     isPublicPage() {
       return !this.user.id
     },
@@ -122,7 +118,16 @@ export default {
         breadcrumbs.push({
           index: 0,
           text: this.$gettext('Home'),
-          to: this.basePath + `?action=${this.currentAction}&target=` + this.resourcesQuery
+          to: {
+            name: this.$route.name,
+            params: {
+              action: this.currentAction,
+              item: '/'
+            },
+            query: {
+              resource: this.resources
+            }
+          }
         })
       }
 
@@ -135,7 +140,16 @@ export default {
           breadcrumbs.push({
             index: i + 1,
             text: items[i],
-            to: this.createPath(itemPath)
+            to: {
+              name: this.$route.name,
+              params: {
+                action: this.currentAction,
+                item: itemPath
+              },
+              query: {
+                resource: this.resources
+              }
+            }
           })
         }
       }
