@@ -21,7 +21,7 @@
         id="files-public-files-table"
         :resources="activeFiles"
         :header-position="headerPosition"
-        target-route="/public/list"
+        :target-route="targetRoute"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         @showDetails="setHighlightedFile"
@@ -80,11 +80,18 @@ export default {
 
     folderNotFound() {
       return this.currentFolder === null
+    },
+
+    targetRoute() {
+      return { name: 'files-public-list' }
     }
   },
 
-  created() {
-    this.loadResources()
+  watch: {
+    $route: {
+      handler: 'loadResources',
+      immediate: true
+    }
   },
 
   methods: {
