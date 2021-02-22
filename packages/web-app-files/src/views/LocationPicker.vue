@@ -244,12 +244,17 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['SET_NAVIGATION_HIDDEN', 'SET_MAIN_CONTENT_COMPONENT']),
+    ...mapMutations([
+      'SET_NAVIGATION_HIDDEN',
+      'SET_MAIN_CONTENT_COMPONENT',
+      'CLEAR_CURRENT_FILES_LIST'
+    ]),
     ...mapActions('Files', ['loadFiles', 'loadIndicators']),
     ...mapActions(['showMessage']),
 
     async navigateToTarget(target) {
       this.loading = true
+      this.CLEAR_CURRENT_FILES_LIST()
 
       if (typeof target === 'object') {
         target = this.target

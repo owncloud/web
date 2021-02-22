@@ -92,10 +92,11 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadFiles', 'loadIndicators']),
-    ...mapMutations('Files', ['SET_CURRENT_FOLDER']),
+    ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'CLEAR_CURRENT_FILES_LIST']),
 
     async loadResources() {
       this.loading = true
+      this.CLEAR_CURRENT_FILES_LIST()
 
       try {
         const resources = await this.$client.publicFiles.list(

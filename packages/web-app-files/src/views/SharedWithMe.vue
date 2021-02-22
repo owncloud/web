@@ -128,10 +128,11 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
-    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES']),
+    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
 
     async loadResources() {
       this.loading = true
+      this.CLEAR_CURRENT_FILES_LIST()
 
       let resources = await this.$client.requests.ocs({
         service: 'apps/files_sharing',

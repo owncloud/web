@@ -86,10 +86,11 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile']),
-    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES']),
+    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
 
     async loadResources() {
       this.loading = true
+      this.CLEAR_CURRENT_FILES_LIST()
 
       const resources = await this.$client.fileTrash.list('', '1', [
         '{http://owncloud.org/ns}trashbin-original-filename',

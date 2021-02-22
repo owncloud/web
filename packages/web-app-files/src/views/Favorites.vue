@@ -96,10 +96,11 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
-    ...mapMutations('Files', ['SELECT_RESOURCES', 'LOAD_FILES']),
+    ...mapMutations('Files', ['SELECT_RESOURCES', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
 
     async loadResources() {
       this.loading = true
+      this.CLEAR_CURRENT_FILES_LIST()
 
       let resources = await this.$client.files.getFavoriteFiles(this.davProperties)
       const rootFolder = await this.$client.files.fileInfo('/', this.davProperties)

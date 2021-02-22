@@ -106,10 +106,16 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
-    ...mapMutations('Files', ['SELECT_RESOURCES', 'SET_CURRENT_FOLDER', 'LOAD_FILES']),
+    ...mapMutations('Files', [
+      'SELECT_RESOURCES',
+      'SET_CURRENT_FOLDER',
+      'LOAD_FILES',
+      'CLEAR_CURRENT_FILES_LIST'
+    ]),
 
     async loadResources() {
       this.loading = true
+      this.CLEAR_CURRENT_FILES_LIST()
 
       try {
         let resources = await this.$client.files.list(
