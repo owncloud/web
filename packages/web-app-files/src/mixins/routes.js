@@ -19,7 +19,7 @@ export default {
       return this.isSharedWithMeRoute || this.isSharedWithOthersRoute
     },
     isPublicFilesRoute() {
-      return this.$route.name === 'files-public-files'
+      return this.$route.name === 'files-public-list'
     }
   }
 }

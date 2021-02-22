@@ -71,11 +71,7 @@ export default {
     },
 
     headerPosition() {
-      if (!this.publicPage() && !this.$route.meta.verbose) {
-        return 150
-      }
-
-      return this.uploadProgressVisible ? 140 : 60
+      return this.uploadProgressVisible ? 180 : 90
     },
 
     folderNotFound() {

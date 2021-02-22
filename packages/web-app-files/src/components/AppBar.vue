@@ -196,7 +196,7 @@ export default {
           to: baseUrl + encodeURIComponent(pathUtil.join(...pathItems))
         })
       } else {
-        baseUrl = '/files/public-files/'
+        baseUrl = '/files/public/list/'
         pathItems.push(pathSegments.splice(0, 1)[0])
         breadcrumbs.push({
           text: this.$gettext('Home'),
