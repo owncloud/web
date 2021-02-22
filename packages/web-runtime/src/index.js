@@ -170,6 +170,10 @@ const finalizeInit = async () => {
   await fetchTheme()
 
   loadTranslations()
+
+  // TODO: Find a different way to access store from withit JS files
+  Vue.$store = store
+
   // eslint-disable-next-line no-new
   new Vue({
     el: '#owncloud',

@@ -90,16 +90,21 @@ export const getIndicators = (resource, sharesTree) => {
       label: shareUserIconLabel(resource, sharesTree),
       visible: isUserShare(resource, sharesTree),
       icon: 'group',
-      handler: () => {}
+      handler: indicatorHandler
     },
     {
       id: 'file-link',
       label: shareLinkIconLabel(resource, sharesTree),
       visible: isLinkShare(resource, sharesTree),
       icon: 'link',
-      handler: () => {}
+      handler: indicatorHandler
     }
   ]
 
   return indicators.filter(indicator => indicator.visible)
+}
+
+const indicatorHandler = (resource, accordion) => {
+  window.Vue.$store.dispatch('Files/setHighlightedFile', resource)
+  window.Vue.$store.commit('Files/SET_APP_SIDEBAR_EXPANDED_ACCORDION', accordion)
 }
