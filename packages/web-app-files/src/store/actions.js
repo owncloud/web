@@ -63,12 +63,6 @@ export default {
         throw new Error(error)
       })
   },
-  addFiles(context, payload) {
-    const files = payload.files
-    for (const file of files) {
-      context.commit('ADD_FILE', buildResource(file))
-    }
-  },
   deleteFiles(context, { files, client, publicPage }) {
     const promises = []
     for (const file of files) {
@@ -529,7 +523,7 @@ export default {
     commit('LOAD_INDICATORS')
   },
 
-  async loadPreviews({ commit, rootGetters }, { resources, isPublic, mediaSource, headers }) {
+  async loadPreviews({ commit, rootGetters }, { resources, isPublic, mediaSource }) {
     let davUrl = rootGetters.configuration.server
 
     davUrl += isPublic

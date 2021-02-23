@@ -235,7 +235,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['addFiles', 'updateFileProgress', 'removeFilesFromTrashbin']),
+    ...mapActions('Files', ['updateFileProgress', 'removeFilesFromTrashbin', 'loadPreviews']),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['PUSH_NEW_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
@@ -427,36 +427,37 @@ export default {
 
       return null
     },
-    onFileSuccess(event, file) {
-      if (file.name) {
-        file = file.name
-      }
-      this.$nextTick().then(async () => {
+    async onFileSuccess(event, file) {
+      try {
+        if (file.name) {
+          file = file.name
+        }
+
+        await this.$nextTick()
+
         const path = pathUtil.join(this.currentPath, file)
-        if (this.isListRoute) {
-          this.$client.files
-            .fileInfo(path, this.davProperties)
-            .then(fileInfo => {
-              this.addFiles({ files: [fileInfo] })
-            })
-            .catch(() => this.$_ocFilesFolder_getFolder())
-        } else {
-          this.$client.publicFiles
-            .list(path, this.publicLinkPassword, this.davProperties, '0')
-            .then(files => {
-              this.addFiles({ files })
-            })
-            .catch(() => this.$_ocFilesFolder_getFolder())
-        }
+        let resource = this.isListRoute
+          ? await this.$client.files.fileInfo(path, this.davProperties)
+          : await this.$client.publicFiles.getFileInfo(
+              path,
+              this.publicLinkPassword,
+              this.davProperties
+            )
 
-        try {
-          const user = await this.$client.users.getUser(this.user.id)
+        resource = buildResource(resource)
+        this.PUSH_NEW_RESOURCE(resource)
+        this.loadPreviews({
+          resources: [resource],
+          isPublic: this.publicPage(),
+          mediaSource: this.mediaSource
+        })
 
-          this.SET_QUOTA(user.quota)
-        } catch (error) {
-          console.error(error)
-        }
-      })
+        const user = await this.$client.users.getUser(this.user.id)
+
+        this.SET_QUOTA(user.quota)
+      } catch (error) {
+        console.error(error)
+      }
     },
 
     onFileError(error) {
