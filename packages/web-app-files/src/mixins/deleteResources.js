@@ -1,4 +1,4 @@
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { cloneStateObject } from '../helpers/store'
 import { checkRoute } from '../helpers/route'
 import PQueue from 'p-queue'
@@ -11,6 +11,7 @@ export default {
 
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
+    ...mapGetters(['user']),
 
     $_deleteResources_isInTrashbin() {
       return checkRoute(['files-trashbin'], this.$route.name)
@@ -96,6 +97,7 @@ export default {
       'deleteFiles'
     ]),
     ...mapActions(['showMessage', 'toggleModalConfirmButton', 'hideModal', 'createModal']),
+    ...mapMutations(['SET_QUOTA']),
 
     $_deleteResources_hideDialog() {
       this.resetFileSelection()
@@ -161,9 +163,14 @@ export default {
         publicPage: this.publicPage(),
         $gettext: this.$gettext,
         $gettextInterpolate: this.$gettextInterpolate
-      }).then(() => {
+      }).then(async () => {
         this.$_deleteResources_hideDialog()
         this.toggleModalConfirmButton()
+
+        // Load quota
+        const user = await this.$client.users.getUser(this.user.id)
+
+        this.SET_QUOTA(user.quota)
       })
     },
 
