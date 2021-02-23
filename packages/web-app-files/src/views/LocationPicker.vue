@@ -40,7 +40,27 @@
           :is-selectable="false"
           :disabled="disabledResources"
           :target-route="targetRoute"
-        />
+        >
+          <template #footer>
+            <div
+              v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
+              class="uk-text-nowrap uk-text-meta uk-text-center uk-width-1-1"
+            >
+              <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
+              <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
+                >folder</translate
+              >
+              <translate>and</translate>
+              <span id="files-list-count-files" v-text="activeFilesCount.files" />
+              <translate :translate-n="activeFilesCount.files" translate-plural="files"
+                >file</translate
+              >
+              <template v-if="activeFiles.length > 0">
+                &ndash; {{ getResourceSize(filesTotalSize) }}
+              </template>
+            </div>
+          </template>
+        </oc-table-files>
       </template>
     </div>
   </div>
@@ -52,6 +72,7 @@ import { basename, join } from 'path'
 
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
+import { getResourceSize } from '../helpers/resources'
 
 import MoveSidebarMainContent from '../components/LocationPicker/MoveSidebarMainContent.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -80,7 +101,9 @@ export default {
       'fileSortField',
       'fileSortDirectionDesc',
       'publicLinkPassword',
-      'davProperties'
+      'davProperties',
+      'activeFilesCount',
+      'filesTotalSize'
     ]),
     ...mapGetters(['user']),
 
@@ -392,6 +415,10 @@ export default {
       return (
         this.basePath + `?action=${encodeURIComponent(this.currentAction)}` + this.resourcesQuery
       )
+    },
+
+    getResourceSize(size) {
+      return getResourceSize(size)
     }
   }
 }

@@ -25,13 +25,35 @@
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         @showDetails="setHighlightedFile"
-      />
+      >
+        <template #footer>
+          <div
+            v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
+            class="uk-text-nowrap uk-text-meta uk-text-center uk-width-1-1"
+          >
+            <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
+            <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
+              >folder</translate
+            >
+            <translate>and</translate>
+            <span id="files-list-count-files" v-text="activeFilesCount.files" />
+            <translate :translate-n="activeFilesCount.files" translate-plural="files"
+              >file</translate
+            >
+            <template v-if="activeFiles.length > 0">
+              &ndash; {{ getResourceSize(filesTotalSize) }}
+            </template>
+          </div>
+        </template>
+      </oc-table-files>
     </template>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
+
+import { getResourceSize } from '../helpers/resources'
 
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -55,7 +77,9 @@ export default {
       'davProperties',
       'currentFolder',
       'highlightedFile',
-      'inProgress'
+      'inProgress',
+      'activeFilesCount',
+      'filesTotalSize'
     ]),
 
     isEmpty() {
@@ -112,6 +136,10 @@ export default {
       }
 
       this.loading = false
+    },
+
+    getResourceSize(size) {
+      return getResourceSize(size)
     }
   }
 }

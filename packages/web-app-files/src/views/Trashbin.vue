@@ -25,7 +25,24 @@
         :are-resources-clickable="false"
         :header-position="headerPosition"
         @showDetails="setHighlightedFile"
-      />
+      >
+        <template #footer>
+          <div
+            v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
+            class="uk-text-nowrap uk-text-meta uk-text-center uk-width-1-1"
+          >
+            <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
+            <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
+              >folder</translate
+            >
+            <translate>and</translate>
+            <span id="files-list-count-files" v-text="activeFilesCount.files" />
+            <translate :translate-n="activeFilesCount.files" translate-plural="files"
+              >file</translate
+            >
+          </div>
+        </template>
+      </oc-table-files>
     </template>
   </div>
 </template>
@@ -33,7 +50,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
-import { buildDeletedResource, buildResource } from '../helpers/resources'
+import { buildDeletedResource, buildResource, getResourceSize } from '../helpers/resources'
 
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -51,7 +68,8 @@ export default {
       'highlightedFile',
       'activeFiles',
       'selectedFiles',
-      'inProgress'
+      'inProgress',
+      'activeFilesCount'
     ]),
 
     selected: {
@@ -105,6 +123,10 @@ export default {
         files: resources.slice(1).map(buildDeletedResource)
       })
       this.loading = false
+    },
+
+    getResourceSize(size) {
+      return getResourceSize(size)
     }
   }
 }

@@ -24,7 +24,7 @@
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
-        @showDetails="highlightResource"
+        @showDetails="setHighlightedFile"
       >
         <template v-slot:quickActions="{ resource }">
           <quick-actions :item="resource" :actions="app.quickActions" />
@@ -56,6 +56,25 @@
             />
           </div>
         </template>
+        <template #footer>
+          <div
+            v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
+            class="uk-text-nowrap uk-text-meta uk-text-center uk-width-1-1"
+          >
+            <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
+            <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
+              >folder</translate
+            >
+            <translate>and</translate>
+            <span id="files-list-count-files" v-text="activeFilesCount.files" />
+            <translate :translate-n="activeFilesCount.files" translate-plural="files"
+              >file</translate
+            >
+            <template v-if="activeFiles.length > 0">
+              &ndash; {{ getResourceSize(filesTotalSize) }}
+            </template>
+          </div>
+        </template>
       </oc-table-files>
     </template>
   </div>
@@ -64,7 +83,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
-import { aggregateResourceShares, buildResource } from '../helpers/resources'
+import { aggregateResourceShares, buildResource, getResourceSize } from '../helpers/resources'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
@@ -84,7 +103,9 @@ export default {
       'highlightedFile',
       'activeFiles',
       'selectedFiles',
-      'inProgress'
+      'inProgress',
+      'activeFilesCount',
+      'filesTotalSize'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
 
@@ -177,10 +198,6 @@ export default {
       this.loading = false
     },
 
-    highlightResource(resource) {
-      this.setHighlightedFile(resource)
-    },
-
     shareStatus(status) {
       if (status === 0) {
         return this.$gettext('Accepted')
@@ -191,6 +208,10 @@ export default {
       if (status === 2) {
         return this.$gettext('Declined')
       }
+    },
+
+    getResourceSize(size) {
+      return getResourceSize(size)
     }
   }
 }
