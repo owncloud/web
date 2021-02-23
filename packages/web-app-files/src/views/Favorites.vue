@@ -106,7 +106,7 @@ export default {
       const rootFolder = await this.$client.files.fileInfo('/', this.davProperties)
 
       resources = resources.map(buildResource)
-      this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
+      this.LOAD_FILES({ currentFolder: buildResource(rootFolder), files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
       await this.loadPreviews({
         resources,
