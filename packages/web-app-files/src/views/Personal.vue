@@ -39,7 +39,6 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
-import Mixins from '../mixins'
 import { buildResource } from '../helpers/resources'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
@@ -49,8 +48,6 @@ import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage },
-
-  mixins: [Mixins],
 
   data: () => ({
     loading: true
@@ -66,6 +63,7 @@ export default {
       'inProgress',
       'currentFolder'
     ]),
+    ...mapGetters(['user']),
 
     isSidebarOpen() {
       return this.highlightedFile !== null
@@ -112,6 +110,7 @@ export default {
       'LOAD_FILES',
       'CLEAR_CURRENT_FILES_LIST'
     ]),
+    ...mapMutations(['SET_QUOTA']),
 
     async loadResources() {
       this.loading = true
@@ -130,9 +129,13 @@ export default {
         await this.loadPreviews({
           resources,
           isPublic: this.publicPage(),
-          mediaSource: this.mediaSource,
-          headers: this.requestHeaders
+          mediaSource: this.mediaSource
         })
+
+        // Load quota
+        const user = await this.$client.users.getUser(this.user.id)
+
+        this.SET_QUOTA(user.quota)
       } catch (error) {
         this.SET_CURRENT_FOLDER(null)
         console.error(error)

@@ -59,7 +59,7 @@ export default {
       'selectedFiles',
       'inProgress'
     ]),
-    ...mapGetters(['isOcis', 'configuration', 'getToken']),
+    ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
 
     selected: {
       get() {
@@ -102,6 +102,7 @@ export default {
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
     ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapMutations(['SET_QUOTA']),
 
     async loadResources() {
       this.loading = true
@@ -141,6 +142,11 @@ export default {
         mediaSource: this.mediaSource,
         headers: this.requestHeaders
       })
+
+      // Load quota
+      const user = await this.$client.users.getUser(this.user.id)
+
+      this.SET_QUOTA(user.quota)
       this.loading = false
     },
 

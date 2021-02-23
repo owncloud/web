@@ -40,8 +40,6 @@ import NoContentMessage from '../components/NoContentMessage.vue'
 export default {
   components: { QuickActions, ListLoader, NoContentMessage },
 
-  mixins: [Mixins],
-
   data: () => ({
     loading: true
   }),
@@ -55,6 +53,7 @@ export default {
       'selectedFiles',
       'inProgress'
     ]),
+    ...mapGetters(['user']),
 
     isSidebarOpen() {
       return this.highlightedFile !== null
@@ -97,6 +96,7 @@ export default {
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
     ...mapMutations('Files', ['SELECT_RESOURCES', 'LOAD_FILES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapMutations(['SET_QUOTA']),
 
     async loadResources() {
       this.loading = true
@@ -111,9 +111,13 @@ export default {
       await this.loadPreviews({
         resources,
         isPublic: this.publicPage(),
-        mediaSource: this.mediaSource,
-        headers: this.requestHeaders
+        mediaSource: this.mediaSource
       })
+
+      // Load quota
+      const user = await this.$client.users.getUser(this.user.id)
+
+      this.SET_QUOTA(user.quota)
       this.loading = false
     }
   }

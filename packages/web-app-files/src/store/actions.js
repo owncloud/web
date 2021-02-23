@@ -557,7 +557,7 @@ export default {
         const previewUrl = davUrl + resource.path + '?' + queryString.stringify(query)
 
         try {
-          resource.preview = await mediaSource(previewUrl, 'url', headers)
+          resource.preview = await mediaSource(previewUrl, 'url')
         } catch (error) {
           console.error(error)
         }
