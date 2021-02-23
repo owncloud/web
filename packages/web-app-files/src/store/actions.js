@@ -524,6 +524,25 @@ export default {
   },
 
   async loadPreviews({ commit, rootGetters }, { resources, isPublic, mediaSource }) {
+    let dimensions
+
+    switch (true) {
+      case window.innerWidth <= 1024:
+        dimensions = 1024
+        break
+      case window.innerWidth <= 1280:
+        dimensions = 1280
+        break
+      case window.innerWidth <= 1920:
+        dimensions = 1920
+        break
+      case window.innerWidth <= 2160:
+        dimensions = 2160
+        break
+      default:
+        dimensions = 3840
+    }
+
     let davUrl = rootGetters.configuration.server
 
     davUrl += isPublic
@@ -531,8 +550,8 @@ export default {
       : 'remote.php/dav/files/' + rootGetters.user.id
 
     const query = {
-      x: 36,
-      y: 36,
+      x: dimensions,
+      y: dimensions,
       scalingup: 0,
       preview: 1,
       a: 1
