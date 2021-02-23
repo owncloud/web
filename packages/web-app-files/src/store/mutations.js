@@ -202,15 +202,6 @@ export default {
   UPDATE_FOLDER_LOADING(state, value) {
     state.loadingFolder = value
   },
-  CHECK_QUOTA(state, quota) {
-    // Turn strings into ints
-    quota.free = parseInt(quota.free)
-    quota.relative = parseInt(quota.relative)
-    quota.used = parseInt(quota.used)
-    quota.total = parseInt(quota.total)
-
-    state.quota = quota
-  },
   SET_HIGHLIGHTED_FILE(state, file) {
     if (typeof file === 'string') {
       const fileIndex = state.files.findIndex(f => {

@@ -115,13 +115,12 @@ export default {
     fileFolderCreationLoading: false
   }),
   computed: {
-    ...mapGetters(['getToken', 'configuration', 'newFileHandlers']),
+    ...mapGetters(['getToken', 'configuration', 'newFileHandlers', 'quota', 'user']),
     ...mapGetters('Files', [
       'activeFiles',
       'inProgress',
       'currentFolder',
       'davProperties',
-      'quota',
       'selectedFiles',
       'publicLinkPassword'
     ]),
@@ -239,6 +238,7 @@ export default {
     ...mapActions('Files', ['addFiles', 'updateFileProgress', 'removeFilesFromTrashbin']),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['PUSH_NEW_RESOURCE']),
+    ...mapMutations(['SET_QUOTA']),
 
     showCreateResourceModal(isFolder = true, ext = 'txt', openAction = null) {
       const defaultName = isFolder
@@ -431,7 +431,7 @@ export default {
       if (file.name) {
         file = file.name
       }
-      this.$nextTick().then(() => {
+      this.$nextTick().then(async () => {
         const path = pathUtil.join(this.currentPath, file)
         if (this.isListRoute) {
           this.$client.files
@@ -447,6 +447,14 @@ export default {
               this.addFiles({ files })
             })
             .catch(() => this.$_ocFilesFolder_getFolder())
+        }
+
+        try {
+          const user = await this.$client.users.getUser(this.user.id)
+
+          this.SET_QUOTA(user.quota)
+        } catch (error) {
+          console.error(error)
         }
       })
     },

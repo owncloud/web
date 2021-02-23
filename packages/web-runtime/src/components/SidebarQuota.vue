@@ -13,13 +13,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getResourceSize } from '../helpers/resources'
+import { getResourceSize } from '../helpers/resource'
 
 export default {
   name: 'SidebarQuota',
 
   computed: {
-    ...mapGetters('Files', ['quota']),
+    ...mapGetters(['quota']),
 
     usedQuota() {
       return getResourceSize(this.quota.used)

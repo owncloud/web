@@ -1,6 +1,8 @@
 import initVueAuthenticate from '../services/auth'
 import router from '../router/'
 
+import SidebarQuota from '../components/SidebarQuota.vue'
+
 let vueAuthInstance
 
 const state = {
@@ -12,7 +14,8 @@ const state = {
   capabilities: [],
   version: {},
   groups: [],
-  userReady: false
+  userReady: false,
+  quota: null
 }
 
 const actions = {
@@ -97,6 +100,8 @@ const actions = {
         context.commit('SET_CAPABILITIES', capabilities)
 
         const userGroups = await client.users.getUserGroups(login.id)
+        const user = await client.users.getUser(login.id)
+
         context.commit('SET_USER', {
           id: login.id,
           username: login.username,
@@ -106,6 +111,14 @@ const actions = {
           isAuthenticated: true,
           groups: userGroups
         })
+
+        // Display quota in the sidebar
+        if (user.quota.definition !== 'default' && user.quota.definition !== 'none') {
+          context.commit('SET_QUOTA', user.quota)
+          context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', SidebarQuota, { root: true })
+        } else {
+          context.commit('SET_SIDEBAR_FOOTER_CONTENT_COMPONENT', null, { root: true })
+        }
 
         await context.dispatch('loadSettingsValues')
         context.commit('SET_USER_READY', true)
@@ -199,6 +212,16 @@ const mutations = {
   },
   SET_USER_READY(state, ready) {
     state.userReady = ready
+  },
+
+  SET_QUOTA(state, quota) {
+    // Turn strings into ints
+    quota.free = parseInt(quota.free)
+    quota.relative = parseInt(quota.relative)
+    quota.used = parseInt(quota.used)
+    quota.total = parseInt(quota.total)
+
+    state.quota = quota
   }
 }
 
@@ -214,7 +237,9 @@ const getters = {
   },
   capabilities: state => {
     return state.capabilities
-  }
+  },
+
+  quota: state => state.quota
 }
 
 export default {
