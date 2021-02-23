@@ -29,7 +29,12 @@
         @showDetails="setHighlightedFile"
       >
         <template v-slot:quickActions="{ resource }">
-          <quick-actions :class="resource.preview" :item="resource" :actions="app.quickActions" />
+          <quick-actions
+            :class="resource.preview"
+            class="oc-visible@s"
+            :item="resource"
+            :actions="app.quickActions"
+          />
         </template>
         <template #footer>
           <div
