@@ -71,7 +71,7 @@ export default {
   mixins: [Routes, DeleteResources],
 
   computed: {
-    ...mapGetters('Files', ['selectedFiles', 'currentFolder']),
+    ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFiles']),
 
     clearTrashbinButtonText() {
       return this.selectedFiles.length < 1 ? this.$gettext('Empty') : this.$gettext('Delete')
@@ -121,7 +121,7 @@ export default {
     restoreFiles(resources = this.selectedFiles) {
       for (const resource of resources) {
         this.$client.fileTrash
-          .restore(resource.id, resource.originalLocation)
+          .restore(resource.id, resource.path)
           .then(() => {
             const translated = this.$gettext('%{resource} was restored successfully')
             this.showMessage({
