@@ -27,7 +27,7 @@
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
         @showDetails="setHighlightedFile"
-        @fileClick="triggerDefaultResourceAction"
+        @fileClick="$_fileActions_triggerDefaultAction"
       >
         <template v-slot:quickActions="{ resource }">
           <quick-actions

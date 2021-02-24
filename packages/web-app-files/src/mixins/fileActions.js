@@ -54,8 +54,6 @@ export default {
               return false
             }
 
-            console.log(getFileExtension(resource.name) === editor.extension)
-
             return getFileExtension(resource.name) === editor.extension
           },
           canBeDefault: true

@@ -8,7 +8,7 @@ const routes = [
     components: {
       app: App
     },
-    name: 'mediaviewer/media',
+    name: 'media',
     meta: { auth: false }
   }
 ]
@@ -20,7 +20,7 @@ const appInfo = {
   extensions: [
     {
       extension: 'png',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
         'files-personal',
         'files-favorites',
@@ -31,7 +31,7 @@ const appInfo = {
     },
     {
       extension: 'jpg',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
         'files-personal',
         'files-favorites',
@@ -42,7 +42,7 @@ const appInfo = {
     },
     {
       extension: 'jpeg',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
         'files-personal',
         'files-favorites',
@@ -53,7 +53,7 @@ const appInfo = {
     },
     {
       extension: 'gif',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
         'files-personal',
         'files-favorites',
@@ -64,7 +64,7 @@ const appInfo = {
     },
     {
       extension: 'mp4',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
         'files-personal',
         'files-favorites',
@@ -75,7 +75,7 @@ const appInfo = {
     },
     {
       extension: 'webm',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
         'files-personal',
         'files-favorites',
@@ -86,7 +86,7 @@ const appInfo = {
     },
     {
       extension: 'ogg',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
         'files-personal',
         'files-favorites',

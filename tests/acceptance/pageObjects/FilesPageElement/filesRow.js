@@ -46,7 +46,7 @@ module.exports = {
   },
   elements: {
     fileActionsButtonInFileRow: {
-      selector: '//button[contains(@class, "files-list-row-show-actions")]',
+      selector: '//button[contains(@class, "oc-table-files-btn-show-details")]',
       locateStrategy: 'xpath'
     },
     quickAction: {

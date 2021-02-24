@@ -88,6 +88,7 @@ export function buildResource(resource) {
       return shareTypes || []
     })(),
     privateLink: resource.fileInfo['{http://owncloud.org/ns}privatelink'],
+    extension: getFileExtension(resource.name),
     canUpload: function() {
       return this.permissions.indexOf('C') >= 0
     },

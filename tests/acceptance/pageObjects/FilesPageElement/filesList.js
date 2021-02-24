@@ -765,9 +765,12 @@ module.exports = {
 
       return this
     },
-    clickOnFileName: async function(fileName) {
-      await this.findItemInFilesList(fileName)
-      const file = await this.getFileLinkSelectorByFileName(fileName)
+    clickOnFileName: function(fileName) {
+      console.log(fileName)
+      const file = this.getFileLinkSelectorByFileName(fileName)
+
+      console.log(file)
+
       return this.useXpath()
         .waitForElementVisible(file)
         .click(file)
@@ -812,7 +815,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
-      selector: '//div[contains(@class, "oc-resource-name")]',
+      selector: '//div[contains(@class, "oc-resource-name")]/..',
       locateStrategy: 'xpath'
     },
     fileIconInFileRow: {
