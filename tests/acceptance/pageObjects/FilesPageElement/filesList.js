@@ -22,23 +22,16 @@ module.exports = {
     /**
      * @param {string} fileName
      * @param {boolean} expected Asserts if we expect the preview image to be shown
-     * @return {Promise<*>}
      */
-    isPreviewImageDisplayed: async function(fileName, expected) {
-      await this.waitForFileVisible(fileName)
-      const element = util.format(this.elements.previewImageParentDiv.selector, fileName)
-      const imageSelector = util.format(this.elements.previewImage.selector, fileName)
-      let previewStatus = ''
-      await this.useXpath().waitForElementVisible(element)
+    checkPreviewImage: function(resource, expected) {
+      const resourceRowSelector = this.getFileRowSelectorByFileName(resource)
+      const previewSelector = resourceRowSelector + this.elements.previewImage.selector
+
       if (expected) {
-        await this.useXpath().waitForElementVisible(imageSelector)
+        return this.useXpath().waitForElementVisible(previewSelector)
       }
-      await this.getAttribute(
-        { selector: element, locateStrategy: this.elements.previewImageParentDiv.locateStrategy },
-        'data-preview-loaded',
-        result => (previewStatus = result.value === 'true')
-      )
-      return previewStatus
+
+      return this.useXpath().waitForElementNotPresent(previewSelector)
     },
     /**
      * @param {string} fileName
@@ -884,12 +877,8 @@ module.exports = {
     dialogConfirmBtn: {
       selector: '.oc-modal-body-actions-confirm'
     },
-    previewImageParentDiv: {
-      selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-resource")]',
-      locateStrategy: 'xpath'
-    },
     previewImage: {
-      selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-resource")]/img',
+      selector: '//img[contains(@class, "oc-resource-preview")]',
       locateStrategy: 'xpath'
     }
   }
