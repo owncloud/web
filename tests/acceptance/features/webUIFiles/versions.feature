@@ -9,7 +9,7 @@ Feature: Versions of a file
     Given these users have been created with default attributes:
       | username |
       | user0    |
-      | user1    |
+      | Alice    |
 
   Scenario: upload new file with same name to see if different versions are shown
     Given user "user0" has logged in using the webUI
@@ -34,10 +34,10 @@ Feature: Versions of a file
     Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
     And user "user0" has uploaded file with content "lorem" to "lorem-file.txt"
     And user "user0" has uploaded file with content "new lorem content" to "lorem-file.txt"
-    And user "user0" has shared file "lorem-file.txt" with user "user1"
-    And user "user1" has logged in using the webUI
+    And user "user0" has shared file "lorem-file.txt" with user "Alice"
+    And user "Alice" has logged in using the webUI
     When the user browses to display the "versions" details of file "lorem-file.txt"
-    Then the content of file "lorem-file.txt" for user "user1" should be "new lorem content"
+    Then the content of file "lorem-file.txt" for user "Alice" should be "new lorem content"
     And the versions list should contain 2 entries
 
   @ocis-reva-issue-110
@@ -56,13 +56,13 @@ Feature: Versions of a file
   Scenario: file versions cannot be seen in the webUI only for user whose versions is deleted
     Given user "user0" has uploaded file with content "lorem content" to "lorem-file.txt"
     And user "user0" has uploaded file with content "lorem" to "lorem-file.txt"
-    And user "user1" has uploaded file with content "lorem content" to "lorem-file.txt"
-    And user "user1" has uploaded file with content "lorem" to "lorem-file.txt"
+    And user "Alice" has uploaded file with content "lorem content" to "lorem-file.txt"
+    And user "Alice" has uploaded file with content "lorem" to "lorem-file.txt"
     And user "user0" has logged in using the webUI
     And the administrator has cleared the versions for user "user0"
     When the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 0 entries
-    When the user re-logs in as "user1" using the webUI
+    When the user re-logs in as "Alice" using the webUI
     And the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 1 entries
 
@@ -71,12 +71,12 @@ Feature: Versions of a file
   Scenario: file versions cannot be seen in the webUI for all users after deleting versions for all users
     Given user "user0" has uploaded file with content "lorem content" to "/lorem-file.txt"
     And user "user0" has uploaded file with content "lorem" to "/lorem-file.txt"
-    And user "user1" has uploaded file with content "lorem content" to "/lorem-file.txt"
-    And user "user1" has uploaded file with content "lorem" to "/lorem-file.txt"
+    And user "Alice" has uploaded file with content "lorem content" to "/lorem-file.txt"
+    And user "Alice" has uploaded file with content "lorem" to "/lorem-file.txt"
     And user "user0" has logged in using the webUI
     And the administrator has cleared the versions for all users
     When the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 0 entries
-    When the user re-logs in as "user1" using the webUI
+    When the user re-logs in as "Alice" using the webUI
     And the user browses to display the "versions" details of file "lorem-file.txt"
     Then the versions list should contain 0 entries

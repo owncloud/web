@@ -7,10 +7,10 @@ Feature: view profile
   Scenario: the user session of a blocked user is cleared properly
     Given these users have been created with default attributes:
       | username |
-      | user1    |
-    And user "user1" has logged in using the webUI
+      | Alice    |
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    And user "user1" has been blocked by admin
+    And user "Alice" has been blocked by admin
     When the user reloads the current page of the webUI
     Then the user should be redirected to the login error page
     When the user exits the login error page
@@ -20,9 +20,9 @@ Feature: view profile
   Scenario: the user session of a blocked user is cleared properly
     Given these users have been created with default attributes:
       | username |
-      | user1    |
-    And user "user1" has logged in using the webUI
+      | Alice    |
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    And user "user1" has been blocked by admin
+    And user "Alice" has been blocked by admin
     When the user reloads the current page of the webUI
     Then the user should be redirected to the user disabled page

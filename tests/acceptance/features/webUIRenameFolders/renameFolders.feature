@@ -4,8 +4,8 @@ Feature: rename folders
   So that I can organise my data structure
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
   @ocisSmokeTest
@@ -24,7 +24,7 @@ Feature: rename folders
 
 
   Scenario Outline: Rename a folder that has special characters in its name
-    Given user "user1" has created file "Sample,Folder,With,Comma"
+    Given user "Alice" has created file "Sample,Folder,With,Comma"
     And the user has reloaded the current page of the webUI
     When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI
@@ -143,7 +143,7 @@ Feature: rename folders
 
   Scenario: User tries to rename a folder that used to exist but does not anymore
     Given the user has browsed to the files page
-    And the following files have been deleted by user "user1"
+    And the following files have been deleted by user "Alice"
       | name          |
       | simple-folder |
     When the user tries to rename folder "simple-folder" to "new-simple-folder" using the webUI
@@ -151,5 +151,5 @@ Feature: rename folders
     When the user reloads the current page of the webUI
     Then folder "simple-folder" should not be listed on the webUI
     And folder "new-simple-folder" should not be listed on the webUI
-    And as "user1" folder "simple-folder" should not exist
-    And as "user1" folder "new-simple-folder" should not exist
+    And as "Alice" folder "simple-folder" should not exist
+    And as "Alice" folder "new-simple-folder" should not exist

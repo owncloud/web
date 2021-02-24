@@ -4,8 +4,8 @@ Feature: create folder
   So that I can organise my data structure
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
 
@@ -36,7 +36,7 @@ Feature: create folder
     Then folder "sub-folder" should be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder "sub-folder" should be listed on the webUI
-    And as "user1" folder "sub-folder" should exist inside folder <folder>
+    And as "Alice" folder "sub-folder" should exist inside folder <folder>
     Examples:
       | folder    |
      #| "?&%0"    |
@@ -52,7 +52,7 @@ Feature: create folder
     Then folder "sub-folder" should be listed on the webUI
     When the user reloads the current page of the webUI
     Then folder "sub-folder" should be listed on the webUI
-    And as "user1" folder "sub-folder" should exist inside folder <folder>
+    And as "Alice" folder "sub-folder" should exist inside folder <folder>
     Examples:
       | folder                  |
       | "0"                     |

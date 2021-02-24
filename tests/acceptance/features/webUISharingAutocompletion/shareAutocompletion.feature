@@ -10,14 +10,14 @@ Feature: Autocompletion of share-with names
     # Users that are in the special known users already
     And these users have been created with default attributes but not initialized:
       | username    |
-      | user1       |
-      | user3       |
+      | Alice       |
+      | Carol       |
       | usergrp     |
       | regularuser |
     # Some extra users to make the share autocompletion interesting
     And these users have been created but not initialized:
       | username  | password  | displayname     | email          |
-      | two       | %regular% | User Two        | u2@oc.com.np   |
+      | two       | %regular% | Brian Murphy        | u2@oc.com.np   |
       | u444      | %regular% | Four            | u3@oc.com.np   |
       | five      | %regular% | User Group      | five@oc.com.np |
       | usersmith | %regular% | John Finn Smith | js@oc.com.np   |
@@ -121,11 +121,11 @@ Feature: Autocompletion of share-with names
   Scenario: autocompletion of a pattern that matches regular existing users but also a user with whom the item is already shared (folder)
     Given user "regularuser" has logged in using the webUI
     And the user has browsed to the files page
-    And user "regularuser" has shared folder "simple-folder" with user "user1"
+    And user "regularuser" has shared folder "simple-folder" with user "Alice"
     And the user has opened the share dialog for folder "simple-folder"
     And the user opens the share creation dialog in the webUI
     When the user types "user" in the share-with-field
-    Then all users and groups that contain the string "user" in their name should be listed in the autocomplete list on the webUI except user "User One"
+    Then all users and groups that contain the string "user" in their name should be listed in the autocomplete list on the webUI except user "Alice Hansen"
     But only users and groups that contain the string "user" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 

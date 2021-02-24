@@ -5,10 +5,10 @@ Feature: Restore deleted files/folders
   So that I can recover accidentally deleted files/folders in ownCloud
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has created file "sample,1.txt"
-    And user "user1" has created folder "Folder,With,Comma"
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has created file "sample,1.txt"
+    And user "Alice" has created folder "Folder,With,Comma"
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
   @smokeTest @ocisSmokeTest
@@ -41,7 +41,7 @@ Feature: Restore deleted files/folders
 
   @smokeTest @issue-1502
   Scenario: Select some trashbin files and restore them in a batch
-    Given the following files have been deleted by user "user1"
+    Given the following files have been deleted by user "Alice"
       | name              |
       | data.zip          |
       | lorem.txt         |
@@ -75,7 +75,7 @@ Feature: Restore deleted files/folders
 
   @issue-1502
   Scenario: Select all except for some trashbin files and restore them in a batch
-    Given the following files have been deleted by user "user1"
+    Given the following files have been deleted by user "Alice"
       | name          |
       | data.zip      |
       | lorem.txt     |
@@ -102,7 +102,7 @@ Feature: Restore deleted files/folders
 
   @skipOnOC10 @issue-core-38039
   Scenario: Select all trashbin files and restore them in a batch
-    Given the following files have been deleted by user "user1"
+    Given the following files have been deleted by user "Alice"
       | name          |
       | data.zip      |
       | lorem.txt     |
@@ -121,11 +121,11 @@ Feature: Restore deleted files/folders
 
   @issue-1753 @issue-product-186
   Scenario: Restore a file from trashbin whose parent folder is renamed
-    Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
-    And the following files have been deleted by user "user1"
+    Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
+    And the following files have been deleted by user "Alice"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
-    And user "user1" has renamed folder "simple-folder" to "simple-folder-renamed"
+    And user "Alice" has renamed folder "simple-folder" to "simple-folder-renamed"
     When the user browses to the trashbin page
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
@@ -134,19 +134,19 @@ Feature: Restore deleted files/folders
      The destination node is not found
      """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
-    #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
-    And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin
-    And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
-    #And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should exist
-    And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
+    #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
+    And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin
+    And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
+    #And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should exist
+    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
   Scenario: Restore a file from trashbin whose parent folder is renamed
-    Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
-    And the following files have been deleted by user "user1"
+    Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
+    And the following files have been deleted by user "Alice"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
-    And user "user1" has renamed folder "simple-folder" to "simple-folder-renamed"
+    And user "Alice" has renamed folder "simple-folder" to "simple-folder-renamed"
     When the user browses to the trashbin page
     And the user restores file "simple-folder/file-to-delete-and-restore" from the trashbin using the webUI
     Then the following error message should be displayed on the webUI
@@ -155,15 +155,15 @@ Feature: Restore deleted files/folders
       Unknown error
       """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
-    #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
-    And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
-    #And as "user1" file "simple-folder-renamed/file-to-delete-and-restore" should exist
-    And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
+    #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
+    And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should not exist
+    #And as "Alice" file "simple-folder-renamed/file-to-delete-and-restore" should exist
+    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
 
   @issue-1753 @skipOnOCIS @issue-product-186
   Scenario: Restore a file from trashbin without restoring the parent folder
-    Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
-    And the following files have been deleted by user "user1"
+    Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
+    And the following files have been deleted by user "Alice"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
       | simple-folder                            |
@@ -175,15 +175,15 @@ Feature: Restore deleted files/folders
      The destination node is not found
      """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
-    #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
-    And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin
-    And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
-    #And as "user1" file "simple-folder/file-to-delete-and-restore" should exist
+    #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
+    And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should exist in the trashbin
+    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
+    #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
   Scenario: Restore a file from trashbin without restoring the parent folder
-    Given user "user1" has created file "simple-folder/file-to-delete-and-restore"
-    And the following files have been deleted by user "user1"
+    Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
+    And the following files have been deleted by user "Alice"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
       | simple-folder                            |
@@ -195,17 +195,17 @@ Feature: Restore deleted files/folders
       Unknown error
       """
     #And a success message "file-to-delete-and-restore was restored successfully" should be displayed on the webUI
-    #And as "user1" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
-    And as "user1" file "simple-folder/file-to-delete-and-restore" should not exist
-    #And as "user1" file "simple-folder/file-to-delete-and-restore" should exist
+    #And as "Alice" the file with original path "simple-folder/file-to-delete-and-restore" should not exist in the trashbin
+    And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
+    #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
 
   @issue-1723
   Scenario: Delete and restore a file that has the same name like a deleted folder
-    Given the following files have been deleted by user "user1"
+    Given the following files have been deleted by user "Alice"
       | name      |
       | lorem.txt |
-    And user "user1" has created folder "lorem.txt"
-    And the following folders have been deleted by user "user1"
+    And user "Alice" has created folder "lorem.txt"
+    And the following folders have been deleted by user "Alice"
       | name      |
       | lorem.txt |
     When the user browses to the trashbin page
@@ -219,12 +219,12 @@ Feature: Restore deleted files/folders
 
 
   Scenario: Delete and restore a folder that has the same name like a deleted file
-    Given user "user1" has created file "lorem.txt"
-    And the following files have been deleted by user "user1"
+    Given user "Alice" has created file "lorem.txt"
+    And the following files have been deleted by user "Alice"
       | name      |
       | lorem.txt |
-    And user "user1" has created folder "lorem.txt"
-    And the following folders have been deleted by user "user1"
+    And user "Alice" has created folder "lorem.txt"
+    And the following folders have been deleted by user "Alice"
       | name      |
       | lorem.txt |
     When the user browses to the trashbin page
@@ -240,17 +240,17 @@ Feature: Restore deleted files/folders
   Scenario: delete and restore a file inside a received shared folder
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And user "user3" has been created with default attributes
-    And user "user3" has created folder "folder-to-share"
-    And user "user3" has uploaded file with content "does-not-matter" to "folder-to-share/fileToShare.txt"
-    And user "user3" has shared folder "folder-to-share" with user "user1"
-    And user "user1" has accepted the share "folder-to-share" offered by user "user3"
+    And user "Carol" has been created with default attributes
+    And user "Carol" has created folder "folder-to-share"
+    And user "Carol" has uploaded file with content "does-not-matter" to "folder-to-share/fileToShare.txt"
+    And user "Carol" has shared folder "folder-to-share" with user "Alice"
+    And user "Alice" has accepted the share "folder-to-share" offered by user "Carol"
     And the user has reloaded the current page of the webUI
     When the user opens folder "Shares" using the webUI
     And the user opens folder "folder-to-share" using the webUI
     And the user deletes file "fileToShare.txt" using the webUI
     When the user browses to the trashbin page
-    Then as "user1" file "fileToShare.txt" should exist in the trashbin
+    Then as "Alice" file "fileToShare.txt" should exist in the trashbin
     When the user restores file "…/folder-to-share/fileToShare.txt" from the trashbin using the webUI
     Then the success message with header "fileToShare.txt was restored successfully" should be displayed on the webUI
-    And as "user1" file "/Shares/folder-to-share/fileToShare.txt" should exist
+    And as "Alice" file "/Shares/folder-to-share/fileToShare.txt" should exist

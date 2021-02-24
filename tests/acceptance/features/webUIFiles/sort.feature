@@ -5,10 +5,10 @@ Feature: Sort files/folders
   So that I can make the file/folder list more clear
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
-    And user "user1" has created folder "test_sort"
-    And user "user1" has created the following folders
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
+    And user "Alice" has created folder "test_sort"
+    And user "Alice" has created the following folders
       | entry_name     |
       | test_sort/a    |
       | test_sort/a 文件 |
@@ -16,7 +16,7 @@ Feature: Sort files/folders
       | test_sort/1    |
       | test_sort/2    |
       | test_sort/z    |
-    And user "user1" has created the following files
+    And user "Alice" has created the following files
       | entry_name                |
       | test_sort/a.txt           |
       | test_sort/a space.txt     |

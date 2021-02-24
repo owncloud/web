@@ -4,8 +4,8 @@ Feature: rename files
   So that I can organise my data structure
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
   @smokeTest @ocisSmokeTest
@@ -24,7 +24,7 @@ Feature: rename files
 
 
   Scenario Outline: Rename a file that has special characters in its name
-    Given user "user1" has created file "sämple,1.txt"
+    Given user "Alice" has created file "sämple,1.txt"
     And the user has reloaded the current page of the webUI
     When the user renames file <from_name> to <to_name> using the webUI
     Then file <to_name> should be listed on the webUI
@@ -178,22 +178,22 @@ Feature: rename files
 
   @ocis-reva-issue-64
   Scenario: rename a file on a public share
-    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
-    When the public uses the webUI to access the last public link created by user "user1"
+    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    When the public uses the webUI to access the last public link created by user "Alice"
     And the user renames file "lorem.txt" to "a-renamed-file.txt" using the webUI
     Then file "a-renamed-file.txt" should be listed on the webUI
     But file "lorem.txt" should not be listed on the webUI
     When the user reloads the current page of the webUI
     Then file "a-renamed-file.txt" should be listed on the webUI
     But file "lorem.txt" should not be listed on the webUI
-    And as "user1" file "simple-folder/a-renamed-file.txt" should exist
-    And as "user1" file "simple-folder/lorem.txt" should not exist
+    And as "Alice" file "simple-folder/a-renamed-file.txt" should exist
+    And as "Alice" file "simple-folder/lorem.txt" should not exist
 
   @ocis-reva-issue-64
   Scenario: Rename a file and folder in shared with me page
-    Given user "user2" has been created with default attributes
-    And user "user2" has shared file "lorem.txt" with user "user1"
-    And user "user2" has shared folder "simple-folder" with user "user1"
+    Given user "Brian" has been created with default attributes
+    And user "Brian" has shared file "lorem.txt" with user "Alice"
+    And user "Brian" has shared folder "simple-folder" with user "Alice"
     When the user browses to the shared-with-me page
     And the user renames file "lorem (2).txt" to "renamed-file.txt" using the webUI
     And the user renames folder "simple-folder (2)" to "renamed-folder" using the webUI
@@ -205,16 +205,16 @@ Feature: rename files
     When the user browses to the files page
     Then file "renamed-file.txt" should be listed on the webUI
     And folder "renamed-folder" should be listed on the webUI
-    And as "user1" file "renamed-file.txt" should exist
-    And as "user1" folder "renamed-folder" should exist
-    And as "user2" file "lorem.txt" should exist
-    And as "user2" folder "simple-folder" should exist
+    And as "Alice" file "renamed-file.txt" should exist
+    And as "Alice" folder "renamed-folder" should exist
+    And as "Brian" file "lorem.txt" should exist
+    And as "Brian" folder "simple-folder" should exist
 
   @ocis-reva-issue-64
   Scenario: Rename a file and folder in shared with others page
-    Given user "user2" has been created with default attributes
-    And user "user1" has shared file "lorem.txt" with user "user2"
-    And user "user1" has shared folder "simple-folder" with user "user2"
+    Given user "Brian" has been created with default attributes
+    And user "Alice" has shared file "lorem.txt" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     When the user browses to the shared-with-others page
     And the user renames file "lorem.txt" to "renamed-file.txt" using the webUI
     And the user renames folder "simple-folder" to "renamed-folder" using the webUI
@@ -226,15 +226,15 @@ Feature: rename files
     When the user browses to the files page
     Then file "renamed-file.txt" should be listed on the webUI
     And folder "renamed-folder" should be listed on the webUI
-    And as "user1" file "renamed-file.txt" should exist
-    And as "user1" folder "renamed-folder" should exist
-    And as "user2" file "lorem.txt" should exist
-    And as "user2" folder "simple-folder" should exist
+    And as "Alice" file "renamed-file.txt" should exist
+    And as "Alice" folder "renamed-folder" should exist
+    And as "Brian" file "lorem.txt" should exist
+    And as "Brian" folder "simple-folder" should exist
 
   @ocis-reva-issue-39
   Scenario: Rename a file and folder in favorites page
-    Given user "user1" has favorited element "lorem.txt"
-    And user "user1" has favorited element "simple-folder"
+    Given user "Alice" has favorited element "lorem.txt"
+    And user "Alice" has favorited element "simple-folder"
     When the user browses to the favorites page
     And the user renames file "lorem.txt" to "renamed-file.txt" using the webUI
     And the user renames folder "simple-folder" to "renamed-folder" using the webUI
@@ -244,7 +244,7 @@ Feature: rename files
 
   Scenario: User tries to rename a file that used to exist but does not anymore
     Given the user has browsed to the files page
-    And the following files have been deleted by user "user1"
+    And the following files have been deleted by user "Alice"
       | name      |
       | lorem.txt |
     When the user tries to rename file "lorem.txt" to "new-lorem.txt" using the webUI
@@ -252,5 +252,5 @@ Feature: rename files
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And file "new-lorem.txt" should not be listed on the webUI
-    And as "user1" file "lorem.txt" should not exist
-    And as "user1" file "new-lorem.txt" should not exist
+    And as "Alice" file "lorem.txt" should not exist
+    And as "Alice" file "new-lorem.txt" should not exist

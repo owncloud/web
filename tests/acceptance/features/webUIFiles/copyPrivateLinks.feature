@@ -5,14 +5,14 @@ Feature: copy path as a permanent link
   So that I can share it with other users
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
 
   Scenario Outline: Copy permalink to clipboard
     When the user copies the permalink of the resource <resource_name> using the webUI
-    Then as user "user1" the clipboard content should match permalink of resource <resource_name>
+    Then as user "Alice" the clipboard content should match permalink of resource <resource_name>
     Examples:
       | resource_name   |
       | "lorem.txt"     |

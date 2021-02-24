@@ -5,8 +5,8 @@ Feature: browse directly to details tab
   So that I can see the details immediately without needing to click in the UI
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
 
   @smokeTest @skip @yetToImplement
   Scenario Outline: Browse directly to the sharing details of a file

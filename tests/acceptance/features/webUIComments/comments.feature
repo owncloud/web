@@ -7,9 +7,9 @@ Feature: Add, delete and edit comments in files and folders
   Background:
     Given these users have been created with default attributes:
       | username |
-      | user1    |
-      | user2    |
-    And user "user1" has logged in using the webUI
+      | Alice    |
+      | Brian    |
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
   @skip @yetToImplement
@@ -30,8 +30,8 @@ Feature: Add, delete and edit comments in files and folders
     When the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
     And the user browses directly to display the "comments" details of file "new-lorem.txt" in folder "/"
     And the user comments with content "<comment>" using the webUI
-    And the user shares file "new-lorem.txt" with user "User Two" using the webUI
-    And the user re-logs in as "user2" using the webUI
+    And the user shares file "new-lorem.txt" with user "Brian Murphy" using the webUI
+    And the user re-logs in as "Brian" using the webUI
     And the user browses directly to display the "comments" details of file "new-lorem.txt" in folder "/"
     Then the comment "<comment>" should be listed in the comments tab in details dialog
     Examples:

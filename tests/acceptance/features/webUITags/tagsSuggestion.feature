@@ -7,18 +7,18 @@ Feature: Suggestion for matching tag names
   Background:
     Given these users have been created with default attributes:
       | username |
-      | user1    |
-    Given user "user1" has created a "normal" tag with name "spam"
+      | Alice    |
+    Given user "Alice" has created a "normal" tag with name "spam"
     And group "group1" has been created
-    And user "user1" has been added to group "group1"
-    And user "user1" has created a "normal" tag with name "ham"
-    And user "user1" has created a "normal" tag with name "notspam"
-    And user "user1" has created a "normal" tag with name "gham"
-    And user "user1" has created a "normal" tag with name "special"
-    And user "user1" has created a "normal" tag with name "specification"
+    And user "Alice" has been added to group "group1"
+    And user "Alice" has created a "normal" tag with name "ham"
+    And user "Alice" has created a "normal" tag with name "notspam"
+    And user "Alice" has created a "normal" tag with name "gham"
+    And user "Alice" has created a "normal" tag with name "special"
+    And user "Alice" has created a "normal" tag with name "specification"
     And the administrator has created a "not user-assignable" tag with name "Violates T&C"
     And the administrator has created a "not user-assignable" tag with name "sponsored"
-    And user "user1" has logged in using the webUI
+    And user "Alice" has logged in using the webUI
 
   @skip @yetToImplement
   Scenario: User should get suggestion from already existing tags
