@@ -17,6 +17,7 @@
         :items="breadcrumbs"
         home
       />
+      <h1 class="oc-invisible-sr" v-text="pageTitle" />
       <div
         v-if="showActions || selectedFiles.length > 0 || isTrashbinRoute"
         class="uk-flex uk-flex-middle oc-p-s"
@@ -174,11 +175,8 @@ export default {
     showBreadcrumb() {
       return this.isPublicFilesRoute || this.isListRoute
     },
-    pageIcon() {
-      return this.$route.meta.pageIcon
-    },
     pageTitle() {
-      const title = this.route.meta.pageTitle
+      const title = this.$route.meta.title
       return this.$gettext(title)
     },
 

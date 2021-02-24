@@ -128,7 +128,8 @@ const routes = [
         path: 'personal/:item?',
         component: Personal,
         meta: {
-          hasBulkActions: true
+          hasBulkActions: true,
+          title: $gettext('Personal files')
         }
       },
       {
@@ -137,7 +138,8 @@ const routes = [
         component: Favorites,
         meta: {
           hideFilelistActions: true,
-          hasBulkActions: true
+          hasBulkActions: true,
+          title: $gettext('Favorite files')
         }
       },
       {
@@ -146,7 +148,8 @@ const routes = [
         name: 'shared-with-me',
         meta: {
           hideFilelistActions: true,
-          hasBulkActions: true
+          hasBulkActions: true,
+          title: $gettext('Files shared with me')
         }
       },
       {
@@ -155,7 +158,8 @@ const routes = [
         name: 'shared-with-others',
         meta: {
           hideFilelistActions: true,
-          hasBulkActions: true
+          hasBulkActions: true,
+          title: $gettext('Files shared with others')
         }
       },
       {
@@ -165,7 +169,8 @@ const routes = [
         meta: {
           hideFilelistActions: true,
           // FIXME: should have a generic bulk actions way as it currently handles this separately
-          hasBulkActions: false
+          hasBulkActions: false,
+          title: $gettext('Deleted files')
         }
       }
     ]
