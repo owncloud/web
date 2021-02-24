@@ -390,24 +390,8 @@ module.exports = {
      * @returns {string}
      */
     getFileRowSelectorByFileName: function(fileName, elementType = 'file') {
-      if (elementType === 'file') {
-        const parts = path.parse(fileName)
-        // If our file has a extension that starts with space (for eg. "newfile. txt")
-        // Then the whole name comes in the filename part (i.e. The file has no extension in such case)
-        // Since the extension has spaces immediately after '.' we check for spaces after removing the '.' using slice().
-        if (parts.ext && !parts.ext.slice(1).startsWith(' ')) {
-          // keep path of nested folders intact, just remove the extension at the end
-          const filePathWithoutExt = parts.dir ? join(parts.dir, parts.name) : parts.name
-          const element = this.elements.fileRowByNameAndExtension
-          return util.format(
-            element.selector,
-            xpathHelper.buildXpathLiteral(filePathWithoutExt),
-            parts.ext
-          )
-        }
-      }
-      const element = this.elements.fileRowByName
-      return util.format(element.selector, xpathHelper.buildXpathLiteral(fileName))
+      const element = this.elements.fileRowByResourcePath
+      return util.format(element.selector, xpathHelper.buildXpathLiteral('/' + fileName))
     },
     /**
      *
@@ -818,14 +802,14 @@ module.exports = {
     fileRow: {
       selector: '.files-table .oc-tbody-tr'
     },
-    fileRowByName: {
+    fileRowByResourcePath: {
       selector:
-        '//span[contains(@class, "oc-resource-name") and text()=%s and not(../span[contains(@class, "oc-resource-extension")])]/ancestor::div[@data-is-visible="true"]',
+        '//div[contains(@class, "oc-resource-name") and @resource-path=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]',
       locateStrategy: 'xpath'
     },
-    fileRowByNameAndExtension: {
+    fileRowDisabled: {
       selector:
-        '//div[contains(@class, "oc-resource-name")][span/text()=%s and span/text()="%s"]/ancestor::div[@data-is-visible="true"]',
+        '//span[contains(@class, "oc-file-name") and text()="%s" and not(../span[contains(@class, "oc-resource-extension")])]/ancestor::div[@class="files-list-row-disabled"]',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
@@ -897,11 +881,6 @@ module.exports = {
     },
     dialogConfirmBtn: {
       selector: '.oc-modal-body-actions-confirm'
-    },
-    fileRowDisabled: {
-      selector:
-        '//span[contains(@class, "oc-file-name") and text()="%s" and not(../span[contains(@class, "oc-resource-extension")])]/ancestor::div[@class="files-list-row-disabled" and @data-is-visible="true"]',
-      locateStrategy: 'xpath'
     },
     previewImageParentDiv: {
       selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-resource")]',

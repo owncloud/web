@@ -41,7 +41,7 @@ Then('the files table should not be empty', () => {
   return (
     client.page.FilesPageElement.filesList()
       // even when the loading indicator is gone the table might not be rendered yet
-      .waitForElementVisible('@fileRows')
+      .waitForElementVisible('@fileRow')
   )
 })
 

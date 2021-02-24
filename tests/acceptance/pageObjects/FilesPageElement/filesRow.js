@@ -21,8 +21,8 @@ module.exports = {
     /**
      * opens file-actions menu for given resource
      *
-     * @param {string} resource name
-     * @param {string} resource type (file|folder)
+     * @param {string} resource The resource name
+     * @param {string} elementType The resource type (file|folder)
      *
      * @returns {*}
      */
