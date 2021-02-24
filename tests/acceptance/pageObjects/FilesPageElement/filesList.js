@@ -2,7 +2,6 @@ const util = require('util')
 const path = require('path')
 const assert = require('assert')
 const xpathHelper = require('../../helpers/xpath')
-const { join } = require('../../helpers/path')
 const { client } = require('nightwatch-api')
 const filesRow = client.page.FilesPageElement.filesRow()
 
