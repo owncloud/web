@@ -25,6 +25,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         @showDetails="setHighlightedFile"
+        @fileClick="$_fileActions_triggerDefaultAction"
       >
         <template #footer>
           <div
@@ -54,6 +55,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 import { getResourceSize } from '../helpers/resources'
+import FileActions from '../mixins/fileActions'
 
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -65,6 +67,8 @@ export default {
     NoContentMessage,
     NotFoundMessage
   },
+
+  mixins: [FileActions],
 
   data: () => ({
     loading: true

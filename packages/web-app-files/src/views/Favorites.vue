@@ -18,6 +18,7 @@
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
         @showDetails="setHighlightedFile"
+        @fileClick="$_fileActions_triggerDefaultAction"
       >
         <template v-slot:quickActions="props">
           <quick-actions class="oc-visible@s" :item="props.resource" :actions="app.quickActions" />
@@ -50,6 +51,7 @@
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import { buildResource, getResourceSize } from '../helpers/resources'
+import FileActions from '../mixins/fileActions'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
@@ -57,6 +59,8 @@ import NoContentMessage from '../components/NoContentMessage.vue'
 
 export default {
   components: { QuickActions, ListLoader, NoContentMessage },
+
+  mixins: [FileActions],
 
   data: () => ({
     loading: true

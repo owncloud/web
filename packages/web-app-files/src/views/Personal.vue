@@ -27,6 +27,7 @@
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
         @showDetails="setHighlightedFile"
+        @fileClick="triggerDefaultResourceAction"
       >
         <template v-slot:quickActions="{ resource }">
           <quick-actions
@@ -63,6 +64,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
+import FileActions from '../mixins/fileActions'
 import { buildResource, getResourceSize } from '../helpers/resources'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
@@ -72,6 +74,8 @@ import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage },
+
+  mixins: [FileActions],
 
   data: () => ({
     loading: true
@@ -152,7 +156,7 @@ export default {
         resources = resources.map(buildResource)
         this.LOAD_FILES({ currentFolder: resources[0], files: resources.slice(1) })
         this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
-        await this.loadPreviews({
+        this.loadPreviews({
           resources,
           isPublic: this.publicPage(),
           mediaSource: this.mediaSource

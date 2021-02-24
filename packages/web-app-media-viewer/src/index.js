@@ -22,77 +22,77 @@ const appInfo = {
       extension: 'png',
       routeName: 'mediaviewer/media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'jpg',
       routeName: 'mediaviewer/media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'jpeg',
       routeName: 'mediaviewer/media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'gif',
       routeName: 'mediaviewer/media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'mp4',
       routeName: 'mediaviewer/media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'webm',
       routeName: 'mediaviewer/media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'ogg',
       routeName: 'mediaviewer/media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     }
   ]

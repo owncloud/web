@@ -1,6 +1,7 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 import { checkRoute } from '../helpers/route'
+import { getFileExtension } from '../helpers/resources'
 import Copy from './actions/copy'
 import Delete from './actions/delete'
 import Download from './actions/download'
@@ -53,7 +54,9 @@ export default {
               return false
             }
 
-            return resource.extension === editor.extension
+            console.log(getFileExtension(resource.name) === editor.extension)
+
+            return getFileExtension(resource.name) === editor.extension
           },
           canBeDefault: true
         }
@@ -103,6 +106,20 @@ export default {
         name: routeName,
         params
       })
+    },
+
+    $_fileActions_triggerDefaultAction(resource) {
+      let actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
+
+      actions = actions.filter(action => {
+        return (
+          action.isEnabled({
+            resource: resource,
+            parent: this.currentFolder
+          }) && action.canBeDefault
+        )
+      })
+      actions[0].handler(resource, actions[0].handlerData)
     }
   }
 }
