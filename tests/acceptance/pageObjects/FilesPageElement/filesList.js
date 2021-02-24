@@ -799,7 +799,7 @@ module.exports = {
     },
     fileRowByResourcePath: {
       selector:
-        '//div[contains(@class, "oc-resource-name") and @resource-path=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]',
+        '//div[contains(@class, "oc-resource-name") and @resource-name=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]',
       locateStrategy: 'xpath'
     },
     fileRowDisabled: {
