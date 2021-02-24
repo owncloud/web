@@ -1,9 +1,11 @@
 <template>
-  <div class="oc-login" uk-height-viewport>
+  <div
+    class="oc-login"
+    uk-height-viewport
+    :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
+  >
     <div class="oc-login-card uk-position-center">
-      <h1 v-translate class="oc-login-logo">
-        ownCloud
-      </h1>
+      <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
       <div v-if="loading" class="oc-login-card-body">
         <h3 class="oc-login-card-title" :aria-hidden="true">{{ $_resolvingPrivateLinkTitle }}</h3>
         <oc-spinner :aria-label="$_resolvingPrivateLinkTitle" />
@@ -19,6 +21,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
@@ -27,8 +31,18 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['configuration']),
+
     $_resolvingPrivateLinkTitle() {
       return this.$gettext('Resolving private link…')
+    },
+
+    backgroundImg() {
+      return this.configuration.theme.loginPage.backgroundImg
+    },
+
+    logoImg() {
+      return this.configuration.theme.logo.login
     }
   },
   mounted() {

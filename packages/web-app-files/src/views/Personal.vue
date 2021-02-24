@@ -172,10 +172,26 @@ export default {
       }
 
       this.loading = false
+      this.scrollToResource()
     },
 
     getResourceSize(size) {
       return getResourceSize(size)
+    },
+
+    scrollToResource() {
+      let resource = this.$route.query.scrollTo
+
+      if (resource && this.activeFiles.length > 0) {
+        this.$nextTick(() => {
+          resource = this.activeFiles.find(r => r.name === resource)
+
+          if (resource) {
+            this.setHighlightedFile(resource)
+            this.$scrollTo(`.oc-tbody-tr-${resource.id}`)
+          }
+        })
+      }
     }
   }
 }
