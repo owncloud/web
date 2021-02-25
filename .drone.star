@@ -416,7 +416,7 @@ def acceptance(ctx):
 		'databases': ['mysql:5.5'],
 		'extraEnvironment': {},
 		'cronOnly': False,
-		'filterTags': 'not @skip and not @skipOnOC10 and not @openIdLogin',
+		'filterTags': 'not @skip and not @skipOnOC10 and not @openIdLogin and @focus',
 		'logLevel': '2',
 		'federatedServerNeeded': False,
 		'federatedServerVersion': '',

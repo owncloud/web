@@ -16,7 +16,7 @@ Feature: view profile
     When the user exits the login error page
     Then the user should be redirected to the login page
 
-  @oauthLogin @notToImplementOnOCIS
+  @oauthLogin @notToImplementOnOCIS @focus
   Scenario: the user session of a blocked user is cleared properly
     Given these users have been created with default attributes:
       | username |
