@@ -12,6 +12,9 @@ Feature: restrict Sharing
       | Alice    |
       | Brian    |
       | Carol    |
+    And these users have been created but not initialized:
+      | username  | password  | displayname     | email             |
+      | Alison    | %regular% | Alison Cooper   | alson@oc.com.np   |
     And these groups have been created:
       | groupname |
       | grp1      |
@@ -19,6 +22,7 @@ Feature: restrict Sharing
     And user "Alice" has been added to group "grp1"
     And user "Brian" has been added to group "grp1"
     And user "Carol" has been added to group "grp2"
+    And user "Alison" has been added to group "grp2"
     And user "Brian" has logged in using the webUI
 
   @smokeTest
@@ -26,8 +30,8 @@ Feature: restrict Sharing
     Given the setting "shareapi_only_share_with_group_members" of app "core" has been set to "yes"
     When the user opens the share dialog for folder "simple-folder" using the webUI
     And the user opens the share creation dialog in the webUI
-    And the user types "User" in the share-with-field
-    Then "user" "Carol King" should not be listed in the autocomplete list on the webUI
+    And the user types "Ali" in the share-with-field
+    Then "user" "Alison Cooper" should not be listed in the autocomplete list on the webUI
     But "user" "Alice Hansen" should be listed in the autocomplete list on the webUI
 
   @smokeTest

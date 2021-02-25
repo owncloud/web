@@ -250,4 +250,4 @@ Feature: Resharing shared files with different permissions
     And user "Carol" has shared folder "simple-folder (2)" with group "Davidgrp"
     When user "David" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder (2)" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" reshared through "Carol King, Brian Murphy" in the collaborators list on the webUI
+    Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy, Carol King" in the collaborators list on the webUI
