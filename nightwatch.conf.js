@@ -122,7 +122,7 @@ const config = {
         idleTimeout: 180
       },
       screenshots: {
-        enabled: SCREENSHOTS,
+        enabled: true,
         path: 'tests/reports/screenshots',
         on_failure: true
       }

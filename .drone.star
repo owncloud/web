@@ -11,7 +11,7 @@ config = {
 		'develop*'
 	],
 
-	'yarnlint': True,
+	'yarnlint': False,
 
 	'acceptance': {
 		'webUI1': {
@@ -21,12 +21,12 @@ config = {
 			'extraEnvironment': {
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md',
 				'WEB_UI_CONFIG': '/var/www/owncloud/web/dist/config.json',
-				'SCREENSHOTS': True,
 			},
 			'visualTesting': False,
+			'screenShots': True
 		}
 	},
-	'build': True
+	'build': True,
 }
 
 def main(ctx):
@@ -45,14 +45,14 @@ def main(ctx):
 	return before + stages + after
 
 def beforePipelines(ctx):
-	return yarnlint() + changelog(ctx) + website(ctx)
+	return []
 
 def stagePipelines(ctx):
 	acceptancePipelines = acceptance(ctx)
 	if acceptancePipelines == False:
 		return unitTests()
 
-	return unitTests() + acceptancePipelines
+	return acceptancePipelines
 
 def afterPipelines(ctx):
 	return build(ctx) + notify()
