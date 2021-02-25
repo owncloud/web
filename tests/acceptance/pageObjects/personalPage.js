@@ -20,8 +20,7 @@ module.exports = {
         join(this.api.launchUrl, '#/files/list/personal', folder),
         this.elements.newFileButtonLoaded
       )
-      // wait for thumbnails
-      await this.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
+      await this.page.FilesPageElement.filesList().waitForLoadingFinished()
     },
     /**
      *

@@ -1,5 +1,4 @@
 const util = require('util')
-const path = require('path')
 const assert = require('assert')
 const xpathHelper = require('../../helpers/xpath')
 const { client } = require('nightwatch-api')
@@ -161,11 +160,12 @@ module.exports = {
         .moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
         .click(this.getFileLinkSelectorByFileName(folder))
         .useCss()
-        .waitForElementNotPresent('@filesListProgressBar')
+      // TODO: can we remove this call?
+      // .waitForElementNotPresent('@filesListProgressBar')
 
-      // wait for previews to finish loading
+      // wait until the files table is loaded
       await this.waitForOutstandingAjaxCalls()
-      await this.waitForAllThumbnailsLoaded()
+      await this.waitForLoadingFinished()
 
       return this
     },
@@ -182,7 +182,7 @@ module.exports = {
 
       // wait for previews to finish loading
       await this.waitForOutstandingAjaxCalls()
-      await this.waitForAllThumbnailsLoaded()
+      await this.waitForTableLoaded()
 
       return this
     },
@@ -274,54 +274,16 @@ module.exports = {
      * @param timeout
      */
     waitForFileVisible: async function(fileName, elementType = 'file', timeout = null) {
-      const linkSelector = this.getFileLinkSelectorByFileName(fileName, elementType)
-
       await client.page.FilesPageElement.appSideBar().closeSidebar(500)
       await this.filesListScrollToTop()
       // Find the item in files list if it's not in the view
       await this.findItemInFilesList(fileName)
-
-      // getAttribute does not have a timeout parameter, so we need to set the global timeout
-      const oldWaitForConditionTimeout = client.globals.waitForConditionTimeout
-      if (timeout !== null) {
-        client.globals.waitForConditionTimeout = parseInt(timeout, 10)
-      }
-      await this.useXpath()
-        .getAttribute(linkSelector, 'filename', function(result) {
-          client.globals.waitForConditionTimeout = oldWaitForConditionTimeout
-          if (result.value.error) {
-            assert.fail(result.value.error)
-          }
-          // using basename because some file lists display the full path while the
-          // file name attribute only contains the basename
-          assert.strictEqual(
-            result.value,
-            path.basename(fileName),
-            'displayed file name not as expected'
-          )
-        })
-        .useCss()
-      // Wait for preview to be loaded
-      return this.waitForThumbnailLoaded(fileName, elementType)
     },
-    /**
-     * Wait for all visible thumbnails to finish loading
-     */
-    waitForAllThumbnailsLoaded: function() {
-      return this.waitForElementNotPresent('@allFilePreviewsLoading')
+    waitForTableLoaded: async function() {
+      await this.waitForElementVisible('@filesTable')
     },
-    waitForThumbnailLoaded: async function(resourceName, elementType) {
-      if (elementType !== 'file') {
-        // no thumbnails for folders
-        return this
-      }
-      const fileRowPreviewLoadedSelector =
-        this.getFileRowSelectorByFileName(resourceName, elementType) +
-        this.elements.filePreviewLoadedInFileRow.selector
-      await this.useXpath()
-        .waitForElementVisible(fileRowPreviewLoadedSelector)
-        .useCss()
-      return this
+    waitForLoadingFinished: async function() {
+      await this.waitForElementVisible('@anyAfterLoading')
     },
     getResourceThumbnail: async function(resourceName, elementType) {
       const fileRowPreviewSelector =
@@ -383,7 +345,7 @@ module.exports = {
      */
     getFileRowSelectorByFileName: function(fileName, elementType = 'file') {
       const element = this.elements.fileRowByResourcePath
-      return util.format(element.selector, xpathHelper.buildXpathLiteral('/' + fileName))
+      return util.format(element.selector, xpathHelper.buildXpathLiteral(fileName))
     },
     /**
      *
@@ -391,48 +353,42 @@ module.exports = {
      * @param {string} elementType
      * @returns {string}
      */
-    getFileLinkSelectorByFileName: function(fileName, elementType) {
-      return (
-        this.getFileRowSelectorByFileName(fileName, elementType) +
-        this.elements.fileLinkInFileRow.selector
-      )
+    getFileLinkSelectorByFileName: function(fileName, elementType = 'file') {
+      const element = this.elements.fileLinkInFileRow
+      return util.format(element.selector, xpathHelper.buildXpathLiteral(fileName))
     },
     /**
      * checks whether the element is listed or not on the filesList
      *
-     * @param {string} element Name of the file/folder/resource
-     * @param {string} elementType
-     * @param timeout
+     * @param {string} name Name of the file/folder/resource
      * @returns {boolean}
      */
-    isElementListed: async function(element, elementType = 'file', timeout = null) {
-      let isListed = false
-      await this.waitForFileVisible(element, elementType, timeout)
-        .then(function() {
-          isListed = true
-        })
-        .catch(function() {
-          isListed = false
-        })
-      return isListed
+    isElementListed: async function(name) {
+      const selector = util.format(this.elements.fileRowByResourcePath.selector, name)
+      let isVisible = false
+
+      await this.api.element('xpath', selector, function(result) {
+        if (result.value && result.value.ELEMENT) {
+          isVisible = true
+        } else {
+          isVisible = false
+        }
+      })
+
+      return isVisible
     },
     /**
      * @returns {Array} array of files/folders element
      */
     allFileRows: async function() {
       let returnResult = null
-      await this.waitForElementVisible('@filesTable')
+      await this.waitForTableLoaded()
       await this.api.elements('css selector', this.elements.fileRow, function(result) {
         returnResult = result
       })
       return returnResult
     },
-    /**
-     * Returns whether the empty folder message is visible
-     *
-     * @return {Boolean} true if the message is visible, false otherwise
-     */
-    isNoContentMessageVisible: async function() {
+    waitForNoContentMessageVisible: async function() {
       let visible = false
       let elementId = null
       await this.waitForElementVisible('@filesListNoContentMessage')
@@ -449,15 +405,10 @@ module.exports = {
           }
         })
       }
-      return visible
+      assert.ok(visible, 'Message about empty file list must be visible')
     },
-    isNotFoundMessageVisible: async function() {
-      await this.waitForElementNotPresent('@filesListProgressBar')
-      let isVisible = false
-      await this.api.element('@filesListNotFoundMessage', result => {
-        isVisible = Object.keys(result.value).length > 0
-      })
-      return isVisible
+    waitForNotFoundMessageVisible: async function() {
+      await this.waitForElementVisible('@filesListNotFoundMessage')
     },
     countFilesAndFolders: async function() {
       let filesCount = 0
@@ -497,7 +448,7 @@ module.exports = {
           let scrollDistance = scrollContainer.scrollTop
 
           function scrollUntilElementVisible() {
-            const item = document.querySelector(`[filename="${itemName}"]`)
+            const item = document.querySelector(`[resource-name="${itemName}"]`)
 
             if (item) {
               const position = item.getBoundingClientRect()
@@ -537,10 +488,7 @@ module.exports = {
         ]
       )
 
-      // wait for previews to be loaded after scrolling to resources that were
-      // not rendered before
       await this.waitForOutstandingAjaxCalls()
-
       return this
     },
 
@@ -548,7 +496,7 @@ module.exports = {
      * Scroll the files list to the beginning
      */
     filesListScrollToTop: async function() {
-      await this.waitForElementVisible('@filesTable')
+      await this.waitForTableLoaded()
       await this.api.executeAsync(
         function(scrollerContainerSelector, done) {
           const filesListScroll = document.querySelector(scrollerContainerSelector)
@@ -730,7 +678,6 @@ module.exports = {
         .waitForElementVisible(disabledRow)
 
       await this.waitForOutstandingAjaxCalls()
-      await this.waitForAllThumbnailsLoaded()
 
       return this
     },
@@ -781,6 +728,7 @@ module.exports = {
       selector: '//*[contains(@class, "oc-loader")]',
       locateStrategy: 'xpath'
     },
+    // TODO: can we get rid of this? we're doing a positive check now for one of .files-table, .files-empty or .files-not-found.
     filesListProgressBar: {
       selector: '#files-list-progress'
     },
@@ -789,6 +737,11 @@ module.exports = {
     },
     filesListNotFoundMessage: {
       selector: '.files-not-found'
+    },
+    anyAfterLoading: {
+      selector:
+        '//*[self::table[contains(@class, "files-table")] or self::div[contains(@class, "files-empty")] or self::div[contains(@class, "files-not-found")]]',
+      locateStrategy: 'xpath'
     },
     shareButtonInFileRow: {
       selector: '//button[@aria-label="People"]',
@@ -804,28 +757,25 @@ module.exports = {
     },
     fileRowDisabled: {
       selector:
-        '//span[contains(@class, "oc-file-name") and text()="%s" and not(../span[contains(@class, "oc-resource-extension")])]/ancestor::div[@class="files-list-row-disabled"]',
+        '//div[contains(@class, "oc-resource-name") and @resource-name=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
-      selector: '//div[contains(@class, "oc-resource-name")]/..',
+      selector: '//div[contains(@class, "oc-resource-name") and @resource-name=%s]/parent::*',
       locateStrategy: 'xpath'
     },
+    /**
+     * This element is concatenated as child of @see fileRowByResourcePath
+     */
     fileIconInFileRow: {
-      selector: '//div[contains(@class, "oc-resource")]//*[local-name() = "svg"]',
+      selector: '//span[contains(@class, "oc-icon-file-type")]//*[local-name() = "svg"]',
       locateStrategy: 'xpath'
     },
+    /**
+     * This element is concatenated as child of @see fileRowByResourcePath
+     */
     filePreviewInFileRow: {
-      selector: '//div[contains(@class, "oc-resource")]//img',
-      locateStrategy: 'xpath'
-    },
-    allFilePreviewsLoading: {
-      selector: '//div[contains(@class, "oc-resource") and @data-preview-loaded="false"]',
-      locateStrategy: 'xpath'
-    },
-    filePreviewLoadedInFileRow: {
-      selector:
-        '//div[contains(@class, "oc-resource") and (@data-preview-loaded="true" or @data-preview-loaded="disabled")]',
+      selector: '//img[contains(@class, "oc-resource-preview")]',
       locateStrategy: 'xpath'
     },
     collaboratorsInFileRow: {

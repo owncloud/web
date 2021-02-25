@@ -84,7 +84,6 @@ Given('the user has browsed to the files page', async function() {
 When('the user opens folder {string} directly on the webUI', async function(folder) {
   folder = encodeURIComponent(path.normalize(folder))
   await client.page.personalPage().navigateAndWaitTillLoaded(folder)
-  await client.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
 })
 
 Given('user {string} has uploaded file with content {string} to {string}', async function(
@@ -366,12 +365,11 @@ async function assertNoResourcesListed() {
 
   // only check empty message in regular file lists, not files drop page
   if (currentUrl.indexOf('/files-drop/') === -1) {
-    const noContentMessageVisible = await client.page.FilesPageElement.filesList().isNoContentMessageVisible()
-    assert.ok(noContentMessageVisible, 'Empty message must be visible')
+    await client.page.FilesPageElement.filesList().waitForNoContentMessageVisible()
+    return
   }
 
   const allRowsResult = await client.page.FilesPageElement.filesList().allFileRows()
-
   return assert.ok(
     allRowsResult.value.length === 0,
     `No resources are listed, ${allRowsResult.length} found`
@@ -379,8 +377,7 @@ async function assertNoResourcesListed() {
 }
 
 Then('there should be a not found error page displayed on the webUI', async function() {
-  const notFoundMessageVisible = await client.page.FilesPageElement.filesList().isNotFoundMessageVisible()
-  assert.ok(notFoundMessageVisible, 'NotFound message must be visible')
+  return client.page.FilesPageElement.filesList().waitForNotFoundMessageVisible()
 })
 
 Then('file {string} should be listed on the webUI', function(folder) {

@@ -3,7 +3,7 @@ const { join } = require('../helpers/path')
 
 module.exports = {
   url: function() {
-    return join(this.api.launchUrl, '/#/files/trash-bin/')
+    return join(this.api.launchUrl, '/#/files/list/trash-bin/')
   },
   commands: {
     /**

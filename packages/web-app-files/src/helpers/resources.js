@@ -6,7 +6,7 @@ import moment from 'moment'
 import fileIconMappings from '../fileTypeIconMappings.json'
 import { getIndicators } from './statusIndicators'
 import { checkPermission, bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
-import { shareTypes } from '../helpers/shareTypes'
+import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 import { $gettext } from '../gettext'
 import { getAvatarSrc } from './user'
 
@@ -154,10 +154,9 @@ export async function aggregateResourceShares(
 
   for (const share of shares) {
     const prev = shares[index]
-    index++
 
     if (prev && share.file_target === prev.file_target) {
-      if (share.share_type < shareTypes.link) {
+      if (userShareTypes.includes(share.share_type)) {
         prev.sharedWith.push({
           username: share.share_with,
           displayName: share.share_with_displayname,
@@ -175,7 +174,7 @@ export async function aggregateResourceShares(
       continue
     }
 
-    if (share.share_type < shareTypes.link) {
+    if (userShareTypes.includes(share.share_type)) {
       share.sharedWith = [
         {
           username: share.share_with,
@@ -194,6 +193,7 @@ export async function aggregateResourceShares(
       ]
     }
 
+    index++
     resources.push(share)
   }
 

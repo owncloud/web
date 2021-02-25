@@ -31,7 +31,7 @@ module.exports = {
       })
 
     await client.page.personalPage().waitForElementPresent('@newFileButtonLoaded')
-    await client.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
+    await client.page.FilesPageElement.filesList().waitForLoadingFinished()
   },
 
   /**
