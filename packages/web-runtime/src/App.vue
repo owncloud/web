@@ -58,7 +58,7 @@
         leave-active-class="uk-animation-fade uk-animation-reverse uk-animation-fast"
         name="custom-classes-transition"
       >
-      <div className="focusInput" @mouseover="setFocus" ref="modalDialog">
+      <div @mouseover="setFocus" ref="modalDialog">
         <oc-modal        
           v-if="modal.displayed"
           :variation="modal.variation"
