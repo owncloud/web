@@ -58,7 +58,8 @@
         leave-active-class="uk-animation-fade uk-animation-reverse uk-animation-fast"
         name="custom-classes-transition"
       >
-        <oc-modal
+      <div className="focusInput" @mouseover="setFocus" ref="modalDialog">
+        <oc-modal        
           v-if="modal.displayed"
           :variation="modal.variation"
           :icon="modal.icon"
@@ -75,8 +76,9 @@
           :button-confirm-disabled="modal.confirmDisabled || !!modal.inputError"
           @cancel="modal.onCancel"
           @confirm="modal.onConfirm"
-          @input="modal.onInput"
+          @input="modal.onInput"       
         />
+      </div>
       </transition>
     </div>
   </div>
@@ -281,7 +283,11 @@ export default {
 
   methods: {
     ...mapActions(['initAuth', 'fetchNotifications', 'deleteMessage']),
-
+ 
+    setFocus(){
+      this.$refs.modalDialog.getElementsByClassName("oc-text-input")[0].focus();     
+    },
+    
     hideAppNavigation() {
       this.appNavigationVisible = false
     },
