@@ -31,25 +31,25 @@ module.exports = {
       password: passwords.regular,
       email: 'user0@example.org'
     },
-    user1: {
-      displayname: 'User One',
+    Alice: {
+      displayname: 'Alice Hansen',
       password: passwords.alt1,
-      email: 'user1@example.org'
+      email: 'alice@example.org'
     },
-    user2: {
-      displayname: 'User Two',
+    Brian: {
+      displayname: 'Brian Murphy',
       password: passwords.alt2,
-      email: 'user2@example.org'
+      email: 'brian@example.org'
     },
-    user3: {
-      displayname: 'User Three',
+    Carol: {
+      displayname: 'Carol King',
       password: passwords.alt3,
-      email: 'user3@example.org'
+      email: 'carol@example.org'
     },
-    user4: {
-      displayname: 'User Four',
+    David: {
+      displayname: 'David Lopez',
       password: passwords.alt4,
-      email: 'user4@example.org'
+      email: 'david@example.org'
     },
     user11: {
       displayname: 'User Eleven',

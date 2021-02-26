@@ -4,8 +4,8 @@ Feature: Renaming files inside a folder with problematic name
   So that I can recognize my file easily
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
 
 
   Scenario Outline: Rename the existing file inside a problematic folder

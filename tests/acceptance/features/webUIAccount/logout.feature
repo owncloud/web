@@ -6,8 +6,8 @@ Feature: Logout users
 
 
   Scenario:logging out
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
     When the user browses to the account page
     And the user logs out of the webUI
     Then the authentication page should be visible

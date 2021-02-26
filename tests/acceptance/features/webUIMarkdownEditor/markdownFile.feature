@@ -4,16 +4,16 @@ Feature: create markdown files
   So that I can organize my text data in formatted form
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has uploaded file with content "simple markdown file" to "simple.md"
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has uploaded file with content "simple markdown file" to "simple.md"
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
   Scenario: create a new markdown file in the root directory
     When the user creates a markdown file with the name "simple_new.md" using the webUI
     Then the file "simple_new.md" should be displayed in the markdown editor webUI
     When the user closes the markdown editor using the webUI
-    Then as "user1" file "simple_new.md" should exist
+    Then as "Alice" file "simple_new.md" should exist
     And file "simple_new.md" should be listed on the webUI
 
   Scenario: update a markdown file with new content
@@ -21,20 +21,20 @@ Feature: create markdown files
     When the user inputs the content "updated content" in the markdown editor webUI
     And the user saves the file in the markdown editor webUI
     And the user closes the markdown editor using the webUI
-    Then as "user1" the file "simple.md" should have the content "updated content"
+    Then as "Alice" the file "simple.md" should have the content "updated content"
 
   Scenario: append new content in a markdown file
     Given the user has opened file "simple.md" in the markdown editor webUI
     When the user appends the content " new content added" in the markdown editor webUI
     And the user saves the file in the markdown editor webUI
     And the user closes the markdown editor using the webUI
-    Then as "user1" the file "simple.md" should have the content "simple markdown file new content added"
+    Then as "Alice" the file "simple.md" should have the content "simple markdown file new content added"
 
   Scenario: close the markdown editor without saving the updated content
     Given the user has opened file "simple.md" in the markdown editor webUI
     When the user inputs the content "updated content" in the markdown editor webUI
     And the user closes the markdown editor using the webUI
-    And as "user1" the file "simple.md" should have the content "simple markdown file"
+    And as "Alice" the file "simple.md" should have the content "simple markdown file"
 
   Scenario: preview content of the file
     When the user opens file "simple.md" in the markdown editor webUI

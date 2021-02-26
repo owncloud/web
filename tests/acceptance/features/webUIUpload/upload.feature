@@ -5,15 +5,15 @@ Feature: File Upload
   So that I can store files in ownCloud
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
 
   @smokeTest
   Scenario: simple upload of a file that does not exist before
     When the user uploads file "new-lorem.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "new-lorem.txt" should be listed on the webUI
-    And as "user1" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
+    And as "Alice" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
   @smokeTest
   Scenario: simple upload of a folder that does not exist before
@@ -22,8 +22,8 @@ Feature: File Upload
       | new-lorem.txt |
     Then no message should be displayed on the webUI
     And the last uploaded folder should be listed on the webUI
-    And as "user1" the last uploaded folder should exist
-    And as "user1" the last uploaded folder should contain the following files inside the sub-folders:
+    And as "Alice" the last uploaded folder should exist
+    And as "Alice" the last uploaded folder should contain the following files inside the sub-folders:
       | new-lorem.txt |
       | lorem.txt     |
 
@@ -37,9 +37,9 @@ Feature: File Upload
       | entry_name |
       | parent.txt |
       | CHILD      |
-    And as "user1" folder "PARENT" should exist
-    And as "user1" file "PARENT/parent.txt" should exist
-    And as "user1" folder "PARENT/CHILD" should exist
+    And as "Alice" folder "PARENT" should exist
+    And as "Alice" file "PARENT/parent.txt" should exist
+    And as "Alice" folder "PARENT/CHILD" should exist
 
   @smokeTest
   Scenario: Upload of a folder inside a subdirectory
@@ -52,9 +52,9 @@ Feature: File Upload
       | entry_name |
       | parent.txt |
       | CHILD      |
-    And as "user1" folder "simple-empty-folder/PARENT" should exist
-    And as "user1" file "simple-empty-folder/PARENT/parent.txt" should exist
-    And as "user1" folder "simple-empty-folder/PARENT/CHILD" should exist
+    And as "Alice" folder "simple-empty-folder/PARENT" should exist
+    And as "Alice" file "simple-empty-folder/PARENT/parent.txt" should exist
+    And as "Alice" folder "simple-empty-folder/PARENT/CHILD" should exist
 
   @smokeTest @ocisSmokeTest
   Scenario: uploading a big file (when chunking is implemented this upload should be chunked)
@@ -62,7 +62,7 @@ Feature: File Upload
     When the user uploads a created file "big-video.mp4" using the webUI
     Then no message should be displayed on the webUI
     And file "big-video.mp4" should be listed on the webUI
-    And as "user1" the content of "big-video.mp4" should be the same as the local "big-video.mp4"
+    And as "Alice" the content of "big-video.mp4" should be the same as the local "big-video.mp4"
 
   @skipOnFIREFOX @skip @yetToImplement
   Scenario: conflict with a big file (when chunking is implemented this upload should be chunked)
@@ -78,14 +78,14 @@ Feature: File Upload
     And the user uploads file "new-lorem.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "new-lorem.txt" should be listed on the webUI
-    And as "user1" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
+    And as "Alice" the content of "simple-folder/new-lorem.txt" should be the same as the local "new-lorem.txt"
 
   @smokeTest
   Scenario: overwrite an existing file
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
-    And as "user1" the content of "lorem.txt" should be the same as the local "lorem.txt"
+    And as "Alice" the content of "lorem.txt" should be the same as the local "lorem.txt"
     And the versions list for resource "lorem.txt" should contain 1 entry
     But file "lorem (2).txt" should not be listed on the webUI
 
@@ -95,7 +95,7 @@ Feature: File Upload
     When the user uploads overwriting file "lorem.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "lorem.txt" should be listed on the webUI
-    And as "user1" the content of "lorem.txt" should be the same as the local "lorem.txt"
+    And as "Alice" the content of "lorem.txt" should be the same as the local "lorem.txt"
     But file "lorem (2).txt" should not be listed on the webUI
 
   @smokeTest @skip @yetToImplement
@@ -126,7 +126,7 @@ Feature: File Upload
     When the user opens folder "simple-folder" using the webUI
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "user1" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
 
   @skip @yetToImplement @ocis-reva-issue-64
   Scenario: keep new and existing file in a sub-folder
@@ -144,18 +144,18 @@ Feature: File Upload
 
   @ocis-reva-issue-64
   Scenario: upload overwriting a file into a public share
-    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
-    When the public uses the webUI to access the last public link created by user "user1" with password "pass123"
+    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     And the user uploads overwriting file "lorem.txt" using the webUI
     Then file "lorem.txt" should be listed on the webUI
-    And as "user1" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
+    And as "Alice" the content of "simple-folder/lorem.txt" should be the same as the local "lorem.txt"
 
 
   Scenario: upload a file with comma in the filename
     When the user uploads file "file,with,comma,.txt" using the webUI
     Then no message should be displayed on the webUI
     And file "file,with,comma,.txt" should be listed on the webUI
-    And as "user1" the content of "file,with,comma,.txt" should be the same as the local "file,with,comma,.txt"
+    And as "Alice" the content of "file,with,comma,.txt" should be the same as the local "file,with,comma,.txt"
 
 
   Scenario: simple upload of a folder, with comma in its name, that does not exist before
@@ -166,5 +166,5 @@ Feature: File Upload
     Then the following resources should be listed on the webUI
       | entry_name        |
       | sunday,monday.txt |
-    And as "user1" folder "Folder,With,Comma" should exist
-    And as "user1" file "Folder,With,Comma/sunday,monday.txt" should exist
+    And as "Alice" folder "Folder,With,Comma" should exist
+    And as "Alice" file "Folder,With,Comma/sunday,monday.txt" should exist

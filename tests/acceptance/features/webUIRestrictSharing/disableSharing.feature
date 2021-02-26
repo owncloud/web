@@ -7,33 +7,33 @@ Feature: disable sharing
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    Given user "user1" has been created with default attributes
+    Given user "Alice" has been created with default attributes
 
   @smokeTest
   Scenario: Users tries to share via WebUI when Sharing is disabled
     Given the setting "shareapi_enabled" of app "core" has been set to "no"
-    When user "user1" logs in using the webUI
+    When user "Alice" logs in using the webUI
     Then it should not be possible to share folder "simple-folder" using the webUI
 
 
   Scenario: Users tries to share from favorites page when sharing is disabled
     Given the setting "shareapi_enabled" of app "core" has been set to "no"
-    And user "user1" has favorited element "lorem.txt"
-    And user "user1" has favorited element "simple-folder"
-    And user "user1" has logged in using the webUI
+    And user "Alice" has favorited element "lorem.txt"
+    And user "Alice" has favorited element "simple-folder"
+    And user "Alice" has logged in using the webUI
     When the user browses to the favorites page
     Then it should not be possible to share folder "simple-folder" using the webUI
     And it should not be possible to share file "lorem.txt" using the webUI
 
   @issue-2459
   Scenario: Check file presence in shared-with-me page when sharing is disabled
-    Given user "user2" has been created with default attributes
-    And user "user2" has shared file "lorem.txt" with user "user1"
-    And user "user1" has accepted the share "lorem.txt" offered by user "user2"
-    And user "user2" has shared folder "simple-folder" with user "user1"
-    And user "user1" has accepted the share "simple-folder" offered by user "user2"
+    Given user "Brian" has been created with default attributes
+    And user "Brian" has shared file "lorem.txt" with user "Alice"
+    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Brian" has shared folder "simple-folder" with user "Alice"
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And the setting "shareapi_enabled" of app "core" has been set to "no"
-    When user "user1" logs in using the webUI
+    When user "Alice" logs in using the webUI
     When the user opens folder "Shares" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And folder "simple-folder" should be listed on the webUI
@@ -44,11 +44,11 @@ Feature: disable sharing
 
   @issue-2459
   Scenario: Check file presence in shared-with-others page when Sharing is disabled
-    Given user "user2" has been created with default attributes
-    And user "user1" has shared file "lorem.txt" with user "user2"
-    And user "user1" has shared folder "simple-folder" with user "user2"
+    Given user "Brian" has been created with default attributes
+    And user "Alice" has shared file "lorem.txt" with user "Brian"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     And the setting "shareapi_enabled" of app "core" has been set to "no"
-    When user "user1" logs in using the webUI
+    When user "Alice" logs in using the webUI
     #    Then the link for "shared-with-others" page should not be available in files page menu
     And the user browses to the shared-with-others page
     Then file "lorem.txt" should not be listed on the webUI

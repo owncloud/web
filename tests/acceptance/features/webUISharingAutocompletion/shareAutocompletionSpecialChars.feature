@@ -12,7 +12,7 @@ Feature: Autocompletion of share-with names
       | regularuser |
     And these users have been created but not initialized:
       | username | password  | displayname | email        |
-      | two      | %regular% | User Two    | u2@oc.com.np |
+      | two      | %regular% | Brian Murphy    | u2@oc.com.np |
       | u444     | %regular% | Four        | u3@oc.com.np |
     And these groups have been created:
       | groupname |

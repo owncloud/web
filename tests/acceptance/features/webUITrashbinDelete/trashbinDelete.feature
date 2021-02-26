@@ -5,11 +5,11 @@ Feature: files and folders can be deleted from the trashbin
   So that I can control my trashbin space and which files are kept in that space
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has created file "sample,1.txt"
-    And user "user1" has created folder "Folder,With,Comma"
-    And user "user1" has logged in using the webUI
-    And the following files have been deleted by user "user1"
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has created file "sample,1.txt"
+    And user "Alice" has created folder "Folder,With,Comma"
+    And user "Alice" has logged in using the webUI
+    And the following files have been deleted by user "Alice"
       | name              |
       | data.zip          |
       | lorem.txt         |

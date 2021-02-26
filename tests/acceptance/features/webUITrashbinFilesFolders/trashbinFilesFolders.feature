@@ -5,10 +5,10 @@ Feature: files and folders exist in the trashbin after being deleted
   So that I can recover data easily
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
-    And user "user1" has created file "sample,1.txt"
-    And user "user1" has created folder "Folder,With,Comma"
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
+    And user "Alice" has created file "sample,1.txt"
+    And user "Alice" has created folder "Folder,With,Comma"
     And the user has browsed to the files page
 
   @smokeTest @ocis-reva-issue-111 @skipOnOCIS @issue-product-186
@@ -20,15 +20,15 @@ Feature: files and folders exist in the trashbin after being deleted
       | strängé नेपाली folder                 |
       | strängé filename (duplicate #2 &).txt |
     And the user browses to the trashbin page
-    Then as "user1" folder "simple-folder" should exist in the trashbin
-    And as "user1" file "lorem.txt" should exist in the trashbin
-    And as "user1" folder "strängé नेपाली folder" should exist in the trashbin
-    And as "user1" file "strängé filename (duplicate #2 &).txt" should exist in the trashbin
+    Then as "Alice" folder "simple-folder" should exist in the trashbin
+    And as "Alice" file "lorem.txt" should exist in the trashbin
+    And as "Alice" folder "strängé नेपाली folder" should exist in the trashbin
+    And as "Alice" file "strängé filename (duplicate #2 &).txt" should exist in the trashbin
     And the deleted elements should be listed on the webUI
 
   @ocis-reva-issue-111 @skipOnOCIS @issue-product-183 @issue-product-186
   Scenario: Delete a file with problematic characters and check it is in the trashbin
-    Given user "user1" has renamed the following files
+    Given user "Alice" has renamed the following files
       | from-name-parts | to-name-parts   |
       | lorem.txt       | 'single'        |
       | lorem-big.txt   | "double" quotes |
@@ -62,22 +62,22 @@ Feature: files and folders exist in the trashbin after being deleted
       | sample,1.txt      |
       | Folder,With,Comma |
     And the user browses to the trashbin page
-    Then as "user1" file "data.zip" should exist in the trashbin
-    And as "user1" file "lorem.txt" should exist in the trashbin
-    And as "user1" file "sample,1.txt" should exist in the trashbin
-    And as "user1" folder "simple-folder" should exist in the trashbin
-    And as "user1" folder "Folder,With,Comma" should exist in the trashbin
-    And as "user1" the file with original path "simple-folder/lorem.txt" should exist in the trashbin
+    Then as "Alice" file "data.zip" should exist in the trashbin
+    And as "Alice" file "lorem.txt" should exist in the trashbin
+    And as "Alice" file "sample,1.txt" should exist in the trashbin
+    And as "Alice" folder "simple-folder" should exist in the trashbin
+    And as "Alice" folder "Folder,With,Comma" should exist in the trashbin
+    And as "Alice" the file with original path "simple-folder/lorem.txt" should exist in the trashbin
     And the deleted elements should be listed on the webUI
 
   @skipOnOCIS @issue-1725 @issue-1910 @issue-product-186
   Scenario: Delete an empty folder and check it is in the trashbin
-    Given user "user1" has created folder "my-empty-folder"
-    And user "user1" has created folder "my-other-empty-folder"
+    Given user "Alice" has created folder "my-empty-folder"
+    And user "Alice" has created folder "my-other-empty-folder"
     When the user reloads the current page of the webUI
     And the user deletes folder "my-empty-folder" using the webUI
-    Then as "user1" folder "my-empty-folder" should exist in the trashbin
-    But as "user1" the folder with original path "my-other-empty-folder" should not exist in the trashbin
+    Then as "Alice" folder "my-empty-folder" should exist in the trashbin
+    But as "Alice" the folder with original path "my-other-empty-folder" should not exist in the trashbin
     When the user browses to the trashbin page
     Then folder "my-empty-folder" should be listed on the webUI
     But folder "my-other-empty-folder" should not be listed on the webUI
@@ -100,9 +100,9 @@ Feature: files and folders exist in the trashbin after being deleted
       | name      |
       | lorem.txt |
     And the user browses to the trashbin page
-    Then as "user1" the file with original path "lorem.txt" should exist in the trashbin
-    And as "user1" the file with original path "simple-folder/lorem.txt" should exist in the trashbin
-    And as "user1" the file with original path "strängé नेपाली folder/lorem.txt" should exist in the trashbin
+    Then as "Alice" the file with original path "lorem.txt" should exist in the trashbin
+    And as "Alice" the file with original path "simple-folder/lorem.txt" should exist in the trashbin
+    And as "Alice" the file with original path "strängé नेपाली folder/lorem.txt" should exist in the trashbin
     And file "lorem.txt" should be listed on the webUI
 #    And file "lorem.txt" with path "./lorem.txt" should be listed in the trashbin on the webUI
 #    And file "lorem.txt" with path "simple-folder/lorem.txt" should be listed in the trashbin on the webUI

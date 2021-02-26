@@ -7,50 +7,50 @@ Feature: Sharing folders with multiple internal users using advanced permissions
   Background:
     Given these users have been created with default attributes:
       | username |
-      | user1    |
-      | user2    |
+      | Alice    |
+      | Brian    |
 
 
   Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
     Given these users have been created with default attributes:
       | username |
       | user0    |
-      | user3    |
-      | user4    |
-    And user "user1" has logged in using the webUI
+      | Carol    |
+      | David    |
+    And user "Alice" has logged in using the webUI
     When the user opens the share dialog for folder "simple-folder" using the webUI
     And the user opens the share creation dialog in the webUI
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
       | collaborator | type |
       | Regular User | user |
-      | User Two     | user |
-      | User Three   | user |
-      | User Four    | user |
-    And the user removes "User Four" as a collaborator from the share
+      | Brian Murphy     | user |
+      | Carol King   | user |
+      | David Lopez    | user |
+    And the user removes "David Lopez" as a collaborator from the share
     And the user removes "Regular User" as a collaborator from the share
     And the user shares with the selected collaborators
-    Then custom permissions "<displayed-permissions>" should be set for user "User Two" for folder "simple-folder" on the webUI
-    And custom permissions "<displayed-permissions>" should be set for user "User Three" for folder "simple-folder" on the webUI
-    And user "User Two" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
-    And user "User Three" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
-    And user "user2" should have received a share with these details:
+    Then custom permissions "<displayed-permissions>" should be set for user "Brian Murphy" for folder "simple-folder" on the webUI
+    And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
+    And user "Brian Murphy" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
+    And user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
+    And user "Brian" should have received a share with these details:
       | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user2                |
+      | uid_owner   | Alice                |
+      | share_with  | Brian                |
       | file_target | /simple-folder (2)   |
       | item_type   | folder               |
       | permissions | <actual-permissions> |
-    And user "user3" should have received a share with these details:
+    And user "Carol" should have received a share with these details:
       | field       | value                |
-      | uid_owner   | user1                |
-      | share_with  | user3                |
+      | uid_owner   | Alice                |
+      | share_with  | Carol                |
       | file_target | /simple-folder (2)   |
       | item_type   | folder               |
       | permissions | <actual-permissions> |
     But user "Regular User" should not be listed in the collaborators list on the webUI
     And as "user0" folder "simple-folder (2)" should not exist
-    And user "User Four" should not be listed in the collaborators list on the webUI
-    And as "user4" folder "simple-folder (2)" should not exist
+    And user "David Lopez" should not be listed in the collaborators list on the webUI
+    And as "David" folder "simple-folder (2)" should not exist
     Examples:
       | role                 | displayed-role       | extra-permissions     | displayed-permissions | actual-permissions          |
       # | Advanced permissions | Advanced permissions | delete                        | delete                | read, delete                 |

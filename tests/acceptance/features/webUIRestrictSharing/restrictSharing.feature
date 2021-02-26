@@ -9,26 +9,30 @@ Feature: restrict Sharing
     And the administrator has set the default folder for received shares to "Shares"
     Given these users have been created with default attributes:
       | username |
-      | user1    |
-      | user2    |
-      | user3    |
+      | Alice    |
+      | Brian    |
+      | Carol    |
+    And these users have been created but not initialized:
+      | username  | password  | displayname     | email             |
+      | Alison    | %regular% | Alison Cooper   | alson@oc.com.np   |
     And these groups have been created:
       | groupname |
       | grp1      |
       | grp2      |
-    And user "user1" has been added to group "grp1"
-    And user "user2" has been added to group "grp1"
-    And user "user3" has been added to group "grp2"
-    And user "user2" has logged in using the webUI
+    And user "Alice" has been added to group "grp1"
+    And user "Brian" has been added to group "grp1"
+    And user "Carol" has been added to group "grp2"
+    And user "Alison" has been added to group "grp2"
+    And user "Brian" has logged in using the webUI
 
   @smokeTest
   Scenario: Restrict users to only share with users in their groups
     Given the setting "shareapi_only_share_with_group_members" of app "core" has been set to "yes"
     When the user opens the share dialog for folder "simple-folder" using the webUI
     And the user opens the share creation dialog in the webUI
-    And the user types "User" in the share-with-field
-    Then "user" "User Three" should not be listed in the autocomplete list on the webUI
-    But "user" "User One" should be listed in the autocomplete list on the webUI
+    And the user types "Ali" in the share-with-field
+    Then "user" "Alison Cooper" should not be listed in the autocomplete list on the webUI
+    But "user" "Alice Hansen" should be listed in the autocomplete list on the webUI
 
   @smokeTest
   Scenario: Restrict users to only share with groups they are member of
@@ -43,8 +47,8 @@ Feature: restrict Sharing
   Scenario: Do not restrict users to only share with groups they are member of
     Given the setting "shareapi_only_share_with_membership_groups" of app "core" has been set to "no"
     When the user shares folder "simple-folder" with group "grp2" as "Viewer" using the webUI
-    And user "user3" accepts the share "simple-folder" offered by user "user2" using the sharing API
-    Then as "user3" folder "/Shares/simple-folder" should exist
+    And user "Carol" accepts the share "simple-folder" offered by user "Brian" using the sharing API
+    Then as "Carol" folder "/Shares/simple-folder" should exist
 
   @smokeTest
   Scenario: Forbid sharing with groups

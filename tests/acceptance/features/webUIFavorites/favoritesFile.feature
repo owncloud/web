@@ -6,17 +6,17 @@ Feature: Mark file as favorite
   So that I can find my favorite file/folder easily
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
   @smokeTest
   Scenario: mark files as favorites
     When the user marks file "data.tar.gz" as favorite using the webUI
     And the user marks file "data.zip" as favorite using the webUI
-    Then as user "user1" file "data.tar.gz" should be marked as favorite
+    Then as user "Alice" file "data.tar.gz" should be marked as favorite
     And file "data.tar.gz" should be marked as favorite on the webUI
-    And as user "user1" file "data.zip" should be marked as favorite
+    And as user "Alice" file "data.zip" should be marked as favorite
     And file "data.zip" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then the count of files and folders shown on the webUI should be 2
@@ -27,9 +27,9 @@ Feature: Mark file as favorite
   Scenario: mark folders as favorites
     When the user marks folder "simple-folder" as favorite using the webUI
     And the user marks folder "strängé नेपाली folder" as favorite using the webUI
-    Then as user "user1" folder "simple-folder" should be marked as favorite
+    Then as user "Alice" folder "simple-folder" should be marked as favorite
     And folder "simple-folder" should be marked as favorite on the webUI
-    And as user "user1" folder "strängé नेपाली folder" should be marked as favorite
+    And as user "Alice" folder "strängé नेपाली folder" should be marked as favorite
     And folder "strängé नेपाली folder" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then the count of files and folders shown on the webUI should be 2
@@ -41,9 +41,9 @@ Feature: Mark file as favorite
     When the user marks folder "simple-folder" as favorite using the webUI sidebar
     And the user marks file "data.zip" as favorite using the webUI sidebar
     Then folder "simple-folder" should be marked as favorite on the webUI
-    And as user "user1" folder "simple-folder" should be marked as favorite
+    And as user "Alice" folder "simple-folder" should be marked as favorite
     And file "data.zip" should be marked as favorite on the webUI
-    And as user "user1" file "data.zip" should be marked as favorite
+    And as user "Alice" file "data.zip" should be marked as favorite
 
 
   Scenario: navigate to an empty favorites page
@@ -54,7 +54,7 @@ Feature: Mark file as favorite
 
 
   Scenario: navigate to the favorites page using the menu
-    Given user "user1" has favorited element "data.zip"
+    Given user "Alice" has favorited element "data.zip"
     When the user browses to the favorites page using the webUI
     Then the count of files and folders shown on the webUI should be 1
     And file "data.zip" should be listed on the webUI
@@ -90,7 +90,7 @@ Feature: Mark file as favorite
   @issue-1720
   Scenario: Try to favorite file and folder that used to exist but does not anymore
     Given the user has browsed to the files page
-    And the following files have been deleted by user "user1"
+    And the following files have been deleted by user "Alice"
       | name          |
       | lorem.txt     |
       | simple-folder |
@@ -103,19 +103,19 @@ Feature: Mark file as favorite
     Then no message should be displayed on the webUI
     # Then the error message with header 'Error while marking "simple-folder" as favorite' should be displayed on the webUI
     And folder "simple-folder" should not be marked as favorite on the webUI
-    And as "user1" file "lorem.txt" should not exist
-    And as "user1" folder "simple-folder" should not exist
+    And as "Alice" file "lorem.txt" should not exist
+    And as "Alice" folder "simple-folder" should not exist
 
 
   Scenario: Favourite files and folders with comma in the names
-    Given user "user1" has created file "sample,1.txt"
-    And user "user1" has created folder "Sample,Folder,With,Comma"
+    Given user "Alice" has created file "sample,1.txt"
+    And user "Alice" has created folder "Sample,Folder,With,Comma"
     And the user has reloaded the current page of the webUI
     When the user marks file "sample,1.txt" as favorite using the webUI
     And the user marks folder "Sample,Folder,With,Comma" as favorite using the webUI
-    Then as user "user1" file "sample,1.txt" should be marked as favorite
+    Then as user "Alice" file "sample,1.txt" should be marked as favorite
     And file "sample,1.txt" should be marked as favorite on the webUI
-    And as user "user1" folder "Sample,Folder,With,Comma" should be marked as favorite
+    And as user "Alice" folder "Sample,Folder,With,Comma" should be marked as favorite
     And folder "Sample,Folder,With,Comma" should be marked as favorite on the webUI
     When the user browses to the favorites page
     Then the count of files and folders shown on the webUI should be 2

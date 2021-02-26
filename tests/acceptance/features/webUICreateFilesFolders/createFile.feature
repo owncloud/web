@@ -4,8 +4,8 @@ Feature: create files
   So that I can organize my data
 
   Background:
-    Given user "user1" has been created with default attributes
-    And user "user1" has logged in using the webUI
+    Given user "Alice" has been created with default attributes
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
   @ocisSmokeTest
@@ -28,7 +28,7 @@ Feature: create files
 
   @issue-2882
   Scenario: redirect to subfolder after closing the text editor
-    Given user "user1" has created folder "parent-folder"
+    Given user "Alice" has created folder "parent-folder"
     When the user reloads the current page of the webUI
     And the user opens folder "parent-folder" using the webUI
     Then there should be no resources listed on the webUI

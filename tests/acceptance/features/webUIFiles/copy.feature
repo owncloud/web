@@ -4,11 +4,11 @@ Feature: copy files and folders
   So that I can work safely on a copy without changing the original
 
   Background:
-    Given user "user1" has been created with default attributes
+    Given user "Alice" has been created with default attributes
 
   @smokeTest
   Scenario: copy a file and a folder into a folder
-    Given user "user1" has logged in using the webUI
+    Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user copies file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
@@ -20,14 +20,14 @@ Feature: copy files and folders
 
 
   Scenario: copy a file into a folder where a file with the same name already exists
-    Given user "user1" has logged in using the webUI
+    Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user copies file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
     Then the error message with header 'An error occurred while copying strängé filename (duplicate #2 &).txt' should be displayed on the webUI
 
   @smokeTest
   Scenario: Copy multiple files at once
-    Given user "user1" has logged in using the webUI
+    Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user batch copies these files into folder "simple-empty-folder" using the webUI
       | file_name   |
@@ -43,7 +43,7 @@ Feature: copy files and folders
 
 
   Scenario Outline: copy a file into a folder (problematic characters)
-    Given user "user1" has logged in using the webUI
+    Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user renames file "lorem.txt" to <file_name> using the webUI
     And the user renames folder "simple-empty-folder" to <folder_name> using the webUI
@@ -59,47 +59,47 @@ Feature: copy files and folders
 
   @issue-3755
   Scenario: copy files on a public share
-    Given user "user1" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
-    And the public uses the webUI to access the last public link created by user "user1"
+    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    And the public uses the webUI to access the last public link created by user "Alice"
     And the user copies file "data.zip" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
-    And as "user1" file "simple-folder/simple-empty-folder/data.zip" should exist
-    And as "user1" file "simple-folder/data.zip" should exist
+    And as "Alice" file "simple-folder/simple-empty-folder/data.zip" should exist
+    And as "Alice" file "simple-folder/data.zip" should exist
 
   @issue-ocis-reva-243
   Scenario: copy a file into another folder with no change permission
-    Given user "user2" has been created with default attributes
-    And user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
-    And user "user1" has logged in using the webUI
+    Given user "Brian" has been created with default attributes
+    And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
+    And user "Alice" has logged in using the webUI
     When the user tries to copy file "lorem.txt" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
 
   @issue-ocis-reva-243
   Scenario: copy a folder into another folder with no change permission
-    Given user "user2" has been created with default attributes
-    And user "user2" has shared folder "simple-folder" with user "user1" with "read" permissions
-    And user "user1" has logged in using the webUI
+    Given user "Brian" has been created with default attributes
+    And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
+    And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
 
 
   Scenario: copy a folder into the same folder
-    And user "user1" has logged in using the webUI
+    And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then it should not be possible to copy into folder "simple-empty-folder" using the webUI
 
 
   Scenario: copy a folder into another folder with same name
-    And user "user1" has logged in using the webUI
+    And user "Alice" has logged in using the webUI
     When the user copies folder "simple-empty-folder" into folder "folder with space/simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And folder "simple-empty-folder" should be listed on the webUI
-    And as "user1" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist
-    And as "user1" folder "simple-empty-folder" should exist
+    And as "Alice" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist
+    And as "Alice" folder "simple-empty-folder" should exist
 
   Scenario: cancel copying a file
-    Given user "user1" has logged in using the webUI
+    Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user tries to copy folder "data.zip" into folder "simple-empty-folder" using the webUI
     And the user cancels the attempt to copy file into folder "simple-empty-folder" using the webUI
@@ -107,7 +107,7 @@ Feature: copy files and folders
     But  file "data.zip" should not be listed in the folder "simple-empty-folder" on the webUI
 
   Scenario: cancel copying of multiple files at once
-    Given user "user1" has logged in using the webUI
+    Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user tries to batch copy these files into folder "simple-empty-folder" using the webUI
       | file_name   |
