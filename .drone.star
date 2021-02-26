@@ -16,76 +16,16 @@ config = {
 	'acceptance': {
 		'webUI': {
 			'suites': {
-				'webUIBasic': [
-					'webUIAccount',
-					'webUILogin',
-					'webUINotifications',
-					'webUIPreview',
-					'webUIPrivateLinks',
-					# The following suites may have all scenarios currently skipped.
-					# The suites are listed here so that scenarios will run when
-					# they are enabled.
-					'webUIAdminSettings',
-					'webUIComments',
-					'webUITags',
-					'webUIWebdavLockProtection',
-					'webUIWebdavLocks',
-				],
-				'webUICreate': [
-					'webUICreateFilesFolders',
-				],
-				'webUIDelete': [
-					'webUIDeleteFilesFolders',
-				],
-				'webUIRename': [
-					'webUIRenameFiles',
-					'webUIRenameFolders',
-				],
-				'webUISharingBasic': [
-					'webUISharingAcceptShares',
-					'webUISharingAcceptSharesToRoot',
-				],
-				'webUISharingNotifications': [
-					'webUISharingNotifications',
-					'webUISharingNotificationsToRoot',
-				],
-				'webUIFavorites': 'Favorites',
-				'webUIMarkdownEditor': 'MarkdownEditor',
-				'webUIFiles': 'Files',
-				'webUIMoveFilesFolders': 'Move',
-				'webUIResharing': 'Resharing',
-				'webUIResharingToRoot': 'ResharingToRoot',
-				'webUIRestrictSharing': 'RestrictSharing',
-				'webUISharingAutocompletion': 'SharingAutocompletion',
-				'webUISharingFilePermissionMultipleUsers': 'SharingFilePermissionMultipleUsers',
-				'webUISharingFilePermissionsGroups': 'SharingFilePermissionsGroups',
-				'webUISharingFolderAdvancedPermissionMultipleUsers': 'SharingFolderAdvancedPermissionMU',
-				'webUISharingFolderAdvancedPermissionsGroups': 'SharingFolderAdvPermissionsGrp',
-				'webUISharingFolderPermissionMultipleUsers': 'SharingFolderPermissionMultipleUsers',
-				'webUISharingFolderPermissionsGroups': 'SharingFolderPermissionsGroups',
-				'webUISharingInternalGroups': 'SharingInternalGroups',
-				'webUISharingInternalGroupsEdgeCases': 'SharingInternalGroupsEdgeCases',
-				'webUISharingInternalGroupsSharingIndicator': 'SharingInternalGroupsSharingIndicator',
-				'webUISharingInternalGroupsToRoot': 'SharingInternalGroupsRoot',
-				'webUISharingInternalGroupsToRootEdgeCases': 'SharingInternalGroupsRootEdgeCases',
-				'webUISharingInternalGroupsToRootSharingIndicator': 'SharingInternalGroupsRootSharingIndicator',
-				'webUISharingInternalUsers': 'SharingInternalUsers',
-				'webUISharingInternalUsersBlacklisted': 'SharingInternalUsersBlacklisted',
-				'webUISharingInternalUsersExpire': 'SharingInternalUsersExpire',
-				'webUISharingInternalUsersExpireToRoot': 'SharingInternalUsersExpireToRoot',
-				'webUISharingInternalUsersSharingIndicator': 'SharingInternalUsersSharingIndicator',
-				'webUISharingInternalUsersToRoot': 'SharingInternalUsersRoot',
-				'webUISharingInternalUsersToRootBlacklisted': 'SharingInternalUsersRootBlacklisted',
-				'webUISharingInternalUsersToRootSharingIndicator': 'SharingInternalUsersRootSharingIndicator',
-				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
-				'webUISharingPermissionToRoot': 'SharingPermissionToRoot',
-				'webUISharingPublic': 'SharingPublic',
-				'webUISharingPublicDifferentRoles': 'SharingPublicDifferentRoles',
-				'webUISharingPublicExpire': 'SharingPublicExpire',
-				'webUITrashbinDelete': 'TrashbinDelete',
-				'webUITrashbinFilesFolders': 'TrashbinFilesFolders',
-				'webUITrashbinRestore': 'TrashbinRestore',
-				'webUIUpload': 'Upload',
+				'SharingFolderAdvancedPermissionMU0': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'SharingFolderAdvancedPermissionMU1': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'SharingFolderAdvancedPermissionMU2': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'SharingFolderAdvancedPermissionMU3': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'SharingFolderAdvancedPermissionMU4': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'SharingFolderAdvancedPermissionMU5': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'SharingFolderAdvancedPermissionMU6': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'SharingFolderAdvancedPermissionMU7': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'SharingFolderAdvancedPermissionMU8': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'SharingFolderAdvancedPermissionMU9': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
 			},
 			'extraEnvironment': {
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md',
@@ -93,227 +33,18 @@ config = {
 			},
 			'visualTesting': True,
 		},
-		'webUIFederation': {
-			'suites': {
-				'webUISharingExternal': 'SharingExternal',
-				'webUISharingExternalToRoot': 'SharingExternalRoot',
-			},
-			'extraEnvironment': {
-				'REMOTE_BACKEND_HOST': 'http://federated',
-				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-oc10-server-oauth2-login.md'
-			},
-			'federatedServerNeeded': True,
-			'federatedServerVersion': 'daily-master-qa'
-		},
-		'webUI-XGA': {
-			'suites': {
-				'XGAPortrait1': [
-					'webUIAccount',
-					'webUICreateFilesFolders',
-					'webUIDeleteFilesFolders',
-					'webUIFavorites',
-					'webUIFiles',
-					'webUILogin',
-					'webUINotifications',
-					'webUIPreview',
-					'webUIPrivateLinks',
-					'webUIRenameFiles',
-					'webUIRenameFolders',
-					'webUIRestrictSharing',
-					'webUISharingAcceptShares',
-					'webUISharingAcceptSharesToRoot',
-					'webUISharingNotifications',
-					'webUISharingNotificationsToRoot',
-					# The following suites may have all scenarios currently skipped.
-					# The suites are listed here so that scenarios will run when
-					# they are enabled.
-					'webUIAdminSettings',
-					'webUIComments',
-					'webUITags',
-					'webUIWebdavLockProtection',
-					'webUIWebdavLocks',
-				],
-				'XGAPortrait2': [
-					'webUIMoveFilesFolders',
-					'webUIResharing',
-					'webUIResharingToRoot',
-					'webUISharingAutocompletion',
-					'webUISharingFilePermissionMultipleUsers',
-					'webUISharingFilePermissionsGroups',
-					'webUISharingFolderAdvancedPermissionMultipleUsers',
-					'webUISharingFolderAdvancedPermissionsGroups',
-					'webUISharingFolderPermissionMultipleUsers',
-					'webUISharingFolderPermissionsGroups',
-					'webUISharingInternalGroups',
-					'webUISharingInternalGroupsEdgeCases',
-					'webUISharingInternalGroupsSharingIndicator',
-					'webUISharingInternalGroupsToRoot',
-					'webUISharingInternalGroupsToRootEdgeCases',
-					'webUISharingInternalGroupsToRootSharingIndicator',
-					'webUISharingInternalUsers',
-					'webUISharingInternalUsersBlacklisted',
-					'webUISharingInternalUsersExpire',
-					'webUISharingInternalUsersExpireToRoot',
-					'webUISharingInternalUsersSharingIndicator',
-					'webUISharingInternalUsersToRoot',
-					'webUISharingInternalUsersToRootBlacklisted',
-					'webUISharingInternalUsersToRootSharingIndicator',
-					'webUISharingPermissionsUsers',
-					'webUISharingPermissionToRoot',
-					'webUISharingPublic',
-					'webUISharingPublicDifferentRoles',
-					'webUISharingPublicExpire',
-					'webUITrashbinDelete',
-					'webUITrashbinFilesFolders',
-					'webUITrashbinRestore',
-					'webUIUpload',
-				]
-			},
-			'extraEnvironment': {
-				'SCREEN_RESOLUTION': '768x1024'
-			},
-			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
-		},
-		'webUI-iPhone': {
-			'suites': {
-				'iPhone1': [
-					'webUIAccount',
-					'webUICreateFilesFolders',
-					'webUIDeleteFilesFolders',
-					'webUIFavorites',
-					'webUIFiles',
-					'webUILogin',
-					'webUINotifications',
-					'webUIPreview',
-					'webUIPrivateLinks',
-					'webUIRenameFiles',
-					'webUIRenameFolders',
-					'webUIRestrictSharing',
-					'webUISharingAcceptShares',
-					'webUISharingAcceptSharesToRoot',
-					'webUISharingNotifications',
-					'webUISharingNotificationsToRoot',
-					# The following suites may have all scenarios currently skipped.
-					# The suites are listed here so that scenarios will run when
-					# they are enabled.
-					'webUIAdminSettings',
-					'webUIComments',
-					'webUITags',
-					'webUIWebdavLockProtection',
-					'webUIWebdavLocks',
-					],
-				'iPhone2': [
-					'webUIMoveFilesFolders',
-					'webUIResharing',
-					'webUIResharingToRoot',
-					'webUISharingAutocompletion',
-					'webUISharingFilePermissionMultipleUsers',
-					'webUISharingFilePermissionsGroups',
-					'webUISharingFolderAdvancedPermissionMultipleUsers',
-					'webUISharingFolderAdvancedPermissionsGroups',
-					'webUISharingFolderPermissionMultipleUsers',
-					'webUISharingFolderPermissionsGroups',
-					'webUISharingInternalGroups',
-					'webUISharingInternalGroupsToRoot',
-					'webUISharingInternalUsers',
-					'webUISharingInternalUsersExpire',
-					'webUISharingInternalUsersExpireToRoot',
-					'webUISharingInternalUsersToRoot',
-					'webUISharingPermissionsUsers',
-					'webUISharingPermissionToRoot',
-					'webUISharingPublic',
-					'webUISharingPublicDifferentRoles',
-					'webUISharingPublicExpire',
-					'webUITrashbinDelete',
-					'webUITrashbinFilesFolders',
-					'webUITrashbinRestore',
-					'webUIUpload',
-				]
-			},
-			'extraEnvironment': {
-				'SCREEN_RESOLUTION': '375x812'
-			},
-			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
-		},
 		'webUI-ocis': {
 			'suites': {
-				'webUIOCISBasic': [
-					'webUILogin',
-					'webUINotifications',
-					'webUIPrivateLinks',
-					'webUIPreview',
-					'webUIAccount',
-					# The following suites may have all scenarios currently skipped.
-					# The suites are listed here so that scenarios will run when
-					# they are enabled.
-					'webUIAdminSettings',
-					'webUIComments',
-					'webUITags',
-					'webUIWebdavLockProtection',
-					'webUIWebdavLocks',
-				],
-				'webUIOCISCreate': [
-					'webUICreateFilesFolders',
-				],
-				'webUIOCISDelete': [
-					'webUIDeleteFilesFolders',
-				],
-				'webUIOCISRename': [
-					'webUIRenameFiles',
-					'webUIRenameFolders',
-				],
-				'webUIOCISSharingBasic': [
-					'webUISharingAcceptShares',
-					'webUISharingAcceptSharesToRoot',
-				],
-				'webUIOCISRestrictSharing': [
-					'webUIRestrictSharing',
-				],
-				'webUIOCISSharingNotifications': [
-					'webUISharingNotifications',
-					'webUISharingNotificationsToRoot',
-				],
-				'webUIFavorites': 'OCISFavorites',
-				'webUIMarkdownEditor': 'OCISMarkdownEditor',
-				'webUIFiles': 'OCISFiles',
-				'webUISharingAutocompletion': 'OCISSharingAutocompletion',
-				'OCISSharingInternalGroups': [
-					'webUISharingInternalGroups',
-					'webUISharingInternalGroupsEdgeCases',
-					'webUISharingInternalGroupsSharingIndicator',
-					'webUISharingInternalGroupsToRoot',
-					'webUISharingInternalGroupsToRootEdgeCases',
-					'webUISharingInternalGroupsToRootSharingIndicator',
-				],
-				'OCISSharingInternalUsers': [
-					'webUISharingInternalUsers',
-					'webUISharingInternalUsersBlacklisted',
-					'webUISharingInternalUsersSharingIndicator',
-					'webUISharingInternalUsersToRoot',
-					'webUISharingInternalUsersToRootBlacklisted',
-					'webUISharingInternalUsersToRootSharingIndicator',
-				],
-				'webUISharingInternalUsersExpire': 'OCISSharingInternalUsersExpire',
-				'webUISharingInternalUsersExpireToRoot': 'OCISSharingInternalUsersExpireToRoot',
-				'webUISharingPermissionsUsers': 'OCISSharingPermissionsUsers',
-				'webUISharingFilePermissionsGroups': 'OCISSharingFilePermissionsGroups',
-				'webUISharingFolderPermissionsGroups': 'OCISSharingFolderPermissionsGroups',
-				'webUISharingFolderAdvancedPermissionsGroups': 'OCISSharingFolderAdvPermissionsGrp',
-				'webUISharingPermissionToRoot': 'OCISSharingPermissionToRoot',
-				'webUIResharing': 'OCISResharing', # for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
-				'webUIResharingToRoot': 'OCISResharingToRoot',
-				'webUISharingPublic': 'OCISSharingPublic',
-				'webUISharingPublicExpire': 'OCISSharingPublicExpire',
-				'webUISharingPublicDifferentRoles': 'OCISSharingPublicDifferentRoles',
-				'webUITrashbinDelete': 'OCISTrashbinDelete',
-				'webUITrashbinFilesFolders': 'OCISTrashbinFilesFolders',
-				'webUITrashbinRestore': 'OCISTrashbinRestore',
-				'webUIUpload': 'OCISUpload',
-				'webUISharingFilePermissionMultipleUsers': 'OCISSharingFilePermissionMultipleUsers',
-				'webUISharingFolderPermissionMultipleUsers': 'OCISSharingFolderPermissionMultipleUsers',
-				'webUISharingFolderAdvancedPermissionMultipleUsers': 'OCISSharingFolderAdvancedPermissionMU',
-				'webUIMoveFilesFolders': 'OCISMove',
-				'webUIUserJourney' : 'OCISJourney'
+				'OCISSharingFolderAdvancedPerMU0': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'OCISSharingFolderAdvancedPerMU1': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'OCISSharingFolderAdvancedPerMU2': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'OCISSharingFolderAdvancedPerMU3': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'OCISSharingFolderAdvancedPerMU4': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'OCISSharingFolderAdvancedPerMU5': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'OCISSharingFolderAdvancedPerMU6': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'OCISSharingFolderAdvancedPerMU7': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'OCISSharingFolderAdvancedPerMU8': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
+				'OCISSharingFolderAdvancedPerMU9': ['webUISharingFolderAdvancedPermissionMultipleUsers'],
 			},
 			'extraEnvironment': {
 				'NODE_TLS_REJECT_UNAUTHORIZED': '0',
@@ -342,12 +73,10 @@ def main(ctx):
 		print('Errors detected. Review messages above.')
 		return []
 
-	dependsOn(before, stages)
-
 	after = afterPipelines(ctx)
 	dependsOn(stages, after)
 
-	return before + stages + after
+	return stages + after
 
 def beforePipelines(ctx):
 	return yarnlint() + changelog(ctx) + website(ctx)
