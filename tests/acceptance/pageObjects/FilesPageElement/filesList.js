@@ -163,7 +163,7 @@ module.exports = {
       // TODO: can we remove this call?
       // .waitForElementNotPresent('@filesListProgressBar')
 
-      // wait until the files table is loaded
+      // wait until loading is finished
       await this.waitForOutstandingAjaxCalls()
       await this.waitForLoadingFinished()
 
@@ -266,19 +266,6 @@ module.exports = {
       })
       return selectionStatus
     },
-    /**
-     * Wait for A filerow with given filename to be visible
-     *
-     * @param {string} fileName
-     * @param {string} elementType
-     * @param timeout
-     */
-    waitForFileVisible: async function(fileName, elementType = 'file', timeout = null) {
-      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
-      await this.filesListScrollToTop()
-      // Find the item in files list if it's not in the view
-      await this.findItemInFilesList(fileName)
-    },
     waitForTableLoaded: async function() {
       await this.waitForElementVisible('@filesTable')
     },
@@ -319,14 +306,29 @@ module.exports = {
       return iconUrl
     },
     /**
-     * Wait for A filerow with given path to be visible
+     * Wait for a filerow with given filename to be visible
+     *
+     * @param {string} fileName
+     * @param {string} elementType
+     * @param timeout
+     */
+    waitForFileVisible: async function(fileName, elementType = 'file', timeout = null) {
+      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
+      const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
+      this.useXpath()
+        .waitForElementVisible(rowSelector)
+        .useCss()
+    },
+    /**
+     * Wait for a filerow with given path to be visible
      * This only works in the favorites page as it uses the whole path of a file rather than just the name
      * This does not works in cases where the path starts with a space (eg. "  ParentFolder/file.txt")
      *
      * @param {string} path
      * @param {string} elementType
      */
-    waitForFileWithPathVisible: function(path, elementType = 'file') {
+    waitForFileWithPathVisible: async function(path, elementType = 'file') {
+      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
       const linkSelector = this.getFileLinkSelectorByFileName(path, elementType)
       const rowSelector = this.getFileRowSelectorByFileName(path, elementType)
       return this.useXpath()
