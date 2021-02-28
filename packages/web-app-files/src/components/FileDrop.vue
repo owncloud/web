@@ -69,8 +69,8 @@ export default {
 <style lang="scss">
 .oc-dropzone {
   position: fixed;
-  top: 0;
-  left: 250px;
+  top: 60px;
+  left: 0;
   height: 100%;
   width: 100%;
   z-index: 3;
@@ -79,6 +79,10 @@ export default {
   .dz-message,
   .oc-dropzone {
     height: 100%;
+  }
+
+  @media only screen and (min-width: 1200px) {
+    left: 300px;
   }
 }
 </style>
