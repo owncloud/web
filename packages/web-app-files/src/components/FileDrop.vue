@@ -3,6 +3,7 @@
     v-if="dropzone"
     id="oc-dropzone"
     ref="ocDropzone"
+    class="oc-dropzone"
     :options="ocDropzone_options"
     :use-custom-slot="true"
     :include-styling="false"
@@ -66,10 +67,10 @@ export default {
 </script>
 
 <style lang="scss">
-#oc-dropzone {
+.oc-dropzone {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 250px;
   height: 100%;
   width: 100%;
   z-index: 3;

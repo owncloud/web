@@ -9,7 +9,7 @@ import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import FileLinkSidebar from './components/FileLinkSidebar.vue'
 import PrivateLink from './views/PrivateLink.vue'
 import PublicLink from './views/PublicLink.vue'
-import FilesDrop from './components/PublicLinks/FilesDrop.vue'
+import FilesDrop from './views/FilesDrop.vue'
 import LocationPicker from './views/LocationPicker.vue'
 import PublicFiles from './views/PublicFiles.vue'
 
@@ -192,11 +192,6 @@ const routes = [
         meta: {
           auth: false
         }
-      },
-      {
-        name: 'public-drop',
-        path: 'files-drop/:token',
-        component: FilesDrop
       }
     ]
   },
@@ -226,6 +221,14 @@ const routes = [
       verbose: true,
       auth: false
     }
+  },
+  {
+    path: '/files-drop/:token',
+    name: 'public-drop',
+    components: {
+      app: FilesDrop
+    },
+    meta: { auth: false }
   }
 ]
 

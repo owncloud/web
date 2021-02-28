@@ -68,7 +68,7 @@
 <script>
 import vue2DropZone from 'vue2-dropzone'
 import { mapGetters } from 'vuex'
-import Mixins from '../../mixins.js'
+import Mixins from '../mixins.js'
 
 export default {
   components: {
