@@ -4,7 +4,7 @@ const { join } = require('../helpers/path')
 
 module.exports = {
   url: function() {
-    return join(this.api.launchUrl, '/#/files/shared-with-me/')
+    return join(this.api.launchUrl, '/#/files/list/shared-with-me/')
   },
   commands: {
     /**

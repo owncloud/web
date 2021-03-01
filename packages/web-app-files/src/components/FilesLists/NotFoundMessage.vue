@@ -64,7 +64,7 @@ export default {
     publicLinkRoute() {
       const item = this.$route.params.item.replace(/^\/+/, '')
       return {
-        name: 'public-files',
+        name: 'files-public-list',
         params: {
           item: item.split('/')[0]
         }
