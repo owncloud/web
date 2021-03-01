@@ -39,7 +39,7 @@
               v-if="resource.status === 1 || resource.status === 2"
               variation="raw"
               class="file-row-share-status-action uk-text-meta"
-              @click="pendingShareAction(item, 'POST')"
+              @click.stop="pendingShareAction(resource, 'POST')"
             >
               <translate>Accept</translate>
             </oc-button>
@@ -47,7 +47,7 @@
               v-if="resource.status === 1 || resource.status === 0"
               variation="raw"
               class="file-row-share-status-action uk-text-meta oc-ml"
-              @click="pendingShareAction(resource, 'DELETE')"
+              @click.stop="pendingShareAction(resource, 'DELETE')"
             >
               <translate>Decline</translate>
             </oc-button>
@@ -71,9 +71,6 @@
             <translate :translate-n="activeFilesCount.files" translate-plural="files"
               >file</translate
             >
-            <template v-if="activeFiles.length > 0">
-              &ndash; {{ getResourceSize(filesTotalSize) }}
-            </template>
           </div>
         </template>
       </oc-table-files>
@@ -109,8 +106,7 @@ export default {
       'activeFiles',
       'selectedFiles',
       'inProgress',
-      'activeFilesCount',
-      'filesTotalSize'
+      'activeFilesCount'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
 
@@ -153,7 +149,13 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
-    ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapActions(['showMessage']),
+    ...mapMutations('Files', [
+      'LOAD_FILES',
+      'SELECT_RESOURCES',
+      'CLEAR_CURRENT_FILES_LIST',
+      'UPDATE_RESOURCE'
+    ]),
     ...mapMutations(['SET_QUOTA']),
 
     async loadResources() {
@@ -222,6 +224,29 @@ export default {
       const appBarPosition = document.querySelector('#files-app-bar')
 
       this.headerPosition = appBarPosition.getBoundingClientRect().bottom
+    },
+
+    async pendingShareAction(resource, type) {
+      try {
+        await this.$client.requests.ocs({
+          service: 'apps/files_sharing',
+          action: `api/v1/shares/pending/${resource.share.id}`,
+          method: type
+        })
+
+        resource.status = type === 'POST' ? 0 : 2
+
+        this.UPDATE_RESOURCE(resource)
+      } catch (error) {
+        this.showMessage({
+          title: this.$gettext('Error while changing share state'),
+          desc: error.message,
+          status: 'danger',
+          autoClose: {
+            enabled: true
+          }
+        })
+      }
     }
   }
 }

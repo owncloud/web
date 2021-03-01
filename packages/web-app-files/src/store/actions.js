@@ -466,36 +466,6 @@ export default {
       .catch(e => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
   },
 
-  // TODO: Think of a better name
-  pendingShare(context, { client, item, type }) {
-    // TODO: Move request to owncloud-sdk
-    client.requests
-      .ocs({
-        service: 'apps/files_sharing',
-        action: `/api/v1/shares/pending/${item.shareId}`,
-        method: type
-      })
-      .then(_ => {
-        context.dispatch('loadFolderSharedWithMe', {
-          client: client
-        })
-      })
-      .catch(e => {
-        context.dispatch(
-          'showMessage',
-          {
-            title: $gettext('Error while changing share state'),
-            desc: e.message,
-            status: 'danger',
-            autoClose: {
-              enabled: true
-            }
-          },
-          { root: true }
-        )
-      })
-  },
-
   addActionToProgress({ commit }, item) {
     commit('ADD_ACTION_TO_PROGRESS', item)
   },
@@ -567,6 +537,8 @@ export default {
       }
     }
 
-    commit('LOAD_PREVIEWS', resources)
+    for (const resource of resources) {
+      commit('UPDATE_RESOURCE', resource)
+    }
   }
 }
