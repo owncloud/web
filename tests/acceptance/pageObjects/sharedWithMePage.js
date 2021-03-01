@@ -21,15 +21,13 @@ module.exports = {
      * gets displayed share status of file-name (shared by user of given username)
      *
      * @param {string} filename
-     * @param {string} sharer
      *
      * @return {Promise<string>}
      */
-    getShareStatusOfResource: async function(filename, sharer) {
+    getShareStatusOfResource: async function(filename) {
       let status
       const requiredXpath =
         this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-        util.format(this.elements.resourceRowByShareOwner.selector, sharer) +
         this.elements.shareStatusOnFileRow.selector
       await this.useXpath()
         .waitForAnimationToFinish()
@@ -48,16 +46,14 @@ module.exports = {
     /**
      * @param {string} filename
      * @param {string} action - It takes one of the following : Decline and Accept
-     * @param {string} user
      *Performs required action, such as accept and decline, on the file row element of the desired file name
      *  shared by specific user
      */
-    declineAcceptFile: function(action, filename, user) {
+    declineAcceptFile: function(action, filename) {
       const actionLocatorButton = {
         locateStrategy: this.elements.shareStatusActionOnFileRow.locateStrategy,
         selector:
           this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-          util.format(this.elements.resourceRowByShareOwner.selector, user) +
           util.format(this.elements.shareStatusActionOnFileRow.selector, action)
       }
       return this.initAjaxCounters()
@@ -97,11 +93,6 @@ module.exports = {
     }
   },
   elements: {
-    resourceRowByShareOwner: {
-      selector:
-        '//td[contains(@class,"oc-table-data-cell-owner")]//div[@alt=normalize-space("%s")]/ancestor::tr',
-      locateStrategy: 'xpath'
-    },
     shareStatusOnFileRow: {
       selector: "//span[contains(@class,'file-row-share-status-text')]",
       locateStrategy: 'xpath'
