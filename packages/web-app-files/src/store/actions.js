@@ -3,13 +3,7 @@ import queryString from 'query-string'
 
 import { getParentPaths } from '../helpers/path'
 import { shareTypes } from '../helpers/shareTypes'
-import {
-  buildResource,
-  buildShare,
-  buildCollaboratorShare,
-  imgExtensions,
-  getFileExtension
-} from '../helpers/resources'
+import { buildResource, buildShare, buildCollaboratorShare } from '../helpers/resources'
 import { $gettext, $gettextInterpolate } from '../gettext'
 
 export default {
@@ -558,22 +552,18 @@ export default {
     }
 
     for (const resource of resources) {
-      const extension = getFileExtension(resource.name)
+      const etag = resource.etag
 
-      if (imgExtensions.includes(extension)) {
-        const etag = resource.etag
+      if (etag) {
+        query.c = etag.substr(1, etag.length - 2)
+      }
 
-        if (etag) {
-          query.c = etag.substr(1, etag.length - 2)
-        }
+      const previewUrl = davUrl + resource.path + '?' + queryString.stringify(query)
 
-        const previewUrl = davUrl + resource.path + '?' + queryString.stringify(query)
-
-        try {
-          resource.preview = await mediaSource(previewUrl, 'url')
-        } catch (error) {
-          console.error(error)
-        }
+      try {
+        resource.preview = await mediaSource(previewUrl, 'url')
+      } catch (error) {
+        console.error(error)
       }
     }
 

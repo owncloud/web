@@ -10,9 +10,7 @@ export async function getAvatarSrc(userId, server, token) {
   })
 
   if (response.status === 200) {
-    const signedUrl = await this.$client.signUrl(url)
-
-    return signedUrl
+    return await this.$client.signUrl(url)
   }
 
   return ''

@@ -10,8 +10,6 @@ import { shareTypes, userShareTypes } from '../helpers/shareTypes'
 import { $gettext } from '../gettext'
 import { getAvatarSrc } from './user'
 
-export const imgExtensions = ['png', 'jpg', 'jpeg', 'gif']
-
 /**
  * Returns formatted size of given resource
  * @param {Number} size Unformatted size of the resource
@@ -36,7 +34,7 @@ export function getResourceSize(size) {
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
-  const icon = fileIconMappings[extension.toLowerCase()]
+  const icon = fileIconMappings[extension]
 
   if (icon) {
     return icon
@@ -48,7 +46,7 @@ export function getFileIcon(extension) {
 export function getFileExtension(name) {
   const dotIndex = name.lastIndexOf('.')
 
-  return name.substring(dotIndex + 1)
+  return name.substring(dotIndex + 1).toLowerCase()
 }
 
 export function buildResource(resource) {
