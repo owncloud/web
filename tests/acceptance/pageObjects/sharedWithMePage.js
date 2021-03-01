@@ -29,7 +29,7 @@ module.exports = {
       let status
       const requiredXpath =
         this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-        util.format(this.elements.getSharedFromUserName.selector, sharer) +
+        util.format(this.elements.resourceRowByShareOwner.selector, sharer) +
         this.elements.shareStatusOnFileRow.selector
       await this.useXpath()
         .waitForAnimationToFinish()
@@ -57,7 +57,7 @@ module.exports = {
         locateStrategy: this.elements.shareStatusActionOnFileRow.locateStrategy,
         selector:
           this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-          util.format(this.elements.getSharedFromUserName.selector, user) +
+          util.format(this.elements.resourceRowByShareOwner.selector, user) +
           util.format(this.elements.shareStatusActionOnFileRow.selector, action)
       }
       return this.initAjaxCounters()
@@ -97,21 +97,28 @@ module.exports = {
     }
   },
   elements: {
+    resourceRowByShareOwner: {
+      selector:
+        '//td[contains(@class,"oc-table-data-cell-owner")]//div[@alt=normalize-space("%s")]/ancestor::tr',
+      locateStrategy: 'xpath'
+    },
     shareStatusOnFileRow: {
-      selector: "/../..//*[contains(@class,'file-row-share-status-text')]",
+      selector: "//span[contains(@class,'file-row-share-status-text')]",
       locateStrategy: 'xpath'
     },
     getSharedFromUserName: {
-      selector: '//*[contains(@class,"file-row-owner-name")][normalize-space(.)="%s"]',
+      selector:
+        '//td[contains(@class,"oc-table-data-cell-owner")]//div[@alt=normalize-space("%s")]',
       locateStrategy: 'xpath'
     },
     sharedFrom: {
-      selector: "//*[contains(@class,'file-row-owner-name')]",
+      selector:
+        "//td[contains(@class,'oc-table-data-cell-owner')]//div[contains(@class, 'oc-avatar')]",
       locateStrategy: 'xpath'
     },
     shareStatusActionOnFileRow: {
       selector:
-        '/../..//*[contains(@class,"file-row-share-status-action")][normalize-space(.)="%s"]',
+        '//button[contains(@class,"file-row-share-status-action")][normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
     }
   }
