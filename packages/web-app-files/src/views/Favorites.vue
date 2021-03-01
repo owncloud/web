@@ -63,7 +63,8 @@ export default {
   mixins: [FileActions],
 
   data: () => ({
-    loading: true
+    loading: true,
+    headerPosition: 60
   }),
 
   computed: {
@@ -100,21 +101,20 @@ export default {
       return this.activeFiles.length < 1
     },
 
-    headerPosition() {
-      if (this.uploadProgressVisible) {
-        return 190
-      }
-
-      return this.selectedFiles.length > 0 ? 110 : 60
-    },
-
     uploadProgressVisible() {
       return this.inProgress.length > 0
     }
   },
 
+  watwch: {
+    uploadProgressVisible() {
+      this.adjustTableHeaderPosition()
+    }
+  },
+
   created() {
     this.loadResources()
+    window.onresize = this.adjustTableHeaderPosition
   },
 
   methods: {
@@ -147,6 +147,12 @@ export default {
 
     getResourceSize(size) {
       return getResourceSize(size)
+    },
+
+    adjustTableHeaderPosition() {
+      const appBarPosition = document.querySelector('#files-app-bar')
+
+      this.headerPosition = appBarPosition.getBoundingClientRect().bottom
     }
   }
 }

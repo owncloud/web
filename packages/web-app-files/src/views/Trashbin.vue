@@ -59,7 +59,8 @@ export default {
   components: { ListLoader, NoContentMessage },
 
   data: () => ({
-    loading: true
+    loading: true,
+    headerPosition: 110
   }),
 
   computed: {
@@ -91,15 +92,18 @@ export default {
 
     uploadProgressVisible() {
       return this.inProgress.length > 0
-    },
+    }
+  },
 
-    headerPosition() {
-      return this.uploadProgressVisible ? 190 : 110
+  watch: {
+    uploadProgressVisible() {
+      this.adjustTableHeaderPosition()
     }
   },
 
   created() {
     this.loadResources()
+    window.onresize = this.adjustTableHeaderPosition
   },
 
   methods: {
@@ -127,6 +131,12 @@ export default {
 
     getResourceSize(size) {
       return getResourceSize(size)
+    },
+
+    adjustTableHeaderPosition() {
+      const appBarPosition = document.querySelector('#files-app-bar')
+
+      this.headerPosition = appBarPosition.getBoundingClientRect().bottom
     }
   }
 }

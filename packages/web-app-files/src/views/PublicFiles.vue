@@ -71,7 +71,8 @@ export default {
   mixins: [FileActions],
 
   data: () => ({
-    loading: true
+    loading: true,
+    headerPosition: 90
   }),
 
   computed: {
@@ -98,10 +99,6 @@ export default {
       return this.inProgress.length > 0
     },
 
-    headerPosition() {
-      return this.uploadProgressVisible ? 180 : 90
-    },
-
     folderNotFound() {
       return this.currentFolder === null
     },
@@ -115,7 +112,15 @@ export default {
     $route: {
       handler: 'loadResources',
       immediate: true
+    },
+
+    uploadProgressVisible() {
+      this.adjustTableHeaderPosition()
     }
+  },
+
+  created() {
+    window.onresize = this.adjustTableHeaderPosition
   },
 
   methods: {
@@ -144,6 +149,12 @@ export default {
 
     getResourceSize(size) {
       return getResourceSize(size)
+    },
+
+    adjustTableHeaderPosition() {
+      const appBarPosition = document.querySelector('#files-app-bar')
+
+      this.headerPosition = appBarPosition.getBoundingClientRect().bottom
     }
   }
 }

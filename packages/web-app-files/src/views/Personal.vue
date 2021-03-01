@@ -78,7 +78,8 @@ export default {
   mixins: [FileActions],
 
   data: () => ({
-    loading: true
+    loading: true,
+    headerPosition: 150
   }),
 
   computed: {
@@ -107,10 +108,6 @@ export default {
       return this.inProgress.length > 0
     },
 
-    headerPosition() {
-      return this.uploadProgressVisible ? 230 : 150
-    },
-
     selected: {
       get() {
         return this.selectedFiles
@@ -129,7 +126,15 @@ export default {
     $route: {
       handler: 'loadResources',
       immediate: true
+    },
+
+    uploadProgressVisible() {
+      this.adjustTableHeaderPosition()
     }
+  },
+
+  created() {
+    window.onresize = this.adjustTableHeaderPosition
   },
 
   methods: {
@@ -188,10 +193,23 @@ export default {
 
           if (resource) {
             this.setHighlightedFile(resource)
-            this.$scrollTo(`.oc-tbody-tr-${resource.id}`)
+
+            const appBarPosition = document.querySelector('#files-app-bar')
+            let offset = appBarPosition.getBoundingClientRect().bottom
+
+            // 24 is the height of the table header without padding
+            offset += 24
+
+            this.$scrollTo(`.oc-tbody-tr-${resource.id}`, 300, { offset: -offset })
           }
         })
       }
+    },
+
+    adjustTableHeaderPosition() {
+      const appBarPosition = document.querySelector('#files-app-bar')
+
+      this.headerPosition = appBarPosition.getBoundingClientRect().bottom
     }
   }
 }

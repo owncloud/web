@@ -97,7 +97,8 @@ export default {
   mixins: [FileActions],
 
   data: () => ({
-    loading: true
+    loading: true,
+    headerPosition: 60
   }),
 
   computed: {
@@ -134,21 +135,20 @@ export default {
       return this.inProgress.length > 0
     },
 
-    headerPosition() {
-      if (this.uploadProgressVisible) {
-        return 190
-      }
-
-      return this.selectedFiles.length > 0 ? 110 : 60
-    },
-
     targetRoute() {
       return { name: 'files-personal' }
     }
   },
 
+  watch: {
+    uploadProgressVisible() {
+      this.adjustTableHeaderPosition()
+    }
+  },
+
   created() {
     this.loadResources()
+    window.onresize = this.adjustTableHeaderPosition
   },
 
   methods: {
@@ -216,6 +216,12 @@ export default {
 
     getResourceSize(size) {
       return getResourceSize(size)
+    },
+
+    adjustTableHeaderPosition() {
+      const appBarPosition = document.querySelector('#files-app-bar')
+
+      this.headerPosition = appBarPosition.getBoundingClientRect().bottom
     }
   }
 }
