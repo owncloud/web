@@ -126,6 +126,7 @@ export default {
         currentFolder: buildResource(resources[0]),
         files: resources.slice(1).map(buildDeletedResource)
       })
+      this.adjustTableHeaderPosition()
       this.loading = false
     },
 
@@ -134,9 +135,9 @@ export default {
     },
 
     adjustTableHeaderPosition() {
-      const appBarPosition = document.querySelector('#files-app-bar')
+      const appBar = document.querySelector('#files-app-bar')
 
-      this.headerPosition = appBarPosition.getBoundingClientRect().bottom
+      this.headerPosition = appBar.getBoundingClientRect().bottom
     }
   }
 }

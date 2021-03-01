@@ -56,11 +56,11 @@ Feature: files and folders exist in the trashbin after being deleted
   Scenario: Delete multiple files at once and check that they are all in the trashbin
     When the user batch deletes these files using the webUI
       | name              |
+      | Folder,With,Comma |
+      | simple-folder     |
       | data.zip          |
       | lorem.txt         |
-      | simple-folder     |
       | sample,1.txt      |
-      | Folder,With,Comma |
     And the user browses to the trashbin page
     Then as "Alice" file "data.zip" should exist in the trashbin
     And as "Alice" file "lorem.txt" should exist in the trashbin

@@ -71,7 +71,7 @@ export default {
   position: fixed;
   top: 60px;
   left: 0;
-  height: 100%;
+  height: calc(100% - 60px);
   width: 100%;
   z-index: 3;
 
@@ -83,6 +83,7 @@ export default {
 
   @media only screen and (min-width: 1200px) {
     left: 300px;
+    width: calc(100% - 300px);
   }
 }
 </style>

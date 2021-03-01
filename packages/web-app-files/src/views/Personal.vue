@@ -176,6 +176,7 @@ export default {
         console.error(error)
       }
 
+      this.adjustTableHeaderPosition()
       this.loading = false
       this.scrollToResource()
     },
@@ -207,9 +208,9 @@ export default {
     },
 
     adjustTableHeaderPosition() {
-      const appBarPosition = document.querySelector('#files-app-bar')
+      const appBar = document.querySelector('#files-app-bar')
 
-      this.headerPosition = appBarPosition.getBoundingClientRect().bottom
+      this.headerPosition = appBar.getBoundingClientRect().bottom
     }
   }
 }
