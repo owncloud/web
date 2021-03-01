@@ -7,10 +7,7 @@
       :class="{ 'uk-visible@m': _sidebarOpen }"
       @dragover="$_ocApp_dragOver"
     >
-      <app-bar
-        id="files-app-bar"
-        :style="{ top: !publicPage() && !$route.meta.verbose ? '60px' : '0' }"
-      />
+      <app-bar id="files-app-bar" :style="{ top: $_topBarVisible ? '60px' : '0' }" />
       <upload-progress
         v-show="$_uploadProgressVisible"
         id="files-upload-progress"
@@ -65,6 +62,10 @@ export default {
 
     _sidebarOpen() {
       return this.highlightedFile !== null
+    },
+
+    $_topBarVisible() {
+      return !this.publicPage() && !this.$route.meta.verbose
     },
 
     $_uploadProgressVisible() {
