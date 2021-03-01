@@ -136,7 +136,7 @@ module.exports = {
         const permissionCheckbox = this.getPermissionCheckbox(permission)
         const elementID = await this.getVisibleElementID('xpath', permissionCheckbox)
         if (elementID === null) {
-          throw new Error(`Checkbox is not visible for permission ${permission}`)
+          throw new Error(`Checkbox is not visible for the permission '${permission}'`)
         }
         await this.api.elementIdClick(elementID)
       }
