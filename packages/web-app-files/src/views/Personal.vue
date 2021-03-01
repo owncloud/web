@@ -163,7 +163,7 @@ export default {
         this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
         this.loadPreviews({
           resources,
-          isPublic: this.publicPage(),
+          isPublic: false,
           mediaSource: this.mediaSource
         })
 

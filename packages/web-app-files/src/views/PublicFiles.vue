@@ -54,7 +54,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
-import { getResourceSize } from '../helpers/resources'
+import { getResourceSize, buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 
 import ListLoader from '../components/ListLoader.vue'
@@ -124,26 +124,31 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadFiles', 'loadIndicators']),
-    ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'CLEAR_CURRENT_FILES_LIST']),
+    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
+    ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'CLEAR_CURRENT_FILES_LIST', 'LOAD_FILES']),
 
     async loadResources() {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
-        const resources = await this.$client.publicFiles.list(
+        let resources = await this.$client.publicFiles.list(
           this.$route.params.item,
           this.publicLinkPassword,
           this.davProperties
         )
 
-        this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
+        resources = resources.map(buildResource)
+        this.LOAD_FILES({ currentFolder: resources[0], files: resources.slice(1) })
+        this.loadPreviews({
+          resources,
+          isPublic: true,
+          mediaSource: this.mediaSource
+        })
       } catch (error) {
         this.SET_CURRENT_FOLDER(null)
         console.error(error)
       }
-
       this.loading = false
     },
 
