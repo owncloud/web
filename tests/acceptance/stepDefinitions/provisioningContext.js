@@ -165,10 +165,7 @@ Given('user {string} has been deleted', function(userId) {
 })
 
 Given('user {string} has been blocked by admin', function(userId) {
-  blockUser(userId)
-    .then((resp)=> {
-      console.log(resp)
-    })
+  return blockUser(userId)
 })
 
 Given('user {string} has been created with default attributes on remote server', function(userId) {
