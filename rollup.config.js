@@ -13,7 +13,6 @@ import del from 'rollup-plugin-delete'
 import * as fs from 'fs'
 import gzip from 'rollup-plugin-gzip'
 import ejs from 'ejs'
-import * as _ from 'lodash'
 import progress from 'rollup-plugin-progress'
 import postcss from 'rollup-plugin-postcss'
 import serve from 'rollup-plugin-serve'
@@ -192,5 +191,6 @@ export default {
       console.error(`(!) ${warning.message}`)
     }
   },
+  preserveSymlinks: true,
   plugins
 }
