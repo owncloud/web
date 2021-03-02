@@ -597,9 +597,6 @@ def acceptance(ctx):
 			for item in config['defaults']['acceptance']:
 				default[item] = config['defaults']['acceptance'][item]
 
-	if (default['screenShots']):
-		default['extraEnvironment'].update({"SCREENSHOTS": "true"})
-
 	for category, matrix in config['acceptance'].items():
 		if type(matrix['suites']) == "list":
 			suites = {}
@@ -678,7 +675,7 @@ def acceptance(ctx):
 						steps += copyFilesForUpload()
 
 						# run the acceptance tests
-						steps += runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser, params['visualTesting'])
+						steps += runWebuiAcceptanceTests(suite, alternateSuiteName, params['filterTags'], params['extraEnvironment'], browser, params['visualTesting'], params['screenShots'])
 
 						# capture the screenshots from visual regression testing (only runs on failure)
 						if (params['visualTesting']):
@@ -1621,7 +1618,7 @@ def copyFilesForUpload():
 		]
 	}]
 
-def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting):
+def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironment, browser, visualTesting, screenShots):
 	environment = {}
 	if (filterTags != ''):
 		environment['TEST_TAGS'] = filterTags
@@ -1648,7 +1645,8 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 
 	if (visualTesting):
 		environment['VISUAL_TEST'] = 'true'
-
+	if (screenShots):
+		environment['SCREENSHOTS'] = "true"
 	environment['SERVER_HOST'] = 'http://web'
 	environment['BACKEND_HOST'] = 'http://owncloud'
 
