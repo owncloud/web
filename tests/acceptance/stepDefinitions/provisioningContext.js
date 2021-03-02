@@ -24,7 +24,7 @@ function createDefaultUser(userId) {
 function createUser(userId, password, displayName = false, email = false) {
   const body = new URLSearchParams()
   if (client.globals.ocis) {
-    if (email === false) {
+    if (!email) {
       email = userId + '@example.com'
     }
     body.append('username', userId)
@@ -54,7 +54,7 @@ function createUser(userId, password, displayName = false, email = false) {
           return fs.copy(skelDir, join(dataDir, 'files'))
         }
       }
-      if (displayName !== false) {
+      if (displayName) {
         promiseList.push(
           new Promise((resolve, reject) => {
             const body = new URLSearchParams()
@@ -75,7 +75,7 @@ function createUser(userId, password, displayName = false, email = false) {
       if (client.globals.ocis) {
         return
       }
-      if (email !== false) {
+      if (email) {
         promiseList.push(
           new Promise((resolve, reject) => {
             const body = new URLSearchParams()
