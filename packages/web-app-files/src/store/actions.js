@@ -522,6 +522,10 @@ export default {
     }
 
     for (const resource of resources) {
+      if (!resource.extension) {
+        continue
+      }
+
       const etag = resource.etag
 
       if (etag) {
@@ -532,13 +536,10 @@ export default {
 
       try {
         resource.preview = await mediaSource(previewUrl, 'url')
+        commit('UPDATE_RESOURCE', resource)
       } catch (error) {
         console.error(error)
       }
-    }
-
-    for (const resource of resources) {
-      commit('UPDATE_RESOURCE', resource)
     }
   }
 }
