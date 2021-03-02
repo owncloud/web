@@ -306,6 +306,15 @@ module.exports = {
       return iconUrl
     },
     /**
+     * Scrolls resource into the view using the offset of headers
+     * @param {string} selector XPATH selector of the resource
+     */
+    scrollResourceToView: async function(selector) {
+      const elementId = await client.api.element(selector)
+      console.log(elementId)
+      // const position = await client.api.elementIdLocation()
+    },
+    /**
      * Wait for a filerow with given filename to be visible
      *
      * @param {string} fileName
@@ -313,11 +322,12 @@ module.exports = {
      * @param timeout
      */
     waitForFileVisible: async function(fileName, elementType = 'file', timeout = null) {
-      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
       const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
-      this.useXpath()
-        .waitForElementVisible(rowSelector)
-        .useCss()
+
+      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
+      await client.api.expect.element(rowSelector).to.be.present
+
+      return this.scrollResourceToView(rowSelector)
     },
     /**
      * Wait for a filerow with given path to be visible
