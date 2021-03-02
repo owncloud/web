@@ -45,6 +45,9 @@ export function getFileIcon(extension) {
 
 export function getFileExtension(name) {
   const dotIndex = name.lastIndexOf('.')
+  if (dotIndex < 0) {
+    return null
+  }
 
   return name.substring(dotIndex + 1).toLowerCase()
 }
@@ -53,11 +56,7 @@ export function buildResource(resource) {
   const builtResource = {
     id: resource.fileInfo['{http://owncloud.org/ns}fileid'],
     icon: resource.type === 'dir' ? 'folder' : getFileIcon(getFileExtension(resource.name)),
-    name: (() => {
-      const name = resource.name
-
-      return name.includes('/') ? name.substring(name.lastIndexOf('/') + 1) : name
-    })(),
+    name: path.basename(resource.name),
     path: resource.name,
     type: resource.type === 'dir' ? 'folder' : resource.type,
     mdate: resource.fileInfo['{DAV:}getlastmodified'],
