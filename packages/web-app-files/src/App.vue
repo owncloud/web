@@ -133,7 +133,7 @@ export default {
 #files-sidebar {
   position: sticky;
   top: 60px;
-  max-height: 100vh;
+  max-height: calc(100vh - 60px);
 }
 
 #files-app-bar {
