@@ -5,8 +5,8 @@ import moment from 'moment'
 
 import fileIconMappings from '../fileTypeIconMappings.json'
 import { getIndicators } from './statusIndicators'
-import { checkPermission, bitmaskToRole, permissionsBitmask } from '../helpers/collaborators'
-import { shareTypes, userShareTypes } from '../helpers/shareTypes'
+import { bitmaskToRole, checkPermission, permissionsBitmask } from './collaborators'
+import { shareTypes, userShareTypes } from './shareTypes'
 import { $gettext } from '../gettext'
 import { getAvatarSrc } from './user'
 
@@ -43,27 +43,28 @@ export function getFileIcon(extension) {
   return 'file'
 }
 
-export function getFileExtension(name) {
-  const dotIndex = name.lastIndexOf('.')
-  if (dotIndex < 0) {
-    return null
+function _getFileExtension(name) {
+  const extension = path.extname(name)
+  if (!extension) {
+    return ''
   }
-
-  return name.substring(dotIndex + 1).toLowerCase()
+  return extension.replace(/^(.)/, '').toLowerCase()
 }
 
 export function buildResource(resource) {
-  const builtResource = {
+  const isFolder = resource.type === 'dir'
+  const extension = _getFileExtension(resource.name)
+  return {
     id: resource.fileInfo['{http://owncloud.org/ns}fileid'],
-    icon: resource.type === 'dir' ? 'folder' : getFileIcon(getFileExtension(resource.name)),
+    icon: isFolder ? 'folder' : getFileIcon(extension),
     name: path.basename(resource.name),
+    extension: isFolder ? '' : extension,
     path: resource.name,
-    type: resource.type === 'dir' ? 'folder' : resource.type,
+    type: isFolder ? 'folder' : resource.type,
     mdate: resource.fileInfo['{DAV:}getlastmodified'],
-    size:
-      resource.type === 'dir'
-        ? resource.fileInfo['{http://owncloud.org/ns}size']
-        : resource.fileInfo['{DAV:}getcontentlength'],
+    size: isFolder
+      ? resource.fileInfo['{http://owncloud.org/ns}size']
+      : resource.fileInfo['{DAV:}getcontentlength'],
     indicators: [],
     permissions: resource.fileInfo['{http://owncloud.org/ns}permissions'] || '',
     starred: resource.fileInfo['{http://owncloud.org/ns}favorite'] !== '0',
@@ -85,12 +86,12 @@ export function buildResource(resource) {
       return shareTypes || []
     })(),
     privateLink: resource.fileInfo['{http://owncloud.org/ns}privatelink'],
-    extension: getFileExtension(resource.name),
     canUpload: function() {
       return this.permissions.indexOf('C') >= 0
     },
     canDownload: function() {
-      return this.type !== 'folder'
+      // TODO: as soon as we allow folder downloads as archive we want to return `true` here without exceptions
+      return !isFolder
     },
     canBeDeleted: function() {
       return this.permissions.indexOf('D') >= 0
@@ -111,11 +112,9 @@ export function buildResource(resource) {
       return this.permissions.indexOf('S') >= 0
     }
   }
-
-  return builtResource
 }
 
-export function attatchIndicators(resource, sharesTree) {
+export function attachIndicators(resource, sharesTree) {
   return (resource.indicators = getIndicators(resource, sharesTree))
 }
 
@@ -206,6 +205,7 @@ async function buildSharedResource(share, incomingShares = false, allowSharePerm
     id: share.item_source,
     type: share.item_type
   }
+  const isFolder = resource.type === 'folder'
 
   if (incomingShares) {
     resource.resourceOwner = {
@@ -220,9 +220,7 @@ async function buildSharedResource(share, incomingShares = false, allowSharePerm
       }
     ]
     resource.status = share.state
-    resource.name = share.file_target.includes('/')
-      ? share.file_target.substring(share.file_target.lastIndexOf('/') + 1)
-      : share.file_target
+    resource.name = path.basename(share.file_target)
     resource.path = share.file_target
     resource.isReceivedShare = () => true
   } else {
@@ -230,11 +228,11 @@ async function buildSharedResource(share, incomingShares = false, allowSharePerm
     resource.shareOwner = share.uid_owner
     resource.shareOwnerDisplayname = share.displayname_owner
     resource.name = path.basename(share.path)
-    resource.basename = path.basename(share.path, resource.extension)
     resource.path = share.path
     // permissions irrelevant here
     resource.isReceivedShare = () => false
   }
+  resource.extension = isFolder ? '' : _getFileExtension(resource.name)
   // FIXME: add actual permission parsing
   resource.canUpload = () => true
   resource.canBeDeleted = () => true
@@ -243,18 +241,10 @@ async function buildSharedResource(share, incomingShares = false, allowSharePerm
     return checkPermission(share.permissions, 'share')
   }
   resource.isMounted = () => false
-  resource.canDownload = () => resource.type !== 'folder'
-  if (resource.extension) {
-    // remove extension from basename like _buildFile does
-    resource.basename = resource.basename.substring(
-      0,
-      resource.basename.length - resource.extension.length - 1
-    )
-  }
+  resource.canDownload = () => !isFolder
   resource.share = buildShare(share, resource, allowSharePerm)
   resource.indicators = []
-  resource.icon =
-    resource.type === 'folder' ? 'folder' : getFileIcon(getFileExtension(resource.name))
+  resource.icon = isFolder ? 'folder' : getFileIcon(resource.extension)
   resource.sdate = share.stime * 1000
 
   return resource
@@ -366,27 +356,16 @@ export function buildCollaboratorShare(s, file, allowSharePerm) {
 }
 
 export function buildDeletedResource(resource) {
+  const isFolder = resource.type === 'dir'
+  const fullName = resource.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
   return {
-    type: resource.type === 'dir' ? 'folder' : resource.type,
+    type: isFolder ? 'folder' : resource.type,
     ddate: resource.fileInfo['{http://owncloud.org/ns}trashbin-delete-datetime'],
-    name: (function() {
-      const fullName = resource.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
-      const pathList = fullName.split('/').filter(e => e !== '')
-      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
-    })(),
+    name: path.basename(fullName),
+    extension: isFolder ? '' : _getFileExtension(fullName),
     path: resource.fileInfo['{http://owncloud.org/ns}trashbin-original-location'],
-    id: (function() {
-      const pathList = resource.name.split('/').filter(e => e !== '')
-      return pathList.length === 0 ? '' : pathList[pathList.length - 1]
-    })(),
-    icon:
-      resource.type === 'dir'
-        ? 'folder'
-        : getFileIcon(
-            getFileExtension(
-              resource.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
-            )
-          ),
+    id: path.basename(resource.name),
+    icon: isFolder ? 'folder' : getFileIcon(this.extension),
     indicators: []
   }
 }

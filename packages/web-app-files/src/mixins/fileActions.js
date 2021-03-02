@@ -1,7 +1,6 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 
 import { checkRoute } from '../helpers/route'
-import { getFileExtension } from '../helpers/resources'
 import Copy from './actions/copy'
 import Delete from './actions/delete'
 import Download from './actions/download'
@@ -54,7 +53,7 @@ export default {
               return false
             }
 
-            return getFileExtension(resource.name) === editor.extension
+            return resource.extension === editor.extension
           },
           canBeDefault: true
         }
