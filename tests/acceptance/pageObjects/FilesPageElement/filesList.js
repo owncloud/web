@@ -160,8 +160,6 @@ module.exports = {
         .moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
         .click(this.getFileLinkSelectorByFileName(folder))
         .useCss()
-      // TODO: can we remove this call?
-      // .waitForElementNotPresent('@filesListProgressBar')
 
       // wait until loading is finished
       await this.waitForOutstandingAjaxCalls()
@@ -306,15 +304,6 @@ module.exports = {
       return iconUrl
     },
     /**
-     * Scrolls resource into the view using the offset of headers
-     * @param {string} selector XPATH selector of the resource
-     */
-    scrollResourceToView: async function(selector) {
-      const elementId = await client.api.element(selector)
-      console.log(elementId)
-      // const position = await client.api.elementIdLocation()
-    },
-    /**
      * Wait for a filerow with given filename to be visible
      *
      * @param {string} fileName
@@ -325,9 +314,8 @@ module.exports = {
       const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
 
       await client.page.FilesPageElement.appSideBar().closeSidebar(500)
-      await client.api.expect.element(rowSelector).to.be.present
-
-      return this.scrollResourceToView(rowSelector)
+      await this.waitForElementPresent({ selector: rowSelector, locateStrategy: 'xpath' })
+      await this.api.moveToElement('xpath', rowSelector, 0, 0)
     },
     /**
      * Wait for a filerow with given path to be visible
@@ -739,10 +727,6 @@ module.exports = {
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',
       locateStrategy: 'xpath'
-    },
-    // TODO: can we get rid of this? we're doing a positive check now for one of .files-table, .files-empty or .files-not-found.
-    filesListProgressBar: {
-      selector: '#files-list-progress'
     },
     filesListNoContentMessage: {
       selector: '.files-empty'
