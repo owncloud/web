@@ -954,7 +954,7 @@ def setUpOauth2():
 			'make vendor',
 			'cd /var/www/owncloud/server/',
 			'php occ a:e oauth2',
-			'php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://web/oidc-callback.html',
+			'php occ oauth2:add-client Web Cxfj9F9ZZWQbQZps1E1M0BszMz6OOFq3lxjSuc8Uh4HLEYb9KIfyRMmgY5ibXXrU 930C6aA0U1VhM03IfNiheR2EwSzRi4hRSpcNqIhhbpeSGU6h38xssVfNcGP0sSwQ http://web/dist/oidc-callback.html',
 		]
 	}]
 
