@@ -65,6 +65,7 @@
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import FileActions from '../mixins/fileActions'
+import MixinScrollToResource from '../mixins/scrollToResource'
 import { buildResource, getResourceSize } from '../helpers/resources'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
@@ -75,7 +76,7 @@ import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage },
 
-  mixins: [FileActions],
+  mixins: [FileActions, MixinScrollToResource],
 
   data: () => ({
     loading: true,
@@ -178,14 +179,14 @@ export default {
 
       this.adjustTableHeaderPosition()
       this.loading = false
-      this.scrollToResource()
+      this.scrollToResourceFromRoute()
     },
 
     getResourceSize(size) {
       return getResourceSize(size)
     },
 
-    scrollToResource() {
+    scrollToResourceFromRoute() {
       let resource = this.$route.query.scrollTo
 
       if (resource && this.activeFiles.length > 0) {
@@ -194,14 +195,7 @@ export default {
 
           if (resource) {
             this.setHighlightedFile(resource)
-
-            const appBarPosition = document.querySelector('#files-app-bar')
-            let offset = appBarPosition.getBoundingClientRect().bottom
-
-            // 24 is the height of the table header without padding
-            offset += 24
-
-            this.$scrollTo(`.oc-tbody-tr-${resource.id}`, 300, { offset: -offset })
+            this.scrollToResource(resource)
           }
         })
       }

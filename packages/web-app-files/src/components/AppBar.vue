@@ -93,6 +93,7 @@ import isEmpty from 'lodash-es/isEmpty'
 import Mixins from '../mixins'
 import MixinFileActions from '../mixins/fileActions'
 import MixinRoutes from '../mixins/routes'
+import MixinScrollToResource from '../mixins/scrollToResource'
 import { buildResource } from '../helpers/resources'
 
 import FileUpload from './FileUpload.vue'
@@ -109,7 +110,7 @@ export default {
     BatchActions,
     InfoSelectedResources
   },
-  mixins: [Mixins, MixinFileActions, MixinRoutes],
+  mixins: [Mixins, MixinFileActions, MixinRoutes, MixinScrollToResource],
   data: () => ({
     newFileAction: null,
     path: '',
@@ -296,14 +297,7 @@ export default {
         this.hideModal()
         setTimeout(() => {
           this.setHighlightedFile(resource)
-
-          const appBarPosition = document.querySelector('#files-app-bar')
-          let offset = appBarPosition.getBoundingClientRect().bottom
-
-          // 24 is the height of the table header without padding
-          offset += 24
-
-          this.$scrollTo(`.oc-tbody-tr-${resource.id}`, 300, { offset: -offset })
+          this.scrollToResource(resource)
         })
       } catch (error) {
         this.showMessage({
@@ -386,7 +380,7 @@ export default {
         this.hideModal()
         setTimeout(() => {
           this.setHighlightedFile(resource)
-          this.$scrollTo(`.oc-tbody-tr-${resource.id}`)
+          this.scrollToResource(resource)
         })
       } catch (error) {
         this.showMessage({
