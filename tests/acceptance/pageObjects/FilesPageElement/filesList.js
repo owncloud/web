@@ -305,15 +305,33 @@ module.exports = {
      * Wait for a filerow with given filename to be visible
      *
      * @param {string} fileName
-     * @param {string} elementType
-     * @param timeout
+     * @param {string} elementType (file|folder)
      */
-    waitForFileVisible: async function(fileName, elementType = 'file', timeout = null) {
+    waitForFileVisible: async function(fileName, elementType = 'file') {
       const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
 
       await client.page.FilesPageElement.appSideBar().closeSidebar(500)
-      await this.waitForElementPresent({ selector: rowSelector, locateStrategy: 'xpath' })
-      await this.api.moveToElement('xpath', rowSelector, 0, 0)
+      let elementId = null
+      await this.waitForElementPresent(
+        { selector: rowSelector, locateStrategy: 'xpath' },
+        result => {
+          elementId = result.WebdriverElementId
+        }
+      )
+      let offset = 0
+      await this.api.elementIdLocation(elementId, result => {
+        offset = result.value.y
+      })
+
+      await this.api.execute(
+        function(scrollerContainerSelector, offset) {
+          const filesListScroll = document.querySelector(scrollerContainerSelector)
+          filesListScroll.scrollTop = offset
+        },
+        [this.elements.filesContainer.selector, offset]
+      )
+
+      return this
     },
     /**
      * Wait for a filerow with given path to be visible
@@ -421,93 +439,6 @@ module.exports = {
       })
 
       return filesCount + foldersCount
-    },
-
-    /**
-     * Find an item in the files list. Scrolls down in case the item is not visible in viewport
-     */
-    findItemInFilesList: async function(itemName) {
-      // Escape double quotes inside of selector
-      if (itemName.indexOf('"') > -1) {
-        itemName = this.replaceChar(itemName, '"', '\\"')
-      }
-
-      await this.initAjaxCounters()
-      await this.waitForElementVisible('@fileRow')
-      await this.api.executeAsync(
-        function(
-          { itemName, scrollContainerSelector, listHeaderSelector, listItemSelector },
-          done
-        ) {
-          const scrollContainer = document.querySelector(scrollContainerSelector)
-          const tableHeaderPosition = document
-            .querySelector(listHeaderSelector)
-            .getBoundingClientRect().bottom
-          let scrollDistance = scrollContainer.scrollTop
-
-          function scrollUntilElementVisible() {
-            const item = document.querySelector(`[resource-name="${itemName}"]`)
-
-            if (item) {
-              const position = item.getBoundingClientRect()
-              // Add position from top to list container height to properly decide if the item is visible
-              const visiblePosition = scrollContainer.clientHeight + tableHeaderPosition
-
-              // Check if the item is inside the view after it's rendered
-              if (position.top > -1 && position.top <= visiblePosition) {
-                done()
-                return
-              }
-            }
-
-            if (scrollContainer.scrollHeight <= scrollDistance) {
-              done()
-              return
-            }
-
-            const listItemHeight = document.querySelector(listItemSelector).clientHeight
-
-            scrollDistance += listItemHeight * 5
-            scrollContainer.scrollTop = scrollDistance
-            setTimeout(function() {
-              scrollUntilElementVisible()
-            }, 500)
-          }
-
-          scrollUntilElementVisible()
-        },
-        [
-          {
-            itemName: itemName,
-            scrollContainerSelector: this.elements.filesContainer.selector,
-            listHeaderSelector: this.elements.filesTableHeader.selector,
-            listItemSelector: this.elements.fileRow.selector
-          }
-        ]
-      )
-
-      await this.waitForOutstandingAjaxCalls()
-      return this
-    },
-
-    /**
-     * Scroll the files list to the beginning
-     */
-    filesListScrollToTop: async function() {
-      await this.waitForTableLoaded()
-      await this.api.executeAsync(
-        function(scrollerContainerSelector, done) {
-          const filesListScroll = document.querySelector(scrollerContainerSelector)
-          if (filesListScroll.scrollTop > 0) {
-            filesListScroll.scrollTop = 0
-          }
-
-          done()
-        },
-        [this.elements.filesContainer.selector]
-      )
-
-      return this
     },
 
     getShareIndicatorsForResource: async function(fileName) {
