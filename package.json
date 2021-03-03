@@ -40,6 +40,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@vue/test-utils": "^1.1.2",
     "archiver": "^3.0.0",
+    "autoprefixer": "^10.2.4",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.3",
@@ -94,6 +95,6 @@
     "xml-js": "^1.6.11"
   },
   "engines": {
-    "node": ">=10 <13"
+    "node": ">=10 <15"
   }
 }
