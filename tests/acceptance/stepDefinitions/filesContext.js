@@ -153,9 +153,7 @@ When('the user opens folder {string} using the webUI', folder =>
 )
 
 Given('the user has opened the share dialog for file/folder {string}', function(fileName) {
-  return client.page.FilesPageElement.appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(fileName)
+  return client.page.FilesPageElement.filesList().openSharingDialog(fileName)
 })
 
 When('the user closes the app-sidebar using the webUI', function() {

@@ -12,9 +12,7 @@ module.exports = {
      */
     openSharingDialog: async function(fileName) {
       const appSidebar = client.page.FilesPageElement.appSideBar()
-
       await appSidebar.closeSidebar(500)
-      await this.waitForFileVisible(fileName)
       await this.openSideBar(fileName)
       return client.page.FilesPageElement.appSideBar().selectAccordionItem('people')
     },
@@ -733,6 +731,9 @@ module.exports = {
     },
     filesListNotFoundMessage: {
       selector: '.files-not-found'
+    },
+    filesListProgressBar: {
+      selector: '#files-list-progress'
     },
     anyAfterLoading: {
       selector:
