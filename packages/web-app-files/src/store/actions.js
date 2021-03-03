@@ -507,11 +507,9 @@ export default {
         dimensions = 3840
     }
 
-    let davUrl = rootGetters.configuration.server
-
-    davUrl += isPublic
-      ? 'remote.php/dav/public-files'
-      : 'remote.php/dav/files/' + rootGetters.user.id
+    const davUrl =
+      rootGetters.configuration.server +
+      (isPublic ? 'remote.php/dav/public-files' : 'remote.php/dav/files/' + rootGetters.user.id)
 
     const query = {
       x: dimensions,
@@ -522,24 +520,20 @@ export default {
     }
 
     for (const resource of resources) {
-      if (!resource.extension) {
+      if (resource.type === 'folder' || !resource.extension) {
         continue
       }
 
-      const etag = resource.etag
-
+      const etag = (resource.etag || '').replace('"', '')
       if (etag) {
-        query.c = etag.substr(1, etag.length - 2)
+        query.c = etag
       }
 
       const previewUrl = davUrl + resource.path + '?' + queryString.stringify(query)
-
       try {
         resource.preview = await mediaSource(previewUrl, 'url')
         commit('UPDATE_RESOURCE', resource)
-      } catch (error) {
-        console.error(error)
-      }
+      } catch (ignored) {}
     }
   }
 }

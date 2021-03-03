@@ -93,7 +93,7 @@ import isEmpty from 'lodash-es/isEmpty'
 import Mixins from '../mixins'
 import MixinFileActions from '../mixins/fileActions'
 import MixinRoutes from '../mixins/routes'
-import MixinScrollToResource from '../mixins/scrollToResource'
+import MixinScrollToResource from '../mixins/filesListScrolling'
 import { buildResource } from '../helpers/resources'
 
 import FileUpload from './FileUpload.vue'

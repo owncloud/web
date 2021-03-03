@@ -83,6 +83,7 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import { aggregateResourceShares, buildResource, getResourceSize } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
+import MixinFilesListPositioning from '../mixins/filesListPositioning'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
@@ -91,11 +92,10 @@ import NoContentMessage from '../components/NoContentMessage.vue'
 export default {
   components: { QuickActions, ListLoader, NoContentMessage },
 
-  mixins: [FileActions],
+  mixins: [FileActions, MixinFilesListPositioning],
 
   data: () => ({
-    loading: true,
-    headerPosition: 60
+    loading: true
   }),
 
   computed: {
@@ -145,6 +145,10 @@ export default {
   created() {
     this.loadResources()
     window.onresize = this.adjustTableHeaderPosition
+  },
+
+  mounted() {
+    this.adjustTableHeaderPosition()
   },
 
   methods: {
@@ -218,12 +222,6 @@ export default {
 
     getResourceSize(size) {
       return getResourceSize(size)
-    },
-
-    adjustTableHeaderPosition() {
-      const appBarPosition = document.querySelector('#files-app-bar')
-
-      this.headerPosition = appBarPosition.getBoundingClientRect().bottom
     },
 
     async pendingShareAction(resource, type) {

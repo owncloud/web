@@ -51,6 +51,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 import { buildDeletedResource, buildResource, getResourceSize } from '../helpers/resources'
+import MixinFilesListPositioning from '../mixins/filesListPositioning'
 
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -58,9 +59,10 @@ import NoContentMessage from '../components/NoContentMessage.vue'
 export default {
   components: { ListLoader, NoContentMessage },
 
+  mixins: [MixinFilesListPositioning],
+
   data: () => ({
-    loading: true,
-    headerPosition: 110
+    loading: true
   }),
 
   computed: {
@@ -106,6 +108,10 @@ export default {
     window.onresize = this.adjustTableHeaderPosition
   },
 
+  mounted() {
+    this.adjustTableHeaderPosition()
+  },
+
   methods: {
     ...mapActions('Files', ['setHighlightedFile']),
     ...mapMutations('Files', ['LOAD_FILES', 'SELECT_RESOURCES', 'CLEAR_CURRENT_FILES_LIST']),
@@ -132,12 +138,6 @@ export default {
 
     getResourceSize(size) {
       return getResourceSize(size)
-    },
-
-    adjustTableHeaderPosition() {
-      const appBar = document.querySelector('#files-app-bar')
-
-      this.headerPosition = appBar.getBoundingClientRect().bottom
     }
   }
 }

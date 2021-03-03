@@ -65,7 +65,8 @@
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
 import FileActions from '../mixins/fileActions'
-import MixinScrollToResource from '../mixins/scrollToResource'
+import MixinFilesListScrolling from '../mixins/filesListScrolling'
+import MixinFilesListPositioning from '../mixins/filesListPositioning'
 import { buildResource, getResourceSize } from '../helpers/resources'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
@@ -76,11 +77,10 @@ import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage },
 
-  mixins: [FileActions, MixinScrollToResource],
+  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListScrolling],
 
   data: () => ({
-    loading: true,
-    headerPosition: 150
+    loading: true
   }),
 
   computed: {
@@ -138,6 +138,10 @@ export default {
     window.onresize = this.adjustTableHeaderPosition
   },
 
+  mounted() {
+    this.adjustTableHeaderPosition()
+  },
+
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
     ...mapMutations('Files', [
@@ -187,11 +191,11 @@ export default {
     },
 
     scrollToResourceFromRoute() {
-      let resource = this.$route.query.scrollTo
+      const resourceName = this.$route.query.scrollTo
 
-      if (resource && this.activeFiles.length > 0) {
+      if (resourceName && this.activeFiles.length > 0) {
         this.$nextTick(() => {
-          resource = this.activeFiles.find(r => r.name === resource)
+          const resource = this.activeFiles.find(r => r.name === resourceName)
 
           if (resource) {
             this.setHighlightedFile(resource)
@@ -199,12 +203,6 @@ export default {
           }
         })
       }
-    },
-
-    adjustTableHeaderPosition() {
-      const appBar = document.querySelector('#files-app-bar')
-
-      this.headerPosition = appBar.getBoundingClientRect().bottom
     }
   }
 }
