@@ -108,7 +108,7 @@ After(function closeSessionForEnv() {
 })
 
 After(async function tryToReadBrowserConsoleOnFailure({ result }) {
-  if (result.status === 'failed') {
+  if (true) {
     const logs = await getAllLogsWithDateTime('SEVERE')
     if (logs.length > 0) {
       console.log('\nThe following logs were found in the browser console:\n')

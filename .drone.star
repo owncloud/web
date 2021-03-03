@@ -1232,7 +1232,8 @@ def setupServerAndApp(logLevel):
 			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton',
 			'php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true',
 			'php occ config:system:set web.baseUrl --value="http://web"',
-			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool'
+			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool',
+			'php occ config:system:set overwrite.cli.url --value="http://owncloud"'
 		]
 	}]
 
