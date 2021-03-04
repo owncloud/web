@@ -13,7 +13,7 @@ Feature: Resharing shared files with different permissions
       | Brian    |
       | Carol    |
 
-
+  @issue-ocis-1743
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -24,7 +24,7 @@ Feature: Resharing shared files with different permissions
     Then user "Carol King" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
-
+  @issue-ocis-1743
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for resharer
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -36,7 +36,7 @@ Feature: Resharing shared files with different permissions
     Then user "Carol King" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
     And no custom permissions should be set for collaborator "Carol King" for folder "simple-folder" on the webUI
 
-  @issue-product-270
+  @issue-product-270 @issue-ocis-1743
   Scenario: Reshare a folder without share permissions using API and check if the receiver can reshare
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -46,7 +46,7 @@ Feature: Resharing shared files with different permissions
     And the user opens folder "Shares" using the webUI
     Then the user should not be able to share folder "simple-folder" using the webUI
 
-
+  @issue-ocis-1743
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for resharer
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -97,7 +97,7 @@ Feature: Resharing shared files with different permissions
       | Advanced permissions | Advanced permissions | update                    | update                | read, update                 |
       | Advanced permissions | Editor               | delete, create, update    |                       | read, delete, update, create |
 
-  @issue-4193
+  @issue-4193 @issue-ocis-1743
   Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
@@ -131,42 +131,6 @@ Feature: Resharing shared files with different permissions
       | Advanced permissions | Advanced permissions | share, create                 | share, create         | read, share, create                 |
       | Advanced permissions | Advanced permissions | update, share                 | share, update         | read, update, share                 |
       | Advanced permissions | Editor               | delete, share, create, update | ,                     | read, share, delete, update, create |
-
-  @skipOnOC10 @issue-ocis-717
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario Outline: share a received folder with another user with same permissions(including share permissions) and check if the user is displayed in collaborators list for original owner
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "<permissions>" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
-    And user "Alice" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "<role>" with permissions "<collaborators-permissions>" using the webUI
-    And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
-    And the user re-logs in as "Brian" using the webUI
-    Then user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
-    And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
-    And user "Alice Hansen" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
-    And custom permissions "<displayed-permissions>" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
-    And user "Carol" should have received a share with these details:
-      | field       | value          |
-      | uid_owner   | Alice          |
-      | share_with  | Carol          |
-      | file_target | /simple-folder |
-      | item_type   | folder         |
-      | permissions | <permissions>  |
-    And user "Alice" should have received a share with these details:
-      | field       | value          |
-      | uid_owner   | Brian          |
-      | share_with  | Alice          |
-      | file_target | /simple-folder |
-      | item_type   | folder         |
-      | permissions | <permissions>  |
-    Examples:
-      | role                 | displayed-role       | collaborators-permissions | displayed-permissions | permissions                  |
-      | Viewer               | Viewer               | ,                         | ,                     | read                         |
-      | Editor               | Editor               | ,                         | ,                     | all                          |
-      | Advanced permissions | Advanced permissions | create                    | create                | read, create                 |
-      | Advanced permissions | Advanced permissions | update                    | update                | read, update                 |
-      | Advanced permissions | Editor               | delete, create, update    | ,                     | read, delete, update, create |
 
   @issue-4193
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer
@@ -285,29 +249,7 @@ Feature: Resharing shared files with different permissions
       | simple-folder     |
       | lorem.txt         |
 
-
-  Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
-    And user "Alice" has logged in using the webUI
-    And the user opens folder "Shares" using the webUI
-    When the user shares folder "simple-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete" using the webUI
-    And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
-    And the user re-logs in as "Carol" using the webUI
-    And the user opens folder "Shares" using the webUI
-    And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then the current collaborators list should have order "Brian Murphy,Carol King"
-    And user "Brian Murphy" should be listed as "Owner" reshared through "Alice Hansen" in the collaborators list on the webUI
-    And user "Carol" should have received a share with these details:
-      | field       | value                 |
-      | uid_owner   | Alice                 |
-      | share_with  | Carol                 |
-      | file_target | /Shares/simple-folder |
-      | item_type   | folder                |
-      | permissions | share, delete, read   |
-
-  @skipOnOC10 @issue-ocis-717
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
+  @issue-ocis-1743
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
