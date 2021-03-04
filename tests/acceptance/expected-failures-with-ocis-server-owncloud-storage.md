@@ -430,3 +430,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [apiSharees/sharees.feature:683](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L683)
 -   [apiSharees/sharees.feature:702](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L702)
 -   [apiSharees/sharees.feature:703](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L703)
+
+### [sorting for files lists needs to be reimplemented](https://github.com/owncloud/ocis/issues/1179)
+-   [webUIFiles/sort.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/sort.feature#L51)
+-   [webUIFiles/sort.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/sort.feature#L72)
