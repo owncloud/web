@@ -74,7 +74,7 @@ When('the user browses to the files page using the webUI', function() {
 })
 
 Then('the files table should be displayed', () => {
-  return client.page.FilesPageElement.filesList().waitForElementVisible('@filesTable')
+  return client.page.FilesPageElement.filesList().waitForElementVisible('@anyAfterLoading')
 })
 
 Given('the user has browsed to the files page', async function() {
