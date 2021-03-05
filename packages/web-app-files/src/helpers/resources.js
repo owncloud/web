@@ -358,14 +358,15 @@ export function buildCollaboratorShare(s, file, allowSharePerm) {
 export function buildDeletedResource(resource) {
   const isFolder = resource.type === 'dir'
   const fullName = resource.fileInfo['{http://owncloud.org/ns}trashbin-original-filename']
+  const extension = isFolder ? '' : _getFileExtension(fullName)
   return {
     type: isFolder ? 'folder' : resource.type,
     ddate: resource.fileInfo['{http://owncloud.org/ns}trashbin-delete-datetime'],
     name: path.basename(fullName),
-    extension: isFolder ? '' : _getFileExtension(fullName),
+    extension,
     path: resource.fileInfo['{http://owncloud.org/ns}trashbin-original-location'],
     id: path.basename(resource.name),
-    icon: isFolder ? 'folder' : getFileIcon(this.extension),
+    icon: isFolder ? 'folder' : getFileIcon(extension),
     indicators: []
   }
 }
