@@ -12,7 +12,7 @@ Feature: Sharing files and folders with internal users
       | Alice    |
       | Brian    |
 
-  @yetToImplement @smokeTest @issue-ocis-717
+  @yetToImplement @smokeTest @issue-ocis-1743
   Scenario Outline: share a file & folder with another internal user
     Given user "Brian" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Alice Hansen" as "<set-role>" using the webUI
@@ -55,7 +55,7 @@ Feature: Sharing files and folders with internal users
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
       | Advanced permissions | Advanced permissions | read                            | read              |
 
-  @issue-ocis-717
+  @issue-ocis-1743
   Scenario Outline: change the collaborators of a file & folder
     Given user "Brian" has logged in using the webUI
     And user "Brian" has shared folder "/simple-folder" with user "Alice" with "<initial-permissions>" permissions
@@ -78,31 +78,6 @@ Feature: Sharing files and folders with internal users
       | read                | Editor               | Editor        | read,update,create,delete,share |
       | read,share          | Advanced permissions | Viewer        | read,share                      |
       | all                 | Advanced permissions | Editor        | all                             |
-
-  @skipOnOC10 @issue-ocis-717
-  #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario Outline: change the collaborators of a file & folder
-    Given user "Brian" has logged in using the webUI
-    And user "Brian" has shared folder "/simple-folder" with user "Alice" with "<initial-permissions>" permissions
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
-    When the user changes the collaborator role of "Alice Hansen" for folder "simple-folder" to "<set-role>" using the webUI
-    # check role without reloading the collaborators panel, see issue #1786
-    Then user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list on the webUI
-    # check role after reopening the collaborators panel
-    And user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
-    And user "Alice" should have received a share with these details:
-      | field       | value                  |
-      | uid_owner   | Brian                  |
-      | share_with  | Alice                  |
-      | file_target | /Shares/simple-folder  |
-      | item_type   | folder                 |
-      | permissions | <expected-permissions> |
-    Examples:
-      | initial-permissions       | set-role             | expected-role | expected-permissions      |
-      | read,update,create        | Viewer               | Viewer        | read                      |
-      | read                      | Editor               | Editor        | read,update,create,delete |
-      | read                      | Advanced permissions | Viewer        | read                      |
-      | read,update,create,delete | Advanced permissions | Editor        | read,update,create,delete |
 
   @skip @issue-4102
   Scenario: share a file with another internal user who overwrites and unshares the file
