@@ -35,5 +35,5 @@ This repository contains the assets and these must be released first before bein
 
 #### Next steps
 
-The next steps are usually to update the Web assets in the [ocis-web](https://github.com/owncloud/ocis-web) repository.
+The next steps are usually to update the Web assets in the [ocis-web](https://github.com/owncloud/ocis-web) repository. Therefor we have prepared a [separate ocis-web release guide](https://owncloud.github.io/extensions/web/releasing/).
 
