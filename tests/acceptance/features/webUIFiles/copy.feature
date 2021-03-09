@@ -80,18 +80,20 @@ Feature: copy files and folders
     Given user "Brian" has been created with default attributes
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
-    When the user tries to copy folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
+    When the user tries to copy file "lorem.txt" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
 
 
   Scenario: copy a folder into the same folder
-    And user "Alice" has logged in using the webUI
-    When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
+    Given user "Alice" has logged in using the webUI
+    When the user opens the file action menu of folder "simple-empty-folder" using the webUI
+    And the user selects copy action for folder "simple-empty-folder" using the webUI
+    And the user selects the folder "simple-empty-folder" as a place to copy the file using the webUI
     Then it should not be possible to copy into folder "simple-empty-folder" using the webUI
 
 
   Scenario: copy a folder into another folder with same name
-    And user "Alice" has logged in using the webUI
+    Given user "Alice" has logged in using the webUI
     When the user copies folder "simple-empty-folder" into folder "folder with space/simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And folder "simple-empty-folder" should be listed on the webUI
@@ -101,7 +103,9 @@ Feature: copy files and folders
   Scenario: cancel copying a file
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    When the user tries to copy folder "data.zip" into folder "simple-empty-folder" using the webUI
+    When the user opens the file action menu of folder "data.zip" using the webUI
+    And the user selects copy action for folder "data.zip" using the webUI
+    And the user selects the folder "simple-empty-folder" as a place to copy the file using the webUI
     And the user cancels the attempt to copy file into folder "simple-empty-folder" using the webUI
     Then file "data.zip" should be listed on the webUI
     But  file "data.zip" should not be listed in the folder "simple-empty-folder" on the webUI
@@ -109,11 +113,13 @@ Feature: copy files and folders
   Scenario: cancel copying of multiple files at once
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    When the user tries to batch copy these files into folder "simple-empty-folder" using the webUI
+    When the user marks these files for batch action using the webUI
       | file_name   |
       | data.zip    |
       | lorem.txt   |
       | testapp.zip |
+    And the user selects the copy button to copy files using the webUI
+    And the user selects the folder "simple-empty-folder" as a place to copy the files using the webUI
     And the user cancels the attempt to copy file into folder "simple-empty-folder" using the webUI
     Then the following files should be listed on the webUI
       | file_name   |
