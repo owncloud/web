@@ -120,9 +120,11 @@ export function attachIndicators(resource, sharesTree) {
 
 /**
  * Transforms given shares into a resource format and returns only their unique occurences
- * @param {Arrau} data Shares to be transformed into unique resources
+ * @param {Array} shares Shares to be transformed into unique resources
  * @param {Boolean} incomingShares Asserts whether the shares are incoming
  * @param {Boolean} allowSharePerm Asserts whether the reshare permission is available
+ * @param {String} server The url of the backend
+ * @param {String} token The access token of the authenticated user
  */
 export async function aggregateResourceShares(
   shares,
@@ -135,7 +137,6 @@ export async function aggregateResourceShares(
     return Promise.all(
       _(shares)
         .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
-        .uniqBy('file_target')
         .map(
           async share =>
             await buildSharedResource(share, incomingShares, allowSharePerm, server, token)
