@@ -17,17 +17,20 @@ function computeShareTypes(shares) {
 
 export default {
   UPDATE_FILE_PROGRESS(state, file) {
-    const fileIndex = state.inProgress.findIndex(f => {
+    const inProgress = [...state.inProgress]
+
+    const fileIndex = inProgress.findIndex(f => {
       return f.id === file.id
     })
-
     if (fileIndex === -1) return
 
-    state.inProgress[fileIndex].progress = file.progress
+    inProgress[fileIndex].progress = file.progress
+    state.inProgress = inProgress
   },
 
   ADD_FILE_TO_PROGRESS(state, file) {
-    state.inProgress.push({
+    const inProgress = [...state.inProgress]
+    inProgress.push({
       id: file.id,
       name: file.name,
       type: file.type,
@@ -35,22 +38,27 @@ export default {
       progress: 0,
       action: 'upload'
     })
+    state.inProgress = inProgress
   },
 
   REMOVE_FILE_FROM_PROGRESS(state, file) {
-    const fileIndex = state.inProgress.findIndex(f => {
+    const inProgress = [...state.inProgress]
+    const fileIndex = inProgress.findIndex(f => {
       return f.id === file.id
     })
 
-    state.inProgress.splice(fileIndex, 1)
-    if (state.inProgress.length < 1) {
+    inProgress.splice(fileIndex, 1)
+    if (inProgress.length < 1) {
       state.inProgress = []
       state.uploaded = []
       return
     }
+    state.inProgress = inProgress
 
+    const uploaded = [...state.uploaded]
     file.progress = 100
-    state.uploaded.push(file)
+    uploaded.push(file)
+    state.uploaded = uploaded
   },
 
   LOAD_FILES(state, { currentFolder, files }) {
@@ -71,16 +79,19 @@ export default {
     state.fileSortField = field
   },
   ADD_FILE_SELECTION(state, file) {
-    const fileIndex = state.selected.findIndex(f => {
+    const selected = [...state.selected]
+    const fileIndex = selected.findIndex(f => {
       return f.id === file.id
     })
     if (fileIndex === -1) {
-      state.selected.push(file)
+      selected.push(file)
+      state.selected = selected
     }
   },
   REMOVE_FILE_SELECTION(state, file) {
-    if (state.selected.length > 1) {
-      state.selected = state.selected.filter(i => file.id !== i.id)
+    const selected = [...state.selected]
+    if (selected.length > 1) {
+      state.selected = selected.filter(i => file.id !== i.id)
       return
     }
     state.selected = []
@@ -89,29 +100,29 @@ export default {
     state.selected = []
   },
   FAVORITE_FILE(state, item) {
-    const fileIndex = state.files.findIndex(f => {
+    const files = [...state.files]
+    const fileIndex = files.findIndex(f => {
       return f.id === item.id
     })
-    state.files[fileIndex].starred = !item.starred
-  },
-  ADD_FILE(state, file) {
-    state.files = state.files.filter(i => file.id !== i.id)
-    state.files.push(file)
+    files[fileIndex].starred = !item.starred
+    state.files = files
   },
   REMOVE_FILE(state, removedFile) {
-    state.files = state.files.filter(file => file.id !== removedFile.id)
+    state.files = [...state.files].filter(file => file.id !== removedFile.id)
   },
   SET_SEARCH_TERM(state, searchTerm) {
     state.searchTermGlobal = searchTerm
   },
   UPDATE_CURRENT_FILE_SHARE_TYPES(state) {
+    const files = [...state.files]
     if (!state.highlightedFile) {
       return
     }
-    const fileIndex = state.files.findIndex(f => {
+    const fileIndex = files.findIndex(f => {
       return f.id === state.highlightedFile.id
     })
-    state.files[fileIndex].shareTypes = computeShareTypes(state.currentFileOutgoingShares)
+    files[fileIndex].shareTypes = computeShareTypes(state.currentFileOutgoingShares)
+    state.files = files
   },
   RENAME_FILE(state, { file, newValue, newPath }) {
     const resources = [...state.files]
@@ -124,7 +135,6 @@ export default {
     resources[fileIndex].path = '/' + newPath + newValue
 
     state.files = resources
-    console.log(state.files)
   },
   DRAG_OVER(state, value) {
     state.dropzone = value
@@ -286,11 +296,15 @@ export default {
   },
 
   LOAD_INDICATORS(state) {
-    state.files.forEach(resource => attachIndicators(resource, state.sharesTree))
+    const files = [...state.files]
+    files.forEach(resource => attachIndicators(resource, state.sharesTree))
+    state.files = files
   },
 
   PUSH_NEW_RESOURCE(state, resource) {
-    state.files.push(resource)
+    const files = [...state.files]
+    files.push(resource)
+    state.files = files
   },
 
   SELECT_RESOURCES(state, resources) {
@@ -298,10 +312,12 @@ export default {
   },
 
   UPDATE_RESOURCE(state, resource) {
-    const index = state.files.findIndex(r => r.id === resource.id)
+    const files = [...state.files]
+    const index = files.findIndex(r => r.id === resource.id)
 
     if (index > -1) {
-      state.files.splice(index, 1, resource)
+      files.splice(index, 1, resource)
+      state.files = files
     }
   }
 }

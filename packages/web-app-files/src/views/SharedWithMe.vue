@@ -39,7 +39,7 @@
               v-if="resource.status === 1 || resource.status === 2"
               variation="raw"
               class="file-row-share-status-action uk-text-meta"
-              @click.stop="pendingShareAction(resource, 'POST')"
+              @click.stop="triggerShareAction(resource, 'POST')"
             >
               <translate>Accept</translate>
             </oc-button>
@@ -47,7 +47,7 @@
               v-if="resource.status === 1 || resource.status === 0"
               variation="raw"
               class="file-row-share-status-action uk-text-meta oc-ml"
-              @click.stop="pendingShareAction(resource, 'DELETE')"
+              @click.stop="triggerShareAction(resource, 'DELETE')"
             >
               <translate>Decline</translate>
             </oc-button>
@@ -80,8 +80,13 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
-
-import { aggregateResourceShares, buildResource, getResourceSize } from '../helpers/resources'
+import { shareStatus } from '../helpers/shareStatus'
+import {
+  aggregateResourceShares,
+  buildResource,
+  buildSharedResource,
+  getResourceSize
+} from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 
@@ -209,14 +214,14 @@ export default {
     },
 
     shareStatus(status) {
-      if (status === 0) {
-        return this.$gettext('Accepted')
-      }
-      if (status === 1) {
-        return this.$gettext('Pending')
-      }
-      if (status === 2) {
-        return this.$gettext('Declined')
+      switch (status) {
+        case shareStatus.accepted:
+          return this.$gettext('Accepted')
+        case shareStatus.declined:
+          return this.$gettext('Declined')
+        case shareStatus.pending:
+        default:
+          return this.$gettext('Pending')
       }
     },
 
@@ -224,17 +229,24 @@ export default {
       return getResourceSize(size)
     },
 
-    async pendingShareAction(resource, type) {
+    async triggerShareAction(resource, type) {
       try {
-        await this.$client.requests.ocs({
+        let response = await this.$client.requests.ocs({
           service: 'apps/files_sharing',
           action: `api/v1/shares/pending/${resource.share.id}`,
           method: type
         })
-
-        resource.status = type === 'POST' ? 0 : 2
-
-        this.UPDATE_RESOURCE(resource)
+        response = await response.json()
+        if (response.ocs.data.length > 0) {
+          const sharedResource = await buildSharedResource(
+            response.ocs.data[0],
+            true,
+            !this.isOcis,
+            this.configuration.server,
+            this.getToken
+          )
+          this.UPDATE_RESOURCE(sharedResource)
+        }
       } catch (error) {
         this.showMessage({
           title: this.$gettext('Error while changing share state'),

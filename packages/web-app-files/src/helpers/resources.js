@@ -201,7 +201,13 @@ export async function aggregateResourceShares(
   )
 }
 
-async function buildSharedResource(share, incomingShares = false, allowSharePerm, server, token) {
+export async function buildSharedResource(
+  share,
+  incomingShares = false,
+  allowSharePerm,
+  server,
+  token
+) {
   const resource = {
     id: share.item_source,
     type: share.item_type
