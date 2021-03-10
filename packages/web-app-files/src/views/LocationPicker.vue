@@ -35,6 +35,7 @@
         <oc-table-files
           v-else
           id="location-picker-files-list"
+          class="files-table"
           :resources="activeFiles"
           :has-actions="false"
           :is-selectable="false"

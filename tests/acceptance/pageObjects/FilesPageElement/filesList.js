@@ -361,7 +361,9 @@ module.exports = {
      */
     getFileRowSelectorByFileName: function(fileName, elementType = 'file') {
       const element = this.elements.fileRowByResourcePath
-      return util.format(element.selector, xpathHelper.buildXpathLiteral(fileName))
+      const name = xpathHelper.buildXpathLiteral(fileName)
+      const path = xpathHelper.buildXpathLiteral('/' + fileName)
+      return util.format(element.selector, name, path)
     },
     /**
      *
@@ -371,7 +373,9 @@ module.exports = {
      */
     getFileLinkSelectorByFileName: function(fileName, elementType = 'file') {
       const element = this.elements.fileLinkInFileRow
-      return util.format(element.selector, xpathHelper.buildXpathLiteral(fileName))
+      const name = xpathHelper.buildXpathLiteral(fileName)
+      const path = xpathHelper.buildXpathLiteral('/' + fileName)
+      return util.format(element.selector, name, path)
     },
     /**
      * checks whether the element is listed or not on the filesList
@@ -597,7 +601,9 @@ module.exports = {
       await this.waitForFileVisible(target)
       await this.initAjaxCounters()
 
-      const element = util.format(this.elements.fileRowDisabled.selector, target)
+      const name = xpathHelper.buildXpathLiteral(target)
+      const path = xpathHelper.buildXpathLiteral('/' + target)
+      const element = util.format(this.elements.fileRowDisabled.selector, name, path)
       const disabledRow = {
         locateStrategy: this.elements.fileRowDisabled.locateStrategy,
         selector: element
@@ -679,16 +685,17 @@ module.exports = {
       selector: '.files-table .oc-tbody-tr'
     },
     fileRowByResourcePath: {
-      selector: `//div[contains(@class, "oc-resource-name") and @resource-name=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
+      selector: `//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
       locateStrategy: 'xpath'
     },
     fileRowDisabled: {
       selector:
-        '//div[contains(@class, "oc-resource-name") and @resource-name=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
+        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/ancestor::tr[contains(@class, "oc-table-disabled")]',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
-      selector: '//div[contains(@class, "oc-resource-name") and @resource-name=%s]/parent::*',
+      selector:
+        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/parent::*',
       locateStrategy: 'xpath'
     },
     /**
