@@ -329,7 +329,7 @@ module.exports = {
       return this.initAjaxCounters()
         .waitForElementVisible('@sharingAutoComplete')
         .setValueBySingleKeys('@sharingAutoComplete', input)
-        .waitForOutstandingAjaxCalls()
+        .waitForAjaxCallsToStartAndFinish()
     },
     /**
      *
