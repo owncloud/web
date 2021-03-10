@@ -53,7 +53,7 @@
             </oc-button>
             <span
               class="uk-text-small oc-ml file-row-share-status-text uk-text-baseline"
-              v-text="shareStatus(resource.status)"
+              v-text="getShareStatusText(resource.status)"
             />
           </div>
         </template>
@@ -81,12 +81,7 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { shareStatus } from '../helpers/shareStatus'
-import {
-  aggregateResourceShares,
-  buildResource,
-  buildSharedResource,
-  getResourceSize
-} from '../helpers/resources'
+import { aggregateResourceShares, buildResource, buildSharedResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 
@@ -213,7 +208,7 @@ export default {
       this.loading = false
     },
 
-    shareStatus(status) {
+    getShareStatusText(status) {
       switch (status) {
         case shareStatus.accepted:
           return this.$gettext('Accepted')
@@ -223,10 +218,6 @@ export default {
         default:
           return this.$gettext('Pending')
       }
-    },
-
-    getResourceSize(size) {
-      return getResourceSize(size)
     },
 
     async triggerShareAction(resource, type) {
