@@ -25,22 +25,19 @@ module.exports = {
      * @return {Promise<string>}
      */
     getShareStatusOfResource: async function(filename) {
-      let status
+      let status = null
       const requiredXpath =
         this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
         this.elements.shareStatusOnFileRow.selector
-      await this.useXpath()
-        .waitForAnimationToFinish()
-        .api.getText(requiredXpath, result => {
-          if (result.status === 0) {
-            status = result.value === '' ? 'Accepted' : result.value
-          } else {
-            throw new Error(
-              `Expected: share status of the resource but found unexpected response: ${result.value.error}`
-            )
-          }
-        })
-        .useCss()
+      await this.api.getText('xpath', requiredXpath, result => {
+        if (result.status === 0) {
+          status = result.value === '' ? 'Accepted' : result.value
+        } else {
+          throw new Error(
+            `Expected: share status of the resource but found unexpected response: ${result.value.error}`
+          )
+        }
+      })
       return status
     },
     /**
