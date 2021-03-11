@@ -37,7 +37,7 @@
             </template>
           </oc-sidebar>
         </transition>
-        <div class="uk-width-expand">
+        <div id="main-container" class="uk-width-expand">
           <top-bar
             v-if="!publicPage() && !$route.meta.verbose"
             class="uk-width-expand"
@@ -326,6 +326,10 @@ export default {
 body {
   height: 100vh;
   overflow: hidden;
+}
+
+#main-container {
+  background-color: var(--oc-background);
 }
 
 #main {

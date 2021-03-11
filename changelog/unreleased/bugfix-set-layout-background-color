@@ -1,0 +1,5 @@
+Bugfix: Set layout background color in main Web app
+
+Accessibility certification requires explicitly color styling of the main column's background.
+
+https://github.com/owncloud/web/pull/4805
