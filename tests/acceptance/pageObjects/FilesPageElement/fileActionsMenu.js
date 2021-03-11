@@ -75,15 +75,13 @@ module.exports = {
      * @return {*}
      */
     rename: async function(toName, expectToSucceed = true) {
-      await this.initAjaxCounters()
-        .useXpath()
+      await this.useXpath()
         .performFileAction(this.FileAction.rename)
         .waitForElementVisible('@dialog')
         .waitForAnimationToFinish()
         .clearValue('@dialogInput')
         .setValue('@dialogInput', toName)
         .click('@dialogConfirmBtn')
-        .waitForOutstandingAjaxCalls()
         .useCss()
 
       if (expectToSucceed) {
