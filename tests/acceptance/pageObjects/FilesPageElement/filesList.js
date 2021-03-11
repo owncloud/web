@@ -311,25 +311,27 @@ module.exports = {
       const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
 
       await client.page.FilesPageElement.appSideBar().closeSidebar(500)
-      let elementId = null
+      let rowElementId = null
       await this.waitForElementPresent(
         { selector: rowSelector, locateStrategy: 'xpath' },
         result => {
-          elementId = result.WebdriverElementId
+          rowElementId = result.WebdriverElementId
         }
       )
       let offset = 0
-      await this.api.elementIdLocation(elementId, result => {
+      await this.api.elementIdLocation(rowElementId, result => {
         offset = result.value.y
       })
 
-      await this.api.execute(
-        function(scrollerContainerSelector, offset) {
-          const filesListScroll = document.querySelector(scrollerContainerSelector)
-          filesListScroll.scrollTop = offset
-        },
-        [this.elements.filesContainer.selector, offset]
-      )
+      let firstRowElementId = null
+      await this.waitForElementPresent('@fileRow', result => {
+        firstRowElementId = result.WebdriverElementId
+      })
+      await this.api.elementIdLocation(firstRowElementId, result => {
+        offset -= result.value.y
+      })
+
+      this.api.execute('scrollTo(0,' + offset + ')')
 
       return this
     },
@@ -655,6 +657,9 @@ module.exports = {
   elements: {
     filesContainer: {
       selector: '.files-list-wrapper'
+    },
+    filesAppBar: {
+      selector: '#files-app-bar'
     },
     filesTable: {
       selector: '.files-table'
