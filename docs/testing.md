@@ -24,6 +24,8 @@ There are multiple ways to run Selenium:
 - If you are a Mac user, run `docker run --rm -d -p ${SELENIUM_PORT:-4444}:4444 -p 5900:5900 -v /dev/shm:/dev/shm -v ${REMOTE_UPLOAD_DIR:-$PWD/tests/acceptance/filesForUpload}:${LOCAL_UPLOAD_DIR:-/uploads}:ro --name web-tests-selenium selenium/standalone-chrome-debug`
   - This command creates a docker container which uses port forwarding instead of host networking [which is not supported on Mac](https://docs.docker.com/network/host/)
 
+  If you are running selenium with these docker commands, you can run these commands from the `web` folder, then you wont need to set `REMOTE_UPLOAD_DIR`.
+
 ### Setup using Docker Desktop for Mac
 
 In order to run acceptance tests with selenium running in Docker Desktop for Mac while having ownCloud Server and Web running as services
@@ -45,9 +47,16 @@ When running a standalone Selenium server, make sure to set the environment vari
 - clone and install the [testing app](http://github.com/owncloud/testing) into ownCloud
 
 ### oCIS
+In order to run the acceptance tests you need to run ocis using the owncloud storage driver. Also, you need to enable basic auth on the server with these environment variables.
+
+`PROXY_ENABLE_BASIC_AUTH=true STORAGE_HOME_DRIVER=owncloud STORAGE_USERS_DRIVER=owncloud`
 
 - set up the [oCIS backend]({{< ref "backend-ocis.md" >}})
   - if you are a Mac user, you need to start the server with additional environment variables: `STORAGE_HOME_DATA_SERVER_URL='http://host.docker.internal:9155/data' STORAGE_DATAGATEWAY_PUBLIC_URL='https://host.docker.internal:9200/data' STORAGE_USERS_DATA_SERVER_URL='http://host.docker.internal:9158/data' STORAGE_FRONTEND_PUBLIC_URL='https://host.docker.internal:9200' PROXY_ENABLE_BASIC_AUTH=true PROXY_OIDC_ISSUER='https://host.docker.internal:9200' IDP_INSECURE='true' IDP_IDENTIFIER_REGISTRATION_CONF='<web-path>/tests/acceptance/mac-identifier-registration.yml' IDP_ISS='https://host.docker.internal:9200' IDP_TLS='true'` (`<web-path>` needs to be replaced with the your local clone of ownCloud Web)
+
+- oCIS also uses redis for caching, so run redis with this command
+
+  `docker run -e REDIS_DATABASES=1 -p 6379:6379 -d webhippie/redis:latest`
 
 ## Setup ownCloud Web
 
@@ -62,9 +71,11 @@ When running a standalone Selenium server, make sure to set the environment vari
 - to be able to run federation tests, additional setup is needed:
    1. Install and set up a second ownCloud server-instance that is accessible by a different URL. That second server-instance must have its own database and data directory.
    2. clone and install the testing app into the second ownCloud server-instance from http://github.com/owncloud/testing .
-   3. when running the acceptance tests use `REMOTE_BACKEND_HOST` environment variable to define its address, for example, `REMOTE_BACKEND_HOST=http://<ip_address_of_second_ownCloud_server-instance> yarn test:acceptance:oc10 <feature-files-to-test>` .
--set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
--set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
+   3. when running the acceptance tests use `REMOTE_BACKEND_HOST` environment variable to define its address, for example, `REMOTE_BACKEND_HOST=http://<ip_address_of_second_ownCloud_server-instance> yarn test:acceptance:oc10 <feature-files-to-test>`
+
+- set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
+- set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
+- set the `OCIS_SKELETON_DIR` when running the tests on ocis pointing to the skeleton files available [here](https://github.com/owncloud/testing/tree/master/data/webUISkeleton). This is handled automatically by the testrunner while running the tests in oc10.
 
 The feature files are located in the "tests/acceptance/features" subdirectories.
 
