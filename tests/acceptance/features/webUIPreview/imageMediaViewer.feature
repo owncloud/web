@@ -123,7 +123,7 @@ Scenario Outline: preview of image files with media viewer is possible
     When the public uses the webUI to access the last public link created by user "Alice"
     Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
 
-  @issue-ocis-1490
+
   Scenario: preview of image in file list view for .jpeg format file
     Given user "Alice" has uploaded file "testavatar.jpeg" to "testavatar.jpeg"
     And user "Alice" has logged in using the webUI
