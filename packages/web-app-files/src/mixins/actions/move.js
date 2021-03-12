@@ -46,8 +46,8 @@ export default {
         name: 'files-location-picker',
         params: {
           context,
-          action: 'move',
-          target: parent
+          item: parent,
+          action: 'move'
         },
         query: { resource: resource.path }
       })

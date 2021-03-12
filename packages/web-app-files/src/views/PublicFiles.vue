@@ -19,11 +19,13 @@
       <oc-table-files
         v-else
         id="files-public-files-table"
-        :resources="activeFiles"
-        :header-position="headerPosition"
-        :target-route="targetRoute"
+        v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
+        :resources="activeFiles"
+        :target-route="$route.name"
+        :highlighted="highlightedFile ? highlightedFile.id : null"
+        :header-position="headerPosition"
         @showDetails="setHighlightedFile"
         @fileClick="$_fileActions_triggerDefaultAction"
       >
@@ -80,10 +82,12 @@ export default {
     ...mapGetters('Files', [
       'publicLinkPassword',
       'activeFiles',
+      'selectedFiles',
       'davProperties',
       'currentFolder',
       'highlightedFile',
       'inProgress',
+      'currentFolder',
       'activeFilesCount',
       'filesTotalSize'
     ]),
@@ -100,12 +104,17 @@ export default {
       return this.inProgress.length > 0
     },
 
-    folderNotFound() {
-      return this.currentFolder === null
+    selected: {
+      get() {
+        return this.selectedFiles
+      },
+      set(resources) {
+        this.SELECT_RESOURCES(resources)
+      }
     },
 
-    targetRoute() {
-      return { name: 'files-public-list' }
+    folderNotFound() {
+      return this.currentFolder === null
     }
   },
 
@@ -130,7 +139,12 @@ export default {
 
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
-    ...mapMutations('Files', ['SET_CURRENT_FOLDER', 'CLEAR_CURRENT_FILES_LIST', 'LOAD_FILES']),
+    ...mapMutations('Files', [
+      'SELECT_RESOURCES',
+      'SET_CURRENT_FOLDER',
+      'LOAD_FILES',
+      'CLEAR_CURRENT_FILES_LIST'
+    ]),
 
     async loadResources() {
       this.loading = true
@@ -154,6 +168,8 @@ export default {
         this.SET_CURRENT_FOLDER(null)
         console.error(error)
       }
+
+      this.adjustTableHeaderPosition()
       this.loading = false
     }
   }

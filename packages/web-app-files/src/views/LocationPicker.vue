@@ -27,14 +27,19 @@
     <div>
       <list-loader v-if="loading" />
       <template v-else>
-        <no-content-message v-if="isEmpty" icon="folder">
+        <no-content-message
+          v-if="isEmpty"
+          id="files-location-picker-empty"
+          class="files-empty"
+          icon="folder"
+        >
           <template #message>
             <span v-translate>There are no resources in this folder.</span>
           </template>
         </no-content-message>
         <oc-table-files
           v-else
-          id="location-picker-files-list"
+          id="files-location-picker-table"
           class="files-table"
           :resources="activeFiles"
           :has-actions="false"
@@ -140,16 +145,20 @@ export default {
 
     breadcrumbs() {
       const breadcrumbs = []
+      const pathSegments = this.target.split('/').filter(item => item !== '')
 
-      if (!this.isPublicContext) {
+      if (this.isPublicContext) {
+        const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, 1)))
+        breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('Public link'), itemPath))
+        for (let i = 1; i < pathSegments.length; i++) {
+          const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, i + 1)))
+          breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
+        }
+      } else {
         breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('Home'), '/'))
-      }
-
-      if (this.target) {
-        const items = this.target.split('/').filter(item => item !== '')
-        for (let i = 0; i < items.length; i++) {
-          const itemPath = encodeURIComponent(join.apply(null, items.slice(0, i + 1)))
-          breadcrumbs.push(this.createBreadcrumbNode(i + 1, items[i], itemPath))
+        for (let i = 0; i < pathSegments.length; i++) {
+          const itemPath = encodeURIComponent(join.apply(null, pathSegments.slice(0, i + 1)))
+          breadcrumbs.push(this.createBreadcrumbNode(i + 1, pathSegments[i], itemPath))
         }
       }
 
@@ -287,7 +296,9 @@ export default {
         target = this.target
       }
 
-      const resources = await this.$client.files.list(target, 1, this.davProperties)
+      const resources = this.isPublicContext
+        ? await this.$client.publicFiles.list(target, this.publicLinkPassword, this.davProperties)
+        : await this.$client.files.list(target, 1, this.davProperties)
 
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
       this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })

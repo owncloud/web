@@ -386,7 +386,7 @@ module.exports = {
      * @returns {boolean}
      */
     isElementListed: async function(name) {
-      const selector = util.format(xpathHelper.buildXpathLiteral(name))
+      const selector = this.getFileRowSelectorByFileName(name)
       let isVisible = false
 
       await this.api.element('xpath', selector, function(result) {
