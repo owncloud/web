@@ -88,9 +88,7 @@ Feature: move files
     Given user "Brian" has been created with default attributes
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
-    When the user opens the file action menu of file "lorem.txt" using the webUI
-    And the user selects move action for file "lorem.txt" using the webUI
-    And the user selects the folder "simple-folder (2)" as a place to move the file using the webUI
+    When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to move into folder "simple-folder (2)" using the webUI
 
   Scenario: cancel moving a file

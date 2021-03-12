@@ -68,17 +68,13 @@ Feature: move folders
     Given user "Brian" has been created with default attributes
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
-    When the user opens the file action menu of folder "simple-empty-folder" using the webUI
-    And the user selects move action for folder "simple-empty-folder" using the webUI
-    And the user selects the folder "simple-folder (2)" as a place to move the file using the webUI
+    When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to move into folder "simple-folder (2)" using the webUI
 
 
   Scenario: move a folder into the same folder
     Given user "Alice" has logged in using the webUI
-    When the user opens the file action menu of folder "simple-empty-folder" using the webUI
-    And the user selects move action for folder "simple-empty-folder" using the webUI
-    And the user selects the folder "simple-empty-folder" as a place to move the file using the webUI
+    When the user tries to move folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then it should not be possible to move into folder "simple-empty-folder" using the webUI
 
 

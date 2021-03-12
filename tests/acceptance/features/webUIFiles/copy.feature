@@ -80,15 +80,13 @@ Feature: copy files and folders
     Given user "Brian" has been created with default attributes
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
-    When the user tries to copy file "lorem.txt" into folder "simple-folder (2)" using the webUI
+    When the user tries to copy folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
     Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
 
 
   Scenario: copy a folder into the same folder
     Given user "Alice" has logged in using the webUI
-    When the user opens the file action menu of folder "simple-empty-folder" using the webUI
-    And the user selects copy action for folder "simple-empty-folder" using the webUI
-    And the user selects the folder "simple-empty-folder" as a place to copy the file using the webUI
+    When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
     Then it should not be possible to copy into folder "simple-empty-folder" using the webUI
 
 
