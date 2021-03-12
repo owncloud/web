@@ -26,7 +26,7 @@
             @click.native.stop="toggleFileFavorite(highlightedFile)"
           />
           <template v-if="highlightedFile.size > -1">
-            {{ highlightedFile.size | fileSize }},
+            {{ getResourceSize(highlightedFile.size) }},
           </template>
           {{ modificationTime }}
         </div>
@@ -65,6 +65,7 @@
 
 <script>
 import Mixins from '../mixins'
+import MixinResources from '../mixins/resources'
 import MixinRoutes from '../mixins/routes'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
@@ -74,7 +75,7 @@ export default {
   components: {
     ActionsAccordion
   },
-  mixins: [Mixins, MixinRoutes],
+  mixins: [Mixins, MixinResources, MixinRoutes],
   computed: {
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),

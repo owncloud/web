@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import path from 'path'
-import filesize from 'filesize'
 import moment from 'moment'
 
 import fileIconMappings from '../fileTypeIconMappings.json'
@@ -9,28 +8,6 @@ import { bitmaskToRole, checkPermission, permissionsBitmask } from './collaborat
 import { shareTypes, userShareTypes } from './shareTypes'
 import { $gettext } from '../gettext'
 import { getAvatarSrc } from './user'
-
-/**
- * Returns formatted size of given resource
- * @param {Number} size Unformatted size of the resource
- * @returns {String} formatted size
- */
-export function getResourceSize(size) {
-  if (size < 0) {
-    return ''
-  }
-
-  if (isNaN(size)) {
-    return '?'
-  }
-
-  const mb = 1048576
-
-  // TODO: Pass current language as locale to display correct separator
-  return filesize(size, {
-    round: size < mb ? 0 : 1
-  })
-}
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {

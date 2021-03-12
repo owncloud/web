@@ -7643,10 +7643,10 @@ ospec@3.1.0:
   dependencies:
     glob "^7.1.3"
 
-owncloud-design-system@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-3.1.0.tgz#fa7908086c2eef59ca7de268945e7af287459a9e"
-  integrity sha512-+WrW64KQZC64cmIsz97oHkyVbaCjRGm99G5NjMZnzzK/vs/Yvw4T19HUgcHvZAalGL5XUpjEqt58vSE8bRyW7A==
+owncloud-design-system@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-3.2.0.tgz#8cf02bcb31428b9db56696d684fb7302177c3a15"
+  integrity sha512-KMGWHyUYprTnCMkipC3dRzOq8LS3k63KIobckMjNgu0dEYwiLNbSBCz4jCLGQIpwIKfnw0OnRVf74iJL28bqrQ==
   dependencies:
     luxon "^1.22.0"
     mini-css-extract-plugin "^1.3.1"

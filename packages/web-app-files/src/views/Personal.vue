@@ -67,7 +67,8 @@ import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
-import { buildResource, getResourceSize } from '../helpers/resources'
+import MixinResources from '../mixins/resources'
+import { buildResource } from '../helpers/resources'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
@@ -77,7 +78,7 @@ import NotFoundMessage from '../components/FilesLists/NotFoundMessage.vue'
 export default {
   components: { QuickActions, ListLoader, NoContentMessage, NotFoundMessage },
 
-  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListScrolling],
+  mixins: [FileActions, MixinFilesListPositioning, MixinFilesListScrolling, MixinResources],
 
   data: () => ({
     loading: true
@@ -184,10 +185,6 @@ export default {
       this.adjustTableHeaderPosition()
       this.loading = false
       this.scrollToResourceFromRoute()
-    },
-
-    getResourceSize(size) {
-      return getResourceSize(size)
     },
 
     scrollToResourceFromRoute() {

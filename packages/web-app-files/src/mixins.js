@@ -2,15 +2,10 @@ import pathUtil from 'path'
 import moment from 'moment'
 import fileTypeIconMappings from './fileTypeIconMappings.json'
 import { mapActions, mapGetters } from 'vuex'
-import { getResourceSize } from './helpers/resources'
 import PQueue from 'p-queue'
 
 export default {
   filters: {
-    fileSize(int) {
-      return getResourceSize(int)
-    },
-
     roundNumber(int) {
       return parseInt(int.toFixed(0))
     }

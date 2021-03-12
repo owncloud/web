@@ -54,9 +54,10 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
-import { getResourceSize, buildResource } from '../helpers/resources'
+import { buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
+import MixinResources from '../mixins/resources'
 
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -69,7 +70,7 @@ export default {
     NotFoundMessage
   },
 
-  mixins: [FileActions, MixinFilesListPositioning],
+  mixins: [FileActions, MixinFilesListPositioning, MixinResources],
 
   data: () => ({
     loading: true
@@ -154,10 +155,6 @@ export default {
         console.error(error)
       }
       this.loading = false
-    },
-
-    getResourceSize(size) {
-      return getResourceSize(size)
     }
   }
 }

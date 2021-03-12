@@ -50,8 +50,9 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
-import { buildDeletedResource, buildResource, getResourceSize } from '../helpers/resources'
+import { buildDeletedResource, buildResource } from '../helpers/resources'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
+import MixinResources from '../mixins/resources'
 
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -59,7 +60,7 @@ import NoContentMessage from '../components/NoContentMessage.vue'
 export default {
   components: { ListLoader, NoContentMessage },
 
-  mixins: [MixinFilesListPositioning],
+  mixins: [MixinFilesListPositioning, MixinResources],
 
   data: () => ({
     loading: true
@@ -134,10 +135,6 @@ export default {
       })
       this.adjustTableHeaderPosition()
       this.loading = false
-    },
-
-    getResourceSize(size) {
-      return getResourceSize(size)
     }
   }
 }

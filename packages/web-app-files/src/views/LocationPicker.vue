@@ -70,10 +70,11 @@
 <script>
 import { mapMutations, mapState, mapActions, mapGetters } from 'vuex'
 import { basename, join } from 'path'
-
+import { batchActions } from '../helpers/batchActions'
 import { cloneStateObject } from '../helpers/store'
 import MixinsGeneral from '../mixins'
-import { getResourceSize } from '../helpers/resources'
+import MixinResources from '../mixins/resources'
+import MixinRoutes from '../mixins/routes'
 
 import MoveSidebarMainContent from '../components/LocationPicker/MoveSidebarMainContent.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
@@ -84,7 +85,7 @@ export default {
     NoContentMessage
   },
 
-  mixins: [MixinsGeneral],
+  mixins: [MixinsGeneral, MixinResources, MixinRoutes],
 
   data: () => ({
     originalLocation: '',
@@ -106,10 +107,13 @@ export default {
       'activeFilesCount',
       'filesTotalSize'
     ]),
-    ...mapGetters(['user']),
 
     currentAction() {
       return this.$route.params.action
+    },
+
+    target() {
+      return this.$route.params.item
     },
 
     resources() {
@@ -127,32 +131,11 @@ export default {
       return this.resources.length
     },
 
-    target() {
-      return this.$route.params.item
-    },
-
-    isPublicPage() {
-      return !this.user.id
-    },
-
     breadcrumbs() {
       const breadcrumbs = []
 
       if (!this.isPublicPage) {
-        breadcrumbs.push({
-          index: 0,
-          text: this.$gettext('Home'),
-          to: {
-            name: this.$route.name,
-            params: {
-              action: this.currentAction,
-              item: '/'
-            },
-            query: {
-              resource: this.resources
-            }
-          }
-        })
+        breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('Home'), '/'))
       }
 
       if (this.target) {
@@ -161,20 +144,7 @@ export default {
         for (let i = 0; i < items.length; i++) {
           const itemPath = encodeURIComponent(join.apply(null, items.slice(0, i + 1)))
 
-          breadcrumbs.push({
-            index: i + 1,
-            text: items[i],
-            to: {
-              name: this.$route.name,
-              params: {
-                action: this.currentAction,
-                item: itemPath
-              },
-              query: {
-                resource: this.resources
-              }
-            }
-          })
+          breadcrumbs.push(this.createBreadcrumbNode(i + 1, items[i], itemPath))
         }
       }
 
@@ -191,31 +161,36 @@ export default {
       const count = this.resourcesCount
       let title = ''
 
-      if (this.currentAction === 'move') {
-        title = this.$ngettext(
-          'Selected %{ count } resource to move into:',
-          'Selected %{ count } resources to move into:',
-          count
-        )
-      } else if (this.currentAction === 'copy') {
-        title = this.$ngettext(
-          'Selected %{ count } resource to copy into:',
-          'Selected %{ count } resources to copy into:',
-          count
-        )
+      switch (this.currentAction) {
+        case batchActions.move: {
+          title = this.$ngettext(
+            'Selected %{ count } resource to move into:',
+            'Selected %{ count } resources to move into:',
+            count
+          )
+          break
+        }
+        case batchActions.copy: {
+          title = this.$ngettext(
+            'Selected %{ count } resource to copy into:',
+            'Selected %{ count } resources to copy into:',
+            count
+          )
+        }
       }
 
       return this.$gettextInterpolate(title, { count: count }, false)
     },
 
     confirmBtnText() {
-      if (this.currentAction === 'move') {
-        return this.$pgettext('Confirm action in the location picker for move', 'Move here')
-      } else if (this.currentAction === 'copy') {
-        return this.$pgettext('Confirm action in the location picker for copy', 'Paste here')
+      switch (this.currentAction) {
+        case batchActions.move:
+          return this.$pgettext('Confirm action in the location picker for move', 'Move here')
+        case batchActions.copy:
+          return this.$pgettext('Confirm action in the location picker for copy', 'Paste here')
+        default:
+          return this.$gettext('Confirm')
       }
-
-      return this.$gettext('Confirm')
     },
 
     disabledResources() {
@@ -253,12 +228,17 @@ export default {
   created() {
     this.originalLocation = this.target
 
-    if (this.currentAction === 'move') {
-      this.SET_NAVIGATION_HIDDEN(true)
-      this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
-    } else if (this.currentAction === 'copy') {
-      this.SET_NAVIGATION_HIDDEN(true)
-      this.SET_MAIN_CONTENT_COMPONENT(CopySidebarMainContent)
+    switch (this.currentAction) {
+      case batchActions.move: {
+        this.SET_NAVIGATION_HIDDEN(true)
+        this.SET_MAIN_CONTENT_COMPONENT(MoveSidebarMainContent)
+        break
+      }
+      case batchActions.copy: {
+        this.SET_NAVIGATION_HIDDEN(true)
+        this.SET_MAIN_CONTENT_COMPONENT(CopySidebarMainContent)
+        break
+      }
     }
   },
 
@@ -275,6 +255,23 @@ export default {
     ]),
     ...mapActions('Files', ['loadFiles', 'loadIndicators']),
     ...mapActions(['showMessage']),
+
+    createBreadcrumbNode(index, text, itemPath) {
+      return {
+        index,
+        text,
+        to: {
+          name: this.$route.name,
+          params: {
+            action: this.currentAction,
+            item: itemPath
+          },
+          query: {
+            resource: this.resources
+          }
+        }
+      }
+    },
 
     async navigateToTarget(target) {
       this.loading = true
@@ -302,9 +299,10 @@ export default {
     },
 
     isRowDisabled(resource) {
-      const isBeingMoved = this.resources.some(item => item === resource.path)
-
-      return resource.type !== 'folder' || !resource.canCreate() || isBeingMoved
+      if (resource.type !== 'folder' || !resource.canCreate()) {
+        return true
+      }
+      return this.resources.some(item => item === resource.path)
     },
 
     async confirmAction() {
@@ -330,22 +328,29 @@ export default {
           continue
         }
 
-        if (this.currentAction === 'move') {
-          promise = this.isPublicPage
-            ? this.$client.publicFiles.move(
-                resource,
-                (target += '/' + resourceName),
-                this.publicLinkPassword
-              )
-            : this.$client.files.move(resource, (target += '/' + resourceName))
-        } else if (this.currentAction === 'copy') {
-          promise = this.isPublicPage
-            ? this.$client.publicFiles.copy(
-                resource,
-                (target += '/' + resourceName),
-                this.publicLinkPassword
-              )
-            : this.$client.files.copy(resource, (target += '/' + resourceName))
+        switch (this.currentAction) {
+          case batchActions.move: {
+            promise = this.isPublicPage
+              ? this.$client.publicFiles.move(
+                  resource,
+                  (target += '/' + resourceName),
+                  this.publicLinkPassword
+                )
+              : this.$client.files.move(resource, (target += '/' + resourceName))
+            break
+          }
+          case batchActions.copy: {
+            promise = this.isPublicPage
+              ? this.$client.publicFiles.copy(
+                  resource,
+                  (target += '/' + resourceName),
+                  this.publicLinkPassword
+                )
+              : this.$client.files.copy(resource, (target += '/' + resourceName))
+            break
+          }
+          default:
+            return
         }
 
         await promise.catch(error => {
@@ -358,10 +363,17 @@ export default {
       if (errors.length === 1) {
         let title = ''
 
-        if (this.currentAction === 'move') {
-          title = this.$gettext('An error occurred while moving %{resource}')
-        } else if (this.currentAction === 'copy') {
-          title = this.$gettext('An error occurred while copying %{resource}')
+        switch (this.currentAction) {
+          case batchActions.move: {
+            title = this.$gettext('An error occurred while moving %{resource}')
+            break
+          }
+          case batchActions.copy: {
+            title = this.$gettext('An error occurred while copying %{resource}')
+            break
+          }
+          default:
+            return
         }
 
         this.showMessage({
@@ -380,20 +392,27 @@ export default {
         let title = ''
         let desc = ''
 
-        if (this.currentAction === 'move') {
-          title = this.$gettext('An error occurred while moving several resources')
-          desc = this.$ngettext(
-            '%{count} resource could not be moved',
-            '%{count} resources could not be moved',
-            errors.length
-          )
-        } else if (this.currentAction === 'copy') {
-          title = this.$gettext('An error occurred while copying several resources')
-          desc = this.$ngettext(
-            '%{count} resource could not be copied',
-            '%{count} resources could not be copied',
-            errors.length
-          )
+        switch (this.currentAction) {
+          case batchActions.move: {
+            title = this.$gettext('An error occurred while moving several resources')
+            desc = this.$ngettext(
+              '%{count} resource could not be moved',
+              '%{count} resources could not be moved',
+              errors.length
+            )
+            break
+          }
+          case batchActions.copy: {
+            title = this.$gettext('An error occurred while copying several resources')
+            desc = this.$ngettext(
+              '%{count} resource could not be copied',
+              '%{count} resources could not be copied',
+              errors.length
+            )
+            break
+          }
+          default:
+            return
         }
 
         this.showMessage({
@@ -404,7 +423,6 @@ export default {
             enabled: true
           }
         })
-        console.error('Move / copy failed:', errors)
 
         return
       }
@@ -416,10 +434,6 @@ export default {
       return (
         this.basePath + `?action=${encodeURIComponent(this.currentAction)}` + this.resourcesQuery
       )
-    },
-
-    getResourceSize(size) {
-      return getResourceSize(size)
     }
   }
 }

@@ -57,9 +57,10 @@
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 
-import { aggregateResourceShares, buildResource, getResourceSize } from '../helpers/resources'
+import { aggregateResourceShares, buildResource } from '../helpers/resources'
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
+import MixinResources from '../mixins/resources'
 
 import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
@@ -68,7 +69,7 @@ import NoContentMessage from '../components/NoContentMessage.vue'
 export default {
   components: { QuickActions, ListLoader, NoContentMessage },
 
-  mixins: [FileActions, MixinFilesListPositioning],
+  mixins: [FileActions, MixinFilesListPositioning, MixinResources],
 
   data: () => ({
     loading: true
@@ -189,10 +190,6 @@ export default {
       if (status === 2) {
         return this.$gettext('Declined')
       }
-    },
-
-    getResourceSize(size) {
-      return getResourceSize(size)
     }
   }
 }

@@ -29,9 +29,10 @@
 import { mapGetters, mapMutations } from 'vuex'
 
 import { cloneStateObject } from '../helpers/store'
-import { getResourceSize } from '../helpers/resources'
+import MixinResources from '../mixins/resources'
 
 export default {
+  mixins: [MixinResources],
   computed: {
     ...mapGetters('Files', ['selectedFiles']),
 
@@ -47,7 +48,7 @@ export default {
         size += parseInt(resource.size, 10)
       }
 
-      return getResourceSize(size)
+      return this.getResourceSize(size)
     }
   },
 

@@ -20,6 +20,12 @@ export default {
     },
     isPublicFilesRoute() {
       return this.$route.name === 'files-public-list'
+    },
+    isPublicPage() {
+      if (this.$route.meta) {
+        return this.$route.meta.auth === false
+      }
+      return false
     }
   }
 }

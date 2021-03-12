@@ -11,7 +11,7 @@
             {{ formDateFromNow(item.fileInfo['{DAV:}getlastmodified']) }}
           </oc-td>
           <oc-td width="expand" class="uk-text-meta uk-text-nowrap">
-            {{ item.fileInfo['{DAV:}getcontentlength'] | fileSize }}
+            {{ getResourceSize(item.fileInfo['{DAV:}getcontentlength']) }}
           </oc-td>
           <oc-td width="shrink">
             <div class="uk-button-group">
@@ -46,11 +46,12 @@
   </div>
 </template>
 <script>
-import Mixins from '../mixins.js'
+import Mixins from '../mixins'
+import MixinResources from '../mixins/resources'
 import { mapGetters } from 'vuex'
 
 export default {
-  mixins: [Mixins],
+  mixins: [Mixins, MixinResources],
   title: $gettext => {
     return $gettext('Versions')
   },
