@@ -61,14 +61,14 @@
 import { mapGetters, mapActions } from 'vuex'
 import pathUtil from 'path'
 
-import Routes from '../mixins/routes'
-import DeleteResources from '../mixins/deleteResources'
+import MixinRoutes from '../mixins/routes'
+import MixinDeleteResources from '../mixins/deleteResources'
 import { cloneStateObject } from '../helpers/store'
 import { canBeMoved } from '../helpers/permissions'
 import { checkRoute } from '../helpers/route'
 
 export default {
-  mixins: [Routes, DeleteResources],
+  mixins: [MixinRoutes, MixinDeleteResources],
 
   computed: {
     ...mapGetters('Files', ['selectedFiles', 'currentFolder', 'activeFiles']),
@@ -175,10 +175,12 @@ export default {
     triggerLocationPicker(action) {
       const resources = cloneStateObject(this.selectedFiles)
       const parent = pathUtil.dirname(this.currentFolder.path)
+      const context = this.isPublicPage ? 'public' : 'private'
 
       this.$router.push({
         name: 'files-location-picker',
         params: {
+          context,
           item: parent,
           action
         },

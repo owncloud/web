@@ -1,8 +1,10 @@
 import { dirname } from 'path'
 
 import { checkRoute } from '../../helpers/route'
+import MixinRoutes from '../routes'
 
 export default {
+  mixins: [MixinRoutes],
   computed: {
     $_copy_items() {
       return [
@@ -34,9 +36,11 @@ export default {
     $_copy_trigger(resource) {
       // Parent of the resource selected for copy used as a default target location
       const parent = dirname(resource.path)
+      const context = this.isPublicPage ? 'public' : 'private'
       this.$router.push({
         name: 'files-location-picker',
         params: {
+          context,
           action: 'copy',
           item: parent
         },

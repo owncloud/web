@@ -112,6 +112,13 @@ export default {
       return this.$route.params.action
     },
 
+    isPublicContext() {
+      const context = ['public', 'private'].includes(this.$route.params.context)
+        ? this.$route.params.context
+        : 'private'
+      return context === 'public'
+    },
+
     target() {
       return this.$route.params.item
     },
@@ -134,20 +141,19 @@ export default {
     breadcrumbs() {
       const breadcrumbs = []
 
-      if (!this.isPublicPage) {
+      if (!this.isPublicContext) {
         breadcrumbs.push(this.createBreadcrumbNode(0, this.$gettext('Home'), '/'))
       }
 
       if (this.target) {
         const items = this.target.split('/').filter(item => item !== '')
-
         for (let i = 0; i < items.length; i++) {
           const itemPath = encodeURIComponent(join.apply(null, items.slice(0, i + 1)))
-
           breadcrumbs.push(this.createBreadcrumbNode(i + 1, items[i], itemPath))
         }
       }
 
+      // the very last breadcrumb node is not supposed to be clickable
       delete breadcrumbs[breadcrumbs.length - 1].to
 
       return breadcrumbs
@@ -289,9 +295,8 @@ export default {
     },
 
     leaveLocationPicker(target) {
-      if (this.isPublicPage) {
+      if (this.isPublicContext) {
         this.$router.push({ name: 'files-public-list', params: { token: target } })
-
         return
       }
 
@@ -311,42 +316,33 @@ export default {
 
       // Execute move or copy
       for (const resource of this.resources) {
-        let target = this.target || '/'
+        let targetPath = this.target || '/'
         const resourceName = basename(resource)
+        targetPath += '/' + resourceName
         const exists = this.activeFiles.some(item => {
           return basename(item.name) === resourceName
         })
 
         if (exists) {
           const message = this.$gettext('Resource with name %{name} already exists')
-
           errors.push({
             resource: resourceName,
             message: this.$gettextInterpolate(message, { name: resourceName }, true)
           })
-
           continue
         }
 
         switch (this.currentAction) {
           case batchActions.move: {
-            promise = this.isPublicPage
-              ? this.$client.publicFiles.move(
-                  resource,
-                  (target += '/' + resourceName),
-                  this.publicLinkPassword
-                )
-              : this.$client.files.move(resource, (target += '/' + resourceName))
+            promise = this.isPublicContext
+              ? this.$client.publicFiles.move(resource, targetPath, this.publicLinkPassword)
+              : this.$client.files.move(resource, targetPath)
             break
           }
           case batchActions.copy: {
-            promise = this.isPublicPage
-              ? this.$client.publicFiles.copy(
-                  resource,
-                  (target += '/' + resourceName),
-                  this.publicLinkPassword
-                )
-              : this.$client.files.copy(resource, (target += '/' + resourceName))
+            promise = this.isPublicContext
+              ? this.$client.publicFiles.copy(resource, targetPath, this.publicLinkPassword)
+              : this.$client.files.copy(resource, targetPath)
             break
           }
           default:
@@ -359,10 +355,16 @@ export default {
         })
       }
 
-      // Display error message
-      if (errors.length === 1) {
-        let title = ''
+      // Leave location picker if everything was successful
+      if (errors.length === 0) {
+        this.leaveLocationPicker(this.target)
+        return
+      }
 
+      // Display error messages
+      let title = ''
+      let desc = ''
+      if (errors.length === 1) {
         switch (this.currentAction) {
           case batchActions.move: {
             title = this.$gettext('An error occurred while moving %{resource}')
@@ -388,52 +390,37 @@ export default {
         return
       }
 
-      if (errors.length > 1) {
-        let title = ''
-        let desc = ''
-
-        switch (this.currentAction) {
-          case batchActions.move: {
-            title = this.$gettext('An error occurred while moving several resources')
-            desc = this.$ngettext(
-              '%{count} resource could not be moved',
-              '%{count} resources could not be moved',
-              errors.length
-            )
-            break
-          }
-          case batchActions.copy: {
-            title = this.$gettext('An error occurred while copying several resources')
-            desc = this.$ngettext(
-              '%{count} resource could not be copied',
-              '%{count} resources could not be copied',
-              errors.length
-            )
-            break
-          }
-          default:
-            return
+      switch (this.currentAction) {
+        case batchActions.move: {
+          title = this.$gettext('An error occurred while moving several resources')
+          desc = this.$ngettext(
+            '%{count} resource could not be moved',
+            '%{count} resources could not be moved',
+            errors.length
+          )
+          break
         }
-
-        this.showMessage({
-          title,
-          desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
-          status: 'danger',
-          autoClose: {
-            enabled: true
-          }
-        })
-
-        return
+        case batchActions.copy: {
+          title = this.$gettext('An error occurred while copying several resources')
+          desc = this.$ngettext(
+            '%{count} resource could not be copied',
+            '%{count} resources could not be copied',
+            errors.length
+          )
+          break
+        }
+        default:
+          return
       }
 
-      this.leaveLocationPicker(this.target)
-    },
-
-    createPath() {
-      return (
-        this.basePath + `?action=${encodeURIComponent(this.currentAction)}` + this.resourcesQuery
-      )
+      this.showMessage({
+        title,
+        desc: this.$gettextInterpolate(desc, { count: errors.length }, false),
+        status: 'danger',
+        autoClose: {
+          enabled: true
+        }
+      })
     }
   }
 }
