@@ -196,7 +196,7 @@ export default {
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
       await this.loadPreviews({
         resources,
-        isPublic: this.publicPage(),
+        isPublic: false,
         mediaSource: this.mediaSource,
         headers: this.requestHeaders
       })
