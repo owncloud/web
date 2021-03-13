@@ -45,7 +45,7 @@ export default {
   computed: {
     ...mapGetters(['homeFolder', 'configuration']),
     showHomeButton() {
-      return this.isListRoute
+      return this.isPersonalRoute
     },
 
     homeRoute() {

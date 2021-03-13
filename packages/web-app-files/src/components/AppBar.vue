@@ -174,7 +174,7 @@ export default {
     },
 
     showBreadcrumb() {
-      return this.isPublicFilesRoute || this.isListRoute
+      return this.isPublicFilesRoute || this.isPersonalRoute
     },
     pageTitle() {
       const title = this.$route.meta.title
@@ -186,7 +186,7 @@ export default {
       const breadcrumbs = []
       let baseUrl
       const pathItems = []
-      if (this.isListRoute) {
+      if (this.isPersonalRoute) {
         baseUrl = '/files/list/personal/'
         pathItems.push('/') // as of now we need to add the url encoded root path `/`, otherwise we'll land in the configured homeFolder
         breadcrumbs.push({
@@ -286,7 +286,7 @@ export default {
       try {
         const path = pathUtil.join(this.currentPath, folderName)
 
-        this.isListRoute
+        this.isPersonalRoute
           ? await this.$client.files.createFolder(path)
           : await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
 
@@ -353,11 +353,11 @@ export default {
 
       try {
         const path = pathUtil.join(this.currentPath, fileName)
-        this.isListRoute
+        this.isPersonalRoute
           ? await this.$client.files.putFileContents(path, '')
           : await this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
 
-        let resource = this.isListRoute
+        let resource = this.isPersonalRoute
           ? await this.$client.files.fileInfo(path, this.davProperties)
           : await this.$client.publicFiles.getFileInfo(
               path,
@@ -435,7 +435,7 @@ export default {
         await this.$nextTick()
 
         const path = pathUtil.join(this.currentPath, file)
-        let resource = this.isListRoute
+        let resource = this.isPersonalRoute
           ? await this.$client.files.fileInfo(path, this.davProperties)
           : await this.$client.publicFiles.getFileInfo(
               path,
