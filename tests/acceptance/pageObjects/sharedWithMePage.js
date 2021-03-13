@@ -46,14 +46,16 @@ module.exports = {
     /**
      * @param {string} filename
      * @param {string} action - It takes one of the following : Decline and Accept
+     * @param {string} user - The user who created the share
      *Performs required action, such as accept and decline, on the file row element of the desired file name
      *  shared by specific user
      */
-    declineAcceptFile: function(action, filename) {
+    declineAcceptFile: function(action, filename, user) {
       const actionLocatorButton = {
         locateStrategy: this.elements.shareStatusActionOnFileRow.locateStrategy,
         selector:
           this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
+          util.format(this.elements.getSharedFromUserName.selector, user) +
           util.format(this.elements.shareStatusActionOnFileRow.selector, action)
       }
       return this.initAjaxCounters()
@@ -109,7 +111,7 @@ module.exports = {
     },
     shareStatusActionOnFileRow: {
       selector:
-        '//button[contains(@class,"file-row-share-status-action")][normalize-space(.)="%s"]',
+        '/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class,"file-row-share-status-action")][normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
     }
   }
