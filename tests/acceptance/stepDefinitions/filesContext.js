@@ -1164,8 +1164,16 @@ When('the user tries to move file/folder {string} into folder {string} using the
   return client.page.FilesPageElement.filesList().attemptToMoveResource(resource, target)
 })
 
+When('the user selects move action for folder/file {string} using the webUI', async function(
+  resource
+) {
+  await client.page.FilesPageElement.filesRow()
+    .openFileActionsMenu(resource)
+    .move()
+})
+
 When(
-  'the user cancels the attempt to move/copy file/folder into folder {string} using the webUI',
+  'the user cancels the attempt to move/copy file/folder/files/folders into folder {string} using the webUI',
   function(target) {
     return client.page.FilesPageElement.filesList().cancelResourceMoveOrCopyProgress(target)
   }
@@ -1199,6 +1207,10 @@ When(
   }
 )
 
+When('the user selects the move button to move files using the webUI', function() {
+  return client.page.filesPage().click('@moveSelectedBtn')
+})
+
 When('the user copies file/folder {string} into folder {string} using the webUI', function(
   resource,
   target
@@ -1212,6 +1224,29 @@ When('the user tries to copy file/folder {string} into folder {string} using the
 ) {
   return client.page.FilesPageElement.filesList().attemptToCopyResource(resource, target)
 })
+
+When('the user opens the file action menu of file/folder {string} using the webUI', async function(
+  resource
+) {
+  await client.page.FilesPageElement.filesList().waitForFileVisible(resource)
+  await client.page.FilesPageElement.filesRow().openFileActionsMenu(resource)
+})
+
+When('the user selects copy action for file/folder {string} using the webUI', async function(
+  resource
+) {
+  await client.page.FilesPageElement.filesRow()
+    .openFileActionsMenu(resource)
+    .copy()
+})
+
+When(
+  'the user selects the folder {string} as a place to copy/move the file/files/folder/folders using the webUI',
+  async function(target) {
+    await client.page.locationPicker().selectFolder(target)
+    await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', target)
+  }
+)
 
 When(
   'the user batch copies these files/folders into folder {string} using the webUI',
@@ -1234,6 +1269,10 @@ When(
     return client.page.filesPage().attemptToCopyMultipleResources(target)
   }
 )
+
+When('the user selects the copy button to copy files using the webUI', function() {
+  return client.page.filesPage().click('@copySelectedBtn')
+})
 
 When('the user creates a markdown file with the name {string} using the webUI', function(fileName) {
   return client.page.filesPage().createMarkdownFile(fileName)

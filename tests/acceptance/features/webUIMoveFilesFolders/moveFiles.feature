@@ -94,7 +94,9 @@ Feature: move files
   Scenario: cancel moving a file
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    When the user tries to move file "data.zip" into folder "simple-empty-folder" using the webUI
+    When the user opens the file action menu of folder "data.zip" using the webUI
+    And the user selects move action for folder "data.zip" using the webUI
+    And the user selects the folder "simple-empty-folder" as a place to move the file using the webUI
     And the user cancels the attempt to move file into folder "simple-empty-folder" using the webUI
     Then file "data.zip" should be listed on the webUI
     But  file "data.zip" should not be listed in the folder "simple-empty-folder" on the webUI
@@ -102,11 +104,13 @@ Feature: move files
   Scenario: cancel moving of multiple files at once
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    When the user tries to batch move these files into folder "simple-empty-folder" using the webUI
+    When the user marks these files for batch action using the webUI
       | file_name   |
       | data.zip    |
       | lorem.txt   |
       | testapp.zip |
+    And the user selects the move button to move files using the webUI
+    And the user selects the folder "simple-empty-folder" as a place to move the files using the webUI
     And the user cancels the attempt to move file into folder "simple-empty-folder" using the webUI
     Then the following files should be listed on the webUI
       | file_name   |
@@ -119,6 +123,7 @@ Feature: move files
       | lorem.txt   |
       | testapp.zip |
 
+  @issue-ocis-873
   Scenario: sharee moves a file shared by sharer into another folder
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
