@@ -1,0 +1,5 @@
+Bugfix: Remove unsupported shareType
+
+We don't support 'userGroup' (originally 'contact', shareType `2`) on the backend side anymore, so we delete it on the frontend, too.
+
+https://github.com/owncloud/web/pull/4809
