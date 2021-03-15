@@ -1,73 +1,78 @@
 <template>
-  <div class="uk-height-1-1 uk-flex uk-flex-column oc-p-s uk-overflow-hidden">
-    <h1 class="location-picker-selection-info uk-flex uk-text-lead uk-margin-bottom">
-      <span class="uk-margin-small-right" v-text="title" />
-      <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
-    </h1>
-    <hr class="oc-mt-rm" />
-    <div class="oc-mb">
-      <oc-grid gutter="small">
-        <div>
-          <oc-button @click="leaveLocationPicker(originalLocation)">
-            <translate>Cancel</translate>
-          </oc-button>
-        </div>
-        <div>
-          <oc-button
-            id="location-picker-btn-confirm"
-            variation="primary"
-            :disabled="!canConfirm"
-            @click="confirmAction"
-          >
-            <span v-text="confirmBtnText" />
-          </oc-button>
-        </div>
-      </oc-grid>
-    </div>
-    <div>
-      <list-loader v-if="loading" />
-      <template v-else>
-        <no-content-message
-          v-if="isEmpty"
-          id="files-location-picker-empty"
-          class="files-empty"
-          icon="folder"
-        >
-          <template #message>
-            <span v-translate>There are no resources in this folder.</span>
-          </template>
-        </no-content-message>
-        <oc-table-files
-          v-else
-          id="files-location-picker-table"
-          class="files-table"
-          :resources="activeFiles"
-          :has-actions="false"
-          :is-selectable="false"
-          :disabled="disabledResources"
-          :target-route="targetRoute"
-        >
-          <template #footer>
-            <div
-              v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
-              class="uk-text-nowrap uk-text-meta uk-text-center uk-width-1-1"
-            >
-              <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
-              <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
-                >folder</translate
-              >
-              <translate>and</translate>
-              <span id="files-list-count-files" v-text="activeFilesCount.files" />
-              <translate :translate-n="activeFilesCount.files" translate-plural="files"
-                >file</translate
-              >
-              <template v-if="activeFiles.length > 0">
-                &ndash; {{ getResourceSize(filesTotalSize) }}
-              </template>
+  <div id="files-location-picker" class="uk-flex uk-height-1-1">
+    <div tabindex="-1" class="files-list-wrapper uk-width-expand">
+      <div id="files-app-bar" class="oc-p-s">
+        <h1 class="location-picker-selection-info uk-flex uk-text-lead oc-mb">
+          <span class="uk-margin-small-right" v-text="title" />
+          <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
+        </h1>
+        <hr class="oc-mt-rm" />
+        <div class="oc-mb">
+          <oc-grid gutter="small">
+            <div>
+              <oc-button @click="leaveLocationPicker(originalLocation)">
+                <translate>Cancel</translate>
+              </oc-button>
             </div>
-          </template>
-        </oc-table-files>
-      </template>
+            <div>
+              <oc-button
+                id="location-picker-btn-confirm"
+                variation="primary"
+                :disabled="!canConfirm"
+                @click="confirmAction"
+              >
+                <span v-text="confirmBtnText" />
+              </oc-button>
+            </div>
+          </oc-grid>
+        </div>
+      </div>
+      <div id="files-view">
+        <list-loader v-if="loading" />
+        <template v-else>
+          <no-content-message
+            v-if="isEmpty"
+            id="files-location-picker-empty"
+            class="files-empty"
+            icon="folder"
+          >
+            <template #message>
+              <span v-translate>There are no resources in this folder.</span>
+            </template>
+          </no-content-message>
+          <oc-table-files
+            v-else
+            id="files-location-picker-table"
+            class="files-table"
+            :resources="activeFiles"
+            :disabled="disabledResources"
+            :target-route="targetRoute"
+            :has-actions="false"
+            :is-selectable="false"
+            :header-position="headerPosition"
+          >
+            <template #footer>
+              <div
+                v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
+                class="uk-text-nowrap uk-text-meta uk-text-center uk-width-1-1"
+              >
+                <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
+                <translate :translate-n="activeFilesCount.folders" translate-plural="folders"
+                  >folder</translate
+                >
+                <translate>and</translate>
+                <span id="files-list-count-files" v-text="activeFilesCount.files" />
+                <translate :translate-n="activeFilesCount.files" translate-plural="files"
+                  >file</translate
+                >
+                <template v-if="activeFiles.length > 0">
+                  &ndash; {{ getResourceSize(filesTotalSize) }}
+                </template>
+              </div>
+            </template>
+          </oc-table-files>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -93,6 +98,7 @@ export default {
   mixins: [MixinsGeneral, MixinResources, MixinRoutes],
 
   data: () => ({
+    headerPosition: 0,
     originalLocation: '',
     loading: true
   }),
@@ -241,6 +247,7 @@ export default {
   },
 
   created() {
+    window.onresize = this.adjustTableHeaderPosition
     this.originalLocation = this.target
 
     switch (this.currentAction) {
@@ -255,6 +262,10 @@ export default {
         break
       }
     }
+  },
+
+  mounted() {
+    this.adjustTableHeaderPosition()
   },
 
   beforeDestroy() {
@@ -288,6 +299,13 @@ export default {
       }
     },
 
+    adjustTableHeaderPosition() {
+      this.$nextTick(() => {
+        const header = document.querySelector('#files-app-bar')
+        this.headerPosition = header.getBoundingClientRect().bottom
+      })
+    },
+
     async navigateToTarget(target) {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
@@ -302,6 +320,7 @@ export default {
 
       this.loadFiles({ currentFolder: resources[0], files: resources.slice(1) })
       this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
+      this.adjustTableHeaderPosition()
       this.loading = false
     },
 
@@ -436,3 +455,33 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.files-list-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content max-content 1fr;
+  gap: 0 0;
+  grid-template-areas:
+    'header'
+    'main';
+
+  &:focus {
+    outline: none;
+  }
+}
+
+#files-app-bar {
+  position: sticky;
+  top: 0;
+  height: auto;
+  z-index: 1;
+  grid-area: header;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+#files-view {
+  grid-area: main;
+}
+</style>

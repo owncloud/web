@@ -119,7 +119,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: max-content max-content 1fr;
-  gap: 0px 0px;
+  gap: 0 0;
   grid-template-areas:
     'header'
     'upload'
