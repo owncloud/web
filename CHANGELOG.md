@@ -1,3 +1,25 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v2.0.2...master
+
+Summary
+-------
+
+* Bugfix - Remove unsupported shareType: [#4809](https://github.com/owncloud/web/pull/4809)
+
+Details
+-------
+
+* Bugfix - Remove unsupported shareType: [#4809](https://github.com/owncloud/web/pull/4809)
+
+   We don't support 'userGroup' (originally 'contact', shareType `2`) on the backend side
+   anymore, so we delete it on the frontend, too.
+
+   https://github.com/owncloud/web/pull/4809
+
 Changelog for ownCloud Web [2.0.2] (2021-03-08)
 =======================================
 The following sections list the changes in ownCloud web 2.0.2 relevant to
