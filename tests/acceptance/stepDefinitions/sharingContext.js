@@ -1282,9 +1282,9 @@ Then('user {string} should not have created any shares', async function(user) {
 
 Then('the following resources should have the following collaborators', async function(dataTable) {
   for (const { fileName, expectedCollaborators } of dataTable.hashes()) {
-    const collaboratorsArray = await client.page.FilesPageElement.filesList().getCollaboratorsForResource(
-      fileName
-    )
+    const collaboratorsArray = await client.page
+      .sharedWithOthersPage()
+      .getCollaboratorsForResource(fileName)
 
     const expectedCollaboratorsArray = expectedCollaborators.split(',').map(s => s.trim())
     assert.ok(

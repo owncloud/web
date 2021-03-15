@@ -515,27 +515,6 @@ module.exports = {
       return this.useCss()
     },
 
-    getCollaboratorsForResource: async function(fileName) {
-      const resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
-      const collaboratorsXpath = resourceRowXpath + this.elements.collaboratorsInFileRow.selector
-      const collaborators = []
-
-      await this.waitForFileVisible(fileName)
-
-      await this.api.elements(
-        this.elements.collaboratorsInFileRow.locateStrategy,
-        collaboratorsXpath,
-        result => {
-          result.value.forEach(element => {
-            return this.api.elementIdText(element.ELEMENT, attr => {
-              collaborators.push(attr.value)
-            })
-          })
-        }
-      )
-      return collaborators
-    },
-
     /**
      * Returns original string with replaced target character
      * @param   {string} string     String in which will be the target character replaced
@@ -707,7 +686,7 @@ module.exports = {
      * This element is concatenated as child of @see fileRowByResourcePath
      */
     fileIconInFileRow: {
-      selector: '//span[contains(@class, "oc-icon-file-type")]//*[local-name() = "svg"]',
+      selector: '//span[contains(@class, "oc-icon-system")]//*[local-name() = "svg"]',
       locateStrategy: 'xpath'
     },
     /**
@@ -715,10 +694,6 @@ module.exports = {
      */
     filePreviewInFileRow: {
       selector: '//img[contains(@class, "oc-resource-preview")]',
-      locateStrategy: 'xpath'
-    },
-    collaboratorsInFileRow: {
-      selector: '//*[contains(@class, "file-row-collaborator-name")]',
       locateStrategy: 'xpath'
     },
     shareIndicatorsInFileRow: {
