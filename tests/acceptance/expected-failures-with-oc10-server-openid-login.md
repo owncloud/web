@@ -21,3 +21,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [Browser session deleted user should not be valid for newly created user of same name](https://github.com/owncloud/ocis/issues/904)
 -   [webUILogin/openidLogin.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L74)
+
+### [sorting for files lists needs to be reimplemented](https://github.com/owncloud/ocis/issues/1179)
+-   [webUIFiles/sort.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/sort.feature#L51)
+-   [webUIFiles/sort.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/sort.feature#L72)

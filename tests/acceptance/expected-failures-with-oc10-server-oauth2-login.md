@@ -20,3 +20,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [webUILogin/adminBlocksUser.feature:20 behaves differently on CI] (https://github.com/owncloud/web/issues/4743)
 -   [webUILogin/adminBlocksUser.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L120)
+
+### [sorting for files lists needs to be reimplemented](https://github.com/owncloud/ocis/issues/1179)
+-   [webUIFiles/sort.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/sort.feature#L51)
+-   [webUIFiles/sort.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/sort.feature#L72)
