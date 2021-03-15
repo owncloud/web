@@ -19,7 +19,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [Media Viewer preview not visible for files with .jpeg, .ogg, .webm and .gif formats](https://github.com/owncloud/ocis/issues/1490)
 -   [webUIPreview/imageMediaViewer.feature:136](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L136)
--   [webUIPreview/imageMediaViewer.feature:145](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L145)
 -   [webUIPreview/imageMediaViewer.feature:154](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L154)
 
 ### [Media viewer previews are not visible in public share](https://github.com/owncloud/ocis/issues/1370)
@@ -422,3 +421,17 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIResharing/reshareUsers.feature:336](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L336)
 -   [webUIResharing/reshareUsers.feature:353](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L353)
 -   [webUIResharing/reshareUsers.feature:365](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L365)
+
+#### [Searching sharee with displayname](https://github.com/owncloud/ocis/issues/547)
+-   [apiSharees/sharees.feature:586](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L586)
+-   [apiSharees/sharees.feature:587](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L587)
+-   [apiSharees/sharees.feature:607](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L607)
+-   [apiSharees/sharees.feature:608](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L608)
+-   [apiSharees/sharees.feature:632](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L632)
+-   [apiSharees/sharees.feature:633](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L633)
+-   [apiSharees/sharees.feature:657](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L657)
+-   [apiSharees/sharees.feature:658](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L658)
+-   [apiSharees/sharees.feature:682](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L682)
+-   [apiSharees/sharees.feature:683](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L683)
+-   [apiSharees/sharees.feature:702](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L702)
+-   [apiSharees/sharees.feature:703](https://github.com/owncloud/core/blob/master/tests/acceptance/features/apiSharees/sharees.feature#L703)
