@@ -21,13 +21,15 @@ module.exports = {
      * gets displayed share status of file-name (shared by user of given username)
      *
      * @param {string} filename
+     * @param {string} user - The user who created the share
      *
      * @return {Promise<string>}
      */
-    getShareStatusOfResource: async function(filename) {
+    getShareStatusOfResource: async function(filename, user) {
       let status
       const requiredXpath =
         this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
+        util.format(this.elements.getSharedFromUserName.selector, user) +
         this.elements.shareStatusOnFileRow.selector
       await this.useXpath()
         .waitForAnimationToFinish()
@@ -96,7 +98,8 @@ module.exports = {
   },
   elements: {
     shareStatusOnFileRow: {
-      selector: "//span[contains(@class,'file-row-share-status-text')]",
+      selector:
+        "/ancestor::tr[contains(@class, 'oc-tbody-tr')]//span[contains(@class,'file-row-share-status-text')]",
       locateStrategy: 'xpath'
     },
     getSharedFromUserName: {
