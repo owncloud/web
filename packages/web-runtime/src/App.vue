@@ -215,8 +215,11 @@ export default {
     }
   },
   watch: {
-    $route() {
-      this.appNavigationVisible = false
+    $route: {
+      immediate: true,
+      handler: function(to) {
+        document.title = this.extractPageTitleFromRoute(to)
+      }
     },
     capabilities(caps) {
       if (!caps) {
@@ -235,6 +238,7 @@ export default {
       }
     },
     selectedLanguage: {
+      immediate: true,
       handler(language) {
         let languageCode = this.$language.defaultLanguage
         if (language !== null && language.listValue.values.length > 0) {
@@ -242,9 +246,9 @@ export default {
         }
         if (languageCode) {
           this.$language.current = languageCode
+          document.documentElement.lang = languageCode
         }
-      },
-      immediate: true
+      }
     }
   },
 
@@ -259,9 +263,7 @@ export default {
   },
 
   metaInfo() {
-    const metaInfo = {
-      title: this.configuration.theme.general.name
-    }
+    const metaInfo = {}
     if (this.favicon) {
       metaInfo.link = [{ rel: 'icon', href: this.favicon }]
     }
@@ -318,6 +320,27 @@ export default {
       }
 
       this.appNavigationVisible = false
+    },
+    extractPageTitleFromRoute(route) {
+      const titleSegments = [this.configuration.theme.general.name]
+
+      if (route.meta.pageTitle) {
+        titleSegments.unshift(route.meta.pageTitle)
+      }
+
+      if (route.params.item) {
+        if (route.name.startsWith('files-')) {
+          const fileTree = route.params.item.split('/').filter(el => el.length)
+
+          if (fileTree.length) {
+            titleSegments.unshift(fileTree.pop())
+          }
+        } else {
+          titleSegments.unshift(route.params.item)
+        }
+      }
+
+      return titleSegments.join(' - ')
     }
   }
 }
