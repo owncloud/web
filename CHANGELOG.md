@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Remove unsupported shareType: [#4809](https://github.com/owncloud/web/pull/4809)
+* Enhancement - A11y improvements for meta attributes: [#4342](https://github.com/owncloud/web/issues/4342)
 
 Details
 -------
@@ -19,6 +20,16 @@ Details
    anymore, so we delete it on the frontend, too.
 
    https://github.com/owncloud/web/pull/4809
+
+* Enhancement - A11y improvements for meta attributes: [#4342](https://github.com/owncloud/web/issues/4342)
+
+   For a11y the html language attribute will be set dynamically <html lang="xx"/>. For a11y the
+   title will be set automatically following the schema: sub item (e.G file) - route (e.g All
+   Files) - general name (e.g ownCloud)
+
+   https://github.com/owncloud/web/issues/4342
+   https://github.com/owncloud/web/issues/4338
+   https://github.com/owncloud/web/pull/4811
 
 Changelog for ownCloud Web [2.0.2] (2021-03-08)
 =======================================
