@@ -9,6 +9,11 @@ import store from '../store'
 
 Vue.use(Router)
 
+// just a dummy function to trick gettext tools
+function $gettext(msg) {
+  return msg
+}
+
 const router = new Router({
   //  mode: 'history',
   routes: [
@@ -18,33 +23,33 @@ const router = new Router({
       components: {
         fullscreen: LoginPage
       },
-      meta: { auth: false, hideHeadbar: true }
+      meta: { auth: false, hideHeadbar: true, pageTitle: $gettext('Login') }
     },
     {
       path: '/oidc-callback',
       components: {
         fullscreen: OidcCallbackPage
       },
-      meta: { auth: false, hideHeadbar: true }
+      meta: { auth: false, hideHeadbar: true, pageTitle: $gettext('Oidc callback') }
     },
     {
       path: '/oidc-silent-redirect',
       components: {
         fullscreen: OidcCallbackPage
       },
-      meta: { auth: false, hideHeadbar: true }
+      meta: { auth: false, hideHeadbar: true, pageTitle: $gettext('Oidc redirect') }
     },
     {
       path: '/f/:fileId',
       name: 'privateLink',
       redirect: '/files/private-link/:fileId',
-      meta: { hideHeadbar: true }
+      meta: { hideHeadbar: true, pageTitle: $gettext('Private link') }
     },
     {
       path: '/s/:token',
       name: 'publicLink',
       redirect: '/files/public-link/:token',
-      meta: { auth: false, hideHeadbar: true }
+      meta: { auth: false, hideHeadbar: true, pageTitle: $gettext('Public link') }
     },
     {
       path: '/access-denied',
@@ -52,14 +57,15 @@ const router = new Router({
       components: {
         fullscreen: AccessDeniedPage
       },
-      meta: { auth: false, hideHeadbar: true }
+      meta: { auth: false, hideHeadbar: true, pageTitle: $gettext('Access denied') }
     },
     {
       path: '/account',
       name: 'account',
       components: {
         app: Account
-      }
+      },
+      meta: { pageTitle: $gettext('Accounts') }
     }
   ]
 })
