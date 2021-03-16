@@ -1205,7 +1205,7 @@ When(
 )
 
 When('the user selects the move button to move files using the webUI', function() {
-  return client.page.filesPage().click('@moveSelectedBtn')
+  return client.page.personalPage().click('@moveSelectedBtn')
 })
 
 When('the user copies file/folder {string} into folder {string} using the webUI', function(
@@ -1268,7 +1268,7 @@ When(
 )
 
 When('the user selects the copy button to copy files using the webUI', function() {
-  return client.page.filesPage().click('@copySelectedBtn')
+  return client.page.personalPage().click('@copySelectedBtn')
 })
 
 When('the user creates a markdown file with the name {string} using the webUI', function(fileName) {
