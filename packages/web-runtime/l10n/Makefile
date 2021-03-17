@@ -77,7 +77,7 @@ push:
 		else \
 			export OUT_DIR=$$app/l10n; \
 		fi; \
-		cd $$OUTTDIR; \
+		cd $$OUT_DIR; \
 		tx -d push -s --no-interactive; \
 	done; \
 
@@ -90,6 +90,6 @@ pull:
 		else \
 			export OUT_DIR=$$app/l10n; \
 		fi; \
-		cd $$OUTTDIR; \
+		cd $$OUT_DIR; \
 		tx -d pull -a; \
 	done; \
