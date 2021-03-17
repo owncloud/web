@@ -12,7 +12,7 @@ module.exports = {
      * @param {string} elementType
      * @returns {string} file action button selector
      */
-    getFileActionBtnSelector: function(fileName, elementType = 'file') {
+    getFileActionBtnSelector: function(fileName, elementType = 'any') {
       return (
         filesList.getFileRowSelectorByFileName(fileName, elementType) +
         this.elements.fileActionsButtonInFileRow.selector
@@ -26,7 +26,7 @@ module.exports = {
      *
      * @returns {*}
      */
-    openFileActionsMenu: function(resource, elementType = 'file') {
+    openFileActionsMenu: function(resource, elementType = 'any') {
       const fileActionsBtnSelector = this.getFileActionBtnSelector(resource, elementType)
       this.useXpath()
         .waitForElementVisible(fileActionsBtnSelector)
