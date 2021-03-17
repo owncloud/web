@@ -50,15 +50,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Files', [
-      'selectedFiles',
-      'activeFiles',
-      'dropzone',
-      'loadingFolder',
-      'highlightedFile',
-      'currentFolder',
-      'inProgress'
-    ]),
+    ...mapGetters('Files', ['dropzone', 'highlightedFile', 'inProgress']),
 
     _sidebarOpen() {
       return this.highlightedFile !== null

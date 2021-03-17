@@ -248,6 +248,8 @@ export default {
 
   CLEAR_CURRENT_FILES_LIST(state) {
     state.currentFolder = null
+    state.selected = []
+    state.highlightedFile = null
     // release blob urls
     state.files.forEach(item => {
       if (item.previewUrl && item.previewUrl.startsWith('blob:')) {
