@@ -31,7 +31,7 @@ import ApplicationsMenu from './ApplicationsMenu.vue'
 import UserMenu from './UserMenu.vue'
 import Notifications from './Notifications.vue'
 import SearchBar from './SearchBar.vue'
-
+ 
 export default {
   components: {
     Notifications,
@@ -70,7 +70,7 @@ export default {
     ...mapGetters(['configuration']),
 
     isSearchDisabled() {
-      return this.configuration.options.hideSearchBar === true
+      return this.configuration.options.hideSearchBar === true || this.$route.meta.hideSearchBar
     }
   },
   methods: {
