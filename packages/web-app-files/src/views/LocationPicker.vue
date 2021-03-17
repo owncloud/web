@@ -276,11 +276,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations([
-      'SET_NAVIGATION_HIDDEN',
-      'SET_MAIN_CONTENT_COMPONENT',
-      'CLEAR_CURRENT_FILES_LIST'
-    ]),
+    ...mapMutations(['SET_NAVIGATION_HIDDEN', 'SET_MAIN_CONTENT_COMPONENT']),
+    ...mapMutations('Files', ['CLEAR_CURRENT_FILES_LIST']),
     ...mapActions('Files', ['loadFiles', 'loadIndicators']),
     ...mapActions(['showMessage']),
 
