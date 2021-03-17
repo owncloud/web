@@ -7,17 +7,17 @@ const filesRow = client.page.FilesPageElement.filesRow()
 module.exports = {
   commands: {
     /**
-     * @param {string} fileName
+     * @param {string} resource
      * @return {Promise<*>}
      */
-    openSharingDialog: async function(fileName) {
+    openSharingDialog: async function(resource) {
       const appSidebar = client.page.FilesPageElement.appSideBar()
       await appSidebar.closeSidebar(500)
-      await this.openSideBar(fileName)
+      await this.openSideBar(resource)
       return client.page.FilesPageElement.appSideBar().selectAccordionItem('people')
     },
     /**
-     * @param {string} fileName
+     * @param {string} resource
      * @param {boolean} expected Asserts if we expect the preview image to be shown
      */
     checkPreviewImage: function(resource, expected) {
@@ -155,8 +155,7 @@ module.exports = {
       await this.initAjaxCounters()
 
       await this.useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
-        .click(this.getFileLinkSelectorByFileName(folder))
+        .click(this.getFileLinkSelectorByFileName(folder, 'folder'))
         .useCss()
 
       // wait until loading is finished
@@ -170,7 +169,7 @@ module.exports = {
      *
      * @param {string} folder
      */
-    navigateUptoFolder: async function(folder) {
+    navigateUpToFolder: async function(folder) {
       await this.waitForFileVisible(folder)
       await this.initAjaxCounters()
 
@@ -365,7 +364,8 @@ module.exports = {
       const element = this.elements.fileRowByResourcePath
       const name = xpathHelper.buildXpathLiteral(fileName)
       const path = xpathHelper.buildXpathLiteral('/' + fileName)
-      return util.format(element.selector, name, path)
+      const type = xpathHelper.buildXpathLiteral(elementType)
+      return util.format(element.selector, name, path, type)
     },
     /**
      *
@@ -377,7 +377,8 @@ module.exports = {
       const element = this.elements.fileLinkInFileRow
       const name = xpathHelper.buildXpathLiteral(fileName)
       const path = xpathHelper.buildXpathLiteral('/' + fileName)
-      return util.format(element.selector, name, path)
+      const type = xpathHelper.buildXpathLiteral(elementType)
+      return util.format(element.selector, name, path, type)
     },
     /**
      * checks whether the element is listed or not on the filesList
@@ -578,19 +579,20 @@ module.exports = {
       return this
     },
 
-    navigationNotAllowed: async function(target) {
-      await this.waitForFileVisible(target)
+    navigationNotAllowed: async function(target, elementType = 'folder') {
+      await this.waitForFileVisible(target, elementType)
       await this.initAjaxCounters()
 
       const name = xpathHelper.buildXpathLiteral(target)
       const path = xpathHelper.buildXpathLiteral('/' + target)
-      const element = util.format(this.elements.fileRowDisabled.selector, name, path)
+      const type = xpathHelper.buildXpathLiteral(elementType)
+      const element = util.format(this.elements.fileRowDisabled.selector, name, path, type)
       const disabledRow = {
         locateStrategy: this.elements.fileRowDisabled.locateStrategy,
         selector: element
       }
       await this.useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(target), 0, 0)
+        .moveToElement(this.getFileRowSelectorByFileName(target, elementType), 0, 0)
         .waitForElementVisible(disabledRow)
 
       await this.waitForOutstandingAjaxCalls()
@@ -623,7 +625,7 @@ module.exports = {
     },
     clickOnFileName: function(fileName) {
       console.log(fileName)
-      const file = this.getFileLinkSelectorByFileName(fileName)
+      const file = this.getFileLinkSelectorByFileName(fileName, 'file')
 
       console.log(file)
 
@@ -669,17 +671,17 @@ module.exports = {
       selector: '.files-table .oc-tbody-tr'
     },
     fileRowByResourcePath: {
-      selector: `//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
+      selector: `//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
       locateStrategy: 'xpath'
     },
     fileRowDisabled: {
       selector:
-        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/ancestor::tr[contains(@class, "oc-table-disabled")]',
+        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
       selector:
-        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/parent::*',
+        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/parent::*',
       locateStrategy: 'xpath'
     },
     /**

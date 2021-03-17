@@ -13,7 +13,7 @@ module.exports = {
     selectFolder: async function(target) {
       const targetSplitted = target.split('/')
       for (let i = 0; i < targetSplitted.length; i++) {
-        await client.page.FilesPageElement.filesList().navigateUptoFolder(targetSplitted[i])
+        await client.page.FilesPageElement.filesList().navigateUpToFolder(targetSplitted[i])
       }
       return this
     }
