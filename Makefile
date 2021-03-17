@@ -4,6 +4,9 @@ HUGO := ${CURDIR}/hugo
 RELEASE := ${CURDIR}/release
 NODE_MODULES := ${CURDIR}/node_modules
 
+node_modules: package.json yarn.lock
+	yarn install --frozen-lockfile && touch ${NODE_MODULES}
+
 .PHONY: clean
 clean:
 	rm -rf ${DIST} ${HUGO} ${RELEASE} ${NODE_MODULES}
