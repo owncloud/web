@@ -52,7 +52,6 @@ Vue.prototype.$client = new OwnCloud()
 
 Vue.use(VueEvents)
 Vue.use(VueRouter)
-Vue.use(DesignSystem)
 Vue.use(VueClipboard)
 Vue.use(VueScrollTo)
 Vue.use(MediaSource)
@@ -183,11 +182,22 @@ const finalizeInit = async () => {
   })
 }
 
-const fetchTheme = async (themeName = 'owncloud') => {
-  const response = await fetch(`themes/${themeName}.json`)
+const fetchTheme = async () => {
+  // TODO: Decide on how to differentiate between themes provided via 
+  // default, local path or external URL
+  let themePath = config.theme || 'themes/owncloud/theme.json'
+
+  const response = await fetch(themePath)
   const theme = await response.json()
 
-  await store.dispatch('loadTheme', { theme, name: themeName })
+  await store.dispatch('loadTheme', { theme, name: config.theme })
+
+  const loadedTheme = store.getters.theme
+
+  // Initializing the ODS using the default theme provided
+  Vue.use(DesignSystem, {
+    tokens: loadedTheme["default"].designTokens
+  })
 }
 
 const missingOrInvalidConfig = async () => {

@@ -103,6 +103,9 @@ const getters = {
       return '/'
     }
     return parsed
+  },
+  theme: state => {
+    return state.theme
   }
 }
 
