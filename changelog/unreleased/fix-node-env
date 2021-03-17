@@ -1,0 +1,6 @@
+Bugfix: NODE_ENV based on rollup mode
+
+The NODE_ENV was set to production by default, now we use development if rollup is started in watch mode so that the vue devtools can be used.
+
+https://github.com/owncloud/web/issues/4819
+https://github.com/owncloud/web/pull/4820
