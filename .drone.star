@@ -1371,7 +1371,6 @@ def idpService():
 			'LDAP_URI': 'ldap://glauth:9125',
 			'IDP_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration-oc10.yml',
 			'IDP_ISS': 'https://idp:9130',
-			'IDP_TLS': 'true',
 			'LDAP_BINDPW': 'admin',
 			'LDAP_SCOPE': 'sub',
 			'LDAP_LOGIN_ATTRIBUTE': 'uid',
