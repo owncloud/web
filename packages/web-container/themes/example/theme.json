@@ -1,0 +1,134 @@
+{
+  "default": {
+    "general": {
+      "name": "Example Pagetitle",
+      "slogan": "Example Slogan"
+    },
+    "logo": {
+      "sidebar": "themes/example/assets/logo.svg",
+      "favicon": "themes/example/assets/favicon.jpg",
+      "login": "themes/example/assets/logo.svg",
+      "notFound": "themes/example/assets/cloud.svg"
+    },
+    "filesList": {
+      "hideDefaultStatusIndicators": false
+    },
+    "loginPage": {
+      "autoRedirect": true,
+      "backgroundImg": "themes/example/assets/loginBackground.jpg"
+    },
+    "designTokens": {
+      "colorPalette": {
+        "color": "",
+        "emphasis-color": "",
+        "muted-color": "",
+        "link-color": "",
+        "link-hover-color": "",
+        "inverse-color": "",
+        "active-icon-color": "",
+        "passive-icon-color": "",
+        "system-icon-color": "",
+        "background": "",
+        "muted-background": "",
+        "primary-background": "",
+        "secondary-background": "",
+        "selected-background": "",
+        "success-background": "",
+        "warning-background": "",
+        "danger-background": "",
+        "danger-background-hover": "",
+        "brand-primary": "",
+        "action-primary": "",
+        "action-primary-hover": "",
+        "action-disabled": "",
+        "shadow-global": "",
+        "shadow-action-primary": "",
+        "border-primary": "",
+        "input-background": "",
+        "input-background-checked": "",
+        "input-border": ""
+      },
+      "fontSizes": {
+        "small-font-size": "",
+        "medium-font-size": "",
+        "large-font-size": "",
+        "font-size": "",
+        "xxlarge-font-size": "",
+        "xlarge-font-size": ""
+      },
+      "spacing": {
+        "space-small": "",
+        "space-medium": "",
+        "space-large": "",
+        "space-xlarge": "",
+        "space-xxlarge": ""
+      }
+    }
+  },
+  "alternative": {
+    "general": {
+      "name": "Example Pagetitle",
+      "slogan": "Example Slogan"
+    },
+    "logo": {
+      "sidebar": "themes/example/assets/logo.svg",
+      "favicon": "themes/example/assets/favicon.jpg",
+      "login": "themes/example/assets/logo.svg",
+      "notFound": "themes/example/assets/cloud.svg"
+    },
+    "filesList": {
+      "hideDefaultStatusIndicators": false
+    },
+    "loginPage": {
+      "autoRedirect": true,
+      "backgroundImg": "themes/example/assets/loginBackground.jpg"
+    },
+    "designTokens": {
+      "colorPalette": {
+        "color": "",
+        "emphasis-color": "",
+        "muted-color": "",
+        "link-color": "",
+        "link-hover-color": "",
+        "inverse-color": "",
+        "active-icon-color": "",
+        "passive-icon-color": "",
+        "system-icon-color": "",
+        "background": "",
+        "muted-background": "",
+        "primary-background": "",
+        "secondary-background": "",
+        "selected-background": "",
+        "success-background": "",
+        "warning-background": "",
+        "danger-background": "",
+        "danger-background-hover": "",
+        "brand-primary": "",
+        "action-primary": "",
+        "action-primary-hover": "",
+        "action-disabled": "",
+        "shadow-global": "",
+        "shadow-action-primary": "",
+        "border-primary": "",
+        "input-background": "",
+        "input-background-checked": "",
+        "input-border": ""
+      },
+      "fontSizes": {
+        "small-font-size": "",
+        "medium-font-size": "",
+        "large-font-size": "",
+        "font-size": "",
+        "xxlarge-font-size": "",
+        "xlarge-font-size": ""
+      },
+      "spacing": {
+        "space-small": "",
+        "space-medium": "",
+        "space-large": "",
+        "space-xlarge": "",
+        "space-xxlarge": ""
+      }
+    }
+  }
+}
