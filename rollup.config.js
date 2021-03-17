@@ -47,7 +47,7 @@ const plugins = [
     exclude: 'node_modules/**'
   }),
   modify({
-    'process.env.NODE_ENV': JSON.stringify('production'),
+    'process.env.NODE_ENV': JSON.stringify(production ? 'production' : 'development'),
     // todo: remove after pending PR is merged
     // fix for 'assignment to undeclared variable dav' in davclient.js/lib/client.js 6:0
     "if (typeof dav === 'undefined') { dav = {}; }": 'var dav = dav || {}',
