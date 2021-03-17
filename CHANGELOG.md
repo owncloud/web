@@ -8,11 +8,20 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - NODE_ENV based on rollup mode: [#4819](https://github.com/owncloud/web/issues/4819)
 * Bugfix - Remove unsupported shareType: [#4809](https://github.com/owncloud/web/pull/4809)
 * Enhancement - A11y improvements for meta attributes: [#4342](https://github.com/owncloud/web/issues/4342)
 
 Details
 -------
+
+* Bugfix - NODE_ENV based on rollup mode: [#4819](https://github.com/owncloud/web/issues/4819)
+
+   The NODE_ENV was set to production by default, now we use development if rollup is started in
+   watch mode so that the vue devtools can be used.
+
+   https://github.com/owncloud/web/issues/4819
+   https://github.com/owncloud/web/pull/4820
 
 * Bugfix - Remove unsupported shareType: [#4809](https://github.com/owncloud/web/pull/4809)
 
