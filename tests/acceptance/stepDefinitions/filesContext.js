@@ -1169,12 +1169,9 @@ When('the user selects move action for folder/file {string} using the webUI', as
     .move()
 })
 
-When(
-  'the user cancels the attempt to move/copy file/folder/files/folders into folder {string} using the webUI',
-  function(target) {
-    return client.page.FilesPageElement.filesList().cancelResourceMoveOrCopyProgress(target)
-  }
-)
+When('the user cancels the attempt to move/copy resources using the webUI', function() {
+  return client.page.FilesPageElement.filesList().cancelResourceMoveOrCopyProgress()
+})
 
 Then('it should not be possible to copy/move into folder {string} using the webUI', function(
   target
@@ -1241,7 +1238,6 @@ When(
   'the user selects the folder {string} as a place to copy/move the file/files/folder/folders using the webUI',
   async function(target) {
     await client.page.locationPicker().selectFolder(target)
-    await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', target)
   }
 )
 

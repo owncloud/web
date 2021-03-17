@@ -3,17 +3,13 @@ const { client } = require('nightwatch-api')
 module.exports = {
   commands: {
     selectFolderAndConfirm: async function(target) {
-      const targetSplitted = target.split('/')
-      for (let i = 0; i < targetSplitted.length; i++) {
-        await client.page.FilesPageElement.filesList().navigateToFolder(targetSplitted[i])
-      }
-
+      await this.selectFolder(target)
       return this.waitForElementVisible('@confirmBtn').click('@confirmBtn')
     },
     selectFolder: async function(target) {
       const targetSplitted = target.split('/')
       for (let i = 0; i < targetSplitted.length; i++) {
-        await client.page.FilesPageElement.filesList().navigateUpToFolder(targetSplitted[i])
+        await client.page.FilesPageElement.filesList().navigateToFolder(targetSplitted[i])
       }
       return this
     }

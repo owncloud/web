@@ -89,10 +89,12 @@ import MixinRoutes from '../mixins/routes'
 import MoveSidebarMainContent from '../components/LocationPicker/MoveSidebarMainContent.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
 import CopySidebarMainContent from '../components/LocationPicker/CopySidebarMainContent.vue'
+import ListLoader from '../components/ListLoader.vue'
 
 export default {
   components: {
-    NoContentMessage
+    NoContentMessage,
+    ListLoader
   },
 
   mixins: [MixinsGeneral, MixinResources, MixinRoutes],

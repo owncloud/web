@@ -166,23 +166,6 @@ module.exports = {
     },
 
     /**
-     *
-     * @param {string} folder
-     */
-    navigateUpToFolder: async function(folder) {
-      await this.waitForFileVisible(folder)
-      await this.initAjaxCounters()
-
-      await this.useXpath().moveToElement(this.getFileRowSelectorByFileName(folder, 'folder'), 0, 0)
-
-      // wait for previews to finish loading
-      await this.waitForOutstandingAjaxCalls()
-      await this.waitForTableLoaded()
-
-      return this
-    },
-
-    /**
      * opens sidebar for given resource
      *
      * @param {string} resource
@@ -568,9 +551,7 @@ module.exports = {
       return this
     },
 
-    cancelResourceMoveOrCopyProgress: async function(target) {
-      await this.waitForFileVisible(target)
-
+    cancelResourceMoveOrCopyProgress: async function() {
       // cancel copy or move
       await this.useXpath()
         .waitForElementVisible(client.page.personalPage().elements.cancelMoveCopyBtn.selector)
