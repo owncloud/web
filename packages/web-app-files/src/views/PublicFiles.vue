@@ -23,7 +23,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         :resources="activeFiles"
-        :target-route="$route.name"
+        :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
         :header-position="headerPosition"
         @showDetails="setHighlightedFile"
@@ -115,6 +115,10 @@ export default {
 
     folderNotFound() {
       return this.currentFolder === null
+    },
+
+    targetRoute() {
+      return { name: this.$route.name }
     }
   },
 
