@@ -173,7 +173,7 @@ module.exports = {
       await this.waitForFileVisible(folder)
       await this.initAjaxCounters()
 
-      await this.useXpath().moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
+      await this.useXpath().moveToElement(this.getFileRowSelectorByFileName(folder, 'folder'), 0, 0)
 
       // wait for previews to finish loading
       await this.waitForOutstandingAjaxCalls()
@@ -306,7 +306,7 @@ module.exports = {
      * @param {string} fileName
      * @param {string} elementType (file|folder)
      */
-    waitForFileVisible: async function(fileName, elementType = 'file') {
+    waitForFileVisible: async function(fileName, elementType = 'any') {
       const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
 
       await client.page.FilesPageElement.appSideBar().closeSidebar(500)
@@ -342,7 +342,7 @@ module.exports = {
      * @param {string} path
      * @param {string} elementType
      */
-    waitForFileWithPathVisible: async function(path, elementType = 'file') {
+    waitForFileWithPathVisible: async function(path, elementType = 'any') {
       await client.page.FilesPageElement.appSideBar().closeSidebar(500)
       const linkSelector = this.getFileLinkSelectorByFileName(path, elementType)
       const rowSelector = this.getFileRowSelectorByFileName(path, elementType)
@@ -356,16 +356,18 @@ module.exports = {
     /**
      *
      * @param {string} fileName
-     * @param {string} elementType
+     * @param {string} elementType Resource type (file/folder). Use `any` if not relevant.
      *
      * @returns {string}
      */
-    getFileRowSelectorByFileName: function(fileName, elementType = 'file') {
-      const element = this.elements.fileRowByResourcePath
+    getFileRowSelectorByFileName: function(fileName, elementType = 'any') {
       const name = xpathHelper.buildXpathLiteral(fileName)
       const path = xpathHelper.buildXpathLiteral('/' + fileName)
+      if (elementType === 'any') {
+        return util.format(this.elements.fileRowByResourcePathAnyType.selector, name, path)
+      }
       const type = xpathHelper.buildXpathLiteral(elementType)
-      return util.format(element.selector, name, path, type)
+      return util.format(this.elements.fileRowByResourcePath.selector, name, path, type)
     },
     /**
      *
@@ -373,29 +375,28 @@ module.exports = {
      * @param {string} elementType
      * @returns {string}
      */
-    getFileLinkSelectorByFileName: function(fileName, elementType = 'file') {
-      const element = this.elements.fileLinkInFileRow
+    getFileLinkSelectorByFileName: function(fileName, elementType = 'any') {
       const name = xpathHelper.buildXpathLiteral(fileName)
       const path = xpathHelper.buildXpathLiteral('/' + fileName)
+      if (elementType === 'any') {
+        return util.format(this.elements.fileLinkInFileRowAnyType.selector, name, path)
+      }
       const type = xpathHelper.buildXpathLiteral(elementType)
-      return util.format(element.selector, name, path, type)
+      return util.format(this.elements.fileLinkInFileRow.selector, name, path, type)
     },
     /**
      * checks whether the element is listed or not on the filesList
      *
      * @param {string} name Name of the file/folder/resource
+     * @param {string} elementType
      * @returns {boolean}
      */
-    isElementListed: async function(name) {
-      const selector = this.getFileRowSelectorByFileName(name)
+    isElementListed: async function(name, elementType = 'any') {
+      const selector = this.getFileRowSelectorByFileName(name, elementType)
       let isVisible = false
 
       await this.api.element('xpath', selector, function(result) {
-        if (result.value && result.value.ELEMENT) {
-          isVisible = true
-        } else {
-          isVisible = false
-        }
+        isVisible = !!(result.value && result.value.ELEMENT)
       })
 
       return isVisible
@@ -670,6 +671,10 @@ module.exports = {
     fileRow: {
       selector: '.files-table .oc-tbody-tr'
     },
+    fileRowByResourcePathAnyType: {
+      selector: `//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
+      locateStrategy: 'xpath'
+    },
     fileRowByResourcePath: {
       selector: `//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
       locateStrategy: 'xpath'
@@ -677,6 +682,11 @@ module.exports = {
     fileRowDisabled: {
       selector:
         '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
+      locateStrategy: 'xpath'
+    },
+    fileLinkInFileRowAnyType: {
+      selector:
+        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/parent::*',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
