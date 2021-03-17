@@ -1459,7 +1459,6 @@ def ocisService():
 			'WEB_UI_CONFIG': '/srv/config/drone/ocis-config.json',
 			'WEB_ASSET_PATH': '/var/www/owncloud/web/dist',
 			'IDP_IDENTIFIER_REGISTRATION_CONF': '/srv/config/drone/identifier-registration.yml',
-			'IDP_TLS': 'true',
 			'ACCOUNTS_DATA_PATH': '/srv/app/tmp/ocis-accounts/',
 			'PROXY_ENABLE_BASIC_AUTH': True,
 		},
