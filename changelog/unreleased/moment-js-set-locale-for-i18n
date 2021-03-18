@@ -1,0 +1,6 @@
+Enhancement: Set locale on moment-js to render translated strings
+
+For i18n purposes we set the moment-js locale to the current selected locale (language) this allows us to show
+translated string for example in the updated column in the All files list (web-app-files package)
+
+https://github.com/owncloud/web/pull/4826
