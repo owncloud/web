@@ -1465,7 +1465,7 @@ def ocisService():
 			'cd /var/www/owncloud',
 			'mkdir -p /srv/app/tmp/ocis/owncloud/data/',
 			'mkdir -p /srv/app/tmp/ocis/storage/users/',
-			'./ocis --log-level debug server'
+			'./ocis server'
 		],
 		'volumes': [{
 			'name': 'gopath',
