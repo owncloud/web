@@ -133,7 +133,7 @@ Feature: rename files
       | from_file_name | to_file_name                      |
       | lorem.txt      | simple-folder/lorem.txt           |
       | lorem.txt      | lorem/txt                         |
-      | simple-folder  | simple-empty-folder/simple-folder |
+
 
 
   Scenario: Rename the last file in a folder

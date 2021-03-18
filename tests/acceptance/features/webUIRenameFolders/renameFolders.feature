@@ -24,7 +24,7 @@ Feature: rename folders
 
 
   Scenario Outline: Rename a folder that has special characters in its name
-    Given user "Alice" has created file "Sample,Folder,With,Comma"
+    Given user "Alice" has created folder "Sample,Folder,With,Comma"
     And the user has reloaded the current page of the webUI
     When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI

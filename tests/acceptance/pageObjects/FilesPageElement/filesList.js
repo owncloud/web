@@ -140,10 +140,8 @@ module.exports = {
      * @return {Promise<*>}
      */
     confirmDeletion: function() {
-      return this.initAjaxCounters()
-        .waitForElementEnabled('@dialogConfirmBtn')
+      return this.waitForElementEnabled('@dialogConfirmBtn')
         .click('@dialogConfirmBtn')
-        .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@dialog')
     },
     /**
