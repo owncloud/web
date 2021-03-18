@@ -1179,6 +1179,13 @@ Then('it should not be possible to copy/move into folder {string} using the webU
   return client.page.FilesPageElement.filesList().navigationNotAllowed(target)
 })
 
+Then(
+  'it should not be possible to paste files/folders into the current folder using the webUI',
+  async function() {
+    return await client.page.locationPicker().copyOrMoveNotAllowed()
+  }
+)
+
 When(
   'the user batch moves these files/folders into folder {string} using the webUI',
   async function(target, resources) {

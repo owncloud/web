@@ -73,7 +73,7 @@ Feature: copy files and folders
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to copy file "lorem.txt" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
+    Then it should not be possible to paste files into the current folder using the webUI
 
   @issue-ocis-reva-243
   Scenario: copy a folder into another folder with no change permission
@@ -81,7 +81,7 @@ Feature: copy files and folders
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
+    Then it should not be possible to paste files into the current folder using the webUI
 
 
   Scenario: copy a folder into the same folder

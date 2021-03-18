@@ -69,7 +69,7 @@ Feature: move folders
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to move into folder "simple-folder (2)" using the webUI
+    Then it should not be possible to paste files into the current folder using the webUI
 
 
   Scenario: move a folder into the same folder
