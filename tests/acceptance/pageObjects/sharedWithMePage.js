@@ -80,7 +80,7 @@ module.exports = {
       await this.waitForElementVisible({
         locateStrategy: this.elements.sharedFrom.locateStrategy,
         selector: requiredXpath
-      }).api.getText(this.elements.sharedFrom.locateStrategy, requiredXpath, result => {
+      }).api.getAttribute(this.elements.sharedFrom.locateStrategy, requiredXpath, 'alt', result => {
         username = result.value
       })
       return username
