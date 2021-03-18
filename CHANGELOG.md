@@ -11,6 +11,7 @@ Summary
 * Bugfix - NODE_ENV based on rollup mode: [#4819](https://github.com/owncloud/web/issues/4819)
 * Bugfix - Remove unsupported shareType: [#4809](https://github.com/owncloud/web/pull/4809)
 * Enhancement - A11y improvements for meta attributes: [#4342](https://github.com/owncloud/web/issues/4342)
+* Enhancement - Set locale on moment-js to render translated strings: [#4826](https://github.com/owncloud/web/pull/4826)
 
 Details
 -------
@@ -39,6 +40,14 @@ Details
    https://github.com/owncloud/web/issues/4342
    https://github.com/owncloud/web/issues/4338
    https://github.com/owncloud/web/pull/4811
+
+* Enhancement - Set locale on moment-js to render translated strings: [#4826](https://github.com/owncloud/web/pull/4826)
+
+   For i18n purposes we set the moment-js locale to the current selected locale (language) this
+   allows us to show translated string for example in the updated column in the All files list
+   (web-app-files package)
+
+   https://github.com/owncloud/web/pull/4826
 
 Changelog for ownCloud Web [2.0.2] (2021-03-08)
 =======================================
