@@ -75,11 +75,15 @@ export default {
           handler: item =>
             this.$_fileActions_openEditor(editor, item.path, item.id, EDITOR_MODE_EDIT),
           isEnabled: ({ resource }) => {
-            if (editor.routes?.length > 0 && !checkRoute(editor.routes, this.$route.name)) {
-              return false
+            if (
+              editor.handler ||
+              !editor.routes?.length ||
+              checkRoute(editor.routes, this.$route.name)
+            ) {
+              return resource.extension === editor.extension
             }
 
-            return resource.extension === editor.extension
+            return false
           },
           canBeDefault: true,
           componentType: 'oc-button',
@@ -107,7 +111,8 @@ export default {
 
       // TODO: Refactor in the store
       this.openFile({
-        filePath
+        filePath,
+        fileId
       })
 
       if (editor.newTab) {
@@ -115,7 +120,7 @@ export default {
           name: editor.routeName,
           params: { filePath, fileId, mode }
         }).href
-        const target = `${editor.routeName}-${filePath}`
+        const target = `${editor.routeName}-${filePath}-${fileId}`
         const win = window.open(path, target)
         // in case popup is blocked win will be null
         if (win) {
