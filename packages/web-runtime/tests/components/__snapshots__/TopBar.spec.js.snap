@@ -18,7 +18,43 @@ exports[`Top Bar component Displays applications menu 1`] = `
 </header>
 `;
 
-exports[`Top Bar component Displays search bar if enabled 1`] = `
+exports[`Top Bar component when search bar hidden globally Hides search bar even if not disabled for specified route 1`] = `
+<header class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
+  <oc-grid-stub gutter="medium" flex="">
+    <div class="uk-hidden@l">
+      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
+        <oc-icon-stub name="menu"></oc-icon-stub>
+      </oc-button-stub>
+    </div>
+    <!---->
+  </oc-grid-stub>
+  <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <!---->
+    <!---->
+    <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist=""></user-menu-stub>
+  </oc-grid-stub>
+</header>
+`;
+
+exports[`Top Bar component when search bar hidden globally Hides the search bar if disabled for specified route 1`] = `
+<header class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
+  <oc-grid-stub gutter="medium" flex="">
+    <div class="uk-hidden@l">
+      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
+        <oc-icon-stub name="menu"></oc-icon-stub>
+      </oc-button-stub>
+    </div>
+    <!---->
+  </oc-grid-stub>
+  <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <!---->
+    <!---->
+    <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist=""></user-menu-stub>
+  </oc-grid-stub>
+</header>
+`;
+
+exports[`Top Bar component when search bar visible globally Displays search bar if not disabled for specified route 1`] = `
 <header class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
   <oc-grid-stub gutter="medium" flex="">
     <div class="uk-hidden@l">
@@ -27,6 +63,24 @@ exports[`Top Bar component Displays search bar if enabled 1`] = `
       </oc-button-stub>
     </div>
     <search-bar-stub></search-bar-stub>
+  </oc-grid-stub>
+  <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
+    <!---->
+    <!---->
+    <user-menu-stub userid="einstein" userdisplayname="Albert Einstein" applicationslist=""></user-menu-stub>
+  </oc-grid-stub>
+</header>
+`;
+
+exports[`Top Bar component when search bar visible globally Hides the search bar if disabled for specified route 1`] = `
+<header class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
+  <oc-grid-stub gutter="medium" flex="">
+    <div class="uk-hidden@l">
+      <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
+        <oc-icon-stub name="menu"></oc-icon-stub>
+      </oc-button-stub>
+    </div>
+    <!---->
   </oc-grid-stub>
   <oc-grid-stub flex="" gutter="small" class="uk-width-expand uk-flex-right oc-m-rm">
     <!---->

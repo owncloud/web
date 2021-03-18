@@ -4,37 +4,117 @@ import TopBar from 'web-runtime/src/components/TopBar.vue'
 import stubs from '../../../../tests/unit/config/stubs'
 
 const localVue = createLocalVue()
-const search = enabled => ({
+localVue.use(Vuex)
+
+const globalSearch = enabled => ({
   options: { hideSearchBar: !enabled }
 })
 
-localVue.use(Vuex)
+const routeWithHiddenSearchBar = () => ({ meta: { hideSearchBar: true } })
+const defaultRoute = () => ({
+  meta: {
+    /* default is empty */
+  }
+})
 
 describe('Top Bar component', () => {
-  it('Displays search bar if enabled', () => {
-    const wrapper = shallowMount(TopBar, {
-      store: new Vuex.Store({
-        getters: {
-          configuration: () => search(true)
+  describe('when search bar visible globally', () => {
+    it('Displays search bar if not disabled for specified route', () => {
+      const wrapper = shallowMount(TopBar, {
+        store: new Vuex.Store({
+          getters: {
+            configuration: () => globalSearch(true)
+          }
+        }),
+        localVue,
+        stubs,
+        propsData: {
+          userId: 'einstein',
+          userDisplayName: 'Albert Einstein'
+        },
+        mocks: {
+          $route: defaultRoute()
         }
-      }),
-      localVue,
-      stubs,
-      propsData: {
-        userId: 'einstein',
-        userDisplayName: 'Albert Einstein'
-      }
+      })
+
+      expect(wrapper.html().indexOf('search-bar-stub')).toBeGreaterThan(-1)
+      expect(wrapper).toMatchSnapshot()
     })
 
-    expect(wrapper.html().indexOf('search-bar-stub')).toBeGreaterThan(-1)
-    expect(wrapper).toMatchSnapshot()
+    it('Hides the search bar if disabled for specified route', () => {
+      const wrapper = shallowMount(TopBar, {
+        store: new Vuex.Store({
+          getters: {
+            configuration: () => globalSearch(true)
+          }
+        }),
+        localVue,
+        stubs,
+        propsData: {
+          userId: 'einstein',
+          userDisplayName: 'Albert Einstein'
+        },
+        mocks: {
+          $route: routeWithHiddenSearchBar()
+        }
+      })
+
+      expect(wrapper.html().indexOf('search-bar-stub')).toEqual(-1)
+      expect(wrapper).toMatchSnapshot()
+    })
+  })
+
+  describe('when search bar hidden globally', () => {
+    it('Hides search bar even if not disabled for specified route', () => {
+      const wrapper = shallowMount(TopBar, {
+        store: new Vuex.Store({
+          getters: {
+            configuration: () => globalSearch(false)
+          }
+        }),
+        localVue,
+        stubs,
+        propsData: {
+          userId: 'einstein',
+          userDisplayName: 'Albert Einstein'
+        },
+        mocks: {
+          $route: defaultRoute()
+        }
+      })
+
+      expect(wrapper.html().indexOf('search-bar-stub')).toEqual(-1)
+      expect(wrapper).toMatchSnapshot()
+    })
+
+    it('Hides the search bar if disabled for specified route', () => {
+      const wrapper = shallowMount(TopBar, {
+        store: new Vuex.Store({
+          getters: {
+            configuration: () => globalSearch(false)
+          }
+        }),
+        localVue,
+        stubs,
+        propsData: {
+          userId: 'einstein',
+          userDisplayName: 'Albert Einstein'
+        },
+        mocks: {
+          $route: routeWithHiddenSearchBar()
+        }
+      })
+
+      expect(wrapper.html().indexOf('search-bar-stub')).toEqual(-1)
+      expect(wrapper).toMatchSnapshot()
+    })
   })
 
   it('Displays applications menu', () => {
     const wrapper = shallowMount(TopBar, {
       store: new Vuex.Store({
         getters: {
-          configuration: () => search(false)
+          configuration: () => globalSearch(false)
         }
       }),
       localVue,
@@ -43,6 +123,9 @@ describe('Top Bar component', () => {
         userId: 'einstein',
         userDisplayName: 'Albert Einstein',
         applicationsList: ['testApp']
+      },
+      mocks: {
+        $route: defaultRoute()
       }
     })
 
@@ -54,11 +137,14 @@ describe('Top Bar component', () => {
     const wrapper = shallowMount(TopBar, {
       store: new Vuex.Store({
         getters: {
-          configuration: () => search(true)
+          configuration: () => globalSearch(true)
         }
       }),
       localVue,
-      stubs
+      stubs,
+      mocks: {
+        $route: defaultRoute()
+      }
     })
 
     wrapper.find('.oc-app-navigation-toggle').vm.$emit('click')
