@@ -1,0 +1,6 @@
+Bugfix: Fix detection of handler function when integrating apps
+
+The detection of the optional handler function instead of routes for extensions and external apps was broken
+which prevented the Only Office extension from working, this fixes the issue.
+
+https://github.com/owncloud/web/pull/4816
