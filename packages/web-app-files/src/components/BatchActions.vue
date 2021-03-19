@@ -20,9 +20,8 @@
       </oc-button>
     </template>
     <oc-grid v-if="displayBulkActions" gutter="small">
-      <div>
+      <div v-if="canCopy">
         <oc-button
-          v-if="canCopy"
           id="copy-selected-btn"
           key="copy-selected-btn"
           @click="triggerLocationPicker('copy')"
@@ -31,9 +30,8 @@
           <translate>Copy</translate>
         </oc-button>
       </div>
-      <div>
+      <div v-if="canMove">
         <oc-button
-          v-if="canMove"
           id="move-selected-btn"
           key="move-selected-btn"
           @click="triggerLocationPicker('move')"
@@ -42,9 +40,8 @@
           <translate>Move</translate>
         </oc-button>
       </div>
-      <div>
+      <div v-if="canDelete">
         <oc-button
-          v-if="canDelete"
           id="delete-selected-btn"
           key="delete-selected-btn"
           @click="$_deleteResources_displayDialog"
@@ -77,7 +74,9 @@ export default {
     },
 
     canMove() {
-      if (!checkRoute(['files-personal', 'public-files', 'files-favorites'], this.$route.name)) {
+      if (
+        !checkRoute(['files-personal', 'files-public-list', 'files-favorites'], this.$route.name)
+      ) {
         return false
       }
 
@@ -89,11 +88,13 @@ export default {
     },
 
     canCopy() {
-      if (!checkRoute(['files-personal', 'public-files', 'files-favorites'], this.$route.name)) {
+      if (
+        !checkRoute(['files-personal', 'files-public-list', 'files-favorites'], this.$route.name)
+      ) {
         return false
       }
 
-      if (this.publicPage()) {
+      if (this.isPublicFilesRoute) {
         return this.currentFolder.canCreate()
       }
 

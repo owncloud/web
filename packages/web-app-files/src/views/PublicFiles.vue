@@ -5,7 +5,7 @@
       <not-found-message v-if="folderNotFound" class="files-not-found uk-height-1-1" />
       <no-content-message
         v-else-if="isEmpty"
-        id="files-public-files-empty"
+        id="files-public-list-empty"
         class="files-empty"
         icon="folder"
       >
@@ -18,7 +18,7 @@
       </no-content-message>
       <oc-table-files
         v-else
-        id="files-public-files-table"
+        id="files-public-list-table"
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
@@ -142,7 +142,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('Files', ['setHighlightedFile', 'loadIndicators', 'loadPreviews']),
+    ...mapActions('Files', ['setHighlightedFile', 'loadPreviews']),
     ...mapMutations('Files', [
       'SELECT_RESOURCES',
       'SET_CURRENT_FOLDER',

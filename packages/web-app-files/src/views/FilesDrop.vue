@@ -139,7 +139,7 @@ export default {
         .then(files => {
           if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
             this.$router.push({
-              name: 'public-files',
+              name: 'files-public-list',
               params: {
                 item: this.publicLinkToken
               }

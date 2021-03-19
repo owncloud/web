@@ -234,7 +234,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions('Files', ['updateFileProgress', 'removeFilesFromTrashbin', 'loadPreviews']),
+    ...mapActions('Files', [
+      'updateFileProgress',
+      'removeFilesFromTrashbin',
+      'loadPreviews',
+      'loadIndicators'
+    ]),
     ...mapActions(['openFile', 'showMessage', 'createModal', 'setModalInputErrorMessage']),
     ...mapMutations('Files', ['PUSH_NEW_RESOURCE']),
     ...mapMutations(['SET_QUOTA']),
@@ -286,15 +291,30 @@ export default {
       try {
         const path = pathUtil.join(this.currentPath, folderName)
 
-        this.isPersonalRoute
-          ? await this.$client.files.createFolder(path)
-          : await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
-
-        let resource = await this.$client.files.fileInfo(path, this.davProperties)
+        let resource
+        if (this.isPersonalRoute) {
+          await this.$client.files.createFolder(path)
+          resource = await this.$client.files.fileInfo(path, this.davProperties)
+        } else {
+          await this.$client.publicFiles.createFolder(path, null, this.publicLinkPassword)
+          resource = await this.$client.publicFiles.getFileInfo(
+            path,
+            this.publicLinkPassword,
+            this.davProperties
+          )
+        }
         resource = buildResource(resource)
 
         this.PUSH_NEW_RESOURCE(resource)
         this.hideModal()
+
+        if (this.isPersonalRoute) {
+          this.loadIndicators({
+            client: this.$client,
+            currentFolder: this.currentFolder.path
+          })
+        }
+
         setTimeout(() => {
           this.setHighlightedFile(resource)
           this.scrollToResource(resource)
@@ -353,17 +373,18 @@ export default {
 
       try {
         const path = pathUtil.join(this.currentPath, fileName)
-        this.isPersonalRoute
-          ? await this.$client.files.putFileContents(path, '')
-          : await this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
-
-        let resource = this.isPersonalRoute
-          ? await this.$client.files.fileInfo(path, this.davProperties)
-          : await this.$client.publicFiles.getFileInfo(
-              path,
-              this.publicLinkPassword,
-              this.davProperties
-            )
+        let resource
+        if (this.isPersonalRoute) {
+          await this.$client.files.putFileContents(path, '')
+          resource = await this.$client.files.fileInfo(path, this.davProperties)
+        } else {
+          await this.$client.publicFiles.putFileContents(path, null, this.publicLinkPassword, '')
+          resource = await this.$client.publicFiles.getFileInfo(
+            path,
+            this.publicLinkPassword,
+            this.davProperties
+          )
+        }
 
         if (this.newFileAction) {
           const fileId = resource.fileInfo['{http://owncloud.org/ns}fileid']
@@ -378,6 +399,14 @@ export default {
 
         this.PUSH_NEW_RESOURCE(resource)
         this.hideModal()
+
+        if (this.isPersonalRoute) {
+          this.loadIndicators({
+            client: this.$client,
+            currentFolder: this.currentFolder.path
+          })
+        }
+
         setTimeout(() => {
           this.setHighlightedFile(resource)
           this.scrollToResource(resource)

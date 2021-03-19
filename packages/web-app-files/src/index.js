@@ -190,7 +190,8 @@ const routes = [
         path: 'list/:item',
         component: PublicFiles,
         meta: {
-          auth: false
+          auth: false,
+          hasBulkActions: true
         }
       }
     ]
