@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Fix missing translations in application menu: [#4830](https://github.com/owncloud/web/pull/4830)
 * Bugfix - NODE_ENV based on rollup mode: [#4819](https://github.com/owncloud/web/issues/4819)
 * Bugfix - Remove unsupported shareType: [#4809](https://github.com/owncloud/web/pull/4809)
 * Enhancement - A11y improvements for meta attributes: [#4342](https://github.com/owncloud/web/issues/4342)
@@ -15,6 +16,10 @@ Summary
 
 Details
 -------
+
+* Bugfix - Fix missing translations in application menu: [#4830](https://github.com/owncloud/web/pull/4830)
+
+   https://github.com/owncloud/web/pull/4830
 
 * Bugfix - NODE_ENV based on rollup mode: [#4819](https://github.com/owncloud/web/issues/4819)
 
