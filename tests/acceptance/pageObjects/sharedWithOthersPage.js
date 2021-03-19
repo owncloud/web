@@ -24,13 +24,18 @@ module.exports = {
       await this.waitForElementVisible({
         locateStrategy: this.elements.collaboratorsInFileRow.locateStrategy,
         selector: requiredXpath
-      }).api.getText(this.elements.collaboratorsInFileRow.locateStrategy, requiredXpath, result => {
-        result.value.forEach(element => {
-          return this.api.elementIdText(element.ELEMENT, attr => {
-            collaborators.push(attr.value)
-          })
-        })
       })
+      await this.api.elements(
+        this.elements.collaboratorsInFileRow.locateStrategy,
+        requiredXpath,
+        elements => {
+          elements.value.forEach(el => {
+            this.api.elementIdAttribute(el.ELEMENT, 'alt', r => {
+              collaborators.push(r.value)
+            })
+          })
+        }
+      )
       return collaborators
     }
   },

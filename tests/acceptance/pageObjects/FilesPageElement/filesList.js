@@ -687,8 +687,11 @@ module.exports = {
       selector: '//img[contains(@class, "oc-resource-preview")]',
       locateStrategy: 'xpath'
     },
+    /**
+     * This element is concatenated as child of @see fileRowByResourcePath
+     */
     shareIndicatorsInFileRow: {
-      selector: '//*[contains(@class, "file-row-share-indicator")]',
+      selector: '//*[contains(@class, "oc-status-indicators-indicator")]',
       locateStrategy: 'xpath'
     },
     publicLinkSideBar: {

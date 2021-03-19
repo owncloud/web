@@ -80,9 +80,15 @@ module.exports = {
       await this.waitForElementVisible({
         locateStrategy: this.elements.sharedFrom.locateStrategy,
         selector: requiredXpath
-      }).api.getAttribute(this.elements.sharedFrom.locateStrategy, requiredXpath, 'alt', result => {
-        username = result.value
       })
+      await this.api.getAttribute(
+        this.elements.sharedFrom.locateStrategy,
+        requiredXpath,
+        'alt',
+        result => {
+          username = result.value
+        }
+      )
       return username
     },
     isSharePresent: async function(element, sharer) {
