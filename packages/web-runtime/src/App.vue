@@ -334,7 +334,6 @@ export default {
 
     announceRouteChange(route) {
       const pageTitle = this.extractPageTitleFromRoute(route, false)
-
       const translated = this.$gettext(' Navigated to %{ pageTitle }')
       this.announcement = this.$gettextInterpolate(translated, { pageTitle })
     },
