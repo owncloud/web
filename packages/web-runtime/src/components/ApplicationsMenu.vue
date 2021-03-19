@@ -24,12 +24,12 @@
           <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
             <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="xlarge" />
             <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="xlarge" />
-            <div>{{ n.title }}</div>
+            <div v-translate>{{ n.title }}</div>
           </a>
           <router-link v-else key="apps-menu-internal-link" :to="n.path">
             <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="xlarge" />
             <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="xlarge" />
-            <div v-text="n.title" />
+            <div v-translate>{{ n.title }}</div>
           </router-link>
         </div>
       </div>
