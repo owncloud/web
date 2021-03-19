@@ -84,7 +84,11 @@
 </template>
 <script>
 import 'inert-polyfill'
+<<<<<<< HEAD
 import { mapGetters, mapState, mapActions } from 'vuex'
+=======
+import { mapActions, mapGetters, mapState } from 'vuex'
+>>>>>>> Update packages/web-runtime/src/App.vue
 import TopBar from './components/Top-Bar.vue'
 import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
