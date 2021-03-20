@@ -291,7 +291,7 @@ export default {
     }
   },
   watch: {
-    // Do not reload shares if we are starting with different panel then show
+    // Do not reload shares if we are starting with different panel than 'show'
     highlightedFile: {
       handler: function(newItem, oldItem) {
         if (oldItem !== newItem && this.currentPanel === PANEL_SHOW) {

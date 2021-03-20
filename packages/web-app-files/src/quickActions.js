@@ -20,25 +20,27 @@ function createPublicLink(ctx) {
   }
 
   return new Promise((resolve, reject) => {
-    ctx.store
-      .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
-      .then(link => {
-        copyToClipboard(link.url)
-        ctx.store.dispatch('showMessage', {
-          title: $gettext('Public link created'),
-          desc: $gettext(
-            'Public link has been successfully created and copied into your clipboard.'
-          ),
-          status: 'success',
-          autoClose: {
-            enabled: true
-          }
+    ctx.store.dispatch('Files/setHighlightedFile', ctx.item).then(() => {
+      ctx.store
+        .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
+        .then(link => {
+          copyToClipboard(link.url)
+          ctx.store.dispatch('showMessage', {
+            title: $gettext('Public link created'),
+            desc: $gettext(
+              'Public link has been successfully created and copied into your clipboard.'
+            ),
+            status: 'success',
+            autoClose: {
+              enabled: true
+            }
+          })
+          resolve()
         })
-        resolve()
-      })
-      .catch(e => {
-        reject(e)
-      })
+        .catch(e => {
+          reject(e)
+        })
+    })
   })
 }
 
