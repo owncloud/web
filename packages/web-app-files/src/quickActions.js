@@ -20,10 +20,10 @@ function createPublicLink(ctx) {
   }
 
   return new Promise((resolve, reject) => {
-    ctx.client.shares
-      .shareFileWithLink(ctx.item.path, params)
-      .then(res => {
-        copyToClipboard(res.shareInfo.url)
+    ctx.store
+      .dispatch('Files/addLink', { path: ctx.item.path, client: ctx.client, params })
+      .then(link => {
+        copyToClipboard(link.url)
         ctx.store.dispatch('showMessage', {
           title: $gettext('Public link created'),
           desc: $gettext(

@@ -261,6 +261,7 @@ export default {
             )
           )
           context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+          context.commit('LOAD_INDICATORS')
         })
         .catch(e => {
           context.dispatch(
@@ -296,6 +297,7 @@ export default {
           )
         )
         context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+        context.commit('LOAD_INDICATORS')
       })
       .catch(e => {
         context.dispatch(
@@ -318,6 +320,7 @@ export default {
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
         context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+        context.commit('LOAD_INDICATORS')
       })
       .catch(e => {
         console.log(e)
@@ -435,6 +438,7 @@ export default {
           const link = buildShare(data.shareInfo, null, !context.rootGetters.isOcis)
           context.commit('CURRENT_FILE_OUTGOING_SHARES_ADD', link)
           context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+          context.commit('LOAD_INDICATORS')
           resolve(link)
         })
         .catch(e => {
@@ -462,6 +466,7 @@ export default {
       .then(() => {
         context.commit('CURRENT_FILE_OUTGOING_SHARES_REMOVE', share)
         context.commit('UPDATE_CURRENT_FILE_SHARE_TYPES')
+        context.commit('LOAD_INDICATORS')
       })
       .catch(e => context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', e.message))
   },
