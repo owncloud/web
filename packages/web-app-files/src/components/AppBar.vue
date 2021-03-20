@@ -474,6 +474,14 @@ export default {
 
         resource = buildResource(resource)
         this.PUSH_NEW_RESOURCE(resource)
+
+        if (this.isPersonalRoute) {
+          this.loadIndicators({
+            client: this.$client,
+            currentFolder: this.currentFolder.path
+          })
+        }
+
         this.loadPreviews({
           resources: [resource],
           isPublic: this.publicPage(),
