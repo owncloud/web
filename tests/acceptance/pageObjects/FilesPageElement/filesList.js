@@ -555,6 +555,7 @@ module.exports = {
         .waitForElementVisible(client.page.personalPage().elements.cancelMoveCopyBtn.selector)
         .click(this.page.personalPage().elements.cancelMoveCopyBtn.selector)
         .useCss()
+      await this.waitForLoadingFinished()
 
       return this
     },
