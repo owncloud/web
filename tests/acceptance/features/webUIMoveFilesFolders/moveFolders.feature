@@ -55,7 +55,7 @@ Feature: move folders
     And the user renames folder "simple-empty-folder" to <target_name> using the webUI
     And the user moves folder <folder_name> into folder <target_name> using the webUI
     Then breadcrumb for folder <target_name> should be displayed on the webUI
-    And file <folder_name> should be listed on the webUI
+    And folder <folder_name> should be listed on the webUI
     Examples:
       | folder_name | target_name                    |
       | "'single'"  | "target-folder-with-'single'"  |
