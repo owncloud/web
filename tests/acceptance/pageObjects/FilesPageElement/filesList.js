@@ -249,35 +249,24 @@ module.exports = {
       await this.waitForElementVisible('@anyAfterLoading')
     },
     getResourceThumbnail: async function(resourceName, elementType) {
+      let iconUrl = null
+      await this.waitForFileVisible(resourceName)
+      // try reading the src tag
       const fileRowPreviewSelector =
         this.getFileRowSelectorByFileName(resourceName, elementType) +
         this.elements.filePreviewInFileRow.selector
-      const fileRowIconSelector =
-        this.getFileRowSelectorByFileName(resourceName, elementType) +
-        this.elements.fileIconInFileRow.selector
-      let iconUrl = null
-      // this implicitly waits for preview to be loaded
-      await this.waitForFileVisible(resourceName)
-      // try reading the src tag
-      await this.useXpath()
-        .getAttribute(
-          {
-            selector: fileRowPreviewSelector
-          },
-          'src',
-          result => {
-            // somehow when element was not found the result.value is an empty array...
-            if (result.status !== -1 && typeof result.value === 'string') {
-              iconUrl = result.value
-            }
-          }
-        )
-        .useCss()
+      await this.api.getAttribute('xpath', fileRowPreviewSelector, 'src', result => {
+        // somehow when element was not found the result.value is an empty array...
+        if (result.status !== -1 && typeof result.value === 'string') {
+          iconUrl = result.value
+        }
+      })
       if (!iconUrl) {
+        const fileRowIconSelector =
+          this.getFileRowSelectorByFileName(resourceName, elementType) +
+          this.elements.fileIconInFileRow.selector
         // check that at least the file type icon svg is displayed
-        await this.useXpath()
-          .waitForElementVisible(fileRowIconSelector)
-          .useCss()
+        await this.api.waitForElementVisible('xpath', fileRowIconSelector)
       }
       return iconUrl
     },
