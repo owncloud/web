@@ -63,6 +63,7 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import isNil from 'lodash/isNil'
 
 import FileActions from '../mixins/fileActions'
 import MixinFilesListScrolling from '../mixins/filesListScrolling'
@@ -96,7 +97,7 @@ export default {
       'activeFilesCount',
       'filesTotalSize'
     ]),
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'homeFolder']),
 
     isSidebarOpen() {
       return this.highlightedFile !== null
@@ -130,7 +131,10 @@ export default {
 
   watch: {
     $route: {
-      handler: 'loadResources',
+      handler: function() {
+        this.checkHomeFallback()
+        this.loadResources()
+      },
       immediate: true
     },
 
@@ -157,20 +161,31 @@ export default {
     ]),
     ...mapMutations(['SET_QUOTA']),
 
+    checkHomeFallback() {
+      if (isNil(this.$route.params.item)) {
+        this.$router.push({
+          name: 'files-personal',
+          params: {
+            item: this.homeFolder
+          }
+        })
+      }
+    },
+
     async loadResources() {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
       try {
         let resources = await this.$client.files.list(
-          this.$route.params.item || '/',
+          this.$route.params.item,
           1,
           this.davProperties
         )
 
         resources = resources.map(buildResource)
         this.LOAD_FILES({ currentFolder: resources[0], files: resources.slice(1) })
-        this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item || '/' })
+        this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item })
         this.loadPreviews({
           resources,
           isPublic: false,
