@@ -167,7 +167,7 @@ const finalizeInit = async () => {
   Vue.prototype.$client.init({ baseUrl: config.server || window.location.origin })
 
   // inject custom theme config into vuex
-  await fetchTheme()
+  await fetchTheme(config.theme)
 
   loadTranslations()
 
@@ -183,15 +183,19 @@ const finalizeInit = async () => {
   })
 }
 
-const fetchTheme = async () => {
-  const response = await fetch(`themes/${config.theme}.json`)
+const fetchTheme = async (themeName = 'owncloud') => {
+  const response = await fetch(`themes/${themeName}.json`)
   const theme = await response.json()
 
-  await store.dispatch('loadTheme', { theme, name: config.theme })
+  await store.dispatch('loadTheme', { theme, name: themeName })
 }
 
-const missingOrInvalidConfig = () => {
+const missingOrInvalidConfig = async () => {
   loadTranslations()
+
+  // inject custom theme config into vuex
+  await fetchTheme()
+
   // eslint-disable-next-line no-new
   new Vue({
     el: '#owncloud',
