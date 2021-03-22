@@ -71,6 +71,14 @@ export default {
     },
     $_loadingPublicLinkTitle() {
       return this.$gettext('Loading public link…')
+    },
+
+    backgroundImg() {
+      return this.configuration.theme.loginPage.backgroundImg
+    },
+
+    logoImg() {
+      return this.configuration.theme.logo.login
     }
   },
   mounted() {
