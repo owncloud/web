@@ -139,14 +139,6 @@ export default {
     }
   },
 
-  created() {
-    window.onresize = this.adjustTableHeaderPosition
-  },
-
-  mounted() {
-    this.adjustTableHeaderPosition()
-  },
-
   methods: {
     ...mapActions('Files', ['setHighlightedFile', 'loadPreviews']),
     ...mapMutations('Files', [
@@ -177,13 +169,26 @@ export default {
             mediaSource: this.mediaSource
           })
         }
+
+        this.adjustTableHeaderPosition()
+        window.onresize = this.adjustTableHeaderPosition
       } catch (error) {
         this.SET_CURRENT_FOLDER(null)
         console.error(error)
+
+        if (error.statusCode === 401) {
+          this.redirectToResolvePage()
+        }
       }
 
-      this.adjustTableHeaderPosition()
       this.loading = false
+    },
+
+    redirectToResolvePage() {
+      this.$router.push({
+        name: 'files-public-link',
+        params: { token: this.$route.params.item }
+      })
     }
   }
 }

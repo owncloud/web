@@ -83,8 +83,8 @@ Feature: Share by public link
   Scenario: opening public-link page of the files-drop link without password set should redirect to files-drop page
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions
     When the public tries to open the public link page of the last public link created by user "Alice"
-#    Then the user should be redirected to the files-drop page
-    Then the user should be redirected to the public links page
+    Then the user should be redirected to the files-drop page
+
 
   @skip @yetToImplement
   Scenario: mount public link
