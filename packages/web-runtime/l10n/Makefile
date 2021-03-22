@@ -56,6 +56,7 @@ $(TEMPLATE_FILE):
 translations: $(OUTPUT_DIR)/translations.json
 
 # Generate translations.json file from all available apps .pot templates.
+.PHONY: $(OUTPUT_DIR)/translations.json
 $(OUTPUT_DIR)/translations.json:
 	@for app in $(INPUT_FILES); \
 	do \
