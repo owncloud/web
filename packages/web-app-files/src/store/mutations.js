@@ -130,7 +130,6 @@ export default {
       return f.id === file.id
     })
 
-    resources[fileIndex].id = 'test'
     resources[fileIndex].name = newValue
     resources[fileIndex].path = '/' + newPath + newValue
 
