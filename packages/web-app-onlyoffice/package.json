@@ -1,0 +1,11 @@
+{
+  "name": "ocis-onlyoffice",
+  "version": "0.0.0",
+  "description": "ownCloud onlyoffice viewer",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "luxon": "^1.22.0",
+    "query-string": "^6.8.3",
+    "vuex": "3.1.3"
+  }
+}

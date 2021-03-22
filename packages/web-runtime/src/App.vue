@@ -426,4 +426,9 @@ export default {
   border: 10px solid;
   border-bottom: 10px solid transparent;
 }
+
+/* move to owncloud-design-system */
+.oc-app-container {
+  height: 100%;
+}
 </style>
