@@ -20,6 +20,7 @@
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
+        :are-previews-displayed="displayPreviews"
         :resources="activeFiles"
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -111,6 +112,10 @@ export default {
 
     targetRoute() {
       return { name: 'files-personal' }
+    },
+
+    displayPreviews() {
+      return !this.configuration.options.disablePreviews
     }
   },
 
@@ -166,12 +171,15 @@ export default {
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
-      await this.loadPreviews({
-        resources,
-        isPublic: false,
-        mediaSource: this.mediaSource,
-        headers: this.requestHeaders
-      })
+
+      if (this.displayPreviews) {
+        await this.loadPreviews({
+          resources,
+          isPublic: false,
+          mediaSource: this.mediaSource,
+          headers: this.requestHeaders
+        })
+      }
 
       // Load quota
       const user = await this.$client.users.getUser(this.user.id)

@@ -14,6 +14,7 @@
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
         :are-paths-displayed="true"
+        :are-previews-displayed="displayPreviews"
         :resources="activeFiles"
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -80,7 +81,7 @@ export default {
       'activeFilesCount',
       'filesTotalSize'
     ]),
-    ...mapGetters(['user']),
+    ...mapGetters(['user', 'configuration']),
 
     isSidebarOpen() {
       return this.highlightedFile !== null
@@ -105,6 +106,10 @@ export default {
 
     uploadProgressVisible() {
       return this.inProgress.length > 0
+    },
+
+    displayPreviews() {
+      return !this.configuration.options.disablePreviews
     }
   },
 
@@ -138,11 +143,14 @@ export default {
       resources = resources.map(buildResource)
       this.LOAD_FILES({ currentFolder: buildResource(rootFolder), files: resources })
       this.loadIndicators({ client: this.$client, currentFolder: '/' })
-      await this.loadPreviews({
-        resources,
-        isPublic: false,
-        mediaSource: this.mediaSource
-      })
+
+      if (this.displayPreviews) {
+        await this.loadPreviews({
+          resources,
+          isPublic: false,
+          mediaSource: this.mediaSource
+        })
+      }
 
       // Load quota
       const user = await this.$client.users.getUser(this.user.id)

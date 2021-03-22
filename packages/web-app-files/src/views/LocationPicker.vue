@@ -44,6 +44,7 @@
             v-else
             id="files-location-picker-table"
             class="files-table"
+            :are-previews-displayed="false"
             :resources="activeFiles"
             :disabled="disabledResources"
             :target-route="targetRoute"

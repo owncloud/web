@@ -22,6 +22,7 @@
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
+        :are-previews-displayed="displayPreviews"
         :resources="activeFiles"
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -97,7 +98,7 @@ export default {
       'activeFilesCount',
       'filesTotalSize'
     ]),
-    ...mapGetters(['user', 'homeFolder']),
+    ...mapGetters(['user', 'homeFolder', 'configuration']),
 
     isSidebarOpen() {
       return this.highlightedFile !== null
@@ -126,6 +127,10 @@ export default {
 
     targetRoute() {
       return { name: this.$route.name }
+    },
+
+    displayPreviews() {
+      return !this.configuration.options.disablePreviews
     }
   },
 
@@ -186,11 +191,14 @@ export default {
         resources = resources.map(buildResource)
         this.LOAD_FILES({ currentFolder: resources[0], files: resources.slice(1) })
         this.loadIndicators({ client: this.$client, currentFolder: this.$route.params.item })
-        this.loadPreviews({
-          resources,
-          isPublic: false,
-          mediaSource: this.mediaSource
-        })
+
+        if (this.displayPreviews) {
+          this.loadPreviews({
+            resources,
+            isPublic: false,
+            mediaSource: this.mediaSource
+          })
+        }
 
         // Load quota
         const user = await this.$client.users.getUser(this.user.id)

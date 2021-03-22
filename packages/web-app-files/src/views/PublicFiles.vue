@@ -22,6 +22,7 @@
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
+        :are-previews-displayed="displayPreviews"
         :resources="activeFiles"
         :target-route="targetRoute"
         :highlighted="highlightedFile ? highlightedFile.id : null"
@@ -91,6 +92,7 @@ export default {
       'activeFilesCount',
       'filesTotalSize'
     ]),
+    ...mapGetters(['configuration']),
 
     isEmpty() {
       return this.activeFiles.length < 1
@@ -119,6 +121,10 @@ export default {
 
     targetRoute() {
       return { name: this.$route.name }
+    },
+
+    displayPreviews() {
+      return !this.configuration.options.disablePreviews
     }
   },
 
@@ -163,11 +169,14 @@ export default {
 
         resources = resources.map(buildResource)
         this.LOAD_FILES({ currentFolder: resources[0], files: resources.slice(1) })
-        this.loadPreviews({
-          resources,
-          isPublic: true,
-          mediaSource: this.mediaSource
-        })
+
+        if (this.displayPreviews) {
+          this.loadPreviews({
+            resources,
+            isPublic: true,
+            mediaSource: this.mediaSource
+          })
+        }
       } catch (error) {
         this.SET_CURRENT_FOLDER(null)
         console.error(error)
