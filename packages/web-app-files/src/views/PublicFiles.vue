@@ -152,12 +152,32 @@ export default {
       this.loading = true
       this.CLEAR_CURRENT_FILES_LIST()
 
+      const properties = this.davProperties.concat([
+        this.$client.publicFiles.PUBLIC_LINK_ITEM_TYPE,
+        this.$client.publicFiles.PUBLIC_LINK_PERMISSION,
+        this.$client.publicFiles.PUBLIC_LINK_EXPIRATION,
+        this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
+        this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
+      ])
+
       try {
         let resources = await this.$client.publicFiles.list(
           this.$route.params.item,
           this.publicLinkPassword,
-          this.davProperties
+          properties
         )
+
+        // Redirect to files drop if the link has role "uploader"
+        if (resources[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_PERMISSION) === '4') {
+          this.$router.push({
+            name: 'files-public-link',
+            params: {
+              token: this.$route.params.item
+            }
+          })
+
+          return
+        }
 
         resources = resources.map(buildResource)
         this.LOAD_FILES({ currentFolder: resources[0], files: resources.slice(1) })

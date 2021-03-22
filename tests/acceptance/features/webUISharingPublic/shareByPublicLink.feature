@@ -79,7 +79,7 @@ Feature: Share by public link
     When the public tries to open the public link page of the last public link created by user "Alice" with password "pass123"
     Then the user should be redirected to the files-drop page
 
-  @issue-2414
+
   Scenario: opening public-link page of the files-drop link without password set should redirect to files-drop page
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions
     When the public tries to open the public link page of the last public link created by user "Alice"
