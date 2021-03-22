@@ -49,11 +49,11 @@ export default {
           icon: this.apps.meta[editor.app].icon,
           handler: item => this.$_fileActions_openEditor(editor, item.path, item.id),
           isEnabled: ({ resource }) => {
-            if (editor.routes && !checkRoute(editor.routes, this.$route.name)) {
-              return false
+            if (editor.handler || (editor.routes && checkRoute(editor.routes, this.$route.name))) {
+              return resource.extension === editor.extension
             }
 
-            return resource.extension === editor.extension
+            return false
           },
           canBeDefault: true
         }
@@ -76,17 +76,17 @@ export default {
 
       // TODO: Refactor in the store
       this.openFile({
-        filePath: filePath
+        filePath: filePath,
+        fileId: fileId
       })
 
       if (editor.newTab) {
         const path = this.$router.resolve({
           name: editor.routeName,
-          params: { filePath: filePath }
+          params: { filePath: filePath, fileId: fileId }
         }).href
-        const target = `${editor.routeName}-${filePath}`
+        const target = `${editor.routeName}-${filePath}-${fileId}`
         const win = window.open(path, target)
-        // in case popup is blocked win will be null
         if (win) {
           win.focus()
         }
@@ -95,6 +95,7 @@ export default {
 
       const routeName = editor.routeName || editor.app
       const params = {
+        fileId,
         filePath,
         contextRouteName: this.$route.name
       }
