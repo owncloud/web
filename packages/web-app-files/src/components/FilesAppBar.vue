@@ -1,5 +1,6 @@
 <template>
   <div id="files-app-bar" class="oc-app-bar">
+    <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
     <file-drop
       v-if="!isIE11() && canUpload && hasFreeSpace"
       :root-path="currentPath"
@@ -365,6 +366,14 @@ export default {
       }
 
       return getResourceSize(size)
+    },
+    selectedResourcesAnnouncement() {
+      const translated = this.$ngettext(
+        '%{ amount } selected item',
+        '%{ amount } selected items',
+        this.selectedResourcesAmount
+      )
+      return this.$gettextInterpolate(translated, { amount: this.selectedResourcesAmount })
     }
   },
   methods: {
