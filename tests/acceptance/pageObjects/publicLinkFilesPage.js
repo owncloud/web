@@ -9,12 +9,12 @@ module.exports = {
      */
     navigateAndWaitTillLoaded: function(token) {
       return navigationHelper.navigateAndWaitTillLoaded(
-        join(this.api.launchUrl, '/#/files/public/list', token),
+        join(this.api.launchUrl, '/#/files/public-link', token),
         this.page.FilesPageElement.filesList().elements.filesListProgressBar
       )
     },
     navigateAndWaitForPasswordPage: function(token) {
-      this.navigate(join(this.api.launchUrl, '/#/files/public/list', token))
+      this.navigate(join(this.api.launchUrl, '/#/files/public-link', token))
       return this.page.publicLinkPasswordPage().waitForElementPresent('@passwordInput')
     },
     /**

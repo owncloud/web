@@ -121,24 +121,19 @@ export async function aggregateResourceShares(
     )
   }
 
+  shares.sort((a, b) => a.path.localeCompare(b.path))
+
   const resources = []
-  let index = -1
-
-  shares.sort((a, b) => a.file_target.localeCompare(b.file_target))
-
+  let prev = null
   for (const share of shares) {
-    const prev = shares[index]
-
-    if (prev && share.file_target === prev.file_target) {
+    if (prev && share.path === prev.path) {
       if (userShareTypes.includes(share.share_type)) {
         prev.sharedWith.push({
           username: share.share_with,
           displayName: share.share_with_displayname,
           avatar: await getAvatarSrc(share.share_with, server, token)
         })
-      }
-
-      if (share.share_type === shareTypes.link) {
+      } else if (share.share_type === shareTypes.link) {
         prev.sharedWith.push({
           name: share.name,
           link: true
@@ -156,9 +151,7 @@ export async function aggregateResourceShares(
           avatar: await getAvatarSrc(share.share_with, server, token)
         }
       ]
-    }
-
-    if (share.share_type === shareTypes.link) {
+    } else if (share.share_type === shareTypes.link) {
       share.sharedWith = [
         {
           name: share.name,
@@ -167,7 +160,7 @@ export async function aggregateResourceShares(
       ]
     }
 
-    index++
+    prev = share
     resources.push(share)
   }
 
