@@ -1,0 +1,5 @@
+Enhancement: Added only office extension opening into a new window window
+
+This integrates the OC10 OnlyOffice extension into the OCIS web frontend opening it in a new window.
+
+https://github.com/owncloud/web/pull/4836
