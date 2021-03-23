@@ -148,7 +148,8 @@ export default {
         await this.loadPreviews({
           resources,
           isPublic: false,
-          mediaSource: this.mediaSource
+          mediaSource: this.mediaSource,
+          encodePath: this.encodePath
         })
       }
 

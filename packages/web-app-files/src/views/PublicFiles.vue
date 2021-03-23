@@ -186,7 +186,8 @@ export default {
           this.loadPreviews({
             resources,
             isPublic: true,
-            mediaSource: this.mediaSource
+            mediaSource: this.mediaSource,
+            encodePath: this.encodePath
           })
         }
 

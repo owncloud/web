@@ -205,6 +205,7 @@ export default {
           resources,
           isPublic: false,
           mediaSource: this.mediaSource,
+          encodePath: this.encodePath,
           headers: this.requestHeaders
         })
       }
