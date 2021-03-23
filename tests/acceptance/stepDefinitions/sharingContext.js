@@ -167,8 +167,8 @@ const shareFileFolder = async function(
   }
   params.append('shareType', shareType)
   params.append('permissions', permissions)
-  if (name || shareType === SHARE_TYPES.public_link) {
-    params.append('name', name || 'Public')
+  if (name) {
+    params.append('name', name)
   }
   for (const key in extraParams) {
     if (extraParams[key]) {
