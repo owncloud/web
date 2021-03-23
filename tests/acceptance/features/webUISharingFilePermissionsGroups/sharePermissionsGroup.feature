@@ -7,7 +7,7 @@ Feature: Sharing files with internal groups with permissions
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
@@ -20,9 +20,10 @@ Feature: Sharing files with internal groups with permissions
 
 
   Scenario Outline: share a file with multiple users with different roles and permissions
-    Given user "user0" has been created with default attributes
+    Given user "user0" has been created with default attributes and without skeleton files
     And group "grp2" has been created
     And user "Brian" has been added to group "grp2"
+    And user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
     When the user opens the share dialog for file "lorem.txt" using the webUI
     And the user opens the share creation dialog in the webUI
