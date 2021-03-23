@@ -28,9 +28,6 @@
         @showDetails="setHighlightedFile"
         @fileClick="$_fileActions_triggerDefaultAction"
       >
-        <template v-slot:quickActions="{ resource }">
-          <quick-actions class="oc-visible@s" :item="resource" :actions="app.quickActions" />
-        </template>
         <template v-slot:status="{ resource }">
           <div
             :key="resource.id + resource.status"
@@ -86,12 +83,11 @@ import { aggregateResourceShares, buildResource, buildSharedResource } from '../
 import FileActions from '../mixins/fileActions'
 import MixinFilesListPositioning from '../mixins/filesListPositioning'
 
-import QuickActions from '../components/FilesLists/QuickActions.vue'
 import ListLoader from '../components/ListLoader.vue'
 import NoContentMessage from '../components/NoContentMessage.vue'
 
 export default {
-  components: { QuickActions, ListLoader, NoContentMessage },
+  components: { ListLoader, NoContentMessage },
 
   mixins: [FileActions, MixinFilesListPositioning],
 
@@ -198,7 +194,6 @@ export default {
       )
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
-      this.loadIndicators({ client: this.$client, currentFolder: '/' })
 
       if (this.displayPreviews) {
         await this.loadPreviews({
