@@ -126,9 +126,12 @@ export default {
     this.$root.$on('upload-start', () => {
       this.$nextTick(() => {
         this.delayForScreenreader(() => this.$refs.progressbar.$el.focus())
-        window.addEventListener('beforeunload', this.handlerClose);
       })
     })
+    window.addEventListener('beforeunload', this.handlerClose)
+  },
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.handlerClose)
   },
   methods: {
     $_toggleExpanded() {
@@ -136,8 +139,8 @@ export default {
     },
     handlerClose(event) {
       if (this.uploadPending) {
-        event.preventDefault()    
-        event.returnValue = ""
+        event.preventDefault()
+        event.returnValue = ''
       }
     }
   }
