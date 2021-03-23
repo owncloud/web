@@ -108,6 +108,10 @@ export default {
       } else {
         return 100
       }
+    },
+
+    uploadPending() {
+      return this.totalUploadProgress < 100
     }
   },
   watch: {
@@ -122,12 +126,19 @@ export default {
     this.$root.$on('upload-start', () => {
       this.$nextTick(() => {
         this.delayForScreenreader(() => this.$refs.progressbar.$el.focus())
+        window.addEventListener('beforeunload', this.handlerClose);
       })
     })
   },
   methods: {
     $_toggleExpanded() {
       this.expanded = !this.expanded
+    },
+    handlerClose(event) {
+      if (this.uploadPending) {
+        event.preventDefault()    
+        event.returnValue = ""
+      }
     }
   }
 }
