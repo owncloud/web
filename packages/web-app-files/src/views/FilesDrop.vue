@@ -22,8 +22,11 @@
           </vue-dropzone>
           <div id="previews" hidden />
         </div>
-        <div v-if="getUploadedFiles" class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1">
-          <oc-table-simple class="uk-width-1-1 uk-width-xxlarge@m">
+        <div
+          class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1"
+          :class="{ 'files-empty': !getUploadedFiles }"
+        >
+          <oc-table-simple v-if="getUploadedFiles" class="uk-width-1-1 uk-width-xxlarge@m">
             <oc-tbody>
               <oc-tr v-for="(file, key) in getUploadedFiles" :key="key">
                 <oc-td class="oc-pl-rm" v-text="file.name" />
