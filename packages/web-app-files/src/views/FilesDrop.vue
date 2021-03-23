@@ -134,6 +134,7 @@ export default {
         this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
         this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
       ])
+
       this.$client.publicFiles
         .list(this.publicLinkToken, this.publicLinkPassword, properties, '0')
         .then(files => {
@@ -152,7 +153,7 @@ export default {
           // likely missing password, redirect to public link password prompt
           if (error.statusCode === 401) {
             this.$router.push({
-              name: 'public-link',
+              name: 'files-public-link',
               params: {
                 token: this.publicLinkToken
               }
