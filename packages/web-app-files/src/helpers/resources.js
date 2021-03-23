@@ -63,6 +63,7 @@ export function buildResource(resource) {
       return shareTypes || []
     })(),
     privateLink: resource.fileInfo['{http://owncloud.org/ns}privatelink'],
+    downloadURL: resource.fileInfo['{http://owncloud.org/ns}downloadURL'],
     canUpload: function() {
       return this.permissions.indexOf('C') >= 0
     },
