@@ -242,9 +242,11 @@ module.exports = {
     },
     waitForTableLoaded: async function() {
       await this.waitForElementVisible('@filesTable')
+      return this
     },
     waitForLoadingFinished: async function() {
       await this.waitForElementVisible('@anyAfterLoading')
+      return this
     },
     getResourceThumbnail: async function(resourceName, elementType) {
       let iconUrl = null

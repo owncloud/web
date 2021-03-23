@@ -45,18 +45,11 @@ module.exports = {
         this.click('@menuButton').waitForAnimationToFinish()
       }
 
-      this.useXpath()
+      await this.useXpath()
         .waitForElementVisible(menuItemSelector)
         .click(menuItemSelector)
-        .api.page.FilesPageElement.filesList()
-        .waitForElementPresent({
-          selector: '@filesListProgressBar',
-          abortOnFailure: false, // don't fail if we are too late
-          timeout: this.api.globals.waitForNegativeConditionTimeout
-        })
-        .waitForElementNotPresent('@filesListProgressBar')
         .useCss()
-
+      await this.api.page.FilesPageElement.filesList().waitForLoadingFinished()
       return this
     },
     markNotificationAsRead: function() {
