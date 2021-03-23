@@ -126,8 +126,8 @@ module.exports = {
       return this.waitForElementVisible('@publicLinkSaveButton')
         .initAjaxCounters()
         .click('@publicLinkSaveButton')
-        .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent({ selector: '@publicLinkSaveButton', abortOnFailure: false })
+        .waitForOutstandingAjaxCalls()
     },
     /**
      * deletes existing public link share
@@ -190,8 +190,8 @@ module.exports = {
       return this.waitForElementVisible('@publicLinkCreateButton')
         .initAjaxCounters()
         .click('@publicLinkCreateButton')
-        .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@publicLinkCreateButton')
+        .waitForOutstandingAjaxCalls()
     },
     /**
      * tries to create a new public link in specified date
@@ -213,8 +213,8 @@ module.exports = {
       return this.waitForElementVisible('@publicLinkCreateButton')
         .initAjaxCounters()
         .click('@publicLinkCreateButton')
-        .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@publicLinkCreateButton')
+        .waitForOutstandingAjaxCalls()
     },
     /**
      * Gets the data of all public links of the currently open public link accordion item

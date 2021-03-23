@@ -25,9 +25,7 @@ module.exports = {
     clickCreateShare: function() {
       return this.useXpath()
         .waitForElementVisible('@createShareButton')
-        .initAjaxCounters()
         .click('@createShareButton')
-        .waitForOutstandingAjaxCalls()
         .waitForElementVisible('@createShareDialog')
         .waitForAnimationToFinish()
         .useCss()
