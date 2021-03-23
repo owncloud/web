@@ -107,22 +107,14 @@ module.exports = {
     /**
      * @return {Promise<module.exports.commands>}
      */
-    restore: async function() {
-      await this.initAjaxCounters()
-        .useXpath()
-        .performFileAction(this.FileAction.restore)
-        .waitForOutstandingAjaxCalls()
-        .useCss()
-      return this
+    restore: function() {
+      return this.performFileAction(this.FileAction.restore)
     },
     /**
      * @return {Promise<module.exports.commands>}
      */
-    download: async function() {
-      await this.initAjaxCounters()
-        .performFileAction(this.FileAction.download)
-        .waitForOutstandingAjaxCalls()
-      return this
+    download: function() {
+      return this.performFileAction(this.FileAction.download)
     },
     /**
      * @return {Promise<module.exports.commands>}
@@ -137,25 +129,25 @@ module.exports = {
      * Trigger the move of a resource via its file action
      */
     move: function() {
-      this.performFileAction(this.FileAction.move)
+      return this.performFileAction(this.FileAction.move)
     },
     /**
      * Trigger the copy of a resource via its file action
      */
     copy: function() {
-      this.performFileAction(this.FileAction.copy)
+      return this.performFileAction(this.FileAction.copy)
     },
     /**
      * Open a resource in the media viewer via its file action
      */
     mediaViewer: function() {
-      this.performFileAction(this.FileAction.mediaViewer)
+      return this.performFileAction(this.FileAction.mediaViewer)
     },
     /**
      * Open a resource in the markdown editor via its file action
      */
     markdownEditor: function() {
-      this.performFileAction(this.FileAction.markdownEditor)
+      return this.performFileAction(this.FileAction.markdownEditor)
     }
   },
   elements: {
