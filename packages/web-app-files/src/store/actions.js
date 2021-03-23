@@ -104,7 +104,8 @@ function _buildFile(file) {
     isReceivedShare: function() {
       return this.permissions.indexOf('S') >= 0
     },
-    isChunkedUploadSupported: !!(file.getTusSupport && file.getTusSupport())
+    isChunkedUploadSupported: !!(file.getTusSupport && file.getTusSupport()),
+    downloadURL: file.fileInfo['{http://owncloud.org/ns}downloadURL']
   }
 }
 

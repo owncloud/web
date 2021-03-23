@@ -167,10 +167,10 @@ export default {
         a: 1
       }
 
-      return this.$_loader_getDavFilePath(this.activeMediaFile.path, query)
+      return this.$_loader_getDavFilePath(this.activeMediaFile, query)
     },
     rawMediaUrl() {
-      return this.$_loader_getDavFilePath(this.activeMediaFile.path)
+      return this.$_loader_getDavFilePath(this.activeMediaFile)
     },
 
     videoExtensions() {
@@ -263,7 +263,7 @@ export default {
       // workaround for now: Load file as blob for images, load as signed url (if supported) for everything else.
       let promise
       if (this.isActiveMediaFileTypeImage || !this.isUrlSigningEnabled) {
-        promise = this.mediaSource(url, 'url', null)
+        promise = this.mediaSource(decodeURIComponent(url), 'url', null)
       } else {
         promise = this.$client.signUrl(url, 86400) // Timeout of the signed URL = 24 hours
       }

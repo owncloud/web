@@ -19,7 +19,8 @@ export default {
     '{http://owncloud.org/ns}size',
     '{DAV:}getlastmodified',
     '{DAV:}getetag',
-    '{DAV:}resourcetype'
+    '{DAV:}resourcetype',
+    '{http://owncloud.org/ns}downloadURL'
   ],
   dropzone: false,
   shareOpen: null,

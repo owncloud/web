@@ -11,6 +11,8 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Media Viewer](https://github.com/owncloud/ocis/issues/1106)
 -   [webUIPreview/imageMediaViewer.feature:81](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L81)
 -   [webUIPreview/imageMediaViewer.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L88)
+-   [webUIPreview/imageMediaViewer.feature:33](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L33)
+-   [webUIPreview/imageMediaViewer.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L24)
 
 ### [Media Viewer does not open upper case file extensions](https://github.com/owncloud/web/issues/4647)
 -   [webUIPreview/imageMediaViewer.feature:172](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L172)

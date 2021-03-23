@@ -1,0 +1,6 @@
+Change: Use pre-signed url download for password protected shares 
+
+Replaced the blob download with a normal download using a pre-signed url provided by the backend.
+
+https://github.com/owncloud/core/pull/38376
+https://github.com/owncloud/web/pull/4689
