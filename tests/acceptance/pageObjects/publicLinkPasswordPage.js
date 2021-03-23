@@ -57,8 +57,8 @@ module.exports = {
        * this is made for those scenarios where we submit wrong password in previous steps and webUI doesn't navigate to files-page
        */
       submitLinkPasswordForm: function() {
-        return this.initAjaxCounters()
-          .waitForElementVisible('@passwordInput')
+        return this.waitForElementVisible('@passwordInput')
+          .initAjaxCounters()
           .click('@passwordSubmitButton')
           .waitForOutstandingAjaxCalls()
       },

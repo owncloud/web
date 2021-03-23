@@ -314,7 +314,7 @@ module.exports = {
     /**
      * Create a md file with the given name
      *
-     * @param {string} name to set or null to use default value from dialog
+     * @param {string | null} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
     createMarkdownFile: async function(name, expectToSucceed = true) {

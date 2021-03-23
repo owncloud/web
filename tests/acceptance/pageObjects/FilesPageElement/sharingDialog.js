@@ -326,8 +326,8 @@ module.exports = {
      * @param {string} input
      */
     enterAutoComplete: function(input) {
-      return this.initAjaxCounters()
-        .waitForElementVisible('@sharingAutoComplete')
+      return this.waitForElementVisible('@sharingAutoComplete')
+        .initAjaxCounters()
         .setValueBySingleKeys('@sharingAutoComplete', input)
         .waitForAjaxCallsToStartAndFinish()
     },
@@ -405,13 +405,12 @@ module.exports = {
         this.elements.roleButtonInDropdown.selector,
         newRole.toLowerCase()
       )
-      return this.initAjaxCounters()
-        .useXpath()
+      return this.useXpath()
         .waitForElementVisible('@selectRoleButtonInCollaboratorInformation')
         .click('@selectRoleButtonInCollaboratorInformation')
         .waitForElementVisible(newRoleButton)
         .click(newRoleButton)
-        .waitForOutstandingAjaxCalls()
+        .useCss()
     },
     /**
      * checks whether autocomplete list is visible
@@ -528,8 +527,7 @@ module.exports = {
      * @return {*}
      */
     openExpirationDatePicker: function() {
-      this.initAjaxCounters()
-        .waitForElementVisible('@expirationDateField')
+      this.waitForElementVisible('@expirationDateField')
         .waitForElementNotPresent('@elementInterceptingCollaboratorsExpirationInput')
         .click('@expirationDateField')
       return client.page.FilesPageElement.expirationDatePicker()

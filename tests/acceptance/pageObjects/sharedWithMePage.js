@@ -60,8 +60,8 @@ module.exports = {
           util.format(this.elements.getSharedFromUserName.selector, user) +
           util.format(this.elements.shareStatusActionOnFileRow.selector, action)
       }
-      return this.initAjaxCounters()
-        .waitForElementVisible(actionLocatorButton)
+      return this.waitForElementVisible(actionLocatorButton)
+        .initAjaxCounters()
         .click(actionLocatorButton)
         .waitForOutstandingAjaxCalls()
     },

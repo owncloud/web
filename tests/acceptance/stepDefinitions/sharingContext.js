@@ -727,6 +727,7 @@ When('the user removes {string} as a collaborator from the share', function(user
 
 When('the user shares with the selected collaborators', function() {
   return client.page.FilesPageElement.sharingDialog()
+    .initAjaxCounters()
     .confirmShare()
     .waitForOutstandingAjaxCalls()
 })

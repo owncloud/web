@@ -14,8 +14,8 @@ module.exports = {
      * @returns {*}
      */
     restoreToPreviousVersion: function() {
-      return this.initAjaxCounters()
-        .waitForElementVisible('@restorePreviousVersion')
+      return this.waitForElementVisible('@restorePreviousVersion')
+        .initAjaxCounters()
         .click('@restorePreviousVersion')
         .waitForOutstandingAjaxCalls()
     }

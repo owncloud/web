@@ -23,9 +23,9 @@ module.exports = {
      * Clicks the button to add a new collaborator
      */
     clickCreateShare: function() {
-      return this.initAjaxCounters()
-        .useXpath()
+      return this.useXpath()
         .waitForElementVisible('@createShareButton')
+        .initAjaxCounters()
         .click('@createShareButton')
         .waitForOutstandingAjaxCalls()
         .waitForElementVisible('@createShareDialog')
@@ -92,9 +92,7 @@ module.exports = {
       }
 
       let collaboratorsElementIds = null
-      await this.initAjaxCounters()
-        .waitForOutstandingAjaxCalls()
-        .waitForAnimationToFinish()
+      await this.waitForAnimationToFinish()
         .waitForElementPresent(informationSelector)
         .api.elements('css selector', this.elements.collaboratorsInformation, result => {
           collaboratorsElementIds = result.value.map(item => item[Object.keys(item)[0]])

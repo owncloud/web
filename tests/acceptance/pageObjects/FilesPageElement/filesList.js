@@ -184,11 +184,12 @@ module.exports = {
      *
      */
     restoreSelected: function() {
-      return this.initAjaxCounters()
-        .waitForElementVisible('@restoreSelectedButton')
+      return this.waitForElementVisible('@restoreSelectedButton')
+        .initAjaxCounters()
         .useXpath()
         .click('@restoreSelectedButton')
         .waitForOutstandingAjaxCalls()
+        .useCss()
     },
     /**
      * @param {string} item the file/folder to click
