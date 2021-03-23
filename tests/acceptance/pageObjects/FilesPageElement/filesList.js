@@ -150,14 +150,12 @@ module.exports = {
      */
     navigateToFolder: async function(folder) {
       await this.waitForFileVisible(folder)
-      await this.initAjaxCounters()
 
       await this.useXpath()
         .click(this.getFileLinkSelectorByFileName(folder, 'folder'))
         .useCss()
 
       // wait until loading is finished
-      await this.waitForOutstandingAjaxCalls()
       await this.waitForLoadingFinished()
 
       return this
@@ -177,8 +175,7 @@ module.exports = {
      *
      */
     checkAllFiles: function() {
-      return this.initAjaxCounters()
-        .waitForElementVisible('@filesTable')
+      return this.waitForElementVisible('@filesTable')
         .waitForElementVisible('@checkBoxAllFiles')
         .click('@checkBoxAllFiles')
     },
@@ -551,7 +548,6 @@ module.exports = {
 
     navigationNotAllowed: async function(target, elementType = 'folder') {
       await this.waitForFileVisible(target, elementType)
-      await this.initAjaxCounters()
 
       const name = xpathHelper.buildXpathLiteral(target)
       const path = xpathHelper.buildXpathLiteral('/' + target)
@@ -564,8 +560,6 @@ module.exports = {
       await this.useXpath()
         .moveToElement(this.getFileRowSelectorByFileName(target, elementType), 0, 0)
         .waitForElementVisible(disabledRow)
-
-      await this.waitForOutstandingAjaxCalls()
 
       return this
     },

@@ -135,7 +135,7 @@ Feature: move files
     And user "Brian" has created folder "/Shares/testFolder"
     And the user has opened folder "Shares"
     And the user has opened folder "simple-empty-folder"
-    When the user batch moves these files into folder "testFolder" using the webUI
+    When the user batch moves these files into folder "/Shares/testFolder" using the webUI
       | file_name    |
       | testFile.txt |
     Then breadcrumb for folder "Shares" should be displayed on the webUI
