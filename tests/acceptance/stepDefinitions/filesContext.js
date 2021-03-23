@@ -12,6 +12,7 @@ const util = require('util')
 let deletedElements
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
+const sharingHelper = require('../helpers/sharingHelper')
 
 Before(() => {
   deletedElements = []
@@ -1336,5 +1337,17 @@ Then(
       true,
       `only '${expectedVisibleItems}' actions menu item(s) was expected to be visible but also found '${visibleItems}'.`
     )
+  }
+)
+
+Then(
+  'the resource {string} should have the token of last link in the people column on the webUI',
+  async resource => {
+    const lastLink = await sharingHelper.fetchLastPublicLinkShare(client.globals.currentUser)
+    const collaboratorsArray = await client.page
+      .sharedWithOthersPage()
+      .getCollaboratorsForResource(resource)
+
+    assert.ok(collaboratorsArray.indexOf(lastLink.token) > -1)
   }
 )

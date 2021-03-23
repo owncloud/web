@@ -54,9 +54,7 @@ Feature: Share by public link
     Given user "Alice" has logged in using the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read" permissions
     When the user browses to the shared-with-others page using the webUI
-    Then the following resources should have the following collaborators
-      | fileName      | expectedCollaborators |
-      | simple-folder | Public                |
+    Then the resource "simple-folder" should have the token of last link in the people column on the webUI
     But file "data.zip" should not be listed on the webUI
 
   @issue-276 @issue-ocis-reva-398

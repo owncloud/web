@@ -135,7 +135,7 @@ export async function aggregateResourceShares(
         })
       } else if (share.share_type === shareTypes.link) {
         prev.sharedWith.push({
-          name: share.name,
+          name: share.name || share.token,
           link: true
         })
       }
@@ -154,7 +154,7 @@ export async function aggregateResourceShares(
     } else if (share.share_type === shareTypes.link) {
       share.sharedWith = [
         {
-          name: share.name,
+          name: share.name || share.token,
           link: true
         }
       ]
