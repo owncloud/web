@@ -29,9 +29,6 @@ module.exports = {
       .then(() => {
         client.globals.currentUser = userId
       })
-
-    await client.page.personalPage().waitForElementPresent('@newFileButtonLoaded')
-    await client.page.FilesPageElement.filesList().waitForLoadingFinished()
   },
 
   /**

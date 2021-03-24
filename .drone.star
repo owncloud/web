@@ -92,6 +92,7 @@ config = {
 				'WEB_UI_CONFIG': '/var/www/owncloud/web/dist/config.json'
 			},
 			'visualTesting': True,
+			'screenShots': True
 		},
 		'webUIFederation': {
 			'suites': {
@@ -587,7 +588,7 @@ def acceptance(ctx):
 		'federatedServerNeeded': False,
 		'federatedServerVersion': '',
 		'runningOnOCIS': False,
-		'screenShots': True,
+		'screenShots': False,
 		'visualTesting': False,
 		'openIdConnect': False,
 	}
