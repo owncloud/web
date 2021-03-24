@@ -1,9 +1,9 @@
-Changelog for ownCloud Web [unreleased] (UNRELEASED)
+Changelog for ownCloud Web [2.1.0] (2021-03-24)
 =======================================
-The following sections list the changes in ownCloud web unreleased relevant to
+The following sections list the changes in ownCloud web 2.1.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/web/compare/v2.0.2...master
+[2.1.0]: https://github.com/owncloud/web/compare/v2.0.2...v2.1.0
 
 Summary
 -------
@@ -11,9 +11,9 @@ Summary
 * Bugfix - Fix missing translations in application menu: [#4830](https://github.com/owncloud/web/pull/4830)
 * Bugfix - NODE_ENV based on rollup mode: [#4819](https://github.com/owncloud/web/issues/4819)
 * Bugfix - Remove unsupported shareType: [#4809](https://github.com/owncloud/web/pull/4809)
-* Change - Use pre-signed url download for password protected shares: [#38376](https://github.com/owncloud/core/pull/38376)
 * Enhancement - A11y improvements for meta attributes: [#4342](https://github.com/owncloud/web/issues/4342)
 * Enhancement - Set locale on moment-js to render translated strings: [#4826](https://github.com/owncloud/web/pull/4826)
+* Enhancement - Use pre-signed url download for password protected shares: [#38376](https://github.com/owncloud/core/pull/38376)
 
 Details
 -------
@@ -37,14 +37,6 @@ Details
 
    https://github.com/owncloud/web/pull/4809
 
-* Change - Use pre-signed url download for password protected shares: [#38376](https://github.com/owncloud/core/pull/38376)
-
-   Replaced the blob download with a normal download using a pre-signed url provided by the
-   backend.
-
-   https://github.com/owncloud/core/pull/38376
-   https://github.com/owncloud/web/pull/4689
-
 * Enhancement - A11y improvements for meta attributes: [#4342](https://github.com/owncloud/web/issues/4342)
 
    For a11y the html language attribute will be set dynamically <html lang="xx"/>. For a11y the
@@ -62,6 +54,14 @@ Details
    (web-app-files package)
 
    https://github.com/owncloud/web/pull/4826
+
+* Enhancement - Use pre-signed url download for password protected shares: [#38376](https://github.com/owncloud/core/pull/38376)
+
+   Replaced the blob download with a normal download using a pre-signed url provided by the
+   backend.
+
+   https://github.com/owncloud/core/pull/38376
+   https://github.com/owncloud/web/pull/4689
 
 Changelog for ownCloud Web [2.0.2] (2021-03-08)
 =======================================
