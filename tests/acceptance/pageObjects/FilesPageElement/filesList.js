@@ -376,7 +376,7 @@ module.exports = {
      */
     allFileRows: async function() {
       let returnResult = null
-      await this.waitForLoadingFinished()
+      await this.waitForElementPresent('@anyAfterLoading')
       await this.api.elements('css selector', this.elements.fileRow, function(result) {
         returnResult = result
       })
