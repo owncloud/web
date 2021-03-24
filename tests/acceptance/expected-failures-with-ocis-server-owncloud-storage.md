@@ -34,6 +34,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFavorites/favoritesFile.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L14)
 -   [webUIFavorites/favoritesFile.feature:27](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L27)
 -   [webUIFavorites/favoritesFile.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L40)
+-   [webUIFavorites/favoritesFile.feature:49](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L49)
 -   [webUIFavorites/favoritesFile.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L56)
 -   [webUIFavorites/favoritesFile.feature:63](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L63)
 -   [webUIFavorites/favoritesFile.feature:69](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L69)
@@ -202,17 +203,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIPrivateLinks/accessingPrivateLinks.feature:33](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPrivateLinks/accessingPrivateLinks.feature#L33)
 -   [webUIPrivateLinks/accessingPrivateLinks.feature:49](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPrivateLinks/accessingPrivateLinks.feature#L49)
 
-### [renameFiles](https://github.com/owncloud/ocis/issues/1216)
--   [webUIRenameFiles/renameFiles.feature:124](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L124)
--   [webUIRenameFiles/renameFiles.feature:125](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L125)
--   [webUIRenameFiles/renameFiles.feature:126](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFiles/renameFiles.feature#L126)
-
-### [renameFolders](https://github.com/owncloud/ocis/issues/1216)
--   [webUIRenameFolders/renameFolders.feature:114](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFolders/renameFolders.feature#L114)
--   [webUIRenameFolders/renameFolders.feature:115](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFolders/renameFolders.feature#L115)
--   [webUIRenameFolders/renameFolders.feature:116](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFolders/renameFolders.feature#L116)
--   [webUIRenameFolders/renameFolders.feature:140](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRenameFolders/renameFolders.feature#L140)
-
 ### [various sharing settings cannot be set](https://github.com/owncloud/ocis/issues/1328)
 -   [webUIRestrictSharing/disableSharing.feature:13](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRestrictSharing/disableSharing.feature#L13)
 -   [webUIRestrictSharing/disableSharing.feature:19](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIRestrictSharing/disableSharing.feature#L19)
@@ -339,7 +329,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [Conflict / overwrite issues with TUS](https://github.com/owncloud/ocis/issues/1294)
 -   [webUIUpload/uploadEdgecases.feature:105](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadEdgecases.feature#L105)
--   [webUIUpload/uploadEdgecases.feature:121](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadEdgecases.feature#L121)
 -   [webUIUpload/uploadFileGreaterThanQuotaSize.feature:12](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIUpload/uploadFileGreaterThanQuotaSize.feature#L12)
 
 ### [restoring a file deleted from a received shared folder is not possible](https://github.com/owncloud/ocis/issues/1124)
