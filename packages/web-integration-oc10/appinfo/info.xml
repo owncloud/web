@@ -22,7 +22,7 @@ For feedback and bug reports, please use the [public issue tracker](https://gith
 		<admin>https://owncloud.github.io/clients/web/deployments/oc10-app</admin>
 	</documentation>
 	<dependencies>
-		<owncloud min-version="10.6" max-version="10" />
+		<owncloud min-version="10.7" max-version="10" />
 	</dependencies>
 	<screenshot>https://raw.githubusercontent.com/owncloud/screenshots/master/web/oc_web.png</screenshot>
 </info>
