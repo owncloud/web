@@ -1129,10 +1129,7 @@ Then('the file {string} should have a thumbnail displayed on the webUI', async f
     resource,
     'file'
   )
-  assert.ok(
-    iconUrl && iconUrl.startsWith('blob:'),
-    'Icon URL expected to be set when thumbnail is displayed'
-  )
+  assert.ok(iconUrl, 'Icon URL expected to be set when thumbnail is displayed')
 })
 Then('the file {string} should have a file type icon displayed on the webUI', async function(
   resource

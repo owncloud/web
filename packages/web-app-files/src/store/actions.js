@@ -512,9 +512,7 @@ export default {
         dimensions = 3840
     }
 
-    const davUrl =
-      rootGetters.configuration.server +
-      (isPublic ? 'remote.php/dav/public-files' : 'remote.php/dav/files/' + rootGetters.user.id)
+    const davUrl = rootGetters.configuration.server + 'remote.php/dav/files/' + rootGetters.user.id
 
     const query = {
       x: dimensions,
@@ -532,6 +530,32 @@ export default {
       const etag = (resource.etag || '').replace('"', '')
       if (etag) {
         query.c = etag
+      }
+
+      if (isPublic) {
+        try {
+          // In a public context, i.e. public shares, the downloadURL contains a pre-signed url to
+          // download the file.
+          const [url, signedQuery] = resource.downloadURL.split('?')
+
+          // Since the pre-signed url contains query parameters and the caller of this method
+          // can also provide query parameters we have to combine them.
+          const combinedQuery = [queryString.stringify(query), signedQuery]
+            .filter(Boolean)
+            .join('&')
+
+          const previewUrl = [url, combinedQuery].filter(Boolean).join('?')
+          const exists = await fetch(previewUrl, { method: 'HEAD' })
+
+          if (exists.status === 404) {
+            continue
+          }
+
+          resource.preview = previewUrl
+          commit('UPDATE_RESOURCE', resource)
+
+          continue
+        } catch (ignored) {}
       }
 
       const previewUrl = davUrl + encodePath(resource.path) + '?' + queryString.stringify(query)
