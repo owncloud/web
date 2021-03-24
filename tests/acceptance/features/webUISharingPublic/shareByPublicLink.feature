@@ -365,14 +365,20 @@ Feature: Share by public link
   @issue-ocis-reva-41
   Scenario: user shares a file through public link and then it appears in a shared-with-others page
     Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
-    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
-    And user "Alice" has shared folder "simple-folder" with link with "read" permissions
+    And user "Alice" has created a public link with following settings
+      | path        | simple-folder                |
+      | name        | link-editor                  |
+      | permissions | read, update, create, delete |
+    And user "Alice" has created a public link with following settings
+      | path        | simple-folder |
+      | name        | link-viewer   |
+      | permissions | read          |
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-others page
     Then folder "simple-folder" should be listed on the webUI
     And the following resources should have the following collaborators
-      | fileName      | expectedCollaborators |
-      | simple-folder | Public                |
+      | fileName      | expectedCollaborators    |
+      | simple-folder | link-editor, link-viewer |
 
 
   Scenario: user edits the password of an already existing public link
