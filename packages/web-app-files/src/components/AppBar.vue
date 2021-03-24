@@ -476,16 +476,18 @@ export default {
         this.PUSH_NEW_RESOURCE(resource)
 
         if (this.isPersonalRoute) {
-          this.loadIndicators({
+          await this.loadIndicators({
             client: this.$client,
-            currentFolder: this.currentFolder.path
+            currentFolder: this.currentFolder.path,
+            encodePath: this.encodePath
           })
         }
 
         this.loadPreviews({
           resources: [resource],
           isPublic: this.publicPage(),
-          mediaSource: this.mediaSource
+          mediaSource: this.mediaSource,
+          encodePath: this.encodePath
         })
 
         const user = await this.$client.users.getUser(this.user.id)
