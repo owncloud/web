@@ -1,4 +1,4 @@
-Change: Use pre-signed url download for password protected shares 
+Enhancement: Use pre-signed url download for password protected shares 
 
 Replaced the blob download with a normal download using a pre-signed url provided by the backend.
 
