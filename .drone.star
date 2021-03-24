@@ -587,7 +587,7 @@ def acceptance(ctx):
 		'federatedServerNeeded': False,
 		'federatedServerVersion': '',
 		'runningOnOCIS': False,
-		'screenShots': False,
+		'screenShots': True,
 		'visualTesting': False,
 		'openIdConnect': False,
 	}
