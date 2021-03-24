@@ -6,7 +6,7 @@ Feature: Logout users
 
 
   Scenario:logging out
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
     When the user browses to the account page
     And the user logs out of the webUI

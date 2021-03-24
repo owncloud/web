@@ -4,7 +4,7 @@ Feature: create folder
   So that I can organise my data structure
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
@@ -47,6 +47,8 @@ Feature: create folder
   Scenario Outline: Create a sub-folder inside an existing folder with problematic name
     # Use an existing folder with problematic name to create a sub-folder
     # Uses the folder created by skeleton
+    Given user "Alice" has created folder <folder>
+    And the user has reloaded the current page of the webUI
     When the user opens folder <folder> using the webUI
     And the user creates a folder with the name "sub-folder" using the webUI
     Then folder "sub-folder" should be listed on the webUI

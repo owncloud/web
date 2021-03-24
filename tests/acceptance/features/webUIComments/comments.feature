@@ -5,10 +5,11 @@ Feature: Add, delete and edit comments in files and folders
   So that I can provide more information about the file/folder
 
   Background:
-    Given these users have been created with default attributes and large skeleton files:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
+    And user "Alice" has created file "/lorem.txt"
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
