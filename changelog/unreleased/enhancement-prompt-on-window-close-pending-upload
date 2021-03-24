@@ -1,0 +1,8 @@
+Enhancement: Prompts leaving user about pending uploads
+
+Added an unload event listener that detects closes/ reloads/ navigates to another URL. 
+Added prompt that ask for confirmation to leave site on unload events if uploads pending.
+Removed the event listener before destroy of component. 
+
+https://github.com/owncloud/web/issues/2590
+https://github.com/owncloud/web/pull/4840
