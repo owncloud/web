@@ -7,7 +7,7 @@ Feature: Sharing files and folders with internal groups
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
@@ -21,7 +21,8 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: share a folder with multiple collaborators and check collaborator list order
-    Given user "Carol" has logged in using the webUI
+    Given user "Carol" has created folder "simple-folder"
+    And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "grp11" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with group "grp1" as "Viewer" using the webUI
@@ -30,7 +31,10 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario Outline: share a file & folder with another internal user
-    Given user "Carol" has logged in using the webUI
+    Given user "Carol" has created folder "simple-folder"
+    And user "Carol" has created file "simple-folder/lorem.txt"
+    And user "Carol" has created file "testimage.jpg"
+    And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "grp1" as "<set-role>" using the webUI
     And the user shares file "testimage.jpg" with group "grp1" as "<set-role>" using the webUI
     And user "Alice" accepts the share "simple-folder" offered by user "Carol" using the sharing API
@@ -74,7 +78,8 @@ Feature: Sharing files and folders with internal groups
 
   @skip @issue-4102
   Scenario: share a file with an internal group a member overwrites and unshares the file
-    Given user "Carol" has logged in using the webUI
+    Given user "Carol" has created file "lorem.txt"
+    And user "Carol" has logged in using the webUI
     When the user renames file "lorem.txt" to "new-lorem.txt" using the webUI
     And the user shares file "new-lorem.txt" with group "grp1" as "Editor" using the webUI
     And user "Alice" accepts the share "new-lorem.txt" offered by user "Carol" using the sharing API
@@ -96,7 +101,10 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: share a folder with an internal group and a member uploads, overwrites and deletes files
-    Given user "Carol" has logged in using the webUI
+    Given user "Carol" has created folder "simple-folder"
+    And user "Carol" has created file "simple-folder/lorem.txt"
+    And user "Carol" has created file "simple-folder/data.zip"
+    And user "Carol" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with group "grp1" as "Editor" using the webUI
     And user "Alice" accepts the share "new-simple-folder" offered by user "Carol" using the sharing API
@@ -131,7 +139,9 @@ Feature: Sharing files and folders with internal groups
 
   @skip @issue-4102
   Scenario: share a folder with an internal group and a member unshares the folder
-    Given user "Carol" has logged in using the webUI
+    Given user "Carol" has created folder "simple-folder"
+    And user "Carol" has created file "simple-folder/lorem.txt"
+    And user "Carol" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with group "grp1" as "Editor" using the webUI
     And user "Alice" accepts the share "new-simple-folder" offered by user "Carol" using the sharing API
@@ -158,6 +168,7 @@ Feature: Sharing files and folders with internal groups
   @skip @yetToImplement
   Scenario: user tries to share a file in a group which is excluded from receiving share
     Given group "system-group" has been created
+    And user "Alice" has created file "lorem.txt"
     And the administrator has browsed to the admin sharing settings page
     When the administrator excludes group "system-group" from receiving shares using the webUI
     Then user "Alice" should not be able to share file "lorem.txt" with group "system-group" using the sharing API
@@ -165,13 +176,15 @@ Feature: Sharing files and folders with internal groups
   @skip @yetToImplement
   Scenario: user tries to share a folder in a group which is excluded from receiving share
     Given group "system-group" has been created
+    And user "Alice" has created folder "simple-folder"
     And the administrator has browsed to the admin sharing settings page
     When the administrator excludes group "system-group" from receiving shares using the webUI
     Then user "Alice" should not be able to share folder "simple-folder" with group "system-group" using the sharing API
 
 
   Scenario: user shares the file/folder with a group and delete the share with group
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with group "grp1"
     And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
     When the user opens the share dialog for file "lorem.txt" using the webUI
@@ -185,6 +198,7 @@ Feature: Sharing files and folders with internal groups
 
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given group "grp2" has been created
+    And user "Alice" has created file "lorem.txt"
     And user "Carol" has been added to group "grp2"
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with group "grp1"
@@ -204,6 +218,7 @@ Feature: Sharing files and folders with internal groups
 
   Scenario: Auto-completion for a group that is excluded from receiving shares
     Given group "system-group" has been created
+    And user "Alice" has created folder "simple-folder"
     And the administrator has excluded group "system-group" from receiving shares
     When the user re-logs in as "Alice" using the webUI
     And the user browses to the files page
@@ -214,7 +229,9 @@ Feature: Sharing files and folders with internal groups
 
   @issue-2897
   Scenario: sharing details of items inside a shared folder shared with user and group
-    Given user "Carol" has created folder "/simple-folder/sub-folder"
+    Given user "Carol" has created folder "/simple-folder"
+    And user "Carol" has created folder "/simple-folder/sub-folder"
+    And user "Carol" has created file "/simple-folder/sub-folder/lorem.txt"
     And user "Carol" has uploaded file with content "test" to "/simple-folder/sub-folder/lorem.txt"
     And user "Carol" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Carol"
@@ -229,7 +246,9 @@ Feature: Sharing files and folders with internal groups
 
   @issue-2898
   Scenario: see resource owner of parent group shares in collaborators list
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has shared folder "simple-folder" with group "grp1"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
@@ -243,7 +262,8 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: share a folder with other group and then it should be listed on Shared with Others page
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has logged in using the webUI
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with group "grp1"
     When the user browses to the shared-with-others page
@@ -253,7 +273,8 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: change existing expiration date of an existing share with another internal group
-    Given user "Carol" has created a new share with following settings
+    Given user "Carol" has created file "lorem.txt"
+    And user "Carol" has created a new share with following settings
       | path            | lorem.txt |
       | shareTypeString | group     |
       | shareWith       | grp1      |
@@ -276,6 +297,7 @@ Feature: Sharing files and folders with internal groups
   Scenario: share a resource with another internal group with default expiration date
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "42"
+    And user "Carol" has created file "lorem.txt"
     And user "Carol" has logged in using the webUI
     When the user shares folder "lorem.txt" with group "grp1" as "Viewer" using the webUI
     And user "Alice" accepts the share "lorem.txt" offered by user "Carol" using the sharing API
@@ -295,6 +317,8 @@ Feature: Sharing files and folders with internal groups
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5"
+    And user "Carol" has created file "lorem.txt"
+    And user "Carol" has created folder "simple-folder"
     And user "Carol" has logged in using the webUI
     When the user tries to share resource "<shared-resource>" with group "grp1" which expires in "+6" days using the webUI
     Then the expiration date shown on the webUI should be "+5" days
@@ -309,6 +333,8 @@ Feature: Sharing files and folders with internal groups
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5"
+    And user "Carol" has created file "lorem.txt"
+    And user "Carol" has created folder "simple-folder"
     And user "Carol" has created a new share with following settings
       | path            | <shared-resource> |
       | shareTypeString | group             |
