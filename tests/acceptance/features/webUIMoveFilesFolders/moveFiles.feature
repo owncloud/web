@@ -41,7 +41,7 @@ Feature: move files
     When the user moves file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
     Then the error message with header 'An error occurred while moving strängé filename (duplicate #2 &).txt' should be displayed on the webUI
 
-  @smokeTest
+  @smokeTest @skip
   Scenario: Move multiple files at once
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
