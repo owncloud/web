@@ -638,26 +638,26 @@ module.exports = {
       selector: '.files-table .oc-tbody-tr'
     },
     fileRowByResourcePathAnyType: {
-      selector: `//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
+      selector: `//span[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
       locateStrategy: 'xpath'
     },
     fileRowByResourcePath: {
-      selector: `//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
+      selector: `//span[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
       locateStrategy: 'xpath'
     },
     fileRowDisabled: {
       selector:
-        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
+        '//span[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRowAnyType: {
       selector:
-        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/parent::*',
+        '//span[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/parent::*',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
       selector:
-        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/parent::*',
+        '//span[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/parent::*',
       locateStrategy: 'xpath'
     },
     /**
