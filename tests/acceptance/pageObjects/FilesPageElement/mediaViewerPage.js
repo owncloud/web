@@ -66,24 +66,23 @@ module.exports = {
   },
   elements: {
     actionBar: {
-      selector:
-        '//div[@class = "uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around"]',
+      selector: '//div[contains(@class, "media-viewer-controls-action-bar")]',
       locateStrategy: 'xpath'
     },
     nextButton: {
-      selector: `//span[@aria-label="Next"]`,
+      selector: `//span[contains(@class, "media-viewer-controls-next")]`,
       locateStrategy: 'xpath'
     },
     previousButton: {
-      selector: `//span[@aria-label="Previous"]`,
+      selector: `//span[contains(@class, "media-viewer-controls-previous")]`,
       locateStrategy: 'xpath'
     },
     downLoadButton: {
-      selector: `//span[@aria-label="Download"]`,
+      selector: `//span[contains(@class, "media-viewer-controls-download")]`,
       locateStrategy: 'xpath'
     },
     closeButton: {
-      selector: `//span[@aria-label="Close"]`,
+      selector: `//span[contains(@class, "media-viewer-controls-close")]`,
       locateStrategy: 'xpath'
     },
     fileName: {
@@ -92,7 +91,7 @@ module.exports = {
       locateStrategy: 'xpath'
     },
     mediaImage: {
-      selector: '//div[contains(@class,"uk-position-bottom-center")]/div[contains(text(),"%s")]',
+      selector: '//div[contains(@class, "media-viewer-file-name") and contains(text(),"%s")]',
       locateStrategy: 'xpath'
     }
   }
