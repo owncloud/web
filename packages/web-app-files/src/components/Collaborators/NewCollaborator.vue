@@ -5,7 +5,7 @@
       <oc-autocomplete
         id="oc-sharing-autocomplete"
         ref="ocSharingAutocomplete"
-        :aria-label="$gettext('Select a person to add')"
+        :label="$gettext('Select a person to add')"
         :items="autocompleteResults"
         :items-loading="autocompleteInProgress"
         :placeholder="$_ocCollaborationStatus_autocompletePlaceholder"

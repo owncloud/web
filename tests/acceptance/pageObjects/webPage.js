@@ -246,7 +246,7 @@ module.exports = {
       selector: '.oc-alert-close-icon'
     },
     webContainer: {
-      selector: '#Web'
+      selector: '#web-container'
     },
     appContainer: {
       selector: '.oc-app-container'

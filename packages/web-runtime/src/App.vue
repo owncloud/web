@@ -1,7 +1,7 @@
 <template>
   <div>
     <skip-to target="main">Skip to main</skip-to>
-    <div id="Web">
+    <div id="web-container">
       <div
         v-if="user.isAuthenticated && !user.userReady"
         class="loading-overlay"
@@ -350,6 +350,10 @@ export default {
 }
 </script>
 <style>
+#web-container {
+  background-color: var(--oc-background);
+}
+
 #oc-topbar {
   position: sticky;
   top: 0;
