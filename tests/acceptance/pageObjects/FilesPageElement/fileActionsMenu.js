@@ -82,6 +82,7 @@ module.exports = {
         .clearValue('@dialogInput')
         .setValue('@dialogInput', toName)
         .click('@dialogConfirmBtn')
+        .waitForAjaxCallsToStartAndFinish()
         .useCss()
 
       if (expectToSucceed) {
