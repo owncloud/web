@@ -17,11 +17,10 @@ module.exports = {
      */
     navigateAndWaitTillLoaded: async function(folder = '') {
       await navigationHelper.navigateAndWaitTillElementPresent(
-        join(this.api.launchUrl, '#/files/list', folder),
+        join(this.api.launchUrl, '#/files/list/personal', folder),
         this.elements.newFileButtonLoaded
       )
-      // wait for thumbnails
-      await this.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
+      await this.page.FilesPageElement.filesList().waitForLoadingFinished()
     },
     /**
      *
@@ -315,7 +314,7 @@ module.exports = {
     /**
      * Create a md file with the given name
      *
-     * @param {string} name to set or null to use default value from dialog
+     * @param {string | null} name to set or null to use default value from dialog
      * @param {boolean} expectToSucceed
      */
     createMarkdownFile: async function(name, expectToSucceed = true) {

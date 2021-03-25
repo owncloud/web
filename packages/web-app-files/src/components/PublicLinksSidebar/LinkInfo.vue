@@ -131,7 +131,7 @@ export default {
       const viaPath = this.link.path
 
       return {
-        name: 'files-list',
+        name: 'files-personal',
         params: {
           item: dirname(viaPath) || '/'
         },

@@ -19,7 +19,7 @@ Feature: Sharing files and folders with internal groups
     And user "Alice" has been added to group "grp1"
     And user "Brian" has been added to group "grp1"
 
-  @issue-2060
+  @skip @issue-2060
   Scenario: sharing indicator of items inside a shared folder two levels down
     Given user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/inside.txt"

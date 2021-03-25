@@ -1,21 +1,20 @@
 <template>
-  <div class="uk-height-1-1">
+  <div>
     <skip-to target="main">Skip to main</skip-to>
-    <div id="Web" class="uk-height-1-1">
+    <div id="Web">
       <div
         v-if="user.isAuthenticated && !user.userReady"
         class="loading-overlay"
         :style="{
           backgroundImage: 'url(' + configuration.theme.loginPage.backgroundImg + ')'
         }"
-        uk-height-viewport
       >
         <oc-spinner size="xlarge" :aria-label="$gettext('Loading')" class="uk-position-center" />
       </div>
       <template v-else-if="!showHeader">
         <router-view name="fullscreen" />
       </template>
-      <div v-else key="core-content" class="uk-height-1-1 uk-flex uk-flex-row uk-flex-row">
+      <div v-else key="core-content" class="uk-flex uk-flex-stretch">
         <transition :name="appNavigationAnimation">
           <oc-sidebar
             v-if="isSidebarVisible"
@@ -37,9 +36,10 @@
             </template>
           </oc-sidebar>
         </transition>
-        <div class="uk-width-expand">
+        <div class="uk-width-expand web-content-container">
           <top-bar
             v-if="!publicPage() && !$route.meta.verbose"
+            id="oc-topbar"
             class="uk-width-expand"
             :applications-list="applicationsList"
             :active-notifications="activeNotifications"
@@ -49,7 +49,7 @@
           />
           <main id="main">
             <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
-            <router-view id="oc-app-container" name="app" class="uk-height-1-1" />
+            <router-view class="oc-app-container" name="app" />
           </main>
         </div>
       </div>
@@ -220,6 +220,7 @@ export default {
     $route: {
       immediate: true,
       handler: function(to) {
+        this.appNavigationVisible = false
         document.title = this.extractPageTitleFromRoute(to)
       }
     },
@@ -349,19 +350,48 @@ export default {
 }
 </script>
 <style>
-body {
-  height: 100vh;
-  overflow: hidden;
+#oc-topbar {
+  position: sticky;
+  top: 0;
+  height: 60px;
+  z-index: 2;
+  background-color: white;
+}
+
+.web-content-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    'header'
+    'main';
 }
 
 #main {
   position: relative;
+  grid-area: main;
+}
+
+#oc-header {
+  grid-area: header;
+}
+
+.oc-app-navigation {
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .loading-overlay {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .loading-overlay .oc-spinner {

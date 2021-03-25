@@ -8,7 +8,7 @@ const routes = [
     components: {
       app: App
     },
-    name: 'mediaviewer/media',
+    name: 'media',
     meta: { auth: false }
   }
 ]
@@ -20,79 +20,79 @@ const appInfo = {
   extensions: [
     {
       extension: 'png',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'jpg',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'jpeg',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'gif',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'mp4',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'webm',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'ogg',
-      routeName: 'mediaviewer/media',
+      routeName: 'mediaviewer-media',
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     }
   ]

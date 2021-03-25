@@ -103,6 +103,20 @@ export default {
         name: routeName,
         params
       })
+    },
+
+    $_fileActions_triggerDefaultAction(resource) {
+      let actions = this.$_fileActions_editorActions.concat(this.$_fileActions_systemActions)
+
+      actions = actions.filter(action => {
+        return (
+          action.isEnabled({
+            resource: resource,
+            parent: this.currentFolder
+          }) && action.canBeDefault
+        )
+      })
+      actions[0].handler(resource, actions[0].handlerData)
     }
   }
 }

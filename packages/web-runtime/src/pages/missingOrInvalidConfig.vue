@@ -1,10 +1,8 @@
 <template>
-  <div id="Web" class="uk-height-1-1">
+  <div id="Web" class="uk-height-1-1" :style="{ backgroundImage: 'url(' + backgroundImg + ')' }">
     <div class="oc-login" uk-height-viewport>
       <div class="oc-login-card uk-position-center">
-        <h1 v-translate class="oc-login-logo">
-          ownCloud
-        </h1>
+        <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
         <div class="oc-login-card-body">
           <h3 class="oc-login-card-title">
             <span v-translate>Missing or invalid config</span>
@@ -29,7 +27,21 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'MissingConfigPage'
+  name: 'MissingConfigPage',
+
+  computed: {
+    ...mapGetters(['configuration']),
+
+    backgroundImg() {
+      return this.configuration.theme.loginPage.backgroundImg
+    },
+
+    logoImg() {
+      return this.configuration.theme.logo.login
+    }
+  }
 }
 </script>

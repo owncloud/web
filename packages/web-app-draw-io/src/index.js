@@ -3,7 +3,7 @@ import App from './App.vue'
 
 const routes = [
   {
-    name: 'draw-io-edit',
+    name: 'edit',
     path: '/edit/:filePath',
     components: {
       fullscreen: App
@@ -27,17 +27,24 @@ const appInfo = {
         }
       },
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
       extension: 'vsdx',
       newTab: true,
-      routeName: 'draw-io-edit'
+      routeName: 'draw-io-edit',
+      routes: [
+        'files-personal',
+        'files-favorites',
+        'files-shared-with-others',
+        'files-shared-with-me',
+        'files-public-list'
+      ]
     }
   ]
 }

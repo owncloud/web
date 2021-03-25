@@ -1,5 +1,5 @@
 <template>
-  <div id="files-upload-progress" class="uk-clearfix oc-py-rm">
+  <div class="files-upload-progress uk-clearfix oc-py-rm">
     <div class="oc-m-rm uk-position-relative uk-width-expand">
       <oc-progress
         ref="progressbar"
@@ -135,11 +135,11 @@ export default {
 
 <style>
 /* FIXME: move whole text part to ODS. it is useful to have a text component available for the progress bar. */
-#files-upload-progress .oc-progress-text {
+.files-upload-progress .oc-progress-text {
   font-size: 0.75em;
   color: #aaa;
 }
-#files-upload-progress .uk-progress {
+.files-upload-progress .uk-progress {
   box-shadow: 0 0 2px #ccc;
 }
 </style>

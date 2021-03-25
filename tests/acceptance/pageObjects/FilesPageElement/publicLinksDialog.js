@@ -18,8 +18,8 @@ module.exports = {
         locateStrategy: this.elements.publicLinkEditButton.locateStrategy,
         selector: linkRowEditButtonSelector
       }
-      return this.initAjaxCounters()
-        .waitForElementVisible(linkRowEditButton)
+      return this.waitForElementVisible(linkRowEditButton)
+        .initAjaxCounters()
         .click(linkRowEditButton)
         .waitForOutstandingAjaxCalls()
     },
@@ -123,8 +123,8 @@ module.exports = {
      * @returns {exports}
      */
     savePublicLink: function() {
-      return this.initAjaxCounters()
-        .waitForElementVisible('@publicLinkSaveButton')
+      return this.waitForElementVisible('@publicLinkSaveButton')
+        .initAjaxCounters()
         .click('@publicLinkSaveButton')
         .waitForElementNotPresent({ selector: '@publicLinkSaveButton', abortOnFailure: false })
         .waitForOutstandingAjaxCalls()
@@ -143,10 +143,10 @@ module.exports = {
         locateStrategy: this.elements.publicLinkDeleteButton.locateStrategy,
         selector: linkRowDeleteButtonSelector
       }
-      return this.initAjaxCounters()
-        .waitForElementVisible(linkRowDeleteButton)
-        .pause(500)
+      return this.waitForElementVisible(linkRowDeleteButton)
+        .initAjaxCounters()
         .click(linkRowDeleteButton)
+        .waitForAnimationToFinish()
         .waitForOutstandingAjaxCalls()
     },
     /**
@@ -187,8 +187,8 @@ module.exports = {
           await this.setPublicLinkForm(key, value)
         }
       }
-      return this.initAjaxCounters()
-        .waitForElementVisible('@publicLinkCreateButton')
+      return this.waitForElementVisible('@publicLinkCreateButton')
+        .initAjaxCounters()
         .click('@publicLinkCreateButton')
         .waitForElementNotPresent('@publicLinkCreateButton')
         .waitForOutstandingAjaxCalls()
@@ -210,8 +210,8 @@ module.exports = {
           return
         }
       }
-      return this.initAjaxCounters()
-        .waitForElementVisible('@publicLinkCreateButton')
+      return this.waitForElementVisible('@publicLinkCreateButton')
+        .initAjaxCounters()
         .click('@publicLinkCreateButton')
         .waitForElementNotPresent('@publicLinkCreateButton')
         .waitForOutstandingAjaxCalls()
@@ -238,16 +238,13 @@ module.exports = {
       let results = []
 
       let linkElementIds = null
-      await this.initAjaxCounters()
-        .waitForElementPresent({
-          locateStrategy: 'xpath',
-          selector: informationSelector,
-          abortOnFailure: false
-        })
-        .waitForOutstandingAjaxCalls()
-        .api.elements('xpath', informationSelector, result => {
-          linkElementIds = result.value.map(item => item[Object.keys(item)[0]])
-        })
+      await this.waitForElementPresent({
+        locateStrategy: 'xpath',
+        selector: informationSelector,
+        abortOnFailure: false
+      }).api.elements('xpath', informationSelector, result => {
+        linkElementIds = result.value.map(item => item[Object.keys(item)[0]])
+      })
 
       results = linkElementIds.map(async linkElementId => {
         const linkResult = {}
@@ -290,24 +287,21 @@ module.exports = {
         this.elements.publicLinkContainer.selector +
         this.elements.publicLinkInformation.selector +
         this.elements.publicLinkUrl.selector
-      await this.initAjaxCounters()
-        .waitForElementPresent({
-          locateStrategy: 'xpath',
-          selector: publicLinkUrlXpath,
-          abortOnFailure: false
-        })
-        .waitForOutstandingAjaxCalls()
-        .api.elements('xpath', publicLinkUrlXpath, result => {
-          result.value.map(item => {
-            promiseList.push(
-              new Promise(resolve => {
-                this.api.elementIdAttribute(item.ELEMENT, 'href', href => {
-                  resolve(href.value)
-                })
+      await this.waitForElementPresent({
+        locateStrategy: 'xpath',
+        selector: publicLinkUrlXpath,
+        abortOnFailure: false
+      }).api.elements('xpath', publicLinkUrlXpath, result => {
+        result.value.map(item => {
+          promiseList.push(
+            new Promise(resolve => {
+              this.api.elementIdAttribute(item.ELEMENT, 'href', href => {
+                resolve(href.value)
               })
-            )
-          })
+            })
+          )
         })
+      })
       return Promise.all(promiseList)
     },
     /**
@@ -342,7 +336,7 @@ module.exports = {
     copyPrivateLink: function() {
       const linksAccordionItem = this.api.page.FilesPageElement.appSideBar().elements
         .linksAccordionItem
-      return this.waitForElementVisible(this.api.page.filesPage().elements.sideBar)
+      return this.waitForElementVisible(this.api.page.personalPage().elements.sideBar)
         .waitForElementVisible(linksAccordionItem)
         .click(linksAccordionItem)
         .waitForElementVisible('@sidebarPrivateLinkLabel')

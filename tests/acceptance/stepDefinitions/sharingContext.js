@@ -35,14 +35,10 @@ const userSharesFileOrFolderWithUserOrGroup = async function(
   quickAction = false
 ) {
   const api = client.page.FilesPageElement
-
   if (quickAction) {
-    await client.page.FilesPageElement.filesList().useQuickAction(file, 'collaborators')
+    await api.filesList().useQuickAction(file, 'collaborators')
   } else {
-    await api
-      .appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(file)
+    await api.filesList().openSharingDialog(file)
   }
 
   return api
@@ -227,10 +223,7 @@ When(
   async function(collaborator, resource, dataTable) {
     const settings = dataTable.rowsHash()
     const api = client.page.FilesPageElement
-    await api
-      .appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(resource)
+    await api.filesList().openSharingDialog(resource)
     return api.sharingDialog().changeCollaboratorSettings(collaborator, settings)
   }
 )
@@ -422,11 +415,7 @@ const userSharesFileOrFolderWithUserOrGroupWithExpirationDate = async function({
   remote = false
 }) {
   const api = client.page.FilesPageElement
-
-  await api
-    .appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(resource)
+  await api.filesList().openSharingDialog(resource)
 
   return api
     .sharingDialog()
@@ -440,12 +429,7 @@ const userSharesFileOrFolderWithUserOrGroupWithExpirationDate = async function({
  */
 const checkCollaboratorsExpirationDate = async function(collaborator, resource, value) {
   const api = client.page.FilesPageElement
-
-  await api
-    .appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(resource)
-
+  await api.filesList().openSharingDialog(resource)
   return api.sharingDialog().checkExpirationDate(collaborator, value)
 }
 
@@ -615,12 +599,7 @@ When(
   'the user sets custom permission for current role of collaborator {string} for folder/file {string} to {string} using the webUI',
   async function(user, resource, permissions) {
     const api = client.page.FilesPageElement
-
-    await api
-      .appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(resource)
-
+    await api.filesList().openSharingDialog(resource)
     return api.sharingDialog().changeCustomPermissionsTo(user, permissions)
   }
 )
@@ -629,12 +608,7 @@ When(
   'the user disables all the custom permissions of collaborator {string} for file/folder {string} using the webUI',
   async function(collaborator, resource) {
     const api = client.page.FilesPageElement
-
-    await api
-      .appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(resource)
-
+    await api.filesList().openSharingDialog(resource)
     return api.sharingDialog().disableAllCustomPermissions(collaborator)
   }
 )
@@ -670,13 +644,10 @@ const assertSharePermissions = async function(currentSharePermissions, permissio
 Then(
   'custom permission/permissions {string} should be set for user {string} for file/folder {string} on the webUI',
   async function(permissions, user, resource) {
-    await client.page.FilesPageElement.appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(resource)
+    await client.page.FilesPageElement.filesList().openSharingDialog(resource)
     const currentSharePermissions = await client.page.FilesPageElement.sharingDialog().getDisplayedPermission(
       user
     )
-
     return assertSharePermissions(currentSharePermissions, permissions)
   }
 )
@@ -684,9 +655,7 @@ Then(
 Then(
   'no custom permissions should be set for collaborator {string} for file/folder {string} on the webUI',
   async function(user, resource) {
-    await client.page.FilesPageElement.appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(resource)
+    await client.page.FilesPageElement.filesList().openSharingDialog(resource)
     const currentSharePermissions = await client.page.FilesPageElement.sharingDialog().getDisplayedPermission(
       user
     )
@@ -758,6 +727,7 @@ When('the user removes {string} as a collaborator from the share', function(user
 
 When('the user shares with the selected collaborators', function() {
   return client.page.FilesPageElement.sharingDialog()
+    .initAjaxCounters()
     .confirmShare()
     .waitForOutstandingAjaxCalls()
 })
@@ -940,11 +910,7 @@ When(
   'the user changes the collaborator role of {string} for file/folder {string} to {string} using the webUI',
   async function(collaborator, resource, newRole) {
     const api = client.page.FilesPageElement
-    await api
-      .appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(resource)
-
+    await api.filesList().openSharingDialog(resource)
     return api.sharingDialog().changeCollaboratorRole(collaborator, newRole)
   }
 )
@@ -953,10 +919,7 @@ When(
   'the user (tries to )edit/edits the collaborator expiry date of {string} of file/folder/resource {string} to {string} days/day using the webUI',
   async function(collaborator, resource, days) {
     const api = client.page.FilesPageElement
-    await api
-      .appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(resource)
+    await api.filesList().openSharingDialog(resource)
     return api.sharingDialog().changeCollaboratorExpiryDate(collaborator, days)
   }
 )
@@ -1050,10 +1013,7 @@ Then(
 Then(
   'user {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI',
   async function(user, role, resource) {
-    await client.page.FilesPageElement.appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(resource)
-
+    await client.page.FilesPageElement.filesList().openSharingDialog(resource)
     return assertCollaboratorslistContains('user', user, { role })
   }
 )
@@ -1075,9 +1035,7 @@ Then(
 Then(
   'group {string} should be listed as {string} in the collaborators list for file/folder/resource {string} on the webUI',
   async function(group, role, resource) {
-    await client.page.FilesPageElement.appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(resource)
+    await client.page.FilesPageElement.filesList().openSharingDialog(resource)
     return assertCollaboratorslistContains('group', group, { role })
   }
 )
@@ -1138,10 +1096,7 @@ Then(
   'the user should not be able to share file/folder/resource {string} using the webUI',
   async function(resource) {
     const api = client.page.FilesPageElement
-    await api
-      .appSideBar()
-      .closeSidebar(100)
-      .openSharingDialog(resource)
+    await api.filesList().openSharingDialog(resource)
     const shareResponse = await api.sharingDialog().getSharingPermissionMsg()
     const noSharePermissionsMsgFormat = "You don't have permission to share this %s."
     const noSharePermissionsFileMsg = util.format(noSharePermissionsMsgFormat, 'file')
@@ -1157,10 +1112,7 @@ Then('the collaborators list for file/folder/resource {string} should be empty',
   resource
 ) {
   const api = client.page.FilesPageElement
-  await api
-    .appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(resource)
+  await api.filesList().openSharingDialog(resource)
 
   const count = (await api.SharingDialog.collaboratorsDialog().getCollaboratorsList({})).length
   assert.strictEqual(
@@ -1331,9 +1283,9 @@ Then('user {string} should not have created any shares', async function(user) {
 
 Then('the following resources should have the following collaborators', async function(dataTable) {
   for (const { fileName, expectedCollaborators } of dataTable.hashes()) {
-    const collaboratorsArray = await client.page.FilesPageElement.filesList().getCollaboratorsForResource(
-      fileName
-    )
+    const collaboratorsArray = await client.page
+      .sharedWithOthersPage()
+      .getCollaboratorsForResource(fileName)
 
     const expectedCollaboratorsArray = expectedCollaborators.split(',').map(s => s.trim())
     assert.ok(

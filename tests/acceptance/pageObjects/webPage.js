@@ -45,18 +45,11 @@ module.exports = {
         this.click('@menuButton').waitForAnimationToFinish()
       }
 
-      this.useXpath()
+      await this.useXpath()
         .waitForElementVisible(menuItemSelector)
         .click(menuItemSelector)
-        .api.page.FilesPageElement.filesList()
-        .waitForElementPresent({
-          selector: '@filesListProgressBar',
-          abortOnFailure: false, // don't fail if we are too late
-          timeout: this.api.globals.waitForNegativeConditionTimeout
-        })
-        .waitForElementNotPresent('@filesListProgressBar')
         .useCss()
-
+      await this.api.page.FilesPageElement.filesList().waitForLoadingFinished()
       return this
     },
     markNotificationAsRead: function() {
@@ -81,13 +74,16 @@ module.exports = {
     getNotifications: async function() {
       const notifications = []
       await this.toggleNotificationDrawer()
-      await this.api.elements('@notificationElement', result => {
-        for (const element of result.value) {
-          this.api.elementIdText(element.ELEMENT, text => {
-            notifications.push(text.value)
-          })
+      await this.waitForElementVisible('@notificationElement').api.elements(
+        '@notificationElement',
+        result => {
+          for (const element of result.value) {
+            this.api.elementIdText(element.ELEMENT, text => {
+              notifications.push(text.value)
+            })
+          }
         }
-      })
+      )
       await this.toggleNotificationDrawer()
       return notifications
     },
@@ -253,7 +249,7 @@ module.exports = {
       selector: '#Web'
     },
     appContainer: {
-      selector: '#oc-app-container'
+      selector: '.oc-app-container'
     },
     notificationElement: {
       selector: '//div[@id="oc-notification"]//h5',

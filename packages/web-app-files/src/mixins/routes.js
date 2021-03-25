@@ -1,7 +1,7 @@
 export default {
   computed: {
-    isListRoute() {
-      return this.$route.name === 'files-list'
+    isPersonalRoute() {
+      return this.$route.name === 'files-personal'
     },
     isFavoritesRoute() {
       return this.$route.name === 'files-favorites'
@@ -19,7 +19,13 @@ export default {
       return this.isSharedWithMeRoute || this.isSharedWithOthersRoute
     },
     isPublicFilesRoute() {
-      return this.$route.name === 'public-files'
+      return this.$route.name === 'files-public-list'
+    },
+    isPublicPage() {
+      if (this.$route.meta) {
+        return this.$route.meta.auth === false
+      }
+      return false
     }
   }
 }

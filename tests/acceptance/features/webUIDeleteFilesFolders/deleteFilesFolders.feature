@@ -8,7 +8,7 @@ Feature: deleting files and folders
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
-  @smokeTest @ocisSmokeTest
+  @skip @smokeTest @ocisSmokeTest
   Scenario: Delete files & folders one by one and check its existence after page reload
     Given user "Alice" has created file "sample,1.txt"
     And user "Alice" has created folder "Sample,Folder,With,Comma"
@@ -49,7 +49,7 @@ Feature: deleting files and folders
       | "question?"         |
       | "&and#hash"         |
 
-  @smokeTest
+  @smokeTest @skip
   Scenario: Delete multiple files at once
     When the user batch deletes these files using the webUI
       | name          |
@@ -63,17 +63,17 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI after a page reload
     And no message should be displayed on the webUI
 
-  @ocis-issue-532
+
   Scenario: Delete all files at once
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
-    # Check just some example files/folders that should not exist any more
-    Then as "Alice" file "data.zip" should not exist
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "simple-folder" should not exist
     And there should be no resources listed on the webUI
     And there should be no resources listed on the webUI after a page reload
     And no message should be displayed on the webUI
+
+
+
+
 
   @ocis-reva-issue-106 @ocis-reve-issue-442
   Scenario: Delete all except for a few files at once

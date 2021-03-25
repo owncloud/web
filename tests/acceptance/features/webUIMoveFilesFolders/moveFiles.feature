@@ -41,7 +41,7 @@ Feature: move files
     When the user moves file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
     Then the error message with header 'An error occurred while moving strängé filename (duplicate #2 &).txt' should be displayed on the webUI
 
-  @smokeTest
+  @smokeTest @skip
   Scenario: Move multiple files at once
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
@@ -89,7 +89,7 @@ Feature: move files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to move into folder "simple-folder (2)" using the webUI
+    Then it should not be possible to paste files into the current folder using the webUI
 
   Scenario: cancel moving a file
     Given user "Alice" has logged in using the webUI
@@ -97,7 +97,7 @@ Feature: move files
     When the user opens the file action menu of folder "data.zip" using the webUI
     And the user selects move action for folder "data.zip" using the webUI
     And the user selects the folder "simple-empty-folder" as a place to move the file using the webUI
-    And the user cancels the attempt to move file into folder "simple-empty-folder" using the webUI
+    And the user cancels the attempt to move resources using the webUI
     Then file "data.zip" should be listed on the webUI
     But  file "data.zip" should not be listed in the folder "simple-empty-folder" on the webUI
 
@@ -111,7 +111,7 @@ Feature: move files
       | testapp.zip |
     And the user selects the move button to move files using the webUI
     And the user selects the folder "simple-empty-folder" as a place to move the files using the webUI
-    And the user cancels the attempt to move file into folder "simple-empty-folder" using the webUI
+    And the user cancels the attempt to move resources using the webUI
     Then the following files should be listed on the webUI
       | file_name   |
       | data.zip    |
@@ -135,7 +135,7 @@ Feature: move files
     And user "Brian" has created folder "/Shares/testFolder"
     And the user has opened folder "Shares"
     And the user has opened folder "simple-empty-folder"
-    When the user batch moves these files into folder "testFolder" using the webUI
+    When the user batch moves these files into folder "/Shares/testFolder" using the webUI
       | file_name    |
       | testFile.txt |
     Then breadcrumb for folder "Shares" should be displayed on the webUI

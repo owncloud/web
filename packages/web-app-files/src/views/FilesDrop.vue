@@ -22,13 +22,16 @@
           </vue-dropzone>
           <div id="previews" hidden />
         </div>
-        <div v-if="getUploadedFiles" class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1">
-          <oc-table-simple class="uk-width-1-1 uk-width-xxlarge@m">
+        <div
+          class="uk-flex uk-flex-center uk-overflow-auto uk-width-1-1"
+          :class="{ 'files-empty': !getUploadedFiles }"
+        >
+          <oc-table-simple v-if="getUploadedFiles" class="uk-width-1-1 uk-width-xxlarge@m">
             <oc-tbody>
               <oc-tr v-for="(file, key) in getUploadedFiles" :key="key">
                 <oc-td class="oc-pl-rm" v-text="file.name" />
                 <oc-td width="shrink" class="uk-text-nowrap uk-text-meta">
-                  {{ file.size | fileSize }}
+                  {{ getResourceSize(file.size) }}
                 </oc-td>
                 <oc-td width="shrink" class="oc-pr-rm uk-preserve-width">
                   <oc-icon
@@ -68,13 +71,14 @@
 <script>
 import vue2DropZone from 'vue2-dropzone'
 import { mapGetters } from 'vuex'
-import Mixins from '../../mixins.js'
+import Mixins from '../mixins.js'
+import MixinResources from '../mixins/resources'
 
 export default {
   components: {
     vueDropzone: vue2DropZone
   },
-  mixins: [Mixins],
+  mixins: [Mixins, MixinResources],
   data() {
     return {
       loading: true,
@@ -133,12 +137,13 @@ export default {
         this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME,
         this.$client.publicFiles.PUBLIC_LINK_SHARE_OWNER
       ])
+
       this.$client.publicFiles
         .list(this.publicLinkToken, this.publicLinkPassword, properties, '0')
         .then(files => {
           if (files[0].getProperty(this.$client.publicFiles.PUBLIC_LINK_SHARE_DATETIME !== '4')) {
             this.$router.push({
-              name: 'public-files',
+              name: 'files-public-list',
               params: {
                 item: this.publicLinkToken
               }
@@ -151,7 +156,7 @@ export default {
           // likely missing password, redirect to public link password prompt
           if (error.statusCode === 401) {
             this.$router.push({
-              name: 'public-link',
+              name: 'files-public-link',
               params: {
                 token: this.publicLinkToken
               }

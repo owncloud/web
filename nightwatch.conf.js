@@ -36,7 +36,6 @@ const SCREENSHOTS = !!process.env.SCREENSHOTS
 
 const VISUAL_TEST = !!process.env.VISUAL_TEST
 const UPDATE_VRT_SCREENSHOTS = !!process.env.UPDATE_VRT_SCREENSHOTS
-
 function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
   return path.join(process.cwd(), basePath, imagePath)
 }

@@ -34,12 +34,6 @@ export default {
           let headers = {}
           if (publicPage) {
             url = file.downloadURL
-            const password = this.publicLinkPassword
-            if (password) {
-              headers = {
-                Authorization: 'Basic ' + Buffer.from('public:' + password).toString('base64')
-              }
-            }
           } else {
             if (version === null) {
               url = this.$client.helpers._webdavUrl + file.path

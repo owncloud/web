@@ -215,21 +215,21 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then it should be possible to create files using the webUI
 
-  @issue-2414
-  Scenario: creating a public link with "Uploader" role makes it possible to upload a file
-    # FIXME: Delete this scenario after fixing the issue at large
-    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions
-    When the public opens the public link page of the last public link created by user "Alice"
-    And the user uploads file "new-lorem.txt" using the webUI
-    Then as "Alice" file "simple-folder/new-lorem.txt" should exist
+  # TODO: Remove blank lines after adjusing expected failures
 
-  @issue-2414
-  Scenario: creating a public link with "Uploader" role makes it possible to upload a folder
-    # FIXME: Delete this scenario after fixing the issue at large
-    Given user "Alice" has shared folder "simple-folder" with link with "create" permissions
-    When the public opens the public link page of the last public link created by user "Alice"
-    And the user uploads folder "PARENT" using the webUI
-    Then as "Alice" file "simple-folder/PARENT/CHILD/child.txt" should exist
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   Scenario: creating a public link with "Uploader" role makes it possible to upload a file through files-drop page

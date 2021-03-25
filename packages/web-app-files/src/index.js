@@ -1,11 +1,17 @@
-import FilesApp from './components/FilesApp.vue'
+import App from './App.vue'
+import Personal from './views/Personal.vue'
+import Favorites from './views/Favorites.vue'
+import SharedWithMe from './views/SharedWithMe.vue'
+import SharedWithOthers from './views/SharedWithOthers.vue'
+import Trashbin from './views/Trashbin.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
 import FileLinkSidebar from './components/FileLinkSidebar.vue'
-import PrivateLink from './components/PrivateLink.vue'
-import PublicLink from './components/PublicLinks/PublicLink.vue'
-import FilesDrop from './components/PublicLinks/FilesDrop.vue'
-import LocationPicker from './components/LocationPicker/LocationPicker.vue'
+import PrivateLink from './views/PrivateLink.vue'
+import PublicLink from './views/PublicLink.vue'
+import FilesDrop from './views/FilesDrop.vue'
+import LocationPicker from './views/LocationPicker.vue'
+import PublicFiles from './views/PublicFiles.vue'
 
 import translationsJson from '../l10n/translations.json'
 import quickActionsImport from './quickActions'
@@ -60,15 +66,16 @@ const navItems = [
     name: $gettext('All files'),
     iconMaterial: appInfo.icon,
     route: {
-      name: 'files-list',
-      path: `/${appInfo.id}/list`
+      name: 'files-personal',
+      path: `/${appInfo.id}/list/personal`
     }
   },
   {
     name: $gettext('Favorites'),
     iconMaterial: 'star',
     route: {
-      name: 'files-favorites'
+      name: 'files-favorites',
+      path: `/${appInfo.id}/list/favorites`
     },
     enabled(capabilities) {
       return capabilities.files && capabilities.files.favorites
@@ -79,7 +86,7 @@ const navItems = [
     iconMaterial: 'shared-with-me',
     route: {
       name: 'files-shared-with-me',
-      path: `/${appInfo.id}/shared-with-me`
+      path: `/${appInfo.id}/list/shared-with-me`
     }
   },
   {
@@ -87,7 +94,7 @@ const navItems = [
     iconMaterial: 'shared-with-others',
     route: {
       name: 'files-shared-with-others',
-      path: `/${appInfo.id}/shared-with-others`
+      path: `/${appInfo.id}/list/shared-with-others`
     }
   },
   {
@@ -97,81 +104,97 @@ const navItems = [
       return capabilities.dav && capabilities.dav.trashbin === '1.0'
     },
     route: {
-      name: 'files-trashbin'
+      name: 'files-trashbin',
+      path: `/${appInfo.id}/list/trash-bin`
     }
   }
 ]
 
 const routes = [
   {
-    path: '',
-    redirect: `/${appInfo.id}/list/`,
-    components: {
-      app: FilesApp
-    }
+    path: '/',
+    redirect: { name: 'files-personal' }
   },
   {
-    path: '/list/:item?',
+    name: 'list',
+    path: '/list',
+    redirect: { name: 'files-personal' },
     components: {
-      app: FilesApp
+      app: App
     },
-    name: 'files-list',
+    children: [
+      {
+        name: 'personal',
+        path: 'personal/:item?',
+        component: Personal,
+        meta: {
+          hasBulkActions: true,
+          title: $gettext('Personal files')
+        }
+      },
+      {
+        name: 'favorites',
+        path: 'favorites',
+        component: Favorites,
+        meta: {
+          hideFilelistActions: true,
+          hasBulkActions: true,
+          title: $gettext('Favorite files')
+        }
+      },
+      {
+        path: 'shared-with-me',
+        component: SharedWithMe,
+        name: 'shared-with-me',
+        meta: {
+          hideFilelistActions: true,
+          hasBulkActions: true,
+          title: $gettext('Files shared with me')
+        }
+      },
+      {
+        path: 'shared-with-others',
+        component: SharedWithOthers,
+        name: 'shared-with-others',
+        meta: {
+          hideFilelistActions: true,
+          hasBulkActions: true,
+          title: $gettext('Files shared with others')
+        }
+      },
+      {
+        path: 'trash-bin',
+        component: Trashbin,
+        name: 'trashbin',
+        meta: {
+          hideFilelistActions: true,
+          // FIXME: should have a generic bulk actions way as it currently handles this separately
+          hasBulkActions: false,
+          title: $gettext('Deleted files')
+        }
+      }
+    ]
+  },
+  {
+    name: 'public',
+    path: '/public',
+    components: {
+      app: App
+    },
     meta: {
-      hasBulkActions: true
-    }
-  },
-  {
-    path: '/favorites',
-    components: {
-      app: FilesApp
+      auth: false
     },
-    name: 'files-favorites',
-    meta: {
-      hideFilelistActions: true,
-      hasBulkActions: true
-    }
-  },
-  {
-    path: '/shared-with-me',
-    components: {
-      app: FilesApp
-    },
-    name: 'files-shared-with-me',
-    meta: {
-      hideFilelistActions: true,
-      hasBulkActions: true
-    }
-  },
-  {
-    path: '/shared-with-others',
-    components: {
-      app: FilesApp
-    },
-    name: 'files-shared-with-others',
-    meta: {
-      hideFilelistActions: true,
-      hasBulkActions: true
-    }
-  },
-  {
-    path: '/trash-bin',
-    components: {
-      app: FilesApp
-    },
-    name: 'files-trashbin',
-    meta: {
-      hideFilelistActions: true,
-      // FIXME: should have a generic bulk actions way as it currently handles this separately
-      hasBulkActions: false
-    }
-  },
-  {
-    path: '/private-link/:fileId',
-    name: 'private-link',
-    components: {
-      fullscreen: PrivateLink
-    },
-    meta: { hideHeadbar: true }
+    children: [
+      {
+        name: 'public-list',
+        path: 'list/:item',
+        component: PublicFiles,
+        meta: {
+          auth: false,
+          hasBulkActions: true
+        }
+      }
+    ]
   },
   {
     path: '/public-link/:token',
@@ -182,26 +205,15 @@ const routes = [
     meta: { auth: false, hideHeadbar: true }
   },
   {
-    path: '/public-files/:item',
-    name: 'public-files',
+    path: '/private-link/:fileId',
+    name: 'private-link',
     components: {
-      app: FilesApp
+      fullscreen: PrivateLink
     },
-    meta: {
-      auth: false,
-      hasBulkActions: true
-    }
+    meta: { hideHeadbar: true }
   },
   {
-    path: '/files-drop/:token',
-    name: 'public-files-drop',
-    components: {
-      app: FilesDrop
-    },
-    meta: { auth: false }
-  },
-  {
-    path: '/location-picker',
+    path: '/location-picker/:context/:action/:item?',
     name: 'location-picker',
     components: {
       app: LocationPicker
@@ -210,6 +222,14 @@ const routes = [
       verbose: true,
       auth: false
     }
+  },
+  {
+    path: '/files-drop/:token',
+    name: 'public-drop',
+    components: {
+      app: FilesDrop
+    },
+    meta: { auth: false }
   }
 ]
 

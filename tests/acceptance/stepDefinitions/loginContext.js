@@ -40,8 +40,8 @@ When('the user authorizes access to web', () => {
 Then('the files table should not be empty', () => {
   return (
     client.page.FilesPageElement.filesList()
-      // even the loading indicator is gone the table might not be rendered yet
-      .waitForElementVisible('@fileRows')
+      // even when the loading indicator is gone the table might not be rendered yet
+      .waitForElementVisible('@fileRow')
   )
 })
 

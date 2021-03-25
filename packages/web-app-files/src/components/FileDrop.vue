@@ -3,6 +3,7 @@
     v-if="dropzone"
     id="oc-dropzone"
     ref="ocDropzone"
+    class="oc-dropzone"
     :options="ocDropzone_options"
     :use-custom-slot="true"
     :include-styling="false"
@@ -64,3 +65,25 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.oc-dropzone {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  height: calc(100% - 60px);
+  width: 100%;
+  z-index: 3;
+
+  // TODO: Remove vue-dropzone
+  .dz-message,
+  .oc-dropzone {
+    height: 100%;
+  }
+
+  @media only screen and (min-width: 1200px) {
+    left: 300px;
+    width: calc(100% - 300px);
+  }
+}
+</style>

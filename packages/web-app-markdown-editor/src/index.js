@@ -31,11 +31,11 @@ const appInfo = {
         }
       },
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     },
     {
@@ -46,11 +46,11 @@ const appInfo = {
         }
       },
       routes: [
-        'files-list',
+        'files-personal',
         'files-favorites',
         'files-shared-with-others',
         'files-shared-with-me',
-        'public-files'
+        'files-public-list'
       ]
     }
   ]

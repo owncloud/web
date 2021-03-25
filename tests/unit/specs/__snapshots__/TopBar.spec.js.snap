@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Top Bar component Displays applications menu 1`] = `
-<header id="oc-topbar" class="uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
+<header class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
   <oc-grid-stub gutter="medium" flex="">
     <div class="uk-hidden@l">
       <oc-button-stub variation="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
@@ -19,7 +19,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
 `;
 
 exports[`Top Bar component Displays search bar if enabled 1`] = `
-<header id="oc-topbar" class="uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
+<header class="oc-topbar uk-flex uk-flex-middle uk-flex-wrap oc-border-b oc-p-s">
   <oc-grid-stub gutter="medium" flex="">
     <div class="uk-hidden@l">
       <oc-button-stub variation="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">

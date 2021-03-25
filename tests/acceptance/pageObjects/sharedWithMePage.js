@@ -4,7 +4,7 @@ const { join } = require('../helpers/path')
 
 module.exports = {
   url: function() {
-    return join(this.api.launchUrl, '/#/files/shared-with-me/')
+    return join(this.api.launchUrl, '/#/files/list/shared-with-me/')
   },
   commands: {
     /**
@@ -21,15 +21,15 @@ module.exports = {
      * gets displayed share status of file-name (shared by user of given username)
      *
      * @param {string} filename
-     * @param {string} sharer
+     * @param {string} user - The user who created the share
      *
      * @return {Promise<string>}
      */
-    getShareStatusOfResource: async function(filename, sharer) {
+    getShareStatusOfResource: async function(filename, user) {
       let status
       const requiredXpath =
         this.api.page.FilesPageElement.filesList().getFileRowSelectorByFileName(filename) +
-        util.format(this.elements.getSharedFromUserName.selector, sharer) +
+        util.format(this.elements.getSharedFromUserName.selector, user) +
         this.elements.shareStatusOnFileRow.selector
       await this.useXpath()
         .waitForAnimationToFinish()
@@ -48,7 +48,7 @@ module.exports = {
     /**
      * @param {string} filename
      * @param {string} action - It takes one of the following : Decline and Accept
-     * @param {string} user
+     * @param {string} user - The user who created the share
      *Performs required action, such as accept and decline, on the file row element of the desired file name
      *  shared by specific user
      */
@@ -60,8 +60,8 @@ module.exports = {
           util.format(this.elements.getSharedFromUserName.selector, user) +
           util.format(this.elements.shareStatusActionOnFileRow.selector, action)
       }
-      return this.initAjaxCounters()
-        .waitForElementVisible(actionLocatorButton)
+      return this.waitForElementVisible(actionLocatorButton)
+        .initAjaxCounters()
         .click(actionLocatorButton)
         .waitForOutstandingAjaxCalls()
     },
@@ -80,9 +80,15 @@ module.exports = {
       await this.waitForElementVisible({
         locateStrategy: this.elements.sharedFrom.locateStrategy,
         selector: requiredXpath
-      }).api.getText(this.elements.sharedFrom.locateStrategy, requiredXpath, result => {
-        username = result.value
       })
+      await this.api.getAttribute(
+        this.elements.sharedFrom.locateStrategy,
+        requiredXpath,
+        'alt',
+        result => {
+          username = result.value
+        }
+      )
       return username
     },
     isSharePresent: async function(element, sharer) {
@@ -98,20 +104,25 @@ module.exports = {
   },
   elements: {
     shareStatusOnFileRow: {
-      selector: "/../..//*[contains(@class,'file-row-share-status-text')]",
+      selector:
+        "/ancestor::tr[contains(@class, 'oc-tbody-tr')]//span[contains(@class,'file-row-share-status-text')]",
       locateStrategy: 'xpath'
     },
     getSharedFromUserName: {
-      selector: '//*[contains(@class,"file-row-owner-name")][normalize-space(.)="%s"]',
+      selector:
+        '//td[contains(@class,"oc-table-data-cell-owner")]//div[@alt=normalize-space("%s")]',
       locateStrategy: 'xpath'
     },
     sharedFrom: {
-      selector: "//*[contains(@class,'file-row-owner-name')]",
+      // ugly hack: oc-avatar has a parent div.oc-avatar-group, which is also matched by `contains(@class, 'oc-avatar')`.
+      // to solve this we try matching on the class surrounded by blanks, which is not matching the oc-avatar-group anymore.
+      selector:
+        "//td[contains(@class,'oc-table-data-cell-owner')]//div[contains(concat(' ', normalize-space(@class), ' '), ' oc-avatar ')]",
       locateStrategy: 'xpath'
     },
     shareStatusActionOnFileRow: {
       selector:
-        '/../..//*[contains(@class,"file-row-share-status-action")][normalize-space(.)="%s"]',
+        '/ancestor::tr[contains(@class, "oc-tbody-tr")]//button[contains(@class,"file-row-share-status-action")][normalize-space(.)="%s"]',
       locateStrategy: 'xpath'
     }
   }

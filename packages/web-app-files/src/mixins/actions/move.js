@@ -2,8 +2,10 @@ import { dirname } from 'path'
 
 import { canBeMoved } from '../../helpers/permissions'
 import { checkRoute } from '../../helpers/route'
+import MixinRoutes from '../routes'
 
 export default {
+  mixins: [MixinRoutes],
   computed: {
     $_move_items() {
       return [
@@ -16,7 +18,12 @@ export default {
               'Move'
             ),
           isEnabled: ({ resource }) => {
-            if (!checkRoute(['files-list', 'public-files', 'files-favorites'], this.$route.name)) {
+            if (
+              !checkRoute(
+                ['files-personal', 'files-public-list', 'files-favorites'],
+                this.$route.name
+              )
+            ) {
               return false
             }
 
@@ -34,9 +41,15 @@ export default {
     $_move_trigger(resource) {
       // Parent of the resource selected for copy used as a default target location
       const parent = dirname(resource.path)
+      const context = this.isPublicPage ? 'public' : 'private'
       this.$router.push({
-        name: 'location-picker',
-        query: { action: 'move', target: parent, resource: resource.path }
+        name: 'files-location-picker',
+        params: {
+          context,
+          item: parent,
+          action: 'move'
+        },
+        query: { resource: resource.path }
       })
     }
   }

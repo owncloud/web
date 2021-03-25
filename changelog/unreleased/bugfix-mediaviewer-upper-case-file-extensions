@@ -1,0 +1,6 @@
+Bugfix: Open mediaviewer for upper case file extensions
+
+We fixed a bug where the mediaviewer didn't open for files which had an uppercase (or mixed case) file extension.
+
+https://github.com/owncloud/web/issues/4647
+https://github.com/owncloud/web/pull/4627

@@ -1,14 +1,13 @@
 <template>
   <oc-app-side-bar
-    id="files-sidebar"
     :key="highlightedFile.id"
-    class="oc-p-s uk-overflow-auto uk-height-1-1 oc-border-l"
+    class="files-sidebar oc-p-s oc-border-l"
     :disable-action="false"
     @close="close()"
   >
     <template v-if="highlightedFile" slot="title">
       <div class="uk-inline">
-        <oc-icon :name="fileTypeIcon(highlightedFile)" size="xlarge" />
+        <oc-icon :name="highlightedFile.icon" size="xlarge" />
       </div>
       <div class="uk-inline">
         <div class="uk-flex uk-flex-middle">
@@ -27,7 +26,7 @@
             @click.native.stop="toggleFileFavorite(highlightedFile)"
           />
           <template v-if="highlightedFile.size > -1">
-            {{ highlightedFile.size | fileSize }},
+            {{ getResourceSize(highlightedFile.size) }},
           </template>
           {{ modificationTime }}
         </div>
@@ -66,17 +65,17 @@
 
 <script>
 import Mixins from '../mixins'
+import MixinResources from '../mixins/resources'
 import MixinRoutes from '../mixins/routes'
 import { mapActions, mapGetters, mapState, mapMutations } from 'vuex'
 
 import ActionsAccordion from './Sidebar/ActionsAccordion.vue'
 
 export default {
-  name: 'FileDetails',
   components: {
     ActionsAccordion
   },
-  mixins: [Mixins, MixinRoutes],
+  mixins: [Mixins, MixinResources, MixinRoutes],
   computed: {
     ...mapGetters(['fileSideBars', 'capabilities']),
     ...mapGetters('Files', ['highlightedFile']),
@@ -203,6 +202,11 @@ export default {
 </script>
 
 <style lang="scss">
+.files-sidebar {
+  background-color: white;
+  z-index: 1;
+}
+
 .oc-star {
   &-shining svg {
     fill: #ffba0a;

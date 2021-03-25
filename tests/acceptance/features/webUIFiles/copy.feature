@@ -73,7 +73,7 @@ Feature: copy files and folders
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to copy file "lorem.txt" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
+    Then it should not be possible to paste files into the current folder using the webUI
 
   @issue-ocis-reva-243
   Scenario: copy a folder into another folder with no change permission
@@ -81,7 +81,7 @@ Feature: copy files and folders
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to copy into folder "simple-folder (2)" using the webUI
+    Then it should not be possible to paste files into the current folder using the webUI
 
 
   Scenario: copy a folder into the same folder
@@ -104,7 +104,7 @@ Feature: copy files and folders
     When the user opens the file action menu of folder "data.zip" using the webUI
     And the user selects copy action for folder "data.zip" using the webUI
     And the user selects the folder "simple-empty-folder" as a place to copy the file using the webUI
-    And the user cancels the attempt to copy file into folder "simple-empty-folder" using the webUI
+    And the user cancels the attempt to copy resources using the webUI
     Then file "data.zip" should be listed on the webUI
     But  file "data.zip" should not be listed in the folder "simple-empty-folder" on the webUI
 
@@ -118,7 +118,7 @@ Feature: copy files and folders
       | testapp.zip |
     And the user selects the copy button to copy files using the webUI
     And the user selects the folder "simple-empty-folder" as a place to copy the files using the webUI
-    And the user cancels the attempt to copy file into folder "simple-empty-folder" using the webUI
+    And the user cancels the attempt to copy resources using the webUI
     Then the following files should be listed on the webUI
       | file_name   |
       | data.zip    |

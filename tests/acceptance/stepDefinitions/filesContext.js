@@ -12,13 +12,14 @@ const util = require('util')
 let deletedElements
 const { download } = require('../helpers/webdavHelper')
 const fs = require('fs')
+const sharingHelper = require('../helpers/sharingHelper')
 
 Before(() => {
   deletedElements = []
 })
 
 When('the user browses to the files page', () => {
-  return client.page.filesPage().navigateAndWaitTillLoaded()
+  return client.page.personalPage().navigateAndWaitTillLoaded()
 })
 
 When('the user browses to the favorites page', function() {
@@ -74,17 +75,16 @@ When('the user browses to the files page using the webUI', function() {
 })
 
 Then('the files table should be displayed', () => {
-  return client.page.FilesPageElement.filesList().waitForElementVisible('@filesTable')
+  return client.page.FilesPageElement.filesList().waitForElementVisible('@anyAfterLoading')
 })
 
 Given('the user has browsed to the files page', async function() {
-  await client.page.filesPage().navigateAndWaitTillLoaded()
+  await client.page.personalPage().navigateAndWaitTillLoaded()
 })
 
 When('the user opens folder {string} directly on the webUI', async function(folder) {
   folder = encodeURIComponent(path.normalize(folder))
-  await client.page.filesPage().navigateAndWaitTillLoaded(folder)
-  await client.page.FilesPageElement.filesList().waitForAllThumbnailsLoaded()
+  await client.page.personalPage().navigateAndWaitTillLoaded(folder)
 })
 
 Given('user {string} has uploaded file with content {string} to {string}', async function(
@@ -125,25 +125,25 @@ Given('user {string} has moved file/folder {string} to {string}', function(user,
 When('the user/public creates a folder with the name {string} using the webUI', function(
   folderName
 ) {
-  return client.page.filesPage().createFolder(folderName)
+  return client.page.personalPage().createFolder(folderName)
 })
 
 When('the user creates a file with the name {string} using the webUI', function(fileName) {
-  return client.page.filesPage().createFile(fileName)
+  return client.page.personalPage().createFile(fileName)
 })
 
 When('the user creates a folder with default name using the webUI', function() {
-  return client.page.filesPage().createFolder(null, false)
+  return client.page.personalPage().createFolder(null, false)
 })
 
 When('the user creates a folder without name using the webUI', function() {
-  return client.page.filesPage().createFolder('', false)
+  return client.page.personalPage().createFolder('', false)
 })
 
 When('the user creates a folder with the invalid name {string} using the webUI', function(
   folderName
 ) {
-  return client.page.filesPage().createFolder(folderName, false)
+  return client.page.personalPage().createFolder(folderName, false)
 })
 
 Given('the user has opened folder {string}', folder =>
@@ -154,9 +154,7 @@ When('the user opens folder {string} using the webUI', folder =>
 )
 
 Given('the user has opened the share dialog for file/folder {string}', function(fileName) {
-  return client.page.FilesPageElement.appSideBar()
-    .closeSidebar(100)
-    .openSharingDialog(fileName)
+  return client.page.FilesPageElement.filesList().openSharingDialog(fileName)
 })
 
 When('the user closes the app-sidebar using the webUI', function() {
@@ -164,7 +162,7 @@ When('the user closes the app-sidebar using the webUI', function() {
 })
 
 When('the user browses to folder {string} using the breadcrumb on the webUI', resource =>
-  client.page.filesPage().navigateToBreadcrumb(resource)
+  client.page.personalPage().navigateToBreadcrumb(resource)
 )
 
 When('the user deletes file/folder {string} using the webUI', function(element) {
@@ -180,7 +178,7 @@ When('the user deletes the following elements using the webUI', async function(t
     await client.page.FilesPageElement.filesList().deleteFile(line[0])
     deletedElements.push(line[0])
   }
-  return client.page.filesPage()
+  return client.page.personalPage()
 })
 
 Then('there should be no breadcrumb displayed on the webUI', function() {
@@ -216,13 +214,13 @@ Given('the following files/folders/resources have been deleted by user {string}'
 
 When('the user/public uploads file {string} using the webUI', function(element) {
   const uploadPath = path.join(client.globals.mountedUploadDir, element)
-  return client.page.filesPage().uploadFile(uploadPath)
+  return client.page.personalPage().uploadFile(uploadPath)
 })
 
 When('the user uploads a created file {string} using the webUI', function(element) {
   const filePath = path.join(client.globals.filesForUpload, element)
   return client.uploadRemote(filePath, function(uploadPath) {
-    client.page.filesPage().uploadFile(uploadPath)
+    client.page.personalPage().uploadFile(uploadPath)
   })
 })
 
@@ -255,7 +253,7 @@ When('the user unshares file/folder {string} using the webUI', function(element)
 When('the user uploads folder {string} using the webUI', function(element) {
   const rootUploadDir = client.globals.mountedUploadDir
   const name = path.join(rootUploadDir, element)
-  return client.page.filesPage().uploadFolder(name)
+  return client.page.personalPage().uploadFolder(name)
 })
 
 When(
@@ -280,17 +278,17 @@ When(
       const filePath = path.join(client.globals.filesForUpload, file)
       await client.uploadRemote(filePath)
     }
-    return client.page.filesPage().uploadSessionFolder()
+    return client.page.personalPage().uploadSessionFolder()
   }
 )
 
 Then('it should not be possible to create files using the webUI', async function() {
-  const canCreate = await client.page.filesPage().canCreateFiles()
+  const canCreate = await client.page.personalPage().canCreateFiles()
   await assert.strictEqual(canCreate, true, 'Create action must not be enabled')
 })
 
 Then('it should be possible to create files using the webUI', async function() {
-  const canCreate = await client.page.filesPage().canCreateFiles()
+  const canCreate = await client.page.personalPage().canCreateFiles()
   await assert.strictEqual(canCreate, false, 'Create action must be enabled')
 })
 
@@ -366,12 +364,11 @@ async function assertNoResourcesListed() {
 
   // only check empty message in regular file lists, not files drop page
   if (currentUrl.indexOf('/files-drop/') === -1) {
-    const noContentMessageVisible = await client.page.FilesPageElement.filesList().isNoContentMessageVisible()
-    assert.ok(noContentMessageVisible, 'Empty message must be visible')
+    await client.page.FilesPageElement.filesList().waitForNoContentMessageVisible()
+    return
   }
 
   const allRowsResult = await client.page.FilesPageElement.filesList().allFileRows()
-
   return assert.ok(
     allRowsResult.value.length === 0,
     `No resources are listed, ${allRowsResult.length} found`
@@ -379,12 +376,11 @@ async function assertNoResourcesListed() {
 }
 
 Then('there should be a not found error page displayed on the webUI', async function() {
-  const notFoundMessageVisible = await client.page.FilesPageElement.filesList().isNotFoundMessageVisible()
-  assert.ok(notFoundMessageVisible, 'NotFound message must be visible')
+  return await client.page.FilesPageElement.filesList().waitForNotFoundMessageVisible()
 })
 
-Then('file {string} should be listed on the webUI', function(folder) {
-  return client.page.FilesPageElement.filesList().waitForFileVisible(folder, 'file')
+Then('file {string} should be listed on the webUI', file => {
+  return client.page.FilesPageElement.filesList().waitForFileVisible(file, 'file')
 })
 
 Then('folder {string} should be listed on the webUI', folder => {
@@ -488,7 +484,7 @@ When('the user marks all files for batch action using the webUI', function() {
 })
 
 When('the user/public batch deletes the marked files using the webUI', function() {
-  return client.page.filesPage().deleteAllCheckedFiles()
+  return client.page.personalPage().deleteAllCheckedFiles()
 })
 
 When('the user batch deletes these files using the webUI', async function(fileOrFolders) {
@@ -497,7 +493,7 @@ When('the user batch deletes these files using the webUI', async function(fileOr
     deletedElements.push(item[0])
   }
 
-  return client.page.filesPage().deleteAllCheckedFiles()
+  return client.page.personalPage().deleteAllCheckedFiles()
 })
 
 When('the user unmarks these files for batch action using the webUI', async function(
@@ -531,7 +527,7 @@ Then('these files should not be selected on the webUI', async function(fileOrFol
 })
 
 When('the user/public clears the selection of files', function() {
-  return client.page.filesPage().clearSelection()
+  return client.page.personalPage().clearSelection()
 })
 
 When('the user clears the trashbin', function() {
@@ -591,7 +587,7 @@ Then('as {string} these folders/files/resources should not be listed on the webU
 Then(
   'these folders/files/resources should not be listed in the folder {string} on the webUI',
   async function(folder, entryList) {
-    await client.page.filesPage().navigateAndWaitTillLoaded(folder)
+    await client.page.personalPage().navigateAndWaitTillLoaded(folder)
     return theseResourcesShouldNotBeListed(entryList)
   }
 )
@@ -599,7 +595,7 @@ Then(
 Then(
   'file/folder/resource {string} should not be listed in the folder {string} on the webUI',
   async function(file, target) {
-    await client.page.filesPage().navigateAndWaitTillLoaded(target)
+    await client.page.personalPage().navigateAndWaitTillLoaded(target)
     return client.page.FilesPageElement.filesList()
       .isElementListed(file, 'file', client.globals.waitForNegativeConditionTimeout)
       .then(state => {
@@ -619,7 +615,7 @@ Then(
     if (user !== client.globals.currentUser) {
       await loginHelper.reLoginAsUser(user)
     }
-    await client.page.filesPage().navigateAndWaitTillLoaded(folder)
+    await client.page.personalPage().navigateAndWaitTillLoaded(folder)
     return theseResourcesShouldNotBeListed(entryList)
   }
 )
@@ -641,7 +637,7 @@ const theseResourcesShouldBeListed = async function(entryList) {
 }
 
 const assertBreadCrumbIsNotDisplayed = function() {
-  const breadcrumbXpath = client.page.filesPage().elements.breadcrumb.selector
+  const breadcrumbXpath = client.page.personalPage().elements.breadcrumb.selector
   return client.expect.element(breadcrumbXpath).to.not.be.present
 }
 
@@ -652,7 +648,9 @@ const assertBreadCrumbIsNotDisplayed = function() {
  * @param {boolean} nonClickable
  */
 const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonClickable) {
-  const breadcrumbElement = client.page.filesPage().getBreadcrumbSelector(clickable, nonClickable)
+  const breadcrumbElement = client.page
+    .personalPage()
+    .getBreadcrumbSelector(clickable, nonClickable)
   const resourceBreadcrumbXpath = util.format(
     breadcrumbElement.selector,
     xpathHelper.buildXpathLiteral(resource)
@@ -661,11 +659,11 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
 
   // lets hope that the breadcrumbs would not take longer than the "NEW" button
   await client.waitForElementVisible({
-    selector: client.page.filesPage().elements.newFileMenuButtonAnyState.selector,
+    selector: client.page.personalPage().elements.newFileMenuButtonAnyState.selector,
     abortOnFailure: false
   })
 
-  await client.page.filesPage().checkBreadcrumbVisibility(resourceBreadcrumbXpath)
+  await client.page.personalPage().checkBreadcrumbVisibility(resourceBreadcrumbXpath)
 
   await client.element('xpath', resourceBreadcrumbXpath, result => {
     if (result.status > -1) {
@@ -676,7 +674,7 @@ const assertBreadcrumbIsDisplayedFor = async function(resource, clickable, nonCl
   // Try to look for a mobile breadcrumbs in case it has not been found
   if (!isBreadcrumbVisible) {
     const mobileBreadcrumbMobileXpath = util.format(
-      client.page.filesPage().elements.breadcrumbMobile.selector,
+      client.page.personalPage().elements.breadcrumbMobile.selector,
       xpathHelper.buildXpathLiteral(resource)
     )
 
@@ -709,7 +707,7 @@ Then('these files/folders/resources should be listed on the webUI', function(ent
 Then(
   'these files/folders/resources should be listed in the folder {string} on the webUI',
   async function(folder, entryList) {
-    await client.page.filesPage().navigateAndWaitTillLoaded(folder)
+    await client.page.personalPage().navigateAndWaitTillLoaded(folder)
     return theseResourcesShouldBeListed(entryList)
   }
 )
@@ -738,7 +736,7 @@ Then(
     if (user !== client.globals.currentUser) {
       await loginHelper.reLoginAsUser(user)
     }
-    await client.page.filesPage().navigateAndWaitTillLoaded(folder)
+    await client.page.personalPage().navigateAndWaitTillLoaded(folder)
     return theseResourcesShouldBeListed(entryList)
   }
 )
@@ -791,13 +789,13 @@ Then(/the count of files and folders shown on the webUI should be (\d+)/, async 
 })
 
 Then('the app-sidebar should be visible', async function() {
-  const visible = await client.page.filesPage().isSidebarVisible()
+  const visible = await client.page.personalPage().isSidebarVisible()
   assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
 })
 
 Then('the app-sidebar should be invisible', async function() {
   const visible = await client.page
-    .filesPage()
+    .personalPage()
     .isSidebarVisible(client.globals.waitForNegativeConditionTimeout)
   assert.strictEqual(visible, false, 'app-sidebar should be invisible, but is not')
 })
@@ -928,7 +926,7 @@ Given('user {string} has created the following files', function(userId, entryLis
 
 When('the user browses to the folder {string} on the files page', folderName => {
   const targetFolder = folderName === '/' ? '' : folderName
-  return client.page.filesPage().navigateAndWaitTillLoaded(targetFolder)
+  return client.page.personalPage().navigateAndWaitTillLoaded(targetFolder)
 })
 When(
   'the user copies the permalink of the file/folder/resource {string} using the webUI',
@@ -936,7 +934,7 @@ When(
     await client.page.FilesPageElement.appSideBar()
       .closeSidebar(100)
       .openPublicLinkDialog(file)
-    await client.page.filesPage().copyPermalinkFromFilesAppBar()
+    await client.page.personalPage().copyPermalinkFromFilesAppBar()
     return client
   }
 )
@@ -953,9 +951,9 @@ Then(
 Then('the app-sidebar for file/folder {string} should be visible on the webUI', async function(
   resource
 ) {
-  const visible = await client.page.filesPage().isSidebarVisible()
+  const visible = await client.page.personalPage().isSidebarVisible()
   assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
-  return client.page.filesPage().checkSidebarItem(resource)
+  return client.page.personalPage().checkSidebarItem(resource)
 })
 
 Then('the thumbnail should be visible in the app-sidebar', function() {
@@ -1006,20 +1004,20 @@ Then('it should not be possible to rename file/folder {string} using the webUI',
 When('the user uploads overwriting file {string} using the webUI', function(file) {
   const uploadPath = path.join(client.globals.mountedUploadDir, file)
   return client.page
-    .filesPage()
+    .personalPage()
     .selectFileForUpload(uploadPath)
-    .then(() => client.page.filesPage().confirmFileOverwrite())
+    .then(() => client.page.personalPage().confirmFileOverwrite())
 })
 
 When(
   'the user tries to create a file with already existing name {string} using the webUI',
   function(fileName) {
-    return client.page.filesPage().triesToCreateExistingFile(fileName)
+    return client.page.personalPage().triesToCreateExistingFile(fileName)
   }
 )
 
 Then('the create file button should be disabled', function() {
-  return client.page.filesPage().checkForButtonDisabled()
+  return client.page.personalPage().checkForButtonDisabled()
 })
 
 When('user {string} has renamed the following file', function(user, table) {
@@ -1131,10 +1129,7 @@ Then('the file {string} should have a thumbnail displayed on the webUI', async f
     resource,
     'file'
   )
-  assert.ok(
-    iconUrl && iconUrl.startsWith('blob:'),
-    'Icon URL expected to be set when thumbnail is displayed'
-  )
+  assert.ok(iconUrl, 'Icon URL expected to be set when thumbnail is displayed')
 })
 Then('the file {string} should have a file type icon displayed on the webUI', async function(
   resource
@@ -1172,18 +1167,22 @@ When('the user selects move action for folder/file {string} using the webUI', as
     .move()
 })
 
-When(
-  'the user cancels the attempt to move/copy file/folder/files/folders into folder {string} using the webUI',
-  function(target) {
-    return client.page.FilesPageElement.filesList().cancelResourceMoveOrCopyProgress(target)
-  }
-)
+When('the user cancels the attempt to move/copy resources using the webUI', function() {
+  return client.page.FilesPageElement.filesList().cancelResourceMoveOrCopyProgress()
+})
 
 Then('it should not be possible to copy/move into folder {string} using the webUI', function(
   target
 ) {
   return client.page.FilesPageElement.filesList().navigationNotAllowed(target)
 })
+
+Then(
+  'it should not be possible to paste files/folders into the current folder using the webUI',
+  async function() {
+    return await client.page.locationPicker().copyOrMoveNotAllowed()
+  }
+)
 
 When(
   'the user batch moves these files/folders into folder {string} using the webUI',
@@ -1192,7 +1191,7 @@ When(
       await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
     }
 
-    return client.page.filesPage().moveMultipleResources(target)
+    return client.page.personalPage().moveMultipleResources(target)
   }
 )
 
@@ -1203,12 +1202,12 @@ When(
       await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
     }
 
-    return client.page.filesPage().attemptToMoveMultipleResources(target)
+    return client.page.personalPage().attemptToMoveMultipleResources(target)
   }
 )
 
 When('the user selects the move button to move files using the webUI', function() {
-  return client.page.filesPage().click('@moveSelectedBtn')
+  return client.page.personalPage().click('@moveSelectedBtn')
 })
 
 When('the user copies file/folder {string} into folder {string} using the webUI', function(
@@ -1244,7 +1243,6 @@ When(
   'the user selects the folder {string} as a place to copy/move the file/files/folder/folders using the webUI',
   async function(target) {
     await client.page.locationPicker().selectFolder(target)
-    await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', target)
   }
 )
 
@@ -1255,7 +1253,7 @@ When(
       await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
     }
 
-    return client.page.filesPage().copyMultipleResources(target)
+    return client.page.personalPage().copyMultipleResources(target)
   }
 )
 
@@ -1266,51 +1264,44 @@ When(
       await client.page.FilesPageElement.filesList().toggleFileOrFolderCheckbox('enable', item[0])
     }
 
-    return client.page.filesPage().attemptToCopyMultipleResources(target)
+    return client.page.personalPage().attemptToCopyMultipleResources(target)
   }
 )
 
 When('the user selects the copy button to copy files using the webUI', function() {
-  return client.page.filesPage().click('@copySelectedBtn')
+  return client.page.personalPage().click('@copySelectedBtn')
 })
 
 When('the user creates a markdown file with the name {string} using the webUI', function(fileName) {
-  return client.page.filesPage().createMarkdownFile(fileName)
+  return client.page.personalPage().createMarkdownFile(fileName)
 })
 
 When('the user closes the text editor using the webUI', function() {
-  return client.page.filesPage().closeTextEditor()
+  return client.page.personalPage().closeTextEditor()
 })
 
 Then('the user should be in the root directory on the webUI', async function() {
-  const isUserInRootDirectory = await client.page.filesPage().isRootDirectory()
+  const isUserInRootDirectory = await client.page.personalPage().isRootDirectory()
   assert.ok(!isUserInRootDirectory, 'Expected user in the root directory but found elsewhere')
 })
 
 Then('the search bar should not be visible in the webUI', async function() {
-  const isVisible = await client.page.filesPage().isSearchBarVisible()
+  const isVisible = await client.page.personalPage().isSearchBarVisible()
   assert.strictEqual(isVisible, false, 'Expected search bar to be invisible but is visible')
 })
 
 Then('the search bar should be visible in the webUI', async function() {
-  const isVisible = await client.page.filesPage().isSearchBarVisible()
+  const isVisible = await client.page.personalPage().isSearchBarVisible()
   assert.strictEqual(isVisible, true, 'Expected search bar to be visible but is not visible')
 })
 
 Then(
   /^the preview image of file "([^"]*)" (should|should not) be displayed in the file list view on the webUI$/,
-  async function(fileName, shouldOrShouldnot) {
-    let expected = true
-    let message = 'Expected preview image to be displayed but is not displayed'
-    const isPreviewDisplayed = await client.page.FilesPageElement.filesList().isPreviewImageDisplayed(
+  function(fileName, shouldOrShouldnot) {
+    return client.page.FilesPageElement.filesList().checkPreviewImage(
       fileName,
-      shouldOrShouldnot
+      shouldOrShouldnot === 'should'
     )
-    if (shouldOrShouldnot === 'should not') {
-      expected = false
-      message = 'Expected preview image to be not displayed but is displayed'
-    }
-    assert.strictEqual(isPreviewDisplayed, expected, message)
   }
 )
 
@@ -1319,9 +1310,9 @@ Given('the app-sidebar for file/folder {string} has been visible on the webUI', 
 ) {
   await client.page.FilesPageElement.filesList().clickRow(resource)
 
-  const visible = await client.page.filesPage().isSidebarVisible()
+  const visible = await client.page.personalPage().isSidebarVisible()
   assert.strictEqual(visible, true, 'app-sidebar should be visible, but is not')
-  return client.page.filesPage().checkSidebarItem(resource)
+  return client.page.personalPage().checkSidebarItem(resource)
 })
 
 Then(
@@ -1343,5 +1334,17 @@ Then(
       true,
       `only '${expectedVisibleItems}' actions menu item(s) was expected to be visible but also found '${visibleItems}'.`
     )
+  }
+)
+
+Then(
+  'the resource {string} should have the token of last link in the people column on the webUI',
+  async resource => {
+    const lastLink = await sharingHelper.fetchLastPublicLinkShare(client.globals.currentUser)
+    const collaboratorsArray = await client.page
+      .sharedWithOthersPage()
+      .getCollaboratorsForResource(resource)
+
+    assert.ok(collaboratorsArray.indexOf(lastLink.token) > -1)
   }
 )

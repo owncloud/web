@@ -1,44 +1,34 @@
 const util = require('util')
-const path = require('path')
 const assert = require('assert')
 const xpathHelper = require('../../helpers/xpath')
-const { join } = require('../../helpers/path')
 const { client } = require('nightwatch-api')
 const filesRow = client.page.FilesPageElement.filesRow()
 
 module.exports = {
   commands: {
     /**
-     * @param {string} fileName
+     * @param {string} resource
      * @return {Promise<*>}
      */
-    openSharingDialog: async function(fileName) {
+    openSharingDialog: async function(resource) {
       const appSidebar = client.page.FilesPageElement.appSideBar()
-
       await appSidebar.closeSidebar(500)
-      await this.waitForFileVisible(fileName)
-      await this.openSideBar(fileName)
+      await this.openSideBar(resource)
       return client.page.FilesPageElement.appSideBar().selectAccordionItem('people')
     },
     /**
-     * @param {string} fileName
-     * @return {Promise<*>}
+     * @param {string} resource
+     * @param {boolean} expected Asserts if we expect the preview image to be shown
      */
-    isPreviewImageDisplayed: async function(fileName, shouldOrShouldnot) {
-      await this.waitForFileVisible(fileName)
-      const element = util.format(this.elements.previewImageParentDiv.selector, fileName)
-      const imageSelector = util.format(this.elements.previewImage.selector, fileName)
-      let previewStatus = ''
-      await this.useXpath().waitForElementVisible(element)
-      if (shouldOrShouldnot === 'should') {
-        await this.useXpath().waitForElementVisible(imageSelector)
+    checkPreviewImage: function(resource, expected) {
+      const resourceRowSelector = this.getFileRowSelectorByFileName(resource)
+      const previewSelector = resourceRowSelector + this.elements.previewImage.selector
+
+      if (expected) {
+        return this.useXpath().waitForElementVisible(previewSelector)
       }
-      await this.getAttribute(
-        { selector: element, locateStrategy: this.elements.previewImageParentDiv.locateStrategy },
-        'data-preview-loaded',
-        result => (previewStatus = result.value === 'true')
-      )
-      return previewStatus
+
+      return this.useXpath().waitForElementNotPresent(previewSelector)
     },
     /**
      * @param {string} fileName
@@ -150,10 +140,8 @@ module.exports = {
      * @return {Promise<*>}
      */
     confirmDeletion: function() {
-      return this.initAjaxCounters()
-        .waitForElementEnabled('@dialogConfirmBtn')
+      return this.waitForElementEnabled('@dialogConfirmBtn')
         .click('@dialogConfirmBtn')
-        .waitForOutstandingAjaxCalls()
         .waitForElementNotPresent('@dialog')
     },
     /**
@@ -162,34 +150,13 @@ module.exports = {
      */
     navigateToFolder: async function(folder) {
       await this.waitForFileVisible(folder)
-      await this.initAjaxCounters()
 
       await this.useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
-        .click(this.getFileLinkSelectorByFileName(folder))
+        .click(this.getFileLinkSelectorByFileName(folder, 'folder'))
         .useCss()
-        .waitForElementNotPresent('@filesListProgressBar')
 
-      // wait for previews to finish loading
-      await this.waitForOutstandingAjaxCalls()
-      await this.waitForAllThumbnailsLoaded()
-
-      return this
-    },
-
-    /**
-     *
-     * @param {string} folder
-     */
-    navigateUptoFolder: async function(folder) {
-      await this.waitForFileVisible(folder)
-      await this.initAjaxCounters()
-
-      await this.useXpath().moveToElement(this.getFileRowSelectorByFileName(folder), 0, 0)
-
-      // wait for previews to finish loading
-      await this.waitForOutstandingAjaxCalls()
-      await this.waitForAllThumbnailsLoaded()
+      // wait until loading is finished
+      await this.waitForLoadingFinished()
 
       return this
     },
@@ -208,8 +175,7 @@ module.exports = {
      *
      */
     checkAllFiles: function() {
-      return this.initAjaxCounters()
-        .waitForElementVisible('@filesTable')
+      return this.waitForElementVisible('@filesTable')
         .waitForElementVisible('@checkBoxAllFiles')
         .click('@checkBoxAllFiles')
     },
@@ -218,11 +184,12 @@ module.exports = {
      *
      */
     restoreSelected: function() {
-      return this.initAjaxCounters()
-        .waitForElementVisible('@restoreSelectedButton')
+      return this.waitForElementVisible('@restoreSelectedButton')
+        .initAjaxCounters()
         .useXpath()
         .click('@restoreSelectedButton')
         .waitForOutstandingAjaxCalls()
+        .useCss()
     },
     /**
      * @param {string} item the file/folder to click
@@ -273,106 +240,80 @@ module.exports = {
       })
       return selectionStatus
     },
-    /**
-     * Wait for A filerow with given filename to be visible
-     *
-     * @param {string} fileName
-     * @param {string} elementType
-     * @param timeout
-     */
-    waitForFileVisible: async function(fileName, elementType = 'file', timeout = null) {
-      const linkSelector = this.getFileLinkSelectorByFileName(fileName, elementType)
-
-      await this.waitForElementPresent('@filesTableContainer')
-      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
-      await this.filesListScrollToTop()
-      // Find the item in files list if it's not in the view
-      await this.findItemInFilesList(fileName)
-
-      // getAttribute does not have a timeout parameter, so we need to set the global timeout
-      const oldWaitForConditionTimeout = client.globals.waitForConditionTimeout
-      if (timeout !== null) {
-        client.globals.waitForConditionTimeout = parseInt(timeout, 10)
-      }
-      await this.useXpath()
-        .getAttribute(linkSelector, 'filename', function(result) {
-          client.globals.waitForConditionTimeout = oldWaitForConditionTimeout
-          if (result.value.error) {
-            assert.fail(result.value.error)
-          }
-          // using basename because some file lists display the full path while the
-          // file name attribute only contains the basename
-          assert.strictEqual(
-            result.value,
-            path.basename(fileName),
-            'displayed file name not as expected'
-          )
-        })
-        .useCss()
-      // Wait for preview to be loaded
-      return this.waitForThumbnailLoaded(fileName, elementType)
+    waitForTableLoaded: async function() {
+      await this.waitForElementVisible('@filesTable')
+      return this
     },
-    /**
-     * Wait for all visible thumbnails to finish loading
-     */
-    waitForAllThumbnailsLoaded: function() {
-      return this.waitForElementNotPresent('@allFilePreviewsLoading')
-    },
-    waitForThumbnailLoaded: async function(resourceName, elementType) {
-      if (elementType !== 'file') {
-        // no thumbnails for folders
-        return this
-      }
-      const fileRowPreviewLoadedSelector =
-        this.getFileRowSelectorByFileName(resourceName, elementType) +
-        this.elements.filePreviewLoadedInFileRow.selector
-      await this.useXpath()
-        .waitForElementVisible(fileRowPreviewLoadedSelector)
-        .useCss()
+    waitForLoadingFinished: async function() {
+      await this.waitForElementVisible('@anyAfterLoading')
       return this
     },
     getResourceThumbnail: async function(resourceName, elementType) {
+      let iconUrl = null
+      await this.waitForFileVisible(resourceName)
+      // try reading the src tag
       const fileRowPreviewSelector =
         this.getFileRowSelectorByFileName(resourceName, elementType) +
         this.elements.filePreviewInFileRow.selector
-      const fileRowIconSelector =
-        this.getFileRowSelectorByFileName(resourceName, elementType) +
-        this.elements.fileIconInFileRow.selector
-      let iconUrl = null
-      // this implicitly waits for preview to be loaded
-      await this.waitForFileVisible(resourceName)
-      // try reading the src tag
-      await this.useXpath()
-        .getAttribute(
-          {
-            selector: fileRowPreviewSelector
-          },
-          'src',
-          result => {
-            // somehow when element was not found the result.value is an empty array...
-            if (result.status !== -1 && typeof result.value === 'string') {
-              iconUrl = result.value
-            }
-          }
-        )
-        .useCss()
+      await this.api.getAttribute('xpath', fileRowPreviewSelector, 'src', result => {
+        // somehow when element was not found the result.value is an empty array...
+        if (result.status !== -1 && typeof result.value === 'string') {
+          iconUrl = result.value
+        }
+      })
       if (!iconUrl) {
+        const fileRowIconSelector =
+          this.getFileRowSelectorByFileName(resourceName, elementType) +
+          this.elements.fileIconInFileRow.selector
         // check that at least the file type icon svg is displayed
-        await this.useXpath()
-          .waitForElementVisible(fileRowIconSelector)
-          .useCss()
+        await this.api.waitForElementVisible('xpath', fileRowIconSelector)
       }
       return iconUrl
     },
     /**
-     * Wait for A filerow with given path to be visible
+     * Wait for a filerow with given filename to be visible
+     *
+     * @param {string} fileName
+     * @param {string} elementType (file|folder)
+     */
+    waitForFileVisible: async function(fileName, elementType = 'any') {
+      const rowSelector = this.getFileRowSelectorByFileName(fileName, elementType)
+
+      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
+      let rowElementId = null
+      await this.waitForElementPresent(
+        { selector: rowSelector, locateStrategy: 'xpath' },
+        result => {
+          rowElementId = result.WebdriverElementId
+        }
+      )
+      let offset = 0
+      await this.api.elementIdLocation(rowElementId, result => {
+        offset = result.value.y
+      })
+
+      let firstRowElementId = null
+      await this.waitForElementPresent('@fileRow', result => {
+        firstRowElementId = result.WebdriverElementId
+      })
+      await this.api.elementIdLocation(firstRowElementId, result => {
+        offset -= result.value.y
+      })
+
+      this.api.execute('scrollTo(0,' + offset + ')')
+
+      return this
+    },
+    /**
+     * Wait for a filerow with given path to be visible
      * This only works in the favorites page as it uses the whole path of a file rather than just the name
      * This does not works in cases where the path starts with a space (eg. "  ParentFolder/file.txt")
      *
      * @param {string} path
      * @param {string} elementType
      */
-    waitForFileWithPathVisible: function(path, elementType = 'file') {
+    waitForFileWithPathVisible: async function(path, elementType = 'any') {
+      await client.page.FilesPageElement.appSideBar().closeSidebar(500)
       const linkSelector = this.getFileLinkSelectorByFileName(path, elementType)
       const rowSelector = this.getFileRowSelectorByFileName(path, elementType)
       return this.useXpath()
@@ -385,29 +326,18 @@ module.exports = {
     /**
      *
      * @param {string} fileName
-     * @param {string} elementType
+     * @param {string} elementType Resource type (file/folder). Use `any` if not relevant.
      *
      * @returns {string}
      */
-    getFileRowSelectorByFileName: function(fileName, elementType = 'file') {
-      if (elementType === 'file') {
-        const parts = path.parse(fileName)
-        // If our file has a extension that starts with space (for eg. "newfile. txt")
-        // Then the whole name comes in the filename part (i.e. The file has no extension in such case)
-        // Since the extension has spaces immediately after '.' we check for spaces after removing the '.' using slice().
-        if (parts.ext && !parts.ext.slice(1).startsWith(' ')) {
-          // keep path of nested folders intact, just remove the extension at the end
-          const filePathWithoutExt = parts.dir ? join(parts.dir, parts.name) : parts.name
-          const element = this.elements.fileRowByNameAndExtension
-          return util.format(
-            element.selector,
-            xpathHelper.buildXpathLiteral(filePathWithoutExt),
-            parts.ext
-          )
-        }
+    getFileRowSelectorByFileName: function(fileName, elementType = 'any') {
+      const name = xpathHelper.buildXpathLiteral(fileName)
+      const path = xpathHelper.buildXpathLiteral('/' + fileName)
+      if (elementType === 'any') {
+        return util.format(this.elements.fileRowByResourcePathAnyType.selector, name, path)
       }
-      const element = this.elements.fileRowByName
-      return util.format(element.selector, xpathHelper.buildXpathLiteral(fileName))
+      const type = xpathHelper.buildXpathLiteral(elementType)
+      return util.format(this.elements.fileRowByResourcePath.selector, name, path, type)
     },
     /**
      *
@@ -415,51 +345,46 @@ module.exports = {
      * @param {string} elementType
      * @returns {string}
      */
-    getFileLinkSelectorByFileName: function(fileName, elementType) {
-      return (
-        this.getFileRowSelectorByFileName(fileName, elementType) +
-        this.elements.fileLinkInFileRow.selector
-      )
+    getFileLinkSelectorByFileName: function(fileName, elementType = 'any') {
+      const name = xpathHelper.buildXpathLiteral(fileName)
+      const path = xpathHelper.buildXpathLiteral('/' + fileName)
+      if (elementType === 'any') {
+        return util.format(this.elements.fileLinkInFileRowAnyType.selector, name, path)
+      }
+      const type = xpathHelper.buildXpathLiteral(elementType)
+      return util.format(this.elements.fileLinkInFileRow.selector, name, path, type)
     },
     /**
      * checks whether the element is listed or not on the filesList
      *
-     * @param {string} element Name of the file/folder/resource
+     * @param {string} name Name of the file/folder/resource
      * @param {string} elementType
-     * @param timeout
      * @returns {boolean}
      */
-    isElementListed: async function(element, elementType = 'file', timeout = null) {
-      let isListed = false
-      await this.waitForFileVisible(element, elementType, timeout)
-        .then(function() {
-          isListed = true
-        })
-        .catch(function() {
-          isListed = false
-        })
-      return isListed
+    isElementListed: async function(name, elementType = 'any') {
+      const selector = this.getFileRowSelectorByFileName(name, elementType)
+      let isVisible = false
+
+      await this.api.element('xpath', selector, function(result) {
+        isVisible = !!(result.value && result.value.ELEMENT)
+      })
+
+      return isVisible
     },
     /**
      * @returns {Array} array of files/folders element
      */
     allFileRows: async function() {
       let returnResult = null
-      await this.waitForElementNotPresent('@filesListProgressBar')
-      await this.api.elements('css selector', this.elements.fileRows, function(result) {
+      await this.waitForElementPresent('@anyAfterLoading')
+      await this.api.elements('css selector', this.elements.fileRow, function(result) {
         returnResult = result
       })
       return returnResult
     },
-    /**
-     * Returns whether the empty folder message is visible
-     *
-     * @return {Boolean} true if the message is visible, false otherwise
-     */
-    isNoContentMessageVisible: async function() {
+    waitForNoContentMessageVisible: async function() {
       let visible = false
       let elementId = null
-      await this.waitForElementNotPresent('@filesListProgressBar')
       await this.waitForElementVisible('@filesListNoContentMessage')
       await this.api.element('@filesListNoContentMessage', result => {
         if (result.status !== -1) {
@@ -474,15 +399,10 @@ module.exports = {
           }
         })
       }
-      return visible
+      assert.ok(visible, 'Message about empty file list must be visible')
     },
-    isNotFoundMessageVisible: async function() {
-      await this.waitForElementNotPresent('@filesListProgressBar')
-      let isVisible = false
-      await this.api.element('@filesListNotFoundMessage', result => {
-        isVisible = Object.keys(result.value).length > 0
-      })
-      return isVisible
+    waitForNotFoundMessageVisible: async function() {
+      await this.waitForElementVisible('@filesListNotFoundMessage')
     },
     countFilesAndFolders: async function() {
       let filesCount = 0
@@ -497,93 +417,6 @@ module.exports = {
       })
 
       return filesCount + foldersCount
-    },
-
-    /**
-     * Find an item in the files list. Scrolls down in case the item is not visible in viewport
-     */
-    findItemInFilesList: async function(itemName) {
-      // Escape double quotes inside of selector
-      if (itemName.indexOf('"') > -1) {
-        itemName = this.replaceChar(itemName, '"', '\\"')
-      }
-
-      await this.initAjaxCounters()
-      await this.waitForElementVisible('@virtualScrollWrapper')
-      await this.api.executeAsync(
-        function({ itemName, scrollWrapperSelector, listHeaderSelector, listItemSelector }, done) {
-          const virtualScrollWrapper = document.querySelector(scrollWrapperSelector)
-          const tableHeaderPosition = document
-            .querySelector(listHeaderSelector)
-            .getBoundingClientRect().bottom
-          let scrollDistance = virtualScrollWrapper.scrollTop
-
-          function scrollUntilElementVisible() {
-            const item = document.querySelector(`[filename="${itemName}"]`)
-
-            if (item) {
-              const position = item.getBoundingClientRect()
-              // Add position from top to list container height to properly decide if the item is visible
-              const visiblePosition = virtualScrollWrapper.clientHeight + tableHeaderPosition
-
-              // Check if the item is inside the view after it's rendered
-              if (position.top > -1 && position.top <= visiblePosition) {
-                done()
-                return
-              }
-            }
-
-            if (virtualScrollWrapper.scrollHeight <= scrollDistance) {
-              done()
-              return
-            }
-
-            const listItemHeight = document.querySelector(listItemSelector).clientHeight
-
-            scrollDistance += listItemHeight * 5
-            virtualScrollWrapper.scrollTop = scrollDistance
-            setTimeout(function() {
-              scrollUntilElementVisible()
-            }, 500)
-          }
-
-          scrollUntilElementVisible()
-        },
-        [
-          {
-            itemName: itemName,
-            scrollWrapperSelector: this.elements.virtualScrollWrapper.selector,
-            listHeaderSelector: this.elements.filesTableHeader.selector,
-            listItemSelector: this.elements.filesListItem.selector
-          }
-        ]
-      )
-
-      // wait for previews to be loaded after scrolling to resources that were
-      // not rendered before
-      await this.waitForOutstandingAjaxCalls()
-
-      return this
-    },
-
-    /**
-     * Scroll the files list to the beginning
-     */
-    filesListScrollToTop: async function() {
-      await this.waitForElementVisible('@virtualScrollWrapper')
-      await this.api.executeAsync(
-        function(scrollerContainerSelector, done) {
-          const filesListScroll = document.querySelector(scrollerContainerSelector)
-          if (filesListScroll.scrollTop > 0) {
-            filesListScroll.scrollTop = 0
-          }
-
-          done()
-        },
-        [this.elements.virtualScrollWrapper.selector]
-      )
-
-      return this
     },
 
     getShareIndicatorsForResource: async function(fileName) {
@@ -654,27 +487,6 @@ module.exports = {
       return this.useCss()
     },
 
-    getCollaboratorsForResource: async function(fileName) {
-      const resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
-      const collaboratorsXpath = resourceRowXpath + this.elements.collaboratorsInFileRow.selector
-      const collaborators = []
-
-      await this.waitForFileVisible(fileName)
-
-      await this.api.elements(
-        this.elements.collaboratorsInFileRow.locateStrategy,
-        collaboratorsXpath,
-        result => {
-          result.value.forEach(element => {
-            return this.api.elementIdText(element.ELEMENT, attr => {
-              collaborators.push(attr.value)
-            })
-          })
-        }
-      )
-      return collaborators
-    },
-
     /**
      * Returns original string with replaced target character
      * @param   {string} string     String in which will be the target character replaced
@@ -726,33 +538,31 @@ module.exports = {
       return this
     },
 
-    cancelResourceMoveOrCopyProgress: async function(target) {
-      await this.waitForFileVisible(target)
-
+    cancelResourceMoveOrCopyProgress: async function() {
       // cancel copy or move
       await this.useXpath()
-        .waitForElementVisible(client.page.filesPage().elements.cancelMoveCopyBtn.selector)
-        .click(this.page.filesPage().elements.cancelMoveCopyBtn.selector)
+        .waitForElementVisible(client.page.personalPage().elements.cancelMoveCopyBtn.selector)
+        .click(this.page.personalPage().elements.cancelMoveCopyBtn.selector)
         .useCss()
+      await this.waitForLoadingFinished()
 
       return this
     },
 
-    navigationNotAllowed: async function(target) {
-      await this.waitForFileVisible(target)
-      await this.initAjaxCounters()
+    navigationNotAllowed: async function(target, elementType = 'folder') {
+      await this.waitForFileVisible(target, elementType)
 
-      const element = util.format(this.elements.fileRowDisabled.selector, target)
+      const name = xpathHelper.buildXpathLiteral(target)
+      const path = xpathHelper.buildXpathLiteral('/' + target)
+      const type = xpathHelper.buildXpathLiteral(elementType)
+      const element = util.format(this.elements.fileRowDisabled.selector, name, path, type)
       const disabledRow = {
         locateStrategy: this.elements.fileRowDisabled.locateStrategy,
         selector: element
       }
       await this.useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(target), 0, 0)
+        .moveToElement(this.getFileRowSelectorByFileName(target, elementType), 0, 0)
         .waitForElementVisible(disabledRow)
-
-      await this.waitForOutstandingAjaxCalls()
-      await this.waitForAllThumbnailsLoaded()
 
       return this
     },
@@ -780,9 +590,12 @@ module.exports = {
 
       return this
     },
-    clickOnFileName: async function(fileName) {
-      await this.findItemInFilesList(fileName)
-      const file = await this.getFileLinkSelectorByFileName(fileName)
+    clickOnFileName: function(fileName) {
+      console.log(fileName)
+      const file = this.getFileLinkSelectorByFileName(fileName, 'file')
+
+      console.log(file)
+
       return this.useXpath()
         .waitForElementVisible(file)
         .click(file)
@@ -790,79 +603,89 @@ module.exports = {
     }
   },
   elements: {
+    filesContainer: {
+      selector: '.files-list-wrapper'
+    },
+    filesAppBar: {
+      selector: '#files-app-bar'
+    },
     filesTable: {
-      selector: '#files-list, #shared-with-list'
-    },
-    filesTableContainer: {
-      selector: '#files-list-container'
-    },
-    fileRows: {
-      selector: '.file-row'
-    },
-    allFiles: {
-      selector: 'div.oc-file.file-row-name'
+      selector: '.files-table'
     },
     loadingIndicator: {
       selector: '//*[contains(@class, "oc-loader")]',
       locateStrategy: 'xpath'
     },
+    filesListNoContentMessage: {
+      selector: '.files-empty'
+    },
+    filesListNotFoundMessage: {
+      selector: '.files-not-found'
+    },
     filesListProgressBar: {
       selector: '#files-list-progress'
     },
-    filesListNoContentMessage: {
-      selector: '#files-list-container .files-list-no-content-message'
-    },
-    filesListNotFoundMessage: {
-      selector: '#files-list-container #files-list-not-found-message'
+    anyAfterLoading: {
+      selector:
+        '//*[self::table[contains(@class, "files-table")] or self::div[contains(@class, "files-empty")] or self::div[contains(@class, "files-not-found")]]',
+      locateStrategy: 'xpath'
     },
     shareButtonInFileRow: {
       selector: '//button[@aria-label="People"]',
       locateStrategy: 'xpath'
     },
-    fileRowByName: {
-      selector:
-        '//span[contains(@class, "oc-file-name") and text()=%s and not(../span[contains(@class, "oc-file-extension")])]/ancestor::div[@data-is-visible="true"]',
+    fileRow: {
+      selector: '.files-table .oc-tbody-tr'
+    },
+    fileRowByResourcePathAnyType: {
+      selector: `//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
       locateStrategy: 'xpath'
     },
-    fileRowByNameAndExtension: {
+    fileRowByResourcePath: {
+      selector: `//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-tbody-tr")]`,
+      locateStrategy: 'xpath'
+    },
+    fileRowDisabled: {
       selector:
-        '//div[contains(@class, "file-row-name")][span/text()=%s and span/text()="%s"]/ancestor::div[@data-is-visible="true"]',
+        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/ancestor::tr[contains(@class, "oc-table-disabled")]',
+      locateStrategy: 'xpath'
+    },
+    fileLinkInFileRowAnyType: {
+      selector:
+        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s)]/parent::*',
       locateStrategy: 'xpath'
     },
     fileLinkInFileRow: {
-      selector: '//div[contains(@class, "file-row-name")]',
-      locateStrategy: 'xpath'
-    },
-    fileIconInFileRow: {
-      selector: '//div[contains(@class, "oc-file")]//*[local-name() = "svg"]',
-      locateStrategy: 'xpath'
-    },
-    filePreviewInFileRow: {
-      selector: '//div[contains(@class, "oc-file")]//img',
-      locateStrategy: 'xpath'
-    },
-    allFilePreviewsLoading: {
-      selector: '//div[contains(@class, "oc-file") and @data-preview-loaded="false"]',
-      locateStrategy: 'xpath'
-    },
-    filePreviewLoadedInFileRow: {
       selector:
-        '//div[contains(@class, "oc-file") and (@data-preview-loaded="true" or @data-preview-loaded="disabled")]',
+        '//div[contains(@class, "oc-resource-name") and (@resource-name=%s or @resource-path=%s) and @resource-type=%s]/parent::*',
       locateStrategy: 'xpath'
     },
-    collaboratorsInFileRow: {
-      selector: '//*[contains(@class, "file-row-collaborator-name")]',
+    /**
+     * This element is concatenated as child of @see fileRowByResourcePath
+     */
+    fileIconInFileRow: {
+      selector: '//span[contains(@class, "oc-icon-system")]//*[local-name() = "svg"]',
       locateStrategy: 'xpath'
     },
+    /**
+     * This element is concatenated as child of @see fileRowByResourcePath
+     */
+    filePreviewInFileRow: {
+      selector: '//img[contains(@class, "oc-resource-preview")]',
+      locateStrategy: 'xpath'
+    },
+    /**
+     * This element is concatenated as child of @see fileRowByResourcePath
+     */
     shareIndicatorsInFileRow: {
-      selector: '//*[contains(@class, "file-row-share-indicator")]',
+      selector: '//*[contains(@class, "oc-status-indicators-indicator")]',
       locateStrategy: 'xpath'
     },
     publicLinkSideBar: {
       selector: '#oc-files-file-link'
     },
     checkBoxAllFiles: {
-      selector: '#filelist-check-all'
+      selector: '#oc-table-files-select-all'
     },
     checkboxInFileRow: {
       selector: '//input[@type="checkbox"]',
@@ -885,37 +708,22 @@ module.exports = {
     filesCount: {
       selector: '#files-list-count-files'
     },
-    virtualScrollWrapper: {
-      selector: '.vue-recycle-scroller'
-    },
     filesTableHeader: {
-      selector: '#files-table-header'
+      selector: '.files-table .oc-thead'
     },
     filesTableHeaderColumn: {
       selector: '//*[contains(@class, "oc-sortable-column-header")]//*[text()=%s]/ancestor::button',
       locateStrategy: 'xpath'
     },
-    // TODO: Merge with selectors in filesPage
+    // TODO: Merge with selectors in personalPage
     dialog: {
       selector: '.oc-modal'
     },
     dialogConfirmBtn: {
       selector: '.oc-modal-body-actions-confirm'
     },
-    fileRowDisabled: {
-      selector:
-        '//span[contains(@class, "oc-file-name") and text()="%s" and not(../span[contains(@class, "oc-file-extension")])]/ancestor::div[@class="files-list-row-disabled" and @data-is-visible="true"]',
-      locateStrategy: 'xpath'
-    },
-    filesListItem: {
-      selector: '.vue-recycle-scroller__item-view'
-    },
-    previewImageParentDiv: {
-      selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-file")]',
-      locateStrategy: 'xpath'
-    },
     previewImage: {
-      selector: '//div[@filename="%s"]/ancestor::div[contains(@class, "oc-file")]/img',
+      selector: '//img[contains(@class, "oc-resource-preview")]',
       locateStrategy: 'xpath'
     }
   }

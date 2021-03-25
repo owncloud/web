@@ -13,7 +13,9 @@ module.exports = {
       locator.selector = loadingIndicatorSelector.selector
       locator.locateStrategy = loadingIndicatorSelector.locateStrategy || 'css selector' // assume the locateStrategy to be 'css selector' if not given
     } else {
-      throw new Error('Invalid type for loading indicator selector')
+      throw new Error(
+        'Invalid type for loading indicator selector with selector=' + loadingIndicatorSelector
+      )
     }
     return client
       .waitForElementPresent({

@@ -6,7 +6,7 @@
         <div class="uk-width-expand">
           <div class="uk-flex">
             <div class="oc-text-bold uk-width-expand uk-text-truncate">{{ item.name }}</div>
-            <div class="uk-width-auto uk-text-nowrap">{{ item.size | fileSize }}</div>
+            <div class="uk-width-auto uk-text-nowrap">{{ getResourceSize(item.size) }}</div>
           </div>
           <div class="oc-m-rm uk-position-relative uk-width-expand">
             <oc-progress
@@ -26,6 +26,7 @@
 </template>
 <script>
 import Mixins from '../mixins'
+import MixinResources from '../mixins/resources'
 
 export default {
   filters: {
@@ -33,7 +34,7 @@ export default {
       return parseInt(value)
     }
   },
-  mixins: [Mixins],
+  mixins: [Mixins, MixinResources],
   props: {
     items: {
       type: Array,

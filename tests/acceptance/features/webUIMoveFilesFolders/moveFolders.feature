@@ -55,7 +55,7 @@ Feature: move folders
     And the user renames folder "simple-empty-folder" to <target_name> using the webUI
     And the user moves folder <folder_name> into folder <target_name> using the webUI
     Then breadcrumb for folder <target_name> should be displayed on the webUI
-    And file <folder_name> should be listed on the webUI
+    And folder <folder_name> should be listed on the webUI
     Examples:
       | folder_name | target_name                    |
       | "'single'"  | "target-folder-with-'single'"  |
@@ -69,7 +69,7 @@ Feature: move folders
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to move into folder "simple-folder (2)" using the webUI
+    Then it should not be possible to paste files into the current folder using the webUI
 
 
   Scenario: move a folder into the same folder

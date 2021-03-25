@@ -27,7 +27,7 @@ export default {
       this.resetFileSelection()
       this.addFileSelection(resource)
       this.$client.fileTrash
-        .restore(resource.id, resource.originalLocation)
+        .restore(resource.id, resource.path)
         .then(() => {
           this.removeFilesFromTrashbin([resource])
           const translated = this.$gettext('%{file} was restored successfully')

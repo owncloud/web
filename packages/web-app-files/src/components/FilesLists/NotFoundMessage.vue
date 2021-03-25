@@ -1,5 +1,8 @@
 <template>
-  <div id="files-list-not-found-message" class="uk-text-center">
+  <div
+    id="files-list-not-found-message"
+    class="uk-text-center uk-flex-middle uk-flex uk-flex-center uk-flex-column"
+  >
     <oc-icon :url="iconPath" type="div" size="xxlarge" variation="system" />
     <div class="uk-text-muted uk-text-large">
       <translate>Resource not found</translate>
@@ -42,12 +45,12 @@ export default {
   computed: {
     ...mapGetters(['homeFolder', 'configuration']),
     showHomeButton() {
-      return this.isListRoute
+      return this.isPersonalRoute
     },
 
     homeRoute() {
       return {
-        name: 'files-list',
+        name: 'files-personal',
         params: {
           item: this.homeFolder
         }
@@ -61,7 +64,7 @@ export default {
     publicLinkRoute() {
       const item = this.$route.params.item.replace(/^\/+/, '')
       return {
-        name: 'public-files',
+        name: 'files-public-list',
         params: {
           item: item.split('/')[0]
         }

@@ -12,7 +12,7 @@ module.exports = {
      * @param {string} elementType
      * @returns {string} file action button selector
      */
-    getFileActionBtnSelector: function(fileName, elementType = 'file') {
+    getFileActionBtnSelector: function(fileName, elementType = 'any') {
       return (
         filesList.getFileRowSelectorByFileName(fileName, elementType) +
         this.elements.fileActionsButtonInFileRow.selector
@@ -21,12 +21,12 @@ module.exports = {
     /**
      * opens file-actions menu for given resource
      *
-     * @param {string} resource name
-     * @param {string} resource type (file|folder)
+     * @param {string} resource The resource name
+     * @param {string} elementType The resource type (file|folder)
      *
      * @returns {*}
      */
-    openFileActionsMenu: function(resource, elementType = 'file') {
+    openFileActionsMenu: function(resource, elementType = 'any') {
       const fileActionsBtnSelector = this.getFileActionBtnSelector(resource, elementType)
       this.useXpath()
         .waitForElementVisible(fileActionsBtnSelector)
@@ -46,7 +46,7 @@ module.exports = {
   },
   elements: {
     fileActionsButtonInFileRow: {
-      selector: '//button[contains(@class, "files-list-row-show-actions")]',
+      selector: '//button[contains(@class, "oc-table-files-btn-show-details")]',
       locateStrategy: 'xpath'
     },
     quickAction: {

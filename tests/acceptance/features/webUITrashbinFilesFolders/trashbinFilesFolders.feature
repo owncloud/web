@@ -11,7 +11,7 @@ Feature: files and folders exist in the trashbin after being deleted
     And user "Alice" has created folder "Folder,With,Comma"
     And the user has browsed to the files page
 
-  @smokeTest @ocis-reva-issue-111 @skipOnOCIS @issue-product-186
+  @smokeTest @ocis-reva-issue-111 @skipOnOCIS @issue-product-186 @skip
   Scenario: Delete files & folders one by one and check that they are all in the trashbin
     When the user deletes the following elements using the webUI
       | name                                  |
@@ -56,11 +56,11 @@ Feature: files and folders exist in the trashbin after being deleted
   Scenario: Delete multiple files at once and check that they are all in the trashbin
     When the user batch deletes these files using the webUI
       | name              |
+      | Folder,With,Comma |
+      | simple-folder     |
       | data.zip          |
       | lorem.txt         |
-      | simple-folder     |
       | sample,1.txt      |
-      | Folder,With,Comma |
     And the user browses to the trashbin page
     Then as "Alice" file "data.zip" should exist in the trashbin
     And as "Alice" file "lorem.txt" should exist in the trashbin

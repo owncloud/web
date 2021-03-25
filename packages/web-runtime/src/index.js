@@ -98,24 +98,21 @@ const loadApp = async path => {
 
   if (app.routes) {
     // rewrite relative app routes by prefixing their corresponding appId
-    app.routes.forEach(r => (r.path = `/${encodeURI(app.appInfo.id)}${r.path}`))
+    app.routes = app.routes.map(route => {
+      route.name = app.appInfo.id === route.name ? route.name : `${app.appInfo.id}-${route.name}`
+      route.path = `/${encodeURI(app.appInfo.id)}${route.path}`
 
-    // adjust routes in nav items
-    if (app.navItems) {
-      app.navItems.forEach(nav => {
-        const r = app.routes.find(function(element) {
-          return element.name === nav.route.name
+      if (route.children) {
+        route.children = route.children.map(child => {
+          child.name = `${app.appInfo.id}-${child.name}`
+
+          return child
         })
-        if (r) {
-          r.meta = r.meta || {}
-          r.meta.pageIcon = nav.iconMaterial
-          r.meta.pageTitle = nav.name
-          nav.route.path = nav.route.path || r.path
-        } else {
-          console.error(`Unknown route name ${nav.route.name}`)
-        }
-      })
-    }
+      }
+
+      return route
+    })
+
     router.addRoutes(app.routes)
   }
 
@@ -170,9 +167,13 @@ const finalizeInit = async () => {
   Vue.prototype.$client.init({ baseUrl: config.server || window.location.origin })
 
   // inject custom theme config into vuex
-  await fetchTheme()
+  await fetchTheme(config.theme)
 
   loadTranslations()
+
+  // TODO: Find a different way to access store from withit JS files
+  Vue.$store = store
+
   // eslint-disable-next-line no-new
   new Vue({
     el: '#owncloud',
@@ -182,15 +183,19 @@ const finalizeInit = async () => {
   })
 }
 
-const fetchTheme = async () => {
-  const response = await fetch(`themes/${config.theme}.json`)
+const fetchTheme = async (themeName = 'owncloud') => {
+  const response = await fetch(`themes/${themeName}.json`)
   const theme = await response.json()
 
-  await store.dispatch('loadTheme', { theme, name: config.theme })
+  await store.dispatch('loadTheme', { theme, name: themeName })
 }
 
-const missingOrInvalidConfig = () => {
+const missingOrInvalidConfig = async () => {
   loadTranslations()
+
+  // inject custom theme config into vuex
+  await fetchTheme()
+
   // eslint-disable-next-line no-new
   new Vue({
     el: '#owncloud',
