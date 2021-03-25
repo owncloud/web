@@ -57,7 +57,7 @@ export default {
         throw new Error(error)
       })
   },
-  deleteFiles(context, { files, client, publicPage }) {
+  deleteFiles(context, { files, client, publicPage, firstRun = true }) {
     const promises = []
     for (const file of files) {
       let p = null
@@ -75,6 +75,15 @@ export default {
         .catch(error => {
           let translated = $gettext('Error while deleting "%{file}"')
           if (error.statusCode === 423) {
+            if (firstRun) {
+              return context.dispatch('deleteFiles', {
+                files: [file],
+                client,
+                publicPage,
+                firstRun: false
+              })
+            }
+
             translated = $gettext('Error while deleting "%{file}" - the file is locked')
           }
           const title = $gettextInterpolate(translated, { file: file.name }, true)
