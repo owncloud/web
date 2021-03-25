@@ -1,0 +1,5 @@
+Change: New files list
+
+We integrated the new oc-table-files component from our design system. This includes breaking changes in how we load resources in our files app. We refactored our files app codebase into views, so that only subcomponents live in the components directory.
+
+https://github.com/owncloud/web/pull/4627
