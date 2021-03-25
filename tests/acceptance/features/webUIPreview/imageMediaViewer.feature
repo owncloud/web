@@ -106,7 +106,7 @@ Scenario Outline: preview of image files with media viewer is possible
     When the user browses to the files page
     Then the preview image of file "testavatar.jpg" should not be displayed in the file list view on the webUI
 
-  @skip @issue-4856
+  @issue-4856
   Scenario: file list view image preview in public share
     Given user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
     And user "Alice" has created a public link with following settings
