@@ -75,19 +75,19 @@ module.exports = {
   },
   elements: {
     editorTextarea: {
-      selector: '.uk-container textarea'
+      selector: '#markdown-editor-input'
     },
     saveButton: {
-      selector: '#markdown-editor-app-bar .uk-first-column .oc-button'
+      selector: '#markdown-editor-controls-save'
     },
     closeButton: {
-      selector: '#markdown-editor-app-bar .uk-text-right .oc-button'
+      selector: '#markdown-editor-controls-close'
     },
     fileName: {
-      selector: '#markdown-editor-app-bar .uk-text-center span'
+      selector: '#markdown-editor-file-path'
     },
     previewPanel: {
-      selector: '.uk-container > div'
+      selector: '#markdown-editor-preview'
     }
   }
 }
