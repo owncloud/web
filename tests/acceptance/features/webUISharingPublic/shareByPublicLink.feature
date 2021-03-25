@@ -57,7 +57,7 @@ Feature: Share by public link
     Then the resource "simple-folder" should have the token of last link in the people column on the webUI
     But file "data.zip" should not be listed on the webUI
 
-  @issue-4858 @issue-276 @issue-ocis-reva-398
+  @skip @issue-4858 @issue-276 @issue-ocis-reva-398
   Scenario: Thumbnails are loaded for known file types in public link file list
     Given user "Alice" has shared folder "simple-folder" with link with "read,create" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
