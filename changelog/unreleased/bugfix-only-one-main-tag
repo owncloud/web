@@ -1,0 +1,9 @@
+Bugfix: Only one `<main>` tag per HTML document
+
+Only one `<main>` tag is allowed per HTML document. 
+This change removes the ones in `web-container` and `web-runtime` and 
+adds one to each extension (files-list, mediaviewer, markdowneditor, drawio) 
+since they can't be loaded at the same time.
+
+https://github.com/owncloud/web/issues/1652
+https://github.com/owncloud/web/pull/4627
