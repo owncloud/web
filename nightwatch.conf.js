@@ -35,7 +35,6 @@ const WEB_UI_CONFIG = process.env.WEB_UI_CONFIG || path.join(__dirname, 'dist/co
 const SCREENSHOTS = !!process.env.SCREENSHOTS
 
 const VISUAL_TEST = !!process.env.VISUAL_TEST
-const UPDATE_VRT_SCREENSHOTS = !!process.env.UPDATE_VRT_SCREENSHOTS
 
 function generateScreenshotFilePath(nightwatchClient, basePath, imagePath) {
   return path.join(process.cwd(), basePath, imagePath)
@@ -82,7 +81,7 @@ const config = {
           diff_suffix: '',
           threshold: 0.002,
           prompt: false,
-          always_save_diff_screenshot: UPDATE_VRT_SCREENSHOTS
+          always_save_diff_screenshot: true
         }
       },
       selenium_host: SELENIUM_HOST,
