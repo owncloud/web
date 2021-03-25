@@ -1,0 +1,4 @@
+Enhancement: Implement live region updates on route changes
+
+https://github.com/owncloud/web/pull/4812
+https://github.com/owncloud/web/issues/4346
