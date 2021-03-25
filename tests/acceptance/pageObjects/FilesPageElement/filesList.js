@@ -664,7 +664,7 @@ module.exports = {
      * This element is concatenated as child of @see fileRowByResourcePath
      */
     fileIconInFileRow: {
-      selector: '//span[contains(@class, "oc-icon-system")]//*[local-name() = "svg"]',
+      selector: '//span[contains(@class, "oc-icon-passive")]//*[local-name() = "svg"]',
       locateStrategy: 'xpath'
     },
     /**
