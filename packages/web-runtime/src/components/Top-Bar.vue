@@ -3,7 +3,7 @@
     <oc-grid gutter="medium" flex>
       <div class="uk-hidden@l">
         <oc-button
-          variation="raw"
+          appearance="raw"
           class="oc-app-navigation-toggle"
           :aria-label="$gettext('Open navigation menu')"
           @click="toggleAppNavigationVisibility"

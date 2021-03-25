@@ -100,7 +100,7 @@
           </oc-button>
         </div>
         <div>
-          <oc-button v-if="saving" variation="primary" disabled>
+          <oc-button v-if="saving" variation="primary" appearance="filled" disabled>
             <template v-if="$_isNew">
               <oc-spinner :aria-label="$gettext('Creating Public Link')" size="small" />
               <span v-translate :aria-hidden="true">Creating</span>
@@ -116,6 +116,7 @@
               id="oc-files-file-link-create"
               :disabled="!$_isValid"
               variation="primary"
+              appearance="filled"
               @click="$_addLink"
             >
               <translate>Create</translate>
@@ -125,6 +126,7 @@
               id="oc-files-file-link-save"
               :disabled="!$_isValid || !$_hasChanges"
               variation="primary"
+              appearance="filled"
               @click="$_updateLink"
             >
               <translate>Save</translate>

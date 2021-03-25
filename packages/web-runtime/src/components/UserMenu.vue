@@ -4,7 +4,7 @@
       id="_userMenuButton"
       ref="menuButton"
       class="oc-topbar-personal uk-height-1-1 oc-pr-xs"
-      variation="raw"
+      appearance="raw"
       :aria-label="$gettext('User Menu')"
     >
       <oc-grid flex>
@@ -35,7 +35,7 @@
             id="oc-topbar-account-manage"
             type="router-link"
             :to="{ path: '/account' }"
-            variation="raw"
+            appearance="raw"
             gap-size="xsmall"
             justify-content="left"
           >
@@ -47,33 +47,31 @@
           <oc-button
             v-if="n.url"
             type="a"
-            variation="raw"
+            appearance="raw"
             gap-size="xsmall"
             justify-content="left"
             :target="n.target"
             :href="n.url"
           >
-            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" />
-            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" />
+            <oc-icon :name="n.iconMaterial" />
             <span>{{ n.title }}</span>
           </oc-button>
           <oc-button
             v-else
             type="router-link"
-            variation="raw"
+            appearance="raw"
             gap-size="xsmall"
             justify-content="left"
             :to="{ path: n.path }"
           >
-            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" />
-            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" />
+            <oc-icon :name="n.iconMaterial" />
             <span v-text="n.title" />
           </oc-button>
         </li>
         <li>
           <oc-button
             id="oc-topbar-account-logout"
-            variation="raw"
+            appearance="raw"
             gap-size="xsmall"
             justify-content="left"
             @click="logout"

@@ -2,7 +2,7 @@ const emptyReturn = () => {}
 
 const state = {
   displayed: false,
-  variation: 'info',
+  variation: 'passive',
   icon: '',
   title: '',
   message: '',

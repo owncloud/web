@@ -12,7 +12,7 @@
         <oc-button
           :aria-label="copyLabel"
           :uk-tooltip="copyLabel"
-          variation="raw"
+          appearance="raw"
           class="oc-files-file-link-copy-url"
         >
           <oc-icon

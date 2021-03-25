@@ -44,7 +44,7 @@ export default {
       }
 
       const modal = {
-        variation: 'info',
+        variation: 'passive',
         title: isFolder
           ? this.$gettext('Rename folder ') + resource.name
           : this.$gettext('Rename file ' + resource.name),

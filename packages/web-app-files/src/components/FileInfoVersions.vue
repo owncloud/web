@@ -16,7 +16,7 @@
           <oc-td width="shrink">
             <div class="uk-button-group">
               <oc-button
-                variation="raw"
+                appearance="raw"
                 :aria-label="$gettext('Restore older version')"
                 :uk-tooltip="$gettext('Restore older version')"
                 @click="revertVersion(item)"
@@ -28,7 +28,7 @@
           <oc-td width="shrink">
             <div class="uk-button-group">
               <oc-button
-                variation="raw"
+                appearance="raw"
                 :aria-label="$gettext('Download older version')"
                 :uk-tooltip="$gettext('Download older version')"
                 @click="downloadVersion(item)"

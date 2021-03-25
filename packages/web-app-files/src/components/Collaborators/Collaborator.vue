@@ -142,7 +142,7 @@
             v-if="$_editButtonVisible"
             :aria-label="$gettext('Edit share')"
             :uk-tooltip="$gettext('Edit share')"
-            variation="raw"
+            appearance="raw"
             class="files-collaborators-collaborator-edit"
             @click="$emit('onEdit', collaborator)"
           >
@@ -153,7 +153,7 @@
               v-if="$_deleteButtonVisible"
               :aria-label="$gettext('Delete share')"
               :uk-tooltip="$gettext('Delete share')"
-              variation="raw"
+              appearance="raw"
               class="files-collaborators-collaborator-delete"
               @click="$_removeShare"
             >

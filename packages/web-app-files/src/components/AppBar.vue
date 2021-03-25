@@ -29,6 +29,7 @@
               id="new-file-menu-btn"
               key="new-file-menu-btn-enabled"
               variation="primary"
+              appearance="filled"
               :uk-tooltip="_cannotCreateDialogText"
               :disabled="isNewBtnDisabled"
             >
@@ -240,7 +241,7 @@ export default {
         '%{ amount } selected items',
         this.selectedFiles.length
       )
-      return this.$gettextInterpolate(translated, { amount: this.selectedResourcesAmount })
+      return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
     }
   },
   methods: {
@@ -270,7 +271,7 @@ export default {
       }
 
       const modal = {
-        variation: 'info',
+        variation: 'passive',
         title: isFolder ? this.$gettext('Create a new folder') : this.$gettext('Create a new file'),
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Create'),

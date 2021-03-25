@@ -3,7 +3,7 @@
     <li v-for="action in actions" :key="action.ariaLabel(highlightedFile)" class="oc-py-xs">
       <oc-button
         :aria-Label="action.ariaLabel(highlightedFile)"
-        variation="raw"
+        appearance="raw"
         color="text"
         class="oc-text-bold"
         @click.stop="action.handler(highlightedFile, action.handlerData)"

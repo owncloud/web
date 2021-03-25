@@ -34,7 +34,7 @@
             <oc-td width="shrink">
               <oc-button
                 :aria-label="$gettext('Delete share')"
-                variation="raw"
+                appearance="raw"
                 size="small"
                 class="files-collaborators-collaborator-autocomplete-item-remove"
                 @click="$_ocCollaborators_removeFromSelection(collaborator)"
@@ -73,6 +73,7 @@
           key="new-collaborator-save-button"
           :disabled="!$_isValid"
           variation="primary"
+          appearance="filled"
           @click="$_ocCollaborators_newCollaboratorsAdd(selectedCollaborators)"
         >
           <translate>Share</translate>

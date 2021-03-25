@@ -5,7 +5,7 @@
       <oc-button
         :aria-label="editButtonLabel"
         :uk-tooltip="editButtonLabel"
-        variation="raw"
+        appearance="raw"
         class="oc-files-file-link-edit oc-mr-xs"
         @click="editLink"
       >
@@ -14,7 +14,7 @@
       <oc-button
         :aria-label="deleteButtonLabel"
         :uk-tooltip="deleteButtonLabel"
-        variation="raw"
+        appearance="raw"
         class="oc-files-file-link-delete"
         @click="$_removeLink"
       >

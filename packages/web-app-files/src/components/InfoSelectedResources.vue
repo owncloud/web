@@ -19,7 +19,7 @@
       >%{ amount } selected item
     </translate>
     <span class="oc-ml-s oc-mr-s">|</span>
-    <oc-button variation="raw" @click="RESET_SELECTION">
+    <oc-button appearance="raw" @click="RESET_SELECTION">
       <translate>Clear selection</translate>
     </oc-button>
   </div>

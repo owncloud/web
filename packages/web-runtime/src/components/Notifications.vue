@@ -2,7 +2,7 @@
   <div id="oc-notification">
     <oc-button
       id="oc-notification-bell"
-      variation="raw"
+      appearance="raw"
       :aria-label="notificationsLabel"
       :uk-tooltip="notificationsLabel"
     >

@@ -35,7 +35,7 @@
           >
             <oc-button
               v-if="resource.status === 1 || resource.status === 2"
-              variation="raw"
+              appearance="raw"
               class="file-row-share-status-action uk-text-meta"
               @click.stop="triggerShareAction(resource, 'POST')"
             >
@@ -43,7 +43,7 @@
             </oc-button>
             <oc-button
               v-if="resource.status === 1 || resource.status === 0"
-              variation="raw"
+              appearance="raw"
               class="file-row-share-status-action uk-text-meta oc-ml"
               @click.stop="triggerShareAction(resource, 'DELETE')"
             >

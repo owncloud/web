@@ -6,7 +6,7 @@
       :key="action.label"
       :aria-label="action.label"
       :uk-tooltip="action.label"
-      variation="raw"
+      appearance="raw"
       class="oc-mr-xs"
       @click.stop="action.handler({ item, client: $client, store: $store })"
     >
