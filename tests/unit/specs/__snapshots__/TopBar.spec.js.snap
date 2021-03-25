@@ -5,7 +5,7 @@ exports[`Top Bar component Displays applications menu 1`] = `
   <oc-grid-stub gutter="medium" flex="">
     <div class="uk-hidden@l">
       <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
-        <oc-icon-stub name="menu" aria-hidden="true"></oc-icon-stub>
+        <oc-icon-stub name="menu"></oc-icon-stub>
       </oc-button-stub>
     </div>
     <!---->
@@ -23,7 +23,7 @@ exports[`Top Bar component Displays search bar if enabled 1`] = `
   <oc-grid-stub gutter="medium" flex="">
     <div class="uk-hidden@l">
       <oc-button-stub appearance="raw" aria-label="Open navigation menu" class="oc-app-navigation-toggle">
-        <oc-icon-stub name="menu" aria-hidden="true"></oc-icon-stub>
+        <oc-icon-stub name="menu"></oc-icon-stub>
       </oc-button-stub>
     </div>
     <search-bar-stub></search-bar-stub>
