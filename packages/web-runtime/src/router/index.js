@@ -65,7 +65,7 @@ const router = new Router({
       components: {
         app: Account
       },
-      meta: { pageTitle: $gettext('Accounts') }
+      meta: { pageTitle: $gettext('Account') }
     }
   ]
 })
