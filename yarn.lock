@@ -7643,10 +7643,10 @@ ospec@3.1.0:
   dependencies:
     glob "^7.1.3"
 
-owncloud-design-system@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-3.2.2.tgz#93438cf6c18b44da42c8cb7f7f246fe622ab3c3d"
-  integrity sha512-wZfx3Rq3TY7EMRMa4fxnI0pK433VQ/bFoKJ8drWjJ4daYe1HIzy5wsUZRwPzPVNjTfJthio5x1AOlQUQecKX2A==
+owncloud-design-system@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-4.0.0.tgz#c2504ea9d14122367731a90ac800eb7aa3e4a817"
+  integrity sha512-DryDUfLN7PKmJqiXqOqaW4gldNLUy4W3022yUi6l9AMcsBU3LadoMpmcZyGY92iUER7hPCZFop+N5oqNJKzQ/A==
   dependencies:
     luxon "^1.22.0"
     mini-css-extract-plugin "^1.3.1"
@@ -7659,6 +7659,7 @@ owncloud-design-system@^3.2.2:
     vue "^2.6.11"
     vue-avatar "^2.2.0"
     vue-datetime "^1.0.0-beta.10"
+    vue-inline-svg "^2.0.0"
     vue-meta "^2.3.2"
     vue-router "^3.1.5"
     vuex "^3.1.1"
@@ -10839,6 +10840,11 @@ vue-gettext@^2.1.5:
   version "2.1.12"
   resolved "https://registry.yarnpkg.com/vue-gettext/-/vue-gettext-2.1.12.tgz#444d3220149b17fa4c7caeded3f12d439b698f33"
   integrity sha512-7Kw36xtKvARp8ZafQGPK9WR6EM+dhFUikR5f0+etSkiHuvUM3yf1HsRDLYoLLdJ0AMaXxKwgekumzvCk6KX8rA==
+
+vue-inline-svg@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/vue-inline-svg/-/vue-inline-svg-2.0.0.tgz#479908ef6f739fed5bfb4cf9f7f9a231706b080a"
+  integrity sha512-tvuYR9ynqJEuzrwqneNQ2q5uoFbgbot1fFuWIADfpmA1Sm9CMkid1SJyRuvmUdQHdjgAstGEU3tMbiTk5ud4OQ==
 
 vue-jest@^3.0.7:
   version "3.0.7"
