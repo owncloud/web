@@ -1,0 +1,7 @@
+Enhancement: A11y improvements for files app bar
+
+If we select resources in the files list, an action context menu appears, to improve a11y we need an aria live region
+element to announce that.
+
+https://github.com/owncloud/web/issues/4786
+https://github.com/owncloud/web/pull/4833
