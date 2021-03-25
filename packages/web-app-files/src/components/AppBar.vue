@@ -1,5 +1,6 @@
 <template>
   <div class="files-app-bar">
+    <oc-hidden-announcer :announcement="selectedResourcesAnnouncement" level="polite" />
     <file-drop
       v-if="!isIE11() && canUpload && hasFreeSpace"
       :root-path="currentPath"
@@ -231,6 +232,15 @@ export default {
 
     isNewBtnDisabled() {
       return !this.canUpload || !this.hasFreeSpace
+    },
+
+    selectedResourcesAnnouncement() {
+      const translated = this.$ngettext(
+        '%{ amount } selected item',
+        '%{ amount } selected items',
+        this.selectedFiles.length
+      )
+      return this.$gettextInterpolate(translated, { amount: this.selectedResourcesAmount })
     }
   },
   methods: {
