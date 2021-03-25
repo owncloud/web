@@ -82,7 +82,7 @@ Feature: rename files
     Then file "lorem.txt" should be listed on the webUI
     And file "  multiple   space    all     over   .  dat  " should not be listed on the webUI
 
-
+  @skip @issue-4859
   Scenario: Rename a file using both double and single quotes
     When the user renames the following file using the webUI
       | fromName      | toName                         |
