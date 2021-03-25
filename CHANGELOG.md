@@ -1,3 +1,26 @@
+Changelog for ownCloud Web [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud web unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/web/compare/v2.1.0...master
+
+Summary
+-------
+
+* Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
+
+Details
+-------
+
+* Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
+
+   If we select resources in the files list, an action context menu appears, to improve a11y we need
+   an aria live region element to announce that.
+
+   https://github.com/owncloud/web/issues/4786
+   https://github.com/owncloud/web/pull/4833
+
 Changelog for ownCloud Web [2.1.0] (2021-03-24)
 =======================================
 The following sections list the changes in ownCloud web 2.1.0 relevant to
