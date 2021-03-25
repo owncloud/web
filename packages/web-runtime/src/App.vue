@@ -220,6 +220,7 @@ export default {
     $route: {
       immediate: true,
       handler: function(to) {
+        this.appNavigationVisible = false
         document.title = this.extractPageTitleFromRoute(to)
       }
     },
