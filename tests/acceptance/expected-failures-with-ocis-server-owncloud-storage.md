@@ -426,6 +426,3 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 -   [webUISharingAcceptShares/acceptShares.feature:93](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L93)
 -   [webUISharingAcceptShares/acceptShares.feature:107](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L107)
-
-### [share indicator in files are not shown until sharing sidebar is opened](https://github.com/owncloud/web/issues/4167)
--   [webUISharingInternalUsersSharingIndicator/shareWithUsers.feature:56](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersSharingIndicator/shareWithUsers.feature#L56)
