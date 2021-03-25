@@ -74,13 +74,16 @@ module.exports = {
     getNotifications: async function() {
       const notifications = []
       await this.toggleNotificationDrawer()
-      await this.api.elements('@notificationElement', result => {
-        for (const element of result.value) {
-          this.api.elementIdText(element.ELEMENT, text => {
-            notifications.push(text.value)
-          })
+      await this.waitForElementVisible('@notificationElement').api.elements(
+        '@notificationElement',
+        result => {
+          for (const element of result.value) {
+            this.api.elementIdText(element.ELEMENT, text => {
+              notifications.push(text.value)
+            })
+          }
         }
-      })
+      )
       await this.toggleNotificationDrawer()
       return notifications
     },
