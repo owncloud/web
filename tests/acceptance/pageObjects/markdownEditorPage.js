@@ -75,7 +75,7 @@ module.exports = {
   },
   elements: {
     editorTextarea: {
-      selector: '.uk-container > textarea'
+      selector: '.uk-container textarea'
     },
     saveButton: {
       selector: '#markdown-editor-app-bar .uk-first-column .oc-button'
