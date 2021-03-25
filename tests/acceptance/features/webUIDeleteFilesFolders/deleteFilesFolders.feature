@@ -63,17 +63,17 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI after a page reload
     And no message should be displayed on the webUI
 
-  @ocis-issue-532
+
   Scenario: Delete all files at once
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
-    # Check just some example files/folders that should not exist any more
-    Then as "Alice" file "data.zip" should not exist
-    And as "Alice" file "lorem.txt" should not exist
-    And as "Alice" folder "simple-folder" should not exist
     And there should be no resources listed on the webUI
     And there should be no resources listed on the webUI after a page reload
     And no message should be displayed on the webUI
+
+
+
+
 
   @ocis-reva-issue-106 @ocis-reve-issue-442
   Scenario: Delete all except for a few files at once
