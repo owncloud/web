@@ -88,7 +88,7 @@ const loadApp = async path => {
     requirejs(
       [path],
       app => resolve(app),
-      () => reject(new Error('failed to load app ' + path))
+      err => reject(err)
     )
   )
 
@@ -243,7 +243,9 @@ export const exec = async () => {
       // please note that we have to go through apps one by one for now, to not break e.g. translations loading (race conditions)
       try {
         await loadApp(path)
-      } catch (err) {}
+      } catch (err) {
+        console.error('failed to load app ' + path, err)
+      }
     }
 
     // Finalize loading core and apps
