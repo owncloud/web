@@ -33,7 +33,7 @@
               :uk-tooltip="_cannotCreateDialogText"
               :disabled="isNewBtnDisabled"
             >
-              <oc-icon name="add" aria-hidden="true" />
+              <oc-icon name="add" />
               <translate>New</translate>
             </oc-button>
             <oc-drop

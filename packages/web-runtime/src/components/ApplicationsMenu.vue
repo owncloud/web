@@ -8,7 +8,7 @@
       :aria-label="applicationSwitcherLabel"
       :uk-tooltip="applicationSwitcherLabel"
     >
-      <oc-icon name="apps" aria-hidden="true" class="uk-flex" />
+      <oc-icon name="apps" class="uk-flex" />
     </oc-button>
     <oc-drop
       ref="menu"

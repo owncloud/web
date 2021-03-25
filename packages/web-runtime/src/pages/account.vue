@@ -5,11 +5,11 @@
       <div class="uk-flex uk-flex-between uk-flex-middle">
         <h1 id="account-page-title" v-translate class="oc-page-title">Account</h1>
         <oc-button v-if="editUrl" variation="primary" type="a" :href="editUrl">
-          <oc-icon name="edit" aria-hidden="true" />
+          <oc-icon name="edit" />
           <translate>Edit</translate>
         </oc-button>
         <oc-button v-else-if="editRoute" variation="primary" type="router-link" :to="editRoute">
-          <oc-icon name="edit" aria-hidden="true" />
+          <oc-icon name="edit" />
           <translate>Edit</translate>
         </oc-button>
       </div>

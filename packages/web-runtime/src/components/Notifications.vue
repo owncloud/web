@@ -6,7 +6,7 @@
       :aria-label="notificationsLabel"
       :uk-tooltip="notificationsLabel"
     >
-      <oc-icon class="oc-cursor-pointer uk-flex uk-flex-middle" name="bell" aria-hidden="true" />
+      <oc-icon class="oc-cursor-pointer uk-flex uk-flex-middle" name="bell" />
     </oc-button>
     <oc-drop
       id="oc-notification-drop"

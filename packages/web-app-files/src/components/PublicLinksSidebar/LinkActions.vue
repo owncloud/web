@@ -9,7 +9,7 @@
         class="oc-files-file-link-edit oc-mr-xs"
         @click="editLink"
       >
-        <oc-icon name="edit" aria-hidden="true" />
+        <oc-icon name="edit" />
       </oc-button>
       <oc-button
         :aria-label="deleteButtonLabel"
@@ -18,7 +18,7 @@
         class="oc-files-file-link-delete"
         @click="$_removeLink"
       >
-        <oc-icon name="delete" aria-hidden="true" />
+        <oc-icon name="delete" />
       </oc-button>
     </template>
   </div>

@@ -8,7 +8,7 @@
         class="oc-text-bold"
         @click.stop="action.handler(highlightedFile, action.handlerData)"
       >
-        <oc-icon :name="action.icon" aria-hidden="true" size="medium" />
+        <oc-icon :name="action.icon" size="medium" />
         {{ action.ariaLabel(highlightedFile) }}
       </oc-button>
     </li>

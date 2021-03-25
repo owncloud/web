@@ -3,7 +3,7 @@
     <oc-grid flex gutter="small">
       <div class="uk-width-auto">
         <oc-button :disabled="!isTouched" @click="saveContent">
-          <oc-icon name="save" aria-hidden="true" />
+          <oc-icon name="save" />
         </oc-button>
         <oc-spinner v-if="isLoading" :aria-label="$gettext('Loading editor content')" />
       </div>
@@ -12,7 +12,7 @@
       </div>
       <div class="uk-width-auto uk-text-right">
         <oc-button @click="closeApp">
-          <oc-icon name="close" aria-hidden="true" />
+          <oc-icon name="close" />
         </oc-button>
       </div>
     </oc-grid>
