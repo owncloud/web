@@ -11,6 +11,7 @@ Summary
 * Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
+* Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
 
 Details
 -------
@@ -38,6 +39,11 @@ Details
 
    https://github.com/owncloud/web/issues/4786
    https://github.com/owncloud/web/pull/4833
+
+* Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
+
+   https://github.com/owncloud/web/issues/4346
+   https://github.com/owncloud/web/pull/4812
 
 Changelog for ownCloud Web [2.1.0] (2021-03-24)
 =======================================
