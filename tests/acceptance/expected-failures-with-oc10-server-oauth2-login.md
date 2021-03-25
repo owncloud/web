@@ -29,4 +29,4 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingNotificationsToRoot/shareWithUsers.feature:36](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/shareWithUsers.feature#L36)
 
 ### [Preview of a text file is not available even when preview is enabled] (https://github.com/owncloud/web/issues/4858)
--   [webUISharingPublic/shareByPublicLink.feature](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublic/shareByPublicLink.feature#L61)
+-   [webUISharingPublic/shareByPublicLink.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublic/shareByPublicLink.feature#L61)

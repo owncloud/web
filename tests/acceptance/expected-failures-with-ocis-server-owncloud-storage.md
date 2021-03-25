@@ -424,5 +424,5 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFiles/sort.feature:51](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/sort.feature#L51)
 -   [webUIFiles/sort.feature:72](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFiles/sort.feature#L72)
 
--   [webUISharingAcceptShares/acceptShares.feature:16](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L93)
--   [webUISharingAcceptShares/acceptShares.feature:16](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L107)
+-   [webUISharingAcceptShares/acceptShares.feature:93](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L93)
+-   [webUISharingAcceptShares/acceptShares.feature:107](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L107)
