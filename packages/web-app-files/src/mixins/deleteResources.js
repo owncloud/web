@@ -5,7 +5,7 @@ import PQueue from 'p-queue'
 
 export default {
   data: () => ({
-    deleteResources_queue: new PQueue({ concurrency: 3 }),
+    deleteResources_queue: new PQueue({ concurrency: 4 }),
     deleteResources_deleteOps: []
   }),
 
