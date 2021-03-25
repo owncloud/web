@@ -8,10 +8,28 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
+* Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
 
 Details
 -------
+
+* Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
+
+   We fixed a bug where the mediaviewer didn't open for files which had an uppercase (or mixed case)
+   file extension.
+
+   https://github.com/owncloud/web/issues/4647
+   https://github.com/owncloud/web/pull/4627
+
+* Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
+
+   We integrated the new oc-table-files component from our design system. This includes
+   breaking changes in how we load resources in our files app. We refactored our files app codebase
+   into views, so that only subcomponents live in the components directory.
+
+   https://github.com/owncloud/web/pull/4627
 
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
 
