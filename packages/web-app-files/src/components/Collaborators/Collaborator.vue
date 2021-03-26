@@ -18,7 +18,7 @@
               class="oc-mr-s files-collaborators-collaborator-indicator"
               name="group"
               size="xlarge"
-              :aria-label="$gettext('Group')"
+              :accessible-label="$gettext('Group')"
             />
             <oc-icon
               v-else
@@ -26,7 +26,7 @@
               class="oc-mr-s files-collaborators-collaborator-indicator"
               name="person"
               size="xlarge"
-              :aria-label="$gettext('Remote user')"
+              :accessible-label="$gettext('Remote user')"
             />
           </div>
         </div>
@@ -55,7 +55,7 @@
           <oc-grid gutter="small">
             <div v-if="!isCurrentUser">
               <oc-tag>
-                <oc-icon :name="collaboratorTypeTagIcon" aria-hidden="true" />
+                <oc-icon :name="collaboratorTypeTagIcon" />
                 {{ collaboratorType(collaborator.shareType) }}
               </oc-tag>
             </div>
@@ -66,7 +66,7 @@
                 type="button"
                 :uk-tooltip="$gettext('Show resharer details')"
               >
-                <oc-icon name="repeat" aria-hidden="true" />
+                <oc-icon name="repeat" />
                 <translate :translate-params="{ resharer: $_reshareInformation }">
                   Shared by %{resharer}
                 </translate>
@@ -107,13 +107,13 @@
             </div>
             <div>
               <oc-tag class="files-collaborators-collaborator-role">
-                <oc-icon :name="roleTagIcon" aria-hidden="true" />
+                <oc-icon :name="roleTagIcon" />
                 {{ originalRole.label }}
               </oc-tag>
             </div>
             <div v-if="collaborator.expires">
               <oc-tag class="files-collaborators-collaborator-expires">
-                <oc-icon name="text-calendar" aria-hidden="true" />
+                <oc-icon name="text-calendar" />
                 <translate :translate-params="{ expires: formDateFromNow(expirationDate) }">
                   Expires %{expires}
                 </translate>
@@ -126,7 +126,7 @@
                 :to="viaRouterParams"
                 :uk-tooltip="viaTooltip"
               >
-                <oc-icon name="exit_to_app" aria-hidden="true" />
+                <oc-icon name="exit_to_app" />
                 <span
                   class="uk-text-truncate files-collaborators-collaborator-via-label"
                   v-text="viaLabel"
