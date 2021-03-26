@@ -329,7 +329,7 @@ export default {
       const titleSegments = [this.configuration.theme.general.name]
 
       if (route.meta.title) {
-        titleSegments.unshift(route.meta.title)
+        titleSegments.unshift(this.$gettext(route.meta.title))
       }
 
       if (route.params.item) {
