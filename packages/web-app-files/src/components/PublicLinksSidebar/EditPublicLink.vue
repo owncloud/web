@@ -11,8 +11,7 @@
         </oc-alert>
       </transition>
       <div class="oc-mb">
-        <label class="oc-label"><span v-translate>Name:</span></label>
-        <input id="oc-files-file-link-name" v-model="name" class="uk-input" />
+        <oc-text-input id="oc-files-file-link-name" v-model="name" :label="$gettext('Name')" />
       </div>
       <oc-grid child-width="1-1" gutter="small">
         <roles-select
@@ -22,57 +21,43 @@
           @roleSelected="$_selectRole"
         />
       </oc-grid>
-      <div class="oc-mb uk-grid-small uk-flex uk-flex-middle" uk-grid>
+      <div class="oc-mb uk-grid-small uk-flex" uk-grid>
         <div v-if="$_expirationDate" class="uk-width-1-1 uk-width-2-5@m">
-          <label class="oc-label" for="oc-files-file-link-expire-date">
-            <span v-translate>Expiration date:</span>
-            <translate v-if="$_expirationDate.enforced" tag="em">(required)</translate>
-          </label>
           <div class="uk-position-relative">
             <oc-datepicker
               id="oc-files-file-link-expire-date"
               :key="'oc-datepicker-' + expireDate"
-              :class="{ 'uk-form-danger': !$_expirationIsValid }"
+              :label="expirationDateLabel"
               :date="expireDate"
               :max-datetime="$_maxExpirationDate"
               :min-datetime="$_minExpirationDate"
-              :placeholder="placeholder.expireDate"
               @input="expireDate = $event"
             />
-            <div
+            <oc-button
               v-if="!$_expirationDate.enforced && !!expireDate"
               id="oc-files-file-link-expire-date-delete"
-              :uk-tooltip="$_expirationDateRemoveText"
-              class="uk-position-small uk-position-center-right oc-cursor-pointer"
-              uk-close
+              class="oc-mt-s"
+              appearance="raw"
               @click="expireDate = null"
+              v-text="$gettext('Remove expiration date')"
             />
           </div>
         </div>
         <div class="uk-width-1-1 uk-width-3-5@m">
-          <label class="oc-label" for="oc-files-file-link-password">
-            <span v-translate>Password:</span
-            ><em v-if="$_passwordEnforced" class="oc-ml-s">(<span v-translate>required</span>)</em>
-          </label>
-          <div class="uk-position-relative">
-            <input
-              id="oc-files-file-link-password"
-              v-model="password"
-              :class="{ 'uk-form-danger': !$_passwordIsValid }"
-              :placeholder="hasPassword && password === null ? '********' : placeholder.password"
-              autocomplete="new-password"
-              class="uk-input"
-              type="password"
-            />
-            <div
-              v-if="!$_passwordEnforced && hasPassword"
-              id="oc-files-file-link-password-delete"
-              :uk-tooltip="$_passwordRemoveText"
-              class="uk-position-small uk-position-center-right oc-cursor-pointer"
-              uk-close
-              @click="password = ''"
-            />
-          </div>
+          <oc-text-input
+            id="oc-files-file-link-password"
+            v-model="password"
+            type="password"
+            :label="passwordLabel"
+          />
+          <oc-button
+            v-if="!$_passwordEnforced && (password || hasPassword)"
+            id="oc-files-file-link-password-delete"
+            class="oc-mt-s"
+            appearance="raw"
+            @click="removePassword"
+            v-text="$gettext('Remove password')"
+          />
         </div>
       </div>
       <!-- @TODO: Enable Mail API to use the following
@@ -162,8 +147,6 @@ export default {
       expireDate: null,
       permissions: 1,
       placeholder: {
-        expireDate: this.$gettext('Expiration date'),
-        password: this.$gettext('Password'),
         mailTo: this.$gettext('Mail recipients'),
         mailBody: this.$gettext('Personal note')
       }
@@ -290,12 +273,20 @@ export default {
       return false
     },
 
-    $_expirationDateRemoveText() {
-      return this.$gettext('Remove expiration date')
+    expirationDateLabel() {
+      if (this.$_expirationDate.enforced) {
+        return `${this.$gettext('Expiration date')} (${this.$gettext('required')})`
+      }
+
+      return this.$gettext('Expiration date')
     },
 
-    $_passwordRemoveText() {
-      return this.$gettext('Remove password')
+    passwordLabel() {
+      if (this.$_passwordEnforced) {
+        return `${this.$gettext('Password')} (${this.$gettext('required')})`
+      }
+
+      return this.$gettext('Password')
     }
   },
   created() {
@@ -374,6 +365,11 @@ export default {
 
     $_closeForm() {
       this.SET_APP_SIDEBAR_ACCORDION_CONTEXT('showLinks')
+    },
+
+    removePassword: function() {
+      this.password = ''
+      this.hasPassword = false
     }
   }
 }
