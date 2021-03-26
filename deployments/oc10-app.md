@@ -47,7 +47,9 @@ There are a few config values which need to be set in order for ownCloud Web to 
     "authUrl": "https://<your-owncloud-server>/index.php/apps/oauth2/authorize"
   },
   "apps" : [
-    "files"
+    "files",
+    "media-viewer",
+    "draw-io"
   ],
   "applications" : [
     {
