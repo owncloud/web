@@ -277,7 +277,7 @@ export default {
         confirmText: this.$gettext('Create'),
         hasInput: true,
         inputValue: defaultName,
-        inputPlaceholder: isFolder
+        inputDescription: isFolder
           ? this.$gettext('Enter new folder name…')
           : this.$gettext('Enter new file name…'),
         inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
