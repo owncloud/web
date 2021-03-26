@@ -48,10 +48,10 @@
             :user-display-name="user.displayname"
             @toggleAppNavigationVisibility="toggleAppNavigationVisibility"
           />
-          <main id="main">
+          <div id="main">
             <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
             <router-view class="oc-app-container" name="app" />
-          </main>
+          </div>
         </div>
       </div>
       <transition
