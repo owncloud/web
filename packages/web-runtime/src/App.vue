@@ -328,8 +328,8 @@ export default {
     extractPageTitleFromRoute(route) {
       const titleSegments = [this.configuration.theme.general.name]
 
-      if (route.meta.pageTitle) {
-        titleSegments.unshift(route.meta.pageTitle)
+      if (route.meta.title) {
+        titleSegments.unshift(route.meta.title)
       }
 
       if (route.params.item) {
