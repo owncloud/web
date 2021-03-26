@@ -1,5 +1,5 @@
 <template>
-  <div id="files" class="uk-flex uk-height-1-1">
+  <main id="files" class="uk-flex uk-height-1-1">
     <div
       ref="filesListWrapper"
       tabindex="-1"
@@ -21,7 +21,7 @@
       class="uk-width-1-1 uk-width-1-2@m uk-width-1-3@xl"
       @reset="setHighlightedFile(null)"
     />
-  </div>
+  </main>
 </template>
 <script>
 import Mixins from './mixins'

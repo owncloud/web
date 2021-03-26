@@ -1,5 +1,6 @@
 <template>
   <div>
+    <oc-hidden-announcer :announcement="announcement" level="polite" />
     <skip-to target="main">Skip to main</skip-to>
     <div id="web-container">
       <div
@@ -47,10 +48,10 @@
             :user-display-name="user.displayname"
             @toggleAppNavigationVisibility="toggleAppNavigationVisibility"
           />
-          <main id="main">
+          <div id="main">
             <message-bar :active-messages="activeMessages" @deleteMessage="$_deleteMessage" />
             <router-view class="oc-app-container" name="app" />
-          </main>
+          </div>
         </div>
       </div>
       <transition
@@ -100,7 +101,8 @@ export default {
     return {
       appNavigationVisible: false,
       $_notificationsInterval: null,
-      windowWidth: 0
+      windowWidth: 0,
+      announcement: ''
     }
   },
   computed: {
@@ -220,7 +222,7 @@ export default {
     $route: {
       immediate: true,
       handler: function(to) {
-        this.appNavigationVisible = false
+        this.announceRouteChange(to)
         document.title = this.extractPageTitleFromRoute(to)
       }
     },
@@ -325,11 +327,19 @@ export default {
 
       this.appNavigationVisible = false
     },
-    extractPageTitleFromRoute(route) {
-      const titleSegments = [this.configuration.theme.general.name]
 
-      if (route.meta.title) {
-        titleSegments.unshift(this.$gettext(route.meta.title))
+    announceRouteChange(route) {
+      const pageTitle = this.extractPageTitleFromRoute(route, false)
+      const translated = this.$gettext('Navigated to %{ pageTitle }')
+      this.announcement = this.$gettextInterpolate(translated, { pageTitle })
+    },
+
+    extractPageTitleFromRoute(route, includeGeneralName = true) {
+      const routeTitle = route.meta.title ? this.$gettext(route.meta.title) : route.name
+      const titleSegments = [routeTitle]
+
+      if (includeGeneralName) {
+        titleSegments.push(this.configuration.theme.general.name)
       }
 
       if (route.params.item) {

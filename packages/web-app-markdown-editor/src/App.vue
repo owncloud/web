@@ -1,5 +1,5 @@
 <template>
-  <div id="markdown-editor">
+  <main id="markdown-editor">
     <markdown-editor-app-bar />
     <oc-notifications>
       <oc-notification-message
@@ -27,7 +27,7 @@
         <div id="markdown-editor-preview" v-html="renderedMarkdown"></div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 <script>
 import MarkdownEditorAppBar from './MarkdownEditorAppBar.vue'

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <oc-spinner
       v-if="loading"
       :aria-label="this.$gettext('Loading media')"
@@ -7,7 +7,7 @@
       size="xlarge"
     />
     <iframe v-else id="drawio-editor" ref="drawIoEditor" :src="iframeSource" />
-  </div>
+  </main>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'

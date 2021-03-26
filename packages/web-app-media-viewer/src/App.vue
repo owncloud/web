@@ -1,5 +1,5 @@
 <template>
-  <div id="mediaviewer" class="uk-position-relative">
+  <main id="mediaviewer" class="uk-position-relative">
     <div class="uk-text-center oc-p-s">
       <transition
         name="custom-classes-transition"
@@ -90,7 +90,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
 <script>
 import { mapGetters } from 'vuex'
