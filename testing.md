@@ -75,7 +75,7 @@ In order to run the acceptance tests you need to run ocis using the owncloud sto
 
 - set the `SELENIUM_HOST` environment variable to your host that runs selenium, mostly `localhost`
 - set the `SELENIUM_PORT` environment variable to your selenium port, mostly `4444`
-- set the `OCIS_SKELETON_DIR` when running the tests on ocis pointing to the skeleton files available [here](https://github.com/owncloud/testing/tree/master/data/webUISkeleton). This is handled automatically by the testrunner while running the tests in oc10.
+- set the `TESTING_DATA_DIR` when running the tests on ocis pointing to the testing data that includes data like skeleton directories. The testing directory is available [here](https://github.com/owncloud/testing/tree/master/data). This is handled automatically by the testrunner while running the tests in oc10.
 
 The feature files are located in the "tests/acceptance/features" subdirectories.
 
@@ -134,7 +134,7 @@ These values can be set using the environment variables to configure `yarn test:
 | `REMOTE_BACKEND_HOST` | ownCloud remote server URL                                               | http://localhost:8080 |
 | `RUN_ON_OCIS`       | Running the tests using the OCIS backend                                                            | false |
 | `OCIS_REVA_DATA_ROOT`       | Data directory of OCIS                                             | /var/tmp/reva |
-| `OCIS_SKELETON_DIR`       | Skeleton files directory for new users                                                           | - |
+| `TESTING_DATA_DIR`       | Testing data directory for new users                                                           | - |
 | `WEB_UI_CONFIG`       | Path for the web config file (usually in the dist folder)                       | - |
 | `VISUAL_TEST`       | Run the visual regression comparison while running the acceptance tests                       | - |
 | `UPDATE_VRT_SCREENSHOTS`       | Update the baseline snapshots with the latest images for visual regression tests                       | - |
