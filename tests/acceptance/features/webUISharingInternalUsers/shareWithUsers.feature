@@ -7,14 +7,17 @@ Feature: Sharing files and folders with internal users
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
+    And user "Brian" has created folder "simple-folder"
 
   @yetToImplement @smokeTest @issue-ocis-1743
   Scenario Outline: share a file & folder with another internal user
-    Given user "Brian" has logged in using the webUI
+    Given user "Brian" has created file "testimage.jpg"
+    And user "Brian" has created file "simple-folder/lorem.txt"
+    And user "Brian" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Alice Hansen" as "<set-role>" using the webUI
     And user "Alice" accepts the share "simple-folder" offered by user "Brian" using the sharing API
     And the user shares file "testimage.jpg" with user "Alice Hansen" as "<set-role>" using the webUI
@@ -81,7 +84,8 @@ Feature: Sharing files and folders with internal users
 
   @skip @issue-4102
   Scenario: share a file with another internal user who overwrites and unshares the file
-    Given user "Brian" has logged in using the webUI
+    Given user "Brian" has created file "lorem.txt"
+    And user "Brian" has logged in using the webUI
     And user "Brian" has renamed file "lorem.txt" to "new-lorem.txt"
     And user "Brian" has shared file "new-lorem.txt" with user "Alice" with "all" permissions
     And user "Alice" has accepted the share "new-lorem.txt" offered by user "Brian"
@@ -100,7 +104,9 @@ Feature: Sharing files and folders with internal users
 
 
   Scenario: share a folder with another internal user who uploads, overwrites and deletes files
-    Given user "Brian" has logged in using the webUI
+    Given user "Brian" has created file "simple-folder/lorem.txt"
+    And user "Brian" has created file "simple-folder/data.zip"
+    And user "Brian" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Alice Hansen" as "Editor" using the webUI
     And user "Alice" accepts the share "simple-folder" offered by user "Brian" using the sharing API
     And the user re-logs in as "Alice" using the webUI
@@ -128,7 +134,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-product-270
   Scenario: share a folder with another internal user who unshares the folder
-    Given user "Brian" has logged in using the webUI
+    Given user "Brian" has uploaded file with content "text file" to "simple-folder/lorem.txt"
+    And user "Brian" has logged in using the webUI
     When the user renames folder "simple-folder" to "new-simple-folder" using the webUI
     And the user shares folder "new-simple-folder" with user "Alice Hansen" as "Editor" using the webUI
     And user "Alice" accepts the share "new-simple-folder" offered by user "Brian" using the sharing API
@@ -141,11 +148,12 @@ Feature: Sharing files and folders with internal users
     # check that the folder is still visible for the share owner
     When the user re-logs in as "Brian" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI
-    And as "Brian" the content of "new-simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
-
+    And the content of file "new-simple-folder/lorem.txt" for user "Brian" should be "text file"
+    
   @issue-product-270
   Scenario: share a folder with another internal user and prohibit deleting
-    Given user "Brian" has logged in using the webUI
+    Given user "Brian" has created file "simple-folder/lorem.txt"
+    And user "Brian" has logged in using the webUI
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "create, read, share" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     When the user re-logs in as "Alice" using the webUI
@@ -155,7 +163,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-#4192
   Scenario: share a folder with other user and then it should be listed on Shared with You for other user
-    Given user "Brian" has renamed folder "simple-folder" to "new-simple-folder"
+    Given user "Brian" has created file "lorem.txt"
+    And user "Brian" has renamed folder "simple-folder" to "new-simple-folder"
     And user "Brian" has renamed file "lorem.txt" to "ipsum.txt"
     And user "Brian" has shared file "ipsum.txt" with user "Alice"
     And user "Alice" has accepted the share "ipsum.txt" offered by user "Brian"
@@ -168,7 +177,8 @@ Feature: Sharing files and folders with internal users
 
 
   Scenario: share a folder with other user and then it should be listed on Shared with Others page
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
+    And user "Brian" has created file "lorem.txt"
     And user "Brian" has logged in using the webUI
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
@@ -184,7 +194,9 @@ Feature: Sharing files and folders with internal users
 
   @issue-2480 @yetToImplement
   Scenario: check file with same name but different paths are displayed correctly in shared with others page
-    Given user "Brian" has shared file "lorem.txt" with user "Alice"
+    Given user "Brian" has created file "lorem.txt"
+    And user "Brian" has created file "simple-folder/lorem.txt"
+    And user "Brian" has shared file "lorem.txt" with user "Alice"
     And user "Brian" has shared file "simple-folder/lorem.txt" with user "Alice"
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-others page
@@ -194,7 +206,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-4193
   Scenario: user shares the file/folder with another internal user and delete the share with user
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
     When the user opens the share dialog for file "lorem.txt" using the webUI
@@ -207,7 +220,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-4193
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
@@ -227,7 +241,9 @@ Feature: Sharing files and folders with internal users
 
 
   Scenario: send share shows up on shared-with-others page
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "data.zip"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has logged in using the webUI
     When the user browses to the shared-with-others page using the webUI
     Then folder "simple-folder" should be listed on the webUI
@@ -235,7 +251,9 @@ Feature: Sharing files and folders with internal users
 
 
   Scenario: received share shows up on shared-with-me page
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "data.zip"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page using the webUI
@@ -244,7 +262,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-4170
   Scenario: clicking a folder on shared-with-me page jumps to the main file list inside the folder
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Alice" has created file "simple-folder/collaborate-on-this.txt"
     And user "Brian" has logged in using the webUI
@@ -254,7 +273,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-ocis-730
   Scenario: deleting an entry on the shared-with-me page unshares from self
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page using the webUI
@@ -264,7 +284,9 @@ Feature: Sharing files and folders with internal users
 
   @issue-ocis-730 @skipOnOC10 @issue-4582
   Scenario: deleting multiple entries on the shared-with-me page
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
@@ -278,18 +300,20 @@ Feature: Sharing files and folders with internal users
 
 
   Scenario: Try to share file and folder that used to exist but does not anymore
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has logged in using the webUI
     And the following files have been deleted by user "Alice"
       | name          |
       | lorem.txt     |
       | simple-folder |
     When the user shares file "lorem.txt" with user "Brian Murphy" as "Editor" using the webUI
     Then the error message with header 'Error while sharing.' should be displayed on the webUI
-    And user "UserTwo" should not be listed in the collaborators list on the webUI
+    And user "Brian Murphy" should not be listed in the collaborators list on the webUI
     When the user clears all error message from the webUI
     And the user shares folder "simple-folder" with user "Brian Murphy" as "Editor" using the webUI
     Then the error message with header 'Error while sharing.' should be displayed on the webUI
-    And user "UserTwo" should not be listed in the collaborators list on the webUI
+    And user "Brian Murphy" should not be listed in the collaborators list on the webUI
     When the user reloads the current page of the webUI
     Then file "lorem.txt" should not be listed on the webUI
     And folder "simple-folder" should not be listed on the webUI
@@ -298,7 +322,9 @@ Feature: Sharing files and folders with internal users
 
   @issue-2897 @issue-4193
   Scenario: sharing details of items inside a shared folder
-    Given user "Carol" has been created with default attributes
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has logged in using the webUI
@@ -311,7 +337,9 @@ Feature: Sharing files and folders with internal users
   # Share permission is not available in oCIS webUI so when setting all permissions, it is displayed as "Advanced permissions" there
   @issue-2897
   Scenario: sharing details of items inside a re-shared folder
-    Given user "Carol" has been created with default attributes
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
@@ -326,7 +354,9 @@ Feature: Sharing files and folders with internal users
 
   @skipOnOC10 @issue-2897
   Scenario: sharing details of items inside a re-shared folder (ocis bug demonstration)
-    Given user "Carol" has been created with default attributes
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
@@ -341,7 +371,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-2897 @issue-4193
   Scenario: sharing details of items inside a shared folder shared with multiple users
-    Given user "Carol" has been created with default attributes
+    Given user "Alice" has created folder "simple-folder"
+    And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/simple-folder/sub-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/sub-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
@@ -354,7 +385,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-2898
   Scenario: see resource owner in collaborators list for direct shares
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     And the user has opened folder "Shares"
@@ -363,7 +395,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-2898
   Scenario: see resource owner in collaborators list for reshares
-    Given user "Carol" has been created with default attributes
+    Given user "Alice" has created folder "simple-folder"
+    And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
@@ -376,7 +409,9 @@ Feature: Sharing files and folders with internal users
 
   @issue-2898 @issue-4168
   Scenario: see resource owner of parent shares in collaborators list
-    Given user "Carol" has been created with default attributes
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder" with user "Carol"
@@ -390,7 +425,9 @@ Feature: Sharing files and folders with internal users
 
   @issue-3040 @issue-4113 @ocis-reva-issue-39
   Scenario: see resource owner of parent shares in "shared with others" and "favorites" list
-    Given user "Carol" has been created with default attributes
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has shared folder "Shares/simple-folder/simple-empty-folder" with user "Carol"
@@ -405,7 +442,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-2898 @ocis-issue-891
   Scenario: see resource owner for direct shares in "shared with me"
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user browses to the shared-with-me page
@@ -415,6 +453,7 @@ Feature: Sharing files and folders with internal users
   @issue-ocis-reva-41
   Scenario Outline: collaborators list contains additional info when enabled
     Given the setting "user_additional_info_field" of app "core" has been set to "<additional-info-field>"
+    And user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     When user "Alice" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
@@ -427,6 +466,7 @@ Feature: Sharing files and folders with internal users
 
   Scenario: collaborators list does not contain additional info when disabled
     Given the setting "user_additional_info_field" of app "core" has been set to ""
+    And user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     When user "Alice" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
@@ -434,14 +474,16 @@ Feature: Sharing files and folders with internal users
 
 
   Scenario: collaborators list contains the current user when they are an owner
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     When user "Alice" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Alice Hansen" should be listed with additional info "(me)" in the collaborators list on the webUI
 
 
   Scenario: collaborators list contains the current user when they are a receiver of the resource
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Brian" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
@@ -452,6 +494,7 @@ Feature: Sharing files and folders with internal users
   Scenario: current user should see the highest role in their entry in collaborators list
     Given group "grp1" has been created
     And user "Brian" has been added to group "grp1"
+    And user "Alice" has created folder "simple-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian" with "read" permission
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And user "Alice" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
@@ -462,7 +505,8 @@ Feature: Sharing files and folders with internal users
 
 
   Scenario: share a file with another internal user via collaborators quick action
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has logged in using the webUI
     When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action in the webUI
     And user "Brian" accepts the share "simple-folder" offered by user "Alice" using the sharing API
     Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
@@ -550,7 +594,8 @@ Feature: Sharing files and folders with internal users
       | Advanced permissions | Viewer        | read                      | read             |
 
   Scenario: file list view image preview in file share
-    Given user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
+    Given user "Alice" has created file "testavatar.jpg"
+    And user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
     And user "Alice" has shared file "testavatar.jpg" with user "Brian"
     And user "Brian" has accepted the share "testavatar.jpg" offered by user "Alice"
     And user "Brian" has logged in using the webUI
@@ -559,6 +604,7 @@ Feature: Sharing files and folders with internal users
 
   Scenario: file list view image preview in file share when previews is disabled
     Given the property "disablePreviews" of "options" has been set to true in web config file
+    And user "Alice" has created file "testavatar.jpg"
     And user "Alice" has uploaded file "testavatar.jpg" to "testavatar.jpg"
     And user "Alice" has shared file "testavatar.jpg" with user "Brian"
     And user "Brian" has accepted the share "testavatar.jpg" offered by user "Alice"
@@ -568,7 +614,8 @@ Feature: Sharing files and folders with internal users
 
   @issue-4192
   Scenario: sharing file after renaming it is possible
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has logged in using the webUI
     And user "Alice" has uploaded file with content "test" to "lorem.txt"
     And the user has renamed file "lorem.txt" to "new-lorem.txt"
     When the user shares resource "new-lorem.txt" with user "Brian Murphy" using the quick action in the webUI
