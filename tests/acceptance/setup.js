@@ -1,6 +1,6 @@
 import { setDefaultTimeout, After, Before, defineParameterType } from 'cucumber'
 import { createSession, closeSession, client, startWebDriver, stopWebDriver } from 'nightwatch-api'
-import { rollbackConfigs, setConfigs, cacheConfigs } from './helpers/config'
+import { rollbackConfigs, cacheConfigs } from './helpers/config'
 import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
 const codify = require('./helpers/codify')
 
@@ -62,7 +62,6 @@ async function cacheAndSetConfigs(server) {
     return
   }
   await cacheConfigs(server)
-  return setConfigs(server, client.globals.backend_admin_username)
 }
 
 Before(function cacheAndSetConfigsOnLocal() {

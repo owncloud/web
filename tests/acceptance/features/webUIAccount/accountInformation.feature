@@ -4,7 +4,7 @@ Feature: View account information
   So that I can verify and use my account details correctly
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and large skeleton files
 
   @ocis-reva-issue-107
   Scenario: view account information when the user has been created without groups membership

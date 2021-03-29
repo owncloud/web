@@ -29,7 +29,7 @@ const OCIS_REVA_DATA_ROOT = process.env.OCIS_REVA_DATA_ROOT || '/var/tmp/ocis/st
 const LDAP_SERVER_URL = process.env.LDAP_SERVER_URL || 'ldap://127.0.0.1'
 const LDAP_BASE_DN = process.env.LDAP_BASE_DN || 'cn=admin,dc=owncloud,dc=com'
 const LDAP_ADMIN_PASSWORD = process.env.LDAP_ADMIN_PASSWORD || 'admin'
-const OCIS_SKELETON_DIR = process.env.OCIS_SKELETON_DIR || './tests/testing-app/data/webUISkeleton/'
+const TESTING_DATA_DIR = process.env.TESTING_DATA_DIR || './tests/testing-app/data/'
 const OPENID_LOGIN = RUN_ON_OCIS || !!process.env.OPENID_LOGIN
 const WEB_UI_CONFIG = process.env.WEB_UI_CONFIG || path.join(__dirname, 'dist/config.json')
 const SCREENSHOTS = !!process.env.SCREENSHOTS
@@ -67,7 +67,7 @@ const config = {
         ldap_url: LDAP_SERVER_URL,
         ocis_data_dir: OCIS_REVA_DATA_ROOT,
         ldap_base_dn: LDAP_BASE_DN,
-        ocis_skeleton_dir: OCIS_SKELETON_DIR,
+        testing_data_dir: TESTING_DATA_DIR,
         ldap_password: LDAP_ADMIN_PASSWORD,
         webUIConfig: WEB_UI_CONFIG,
         visual_test: VISUAL_TEST,

@@ -323,7 +323,7 @@ config = {
 				'SERVER_HOST': 'https://ocis:9200',
 				'BACKEND_HOST': 'https://ocis:9200',
 				'RUN_ON_OCIS': 'true',
-				'OCIS_SKELETON_DIR': '/srv/app/testing/data/webUISkeleton',
+				'TESTING_DATA_DIR': '/srv/app/testing/data/',
 				'OCIS_REVA_DATA_ROOT': '/srv/app/tmp/ocis/owncloud/data/',
 				'WEB_UI_CONFIG': '/srv/config/drone/ocis-config.json',
 				'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-with-ocis-server-owncloud-storage.md'

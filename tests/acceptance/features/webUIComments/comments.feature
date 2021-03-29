@@ -5,14 +5,13 @@ Feature: Add, delete and edit comments in files and folders
   So that I can provide more information about the file/folder
 
   Background:
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and large skeleton files:
       | username |
       | Alice    |
       | Brian    |
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
-  @skip @yetToImplement
   Scenario Outline: user adds and deletes comment for a file/folder
     When the user browses directly to display the "comments" details of file "lorem.txt" in folder "/"
     And the user comments with content "<comment>" using the webUI

@@ -4,7 +4,7 @@ Feature: view profile
   So that I can manage my account
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
 
   @ocis-reva-issue-107
   Scenario: view user profile for the logged in user

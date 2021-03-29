@@ -10,18 +10,28 @@ const { join } = require('../helpers/path')
 
 const ldap = require('../helpers/ldapHelper')
 const sharingHelper = require('../helpers/sharingHelper')
+const { setConfigs, getActualSkeletonDir } = require('../helpers/config')
 
-function createDefaultUser(userId) {
+function createDefaultUser(userId, skeletonType) {
   const password = userSettings.getPasswordForUser(userId)
   const displayname = userSettings.getDisplayNameOfDefaultUser(userId)
   const email = userSettings.getEmailAddressOfDefaultUser(userId)
   if (client.globals.ldap) {
     return ldap.createUser(client.globals.ldapClient, userId)
   }
-  return createUser(userId, password, displayname, email)
+  return createUser(userId, password, displayname, email, skeletonType)
 }
 
-function createUser(userId, password, displayName = false, email = false) {
+async function createUser(
+  userId,
+  password,
+  displayName = false,
+  email = false,
+  skeletonType = 'large'
+) {
+  if (!client.globals.ocis) {
+    await setConfigs(skeletonType)
+  }
   const body = new URLSearchParams()
   if (client.globals.ocis) {
     if (!email) {
@@ -44,8 +54,9 @@ function createUser(userId, password, displayName = false, email = false) {
     .then(res => httpHelper.checkOCSStatus(res, 'Failed while creating user'))
     .then(() => {
       if (client.globals.ocis) {
-        const skelDir = client.globals.ocis_skeleton_dir
-        if (skelDir) {
+        const actualSkeletonDir = getActualSkeletonDir(skeletonType)
+        if (actualSkeletonDir) {
+          const skelDir = `${client.globals.testing_data_dir}${actualSkeletonDir}`
           const dataDir = join(client.globals.ocis_data_dir, userId)
           if (!fs.existsSync(dataDir)) {
             fs.removeSync(dataDir)
@@ -156,9 +167,18 @@ function blockUser(userId) {
 
 Given('user {string} has been created with default attributes', async function(userId) {
   await deleteUser(userId)
-  await createDefaultUser(userId)
+  await createDefaultUser(userId, 'large')
   await initUser(userId)
 })
+
+Given(
+  /^user "([^"]*)" has been created with default attributes and (without|large|small) skeleton files$/,
+  async function(userId, skeletonType) {
+    await deleteUser(userId)
+    await createDefaultUser(userId, skeletonType)
+    await initUser(userId)
+  }
+)
 
 Given('user {string} has been deleted', function(userId) {
   return deleteUser(userId)
@@ -171,10 +191,21 @@ Given('user {string} has been blocked by admin', function(userId) {
 Given('user {string} has been created with default attributes on remote server', function(userId) {
   return backendHelper.runOnRemoteBackend(async function() {
     await deleteUser()
-      .then(() => createDefaultUser(userId))
+      .then(() => createDefaultUser(userId, 'large'))
       .then(() => initUser(userId))
   })
 })
+
+Given(
+  /^user "([^"]*)" has been created with default attributes and (without|large|small) skeleton files on remote server$/,
+  function(userId) {
+    return backendHelper.runOnRemoteBackend(async function(skeletonType) {
+      await deleteUser()
+        .then(() => createDefaultUser(userId, skeletonType))
+        .then(() => initUser(userId))
+    })
+  }
+)
 
 Given('the quota of user {string} has been set to {string}', function(userId, quota) {
   const body = new URLSearchParams()
@@ -191,10 +222,23 @@ Given('these users have been created with default attributes but not initialized
 ) {
   return Promise.all(
     dataTable.rows().map(userId => {
-      return deleteUser(userId.toString()).then(() => createDefaultUser(userId.toString()))
+      return deleteUser(userId.toString()).then(() => createDefaultUser(userId.toString(), 'large'))
     })
   )
 })
+
+Given(
+  /^these users have been created with default attributes and (without|small|large) skeleton files but not initialized:$/,
+  function(skeletonType, dataTable) {
+    return Promise.all(
+      dataTable.rows().map(userId => {
+        return deleteUser(userId.toString()).then(() =>
+          createDefaultUser(userId.toString(), skeletonType)
+        )
+      })
+    )
+  }
+)
 
 Given('these users have been created but not initialized:', function(dataTable) {
   codify.replaceInlineTable(dataTable)
@@ -204,21 +248,55 @@ Given('these users have been created but not initialized:', function(dataTable) 
       const password = user.password || userSettings.getPasswordForUser(userId)
       const displayName = user.displayname || false
       const email = user.email || false
-      return deleteUser(userId).then(() => createUser(userId, password, displayName, email))
+      return deleteUser(userId).then(() =>
+        createUser(userId, password, displayName, email, 'large')
+      )
     })
   )
 })
+
+Given(
+  /^these users have been created without initialization and (without|small|large) skeleton files:$/,
+  function(skeletonType, dataTable) {
+    codify.replaceInlineTable(dataTable)
+    return Promise.all(
+      dataTable.hashes().map(user => {
+        const userId = user.username
+        const password = user.password || userSettings.getPasswordForUser(userId)
+        const displayName = user.displayname || false
+        const email = user.email || false
+        return deleteUser(userId).then(() =>
+          createUser(userId, password, displayName, email, skeletonType)
+        )
+      })
+    )
+  }
+)
 
 Given('these users have been created with default attributes:', function(dataTable) {
   return Promise.all(
     dataTable.rows().map(user => {
       const userId = user[0]
       return deleteUser(userId)
-        .then(() => createDefaultUser(userId))
+        .then(() => createDefaultUser(userId, 'large'))
         .then(() => initUser(userId))
     })
   )
 })
+
+Given(
+  /^these users have been created with default attributes and (without|small|large) skeleton files:$/,
+  function(skeletonType, dataTable) {
+    return Promise.all(
+      dataTable.rows().map(user => {
+        const userId = user[0]
+        return deleteUser(userId)
+          .then(() => createDefaultUser(userId, skeletonType))
+          .then(() => initUser(userId))
+      })
+    )
+  }
+)
 
 Given('group {string} has been created', function(groupId) {
   return deleteGroup(groupId.toString()).then(() => createGroup(groupId.toString()))

@@ -11,8 +11,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [Media Viewer](https://github.com/owncloud/ocis/issues/1106)
 -   [webUIPreview/imageMediaViewer.feature:81](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L81)
 -   [webUIPreview/imageMediaViewer.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L88)
--   [webUIPreview/imageMediaViewer.feature:33](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L33)
--   [webUIPreview/imageMediaViewer.feature:24](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L24)
 
 ### [Media Viewer preview not visible for files with .ogg and .webm formats](https://github.com/owncloud/web/issues/4667)
 -   [webUIPreview/imageMediaViewer.feature:136](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L136)
@@ -27,9 +25,3 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [regression in accepting shares from notifications](https://github.com/owncloud/web/issues/4839)
 -   [webUISharingNotificationsToRoot/shareWithUsers.feature:36](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/shareWithUsers.feature#L36)
-
-### [Preview of a text file is not available even when preview is enabled] (https://github.com/owncloud/web/issues/4858)
--   [webUISharingPublic/shareByPublicLink.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublic/shareByPublicLink.feature#L61)
-
-### [public cant get access to public link shares] (https://github.com/owncloud/web/issues/4856)
--   [webUIPreview/imageMediaViewer.feature:110](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L110)
