@@ -28,8 +28,5 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [regression in accepting shares from notifications](https://github.com/owncloud/web/issues/4839)
 -   [webUISharingNotificationsToRoot/shareWithUsers.feature:36](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/shareWithUsers.feature#L36)
 
-### [Preview of a text file is not available even when preview is enabled] (https://github.com/owncloud/web/issues/4858)
--   [webUISharingPublic/shareByPublicLink.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublic/shareByPublicLink.feature#L61)
-
 ### [public cant get access to public link shares] (https://github.com/owncloud/web/issues/4856)
 -   [webUIPreview/imageMediaViewer.feature:110](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L110)
