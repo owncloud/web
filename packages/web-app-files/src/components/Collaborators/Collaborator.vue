@@ -54,7 +54,7 @@
           </div>
           <oc-grid gutter="small">
             <div v-if="!isCurrentUser">
-              <oc-tag>
+              <oc-tag class="files-collaborators-collaborator-share-type">
                 <oc-icon :name="collaboratorTypeTagIcon" />
                 {{ collaboratorType(collaborator.shareType) }}
               </oc-tag>
