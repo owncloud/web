@@ -408,7 +408,8 @@ def stagePipelines(ctx):
 	if acceptancePipelines == False:
 		return unitTests()
 
-	return unitTests() + acceptancePipelines
+	cachePipelines = cacheOcisPipeline(ctx)
+	return unitTests() + cachePipelines + acceptancePipelines
 
 def afterPipelines(ctx):
 	return build(ctx) + notify()
@@ -694,7 +695,7 @@ def acceptance(ctx):
 
 						if (params['runningOnOCIS']):
 							# Services and steps required for running tests with oCIS
-							steps += cloneOCIS() + buildOCIS() + ocisService() + getSkeletonFiles()
+							steps += getOcis() + ocisService() + getSkeletonFiles()
 
 							services += redisService()
 						else:
@@ -751,7 +752,7 @@ def acceptance(ctx):
 							},
 							'steps': steps,
 							'services': services,
-							'depends_on': [],
+							'depends_on': ['cache-ocis'] if (params['runningOnOCIS']) else [],
 							'trigger': {
 								'ref': [
 									'refs/tags/**',
@@ -1444,50 +1445,6 @@ def idpService():
 		}],
 	}]
 
-def cloneOCIS():
-	return[{
-		'name': 'clone-ocis',
-		'image': 'owncloudci/golang:1.16',
-		'pull': 'always',
-		'commands': [
-			'source .drone.env',
-			'mkdir -p /srv/app/src',
-			'cd /srv/app/src',
-			'mkdir -p github.com/owncloud/',
-			'cd github.com/owncloud/',
-			'git clone -b $OCIS_BRANCH --single-branch --no-tags https://github.com/owncloud/ocis',
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
-def buildOCIS():
-	return[{
-		'name': 'build-ocis',
-		'image': 'owncloudci/golang:1.16',
-		'pull': 'always',
-		'commands': [
-			'source .drone.env',
-			'cd /srv/app/src/github.com/owncloud/ocis',
-			'git checkout $OCIS_COMMITID',
-			'cd ocis',
-			'make build',
-			'cp bin/ocis /var/www/owncloud'
-		],
-		'volumes': [{
-			'name': 'gopath',
-			'path': '/srv/app',
-		}, {
-			'name': 'configs',
-			'path': '/srv/config'
-		}],
-	}]
-
 def ocisService():
 	return[{
 		'name': 'ocis',
@@ -1513,7 +1470,7 @@ def ocisService():
 			'PROXY_ENABLE_BASIC_AUTH': True,
 		},
 		'commands': [
-			'cd /var/www/owncloud',
+			'cd /var/www/owncloud/ocis-build',
 			'mkdir -p /srv/app/tmp/ocis/owncloud/data/',
 			'mkdir -p /srv/app/tmp/ocis/storage/users/',
 			'./ocis server'
@@ -1729,6 +1686,112 @@ def redisService():
 			'REDIS_DATABASES': 1
 		},
 	}]
+
+def cacheOcisPipeline(ctx):
+	return[{
+		'kind': 'pipeline',
+		'type': 'docker',
+		'name': 'cache-ocis',
+		'workspace' : {
+			'base': '/var/www/owncloud',
+			'path': config['app']
+		},
+		'steps':
+			buildOCISCache() +
+			cacheOcis() +
+			listRemoteCache(),
+		'depends_on': [],
+		'trigger': {
+			'ref': [
+				'refs/pull/**',
+			]
+		}
+	}]
+
+def getOcis():
+	return [{
+		'name': 'get-ocis-from-cache',
+		'image': 'minio/mc:RELEASE.2020-12-10T01-26-17Z',
+		'failure': 'ignore',
+		'environment': {
+			'MC_HOST': {
+				'from_secret': 'cache_s3_endpoint'
+			},
+			'AWS_ACCESS_KEY_ID': {
+				'from_secret': 'cache_s3_access_key'
+			},
+			'AWS_SECRET_ACCESS_KEY': {
+				'from_secret': 'cache_s3_secret_key'
+			},
+		},
+		'commands': [
+			'source /var/www/owncloud/web/.drone.env',
+			'mkdir -p /var/www/owncloud/ocis-build',
+			'mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY',
+			'mc mirror s3/owncloud/web/ocis-build/$OCIS_COMMITID /var/www/owncloud/ocis-build/',
+			'chmod +x /var/www/owncloud/ocis-build/ocis',
+		]
+	}]
+
+def buildOCISCache():
+	return[{
+		'name': 'build-ocis',
+		'image': 'webhippie/golang:1.16',
+		'pull': 'always',
+		'commands': [
+			'./tests/drone/cache_ocis.sh'
+		],
+	}]
+
+def cacheOcis():
+	return [{
+		'name': 'upload-ocis-bin',
+		'image': 'plugins/s3',
+		'pull': 'if-not-exists',
+		'settings': {
+			'bucket': 'owncloud',
+			'endpoint': {
+				'from_secret': 'cache_s3_endpoint'
+			},
+			'path_style': True,
+			'source': '/var/www/owncloud/ocis-build/**/*',
+			'strip_prefix': '/var/www/owncloud/ocis-build',
+			'target': '/web/ocis-build/',
+			'access_key': {
+				'from_secret': 'cache_s3_access_key'
+			},
+			'secret_key': {
+				'from_secret': 'cache_s3_secret_key'
+			},
+		},
+		'when': {
+			'event': [
+				'pull_request'
+			]
+		},
+	}]
+
+def listRemoteCache():
+  return [{
+	'name': 'list-ocis-bin-cache',
+	'image': 'minio/mc:RELEASE.2020-12-10T01-26-17Z',
+	'failure': 'ignore',
+	'environment': {
+		'MC_HOST': {
+			'from_secret': 'cache_s3_endpoint'
+		},
+		'AWS_ACCESS_KEY_ID': {
+			'from_secret': 'cache_s3_access_key'
+		},
+		'AWS_SECRET_ACCESS_KEY': {
+			'from_secret': 'cache_s3_secret_key'
+		},
+	},
+	'commands': [
+		'mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY',
+		'mc find s3/owncloud/web/ocis-build',
+	]
+}]
 
 def uploadScreenshots():
 	return [{
