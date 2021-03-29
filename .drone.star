@@ -61,6 +61,7 @@ config = {
 			        'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-XGA-with-oc10-server-oauth2-login.md',
 				'SCREEN_RESOLUTION': '768x1024'
 			},
+			'screenShots': True,
 			'filterTags': '@smokeTest and not @skipOnXGAPortraitResolution and not @skip and not @skipOnOC10'
 		},
 		'webUI-iPhone': {
@@ -125,6 +126,7 @@ config = {
 			        'EXPECTED_FAILURES_FILE': '/var/www/owncloud/web/tests/acceptance/expected-failures-Iphone-oc10-server-oauth2-login.md',
 				'SCREEN_RESOLUTION': '375x812'
 			},
+			'screenShots': True,
 			'filterTags': '@smokeTest and not @skipOnIphoneResolution and not @skip and not @skipOnOC10'
 		}
 	},
@@ -385,7 +387,7 @@ def acceptance(ctx):
 		'federatedServerNeeded': False,
 		'federatedServerVersion': '',
 		'runningOnOCIS': False,
-		'screenShots': False,
+		'screenShots': True,
 		'visualTesting': False,
 		'openIdConnect': False,
 	}
