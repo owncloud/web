@@ -132,12 +132,12 @@ Feature: rename folders
 
   @notToImplementOnOCIS
   # This is valid file name for ocis
-  Scenario: Rename a folder to .part
+  Scenario: Rename a folder to .part (on oc10)
     When the user tries to rename folder "simple-folder" to "simple.part" using the webUI
     Then the error message with header 'Error while renaming "simple-folder" to "simple.part"' should be displayed on the webUI
 
   @skipOnOC10
-  Scenario: Rename a folder to .part
+  Scenario: Rename a folder to .part (on ocis)
     When the user tries to rename folder "simple-folder" to "simple.part" using the webUI
     Then folder "simple.part" should be listed on the webUI
 

@@ -118,7 +118,7 @@ Feature: File Upload
 
   # When this issue is fixed merge with the scenario above
   @issue-3015 @skipOnOC10 @issue-ocis-reva-200
-  Scenario: Upload a file with the same name as already existing folder
+  Scenario: Upload a file with the same name as already existing folder (ocis bug demonstration)
     Given user "Alice" has created folder "new-lorem.txt"
     And the user has reloaded the current page of the webUI
     When the user uploads overwriting file "new-lorem.txt" using the webUI

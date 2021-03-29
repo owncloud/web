@@ -449,7 +449,7 @@ Feature: Sharing files and folders with internal users
       | Editor               | Editor               | read,update,create,delete,share | read,update,share |
       | Advanced permissions | Advanced permissions | read                            | read              |
 
-    Scenario Outline: Share files/folders with special characters in their name
+    Scenario Outline: Share files/folders with special characters in their name (duplicate)
       Given user "Brian" has created folder "Sample,Folder,With,Comma"
       And user "Brian" has created file "sample,1.txt"
       And user "Brian" has logged in using the webUI

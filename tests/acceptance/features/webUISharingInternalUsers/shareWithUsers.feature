@@ -325,7 +325,7 @@ Feature: Sharing files and folders with internal users
     Then user "Carol King" should be listed as "Editor" via "simple-folder" in the collaborators list on the webUI
 
   @skipOnOC10 @issue-2897
-  Scenario: sharing details of items inside a re-shared folder
+  Scenario: sharing details of items inside a re-shared folder (ocis bug demonstration)
     Given user "Carol" has been created with default attributes
     And user "Alice" has uploaded file with content "test" to "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"

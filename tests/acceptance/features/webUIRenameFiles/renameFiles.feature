@@ -103,7 +103,7 @@ Feature: rename files
 
   @notToImplementOnOCIS
   # these are valid file names for ocis
-  Scenario Outline: Rename a file using forbidden characters
+  Scenario Outline: Rename a file using forbidden characters (on oc10)
     When the user tries to rename file "data.zip" to "<filename>" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "<filename>"' should be displayed on the webUI
     And file "data.zip" should be listed on the webUI
@@ -115,7 +115,7 @@ Feature: rename files
       | .htaccess |
 
   @skipOnOC10
-  Scenario Outline: Rename a file using forbidden characters
+  Scenario Outline: Rename a file using forbidden characters (on ocis)
     When the user tries to rename file "data.zip" to "<filename>" using the webUI
     Then file "data.zip" should not be listed on the webUI
     And file "<filename>" should be listed on the webUI
@@ -167,7 +167,7 @@ Feature: rename files
 
   @notToImplementOnOCIS
   # This is valid file name for ocis
-  Scenario: Rename a file to .part
+  Scenario: Rename a file to .part (on oc10)
     When the user tries to rename file "data.zip" to "data.part" using the webUI
     Then the error message with header 'Error while renaming "data.zip" to "data.part"' should be displayed on the webUI
 
@@ -177,7 +177,7 @@ Feature: rename files
     Then file 'data.part' should be listed on the webUI
 
   @ocis-reva-issue-64
-  Scenario: rename a file on a public share
+  Scenario: rename a file on a public share (on ocis)
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user renames file "lorem.txt" to "a-renamed-file.txt" using the webUI
