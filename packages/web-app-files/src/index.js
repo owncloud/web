@@ -3,7 +3,7 @@ import Personal from './views/Personal.vue'
 import Favorites from './views/Favorites.vue'
 import SharedWithMe from './views/SharedWithMe.vue'
 import SharedWithOthers from './views/SharedWithOthers.vue'
-import SharedByLink from './views/SharedByLink.vue'
+import SharedViaLink from './views/SharedViaLink.vue'
 import Trashbin from './views/Trashbin.vue'
 import FileInfoVersions from './components/FileInfoVersions.vue'
 import FileSharingSidebar from './components/FileSharingSidebar.vue'
@@ -99,11 +99,11 @@ const navItems = [
     }
   },
   {
-    name: $gettext('Shared by link'),
+    name: $gettext('Shared via link'),
     iconMaterial: 'link',
     route: {
-      name: 'files-shared-by-link',
-      path: `/${appInfo.id}/list/shared-by-link`
+      name: 'files-shared-via-link',
+      path: `/${appInfo.id}/list/shared-via-link`
     }
   },
   {
@@ -172,13 +172,13 @@ const routes = [
         }
       },
       {
-        path: 'shared-by-link',
-        component: SharedByLink,
-        name: 'shared-by-link',
+        path: 'shared-via-link',
+        component: SharedViaLink,
+        name: 'shared-via-link',
         meta: {
           hideFilelistActions: true,
           hasBulkActions: true,
-          title: $gettext('Files shared by link')
+          title: $gettext('Files shared via link')
         }
       },
       {
