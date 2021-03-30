@@ -226,11 +226,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:100](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L100)
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:123](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L123)
 -   [webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature:139](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicExpire/shareByPublicLinkExpiringLinks.feature#L139)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:312](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L312)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:320](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L320)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:329](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L329)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:338](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L338)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:347](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L347)
 
 ### [[OCIS] declining a received share gives 500 error even if the share is declined](https://github.com/owncloud/product/issues/276)
 -   [webUISharingAcceptShares/acceptShares.feature:124](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingAcceptShares/acceptShares.feature#L124)
@@ -304,10 +299,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 ### [name of public link is empty and not "Public link" when not specified in the create request](https://github.com/owncloud/ocis/issues/1237)
 -   [webUISharingPublic/shareByPublicLink.feature:30](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublic/shareByPublicLink.feature#L30)
 -   [webUISharingPublic/shareByPublicLink.feature:31](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublic/shareByPublicLink.feature#L31)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:31](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L31)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:32](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L32)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:33](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L33)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:57](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L57)
 
 ### [Cannot upload files to the ownCloud storage](https://github.com/owncloud/ocis-reva/issues/398)
 -   [webUISharingPublic/shareByPublicLink.feature:61](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublic/shareByPublicLink.feature#L61)
@@ -336,10 +327,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [Adjust web UI test scenarios that demonstrate fixed bugs](https://github.com/owncloud/web/issues/4601)
 -   [webUISharingPublic/shareByPublicLink.feature:795](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublic/shareByPublicLink.feature#L795)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:123](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L123)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:299](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L299)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:276](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L276)
--   [webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature:213](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublicDifferentRoles/shareByPublicLinkDifferentRoles.feature#L213)
 
 ### [renamed file cannot be shared](https://github.com/owncloud/web/issues/4192)
 -   [webUISharingInternalUsers/shareWithUsers.feature:570](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsers/shareWithUsers.feature#L570)

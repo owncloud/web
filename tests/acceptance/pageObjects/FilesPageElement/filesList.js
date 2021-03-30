@@ -140,7 +140,9 @@ module.exports = {
      * @return {Promise<*>}
      */
     confirmDeletion: function() {
-      return this.waitForElementEnabled('@dialogConfirmBtn')
+      return this.waitForElementVisible('@dialog')
+        .pause(2000)
+        .waitForElementEnabled('@dialogConfirmBtn')
         .click('@dialogConfirmBtn')
         .waitForElementNotPresent('@dialog')
     },
