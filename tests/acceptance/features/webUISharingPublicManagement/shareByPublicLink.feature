@@ -1,12 +1,8 @@
 @mailhog @public_link_share-feature-required @ocis-reva-issue-64
-Feature: Share by public link
+Feature: Public link share management
   As a user
-  I want to share files through a publicly accessible link
-  So that users who do not have an account on my ownCloud server can access them
-
-  As an admin
-  I want to limit the ability of a user to share files/folders through a publicly accessible link
-  So that public sharing is limited according to organization policy
+  I want to check different opitions available in public shares
+  So that I can manage and organize the shares
 
   Background:
     Given user "Alice" has been created with default attributes
