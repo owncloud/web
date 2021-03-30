@@ -1296,7 +1296,7 @@ def setupGraphapiOIdC():
 def buildGlauth():
 	return[{
 		'name': 'build-glauth',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
       # using ocis-glauth repo because latest glauth doesn't supports the bridge setup
@@ -1322,7 +1322,7 @@ def buildGlauth():
 def glauthService():
 	return[{
 		'name': 'glauth',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
@@ -1345,7 +1345,7 @@ def glauthService():
 def buildIdP():
 	return[{
 		'name': 'build-idp',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
 			'cd $GOPATH/src/github.com/owncloud/ocis',
@@ -1365,7 +1365,7 @@ def buildIdP():
 def idpService():
 	return[{
 		'name': 'idp',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
@@ -1399,7 +1399,7 @@ def idpService():
 def cloneOCIS():
 	return[{
 		'name': 'clone-ocis',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
 			'source .drone.env',
@@ -1421,7 +1421,7 @@ def cloneOCIS():
 def buildOCIS():
 	return[{
 		'name': 'build-ocis',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
 			'source .drone.env',
@@ -1443,7 +1443,7 @@ def buildOCIS():
 def ocisService():
 	return[{
 		'name': 'ocis',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
@@ -1482,7 +1482,7 @@ def ocisService():
 def buildOcisWeb():
 	return[{
 		'name': 'build-ocis-web',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
 			'cd $GOPATH/src/github.com/owncloud/ocis',
@@ -1503,7 +1503,7 @@ def buildOcisWeb():
 def ocisWebService():
 	return[{
 		'name': 'web',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
