@@ -36,9 +36,11 @@ module.exports = {
       }
       const actualAccInfo = {}
       for (const elem of accountInformation) {
-        const key = elem.substring(0, elem.lastIndexOf(':'))
-        const value = elem.substring(elem.lastIndexOf('\n') + 1)
-        actualAccInfo[key] = value
+        if (elem.indexOf('\n') < 0) {
+          continue
+        }
+        const s = elem.split('\n')
+        actualAccInfo[s[0].trim()] = s[1].trim()
       }
       return actualAccInfo
     },
@@ -57,7 +59,7 @@ module.exports = {
       selector: '#account-page-title'
     },
     accountInformationElements: {
-      selector: '//div/span[.="Account Information"]/../../div[@class="uk-flex uk-flex-wrap"]/div',
+      selector: '//div[contains(@class, "account-page-info-")]',
       locateStrategy: 'xpath'
     }
   }

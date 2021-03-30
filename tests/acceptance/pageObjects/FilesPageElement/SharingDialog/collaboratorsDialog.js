@@ -84,7 +84,6 @@ module.exports = {
           additionalInfo: this.elements.collaboratorInformationSubAdditionalInfo,
           viaLabel: this.elements.collaboratorInformationSubVia,
           resharer: this.elements.collaboratorInformationSubResharer,
-          // Type of user is stored in aria-label of indicator so we use the selector for the indicator
           shareType: this.elements.collaboratorShareType
         }
       }
@@ -216,9 +215,6 @@ module.exports = {
     collaboratorInformationSubResharer: {
       // within collaboratorsInformation
       selector: '.files-collaborators-collaborator-reshare-information'
-    },
-    collaboratorIndicator: {
-      selector: '.files-collaborators-collaborator-indicator'
     },
     collaboratorShareType: {
       selector: '.files-collaborators-collaborator-share-type'
