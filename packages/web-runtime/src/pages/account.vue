@@ -15,31 +15,30 @@
       </div>
       <hr />
       <div class="oc-text-bold oc-mb"><translate>Account Information</translate></div>
-      <div class="uk-flex uk-flex-wrap">
-        <div class="uk-width-1-2@s oc-mb">
+      <div class="uk-flex uk-flex-wrap account-page-info">
+        <div class="uk-width-1-2@s oc-mb account-page-info-username">
           <div class="uk-text-meta"><translate>Username</translate></div>
           {{ user.username || user.id }}
         </div>
-        <div v-if="user.username && user.id" class="uk-width-1-2@s oc-mb">
+        <div v-if="user.username && user.id" class="uk-width-1-2@s oc-mb account-page-info-userid">
           <div class="uk-text-meta"><translate>User ID</translate></div>
           {{ user.id }}
         </div>
-        <div class="uk-width-1-2@s oc-mb">
+        <div class="uk-width-1-2@s oc-mb account-page-info-displayname">
           <div class="uk-text-meta"><translate>Display name</translate></div>
           {{ user.displayname }}
         </div>
-        <div class="uk-width-1-2@s oc-mb">
+        <div class="uk-width-1-2@s oc-mb account-page-info-email">
           <div class="uk-text-meta"><translate>Email</translate></div>
           <template v-if="user.email">{{ user.email }}</template>
           <span v-else v-translate>No email has been set up</span>
         </div>
-        <div class="uk-width-1-2@s oc-mb" @click="$_oc_settingsAccount_getGroup">
+        <div
+          class="uk-width-1-2@s oc-mb account-page-info-groups"
+          @click="$_oc_settingsAccount_getGroup"
+        >
           <div class="uk-text-meta"><translate>Groups membership</translate></div>
-          <template v-if="groups.length > 0">
-            <span v-for="(group, index) in groups" :key="index">
-              {{ group }}<template v-if="index + 1 < groups.length">, </template>
-            </span>
-          </template>
+          <span v-if="groupNames">{{ groupNames }}</span>
           <span v-else v-translate>You are not part of any group</span>
         </div>
       </div>
@@ -71,6 +70,9 @@ export default {
         return navItems[0].route || {}
       }
       return null
+    },
+    groupNames() {
+      return this.groups.join(', ')
     }
   },
   mounted() {
