@@ -80,7 +80,7 @@
                 class="oc-mt-s"
                 close-on-click
               >
-                <translate tag="h4">Shared by:</translate>
+                <translate tag="h4">Shared by</translate>
                 <ul class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">
                   <li v-for="resharer in collaborator.resharers" :key="resharer.name">
                     <div class="uk-flex uk-flex-middle uk-flex-left">

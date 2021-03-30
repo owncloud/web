@@ -21,7 +21,7 @@
     <oc-grid v-if="selectedCollaborators.length > 0" gutter="small">
       <div>
         <div>
-          <translate>Selected people:</translate>
+          <translate>Selected people</translate>
         </div>
         <oc-table-simple class="uk-width-expand files-collaborators-collaborator-autocomplete-item">
           <oc-tr
