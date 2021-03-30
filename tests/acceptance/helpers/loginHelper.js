@@ -14,21 +14,53 @@ module.exports = {
    * @param {password} [password=null] - If not passed, default password for given `userId` will be used
    */
   loginAsUser: async function(userId, password = null) {
-    await client.page.loginPage().navigate()
-
-    password = password || userSettings.getPasswordForUser(userId)
-    if (client.globals.openid_login) {
-      await client.page.ocisLoginPage().login(userId, password)
+    if (process.env.WEB_TOKEN && process.env.WEB_STATE) {
+      await client.url(client.globals.backend_url)
+      await client.execute(
+        function(backendUrl, token, state) {
+          sessionStorage.setItem('webStateInSessionStorage', JSON.parse(state))
+          sessionStorage.setItem(`oc_oAuthuser:${backendUrl}:web`, JSON.parse(token))
+        },
+        [client.globals.backend_url, process.env.WEB_TOKEN, process.env.WEB_STATE],
+        function(result) {
+          console.log(result)
+        }
+      )
+      await client.page.personalPage().navigateAndWaitTillLoaded()
     } else {
-      await client.page.ownCloudLoginPage().login(userId, password)
-      await client.page.ownCloudAuthorizePage().authorize()
+      await client.page.loginPage().navigate()
+      password = password || userSettings.getPasswordForUser(userId)
+      if (client.globals.openid_login) {
+        await client.page.ocisLoginPage().login(userId, password)
+      } else {
+        await client.page.ownCloudLoginPage().login(userId, password)
+        await client.page.ownCloudAuthorizePage().authorize()
+      }
+      await client.page
+        .webPage()
+        .waitForElementVisible('@appContainer')
+        .then(() => {
+          client.globals.currentUser = userId
+        })
+      await client.execute(
+        function(backendUrl) {
+          return sessionStorage.getItem(`oc_oAuthuser:${backendUrl}:web`)
+        },
+        [client.globals.backend_url],
+        function(result) {
+          process.env.WEB_TOKEN = JSON.stringify(result.value)
+        }
+      )
+      await client.execute(
+        function() {
+          return sessionStorage.getItem('webStateInSessionStorage')
+        },
+        [],
+        function(result) {
+          process.env.WEB_STATE = JSON.stringify(result.value)
+        }
+      )
     }
-    await client.page
-      .webPage()
-      .waitForElementVisible('@appContainer')
-      .then(() => {
-        client.globals.currentUser = userId
-      })
   },
 
   /**
