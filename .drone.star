@@ -1296,12 +1296,12 @@ def setupGraphapiOIdC():
 def buildGlauth():
 	return[{
 		'name': 'build-glauth',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
       # using ocis-glauth repo because latest glauth doesn't supports the bridge setup
 			'mkdir -p /srv/app/src',
-			'cd $GOPATH/src',
+			'cd /srv/app/src',
 			'mkdir -p github.com/owncloud/',
 			'cd github.com/owncloud/',
 			'git clone http://github.com/owncloud/ocis-glauth',
@@ -1322,7 +1322,7 @@ def buildGlauth():
 def glauthService():
 	return[{
 		'name': 'glauth',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
@@ -1345,10 +1345,10 @@ def glauthService():
 def buildIdP():
 	return[{
 		'name': 'build-idp',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
-			'cd $GOPATH/src/github.com/owncloud/ocis',
+			'cd /srv/app/src/github.com/owncloud/ocis',
 			'cd idp',
 			'make build',
 			'cp bin/idp /var/www/owncloud'
@@ -1365,7 +1365,7 @@ def buildIdP():
 def idpService():
 	return[{
 		'name': 'idp',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
@@ -1399,12 +1399,12 @@ def idpService():
 def cloneOCIS():
 	return[{
 		'name': 'clone-ocis',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
 			'source .drone.env',
 			'mkdir -p /srv/app/src',
-			'cd $GOPATH/src',
+			'cd /srv/app/src',
 			'mkdir -p github.com/owncloud/',
 			'cd github.com/owncloud/',
 			'git clone -b $OCIS_BRANCH --single-branch --no-tags https://github.com/owncloud/ocis',
@@ -1421,11 +1421,11 @@ def cloneOCIS():
 def buildOCIS():
 	return[{
 		'name': 'build-ocis',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
 			'source .drone.env',
-			'cd $GOPATH/src/github.com/owncloud/ocis',
+			'cd /srv/app/src/github.com/owncloud/ocis',
 			'git checkout $OCIS_COMMITID',
 			'cd ocis',
 			'make build',
@@ -1443,7 +1443,7 @@ def buildOCIS():
 def ocisService():
 	return[{
 		'name': 'ocis',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
@@ -1482,10 +1482,10 @@ def ocisService():
 def buildOcisWeb():
 	return[{
 		'name': 'build-ocis-web',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
-			'cd $GOPATH/src/github.com/owncloud/ocis',
+			'cd /srv/app/src/github.com/owncloud/ocis',
 			'cd web',
 			'make build',
 			'cp bin/web /var/www/owncloud/ocis-web'
@@ -1503,7 +1503,7 @@ def buildOcisWeb():
 def ocisWebService():
 	return[{
 		'name': 'web',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'detach': True,
 		'environment' : {
