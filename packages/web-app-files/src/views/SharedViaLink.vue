@@ -176,18 +176,6 @@ export default {
 
       this.SET_QUOTA(user.quota)
       this.loading = false
-    },
-
-    shareStatus(status) {
-      if (status === 0) {
-        return this.$gettext('Accepted')
-      }
-      if (status === 1) {
-        return this.$gettext('Pending')
-      }
-      if (status === 2) {
-        return this.$gettext('Declined')
-      }
     }
   }
 }
