@@ -29,7 +29,7 @@ exports.command = function() {
     numAjaxRequestsStart = result.value
   })
   start = Date.now()
-  end = start + this.globals.waitForConditionTimeout
+  end = start + this.globals.waitForNegativeConditionTimeout
   checkSumStartedAjaxRequests(this)
   this.waitForOutstandingAjaxCalls()
 }
