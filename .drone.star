@@ -101,7 +101,7 @@ config = {
 				'WEB_UI_CONFIG': '/var/www/owncloud/web/dist/config.json'
 			},
 			'visualTesting': True,
-			'screenShots': True
+			'screenShots': False
 		},
 		'webUIFederation': {
 			'suites': {
