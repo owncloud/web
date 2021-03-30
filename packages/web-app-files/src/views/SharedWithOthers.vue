@@ -42,9 +42,6 @@
             <translate :translate-n="activeFilesCount.files" translate-plural="files"
               >file</translate
             >
-            <template v-if="activeFiles.length > 0">
-              &ndash; {{ getResourceSize(filesTotalSize) }}
-            </template>
           </div>
         </template>
       </oc-table-files>
@@ -80,8 +77,7 @@ export default {
       'activeFiles',
       'selectedFiles',
       'inProgress',
-      'activeFilesCount',
-      'filesTotalSize'
+      'activeFilesCount'
     ]),
     ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
 

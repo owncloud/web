@@ -4,7 +4,7 @@
     <template v-else>
       <no-content-message
         v-if="isEmpty"
-        id="files-shared-with-others-empty"
+        id="files-shared-via-link-empty"
         class="files-empty"
         icon="group"
       >
@@ -14,7 +14,7 @@
       </no-content-message>
       <oc-table-files
         v-else
-        id="files-shared-with-others-table"
+        id="files-shared-via-link-table"
         v-model="selected"
         class="files-table"
         :class="{ 'files-table-squashed': isSidebarOpen }"
