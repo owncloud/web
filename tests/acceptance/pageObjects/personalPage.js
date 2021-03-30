@@ -149,7 +149,7 @@ module.exports = {
       return this.selectFileForUpload(filePath)
         .waitForElementVisible(
           '@fileUploadProgress',
-          this.api.globals.waitForConditionTimeout,
+          this.api.globals.waitForNegativeConditionTimeout,
           this.api.globals.waitForConditionPollInterval,
           false
         )
@@ -199,7 +199,7 @@ module.exports = {
         .setValue('@folderUploadInput', folderName)
         .waitForElementVisible(
           '@fileUploadProgress',
-          this.api.globals.waitForConditionTimeout,
+          this.api.globals.waitForNegativeConditionTimeout,
           this.api.globals.waitForConditionPollInterval,
           false
         )

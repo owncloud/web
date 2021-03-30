@@ -125,7 +125,7 @@ function initUser(userId) {
  * @returns {*|Promise}
  */
 function createGroup(groupId) {
-  if (client.globals.ocis) {
+  if (client.globals.ldap) {
     return ldap.createGroup(client.globals.ldapClient, groupId).then(err => {
       if (!err) {
         userSettings.addGroupToCreatedGroupsList(groupId)
@@ -151,7 +151,7 @@ function deleteGroup(groupId) {
 }
 
 function addToGroup(userId, groupId) {
-  if (client.globals.ocis) {
+  if (client.globals.ldap) {
     return ldap.addUserToGroup(client.globals.ldapClient, userId, groupId)
   }
   const body = new URLSearchParams()
