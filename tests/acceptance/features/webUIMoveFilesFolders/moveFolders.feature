@@ -1,3 +1,4 @@
+@skip
 Feature: move folders
   As a user
   I want to move folders
