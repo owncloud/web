@@ -2,31 +2,6 @@ module.exports = {
   url: function() {
     return this.api.launchUrl
   },
-  elements: {
-    body: 'body',
-    passwordInput: {
-      selector: 'input[type=password]'
-    },
-    passwordSubmitButton: {
-      selector: '.oc-login-authorize-button'
-    },
-    resourceProtectedText: {
-      selector: '//h2[@class="oc-login-card-title"]/span',
-      locateStrategy: 'xpath'
-    },
-    loadingPublicLink: {
-      selector: "//div[@class='oc-login-card uk-position-center']//span[.='Loading public link…']",
-      locateStrategy: 'xpath'
-    },
-    loginCardDialogBox: {
-      selector: '.oc-login-card-body'
-    },
-    publicLinkPasswordSection: {
-      selector:
-        '//div[@class="oc-login-card-body"]//h2[@class="oc-login-card-title"]/span[text()="This resource is password-protected."]',
-      locateStrategy: 'xpath'
-    }
-  },
   commands: [
     {
       /**
@@ -78,5 +53,30 @@ module.exports = {
         return message
       }
     }
-  ]
+  ],
+  elements: {
+    body: 'body',
+    passwordInput: {
+      selector: 'input[type=password]'
+    },
+    passwordSubmitButton: {
+      selector: '.oc-login-authorize-button'
+    },
+    resourceProtectedText: {
+      selector: '//h2[@class="oc-login-card-title"]/span',
+      locateStrategy: 'xpath'
+    },
+    loadingPublicLink: {
+      selector: "//div[@class='oc-login-card uk-position-center']//span[.='Loading public link…']",
+      locateStrategy: 'xpath'
+    },
+    loginCardDialogBox: {
+      selector: '.oc-login-card-body'
+    },
+    publicLinkPasswordSection: {
+      selector:
+        '//div[@class="oc-login-card-body"]//h2[@class="oc-login-card-title"]/span[text()="This resource is password-protected."]',
+      locateStrategy: 'xpath'
+    }
+  }
 }

@@ -1,5 +1,4 @@
 const util = require('util')
-const navigationHelper = require('../helpers/navigationHelper')
 const xpathHelper = require('../helpers/xpath')
 const timeoutHelper = require('../helpers/timeoutHelper')
 const { join, normalize } = require('../helpers/path')
@@ -7,7 +6,7 @@ const { client } = require('nightwatch-api')
 
 module.exports = {
   url: function() {
-    return this.api.launchUrl + ''
+    return join(this.api.launchUrl, '#/files/list/personal')
   },
   commands: {
     /**
@@ -16,11 +15,9 @@ module.exports = {
      * @returns {*}
      */
     navigateAndWaitTillLoaded: async function(folder = '') {
-      await navigationHelper.navigateAndWaitTillElementPresent(
-        join(this.api.launchUrl, '#/files/list/personal', folder),
-        this.elements.newFileButtonLoaded
+      return await this.navigate(join(this.url(), folder)).waitForElementPresent(
+        this.page.FilesPageElement.filesList().elements.anyAfterLoading
       )
-      await this.page.FilesPageElement.filesList().waitForLoadingFinished()
     },
     /**
      *
