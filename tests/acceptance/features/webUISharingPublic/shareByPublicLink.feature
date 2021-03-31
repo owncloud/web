@@ -32,7 +32,7 @@ Feature: Share by public link
 
   @skipOnOC10 @issue-ocis-reva-383
   # When this issue is fixed delete this scenario and use the one above
-  Scenario Outline: simple sharing by public link
+  Scenario Outline: simple sharing by public link (ocis bug demonstration)
     Given user "Alice" has logged in using the webUI
     When the user creates a new public link for resource "<shared-resource>" using the webUI
     Then user "Alice" should have a share with these details:
@@ -333,7 +333,7 @@ Feature: Share by public link
     Then the public should not get access to the publicly shared file
 
   @skip @yetToImplement @issue-ocis-reva-41
-  Scenario: user shares a public link via email with a personal message
+  Scenario: user shares a public link via email with a personal message (duplicate)
     Given parameter "shareapi_allow_public_notification" of app "core" has been set to "yes"
     And the user has reloaded the current page of the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
@@ -792,7 +792,7 @@ Feature: Share by public link
 
   @skipOnOC10 @issue-product-130
   # When this issue is fixed delete this scenario and use the one above
-  Scenario: User can attempt to upload a file in public link
+  Scenario: User can attempt to upload a file in public link (ocis bug demonstration)
     Given user "Alice" has created a public link with following settings
       | path        | lorem.txt   |
       | name        | public link |
@@ -821,7 +821,7 @@ Feature: Share by public link
     Then folder "public-created-folder" should be listed on the webUI
     And as "Alice" folder "/simple-folder/public-created-folder" should exist
 
-
+  @skipOnOC10 @issue-4582
   Scenario: public batch deletes resources in the public link
     Given user "Alice" has created a public link with following settings
       | path        | /simple-folder               |
@@ -885,3 +885,14 @@ Feature: Share by public link
       | password | pass123 |
     And the public tries to open the public link page of the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
+
+  Scenario: Shared via link page is displayed
+    Given user "Alice" has created a public link with following settings
+      | path        | lorem.txt             |
+      | name        | Public-link           |
+    And user "Alice" has logged in using the webUI
+    When the user browses to the shared-via-link page using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And the following resources should have the following collaborators
+      | fileName  | expectedCollaborators |
+      | lorem.txt | Public-link           |

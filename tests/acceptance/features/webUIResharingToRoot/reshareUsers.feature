@@ -136,8 +136,8 @@ Feature: Resharing shared files with different permissions
       | shared-entry-name | received-entry-name |
       | simple-folder     | simple-folder (2)   |
       | lorem.txt         | lorem (2).txt       |
-      | simple-folder     | simple-folder (2)   |
-      | lorem.txt         | lorem (2).txt       |
+
+
 
 
   Scenario Outline: share a received file/folder without share permissions and check if another user can reshare

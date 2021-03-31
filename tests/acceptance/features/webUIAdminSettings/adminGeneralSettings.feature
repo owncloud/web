@@ -27,13 +27,13 @@ Feature: admin general settings
       """
 
   @smokeTest @skip @yetToImplement
-  Scenario: administrator sets legal URLs
+  Scenario: administrator sets legal URLs on imprint url
     When the administrator sets the value of imprint url to "imprinturl.html" using the webUI
     And the administrator logs out of the webUI
     Then the imprint url on the login page should link to "imprinturl.html"
 
   @smokeTest @skip @yetToImplement
-  Scenario: administrator sets legal URLs
+  Scenario: administrator sets legal URLs on privacy policy url
     When the administrator sets the value of privacy policy url to "privacy_policy.html" using the webUI
     And the administrator logs out of the webUI
     Then the privacy policy url on the login page should link to "privacy_policy.html"

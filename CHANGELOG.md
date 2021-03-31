@@ -13,6 +13,7 @@ Summary
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
 * Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
+* Enhancement - Add "Shared via link" page: [#4881](https://github.com/owncloud/web/pull/4881)
 
 Details
 -------
@@ -54,6 +55,13 @@ Details
 
    https://github.com/owncloud/web/issues/4346
    https://github.com/owncloud/web/pull/4812
+
+* Enhancement - Add "Shared via link" page: [#4881](https://github.com/owncloud/web/pull/4881)
+
+   We've added a new page called "Shared via link". This page displays a files list containing only
+   resources shared via public links.
+
+   https://github.com/owncloud/web/pull/4881
 
 Changelog for ownCloud Web [2.1.0] (2021-03-24)
 =======================================

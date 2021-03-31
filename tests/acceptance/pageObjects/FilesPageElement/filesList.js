@@ -426,7 +426,12 @@ module.exports = {
       const indicators = []
 
       await this.waitForFileVisible(fileName)
-
+      await this.waitForElementVisible({
+        selector: shareIndicatorsXpath,
+        locateStrategy: this.elements.shareIndicatorsInFileRow.locateStrategy,
+        abortOnFailure: false,
+        timeout: client.globals.waitForNegativeConditionTimeout
+      })
       await this.api.elements(
         this.elements.shareIndicatorsInFileRow.locateStrategy,
         shareIndicatorsXpath,

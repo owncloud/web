@@ -141,7 +141,7 @@ Feature: Restore deleted files/folders
     And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
-  Scenario: Restore a file from trashbin whose parent folder is renamed
+  Scenario: Restore a file from trashbin whose parent folder is renamed (ocis bug demonstration)
     Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "Alice"
       | name                                     |
@@ -161,7 +161,7 @@ Feature: Restore deleted files/folders
     And as "Alice" file "simple-folder/file-to-delete-and-restore" should not exist
 
   @issue-1753 @skipOnOCIS @issue-product-186
-  Scenario: Restore a file from trashbin without restoring the parent folder
+  Scenario: Restore a file from trashbin without restoring the parent folder (bug demonstration)
     Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "Alice"
       | name                                     |
@@ -181,7 +181,7 @@ Feature: Restore deleted files/folders
     #And as "Alice" file "simple-folder/file-to-delete-and-restore" should exist
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
-  Scenario: Restore a file from trashbin without restoring the parent folder
+  Scenario: Restore a file from trashbin without restoring the parent folder (ocis bug demonstration)
     Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "Alice"
       | name                                     |

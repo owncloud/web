@@ -52,7 +52,7 @@ Feature: files and folders exist in the trashbin after being deleted
       | &and#hash       |
       | sämple,1.txt    |
 
-  @skipOnOCIS @issue-product-186
+  @skipOnOCIS @issue-product-186 @skipOnOC10 @issue-4582
   Scenario: Delete multiple files at once and check that they are all in the trashbin
     When the user batch deletes these files using the webUI
       | name              |

@@ -41,14 +41,14 @@ Feature: files and folders can be deleted from the trashbin
 
   @skipOnOC10 @issue-product-188
   # after the issue is fixed delete this scenario and use the one above
-  Scenario: Delete folders and check that they are gone
+  Scenario: Delete folders and check that they are gone (ocis bug demonstration)
     When the user deletes folder "simple-folder" using the webUI
     Then the error message with header "Deletion of simple-folder failed" should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
     When the user deletes folder "Folder,With,Comma" using the webUI
     Then folder "Folder,With,Comma" should not be listed on the webUI
 
-
+  @skipOnOC10 @issue-4582
   Scenario: Select some files and delete from trashbin in a batch
     When the user batch deletes these files using the webUI
       | name          |
@@ -62,7 +62,7 @@ Feature: files and folders can be deleted from the trashbin
     And file "lorem.txt" should not be listed on the webUI
     And file "lorem-big.txt" should not be listed on the webUI
 
-  @issue-product-188
+  @issue-product-188 @skipOnOC10 @issue-4582
   Scenario: Select all except for some files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
@@ -77,7 +77,7 @@ Feature: files and folders can be deleted from the trashbin
 
   @skipOnOC10 @issue-product-188
   # after the issue is fixed delete this scenario and use the one above
-  Scenario: Select all except for some files and delete from trashbin in a batch
+  Scenario: Select all except for some files and delete from trashbin in a batch (ocis bug demonstration)
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
       | name          |
@@ -89,7 +89,7 @@ Feature: files and folders can be deleted from the trashbin
     But folder "simple-folder" should be listed on the webUI
     And file "data.zip" should not be listed on the webUI
 
-  @issue-product-188
+  @issue-product-188 @skipOnOC10 @issue-4582
   Scenario: Select all files and delete from trashbin in a batch
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
@@ -97,7 +97,7 @@ Feature: files and folders can be deleted from the trashbin
 
   @skipOnOC10 @issue-product-188
   # after the issue is fixed delete this scenario and use the one above
-  Scenario: Select all files and delete from trashbin in a batch
+  Scenario: Select all files and delete from trashbin in a batch (ocis bug demonstration)
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
     Then file "lorem.txt" should not be listed on the webUI
