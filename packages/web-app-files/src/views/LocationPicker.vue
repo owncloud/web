@@ -18,6 +18,7 @@
               <oc-button
                 id="location-picker-btn-confirm"
                 variation="primary"
+                appearance="filled"
                 :disabled="!canConfirm"
                 @click="confirmAction"
               >
