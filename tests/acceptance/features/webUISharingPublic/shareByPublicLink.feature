@@ -821,7 +821,7 @@ Feature: Share by public link
     Then folder "public-created-folder" should be listed on the webUI
     And as "Alice" folder "/simple-folder/public-created-folder" should exist
 
-
+  @skipOnOC10 @issue-4582
   Scenario: public batch deletes resources in the public link
     Given user "Alice" has created a public link with following settings
       | path        | /simple-folder               |
@@ -885,3 +885,14 @@ Feature: Share by public link
       | password | pass123 |
     And the public tries to open the public link page of the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
+
+  Scenario: Shared via link page is displayed
+    Given user "Alice" has created a public link with following settings
+      | path        | lorem.txt             |
+      | name        | Public-link           |
+    And user "Alice" has logged in using the webUI
+    When the user browses to the shared-via-link page using the webUI
+    Then file "lorem.txt" should be listed on the webUI
+    And the following resources should have the following collaborators
+      | fileName  | expectedCollaborators |
+      | lorem.txt | Public-link           |

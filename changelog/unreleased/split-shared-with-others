@@ -1,0 +1,5 @@
+Enhancement: Add "Shared via link" page
+
+We've added a new page called "Shared via link". This page displays a files list containing only resources shared via public links.
+
+https://github.com/owncloud/web/pull/4881

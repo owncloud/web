@@ -49,7 +49,7 @@ Feature: deleting files and folders
       | "question?"         |
       | "&and#hash"         |
 
-  @smokeTest @skip
+  @smokeTest @skipOnOC10 @issue-4582
   Scenario: Delete multiple files at once
     When the user batch deletes these files using the webUI
       | name          |
@@ -63,7 +63,7 @@ Feature: deleting files and folders
     And the deleted elements should not be listed on the webUI after a page reload
     And no message should be displayed on the webUI
 
-
+  @skipOnOC10 @issue-4582
   Scenario: Delete all files at once
     When the user marks all files for batch action using the webUI
     And the user batch deletes the marked files using the webUI
@@ -75,7 +75,7 @@ Feature: deleting files and folders
 
 
 
-  @ocis-reva-issue-106 @ocis-reve-issue-442
+  @ocis-reva-issue-106 @ocis-reve-issue-442 @skipOnOC10 @issue-4582
   Scenario: Delete all except for a few files at once
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
@@ -183,7 +183,7 @@ Feature: deleting files and folders
       | question?       |
       | &and#hash       |
 
-  @skip @yetToImplement
+  @skip @yetToImplement @issue-4582
   Scenario: Delete multiple files at once on a public share
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"

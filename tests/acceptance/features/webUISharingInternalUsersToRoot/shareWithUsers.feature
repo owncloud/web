@@ -238,7 +238,7 @@ Feature: Sharing files and folders with internal users
     And the user browses to the files page
     Then folder "simple-folder (2)" should not be listed on the webUI
 
-
+  @skipOnOC10 @issue-4582
   Scenario: deleting multiple entries on the shared-with-me page
     Given user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared file "lorem.txt" with user "Brian"

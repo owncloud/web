@@ -88,7 +88,7 @@ Feature: Share by public link with different roles
     When the public uses the webUI to access the last public link created by user "Alice"
     Then there should be no resources listed on the webUI
 
-
+  @skipOnOC10 @issue-4582
   Scenario: creating a public link with "Editor" role makes it possible to delete files via the link
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
@@ -101,6 +101,7 @@ Feature: Share by public link with different roles
     Then the deleted elements should not be listed on the webUI
     And the deleted elements should not be listed on the webUI after a page reload
 
+  @skipOnOC10 @issue-4582
   Scenario: creating a public link with "Editor" role makes it possible to delete files via the link even with password set
     Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
