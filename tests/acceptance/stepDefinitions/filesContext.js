@@ -54,6 +54,10 @@ When('the user browses to the shared-with-others page using the webUI', function
   return client.page.webPage().navigateToUsingMenu('Shared with others')
 })
 
+When('the user browses to the shared-via-link page using the webUI', function() {
+  return client.page.webPage().navigateToUsingMenu('Shared via link')
+})
+
 Given('the user has browsed to the trashbin page', function() {
   return client.page.trashbinPage().navigateAndWaitTillLoaded()
 })
