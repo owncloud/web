@@ -1,4 +1,3 @@
-const navigationHelper = require('../helpers/navigationHelper')
 const { join } = require('../helpers/path')
 
 module.exports = {
@@ -11,9 +10,8 @@ module.exports = {
      * @returns {*}
      */
     navigateAndWaitTillLoaded: function() {
-      return navigationHelper.navigateAndWaitTillLoaded(
-        this.url(),
-        this.page.FilesPageElement.filesList().elements.filesListProgressBar
+      return this.navigate(this.url()).waitForElementPresent(
+        this.page.FilesPageElement.filesList().elements.anyAfterLoading
       )
     }
   }
