@@ -29,10 +29,11 @@
               id="new-file-menu-btn"
               key="new-file-menu-btn-enabled"
               variation="primary"
+              appearance="filled"
               :uk-tooltip="_cannotCreateDialogText"
               :disabled="isNewBtnDisabled"
             >
-              <oc-icon name="add" aria-hidden="true" />
+              <oc-icon name="add" />
               <translate>New</translate>
             </oc-button>
             <oc-drop
@@ -240,7 +241,7 @@ export default {
         '%{ amount } selected items',
         this.selectedFiles.length
       )
-      return this.$gettextInterpolate(translated, { amount: this.selectedResourcesAmount })
+      return this.$gettextInterpolate(translated, { amount: this.selectedFiles.length })
     }
   },
   methods: {
@@ -270,15 +271,12 @@ export default {
       }
 
       const modal = {
-        variation: 'info',
+        variation: 'passive',
         title: isFolder ? this.$gettext('Create a new folder') : this.$gettext('Create a new file'),
         cancelText: this.$gettext('Cancel'),
         confirmText: this.$gettext('Create'),
         hasInput: true,
         inputValue: defaultName,
-        inputPlaceholder: isFolder
-          ? this.$gettext('Enter new folder name…')
-          : this.$gettext('Enter new file name…'),
         inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
         inputError: isFolder
           ? this.checkNewFolderName(defaultName)

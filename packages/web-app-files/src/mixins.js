@@ -188,7 +188,7 @@ export default {
             )
 
       const modal = {
-        variation: isVersioningEnabled ? 'info' : 'danger',
+        variation: isVersioningEnabled ? 'passive' : 'danger',
         icon: 'cloud_upload',
         title,
         message: isVersioningEnabled

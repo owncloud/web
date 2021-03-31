@@ -1,7 +1,7 @@
 <template>
   <div>
     <label class="oc-label">
-      <translate>Role:</translate>
+      <translate>Role</translate>
     </label>
     <oc-button
       :id="`files-${mode}-role-button`"

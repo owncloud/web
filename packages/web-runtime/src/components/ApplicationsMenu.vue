@@ -3,12 +3,12 @@
     <oc-button
       id="_appSwitcherButton"
       ref="menubutton"
-      variation="raw"
+      appearance="raw"
       class="oc-topbar-menu-burger"
       :aria-label="applicationSwitcherLabel"
       :uk-tooltip="applicationSwitcherLabel"
     >
-      <oc-icon name="apps" aria-hidden="true" class="uk-flex" />
+      <oc-icon name="apps" class="uk-flex" />
     </oc-button>
     <oc-drop
       ref="menu"
@@ -22,13 +22,11 @@
       <div class="uk-grid-small uk-text-center" uk-grid>
         <div v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="uk-width-1-3">
           <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
-            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="xlarge" />
-            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="xlarge" />
+            <oc-icon :name="n.iconMaterial" size="xlarge" />
             <div v-translate>{{ n.title }}</div>
           </a>
           <router-link v-else key="apps-menu-internal-link" :to="n.path">
-            <oc-icon v-if="n.iconMaterial" :name="n.iconMaterial" size="xlarge" />
-            <oc-icon v-if="n.iconUrl" :url="n.iconUrl" size="xlarge" />
+            <oc-icon :name="n.iconMaterial" size="xlarge" />
             <div v-translate>{{ n.title }}</div>
           </router-link>
         </div>

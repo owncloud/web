@@ -18,7 +18,7 @@
       :aria-label="displaySearchButtonLabel"
       @click="focusMobileSearchInput"
     >
-      <oc-icon name="search" aria-hidden="true" />
+      <oc-icon name="search" />
     </oc-button>
     <oc-drop
       drop-id="oc-topbar-search-mobile"

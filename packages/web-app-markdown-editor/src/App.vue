@@ -12,6 +12,7 @@
     <div class="uk-flex">
       <div class="uk-container uk-width-1-2">
         <oc-textarea
+          id="markdown-editor-input"
           name="input"
           full-width
           :value="currentContent"
@@ -23,7 +24,7 @@
       </div>
       <div class="uk-container uk-width-1-2">
         <!-- eslint-disable-next-line vue/no-v-html -->
-        <div v-html="renderedMarkdown"></div>
+        <div id="markdown-editor-preview" v-html="renderedMarkdown"></div>
       </div>
     </div>
   </main>

@@ -29,7 +29,7 @@
     </div>
     <oc-spinner
       v-if="loading"
-      :aria-label="this.$gettext('Loading media')"
+      :aria-label="$gettext('Loading media')"
       class="uk-position-center"
       size="xlarge"
     />
@@ -39,25 +39,26 @@
       variation="danger"
       size="xlarge"
       class="uk-position-center uk-z-index"
+      :accessible-label="$gettext('Failed to load media')"
     />
 
-    <div class="uk-position-medium uk-position-bottom-center">
+    <div class="uk-position-medium uk-position-bottom-center media-viewer-details">
       <div
-        class="uk-overlay uk-overlay-default oc-p-s uk-text-center uk-text-meta uk-text-truncate"
+        class="uk-overlay uk-overlay-default oc-p-s uk-text-center uk-text-meta uk-text-truncate media-viewer-file-name"
       >
         {{ medium.name }}
       </div>
-      <div class="uk-overlay uk-overlay-primary uk-light oc-p-s">
+      <div class="uk-overlay uk-overlay-primary uk-light oc-p-s media-viewer-controls-container">
         <div
-          class="uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around"
+          class="uk-width-large uk-flex uk-flex-middle uk-flex-center uk-flex-around media-viewer-controls-action-bar"
           style="user-select:none;"
         >
           <oc-icon
             role="button"
-            class="oc-cursor-pointer"
+            class="oc-cursor-pointer media-viewer-controls-previous"
             size="large"
             name="chevron_left"
-            :aria-label="$gettext('Previous')"
+            :accessible-label="$gettext('Previous')"
             @click="prev"
           />
           <!-- @TODO: Bring back working uk-light -->
@@ -66,24 +67,24 @@
           </span>
           <oc-icon
             role="button"
-            class="oc-cursor-pointer"
+            class="oc-cursor-pointer media-viewer-controls-next"
             size="large"
             name="chevron_right"
-            :aria-label="$gettext('Next')"
+            :accessible-label="$gettext('Next')"
             @click="next"
           />
           <oc-icon
             role="button"
-            class="oc-cursor-pointer"
+            class="oc-cursor-pointer media-viewer-controls-download"
             name="file_download"
-            :aria-label="$gettext('Download')"
+            :accessible-label="$gettext('Download')"
             @click="downloadMedium"
           />
           <oc-icon
             role="button"
-            class="oc-cursor-pointer"
+            class="oc-cursor-pointer media-viewer-controls-close"
             name="close"
-            :aria-label="$gettext('Close')"
+            :accessible-label="$gettext('Close')"
             @click="closeApp"
           />
         </div>

@@ -7,7 +7,7 @@
         class="oc-mr-s"
         @click="restoreFiles()"
       >
-        <oc-icon name="restore" aria-hidden="true" />
+        <oc-icon name="restore" />
         <translate>Restore</translate>
       </oc-button>
       <oc-button
@@ -15,7 +15,7 @@
         key="delete-btn"
         @click="selectedFiles.length < 1 ? emptyTrashbin() : $_deleteResources_displayDialog()"
       >
-        <oc-icon name="delete" aria-hidden="true" />
+        <oc-icon name="delete" />
         {{ clearTrashbinButtonText }}
       </oc-button>
     </template>
@@ -26,7 +26,7 @@
           key="copy-selected-btn"
           @click="triggerLocationPicker('copy')"
         >
-          <oc-icon name="file_copy" aria-hidden="true" />
+          <oc-icon name="file_copy" />
           <translate>Copy</translate>
         </oc-button>
       </div>
@@ -36,7 +36,7 @@
           key="move-selected-btn"
           @click="triggerLocationPicker('move')"
         >
-          <oc-icon name="folder-move" aria-hidden="true" />
+          <oc-icon name="folder-move" />
           <translate>Move</translate>
         </oc-button>
       </div>
@@ -46,7 +46,7 @@
           key="delete-selected-btn"
           @click="$_deleteResources_displayDialog"
         >
-          <oc-icon name="delete" aria-hidden="true" />
+          <oc-icon name="delete" />
           <translate>Delete</translate>
         </oc-button>
       </div>

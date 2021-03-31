@@ -30,7 +30,7 @@ module.exports = {
         requiredXpath,
         elements => {
           elements.value.forEach(el => {
-            this.api.elementIdAttribute(el.ELEMENT, 'alt', r => {
+            this.api.elementIdAttribute(el.ELEMENT, 'aria-label', r => {
               collaborators.push(r.value)
             })
           })

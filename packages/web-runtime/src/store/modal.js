@@ -2,7 +2,7 @@ const emptyReturn = () => {}
 
 const state = {
   displayed: false,
-  variation: 'info',
+  variation: 'passive',
   icon: '',
   title: '',
   message: '',
@@ -43,7 +43,7 @@ const actions = {
 const mutations = {
   CREATE_MODAL(state, modal) {
     state.displayed = true
-    state.variation = modal.variation || 'info'
+    state.variation = modal.variation || 'passive'
     state.icon = modal.icon
     state.title = modal.title
     state.message = modal.message
@@ -54,7 +54,7 @@ const mutations = {
     state.onConfirm = modal.onConfirm
     state.hasInput = modal.hasInput || false
     state.inputValue = modal.inputValue || null
-    state.inputPlaceholder = modal.inputPlaceholder || null
+    state.inputDescription = modal.inputDescription || null
     state.inputLabel = modal.inputLabel || null
     state.inputError = modal.inputError || null
     state.inputDisabled = modal.inputDisabled || false

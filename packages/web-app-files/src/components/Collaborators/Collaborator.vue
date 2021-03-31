@@ -18,7 +18,7 @@
               class="oc-mr-s files-collaborators-collaborator-indicator"
               name="group"
               size="xlarge"
-              :aria-label="$gettext('Group')"
+              :accessible-label="$gettext('Group')"
             />
             <oc-icon
               v-else
@@ -26,7 +26,7 @@
               class="oc-mr-s files-collaborators-collaborator-indicator"
               name="person"
               size="xlarge"
-              :aria-label="$gettext('Remote user')"
+              :accessible-label="$gettext('Remote user')"
             />
           </div>
         </div>
@@ -54,8 +54,8 @@
           </div>
           <oc-grid gutter="small">
             <div v-if="!isCurrentUser">
-              <oc-tag>
-                <oc-icon :name="collaboratorTypeTagIcon" aria-hidden="true" />
+              <oc-tag class="files-collaborators-collaborator-share-type">
+                <oc-icon :name="collaboratorTypeTagIcon" />
                 {{ collaboratorType(collaborator.shareType) }}
               </oc-tag>
             </div>
@@ -66,7 +66,7 @@
                 type="button"
                 :uk-tooltip="$gettext('Show resharer details')"
               >
-                <oc-icon name="repeat" aria-hidden="true" />
+                <oc-icon name="repeat" />
                 <translate :translate-params="{ resharer: $_reshareInformation }">
                   Shared by %{resharer}
                 </translate>
@@ -80,7 +80,7 @@
                 class="oc-mt-s"
                 close-on-click
               >
-                <translate tag="h4">Shared by:</translate>
+                <translate tag="h4">Shared by</translate>
                 <ul class="uk-list uk-list-divider uk-overflow-hidden oc-m-rm">
                   <li v-for="resharer in collaborator.resharers" :key="resharer.name">
                     <div class="uk-flex uk-flex-middle uk-flex-left">
@@ -107,13 +107,13 @@
             </div>
             <div>
               <oc-tag class="files-collaborators-collaborator-role">
-                <oc-icon :name="roleTagIcon" aria-hidden="true" />
+                <oc-icon :name="roleTagIcon" />
                 {{ originalRole.label }}
               </oc-tag>
             </div>
             <div v-if="collaborator.expires">
               <oc-tag class="files-collaborators-collaborator-expires">
-                <oc-icon name="text-calendar" aria-hidden="true" />
+                <oc-icon name="text-calendar" />
                 <translate :translate-params="{ expires: formDateFromNow(expirationDate) }">
                   Expires %{expires}
                 </translate>
@@ -126,7 +126,7 @@
                 :to="viaRouterParams"
                 :uk-tooltip="viaTooltip"
               >
-                <oc-icon name="exit_to_app" aria-hidden="true" />
+                <oc-icon name="exit_to_app" />
                 <span
                   class="uk-text-truncate files-collaborators-collaborator-via-label"
                   v-text="viaLabel"
@@ -142,7 +142,7 @@
             v-if="$_editButtonVisible"
             :aria-label="$gettext('Edit share')"
             :uk-tooltip="$gettext('Edit share')"
-            variation="raw"
+            appearance="raw"
             class="files-collaborators-collaborator-edit"
             @click="$emit('onEdit', collaborator)"
           >
@@ -153,7 +153,7 @@
               v-if="$_deleteButtonVisible"
               :aria-label="$gettext('Delete share')"
               :uk-tooltip="$gettext('Delete share')"
-              variation="raw"
+              appearance="raw"
               class="files-collaborators-collaborator-delete"
               @click="$_removeShare"
             >

@@ -84,8 +84,7 @@ module.exports = {
           additionalInfo: this.elements.collaboratorInformationSubAdditionalInfo,
           viaLabel: this.elements.collaboratorInformationSubVia,
           resharer: this.elements.collaboratorInformationSubResharer,
-          // Type of user is stored in aria-label of indicator so we use the selector for the indicator
-          shareType: this.elements.collaboratorIndicator
+          shareType: this.elements.collaboratorShareType
         }
       }
 
@@ -112,16 +111,9 @@ module.exports = {
           )
 
           if (attrElementId) {
-            // Get collaborator type via aria-label of indicator
-            if (attrName === 'shareType') {
-              await this.api.elementIdAttribute(attrElementId, 'aria-label', label => {
-                collaboratorResult[attrName] = label.value
-              })
-            } else {
-              await this.api.elementIdText(attrElementId, text => {
-                collaboratorResult[attrName] = text.value
-              })
-            }
+            await this.api.elementIdText(attrElementId, text => {
+              collaboratorResult[attrName] = text.value
+            })
           } else {
             collaboratorResult[attrName] = false
           }
@@ -224,8 +216,8 @@ module.exports = {
       // within collaboratorsInformation
       selector: '.files-collaborators-collaborator-reshare-information'
     },
-    collaboratorIndicator: {
-      selector: '.files-collaborators-collaborator-indicator'
+    collaboratorShareType: {
+      selector: '.files-collaborators-collaborator-share-type'
     },
     collaboratorExpirationInfo: {
       selector:

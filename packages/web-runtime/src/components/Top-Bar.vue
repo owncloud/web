@@ -3,12 +3,12 @@
     <oc-grid gutter="medium" flex>
       <div class="uk-hidden@l">
         <oc-button
-          variation="raw"
+          appearance="raw"
           class="oc-app-navigation-toggle"
           :aria-label="$gettext('Open navigation menu')"
           @click="toggleAppNavigationVisibility"
         >
-          <oc-icon name="menu" aria-hidden="true" />
+          <oc-icon name="menu" />
         </oc-button>
       </div>
       <search-bar v-if="!isSearchDisabled" />

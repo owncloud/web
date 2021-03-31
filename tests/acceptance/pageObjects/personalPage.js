@@ -362,7 +362,7 @@ module.exports = {
   },
   elements: {
     searchInput: {
-      selector: '.oc-search-input input'
+      selector: 'input.oc-search-input'
     },
     newFileMenuButtonAnyState: {
       selector: '#new-file-menu-btn'

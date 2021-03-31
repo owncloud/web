@@ -23,6 +23,11 @@
             id="files-sidebar-star-icon"
             :class="['uk-inline', 'oc-mr-xs', favoriteIconClass]"
             name="star"
+            :accessible-label="
+              highlightedFile.starred
+                ? $gettext('File is marked as favorite')
+                : $gettext('File is not marked as favorite')
+            "
             @click.native.stop="toggleFileFavorite(highlightedFile)"
           />
           <template v-if="highlightedFile.size > -1">

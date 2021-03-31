@@ -281,7 +281,9 @@ const assertCollaboratorslistContains = function(
     .getCollaboratorsList(null, name)
     .then(shares => {
       const share = shares.find(share => {
-        return name === share.displayName && type === share.shareType.toLowerCase()
+        return (
+          name === share.displayName && (!share.shareType || type === share.shareType.toLowerCase())
+        )
       })
 
       if (!share) {

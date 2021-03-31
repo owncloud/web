@@ -1,30 +1,27 @@
 <template>
   <div class="files-collaborators-collaborator-add-dialog">
-    <label for="oc-sharing-autocomplete" class="oc-mb-s uk-display-block">
-      <translate>Add People:</translate>
-      <oc-autocomplete
-        id="oc-sharing-autocomplete"
-        ref="ocSharingAutocomplete"
-        :aria-label="$gettext('Select a person to add')"
-        :items="autocompleteResults"
-        :items-loading="autocompleteInProgress"
-        :placeholder="$_ocCollaborationStatus_autocompletePlaceholder"
-        :filter="filterRecipients"
-        :fill-on-selection="false"
-        class="uk-width-1-1"
-        dropdown-class="uk-width-1-1"
-        @input="$_ocCollaborators_selectAutocompleteResult"
-        @update:input="$_onAutocompleteInput"
-      >
-        <template v-slot:item="{ item }">
-          <autocomplete-item :item="item" />
-        </template>
-      </oc-autocomplete>
-    </label>
+    <oc-autocomplete
+      id="oc-sharing-autocomplete"
+      ref="ocSharingAutocomplete"
+      :label="$gettext('Select a person to add')"
+      :items="autocompleteResults"
+      :items-loading="autocompleteInProgress"
+      :description-message="$_ocCollaborationStatus_autocompleteDescriptionMessage"
+      :filter="filterRecipients"
+      :fill-on-selection="false"
+      class="uk-width-1-1 oc-mb"
+      dropdown-class="uk-width-1-1"
+      @input="$_ocCollaborators_selectAutocompleteResult"
+      @update:input="$_onAutocompleteInput"
+    >
+      <template v-slot:item="{ item }">
+        <autocomplete-item :item="item" />
+      </template>
+    </oc-autocomplete>
     <oc-grid v-if="selectedCollaborators.length > 0" gutter="small">
       <div>
         <div>
-          <translate>Selected people:</translate>
+          <translate>Selected people</translate>
         </div>
         <oc-table-simple class="uk-width-expand files-collaborators-collaborator-autocomplete-item">
           <oc-tr
@@ -34,7 +31,7 @@
             <oc-td width="shrink">
               <oc-button
                 :aria-label="$gettext('Delete share')"
-                variation="raw"
+                appearance="raw"
                 size="small"
                 class="files-collaborators-collaborator-autocomplete-item-remove"
                 @click="$_ocCollaborators_removeFromSelection(collaborator)"
@@ -73,6 +70,7 @@
           key="new-collaborator-save-button"
           :disabled="!$_isValid"
           variation="primary"
+          appearance="filled"
           @click="$_ocCollaborators_newCollaboratorsAdd(selectedCollaborators)"
         >
           <translate>Share</translate>
@@ -117,7 +115,7 @@ export default {
     ...mapGetters('Files', ['currentFileOutgoingCollaborators', 'highlightedFile']),
     ...mapGetters(['user']),
 
-    $_ocCollaborationStatus_autocompletePlaceholder() {
+    $_ocCollaborationStatus_autocompleteDescriptionMessage() {
       return this.$gettext("Add new person by name, email or federation ID's")
     },
 

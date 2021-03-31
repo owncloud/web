@@ -6,11 +6,11 @@
       :key="action.label"
       :aria-label="action.label"
       :uk-tooltip="action.label"
-      variation="raw"
+      appearance="raw"
       class="oc-mr-xs"
       @click.stop="action.handler({ item, client: $client, store: $store })"
     >
-      <oc-icon :name="action.icon" aria-hidden="true" class="uk-flex" />
+      <oc-icon :name="action.icon" class="uk-flex" />
     </oc-button>
   </div>
 </template>

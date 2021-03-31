@@ -2,7 +2,7 @@
   <div>
     <oc-hidden-announcer :announcement="announcement" level="polite" />
     <skip-to target="main">Skip to main</skip-to>
-    <div id="Web">
+    <div id="web-container">
       <div
         v-if="user.isAuthenticated && !user.userReady"
         class="loading-overlay"
@@ -69,7 +69,7 @@
           :input-label="modal.inputLabel"
           :input-disabled="modal.inputDisabled"
           :input-value="modal.inputValue"
-          :input-placeholder="modal.inputPlaceholder"
+          :input-description="modal.inputDescription"
           :input-error="modal.inputError"
           :button-cancel-text="modal.cancelText"
           :button-confirm-text="modal.confirmText"
@@ -335,7 +335,8 @@ export default {
     },
 
     extractPageTitleFromRoute(route, includeGeneralName = true) {
-      const titleSegments = [route.meta.pageTitle || route.name]
+      const routeTitle = route.meta.title ? this.$gettext(route.meta.title) : route.name
+      const titleSegments = [routeTitle]
 
       if (includeGeneralName) {
         titleSegments.push(this.configuration.theme.general.name)
@@ -359,6 +360,10 @@ export default {
 }
 </script>
 <style>
+#web-container {
+  background-color: var(--oc-background);
+}
+
 #oc-topbar {
   position: sticky;
   top: 0;

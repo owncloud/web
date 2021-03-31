@@ -44,7 +44,7 @@ export default {
       }
 
       const modal = {
-        variation: 'info',
+        variation: 'passive',
         title: isFolder
           ? this.$gettext('Rename folder ') + resource.name
           : this.$gettext('Rename file ' + resource.name),
@@ -52,9 +52,6 @@ export default {
         confirmText: this.$gettext('Rename'),
         hasInput: true,
         inputValue: resource.name,
-        inputPlaceholder: isFolder
-          ? this.$gettext('Enter new folder name…')
-          : this.$gettext('Enter new file name…'),
         inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
         onCancel: this.hideModal,
         onConfirm: confirmAction,

@@ -398,7 +398,7 @@ module.exports = {
       selector: '#files-file-link-role-uploader'
     },
     errorMessageInsidePublicLinkContainer: {
-      selector: '//div[contains(@class, "uk-alert-danger")]',
+      selector: '//div[contains(@class, "oc-alert-danger")]',
       locateStrategy: 'xpath'
     },
     publicLinkNameInputField: {

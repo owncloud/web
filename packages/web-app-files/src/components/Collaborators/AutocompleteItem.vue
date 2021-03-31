@@ -14,8 +14,16 @@
         class="oc-mr-s"
         name="group"
         size="xlarge"
+        :accessible-label="$gettext('Group')"
       />
-      <oc-icon v-else key="avatar-generic-person" class="oc-mr-s" name="person" size="xlarge" />
+      <oc-icon
+        v-else
+        key="avatar-generic-person"
+        class="oc-mr-s"
+        name="person"
+        size="xlarge"
+        :accessible-label="$gettext('User')"
+      />
     </template>
     <div class="files-collaborators-autocomplete-user-text">
       <span class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />

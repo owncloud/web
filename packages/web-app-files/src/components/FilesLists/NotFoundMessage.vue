@@ -3,7 +3,7 @@
     id="files-list-not-found-message"
     class="uk-text-center uk-flex-middle uk-flex uk-flex-center uk-flex-column"
   >
-    <oc-icon :url="iconPath" type="div" size="xxlarge" variation="system" />
+    <oc-icon name="cloud" type="div" size="xxlarge" />
     <div class="uk-text-muted uk-text-large">
       <translate>Resource not found</translate>
     </div>
@@ -17,7 +17,7 @@
         v-if="showHomeButton"
         id="files-list-not-found-button-go-home"
         type="router-link"
-        variation="raw"
+        appearance="raw"
         :to="homeRoute"
       >
         <translate>Go to »All files«</translate>
@@ -26,7 +26,7 @@
         v-if="showPublicLinkButton"
         id="files-list-not-found-button-reload-link"
         type="router-link"
-        variation="raw"
+        appearance="raw"
         :to="publicLinkRoute"
       >
         <translate>Reload public link</translate>

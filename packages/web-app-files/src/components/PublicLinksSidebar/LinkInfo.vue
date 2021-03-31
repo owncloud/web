@@ -12,7 +12,7 @@
         <oc-button
           :aria-label="copyLabel"
           :uk-tooltip="copyLabel"
-          variation="raw"
+          appearance="raw"
           class="oc-files-file-link-copy-url"
         >
           <oc-icon
@@ -34,13 +34,13 @@
     <oc-grid gutter="small">
       <div>
         <oc-tag class="oc-files-file-link-role">
-          <oc-icon :name="roleTagIcon" aria-hidden="true" />
+          <oc-icon :name="roleTagIcon" />
           {{ link.description }}
         </oc-tag>
       </div>
       <div v-if="link.expiration">
         <oc-tag>
-          <oc-icon name="text-calendar" aria-hidden="true" />
+          <oc-icon name="text-calendar" />
           <translate :translate-params="{ expires: formDateFromNow(link.expiration) }">
             Expires %{expires}
           </translate>
@@ -48,7 +48,7 @@
       </div>
       <div v-if="link.password">
         <oc-tag>
-          <oc-icon name="lock" aria-hidden="true" />
+          <oc-icon name="lock" />
           <translate>Password protected</translate>
         </oc-tag>
       </div>
@@ -59,7 +59,7 @@
           :to="viaRouterParams"
           :uk-tooltip="viaTooltip"
         >
-          <oc-icon name="exit_to_app" aria-hidden="true" />
+          <oc-icon name="exit_to_app" />
           <span class="uk-text-truncate files-file-links-link-via-label" v-text="viaLabel" />
         </oc-tag>
       </div>

@@ -219,11 +219,11 @@ module.exports = {
       selector: '.oc-modal .oc-text-input-message'
     },
     searchInputFieldHighResolution: {
-      selector: '(//div[contains(@class, "oc-search-input")]//input)[1]',
+      selector: '(//input[contains(@class, "oc-search-input")])[1]',
       locateStrategy: 'xpath'
     },
     searchInputFieldLowResolution: {
-      selector: '(//div[contains(@class, "oc-search-input")]//input)[2]',
+      selector: '(//input[contains(@class, "oc-search-input")])[2]',
       locateStrategy: 'xpath'
     },
     searchLoadingIndicator: {
@@ -246,7 +246,7 @@ module.exports = {
       selector: '.oc-alert-close-icon'
     },
     webContainer: {
-      selector: '#Web'
+      selector: '#web-container'
     },
     appContainer: {
       selector: '.oc-app-container'
