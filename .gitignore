@@ -38,3 +38,8 @@ tests/testing-app
 
 # drone CI is in .drone.star, do not let someone accidentally commit a local .drone.yml
 .drone.yml
+
+# Themes
+/packages/web-container/themes/**
+!/packages/web-container/themes/example/**
+!/packages/web-container/themes/owncloud/**
