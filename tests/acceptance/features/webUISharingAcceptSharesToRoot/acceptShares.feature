@@ -294,7 +294,7 @@ Feature: accept/decline shares coming from internal users
     Then file "lorem (2).txt" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And file "testimage.jpg" shared by "Alice Hansen" should be in "Pending" state on the webUI
 
-  @issue-3101 @skip
+  @issue-3101 @skip @issue-4582
   Scenario: Delete multiple accepted shares at once from shared with me page
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And user "Alice" has been created with default attributes
