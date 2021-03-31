@@ -24,7 +24,7 @@ Feature: Set config options from web config file
     When the user browses to the files page
     Then the search bar should be visible in the webUI
     When the property "hideSearchBar" of "options" is changed to true in web config file
-    And the user browses to the files page
+    And the user reloads the current page of the webUI
     Then the search bar should not be visible in the webUI
 
 
@@ -34,5 +34,5 @@ Feature: Set config options from web config file
     When the user browses to the files page
     Then the search bar should not be visible in the webUI
     When the property "hideSearchBar" of "options" is changed to false in web config file
-    And the user browses to the files page
+    And the user reloads the current page of the webUI
     Then the search bar should be visible in the webUI

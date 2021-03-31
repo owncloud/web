@@ -244,8 +244,12 @@ module.exports = {
       await this.waitForElementVisible('@filesTable')
       return this
     },
-    waitForLoadingFinished: async function() {
-      await this.waitForElementVisible('@anyAfterLoading')
+    waitForLoadingFinished: async function(awaitVisible = true) {
+      if (awaitVisible) {
+        await this.waitForElementVisible('@anyAfterLoading')
+        return this
+      }
+      await this.waitForElementPresent('@anyAfterLoading')
       return this
     },
     getResourceThumbnail: async function(resourceName, elementType) {
