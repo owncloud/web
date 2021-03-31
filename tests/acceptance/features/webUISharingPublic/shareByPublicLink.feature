@@ -821,7 +821,7 @@ Feature: Share by public link
     Then folder "public-created-folder" should be listed on the webUI
     And as "Alice" folder "/simple-folder/public-created-folder" should exist
 
-
+  @skipOnOC10 @issue-4582
   Scenario: public batch deletes resources in the public link
     Given user "Alice" has created a public link with following settings
       | path        | /simple-folder               |
