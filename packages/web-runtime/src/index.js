@@ -183,20 +183,20 @@ const finalizeInit = async () => {
 }
 
 const fetchTheme = async () => {
-  // TODO: Decide on how to differentiate between themes provided via 
+  // TODO: Decide on how to differentiate between themes provided via
   // default, local path or external URL
-  let themePath = config.theme || 'themes/owncloud/theme.json'
+  const themePath = config.theme || 'themes/owncloud/theme.json'
 
   const response = await fetch(themePath)
   const theme = await response.json()
 
-  await store.dispatch('loadTheme', { theme, name: config.theme })
+  await store.dispatch('loadTheme', { theme: theme.default, name: config.theme })
 
   const loadedTheme = store.getters.theme
 
   // Initializing the ODS using the default theme provided
   Vue.use(DesignSystem, {
-    tokens: loadedTheme["default"].designTokens
+    tokens: loadedTheme.designTokens
   })
 }
 

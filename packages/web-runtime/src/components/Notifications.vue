@@ -15,7 +15,7 @@
       class="uk-overflow-auto uk-height-large uk-width-3-4 uk-width-large@s"
     >
       <div v-for="(el, index) in activeNotifications" :key="index" class="uk-width-1-1">
-        <h5 class="uk-h4">{{ el.subject }}</h5>
+        <h4 v-text="el.subject" />
         <p v-if="el.message" class="uk-text-small">{{ el.message }}</p>
         <p>
           <a v-if="el.link" :href="el.link" class="uk-link" target="_blank">{{ el.link }}</a>
@@ -26,7 +26,8 @@
               v-for="(action, actionIndex) in el.actions"
               :key="index + '-' + actionIndex"
               size="small"
-              :variation="action.primary ? 'primary' : 'default'"
+              :variation="action.primary ? 'primary' : 'passive'"
+              appearance="filled"
               class="oc-ml-s"
               @click.prevent="executeRequest(el.app, action.link, action.type, el.notification_id)"
               >{{ action.label }}</oc-button
@@ -39,8 +40,9 @@
             @click.prevent.once="
               deleteNotification({ client: $client, notification: el.notification_id })
             "
-            >Mark as read</oc-button
           >
+            Mark as read
+          </oc-button>
         </div>
         <hr v-if="index + 1 !== activeNotifications.length" />
       </div>
