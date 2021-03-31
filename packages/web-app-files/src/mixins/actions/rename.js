@@ -52,9 +52,6 @@ export default {
         confirmText: this.$gettext('Rename'),
         hasInput: true,
         inputValue: resource.name,
-        inputDescription: isFolder
-          ? this.$gettext('Enter new folder name…')
-          : this.$gettext('Enter new file name…'),
         inputLabel: isFolder ? this.$gettext('Folder name') : this.$gettext('File name'),
         onCancel: this.hideModal,
         onConfirm: confirmAction,
