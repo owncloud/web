@@ -16,6 +16,7 @@ import ejs from 'ejs'
 import progress from 'rollup-plugin-progress'
 import postcss from 'rollup-plugin-postcss'
 import serve from 'rollup-plugin-serve'
+import livereload from 'rollup-plugin-livereload'
 import html from '@rollup/plugin-html'
 import globals from 'rollup-plugin-node-globals'
 
@@ -153,6 +154,9 @@ if (process.env.SERVER === 'true') {
       port: process.env.PORT || 9100
     })
   )
+  plugins.push(livereload({
+    watch: 'dist',
+  }))
 }
 
 if (process.env.REPORT === 'true') {
