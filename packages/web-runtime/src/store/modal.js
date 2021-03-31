@@ -43,7 +43,7 @@ const actions = {
 const mutations = {
   CREATE_MODAL(state, modal) {
     state.displayed = true
-    state.variation = modal.variation || 'info'
+    state.variation = modal.variation || 'passive'
     state.icon = modal.icon
     state.title = modal.title
     state.message = modal.message
