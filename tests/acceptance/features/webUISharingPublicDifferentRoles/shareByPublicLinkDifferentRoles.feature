@@ -34,7 +34,7 @@ Feature: Share by public link with different roles
 
   @skipOnOC10 @issue-ocis-reva-383
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario Outline: simple sharing by public link with different roles
+  Scenario Outline: simple sharing by public link with different roles (ocis bug demonstration)
     Given user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | <role> |
@@ -73,7 +73,7 @@ Feature: Share by public link with different roles
 
   @skipOnOC10 @issue-ocis-reva-383
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: sharing by public link with "Uploader" role
+  Scenario: sharing by public link with "Uploader" role (ocis bug demonstration)
     Given user "Alice" has logged in using the webUI
     When the user creates a folder with the name "shared-folder" using the webUI
     And the user creates a new public link for folder "shared-folder" using the webUI with
@@ -121,7 +121,7 @@ Feature: Share by public link with different roles
 
   @skipOnOC10 @issue-ocis-270
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: creating a public link with "Viewer" role only makes it impossible to delete files via the link
+  Scenario: creating a public link with "Viewer" role only makes it impossible to delete files via the link (ocis bug demonstration)
     Given user "Alice" has shared folder "simple-folder" with link with "read" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     Then it should be possible to delete file "lorem.txt" using the webUI
@@ -211,7 +211,7 @@ Feature: Share by public link with different roles
 
   @skipOnOC10 @issue-ocis-reva-383
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: creating a public link with "Viewer" role makes it impossible to create files via the link even with password set
+  Scenario: creating a public link with "Viewer" role makes it impossible to create files via the link even with password set (ocis bug demonstration)
     Given user "Alice" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then it should be possible to create files using the webUI
@@ -274,7 +274,7 @@ Feature: Share by public link with different roles
 
   @skipOnOC10 @issue-ocis-723
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: creating a public link with "Uploader" role makes it possible to create files through files-drop page even with password set
+  Scenario: creating a public link with "Uploader" role makes it possible to create files through files-drop page even with password set (ocis bug demonstration)
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     And the public uploads file "'single'quotes.txt" in files-drop page
@@ -297,7 +297,7 @@ Feature: Share by public link with different roles
 
   @skipOnOC10 @issue-ocis-723
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
-  Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page even with password set
+  Scenario: creating a public link with "Uploader" role makes it possible to upload multiple files via files-drop page even with password set (ocis bug demonstration)
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     And the public uploads file "'single'quotes.txt" in files-drop page

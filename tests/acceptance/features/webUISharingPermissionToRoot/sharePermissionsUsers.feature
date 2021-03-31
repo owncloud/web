@@ -11,7 +11,7 @@ Feature: Sharing files and folders with internal users with different permission
       | Brian    |
 
 
-  Scenario: Change permissions of the previously shared folder
+  Scenario: Change permissions of the previously shared folder to share, update
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, update" permissions
     And user "Brian" has logged in using the webUI
     Then custom permission "update" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
@@ -26,7 +26,7 @@ Feature: Sharing files and folders with internal users with different permission
       | permissions | read, share, update |
 
   @issue-1853
-  Scenario: Change permissions of the previously shared folder
+  Scenario: Change permissions of the previously shared folder to all permissions
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, create, delete" permissions
     And user "Brian" has logged in using the webUI
     Then custom permissions "share, create, delete" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
@@ -41,7 +41,7 @@ Feature: Sharing files and folders with internal users with different permission
       | permissions | read, share, create, delete |
 
   @issue-1853
-  Scenario: Change permissions of the previously shared folder
+  Scenario: Change permissions of the previously shared folder to update and delete
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, create" permissions
     And user "Brian" has logged in using the webUI
     Then custom permissions "share, create" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
@@ -56,7 +56,7 @@ Feature: Sharing files and folders with internal users with different permission
       | permissions | read, update, delete |
 
 
-  Scenario: Change permissions of the previously shared folder
+  Scenario: Change permissions of the previously shared folder to read, create, share
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, delete" permissions
     And user "Brian" has logged in using the webUI
     Then custom permissions "delete" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI

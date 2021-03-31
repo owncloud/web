@@ -395,8 +395,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIResharing/reshareUsers.feature:192](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L192)
 -   [webUIResharing/reshareUsers.feature:233](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L233)
 -   [webUIResharing/reshareUsers.feature:234](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L234)
--   [webUIResharing/reshareUsers.feature:235](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L235)
--   [webUIResharing/reshareUsers.feature:236](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L236)
 -   [webUIResharing/reshareUsers.feature:249](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L249)
 -   [webUIResharing/reshareUsers.feature:250](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L250)
 -   [webUIResharing/reshareUsers.feature:253](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIResharing/reshareUsers.feature#L253)

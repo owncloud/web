@@ -28,7 +28,7 @@ Feature: File Upload
       | lorem.txt     |
 
   @smokeTest @ocisSmokeTest
-  Scenario: simple upload of a folder that does not exist before
+  Scenario: simple upload of a folder with subfolders that does not exist before
     When the user uploads folder "PARENT" using the webUI
     Then no message should be displayed on the webUI
     And folder "PARENT" should be listed on the webUI
