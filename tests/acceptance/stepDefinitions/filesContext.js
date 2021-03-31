@@ -1290,11 +1290,13 @@ Then('the user should be in the root directory on the webUI', async function() {
 })
 
 Then('the search bar should not be visible in the webUI', async function() {
+  await client.page.FilesPageElement.filesList().waitForLoadingFinished(false)
   const isVisible = await client.page.personalPage().isSearchBarVisible()
   assert.strictEqual(isVisible, false, 'Expected search bar to be invisible but is visible')
 })
 
 Then('the search bar should be visible in the webUI', async function() {
+  await client.page.FilesPageElement.filesList().waitForLoadingFinished(false)
   const isVisible = await client.page.personalPage().isSearchBarVisible()
   assert.strictEqual(isVisible, true, 'Expected search bar to be visible but is not visible')
 })
