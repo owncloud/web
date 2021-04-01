@@ -1086,9 +1086,9 @@ Then('the following resources should have share indicators on the webUI', async 
 ) {
   for (const { fileName, expectedIndicators } of dataTable.hashes()) {
     const indicatorsArray = await client.page.FilesPageElement.filesList().getShareIndicatorsForResource(
-      fileName
+      fileName,
+      true
     )
-
     const expectedIndicatorsArray = expectedIndicators.split(',').map(s => s.trim())
     assert.ok(
       _.intersection(indicatorsArray, expectedIndicatorsArray).length ===
@@ -1107,7 +1107,8 @@ Then('the following resources should not have share indicators on the webUI', as
 ) {
   for (const [fileName] of dataTable.raw()) {
     const indicatorsArray = await client.page.FilesPageElement.filesList().getShareIndicatorsForResource(
-      fileName
+      fileName,
+      false
     )
 
     assert.ok(!indicatorsArray.length, `Expected no share indicators present for "${fileName}"`)
