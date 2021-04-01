@@ -56,7 +56,7 @@ async function createUser(
       if (client.globals.ocis) {
         const actualSkeletonDir = getActualSkeletonDir(skeletonType)
         if (actualSkeletonDir) {
-          const skelDir = `${client.globals.testing_data_dir}${actualSkeletonDir}`
+          const skelDir = join(client.globals.testing_data_dir, actualSkeletonDir)
           const dataDir = join(client.globals.ocis_data_dir, userId)
           if (!fs.existsSync(dataDir)) {
             fs.removeSync(dataDir)
