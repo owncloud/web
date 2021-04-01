@@ -137,13 +137,16 @@ export default {
 /* FIXME: move whole text part to ODS. it is useful to have a text component available for the progress bar. */
 .files-upload-progress .oc-progress-text {
   font-size: 0.75em;
-  color: #aaa;
+  color: var(--oc-color-inverse);
 }
 .files-upload-progress .uk-progress {
-  box-shadow: 0 0 2px #ccc;
+  box-shadow: 0 0 2px var(--oc-border-primary);
 }
 </style>
 <style scoped>
+.files-upload-progress {
+  background-color: var(--oc-background-muted);
+}
 /* FIXME: move to ODS somehow? with the very specific max-height it probably doesn't make a generic css class from it... */
 .oc-upload-menu-scrollable {
   max-height: 200px;
