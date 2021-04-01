@@ -525,6 +525,6 @@ export default {
 .files-app-bar {
   background-color: var(--oc-background);
   box-sizing: border-box;
-  z-index: 1;
+  z-index: 2;
 }
 </style>

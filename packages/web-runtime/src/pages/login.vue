@@ -1,9 +1,12 @@
 <template>
-  <div v-if="initialized" class="oc-login" uk-height-viewport>
+  <div
+    v-if="initialized"
+    class="oc-login"
+    uk-height-viewport
+    :style="{ backgroundImage: 'url(' + backgroundImg + ')' }"
+  >
     <div class="oc-login-card uk-position-center">
-      <h1 v-translate class="oc-login-logo">
-        ownCloud
-      </h1>
+      <img class="oc-login-logo" :src="logoImg" :alt="configuration.theme.general.name" />
       <div class="oc-login-card-body">
         <h3 class="oc-login-card-title">
           <translate :translate-params="{ productName: $_productName }"
@@ -47,6 +50,14 @@ export default {
 
     $_productName() {
       return this.configuration.theme.general.name
+    },
+
+    logoImg() {
+      return this.configuration.theme.logo.login
+    },
+
+    backgroundImg() {
+      return this.configuration.theme.loginPage.backgroundImg
     }
   },
 
