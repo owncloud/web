@@ -1334,6 +1334,7 @@ def setupServerAndApp(logLevel):
 			'php occ config:list',
 			'php occ config:system:set skeletondirectory --value=/var/www/owncloud/server/apps/testing/data/webUISkeleton',
 			'php occ config:system:set dav.enable.tech_preview  --type=boolean --value=true',
+			'php occ config:system:set enable_previews --type=boolean --value=false',
 			'php occ config:system:set web.baseUrl --value="http://web"',
 			'php occ config:system:set sharing.federation.allowHttpFallback --value=true --type=bool'
 		]
