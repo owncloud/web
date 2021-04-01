@@ -1160,7 +1160,13 @@ When('the user tries to move file/folder {string} into folder {string} using the
   resource,
   target
 ) {
-  return client.page.FilesPageElement.filesList().attemptToMoveResource(resource, target)
+  return client.page.FilesPageElement.filesList()
+    .moveResource(resource, target)
+    .catch(error => {
+      // while moving resource, after clicking the "Paste here" button, the button should disappear but if it doesn't
+      // we throw "ElementPresentError" error. So, all the error except "ElementPresentError" is caught and thrown back
+      if (error.message !== 'ElementPresentError') throw error
+    })
 })
 
 When('the user selects move action for folder/file {string} using the webUI', async function(
@@ -1174,19 +1180,6 @@ When('the user selects move action for folder/file {string} using the webUI', as
 When('the user cancels the attempt to move/copy resources using the webUI', function() {
   return client.page.FilesPageElement.filesList().cancelResourceMoveOrCopyProgress()
 })
-
-Then('it should not be possible to copy/move into folder {string} using the webUI', function(
-  target
-) {
-  return client.page.FilesPageElement.filesList().navigationNotAllowed(target)
-})
-
-Then(
-  'it should not be possible to paste files/folders into the current folder using the webUI',
-  async function() {
-    return await client.page.locationPicker().copyOrMoveNotAllowed()
-  }
-)
 
 When(
   'the user batch moves these files/folders into folder {string} using the webUI',
@@ -1225,7 +1218,13 @@ When('the user tries to copy file/folder {string} into folder {string} using the
   resource,
   target
 ) {
-  return client.page.FilesPageElement.filesList().attemptToCopyResource(resource, target)
+  return client.page.FilesPageElement.filesList()
+    .copyResource(resource, target)
+    .catch(error => {
+      // while copying resource, after clicking the "Paste here" button, the button should disappear but if it doesn't
+      // we throw "ElementPresentError" error. So, all the error except "ElementPresentError" is caught and thrown back
+      if (error.message !== 'ElementPresentError') throw error
+    })
 })
 
 When('the user opens the file action menu of file/folder {string} using the webUI', async function(

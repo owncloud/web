@@ -38,7 +38,7 @@ Feature: move files
   Scenario: move a file into a folder where a file with the same name already exists
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    When the user moves file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
+    When the user tries to move file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
     Then the error message with header 'An error occurred while moving strängé filename (duplicate #2 &).txt' should be displayed on the webUI
 
   @smokeTest @skip
@@ -89,7 +89,7 @@ Feature: move files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to move file "lorem.txt" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to paste files into the current folder using the webUI
+    Then as "Alice" file "simple-folder (2)/lorem (2).txt" should not exist
 
   Scenario: cancel moving a file
     Given user "Alice" has logged in using the webUI

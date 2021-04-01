@@ -290,13 +290,6 @@ module.exports = {
       return client.page.locationPicker().selectFolderAndConfirm(target)
     },
 
-    attemptToMoveMultipleResources: async function(target) {
-      // Trigger move
-      await this.click('@moveSelectedBtn')
-
-      return client.page.locationPicker().selectFolder(target)
-    },
-
     copyMultipleResources: function(target) {
       // Trigger copy
       this.click('@copySelectedBtn')
@@ -305,12 +298,6 @@ module.exports = {
       return client.page.locationPicker().selectFolderAndConfirm(target)
     },
 
-    attemptToCopyMultipleResources: async function(target) {
-      // Trigger copy
-      await this.click('@copySelectedBtn')
-
-      return client.page.locationPicker().selectFolder(target)
-    },
     /**
      * Create a md file with the given name
      *

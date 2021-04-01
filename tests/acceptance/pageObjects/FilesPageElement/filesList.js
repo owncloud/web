@@ -554,24 +554,6 @@ module.exports = {
       return this
     },
 
-    navigationNotAllowed: async function(target, elementType = 'folder') {
-      await this.waitForFileVisible(target, elementType)
-
-      const name = xpathHelper.buildXpathLiteral(target)
-      const path = xpathHelper.buildXpathLiteral('/' + target)
-      const type = xpathHelper.buildXpathLiteral(elementType)
-      const element = util.format(this.elements.fileRowDisabled.selector, name, path, type)
-      const disabledRow = {
-        locateStrategy: this.elements.fileRowDisabled.locateStrategy,
-        selector: element
-      }
-      await this.useXpath()
-        .moveToElement(this.getFileRowSelectorByFileName(target, elementType), 0, 0)
-        .waitForElementVisible(disabledRow)
-
-      return this
-    },
-
     copyResource: async function(resource, target) {
       await this.waitForFileVisible(resource)
 
@@ -596,11 +578,7 @@ module.exports = {
       return this
     },
     clickOnFileName: function(fileName) {
-      console.log(fileName)
       const file = this.getFileLinkSelectorByFileName(fileName, 'file')
-
-      console.log(file)
-
       return this.useXpath()
         .waitForElementVisible(file)
         .click(file)
