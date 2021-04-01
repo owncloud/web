@@ -214,7 +214,7 @@ export default {
 
 .oc-star {
   &-shining svg {
-    fill: #ffba0a;
+    fill: #ffba0a !important;
   }
 }
 </style>
