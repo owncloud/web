@@ -833,7 +833,7 @@ const assertElementsAreNotListed = async function(elements) {
   for (const element of elements) {
     const state = await client.page.FilesPageElement.filesList().isElementListed(
       element,
-      'file',
+      'any',
       client.globals.waitForNegativeConditionTimeout
     )
     assert.ok(!state, `Expected resource '${element}' to be 'not present' but found 'present'`)

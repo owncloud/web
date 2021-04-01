@@ -8,7 +8,7 @@ Feature: deleting files and folders
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
-  @skip @smokeTest @ocisSmokeTest
+  @skipOnOC10 @smokeTest @ocisSmokeTest
   Scenario: Delete files & folders one by one and check its existence after page reload
     Given user "Alice" has created file "sample,1.txt"
     And user "Alice" has created folder "Sample,Folder,With,Comma"
@@ -70,10 +70,6 @@ Feature: deleting files and folders
     And there should be no resources listed on the webUI
     And there should be no resources listed on the webUI after a page reload
     And no message should be displayed on the webUI
-
-
-
-
 
   @ocis-reva-issue-106 @ocis-reve-issue-442 @skipOnOC10 @issue-4582
   Scenario: Delete all except for a few files at once
