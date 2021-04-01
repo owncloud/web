@@ -7,8 +7,7 @@
     "logo": {
       "sidebar": "themes/owncloud/assets/logo.svg",
       "favicon": "themes/owncloud/assets/favicon.jpg",
-      "login": "themes/owncloud/assets/logo.svg",
-      "notFound": "themes/owncloud/assets/cloud.svg"
+      "login": "themes/owncloud/assets/logo.svg"
     },
     "filesList": {
       "hideDefaultStatusIndicators": false
