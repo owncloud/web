@@ -93,7 +93,7 @@ export default {
       }
       const headers = new Headers()
       const instance = this.configuration.server || window.location.origin
-      const url = instance + '/remote.php/dav/avatars/' + this.userid + '/128.png'
+      const url = instance + 'remote.php/dav/avatars/' + this.userid + '/128.png'
       headers.append('Authorization', 'Bearer ' + this.getToken)
       headers.append('X-Requested-With', 'XMLHttpRequest')
       fetch(url, { headers })

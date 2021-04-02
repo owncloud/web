@@ -1,0 +1,8 @@
+Bugfix: Avatar url without double slash
+
+The avatar url added another superfluous slash
+after the instance url which resulted in the avatar
+not being able to load.
+
+https://github.com/owncloud/web/issues/4610
+https://github.com/owncloud/web/pull/4849
