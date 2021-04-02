@@ -14,5 +14,8 @@
     "draw-io",
     "markdown-editor",
     "media-viewer"
-  ]
+  ],
+  "options": {
+    "hideSearchBar": true
+  }
 }
