@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Avatar url without double slash: [#4610](https://github.com/owncloud/web/issues/4610)
 * Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
 * Bugfix - Only one `<main>` tag per HTML document: [#1652](https://github.com/owncloud/web/issues/1652)
 * Change - Update owncloud Design System to v4.1.1: [#4862](https://github.com/owncloud/web/pull/4862)
@@ -18,6 +19,14 @@ Summary
 
 Details
 -------
+
+* Bugfix - Avatar url without double slash: [#4610](https://github.com/owncloud/web/issues/4610)
+
+   The avatar url added another superfluous slash after the instance url which resulted in the
+   avatar not being able to load.
+
+   https://github.com/owncloud/web/issues/4610
+   https://github.com/owncloud/web/pull/4849
 
 * Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
 
