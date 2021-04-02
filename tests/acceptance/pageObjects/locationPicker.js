@@ -4,7 +4,16 @@ module.exports = {
   commands: {
     selectFolderAndConfirm: async function(target) {
       await this.selectFolder(target)
-      return this.waitForElementVisible('@confirmBtn').click('@confirmBtn')
+      await this.waitForElementVisible('@confirmBtn').click('@confirmBtn')
+      try {
+        await this.waitForElementNotPresent({
+          selector: '@confirmBtn',
+          timeout: client.globals.waitForNegativeConditionTimeout
+        })
+      } catch (e) {
+        throw new Error('ElementPresentError')
+      }
+      return this
     },
     selectFolder: async function(target) {
       if (target.startsWith('/')) {
@@ -24,9 +33,6 @@ module.exports = {
         await client.page.FilesPageElement.filesList().navigateToFolder(targetSplitted[i])
       }
       return this
-    },
-    copyOrMoveNotAllowed: async function() {
-      return await this.waitForElementVisible('@confirmBtnDisabled')
     }
   },
   elements: {
@@ -36,10 +42,6 @@ module.exports = {
     },
     confirmBtn: {
       selector: 'button#location-picker-btn-confirm'
-    },
-    confirmBtnDisabled: {
-      selector: '//button[@id="location-picker-btn-confirm" and @disabled="disabled"]',
-      locateStrategy: 'xpath'
     }
   }
 }

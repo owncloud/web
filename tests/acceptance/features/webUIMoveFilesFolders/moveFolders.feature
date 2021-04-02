@@ -30,7 +30,7 @@ Feature: move folders
   Scenario: move a folder into another folder where a folder with the same name already exists
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    When the user moves folder "simple-empty-folder" into folder "simple-folder" using the webUI
+    When the user tries to move folder "simple-empty-folder" into folder "simple-folder" using the webUI
     Then the error message with header 'An error occurred while moving simple-empty-folder' should be displayed on the webUI
 
   @smokeTest
@@ -69,13 +69,14 @@ Feature: move folders
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to paste files into the current folder using the webUI
+    Then as "Alice" folder "simple-folder (2)/simple-empty-folder (2)" should not exist
 
 
   Scenario: move a folder into the same folder
     Given user "Alice" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
-    Then it should not be possible to move into folder "simple-empty-folder" using the webUI
+    Then the error message with header 'An error occurred while moving simple-empty-folder' should be displayed on the webUI
+    And as "Alice" folder "simple-empty-folder/simple-empty-folder" should not exist
 
 
   Scenario: move a folder into another folder with same name

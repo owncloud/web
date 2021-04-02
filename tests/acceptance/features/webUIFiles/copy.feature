@@ -22,7 +22,7 @@ Feature: copy files and folders
   Scenario: copy a file into a folder where a file with the same name already exists
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page
-    When the user copies file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
+    When the user tries to copy file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
     Then the error message with header 'An error occurred while copying strängé filename (duplicate #2 &).txt' should be displayed on the webUI
 
   @smokeTest
@@ -73,7 +73,7 @@ Feature: copy files and folders
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to copy file "lorem.txt" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to paste files into the current folder using the webUI
+    Then as "Alice" file "simple-folder (2)/lorem (2).txt" should not exist
 
   @issue-ocis-reva-243
   Scenario: copy a folder into another folder with no change permission
@@ -81,13 +81,14 @@ Feature: copy files and folders
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
-    Then it should not be possible to paste files into the current folder using the webUI
+    Then as "Alice" file "simple-folder (2)/simple-empty-folder (2)" should not exist
 
 
   Scenario: copy a folder into the same folder
     Given user "Alice" has logged in using the webUI
     When the user tries to copy folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
-    Then it should not be possible to copy into folder "simple-empty-folder" using the webUI
+    Then the error message with header 'An error occurred while copying simple-empty-folder' should be displayed on the webUI
+    And as "Alice" file "simple-empty-folder/simple-empty-folder" should not exist
 
 
   Scenario: copy a folder into another folder with same name
