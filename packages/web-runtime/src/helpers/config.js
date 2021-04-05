@@ -10,7 +10,3 @@ export const loadConfig = async () => {
   }
   return config
 }
-
-export default {
-  loadConfig: loadConfig
-}

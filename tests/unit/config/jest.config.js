@@ -10,6 +10,7 @@ module.exports = {
     '.*\\.(vue)$': 'vue-jest',
     '^.+\\.svg$': 'jest-svg-transformer'
   },
+  transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es)'],
   setupFiles: ['<rootDir>/tests/unit/config/jest.init.js'],
   snapshotSerializers: ['jest-serializer-vue'],
   coverageDirectory: '<rootDir>/coverage',

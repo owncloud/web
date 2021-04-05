@@ -63,10 +63,10 @@ const plugins = [
     watch: !production && './config',
     targets: [
       { src: './packages/web-container/img', dest: 'dist' },
-      { src: './packages/web-container/themes', dest: 'dist' },
       { src: './packages/web-container/oidc-callback.html', dest: 'dist' },
       { src: './packages/web-container/oidc-silent-redirect.html', dest: 'dist' },
       { src: './packages/web-container/manifest.json', dest: 'dist' },
+      { src: './packages/web-runtime/themes', dest: 'dist' },
       { src: `./config/${production ? 'config.dist.json' : 'config.json'}`, dest: 'dist' },
       { src: 'node_modules/requirejs/require.js', dest: 'dist/js' }
     ]
@@ -154,9 +154,11 @@ if (process.env.SERVER === 'true') {
       port: process.env.PORT || 9100
     })
   )
-  plugins.push(livereload({
-    watch: 'dist',
-  }))
+  plugins.push(
+    livereload({
+      watch: 'dist'
+    })
+  )
 }
 
 if (process.env.REPORT === 'true') {

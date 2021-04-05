@@ -85,7 +85,7 @@
 <script>
 import 'inert-polyfill'
 import { mapGetters, mapState, mapActions } from 'vuex'
-import TopBar from './components/Top-Bar.vue'
+import TopBar from './components/TopBar.vue'
 import MessageBar from './components/MessageBar.vue'
 import SkipTo from './components/SkipTo.vue'
 import moment from 'moment'

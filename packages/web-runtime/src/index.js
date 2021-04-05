@@ -44,7 +44,8 @@ import wgxpath from 'wicked-good-xpath'
 
 import { registerClient } from './services/clientRegistration'
 
-import { loadConfig } from './configHelper'
+import { loadConfig } from './helpers/config'
+import { loadTheme } from './helpers/theme'
 
 wgxpath.install()
 
@@ -52,6 +53,7 @@ Vue.prototype.$client = new OwnCloud()
 
 Vue.use(VueEvents)
 Vue.use(VueRouter)
+Vue.use(DesignSystem)
 Vue.use(VueClipboard)
 Vue.use(VueScrollTo)
 Vue.use(MediaSource)
@@ -182,22 +184,10 @@ const finalizeInit = async () => {
   })
 }
 
-const fetchTheme = async () => {
-  // TODO: Decide on how to differentiate between themes provided via
-  // default, local path or external URL
-  const themePath = config.theme || 'themes/owncloud/theme.json'
+const fetchTheme = async (themeName = 'owncloud') => {
+  const { theme, name } = await loadTheme(`themes/${themeName}.json`)
 
-  const response = await fetch(themePath)
-  const theme = await response.json()
-
-  await store.dispatch('loadTheme', { theme: theme.default, name: config.theme })
-
-  const loadedTheme = store.getters.theme
-
-  // Initializing the ODS using the default theme provided
-  Vue.use(DesignSystem, {
-    tokens: loadedTheme.designTokens
-  })
+  await store.dispatch('loadTheme', { theme, name })
 }
 
 const missingOrInvalidConfig = async () => {

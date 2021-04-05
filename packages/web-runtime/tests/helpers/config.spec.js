@@ -1,7 +1,4 @@
-import { loadConfig } from 'web-runtime/src/configHelper'
-import fetchMock from 'jest-fetch-mock'
-
-fetchMock.enableMocks()
+import { loadConfig } from 'web-runtime/src/helpers/config'
 
 const validConfig = `{
   "server" : "http://localhost/owncloud-core",
@@ -31,14 +28,14 @@ const validConfig = `{
 
 describe('config file loading and error reporting', () => {
   it('should load and parse a valid config', function() {
-    fetchMock.mockOnce(validConfig)
+    fetch.mockResponseOnce(validConfig)
     return loadConfig().then(async result => {
       expect(await result).toMatchObject(JSON.parse(validConfig))
     })
   })
   describe('empty config', () => {
     it('should throw an exception', function() {
-      fetchMock.mockOnce('')
+      fetch.mockResponseOnce('')
       return expect(loadConfig).rejects.toThrow(
         'config could not be parsed. ' +
           'FetchError: invalid json response body at  ' +
@@ -48,7 +45,7 @@ describe('config file loading and error reporting', () => {
   })
   describe('config with an trailing comma', () => {
     it('should throw an exception', function() {
-      fetchMock.mockOnce('"title": { "en": "Classic Design", "de": "Dateien", },')
+      fetch.mockResponseOnce('"title": { "en": "Classic Design", "de": "Dateien", },')
       return expect(loadConfig).rejects.toThrow(
         'config could not be parsed. ' +
           'FetchError: invalid json response body at  ' +
@@ -59,7 +56,7 @@ describe('config file loading and error reporting', () => {
 })
 describe('missing config', () => {
   it('should throw an exception', function() {
-    fetchMock.mockOnce(
+    fetch.mockResponseOnce(
       '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">\n' +
         '<html><head>\n' +
         '<title>404 Not Found</title>\n' +
