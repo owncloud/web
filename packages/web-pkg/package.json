@@ -1,0 +1,9 @@
+{
+  "name": "web-pkg",
+  "version": "0.0.0",
+  "description": "ownCloud web pkg",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "lodash-es": "^4.17.20"
+  }
+}

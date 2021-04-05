@@ -1,9 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
-
-import Stubs from '../config/stubs'
-
-import TopBar from 'web-runtime/src/components/Top-Bar.vue'
+import TopBar from 'web-runtime/src/components/TopBar.vue'
+import stubs from '../../../../tests/unit/config/stubs'
 
 const localVue = createLocalVue()
 const search = enabled => ({
@@ -21,7 +19,7 @@ describe('Top Bar component', () => {
         }
       }),
       localVue,
-      stubs: Stubs,
+      stubs,
       propsData: {
         userId: 'einstein',
         userDisplayName: 'Albert Einstein'
@@ -40,7 +38,7 @@ describe('Top Bar component', () => {
         }
       }),
       localVue,
-      stubs: Stubs,
+      stubs,
       propsData: {
         userId: 'einstein',
         userDisplayName: 'Albert Einstein',
@@ -60,7 +58,7 @@ describe('Top Bar component', () => {
         }
       }),
       localVue,
-      stubs: Stubs
+      stubs
     })
 
     wrapper.find('.oc-app-navigation-toggle').vm.$emit('click')

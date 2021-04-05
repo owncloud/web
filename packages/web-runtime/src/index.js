@@ -44,7 +44,8 @@ import wgxpath from 'wicked-good-xpath'
 
 import { registerClient } from './services/clientRegistration'
 
-import { loadConfig } from './configHelper'
+import { loadConfig } from './helpers/config'
+import { loadTheme } from './helpers/theme'
 
 wgxpath.install()
 
@@ -184,10 +185,9 @@ const finalizeInit = async () => {
 }
 
 const fetchTheme = async (themeName = 'owncloud') => {
-  const response = await fetch(`themes/${themeName}.json`)
-  const theme = await response.json()
+  const { theme, name } = await loadTheme(`themes/${themeName}.json`)
 
-  await store.dispatch('loadTheme', { theme, name: themeName })
+  await store.dispatch('loadTheme', { theme, name })
 }
 
 const missingOrInvalidConfig = async () => {

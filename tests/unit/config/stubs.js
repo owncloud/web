@@ -1,4 +1,4 @@
-export const stubs = {
+export default {
   'oc-spinner': true,
   'oc-grid': true,
   'oc-icon': true,
@@ -6,5 +6,3 @@ export const stubs = {
   'oc-button': true,
   'oc-breadcrumb': true
 }
-
-export default stubs
