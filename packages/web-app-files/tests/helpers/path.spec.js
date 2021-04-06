@@ -22,6 +22,11 @@ describe('build an array of parent paths from a provided path', () => {
     expect(paths1).toEqual(paths2)
   })
 
+  it('should not interpret a trailing slash as yet another path segment', () => {
+    const paths = getParentPaths('/a/b/c/', true)
+    expect(paths).toEqual(['/a/b/c', '/a/b', '/a', ''])
+  })
+
   it('should include the provided path in the result if includeCurrent=true', () => {
     const paths = getParentPaths('a/b/c', true)
     expect(paths).toEqual(['/a/b/c', '/a/b', '/a', ''])

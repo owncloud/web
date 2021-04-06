@@ -2,7 +2,7 @@
  * Return all absolute parent paths.
  *
  * For example if passing in "a/b/c" it will return
- * ["a/b", "a", ""]
+ * ["/a/b", "/a", ""]
 
  * If an empty string or "/" is passed in, an empty array is returned.
  *
@@ -11,19 +11,18 @@
  * @return {Array.<String>} parent paths
  */
 export function getParentPaths(path, includeCurrent = false) {
-  if (path === '' || path === '/') {
+  // remove potential leading and trailing slash from current path (so that the resulting array doesn't start with an empty string).
+  // then reintroduce the leading slash, because we know that we need it.
+  const s = '/' + path.replace(/^\/+/, '').replace(/\/+$/, '')
+  if (s === '/') {
     return []
   }
 
-  if (path.charAt(0) !== '/') {
-    path = '/' + path
-  }
-
   const paths = []
-  const sections = path.split('/')
+  const sections = s.split('/')
 
   if (includeCurrent) {
-    paths.push(path)
+    paths.push(s)
   }
 
   sections.pop()
