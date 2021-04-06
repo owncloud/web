@@ -29,9 +29,6 @@ const state = {
       login: '',
       notFound: ''
     },
-    filesList: {
-      hideDefaultStatusIndicators: false
-    },
     loginPage: {
       autoRedirect: true,
       backgroundImg: ''

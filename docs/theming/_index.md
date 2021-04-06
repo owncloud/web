@@ -48,9 +48,6 @@ You can use the snippet below as a base for writing your own theme by replacing 
       // Example use of relative paths for usage with a local theme inside packages/web-container/themes/
       "login": "themes/owncloud/assets/logo.svg"
     },
-    "filesList": {
-      "hideDefaultStatusIndicators": false
-    },
     "loginPage": {
       "autoRedirect": true,
       "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"
@@ -75,10 +72,6 @@ Here, you can specify a `"name"` and a `"slogan"` string. The name gets used in 
 ## The "logo" options
 
 Here, you can specify the images to be used in the `"sidebar"`, for the `"favicon"` and on the `"login"` page. Various formats are supported and it's up to you to decide which one fits best to your use case.
-
-## The "filesList" option
-
-Using the `"hideDefaultStatusIndicators"` boolean, you can specify whether the default status indicators should be visible in the files list.
 
 ## The "loadingPage" options
 
