@@ -297,7 +297,8 @@ Before(function() {
 })
 
 Before({ tags: '@disablePreviews' }, () => {
-  occHelper.runOcc(['config:system:set', 'enable_previews', '--type=boolean', '--value=false'])
+  if (!client.globals.ocis)
+    occHelper.runOcc(['config:system:set', 'enable_previews', '--type=boolean', '--value=false'])
 })
 
 After(function() {
