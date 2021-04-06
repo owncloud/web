@@ -4,10 +4,12 @@ Feature: User can see the file or folder actions menu options
   So that the menu options of the selected file type or folder are visible to me
 
 Background: prepare user and files
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "testavatar.png" to "testavatar.png"
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
-    
+
   Scenario: observe different actions menu options on selecting different file types or folder
     Given user "Alice" has uploaded file with content "pdf file" to "lorem.pdf"
     And the user has reloaded the current page of the webUI
@@ -35,4 +37,3 @@ Background: prepare user and files
       | items                     |
       | open in mediaviewer       |
       | download                  |
-    

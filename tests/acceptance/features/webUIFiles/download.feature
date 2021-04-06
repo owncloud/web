@@ -4,13 +4,14 @@ Feature: download files
   So that I can get files from my owncloud server
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
 
 
   Scenario: Try to download file and folder that used to exist but does not anymore
-    Given the following files have been deleted by user "Alice"
+    Given user "Alice" has created file "lorem.txt"
+    And the user has browsed to the files page
+    And the following files have been deleted by user "Alice"
       | name      |
       | lorem.txt |
     When the user downloads file "lorem.txt" using the webUI

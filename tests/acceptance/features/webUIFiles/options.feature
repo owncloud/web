@@ -1,7 +1,7 @@
 Feature: Set config options from web config file
 
   Background:
-    And user "Alice" has been created with default attributes
+    And user "Alice" has been created with default attributes and without skeleton files
 
 
   Scenario: Set config to hide the search bar
