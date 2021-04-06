@@ -187,7 +187,6 @@ const fetchTheme = async location => {
   const { theme } = await loadTheme(location)
   await store.dispatch('loadTheme', { theme: theme.default })
 
-  // Initializing the ODS using the default theme provided
   Vue.use(DesignSystem, {
     tokens: store.getters.theme.designTokens
   })
