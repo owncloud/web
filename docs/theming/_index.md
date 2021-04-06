@@ -19,11 +19,10 @@ This page documents the setup and configuration options.
 
 Generally, your theming configuration lives inside a `.json` file, e.g. `theme.json`. To load this file, it needs to be correctly referenced inside your `config/config.json` (example configurations can be [found on GitHub](https://github.com/owncloud/web/tree/master/config)).
 
-To reference your theme, you have three options:
+To reference your theme, you have two options:
 
-- ...
-- ...
-- For development and testing purposes, you can store your `theme.json` inside `packages/web-container/themes/{theme-name}/*` and reference it in the `config.json`. However, this isn't recommended for production use since your changes may get lost when updating oCIS or the `web` app in OC10.
+- Using a URL, e.g. `"theme": "https://externalurl.example.com/theme-name/theme.json",`. To avoid CORS issues, please make sure that you host the URL on the same URL as your ownCloud web hosting.
+- For development and testing purposes, you can store your `theme.json` inside `packages/web-container/themes/{theme-name}/` and reference it in the `config.json`. However, this isn't recommended for production use since your changes may get lost when updating oCIS or the `web` app in OC10.
 
 **Hint:** If no theme is provided or the loading of your custom theme fails, the standard ownCloud theme will be loaded as a fallback. However, this doesn't stop you from correctly loading a theme that is wrongly formatted, so please read the instructions below carefully.
 
@@ -43,8 +42,10 @@ You can use the snippet below as a base for writing your own theme by replacing 
       "slogan": "ownCloud – A safe home for all your data"
     },
     "logo": {
-      "sidebar": "themes/owncloud/assets/logo.svg",
-      "favicon": "themes/owncloud/assets/favicon.jpg",
+      // Reference URL paths for assets when using a remote theme
+      "sidebar": "https://externalurl.example.com/theme-name/assets/logo.svg",
+      "favicon": "https://externalurl.example.com/theme-name/assets/favicon.jpg",
+      // Example use of relative paths for usage with a local theme inside packages/web-container/themes/
       "login": "themes/owncloud/assets/logo.svg"
     },
     "filesList": {
@@ -77,8 +78,7 @@ Here, you can specify the images to be used in the `"sidebar"`, for the `"favico
 
 ## The "filesList" option
 
-Using the `"hideDefaultStatusIndicators"` boolean, you can specify whether ...
-
+Using the `"hideDefaultStatusIndicators"` boolean, you can specify whether the default status indicators should be visible in the files list.
 
 ## The "loadingPage" options
 
