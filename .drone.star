@@ -51,7 +51,16 @@ config = {
 				],
 				'webUIFavorites': 'Favorites',
 				'webUIMarkdownEditor': 'MarkdownEditor',
-				'webUIFiles': 'Files',
+				'webUIFiles1': [
+					'webUIFiles',
+					'webUIFilesActionMenu',
+					'webUIFilesCopy'
+				],
+				'webUIFiles2': [
+					'webUIFilesDetails',
+					'webUIFilesList',
+					'webUIFilesSearch'
+				],
 				'webUIMoveFilesFolders': 'Move',
 				'webUIResharing': 'Resharing',
 				'webUIResharingToRoot': 'ResharingToRoot',
@@ -114,6 +123,11 @@ config = {
 					'webUIDeleteFilesFolders',
 					'webUIFavorites',
 					'webUIFiles',
+					'webUIFilesActionMenu',
+					'webUIFilesCopy',
+					'webUIFilesDetails',
+					'webUIFilesList',
+					'webUIFilesSearch',
 					'webUILogin',
 					'webUINotifications',
 					'webUIPreview',
@@ -184,6 +198,11 @@ config = {
 					'webUIDeleteFilesFolders',
 					'webUIFavorites',
 					'webUIFiles',
+					'webUIFilesActionMenu',
+					'webUIFilesCopy',
+					'webUIFilesDetails',
+					'webUIFilesList',
+					'webUIFilesSearch',
 					'webUILogin',
 					'webUINotifications',
 					'webUIPreview',
@@ -278,7 +297,16 @@ config = {
 				],
 				'webUIFavorites': 'OCISFavorites',
 				'webUIMarkdownEditor': 'OCISMarkdownEditor',
-				'webUIFiles': 'OCISFiles',
+				'webUIOCISFiles1': [
+					'webUIFiles',
+					'webUIFilesActionMenu',
+					'webUIFilesCopy'
+				],
+				'webUIOCISFiles2': [
+					'webUIFilesDetails',
+					'webUIFilesList',
+					'webUIFilesSearch'
+				],
 				'webUISharingAutocompletion': 'OCISSharingAutocompletion',
 				'OCISSharingInternalGroups': [
 					'webUISharingInternalGroups',
