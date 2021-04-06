@@ -21,21 +21,21 @@ Feature: Session storage for public link
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with link with "read" permissions and password "pass123"
-    When the public tries to open the public link page of the last public link created by user "Alice" with password "pass123"
-    And the public opens the public link page of the last public link created by user "Alice" on a new session
-    Then the password input for the public link should appear in the webUI
-    When the user accesses the public link with password "pass123" using the webUI
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
+
+
+
 
 
   Scenario: Public accesses the public link files page on a new session after visiting once (file share)
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has shared folder "lorem.txt" with link with "read" permissions and password "pass123"
-    When the public tries to open the public link page of the last public link created by user "Alice" with password "pass123"
-    And the public opens the public link page of the last public link created by user "Alice" on a new session
-    Then the password input for the public link should appear in the webUI
-    When the user accesses the public link with password "pass123" using the webUI
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
+
+
+
 
 
   Scenario: Public link author changes the password when the public is in public link files page session (folder share)
