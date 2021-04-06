@@ -16,7 +16,6 @@ const state = {
     authority: ''
   },
   theme: {
-    name: 'owncloud',
     general: {
       name: '',
       slogan: '',
@@ -59,8 +58,7 @@ const actions = {
       })
     }
   },
-  loadTheme(context, { theme, name }) {
-    theme.name = name
+  loadTheme(context, { theme }) {
     context.commit('LOAD_THEME', theme)
   }
 }

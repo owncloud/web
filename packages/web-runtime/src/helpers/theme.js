@@ -1,14 +1,15 @@
-import defaultTheme from 'web-runtime/themes/owncloud.json'
-export const loadTheme = async (name = '') => {
-  const defaults = { theme: defaultTheme, name: 'themes/owncloud/theme.json' }
+import defaultTheme from 'web-runtime/themes/owncloud/theme.json'
 
-  if (name === '' || name === defaults.name) {
+export const loadTheme = async (location = '') => {
+  const defaults = { theme: defaultTheme }
+
+  if (location.split('.').pop() !== 'json') {
     return defaults
   }
 
   let response
   try {
-    response = await fetch(name)
+    response = await fetch(location)
   } catch (e) {
     return defaults
   }
@@ -17,6 +18,6 @@ export const loadTheme = async (name = '') => {
     return defaults
   }
 
-  const customTheme = await response.json()
-  return { theme: customTheme, name }
+  const theme = await response.json()
+  return { theme }
 }
