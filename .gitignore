@@ -40,6 +40,5 @@ tests/testing-app
 .drone.yml
 
 # Themes
-/packages/web-container/themes/**
-!/packages/web-container/themes/example/**
-!/packages/web-container/themes/owncloud/**
+/packages/web-runtime/themes/**
+!/packages/web-runtime/themes/owncloud/**

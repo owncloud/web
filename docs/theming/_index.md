@@ -9,11 +9,12 @@ geekdocCollapseSection: true
 ---
 
 {{< toc >}}
+
 ## Introduction
 
 By providing your own theme, you can customize the user experience for your own ownCloud installation. This is being achieved by providing a `json` file that contains text snippets (like brand name and slogan), paths to images (e.g. logos or favicon) and design tokens for custom colors (font size and spacing aren't yet supported).
 
-This page documents the setup and configuration options.
+This page documents the setup and configuration options, and provides an empty template for you to get started.
 
 ## Ways of providing a theme
 
@@ -22,7 +23,7 @@ Generally, your theming configuration lives inside a `.json` file, e.g. `theme.j
 To reference your theme, you have two options:
 
 - Using a URL, e.g. `"theme": "https://externalurl.example.com/theme-name/theme.json",`. To avoid CORS issues, please make sure that you host the URL on the same URL as your ownCloud web hosting.
-- For development and testing purposes, you can store your `theme.json` inside `packages/web-container/themes/{theme-name}/` and reference it in the `config.json`. However, this isn't recommended for production use since your changes may get lost when updating oCIS or the `web` app in OC10.
+- For development and testing purposes, you can store your `theme.json` inside `packages/web-runtime/themes/{theme-name}/` and reference it in the `config.json`. However, this isn't recommended for production use since your changes may get lost when updating oCIS or the `web` app in OC10.
 
 **Hint:** If no theme is provided or the loading of your custom theme fails, the standard ownCloud theme will be loaded as a fallback. However, this doesn't stop you from correctly loading a theme that is wrongly formatted, so please read the instructions below carefully.
 
@@ -45,7 +46,7 @@ You can use the snippet below as a base for writing your own theme by replacing 
       // Reference URL paths for assets when using a remote theme
       "sidebar": "https://externalurl.example.com/theme-name/assets/logo.svg",
       "favicon": "https://externalurl.example.com/theme-name/assets/favicon.jpg",
-      // Example use of relative paths for usage with a local theme inside packages/web-container/themes/
+      // Example use of relative paths for usage with a local theme inside packages/web-runtime/themes/
       "login": "themes/owncloud/assets/logo.svg"
     },
     "loginPage": {
@@ -65,6 +66,7 @@ You can use the snippet below as a base for writing your own theme by replacing 
 ```
 
 See below for the meaning of all the first-level objects inside a single theme and recommendations on how to make best use of them:
+
 ## The "general" options
 
 Here, you can specify a `"name"` and a `"slogan"` string. The name gets used in the HTML page `<title>`, and both of them are shown on various screens (e.g. login, loading, error and public share pages).
@@ -76,6 +78,7 @@ Here, you can specify the images to be used in the `"sidebar"`, for the `"favico
 ## The "loadingPage" options
 
 Using the `"autoRedirect"` boolean, you can specify whether the user is shown a login page before possible getting redirected to your LDAP/OIDC/OAuth provider. If it is set to true, you can set the background image for said login page by providing an image file in the `"backgroundImg"` option.
+
 ## Design Tokens
 
 To further customize your ownCloud instance, you can provide your own styles. To give you an idea of how a working design system looks like, feel free to head over to the [ownCloud design tokens](https://owncloud.design/#/Design%20Tokens) for inspiration.
@@ -107,6 +110,7 @@ In general, the theme loader looks for a `designTokens` key inside your theme co
 ```
 
 Please follow this structure to make sure your theming configuration can be loaded correctly.
+
 ### Colors
 
 For the color values, you can use any valid CSS color format, e.g. **hex** (#fff), **rgb** (rgb(255,255,255)) or **color names** (white).
@@ -161,7 +165,7 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
 }
 ```
 
-If you define different key-value pairs inside `"colorPalette"`, they will get loaded and initialized as CSS custom properties but don't tale any effect in the user interface.
+If you define different key-value pairs inside `"colorPalette"`, they will get loaded and initialized as CSS custom properties but don't take any effect in the user interface. This gives you an opportunity to, for example, customize extensions from within the theme in the web runtime (and not the extension itself).
 
 ### Font sizes
 
@@ -169,3 +173,75 @@ Changing font sizes via a custom theme is not yet supported and will be released
 ### Spacing
 
 Changing the spacing via a custom theme is not yet supported and will be released in the future. If this is a pressing feature you'd like to use soon, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) or reach out to us about contribution options.
+
+## Example theme
+
+An empty template for your custom theme is provided below, and you can use the instructions above to set it up according to your needs. Please note that since changing themes at runtime is not yet supported it only consists of a `default` theme, and the `fontSizes` and `spacing` tokens don't have any effect yet.
+
+```json
+{
+  "default": {
+    "general": {
+      "name": "",
+      "slogan": ""
+    },
+    "logo": {
+      "sidebar": "",
+      "favicon": "",
+      "login": "",
+      "notFound": ""
+    },
+    "loginPage": {
+      "autoRedirect": true,
+      "backgroundImg": ""
+    },
+    "designTokens": {
+      "colorPalette": {
+        "color": "",
+        "emphasis-color": "",
+        "muted-color": "",
+        "link-color": "",
+        "link-hover-color": "",
+        "inverse-color": "",
+        "active-icon-color": "",
+        "passive-icon-color": "",
+        "system-icon-color": "",
+        "background": "",
+        "muted-background": "",
+        "primary-background": "",
+        "secondary-background": "",
+        "selected-background": "",
+        "success-background": "",
+        "warning-background": "",
+        "danger-background": "",
+        "danger-background-hover": "",
+        "brand-primary": "",
+        "action-primary": "",
+        "action-primary-hover": "",
+        "action-disabled": "",
+        "shadow-global": "",
+        "shadow-action-primary": "",
+        "border-primary": "",
+        "input-background": "",
+        "input-background-checked": "",
+        "input-border": ""
+      },
+      "fontSizes": {
+        "small-font-size": "",
+        "medium-font-size": "",
+        "large-font-size": "",
+        "font-size": "",
+        "xxlarge-font-size": "",
+        "xlarge-font-size": ""
+      },
+      "spacing": {
+        "space-small": "",
+        "space-medium": "",
+        "space-large": "",
+        "space-xlarge": "",
+        "space-xxlarge": ""
+      }
+    }
+  }
+}
+```
