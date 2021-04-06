@@ -1,0 +1,7 @@
+Enhancement: Runtime theming
+
+It's now possible to specify a custom theme and have logos, brand slogan and 
+colors changed to modify the appearance of your ownCloud web frontend.
+
+https://github.com/owncloud/web/pull/4822
+https://github.com/owncloud/web/issues/2362

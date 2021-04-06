@@ -208,17 +208,13 @@ export default {
 
 <style lang="scss">
 .files-sidebar {
-  background-color: white;
+  background-color: var(--oc-background);
   z-index: 1;
 }
 
 .oc-star {
   &-shining svg {
-    fill: #ffba0a;
-  }
-
-  &-dimm svg {
-    fill: rgba(4, 30, 66, 0.5);
+    fill: #ffba0a !important;
   }
 }
 </style>

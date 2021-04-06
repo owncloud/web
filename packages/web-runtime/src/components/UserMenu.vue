@@ -5,6 +5,7 @@
       ref="menuButton"
       class="oc-topbar-personal uk-height-1-1 oc-pr-xs"
       appearance="raw"
+      variation="passive"
       :aria-label="$gettext('User Menu')"
     >
       <oc-grid flex>
@@ -14,10 +15,7 @@
           :userid="userId"
           :user-name="userDisplayName"
         />
-        <div
-          class="oc-topbar-personal-label uk-text-primary oc-text-bold oc-ml-rm"
-          v-text="userDisplayName"
-        />
+        <div class="oc-topbar-personal-label oc-text-bold oc-ml-rm" v-text="userDisplayName" />
       </oc-grid>
     </oc-button>
     <oc-drop

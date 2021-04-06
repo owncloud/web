@@ -16,7 +16,6 @@ const state = {
     authority: ''
   },
   theme: {
-    name: 'owncloud',
     general: {
       name: '',
       slogan: '',
@@ -29,9 +28,6 @@ const state = {
       favicon: '',
       login: '',
       notFound: ''
-    },
-    filesList: {
-      hideDefaultStatusIndicators: false
     },
     loginPage: {
       autoRedirect: true,
@@ -62,8 +58,7 @@ const actions = {
       })
     }
   },
-  loadTheme(context, { theme, name }) {
-    theme.name = name
+  loadTheme(context, { theme }) {
     context.commit('LOAD_THEME', theme)
   }
 }
@@ -104,6 +99,9 @@ const getters = {
       return '/'
     }
     return parsed
+  },
+  theme: state => {
+    return state.theme
   }
 }
 

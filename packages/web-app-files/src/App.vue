@@ -8,11 +8,7 @@
       @dragover="$_ocApp_dragOver"
     >
       <app-bar id="files-app-bar" :style="{ top: $_topBarVisible ? '60px' : '0' }" />
-      <upload-progress
-        v-show="$_uploadProgressVisible"
-        id="files-upload-progress"
-        class="oc-p-s uk-background-muted"
-      />
+      <upload-progress v-show="$_uploadProgressVisible" id="files-upload-progress" class="oc-p-s" />
       <router-view id="files-view" />
     </div>
     <sidebar

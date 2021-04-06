@@ -252,17 +252,17 @@ module.exports = {
       selector: '.oc-app-container'
     },
     notificationElement: {
-      selector: '//div[@id="oc-notification"]//h5',
+      selector: '//div[@id="oc-notification"]//h4',
       locateStrategy: 'xpath'
     },
     declineSharesInNotifications: {
       selector:
-        '//div[@id="oc-notification"]//h5[contains(text(),\'%s\')]/../div/button[.="Decline"]',
+        '//div[@id="oc-notification"]//h4[contains(text(),\'%s\')]/../div/button[.="Decline"]',
       locateStrategy: 'xpath'
     },
     acceptSharesInNotifications: {
       selector:
-        '//div[@id="oc-notification"]//h5[contains(text(),\'%s\')]/../div/button[.="Accept"]',
+        '//div[@id="oc-notification"]//h4[contains(text(),\'%s\')]/../div/button[.="Accept"]',
       locateStrategy: 'xpath'
     },
     appNavigation: {

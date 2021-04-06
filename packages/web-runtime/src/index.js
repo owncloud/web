@@ -53,7 +53,6 @@ Vue.prototype.$client = new OwnCloud()
 
 Vue.use(VueEvents)
 Vue.use(VueRouter)
-Vue.use(DesignSystem)
 Vue.use(VueClipboard)
 Vue.use(VueScrollTo)
 Vue.use(MediaSource)
@@ -184,10 +183,13 @@ const finalizeInit = async () => {
   })
 }
 
-const fetchTheme = async (themeName = 'owncloud') => {
-  const { theme, name } = await loadTheme(`themes/${themeName}.json`)
+const fetchTheme = async location => {
+  const { theme } = await loadTheme(location)
+  await store.dispatch('loadTheme', { theme: theme.default })
 
-  await store.dispatch('loadTheme', { theme, name })
+  Vue.use(DesignSystem, {
+    tokens: store.getters.theme.designTokens
+  })
 }
 
 const missingOrInvalidConfig = async () => {

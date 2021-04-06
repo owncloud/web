@@ -2,9 +2,9 @@
   <div id="files-location-picker" class="uk-flex uk-height-1-1">
     <div tabindex="-1" class="files-list-wrapper uk-width-expand">
       <div id="files-app-bar" class="oc-p-s">
-        <h1 class="location-picker-selection-info uk-flex uk-text-lead oc-mb">
+        <h1 class="location-picker-selection-info uk-flex oc-text-lead oc-mb">
           <span class="uk-margin-small-right" v-text="title" />
-          <oc-breadcrumb :items="breadcrumbs" variation="lead" class="uk-text-lead" />
+          <oc-breadcrumb :items="breadcrumbs" variation="lead" class="oc-text-lead" />
         </h1>
         <hr class="oc-mt-rm" />
         <div class="oc-mb">
@@ -478,7 +478,7 @@ export default {
   height: auto;
   z-index: 1;
   grid-area: header;
-  background-color: white;
+  background-color: var(--oc-background);
   box-sizing: border-box;
 }
 

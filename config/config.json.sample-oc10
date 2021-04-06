@@ -1,6 +1,6 @@
 {
   "server" : "http://localhost:8080",
-  "theme": "owncloud",
+  "theme": "https://localhost:9100/themes/owncloud/theme.json",
   "version": "0.1.0",
   "auth": {
     "clientId": "",

@@ -69,10 +69,6 @@ export default {
           item: item.split('/')[0]
         }
       }
-    },
-
-    iconPath() {
-      return this.configuration.theme.logo.notFound
     }
   }
 }

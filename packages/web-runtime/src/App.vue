@@ -369,7 +369,7 @@ export default {
   top: 0;
   height: 60px;
   z-index: 2;
-  background-color: white;
+  background-color: var(--oc-background);
 }
 
 .web-content-container {
