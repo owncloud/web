@@ -9,6 +9,7 @@ const occHelper = require('../helpers/occHelper')
 
 let initialConfigJsonSettings
 let createdFiles = []
+let oldPreviewSetting = ''
 
 Given(
   'a file with the size of {string} bytes and the name {string} has been created locally',
@@ -293,6 +294,23 @@ Before(function() {
       '\x1b[33m%s\x1b[0m',
       `\tCould not read config file.\n\tSet correct path of config file in WEB_UI_CONFIG env variable to fix this.\n\tSome tests may fail as a result.`
     )
+  }
+})
+
+const getConfigSystem = async function(name) {
+  if (!client.globals.ocis) {
+    const value = await occHelper.runOcc(['config:system:get ' + name])
+    return value.ocs.data.stdOut
+  }
+}
+
+Before({ tags: '@disablePreviews' }, async () => {
+  if (!client.globals.ocis) {
+    if (!oldPreviewSetting) {
+      oldPreviewSetting = await getConfigSystem('enable_previews')
+      oldPreviewSetting = oldPreviewSetting.toString().trim()
+    }
+    occHelper.runOcc(['config:system:set enable_previews --type=boolean --value=false'])
   }
 })
 

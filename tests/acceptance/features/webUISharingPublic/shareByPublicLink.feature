@@ -420,7 +420,7 @@ Feature: Share by public link
     Then file "lorem.txt" should be listed on the webUI
     And it should not be possible to delete file "lorem.txt" using the webUI
 
-  @issue-ocis-reva-292
+  @issue-ocis-reva-292 @disablePreviews
   Scenario: user edits the permission of an already existing public link from read to read-write
     Given user "Alice" has created a public link with following settings
       | path        | simple-folder |
