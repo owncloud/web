@@ -15,7 +15,9 @@ Summary
 * Change - Add web-pkg package: [#4907](https://github.com/owncloud/web/pull/4907)
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
+* Enhancement - Add web-pkg package: [#4907](https://github.com/owncloud/web/pull/4907)
 * Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
+* Enhancement - Runtime theming: [#4822](https://github.com/owncloud/web/pull/4822)
 * Enhancement - Add "Shared via link" page: [#4881](https://github.com/owncloud/web/pull/4881)
 
 Details
@@ -77,10 +79,25 @@ Details
    https://github.com/owncloud/web/issues/4786
    https://github.com/owncloud/web/pull/4833
 
+* Enhancement - Add web-pkg package: [#4907](https://github.com/owncloud/web/pull/4907)
+
+   We added web-pkg as a new package. It is supposed to be the central location for reuse of generic
+   functionality.
+
+   https://github.com/owncloud/web/pull/4907
+
 * Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
 
    https://github.com/owncloud/web/issues/4346
    https://github.com/owncloud/web/pull/4812
+
+* Enhancement - Runtime theming: [#4822](https://github.com/owncloud/web/pull/4822)
+
+   It's now possible to specify a custom theme and have logos, brand slogan and colors changed to
+   modify the appearance of your ownCloud web frontend.
+
+   https://github.com/owncloud/web/issues/2362
+   https://github.com/owncloud/web/pull/4822
 
 * Enhancement - Add "Shared via link" page: [#4881](https://github.com/owncloud/web/pull/4881)
 
