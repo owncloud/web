@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
+import { createStore } from 'vuex-extensions'
 
 /* STORE MODULES
  */
@@ -31,7 +32,7 @@ const vuexPersistInSession = new VuexPersistence({
 
 const strict = process.env.NODE_ENV === 'development'
 
-export const Store = new Vuex.Store({
+export const Store = createStore(Vuex.Store, {
   plugins: [vuexPersistInSession.plugin],
   modules: {
     app,

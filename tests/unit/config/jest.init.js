@@ -1,7 +1,8 @@
 import { config } from '@vue/test-utils'
+import fetchMock from 'jest-fetch-mock'
 
-const $gettext = str => str
+fetchMock.enableMocks()
 
 config.mocks = {
-  $gettext
+  $gettext: str => str
 }

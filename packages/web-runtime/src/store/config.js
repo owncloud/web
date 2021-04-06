@@ -1,4 +1,5 @@
 import isEmpty from 'lodash-es/isEmpty'
+import merge from 'lodash-es/merge'
 
 const state = {
   state: null,
@@ -84,7 +85,7 @@ const mutations = {
     }
   },
   LOAD_THEME(state, theme) {
-    state.theme = { ...state.theme, ...theme }
+    state.theme = merge({}, state.theme, theme)
   }
 }
 
