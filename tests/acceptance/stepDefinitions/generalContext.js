@@ -296,6 +296,10 @@ Before(function() {
   }
 })
 
+Before({ tags: '@disablePreviews' }, () => {
+  occHelper.runOcc(['config:system:set', 'enable_previews', '--type=boolean', '--value=false'])
+})
+
 After(function() {
   if (initialConfigJsonSettings) {
     fs.writeFileSync(this.fullPathOfConfigFile, JSON.stringify(initialConfigJsonSettings, null, 4))

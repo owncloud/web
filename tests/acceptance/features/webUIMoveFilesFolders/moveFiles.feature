@@ -1,3 +1,4 @@
+@disablePreviews
 Feature: move files
   As a user
   I want to move files
@@ -41,7 +42,7 @@ Feature: move files
     When the user tries to move file "strängé filename (duplicate #2 &).txt" into folder "strängé नेपाली folder" using the webUI
     Then the error message with header 'An error occurred while moving strängé filename (duplicate #2 &).txt' should be displayed on the webUI
 
-  @smokeTest @skipOnOC10
+   @smokeTest
   Scenario: Move multiple files at once
     Given user "Alice" has logged in using the webUI
     And the user has browsed to the files page

@@ -1,4 +1,4 @@
-@files_trashbin-app-required
+@files_trashbin-app-required @disablePreviews
 Feature: files and folders exist in the trashbin after being deleted
   As a user
   I want deleted files and folders to be available in the trashbin
@@ -11,7 +11,7 @@ Feature: files and folders exist in the trashbin after being deleted
     And user "Alice" has created folder "Folder,With,Comma"
     And the user has browsed to the files page
 
-  @smokeTest @ocis-reva-issue-111 @skipOnOCIS @issue-product-186 @skipOnOC10
+  @smokeTest @ocis-reva-issue-111 @skipOnOCIS @issue-product-186
   Scenario: Delete files & folders one by one and check that they are all in the trashbin
     When the user deletes the following elements using the webUI
       | name                                  |

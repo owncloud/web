@@ -1,3 +1,4 @@
+@disablePreviews
 Feature: deleting files and folders
   As a user
   I want to delete files and folders
@@ -8,7 +9,7 @@ Feature: deleting files and folders
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
-  @skipOnOC10 @smokeTest @ocisSmokeTest
+  @smokeTest @ocisSmokeTest
   Scenario: Delete files & folders one by one and check its existence after page reload
     Given user "Alice" has created file "sample,1.txt"
     And user "Alice" has created folder "Sample,Folder,With,Comma"
@@ -49,7 +50,7 @@ Feature: deleting files and folders
       | "question?"         |
       | "&and#hash"         |
 
-  @smokeTest @skipOnOC10 @issue-4582
+  @smokeTest @issue-4582
   Scenario: Delete multiple files at once
     When the user batch deletes these files using the webUI
       | name          |
