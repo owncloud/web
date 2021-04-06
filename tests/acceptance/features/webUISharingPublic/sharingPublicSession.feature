@@ -17,16 +17,16 @@ Feature: Session storage for public link
 
   Scenario Outline: Public accesses the public link files page on a new session after visiting once
     Given user "Alice" has shared folder "<share-path>" with link with "read" permissions and password "pass123"
-    When the public tries to open the public link page of the last public link created by user "Alice" with password "pass123"
-    And the public opens the public link page of the last public link created by user "Alice" on a new session
-    Then the password input for the public link should appear in the webUI
-    When the user accesses the public link with password "pass123" using the webUI
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
     Examples:
       | share-path    |
       | simple-folder |
       | lorem.txt     |
 
+
+
+    
 
   Scenario Outline: Public link author changes the password when the public is in public link files page session
     Given user "Alice" has shared folder "<share-path>" with link with "read" permissions and password "pass123"
