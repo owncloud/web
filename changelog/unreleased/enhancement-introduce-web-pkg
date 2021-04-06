@@ -1,4 +1,4 @@
-Change: Add web-pkg package
+Enhancement: Add web-pkg package
 
 We added web-pkg as a new package.
 It is supposed to be the central location for reuse of generic functionality.
