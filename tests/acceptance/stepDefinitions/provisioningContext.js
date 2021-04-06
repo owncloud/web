@@ -353,7 +353,8 @@ After(async function() {
       userSettings.resetCreatedGroups()
     })
   } else {
-    await Promise.all([...createdUsers.map(deleteUser), ...createdGroups.map(deleteGroup)])
+    await Promise.all(createdUsers.map(deleteUser))
+    await Promise.all(createdGroups.map(deleteGroup))
   }
 
   if (client.globals.ocis) {
