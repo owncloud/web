@@ -12,6 +12,7 @@ Summary
 * Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
 * Bugfix - Only one `<main>` tag per HTML document: [#1652](https://github.com/owncloud/web/issues/1652)
 * Change - Update owncloud Design System to v4.1.1: [#4862](https://github.com/owncloud/web/pull/4862)
+* Change - Add web-pkg package: [#4907](https://github.com/owncloud/web/pull/4907)
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
 * Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
@@ -52,6 +53,13 @@ Details
 
    https://github.com/owncloud/web/issues/4331
    https://github.com/owncloud/web/pull/4862
+
+* Change - Add web-pkg package: [#4907](https://github.com/owncloud/web/pull/4907)
+
+   We added web-pkg as a new package. It is supposed to be the central location for reuse of generic
+   functionality.
+
+   https://github.com/owncloud/web/pull/4907
 
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
 
