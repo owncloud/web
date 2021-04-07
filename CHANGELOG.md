@@ -14,6 +14,7 @@ Summary
 * Bugfix - Parent paths traversal for shares: [#4860](https://github.com/owncloud/web/issues/4860)
 * Change - Update owncloud Design System to v4.1.1: [#4862](https://github.com/owncloud/web/pull/4862)
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
+* Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
 * Enhancement - Add web-pkg package: [#4907](https://github.com/owncloud/web/pull/4907)
 * Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
@@ -73,6 +74,12 @@ Details
    into views, so that only subcomponents live in the components directory.
 
    https://github.com/owncloud/web/pull/4627
+
+* Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
+
+   Permits the search bar in the files app to be toggleable on a per-route basis as shown or hidden.
+
+   https://github.com/owncloud/web/pull/4815
 
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
 
