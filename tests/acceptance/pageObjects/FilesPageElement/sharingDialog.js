@@ -90,9 +90,13 @@ module.exports = {
       shareWithGroup = false,
       remoteShare = false
     ) {
-      let sharee = client.globals.ocis
-        ? userSettings.getUsernameFromDisplayname(receiver)
-        : receiver
+      let sharee
+      if (shareWithGroup === true) {
+        sharee = receiver
+      } else {
+        sharee = client.globals.ocis ? userSettings.getUsernameFromDisplayname(receiver) : receiver
+      }
+
       if (remoteShare) sharee = util.format('%s@%s', receiver, this.api.globals.remote_backend_url)
       const autocompleteUser = client.globals.ocis ? receiver : sharee
 
