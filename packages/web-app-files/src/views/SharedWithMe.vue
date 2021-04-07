@@ -105,7 +105,7 @@ export default {
       'inProgress',
       'activeFilesCount'
     ]),
-    ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
+    ...mapGetters(['isOcis', 'configuration', 'getToken', 'user', 'homeFolder']),
 
     selected: {
       get() {
@@ -190,7 +190,8 @@ export default {
         true,
         !this.isOcis,
         this.configuration.server,
-        this.getToken
+        this.getToken,
+        this.homeFolder
       )
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })
@@ -238,7 +239,8 @@ export default {
             true,
             !this.isOcis,
             this.configuration.server,
-            this.getToken
+            this.getToken,
+            this.homeFolder
           )
           this.UPDATE_RESOURCE(sharedResource)
         }

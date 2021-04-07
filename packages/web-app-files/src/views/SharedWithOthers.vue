@@ -79,7 +79,7 @@ export default {
       'inProgress',
       'activeFilesCount'
     ]),
-    ...mapGetters(['isOcis', 'configuration', 'getToken', 'user']),
+    ...mapGetters(['isOcis', 'configuration', 'getToken', 'user', 'homeFolder']),
 
     selected: {
       get() {
@@ -158,7 +158,8 @@ export default {
         false,
         !this.isOcis,
         this.configuration.server,
-        this.getToken
+        this.getToken,
+        this.homeFolder
       )
 
       this.LOAD_FILES({ currentFolder: rootFolder, files: resources })

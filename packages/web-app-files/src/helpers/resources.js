@@ -8,6 +8,7 @@ import { bitmaskToRole, checkPermission, permissionsBitmask } from './collaborat
 import { shareTypes, userShareTypes } from './shareTypes'
 import { $gettext } from '../gettext'
 import { getAvatarSrc } from './user'
+import { join } from 'lodash-es'
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
@@ -103,13 +104,15 @@ export function attachIndicators(resource, sharesTree) {
  * @param {Boolean} allowSharePerm Asserts whether the reshare permission is available
  * @param {String} server The url of the backend
  * @param {String} token The access token of the authenticated user
+ * @param {String} homeFolder The homeFolder path of the authenticated user
  */
 export async function aggregateResourceShares(
   shares,
   incomingShares = false,
   allowSharePerm,
   server,
-  token
+  token,
+  homeFolder
 ) {
   if (incomingShares) {
     return Promise.all(
@@ -117,7 +120,14 @@ export async function aggregateResourceShares(
         .orderBy(['file_target', 'permissions'], ['asc', 'desc'])
         .map(
           async share =>
-            await buildSharedResource(share, incomingShares, allowSharePerm, server, token)
+            await buildSharedResource(
+              share,
+              incomingShares,
+              allowSharePerm,
+              server,
+              token,
+              homeFolder
+            )
         )
     )
   }
@@ -167,7 +177,8 @@ export async function aggregateResourceShares(
 
   return Promise.all(
     resources.map(
-      async share => await buildSharedResource(share, incomingShares, allowSharePerm, server, token)
+      async share =>
+        await buildSharedResource(share, incomingShares, allowSharePerm, server, token, homeFolder)
     )
   )
 }
@@ -177,7 +188,8 @@ export async function buildSharedResource(
   incomingShares = false,
   allowSharePerm,
   server,
-  token
+  token,
+  homeFolder
 ) {
   const resource = {
     id: share.item_source,
@@ -207,9 +219,9 @@ export async function buildSharedResource(
     resource.shareOwnerDisplayname = share.displayname_owner
     resource.name = path.basename(share.path)
     resource.path = share.path
-    // permissions irrelevant here
     resource.isReceivedShare = () => false
   }
+  resource.path = path.join(homeFolder, resource.path)
   resource.extension = isFolder ? '' : _getFileExtension(resource.name)
   // FIXME: add actual permission parsing
   resource.canUpload = () => true
