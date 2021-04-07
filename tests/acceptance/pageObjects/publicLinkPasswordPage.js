@@ -16,13 +16,9 @@ module.exports = {
           .setValue('@passwordInput', password)
           .click('@passwordSubmitButton')
 
-        return this.page.FilesPageElement.filesList()
-          .waitForElementPresent({
-            selector: '@filesListProgressBar',
-            abortOnFailure: false, // don't fail if we are too late
-            timeout: this.api.globals.waitForNegativeConditionTimeout
-          })
-          .waitForElementNotPresent('@filesListProgressBar')
+        return this.waitForElementPresent(
+          this.page.FilesPageElement.filesList().elements.anyAfterLoading
+        )
       },
       /**
        * submits the public link password input form

@@ -17,7 +17,7 @@ Feature: Session storage for public link
 
   Scenario Outline: Public accesses the public link files page on a new session after visiting once
     Given user "Alice" has shared folder "<share-path>" with link with "read" permissions and password "pass123"
-    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123" on a new session
     Then file "lorem.txt" should be listed on the webUI
     Examples:
       | share-path    |
@@ -26,7 +26,7 @@ Feature: Session storage for public link
 
 
 
-    
+
 
   Scenario Outline: Public link author changes the password when the public is in public link files page session
     Given user "Alice" has shared folder "<share-path>" with link with "read" permissions and password "pass123"

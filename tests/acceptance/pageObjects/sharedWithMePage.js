@@ -11,7 +11,7 @@ module.exports = {
      * @returns {*}
      */
     navigateAndWaitTillLoaded: function() {
-      return this.navigate(this.url()).waitForElementVisible(
+      return this.navigate(this.url()).waitForElementPresent(
         this.page.FilesPageElement.filesList().elements.anyAfterLoading
       )
     },
