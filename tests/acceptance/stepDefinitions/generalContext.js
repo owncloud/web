@@ -306,23 +306,11 @@ const getConfigSystem = async function(name) {
 
 Before({ tags: '@disablePreviews' }, async () => {
   if (!client.globals.ocis) {
-    console.log(oldPreviewSetting)
     if (!oldPreviewSetting) {
       oldPreviewSetting = await getConfigSystem('enable_previews')
       oldPreviewSetting = oldPreviewSetting.toString().trim()
     }
-    occHelper.runOcc(['config:system:set enable_previews --type=boolean --value=' + false])
-  }
-})
-
-After({ tags: '@disablePreviews' }, () => {
-  if (!client.globals.ocis) {
-    if (!oldPreviewSetting) {
-      occHelper.runOcc(['config:system:delete enable_previews'])
-    }
-    occHelper.runOcc([
-      'config:system:set enable_previews --type=boolean --value=' + oldPreviewSetting
-    ])
+    occHelper.runOcc(['config:system:set enable_previews --type=boolean --value=false'])
   }
 })
 
