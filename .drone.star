@@ -62,7 +62,10 @@ config = {
 					'webUIFilesSearch'
 				],
 				'webUIMoveFilesFolders': 'Move',
-				'webUIResharing': 'Resharing',
+				'webUIResharing': [
+					'webUIResharing1',
+					'webUIResharing2'
+				],
 				'webUIResharingToRoot': 'ResharingToRoot',
 				'webUIRestrictSharing': 'RestrictSharing',
 				'webUISharingAutocompletion': 'SharingAutocompletion',
@@ -83,7 +86,12 @@ config = {
 				'webUISharingInternalUsersExpire': 'SharingInternalUsersExpire',
 				'webUISharingInternalUsersExpireToRoot': 'SharingInternalUsersExpireToRoot',
 				'webUISharingInternalUsersSharingIndicator': 'SharingInternalUsersSharingIndicator',
-				'webUISharingInternalUsersToRoot': 'SharingInternalUsersRoot',
+				'webUISharingInternalUsersToRoot': 'webUISharingInternalUsersRoot1',
+				'webUISharingInternalUsersRoot2': [
+					'webUISharingInternalUsersToRootCollaborator',
+					'webUISharingInternalUsersToRootPreviews',
+					'webUISharingInternalUsersToRootShareWithPage'
+				],
 				'webUISharingInternalUsersToRootBlacklisted': 'SharingInternalUsersRootBlacklisted',
 				'webUISharingInternalUsersToRootSharingIndicator': 'SharingInternalUsersRootSharingIndicator',
 				'webUISharingPermissionsUsers': 'SharingPermissionsUsers',
@@ -151,7 +159,8 @@ config = {
 				],
 				'XGAPortrait2': [
 					'webUIMoveFilesFolders',
-					'webUIResharing',
+					'webUIResharing1',
+					'webUIResharing2',
 					'webUIResharingToRoot',
 					'webUISharingAutocompletion',
 					'webUISharingFilePermissionMultipleUsers',
@@ -172,6 +181,9 @@ config = {
 					'webUISharingInternalUsersExpireToRoot',
 					'webUISharingInternalUsersSharingIndicator',
 					'webUISharingInternalUsersToRoot',
+					'webUISharingInternalUsersToRootCollaborator',
+					'webUISharingInternalUsersToRootPreviews',
+					'webUISharingInternalUsersToRootShareWithPage',
 					'webUISharingInternalUsersToRootBlacklisted',
 					'webUISharingInternalUsersToRootSharingIndicator',
 					'webUISharingPermissionsUsers',
@@ -227,7 +239,8 @@ config = {
 					],
 				'iPhone2': [
 					'webUIMoveFilesFolders',
-					'webUIResharing',
+					'webUIResharing1',
+					'webUIResharing2',
 					'webUIResharingToRoot',
 					'webUISharingAutocompletion',
 					'webUISharingFilePermissionMultipleUsers',
@@ -240,6 +253,9 @@ config = {
 					'webUISharingInternalGroupsToRoot',
 					'webUISharingInternalUsers',
 					'webUISharingInternalUsersExpire',
+					'webUISharingInternalUsersToRootCollaborator',
+					'webUISharingInternalUsersToRootPreviews',
+					'webUISharingInternalUsersToRootShareWithPage',
 					'webUISharingInternalUsersExpireToRoot',
 					'webUISharingInternalUsersToRoot',
 					'webUISharingPermissionsUsers',
@@ -319,12 +335,17 @@ config = {
 					'webUISharingInternalGroupsToRootEdgeCases',
 					'webUISharingInternalGroupsToRootSharingIndicator',
 				],
-				'OCISSharingInternalUsers': [
+				'OCISSharingInternalUsers1': [
 					'webUISharingInternalUsers',
+				],
+				'OCISSharingInternalUsers2': [
 					'webUISharingInternalUsersBlacklisted',
 					'webUISharingInternalUsersSharingIndicator',
 					'webUISharingInternalUsersToRoot',
 					'webUISharingInternalUsersToRootBlacklisted',
+					'webUISharingInternalUsersToRootCollaborator',
+					'webUISharingInternalUsersToRootPreviews',
+					'webUISharingInternalUsersToRootShareWithPage',
 					'webUISharingInternalUsersToRootSharingIndicator',
 				],
 				'webUISharingInternalUsersExpire': 'OCISSharingInternalUsersExpire',
@@ -334,7 +355,13 @@ config = {
 				'webUISharingFolderPermissionsGroups': 'OCISSharingFolderPermissionsGroups',
 				'webUISharingFolderAdvancedPermissionsGroups': 'OCISSharingFolderAdvPermissionsGrp',
 				'webUISharingPermissionToRoot': 'OCISSharingPermissionToRoot',
-				'webUIResharing': 'OCISResharing', # for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
+				# for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
+				'OCISResharing1': [
+					'webUIResharing1'
+				],
+				'OCISResharing2': [
+					'webUIResharing2'
+				],
 				'webUIResharingToRoot': 'OCISResharingToRoot',
 				'webUISharingPublicBasic': 'OCISSharingPublicBasic',
 				'webUISharingPublicManagement': 'OCISSharingPublicManagement',
