@@ -1,0 +1,6 @@
+Bugfix: Parent paths traversal for shares
+
+We fixed a bug in parent paths traversals for loading shares. A path with a trailing slash was twice in the result of (parent-)paths, leading to fetching the existing shares on the current folder twice. Since we fetch incoming and outgoing shares this caused 2 unnecessary requests on every page load that changed into a child folder or a folder unrelated to the current path.
+
+https://github.com/owncloud/web/issues/4860
+https://github.com/owncloud/web/pull/4918
