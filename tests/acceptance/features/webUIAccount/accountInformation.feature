@@ -7,14 +7,14 @@ Feature: View account information
     Given user "Alice" has been created with default attributes and large skeleton files
 
   @ocis-reva-issue-107
-  Scenario: view account information when the user has been created without groups membership
+  Scenario: view account information when the user has been created without group memberships
     Given user "Alice" has logged in using the webUI
     When the user browses to the account page
     Then the user should have following details displayed on the account information
       | Username          | Alice                         |
       | Display name      | Alice Hansen                      |
       | Email             | alice@example.org             |
-      | Groups membership | You are not part of any group |
+      | Group memberships | You are not part of any group |
 
   @ocis-konnectd-issue-42
   Scenario: view account information when the user has been added to a group
@@ -28,7 +28,7 @@ Feature: View account information
       | Username          | Alice             |
       | Display name      | Alice Hansen          |
       | Email             | alice@example.org |
-      | Groups membership | Group1            |
+      | Group memberships | Group1            |
 
   @ocis-reva-issue-107 @ocis-konnectd-issue-42
   Scenario: view account information when the user has been added to multiple groups
@@ -52,4 +52,4 @@ Feature: View account information
       | Username          | Alice                                            |
       | Display name      | Alice Hansen                                         |
       | Email             | alice@example.org                                |
-      | Groups membership | Group1, Group2, Group3, Group4, Group31, A111111 |
+      | Group memberships | Group1, Group2, Group3, Group4, Group31, A111111 |
