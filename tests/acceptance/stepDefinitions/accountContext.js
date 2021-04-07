@@ -14,7 +14,7 @@ Then('the user should have following details displayed on the account informatio
   const actualAccInfo = await client.page.accountPage().getAccountInformation()
   const actualEntries = Object.entries(actualAccInfo)
   for (const [key, value] of actualEntries) {
-    if (key === 'Groups membership') {
+    if (key === 'Group memberships') {
       const actualGroupMembership = value.split(',').map(grp => grp.trim())
       const expectedGroupMembership = expectedAccInfo[key].split(',').map(grp => grp.trim())
       const differenceInGroups = _.difference(actualGroupMembership, expectedGroupMembership)

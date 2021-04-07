@@ -37,7 +37,7 @@
           class="uk-width-1-2@s oc-mb account-page-info-groups"
           @click="$_oc_settingsAccount_getGroup"
         >
-          <div class="uk-text-meta"><translate>Groups membership</translate></div>
+          <div class="uk-text-meta"><translate>Group memberships</translate></div>
           <span v-if="groupNames">{{ groupNames }}</span>
           <span v-else v-translate>You are not part of any group</span>
         </div>
