@@ -296,15 +296,15 @@ Before(function() {
   }
 })
 
-Before({ tags: '@disablePreviews' }, () => {
-  if (!client.globals.ocis)
-    occHelper.runOcc(['config:system:set', 'enable_previews', '--type=boolean', '--value=false'])
-})
-
-After({ tags: '@disablePreviews' }, () => {
-  if (!client.globals.ocis)
-    occHelper.runOcc(['config:system:set', 'enable_previews', '--type=boolean', '--value=true'])
-})
+// Before({ tags: '@disablePreviews' }, () => {
+//   if (!client.globals.ocis)
+//     occHelper.runOcc(['config:system:set', 'enable_previews', '--type=boolean', '--value=false'])
+// })
+//
+// After({ tags: '@disablePreviews' }, () => {
+//   if (!client.globals.ocis)
+//     occHelper.runOcc(['config:system:set', 'enable_previews', '--type=boolean', '--value=true'])
+// })
 
 After(function() {
   if (initialConfigJsonSettings) {
