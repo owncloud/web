@@ -39,7 +39,7 @@ Feature: Sharing folders with internal groups with different roles and permissio
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
     And group "grp2" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
-    Then user "Brian" should have received a share with these details:
+    And user "Brian" should have received a share with these details:
       | field       | value                 |
       | uid_owner   | Alice                 |
       | share_with  | grp2                  |

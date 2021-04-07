@@ -34,7 +34,7 @@ Feature: disable sharing
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And the setting "shareapi_enabled" of app "core" has been set to "no"
     When user "Alice" logs in using the webUI
-    When the user opens folder "Shares" using the webUI
+    And the user opens folder "Shares" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And folder "simple-folder" should be listed on the webUI
 #    And the link for "shared-with-me" page should not be available in files page menu

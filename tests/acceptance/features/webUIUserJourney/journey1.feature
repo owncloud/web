@@ -21,7 +21,7 @@ Feature: User Journey 1
     And file "new-lorem2.txt" should be listed on the webUI
     And the user deletes file "new-lorem2.txt" using the webUI
     And the user browses to the trashbin page
-    Then file "new-lorem2.txt" should be listed on the webUI
+    And file "new-lorem2.txt" should be listed on the webUI
     And the user restores file "new-lorem2.txt" from the trashbin using the webUI
     And the user browses to the files page
-    Then file "new-lorem2.txt" should be listed on the webUI
+    And file "new-lorem2.txt" should be listed on the webUI

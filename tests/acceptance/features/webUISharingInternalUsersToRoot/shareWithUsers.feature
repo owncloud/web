@@ -126,7 +126,7 @@ Feature: Sharing files and folders with internal users
     And the user re-logs in as "Alice" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI
     And the user deletes folder "new-simple-folder" using the webUI
-    Then folder "new-simple-folder" should not be listed on the webUI
+    And folder "new-simple-folder" should not be listed on the webUI
     # check that the folder is still visible for the share owner
     When the user re-logs in as "Brian" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI
@@ -135,7 +135,7 @@ Feature: Sharing files and folders with internal users
 
   Scenario: share a folder with another internal user and prohibit deleting
     Given user "Brian" has logged in using the webUI
-    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "create, read, share" permissions
+    And user "Brian" has shared folder "simple-folder" with user "Alice" with "create, read, share" permissions
     And the user re-logs in as "Alice" using the webUI
     And the user opens folder "simple-folder (2)" using the webUI
     Then it should not be possible to delete file "lorem.txt" using the webUI

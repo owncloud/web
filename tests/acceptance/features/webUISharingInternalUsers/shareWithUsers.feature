@@ -144,7 +144,7 @@ Feature: Sharing files and folders with internal users
     And the user browses to the folder "Shares" on the files page
     Then folder "new-simple-folder" should be listed on the webUI
     And the user deletes folder "new-simple-folder" using the webUI
-    Then folder "new-simple-folder" should not be listed on the webUI
+    And folder "new-simple-folder" should not be listed on the webUI
     # check that the folder is still visible for the share owner
     When the user re-logs in as "Brian" using the webUI
     Then folder "new-simple-folder" should be listed on the webUI

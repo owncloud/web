@@ -527,7 +527,7 @@ Feature: Share by public link
       | permission | read-write |
     When the user changes the permission of the public link named "Public link" to "upload-write-without-modify"
     And the public accesses the last created public link using the webUI
-    When the user uploads file "lorem.txt" keeping both new and existing files using the webUI
+    And the user uploads file "lorem.txt" keeping both new and existing files using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And file "lorem (2).txt" should be listed on the webUI
 

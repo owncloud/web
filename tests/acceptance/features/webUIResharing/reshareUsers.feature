@@ -56,7 +56,7 @@ Feature: Resharing shared files with different permissions
     And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
     Then user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
-    Then user "Carol" should have received a share with these details:
+    And user "Carol" should have received a share with these details:
       | field       | value                 |
       | uid_owner   | Alice                 |
       | share_with  | Carol                 |
@@ -82,7 +82,7 @@ Feature: Resharing shared files with different permissions
     And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
     Then user "Carol King" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Carol King" for folder "simple-folder" on the webUI
-    Then user "Carol" should have received a share with these details:
+    And user "Carol" should have received a share with these details:
       | field       | value                 |
       | uid_owner   | Alice                 |
       | share_with  | Carol                 |
@@ -327,7 +327,7 @@ Feature: Resharing shared files with different permissions
     And the user has browsed to the shared-with-others page
     When the user shares folder "simple-folder" with user "Carol King" as "Editor" using the webUI
     And the user shares file "lorem.txt" with user "Carol King" as "Editor" using the webUI
-    When user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
+    And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
     And user "Carol" accepts the share "lorem.txt" offered by user "Alice" using the sharing API
     Then as "Carol" folder "/Shares/simple-folder" should exist
     And as "Carol" file "/Shares/lorem.txt" should exist
@@ -375,6 +375,6 @@ Feature: Resharing shared files with different permissions
     And user "Carol" has shared folder "/Shares/simple-folder" with group "Davidgrp"
     And user "David" has accepted the share "simple-folder" offered by user "Brian"
     When user "David" has logged in using the webUI
-    When the user opens folder "Shares" using the webUI
+    And the user opens folder "Shares" using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy, Carol King" in the collaborators list on the webUI

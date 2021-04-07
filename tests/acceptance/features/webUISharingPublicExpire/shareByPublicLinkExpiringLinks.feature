@@ -110,7 +110,7 @@ Feature: Share by public link
     When the user edits the public link named "Public link" of file "lorem.txt" changing following
       | expireDate | +15 |
     Then the user should see an error message on the public link share dialog saying "Cannot set expiration date more than 7 days in the future"
-    Then user "Alice" should have a share with these details:
+    And user "Alice" should have a share with these details:
       | field       | value       |
       | share_type  | public_link |
       | uid_owner   | Alice       |
