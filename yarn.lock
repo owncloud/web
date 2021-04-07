@@ -7663,10 +7663,10 @@ ospec@3.1.0:
   dependencies:
     glob "^7.1.3"
 
-owncloud-design-system@4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-4.2.1.tgz#19524b7318690b5ed4886463685d2731b06a0ca5"
-  integrity sha512-RWcCKdmASsGpNpuU+1xaaxTRE5tP5uwu83MFL88jS8iLyA0mgs84stCt07+B+nQ8CJvjo2dWQN0EZJzUZhaAig==
+owncloud-design-system@4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/owncloud-design-system/-/owncloud-design-system-4.3.0.tgz#2e564cb741dea8b7baddf8f17bacacb3c4f9266c"
+  integrity sha512-VGQFprosPXBtHDcgDuo/ilY+lfaRy48vMbHm3uOqWevyOq8NkI6f+mZZa05+hBn8IBmiiB8z7heCjYDqc/cO6g==
   dependencies:
     luxon "^1.22.0"
     mini-css-extract-plugin "^1.3.1"
@@ -10923,6 +10923,11 @@ vue-scrollto@^2.15.0:
   integrity sha512-7i+AGKJTThZnMEkhIPgrZjyAX+fXV7/rGdg+CV283uZZwCxwiMXaBLTmIc5RTA4uwGnT+E6eJle3mXQfM2OD3A==
   dependencies:
     bezier-easing "2.1.0"
+
+vue-select@^3.11.2:
+  version "3.11.2"
+  resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.11.2.tgz#3ef93e3f2707e133c2df0b2920a05eea78764d18"
+  integrity sha512-pIOcY8ajWNSwg8Ns4eHVr5ZWwqKCSZeQRymTnlUI8i+3QiQXF6JIM4lylK6mVfbccs4S6vOyxB7zmJBpp7tDUg==
 
 vue-template-compiler@^2.6.12:
   version "2.6.12"
