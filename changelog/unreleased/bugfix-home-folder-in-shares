@@ -1,0 +1,5 @@
+Bugfix: homeFolder in share paths
+
+We had a bug in building resources from shares as we didn't prefix the share paths with the homeFolder path.
+
+https://github.com/owncloud/web/issues/4823
