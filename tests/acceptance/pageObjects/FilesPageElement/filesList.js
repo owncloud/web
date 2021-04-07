@@ -419,18 +419,31 @@ module.exports = {
       return filesCount + foldersCount
     },
 
-    getShareIndicatorsForResource: async function(fileName) {
+    /**
+     *
+     * @param {string} fileName
+     * @param {boolean} sharingIndicatorExpectedToBeVisible
+     * @returns {Array} array of sharing indicator
+     */
+    getShareIndicatorsForResource: async function(fileName, sharingIndicatorExpectedToBeVisible) {
       const resourceRowXpath = this.getFileRowSelectorByFileName(fileName)
       const shareIndicatorsXpath =
         resourceRowXpath + this.elements.shareIndicatorsInFileRow.selector
       const indicators = []
-
       await this.waitForFileVisible(fileName)
+      const {
+        waitForNegativeConditionTimeout,
+        waitForConditionTimeout,
+        waitForConditionPollInterval
+      } = client.globals
       await this.waitForElementVisible({
         selector: shareIndicatorsXpath,
         locateStrategy: this.elements.shareIndicatorsInFileRow.locateStrategy,
         abortOnFailure: false,
-        timeout: client.globals.waitForNegativeConditionTimeout
+        timeout: sharingIndicatorExpectedToBeVisible
+          ? waitForConditionTimeout
+          : waitForNegativeConditionTimeout,
+        pollInterval: waitForConditionPollInterval
       })
       await this.api.elements(
         this.elements.shareIndicatorsInFileRow.locateStrategy,
