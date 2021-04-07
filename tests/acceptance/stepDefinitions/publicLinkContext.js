@@ -49,23 +49,6 @@ When(
   }
 )
 
-When(
-  'the public (tries to )open/opens the public link page of the last public link created by user {string}',
-  async function(linkCreator) {
-    const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-    return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastShare.token)
-  }
-)
-
-When(
-  'the public (tries to )open/opens the public link page of the last public link created by user {string} on a new session',
-  async function(linkCreator) {
-    const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-    await loginHelper.startNewSession()
-    return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastShare.token)
-  }
-)
-
 Then('the password input for the public link should appear in the webUI', function() {
   return client.page.publicLinkPasswordPage().waitForVisible()
 })
@@ -81,15 +64,6 @@ When(
   async function(user, password) {
     const lastShare = await sharingHelper.fetchLastPublicLinkShare(user)
     await sharingHelper.updatePublicLinkPassword(user, lastShare.id, password)
-  }
-)
-
-When(
-  'the public (tries to )open/opens the public link page of the last public link created by user {string} with password {string}',
-  async function(linkCreator, password) {
-    const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-    await client.page.publicLinkFilesPage().navigateAndWaitForPasswordPage(lastShare.token)
-    return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
   }
 )
 

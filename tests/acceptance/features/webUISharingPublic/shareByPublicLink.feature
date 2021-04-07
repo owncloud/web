@@ -74,13 +74,13 @@ Feature: Share by public link
 
   Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions and password "pass123"
-    When the public tries to open the public link page of the last public link created by user "Alice" with password "pass123"
+    When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then the user should be redirected to the files-drop page
 
 
   Scenario: opening public-link page of the files-drop link without password set should redirect to files-drop page
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions
-    When the public tries to open the public link page of the last public link created by user "Alice"
+    When the public uses the webUI to access the last public link created by user "Alice"
     Then the user should be redirected to the files-drop page
 
 
@@ -883,7 +883,7 @@ Feature: Share by public link
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "Public-link" of file "lorem.txt" changing following
       | password | pass123 |
-    And the public tries to open the public link page of the last public link created by user "Alice" with password "pass123"
+    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
 
   Scenario: Shared via link page is displayed
