@@ -9,6 +9,7 @@ const occHelper = require('../helpers/occHelper')
 
 let initialConfigJsonSettings
 let createdFiles = []
+let oldPreviewSetting = ''
 
 Given(
   'a file with the size of {string} bytes and the name {string} has been created locally',
@@ -296,15 +297,34 @@ Before(function() {
   }
 })
 
-// Before({ tags: '@disablePreviews' }, () => {
-//   if (!client.globals.ocis)
-//     occHelper.runOcc(['config:system:set', 'enable_previews', '--type=boolean', '--value=false'])
-// })
-//
-// After({ tags: '@disablePreviews' }, () => {
-//   if (!client.globals.ocis)
-//     occHelper.runOcc(['config:system:set', 'enable_previews', '--type=boolean', '--value=true'])
-// })
+const getConfigSystem = async function(name) {
+  if (!client.globals.ocis) {
+    const value = await occHelper.runOcc(['config:system:get ' + name])
+    return value.ocs.data.stdOut
+  }
+}
+
+Before({ tags: '@disablePreviews' }, async () => {
+  if (!client.globals.ocis) {
+    console.log(oldPreviewSetting)
+    if (!oldPreviewSetting) {
+      oldPreviewSetting = await getConfigSystem('enable_previews')
+      oldPreviewSetting = oldPreviewSetting.toString().trim()
+    }
+    occHelper.runOcc(['config:system:set enable_previews --type=boolean --value=' + false])
+  }
+})
+
+After({ tags: '@disablePreviews' }, () => {
+  if (!client.globals.ocis) {
+    if (!oldPreviewSetting) {
+      occHelper.runOcc(['config:system:delete enable_previews'])
+    }
+    occHelper.runOcc([
+      'config:system:set enable_previews --type=boolean --value=' + oldPreviewSetting
+    ])
+  }
+})
 
 After(function() {
   if (initialConfigJsonSettings) {
