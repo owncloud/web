@@ -30,7 +30,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIAccount/accountInformation.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L20)
 
 ### [REPORT request not implemented](https://github.com/owncloud/ocis/issues/1330)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:250](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L250)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:249](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L249)
 -   [webUIFavorites/favoritesFile.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L14)
 -   [webUIFavorites/favoritesFile.feature:27](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L27)
 -   [webUIFavorites/favoritesFile.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L40)
@@ -51,7 +51,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesDetails/fileDetails.feature:46](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L46)
 
 ### [Sharing seems to work but does not work](https://github.com/owncloud/ocis/issues/1303)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:199](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L199)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:198](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L198)
 -   [webUIFilesDetails/fileDetails.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L88)
 -   [webUIFilesDetails/fileDetails.feature:103](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L103)
 -   [webUIFilesActionMenu/versions.feature:33](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L33)
@@ -123,7 +123,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingPermissionsUsers/sharePermissionsUsers.feature:218](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPermissionsUsers/sharePermissionsUsers.feature#L218)
 -   [webUIFilesCopy/copy.feature:71](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesCopy/copy.feature#L71)
 -   [webUIFilesCopy/copy.feature:79](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesCopy/copy.feature#L79)
--   [webUIMoveFilesFolders/moveFiles.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L88)
+-   [webUIMoveFilesFolders/moveFiles.feature:87](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L87)
 -   [webUIMoveFilesFolders/moveFolders.feature:67](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFolders.feature#L67)
 -   [webUISharingPublic/shareByPublicLink.feature:576](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublic/shareByPublicLink.feature#L576)
 -   [webUISharingPublic/shareByPublicLink.feature:611](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingPublic/shareByPublicLink.feature#L611)
@@ -332,7 +332,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUILogin/openidLogin.feature:74](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/openidLogin.feature#L74)
 
 ### [Moving files in a shared folder causes errors but succeeds](https://github.com/owncloud/ocis/issues/873)
--   [webUIMoveFilesFolders/moveFiles.feature:128](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L128)
+-   [webUIMoveFilesFolders/moveFiles.feature:127](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIMoveFilesFolders/moveFiles.feature#L127)
 
 ### [enable re-sharing is not possible](https://github.com/owncloud/ocis/issues/1743)
 -   [webUISharingFolderAdvancedPermissionMultipleUsers/sharedFolderWithMultipleUsersAdvancedPermissions.feature:65](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingFolderAdvancedPermissionMultipleUsers/sharedFolderWithMultipleUsersAdvancedPermissions.feature#L65)
