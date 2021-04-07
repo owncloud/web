@@ -345,3 +345,17 @@ Feature: Sharing files and folders with internal users
     And the user has renamed file "lorem.txt" to "new-lorem.txt"
     When the user shares resource "new-lorem.txt" with user "Brian Murphy" using the quick action in the webUI
     Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for file "new-lorem.txt" on the webUI
+
+  @issue-4193
+  Scenario: user shares the file/folder with another internal user and delete the share with user
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has logged in using the webUI
+    And user "Alice" has shared file "lorem.txt" with user "Brian"
+    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    When the user opens the share dialog for file "lorem.txt" using the webUI
+    Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
+    And as "Brian" file "Shares/lorem.txt" should exist
+    When the user deletes "Brian Murphy" as collaborator for the current file using the webUI
+    Then user "Brian Murphy" should not be listed in the collaborators list on the webUI
+    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
+    And as "Brian" file "Shares/lorem.txt" should not exist

@@ -1,8 +1,8 @@
 @ocis-reva-issue-64
-Feature: Sharing files and folders with internal users
+Feature: Shares collaborator list
   As a user
-  I want to share files and folders with other users
-  So that those users can access the files and folders
+  I want to check the collaborator list
+  So that I can know the collaborators of a shared resource
 
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"

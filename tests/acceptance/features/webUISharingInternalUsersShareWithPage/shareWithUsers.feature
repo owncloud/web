@@ -1,8 +1,8 @@
 @ocis-reva-issue-64
-Feature: Sharing files and folders with internal users
+Feature: Shares in share-with pages
   As a user
-  I want to share files and folders with other users
-  So that those users can access the files and folders
+  I want to check share-with pages
+  So that I can know what is shared with me and by me
 
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
@@ -56,19 +56,6 @@ Feature: Sharing files and folders with internal users
 #    Then file "lorem.txt" with path "" should be listed in the shared with others page on the webUI
 #    And file "lorem.txt" with path "/simple-folder" should be listed in the shared with others page on the webUI
 
-  @issue-4193
-  Scenario: user shares the file/folder with another internal user and delete the share with user
-    Given user "Alice" has created file "lorem.txt"
-    And user "Alice" has logged in using the webUI
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
-    When the user opens the share dialog for file "lorem.txt" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
-    And as "Brian" file "Shares/lorem.txt" should exist
-    When the user deletes "Brian Murphy" as collaborator for the current file using the webUI
-    Then user "Brian Murphy" should not be listed in the collaborators list on the webUI
-    And file "lorem.txt" should not be listed in shared-with-others page on the webUI
-    And as "Brian" file "Shares/lorem.txt" should not exist
 
   Scenario: send share shows up on shared-with-others page
     Given user "Alice" has created folder "simple-folder"
