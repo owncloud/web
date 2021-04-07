@@ -7,61 +7,61 @@ Feature: move folders
     Given user "Alice" has been created with default attributes
 
 
-  Scenario: An attempt to move a folder into a sub-folder using rename is not allowed
-    Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
-    When the user tries to rename folder "simple-empty-folder" to "simple-folder/simple-empty-folder" using the webUI
-    Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
-    And folder "simple-empty-folder" should be listed on the webUI
-
-  @smokeTest
-  Scenario: move a folder into another folder
-    Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
-    When the user moves folder "simple-folder" into folder "simple-empty-folder" using the webUI
-    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
-    And folder "simple-folder" should be listed on the webUI
-    When the user browses to the files page
-    And the user moves folder "strängé नेपाली folder" into folder "strängé नेपाली folder empty" using the webUI
-    Then breadcrumb for folder "strängé नेपाली folder empty" should be displayed on the webUI
-    And folder "strängé नेपाली folder" should be listed on the webUI
-
-
-  Scenario: move a folder into another folder where a folder with the same name already exists
-    Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
-    When the user tries to move folder "simple-empty-folder" into folder "simple-folder" using the webUI
-    Then the error message with header 'An error occurred while moving simple-empty-folder' should be displayed on the webUI
-
-  @smokeTest
-  Scenario: Move multiple folders at once
-    Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
-    When the user batch moves these folders into folder "simple-empty-folder" using the webUI
-      | name                  |
-      | simple-folder         |
-      | strängé नेपाली folder |
-    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
-    And the following folders should be listed on the webUI
-      | folders               |
-      | simple-folder         |
-      | strängé नेपाली folder |
-
-
-  Scenario Outline: move a folder into another folder (problematic characters)
-    Given user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
-    When the user renames folder "simple-folder" to <folder_name> using the webUI
-    And the user renames folder "simple-empty-folder" to <target_name> using the webUI
-    And the user moves folder <folder_name> into folder <target_name> using the webUI
-    Then breadcrumb for folder <target_name> should be displayed on the webUI
-    And folder <folder_name> should be listed on the webUI
-    Examples:
-      | folder_name | target_name                    |
-      | "'single'"  | "target-folder-with-'single'"  |
-      # | "\"double\" quotes" | "target-folder-with\"double\" quotes" | FIXME: Needs a way to access breadcrumbs with double quotes issue-3734
-      | "question?" | "target-folder-with-question?" |
-      | "&and#hash" | "target-folder-with-&and#hash" |
+#  Scenario: An attempt to move a folder into a sub-folder using rename is not allowed
+#    Given user "Alice" has logged in using the webUI
+#    And the user has browsed to the files page
+#    When the user tries to rename folder "simple-empty-folder" to "simple-folder/simple-empty-folder" using the webUI
+#    Then the error message 'The name cannot contain "/"' should be displayed on the webUI dialog prompt
+#    And folder "simple-empty-folder" should be listed on the webUI
+#
+#  @smokeTest
+#  Scenario: move a folder into another folder
+#    Given user "Alice" has logged in using the webUI
+#    And the user has browsed to the files page
+#    When the user moves folder "simple-folder" into folder "simple-empty-folder" using the webUI
+#    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
+#    And folder "simple-folder" should be listed on the webUI
+#    When the user browses to the files page
+#    And the user moves folder "strängé नेपाली folder" into folder "strängé नेपाली folder empty" using the webUI
+#    Then breadcrumb for folder "strängé नेपाली folder empty" should be displayed on the webUI
+#    And folder "strängé नेपाली folder" should be listed on the webUI
+#
+#
+#  Scenario: move a folder into another folder where a folder with the same name already exists
+#    Given user "Alice" has logged in using the webUI
+#    And the user has browsed to the files page
+#    When the user tries to move folder "simple-empty-folder" into folder "simple-folder" using the webUI
+#    Then the error message with header 'An error occurred while moving simple-empty-folder' should be displayed on the webUI
+#
+#  @smokeTest
+#  Scenario: Move multiple folders at once
+#    Given user "Alice" has logged in using the webUI
+#    And the user has browsed to the files page
+#    When the user batch moves these folders into folder "simple-empty-folder" using the webUI
+#      | name                  |
+#      | simple-folder         |
+#      | strängé नेपाली folder |
+#    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
+#    And the following folders should be listed on the webUI
+#      | folders               |
+#      | simple-folder         |
+#      | strängé नेपाली folder |
+#
+#
+#  Scenario Outline: move a folder into another folder (problematic characters)
+#    Given user "Alice" has logged in using the webUI
+#    And the user has browsed to the files page
+#    When the user renames folder "simple-folder" to <folder_name> using the webUI
+#    And the user renames folder "simple-empty-folder" to <target_name> using the webUI
+#    And the user moves folder <folder_name> into folder <target_name> using the webUI
+#    Then breadcrumb for folder <target_name> should be displayed on the webUI
+#    And folder <folder_name> should be listed on the webUI
+#    Examples:
+#      | folder_name | target_name                    |
+#      | "'single'"  | "target-folder-with-'single'"  |
+#      # | "\"double\" quotes" | "target-folder-with\"double\" quotes" | FIXME: Needs a way to access breadcrumbs with double quotes issue-3734
+#      | "question?" | "target-folder-with-question?" |
+#      | "&and#hash" | "target-folder-with-&and#hash" |
 
   @issue-ocis-reva-243
   Scenario: move a folder into another folder with no change permission
@@ -72,17 +72,17 @@ Feature: move folders
     Then as "Alice" folder "simple-folder (2)/simple-empty-folder (2)" should not exist
 
 
-  Scenario: move a folder into the same folder
-    Given user "Alice" has logged in using the webUI
-    When the user tries to move folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
-    Then the error message with header 'An error occurred while moving simple-empty-folder' should be displayed on the webUI
-    And as "Alice" folder "simple-empty-folder/simple-empty-folder" should not exist
-
-
-  Scenario: move a folder into another folder with same name
-    Given user "Alice" has logged in using the webUI
-    When the user moves folder "simple-empty-folder" into folder "folder with space/simple-empty-folder" using the webUI
-    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
-    And folder "simple-empty-folder" should be listed on the webUI
-    And as "Alice" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist
-    And as "Alice" folder "simple-empty-folder" should not exist
+#  Scenario: move a folder into the same folder
+#    Given user "Alice" has logged in using the webUI
+#    When the user tries to move folder "simple-empty-folder" into folder "simple-empty-folder" using the webUI
+#    Then the error message with header 'An error occurred while moving simple-empty-folder' should be displayed on the webUI
+#    And as "Alice" folder "simple-empty-folder/simple-empty-folder" should not exist
+#
+#
+#  Scenario: move a folder into another folder with same name
+#    Given user "Alice" has logged in using the webUI
+#    When the user moves folder "simple-empty-folder" into folder "folder with space/simple-empty-folder" using the webUI
+#    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
+#    And folder "simple-empty-folder" should be listed on the webUI
+#    And as "Alice" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist
+#    And as "Alice" folder "simple-empty-folder" should not exist
