@@ -10,9 +10,6 @@
       "login": "themes/owncloud/assets/logo.svg",
       "notFound": "themes/owncloud/assets/cloud.svg"
     },
-    "filesList": {
-      "hideDefaultStatusIndicators": false
-    },
     "loginPage": {
       "autoRedirect": true,
       "backgroundImg": "themes/owncloud/assets/loginBackground.jpg"

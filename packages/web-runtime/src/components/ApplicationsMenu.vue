@@ -23,11 +23,11 @@
         <div v-for="(n, nid) in menuItems" :key="`apps-menu-${nid}`" class="uk-width-1-3">
           <a v-if="n.url" key="apps-menu-external-link" :target="n.target" :href="n.url">
             <oc-icon :name="n.iconMaterial" size="xlarge" />
-            <div v-translate>{{ n.title }}</div>
+            <span class="uk-display-block" v-text="$gettext(n.title)" />
           </a>
           <router-link v-else key="apps-menu-internal-link" :to="n.path">
             <oc-icon :name="n.iconMaterial" size="xlarge" />
-            <div v-translate>{{ n.title }}</div>
+            <span class="uk-display-block" v-text="$gettext(n.title)" />
           </router-link>
         </div>
       </div>

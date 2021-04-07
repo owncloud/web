@@ -536,7 +536,7 @@ export default {
         continue
       }
 
-      const etag = (resource.etag || '').replace('"', '')
+      const etag = (resource.etag || '').replaceAll('"', '')
       if (etag) {
         query.c = etag
       }
