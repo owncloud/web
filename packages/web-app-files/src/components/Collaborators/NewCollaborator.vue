@@ -20,11 +20,11 @@
     </oc-autocomplete>
     <div v-if="selectedCollaborators.length > 0">
       <translate tag="div">Selected people</translate>
-      <ul class="uk-list files-collaborators-collaborator-autocomplete-item oc-mt-s oc-mb-m">
+      <ul class="uk-list files-collaborators-collaborator-autocomplete-items oc-mt-s oc-mb-m">
         <li
           v-for="collaborator in selectedCollaborators"
           :key="collaborator.value.shareWith + '-' + collaborator.value.shareType"
-          class="uk-flex"
+          class="uk-flex files-collaborators-collaborator-autocomplete-item"
         >
           <oc-button
             :aria-label="$gettext('Delete share')"
