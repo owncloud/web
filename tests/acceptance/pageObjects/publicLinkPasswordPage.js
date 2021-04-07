@@ -16,9 +16,7 @@ module.exports = {
           .setValue('@passwordInput', password)
           .click('@passwordSubmitButton')
 
-        return this.waitForElementPresent(
-          this.page.FilesPageElement.filesList().elements.anyAfterLoading
-        )
+        return this.page.FilesPageElement.filesList().waitForLoadingFinished(false, false)
       },
       /**
        * submits the public link password input form
