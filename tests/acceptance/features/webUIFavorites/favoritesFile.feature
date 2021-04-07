@@ -80,7 +80,7 @@ Feature: Mark file as favorite
     And the user browses to the files page
     And the user opens folder "strängé नेपाली folder" using the webUI
     And the user marks file "lorem.txt" as favorite using the webUI
-    When the user browses to the favorites page
+    And the user browses to the favorites page
     Then file with path "lorem.txt" should be listed in the favorites page on the webUI
     And file with path "simple-folder/lorem.txt" should be listed in the favorites page on the webUI
     And folder with path "simple-empty-folder" should be listed in the favorites page on the webUI

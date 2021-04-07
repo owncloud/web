@@ -79,7 +79,7 @@ Feature: rename files
     When the user tries to rename file "lorem.txt" to "  multiple   space    all     over   .  dat  " using the webUI
     Then the error message 'The name cannot end with whitespace' should be displayed on the webUI dialog prompt
     And the user reloads the current page of the webUI
-    Then file "lorem.txt" should be listed on the webUI
+    And file "lorem.txt" should be listed on the webUI
     And file "  multiple   space    all     over   .  dat  " should not be listed on the webUI
 
   @skip @issue-4859
@@ -99,7 +99,7 @@ Feature: rename files
       | Test" 'me o'ut".txt            | loremy.tad |
     And the user reloads the current page of the webUI
     Then file "loremz.dat" should be listed on the webUI
-    Then file "loremy.tad" should be listed on the webUI
+    And file "loremy.tad" should be listed on the webUI
 
   @notToImplementOnOCIS
   # these are valid file names for ocis

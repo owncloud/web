@@ -27,7 +27,7 @@ Feature: files and folders can be deleted from the trashbin
     # And the user opens folder "simple-folder" using the webUI
     # And the user deletes file "lorem-big.txt" using the webUI
     Then file "lorem.txt" should not be listed on the webUI
-    Then file "sample,1.txt" should not be listed on the webUI
+    And file "sample,1.txt" should not be listed on the webUI
     # But file "lorem.txt" should be listed in the trashbin folder "simple-folder" on the webUI
     # And file "lorem-big.txt" should not be listed in the trashbin folder "simple-folder" on the webUI
     But file "lorem-big.txt" should be listed on the webUI

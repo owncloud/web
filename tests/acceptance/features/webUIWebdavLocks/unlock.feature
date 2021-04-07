@@ -23,7 +23,7 @@ Feature: Unlock locked files and folders
     Given these users have been created:
       | username               | displayname   |
       | user-with-display-name | My fancy name |
-    Given user "user-with-display-name" has locked folder "simple-folder" setting following properties
+    And user "user-with-display-name" has locked folder "simple-folder" setting following properties
       | lockscope | shared |
     And user "user-with-display-name" has locked file "data.zip" setting following properties
       | lockscope | exclusive |

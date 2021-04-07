@@ -190,7 +190,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: test sharing long file names with federation share
     When user "Alice" has uploaded file with content "secret" to "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt"
     And the user has reloaded the current page of the webUI
-    When the user shares file "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" with remote user "Alice" as "Viewer" using the webUI
+    And the user shares file "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" with remote user "Alice" as "Viewer" using the webUI
     Then as "Alice" file "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" should exist on remote server
 
 

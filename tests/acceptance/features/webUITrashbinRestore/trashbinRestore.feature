@@ -14,16 +14,16 @@ Feature: Restore deleted files/folders
   @smokeTest @ocisSmokeTest
   Scenario: Restore files
     When the user deletes file "data.zip" using the webUI
-    When the user deletes file "sample,1.txt" using the webUI
+    And the user deletes file "sample,1.txt" using the webUI
     And the user browses to the trashbin page
     Then file "data.zip" should be listed on the webUI
-    Then file "sample,1.txt" should be listed on the webUI
+    And file "sample,1.txt" should be listed on the webUI
     When the user restores file "data.zip" from the trashbin using the webUI
-    When the user restores file "sample,1.txt" from the trashbin using the webUI
+    And the user restores file "sample,1.txt" from the trashbin using the webUI
     Then there should be no resources listed on the webUI
     When the user browses to the files page
     Then file "data.zip" should be listed on the webUI
-    Then file "sample,1.txt" should be listed on the webUI
+    And file "sample,1.txt" should be listed on the webUI
 
 
   Scenario: Restore folder
@@ -249,7 +249,7 @@ Feature: Restore deleted files/folders
     When the user opens folder "Shares" using the webUI
     And the user opens folder "folder-to-share" using the webUI
     And the user deletes file "fileToShare.txt" using the webUI
-    When the user browses to the trashbin page
+    And the user browses to the trashbin page
     Then as "Alice" file "fileToShare.txt" should exist in the trashbin
     When the user restores file "…/folder-to-share/fileToShare.txt" from the trashbin using the webUI
     Then the success message with header "fileToShare.txt was restored successfully" should be displayed on the webUI

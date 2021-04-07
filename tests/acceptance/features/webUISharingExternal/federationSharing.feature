@@ -50,7 +50,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     And as "Alice" the content of "Shares/lorem.txt" should be the same as the original "lorem.txt"
     And folder "simple-folder" should be listed on the webUI
     And the user opens folder "simple-folder" using the webUI
-    Then file "lorem.txt" should be listed on the webUI
+    And file "lorem.txt" should be listed on the webUI
     And as "Alice" the content of "Shares/simple-folder/lorem.txt" should be the same as the original "simple-folder/lorem.txt"
     #    When the user browses to the shared-with-me page
     #    Then file "Shares/lorem.txt" should be listed on the webUI
@@ -196,7 +196,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
   Scenario: test sharing long file names with federation share
     When user "Alice" has uploaded file with content "secret" to "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt"
     And the user has reloaded the current page of the webUI
-    When the user shares file "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" with remote user "Alice" as "Viewer" using the webUI
+    And the user shares file "averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" with remote user "Alice" as "Viewer" using the webUI
     And user "Alice" from server "REMOTE" accepts the last pending share using the sharing API
     Then as "Alice" file "Shares/averylongfilenamefortestingthatfileswithlongfilenamescannotbeshared.txt" should exist on remote server
 

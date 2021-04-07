@@ -82,7 +82,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "Alice" accepts the share "simple-folder" offered by user "Brian" using the sharing API
     Then user "Alice Hansen" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
-    Then user "Alice" should have received a share with these details:
+    And user "Alice" should have received a share with these details:
       | field       | value                 |
       | uid_owner   | Brian                 |
       | share_with  | Alice                 |
@@ -138,7 +138,7 @@ Feature: Sharing files and folders with internal users with different permission
     And user "Alice" accepts the share "lorem.txt" offered by user "Brian" using the sharing API
     Then user "Alice Hansen" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Alice Hansen" for file "lorem.txt" on the webUI
-    Then user "Alice" should have received a share with these details:
+    And user "Alice" should have received a share with these details:
       | field       | value             |
       | uid_owner   | Brian             |
       | share_with  | Alice             |

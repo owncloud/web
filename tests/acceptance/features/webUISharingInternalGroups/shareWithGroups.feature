@@ -137,7 +137,7 @@ Feature: Sharing files and folders with internal groups
     And user "Alice" accepts the share "new-simple-folder" offered by user "Carol" using the sharing API
     And user "Brian" accepts the share "new-simple-folder" offered by user "Carol" using the sharing API
     # unshare the received shared folder and check it is gone
-    When the user re-logs in as "Alice" using the webUI
+    And the user re-logs in as "Alice" using the webUI
     And the user opens folder "Shares" using the webUI
     And the user deletes folder "new-simple-folder" using the webUI
     Then folder "new-simple-folder" should not be listed on the webUI
