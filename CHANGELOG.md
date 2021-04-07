@@ -11,6 +11,7 @@ Summary
 * Bugfix - Avatar url without double slash: [#4610](https://github.com/owncloud/web/issues/4610)
 * Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
 * Bugfix - Only one `<main>` tag per HTML document: [#1652](https://github.com/owncloud/web/issues/1652)
+* Bugfix - Parent paths traversal for shares: [#4860](https://github.com/owncloud/web/issues/4860)
 * Change - Update owncloud Design System to v4.1.1: [#4862](https://github.com/owncloud/web/pull/4862)
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
@@ -46,6 +47,16 @@ Details
 
    https://github.com/owncloud/web/issues/1652
    https://github.com/owncloud/web/pull/4627
+
+* Bugfix - Parent paths traversal for shares: [#4860](https://github.com/owncloud/web/issues/4860)
+
+   We fixed a bug in parent paths traversals for loading shares. A path with a trailing slash was
+   twice in the result of (parent-)paths, leading to fetching the existing shares on the current
+   folder twice. Since we fetch incoming and outgoing shares this caused 2 unnecessary requests
+   on every page load that changed into a child folder or a folder unrelated to the current path.
+
+   https://github.com/owncloud/web/issues/4860
+   https://github.com/owncloud/web/pull/4918
 
 * Change - Update owncloud Design System to v4.1.1: [#4862](https://github.com/owncloud/web/pull/4862)
 
