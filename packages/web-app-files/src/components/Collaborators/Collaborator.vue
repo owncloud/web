@@ -262,11 +262,8 @@ export default {
     },
 
     originalRole() {
-      if (this.collaborator.role.name === 'advancedRole') {
-        return this.advancedRole
-      }
+      const role = this.displayRoles.find(r => r.name === this.collaborator.role.name)
 
-      const role = this.displayRoles[this.collaborator.role.name]
       if (role) {
         return role
       }
