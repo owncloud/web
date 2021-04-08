@@ -20,6 +20,7 @@ Summary
 * Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
 * Enhancement - Runtime theming: [#4822](https://github.com/owncloud/web/pull/4822)
 * Enhancement - Add "Shared via link" page: [#4881](https://github.com/owncloud/web/pull/4881)
+* Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 
 Details
 -------
@@ -116,6 +117,14 @@ Details
    resources shared via public links.
 
    https://github.com/owncloud/web/pull/4881
+
+* Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
+
+   We've changed the HTML elements in the people accordion when adding new people. People added
+   via people autocomplete are now displayed in a list element to use correct structure for screen
+   readers.
+
+   https://github.com/owncloud/web/pull/4915
 
 Changelog for ownCloud Web [2.1.0] (2021-03-24)
 =======================================
