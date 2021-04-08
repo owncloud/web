@@ -8,7 +8,6 @@ import { bitmaskToRole, checkPermission, permissionsBitmask } from './collaborat
 import { shareTypes, userShareTypes } from './shareTypes'
 import { $gettext } from '../gettext'
 import { getAvatarSrc } from './user'
-import { join } from 'lodash-es'
 
 // Should we move this to ODS?
 export function getFileIcon(extension) {
