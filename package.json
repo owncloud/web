@@ -1,6 +1,9 @@
 {
   "version": "2.1.0",
   "private": true,
+  "homepage": "https://github.com/owncloud/web",
+  "license": "AGPL-3.0",
+  "author": "ownCloud",
   "workspaces": [
     "packages/web-app-draw-io",
     "packages/web-app-files",
@@ -20,9 +23,6 @@
     "test:acceptance:ocis": "NODE_TLS_REJECT_UNAUTHORIZED=0 RUN_ON_OCIS=true cucumber-js --require-module @babel/register --require-module @babel/polyfill --require tests/acceptance/setup.js --require tests/acceptance/stepDefinitions --format node_modules/cucumber-pretty -t \"${TEST_TAGS:-not @skip and not @skipOnOCIS and not @notToImplementOnOCIS}\"",
     "test:unit": "jest --coverage --config ./tests/unit/config/jest.config.js"
   },
-  "author": "ownCloud",
-  "license": "AGPL-3.0",
-  "homepage": "https://github.com/owncloud/web",
   "browserslist": [
     "last 2 version",
     "> .2%",

@@ -1,5 +1,7 @@
 {
   "ignores": [
+    "autoprefixer",
+    "core-js",
     "cucumber-pretty",
     "requirejs",
     "nightwatch-vrt",

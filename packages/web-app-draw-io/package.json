@@ -1,10 +1,10 @@
 {
   "name": "draw-io",
-  "license": "AGPL-3.0",
   "version": "0.0.0",
   "description": "ownCloud web draw.io integration",
+  "license": "AGPL-3.0",
   "devDependencies": {
-    "moment": "^2.24.0",
+    "luxon": "^1.22.0",
     "query-string": "^6.8.3",
     "vuex": "3.1.3"
   }

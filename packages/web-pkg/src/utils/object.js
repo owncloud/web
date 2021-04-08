@@ -1,4 +1,4 @@
-import { isPlainObject } from 'lodash'
+import isPlainObject from 'lodash-es/isPlainObject'
 
 export const keysDeep = obj => {
   const paths = []
