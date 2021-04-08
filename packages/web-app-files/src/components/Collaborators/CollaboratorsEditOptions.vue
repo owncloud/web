@@ -3,7 +3,7 @@
     <label tag="label" class="oc-label">
       {{ $gettext('Role') }}
       <oc-select
-        id="files-people-role"
+        id="files-collaborators-role-button"
         v-model="selectedRole"
         :options="roles"
         :clearable="false"
