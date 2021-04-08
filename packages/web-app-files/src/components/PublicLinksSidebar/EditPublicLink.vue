@@ -13,10 +13,10 @@
       <div class="oc-mb">
         <oc-text-input id="oc-files-file-link-name" v-model="name" :label="$gettext('Name')" />
       </div>
-      <label tag="label" class="oc-label">
+      <label tag="label" class="oc-label oc-mb">
         {{ $gettext('Role') }}
         <oc-select
-          id="files-link-role"
+          id="files-file-link-role-button"
           v-model="selectedRole"
           :options="roles"
           :clearable="false"
@@ -151,7 +151,6 @@ export default {
       name: null,
       hasPassword: false,
       expireDate: null,
-      permissions: 1,
       placeholder: {
         mailTo: this.$gettext('Mail recipients'),
         mailBody: this.$gettext('Personal note')
@@ -187,7 +186,7 @@ export default {
       return (
         expireDateNow !== expireDateBefore ||
         this.name !== this.publicLinkInEdit.name ||
-        this.permissions !== this.publicLinkInEdit.permissions ||
+        this.selectedRole.permissions !== this.publicLinkInEdit.permissions ||
         (this.publicLinkInEdit.hasPassword
           ? this.password !== null
           : this.password !== null && this.password.trim().length > 0)
@@ -253,7 +252,7 @@ export default {
     },
 
     $_passwordEnforced() {
-      const permissions = parseInt(this.permissions, 10)
+      const permissions = parseInt(this.selectedRole.permissions, 10)
       const password = this.capabilities.files_sharing.public.password.enforced_for
 
       if (permissions === 1 && password.read_only === '1') {
@@ -289,7 +288,6 @@ export default {
     this.name = this.publicLinkInEdit.name
     this.hasPassword = this.publicLinkInEdit.hasPassword
     this.expireDate = this.publicLinkInEdit.expireDate
-    this.permissions = this.publicLinkInEdit.permissions
 
     this.setRole()
   },
@@ -298,7 +296,7 @@ export default {
     ...mapMutations('Files', ['SET_APP_SIDEBAR_ACCORDION_CONTEXT']),
 
     setRole() {
-      const permissions = parseInt(this.permissions, 10)
+      const permissions = parseInt(this.publicLinkInEdit.permissions, 10)
 
       if (permissions) {
         const role = this.roles.find(r => r.permissions === permissions)
@@ -318,7 +316,7 @@ export default {
 
       const params = {
         expireDate: this.expireDate,
-        permissions: this.permissions,
+        permissions: this.selectedRole.permissions,
         name: this.name
       }
 
@@ -348,7 +346,7 @@ export default {
 
       const params = {
         expireDate: this.expireDate,
-        permissions: this.permissions,
+        permissions: this.selectedRole.permissions,
         name: this.name
       }
 

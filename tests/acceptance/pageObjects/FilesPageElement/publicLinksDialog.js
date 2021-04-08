@@ -40,12 +40,8 @@ module.exports = {
         this.elements.publicLinkRoleSelectionDropdown.selector,
         role
       )
-      return this.waitForElementPresent('@selectRoleButton')
-        .click('@selectRoleButton')
-        .waitForElementVisible('@rolesDropdown')
-        .waitForElementVisible(`@role${role}`)
+      return this.click('@selectRoleButton')
         .click(`@role${role}`)
-        .waitForElementNotVisible('@rolesDropdown')
         .useXpath()
         .waitForElementVisible(selectedRoleDropdown)
         .useCss()
@@ -382,20 +378,17 @@ module.exports = {
     selectRoleButton: {
       selector: '#files-file-link-role-button'
     },
-    rolesDropdown: {
-      selector: '#files-file-link-roles-dropdown'
-    },
     roleViewer: {
-      selector: '#files-file-link-role-viewer'
+      selector: '#files-role-viewer'
     },
     roleContributor: {
-      selector: '#files-file-link-role-contributor'
+      selector: '#files-role-contributor'
     },
     roleEditor: {
-      selector: '#files-file-link-role-editor'
+      selector: '#files-role-editor'
     },
     roleUploader: {
-      selector: '#files-file-link-role-uploader'
+      selector: '#files-role-uploader'
     },
     errorMessageInsidePublicLinkContainer: {
       selector: '//div[contains(@class, "oc-alert-danger")]',
@@ -440,7 +433,7 @@ module.exports = {
       selector: '#files-sidebar-private-link-icon-copied'
     },
     publicLinkRoleSelectionDropdown: {
-      selector: '//button[contains(@class, "files-file-link-role-button")]//span[.="%s"]',
+      selector: '//div[@id="files-file-link-role-button"]//span[.="%s"]',
       locateStrategy: 'xpath'
     }
   }
