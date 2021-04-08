@@ -1,0 +1,6 @@
+Enhancement: Use `oc-select` for role select
+
+We've used the new `oc-select` component from ODS for selecting role in people and public links accordions in the right sidebar.
+We are using this component to enable keyboard navigation when selecting the role.
+
+https://github.com/owncloud/web/pull/4937
