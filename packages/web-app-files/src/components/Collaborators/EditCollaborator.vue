@@ -121,7 +121,7 @@ export default {
     },
 
     $_originalRole() {
-      return this.roles[this.collaborator.role.name]
+      return this.roles.find(r => r.name === this.collaborator.role.name)
     },
 
     $_permissionsBitmask() {
