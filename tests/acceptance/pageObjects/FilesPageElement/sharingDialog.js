@@ -203,12 +203,7 @@ module.exports = {
         .startCase()
         .replace(/\s/g, '')
         .value()
-      return this.waitForElementPresent('@newCollaboratorSelectRoleButton')
-        .click('@newCollaboratorSelectRoleButton')
-        .waitForElementVisible('@newCollaboratorRolesDropdown')
-        .waitForElementVisible(`@newCollaboratorRole${role}`)
-        .click(`@newCollaboratorRole${role}`)
-        .waitForElementNotVisible('@newCollaboratorRolesDropdown')
+      return this.click('@newCollaboratorSelectRoleButton').click(`@newCollaboratorRole${role}`)
     },
     confirmShare: function() {
       return this.waitForElementPresent('@addShareSaveButton')
@@ -659,7 +654,8 @@ module.exports = {
       selector: '#files-collaborators-role-button'
     },
     newCollaboratorRolesDropdown: {
-      selector: '#files-collaborators-roles-dropdown'
+      selector: '//div[@id="files-collaborators-role-button"]//ul[@class="vs__dropdown-menu"]',
+      locateStrategy: 'xpath'
     },
     newCollaboratorRoleViewer: {
       selector: '#files-collaborators-role-viewer'
