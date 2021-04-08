@@ -65,14 +65,16 @@ export default {
         isFolder: isFolder,
         allowSharePerm: !this.isOcis
       })
-      collaboratorRoles.advancedRole = this.advancedRole
+      collaboratorRoles.push(this.advancedRole)
 
       return collaboratorRoles
     },
+
     displayRoles() {
       const result = this.roles
-      result[this.resharerRole.name] = this.resharerRole
-      result[this.ownerRole.name] = this.ownerRole
+
+      result.push(this.resharerRole, this.ownerRole)
+
       return result
     }
   },
