@@ -13,8 +13,8 @@ function returnOriginal(string) {
  */
 export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = false }) => {
   if (isFolder) {
-    return {
-      viewer: {
+    return [
+      {
         name: 'viewer',
         label: $gettext('Viewer'),
         description: allowSharePerm
@@ -22,7 +22,7 @@ export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = 
           : $gettext('Download and preview'),
         permissions: allowSharePerm ? ['read', 'share'] : ['read']
       },
-      editor: {
+      {
         name: 'editor',
         label: $gettext('Editor'),
         description: allowSharePerm
@@ -32,11 +32,11 @@ export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = 
           ? ['read', 'update', 'create', 'delete', 'share']
           : ['read', 'update', 'create', 'delete']
       }
-    }
+    ]
   }
 
-  return {
-    viewer: {
+  return [
+    {
       name: 'viewer',
       label: $gettext('Viewer'),
       description: allowSharePerm
@@ -44,7 +44,7 @@ export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = 
         : $gettext('Download and preview'),
       permissions: allowSharePerm ? ['read', 'share'] : ['read']
     },
-    editor: {
+    {
       name: 'editor',
       label: $gettext('Editor'),
       description: allowSharePerm
@@ -52,5 +52,5 @@ export default ({ isFolder = false, $gettext = returnOriginal, allowSharePerm = 
         : $gettext('Edit, download and preview'),
       permissions: allowSharePerm ? ['read', 'update', 'share'] : ['read', 'update']
     }
-  }
+  ]
 }
