@@ -41,6 +41,10 @@ function rollbackSystemConfigs(oldSysConfig, newSysConfig) {
     const value = _.get(oldSysConfig, [key])
     if (value === undefined) {
       _rollbacks.push(limit(occHelper.runOcc, ['config:system:delete', key]))
+    } else if (typeof value === 'boolean') {
+      _rollbacks.push(
+        limit(occHelper.runOcc, ['config:system:set', key, `--type=boolean --value=${value}`])
+      )
     } else {
       _rollbacks.push(limit(occHelper.runOcc, ['config:system:set', key, `--value=${value}`]))
     }
