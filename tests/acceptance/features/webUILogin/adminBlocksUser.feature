@@ -3,14 +3,14 @@ Feature: view profile
   I want to be able to disable a user
   So that I can remove access to files and resources for a user, without actually deleting the files and resources
 
-  @openIdLogin
-  Scenario: the user session of a blocked user is cleared properly using openid authentication
-    Given these users have been created with default attributes:
-      | username |
-      | Alice    |
+  Background:
+    Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     And user "Alice" has been blocked by admin
+
+  @openIdLogin
+  Scenario: the user session of a blocked user is cleared properly using openid authentication
     When the user reloads the current page of the webUI
     Then the user should be redirected to the login error page
     When the user exits the login error page
@@ -18,11 +18,5 @@ Feature: view profile
 
   @oauthLogin @notToImplementOnOCIS
   Scenario: the user session of a blocked user is cleared properly using oauth authentication
-    Given these users have been created with default attributes:
-      | username |
-      | Alice    |
-    And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
-    And user "Alice" has been blocked by admin
     When the user reloads the current page of the webUI
     Then the user should be redirected to the user disabled page

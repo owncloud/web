@@ -4,7 +4,9 @@ Feature: move folders
   So that I can organise my data structure
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-empty-folder"
 
 
   Scenario: An attempt to move a folder into a sub-folder using rename is not allowed
@@ -16,26 +18,29 @@ Feature: move folders
 
   @smokeTest
   Scenario: move a folder into another folder
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created folder "strängé नेपाली folder"
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user moves folder "simple-folder" into folder "simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And folder "simple-folder" should be listed on the webUI
     When the user browses to the files page
-    And the user moves folder "strängé नेपाली folder" into folder "strängé नेपाली folder empty" using the webUI
-    Then breadcrumb for folder "strängé नेपाली folder empty" should be displayed on the webUI
+    And the user moves folder "strängé नेपाली folder" into folder "simple-empty-folder" using the webUI
+    Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And folder "strängé नेपाली folder" should be listed on the webUI
 
 
   Scenario: move a folder into another folder where a folder with the same name already exists
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder" using the webUI
     Then the error message with header 'An error occurred while moving simple-empty-folder' should be displayed on the webUI
 
   @smokeTest
   Scenario: Move multiple folders at once
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created folder "strängé नेपाली folder"
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
     When the user batch moves these folders into folder "simple-empty-folder" using the webUI
       | name                  |
@@ -65,11 +70,12 @@ Feature: move folders
 
   @issue-ocis-reva-243
   Scenario: move a folder into another folder with no change permission
-    Given user "Brian" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has created folder "/simple-folder"
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
     And user "Alice" has logged in using the webUI
     When the user tries to move folder "simple-empty-folder" into folder "simple-folder (2)" using the webUI
-    Then as "Alice" folder "simple-folder (2)/simple-empty-folder (2)" should not exist
+    Then as "Alice" folder "simple-folder (2)/simple-empty-folder" should not exist
 
 
   Scenario: move a folder into the same folder
@@ -80,9 +86,10 @@ Feature: move folders
 
 
   Scenario: move a folder into another folder with same name
-    Given user "Alice" has logged in using the webUI
-    When the user moves folder "simple-empty-folder" into folder "folder with space/simple-empty-folder" using the webUI
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has logged in using the webUI
+    When the user moves folder "simple-empty-folder" into folder "simple-folder/simple-empty-folder" using the webUI
     Then breadcrumb for folder "simple-empty-folder" should be displayed on the webUI
     And folder "simple-empty-folder" should be listed on the webUI
-    And as "Alice" folder "folder with space/simple-empty-folder/simple-empty-folder" should exist
+    And as "Alice" folder "simple-folder/simple-empty-folder/simple-empty-folder" should exist
     And as "Alice" folder "simple-empty-folder" should not exist

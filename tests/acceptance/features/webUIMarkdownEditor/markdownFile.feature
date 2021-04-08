@@ -4,7 +4,7 @@ Feature: create markdown files
   So that I can organize my text data in formatted form
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has uploaded file with content "simple markdown file" to "simple.md"
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
@@ -47,10 +47,14 @@ Feature: create markdown files
     Then the preview panel should have the content "updating the file with new content" in the WebUI
 
   Scenario: open text file in markdown editor
+    Given user "Alice" has uploaded file with content "test" to "lorem.txt"
+    And the user has reloaded the current page of the webUI
     When the user opens file "lorem.txt" in the markdown editor webUI
     Then the file "lorem.txt" should be displayed in the markdown editor webUI
 
   Scenario Outline: preview of files with markdown editor by clicking the action menu option
+    Given user "Alice" has uploaded file with content "test" to "lorem.txt"
+    And the user has reloaded the current page of the webUI
     When the user opens file "<file>" in the markdown editor using the action menu option in the webUI
     Then the file "<file>" should be displayed in the markdown editor webUI
     Examples:
