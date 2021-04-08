@@ -12,7 +12,7 @@ Summary
 * Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
 * Bugfix - Only one `<main>` tag per HTML document: [#1652](https://github.com/owncloud/web/issues/1652)
 * Bugfix - Parent paths traversal for shares: [#4860](https://github.com/owncloud/web/issues/4860)
-* Change - Update owncloud Design System to v4.1.1: [#4862](https://github.com/owncloud/web/pull/4862)
+* Change - Update owncloud Design System to v4.3.0: [#4925](https://github.com/owncloud/web/pull/4925)
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
@@ -59,12 +59,13 @@ Details
    https://github.com/owncloud/web/issues/4860
    https://github.com/owncloud/web/pull/4918
 
-* Change - Update owncloud Design System to v4.1.1: [#4862](https://github.com/owncloud/web/pull/4862)
+* Change - Update owncloud Design System to v4.3.0: [#4925](https://github.com/owncloud/web/pull/4925)
 
    Lots of updates regarding accessibility topics, an updated color palette and custom CSS
    properties to allow for (runtime) theming.
 
    https://github.com/owncloud/web/issues/4331
+   https://github.com/owncloud/web/pull/4925
    https://github.com/owncloud/web/pull/4862
 
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
