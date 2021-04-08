@@ -1,6 +1,7 @@
-Change: Update owncloud Design System to v4.1.1
+Change: Update owncloud Design System to v4.3.0
 
 Lots of updates regarding accessibility topics, an updated color palette and custom CSS properties to allow for (runtime) theming.
 
+https://github.com/owncloud/web/pull/4925
 https://github.com/owncloud/web/pull/4862
 https://github.com/owncloud/web/issues/4331
