@@ -18,34 +18,27 @@
         <autocomplete-item :item="item" />
       </template>
     </oc-autocomplete>
-    <oc-grid v-if="selectedCollaborators.length > 0" gutter="small">
-      <div>
-        <div>
-          <translate>Selected people</translate>
-        </div>
-        <oc-table-simple class="uk-width-expand files-collaborators-collaborator-autocomplete-item">
-          <oc-tr
-            v-for="collaborator in selectedCollaborators"
-            :key="collaborator.value.shareWith + '-' + collaborator.value.shareType"
+    <div v-if="selectedCollaborators.length > 0">
+      <translate tag="div">Selected people</translate>
+      <ul class="uk-list files-collaborators-collaborator-autocomplete-items oc-mt-s oc-mb-m">
+        <li
+          v-for="collaborator in selectedCollaborators"
+          :key="collaborator.value.shareWith + '-' + collaborator.value.shareType"
+          class="uk-flex files-collaborators-collaborator-autocomplete-item"
+        >
+          <oc-button
+            :aria-label="$gettext('Delete share')"
+            appearance="raw"
+            size="small"
+            class="files-collaborators-collaborator-autocomplete-item-remove oc-mr-xs"
+            @click="$_ocCollaborators_removeFromSelection(collaborator)"
           >
-            <oc-td width="shrink">
-              <oc-button
-                :aria-label="$gettext('Delete share')"
-                appearance="raw"
-                size="small"
-                class="files-collaborators-collaborator-autocomplete-item-remove"
-                @click="$_ocCollaborators_removeFromSelection(collaborator)"
-              >
-                <oc-icon name="close" />
-              </oc-button>
-            </oc-td>
-            <oc-td>
-              <autocomplete-item :item="collaborator" />
-            </oc-td>
-          </oc-tr>
-        </oc-table-simple>
-      </div>
-    </oc-grid>
+            <oc-icon name="close" />
+          </oc-button>
+          <autocomplete-item :item="collaborator" />
+        </li>
+      </ul>
+    </div>
     <collaborators-edit-options class="oc-mb" @optionChange="collaboratorOptionChanged" />
     <hr class="divider" />
     <oc-grid gutter="small" class="oc-mb">

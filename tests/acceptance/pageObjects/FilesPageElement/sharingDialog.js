@@ -669,7 +669,7 @@ module.exports = {
     },
     newCollaboratorItems: {
       selector:
-        "//div[@id='oc-files-sharing-sidebar']//table[contains(@class, 'files-collaborators-collaborator-autocomplete-item')]//div[contains(., '%s')]/ancestor::tr[position()=1]"
+        "//span[contains(@class, 'files-collaborators-autocomplete-username') and contains(., '%s')]/ancestor::li[contains(@class, 'files-collaborators-collaborator-autocomplete-item')]"
     },
     newCollaboratorRemoveButton: {
       selector:

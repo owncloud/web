@@ -1,0 +1,6 @@
+Enhancement: Use list for displaying added people
+
+We've changed the HTML elements in the people accordion when adding new people.
+People added via people autocomplete are now displayed in a list element to use correct structure for screen readers.
+
+https://github.com/owncloud/web/pull/4915
