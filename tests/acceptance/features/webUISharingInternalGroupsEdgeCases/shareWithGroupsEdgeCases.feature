@@ -7,17 +7,19 @@ Feature: Sharing files and folders with internal groups
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-
-  @skip @yetToImplement
-  Scenario Outline: sharing  files and folder with an internal problematic group name
-    Given these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
       | Carol    |
-    And these groups have been created:
+
+  @skip @yetToImplement
+  Scenario Outline: sharing  files and folder with an internal problematic group name
+    Given these groups have been created:
       | groupname |
       | <group>   |
+    And user "Carol" has created folder "simple-folder"
+    And user "Carol" has created file "testimage.jpg"
     And user "Alice" has been added to group "<group>"
     And user "Brian" has been added to group "<group>"
     And user "Carol" has logged in using the webUI
@@ -46,13 +48,7 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: Share file with a user and a group with same name
-    Given these users have been created with default attributes:
-      | username |
-      | Alice    |
-      | Brian    |
-      | Carol    |
-      | user11   |
-    And these groups have been created:
+    Given these groups have been created:
       | groupname |
       | Alice     |
     And user "Brian" has been added to group "Alice"
@@ -70,12 +66,7 @@ Feature: Sharing files and folders with internal groups
 
 
   Scenario: Share file with a group and a user with same name
-    Given these users have been created with default attributes:
-      | username |
-      | Alice    |
-      | Brian    |
-      | Carol    |
-    And these groups have been created:
+    Given these groups have been created:
       | groupname |
       | Alice     |
     And user "Brian" has been added to group "Alice"
@@ -93,14 +84,10 @@ Feature: Sharing files and folders with internal groups
 
   @yetToImplement
   Scenario: Share file with a user and again with a group with same name but different case
-    Given these users have been created with default attributes:
-      | username |
-      | Alice    |
-      | Brian    |
-      | Carol    |
-    And these groups have been created:
+    Given these groups have been created:
       | groupname |
       | User1     |
+    And user "Carol" has created folder "simple-folder"
     And user "Brian" has been added to group "User1"
     And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with user "Alice Hansen" as "Editor" using the webUI
@@ -118,14 +105,10 @@ Feature: Sharing files and folders with internal groups
 
   @yetToImplement
   Scenario: Share file with a group and again with a user with same name but different case
-    Given these users have been created with default attributes:
-      | username |
-      | Alice    |
-      | Brian    |
-      | Carol    |
-    And these groups have been created:
+    Given these groups have been created:
       | groupname |
       | User1     |
+    And user "Carol" has created folder "simple-folder"
     And user "Brian" has been added to group "User1"
     And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "User1" as "Editor" using the webUI
