@@ -1,17 +1,28 @@
 <template>
   <oc-grid gutter="small" child-width="1-1">
-    <roles-select
-      mode="collaborators"
-      :roles="roles"
-      :selected-role="role"
-      @roleSelected="selectRole"
-    />
+    <label tag="label" class="oc-label">
+      {{ $gettext('Role') }}
+      <oc-select
+        id="files-people-role"
+        v-model="selectedRole"
+        :options="roles"
+        :clearable="false"
+        label="label"
+      >
+        <template v-slot:option="option">
+          <role-item :role="option" />
+        </template>
+        <template #no-options v-translate>
+          No matching role found
+        </template>
+      </oc-select>
+    </label>
     <template v-if="$_ocCollaborators_hasAdditionalPermissions">
       <label v-if="selectedRole.name !== 'advancedRole'" class="oc-label">
         <translate>Additional permissions</translate>
       </label>
       <additional-permissions
-        :available-permissions="role.additionalPermissions"
+        :available-permissions="selectedRole.additionalPermissions"
         :collaborators-permissions="collaboratorsPermissions"
         @permissionChecked="checkAdditionalPermissions"
       />
@@ -48,14 +59,14 @@ import { mapGetters } from 'vuex'
 import moment from 'moment'
 import collaboratorsMixins from '../../mixins/collaborators'
 
-import RolesSelect from '../Roles/RolesSelect.vue'
+import RoleItem from '../RoleItem.vue'
 import AdditionalPermissions from './AdditionalPermissions.vue'
 
 export default {
   name: 'CollaboratorsEditOptions',
 
   components: {
-    RolesSelect,
+    RoleItem,
     AdditionalPermissions
   },
 
@@ -108,30 +119,6 @@ export default {
 
     $_ocCollaborators_hasAdditionalPermissions() {
       return this.selectedRole && this.selectedRole.additionalPermissions
-    },
-
-    role() {
-      // Returns default role
-      if (!this.existingRole && !this.selectedRole) {
-        const defaultRole = this.roles[Object.keys(this.roles)[0]]
-        this.selectRole(defaultRole, false)
-        return defaultRole
-      }
-
-      if (
-        (this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole) ||
-        (this.selectedRole && this.selectedRole.name === 'advancedRole')
-      ) {
-        this.selectRole(this.advancedRole, false)
-        return this.advancedRole
-      }
-
-      if (this.existingRole && !this.selectedRole) {
-        this.selectRole(this.existingRole, false)
-        return this.existingRole
-      }
-
-      return this.selectedRole
     },
 
     expirationSupported() {
@@ -236,6 +223,19 @@ export default {
     }
   },
 
+  created() {
+    if (
+      (this.existingRole && this.existingRole.name === 'advancedRole' && !this.selectedRole) ||
+      (this.selectedRole && this.selectedRole.name === 'advancedRole')
+    ) {
+      this.selectedRole = this.advancedRole
+    } else if (this.existingRole && !this.selectedRole) {
+      this.selectedRole = this.existingRole
+    } else {
+      this.selectedRole = this.roles[0]
+    }
+  },
+
   mounted() {
     if (this.expirationSupported) {
       if (this.editingUser || this.editingGroup) {
@@ -253,11 +253,6 @@ export default {
   },
 
   methods: {
-    selectRole(role) {
-      this.selectedRole = role
-      this.publishChange()
-    },
-
     checkAdditionalPermissions(permissions) {
       this.additionalPermissions = permissions
       this.publishChange()
