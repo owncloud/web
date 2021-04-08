@@ -653,15 +653,11 @@ module.exports = {
     newCollaboratorSelectRoleButton: {
       selector: '#files-collaborators-role-button'
     },
-    newCollaboratorRolesDropdown: {
-      selector: '//div[@id="files-collaborators-role-button"]//ul[@class="vs__dropdown-menu"]',
-      locateStrategy: 'xpath'
-    },
     newCollaboratorRoleViewer: {
-      selector: '#files-collaborators-role-viewer'
+      selector: '#files-role-viewer'
     },
     newCollaboratorRoleEditor: {
-      selector: '#files-collaborators-role-editor'
+      selector: '#files-role-editor'
     },
     newCollaboratorItems: {
       selector:
@@ -672,7 +668,7 @@ module.exports = {
         "//button[contains(@class, 'files-collaborators-collaborator-autocomplete-item-remove')]"
     },
     newCollaboratorRoleAdvancedPermissions: {
-      selector: '#files-collaborators-role-advancedRole'
+      selector: '#files-role-advancedRole'
     },
     selectRoleButtonInCollaboratorInformation: {
       selector: '//button[contains(@class, "files-collaborators-role-button")]',
