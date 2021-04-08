@@ -5,7 +5,7 @@ Feature: Suggestion for matching tag names
   So that I can easily categorize the files
 
   Background:
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
     Given user "Alice" has created a "normal" tag with name "spam"
@@ -18,6 +18,7 @@ Feature: Suggestion for matching tag names
     And user "Alice" has created a "normal" tag with name "specification"
     And the administrator has created a "not user-assignable" tag with name "Violates T&C"
     And the administrator has created a "not user-assignable" tag with name "sponsored"
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
     And user "Alice" has logged in using the webUI
 
   @skip @yetToImplement

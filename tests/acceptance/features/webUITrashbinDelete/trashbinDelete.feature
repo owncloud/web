@@ -5,18 +5,24 @@ Feature: files and folders can be deleted from the trashbin
   So that I can control my trashbin space and which files are kept in that space
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    Given user "Alice" has created file "lorem.txt"
+    Given user "Alice" has created file "lorem-big.txt"
     And user "Alice" has created file "sample,1.txt"
+    And user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "Folder,With,Comma"
-    And user "Alice" has logged in using the webUI
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has created file "simple-folder/lorem-big.txt"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
     And the following files have been deleted by user "Alice"
       | name              |
-      | data.zip          |
       | lorem.txt         |
-      | lorem-big.txt     |
       | simple-folder     |
       | sample,1.txt      |
+      | lorem-big.txt     |
       | Folder,With,Comma |
+      | data.zip          |
+    And user "Alice" has logged in using the webUI
     And the user has browsed to the trashbin page
 
   @smokeTest @yetToImplement
