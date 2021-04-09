@@ -39,5 +39,5 @@ When making changes to the docs, run `make docs` again and the server will pick 
 
 ### Deploying the documentation
 
-The documentation is automatically deployed from the master branch to https://owncloud.dev/web/
+The documentation is automatically deployed from the master branch to https://owncloud.dev/clients/web/
 
