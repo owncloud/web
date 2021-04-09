@@ -1,0 +1,5 @@
+Enhancement: Enable files app search bar to be toggleable on a per-route basis
+
+Permits the search bar in the files app to be toggleable on a per-route basis as shown or hidden.
+
+https://github.com/owncloud/web/pull/4815
