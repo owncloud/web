@@ -20,6 +20,7 @@ Summary
 * Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
 * Enhancement - Runtime theming: [#4822](https://github.com/owncloud/web/pull/4822)
 * Enhancement - Add "Shared via link" page: [#4881](https://github.com/owncloud/web/pull/4881)
+* Enhancement - Use ODS translations: [#4934](https://github.com/owncloud/web/pull/4934)
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 
 Details
@@ -119,6 +120,14 @@ Details
    resources shared via public links.
 
    https://github.com/owncloud/web/pull/4881
+
+* Enhancement - Use ODS translations: [#4934](https://github.com/owncloud/web/pull/4934)
+
+   Some ODS components were using their own translation strings which were availabel in the ODS
+   but not exported there/imported in the web project. Now, we import the translation strings
+   from the ODS package and merge them with the web translations.
+
+   https://github.com/owncloud/web/pull/4934
 
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 
