@@ -25,6 +25,7 @@ import Vue2TouchEvents from 'vue2-touch-events'
 // --- Gettext ----
 import GetTextPlugin from 'vue-gettext'
 import coreTranslations from '../l10n/translations.json'
+import odsTranslations from 'owncloud-design-system/dist/system/translations.json'
 
 // --- Image source ----
 import MediaSource from './plugins/mediaSource.js'
@@ -46,6 +47,8 @@ import { registerClient } from './services/clientRegistration'
 
 import { loadConfig } from './helpers/config'
 import { loadTheme } from './helpers/theme'
+
+import merge from 'lodash-es/merge'
 
 wgxpath.install()
 
@@ -81,7 +84,8 @@ const supportedLanguages = {
   it: 'Italiano',
   gl: 'Galego'
 }
-const translations = coreTranslations
+
+const translations = merge({}, coreTranslations, odsTranslations)
 
 const loadApp = async path => {
   const app = await new Promise((resolve, reject) =>
