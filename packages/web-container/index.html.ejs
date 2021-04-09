@@ -28,9 +28,9 @@
 <body>
   <div id="owncloud"></div>
   <noscript>
-    <div id="enable-js-banner"><span id="banner-content"><h3>Please enable JavaScript</h3></span></div>
+    <div id="enable-js-banner"><h3 id="banner-content">Please enable JavaScript</h3></div>
   </noscript>
-  <script type="text/javascript">
+  <script>
     requirejs.config({
       baseUrl: <%- JSON.stringify(data.roots.js) %>,
       paths: <%- JSON.stringify(data.bundle.js) %>
