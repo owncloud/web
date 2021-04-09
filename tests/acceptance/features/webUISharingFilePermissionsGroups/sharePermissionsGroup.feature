@@ -1,4 +1,4 @@
-@ocis-reva-issue-34 @ocis-reva-issue-194
+@issue-ocis-1743 @issue-ocis-1277 @issue-ocis-1922
 Feature: Sharing files with internal groups with permissions
   As a user
   I want to set different permissions on shared files with groups

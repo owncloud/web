@@ -1,4 +1,3 @@
-@ocis-reva-issue-34 @ocis-reva-issue-194
 Feature: Autocompletion of share-with names
   As a user
   I want to share files, with minimal typing, to the right people or groups
@@ -29,7 +28,7 @@ Feature: Autocompletion of share-with names
       | users-finance |
       | other         |
 
-  @smokeTest
+  @smokeTest @issue-ocis-1961
   Scenario: autocompletion of regular existing users
     Given user "regularuser" has created folder "simple-folder"
     And user "regularuser" has logged in using the webUI
@@ -41,7 +40,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "us" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-  @smokeTest
+  @smokeTest @issue-ocis-1961
   Scenario: autocompletion of regular existing groups
     Given user "regularuser" has created folder "simple-folder"
     And user "regularuser" has logged in using the webUI
@@ -53,7 +52,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-
+  @issue-ocis-1675
   Scenario: autocompletion for a pattern that does not match any user or group
     Given user "regularuser" has created folder "simple-folder"
     And user "regularuser" has logged in using the webUI
@@ -63,7 +62,7 @@ Feature: Autocompletion of share-with names
     When the user types "doesnotexist" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
-
+  @issue-ocis-1675
   Scenario: autocompletion when minimum characters is the default (2) and not enough characters are typed
     Given user "regularuser" has created folder "simple-folder"
     And user "regularuser" has logged in using the webUI
@@ -73,7 +72,7 @@ Feature: Autocompletion of share-with names
     When the user types "u" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
-
+  @issue-ocis-1675 @issue-ocis-1317
   Scenario: autocompletion when minimum characters is increased and not enough characters are typed
     Given the administrator has set the minimum characters for sharing autocomplete to "4"
     And user "regularuser" has created folder "simple-folder"
@@ -112,7 +111,7 @@ Feature: Autocompletion of share-with names
     When the user types "fi" in the share-with-field
     Then only "fi (group)" should be listed in the autocomplete list on the webUI
 
-
+  @issue-ocis-1675 @issue-ocis-1317
   Scenario: autocompletion when increasing the minimum characters for sharing autocomplete
     Given the administrator has set the minimum characters for sharing autocomplete to "3"
     And user "regularuser" has created folder "simple-folder"
@@ -125,7 +124,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "use" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-
+  @issue-ocis-1675
   Scenario: autocompletion of a pattern that matches regular existing users but also a user with whom the item is already shared (folder)
     Given user "regularuser" has created folder "simple-folder"
     And user "regularuser" has logged in using the webUI
@@ -138,7 +137,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "user" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-
+  @issue-ocis-1675
   Scenario: autocompletion of a pattern that matches regular existing users but also a user with whom the item is already shared (file)
     Given user "regularuser" has created file "data.zip"
     And user "regularuser" has logged in using the webUI
@@ -151,7 +150,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "user" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-
+  @issue-ocis-1675 @issue-ocis-1317
   Scenario: autocompletion of a pattern that matches regular existing groups but also a group with whom the item is already shared (folder)
     Given the administrator has set the minimum characters for sharing autocomplete to "2"
     And user "regularuser" has created folder "simple-folder"
@@ -165,7 +164,7 @@ Feature: Autocompletion of share-with names
     But only users and groups that contain the string "fi" in their name or displayname should be listed in the autocomplete list on the webUI
     And the users own name should not be listed in the autocomplete list on the webUI
 
-
+  @issue-ocis-1675 @issue-ocis-1317
   Scenario: autocompletion of a pattern that matches regular existing groups but also a group with whom the item is already shared (file)
     Given the administrator has set the minimum characters for sharing autocomplete to "2"
     And user "regularuser" has created file "data.zip"

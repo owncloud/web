@@ -1,4 +1,3 @@
-@ocis-reva-issue-34 @ocis-reva-issue-194
 Feature: Autocompletion of share-with names
   As a user
   I want to share files, with minimal typing, to the right people or groups
@@ -20,7 +19,7 @@ Feature: Autocompletion of share-with names
       | finance2  |
     And the setting "outgoing_server2server_share_enabled" of app "files_sharing" has been set to "no"
 
-
+  @issue-ocis-1417
   Scenario Outline: autocompletion of user having special characters in their usernames
     Given these users have been created without initialization and without skeleton files:
       | username   | password  | displayname | email             |
@@ -39,7 +38,7 @@ Feature: Autocompletion of share-with names
       | ocusr-_. | oc     |
       | _ocusr@  | _u     |
 
-
+  @issue-ocis-1317 @issue-ocis-1675
   Scenario Outline: autocompletion of user having special characters in their displaynames
     Given these users have been created without initialization and without skeleton files:
       | username  | password  | displayname   | email             |
@@ -57,7 +56,7 @@ Feature: Autocompletion of share-with names
       | ocusr-_.    | oc     |
       | _ocusr@     | _u     |
 
-
+  @issue-ocis-1317 @issue-ocis-1675
   Scenario Outline: autocompletion of groups having special characters in their names
     Given these groups have been created:
       | groupname |

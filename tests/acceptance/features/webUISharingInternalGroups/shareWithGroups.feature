@@ -1,4 +1,3 @@
-@ocis-reva-issue-34 @ocis-reva-issue-194
 Feature: Sharing files and folders with internal groups
   As a user
   I want to share files and folders with groups
@@ -12,16 +11,14 @@ Feature: Sharing files and folders with internal groups
       | Alice    |
       | Brian    |
       | Carol    |
-    And these groups have been created:
-      | groupname |
-      | grp1      |
-      | grp11     |
+    And group "grp1" has been created
     And user "Alice" has been added to group "grp1"
     And user "Brian" has been added to group "grp1"
 
 
   Scenario: share a folder with multiple collaborators and check collaborator list order
-    Given user "Carol" has created folder "simple-folder"
+    Given group "grp11" has been created
+    And user "Carol" has created folder "simple-folder"
     And user "Carol" has logged in using the webUI
     When the user shares folder "simple-folder" with group "grp11" as "Viewer" using the webUI
     And the user shares folder "simple-folder" with user "Brian Murphy" as "Viewer" using the webUI
@@ -29,7 +26,7 @@ Feature: Sharing files and folders with internal groups
     And the user shares folder "simple-folder" with user "Alice Hansen" as "Viewer" using the webUI
     Then the current collaborators list should have order "Carol King,Alice Hansen,Brian Murphy,grp1,grp11"
 
-
+  @issue-ocis-1922 @issue-ocis-1743
   Scenario Outline: share a file & folder with another internal user
     Given user "Carol" has created folder "simple-folder"
     And user "Carol" has created file "simple-folder/lorem.txt"
@@ -99,7 +96,7 @@ Feature: Sharing files and folders with internal groups
     # check that the original file owner can still see the file
     And as "Carol" the content of "new-lorem.txt" should be the same as the local "new-lorem.txt"
 
-
+  @issue-ocis-1943
   Scenario: share a folder with an internal group and a member uploads, overwrites and deletes files
     Given user "Carol" has created folder "simple-folder"
     And user "Carol" has created file "simple-folder/lorem.txt"
@@ -181,7 +178,7 @@ Feature: Sharing files and folders with internal groups
     When the administrator excludes group "system-group" from receiving shares using the webUI
     Then user "Alice" should not be able to share folder "simple-folder" with group "system-group" using the sharing API
 
-
+  @issue-ocis-1277
   Scenario: user shares the file/folder with a group and delete the share with group
     Given user "Alice" has created file "lorem.txt"
     And user "Alice" has logged in using the webUI
@@ -195,7 +192,7 @@ Feature: Sharing files and folders with internal groups
     And as "Brian" file "/Shares/lorem.txt" should not exist
     And as "Brian" file "lorem (2).txt" should not exist
 
-
+  @issue-ocis-1277
   Scenario: user shares the file/folder with multiple internal users and delete the share with one user
     Given group "grp2" has been created
     And user "Alice" has created file "lorem.txt"
@@ -215,7 +212,7 @@ Feature: Sharing files and folders with internal groups
     And as "Brian" file "/Shares/lorem.txt" should not exist
     But as "Carol" file "/Shares/lorem.txt" should exist
 
-
+  @issue-ocis-1317
   Scenario: Auto-completion for a group that is excluded from receiving shares
     Given group "system-group" has been created
     And user "Alice" has created folder "simple-folder"
@@ -227,7 +224,7 @@ Feature: Sharing files and folders with internal groups
     And the user types "system-group" in the share-with-field
     Then the autocomplete list should not be displayed on the webUI
 
-  @issue-2897
+  @issue-2897 @issue-ocis-1231 @issue-ocis-1277
   Scenario: sharing details of items inside a shared folder shared with user and group
     Given user "Carol" has created folder "/simple-folder"
     And user "Carol" has created folder "/simple-folder/sub-folder"
@@ -271,7 +268,7 @@ Feature: Sharing files and folders with internal groups
       | fileName      | expectedCollaborators |
       | simple-folder | Brian Murphy, grp1        |
 
-
+  @issue-ocis-1250
   Scenario: change existing expiration date of an existing share with another internal group
     Given user "Carol" has created file "lorem.txt"
     And user "Carol" has created a new share with following settings
@@ -293,7 +290,7 @@ Feature: Sharing files and folders with internal groups
       | share_with | grp1       |
       | expiration | +7         |
 
-
+  @issue-ocis-1317 @issue-ocis-1250
   Scenario: share a resource with another internal group with default expiration date
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "42"
@@ -312,7 +309,7 @@ Feature: Sharing files and folders with internal groups
     And user "Alice" should have received a share with target "Shares/lorem.txt" and expiration date in 42 days
     And user "Brian" should have received a share with target "Shares/lorem.txt" and expiration date in 42 days
 
-
+  @issue-ocis-1250
   Scenario Outline: share a resource with another internal group with expiration date beyond maximum enforced expiration date
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
@@ -328,7 +325,7 @@ Feature: Sharing files and folders with internal groups
       | lorem.txt       |
       | simple-folder   |
 
-
+  @issue-ocis-1250
   Scenario Outline: share a resource with another internal group with expiration date within maximum enforced expiration date
     Given the setting "shareapi_default_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"

@@ -1,4 +1,4 @@
-@ocis-reva-issue-34
+@issue-ocis-1317
 Feature: restrict Sharing
   As an admin
   I want to be able to restrict the sharing function

@@ -1217,7 +1217,7 @@ Given('user {string} has declined the share {string} offered by user {string}', 
   return sharingHelper.declineShare(filename, user, sharer)
 })
 
-Given('user {string} has accepted the share {string} offered by user {code}', function(
+Given('user {string} has accepted the share {string} offered by user {string}', function(
   user,
   filename,
   sharer

@@ -1,4 +1,4 @@
-@ocis-reva-issue-34
+@issue-ocis-1330
 Feature: Search
 
   As a user
