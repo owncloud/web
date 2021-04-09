@@ -43,7 +43,7 @@ We have the goal that code segments are unit tested. Please try to help us with 
 (aka almost impossible) as of today - in these areas refactoring WHILE fixing a bug is encouraged to enable unit testing.
 
 [agreement]: https://owncloud.com/contribute/join-the-development/contributor-agreement/
-[devmanual]: https://owncloud.github.io/clients/web/
+[devmanual]: https://owncloud.dev/clients/web/
 
 ## Translations
 Please submit translations via [Transifex][transifex].

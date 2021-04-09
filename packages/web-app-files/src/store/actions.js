@@ -163,7 +163,7 @@ export default {
     context.commit('CURRENT_FILE_OUTGOING_SHARES_ERROR', null)
     context.commit('CURRENT_FILE_OUTGOING_SHARES_LOADING', true)
 
-    // see https://owncloud.github.io/js-owncloud-client/Shares.html
+    // see https://owncloud.dev/owncloud-sdk/Shares.html
     client.shares
       .getShares(path, { reshares: true })
       .then(data => {
@@ -190,7 +190,7 @@ export default {
     context.commit('INCOMING_SHARES_ERROR', null)
     context.commit('INCOMING_SHARES_LOADING', true)
 
-    // see https://owncloud.github.io/js-owncloud-client/Shares.html
+    // see https://owncloud.dev/owncloud-sdk/Shares.html
     const client = payload.client
     const path = payload.path
     client.shares
