@@ -11,7 +11,7 @@ geekdocFilePath: backend-ocis.md
 
 ## Setting up OCIS services
 
-- Setup OCIS by following the [setup instructions](https://owncloud.github.io/ocis/getting-started/).
+- Setup OCIS by following the [setup instructions](https://owncloud.dev/ocis/getting-started/).
 - Kill the oCIS Web service `./ocis kill web`
 
 ## Setting up Web
@@ -22,7 +22,7 @@ geekdocFilePath: backend-ocis.md
 
 - in the Web checkout folder, run `yarn serve`
 - open [https://localhost:9200](https://localhost:9200) and accept the certificate.
-- when signing in, use one of the [available test users](https://owncloud.github.io/ocis/getting-started/#usage)
+- when signing in, use one of the [available test users](https://owncloud.dev/ocis/getting-started/#usage)
 - whenever code changes are made, you need to manually reload the browser page (no hot reload)
 
 ## Running acceptance tests
