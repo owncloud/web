@@ -5,34 +5,37 @@ Feature: Sharing files and folders with internal users with expiry date
   So that I don't have to remember to unshare
 
   Background:
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
 
 
   Scenario: share a file with another internal user which should expire after 2 days
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
+    And user "Alice" has logged in using the webUI
     When the user shares file "testimage.jpg" with user "Brian Murphy" which expires in "+2" days using the webUI
-    Then user "Brian" should have received a share with target "testimage (2).jpg" and expiration date in 2 days
+    Then user "Brian" should have received a share with target "testimage.jpg" and expiration date in 2 days
 
 
   Scenario: share a file with another internal user with default expiration date
-    Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
+    Given user "Alice" has uploaded file "testavatar.jpg" to "testimage.jpg"
+    And the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And default expiration date for users is set to 3 days
     And user "Alice" has logged in using the webUI
     When the user shares file "testimage.jpg" with user "Brian Murphy" using the webUI
-    Then user "Brian" should have received a share with target "testimage (2).jpg" and expiration date in 3 days
+    Then user "Brian" should have received a share with target "testimage.jpg" and expiration date in 3 days
 
 
   Scenario: change existing expiration date of an existing share with another internal user
-    Given user "Alice" has created a new share with following settings
+    Given user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has created a new share with following settings
       | path       | lorem.txt |
       | shareWith  | Brian     |
       | expireDate | +14       |
     And user "Alice" has logged in using the webUI
     When the user edits the collaborator expiry date of "Brian Murphy" of file "lorem.txt" to "+7" days using the webUI
-    Then user "Brian" should have received a share with target "lorem (2).txt" and expiration date in 7 days
+    Then user "Brian" should have received a share with target "lorem.txt" and expiration date in 7 days
     And user "Alice" should have a share with these details:
       | field      | value      |
       | path       | /lorem.txt |
@@ -46,6 +49,7 @@ Feature: Sharing files and folders with internal users with expiry date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "5"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has logged in using the webUI
     When the user shares file "lorem.txt" with user "Brian Murphy" which expires in "+4" days using the webUI
     Then user "Alice" should have a share with these details:
@@ -61,6 +65,8 @@ Feature: Sharing files and folders with internal users with expiry date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "5"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has created folder "simple-folder"
     And user "Alice" has logged in using the webUI
     When the user tries to share resource "<shared-resource>" with user "Brian Murphy" which expires in "+6" days using the webUI
     Then the expiration date shown on the webUI should be "+5" days
@@ -75,6 +81,8 @@ Feature: Sharing files and folders with internal users with expiry date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "5"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has created folder "simple-folder"
     And user "Alice" has created a new share with following settings
       | path       | <shared-resource> |
       | shareWith  | Brian             |
@@ -93,6 +101,7 @@ Feature: Sharing files and folders with internal users with expiry date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "30"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has created a new share with following settings
       | path             | lorem.txt |
       | shareWith        | Brian     |
@@ -118,6 +127,7 @@ Feature: Sharing files and folders with internal users with expiry date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_enforce_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "30"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has created a new share with following settings
       | path       | lorem.txt |
       | shareWith  | Brian     |
@@ -143,6 +153,8 @@ Feature: Sharing files and folders with internal users with expiry date
     And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "10"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "5"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has created folder "simple-folder"
     And user "Alice" has logged in using the webUI
     When the user tries to share resource "<shared-resource>" with user "Brian Murphy" which expires in "+6" days using the webUI
     Then the expiration date shown on the webUI should be "+5" days
@@ -169,6 +181,8 @@ Feature: Sharing files and folders with internal users with expiry date
     And the setting "shareapi_enforce_expire_date_group_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "5"
     And the setting "shareapi_expire_after_n_days_group_share" of app "core" has been set to "10"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has created folder "simple-folder"
     And user "Alice" has logged in using the webUI
     When the user tries to share resource "<shared-resource>" with group "grp1" which expires in "+6" days using the webUI
     Then the expiration date shown on the webUI should be "+5" days
@@ -189,6 +203,7 @@ Feature: Sharing files and folders with internal users with expiry date
   Scenario: change existing expiration date of an existing share to a date beyond the enforced maximum expiry date
     Given the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
     And the setting "shareapi_expire_after_n_days_user_share" of app "core" has been set to "7"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has created a new share with following settings
       | path       | lorem.txt |
       | shareWith  | Brian     |
@@ -203,7 +218,8 @@ Feature: Sharing files and folders with internal users with expiry date
 
 
   Scenario: setting default expiration date and enforcing it does not change the expiration date of a previously created share
-    Given user "Alice" has created a new share with following settings
+    Given user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has created a new share with following settings
       | path      | lorem.txt |
       | shareWith | Brian     |
     And the setting "shareapi_default_expire_date_user_share" of app "core" has been set to "yes"
@@ -214,7 +230,8 @@ Feature: Sharing files and folders with internal users with expiry date
 
 
   Scenario: setting default expiration date and enforcing it does not change the expiration date of a previously created share which is beyond the new maximum date(enforced)
-    Given user "Alice" has created a new share with following settings
+    Given user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has created a new share with following settings
       | path       | lorem.txt |
       | shareWith  | Brian     |
       | expireDate | +14       |
