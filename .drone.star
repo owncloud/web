@@ -1736,10 +1736,10 @@ def getOcis():
 def buildOCISCache():
 	return[{
 		'name': 'build-ocis',
-		'image': 'webhippie/golang:1.16',
+		'image': 'owncloudci/golang:1.16',
 		'pull': 'always',
 		'commands': [
-			'./tests/drone/cache_ocis.sh'
+			'./tests/drone/build-ocis.sh'
 		],
 	}]
 
