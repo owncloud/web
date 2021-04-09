@@ -1,0 +1,5 @@
+Change: Update supported node engines
+
+We've updated the supported engines to also support node version 15
+
+https://github.com/owncloud/web/pull/4846
