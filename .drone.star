@@ -1703,6 +1703,8 @@ def cacheOcisPipeline(ctx):
 		'depends_on': [],
 		'trigger': {
 			'ref': [
+				'refs/heads/master',
+				'refs/tags/**',
 				'refs/pull/**',
 			]
 		}
@@ -1763,11 +1765,6 @@ def cacheOcis():
 			'secret_key': {
 				'from_secret': 'cache_s3_secret_key'
 			},
-		},
-		'when': {
-			'event': [
-				'pull_request'
-			]
 		},
 	}]
 
