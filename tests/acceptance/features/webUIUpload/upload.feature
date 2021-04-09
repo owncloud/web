@@ -5,7 +5,10 @@ Feature: File Upload
   So that I can store files in ownCloud
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has uploaded file with content "initial content" to "lorem.txt"
+    And user "Alice" has uploaded file with content "initial content" to "simple-folder/lorem.txt"
     And user "Alice" has logged in using the webUI
 
   @smokeTest
@@ -43,6 +46,8 @@ Feature: File Upload
 
   @smokeTest
   Scenario: Upload of a folder inside a subdirectory
+    Given user "Alice" has created folder "simple-empty-folder"
+    And the user has browsed to the files page
     When the user browses to the folder "simple-empty-folder" on the files page
     And the user uploads folder "PARENT" using the webUI
     Then no message should be displayed on the webUI

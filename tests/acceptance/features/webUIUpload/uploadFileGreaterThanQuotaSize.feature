@@ -5,7 +5,7 @@ Feature: Upload a file
   So that I can store it in owncloud
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
 
   @smokeTest
   @issue-1049

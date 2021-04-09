@@ -7,7 +7,7 @@ Feature: File Upload
   that is not academically correct but saves a lot of time
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
     And the user browses to the files page
 
@@ -27,7 +27,9 @@ Feature: File Upload
 
   @smokeTest
   Scenario Outline: upload a new file into a sub folder
-    Given a file with the size of "3000" bytes and the name "0" has been created locally
+    Given user "Alice" has created folder "<folder-to-upload-to>"
+    And the user has browsed to the files page
+    And a file with the size of "3000" bytes and the name "0" has been created locally
     When the user opens folder "<folder-to-upload-to>" using the webUI
     And the user uploads a created file "0" using the webUI
     Then file "0" should be listed on the webUI
@@ -95,7 +97,9 @@ Feature: File Upload
 
   # upload into "simple-folder" because there is already a folder called "0" in the root
   Scenario: Upload a big file called "0" (when chunking in implemented that upload should be chunked)
-    Given a file with the size of "30000000" bytes and the name "0" has been created locally
+    Given user "Alice" has created folder "simple-folder"
+    And the user has browsed to the files page
+    And a file with the size of "30000000" bytes and the name "0" has been created locally
     When the user opens folder "simple-folder" using the webUI
     And the user uploads a created file "0" using the webUI
     Then file "0" should be listed on the webUI

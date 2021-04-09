@@ -5,9 +5,13 @@ Feature: Locks
 
   Background:
     #do not set email, see bugs in https://github.com/owncloud/core/pull/32250#issuecomment-434615887
-    Given these users have been created:
+    Given these users have been created with default attributes and without skeleton files:
       | username       |
       | brand-new-user |
+    Given user "brand-new-user" has created folder "simple-folder"
+    Given user "brand-new-user" has created folder "simple-empty-folder"
+    Given user "brand-new-user" has created file "simple-folder/lorem.txt"
+    Given user "brand-new-user" has created file "lorem.txt"
     And user "brand-new-user" has logged in using the webUI
     And the user browses to the files page
 
