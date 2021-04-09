@@ -5,7 +5,8 @@ Feature: Public link share indicator
   So that I can know with resources are shared
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "/simple-folder"
 
   @issue-2060 @issue-ocis-reva-243
   Scenario: sharing indicator inside a shared folder
@@ -44,7 +45,7 @@ Feature: Public link share indicator
 
   @issue-2060 @issue-ocis-reva-243
   Scenario: sharing indicators public link and collaborators inside a shared folder
-    Given user "Brian" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/simple-folder/sub-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt"
     And user "Alice" has shared folder "simple-folder" with link with "read" permissions
@@ -61,16 +62,16 @@ Feature: Public link share indicator
 
   @issue-2060 @issue-ocis-reva-243
   Scenario: sharing indicators public link from reshare
-    Given user "Brian" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/simple-folder/sub-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder (2)" with link with "read" permissions
+    And user "Brian" has shared folder "simple-folder" with link with "read" permissions
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName          | expectedIndicators        |
-      | simple-folder (2) | link-direct,user-indirect |
-    When the user opens folder "simple-folder (2)" using the webUI
+      | simple-folder     | link-direct,user-indirect |
+    When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName     | expectedIndicators          |
       | sub-folder   | link-indirect,user-indirect |
@@ -78,16 +79,16 @@ Feature: Public link share indicator
 
   @issue-2060 @issue-ocis-reva-243
   Scenario: sharing indicators public link from child of reshare
-    Given user "Brian" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "/simple-folder/sub-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/textfile.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder (2)/sub-folder" with link with "read" permissions
+    And user "Brian" has shared folder "simple-folder/sub-folder" with link with "read" permissions
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName          | expectedIndicators |
-      | simple-folder (2) | user-indirect      |
-    When the user opens folder "simple-folder (2)" using the webUI
+      | simple-folder     | user-indirect      |
+    When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName     | expectedIndicators        |
       | sub-folder   | link-direct,user-indirect |
@@ -95,18 +96,20 @@ Feature: Public link share indicator
 
   @issue-2060 @issue-ocis-reva-243
   Scenario: no sharing indicator visible in file list from public link
-    Given user "Brian" has been created with default attributes
-    And user "Carol" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder (2)/simple-empty-folder" with user "Carol"
-    And user "Brian" has shared folder "simple-folder (2)" with link with "read" permissions
+    And user "Brian" has shared folder "simple-folder/simple-empty-folder" with user "Carol"
+    And user "Brian" has shared folder "simple-folder" with link with "read" permissions
     When the public uses the webUI to access the last public link created by user "Brian"
     Then the following resources should not have share indicators on the webUI
       | simple-empty-folder |
 
   @issue-2939 @issue-ocis-reva-243
   Scenario: sharing indicator for link shares stays up to date
-    Given user "Brian" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has uploaded file "testavatar.png" to "simple-folder/testavatar.png"
     When user "Alice" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
@@ -123,19 +126,19 @@ Feature: Public link share indicator
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators          |
-      | testimage.png | user-indirect,link-indirect |
-    When the user creates a new public link for resource "testimage.png" using the webUI with
+      | testavatar.png | user-indirect,link-indirect |
+    When the user creates a new public link for resource "testavatar.png" using the webUI with
       | field | value |
       | name  | third |
     # the indicator changes from link-indirect to link-direct to show the direct share
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators        |
-      | testimage.png | user-indirect,link-direct |
+      | testavatar.png | user-indirect,link-direct |
     # removing the last link reverts the indicator to user-indirect
-    When the user removes the public link named "third" of resource "testimage.png" using the webUI
+    When the user removes the public link named "third" of resource "testavatar.png" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators          |
-      | testimage.png | user-indirect,link-indirect |
+      | testavatar.png | user-indirect,link-indirect |
     When the user opens folder "" directly on the webUI
     And the user removes the public link named "second" of resource "simple-folder" using the webUI
     # because there is still another link share left, the indicator stays

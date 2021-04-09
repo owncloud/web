@@ -5,7 +5,8 @@ Feature: Access public link shares by public
   So that I get access to files on owncloud
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
 
   @issue-4858 @issue-276 @issue-ocis-reva-398
   Scenario: Thumbnails are loaded for known file types in public link file list
@@ -22,7 +23,8 @@ Feature: Access public link shares by public
     Then the file "new-data.zip" should have a file type icon displayed on the webUI
 
   Scenario: public should be able to access a public link with correct password
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
+    Given user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
 
@@ -34,7 +36,8 @@ Feature: Access public link shares by public
 
   @yetToImplement
   Scenario: public should be able to access the shared file through public link
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has uploaded file with content "Lorem ipsum dolor sit amet, consectetur" to "lorem.txt"
+    And user "Alice" has logged in using the webUI
     And user "Alice" has created a public link with following settings
       | path | lorem.txt   |
       | name | Public link |
@@ -57,7 +60,10 @@ Feature: Access public link shares by public
 
   @skipOnOC10 @issue-4582
   Scenario: public batch deletes resources in the public link
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has created a public link with following settings
       | path        | /simple-folder               |
       | name        | public link                  |
       | permissions | read, create, delete, update |
@@ -69,7 +75,7 @@ Feature: Access public link shares by public
       | data.zip            |
     And the public batch deletes the marked files using the webUI
     Then file "data.zip" should not be listed on the webUI
-    And folder "simple-folder" should not be listed on the webUI
+    And folder "simple-empty-folder" should not be listed on the webUI
     And file "lorem.txt" should not be listed on the webUI
     And as "Alice" folder "/simple-folder/simple-empty-folder" should not exist
     And as "Alice" file "/simple-folder/lorem.txt" should not exist
@@ -77,7 +83,10 @@ Feature: Access public link shares by public
 
 
   Scenario: files are not selected initially in the public share
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has created a public link with following settings
       | path | /simple-folder |
       | name | public link    |
     When the public uses the webUI to access the last public link created by user "Alice"
@@ -89,7 +98,10 @@ Feature: Access public link shares by public
 
 
   Scenario: public selects files and clear the selection in the public share
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has uploaded file "data.zip" to "simple-folder/data.zip"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has created a public link with following settings
       | path | /simple-folder |
       | name | public link    |
     When the public uses the webUI to access the last public link created by user "Alice"

@@ -5,13 +5,14 @@ Feature: Share public link shares via email
   So that I can send share links to other users using email
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "/simple-folder"
+    And the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
+    And user "Alice" has logged in using the webUI
+    And the user reloads the current page of the webUI
 
   @skip @yetToImplement
   Scenario: user shares a public link via email
-    Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
-    And user "Alice" has logged in using the webUI
-    And the user reloads the current page of the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email | foo@bar.co |
     Then the email address "foo@bar.co" should have received an email with the body containing
@@ -22,8 +23,6 @@ Feature: Share public link shares via email
 
   @skip @yetToImplement
   Scenario: user shares a public link via email and sends a copy to self
-    Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
-    And the user reloads the current page of the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email       | foo@bar.co |
       | emailToSelf | true       |
@@ -40,8 +39,6 @@ Feature: Share public link shares via email
 
   @skip @yetToImplement
   Scenario: user shares a public link via email with multiple addresses
-    Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
-    And the user reloads the current page of the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email | foo@bar.co, foo@barr.co |
     Then the email address "foo@bar.co" should have received an email with the body containing
@@ -57,8 +54,6 @@ Feature: Share public link shares via email
 
   @skip @yetToImplement
   Scenario: user shares a public link via email with a personal message
-    Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
-    And the user reloads the current page of the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email           | foo@bar.co  |
       | personalMessage | lorem ipsum |
@@ -74,8 +69,6 @@ Feature: Share public link shares via email
 
   @skip @yetToImplement
   Scenario: user shares a public link via email adding few addresses before and then removing some addresses afterwards
-    Given the setting "shareapi_allow_public_notification" of app "core" has been set to "yes"
-    And the user reloads the current page of the webUI
     When the user opens the link share dialog for folder "simple-folder" using the webUI
     And the user opens the create public link share popup
     And the user adds the following email addresses using the webUI:
@@ -104,8 +97,6 @@ Feature: Share public link shares via email
 
   @skip @yetToImplement @issue-ocis-reva-41
   Scenario: user shares a public link via email with a personal message (duplicate)
-    Given parameter "shareapi_allow_public_notification" of app "core" has been set to "yes"
-    And the user has reloaded the current page of the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | email           | foo@bar.co  |
       | personalMessage | lorem ipsum |
