@@ -92,7 +92,7 @@ const plugins = [
       },
       {
         'http-equiv': 'x-ua-compatible',
-        content: 'IE=11'
+        content: 'IE=edge'
       }
     ],
     template: ({ attributes, files, meta, publicPath, title }) => {
