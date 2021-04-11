@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Avatar url without double slash: [#4610](https://github.com/owncloud/web/issues/4610)
+* Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
 * Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
 * Bugfix - Only one `<main>` tag per HTML document: [#1652](https://github.com/owncloud/web/issues/1652)
 * Bugfix - Parent paths traversal for shares: [#4860](https://github.com/owncloud/web/issues/4860)
@@ -33,6 +34,13 @@ Details
 
    https://github.com/owncloud/web/issues/4610
    https://github.com/owncloud/web/pull/4849
+
+* Bugfix - Improve web container: [#4942](https://github.com/owncloud/web/pull/4942)
+
+   The wrapping `index.html.ejs` had some minor problems with HTML validators which are now
+   fixed.
+
+   https://github.com/owncloud/web/pull/4942
 
 * Bugfix - Open mediaviewer for upper case file extensions: [#4647](https://github.com/owncloud/web/issues/4647)
 
