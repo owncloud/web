@@ -24,7 +24,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value               |
       | uid_owner   | Brian               |
       | share_with  | Alice               |
-      | file_target | /simple-folder  |
+      | file_target | /simple-folder      |
       | item_type   | folder              |
       | permissions | read, share, update |
 
@@ -39,7 +39,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value                       |
       | uid_owner   | Brian                       |
       | share_with  | Alice                       |
-      | file_target | /simple-folder          |
+      | file_target | /simple-folder              |
       | item_type   | folder                      |
       | permissions | read, share, create, delete |
 
@@ -54,7 +54,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value                |
       | uid_owner   | Brian                |
       | share_with  | Alice                |
-      | file_target | /simple-folder   |
+      | file_target | /simple-folder       |
       | item_type   | folder               |
       | permissions | read, update, delete |
 
@@ -69,7 +69,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value               |
       | uid_owner   | Brian               |
       | share_with  | Alice               |
-      | file_target | /simple-folder  |
+      | file_target | /simple-folder      |
       | item_type   | folder              |
       | permissions | read, create, share |
 
@@ -80,12 +80,12 @@ Feature: Sharing files and folders with internal users with different permission
     Then user "Alice Hansen" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
     And user "Alice" should have received a share with these details:
-      | field       | value              |
-      | uid_owner   | Brian              |
-      | share_with  | Alice              |
+      | field       | value          |
+      | uid_owner   | Brian          |
+      | share_with  | Alice          |
       | file_target | /simple-folder |
-      | item_type   | folder             |
-      | permissions | <permissions>      |
+      | item_type   | folder         |
+      | permissions | <permissions>  |
     Examples:
       | role                 | displayed-role       | extra-permissions             | displayed-permissions | permissions                         |
       | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
@@ -101,12 +101,12 @@ Feature: Sharing files and folders with internal users with different permission
     Then custom permissions "<set-permissions>" should be set for user "Alice Hansen" for file "lorem.txt" on the webUI
     When the user sets custom permission for current role of collaborator "Alice Hansen" for file "lorem.txt" to "share" using the webUI
     Then user "Alice" should have received a share with these details:
-      | field       | value          |
-      | uid_owner   | Brian          |
-      | share_with  | Alice          |
-      | file_target | /lorem.txt |
-      | item_type   | file           |
-      | permissions | <permissions>  |
+      | field       | value         |
+      | uid_owner   | Brian         |
+      | share_with  | Alice         |
+      | file_target | /lorem.txt    |
+      | item_type   | file          |
+      | permissions | <permissions> |
     Examples:
       | initial-permissions | permissions | set-permissions |
       | read, update        | read, share | update          |
@@ -119,12 +119,12 @@ Feature: Sharing files and folders with internal users with different permission
     When the user disables all the custom permissions of collaborator "Alice Hansen" for file "simple-folder" using the webUI
     Then no custom permissions should be set for collaborator "Alice Hansen" for file "simple-folder" on the webUI
     And user "Alice" should have received a share with these details:
-      | field       | value              |
-      | uid_owner   | Brian              |
-      | share_with  | Alice              |
+      | field       | value          |
+      | uid_owner   | Brian          |
+      | share_with  | Alice          |
       | file_target | /simple-folder |
-      | item_type   | folder             |
-      | permissions | read               |
+      | item_type   | folder         |
+      | permissions | read           |
 
 
   Scenario Outline: share a file with another internal user assigning a role and the permissions
@@ -133,12 +133,12 @@ Feature: Sharing files and folders with internal users with different permission
     Then user "Alice Hansen" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Alice Hansen" for file "lorem.txt" on the webUI
     And user "Alice" should have received a share with these details:
-      | field       | value          |
-      | uid_owner   | Brian          |
-      | share_with  | Alice          |
-      | file_target | /lorem.txt |
-      | item_type   | file           |
-      | permissions | <permissions>  |
+      | field       | value         |
+      | uid_owner   | Brian         |
+      | share_with  | Alice         |
+      | file_target | /lorem.txt    |
+      | item_type   | file          |
+      | permissions | <permissions> |
     Examples:
       | role                 | displayed-role | collaborators-permissions | displayed-permissions | permissions         |
       | Viewer               | Viewer         | ,                         | ,                     | read, share         |
@@ -165,7 +165,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Carol                |
-      | file_target | /simple-folder   |
+      | file_target | /simple-folder       |
       | item_type   | folder               |
       | permissions | delete, read, update |
 
@@ -199,9 +199,9 @@ Feature: Sharing files and folders with internal users with different permission
     When the user browses to the folder "simple-folder" on the files page
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete, create, update" using the webUI
     Then user "Carol" should have received a share with these details:
-      | field       | value                    |
-      | uid_owner   | Alice                    |
-      | share_with  | Carol                    |
+      | field       | value                |
+      | uid_owner   | Alice                |
+      | share_with  | Carol                |
       | file_target | /simple-empty-folder |
-      | item_type   | folder                   |
-      | permissions | all                      |
+      | item_type   | folder               |
+      | permissions | all                  |

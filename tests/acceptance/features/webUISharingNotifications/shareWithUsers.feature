@@ -12,10 +12,10 @@ Feature: Sharing files and folders with internal users
       | username |
       | Alice    |
       | Brian    |
-    Given user "Alice" has created folder "simple-folder"
-    Given user "Alice" has created folder "simple-empty-folder"
-    Given user "Alice" has uploaded file "data.zip" to "data.zip"
-    Given user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
   @smokeTest
   Scenario: notifications about new share is displayed when auto-accepting is disabled

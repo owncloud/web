@@ -41,14 +41,14 @@ Feature: Sharing folders with internal groups with different roles and permissio
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | grp2                 |
-      | file_target | /simple-folder   |
+      | file_target | /simple-folder       |
       | item_type   | folder               |
       | permissions | <actual-permissions> |
     And user "Carol" should have received a share with these details:
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Carol                |
-      | file_target | /simple-folder   |
+      | file_target | /simple-folder       |
       | item_type   | folder               |
       | permissions | <actual-permissions> |
     But group "grp1" should not be listed in the collaborators list on the webUI

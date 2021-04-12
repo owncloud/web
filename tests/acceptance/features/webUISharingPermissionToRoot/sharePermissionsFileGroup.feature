@@ -40,14 +40,14 @@ Feature: Sharing files with internal groups with permissions
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | grp2                 |
-      | file_target | /lorem.txt       |
+      | file_target | /lorem.txt           |
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     And user "Carol" should have received a share with these details:
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Carol                |
-      | file_target | /lorem.txt       |
+      | file_target | /lorem.txt           |
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     But group "grp1" should not be listed in the collaborators list on the webUI

@@ -24,9 +24,9 @@ Feature: Sharing files with multiple internal users with different permissions
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
       | collaborator | type |
       | Regular User | user |
-      | Brian Murphy     | user |
+      | Brian Murphy | user |
       | Carol King   | user |
-      | David Lopez    | user |
+      | David Lopez  | user |
     And the user removes "David Lopez" as a collaborator from the share
     And the user removes "Regular User" as a collaborator from the share
     And the user shares with the selected collaborators
@@ -38,14 +38,14 @@ Feature: Sharing files with multiple internal users with different permissions
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Brian                |
-      | file_target | /lorem.txt       |
+      | file_target | /lorem.txt           |
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     And user "Carol" should have received a share with these details:
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Carol                |
-      | file_target | /lorem.txt       |
+      | file_target | /lorem.txt           |
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     But user "Regular User" should not be listed in the collaborators list on the webUI

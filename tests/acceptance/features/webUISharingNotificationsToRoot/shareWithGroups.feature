@@ -17,9 +17,9 @@ Feature: Sharing files and folders with internal groups
     And user "Alice" has been added to group "grp1"
     And user "Brian" has been added to group "grp1"
     And user "Brian" has logged in using the webUI
-    Given user "Carol" has created folder "simple-folder"
-    Given user "Carol" has uploaded file "data.zip" to "data.zip"
-    Given user "Carol" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Carol" has created folder "simple-folder"
+    And user "Carol" has uploaded file "data.zip" to "data.zip"
+    And user "Carol" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
   Scenario: notifications about new share is displayed
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
