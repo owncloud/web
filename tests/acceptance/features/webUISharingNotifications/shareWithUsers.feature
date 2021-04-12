@@ -8,10 +8,14 @@ Feature: Sharing files and folders with internal users
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
     And app "notifications" has been enabled
-    And these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
+    Given user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    Given user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
   @smokeTest
   Scenario: notifications about new share is displayed when auto-accepting is disabled
@@ -52,8 +56,8 @@ Feature: Sharing files and folders with internal users
     When user "Brian" logs in using the webUI
     And the user declines all shares displayed in the notifications on the webUI
     Then folder "Shares" should not be listed on the webUI
-    And folder "simple-folder (2)" should not be listed on the webUI
-    And folder "simple-empty-folder (2)" should not be listed on the webUI
+    And folder "simple-folder" should not be listed on the webUI
+    And folder "simple-empty-folder" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-empty-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI

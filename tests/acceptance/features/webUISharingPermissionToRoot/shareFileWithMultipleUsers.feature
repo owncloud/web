@@ -5,14 +5,15 @@ Feature: Sharing files with multiple internal users with different permissions
   So that I can control the access on those files by other collaborators
 
   Background:
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
 
 
   Scenario Outline: share a file with multiple users with different roles and permissions
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | user0    |
       | Carol    |
@@ -37,20 +38,20 @@ Feature: Sharing files with multiple internal users with different permissions
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Brian                |
-      | file_target | /lorem (2).txt       |
+      | file_target | /lorem.txt       |
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     And user "Carol" should have received a share with these details:
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Carol                |
-      | file_target | /lorem (2).txt       |
+      | file_target | /lorem.txt       |
       | item_type   | file                 |
       | permissions | <actual-permissions> |
     But user "Regular User" should not be listed in the collaborators list on the webUI
-    And as "user0" file "lorem (2).txt" should not exist
+    And as "user0" file "lorem.txt" should not exist
     And user "David Lopez" should not be listed in the collaborators list on the webUI
-    And as "David" file "lorem(2).txt" should not exist
+    And as "David" file "lorem.txt" should not exist
     Examples:
       | role                 | displayed-role | extra-permissions | displayed-permissions | actual-permissions  |
       # | Viewer               | Viewer         | share             | share                 | read, share         |

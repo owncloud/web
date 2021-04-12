@@ -6,10 +6,14 @@ Feature: Sharing files and folders with internal users
 
   Background:
     Given app "notifications" has been enabled
-    And these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
+    Given user "Alice" has created folder "simple-folder"
+    Given user "Alice" has created folder "simple-empty-folder"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    Given user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
   @smokeTest
   Scenario: notifications about new share is displayed when auto-accepting is disabled
@@ -39,11 +43,12 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has shared folder "simple-empty-folder" with user "Brian"
     When user "Brian" logs in using the webUI
     And the user accepts all shares displayed in the notifications on the webUI
-    Then folder "simple-folder (2)" should be listed on the webUI
-    And folder "simple-empty-folder (2)" should be listed on the webUI
+    And the user reloads the current page of the webUI
+    Then folder "simple-folder" should be listed on the webUI
+    And folder "simple-empty-folder" should be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
-    Then folder "simple-folder (2)" shared by "Alice Hansen" should be in "Accepted" state on the webUI
-    And folder "simple-empty-folder (2)" shared by "Alice Hansen" should be in "Accepted" state on the webUI
+    Then folder "simple-folder" shared by "Alice Hansen" should be in "Accepted" state on the webUI
+    And folder "simple-empty-folder" shared by "Alice Hansen" should be in "Accepted" state on the webUI
 
   @smokeTest
   Scenario: reject an offered share
@@ -52,8 +57,8 @@ Feature: Sharing files and folders with internal users
     And user "Alice" has shared folder "simple-empty-folder" with user "Brian"
     When user "Brian" logs in using the webUI
     And the user declines all shares displayed in the notifications on the webUI
-    Then folder "simple-folder (2)" should not be listed on the webUI
-    And folder "simple-empty-folder (2)" should not be listed on the webUI
+    Then folder "simple-folder" should not be listed on the webUI
+    And folder "simple-empty-folder" should not be listed on the webUI
     When the user browses to the shared-with-me page using the webUI
     Then folder "simple-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI
     And folder "simple-empty-folder" shared by "Alice Hansen" should be in "Declined" state on the webUI

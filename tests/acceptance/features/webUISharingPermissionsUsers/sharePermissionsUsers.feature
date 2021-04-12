@@ -7,10 +7,16 @@ Feature: Sharing files and folders with internal users with different permission
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
+    Given user "Brian" has created folder "simple-folder"
+    Given user "Brian" has created folder "simple-empty-folder"
+    Given user "Brian" has created folder "simple-folder/simple-empty-folder"
+    Given user "Brian" has uploaded file "data.zip" to "data.zip"
+    Given user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
+    Given user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
   @issue-ocis-1743
   Scenario: Change permissions of the previously shared folder to read, share

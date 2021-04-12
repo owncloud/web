@@ -5,7 +5,7 @@ Feature: Sharing folders with internal groups with role as advanced permissions
   So that I can control the access on those folders by other users on the group
 
   Background:
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
@@ -15,6 +15,8 @@ Feature: Sharing folders with internal groups with role as advanced permissions
       | grp1      |
     And user "Alice" has been added to group "grp1"
     And user "Brian" has been added to group "grp1"
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
   @issue-1837
   Scenario Outline: share a folder with multiple users with role as advanced permissions and different extra permissions
