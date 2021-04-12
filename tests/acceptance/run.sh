@@ -27,6 +27,9 @@ declare -a UNEXPECTED_PASSED_SCENARIOS
 UNEXPECTED_NIGHTWATCH_CRASH=false
 FINAL_EXIT_STATUS=0
 
+echo "waiting for backend server to start"
+timeout 60 bash -c 'while [[ "$(curl --insecure -s -o /dev/null -w ''%{http_code}'' ${BACKEND_HOST})" != "200" ]]; do printf "."; sleep 5; done'
+
 yarn test:acceptance:drone | tee -a 'logfile.txt'
 ACCEPTANCE_TESTS_EXIT_STATUS=${PIPESTATUS[0]}
 if [ "${ACCEPTANCE_TESTS_EXIT_STATUS}" -ne 0 ]; then
