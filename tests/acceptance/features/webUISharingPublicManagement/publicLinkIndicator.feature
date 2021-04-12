@@ -109,7 +109,7 @@ Feature: Public link share indicator
   @issue-2939 @issue-ocis-reva-243
   Scenario: sharing indicator for link shares stays up to date
     Given user "Brian" has been created with default attributes and without skeleton files
-    And user "Alice" has uploaded file "testavatar.png" to "simple-folder/testavatar.png"
+    And user "Alice" has uploaded file "testavatar.png" to "simple-folder/testimage.png"
     When user "Alice" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
@@ -126,19 +126,19 @@ Feature: Public link share indicator
     When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators          |
-      | testavatar.png | user-indirect,link-indirect |
-    When the user creates a new public link for resource "testavatar.png" using the webUI with
+      | testimage.png | user-indirect,link-indirect |
+    When the user creates a new public link for resource "testimage.png" using the webUI with
       | field | value |
       | name  | third |
     # the indicator changes from link-indirect to link-direct to show the direct share
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators        |
-      | testavatar.png | user-indirect,link-direct |
+      | testimage.png | user-indirect,link-direct |
     # removing the last link reverts the indicator to user-indirect
-    When the user removes the public link named "third" of resource "testavatar.png" using the webUI
+    When the user removes the public link named "third" of resource "testimage.png" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators          |
-      | testavatar.png | user-indirect,link-indirect |
+      | testimage.png | user-indirect,link-indirect |
     When the user opens folder "" directly on the webUI
     And the user removes the public link named "second" of resource "simple-folder" using the webUI
     # because there is still another link share left, the indicator stays
