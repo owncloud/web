@@ -7,11 +7,12 @@ Feature: Resharing shared files with different permissions
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
       | Carol    |
+    And user "Brian" has created folder "simple-folder"
 
   @issue-ocis-1743
   Scenario: Reshare a folder without share permissions using API and check if it is listed on the collaborators list for original owner
