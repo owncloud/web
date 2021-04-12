@@ -1,10 +1,15 @@
 #!/bin/bash
-url=https://cache.owncloud.com/owncloud/web/ocis-build/$OCIS_COMMITID/ocis;
+source .drone.env;
+echo "checking ocis version - $OCIS_COMMITID in cache";
+
+url="https://cache.owncloud.com/owncloud/web/ocis-build/$OCIS_COMMITID/ocis";
+
+echo "downloading ocis from $url";
 
 if curl --output /dev/null --silent --head --fail "$url"; then
+  echo "ocis binary for $OCIS_COMMITID already available in cache";
   exit 0;
 else
-  source .drone.env;
   mkdir -p $GOPATH/src/github.com/owncloud/;
   cd $GOPATH/src/github.com/owncloud/;
   git clone -b $OCIS_BRANCH --single-branch --no-tags https://github.com/owncloud/ocis;
