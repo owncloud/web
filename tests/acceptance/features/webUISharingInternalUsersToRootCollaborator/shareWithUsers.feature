@@ -116,14 +116,3 @@ Feature: Shares collaborator list
       | file_target | /simple-folder (2) |
       | item_type   | folder             |
       | permissions | read,share         |
-
-  @issue-2898
-  Scenario: see resource owner of parent shares in collaborators list
-    Given user "Carol" has been created with default attributes
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder (2)" with user "Carol"
-    And user "Carol" has logged in using the webUI
-    And the user opens folder "simple-folder (2)" using the webUI
-    When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" via "simple-folder (2)" in the collaborators list on the webUI
-    And the current collaborators list should have order "Alice Hansen,Carol King"
