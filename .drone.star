@@ -242,7 +242,7 @@ config = {
 					'webUITags',
 					'webUIWebdavLockProtection',
 					'webUIWebdavLocks',
-					],
+				],
 				'iPhone2': [
 					'webUIMoveFilesFolders',
 					'webUIResharing1',
@@ -272,6 +272,7 @@ config = {
 					'webUISharingInternalUsersToRootSharingIndicator',
 					'webUISharingInternalUsersExpireToRoot',
 					'webUISharingInternalUsersToRoot',
+					'webUISharingInternalUsersToRootBlacklisted',
 					'webUISharingPermissionsUsers',
 					'webUISharingPermissionToRoot',
 					'webUISharingPublicBasic',

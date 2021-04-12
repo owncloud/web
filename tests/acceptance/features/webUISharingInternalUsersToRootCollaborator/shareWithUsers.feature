@@ -5,24 +5,25 @@ Feature: Shares collaborator list
   So that I can know the collaborators of a shared resource
 
   Background:
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
+    And user "Alice" has created folder "simple-folder"
 
   Scenario Outline: change the collaborators of a file & folder
-    Given user "Brian" has logged in using the webUI
-    And user "Brian" has shared folder "/simple-folder" with user "Alice" with "<initial-permissions>" permissions
-    When the user changes the collaborator role of "Alice Hansen" for folder "simple-folder" to "<set-role>" using the webUI
+    Given user "Alice" has logged in using the webUI
+    And user "Alice" has shared folder "/simple-folder" with user "Brian" with "<initial-permissions>" permissions
+    When the user changes the collaborator role of "Brian Murphy" for folder "simple-folder" to "<set-role>" using the webUI
     # check role without reloading the collaborators panel, see issue #1786
-    Then user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list on the webUI
+    Then user "Brian Murphy" should be listed as "<expected-role>" in the collaborators list on the webUI
     # check role after reopening the collaborators panel
-    And user "Alice Hansen" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
-    And user "Alice" should have received a share with these details:
+    And user "Brian Murphy" should be listed as "<expected-role>" in the collaborators list for folder "simple-folder" on the webUI
+    And user "Brian" should have received a share with these details:
       | field       | value                  |
-      | uid_owner   | Brian                  |
-      | share_with  | Alice                  |
-      | file_target | /simple-folder (2)     |
+      | uid_owner   | Alice                  |
+      | share_with  | Brian                  |
+      | file_target | /simple-folder         |
       | item_type   | folder                 |
       | permissions | <expected-permissions> |
     Examples:
@@ -36,28 +37,29 @@ Feature: Shares collaborator list
   Scenario: see resource owner in collaborators list for direct shares
     Given user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has logged in using the webUI
-    When the user opens the share dialog for folder "simple-folder (2)" using the webUI
+    When the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Alice Hansen" should be listed as "Owner" in the collaborators list on the webUI
 
   @issue-2898
   Scenario: see resource owner in collaborators list for reshares
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder (2)" with user "Carol"
+    And user "Brian" has shared folder "simple-folder" with user "Carol"
     And user "Carol" has logged in using the webUI
-    When the user opens the share dialog for folder "simple-folder (2)" using the webUI
+    When the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" in the collaborators list on the webUI
     And the current collaborators list should have order "Alice Hansen,Carol King"
 
   @issue-2898
   Scenario: see resource owner of parent shares in collaborators list
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder (2)" with user "Carol"
+    And user "Brian" has shared folder "simple-folder" with user "Carol"
     And user "Carol" has logged in using the webUI
-    And the user opens folder "simple-folder (2)" using the webUI
+    And the user opens folder "simple-folder" using the webUI
     When the user opens the share dialog for folder "simple-empty-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" via "simple-folder (2)" in the collaborators list on the webUI
+    Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy" via "simple-folder" in the collaborators list on the webUI
     And the current collaborators list should have order "Alice Hansen,Carol King"
 
 
@@ -91,7 +93,7 @@ Feature: Shares collaborator list
   Scenario: collaborators list contains the current user when they are a receiver of the resource
     Given user "Alice" has shared folder "simple-folder" with user "Brian"
     When user "Brian" has logged in using the webUI
-    And the user opens the share dialog for folder "simple-folder (2)" using the webUI
+    And the user opens the share dialog for folder "simple-folder" using the webUI
     Then user "Brian Murphy" should be listed with additional info "(me)" in the collaborators list on the webUI
 
 
@@ -101,18 +103,18 @@ Feature: Shares collaborator list
     And user "Alice" has shared folder "simple-folder" with user "Brian" with "read" permission
     And user "Alice" has shared folder "simple-folder" with group "grp1" with "read,update,create,delete" permissions
     When user "Brian" has logged in using the webUI
-    Then user "Brian Murphy" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder (2)" on the webUI
+    Then user "Brian Murphy" should be listed as "Advanced permissions" in the collaborators list for folder "simple-folder" on the webUI
 
 
   Scenario: share a file with another internal user via collaborators quick action
-    Given user "Alice" has logged in using the webUI
-    And the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+    Given the setting "shareapi_auto_accept_share" of app "core" has been set to "yes"
+    And user "Alice" has logged in using the webUI
     When the user shares resource "simple-folder" with user "Brian Murphy" using the quick action in the webUI
     Then user "Brian Murphy" should be listed as "Viewer" in the collaborators list for folder "simple-folder" on the webUI
     And user "Brian" should have received a share with these details:
       | field       | value              |
       | uid_owner   | Alice              |
       | share_with  | Brian              |
-      | file_target | /simple-folder (2) |
+      | file_target | /simple-folder     |
       | item_type   | folder             |
       | permissions | read,share         |
