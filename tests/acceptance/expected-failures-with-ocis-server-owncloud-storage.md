@@ -30,7 +30,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIAccount/accountInformation.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIAccount/accountInformation.feature#L20)
 
 ### [REPORT request not implemented](https://github.com/owncloud/ocis/issues/1330)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:249](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L249)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:291](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L291)
 -   [webUIFavorites/favoritesFile.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L14)
 -   [webUIFavorites/favoritesFile.feature:27](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L27)
 -   [webUIFavorites/favoritesFile.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFavorites/favoritesFile.feature#L40)
@@ -51,7 +51,8 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIFilesDetails/fileDetails.feature:46](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L46)
 
 ### [Sharing seems to work but does not work](https://github.com/owncloud/ocis/issues/1303)
--   [webUIDeleteFilesFolders/deleteFilesFolders.feature:198](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L198)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:77](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L77)
+-   [webUIDeleteFilesFolders/deleteFilesFolders.feature:231](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIDeleteFilesFolders/deleteFilesFolders.feature#L231)
 -   [webUIFilesDetails/fileDetails.feature:88](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L88)
 -   [webUIFilesDetails/fileDetails.feature:103](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesDetails/fileDetails.feature#L103)
 -   [webUIFilesActionMenu/versions.feature:33](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature#L33)

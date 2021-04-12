@@ -4,13 +4,19 @@ Feature: deleting files and folders
   So that I can keep my filing system clean and tidy
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
   @smokeTest @ocisSmokeTest @disablePreviews
   Scenario: Delete files & folders one by one and check its existence after page reload
-    Given user "Alice" has created file "sample,1.txt"
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created file "lorem-big.txt"
+    And user "Alice" has created folder "strängé नेपाली folder"
+    And user "Alice" has created file "strängé filename (duplicate #2 &).txt"
+    And user "Alice" has created file "sample,1.txt"
     And user "Alice" has created folder "Sample,Folder,With,Comma"
     And the user has reloaded the current page of the webUI
     When the user deletes the following elements using the webUI
@@ -51,6 +57,10 @@ Feature: deleting files and folders
 
   @smokeTest @issue-4582 @disablePreviews
   Scenario: Delete multiple files at once
+    Given user "Alice" has created file "data.zip"
+    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created folder "simple-folder"
+    And the user has reloaded the current page of the webUI
     When the user batch deletes these files using the webUI
       | name          |
       | data.zip      |
@@ -73,6 +83,10 @@ Feature: deleting files and folders
 
   @ocis-reva-issue-106 @ocis-reve-issue-442 @skipOnOC10 @issue-4582
   Scenario: Delete all except for a few files at once
+    Given user "Alice" has created file "data.zip"
+    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created folder "simple-folder"
+    And the user has reloaded the current page of the webUI
     When the user marks all files for batch action using the webUI
     And the user unmarks these files for batch action using the webUI
       | name          |
@@ -102,6 +116,8 @@ Feature: deleting files and folders
 
 
   Scenario: Delete the last file in a folder
+    Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt"
+    And the user has reloaded the current page of the webUI
     When the user deletes file "zzzz-must-be-last-file-in-folder.txt" using the webUI
     Then as "Alice" file "zzzz-must-be-last-file-in-folder.txt" should not exist
     And file "zzzz-must-be-last-file-in-folder.txt" should not be listed on the webUI
@@ -109,7 +125,9 @@ Feature: deleting files and folders
 
   @skip @yetToImplement @public_link_share-feature-required
   Scenario: delete files from shared by link page
-    Given the user has created a new public link for file "lorem.txt" using the webUI
+    Given user "Alice" has created file "lorem.txt"
+    And the user has reloaded the current page of the webUI
+    And the user has created a new public link for file "lorem.txt" using the webUI
     And the user has browsed to the shared-by-link page
     Then file "lorem.txt" should be listed on the webUI
     When the user deletes file "lorem.txt" using the webUI
@@ -120,7 +138,9 @@ Feature: deleting files and folders
 
   @skip @yetToImplement @systemtags-app-required
   Scenario: delete files from tags page
-    Given user "Alice" has created a "normal" tag with name "lorem"
+    Given user "Alice" has created file "lorem.txt"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has created a "normal" tag with name "lorem"
     And user "Alice" has added tag "lorem" to file "/lorem.txt"
     When the user browses to the tags page
     And the user searches for tag "lorem" using the webUI
@@ -133,7 +153,12 @@ Feature: deleting files and folders
 
   @ocis-reva-issue-64
   Scenario: delete a file on a public share
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created folder "simple-folder/strängé filename (duplicate #2 &).txt"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user deletes the following elements using the webUI
       | name                                  |
@@ -149,7 +174,10 @@ Feature: deleting files and folders
 
   @ocis-reva-issue-64
   Scenario: delete a file on a public share with problematic characters
-    Given user "Alice" has renamed the following file
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has created folder "simple-folder"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has renamed the following file
       | from-name-parts | to-name-parts   |
       | lorem.txt       | simple-folder/  |
       |                 | 'single'        |
@@ -181,7 +209,12 @@ Feature: deleting files and folders
 
   @skip @yetToImplement @issue-4582
   Scenario: Delete multiple files at once on a public share
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "simple-folder/data.zip"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has created file "simple-folder/simple-empty-folder"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user batch deletes these files using the webUI
       | name                |
@@ -196,19 +229,24 @@ Feature: deleting files and folders
 
   @ocis-reva-issue-64
   Scenario: Delete a file and folder from shared with me page
-    Given user "Brian" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created file "lorem.txt"
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And the user has browsed to the shared-with-me page
-    When the user deletes folder "simple-folder (2)" using the webUI
-    And the user deletes file "lorem (2).txt" using the webUI
-    Then as "Alice" folder "simple-folder (2)" should not exist
-    And as "Alice" file "lorem (2).txt" should not exist
+    When the user deletes folder "simple-folder" using the webUI
+    And the user deletes file "lorem.txt" using the webUI
+    Then as "Alice" folder "simple-folder" should not exist
+    And as "Alice" file "lorem.txt" should not exist
     And no message should be displayed on the webUI
 
   @ocis-reva-issue-64
   Scenario: Delete a file and folder in shared with others page
-    Given user "Brian" has been created with default attributes
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "lorem.txt"
+    And the user has reloaded the current page of the webUI
+    And user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     When the user browses to the shared-with-others page
@@ -228,7 +266,11 @@ Feature: deleting files and folders
 
   @ocis-reva-issue-64
   Scenario: Delete multiple files at once from shared with others page
-    Given user "Brian" has been created with default attributes
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has created file "data.zip"
+    And the user has reloaded the current page of the webUI
+    And user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Alice" has shared file "data.zip" with user "Brian"
@@ -247,7 +289,10 @@ Feature: deleting files and folders
 
   @ocis-reva-issue-39
   Scenario: Try to delete file and folder from favorites page
-    Given user "Alice" has favorited element "simple-folder"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "lorem.txt"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has favorited element "simple-folder"
     And user "Alice" has favorited element "lorem.txt"
     When the user browses to the favorites page
     And the user deletes file "lorem.txt" using the webUI
@@ -257,7 +302,9 @@ Feature: deleting files and folders
 
 
   Scenario: Try to delete file and folder that used to exist but does not anymore
-    Given the user has browsed to the files page
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "lorem.txt"
+    And the user has browsed to the files page
     And the following files have been deleted by user "Alice"
       | name          |
       | lorem.txt     |

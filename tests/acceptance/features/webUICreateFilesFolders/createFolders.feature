@@ -4,7 +4,7 @@ Feature: create folders
   So that I can organise my data structure
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
@@ -30,6 +30,8 @@ Feature: create folders
 
 
   Scenario: Try to create a folder with existing name
+    Given user "Alice" has created folder "simple-folder"
+    And the user has reloaded the current page of the webUI
     When the user creates a folder with the invalid name "simple-folder" using the webUI
     Then the error message 'simple-folder already exists' should be displayed on the webUI dialog prompt
 
@@ -53,7 +55,9 @@ Feature: create folders
 
   @skip @yetToImplement
   Scenario: Create a folder in a public share
-    Given the user has created a new public link for folder "simple-empty-folder" using the webUI with
+    Given user "Alice" has created folder "simple-empty-folder"
+    And the user has reloaded the current page of the webUI
+    And the user has created a new public link for folder "simple-empty-folder" using the webUI with
       | permission | read-write |
     And the public accesses the last created public link using the webUI
     When the user creates a folder with the name "top-folder" using the webUI

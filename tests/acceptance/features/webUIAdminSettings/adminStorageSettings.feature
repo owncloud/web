@@ -18,7 +18,7 @@ Feature: admin storage settings
 
   @skip @yetToImplement
   Scenario: administrator creates a local storage mount
-    Given user "user0" has been created with default attributes
+    Given user "user0" has been created with default attributes and without skeleton files
     And the administrator has browsed to the admin storage settings page
     And the administrator has enabled the external storage
     When the administrator creates the local storage mount "local_storage1" using the webUI
@@ -27,7 +27,7 @@ Feature: admin storage settings
 
   @skip @yetToImplement
   Scenario: administrator assigns an applicable user to a local storage mount
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | user0    |
       | Alice    |
@@ -46,7 +46,7 @@ Feature: admin storage settings
 
   @skip @yetToImplement
   Scenario: user should get access if the user is removed from the applicable user and the user was the only applicable user
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | user0    |
       | Alice    |
@@ -62,7 +62,7 @@ Feature: admin storage settings
 
   @skip @yetToImplement
   Scenario: administrator should be able to create a local mount for a specific group
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | user0    |
       | Alice    |
@@ -79,7 +79,7 @@ Feature: admin storage settings
 
   @skip @yetToImplement
   Scenario: removing group from applicable group of a local mount
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | user0    |
       | Alice    |
@@ -97,7 +97,7 @@ Feature: admin storage settings
 
   @skip @yetToImplement
   Scenario: administrator deletes local storage mount
-    Given user "user0" has been created with default attributes
+    Given user "user0" has been created with default attributes and without skeleton files
     And the administrator has browsed to the admin storage settings page
     And the administrator has enabled the external storage
     And the administrator has created the local storage mount "local_storage1" from the admin storage settings page
@@ -107,7 +107,7 @@ Feature: admin storage settings
 
   @skip @yetToImplement
   Scenario: local storage mount is deleted when the last user applicable to it is deleted
-    Given user "user0" has been created with default attributes
+    Given user "user0" has been created with default attributes and without skeleton files
     And the administrator has browsed to the admin storage settings page
     And the administrator has enabled the external storage
     And the administrator has created the local storage mount "local_storage1" from the admin storage settings page
@@ -118,7 +118,7 @@ Feature: admin storage settings
 
   @skip @yetToImplement
   Scenario: local storage mount is not deleted when the last group applicable to it is deleted but the member of the deleted group should not have access to it
-    Given user "user0" has been created with default attributes
+    Given user "user0" has been created with default attributes and without skeleton files
     And group "newgroup" has been created
     And user "user0" has been added to group "newgroup"
     And the administrator has browsed to the admin storage settings page
@@ -133,7 +133,7 @@ Feature: admin storage settings
 
   @skip @yetToImplement
   Scenario: local storage mount is not deleted when the one of two users applicable to the mount is deleted
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | user0    |
       | Alice    |
