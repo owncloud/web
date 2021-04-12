@@ -137,7 +137,7 @@ Feature: Resharing shared files with different permissions
 
   Scenario: share a file without share permissions and check if another user can reshare
     Given user "Brian" has created file "lorem.txt"
-    And user "Brian" has shared folder "lorem.txt" with user "Alice" with "read" permissions
+    And user "Brian" has shared file "lorem.txt" with user "Alice" with "read" permissions
     When user "Alice" logs in using the webUI
     Then the user should not be able to share resource "lorem.txt" using the webUI
 
@@ -151,8 +151,8 @@ Feature: Resharing shared files with different permissions
 
   Scenario: share a received file without share permissions and check if another user can reshare
     Given user "Brian" has created file "lorem.txt"
-    And user "Brian" has shared folder "lorem.txt" with user "Alice" with "all" permissions
-    And user "Alice" has shared folder "lorem.txt" with user "Carol" with "read" permissions
+    And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
+    And user "Alice" has shared file "lorem.txt" with user "Carol" with "read" permissions
     When user "Carol" logs in using the webUI
     Then the user should not be able to share resource "lorem.txt" using the webUI
 

@@ -114,7 +114,7 @@ Feature: Resharing shared files with different permissions
   @issue-product-270
   Scenario: share a file without share permissions and check if another user can reshare
     Given user "Brian" has created file "lorem.txt"
-    And user "Brian" has shared folder "lorem.txt" with user "Alice" with "read" permissions
+    And user "Brian" has shared file "lorem.txt" with user "Alice" with "read" permissions
     And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
     When user "Alice" logs in using the webUI
     And the user opens folder "Shares" using the webUI
@@ -131,9 +131,9 @@ Feature: Resharing shared files with different permissions
     Then the user should not be able to share resource "simple-folder" using the webUI
 
   @issue-product-270
-  Scenario Outline: share a received file without share permissions and check if another user can reshare
+  Scenario: share a received file without share permissions and check if another user can reshare
     Given user "Brian" has created file "lorem.txt"
-    And user "Brian" has shared folder "lorem.txt" with user "Alice" with "all" permissions
+    And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
     And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/lorem.txt" with user "Carol" with "read" permissions
     And user "Carol" has accepted the share "lorem.txt" offered by user "Alice"
