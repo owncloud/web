@@ -62,7 +62,10 @@ config = {
 					'webUIFilesSearch'
 				],
 				'webUIMoveFilesFolders': 'Move',
-				'webUIResharing': 'Resharing',
+				'webUIResharing': [
+					'webUIResharing1',
+					'webUIResharing2'
+				],
 				'webUIResharingToRoot': 'ResharingToRoot',
 				'webUIRestrictSharing': 'RestrictSharing',
 				'webUISharingAutocompletion': 'SharingAutocompletion',
@@ -160,7 +163,8 @@ config = {
 				],
 				'XGAPortrait2': [
 					'webUIMoveFilesFolders',
-					'webUIResharing',
+					'webUIResharing1',
+					'webUIResharing2',
 					'webUIResharingToRoot',
 					'webUISharingAutocompletion',
 					'webUISharingFilePermissionMultipleUsers',
@@ -241,7 +245,8 @@ config = {
 					],
 				'iPhone2': [
 					'webUIMoveFilesFolders',
-					'webUIResharing',
+					'webUIResharing1',
+					'webUIResharing2',
 					'webUIResharingToRoot',
 					'webUISharingAutocompletion',
 					'webUISharingFilePermissionMultipleUsers',
@@ -360,7 +365,13 @@ config = {
 				'webUISharingFolderPermissionsGroups': 'OCISSharingFolderPermissionsGroups',
 				'webUISharingFolderAdvancedPermissionsGroups': 'OCISSharingFolderAdvPermissionsGrp',
 				'webUISharingPermissionToRoot': 'OCISSharingPermissionToRoot',
-				'webUIResharing': 'OCISResharing', # for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
+				# for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
+				'OCISResharing1': [
+					'webUIResharing1'
+				],
+				'OCISResharing2': [
+					'webUIResharing2'
+				],
 				'webUIResharingToRoot': 'OCISResharingToRoot',
 				'webUISharingPublicBasic': 'OCISSharingPublicBasic',
 				'webUISharingPublicManagement': 'OCISSharingPublicManagement',
