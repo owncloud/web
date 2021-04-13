@@ -84,6 +84,7 @@ export async function getConfigs() {
 
 export async function cacheConfigs(server) {
   config[server] = await getConfigs()
+  console.log(JSON.stringify(config))
   return config
 }
 
