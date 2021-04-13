@@ -1819,20 +1819,21 @@ def uploadScreenshots():
 		'image': 'plugins/s3',
 		'pull': 'if-not-exists',
 		'settings': {
-			'acl': 'public-read',
-			'bucket': 'phoenix',
-			'endpoint': 'https://minio.owncloud.com/',
+			'bucket': 'owncloud',
+			'endpoint': {
+				'from_secret': 'cache_s3_endpoint',
+			},
 			'path_style': True,
 			'source': '/var/www/owncloud/web/tests/reports/screenshots/**/*',
 			'strip_prefix': '/var/www/owncloud/web/tests/reports/screenshots',
-			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
+			'target': '/web/screenshots/${DRONE_BUILD_NUMBER}',
 		},
 		'environment': {
 			'AWS_ACCESS_KEY_ID': {
-				'from_secret': 'aws_access_key_id'
+				'from_secret': 'cache_s3_access_key'
 			},
 			'AWS_SECRET_ACCESS_KEY': {
-				'from_secret': 'aws_secret_access_key'
+				'from_secret': 'cache_s3_secret_key'
 			},
 		},
 		'when': {
@@ -1866,19 +1867,22 @@ def uploadVisualDiff():
 		'image': 'plugins/s3',
 		'pull': 'if-not-exists',
 		'settings': {
-			'acl': 'public-read',
-			'bucket': 'phoenix',
-			'endpoint': 'https://minio.owncloud.com/',
+			'bucket': 'owncloud',
+			'endpoint': {
+				'from_secret': 'cache_s3_endpoint',
+			},
 			'path_style': True,
 			'source': '/var/www/owncloud/web/tests/vrt/diff/**/*',
 			'strip_prefix': '/var/www/owncloud/web/tests/vrt',
-			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
-			'access_key': {
-				'from_secret': 'AWS_ACCESS_KEY_ID'
+			'target': '/web/screenshots/${DRONE_BUILD_NUMBER}',
+		},
+		'environment': {
+			'AWS_ACCESS_KEY_ID': {
+				'from_secret': 'cache_s3_access_key'
 			},
-			'secret_key': {
-				'from_secret': 'AWS_SECRET_ACCESS_KEY'
-			}
+			'AWS_SECRET_ACCESS_KEY': {
+				'from_secret': 'cache_s3_secret_key'
+			},
 		},
 		'when': {
 			'status': [
@@ -1896,19 +1900,22 @@ def uploadVisualScreenShots():
 		'image': 'plugins/s3',
 		'pull': 'if-not-exists',
 		'settings': {
-			'acl': 'public-read',
-			'bucket': 'phoenix',
-			'endpoint': 'https://minio.owncloud.com/',
+			'bucket': 'owncloud',
+			'endpoint': {
+				'from_secret': 'cache_s3_endpoint',
+			},
 			'path_style': True,
 			'source': '/var/www/owncloud/web/tests/vrt/latest/**/*',
 			'strip_prefix': '/var/www/owncloud/web/tests/vrt',
-			'target': '/screenshots/${DRONE_BUILD_NUMBER}',
-			'access_key': {
-				'from_secret': 'AWS_ACCESS_KEY_ID'
+			'target': '/web/screenshots/${DRONE_BUILD_NUMBER}',
+		},
+		'environment': {
+			'AWS_ACCESS_KEY_ID': {
+				'from_secret': 'cache_s3_access_key'
 			},
-			'secret_key': {
-				'from_secret': 'AWS_SECRET_ACCESS_KEY'
-			}
+			'AWS_SECRET_ACCESS_KEY': {
+				'from_secret': 'cache_s3_secret_key'
+			},
 		},
 		'when': {
 			'status': [
@@ -1931,13 +1938,13 @@ def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
 			'cd /var/www/owncloud/web/tests/vrt/diff',
 			'cd %s' % backend,
 			'ls -la',
-			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
+			'echo "<details><summary>:boom: Visual regression tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
 			'echo "Diff Image: </br>" >> /var/www/owncloud/web/comments.file',
-			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/diff/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % backend,
+			'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/diff/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % backend,
 			'cd ../../latest',
 			'cd %s' % backend,
 			'echo "Actual Image: </br>" >> /var/www/owncloud/web/comments.file',
-			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/latest/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % backend,
+			'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/latest/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % backend,
 			'echo "Comparing Against: </br>" >> /var/www/owncloud/web/comments.file',
 			'for f in *.png; do echo \'!\'"[$f](https://raw.githubusercontent.com/owncloud/web/%s/tests/vrt/baseline/%s/$f)" >> /var/www/owncloud/web/comments.file; done' % (branch, backend),
 			'echo "\n</p></details>" >> /var/www/owncloud/web/comments.file',
@@ -1945,6 +1952,9 @@ def buildGithubCommentVisualDiff(ctx, suite, alternateSuiteName, runningOnOCIS):
 		],
 		'environment': {
 			'TEST_CONTEXT': suite,
+			'CACHE_ENDPOINT': {
+				'from_secret': 'cache_s3_endpoint',
+			},
 		},
 		'when': {
 			'status': [
@@ -1963,14 +1973,16 @@ def buildGithubComment(suite, alternateSuiteName):
 		'pull': 'always',
 		'commands': [
 			'cd /var/www/owncloud/web/tests/reports/screenshots/',
-			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> comments.file' % alternateSuiteName,
-			'for f in *.png; do echo \'!\'"[$f](https://minio.owncloud.com/phoenix/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> comments.file; done',
-			'echo "\n</p></details>" >> comments.file',
-			'more comments.file',
-			'mv comments.file /var/www/owncloud/web/comments.file'
+			'echo "<details><summary>:boom: Acceptance tests <strong>%s</strong> failed. Please find the screenshots inside ...</summary>\\n\\n${DRONE_BUILD_LINK}/${DRONE_JOB_NUMBER}\\n\\n<p>\\n\\n" >> /var/www/owncloud/web/comments.file' % alternateSuiteName,
+			'for f in *.png; do echo \'!\'"[$f]($CACHE_ENDPOINT/owncloud/web/screenshots/${DRONE_BUILD_NUMBER}/$f)" >> /var/www/owncloud/web/comments.file; done',
+			'echo "\n</p></details>" >> /var/www/owncloud/web/comments.file',
+			'more /var/www/owncloud/web/comments.file',
 		],
 		'environment': {
 			'TEST_CONTEXT': suite,
+			'CACHE_ENDPOINT': {
+				'from_secret': 'cache_s3_endpoint',
+			},
 		},
 		'when': {
 			'status': [
