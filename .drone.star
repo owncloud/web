@@ -331,8 +331,10 @@ config = {
 				],
 				'webUIOCISFiles2': [
 					'webUIFilesDetails',
-					'webUIFilesList',
 					'webUIFilesSearch'
+				],
+				'webUIOCISFiles3': [
+					'webUIFilesList',
 				],
 				'webUISharingAutocompletion': 'OCISSharingAutocompletion',
 				'OCISSharingInternalGroups': [
