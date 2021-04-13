@@ -77,6 +77,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUISharingInternalUsersCollaborator/shareWithUsers.feature:37](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersCollaborator/shareWithUsers.feature#L37)
 -   [webUISharingInternalUsersCollaborator/shareWithUsers.feature:38](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersCollaborator/shareWithUsers.feature#L38)
 -   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:17](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L17)
+-   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:92](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L92)
 -   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:103](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L103)
 -   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:119](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L119)
 -   [webUISharingInternalUsersShareWithPage/shareWithUsers.feature:155](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingInternalUsersShareWithPage/shareWithUsers.feature#L155)
