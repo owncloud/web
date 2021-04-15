@@ -198,8 +198,8 @@ Given('user {string} has been created with default attributes on remote server',
 
 Given(
   /^user "([^"]*)" has been created with default attributes and (without|large|small) skeleton files on remote server$/,
-  function(userId) {
-    return backendHelper.runOnRemoteBackend(async function(skeletonType) {
+  function(userId, skeletonType) {
+    return backendHelper.runOnRemoteBackend(async function() {
       await deleteUser()
         .then(() => createDefaultUser(userId, skeletonType))
         .then(() => initUser(userId))
