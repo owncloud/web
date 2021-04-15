@@ -239,10 +239,3 @@ export default {
   }
 }
 </script>
-
-<style scoped="scoped">
-/* FIXME: Move to ODS somehow */
-.files-collaborators-collaborator-autocomplete-item td {
-  padding: 0 10px 10px 0;
-}
-</style>

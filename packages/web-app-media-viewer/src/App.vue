@@ -44,7 +44,7 @@
 
     <div class="uk-position-medium uk-position-bottom-center media-viewer-details">
       <div
-        class="uk-overlay uk-overlay-default oc-p-s uk-text-center uk-text-meta uk-text-truncate media-viewer-file-name"
+        class="uk-overlay uk-overlay-default oc-p-s uk-text-center oc-text-muted uk-text-truncate media-viewer-file-name"
       >
         {{ medium.name }}
       </div>

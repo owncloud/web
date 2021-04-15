@@ -4,10 +4,10 @@
     class="uk-text-center uk-flex-middle uk-flex uk-flex-center uk-flex-column"
   >
     <oc-icon name="cloud" type="div" size="xxlarge" />
-    <div class="uk-text-muted uk-text-large">
+    <div class="oc-text-muted uk-text-large">
       <translate>Resource not found</translate>
     </div>
-    <div class="uk-text-muted">
+    <div class="oc-text-muted">
       <translate>
         We went looking everywhere, but were unable to find the selected resource.
       </translate>
