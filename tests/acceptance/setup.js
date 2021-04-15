@@ -2,6 +2,8 @@ import { setDefaultTimeout, After, Before, defineParameterType } from 'cucumber'
 import { createSession, closeSession, client, startWebDriver, stopWebDriver } from 'nightwatch-api'
 import { rollbackConfigs, cacheConfigs } from './helpers/config'
 import { getAllLogsWithDateTime } from './helpers/browserConsole.js'
+import { runOcc } from './helpers/occHelper'
+
 const codify = require('./helpers/codify')
 
 const ldap = require('./helpers/ldapHelper')
@@ -78,6 +80,15 @@ Before(function cacheAndSetConfigsOnRemoteIfExists() {
   if (client.globals.remote_backend_url) {
     return cacheAndSetConfigs(client.globals.remote_backend_url)
   }
+})
+
+// Delete share_folder config
+// Some tests will fail if this config was already set in the system
+Before(function deleteShareFolderConfig() {
+  if (client.globals.ocis) {
+    return
+  }
+  return runOcc(['config:system:delete share_folder'])
 })
 
 // After hooks are run in reverse order in which they are defined
