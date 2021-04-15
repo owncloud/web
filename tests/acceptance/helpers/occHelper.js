@@ -12,11 +12,9 @@ exports.runOcc = function(args) {
   return httpHelper
     .postOCS(apiURL, 'admin', params)
     .then(res => {
-      httpHelper.checkStatus(res, 'Failed while executing occ command')
-      return res.json()
+      return httpHelper.checkStatus(res, 'Failed while executing occ command').json()
     })
     .then(res => {
-      httpHelper.checkOCSStatus(res, 'Failed while executing occ command')
-      return res
+      return httpHelper.checkOCSStatus(res, 'Failed while executing occ command')
     })
 }
