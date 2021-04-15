@@ -162,7 +162,7 @@ Feature: Edit public link shares
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created folder "simple-folder/simple-empty-folder"
     And user "Alice" has created file "simple-folder/lorem.txt"
-    Given user "Alice" has created a public link with following settings
+    And user "Alice" has created a public link with following settings
       | path        | simple-folder |
       | name        | Public-link   |
       | permissions | read          |

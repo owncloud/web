@@ -7,7 +7,10 @@ Feature: disable sharing
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
   @smokeTest
   Scenario: Users tries to share via WebUI when Sharing is disabled
@@ -27,13 +30,13 @@ Feature: disable sharing
 
   @issue-2459
   Scenario: Check file presence in shared-with-me page when sharing is disabled
-    Given user "Brian" has been created with default attributes
-    And user "Brian" has shared file "lorem.txt" with user "Alice"
-    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
-    And user "Brian" has shared folder "simple-folder" with user "Alice"
-    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has shared file "lorem.txt" with user "Brian"
+    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
+    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     And the setting "shareapi_enabled" of app "core" has been set to "no"
-    When user "Alice" logs in using the webUI
+    When user "Brian" logs in using the webUI
     And the user opens folder "Shares" using the webUI
     Then file "lorem.txt" should be listed on the webUI
     And folder "simple-folder" should be listed on the webUI
@@ -44,7 +47,7 @@ Feature: disable sharing
 
   @issue-2459
   Scenario: Check file presence in shared-with-others page when Sharing is disabled
-    Given user "Brian" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And the setting "shareapi_enabled" of app "core" has been set to "no"

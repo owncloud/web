@@ -1,7 +1,7 @@
 Feature: display image in media viewer on the webUI
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
 
 Scenario Outline: preview of image files with media viewer is possible
     Given user "Alice" has uploaded file "<image-file>" to "<image-file>"
@@ -22,7 +22,8 @@ Scenario Outline: preview of image files with media viewer is possible
 
 
   Scenario: video playback in public share
-    Given user "Alice" has uploaded file "test_video.mp4" to "simple-empty-folder/test_video.mp4"
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "test_video.mp4" to "simple-empty-folder/test_video.mp4"
     And user "Alice" has created a public link with following settings
       | path | simple-empty-folder |
     When the public uses the webUI to access the last public link created by user "Alice"
@@ -31,7 +32,8 @@ Scenario Outline: preview of image files with media viewer is possible
 
   @issue-4295
   Scenario: image preview in public share
-    Given user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
     And user "Alice" has created a public link with following settings
       | path | simple-empty-folder |
     When the public uses the webUI to access the last public link created by user "Alice"
@@ -108,7 +110,8 @@ Scenario Outline: preview of image files with media viewer is possible
 
   @issue-4856
   Scenario: file list view image preview in public share
-    Given user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
+    Given user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
     And user "Alice" has created a public link with following settings
       | path | simple-empty-folder |
     When the public uses the webUI to access the last public link created by user "Alice"
@@ -116,7 +119,8 @@ Scenario Outline: preview of image files with media viewer is possible
 
 
   Scenario: file list view image preview in public share when previews is disabled
-    Given the property "disablePreviews" of "options" has been set to true in web config file
+    Given user "Alice" has created folder "simple-empty-folder"
+    And the property "disablePreviews" of "options" has been set to true in web config file
     And user "Alice" has uploaded file "testavatar.jpg" to "simple-empty-folder/testavatar.jpg"
     And user "Alice" has created a public link with following settings
       | path | simple-empty-folder |
