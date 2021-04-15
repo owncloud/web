@@ -4,7 +4,10 @@ Feature: rename files
   So that I can organise my data structure
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
@@ -24,7 +27,7 @@ Feature: rename files
 
 
   Scenario Outline: Rename a file that has special characters in its name
-    Given user "Alice" has created file "sämple,1.txt"
+    Given user "Alice" has created file <from_name>
     And the user has reloaded the current page of the webUI
     When the user renames file <from_name> to <to_name> using the webUI
     Then file <to_name> should be listed on the webUI
@@ -38,6 +41,7 @@ Feature: rename files
 
   @smokeTest
   Scenario: Rename a file using special characters and check its existence after page reload
+    Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt"
     When the user renames file "lorem.txt" to "लोरेम।तयक्स्त $%&" using the webUI
     And the user reloads the current page of the webUI
     Then file "लोरेम।तयक्स्त $%&" should be listed on the webUI
@@ -137,6 +141,8 @@ Feature: rename files
 
 
   Scenario: Rename the last file in a folder
+    Given user "Alice" has created file "zzzz-must-be-last-file-in-folder.txt"
+    And the user has reloaded the current page of the webUI
     When the user renames file "zzzz-must-be-last-file-in-folder.txt" to "a-file.txt" using the webUI
     And the user reloads the current page of the webUI
     Then file "a-file.txt" should be listed on the webUI
@@ -178,7 +184,10 @@ Feature: rename files
 
   @ocis-reva-issue-64
   Scenario: rename a file on a public share (on ocis)
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And the user has reloaded the current page of the webUI
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user renames file "lorem.txt" to "a-renamed-file.txt" using the webUI
     Then file "a-renamed-file.txt" should be listed on the webUI
@@ -191,12 +200,16 @@ Feature: rename files
 
   @ocis-reva-issue-64
   Scenario: Rename a file and folder in shared with me page
-    Given user "Brian" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
+    And the user has reloaded the current page of the webUI
     And user "Brian" has shared file "lorem.txt" with user "Alice"
     And user "Brian" has shared folder "simple-folder" with user "Alice"
     When the user browses to the shared-with-me page
     And the user renames file "lorem (2).txt" to "renamed-file.txt" using the webUI
-    And the user renames folder "simple-folder (2)" to "renamed-folder" using the webUI
+    And the user renames folder "simple-folder" to "renamed-folder" using the webUI
     Then file "renamed-file.txt" should be listed on the webUI
     And folder "renamed-folder" should be listed on the webUI
     When the user reloads the current page of the webUI
@@ -212,7 +225,8 @@ Feature: rename files
 
   @ocis-reva-issue-64
   Scenario: Rename a file and folder in shared with others page
-    Given user "Brian" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
     And user "Alice" has shared file "lorem.txt" with user "Brian"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     When the user browses to the shared-with-others page
@@ -233,7 +247,8 @@ Feature: rename files
 
   @ocis-reva-issue-39
   Scenario: Rename a file and folder in favorites page
-    Given user "Alice" has favorited element "lorem.txt"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has favorited element "lorem.txt"
     And user "Alice" has favorited element "simple-folder"
     When the user browses to the favorites page
     And the user renames file "lorem.txt" to "renamed-file.txt" using the webUI
