@@ -7,11 +7,12 @@ Feature: Resharing shared files with different permissions
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
       | Carol    |
+    And user "Brian" has created folder "simple-folder"
 
   @issue-4193
   Scenario: share a folder with another user with share permissions and reshare without share permissions to different user, and check if user is displayed for original sharer
@@ -103,32 +104,42 @@ Feature: Resharing shared files with different permissions
       | permissions | read                  |
 
   @issue-product-270
-  Scenario Outline: share a file/folder without share permissions and check if another user can reshare
-    Given user "Brian" has shared folder "<shared-entry-name>" with user "Alice" with "read" permissions
-    And user "Alice" has accepted the share "<shared-entry-name>" offered by user "Brian"
+  Scenario: share a folder without share permissions and check if another user can reshare
+    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read" permissions
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     When user "Alice" logs in using the webUI
     And the user opens folder "Shares" using the webUI
-    Then the user should not be able to share resource "<shared-entry-name>" using the webUI
-    Examples:
-      | shared-entry-name |
-      | simple-folder     |
-      | lorem.txt         |
-
-
+    Then the user should not be able to share resource "simple-folder" using the webUI
+  
+  @issue-product-270
+  Scenario: share a file without share permissions and check if another user can reshare
+    Given user "Brian" has created file "lorem.txt"
+    And user "Brian" has shared file "lorem.txt" with user "Alice" with "read" permissions
+    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    When user "Alice" logs in using the webUI
+    And the user opens folder "Shares" using the webUI
+    Then the user should not be able to share resource "lorem.txt" using the webUI
 
   @issue-product-270
-  Scenario Outline: share a received file/folder without share permissions and check if another user can reshare
-    Given user "Brian" has shared folder "<shared-entry-name>" with user "Alice" with "all" permissions
-    And user "Alice" has accepted the share "<shared-entry-name>" offered by user "Brian"
-    And user "Alice" has shared folder "/Shares/<shared-entry-name>" with user "Carol" with "read" permissions
-    And user "Carol" has accepted the share "<shared-entry-name>" offered by user "Alice"
+  Scenario: share a received folder without share permissions and check if another user can reshare
+    Given user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "read" permissions
+    And user "Carol" has accepted the share "simple-folder" offered by user "Alice"
     When user "Carol" logs in using the webUI
     And the user opens folder "Shares" using the webUI
-    Then the user should not be able to share resource "<shared-entry-name>" using the webUI
-    Examples:
-      | shared-entry-name |
-      | simple-folder     |
-      | lorem.txt         |
+    Then the user should not be able to share resource "simple-folder" using the webUI
+
+  @issue-product-270
+  Scenario: share a received file without share permissions and check if another user can reshare
+    Given user "Brian" has created file "lorem.txt"
+    And user "Brian" has shared file "lorem.txt" with user "Alice" with "all" permissions
+    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Alice" has shared folder "/Shares/lorem.txt" with user "Carol" with "read" permissions
+    And user "Carol" has accepted the share "lorem.txt" offered by user "Alice"
+    When user "Carol" logs in using the webUI
+    And the user opens folder "Shares" using the webUI
+    Then the user should not be able to share resource "lorem.txt" using the webUI
 
   @issue-ocis-1743
   Scenario: User is allowed to reshare a file/folder with the equivalent received permissions, and collaborators should not be listed for the receiver
@@ -185,27 +196,13 @@ Feature: Resharing shared files with different permissions
 
 
   Scenario: Reshare a file and folder from shared with me page
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
-    And user "Brian" has logged in using the webUI
-    And the user has browsed to the shared-with-me page
-    When the user shares folder "simple-folder" with user "Carol King" as "Editor" using the webUI
-    And the user shares file "lorem.txt" with user "Carol King" as "Editor" using the webUI
-    And user "Carol" accepts the share "simple-folder" offered by user "Brian" using the sharing API
-    And user "Carol" accepts the share "lorem.txt" offered by user "Brian" using the sharing API
-    Then as "Carol" folder "/Shares/simple-folder" should exist
-    And as "Carol" file "/Shares/lorem.txt" should exist
-
-
-  Scenario: Reshare a file and folder from shared with others page
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
+    Given user "Brian" has created file "lorem.txt"
+    And user "Brian" has shared folder "simple-folder" with user "Alice"
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Brian" has shared file "lorem.txt" with user "Alice"
+    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the shared-with-others page
+    And the user has browsed to the shared-with-me page
     When the user shares folder "simple-folder" with user "Carol King" as "Editor" using the webUI
     And the user shares file "lorem.txt" with user "Carol King" as "Editor" using the webUI
     And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
@@ -213,49 +210,65 @@ Feature: Resharing shared files with different permissions
     Then as "Carol" folder "/Shares/simple-folder" should exist
     And as "Carol" file "/Shares/lorem.txt" should exist
 
-  @ocis-reva-issue-39
-  Scenario: Reshare a file and folder from favorites page
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
-    And user "Alice" has shared file "lorem.txt" with user "Brian"
-    And user "Brian" has accepted the share "lorem.txt" offered by user "Alice"
-    And user "Brian" has favorited element "/Shares/simple-folder"
-    And user "Brian" has favorited element "/Shares/lorem.txt"
+
+  Scenario: Reshare a file and folder from shared with others page
+    Given user "Brian" has created file "lorem.txt"
+    And user "Brian" has shared folder "simple-folder" with user "Alice"
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Brian" has shared file "lorem.txt" with user "Alice"
+    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
     And user "Brian" has logged in using the webUI
-    When the user browses to the favorites page using the webUI
-    And the user shares folder "Shares/simple-folder" with user "Carol King" as "Editor" using the webUI
-    And the user shares file "Shares/lorem.txt" with user "Carol King" as "Editor" using the webUI
+    And the user has browsed to the shared-with-others page
+    When the user shares folder "simple-folder" with user "Carol King" as "Editor" using the webUI
+    And the user shares file "lorem.txt" with user "Carol King" as "Editor" using the webUI
     And user "Carol" accepts the share "simple-folder" offered by user "Brian" using the sharing API
     And user "Carol" accepts the share "lorem.txt" offered by user "Brian" using the sharing API
     Then as "Carol" folder "/Shares/simple-folder" should exist
     And as "Carol" file "/Shares/lorem.txt" should exist
 
+  @ocis-reva-issue-39
+  Scenario: Reshare a file and folder from favorites page
+    Given user "Brian" has created file "lorem.txt"
+    And user "Brian" has shared folder "simple-folder" with user "Alice"
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Brian" has shared file "lorem.txt" with user "Alice"
+    And user "Alice" has accepted the share "lorem.txt" offered by user "Brian"
+    And user "Alice" has favorited element "/Shares/simple-folder"
+    And user "Alice" has favorited element "/Shares/lorem.txt"
+    And user "Alice" has logged in using the webUI
+    When the user browses to the favorites page using the webUI
+    And the user shares folder "Shares/simple-folder" with user "Carol King" as "Editor" using the webUI
+    And the user shares file "Shares/lorem.txt" with user "Carol King" as "Editor" using the webUI
+    And user "Carol" accepts the share "simple-folder" offered by user "Alice" using the sharing API
+    And user "Carol" accepts the share "lorem.txt" offered by user "Alice" using the sharing API
+    Then as "Carol" folder "/Shares/simple-folder" should exist
+    And as "Carol" file "/Shares/lorem.txt" should exist
+
 
   Scenario: Resource owner sees resharer in collaborators list
-    Given user "Carol" has been created with default attributes
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
-    And user "Brian" has shared folder "/Shares/simple-folder" with user "Carol"
-    And user "Carol" has accepted the share "simple-folder" offered by user "Brian"
-    When user "Alice" has logged in using the webUI
+    Given user "Brian" has created file "lorem.txt"
+    And user "Brian" has shared folder "simple-folder" with user "Alice"
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol"
+    And user "Carol" has accepted the share "simple-folder" offered by user "Alice"
+    When user "Brian" has logged in using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Brian Murphy" should be listed as "Editor" in the collaborators list on the webUI
-    And user "Carol King" should be listed as "Editor" reshared through "Brian Murphy" in the collaborators list on the webUI
+    Then user "Alice Hansen" should be listed as "Editor" in the collaborators list on the webUI
+    And user "Carol King" should be listed as "Editor" reshared through "Alice Hansen" in the collaborators list on the webUI
 
   @ocis-reva-issue-34
   Scenario: Share recipient sees resharer in collaborators list
-    Given user "Carol" has been created with default attributes
-    And user "David" has been created with default attributes
+    Given user "David" has been created with default attributes and without skeleton files
     And group "Davidgrp" has been created
     And user "David" has been added to group "Davidgrp"
-    And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
-    And user "Alice" has shared folder "simple-folder" with user "Carol"
-    And user "Carol" has accepted the share "simple-folder" offered by user "Alice"
-    And user "Brian" has shared folder "/Shares/simple-folder" with user "David"
+    And user "Brian" has shared folder "simple-folder" with user "Alice"
+    And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Brian" has shared folder "simple-folder" with user "Carol"
+    And user "Carol" has accepted the share "simple-folder" offered by user "Brian"
+    And user "Alice" has shared folder "/Shares/simple-folder" with user "David"
     And user "Carol" has shared folder "/Shares/simple-folder" with group "Davidgrp"
-    And user "David" has accepted the share "simple-folder" offered by user "Brian"
+    And user "David" has accepted the share "simple-folder" offered by user "Alice"
     When user "David" has logged in using the webUI
     And the user opens folder "Shares" using the webUI
     And the user opens the share dialog for folder "simple-folder" using the webUI
-    Then user "Alice Hansen" should be listed as "Owner" reshared through "Brian Murphy, Carol King" in the collaborators list on the webUI
+    Then user "Brian Murphy" should be listed as "Owner" reshared through "Alice Hansen, Carol King" in the collaborators list on the webUI
