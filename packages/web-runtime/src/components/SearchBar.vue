@@ -50,7 +50,7 @@ export default {
 
   computed: {
     searchLabel() {
-      return this.$gettext('Search')
+      return this.$gettext('Enter search query')
     },
 
     displaySearchButtonLabel() {
