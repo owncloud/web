@@ -17,30 +17,50 @@ config = {
 		'webUI-XGA': {
 			'suites': {
 				'XGAPortrait1': [
-					'webUIRestrictSharing',
-					'webUISharingAcceptShares',
-					'webUISharingAcceptSharesToRoot',
-					# The following suites may have all scenarios currently skipped.
-					# The suites are listed here so that scenarios will run when
-					# they are enabled.
-					'webUIAdminSettings',
-					'webUIComments',
-					'webUITags',
-					'webUIWebdavLockProtection',
-					'webUIWebdavLocks',
-				],
-				'XGAPortrait2': [
-					'webUIRestrictSharing',
+					'webUIAccount',
+                    'webUICreateFilesFolders',
+                    'webUIDeleteFilesFolders',
+                    'webUIFavorites',
+                    'webUIFiles',
+                    'webUIFilesActionMenu',
+                    'webUIFilesCopy',
+                    'webUIFilesDetails',
+                    'webUIFilesList',
+                    'webUIFilesSearch',
+                    'webUILogin',
+                    'webUINotifications',
+                    'webUIPreview',
+                    'webUIPrivateLinks',
+                    'webUIRenameFiles',
+                    'webUIRenameFolders',
+                    'webUIRestrictSharing',
                     'webUISharingAcceptShares',
                     'webUISharingAcceptSharesToRoot',
-                    # The following suites may have all scenarios currently skipped.
-                    # The suites are listed here so that scenarios will run when
-                    # they are enabled.
-                    'webUIAdminSettings',
-                    'webUIComments',
-                    'webUITags',
-                    'webUIWebdavLockProtection',
-                    'webUIWebdavLocks',
+                    'webUISharingNotifications',
+                    'webUISharingNotificationsToRoot',
+				],
+				'XGAPortrait2': [
+					'webUIAccount',
+                    'webUICreateFilesFolders',
+                    'webUIDeleteFilesFolders',
+                    'webUIFavorites',
+                    'webUIFiles',
+                    'webUIFilesActionMenu',
+                    'webUIFilesCopy',
+                    'webUIFilesDetails',
+                    'webUIFilesList',
+                    'webUIFilesSearch',
+                    'webUILogin',
+                    'webUINotifications',
+                    'webUIPreview',
+                    'webUIPrivateLinks',
+                    'webUIRenameFiles',
+                    'webUIRenameFolders',
+                    'webUIRestrictSharing',
+                    'webUISharingAcceptShares',
+                    'webUISharingAcceptSharesToRoot',
+                    'webUISharingNotifications',
+                    'webUISharingNotificationsToRoot',
 				]
 			},
 			'extraEnvironment': {
