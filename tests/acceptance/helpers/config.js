@@ -5,7 +5,7 @@ const _ = require('lodash')
 const pLimit = require('p-limit')
 
 // run 10 promises at once at max
-const limit = pLimit(10)
+const limit = pLimit(12)
 
 const config = {}
 
@@ -84,7 +84,6 @@ export async function getConfigs() {
 
 export async function cacheConfigs(server) {
   config[server] = await getConfigs()
-  console.log(JSON.stringify(config))
   return config
 }
 
