@@ -5,14 +5,15 @@ Feature: Public link share management
   So that I can manage and organize the shares
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "/simple-folder"
+
 
   Scenario: public link share shows up on shared-with-others page
     Given user "Alice" has logged in using the webUI
     And user "Alice" has shared folder "simple-folder" with link with "read" permissions
     When the user browses to the shared-with-others page using the webUI
     Then the resource "simple-folder" should have the token of last link in the people column on the webUI
-    But file "data.zip" should not be listed on the webUI
 
 
   Scenario: opening public-link page of the files-drop link protected with password should redirect to files-drop page
@@ -25,7 +26,6 @@ Feature: Public link share management
     Given user "Alice" has shared folder "simple-folder" with link with "create" permissions
     When the public tries to open the public link page of the last public link created by user "Alice"
     Then the user should be redirected to the files-drop page
-
 
   @skip @yetToImplement
   Scenario: mount public link
@@ -80,14 +80,16 @@ Feature: Public link share management
 
   @skip @yetToImplement
   Scenario: user cancel removes operation for the public link of a file
-    Given the user has created a new public link for file "lorem.txt" using the webUI
+    Given user "Alice" has created file "lorem.txt"
+    And the user has created a new public link for file "lorem.txt" using the webUI
     When the user tries to remove the public link of file "lorem.txt" but later cancels the remove dialog using webUI
     And the public accesses the last created public link using the webUI
     Then the content of the file shared by the last public link should be the same as "lorem.txt"
 
 
   Scenario: user browses to public link share using copy link button
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has created a public link with following settings
       | path        | simple-folder |
       | name        | Public-link   |
       | permissions | read          |
@@ -98,7 +100,8 @@ Feature: Public link share management
 
   @issue-2090
   Scenario: access details dialog of public share and check the tabs displayed
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Editor |
     And the public uses the webUI to access the last public link created by user "Alice"
@@ -141,7 +144,8 @@ Feature: Public link share management
 
   @issue-3040 @issue-3841 @issue-ocis-reva-372
   Scenario: sharing details of indirect link share in "favorites" file lists
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has created folder "/simple-folder/simple-empty-folder"
+    And user "Alice" has created a public link with following settings
       | path | /simple-folder |
       | name | Public Link    |
     And user "Alice" has created a public link with following settings
@@ -165,7 +169,8 @@ Feature: Public link share management
 
   @issue-product-130
   Scenario: User can attempt to upload a file in public link
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has created a public link with following settings
       | path        | lorem.txt   |
       | name        | public link |
       | permissions | read        |
@@ -176,7 +181,8 @@ Feature: Public link share management
   @skipOnOC10 @issue-product-130
   # When this issue is fixed delete this scenario and use the one above
   Scenario: User can attempt to upload a file in public link (ocis bug demonstration)
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has created a public link with following settings
       | path        | lorem.txt   |
       | name        | public link |
       | permissions | read        |
@@ -193,7 +199,8 @@ Feature: Public link share management
 
 
   Scenario: Shared via link page is displayed
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has created a public link with following settings
       | path        | lorem.txt             |
       | name        | Public-link           |
     And user "Alice" has logged in using the webUI

@@ -5,49 +5,79 @@ Feature: Create public link shares
   So that users who do not have an account on my ownCloud server can access them
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
 
   @smokeTest @issue-ocis-reva-383
-  Scenario Outline: simple sharing by public link
-    Given user "Alice" has logged in using the webUI
-    When the user creates a new public link for resource "<shared-resource>" using the webUI
+  Scenario: simple folder sharing by public link
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has logged in using the webUI
+    When the user creates a new public link for resource "simple-folder" using the webUI
     Then user "Alice" should have a share with these details:
       | field       | value              |
       | share_type  | public_link        |
       | uid_owner   | Alice              |
       | permissions | read               |
-      | path        | /<shared-resource> |
+      | path        | /simple-folder     |
       | name        | Public link        |
-    And a link named "Public link" should be listed with role "Viewer" in the public link list of resource "<shared-resource>" on the webUI
+    And a link named "Public link" should be listed with role "Viewer" in the public link list of resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice"
     Then file "lorem.txt" should be listed on the webUI
-    Examples:
-      | shared-resource |
-      | simple-folder   |
-      | lorem.txt       |
+
+  @smokeTest @issue-ocis-reva-383
+  Scenario: simple file sharing by public link
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has logged in using the webUI
+    When the user creates a new public link for resource "lorem.txt" using the webUI
+    Then user "Alice" should have a share with these details:
+      | field       | value              |
+      | share_type  | public_link        |
+      | uid_owner   | Alice              |
+      | permissions | read               |
+      | path        | /lorem.txt         |
+      | name        | Public link        |
+    And a link named "Public link" should be listed with role "Viewer" in the public link list of resource "lorem.txt" on the webUI
+    When the public uses the webUI to access the last public link created by user "Alice"
+    Then file "lorem.txt" should be listed on the webUI
 
   @skipOnOC10 @issue-ocis-reva-383
   # When this issue is fixed delete this scenario and use the one above
-  Scenario Outline: simple sharing by public link (ocis bug demonstration)
-    Given user "Alice" has logged in using the webUI
-    When the user creates a new public link for resource "<shared-resource>" using the webUI
+  Scenario: simple folder sharing by public link (ocis bug demonstration)
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has logged in using the webUI
+    When the user creates a new public link for resource "simple-folder" using the webUI
     Then user "Alice" should have a share with these details:
       | field       | value              |
       | share_type  | public_link        |
       | uid_owner   | Alice              |
       | permissions | read               |
-      | path        | /<shared-resource> |
-    And a public link with the last created link share token as name should be listed for resource "<shared-resource>" on the webUI
+      | path        | /simple-folder     |
+    And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice"
     Then file "lorem.txt" should be listed on the webUI
-    Examples:
-      | shared-resource |
-      | simple-folder   |
-      | lorem.txt       |
+
+  @skipOnOC10 @issue-ocis-reva-383
+  # When this issue is fixed delete this scenario and use the one above
+  Scenario: simple file sharing by public link (ocis bug demonstration)
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has logged in using the webUI
+    When the user creates a new public link for resource "lorem.txt" using the webUI
+    Then user "Alice" should have a share with these details:
+      | field       | value              |
+      | share_type  | public_link        |
+      | uid_owner   | Alice              |
+      | permissions | read               |
+      | path        | /lorem.txt         |
+    And a public link with the last created link share token as name should be listed for resource "lorem.txt" on the webUI
+    When the public uses the webUI to access the last public link created by user "Alice"
+    Then file "lorem.txt" should be listed on the webUI
 
   @issue-ocis-reva-389
   Scenario: user shares a public link with folder longer than 64 chars and shorter link name
-    Given user "Alice" has renamed folder "simple-folder" to "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has renamed folder "simple-folder" to "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog"
     And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "aquickbrownfoxjumpsoveraverylazydogaquickbrownfoxjumpsoveralazydog" using the webUI with
       | name | short_linkname |
@@ -56,6 +86,10 @@ Feature: Create public link shares
 
   @skip @yetToImplement
   Scenario: share two file with same name but different paths by public link
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has created file "lorem.txt"
+    And user "Alice" has logged in using the webUI
     When the user creates a new public link for file "lorem.txt" using the webUI
     And the user closes the details dialog
     And the user opens folder "simple-folder" using the webUI
@@ -66,7 +100,8 @@ Feature: Create public link shares
 
 
   Scenario: user creates a multiple public link of a file and delete the first link
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has created a public link with following settings
       | path | lorem.txt  |
       | name | first-name |
     And user "Alice" has created a public link with following settings
@@ -83,7 +118,8 @@ Feature: Create public link shares
 
 
   Scenario: user creates a multiple public link of a file and delete the second link
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has created a public link with following settings
       | path | lorem.txt  |
       | name | first-name |
     And user "Alice" has created a public link with following settings
@@ -100,7 +136,8 @@ Feature: Create public link shares
 
 
   Scenario: user creates a multiple public link of a file and delete the third link
-    Given user "Alice" has created a public link with following settings
+    Given user "Alice" has created file "lorem.txt"
+    And user "Alice" has created a public link with following settings
       | path | lorem.txt  |
       | name | first-name |
     And user "Alice" has created a public link with following settings
@@ -117,12 +154,15 @@ Feature: Create public link shares
 
   @skip @yetToImplement
   Scenario: user creates public link with view and upload feature
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | permission | upload-write-without-modify |
     And the public accesses the last created public link using the webUI
 
   Scenario Outline: user creates multiple public links with same name for the same file/folder
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created <element> "<name>"
+    And user "Alice" has logged in using the webUI
     When the user creates a new public link for <element> "<name>" using the webUI with
       | name | same_link_name |
     And the user creates a new public link for <element> "<name>" using the webUI with
@@ -135,7 +175,8 @@ Feature: Create public link shares
 
   @issue-ocis-reva-243
   Scenario: User can create a public link via quick action
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has logged in using the webUI
     When the user creates a public link via quick action for resource "simple-folder" using the webUI
     Then user "Alice" should have a share with these details:
       | field       | value             |

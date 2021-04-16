@@ -9,11 +9,13 @@ Feature: Share by public link with different roles
   So that public sharing is limited according to organization policy
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
 
   @smokeTest @issue-ocis-reva-383
   Scenario Outline: simple sharing by public link with different roles
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | <role> |
     Then user "Alice" should have a share with these details:
@@ -35,7 +37,8 @@ Feature: Share by public link with different roles
   @skipOnOC10 @issue-ocis-reva-383
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario Outline: simple sharing by public link with different roles (ocis bug demonstration)
-    Given user "Alice" has logged in using the webUI
+    Given user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has logged in using the webUI
     When the user creates a new public link for folder "simple-folder" using the webUI with
       | role | <role> |
     Then user "Alice" should have a share with these details:
@@ -55,19 +58,18 @@ Feature: Share by public link with different roles
 
   @issue-ocis-reva-383
   Scenario: sharing by public link with "Uploader" role
-    Given user "Alice" has created folder "shared-folder"
-    And user "Alice" has created file "shared-folder/fileInside"
+    Given user "Alice" has created file "simple-folder/fileInside"
     And user "Alice" has logged in using the webUI
-    And the user creates a new public link for folder "shared-folder" using the webUI with
+    And the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Uploader |
     Then user "Alice" should have a share with these details:
       | field       | value          |
       | share_type  | public_link    |
       | uid_owner   | Alice          |
       | permissions | create         |
-      | path        | /shared-folder |
+      | path        | /simple-folder |
       | name        | Public link    |
-    And a link named "Public link" should be listed with role "Uploader" in the public link list of folder "shared-folder" on the webUI
+    And a link named "Public link" should be listed with role "Uploader" in the public link list of folder "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice"
     Then there should be no resources listed on the webUI
 
@@ -75,22 +77,29 @@ Feature: Share by public link with different roles
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario: sharing by public link with "Uploader" role (ocis bug demonstration)
     Given user "Alice" has logged in using the webUI
-    When the user creates a folder with the name "shared-folder" using the webUI
-    And the user creates a new public link for folder "shared-folder" using the webUI with
+    And the user creates a new public link for folder "simple-folder" using the webUI with
       | role | Uploader |
     Then user "Alice" should have a share with these details:
       | field       | value          |
       | share_type  | public_link    |
       | uid_owner   | Alice          |
       | permissions | create         |
-      | path        | /shared-folder |
-    And a public link with the last created link share token as name should be listed for resource "shared-folder" on the webUI
+      | path        | /simple-folder |
+    And a public link with the last created link share token as name should be listed for resource "simple-folder" on the webUI
     When the public uses the webUI to access the last public link created by user "Alice"
     Then there should be no resources listed on the webUI
 
   @issue-4582 @disablePreviews
   Scenario: creating a public link with "Editor" role makes it possible to delete files via the link
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    Given user "Alice" has created the following folders
+      | entry_name                        |
+      | simple-folder/simple-empty-folder |
+    And user "Alice" has created the following files
+      | entry_name                                          |
+      | simple-folder/lorem.txt                             |
+      | simple-folder/strängé filename (duplicate #2 &).txt |
+      | simple-folder/zzzz-must-be-last-file-in-folder.txt  |
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user deletes the following elements using the webUI
       | name                                  |
@@ -103,7 +112,15 @@ Feature: Share by public link with different roles
 
   @issue-4582 @disablePreviews
   Scenario: creating a public link with "Editor" role makes it possible to delete files via the link even with password set
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
+    Given user "Alice" has created the following folders
+      | entry_name                        |
+      | simple-folder/simple-empty-folder |
+    And user "Alice" has created the following files
+      | entry_name                                          |
+      | simple-folder/lorem.txt                             |
+      | simple-folder/strängé filename (duplicate #2 &).txt |
+      | simple-folder/zzzz-must-be-last-file-in-folder.txt  |
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     And the user deletes the following elements using the webUI
       | name                                  |
@@ -115,14 +132,16 @@ Feature: Share by public link with different roles
 
   @issue-ocis-270
   Scenario: creating a public link with "Viewer" role only makes it impossible to delete files via the link
-    Given user "Alice" has shared folder "simple-folder" with link with "read" permissions
+    Given user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with link with "read" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     Then it should not be possible to delete file "lorem.txt" using the webUI
 
   @skipOnOC10 @issue-ocis-270
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario: creating a public link with "Viewer" role only makes it impossible to delete files via the link (ocis bug demonstration)
-    Given user "Alice" has shared folder "simple-folder" with link with "read" permissions
+    Given user "Alice" has created file "simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with link with "read" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     Then it should be possible to delete file "lorem.txt" using the webUI
 
@@ -136,7 +155,8 @@ Feature: Share by public link with different roles
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a file inside a subdirectory with password set
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
@@ -155,7 +175,8 @@ Feature: Share by public link with different roles
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder inside a subdirectory
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads folder "PARENT" using the webUI
@@ -174,13 +195,13 @@ Feature: Share by public link with different roles
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload files inside a subdirectory
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions
     When the public uses the webUI to access the last public link created by user "Alice"
-    And the user uploads folder "PARENT" using the webUI
-    Then folder "PARENT" should be listed on the webUI
-    And folder "CHILD" should be listed in the folder "PARENT" on the webUI
-    And file "child.txt" should be listed in the folder "CHILD" on the webUI
-    And as "Alice" file "simple-folder/PARENT/CHILD/child.txt" should exist
+    And the user opens folder "simple-empty-folder" using the webUI
+    And the user uploads file "new-lorem.txt" using the webUI
+    Then file "new-lorem.txt" should be listed on the webUI
+    And as "Alice" file "simple-folder/simple-empty-folder/new-lorem.txt" should exist
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder even with password set
@@ -194,7 +215,8 @@ Feature: Share by public link with different roles
 
 
   Scenario: creating a public link with "Editor" role makes it possible to upload a folder inside a sub-directory even with password set
-    Given user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
+    Given user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has shared folder "simple-folder" with link with "read, update, create, delete" permissions and password "pass123"
     When the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     And the user opens folder "simple-empty-folder" using the webUI
     And the user uploads folder "PARENT" using the webUI
