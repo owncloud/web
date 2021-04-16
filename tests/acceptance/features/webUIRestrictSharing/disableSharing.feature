@@ -7,7 +7,7 @@ Feature: disable sharing
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "simple-folder"
     And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"

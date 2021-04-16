@@ -5,14 +5,15 @@ Feature: Sharing folders with multiple internal users using advanced permissions
   So that I can control the access on those folders by other collaborators
 
   Background:
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
-
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
   Scenario Outline: share a folder with multiple users using role as advanced permissions role and different extra permissions
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | user0    |
       | Carol    |
@@ -23,9 +24,9 @@ Feature: Sharing folders with multiple internal users using advanced permissions
     And the user selects the following collaborators for the share as "<role>" with "<extra-permissions>" permissions:
       | collaborator | type |
       | Regular User | user |
-      | Brian Murphy     | user |
+      | Brian Murphy | user |
       | Carol King   | user |
-      | David Lopez    | user |
+      | David Lopez  | user |
     And the user removes "David Lopez" as a collaborator from the share
     And the user removes "Regular User" as a collaborator from the share
     And the user shares with the selected collaborators
@@ -37,20 +38,20 @@ Feature: Sharing folders with multiple internal users using advanced permissions
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Brian                |
-      | file_target | /simple-folder (2)   |
+      | file_target | /simple-folder       |
       | item_type   | folder               |
       | permissions | <actual-permissions> |
     And user "Carol" should have received a share with these details:
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Carol                |
-      | file_target | /simple-folder (2)   |
+      | file_target | /simple-folder       |
       | item_type   | folder               |
       | permissions | <actual-permissions> |
     But user "Regular User" should not be listed in the collaborators list on the webUI
-    And as "user0" folder "simple-folder (2)" should not exist
+    And as "user0" folder "simple-folder" should not exist
     And user "David Lopez" should not be listed in the collaborators list on the webUI
-    And as "David" folder "simple-folder (2)" should not exist
+    And as "David" folder "simple-folder" should not exist
     Examples:
       | role                 | displayed-role       | extra-permissions     | displayed-permissions | actual-permissions          |
       # | Advanced permissions | Advanced permissions | delete                        | delete                | read, delete                 |

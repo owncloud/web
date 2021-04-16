@@ -7,10 +7,16 @@ Feature: Sharing files and folders with internal users with different permission
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    And these users have been created with default attributes:
+    And these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
+    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created folder "simple-empty-folder"
+    And user "Brian" has created folder "simple-folder/simple-empty-folder"
+    And user "Brian" has uploaded file "data.zip" to "data.zip"
+    And user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
 
   @issue-ocis-1743
   Scenario: Change permissions of the previously shared folder to read, share
@@ -171,7 +177,7 @@ Feature: Sharing files and folders with internal users with different permission
 
   @issue-product-270
   Scenario: Resource owner upgrades share permissions of a re-share
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "read, delete" permissions
@@ -189,7 +195,7 @@ Feature: Sharing files and folders with internal users with different permission
 
   @issue-product-270
   Scenario: User is not allowed to reshare sub-folder with more permissions
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And user "Alice" has logged in using the webUI
@@ -202,7 +208,7 @@ Feature: Sharing files and folders with internal users with different permission
 
   @issue-product-270
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete, update" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "share, delete" permissions
@@ -216,13 +222,13 @@ Feature: Sharing files and folders with internal users with different permission
 
   @issue-ocis-1743
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
-    And the user browses to the folder "simple-folder" on the files page
+    And the user opens folder "simple-folder" using the webUI
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete, create, update" using the webUI
     And user "Carol" accepts the share "simple-folder/simple-empty-folder" offered by user "Alice" using the sharing API
     Then user "Carol" should have received a share with these details:
@@ -236,13 +242,13 @@ Feature: Sharing files and folders with internal users with different permission
   @skipOnOC10 @issue-ocis-reva-372
   #after fixing the issue delete this scenario and use the one above by deleting the @skipOnOCIS tag there
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received (ocis bug demonstration)
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions
     And user "Alice" has accepted the share "simple-folder" offered by user "Brian"
     And user "Alice" has shared folder "/Shares/simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI
     When the user opens folder "Shares" using the webUI
-    And the user browses to the folder "simple-folder" on the files page
+    And the user opens folder "simple-folder" using the webUI
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Advanced permissions" with permissions "delete, create, update" using the webUI
     And user "Carol" accepts the share "simple-empty-folder" offered by user "Alice" using the sharing API
     Then user "Carol" should have received a share with these details:

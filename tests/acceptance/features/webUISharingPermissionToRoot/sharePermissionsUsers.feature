@@ -5,11 +5,14 @@ Feature: Sharing files and folders with internal users with different permission
   So that I can control the access on those files/folders by other collaborators
 
   Background:
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
-
+    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has created folder "simple-folder/simple-empty-folder"
+    And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
 
   Scenario: Change permissions of the previously shared folder to share, update
     Given user "Brian" has shared folder "simple-folder" with user "Alice" with "read, update" permissions
@@ -21,7 +24,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value               |
       | uid_owner   | Brian               |
       | share_with  | Alice               |
-      | file_target | /simple-folder (2)  |
+      | file_target | /simple-folder      |
       | item_type   | folder              |
       | permissions | read, share, update |
 
@@ -36,7 +39,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value                       |
       | uid_owner   | Brian                       |
       | share_with  | Alice                       |
-      | file_target | /simple-folder (2)          |
+      | file_target | /simple-folder              |
       | item_type   | folder                      |
       | permissions | read, share, create, delete |
 
@@ -51,7 +54,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value                |
       | uid_owner   | Brian                |
       | share_with  | Alice                |
-      | file_target | /simple-folder (2)   |
+      | file_target | /simple-folder       |
       | item_type   | folder               |
       | permissions | read, update, delete |
 
@@ -66,7 +69,7 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value               |
       | uid_owner   | Brian               |
       | share_with  | Alice               |
-      | file_target | /simple-folder (2)  |
+      | file_target | /simple-folder      |
       | item_type   | folder              |
       | permissions | read, create, share |
 
@@ -77,12 +80,12 @@ Feature: Sharing files and folders with internal users with different permission
     Then user "Alice Hansen" should be listed as "<displayed-role>" in the collaborators list for folder "simple-folder" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Alice Hansen" for folder "simple-folder" on the webUI
     And user "Alice" should have received a share with these details:
-      | field       | value              |
-      | uid_owner   | Brian              |
-      | share_with  | Alice              |
-      | file_target | /simple-folder (2) |
-      | item_type   | folder             |
-      | permissions | <permissions>      |
+      | field       | value          |
+      | uid_owner   | Brian          |
+      | share_with  | Alice          |
+      | file_target | /simple-folder |
+      | item_type   | folder         |
+      | permissions | <permissions>  |
     Examples:
       | role                 | displayed-role       | extra-permissions             | displayed-permissions | permissions                         |
       | Viewer               | Viewer               | ,                             | ,                     | read, share                         |
@@ -98,12 +101,12 @@ Feature: Sharing files and folders with internal users with different permission
     Then custom permissions "<set-permissions>" should be set for user "Alice Hansen" for file "lorem.txt" on the webUI
     When the user sets custom permission for current role of collaborator "Alice Hansen" for file "lorem.txt" to "share" using the webUI
     Then user "Alice" should have received a share with these details:
-      | field       | value          |
-      | uid_owner   | Brian          |
-      | share_with  | Alice          |
-      | file_target | /lorem (2).txt |
-      | item_type   | file           |
-      | permissions | <permissions>  |
+      | field       | value         |
+      | uid_owner   | Brian         |
+      | share_with  | Alice         |
+      | file_target | /lorem.txt    |
+      | item_type   | file          |
+      | permissions | <permissions> |
     Examples:
       | initial-permissions | permissions | set-permissions |
       | read, update        | read, share | update          |
@@ -116,12 +119,12 @@ Feature: Sharing files and folders with internal users with different permission
     When the user disables all the custom permissions of collaborator "Alice Hansen" for file "simple-folder" using the webUI
     Then no custom permissions should be set for collaborator "Alice Hansen" for file "simple-folder" on the webUI
     And user "Alice" should have received a share with these details:
-      | field       | value              |
-      | uid_owner   | Brian              |
-      | share_with  | Alice              |
-      | file_target | /simple-folder (2) |
-      | item_type   | folder             |
-      | permissions | read               |
+      | field       | value          |
+      | uid_owner   | Brian          |
+      | share_with  | Alice          |
+      | file_target | /simple-folder |
+      | item_type   | folder         |
+      | permissions | read           |
 
 
   Scenario Outline: share a file with another internal user assigning a role and the permissions
@@ -130,12 +133,12 @@ Feature: Sharing files and folders with internal users with different permission
     Then user "Alice Hansen" should be listed as "<displayed-role>" in the collaborators list for file "lorem.txt" on the webUI
     And custom permissions "<displayed-permissions>" should be set for user "Alice Hansen" for file "lorem.txt" on the webUI
     And user "Alice" should have received a share with these details:
-      | field       | value          |
-      | uid_owner   | Brian          |
-      | share_with  | Alice          |
-      | file_target | /lorem (2).txt |
-      | item_type   | file           |
-      | permissions | <permissions>  |
+      | field       | value         |
+      | uid_owner   | Brian         |
+      | share_with  | Alice         |
+      | file_target | /lorem.txt    |
+      | item_type   | file          |
+      | permissions | <permissions> |
     Examples:
       | role                 | displayed-role | collaborators-permissions | displayed-permissions | permissions         |
       | Viewer               | Viewer         | ,                         | ,                     | read, share         |
@@ -152,9 +155,9 @@ Feature: Sharing files and folders with internal users with different permission
 
 
   Scenario: Resource owner upgrades share permissions of a re-share
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
-    And user "Alice" has shared folder "simple-folder (2)" with user "Carol" with "read, delete" permissions
+    And user "Alice" has shared folder "simple-folder" with user "Carol" with "read, delete" permissions
     And user "Brian" has logged in using the webUI
     When the user sets custom permission for current role of collaborator "Carol King" for folder "simple-folder" to "delete, update" using the webUI
     Then custom permissions "delete, update" should be set for user "Carol King" for folder "simple-folder" on the webUI
@@ -162,43 +165,43 @@ Feature: Sharing files and folders with internal users with different permission
       | field       | value                |
       | uid_owner   | Alice                |
       | share_with  | Carol                |
-      | file_target | /simple-folder (2)   |
+      | file_target | /simple-folder       |
       | item_type   | folder               |
       | permissions | delete, read, update |
 
 
   Scenario: User is not allowed to reshare sub-folder with more permissions
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete" permissions
     And user "Alice" has logged in using the webUI
-    When the user browses to the folder "simple-folder (2)" on the files page
+    When the user browses to the folder "simple-folder" on the files page
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete, update" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
-    And as "Carol" folder "simple-empty-folder (2)" should not exist
+    And as "Carol" folder "simple-empty-folder" should not exist
 
 
   Scenario: User is not allowed to update permissions of a reshared sub-folder to higher permissions than what user has received
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "read, share, delete, update" permissions
-    And user "Alice" has shared folder "simple-folder (2)" with user "Carol" with "share, delete" permissions
+    And user "Alice" has shared folder "simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI
-    When the user browses to the folder "simple-folder (2)" on the files page
+    When the user browses to the folder "simple-folder" on the files page
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete, update, create" using the webUI
     Then the error message with header "Error while sharing." should be displayed on the webUI
-    And as "Carol" folder "simple-empty-folder (2)" should not exist
+    And as "Carol" folder "simple-empty-folder" should not exist
 
 
   Scenario: User is allowed to update permissions of a reshared sub-folder within the permissions that the user has received
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
     And user "Brian" has shared folder "simple-folder" with user "Alice" with "all" permissions
-    And user "Alice" has shared folder "simple-folder (2)" with user "Carol" with "share, delete" permissions
+    And user "Alice" has shared folder "simple-folder" with user "Carol" with "share, delete" permissions
     And user "Alice" has logged in using the webUI
-    When the user browses to the folder "simple-folder (2)" on the files page
+    When the user browses to the folder "simple-folder" on the files page
     And the user shares folder "simple-empty-folder" with user "Carol King" as "Advanced permissions" with permissions "share, delete, create, update" using the webUI
     Then user "Carol" should have received a share with these details:
-      | field       | value                    |
-      | uid_owner   | Alice                    |
-      | share_with  | Carol                    |
-      | file_target | /simple-empty-folder (2) |
-      | item_type   | folder                   |
-      | permissions | all                      |
+      | field       | value                |
+      | uid_owner   | Alice                |
+      | share_with  | Carol                |
+      | file_target | /simple-empty-folder |
+      | item_type   | folder               |
+      | permissions | all                  |
