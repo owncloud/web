@@ -106,6 +106,7 @@ Details
    ODS to v5.1.0
 
    https://github.com/owncloud/web/pull/4965
+   https://github.com/owncloud/web/pull/4975
 
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 
