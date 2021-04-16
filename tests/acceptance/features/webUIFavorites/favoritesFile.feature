@@ -12,8 +12,8 @@ Feature: Mark file as favorite
 
   @smokeTest
   Scenario: mark files as favorites
-    Given user "Alice" has created file "data.tar.gz"
-    And user "Alice" has created file "data.zip"
+    Given user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
     And the user has reloaded the current page of the webUI
     When the user marks file "data.tar.gz" as favorite using the webUI
     And the user marks file "data.zip" as favorite using the webUI
@@ -45,7 +45,7 @@ Feature: Mark file as favorite
 
   Scenario: mark files/folders as favorites using the sidebar
     Given user "Alice" has created folder "simple-folder"
-    And user "Alice" has created file "data.zip"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
     And the user has reloaded the current page of the webUI
     When the user marks folder "simple-folder" as favorite using the webUI sidebar
     And the user marks file "data.zip" as favorite using the webUI sidebar
@@ -63,7 +63,7 @@ Feature: Mark file as favorite
 
 
   Scenario: navigate to the favorites page using the menu
-    Given user "Alice" has created file "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "data.zip"
     When the user browses to the favorites page using the webUI

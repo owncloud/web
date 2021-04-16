@@ -16,7 +16,7 @@ Other free text and markdown formatting can be used elsewhere in the document if
 -   [webUIPreview/imageMediaViewer.feature:140](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L140)
 -   [webUIPreview/imageMediaViewer.feature:158](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIPreview/imageMediaViewer.feature#L158)
 
-### [webUILogin/adminBlocksUser.feature:20 behaves differently on CI] (https://github.com/owncloud/web/issues/4743)
+### [webUILogin/adminBlocksUser.feature:20 behaves differently on CI](https://github.com/owncloud/web/issues/4743)
 -   [webUILogin/adminBlocksUser.feature:20](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUILogin/adminBlocksUser.feature#L120)
 
 ### [sorting for files lists needs to be reimplemented](https://github.com/owncloud/ocis/issues/1179)
@@ -25,3 +25,6 @@ Other free text and markdown formatting can be used elsewhere in the document if
 
 ### [regression in accepting shares from notifications](https://github.com/owncloud/web/issues/4839)
 -   [webUISharingNotificationsToRoot/shareWithUsers.feature:40](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUISharingNotificationsToRoot/shareWithUsers.feature#L40)
+
+### [webUIFilesActionMenu/versions.feature:14 behaves differently on CI](https://github.com/owncloud/web/issues/5022)
+-   [webUIFilesActionMenu/versions.feature:14](https://github.com/owncloud/web/blob/master/tests/acceptance/features/webUIFilesActionMenu/versions.feature:#L14)

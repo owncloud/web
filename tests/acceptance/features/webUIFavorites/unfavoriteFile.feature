@@ -11,9 +11,9 @@ Feature: Unmark file/folder as favorite
 
   @smokeTest
   Scenario: unmark files as favorite from files page
-    Given user "Alice" has created file "data.tar.gz"
-    And user "Alice" has created file "data.zip"
-    And user "Alice" has created file "lorem.zip"
+    Given user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has created file "lorem.txt"
     And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "data.zip"
     And user "Alice" has favorited element "data.tar.gz"
@@ -53,8 +53,8 @@ Feature: Unmark file/folder as favorite
 
   @smokeTest
   Scenario: unmark a file as favorite from favorite page
-    Given user "Alice" has created file "data.zip"
-    And user "Alice" has created file "data.tar.gz"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has uploaded file "data.tar.gz" to "data.tar.gz"
     And user "Alice" has created file "lorem.txt"
     And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "data.zip"
@@ -87,7 +87,7 @@ Feature: Unmark file/folder as favorite
 
 
   Scenario: unmark files/folders as favorites using the sidebar
-    Given user "Alice" has created file "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has created folder "simple-folder"
     And the user has reloaded the current page of the webUI
     And user "Alice" has favorited element "data.zip"

@@ -57,7 +57,7 @@ Feature: deleting files and folders
 
   @smokeTest @issue-4582 @disablePreviews
   Scenario: Delete multiple files at once
-    Given user "Alice" has created file "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"
     And the user has reloaded the current page of the webUI
@@ -83,7 +83,7 @@ Feature: deleting files and folders
 
   @ocis-reva-issue-106 @ocis-reve-issue-442 @skipOnOC10 @issue-4582
   Scenario: Delete all except for a few files at once
-    Given user "Alice" has created file "data.zip"
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has created file "lorem.txt"
     And user "Alice" has created folder "simple-folder"
     And the user has reloaded the current page of the webUI
@@ -268,7 +268,7 @@ Feature: deleting files and folders
   Scenario: Delete multiple files at once from shared with others page
     Given user "Alice" has created folder "simple-folder"
     And user "Alice" has created file "lorem.txt"
-    And user "Alice" has created file "data.zip"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
     And the user has reloaded the current page of the webUI
     And user "Brian" has been created with default attributes and without skeleton files
     And user "Alice" has shared file "lorem.txt" with user "Brian"
