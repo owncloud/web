@@ -261,6 +261,7 @@ config = {
 					'webUISharingInternalUsersExpire',
 					'webUISharingInternalUsersCollaborator',
 					'webUISharingInternalUsersSharreWithPage',
+					'webUISharingInternalUsersSharingIndicator',
 					'webUISharingInternalUsersToRootCollaborator',
 					'webUISharingInternalUsersToRootPreviews',
 					'webUISharingInternalUsersToRootShareWithPage',
