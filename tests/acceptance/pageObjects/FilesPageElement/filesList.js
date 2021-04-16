@@ -453,8 +453,10 @@ module.exports = {
         this.elements.shareIndicatorsInFileRow.locateStrategy,
         shareIndicatorsXpath,
         result => {
+          console.log(result)
           result.value.forEach(element => {
             this.api.elementIdAttribute(element.ELEMENT, 'class', attr => {
+              console.log(attr)
               if (attr.value.indexOf('uk-invisible') >= 0) {
                 return
               }
