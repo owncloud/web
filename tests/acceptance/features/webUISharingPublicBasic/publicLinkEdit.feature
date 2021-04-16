@@ -209,5 +209,5 @@ Feature: Edit public link shares
     And user "Alice" has logged in using the webUI
     When the user edits the public link named "Public-link" of file "lorem.txt" changing following
       | password | pass123 |
-    And the public tries to open the public link page of the last public link created by user "Alice" with password "pass123"
+    And the public uses the webUI to access the last public link created by user "Alice" with password "pass123"
     Then file "lorem.txt" should be listed on the webUI
