@@ -7,7 +7,7 @@ Feature: restrict Sharing
   Background:
     Given the setting "shareapi_auto_accept_share" of app "core" has been set to "no"
     And the administrator has set the default folder for received shares to "Shares"
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
@@ -23,6 +23,8 @@ Feature: restrict Sharing
     And user "Brian" has been added to group "grp1"
     And user "Carol" has been added to group "grp2"
     And user "Alison" has been added to group "grp2"
+    And user "Brian" has created folder "simple-folder"
+    And user "Brian" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
     And user "Brian" has logged in using the webUI
 
   @smokeTest
