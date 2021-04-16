@@ -4,7 +4,10 @@ Feature: rename folders
   So that I can organise my data structure
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has created folder "simple-empty-folder"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
@@ -24,7 +27,7 @@ Feature: rename folders
 
 
   Scenario Outline: Rename a folder that has special characters in its name
-    Given user "Alice" has created folder "Sample,Folder,With,Comma"
+    Given user "Alice" has created folder <from_name>
     And the user has reloaded the current page of the webUI
     When the user renames folder <from_name> to <to_name> using the webUI
     Then folder <to_name> should be listed on the webUI

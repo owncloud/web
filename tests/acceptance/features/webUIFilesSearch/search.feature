@@ -6,8 +6,20 @@ Feature: Search
   So that I can find needed files quickly
 
   Background:
-    Given user "Alice" has been created with default attributes
-    And user "user0" has been created with default attributes
+    Given these users have been created with default attributes and without skeleton files:
+      | username |
+      | Alice    |
+      | user0    |
+    And user "Alice" has created the following folders
+      | entry_name            |
+      | simple-folder         |
+      | simple-empty-folder   |
+      | strängé नेपाली folder |
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "zzzz-must-be-last-file-in-folder.txt" to "zzzz-must-be-last-file-in-folder.txt"
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
     And user "Alice" has logged in using the webUI
     And the user has browsed to the files page
 
@@ -81,26 +93,30 @@ Feature: Search
 
 
   Scenario: Search for a shared file
-    Given user "user0" has shared file "/lorem.txt" with user "Alice"
+    Given user "user0" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "user0" has shared file "/lorem.txt" with user "Alice"
     When the user reloads the current page of the webUI
     And the user searches for "lorem" using the webUI
-    Then file "lorem (2).txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI
 
 
   Scenario: Search for a re-shared file
-    Given user "Brian" has been created with default attributes
+    Given user "Brian" has been created with default attributes and without skeleton files
+    And user "Brian" has uploaded file "lorem.txt" to "lorem.txt"
     And user "Brian" has shared file "/lorem.txt" with user "user0"
-    And user "user0" has shared file "/lorem (2).txt" with user "Alice"
+    And user "user0" has shared file "/lorem.txt" with user "Alice"
     When the user reloads the current page of the webUI
     And the user searches for "lorem" using the webUI
-    Then file "lorem (2).txt" should be listed on the webUI
+    Then file "lorem.txt" should be listed on the webUI
 
 
   Scenario: Search for a shared folder
-    Given user "user0" has shared folder "simple-folder" with user "Alice"
+    Given user "user0" has created folder "simple-folder"
+    And user "user0" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "user0" has shared folder "simple-folder" with user "Alice"
     When the user reloads the current page of the webUI
     And the user searches for "simple" using the webUI
-    Then folder "simple-folder (2)" should be listed on the webUI
+    Then folder "simple-folder" should be listed on the webUI
 
 
   Scenario: Search for a file after name is changed
