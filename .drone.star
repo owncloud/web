@@ -312,15 +312,13 @@ config = {
 					'webUIRenameFolders',
 				],
 				'webUIOCISSharingBasic': [
-					'webUISharingAcceptShares',
-					'webUISharingAcceptSharesToRoot',
+					'webUISharingAcceptShares'
 				],
 				'webUIOCISRestrictSharing': [
 					'webUIRestrictSharing',
 				],
 				'webUIOCISSharingNotifications': [
-					'webUISharingNotifications',
-					'webUISharingNotificationsToRoot',
+					'webUISharingNotifications'
 				],
 				'webUIFavorites': 'OCISFavorites',
 				'webUIMarkdownEditor': 'OCISMarkdownEditor',
@@ -340,10 +338,7 @@ config = {
 				'OCISSharingInternalGroups': [
 					'webUISharingInternalGroups',
 					'webUISharingInternalGroupsEdgeCases',
-					'webUISharingInternalGroupsSharingIndicator',
-					'webUISharingInternalGroupsToRoot',
-					'webUISharingInternalGroupsToRootEdgeCases',
-					'webUISharingInternalGroupsToRootSharingIndicator',
+					'webUISharingInternalGroupsSharingIndicator'
 				],
 				'OCISSharingInternalUsers1': [
 					'webUISharingInternalUsers',
@@ -352,21 +347,13 @@ config = {
 					'webUISharingInternalUsersBlacklisted',
 					'webUISharingInternalUsersCollaborator',
 					'webUISharingInternalUsersSharreWithPage',
-					'webUISharingInternalUsersSharingIndicator',
-					'webUISharingInternalUsersToRoot',
-					'webUISharingInternalUsersToRootBlacklisted',
-					'webUISharingInternalUsersToRootCollaborator',
-					'webUISharingInternalUsersToRootPreviews',
-					'webUISharingInternalUsersToRootShareWithPage',
-					'webUISharingInternalUsersToRootSharingIndicator',
+					'webUISharingInternalUsersSharingIndicator'
 				],
 				'webUISharingInternalUsersExpire': 'OCISSharingInternalUsersExpire',
-				'webUISharingInternalUsersExpireToRoot': 'OCISSharingInternalUsersExpireToRoot',
 				'webUISharingPermissionsUsers': 'OCISSharingPermissionsUsers',
 				'webUISharingFilePermissionsGroups': 'OCISSharingFilePermissionsGroups',
 				'webUISharingFolderPermissionsGroups': 'OCISSharingFolderPermissionsGroups',
 				'webUISharingFolderAdvancedPermissionsGroups': 'OCISSharingFolderAdvPermissionsGrp',
-				'webUISharingPermissionToRoot': 'OCISSharingPermissionToRoot',
 				# for now run this suite by itself see https://github.com/owncloud/ocis/issues/736
 				'OCISResharing1': [
 					'webUIResharing1'
@@ -374,7 +361,6 @@ config = {
 				'OCISResharing2': [
 					'webUIResharing2'
 				],
-				'webUIResharingToRoot': 'OCISResharingToRoot',
 				'webUISharingPublicBasic': 'OCISSharingPublicBasic',
 				'webUISharingPublicManagement': 'OCISSharingPublicManagement',
 				'webUISharingPublicExpire': 'OCISSharingPublicExpire',
