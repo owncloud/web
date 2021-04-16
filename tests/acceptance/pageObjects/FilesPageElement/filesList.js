@@ -453,10 +453,11 @@ module.exports = {
         this.elements.shareIndicatorsInFileRow.locateStrategy,
         shareIndicatorsXpath,
         result => {
-          console.log(result)
           result.value.forEach(element => {
             this.api.elementIdAttribute(element.ELEMENT, 'class', attr => {
-              console.log(attr)
+              if (parseInt(attr.status) < 0) {
+                return
+              }
               if (attr.value.indexOf('uk-invisible') >= 0) {
                 return
               }
@@ -482,6 +483,30 @@ module.exports = {
           })
         }
       )
+      return indicators
+    },
+
+    /**
+     *
+     * @param {string} fileName
+     * @param {boolean} sharingIndicatorExpectedToBeVisible
+     * @returns {Array} array of sharing indicator
+     */
+    getShareIndicatorsForResourceWithRetry: async function(
+      fileName,
+      sharingIndicatorExpectedToBeVisible
+    ) {
+      let indicators = await this.getShareIndicatorsForResource(
+        fileName,
+        sharingIndicatorExpectedToBeVisible
+      )
+      if (!indicators.length) {
+        console.log('Share indicators not found on first try, Retrying again')
+        indicators = await this.getShareIndicatorsForResource(
+          fileName,
+          sharingIndicatorExpectedToBeVisible
+        )
+      }
       return indicators
     },
 
