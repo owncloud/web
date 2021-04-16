@@ -15,14 +15,15 @@ Summary
 * Bugfix - Parent paths traversal for shares: [#4860](https://github.com/owncloud/web/issues/4860)
 * Change - Update owncloud Design System to v5.0.1: [#4940](https://github.com/owncloud/web/pull/4940)
 * Change - New files list: [#4627](https://github.com/owncloud/web/pull/4627)
-* Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
+* Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
+* Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 * Enhancement - Add web-pkg package: [#4907](https://github.com/owncloud/web/pull/4907)
 * Enhancement - Implement live region updates on route changes: [#4812](https://github.com/owncloud/web/pull/4812)
+* Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 * Enhancement - Runtime theming: [#4822](https://github.com/owncloud/web/pull/4822)
 * Enhancement - Add "Shared via link" page: [#4881](https://github.com/owncloud/web/pull/4881)
 * Enhancement - Use ODS translations: [#4934](https://github.com/owncloud/web/pull/4934)
-* Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
 
 Details
 -------
@@ -88,12 +89,6 @@ Details
 
    https://github.com/owncloud/web/pull/4627
 
-* Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
-
-   Permits the search bar in the files app to be toggleable on a per-route basis as shown or hidden.
-
-   https://github.com/owncloud/web/pull/4815
-
 * Enhancement - A11y improvements for files app bar: [#4786](https://github.com/owncloud/web/issues/4786)
 
    If we select resources in the files list, an action context menu appears, to improve a11y we need
@@ -101,6 +96,22 @@ Details
 
    https://github.com/owncloud/web/issues/4786
    https://github.com/owncloud/web/pull/4833
+
+* Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
+
+   A lot of random changes: - Extracted some helper classes to ODS & unified their usage - Removed
+   `<br>` tags that were incorrectly used for spacing - Used `<h4>` tags for headings in the files
+   sidebar - Make skip-to-main button translate-able - Update searchbar label string - Renamed
+   "personal files" to "all files" in routes (soft rename, due to changes in the future) - Updated
+   ODS to v5.1.0
+
+   https://github.com/owncloud/web/pull/4965
+
+* Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
+
+   Permits the search bar in the files app to be toggleable on a per-route basis as shown or hidden.
+
+   https://github.com/owncloud/web/pull/4815
 
 * Enhancement - Add web-pkg package: [#4907](https://github.com/owncloud/web/pull/4907)
 
@@ -113,6 +124,14 @@ Details
 
    https://github.com/owncloud/web/issues/4346
    https://github.com/owncloud/web/pull/4812
+
+* Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
+
+   We've changed the HTML elements in the people accordion when adding new people. People added
+   via people autocomplete are now displayed in a list element to use correct structure for screen
+   readers.
+
+   https://github.com/owncloud/web/pull/4915
 
 * Enhancement - Runtime theming: [#4822](https://github.com/owncloud/web/pull/4822)
 
@@ -136,14 +155,6 @@ Details
    from the ODS package and merge them with the web translations.
 
    https://github.com/owncloud/web/pull/4934
-
-* Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
-
-   We've changed the HTML elements in the people accordion when adding new people. People added
-   via people autocomplete are now displayed in a list element to use correct structure for screen
-   readers.
-
-   https://github.com/owncloud/web/pull/4915
 
 Changelog for ownCloud Web [2.1.0] (2021-03-24)
 =======================================
