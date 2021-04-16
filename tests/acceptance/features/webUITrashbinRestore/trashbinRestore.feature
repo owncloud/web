@@ -5,14 +5,15 @@ Feature: Restore deleted files/folders
   So that I can recover accidentally deleted files/folders in ownCloud
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given user "Alice" has been created with default attributes and without skeleton files
     And user "Alice" has created file "sample,1.txt"
     And user "Alice" has created folder "Folder,With,Comma"
     And user "Alice" has logged in using the webUI
-    And the user has browsed to the files page
 
   @smokeTest @ocisSmokeTest
   Scenario: Restore files
+    Given user "Alice" has uploaded file "data.zip" to "data.zip"
+    And the user has browsed to the files page
     When the user deletes file "data.zip" using the webUI
     And the user deletes file "sample,1.txt" using the webUI
     And the user browses to the trashbin page
@@ -27,6 +28,8 @@ Feature: Restore deleted files/folders
 
 
   Scenario: Restore folder
+    Given user "Alice" has created folder "folder with space"
+    And the user has browsed to the files page
     When the user deletes folder "folder with space" using the webUI
     And the user deletes folder "Folder,With,Comma" using the webUI
     And the user browses to the trashbin page
@@ -41,7 +44,11 @@ Feature: Restore deleted files/folders
 
   @smokeTest @issue-1502
   Scenario: Select some trashbin files and restore them in a batch
-    Given the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
+    And the following files have been deleted by user "Alice"
       | name              |
       | data.zip          |
       | lorem.txt         |
@@ -75,7 +82,11 @@ Feature: Restore deleted files/folders
 
   @issue-1502
   Scenario: Select all except for some trashbin files and restore them in a batch
-    Given the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
+    And the following files have been deleted by user "Alice"
       | name          |
       | data.zip      |
       | lorem.txt     |
@@ -102,7 +113,11 @@ Feature: Restore deleted files/folders
 
   @skipOnOC10 @issue-core-38039
   Scenario: Select all trashbin files and restore them in a batch
-    Given the following files have been deleted by user "Alice"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has uploaded file "data.zip" to "data.zip"
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
+    And the following files have been deleted by user "Alice"
       | name          |
       | data.zip      |
       | lorem.txt     |
@@ -121,7 +136,8 @@ Feature: Restore deleted files/folders
 
   @issue-1753 @issue-product-186
   Scenario: Restore a file from trashbin whose parent folder is renamed
-    Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "Alice"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
@@ -142,7 +158,8 @@ Feature: Restore deleted files/folders
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
   Scenario: Restore a file from trashbin whose parent folder is renamed (ocis bug demonstration)
-    Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "Alice"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
@@ -162,7 +179,8 @@ Feature: Restore deleted files/folders
 
   @issue-1753 @skipOnOCIS @issue-product-186
   Scenario: Restore a file from trashbin without restoring the parent folder (bug demonstration)
-    Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "Alice"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
@@ -182,7 +200,8 @@ Feature: Restore deleted files/folders
 
   @skipOnOC10 @issue-product-186 @issue-ocis-1057
   Scenario: Restore a file from trashbin without restoring the parent folder (ocis bug demonstration)
-    Given user "Alice" has created file "simple-folder/file-to-delete-and-restore"
+    Given user "Alice" has created folder "simple-folder"
+    And user "Alice" has created file "simple-folder/file-to-delete-and-restore"
     And the following files have been deleted by user "Alice"
       | name                                     |
       | simple-folder/file-to-delete-and-restore |
@@ -201,7 +220,8 @@ Feature: Restore deleted files/folders
 
   @issue-1723
   Scenario: Delete and restore a file that has the same name like a deleted folder
-    Given the following files have been deleted by user "Alice"
+    Given user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And the following files have been deleted by user "Alice"
       | name      |
       | lorem.txt |
     And user "Alice" has created folder "lorem.txt"

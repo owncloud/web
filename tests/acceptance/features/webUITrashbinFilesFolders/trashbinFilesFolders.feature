@@ -5,11 +5,19 @@ Feature: files and folders exist in the trashbin after being deleted
   So that I can recover data easily
 
   Background:
-    Given user "Alice" has been created with default attributes
-    And user "Alice" has logged in using the webUI
+    Given user "Alice" has been created with default attributes and without skeleton files
+    And user "Alice" has uploaded file "lorem.txt" to "lorem.txt"
+    And user "Alice" has uploaded file "lorem-big.txt" to "lorem-big.txt"
+    And user "Alice" has uploaded file "new-lorem.txt" to "textfile0.txt"
+    And user "Alice" has uploaded file "testavatar.png" to "testimage.png"
     And user "Alice" has created file "sample,1.txt"
+    And user "Alice" has created file "strängé filename (duplicate #2 &).txt"
     And user "Alice" has created folder "Folder,With,Comma"
-    And the user has browsed to the files page
+    And user "Alice" has created folder "strängé नेपाली folder"
+    And user "Alice" has created folder "simple-folder"
+    And user "Alice" has uploaded file "lorem.txt" to "simple-folder/lorem.txt"
+    And user "Alice" has uploaded file "lorem.txt" to "strängé नेपाली folder/lorem.txt"
+    And user "Alice" has logged in using the webUI
 
   @smokeTest @ocis-reva-issue-111 @skipOnOCIS @issue-product-186 @skip @disablePreviews
   Scenario: Delete files & folders one by one and check that they are all in the trashbin
@@ -26,7 +34,7 @@ Feature: files and folders exist in the trashbin after being deleted
     And as "Alice" file "strängé filename (duplicate #2 &).txt" should exist in the trashbin
     And the deleted elements should be listed on the webUI
 
-  @ocis-reva-issue-111 @skipOnOCIS @issue-product-183 @issue-product-186
+  @ocis-reva-issue-111 @skipOnOCIS @issue-product-183 @issue-product-186 @disablePreviews
   Scenario: Delete a file with problematic characters and check it is in the trashbin
     Given user "Alice" has renamed the following files
       | from-name-parts | to-name-parts   |
@@ -85,7 +93,7 @@ Feature: files and folders exist in the trashbin after being deleted
     #When the user opens folder "my-empty-folder" using the webUI
     #Then there should be no resources listed on the webUI
 
-  @skipOnOCIS @issue-product-186
+  @skipOnOCIS @issue-product-186 @disablePreviews
   Scenario: Delete multiple file with same filename and check they are in the trashbin
     When the user deletes the following elements using the webUI
       | name      |
