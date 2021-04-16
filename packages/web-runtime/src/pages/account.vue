@@ -17,19 +17,19 @@
       <div class="oc-text-bold oc-mb"><translate>Account Information</translate></div>
       <div class="uk-flex uk-flex-wrap account-page-info">
         <div class="uk-width-1-2@s oc-mb account-page-info-username">
-          <div class="uk-text-meta"><translate>Username</translate></div>
+          <div class="oc-text-muted"><translate>Username</translate></div>
           {{ user.username || user.id }}
         </div>
         <div v-if="user.username && user.id" class="uk-width-1-2@s oc-mb account-page-info-userid">
-          <div class="uk-text-meta"><translate>User ID</translate></div>
+          <div class="oc-text-muted"><translate>User ID</translate></div>
           {{ user.id }}
         </div>
         <div class="uk-width-1-2@s oc-mb account-page-info-displayname">
-          <div class="uk-text-meta"><translate>Display name</translate></div>
+          <div class="oc-text-muted"><translate>Display name</translate></div>
           {{ user.displayname }}
         </div>
         <div class="uk-width-1-2@s oc-mb account-page-info-email">
-          <div class="uk-text-meta"><translate>Email</translate></div>
+          <div class="oc-text-muted"><translate>Email</translate></div>
           <template v-if="user.email">{{ user.email }}</template>
           <span v-else v-translate>No email has been set up</span>
         </div>
@@ -37,7 +37,7 @@
           class="uk-width-1-2@s oc-mb account-page-info-groups"
           @click="$_oc_settingsAccount_getGroup"
         >
-          <div class="uk-text-meta"><translate>Group memberships</translate></div>
+          <div class="oc-text-muted"><translate>Group memberships</translate></div>
           <span v-if="groupNames">{{ groupNames }}</span>
           <span v-else v-translate>You are not part of any group</span>
         </div>

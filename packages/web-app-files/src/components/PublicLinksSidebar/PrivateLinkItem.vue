@@ -1,7 +1,7 @@
 <template>
   <section>
-    <translate tag="div" class="oc-text-bold">Private Link</translate>
-    <div class="uk-text-meta oc-mb-xs">
+    <translate tag="h4" class="oc-text-bold oc-m-rm oc-text-initial">Private Link</translate>
+    <div class="oc-text-muted oc-mb-xs">
       <translate tag="i">Only invited people can use this link.</translate>
     </div>
     <div class="uk-width-1-1 uk-flex uk-flex-middle">

@@ -15,7 +15,7 @@
     </transition>
     <div
       v-if="user.id !== collaborator.owner.name"
-      class="uk-text-meta uk-flex uk-flex-middle oc-mb-s"
+      class="oc-text-muted uk-flex uk-flex-middle oc-mb-s"
     >
       <oc-icon name="repeat" class="oc-mr-s" /> {{ collaborator.owner.displayName }}
     </div>
@@ -203,13 +203,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.oc-text {
-  font-size: 1rem;
-}
-
-.oc-disabled {
-  opacity: 0.4;
-}
-</style>

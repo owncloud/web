@@ -33,7 +33,7 @@
       </oc-td>
       <oc-td>
         <div class="uk-flex uk-flex-column uk-flex-center" :class="collaboratorListItemClass">
-          <div class="oc-text oc-mb-xs">
+          <div class="oc-text-initial oc-mb-xs">
             <span>
               <span class="files-collaborators-collaborator-name oc-text-bold">
                 {{ collaborator.collaborator.displayName }}
@@ -41,14 +41,14 @@
               <translate
                 v-if="isCurrentUser"
                 translate-comment="Indicator for current user in list of people"
-                class="uk-text-meta files-collaborators-collaborator-additional-info"
+                class="oc-text-muted files-collaborators-collaborator-additional-info"
               >
                 (me)
               </translate>
             </span>
             <span
               v-if="collaborator.collaborator.additionalInfo"
-              class="uk-text-meta files-collaborators-collaborator-additional-info"
+              class="oc-text-muted files-collaborators-collaborator-additional-info"
               v-text="collaborator.collaborator.additionalInfo"
             />
           </div>
@@ -96,7 +96,7 @@
                         }}</span>
                         <span
                           v-if="resharer.additionalInfo"
-                          class="uk-text-meta files-collaborators-resharer-additional-info"
+                          class="oc-text-muted files-collaborators-resharer-additional-info"
                           >({{ resharer.additionalInfo }})</span
                         >
                       </div>
@@ -355,11 +355,5 @@ export default {
 }
 .files-collaborators-collaborator-via-label {
   max-width: 75%;
-}
-</style>
-<style>
-/* TODO: Move to ODS  */
-.oc-text {
-  font-size: 1rem;
 }
 </style>

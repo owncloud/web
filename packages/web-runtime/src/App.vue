@@ -1,7 +1,9 @@
 <template>
   <div>
     <oc-hidden-announcer :announcement="announcement" level="polite" />
-    <skip-to target="main">Skip to main</skip-to>
+    <skip-to target="main">
+      <translate>Skip to main</translate>
+    </skip-to>
     <div id="web-container">
       <div
         v-if="user.isAuthenticated && !user.userReady"

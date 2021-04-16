@@ -30,7 +30,7 @@
             <oc-tbody>
               <oc-tr v-for="(file, key) in getUploadedFiles" :key="key">
                 <oc-td class="oc-pl-rm" v-text="file.name" />
-                <oc-td width="shrink" class="uk-text-nowrap uk-text-meta">
+                <oc-td width="shrink" class="uk-text-nowrap oc-text-muted">
                   {{ getResourceSize(file.size) }}
                 </oc-td>
                 <oc-td width="shrink" class="oc-pr-rm uk-preserve-width">

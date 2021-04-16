@@ -411,8 +411,8 @@ export default {
   padding: 0 !important;
 }
 
-.oc-app-side-bar .oc-autocomplete-suggestion:hover .uk-text-meta,
-.oc-autocomplete-suggestion-selected .uk-text-meta {
+.oc-app-side-bar .oc-autocomplete-suggestion:hover .oc-text-muted,
+.oc-autocomplete-suggestion-selected .oc-text-muted {
   color: white;
 }
 </style>

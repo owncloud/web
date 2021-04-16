@@ -68,7 +68,7 @@ const navItems = [
     iconMaterial: appInfo.icon,
     route: {
       name: 'files-personal',
-      path: `/${appInfo.id}/list/personal`
+      path: `/${appInfo.id}/list/all`
     }
   },
   {
@@ -134,11 +134,11 @@ const routes = [
     children: [
       {
         name: 'personal',
-        path: 'personal/:item?',
+        path: 'all/:item?',
         component: Personal,
         meta: {
           hasBulkActions: true,
-          title: $gettext('Personal files')
+          title: $gettext('All files')
         }
       },
       {

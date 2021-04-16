@@ -15,7 +15,7 @@
     </div>
     <oc-grid
       flex
-      class="oc-mt-s oc-mb-s uk-text-meta oc-cursor-pointer"
+      class="oc-mt-s oc-mb-s oc-text-muted oc-cursor-pointer"
       :aria-label="$gettext('Click row to toggle upload progress details')"
       @click.native="$_toggleExpanded"
     >

@@ -29,7 +29,7 @@
       <span class="oc-text-bold files-collaborators-autocomplete-username" v-text="item.label" />
       <span
         v-if="item.value.shareWithAdditionalInfo"
-        class="uk-text-meta"
+        class="oc-text-muted"
         v-text="item.value.shareWithAdditionalInfo"
       />
       <div v-text="collaboratorType(item.value.shareType)" />

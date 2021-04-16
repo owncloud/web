@@ -1,7 +1,7 @@
 <template>
   <div class="roles-select-role-item">
     <span class="oc-text-bold" v-text="role.label" />
-    <p v-if="showDescription" class="uk-text-meta oc-m-rm" v-text="role.description" />
+    <p v-if="showDescription" class="oc-text-muted oc-m-rm" v-text="role.description" />
   </div>
 </template>
 

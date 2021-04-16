@@ -1,0 +1,12 @@
+Enhancement: Accessibility improvements
+
+A lot of random changes:
+- Extracted some helper classes to ODS & unified their usage
+- Removed `<br>` tags that were incorrectly used for spacing
+- Used `<h4>` tags for headings in the files sidebar
+- Make skip-to-main button translate-able
+- Update searchbar label string
+- Renamed "personal files" to "all files" in routes (soft rename, due to changes in the future)
+- Updated ODS to v5.1.0
+
+https://github.com/owncloud/web/pull/4965

@@ -9,10 +9,10 @@
       <template v-else>
         <private-link-item />
         <section>
-          <div class="oc-text-bold">
+          <h4 class="oc-text-bold oc-m-rm oc-text-initial">
             <translate>Public Links</translate>
-          </div>
-          <div class="uk-text-meta">
+          </h4>
+          <div class="oc-text-muted">
             <i
               ><translate
                 >Any external person with the respective link can access this resource. No sign-in

@@ -1,10 +1,10 @@
 <template>
   <div class="uk-height-1-1 uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-text-center">
     <oc-icon :name="icon" type="div" size="xxlarge" />
-    <div class="uk-text-muted uk-text-large">
+    <div class="oc-text-muted uk-text-large">
       <slot name="message" />
     </div>
-    <div class="uk-text-muted">
+    <div class="oc-text-muted">
       <slot name="callToAction" />
     </div>
   </div>

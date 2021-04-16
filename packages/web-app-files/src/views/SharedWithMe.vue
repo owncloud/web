@@ -36,7 +36,7 @@
             <oc-button
               v-if="resource.status === 1 || resource.status === 2"
               appearance="raw"
-              class="file-row-share-status-action uk-text-meta"
+              class="file-row-share-status-action oc-text-muted"
               @click.stop="triggerShareAction(resource, 'POST')"
             >
               <translate>Accept</translate>
@@ -44,7 +44,7 @@
             <oc-button
               v-if="resource.status === 1 || resource.status === 0"
               appearance="raw"
-              class="file-row-share-status-action uk-text-meta oc-ml"
+              class="file-row-share-status-action oc-text-muted oc-ml"
               @click.stop="triggerShareAction(resource, 'DELETE')"
             >
               <translate>Decline</translate>
@@ -58,7 +58,7 @@
         <template #footer>
           <div
             v-if="activeFilesCount.folders > 0 || activeFilesCount.files > 0"
-            class="uk-text-nowrap uk-text-meta uk-text-center uk-width-1-1"
+            class="uk-text-nowrap oc-text-muted uk-text-center uk-width-1-1"
           >
             <span id="files-list-count-folders" v-text="activeFilesCount.folders" />
             <translate :translate-n="activeFilesCount.folders" translate-plural="folders"

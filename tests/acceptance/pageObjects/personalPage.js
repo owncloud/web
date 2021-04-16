@@ -17,7 +17,7 @@ module.exports = {
      */
     navigateAndWaitTillLoaded: async function(folder = '') {
       await navigationHelper.navigateAndWaitTillElementPresent(
-        join(this.api.launchUrl, '#/files/list/personal', folder),
+        join(this.api.launchUrl, '#/files/list/all', folder),
         this.elements.newFileButtonLoaded
       )
       await this.page.FilesPageElement.filesList().waitForLoadingFinished()
