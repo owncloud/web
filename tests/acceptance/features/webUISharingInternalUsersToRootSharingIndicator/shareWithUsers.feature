@@ -5,14 +5,16 @@ Feature: Sharing files and folders with internal users
   So that those users can access the files and folders
 
   Background:
-    Given these users have been created with default attributes:
+    Given these users have been created with default attributes and without skeleton files:
       | username |
       | Alice    |
       | Brian    |
+    And user "Alice" has created folder "simple-folder"
 
   @issue-2060
   Scenario: sharing indicator of items inside a shared folder two levels down
-    Given user "Alice" has created folder "/simple-folder/simple-empty-folder/new-folder"
+    Given user "Alice" has created folder "/simple-folder/simple-empty-folder"
+    And user "Alice" has created folder "/simple-folder/simple-empty-folder/new-folder"
     And user "Alice" has uploaded file with content "test" to "/simple-folder/simple-empty-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     When user "Alice" has logged in using the webUI
@@ -31,14 +33,16 @@ Feature: Sharing files and folders with internal users
 
   @issue-2060
   Scenario: sharing indicator of items inside a re-shared folder
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "/simple-folder/simple-empty-folder"
+    And user "Alice" has created file "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder (2)" with user "Carol"
+    And user "Brian" has shared folder "simple-folder" with user "Carol"
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName          | expectedIndicators |
-      | simple-folder (2) | user-direct        |
-    When the user opens folder "simple-folder (2)" using the webUI
+      | simple-folder     | user-direct        |
+    When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
       | simple-empty-folder | user-indirect      |
@@ -46,14 +50,16 @@ Feature: Sharing files and folders with internal users
 
   @issue-2060
   Scenario: sharing indicator of items inside a re-shared subfolder
-    Given user "Carol" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
+    And user "Alice" has created folder "/simple-folder/simple-empty-folder"
+    And user "Alice" has created file "/simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
-    And user "Brian" has shared folder "simple-folder (2)/simple-empty-folder" with user "Carol"
+    And user "Brian" has shared folder "simple-folder/simple-empty-folder" with user "Carol"
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName          | expectedIndicators |
-      | simple-folder (2) | user-indirect      |
-    When the user opens folder "simple-folder (2)" using the webUI
+      | simple-folder     | user-indirect      |
+    When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
       | simple-empty-folder | user-direct        |
@@ -61,12 +67,14 @@ Feature: Sharing files and folders with internal users
 
   @issue-2060
   Scenario: sharing indicator of items inside an incoming shared folder
-    Given user "Alice" has shared folder "simple-folder" with user "Brian"
+    Given user "Alice" has created folder "/simple-folder/simple-empty-folder"
+    And user "Alice" has created file "/simple-folder/lorem.txt"
+    And user "Alice" has shared folder "simple-folder" with user "Brian"
     When user "Brian" has logged in using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName          | expectedIndicators |
-      | simple-folder (2) | user-indirect      |
-    When the user opens folder "simple-folder (2)" using the webUI
+      | simple-folder     | user-indirect      |
+    When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
       | simple-empty-folder | user-indirect      |
@@ -74,8 +82,11 @@ Feature: Sharing files and folders with internal users
 
   @issue-2060
   Scenario: no sharing indicator of items inside a not shared folder
-    Given user "Alice" has shared file "/textfile0.txt" with user "Brian"
-    When user "Brian" has logged in using the webUI
+    Given user "Alice" has created folder "/simple-folder/simple-empty-folder"
+    And user "Alice" has created file "/simple-folder/lorem.txt"
+    And user "Alice" has created file "textfile0.txt"
+    And user "Alice" has shared file "/textfile0.txt" with user "Brian"
+    When user "Alice" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
     When the user opens folder "simple-folder" using the webUI
@@ -85,9 +96,9 @@ Feature: Sharing files and folders with internal users
 
   @issue-2060
   Scenario: sharing indicator for file uploaded inside a shared folder
-    Given user "Alice" has shared folder "/simple-empty-folder" with user "Brian"
+    Given user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has logged in using the webUI
-    When the user opens folder "simple-empty-folder" using the webUI
+    When the user opens folder "simple-folder" using the webUI
     And the user uploads file "new-lorem.txt" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
@@ -95,9 +106,9 @@ Feature: Sharing files and folders with internal users
 
   @issue-2060
   Scenario: sharing indicator for folder created inside a shared folder
-    Given user "Alice" has shared folder "/simple-empty-folder" with user "Brian"
+    Given user "Alice" has shared folder "/simple-folder" with user "Brian"
     And user "Alice" has logged in using the webUI
-    When the user opens folder "simple-empty-folder" using the webUI
+    When the user opens folder "simple-folder" using the webUI
     And the user creates a folder with the name "sub-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName   | expectedIndicators |
@@ -105,8 +116,9 @@ Feature: Sharing files and folders with internal users
 
   @issue-2939
   Scenario: sharing indicator for user shares stays up to date
-    Given user "Carol" has been created with default attributes
-    And user "David" has been created with default attributes
+    Given user "Carol" has been created with default attributes and without skeleton files
+    And user "David" has been created with default attributes and without skeleton files
+    And user "Alice" has uploaded file "testavatar.png" to "simple-folder/testimage.png"
     When user "Alice" has logged in using the webUI
     Then the following resources should not have share indicators on the webUI
       | simple-folder |
