@@ -1,4 +1,4 @@
-Change: Update owncloud Design System to v5.0.1
+Change: Update owncloud Design System to v6.0.1
 
 - Lots of updates regarding accessibility topics, an updated color palette and custom CSS properties to allow for (runtime) theming.
 - ODS started to use peerDependencies now, we adopted this and added the required packages
