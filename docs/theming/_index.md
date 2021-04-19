@@ -101,6 +101,9 @@ In general, the theme loader looks for a `designTokens` key inside your theme co
       "fontSizes": {
         // ...
       },
+      "sizes": {
+        // ...
+      },
       "spacing": {
         // ...
       }
@@ -111,9 +114,14 @@ In general, the theme loader looks for a `designTokens` key inside your theme co
 
 Please follow this structure to make sure your theming configuration can be loaded correctly.
 
+### Extendability
+
+If you define different key-value pairs inside any of the objects in `"designTokens"`, they will get loaded and initialized as CSS custom properties but don't take any effect in the user interface. This gives you an opportunity to, for example, customize extensions from within the theme in the web runtime (and not the extension itself).
 ### Colors
 
 For the color values, you can use any valid CSS color format, e.g. **hex** (#fff), **rgb** (rgb(255,255,255)) or **color names** (white).
+
+Color variables get prepended with `--oc-color-`, so e.g. *"background-default"* creates the custom CSS property `--oc-color-background-default`.
 
 Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design%20Tokens) as a reference implementation.
 
@@ -125,55 +133,75 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
     },
     "designTokens": {
       "colorPalette": {
-        "background": "",
-        "background-muted": "",
+        "background-default": "",
         "background-highlight": "",
-        "border-primary": "",
-        "brand-primary": "",
-        "brand-primary-hover": "",
-        "color": "",
-        "color-muted": "",
-        "color-inverse": "",
-        "input-color": "",
-        "input-color-muted": "",
+        "background-muted": "",
+        "border": "",
+        "input-bg": "",
         "input-border": "",
-        "input-background": "",
-        "variation-primary": "",
-        "variation-primary-hover": "",
-        "variation-primary-muted": "",
-        "variation-passive": "",
-        "variation-passive-hover": "",
-        "variation-passive-muted": "",
-        "variation-success": "",
-        "variation-success-hover": "",
-        "variation-success-muted": "",
-        "variation-warning": "",
-        "variation-warning-hover": "",
-        "variation-warning-muted": "",
-        "variation-danger": "",
-        "variation-danger-hover": "",
-        "variation-danger-muted": ""
+        "input-text-default": "",
+        "input-text-muted": "",
+        "swatch-brand-default": "",
+        "swatch-brand-hover": "",
+        "swatch-danger-default": "",
+        "swatch-danger-hover": "",
+        "swatch-danger-muted": "",
+        "swatch-passive-default": "",
+        "swatch-passive-hover": "",
+        "swatch-passive-muted": "",
+        "swatch-primary-default": "",
+        "swatch-primary-hover": "",
+        "swatch-primary-muted": "",
+        "swatch-success-default": "",
+        "swatch-success-hover": "",
+        "swatch-success-muted": "",
+        "swatch-warning-default": "",
+        "swatch-warning-hover": "",
+        "swatch-warning-muted": "",
+        "text-default": "",
+        "text-inverse": "",
+        "text-muted": ""
       },
       "fontSizes": {
-        // ...
+        "default": "",
+        "large": "",
+        "medium": ""
+      },
+      "size": {
+        "form-check-default": "",
+        "height-small": "",
+        "icon-default": "",
+        "width-medium": ""
       },
       "spacing": {
-        // ...
+        "large": "",
+        "medium": "",
+        "small": "",
+        "xlarge": "",
+        "xsmall": "",
+        "xxlarge": ""
       }
     }
   }
 }
 ```
 
-If you define different key-value pairs inside `"colorPalette"`, they will get loaded and initialized as CSS custom properties but don't take any effect in the user interface. This gives you an opportunity to, for example, customize extensions from within the theme in the web runtime (and not the extension itself).
-
 ### Font sizes
 
-Changing font sizes via a custom theme is not yet supported and will be released in the future. If this is a pressing feature you'd like to use soon, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) or reach out to us about contribution options.
+You can change the `default`, `large` and `medium` font sizes according to your needs. If you need more customization options regarding font sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
+
+Font size variables get prepended with `--oc-font-size-`, so e.g. *"default"* creates the custom CSS property `--oc-font-size-default`.
+### Sizes
+
+You can change the `form-check-default` (checkbox sizing), `height-small` (height of the logo img in the sidebar), `icon-default` (icon base size) and `width-medium` (width of the sidebar) according to your needs. If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
+
+Size variables get prepended with `--oc-size-`, so e.g. *"icon-default"* creates the custom CSS property `--oc-size-icon-default`.
+
 ### Spacing
 
-Changing the spacing via a custom theme is not yet supported and will be released in the future. If this is a pressing feature you'd like to use soon, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) or reach out to us about contribution options.
+Use the six spacing options (`large | medium | small | xlarge | xsmall | xxlarge`) to create a more (or less) condensed version of the user interface. If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
 
+Spacing variables get prepended with `--oc-space-`, so e.g. *"xlarge"* creates the custom CSS property `--oc-space-xlarge`.
 ## Example theme
 
 An empty template for your custom theme is provided below, and you can use the instructions above to set it up according to your needs. Please note that since changing themes at runtime is not yet supported it only consists of a `default` theme, and the `fontSizes` and `spacing` tokens don't have any effect yet.
