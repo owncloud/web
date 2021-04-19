@@ -17,7 +17,7 @@ This repository contains the assets and these must be released first before bein
 ### Package Hierarchy
 
 - [ocis](https://github.com/owncloud/ocis)
-    - [ocis-web](https://github.com/owncloud/ocis-web)
+    - [ocis-web](https://github.com/owncloud/web)
       - [ocis-pkg](https://github.com/owncloud/ocis-pkg)
       - [web](https://github.com/owncloud/web)
 
@@ -36,4 +36,4 @@ This repository contains the assets and these must be released first before bein
 
 #### Next steps
 
-The next steps are usually to update the Web assets in the [ocis-web](https://github.com/owncloud/ocis-web) repository. Therefore  we have prepared a [separate ocis-web release guide](https://owncloud.dev/extensions/web/releasing/).
+The next steps are usually to update the Web assets in the [ocis-web](https://github.com/owncloud/web) repository. Therefore  we have prepared a [separate ocis-web release guide](https://owncloud.dev/extensions/web/releasing/).
