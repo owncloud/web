@@ -49,23 +49,6 @@ When(
   }
 )
 
-When(
-  'the public (tries to )open/opens the public link page of the last public link created by user {string}',
-  async function(linkCreator) {
-    const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-    return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastShare.token)
-  }
-)
-
-When(
-  'the public (tries to )open/opens the public link page of the last public link created by user {string} on a new session',
-  async function(linkCreator) {
-    const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-    await loginHelper.startNewSession()
-    return client.page.publicLinkFilesPage().navigateAndWaitTillLoaded(lastShare.token)
-  }
-)
-
 Then('the password input for the public link should appear in the webUI', function() {
   return client.page.publicLinkPasswordPage().waitForVisible()
 })
@@ -85,26 +68,31 @@ When(
 )
 
 When(
-  'the public (tries to )open/opens the public link page of the last public link created by user {string} with password {string}',
-  async function(linkCreator, password) {
-    const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-    await client.page.publicLinkFilesPage().navigateAndWaitForPasswordPage(lastShare.token)
-    return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
+  'the public uses the webUI to access the last public link created by user {string} with password {string}',
+  function(linkCreator, password) {
+    return loadPublicLinkWithPassword(linkCreator, password, false)
   }
 )
 
 When(
-  'the public uses the webUI to access the last public link created by user {string} with password {string}',
-  async function(linkCreator, password) {
-    const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
-    if (lastShare.permissions === sharingHelper.PERMISSION_TYPES.create) {
-      await client.page.filesDropPage().navigateAndWaitForPasswordPage(lastShare.token)
-    } else {
-      await client.page.publicLinkFilesPage().navigateAndWaitForPasswordPage(lastShare.token)
-    }
-    return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
+  'the public uses the webUI to access the last public link created by user {string} with password {string} on a new session',
+  function(linkCreator, password) {
+    return loadPublicLinkWithPassword(linkCreator, password, true)
   }
 )
+
+const loadPublicLinkWithPassword = async function(linkCreator, password, newSession) {
+  const lastShare = await sharingHelper.fetchLastPublicLinkShare(linkCreator)
+  if (newSession) {
+    await loginHelper.startNewSession()
+  }
+  if (lastShare.permissions === sharingHelper.PERMISSION_TYPES.create) {
+    await client.page.filesDropPage().navigateAndWaitForPasswordPage(lastShare.token)
+  } else {
+    await client.page.publicLinkFilesPage().navigateAndWaitForPasswordPage(lastShare.token)
+  }
+  return client.page.publicLinkPasswordPage().submitPublicLinkPassword(password)
+}
 
 Then('user {string} should not have any public link', async function(sharer) {
   const resp = await sharingHelper.getAllPublicLinkShares(sharer)
