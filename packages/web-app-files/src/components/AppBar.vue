@@ -523,7 +523,7 @@ export default {
 
 <style scoped>
 .files-app-bar {
-  background-color: var(--oc-background);
+  background-color: var(--oc-color-background-default);
   box-sizing: border-box;
   z-index: 2;
 }

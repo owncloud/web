@@ -22,7 +22,7 @@ Please refer to the [build documentation for Web]({{< ref "building.md" >}}).
 
 ## Configuration
 
-Depending on the backend you are using, there are sample config files provided in the [config folder](https://github.com/owncloud/web/config) of the ownCloud Web git repository. See below for available backends. Also, find some of the configuration details below.
+Depending on the backend you are using, there are sample config files provided in the [config folder](https://github.com/owncloud/web/tree/master/config) of the ownCloud Web git repository. See below for available backends. Also, find some of the configuration details below.
 
 #### Options
 - `options.hideSearchBar` Lets you hide the search bar at the top of the screen for all users.

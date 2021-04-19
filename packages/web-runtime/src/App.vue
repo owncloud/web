@@ -363,7 +363,7 @@ export default {
 </script>
 <style>
 #web-container {
-  background-color: var(--oc-background);
+  background-color: var(--oc-color-background-default);
 }
 
 #oc-topbar {
@@ -371,7 +371,7 @@ export default {
   top: 0;
   height: 60px;
   z-index: 2;
-  background-color: var(--oc-background);
+  background-color: var(--oc-color-background-default);
 }
 
 .web-content-container {

@@ -208,7 +208,7 @@ export default {
 
 <style lang="scss">
 .files-sidebar {
-  background-color: var(--oc-background);
+  background-color: var(--oc-color-background-default);
   z-index: 1;
 }
 

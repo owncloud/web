@@ -478,7 +478,7 @@ export default {
   height: auto;
   z-index: 1;
   grid-area: header;
-  background-color: var(--oc-background);
+  background-color: var(--oc-color-background-default);
   box-sizing: border-box;
 }
 
