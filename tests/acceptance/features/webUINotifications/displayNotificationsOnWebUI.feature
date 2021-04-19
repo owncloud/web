@@ -6,7 +6,8 @@ Feature: display notifications on the webUI
   So that I can stay informed
 
   Background:
-    Given user "Alice" has been created with default attributes
+    Given app "notifications" has been enabled
+    And user "Alice" has been created with default attributes
     And user "Alice" has logged in using the webUI
 
 

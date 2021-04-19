@@ -645,7 +645,7 @@ def acceptance(ctx):
 	errorFound = False
 
 	default = {
-		'servers': ['daily-master-qa'],
+		'servers': [''],
 		'browsers': ['chrome'],
 		'databases': ['mysql:5.5'],
 		'extraEnvironment': {},
@@ -719,6 +719,9 @@ def acceptance(ctx):
 							services += databaseService(db) + owncloudService()
 
 							## prepare oc10 server
+							if server == '':
+								server = False
+
 							steps += installCore(server, db) + owncloudLog() + setupServerAndApp(params['logLevel'])
 
 							if (params['openIdConnect']):
@@ -733,6 +736,8 @@ def acceptance(ctx):
 							steps += fixPermissions()
 
 							if (params['federatedServerNeeded']):
+								if federatedServerVersion == '':
+									federatedServerVersion = False
 								# services and steps required to run federated sharing tests
 								steps += installFederatedServer(federatedServerVersion, db, federationDbSuffix) + setupFedServerAndApp(params['logLevel'])
 								steps += fixPermissionsFederated() + owncloudLogFederated()
@@ -1045,7 +1050,10 @@ def installCore(version, db):
 		'name': 'install-core',
 		'image': 'owncloudci/core',
 		'pull': 'always',
-		'settings': {
+	}
+
+	if version:
+		stepDefinition.update({'settings': {
 			'version': version,
 			'core_path': '/var/www/owncloud/server',
 			'db_type': dbType,
@@ -1053,8 +1061,21 @@ def installCore(version, db):
 			'db_host': host,
 			'db_username': username,
 			'db_password': password
-		}
-	}
+		}})
+	else:
+		stepDefinition.update({'settings': {
+			'core_path': '/var/www/owncloud/server',
+			'db_type': dbType,
+			'db_name': database,
+			'db_host': host,
+			'db_username': username,
+			'db_password': password
+		}})
+		stepDefinition.update({'commands': [
+			'. /var/www/owncloud/web/.drone.env',
+			'export PLUGIN_GIT_REFERENCE=$CORE_COMMITID',
+			'bash /usr/sbin/plugin.sh'
+		]})
 
 	return [stepDefinition]
 
@@ -1077,7 +1098,9 @@ def installFederatedServer(version, db, dbSuffix = '-federated'):
 		'name': 'install-federated',
 		'image': 'owncloudci/core',
 		'pull': 'always',
-		'settings': {
+	}
+	if version:
+		stepDefinition.update({'settings': {
 			'version': version,
 			'core_path': '/var/www/owncloud/federated/',
 			'db_type': dbType,
@@ -1085,8 +1108,22 @@ def installFederatedServer(version, db, dbSuffix = '-federated'):
 			'db_host': host + dbSuffix,
 			'db_username': username,
 			'db_password': password
-		}
-	}
+		}})
+	else:
+		stepDefinition.update({'settings': {
+			'core_path': '/var/www/owncloud/federated/',
+			'db_type': dbType,
+			'db_name': database,
+			'db_host': host + dbSuffix,
+			'db_username': username,
+			'db_password': password
+		}})
+		stepDefinition.update({'commands': [
+			'. /var/www/owncloud/web/.drone.env',
+			'export PLUGIN_GIT_REFERENCE=$CORE_COMMITID',
+			'bash /usr/sbin/plugin.sh'
+		]})
+
 	return [stepDefinition]
 
 def installNPM():
