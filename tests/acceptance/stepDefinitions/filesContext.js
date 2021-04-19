@@ -915,16 +915,16 @@ Given('user {string} has created file {string}', function(userId, fileName) {
   return webdav.createFile(userId, fileName, '')
 })
 
-Given('user {string} has created the following folders', function(userId, entryList) {
-  entryList.rows().forEach(entry => {
-    webdav.createFolder(userId, entry[0])
-  })
+Given('user {string} has created the following folders', async function(userId, entryList) {
+  for (const entry of entryList.rows()) {
+    await webdav.createFolder(userId, entry[0])
+  }
   return client
 })
-Given('user {string} has created the following files', function(userId, entryList) {
-  entryList.rows().forEach(entry => {
-    webdav.createFile(userId, entry[0])
-  })
+Given('user {string} has created the following files', async function(userId, entryList) {
+  for (const entry of entryList.rows()) {
+    await webdav.createFile(userId, entry[0])
+  }
   return client
 })
 
