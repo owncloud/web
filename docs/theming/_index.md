@@ -1,3 +1,4 @@
+
 ---
 title: "Theming"
 date: 2021-04-01T00:00:00+00:00
@@ -174,11 +175,11 @@ Again, you can use the [ownCloud design tokens](https://owncloud.design/#/Design
         "width-medium": ""
       },
       "spacing": {
-        "large": "",
-        "medium": "",
-        "small": "",
-        "xlarge": "",
         "xsmall": "",
+        "small": "",
+        "medium": "",
+        "large": "",
+        "xlarge": "",
         "xxlarge": ""
       }
     }
@@ -199,7 +200,7 @@ Size variables get prepended with `--oc-size-`, so e.g. *"icon-default"* creates
 
 ### Spacing
 
-Use the six spacing options (`large | medium | small | xlarge | xsmall | xxlarge`) to create a more (or less) condensed version of the user interface. If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
+Use the six spacing options (`xsmall | small | medium | large | xlarge | xxlarge`) to create a more (or less) condensed version of the user interface. If you need more customization options regarding sizes, please [open an issue on GitHub](https://github.com/owncloud/web/issues/new) with a detailed description.
 
 Spacing variables get prepended with `--oc-space-`, so e.g. *"xlarge"* creates the custom CSS property `--oc-space-xlarge`.
 ## Example theme

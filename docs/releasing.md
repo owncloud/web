@@ -10,18 +10,15 @@ geekdocFilePath: releasing.md
 
 ## Releasing ownCloud Web
 
-The ownCloud Web is shipped as an ocis Extension. The `ocis-web` extension is also embedded in the single binary and part of the `ocis server` command.
+OwnCloud Web can be hosted standalone, as ownCloud 10 app or as part of oCIS. 
 
-This repository contains the assets and these must be released first before being bundled into `ocis-web`.
+### Versioning
 
-### Package Hierarchy
+We follow the [Semantic Versioning](https://semver.org/) scheme. Therefore, each change is of one of the possible types: `Bugfix, Change, Enhancement, Security`.
 
-- [ocis](https://github.com/owncloud/ocis)
-    - [ocis-web](https://github.com/owncloud/web)
-      - [ocis-pkg](https://github.com/owncloud/ocis-pkg)
-      - [web](https://github.com/owncloud/web)
+The highest type before a new release determines the version update number, so if it's only `Bugfix` and `Security` changes the next release will be a `PATCH` version bump, if there's at least one `Enhancement` within the changes this leads to a `MINOR` version bump, while `Change` type changes make for a new `MAJOR` release version.
 
-#### Releasing Web Frontend
+### Release Guide
 
 1. Create a branch `release-$version` in <https://github.com/owncloud/web>.
 2. Create a folder in `changelog` for the release version and date `mkdir $major.$minor.$patchVersion_YYYY-MM-DD`.
@@ -34,6 +31,7 @@ This repository contains the assets and these must be released first before bein
 9. Use `v$major.$minor.$patch` as a tag (the `v` prefix is important) and publish it.
 10. The tag and the Release artifacts will be created automatically.
 
-#### Next steps
+### Next steps
 
-The next steps are usually to update the Web assets in the [ocis-web](https://github.com/owncloud/web) repository. Therefore  we have prepared a [separate ocis-web release guide](https://owncloud.dev/extensions/web/releasing/).
+- The ownCloud 10 app gets created as part of the release pipeline and will be part of the [release assets](https://github.com/owncloud/web/releases).
+- For oCIS the release assets need to be updated. For that we have prepared a [separate ocis-web release guide](https://owncloud.dev/extensions/web/releasing/).
