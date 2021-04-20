@@ -7,7 +7,6 @@
       :label="searchLabel"
       :placeholder="searchLabel"
       :loading="isLoadingSearchResults"
-      :button-hidden="true"
       @search="search"
       @clear="resetSearch"
     />
