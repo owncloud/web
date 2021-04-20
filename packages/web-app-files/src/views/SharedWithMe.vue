@@ -226,15 +226,33 @@ export default {
 
     async triggerShareAction(resource, type) {
       try {
+        // exec share action
         let response = await this.$client.requests.ocs({
           service: 'apps/files_sharing',
           action: `api/v1/shares/pending/${resource.share.id}`,
           method: type
         })
-        response = await response.json()
-        if (response.ocs.data.length > 0) {
+
+        // exit on failure
+        if (response.status !== 200) {
+          throw new Error()
+        }
+
+        // get updated share from response or re-fetch it
+        let share = null
+        if (response.headers.map['content-length'] > 0) {
+          response = await response.json()
+          if (response.ocs.data.length > 0) {
+            share = response.ocs.data[0]
+          }
+        } else {
+          share = await this.$client.shares.getShare(resource.share.id)
+        }
+
+        // update share in store
+        if (share) {
           const sharedResource = await buildSharedResource(
-            response.ocs.data[0],
+            share,
             true,
             !this.isOcis,
             this.configuration.server,
