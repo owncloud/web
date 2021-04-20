@@ -6,6 +6,7 @@ const webdav = require('../helpers/webdavHelper')
 const _ = require('lodash')
 const loginHelper = require('../helpers/loginHelper')
 const xpathHelper = require('../helpers/xpath')
+const backendHelper = require('../helpers/backendHelper')
 const { move } = require('../helpers/webdavHelper')
 const path = require('../helpers/path')
 const util = require('util')
@@ -107,6 +108,18 @@ Given('user {string} has uploaded file {string} to {string}', async function(
   const filePath = path.join(client.globals.filesForUpload, source)
   const content = fs.readFileSync(filePath)
   await webdav.createFile(user, filename, content)
+})
+
+Given('user {string} has uploaded file {string} to {string} on remote server', function(
+  user,
+  source,
+  filename
+) {
+  return backendHelper.runOnRemoteBackend(async function() {
+    const filePath = path.join(client.globals.filesForUpload, source)
+    const content = fs.readFileSync(filePath)
+    await webdav.createFile(user, filename, content)
+  })
 })
 
 When('the user browses to display the {string} details of file {string}', async function(
@@ -888,6 +901,18 @@ Given('user {string} has renamed the following files', function(userId, table) {
 Given('user {string} has renamed file/folder {string} to {string}', webdav.move)
 
 Given('user {string} has created folder {string}', webdav.createFolder)
+
+Given('user {string} has created folder {string} on remote server', function(userId, folderName) {
+  return backendHelper.runOnRemoteBackend(async function() {
+    await webdav.createFolder(userId, folderName)
+  })
+})
+
+Given('user {string} has created file {string} on remote server', function(userId, fileName) {
+  return backendHelper.runOnRemoteBackend(async function() {
+    await webdav.createFile(userId, fileName, '')
+  })
+})
 
 Then(
   'file/folder {string} should not be listed in shared-with-others page on the webUI',
