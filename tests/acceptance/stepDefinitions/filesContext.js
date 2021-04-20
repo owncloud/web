@@ -110,7 +110,7 @@ Given('user {string} has uploaded file {string} to {string}', async function(
   await webdav.createFile(user, filename, content)
 })
 
-Given('user {string} has uploaded file {string} to {string} on remote server', async function(
+Given('user {string} has uploaded file {string} to {string} on remote server', function(
   user,
   source,
   filename

@@ -163,6 +163,10 @@ const shareFileFolder = async function(
   const permissions = sharingHelper.humanReadablePermissionsToBitmask(permissionString)
   params.append('path', elementToShare)
   if (receiver) {
+    if (receiver.endsWith('@%remote_backend_url%')) {
+      shareType = SHARE_TYPES.federated_cloud_share
+      receiver = receiver.replace('%remote_backend_url%', client.globals.remote_backend_url)
+    }
     params.append('shareWith', receiver)
   }
   params.append('shareType', shareType)

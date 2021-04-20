@@ -343,9 +343,8 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Given user "Brian" has been created with default attributes and without skeleton files
     And user "Carol" has been created with default attributes and without skeleton files
     And user "Alice" has created folder "simple-folder"
-    And user "Alice" has created folder "simple-folder/sub-folder"
-    And user "Alice" has created folder "simple-folder/sub-folder/simple-empty-folder"
-    And user "Alice" has created file "simple-folder/sub-folder/lorem.txt"
+    And user "Alice" has created folder "simple-folder/simple-empty-folder"
+    And user "Alice" has created file "simple-folder/lorem.txt"
     And user "Alice" has shared folder "simple-folder" with user "Brian"
     And user "Brian" has accepted the share "simple-folder" offered by user "Alice"
     When the user re-logs in as "Brian" using the webUI
@@ -355,7 +354,7 @@ Feature: Federation Sharing - sharing with users on other cloud storages
     Then the following resources should have share indicators on the webUI
       | fileName      | expectedIndicators |
       | simple-folder | user-indirect      |
-    When the user opens folder "/Shares/simple-folder/sub-folder" directly on the webUI
+    When the user opens folder "simple-folder" using the webUI
     Then the following resources should have share indicators on the webUI
       | fileName            | expectedIndicators |
       | simple-empty-folder | user-direct        |
