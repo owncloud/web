@@ -81,6 +81,7 @@ module.exports = {
         .waitForAnimationToFinish()
         .clearValue('@dialogInput')
         .setValue('@dialogInput', toName)
+        .waitForAnimationToFinish()
         .click('@dialogConfirmBtn')
         .useCss()
 
