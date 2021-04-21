@@ -1,0 +1,7 @@
+Enhancement: Focus management
+
+We added a mixin that makes it able to manage, record and reverse-replay the focus for the current document.
+The first components that using it are modal and sidebar in the files app.
+
+https://github.com/owncloud/web/pull/4993
+https://github.com/owncloud/web/issues/4992

@@ -36,6 +36,7 @@
             appearance="raw"
             gap-size="xsmall"
             justify-content="left"
+            tabindex="0"
           >
             <oc-icon name="portrait" />
             <translate>Profile</translate>
@@ -50,6 +51,7 @@
             justify-content="left"
             :target="n.target"
             :href="n.url"
+            tabindex="0"
           >
             <oc-icon :name="n.iconMaterial" />
             <span>{{ n.title }}</span>
@@ -61,6 +63,7 @@
             gap-size="xsmall"
             justify-content="left"
             :to="{ path: n.path }"
+            tabindex="0"
           >
             <oc-icon :name="n.iconMaterial" />
             <span v-text="n.title" />
