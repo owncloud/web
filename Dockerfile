@@ -10,7 +10,8 @@ LABEL maintainer="ownCloud GmbH <devops@owncloud.com>" \
   org.opencontainers.image.url="https://hub.docker.com/r/owncloud/web" \
   org.opencontainers.image.source="https://github.com/owncloud/web"
 
-RUN rm -v /var/lib/nginx/html/index.html
+RUN rm -f /var/lib/nginx/html/*
+
 ADD dist/ /var/lib/nginx/html
 
 EXPOSE 8080
