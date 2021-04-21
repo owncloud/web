@@ -1696,11 +1696,8 @@ def runWebuiAcceptanceTests(suite, alternateSuiteName, filterTags, extraEnvironm
 def redisService():
 	return[{
 		'name': 'redis',
-		'image': 'webhippie/redis',
+		'image': 'redis:6-alpine',
 		'pull': 'always',
-		'environment': {
-			'REDIS_DATABASES': 1
-		},
 	}]
 
 def cacheOcisPipeline(ctx):
