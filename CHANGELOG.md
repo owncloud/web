@@ -12,6 +12,7 @@ Summary
 * Enhancement - Accessibility improvements: [#4965](https://github.com/owncloud/web/pull/4965)
 * Enhancement - Enable files app search bar to be toggleable on a per-route basis: [#4815](https://github.com/owncloud/web/pull/4815)
 * Enhancement - Use list for displaying added people: [#4915](https://github.com/owncloud/web/pull/4915)
+* Enhancement - Show search button in search bar: [#4985](https://github.com/owncloud/web/pull/4985)
 
 Details
 -------
@@ -47,6 +48,10 @@ Details
    readers.
 
    https://github.com/owncloud/web/pull/4915
+
+* Enhancement - Show search button in search bar: [#4985](https://github.com/owncloud/web/pull/4985)
+
+   https://github.com/owncloud/web/pull/4985
 
 Changelog for ownCloud Web [3.0.0] (2021-04-21)
 =======================================
